@@ -24,6 +24,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using Mono.Cecil;
@@ -34,7 +35,7 @@ namespace Extrospection {
 
 	public class ObjCProtocolCheck : BaseVisitor {
 
-		Dictionary<string, TypeDefinition> protocol_map = new Dictionary<string, TypeDefinition> ();
+		Dictionary<string, List<TypeDefinition>> protocol_map = new Dictionary<string, List<TypeDefinition>> ();
 
 		public override void VisitManagedType (TypeDefinition type)
 		{
@@ -67,8 +68,11 @@ namespace Extrospection {
 					break;
 				}
 			}
-			if (!informal && !String.IsNullOrEmpty (pname))
-				protocol_map.Add (pname, type);
+			if (!informal && !String.IsNullOrEmpty (pname)) {
+				if (!protocol_map.TryGetValue (pname, out var types))
+					protocol_map [pname] = types = new List<TypeDefinition> ();
+				types.Add (type);
+			}
 		}
 
 		public override void VisitObjCProtocolDecl (ObjCProtocolDecl decl, VisitKind visitKind)
@@ -87,8 +91,7 @@ namespace Extrospection {
 				return;
 
 			var name = decl.Name;
-			TypeDefinition td;
-			if (!protocol_map.TryGetValue (name, out td)) {
+			if (!protocol_map.TryGetValue (name, out var types)) {
 				if (!decl.IsDeprecated ())
 					Log.On (framework).Add ($"!missing-protocol! {name} not bound");
 				// other checks can't be done without an actual protocol to inspect
@@ -96,55 +99,57 @@ namespace Extrospection {
 			}
 
 			// build type selector-required map
-			var map = new Dictionary<string, bool> ();
-			foreach (var ca in td.CustomAttributes) {
-				string export = null;
-				string g_export = null;
-				string s_export = null;
-				bool is_required = false;
-				bool is_property = false;
-				bool is_static = false;
-				switch (ca.Constructor.DeclaringType.Name) {
-				case "ProtocolMemberAttribute":
-					foreach (var p in ca.Properties) {
-						switch (p.Name) {
-						case "Selector":
-							export = p.Argument.Value as string;
-							break;
-						case "GetterSelector":
-							g_export = p.Argument.Value as string;
-							break;
-						case "SetterSelector":
-							s_export = p.Argument.Value as string;
-							break;
-						case "IsRequired":
-							is_required = (bool) p.Argument.Value;
-							break;
-						case "IsProperty":
-							is_property = (bool) p.Argument.Value;
-							break;
-						case "IsStatic":
-							is_static = (bool) p.Argument.Value;
-							break;
+			var map = new Dictionary<string, Requiredness> ();
+			foreach (var td in types) {
+				foreach (var ca in td.CustomAttributes) {
+					string export = null;
+					string g_export = null;
+					string s_export = null;
+					bool is_required = false;
+					bool is_property = false;
+					bool is_static = false;
+					switch (ca.Constructor.DeclaringType.Name) {
+					case "ProtocolMemberAttribute":
+						foreach (var p in ca.Properties) {
+							switch (p.Name) {
+							case "Selector":
+								export = p.Argument.Value as string;
+								break;
+							case "GetterSelector":
+								g_export = p.Argument.Value as string;
+								break;
+							case "SetterSelector":
+								s_export = p.Argument.Value as string;
+								break;
+							case "IsRequired":
+								is_required = (bool) p.Argument.Value;
+								break;
+							case "IsProperty":
+								is_property = (bool) p.Argument.Value;
+								break;
+							case "IsStatic":
+								is_static = (bool) p.Argument.Value;
+								break;
+							}
 						}
+						break;
 					}
-					break;
-				}
-				if (is_property) {
-					if (g_export is not null) {
+					if (is_property) {
+						if (g_export is not null) {
+							if (is_static)
+								g_export = "+" + g_export;
+							AddRequiredness (map, g_export, is_required);
+						}
+						if (s_export is not null) {
+							if (is_static)
+								s_export = "+" + s_export;
+							AddRequiredness (map, s_export, is_required);
+						}
+					} else if (export is not null) {
 						if (is_static)
-							g_export = "+" + g_export;
-						map.Add (g_export, is_required);
+							export = "+" + export;
+						AddRequiredness (map, export, is_required);
 					}
-					if (s_export is not null) {
-						if (is_static)
-							s_export = "+" + s_export;
-						map.Add (s_export, is_required);
-					}
-				} else if (export is not null) {
-					if (is_static)
-						export = "+" + export;
-					map.Add (export, is_required);
 				}
 			}
 
@@ -154,7 +159,7 @@ namespace Extrospection {
 			// (we still report some errors for deprecated members of non-deprecated protocols - because abstract/non-abstract can
 			// change the managed API and we want to get things right, even if for deprecated members).
 			if (!deprecatedProtocol) {
-				var remaining = new Dictionary<string, bool> (map);
+				var remaining = new Dictionary<string, Requiredness> (map);
 
 				// check that required members match the [Abstract] members
 				foreach (ObjCMethodDecl method in decl.Methods) {
@@ -173,14 +178,15 @@ namespace Extrospection {
 					if (method.IsClassMethod)
 						selector = "+" + selector;
 
-					bool is_abstract;
-					if (map.TryGetValue (selector, out is_abstract)) {
+					if (map.TryGetValue (selector, out var requiredness)) {
+						var is_abstract = requiredness.HasFlag (Requiredness.Required);
+						var is_optional = requiredness.HasFlag (Requiredness.Optional);
 						bool required = method.ImplementationControl == ObjCImplementationControl.Required;
 						if (required) {
 							if (!is_abstract)
 								Log.On (framework).Add ($"!incorrect-protocol-member! {GetName (decl, method)} is REQUIRED and should be abstract");
 						} else {
-							if (is_abstract)
+							if (!is_optional)
 								Log.On (framework).Add ($"!incorrect-protocol-member! {GetName (decl, method)} is OPTIONAL and should NOT be abstract");
 						}
 						remaining.Remove (selector);
@@ -199,6 +205,35 @@ namespace Extrospection {
 			map.Clear ();
 
 			protocol_map.Remove (name);
+		}
+
+		static void AddRequiredness (Dictionary<string, Requiredness> map, string key, bool required)
+		{
+			AddRequiredness (map, key, required ? Requiredness.Required : Requiredness.Optional);
+		}
+
+		static void AddRequiredness (Dictionary<string, Requiredness> map, string key, Requiredness required)
+		{
+			if (map.TryGetValue (key, out var current)) {
+				map [key] = current | required;
+			} else {
+				map [key] = required;
+			}
+		}
+
+		// We can have multiple interfaces binding the same protocol
+		// (in particular to work around binding mistakes, where we can't
+		// make an existing interface work, we might add another one for
+		// the same protocol), and a protocol member might be defined in
+		// more than one interface, so we need to keep track of the all
+		// of them, which is why we have this weird enum that lists "Both"
+		// for required/optional: it's the sum of all the managed members
+		// that bind a particular protocol member.
+		[Flags]
+		enum Requiredness {
+			Required = 1,
+			Optional = 2,
+			Both = 3,
 		}
 
 		static string GetSelector (ObjCMethodDecl method)
@@ -232,7 +267,7 @@ namespace Extrospection {
 			// at this stage anything else we have is not something we could find in Apple's headers
 			foreach (var kvp in protocol_map) {
 				var extra = kvp.Key;
-				var fx = kvp.Value.Namespace;
+				var fx = kvp.Value [0].Namespace;
 				Log.On (fx).Add ($"!unknown-protocol! {extra} bound");
 			}
 		}

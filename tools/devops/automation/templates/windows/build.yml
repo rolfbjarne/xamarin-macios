@@ -210,6 +210,7 @@ steps:
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tools/devops/automation/scripts/MaciosCI.psd1
     $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
     # maccore
+    Compress-Archive -Path "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/maccore" -DestinationPath "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/maccore.zip"
     Invoke-SshEnvUpload `
       -SourcesDirectory "$(Build.SourcesDirectory)" `
       -DotNet "$Env:DOTNET" `
@@ -217,8 +218,17 @@ steps:
       -RemoteUserName "builder" `
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
-      -Source "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/maccore" `
-      -Target "/Users/builder/remote_build_testing/src/maccore"
+      -Source "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/maccore.zip" `
+      -Target "/Users/builder/remote_build_testing/src/maccore.zip"
+    Invoke-SshCommand `
+      -SourcesDirectory "$(Build.SourcesDirectory)"
+      -DotNet "$Env:DOTNET" `
+      -RemoteHost "$Env:MAC_AGENT_IP" `
+      -RemoteUserName "builder"`
+      -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
+      -ThrowIfError $true `
+      unzip -d "/Users/builder/remote_build_testing/src/" "/Users/builder/remote_build_testing/src/maccore.zip"
+
     # xamarin-macios
     Compress-Archive -Path "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios" -DestinationPath "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios.zip"
     Invoke-SshEnvUpload `
@@ -238,6 +248,8 @@ steps:
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
       unzip -d "/Users/builder/remote_build_testing/src/" "/Users/builder/remote_build_testing/src/xamarin-macios.zip"
+
+    # let's see what we did
     Invoke-SshCommand `
       -SourcesDirectory "$(Build.SourcesDirectory)"
       -DotNet "$Env:DOTNET" `

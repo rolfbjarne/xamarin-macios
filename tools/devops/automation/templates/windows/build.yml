@@ -210,7 +210,9 @@ steps:
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tools/devops/automation/scripts/MaciosCI.psd1
     $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
     # maccore
+    Write-Host "Zipping maccore"
     Compress-Archive -Path "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/maccore" -DestinationPath "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/maccore.zip"
+    Write-Host "Zipping maccore done"
     Invoke-SshEnvUpload `
       -SourcesDirectory "$(Build.SourcesDirectory)" `
       -DotNet "$Env:DOTNET" `
@@ -231,7 +233,9 @@ steps:
       unzip -d "/Users/builder/remote_build_testing/src/" "/Users/builder/remote_build_testing/src/maccore.zip"
 
     # xamarin-macios
+    Write-Host "Zipping xamarin-macios"
     Compress-Archive -Path "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios" -DestinationPath "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios.zip"
+    Write-Host "Zipping xamarin-macios done"
     Invoke-SshEnvUpload `
       -SourcesDirectory "$(Build.SourcesDirectory)" `
       -DotNet "$Env:DOTNET" `

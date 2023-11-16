@@ -291,7 +291,7 @@ steps:
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
       -- `
-      make /Users/builder/remote_build_testing/src/xamarin-macios/tools/devops provision-xcode.csx
+      make -C /Users/builder/remote_build_testing/src/xamarin-macios/tools/devops provision-xcode.csx
     Invoke-SshEnvCommand `
       -SourcesDirectory "$(Build.SourcesDirectory)" `
       -DotNet "$Env:DOTNET" `

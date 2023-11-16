@@ -227,6 +227,7 @@ steps:
       -RemoteUserName "builder" `
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
+      -- `
       unzip -d "/Users/builder/remote_build_testing/src/" "/Users/builder/remote_build_testing/src/maccore.zip"
 
     # xamarin-macios
@@ -247,6 +248,7 @@ steps:
       -RemoteUserName "builder" `
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
+      -- `
       unzip -d "/Users/builder/remote_build_testing/src/" "/Users/builder/remote_build_testing/src/xamarin-macios.zip"
 
     # let's see what we did
@@ -257,6 +259,7 @@ steps:
       -RemoteUserName "builder"`
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $false `
+      -- `
       ls -la "/Users/builder/remote_build_testing/src/"
     Invoke-SshEnvCommand `
       -SourcesDirectory "$(Build.SourcesDirectory)" `
@@ -265,6 +268,7 @@ steps:
       -RemoteUserName "builder"`
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $false `
+      -- `
       ls -la "/Users/builder/remote_build_testing/src/xamarin-macios"
   displayName: 'Copy source code to Mac'
   continueOnError: true
@@ -282,6 +286,7 @@ steps:
       -RemoteUserName "builder"`
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
+      -- `
       make /Users/builder/remote_build_testing/src/xamarin-macios/tools/devops provision-xcode.csx
     Invoke-SshEnvCommand `
       -SourcesDirectory "$(Build.SourcesDirectory)"
@@ -290,6 +295,7 @@ steps:
       -RemoteUserName "builder"`
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
+      -- `
       /Users/builder/remote_build_testing/src/maccore/tools/devops/provisionator.sh /Users/builder/remote_build_testing/src/xamarin-macios/tools/devops/provision-xcode.csx
   displayName: 'Install Xcode on Mac'
   continueOnError: true
@@ -308,6 +314,7 @@ steps:
       -RemoteUserName "builder"`
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
+      -- `
       /Users/builder/remote_build_testing/src/maccore/tools/install-qa-provisioning-profiles.sh -v
   displayName: 'Install provisioning profiles on Mac'
   continueOnError: true

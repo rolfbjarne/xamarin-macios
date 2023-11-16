@@ -291,7 +291,34 @@ steps:
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
       -- `
+      chmod +x /Users/builder/remote_build_testing/src/xamarin-macios/create-make-config.sh
+    Invoke-SshEnvCommand `
+      -SourcesDirectory "$(Build.SourcesDirectory)" `
+      -DotNet "$Env:DOTNET" `
+      -RemoteHost "$Env:MAC_AGENT_IP" `
+      -RemoteUserName "builder" `
+      -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
+      -ThrowIfError $true `
+      -- `
       make -C /Users/builder/remote_build_testing/src/xamarin-macios/tools/devops provision-xcode.csx
+    Invoke-SshEnvCommand `
+      -SourcesDirectory "$(Build.SourcesDirectory)" `
+      -DotNet "$Env:DOTNET" `
+      -RemoteHost "$Env:MAC_AGENT_IP" `
+      -RemoteUserName "builder" `
+      -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
+      -ThrowIfError $true `
+      -- `
+      cat /Users/builder/remote_build_testing/src/xamarin-macios/tools/devops/provision-xcode.csx
+    Invoke-SshEnvCommand `
+      -SourcesDirectory "$(Build.SourcesDirectory)" `
+      -DotNet "$Env:DOTNET" `
+      -RemoteHost "$Env:MAC_AGENT_IP" `
+      -RemoteUserName "builder" `
+      -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
+      -ThrowIfError $true `
+      -- `
+      chmod +x /Users/builder/remote_build_testing/src/maccore/tools/devops/provisionator.sh
     Invoke-SshEnvCommand `
       -SourcesDirectory "$(Build.SourcesDirectory)" `
       -DotNet "$Env:DOTNET" `

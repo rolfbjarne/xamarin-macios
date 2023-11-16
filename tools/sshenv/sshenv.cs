@@ -334,7 +334,7 @@ static class Program {
 
 		var watch = Stopwatch.StartNew ();
 		var finfo = new FileInfo (source);
-		Console.WriteLine ($"Uploading '{source}' to '{targetSystemPath}' - {source.Length} bytes.");
+		Console.WriteLine ($"Uploading '{source}' to '{targetSystemPath}' - {finfo.Length} bytes.");
 		using var input = new FileStream (source, FileMode.Open, FileAccess.Read, FileShare.Read);
 		var lastPrint = Stopwatch.StartNew ();
 		client.UploadFile (input, targetSystemPath, false, (v) => {

@@ -15,6 +15,10 @@ using System.Runtime.InteropServices;
 using Foundation;
 using ObjCRuntime;
 
+#if !NET
+using NativeHandle = System.IntPtr;
+#endif
+
 #nullable enable
 
 namespace UIKit {
@@ -82,6 +86,13 @@ namespace UIKit {
 
 #if !XAMCORE_5_0
 		[BindingImpl (BindingImplOptions.Optimizable)]
+#if !NET
+		public IUITraitChangeRegistration RegisterForTraitChanges (Class [] traits, global::System.Action<IUITraitEnvironment, UITraitCollection> handler)
+		{
+			// The manual block code is somewhat annoying to implement, so at least don't do it twice (once for .NET and once for legacy Xamarin) unless we really need to.
+			throw new NotImplementedException ("This API has not been implemented for legacy Xamarin. Please upgrade to .NET");
+		}
+#else
 		public unsafe IUITraitChangeRegistration RegisterForTraitChanges (Class [] traits, [BlockProxy (typeof (ObjCRuntime.Trampolines.IUITraitChangeObservable_RegisterForTraitChanges_NIDAction))] global::System.Action<IUITraitEnvironment, UITraitCollection> handler)
 		{
 			global::UIKit.UIApplication.EnsureUIThread ();
@@ -93,10 +104,11 @@ namespace UIKit {
 			using var block_handler = Trampolines.IUITraitChangeObservable_RegisterForTraitChanges_SDAction.CreateBlock (handler);
 			BlockLiteral* block_ptr_handler = &block_handler;
 			IUITraitChangeRegistration? ret;
-			ret = Runtime.GetINativeObject<IUITraitChangeRegistration> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("registerForTraitChanges:withHandler:"), nsa_traits.Handle, (IntPtr) block_ptr_handler), false)!;
+			ret = Runtime.GetINativeObject<IUITraitChangeRegistration> (NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("registerForTraitChanges:withHandler:"), nsa_traits.Handle, (IntPtr) block_ptr_handler), false)!;
 			nsa_traits.Dispose ();
 			return ret!;
 		}
+#endif
 
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public IUITraitChangeRegistration RegisterForTraitChanges (Class [] traits, NSObject target, Selector action)
@@ -108,7 +120,7 @@ namespace UIKit {
 			var action__handle__ = action!.GetNonNullHandle (nameof (action));
 			var nsa_traits = NSArray.FromNSObjects (traits);
 			IUITraitChangeRegistration? ret;
-			ret = Runtime.GetINativeObject<IUITraitChangeRegistration> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("registerForTraitChanges:withTarget:action:"), nsa_traits.Handle, target__handle__, action.Handle), false)!;
+			ret = Runtime.GetINativeObject<IUITraitChangeRegistration> (NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("registerForTraitChanges:withTarget:action:"), nsa_traits.Handle, target__handle__, action.Handle), false)!;
 			nsa_traits.Dispose ();
 			return ret!;
 		}
@@ -122,15 +134,21 @@ namespace UIKit {
 			var action__handle__ = action!.GetNonNullHandle (nameof (action));
 			var nsa_traits = NSArray.FromNSObjects (traits);
 			IUITraitChangeRegistration? ret;
-			ret = Runtime.GetINativeObject<IUITraitChangeRegistration> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("registerForTraitChanges:withAction:"), nsa_traits.Handle, action.Handle), false)!;
+			ret = Runtime.GetINativeObject<IUITraitChangeRegistration> (NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("registerForTraitChanges:withAction:"), nsa_traits.Handle, action.Handle), false)!;
 			nsa_traits.Dispose ();
 			return ret!;
 		}
+
+		[DllImport (Messaging.LIBOBJC_DYLIB, EntryPoint="objc_msgSend")]
+		extern static NativeHandle NativeHandle_objc_msgSend_NativeHandle_NativeHandle (IntPtr receiver, IntPtr selector, NativeHandle arg1, NativeHandle arg2);
+
+		[DllImport (Messaging.LIBOBJC_DYLIB, EntryPoint="objc_msgSend")]
+		extern static NativeHandle NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (IntPtr receiver, IntPtr selector, NativeHandle arg1, NativeHandle arg2, NativeHandle arg3);
 #endif // !XAMCORE_5_0
 	}
 }
 
-#if !XAMCORE_5_0
+#if !XAMCORE_5_0 && NET
 namespace ObjCRuntime {
 	using UIKit;
 	static partial class Trampolines {
@@ -188,6 +206,6 @@ namespace ObjCRuntime {
 		}
 	}
 }
-#endif // !XAMCORE_5_0
+#endif // !XAMCORE_5_0 && NET
 
 #endif // !__WATCHOS__

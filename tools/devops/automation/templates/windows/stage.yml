@@ -32,6 +32,12 @@ parameters:
   type: string
   default: HEAD
 
+- name: gitHubToken
+  type: string
+
+- name: xqaCertPass
+  type: string
+
 stages:
 - stage: ${{ parameters.stageName }}
   displayName: ${{ parameters.displayName }}
@@ -106,3 +112,5 @@ stages:
         commit: ${{ parameters.commit }}
         isPR: ${{ parameters.isPR }}
         statusContext: ${{ parameters.statusContext }}
+        gitHubToken: ${{ parameters.gitHubToken }}
+        xqaCertPass: ${{ parameters.xqaCertPass }}

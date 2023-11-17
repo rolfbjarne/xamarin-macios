@@ -10,6 +10,7 @@
 #if !__WATCHOS__
 
 using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 
 using Foundation;
@@ -137,6 +138,37 @@ namespace UIKit {
 			ret = Runtime.GetINativeObject<IUITraitChangeRegistration> (NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("registerForTraitChanges:withAction:"), nsa_traits.Handle, action.Handle), false)!;
 			nsa_traits.Dispose ();
 			return ret!;
+		}
+
+		static Class [] ToClasses (IUITraitDefinition [] traits)
+		{
+			if (traits is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (traits));
+			var traitsClasses = new Class [traits.Length];
+			for (var i = 0; i < traits.Length; i++)
+				traitsClasses [i] = new Class (traits [i].GetType ());
+			return traitsClasses;
+		}
+
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		[Obsolete ("Use the 'UITraitChangeObservable.RegisterForTraitChanges (Class[], Action<IUITraitEnvironment, UITraitCollection>)' method instead.")]
+		public IUITraitChangeRegistration RegisterForTraitChanges (IUITraitDefinition [] traits, Action<IUITraitEnvironment, UITraitCollection> handler)
+		{
+			return RegisterForTraitChanges (ToClasses (traits), handler);
+		}
+
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		[Obsolete ("Use the 'UITraitChangeObservable.RegisterForTraitChanges (Class[], NSObject, Selector)' method instead.")]
+		public IUITraitChangeRegistration RegisterForTraitChanges (IUITraitDefinition [] traits, NSObject target, Selector action)
+		{
+			return RegisterForTraitChanges (ToClasses (traits), target, action);
+		}
+
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		[Obsolete ("Use the 'UITraitChangeObservable.RegisterForTraitChanges (Class[], Selector)' method instead.")]
+		public IUITraitChangeRegistration RegisterForTraitChanges (IUITraitDefinition [] traits, Selector action)
+		{
+			return RegisterForTraitChanges (ToClasses (traits), action);
 		}
 
 		[DllImport (Messaging.LIBOBJC_DYLIB, EntryPoint = "objc_msgSend")]

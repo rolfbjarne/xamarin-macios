@@ -13,7 +13,7 @@ using Xamarin.Utils;
 #nullable disable
 
 namespace Xamarin.MacDev.Tasks {
-	public class Zip : XamarinToolTask, ITaskCallback {
+	public class Zip : XamarinToolTask2, ITaskCallback {
 		#region Inputs
 
 		[Output]
@@ -51,9 +51,9 @@ namespace Xamarin.MacDev.Tasks {
 			return WorkingDirectory.GetMetadata ("FullPath");
 		}
 
-		protected override string GenerateCommandLineCommands ()
+		protected override IList<string> GenerateCommandLineCommands ()
 		{
-			var args = new CommandLineArgumentBuilder ();
+			var args = new List<string> ();
 
 			if (Recursive)
 				args.Add ("-r");
@@ -61,21 +61,15 @@ namespace Xamarin.MacDev.Tasks {
 			if (Symlinks)
 				args.Add ("-y");
 
-			args.AddQuoted (OutputFile.GetMetadata ("FullPath"));
+			args.Add (OutputFile.GetMetadata ("FullPath"));
 
 			var root = WorkingDirectory.GetMetadata ("FullPath");
 			for (int i = 0; i < Sources.Length; i++) {
 				var relative = PathUtils.AbsoluteToRelative (root, Sources [i].GetMetadata ("FullPath"));
-				args.AddQuoted (relative);
+				args.Add (relative);
 			}
 
-			return args.ToString ();
-		}
-
-		protected override void LogEventsFromTextOutput (string singleLine, MessageImportance messageImportance)
-		{
-			// TODO: do proper parsing of error messages and such
-			Log.LogMessage (messageImportance, "{0}", singleLine);
+			return args;
 		}
 
 		public override bool Execute ()

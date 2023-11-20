@@ -116,8 +116,7 @@ namespace MonoTouchFixtures.UIKit {
 			var tc = UITraitCollection.CurrentTraitCollection;
 			UIUserInterfaceSizeClass? initialHorizonal = null;
 			UIUserInterfaceSizeClass? initialVertical = null;
-			tc.PerformAsCurrentTraitCollection (() =>
-			{
+			tc.PerformAsCurrentTraitCollection (() => {
 				initialHorizonal = tc.HorizontalSizeClass;
 				initialVertical = tc.VerticalSizeClass;
 			});

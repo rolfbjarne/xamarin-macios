@@ -45,7 +45,7 @@ namespace Xamarin.MacDev.Tasks {
 		public string Keychain { get; set; } = string.Empty;
 
 		[Required]
-		public ITaskItem [] Resources { get; set; } = Array.Empty<ITaskItem> ();
+		public ITaskItem? [] Resources { get; set; } = Array.Empty<ITaskItem> ();
 
 		// Can also be specified per resource using the 'CodesignResourceRules' metadata
 		public string ResourceRules { get; set; } = string.Empty;
@@ -127,9 +127,12 @@ namespace Xamarin.MacDev.Tasks {
 		}
 
 		// 'sortedItems' is sorted by length of path, longest first.
-		bool NeedsCodesign (ITaskItem [] sortedItems, int index, string stampFileContents)
+		bool NeedsCodesign (ITaskItem? [] sortedItems, int index, string stampFileContents)
 		{
 			var item = sortedItems [index];
+			if (item is null)
+				return false;
+
 			var stampFile = GetCodesignStampFile (item);
 			if (!File.Exists (stampFile)) {
 				Log.LogMessage (MessageImportance.Low, "The stamp file '{0}' does not exist, so the item '{1}' needs to be codesigned.", stampFile, item.ItemSpec);
@@ -150,10 +153,11 @@ namespace Xamarin.MacDev.Tasks {
 				var resolvedStampFile = Path.GetFullPath (PathUtils.ResolveSymbolicLinks (stampFile));
 
 				for (var i = 0; i < index; i++) {
-					if (sortedItems [i] is null)
+					var sortedItem = sortedItems [i];
+					if (sortedItem is null)
 						continue; // this item does not need to be signed
-					if (sortedItems [i].ItemSpec.StartsWith (itemPath, StringComparison.OrdinalIgnoreCase)) {
-						Log.LogMessage (MessageImportance.Low, "The item '{0}' contains '{1}', which must be signed, which means that the item must be signed too.", item.ItemSpec, sortedItems [i].ItemSpec);
+					if (sortedItem.ItemSpec.StartsWith (itemPath, StringComparison.OrdinalIgnoreCase)) {
+						Log.LogMessage (MessageImportance.Low, "The item '{0}' contains '{1}', which must be signed, which means that the item must be signed too.", item.ItemSpec, sortedItem.ItemSpec);
 						return true; // there's an item inside this directory that needs to be signed, so this directory must be signed too
 					}
 				}
@@ -402,7 +406,7 @@ namespace Xamarin.MacDev.Tasks {
 			// All this makes it easier to sort and split the input files into buckets that can be codesigned together,
 			// while also not codesigning directories before files inside them.
 			foreach (var res in resourcesToSign) {
-				var path = res.ItemSpec;
+				var path = res!.ItemSpec;
 				var parent = Path.GetDirectoryName (path);
 
 				// so do not don't sign `A.framework/A`, sign `A.framework` which will always sign the *bundle*
@@ -416,17 +420,22 @@ namespace Xamarin.MacDev.Tasks {
 			}
 
 			// first sort all the items by path length, longest path first.
-			resourcesToSign = resourcesToSign.OrderBy (v => v.ItemSpec.Length).Reverse ().ToArray ();
+			resourcesToSign = resourcesToSign.OrderBy (v => v!.ItemSpec.Length).Reverse ().ToArray ();
 
 			// remove items that are up-to-date
 			var itemsToSign = new List<SignInfo> ();
 			for (var i = 0; i < resourcesToSign.Length; i++) {
 				var item = resourcesToSign [i];
+				if (item is null)
+					continue;
 				var info = new SignInfo (item);
 				if (!Validate (info))
 					continue;
-				if (NeedsCodesign (resourcesToSign, i, info.GetStampFileContents (this)))
+				if (NeedsCodesign (resourcesToSign, i, info.GetStampFileContents (this))) {
 					itemsToSign.Add (info);
+				} else {
+					resourcesToSign [i] = new TaskItem ("");
+				}
 			}
 
 			if (Log.HasLoggedErrors)

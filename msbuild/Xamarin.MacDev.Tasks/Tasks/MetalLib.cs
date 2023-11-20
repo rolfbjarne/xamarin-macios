@@ -14,7 +14,7 @@ using Xamarin.Utils;
 #nullable disable
 
 namespace Xamarin.MacDev.Tasks {
-	public class MetalLib : XamarinToolTask, ITaskCallback {
+	public class MetalLib : XamarinToolTask2, ITaskCallback {
 		#region Inputs
 
 		[Required]
@@ -65,23 +65,17 @@ namespace Xamarin.MacDev.Tasks {
 			return File.Exists (path) ? path : ToolExe;
 		}
 
-		protected override string GenerateCommandLineCommands ()
+		protected override IList<string> GenerateCommandLineCommands ()
 		{
-			var args = new CommandLineArgumentBuilder ();
+			var args = new List<string> ();
 
 			args.Add ("-o");
-			args.AddQuoted (OutputLibrary);
+			args.Add (OutputLibrary);
 
 			foreach (var item in Items)
-				args.AddQuoted (item.ItemSpec);
+				args.Add (item.ItemSpec);
 
-			return args.ToString ();
-		}
-
-		protected override void LogEventsFromTextOutput (string singleLine, MessageImportance messageImportance)
-		{
-			// TODO: do proper parsing of error messages and such
-			Log.LogMessage (messageImportance, "{0}", singleLine);
+			return args;
 		}
 
 		public override bool Execute ()
@@ -95,7 +89,7 @@ namespace Xamarin.MacDev.Tasks {
 				Directory.CreateDirectory (dir);
 
 			if (AppleSdkSettings.XcodeVersion.Major >= 11)
-				EnvironmentVariables = EnvironmentVariables.CopyAndAdd ($"SDKROOT={SdkRoot}");
+				EnvironmentVariables ["SDKROOT"] = SdkRoot;
 
 			return base.Execute ();
 		}

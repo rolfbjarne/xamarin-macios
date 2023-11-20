@@ -1576,4 +1576,19 @@
         <comment>RuntimeIdentifier: don't translate (it's the name of a MSBuild property)</comment>
     </data>
 
+    <data name="E7125" xml:space="preserve">
+        <value>Encountered an assembly reference cycle related to the assembly {0}.</value>
+        <comment>
+            {0}: the path to an assembly
+        </comment>
+    </data>
+
+    <data name="E7126" xml:space="preserve">
+        <value>Failed to optimize the image {0}, pngcrush exited with code {1}.</value>
+        <comment>
+            {0}: the path to an image
+            {1}: the exit code of a process
+        </comment>
+    </data>
+>>>>>>> a733bdad1c ([msbuild] Port OptimizeImage to XamarinTask.)
 </root>

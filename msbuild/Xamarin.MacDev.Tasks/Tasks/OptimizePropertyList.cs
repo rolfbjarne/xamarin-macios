@@ -12,7 +12,7 @@ using Xamarin.Messaging.Build.Client;
 #nullable disable
 
 namespace Xamarin.MacDev.Tasks {
-	public class OptimizePropertyList : XamarinToolTask, ITaskCallback {
+	public class OptimizePropertyList : XamarinToolTask2, ITaskCallback {
 		#region Inputs
 
 		[Required]
@@ -38,22 +38,17 @@ namespace Xamarin.MacDev.Tasks {
 			return File.Exists (path) ? path : ToolExe;
 		}
 
-		protected override string GenerateCommandLineCommands ()
+		protected override IList<string> GenerateCommandLineCommands ()
 		{
-			var args = new CommandLineBuilder ();
+			var args = new List<string> ();
 
-			args.AppendSwitch ("-convert");
-			args.AppendSwitch ("binary1");
-			args.AppendSwitch ("-o");
-			args.AppendFileNameIfNotNull (Output.ItemSpec);
-			args.AppendFileNameIfNotNull (Input.ItemSpec);
+			args.Add ("-convert");
+			args.Add ("binary1");
+			args.Add ("-o");
+			args.Add (Output.ItemSpec);
+			args.Add (Input.ItemSpec);
 
-			return args.ToString ();
-		}
-
-		protected override void LogEventsFromTextOutput (string singleLine, MessageImportance messageImportance)
-		{
-			Log.LogMessage (messageImportance, "{0}", singleLine);
+			return args;
 		}
 
 		public override bool Execute ()

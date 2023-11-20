@@ -19,7 +19,7 @@ using Xamarin.Messaging.Build.Client;
 #nullable disable
 
 namespace Xamarin.MacDev.Tasks {
-	public class BTouch : XamarinToolTask, ITaskCallback {
+	public class BTouch : XamarinToolTask2, ITaskCallback {
 
 		public string OutputPath { get; set; }
 
@@ -111,7 +111,7 @@ namespace Xamarin.MacDev.Tasks {
 			}
 		}
 
-		protected override string GenerateCommandLineCommands ()
+		protected override IList<string> GenerateCommandLineCommands ()
 		{
 			var cmd = new CommandLineArgumentBuilder ();
 
@@ -248,7 +248,7 @@ namespace Xamarin.MacDev.Tasks {
 			if (IsDotNet)
 				commandLine = StringUtils.Quote (Path.Combine (BTouchToolPath, BTouchToolExe)) + " " + commandLine;
 
-			return commandLine.ToString ();
+			return new string [] { commandLine };
 		}
 
 		public override bool Execute ()
@@ -284,7 +284,7 @@ namespace Xamarin.MacDev.Tasks {
 				var customHome = Environment.GetEnvironmentVariable ("DOTNET_CUSTOM_HOME");
 
 				if (!string.IsNullOrEmpty (customHome)) {
-					EnvironmentVariables = EnvironmentVariables.CopyAndAdd ($"HOME={customHome}");
+					EnvironmentVariables ["HOME"] = customHome;
 				}
 			} else {
 				ToolExe = BTouchToolExe;

@@ -15,7 +15,7 @@ using Xamarin.Messaging.Build.Client;
 #nullable disable
 
 namespace Xamarin.MacDev.Tasks {
-	public class Metal : XamarinToolTask {
+	public class Metal : XamarinToolTask2 {
 		#region Inputs
 
 		[Required]
@@ -90,17 +90,17 @@ namespace Xamarin.MacDev.Tasks {
 				return new TaskRunner (SessionId, BuildEngine4).RunAsync (this).Result;
 
 			if (AppleSdkSettings.XcodeVersion.Major >= 11)
-				EnvironmentVariables = EnvironmentVariables.CopyAndAdd ($"SDKROOT={SdkRoot}");
+				EnvironmentVariables ["SDKROOT"] = SdkRoot;
 			return base.Execute ();
 		}
 
-		protected override string GenerateCommandLineCommands ()
+		protected override IList<string> GenerateCommandLineCommands ()
 		{
 			var prefixes = BundleResource.SplitResourcePrefixes (ResourcePrefix);
 			var intermediate = Path.Combine (IntermediateOutputPath, ToolName);
 			var logicalName = BundleResource.GetLogicalName (ProjectDir, prefixes, SourceFile, !string.IsNullOrEmpty (SessionId));
 			var path = Path.Combine (intermediate, logicalName);
-			var args = new CommandLineArgumentBuilder ();
+			var args = new List<string> ();
 			var dir = Path.GetDirectoryName (path);
 
 			if (!Directory.Exists (dir))
@@ -109,17 +109,18 @@ namespace Xamarin.MacDev.Tasks {
 			OutputFile = new TaskItem (Path.ChangeExtension (path, ".air"));
 			OutputFile.SetMetadata ("LogicalName", Path.ChangeExtension (logicalName, ".air"));
 
-			args.Add ("-arch", "air64");
+			args.Add ("-arch");
+			args.Add ("air64");
 			args.Add ("-emit-llvm");
 			args.Add ("-c");
 			args.Add ("-gline-tables-only");
 			args.Add ("-ffast-math");
 
 			args.Add ("-serialize-diagnostics");
-			args.AddQuoted (Path.ChangeExtension (path, ".dia"));
+			args.Add (Path.ChangeExtension (path, ".dia"));
 
 			args.Add ("-o");
-			args.AddQuoted (Path.ChangeExtension (path, ".air"));
+			args.Add (Path.ChangeExtension (path, ".air"));
 
 			if (Platform == ApplePlatform.MacCatalyst) {
 				args.Add ($"-target");
@@ -127,15 +128,9 @@ namespace Xamarin.MacDev.Tasks {
 			} else {
 				args.Add (PlatformFrameworkHelper.GetMinimumVersionArgument (TargetFrameworkMoniker, SdkIsSimulator, MinimumOSVersion));
 			}
-			args.AddQuoted (SourceFile.ItemSpec);
+			args.Add (SourceFile.ItemSpec);
 
-			return args.ToString ();
-		}
-
-		protected override void LogEventsFromTextOutput (string singleLine, MessageImportance messageImportance)
-		{
-			// TODO: do proper parsing of error messages and such
-			Log.LogMessage (messageImportance, "{0}", singleLine);
+			return args;
 		}
 
 		public override void Cancel ()

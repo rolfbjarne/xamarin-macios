@@ -308,7 +308,7 @@ steps:
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
       -- `
-      /Users/builder/remote_build_testing/src/xamarin-macios/tests/dotnet/Windows/install-xcode.sh "$Env:AUTH_TOKEN_GITHUB_COM"
+      /Users/builder/remote_build_testing/src/xamarin-macios/tests/dotnet/Windows/install-xcode.sh "$Env:AUTH_TOKEN_GITHUB_COM" "$Env:BUILD_SOURCEVERSION"
   displayName: 'Install Xcode on Mac'
   continueOnError: true
   timeoutInMinutes: 60

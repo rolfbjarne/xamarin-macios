@@ -24,12 +24,23 @@ perl -pi -e 's/\r\n|\n|\r/\n/g' "$TOP/../maccore/tools/devops/provisionator.sh"
 
 if test -z "${AUTH_TOKEN_GITHUB_COM:-}"; then
 	AUTH_TOKEN_GITHUB_COM=${1:-}
+	shift
 	if test -z "$AUTH_TOKEN_GITHUB_COM"; then
 		echo "AUTH_TOKEN_GITHUB_COM not provided, neither in the environment, nor as an argument"
 		exit 1
 	fi
 fi
 
+if test -z "${BUILD_SOURCEVERSION:-}"; then
+	BUILD_SOURCEVERSION=${2:-}
+	shift
+	if test -z "$BUILD_SOURCEVERSION"; then
+		echo "BUILD_SOURCEVERSION not provided, neither in the environment, nor as an argument"
+		exit 1
+	fi
+fi
+
 export AUTH_TOKEN_GITHUB_COM
+export BUILD_SOURCEVERSION
 
 "$TOP/../maccore/tools/devops/provisionator.sh" "$TOP/tools/devops/provision-xcode.csx"

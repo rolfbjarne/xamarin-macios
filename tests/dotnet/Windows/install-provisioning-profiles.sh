@@ -16,5 +16,6 @@ chmod +x "$TOP/../maccore/tools/install-qa-provisioning-profiles.sh"
 
 # dos2unix
 perl -pi -e 's/\r\n|\n|\r/\n/g' "$TOP/../maccore/tools/install-qa-provisioning-profiles.sh"
+perl -pi -e 's/\r\n|\n|\r/\n/g' "$TOP/../maccore/tools/provisioning-profiles/provisionator.sh"
 
 "$TOP/../maccore/tools/install-qa-provisioning-profiles.sh" -v

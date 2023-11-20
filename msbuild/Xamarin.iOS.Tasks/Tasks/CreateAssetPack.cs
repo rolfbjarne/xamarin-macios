@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Build.Utilities;
 using Microsoft.Build.Framework;
 using System.IO;
@@ -9,7 +10,7 @@ using Xamarin.Messaging.Build.Client;
 #nullable enable
 
 namespace Xamarin.iOS.Tasks {
-	public class CreateAssetPack : XamarinToolTask {
+	public class CreateAssetPack : XamarinToolTask2 {
 		#region Inputs
 
 		[Required]
@@ -39,13 +40,14 @@ namespace Xamarin.iOS.Tasks {
 			return Source!.GetMetadata ("FullPath");
 		}
 
-		protected override string GenerateCommandLineCommands ()
+		protected override IList<string> GenerateCommandLineCommands ()
 		{
-			var args = new CommandLineArgumentBuilder ();
+			var args = new List<string> ();
 
-			args.Add ("-r", "-y");
-			args.AddQuoted (OutputFile!.GetMetadata ("FullPath"));
-			args.AddQuoted ("META-INF");
+			args.Add ("-r");
+			args.Add ("-y");
+			args.Add (OutputFile!.GetMetadata ("FullPath"));
+			args.Add ("META-INF");
 
 			long size = 0;
 			int count = 0;
@@ -64,18 +66,13 @@ namespace Xamarin.iOS.Tasks {
 					size += info.Length;
 				}
 
-				args.AddQuoted (Path.GetFileName (path));
+				args.Add (Path.GetFileName (path));
 				count++;
 			}
 
 			SaveMetaFile (count, size);
 
-			return args.ToString ();
-		}
-
-		protected override void LogEventsFromTextOutput (string singleLine, MessageImportance messageImportance)
-		{
-			Log.LogMessage (messageImportance, "{0}", singleLine);
+			return args;
 		}
 
 		public override bool Execute ()

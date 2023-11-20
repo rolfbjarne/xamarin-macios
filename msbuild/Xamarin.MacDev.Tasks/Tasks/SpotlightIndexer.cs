@@ -8,7 +8,7 @@ using Microsoft.Build.Utilities;
 using Xamarin.Messaging.Build.Client;
 
 namespace Xamarin.MacDev.Tasks {
-	public class SpotlightIndexer : XamarinToolTask2 {
+	public class SpotlightIndexer : XamarinToolTask {
 		#region Inputs
 
 		[Required]

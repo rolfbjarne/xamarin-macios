@@ -14,7 +14,7 @@ using Xamarin.Utils;
 #nullable disable
 
 namespace Xamarin.MacDev.Tasks {
-	public class MetalLib : XamarinToolTask2, ITaskCallback {
+	public class MetalLib : XamarinToolTask, ITaskCallback {
 		#region Inputs
 
 		[Required]

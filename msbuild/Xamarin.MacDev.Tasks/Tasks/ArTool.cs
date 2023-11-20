@@ -10,7 +10,7 @@ using Xamarin.MacDev;
 using Xamarin.Messaging.Build.Client;
 
 namespace Xamarin.MacDev.Tasks {
-	public class ArTool : XamarinToolTask2, ITaskCallback {
+	public class ArTool : XamarinToolTask, ITaskCallback {
 		#region Inputs
 
 		[Required]

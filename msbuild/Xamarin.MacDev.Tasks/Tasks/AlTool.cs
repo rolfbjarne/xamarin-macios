@@ -13,7 +13,7 @@ using Xamarin.Localization.MSBuild;
 #nullable disable
 
 namespace Xamarin.MacDev.Tasks {
-	public abstract class ALToolTaskBase : XamarinToolTask2 {
+	public abstract class ALToolTaskBase : XamarinToolTask {
 		string sdkDevPath;
 
 		[Required]

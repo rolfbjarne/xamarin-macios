@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 using Microsoft.Build.Utilities;
@@ -12,9 +13,8 @@ using Xamarin.Localization.MSBuild;
 #nullable disable
 
 namespace Xamarin.MacDev.Tasks {
-	public abstract class ALToolTaskBase : XamarinToolTask {
+	public abstract class ALToolTaskBase : XamarinToolTask2 {
 		string sdkDevPath;
-		StringBuilder toolOutput;
 
 		[Required]
 		public string Username { get; set; }
@@ -45,13 +45,11 @@ namespace Xamarin.MacDev.Tasks {
 
 		public override bool Execute ()
 		{
-			toolOutput = new StringBuilder ();
-
 			base.Execute ();
 
-			LogErrorsFromOutput (toolOutput.ToString ());
+			LogErrorsFromOutput (ExecutionResult.StandardOutput.ToString ());
 
-			return !HasLoggedErrors;
+			return !Log.HasLoggedErrors;
 		}
 
 		protected override string GenerateFullPathToTool ()
@@ -64,29 +62,23 @@ namespace Xamarin.MacDev.Tasks {
 			return File.Exists (path) ? path : ToolExe;
 		}
 
-		protected override string GenerateCommandLineCommands ()
+		protected override IList<string> GenerateCommandLineCommands ()
 		{
-			var args = new CommandLineArgumentBuilder ();
+			var args = new List<string> ();
 
 			args.Add (ALToolAction);
 			args.Add ("--file");
-			args.AddQuoted (FilePath);
+			args.Add (FilePath);
 			args.Add ("--type");
-			args.AddQuoted (GetFileTypeValue ());
+			args.Add (GetFileTypeValue ());
 			args.Add ("--username");
-			args.AddQuoted (Username);
+			args.Add (Username);
 			args.Add ("--password");
-			args.AddQuoted (Password);
+			args.Add (Password);
 			args.Add ("--output-format");
 			args.Add ("xml");
 
-			return args.ToString ();
-		}
-
-		protected override void LogEventsFromTextOutput (string singleLine, MessageImportance messageImportance)
-		{
-			toolOutput.Append (singleLine);
-			Log.LogMessage (messageImportance, "{0}", singleLine);
+			return args;
 		}
 
 		string GetFileTypeValue ()

@@ -15,7 +15,7 @@ using Xamarin.Messaging.Build.Client;
 #nullable disable
 
 namespace Xamarin.MacDev.Tasks {
-	public class Metal : XamarinToolTask2 {
+	public class Metal : XamarinToolTask {
 		#region Inputs
 
 		[Required]

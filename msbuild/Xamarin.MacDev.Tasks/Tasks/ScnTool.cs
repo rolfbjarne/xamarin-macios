@@ -12,7 +12,7 @@ using Xamarin.Utils;
 #nullable disable
 
 namespace Xamarin.MacDev.Tasks {
-	public class ScnTool : XamarinToolTask2 {
+	public class ScnTool : XamarinToolTask {
 		string sdkDevPath;
 
 		#region Inputs

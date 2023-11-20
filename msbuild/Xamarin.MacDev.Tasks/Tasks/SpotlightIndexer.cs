@@ -11,7 +11,7 @@ using Xamarin.Messaging.Build.Client;
 #nullable disable
 
 namespace Xamarin.MacDev.Tasks {
-	public class SpotlightIndexer : XamarinToolTask2 {
+	public class SpotlightIndexer : XamarinToolTask {
 		#region Inputs
 
 		[Required]

@@ -13,7 +13,7 @@ using Xamarin.Utils;
 
 namespace Xamarin.MacDev.Tasks {
 	// A class to express what's shared/common between mtouch and mmp.
-	public abstract class BundlerToolTaskBase : XamarinToolTask2 {
+	public abstract class BundlerToolTaskBase : XamarinToolTask {
 
 		#region Inputs
 		[Required]

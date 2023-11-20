@@ -19,7 +19,7 @@ using Xamarin.Messaging.Build.Client;
 #nullable disable
 
 namespace Xamarin.MacDev.Tasks {
-	public class BTouch : XamarinToolTask2, ITaskCallback {
+	public class BTouch : XamarinToolTask, ITaskCallback {
 
 		public string OutputPath { get; set; }
 

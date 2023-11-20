@@ -12,7 +12,7 @@ using Xamarin.Messaging.Build.Client;
 #nullable disable
 
 namespace Xamarin.MacDev.Tasks {
-	public class OptimizePropertyList : XamarinToolTask2, ITaskCallback {
+	public class OptimizePropertyList : XamarinToolTask, ITaskCallback {
 		#region Inputs
 
 		[Required]

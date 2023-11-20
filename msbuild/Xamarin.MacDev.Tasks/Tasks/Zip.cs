@@ -13,7 +13,7 @@ using Xamarin.Utils;
 #nullable disable
 
 namespace Xamarin.MacDev.Tasks {
-	public class Zip : XamarinToolTask2, ITaskCallback {
+	public class Zip : XamarinToolTask, ITaskCallback {
 		#region Inputs
 
 		[Output]

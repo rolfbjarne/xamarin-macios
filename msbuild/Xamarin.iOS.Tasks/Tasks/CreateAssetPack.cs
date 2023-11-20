@@ -10,7 +10,7 @@ using Xamarin.Messaging.Build.Client;
 #nullable enable
 
 namespace Xamarin.iOS.Tasks {
-	public class CreateAssetPack : XamarinToolTask2 {
+	public class CreateAssetPack : XamarinToolTask {
 		#region Inputs
 
 		[Required]

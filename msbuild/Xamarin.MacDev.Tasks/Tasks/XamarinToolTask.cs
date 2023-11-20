@@ -11,7 +11,7 @@ using Xamarin.Utils;
 #nullable enable
 
 namespace Xamarin.MacDev.Tasks {
-	public abstract class XamarinToolTask2 : XamarinTask {
+	public abstract class XamarinToolTask : XamarinTask {
 		public string ToolPath { get; set; } = string.Empty;
 		protected virtual string ToolName { get; set; } = string.Empty;
 

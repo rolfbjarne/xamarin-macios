@@ -1056,28 +1056,24 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<Target Name="_CoreCompileColladaAssets"
 		DependsOnTargets="_CollectColladaAssets;_DetectSdkLocations;_ComputeTargetFrameworkMoniker"
 		Inputs="@(_ColladaAssetWithLogicalName)"
-		Outputs="$(DeviceSpecificIntermediateOutputPath)%(_ColladaAssetWithLogicalName.LogicalName)"
+		Outputs="@(_ColladaAssetWithLogicalName -> '$(DeviceSpecificIntermediateOutputPath)%(LogicalName)')"
 		>
 
 		<ScnTool
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
+			DeviceSpecificIntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
 			IsWatchApp="$(IsWatchApp)"
-			ToolExe="$(ScnToolExe)"
-			ToolPath="$(ScnToolPath)"
 			SdkPlatform="$(_SdkPlatform)"
 			SdkRoot="$(_SdkRoot)"
 			SdkDevPath="$(_SdkDevPath)"
 			SdkVersion="$(_SdkVersion)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
-			InputScene="%(_ColladaAssetWithLogicalName.Identity)"
-			OutputScene="$(DeviceSpecificIntermediateOutputPath)%(_ColladaAssetWithLogicalName.LogicalName)">
+			ColladaAssets="@(_ColladaAssetWithLogicalName)"
+			>
+			<Output TaskParameter="BundleResources" ItemName="_BundleResourceWithLogicalName" />
 		</ScnTool>
-
-		<CreateItem Include="$(DeviceSpecificIntermediateOutputPath)%(_ColladaAssetWithLogicalName.LogicalName)" AdditionalMetadata="LogicalName=%(_ColladaAssetWithLogicalName.LogicalName);Optimize='False'">
-			<Output TaskParameter="Include" ItemName="_BundleResourceWithLogicalName" />
-		</CreateItem>
 
 		<!-- Write out the list of assets we've processed, so that an inner build in a multi-rid build can skip processing them -->
 		<WriteItemsToFile Items="@(_ColladaAssetWithLogicalName)" Condition="'$(_SaveProcessedItems)' == 'true'" ItemName="_ColladaAssetWithLogicalName" File="$(_ProcessedColladaAssetsPath)" Overwrite="true" IncludeMetadata="false" />

@@ -15,7 +15,7 @@ using Xamarin.Localization.MSBuild;
 #nullable disable
 
 namespace Xamarin.MacDev.Tasks {
-	public class CreateInstallerPackage : XamarinToolTask {
+	public class CreateInstallerPackage : XamarinToolTask2 {
 		#region Inputs
 		[Required]
 		public string OutputDirectory { get; set; }
@@ -83,24 +83,24 @@ namespace Xamarin.MacDev.Tasks {
 			return OutputDirectory;
 		}
 
-		protected override string GenerateCommandLineCommands ()
+		protected override IList<string> GenerateCommandLineCommands ()
 		{
 			Log.LogMessage ("Creating installer package");
 
-			var args = new CommandLineArgumentBuilder ();
+			var args = new List<string> ();
 
 			if (!string.IsNullOrEmpty (ProductDefinition)) {
 				args.Add ("--product");
-				args.AddQuoted (Path.GetFullPath (ProductDefinition));
+				args.Add (Path.GetFullPath (ProductDefinition));
 			}
 
 			args.Add ("--component");
-			args.AddQuoted (Path.GetFullPath (AppBundleDir));
+			args.Add (Path.GetFullPath (AppBundleDir));
 			args.Add ("/Applications");
 
 			if (EnablePackageSigning) {
 				args.Add ("--sign");
-				args.AddQuoted (GetPackageSigningCertificateCommonName ());
+				args.Add (GetPackageSigningCertificateCommonName ());
 			}
 
 			if (!string.IsNullOrEmpty (PackagingExtraArgs)) {
@@ -108,7 +108,7 @@ namespace Xamarin.MacDev.Tasks {
 					AppendExtraArgs (args, PackagingExtraArgs);
 				} catch (FormatException) {
 					Log.LogError (MSBStrings.E0123);
-					return string.Empty;
+					return Array.Empty<string> ();
 				}
 			}
 
@@ -118,14 +118,14 @@ namespace Xamarin.MacDev.Tasks {
 				PkgPackagePath = Path.Combine (OutputDirectory, target);
 			}
 			PkgPackagePath = Path.GetFullPath (PkgPackagePath);
-			args.AddQuoted (PkgPackagePath);
+			args.Add (PkgPackagePath);
 
 			Directory.CreateDirectory (Path.GetDirectoryName (PkgPackagePath));
 
-			return args.ToString ();
+			return args;
 		}
 
-		void AppendExtraArgs (CommandLineArgumentBuilder args, string extraArgs)
+		void AppendExtraArgs (List<string> args, string extraArgs)
 		{
 			var target = this.MainAssembly.ItemSpec;
 
@@ -142,7 +142,7 @@ namespace Xamarin.MacDev.Tasks {
 			};
 
 			for (int i = 0; i < argv.Length; i++)
-				args.AddQuoted (StringParserService.Parse (argv [i], customTags));
+				args.Add (StringParserService.Parse (argv [i], customTags));
 		}
 
 		string GetPackageSigningCertificateCommonName ()

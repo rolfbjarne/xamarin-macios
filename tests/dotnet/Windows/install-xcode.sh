@@ -30,4 +30,6 @@ if test -z "${AUTH_TOKEN_GITHUB_COM:-}"; then
 	fi
 fi
 
+export AUTH_TOKEN_GITHUB_COM
+
 "$TOP/../maccore/tools/devops/provisionator.sh" "$TOP/tools/devops/provision-xcode.csx"

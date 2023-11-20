@@ -319,7 +319,6 @@ steps:
 - pwsh: |
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tools/devops/automation/scripts/MaciosCI.psd1
     $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
-    # execute install-qa-provisioning-profiles.sh
     Invoke-SshEnvCommand `
       -SourcesDirectory "$(Build.SourcesDirectory)" `
       -DotNet "$Env:DOTNET" `
@@ -328,7 +327,7 @@ steps:
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
       -- `
-      chmod +x /Users/builder/remote_build_testing/src/maccore/tools/install-qa-provisioning-profiles.sh
+      chmod +x /Users/builder/remote_build_testing/src/xamarin-macios/tests/dotnet/Windows/install-provisioning-profiles.sh
     Invoke-SshEnvCommand `
       -SourcesDirectory "$(Build.SourcesDirectory)" `
       -DotNet "$Env:DOTNET" `
@@ -337,16 +336,7 @@ steps:
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
       -- `
-      dos2unix /Users/builder/remote_build_testing/src/maccore/tools/install-qa-provisioning-profiles.sh
-    Invoke-SshEnvCommand `
-      -SourcesDirectory "$(Build.SourcesDirectory)" `
-      -DotNet "$Env:DOTNET" `
-      -RemoteHost "$Env:MAC_AGENT_IP" `
-      -RemoteUserName "builder" `
-      -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
-      -ThrowIfError $true `
-      -- `
-      /Users/builder/remote_build_testing/src/maccore/tools/install-qa-provisioning-profiles.sh -v
+      /Users/builder/remote_build_testing/src/xamarin-macios/tests/dotnet/Windows/install-provisioning-profiles.sh
   displayName: 'Install provisioning profiles on Mac'
   continueOnError: true
   timeoutInMinutes: 5

@@ -336,18 +336,14 @@ steps:
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
       -- `
-      /Users/builder/remote_build_testing/src/xamarin-macios/tests/dotnet/Windows/install-provisioning-profiles.sh "$Env:AUTH_TOKEN_GITHUB_COM"
+      /Users/builder/remote_build_testing/src/xamarin-macios/tests/dotnet/Windows/install-provisioning-profiles.sh "$Env:AUTH_TOKEN_GITHUB_COM" "$Env:XQA_CERT_PASS"
   displayName: 'Install provisioning profiles on Mac'
   continueOnError: true
   timeoutInMinutes: 5
   env:
     XMA_PASSWORD: $(XMA.Password)
     AUTH_TOKEN_GITHUB_COM: ${{ parameters.gitHubToken }}
-    AUTH_TOKEN_LA_DEV_APPLE_P12: ${{ parameters.xqaCertPass }}
-    AUTH_TOKEN_LA_DISTR_APPLE_P12: ${{ parameters.xqaCertPass }}
-    AUTH_TOKEN_LA_MAC_INSTALLER_DISTR_P12: ${{ parameters.xqaCertPass }}
-    AUTH_TOKEN_VSENG_XAMARIN_MAC_DEVICES_P12: ${{ parameters.xqaCertPass }}
-    AUTH_TOKEN_VSENG_XAMARIN_MAC_DEVICES_2_P12: ${{ parameters.xqaCertPass }}
+    XQA_CERT_PASS: ${{ parameters.xqaCertPass }}
 
 - pwsh: |
     $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"

@@ -29,4 +29,19 @@ fi
 
 export AUTH_TOKEN_GITHUB_COM
 
+
+if test -z "${XQA_CERT_PASS:-}"; then
+	XQA_CERT_PASS=${1:-}
+	shift
+	if test -z "${XQA_CERT_PASS:-1}"; then
+		echo "XQA_CERT_PASS not provided, neither in the environment, nor as an argument"
+		exit 1
+	fi
+fi
+export AUTH_TOKEN_LA_DEV_APPLE_P12=$XQA_CERT_PASS
+export AUTH_TOKEN_LA_DISTR_APPLE_P12=$XQA_CERT_PASS
+export AUTH_TOKEN_LA_MAC_INSTALLER_DISTR_P12=$XQA_CERT_PASS
+export AUTH_TOKEN_VSENG_XAMARIN_MAC_DEVICES_P12=$XQA_CERT_PASS
+export AUTH_TOKEN_VSENG_XAMARIN_MAC_DEVICES_2_P12=$XQA_CERT_PASS
+
 "$TOP/../maccore/tools/install-qa-provisioning-profiles.sh" -v

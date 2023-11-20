@@ -11,7 +11,6 @@ using Xamarin.Utils;
 #nullable enable
 
 namespace Xamarin.MacDev.Tasks {
-	// This is a variation of XamarinToolTask that subclasses XamarinTask and provides an interface similar to ToolTask.
 	public abstract class XamarinToolTask2 : XamarinTask {
 		public string ToolPath { get; set; } = string.Empty;
 		protected virtual string ToolName { get; set; } = string.Empty;

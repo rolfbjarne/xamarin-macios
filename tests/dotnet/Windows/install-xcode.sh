@@ -32,7 +32,7 @@ if test -z "${AUTH_TOKEN_GITHUB_COM:-}"; then
 fi
 
 if test -z "${BUILD_SOURCEVERSION:-}"; then
-	BUILD_SOURCEVERSION=${2:-}
+	BUILD_SOURCEVERSION=${1:-}
 	shift
 	if test -z "$BUILD_SOURCEVERSION"; then
 		echo "BUILD_SOURCEVERSION not provided, neither in the environment, nor as an argument"

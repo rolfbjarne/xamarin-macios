@@ -18,4 +18,15 @@ chmod +x "$TOP/../maccore/tools/install-qa-provisioning-profiles.sh"
 perl -pi -e 's/\r\n|\n|\r/\n/g' "$TOP/../maccore/tools/install-qa-provisioning-profiles.sh"
 perl -pi -e 's/\r\n|\n|\r/\n/g' "$TOP/../maccore/tools/provisioning-profiles/provisionator.sh"
 
+if test -z "${AUTH_TOKEN_GITHUB_COM:-}"; then
+	AUTH_TOKEN_GITHUB_COM=${1:-}
+	shift
+	if test -z "$AUTH_TOKEN_GITHUB_COM"; then
+		echo "AUTH_TOKEN_GITHUB_COM not provided, neither in the environment, nor as an argument"
+		exit 1
+	fi
+fi
+
+export AUTH_TOKEN_GITHUB_COM
+
 "$TOP/../maccore/tools/install-qa-provisioning-profiles.sh" -v

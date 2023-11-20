@@ -336,7 +336,7 @@ steps:
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
       -- `
-      /Users/builder/remote_build_testing/src/xamarin-macios/tests/dotnet/Windows/install-provisioning-profiles.sh
+      /Users/builder/remote_build_testing/src/xamarin-macios/tests/dotnet/Windows/install-provisioning-profiles.sh "$Env:AUTH_TOKEN_GITHUB_COM"
   displayName: 'Install provisioning profiles on Mac'
   continueOnError: true
   timeoutInMinutes: 5

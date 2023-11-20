@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 using Microsoft.Build.Utilities;
@@ -11,7 +12,7 @@ using Xamarin.Utils;
 #nullable disable
 
 namespace Xamarin.MacDev.Tasks {
-	public class ScnTool : XamarinToolTask {
+	public class ScnTool : XamarinToolTask2 {
 		string sdkDevPath;
 
 		#region Inputs
@@ -42,7 +43,7 @@ namespace Xamarin.MacDev.Tasks {
 			set {
 				sdkDevPath = value;
 
-				SetEnvironmentVariable ("DEVELOPER_DIR", sdkDevPath);
+				EnvironmentVariables ["DEVELOPER_DIR"] = sdkDevPath;
 			}
 		}
 
@@ -62,33 +63,6 @@ namespace Xamarin.MacDev.Tasks {
 			get { return "scntool"; }
 		}
 
-		void SetEnvironmentVariable (string variableName, string value)
-		{
-			var envVariables = EnvironmentVariables;
-			var index = -1;
-
-			if (envVariables is null) {
-				envVariables = new string [1];
-				index = 0;
-			} else {
-				for (int i = 0; i < envVariables.Length; i++) {
-					if (envVariables [i].StartsWith (variableName + "=", StringComparison.Ordinal)) {
-						index = i;
-						break;
-					}
-				}
-
-				if (index < 0) {
-					Array.Resize<string> (ref envVariables, envVariables.Length + 1);
-					index = envVariables.Length - 1;
-				}
-			}
-
-			envVariables [index] = string.Format ("{0}={1}", variableName, value);
-
-			EnvironmentVariables = envVariables;
-		}
-
 		protected override string GenerateFullPathToTool ()
 		{
 			if (!string.IsNullOrEmpty (ToolPath))
@@ -99,31 +73,25 @@ namespace Xamarin.MacDev.Tasks {
 			return File.Exists (path) ? path : ToolExe;
 		}
 
-		protected override string GenerateCommandLineCommands ()
+		protected override IList<string> GenerateCommandLineCommands ()
 		{
-			var args = new CommandLineArgumentBuilder ();
+			var args = new List<string> ();
 
 			args.Add ("--compress");
-			args.AddQuoted (InputScene);
+			args.Add (InputScene);
 			args.Add ("-o");
-			args.AddQuoted (OutputScene);
-			args.AddQuotedFormat ("--sdk-root={0}", SdkRoot);
-			args.AddQuotedFormat ("--target-build-dir={0}", IntermediateOutputPath);
+			args.Add (OutputScene);
+			args.Add ($"--sdk-root={SdkRoot}");
+			args.Add ($"--target-build-dir={IntermediateOutputPath}");
 			if (AppleSdkSettings.XcodeVersion.Major >= 13) {
 				// I'm not sure which Xcode version these options are available in, but it's at least Xcode 13+
-				args.AddQuotedFormat ("--target-version={0}", SdkVersion);
-				args.AddQuotedFormat ("--target-platform={0}", PlatformUtils.GetTargetPlatform (SdkPlatform, IsWatchApp));
+				args.Add ($"--target-version={SdkVersion}");
+				args.Add ($"--target-platform={PlatformUtils.GetTargetPlatform (SdkPlatform, IsWatchApp)}");
 			} else {
-				args.AddQuotedFormat ("--target-version-{0}={1}", OperatingSystem, SdkVersion);
+				args.Add ($"--target-version-{OperatingSystem}={SdkVersion}");
 			}
 
-			return args.ToString ();
-		}
-
-		protected override void LogEventsFromTextOutput (string singleLine, MessageImportance messageImportance)
-		{
-			// TODO: do proper parsing of error messages and such
-			Log.LogMessage (messageImportance, "{0}", singleLine);
+			return args;
 		}
 
 		public override bool Execute ()

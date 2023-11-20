@@ -11,7 +11,7 @@ using Microsoft.Build.Utilities;
 using Xamarin.Messaging.Build.Client;
 
 namespace Xamarin.MacDev.Tasks {
-	public class Ditto : XamarinToolTask, ITaskCallback {
+	public class Ditto : XamarinToolTask2, ITaskCallback {
 		#region Inputs
 
 		public string? AdditionalArguments { get; set; }
@@ -54,16 +54,20 @@ namespace Xamarin.MacDev.Tasks {
 			return File.Exists (path) ? path : ToolExe;
 		}
 
-		protected override string GenerateCommandLineCommands ()
+		protected override IList<string> GenerateCommandLineCommands ()
 		{
-			var args = new CommandLineArgumentBuilder ();
+			var args = new List<string> ();
 
-			args.AddQuoted (Path.GetFullPath (Source!.ItemSpec));
-			args.AddQuoted (Path.GetFullPath (Destination!.ItemSpec));
+			args.Add (Path.GetFullPath (Source!.ItemSpec));
+			args.Add (Path.GetFullPath (Destination!.ItemSpec));
+#if NET
 			if (!string.IsNullOrEmpty (AdditionalArguments))
+#else
+			if (!string.IsNullOrEmpty (AdditionalArguments) && AdditionalArguments is not null)
+#endif
 				args.Add (AdditionalArguments);
 
-			return args.ToString ();
+			return args;
 		}
 
 		public override bool Execute ()
@@ -94,12 +98,6 @@ namespace Xamarin.MacDev.Tasks {
 			CopiedFiles = copiedFiles.ToArray ();
 
 			return !Log.HasLoggedErrors;
-		}
-
-		protected override void LogEventsFromTextOutput (string singleLine, MessageImportance messageImportance)
-		{
-			// TODO: do proper parsing of error messages and such
-			Log.LogMessage (messageImportance, "{0}", singleLine);
 		}
 
 		public override void Cancel ()

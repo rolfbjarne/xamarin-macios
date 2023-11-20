@@ -7,7 +7,7 @@
 // Copyright 2023 Microsoft Corp. All rights reserved.
 //
 
-#if !__WATCHOS__ && !__MACOS__
+#if !__WATCHOS__ && !__MACOS__ && NET
 
 using System;
 using System.IO;

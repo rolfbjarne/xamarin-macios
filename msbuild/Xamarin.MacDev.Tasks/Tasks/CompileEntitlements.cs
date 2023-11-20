@@ -137,6 +137,22 @@ namespace Xamarin.MacDev.Tasks {
 			}
 		}
 
+		bool IsDeviceOrDesktop {
+			get {
+				switch (Platform) {
+				case ApplePlatform.iOS:
+				case ApplePlatform.TVOS:
+				case ApplePlatform.WatchOS:
+					return !SdkIsSimulator;
+				case ApplePlatform.MacOSX:
+				case ApplePlatform.MacCatalyst:
+					return true;
+				default:
+					throw new InvalidOperationException (string.Format (MSBStrings.InvalidPlatform, Platform));
+				}
+			}
+		}
+
 		PString MergeEntitlementString (PString pstr, MobileProvision? profile, bool expandWildcards, string? key)
 		{
 			string TeamIdentifierPrefix;
@@ -145,7 +161,7 @@ namespace Xamarin.MacDev.Tasks {
 			if (string.IsNullOrEmpty (pstr.Value))
 				return (PString) pstr.Clone ();
 
-			if (profile is null) {
+			if (profile is null && IsDeviceOrDesktop) {
 				if (!warnedTeamIdentifierPrefix && pstr.Value.Contains ("$(TeamIdentifierPrefix)")) {
 					Log.LogWarning (null, null, null, Entitlements, 0, 0, 0, 0, MSBStrings.W0108b /* Cannot expand $(TeamIdentifierPrefix) in Entitlements.plist without a provisioning profile for key '{0}' with value '{1}' */, key, pstr.Value);
 					warnedTeamIdentifierPrefix = true;
@@ -455,7 +471,7 @@ namespace Xamarin.MacDev.Tasks {
 			MobileProvision? profile;
 			PDictionary template;
 			PDictionary compiled;
-			PDictionary archived;
+			PDictionary? archived = null;
 			string path;
 
 			switch (SdkPlatform) {
@@ -507,34 +523,50 @@ namespace Xamarin.MacDev.Tasks {
 
 			compiled = GetCompiledEntitlements (profile, template);
 
-			ValidateAppEntitlements (profile, compiled);
-
-			archived = GetArchivedExpandedEntitlements (template, compiled);
-
-			try {
-				Directory.CreateDirectory (Path.GetDirectoryName (CompiledEntitlements!.ItemSpec));
-				WriteXcent (compiled, CompiledEntitlements.ItemSpec);
-			} catch (Exception ex) {
-				Log.LogError (MSBStrings.E0114, CompiledEntitlements, ex.Message);
-				return false;
-			}
-
-			SaveArchivedExpandedEntitlements (archived);
-
 			/* The path to the entitlements must be resolved to the full path, because we might want to reference it from a containing project that just references this project,
 			  * and in that case it becomes a bit complicated to resolve to a full path on disk when building remotely from Windows. Instead just resolve to a full path here,
 			  * and use that from now on. This has to be done from a task, so that we get the full path on the mac when executed remotely from Windows. */
-			var compiledEntitlementsFullPath = new TaskItem (Path.GetFullPath (CompiledEntitlements!.ItemSpec));
+			var compiledEntitlementsFullPath = Path.GetFullPath (CompiledEntitlements!.ItemSpec);
+			var compiledEntitlementsFullPathItem = new TaskItem (compiledEntitlementsFullPath);
 
-			if (Platform == Utils.ApplePlatform.MacCatalyst) {
-				EntitlementsInSignature = compiledEntitlementsFullPath;
-			} else if (SdkIsSimulator) {
-				if (compiled.Count > 0) {
-					EntitlementsInExecutable = compiledEntitlementsFullPath;
+			Directory.CreateDirectory (Path.GetDirectoryName (compiledEntitlementsFullPath));
+
+			if (SdkIsSimulator) {
+				// Any entitlements the app desires are stored inside the executable for simulator builds,
+				// and then the executable is signed with a placeholder signature ('-') + just a single
+				// entitlement (com.apple.security.get-task-allow). One consequence of storing entitlements
+				// this way is that no provisioning profile will be needed to sign the executable.
+				var simulatedEntitlements = compiled;
+				var simulatedXcent = Path.ChangeExtension (compiledEntitlementsFullPath, "").TrimEnd ('.') + "-Simulated.xcent";
+				try {
+					WriteXcent (simulatedEntitlements, simulatedXcent);
+				} catch (Exception ex) {
+					Log.LogError (MSBStrings.E0114, simulatedXcent, ex.Message);
+					return false;
 				}
+
+				EntitlementsInExecutable = new TaskItem (simulatedXcent);
+
+				// No matter what, I've only been able to make Xcode apply a single entitlement to simulator builds: com.apple.security.get-task-allow
+				compiled = new PDictionary ();
+				compiled.Add ("com.apple.security.get-task-allow", new PBoolean (true));
 			} else {
-				EntitlementsInSignature = compiledEntitlementsFullPath;
+				archived = GetArchivedExpandedEntitlements (template, compiled);
 			}
+
+			ValidateAppEntitlements (profile, compiled);
+
+			try {
+				WriteXcent (compiled, compiledEntitlementsFullPath);
+			} catch (Exception ex) {
+				Log.LogError (MSBStrings.E0114, compiledEntitlementsFullPathItem, ex.Message);
+				return false;
+			}
+
+			if (archived is not null)
+				SaveArchivedExpandedEntitlements (archived);
+
+			EntitlementsInSignature = compiledEntitlementsFullPathItem;
 
 			return !Log.HasLoggedErrors;
 		}

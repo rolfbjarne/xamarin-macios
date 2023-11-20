@@ -1981,6 +1981,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			_ComputeTargetFrameworkMoniker;
 			_GenerateBundleName;
 			_ReadAppManifest;
+			$(CodesignConfigureDependsOn);
 		</_DetectSigningIdentityDependsOn>
 	</PropertyGroup>
 

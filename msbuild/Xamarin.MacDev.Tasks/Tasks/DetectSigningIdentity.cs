@@ -588,88 +588,27 @@ namespace Xamarin.MacDev.Tasks {
 			identity.BundleId = BundleIdentifier;
 			DetectedAppId = BundleIdentifier; // default value that can be changed below
 
+			// If a code signing key has been pre-detected, it overrides any custom detection on our side.
+			if (!string.IsNullOrEmpty (DetectedCodeSigningKey))
+				return !Log.HasLoggedErrors;
+
 			// If the developer chooses to use the placeholder codesigning key, accept that.
 			if (SigningKey == "-") {
 				DetectedCodeSigningKey = SigningKey;
 				return !Log.HasLoggedErrors;
 			}
 
-			if (Platform == ApplePlatform.MacOSX) {
-				if (!RequireCodeSigning || !string.IsNullOrEmpty (DetectedCodeSigningKey)) {
-					return !Log.HasLoggedErrors;
-				}
-			} else if (Platform == ApplePlatform.MacCatalyst) {
-				var doesNotNeedCodeSigningCertificate = !RequireCodeSigning || !string.IsNullOrEmpty (DetectedCodeSigningKey);
-				if (RequireProvisioningProfile)
-					doesNotNeedCodeSigningCertificate = false;
-				if (doesNotNeedCodeSigningCertificate) {
-					DetectedCodeSigningKey = "-";
+			// If no code signing is required and no provisioning profile is required, we can get away
+			// with using the placeholder codesign key.
+			if (!RequireCodeSigning && !RequireProvisioningProfile) {
+				DetectedCodeSigningKey = "-";
+				return !Log.HasLoggedErrors;
+			}
 
-					return !Log.HasLoggedErrors;
-				}
-			} else {
-				// Framework is either iOS or tvOS
-				if (SdkIsSimulator) {
-					if (AppleSdkSettings.XcodeVersion.Major >= 8 && RequireProvisioningProfile) {
-						// Note: Starting with Xcode 8.0, we need to codesign iOS Simulator builds that enable Entitlements
-						// in order for them to run. The "-" key is a special value allowed by the codesign utility that
-						// allows us to get away with not having an actual codesign key.
-						DetectedCodeSigningKey = "-";
-
-						if (!IsAutoCodeSignProfile (ProvisioningProfile)) {
-							identity.Profile = MobileProvisionIndex.GetMobileProvision (platform, ProvisioningProfile);
-
-							if (identity.Profile is null) {
-								Log.LogError (MSBStrings.E0140, PlatformName, ProvisioningProfile);
-								return false;
-							}
-
-							identity.AppId = ConstructValidAppId (identity.Profile, identity.BundleId);
-							if (identity.AppId is null) {
-								Log.LogError (MSBStrings.E0141, identity.BundleId, ProvisioningProfile);
-								return false;
-							}
-
-							provisioningProfileName = identity.Profile.Name;
-
-							DetectedProvisioningProfile = identity.Profile.Uuid;
-							DetectedDistributionType = identity.Profile.DistributionType.ToString ();
-						} else {
-							certs = new X509Certificate2 [0];
-
-							if ((profiles = GetProvisioningProfiles (platform, type, identity, certs)) is null)
-								return false;
-
-							if ((pairs = GetCodeSignIdentityPairs (profiles, certs)) is null)
-								return false;
-
-							var match = GetBestMatch (pairs, identity);
-							identity.Profile = match.Profile;
-							identity.AppId = match.AppId;
-
-							if (identity.Profile is not null) {
-								DetectedDistributionType = identity.Profile.DistributionType.ToString ();
-								DetectedProvisioningProfile = identity.Profile.Uuid;
-								provisioningProfileName = identity.Profile.Name;
-							}
-
-							DetectedAppId = identity.AppId;
-						}
-					} else {
-						// Note: Do not codesign. Codesigning seems to break the iOS Simulator in older versions of Xcode.
-						DetectedCodeSigningKey = null;
-					}
-
-					return !Log.HasLoggedErrors;
-				}
-
-				if (!SdkIsSimulator && !RequireCodeSigning) {
-					// The "-" key is a special value allowed by the codesign utility that
-					// allows us to get away with not having an actual codesign key.
-					DetectedCodeSigningKey = "-";
-
-					return !Log.HasLoggedErrors;
-				}
+			// If we're building for the simulator, always use the placeholder codesign key.
+			if (SdkIsSimulator) {
+				DetectedCodeSigningKey = "-";
+				return !Log.HasLoggedErrors;
 			}
 
 			// Note: if we make it this far, we absolutely need a codesigning certificate

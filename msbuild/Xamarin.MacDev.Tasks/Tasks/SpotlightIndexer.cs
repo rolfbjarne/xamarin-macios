@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 using Microsoft.Build.Framework;
@@ -10,7 +11,7 @@ using Xamarin.Messaging.Build.Client;
 #nullable disable
 
 namespace Xamarin.MacDev.Tasks {
-	public class SpotlightIndexer : XamarinToolTask {
+	public class SpotlightIndexer : XamarinToolTask2 {
 		#region Inputs
 
 		[Required]
@@ -32,19 +33,13 @@ namespace Xamarin.MacDev.Tasks {
 			return File.Exists (path) ? path : ToolExe;
 		}
 
-		protected override string GenerateCommandLineCommands ()
+		protected override IList<string> GenerateCommandLineCommands ()
 		{
-			var args = new CommandLineBuilder ();
+			var args = new List<string> ();
 
-			args.AppendFileNameIfNotNull (Input);
+			args.Add (Input);
 
-			return args.ToString ();
-		}
-
-		protected override void LogEventsFromTextOutput (string singleLine, MessageImportance messageImportance)
-		{
-			// TODO: do proper parsing of error messages and such
-			Log.LogMessage (messageImportance, "{0}", singleLine);
+			return args;
 		}
 
 		public override bool Execute ()

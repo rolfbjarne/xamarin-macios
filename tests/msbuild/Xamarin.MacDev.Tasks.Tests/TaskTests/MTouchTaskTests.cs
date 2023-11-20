@@ -29,7 +29,7 @@ namespace Xamarin.MacDev.Tasks {
 
 		public string ResponseFile = "";
 
-		public new string GenerateCommandLineCommands ()
+		public new IList<string> GenerateCommandLineCommands ()
 		{
 			var cl = base.GenerateCommandLineCommands ();
 

@@ -246,9 +246,9 @@ namespace Xamarin.MacDev.Tasks {
 
 			var commandLine = cmd.CreateResponseFile (this, ResponseFilePath, null);
 			if (IsDotNet)
-				commandLine = StringUtils.Quote (Path.Combine (BTouchToolPath, BTouchToolExe)) + " " + commandLine;
+				commandLine.Insert (0, Path.Combine (BTouchToolPath, BTouchToolExe));
 
-			return new string [] { commandLine };
+			return commandLine;
 		}
 
 		public override bool Execute ()

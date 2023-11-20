@@ -45,6 +45,9 @@ namespace Xamarin.MacDev.Tasks {
 			var fileName = GenerateFullPathToTool ();
 			var arguments = GenerateCommandLineCommands ();
 
+			if (Log.HasLoggedErrors)
+				return false;
+
 			ExecutionResult = ExecuteAsync (fileName, arguments, mergeOutput: true, showErrorIfFailure: true, workingDirectory: workingDirectory, environment: EnvironmentVariables).Result;
 
 			return ExecutionResult.ExitCode == 0;

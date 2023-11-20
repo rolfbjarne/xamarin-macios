@@ -39,14 +39,7 @@ namespace Xamarin.Mac.Tasks {
 		[Required]
 		public string CustomBundleName { get; set; }
 
-		protected override bool ValidateParameters ()
-		{
-			XamMacArch arch;
-
-			return Enum.TryParse (Architecture, true, out arch);
-		}
-
-		protected override string GenerateCommandLineCommands ()
+		protected override IList<string> GenerateCommandLineCommands ()
 		{
 			var args = GenerateCommandLineArguments ();
 
@@ -124,15 +117,6 @@ namespace Xamarin.Mac.Tasks {
 				return false;
 
 			return !Log.HasLoggedErrors;
-		}
-
-		protected override void LogEventsFromTextOutput (string singleLine, MessageImportance messageImportance)
-		{
-			try { // We first try to use the base logic, which shows up nicely in XS.
-				base.LogEventsFromTextOutput (singleLine, messageImportance);
-			} catch { // But when that fails, just output the message to the command line and XS will output it raw
-				Log.LogMessage (messageImportance, "{0}", singleLine);
-			}
 		}
 	}
 }

@@ -82,14 +82,6 @@ namespace Xamarin.iOS.Tasks {
 			get { return "mtouch"; }
 		}
 
-		protected override int ExecuteTool (string pathToTool, string responseFileCommands, string commandLineCommands)
-		{
-			// First we need to create the output directory if it does not exist
-			Directory.CreateDirectory (AppBundleDir);
-
-			return base.ExecuteTool (pathToTool, responseFileCommands, commandLineCommands);
-		}
-
 		static string Unquote (string text, int startIndex)
 		{
 			if (startIndex >= text.Length)
@@ -127,7 +119,7 @@ namespace Xamarin.iOS.Tasks {
 			return builder.ToString ();
 		}
 
-		protected override string GenerateCommandLineCommands ()
+		protected override IList<string> GenerateCommandLineCommands ()
 		{
 			var args = GenerateCommandLineArguments ();
 			List<string> unescapedArgs = new List<string> ();
@@ -139,7 +131,7 @@ namespace Xamarin.iOS.Tasks {
 
 			if (architectures == TargetArchitecture.ARMv6) {
 				Log.LogError (MSBStrings.E0053);
-				return string.Empty;
+				return Array.Empty<string> ();
 			}
 
 			args.AddQuotedLine ((SdkIsSimulator ? "--sim=" : "--dev=") + Path.GetFullPath (AppBundleDir));

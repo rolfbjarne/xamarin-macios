@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 using Microsoft.Build.Utilities;
@@ -9,7 +10,7 @@ using Xamarin.iOS.Tasks;
 
 namespace Xamarin.MacDev.Tasks {
 	class CustomBTouchTask : BTouch {
-		public string GetCommandLineCommands ()
+		public IList<string> GetCommandLineCommands ()
 		{
 			return base.GenerateCommandLineCommands ();
 		}
@@ -26,7 +27,7 @@ namespace Xamarin.MacDev.Tasks {
 			task.References = new [] { new TaskItem ("a.dll"), new TaskItem ("b.dll"), new TaskItem ("c.dll") };
 			task.ResponseFilePath = Path.Combine (Cache.CreateTemporaryDirectory (), "response-file.txt");
 
-			var args = task.GetCommandLineCommands () + " " + File.ReadAllText (task.ResponseFilePath);
+			var args = string.Join (" ", task.GetCommandLineCommands ()) + " " + File.ReadAllText (task.ResponseFilePath);
 			Assert.That (args, Does.Contain ("-r:" + Path.Combine (Environment.CurrentDirectory, "a.dll")), "#1a");
 			Assert.That (args, Does.Contain ("-r:" + Path.Combine (Environment.CurrentDirectory, "b.dll")), "#1b");
 			Assert.That (args, Does.Contain ("-r:" + Path.Combine (Environment.CurrentDirectory, "c.dll")), "#1c");
@@ -44,7 +45,7 @@ namespace Xamarin.MacDev.Tasks {
 
 			task.OutputAssembly = null; // default, but important for the bug (in case that default changes)
 			task.ExtraArgs = "-invalid";
-			var args = task.GetCommandLineCommands () + " " + File.ReadAllText (task.ResponseFilePath);
+			var args = string.Join (" ", task.GetCommandLineCommands ()) + " " + File.ReadAllText (task.ResponseFilePath);
 			Assert.That (args.Contains (" -invalid"), "incorrect ExtraArg not causing an exception");
 		}
 	}

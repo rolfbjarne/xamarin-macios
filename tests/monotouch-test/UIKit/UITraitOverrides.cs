@@ -112,24 +112,39 @@ namespace MonoTouchFixtures.UIKit {
 				}
 			};
 
+			// Figure out the initial values so that we can choose a different value when setting them.
+			var tc = UITraitCollection.CurrentTraitCollection;
+			UIUserInterfaceSizeClass? initialHorizonal = null;
+			UIUserInterfaceSizeClass? initialVertical = null;
+			tc.PerformAsCurrentTraitCollection (() =>
+			{
+				initialHorizonal = tc.HorizontalSizeClass;
+				initialVertical = tc.VerticalSizeClass;
+			});
+
+			var firstHorizontal = initialHorizonal! == UIUserInterfaceSizeClass.Regular ? UIUserInterfaceSizeClass.Compact : UIUserInterfaceSizeClass.Regular;
+			var firstVertical = initialHorizonal! == UIUserInterfaceSizeClass.Regular ? UIUserInterfaceSizeClass.Compact : UIUserInterfaceSizeClass.Regular;
+			var secondHorizontal = initialHorizonal! == UIUserInterfaceSizeClass.Regular ? UIUserInterfaceSizeClass.Regular : UIUserInterfaceSizeClass.Compact;
+			var secondVertical = initialHorizonal! == UIUserInterfaceSizeClass.Regular ? UIUserInterfaceSizeClass.Regular : UIUserInterfaceSizeClass.Compact;
+
 			var token = registerFunc (vc, callback);
 
-			horizontal = UIUserInterfaceSizeClass.Regular;
+			horizontal = firstHorizontal;
 			vc.TraitOverrides.HorizontalSizeClass = horizontal.Value;
 			Assert.AreEqual (1, callbackCounter, $"{prefix}CallbackCounter 1");
 			Assert.IsNull (ex, $"{prefix}Exception 1");
 
-			horizontal = UIUserInterfaceSizeClass.Compact;
+			horizontal = secondHorizontal;
 			vc.TraitOverrides.HorizontalSizeClass = horizontal.Value;
 			Assert.AreEqual (2, callbackCounter, $"{prefix}CallbackCounter 2");
 			Assert.IsNull (ex, $"{prefix}Exception 2");
 
-			vertical = UIUserInterfaceSizeClass.Compact;
+			vertical = firstVertical;
 			vc.TraitOverrides.VerticalSizeClass = vertical.Value;
 			Assert.AreEqual (3, callbackCounter, $"{prefix}CallbackCounter 3");
 			Assert.IsNull (ex, $"{prefix}Exception 3");
 
-			vertical = UIUserInterfaceSizeClass.Regular;
+			vertical = secondVertical;
 			vc.TraitOverrides.VerticalSizeClass = vertical.Value;
 			Assert.AreEqual (4, callbackCounter, $"{prefix}CallbackCounter 4");
 			Assert.IsNull (ex, $"{prefix}Exception 4");
@@ -144,7 +159,7 @@ namespace MonoTouchFixtures.UIKit {
 			Assert.AreEqual (4, callbackCounter, $"{prefix}CallbackCounter 6");
 			Assert.IsNull (ex, $"{prefix}Exception 6");
 
-			horizontal = UIUserInterfaceSizeClass.Regular;
+			horizontal = firstHorizontal;
 			vc.TraitOverrides.HorizontalSizeClass = horizontal.Value;
 			Assert.AreEqual (5, callbackCounter, $"{prefix}CallbackCounter 7");
 			Assert.IsNull (ex, $"{prefix}Exception 7");

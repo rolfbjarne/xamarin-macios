@@ -13,7 +13,7 @@ using Xamarin.Messaging.Build.Client;
 #nullable disable
 
 namespace Xamarin.MacDev.Tasks {
-	public class ArTool : XamarinToolTask, ITaskCallback {
+	public class ArTool : XamarinToolTask2, ITaskCallback {
 		#region Inputs
 
 		[Required]
@@ -38,23 +38,17 @@ namespace Xamarin.MacDev.Tasks {
 			return File.Exists (path) ? path : ToolExe;
 		}
 
-		protected override string GenerateCommandLineCommands ()
+		protected override IList<string> GenerateCommandLineCommands ()
 		{
-			var args = new CommandLineArgumentBuilder ();
+			var args = new List<string> ();
 
 			args.Add ("-r");
-			args.AddQuoted (Archive.ItemSpec);
+			args.Add (Archive.ItemSpec);
 
 			foreach (var item in Items)
-				args.AddQuoted (item.ItemSpec);
+				args.Add (item.ItemSpec);
 
-			return args.ToString ();
-		}
-
-		protected override void LogEventsFromTextOutput (string singleLine, MessageImportance messageImportance)
-		{
-			// TODO: do proper parsing of error messages and such
-			Log.LogMessage (messageImportance, "{0}", singleLine);
+			return args;
 		}
 
 		public override bool Execute ()

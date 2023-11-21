@@ -429,6 +429,7 @@ steps:
   displayName: 'Fetch remote binlogs'
   timeoutInMinutes: 5
   condition: always()
+  continueOnError: true
   env:
     XMA_PASSWORD: $(XMA.Password)
 

@@ -17,6 +17,7 @@ chmod +x "$TOP/../maccore/tools/install-qa-provisioning-profiles.sh"
 # dos2unix
 perl -pi -e 's/\r\n|\n|\r/\n/g' "$TOP/../maccore/tools/install-qa-provisioning-profiles.sh"
 perl -pi -e 's/\r\n|\n|\r/\n/g' "$TOP/../maccore/tools/provisioning-profiles/provisionator.sh"
+perl -pi -e 's/\r\n|\n|\r/\n/g' "$TOP/../maccore/tools/provisioning-profiles/fetch-updated-certificates-and-profiles.sh"
 
 if test -z "${AUTH_TOKEN_GITHUB_COM:-}"; then
 	AUTH_TOKEN_GITHUB_COM=${1:-}

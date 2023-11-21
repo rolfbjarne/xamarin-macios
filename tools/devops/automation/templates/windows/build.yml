@@ -354,6 +354,8 @@ steps:
       /p:ServerUser=builder `
       /p:ServerPassword=$Env:XMA_PASSWORD `
       /p:_DotNetRootRemoteDirectory=/Users/builder/remote_build_testing/_build `
+      /p:ExcludeTouchUnitReference=true `
+      /p:ExcludeNUnitLiteReference=true `
       -v:diag `
       "-bl:/Users/builder/remote_build_testing/MySimpleApp.binlog"
   displayName: 'Try to build test on Mac'
@@ -391,6 +393,7 @@ steps:
         "$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/UnitTests/DotNetUnitTests.csproj" `
         --filter Category=RemoteWindows `
         --verbosity quiet `
+        --settings $(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/Windows/config.runsettings `
         "--results-directory:$(Build.SourcesDirectory)/xamarin-macios/jenkins-results/windows-remote-tests/" `
         "--logger:console;verbosity=detailed" `
         "--logger:trx;LogFileName=$(Build.SourcesDirectory)/xamarin-macios/jenkins-results/windows-remote-dotnet-tests.trx" `
@@ -425,6 +428,7 @@ steps:
       -Target "$(Build.ArtifactStagingDirectory)/windows-binlogs/windows-remote-binlogs.zip"
   displayName: 'Fetch remote binlogs'
   timeoutInMinutes: 5
+  condition: always()
   env:
     XMA_PASSWORD: $(XMA.Password)
 

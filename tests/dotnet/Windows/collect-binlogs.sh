@@ -7,7 +7,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 
 DIRS=("$1" "$2")
 rm -f files.txt
-for dir in ${DIRS[@]}; do
+for dir in "$@"; do
 	echo $dir
 	for file in $(git --git-dir $dir/.git ls-files -o '*.binlog'); do
 		echo "$dir/$file" >> files.txt

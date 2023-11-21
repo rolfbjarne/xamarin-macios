@@ -327,16 +327,7 @@ steps:
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
       -- `
-      chmod +x /Users/builder/remote_build_testing/src/xamarin-macios/tests/dotnet/Windows/install-provisioning-profiles.sh
-    Invoke-SshEnvCommand `
-      -SourcesDirectory "$(Build.SourcesDirectory)" `
-      -DotNet "$Env:DOTNET" `
-      -RemoteHost "$Env:MAC_AGENT_IP" `
-      -RemoteUserName "builder" `
-      -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
-      -ThrowIfError $true `
-      -- `
-      /Users/builder/remote_build_testing/src/xamarin-macios/tests/dotnet/Windows/install-provisioning-profiles.sh "$Env:AUTH_TOKEN_GITHUB_COM" "$Env:XQA_CERT_PASS"
+      $Env:MAC_AGENT_BUILD_SOURCESDIRECTORY/maccore/tests/dotnet/Windows/install-provisioning-profiles.sh "$Env:AUTH_TOKEN_GITHUB_COM" "$Env:XQA_CERT_PASS"
   displayName: 'Install provisioning profiles on Mac'
   continueOnError: true
   timeoutInMinutes: 5
@@ -488,6 +479,8 @@ steps:
     Write-Host "Mac agent pool: $Env:MAC_AGENT_POOL"
     Write-Host "Mac agent name: $Env:MAC_AGENT_NAME"
     Write-Host "Mac agent IP: $Env:MAC_AGENT_IP"
+    Write-Host "Mac agent SYSTEM_DEFAULTWORKINGDIRECTORY: $Env:MAC_AGENT_SYSTEM_DEFAULTWORKINGDIRECTORY"
+    Write-Host "Mac agent BUILD_SOURCESDIRECTORY: $Env:MAC_AGENT_BUILD_SOURCESDIRECTORY"
   displayName: Run tests
 
 # Upload all the binlogs

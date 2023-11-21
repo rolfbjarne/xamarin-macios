@@ -418,10 +418,10 @@ steps:
       git ls-files -o '*.binlog' | zip -9r /Users/builder/remote_build_testing/windows-remote-binlogs.zip -@
     # Copy the zip from the remote Mac to this machine
     Invoke-SshEnvDownload `
-      -SourcesDirectory "$(Build.SourcesDirectory)"
+      -SourcesDirectory "$(Build.SourcesDirectory)" `
       -DotNet "$Env:DOTNET" `
       -RemoteHost "$Env:MAC_AGENT_IP" `
-      -RemoteUserName "builder"`
+      -RemoteUserName "builder" `
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
       -Source "/Users/builder/remote_build_testing/windows-remote-binlogs.zip" `

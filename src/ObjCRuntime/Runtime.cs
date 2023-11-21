@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -2169,7 +2170,21 @@ namespace ObjCRuntime {
 
 		internal static bool IsUserType (IntPtr self)
 		{
-			var cls = Class.object_getClass (self);
+			if (!TryGetIsUserType (self, out var result, out var error_message))
+				throw new InvalidOperationException ($"Unable to get the class of the pointer 0x{self.ToString ("x")}: {error_message}");
+			return result;
+		}
+
+#if NET
+		internal static bool TryGetIsUserType (IntPtr self, out bool isUserType, [NotNullWhen (false)] out string? error_message)
+#else
+		internal static bool TryGetIsUserType (IntPtr self, out bool isUserType, out string? error_message)
+#endif
+		{
+			isUserType = false;
+			if (!Class.TryGetClass (self, out var cls, out error_message))
+				return false;
+
 			lock (usertype_cache) {
 #if NET
 				ref var result = ref CollectionsMarshal.GetValueRefOrAddDefault (usertype_cache, cls, out var exists);
@@ -2181,7 +2196,8 @@ namespace ObjCRuntime {
 					usertype_cache.Add (cls, result);
 				}
 #endif
-				return result;
+				isUserType = result;
+				return true;
 			}
 		}
 

@@ -9,7 +9,7 @@ using Xamarin.Messaging.Build.Client;
 // Disable until we get around to enable + fix any issues.
 #nullable disable
 
-namespace Xamarin.iOS.Tasks {
+namespace Xamarin.MacDev.Tasks {
 	public abstract class WriteAssetPackManifestTaskBase : XamarinTask, ICancelableTask {
 		#region Inputs
 

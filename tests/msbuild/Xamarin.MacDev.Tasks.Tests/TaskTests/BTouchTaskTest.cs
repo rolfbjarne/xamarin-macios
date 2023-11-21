@@ -6,8 +6,6 @@ using Microsoft.Build.Utilities;
 
 using NUnit.Framework;
 
-using Xamarin.iOS.Tasks;
-
 namespace Xamarin.MacDev.Tasks {
 	class CustomBTouchTask : BTouch {
 		public IList<string> GetCommandLineCommands ()

@@ -34,23 +34,23 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<UsingTask TaskName="Microsoft.Build.Tasks.WriteLinesToFile" AssemblyFile="$(_TaskAssemblyName)" />
 
 	<!-- Xamarin.iOS-specific tasks. Some of these are duplicated with the Xamarin.Mac ones below, and should eventually be re-namespaced to be in Xamarin.MacDev -->
-	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.iOS.Tasks.CollectAssetPacks" AssemblyFile="$(_TaskAssemblyName)" />
-	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.iOS.Tasks.CollectITunesArtwork" AssemblyFile="$(_TaskAssemblyName)" />
-	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.iOS.Tasks.CollectITunesSourceFiles" AssemblyFile="$(_TaskAssemblyName)" />
-	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.iOS.Tasks.CompileITunesMetadata" AssemblyFile="$(_TaskAssemblyName)" />
-	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.iOS.Tasks.CreateAssetPack" AssemblyFile="$(_TaskAssemblyName)" />
-	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.iOS.Tasks.FindWatchOS2AppBundle" AssemblyFile="$(_TaskAssemblyName)" />
-	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.iOS.Tasks.GetMlaunchArguments" AssemblyFile="$(_TaskAssemblyName)" />
-	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.iOS.Tasks.MTouch" AssemblyFile="$(_TaskAssemblyName)" />
-	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.iOS.Tasks.ParseDeviceSpecificBuildInformation" AssemblyFile="$(_TaskAssemblyName)" />
-	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.iOS.Tasks.ResolveNativeWatchApp" AssemblyFile="$(_TaskAssemblyName)" />
-	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.iOS.Tasks.ResolveUniversalTypeIdentifiers" AssemblyFile="Xamarin.iOS.Tasks.dll" />
-	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.iOS.Tasks.ValidateAppBundleTask" AssemblyFile="$(_TaskAssemblyName)" />
-	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.iOS.Tasks.VerifyXcodeVersion" AssemblyFile="$(_TaskAssemblyName)" />
-	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.iOS.Tasks.WriteAssetPackManifest" AssemblyFile="$(_TaskAssemblyName)" />
+	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.MacDev.Tasks.CollectAssetPacks" AssemblyFile="$(_TaskAssemblyName)" />
+	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.MacDev.Tasks.CollectITunesArtwork" AssemblyFile="$(_TaskAssemblyName)" />
+	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.MacDev.Tasks.CollectITunesSourceFiles" AssemblyFile="$(_TaskAssemblyName)" />
+	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.MacDev.Tasks.CompileITunesMetadata" AssemblyFile="$(_TaskAssemblyName)" />
+	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.MacDev.Tasks.CreateAssetPack" AssemblyFile="$(_TaskAssemblyName)" />
+	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.MacDev.Tasks.FindWatchOS2AppBundle" AssemblyFile="$(_TaskAssemblyName)" />
+	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.MacDev.Tasks.GetMlaunchArguments" AssemblyFile="$(_TaskAssemblyName)" />
+	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.MacDev.Tasks.MTouch" AssemblyFile="$(_TaskAssemblyName)" />
+	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.MacDev.Tasks.ParseDeviceSpecificBuildInformation" AssemblyFile="$(_TaskAssemblyName)" />
+	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.MacDev.Tasks.ResolveNativeWatchApp" AssemblyFile="$(_TaskAssemblyName)" />
+	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.MacDev.Tasks.ResolveUniversalTypeIdentifiers" AssemblyFile="Xamarin.iOS.Tasks.dll" />
+	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.MacDev.Tasks.ValidateAppBundleTask" AssemblyFile="$(_TaskAssemblyName)" />
+	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.MacDev.Tasks.VerifyXcodeVersion" AssemblyFile="$(_TaskAssemblyName)" />
+	<UsingTask Condition="'$(_PlatformName)' != 'macOS'" TaskName="Xamarin.MacDev.Tasks.WriteAssetPackManifest" AssemblyFile="$(_TaskAssemblyName)" />
 
 	<!-- Xamarin.Mac-specific tasks. Some of these are duplicated with the Xamarin.iOS ones above, and should eventually be re-namespaced to be in Xamarin.MacDev -->
-	<UsingTask Condition="'$(_PlatformName)' == 'macOS'" TaskName="Xamarin.Mac.Tasks.Mmp" AssemblyFile="$(_TaskAssemblyName)" />
+	<UsingTask Condition="'$(_PlatformName)' == 'macOS'" TaskName="Xamarin.MacDev.Tasks.Mmp" AssemblyFile="$(_TaskAssemblyName)" />
 
 	<!-- Tasks shared between Xamarin.iOS and Xamarin.Mac -->
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.ACTool" AssemblyFile="$(_TaskAssemblyName)" />

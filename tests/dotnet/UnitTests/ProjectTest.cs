@@ -17,7 +17,6 @@ namespace Xamarin.Tests {
 		[TestCase ("iossimulator-arm64")]
 		[TestCase ("ios-arm64")]
 		[TestCase ("ios-arm")]
-		[Category ("RemoteWindows")]
 		public void BuildMySingleView (string runtimeIdentifier)
 		{
 			var platform = ApplePlatform.iOS;
@@ -311,6 +310,31 @@ namespace Xamarin.Tests {
 			// The native library is removed from the resources by the linker
 			Assert.That (ad2.MainModule.Resources.Count, Is.EqualTo (0), "0 resources for bindings-test2.dll");
 
+		}
+
+		[Category ("RemoteWindows")]
+		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
+		public void RemoteTest (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			var project = "MySimpleApp";
+			Configuration.IgnoreIfIgnoredPlatform (platform);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
+
+			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
+			Clean (project_path);
+			var properties = GetDefaultProperties (runtimeIdentifiers);
+			properties ["ServerAddress"] = Environment.GetEnvironmentVariable ("MAC_AGENT_IP");
+			properties ["ServerUser"] = "builder";
+			properties ["ServerPassword"] = Environment.GetEnvironmentVariable ("XMA_PASSWORD");
+			var result = DotNet.AssertBuild (project_path, properties);
+			AssertThatLinkerExecuted (result);
+			var infoPlistPath = GetInfoPListPath (platform, appPath);
+			Assert.That (infoPlistPath, Does.Exist, "Info.plist");
+			var infoPlist = PDictionary.FromFile (infoPlistPath)!;
+			Assert.AreEqual ("com.xamarin.mysimpleapp", infoPlist.GetString ("CFBundleIdentifier").Value, "CFBundleIdentifier");
+			Assert.AreEqual ("MySimpleApp", infoPlist.GetString ("CFBundleDisplayName").Value, "CFBundleDisplayName");
+			Assert.AreEqual ("3.14", infoPlist.GetString ("CFBundleVersion").Value, "CFBundleVersion");
+			Assert.AreEqual ("3.14", infoPlist.GetString ("CFBundleShortVersionString").Value, "CFBundleShortVersionString");
 		}
 
 		[Test]

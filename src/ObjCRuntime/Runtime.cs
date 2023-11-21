@@ -2161,7 +2161,17 @@ namespace ObjCRuntime {
 
 		internal static bool IsUserType (IntPtr self)
 		{
-			var cls = Class.object_getClass (self);
+			if (!TryGetIsUserType (self, out var result))
+				throw new InvalidOperationException ($"Unable to get the class of the pointer 0x{self.ToString ("x")}");
+			return result;
+		}
+
+		internal static bool TryGetIsUserType (IntPtr self, out bool isUserType)
+		{
+			isUserType = false;
+			if (!Class.TryGetClass (self, out var cls))
+				return false;
+
 			lock (usertype_cache) {
 #if NET
 				ref var result = ref CollectionsMarshal.GetValueRefOrAddDefault (usertype_cache, cls, out var exists);
@@ -2173,7 +2183,8 @@ namespace ObjCRuntime {
 					usertype_cache.Add (cls, result);
 				}
 #endif
-				return result;
+				isUserType = result;
+				return true;
 			}
 		}
 

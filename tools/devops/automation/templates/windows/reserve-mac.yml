@@ -12,6 +12,11 @@ parameters:
   type: string
   default: HEAD
 
+- name: gitHubToken
+  type: string
+
+- name: xqaCertPass
+  type: string
 
 steps:
 - template:  sdk-unified/steps/checkout/v1.yml@yaml-templates

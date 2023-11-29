@@ -387,7 +387,7 @@ steps:
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
       -- `
-      $Env:MAC_AGENT_BUILD_SOURCESDIRECTORY/xamarin-macios/tests/dotnet/Windows/collect-binlogs.sh $Env:MAC_AGENT_BUILD_SOURCESDIRECTORY/xamarin-macios/.git $Env:MAC_AGENT_BUILD_SOURCESDIRECTORY/maccore/.git
+      $Env:MAC_AGENT_BUILD_SOURCESDIRECTORY/xamarin-macios/tests/dotnet/Windows/collect-binlogs.sh $Env:MAC_AGENT_BUILD_SOURCESDIRECTORY/xamarin-macios $Env:MAC_AGENT_BUILD_SOURCESDIRECTORY/maccore
 
     # Copy the zip from the remote Mac to this machine
     Invoke-SshEnvDownload `

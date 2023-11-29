@@ -14,6 +14,12 @@ for dir in "$@"; do
 	done
 done
 
-mkdir -p ~/remote_build_testing/
-rm -f ~/remote_build_testing/windows-remote-binlogs.zip
-zip -9r ~/remote_build_testing/windows-remote-binlogs.zip -@ < files.txt
+if test -f files.txt; then
+	mkdir -p ~/remote_build_testing/
+	rm -f ~/remote_build_testing/windows-remote-binlogs.zip
+	zip -9r ~/remote_build_testing/windows-remote-binlogs.zip -@ < files.txt
+else
+	touch ~/remote_build_testing/windows-remote-binlogs.zip
+	echo "No binlogs found"
+fi
+

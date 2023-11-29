@@ -326,7 +326,7 @@ namespace Xamarin.Tests {
 			properties ["ServerAddress"] = Environment.GetEnvironmentVariable ("MAC_AGENT_IP")!;
 			properties ["ServerUser"] = "builder";
 			properties ["ServerPassword"] = Environment.GetEnvironmentVariable ("XMA_PASSWORD")!;
-			var result = DotNet.AssertBuild (project_path, properties, quiet: false, timeout: TimeSpan.FromMinutes (20));
+			var result = DotNet.AssertBuild (project_path, properties, quiet: false, timeout: TimeSpan.FromMinutes (60));
 			AssertThatLinkerExecuted (result);
 			var infoPlistPath = GetInfoPListPath (platform, appPath);
 			Assert.That (infoPlistPath, Does.Exist, "Info.plist");

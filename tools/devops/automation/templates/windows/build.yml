@@ -317,6 +317,24 @@ steps:
     AUTH_TOKEN_GITHUB_COM: ${{ parameters.gitHubToken }}
 
 - pwsh: |
+    Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tools/devops/automation/scripts/MaciosCI.psd1
+    $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
+    Invoke-SshEnvCommand `
+      -SourcesDirectory "$(Build.SourcesDirectory)" `
+      -DotNet "$Env:DOTNET" `
+      -RemoteHost "$Env:MAC_AGENT_IP" `
+      -RemoteUserName "builder" `
+      -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
+      -ThrowIfError $false `
+      -- `
+      /Users/builder/remote_build_testing/src/xamarin-macios/tests/dotnet/Windows/prepare-for-remote-tests.sh
+  displayName: 'Prepare remote Mac'
+  continueOnError: true
+  timeoutInMinutes: 60
+  env:
+    XMA_PASSWORD: $(XMA.Password)
+
+- pwsh: |
     $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
     & $Env:DOTNET `
       build `

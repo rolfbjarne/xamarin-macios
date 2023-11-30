@@ -16,10 +16,15 @@ done
 
 if test -f files.txt; then
 	mkdir -p ~/remote_build_testing/
-	rm -f ~/remote_build_testing/windows-remote-binlogs.zip
-	zip -9r ~/remote_build_testing/windows-remote-binlogs.zip -@ < files.txt
+	rm -f ~/remote_build_testing/windows-remote-logs.zip
+	zip -9r ~/remote_build_testing/windows-remote-logs.zip -@ < files.txt
 else
-	touch ~/remote_build_testing/windows-remote-binlogs.zip
+	touch ~/remote_build_testing/windows-remote-logs.zip
 	echo "No binlogs found"
 fi
 
+if ls ~/Library/Logs/Xamarin.Messaging-* >& /dev/null ; then
+	zip -9r ~/remote_build_testing/windows-remote-logs.zip ~/Library/Logs/Xamarin.Messaging-*
+else
+	echo "No logs in ~/Library/Logs/Xamarin.Messaging"
+fi

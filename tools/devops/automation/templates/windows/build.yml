@@ -397,8 +397,8 @@ steps:
       -RemoteUserName "builder" `
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $true `
-      -Source "/Users/builder/remote_build_testing/windows-remote-binlogs.zip" `
-      -Target "$(Build.ArtifactStagingDirectory)/windows-binlogs/windows-remote-binlogs.zip"
+      -Source "/Users/builder/remote_build_testing/windows-remote-logs.zip" `
+      -Target "$(Build.ArtifactStagingDirectory)/windows-binlogs/windows-remote-logs.zip"
   displayName: 'Fetch remote binlogs'
   timeoutInMinutes: 5
   condition: always()

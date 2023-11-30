@@ -19,12 +19,16 @@ if test -f files.txt; then
 	rm -f ~/remote_build_testing/windows-remote-logs.zip
 	zip -9r ~/remote_build_testing/windows-remote-logs.zip -@ < files.txt
 else
-	touch ~/remote_build_testing/windows-remote-logs.zip
-	echo "No binlogs found"
+	echo "No binlogs found."
 fi
 
 if ls ~/Library/Logs/Xamarin.Messaging-* >& /dev/null ; then
 	zip -9r ~/remote_build_testing/windows-remote-logs.zip ~/Library/Logs/Xamarin.Messaging-*
 else
 	echo "No logs in ~/Library/Logs/Xamarin.Messaging"
+fi
+
+if ! test -f ~/remote_build_testing/windows-remote-logs.zip; then
+	# Create an empty zip file.
+	echo UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA== | base64 -d > ~/remote_build_testing/windows-remote-logs.zip
 fi

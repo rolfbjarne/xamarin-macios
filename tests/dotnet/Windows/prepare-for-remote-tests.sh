@@ -9,3 +9,8 @@ IFS=$'\n\t'
 if du -hs ~/Library/Logs/Xamarin.Messaging-*; then
 	rm -rf ~/Library/Logs/Xamarin.Messaging-*
 fi
+
+# Make sure we don't have any old stuff installed
+if du -hs ~/Libary/Caches/Xamarin; then
+	rm -rf ~/Libary/Caches/Xamarin
+fi

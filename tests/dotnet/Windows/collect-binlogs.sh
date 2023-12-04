@@ -28,7 +28,12 @@ else
 	echo "No logs in ~/Library/Logs/Xamarin.Messaging"
 fi
 
-if ! test -f ~/remote_build_testing/windows-remote-logs.zip; then
-	# Create an empty zip file.
-	echo UEsFBgAAAAAAAAAAAAAAAAAAAAAAAA== | base64 -d > ~/remote_build_testing/windows-remote-logs.zip
+if test -d ~/Library/Caches/Xamarin; then
+	find ~/Library/Caches/Xamarin > filelist.txt
+	find ~/Library/Caches/Xamarin -print0 | xargs -0 ls -lad >> filelist.txt
+	find ~/Library/Caches/Xamarin/XMA/Agents -type f -print0 | xargs -0 shasum >> filelist.txt
+else
+	echo "No files in ~/Library/Caches/Xamarin" > filelist.txt
 fi
+zip -9r ~/remote_build_testing/windows-remote-logs.zip filelist.txt
+rm -f filelist.txt

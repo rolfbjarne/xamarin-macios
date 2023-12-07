@@ -14,3 +14,7 @@ fi
 if du -hs ~/Libary/Caches/Xamarin; then
 	rm -rf ~/Libary/Caches/Xamarin
 fi
+
+if du -hs ~/Library/Caches/Xamarin/XMA/Agents; then
+	rm -rf ~/Library/Caches/Xamarin/XMA/Agents
+fi

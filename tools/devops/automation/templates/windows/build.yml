@@ -207,7 +207,7 @@ steps:
       -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
       -ThrowIfError $false `
       -- `
-      /Users/builder/remote_build_testing/src/xamarin-macios/tests/dotnet/Windows/prepare-for-remote-tests.sh
+      $Env:MAC_AGENT_BUILD_SOURCESDIRECTORY/xamarin-macios/tests/dotnet/Windows/prepare-for-remote-tests.sh
   displayName: 'Prepare remote Mac'
   continueOnError: true
   timeoutInMinutes: 60

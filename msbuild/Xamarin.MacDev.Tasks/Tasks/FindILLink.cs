@@ -13,6 +13,11 @@ namespace Xamarin.MacDev.Tasks {
 
 		public override bool Execute ()
 		{
+
+			foreach (var key in Environment.GetEnvironmentVariables ().Keys.Cast<string> ().OrderBy (v => v)) {
+				Log.LogWarning ($"{key}={Environment.GetEnvironmentVariable (key)}");
+			}
+
 			if (this.ShouldExecuteRemotely (SessionId))
 				return new TaskRunner (SessionId, BuildEngine4).RunAsync (this).Result;
 

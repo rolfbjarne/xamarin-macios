@@ -495,6 +495,7 @@ steps:
         New-Item -ItemType File -Path $targetFile -Force
         Copy-Item $binlog.FullName -destination $targetFile
     }
+    Copy-Item /Users/builder/remote_build_testing/MySimpleApp.binlog $targetDir/MySimpleApp.binlog
   displayName: Copy all binlogs
   continueOnError: true
   condition: succeededOrFailed()

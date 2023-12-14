@@ -18,6 +18,8 @@ namespace Xamarin.Messaging.Build {
 
 		internal TaskRunner (ITaskSerializer serializer)
 		{
+			Console.Error.WriteLine ($"TaskRunner ({serializer})");
+			Console.Error.WriteLine (Environment.StackTrace);
 			this.serializer = serializer;
 			SetDotNetVariables ();
 		}
@@ -30,6 +32,7 @@ namespace Xamarin.Messaging.Build {
 
 		public ExecuteTaskResult Execute (string taskName, string inputs)
 		{
+			Console.Error.WriteLine ($"TaskRunner.Execute ({taskName}, {inputs})");
 			var taskType = tasks.FirstOrDefault (x => string.Equals (x.FullName, taskName, StringComparison.OrdinalIgnoreCase));
 
 			if (taskType is null) {
@@ -56,6 +59,8 @@ namespace Xamarin.Messaging.Build {
 			var xmaDotNetRootPath = Path.Combine (xmaSdkRootPath, "dotnet");
 			var xmaDotNetPath = default (string);
 
+			Console.Error.WriteLine ($"TaskRunner.SetDotNetVariables () 1: xmaSdkRootPath={xmaSdkRootPath} xmaDotNetRootPath={xmaDotNetRootPath} xmaDotNetPath={xmaDotNetPath}");
+
 			if (IsValidDotNetInstallation (xmaDotNetRootPath)) {
 				//If the XMA dotnet is already installed, we use it and also declare a custom home for it (for NuGet restore and caches)
 				Environment.SetEnvironmentVariable ("DOTNET_CUSTOM_HOME", Path.Combine (xmaSdkRootPath, ".home"));
@@ -66,6 +71,7 @@ namespace Xamarin.Messaging.Build {
 				xmaDotNetRootPath = Path.GetDirectoryName (xmaDotNetPath);
 			}
 
+			Console.Error.WriteLine ($"TaskRunner.SetDotNetVariables () 2: xmaSdkRootPath={xmaSdkRootPath} xmaDotNetRootPath={xmaDotNetRootPath} xmaDotNetPath={xmaDotNetPath}");
 			var pathContent = GetPathContent ();
 			//We add the XMA dotnet path first so it has priority over the default dotnet installation
 			var newPathContent = $"{xmaDotNetRootPath}:{pathContent}";
@@ -109,8 +115,18 @@ namespace Xamarin.Messaging.Build {
 
 		string GetPathContent () => Environment.GetEnvironmentVariable ("PATH") ?? "";
 
-		bool IsValidDotNetInstallation (string rootPath) => File.Exists (GetDotNetPath (rootPath));
+		bool IsValidDotNetInstallation (string rootPath)
+		{
+			var rv = File.Exists (GetDotNetPath (rootPath));
+			Console.Error.WriteLine ($"TaskRunner.IsValidDotNetInstallation ({rootPath}) => {rv}");
+			return rv;
+		}
 
-		string GetDotNetPath (string rootPath) => Path.Combine (rootPath, "dotnet");
+		string GetDotNetPath (string rootPath)
+		{
+			var rv = Path.Combine (rootPath, "dotnet");
+			Console.Error.WriteLine ($"TaskRunner.GetDotNetPath ({rootPath}) => {rv}");
+			return rv;
+		}
 	}
 }

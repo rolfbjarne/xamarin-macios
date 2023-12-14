@@ -205,9 +205,11 @@ namespace AudioToolbox {
 			get {
 				AudioConverterPrimeInfo value;
 				var size = sizeof (AudioConverterPrimeInfo);
-				var res = AudioConverterGetProperty (Handle, AudioConverterPropertyID.PrimeInfo, ref size, out value);
-				if (res != AudioConverterError.None)
-					throw new ArgumentException (res.ToString ());
+				unsafe {
+					var res = AudioConverterGetProperty (Handle, AudioConverterPropertyID.PrimeInfo, &size, &value);
+					if (res != AudioConverterError.None)
+						throw new ArgumentException (res.ToString ());
+				}
 
 				return value;
 			}
@@ -221,14 +223,16 @@ namespace AudioToolbox {
 
 		public byte []? CompressionMagicCookie {
 			get {
-				int size;
-				bool writable;
-				if (AudioConverterGetPropertyInfo (Handle, AudioConverterPropertyID.CompressionMagicCookie, out size, out writable) != AudioConverterError.None)
+				if (AudioConverterGetPropertyInfo (Handle, AudioConverterPropertyID.CompressionMagicCookie, out var size, out var writable) != AudioConverterError.None)
 					return null;
 
 				var cookie = new byte [size];
-				if (AudioConverterGetProperty (Handle, AudioConverterPropertyID.CompressionMagicCookie, ref size, cookie) != AudioConverterError.None)
-					return null;
+				unsafe {
+					fixed (byte* cookiePtr = cookie) {
+						if (AudioConverterGetProperty (Handle, AudioConverterPropertyID.CompressionMagicCookie, &size, cookiePtr) != AudioConverterError.None)
+							return null;
+					}
+				}
 
 				return cookie;
 			}
@@ -237,9 +241,13 @@ namespace AudioToolbox {
 				if (value is null)
 					ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (value));
 
-				var res = AudioConverterSetProperty (Handle, AudioConverterPropertyID.CompressionMagicCookie, value.Length, value);
-				if (res != AudioConverterError.None)
-					throw new ArgumentException (res.ToString ());
+				unsafe {
+					fixed (byte* valuePtr = value) {
+						var res = AudioConverterSetProperty (Handle, AudioConverterPropertyID.CompressionMagicCookie, value.Length, valuePtr);
+						if (res != AudioConverterError.None)
+							throw new ArgumentException (res.ToString ());
+					}
+				}
 			}
 		}
 
@@ -251,8 +259,12 @@ namespace AudioToolbox {
 					return null;
 
 				var cookie = new byte [size];
-				if (AudioConverterGetProperty (Handle, AudioConverterPropertyID.DecompressionMagicCookie, ref size, cookie) != AudioConverterError.None)
-					return null;
+				unsafe {
+					fixed (byte* cookiePtr = cookie) {
+						if (AudioConverterGetProperty (Handle, AudioConverterPropertyID.DecompressionMagicCookie, &size, cookiePtr) != AudioConverterError.None)
+							return null;
+					}
+				}
 
 				return cookie;
 			}
@@ -260,9 +272,13 @@ namespace AudioToolbox {
 				if (value is null)
 					ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (value));
 
-				var res = AudioConverterSetProperty (Handle, AudioConverterPropertyID.DecompressionMagicCookie, value.Length, value);
-				if (res != AudioConverterError.None)
-					throw new ArgumentException (res.ToString ());
+				unsafe {
+					fixed (byte* valuePtr = value) {
+						var res = AudioConverterSetProperty (Handle, AudioConverterPropertyID.DecompressionMagicCookie, value.Length, valuePtr);
+						if (res != AudioConverterError.None)
+							throw new ArgumentException (res.ToString ());
+					}
+				}
 			}
 		}
 
@@ -292,10 +308,14 @@ namespace AudioToolbox {
 					return null;
 
 				IntPtr ptr = Marshal.AllocHGlobal (size);
-				var res = AudioConverterGetProperty (Handle, AudioConverterPropertyID.InputChannelLayout, ref size, ptr);
-				var layout = res == AudioConverterError.None ? new AudioChannelLayout (ptr) : null;
-				Marshal.FreeHGlobal (ptr);
-				return layout;
+				try {
+					unsafe {
+						var res = AudioConverterGetProperty (Handle, AudioConverterPropertyID.InputChannelLayout, &size, ptr);
+						return res == AudioConverterError.None ? new AudioChannelLayout (ptr) : null;
+					}
+				} finally {
+					Marshal.FreeHGlobal (ptr);
+				}
 			}
 		}
 
@@ -307,10 +327,14 @@ namespace AudioToolbox {
 					return null;
 
 				IntPtr ptr = Marshal.AllocHGlobal (size);
-				var res = AudioConverterGetProperty (Handle, AudioConverterPropertyID.OutputChannelLayout, ref size, ptr);
-				var layout = res == AudioConverterError.None ? new AudioChannelLayout (ptr) : null;
-				Marshal.FreeHGlobal (ptr);
-				return layout;
+				try {
+					unsafe {
+						var res = AudioConverterGetProperty (Handle, AudioConverterPropertyID.OutputChannelLayout, &size, ptr);
+						return res == AudioConverterError.None ? new AudioChannelLayout (ptr) : null;
+					}
+				} finally {
+					Marshal.FreeHGlobal (ptr);
+				}
 			}
 		}
 
@@ -353,13 +377,15 @@ namespace AudioToolbox {
 					throw new ArgumentException (res.ToString ());
 
 				IntPtr ptr = Marshal.AllocHGlobal (size);
-				res = AudioConverterGetProperty (Handle, AudioConverterPropertyID.CurrentOutputStreamDescription, ref size, ptr);
-				if (res != AudioConverterError.None)
-					throw new ArgumentException (res.ToString ());
+				try {
+					res = AudioConverterGetProperty (Handle, AudioConverterPropertyID.CurrentOutputStreamDescription, &size, ptr);
+					if (res != AudioConverterError.None)
+						throw new ArgumentException (res.ToString ());
 
-				var asbd = *(AudioStreamBasicDescription*) ptr;
-				Marshal.FreeHGlobal (ptr);
-				return asbd;
+					return *(AudioStreamBasicDescription*) ptr;
+				} finally {
+					Marshal.FreeHGlobal (ptr);
+				}
 			}
 		}
 
@@ -372,13 +398,15 @@ namespace AudioToolbox {
 					throw new ArgumentException (res.ToString ());
 
 				IntPtr ptr = Marshal.AllocHGlobal (size);
-				res = AudioConverterGetProperty (Handle, AudioConverterPropertyID.CurrentInputStreamDescription, ref size, ptr);
-				if (res != AudioConverterError.None)
-					throw new ArgumentException (res.ToString ());
+				try {
+					res = AudioConverterGetProperty (Handle, AudioConverterPropertyID.CurrentInputStreamDescription, &size, ptr);
+					if (res != AudioConverterError.None)
+						throw new ArgumentException (res.ToString ());
 
-				var asbd = *(AudioStreamBasicDescription*) ptr;
-				Marshal.FreeHGlobal (ptr);
-				return asbd;
+					return *(AudioStreamBasicDescription*) ptr;
+				} finally {
+					Marshal.FreeHGlobal (ptr);
+				}
 			}
 		}
 
@@ -414,7 +442,9 @@ namespace AudioToolbox {
 		public static AudioConverter? Create (AudioStreamBasicDescription sourceFormat, AudioStreamBasicDescription destinationFormat, out AudioConverterError error)
 		{
 			IntPtr ptr = new IntPtr ();
-			error = AudioConverterNew (ref sourceFormat, ref destinationFormat, ref ptr);
+			unsafe {
+				error = AudioConverterNew (&sourceFormat, &destinationFormat, &ptr);
+			}
 			if (error != AudioConverterError.None)
 				return null;
 
@@ -427,9 +457,13 @@ namespace AudioToolbox {
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (descriptions));
 
 			IntPtr ptr = new IntPtr ();
-			var res = AudioConverterNewSpecific (ref sourceFormat, ref destinationFormat, descriptions.Length, ref descriptions, ref ptr);
-			if (res != AudioConverterError.None)
-				return null;
+			unsafe {
+				fixed (AudioClassDescription* descriptionsPtr = descriptions) {
+					var res = AudioConverterNewSpecific (&sourceFormat, &destinationFormat, descriptions.Length, descriptionsPtr, &ptr);
+					if (res != AudioConverterError.None)
+						return null;
+				}
+			}
 
 			return new AudioConverter (ptr, true);
 		}
@@ -467,7 +501,13 @@ namespace AudioToolbox {
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (output));
 
 			int outSize = output.Length;
-			return AudioConverterConvertBuffer (Handle, input.Length, input, ref outSize, output);
+			unsafe {
+				fixed (byte* inputPtr = input) {
+					fixed (byte* outputPtr = output) {
+						return AudioConverterConvertBuffer (Handle, input.Length, inputPtr, &outSize, outputPtr);
+					}
+				}
+			}
 		}
 
 		public AudioConverterError ConvertComplexBuffer (int numberPCMFrames, AudioBuffers inputData, AudioBuffers outputData)
@@ -636,39 +676,43 @@ namespace AudioToolbox {
 		unsafe static AudioFormatType []? GetFormats (AudioFormatProperty prop)
 		{
 			int size;
-			if (AudioFormatPropertyNative.AudioFormatGetPropertyInfo (prop, 0, IntPtr.Zero, out size) != 0)
+			if (AudioFormatPropertyNative.AudioFormatGetPropertyInfo (prop, 0, IntPtr.Zero, &size) != 0)
 				return null;
 
 			var elementSize = sizeof (AudioFormatType);
 			var data = new AudioFormatType [size / elementSize];
-			fixed (AudioFormatType* ptr = data) {
-				var res = AudioFormatPropertyNative.AudioFormatGetProperty (prop, 0, IntPtr.Zero, ref size, (IntPtr) ptr);
+			fixed (AudioFormatType* dataPtr = data) {
+				var res = AudioFormatPropertyNative.AudioFormatGetProperty (prop, 0, IntPtr.Zero, &size, (IntPtr) dataPtr);
 				if (res != 0)
 					return null;
-
-				Array.Resize (ref data, elementSize);
-				return data;
 			}
+
+			Array.Resize (ref data, elementSize);
+			return data;
 		}
 
 		uint GetUIntProperty (AudioConverterPropertyID propertyID)
 		{
-			uint value;
+			uint value = 0;
 			var size = sizeof (uint);
-			var res = AudioConverterGetProperty (Handle, propertyID, ref size, out value);
-			if (res != AudioConverterError.None)
-				throw new ArgumentException (res.ToString ());
+			unsafe {
+				var res = AudioConverterGetProperty (Handle, propertyID, &size, &value);
+				if (res != AudioConverterError.None)
+					throw new ArgumentException (res.ToString ());
+			}
 
 			return value;
 		}
 
 		double GetDoubleProperty (AudioConverterPropertyID propertyID)
 		{
-			double value;
+			double value = 0;
 			var size = sizeof (double);
-			var res = AudioConverterGetProperty (Handle, propertyID, ref size, out value);
-			if (res != AudioConverterError.None)
-				throw new ArgumentException (res.ToString ());
+			unsafe {
+				var res = AudioConverterGetProperty (Handle, propertyID, &size, &value);
+				if (res != AudioConverterError.None)
+					throw new ArgumentException (res.ToString ());
+			}
 
 			return value;
 		}
@@ -691,7 +735,7 @@ namespace AudioToolbox {
 			var data = new T [size / elementSize];
 
 			fixed (T* ptr = data) {
-				var res = AudioConverterGetProperty (Handle, prop, ref size, (IntPtr) ptr);
+				var res = AudioConverterGetProperty (Handle, prop, &size, (IntPtr) ptr);
 				if (res != 0)
 					return null;
 
@@ -702,31 +746,37 @@ namespace AudioToolbox {
 
 		void SetProperty (AudioConverterPropertyID propertyID, uint value)
 		{
-			var res = AudioConverterSetProperty (Handle, propertyID, sizeof (uint), ref value);
-			if (res != AudioConverterError.None)
-				throw new ArgumentException (res.ToString ());
+			unsafe {
+				var res = AudioConverterSetProperty (Handle, propertyID, sizeof (uint), &value);
+				if (res != AudioConverterError.None)
+					throw new ArgumentException (res.ToString ());
+			}
 		}
 
 		void SetProperty (AudioConverterPropertyID propertyID, int value)
 		{
-			var res = AudioConverterSetProperty (Handle, propertyID, sizeof (int), ref value);
-			if (res != AudioConverterError.None)
-				throw new ArgumentException (res.ToString ());
+			unsafe {
+				var res = AudioConverterSetProperty (Handle, propertyID, sizeof (int), &value);
+				if (res != AudioConverterError.None)
+					throw new ArgumentException (res.ToString ());
+			}
 		}
 
 		void SetProperty (AudioConverterPropertyID propertyID, double value)
 		{
-			var res = AudioConverterSetProperty (Handle, propertyID, sizeof (double), ref value);
-			if (res != AudioConverterError.None)
-				throw new ArgumentException (res.ToString ());
+			unsafe {
+				var res = AudioConverterSetProperty (Handle, propertyID, sizeof (double), &value);
+				if (res != AudioConverterError.None)
+					throw new ArgumentException (res.ToString ());
+			}
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		static extern AudioConverterError AudioConverterNew (ref AudioStreamBasicDescription inSourceFormat, ref AudioStreamBasicDescription inDestinationFormat, ref IntPtr outAudioConverter);
+		unsafe static extern AudioConverterError AudioConverterNew (AudioStreamBasicDescription* inSourceFormat, AudioStreamBasicDescription* inDestinationFormat, IntPtr* outAudioConverter);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		static extern AudioConverterError AudioConverterNewSpecific (ref AudioStreamBasicDescription inSourceFormat, ref AudioStreamBasicDescription inDestinationFormat,
-			int inNumberClassDescriptions, ref AudioClassDescription [] inClassDescriptions, ref IntPtr outAudioConverter);
+		unsafe static extern AudioConverterError AudioConverterNewSpecific (AudioStreamBasicDescription* inSourceFormat, AudioStreamBasicDescription* inDestinationFormat,
+			int inNumberClassDescriptions, AudioClassDescription* inClassDescriptions, IntPtr* outAudioConverter);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 		static extern AudioConverterError AudioConverterDispose (IntPtr inAudioConverter);
@@ -739,52 +789,64 @@ namespace AudioToolbox {
 			IntPtr inInputData, IntPtr outOutputData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		static extern AudioConverterError AudioConverterGetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
-			ref int ioPropertyDataSize, out uint outPropertyData);
+		unsafe static extern AudioConverterError AudioConverterGetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
+			int* ioPropertyDataSize, uint* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		static extern AudioConverterError AudioConverterGetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
-			ref int ioPropertyDataSize, out int outPropertyData);
+		unsafe static extern AudioConverterError AudioConverterGetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
+			int* ioPropertyDataSize, int* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		static extern AudioConverterError AudioConverterGetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
-			ref int ioPropertyDataSize, out double outPropertyData);
+		unsafe static extern AudioConverterError AudioConverterGetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
+			int* ioPropertyDataSize, double* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		static extern AudioConverterError AudioConverterGetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
-			ref int ioPropertyDataSize, byte [] outPropertyData);
+		unsafe static extern AudioConverterError AudioConverterGetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
+			int* ioPropertyDataSize, byte* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		static extern AudioConverterError AudioConverterGetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
-			ref int ioPropertyDataSize, out AudioConverterPrimeInfo outPropertyData);
+		unsafe static extern AudioConverterError AudioConverterGetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
+			int* ioPropertyDataSize, AudioConverterPrimeInfo* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		static extern AudioConverterError AudioConverterGetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
-			ref int ioPropertyDataSize, IntPtr outPropertyData);
+		unsafe static extern AudioConverterError AudioConverterGetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
+			int* ioPropertyDataSize, IntPtr outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		static extern AudioConverterError AudioConverterGetPropertyInfo (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
-			out int outSize, [MarshalAs (UnmanagedType.I1)] out bool outWritable);
+		unsafe static extern AudioConverterError AudioConverterGetPropertyInfo (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID, int* outSize, byte* outWritable);
+
+		static AudioConverterError AudioConverterGetPropertyInfo (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID, out int outSize, out bool outWritable)
+		{
+			byte writable = 0;
+			int size = 0;
+			AudioConverterError rv;
+			unsafe {
+				rv = AudioConverterGetPropertyInfo (inAudioConverter, inPropertyID, &size, &writable);
+			}
+			outWritable = writable != 0;
+			outSize = size;
+			return rv;
+		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		static extern AudioConverterError AudioConverterSetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
-			int inPropertyDataSize, ref uint inPropertyData);
+		unsafe static extern AudioConverterError AudioConverterSetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
+			int inPropertyDataSize, uint* inPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		static extern AudioConverterError AudioConverterSetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
-			int inPropertyDataSize, ref int inPropertyData);
+		unsafe static extern AudioConverterError AudioConverterSetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
+			int inPropertyDataSize, int* inPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		static extern AudioConverterError AudioConverterSetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
-			int inPropertyDataSize, ref double inPropertyData);
+		unsafe static extern AudioConverterError AudioConverterSetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
+			int inPropertyDataSize, double* inPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		static extern AudioConverterError AudioConverterSetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
-			int inPropertyDataSize, byte [] inPropertyData);
+		unsafe static extern AudioConverterError AudioConverterSetProperty (IntPtr inAudioConverter, AudioConverterPropertyID inPropertyID,
+			int inPropertyDataSize, byte* inPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		static extern AudioConverterError AudioConverterConvertBuffer (IntPtr inAudioConverter, int inInputDataSize, byte [] inInputData,
-			ref int ioOutputDataSize, byte [] outOutputData);
+		unsafe static extern AudioConverterError AudioConverterConvertBuffer (IntPtr inAudioConverter, int inInputDataSize, byte* inInputData,
+			int* ioOutputDataSize, byte* outOutputData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 #if NET

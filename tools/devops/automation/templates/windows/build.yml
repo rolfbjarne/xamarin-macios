@@ -341,7 +341,7 @@ steps:
       /p:ServerAddress=$Env:MAC_AGENT_IP `
       /p:ServerUser=builder `
       /p:ServerPassword=$Env:XMA_PASSWORD `
-      /p:_DotNetRootRemoteDirectory=/Users/builder/remote_build_testing/_build `
+      /p:_DotNetRootRemoteDirectory=/Users/builder/remote_build_testing/_build/ `
       /p:ExcludeTouchUnitReference=true `
       /p:ExcludeNUnitLiteReference=true `
       -v:diag `

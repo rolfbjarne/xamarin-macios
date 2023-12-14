@@ -21,7 +21,9 @@ namespace Xamarin.MacDev.Tasks {
 				return new TaskRunner (SessionId, BuildEngine4).RunAsync (this).Result;
 			}
 
-			foreach (var key in Environment.GetEnvironmentVariables ().Keys.Cast<string> ().OrderBy (v => v)) {
+			var keys = Environment.GetEnvironmentVariables ().Keys;
+			Log.LogWarning ($"Mac: got {keys.Count ()} environment variables");
+			foreach (var key in keys.Cast<string> ().OrderBy (v => v)) {
 				Log.LogWarning ($"Mac: {key}={Environment.GetEnvironmentVariable (key)}");
 			}
 

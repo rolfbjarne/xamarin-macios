@@ -71,7 +71,7 @@ namespace AudioToolbox {
 		[SupportedOSPlatform ("tvos")]
 #endif
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static OSStatus CopyNameFromSoundBank (/* CFURLRef */ IntPtr inURL, /* CFStringRef */ ref IntPtr outName);
+		unsafe extern static OSStatus CopyNameFromSoundBank (/* CFURLRef */ IntPtr inURL, /* CFStringRef */ IntPtr* outName);
 
 #if NET
 		[SupportedOSPlatform ("ios")]
@@ -101,7 +101,7 @@ namespace AudioToolbox {
 		[SupportedOSPlatform ("tvos")]
 #endif
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static OSStatus CopyInstrumentInfoFromSoundBank (/* CFURLRef */ IntPtr inURL, /* CFSArrayRef */ ref IntPtr outInstrumentInfo);
+		unsafe extern static OSStatus CopyInstrumentInfoFromSoundBank (/* CFURLRef */ IntPtr inURL, /* CFSArrayRef */ IntPtr* outInstrumentInfo);
 
 #if NET
 		[SupportedOSPlatform ("ios")]

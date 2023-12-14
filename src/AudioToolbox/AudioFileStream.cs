@@ -319,10 +319,10 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioFileStreamStatus AudioFileStreamSeek (AudioFileStreamID inAudioFileStream,
+		unsafe extern static AudioFileStreamStatus AudioFileStreamSeek (AudioFileStreamID inAudioFileStream,
 									long inPacketOffset,
-									out long outDataByteOffset,
-									ref int ioFlags);
+									long* outDataByteOffset,
+									int* ioFlags);
 
 		public AudioFileStreamStatus Seek (long packetOffset, out long dataByteOffset, out bool isEstimate)
 		{
@@ -338,17 +338,17 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioFileStreamStatus AudioFileStreamGetPropertyInfo (
+		unsafe extern static AudioFileStreamStatus AudioFileStreamGetPropertyInfo (
 			AudioFileStreamID inAudioFileStream,
 			AudioFileStreamProperty inPropertyID,
-			out int outPropertyDataSize,
-			[MarshalAs (UnmanagedType.I1)] out bool isWritable);
+			int* outPropertyDataSize,
+			byte* isWritable);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioFileStreamStatus AudioFileStreamGetProperty (
+		unsafe extern static AudioFileStreamStatus AudioFileStreamGetProperty (
 			AudioFileStreamID inAudioFileStream,
 			AudioFileStreamProperty inPropertyID,
-			ref int ioPropertyDataSize,
+			int* ioPropertyDataSize,
 			IntPtr outPropertyData);
 
 		public bool GetProperty (AudioFileStreamProperty property, ref int dataSize, IntPtr outPropertyData)

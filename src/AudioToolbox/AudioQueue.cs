@@ -421,7 +421,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static OSStatus AudioQueueDispose (IntPtr AQ, [MarshalAs (UnmanagedType.I1)] bool immediate);
+		extern static OSStatus AudioQueueDispose (IntPtr AQ, byte immediate);
 
 		protected virtual void Dispose (bool disposing)
 		{
@@ -454,7 +454,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioQueueStatus AudioQueueStart (IntPtr AQ, ref AudioTimeStamp startTime);
+		unsafe extern static AudioQueueStatus AudioQueueStart (IntPtr AQ, AudioTimeStamp* startTime);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static AudioQueueStatus AudioQueueStart (IntPtr AQ, IntPtr startTime);
@@ -470,7 +470,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioQueueStatus AudioQueuePrime (IntPtr AQ, int toPrepare, out int prepared);
+		unsafe extern static AudioQueueStatus AudioQueuePrime (IntPtr AQ, int toPrepare, int* prepared);
 		public AudioQueueStatus Prime (int toPrepare, out int prepared)
 		{
 			return AudioQueuePrime (handle, toPrepare, out prepared);
@@ -484,7 +484,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioQueueStatus AudioQueueStop (IntPtr aq, [MarshalAs (UnmanagedType.I1)] bool immediate);
+		unsafe extern static AudioQueueStatus AudioQueueStop (IntPtr aq, byte immediate);
 		public AudioQueueStatus Stop (bool immediate)
 		{
 			return AudioQueueStop (handle, immediate);
@@ -505,7 +505,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioQueueStatus AudioQueueAllocateBuffer (AudioQueueRef AQ, int bufferSize, out IntPtr audioQueueBuffer);
+		unsafe extern static AudioQueueStatus AudioQueueAllocateBuffer (AudioQueueRef AQ, int bufferSize, IntPtr* audioQueueBuffer);
 		public AudioQueueStatus AllocateBuffer (int bufferSize, out IntPtr audioQueueBuffer)
 		{
 			return AudioQueueAllocateBuffer (handle, bufferSize, out audioQueueBuffer);
@@ -521,7 +521,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioQueueStatus AudioQueueAllocateBufferWithPacketDescriptions (IntPtr AQ, int bufferSize, int nPackets, out IntPtr audioQueueBuffer);
+		unsafe extern static AudioQueueStatus AudioQueueAllocateBufferWithPacketDescriptions (IntPtr AQ, int bufferSize, int nPackets, IntPtr* audioQueueBuffer);
 		public AudioQueueStatus AllocateBufferWithPacketDescriptors (int bufferSize, int nPackets, out IntPtr audioQueueBuffer)
 		{
 			return AudioQueueAllocateBufferWithPacketDescriptions (handle, bufferSize, nPackets, out audioQueueBuffer);
@@ -545,7 +545,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		internal extern unsafe static AudioQueueStatus AudioQueueEnqueueBuffer (IntPtr AQ, AudioQueueBuffer* audioQueueBuffer, int nPackets, AudioStreamPacketDescription []? desc);
+		internal extern unsafe static AudioQueueStatus AudioQueueEnqueueBuffer (IntPtr AQ, AudioQueueBuffer* audioQueueBuffer, int nPackets, AudioStreamPacketDescription* desc);
 
 		public AudioQueueStatus EnqueueBuffer (IntPtr audioQueueBuffer, int bytes, AudioStreamPacketDescription [] desc)
 		{
@@ -580,26 +580,26 @@ namespace AudioToolbox {
 			IntPtr AQ,
 			AudioQueueBuffer* audioQueueBuffer,
 			int nPackets,
-			AudioStreamPacketDescription []? desc,
+			AudioStreamPacketDescription* desc,
 			int trimFramesAtStart,
 			int trimFramesAtEnd,
 			int nParam,
-			AudioQueueParameterEvent []? parameterEvents,
-			ref AudioTimeStamp startTime,
-			out AudioTimeStamp actualStartTime);
+			AudioQueueParameterEvent* parameterEvents,
+			AudioTimeStamp* startTime,
+			AudioTimeStamp* actualStartTime);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern unsafe static AudioQueueStatus AudioQueueEnqueueBufferWithParameters (
 			IntPtr AQ,
 			AudioQueueBuffer* audioQueueBuffer,
 			int nPackets,
-			AudioStreamPacketDescription []? desc,
+			AudioStreamPacketDescription* desc,
 			int trimFramesAtStart,
 			int trimFramesAtEnd,
 			int nParam,
-			AudioQueueParameterEvent []? parameterEvents,
+			AudioQueueParameterEvent* parameterEvents,
 			AudioTimeStamp* startTime,
-			out AudioTimeStamp actualStartTime);
+			AudioTimeStamp* actualStartTime);
 
 		public AudioQueueStatus EnqueueBuffer (IntPtr audioQueueBuffer, int bytes, AudioStreamPacketDescription [] desc,
 							   int trimFramesAtStart, int trimFramesAtEnd, AudioQueueParameterEvent [] parameterEvents,
@@ -671,7 +671,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioQueueStatus AudioQueueCreateTimeline (IntPtr AQ, out IntPtr timeline);
+		unsafe extern static AudioQueueStatus AudioQueueCreateTimeline (IntPtr AQ, IntPtr* timeline);
 
 		public AudioQueueTimeline? CreateTimeline ()
 		{
@@ -683,7 +683,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioQueueStatus AudioQueueGetCurrentTime (IntPtr AQ, IntPtr timelineHandle, ref AudioTimeStamp time, [MarshalAs (UnmanagedType.I1)] ref bool discontinuty);
+		unsafe extern static AudioQueueStatus AudioQueueGetCurrentTime (IntPtr AQ, IntPtr timelineHandle, AudioTimeStamp* time, byte* discontinuty);
 
 		public AudioQueueStatus GetCurrentTime (AudioQueueTimeline timeline, ref AudioTimeStamp time, ref bool timelineDiscontinuty)
 		{
@@ -701,7 +701,7 @@ namespace AudioToolbox {
 
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioQueueStatus AudioQueueDeviceGetCurrentTime (IntPtr AQ, ref AudioTimeStamp time);
+		unsafe extern static AudioQueueStatus AudioQueueDeviceGetCurrentTime (IntPtr AQ, AudioTimeStamp* time);
 
 		public AudioTimeStamp CurrentTime {
 			get {
@@ -717,7 +717,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioQueueStatus AudioQueueDeviceGetNearestStartTime (IntPtr AQ, ref AudioTimeStamp data, int flags);
+		unsafe extern static AudioQueueStatus AudioQueueDeviceGetNearestStartTime (IntPtr AQ, AudioTimeStamp* data, int flags);
 
 		public AudioTimeStamp GetNearestStartTime (AudioTimeStamp requestedStartTime)
 		{
@@ -729,7 +729,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioQueueStatus AudioQueueDeviceTranslateTime (IntPtr AQ, ref AudioTimeStamp inTime, out AudioTimeStamp translatedTime);
+		unsafe extern static AudioQueueStatus AudioQueueDeviceTranslateTime (IntPtr AQ, AudioTimeStamp* inTime, AudioTimeStamp* translatedTime);
 
 		public AudioTimeStamp TranslateTime (AudioTimeStamp timeToTranslate)
 		{
@@ -740,7 +740,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static OSStatus AudioQueueGetParameter (IntPtr AQ, AudioQueueParameter parameterId, out float result);
+		unsafe extern static OSStatus AudioQueueGetParameter (IntPtr AQ, AudioQueueParameter parameterId, float* result);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static OSStatus AudioQueueSetParameter (IntPtr AQ, AudioQueueParameter parameterId, float value);
@@ -892,10 +892,10 @@ namespace AudioToolbox {
 #endif
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioQueueStatus AudioQueueGetProperty (IntPtr AQ, uint id, IntPtr outdata, ref int dataSize);
+		unsafe extern static AudioQueueStatus AudioQueueGetProperty (IntPtr AQ, uint id, IntPtr outdata, int* dataSize);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioQueueStatus AudioQueueGetPropertySize (IntPtr AQ, uint id, out int size);
+		unsafe extern static AudioQueueStatus AudioQueueGetPropertySize (IntPtr AQ, uint id, int* size);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static AudioQueueStatus AudioQueueSetProperty (
@@ -1332,8 +1332,8 @@ namespace AudioToolbox {
 		extern static OSStatus AudioQueueProcessingTapDispose (IntPtr inAQTap);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioQueueStatus AudioQueueProcessingTapGetSourceAudio (IntPtr inAQTap, uint inNumberFrames, ref AudioTimeStamp ioTimeStamp,
-																	   out AudioQueueProcessingTapFlags outFlags, out uint outNumberFrames,
+		unsafe extern static AudioQueueStatus AudioQueueProcessingTapGetSourceAudio (IntPtr inAQTap, uint inNumberFrames, AudioTimeStamp* ioTimeStamp,
+																	   AudioQueueProcessingTapFlags* outFlags, uint* outNumberFrames,
 																	   IntPtr ioData);
 
 		public AudioQueueStatus GetSourceAudio (uint numberOfFrames, ref AudioTimeStamp timeStamp,
@@ -1347,7 +1347,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioQueueStatus AudioQueueProcessingTapGetQueueTime (IntPtr inAQTap, out double outQueueSampleTime, out uint outQueueFrameCount);
+		unsafe extern static AudioQueueStatus AudioQueueProcessingTapGetQueueTime (IntPtr inAQTap, double* outQueueSampleTime, uint* outQueueFrameCount);
 
 		public AudioQueueStatus GetQueueTime (out double sampleTime, out uint frameCount)
 		{
@@ -1399,9 +1399,9 @@ namespace AudioToolbox {
 		static readonly AudioQueueOutputCallback dOutputCallback = output_callback;
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static OSStatus AudioQueueNewOutput (ref AudioStreamBasicDescription format, AudioQueueOutputCallback callback,
+		extern static OSStatus AudioQueueNewOutput (AudioStreamBasicDescription* format, AudioQueueOutputCallback callback,
 								IntPtr userData, IntPtr cfrunLoop_callbackRunloop, IntPtr cfstr_runMode,
-								uint flags, out IntPtr audioQueue);
+								uint flags, IntPtr* audioQueue);
 #endif
 
 #if NET
@@ -1465,7 +1465,7 @@ namespace AudioToolbox {
 		extern static AudioQueueStatus AudioQueueSetOfflineRenderFormat2 (IntPtr aq, IntPtr format, IntPtr layout);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioQueueStatus AudioQueueSetOfflineRenderFormat (IntPtr aq, ref AudioStreamBasicDescription format, IntPtr layout);
+		unsafe extern static AudioQueueStatus AudioQueueSetOfflineRenderFormat (IntPtr aq, AudioStreamBasicDescription* format, IntPtr layout);
 
 		public AudioQueueStatus SetOfflineRenderFormat (AudioStreamBasicDescription desc, AudioChannelLayout layout)
 		{
@@ -1484,7 +1484,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern unsafe static AudioQueueStatus AudioQueueOfflineRender (IntPtr aq, ref AudioTimeStamp stamp, AudioQueueBuffer* buffer, int frames);
+		unsafe extern unsafe static AudioQueueStatus AudioQueueOfflineRender (IntPtr aq, AudioTimeStamp* stamp, AudioQueueBuffer* buffer, int frames);
 
 		public unsafe AudioQueueStatus RenderOffline (double timeStamp, AudioQueueBuffer* audioQueueBuffer, int frameCount)
 		{

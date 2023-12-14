@@ -86,7 +86,7 @@ namespace AudioToolbox {
 	// MusicPlayer.h
 	public class MusicPlayer : DisposableObject {
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static /* OSStatus */ MusicPlayerStatus NewMusicPlayer (/* MusicPlayer* */ out IntPtr outPlayer);
+		unsafe extern static /* OSStatus */ MusicPlayerStatus NewMusicPlayer (/* MusicPlayer* */ IntPtr* outPlayer);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus DisposeMusicPlayer (/* MusicPlayer */ IntPtr inPlayer);
@@ -131,7 +131,7 @@ namespace AudioToolbox {
 		// note: MusicTimeStamp -> Float64
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static /* OSStatus */ MusicPlayerStatus MusicPlayerGetTime (/* MusicPlayer */ IntPtr inPlayer, /* MusicTimeStamp* */ out double outTime);
+		unsafe  static /* OSStatus */ MusicPlayerStatus MusicPlayerGetTime (/* MusicPlayer */ IntPtr inPlayer, /* MusicTimeStamp* */ double* outTime);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicPlayerSetTime (/* MusicPlayer */ IntPtr inPlayer, /* MusicTimeStamp* */ double inTime);
@@ -171,7 +171,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static /* OSStatus */ MusicPlayerStatus MusicPlayerIsPlaying (/* MusicPlayer */ IntPtr inPlayer, /* Boolean* */ [MarshalAs (UnmanagedType.I1)] out bool outIsPlaying);
+		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicPlayerIsPlaying (/* MusicPlayer */ IntPtr inPlayer, /* Boolean* */ byte* outIsPlaying);
 
 		public bool IsPlaying {
 			get {
@@ -184,7 +184,7 @@ namespace AudioToolbox {
 		extern static /* OSStatus */ MusicPlayerStatus MusicPlayerSetPlayRateScalar (/* MusicPlayer */ IntPtr inPlayer, /* Float64 */ double inScaleRate);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static /* OSStatus */ MusicPlayerStatus MusicPlayerGetPlayRateScalar (/* MusicPlayer */ IntPtr inPlayer, /* Float64* */ out double outScaleRate);
+		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicPlayerGetPlayRateScalar (/* MusicPlayer */ IntPtr inPlayer, /* Float64* */ double* outScaleRate);
 
 		public double PlayRateScalar {
 			get {
@@ -197,7 +197,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static /* OSStatus */ MusicPlayerStatus MusicPlayerGetHostTimeForBeats (/* MusicPlayer */ IntPtr inPlayer, /* MusicTimeStamp */ double inBeats, /* UInt64* */ out long outHostTime);
+		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicPlayerGetHostTimeForBeats (/* MusicPlayer */ IntPtr inPlayer, /* MusicTimeStamp */ double inBeats, /* UInt64* */ long* outHostTime);
 
 		public MusicPlayerStatus GetHostTimeForBeats (double beats, out long hostTime)
 		{
@@ -205,7 +205,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static /* OSStatus */ MusicPlayerStatus MusicPlayerGetBeatsForHostTime (/* MusicPlayer */ IntPtr inPlayer, /* UInt64 */ long inHostTime, /* MusicTimeStamp* */ out double outBeats);
+		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicPlayerGetBeatsForHostTime (/* MusicPlayer */ IntPtr inPlayer, /* UInt64 */ long inHostTime, /* MusicTimeStamp* */ double* outBeats);
 
 		public MusicPlayerStatus GetBeatsForHostTime (long hostTime, out double beats)
 		{
@@ -214,7 +214,7 @@ namespace AudioToolbox {
 
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static /* OSStatus */ MusicPlayerStatus MusicPlayerGetSequence (/* MusicPlayer */ IntPtr inPlayer, /* MusicSequence* */ out IntPtr outSequence);
+		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicPlayerGetSequence (/* MusicPlayer */ IntPtr inPlayer, /* MusicSequence* */ IntPtr* outSequence);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicPlayerSetSequence (/* MusicPlayer */ IntPtr inPlayer, IntPtr inSequence);

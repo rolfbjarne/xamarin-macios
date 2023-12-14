@@ -225,31 +225,31 @@ namespace AudioToolbox {
 				}
 		*/
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static int AudioFileGetGlobalInfoSize (AudioFileGlobalProperty propertyID, uint size, IntPtr inSpecifier, out uint outDataSize);
+		unsafe extern static int AudioFileGetGlobalInfoSize (AudioFileGlobalProperty propertyID, uint size, IntPtr inSpecifier, uint* outDataSize);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static int AudioFileGetGlobalInfoSize (AudioFileGlobalProperty propertyID, uint size, ref AudioFileType inSpecifier, out uint outDataSize);
+		unsafe extern static int AudioFileGetGlobalInfoSize (AudioFileGlobalProperty propertyID, uint size, AudioFileType* inSpecifier, uint* outDataSize);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static int AudioFileGetGlobalInfoSize (AudioFileGlobalProperty propertyID, uint size, ref AudioFileTypeAndFormatID inSpecifier, out uint outDataSize);
+		unsafe extern static int AudioFileGetGlobalInfoSize (AudioFileGlobalProperty propertyID, uint size, AudioFileTypeAndFormatID* inSpecifier, uint* outDataSize);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static int AudioFileGetGlobalInfo (AudioFileGlobalProperty propertyID, uint size, IntPtr inSpecifier, ref uint ioDataSize, AudioFileType* outPropertyData);
+		unsafe extern static int AudioFileGetGlobalInfo (AudioFileGlobalProperty propertyID, uint size, IntPtr inSpecifier, uint* ioDataSize, AudioFileType* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static int AudioFileGetGlobalInfo (AudioFileGlobalProperty propertyID, uint size, ref AudioFileType inSpecifier, ref uint ioDataSize, AudioFormatType* outPropertyData);
+		unsafe extern static int AudioFileGetGlobalInfo (AudioFileGlobalProperty propertyID, uint size, AudioFileType* inSpecifier, uint* ioDataSize, AudioFormatType* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static int AudioFileGetGlobalInfo (AudioFileGlobalProperty propertyID, uint size, ref AudioFileTypeAndFormatID inSpecifier, ref uint ioDataSize, AudioStreamBasicDescription* outPropertyData);
+		unsafe extern static int AudioFileGetGlobalInfo (AudioFileGlobalProperty propertyID, uint size, AudioFileTypeAndFormatID* inSpecifier, uint* ioDataSize, AudioStreamBasicDescription* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static int AudioFileGetGlobalInfo (AudioFileGlobalProperty propertyID, uint size, ref AudioFileType inSpecifier, ref uint ioDataSize, out IntPtr outPropertyData);
+		unsafe extern static int AudioFileGetGlobalInfo (AudioFileGlobalProperty propertyID, uint size, AudioFileType* inSpecifier, uint* ioDataSize, IntPtr* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static int AudioFileGetGlobalInfo (AudioFileGlobalProperty propertyID, uint size, IntPtr inSpecifier, ref uint ioDataSize, out IntPtr outPropertyData);
+		unsafe extern static int AudioFileGetGlobalInfo (AudioFileGlobalProperty propertyID, uint size, IntPtr inSpecifier, uint* ioDataSize, IntPtr* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static int AudioFileGetGlobalInfo (AudioFileGlobalProperty propertyID, uint size, IntPtr inSpecifier, ref uint ioDataSize, out uint outPropertyData);
+		unsafe extern static int AudioFileGetGlobalInfo (AudioFileGlobalProperty propertyID, uint size, IntPtr inSpecifier, uint* ioDataSize, uint* outPropertyData);
 	}
 
 	[StructLayout (LayoutKind.Sequential)]

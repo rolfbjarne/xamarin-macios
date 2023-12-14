@@ -89,7 +89,7 @@ namespace AudioToolbox {
 
 	static partial class AudioFormatPropertyNative {
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty inPropertyID, int inSpecifierSize, AudioClassDescription* inSpecifier, ref int ioPropertyDataSize,
-			out uint outPropertyData);
+		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty inPropertyID, int inSpecifierSize, AudioClassDescription* inSpecifier, int* ioPropertyDataSize,
+			uint* outPropertyData);
 	}
 }

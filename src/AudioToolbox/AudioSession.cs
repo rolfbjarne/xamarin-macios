@@ -345,7 +345,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static OSStatus AudioSessionSetActive ([MarshalAs (UnmanagedType.I1)] bool active);
+		extern static OSStatus AudioSessionSetActive (byte active);
 
 		public static void SetActive (bool active)
 		{
@@ -355,7 +355,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioSessionErrors AudioSessionSetActiveWithFlags ([MarshalAs (UnmanagedType.I1)] bool active, AudioSessionActiveFlags inFlags);
+		extern static AudioSessionErrors AudioSessionSetActiveWithFlags (byte active, AudioSessionActiveFlags inFlags);
 
 		public static AudioSessionErrors SetActive (bool active, AudioSessionActiveFlags flags)
 		{
@@ -363,14 +363,14 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static OSStatus AudioSessionGetProperty (AudioSessionProperty id, ref int size, IntPtr data);
+		unsafe extern static OSStatus AudioSessionGetProperty (AudioSessionProperty id, int* size, IntPtr data);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static OSStatus AudioSessionSetProperty (AudioSessionProperty id, int size, IntPtr data);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 		// deprecated in iOS7 but not exposed / used anywhere
-		extern static OSStatus AudioSessionGetPropertySize (AudioSessionProperty id, out int size);
+		unsafe extern static OSStatus AudioSessionGetPropertySize (AudioSessionProperty id, int* size);
 
 		static double GetDouble (AudioSessionProperty property)
 		{

@@ -291,7 +291,7 @@ namespace AudioToolbox {
 		unsafe static extern void AudioServicesPlaySystemSoundWithCompletion (uint inSystemSoundID, BlockLiteral* inCompletionBlock);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		static extern AudioServicesError AudioServicesCreateSystemSoundID (IntPtr fileUrl, out uint soundId);
+		unsafe static extern AudioServicesError AudioServicesCreateSystemSoundID (IntPtr fileUrl, uint* soundId);
 
 		static uint Create (NSUrl fileUrl)
 		{

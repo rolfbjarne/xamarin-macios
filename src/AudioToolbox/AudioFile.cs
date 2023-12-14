@@ -644,7 +644,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static OSStatus AudioFileCreateWithURL (IntPtr cfurlref_infile, AudioFileType inFileType, ref AudioStreamBasicDescription inFormat, AudioFileFlags inFlags, out AudioFileID file_id);
+		unsafe extern static OSStatus AudioFileCreateWithURL (IntPtr cfurlref_infile, AudioFileType inFileType, AudioStreamBasicDescription* inFormat, AudioFileFlags inFlags, AudioFileID* file_id);
 
 		public static AudioFile? Create (string url, AudioFileType fileType, AudioStreamBasicDescription format, AudioFileFlags inFlags)
 		{
@@ -681,7 +681,7 @@ namespace AudioToolbox {
 
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioFileError AudioFileOpenURL (IntPtr cfurlref_infile, byte permissions, AudioFileType fileTypeHint, out IntPtr file_id);
+		unsafe extern static AudioFileError AudioFileOpenURL (IntPtr cfurlref_infile, byte permissions, AudioFileType fileTypeHint, IntPtr* file_id);
 
 		public static AudioFile? OpenRead (string url, AudioFileType fileTypeHint = 0)
 		{
@@ -774,7 +774,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static OSStatus AudioFileReadBytes (AudioFileID inAudioFile, [MarshalAs (UnmanagedType.I1)] bool useCache, long startingByte, ref int numBytes, IntPtr outBuffer);
+		unsafe extern static OSStatus AudioFileReadBytes (AudioFileID inAudioFile, byte useCache, long startingByte, int* numBytes, IntPtr outBuffer);
 
 		public int Read (long startingByte, byte [] buffer, int offset, int count, bool useCache)
 		{
@@ -807,7 +807,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static OSStatus AudioFileWriteBytes (AudioFileID audioFile, [MarshalAs (UnmanagedType.I1)] bool useCache, long startingByte, ref int numBytes, IntPtr buffer);
+		unsafe extern static OSStatus AudioFileWriteBytes (AudioFileID audioFile, byte useCache, long startingByte, int* numBytes, IntPtr buffer);
 
 		public int Write (long startingByte, byte [] buffer, int offset, int count, bool useCache)
 		{
@@ -849,9 +849,9 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		unsafe extern static OSStatus AudioFileReadPacketData (
-			AudioFileID audioFile, [MarshalAs (UnmanagedType.I1)] bool useCache, ref int numBytes,
-			AudioStreamPacketDescription* packetDescriptions, long inStartingPacket, ref int numPackets, IntPtr outBuffer);
+		unsafe unsafe extern static OSStatus AudioFileReadPacketData (
+			AudioFileID audioFile, byte useCache, int* numBytes,
+			AudioStreamPacketDescription* packetDescriptions, long inStartingPacket, int* numPackets, IntPtr outBuffer);
 
 		public AudioStreamPacketDescription []? ReadPacketData (long inStartingPacket, int nPackets, byte [] buffer)
 		{
@@ -1033,9 +1033,9 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioFileError AudioFileWritePackets (
-			AudioFileID audioFile, [MarshalAs (UnmanagedType.I1)] bool useCache, int inNumBytes, AudioStreamPacketDescription []? inPacketDescriptions,
-						long inStartingPacket, ref int numPackets, IntPtr buffer);
+		unsafe extern static AudioFileError AudioFileWritePackets (
+			AudioFileID audioFile, byte useCache, int inNumBytes, AudioStreamPacketDescription* inPacketDescriptions,
+						long inStartingPacket, int* numPackets, IntPtr buffer);
 
 		public int WritePackets (bool useCache, long startingPacket, int numPackets, IntPtr buffer, int byteCount)
 		{
@@ -1126,7 +1126,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static OSStatus AudioFileCountUserData (AudioFileID handle, uint userData, out int count);
+		unsafe extern static OSStatus AudioFileCountUserData (AudioFileID handle, uint userData, int* count);
 
 		public int CountUserData (uint userData)
 		{
@@ -1137,7 +1137,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static OSStatus AudioFileGetUserDataSize (AudioFileID audioFile, uint userDataID, int index, out int userDataSize);
+		unsafe extern static OSStatus AudioFileGetUserDataSize (AudioFileID audioFile, uint userDataID, int index, int* userDataSize);
 		public int GetUserDataSize (uint userDataId, int index)
 		{
 			int ds;
@@ -1148,7 +1148,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static OSStatus AudioFileGetUserData (AudioFileID audioFile, int userDataID, int index, ref int userDataSize, IntPtr userData);
+		unsafe extern static OSStatus AudioFileGetUserData (AudioFileID audioFile, int userDataID, int index, int* userDataSize, IntPtr userData);
 
 		public int GetUserData (int userDataID, int index, ref int size, IntPtr userData)
 		{
@@ -1174,7 +1174,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static OSStatus AudioFileGetPropertyInfo (AudioFileID audioFile, AudioFileProperty propertyID, out int outDataSize, out int isWritable);
+		unsafe extern static OSStatus AudioFileGetPropertyInfo (AudioFileID audioFile, AudioFileProperty propertyID, int* outDataSize, int* isWritable);
 
 		public bool GetPropertyInfo (AudioFileProperty property, out int size, out int writable)
 		{
@@ -1189,7 +1189,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static OSStatus AudioFileGetProperty (AudioFileID audioFile, AudioFileProperty property, ref int dataSize, IntPtr outdata);
+		unsafe extern static OSStatus AudioFileGetProperty (AudioFileID audioFile, AudioFileProperty property, int* dataSize, IntPtr outdata);
 
 		public bool GetProperty (AudioFileProperty property, ref int dataSize, IntPtr outdata)
 		{
@@ -1293,7 +1293,7 @@ namespace AudioToolbox {
 		extern static AudioFileError AudioFileSetProperty (AudioFileID audioFile, AudioFileProperty property, int dataSize, IntPtr propertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static AudioFileError AudioFileSetProperty (AudioFileID audioFile, AudioFileProperty property, int dataSize, ref AudioFilePacketTableInfo propertyData);
+		unsafe extern static AudioFileError AudioFileSetProperty (AudioFileID audioFile, AudioFileProperty property, int dataSize, AudioFilePacketTableInfo* propertyData);
 
 		public bool SetProperty (AudioFileProperty property, int dataSize, IntPtr propertyData)
 		{

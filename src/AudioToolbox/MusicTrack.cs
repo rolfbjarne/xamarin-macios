@@ -278,7 +278,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static /* OSStatus */ MusicPlayerStatus MusicTrackGetSequence (/* MusicTrack */ IntPtr inTrack, /* MusicSequence* */ out IntPtr outSequence);
+		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicTrackGetSequence (/* MusicTrack */ IntPtr inTrack, /* MusicSequence* */ IntPtr* outSequence);
 
 		public MusicSequence? Sequence {
 			get {
@@ -298,7 +298,7 @@ namespace AudioToolbox {
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static /* OSStatus */ MusicPlayerStatus MusicTrackGetDestMIDIEndpoint (/* MusicTrack */ IntPtr inTrack, out MidiEndpointRef outEndpoint);
+		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicTrackGetDestMIDIEndpoint (/* MusicTrack */ IntPtr inTrack, MidiEndpointRef* outEndpoint);
 
 		public MusicPlayerStatus GetDestMidiEndpoint (out MidiEndpoint? outEndpoint)
 		{
@@ -320,13 +320,13 @@ namespace AudioToolbox {
 		extern unsafe static /* OSStatus */ MusicPlayerStatus MusicTrackSetProperty (/* MusicTrack */ IntPtr inTrack, /* UInt32 */ SequenceTrackProperty propertyId, void* inData, /* UInt32 */ int inLength);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static /* OSStatus */ MusicPlayerStatus MusicTrackSetProperty (/* MusicTrack */ IntPtr inTrack, /* UInt32 */ SequenceTrackProperty propertyId, ref double inData, /* UInt32 */ int inLength);
+		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicTrackSetProperty (/* MusicTrack */ IntPtr inTrack, /* UInt32 */ SequenceTrackProperty propertyId, double* inData, /* UInt32 */ int inLength);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern unsafe static /* OSStatus */ MusicPlayerStatus MusicTrackGetProperty (/* MusicTrack */ IntPtr inTrack, /* UInt32 */ SequenceTrackProperty propertyId, void* outData, /* UInt32* */ ref int ioLength);
+		extern unsafe static /* OSStatus */ MusicPlayerStatus MusicTrackGetProperty (/* MusicTrack */ IntPtr inTrack, /* UInt32 */ SequenceTrackProperty propertyId, void* outData, /* UInt32* */ int* ioLength);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		extern static /* OSStatus */ MusicPlayerStatus MusicTrackGetProperty (/* MusicTrack */ IntPtr inTrack, /* UInt32 */ SequenceTrackProperty propertyId, ref double outData, /* UInt32* */ ref int ioLength);
+		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicTrackGetProperty (/* MusicTrack */ IntPtr inTrack, /* UInt32 */ SequenceTrackProperty propertyId, double* outData, /* UInt32* */ int* ioLength);
 
 		// internal use only - it's a UInt32 in the API
 		enum SequenceTrackProperty {

@@ -276,92 +276,92 @@ namespace AudioToolbox {
 #endif
 	static partial class AudioFormatPropertyNative {
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public extern static AudioFormatError AudioFormatGetPropertyInfo (AudioFormatProperty propertyID, int inSpecifierSize, ref AudioFormatType inSpecifier,
-			out uint outPropertyDataSize);
+		public unsafe extern static AudioFormatError AudioFormatGetPropertyInfo (AudioFormatProperty propertyID, int inSpecifierSize, AudioFormatType* inSpecifier,
+			uint* outPropertyDataSize);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public extern static AudioFormatError AudioFormatGetPropertyInfo (AudioFormatProperty propertyID, int inSpecifierSize, ref AudioStreamBasicDescription inSpecifier,
-			out uint outPropertyDataSize);
+		public unsafe extern static AudioFormatError AudioFormatGetPropertyInfo (AudioFormatProperty propertyID, int inSpecifierSize, AudioStreamBasicDescription* inSpecifier,
+			uint* outPropertyDataSize);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public extern static AudioFormatError AudioFormatGetPropertyInfo (AudioFormatProperty propertyID, int inSpecifierSize, ref AudioFormatInfo inSpecifier,
-			out uint outPropertyDataSize);
+		public unsafe extern static AudioFormatError AudioFormatGetPropertyInfo (AudioFormatProperty propertyID, int inSpecifierSize, AudioFormatInfo* inSpecifier,
+			uint* outPropertyDataSize);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public extern static AudioFormatError AudioFormatGetPropertyInfo (AudioFormatProperty propertyID, int inSpecifierSize, ref int inSpecifier,
-			out int outPropertyDataSize);
+		public unsafe extern static AudioFormatError AudioFormatGetPropertyInfo (AudioFormatProperty propertyID, int inSpecifierSize, int* inSpecifier,
+			int* outPropertyDataSize);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public extern static AudioFormatError AudioFormatGetPropertyInfo (AudioFormatProperty propertyID, int inSpecifierSize, IntPtr inSpecifier,
-			out int outPropertyDataSize);
+		public unsafe extern static AudioFormatError AudioFormatGetPropertyInfo (AudioFormatProperty propertyID, int inSpecifierSize, IntPtr inSpecifier,
+			int* outPropertyDataSize);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, ref AudioFormatType inSpecifier,
-			ref uint ioDataSize, IntPtr outPropertyData);
+		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, AudioFormatType* inSpecifier,
+			uint* ioDataSize, IntPtr outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, ref int inSpecifier,
-			ref int ioDataSize, IntPtr outPropertyData);
-
-		[DllImport (Constants.AudioToolboxLibrary)]
-		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, IntPtr inSpecifier,
-			ref int ioDataSize, IntPtr outPropertyData);
+		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, int* inSpecifier,
+			int* ioDataSize, IntPtr outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, IntPtr inSpecifier,
-			ref int ioDataSize, out IntPtr outPropertyData);
+			int* ioDataSize, IntPtr outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, IntPtr inSpecifier,
-			ref int ioDataSize, out int outPropertyData);
+			int* ioDataSize, IntPtr* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, ref int inSpecifier,
-			ref int ioDataSize, out int outPropertyData);
+		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, IntPtr inSpecifier,
+			int* ioDataSize, int* outPropertyData);
+
+		[DllImport (Constants.AudioToolboxLibrary)]
+		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, int* inSpecifier,
+			int* ioDataSize, int* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, IntPtr inSpecifier,
 			IntPtr ioDataSize, IntPtr outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, ref AudioFormatInfo inSpecifier,
-			ref uint ioDataSize, AudioFormat* outPropertyData);
+		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, AudioFormatInfo* inSpecifier,
+			uint* ioDataSize, AudioFormat* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, ref AudioStreamBasicDescription inSpecifier,
-			ref uint ioDataSize, int* outPropertyData);
+		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, AudioStreamBasicDescription* inSpecifier,
+			uint* ioDataSize, int* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, ref int inSpecifier,
-			ref int ioDataSize, int* outPropertyData);
-
-		[DllImport (Constants.AudioToolboxLibrary)]
-		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, IntPtr* inSpecifier,
-			ref int ioDataSize, int* outPropertyData);
+		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, int* inSpecifier,
+			int* ioDataSize, int* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, IntPtr* inSpecifier,
-			ref int ioDataSize, float* outPropertyData);
+			int* ioDataSize, int* outPropertyData);
+
+		[DllImport (Constants.AudioToolboxLibrary)]
+		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, IntPtr* inSpecifier,
+			int* ioDataSize, float* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
 		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, IntPtr inSpecifier,
-			ref int ioDataSize, float* outPropertyData);
+			int* ioDataSize, float* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty inPropertyID, int inSpecifierSize, ref AudioStreamBasicDescription inSpecifier,
-			ref int ioPropertyDataSize, out IntPtr outPropertyData);
+		public extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty inPropertyID, int inSpecifierSize, AudioStreamBasicDescription* inSpecifier,
+			int* ioPropertyDataSize, IntPtr* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty inPropertyID, int inSpecifierSize, ref AudioStreamBasicDescription inSpecifier,
-			ref int ioPropertyDataSize, out uint outPropertyData);
+		public extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty inPropertyID, int inSpecifierSize, AudioStreamBasicDescription* inSpecifier,
+			int* ioPropertyDataSize, uint* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty inPropertyID, int inSpecifierSize, IntPtr inSpecifier, ref int ioPropertyDataSize,
-			ref AudioStreamBasicDescription outPropertyData);
+		public extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty inPropertyID, int inSpecifierSize, IntPtr inSpecifier, int* ioPropertyDataSize,
+			AudioStreamBasicDescription* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty inPropertyID, int inSpecifierSize, AudioFormat* inSpecifier, ref int ioPropertyDataSize,
-			out uint outPropertyData);
+		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty inPropertyID, int inSpecifierSize, AudioFormat* inSpecifier, int* ioPropertyDataSize,
+			uint* outPropertyData);
 	}
 
 	// Properties are used from various types (most suitable should be used)

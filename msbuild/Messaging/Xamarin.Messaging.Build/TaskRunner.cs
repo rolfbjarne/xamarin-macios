@@ -18,6 +18,11 @@ namespace Xamarin.Messaging.Build {
 
 		internal TaskRunner (ITaskSerializer serializer)
 		{
+			var keys = Environment.GetEnvironmentVariables ().Keys;
+			Console.Error.WriteLine ($"Got {keys.Count} environment variables:");
+			foreach (var key in keys.Cast<string> ().OrderBy (v => v)) {
+				Console.Error.WriteLine ($".   {key}={Environment.GetEnvironmentVariable (key)}");
+			}
 			Console.Error.WriteLine ($"TaskRunner ({serializer})");
 			Console.Error.WriteLine (Environment.StackTrace);
 			this.serializer = serializer;

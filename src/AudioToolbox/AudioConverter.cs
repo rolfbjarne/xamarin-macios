@@ -228,8 +228,10 @@ namespace AudioToolbox {
 
 				var cookie = new byte [size];
 				unsafe {
-					if (AudioConverterGetProperty (Handle, AudioConverterPropertyID.CompressionMagicCookie, &size, &cookie) != AudioConverterError.None)
-						return null;
+					fixed (byte* cookiePtr = cookie) {
+						if (AudioConverterGetProperty (Handle, AudioConverterPropertyID.CompressionMagicCookie, &size, cookiePtr) != AudioConverterError.None)
+							return null;
+					}
 				}
 
 				return cookie;
@@ -240,9 +242,11 @@ namespace AudioToolbox {
 					ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (value));
 
 				unsafe {
-					var res = AudioConverterSetProperty (Handle, AudioConverterPropertyID.CompressionMagicCookie, value.Length, &value);
-					if (res != AudioConverterError.None)
-						throw new ArgumentException (res.ToString ());
+					fixed (byte* valuePtr = value) {
+						var res = AudioConverterSetProperty (Handle, AudioConverterPropertyID.CompressionMagicCookie, value.Length, valuePtr);
+						if (res != AudioConverterError.None)
+							throw new ArgumentException (res.ToString ());
+					}
 				}
 			}
 		}
@@ -256,8 +260,10 @@ namespace AudioToolbox {
 
 				var cookie = new byte [size];
 				unsafe {
-					if (AudioConverterGetProperty (Handle, AudioConverterPropertyID.DecompressionMagicCookie, &size, &cookie) != AudioConverterError.None)
-						return null;
+					fixed (byte* cookiePtr = cookie) {
+						if (AudioConverterGetProperty (Handle, AudioConverterPropertyID.DecompressionMagicCookie, &size, cookiePtr) != AudioConverterError.None)
+							return null;
+					}
 				}
 
 				return cookie;
@@ -267,9 +273,11 @@ namespace AudioToolbox {
 					ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (value));
 
 				unsafe {
-					var res = AudioConverterSetProperty (Handle, AudioConverterPropertyID.DecompressionMagicCookie, value.Length, &value);
-					if (res != AudioConverterError.None)
-						throw new ArgumentException (res.ToString ());
+					fixed (byte* valuePtr = value) {
+						var res = AudioConverterSetProperty (Handle, AudioConverterPropertyID.DecompressionMagicCookie, value.Length, valuePtr);
+						if (res != AudioConverterError.None)
+							throw new ArgumentException (res.ToString ());
+					}
 				}
 			}
 		}
@@ -450,9 +458,11 @@ namespace AudioToolbox {
 
 			IntPtr ptr = new IntPtr ();
 			unsafe {
-				var res = AudioConverterNewSpecific (&sourceFormat, &destinationFormat, descriptions.Length, &descriptions, &ptr);
-				if (res != AudioConverterError.None)
-					return null;
+				fixed (AudioClassDescription* descriptionsPtr = descriptions) {
+					var res = AudioConverterNewSpecific (&sourceFormat, &destinationFormat, descriptions.Length, descriptionsPtr, &ptr);
+					if (res != AudioConverterError.None)
+						return null;
+				}
 			}
 
 			return new AudioConverter (ptr, true);
@@ -492,7 +502,11 @@ namespace AudioToolbox {
 
 			int outSize = output.Length;
 			unsafe {
-				return AudioConverterConvertBuffer (Handle, input.Length, input, &outSize, &output);
+				fixed (byte* inputPtr = input) {
+					fixed (byte* outputPtr = output) {
+						return AudioConverterConvertBuffer (Handle, input.Length, inputPtr, &outSize, outputPtr);
+					}
+				}
 			}
 		}
 
@@ -662,19 +676,19 @@ namespace AudioToolbox {
 		unsafe static AudioFormatType []? GetFormats (AudioFormatProperty prop)
 		{
 			int size;
-			if (AudioFormatPropertyNative.AudioFormatGetPropertyInfo (prop, 0, IntPtr.Zero, out size) != 0)
+			if (AudioFormatPropertyNative.AudioFormatGetPropertyInfo (prop, 0, IntPtr.Zero, &size) != 0)
 				return null;
 
 			var elementSize = sizeof (AudioFormatType);
 			var data = new AudioFormatType [size / elementSize];
-			fixed (AudioFormatType* ptr = data) {
-				var res = AudioFormatPropertyNative.AudioFormatGetProperty (prop, 0, IntPtr.Zero, ref size, (IntPtr) ptr);
+			fixed (AudioFormatType* dataPtr = data) {
+				var res = AudioFormatPropertyNative.AudioFormatGetProperty (prop, 0, IntPtr.Zero, &size, (IntPtr) dataPtr);
 				if (res != 0)
 					return null;
-
-				Array.Resize (ref data, elementSize);
-				return data;
 			}
+
+			Array.Resize (ref data, elementSize);
+			return data;
 		}
 
 		uint GetUIntProperty (AudioConverterPropertyID propertyID)
@@ -695,7 +709,7 @@ namespace AudioToolbox {
 			double value = 0;
 			var size = sizeof (double);
 			unsafe {
-				var res = AudioConverterGetProperty (Handle, propertyID, &size, out value);
+				var res = AudioConverterGetProperty (Handle, propertyID, &size, &value);
 				if (res != AudioConverterError.None)
 					throw new ArgumentException (res.ToString ());
 			}
@@ -831,7 +845,7 @@ namespace AudioToolbox {
 			int inPropertyDataSize, byte* inPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		unsafe static extern AudioConverterError AudioConverterConvertBuffer (IntPtr inAudioConverter, int inInputDataSize, byte [] inInputData,
+		unsafe static extern AudioConverterError AudioConverterConvertBuffer (IntPtr inAudioConverter, int inInputDataSize, byte* inInputData,
 			int* ioOutputDataSize, byte* outOutputData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]

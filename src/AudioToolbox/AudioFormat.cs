@@ -332,14 +332,6 @@ namespace AudioToolbox {
 			uint* ioDataSize, int* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, int* inSpecifier,
-			int* ioDataSize, int* outPropertyData);
-
-		[DllImport (Constants.AudioToolboxLibrary)]
-		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, IntPtr* inSpecifier,
-			int* ioDataSize, int* outPropertyData);
-
-		[DllImport (Constants.AudioToolboxLibrary)]
 		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty propertyID, int inSpecifierSize, IntPtr* inSpecifier,
 			int* ioDataSize, float* outPropertyData);
 
@@ -348,15 +340,15 @@ namespace AudioToolbox {
 			int* ioDataSize, float* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty inPropertyID, int inSpecifierSize, AudioStreamBasicDescription* inSpecifier,
+		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty inPropertyID, int inSpecifierSize, AudioStreamBasicDescription* inSpecifier,
 			int* ioPropertyDataSize, IntPtr* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty inPropertyID, int inSpecifierSize, AudioStreamBasicDescription* inSpecifier,
+		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty inPropertyID, int inSpecifierSize, AudioStreamBasicDescription* inSpecifier,
 			int* ioPropertyDataSize, uint* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]
-		public extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty inPropertyID, int inSpecifierSize, IntPtr inSpecifier, int* ioPropertyDataSize,
+		public unsafe extern static AudioFormatError AudioFormatGetProperty (AudioFormatProperty inPropertyID, int inSpecifierSize, IntPtr inSpecifier, int* ioPropertyDataSize,
 			AudioStreamBasicDescription* outPropertyData);
 
 		[DllImport (Constants.AudioToolboxLibrary)]

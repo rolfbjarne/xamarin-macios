@@ -24,7 +24,7 @@ namespace Xamarin.iOS.Tasks {
 		[Output]
 		public ITaskItem [] LinkedItems { get; set; } = Array.Empty<ITaskItem> ();
 
-		public string DotNetPath { get; set; }
+		public string DotNetPath { get; set; } = string.Empty;
 
 		public override bool Execute ()
 		{

@@ -321,6 +321,7 @@ Copyright (C) 2011-2013 Xamarin. All rights reserved.
 		<FindILLink
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true' And '$(_RemoteILLinkPath)' == ''"
+			DotNetPath="$(_DotNetRootRemoteDirectory)"
 			KeepTemporaryOutput="$(FindILLinkKeepKeepTemporaryOutput)"
 			RuntimeIdentifier="$(RuntimeIdentifier)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"

@@ -71,7 +71,7 @@ namespace Xamarin.MacDev.Tasks {
 				NoDSymUtil = "false";
 
 			if (!string.IsNullOrEmpty (ExtraArgs)) {
-				var args = CommandLineArgumentBuilder.Parse (ExtraArgs);
+				var args = CommandLineArgumentBuilder.Parse (ExtraArgs.Replace ('\\', '/'));
 				List<string> xml = null;
 				List<string> customLinkFlags = null;
 				var aot = new List<ITaskItem> ();

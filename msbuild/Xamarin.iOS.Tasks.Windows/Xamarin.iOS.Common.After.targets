@@ -353,6 +353,7 @@ Copyright (C) 2011-2013 Xamarin. All rights reserved.
 			<TrimmerDefaultAction Condition="'$(TrimmerDefaultAction)' == ''">$(_TrimmerDefaultAction)</TrimmerDefaultAction>
 
 			<_RemoteExtraTrimmerArgs Condition="'$(_ExtraTrimmerArgs)' != ''">$(_ExtraTrimmerArgs.Replace('$(NetCoreRoot)', '$(_DotNetRootRemoteDirectory)'))</_RemoteExtraTrimmerArgs>
+			<_DotNetRootRemotePath Condition="'$(_DotNetRootRemoteDirectory)' != '' And '$(_DotNetRootRemotePath)' == ''">$(_DotNetRootRemoteDirectory)/dotnet</_DotNetRootRemotePath>
 		</PropertyGroup>
 
 		<!-- Include Debug symbols as input so those are copied to the server -->
@@ -399,6 +400,7 @@ Copyright (C) 2011-2013 Xamarin. All rights reserved.
 				ILLinkPath="$(_RemoteILLinkPath)"
 				LinkerItemsDirectory="$(_LinkerItemsDirectory)"
 				DebugSymbols="@(_ILLinkDebugSymbols)"
+				DotNetPath="$(_DotNetRootRemotePath)"
 				ContinueOnError="ErrorAndContinue">
 			<Output TaskParameter="ExitCode" PropertyName="_ILLinkExitCode" />
 			<Output TaskParameter="LinkedItems" ItemName="_XamarinLinkedItems" />

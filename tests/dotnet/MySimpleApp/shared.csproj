@@ -29,7 +29,7 @@
 			<Output TaskParameter="FullPath" PropertyName="CompressedPath" />
 		</GetFullPath>
 
-		<MakeDir SessionId="$(BuildSessionId)" Directories="$(DirectoryToCompress)" />
+		<MakeDir SessionId="$(BuildSessionId)" Directories="$([System.IO.Path]::GetDirectoryName('$(CompressedPath)'))" />
 		<Delete SessionId="$(BuildSessionId)" Files="$(CompressedPath)" />
 
 		<Zip
@@ -41,7 +41,7 @@
 			Symlinks="true"
 			Sources="$(DirectoryToCompress)"
 			OutputFile="$(CompressedPath)"
-			WorkingDirectory="$(MSBuildThisFileDirectory)"
+			WorkingDirectory="$(DirectoryToCompress)"
 			>
 			<Output TaskParameter="OutputFile" ItemName="FileWrites" />
 		</Zip>

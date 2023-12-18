@@ -12,8 +12,10 @@ namespace Xamarin.MacDev.Tasks {
 				var rv = taskRunner.RunAsync (this).Result;
 
 				// Copy the zipped file back to Windows.
-				if (rv)
+				if (rv) {
+					OutputFile = new OutputFile (OutputFile.ItemSpec.Replace ('\\', '/'));
 					taskRunner.GetFileAsync (this, OutputFile.ItemSpec).Wait ();
+				}
 
 				return rv;
 			}

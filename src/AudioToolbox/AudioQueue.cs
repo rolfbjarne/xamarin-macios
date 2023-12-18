@@ -634,12 +634,19 @@ namespace AudioToolbox {
 			if (audioQueueBuffer is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (audioQueueBuffer));
 
-			return AudioQueueEnqueueBufferWithParameters (
-				handle, audioQueueBuffer, desc?.Length ?? 0, desc,
-				trimFramesAtStart, trimFramesAtEnd, parameterEvents?.Length ?? 0,
-				parameterEvents,
-				ref startTime,
-				out actualStartTime);
+			fixed (AudioQueueParameterEvent* parameterEventsPtr = parameterEvents) {
+				AudioTimeStamp actualStartTimePtr;
+				AudioTimeStamp startTimePtr;
+				var rv = AudioQueueEnqueueBufferWithParameters (
+					handle, audioQueueBuffer, desc?.Length ?? 0, desc,
+					trimFramesAtStart, trimFramesAtEnd, parameterEvents?.Length ?? 0,
+					parameterEvents,
+					&startTimePtr,
+					&actualStartTimePtr);
+				actualStartTime = actualStartTimePtr;
+				startTime = startTimePtr;
+				return rv;
+			}
 		}
 
 		public unsafe AudioQueueStatus EnqueueBuffer (AudioQueueBuffer* audioQueueBuffer, int bytes, AudioStreamPacketDescription [] desc,
@@ -649,12 +656,17 @@ namespace AudioToolbox {
 			if (audioQueueBuffer is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (audioQueueBuffer));
 
-			return AudioQueueEnqueueBufferWithParameters (
-				handle, audioQueueBuffer, desc?.Length ?? 0, desc,
-				trimFramesAtStart, trimFramesAtEnd, parameterEvents?.Length ?? 0,
-				parameterEvents,
-				null,
-				out actualStartTime);
+			fixed (AudioQueueParameterEvent* parameterEventsPtr = parameterEvents) {
+				AudioTimeStamp actualStartTimePtr;
+				var rv = AudioQueueEnqueueBufferWithParameters (
+					handle, audioQueueBuffer, desc?.Length ?? 0, desc,
+					trimFramesAtStart, trimFramesAtEnd, parameterEvents?.Length ?? 0,
+					parameterEventsPtr,
+					null,
+					&actualStartTimePtr);
+				actualStartTime = actualStartTimePtr;
+				return rv;
+			}
 		}
 
 		[DllImport (Constants.AudioToolboxLibrary)]
@@ -884,6 +896,14 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		unsafe extern static AudioQueueStatus AudioQueueGetPropertySize (IntPtr AQ, uint id, int* size);
 
+		unsafe static AudioQueueStatus AudioQueueGetPropertySize (IntPtr AQ, uint id, out int size)
+		{
+			int sizePtr = 0;
+			var rv = AudioQueueGetPropertySize (AQ, id, &sizePtr);
+			size = sizePtr;
+			return rv;
+		}
+
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static AudioQueueStatus AudioQueueSetProperty (
 			IntPtr AQ, AudioQueueProperty id, IntPtr data, int size);
@@ -893,7 +913,7 @@ namespace AudioToolbox {
 		{
 			if (outdata == IntPtr.Zero)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (outdata));
-			return AudioQueueGetProperty (handle, (uint) property, outdata, ref dataSize) == 0;
+			return AudioQueueGetProperty (handle, (uint) property, outdata, &dataSize) == 0;
 		}
 
 		// Should be private
@@ -915,7 +935,7 @@ namespace AudioToolbox {
 			if (buffer == IntPtr.Zero)
 				return IntPtr.Zero;
 
-			r = AudioQueueGetProperty (handle, (uint) property, buffer, ref size);
+			r = AudioQueueGetProperty (handle, (uint) property, buffer, &size);
 			if (r == 0)
 				return buffer;
 			Marshal.FreeHGlobal (buffer);
@@ -935,7 +955,7 @@ namespace AudioToolbox {
 			if (buffer == IntPtr.Zero)
 				return default (T);
 			try {
-				r = AudioQueueGetProperty (handle, (uint) property, buffer, ref size);
+				r = AudioQueueGetProperty (handle, (uint) property, buffer, &size);
 				if (r == 0) {
 					T result = Marshal.PtrToStructure<T> (buffer)!;
 					return result;
@@ -959,7 +979,7 @@ namespace AudioToolbox {
 			if (buffer == IntPtr.Zero)
 				return default (T);
 			try {
-				r = AudioQueueGetProperty (handle, (uint) property, buffer, ref size);
+				r = AudioQueueGetProperty (handle, (uint) property, buffer, &size);
 				if (r == 0) {
 					T result = Marshal.PtrToStructure<T> (buffer)!;
 					return result;
@@ -976,7 +996,7 @@ namespace AudioToolbox {
 			unsafe {
 				int val = 0;
 				int size = 4;
-				var k = AudioQueueGetProperty (handle, (uint) property, (IntPtr) (&val), ref size);
+				var k = AudioQueueGetProperty (handle, (uint) property, (IntPtr) (&val), &size);
 				if (k == 0)
 					return val;
 				throw new AudioQueueException (k);
@@ -999,7 +1019,7 @@ namespace AudioToolbox {
 			unsafe {
 				double val = 0;
 				int size = 8;
-				var k = AudioQueueGetProperty (handle, (uint) property, (IntPtr) (&val), ref size);
+				var k = AudioQueueGetProperty (handle, (uint) property, (IntPtr) (&val), &size);
 				if (k == 0)
 					return val;
 				throw new AudioQueueException (k);

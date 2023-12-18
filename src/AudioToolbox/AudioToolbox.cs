@@ -84,13 +84,9 @@ namespace AudioToolbox {
 			if (url is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (url));
 
-			string? result = null;
 			IntPtr name = IntPtr.Zero;
-			var error = CopyNameFromSoundBank (url.Handle, ref name);
-			if (name != IntPtr.Zero) {
-				using (NSString s = new NSString (name))
-					result = s.ToString ();
-			}
+			var error = CopyNameFromSoundBank (url.Handle, &name);
+			var result = CFString.FromHandle (name);
 			return (error != 0) ? null : result;
 		}
 
@@ -116,7 +112,7 @@ namespace AudioToolbox {
 
 			InstrumentInfo []? result = null;
 			IntPtr array = IntPtr.Zero;
-			var error = CopyInstrumentInfoFromSoundBank (url.Handle, ref array);
+			var error = CopyInstrumentInfoFromSoundBank (url.Handle, &array);
 			if (array != IntPtr.Zero) {
 				var dicts = NSArray.ArrayFromHandle<NSDictionary> (array);
 				result = new InstrumentInfo [dicts.Length];

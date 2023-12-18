@@ -327,7 +327,11 @@ namespace AudioToolbox {
 		public AudioFileStreamStatus Seek (long packetOffset, out long dataByteOffset, out bool isEstimate)
 		{
 			int v = 0;
-			LastError = AudioFileStreamSeek (handle, packetOffset, out dataByteOffset, ref v);
+			unsafe {
+				long dataByteOffsetPtr;
+				LastError = AudioFileStreamSeek (handle, packetOffset, &dataByteOffsetPtr, &v);
+				dataByteOffset = dataByteOffsetPtr;
+			}
 			if (LastError != AudioFileStreamStatus.Ok) {
 				isEstimate = false;
 			} else {
@@ -344,6 +348,23 @@ namespace AudioToolbox {
 			int* outPropertyDataSize,
 			byte* isWritable);
 
+		static AudioFileStreamStatus AudioFileStreamGetPropertyInfo (
+			AudioFileStreamID inAudioFileStream,
+			AudioFileStreamProperty inPropertyID,
+			out int outPropertyDataSize,
+			out bool isWritable)
+		{
+			int datasize;
+			byte writable;
+			AudioFileStreamStatus rv;
+			unsafe {
+				rv = AudioFileStreamGetPropertyInfo (inAudioFileStream, inPropertyID, &datasize, &writable);
+			}
+			outPropertyDataSize = datasize;
+			isWritable = writable != 0;
+			return rv;
+		}
+
 		[DllImport (Constants.AudioToolboxLibrary)]
 		unsafe extern static AudioFileStreamStatus AudioFileStreamGetProperty (
 			AudioFileStreamID inAudioFileStream,
@@ -355,7 +376,12 @@ namespace AudioToolbox {
 		{
 			if (outPropertyData == IntPtr.Zero)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (outPropertyData));
-			return AudioFileStreamGetProperty (handle, property, ref dataSize, outPropertyData) == 0;
+			unsafe {
+				int dataSizePtr = dataSize;
+				var rv = AudioFileStreamGetProperty (handle, property, &dataSizePtr, outPropertyData);
+				dataSize = dataSizePtr;
+				return rv == 0;
+			}
 		}
 
 		public IntPtr GetProperty (AudioFileStreamProperty property, out int size)
@@ -370,7 +396,11 @@ namespace AudioToolbox {
 			if (buffer == IntPtr.Zero)
 				return IntPtr.Zero;
 
-			LastError = AudioFileStreamGetProperty (handle, property, ref size, buffer);
+			unsafe {
+				var sizePtr = size;
+				LastError = AudioFileStreamGetProperty (handle, property, &sizePtr, buffer);
+				size = sizePtr;
+			}
 			if (LastError == 0)
 				return buffer;
 			Marshal.FreeHGlobal (buffer);
@@ -382,7 +412,7 @@ namespace AudioToolbox {
 			unsafe {
 				int val = 0;
 				int size = 4;
-				LastError = AudioFileStreamGetProperty (handle, property, ref size, (IntPtr) (&val));
+				LastError = AudioFileStreamGetProperty (handle, property, &size, (IntPtr) (&val));
 				if (LastError == 0)
 					return val;
 				return 0;
@@ -394,7 +424,7 @@ namespace AudioToolbox {
 			unsafe {
 				double val = 0;
 				int size = 8;
-				LastError = AudioFileStreamGetProperty (handle, property, ref size, (IntPtr) (&val));
+				LastError = AudioFileStreamGetProperty (handle, property, &size, (IntPtr) (&val));
 				if (LastError == 0)
 					return val;
 				return 0;
@@ -406,7 +436,7 @@ namespace AudioToolbox {
 			unsafe {
 				long val = 0;
 				int size = 8;
-				LastError = AudioFileStreamGetProperty (handle, property, ref size, (IntPtr) (&val));
+				LastError = AudioFileStreamGetProperty (handle, property, &size, (IntPtr) (&val));
 				if (LastError == 0)
 					return val;
 				return 0;
@@ -425,7 +455,7 @@ namespace AudioToolbox {
 			if (buffer == IntPtr.Zero)
 				return null;
 			try {
-				LastError = AudioFileStreamGetProperty (handle, property, ref size, buffer);
+				LastError = AudioFileStreamGetProperty (handle, property, &size, buffer);
 				if (LastError == 0) {
 					return Marshal.PtrToStructure<T> (buffer)!;
 				}
@@ -566,7 +596,7 @@ namespace AudioToolbox {
 			unsafe {
 				AudioFramePacketTranslation* p = &buffer;
 				int size = sizeof (AudioFramePacketTranslation);
-				LastError = AudioFileStreamGetProperty (handle, AudioFileStreamProperty.PacketToFrame, ref size, (IntPtr) p);
+				LastError = AudioFileStreamGetProperty (handle, AudioFileStreamProperty.PacketToFrame, &size, (IntPtr) p);
 				if (LastError == 0)
 					return buffer.Frame;
 				return -1;
@@ -581,7 +611,7 @@ namespace AudioToolbox {
 			unsafe {
 				AudioFramePacketTranslation* p = &buffer;
 				int size = sizeof (AudioFramePacketTranslation);
-				LastError = AudioFileStreamGetProperty (handle, AudioFileStreamProperty.FrameToPacket, ref size, (IntPtr) p);
+				LastError = AudioFileStreamGetProperty (handle, AudioFileStreamProperty.FrameToPacket, &size, (IntPtr) p);
 				if (LastError == 0) {
 					frameOffsetInPacket = buffer.FrameOffsetInPacket;
 					return buffer.Packet;
@@ -599,7 +629,7 @@ namespace AudioToolbox {
 			unsafe {
 				AudioBytePacketTranslation* p = &buffer;
 				int size = sizeof (AudioBytePacketTranslation);
-				LastError = AudioFileStreamGetProperty (handle, AudioFileStreamProperty.PacketToByte, ref size, (IntPtr) p);
+				LastError = AudioFileStreamGetProperty (handle, AudioFileStreamProperty.PacketToByte, &size, (IntPtr) p);
 				if (LastError == 0) {
 					isEstimate = (buffer.Flags & BytePacketTranslationFlags.IsEstimate) != 0;
 					return buffer.Byte;
@@ -617,7 +647,7 @@ namespace AudioToolbox {
 			unsafe {
 				AudioBytePacketTranslation* p = &buffer;
 				int size = sizeof (AudioBytePacketTranslation);
-				LastError = AudioFileStreamGetProperty (handle, AudioFileStreamProperty.ByteToPacket, ref size, (IntPtr) p);
+				LastError = AudioFileStreamGetProperty (handle, AudioFileStreamProperty.ByteToPacket, &size, (IntPtr) p);
 				if (LastError == 0) {
 					isEstimate = (buffer.Flags & BytePacketTranslationFlags.IsEstimate) != 0;
 					byteOffsetInPacket = buffer.ByteOffsetInPacket;

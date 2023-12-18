@@ -68,7 +68,7 @@ namespace AudioToolbox {
 				uint index;
 				int size = sizeof (uint);
 				var ptr_size = sizeof (AudioFormat) * formatList.Length;
-				if (AudioFormatPropertyNative.AudioFormatGetProperty (AudioFormatProperty.FirstPlayableFormatFromList, ptr_size, item, ref size, out index) != 0)
+				if (AudioFormatPropertyNative.AudioFormatGetProperty (AudioFormatProperty.FirstPlayableFormatFromList, ptr_size, item, &size, &index) != 0)
 					return null;
 				return formatList [index];
 			}
@@ -153,13 +153,13 @@ namespace AudioToolbox {
 			(*(Layout*) ptr) = str;
 
 			int size;
-			if (AudioFormatPropertyNative.AudioFormatGetPropertyInfo (AudioFormatProperty.BalanceFade, type_size, ptr, out size) != 0)
+			if (AudioFormatPropertyNative.AudioFormatGetPropertyInfo (AudioFormatProperty.BalanceFade, type_size, ptr, &size) != 0)
 				return null;
 
 			AudioFormatError res;
 			var data = new float [size / sizeof (float)];
 			fixed (float* data_ptr = data) {
-				res = AudioFormatPropertyNative.AudioFormatGetProperty (AudioFormatProperty.BalanceFade, type_size, ptr, ref size, data_ptr);
+				res = AudioFormatPropertyNative.AudioFormatGetProperty (AudioFormatProperty.BalanceFade, type_size, ptr, &size, data_ptr);
 			}
 
 			Marshal.FreeHGlobal (str.ChannelLayoutWeak);
@@ -232,13 +232,13 @@ namespace AudioToolbox {
 			*((Layout*) ptr) = str;
 
 			int size;
-			if (AudioFormatPropertyNative.AudioFormatGetPropertyInfo (AudioFormatProperty.PanningMatrix, type_size, ptr, out size) != 0)
+			if (AudioFormatPropertyNative.AudioFormatGetPropertyInfo (AudioFormatProperty.PanningMatrix, type_size, ptr, &size) != 0)
 				return null;
 
 			AudioFormatError res;
 			var data = new float [size / sizeof (float)];
 			fixed (float* data_ptr = data) {
-				res = AudioFormatPropertyNative.AudioFormatGetProperty (AudioFormatProperty.PanningMatrix, type_size, ptr, ref size, data_ptr);
+				res = AudioFormatPropertyNative.AudioFormatGetProperty (AudioFormatProperty.PanningMatrix, type_size, ptr, &size, data_ptr);
 			}
 
 			Marshal.FreeHGlobal (str.OutputChannelMapWeak);

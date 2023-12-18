@@ -313,7 +313,7 @@ namespace Xamarin.Tests {
 		}
 
 		[Category ("RemoteWindows")]
-		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
+		[TestCase (ApplePlatform.iOS, "ios-arm64")]
 		public void RemoteTest (ApplePlatform platform, string runtimeIdentifiers)
 		{
 			var project = "MySimpleApp";

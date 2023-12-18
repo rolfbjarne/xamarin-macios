@@ -56,7 +56,7 @@ jobs:
     # set the branch variable name, this is required by jenkins and we have a lot of scripts that depend on it
     BRANCH_NAME: $[ replace(variables['Build.SourceBranch'], 'refs/heads/', '') ]
     RUN_MAC_TESTS: $[ stageDependencies.configure_build.configure.outputs['decisions.RUN_MAC_TESTS'] ]
-  condition: ne(stageDependencies.configure_build.configure.outputs['decisions.RUN_MAC_TESTS'],'')
+  condition: eq(stageDependencies.configure_build.configure.outputs['decisions.RUN_MAC_TESTS'],'true')
   pool:
     name: $(AgentPoolComputed)
     demands:

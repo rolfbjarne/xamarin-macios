@@ -327,6 +327,7 @@ namespace Xamarin.Tests {
 			properties ["ServerUser"] = "builder";
 			properties ["ServerPassword"] = Environment.GetEnvironmentVariable ("XMA_PASSWORD")!;
 			properties ["BuildIpa"] = "true";
+			properties ["CopyAppBundleToWindows"] = "true";
 			var result = DotNet.AssertBuild (project_path, properties, quiet: false, timeout: TimeSpan.FromMinutes (60));
 			AssertThatLinkerExecuted (result);
 			var infoPlistPath = GetInfoPListPath (platform, appPath);

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.IO;
 using System.IO.Compression;
 using System.Runtime.InteropServices;
 
@@ -350,7 +351,14 @@ namespace Xamarin.Tests {
 			}
 			var infoPlistEntry = entries.SingleOrDefault (v => v.Name == "Info.plist");
 			Assert.NotNull (infoPlistEntry, "Info.plist");
-			var infoPlist = (PDictionary) PDictionary.FromStream (infoPlistEntry!.Open ())!;
+
+			// PDictionary.FromStream requires a seekable stream, but the zip stream isn't seekable, so copy to a
+			// MemoryStream and use that. Info.plist files aren't big, so this shouldn't become a memory consumption problem.
+			using var memoryStream = new MemoryStream ((int) infoPlistEntry!.Length);
+			using var plistStream = infoPlistEntry!.Open ();
+			plistStream.CopyTo (memoryStream);
+
+			var infoPlist = (PDictionary) PDictionary.FromStream (memoryStream)!;
 			Assert.AreEqual ("com.xamarin.mysimpleapp", infoPlist.GetString ("CFBundleIdentifier").Value, "CFBundleIdentifier");
 			Assert.AreEqual ("MySimpleApp", infoPlist.GetString ("CFBundleDisplayName").Value, "CFBundleDisplayName");
 			Assert.AreEqual ("3.14", infoPlist.GetString ("CFBundleVersion").Value, "CFBundleVersion");

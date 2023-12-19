@@ -21,13 +21,13 @@
 			<CompressedPath Condition="'$(CompressedPath)' == ''">$(DeviceSpecificIntermediateOutputPath)$(CompressedName)</CompressedPath>
 		</PropertyGroup>
 
-		<GetFullPath SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" RelativePath="$(DirectoryToCompress)">
+		<!-- <GetFullPath SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" RelativePath="$(DirectoryToCompress)">
 			<Output TaskParameter="FullPath" PropertyName="DirectoryToCompress" />
 		</GetFullPath>
 
 		<GetFullPath SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" RelativePath="$(CompressedPath)">
 			<Output TaskParameter="FullPath" PropertyName="CompressedPath" />
-		</GetFullPath>
+		</GetFullPath> -->
 
 		<MakeDir SessionId="$(BuildSessionId)" Directories="$([System.IO.Path]::GetDirectoryName('$(CompressedPath)'))" />
 		<Delete SessionId="$(BuildSessionId)" Files="$(CompressedPath)" />

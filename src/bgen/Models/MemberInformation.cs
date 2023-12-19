@@ -13,11 +13,11 @@ public class MemberInformation {
 	internal readonly WrapPropMemberInformation? wpmi;
 	public readonly bool is_abstract;
 	public readonly bool is_protected;
-	public readonly bool is_internal;
+	public bool is_internal;
 	public readonly bool is_override;
 	public readonly bool is_new;
 	public readonly bool is_sealed;
-	public readonly bool is_static;
+	public bool is_static;
 	public readonly bool is_thread_static;
 	public readonly bool is_autorelease;
 	public readonly bool is_wrapper;
@@ -34,6 +34,7 @@ public class MemberInformation {
 	public bool is_interface_impl;
 	public bool is_extension_method;
 	public bool is_protocol_member;
+	public bool? is_protocol_member_required;
 	public bool is_appearance;
 	public bool is_model;
 	public bool is_ctor;
@@ -41,8 +42,12 @@ public class MemberInformation {
 	public bool is_type_sealed;
 	public string? selector;
 	public string? wrap_method;
+	public bool call_protocol_implementation_method;
+	public bool is_protocol_implementation_method;
 	public string is_forced_owns;
 	public bool is_bindAs => Generator.HasBindAsAttribute (mi);
+	public string? method_name_prefix;
+	public bool generate_is_async_overload;
 
 	public MethodInfo? Method { get { return mi as MethodInfo; } }
 	public PropertyInfo? Property { get { return mi as PropertyInfo; } }
@@ -59,13 +64,14 @@ public class MemberInformation {
 		is_override = AttributeManager.HasAttribute<OverrideAttribute> (mi) || !Generator.MemberBelongsToType (mi.DeclaringType, type);
 		is_new = AttributeManager.HasAttribute<NewAttribute> (mi);
 		is_sealed = AttributeManager.HasAttribute<SealedAttribute> (mi);
-		is_static = AttributeManager.HasAttribute<StaticAttribute> (mi);
+		is_static = AttributeManager.IsStatic (mi);
 		is_thread_static = AttributeManager.HasAttribute<IsThreadStaticAttribute> (mi);
 		is_autorelease = AttributeManager.HasAttribute<AutoreleaseAttribute> (mi);
 		is_wrapper = !AttributeManager.HasAttribute<SyntheticAttribute> (mi.DeclaringType);
 		is_type_sealed = AttributeManager.HasAttribute<SealedAttribute> (mi.DeclaringType);
 		is_return_release = methodInfo is not null && AttributeManager.HasAttribute<ReleaseAttribute> (methodInfo.ReturnParameter);
 		is_forced = Generator.HasForcedAttribute (mi, out is_forced_owns);
+		generate_is_async_overload = AttributeManager.HasAttribute<AsyncAttribute> (mi);
 
 		var tsa = AttributeManager.GetCustomAttribute<ThreadSafeAttribute> (mi);
 		// if there's an attribute then it overrides the parent (e.g. type attribute) or namespace default
@@ -109,9 +115,16 @@ public class MemberInformation {
 		: this (generator, gather, mi, type, isInterfaceImpl, isExtensionMethod, isAppearance, isModel)
 	{
 		is_basewrapper_protocol_method = isBaseWrapperProtocolMethod;
-		foreach (ParameterInfo pi in mi.GetParameters ())
-			if (pi.ParameterType.IsSubclassOf (Generator.TypeCache.System_Delegate))
+		foreach (ParameterInfo pi in mi.GetParameters ()) {
+			if (pi.ParameterType.IsSubclassOf (Generator.TypeCache.System_Delegate)) {
 				is_unsafe = true;
+				break;
+			}
+			if (pi.ParameterType.IsByRef) {
+				is_unsafe = true;
+				break;
+			}
+		}
 
 		if (!is_unsafe && mi.ReturnType.IsSubclassOf (Generator.TypeCache.System_Delegate))
 			is_unsafe = true;
@@ -197,6 +210,9 @@ public class MemberInformation {
 
 	public string GetVisibility ()
 	{
+		if (is_protocol_implementation_method)
+			return "internal";
+
 		if (is_interface_impl || is_extension_method)
 			return "public";
 
@@ -217,9 +233,15 @@ public class MemberInformation {
 		if (is_sealed) {
 			mods += "";
 		} else if (is_ctor && is_protocol_member) {
-			mods += "unsafe static ";
-		} else if (is_static || is_category_extension || is_extension_method) {
+			if (is_unsafe) {
+				mods += "static ";
+			} else {
+				mods += "unsafe static ";
+			}
+		} else if (is_static || is_category_extension || is_extension_method || is_protocol_implementation_method) {
 			mods += "static ";
+		} else if (is_protocol_member) {
+			mods += "virtual ";
 		} else if (is_abstract) {
 #if NET
 			mods += "virtual ";

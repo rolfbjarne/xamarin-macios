@@ -325,9 +325,9 @@ namespace Xamarin.Tests {
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
 			Clean (project_path);
 			var properties = GetDefaultProperties (runtimeIdentifiers);
-			properties ["ServerAddress"] = Environment.GetEnvironmentVariable ("MAC_AGENT_IP")!;
+			properties ["ServerAddress"] = Environment.GetEnvironmentVariable ("MAC_AGENT_IP") ?? string.Empty;
 			properties ["ServerUser"] = "builder";
-			properties ["ServerPassword"] = Environment.GetEnvironmentVariable ("XMA_PASSWORD")!;
+			properties ["ServerPassword"] = Environment.GetEnvironmentVariable ("XMA_PASSWORD") ?? string.Empty;
 			properties ["BuildIpa"] = "true";
 			properties ["CopyAppBundleToWindows"] = "true";
 			var result = DotNet.AssertBuild (project_path, properties, quiet: false, timeout: TimeSpan.FromMinutes (60));

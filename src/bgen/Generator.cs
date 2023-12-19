@@ -966,7 +966,7 @@ public partial class Generator : IMemberGatherer {
 		try {
 			sb.Append (ParameterGetMarshalType (new MarshalInfo (this, mi) { IsAligned = aligned }));
 		} catch (BindingException ex) {
-			throw new BindingException (1078, ex.Error, ex, ex.Message, mi.Name);
+			throw new BindingException (1078, ex.Error, ex, ex.Message, $"{mi.DeclaringType.FullName}.{mi.Name}");
 		}
 
 		sb.Append ("_");
@@ -1439,6 +1439,8 @@ public partial class Generator : IMemberGatherer {
 					else if (attr is ExperimentalAttribute)
 						continue;
 #endif
+					else if (attr is OptionalMemberAttribute || attr is RequiredMemberAttribute)
+						continue;
 					else {
 						switch (attr.GetType ().Name) {
 						case "PreserveAttribute":
@@ -2401,7 +2403,7 @@ public partial class Generator : IMemberGatherer {
 	}
 
 	// This assumes the compiler implements property methods as get_ or set_ prefixes
-	static PropertyInfo GetProperyFromGetSetMethod (MethodInfo method)
+	public static PropertyInfo GetProperyFromGetSetMethod (MethodInfo method)
 	{
 		string name = method.Name;
 		if (name.StartsWith ("get_", StringComparison.Ordinal) || name.StartsWith ("set_", StringComparison.Ordinal)) {
@@ -2724,12 +2726,14 @@ public partial class Generator : IMemberGatherer {
 
 			sb.Append (" ");
 		}
-		if (minfo.is_extension_method && minfo.Method.IsSpecialName) {
+		if ((minfo.is_extension_method || minfo.is_protocol_method || minfo.is_protocol_implementation_method) && minfo.Method.IsSpecialName) {
 			if (name.StartsWith ("get_", StringComparison.Ordinal))
 				name = "Get" + name.Substring (4);
 			else if (name.StartsWith ("set_", StringComparison.Ordinal))
 				name = "Set" + name.Substring (4);
 		}
+		if (minfo.is_protocol_implementation_method)
+			sb.Append ('_');
 		sb.Append (name);
 
 		if (minfo.is_protocol_member) {
@@ -2743,6 +2747,10 @@ public partial class Generator : IMemberGatherer {
 		bool comma = false;
 		if (minfo.is_extension_method) {
 			sb.Append ("this ");
+			sb.Append ("I" + mi.DeclaringType.Name);
+			sb.Append (" This");
+			comma = true;
+		} else if (minfo.is_protocol_implementation_method && !minfo.is_static) {
 			sb.Append ("I" + mi.DeclaringType.Name);
 			sb.Append (" This");
 			comma = true;
@@ -2811,8 +2819,16 @@ public partial class Generator : IMemberGatherer {
 			} else {
 				sb.Append (TypeManager.FormatType (declaringType, parType));
 				// some `IntPtr` are decorated with `[NullAttribute]`
-				if (!parType.IsValueType && AttributeManager.HasAttribute<NullAllowedAttribute> (pi))
-					sb.Append ('?');
+				if (!parType.IsValueType) {
+					if (AttributeManager.HasAttribute<NullAllowedAttribute> (pi)) {
+						sb.Append ('?');
+					} else if (pi.Position == 0 && mi is MethodInfo minfo) {
+						// only need to check for setter, since we wouldn't get here for a getter.
+						var propertyInfo = GetProperty (minfo, getter: false, setter: true);
+						if (AttributeManager.HasAttribute<NullAllowedAttribute> (propertyInfo))
+							sb.Append ('?');
+					}
+				}
 			}
 
 			sb.Append (" ");
@@ -2940,7 +2956,7 @@ public partial class Generator : IMemberGatherer {
 
 	void GenerateInvoke (bool stret, bool supercall, MethodInfo mi, MemberInformation minfo, string selector, string args, bool assign_to_temp, Type category_type, bool aligned)
 	{
-		string target_name = (category_type is null && !minfo.is_extension_method) ? "this" : "This";
+		string target_name = (category_type is null && !minfo.is_extension_method && !minfo.is_protocol_implementation_method) ? "this" : "This";
 		string handle = supercall ? ".SuperHandle" : ".Handle";
 
 		// If we have supercall == false, we can be a Bind method that has a [Target]
@@ -2975,10 +2991,10 @@ public partial class Generator : IMemberGatherer {
 		if (minfo.is_interface_impl || minfo.is_extension_method) {
 			var tmp = InlineSelectors;
 			InlineSelectors = true;
-			selector_field = SelectorField (selector, force_gethandle: minfo.is_protocol_member);
+			selector_field = SelectorField (selector, force_gethandle: minfo.is_protocol_method || minfo.is_protocol_implementation_method);
 			InlineSelectors = tmp;
 		} else {
-			selector_field = SelectorField (selector, force_gethandle: minfo.is_protocol_member);
+			selector_field = SelectorField (selector, force_gethandle: minfo.is_protocol_method || minfo.is_protocol_implementation_method);
 		}
 
 		if (ShouldMarshalNativeExceptions (mi))
@@ -3514,6 +3530,10 @@ public partial class Generator : IMemberGatherer {
 
 		GenerateTypeLowering (mi, null_allowed_override, out var args, out var convs, out var disposes, out var by_ref_processing, out var by_ref_init, propInfo);
 
+		if (minfo.is_protocol_method && minfo.is_static) {
+			print ("var class_ptr = Class.GetHandle (typeof (T));");
+		}
+
 		var argsArray = args.ToString ();
 
 		if (by_ref_init.Length > 0)
@@ -3763,6 +3783,12 @@ public partial class Generator : IMemberGatherer {
 			// e.g. Dispose won't have an [Export] since it's present to satisfy System.IDisposable
 			if (parent.FullName != "System.IDisposable") {
 				foreach (var method in parent.GatherMethods (BindingFlags.Public | BindingFlags.Instance, this)) {
+					// Skip methods the interface already implements if it doesn't have an export
+					if (!method.IsAbstract) {
+						var exportAttribute = GetExportAttribute (method);
+						if (exportAttribute is null)
+							continue;
+					}
 					yield return method;
 				}
 			}
@@ -3853,6 +3879,13 @@ public partial class Generator : IMemberGatherer {
 
 	void PrintPropertyAttributes (PropertyInfo pi, Type type, bool skipTypeInjection = false)
 	{
+		var minfo = new MemberInformation (this, this, pi, type);
+		PrintPropertyAttributes (pi, minfo, skipTypeInjection);
+	}
+
+	void PrintPropertyAttributes (PropertyInfo pi, MemberInformation minfo, bool skipTypeInjection = false)
+	{
+		Type type = minfo.type;
 		PrintObsoleteAttributes (pi);
 
 		foreach (var ba in AttributeManager.GetCustomAttributes<DebuggerBrowsableAttribute> (pi))
@@ -3881,13 +3914,31 @@ public partial class Generator : IMemberGatherer {
 
 		foreach (var sa in AttributeManager.GetCustomAttributes<ThreadSafeAttribute> (pi))
 			print (sa.Safe ? "[ThreadSafe]" : "[ThreadSafe (false)]");
+
+		PrintProtocolMemberAttributes (minfo);
 	}
 
-	void GenerateProperty (Type type, PropertyInfo pi, List<string> instance_fields_to_clear_on_dispose, bool is_model, bool is_interface_impl = false)
+	void PrintProtocolMemberAttributes (MemberInformation minfo)
+	{
+		if (!minfo.is_protocol_method || minfo.is_protocol_implementation_method)
+			return;
+
+		if (minfo.is_protocol_method_required.Value) {
+			print ("[RequiredMember]");
+		} else {
+			print ("[OptionalMember]");
+		}
+		print ("[Preserve (Conditional = true)]"); // FIXME: use .NET trimmer attribute
+	}
+
+	void GenerateProperty (Type type, PropertyInfo pi, List<string> instance_fields_to_clear_on_dispose, bool is_model, bool is_interface_impl = false, bool is_protocol_method = false, bool? is_protocol_method_required = null, bool is_protocol_implementation_method = false)
 	{
 		string wrap;
 		var export = GetExportAttribute (pi, out wrap);
 		var minfo = new MemberInformation (this, this, pi, type, is_interface_impl);
+		minfo.is_protocol_method = is_protocol_method;
+		minfo.is_protocol_method_required = is_protocol_method_required;
+		minfo.is_protocol_implementation_method = is_protocol_implementation_method;
 		var mod = minfo.GetVisibility ();
 		Type inlinedType = pi.DeclaringType == type ? null : type;
 		GetAccessorInfo (pi, out var getter, out var setter, out var generate_getter, out var generate_setter);
@@ -3922,7 +3973,7 @@ public partial class Generator : IMemberGatherer {
 
 		if (wrap is not null) {
 			print_generated_code ();
-			PrintPropertyAttributes (pi, minfo.type);
+			PrintPropertyAttributes (pi, minfo);
 			PrintAttributes (pi, preserve: true, advice: true);
 			print ("{0} {1}{2}{3} {4} {{",
 				   mod,
@@ -3989,7 +4040,7 @@ public partial class Generator : IMemberGatherer {
 		string var_name = null;
 
 		// [Model] has properties that only throws, so there's no point in adding unused backing fields
-		if (!is_model && DoesPropertyNeedBackingField (pi) && !is_interface_impl && !minfo.is_static && !DoesPropertyNeedDirtyCheck (pi, export)) {
+		if (!is_model && DoesPropertyNeedBackingField (pi) && !is_interface_impl && !minfo.is_static && !minfo.is_protocol_method && !DoesPropertyNeedDirtyCheck (pi, export)) {
 			var_name = string.Format ("__mt_{0}_var{1}", pi.Name, minfo.is_static ? "_static" : "");
 
 			print_generated_code ();
@@ -4004,7 +4055,7 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		print_generated_code (optimizable: IsOptimizable (pi));
-		PrintPropertyAttributes (pi, minfo.type);
+		PrintPropertyAttributes (pi, minfo);
 
 		PrintAttributes (pi, preserve: true, advice: true, bindAs: true);
 
@@ -4076,7 +4127,10 @@ public partial class Generator : IMemberGatherer {
 
 			PrintAttributes (pi.GetGetMethod (), platform: true, preserve: true, advice: true, notImplemented: true, inlinedType: inlinedType);
 #if NET
-			if (false) {
+			if (minfo.is_protocol_method && !minfo.is_static) {
+				print ("get {");
+				print ($"\treturn _Get{pi.Name.GetSafeParamName ()} (this);");
+				print ("}");
 #else
 			if (minfo.is_abstract) {
 				print ("get; ");
@@ -4093,14 +4147,14 @@ public partial class Generator : IMemberGatherer {
 					print ("Console.WriteLine (\"In {0}\");", pi.GetGetMethod ());
 				if (is_model)
 					print ("\tthrow new ModelNotImplementedException ();");
-				else if (minfo.is_abstract)
+				else if (minfo.is_abstract && !minfo.is_protocol_method)
 					print ("throw new You_Should_Not_Call_base_In_This_Method ();");
 				else {
 					if (minfo.is_autorelease) {
 						indent++;
 						print ("using (var autorelease_pool = new NSAutoreleasePool ()) {");
 					}
-					if (is_interface_impl || !DoesPropertyNeedBackingField (pi)) {
+					if (is_interface_impl || minfo.is_protocol_method || !DoesPropertyNeedBackingField (pi)) {
 						GenerateMethodBody (minfo, getter, sel, false, null, BodyOption.None, pi);
 					} else if (minfo.is_static) {
 						GenerateMethodBody (minfo, getter, sel, false, var_name, BodyOption.StoreRet, pi);
@@ -4147,7 +4201,10 @@ public partial class Generator : IMemberGatherer {
 
 			PrintAttributes (pi.GetSetMethod (), platform: true, preserve: true, advice: true, notImplemented: true, inlinedType: inlinedType);
 #if NET
-			if (false) {
+			if (minfo.is_protocol_method && !minfo.is_static) {
+				print ("set {");
+				print ($"\t_Set{pi.Name.GetSafeParamName ()} (this, value);");
+				print ("}");
 #else
 			if (minfo.is_abstract) {
 				print ("set; ");
@@ -4176,11 +4233,11 @@ public partial class Generator : IMemberGatherer {
 					print ("\tthrow new NotImplementedException ({0});", not_implemented_attr.Message is null ? "" : "\"" + not_implemented_attr.Message + "\"");
 				} else if (is_model)
 					print ("\tthrow new ModelNotImplementedException ();");
-				else if (minfo.is_abstract)
+				else if (minfo.is_abstract && !minfo.is_protocol_method)
 					print ("throw new You_Should_Not_Call_base_In_This_Method ();");
 				else {
 					GenerateMethodBody (minfo, setter, sel, null_allowed, null, BodyOption.None, pi);
-					if (!minfo.is_static && !is_interface_impl && DoesPropertyNeedBackingField (pi)) {
+					if (!minfo.is_static && !is_interface_impl && !minfo.is_protocol_method && DoesPropertyNeedBackingField (pi)) {
 						if (!DoesPropertyNeedDirtyCheck (pi, export)) {
 							print ("\tMarkDirty ();");
 							print ("\t{0} = value;", var_name);
@@ -4265,6 +4322,7 @@ public partial class Generator : IMemberGatherer {
 	{
 		var mi = original_minfo.Method;
 		var minfo = new AsyncMethodInfo (this, this, original_minfo.type, mi, original_minfo.category_extension_type, original_minfo.is_extension_method);
+		minfo.is_protocol_method = original_minfo.is_protocol_method;
 		var is_void = mi.ReturnType == TypeCache.System_Void;
 
 		// Print a error if any of the method parameters or handler parameters is ref/out, it should not be asyncified.
@@ -4300,14 +4358,15 @@ public partial class Generator : IMemberGatherer {
 		bool ignoreResult = !is_void &&
 			asyncKind == AsyncMethodKind.Plain &&
 			AttributeManager.GetCustomAttribute<AsyncAttribute> (mi).PostNonResultSnippet is null;
-		print ("{6}{5}{4}{0}({1}{2}({3}) => {{",
+		print ("{6}{5}{4}{0}{7}({1}{2}({3}) => {{",
 			mi.Name,
 			GetInvokeParamList (minfo.AsyncInitialParams, false),
 			minfo.AsyncInitialParams.Length > 0 ? ", " : "",
 			GetInvokeParamList (minfo.AsyncCompletionParams),
 			minfo.is_extension_method || minfo.is_category_extension ? "This." : string.Empty,
 			is_void || ignoreResult ? string.Empty : minfo.GetUniqueParamName ("result") + " = ",
-			is_void || ignoreResult ? string.Empty : (asyncKind == AsyncMethodKind.WithResultOutParameter ? string.Empty : "var ")
+			is_void || ignoreResult ? string.Empty : (asyncKind == AsyncMethodKind.WithResultOutParameter ? string.Empty : "var "),
+			minfo.is_protocol_method && minfo.is_static ? "<T>" : string.Empty
 		);
 
 		indent++;
@@ -4391,9 +4450,12 @@ public partial class Generator : IMemberGatherer {
 	}
 
 
-	void GenerateMethod (Type type, MethodInfo mi, bool is_model, Type category_extension_type, bool is_appearance, bool is_interface_impl = false, bool is_extension_method = false, string selector = null, bool isBaseWrapperProtocolMethod = false)
+	void GenerateMethod (Type type, MethodInfo mi, bool is_model = false, Type category_extension_type = null, bool is_appearance = false, bool is_interface_impl = false, bool is_extension_method = false, string selector = null, bool isBaseWrapperProtocolMethod = false, bool is_protocol_method = false, bool? is_protocol_method_required = null, bool is_protocol_implementation_method = false)
 	{
 		var minfo = new MemberInformation (this, this, mi, type, category_extension_type, is_interface_impl, is_extension_method, is_appearance, is_model, selector, isBaseWrapperProtocolMethod);
+		minfo.is_protocol_method = is_protocol_method;
+		minfo.is_protocol_method_required = is_protocol_method_required;
+		minfo.is_protocol_implementation_method = is_protocol_implementation_method;
 		GenerateMethod (minfo);
 	}
 
@@ -4421,6 +4483,9 @@ public partial class Generator : IMemberGatherer {
 	void PrintExport (MemberInformation minfo)
 	{
 		if (minfo.is_ctor && minfo.is_protocol_member)
+			return;
+
+		if (minfo.is_protocol_implementation_method)
 			return;
 
 		if (minfo.is_export)
@@ -4480,6 +4545,7 @@ public partial class Generator : IMemberGatherer {
 			WriteDocumentation (minfo.Method);
 		}
 
+		PrintProtocolMemberAttributes (minfo);
 		PrintDelegateProxy (minfo);
 
 		if (AttributeManager.HasAttribute<NoMethodAttribute> (minfo.mi)) {
@@ -4533,7 +4599,15 @@ public partial class Generator : IMemberGatherer {
 
 			if (do_not_call_base)
 				print ("\tthrow new You_Should_Not_Call_base_In_This_Method ();");
-			else if (minfo.wrap_method is not null) {
+			else if (minfo.call_protocol_implementation_method) {
+				indent++;
+				var ret = mi.ReturnType == TypeCache.System_Void ? null : "return ";
+				var parameters = mi.GetParameters ();
+				var selfCall = minfo.is_static ? string.Empty : (parameters.Length == 0 ? "this" : "this, ");
+				var genericArguments = minfo.is_static ? "<T>" : string.Empty;
+				print ($"{ret}_{GetMethodName (minfo, false)}{genericArguments} ({selfCall}{RenderArgs (parameters)});");
+				indent--;
+			} else if (minfo.wrap_method is not null) {
 				if (!minfo.is_ctor) {
 					indent++;
 
@@ -4567,13 +4641,14 @@ public partial class Generator : IMemberGatherer {
 			print ("}\n");
 		}
 
-		if (AttributeManager.HasAttribute<AsyncAttribute> (mi)) {
+		if (minfo.generate_is_async_overload) {
 			// We do not want Async methods inside internal wrapper classes, they are useless
 			// internal sealed class FooWrapper : BaseWrapper, IMyFooDelegate
 			// Also we do not want Async members inside [Model] classes
 			if (minfo.is_basewrapper_protocol_method || minfo.is_model)
 				return;
 
+			minfo.generate_is_async_overload = false;
 			GenerateAsyncMethod (minfo, AsyncMethodKind.Plain);
 
 			// Generate the overload with the out parameter
@@ -4732,9 +4807,20 @@ public partial class Generator : IMemberGatherer {
 
 	bool IsRequired (MemberInfo provider, Attribute [] attributes = null)
 	{
+		return IsRequired (provider, out var _, attributes);
+	}
+
+	bool IsRequired (MemberInfo provider, out bool generateExtensionMethod, Attribute [] attributes = null)
+	{
+		generateExtensionMethod = false;
+
 		var type = provider.DeclaringType;
 		if (IsApiType (type)) {
-			return AttributeManager.HasAttribute<AbstractAttribute> (provider, attributes);
+			var abstractAttribute = AttributeManager.GetCustomAttribute<AbstractAttribute> (provider, attributes);
+			if (abstractAttribute is null)
+				return false;
+			generateExtensionMethod = abstractAttribute.GenerateExtensionMethod;
+			return true;
 		}
 		if (type.IsInterface)
 			return true;
@@ -4744,6 +4830,12 @@ public partial class Generator : IMemberGatherer {
 
 	void GenerateProtocolTypes (Type type, string class_visibility, string TypeName, string protocol_name, ProtocolAttribute protocolAttribute)
 	{
+		var protocol = AttributeManager.GetCustomAttribute<ProtocolAttribute> (type);
+#if NET
+		var backwardsCompatibleCodeGeneration = protocol.BackwardsCompatibleCodeGeneration;
+#else
+		var backwardsCompatibleCodeGeneration = true;
+#endif
 		var allProtocolMethods = new List<MethodInfo> ();
 		var allProtocolProperties = new List<PropertyInfo> ();
 		var allProtocolConstructors = new List<MethodInfo> ();
@@ -4760,11 +4852,17 @@ public partial class Generator : IMemberGatherer {
 		allProtocolProperties.AddRange (SelectProtocolProperties (type));
 		allProtocolConstructors.AddRange (SelectProtocolMethods (type, selectConstructors: true));
 
+		var requiredMethods = allProtocolMethods.Where ((v) => IsRequired (v));
+		var optionalMethods = allProtocolMethods.Where ((v) => !IsRequired (v));
 		var requiredInstanceMethods = allProtocolMethods.Where ((v) => IsRequired (v) && !AttributeManager.HasAttribute<StaticAttribute> (v)).ToList ();
 		var optionalInstanceMethods = allProtocolMethods.Where ((v) => !IsRequired (v) && !AttributeManager.HasAttribute<StaticAttribute> (v));
 		var requiredInstanceProperties = allProtocolProperties.Where ((v) => IsRequired (v) && !AttributeManager.HasAttribute<StaticAttribute> (v)).ToList ();
 		var optionalInstanceProperties = allProtocolProperties.Where ((v) => !IsRequired (v) && !AttributeManager.HasAttribute<StaticAttribute> (v));
 		var requiredInstanceAsyncMethods = requiredInstanceMethods.Where (m => AttributeManager.HasAttribute<AsyncAttribute> (m)).ToList ();
+		var instanceProperties = allProtocolProperties.Where (v => !AttributeManager.HasAttribute<StaticAttribute> (v));
+		var staticProperties = allProtocolProperties.Where (v => AttributeManager.HasAttribute<StaticAttribute> (v));
+		var extensionMethods = optionalInstanceMethods.Concat (requiredInstanceMethods.Where (v => IsRequired (v, out var generateExtensionMethod) && generateExtensionMethod));
+		var extensionProperties = optionalInstanceProperties.Concat (requiredInstanceProperties.Where (v => IsRequired (v, out var generateExtensionMethod) && generateExtensionMethod));
 
 		WriteDocumentation (type);
 
@@ -4902,13 +5000,25 @@ public partial class Generator : IMemberGatherer {
 		indent++;
 
 #if NET
-		foreach (var ctor in allProtocolConstructors) {
-			var minfo = new MemberInformation (this, this, ctor, type, null);
+		foreach (var mi in allProtocolMethods) {
+			var minfo = new MemberInformation (this, this, mi, type, null);
+			var mod = string.Empty;
+			var useSeparateImplementationMethod = !minfo.is_static;
 			minfo.is_protocol_member = true;
+			minfo.is_protocol_method_required = IsRequired (mi);
+			minfo.call_protocol_implementation_method = useSeparateImplementationMethod;
 			GenerateMethod (minfo);
 			print ("");
+
+			if (useSeparateImplementationMethod) {
+				minfo.call_protocol_implementation_method = false;
+				minfo.is_protocol_implementation_method = true;
+				minfo.generate_is_async_overload = false;
+				GenerateMethod (minfo);
+				print ("");
+			}
 		}
-#endif
+#else
 		foreach (var mi in requiredInstanceMethods) {
 			if (AttributeManager.HasAttribute<StaticAttribute> (mi))
 				continue;
@@ -4927,6 +5037,46 @@ public partial class Generator : IMemberGatherer {
 			print ("{0}{1};", mod, MakeSignature (minfo, true));
 			print ("");
 		}
+#endif
+
+#if NET
+		var instance_fields_to_clear_on_dispose = new List<string> ();
+		foreach (var pi in instanceProperties) {
+			GenerateProperty (type, pi, instance_fields_to_clear_on_dispose, false, is_protocol_method: true, is_protocol_method_required: IsRequired (pi));
+
+			// HERE
+			GetAccessorInfo (pi, out var getter, out var setter, out var generate_getter, out var generate_setter);
+			var attrib = GetExportAttribute (pi);
+			if (generate_getter) {
+				PrintAttributes (pi, preserve: true, advice: true);
+				var ba = GetBindAttribute (getter);
+				var selector = ba?.Selector ?? attrib.ToGetter (pi).Selector;
+				GenerateMethod (type, getter, selector: selector, is_protocol_implementation_method: true);
+			}
+			if (generate_setter) {
+				PrintAttributes (pi, preserve: true, advice: true);
+				var ba = GetBindAttribute (setter);
+				var selector = ba?.Selector ?? attrib.ToSetter (pi).Selector;
+				GenerateMethod (type, setter, selector: selector, is_protocol_implementation_method: true);
+			}
+		}
+
+		// C# does not support type constraint on properties, so create Get* and Set* accessors instead.
+		foreach (var pi in staticProperties) {
+			GetAccessorInfo (pi, out var getter, out var setter, out var generate_getter, out var generate_setter);
+			var attrib = GetExportAttribute (pi);
+			if (generate_getter) {
+				PrintAttributes (pi, preserve: true, advice: true);
+				var ba = GetBindAttribute (getter);
+				GenerateMethod (type, getter, false, null, false, false, false, ba?.Selector ?? attrib.ToGetter (pi).Selector, is_protocol_method: true, is_protocol_method_required: IsRequired (pi));
+			}
+			if (generate_setter) {
+				PrintAttributes (pi, preserve: true, advice: true);
+				var ba = GetBindAttribute (setter);
+				GenerateMethod (type, setter, false, null, false, false, false, ba?.Selector ?? attrib.ToSetter (pi).Selector, is_protocol_method: true, is_protocol_method_required: IsRequired (pi));
+			}
+		}
+#else
 
 		foreach (var pi in requiredInstanceProperties) {
 			var minfo = new MemberInformation (this, this, pi, type);
@@ -4970,13 +5120,16 @@ public partial class Generator : IMemberGatherer {
 			print ("}");
 			print ("");
 		}
+#endif
+
 		indent--;
 		print ("}");
 		print ("");
 
 		// avoid (for unified) all the metadata for empty static classes, we can introduce them later when required
 		bool include_extensions = false;
-		include_extensions = optionalInstanceMethods.Any () || optionalInstanceProperties.Any () || requiredInstanceAsyncMethods.Any ();
+		if (backwardsCompatibleCodeGeneration)
+			include_extensions = extensionMethods.Any () || extensionProperties.Any () || requiredInstanceAsyncMethods.Any ();
 		if (include_extensions) {
 			// extension methods
 			if (BindingTouch.SupportsXmlDocumentation) {
@@ -4988,7 +5141,7 @@ public partial class Generator : IMemberGatherer {
 			PrintAttributes (type, preserve: true, advice: true);
 			print ("{1} unsafe static partial class {0}_Extensions {{", TypeName, class_visibility);
 			indent++;
-			foreach (var mi in optionalInstanceMethods)
+			foreach (var mi in extensionMethods)
 				GenerateMethod (type, mi, false, null, false, false, true);
 
 			// Generate Extension Methods of required [Async] decorated methods (we already do optional) 
@@ -5002,7 +5155,7 @@ public partial class Generator : IMemberGatherer {
 			}
 
 			// C# does not support extension properties, so create Get* and Set* accessors instead.
-			foreach (var pi in optionalInstanceProperties) {
+			foreach (var pi in extensionProperties) {
 				GetAccessorInfo (pi, out var getter, out var setter, out var generate_getter, out var generate_setter);
 				var attrib = GetExportAttribute (pi);
 				if (generate_getter) {
@@ -5068,6 +5221,16 @@ public partial class Generator : IMemberGatherer {
 			foreach (var gr in duplicateMethodsGroupedBySelector) {
 				var distinctMethodsBySignature = gr.GroupBy ((v) => v.Signature).Select ((v) => v.First ()).ToArray ();
 				if (distinctMethodsBySignature.Length > 1) {
+					var areAllNonAbstract = gr.All (v => !v.Method.IsAbstract);
+					// If none of the method are abstract, we can just skip them all
+					if (areAllNonAbstract) {
+						var warning = ErrorHelper.CreateWarning (1120
+							/* The type '{0}' is trying to inline the methods binding the selector '{1}' from the protocols '{2}' and '{3}', using methods with different signatures ('{4}' vs '{5}'). These methods will be ignored. */,
+							type.FullName, gr.Key, distinctMethodsBySignature [0].Method.DeclaringType.FullName, distinctMethodsBySignature [1].Method.DeclaringType.FullName,
+							distinctMethodsBySignature [0].Method.ToString (), distinctMethodsBySignature [1].Method.ToString ());
+						exceptions.Add (warning);
+						continue;
+					}
 					exceptions.Add (ErrorHelper.CreateError (1069, type.FullName, gr.Key, distinctMethodsBySignature [0].Method.DeclaringType.FullName, distinctMethodsBySignature [1].Method.DeclaringType.FullName,
 						distinctMethodsBySignature [0].Method.ToString (), distinctMethodsBySignature [1].Method.ToString ()));
 					continue;
@@ -6020,6 +6183,7 @@ public partial class Generator : IMemberGatherer {
 				if (appearance_selectors is not null && AttributeManager.HasAttribute<AppearanceAttribute> (pi))
 					appearance_selectors.Add (pi);
 
+				var hasNullableMismatch = false;
 				if (type == pi.DeclaringType || type.IsSubclassOf (pi.DeclaringType)) {
 					// not an injected protocol property.
 					bound_properties.Add (pi.Name);
@@ -6046,11 +6210,26 @@ public partial class Generator : IMemberGatherer {
 							if (!protocolsThatHaveThisProp.All (x => x.CanRead == pi.CanRead && x.CanWrite == pi.CanWrite))
 								throw new BindingException (1037, true, pi.Name, type.Name);
 						}
+
+						if (AttributeManager.HasAttribute<NullAllowedAttribute> (pi)) {
+							var nonNullableProperty = protocolsThatHaveThisProp.SingleOrDefault (v => !AttributeManager.HasAttribute<NullAllowedAttribute> (v));
+							if (nonNullableProperty is not null) {
+								// We're getting the same property from multiple interfaces, and the nullability attributes don't match.
+								// This results in a warning (which turn into an error because we've turned on warnaserror):
+								// error CS8766: Nullability of reference types in return type of 'string? NSApplication.AccessibilityIdentifier.get' doesn't match implicitly implemented member 'string INSAccessibilityElementProtocol.AccessibilityIdentifier.get' (possibly because of nullability attributes).
+								// So we need to ignore this warning.
+								hasNullableMismatch = true;
+							}
+						}
 					}
 				}
 
 				generated_properties.Add (pi.Name);
+				if (hasNullableMismatch)
+					print ("#pragma warning disable CS8766");
 				GenerateProperty (type, pi, instance_fields_to_clear_on_dispose, is_model);
+				if (hasNullableMismatch)
+					print ("#pragma warning restore CS8766");
 			}
 
 			if (field_exports.Count != 0) {

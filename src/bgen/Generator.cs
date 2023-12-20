@@ -303,18 +303,6 @@ public partial class Generator : IMemberGatherer {
 		return AttributeManager.HasAttribute<ProtocolAttribute> (protocol);
 	}
 
-	string FindProtocolInterface (Type type, MemberInfo pi)
-	{
-		var isArray = type.IsArray;
-		var declType = isArray ? type.GetElementType () : type;
-
-		if (!AttributeManager.HasAttribute<ProtocolAttribute> (declType))
-			throw new BindingException (1034, true,
-				pi.DeclaringType, pi.Name, declType);
-
-		return "I" + type.Name;
-	}
-
 	public BindAsAttribute GetBindAsAttribute (ICustomAttributeProvider cu)
 	{
 		BindAsAttribute rv;
@@ -2641,16 +2629,6 @@ public partial class Generator : IMemberGatherer {
 		return AttributeManager.HasAttribute<ProtocolAttribute> (type);
 	}
 
-	public bool Protocolize (ICustomAttributeProvider provider)
-	{
-		var attribs = AttributeManager.GetCustomAttributes<ProtocolizeAttribute> (provider);
-		if (attribs is null || attribs.Length == 0)
-			return false;
-
-		var attrib = attribs [0];
-		return CurrentPlatform.GetXamcoreVersion () >= attrib.Version;
-	}
-
 	public string MakeSignature (MemberInformation minfo, bool is_async, ParameterInfo [] parameters, string extra = "", bool alreadyPreserved = false)
 	{
 		var mi = minfo.Method;
@@ -2664,20 +2642,12 @@ public partial class Generator : IMemberGatherer {
 		if (!minfo.is_ctor && !is_async) {
 			var prefix = "";
 			if (!BindThirdPartyLibrary) {
-				var hasReturnTypeProtocolize = Protocolize (minfo.Method.ReturnParameter);
-				if (hasReturnTypeProtocolize) {
-					if (!IsProtocol (minfo.Method.ReturnType)) {
-						ErrorHelper.Warning (1108, minfo.Method.DeclaringType, minfo.Method, minfo.Method.ReturnType.FullName);
-					} else {
-						prefix = "I";
-					}
-				}
 				if (minfo.Method.ReturnType.IsArray) {
 					var et = minfo.Method.ReturnType.GetElementType ();
 					if (IsModel (et))
 						ErrorHelper.Warning (1109, minfo.Method.DeclaringType, minfo.Method.Name, et, et.Namespace, et.Name);
 				}
-				if (IsModel (minfo.Method.ReturnType) && !hasReturnTypeProtocolize)
+				if (IsModel (minfo.Method.ReturnType))
 					ErrorHelper.Warning (1107, minfo.Method.DeclaringType, minfo.Method.Name, minfo.Method.ReturnType, minfo.Method.ReturnType.Namespace, minfo.Method.ReturnType.Name);
 			}
 
@@ -2762,23 +2732,16 @@ public partial class Generator : IMemberGatherer {
 			if (pari == parCount - 1 && parType.IsArray && (AttributeManager.HasAttribute<ParamsAttribute> (pi) || AttributeManager.HasAttribute<ParamArrayAttribute> (pi))) {
 				sb.Append ("params ");
 			}
-			var protocolized = false;
-			if (!BindThirdPartyLibrary && Protocolize (pi)) {
-				if (!AttributeManager.HasAttribute<ProtocolAttribute> (parType)) {
-					Console.WriteLine ("Protocolized attribute for type that does not have a [Protocol] for {0}'s parameter {1}", mi, pi);
-				}
-				protocolized = true;
-			}
 
 			var bindAsAtt = GetBindAsAttribute (pi);
 			if (bindAsAtt is not null) {
 				PrintBindAsAttribute (pi, sb);
 				var bt = bindAsAtt.Type;
-				sb.Append (TypeManager.FormatType (bt.DeclaringType, bt, protocolized));
+				sb.Append (TypeManager.FormatType (bt.DeclaringType, bt));
 				if (!bt.IsValueType && AttributeManager.HasAttribute<NullAllowedAttribute> (pi))
 					sb.Append ('?');
 			} else {
-				sb.Append (TypeManager.FormatType (declaringType, parType, protocolized));
+				sb.Append (TypeManager.FormatType (declaringType, parType));
 				// some `IntPtr` are decorated with `[NullAttribute]`
 				if (!parType.IsValueType && AttributeManager.HasAttribute<NullAllowedAttribute> (pi))
 					sb.Append ('?');
@@ -2833,9 +2796,6 @@ public partial class Generator : IMemberGatherer {
 			// protocol support means we can return interfaces and, as far as .NET knows, they might not be NSObject
 			if (IsProtocolInterface (mi.ReturnType)) {
 				cast_a = " Runtime.GetINativeObject<" + TypeManager.FormatType (mi.DeclaringType, mi.ReturnType) + "> (";
-				cast_b = ", false)!";
-			} else if (minfo is not null && minfo.protocolize) {
-				cast_a = " Runtime.GetINativeObject<" + TypeManager.FormatType (mi.DeclaringType, mi.ReturnType.Namespace, FindProtocolInterface (mi.ReturnType, mi)) + "> (";
 				cast_b = ", false)!";
 			} else if (minfo is not null && minfo.is_forced) {
 				cast_a = " Runtime.GetINativeObject<" + TypeManager.FormatType (declaringType, mi.ReturnType) + "> (";
@@ -2893,9 +2853,6 @@ public partial class Generator : IMemberGatherer {
 				cast_b += "))";
 			} else if (etype == TypeCache.System_String) {
 				cast_a = "CFArray.StringArrayFromHandle (";
-				cast_b = ")!";
-			} else if (minfo is not null && minfo.protocolize) {
-				cast_a = "CFArray.ArrayFromHandle<global::" + etype.Namespace + ".I" + etype.Name + ">(";
 				cast_b = ")!";
 			} else if (etype == TypeCache.Selector) {
 				exceptions.Add (ErrorHelper.CreateError (1066, mai.Type.FullName, mi.DeclaringType.FullName, mi.Name));
@@ -3385,9 +3342,8 @@ public partial class Generator : IMemberGatherer {
 
 		foreach (var pi in mi.GetParameters ()) {
 			var safe_name = pi.Name.GetSafeParamName ();
-			bool protocolize = Protocolize (pi);
 			if (!BindThirdPartyLibrary) {
-				if (!mi.IsSpecialName && IsModel (pi.ParameterType) && !protocolize) {
+				if (!mi.IsSpecialName && IsModel (pi.ParameterType)) {
 					// don't warn on obsoleted API, there's likely a new version that fix this
 					// any no good reason for using the obsolete API anyway
 					if (!AttributeManager.HasAttribute<ObsoleteAttribute> (mi) && !AttributeManager.HasAttribute<ObsoleteAttribute> (mi.DeclaringType))
@@ -3396,13 +3352,6 @@ public partial class Generator : IMemberGatherer {
 			}
 
 			var needs_null_check = ParameterNeedsNullCheck (pi, mi, propInfo);
-			if (protocolize) {
-				print ("if ({0} is not null) {{", safe_name);
-				print ("\tif (!({0} is NSObject))\n", safe_name);
-				print ("\t\tthrow new ArgumentException (\"The object passed of type \" + {0}.GetType () + \" does not derive from NSObject\");", safe_name);
-				print ("}");
-			}
-
 			var cap = propInfo?.SetMethod == mi ? (ICustomAttributeProvider) propInfo : (ICustomAttributeProvider) pi;
 			var bind_as = GetBindAsAttribute (cap);
 			var pit = bind_as is null ? pi.ParameterType : bind_as.Type;
@@ -3552,8 +3501,6 @@ public partial class Generator : IMemberGatherer {
 				print ("IntPtr ret_alloced = Marshal.AllocHGlobal (Marshal.SizeOf<{0}> () + {1});", TypeManager.FormatType (mi.DeclaringType, mi.ReturnType), align.Align);
 				print ("IntPtr aligned_ret = new IntPtr (((nint) (ret_alloced + {0}) >> {1}) << {1});", align.Align - 1, align.Bits);
 				print ("bool aligned_assigned = false;");
-			} else if (minfo.protocolize) {
-				print ("{0} ret;", TypeManager.FormatType (mi.DeclaringType, mi.ReturnType.Namespace, FindProtocolInterface (mi.ReturnType, mi)));
 			} else if (minfo.is_bindAs) {
 				var bindAsAttrib = GetBindAsAttribute (minfo.mi);
 				// tricky, e.g. when an nullable `NSNumber[]` is bound as a `float[]`, since FormatType and bindAsAttrib have not clue about the original nullability 
@@ -3866,7 +3813,6 @@ public partial class Generator : IMemberGatherer {
 		bool use_underscore = minfo.is_unified_internal;
 		var mod = minfo.GetVisibility ();
 		Type inlinedType = pi.DeclaringType == type ? null : type;
-		minfo.protocolize = Protocolize (pi);
 		GetAccessorInfo (pi, out var getter, out var setter, out var generate_getter, out var generate_setter);
 
 		var nullable = !pi.PropertyType.IsValueType && AttributeManager.HasAttribute<NullAllowedAttribute> (pi);
@@ -3890,7 +3836,7 @@ public partial class Generator : IMemberGatherer {
 		if (!BindThirdPartyLibrary) {
 			var elType = pi.PropertyType.IsArray ? pi.PropertyType.GetElementType () : pi.PropertyType;
 
-			if (IsModel (elType) && !minfo.protocolize) {
+			if (IsModel (elType)) {
 				ErrorHelper.Warning (1110, pi.DeclaringType, pi.Name, pi.PropertyType, pi.PropertyType.Namespace, pi.PropertyType.Name);
 			}
 		}
@@ -3902,7 +3848,7 @@ public partial class Generator : IMemberGatherer {
 			print ("{0} {1}{2}{3} {4}{5} {{",
 				   mod,
 				   minfo.GetModifiers (),
-				   (minfo.protocolize ? "I" : "") + TypeManager.FormatType (pi.DeclaringType, pi.PropertyType),
+				   TypeManager.FormatType (pi.DeclaringType, pi.PropertyType),
 				   nullable ? "?" : String.Empty,
 					pi.Name.GetSafeParamName (),
 				   use_underscore ? "_" : "");
@@ -3924,7 +3870,7 @@ public partial class Generator : IMemberGatherer {
 					else if (pi.PropertyType.IsValueType)
 						print ("return ({0}) ({1});", TypeManager.FormatType (pi.DeclaringType, pi.PropertyType), wrap);
 					else
-						print ("return ({0} as {1}{2})!;", wrap, minfo.protocolize ? "I" : String.Empty, TypeManager.FormatType (pi.DeclaringType, pi.PropertyType));
+						print ("return ({0} as {1})!;", wrap, TypeManager.FormatType (pi.DeclaringType, pi.PropertyType));
 				}
 				indent--;
 				print ("}");
@@ -3939,7 +3885,7 @@ public partial class Generator : IMemberGatherer {
 
 				var is_protocol_wrapper = IsProtocolInterface (pi.PropertyType, false);
 
-				if (minfo.protocolize || is_protocol_wrapper) {
+				if (is_protocol_wrapper) {
 					print ("var rvalue = value as NSObject;");
 					print ("if (!(value is null) && rvalue is null)");
 					print ("\tthrow new ArgumentException (\"The object passed of type \" + value.GetType () + \" does not derive from NSObject\");");
@@ -3951,7 +3897,7 @@ public partial class Generator : IMemberGatherer {
 					if (TypeManager.IsArrayOfWrappedType (pi.PropertyType))
 						print ("{0} = NSArray.FromNSObjects (value);", wrap);
 					else
-						print ("{0} = {1}value;", wrap, minfo.protocolize || is_protocol_wrapper ? "r" : "");
+						print ("{0} = {1}value;", wrap, is_protocol_wrapper ? "r" : "");
 				}
 				indent--;
 				print ("}");
@@ -3985,9 +3931,7 @@ public partial class Generator : IMemberGatherer {
 		PrintAttributes (pi, preserve: true, advice: true, bindAs: true);
 
 		string propertyTypeName;
-		if (minfo.protocolize) {
-			propertyTypeName = FindProtocolInterface (pi.PropertyType, pi);
-		} else if (minfo.is_bindAs) {
+		if (minfo.is_bindAs) {
 			var bindAsAttrib = GetBindAsAttribute (minfo.mi);
 			propertyTypeName = TypeManager.FormatType (bindAsAttrib.Type.DeclaringType, bindAsAttrib.Type);
 			// it remains nullable only if the BindAs type can be null (i.e. a reference type)
@@ -6738,7 +6682,7 @@ public partial class Generator : IMemberGatherer {
 				return false;
 		}
 
-		return (Protocolize (pi) || IsProtocolInterface (pi.DeclaringType)) && bta.Events is not null && bta.Events.Any (x => x.Name == pi.PropertyType.Name);
+		return IsProtocolInterface (pi.DeclaringType) && bta.Events is not null && bta.Events.Any (x => x.Name == pi.PropertyType.Name);
 	}
 
 	string FindSelector (Type type, MethodInfo mi)
@@ -6849,16 +6793,14 @@ public partial class Generator : IMemberGatherer {
 
 	string RenderSingleParameter (ParameterInfo p, bool removeRefTypes)
 	{
-		var protocolized = Protocolize (p);
-		var prefix = protocolized ? "I" : "";
 		var pt = p.ParameterType;
 
 		string name;
 		if (pt.IsByRef) {
 			pt = pt.GetElementType ();
-			name = (removeRefTypes ? "" : (p.IsOut ? "out " : "ref ")) + prefix + TypeManager.RenderType (pt, p);
+			name = (removeRefTypes ? "" : (p.IsOut ? "out " : "ref ")) + TypeManager.RenderType (pt, p);
 		} else
-			name = prefix + TypeManager.RenderType (pt, p);
+			name = TypeManager.RenderType (pt, p);
 		if (!pt.IsValueType && AttributeManager.HasAttribute<NullAllowedAttribute> (p))
 			name += "?";
 		return name;

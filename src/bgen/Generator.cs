@@ -303,18 +303,6 @@ public partial class Generator : IMemberGatherer {
 		return AttributeManager.HasAttribute<ProtocolAttribute> (protocol);
 	}
 
-	string FindProtocolInterface (Type type, MemberInfo pi)
-	{
-		var isArray = type.IsArray;
-		var declType = isArray ? type.GetElementType () : type;
-
-		if (!AttributeManager.HasAttribute<ProtocolAttribute> (declType))
-			throw new BindingException (1034, true,
-				pi.DeclaringType, pi.Name, declType);
-
-		return "I" + type.Name;
-	}
-
 	public BindAsAttribute GetBindAsAttribute (ICustomAttributeProvider cu)
 	{
 		BindAsAttribute rv;
@@ -2641,16 +2629,6 @@ public partial class Generator : IMemberGatherer {
 		return AttributeManager.HasAttribute<ProtocolAttribute> (type);
 	}
 
-	public bool Protocolize (ICustomAttributeProvider provider)
-	{
-		var attribs = AttributeManager.GetCustomAttributes<ProtocolizeAttribute> (provider);
-		if (attribs is null || attribs.Length == 0)
-			return false;
-
-		var attrib = attribs [0];
-		return CurrentPlatform.GetXamcoreVersion () >= attrib.Version;
-	}
-
 	public string MakeSignature (MemberInformation minfo, bool is_async, ParameterInfo [] parameters, string extra = "", bool alreadyPreserved = false)
 	{
 		var mi = minfo.Method;
@@ -2664,20 +2642,12 @@ public partial class Generator : IMemberGatherer {
 		if (!minfo.is_ctor && !is_async) {
 			var prefix = "";
 			if (!BindThirdPartyLibrary) {
-				var hasReturnTypeProtocolize = Protocolize (minfo.Method.ReturnParameter);
-				if (hasReturnTypeProtocolize) {
-					if (!IsProtocol (minfo.Method.ReturnType)) {
-						ErrorHelper.Warning (1108, minfo.Method.DeclaringType, minfo.Method, minfo.Method.ReturnType.FullName);
-					} else {
-						prefix = "I";
-					}
-				}
 				if (minfo.Method.ReturnType.IsArray) {
 					var et = minfo.Method.ReturnType.GetElementType ();
 					if (IsModel (et))
 						ErrorHelper.Warning (1109, minfo.Method.DeclaringType, minfo.Method.Name, et, et.Namespace, et.Name);
 				}
-				if (IsModel (minfo.Method.ReturnType) && !hasReturnTypeProtocolize)
+				if (IsModel (minfo.Method.ReturnType))
 					ErrorHelper.Warning (1107, minfo.Method.DeclaringType, minfo.Method.Name, minfo.Method.ReturnType, minfo.Method.ReturnType.Namespace, minfo.Method.ReturnType.Name);
 			}
 
@@ -2762,23 +2732,16 @@ public partial class Generator : IMemberGatherer {
 			if (pari == parCount - 1 && parType.IsArray && (AttributeManager.HasAttribute<ParamsAttribute> (pi) || AttributeManager.HasAttribute<ParamArrayAttribute> (pi))) {
 				sb.Append ("params ");
 			}
-			var protocolized = false;
-			if (!BindThirdPartyLibrary && Protocolize (pi)) {
-				if (!AttributeManager.HasAttribute<ProtocolAttribute> (parType)) {
-					Console.WriteLine ("Protocolized attribute for type that does not have a [Protocol] for {0}'s parameter {1}", mi, pi);
-				}
-				protocolized = true;
-			}
 
 			var bindAsAtt = GetBindAsAttribute (pi);
 			if (bindAsAtt is not null) {
 				PrintBindAsAttribute (pi, sb);
 				var bt = bindAsAtt.Type;
-				sb.Append (TypeManager.FormatType (bt.DeclaringType, bt, protocolized));
+				sb.Append (TypeManager.FormatType (bt.DeclaringType, bt));
 				if (!bt.IsValueType && AttributeManager.HasAttribute<NullAllowedAttribute> (pi))
 					sb.Append ('?');
 			} else {
-				sb.Append (TypeManager.FormatType (declaringType, parType, protocolized));
+				sb.Append (TypeManager.FormatType (declaringType, parType));
 				// some `IntPtr` are decorated with `[NullAttribute]`
 				if (!parType.IsValueType && AttributeManager.HasAttribute<NullAllowedAttribute> (pi))
 					sb.Append ('?');
@@ -2833,9 +2796,6 @@ public partial class Generator : IMemberGatherer {
 			// protocol support means we can return interfaces and, as far as .NET knows, they might not be NSObject
 			if (IsProtocolInterface (mi.ReturnType)) {
 				cast_a = " Runtime.GetINativeObject<" + TypeManager.FormatType (mi.DeclaringType, mi.ReturnType) + "> (";
-				cast_b = ", false)!";
-			} else if (minfo is not null && minfo.protocolize) {
-				cast_a = " Runtime.GetINativeObject<" + TypeManager.FormatType (mi.DeclaringType, mi.ReturnType.Namespace, FindProtocolInterface (mi.ReturnType, mi)) + "> (";
 				cast_b = ", false)!";
 			} else if (minfo is not null && minfo.is_forced) {
 				cast_a = " Runtime.GetINativeObject<" + TypeManager.FormatType (declaringType, mi.ReturnType) + "> (";
@@ -2893,9 +2853,6 @@ public partial class Generator : IMemberGatherer {
 				cast_b += "))";
 			} else if (etype == TypeCache.System_String) {
 				cast_a = "CFArray.StringArrayFromHandle (";
-				cast_b = ")!";
-			} else if (minfo is not null && minfo.protocolize) {
-				cast_a = "CFArray.ArrayFromHandle<global::" + etype.Namespace + ".I" + etype.Name + ">(";
 				cast_b = ")!";
 			} else if (etype == TypeCache.Selector) {
 				exceptions.Add (ErrorHelper.CreateError (1066, mai.Type.FullName, mi.DeclaringType.FullName, mi.Name));
@@ -3385,9 +3342,8 @@ public partial class Generator : IMemberGatherer {
 
 		foreach (var pi in mi.GetParameters ()) {
 			var safe_name = pi.Name.GetSafeParamName ();
-			bool protocolize = Protocolize (pi);
 			if (!BindThirdPartyLibrary) {
-				if (!mi.IsSpecialName && IsModel (pi.ParameterType) && !protocolize) {
+				if (!mi.IsSpecialName && IsModel (pi.ParameterType)) {
 					// don't warn on obsoleted API, there's likely a new version that fix this
 					// any no good reason for using the obsolete API anyway
 					if (!AttributeManager.HasAttribute<ObsoleteAttribute> (mi) && !AttributeManager.HasAttribute<ObsoleteAttribute> (mi.DeclaringType))
@@ -3396,13 +3352,6 @@ public partial class Generator : IMemberGatherer {
 			}
 
 			var needs_null_check = ParameterNeedsNullCheck (pi, mi, propInfo);
-			if (protocolize) {
-				print ("if ({0} is not null) {{", safe_name);
-				print ("\tif (!({0} is NSObject))\n", safe_name);
-				print ("\t\tthrow new ArgumentException (\"The object passed of type \" + {0}.GetType () + \" does not derive from NSObject\");", safe_name);
-				print ("}");
-			}
-
 			var cap = propInfo?.SetMethod == mi ? (ICustomAttributeProvider) propInfo : (ICustomAttributeProvider) pi;
 			var bind_as = GetBindAsAttribute (cap);
 			var pit = bind_as is null ? pi.ParameterType : bind_as.Type;
@@ -3552,8 +3501,6 @@ public partial class Generator : IMemberGatherer {
 				print ("IntPtr ret_alloced = Marshal.AllocHGlobal (Marshal.SizeOf<{0}> () + {1});", TypeManager.FormatType (mi.DeclaringType, mi.ReturnType), align.Align);
 				print ("IntPtr aligned_ret = new IntPtr (((nint) (ret_alloced + {0}) >> {1}) << {1});", align.Align - 1, align.Bits);
 				print ("bool aligned_assigned = false;");
-			} else if (minfo.protocolize) {
-				print ("{0} ret;", TypeManager.FormatType (mi.DeclaringType, mi.ReturnType.Namespace, FindProtocolInterface (mi.ReturnType, mi)));
 			} else if (minfo.is_bindAs) {
 				var bindAsAttrib = GetBindAsAttribute (minfo.mi);
 				// tricky, e.g. when an nullable `NSNumber[]` is bound as a `float[]`, since FormatType and bindAsAttrib have not clue about the original nullability 
@@ -3866,7 +3813,6 @@ public partial class Generator : IMemberGatherer {
 		bool use_underscore = minfo.is_unified_internal;
 		var mod = minfo.GetVisibility ();
 		Type inlinedType = pi.DeclaringType == type ? null : type;
-		minfo.protocolize = Protocolize (pi);
 		GetAccessorInfo (pi, out var getter, out var setter, out var generate_getter, out var generate_setter);
 
 		var nullable = !pi.PropertyType.IsValueType && AttributeManager.HasAttribute<NullAllowedAttribute> (pi);
@@ -3890,7 +3836,7 @@ public partial class Generator : IMemberGatherer {
 		if (!BindThirdPartyLibrary) {
 			var elType = pi.PropertyType.IsArray ? pi.PropertyType.GetElementType () : pi.PropertyType;
 
-			if (IsModel (elType) && !minfo.protocolize) {
+			if (IsModel (elType)) {
 				ErrorHelper.Warning (1110, pi.DeclaringType, pi.Name, pi.PropertyType, pi.PropertyType.Namespace, pi.PropertyType.Name);
 			}
 		}
@@ -3902,7 +3848,7 @@ public partial class Generator : IMemberGatherer {
 			print ("{0} {1}{2}{3} {4}{5} {{",
 				   mod,
 				   minfo.GetModifiers (),
-				   (minfo.protocolize ? "I" : "") + TypeManager.FormatType (pi.DeclaringType, pi.PropertyType),
+				   TypeManager.FormatType (pi.DeclaringType, pi.PropertyType),
 				   nullable ? "?" : String.Empty,
 					pi.Name.GetSafeParamName (),
 				   use_underscore ? "_" : "");
@@ -3924,7 +3870,7 @@ public partial class Generator : IMemberGatherer {
 					else if (pi.PropertyType.IsValueType)
 						print ("return ({0}) ({1});", TypeManager.FormatType (pi.DeclaringType, pi.PropertyType), wrap);
 					else
-						print ("return ({0} as {1}{2})!;", wrap, minfo.protocolize ? "I" : String.Empty, TypeManager.FormatType (pi.DeclaringType, pi.PropertyType));
+						print ("return ({0} as {1})!;", wrap, TypeManager.FormatType (pi.DeclaringType, pi.PropertyType));
 				}
 				indent--;
 				print ("}");
@@ -3939,7 +3885,7 @@ public partial class Generator : IMemberGatherer {
 
 				var is_protocol_wrapper = IsProtocolInterface (pi.PropertyType, false);
 
-				if (minfo.protocolize || is_protocol_wrapper) {
+				if (is_protocol_wrapper) {
 					print ("var rvalue = value as NSObject;");
 					print ("if (!(value is null) && rvalue is null)");
 					print ("\tthrow new ArgumentException (\"The object passed of type \" + value.GetType () + \" does not derive from NSObject\");");
@@ -3951,7 +3897,7 @@ public partial class Generator : IMemberGatherer {
 					if (TypeManager.IsArrayOfWrappedType (pi.PropertyType))
 						print ("{0} = NSArray.FromNSObjects (value);", wrap);
 					else
-						print ("{0} = {1}value;", wrap, minfo.protocolize || is_protocol_wrapper ? "r" : "");
+						print ("{0} = {1}value;", wrap, is_protocol_wrapper ? "r" : "");
 				}
 				indent--;
 				print ("}");
@@ -3985,9 +3931,7 @@ public partial class Generator : IMemberGatherer {
 		PrintAttributes (pi, preserve: true, advice: true, bindAs: true);
 
 		string propertyTypeName;
-		if (minfo.protocolize) {
-			propertyTypeName = FindProtocolInterface (pi.PropertyType, pi);
-		} else if (minfo.is_bindAs) {
+		if (minfo.is_bindAs) {
 			var bindAsAttrib = GetBindAsAttribute (minfo.mi);
 			propertyTypeName = TypeManager.FormatType (bindAsAttrib.Type.DeclaringType, bindAsAttrib.Type);
 			// it remains nullable only if the BindAs type can be null (i.e. a reference type)
@@ -4141,15 +4085,6 @@ public partial class Generator : IMemberGatherer {
 				}
 				if (debug)
 					print ("Console.WriteLine (\"In {0}\");", pi.GetSetMethod ());
-
-				// If we're doing a setter for a weak property that is protocolized event back
-				// we need to put in a check to verify you aren't stomping the "internal underscore"
-				// generated delegate. We check CheckForEventAndDelegateMismatches global to disable the checks
-				if (!BindThirdPartyLibrary && pi.Name.StartsWith ("Weak", StringComparison.Ordinal)) {
-					string delName = pi.Name.Substring (4);
-					if (SafeIsProtocolizedEventBacked (delName, type))
-						print ("\t{0}.EnsureDelegateAssignIsNotOverwritingInternalDelegate ({1}, value, {2});", CurrentPlatform.GetApplicationClassName (), string.IsNullOrEmpty (var_name) ? "null" : var_name, GetDelegateTypePropertyName (delName));
-				}
 
 				if (not_implemented_attr is not null) {
 					print ("\tthrow new NotImplementedException ({0});", not_implemented_attr.Message is null ? "" : "\"" + not_implemented_attr.Message + "\"");
@@ -6106,22 +6041,6 @@ public partial class Generator : IMemberGatherer {
 					string delName = bta.Delegates [delidx++];
 					delName = delName.StartsWith ("Weak", StringComparison.Ordinal) ? delName.Substring (4) : delName;
 
-					// Here's the problem:
-					//    If you have two or more types in an inheritence structure in the binding that expose events
-					//    they can fight over who's generated delegate gets used if you use the events at both level.
-					//    e.g. NSComboxBox.SelectionChanged (on NSComboxBox) and NSComboBox.EditingEnded (on NSTextField)
-					// We solve this under Unified when the delegate is protocalized (and leave Classic how it always has been)
-					// To handle this case, we do two things:
-					//    1) We have to ensure that the same internal delegate is uses for base and derived events, so they
-					//     aren't stepping on each other toes. This means we always instance up the leaf class's internal delegate
-					//    2) We have to have an some for of "inheritance" in the generated delegates, so the
-					//     base class can use this derived type (and have the events it expects on it) We do this via inhertiance and
-					//     use of the protocal interfaces.
-					//     See xamcore/test/apitest/DerivedEventTest.cs for specific tests
-
-					// Does this delegate qualify for this treatment. We fall back on the old "wrong" codegen if not.
-					bool isProtocolizedEventBacked = IsProtocolizedEventBacked (delName, type);
-
 					// The name of the the generated virtual property that specifies the type of the leaf most internal delegate
 					string delegateTypePropertyName = GetDelegateTypePropertyName (delName);
 
@@ -6136,76 +6055,32 @@ public partial class Generator : IMemberGatherer {
 
 					bool hasKeepRefUntil = bta.KeepRefUntil is not null;
 
-					if (isProtocolizedEventBacked) {
-						// The generated virtual type property and creation virtual method
-						string generatedTypeOverrideType = shouldOverride ? "override" : "virtual";
-						print ("internal {0} Type {1}", generatedTypeOverrideType, delegateTypePropertyName);
-						print ("{");
-						print ("	get {{ return typeof (_{0}); }}", dtype.Name);
-						print ("}\n");
-
-						print ("internal {0} _{1} {2} ({3})", generatedTypeOverrideType, interfaceName, delegateCreationMethodName, hasKeepRefUntil ? "object oref" : "");
-						print ("{");
-						print ("	return (_{0})(new _{1}({2}));", interfaceName, dtype.Name, hasKeepRefUntil ? "oref" : "");
-						print ("}\n");
-					}
-
 					if (!hasKeepRefUntil)
-						print ("{0}_{1} Ensure{1} ()", isProtocolizedEventBacked ? "internal " : "", dtype.Name);
+						print ("_{0} Ensure{0} ()", dtype.Name);
 					else {
 						print ("static System.Collections.ArrayList? instances;");
-						print ("{0}_{1} Ensure{1} (object oref)", isProtocolizedEventBacked ? "internal " : "", dtype.Name);
+						print ("_{0} Ensure{0} (object oref)", dtype.Name);
 					}
 
 					print ("{"); indent++;
 
-					if (isProtocolizedEventBacked) {
-						// If our delegate not null and it isn't the same type as our property
-						//   - We're in one of two cases: The user += an Event and then assigned their own delegate or the inverse
-						//   - One of them isn't being called anymore no matter what. Throw an exception.
-						if (!BindThirdPartyLibrary) {
-							print ("if (Weak{0} is not null)", delName);
-							print ("\t{0}.EnsureEventAndDelegateAreNotMismatched (Weak{1}, {2});", CurrentPlatform.GetApplicationClassName (), delName, delegateTypePropertyName);
-						}
-
-						print ("var del = {1} as _{0};", dtype.Name, delName);
-
-						print ("if (del is null){");
-						indent++;
-						if (!hasKeepRefUntil)
-							print ("del = (_{0}){1} ();", dtype.Name, delegateCreationMethodName);
-						else {
-							string oref = "new object[] {\"oref\"}";
-							print ("del = (_{0}){1} ({2});", dtype.Name, delegateCreationMethodName, oref);
-							print ("if (instances is null) instances = new System.Collections.ArrayList ();");
-							print ("if (!instances.Contains (this)) instances.Add (this);");
-						}
-						print ("{0} = (I{1})del;", delName, dtype.Name);
-						indent--;
-						print ("}");
-						print ("return del;");
-					} else {
-						print ("var del = {0};", delName);
-						print ("if (del is null || (!(del is _{0}))){{", dtype.Name);
-						print ("\tdel = new _{0} ({1});", dtype.Name, bta.KeepRefUntil is null ? "" : "oref");
-						if (hasKeepRefUntil) {
-							print ("\tif (instances is null) instances = new System.Collections.ArrayList ();");
-							print ("\tif (!instances.Contains (this)) instances.Add (this);");
-						}
-						print ("\t{0} = del;", delName);
-						print ("}");
-						print ("return (_{0}) del;", dtype.Name);
+					print ("var del = {0};", delName);
+					print ("if (del is null || (!(del is _{0}))){{", dtype.Name);
+					print ("\tdel = new _{0} ({1});", dtype.Name, bta.KeepRefUntil is null ? "" : "oref");
+					if (hasKeepRefUntil) {
+						print ("\tif (instances is null) instances = new System.Collections.ArrayList ();");
+						print ("\tif (!instances.Contains (this)) instances.Add (this);");
 					}
+					print ("\t{0} = del;", delName);
+					print ("}");
+					print ("return (_{0}) del;", dtype.Name);
 					indent--; print ("}\n");
 
 					var noDefaultValue = new List<MethodInfo> ();
 
 					print ("#pragma warning disable 672");
 					print ("[Register]");
-					if (isProtocolizedEventBacked)
-						print ("internal class _{0} : {1}I{2} {{ ", dtype.Name, shouldOverride ? "_" + interfaceName + ", " : "NSObject, ", dtype.Name);
-					else
-						print ("sealed class _{0} : {1} {{ ", dtype.Name, TypeManager.RenderType (dtype));
+					print ("sealed class _{0} : {1} {{ ", dtype.Name, TypeManager.RenderType (dtype));
 
 
 					indent++;
@@ -6216,7 +6091,7 @@ public partial class Generator : IMemberGatherer {
 						print ("public _{0} () {{ IsDirectBinding = false; }}\n", dtype.Name);
 
 
-					string shouldOverrideDelegateString = isProtocolizedEventBacked ? "" : "override ";
+					string shouldOverrideDelegateString = "override ";
 
 					string previous_miname = null;
 					int miname_count = 0;
@@ -6252,8 +6127,6 @@ public partial class Generator : IMemberGatherer {
 							print ("internal {0}? {1};", Nomenclator.GetDelegateName (mi), miname);
 
 						print ("[Preserve (Conditional = true)]");
-						if (isProtocolizedEventBacked)
-							print ("[Export (\"{0}\")]", FindSelector (dtype, mi));
 
 						print ("public {0}{1} {2} ({3})", shouldOverrideDelegateString, TypeManager.RenderType (mi.ReturnType), mi.Name, RenderParameterDecl (pars));
 						print ("{"); indent++;
@@ -6693,54 +6566,6 @@ public partial class Generator : IMemberGatherer {
 		return "GetInternalEvent" + delName + "Type";
 	}
 
-	bool SafeIsProtocolizedEventBacked (string propertyName, Type type)
-	{
-		return CoreIsProtocolizedEventBacked (propertyName, type, false);
-	}
-
-	bool IsProtocolizedEventBacked (string propertyName, Type type)
-	{
-		return CoreIsProtocolizedEventBacked (propertyName, type, true);
-	}
-
-	bool CoreIsProtocolizedEventBacked (string propertyName, Type type, bool shouldThrowOnNotFound)
-	{
-		PropertyInfo pi = type.GetProperty (propertyName);
-		BaseTypeAttribute bta = ReflectionExtensions.GetBaseTypeAttribute (type, this);
-		if (pi is null || bta is null) {
-			if (shouldThrowOnNotFound) {
-				if (propertyName == "Delegate" && bta.Delegates.Count () > 0) {
-					var delegates = new List<string> (bta.Delegates);
-					// grab all the properties that have the Wrap attr
-					var propsAttrs = from p in type.GetProperties ()
-									 let attrs = AttributeManager.GetCustomAttributes<WrapAttribute> (p)
-									 where p.Name != "Delegate" && attrs.Length > 0
-									 select new { Name = p.Name, Attributes = Array.ConvertAll (attrs, item => item.MethodName) };
-
-					var props = new List<string> ();
-					foreach (var p in propsAttrs) {
-						if (delegates.Intersect (p.Attributes).Any ()) {
-							// add quoates since we are only using this info for the exception message
-							props.Add (String.Format ("'{0}'", p.Name));
-						}
-					}
-					if (props.Count == 1)
-						throw new BindingException (1112, true,
-							 props [0], false);
-					else if (props.Count > 1)
-						throw new BindingException (1112, true,
-							String.Join (", ", props.ToArray ()), false);
-					else
-						throw new BindingException (1113, true, false);
-				} else
-					throw new BindingException (1114, propertyName, type, false);
-			} else
-				return false;
-		}
-
-		return Protocolize (pi) && bta.Events is not null && bta.Events.Any (x => x.Name == pi.PropertyType.Name);
-	}
-
 	string FindSelector (Type type, MethodInfo mi)
 	{
 		Type currentType = type;
@@ -6849,16 +6674,14 @@ public partial class Generator : IMemberGatherer {
 
 	string RenderSingleParameter (ParameterInfo p, bool removeRefTypes)
 	{
-		var protocolized = Protocolize (p);
-		var prefix = protocolized ? "I" : "";
 		var pt = p.ParameterType;
 
 		string name;
 		if (pt.IsByRef) {
 			pt = pt.GetElementType ();
-			name = (removeRefTypes ? "" : (p.IsOut ? "out " : "ref ")) + prefix + TypeManager.RenderType (pt, p);
+			name = (removeRefTypes ? "" : (p.IsOut ? "out " : "ref ")) + TypeManager.RenderType (pt, p);
 		} else
-			name = prefix + TypeManager.RenderType (pt, p);
+			name = TypeManager.RenderType (pt, p);
 		if (!pt.IsValueType && AttributeManager.HasAttribute<NullAllowedAttribute> (p))
 			name += "?";
 		return name;

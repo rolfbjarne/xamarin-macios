@@ -305,7 +305,7 @@ namespace PassKit {
 	delegate void PKPaymentShippingAddressSelected (PKPaymentAuthorizationStatus status, PKShippingMethod [] shippingMethods, PKPaymentSummaryItem [] summaryItems);
 	delegate void PKPaymentShippingMethodSelected (PKPaymentAuthorizationStatus status, PKPaymentSummaryItem [] summaryItems);
 
-	interface IPKPaymentAuthorizationViewControllerDelegate {}
+	interface IPKPaymentAuthorizationViewControllerDelegate { }
 
 	[Mac (11, 0)]
 	[MacCatalyst (13, 1)]
@@ -762,7 +762,7 @@ namespace PassKit {
 		IPKAddPassesViewControllerDelegate Delegate { get; set; }
 	}
 
-	interface IPKAddPassesViewControllerDelegate {}
+	interface IPKAddPassesViewControllerDelegate { }
 
 	[NoMac] // under `TARGET_OS_IPHONE`
 	[NoWatch]

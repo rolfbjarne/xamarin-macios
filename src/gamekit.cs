@@ -73,7 +73,7 @@ namespace GameKit {
 	interface UIWindow {}
 #endif
 
-	interface IGKVoiceChatClient {}
+	interface IGKVoiceChatClient { }
 
 	[NoMac]
 	[NoWatch] // only exposed thru GKVoiceChatService (not in 3.0)
@@ -767,7 +767,7 @@ namespace GameKit {
 		UIViewController ChallengeComposeController ([NullAllowed] string message, [NullAllowed] GKPlayer [] players, [NullAllowed] GKChallengeComposeHandler completionHandler);
 	}
 
-	interface IGKLeaderboardViewControllerDelegate {}
+	interface IGKLeaderboardViewControllerDelegate { }
 
 	[NoWatch]
 	[NoTV]
@@ -1149,7 +1149,7 @@ namespace GameKit {
 		bool SendData (NSData data, GKPlayer [] players, GKMatchSendDataMode mode, out NSError error);
 	}
 
-	interface IGKMatchDelegate {}
+	interface IGKMatchDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -1554,7 +1554,7 @@ namespace GameKit {
 		bool CanStartWithMinimumPlayers { get; set; }
 	}
 
-	interface IGKMatchmakerViewControllerDelegate {}
+	interface IGKMatchmakerViewControllerDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -1824,7 +1824,7 @@ namespace GameKit {
 		NSNumber RarityPercent { get; }
 	}
 
-	interface IGKAchievementViewControllerDelegate {}
+	interface IGKAchievementViewControllerDelegate { }
 
 	[NoWatch]
 	[NoTV]
@@ -1934,7 +1934,7 @@ namespace GameKit {
 		void SetMessage ([NullAllowed] string message);
 	}
 
-	interface IGKFriendRequestComposeViewControllerDelegate {}
+	interface IGKFriendRequestComposeViewControllerDelegate { }
 
 	[NoWatch]
 	[NoTV]
@@ -2000,7 +2000,7 @@ namespace GameKit {
 		NSDate TimeoutDate { get; }
 	}
 
-	interface IGKTurnBasedEventHandlerDelegate {}
+	interface IGKTurnBasedEventHandlerDelegate { }
 
 	[NoTV]
 	[BaseType (typeof (NSObject))]
@@ -2276,7 +2276,7 @@ namespace GameKit {
 		IGKTurnBasedMatchmakerViewControllerDelegate Delegate { get; set; }
 	}
 
-	interface IGKTurnBasedMatchmakerViewControllerDelegate {}
+	interface IGKTurnBasedMatchmakerViewControllerDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -2477,7 +2477,7 @@ namespace GameKit {
 		string LeaderboardIdentifier { get; set; }
 	}
 
-	interface IGKGameCenterControllerDelegate {}
+	interface IGKGameCenterControllerDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -2509,7 +2509,7 @@ namespace GameKit {
 		GKChallengeEventHandler Instance { get; }
 	}
 
-	interface IGKChallengeEventHandlerDelegate {}
+	interface IGKChallengeEventHandlerDelegate { }
 
 	[NoWatch]
 	[NoTV]
@@ -2624,7 +2624,7 @@ namespace GameKit {
 		NSDate ReplyDate { get; }
 	}
 
-	interface IGKLocalPlayerListener {}
+	interface IGKLocalPlayerListener { }
 
 	[MacCatalyst (13, 1)]
 	[Model, Protocol, BaseType (typeof (NSObject))]
@@ -2913,7 +2913,7 @@ namespace GameKit {
 	interface GKViewController {
 	}
 
-	interface IGKSessionDelegate {}
+	interface IGKSessionDelegate { }
 
 	[NoTV]
 	[NoWatch] // only exposed thru GKSession (not in 3.0)

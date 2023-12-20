@@ -109,7 +109,7 @@ namespace MultipeerConnectivity {
 		#endregion
 	}
 
-	interface IMCSessionDelegate {}
+	interface IMCSessionDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -174,7 +174,7 @@ namespace MultipeerConnectivity {
 
 	delegate void MCNearbyServiceAdvertiserInvitationHandler (bool accept, [NullAllowed] MCSession session);
 
-	interface IMCNearbyServiceAdvertiserDelegate {}
+	interface IMCNearbyServiceAdvertiserDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -278,7 +278,7 @@ namespace MultipeerConnectivity {
 		MCSession Session { get; }
 	}
 
-	interface IMCBrowserViewControllerDelegate {}
+	interface IMCBrowserViewControllerDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -332,7 +332,7 @@ namespace MultipeerConnectivity {
 		void Stop ();
 	}
 
-	interface IMCAdvertiserAssistantDelegate {}
+	interface IMCAdvertiserAssistantDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]

@@ -327,7 +327,7 @@ namespace CoreBluetooth {
 		NSString ScanOptionsKey { get; }
 	}
 
-	interface ICBCentralManagerDelegate {}
+	interface ICBCentralManagerDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -607,7 +607,7 @@ namespace CoreBluetooth {
 		bool AncsAuthorized { get; }
 	}
 
-	interface ICBPeripheralDelegate {}
+	interface ICBPeripheralDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -983,7 +983,7 @@ namespace CoreBluetooth {
 #endif // !NET
 	}
 
-	interface ICBPeripheralManagerDelegate {}
+	interface ICBPeripheralManagerDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]

@@ -631,7 +631,7 @@ namespace CoreData {
 		void DeleteCache ([NullAllowed] string name);
 	}
 
-	interface INSFetchedResultsControllerDelegate {}
+	interface INSFetchedResultsControllerDelegate { }
 
 	[NoMac]
 	[MacCatalyst (13, 1)]

@@ -75,7 +75,7 @@ namespace HomeKit {
 		HMHomeManagerAuthorizationStatus AuthorizationStatus { get; }
 	}
 
-	interface IHMHomeManagerDelegate {}
+	interface IHMHomeManagerDelegate { }
 
 	[MacCatalyst (14, 0)]
 	[Model, Protocol]
@@ -208,7 +208,7 @@ namespace HomeKit {
 		bool SupportsIdentify { get; }
 	}
 
-	interface IHMAccessoryDelegate {}
+	interface IHMAccessoryDelegate { }
 
 	[MacCatalyst (14, 0)]
 	[Model, Protocol]
@@ -270,7 +270,7 @@ namespace HomeKit {
 		void StopSearchingForNewAccessories ();
 	}
 
-	interface IHMAccessoryBrowserDelegate {}
+	interface IHMAccessoryBrowserDelegate { }
 
 	[NoTV]
 	[NoMacCatalyst]
@@ -822,7 +822,7 @@ namespace HomeKit {
 		bool SupportsAddingNetworkRouter { get; }
 	}
 
-	interface IHMHomeDelegate {}
+	interface IHMHomeDelegate { }
 
 	[MacCatalyst (14, 0)]
 	[Model, Protocol]

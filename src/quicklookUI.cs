@@ -19,7 +19,7 @@ namespace QuickLookUI {
 		Compact = 1
 	}
 
-	interface IQLPreviewPanelDataSource {}
+	interface IQLPreviewPanelDataSource { }
 
 	[BaseType (typeof (NSObject))]
 	[Protocol, Model]
@@ -33,7 +33,7 @@ namespace QuickLookUI {
 		IQLPreviewItem PreviewItemAtIndex (QLPreviewPanel panel, nint index);
 	}
 
-	interface IQLPreviewPanelDelegate {}
+	interface IQLPreviewPanelDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Protocol, Model]

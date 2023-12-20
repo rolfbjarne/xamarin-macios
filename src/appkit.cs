@@ -249,7 +249,7 @@ namespace AppKit {
 		NSString TriggerOrderOut { get; }
 	}
 
-	interface INSAnimationDelegate {}
+	interface INSAnimationDelegate { }
 
 	[NoiOS]
 	[NoMacCatalyst]
@@ -377,7 +377,7 @@ namespace AppKit {
 		NSPanel Window { get; }
 	}
 
-	interface INSAlertDelegate {}
+	interface INSAlertDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -925,7 +925,7 @@ namespace AppKit {
 	delegate void ContinueUserActivityRestorationHandler (NSObject [] restorableObjects);
 #endif
 
-	interface INSApplicationDelegate {}
+	interface INSApplicationDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -1987,7 +1987,7 @@ namespace AppKit {
 		nint LastColumn { get; set; }
 	}
 
-	interface INSBrowserDelegate {}
+	interface INSBrowserDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -3098,7 +3098,7 @@ namespace AppKit {
 		INSCollectionViewPrefetching PrefetchDataSource { get; set; }
 	}
 
-	interface INSCollectionViewDataSource {}
+	interface INSCollectionViewDataSource { }
 
 	// @protocol NSCollectionViewDataSource <NSObject>
 	[NoMacCatalyst]
@@ -3120,7 +3120,7 @@ namespace AppKit {
 		NSView GetView (NSCollectionView collectionView, NSString kind, NSIndexPath indexPath);
 	}
 
-	interface INSCollectionViewDelegate {}
+	interface INSCollectionViewDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -4818,7 +4818,7 @@ namespace AppKit {
 		NSString WillPopUpNotification { get; }
 	}
 
-	interface INSComboBoxDataSource {}
+	interface INSComboBoxDataSource { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -4931,7 +4931,7 @@ namespace AppKit {
 
 	}
 
-	interface INSComboBoxCellDataSource {}
+	interface INSComboBoxCellDataSource { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -5553,7 +5553,7 @@ namespace AppKit {
 
 	}
 
-	interface INSDatePickerCellDelegate {}
+	interface INSDatePickerCellDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -6320,7 +6320,7 @@ namespace AppKit {
 
 	interface INSDraggingInfo { }
 
-	interface INSDraggingDestination {}
+	interface INSDraggingDestination { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -6411,7 +6411,7 @@ namespace AppKit {
 		void EnumerateDraggingItems (NSDraggingItemEnumerationOptions enumOpts, NSView view, IntPtr classArray, [NullAllowed] NSDictionary searchOptions, NSDraggingEnumerator enumerator);
 	}
 
-	interface INSDraggingSource {}
+	interface INSDraggingSource { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -6504,7 +6504,7 @@ namespace AppKit {
 		nfloat TrailingOffset { get; set; }
 	}
 
-	interface INSDrawerDelegate {}
+	interface INSDrawerDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -8280,7 +8280,7 @@ namespace AppKit {
 		void TouchesCancelled (NSEvent touchEvent);
 	}
 
-	interface INSGestureRecognizerDelegate {}
+	interface INSGestureRecognizerDelegate { }
 
 	[NoMacCatalyst]
 	[Protocol, Model]
@@ -9209,7 +9209,7 @@ namespace AppKit {
 	interface NSRemoteOpenPanel { }
 #endif
 
-	interface INSOpenSavePanelDelegate {}
+	interface INSOpenSavePanelDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -9352,7 +9352,7 @@ namespace AppKit {
 		bool StronglyReferencesItems { get; set; }
 	}
 
-	interface INSOutlineViewDelegate {}
+	interface INSOutlineViewDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -9484,7 +9484,7 @@ namespace AppKit {
 		void UserDidChangeVisibility (NSOutlineView outlineView, NSTableColumn [] columns);
 	}
 
-	interface INSOutlineViewDataSource {}
+	interface INSOutlineViewDataSource { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -10475,7 +10475,7 @@ namespace AppKit {
 		void UpdateAttachmentsFromPath (string path);
 	}
 
-	interface INSImageDelegate {}
+	interface INSImageDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -11190,7 +11190,7 @@ namespace AppKit {
 		nfloat Magnification { get; set; }
 	}
 
-	interface INSMatrixDelegate {}
+	interface INSMatrixDelegate { }
 
 	[NoMacCatalyst]
 	[Model]
@@ -11648,7 +11648,7 @@ namespace AppKit {
 
 	}
 
-	interface INSPasteboardItemDataProvider {}
+	interface INSPasteboardItemDataProvider { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -11765,7 +11765,7 @@ namespace AppKit {
 		void SetControlSize (NSControlSize size);
 	}
 
-	interface INSPathCellDelegate {}
+	interface INSPathCellDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -11852,7 +11852,7 @@ namespace AppKit {
 
 	}
 
-	interface INSPathControlDelegate {}
+	interface INSPathControlDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -11983,7 +11983,7 @@ namespace AppKit {
 		NSString _Reason { get; }
 	}
 
-	interface INSPopoverDelegate {}
+	interface INSPopoverDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -13894,7 +13894,7 @@ namespace AppKit {
 		CGRect CancelButtonBounds { get; }
 	}
 
-	interface INSSearchFieldDelegate {}
+	interface INSSearchFieldDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -14422,7 +14422,7 @@ namespace AppKit {
 		bool BlocksOtherRecognizers { get; set; }
 	}
 
-	interface INSSpeechRecognizerDelegate {}
+	interface INSSpeechRecognizerDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -14511,7 +14511,7 @@ namespace AppKit {
 		bool UsesFeedbackWindow { get; set; }
 	}
 
-	interface INSSpeechSynthesizerDelegate {}
+	interface INSSpeechSynthesizerDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -14807,7 +14807,7 @@ namespace AppKit {
 		NSObject ChannelMapping { get; set; }
 	}
 
-	interface INSSoundDelegate {}
+	interface INSSoundDelegate { }
 
 	[NoMacCatalyst]
 	[Model, BaseType (typeof (NSObject))]
@@ -15216,7 +15216,7 @@ namespace AppKit {
 		void RemoveArrangedSubview (NSView view);
 	}
 
-	interface INSStackViewDelegate {}
+	interface INSStackViewDelegate { }
 
 	[NoMacCatalyst]
 	[Protocol, Model]
@@ -15562,7 +15562,7 @@ namespace AppKit {
 		string Identifier { get; set; }
 	}
 
-	interface INSTextFinderClient {}
+	interface INSTextFinderClient { }
 
 	[NoMacCatalyst]
 	[Protocol]
@@ -15697,7 +15697,7 @@ namespace AppKit {
 
 	}
 
-	interface INSTextFinderBarContainer {}
+	interface INSTextFinderBarContainer { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject)), Model, Protocol]
@@ -16913,7 +16913,7 @@ namespace AppKit {
 		void NavigateForward (NSObject sender);
 	}
 
-	interface INSPageControllerDelegate {}
+	interface INSPageControllerDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject)), Model, Protocol]
@@ -17499,7 +17499,7 @@ namespace AppKit {
 		NSTableViewStyle EffectiveStyle { get; }
 	}
 
-	interface INSTableViewDelegate {}
+	interface INSTableViewDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -17593,7 +17593,7 @@ namespace AppKit {
 		NSTableViewRowAction [] RowActions (NSTableView tableView, nint row, NSTableRowActionEdge edge);
 	}
 
-	interface INSTableViewDataSource {}
+	interface INSTableViewDataSource { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -18048,7 +18048,7 @@ namespace AppKit {
 		new string [] SelectableItemIdentifiers (NSToolbar toolbar);
 	}
 
-	interface INSTabViewDelegate {}
+	interface INSTabViewDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -18278,7 +18278,7 @@ namespace AppKit {
 		bool VerticallyResizable { [Bind ("isVerticallyResizable")] get; set; }
 	}
 
-	interface INSTextDelegate {}
+	interface INSTextDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -18612,7 +18612,7 @@ namespace AppKit {
 		bool ShouldSelectCandidate (NSTextField textField, NSTextView textView, nuint index);
 	}
 
-	interface INSComboBoxDelegate {}
+	interface INSComboBoxDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSTextFieldDelegate))]
@@ -18632,7 +18632,7 @@ namespace AppKit {
 		void SelectionIsChanging (NSNotification notification);
 	}
 
-	interface INSTokenFieldCellDelegate {}
+	interface INSTokenFieldCellDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -19596,7 +19596,7 @@ namespace AppKit {
 		NSTextCursorAccessoryPlacement PreferredTextAccessoryPlacement { get; }
 	}
 
-	interface INSTextViewDelegate {}
+	interface INSTextViewDelegate { }
 
 	[NoiOS]
 	[NoMacCatalyst]
@@ -19720,7 +19720,7 @@ namespace AppKit {
 		NSCharacterSet CharacterSet { get; set; }
 	}
 
-	interface INSTokenFieldDelegate {}
+	interface INSTokenFieldDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -19909,7 +19909,7 @@ namespace AppKit {
 		NSString NSToolbarInspectorTrackingSeparatorItemIdentifier { get; }
 	}
 
-	interface INSToolbarDelegate {}
+	interface INSToolbarDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -21619,7 +21619,7 @@ namespace AppKit {
 		void DismissController (NSObject sender);
 	}
 
-	interface INSWindowDelegate {}
+	interface INSWindowDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
@@ -22501,7 +22501,7 @@ namespace AppKit {
 		string DisplayValuesKeyPath { get; set; }
 	}
 
-	interface INSRuleEditorDelegate {}
+	interface INSRuleEditorDelegate { }
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]

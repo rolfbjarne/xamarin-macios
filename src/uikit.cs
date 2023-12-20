@@ -626,7 +626,7 @@ namespace UIKit {
 		NSObject WeakDelegate { get; set; }
 	}
 
-	interface IUIAccelerometerDelegate {}
+	interface IUIAccelerometerDelegate { }
 
 	[NoTV, NoWatch]
 	[MacCatalyst (13, 1)]
@@ -3433,7 +3433,7 @@ namespace UIKit {
 		CGRect ConvertRectFromCoordinateSpace (CGRect rect, IUICoordinateSpace coordinateSpace);
 	}
 
-	interface IUIApplicationDelegate {}
+	interface IUIApplicationDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -4466,7 +4466,7 @@ namespace UIKit {
 
 	}
 
-	interface IUICollectionViewDataSource {}
+	interface IUICollectionViewDataSource { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -4507,7 +4507,7 @@ namespace UIKit {
 		NSIndexPath GetIndexPath (UICollectionView collectionView, string title, nint atIndex);
 	}
 
-	interface IUICollectionViewDelegate {}
+	interface IUICollectionViewDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -6125,7 +6125,7 @@ namespace UIKit {
 		void RemoveAllBoundaries ();
 	}
 
-	interface IUICollisionBehaviorDelegate {}
+	interface IUICollisionBehaviorDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -6274,7 +6274,7 @@ namespace UIKit {
 
 	}
 
-	interface IUIDynamicAnimatorDelegate {}
+	interface IUIDynamicAnimatorDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -7110,7 +7110,7 @@ namespace UIKit {
 		void PressesCancelled (NSSet<UIPress> presses, UIPressesEvent evt);
 	}
 
-	interface IUIGestureRecognizerDelegate {}
+	interface IUIGestureRecognizerDelegate { }
 
 	[NoWatch]
 	[NoMac]
@@ -8050,7 +8050,7 @@ namespace UIKit {
 		UIBarButtonItemGroup [] TrailingBarButtonGroups { get; set; }
 	}
 
-	interface IUITextInputTokenizer {}
+	interface IUITextInputTokenizer { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -10477,7 +10477,7 @@ namespace UIKit {
 		UIGestureRecognizer [] GestureRecognizers { get; }
 	}
 
-	interface IUIDocumentInteractionControllerDelegate {}
+	interface IUIDocumentInteractionControllerDelegate { }
 
 	[NoTV, NoWatch]
 	[MacCatalyst (13, 1)]
@@ -10992,7 +10992,7 @@ namespace UIKit {
 		UIBehavioralStyle BehavioralStyle { get; }
 	}
 
-	interface IUINavigationBarDelegate {}
+	interface IUINavigationBarDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -11339,7 +11339,7 @@ namespace UIKit {
 		UITapGestureRecognizer BarHideOnTapGestureRecognizer { get; }
 	}
 
-	interface IUINavigationControllerDelegate {}
+	interface IUINavigationControllerDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -11552,7 +11552,7 @@ namespace UIKit {
 		NSString OptionInterPageSpacingKey { get; }
 	}
 
-	interface IUIPageViewControllerDelegate {}
+	interface IUIPageViewControllerDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -11587,7 +11587,7 @@ namespace UIKit {
 		UIInterfaceOrientation GetPreferredInterfaceOrientationForPresentation (UIPageViewController pageViewController);
 	}
 
-	interface IUIPageViewControllerDataSource {}
+	interface IUIPageViewControllerDataSource { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -11944,7 +11944,7 @@ namespace UIKit {
 		UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath);
 	}
 
-	interface IUIPickerViewDelegate {}
+	interface IUIPickerViewDelegate { }
 
 	[NoTV, NoWatch]
 	[MacCatalyst (13, 1)]
@@ -12958,7 +12958,7 @@ namespace UIKit {
 		bool AllowsKeyboardScrolling { get; set; }
 	}
 
-	interface IUIScrollViewDelegate {}
+	interface IUIScrollViewDelegate { }
 
 	[NoMac, NoWatch]
 	[MacCatalyst (13, 1)]
@@ -13219,7 +13219,7 @@ namespace UIKit {
 		new bool LookToDictateEnabled { [Bind ("isLookToDictateEnabled")] get; set; }
 	}
 
-	interface IUISearchBarDelegate {}
+	interface IUISearchBarDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -13387,7 +13387,7 @@ namespace UIKit {
 
 	}
 
-	interface IUISearchControllerDelegate {}
+	interface IUISearchControllerDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -13476,7 +13476,7 @@ namespace UIKit {
 		UINavigationItem NavigationItem { get; }
 	}
 
-	interface IUISearchDisplayDelegate {}
+	interface IUISearchDisplayDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -13546,7 +13546,7 @@ namespace UIKit {
 		bool ShouldReloadForSearchScope (UISearchDisplayController controller, nint forSearchOption);
 	}
 
-	interface IUISearchResultsUpdating {}
+	interface IUISearchResultsUpdating { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -14136,7 +14136,7 @@ namespace UIKit {
 		NSObject WeakDelegate { get; set; }
 	}
 
-	interface IUITabBarDelegate {}
+	interface IUITabBarDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -14168,7 +14168,7 @@ namespace UIKit {
 		void DidEndCustomizingItems (UITabBar tabbar, UITabBarItem [] items, bool changed);
 	}
 
-	interface IUITabBarControllerDelegate {}
+	interface IUITabBarControllerDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -15205,7 +15205,7 @@ namespace UIKit {
 		UIRefreshControl RefreshControl { get; set; }
 	}
 
-	interface IUITableViewDataSource {}
+	interface IUITableViewDataSource { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -15256,7 +15256,7 @@ namespace UIKit {
 		void MoveRow (UITableView tableView, NSIndexPath sourceIndexPath, NSIndexPath destinationIndexPath);
 	}
 
-	interface IUITableViewDelegate {}
+	interface IUITableViewDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -15767,7 +15767,7 @@ namespace UIKit {
 		NSObject InteractionState { get; set; }
 	}
 
-	interface IUITextFieldDelegate {}
+	interface IUITextFieldDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -15974,7 +15974,7 @@ namespace UIKit {
 		UITextViewBorderStyle BorderStyle { get; set; }
 	}
 
-	interface IUITextViewDelegate {}
+	interface IUITextViewDelegate { }
 
 	[BaseType (typeof (UIScrollViewDelegate))]
 	[NoMac, NoWatch]
@@ -16161,7 +16161,7 @@ namespace UIKit {
 		UISpringTimingParameters SpringTimingParameters { get; }
 	}
 
-	interface IUIToolbarDelegate {}
+	interface IUIToolbarDelegate { }
 
 	[NoTV, NoWatch]
 	[MacCatalyst (13, 1)]
@@ -16288,7 +16288,7 @@ namespace UIKit {
 		UIImagePickerControllerQualityType VideoQuality { get; set; }
 	}
 
-	interface IUIVideoEditorControllerDelegate {}
+	interface IUIVideoEditorControllerDelegate { }
 
 	// id<UINavigationControllerDelegate, UIVideoEditorControllerDelegate>
 	[BaseType (typeof (UINavigationControllerDelegate))]
@@ -18331,7 +18331,7 @@ namespace UIKit {
 	}
 	interface IUIViewControllerInteractiveTransitioning { }
 
-	interface IUIViewControllerTransitioningDelegate {}
+	interface IUIViewControllerTransitioningDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -18607,7 +18607,7 @@ namespace UIKit {
 		bool AllowsLinkPreview { get; set; }
 	}
 
-	interface IUIWebViewDelegate {}
+	interface IUIWebViewDelegate { }
 
 	[NoMacCatalyst, NoWatch]
 	[NoTV]
@@ -18985,7 +18985,7 @@ namespace UIKit {
 		UISplitViewControllerBackgroundStyle PrimaryBackgroundStyle { get; set; }
 	}
 
-	interface IUISplitViewControllerDelegate {}
+	interface IUISplitViewControllerDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -19382,7 +19382,7 @@ namespace UIKit {
 		UIColor BackgroundColor { get; set; }
 	}
 
-	interface IUIPopoverControllerDelegate {}
+	interface IUIPopoverControllerDelegate { }
 
 	[NoWatch]
 	[BaseType (typeof (NSObject))]
@@ -19466,7 +19466,7 @@ namespace UIKit {
 		IUIPopoverPresentationControllerSourceItem SourceItem { get; set; }
 	}
 
-	interface IUIAdaptivePresentationControllerDelegate {}
+	interface IUIAdaptivePresentationControllerDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -19521,7 +19521,7 @@ namespace UIKit {
 		void DidAttemptToDismiss (UIPresentationController presentationController);
 	}
 
-	interface IUIPopoverPresentationControllerDelegate {}
+	interface IUIPopoverPresentationControllerDelegate { }
 
 	[NoTV, NoWatch]
 	[MacCatalyst (13, 1)]
@@ -19648,7 +19648,7 @@ namespace UIKit {
 		void Dismiss (bool animated);
 	}
 
-	interface IUIPrinterPickerControllerDelegate {}
+	interface IUIPrinterPickerControllerDelegate { }
 
 	[NoTV, NoWatch]
 	[MacCatalyst (13, 1)]
@@ -19746,7 +19746,7 @@ namespace UIKit {
 		UIPrintFormatter [] PrintFormattersForPage (nint index);
 	}
 
-	interface IUIPrintInteractionControllerDelegate {}
+	interface IUIPrintInteractionControllerDelegate { }
 
 	[NoTV, NoWatch]
 	[MacCatalyst (13, 1)]
@@ -20684,7 +20684,7 @@ namespace UIKit {
 		void AddOption (string title, [NullAllowed] UIImage image, UIDocumentMenuOrder order, Action completionHandler);
 	}
 
-	interface IUIDocumentMenuDelegate {}
+	interface IUIDocumentMenuDelegate { }
 
 	[NoWatch]
 	[NoTV]
@@ -20780,7 +20780,7 @@ namespace UIKit {
 		NSUrl DirectoryUrl { get; set; }
 	}
 
-	interface IUIDocumentPickerDelegate {}
+	interface IUIDocumentPickerDelegate { }
 
 	[NoWatch]
 	[NoTV]

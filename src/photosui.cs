@@ -127,7 +127,7 @@ namespace PhotosUI {
 		CGRect ContentsRect { get; set; }
 	}
 
-	interface IPHLivePhotoViewDelegate {}
+	interface IPHLivePhotoViewDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[Protocol, Model]

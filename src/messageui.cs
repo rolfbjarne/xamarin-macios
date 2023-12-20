@@ -52,7 +52,7 @@ namespace MessageUI {
 		void SetPreferredSendingEmailAddress (string emailAddress);
 	}
 
-	interface IMFMailComposeViewControllerDelegate {}
+	interface IMFMailComposeViewControllerDelegate { }
 
 #if XAMCORE_3_0
 	[BaseType (typeof (NSObject))]
@@ -147,7 +147,7 @@ namespace MessageUI {
 		void SetUpiVerificationCodeSendCompletion (Action<bool> completion);
 	}
 
-	interface IMFMessageComposeViewControllerDelegate {}
+	interface IMFMessageComposeViewControllerDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]

@@ -1063,7 +1063,7 @@ namespace CoreAnimation {
 		bool AllowsFontSubpixelQuantization { get; set; }
 	}
 
-	interface ICALayerDelegate {}
+	interface ICALayerDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]

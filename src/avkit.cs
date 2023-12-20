@@ -353,7 +353,7 @@ namespace AVKit {
 		void SelectSpeed (AVPlaybackSpeed speed);
 	}
 
-	interface IAVPlayerViewControllerDelegate {}
+	interface IAVPlayerViewControllerDelegate { }
 
 	[NoMac]
 	[MacCatalyst (13, 1)]
@@ -1031,7 +1031,7 @@ namespace AVKit {
 		bool ShouldProhibitBackgroundAudioPlayback (AVPictureInPictureController pictureInPictureController);
 	}
 
-	interface IAVPlayerViewDelegate {}
+	interface IAVPlayerViewDelegate { }
 
 	[Mac (12, 0), NoiOS, NoTV, NoMacCatalyst]
 #if NET

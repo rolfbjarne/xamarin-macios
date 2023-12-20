@@ -1081,7 +1081,7 @@ namespace Photos {
 
 	}
 
-	interface IPHPhotoLibraryChangeObserver {}
+	interface IPHPhotoLibraryChangeObserver { }
 
 	[MacCatalyst (13, 1)]
 	[Protocol]

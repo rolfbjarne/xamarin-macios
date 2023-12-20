@@ -56,7 +56,7 @@ namespace AddressBookUI {
 		void DidCompleteWithNewPerson (ABNewPersonViewController controller, [NullAllowed] ABPerson person);
 	}
 
-	interface IABNewPersonViewControllerDelegate {}
+	interface IABNewPersonViewControllerDelegate { }
 
 	[Deprecated (PlatformName.iOS, 9, 0, message: "Use the 'Contacts' API instead.")]
 	[BaseType (typeof (UINavigationController))]
@@ -123,7 +123,7 @@ namespace AddressBookUI {
 		void DidSelectPerson (ABPeoplePickerNavigationController peoplePicker, ABPerson selectedPerson, int /* ABPropertyId = int32 */ propertyId, int /* ABMultiValueIdentifier = int32 */ identifier);
 	}
 
-	interface IABPeoplePickerNavigationControllerDelegate {}
+	interface IABPeoplePickerNavigationControllerDelegate { }
 
 	[Deprecated (PlatformName.iOS, 9, 0, message: "Use the 'Contacts' API instead.")]
 	[BaseType (typeof (UIViewController))]
@@ -249,7 +249,7 @@ namespace AddressBookUI {
 		bool ShouldPerformDefaultActionForPerson (ABPersonViewController personViewController, ABPerson person, int /* ABPropertyID = int32 */ propertyId, int /* ABMultiValueIdentifier = int32 */ identifier);
 	}
 
-	interface IABPersonViewControllerDelegate {}
+	interface IABPersonViewControllerDelegate { }
 
 	[Deprecated (PlatformName.iOS, 9, 0, message: "Use the 'Contacts' API instead.")]
 	[BaseType (typeof (UIViewController))]
@@ -298,5 +298,5 @@ namespace AddressBookUI {
 		[Export ("unknownPersonViewController:shouldPerformDefaultActionForPerson:property:identifier:")]
 		bool ShouldPerformDefaultActionForPerson (ABUnknownPersonViewController personViewController, ABPerson person, int /* ABPropertyID = int32 */ propertyId, int /* ABMultiValueIdentifier = int32 */ identifier);
 	}
-	interface IABUnknownPersonViewControllerDelegate {}
+	interface IABUnknownPersonViewControllerDelegate { }
 }

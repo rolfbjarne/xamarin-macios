@@ -67,7 +67,7 @@ namespace ExternalAccessory {
 		string DockType { get; }
 	}
 
-	interface IEAAccessoryDelegate {}
+	interface IEAAccessoryDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]

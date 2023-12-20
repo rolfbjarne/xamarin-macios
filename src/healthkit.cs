@@ -3675,7 +3675,7 @@ namespace HealthKit {
 		void StopMirroringToCompanionDevice (Action<bool, NSError> completion);
 	}
 
-	interface IHKWorkoutSessionDelegate {}
+	interface IHKWorkoutSessionDelegate { }
 
 	[Mac (13, 0)]
 	[iOS (17, 0)]

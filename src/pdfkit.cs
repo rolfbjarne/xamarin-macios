@@ -1488,7 +1488,7 @@ namespace PdfKit {
 #pragma warning restore
 	}
 
-	interface IPdfDocumentDelegate {}
+	interface IPdfDocumentDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject), Name = "PDFDocumentDelegate")]
@@ -2195,7 +2195,7 @@ namespace PdfKit {
 		PdfAnnotation AnnotationHit { get; }
 	}
 
-	interface IPdfViewDelegate {}
+	interface IPdfViewDelegate { }
 
 	//Verify delegate methods.  There are default actions (not just return null ) that should occur
 	//if the delegate does not implement the method.

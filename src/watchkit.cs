@@ -982,7 +982,7 @@ namespace WatchKit {
 		NSString DidEnterBackgroundNotification { get; }
 	}
 
-	interface IWKExtensionDelegate {}
+	interface IWKExtensionDelegate { }
 
 	[NoiOS]
 	[Protocol]

@@ -2400,7 +2400,7 @@ namespace SceneKit {
 		//void Rotate (Quaternion worldRotation, NVector3 worldTarget);
 	}
 
-	interface ISCNNodeRendererDelegate {}
+	interface ISCNNodeRendererDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -2528,7 +2528,7 @@ namespace SceneKit {
 		IMTLLibrary Library { get; set; }
 	}
 
-	interface ISCNProgramDelegate {}
+	interface ISCNProgramDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -3302,7 +3302,7 @@ namespace SceneKit {
 		CGColorSpace WorkingColorSpace { get; }
 	}
 
-	interface ISCNSceneRendererDelegate {}
+	interface ISCNSceneRendererDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[Protocol, Model]
@@ -4528,7 +4528,7 @@ namespace SceneKit {
 		nfloat SweepTestFraction { get; }
 	}
 
-	interface ISCNPhysicsContactDelegate {}
+	interface ISCNPhysicsContactDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[Protocol, Model]

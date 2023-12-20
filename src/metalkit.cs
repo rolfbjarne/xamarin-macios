@@ -145,7 +145,7 @@ namespace MetalKit {
 		MTLStorageMode DepthStencilStorageMode { get; set; }
 	}
 
-	interface IMTKViewDelegate {}
+	interface IMTKViewDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[Protocol, Model]

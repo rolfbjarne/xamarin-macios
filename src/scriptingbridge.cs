@@ -156,7 +156,7 @@ namespace ScriptingBridge {
 		nint Timeout { get; set; }
 	}
 
-	interface ISBApplicationDelegate {}
+	interface ISBApplicationDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]

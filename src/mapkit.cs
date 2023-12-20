@@ -760,7 +760,7 @@ namespace MapKit {
 		NSString ClusterAnnotationViewReuseIdentifier { get; }
 	}
 
-	interface IMKMapViewDelegate {}
+	interface IMKMapViewDelegate { }
 
 	[NoWatch]
 	[BaseType (typeof (NSObject))]
@@ -1010,7 +1010,7 @@ namespace MapKit {
 		MKPlacemark Placemark { get; }
 	}
 
-	interface IMKReverseGeocoderDelegate {}
+	interface IMKReverseGeocoderDelegate { }
 
 #pragma warning disable 618
 	[NoMac]
@@ -2066,7 +2066,7 @@ namespace MapKit {
 		MKPointOfInterestFilter PointOfInterestFilter { get; set; }
 	}
 
-	interface IMKLocalSearchCompleterDelegate {}
+	interface IMKLocalSearchCompleterDelegate { }
 
 	[NoWatch]
 	[NoWatch]

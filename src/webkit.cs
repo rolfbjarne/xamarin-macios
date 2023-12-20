@@ -1154,7 +1154,7 @@ namespace WebKit {
 	partial interface DomEntityReference {
 	}
 
-	interface IDomEventTarget {}
+	interface IDomEventTarget { }
 
 	[NoiOS, NoTV, NoWatch, NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "No longer supported.")]
@@ -1935,7 +1935,7 @@ namespace WebKit {
 		void AddSubresource (WebResource subresource);
 	}
 
-	interface IWebDocumentRepresentation {}
+	interface IWebDocumentRepresentation { }
 
 	[NoiOS, NoTV, NoWatch, NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "No longer supported.")]
@@ -2012,7 +2012,7 @@ namespace WebKit {
 	partial interface WebDownload {
 	}
 
-	interface IWebDownloadDelegate {}
+	interface IWebDownloadDelegate { }
 
 	[NoiOS, NoTV, NoWatch, NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "No longer supported.")]
@@ -2097,7 +2097,7 @@ namespace WebKit {
 		JSContext JavaScriptContext { get; }
 	}
 
-	interface IWebFrameLoadDelegate {}
+	interface IWebFrameLoadDelegate { }
 
 	[NoiOS, NoTV, NoWatch, NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "No longer supported.")]
@@ -2285,7 +2285,7 @@ namespace WebKit {
 
 	interface IWebOpenPanelResultListener { }
 
-	interface IWebPolicyDelegate {}
+	interface IWebPolicyDelegate { }
 
 	[NoiOS, NoTV, NoWatch, NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "No longer supported.")]
@@ -2466,7 +2466,7 @@ namespace WebKit {
 		string FrameName { get; }
 	}
 
-	interface IWebResourceLoadDelegate {}
+	interface IWebResourceLoadDelegate { }
 
 	[NoiOS, NoTV, NoWatch, NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "No longer supported.")]
@@ -2502,7 +2502,7 @@ namespace WebKit {
 		void OnPlugInFailed (WebView sender, NSError error, WebDataSource dataSource);
 	}
 
-	interface IWebUIDelegate {}
+	interface IWebUIDelegate { }
 
 	[NoiOS, NoTV, NoWatch, NoMacCatalyst]
 	[Deprecated (PlatformName.MacOSX, 10, 14, message: "No longer supported.")]
@@ -4650,7 +4650,7 @@ namespace WebKit {
 		void NavigationResponseDidBecomeDownload (WKWebView webView, WKNavigationResponse navigationResponse, WKDownload download);
 	}
 
-	interface IWKNavigationDelegate {}
+	interface IWKNavigationDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -5100,7 +5100,7 @@ namespace WebKit {
 		void WillDismissEditMenu (WKWebView webView, IUIEditMenuInteractionAnimating animator);
 	}
 
-	interface IWKUIDelegate {}
+	interface IWKUIDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]

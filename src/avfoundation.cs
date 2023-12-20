@@ -1685,7 +1685,7 @@ namespace AVFoundation {
 		string CurrentDevice { get; set; }
 	}
 
-	interface IAVAudioPlayerDelegate {}
+	interface IAVAudioPlayerDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -1891,7 +1891,7 @@ namespace AVFoundation {
 		AVAudioFormat Format { get; }
 	}
 
-	interface IAVAudioRecorderDelegate {}
+	interface IAVAudioRecorderDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -2837,7 +2837,7 @@ namespace AVFoundation {
 		AVAudioSessionRouteDescription PreviousRoute { get; }
 	}
 
-	interface IAVAudioSessionDelegate {}
+	interface IAVAudioSessionDelegate { }
 
 	[NoMac]
 	[Deprecated (PlatformName.iOS, 6, 0)]
@@ -4351,7 +4351,7 @@ namespace AVFoundation {
 		bool PreloadsEligibleContentKeys { get; set; }
 	}
 
-	interface IAVAssetResourceLoaderDelegate {}
+	interface IAVAssetResourceLoaderDelegate { }
 
 	[Watch (6, 0)]
 	[MacCatalyst (13, 1)]
@@ -8894,7 +8894,7 @@ namespace AVFoundation {
 		NSString AudioTimePitchAlgorithm { get; set; }
 	}
 
-	interface IAVVideoCompositing {}
+	interface IAVVideoCompositing { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -9034,7 +9034,7 @@ namespace AVFoundation {
 		CVPixelBuffer CreatePixelBuffer ();
 	}
 
-	interface IAVVideoCompositionValidationHandling {}
+	interface IAVVideoCompositionValidationHandling { }
 
 	[Watch (6, 0)]
 	[MacCatalyst (13, 1)]
@@ -10353,7 +10353,7 @@ namespace AVFoundation {
 
 	}
 
-	interface IAVCaptureMetadataOutputObjectsDelegate {}
+	interface IAVCaptureMetadataOutputObjectsDelegate { }
 
 	[NoWatch]
 	[NoTV]
@@ -13350,7 +13350,7 @@ namespace AVFoundation {
 		void SetDelegate ([NullAllowed] IAVPlayerItemMetadataOutputPushDelegate pushDelegate, [NullAllowed] DispatchQueue delegateQueue);
 	}
 
-	interface IAVPlayerItemMetadataOutputPushDelegate {}
+	interface IAVPlayerItemMetadataOutputPushDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Watch (6, 0)]
@@ -13609,7 +13609,7 @@ namespace AVFoundation {
 		void RequestNotificationOfMediaDataChange (double advanceInterval);
 	}
 
-	interface IAVPlayerItemOutputPullDelegate {}
+	interface IAVPlayerItemOutputPullDelegate { }
 
 	[Watch (6, 0)]
 	[MacCatalyst (13, 1)]
@@ -13634,7 +13634,7 @@ namespace AVFoundation {
 		void OutputSequenceWasFlushed (AVPlayerItemOutput output);
 	}
 
-	interface IAVPlayerItemLegibleOutputPushDelegate {}
+	interface IAVPlayerItemLegibleOutputPushDelegate { }
 
 	[Watch (6, 0)]
 	[MacCatalyst (13, 1)]
@@ -14527,7 +14527,7 @@ namespace AVFoundation {
 		AVAudioSessionChannelDescription [] OutputChannels { get; set; }
 	}
 
-	interface IAVSpeechSynthesizerDelegate {}
+	interface IAVSpeechSynthesizerDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[Model]

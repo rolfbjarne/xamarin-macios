@@ -585,7 +585,7 @@ namespace CoreLocation {
 		void RequestHistoricalLocations (string purposeKey, nint sampleCount, RequestHistoricalLocationsCompletionHandler handler);
 	}
 
-	interface ICLLocationManagerDelegate {}
+	interface ICLLocationManagerDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]

@@ -141,7 +141,7 @@ namespace SafariServices {
 		SFSafariViewControllerPrewarmingToken PrewarmConnections (NSUrl [] urls);
 	}
 
-	interface ISFSafariViewControllerDelegate {}
+	interface ISFSafariViewControllerDelegate { }
 
 	[NoMac]
 	[MacCatalyst (13, 1)]

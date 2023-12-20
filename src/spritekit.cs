@@ -657,7 +657,7 @@ namespace SpriteKit {
 		SKNode Listener { get; set; }
 	}
 
-	interface ISKSceneDelegate {}
+	interface ISKSceneDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[Protocol, Model]
@@ -2748,7 +2748,7 @@ namespace SpriteKit {
 
 	}
 
-	interface ISKPhysicsContactDelegate {}
+	interface ISKPhysicsContactDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]

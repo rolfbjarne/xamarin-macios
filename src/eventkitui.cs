@@ -43,7 +43,7 @@ namespace EventKitUI {
 		IEKEventViewDelegate Delegate { get; set; }
 	}
 
-	interface IEKEventViewDelegate {}
+	interface IEKEventViewDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -81,7 +81,7 @@ namespace EventKitUI {
 		void CancelEditing ();
 	}
 
-	interface IEKEventEditViewDelegate {}
+	interface IEKEventEditViewDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -135,7 +135,7 @@ namespace EventKitUI {
 		NSSet SelectedCalendars { get; set; }
 	}
 
-	interface IEKCalendarChooserDelegate {}
+	interface IEKCalendarChooserDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]

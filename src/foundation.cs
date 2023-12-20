@@ -990,7 +990,7 @@ namespace Foundation {
 		bool EvictsObjectsWithDiscardedContent { get; set; }
 	}
 
-	interface INSCacheDelegate {}
+	interface INSCacheDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -2764,7 +2764,7 @@ namespace Foundation {
 
 	interface INSMutableCopying { }
 
-	interface INSKeyedArchiverDelegate {}
+	interface INSKeyedArchiverDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -2786,7 +2786,7 @@ namespace Foundation {
 		void ReplacingObject (NSKeyedArchiver archiver, NSObject oldObject, NSObject newObject);
 	}
 
-	interface INSKeyedUnarchiverDelegate {}
+	interface INSKeyedUnarchiverDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -3907,7 +3907,7 @@ namespace Foundation {
 		NSString QueryUpdateRemovedItemsKey { get; }
 	}
 
-	interface INSMetadataQueryDelegate {}
+	interface INSMetadataQueryDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -6033,7 +6033,7 @@ namespace Foundation {
 		NSString BrowsingWeb { get; }
 	}
 
-	interface INSUserActivityDelegate {}
+	interface INSUserActivityDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[Protocol, Model]
@@ -7464,7 +7464,7 @@ namespace Foundation {
 		void SendAsynchronousRequest (NSUrlRequest request, NSOperationQueue queue, NSUrlConnectionDataResponse completionHandler);
 	}
 
-	interface INSUrlConnectionDelegate {}
+	interface INSUrlConnectionDelegate { }
 
 	[BaseType (typeof (NSObject), Name = "NSURLConnectionDelegate")]
 	[Model]
@@ -9069,7 +9069,7 @@ namespace Foundation {
 		void GetStreamsToHost (string hostname, nint port, out NSInputStream inputStream, out NSOutputStream outputStream);
 	}
 
-	interface INSStreamDelegate {}
+	interface INSStreamDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -11637,7 +11637,7 @@ namespace Foundation {
 		bool IncludesPeerToPeer { get; set; }
 	}
 
-	interface INSNetServiceDelegate {}
+	interface INSNetServiceDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -11727,7 +11727,7 @@ namespace Foundation {
 		bool IncludesPeerToPeer { get; set; }
 	}
 
-	interface INSNetServiceBrowserDelegate {}
+	interface INSNetServiceBrowserDelegate { }
 
 	[NoWatch]
 	[MacCatalyst (13, 1)]
@@ -12870,7 +12870,7 @@ namespace Foundation {
 #pragma warning restore 618
 	}
 
-	interface INSPortDelegate {}
+	interface INSPortDelegate { }
 
 	[Model, BaseType (typeof (NSObject))]
 	[Protocol]
@@ -12973,7 +12973,7 @@ namespace Foundation {
 		INSMachPortDelegate Delegate { get; set; }
 	}
 
-	interface INSMachPortDelegate {}
+	interface INSMachPortDelegate { }
 
 	[Model, BaseType (typeof (NSPortDelegate))]
 	[Protocol]
@@ -13831,7 +13831,7 @@ namespace Foundation {
 		void GetFileProviderServices (NSUrl url, Action<NSDictionary<NSString, NSFileProviderService>, NSError> completionHandler);
 	}
 
-	interface INSFileManagerDelegate {}
+	interface INSFileManagerDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -15346,7 +15346,7 @@ namespace Foundation {
 		INSConnectionDelegate Delegate { get; set; }
 	}
 
-	interface INSConnectionDelegate {}
+	interface INSConnectionDelegate { }
 
 	[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'NSXpcConnection' instead.")]
 	[NoMacCatalyst]
@@ -15942,7 +15942,7 @@ namespace Foundation {
 		void RemoveAllDeliveredNotifications ();
 	}
 
-	interface INSUserNotificationCenterDelegate {}
+	interface INSUserNotificationCenterDelegate { }
 
 	[NoiOS, NoTV, NoWatch, NoMacCatalyst]
 	[BaseType (typeof (NSObject))]

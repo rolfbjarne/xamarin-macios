@@ -547,7 +547,7 @@ namespace StoreKit {
 		void Start ();
 	}
 
-	interface ISKRequestDelegate {}
+	interface ISKRequestDelegate { }
 
 	[Watch (6, 2)]
 	[MacCatalyst (13, 1)]
@@ -623,7 +623,7 @@ namespace StoreKit {
 		string [] InvalidProducts { get; }
 	}
 
-	interface ISKProductsRequestDelegate {}
+	interface ISKProductsRequestDelegate { }
 
 	[Watch (6, 2)]
 	[MacCatalyst (13, 1)]
@@ -678,7 +678,7 @@ namespace StoreKit {
 		void LoadProduct (StoreProductParameters parameters, SKAdImpression impression, [NullAllowed] Action<bool, NSError> callback);
 	}
 
-	interface ISKStoreProductViewControllerDelegate {}
+	interface ISKStoreProductViewControllerDelegate { }
 
 	[Mac (11, 0), NoTV, NoWatch]
 	[MacCatalyst (13, 1)]

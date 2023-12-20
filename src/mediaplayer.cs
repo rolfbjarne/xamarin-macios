@@ -431,7 +431,7 @@ namespace MediaPlayer {
 		bool ShowsItemsWithProtectedAssets { get; set; }
 	}
 
-	interface IMPMediaPickerControllerDelegate {}
+	interface IMPMediaPickerControllerDelegate { }
 
 	[NoTV]
 	[NoMac]
@@ -1763,7 +1763,7 @@ namespace MediaPlayer {
 	interface IMPPlayableContentDataSource {
 	}
 
-	interface IMPPlayableContentDelegate {}
+	interface IMPPlayableContentDelegate { }
 
 	[NoMac]
 	[NoTV]

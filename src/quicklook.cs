@@ -85,7 +85,7 @@ namespace QuickLook {
 		void RefreshCurrentPreviewItem ();
 	}
 
-	interface IQLPreviewControllerDataSource {}
+	interface IQLPreviewControllerDataSource { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -112,7 +112,7 @@ namespace QuickLook {
 		CreateCopy,
 	}
 
-	interface IQLPreviewControllerDelegate {}
+	interface IQLPreviewControllerDelegate { }
 
 	[NoMac]
 	[MacCatalyst (13, 1)]

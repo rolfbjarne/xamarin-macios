@@ -618,7 +618,7 @@ namespace GLKit {
 		void DeleteDrawable ();
 	}
 
-	interface IGLKViewDelegate {}
+	interface IGLKViewDelegate { }
 
 	[NoMac]
 	[Deprecated (PlatformName.iOS, 12, 0, message: "Use 'Metal' instead.")]
@@ -682,7 +682,7 @@ namespace GLKit {
 		void Update ();
 	}
 
-	interface IGLKViewControllerDelegate {}
+	interface IGLKViewControllerDelegate { }
 
 	[NoMac]
 	[Deprecated (PlatformName.iOS, 12, 0, message: "Use 'Metal' instead.")]

@@ -183,7 +183,7 @@ namespace ImageKit {
 		void SetShowStatusInfoAsWindowSubtitle (bool value);
 	}
 
-	interface IIKCameraDeviceViewDelegate {}
+	interface IIKCameraDeviceViewDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -229,7 +229,7 @@ namespace ImageKit {
 		ICDevice SelectedDevice { get; }
 	}
 
-	interface IIKDeviceBrowserViewDelegate {}
+	interface IIKDeviceBrowserViewDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -573,7 +573,7 @@ namespace ImageKit {
 		NSString CellsSubtitleAttributesKey { get; }
 	}
 
-	interface IIKImageBrowserDataSource {}
+	interface IIKImageBrowserDataSource { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -699,7 +699,7 @@ namespace ImageKit {
 
 	interface IIKImageBrowserItem { }
 
-	interface IIKImageBrowserDelegate {}
+	interface IIKImageBrowserDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -741,7 +741,7 @@ namespace ImageKit {
 		void ReloadData ();
 	}
 
-	interface IIKImageEditPanelDataSource {}
+	interface IIKImageEditPanelDataSource { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -997,7 +997,7 @@ namespace ImageKit {
 		bool RememberLastSetting { get; set; }
 	}
 
-	interface IIKSaveOptionsDelegate {}
+	interface IIKSaveOptionsDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -1055,7 +1055,7 @@ namespace ImageKit {
 		NSUrl PostProcessApplication { get; set; }
 	}
 
-	interface IIKScannerDeviceViewDelegate {}
+	interface IIKScannerDeviceViewDelegate { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -1158,7 +1158,7 @@ namespace ImageKit {
 		NSString PhotosBundleIdentifier { get; }
 	}
 
-	interface IIKSlideshowDataSource {}
+	interface IIKSlideshowDataSource { }
 
 	[BaseType (typeof (NSObject))]
 	[Model]

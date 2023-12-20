@@ -81,7 +81,7 @@ namespace PushKit {
 		NSString FileProvider { get; }
 	}
 
-	interface IPKPushRegistryDelegate {}
+	interface IPKPushRegistryDelegate { }
 
 	[Watch (6, 0)]
 	[MacCatalyst (13, 1)]

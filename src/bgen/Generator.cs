@@ -2702,7 +2702,7 @@ public partial class Generator : IMemberGatherer {
 			sb.Append (" ");
 		}
 		// Unified internal methods automatically get a _ appended
-		if ((minfo.is_extension_method || minfo.is_protocol_method) && minfo.Method.IsSpecialName) {
+		if ((minfo.is_extension_method || minfo.is_protocol_method) && minfo.Method.IsSpecialName) {
 			if (name.StartsWith ("get_", StringComparison.Ordinal))
 				name = "Get" + name.Substring (4);
 			else if (name.StartsWith ("set_", StringComparison.Ordinal))

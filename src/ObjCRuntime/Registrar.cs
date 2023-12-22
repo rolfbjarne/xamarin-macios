@@ -429,7 +429,7 @@ namespace Registrar {
 			{
 				ObjCMember existing;
 				bool rv = true;
-				
+
 				alreadyAdded = false;
 
 				if (TryGetMember (member.Selector, member.IsNativeStatic, out existing)) {

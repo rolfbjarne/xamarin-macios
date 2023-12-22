@@ -35,6 +35,8 @@ steps:
 
 - pwsh: $(System.DefaultWorkingDirectory)/xamarin-macios/tools/devops/automation/scripts/show_env.ps1
   displayName: 'Dump Environment'
+  env:
+    XMA_PASSWORD: $(XMA.Password)
 
 - task: DownloadPipelineArtifact@2
   displayName: Download artifacts
@@ -59,6 +61,17 @@ steps:
 - task: UseDotNet@2
   inputs:
     version: 7.0.102
+
+- pwsh: |
+    Write-Host "Network Configuration:"
+    Get-NetIPConfiguration
+    Write-Host "IP Addresses:"
+    Get-NetIPAddress
+  displayName: 'Show Network Configuration'
+  continueOnError: true
+
+- pwsh: $(System.DefaultWorkingDirectory)/xamarin-macios/tools/devops/automation/scripts/show_env.ps1
+  displayName: 'Show Environment'
 
 - pwsh: |
     & dotnet --version
@@ -138,6 +151,16 @@ steps:
   continueOnError: true
 
 - pwsh: |
+    Get-NetIPAddress | Write-Host
+  displayName: 'Print network info A'
+  continueOnError: true
+
+- pwsh: |
+    & ipconfig
+  displayName: 'Print network info B'
+  continueOnError: true
+
+- pwsh: |
     $runsettings = @"
     <?xml version="1.0" encoding="utf-8"?>
     <RunSettings>
@@ -154,6 +177,40 @@ steps:
     $Env:PATH = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet;$env:PATH"
     $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
     & $(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe `
+       run --project "$(Build.SourcesDirectory)\xamarin-macios\tools\sshenv\sshenv.csproj" `
+       -- `
+       --host $Env:MAC_AGENT_IP `
+       --user builder `
+       --penv XMA_PASSWORD `
+       ls -la
+  displayName: 'Check the Mac'
+  continueOnError: true
+  timeoutInMinutes: 5
+  env:
+    XMA_PASSWORD: $(XMA.Password)
+
+- pwsh: |
+    $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
+    & $Env:DOTNET `
+      build `
+      "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\MySimpleApp\iOS\MySimpleApp.csproj" `
+      /p:ServerAddress=$Env:MAC_AGENT_IP `
+      /p:ServerUser=builder `
+      /p:ServerPassword=$Env:XMA_PASSWORD `
+      /p:_DotNetRootRemoteDirectory=$Env:MAC_AGENT_BUILD_SOURCESDIRECTORY/xamarin-macios/builds/downloads/dotnet/ `
+      /p:ExcludeTouchUnitReference=true `
+      /p:ExcludeNUnitLiteReference=true `
+      -v:diag `
+      "-bl:/Users/builder/remote_build_testing/MySimpleApp.binlog"
+  displayName: 'Try to build test on Mac'
+  continueOnError: true
+  timeoutInMinutes: 30
+  env:
+    XMA_PASSWORD: $(XMA.Password)
+
+- pwsh: |
+    $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
+    & $Env:DOTNET `
         test `
         "$(Build.SourcesDirectory)/xamarin-macios/tests/dotnet/UnitTests/DotNetUnitTests.csproj" `
         --filter Category=Windows `

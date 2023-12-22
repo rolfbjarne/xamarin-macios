@@ -62,7 +62,7 @@ steps:
     $vsts.Agents.SetEnabled($pool, $agent, $False)
   displayName: "Disable macOS bot from pool"
 
-- bash: make -C $(System.SourcesDirectory)/xamarin-macios/tools/devops provision-xcode.csx
+- bash: make -C $(Build.SourcesDirectory)/xamarin-macios/tools/devops provision-xcode.csx
   displayName: 'Generate Xcode provisioning csx file'
 
 - task: xamops.azdevex.provisionator-task.provisionator@2
@@ -73,6 +73,6 @@ steps:
     github_token: ${{ parameters.gitHubToken }}
   timeoutInMinutes: 250
 
-- bash: $(System.SourcesDirectory)/tools/devops/automation/scripts/prepare-for-remote-tests.sh
+- bash: $(Build.SourcesDirectory)/tools/devops/automation/scripts/prepare-for-remote-tests.sh
   displayName: 'Prepare for remote tests'
   continueOnError: true

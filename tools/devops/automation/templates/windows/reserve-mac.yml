@@ -72,3 +72,7 @@ steps:
     provisioning_extra_args: '-vvvv'
     github_token: ${{ parameters.gitHubToken }}
   timeoutInMinutes: 250
+
+- bash: $(System.SourcesDirectory)/tools/devops/automation/scripts/prepare-for-remote-tests.sh
+  displayName: 'Prepare for remote tests'
+  continueOnError: true

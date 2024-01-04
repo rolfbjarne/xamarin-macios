@@ -190,22 +190,6 @@ steps:
     XMA_PASSWORD: $(XMA.Password)
 
 - pwsh: |
-    Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tools/devops/automation/scripts/MaciosCI.psd1
-    $uploadDirectory = New-RemoteMacInstallDirectory -SourcesDirectory "$(Build.SourcesDirectory)" -ArtifactsDirectory "$(Build.SourcesDirectory)/artifacts"
-    Install-DotNetOnRemoteMac `
-      -SourcesDirectory "$(Build.SourcesDirectory)" `
-      -DotNet "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe" `
-      -UploadDirectory "$(Build.SourcesDirectory)/artifacts/remote-mac-upload" `
-      -RemoteHost $Env:MAC_AGENT_IP `
-      -RemoteUserName builder `
-      -RemotePasswordEnvironmentVariable XMA_PASSWORD
-  displayName: 'Install .NET on Mac'
-  continueOnError: true
-  timeoutInMinutes: 30
-  env:
-    XMA_PASSWORD: $(XMA.Password)
-
-- pwsh: |
     $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
     & $Env:DOTNET `
       build `
@@ -213,7 +197,7 @@ steps:
       /p:ServerAddress=$Env:MAC_AGENT_IP `
       /p:ServerUser=builder `
       /p:ServerPassword=$Env:XMA_PASSWORD `
-      /p:_DotNetRootRemoteDirectory=/Users/builder/remote_build_testing/_build/ `
+      /p:_DotNetRootRemoteDirectory=$Env:MAC_AGENT_BUILD_SOURCESDIRECTORY/xamarin-macios/builds/dotnet/ `
       /p:ExcludeTouchUnitReference=true `
       /p:ExcludeNUnitLiteReference=true `
       -v:diag `
@@ -246,7 +230,7 @@ steps:
     $Env:ServerUser = "builder"
     $Env:ServerPassword = $Env:XMA_PASSWORD
     $Env:DOTNET_IOS_RUNTIME_IDENTIFIERS = "'ios-arm iossimulator-x86 ios-arm64 iossimulator-x64 iossimulator-arm64'"
-    $Env:_DotNetRootRemoteDirectory = "/Users/builder/remote_build_testing/_build/"
+    $Env:_DotNetRootRemoteDirectory = "$Env:MAC_AGENT_BUILD_SOURCESDIRECTORY/xamarin-macios/builds/dotnet/"
     Add-Content $(Build.SourcesDirectory)/xamarin-macios/tests/test.config "`nINCLUDE_MAC=`nINCLUDE_TVOS=`nINCLUDE_MACCATALYST=`n"
     & $Env:DOTNET `
         test `

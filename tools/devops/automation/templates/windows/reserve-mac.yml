@@ -18,6 +18,10 @@ parameters:
 - name: xqaCertPass
   type: string
 
+- name: uploadPrefix
+  type: string
+  default: '$(MaciosUploadPrefix)'
+
 steps:
 - template:  sdk-unified/steps/checkout/v1.yml@yaml-templates
   parameters:

@@ -76,3 +76,16 @@ steps:
 - bash: $(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/scripts/prepare-for-remote-tests.sh
   displayName: 'Prepare for remote tests'
   continueOnError: true
+
+- task: DownloadPipelineArtifact@2
+  displayName: Download artifacts
+  inputs:
+    allowFailedBuilds: true
+    path: $(Build.SourcesDirectory)/artifacts
+
+- bash: $(System.SourcesDirectory)/xamarin-macios/tools/devops/automation/scripts/bash/install-workloads.sh
+  workingDirectory: $(System.DefaultWorkingDirectory)/xamarin-macios
+  displayName: 'Install .NET + workloads'
+  timeoutInMinutes: 45
+  env:
+    MACIOS_UPLOAD_PREFIX: ${{ parameters.uploadPrefix }}

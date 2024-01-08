@@ -813,7 +813,7 @@ namespace ObjCRuntime {
 		internal unsafe static bool TryGetClass (IntPtr obj, out IntPtr cls, [NotNullWhen (false)] out string? error_message)
 		{
 			error_message = null;
-			if (ValidateObjectPointers && obj != IntPr.Zero) {
+			if (ValidateObjectPointers && obj != IntPtr.Zero) {
 				IntPtr error_str;
 				var rv = xamarin_is_object_valid (obj, &error_str);
 				if (rv == 0) {

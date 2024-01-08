@@ -35,6 +35,8 @@ steps:
 
 - pwsh: $(System.DefaultWorkingDirectory)/xamarin-macios/tools/devops/automation/scripts/show_env.ps1
   displayName: 'Dump Environment'
+  env:
+    XMA_PASSWORD: $(XMA.Password)
 
 - task: DownloadPipelineArtifact@2
   displayName: Download artifacts
@@ -59,6 +61,17 @@ steps:
 - task: UseDotNet@2
   inputs:
     version: 7.0.102
+
+- pwsh: |
+    Write-Host "Network Configuration:"
+    Get-NetIPConfiguration
+    Write-Host "IP Addresses:"
+    Get-NetIPAddress
+  displayName: 'Show Network Configuration'
+  continueOnError: true
+
+- pwsh: $(System.DefaultWorkingDirectory)/xamarin-macios/tools/devops/automation/scripts/show_env.ps1
+  displayName: 'Show Environment'
 
 - pwsh: |
     & dotnet --version
@@ -135,6 +148,16 @@ steps:
         "$(Build.SourcesDirectory)\xamarin-macios\tests\test-libraries\nugets\FrameworksInRuntimesNativeDirectory\bin\Release\Xamarin.Tests.FrameworksInRuntimesNativeDirectory.1.0.0.nupkg" `
         --source "$(Build.SourcesDirectory)\xamarin-macios\tests\.nuget\packages"
   displayName: 'Build dependencies for .NET tests'
+  continueOnError: true
+
+- pwsh: |
+    Get-NetIPAddress | Write-Host
+  displayName: 'Print network info A'
+  continueOnError: true
+
+- pwsh: |
+    & ipconfig
+  displayName: 'Print network info B'
   continueOnError: true
 
 - pwsh: |

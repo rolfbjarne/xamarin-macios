@@ -191,7 +191,6 @@ Describe 'New-BuildConfiguration' {
                 "BUILD_SOURCEBRANCHNAME" = "BUILD_SOURCEBRANCHNAME"
                 "BUILD_SOURCEVERSION" = "BUILD_SOURCEVERSION"
                 "CONFIGURE_PLATFORMS_DOTNET_PLATFORMS" = "iOS tvOS"
-                "CONFIGURE_PLATFORMS_DOTNET_VERSION" = "1.2.3"
                 "CONFIGURE_PLATFORMS_INCLUDE_DOTNET_TVOS" = "true"
                 "CONFIGURE_PLATFORMS_DOTNET_IOS_RUNTIME_IDENTIFIERS" = "ios-arm64";
                 "CONFIGURE_PLATFORMS_DOTNET_TVOS_RUNTIME_IDENTIFIERS" = "tvos-arm64";
@@ -217,7 +216,6 @@ Describe 'New-BuildConfiguration' {
   ""BuildSourceBranch"": ""BUILD_SOURCEBRANCH"",
   ""BuildId"": ""BUILD_BUILDID"",
   ""DOTNET_PLATFORMS"": ""iOS tvOS"",
-  ""DOTNET_VERSION"": ""1.2.3"",
   ""INCLUDE_DOTNET_IOS"": null,
   ""IOS_NUGET_VERSION_NO_METADATA"": null,
   ""IOS_NUGET_SDK_NAME"": ""iOSNuGetSdkName"",
@@ -254,7 +252,6 @@ Describe 'New-BuildConfiguration' {
   ""BuildSourceBranch"": ""BUILD_SOURCEBRANCH"",
   ""BuildId"": ""BUILD_BUILDID"",
   ""DOTNET_PLATFORMS"": ""iOS tvOS"",
-  ""DOTNET_VERSION"": ""1.2.3"",
   ""INCLUDE_DOTNET_IOS"": null,
   ""IOS_NUGET_VERSION_NO_METADATA"": null,
   ""IOS_NUGET_SDK_NAME"": ""iOSNuGetSdkName"",
@@ -287,7 +284,6 @@ Describe 'Import-BuildConfiguration' {
   ""BuildSourceBranch"": ""BUILD_SOURCEBRANCH"",
   ""BuildId"": ""BUILD_BUILDID"",
   ""DOTNET_PLATFORMS"": ""iOS tvOS"",
-  ""DOTNET_VERSION"": ""1.2.3"",
   ""INCLUDE_DOTNET_IOS"": null,
   ""INCLUDE_DOTNET_TVOS"": ""true"",
   ""DOTNET_IOS_RUNTIME_IDENTIFIERS"": ""ios-arm64"",

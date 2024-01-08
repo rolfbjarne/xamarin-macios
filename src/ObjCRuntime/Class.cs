@@ -804,12 +804,16 @@ namespace ObjCRuntime {
 		static extern void xamarin_free (IntPtr ptr);
 
 		// FIXME: Default to false, true is just to run our test suite with this enabled.
-		public static bool ValidateObjectPointers { get; set; } = true;
+		static bool validate_object_pointers = true;
+		public static bool ValidateObjectPointers {
+			get => validate_object_pointers;
+			set => validate_object_pointers = value;
+		}
 
 		internal unsafe static bool TryGetClass (IntPtr obj, out IntPtr cls, [NotNullWhen (false)] out string? error_message)
 		{
 			error_message = null;
-			if (ValidateObjectPointers) {
+			if (ValidateObjectPointers && obj != IntPr.Zero) {
 				IntPtr error_str;
 				var rv = xamarin_is_object_valid (obj, &error_str);
 				if (rv == 0) {

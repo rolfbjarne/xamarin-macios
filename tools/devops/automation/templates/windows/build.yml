@@ -72,6 +72,11 @@ steps:
 
 - pwsh: $(System.DefaultWorkingDirectory)/xamarin-macios/tools/devops/automation/scripts/show_env.ps1
   displayName: 'Show Environment'
+  env:
+    DEVOPS_DEPENDENCIES: ${{ convertToJson (dependencies)}}
+    DEVOPS_STAGEDEPENDENCIES: ${{ convertToJson (stageDependencies)}}
+    DEVOPS_PARAMETERS: ${{ convertToJson (parameters)}}
+    DEVOPS_VARIABLES: ${{ convertToJson (variables)}}
 
 - pwsh: |
     & dotnet --version

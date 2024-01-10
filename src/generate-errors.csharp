@@ -1,10 +1,9 @@
-#!/usr/bin/env /Library/Frameworks/Mono.framework/Commands/csharp
+#!/usr/bin/env /Library/Frameworks/Mono.framework/Commands/csharp -s
 
 using System.IO;
 using System.Xml;
 
-var args = Environment.GetCommandLineArgs ();
-var dir = Path.GetDirectoryName (args [1]);
+var dir = Path.GetDirectoryName (Args [0]);
 var file = Path.Combine (dir, "..", "tools", "mtouch", "Errors.resx");
 var doc = new XmlDocument ();
 doc.Load (file);

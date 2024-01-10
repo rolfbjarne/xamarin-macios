@@ -69,6 +69,23 @@ steps:
   displayName: 'Show .NET info'
   continueOnError: true
 
+- task: AzureKeyVault@2
+  inputs:
+    azureSubscription: 'Azure Releng (7b4817ae-218f-464a-bab1-a9df2d99e1e5)'
+    KeyVaultName: 'xamarin-ios-vault'
+    SecretsFilter: 'RemoteMacIdRsa'
+  displayName: 'Download id_rsa'
+
+- pwsh: |
+    Add-Content -Path "id_rsa"  -Value "$(RemoteMacIdRsa)"
+    Get-FileHash "id_rsa" -Algorithm MD5
+  displayName: "Write and verify id_rsa"
+  continueOnError: true
+
+- pwsh: |
+    ssh -v -i id_rsa -o StrictHostKeyChecking=no $Env:MAC_AGENT_NAME@$Env:MAC_AGENT_IP pwd
+  displayName: "Verify ssh connection"
+
 # This task fixes errors such as these:
 #     error MSB4242: SDK Resolver Failure: "The SDK resolver "NuGetSdkResolver" failed while attempting to resolve the SDK "Microsoft.Build.NoTargets/3.3.0".
 #                    Exception: "NuGet.Packaging.Core.PackagingException: Unable to find fallback package folder 'D:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages'.

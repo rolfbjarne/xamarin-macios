@@ -1597,7 +1597,7 @@ namespace Xamarin.Tests {
 			get => Version.Parse (Configuration.DotNetTfm.Replace ("net", "")).Major < 9;
 		}
 
-		string[] GetSupportedApiVersions (ApplePlatform platform, bool? isCompat = null)
+		string [] GetSupportedApiVersions (ApplePlatform platform, bool? isCompat = null)
 		{
 			if (isCompat is null)
 				isCompat = IsTargetPlatformVersionCompatEnabled;
@@ -1611,7 +1611,7 @@ namespace Xamarin.Tests {
 				.ToArray ();
 		}
 
-		string[] GetSupportedOSVersions (ApplePlatform platform)
+		string [] GetSupportedOSVersions (ApplePlatform platform)
 		{
 			var plistPath = Path.Combine (Configuration.SourceRoot, platform == ApplePlatform.MacOSX ? "Versions-mac.plist.in" : "Versions-ios.plist.in");
 			var doc = new XmlDocument ();

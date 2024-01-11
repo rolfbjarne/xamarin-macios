@@ -18,8 +18,6 @@ namespace Xamarin.MacDev.Tasks {
 		[Required]
 		public string RuntimeIdentifier { get; set; }
 
-		public string DotNetPath { get; set; }
-
 		/// <summary>
 		/// Runs the target passed in computeValueTarget and returns its result.
 		/// The target must write the result into a text file using $(OutputFilePath) as path.
@@ -42,7 +40,7 @@ namespace Xamarin.MacDev.Tasks {
 ";
 			File.WriteAllText (projectPath, csproj);
 
-			var dotnetPath = !string.IsNullOrEmpty (DotNetPath) ? DotNetPath : this.GetDotNetPath ();
+			var dotnetPath = this.GetDotNetPath ();
 			var environment = default (Dictionary<string, string>);
 			var customHome = Environment.GetEnvironmentVariable ("DOTNET_CUSTOM_HOME");
 

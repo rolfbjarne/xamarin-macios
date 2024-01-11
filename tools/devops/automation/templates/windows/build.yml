@@ -198,6 +198,7 @@ steps:
       /p:ServerUser=builder `
       /p:ServerPassword=$Env:XMA_PASSWORD `
       /p:ExcludeTouchUnitReference=true `
+      /p:_DotNetRootRemoteDirectory=/Users/$Env:MAC_AGENT_NAME/Library/Caches/Xamarin/XMA/SDKs/dotnet/ `
       /p:ExcludeNUnitLiteReference=true `
       -v:diag `
       "-bl:/Users/builder/remote_build_testing/MySimpleApp.binlog"

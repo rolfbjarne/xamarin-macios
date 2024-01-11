@@ -2,6 +2,7 @@ $Env:DOTNET = "$Env:BUILD_SOURCESDIRECTORY\xamarin-macios\tests\dotnet\Windows\b
 $Env:ServerAddress = $Env:MAC_AGENT_IP
 $Env:ServerUser = "builder"
 $Env:ServerPassword = $Env:XMA_PASSWORD
+$Env:_DotNetRootRemoteDirectory = "/Users/$Env:MAC_AGENT_NAME/Library/Caches/Xamarin/XMA/SDKs/dotnet/"
 
 & $Env:DOTNET `
     test `

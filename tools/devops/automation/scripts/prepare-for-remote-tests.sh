@@ -14,3 +14,6 @@ fi
 # (we can't point XMA to our local directory)
 mkdir -p ~/Library/Caches/Xamarin/XMA/SDKs
 cp -cRH "$BUILD_SOURCESDIRECTORY"/xamarin-macios/builds/downloads/dotnet ~/Library/Caches/Xamarin/XMA/SDKs
+
+find ~/Library/Caches/Xamarin/XMA/SDKs
+ls -la ~/Library/Caches/Xamarin/XMA/SDKs

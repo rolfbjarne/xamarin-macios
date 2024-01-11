@@ -71,7 +71,7 @@ steps:
 
 - task: AzureKeyVault@2
   inputs:
-    azureSubscription: 'Xamarin - R&D - PlatformTools'
+    azureSubscription: 'Xamarin - R&D (64e11c84-c922-4ffd-bea9-67ab39354edd)'
     KeyVaultName: 'xamarin-ios-vault'
     SecretsFilter: 'RemoteMacIdRsa'
   displayName: 'Download id_rsa'

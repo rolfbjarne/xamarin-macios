@@ -5,9 +5,11 @@
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
+TOPLEVEL="$(git rev-parse --show-toplevel)"
+
 # Collect and zip up all the binlogs
 mkdir -p ~/remote_build_testing/binlogs
-rsync -av --prune-empty-dirs --include '*/' --include '*.binlog' --exclude '*' "$BUILD_SOURCESDIRECTORY" ~/remote_build_testing/binlogs
+rsync -av --prune-empty-dirs --include '*/' --include '*.binlog' --exclude '*' "$TOPLEVEL/.." ~/remote_build_testing/binlogs
 
 rm -f ~/remote_build_testing/windows-remote-logs.zip
 zip -9r ~/remote_build_testing/windows-remote-logs.zip ~/remote_build_testing/binlogs

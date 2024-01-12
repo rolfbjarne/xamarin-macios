@@ -10,6 +10,7 @@ echo "Authorizing the public key:"
 echo "    $KEY"
 
 echo "Contents of ~/.ssh:"
+# shellcheck disable=SC2012
 ls -la ~/.ssh | sed 's/^/    /'
 
 # Check if the corresponding files exist, and if not, create them with the correct permissions.
@@ -23,10 +24,10 @@ if ! test -f ~/.ssh/authorized_keys; then
 fi
 
 # Check if the key has already been authorized
-KEYPART=$(echo "$KEY" | sed 's/= .*/=/')
+KEYPART="${KEY//= */=}"
 if grep "$KEYPART" ~/.ssh/authorized_keys >/dev/null 2>&1; then
   echo "The public key is already in ~/.ssh/authorized_keys:"
-  cat ~/.ssh/authorized_keys | sed 's/^/    /'
+  sed 's/^/    ' ~/.ssh/authorized_keys
   exit 0
 fi
 

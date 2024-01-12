@@ -7,7 +7,7 @@ Invoke-SshEnvCommand `
   -SourcesDirectory "$Env:BUILD_SOURCESDIRECTORY" `
   -DotNet "$Env:DOTNET" `
   -RemoteHost "$Env:MAC_AGENT_IP" `
-  -RemoteUserName "builder" `
+  -RemoteUserName "$Env:MAC_AGENT_USER" `
   -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
   -ThrowIfError $true `
   -- `
@@ -18,8 +18,8 @@ Invoke-SshEnvDownload `
   -SourcesDirectory "$Env:BUILD_SOURCESDIRECTORY" `
   -DotNet "$Env:DOTNET" `
   -RemoteHost "$Env:MAC_AGENT_IP" `
-  -RemoteUserName "builder" `
+  -RemoteUserName "$Env:MAC_AGENT_USER" `
   -RemotePasswordEnvironmentVariable "XMA_PASSWORD" `
   -ThrowIfError $true `
-  -Source "/Users/builder/remote_build_testing/windows-remote-logs.zip" `
+  -Source "/Users/$Env:MAC_AGENT_USER/remote_build_testing/windows-remote-logs.zip" `
   -Target "$Env:BUILD_ARTIFACTSTAGINGDIRECTORY/windows-binlogs/windows-remote-logs.zip"

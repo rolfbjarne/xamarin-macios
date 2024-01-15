@@ -184,7 +184,9 @@ namespace UIKit {
 			using var nsa_traits = NSArray.FromNSObjects (traits);
 			return Runtime.GetINativeObject<IUITraitChangeRegistration> (NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("registerForTraitChanges:withAction:"), nsa_traits.Handle, action.Handle), false)!;
 		}
+#endif // !NET
 
+#if !XAMCORE_5_0
 		static Class [] ToClasses (IUITraitDefinition [] traits)
 		{
 			if (traits is null)

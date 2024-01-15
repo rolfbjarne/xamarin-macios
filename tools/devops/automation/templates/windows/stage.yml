@@ -50,7 +50,7 @@ stages:
   - job: mac_reservation
     dependsOn:
     displayName: "Reserve bot for tests"
-    timeoutInMinutes: 1000
+    timeoutInMinutes: 120
     condition: ne(stageDependencies.configure_build.configure.outputs['configure_platforms.ENABLE_DOTNET'],'')
     workspace:
       clean: all

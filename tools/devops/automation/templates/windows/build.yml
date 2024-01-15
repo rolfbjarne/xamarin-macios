@@ -79,6 +79,13 @@ steps:
 - pwsh: |
     Add-Content -Path "id_rsa"  -Value "$(RemoteMacIdRsa)"
     Get-FileHash "id_rsa" -Algorithm MD5
+    Get-Acl id_rsa
+    icacls id_rsa /inheritance:r
+    Get-Acl id_rsa
+    $grant="$Env:USERNAME" + ":(R)"
+    Write-Host "Grant: $grant"
+    icacls id_rsa /grant:r $grant
+    Get-Acl id_rsa
   displayName: "Write and verify id_rsa"
   continueOnError: true
 

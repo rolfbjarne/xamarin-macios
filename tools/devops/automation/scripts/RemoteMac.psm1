@@ -1,9 +1,9 @@
 <#
     .SYNOPSIS
-        Executes a command on a remote machine using sshenv
+        Executes a command on a remote machine using scp
 #>
 
-function Invoke-SshEnvCommand {
+function Invoke-SshCommand {
     param (
         [Parameter(Mandatory)]
         [string]
@@ -39,18 +39,11 @@ function Invoke-SshEnvCommand {
     Write-Host "Command is: $cmd"
     Write-Host "There are $($CommandArguments.Length) arguments in the command."
 
-    & $DotNet `
-      run `
-      --project "$SourcesDirectory\xamarin-macios\tools\sshenv\sshenv.csproj" `
-      -- `
-      --host $RemoteHost `
-      --user $RemoteUserName `
-      --penv $RemotePasswordEnvironmentVariable `
-      @CommandArguments
+    ssh -v -i "$Env:ID_RSA_PATH" -o StrictHostKeyChecking=no "$RemoteUserName@$RemoteHost" @CommandArguments
 
     if ($ThrowIfError) {
         if ($LastExitCode -ne 0) {
-            throw [System.Exception]::new("Failed to execute sshenv command, exit code: $LastExitCode")
+            throw [System.Exception]::new("Failed to execute ssh command, exit code: $LastExitCode")
         }
     }
     Write-Host "sshenv command returned exit code: $LastExitCode"
@@ -58,18 +51,10 @@ function Invoke-SshEnvCommand {
 
 <#
     .SYNOPSIS
-        Uploads a file or directory to a remote machine using sshenv
+        Uploads a file or directory to a remote machine using scp
 #>
-function Invoke-SshEnvDownload {
+function Invoke-SshDownload {
     param (
-        [Parameter(Mandatory)]
-        [string]
-        $SourcesDirectory,
-
-        [Parameter(Mandatory)]
-        [string]
-        $DotNet,
-
         [Parameter(Mandatory)]
         [string]
         $RemoteHost,
@@ -77,10 +62,6 @@ function Invoke-SshEnvDownload {
         [Parameter(Mandatory)]
         [string]
         $RemoteUserName,
-
-        [Parameter(Mandatory)]
-        [string]
-        $RemotePasswordEnvironmentVariable,
 
         [Parameter(Mandatory)]
         [bool]
@@ -95,16 +76,7 @@ function Invoke-SshEnvDownload {
         $Target
     )
 
-    & $DotNet `
-      run `
-      --project "$SourcesDirectory\xamarin-macios\tools\sshenv\sshenv.csproj" `
-      -- `
-      --host $RemoteHost `
-      --user $RemoteUserName `
-      --penv $RemotePasswordEnvironmentVariable `
-      --mode download `
-      --source $Source `
-      --target $Target
+    scp -v -i "$Env:ID_RSA_PATH" -o StrictHostKeyChecking=no "$RemoteUserName@$RemoteHost":$Source $Target
 
     if ($ThrowIfError) {
         if ($LastExitCode -ne 0) {
@@ -114,5 +86,5 @@ function Invoke-SshEnvDownload {
     Write-Host "sshenv command returned exit code: $LastExitCode"
 }
 
-Export-ModuleMember -Function Invoke-SshEnvCommand
-Export-ModuleMember -Function Invoke-SshEnvDownload
+Export-ModuleMember -Function Invoke-SshCommand
+Export-ModuleMember -Function Invoke-SshDownload

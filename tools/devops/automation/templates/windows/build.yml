@@ -200,22 +200,6 @@ steps:
   displayName: 'Create runsettings for .NET tests'
 
 - pwsh: |
-    $Env:PATH = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet;$env:PATH"
-    $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
-    & $(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe `
-       run --project "$(Build.SourcesDirectory)\xamarin-macios\tools\sshenv\sshenv.csproj" `
-       -- `
-       --host $Env:MAC_AGENT_IP `
-       --user $Env:MAC_AGENT_USER `
-       --penv XMA_PASSWORD `
-       ls -la
-  displayName: 'Check the Mac'
-  continueOnError: true
-  timeoutInMinutes: 5
-  env:
-    XMA_PASSWORD: $(XMA.Password)
-
-- pwsh: |
     $Env:DOTNET = "$(Build.SourcesDirectory)\xamarin-macios\tests\dotnet\Windows\bin\dotnet\dotnet.exe"
     & $Env:DOTNET `
       build `

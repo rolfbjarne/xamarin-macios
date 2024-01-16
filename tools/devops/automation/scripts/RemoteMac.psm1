@@ -7,23 +7,11 @@ function Invoke-SshCommand {
     param (
         [Parameter(Mandatory)]
         [string]
-        $SourcesDirectory,
-
-        [Parameter(Mandatory)]
-        [string]
-        $DotNet,
-
-        [Parameter(Mandatory)]
-        [string]
         $RemoteHost,
 
         [Parameter(Mandatory)]
         [string]
         $RemoteUserName,
-
-        [Parameter(Mandatory)]
-        [string]
-        $RemotePasswordEnvironmentVariable,
 
         [Parameter(Mandatory)]
         [bool]

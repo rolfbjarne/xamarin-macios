@@ -8,6 +8,8 @@ Invoke-SshCommand `
   -- `
   "$Env:MAC_AGENT_BUILD_SOURCESDIRECTORY/xamarin-macios/tests/dotnet/Windows/collect-binlogs.sh"
 
+New-Item -Path "$Env:BUILD_ARTIFACTSTAGINGDIRECTORY" -Name "windows-binlogs" -ItemType "directory"
+
 # Copy the zip from the remote Mac to this machine
 Invoke-SshDownload `
   -RemoteHost "$Env:MAC_AGENT_IP" `

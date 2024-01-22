@@ -34,7 +34,7 @@ function Invoke-SshCommand {
             throw [System.Exception]::new("Failed to execute ssh command, exit code: $LastExitCode")
         }
     }
-    Write-Host "sshenv command returned exit code: $LastExitCode"
+    Write-Host "ssh command returned exit code: $LastExitCode"
 }
 
 <#
@@ -68,10 +68,10 @@ function Invoke-SshDownload {
 
     if ($ThrowIfError) {
         if ($LastExitCode -ne 0) {
-            throw [System.Exception]::new("Failed to execute sshenv command, exit code: $LastExitCode")
+            throw [System.Exception]::new("Failed to execute ssh command, exit code: $LastExitCode")
         }
     }
-    Write-Host "sshenv command returned exit code: $LastExitCode"
+    Write-Host "ssh command returned exit code: $LastExitCode"
 }
 
 Export-ModuleMember -Function Invoke-SshCommand

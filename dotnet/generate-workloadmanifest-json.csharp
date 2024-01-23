@@ -37,11 +37,9 @@ using (TextWriter writer = new StreamWriter (outputPath)) {
 	writer.WriteLine ($"			\"packs\": [");
 	writer.WriteLine ($"				\"Microsoft.{platform}.Sdk.net9\",");
 	writer.WriteLine ($"				\"Microsoft.{platform}.Sdk.net8\",");
-	writer.WriteLine ($"				\"Microsoft.{platform}.Sdk.net7\",");
 	if (hasWindows) {
 		writer.WriteLine ($"				\"Microsoft.{platform}.Windows.Sdk.Aliased.net9\",");
 		writer.WriteLine ($"				\"Microsoft.{platform}.Windows.Sdk.Aliased.net8\",");
-		writer.WriteLine ($"				\"Microsoft.{platform}.Windows.Sdk.Aliased.net7\",");
 	}
 	writer.WriteLine ($"				\"Microsoft.{platform}.Ref\",");
 	foreach (var rid in runtimeIdentifiers) {
@@ -53,11 +51,9 @@ using (TextWriter writer = new StreamWriter (outputPath)) {
 	if (platform == "macOS") {
 		writer.WriteLine ($"				\"microsoft-net-runtime-mono-tooling\",");
 		// writer.WriteLine ($"				\"microsoft-net-runtime-mono-tooling-net8\",");
-		writer.WriteLine ($"				\"microsoft-net-runtime-mono-tooling-net7\",");
 	} else {
 		writer.WriteLine ($"				\"microsoft-net-runtime-{platformLowerCase}\",");
 		// writer.WriteLine ($"				\"microsoft-net-runtime-{platformLowerCase}-net8\",");
-		writer.WriteLine ($"				\"microsoft-net-runtime-{platformLowerCase}-net7\",");
 	}
 	writer.WriteLine ($"			]");
 	writer.WriteLine ($"		}},");
@@ -77,13 +73,6 @@ using (TextWriter writer = new StreamWriter (outputPath)) {
 	writer.WriteLine ($"				\"any\": \"Microsoft.{platform}.Sdk\"");
 	writer.WriteLine ($"			}}");
 	writer.WriteLine ($"		}},");
-	writer.WriteLine ($"		\"Microsoft.{platform}.Sdk.net7\": {{");
-	writer.WriteLine ($"			\"kind\": \"sdk\",");
-	writer.WriteLine ($"			\"version\": \"{net7Version}\",");
-	writer.WriteLine ($"			\"alias-to\": {{");
-	writer.WriteLine ($"				\"any\": \"Microsoft.{platform}.Sdk\"");
-	writer.WriteLine ($"			}}");
-	writer.WriteLine ($"		}},");
 	if (hasWindows) {
 		writer.WriteLine ($"		\"Microsoft.{platform}.Windows.Sdk.Aliased.net9\": {{");
 		writer.WriteLine ($"			\"kind\": \"sdk\",");
@@ -97,15 +86,6 @@ using (TextWriter writer = new StreamWriter (outputPath)) {
 		writer.WriteLine ($"		\"Microsoft.{platform}.Windows.Sdk.Aliased.net8\": {{");
 		writer.WriteLine ($"			\"kind\": \"sdk\",");
 		writer.WriteLine ($"			\"version\": \"{net8Version}\",");
-		writer.WriteLine ($"			\"alias-to\": {{");
-		writer.WriteLine ($"				\"win-x64\": \"Microsoft.{platform}.Windows.Sdk\",");
-		writer.WriteLine ($"				\"win-x86\": \"Microsoft.{platform}.Windows.Sdk\",");
-		writer.WriteLine ($"				\"win-arm64\": \"Microsoft.{platform}.Windows.Sdk\",");
-		writer.WriteLine ($"			}}");
-		writer.WriteLine ($"		}},");
-		writer.WriteLine ($"		\"Microsoft.{platform}.Windows.Sdk.Aliased.net7\": {{");
-		writer.WriteLine ($"			\"kind\": \"sdk\",");
-		writer.WriteLine ($"			\"version\": \"{net7Version}\",");
 		writer.WriteLine ($"			\"alias-to\": {{");
 		writer.WriteLine ($"				\"win-x64\": \"Microsoft.{platform}.Windows.Sdk\",");
 		writer.WriteLine ($"				\"win-x86\": \"Microsoft.{platform}.Windows.Sdk\",");

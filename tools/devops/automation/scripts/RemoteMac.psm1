@@ -51,13 +51,13 @@ function Invoke-SshDownload {
         $Target
     )
 
-    $cmd = "ssh -v -i `"$Env:ID_RSA_PATH`" -o StrictHostKeyChecking=no `"$RemoteUserName@$RemoteHost`":$Source $Target"
+    $cmd = "scp -v -i $Env:ID_RSA_PATH -o StrictHostKeyChecking=no $RemoteUserName@$RemoteHost:$Source $Target"
     Write-Host "Executing: $cmd"
 
-    scp -v -i "$Env:ID_RSA_PATH" -o StrictHostKeyChecking=no "$RemoteUserName@$RemoteHost":$Source $Target
+    scp -v -i $Env:ID_RSA_PATH -o StrictHostKeyChecking=no $RemoteUserName@$RemoteHost:$Source $Target
 
     if ($LastExitCode -ne 0) {
-        throw [System.Exception]::new("Failed to download file using ssh command '$cmd', exit code: $LastExitCode")
+        throw [System.Exception]::new("Failed to execute scp command '$cmd', exit code: $LastExitCode")
     }
 }
 

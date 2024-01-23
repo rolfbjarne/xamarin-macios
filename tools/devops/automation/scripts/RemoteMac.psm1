@@ -13,28 +13,19 @@ function Invoke-SshCommand {
         [string]
         $RemoteUserName,
 
-        [Parameter(Mandatory)]
-        [bool]
-        $ThrowIfError,
-
         [Parameter(Mandatory, ValueFromRemainingArguments)]
         [string[]]
         $CommandArguments
     )
 
-    $cmd = [System.String]::Join(" ", $CommandArguments)
-
-    Write-Host "Command is: $cmd"
-    Write-Host "There are $($CommandArguments.Length) arguments in the command."
+    $cmd = "ssh -v -i `"$Env:ID_RSA_PATH`" -o StrictHostKeyChecking=no `"$RemoteUserName@$RemoteHost`" $CommandArguments"
+    Write-Host "Executing: $cmd"
 
     ssh -v -i "$Env:ID_RSA_PATH" -o StrictHostKeyChecking=no "$RemoteUserName@$RemoteHost" @CommandArguments
 
-    if ($ThrowIfError) {
-        if ($LastExitCode -ne 0) {
-            throw [System.Exception]::new("Failed to execute ssh command, exit code: $LastExitCode")
-        }
+    if ($LastExitCode -ne 0) {
+        throw [System.Exception]::new("Failed to execute ssh command '$cmd', exit code: $LastExitCode")
     }
-    Write-Host "ssh command returned exit code: $LastExitCode"
 }
 
 <#
@@ -52,10 +43,6 @@ function Invoke-SshDownload {
         $RemoteUserName,
 
         [Parameter(Mandatory)]
-        [bool]
-        $ThrowIfError,
-
-        [Parameter(Mandatory)]
         [string]
         $Source,
 
@@ -64,14 +51,14 @@ function Invoke-SshDownload {
         $Target
     )
 
+    $cmd = "ssh -v -i `"$Env:ID_RSA_PATH`" -o StrictHostKeyChecking=no `"$RemoteUserName@$RemoteHost`":$Source $Target"
+    Write-Host "Executing: $cmd"
+
     scp -v -i "$Env:ID_RSA_PATH" -o StrictHostKeyChecking=no "$RemoteUserName@$RemoteHost":$Source $Target
 
-    if ($ThrowIfError) {
-        if ($LastExitCode -ne 0) {
-            throw [System.Exception]::new("Failed to execute ssh command, exit code: $LastExitCode")
-        }
+    if ($LastExitCode -ne 0) {
+        throw [System.Exception]::new("Failed to download file using ssh command '$cmd', exit code: $LastExitCode")
     }
-    Write-Host "ssh command returned exit code: $LastExitCode"
 }
 
 Export-ModuleMember -Function Invoke-SshCommand

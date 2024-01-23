@@ -1185,7 +1185,7 @@ namespace Xamarin.Tests {
 			Configuration.IgnoreIfIgnoredPlatform (platform);
 			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
 
-			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath, netVersion: "net7.0");
+			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath, netVersion: "net8.0");
 			Clean (project_path);
 			var properties = GetDefaultProperties (runtimeIdentifiers);
 

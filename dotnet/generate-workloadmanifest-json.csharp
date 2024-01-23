@@ -6,7 +6,7 @@ using System.IO;
 using System.Xml;
 
 var args = Environment.GetCommandLineArgs ();
-var expectedArgumentCount = 7;
+var expectedArgumentCount = 6;
 if (args.Length != expectedArgumentCount + 3 /* 2 default arguments (executable + script) + 'expectedArgumentCount' arguments we're interested in */) {
 	// first arg is "/Library/Frameworks/Mono.framework/Versions/4.8.0/lib/mono/4.5/csharp.exe"
 	// second arg the script itself
@@ -19,7 +19,6 @@ if (args.Length != expectedArgumentCount + 3 /* 2 default arguments (executable 
 var argumentIndex = 3;
 var platform = args [argumentIndex++];
 var version = args [argumentIndex++];
-var net7Version = args [argumentIndex++];
 var net8Version = args [argumentIndex++];
 var runtimeIdentifiers = args [argumentIndex++].Split (new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 var outputPath = args [argumentIndex++];

@@ -28,6 +28,7 @@ namespace Xamarin.Tests {
 			var properties = GetDefaultProperties (runtimeIdentifiers, extraProperties);
 			if (!string.IsNullOrWhiteSpace (configuration))
 				properties ["Configuration"] = configuration;
+			AddHotRestartProperties (properties, tmpdir, out var hotRestartOutputDir, out var hotRestartAppBundlePath);
 
 			var rv = DotNet.AssertBuild (project_path, properties);
 

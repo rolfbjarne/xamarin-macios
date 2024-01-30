@@ -10,7 +10,6 @@ $Env:_DotNetRootRemoteDirectory = "/Users/$Env:MAC_AGENT_USER/Library/Caches/Xam
     test `
     "$Env:BUILD_SOURCESDIRECTORY/xamarin-macios/tests/dotnet/UnitTests/DotNetUnitTests.csproj" `
     --filter Category=RemoteWindows `
-    --verbosity quiet `
     --settings $Env:BUILD_SOURCESDIRECTORY/xamarin-macios/tests/dotnet/Windows/config.runsettings `
     "--results-directory:$Env:BUILD_SOURCESDIRECTORY/xamarin-macios/jenkins-results/windows-remote-tests/" `
     "--logger:trx;LogFileName=$Env:BUILD_SOURCESDIRECTORY/xamarin-macios/jenkins-results/windows-remote-dotnet-tests.trx" `

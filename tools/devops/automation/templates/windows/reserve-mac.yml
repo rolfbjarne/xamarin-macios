@@ -101,8 +101,6 @@ steps:
   env:
     MACIOS_UPLOAD_PREFIX: ${{ parameters.uploadPrefix }}
 
-- task: UseDotNet@2
-
 - bash: $(Build.SourcesDirectory)/xamarin-macios/tools/devops/automation/scripts/prepare-for-remote-tests.sh
   displayName: 'Prepare for remote tests'
   continueOnError: true

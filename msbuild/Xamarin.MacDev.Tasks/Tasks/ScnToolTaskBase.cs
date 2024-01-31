@@ -17,7 +17,7 @@ namespace Xamarin.MacDev.Tasks {
 		public string IntermediateOutputPath { get; set; } = string.Empty;
 
 		[Required]
-		public ITaskItem[] ColladaAssets { get; set; } = Array.Empty<ITaskItem> ();
+		public ITaskItem [] ColladaAssets { get; set; } = Array.Empty<ITaskItem> ();
 
 		[Required]
 		public string DeviceSpecificIntermediateOutputPath { get; set; } = string.Empty;
@@ -38,10 +38,10 @@ namespace Xamarin.MacDev.Tasks {
 
 		#endregion
 
-#region Outputs
+		#region Outputs
 		[Output]
-		public ITaskItem[] BundleResources { get; set; } = Array.Empty<ITaskItem> ();
-#endregion
+		public ITaskItem [] BundleResources { get; set; } = Array.Empty<ITaskItem> ();
+		#endregion
 
 		IList<string> GenerateCommandLineCommands (string inputScene, string outputScene)
 		{

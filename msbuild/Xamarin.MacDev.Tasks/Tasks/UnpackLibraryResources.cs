@@ -47,7 +47,35 @@ namespace Xamarin.MacDev.Tasks {
 		[Output]
 		public ITaskItem [] UnpackedResources { get; set; } = Array.Empty<ITaskItem> ();
 
+		[Output]
+		public ITaskItem [] AtlasTextures { get; set; } = Array.Empty<ITaskItem> ();
+
+		[Output]
+		public ITaskItem [] ColladaAssets { get; set; } = Array.Empty<ITaskItem> ();
+
+		[Output]
+		public ITaskItem [] CoreMLModels { get; set; } = Array.Empty<ITaskItem> ();
+
+		[Output]
+		public ITaskItem [] ImageAssets { get; set; } = Array.Empty<ITaskItem> ();
+
+		[Output]
+		public ITaskItem [] InterfaceDefinitions { get; set; } = Array.Empty<ITaskItem> ();
+
+		[Output]
+		public ITaskItem [] SceneKitAssets { get; set; } = Array.Empty<ITaskItem> ();
+
 		#endregion
+
+		enum ResourceType {
+			AtlasTexture,
+			BundleResource,
+			ColladaAsset,
+			CoreMLModel,
+			ImageAsset,
+			InterfaceDefinition,
+			SceneKitAsset,
+		}
 
 		public override bool Execute ()
 		{
@@ -67,7 +95,13 @@ namespace Xamarin.MacDev.Tasks {
 				return result;
 			}
 
-			var results = new List<ITaskItem> ();
+			var bundleResources = new List<ITaskItem> ();
+			var atlasTextures = new List<ITaskItem> ();
+			var colladaAssets = new List<ITaskItem> ();
+			var coreMLModels = new List<ITaskItem> ();
+			var imageAssets = new List<ITaskItem> ();
+			var interfaceDefinitions = new List<ITaskItem> ();
+			var sceneKitAssets = new List<ITaskItem> ();
 
 			foreach (var asm in ReferencedLibraries) {
 				// mscorlib.dll was not coming out with ResolvedFrom == {TargetFrameworkDirectory}
@@ -78,15 +112,46 @@ namespace Xamarin.MacDev.Tasks {
 					var perAssemblyOutputPath = Path.Combine (IntermediateOutputPath, "unpack", asm.GetMetadata ("Filename"));
 					var extracted = ExtractContentAssembly (asm.ItemSpec, perAssemblyOutputPath);
 
-					results.AddRange (extracted);
-
-					var itemsFile = asm.GetMetadata ("ItemsFile");
-					itemsFile = itemsFile.Replace ('\\', Path.DirectorySeparatorChar);
-					WriteItemsToFile.Write (this, itemsFile, extracted, "_BundleResourceWithLogicalName", true, true);
+					foreach (var tuple in extracted) {
+						var resourceType = tuple.Type;
+						var item = tuple.Item;
+						switch (resourceType) {
+						case ResourceType.AtlasTexture:
+							atlasTextures.Add (item);
+							break;
+						case ResourceType.BundleResource:
+							bundleResources.Add (item);
+							break;
+						case ResourceType.ColladaAsset:
+							colladaAssets.Add (item);
+							break;
+						case ResourceType.CoreMLModel:
+							coreMLModels.Add (item);
+							break;
+						case ResourceType.ImageAsset:
+							imageAssets.Add (item);
+							break;
+						case ResourceType.InterfaceDefinition:
+							interfaceDefinitions.Add (item);
+							break;
+						case ResourceType.SceneKitAsset:
+							sceneKitAssets.Add (item);
+							break;
+						default:
+							Log.LogError ($"Unknown resource type: {resourceType}"); // FIXME: better error.
+							break;
+						}
+					}
 				}
 			}
 
-			BundleResourcesWithLogicalNames = results.ToArray ();
+			BundleResourcesWithLogicalNames = bundleResources.ToArray ();
+			AtlasTextures = atlasTextures.ToArray ();
+			ColladaAssets = colladaAssets.ToArray ();
+			CoreMLModels = coreMLModels.ToArray ();
+			ImageAssets = imageAssets.ToArray ();
+			InterfaceDefinitions = interfaceDefinitions.ToArray ();
+			SceneKitAssets = sceneKitAssets.ToArray ();
 			UnpackedResources = unpackedResources.ToArray ();
 
 			return !Log.HasLoggedErrors;
@@ -102,7 +167,7 @@ namespace Xamarin.MacDev.Tasks {
 			return false;
 		}
 
-		List<ITaskItem> ExtractContentAssembly (string assembly, string intermediatePath)
+		IEnumerable<(ResourceType Type, ITaskItem Item)> ExtractContentAssembly (string assembly, string intermediatePath)
 		{
 			var rv = new List<ITaskItem> ();
 
@@ -111,31 +176,98 @@ namespace Xamarin.MacDev.Tasks {
 				return rv;
 			}
 
-			try {
-				var asmWriteTime = File.GetLastWriteTimeUtc (assembly);
-				using var peStream = File.OpenRead (assembly);
-				using var peReader = new PEReader (peStream);
-				var metadataReader = PEReaderExtensions.GetMetadataReader (peReader);
-				Log.LogMessage (MessageImportance.Low, $"Inspecting resources in assembly {assembly}");
-				foreach (var manifestResourceHandle in metadataReader.ManifestResources) {
-					var manifestResource = metadataReader.GetManifestResource (manifestResourceHandle);
-					if (!manifestResource.Implementation.IsNil)
-						continue; // embedded resources have Implementation.IsNil = true, and those are the ones we care about
+			var asmWriteTime = File.GetLastWriteTimeUtc (assembly);
+			var manifestResources = GetAssemblyManifestResources (assembly).ToArray ();
+			// Log.LogMessage (MessageImportance.Low, $"Inspecting assembly with {manifestResources.Length} resources: {assembly}");
+			if (!manifestResources.Any ()) {
+				Log.LogMessage (MessageImportance.Low, $"  No resources found in: {assembly}");
+				yield break;
+			}
 
-					var name = metadataReader.GetString (manifestResource.Name);
-					if (string.IsNullOrEmpty (name))
+			// Log.LogMessage (MessageImportance.Low, "  Searching resources in assembly: {0}", assembly);
+			foreach (var embedded in manifestResources) {
+				string rpath;
+
+				var resourceName = embedded.Name;
+				var startsWith = "__" + Prefix + "_";
+				if (!resourceName.StartsWith (startsWith, StringComparison.Ordinal)) {
+					Log.LogMessage (MessageImportance.Low, $"    Not applicable resource (does not match prefix): {resourceName}");
+					continue;
+				}
+
+				var underscoreIndex = resourceName.IndexOf ('_', startsWith.Length);
+				if (underscoreIndex == -1) {
+					Log.LogMessage (MessageImportance.Low, $"    Not applicable resource (no content type found): {resourceName}");
+					continue;
+				}
+				var contentType = resourceName.Substring (startsWith.Length, underscoreIndex - startsWith.Length);
+				var contentValue = resourceName.Substring (underscoreIndex + 1);
+				ResourceType resourceType;
+				switch (contentType) {
+				case "content":
+				case "page":
+					rpath = UnmangleResource (contentValue);
+					resourceType = ResourceType.BundleResource;
+					break;
+				case "item":
+					var itemUnderscoreIndex = contentValue.IndexOf ('_');
+					if (itemUnderscoreIndex == -1) {
+						Log.LogMessage (MessageImportance.Low, $"    Not applicable resource (no item type in '{contentValue}'): {resourceName}");
 						continue;
-
-					string rpath;
-
-					if (name.StartsWith ("__" + Prefix + "_content_", StringComparison.Ordinal)) {
-						var mangled = name.Substring (("__" + Prefix + "_content_").Length);
-						rpath = UnmangleResource (mangled);
-					} else if (name.StartsWith ("__" + Prefix + "_page_", StringComparison.Ordinal)) {
-						var mangled = name.Substring (("__" + Prefix + "_page_").Length);
-						rpath = UnmangleResource (mangled);
-					} else {
+					}
+					var itemType = contentValue.Substring (0, itemUnderscoreIndex);
+					var itemValue = contentValue.Substring (itemUnderscoreIndex + 1);
+					rpath = UnmangleResource (itemValue);
+					switch (itemType) {
+					case "AtlasTexture":
+						resourceType = ResourceType.AtlasTexture;
+						break;
+					case "BundleResource":
+						resourceType = ResourceType.BundleResource;
+						break;
+					case "Collada":
+						resourceType = ResourceType.ColladaAsset;
+						break;
+					case "CoreMLModel":
+						resourceType = ResourceType.CoreMLModel;
+						break;
+					case "ImageAsset":
+						resourceType = ResourceType.ImageAsset;
+						break;
+					case "InterfaceDefinition":
+						resourceType = ResourceType.InterfaceDefinition;
+						break;
+					case "SceneKitAsset":
+						resourceType = ResourceType.SceneKitAsset;
+						break;
+					default:
+						Log.LogMessage (MessageImportance.Low, $"    Not applicable resource (unknown item type in '{itemType}'): {resourceName}");
 						continue;
+					}
+					break;
+				default:
+					Log.LogMessage (MessageImportance.Low, $"    Not applicable resource (unknown content type '{contentType}'): {resourceName}");
+					continue;
+				}
+
+				var path = Path.Combine (intermediatePath, rpath);
+				var file = new FileInfo (path);
+
+				var item = new TaskItem (path);
+				item.SetMetadata ("LogicalName", rpath);
+				item.SetMetadata ("Optimize", "false");
+				item.SetMetadata ("BundledInAssembly", assembly);
+
+				if (file.Exists && file.LastWriteTimeUtc >= asmWriteTime) {
+					Log.LogMessage ($"    Up to date (contentType: {contentType} resourceType: {resourceType}: {path}");
+				} else {
+					Log.LogMessage ($"    Unpacking (contentType: {contentType} resourceType: {resourceType}: {path}");
+
+					Directory.CreateDirectory (Path.GetDirectoryName (path));
+
+					using (var stream = File.Open (path, FileMode.Create)) {
+						using (var resource = embedded.Open ())
+							resource.CopyTo (stream);
 					}
 
 					var path = Path.Combine (intermediatePath, rpath);
@@ -179,9 +311,8 @@ namespace Xamarin.MacDev.Tasks {
 
 					rv.Add (item);
 				}
-			} catch (Exception e) {
-				Log.LogMessage (MessageImportance.Low, $"Unable to load the resources from the assembly '{assembly}': {e}");
-				return new List<ITaskItem> ();
+
+				yield return (resourceType, item);
 			}
 			return rv;
 		}

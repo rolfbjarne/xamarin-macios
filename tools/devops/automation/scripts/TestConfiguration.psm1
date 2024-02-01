@@ -38,8 +38,12 @@ class TestConfiguration {
                     continue
                 }
                 if ($this.enabledPlatforms.Length -gt 1) {
-                    Write-Host "Multiple platform enabled"
-                    $this.enabledPlatforms += "Multiple"
+                    if ($this.needsMultiplePlatforms -eq "true") {
+                        Write-Host "Multiple platform enabled"
+                        $this.enabledPlatforms += "Multiple"
+                    } else {
+                        Write-Host "Test has multiple platforms, but does not need a specific multiple test run."
+                    }
                 }
                 foreach ($platform in $this.enabledPlatforms) {
                     Write-Host "platform: $platform"

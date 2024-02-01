@@ -145,6 +145,19 @@ namespace Xamarin.MacDev.Tasks {
 
 		public override bool Execute ()
 		{
+			try {
+				return ExecuteInternal ();
+			} catch (Exception e) {
+				Log.LogWarning ($"Exception details: {e.ToString ()}");
+				Log.LogWarning ($"Exception stack trace: {e.StackTrace}");
+				Log.LogError ($"Failed to AOT compile due to an exception: {e}");
+				Log.LogErrorFromException (e);
+				return false;
+			}
+		}
+
+		bool ExecuteInternal ()
+		{
 			if (ShouldExecuteRemotely ())
 				return new TaskRunner (SessionId, BuildEngine4).RunAsync (this).Result;
 

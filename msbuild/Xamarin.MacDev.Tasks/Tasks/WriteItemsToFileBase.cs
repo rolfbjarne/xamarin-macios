@@ -8,9 +8,6 @@ using Microsoft.Build.Utilities;
 using Microsoft.Build.Tasks;
 using System.Xml.Linq;
 
-// Disable until we get around to enable + fix any issues.
-#nullable disable
-
 namespace Xamarin.MacDev.Tasks {
 	public class WriteItemsToFile : XamarinTask {
 		static readonly XNamespace XmlNs = XNamespace.Get ("http://schemas.microsoft.com/developer/msbuild/2003");
@@ -21,13 +18,13 @@ namespace Xamarin.MacDev.Tasks {
 
 		#region Inputs
 
-		public ITaskItem [] Items { get; set; }
+		public ITaskItem [] Items { get; set; } = Array.Empty<ITaskItem> ();
 
-		public string ItemName { get; set; }
+		public string ItemName { get; set; } = string.Empty;
 
 		[Output]
 		[Required]
-		public ITaskItem File { get; set; }
+		public ITaskItem? File { get; set; }
 
 		public bool Overwrite { get; set; }
 
@@ -37,36 +34,41 @@ namespace Xamarin.MacDev.Tasks {
 
 		public override bool Execute ()
 		{
-			var items = this.Items;
-			if (items is null)
-				items = new ITaskItem [0];
+			Write (this, File?.ItemSpec, Items, ItemName, Overwrite, IncludeMetadata);
+			return true;
+		}
+
+		public static void Write (Task task, string? file, IEnumerable<ITaskItem> items, string itemName, bool overwrite, bool includeMetadata)
+		{
+			if (file is null) {
+				task.Log.LogWarning ($"No output file to write to for item {itemName}");
+				return;
+			}
 
 			var document = new XDocument (
 				new XElement (ProjectElementName,
 					new XElement (ItemGroupElementName,
-						items.Select (item => this.CreateElementFromItem (item)))));
+						items.Select (item => CreateElementFromItem (item, itemName, includeMetadata)))));
 
-			if (this.Overwrite && System.IO.File.Exists (this.File.ItemSpec))
-				System.IO.File.Delete (this.File.ItemSpec);
+			if (overwrite && System.IO.File.Exists (file))
+				System.IO.File.Delete (file);
 
-			if (!Directory.Exists (Path.GetDirectoryName (this.File.ItemSpec)))
-				Directory.CreateDirectory (Path.GetDirectoryName (this.File.ItemSpec));
+			if (!Directory.Exists (Path.GetDirectoryName (file)))
+				Directory.CreateDirectory (Path.GetDirectoryName (file));
 
-			document.Save (this.File.ItemSpec);
-
-			return true;
+			document.Save (file);
 		}
 
-		private XElement CreateElementFromItem (ITaskItem item)
+		static XElement CreateElementFromItem (ITaskItem item, string itemName, bool includeMetadata)
 		{
-			return new XElement (XmlNs + ItemName,
+			return new XElement (XmlNs + itemName,
 				new XAttribute (IncludeAttributeName, item.ItemSpec),
-					this.CreateMetadataFromItem (item));
+					CreateMetadataFromItem (item, includeMetadata));
 		}
 
-		private IEnumerable<XElement> CreateMetadataFromItem (ITaskItem item)
+		static IEnumerable<XElement> CreateMetadataFromItem (ITaskItem item, bool includeMetadata)
 		{
-			if (this.IncludeMetadata) {
+			if (includeMetadata) {
 				var metadata = item.CloneCustomMetadata ();
 
 				return metadata.Keys

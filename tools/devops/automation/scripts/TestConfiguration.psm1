@@ -33,16 +33,23 @@ class TestConfiguration {
             $vars["LABEL"] = $label
             $vars["TESTS_LABELS"] = "$($this.testsLabels),run-$($label)-tests"
             if ($splitByPlatforms -eq "True") {
+                # watchOS is not supported for .NET so it's an outlier.
+                # we're soon removing legacy Xamarin support though, so hard-coding it here is a quick solution
+                # until this code will be removed anyways.
+                if (("$($this.containsLegacyTests)" -eq "true") -and ("$($Env:CONFIGURE_PLATFORMS_INCLUDE_WATCH)$($Env:CONFIGURE_PLATFORMS_INCLUDE_XAMARIN_LEGACY))" == "11")) {
+                    Write-Host "Enabling watchOS for $label because it's enabled."
+                    $this.enabledPlatforms += "watchOS"
+                }
                 if ($this.enabledPlatforms.Length -eq 0) {
                     Write-Host "No enabled platforms, skipping $label"
                     continue
                 }
                 if ($this.enabledPlatforms.Length -gt 1) {
-                    if ($this.needsMultiplePlatforms -eq "true") {
+                    if ($config.needsMultiplePlatforms -eq "true") {
                         Write-Host "Multiple platform enabled"
                         $this.enabledPlatforms += "Multiple"
                     } else {
-                        Write-Host "Test has multiple platforms, but does not need a specific multiple test run."
+                        Write-Host "Test $label has multiple platforms, but does not need a specific multiple test run (needsMultiplePlatforms=$($config.needsMultiplePlatforms))."
                     }
                 }
                 foreach ($platform in $this.enabledPlatforms) {

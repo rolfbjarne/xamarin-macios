@@ -27,6 +27,9 @@ namespace Xamarin.MacDev.Tasks {
 		public string IntermediateOutputPath { get; set; } = string.Empty;
 
 		[Required]
+		public ITaskItem [] ReferenceAssemblies { get; set; } = Array.Empty<ITaskItem> ();
+
+		[Required]
 		public ITaskItem [] ReferencedLibraries { get; set; } = Array.Empty<ITaskItem> ();
 
 		[Required]
@@ -236,7 +239,7 @@ namespace Xamarin.MacDev.Tasks {
 		IEnumerable<ManifestResource> GetAssemblyManifestResources (string fileName)
 		{
 			if (universe is null)
-				universe = new MetadataLoadContext (new PathAssemblyResolver (ReferencedLibraries.Select (v => v.ItemSpec)));
+				universe = new MetadataLoadContext (new PathAssemblyResolver (ReferenceAssemblies.Select (v => v.ItemSpec)));
 
 			Assembly assembly;
 			try {

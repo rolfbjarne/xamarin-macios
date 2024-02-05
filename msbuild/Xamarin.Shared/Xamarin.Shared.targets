@@ -1883,6 +1883,20 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</PackLibraryResources>
 	</Target>
 
+	<!-- Unpacking of resources from libraries -->
+
+	<PropertyGroup>
+		<_UnpackLibraryResourcesDependsOn>
+			$(_UnpackLibraryResourcesDependsOn);
+			ResolveReferences;
+			_DetectBuildType;
+			_CollectBundleResources;
+			_PrepareUnpackLibraryResources;
+			_BeforeUnpackLibraryResources;
+			_ReadUnpackedLibraryResources;
+		</_UnpackLibraryResourcesDependsOn>
+	</PropertyGroup>
+
 	<Target Name="_PrepareUnpackLibraryResources">
 		<PropertyGroup>
 			<_StampDirectory>$(DeviceSpecificIntermediateOutputPath)resourcestamps\</_StampDirectory>
@@ -1923,7 +1937,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ReadItemsFromFile>
 	</Target>
 
-	<Target Name="_UnpackLibraryResources" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="ResolveReferences;_DetectBuildType;_CollectBundleResources;_PrepareUnpackLibraryResources"
+	<Target Name="_UnpackLibraryResources" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="$(_UnpackLibraryResourcesDependsOn)"
 		Inputs="@(_UnpackLibraryResourceItems)"
 		Outputs="@(_UnpackLibraryResourceItems->'%(StampFile)')">
 
@@ -1937,8 +1951,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			Prefix="$(_EmbeddedResourcePrefix)"
 			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
 			TargetFrameworkDirectory="$(TargetFrameworkDirectory)"
-			ReferencedLibraries="@(_UnpackLibraryResourceItems)"
 			ReferenceAssemblies="@(ReferencePath);@(ReferenceDependencyPaths)"
+			ReferencedLibraries="@(_UnpackLibraryResourceItems)"
 			>
 			<Output TaskParameter="BundleResourcesWithLogicalNames" ItemName="_BundleResourceWithLogicalName" />
 

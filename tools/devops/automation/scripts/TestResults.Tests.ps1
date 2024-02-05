@@ -77,74 +77,6 @@ Describe "TestResults tests" {
     }
 }
 "@
-        $dependencies = @"
-{
-    "tests": {
-        "outputs": {
-        "dotnettests_tvOS.runTests.TESTS_JOBSTATUS": "Succeeded",
-        "dotnettests_tvOS.fix_commit.GIT_HASH": "fa3d1deb4e2d0ac358f2e0ac80e3d305ca541848",
-        "dotnettests_tvOS.DownloadPipelineArtifact1.BuildNumber": "8894907",
-        "dotnettests_tvOS.Bash23.TESTS_ATTEMPT": "1",
-        "dotnettests_tvOS.Bash23.TESTS_BOT": "XAMMINI-012.Ventura",          
-        "dotnettests_tvOS.Bash23.TESTS_JOBSTATUS": "Failed",
-        "dotnettests_tvOS.Bash23.TESTS_LABEL": "dotnettests",
-        "dotnettests_tvOS.Bash23.TESTS_PLATFORM": "",
-        "dotnettests_tvOS.DownloadPipelineArtifact2.BuildNumber": "8894907",
-        "dotnettests_MacCatalyst.fix_commit.GIT_HASH": "fa3d1deb4e2d0ac358f2e0ac80e3d305ca541848",
-        "dotnettests_MacCatalyst.DownloadPipelineArtifact1.BuildNumber": "8894907",
-        "dotnettests_MacCatalyst.Bash23.TESTS_ATTEMPT": "1",
-        "dotnettests_MacCatalyst.Bash23.TESTS_BOT": "XAMBOT-1023.Ventura",
-        "dotnettests_MacCatalyst.Bash23.TESTS_JOBSTATUS": "Failed",
-        "dotnettests_MacCatalyst.Bash23.TESTS_LABEL": "dotnettests",
-        "dotnettests_MacCatalyst.Bash23.TESTS_PLATFORM": "",
-        "dotnettests_MacCatalyst.DownloadPipelineArtifact2.BuildNumber": "8894907",
-        "dotnettests_macOS.fix_commit.GIT_HASH": "fa3d1deb4e2d0ac358f2e0ac80e3d305ca541848",
-        "dotnettests_macOS.DownloadPipelineArtifact1.BuildNumber": "8894907",
-        "dotnettests_macOS.Bash23.TESTS_ATTEMPT": "1",
-        "dotnettests_macOS.Bash23.TESTS_BOT": "XAMMINI-015.Ventura",
-        "dotnettests_macOS.Bash23.TESTS_JOBSTATUS": "Failed",
-        "dotnettests_macOS.Bash23.TESTS_LABEL": "dotnettests",
-        "dotnettests_macOS.Bash23.TESTS_PLATFORM": "",
-        "dotnettests_macOS.DownloadPipelineArtifact2.BuildNumber": "8894907",
-        "dotnettests_macOS.runTests.TESTS_JOBSTATUS": "Succeeded",
-        "dotnettests_iOS.fix_commit.GIT_HASH": "fa3d1deb4e2d0ac358f2e0ac80e3d305ca541848",
-        "dotnettests_iOS.DownloadPipelineArtifact1.BuildNumber": "8894907",
-        "dotnettests_iOS.Bash23.TESTS_ATTEMPT": "1",
-        "dotnettests_iOS.Bash23.TESTS_BOT": "XAMMINI-014.Ventura",
-        "dotnettests_iOS.Bash23.TESTS_JOBSTATUS": "Failed",
-        "dotnettests_iOS.Bash23.TESTS_LABEL": "dotnettests",
-        "dotnettests_iOS.Bash23.TESTS_PLATFORM": "",
-        "dotnettests_iOS.DownloadPipelineArtifact2.BuildNumber": "8894907",
-        "dotnettests_iOS.runTests.TESTS_JOBSTATUS": "Succeeded",
-        "dotnettests_Multiple.fix_commit.GIT_HASH": "fa3d1deb4e2d0ac358f2e0ac80e3d305ca541848",
-        "dotnettests_Multiple.DownloadPipelineArtifact1.BuildNumber": "8894907",
-        "dotnettests_Multiple.Bash23.TESTS_ATTEMPT": "1",
-        "dotnettests_Multiple.Bash23.TESTS_BOT": "XAMMINI-010.Ventura",
-        "dotnettests_Multiple.Bash23.TESTS_JOBSTATUS": "Failed",
-        "dotnettests_Multiple.Bash23.TESTS_LABEL": "dotnettests",
-        "dotnettests_Multiple.Bash23.TESTS_PLATFORM": "",
-        "dotnettests_Multiple.DownloadPipelineArtifact2.BuildNumber": "8894907",
-        "dotnettests_Multiple.runTests.TESTS_JOBSTATUS": "Succeeded",
-        "cecil.fix_commit.GIT_HASH": "fa3d1deb4e2d0ac358f2e0ac80e3d305ca541848",
-        "cecil.DownloadPipelineArtifact1.BuildNumber": "8894907",
-        "cecil.Bash23.TESTS_ATTEMPT": "1",
-        "cecil.Bash23.TESTS_BOT": "XAMMINI-013.Ventura",
-        "cecil.Bash23.TESTS_JOBSTATUS": "Failed",
-        "cecil.Bash23.TESTS_LABEL": "cecil",
-        "cecil.Bash23.TESTS_PLATFORM": "",
-        "cecil.DownloadPipelineArtifact2.BuildNumber": "8894907",
-        "cecil.runTests.TESTS_JOBSTATUS": "Succeeded"
-      },
-      "identifier": null,
-      "name": "tests",
-      "attempt": 1,
-      "startTime": null,
-      "finishTime": null,
-      "state": "NotStarted",
-      "result": "Failed"
-    }
-  }  
-"@
         $stageDependencies = @"
 {    
   "configure_build": {
@@ -153,41 +85,116 @@ Describe "TestResults tests" {
         "test_matrix.TEST_MATRIX": "$($matrix.Replace("`n", "\n").Replace("`"", "\`""))"
       }
     }
-  }
+  },
+    "simulator_tests": {
+        "tests": {
+            "outputs": {
+                "dotnettests_tvOS.runTests.TESTS_JOBSTATUS": "Succeeded",
+                "dotnettests_tvOS.fix_commit.GIT_HASH": "fa3d1deb4e2d0ac358f2e0ac80e3d305ca541848",
+                "dotnettests_tvOS.DownloadPipelineArtifact1.BuildNumber": "8894907",
+                "dotnettests_tvOS.Bash23.TESTS_ATTEMPT": "1",
+                "dotnettests_tvOS.Bash23.TESTS_BOT": "XAMMINI-012.Ventura",
+                "dotnettests_tvOS.Bash23.TESTS_JOBSTATUS": "Failed",
+                "dotnettests_tvOS.Bash23.TESTS_LABEL": "dotnettests",
+                "dotnettests_tvOS.Bash23.TESTS_PLATFORM": "",
+                "dotnettests_tvOS.DownloadPipelineArtifact2.BuildNumber": "8894907",
+                "dotnettests_MacCatalyst.fix_commit.GIT_HASH": "fa3d1deb4e2d0ac358f2e0ac80e3d305ca541848",
+                "dotnettests_MacCatalyst.DownloadPipelineArtifact1.BuildNumber": "8894907",
+                "dotnettests_MacCatalyst.Bash23.TESTS_ATTEMPT": "1",
+                "dotnettests_MacCatalyst.Bash23.TESTS_BOT": "XAMBOT-1023.Ventura",
+                "dotnettests_MacCatalyst.Bash23.TESTS_JOBSTATUS": "Failed",
+                "dotnettests_MacCatalyst.Bash23.TESTS_LABEL": "dotnettests",
+                "dotnettests_MacCatalyst.Bash23.TESTS_PLATFORM": "",
+                "dotnettests_MacCatalyst.DownloadPipelineArtifact2.BuildNumber": "8894907",
+                "dotnettests_macOS.fix_commit.GIT_HASH": "fa3d1deb4e2d0ac358f2e0ac80e3d305ca541848",
+                "dotnettests_macOS.DownloadPipelineArtifact1.BuildNumber": "8894907",
+                "dotnettests_macOS.Bash23.TESTS_ATTEMPT": "1",
+                "dotnettests_macOS.Bash23.TESTS_BOT": "XAMMINI-015.Ventura",
+                "dotnettests_macOS.Bash23.TESTS_JOBSTATUS": "Failed",
+                "dotnettests_macOS.Bash23.TESTS_LABEL": "dotnettests",
+                "dotnettests_macOS.Bash23.TESTS_PLATFORM": "",
+                "dotnettests_macOS.DownloadPipelineArtifact2.BuildNumber": "8894907",
+                "dotnettests_macOS.runTests.TESTS_JOBSTATUS": "Succeeded",
+                "dotnettests_iOS.fix_commit.GIT_HASH": "fa3d1deb4e2d0ac358f2e0ac80e3d305ca541848",
+                "dotnettests_iOS.DownloadPipelineArtifact1.BuildNumber": "8894907",
+                "dotnettests_iOS.Bash23.TESTS_ATTEMPT": "1",
+                "dotnettests_iOS.Bash23.TESTS_BOT": "XAMMINI-014.Ventura",
+                "dotnettests_iOS.Bash23.TESTS_JOBSTATUS": "Failed",
+                "dotnettests_iOS.Bash23.TESTS_LABEL": "dotnettests",
+                "dotnettests_iOS.Bash23.TESTS_PLATFORM": "",
+                "dotnettests_iOS.DownloadPipelineArtifact2.BuildNumber": "8894907",
+                "dotnettests_iOS.runTests.TESTS_JOBSTATUS": "Succeeded",
+                "dotnettests_Multiple.fix_commit.GIT_HASH": "fa3d1deb4e2d0ac358f2e0ac80e3d305ca541848",
+                "dotnettests_Multiple.DownloadPipelineArtifact1.BuildNumber": "8894907",
+                "dotnettests_Multiple.Bash23.TESTS_ATTEMPT": "1",
+                "dotnettests_Multiple.Bash23.TESTS_BOT": "XAMMINI-010.Ventura",
+                "dotnettests_Multiple.Bash23.TESTS_JOBSTATUS": "Failed",
+                "dotnettests_Multiple.Bash23.TESTS_LABEL": "dotnettests",
+                "dotnettests_Multiple.Bash23.TESTS_PLATFORM": "",
+                "dotnettests_Multiple.DownloadPipelineArtifact2.BuildNumber": "8894907",
+                "dotnettests_Multiple.runTests.TESTS_JOBSTATUS": "Succeeded",
+                "cecil.fix_commit.GIT_HASH": "fa3d1deb4e2d0ac358f2e0ac80e3d305ca541848",
+                "cecil.DownloadPipelineArtifact1.BuildNumber": "8894907",
+                "cecil.Bash23.TESTS_ATTEMPT": "1",
+                "cecil.Bash23.TESTS_BOT": "XAMMINI-013.Ventura",
+                "cecil.Bash23.TESTS_JOBSTATUS": "Failed",
+                "cecil.Bash23.TESTS_LABEL": "cecil",
+                "cecil.Bash23.TESTS_PLATFORM": "",
+                "cecil.DownloadPipelineArtifact2.BuildNumber": "8894907",
+                "cecil.runTests.TESTS_JOBSTATUS": "Succeeded"
+            },
+            "identifier": null,
+            "name": "tests",
+            "attempt": 1,
+            "startTime": null,
+            "finishTime": null,
+            "state": "NotStarted",
+            "result": "Failed"
+        }
+    }
 }
 "@
 
-        $dependenciesWithMissingResults = @"
+        $stageDependenciesWithMissingResults = @"
 {
-    "tests": {
-        "outputs": {
-        "cecil.fix_commit.GIT_HASH": "fa3d1deb4e2d0ac358f2e0ac80e3d305ca541848",
-        "cecil.DownloadPipelineArtifact1.BuildNumber": "8894907",
-        "cecil.Bash23.TESTS_ATTEMPT": "1",
-        "cecil.Bash23.TESTS_BOT": "XAMMINI-013.Ventura",
-        "cecil.Bash23.TESTS_JOBSTATUS": "Failed",
-        "cecil.Bash23.TESTS_LABEL": "cecil",
-        "cecil.Bash23.TESTS_PLATFORM": "",
-        "cecil.DownloadPipelineArtifact2.BuildNumber": "8894907",
-        "cecil.runTests.TESTS_JOBSTATUS": "Succeeded",
+  "configure_build": {
+    "configure": {
+      "outputs": {
+        "test_matrix.TEST_MATRIX": "$($matrix.Replace("`n", "\n").Replace("`"", "\`""))"
+      }
+    }
+  },
+    "simulator_tests": {
+        "tests": {
+            "outputs": {
+                "cecil.fix_commit.GIT_HASH": "fa3d1deb4e2d0ac358f2e0ac80e3d305ca541848",
+                "cecil.DownloadPipelineArtifact1.BuildNumber": "8894907",
+                "cecil.Bash23.TESTS_ATTEMPT": "1",
+                "cecil.Bash23.TESTS_BOT": "XAMMINI-013.Ventura",
+                "cecil.Bash23.TESTS_JOBSTATUS": "Failed",
+                "cecil.Bash23.TESTS_LABEL": "cecil",
+                "cecil.Bash23.TESTS_PLATFORM": "",
+                "cecil.DownloadPipelineArtifact2.BuildNumber": "8894907",
+                "cecil.runTests.TESTS_JOBSTATUS": "Succeeded",
 
-        "dotnettests_Multiple.fix_commit.GIT_HASH": "fa3d1deb4e2d0ac358f2e0ac80e3d305ca541848",
-        "dotnettests_Multiple.DownloadPipelineArtifact1.BuildNumber": "8894907",
-        "dotnettests_Multiple.Bash23.TESTS_ATTEMPT": "1",
-        "dotnettests_Multiple.Bash23.TESTS_BOT": "XAMMINI-010.Ventura",
-        "dotnettests_Multiple.Bash23.TESTS_JOBSTATUS": "Failed",
-        "dotnettests_Multiple.Bash23.TESTS_LABEL": "dotnettests",
-        "dotnettests_Multiple.Bash23.TESTS_PLATFORM": "",
-        "dotnettests_Multiple.DownloadPipelineArtifact2.BuildNumber": "8894907",
-        "dotnettests_Multiple.runTests.TESTS_JOBSTATUS": "Succeeded"
-        },
-        "identifier": null,
-        "name": "tests",
-        "attempt": 1,
-        "startTime": null,
-        "finishTime": null,
-        "state": "NotStarted",
-        "result": "Failed"
+                "dotnettests_Multiple.fix_commit.GIT_HASH": "fa3d1deb4e2d0ac358f2e0ac80e3d305ca541848",
+                "dotnettests_Multiple.DownloadPipelineArtifact1.BuildNumber": "8894907",
+                "dotnettests_Multiple.Bash23.TESTS_ATTEMPT": "1",
+                "dotnettests_Multiple.Bash23.TESTS_BOT": "XAMMINI-010.Ventura",
+                "dotnettests_Multiple.Bash23.TESTS_JOBSTATUS": "Failed",
+                "dotnettests_Multiple.Bash23.TESTS_LABEL": "dotnettests",
+                "dotnettests_Multiple.Bash23.TESTS_PLATFORM": "",
+                "dotnettests_Multiple.DownloadPipelineArtifact2.BuildNumber": "8894907",
+                "dotnettests_Multiple.runTests.TESTS_JOBSTATUS": "Succeeded"
+            },
+            "identifier": null,
+            "name": "tests",
+            "attempt": 1,
+            "startTime": null,
+            "finishTime": null,
+            "state": "NotStarted",
+            "result": "Failed"
+        }
     }
 }
 "@
@@ -323,7 +330,7 @@ Describe "TestResults tests" {
             New-Item -Path "$testDirectory/TestSummary-prefixdotnettests_macOS-1" -Name "TestSummary.md" -Value "SummaryF" -Force
             New-Item -Path "$testDirectory/TestSummary-prefixdotnettests_Multiple-1" -Name "TestSummary.md" -Value "SummaryF" -Force
 
-            $testResults = New-TestSummaryResults -Path "$testDirectory" -TestPrefix "prefix" -Dependencies "$dependencies"
+            $testResults = New-TestSummaryResults -Path "$testDirectory" -TestPrefix "prefix" -StageDependencies "$stageDependencies"
 
             # Remove-Item -Path $testDirectory -Recurse
 
@@ -357,7 +364,7 @@ Describe "TestResults tests" {
             New-Item -Path "$testDirectory/TestSummary-prefixcecil-1" -Name "TestSummary.md" -Value "# :tada: All 1 tests passed :tada:" -Force
             New-Item -Path "$testDirectory/TestSummary-prefixdotnettests_Multiple-1" -Name "TestSummary.md" -Value "# :tada: All 7 tests passed :tada:" -Force
 
-            $parallelResults = New-ParallelTestsResults -Path "$testDirectory" -TestPrefix "prefix" -Dependencies "$dependenciesWithMissingResults" -Context "context" -VSDropsIndex "vsdropsIndex"
+            $parallelResults = New-ParallelTestsResults -Path "$testDirectory" -TestPrefix "prefix" -StageDependencies "$stageDependenciesWithMissingResults" -Context "context" -VSDropsIndex "vsdropsIndex"
 
             $parallelResults.IsSuccess() | Should -Be $false
 
@@ -415,7 +422,7 @@ Describe "TestResults tests" {
             New-Item -Path "$testDirectory/TestSummary-prefixdotnettests_Multiple-1" -Name "TestSummary.md" -Value "# :tada: All 7 tests passed :tada:" -Force
 
 
-            $parallelResults = New-ParallelTestsResults -Path "$testDirectory" -TestPrefix "prefix" -Dependencies "$dependencies" -StageDependencies "$stageDependencies" -Context "context" -VSDropsIndex "vsdropsIndex"
+            $parallelResults = New-ParallelTestsResults -Path "$testDirectory" -TestPrefix "prefix" -StageDependencies "$stageDependencies" -Context "context" -VSDropsIndex "vsdropsIndex"
 
             $parallelResults.IsSuccess() | Should -Be $false
 
@@ -469,7 +476,7 @@ Describe "TestResults tests" {
             New-Item -Path "$testDirectory/TestSummary-prefixdotnettests_macOS-1" -Name "TestSummary.md" -Value "# :tada: All 6 tests passed :tada:" -Force
             New-Item -Path "$testDirectory/TestSummary-prefixdotnettests_Multiple-1" -Name "TestSummary.md" -Value "# :tada: All 7 tests passed :tada:" -Force
 
-            $parallelResults = New-ParallelTestsResults -Path "$testDirectory" -TestPrefix "prefix" -Dependencies "$dependencies" -StageDependencies "$stageDependencies" -Context "context" -VSDropsIndex "vsdropsIndex"
+            $parallelResults = New-ParallelTestsResults -Path "$testDirectory" -TestPrefix "prefix" -StageDependencies "$stageDependencies" -Context "context" -VSDropsIndex "vsdropsIndex"
 
             $parallelResults.IsSuccess() | Should -Be $false
 

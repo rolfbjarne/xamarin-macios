@@ -251,7 +251,7 @@ namespace Xamarin.MacDev.Tasks {
 
 			foreach (var resourceName in assembly.GetManifestResourceNames ()) {
 				var info = assembly.GetManifestResourceInfo (resourceName);
-				if (info.ResourceLocation != ResourceLocation.Embedded)
+				if (!info.ResourceLocation.HasFlag (ResourceLocation.Embedded))
 					continue;
 				yield return new ManifestResource (resourceName, () => assembly.GetManifestResourceStream (resourceName));
 			}

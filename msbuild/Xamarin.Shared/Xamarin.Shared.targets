@@ -1933,8 +1933,15 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			File="@(_UnpackLibraryResourceItems -> '%(ItemsFile)')"
 			Condition="Exists('%(ItemsFile)')"
 			>
-			<Output TaskParameter="Items" ItemName="_BundleResourceWithLogicalName" />
+			<Output TaskParameter="Items" ItemName="_PreviouslyUnpackedBundleResourceWithLogicalName" />
 		</ReadItemsFromFile>
+
+		<ItemGroup>
+			<FileWrites Include="@(_PreviouslyUnpackedBundleResourceWithLogicalName)" />
+			<FileWrites Include="@(_PreviouslyUnpackedBundleResourceWithLogicalName -> '%(ItemsFile)')" />
+
+			<_BundleResourceWithLogicalName Include="@(_PreviouslyUnpackedBundleResourceWithLogicalName)" />
+		</ItemGroup>
 	</Target>
 
 	<Target Name="_UnpackLibraryResources" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="$(_UnpackLibraryResourcesDependsOn)"

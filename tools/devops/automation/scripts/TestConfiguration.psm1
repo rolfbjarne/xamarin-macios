@@ -36,7 +36,7 @@ class TestConfiguration {
                 # watchOS is not supported for .NET so it's an outlier.
                 # we're soon removing legacy Xamarin support though, so hard-coding it here is a quick solution
                 # until this code will be removed anyways.
-                if (("$($this.containsLegacyTests)" -eq "true") -and ("$($Env:CONFIGURE_PLATFORMS_INCLUDE_WATCH)$($Env:CONFIGURE_PLATFORMS_INCLUDE_XAMARIN_LEGACY))" == "11")) {
+                if (("$($this.containsLegacyTests)" -eq "true") -and ("$($Env:CONFIGURE_PLATFORMS_INCLUDE_WATCH)$($Env:CONFIGURE_PLATFORMS_INCLUDE_XAMARIN_LEGACY))" -eq "11")) {
                     Write-Host "Enabling watchOS for $label because it's enabled."
                     $this.enabledPlatforms += "watchOS"
                 }

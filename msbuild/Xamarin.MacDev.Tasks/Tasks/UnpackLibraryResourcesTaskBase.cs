@@ -92,6 +92,7 @@ namespace Xamarin.MacDev.Tasks {
 					results.AddRange (extracted);
 
 					var itemsFile = asm.GetMetadata ("ItemsFile");
+					itemsFile = itemsFile.Replace ('\\', Path.DirectorySeparatorChar);
 					WriteItemsToFile.Write (this, itemsFile, extracted, "_BundleResourceWithLogicalName", true, true);
 				}
 			}

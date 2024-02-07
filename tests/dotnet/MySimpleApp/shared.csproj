@@ -12,5 +12,7 @@
 
 	<ItemGroup>
 		<Compile Include="../*.cs" />
+		<!-- Not escaping (using the quote: ' directly) fails the same way -->
+		<BundleResource Include="../Rolf%27s Quote.txt" Link="Rolf%27s Quote.txt" />
 	</ItemGroup>
 </Project>

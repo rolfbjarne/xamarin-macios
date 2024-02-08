@@ -250,7 +250,6 @@ namespace UIKit {
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public extern static NativeHandle NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (IntPtr receiver, IntPtr selector, NativeHandle arg1, NativeHandle arg2, NativeHandle arg3);
 #endif
-#endif // !XAMCORE_5_0
 	}
 }
 

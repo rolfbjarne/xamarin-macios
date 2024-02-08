@@ -4842,6 +4842,7 @@ public partial class Generator : IMemberGatherer {
 			} else {
 				print ("[OptionalMember]");
 			}
+			print ("[Preserve (Conditional = true)]");
 			GenerateMethod (minfo);
 			print ("");
 		}

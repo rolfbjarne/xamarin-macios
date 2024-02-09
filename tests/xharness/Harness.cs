@@ -175,7 +175,7 @@ namespace Xharness {
 				} else if (INCLUDE_XAMARIN_LEGACY && (INCLUDE_IOS || INCLUDE_TVOS || INCLUDE_WATCH)) {
 					return Path.Combine (IOS_DESTDIR, "Library", "Frameworks", "Xamarin.iOS.framework", "Versions", "Current", "bin", "mlaunch");
 				}
-				return $"Not building any mobile platform, so can't provide a location to mlaunch.";
+				return $"Not building any mobile platform, so can't provide a location to mlaunch. INCLUDE_XAMARIN_LEGACY: {INCLUDE_XAMARIN_LEGACY} INCLUDE_IOS: {INCLUDE_IOS} INCLUDE_TVOS: {INCLUDE_TVOS} INCLUDE_WATCH: {INCLUDE_WATCH}";
 			}
 		}
 

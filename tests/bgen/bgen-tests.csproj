@@ -87,7 +87,7 @@
     <Compile Include="..\generator\BGenBase.cs">
       <Link>BGenBase.cs</Link>
     </Compile>
-    <Compile Include="..\generator\ProtocolTest.cs">
+    <Compile Include="..\generator\ProtocolTests.cs">
       <Link>ProtocolTest.cs</Link>
     </Compile>
   </ItemGroup>

@@ -1,5 +1,6 @@
 #define TRACE
 
+using System.IO;
 using System.IO.Compression;
 
 #nullable enable
@@ -10,7 +11,7 @@ namespace Xamarin.Tests {
 		{
 			using var zip = ZipFile.OpenRead (file);
 			DumpZipFile (zip, file);
-			return zip.Entries.Select (entry => entry.FullName).ToList ();
+			return zip.Entries.Select (entry => entry.FullName.TrimEnd ('/').Replace ('/', Path.DirectorySeparatorChar)).ToList ();
 		}
 
 		public static void DumpZipFile (ZipArchive zip, string path)

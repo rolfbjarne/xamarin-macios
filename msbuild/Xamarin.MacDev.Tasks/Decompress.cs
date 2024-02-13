@@ -122,7 +122,26 @@ namespace Xamarin.MacDev {
 				log.LogWarning ("The extracted file or directory '{0}' could not be found." /* The extracted file or directory '{0}' could not be found. */, decompressedResource);
 			}
 
+
+			DumpZipFile (zip);
+
+			Console.WriteLine ($"Created {createdFiles.Count} files:");
+			foreach (var cf in createdFiles) {
+				var finfo = new FileInfo (cf);
+				Console.Write ($"    {cf} Exists: {finfo.Exists} Length: {finfo.Length}");
+			}
+
 			return rv;
+		}
+
+		static void DumpZipFile (string path)
+		{
+			using var zip = ZipFile.OpenRead (path);
+			var entries = zip.Entries;
+			Console.WriteLine ($"Viewing zip archive {path} with {entries.Count} entries:");
+			foreach (var entry in entries) {
+				Console.WriteLine ($"    FullName: {entry.FullName} Name: {entry.Name} Length: {entry.Length} CompressedLength: {entry.CompressedLength} ExternalAttributes: 0x{GetExternalAttributes (entry):X}");
+			}
 		}
 
 		// The dir separator character in zip files is always "/", even on Windows

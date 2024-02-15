@@ -953,7 +953,7 @@ public partial class Generator : IMemberGatherer {
 		try {
 			sb.Append (ParameterGetMarshalType (new MarshalInfo (this, mi) { IsAligned = aligned }));
 		} catch (BindingException ex) {
-			throw new BindingException (1078, ex.Error, ex, ex.Message, mi.Name);
+			throw new BindingException (1078, ex.Error, ex, ex.Message, $"{mi.DeclaringType.FullName}.{mi.Name}");
 		}
 
 		sb.Append ("_");
@@ -1421,6 +1421,8 @@ public partial class Generator : IMemberGatherer {
 					else if (attr is RequiresSuperAttribute)
 						continue;
 					else if (attr is NoMethodAttribute)
+						continue;
+					else if (attr is OptionalMemberAttribute || attr is RequiredMemberAttribute)
 						continue;
 					else {
 						switch (attr.GetType ().Name) {
@@ -3701,6 +3703,12 @@ public partial class Generator : IMemberGatherer {
 			// e.g. Dispose won't have an [Export] since it's present to satisfy System.IDisposable
 			if (parent.FullName != "System.IDisposable") {
 				foreach (var method in parent.GatherMethods (BindingFlags.Public | BindingFlags.Instance, this)) {
+					// Skip methods the interface already implements if it doesn't have an export
+					if (!method.IsAbstract) {
+						var exportAttribute = GetExportAttribute (method);
+						if (exportAttribute is null)
+							continue;
+					}
 					yield return method;
 				}
 			}
@@ -5029,6 +5037,16 @@ public partial class Generator : IMemberGatherer {
 			foreach (var gr in duplicateMethodsGroupedBySelector) {
 				var distinctMethodsBySignature = gr.GroupBy ((v) => v.Signature).Select ((v) => v.First ()).ToArray ();
 				if (distinctMethodsBySignature.Length > 1) {
+					var areAllNonAbstract = gr.All(v => !v.Method.IsAbstract);
+					// If none of the method are abstract, we can just skip them all
+					if (areAllNonAbstract) {
+						var warning = ErrorHelper.CreateWarning (1120
+							/* The type '{0}' is trying to inline the methods binding the selector '{1}' from the protocols '{2}' and '{3}', using methods with different signatures ('{4}' vs '{5}'). These methods will be ignored. */,
+							type.FullName, gr.Key, distinctMethodsBySignature [0].Method.DeclaringType.FullName, distinctMethodsBySignature [1].Method.DeclaringType.FullName,
+							distinctMethodsBySignature [0].Method.ToString (), distinctMethodsBySignature [1].Method.ToString ());
+						exceptions.Add (warning);
+						continue;
+					}
 					exceptions.Add (ErrorHelper.CreateError (1069, type.FullName, gr.Key, distinctMethodsBySignature [0].Method.DeclaringType.FullName, distinctMethodsBySignature [1].Method.DeclaringType.FullName,
 						distinctMethodsBySignature [0].Method.ToString (), distinctMethodsBySignature [1].Method.ToString ()));
 					continue;

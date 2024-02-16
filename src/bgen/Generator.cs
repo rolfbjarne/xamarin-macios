@@ -1499,8 +1499,14 @@ public partial class Generator : IMemberGatherer {
 
 	void ThrowIfExceptions ()
 	{
-		if (exceptions.Count > 0)
+		if (exceptions.Count == 0)
+			return;
+
+		if (exceptions.All (v => v is BindingException pe && pe.Error))
 			throw new AggregateException (exceptions);
+
+		foreach (var e in exceptions)
+			ErrorHelper.Show (e);
 	}
 
 	static string GenerateNSValue (string propertyToCall)

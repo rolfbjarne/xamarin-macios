@@ -5043,7 +5043,7 @@ public partial class Generator : IMemberGatherer {
 			foreach (var gr in duplicateMethodsGroupedBySelector) {
 				var distinctMethodsBySignature = gr.GroupBy ((v) => v.Signature).Select ((v) => v.First ()).ToArray ();
 				if (distinctMethodsBySignature.Length > 1) {
-					var areAllNonAbstract = gr.All(v => !v.Method.IsAbstract);
+					var areAllNonAbstract = gr.All (v => !v.Method.IsAbstract);
 					// If none of the method are abstract, we can just skip them all
 					if (areAllNonAbstract) {
 						var warning = ErrorHelper.CreateWarning (1120

@@ -22,6 +22,9 @@ namespace Xamarin.MacDev.Tasks {
 	/// This task works on Windows too, but if the task encounters a symlink while extracting, an error will be shown.
 	/// </summary>
 	public class Unzip : XamarinTask, ITaskCallback {
+		// If we should copy the extracted files to Windows (as opposed to just creating an empty output file).
+		public bool CopyToWindows { get; set; }
+
 		[Required]
 		public ITaskItem? ZipFilePath { get; set; }
 
@@ -37,8 +40,15 @@ namespace Xamarin.MacDev.Tasks {
 
 		public override bool Execute ()
 		{
-			if (ShouldExecuteRemotely ())
-				return new TaskRunner (SessionId, BuildEngine4).RunAsync (this).Result;
+			if (ShouldExecuteRemotely ()) {
+				var taskRunner = new TaskRunner (SessionId, BuildEngine4);
+				var rv = taskRunner.RunAsync (this).Result;
+
+				if (CopyToWindows)
+					CopyFilesToWindowsAsync (taskRunner, TouchedFiles).Wait ();
+
+				return rv;
+			}
 
 			return ExecuteLocally ();
 		}

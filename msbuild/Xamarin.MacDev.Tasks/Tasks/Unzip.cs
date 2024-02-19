@@ -40,8 +40,16 @@ namespace Xamarin.MacDev.Tasks {
 
 		public override bool Execute ()
 		{
-			if (ShouldExecuteRemotely ())
-				return new TaskRunner (SessionId, BuildEngine4).RunAsync (this).Result;
+			if (ShouldExecuteRemotely ()) {
+				var rv = new TaskRunner (SessionId, BuildEngine4).RunAsync (this).Result;
+
+				Log.LogWarning ($"Got {TouchedFiles.Length} touched files:");
+				foreach (var tf in TouchedFiles) {
+					Log.LogWarning ($"    {tf} Exists: {File.Exists (tf.ItemSpec)}");
+				}
+
+				return rv;
+			}
 
 			return ExecuteLocally ();
 		}

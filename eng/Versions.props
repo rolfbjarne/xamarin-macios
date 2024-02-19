@@ -20,5 +20,10 @@
     <MicrosoftmacOSSdkPackageVersion>13.3.7139</MicrosoftmacOSSdkPackageVersion>
     <MicrosoftiOSSdkPackageVersion>16.4.7139</MicrosoftiOSSdkPackageVersion>
     <MicrosofttvOSSdkPackageVersion>16.4.7139</MicrosofttvOSSdkPackageVersion>
+    <!-- This is a subscription of the .NET 8/Xcode 15.0 versions of our packages -->
+    <MicrosoftMacCatalystSdknet80_170PackageVersion>17.0.8519-rt</MicrosoftMacCatalystSdknet80_170PackageVersion>
+    <MicrosoftmacOSSdknet80_140PackageVersion>14.0.8519-rt</MicrosoftmacOSSdknet80_140PackageVersion>
+    <MicrosoftiOSSdknet80_170PackageVersion>17.0.8519-rt</MicrosoftiOSSdknet80_170PackageVersion>
+    <MicrosofttvOSSdknet80_170PackageVersion>17.0.8519-rt</MicrosofttvOSSdknet80_170PackageVersion>
   </PropertyGroup>
 </Project>

@@ -22,6 +22,9 @@ namespace Xamarin.MacDev.Tasks {
 	/// This task works on Windows too, but if the task encounters a symlink while extracting, an error will be shown.
 	/// </summary>
 	public class Unzip : XamarinTask, ITaskCallback {
+		// If we should copy the extracted files to Windows (as opposed to just creating an empty output file).
+		public bool CopyToWindows { get; set; }
+
 		[Required]
 		public ITaskItem? ZipFilePath { get; set; }
 
@@ -53,7 +56,13 @@ namespace Xamarin.MacDev.Tasks {
 
 		public bool ShouldCreateOutputFile (ITaskItem item) => true;
 
-		public IEnumerable<ITaskItem> GetAdditionalItemsToBeCopied () => Enumerable.Empty<ITaskItem> ();
+		public IEnumerable<ITaskItem> GetAdditionalItemsToBeCopied ()
+		{
+			if (!CopyToWindows)
+				return Enumerable.Empty<ITaskItem> ();
+
+			return TouchedFiles;
+		}
 
 		bool ExecuteLocally ()
 		{

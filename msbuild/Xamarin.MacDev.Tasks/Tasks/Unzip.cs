@@ -45,7 +45,8 @@ namespace Xamarin.MacDev.Tasks {
 
 				Log.LogWarning ($"Got {TouchedFiles.Length} touched files:");
 				foreach (var tf in TouchedFiles) {
-					Log.LogWarning ($"    {tf} Exists: {File.Exists (tf.ItemSpec)}");
+					var finfo = new FileInfo (tf.ItemSpec);
+					Log.LogWarning ($"    {tf} Exists: {finfo.Exists} Length: {(finfo.Exists ? finfo.Length : -1)}");
 				}
 
 				return rv;
@@ -60,15 +61,26 @@ namespace Xamarin.MacDev.Tasks {
 				BuildConnection.CancelAsync (BuildEngine4).Wait ();
 		}
 
-		public bool ShouldCopyToBuildServer (ITaskItem item) => true;
+		public bool ShouldCopyToBuildServer (ITaskItem item)
+		{
+			Log.LogWarning ($"ShouldCopyToBuildServer ({item.ItemSpec}) => true");
+			return true;
+		}
 
-		public bool ShouldCreateOutputFile (ITaskItem item) => true;
+		public bool ShouldCreateOutputFile (ITaskItem item)
+		{
+			Log.LogWarning ($"ShouldCreateOutputFile ({item.ItemSpec}) => true");
+			return true;
+		}
 
 		public IEnumerable<ITaskItem> GetAdditionalItemsToBeCopied ()
 		{
-			if (!CopyToWindows)
+			if (!CopyToWindows) {
+				Log.LogWarning ($"Not copying any file back to windows");
 				return Enumerable.Empty<ITaskItem> ();
+			}
 
+			Log.LogWarning ($"Copying {TouchedFiles.Length} TouchedFiles back to Windows");
 			return TouchedFiles;
 		}
 

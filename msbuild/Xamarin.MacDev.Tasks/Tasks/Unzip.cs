@@ -41,7 +41,10 @@ namespace Xamarin.MacDev.Tasks {
 		public override bool Execute ()
 		{
 			if (ShouldExecuteRemotely ()) {
-				var rv = new TaskRunner (SessionId, BuildEngine4).RunAsync (this).Result;
+				var taskRunner = new TaskRunner (SessionId, BuildEngine4);
+				var rv = taskRunner.RunAsync (this).Result;
+
+				CopyFilesToWindowsAsync (taskRunner, TouchedFiles).Wait ();
 
 				Log.LogWarning ($"Got {TouchedFiles.Length} touched files:");
 				foreach (var tf in TouchedFiles) {
@@ -69,23 +72,16 @@ namespace Xamarin.MacDev.Tasks {
 
 		public bool ShouldCreateOutputFile (ITaskItem item)
 		{
+			Log.LogWarning ($"ShouldCreateOutputFile\n{Environment.StackTrace}");
 			Log.LogWarning ($"ShouldCreateOutputFile ({item.ItemSpec}) => true");
 			return true;
 		}
 
-		public IEnumerable<ITaskItem> GetAdditionalItemsToBeCopied ()
-		{
-			if (!CopyToWindows) {
-				Log.LogWarning ($"Not copying any file back to windows");
-				return Enumerable.Empty<ITaskItem> ();
-			}
-
-			Log.LogWarning ($"Copying {TouchedFiles.Length} TouchedFiles back to Windows");
-			return TouchedFiles;
-		}
+		public IEnumerable<ITaskItem> GetAdditionalItemsToBeCopied () => Enumerable.Empty<ITaskItem> ();
 
 		bool ExecuteLocally ()
 		{
+			Log.LogWarning ($"Executing locally\n{Environment.StackTrace}");
 			var createdFiles = new List<string> ();
 			if (!CompressionHelper.TryDecompress (Log, ZipFilePath!.ItemSpec, Resource, ExtractionPath, createdFiles, out var _))
 				return false;

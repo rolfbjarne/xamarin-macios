@@ -236,6 +236,7 @@ namespace Xamarin.Tests {
 
 			// Sort the messages so that comparison against the expected array is faster
 			expectedWarnings = expectedWarnings
+				.Select (v => v.Replace (Path.DirectorySeparatorChar, '/')) // warnings we get are from macOS, so make sure we expect macOS-style paths.
 				.OrderBy (v => v)
 				.ToList ();
 

@@ -167,7 +167,11 @@ namespace GeneratorTests {
 				.Union (allTypes.SelectMany ((type) => type.Properties));
 
 			var preserves = allMembers.Count ((v) => v.HasCustomAttributes && v.CustomAttributes.Any ((ca) => ca.AttributeType.Name == "PreserveAttribute"));
+#if NET
 			Assert.AreEqual (30, preserves, "Preserve attribute count"); // If you modified code that generates PreserveAttributes please update the preserve count
+#else
+			Assert.AreEqual (28, preserves, "Preserve attribute count"); // If you modified code that generates PreserveAttributes please update the preserve count
+#endif
 		}
 
 		[Test]
@@ -425,7 +429,11 @@ namespace GeneratorTests {
 				.Union (allTypes.SelectMany ((type) => type.Properties));
 
 			var preserves = allMembers.Sum ((v) => v.CustomAttributes.Count ((ca) => ca.AttributeType.Name == "AdviceAttribute"));
+#if NET
 			Assert.AreEqual (27, preserves, "Advice attribute count"); // If you modified code that generates AdviceAttributes please update the attribute count
+#else
+			Assert.AreEqual (24, preserves, "Advice attribute count"); // If you modified code that generates AdviceAttributes please update the attribute count
+#endif
 		}
 
 		[Test]
@@ -620,7 +628,11 @@ namespace GeneratorTests {
 				.Union (allTypes.SelectMany ((type) => type.Fields))
 				.Union (allTypes.SelectMany ((type) => type.Properties));
 
+#if NET
 			Assert.AreEqual (2, allMembers.Count ((member) => member.Name == "RequiredMethodAsync"), "Expected 2 RequiredMethodAsync members in generated code. If you modified code that generates RequiredMethodAsync (AsyncAttribute) please update the RequiredMethodAsync count.");
+#else
+			Assert.AreEqual (1, allMembers.Count ((member) => member.Name == "RequiredMethodAsync"), "Expected 1 RequiredMethodAsync members in generated code. If you modified code that generates RequiredMethodAsync (AsyncAttribute) please update the RequiredMethodAsync count.");
+#endif
 
 			var attribs = MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.HideBySig;
 			bgen.AssertMethod ("NoAsyncInternalWrapperTests.MyFooDelegate_Extensions", "RequiredMethodAsync", attribs, "System.Threading.Tasks.Task", "NoAsyncInternalWrapperTests.IMyFooDelegate", "System.Int32");
@@ -1171,12 +1183,20 @@ namespace GeneratorTests {
 			bgen.AssertPublicMethodCount ("NS.Whatever", 9); // 6 accessors + 2 constructors + ClassHandle getter
 
 			bgen.AssertMethod ("NS.IIProtocol", "get_IPropA");
+#if NET
 			bgen.AssertMethod ("NS.IIProtocol", "get_IPropAOpt");
+#endif
 			bgen.AssertNoMethod ("NS.IIProtocol", "set_IPropA", parameterTypes: "Foundation.NSObject");
 			bgen.AssertMethod ("NS.IIProtocol", "set_IPropB", parameterTypes: "Foundation.NSObject");
+#if NET
 			bgen.AssertMethod ("NS.IIProtocol", "set_IPropBOpt", parameterTypes: "Foundation.NSObject");
+#endif
 			bgen.AssertNoMethod ("NS.IIProtocol", "get_IPropB");
+#if NET
 			bgen.AssertPublicMethodCount ("NS.IIProtocol", 4);
+#else
+			bgen.AssertPublicMethodCount ("NS.IIProtocol", 2);
+#endif
 
 			bgen.AssertMethod ("NS.IProtocol_Extensions", "GetIPropAOpt", parameterTypes: "NS.IIProtocol");
 			bgen.AssertMethod ("NS.IProtocol_Extensions", "SetIPropBOpt", parameterTypes: new string [] { "NS.IIProtocol", "Foundation.NSObject" });

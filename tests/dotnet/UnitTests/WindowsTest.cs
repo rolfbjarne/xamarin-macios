@@ -247,7 +247,7 @@ namespace Xamarin.Tests {
 			Assert.That (zippedAppBundlePath, Does.Exist, "AppBundle.zip");
 
 			BundleStructureTest.CheckZippedAppBundleContents (platform, zippedAppBundlePath, rids, signature, isReleaseBuild);
-			CollectionAssert.AreEqual (expectedWarnings, warningMessages, "Warnings");
+			AssertWarningsEqual (expectedWarnings, warningMessages, "Warnings");
 			ExecuteWithMagicWordAndAssert (platform, runtimeIdentifiers, appExecutable);
 
 			// touch AppDelegate.cs, and rebuild should succeed and do the right thing
@@ -259,7 +259,7 @@ namespace Xamarin.Tests {
 			warningMessages = BundleStructureTest.FilterWarnings (warnings, canonicalizePaths: true);
 
 			BundleStructureTest.CheckZippedAppBundleContents (platform, zippedAppBundlePath, rids, signature, isReleaseBuild);
-			CollectionAssert.AreEqual (expectedWarnings, warningMessages, "Warnings Rebuild 1");
+			AssertWarningsEqual (expectedWarnings, warningMessages, "Warnings Rebuild 1");
 			ExecuteWithMagicWordAndAssert (platform, runtimeIdentifiers, appExecutable);
 
 			// remove the bin directory, and rebuild should succeed and do the right thing
@@ -271,7 +271,7 @@ namespace Xamarin.Tests {
 			warningMessages = BundleStructureTest.FilterWarnings (warnings, canonicalizePaths: true);
 
 			BundleStructureTest.CheckZippedAppBundleContents (platform, zippedAppBundlePath, rids, signature, isReleaseBuild);
-			CollectionAssert.AreEqual (expectedWarnings, warningMessages, "Warnings Rebuild 2");
+			AssertWarningsEqual (expectedWarnings, warningMessages, "Warnings Rebuild 2");
 			ExecuteWithMagicWordAndAssert (platform, runtimeIdentifiers, appExecutable);
 
 			// a simple rebuild should succeed
@@ -280,8 +280,40 @@ namespace Xamarin.Tests {
 			warningMessages = BundleStructureTest.FilterWarnings (warnings, canonicalizePaths: true);
 
 			BundleStructureTest.CheckZippedAppBundleContents (platform, zippedAppBundlePath, rids, signature, isReleaseBuild);
-			CollectionAssert.AreEqual (expectedWarnings, warningMessages, "Warnings Rebuild 3");
+			AssertWarningsEqual (expectedWarnings, warningMessages, "Warnings Rebuild 3");
 			ExecuteWithMagicWordAndAssert (platform, runtimeIdentifiers, appExecutable);
+		}
+
+		static void AssertWarningsEqual (IList<string> expected, IList<string> actual, string message)
+		{
+			if (expected.Count == actual.Count) {
+				var equal = true;
+				for (var i = 0; i < actual.Count; i++) {
+					if (expected [i] != actual [i]) {
+						equal = false;
+						break;
+					}
+				}
+				if (equal)
+					return;
+			}
+
+			var sb = new StringBuilder ();
+			sb.AppendLine ($"Incorrect warnings: {message}");
+			sb.AppendLine ($"Expected {expected.Count} warnings:");
+			for (var i = 0; i < expected.Count; i++)
+				sb.AppendLine ($"\t#{i + 1}: {expected [i]}");
+			sb.AppendLine ($"Got {actual.Count} warnings:");
+			for (var i = 0; i < actual.Count; i++) {
+				if (i < expected.Count && actual [i] == expected [i]) {
+					sb.AppendLine ($"\t#{i + 1}: {actual [i]}");
+				} else {
+					sb.AppendLine ($"\t!{i + 1}: {actual [i]}");
+				}
+			}
+
+			Console.WriteLine (sb);
+			Assert.Fail (sb.ToString ());
 		}
 
 		[Category ("RemoteWindows")]

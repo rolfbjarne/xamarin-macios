@@ -348,12 +348,12 @@ namespace GeneratorTests {
 	UIKit.UIView Bug35176.BarObject::FooView(): [Introduced(ObjCRuntime.PlatformName.MacCatalyst, 15, 3, ObjCRuntime.PlatformArchitecture.None, null)]
 	UIKit.UIView Bug35176.BarObject::FooView(): [Introduced(ObjCRuntime.PlatformName.MacOSX, 12, 2, ObjCRuntime.PlatformArchitecture.None, null)]
 	UIKit.UIView Bug35176.BarObject::get_BarView(): [Introduced(ObjCRuntime.PlatformName.iOS, 14, 4, ObjCRuntime.PlatformArchitecture.None, null)]
-	UIKit.UIView Bug35176.BarObject::get_BarView(): [Introduced(ObjCRuntime.PlatformName.MacCatalyst, 14, 4, ObjCRuntime.PlatformArchitecture.None, null)]
+	UIKit.UIView Bug35176.BarObject::get_BarView(): [Introduced(ObjCRuntime.PlatformName.MacCatalyst, 15, 4, ObjCRuntime.PlatformArchitecture.None, null)]
 	UIKit.UIView Bug35176.BarObject::GetBarMember(System.Int32): [Introduced(ObjCRuntime.PlatformName.iOS, 14, 3, ObjCRuntime.PlatformArchitecture.None, null)]
 	UIKit.UIView Bug35176.BarObject::GetBarMember(System.Int32): [Introduced(ObjCRuntime.PlatformName.MacCatalyst, 15, 3, ObjCRuntime.PlatformArchitecture.None, null)]
 	UIKit.UIView Bug35176.BarObject::GetBarMember(System.Int32): [Introduced(ObjCRuntime.PlatformName.MacOSX, 12, 2, ObjCRuntime.PlatformArchitecture.None, null)]
 	UIKit.UIView Bug35176.FooInterface_Extensions::GetBarView(Bug35176.IFooInterface): [Introduced(ObjCRuntime.PlatformName.iOS, 14, 4, ObjCRuntime.PlatformArchitecture.None, null)]
-	UIKit.UIView Bug35176.FooInterface_Extensions::GetBarView(Bug35176.IFooInterface): [Introduced(ObjCRuntime.PlatformName.MacCatalyst, 14, 4, ObjCRuntime.PlatformArchitecture.None, null)]
+	UIKit.UIView Bug35176.FooInterface_Extensions::GetBarView(Bug35176.IFooInterface): [Introduced(ObjCRuntime.PlatformName.MacCatalyst, 15, 4, ObjCRuntime.PlatformArchitecture.None, null)]
 ";
 #endif
 
@@ -1216,12 +1216,12 @@ namespace GeneratorTests {
 			var expectedPropertyAttributes =
 @"[SupportedOSPlatform(""ios"")]
 [SupportedOSPlatform(""maccatalyst"")]
-[SupportedOSPlatform(""macos12.0"")]
+[SupportedOSPlatform(""macos13.0"")]
 [UnsupportedOSPlatform(""tvos"")]";
 			var expectedSetterAttributes =
 @"[SupportedOSPlatform(""ios"")]
 [SupportedOSPlatform(""maccatalyst"")]
-[SupportedOSPlatform(""macos12.0"")]
+[SupportedOSPlatform(""macos13.0"")]
 [UnsupportedOSPlatform(""tvos"")]";
 
 			expectedPropertyAttributes = expectedPropertyAttributes.Replace ("\r", string.Empty);

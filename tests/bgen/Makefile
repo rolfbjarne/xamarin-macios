@@ -1,5 +1,5 @@
 TOP=../..
 include $(TOP)/Make.config
 
-run-tests:
+run-tests run-unit-tests:
 	$(Q) $(DOTNET) test $(TEST_FILTER) bgen-tests.csproj

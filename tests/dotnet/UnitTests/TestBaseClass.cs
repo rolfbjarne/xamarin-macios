@@ -425,7 +425,7 @@ namespace Xamarin.Tests {
 			AssertBuildMessages ("error", actualErrors, expectedErrorMessages);
 		}
 
-		public static void AssertErrorMessages (IList<BuildLogEvent> actualErrors, Func<string,bool>[] matchesExpectedErrorMessage, Func<string>[] rendersExpectedErrorMessage)
+		public static void AssertErrorMessages (IList<BuildLogEvent> actualErrors, Func<string, bool> [] matchesExpectedErrorMessage, Func<string> [] rendersExpectedErrorMessage)
 		{
 			AssertBuildMessages ("error", actualErrors, matchesExpectedErrorMessage, rendersExpectedErrorMessage);
 		}
@@ -445,7 +445,7 @@ namespace Xamarin.Tests {
 			return msg.TrimEnd ().Replace ("\n", "\\n").Replace ("\r", "\\r");
 		}
 
-		public static void AssertBuildMessages (string type, IList<BuildLogEvent> actualMessages, Func<string,bool>[] matchesExpectedMessage, Func<string>[] rendersExpectedMessage)
+		public static void AssertBuildMessages (string type, IList<BuildLogEvent> actualMessages, Func<string, bool> [] matchesExpectedMessage, Func<string> [] rendersExpectedMessage)
 		{
 			var expectedCount = matchesExpectedMessage.Length;
 			if (expectedCount != rendersExpectedMessage.Length)

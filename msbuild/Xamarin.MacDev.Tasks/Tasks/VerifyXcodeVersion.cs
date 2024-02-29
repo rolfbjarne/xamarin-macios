@@ -38,6 +38,7 @@ namespace Xamarin.MacDev.Tasks {
 				return true;
 			} catch (Exception ex) {
 				Log.LogWarning (MSBStrings.E0185, ex.Message);
+				Log.LogWarningFromException (ex, true);
 
 				return true;
 			}

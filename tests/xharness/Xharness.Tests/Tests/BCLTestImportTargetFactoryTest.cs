@@ -13,8 +13,7 @@ namespace Xharness.Tests.TestImporter.Tests {
 
 	// test the class so that we ensure that we do call the template object and that we are correctly creating the
 	// default projects.
-	public class BCLTestImportTargetFactoryTest
-	{
+	public class BCLTestImportTargetFactoryTest {
 		string outputdir;
 		AssemblyLocator assemblyLocator;
 		Mock<ITemplatedProject> template;
@@ -48,9 +47,9 @@ namespace Xharness.Tests.TestImporter.Tests {
 			Assert.Throws<ArgumentNullException> (() => new BCLTestImportTargetFactory ((string) null));
 			Assert.Throws<ArgumentNullException> (() => new BCLTestImportTargetFactory (null, ""));
 		}
-		
+
 		[Test]
-		public void ConstructorNullMonoDir () => 
+		public void ConstructorNullMonoDir () =>
 			Assert.Throws<ArgumentNullException> (() => new BCLTestImportTargetFactory ("", null));
 
 		[Test]
@@ -85,19 +84,19 @@ namespace Xharness.Tests.TestImporter.Tests {
 		public void GenerateTestProjectsAsyncTest ()
 		{
 			var projects = new GeneratedProjects () {
-				new GeneratedProject { Name = "First project", Path = "", XUnit = false, ExtraArgs = "", Failure = "", TimeoutMultiplier = 1, GenerationCompleted = Task.CompletedTask, },
-				new GeneratedProject { Name = "Second project", Path = "", XUnit = true, ExtraArgs = "", Failure = "", TimeoutMultiplier = 1, GenerationCompleted = Task.CompletedTask, },
+				new GeneratedProject { Name = "First project", Path = "", XUnit = false, Failure = "", TimeoutMultiplier = 1, GenerationCompleted = Task.CompletedTask, },
+				new GeneratedProject { Name = "Second project", Path = "", XUnit = true, Failure = "", TimeoutMultiplier = 1, GenerationCompleted = Task.CompletedTask, },
 			};
-			var infos = new List<(string Name, string [] Assemblies, string ExtraArgs, double TimeoutMultiplier)> {
-				( Name: "First project", Assemblies: new string [] { }, ExtraArgs: "", TimeoutMultiplier: 1),
-				( Name: "Second project", Assemblies: new string [] { }, ExtraArgs: "", TimeoutMultiplier: 1),
+			var infos = new List<(string Name, string [] Assemblies, double TimeoutMultiplier)> {
+				( Name: "First project", Assemblies: new string [] { }, TimeoutMultiplier: 1),
+				( Name: "Second project", Assemblies: new string [] { }, TimeoutMultiplier: 1),
 			};
-			template.Setup (t => t.GenerateTestProjects (It.IsAny<IEnumerable<(string Name, string [] Assemblies, string ExtraArgs, double TimeoutMultiplier)>> (), It.IsAny<Platform> ())).Returns (() => {
+			template.Setup (t => t.GenerateTestProjects (It.IsAny<IEnumerable<(string Name, string [] Assemblies, double TimeoutMultiplier)>> (), It.IsAny<Platform> ())).Returns (() => {
 				return projects;
 			});
 			var result = generator.GenerateTestProjects (infos, Platform.iOS);
 			Assert.AreEqual (projects.Count, result.Count);
-			template.Verify (t => t.GenerateTestProjects (It.IsAny<IEnumerable<(string Name, string [] Assemblies, string ExtraArgs, double TimeoutMultiplier)>> (), It.IsAny<Platform> ()));
+			template.Verify (t => t.GenerateTestProjects (It.IsAny<IEnumerable<(string Name, string [] Assemblies, double TimeoutMultiplier)>> (), It.IsAny<Platform> ()));
 		}
 	}
 }

@@ -48,7 +48,7 @@ using NativeHandle = System.IntPtr;
 namespace AddressBook {
 	static class ABGroupProperty {
 
-		public static int Name {get; private set;}
+		public static int Name { get; private set; }
 
 		static ABGroupProperty ()
 		{
@@ -63,17 +63,13 @@ namespace AddressBook {
 
 #if NET
 	[SupportedOSPlatform ("maccatalyst14.0")]
-	[UnsupportedOSPlatform ("maccatalyst14.0")]
-	[UnsupportedOSPlatform ("ios9.0")]
-#if __MACCATALYST__
-	[Obsolete ("Starting with maccatalyst14.0 use the 'Contacts' API instead.", DiagnosticId = "BI1234", UrlFormat = "https://github.com/xamarin/xamarin-macios/wiki/Obsolete")]
-#elif IOS
-	[Obsolete ("Starting with ios9.0 use the 'Contacts' API instead.", DiagnosticId = "BI1234", UrlFormat = "https://github.com/xamarin/xamarin-macios/wiki/Obsolete")]
-#endif
+	[SupportedOSPlatform ("ios")]
+	[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]
+	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
 #else
-	[Deprecated (PlatformName.iOS, 9, 0, message : "Use the 'Contacts' API instead.")]
+	[Deprecated (PlatformName.iOS, 9, 0, message: "Use the 'Contacts' API instead.")]
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
-	[Deprecated (PlatformName.MacCatalyst, 14, 0, message : "Use the 'Contacts' API instead.")]
+	[Deprecated (PlatformName.MacCatalyst, 14, 0, message: "Use the 'Contacts' API instead.")]
 #endif
 	public class ABGroup : ABRecord, IEnumerable<ABRecord> {
 
@@ -105,14 +101,14 @@ namespace AddressBook {
 		}
 
 		internal ABGroup (NativeHandle handle, ABAddressBook addressbook)
-        	: base (handle, false)
+			: base (handle, false)
 		{
 			AddressBook = addressbook;
 		}
 
 		public string? Name {
 			get { return PropertyToString (ABGroupProperty.Name); }
-			set {SetValue (ABGroupProperty.Name, value);}
+			set { SetValue (ABGroupProperty.Name, value); }
 		}
 
 		[DllImport (Constants.AddressBookLibrary)]
@@ -129,15 +125,16 @@ namespace AddressBook {
 		}
 
 		[DllImport (Constants.AddressBookLibrary)]
-		[return: MarshalAs (UnmanagedType.I1)]
-		extern static bool ABGroupAddMember (IntPtr group, IntPtr person, out IntPtr error);
+		unsafe extern static byte ABGroupAddMember (IntPtr group, IntPtr person, IntPtr* error);
 		public void Add (ABRecord person)
 		{
 			if (person is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (person));
 			IntPtr error;
-			if (!ABGroupAddMember (Handle, person.Handle, out error))
-				throw CFException.FromCFError (error);
+			unsafe {
+				if (ABGroupAddMember (Handle, person.Handle, &error) == 0)
+					throw CFException.FromCFError (error);
+			}
 		}
 
 		[DllImport (Constants.AddressBookLibrary)]
@@ -171,15 +168,16 @@ namespace AddressBook {
 		}
 
 		[DllImport (Constants.AddressBookLibrary)]
-		[return: MarshalAs (UnmanagedType.I1)]
-		extern static bool ABGroupRemoveMember (IntPtr group, IntPtr member, out IntPtr error);
+		unsafe extern static byte ABGroupRemoveMember (IntPtr group, IntPtr member, IntPtr* error);
 		public void Remove (ABRecord member)
 		{
 			if (member is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (member));
 			IntPtr error;
-			if (!ABGroupRemoveMember (Handle, member.Handle, out error))
-				throw CFException.FromCFError (error);
+			unsafe {
+				if (ABGroupRemoveMember (Handle, member.Handle, &error) == 0)
+					throw CFException.FromCFError (error);
+			}
 		}
 	}
 }

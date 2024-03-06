@@ -12,20 +12,20 @@ namespace Xharness {
 			case TestPlatform.iOS_TodayExtension64:
 			case TestPlatform.iOS_Unified32:
 			case TestPlatform.iOS_Unified64:
-				return "iOS " + SdkVersions.MiniOSSimulator;
+				return "iOS " + Xamarin.SdkVersions.MiniOSSimulator;
 			case TestPlatform.tvOS:
-				return "tvOS " + SdkVersions.MinTVOSSimulator;
+				return "tvOS " + Xamarin.SdkVersions.MinTVOSSimulator;
 			case TestPlatform.watchOS:
 			case TestPlatform.watchOS_32:
 			case TestPlatform.watchOS_64_32:
-				return "watchOS " + SdkVersions.MinWatchOSSimulator;
+				return "watchOS " + Xamarin.SdkVersions.MinWatchOSSimulator;
 			default:
 				throw new NotImplementedException (platform.ToString ());
 			}
 		}
 
 		public static bool IsMac (this TestPlatform platform)
-		{ 
+		{
 			switch (platform) {
 			case TestPlatform.Mac:
 			case TestPlatform.Mac_Modern:
@@ -38,7 +38,7 @@ namespace Xharness {
 		}
 
 		public static bool CanSymlink (this TestPlatform platform)
-		{ 
+		{
 			switch (platform) {
 			case TestPlatform.iOS:
 			case TestPlatform.iOS_TodayExtension64:

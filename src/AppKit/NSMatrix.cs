@@ -25,6 +25,8 @@
 
 using System;
 
+#nullable enable
+
 namespace AppKit {
 	public partial class NSMatrix {
 		public NSCell this [nint col, nint row] {
@@ -33,6 +35,6 @@ namespace AppKit {
 			}
 		}
 	}
-	
+
 }
 #endif // !__MACCATALYST__

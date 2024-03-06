@@ -47,27 +47,23 @@ using NativeHandle = System.IntPtr;
 namespace AddressBook {
 #if NET
 	[SupportedOSPlatform ("maccatalyst14.0")]
-	[UnsupportedOSPlatform ("maccatalyst14.0")]
-	[UnsupportedOSPlatform ("ios9.0")]
-#if __MACCATALYST__
-	[Obsolete ("Starting with maccatalyst14.0 use the 'Contacts' API instead.", DiagnosticId = "BI1234", UrlFormat = "https://github.com/xamarin/xamarin-macios/wiki/Obsolete")]
-#elif IOS
-	[Obsolete ("Starting with ios9.0 use the 'Contacts' API instead.", DiagnosticId = "BI1234", UrlFormat = "https://github.com/xamarin/xamarin-macios/wiki/Obsolete")]
-#endif
+	[SupportedOSPlatform ("ios")]
+	[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]
+	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
 #else
-	[Deprecated (PlatformName.iOS, 9, 0, message : "Use the 'Contacts' API instead.")]
+	[Deprecated (PlatformName.iOS, 9, 0, message: "Use the 'Contacts' API instead.")]
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
-	[Deprecated (PlatformName.MacCatalyst, 14, 0, message : "Use the 'Contacts' API instead.")]
+	[Deprecated (PlatformName.MacCatalyst, 14, 0, message: "Use the 'Contacts' API instead.")]
 #endif
 	public class ExternalChangeEventArgs : EventArgs {
 		public ExternalChangeEventArgs (ABAddressBook addressBook, NSDictionary? info)
 		{
 			AddressBook = addressBook;
-			Info        = info;
+			Info = info;
 		}
 
-		public ABAddressBook AddressBook {get; private set;}
-		public NSDictionary? Info {get; private set;}
+		public ABAddressBook AddressBook { get; private set; }
+		public NSDictionary? Info { get; private set; }
 	}
 
 	// Quoth the docs: 
@@ -83,7 +79,7 @@ namespace AddressBook {
 	// It make sense since it's not possible to call those functions, from 6.0+ they will return NULL on devices,
 	// unless the application has been authorized to access the address book.
 	static class InitConstants {
-		public static void Init () {}
+		public static void Init () { }
 
 		static InitConstants ()
 		{
@@ -117,17 +113,13 @@ namespace AddressBook {
 
 #if NET
 	[SupportedOSPlatform ("maccatalyst14.0")]
-	[UnsupportedOSPlatform ("maccatalyst14.0")]
-	[UnsupportedOSPlatform ("ios9.0")]
-#if __MACCATALYST__
-	[Obsolete ("Starting with maccatalyst14.0 use the 'Contacts' API instead.", DiagnosticId = "BI1234", UrlFormat = "https://github.com/xamarin/xamarin-macios/wiki/Obsolete")]
-#elif IOS
-	[Obsolete ("Starting with ios9.0 use the 'Contacts' API instead.", DiagnosticId = "BI1234", UrlFormat = "https://github.com/xamarin/xamarin-macios/wiki/Obsolete")]
-#endif
+	[SupportedOSPlatform ("ios")]
+	[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]
+	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
 #else
-	[Deprecated (PlatformName.iOS, 9, 0, message : "Use the 'Contacts' API instead.")]
+	[Deprecated (PlatformName.iOS, 9, 0, message: "Use the 'Contacts' API instead.")]
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
-	[Deprecated (PlatformName.MacCatalyst, 14, 0, message : "Use the 'Contacts' API instead.")]
+	[Deprecated (PlatformName.MacCatalyst, 14, 0, message: "Use the 'Contacts' API instead.")]
 #endif
 	public class ABAddressBook : NativeObject, IEnumerable<ABRecord> {
 
@@ -140,15 +132,11 @@ namespace AddressBook {
 
 #if NET
 		[SupportedOSPlatform ("maccatalyst14.0")]
-		[UnsupportedOSPlatform ("maccatalyst14.0")]
-		[UnsupportedOSPlatform ("ios6.0")]
-#if __MACCATALYST__
-		[Obsolete ("Starting with maccatalyst14.0 use the 'Contacts' API instead.", DiagnosticId = "BI1234", UrlFormat = "https://github.com/xamarin/xamarin-macios/wiki/Obsolete")]
-#elif IOS
-		[Obsolete ("Starting with ios6.0 use the static Create method instead.", DiagnosticId = "BI1234", UrlFormat = "https://github.com/xamarin/xamarin-macios/wiki/Obsolete")]
-#endif
+		[SupportedOSPlatform ("ios")]
+		[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]
+		[ObsoletedOSPlatform ("ios6.0", "Use the static Create method instead.")]
 #else
-		[Deprecated (PlatformName.iOS, 6, 0, message : "Use the static Create method instead")]
+		[Deprecated (PlatformName.iOS, 6, 0, message: "Use the static Create method instead")]
 #endif
 		public ABAddressBook ()
 			: this (ABAddressBookCreate (), true)
@@ -156,19 +144,23 @@ namespace AddressBook {
 		}
 
 		[DllImport (Constants.AddressBookLibrary)]
-		internal extern static IntPtr ABAddressBookCreateWithOptions (IntPtr dictionary, out IntPtr cfError);
+		unsafe extern static IntPtr ABAddressBookCreateWithOptions (IntPtr dictionary, IntPtr* cfError);
 
 		public static ABAddressBook? Create (out NSError? error)
 		{
-			var handle = ABAddressBookCreateWithOptions (IntPtr.Zero, out var e);
-			if (handle == IntPtr.Zero){
+			IntPtr e;
+			IntPtr handle;
+			unsafe {
+				handle = ABAddressBookCreateWithOptions (IntPtr.Zero, &e);
+			}
+			if (handle == IntPtr.Zero) {
 				error = Runtime.GetNSObject<NSError> (e);
 				return null;
 			}
 			error = null;
 			return new ABAddressBook (handle, true);
 		}
-			
+
 		[Preserve (Conditional = true)]
 		internal ABAddressBook (NativeHandle handle, bool owns)
 			: base (handle, owns)
@@ -193,51 +185,62 @@ namespace AddressBook {
 
 		public static ABAuthorizationStatus GetAuthorizationStatus ()
 		{
-			return (ABAuthorizationStatus)(long)ABAddressBookGetAuthorizationStatus ();
+			return (ABAuthorizationStatus) (long) ABAddressBookGetAuthorizationStatus ();
 		}
 
 		[DllImport (Constants.AddressBookLibrary)]
-		extern static void ABAddressBookRequestAccessWithCompletion (IntPtr addressbook, ref BlockLiteral completion);
+		unsafe extern static void ABAddressBookRequestAccessWithCompletion (IntPtr addressbook, BlockLiteral* completion);
 
 		[BindingImpl (BindingImplOptions.Optimizable)]
-		public void RequestAccess (Action<bool,NSError?> onCompleted)
+		public void RequestAccess (Action<bool, NSError?> onCompleted)
 		{
 			if (onCompleted is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (onCompleted));
 
-			var block_handler = new BlockLiteral ();
-			block_handler.SetupBlockUnsafe (static_completionHandler, onCompleted);
-			ABAddressBookRequestAccessWithCompletion (Handle, ref block_handler);
-			block_handler.CleanupBlock ();
+			unsafe {
+#if NET
+				delegate* unmanaged<IntPtr, byte, IntPtr, void> trampoline = &TrampolineCompletionHandler;
+				using var block = new BlockLiteral (trampoline, onCompleted, typeof (ABAddressBook), nameof (TrampolineCompletionHandler));
+#else
+				using var block = new BlockLiteral ();
+				block.SetupBlockUnsafe (static_completionHandler, onCompleted);
+#endif
+				ABAddressBookRequestAccessWithCompletion (Handle, &block);
+			}
 		}
 
-		internal delegate void InnerCompleted (IntPtr block, bool success, IntPtr error);
+#if !NET
+		internal delegate void InnerCompleted (IntPtr block, byte success, IntPtr error);
 		static readonly InnerCompleted static_completionHandler = TrampolineCompletionHandler;
 		[MonoPInvokeCallback (typeof (InnerCompleted))]
-		static unsafe void TrampolineCompletionHandler (IntPtr block, bool success, IntPtr error)
+#else
+		[UnmanagedCallersOnly]
+#endif
+		static unsafe void TrampolineCompletionHandler (IntPtr block, byte success, IntPtr error)
 		{
-			var descriptor = (BlockLiteral *) block;
+			var descriptor = (BlockLiteral*) block;
 			var del = descriptor->Target as Action<bool, NSError?>;
 			if (del is not null)
-				del (success, Runtime.GetNSObject<NSError> (error));
+				del (success != 0, Runtime.GetNSObject<NSError> (error));
 		}
 
 		[DllImport (Constants.AddressBookLibrary)]
-		[return: MarshalAs (UnmanagedType.I1)]
-		extern static bool ABAddressBookHasUnsavedChanges (IntPtr addressBook);
+		extern static byte ABAddressBookHasUnsavedChanges (IntPtr addressBook);
 		public bool HasUnsavedChanges {
 			get {
-				return ABAddressBookHasUnsavedChanges (GetCheckedHandle ());
+				return ABAddressBookHasUnsavedChanges (GetCheckedHandle ()) != 0;
 			}
 		}
 
 		[DllImport (Constants.AddressBookLibrary)]
-		[return: MarshalAs (UnmanagedType.I1)]
-		extern static bool ABAddressBookSave (IntPtr addressBook, out IntPtr error);
+		unsafe extern static byte ABAddressBookSave (IntPtr addressBook, IntPtr* error);
 		public void Save ()
 		{
-			if (!ABAddressBookSave (GetCheckedHandle (), out var error))
-				throw CFException.FromCFError (error);
+			IntPtr error;
+			unsafe {
+				if (ABAddressBookSave (GetCheckedHandle (), &error) == 0)
+					throw CFException.FromCFError (error);
+			}
 		}
 
 		[DllImport (Constants.AddressBookLibrary)]
@@ -248,28 +251,32 @@ namespace AddressBook {
 		}
 
 		[DllImport (Constants.AddressBookLibrary)]
-		[return: MarshalAs (UnmanagedType.I1)]
-		extern static bool ABAddressBookAddRecord (IntPtr addressBook, IntPtr record, out IntPtr error);
+		unsafe extern static byte ABAddressBookAddRecord (IntPtr addressBook, IntPtr record, IntPtr* error);
 		public void Add (ABRecord record)
 		{
 			if (record is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (record));
 
-			if (!ABAddressBookAddRecord (GetCheckedHandle (), record.Handle, out var error))
-				throw CFException.FromCFError (error);
+			IntPtr error;
+			unsafe {
+				if (ABAddressBookAddRecord (GetCheckedHandle (), record.Handle, &error) == 0)
+					throw CFException.FromCFError (error);
+			}
 			record.AddressBook = this;
 		}
 
 		[DllImport (Constants.AddressBookLibrary)]
-		[return: MarshalAs (UnmanagedType.I1)]
-		extern static bool ABAddressBookRemoveRecord (IntPtr addressBook, IntPtr record, out IntPtr error);
+		unsafe extern static byte ABAddressBookRemoveRecord (IntPtr addressBook, IntPtr record, IntPtr* error);
 		public void Remove (ABRecord record)
 		{
 			if (record is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (record));
 
-			if (!ABAddressBookRemoveRecord (GetCheckedHandle (), record.Handle, out var error))
-				throw CFException.FromCFError (error);
+			IntPtr error;
+			unsafe {
+				if (ABAddressBookRemoveRecord (GetCheckedHandle (), record.Handle, &error) == 0)
+					throw CFException.FromCFError (error);
+			}
 			record.AddressBook = null;
 		}
 
@@ -309,7 +316,7 @@ namespace AddressBook {
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (source));
 			var cfArrayRef = ABAddressBookCopyArrayOfAllPeopleInSourceWithSortOrdering (GetCheckedHandle (), source.Handle, sortOrdering);
 			return NSArray.ArrayFromHandle (cfArrayRef, l => new ABPerson (l, this));
-		}		
+		}
 
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static nint ABAddressBookGetGroupCount (IntPtr addressBook);
@@ -330,7 +337,7 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr ABAddressBookCopyArrayOfAllGroupsInSource (IntPtr addressBook, IntPtr source);
 
-		public ABGroup[] GetGroups (ABRecord source)
+		public ABGroup [] GetGroups (ABRecord source)
 		{
 			if (source is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (source));
@@ -350,14 +357,27 @@ namespace AddressBook {
 		}
 
 		[DllImport (Constants.AddressBookLibrary)]
+#if NET
+		extern unsafe static void ABAddressBookRegisterExternalChangeCallback (IntPtr addressBook,
+			delegate* unmanaged<IntPtr, IntPtr, IntPtr, void> callback, IntPtr context);
+#else
 		extern static void ABAddressBookRegisterExternalChangeCallback (IntPtr addressBook, ABExternalChangeCallback callback, IntPtr context);
+#endif
 
 		[DllImport (Constants.AddressBookLibrary)]
+#if NET
+		extern unsafe static void ABAddressBookUnregisterExternalChangeCallback (IntPtr addressBook, delegate* unmanaged<IntPtr, IntPtr, IntPtr, void> callback, IntPtr context);
+#else
 		extern static void ABAddressBookUnregisterExternalChangeCallback (IntPtr addressBook, ABExternalChangeCallback callback, IntPtr context);
+#endif
 
+#if !NET
 		delegate void ABExternalChangeCallback (IntPtr addressBook, IntPtr info, IntPtr context);
 
 		[MonoPInvokeCallback (typeof (ABExternalChangeCallback))]
+#else
+		[UnmanagedCallersOnly]
+#endif
 		static void ExternalChangeCallback (IntPtr addressBook, IntPtr info, IntPtr context)
 		{
 			GCHandle s = GCHandle.FromIntPtr (context);
@@ -365,8 +385,8 @@ namespace AddressBook {
 			if (self is null)
 				return;
 			self.OnExternalChange (new ExternalChangeEventArgs (
-					       new ABAddressBook (addressBook, false),
-					       Runtime.GetNSObject<NSDictionary> (info)));
+						   new ABAddressBook (addressBook, false),
+						   Runtime.GetNSObject<NSDictionary> (info)));
 		}
 
 		object eventLock = new object ();
@@ -386,7 +406,13 @@ namespace AddressBook {
 				lock (eventLock) {
 					if (externalChange is null) {
 						sender = GCHandle.Alloc (this);
+#if NET
+						unsafe {
+							ABAddressBookRegisterExternalChangeCallback (Handle, &ExternalChangeCallback, GCHandle.ToIntPtr (sender));
+						}
+#else
 						ABAddressBookRegisterExternalChangeCallback (Handle, ExternalChangeCallback, GCHandle.ToIntPtr (sender));
+#endif
 					}
 					externalChange += value;
 				}
@@ -395,7 +421,13 @@ namespace AddressBook {
 				lock (eventLock) {
 					externalChange -= value;
 					if (externalChange is null) {
+#if NET
+						unsafe {
+							ABAddressBookUnregisterExternalChangeCallback (Handle, &ExternalChangeCallback, GCHandle.ToIntPtr (sender));
+						}
+#else
 						ABAddressBookUnregisterExternalChangeCallback (Handle, ExternalChangeCallback, GCHandle.ToIntPtr (sender));
+#endif
 						sender.Free ();
 					}
 				}
@@ -448,7 +480,7 @@ namespace AddressBook {
 				CFString.ReleaseNative (nameHandle);
 			}
 		}
-		
+
 		// ABSource
 		// http://developer.apple.com/library/IOs/#documentation/AddressBook/Reference/ABSourceRef_iPhoneOS/Reference/reference.html
 
@@ -469,7 +501,7 @@ namespace AddressBook {
 				return null;
 			return new ABSource (h, this);
 		}
-		
+
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr /* ABRecordRef */ ABAddressBookGetSourceWithRecordID (IntPtr /* ABAddressBookRef */ addressBook, int /* ABRecordID */ sourceID);
 		public ABSource? GetSource (int sourceID)

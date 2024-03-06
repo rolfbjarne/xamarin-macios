@@ -2,13 +2,15 @@
 #if !WATCH
 
 #if !MONOMAC
-using NSFont=UIKit.UIFont;
+using NSFont = UIKit.UIFont;
 #endif
 
 using System;
 using ObjCRuntime;
 using Foundation;
 using CoreGraphics;
+
+#nullable enable
 
 #if MONOMAC
 namespace AppKit {
@@ -20,7 +22,7 @@ namespace UIKit {
 		[Deprecated (PlatformName.MacOSX, 10, 11)]
 		public CGRect [] GetRectArray (NSRange glyphRange, NSRange selectedGlyphRange, NSTextContainer textContainer)
 		{
-			if (textContainer == null)
+			if (textContainer is null)
 				throw new ArgumentNullException ("textContainer");
 
 			nuint rectCount;

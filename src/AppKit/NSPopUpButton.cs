@@ -32,11 +32,13 @@ using System;
 using ObjCRuntime;
 using Foundation;
 
+#nullable enable
+
 namespace AppKit {
 
 	public partial class NSPopUpButton {
 		public new NSPopUpButtonCell Cell {
-			get { return (NSPopUpButtonCell)base.Cell; }
+			get { return (NSPopUpButtonCell) base.Cell; }
 			set { base.Cell = value; }
 		}
 	}

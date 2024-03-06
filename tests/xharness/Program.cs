@@ -16,7 +16,7 @@ namespace Xharness {
 				tVOS: Xamarin.SdkVersions.TVOS,
 				minOSX: Xamarin.SdkVersions.MinOSX,
 				miniOS: Xamarin.SdkVersions.MiniOS,
-				minWatchOS: Xamarin.SdkVersions.MinWatchOS,
+				minWatchOS: Xamarin.SdkVersions.LegacyMinWatchOS,
 				minTVOS: Xamarin.SdkVersions.MinTVOS,
 				miniOSSimulator: Xamarin.SdkVersions.MiniOSSimulator,
 				minWatchOSSimulator: Xamarin.SdkVersions.MinWatchOSSimulator,
@@ -33,7 +33,7 @@ namespace Xharness {
 			Action showHelp = null;
 
 			var action = HarnessAction.None;
-			var configuration = new HarnessConfiguration();
+			var configuration = new HarnessConfiguration ();
 
 			var os = new OptionSet () {
 				{ "h|?|help", "Displays the help", (v) => showHelp () },
@@ -114,7 +114,7 @@ namespace Xharness {
 			var input = os.Parse (args);
 			if (input.Count > 0)
 				throw new Exception (string.Format ("Unknown arguments: {0}", string.Join (", ", input.ToArray ())));
-			
+
 			if (action == HarnessAction.None)
 				showHelp ();
 

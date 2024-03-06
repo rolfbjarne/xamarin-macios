@@ -7,8 +7,7 @@ using Microsoft.DotNet.XHarness.iOS.Shared.Hardware;
 using Microsoft.DotNet.XHarness.iOS.Shared.Utilities;
 
 namespace Xharness.Targets {
-	public class WatchOSTarget : iOSTarget
-	{
+	public class WatchOSTarget : iOSTarget {
 		public string AppName { get; private set; }
 		public string ExtensionName { get; private set; }
 
@@ -21,11 +20,11 @@ namespace Xharness.Targets {
 		public string WatchOSProjectPath { get { return ProjectPath; } private set { ProjectPath = value; } }
 
 		public override string SimulatorArchitectures {
-			get { return "i386, x86_64"; }
+			get { return "x86_64"; }
 		}
 
 		public override string DeviceArchitectures {
-			get { return "ARMv7k, ARM64_32"; }
+			get { return "ARM64_32"; }
 		}
 
 		public override string DotNetSdk => "Microsoft.watchOS.Sdk";
@@ -56,7 +55,7 @@ namespace Xharness.Targets {
 			info_plist.SetPListStringValue ("WKCompanionAppBundleIdentifier", BundleIdentifier);
 			info_plist.SetPListStringValue ("CFBundleName", Name);
 			info_plist.SetMinimumOSVersion (GetMinimumOSVersion (info_plist.GetMinimumOSVersion ()));
-			info_plist.Save(target_info_plist, Harness);
+			info_plist.Save (target_info_plist, Harness);
 		}
 
 		void CreateWatchOSContainerProject ()
@@ -78,7 +77,7 @@ namespace Xharness.Targets {
 			info_plist.LoadWithoutNetworkAccess (Path.Combine (Harness.WatchOSContainerTemplate, "Info.plist"));
 			info_plist.SetCFBundleIdentifier (BundleIdentifier);
 			info_plist.SetCFBundleName (Name);
-			info_plist.SetMinimumOSVersion ("9.0");
+			info_plist.SetMinimumOSVersion (Xamarin.SdkVersions.MiniOS);
 			info_plist.Save (target_info_plist, Harness);
 		}
 
@@ -86,22 +85,6 @@ namespace Xharness.Targets {
 		{
 			var csproj = inputProject;
 			var suffix = Suffix + "-extension";
-
-			// Remove unused configurations
-			csproj.DeleteConfiguration ("iPhone", "Release-bitcode");
-			csproj.DeleteConfiguration ("iPhone", "Release64");
-			csproj.DeleteConfiguration ("iPhone", "Debug64");
-
-			csproj.FixArchitectures ("i386", "ARMv7k", "iPhone", "Release32");
-			csproj.FixArchitectures ("i386", "ARMv7k", "iPhone", "Debug32");
-
-			// add Release64_32 and set the correct architecture
-			csproj.CloneConfiguration ("iPhone", "Release", "Release64_32");
-			csproj.FixArchitectures ("i386", "ARM64_32", "iPhone", "Release64_32");
-
-			// add Debug64_32 and set the correct architecture
-			csproj.CloneConfiguration ("iPhone", "Debug", "Debug64_32");
-			csproj.FixArchitectures ("i386", "ARM64_32", "iPhone", "Debug64_32");
 
 			csproj.FixArchitectures (SimulatorArchitectures, DeviceArchitectures, "iPhoneSimulator", "Debug");
 			csproj.FixArchitectures (SimulatorArchitectures, DeviceArchitectures, "iPhoneSimulator", "Release");
@@ -118,7 +101,6 @@ namespace Xharness.Targets {
 
 			csproj.FixInfoPListInclude (suffix, Path.GetDirectoryName (TemplateProjectPath));
 			csproj.SetOutputType ("Library");
-			csproj.AddAdditionalDefines ("BITCODE", "iPhone", "Release");
 			csproj.AddAdditionalDefines ("XAMCORE_3_0;FEATURE_NO_BSD_SOCKETS;MONOTOUCH_WATCH;");
 			csproj.RemoveReferences ("OpenTK-1.0");
 			csproj.RemovePackageReference ("MonoTouch.Dialog");
@@ -131,7 +113,7 @@ namespace Xharness.Targets {
 
 			// Not linking a watch extensions requires passing -Os to the native compiler.
 			// https://github.com/mono/mono/issues/9867
-			var configurations = new string [] { "Debug", "Debug32", "Debug64_32", "Release", "Release32", "Release64_32" };
+			var configurations = new string [] { "Debug", "Release" };
 			foreach (var c in configurations) {
 				var flags = "-fembed-bitcode-marker";
 				if (csproj.GetMtouchLink ("iPhone", c) == "None")
@@ -146,12 +128,13 @@ namespace Xharness.Targets {
 
 			XmlDocument info_plist = new XmlDocument ();
 			var target_info_plist = Path.Combine (TargetDirectory, $"Info{Suffix}-extension.plist");
-			info_plist.LoadWithoutNetworkAccess (Path.Combine (TargetDirectory, OriginalInfoPListInclude));
+			var original_info_plist_include = HarnessConfiguration.EvaluateRootTestsDirectory (OriginalInfoPListInclude);
+			info_plist.LoadWithoutNetworkAccess (Path.Combine (TargetDirectory, original_info_plist_include));
 			BundleIdentifier = info_plist.GetCFBundleIdentifier () + "_watch";
 			if (BundleIdentifier.Length >= 58)
 				BundleIdentifier = BundleIdentifier.Substring (0, 57); // If the main app's bundle id is 58 characters (or sometimes more), then the watch extension crashes at launch. radar #29847128.
 			info_plist.SetCFBundleIdentifier (BundleIdentifier + ".watchkitapp.watchkitextension");
-			info_plist.SetMinimumOSVersion (GetMinimumOSVersion ("2.0"));
+			info_plist.SetMinimumOSVersion (GetMinimumOSVersion (Xamarin.SdkVersions.LegacyMinWatchOS));
 			info_plist.SetUIDeviceFamily (4);
 			info_plist.AddPListStringValue ("RemoteInterfacePrincipleClass", "InterfaceController");
 			info_plist.AddPListKeyValuePair ("NSExtension", "dict", string.Format (
@@ -185,7 +168,7 @@ namespace Xharness.Targets {
 				return IsFSharp ? "$(MSBuildExtensionsPath)\\Xamarin\\WatchOS\\Xamarin.WatchOS.ObjCBinding.FSharp.targets" : "$(MSBuildExtensionsPath)\\Xamarin\\WatchOS\\Xamarin.WatchOS.ObjCBinding.CSharp.targets";
 			}
 		}
-			
+
 		void CreateWatchOSLibraryProject ()
 		{
 			var csproj = inputProject;
@@ -242,9 +225,9 @@ namespace Xharness.Targets {
 
 		protected override string GetMinimumOSVersion (string templateMinimumOSVersion)
 		{
-			if (MonoNativeInfo == null)
+			if (MonoNativeInfo is null)
 				return templateMinimumOSVersion;
-			return MonoNativeHelper.GetMinimumOSVersion (DevicePlatform.watchOS, MonoNativeInfo.Flavor);
+			return MonoNativeHelper.GetMinimumOSVersion (DevicePlatform.watchOS);
 		}
 
 		public override string Suffix {
@@ -262,12 +245,6 @@ namespace Xharness.Targets {
 		public override string Platform {
 			get {
 				return "watchos";
-			}
-		}
-
-		protected override bool SupportsBitcode {
-			get {
-				return true;
 			}
 		}
 

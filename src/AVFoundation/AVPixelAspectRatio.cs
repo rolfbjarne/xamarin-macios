@@ -66,12 +66,12 @@ namespace AVFoundation {
 
 		public override int GetHashCode ()
 		{
-			return (int) HorizontalSpacing ^ (int) VerticalSpacing;
+			return HashCode.Combine (HorizontalSpacing, VerticalSpacing);
 		}
 
 		public override bool Equals (object? other)
 		{
-			if (other is AVPixelAspectRatio){
+			if (other is AVPixelAspectRatio) {
 				var o = (AVPixelAspectRatio) other;
 				return o.HorizontalSpacing == HorizontalSpacing && o.VerticalSpacing == VerticalSpacing;
 			}

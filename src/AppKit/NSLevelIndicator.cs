@@ -11,11 +11,13 @@ using System;
 using ObjCRuntime;
 using Foundation;
 
+#nullable enable
+
 namespace AppKit {
 
 	public partial class NSLevelIndicator {
 		public new NSLevelIndicatorCell Cell {
-			get { return (NSLevelIndicatorCell)base.Cell; }
+			get { return (NSLevelIndicatorCell) base.Cell; }
 			set { base.Cell = value; }
 		}
 	}

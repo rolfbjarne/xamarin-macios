@@ -25,12 +25,14 @@
 
 using System;
 
+#nullable enable
+
 namespace AppKit {
-	
+
 	public partial class NSSound {
-		
+
 		// note: if needed override the protected Get|Set methods
-		public string Name { 
+		public string Name {
 			get { return GetName (); }
 			// ignore return value (bool)
 			set { SetName (value); }

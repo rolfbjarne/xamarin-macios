@@ -14,11 +14,11 @@ namespace Xharness {
 	public class BCLTestImportTargetFactory {
 
 		// less typing
-		class ProjectsDefinitions : Dictionary<string, (string ExtraArgs, double TimeoutMultiplier, (string Name, string [] Assemblies) [] Projects)> { } 
+		class ProjectsDefinitions : Dictionary<string, (string ExtraArgs, double TimeoutMultiplier, (string Name, string [] Assemblies) [] Projects)> { }
 
 		// we have two different types of list, those that are for the iOS like projects (ios, tvos and watch os) and those 
 		// for mac
-		static readonly ProjectsDefinitions commoniOSTestProjects = new ProjectsDefinitions { 
+		static readonly ProjectsDefinitions commoniOSTestProjects = new ProjectsDefinitions {
 			// NUNIT TESTS
 
 			["BCL tests group 1"] = (
@@ -125,11 +125,11 @@ namespace Xharness {
 				ExtraArgs: $"--xml={Path.Combine (HarnessConfiguration.RootDirectory, "bcl-test", "SystemXunitLinker.xml")} --optimize=-custom-attributes-removal", // special case due to the need of the extra args,
 				TimeoutMultiplier: 1,
 				Projects: new [] {
-					( Name: "SystemXunit", Assemblies: new [] { "monotouch_System_xunit-test.dll" }), 
+					( Name: "SystemXunit", Assemblies: new [] { "monotouch_System_xunit-test.dll" }),
 			}),
 		};
 
-		private static readonly ProjectsDefinitions macTestProjects = new ProjectsDefinitions { 
+		private static readonly ProjectsDefinitions macTestProjects = new ProjectsDefinitions {
 
 			// NUNIT Projects
 			["Mac OS X BCL tests group 1"] = (
@@ -210,7 +210,7 @@ namespace Xharness {
 		};
 
 		public bool GroupTests { get; set; }
-		public string OutputDirectoryPath { get; private  set; }
+		public string OutputDirectoryPath { get; private set; }
 		public string MonoRootPath { get; private set; }
 
 		public Func<string, Guid> GuidGenerator {
@@ -225,7 +225,7 @@ namespace Xharness {
 			}
 			set {
 				var locator = AssemblyLocator as AssemblyLocator;
-				if (locator != null)
+				if (locator is not null)
 					locator.iOSMonoSDKPath = value;
 			}
 		}
@@ -237,7 +237,7 @@ namespace Xharness {
 			}
 			set {
 				var locator = TemplatedProject.AssemblyLocator as AssemblyLocator;
-				if (locator != null)
+				if (locator is not null)
 					locator.MacMonoSDKPath = value;
 			}
 		}
@@ -249,7 +249,7 @@ namespace Xharness {
 
 		public BCLTestImportTargetFactory (IHarness harness) : this (Path.GetFullPath (Path.Combine (HarnessConfiguration.RootDirectory, "bcl-test")), harness.MONO_PATH)
 		{
-			if (harness == null)
+			if (harness is null)
 				throw new ArgumentNullException (nameof (harness));
 			iOSMonoSDKPath = harness.MONO_IOS_SDK_DESTDIR;
 			MacMonoSDKPath = harness.MONO_MAC_SDK_DESTDIR;
@@ -268,10 +268,10 @@ namespace Xharness {
 				OutputDirectoryPath = outputDirectory,
 				IgnoreFilesRootDirectory = outputDirectory,
 				ProjectFilter = ProjectFilter,
-				AssemblyDefinitionFactory = AssemblyDefinitionFactory, 
+				AssemblyDefinitionFactory = AssemblyDefinitionFactory,
 			};
 		}
-		
+
 		public BCLTestImportTargetFactory (string outputDirectory, string monoRootPath) : this (outputDirectory)
 		{
 			MonoRootPath = monoRootPath ?? throw new ArgumentNullException (nameof (monoRootPath));
@@ -285,18 +285,18 @@ namespace Xharness {
 		/// has its own details.</param>
 		/// <param name="generatedDir">The dir where the projects will be saved.</param>
 		/// <returns></returns>
-		public GeneratedProjects GenerateTestProjects (IEnumerable<(string Name, string [] Assemblies, string ExtraArgs, double TimeoutMultiplier)> projects, Platform platform)
+		public GeneratedProjects GenerateTestProjects (IEnumerable<(string Name, string [] Assemblies, double TimeoutMultiplier)> projects, Platform platform)
 			=> TemplatedProject.GenerateTestProjects (projects, platform);
-		
-		List<(string Name, string [] Assemblies, string ExtraArgs, double TimeoutMultiplier)> GetProjectDefinitions (ProjectsDefinitions definitions, Platform platform)
+
+		List<(string Name, string [] Assemblies, double TimeoutMultiplier)> GetProjectDefinitions (ProjectsDefinitions definitions, Platform platform)
 		{
-			var testProjects = new List<(string Name, string [] Assemblies, string ExtraArgs, double TimeoutMultiplier)> ();
-			if (platform == Platform.WatchOS || !GroupTests) { 
+			var testProjects = new List<(string Name, string [] Assemblies, double TimeoutMultiplier)> ();
+			if (platform == Platform.WatchOS || !GroupTests) {
 				// go over the keys which define the groups, and split them
 				foreach (var groupName in definitions.Keys) {
 					var (ExtraArgs, TimeoutMultiplier, Projects) = definitions [groupName];
-					foreach (var (Name, Assemblies) in Projects) { 
-						testProjects.Add ((Name, Assemblies, ExtraArgs, TimeoutMultiplier));
+					foreach (var (Name, Assemblies) in Projects) {
+						testProjects.Add ((Name, Assemblies, TimeoutMultiplier));
 					}
 				}
 			} else {
@@ -306,11 +306,11 @@ namespace Xharness {
 					var (ExtraArgs, TimeoutMultiplier, Projects) = definitions [groupName];
 					foreach (var (_, Assemblies) in Projects) {
 						foreach (var a in Assemblies) {
-							if (ProjectFilter == null || !ProjectFilter.ExcludeDll (platform, a))
+							if (ProjectFilter is null || !ProjectFilter.ExcludeDll (platform, a))
 								groupedAssemblies.AddRange (Assemblies);
 						}
 					}
-					testProjects.Add ((Name: groupName, Assemblies: groupedAssemblies.ToArray (), ExtraArgs, TimeoutMultiplier));
+					testProjects.Add ((Name: groupName, Assemblies: groupedAssemblies.ToArray (), TimeoutMultiplier));
 				}
 			}
 			return testProjects;
@@ -347,7 +347,6 @@ namespace Xharness {
 						Name = finalName,
 						FailureMessage = tp.Failure,
 						RestoreNugetsInProject = true,
-						MTouchExtraArgs = tp.ExtraArgs,
 						TimeoutMultiplier = tp.TimeoutMultiplier,
 						GenerateVariations = false,
 						TestPlatform = platform,
@@ -379,7 +378,6 @@ namespace Xharness {
 					IsExecutableProject = true,
 					FailureMessage = tp.Failure,
 					RestoreNugetsInProject = true,
-					MTouchExtraArgs = tp.ExtraArgs,
 					TestPlatform = TestPlatform.Mac,
 				};
 				proj.Dependency = () => {

@@ -35,12 +35,14 @@ using System;
 namespace AVFoundation {
 #if !TVOS
 	public partial class AVAudioRecorder {
-		AVAudioRecorder (NSUrl url, AudioSettings settings, out NSError error) {
+		AVAudioRecorder (NSUrl url, AudioSettings settings, out NSError error)
+		{
 			// We use this method because it allows us to out NSError but, as a side effect, it is possible for the handle to be null and we will need to check this manually (on the Create method).
 			Handle = InitWithUrl (url, settings.Dictionary, out error);
-		}	
+		}
 
-		AVAudioRecorder (NSUrl url, AVAudioFormat format, out NSError error) {
+		AVAudioRecorder (NSUrl url, AVAudioFormat format, out NSError error)
+		{
 			// We use this method because it allows us to out NSError but, as a side effect, it is possible for the handle to be null and we will need to check this manually (on the Create method).
 			Handle = InitWithUrl (url, format, out error);
 		}
@@ -52,23 +54,20 @@ namespace AVFoundation {
 			error = null;
 			try {
 				AVAudioRecorder r = new AVAudioRecorder (url, settings, out error);
-				if (r.Handle == IntPtr.Zero) 
+				if (r.Handle == IntPtr.Zero)
 					return null;
 
 				return r;
-			} catch { 
+			} catch {
 				return null;
 			}
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios10.0")]
-		[SupportedOSPlatform ("macos10.12")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
-#else
-		[iOS (10,0)]
-		[Mac (10,12)]
 #endif
 		public static AVAudioRecorder? Create (NSUrl url, AVAudioFormat? format, out NSError? error)
 		{
@@ -77,11 +76,11 @@ namespace AVFoundation {
 			error = null;
 			try {
 				AVAudioRecorder r = new AVAudioRecorder (url, format, out error);
-				if (r.Handle == IntPtr.Zero) 
+				if (r.Handle == IntPtr.Zero)
 					return null;
 
 				return r;
-			} catch { 
+			} catch {
 				return null;
 			}
 		}

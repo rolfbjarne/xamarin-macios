@@ -3,11 +3,9 @@ using System.Xml;
 using Microsoft.DotNet.XHarness.iOS.Shared;
 using Microsoft.DotNet.XHarness.iOS.Shared.Utilities;
 
-namespace Xharness.Targets
-{
+namespace Xharness.Targets {
 	// iOS here means Xamarin.iOS, not iOS as opposed to tvOS/watchOS.
-	public abstract class iOSTarget : Target
-	{
+	public abstract class iOSTarget : Target {
 		public iOSTestProject TestProject;
 
 		public MonoNativeInfo MonoNativeInfo => TestProject.MonoNativeInfo;
@@ -27,7 +25,8 @@ namespace Xharness.Targets
 		{
 			XmlDocument info_plist = new XmlDocument ();
 			var target_info_plist = Path.Combine (TargetDirectory, "Info" + Suffix + ".plist");
-			info_plist.LoadWithoutNetworkAccess (Path.Combine (TargetDirectory, OriginalInfoPListInclude));
+			var original_info_plist_include = HarnessConfiguration.EvaluateRootTestsDirectory (OriginalInfoPListInclude);
+			info_plist.LoadWithoutNetworkAccess (Path.Combine (TargetDirectory, original_info_plist_include));
 			BundleIdentifier = info_plist.GetCFBundleIdentifier ();
 			info_plist.SetMinimumOSVersion (GetMinimumOSVersion (info_plist.GetMinimumOSVersion ()));
 			info_plist.SetUIDeviceFamily (UIDeviceFamily);

@@ -8,15 +8,14 @@ using Microsoft.DotNet.XHarness.iOS.Shared.Hardware;
 using Microsoft.DotNet.XHarness.iOS.Shared.Listeners;
 
 namespace Xharness.Jenkins.TestTasks {
-	class RunDeviceTask : RunXITask<IHardwareDevice>, IRunDeviceTask
-	{
+	class RunDeviceTask : RunXITask<IHardwareDevice>, IRunDeviceTask {
 		public ITunnelBore TunnelBore { get; private set; }
-		
+
 		RunDevice runDevice;
 		public override string ProgressMessage {
 			get {
 				var log = runDevice.InstallLog;
-				if (log == null)
+				if (log is null)
 					return base.ProgressMessage;
 
 				var percent_complete = log.CopyingApp ? log.AppPercentComplete : log.WatchAppPercentComplete;

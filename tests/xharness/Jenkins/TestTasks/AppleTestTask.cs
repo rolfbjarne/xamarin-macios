@@ -6,8 +6,7 @@ using Microsoft.DotNet.XHarness.Common.Logging;
 #nullable enable
 
 namespace Xharness.Jenkins.TestTasks {
-	abstract class AppleTestTask : TestTasks
-	{
+	abstract class AppleTestTask : TestTasks {
 		public Jenkins Jenkins { get; private set; }
 		public IHarness Harness { get { return Jenkins.Harness; } }
 		public override string RootDirectory => HarnessConfiguration.RootDirectory;
@@ -34,6 +33,8 @@ namespace Xharness.Jenkins.TestTasks {
 		public override void SetEnvironmentVariables (Process process)
 		{
 			var xcodeRoot = Jenkins.Harness.XcodeRoot;
+
+			process.StartInfo.EnvironmentVariables ["RootTestsDirectory"] = HarnessConfiguration.RootDirectory;
 
 			switch (Platform) {
 			case TestPlatform.iOS:
@@ -77,7 +78,7 @@ namespace Xharness.Jenkins.TestTasks {
 			}
 
 			foreach (var kvp in Environment) {
-				if (kvp.Value == null) {
+				if (kvp.Value is null) {
 					process.StartInfo.EnvironmentVariables.Remove (kvp.Key);
 				} else {
 					process.StartInfo.EnvironmentVariables [kvp.Key] = kvp.Value;

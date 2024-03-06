@@ -8,11 +8,13 @@ using System;
 using ObjCRuntime;
 using Foundation;
 
+#nullable enable
+
 namespace AppKit {
 
 	public partial class NSTextField {
 		public new NSTextFieldCell Cell {
-			get { return (NSTextFieldCell)base.Cell; }
+			get { return (NSTextFieldCell) base.Cell; }
 			set { base.Cell = value; }
 		}
 	}

@@ -6,6 +6,8 @@ using CoreGraphics;
 using Foundation;
 using ObjCRuntime;
 
+#nullable enable
+
 namespace AppKit {
 	public partial class NSPasteboard {
 		public bool WriteObjects (INSPasteboardWriting [] objects)
@@ -15,7 +17,7 @@ namespace AppKit {
 			nsa_pasteboardReading.Dispose ();
 			return result;
 		}
-		
+
 #if !NET
 		public bool WriteObjects (NSPasteboardWriting [] objects)
 		{

@@ -66,8 +66,7 @@ public enum OutputFormat {
 	Xml,
 }
 
-namespace Xamarin.Bundler
-{
+namespace Xamarin.Bundler {
 	public partial class Driver {
 		internal const string NAME = "mtouch";
 
@@ -216,7 +215,7 @@ namespace Xamarin.Bundler
 		{
 			if (File.Exists (target))
 				File.Delete (target);
-			if (target_dir == null)
+			if (target_dir is null)
 				target_dir = Path.GetDirectoryName (target);
 			if (!Directory.Exists (target_dir))
 				Directory.CreateDirectory (target_dir);
@@ -299,7 +298,7 @@ namespace Xamarin.Bundler
 				return false;
 			foreach (var target in app.Targets) {
 				foreach (var assembly in target.Assemblies)
-					if (assembly.Frameworks != null && assembly.Frameworks.Count > 0)
+					if (assembly.Frameworks is not null && assembly.Frameworks.Count > 0)
 						return false;
 			}
 
@@ -355,15 +354,14 @@ namespace Xamarin.Bundler
 
 			a = Action.None;
 
-			if (extra_args != null) {
+			if (extra_args is not null) {
 				var l = new List<string> (args);
 				foreach (var s in extra_args.Split (new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries))
 					l.Add (s);
 				args = l.ToArray ();
 			}
 
-			Action<Action> SetAction = (Action value) =>
-			{
+			Action<Action> SetAction = (Action value) => {
 				switch (action) {
 				case Action.None:
 					action = value;
@@ -396,7 +394,7 @@ namespace Xamarin.Bundler
 						throw new Exception ("Unsupported flag to -aot-options");
 					if (!StringUtils.TryParseArguments (v, out var aot_options, out var ex))
 						throw ErrorHelper.CreateError (26, ex, Errors.MX0026, "-aot-options="+v, ex.Message);
-					if (app.AotOtherArguments == null)
+					if (app.AotOtherArguments is null)
 						app.AotOtherArguments = new List<string> ();
 					app.AotOtherArguments.AddRange (aot_options);
 				}
@@ -478,7 +476,7 @@ namespace Xamarin.Bundler
 			{ "argument=", "Launch the app with this command line argument. This must be specified multiple times for multiple arguments [DEPRECATED]", v => { }, true },
 			{ "sgen:", "Enable the SGen garbage collector",
 					v => {
-						if (!ParseBool (v, "sgen")) 
+						if (!ParseBool (v, "sgen"))
 							ErrorHelper.Warning (43, Errors.MX0043);
 					},
 					true // do not show the option anymore
@@ -486,7 +484,7 @@ namespace Xamarin.Bundler
 			{ "boehm:", "Enable the Boehm garbage collector",
 					v => {
 						if (ParseBool (v, "boehm"))
-							ErrorHelper.Warning (43, Errors.MX0043); }, 
+							ErrorHelper.Warning (43, Errors.MX0043); },
 					true // do not show the option anymore
 				},
 			{ "new-refcount:", "Enable new refcounting logic",
@@ -596,14 +594,14 @@ namespace Xamarin.Bundler
 			return app;
 		}
 
-		static int Main2 (string[] args)
+		static int Main2 (string [] args)
 		{
 			Action action;
 			var app = ParseArguments (args, out action);
 
-			if (app == null)
+			if (app is null)
 				return 0;
-			
+
 			// Allow a few actions, since these seem to always work no matter the Xcode version.
 			var accept_any_xcode_version = action == Action.ListDevices || action == Action.ListCrashReports || action == Action.ListApps || action == Action.LogDev;
 			ValidateXcode (app, accept_any_xcode_version, false);
@@ -611,7 +609,7 @@ namespace Xamarin.Bundler
 			if (IsMlaunchAction (action))
 				return CallMlaunch (app);
 
-			if (app.SdkVersion == null)
+			if (app.SdkVersion is null)
 				throw new ProductException (25, true, Errors.MT0025, app.PlatformName);
 
 			var framework_dir = GetFrameworkDirectory (app);
@@ -648,7 +646,7 @@ namespace Xamarin.Bundler
 			if (app.EnableRepl && app.LinkMode != LinkMode.None)
 				throw new ProductException (82, true, Errors.MT0082);
 
-			if (cross_prefix == null)
+			if (cross_prefix is null)
 				cross_prefix = GetFrameworkCurrentDirectory (app);
 
 			Watch ("Setup", 1);
@@ -713,15 +711,13 @@ namespace Xamarin.Bundler
 
 		static void RedirectStream (StreamReader @in, StreamWriter @out)
 		{
-			new Thread (() =>
-			{
+			new Thread (() => {
 				string line;
-				while ((line = @in.ReadLine ()) != null) {
+				while ((line = @in.ReadLine ()) is not null) {
 					@out.WriteLine (line);
 					@out.Flush ();
 				}
-			})
-			{ IsBackground = true }.Start ();
+			}) { IsBackground = true }.Start ();
 		}
 
 		static string GetMlaunchPath (Application app)
@@ -788,11 +784,11 @@ namespace Xamarin.Bundler
 			//
 
 			switch (app.Platform) {
-				case ApplePlatform.TVOS:
-				case ApplePlatform.WatchOS:
-					if (Driver.XcodeVersion.Major >= 14)
-						app.EnableCxx = true;
-					break;
+			case ApplePlatform.TVOS:
+			case ApplePlatform.WatchOS:
+				if (Driver.XcodeVersion.Major >= 14)
+					app.EnableCxx = true;
+				break;
 			}
 
 			if (string.IsNullOrEmpty (app.Compiler)) {

@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 using Xamarin.MacDev;
 using Xamarin.Utils;
+using ClassRedirector;
 
-namespace Xamarin.Bundler
-{
-	public abstract class ProcessTask : BuildTask
-	{
+namespace Xamarin.Bundler {
+	public abstract class ProcessTask : BuildTask {
 		public string FileName;
 		public IList<string> Arguments;
 		public Dictionary<string, string> Environment = new Dictionary<string, string> ();
@@ -42,7 +41,7 @@ namespace Xamarin.Bundler
 		// calls to this function will be synchronized (no need to lock in here).
 		protected virtual void OutputReceived (string line)
 		{
-			if (line != null)
+			if (line is not null)
 				Output.AppendLine (line);
 		}
 
@@ -61,8 +60,7 @@ namespace Xamarin.Bundler
 		}
 	}
 
-	class GenerateMainTask : BuildTask
-	{
+	class GenerateMainTask : BuildTask {
 		public Target Target;
 		public Abi Abi;
 		public string MainM;
@@ -87,27 +85,25 @@ namespace Xamarin.Bundler
 		}
 	}
 
-	class CompileMainTask : CompileTask
-	{
+	class CompileMainTask : CompileTask {
 		protected override void CompilationFailed (int exitCode)
 		{
 			throw ErrorHelper.CreateError (5103, Errors.MT5103_A, string.Join ("', '", CompilerFlags.SourceFiles.ToArray ()));
 		}
 	}
 
-	class PinvokesTask : CompileTask
-	{
+	class PinvokesTask : CompileTask {
 		protected override void CompilationFailed (int exitCode)
 		{
 			throw ErrorHelper.CreateError (4002, Errors.MT4002);
 		}
 	}
 
-	class RunRegistrarTask : BuildTask
-	{
+	class RunRegistrarTask : BuildTask {
 		public Target Target;
 		public string RegistrarCodePath;
 		public string RegistrarHeaderPath;
+		public List<string> RegistrationMethods;
 
 		public override IEnumerable<string> Inputs {
 			get {
@@ -125,12 +121,13 @@ namespace Xamarin.Bundler
 
 		protected override void Execute ()
 		{
-			Target.StaticRegistrar.Generate (Target.Assemblies.Select ((a) => a.AssemblyDefinition), RegistrarHeaderPath, RegistrarCodePath);
+			var assemblies = Target.Assemblies.Select ((a) => a.AssemblyDefinition);
+			Target.StaticRegistrar.Generate (assemblies, RegistrarHeaderPath, RegistrarCodePath, out var initialization_name);
+			RegistrationMethods.Add (initialization_name);
 		}
 	}
 
-	class CompileRegistrarTask : CompileTask
-	{
+	class CompileRegistrarTask : CompileTask {
 		public string RegistrarCodePath;
 		public string RegistrarHeaderPath;
 
@@ -147,8 +144,7 @@ namespace Xamarin.Bundler
 		}
 	}
 
-	public class AOTTask : ProcessTask
-	{
+	public class AOTTask : ProcessTask {
 		public Assembly Assembly;
 		public string AssemblyName;
 		public bool AddBitcodeMarkerSection;
@@ -175,7 +171,7 @@ namespace Xamarin.Bundler
 
 		public override IEnumerable<string> FileDependencies {
 			get {
-				if (inputs == null) {
+				if (inputs is null) {
 					inputs = new List<string> ();
 					if (Assembly.HasDependencyMap)
 						inputs.AddRange (Assembly.DependencyMap);
@@ -205,7 +201,7 @@ namespace Xamarin.Bundler
 
 		protected override void OutputReceived (string line)
 		{
-			if (line == null)
+			if (line is null)
 				return;
 
 			if (line.StartsWith ("AOT restriction: Method '", StringComparison.Ordinal) && line.Contains ("must be static since it is decorated with [MonoPInvokeCallback]")) {
@@ -233,7 +229,7 @@ namespace Xamarin.Bundler
 
 			WriteLimitedOutput ($"AOT Compilation exited with code {exit_code}, command:\n{Command}", output_lines, exceptions);
 
-			exceptions.Add (ErrorHelper.CreateError (3001, Errors.MX3001, "AOT",  AssemblyName));
+			exceptions.Add (ErrorHelper.CreateError (3001, Errors.MX3001, "AOT", AssemblyName));
 
 			throw new AggregateException (exceptions);
 		}
@@ -244,8 +240,7 @@ namespace Xamarin.Bundler
 		}
 	}
 
-	public class NativeLinkTask : BuildTask
-	{
+	public class NativeLinkTask : BuildTask {
 		public Target Target;
 		public string OutputFile;
 		public CompilerFlags CompilerFlags;
@@ -280,7 +275,7 @@ namespace Xamarin.Bundler
 					Console.WriteLine ($"Process exited with code {code}, command:\n{Target.App.CompilerPath} {CompilerFlags.ToString ()}\n{output} ");
 					// if the build failed - it could be because of missing frameworks / libraries we identified earlier
 					foreach (var assembly in Target.Assemblies) {
-						if (assembly.UnresolvedModuleReferences == null)
+						if (assembly.UnresolvedModuleReferences is null)
 							continue;
 
 						foreach (var mr in assembly.UnresolvedModuleReferences) {
@@ -345,8 +340,7 @@ namespace Xamarin.Bundler
 		}
 	}
 
-	public class LinkTask : CompileTask
-	{
+	public class LinkTask : CompileTask {
 		protected override async Task ExecuteAsync ()
 		{
 			await base.ExecuteAsync ();
@@ -364,8 +358,7 @@ namespace Xamarin.Bundler
 		}
 	}
 
-	public class CompileTask : BuildTask
-	{
+	public class CompileTask : BuildTask {
 		public Target Target;
 		public Application App { get { return Target.App; } }
 		public bool SharedLibrary;
@@ -563,7 +556,7 @@ namespace Xamarin.Bundler
 			var output = new List<string> ();
 			var assembly_name = Path.GetFileNameWithoutExtension (OutputFile);
 			var output_received = new Action<string> ((string line) => {
-				if (line == null)
+				if (line is null)
 					return;
 				output.Add (line);
 				CheckFor5107 (assembly_name, line, exceptions);
@@ -580,14 +573,13 @@ namespace Xamarin.Bundler
 
 		public override string ToString ()
 		{
-			if (compiler_flags == null || compiler_flags.SourceFiles == null)
+			if (compiler_flags is null || compiler_flags.SourceFiles is null)
 				return Path.GetFileName (OutputFile);
 			return string.Join (", ", compiler_flags.SourceFiles.Select ((arg) => Path.GetFileName (arg)).ToArray ());
 		}
 	}
 
-	public class BitCodeifyTask : BuildTask
-	{
+	public class BitCodeifyTask : BuildTask {
 		public string Input { get; set; }
 		public string OutputFile { get; set; }
 		public ApplePlatform Platform { get; set; }
@@ -617,8 +609,7 @@ namespace Xamarin.Bundler
 		}
 	}
 
-	public class LipoTask : BuildTask
-	{
+	public class LipoTask : BuildTask {
 		public Application App;
 		public IEnumerable<string> InputFiles { get; set; }
 		public string OutputFile { get; set; }
@@ -647,8 +638,7 @@ namespace Xamarin.Bundler
 	}
 
 
-	public class FileCopyTask : BuildTask
-	{
+	public class FileCopyTask : BuildTask {
 		public string InputFile { get; set; }
 		public string OutputFile { get; set; }
 

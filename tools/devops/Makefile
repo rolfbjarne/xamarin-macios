@@ -9,6 +9,8 @@ device-tests-provisioning.csx: device-tests-provisioning.csx.in Makefile $(TOP)/
 		-e 's#@MIN_SHARPIE_URL@#$(MIN_SHARPIE_URL)#g' \
 		-e 's#@INCLUDE_MAC@#$(INCLUDE_MAC)#g' \
 		-e 's#@INCLUDE_IOS@#$(INCLUDE_IOS)#g' \
+		-e 's#@INCLUDE_TVOS@#$(INCLUDE_TVOS)#g' \
+		-e 's#@INCLUDE_WATCH@#$(INCLUDE_WATCH)#g' \
 		-e 's#@INCLUDE_XAMARIN_LEGACY@#$(INCLUDE_XAMARIN_LEGACY)#g' \
 		$< > $@;
 		@echo "Generated $@:"
@@ -47,8 +49,16 @@ LocProject.json: LocProject.json.in Makefile $(TOP)/Make.config
 		-e 's#@WORKING_DIRECTORY@#$(PWD)#g' \
 		$< > $(TOP)/Localize/$@;
 
-all check:
-	shellcheck *.sh
+all check: check-sh check-yaml
+	@true
+
+check-sh:
+	$(Q) if ! type shellcheck >/dev/null; then echo "shellcheck is not installed. Install it like this: 'brew install shellcheck'"; exit 1; fi
+	$(Q) shellcheck $(shell find . -name '*.sh')
+
+check-yml check-yaml:
+	$(Q) if ! type yamllint >/dev/null; then echo "yamllint is not installed. Install it like this: 'brew install yamllint'"; exit 1; fi
+	$(Q) yamllint -c .yamllint.yml $(shell find . -name '*.yml')
 
 print-abspath-variable:
 	@echo $(VARIABLE)=$(abspath $($(VARIABLE)))

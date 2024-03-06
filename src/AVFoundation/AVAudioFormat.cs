@@ -30,7 +30,7 @@ namespace AVFoundation {
 				return false;
 			return a.Equals (b);
 		}
-		
+
 		public static bool operator != (AVAudioFormat a, AVAudioFormat b)
 		{
 			return !(a == b);
@@ -38,24 +38,24 @@ namespace AVFoundation {
 
 		[Export ("StreamDescription")]
 #if NET
-		[SupportedOSPlatform ("ios8.0")]
-		[SupportedOSPlatform ("macos10.10")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst8.0")]
+		[SupportedOSPlatform ("maccatalyst")]
 #endif
 		public virtual AudioStreamBasicDescription StreamDescription {
 #if NET
-			[SupportedOSPlatform ("ios8.0")]
-			[SupportedOSPlatform ("macos10.10")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
 			[SupportedOSPlatform ("tvos")]
-			[SupportedOSPlatform ("maccatalyst8.0")]
+			[SupportedOSPlatform ("maccatalyst")]
 #endif
 			get {
 				var ptr = _StreamDescription;
 				if (ptr == IntPtr.Zero)
 					return default (AudioStreamBasicDescription);
 				unsafe {
-					AudioStreamBasicDescription *p = (AudioStreamBasicDescription *) ptr;
+					AudioStreamBasicDescription* p = (AudioStreamBasicDescription*) ptr;
 					return *p;
 				}
 			}

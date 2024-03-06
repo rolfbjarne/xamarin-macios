@@ -11,6 +11,7 @@ namespace Xamarin.Tests {
 		macOSMobile,
 		macOSFull,
 		macOSSystem,
+		MacCatalyst,
 	}
 
 	public static class ProfileExtensions {
@@ -27,10 +28,32 @@ namespace Xamarin.Tests {
 			case Profile.macOSFull:
 			case Profile.macOSMobile:
 			case Profile.macOSSystem:
+				return ApplePlatform.MacOSX;
+			case Profile.MacCatalyst:
 				return ApplePlatform.MacCatalyst;
 			case Profile.None:
 			default:
 				throw new NotImplementedException (profile.ToString ());
+			}
+		}
+
+		public static Profile AsProfile (this ApplePlatform platform)
+		{
+			switch (platform) {
+			case ApplePlatform.iOS:
+				return Profile.iOS;
+			case ApplePlatform.MacCatalyst:
+				return Profile.MacCatalyst;
+			case ApplePlatform.MacOSX:
+				return Profile.macOSMobile;
+			case ApplePlatform.None:
+				return Profile.None;
+			case ApplePlatform.TVOS:
+				return Profile.tvOS;
+			case ApplePlatform.WatchOS:
+				return Profile.watchOS;
+			default:
+				throw new NotImplementedException (platform.ToString ());
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
@@ -22,13 +23,13 @@ namespace Xharness {
 		None = 0,
 		[Label ("bcl")]
 		Bcl = 1 << 1,
-		[Label("bgen")]
+		[Label ("bgen")]
 		Bgen = 1 << 2,
 		[Label ("binding")]
 		Binding = 1 << 3,
 		[Label ("bindings-framework")]
 		BindingFramework = 1 << 4,
-		[Label("bindings-xcframework")]
+		[Label ("bindings-xcframework")]
 		BindingsXcframework = 1 << 5,
 		[Label ("cecil")]
 		Cecil = 1 << 6,
@@ -38,13 +39,13 @@ namespace Xharness {
 		DotnetTest = 1 << 8,
 		[Label ("fsharp")]
 		Fsharp = 1 << 9,
-		[Label("framework")]
+		[Label ("framework")]
 		Framework = 1 << 10,
 		[Label ("generator")]
 		Generator = 1 << 11,
 		[Label ("interdependent-binding-projects")]
 		InterdependentBindingProjects = 1 << 12,
-		[Label("install-source")]
+		[Label ("install-source")]
 		InstallSource = 1 << 13,
 		[Label ("introspection")]
 		Introspection = 1 << 14,
@@ -74,8 +75,12 @@ namespace Xharness {
 		Xcframework = 1 << 26,
 		[Label ("xtro")]
 		Xtro = 1 << 27,
+		[Label ("packaged-macos")]
+		PackagedMacOS = 1 << 28,
+		[Label ("windows")]
+		Windows = 1 << 29,
 		[Label ("all")]
-		All =  Int64.MaxValue, 
+		All = Int64.MaxValue,
 	}
 
 	[Flags]
@@ -90,10 +95,6 @@ namespace Xharness {
 		iOSExtension = 1 << 3,
 		[Label ("ios-simulator")]
 		iOSSimulator = 1 << 4,
-		[Label ("ios-32")]
-		iOS32 = 1 << 5,
-		[Label ("ios-64")]
-		iOS64 = 1 << 6,
 		[Label ("mac")]
 		Mac = 1 << 7,
 		[Label ("maccatalyst")]
@@ -109,20 +110,24 @@ namespace Xharness {
 		[Label ("legacy-xamarin")]
 		LegacyXamarin = 1 << 13,
 		[Label ("all")]
-		All =  0xFFFFFFFF, 
+		All = 0xFFFFFFFF,
 	}
 
 	static class TestLabelExtensions {
 		static string GetLabel<T> (this T self) where T : Enum
 		{
-			var name = Enum.GetName (typeof (T), self);
-			var attr = typeof (T).GetField (name).GetCustomAttribute<LabelAttribute> ();
-			return attr.Label;
+			var name = Enum.GetName (typeof (T), self)!;
+			var attr = typeof (T).GetField (name)!.GetCustomAttribute<LabelAttribute> ();
+			return attr!.Label;
 		}
 
-		public static bool TryGetLabel<T> (this string self, out T? label) where T : Enum
+		public static bool TryGetLabel<T> (this string self, out T label) where T : struct, Enum
 		{
+#if NET
+			foreach (var obj in Enum.GetValues<T> ()) {
+#else
 			foreach (var obj in Enum.GetValues (typeof (T))) {
+#endif
 				if (obj is T value && value.GetLabel () == self) {
 					label = value;
 					return true;

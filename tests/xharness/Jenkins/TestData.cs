@@ -4,11 +4,9 @@ using Microsoft.DotNet.XHarness.iOS.Shared.Hardware;
 
 namespace Xharness.Jenkins {
 
-	class TestData
-	{
+	class TestData {
 		public string Variation;
-		public string MTouchExtraArgs;
-		public string MonoBundlingExtraArgs; // mmp
+		public string BundlerArguments; // MtouchExtraArgs + MonoBundlingExtraArgs
 		public KnownIssue KnownFailure;
 		public bool Debug;
 		public bool Profiling;
@@ -25,5 +23,6 @@ namespace Xharness.Jenkins {
 		public string XamMacArch;
 		public string RuntimeIdentifier;
 		public string Registrar;
+		public bool PublishAot; // NativeAOT
 	}
 }

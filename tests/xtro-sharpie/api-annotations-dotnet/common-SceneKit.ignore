@@ -11,8 +11,6 @@
 !missing-pinvoke! SCNMatrix4Scale is not bound
 !missing-pinvoke! SCNVector3EqualToVector3 is not bound
 !missing-pinvoke! SCNVector4EqualToVector4 is not bound
-!missing-pinvoke! SCNMatrix4FromGLKMatrix4 is not bound
-!missing-pinvoke! SCNMatrix4ToGLKMatrix4 is not bound
 
 !missing-selector! +SCNNode::simdLocalFront not bound
 !missing-selector! +SCNNode::simdLocalRight not bound
@@ -66,3 +64,6 @@
 
 # normal pattern accept null delegate and unit tests shows it works just fine
 !extra-null-allowed! 'System.Void SceneKit.SCNAvoidOccluderConstraint::set_Delegate(SceneKit.ISCNAvoidOccluderConstraintDelegate)' has a extraneous [NullAllowed] on parameter #0
+
+## we cannot add abstract members to existing SCNSceneRenderer protocols (breaking changes)
+!incorrect-protocol-member! SCNSceneRenderer::workingColorSpace is REQUIRED and should be abstract

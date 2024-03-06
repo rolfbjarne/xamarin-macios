@@ -6,12 +6,12 @@ using Foundation;
 using ObjCRuntime;
 using CoreGraphics;
 
+#nullable enable
+
 namespace AppKit {
 
 #if NET
-	[SupportedOSPlatform ("macos10.15")]
-#else
-	[Mac (10, 15)]
+	[SupportedOSPlatform ("macos")]
 #endif
 	public enum NSCollectionLayoutAnchorOffsetType {
 		Absolute,
@@ -20,12 +20,11 @@ namespace AppKit {
 
 	public partial class NSCollectionLayoutAnchor {
 		public static NSCollectionLayoutAnchor Create (NSDirectionalRectEdge edges, NSCollectionLayoutAnchorOffsetType offsetType, CGPoint offset) =>
-		    offsetType switch
-		    {
-			    NSCollectionLayoutAnchorOffsetType.Absolute   => CreateFromAbsoluteOffset (edges, offset),
-			    NSCollectionLayoutAnchorOffsetType.Fractional => CreateFromFractionalOffset (edges, offset),
-			    _                                             => throw new ArgumentException (message: "Invalid enum value", paramName: nameof (offsetType)),
-		    };
+			offsetType switch {
+				NSCollectionLayoutAnchorOffsetType.Absolute => CreateFromAbsoluteOffset (edges, offset),
+				NSCollectionLayoutAnchorOffsetType.Fractional => CreateFromFractionalOffset (edges, offset),
+				_ => throw new ArgumentException (message: "Invalid enum value", paramName: nameof (offsetType)),
+			};
 	}
 }
 #endif // !__MACCATALYST__

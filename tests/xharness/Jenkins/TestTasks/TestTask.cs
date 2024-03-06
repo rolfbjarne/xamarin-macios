@@ -17,7 +17,7 @@ namespace Xharness.Jenkins.TestTasks {
 		static int counter;
 		static DriveInfo rootDrive;
 
-		protected readonly Stopwatch waitingDuration = new();
+		protected readonly Stopwatch waitingDuration = new ();
 
 		#region Private vars
 
@@ -35,7 +35,7 @@ namespace Xharness.Jenkins.TestTasks {
 		public Task InitialTask { get; set; } // a task that's executed before this task's ExecuteAsync method.
 		public Task CompletedTask; // a task that's executed after this task's ExecuteAsync method.
 		public List<Resource> Resources = new ();
- 
+
 		#endregion
 
 		#region Properties
@@ -48,7 +48,7 @@ namespace Xharness.Jenkins.TestTasks {
 
 		protected static string Timestamp => Harness.Helpers.Timestamp;
 		public string ProjectFile => TestProject?.Path;
-		public bool HasCustomTestName => testName != null;
+		public bool HasCustomTestName => testName is not null;
 
 		public bool NotStarted => (ExecutionResult & TestExecutingResult.StateMask) == TestExecutingResult.NotStarted;
 		public bool InProgress => (ExecutionResult & TestExecutingResult.InProgress) == TestExecutingResult.InProgress;
@@ -89,7 +89,7 @@ namespace Xharness.Jenkins.TestTasks {
 			}
 		}
 
-		public ILog MainLog 
+		public ILog MainLog
 			=> testLog ??= Logs.Create ($"main-{Timestamp}.log", "Main log");
 
 		ILogs logs;
@@ -98,7 +98,7 @@ namespace Xharness.Jenkins.TestTasks {
 		IEnumerable<string> referencedNunitAndXunitTestAssemblies;
 		public IEnumerable<string> ReferencedNunitAndXunitTestAssemblies {
 			get {
-				if (referencedNunitAndXunitTestAssemblies != null)
+				if (referencedNunitAndXunitTestAssemblies is not null)
 					return referencedNunitAndXunitTestAssemblies;
 
 				if (TestName.Contains ("BCL tests group")) { // avoid loading unrelated projects
@@ -157,11 +157,11 @@ namespace Xharness.Jenkins.TestTasks {
 
 		public virtual string TestName {
 			get {
-				if (testName != null)
+				if (testName is not null)
 					return testName;
 
 				var rv = Path.GetFileNameWithoutExtension (ProjectFile);
-				if (rv == null)
+				if (rv is null)
 					return $"unknown test name ({GetType ().Name}";
 				switch (Platform) {
 				case TestPlatform.Mac:
@@ -220,7 +220,7 @@ namespace Xharness.Jenkins.TestTasks {
 			if (Finished)
 				return Task.CompletedTask;
 
-			rootDrive ??= new("/");
+			rootDrive ??= new ("/");
 			var afs = rootDrive.AvailableFreeSpace;
 			const long minSpaceRequirement = 1024 * 1024 * 1024; /* 1 GB */
 			if (afs < minSpaceRequirement) {
@@ -253,10 +253,10 @@ namespace Xharness.Jenkins.TestTasks {
 			ExecutionResult = ExecutionResult & ~TestExecutingResult.StateMask | TestExecutingResult.InProgress;
 
 			try {
-				if (Dependency != null)
+				if (Dependency is not null)
 					await Dependency ();
 
-				if (InitialTask != null)
+				if (InitialTask is not null)
 					await InitialTask;
 
 				await VerifyRunAsync ();
@@ -268,7 +268,7 @@ namespace Xharness.Jenkins.TestTasks {
 				executeTask = ExecuteAsync ();
 				await executeTask;
 
-				if (CompletedTask != null) {
+				if (CompletedTask is not null) {
 					if (CompletedTask.Status == TaskStatus.Created)
 						CompletedTask.Start ();
 					await CompletedTask;
@@ -301,7 +301,7 @@ namespace Xharness.Jenkins.TestTasks {
 		protected void AddCILogFiles (StreamReader stream)
 		{
 			string line;
-			while ((line = stream.ReadLine ()) != null) {
+			while ((line = stream.ReadLine ()) is not null) {
 				if (!line.StartsWith ("@MonkeyWrench: ", StringComparison.Ordinal))
 					continue;
 
@@ -328,7 +328,7 @@ namespace Xharness.Jenkins.TestTasks {
 				using (var reader = log.GetReader ()) {
 					string line;
 					var error_msg = new System.Text.RegularExpressions.Regex ("([A-Z][A-Z][0-9][0-9][0-9][0-9]:.*)");
-					while ((line = reader.ReadLine ()) != null) {
+					while ((line = reader.ReadLine ()) is not null) {
 						var match = error_msg.Match (line);
 						if (match.Success)
 							return match.Groups [1].Captures [0].Value;

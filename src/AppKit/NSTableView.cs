@@ -30,13 +30,15 @@ using System;
 
 using Foundation;
 
+#nullable enable
+
 namespace AppKit {
 
 	public partial class NSTableView {
-		public NSTableViewSource Source {
+		public NSTableViewSource? Source {
 			get {
-				var d = WeakDelegate as NSTableViewSource; 
-				if (d != null)
+				var d = WeakDelegate as NSTableViewSource;
+				if (d is not null)
 					return d;
 				return null;
 			}

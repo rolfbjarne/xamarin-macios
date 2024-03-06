@@ -28,6 +28,8 @@
 using System;
 using Foundation;
 
+#nullable enable
+
 namespace AppKit {
 
 	public partial class NSBrowser {
@@ -89,7 +91,7 @@ namespace AppKit {
 			}
 		}
 	}
-	
+
 	public partial class NSTableView {
 		public event EventHandler DoubleClick {
 			add {

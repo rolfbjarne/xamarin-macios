@@ -11,8 +11,7 @@ using Mono.Cecil;
 using Xamarin.Utils;
 
 namespace Xamarin.Bundler {
-	public class AotInfo
-	{
+	public class AotInfo {
 		public AOTTask Task;
 		public LinkTask LinkTask;
 		public List<string> BitcodeFiles = new List<string> (); // .bc files produced by the AOT compiler
@@ -21,8 +20,7 @@ namespace Xamarin.Bundler {
 		public List<string> ObjectFiles = new List<string> (); // .o files produced by the AOT compiler
 	}
 
-	public partial class Assembly
-	{
+	public partial class Assembly {
 		public bool BundleInContainerApp;
 
 		public Dictionary<Abi, AotInfo> AotInfos = new Dictionary<Abi, AotInfo> ();
@@ -45,7 +43,7 @@ namespace Xamarin.Bundler {
 		// Recursively list all the assemblies the specified assembly depends on.
 		HashSet<string> ComputeDependencies (List<Exception> warnings)
 		{
-			if (dependency_map != null)
+			if (dependency_map is not null)
 				return dependency_map;
 
 			dependency_map = new HashSet<string> ();
@@ -184,8 +182,7 @@ namespace Xamarin.Bundler {
 
 			var aotCompiler = Driver.GetAotCompiler (App, abi, Target.Is64Build);
 			var aotArgs = App.GetAotArguments (assembly_path, abi, build_dir, asm_output ?? other_output, llvm_aot_ofile, data);
-			var task = new AOTTask
-			{
+			var task = new AOTTask {
 				Assembly = this,
 				AssemblyName = assembly_path,
 				AddBitcodeMarkerSection = BuildTarget != AssemblyBuildTarget.StaticObject && App.EnableMarkerOnlyBitCode,
@@ -210,10 +207,10 @@ namespace Xamarin.Bundler {
 			if (EnableCxx || NeedsGccExceptionHandling || ForceLoad)
 				return false;
 
-			if (LinkerFlags != null && LinkerFlags.Count > 0)
+			if (LinkerFlags is not null && LinkerFlags.Count > 0)
 				return false;
 
-			if (LinkWith != null && LinkWith.Count > 0)
+			if (LinkWith is not null && LinkWith.Count > 0)
 				return false;
 
 			return true;
@@ -231,7 +228,7 @@ namespace Xamarin.Bundler {
 				CopyAssembly (source, target);
 			}
 
-			if (Satellites != null) {
+			if (Satellites is not null) {
 				foreach (var a in Satellites) {
 					string s_target_dir = Path.Combine (Target.TargetDirectory, Path.GetFileName (Path.GetDirectoryName (a)));
 					string s_target = Path.Combine (s_target_dir, Path.GetFileName (a));

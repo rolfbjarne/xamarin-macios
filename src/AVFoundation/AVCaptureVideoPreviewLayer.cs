@@ -15,11 +15,9 @@ namespace AVFoundation {
 		public enum InitMode {
 			WithConnection,
 #if NET
-			[SupportedOSPlatform ("ios8.0")]
+			[SupportedOSPlatform ("ios")]
 			[SupportedOSPlatform ("macos")]
 			[SupportedOSPlatform ("maccatalyst")]
-#else
-			[iOS (8,0)]
 #endif
 			WithNoConnection,
 		}
@@ -38,7 +36,7 @@ namespace AVFoundation {
 			}
 		}
 
-		public AVCaptureVideoPreviewLayer (AVCaptureSession session) : this (session, InitMode.WithConnection) {}
+		public AVCaptureVideoPreviewLayer (AVCaptureSession session) : this (session, InitMode.WithConnection) { }
 	}
 }
 

@@ -32,13 +32,10 @@ using ObjCRuntime;
 namespace AVFoundation {
 
 #if NET
-	[SupportedOSPlatform ("ios9.0")]
-	[SupportedOSPlatform ("macos10.11")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("tvos")]
-#else
-	[iOS (9,0)]
-	[Mac (10,11)]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AVAudioConverterPrimeInfo {
@@ -71,7 +68,7 @@ namespace AVFoundation {
 			if (!(obj is AVAudioConverterPrimeInfo))
 				return false;
 
-			return this.Equals ((AVAudioConverterPrimeInfo)obj);
+			return this.Equals ((AVAudioConverterPrimeInfo) obj);
 		}
 
 		public bool Equals (AVAudioConverterPrimeInfo other)
@@ -81,7 +78,7 @@ namespace AVFoundation {
 
 		public override int GetHashCode ()
 		{
-			return LeadingFrames.GetHashCode () ^ TrailingFrames.GetHashCode ();
+			return HashCode.Combine (LeadingFrames, TrailingFrames);
 		}
 	}
 }

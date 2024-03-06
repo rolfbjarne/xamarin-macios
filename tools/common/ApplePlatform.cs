@@ -3,6 +3,8 @@
 //
 // Copyright 2020 Microsoft Corp. All Rights Reserved.
 
+#nullable enable
+
 namespace Xamarin.Utils {
 	public enum ApplePlatform {
 		None,
@@ -34,9 +36,11 @@ namespace Xamarin.Utils {
 			}
 		}
 
-		public static string ToFramework (this ApplePlatform @this)
+		public static string ToFramework (this ApplePlatform @this, string? netVersion = null)
 		{
-			var netVersion = "net6.0";
+			if (netVersion is null)
+				netVersion = Xamarin.DotNetVersions.Tfm;
+
 			switch (@this) {
 			case ApplePlatform.iOS:
 				return netVersion + "-ios";
@@ -50,6 +54,24 @@ namespace Xamarin.Utils {
 				return netVersion + "-maccatalyst";
 			default:
 				return "Unknown";
+			}
+		}
+
+		public static ApplePlatform Parse (string platform)
+		{
+			switch (platform.ToLowerInvariant ()) {
+			case "ios":
+				return ApplePlatform.iOS;
+			case "tvos":
+				return ApplePlatform.TVOS;
+			case "macos":
+				return ApplePlatform.MacOSX;
+			case "watchos":
+				return ApplePlatform.WatchOS;
+			case "maccatalyst":
+				return ApplePlatform.MacCatalyst;
+			default:
+				throw new System.InvalidOperationException ($"Unknown platform: {platform}");
 			}
 		}
 	}

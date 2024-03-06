@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.DotNet.XHarness.Common.Logging;
@@ -31,7 +33,7 @@ namespace Xharness.Jenkins {
 		readonly HtmlReportWriter xamarinStorageHtmlReportWriter;
 		readonly HtmlReportWriter vsdropsHtmlReportWriter;
 		readonly MarkdownReportWriter markdownReportWriter;
-		
+
 		public bool Populating { get; private set; } = true;
 
 		public IHarness Harness { get; }
@@ -94,7 +96,7 @@ namespace Xharness.Jenkins {
 				return false;
 			}
 
-			if (!TestSelection.IsEnabled(TestLabel.SystemPermission) && project.Label == TestLabel.Introspection) {
+			if (!TestSelection.IsEnabled (TestLabel.SystemPermission) && project.Label == TestLabel.Introspection) {
 				MainLog.WriteLine ($"Ignoring {project.Name} with label {project.Label} because we cannot include the system permission tests");
 				return false;
 			}
@@ -115,7 +117,7 @@ namespace Xharness.Jenkins {
 		}
 
 		public bool IsBetaXcode => Harness.XcodeRoot.IndexOf ("beta", StringComparison.OrdinalIgnoreCase) >= 0;
-		
+
 		Task PopulateTasksAsync ()
 		{
 			// Missing:
@@ -135,7 +137,7 @@ namespace Xharness.Jenkins {
 						Console.WriteLine ($"Failed to create simulator tasks: {v.Exception}");
 					}
 				});
-			
+
 			//Tasks.AddRange (await CreateRunSimulatorTasksAsync ());
 
 			var crashReportSnapshotFactory = new CrashSnapshotReporterFactory (processManager);
@@ -224,8 +226,9 @@ namespace Xharness.Jenkins {
 				TestProject = buildDotNetTestsProject,
 				Platform = TestPlatform.All,
 				TestName = "DotNet tests",
-				Timeout = TimeSpan.FromMinutes (240),
-				Ignored = !TestSelection.IsEnabled (TestLabel.DotnetTest),
+				Filter = "Category!=Windows",
+				Timeout = TimeSpan.FromMinutes (360),
+				Ignored = !TestSelection.IsEnabled (TestLabel.DotnetTest) || !TestSelection.IsEnabled (PlatformLabel.Dotnet),
 			};
 			Tasks.Add (runDotNetTests);
 
@@ -236,6 +239,79 @@ namespace Xharness.Jenkins {
 			});
 
 			return Task.WhenAll (loadsim, loaddev);
+		}
+
+		[DllImport ("libc")]
+		static extern int getloadavg (double [] avg, int nelem);
+
+		async Task<(bool Success, string Output)> GetProcessListAsync (ILog log)
+		{
+			try {
+				using var ps = new Process ();
+				ps.StartInfo.FileName = "ps";
+				ps.StartInfo.Arguments = "auxww";
+				var output = new MemoryLog () {
+					Timestamp = false,
+				};
+				var rv = await processManager.RunAsync (ps, log, stdoutLog: output, stderrLog: output, timeout: TimeSpan.FromMinutes (1));
+				if (!rv.Succeeded) {
+					log.WriteLine ($"Failed to list processes, 'ps auxww' exited with exit code {rv.ExitCode}");
+					return new (false, $"'ps auxww' exited with exit code {rv.ExitCode}");
+				}
+
+				var allLines = output.ToString ().Split ('\n');
+				// First line contains headers
+				var headers = allLines [0].Split (new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+				var processes = new List<string []> (allLines.Length);
+				processes.Add (headers);
+				for (var p = 1; p < allLines.Length; p++) {
+					var line = allLines [p].Trim ();
+					if (string.IsNullOrEmpty (line))
+						continue;
+
+					// Split on space to get the fields for the process
+					var fields = line.Split (new char [] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+					if (fields.Length < headers.Length) {
+						// shouldn't happen - not enough fields?
+						processes.Add (fields);
+						continue;
+					}
+					// Reconstruct the 'COMMAND' field, it's all the remaining entries in the array
+					for (var f = headers.Length; f < fields.Length; f++) {
+						fields [headers.Length - 1] += " " + fields [f];
+					}
+					Array.Resize (ref fields, headers.Length);
+					processes.Add (fields);
+				}
+
+				var fieldWidth = new int [headers.Length];
+				for (var p = 0; p < processes.Count; p++) {
+					var fields = processes [p];
+					for (var i = 0; i < fields.Length; i++) {
+						fieldWidth [i] = Math.Max (fieldWidth [i], fields [i]?.Length ?? 0);
+					}
+				}
+
+				var sb = new StringBuilder ();
+				for (var p = 0; p < processes.Count; p++) {
+					var fields = processes [p];
+
+					for (var f = 0; f < fields.Length - 1; f++) {
+						sb.Append (' ', fieldWidth [f] - (fields [f]?.Length ?? 0));
+						sb.Append (fields [f]);
+						sb.Append (' ');
+					}
+
+					// last is COMMAND, no padding
+					sb.Append (fields [fields.Length - 1]);
+					sb.AppendLine ();
+				}
+
+				return new (true, sb.ToString ());
+			} catch (Exception e) {
+				log.WriteLine ($"Failed to list processes: {e.Message}");
+				return new (false, e.Message);
+			}
 		}
 
 		public int Run ()
@@ -257,7 +333,29 @@ namespace Xharness.Jenkins {
 					Task.Factory.StartNew (async () => {
 						while (true) {
 							await Task.Delay (TimeSpan.FromMinutes (10));
-							Console.WriteLine ("Still running tests. Please be patient.");
+							var averages = new double [3];
+							getloadavg (averages, averages.Length);
+							Console.WriteLine ($"{DateTime.UtcNow.ToString ("O")} Still running tests. Please be patient. Load averages: {averages [0],6:0.00} {averages [1],6:0.00} {averages [2],6:0.00}");
+							if (averages [0] > 10) {
+								var rv = await GetProcessListAsync (MainLog);
+								if (rv.Success) {
+									Console.WriteLine ($"{DateTime.UtcNow.ToString ("O")} Current process list from 'ps auxww' (due to high load average):\n\t\t{string.Join ("\n\t\t", rv.Output.Split ('\n'))}");
+								} else {
+									Console.WriteLine ($"{DateTime.UtcNow.ToString ("O")} Failed to list processes (due to high load average): {rv.Output}");
+								}
+							}
+						}
+					});
+
+					Task.Factory.StartNew (async () => {
+						while (true) {
+							var rv = await GetProcessListAsync (MainLog);
+							if (rv.Success) {
+								Console.WriteLine ($"{DateTime.UtcNow.ToString ("O")} Current process list from 'ps auxww':\n\t\t{string.Join ("\n\t\t", rv.Output.Split ('\n'))}");
+							} else {
+								Console.WriteLine ($"{DateTime.UtcNow.ToString ("O")} Failed to list processes: {rv.Output}");
+							}
+							await Task.Delay (TimeSpan.FromHours (1));
 						}
 					});
 				}
@@ -291,6 +389,16 @@ namespace Xharness.Jenkins {
 				}
 				Task.WaitAll (tasks.ToArray ());
 				GenerateReport ();
+
+				Console.WriteLine ("Summary:");
+				Console.WriteLine ($"    Executed {Tasks.Count} tasks");
+				Console.WriteLine ($"    Succeeded: {Tasks.Count (v => v.Succeeded)}");
+				Console.WriteLine ($"    Failed: {Tasks.Count (v => v.Failed)}");
+				Console.WriteLine ($"    Crashed: {Tasks.Count (v => v.Crashed)}");
+				Console.WriteLine ($"    TimedOut: {Tasks.Count (v => v.TimedOut)}");
+				Console.WriteLine ($"    DeviceNotFound: {Tasks.Count (v => v.DeviceNotFound)}");
+				Console.WriteLine ($"    NotStarted: {Tasks.Count (v => v.NotStarted)}");
+
 				return Tasks.Any ((v) => v.Failed || v.DeviceNotFound) ? 1 : 0;
 			} catch (Exception ex) {
 				MainLog.WriteLine ("Unexpected exception: {0}", ex);
@@ -363,37 +471,37 @@ namespace Xharness.Jenkins {
 
 					foreach (var task in Tasks) {
 						var aggregated = task as AggregatedRunSimulatorTask;
-						if (aggregated != null) {
+						if (aggregated is not null) {
 							allSimulatorTasks.AddRange (aggregated.Tasks);
 							continue;
 						}
 
 						var execute = task as MacExecuteTask;
-						if (execute != null) {
+						if (execute is not null) {
 							allExecuteTasks.Add (execute);
 							continue;
 						}
 
 						var nunit = task as NUnitExecuteTask;
-						if (nunit != null) {
+						if (nunit is not null) {
 							allNUnitTasks.Add (nunit);
 							continue;
 						}
 
 						var make = task as MakeTask;
-						if (make != null) {
+						if (make is not null) {
 							allMakeTasks.Add (make);
 							continue;
 						}
 
 						var run_device = task as RunDeviceTask;
-						if (run_device != null) {
+						if (run_device is not null) {
 							allDeviceTasks.Add (run_device);
 							continue;
 						}
 
 						var simulator = task as RunSimulatorTask;
-						if (simulator != null) {
+						if (simulator is not null) {
 							allSimulatorTasks.Add (simulator);
 							continue;
 						}
@@ -417,15 +525,15 @@ namespace Xharness.Jenkins {
 					}
 
 					// write the html
-					using (var stream = new FileStream (tmpreport, FileMode.Create, FileAccess.ReadWrite)) 
-					using (var writer = new StreamWriter (stream)) { 
+					using (var stream = new FileStream (tmpreport, FileMode.Create, FileAccess.ReadWrite))
+					using (var writer = new StreamWriter (stream)) {
 						xamarinStorageHtmlReportWriter.Write (allTasks, writer);
 					}
 
 					// write the vsdrops report only if needed
-					if (vsdropsHtmlReportWriter != null) {
-						using (var stream = new FileStream (tmpVsdropsReport, FileMode.Create, FileAccess.ReadWrite)) 
-						using (var writer = new StreamWriter (stream)) { 
+					if (vsdropsHtmlReportWriter is not null) {
+						using (var stream = new FileStream (tmpVsdropsReport, FileMode.Create, FileAccess.ReadWrite))
+						using (var writer = new StreamWriter (stream)) {
 							vsdropsHtmlReportWriter.Write (allTasks, writer);
 						}
 					}
@@ -441,18 +549,18 @@ namespace Xharness.Jenkins {
 						File.Delete (report);
 					File.Move (tmpreport, report);
 
-					if (vsdropsHtmlReportWriter != null) {
+					if (vsdropsHtmlReportWriter is not null) {
 						if (File.Exists (vsdropsReport))
 							File.Delete (vsdropsReport);
 						File.Move (tmpVsdropsReport, vsdropsReport);
 					}
-					
+
 					if (!string.IsNullOrEmpty (tmpmarkdown)) {
 						if (File.Exists (Harness.MarkdownSummaryPath))
 							File.Delete (Harness.MarkdownSummaryPath);
 						File.Move (tmpmarkdown, Harness.MarkdownSummaryPath);
 					}
-					
+
 					var dependentFileLocation = Path.GetDirectoryName (System.Reflection.Assembly.GetExecutingAssembly ().Location);
 					foreach (var file in new string [] { "xharness.js", "xharness.css" }) {
 						File.Copy (Path.Combine (dependentFileLocation, file), Path.Combine (LogDirectory, file), true);

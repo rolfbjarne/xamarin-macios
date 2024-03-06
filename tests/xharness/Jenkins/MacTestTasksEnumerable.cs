@@ -27,9 +27,9 @@ namespace Xharness.Jenkins {
 
 		NUnitExecuteTask CreateNUnitTask (MacTestProject project, MSBuildTask build, bool ignored)
 		{
-			if (project == null)
+			if (project is null)
 				throw new ArgumentNullException (nameof (project));
-			if (build == null)
+			if (build is null)
 				throw new ArgumentNullException (nameof (build));
 
 			var dll = Path.Combine (Path.GetDirectoryName (build.TestProject.Path), project.Xml.GetOutputAssemblyPath (build.ProjectPlatform, build.ProjectConfiguration).Replace ('\\', '/'));
@@ -46,9 +46,9 @@ namespace Xharness.Jenkins {
 
 		IEnumerable<MacExecuteTask> CreateMacExecuteTask (MacTestProject project, MSBuildTask build, bool ignored)
 		{
-			if (project == null)
+			if (project is null)
 				throw new ArgumentNullException (nameof (project));
-			if (build == null)
+			if (build is null)
 				throw new ArgumentNullException (nameof (build));
 
 			var exec = new MacExecuteTask (jenkins, build, processManager, crashReportSnapshotFactory) {
@@ -58,14 +58,21 @@ namespace Xharness.Jenkins {
 				IsUnitTest = true,
 			};
 			return testVariationsFactory.CreateTestVariations (new [] { exec }, (buildTask, test, candidates) =>
-				new MacExecuteTask (jenkins, buildTask, processManager, crashReportSnapshotFactory) { IsUnitTest = true } );
+				new MacExecuteTask (jenkins, buildTask, processManager, crashReportSnapshotFactory) { IsUnitTest = true });
 		}
 
 		public IEnumerator<RunTestTask> GetEnumerator ()
 		{
 
 			foreach (var project in jenkins.Harness.MacTestProjects) {
-				bool ignored = !jenkins.TestSelection.IsEnabled (PlatformLabel.Mac);
+				bool ignored = false;
+
+				if (project.TestPlatform == TestPlatform.MacCatalyst) {
+					ignored |= !jenkins.TestSelection.IsEnabled (PlatformLabel.MacCatalyst);
+				} else {
+					ignored |= !jenkins.TestSelection.IsEnabled (PlatformLabel.Mac);
+				}
+
 				if (project.Ignore == true)
 					ignored = true;
 
@@ -76,7 +83,7 @@ namespace Xharness.Jenkins {
 					ignored = true;
 
 				var configurations = project.Configurations;
-				if (configurations == null)
+				if (configurations is null)
 					configurations = new string [] { "Debug" };
 
 				TestPlatform platform = project.TargetFrameworkFlavors.ToTestPlatform ();

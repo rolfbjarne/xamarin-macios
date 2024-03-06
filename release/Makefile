@@ -43,8 +43,8 @@ ifdef INCLUDE_MAC
 endif
 ifdef INCLUDE_IOS
 	$(Q) cp $(IOS_PACKAGE_DESTDIR)/$(IOS_FRAMEWORK_DIR)/Versions/Current/updateinfo ios-updateinfo
-	$(MAKE) bundle.zip msbuild.zip
 endif
+	$(MAKE) bundle.zip msbuild.zip
 
 # this are just a useful targets to run locally if you're not interested in the XI/XM package
 # it should be almost identical to the normal 'package' target (only difference should be that the XM/XI
@@ -156,7 +156,9 @@ msbuild.zip:
 	mkdir -p msbuild/maccore/src
 	mkdir -p msbuild/maccore/tools/mtouch
 	mkdir -p msbuild/maccore/msbuild/Xamarin.ObjcBinding.Tasks
+ifdef INCLUDE_IOS
 	cp -aL $(TOP)/src/Constants.iOS.cs.in msbuild/maccore/src/Constants.cs
+endif
 	$(SYSTEM_MSBUILD) $(TOP)/msbuild/Xamarin.iOS.Tasks/Xamarin.iOS.Tasks.csproj -r /p:Configuration=Release /p:"IncludeMSBuildAssets=all"
 	cp -R $(TOP)/msbuild/Xamarin.iOS.Tasks/bin/Release/netstandard2.0/ msbuild/iOS
 	$(SYSTEM_MSBUILD) $(TOP)/msbuild/Xamarin.iOS.Tasks.Windows/Xamarin.iOS.Tasks.Windows.csproj -r /p:Configuration=Release
@@ -173,9 +175,23 @@ endif
 
 bundle.zip: Version Version.rev
 	rm -f $@
-	cd $(MAC_DESTDIR)/Library/Frameworks/Xamarin.Mac.framework/Versions/Current/lib/mono     && zip -9 -r $(CURDIR)/bundle.zip .
-	cd $(IOS_DESTDIR)/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono     && zip -9 -r $(CURDIR)/bundle.zip .
-	cd $(DOTNET_DESTDIR)               && zip -9 -r $(CURDIR)/bundle.zip $(foreach platform,$(DOTNET_PLATFORMS),./Microsoft.$(platform).Ref/ref/)
+ifdef INCLUDE_XAMARIN_LEGACY
+	if test -d $(MAC_DESTDIR)/Library/Frameworks/Xamarin.Mac.framework/Versions/Current/lib/mono; then cd $(MAC_DESTDIR)/Library/Frameworks/Xamarin.Mac.framework/Versions/Current/lib/mono     && zip -9 -r $(CURDIR)/bundle.zip .; fi
+	if test -d $(IOS_DESTDIR)/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono; then cd $(IOS_DESTDIR)/Library/Frameworks/Xamarin.iOS.framework/Versions/Current/lib/mono     && zip -9 -r $(CURDIR)/bundle.zip .; fi
+endif
+ifdef ENABLE_DOTNET
+	$(foreach platform,$(DOTNET_PLATFORMS),export $(platform)_NUGET_REF_NAME=$($(platform)_NUGET_REF_NAME);) \
+	for platform in $(DOTNET_PLATFORMS); do \
+		cd $(CURDIR); \
+		rm -rf tmpdir; \
+		mkdir -p Microsoft.$$platform.Ref/; \
+		TMPVAR=$${platform}_NUGET_REF_NAME; \
+		$(CP) -r $(DOTNET_DESTDIR)/$${!TMPVAR}/ref Microsoft.$$platform.Ref; \
+		cd tmpdir; \
+		zip -9 -r $(CURDIR)/bundle.zip ./Microsoft.$$platform.Ref/ref/; \
+		rm -rf tmpdir; \
+	done
+endif
 	zip -9 $@ Version Version.rev
 
 Version:

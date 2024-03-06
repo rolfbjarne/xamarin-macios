@@ -1,7 +1,7 @@
 # Protocoolizer 3000XXX.
 
 This document describes how we bind Objective-C protocols in C#, and in
-particular improvements we've done in .NET 8.
+particular improvements we've done in .NET 9.
 
 ## Objective-C protocols
 
@@ -15,7 +15,7 @@ been possible to represent required members in a C# interface (any interface
 member would be required), but optional members were not possible until C# added
 support for default interface members in C# 8.
 
-In the past (before .NET 8) we represented optional members in two ways:
+In the past (before .NET 9) we represented optional members in two ways:
 
 * As an extension method on the interface (useful when calling the optional member).
 * As an IDE feature that would show any optional members from an interface by
@@ -25,6 +25,7 @@ This had a few drawbacks:
 
 * There are no extension properties, so optional properties would have to be
   bound as a pair of GetProperty/SetProperty methods.
+
 * The IDE feature was obscure, few people knew about it, it broke on pretty much
   every major release of Visual Studio for Mac, and it was never implemented for
   Visual Studio on Windows. This made it quite hard to implement optional
@@ -39,7 +40,7 @@ It's entirely possible to change a member from being required to being optional
 in Objective-C. Technically it's also a breaking change to do the opposite (make
 an optional member required), but Apple does it all the time.
 
-Before .NET 8 we had no way of changing requiredness in the corresponding C#
+Before .NET 9 we had no way of changing requiredness in the corresponding C#
 bindings, because it would be a breaking change. We would just not update the
 binding until we're able to do breaking changes (which happens very rarely).
 
@@ -299,9 +300,9 @@ public class MyObject : NSObject, IProtocol {
 
 ## Backwards compatibility
 
-### Pre-NET 8 extension class
+### Pre-NET 9 extension class
 
-Before .NET 8, we generated an extension class for optional members. This is no
+Before .NET 9, we generated an extension class for optional members. This is no
 longer needed, but we still need to do it for existing protocols (to not break
 backwards compatibility).
 
@@ -326,9 +327,9 @@ This property will default to true (that way we don't have to change existing
 code), and then the next time we can do an API break (the `XAMCORE_5_0` define),
 we'll remove the property since we no longer need to be backwards compatible.
 
-### Pre-NET 8 attributes
+### Pre-NET 9 attributes
 
-Before .NET 8, we generated a ProtocolMember attribute on the interface for all
+Before .NET 9, we generated a ProtocolMember attribute on the interface for all
 members on the protocol, with enough information for our runtime to be able to
 do the right thing.
 

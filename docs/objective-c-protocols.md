@@ -252,6 +252,10 @@ class Program {
 
 We improve this by inlining all protocol members in any implementing class.
 
+One complication is that there's currently no way to call the default
+interface implementation from the implementing class (see
+https://github.com/dotnet/csharplang/issues/2337), so we have to go through a
+static method.
 
 Given the following API definition:
 
@@ -278,22 +282,32 @@ we're binding it like this:
 public interface IProtocol : INativeObject {
     [Required]
     [Export ("requiredMethod")]
-    public void RequiredMethod () { /* default implementation */ }
+    public void RequiredMethod () { _RequireMethodImpl (Handle); }
 
     [Optional]
     [Export ("optionalMethod")]
-    public void OptionalMethod () { /* default implementation */ }
+    public void OptionalMethod () { _OptionalMethodImpl (Handle); }
+
+    internal static void _RequireMethodImpl (IntPtr handle)
+    {
+        /* default implementation */
+    }
+
+    internal static void _OptionalMethodImpl (IntPtr handle)
+    {
+        /* default implementation */
+    }
 }
 
 public class MyObject : NSObject, IProtocol {
     public virtual void RequiredMethod ()
     {
-        ((IProtocol) this).RequiredMethod (); // just forward to the default implementation
+        IProtocol._RequireMethodImpl (Handle); // just forward to the default implementation
     }
 
     public virtual void OptionalMethod ()
     {
-        ((IProtocol) this).OptionalMethod (); // just forward to the default implementation
+        IProtocol._OptionalMethodImpl (Handle); // just forward to the default implementation
     }
 }
 ```

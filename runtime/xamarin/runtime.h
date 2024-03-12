@@ -299,6 +299,7 @@ void			xamarin_printf (const char *format, ...);
 void			xamarin_vprintf (const char *format, va_list args);
 void			xamarin_install_log_callbacks ();
 
+bool			xamarin_is_user_type (Class cls);
 /*
  * Looks up a native function pointer for a managed [UnmanagedCallersOnly] method.
  *     function_pointer: the return value, lookup will only be performed if this points to NULL.

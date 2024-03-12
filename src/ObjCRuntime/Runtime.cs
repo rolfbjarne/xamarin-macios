@@ -2222,9 +2222,8 @@ namespace ObjCRuntime {
 			}
 		}
 
-#if __MACOS__
-		static IntPtr selSetGCHandle = Selector.GetHandle ("xamarinSetGCHandle:flags:");
-#endif
+		[DllImport ("__Internal")]
+		extern static byte xamarin_is_user_type (IntPtr cls);
 
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		static bool SlowIsUserType (IntPtr cls)
@@ -2241,11 +2240,8 @@ namespace ObjCRuntime {
 						return false;
 				}
 			}
-#if __MACOS__
-			return Class.class_getInstanceMethod (cls, selSetGCHandle) != IntPtr.Zero;
-#else
-			return Class.class_getInstanceMethod (cls, Selector.GetHandle ("xamarinSetGCHandle:flags:")) != IntPtr.Zero;
-#endif
+
+			return xamarin_is_user_type (cls) != 0;
 		}
 
 		public static void ConnectMethod (Type type, MethodInfo method, Selector selector)

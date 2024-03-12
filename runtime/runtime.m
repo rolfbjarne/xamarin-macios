@@ -3078,6 +3078,13 @@ xamarin_gchandle_unwrap (GCHandle handle)
 	return rv;
 }
 
+bool
+xamarin_is_user_type (Class cls)
+{
+	Method setGCHandle = class_getInstanceMethod (cls, @selector(xamarinSetGCHandle:flags:));
+	return setGCHandle != NULL;
+}
+
 /*
  * Object unregistration:
  *

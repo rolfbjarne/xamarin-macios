@@ -3293,9 +3293,9 @@ xamarin_is_object_valid (id obj, char** error_message)
 	}
 
 	// Read the memory
-	vm_offset_t readMem = 0;
-	mach_msg_type_number_t size = 0;
-	rv = vm_read (mach_task_self (), (vm_address_t) obj, sizeof (void*), &readMem, &size);
+	void* readMem = NULL;
+	vm_size_t size = 0;
+	rv = vm_read_overwrite (mach_task_self (), (vm_address_t) obj, sizeof (readMem), (vm_address_t) &readMem, &size);
 
 	if (rv != KERN_SUCCESS)	{
 		*error_message = xamarin_strdup_printf ("vm_read returned kern error %i", rv);

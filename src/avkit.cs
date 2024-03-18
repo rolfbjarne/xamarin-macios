@@ -27,6 +27,7 @@ using AVPlayerViewController = Foundation.NSObject;
 using IUIViewControllerTransitionCoordinator = Foundation.NSObject;
 using UIColor = AppKit.NSColor;
 using UIImage = AppKit.NSImage;
+using UIInteraction = Foundation.NSObjectProtocol;
 using UILayoutGuide = Foundation.NSObject;
 using UITraitCollection = Foundation.NSObject;
 using UIView = AppKit.NSView;
@@ -225,8 +226,7 @@ namespace AVKit {
 
 		[Wrap ("WeakDelegate")]
 		[NullAllowed]
-		[Protocolize]
-		AVPlayerViewControllerDelegate Delegate { get; set; }
+		IAVPlayerViewControllerDelegate Delegate { get; set; }
 
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
@@ -353,6 +353,8 @@ namespace AVKit {
 		[Export ("selectSpeed:")]
 		void SelectSpeed (AVPlaybackSpeed speed);
 	}
+
+	interface IAVPlayerViewControllerDelegate { }
 
 	[NoMac]
 	[MacCatalyst (13, 1)]
@@ -615,8 +617,7 @@ namespace AVKit {
 		[Mac (12, 0)]
 		[NoMacCatalyst]
 		[Wrap ("WeakDelegate")]
-		[Protocolize]
-		AVPlayerViewDelegate Delegate { get; set; }
+		IAVPlayerViewDelegate Delegate { get; set; }
 
 		[Mac (12, 0)]
 		[NoMacCatalyst]
@@ -1031,6 +1032,8 @@ namespace AVKit {
 		bool ShouldProhibitBackgroundAudioPlayback (AVPictureInPictureController pictureInPictureController);
 	}
 
+	interface IAVPlayerViewDelegate { }
+
 	[Mac (12, 0), NoiOS, NoTV, NoMacCatalyst]
 #if NET
 	[Protocol, Model]
@@ -1096,5 +1099,35 @@ namespace AVKit {
 
 		[Export ("localizedNumericName")]
 		string LocalizedNumericName { get; }
+	}
+
+	[iOS (17, 2), NoMac, NoMacCatalyst, NoTV, NoWatch]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface AVCaptureEvent {
+		[Export ("phase")]
+		AVCaptureEventPhase Phase { get; }
+	}
+
+	[iOS (17, 2), NoMac, NoMacCatalyst, NoTV, NoWatch]
+	[Native]
+	public enum AVCaptureEventPhase : ulong {
+		Began,
+		Ended,
+		Cancelled,
+	}
+
+	[iOS (17, 2), NoMac, NoMacCatalyst, NoTV, NoWatch]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface AVCaptureEventInteraction : UIInteraction {
+		[Export ("initWithEventHandler:")]
+		NativeHandle Constructor (Action<AVCaptureEvent> handler);
+
+		[Export ("initWithPrimaryEventHandler:secondaryEventHandler:")]
+		NativeHandle Constructor (Action<AVCaptureEvent> primaryHandler, Action<AVCaptureEvent> secondaryHandler);
+
+		[Export ("enabled")]
+		bool Enabled { [Bind ("isEnabled")] get; set; }
 	}
 }

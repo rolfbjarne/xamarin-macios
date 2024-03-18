@@ -9,6 +9,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <ProvisioningType>automatic</ProvisioningType>
+    <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
     <_LinkMode>None</_LinkMode>
     <UseInterpreter>true</UseInterpreter>
@@ -18,6 +19,9 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.iOS.HotRestart.Application" Version="1.1.5" />
+    <!-- GitInfo is pulled in because of Xamarin.iOS.HotRestart.Application, but we don't want it, so just exclude all assets from it -->
+    <!-- This can be removed once our package references have been updated to not expose GitInfo -->
+    <PackageReference Include="GitInfo" Version="2.2.0" ExcludeAssets="all" />
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\appiconfg.png" />

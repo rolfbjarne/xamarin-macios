@@ -24,7 +24,12 @@ using NativeHandle = System.IntPtr;
 
 namespace UIKit {
 	public partial interface IUITraitChangeObservable {
-		static Class [] ToClasses (params Type [] traits)
+#if XAMCORE_5_0
+		private static Class [] ToClasses (params Type [] traits)
+#else
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		public static Class [] ToClasses (params Type [] traits)
+#endif
 		{
 			if (traits is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (traits));
@@ -142,8 +147,8 @@ namespace UIKit {
 
 
 #if !XAMCORE_5_0
-		[BindingImpl (BindingImplOptions.Optimizable)]
 #if !NET
+		[BindingImpl (BindingImplOptions.Optimizable)]
 		public IUITraitChangeRegistration RegisterForTraitChanges (Class [] traits, global::System.Action<IUITraitEnvironment, UITraitCollection> handler)
 		{
 			// The manual block code is somewhat annoying to implement, so at least don't do it twice (once for .NET and once for legacy Xamarin) unless we really need to.
@@ -156,6 +161,7 @@ namespace UIKit {
 		/// <param name="traits">The traits to observe.</param>
 		/// <param name="handler">The callback to execute when any of the specified traits changes.</param>
 		/// <returns>A token that can be used to unregister the callback by calling <see cref="M:UnregisterForTraitChanges" />.</returns>
+		[BindingImpl (BindingImplOptions.Optimizable)]
 		public unsafe IUITraitChangeRegistration RegisterForTraitChanges (Class [] traits, [BlockProxy (typeof (ObjCRuntime.Trampolines.IUITraitChangeObservable_RegisterForTraitChanges_NIDAction))] global::System.Action<IUITraitEnvironment, UITraitCollection> handler)
 		{
 			global::UIKit.UIApplication.EnsureUIThread ();
@@ -205,7 +211,12 @@ namespace UIKit {
 			return Runtime.GetINativeObject<IUITraitChangeRegistration> (NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("registerForTraitChanges:withAction:"), nsa_traits.Handle, action.Handle), false)!;
 		}
 
-		static Class [] ToClasses (IUITraitDefinition [] traits)
+#if XAMCORE_5_0
+		private static Class [] ToClasses (IUITraitDefinition [] traits)
+#else
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		public static Class [] ToClasses (IUITraitDefinition [] traits)
+#endif
 		{
 			if (traits is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (traits));
@@ -237,13 +248,28 @@ namespace UIKit {
 		}
 
 		[DllImport (Messaging.LIBOBJC_DYLIB, EntryPoint = "objc_msgSend")]
-		extern static NativeHandle NativeHandle_objc_msgSend_NativeHandle_NativeHandle (IntPtr receiver, IntPtr selector, NativeHandle arg1, NativeHandle arg2);
+#if XAMCORE_5_0
+		private extern static NativeHandle NativeHandle_objc_msgSend_NativeHandle_NativeHandle (IntPtr receiver, IntPtr selector, NativeHandle arg1, NativeHandle arg2);
+#else
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		public extern static NativeHandle NativeHandle_objc_msgSend_NativeHandle_NativeHandle (IntPtr receiver, IntPtr selector, NativeHandle arg1, NativeHandle arg2);
+#endif
 
 		[DllImport (Messaging.LIBOBJC_DYLIB, EntryPoint = "objc_msgSend")]
-		extern unsafe static NativeHandle NativeHandle_objc_msgSend_NativeHandle_BlockLiteral (IntPtr receiver, IntPtr selector, NativeHandle arg1, BlockLiteral* arg2);
+#if XAMCORE_5_0
+		private extern unsafe static NativeHandle NativeHandle_objc_msgSend_NativeHandle_BlockLiteral (IntPtr receiver, IntPtr selector, NativeHandle arg1, BlockLiteral* arg2);
+#else
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		public extern unsafe static NativeHandle NativeHandle_objc_msgSend_NativeHandle_BlockLiteral (IntPtr receiver, IntPtr selector, NativeHandle arg1, BlockLiteral* arg2);
+#endif
 
 		[DllImport (Messaging.LIBOBJC_DYLIB, EntryPoint = "objc_msgSend")]
-		extern static NativeHandle NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (IntPtr receiver, IntPtr selector, NativeHandle arg1, NativeHandle arg2, NativeHandle arg3);
+#if XAMCORE_5_0
+		private extern static NativeHandle NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (IntPtr receiver, IntPtr selector, NativeHandle arg1, NativeHandle arg2, NativeHandle arg3);
+#else
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		public extern static NativeHandle NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (IntPtr receiver, IntPtr selector, NativeHandle arg1, NativeHandle arg2, NativeHandle arg3);
+#endif
 #endif // !XAMCORE_5_0
 	}
 }

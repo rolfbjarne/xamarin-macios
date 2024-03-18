@@ -25,6 +25,7 @@
 //
 //
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -144,9 +145,15 @@ namespace ObjCRuntime {
 			SetupFunctionPointerBlock ((IntPtr) trampoline, context, System.Text.Encoding.UTF8.GetBytes (trampolineSignature));
 		}
 
+#if NET
+		// Note that the code in this method shouldn't be called when using NativeAOT, so throw an exception in that case.
+		// IL2070: 'this' argument does not satisfy 'DynamicallyAccessedMemberTypes.PublicMethods', 'DynamicallyAccessedMemberTypes.NonPublicMethods' in call to 'System.Type.GetMethod(String, BindingFlags)'. The parameter 'trampolineType' of method 'ObjCRuntime.BlockLiteral.FindTrampoline(Type, String)' does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to.
+		[UnconditionalSuppressMessage ("", "IL2070", Justification = "The APIs this method tries to access are marked by other means, so this is linker-safe.")]
+#endif
 		static MethodInfo FindTrampoline (Type trampolineType, string trampolineMethod)
 		{
 #if NET
+			// Note that the code in this method shouldn't be called when using NativeAOT, so throw an exception in that case.
 			if (Runtime.IsNativeAOT)
 				throw Runtime.CreateNativeAOTNotSupportedException ();
 #endif
@@ -190,9 +197,15 @@ namespace ObjCRuntime {
 		}
 #endif // NET
 
+#if NET
+		// Note that the code in this method shouldn't be called when using any static registrar, so throw an exception in that case.
+		// IL2075: 'this' argument does not satisfy 'DynamicallyAccessedMemberTypes.PublicMethods' in call to 'System.Type.GetMethod(String)'. The return value of method 'ObjCRuntime.UserDelegateTypeAttribute.UserDelegateType.get' does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to.
+		[UnconditionalSuppressMessage ("", "IL2075", Justification = "The APIs this method tries to access are marked by other means, so this is linker-safe.")]
+#endif
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		void SetupBlock (Delegate trampoline, Delegate target, bool safe)
 		{
+			// Note that the code in this method shouldn't be called when using any static registrar, so throw an exception in that case.
 			if (!Runtime.DynamicRegistrationSupported)
 				throw ErrorHelper.CreateError (8026, "BlockLiteral.SetupBlock is not supported when the dynamic registrar has been linked away.");
 
@@ -404,8 +417,23 @@ namespace ObjCRuntime {
 			return descriptor->copy_helper == ((BlockDescriptor*) literal->block_descriptor)->copy_helper;
 		}
 
+#if NET
+		// This method should never be called when using the managed static registrar, so assert that never happens by throwing an exception in that case.
+		// This method doesn't necessarily work with NativeAOT, but this is covered by the exception, because the managed static registrar is required for NativeAOT.
+		//
+		// IL2075: 'this' argument does not satisfy 'DynamicallyAccessedMemberTypes.Interfaces' in call to 'System.Type.GetInterfaces()'. The return value of method 'System.Reflection.MemberInfo.DeclaringType.get' does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to.
+		[UnconditionalSuppressMessage("", "IL2075", Justification = "The APIs this method tries to access are marked by other means, so this is linker-safe.")]
+		// IL2062: Value passed to parameter 'interfaceType' of method 'System.Type.GetInterfaceMap(Type)' can not be statically determined and may not meet 'DynamicallyAccessedMembersAttribute' requirements.
+		[UnconditionalSuppressMessage("", "IL2062", Justification = "The APIs this method tries to access are marked by other means, so this is linker-safe.")]
+#endif
 		static Type GetDelegateProxyType (MethodInfo minfo, uint token_ref, out MethodInfo baseMethod)
 		{
+#if NET
+			// Note that the code in this method doesn't necessarily work with NativeAOT, so assert that never happens by throwing an exception if using the managed static registrar (which is required for NativeAOT)
+			if (Runtime.IsManagedStaticRegistrar)
+				throw new System.Diagnostics.UnreachableException ();
+#endif
+
 			// A mirror of this method is also implemented in StaticRegistrar:GetDelegateProxyType
 			// If this method is changed, that method will probably have to be updated too (tests!!!)
 			baseMethod = null;
@@ -492,8 +520,22 @@ namespace ObjCRuntime {
 		}
 
 		[BindingImpl (BindingImplOptions.Optimizable)]
+#if NET
+		// This method should never be called when using the managed static registrar, so assert that never happens by throwing an exception in that case.
+		// This method doesn't necessarily work with NativeAOT, but this is covered by the exception, because the managed static registrar is required for NativeAOT.
+		//
+		// IL2075: 'this' argument does not satisfy 'DynamicallyAccessedMemberTypes.NonPublicFields' in call to 'System.Type.GetField(String, BindingFlags)'. The return value of method 'ObjCRuntime.BlockLiteral.GetDelegateProxyType(MethodInfo, UInt32, MethodInfo&)' does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to.
+		// IL2075: 'this' argument does not satisfy 'DynamicallyAccessedMemberTypes.NonPublicMethods' in call to 'System.Type.GetMethod(String, BindingFlags)'. The return value of method 'ObjCRuntime.BlockLiteral.GetDelegateProxyType(MethodInfo, UInt32, MethodInfo&)' does not have matching annotations. The source value must declare at least the same requirements as those declared on the target location it is assigned to."
+		[UnconditionalSuppressMessage("", "IL2075", Justification = "The APIs this method tries to access are marked by other means, so this is linker-safe.")]
+#endif
 		internal static IntPtr GetBlockForDelegate (MethodInfo minfo, object @delegate, uint token_ref, string signature)
 		{
+#if NET
+			// Note that the code in this method doesn't necessarily work with NativeAOT, so assert that never happens by throwing an exception if using the managed static registrar (which is required for NativeAOT)
+			if (Runtime.IsManagedStaticRegistrar)
+				throw new System.Diagnostics.UnreachableException ();
+#endif
+
 			if (@delegate is null)
 				return IntPtr.Zero;
 

@@ -62,9 +62,9 @@ namespace Xamarin.Tests {
 			return Execute ("restore", project, properties, false);
 		}
 
-		public static ExecutionResult AssertBuild (string project, Dictionary<string, string>? properties = null)
+		public static ExecutionResult AssertBuild (string project, Dictionary<string, string>? properties = null, TimeSpan? timeout = null)
 		{
-			return Execute ("build", project, properties, true);
+			return Execute ("build", project, properties, true, timeout: timeout);
 		}
 
 		public static ExecutionResult AssertBuildFailure (string project, Dictionary<string, string>? properties = null)
@@ -113,7 +113,36 @@ namespace Xamarin.Tests {
 			return new ExecutionResult (output, output, rv.ExitCode);
 		}
 
-		public static ExecutionResult Execute (string verb, string project, Dictionary<string, string>? properties, bool assert_success = true, string? target = null, bool? msbuildParallelism = null)
+		public static ExecutionResult InstallTool (string tool, string path)
+		{
+			var installed = ExecuteCommand (Executable, "tool", "list", "--tool-path", path);
+			if (!installed.StandardOutput.ToString ().Contains (tool))
+				installed = ExecuteCommand (Executable, "tool", "install", tool, "--tool-path", path);
+			return installed;
+		}
+
+		public static ExecutionResult RunTool (string tool, params string [] args) => ExecuteCommand (tool, args);
+
+		public static ExecutionResult ExecuteCommand (string exe, params string [] args)
+		{
+			var env = new Dictionary<string, string?> ();
+			env ["MSBuildSDKsPath"] = null;
+			env ["MSBUILD_EXE_PATH"] = null;
+
+			var output = new StringBuilder ();
+			var rv = Execution.RunWithStringBuildersAsync (exe, args, env, output, output, Console.Out, workingDirectory: Configuration.SourceRoot, timeout: TimeSpan.FromMinutes (10)).Result;
+			if (rv.ExitCode != 0) {
+				var msg = new StringBuilder ();
+				msg.AppendLine ($"'{exe}' failed with exit code {rv.ExitCode}");
+				msg.AppendLine ($"Full command: {Executable} {StringUtils.FormatArguments (args)}");
+				msg.AppendLine (output.ToString ());
+				Console.WriteLine (msg);
+				Assert.Fail (msg.ToString ());
+			}
+			return new ExecutionResult (output, output, rv.ExitCode);
+		}
+
+		public static ExecutionResult Execute (string verb, string project, Dictionary<string, string>? properties, bool assert_success = true, string? target = null, bool? msbuildParallelism = null, TimeSpan? timeout = null)
 		{
 			if (!File.Exists (project))
 				throw new FileNotFoundException ($"The project file '{project}' does not exist.");
@@ -206,7 +235,8 @@ namespace Xamarin.Tests {
 				env ["MSBuildSDKsPath"] = null;
 				env ["MSBUILD_EXE_PATH"] = null;
 				var output = new StringBuilder ();
-				var rv = Execution.RunWithStringBuildersAsync (Executable, args, env, output, output, Console.Out, workingDirectory: Path.GetDirectoryName (project), timeout: TimeSpan.FromMinutes (10)).Result;
+				timeout ??= TimeSpan.FromMinutes (10);
+				var rv = Execution.RunWithStringBuildersAsync (Executable, args, env, output, output, Console.Out, workingDirectory: Path.GetDirectoryName (project), timeout: timeout).Result;
 				if (assert_success && rv.ExitCode != 0) {
 					var outputStr = output.ToString ();
 					Console.WriteLine ($"'{Executable} {StringUtils.FormatArguments (args)}' failed with exit code {rv.ExitCode}.");
@@ -225,7 +255,7 @@ namespace Xamarin.Tests {
 									msg.AppendLine ($"    {string.Join ($"{Environment.NewLine}        ", error.ToString ().Split ('\n', '\r'))}");
 							}
 						} catch (Exception e) {
-							msg.AppendLine ($"Failed to list errors: {e}");
+							msg.AppendLine ($"Failed to list errors in the binlog {binlogPath}: {e}");
 						}
 #endif
 						Assert.Fail (msg.ToString ());

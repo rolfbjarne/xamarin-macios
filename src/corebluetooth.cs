@@ -141,22 +141,21 @@ namespace CoreBluetooth {
 		NSObject WeakDelegate { get; set; }
 
 		[Wrap ("WeakDelegate")]
-		[Protocolize]
-		CBCentralManagerDelegate Delegate { get; set; }
+		ICBCentralManagerDelegate Delegate { get; set; }
 
 		[Export ("initWithDelegate:queue:")]
 		[PostGet ("WeakDelegate")]
-		NativeHandle Constructor ([NullAllowed, Protocolize] CBCentralManagerDelegate centralDelegate, [NullAllowed] DispatchQueue queue);
+		NativeHandle Constructor ([NullAllowed] ICBCentralManagerDelegate centralDelegate, [NullAllowed] DispatchQueue queue);
 
 		[DesignatedInitializer]
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDelegate:queue:options:")]
 		[PostGet ("WeakDelegate")]
-		NativeHandle Constructor ([NullAllowed, Protocolize] CBCentralManagerDelegate centralDelegate, [NullAllowed] DispatchQueue queue, [NullAllowed] NSDictionary options);
+		NativeHandle Constructor ([NullAllowed] ICBCentralManagerDelegate centralDelegate, [NullAllowed] DispatchQueue queue, [NullAllowed] NSDictionary options);
 
 		[MacCatalyst (13, 1)]
 		[Wrap ("this (centralDelegate, queue, options.GetDictionary ())")]
-		NativeHandle Constructor ([NullAllowed, Protocolize] CBCentralManagerDelegate centralDelegate, [NullAllowed] DispatchQueue queue, CBCentralInitOptions options);
+		NativeHandle Constructor ([NullAllowed] ICBCentralManagerDelegate centralDelegate, [NullAllowed] DispatchQueue queue, CBCentralInitOptions options);
 
 		[Export ("scanForPeripheralsWithServices:options:"), Internal]
 		void ScanForPeripherals ([NullAllowed] NSArray serviceUUIDs, [NullAllowed] NSDictionary options);
@@ -328,6 +327,8 @@ namespace CoreBluetooth {
 		NSString ScanOptionsKey { get; }
 	}
 
+	interface ICBCentralManagerDelegate { }
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -360,7 +361,11 @@ namespace CoreBluetooth {
 #endif
 
 		[Export ("centralManager:didDiscoverPeripheral:advertisementData:RSSI:"), EventArgs ("CBDiscoveredPeripheral")]
+#if XAMCORE_5_0
+		void DiscoveredPeripheral (CBCentralManager central, CBPeripheral peripheral, NSDictionary advertisementData, NSNumber rssi);
+#else
 		void DiscoveredPeripheral (CBCentralManager central, CBPeripheral peripheral, NSDictionary advertisementData, NSNumber RSSI);
+#endif
 
 		[Export ("centralManager:didConnectPeripheral:"), EventArgs ("CBPeripheral")]
 		void ConnectedPeripheral (CBCentralManager central, CBPeripheral peripheral);
@@ -552,8 +557,7 @@ namespace CoreBluetooth {
 		NSObject WeakDelegate { get; set; }
 
 		[Wrap ("WeakDelegate")]
-		[Protocolize]
-		CBPeripheralDelegate Delegate { get; set; }
+		ICBPeripheralDelegate Delegate { get; set; }
 
 		[Export ("readRSSI")]
 		void ReadRSSI ();
@@ -606,6 +610,8 @@ namespace CoreBluetooth {
 		[Export ("ancsAuthorized")]
 		bool AncsAuthorized { get; }
 	}
+
+	interface ICBPeripheralDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -903,7 +909,7 @@ namespace CoreBluetooth {
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDelegate:queue:")]
 		[PostGet ("WeakDelegate")]
-		NativeHandle Constructor ([NullAllowed][Protocolize] CBPeripheralManagerDelegate peripheralDelegate, [NullAllowed] DispatchQueue queue);
+		NativeHandle Constructor ([NullAllowed] ICBPeripheralManagerDelegate peripheralDelegate, [NullAllowed] DispatchQueue queue);
 
 		[NoTV]
 		[NoWatch]
@@ -911,12 +917,11 @@ namespace CoreBluetooth {
 		[DesignatedInitializer]
 		[Export ("initWithDelegate:queue:options:")]
 		[PostGet ("WeakDelegate")]
-		NativeHandle Constructor ([NullAllowed][Protocolize] CBPeripheralManagerDelegate peripheralDelegate, [NullAllowed] DispatchQueue queue, [NullAllowed] NSDictionary options);
+		NativeHandle Constructor ([NullAllowed] ICBPeripheralManagerDelegate peripheralDelegate, [NullAllowed] DispatchQueue queue, [NullAllowed] NSDictionary options);
 
 		[NullAllowed]
 		[Wrap ("WeakDelegate")]
-		[Protocolize]
-		CBPeripheralManagerDelegate Delegate { get; set; }
+		ICBPeripheralManagerDelegate Delegate { get; set; }
 
 		[NullAllowed]
 		[Export ("delegate", ArgumentSemantic.Weak)]
@@ -981,6 +986,8 @@ namespace CoreBluetooth {
 		CBPeripheralManagerAuthorizationStatus AuthorizationStatus { get; }
 #endif // !NET
 	}
+
+	interface ICBPeripheralManagerDelegate { }
 
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]

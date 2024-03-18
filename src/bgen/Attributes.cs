@@ -52,6 +52,7 @@ public class ForcedTypeAttribute : Attribute {
 	public bool Owns;
 }
 
+#if !XAMCORE_5_0
 // Used to flag a type as needing to be turned into a protocol on output for Unified
 // For example:
 //   [Protocolize, Wrap ("WeakDelegate")]
@@ -66,6 +67,7 @@ public class ForcedTypeAttribute : Attribute {
 //
 // To protocolize newer versions, use [Protocolize (3)] for XAMCORE_3_0, [Protocolize (4)] for NET, etc
 //
+[Obsolete ("This attribute no longer has any effect; do not use")]
 public class ProtocolizeAttribute : Attribute {
 	public ProtocolizeAttribute ()
 	{
@@ -79,6 +81,7 @@ public class ProtocolizeAttribute : Attribute {
 
 	public int Version { get; set; }
 }
+#endif
 
 // Used to mark if a type is not a wrapper type.
 public class SyntheticAttribute : Attribute {
@@ -364,18 +367,6 @@ public class AlignAttribute : Attribute {
 [AttributeUsage (AttributeTargets.Parameter, AllowMultiple = false)]
 public class ParamsAttribute : Attribute {
 }
-
-//
-// These two attributes can be applied to parameters in a C# delegate
-// declaration to specify what kind of bridge needs to be provided on
-// callback.   Either a Block style setup, or a C-style setup
-//
-[AttributeUsage (AttributeTargets.Parameter, AllowMultiple = false)]
-public class BlockCallbackAttribute : Attribute { }
-
-[AttributeUsage (AttributeTargets.Parameter, AllowMultiple = false)]
-public class CCallbackAttribute : Attribute { }
-
 
 //
 // When applied, flags the [Flags] as a notification and generates the

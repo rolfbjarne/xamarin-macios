@@ -1,24 +1,55 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Collections.Generic;
+
 using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
+using Xamarin.Localization.MSBuild;
 using Xamarin.Messaging.Build.Client;
 
 namespace Xamarin.MacDev.Tasks {
-	public class PackLibraryResources : PackLibraryResourcesTaskBase, ITaskCallback, ICancelableTask {
-		public override bool Execute ()
+	public class PackLibraryResources : XamarinTask, ITaskCallback, ICancelableTask {
+		#region Inputs
+
+		[Required]
+		public string Prefix { get; set; } = string.Empty;
+
+		public ITaskItem [] BundleResourcesWithLogicalNames { get; set; } = Array.Empty<ITaskItem> ();
+
+		#endregion
+
+		#region Outputs
+
+		[Output]
+		public ITaskItem [] EmbeddedResources { get; set; } = Array.Empty<ITaskItem> ();
+
+		#endregion
+
+		static string EscapeMangledResource (string name)
 		{
-			if (!ShouldExecuteRemotely ())
-				return base.Execute ();
+			var mangled = new StringBuilder ();
 
+			for (int i = 0; i < name.Length; i++) {
+				switch (name [i]) {
+				case '\\': mangled.Append ("_b"); break;
+				case '/': mangled.Append ("_f"); break;
+				case '_': mangled.Append ("__"); break;
+				default: mangled.Append (name [i]); break;
+				}
+			}
+
+			return mangled.ToString ();
+		}
+
+		bool ExecuteRemotely ()
+		{
 			// Fix LogicalName path for the Mac
-			if (BundleResourcesWithLogicalNames is not null) {
-				foreach (var resource in BundleResourcesWithLogicalNames) {
-					var logicalName = resource.GetMetadata ("LogicalName");
+			foreach (var resource in BundleResourcesWithLogicalNames) {
+				var logicalName = resource.GetMetadata ("LogicalName");
 
-					if (!string.IsNullOrEmpty (logicalName)) {
-						resource.SetMetadata ("LogicalName", logicalName.Replace ("\\", "/"));
-					}
+				if (!string.IsNullOrEmpty (logicalName)) {
+					resource.SetMetadata ("LogicalName", logicalName.Replace ("\\", "/"));
 				}
 			}
 
@@ -41,6 +72,33 @@ namespace Xamarin.MacDev.Tasks {
 
 				return false;
 			}
+		}
+
+		public override bool Execute ()
+		{
+			if (ShouldExecuteRemotely ())
+				return ExecuteRemotely ();
+
+			var results = new List<ITaskItem> ();
+
+			foreach (var item in BundleResourcesWithLogicalNames) {
+				var logicalName = item.GetMetadata ("LogicalName");
+
+				if (string.IsNullOrEmpty (logicalName)) {
+					Log.LogError (null, null, null, item.ItemSpec, 0, 0, 0, 0, MSBStrings.E0161);
+					continue;
+				}
+
+				var embedded = new TaskItem (item);
+
+				embedded.SetMetadata ("LogicalName", "__" + Prefix + "_content_" + EscapeMangledResource (logicalName));
+
+				results.Add (embedded);
+			}
+
+			EmbeddedResources = results.ToArray ();
+
+			return !Log.HasLoggedErrors;
 		}
 
 		public void Cancel ()

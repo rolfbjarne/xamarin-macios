@@ -39,6 +39,10 @@ parameters:
   type: string
   default: '$(MaciosUploadPrefix)'
 
+- name: retryCount
+  type: number
+  default: 3
+
 steps:
 
 - template: ../common/checkout.yml
@@ -86,6 +90,7 @@ steps:
     provisioning_extra_args: '-vvvv'
     github_token: ${{ parameters.gitHubToken }}
   timeoutInMinutes: 250
+  retryCountOnTaskFailure: ${{ parameters.retryCount }} # mono does give issues sometimes to download, we will retry
 
 # Use the env variables that were set by the label parsing in the configure step
 # print some useful logging to allow to know what is going on AND allow make some
@@ -128,6 +133,14 @@ steps:
   workingDirectory: "$(Build.SourcesDirectory)/xamarin-macios"
   timeoutInMinutes: 5
 
+- bash: |
+    set -x
+    set -e
+    cat configure.inc
+  displayName: "Print configuration"
+  workingDirectory: "$(Build.SourcesDirectory)/xamarin-macios"
+  timeoutInMinutes: 5
+
 # Make sure we have the right maccore hash checked out before we try to add
 # the provisioning profiles.
 - bash: |
@@ -166,7 +179,7 @@ steps:
   name: build
   workingDirectory: "$(Build.SourcesDirectory)/xamarin-macios"
   displayName: 'Build'
-  timeoutInMinutes: 300
+  timeoutInMinutes: 180
   env:
     MAKE_PARALLELISM: ${{ parameters.makeParallelism }}
 

@@ -491,6 +491,11 @@ namespace Foundation {
 			};
 
 			if (stream != Stream.Null) {
+				// Rewind the stream to the beginning in case the HttpContent implementation
+				// will be accessed again (e.g. for retry/redirect) and it keeps its stream open behind the scenes.
+				if (stream.CanSeek)
+					stream.Seek (0, SeekOrigin.Begin);
+
 				// HttpContent.TryComputeLength is `protected internal` :-( but it's indirectly called by headers
 				var length = request.Content?.Headers?.ContentLength;
 				if (length.HasValue && (length <= MaxInputInMemory))
@@ -1428,6 +1433,7 @@ namespace Foundation {
 			CFRunLoopSource source;
 			readonly Stream stream;
 			bool notifying;
+			NSError? error;
 
 			public WrappedNSInputStream (Stream inputStream)
 			{
@@ -1456,21 +1462,34 @@ namespace Foundation {
 			[Preserve (Conditional = true)]
 			public override nint Read (IntPtr buffer, nuint len)
 			{
-				var sourceBytes = new byte [len];
-				var read = stream.Read (sourceBytes, 0, (int) len);
-				Marshal.Copy (sourceBytes, 0, buffer, (int) len);
+				try {
+					var sourceBytes = new byte [len];
+					var read = stream.Read (sourceBytes, 0, (int) len);
+					Marshal.Copy (sourceBytes, 0, buffer, (int) len);
 
-				if (notifying)
+					if (notifying)
+						return read;
+
+					notifying = true;
+					if (stream.CanSeek && stream.Position == stream.Length) {
+						Notify (CFStreamEventType.EndEncountered);
+						status = NSStreamStatus.AtEnd;
+					}
+					notifying = false;
+
 					return read;
-
-				notifying = true;
-				if (stream.CanSeek && stream.Position == stream.Length) {
-					Notify (CFStreamEventType.EndEncountered);
-					status = NSStreamStatus.AtEnd;
+				} catch (Exception e) {
+					// -1 means that the operation failed; more information about the error can be obtained with streamError.
+					error = new NSExceptionError (e);
+					return -1;
 				}
-				notifying = false;
+			}
 
-				return read;
+			[Preserve (Conditional = true)]
+			public override NSError Error {
+				get {
+					return error ?? base.Error;
+				}
 			}
 
 			[Preserve (Conditional = true)]

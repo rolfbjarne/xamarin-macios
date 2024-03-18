@@ -1,9 +1,7 @@
-using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Xml;
 
 using Mono.Cecil;
-
-using Xamarin.Tests;
 
 #nullable enable
 
@@ -854,20 +852,6 @@ namespace Xamarin.Tests {
 				Assert.Fail ($"Could not find either BindingWithDefaultCompileInclude.resources.zip or BindingWithDefaultCompileInclude.resources in {bindir}");
 		}
 
-		void AssertThatLinkerExecuted (ExecutionResult result)
-		{
-			var output = BinLog.PrintToString (result.BinLogPath);
-			Assert.That (output, Does.Contain ("Building target \"_RunILLink\" completely."), "Linker did not executed as expected.");
-			Assert.That (output, Does.Contain ("LinkerConfiguration:"), "Custom steps did not run as expected.");
-		}
-
-		void AssertThatLinkerDidNotExecute (ExecutionResult result)
-		{
-			var output = BinLog.PrintToString (result.BinLogPath);
-			Assert.That (output, Does.Not.Contain ("Building target \"_RunILLink\" completely."), "Linker did not executed as expected.");
-			Assert.That (output, Does.Not.Contain ("LinkerConfiguration:"), "Custom steps did not run as expected.");
-		}
-
 		void AssertAppContents (ApplePlatform platform, string app_directory)
 		{
 			var info_plist_path = GetInfoPListPath (platform, app_directory);
@@ -1027,6 +1011,7 @@ namespace Xamarin.Tests {
 			DotNet.AssertBuild (project_path, properties);
 		}
 
+		[Category ("Multiplatform")]
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64;iossimulator-arm64")]
 		[TestCase (ApplePlatform.TVOS, "tvossimulator-x64")]
 		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
@@ -1138,21 +1123,58 @@ namespace Xamarin.Tests {
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath, netVersion: "net6.0");
 			Clean (project_path);
 			var properties = GetDefaultProperties (runtimeIdentifiers);
+			properties ["ExcludeNUnitLiteReference"] = "true";
+			properties ["ExcludeTouchUnitReference"] = "true";
+			// This is to prevent this type of errors:
+			//     Unable to find package Microsoft.NETCore.App.Ref with version (= 6.0.27)
+			// which happens when we don't have a feed for the Microsoft.NETCore.App.Ref version in question
+			// (the specific package version may in fact not exist yet - which happens sometimes for maestro bumps,
+			// and if that happens, we can do nothing but wait, which may take a while).
+			// This works around the problem by just skipping the reference to the Microsoft.NETCore.App.Ref package,
+			// which we don't need for this test anyway.
+			properties ["DisableImplicitFrameworkReferences"] = "true";
 
 			var result = DotNet.AssertBuildFailure (project_path, properties);
 			var errors = BinLog.GetBuildLogErrors (result.BinLogPath).ToList ();
-			Assert.AreEqual (1, errors.Count, "Error Count");
-			Assert.That (errors [0].Message, Does.Contain ("To build this project, the following workloads must be installed: "), "Error message");
 
-			// With multi targeting, this happens instead:
-			// // Due to an implementation detail in .NET, the same error message is shown twice.
-			// Assert.AreEqual (2, errors.Count, "Error Count");
-			// Assert.AreEqual (errors [0].Message, $"The workload 'net6.0-{platform.AsString ().ToLowerInvariant ()}' is out of support and will not receive security updates in the future. Please refer to https://aka.ms/maui-support-policy for more information about the support policy.", "Error message 1");
-			// Assert.AreEqual (errors [1].Message, $"The workload 'net6.0-{platform.AsString ().ToLowerInvariant ()}' is out of support and will not receive security updates in the future. Please refer to https://aka.ms/maui-support-policy for more information about the support policy.", "Error message 2");
+			// Due to an implementation detail in .NET, the same error message is shown twice.
+			var targetFramework = $"net6.0-{platform.AsString ().ToLowerInvariant ()}";
+			AssertErrorMessages (errors,
+				$"The workload '{targetFramework}' is out of support and will not receive security updates in the future. Please refer to https://aka.ms/maui-support-policy for more information about the support policy.",
+				$"The workload '{targetFramework}' is out of support and will not receive security updates in the future. Please refer to https://aka.ms/maui-support-policy for more information about the support policy.");
 		}
 
 		[Test]
-		[Ignore ("Ignore due to issue: https://github.com/xamarin/xamarin-macios/issues/18655")]
+		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
+		[TestCase (ApplePlatform.iOS, "ios-arm64")]
+		[TestCase (ApplePlatform.TVOS, "tvossimulator-arm64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-arm64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		public void BuildNetFutureApp (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			// Builds an app with a higher .NET version than we support (for instance 'net9.0-ios' when we support 'net8.0-ios')
+			var project = "MySimpleApp";
+			Configuration.IgnoreIfIgnoredPlatform (platform);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
+
+			var majorNetVersion = Version.Parse (Configuration.DotNetTfm.Replace ("net", "")).Major;
+			var netVersion = $"net{majorNetVersion + 1}.0";
+			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath, netVersion: netVersion);
+			Clean (project_path);
+			var properties = GetDefaultProperties (runtimeIdentifiers);
+			var targetFramework = platform.ToFramework (netVersion);
+			properties ["TargetFramework"] = targetFramework;
+			properties ["ExcludeNUnitLiteReference"] = "true";
+			properties ["ExcludeTouchUnitReference"] = "true";
+
+			var result = DotNet.AssertBuildFailure (project_path, properties);
+			var errors = BinLog.GetBuildLogErrors (result.BinLogPath).ToList ();
+
+			AssertErrorMessages (errors,
+				$"The current .NET SDK does not support targeting .NET {majorNetVersion + 1}.0.  Either target .NET {majorNetVersion}.0 or lower, or use a version of the .NET SDK that supports .NET {majorNetVersion + 1}.0. Download the .NET SDK from https://aka.ms/dotnet/download");
+		}
+
+		[Test]
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
 		[TestCase (ApplePlatform.iOS, "ios-arm64")]
 		[TestCase (ApplePlatform.TVOS, "tvossimulator-arm64")]
@@ -1167,9 +1189,6 @@ namespace Xamarin.Tests {
 			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath, netVersion: "net7.0");
 			Clean (project_path);
 			var properties = GetDefaultProperties (runtimeIdentifiers);
-
-			// This property is needed until https://github.com/xamarin/xamarin-macios/pull/18411 has been merged and we can use the resulting packages.
-			properties ["_RequiresILLinkPack"] = "true";
 
 			var result = DotNet.AssertBuild (project_path, properties);
 			AssertThatLinkerExecuted (result);
@@ -1504,7 +1523,6 @@ namespace Xamarin.Tests {
 		[TestCase (ApplePlatform.iOS)]
 		[TestCase (ApplePlatform.TVOS)]
 		[TestCase (ApplePlatform.MacOSX)]
-		[Ignore ("Multi-targeting support has been temporarily reverted/postponed")]
 		public void MultiTargetLibrary (ApplePlatform platform)
 		{
 			Configuration.IgnoreIfIgnoredPlatform (platform);
@@ -1541,15 +1559,13 @@ namespace Xamarin.Tests {
 		[TestCase (ApplePlatform.iOS)]
 		[TestCase (ApplePlatform.TVOS)]
 		[TestCase (ApplePlatform.MacOSX)]
-		[Ignore ("Multi-targeting support has been temporarily reverted/postponed")]
 		public void InvalidTargetPlatformVersion (ApplePlatform platform)
 		{
 			Configuration.IgnoreIfIgnoredPlatform (platform);
 
 			// Pick a target platform version we don't support (such as iOS 6.66).
 			var targetFrameworks = Configuration.DotNetTfm + "-" + platform.AsString ().ToLowerInvariant () + "6.66";
-			var supportedApiVersion = Configuration.GetVariableArray ($"SUPPORTED_API_VERSIONS_{platform.AsString ().ToUpperInvariant ()}");
-			var validTargetPlatformVersions = supportedApiVersion.Where (v => v.StartsWith (Configuration.DotNetTfm + "-", StringComparison.Ordinal)).Select (v => v.Substring (Configuration.DotNetTfm.Length + 1));
+			var supportedApiVersions = GetSupportedApiVersions (platform);
 
 			var project = "MultiTargetingLibrary";
 			var project_path = GetProjectPath (project, platform: platform);
@@ -1558,8 +1574,72 @@ namespace Xamarin.Tests {
 			properties ["cmdline:AllTheTargetFrameworks"] = targetFrameworks;
 			var rv = DotNet.AssertBuildFailure (project_path, properties);
 			var errors = BinLog.GetBuildLogErrors (rv.BinLogPath).ToArray ();
-			Assert.AreEqual (1, errors.Length, "Error count");
-			Assert.AreEqual ($"6.66 is not a valid TargetPlatformVersion for {platform.AsString ()}. Valid versions include:\n{string.Join ('\n', validTargetPlatformVersions)}", errors [0].Message, "Error message");
+			AssertErrorMessages (errors, $"6.66 is not a valid TargetPlatformVersion for {platform.AsString ()}. Valid versions include:\n{string.Join ('\n', supportedApiVersions)}");
+		}
+
+		[Test]
+		[TestCase (ApplePlatform.MacCatalyst)]
+		[TestCase (ApplePlatform.iOS)]
+		[TestCase (ApplePlatform.TVOS)]
+		[TestCase (ApplePlatform.MacOSX)]
+		public void UnsupportedTargetPlatformVersion (ApplePlatform platform)
+		{
+			Configuration.IgnoreIfIgnoredPlatform (platform);
+
+			// Pick a target platform version that we don't really support,
+			// but don't show an error in .NET 8 because of backwards compat.
+			// The earliest target OS version should do.
+			var minSupportedOSVersion = GetSupportedTargetPlatformVersions (platform).First ();
+			var targetFrameworks = Configuration.DotNetTfm + "-" + platform.AsString ().ToLowerInvariant () + minSupportedOSVersion;
+			var supportedApiVersions = GetSupportedApiVersions (platform, isCompat: false);
+
+			var project = "MultiTargetingLibrary";
+			var project_path = GetProjectPath (project, platform: platform);
+			Clean (project_path);
+			var properties = GetDefaultProperties ();
+			properties ["cmdline:AllTheTargetFrameworks"] = targetFrameworks;
+
+			if (IsTargetPlatformVersionCompatEnabled) {
+				var rv = DotNet.AssertBuild (project_path, properties);
+				var warnings = BinLog.GetBuildLogWarnings (rv.BinLogPath).ToArray ();
+				AssertWarningMessages (warnings, $"{minSupportedOSVersion} is not a valid TargetPlatformVersion for {platform.AsString ()}. This warning will become an error in future versions of the {platform.AsString ()} workload. Valid versions include:\n{string.Join ('\n', supportedApiVersions)}");
+			} else {
+				var rv = DotNet.AssertBuildFailure (project_path, properties);
+				var errors = BinLog.GetBuildLogErrors (rv.BinLogPath).ToArray ();
+				AssertErrorMessages (errors, $"{minSupportedOSVersion} is not a valid TargetPlatformVersion for {platform.AsString ()}. Valid versions include:\n{string.Join ('\n', supportedApiVersions)}");
+			}
+		}
+
+		bool IsTargetPlatformVersionCompatEnabled {
+			get => Version.Parse (Configuration.DotNetTfm.Replace ("net", "")).Major < 9;
+		}
+
+		string [] GetSupportedApiVersions (ApplePlatform platform, bool? isCompat = null)
+		{
+			if (isCompat is null)
+				isCompat = IsTargetPlatformVersionCompatEnabled;
+			if (isCompat.Value)
+				return GetSupportedTargetPlatformVersions (platform);
+
+			var supportedApiVersions = Configuration.GetVariableArray ($"SUPPORTED_API_VERSIONS_{platform.AsString ().ToUpperInvariant ()}");
+			return supportedApiVersions
+				.Where (v => v.StartsWith (Configuration.DotNetTfm + "-", StringComparison.Ordinal))
+				.Select (v => v.Substring (Configuration.DotNetTfm.Length + 1))
+				.OrderBy (v => v)
+				.ToArray ();
+		}
+
+		string [] GetSupportedTargetPlatformVersions (ApplePlatform platform)
+		{
+			var plistPath = Path.Combine (Configuration.SourceRoot, "builds", $"Versions-{platform.AsString ()}.plist.in");
+			var doc = new XmlDocument ();
+			doc.Load (plistPath);
+			var query = $"/plist/dict/key[text()='SupportedTargetPlatformVersions']/following-sibling::dict[1]/key[text()='{platform.AsString ()}']/following-sibling::array[1]/string";
+			return doc
+				.SelectNodes (query)!
+				.Cast<XmlNode> ()
+				.Select (v => v.InnerText)
+				.ToArray ();
 		}
 
 		[Test]
@@ -1585,6 +1665,69 @@ namespace Xamarin.Tests {
 			var errors = BinLog.GetBuildLogErrors (rv.BinLogPath).ToArray ();
 			AssertErrorCount (errors, 1, "Error count");
 			AssertErrorMessages (errors, $"The property '{property}' is deprecated, please remove it from the project file. Use 'RuntimeIdentifier' or 'RuntimeIdentifiers' instead to specify the target architecture.");
+		}
+
+		[Test]
+		// The trailing semi-colon for single-arch platforms is significant:
+		// it means we'll use "RuntimeIdentifiers" (plural) instead of "RuntimeIdentifier" (singular)
+		[TestCase (ApplePlatform.iOS, "ios-arm64;")]
+		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64;")]
+		[TestCase (ApplePlatform.TVOS, "tvos-arm64;")]
+		public void StrippedRuntimeIdentifiers (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			var project = "MySimpleApp";
+			Configuration.IgnoreIfIgnoredPlatform (platform);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
+
+			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
+			Clean (project_path);
+			var properties = GetDefaultProperties (runtimeIdentifiers);
+			properties ["NoSymbolStrip"] = "false";
+			DotNet.AssertBuild (project_path, properties);
+
+			var appExecutable = GetNativeExecutable (platform, appPath);
+			ExecuteWithMagicWordAndAssert (platform, runtimeIdentifiers, appExecutable);
+
+			var symbols = Configuration.GetNativeSymbols (appExecutable);
+			Assert.That (symbols, Does.Contain ("_xamarin_release_managed_ref"), "_xamarin_release_managed_ref");
+		}
+
+		[Test]
+		[TestCase (ApplePlatform.iOS, "ios-arm64;", "iOS")]
+		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64", "macOS")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64", "MacCatalyst")]
+		[TestCase (ApplePlatform.TVOS, "tvos-arm64;", "tvOS")]
+		public void SourcelinkTest (ApplePlatform platform, string runtimeIdentifiers, string platformName)
+		{
+			// Sourcelink uses the latest commit and tests to see if
+			// it is valid which will not pass until the commit has
+			// been merged in and actually exists on github.
+
+			if (!IsInCI || IsPullRequest)
+				Assert.Ignore ("This test is disabled for local runs and Pull Requests.");
+
+			var project = "MySimpleApp";
+			Configuration.IgnoreIfIgnoredPlatform (platform);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
+
+			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
+			Clean (project_path);
+			var properties = GetDefaultProperties (runtimeIdentifiers);
+			DotNet.AssertBuild (project_path, properties);
+
+			var pdbFile = Directory
+				.GetFiles (Path.GetDirectoryName (project_path)!, $"Microsoft.{platformName}.pdb", SearchOption.AllDirectories)
+				.FirstOrDefault ();
+
+			Assert.NotNull (pdbFile, "No PDB file found");
+
+			var tool = "sourcelink";
+			var toolPath = Directory.GetCurrentDirectory ();
+			DotNet.InstallTool (tool, toolPath);
+			var test = DotNet.RunTool (Path.Combine (toolPath, tool), "test", pdbFile!);
+
+			Assert.AreEqual ($"sourcelink test passed: {pdbFile}", test.StandardOutput.ToString ().TrimEnd ('\n'));
 		}
 	}
 }

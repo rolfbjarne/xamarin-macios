@@ -4709,9 +4709,20 @@ public partial class Generator : IMemberGatherer {
 
 	bool IsRequired (MemberInfo provider, Attribute [] attributes = null)
 	{
+		return IsRequired (provider, out var _, attributes);
+	}
+
+	bool IsRequired (MemberInfo provider, out bool generateExtensionMethod, Attribute [] attributes = null)
+	{
+		generateExtensionMethod = false;
+
 		var type = provider.DeclaringType;
 		if (IsApiType (type)) {
-			return AttributeManager.HasAttribute<AbstractAttribute> (provider, attributes);
+			var abstractAttribute = AttributeManager.GetCustomAttribute<AbstractAttribute> (provider, attributes);
+			if (abstractAttribute is null)
+				return false;
+			generateExtensionMethod = abstractAttribute.GenerateExtensionMethod;
+			return true;
 		}
 		if (type.IsInterface)
 			return true;
@@ -4750,6 +4761,8 @@ public partial class Generator : IMemberGatherer {
 		var requiredInstanceAsyncMethods = requiredInstanceMethods.Where (m => AttributeManager.HasAttribute<AsyncAttribute> (m)).ToList ();
 		var instanceProperties = allProtocolProperties.Where (v => !AttributeManager.HasAttribute<StaticAttribute> (v));
 		var staticProperties = allProtocolProperties.Where (v => AttributeManager.HasAttribute<StaticAttribute> (v));
+		var extensionMethods = optionalInstanceMethods.Concat (requiredInstanceMethods.Where (v => IsRequired (v, out var generateExtensionMethod) && generateExtensionMethod));
+		var extensionProperties = optionalInstanceProperties.Concat (requiredInstanceProperties.Where (v => IsRequired (v, out var generateExtensionMethod) && generateExtensionMethod));
 
 		WriteDocumentation (type);
 
@@ -4989,13 +5002,13 @@ public partial class Generator : IMemberGatherer {
 		// avoid (for unified) all the metadata for empty static classes, we can introduce them later when required
 		bool include_extensions = false;
 		if (backwardsCompatibleCodeGeneration)
-			include_extensions = optionalInstanceMethods.Any () || optionalInstanceProperties.Any () || requiredInstanceAsyncMethods.Any ();
+			include_extensions = extensionMethods.Any () || extensionProperties.Any () || requiredInstanceAsyncMethods.Any ();
 		if (include_extensions) {
 			// extension methods
 			PrintAttributes (type, preserve: true, advice: true);
 			print ("{1} unsafe static partial class {0}_Extensions {{", TypeName, class_visibility);
 			indent++;
-			foreach (var mi in optionalInstanceMethods)
+			foreach (var mi in extensionMethods)
 				GenerateMethod (type, mi, false, null, false, false, true);
 
 			// Generate Extension Methods of required [Async] decorated methods (we already do optional) 
@@ -5009,7 +5022,7 @@ public partial class Generator : IMemberGatherer {
 			}
 
 			// C# does not support extension properties, so create Get* and Set* accessors instead.
-			foreach (var pi in optionalInstanceProperties) {
+			foreach (var pi in extensionProperties) {
 				GetAccessorInfo (pi, out var getter, out var setter, out var generate_getter, out var generate_setter);
 				var attrib = GetExportAttribute (pi);
 				if (generate_getter) {

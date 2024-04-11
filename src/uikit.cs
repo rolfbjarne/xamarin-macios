@@ -28601,7 +28601,7 @@ namespace UIKit {
 	[Protocol]
 	interface UITraitChangeObservable {
 #if NET
-		[Abstract]
+		[Abstract (GenerateExtensionMethod = true)]
 #endif
 		[Export ("registerForTraitChanges:withHandler:")]
 #if NET
@@ -28612,7 +28612,7 @@ namespace UIKit {
 #endif
 
 #if NET
-		[Abstract]
+		[Abstract (GenerateExtensionMethod = true)]
 #endif
 		[Export ("registerForTraitChanges:withTarget:action:")]
 #if NET
@@ -28623,7 +28623,7 @@ namespace UIKit {
 #endif
 
 #if NET
-		[Abstract]
+		[Abstract (GenerateExtensionMethod = true)]
 #endif
 		[Export ("registerForTraitChanges:withAction:")]
 #if NET

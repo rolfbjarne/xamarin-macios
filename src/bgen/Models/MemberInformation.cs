@@ -34,6 +34,7 @@ public class MemberInformation {
 	public bool is_interface_impl;
 	public bool is_extension_method;
 	public bool is_protocol_method;
+	public bool? is_protocol_method_required;
 	public bool is_appearance;
 	public bool is_model;
 	public bool is_ctor;

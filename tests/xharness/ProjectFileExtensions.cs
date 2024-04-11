@@ -197,9 +197,9 @@ namespace Xharness {
 
 		public static void AddTopLevelInclude (this XmlDocument csproj, string type, string link, string include, bool prepend = false)
 		{
-			var type_node = csproj.SelectSingleNode($"//*[local-name() = '{type}']");
+			var type_node = csproj.SelectSingleNode ($"//*[local-name() = '{type}']");
 			var item_group = type_node?.ParentNode ?? csproj.SelectSingleNode ($"/Project/*[local-name() = 'ItemGroup'][last()]")!;
-			var node = csproj.CreateElement (type, csproj.GetNamespace());
+			var node = csproj.CreateElement (type, csproj.GetNamespace ());
 			var include_attribute = csproj.CreateAttribute ("Include");
 			include_attribute.Value = include;
 			node.Attributes.Append (include_attribute);

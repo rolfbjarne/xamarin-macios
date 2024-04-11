@@ -75,6 +75,46 @@ namespace Protocols {
 		NSObject StaticRequiredPropertyWeakSemantics { get; set; }
 	}
 
+	[Protocol]
+	interface RequiredProtocolCompatWithExtensions {
+		[Abstract (GenerateExtensionMethod = true)]
+		[Export ("requiredMethod")]
+		int RequiredMethod ();
+
+		[Abstract (GenerateExtensionMethod = true)]
+		[Export ("requiredProperty")]
+		int RequiredProperty { get; set; }
+
+		[Abstract (GenerateExtensionMethod = true)]
+		[Internal]
+		[Export ("internalRequiredMethod")]
+		int InternalRequiredMethod ();
+
+		[Abstract (GenerateExtensionMethod = true)]
+		[Internal]
+		[Export ("internalRequiredProperty")]
+		int InternalRequiredProperty { get; set; }
+
+		[Abstract (GenerateExtensionMethod = true)]
+		[Static]
+		[Export ("staticRequiredMethod")]
+		int StaticRequiredMethod ();
+
+		[Abstract (GenerateExtensionMethod = true)]
+		[Static]
+		[Export ("staticRequiredProperty")]
+		int StaticRequiredProperty { get; set; }
+
+		[Abstract (GenerateExtensionMethod = true)]
+		[Export ("requiredPropertyWeakSemantics", ArgumentSemantic.Weak)]
+		NSObject RequiredPropertyWeakSemantics { get; set; }
+
+		[Abstract (GenerateExtensionMethod = true)]
+		[Static]
+		[Export ("staticRequiredPropertyWeakSemantics", ArgumentSemantic.Weak)]
+		NSObject StaticRequiredPropertyWeakSemantics { get; set; }
+	}
+
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
 	interface OptionalProtocol {
 		[Export ("optionalMethod")]

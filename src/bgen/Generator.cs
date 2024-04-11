@@ -3807,6 +3807,13 @@ public partial class Generator : IMemberGatherer {
 
 	void PrintPropertyAttributes (PropertyInfo pi, Type type, bool skipTypeInjection = false)
 	{
+		var minfo = new MemberInformation (this, this, pi, type);
+		PrintPropertyAttributes (pi, minfo, skipTypeInjection);
+	}
+
+	void PrintPropertyAttributes (PropertyInfo pi, MemberInformation minfo, bool skipTypeInjection = false)
+	{
+		Type type = minfo.type;
 		PrintObsoleteAttributes (pi);
 
 		foreach (var ba in AttributeManager.GetCustomAttributes<DebuggerBrowsableAttribute> (pi))
@@ -3835,14 +3842,30 @@ public partial class Generator : IMemberGatherer {
 
 		foreach (var sa in AttributeManager.GetCustomAttributes<ThreadSafeAttribute> (pi))
 			print (sa.Safe ? "[ThreadSafe]" : "[ThreadSafe (false)]");
+
+		PrintProtocolMemberAttributes (minfo);
 	}
 
-	void GenerateProperty (Type type, PropertyInfo pi, List<string> instance_fields_to_clear_on_dispose, bool is_model, bool is_interface_impl = false, bool is_protocol_method = false)
+	void PrintProtocolMemberAttributes (MemberInformation minfo)
+	{
+		if (!minfo.is_protocol_method)
+			return;
+
+		if (minfo.is_protocol_method_required.Value) {
+			print ("[RequiredMember]");
+		} else {
+			print ("[OptionalMember]");
+		}
+		print ("[Preserve (Conditional = true)]"); // FIXME: use .NET trimmer attribute
+	}
+
+	void GenerateProperty (Type type, PropertyInfo pi, List<string> instance_fields_to_clear_on_dispose, bool is_model, bool is_interface_impl = false, bool is_protocol_method = false, bool? is_protocol_method_required = null)
 	{
 		string wrap;
 		var export = GetExportAttribute (pi, out wrap);
 		var minfo = new MemberInformation (this, this, pi, type, is_interface_impl);
 		minfo.is_protocol_method = is_protocol_method;
+		minfo.is_protocol_method_required = is_protocol_method_required;
 		var mod = minfo.GetVisibility ();
 		Type inlinedType = pi.DeclaringType == type ? null : type;
 		GetAccessorInfo (pi, out var getter, out var setter, out var generate_getter, out var generate_setter);
@@ -3877,7 +3900,7 @@ public partial class Generator : IMemberGatherer {
 
 		if (wrap is not null) {
 			print_generated_code ();
-			PrintPropertyAttributes (pi, minfo.type);
+			PrintPropertyAttributes (pi, minfo);
 			PrintAttributes (pi, preserve: true, advice: true);
 			print ("{0} {1}{2}{3} {4} {{",
 				   mod,
@@ -3959,7 +3982,7 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		print_generated_code (optimizable: IsOptimizable (pi));
-		PrintPropertyAttributes (pi, minfo.type);
+		PrintPropertyAttributes (pi, minfo);
 
 		PrintAttributes (pi, preserve: true, advice: true, bindAs: true);
 
@@ -4346,10 +4369,11 @@ public partial class Generator : IMemberGatherer {
 	}
 
 
-	void GenerateMethod (Type type, MethodInfo mi, bool is_model, Type category_extension_type, bool is_appearance, bool is_interface_impl = false, bool is_extension_method = false, string selector = null, bool isBaseWrapperProtocolMethod = false, bool is_protocol_method = false)
+	void GenerateMethod (Type type, MethodInfo mi, bool is_model, Type category_extension_type, bool is_appearance, bool is_interface_impl = false, bool is_extension_method = false, string selector = null, bool isBaseWrapperProtocolMethod = false, bool is_protocol_method = false, bool? is_protocol_method_required = null)
 	{
 		var minfo = new MemberInformation (this, this, mi, type, category_extension_type, is_interface_impl, is_extension_method, is_appearance, is_model, selector, isBaseWrapperProtocolMethod);
 		minfo.is_protocol_method = is_protocol_method;
+		minfo.is_protocol_method_required = is_protocol_method_required;
 		GenerateMethod (minfo);
 	}
 
@@ -4433,6 +4457,7 @@ public partial class Generator : IMemberGatherer {
 			WriteDocumentation (minfo.Method);
 		}
 
+		PrintProtocolMemberAttributes (minfo);
 		PrintDelegateProxy (minfo);
 
 		if (AttributeManager.HasAttribute<NoMethodAttribute> (minfo.mi)) {
@@ -4865,12 +4890,7 @@ public partial class Generator : IMemberGatherer {
 			var minfo = new MemberInformation (this, this, mi, type, null);
 			var mod = string.Empty;
 			minfo.is_protocol_method = true;
-			if (IsRequired (mi)) {
-				print ("[RequiredMember]");
-			} else {
-				print ("[OptionalMember]");
-			}
-			print ("[Preserve (Conditional = true)]");
+			minfo.is_protocol_method_required = IsRequired (mi);
 			GenerateMethod (minfo);
 			print ("");
 		}
@@ -4898,13 +4918,7 @@ public partial class Generator : IMemberGatherer {
 #if NET
 		var instance_fields_to_clear_on_dispose = new List<string> ();
 		foreach (var pi in instanceProperties) {
-			if (IsRequired (pi)) {
-				print ("[RequiredMember]");
-			} else {
-				print ("[OptionalMember]");
-			}
-
-			GenerateProperty (type, pi, instance_fields_to_clear_on_dispose, false, is_protocol_method: true);
+			GenerateProperty (type, pi, instance_fields_to_clear_on_dispose, false, is_protocol_method: true, is_protocol_method_required: IsRequired (pi));
 		}
 
 		// C# does not support type constraint on properties, so create Get* and Set* accessors instead.
@@ -4914,12 +4928,12 @@ public partial class Generator : IMemberGatherer {
 			if (generate_getter) {
 				PrintAttributes (pi, preserve: true, advice: true);
 				var ba = GetBindAttribute (getter);
-				GenerateMethod (type, getter, false, null, false, false, false, ba?.Selector ?? attrib.ToGetter (pi).Selector, is_protocol_method: true);
+				GenerateMethod (type, getter, false, null, false, false, false, ba?.Selector ?? attrib.ToGetter (pi).Selector, is_protocol_method: true, is_protocol_method_required: IsRequired (pi));
 			}
 			if (generate_setter) {
 				PrintAttributes (pi, preserve: true, advice: true);
 				var ba = GetBindAttribute (setter);
-				GenerateMethod (type, setter, false, null, false, false, false, ba?.Selector ?? attrib.ToSetter (pi).Selector, is_protocol_method: true);
+				GenerateMethod (type, setter, false, null, false, false, false, ba?.Selector ?? attrib.ToSetter (pi).Selector, is_protocol_method: true, is_protocol_method_required: IsRequired (pi));
 			}
 		}
 #else

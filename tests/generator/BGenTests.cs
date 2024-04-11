@@ -1501,9 +1501,19 @@ namespace GeneratorTests {
             Summary for P1
             </summary>
         </member>
+        <member name=""M:XmlDocumentation.IP1.PMethod"">
+            <summary>
+            Summary for P1.PMethod
+            </summary>
+        </member>
         <member name=""M:XmlDocumentation.IP1.PAMethod"">
             <summary>
             Summary for PA1.PMethod
+            </summary>
+        </member>
+        <member name=""P:XmlDocumentation.IP1.PProperty"">
+            <summary>
+            Summary for P1.PProperty
             </summary>
         </member>
         <member name=""P:XmlDocumentation.IP1.PAProperty"">

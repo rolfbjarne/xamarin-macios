@@ -12,3 +12,9 @@ fi
 
 # Make sure we don't have stuff from earlier builds.
 rm -rf ~/remote_build_testing
+
+# Killing any existing brokers and builders
+ps auxww || true
+pkill -f Broker.exe
+pkill -f Build.exe
+ps auxww || true

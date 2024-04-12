@@ -25,3 +25,5 @@ if ls ~/Library/Logs/Xamarin.Messaging* >& /dev/null ; then
 else
 	echo "No logs in ~/Library/Logs/Xamarin.Messaging"
 fi
+
+ps auxww > ~/remote_build_testing/processes.txt || true

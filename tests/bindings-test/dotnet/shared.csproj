@@ -38,6 +38,10 @@
       <Kind>Static</Kind>
       <Frameworks>CoreLocation Foundation ModelIO</Frameworks>
     </NativeReference>
+
+    <NativeReference Include="$(TestLibrariesDirectory)\.libs\libSwiftTest.xcframework">
+      <Kind>Static</Kind>
+    </NativeReference>
   </ItemGroup>
 
   <ItemGroup>

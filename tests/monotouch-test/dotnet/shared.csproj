@@ -49,6 +49,10 @@
     <LinkWithSwiftSystemLibraries>true</LinkWithSwiftSystemLibraries>
   </PropertyGroup>
 
+  <ItemGroup>
+    <_MainLinkerFlags Include="-u_OBJC_CLASS_$_SwiftTestClass" />
+  </ItemGroup>
+
   <Import Project="$(RootTestsDirectory)/common/shared-dotnet.csproj" />
 
   <ItemGroup>

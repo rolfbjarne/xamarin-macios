@@ -447,6 +447,12 @@ MAC_LDFLAGS = -mmacosx-version-min=$(MIN_MACOS_SDK_VERSION) -framework AppKit
 .libs/macos/libtest2.%.o: libtest2.m $(EXTRA_DEPENDENCIES) | .libs/macos
 	$(call Q_2,OBJC,  [mac]) $(MAC_CLANG) -arch $* -c $(MAC_OBJC_CFLAGS) $(MAC_CFLAGS) -o $@ $<
 
+.libs/macos/%.x86_64.o: %.swift $(EXTRA_DEPENDENCIES) | .libs/macos
+	$$(call Q_2,SWIFT, [mac]) $(SWIFTC) $(MACOS_X64_SWIFTFLAGS) -c $< -o $@
+
+.libs/macos/%.arm64.o: %.swift $(EXTRA_DEPENDENCIES) | .libs/macos
+	$$(call Q_2,SWIFT, [mac]) $(SWIFTC) $(MACOS_ARM64_SWIFTFLAGS) -c $< -o $@
+
 .libs/macos:
 	$(Q) mkdir -p $@
 

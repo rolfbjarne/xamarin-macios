@@ -95,5 +95,24 @@ namespace Xamarin.Tests {
 				completionHandler (42);
 			}
 		}
+
+		[Test]
+		public void SwiftTypeEncodings ()
+		{
+			using var obj = new SwiftTestClass ();
+
+			Assert.AreEqual ("42", obj.DoSomething ("42"), "DoSomething");
+
+			string asyncResult = null;
+			obj.DoSomethingAsync ("dolphins", (v) => asyncResult = v);
+			var done = TestRuntime.RunAsync (TimeSpan.FromSeconds (5), () => asyncResult is not null);
+			Assert.AreEqual ("dolphins", asyncResult, "DoSomethingAsync");
+			Assert.IsTrue (done, "Done");
+
+			obj.DoSomethingComplexAsync ("fish", IntPtr.Zero, (v) => asyncResult = v);
+			done = TestRuntime.RunAsync (TimeSpan.FromSeconds (5), () => asyncResult is not null);
+			Assert.AreEqual ("fish", asyncResult, "DoSomethingComplexAsync");
+			Assert.IsTrue (done, "Done 2");
+		}
 	}
 }

@@ -820,8 +820,8 @@ namespace Metal {
 		void SetAccelerationStructure ([NullAllowed] IMTLAccelerationStructure accelerationStructure, nuint bufferIndex);
 
 		[Mac (14, 0), iOS (17, 0), TV (17, 0), MacCatalyst (17, 0)]
-#if XAMCORE_5_0
-		[Abstract]
+#if NET
+		[Abstract (GenerateExtensionMethod = true)]
 #endif
 		[Export ("setBuffer:offset:attributeStride:atIndex:")]
 		void SetBuffer (IMTLBuffer buffer, nuint offset, nuint stride, nuint index);

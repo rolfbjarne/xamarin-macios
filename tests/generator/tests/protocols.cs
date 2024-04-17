@@ -190,4 +190,8 @@ namespace Protocols {
 	[BaseType (typeof (NSObject))]
 	interface MyObject : OptionalProtocol, RequiredProtocol {
 	}
+
+	[BaseType (typeof (NSObject))]
+	interface MyObject2 : OptionalProtocolCompat, RequiredProtocolCompat {
+	}
 }

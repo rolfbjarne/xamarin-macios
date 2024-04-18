@@ -49,6 +49,10 @@
     <LinkWithSwiftSystemLibraries>true</LinkWithSwiftSystemLibraries>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ReferenceNativeSymbol Include="Inexistent" SymbolType="ObjectiveCClass" SymbolMode="Ignore" />
+  </ItemGroup>
+
   <Import Project="$(RootTestsDirectory)/common/shared-dotnet.csproj" />
 
   <ItemGroup>

@@ -5,23 +5,23 @@ using ObjCRuntime;
 namespace Protocols {
 	[Protocol]
 	interface OptionalProtocolCompat {
-		[Export ("optionalMethod")]
-		int OptionalMethod ();
+		[Export ("optionalMethod:outValue:refValue:")]
+		int OptionalMethod (int @event, out byte outValue, ref short refValue);
 
 		[Export ("optionalProperty")]
 		int OptionalProperty { get; set; }
 
 		[Internal]
-		[Export ("internalOptionalMethod")]
-		int InternalOptionalMethod ();
+		[Export ("internalOptionalMethod:outValue:refValue:")]
+		int InternalOptionalMethod (int @event, out byte outValue, ref short refValue);
 
 		[Internal]
 		[Export ("internalOptionalProperty")]
 		int InternalOptionalProperty { get; set; }
 
 		[Static]
-		[Export ("staticOptionalMethod")]
-		int StaticOptionalMethod ();
+		[Export ("staticOptionalMethod:outValue:refValue:")]
+		int StaticOptionalMethod (int @event, out byte outValue, ref short refValue);
 
 		[Static]
 		[Export ("staticOptionalProperty")]
@@ -38,8 +38,8 @@ namespace Protocols {
 	[Protocol]
 	interface RequiredProtocolCompat {
 		[Abstract]
-		[Export ("requiredMethod")]
-		int RequiredMethod ();
+		[Export ("requiredMethod:outValue:refValue:")]
+		int RequiredMethod (int @event, out byte outValue, ref short refValue);
 
 		[Abstract]
 		[Export ("requiredProperty")]
@@ -47,8 +47,8 @@ namespace Protocols {
 
 		[Abstract]
 		[Internal]
-		[Export ("internalRequiredMethod")]
-		int InternalRequiredMethod ();
+		[Export ("internalRequiredMethod:outValue:refValue:")]
+		int InternalRequiredMethod (int @event, out byte outValue, ref short refValue);
 
 		[Abstract]
 		[Internal]
@@ -57,8 +57,8 @@ namespace Protocols {
 
 		[Abstract]
 		[Static]
-		[Export ("staticRequiredMethod")]
-		int StaticRequiredMethod ();
+		[Export ("staticRequiredMethod:outValue:refValue:")]
+		int StaticRequiredMethod (int @event, out byte outValue, ref short refValue);
 
 		[Abstract]
 		[Static]
@@ -78,8 +78,8 @@ namespace Protocols {
 	[Protocol]
 	interface RequiredProtocolCompatWithExtensions {
 		[Abstract (GenerateExtensionMethod = true)]
-		[Export ("requiredMethod")]
-		int RequiredMethod ();
+		[Export ("requiredMethod:outValue:refValue:")]
+		int RequiredMethod (int @event, out byte outValue, ref short refValue);
 
 		[Abstract (GenerateExtensionMethod = true)]
 		[Export ("requiredProperty")]
@@ -87,8 +87,8 @@ namespace Protocols {
 
 		[Abstract (GenerateExtensionMethod = true)]
 		[Internal]
-		[Export ("internalRequiredMethod")]
-		int InternalRequiredMethod ();
+		[Export ("internalRequiredMethod:outValue:refValue:")]
+		int InternalRequiredMethod (int @event, out byte outValue, ref short refValue);
 
 		[Abstract (GenerateExtensionMethod = true)]
 		[Internal]
@@ -97,8 +97,8 @@ namespace Protocols {
 
 		[Abstract (GenerateExtensionMethod = true)]
 		[Static]
-		[Export ("staticRequiredMethod")]
-		int StaticRequiredMethod ();
+		[Export ("staticRequiredMethod:outValue:refValue:")]
+		int StaticRequiredMethod (int @event, out byte outValue, ref short refValue);
 
 		[Abstract (GenerateExtensionMethod = true)]
 		[Static]
@@ -117,27 +117,36 @@ namespace Protocols {
 
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
 	interface OptionalProtocol {
-		[Export ("optionalMethod")]
-		int OptionalMethod ();
+		[Export ("optionalMethod:outValue:refValue:")]
+		int OptionalMethod (int @event, out byte outValue, ref short refValue);
 
 		[Export ("optionalProperty")]
 		int OptionalProperty { get; set; }
 
+		[Export ("nullableOptionalProperty")]
+		[NullAllowed]
+		string NullableOptionalProperty { get; set; }
+
 		[Internal]
-		[Export ("internalOptionalMethod")]
-		int InternalOptionalMethod ();
+		[Export ("internalOptionalMethod:outValue:refValue:")]
+		int InternalOptionalMethod (int @event, out byte outValue, ref short refValue);
 
 		[Internal]
 		[Export ("internalOptionalProperty")]
 		int InternalOptionalProperty { get; set; }
 
 		[Static]
-		[Export ("staticOptionalMethod")]
-		int StaticOptionalMethod ();
+		[Export ("staticOptionalMethod:outValue:refValue:")]
+		int StaticOptionalMethod (int @event, out byte outValue, ref short refValue);
 
 		[Static]
 		[Export ("staticOptionalProperty")]
 		int StaticOptionalProperty { get; set; }
+
+		[Static]
+		[Export ("nullableStaticOptionalProperty")]
+		[NullAllowed]
+		string NullableStaticOptionalProperty { get; set; }
 
 		[Export ("optionalPropertyWeakSemantics", ArgumentSemantic.Weak)]
 		NSObject OptionalPropertyWeakSemantics { get; set; }
@@ -145,22 +154,36 @@ namespace Protocols {
 		[Static]
 		[Export ("staticOptionalPropertyWeakSemantics", ArgumentSemantic.Weak)]
 		NSObject StaticOptionalPropertyWeakSemantics { get; set; }
+
+		[Async]
+		[Export ("optionalAsyncMethod:")]
+		void OptionalAsyncMethod (Action callback);
+
+		[Async]
+		[Static]
+		[Export ("staticOptionalAsyncMethod:")]
+		void StaticOptionalAsyncMethod (Action callback);
 	}
 
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
 	interface RequiredProtocol {
 		[Abstract]
-		[Export ("requiredMethod")]
-		int RequiredMethod ();
+		[Export ("requiredMethod:outValue:refValue:")]
+		int RequiredMethod (int @event, out byte outValue, ref short refValue);
 
 		[Abstract]
 		[Export ("requiredProperty")]
 		int RequiredProperty { get; set; }
 
 		[Abstract]
+		[Export ("nullableRequiredProperty")]
+		[NullAllowed]
+		string NullableRequiredProperty { get; set; }
+
+		[Abstract]
 		[Internal]
-		[Export ("internalRequiredMethod")]
-		int InternalRequiredMethod ();
+		[Export ("internalRequiredMethod:outValue:refValue:")]
+		int InternalRequiredMethod (int @event, out byte outValue, ref short refValue);
 
 		[Abstract]
 		[Internal]
@@ -169,13 +192,19 @@ namespace Protocols {
 
 		[Abstract]
 		[Static]
-		[Export ("staticRequiredMethod")]
-		int StaticRequiredMethod ();
+		[Export ("staticRequiredMethod:outValue:refValue:")]
+		int StaticRequiredMethod (int @event, out byte outValue, ref short refValue);
 
 		[Abstract]
 		[Static]
 		[Export ("staticRequiredProperty")]
 		int StaticRequiredProperty { get; set; }
+
+		[Abstract]
+		[Static]
+		[Export ("nullableStaticRequiredProperty")]
+		[NullAllowed]
+		string NullableStaticRequiredProperty { get; set; }
 
 		[Abstract]
 		[Export ("requiredPropertyWeakSemantics", ArgumentSemantic.Weak)]
@@ -185,6 +214,17 @@ namespace Protocols {
 		[Static]
 		[Export ("staticRequiredPropertyWeakSemantics", ArgumentSemantic.Weak)]
 		NSObject StaticRequiredPropertyWeakSemantics { get; set; }
+
+		[Abstract]
+		[Async]
+		[Export ("requiredAsyncMethod:")]
+		void RequiredAsyncMethod (Action callback);
+
+		[Abstract]
+		[Async]
+		[Static]
+		[Export ("staticRequiredAsyncMethod:")]
+		void StaticRequiredAsyncMethod (Action callback);
 	}
 
 	[BaseType (typeof (NSObject))]

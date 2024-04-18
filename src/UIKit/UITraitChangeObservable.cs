@@ -12,6 +12,7 @@
 using System;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 
 using Foundation;
 using ObjCRuntime;
@@ -251,6 +252,44 @@ namespace UIKit {
 		public extern static NativeHandle NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (IntPtr receiver, IntPtr selector, NativeHandle arg1, NativeHandle arg2, NativeHandle arg3);
 #endif
 	}
+
+#if !XAMCORE_5_0 && NET
+	public partial class UIPresentationController {
+		[Export ("registerForTraitChanges:withHandler:")]
+		[Obsolete ("Use the 'UITraitChangeObservable.RegisterForTraitChanges (Class[], Action<IUITraitEnvironment, UITraitCollection>)' method instead.", false)]
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		public unsafe virtual IUITraitChangeRegistration RegisterForTraitChanges (IUITraitDefinition[] traits, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity2V175))]global::System.Action<IUITraitEnvironment, UITraitCollection> handler)
+		{
+			// return IUITraitChangeObservable._RegisterForTraitChanges (this, traits, handler);
+			throw new NotImplementedException ();
+		}
+
+		[Export ("registerForTraitChanges:withTarget:action:")]
+		[Obsolete ("Use the 'UITraitChangeObservable.RegisterForTraitChanges (Class[], NSObject, Selector)' method instead.", false)]
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		public virtual IUITraitChangeRegistration RegisterForTraitChanges (IUITraitDefinition[] traits, NSObject target, Selector action)
+		{
+			throw new NotImplementedException (); // return IUITraitChangeObservable._RegisterForTraitChanges (this, traits, target, action);
+		}
+
+		[Export ("registerForTraitChanges:withAction:")]
+		[Obsolete ("Use the 'UITraitChangeObservable.RegisterForTraitChanges (Class[], Selector)' method instead.", false)]
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		public virtual IUITraitChangeRegistration RegisterForTraitChanges (IUITraitDefinition[] traits, Selector action)
+		{
+			throw new NotImplementedException (); // return IUITraitChangeObservable._RegisterForTraitChanges (this, traits, action);
+		}
+	}
+#endif
 }
 
 #endif // !__WATCHOS__

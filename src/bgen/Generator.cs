@@ -2952,10 +2952,10 @@ public partial class Generator : IMemberGatherer {
 		if (minfo.is_interface_impl || minfo.is_extension_method) {
 			var tmp = InlineSelectors;
 			InlineSelectors = true;
-			selector_field = SelectorField (selector, force_gethandle: minfo.is_protocol_method);
+			selector_field = SelectorField (selector, force_gethandle: minfo.is_protocol_method || minfo.is_protocol_implementation_method);
 			InlineSelectors = tmp;
 		} else {
-			selector_field = SelectorField (selector, force_gethandle: minfo.is_protocol_method);
+			selector_field = SelectorField (selector, force_gethandle: minfo.is_protocol_method || minfo.is_protocol_implementation_method);
 		}
 
 		if (ShouldMarshalNativeExceptions (mi))

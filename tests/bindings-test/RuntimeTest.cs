@@ -96,6 +96,7 @@ namespace Xamarin.Tests {
 			}
 		}
 
+#if NET
 		[Test]
 		public void SwiftTypeEncodings ()
 		{
@@ -114,5 +115,6 @@ namespace Xamarin.Tests {
 			Assert.AreEqual ("fish", asyncResult, "DoSomethingComplexAsync");
 			Assert.IsTrue (done, "Done 2");
 		}
+#endif
 	}
 }

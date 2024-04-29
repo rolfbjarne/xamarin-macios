@@ -334,6 +334,8 @@ namespace Xamarin.MacDev.Tasks {
 				items.Add (asset);
 			}
 
+			imageAssets = CollectBundleResources.ComputeLogicalNameAndDetectDuplicates (this, imageAssets, ProjectDir, string.Empty, "ImageAsset", (v) => v.Item).ToArray ();
+
 			// clone any *.xcassets dirs that need cloning
 			if (clones.Count > 0) {
 				if (Directory.Exists (intermediateCloneDir))

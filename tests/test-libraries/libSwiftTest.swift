@@ -1,7 +1,7 @@
 import Foundation
 
 @objc(SwiftTestClass)
-@available(iOS 15, tvOS 15, macOS 12, macCatalyst 12, watchOS 6, *)
+@available(iOS 15, tvOS 15, macOS 12, macCatalyst 12, watchOS 8, *)
 public class SwiftTestClass : NSObject {
     @objc
     // encoding for 'message': @"NSString"

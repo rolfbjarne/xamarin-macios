@@ -100,6 +100,8 @@ namespace Xamarin.Tests {
 		[Test]
 		public void SwiftTypeEncodings ()
 		{
+			TestRuntime.AssertXcodeVersion (13, 0);
+
 			using var obj = new SwiftTestClass ();
 
 			Assert.AreEqual ("42", obj.DoSomething ("42"), "DoSomething");

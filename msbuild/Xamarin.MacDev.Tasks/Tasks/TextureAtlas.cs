@@ -8,16 +8,13 @@ using Microsoft.Build.Utilities;
 using Xamarin.MacDev;
 using Xamarin.Messaging.Build.Client;
 
-// Disable until we get around to enable + fix any issues.
-#nullable disable
-
 namespace Xamarin.MacDev.Tasks {
 	public class TextureAtlas : XcodeToolTaskBase, ICancelableTask {
 		readonly Dictionary<string, (ITaskItem Item, List<ITaskItem> Items)> atlases = new ();
 
 		#region Inputs
 
-		public ITaskItem [] AtlasTextures { get; set; }
+		public ITaskItem [] AtlasTextures { get; set; } = Array.Empty<ITaskItem> ();
 
 		#endregion
 
@@ -89,6 +86,7 @@ namespace Xamarin.MacDev.Tasks {
 				yield break;
 
 			// group the atlas textures by their parent .atlas directories
+			var prefixes = BundleResource.SplitResourcePrefixes (ResourcePrefix);
 			foreach (var item in AtlasTextures) {
 				var vpp = BundleResource.GetVirtualProjectPath (this, item);
 				var atlasName = Path.GetDirectoryName (vpp);
@@ -103,6 +101,7 @@ namespace Xamarin.MacDev.Tasks {
 					atlas = new (atlasItem, new List<ITaskItem> ());
 					atlases.Add (atlasName, atlas);
 				}
+				var items = tuple.Items;
 
 				atlas.Items.Add (item);
 			}

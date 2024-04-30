@@ -63,6 +63,9 @@ namespace Xamarin.MacDev.Tasks {
 		public ITaskItem [] InterfaceDefinitions { get; set; } = Array.Empty<ITaskItem> ();
 
 		[Output]
+		public ITaskItem [] PartialAppManifests { get; set; } = Array.Empty<ITaskItem> ();
+
+		[Output]
 		public ITaskItem [] SceneKitAssets { get; set; } = Array.Empty<ITaskItem> ();
 
 		#endregion
@@ -74,6 +77,7 @@ namespace Xamarin.MacDev.Tasks {
 			CoreMLModel,
 			ImageAsset,
 			InterfaceDefinition,
+			PartialAppManifest,
 			SceneKitAsset,
 		}
 
@@ -101,6 +105,7 @@ namespace Xamarin.MacDev.Tasks {
 			var coreMLModels = new List<ITaskItem> ();
 			var imageAssets = new List<ITaskItem> ();
 			var interfaceDefinitions = new List<ITaskItem> ();
+			var partialAppManifests = new List<ITaskItem> ();
 			var sceneKitAssets = new List<ITaskItem> ();
 
 			foreach (var asm in ReferencedLibraries) {
@@ -134,6 +139,9 @@ namespace Xamarin.MacDev.Tasks {
 						case ResourceType.InterfaceDefinition:
 							interfaceDefinitions.Add (item);
 							break;
+						case ResourceType.PartialAppManifest:
+							partialAppManifests.Add (item);
+							break;
 						case ResourceType.SceneKitAsset:
 							sceneKitAssets.Add (item);
 							break;
@@ -151,6 +159,7 @@ namespace Xamarin.MacDev.Tasks {
 			CoreMLModels = coreMLModels.ToArray ();
 			ImageAssets = imageAssets.ToArray ();
 			InterfaceDefinitions = interfaceDefinitions.ToArray ();
+			PartialAppManifests = partialAppManifests.ToArray ();
 			SceneKitAssets = sceneKitAssets.ToArray ();
 			UnpackedResources = unpackedResources.ToArray ();
 
@@ -236,6 +245,9 @@ namespace Xamarin.MacDev.Tasks {
 						break;
 					case "InterfaceDefinition":
 						resourceType = ResourceType.InterfaceDefinition;
+						break;
+					case "PartialAppManifest":
+						resourceType = ResourceType.PartialAppManifest;
 						break;
 					case "SceneKitAsset":
 						resourceType = ResourceType.SceneKitAsset;

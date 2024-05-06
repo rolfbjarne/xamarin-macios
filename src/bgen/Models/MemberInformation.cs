@@ -232,7 +232,7 @@ public class MemberInformation {
 
 		if (is_sealed) {
 			mods += "";
-		} else if (is_static || is_category_extension || is_extension_method || is_protocol_implementation_method) {
+		} else if (is_static || is_category_extension || is_extension_method || is_protocol_implementation_method || (is_ctor && is_protocol_method)) {
 			mods += "static ";
 		} else if (is_protocol_method) {
 			mods += "virtual ";

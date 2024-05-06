@@ -2660,7 +2660,7 @@ public partial class Generator : IMemberGatherer {
 		} else if (is_async) {
 			name = GetAsyncName (mi);
 		} else {
-			name =  mi.Name;
+			name = mi.Name;
 		}
 		return name;
 	}

@@ -1420,63 +1420,62 @@ namespace GeneratorTests {
 
 			var failures = new List<string> ();
 
-			Assert.Multiple (() =>
-			{
+			Assert.Multiple (() => {
 
-			foreach (var expected in expectedMethods) {
-				var type = bgen.ApiAssembly.MainModule.Types.FirstOrDefault (v => v.Name == expected.Type);
-				Assert.IsNotNull (type, $"Type not found: {expected.Type}");
-				if (type is null)
-					continue;
-				Assert.AreEqual (expected.MethodCount, type.Methods.Count, $"Unexpected method count for {expected.Type}.\n\tActual methods:\n\t\t{string.Join ("\n\t\t", type.Methods.Select (v => v.FullName))}");
-				if (expected.MethodCount == 0)
-					continue;
-				foreach (var expectedMember in expected.Methods) {
-					var member = type.Methods.SingleOrDefault (v => v.Name == expectedMember.Method);
-					Assert.IsNotNull (member, $"Method not found: {expectedMember.Method} in {type.FullName}");
-					var renderedAttributes = RenderSupportedOSPlatformAttributes (member);
-					var expectedAttributes = expectedMember.Attributes.Replace ("\r", string.Empty);
-					if (renderedAttributes != expectedAttributes) {
-						var msg =
-							$"Property: {type.FullName}::{member.Name}\n" +
-							$"\tExpected attributes:\n" +
-							$"\t\t{string.Join ("\n\t\t", expectedMember.Attributes.Split ('\n'))}\n" +
-							$"\tActual attributes:\n" +
-							$"\t\t{string.Join ("\n\t\t", renderedAttributes.Split ('\n'))}";
-						failures.Add (msg);
-						Console.WriteLine ($"❌ {msg}");
-					}
-				}
-			}
-
-			foreach (var expected in expectedProperties) {
-				var type = bgen.ApiAssembly.MainModule.Types.FirstOrDefault (v => v.Name == expected.Type);
-				Assert.IsNotNull (type, $"Type not found: {expected.Type}");
-				if (type is null)
-					continue;
-				Assert.AreEqual (expected.PropertyCount, type.Properties.Count, $"Unexpected property count for {expected.Type}.\n\tActual properties:\n\t\t{string.Join ("\n\t\t", type.Properties.Select (v => v.Name))}");
-				if (expected.PropertyCount == 0)
-					continue;
-				foreach (var expectedMember in expected.Properties) {
-					var member = type.Properties.SingleOrDefault (v => v.Name == expectedMember.Property);
-					Assert.IsNotNull (member, $"Property not found: {expectedMember.Property} in {type.FullName}");
-					if (member is null)
+				foreach (var expected in expectedMethods) {
+					var type = bgen.ApiAssembly.MainModule.Types.FirstOrDefault (v => v.Name == expected.Type);
+					Assert.IsNotNull (type, $"Type not found: {expected.Type}");
+					if (type is null)
 						continue;
-					var renderedAttributes = RenderSupportedOSPlatformAttributes (member);
-					var expectedAttributes = expectedMember.Attributes.Replace ("\r", string.Empty);
-					if (renderedAttributes != expectedAttributes) {
-						var msg =
-							$"Property: {type.FullName}::{member.Name}\n" +
-							$"\tExpected attributes:\n" +
-							$"\t\t{string.Join ("\n\t\t", expectedMember.Attributes.Split ('\n'))}\n" +
-							$"\tActual attributes:\n" +
-							$"\t\t{string.Join ("\n\t\t", renderedAttributes.Split ('\n'))}";
-						failures.Add (msg);
-						Console.WriteLine ($"❌ {msg}");
+					Assert.AreEqual (expected.MethodCount, type.Methods.Count, $"Unexpected method count for {expected.Type}.\n\tActual methods:\n\t\t{string.Join ("\n\t\t", type.Methods.Select (v => v.FullName))}");
+					if (expected.MethodCount == 0)
+						continue;
+					foreach (var expectedMember in expected.Methods) {
+						var member = type.Methods.SingleOrDefault (v => v.Name == expectedMember.Method);
+						Assert.IsNotNull (member, $"Method not found: {expectedMember.Method} in {type.FullName}");
+						var renderedAttributes = RenderSupportedOSPlatformAttributes (member);
+						var expectedAttributes = expectedMember.Attributes.Replace ("\r", string.Empty);
+						if (renderedAttributes != expectedAttributes) {
+							var msg =
+								$"Property: {type.FullName}::{member.Name}\n" +
+								$"\tExpected attributes:\n" +
+								$"\t\t{string.Join ("\n\t\t", expectedMember.Attributes.Split ('\n'))}\n" +
+								$"\tActual attributes:\n" +
+								$"\t\t{string.Join ("\n\t\t", renderedAttributes.Split ('\n'))}";
+							failures.Add (msg);
+							Console.WriteLine ($"❌ {msg}");
+						}
 					}
 				}
-			}
-		});
+
+				foreach (var expected in expectedProperties) {
+					var type = bgen.ApiAssembly.MainModule.Types.FirstOrDefault (v => v.Name == expected.Type);
+					Assert.IsNotNull (type, $"Type not found: {expected.Type}");
+					if (type is null)
+						continue;
+					Assert.AreEqual (expected.PropertyCount, type.Properties.Count, $"Unexpected property count for {expected.Type}.\n\tActual properties:\n\t\t{string.Join ("\n\t\t", type.Properties.Select (v => v.Name))}");
+					if (expected.PropertyCount == 0)
+						continue;
+					foreach (var expectedMember in expected.Properties) {
+						var member = type.Properties.SingleOrDefault (v => v.Name == expectedMember.Property);
+						Assert.IsNotNull (member, $"Property not found: {expectedMember.Property} in {type.FullName}");
+						if (member is null)
+							continue;
+						var renderedAttributes = RenderSupportedOSPlatformAttributes (member);
+						var expectedAttributes = expectedMember.Attributes.Replace ("\r", string.Empty);
+						if (renderedAttributes != expectedAttributes) {
+							var msg =
+								$"Property: {type.FullName}::{member.Name}\n" +
+								$"\tExpected attributes:\n" +
+								$"\t\t{string.Join ("\n\t\t", expectedMember.Attributes.Split ('\n'))}\n" +
+								$"\tActual attributes:\n" +
+								$"\t\t{string.Join ("\n\t\t", renderedAttributes.Split ('\n'))}";
+							failures.Add (msg);
+							Console.WriteLine ($"❌ {msg}");
+						}
+					}
+				}
+			});
 
 			Assert.That (failures, Is.Empty, "Failures");
 		}

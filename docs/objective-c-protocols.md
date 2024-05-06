@@ -1,4 +1,4 @@
-# Protocoolizer 3000XXX.
+# Protocolizer 3000XXX.
 
 This document describes how we bind Objective-C protocols in C#, and in
 particular improvements we've done in .NET 9.
@@ -140,31 +140,31 @@ we're binding it like this:
 public interface IProtocol : INativeObject {
     [Required]
     [Export ("requiredStaticMethod")]
-    public static void RequiredStaticMethod<T> () where T: class, IProtocol { /* default implementation */ }
+    public static void RequiredStaticMethod<T> () where T: NSObject, IProtocol { /* default implementation */ }
 
     [Optional]
     [Export ("optionalStaticMethod")]
-    public static void OptionalStaticMethod<T> () where T: class, IProtocol { /* default implementation */ }
+    public static void OptionalStaticMethod<T> () where T: NSObject, IProtocol { /* default implementation */ }
 
     [Property ("RequiredStaticProperty")]
     [Required]
     [Export ("requiredStaticProperty")]
-    public static IntPtr GetRequiredStaticProperty<T> () where T: class, IProtocol { /* default implementation */ }
+    public static IntPtr GetRequiredStaticProperty<T> () where T: NSObject, IProtocol { /* default implementation */ }
     
     [Property ("RequiredStaticProperty")]
     [Required]
     [Export ("setRequiredStaticProperty:")]
-    public static void SetRequiredStaticProperty<T> (IntPtr value) where T: class, IProtocol { /* default implementation */ }
+    public static void SetRequiredStaticProperty<T> (IntPtr value) where T: NSObject, IProtocol { /* default implementation */ }
     
     [Property ("OptionalStaticProperty")]
     [Optional]
     [Export ("optionalStaticProperty")]
-    public static IntPtr GetOptionalStaticProperty<T> () where T: class, IProtocol { /* default implementation */ }
+    public static IntPtr GetOptionalStaticProperty<T> () where T: NSObject, IProtocol { /* default implementation */ }
 
     [Property ("OptionalStaticProperty")]
     [Optional]
     [Export ("setOptionalStaticProperty:")]
-    public static void SetOptionalStaticProperty<T> (IntPtr value) where T: class, IProtocol { /* default implementation */ }
+    public static void SetOptionalStaticProperty<T> (IntPtr value) where T: NSObject, IProtocol { /* default implementation */ }
 }
 ```
 
@@ -211,20 +211,44 @@ we're binding it like this:
 public interface IProtocol : INativeObject {
     [Required]
     [Export ("init")]
-    public static T CreateInstance<T> () where T: class, IProtocol { /* default implementation */ }
+    public static T CreateInstance<T> () where T: NSObject, IProtocol { /* default implementation */ }
 
     [Optional]
     [Export ("initWithValue:")]
-    public static T CreateInstance<T> () where T: class, IProtocol { /* default implementation */ }
+    public static T CreateInstance<T> () where T: NSObject, IProtocol { /* default implementation */ }
 
     [Optional]
     [Export ("initWithPlanet:")]
-    public static T Create<T> () where T: class, IProtocol { /* default implementation */ }
+    public static T Create<T> () where T: NSObject, IProtocol { /* default implementation */ }
 }
 ```
 
 We bind initializers as a static C# factory method that takes a generic type
 argument specifying the type to instantiate.
+
+Notes:
+
+1. Constructors are currently not inlined in any implementing classes, like other members are.
+2. If a managed class implements a protocol with a constructor, the class has to implement the constructor manually using the `[Export]` attribute:
+
+```cs
+[Protocol]
+interface IMyProtocol {
+    [Export ("initWithValue:")]
+    IntPtr Constructor (string value);
+}
+```
+
+```cs
+class MyClass : NSObject, IMyProtocol {
+    public string Value { get; private set; }
+    [Export ("initWithValue:")]
+    public MyClass (string value)
+    {
+        this.Value = value;
+    }
+}
+```
 
 ### Coping with C# quirks
 

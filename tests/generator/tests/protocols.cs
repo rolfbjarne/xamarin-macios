@@ -227,6 +227,19 @@ namespace Protocols {
 		void StaticRequiredAsyncMethod (Action callback);
 	}
 
+	[Protocol]
+	interface ProtocolWithConstructors {
+		[Abstract]
+		[Export ("init")]
+		NativeHandle Constructor ();
+
+		[Export ("initWithValue:")]
+		NativeHandle Constructor (string p0);
+
+		[Export ("initWithError:")]
+		NativeHandle Constructor (out NSError error);
+	}
+
 	[BaseType (typeof (NSObject))]
 	interface MyObject : OptionalProtocol, RequiredProtocol {
 	}

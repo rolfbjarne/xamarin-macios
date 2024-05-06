@@ -319,8 +319,9 @@ namespace Xamarin.Tests {
 
 			var t = assembly.MainModule.Types.First ((v) => v.FullName == typename);
 			var actual = t.Methods.Where ((v) => {
-				if (v.IsPrivate || v.IsFamily || v.IsFamilyAndAssembly)
+				if (v.IsPrivate || v.IsAssembly || v.IsFamilyAndAssembly)
 					return false;
+				Console.WriteLine ($"{v}: {v.Attributes}");
 				return true;
 			});
 			if (actual.Count () != count) {

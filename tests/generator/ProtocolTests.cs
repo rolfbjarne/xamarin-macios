@@ -97,12 +97,14 @@ namespace GeneratorTests {
 				"Foundation.NSObject Protocols.RequiredProtocolWrapper::get_RequiredPropertyWeakSemantics()",
 				"ObjCRuntime.BlockLiteral ObjCRuntime.Trampolines/SDAction::CreateBlock(System.Action)",
 				"ObjCRuntime.BlockLiteral ObjCRuntime.Trampolines/SDAction::CreateNullableBlock(System.Action)",
+				"ObjCRuntime.NativeHandle api0.Messaging::NativeHandle_objc_msgSend_NativeHandle(System.IntPtr,System.IntPtr,ObjCRuntime.NativeHandle)",
+				"ObjCRuntime.NativeHandle api0.Messaging::NativeHandle_objc_msgSend_ref_NativeHandle(System.IntPtr,System.IntPtr,ObjCRuntime.NativeHandle*)",
 				"ObjCRuntime.NativeHandle api0.Messaging::NativeHandle_objc_msgSend(System.IntPtr,System.IntPtr)",
+				"ObjCRuntime.NativeHandle api0.Messaging::NativeHandle_objc_msgSendSuper_NativeHandle(System.IntPtr,System.IntPtr,ObjCRuntime.NativeHandle)",
+				"ObjCRuntime.NativeHandle api0.Messaging::NativeHandle_objc_msgSendSuper_ref_NativeHandle(System.IntPtr,System.IntPtr,ObjCRuntime.NativeHandle*)",
 				"ObjCRuntime.NativeHandle api0.Messaging::NativeHandle_objc_msgSendSuper(System.IntPtr,System.IntPtr)",
 				"ObjCRuntime.NativeHandle Protocols.MyObject::get_ClassHandle()",
 				"ObjCRuntime.NativeHandle Protocols.MyObject2::get_ClassHandle()",
-				"Protocols.IProtocolWithConstructors Protocols.IProtocolWithConstructors::CreateInstance()",
-				"Protocols.IProtocolWithConstructors Protocols.IProtocolWithConstructors::CreateInstance(System.String)",
 				"System.Action ObjCRuntime.Trampolines/NIDAction::Create(System.IntPtr)",
 				"System.IAsyncResult ObjCRuntime.Trampolines/DAction::BeginInvoke(System.IntPtr,System.AsyncCallback,System.Object)",
 				"System.Int32 api0.Messaging::int_objc_msgSend_int_out_Byte_ref_Int16(System.IntPtr,System.IntPtr,System.Int32,System.Byte*,System.Int16*)",
@@ -204,10 +206,8 @@ namespace GeneratorTests {
 				"System.Int32 Protocols.RequiredProtocolWrapper::InternalRequiredMethod(System.Int32,System.Byte&,System.Int16&)",
 				"System.Int32 Protocols.RequiredProtocolWrapper::RequiredMethod(System.Int32,System.Byte&,System.Int16&)",
 				"System.IntPtr api0.Messaging::IntPtr_objc_msgSend_IntPtr(System.IntPtr,System.IntPtr,System.IntPtr)",
-				"System.IntPtr api0.Messaging::IntPtr_objc_msgSend_NativeHandle(System.IntPtr,System.IntPtr,ObjCRuntime.NativeHandle)",
 				"System.IntPtr api0.Messaging::IntPtr_objc_msgSend(System.IntPtr,System.IntPtr)",
 				"System.IntPtr api0.Messaging::IntPtr_objc_msgSendSuper_IntPtr(System.IntPtr,System.IntPtr,System.IntPtr)",
-				"System.IntPtr api0.Messaging::IntPtr_objc_msgSendSuper_NativeHandle(System.IntPtr,System.IntPtr,ObjCRuntime.NativeHandle)",
 				"System.IntPtr api0.Messaging::IntPtr_objc_msgSendSuper(System.IntPtr,System.IntPtr)",
 				"System.String Protocols.IOptionalProtocol::_GetNullableOptionalProperty(Protocols.IOptionalProtocol)",
 				"System.String Protocols.IOptionalProtocol::get_NullableOptionalProperty()",
@@ -368,7 +368,11 @@ namespace GeneratorTests {
 				"System.Void Protocols.RequiredProtocolWrapper::set_NullableRequiredProperty(System.String)",
 				"System.Void Protocols.RequiredProtocolWrapper::set_RequiredProperty(System.Int32)",
 				"System.Void Protocols.RequiredProtocolWrapper::set_RequiredPropertyWeakSemantics(Foundation.NSObject)",
+				"T Protocols.IProtocolWithConstructors::CreateInstance()",
+				"T Protocols.IProtocolWithConstructors::CreateInstance(Foundation.NSError&)",
+				"T Protocols.IProtocolWithConstructors::CreateInstance(System.String)",
 			};
+
 			CollectionAssert.AreEqual (expectedMethods, allMethods, "Types");
 		}
 	}

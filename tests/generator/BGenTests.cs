@@ -1239,6 +1239,18 @@ namespace GeneratorTests {
 			Assert.AreEqual (expectedSetterAttributes, RenderSupportedOSPlatformAttributes (setter), "Setter Attributes");
 		}
 
+		[TestCase (Profile.iOS)]
+		public void RedefinedPropertyFromBaseClass (Profile profile)
+		{
+			BuildFile (profile, "tests/redefined-property.cs");
+		}
+
+		[TestCase (Profile.iOS)]
+		public void CategoryImplementingProtocol (Profile profile)
+		{
+			BuildFile (profile, "tests/category-implementing-protocol.cs");
+		}
+
 #if !NET
 		[Ignore ("This only applies to .NET")]
 #endif

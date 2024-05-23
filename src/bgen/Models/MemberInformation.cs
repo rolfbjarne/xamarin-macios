@@ -236,7 +236,7 @@ public class MemberInformation {
 			mods += "unsafe static ";
 		} else if (is_static || is_category_extension || is_extension_method || is_protocol_implementation_method) {
 			mods += "static ";
-		} else if (is_protocol_method) {
+		} else if (is_protocol_member) {
 			mods += "virtual ";
 		} else if (is_abstract) {
 #if NET

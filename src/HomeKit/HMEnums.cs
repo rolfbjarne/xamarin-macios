@@ -1412,7 +1412,7 @@ namespace HomeKit {
 
 	/// <summary>Enumerates the possible values of a <see cref="T:HomeKit.HMCharacteristic" /> that can be scheduled or manually overriden.</summary>
 	[Watch (4, 2), MacCatalyst (14, 0)]
->>>>>>> origin/main	[Native]
+>>>>>>> origin/main [Native]
 	public enum HMCharacteristicValueProgramMode : long {
 		NotScheduled = 0,
 		Scheduled,

@@ -28,6 +28,7 @@ namespace Xamarin.MacDev.Tasks {
 
 		protected override void AppendCommandLineArguments (IDictionary<string, string> environment, CommandLineBuilder args, ITaskItem input, ITaskItem output)
 		{
+			Log.LogWarning ($"AppendCommandLineArguments ({input.ItemSpec}, {output.ItemSpec}) => {input.GetMetadata ("FullPath")} {output.GetMetadata ("FullPath")}");
 			args.AppendFileNameIfNotNull (input.GetMetadata ("FullPath"));
 			args.AppendFileNameIfNotNull (Path.GetDirectoryName (output.GetMetadata ("FullPath")));
 		}
@@ -35,7 +36,9 @@ namespace Xamarin.MacDev.Tasks {
 		protected override string GetBundleRelativeOutputPath (IList<string> prefixes, ITaskItem input)
 		{
 			// Note: if the relative input dir is "relative/texture.atlas", then the relative output path will be "relative/texture.atlasc"
-			return Path.ChangeExtension (base.GetBundleRelativeOutputPath (prefixes, input), ".atlasc");
+			var rv = Path.ChangeExtension (base.GetBundleRelativeOutputPath (prefixes, input), ".atlasc");
+			Log.LogWarning ($"GetBundleRelativeOutputPath ({input.ItemSpec}) => {rv}");
+			return rv;
 		}
 
 		protected override IEnumerable<ITaskItem> GetCompiledBundleResources (ITaskItem input, ITaskItem output)
@@ -54,6 +57,8 @@ namespace Xamarin.MacDev.Tasks {
 
 				item.SetMetadata ("LogicalName", logical);
 				item.SetMetadata ("Optimize", "false");
+
+				Log.LogWarning ($"GetCompiledBundleResources ({input.ItemSpec}, {output.ItemSpec}) => {item.ItemSpec} LogicalName={logical}");
 
 				yield return item;
 			}
@@ -86,13 +91,18 @@ namespace Xamarin.MacDev.Tasks {
 			// group the atlas textures by their parent .atlas directories
 			var prefixes = BundleResource.SplitResourcePrefixes (ResourcePrefix);
 			foreach (var item in AtlasTextures) {
-				var atlas = Path.GetDirectoryName (BundleResource.GetVirtualProjectPath (ProjectDir, item, !string.IsNullOrEmpty (SessionId)));
+				var vpp = BundleResource.GetVirtualProjectPath (this, ProjectDir, item, MacProjectDir);
+				var atlas = Path.GetDirectoryName (vpp);
+				Log.LogWarning ($"Processing atlas {item.ItemSpec} with LogicalName={item.GetMetadata ("LogicalName")} VirtualProjectPath={vpp} and atlas name {atlas}");
 
 				if (!atlases.TryGetValue (atlas, out var tuple)) {
 					tuple.Items = new List<ITaskItem> ();
-					var itemLogicalName = BundleResource.GetLogicalName (ProjectDir, prefixes, item, !string.IsNullOrEmpty (SessionId));
+					var itemLogicalName = BundleResource.GetLogicalName (this, ProjectDir, prefixes, item, MacProjectDir);
 					tuple.LogicalName = Path.GetDirectoryName (itemLogicalName);
 					atlases.Add (atlas, tuple);
+					Log.LogWarning ($"    => created new atlas {atlas} with new LogicalName {tuple.LogicalName} and itemLogicalName {itemLogicalName}");
+				} else {
+					Log.LogWarning ($"    => added to atlas {atlas} with LogicalName {tuple.LogicalName}");
 				}
 				var items = tuple.Items;
 

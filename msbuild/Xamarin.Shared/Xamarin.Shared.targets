@@ -1310,6 +1310,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			ToolPath="$(TextureAtlasPath)"
 			AtlasTextures="@(AtlasTexture)"
 			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
+			MacProjectDir="$(MacBuildPath)"
 			ProjectDir="$(MSBuildProjectDirectory)"
 			ResourcePrefix="$(_ResourcePrefix)"
 			SdkDevPath="$(_SdkDevPath)"

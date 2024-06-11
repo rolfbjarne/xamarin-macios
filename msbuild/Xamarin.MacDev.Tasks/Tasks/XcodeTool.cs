@@ -21,6 +21,8 @@ namespace Xamarin.MacDev.Tasks {
 		[Required]
 		public string IntermediateOutputPath { get; set; } = string.Empty;
 
+		public string MacProjectDir { get; set; } = string.Empty;
+
 		[Required]
 		public string ProjectDir { get; set; } = string.Empty;
 

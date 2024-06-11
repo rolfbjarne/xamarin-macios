@@ -31,6 +31,7 @@ namespace Xamarin.MacDev.Tasks {
 
 		protected override void AppendCommandLineArguments (IDictionary<string, string> environment, CommandLineBuilder args, ITaskItem input, ITaskItem output)
 		{
+			Log.LogMessage ($"TextureAtlas.AppendCommandLineArguments ({input.ItemSpec}, {output.ItemSpec}) => {input.GetMetadata ("FullPath")} {output.GetMetadata ("FullPath")}");
 			args.AppendFileNameIfNotNull (input.GetMetadata ("FullPath"));
 			args.AppendFileNameIfNotNull (Path.GetDirectoryName (output.GetMetadata ("FullPath")));
 		}
@@ -38,7 +39,9 @@ namespace Xamarin.MacDev.Tasks {
 		protected override string GetBundleRelativeOutputPath (IList<string> prefixes, ITaskItem input)
 		{
 			// Note: if the relative input dir is "relative/texture.atlas", then the relative output path will be "relative/texture.atlasc"
-			return Path.ChangeExtension (base.GetBundleRelativeOutputPath (prefixes, input), ".atlasc");
+			var rv = Path.ChangeExtension (base.GetBundleRelativeOutputPath (prefixes, input), ".atlasc");
+			Log.LogMessage ($"TextureAtlas.GetBundleRelativeOutputPath ({input.ItemSpec}) => {rv}");
+			return rv;
 		}
 
 		protected override IEnumerable<ITaskItem> GetCompiledBundleResources (ITaskItem input, ITaskItem output)
@@ -57,6 +60,8 @@ namespace Xamarin.MacDev.Tasks {
 
 				item.SetMetadata ("LogicalName", logical);
 				item.SetMetadata ("Optimize", "false");
+
+				Log.LogMessage ($"TextureAtlas.GetCompiledBundleResources ({input.ItemSpec}, {output.ItemSpec}) => {item.ItemSpec} LogicalName={logical}");
 
 				yield return item;
 			}
@@ -88,12 +93,18 @@ namespace Xamarin.MacDev.Tasks {
 
 			// group the atlas textures by their parent .atlas directories
 			foreach (var item in AtlasTextures) {
-				var atlas = Path.GetDirectoryName (BundleResource.GetVirtualProjectPath (ProjectDir, item, !string.IsNullOrEmpty (SessionId)));
+				var vpp = BundleResource.GetVirtualProjectPath (this, ProjectDir, item);
+				var atlas = Path.GetDirectoryName (vpp);
+				var logicalName = item.GetMetadata ("LogicalName");
 				List<ITaskItem> items;
+				Log.LogMessage ($"TextureAtlas.Processing atlas {item.ItemSpec} with LogicalName={logicalName} VirtualProjectPath={vpp} and atlas name {atlas}");
 
 				if (!atlases.TryGetValue (atlas, out items)) {
 					items = new List<ITaskItem> ();
 					atlases.Add (atlas, items);
+					Log.LogMessage ($"    => created new atlas {atlas}");
+				} else {
+					Log.LogMessage ($"    => added to atlas {atlas}");
 				}
 
 				items.Add (item);

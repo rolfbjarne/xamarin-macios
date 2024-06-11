@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -73,7 +74,7 @@ namespace Xamarin.MacDev.Tasks {
 				if (!string.IsNullOrEmpty (publishFolderType))
 					continue;
 
-				var logicalName = BundleResource.GetLogicalName (ProjectDir, prefixes, item, !string.IsNullOrEmpty (SessionId));
+				var logicalName = BundleResource.GetLogicalName (this, ProjectDir, prefixes, item);
 				// We need a physical path here, ignore the Link element
 				var path = item.GetMetadata ("FullPath");
 

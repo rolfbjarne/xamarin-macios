@@ -253,8 +253,10 @@ namespace CoreGraphics {
 #if MONOMAC || __MACCATALYST__
 #if NET
 		[SupportedOSPlatform ("maccatalyst")]
+		[ObsoletedOSPlatform ("maccatalyst18.0", "Use ScreenCaptureKit instead.")]
 		[UnsupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
+		[ObsoletedOSPlatform ("macos15.0", "Use ScreenCaptureKit instead.")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
 		[MacCatalyst (13,1)]
@@ -264,8 +266,10 @@ namespace CoreGraphics {
         
 #if NET
 		[SupportedOSPlatform ("maccatalyst")]
+		[ObsoletedOSPlatform ("maccatalyst18.0", "Use ScreenCaptureKit instead.")]
 		[UnsupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
+		[ObsoletedOSPlatform ("macos15.0", "Use ScreenCaptureKit instead.")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
 		[MacCatalyst (13,1)]
@@ -277,8 +281,10 @@ namespace CoreGraphics {
 
 #if NET
 		[SupportedOSPlatform ("maccatalyst")]
+		[ObsoletedOSPlatform ("maccatalyst18.0", "Use ScreenCaptureKit instead.")]
 		[UnsupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
+		[ObsoletedOSPlatform ("macos15.0", "Use ScreenCaptureKit instead.")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
 		[MacCatalyst (13,1)]
@@ -596,6 +602,140 @@ namespace CoreGraphics {
 #endif
 		public CGImageByteOrderInfo ByteOrderInfo => CGImageGetByteOrderInfo (Handle);
 
+#if NET
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("tvos18.0")]
+#else
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+#endif
+		[DllImport (Constants.CoreGraphicsLibrary)]
+		unsafe static extern /* CGImageRef __nullable */ IntPtr CGImageCreateWithEDRHeadroom (
+			/* float */ float headroom,
+			/* size_t */ nint width,
+			/* size_t */ nint height,
+			/* size_t */ nint bitsPerComponent,
+			/* size_t */ nint bitsPerPixel,
+			/* size_t */ nint bytesPerRow,
+			/* CGColorSpaceRef cg_nullable */ IntPtr space,
+			/* CGBitmapInfo */ CGBitmapFlags bitmapInfo,
+			/* CGDataProviderRef cg_nullable */ IntPtr provider,
+			/* const CGFloat * __nullable */ nfloat* decode,
+			/* bool */ byte shouldInterpolate,
+			/* CGColorRenderingIntent */ CGColorRenderingIntent intent);
+
+#if NET
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("tvos18.0")]
+#else
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+#endif
+		public CGImage (float headroom, int width, int height, int bitsPerComponent, int bitsPerPixel, int bytesPerRow,
+				CGColorSpace? colorSpace, CGBitmapFlags bitmapFlags, CGDataProvider? provider,
+				nfloat []? decode, bool shouldInterpolate, CGColorRenderingIntent intent)
+			: base (Create (headroom, width, height, bitsPerComponent, bitsPerPixel, bytesPerRow, colorSpace, bitmapFlags, provider, decode, shouldInterpolate, intent), true)
+		{
+		}
+
+#if NET
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("tvos18.0")]
+#else
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+#endif
+		static IntPtr Create (float headroom, int width, int height, int bitsPerComponent, int bitsPerPixel, int bytesPerRow,
+				CGColorSpace? colorSpace, CGBitmapFlags bitmapFlags, CGDataProvider? provider,
+				nfloat []? decode, bool shouldInterpolate, CGColorRenderingIntent intent)
+		{
+			if (headroom != 0.0f && headroom < 1.0f)
+				throw new ArgumentException (nameof (headroom));
+			if (width < 0)
+				throw new ArgumentException (nameof (width));
+			if (height < 0)
+				throw new ArgumentException (nameof (height));
+			if (bitsPerPixel < 0)
+				throw new ArgumentException (nameof (bitsPerPixel));
+			if (bitsPerComponent < 0)
+				throw new ArgumentException (nameof (bitsPerComponent));
+			if (bytesPerRow < 0)
+				throw new ArgumentException (nameof (bytesPerRow));
+
+			unsafe {
+				fixed (nfloat* decodePtr = decode) {
+					return CGImageCreateWithEDRHeadroom (headroom, width, height, bitsPerComponent, bitsPerPixel, bytesPerRow,
+						colorSpace.GetHandle (), bitmapFlags, provider.GetHandle (),
+						decodePtr, shouldInterpolate.AsByte (), intent);
+				}
+			}
+		}
+
+#if NET
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("tvos18.0")]
+#else
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+#endif
+		[DllImport (Constants.CoreGraphicsLibrary)]
+		static extern float CGImageGetContentHeadroom (/* __nullable CGImageRef */ IntPtr handle);
+
+#if NET
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("tvos18.0")]
+#else
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+#endif
+		public float ContentHeadroom => CGImageGetContentHeadroom (Handle);
+
+#if NET
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("tvos18.0")]
+#else
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+#endif
+		[DllImport (Constants.CoreGraphicsLibrary)]
+		static extern /* bool */ byte CGImageShouldToneMap (/* __nullable CGImageRef */ IntPtr handle);
+
+#if NET
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("tvos18.0")]
+#else
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+#endif
+		public bool ShouldToneMap => CGImageShouldToneMap (Handle) != 0;
+
+#if NET
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("tvos18.0")]
+#else
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+#endif
+		[DllImport (Constants.CoreGraphicsLibrary)]
+		static extern /* bool */ byte CGImageContainsImageSpecificToneMappingMetadata (/* __nullable CGImageRef */ IntPtr handle);
+
+#if NET
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("tvos18.0")]
+#else
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+#endif
+		public bool ContainsImageSpecificToneMappingMetadata => CGImageContainsImageSpecificToneMappingMetadata (Handle) != 0;
 #endif // !COREBUILD
 	}
 }

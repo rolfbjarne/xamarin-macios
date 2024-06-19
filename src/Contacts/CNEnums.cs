@@ -70,7 +70,9 @@ namespace Contacts {
 		NotDetermined = 0,
 		Restricted,
 		Denied,
-		Authorized
+		Authorized,
+		[iOS (18, 0), MacCatalyst (18, 0), Watch (11, 0), Mac (15, 0)]
+		Limited,
 	}
 
 	// NSInteger -> CNContainer.h

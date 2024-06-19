@@ -891,6 +891,9 @@ namespace Foundation {
 		[Field ("NSInflectionReferentConceptAttributeName")]
 		InflectionReferentConcept,
 
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Field ("NSLocalizedNumberFormatAttributeName")]
+		LocalizedNumberFormat,
 	}
 
 	[Watch (10, 0), TV (17, 0), Mac (14, 0), iOS (17, 0), MacCatalyst (17, 0)]
@@ -2016,6 +2019,10 @@ namespace Foundation {
 
 		[Export ("yearForWeekOfYear")]
 		nint YearForWeekOfYear { get; set; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("dayOfYear")]
+		nint DayOfYear { get; set; }
 
 		[Export ("leapMonth")]
 		bool IsLeapMonth { [Bind ("isLeapMonth")] get; set; }
@@ -8545,6 +8552,19 @@ namespace Foundation {
 		[Export ("registerUndoWithTarget:handler:")]
 		void RegisterUndo (NSObject target, Action<NSObject> undoHandler);
 
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("undoActionUserInfoValueForKey:")]
+		[return: NullAllowed]
+		NSObject GetUndoActionUserInfoValue (string key);
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("redoActionUserInfoValueForKey:")]
+		[return: NullAllowed]
+		NSObject GetRedoActionUserInfoValue (string key);
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("setActionUserInfoValue:forKey:")]
+		void SetActionUserInfoValue ([NullAllowed] NSObject info, string key);
 	}
 
 	[BaseType (typeof (NSObject), Name = "NSURLProtectionSpace")]
@@ -8714,6 +8734,10 @@ namespace Foundation {
 		[MacCatalyst (16, 1)]
 		[Export ("requiresDNSSECValidation")]
 		bool RequiresDnsSecValidation { get; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("allowsPersistentDNS")]
+		bool AllowsPersistentDns { get; }
 	}
 
 	[BaseType (typeof (NSDictionary))]
@@ -8919,6 +8943,10 @@ namespace Foundation {
 		[MacCatalyst (16, 1)]
 		[Export ("requiresDNSSECValidation")]
 		bool RequiresDnsSecValidation { get; set; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("allowsPersistentDNS")]
+		bool AllowsPersistentDns { get; set; }
 	}
 
 	[BaseType (typeof (NSObject), Name = "NSURLResponse")]
@@ -8951,7 +8979,10 @@ namespace Foundation {
 		[Export ("close")]
 		void Close ();
 
-		[Export ("delegate", ArgumentSemantic.Assign), NullAllowed]
+		// Header says:
+		//    assign /* actually weak */
+		// so bind as weak
+		[Export ("delegate", ArgumentSemantic.Weak), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
 		[Wrap ("WeakDelegate")]
@@ -12671,6 +12702,10 @@ namespace Foundation {
 
 		[Export ("partialStringValidationEnabled")]
 		bool PartialStringValidationEnabled { [Bind ("isPartialStringValidationEnabled")] get; set; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("minimumGroupingDigits")]
+		nint MinimumGroupingDigits { get; set; }
 	}
 
 	[BaseType (typeof (NSNumber))]
@@ -18421,4 +18456,42 @@ namespace Foundation {
 		int PrefixSpaces { get; set; }
 	}
 
+	[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface NSKeyValueSharedObserversSnapshot {
+	}
+
+	[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface NSKeyValueSharedObservers {
+		[Export ("initWithObservableClass:")]
+		NativeHandle Constructor (Class observableClass);
+
+		[Wrap ("this (new Class (observableType))")]
+		NativeHandle Constructor (Type observableType);
+
+		[Export ("addSharedObserver:forKey:options:context:")]
+		void AddSharedObserver (NSObject observer, string forKey, NSKeyValueObservingOptions options, IntPtr context);
+
+		[Export ("snapshot")]
+		NSKeyValueSharedObserversSnapshot GetSnapshot ();
+	}
+
+	[Category, BaseType (typeof (NSObject))]
+	[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	interface NSKeyValueSharedObserverRegistration_NSObject {
+		[Export ("setSharedObservers:")]
+		void SetSharedObservers ([NullAllowed] NSKeyValueSharedObserversSnapshot sharedObservers);
+	}
+
+	[BaseType (typeof (NSObject))]
+	[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	[DisableDefaultCtor]
+	interface NSLocalizedNumberFormatRule : NSCopying, NSSecureCoding {
+		[Static]
+		[Export ("automatic")]
+		NSLocalizedNumberFormatRule Automatic { get; }
+	}
 }

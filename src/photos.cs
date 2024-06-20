@@ -381,7 +381,7 @@ namespace Photos {
 		[Static]
 		[Export ("changeRequestForAssetCollection:assets:")]
 		[return: NullAllowed]
-		PHAssetCollectionChangeRequest ChangeRequest (PHAssetCollection assetCollection, PHFetchResult assets);
+		PHAssetCollectionChangeRequest ChangeRequest (PHAssetCollection assetCollection, [NullAllowed] PHFetchResult assets);
 
 		[Export ("title", ArgumentSemantic.Strong)]
 		string Title { get; set; }

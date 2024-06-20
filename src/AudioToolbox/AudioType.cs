@@ -921,6 +921,46 @@ namespace AudioToolbox {
 #endif
 		Ogg_7_1 = (215U << 16) | 8,
 
+#if NET
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("tvos18.0")]
+#else
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+#endif
+		MPEG_5_0_E = (216U << 16) | 5,
+
+#if NET
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("tvos18.0")]
+#else
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+#endif
+		MPEG_5_1_E = (217U << 16) | 6,
+
+#if NET
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("tvos18.0")]
+#else
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+#endif
+		MPEG_6_1_B = (218U << 16) | 7,
+
+#if NET
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("tvos18.0")]
+#else
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+#endif
+		MPEG_7_1_D = (219U << 16) | 8,
+
 		Unknown = 0xFFFF0000                           // needs to be ORed with the actual number of channels  
 	}
 

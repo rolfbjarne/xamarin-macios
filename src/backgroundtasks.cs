@@ -122,4 +122,37 @@ namespace BackgroundTasks {
 		string ProtectionTypeOfRequiredData { get; set; }
 	}
 
+	// Header says that the class is both available and unavailable on tvOS:
+	//    API_AVAILABLE(ios(18.0), tvos(25.0)) API_UNAVAILABLE(macos, watchos, tvos)
+	// so leaving it out of tvOS for now
+	[Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	[BaseType (typeof (BGTask))]
+	[DisableDefaultCtor]
+	interface BGContinuedProcessingTask {
+		[Export ("title", ArgumentSemantic.Copy)]
+		string Title { get; }
+
+		[Export ("reason", ArgumentSemantic.Copy)]
+		string Reason { get; }
+
+		[Export ("updateProgress:"))]
+		void UpdateProgress (NSProgress progress);
+	}
+
+	// Header says that the class is both available and unavailable on tvOS:
+	//    API_AVAILABLE(ios(18.0), tvos(25.0)) API_UNAVAILABLE(macos, watchos, tvos)
+	// so leaving it out of tvOS for now
+	[Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	[BaseType (typeof (BGTaskRequest))]
+	[DisableDefaultCtor]
+	interface BGContinuedProcessingTaskRequest {
+		[Export ("initWithIdentifier:")]
+		NativeHandle Constructor (string identifier);
+
+		[Export ("title", ArgumentSemantic.Copy)]
+		string Title { get; set; }
+
+		[Export ("reason", ArgumentSemantic.Copy)]
+		string Reason { get; set; }
+	}
 }

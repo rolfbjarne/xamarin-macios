@@ -4417,6 +4417,9 @@ namespace WebKit {
 		[Export ("URL", ArgumentSemantic.Copy)]
 		NSUrl Url { get; }
 
+		[Deprecated (PlatformName.MacOSX, 15, 0, message: "No longer supported. Always returns null.")]
+		[Deprecated (PlatformName.iOS, 18, 0, message: "No longer supported. Always returns null.")]
+		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "No longer supported. Always returns null.")]
 		[Export ("title")]
 		[NullAllowed]
 		string Title { get; }

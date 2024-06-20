@@ -360,6 +360,11 @@ namespace Accessibility {
 		[Notification]
 		[Field ("AXPrefersHorizontalTextLayoutDidChangeNotification")]
 		NSString HorizontalTextLayoutDidChangeNotification { get; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Notification]
+		[Field ("AXPrefersNonBlinkingTextInsertionIndicatorDidChangeNotification")]
+		NSString NonBlinkingTextInsertionIndicatorDidChangeNotification { get; }
 	}
 
 }

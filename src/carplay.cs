@@ -198,6 +198,14 @@ namespace CarPlay {
 		UserPreference,
 	}
 
+	[NoWatch, NoTV, NoMac, iOS (17, 4), MacCatalyst (17, 4)]
+	[Native]
+	public enum CPLaneStatus : long {
+		NotGood = 0,
+		Good,
+		Preferred,
+	}
+
 	/// <summary>An action that is displayed on a button in an alert.</summary>
 	[NoWatch, NoTV, NoMac, iOS (12, 0)]
 	[BaseType (typeof (NSObject))]
@@ -2168,4 +2176,58 @@ namespace CarPlay {
 		UIUserInterfaceStyle ContentStyle { get; }
 	}
 
+	[NoWatch, NoTV, NoMac, iOS (17, 4), MacCatalyst (17, 4)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface CPLane : NSCopying, NSSecureCoding {
+		[Export ("init")]
+		[Deprecated (PlatformName.iOS, 17, 4, "Use either of the other two constructors instead.")]
+		[Deprecated (PlatformName.MacCatalyst, 17, 4, "Use either of the other two constructors instead.")]
+		NativeHandle Constructor ();
+
+		[iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("initWitAngles:")]
+		NativeHandle Constructor (NSMeasurement<NSUnitAngle>[] angles);
+
+		[iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("initWitAngles:highlightedAngle:isPreferred:")]
+		NativeHandle Constructor (NSMeasurement<NSUnitAngle>[] angles, NSMeasurement<NSUnitAngle>[] highlightedAngle, bool isPreferred);
+
+		[Export ("status", ArgumentSemantic.Assign)]
+		CPLaneStatus Status {
+			get;
+			[Deprecated (PlatformName.iOS, 18, 0, "Use the 'NSMeasurement<NSUnitAngle>' constructor to create a CPLane with CPLaneStatus.NotGood, or use the 'NSMeasurement<NSUnitAngle>[], NSMeasurement<NSUnitAngle>[], bool' constructor to create a CPLane with status CPLaneStatus.Good or CPLaneStatus.Preferred.")]
+			[Deprecated (PlatformName.MacCatalyst, 18, 0, "Use the 'NSMeasurement<NSUnitAngle>' constructor to create a CPLane with CPLaneStatus.NotGood, or use the 'NSMeasurement<NSUnitAngle>[], NSMeasurement<NSUnitAngle>[], bool' constructor to create a CPLane with status CPLaneStatus.Good or CPLaneStatus.Preferred.")]
+			set;
+		}
+
+		[Export ("primaryAngle", ArgumentSemantic.Strong)]
+		NSMeasurement<NSUnitAngle> PrimaryAngle {
+			[Deprecated (PlatformName.iOS, 18, 0, "Use the 'HighlightedAngle' property instead.")]
+			[Deprecated (PlatformName.MacCatalyst, 18, 0, "Use the 'HighlightedAngle' property instead.")]
+			get;
+			[Deprecated (PlatformName.iOS, 18, 0, "Use the 'NSMeasurement<NSUnitAngle>[], NSMeasurement<NSUnitAngle>[], bool' to create a CPLane with a HighlightedAngle.")]
+			[Deprecated (PlatformName.MacCatalyst, 18, 0, "Use the 'NSMeasurement<NSUnitAngle>[], NSMeasurement<NSUnitAngle>[], bool' to create a CPLane with a HighlightedAngle.")]
+			set;
+		}
+
+		[NullAllowed]
+		[iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("highlightedAngle", ArgumentSemantic.Strong)]
+		NSMeasurement<NSUnitAngle> HighlightedAngle { get; }
+
+		[Export ("secondaryAngles", ArgumentSemantic.Strong)]
+		NSMeasurement<NSUnitAngle> [] SecondaryAngles {
+			[Deprecated (PlatformName.iOS, 18, 0, "Use the 'Angles' property instead.")]
+			[Deprecated (PlatformName.MacCatalyst, 18, 0, "Use the 'Angles' property instead.")]
+			get;
+			[Deprecated (PlatformName.iOS, 18, 0, "Use the 'NSMeasurement<NSUnitAngle>' constructor or the 'NSMeasurement<NSUnitAngle>[], NSMeasurement<NSUnitAngle>[], bool' constructor to create a CPLane with angles.")]
+			[Deprecated (PlatformName.MacCatalyst, 18, 0, "Use the 'NSMeasurement<NSUnitAngle>' constructor or the 'NSMeasurement<NSUnitAngle>[], NSMeasurement<NSUnitAngle>[], bool' constructor to create a CPLane with angles.")]
+			set;
+		}
+
+		[iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("angles", ArgumentSemantic.Copy)]
+		NSMeasurement<NSUnitAngle> [] Angles { get; }
+	}
 }

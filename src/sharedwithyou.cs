@@ -409,5 +409,28 @@ namespace SharedWithYou {
 		NativeHandle Constructor (SWHighlight highlight, SWHighlightPersistenceEventTrigger trigger);
 	}
 
+	[NoWatch, NoTV, Mac (13, 0), NoiOS, NoMacCatalyst]
+	[BaseType (typeof (NSPasteboardItem))]
+	[Category]
+	interface NSPasteboardItem_SWCollaborationMetadata {
+		[Export ("collaborationMetadata", ArgumentSemantic.Copy)]
+		[NullAllowed]
+		SWCollaborationMetadata CollaborationMetadata { get; set; }
+	}
 
+	[NoWatch, NoTV, Mac (13, 0), NoiOS, NoMacCatalyst]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface SWRemoveParticipantAlert {
+		// +(void)showAlertWithParticipant:(SWPerson *)participant highlight:(SWCollaborationHighlight *)highlight inWindow:(nullable NSWindow *)window;
+		[Static]
+		[Export ("showAlertWithParticipant:highlight:inWindow:")]
+		void ShowAlert (SWPerson participant, SWCollaborationHighlight highlight, [NullAllowed] UIWindow window);
+
+		[Export ("addedIdentities")]
+		SWPersonIdentity [] AddedIdentities { get; }
+
+		[Export ("removedIdentities")]
+		SWPersonIdentity [] RemovedIdentities { get; }
+	}
 }

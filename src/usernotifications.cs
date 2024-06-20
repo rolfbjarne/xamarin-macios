@@ -948,5 +948,14 @@ namespace UserNotifications {
 	[Protocol]
 	interface UNNotificationContentProviding {
 	}
+
+	[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface UNNotificationAttributedMessageContext : UNNotificationContentProviding {
+		[Static]
+		[Export ("contextWithSendMessageIntent:attributedContent:")]
+		UNNotificationAttributedMessageContext Create (INSendMessageIntent sendMessageIntent, NSAttributedString attributedContent);
+	}
 }
 

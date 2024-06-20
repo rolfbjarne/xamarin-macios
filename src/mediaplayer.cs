@@ -273,6 +273,11 @@ namespace MediaPlayer {
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Field ("MPMediaItemPropertyIsPreorder")]
 		NSString IsPreorderProperty { get; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Field ("MPMediaItemPropertyStoreCanonicalId")]
+		NSString StoreCanonicalIdProperty { get; }
 	}
 
 	[Watch (5, 0)]
@@ -1737,6 +1742,14 @@ namespace MediaPlayer {
 		[TV (16, 0), Mac (13, 0), iOS (16, 0), MacCatalyst (16, 0), Watch (9, 0)]
 		[Field ("MPNowPlayingInfoPropertyCreditsStartTime")]
 		NSString PropertyCreditsStartTime { get; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Field ("MPNowPlayingInfoPropertyInternationalStandardRecordingCode")]
+		NSString PropertyInternationalStandardRecordingCode { get; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Field ("MPNowPlayingInfoPropertyExcludeFromSuggestions")]
+		NSString PropertyExcludeFromSuggestions { get; }
 	}
 
 	[NoWatch]

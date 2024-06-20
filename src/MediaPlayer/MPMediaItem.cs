@@ -329,6 +329,20 @@ namespace MediaPlayer {
 				return BoolForProperty (IsPreorderProperty);
 			}
 		}
+
+#if NET
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("tvos18.0")]
+#else
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+#endif
+		public bool StoreCanonicalId {
+			get {
+				return BoolForProperty (StoreCanonicalIdProperty);
+			}
+		}
 	}
 }
 

@@ -891,7 +891,10 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum NSWindowSharingType : ulong {
-		None, ReadOnly, ReadWrite
+		None,
+		ReadOnly,
+		[Deprecated (PlatformName.MacOSX, 15, 0, message: "Use 'ReadOnly' instead.")]
+		ReadWrite,
 	}
 
 	[NoMacCatalyst]

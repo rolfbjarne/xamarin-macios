@@ -9,6 +9,7 @@ using ObjCRuntime;
 using CoreAnimation;
 #endif
 using CoreGraphics;
+using UniformTypeIdentifiers;
 
 using CGGlyph = System.UInt16;
 using NSGlyph = System.UInt32;
@@ -4579,6 +4580,53 @@ namespace UIKit {
 		[Mac (10, 15), iOS (13, 0), MacCatalyst (13, 1), NoTV, NoWatch]
 		[Field ("NSReadAccessURLDocumentOption", "WebKit")]
 		NSString ReadAccessUrlDocumentOption { get; }
+
+	}
+
+	[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface NSAdaptiveImageGlyph : NSCopying, NSSecureCoding /* This needs CoreText bindings: , CTAdaptiveImageProviding */ {
+		[DesignatedInitializer]
+		[Export ("initWithImageContent:")]
+		NativeHandle Constructor (NSData imageContent);
+
+		[Export ("imageContent")]
+		NSData ImageContent { get; }
+
+		[Export ("contentIdentifier")]
+		string ContentIdentifier { get; }
+
+		[Export ("contentDescription", ArgumentSemantic.Copy)]
+		string ContentDescription { get; }
+
+		[Static]
+		[Export ("contentType")]
+		UTType ContentType { get; }
+	}
+
+	[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	enum NSTextHighlightStyle {
+		[DefaultEnumValue]
+		[Field ("NSTextHighlightStyleDefault")]
+		Default,
+	}
+
+	[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	enum NSTextHighlightColorScheme {
+		[DefaultEnumValue]
+		[Field ("NSTextHighlightColorSchemeDefault")]
+		Default,
+		[Field ("NSTextHighlightColorSchemePurple")]
+		Purple,
+		[Field ("NSTextHighlightColorSchemePink")]
+		Pink,
+		[Field ("NSTextHighlightColorSchemeOrange")]
+		Orange,
+		[Field ("NSTextHighlightColorSchemeMint")]
+		Mint,
+		[Field ("NSTextHighlightColorSchemeBlue")]
+		Blue,
 
 	}
 }

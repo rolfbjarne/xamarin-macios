@@ -101,4 +101,15 @@ namespace MetalPerformanceShadersGraph {
 		BoxMuller = 1,
 	}
 
+	[TV (15, 4), Mac (12, 3), iOS (15, 4), MacCatalyst (15, 4)]
+	public enum MPSGraphOptimization : ulong {
+		Level0 = 0,
+		Level1 = 1L,
+	}
+
+	[TV (15, 4), Mac (12, 3), iOS (15, 4), MacCatalyst (15, 4)]
+	public enum MPSGraphOptimizationProfile : ulong {
+		Performance = 0,
+		PowerEfficiency = 1L,
+	}
 }

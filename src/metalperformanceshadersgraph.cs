@@ -1,4 +1,5 @@
 using System;
+using CoreFoundation;
 using CoreGraphics;
 using Foundation;
 using Metal;
@@ -58,7 +59,15 @@ namespace MetalPerformanceShadersGraph {
 
 		[Export ("encodeToCommandBuffer:feeds:targetOperations:resultsDictionary:executionDescriptor:")]
 		void Encode (MPSCommandBuffer commandBuffer, MPSGraphTensorDataDictionary feeds, [NullAllowed] MPSGraphOperation [] targetOperations, MPSGraphTensorDataDictionary resultsDictionary, [NullAllowed] MPSGraphExecutionDescriptor executionDescriptor);
+	}
 
+	[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	[Category]
+	[BaseType (typeof (MPSGraph))]
+	interface MPSGraph_CallOp {
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("callSymbolName:inputTensors:outputTypes:name:")]
+		MPSGraphTensor [] Call (string symbolName, MPSGraphTensor [] inputTensors, MPSGraphType [] outputTypes, [NullAllowed] string name);
 	}
 
 	// @interface MPSGraphGradientOps (MPSGraph)
@@ -726,6 +735,14 @@ namespace MetalPerformanceShadersGraph {
 		// -(MPSGraphTensor * _Nonnull)matrixMultiplicationWithPrimaryTensor:(MPSGraphTensor * _Nonnull)primaryTensor secondaryTensor:(MPSGraphTensor * _Nonnull)secondaryTensor name:(NSString * _Nullable)name __attribute__((swift_name("matrixMultiplication(primary:secondary:name:)")));
 		[Export ("matrixMultiplicationWithPrimaryTensor:secondaryTensor:name:")]
 		MPSGraphTensor MatrixMultiplication (MPSGraphTensor primaryTensor, MPSGraphTensor secondaryTensor, [NullAllowed] string name);
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("scaledDotProductAttentionWithQueryTensor:keyTensor:valueTensor:maskTensor:scale:name:")]
+		MPSGraphTensor ScaledDotProductAttention (MPSGraphTensor queryTensor, MPSGraphTensor keyTensor, MPSGraphTensor valueTensor, MPSGraphTensor maskTensor, float scale, [NullAllowed] string name);
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("scaledDotProductAttentionWithQueryTensor:keyTensor:valueTensor:scale:name:")]
+		MPSGraphTensor ScaledDotProductAttention (MPSGraphTensor queryTensor, MPSGraphTensor keyTensor, MPSGraphTensor valueTensor, float scale, [NullAllowed] string name);
 	}
 
 	// @interface MPSGraphCreateSparseOpDescriptor : NSObject <NSCopying>
@@ -812,6 +829,10 @@ namespace MetalPerformanceShadersGraph {
 		// -(MPSGraphOperation * _Nonnull)assignVariable:(MPSGraphTensor * _Nonnull)variable withValueOfTensor:(MPSGraphTensor * _Nonnull)tensor name:(NSString * _Nullable)name __attribute__((swift_name("assign(_:tensor:name:)")));
 		[Export ("assignVariable:withValueOfTensor:name:")]
 		MPSGraphOperation Assign (MPSGraphTensor variable, MPSGraphTensor tensor, [NullAllowed] string name);
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("variableFromTensorWithTensor:name:")]
+		MPSGraphTensor Variable (MPSGraphTensor tensor, [NullAllowed] string name);
 	}
 
 	// @interface MPSGraphNormalizationOps (MPSGraph)
@@ -890,6 +911,45 @@ namespace MetalPerformanceShadersGraph {
 		// -(MPSGraphOperation * _Nonnull)applyStochasticGradientDescentWithLearningRateTensor:(MPSGraphTensor * _Nonnull)learningRateTensor variable:(MPSGraphVariableOp * _Nonnull)variable gradientTensor:(MPSGraphTensor * _Nonnull)gradientTensor name:(NSString * _Nullable)name __attribute__((swift_name("applyStochasticGradientDescent(learningRate:variable:gradient:name:)")));
 		[Export ("applyStochasticGradientDescentWithLearningRateTensor:variable:gradientTensor:name:")]
 		MPSGraphOperation ApplyStochasticGradientDescent (MPSGraphTensor learningRate, MPSGraphVariableOp variable, MPSGraphTensor gradient, [NullAllowed] string name);
+	}
+
+	[iOS (16, 2), TV (16, 2), Mac (13, 1), MacCatalyst (16, 2)]
+	[Category]
+	[BaseType (typeof (MPSGraph))]
+	interface MPSGraph_MPSGraphQuantizationOps {
+		[Export ("quantizeTensor:scale:zeroPoint:dataType:name:")]
+		MPSGraphTensor Quantize (MPSGraphTensor tensor, double scale, double zeroPoint, MPSDataType dataType, [NullAllowed] string name);
+
+		[Export ("dequantizeTensor:scale:zeroPoint:dataType:name:")]
+		MPSGraphTensor Dequantize (MPSGraphTensor tensor, double scale, double zeroPoint, MPSDataType dataType, [NullAllowed] string name);
+
+		[Export ("quantizeTensor:scaleTensor:zeroPoint:dataType:axis:name:")]
+		MPSGraphTensor Quantize (MPSGraphTensor tensor, MPSGraphTensor scaleTensor, double zeroPoint, MPSDataType dataType, nint axis, [NullAllowed] string name);
+
+		[Export ("dequantizeTensor:scaleTensor:zeroPoint:dataType:axis:name:")]
+		MPSGraphTensor Dequantize (MPSGraphTensor tensor, MPSGraphTensor scaleTensor, double zeroPoint, MPSDataType dataType, nint axis, [NullAllowed] string name);
+
+		[Export ("quantizeTensor:scaleTensor:zeroPointTensor:dataType:axis:name:")]
+		MPSGraphTensor Quantize (MPSGraphTensor tensor, MPSGraphTensor scaleTensor, MPSGraphTensor zeroPointTensor, MPSDataType dataType, nint axis, [NullAllowed] string name);
+
+		[Export ("dequantizeTensor:scaleTensor:zeroPointTensor:dataType:axis:name:")]
+		MPSGraphTensor Dequantize (MPSGraphTensor tensor, MPSGraphTensor scaleTensor, MPSGraphTensor zeroPointTensor, MPSDataType dataType, nint axis, [NullAllowed] string name);
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("dequantizeTensor:scaleTensor:zeroPointTensor:dataType:name:")]
+		MPSGraphTensor Dequantize (MPSGraphTensor tensor, MPSGraphTensor scaleTensor, MPSGraphTensor zeroPointTensor, MPSDataType dataType, [NullAllowed] string name);
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("dequantizeTensor:scaleTensor:dataType:name:")]
+		MPSGraphTensor Dequantize (MPSGraphTensor tensor, MPSGraphTensor scaleTensor, MPSDataType dataType, [NullAllowed] string name);
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("dequantizeTensor:LUTTensor:name:")]
+		MPSGraphTensor Dequantize (MPSGraphTensor tensor, MPSGraphTensor lookupTableTensor, [NullAllowed] string name);
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("dequantizeTensor:LUTTensor:axis:name:")]
+		MPSGraphTensor Dequantize (MPSGraphTensor tensor, MPSGraphTensor lookupTableTensor, nint axis, [NullAllowed] string name);
 	}
 
 	// @interface MPSGraphPooling2DOpDescriptor : NSObject <NSCopying>
@@ -1512,6 +1572,14 @@ namespace MetalPerformanceShadersGraph {
 		[TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
 		[Export ("castTensor:toType:name:")]
 		MPSGraphTensor Cast (MPSGraphTensor tensor, MPSDataType type, string name);
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("sliceUpdateDataTensor:updateTensor:startsTensor:endsTensor:stridesTensor:name:")]
+		MPSGraphTensor SliceUpdateData (MPSGraphTensor dataTensor, MPSGraphTensor updatesTensor, MPSGraphTensor startsTensor, MPSGraphTensor endsTensor, MPSGraphTensor stridesTensor, [NullAllowed] string name);
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("sliceUpdateDataTensor:updateTensor:starts:ends:strides:name:")]
+		MPSGraphTensor SliceUpdateData (MPSGraphTensor dataTensor, MPSGraphTensor updatesTensor, [BindAs (typeof (int[]))] NSNumber [] starts, [BindAs (typeof (int[]))] NSNumber [] ends, [BindAs (typeof (int[]))] NSNumber [] strides, [NullAllowed] string name);
 	}
 
 	// @interface MPSGraphTopKOps (MPSGraph)
@@ -1542,13 +1610,43 @@ namespace MetalPerformanceShadersGraph {
 		MPSGraphTensor TopKGradient (MPSGraphTensor gradient, MPSGraphTensor source, MPSGraphTensor kTensor, [NullAllowed] string name);
 	}
 
+	delegate void MPSGraphCompilationCompletionHandler (MPSGraphExecutable executable, [NullAllowed] NSError error);
+
 	// @interface MPSGraphCompilationDescriptor : NSObject <NSCopying>
 	[TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MPSGraphCompilationDescriptor : NSCopying {
-		// -(void)disableTypeInference;
 		[Export ("disableTypeInference")]
 		void DisableTypeInference ();
+
+		[TV (15, 4), Mac (12, 3), iOS (15, 4), MacCatalyst (15, 4)]
+		[Export ("optimizationLevel")]
+		MPSGraphOptimization OptimizationLevel { get; set; }
+
+		[TV (16, 0), Mac (13, 0), iOS (16, 0), MacCatalyst (16, 0)]
+		[Export ("waitForCompilationCompletion")]
+		bool WaitForCompilationCompletion { get; set; }
+
+		[TV (16, 0), Mac (13, 0), iOS (16, 0), MacCatalyst (16, 0)]
+		[Export ("compilationCompletionHandler")]
+		MPSGraphCompilationCompletionHandler CompilationCompletionHandler { get; set; }
+
+		[TV (16, 0), Mac (13, 0), iOS (16, 0), MacCatalyst (16, 0)]
+		[Export ("dispatchQueue")]
+		DispatchQueue DispatchQueue { get; set; }
+
+		[TV (15, 4), Mac (12, 3), iOS (15, 4), MacCatalyst (15, 4)]
+		[Deprecated (PlatformName.iOS, 17, 0, message : "MPSGraph will automatically provide the best performance and power efficiency with MPSGraphOptimization.Level1")]
+		[Deprecated (PlatformName.MacOSX, 14, 0, message : "MPSGraph will automatically provide the best performance and power efficiency with MPSGraphOptimization.Level1")]
+		[Deprecated (PlatformName.TvOS, 17, 0, message : "MPSGraph will automatically provide the best performance and power efficiency with MPSGraphOptimization.Level1")]
+		[Deprecated (PlatformName.MacCatalyst, 17, 0, message : "MPSGraph will automatically provide the best performance and power efficiency with MPSGraphOptimization.Level1")]
+		[Export ("optimizationProfile")]
+		MPSGraphOptimizationProfile OptimizationProfile { get; set; }
+
+		[TV (17, 1), Mac (14, 1), iOS (17, 1), MacCatalyst (17, 1)]
+		[Export ("callables")]
+		[NullAllowed]
+		NSDictionary<NSString, MPSGraphExecutable> Callables { get; set; }
 	}
 
 	// @interface MPSGraphDevice : NSObject
@@ -1623,6 +1721,10 @@ namespace MetalPerformanceShadersGraph {
 		// -(NSArray<MPSGraphTensorData *> * _Nonnull)encodeToCommandBuffer:(MPSCommandBuffer * _Nonnull)commandBuffer inputsArray:(NSArray<MPSGraphTensorData *> * _Nonnull)inputsArray resultsArray:(NSArray<MPSGraphTensorData *> * _Nullable)resultsArray executionDescriptor:(MPSGraphExecutableExecutionDescriptor * _Nullable)executionDescriptor __attribute__((swift_name("encode(to:inputs:results:executionDescriptor:)")));
 		[Export ("encodeToCommandBuffer:inputsArray:resultsArray:executionDescriptor:")]
 		MPSGraphTensorData [] Encode (MPSCommandBuffer commandBuffer, MPSGraphTensorData [] inputsArray, [NullAllowed] MPSGraphTensorData [] resultsArray, [NullAllowed] MPSGraphExecutableExecutionDescriptor executionDescriptor);
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("initWithCoreMLPackageAtURL:compilationDescriptor:")]
+		NativeHandle Constructor (NSUrl coreMLPackageUrl, [NullAllowed] MPSGraphCompilationDescriptor compilationDescriptor);
 	}
 
 	// typedef void (^MPSGraphCompletionHandler)(MPSGraphTensorDataDictionary * _Nonnull, NSError * _Nullable);

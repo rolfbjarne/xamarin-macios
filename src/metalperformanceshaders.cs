@@ -6932,6 +6932,45 @@ namespace MetalPerformanceShaders {
 
 		[Export ("synchronizeOnCommandBuffer:")]
 		void Synchronize (IMTLCommandBuffer commandBuffer);
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("preferPackedRows")]
+		bool PreferPackedRows { get; set; }
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("permuteWithDimensionOrder:")]
+		[Internal]
+		void _PermuteWithDimensionOrder (/* NSUInteger* */ IntPtr dimensionOrder);
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("getShape")]
+		[return: BindAs (typeof (nuint[]))]
+		NSNumber[] GetShape ();
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("initWithBuffer:offset:descriptor:")]
+		NativeHandle Constructor (IMTLBuffer buffer, nuint offset, MPSNDArrayDescriptor descriptor);
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[NullAllowed]
+		[Export ("userBuffer")]
+		IMTLBuffer UserBuffer { get; }
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("arrayViewWithDescriptor:")]
+		[return: NullAllowed]
+		MPSNDArray Create (MPSNDArrayDescriptor descriptor);
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("arrayViewWithShape:strides:")]
+		[return: NullAllowed]
+		MPSNDArray Create ([NullAllowed] [BindAs (typeof (nint []))] NSNumber [] shape, [BindAs (typeof (nint []))] NSNumber [] strides);
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("arrayViewWithDimensionCount:dimensionSizes:strides:")]
+		[return: NullAllowed]
+		[Internal]
+		MPSNDArray _Create (nuint numberOfDimensions, IntPtr dimensionSizes, IntPtr dimStrides);
 	}
 
 	[DisableDefaultCtor]

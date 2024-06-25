@@ -35,6 +35,47 @@ namespace MonoTouchFixtures.AudioToolbox {
 		}
 
 		[Test]
+		public void Prepare ()
+		{
+			TestRuntime.AssertXcodeVersion (16, 0);
+
+			AudioConverter.Prepare ();
+		}
+
+		[Test]
+		public void PrepareWithCallback ()
+		{
+			TestRuntime.AssertXcodeVersion (16, 0);
+
+			var tcs = new TaskCompletionSource<AudioConverterError> ();
+			AudioConverter.Prepare ((status) => tcs.SetResult (status));
+			var timeout = TimeSpan.FromSeconds (5);
+			if (!tcs.Task.Wait (timeout)) {
+				// Preparation might take a long time, so don't assert on the bots.
+				// We might have to bump the timeout for local test runs as well.
+				if (!TestRuntime.IsInCI)
+					Assert.Fail ($"Callback wasn't called within {timeout.TotalSeconds} s");
+			}
+		}
+
+		[Test]
+		public void CreateWithOptions ()
+		{
+			TestRuntime.AssertXcodeVersion (16, 0);
+
+			var sourcePath = Path.Combine (NSBundle.MainBundle.ResourcePath, "Hand.wav");
+			var paths = NSSearchPath.GetDirectories (NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomain.User);
+
+			// Convert once
+			var output1 = Path.Combine (paths [0], "outputOptions1.caf");
+			Convert (sourcePath, output1, AudioFormatType.AppleLossless, AudioConverterOptions.None);
+
+			// Convert converted output
+			var output2 = Path.Combine (paths [0], "outputOptions2.wav");
+			Convert (output1, output2, AudioFormatType.LinearPCM, AudioConverterOptions.None);
+		}
+
+		[Test]
 		public void Convert ()
 		{
 			TestRuntime.AssertXcodeVersion (9, 0);
@@ -51,7 +92,7 @@ namespace MonoTouchFixtures.AudioToolbox {
 			Convert (output1, output2, AudioFormatType.LinearPCM);
 		}
 
-		void Convert (string sourceFilePath, string destinationFilePath, AudioFormatType outputFormatType, int? sampleRate = null)
+		void Convert (string sourceFilePath, string destinationFilePath, AudioFormatType outputFormatType, int? sampleRate = null, AudioConverterOptions? options)
 		{
 			var destinationUrl = NSUrl.FromFilename (destinationFilePath);
 			var sourceUrl = NSUrl.FromFilename (sourceFilePath);
@@ -84,7 +125,12 @@ namespace MonoTouchFixtures.AudioToolbox {
 			}
 
 			// create the AudioConverter
-			using var converter = AudioConverter.Create (srcFormat, dstFormat, out var ce);
+			using AudioConverter? converter = null;
+			if (options.HasValue) {
+				converter = AudioConverter.Create (srcFormat, dstFormat, options.Value, out var ce);
+			} else {
+				converter = AudioConverter.Create (srcFormat, dstFormat, out var ce);
+			}
 			Assert.AreEqual (AudioConverterError.None, ce, $"AudioConverterCreate: {name}");
 
 			// set up source buffers and data proc info struct

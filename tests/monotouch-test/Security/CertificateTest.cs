@@ -401,6 +401,10 @@ namespace MonoTouchFixtures.Security {
 			if (TestRuntime.CheckXcodeVersion (10, 0)) {
 				Assert.NotNull (cert.GetKey (), "GetKey");
 			}
+			if (TestRuntime.CheckXcodeVersion (16, 0)) {
+				Assert.NotNull (cert.NotValidBeforeDate, "NotValidBeforeDate");
+				Assert.NotNull (cert.NotValidaAfterDate, "NotValidaAfterDate");
+			}
 		}
 
 		[Test]

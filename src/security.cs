@@ -652,6 +652,16 @@ namespace Security {
 		[Field ("kSecImportExportPassphrase")]
 		NSString Passphrase { get; }
 
+		[Field ("kSecImportExportKeychain")]
+		NSString Keychain { get; }
+
+		[Field ("kSecImportExportAccess")]
+		NSString Access { get; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Field ("kSecImportToMemoryOnly")]
+		NSString ToMemoryOnly { get; }
+
 		[Field ("kSecImportItemLabel")]
 		NSString Label { get; }
 
@@ -688,6 +698,22 @@ namespace Security {
 
 		[Field ("kSecMatchSubjectContains")]
 		IntPtr MatchSubjectContains { get; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Field ("kSecMatchHostOrSubdomainOfHost")]
+		IntPtr MatchHostOrSubdomainOfHost { get; }
+
+		[NoiOS, NoTV, NoWatch]
+		[Field ("kSecMatchSubjectStartsWith")]
+		IntPtr MatchSubjectStartsWith { get; }
+
+		[NoiOS, NoTV, NoWatch]
+		[Field ("kSecMatchSubjectEndsWith")]
+		IntPtr MatchSubjectEndsWith { get; }
+
+		[NoiOS, NoTV, NoWatch]
+		[Field ("kSecMatchSubjectWholeString")]
+		IntPtr MatchSubjectWholeString { get; }
 
 		[Field ("kSecMatchCaseInsensitive")]
 		IntPtr MatchCaseInsensitive { get; }

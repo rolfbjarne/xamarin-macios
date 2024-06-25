@@ -276,4 +276,46 @@ namespace MetalPerformanceShaders {
 		public uint RowOffset;
 		public uint ColumnOffset;
 	}
+
+	[StructLayout (LayoutKind.Sequential)]
+	public struct MPSNDArrayOffsets {
+		// NSInteger dimensions[16];
+		nint dimension0;
+		nint dimension1;
+		nint dimension2;
+		nint dimension3;
+		nint dimension4;
+		nint dimension5;
+		nint dimension6;
+		nint dimension7;
+		nint dimension8;
+		nint dimension9;
+		nint dimension10;
+		nint dimension11;
+		nint dimension12;
+		nint dimension13;
+		nint dimension14;
+		nint dimension15;
+	}
+
+	[StructLayout (LayoutKind.Sequential)]
+	public struct MPSNDArraySizes {
+		// NSUInteger dimensions[16];
+		nuint dimension0;
+		nuint dimension1;
+		nuint dimension2;
+		nuint dimension3;
+		nuint dimension4;
+		nuint dimension5;
+		nuint dimension6;
+		nuint dimension7;
+		nuint dimension8;
+		nuint dimension9;
+		nuint dimension10;
+		nuint dimension11;
+		nuint dimension12;
+		nuint dimension13;
+		nuint dimension14;
+		nuint dimension15;
+	}
 }

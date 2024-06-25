@@ -238,6 +238,14 @@ namespace Phase {
 		LateReverb = 1uL << 2,
 	}
 
+	[Flags]
+	[NoWatch, TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	[Native]
+	[NativeName ("PHASEAutomaticHeadTrackingFlags")]
+	public enum PhaseAutomaticHeadTrackingFlags : ulong {
+		None = 0,
+		Orientation = 1UL << 0,
+	}
 
 	[NoWatch, TV (17, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
 	[BaseType (typeof (NSObject), Name = "PHASENumericPair")]
@@ -725,14 +733,15 @@ namespace Phase {
 		bool Normalize { get; set; }
 	}
 
-	[NoWatch, TV (17, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
-	[BaseType (typeof (NSObject), Name = "PHASEPushStreamNode")]
+
+	[NoWatch, TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	[BaseType (typeof (NSObject), Name = "PHASEStreamNode")]
 	[DisableDefaultCtor]
-	interface PhasePushStreamNode {
-		[NullAllowed, Export ("gainMetaParameter", ArgumentSemantic.Strong)]
+	interface PhaseStreamNode {
+		[Export ("gainMetaParameter", ArgumentSemantic.Strong), NullAllowed]
 		PhaseNumberMetaParameter GainMetaParameter { get; }
 
-		[NullAllowed, Export ("rateMetaParameter", ArgumentSemantic.Strong)]
+		[Export ("rateMetaParameter", ArgumentSemantic.Strong), NullAllowed]
 		PhaseNumberMetaParameter RateMetaParameter { get; }
 
 		[Export ("mixer", ArgumentSemantic.Strong)]
@@ -740,6 +749,23 @@ namespace Phase {
 
 		[Export ("format", ArgumentSemantic.Strong)]
 		AVAudioFormat Format { get; }
+	}
+
+	[NoWatch, TV (17, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+	[BaseType (typeof (PhaseStreamNode), Name = "PHASEPushStreamNode")]
+	[DisableDefaultCtor]
+	interface PhasePushStreamNode {
+		// [NullAllowed, Export ("gainMetaParameter", ArgumentSemantic.Strong)]
+		// PhaseNumberMetaParameter GainMetaParameter { get; }
+
+		// [NullAllowed, Export ("rateMetaParameter", ArgumentSemantic.Strong)]
+		// PhaseNumberMetaParameter RateMetaParameter { get; }
+
+		// [Export ("mixer", ArgumentSemantic.Strong)]
+		// PhaseMixer Mixer { get; }
+
+		// [Export ("format", ArgumentSemantic.Strong)]
+		// AVAudioFormat Format { get; }
 
 		[Export ("scheduleBuffer:")]
 		void ScheduleBuffer (AVAudioPcmBuffer buffer);
@@ -1131,6 +1157,10 @@ namespace Phase {
 
 		[Export ("indefinite")]
 		bool Indefinite { [Bind ("isIndefinite")] get; }
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("pullStreamNodes", ArgumentSemantic.Copy)]
+		NSDictionary<NSString, PhasePullStreamNode> PullStreamNodes { get; }
 	}
 
 	[NoWatch, TV (17, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
@@ -1200,6 +1230,10 @@ namespace Phase {
 
 		[Export ("gain")]
 		double Gain { get; set; }
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("automaticHeadTrackingFlags", ArgumentSemantic.Assign)]
+		PhaseAutomaticHeadTrackingFlags AutomaticHeadTrackingFlags { get; set; }
 	}
 
 	[NoWatch, TV (17, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
@@ -1295,5 +1329,37 @@ namespace Phase {
 
 		[Export ("entries", ArgumentSemantic.Copy)]
 		NSDictionary<NSString, PhaseSpatialPipelineEntry> Entries { get; }
+	}
+
+	public unsafe delegate /* OSStatus */ int PhasePullStreamRenderBlockRaw (
+		/* BOOL * */ IntPtr isSilence,
+		/* const AudioTimeStamp * */ IntPtr timeStamp,
+		/* AVAudioFrameCount */ uint frameCount,
+		/* AudioBufferList * */ IntPtr outputData);
+
+	[NoWatch, TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	[BaseType (typeof (PhaseGeneratorNodeDefinition), Name = "PHASEPullStreamNodeDefinition")]
+	[DisableDefaultCtor]
+	interface PhasePullStreamNodeDefinition {
+		[Export ("initWithMixerDefinition:format:identifier:")]
+		NativeHandle Constructor  (PhaseMixerDefinition mixerDefinition, AVAudioFormat format, string identifier);
+
+		[DesignatedInitializer]
+		[Export ("initWithMixerDefinition:format:")]
+		NativeHandle Constructor  (PhaseMixerDefinition mixerDefinition, AVAudioFormat format);
+
+		[Export ("format", ArgumentSemantic.Strong)]
+		AVAudioFormat Format { get; }
+
+		[Export ("normalize")]
+		bool Normalize { get; set; }
+	}
+
+	[NoWatch, TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	[BaseType (typeof (PhaseGeneratorNodeDefinition), Name = "PHASEPullStreamNode")]
+	[DisableDefaultCtor]
+	interface PhasePullStreamNode {
+		[Export ("renderBlock", ArgumentSemantic.Strong)]
+		PhasePullStreamRenderBlockRaw RenderBlockRaw { get; set; }
 	}
 }

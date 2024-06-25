@@ -1490,6 +1490,11 @@ PDFKIT_SOURCES = \
 	PdfKit/PdfCompat.cs \
 	PdfKit/PdfKit.cs \
 
+# Phase
+
+PHASE_SOURCES = \
+	Phase/PhasePullStreamNode.cs \
+
 # Photos
 
 PHOTOS_API_SOURCES = \

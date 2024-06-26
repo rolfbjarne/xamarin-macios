@@ -184,13 +184,13 @@ namespace PassKit {
 		[Export ("canAddFelicaPass")]
 		bool CanAddFelicaPass { get; }
 
-		[NoWatch]
+		[Watch (10, 2)]
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("endAutomaticPassPresentationSuppressionWithRequestToken:")]
 		void EndAutomaticPassPresentationSuppression (nuint requestToken);
 
-		[NoWatch]
+		[Watch (10, 2)]
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("isSuppressingAutomaticPassPresentation")]
@@ -209,13 +209,11 @@ namespace PassKit {
 		[Export ("remoteSecureElementPasses", ArgumentSemantic.Copy)]
 		PKSecureElementPass [] RemoteSecureElementPasses { get; }
 
-#if !WATCH
-		[NoWatch]
+		[Watch (10, 2)]
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("requestAutomaticPassPresentationSuppressionWithResponseHandler:")]
 		nuint RequestAutomaticPassPresentationSuppression (Action<PKAutomaticPassPresentationSuppressionResult> responseHandler);
-#endif
 
 		[NoMac]
 		[Deprecated (PlatformName.iOS, 13, 4, message: "Use 'PresentSecureElementPass' instead.")]
@@ -456,17 +454,17 @@ namespace PassKit {
 		[Export ("canMakePaymentsUsingNetworks:capabilities:")]
 		bool CanMakePaymentsUsingNetworks (string [] supportedNetworks, PKMerchantCapability capabilties);
 
-		[NoWatch, NoTV, NoMac, iOS (17, 0), MacCatalyst (17, 0)]
+		[NoWatch, NoTV, Mac (15, 0), iOS (17, 0), MacCatalyst (17, 0)]
 		[Static]
 		[Export ("supportsDisbursements")]
 		bool SupportsDisbursements ();
 
-		[NoWatch, NoTV, NoMac, iOS (17, 0), MacCatalyst (17, 0)]
+		[NoWatch, NoTV, Mac (15, 0), iOS (17, 0), MacCatalyst (17, 0)]
 		[Static]
 		[Export ("supportsDisbursementsUsingNetworks:")]
 		bool SupportsDisbursements (string [] supportedNetworks);
 
-		[NoWatch, NoTV, NoMac, iOS (17, 0), MacCatalyst (17, 0)]
+		[NoWatch, NoTV, Mac (15, 0), iOS (17, 0), MacCatalyst (17, 0)]
 		[Static]
 		[Export ("supportsDisbursementsUsingNetworks:capabilities:")]
 		bool SupportsDisbursements (string [] supportedNetworks, PKMerchantCapability capabilities);
@@ -704,6 +702,10 @@ namespace PassKit {
 		[iOS (17, 0), Mac (14, 0), Watch (10, 0), NoTV, MacCatalyst (17, 0)]
 		[Export ("applePayLaterAvailability", ArgumentSemantic.Assign)]
 		PKApplePayLaterAvailability ApplePayLaterAvailability { get; set; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("merchantCategoryCode", ArgumentSemantic.Assign)]
+		PKMerchantCategoryCode MerchantCategoryCode { get; set; }
 	}
 
 	/// <summary>Enumerates fields for a contact.</summary>
@@ -995,6 +997,11 @@ namespace PassKit {
 		[Export ("passURL", ArgumentSemantic.Copy)]
 		NSUrl PassUrl { get; }
 
+		[Deprecated (PlatformName.iOS, 18, 0, message: "Use 'RelevantDates' instead.")]
+		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use 'RelevantDates' instead.")]
+		[Deprecated (PlatformName.TvOS, 18, 0, message: "Use 'RelevantDates' instead.")]
+		[Deprecated (PlatformName.WatchOS, 11, 0, message: "Use 'RelevantDates' instead.")]
+		[Deprecated (PlatformName.MacOSX, 15, 0, message: "Use 'RelevantDates' instead.")]
 		[NullAllowed, Export ("relevantDate", ArgumentSemantic.Copy)]
 		NSDate RelevantDate { get; }
 
@@ -1041,6 +1048,10 @@ namespace PassKit {
 		[MacCatalyst (13, 1)]
 		[Export ("deviceName")]
 		string DeviceName { get; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[NullAllowed, Export ("relevantDates", ArgumentSemantic.Copy)]
+		PKPassRelevantDate [] RelevantDates { get; }
 	}
 
 	/// <summary>Information about Apple Pay cards.</summary>
@@ -1371,7 +1382,7 @@ namespace PassKit {
 		[Export ("supportsDisbursementsUsingNetworks:capabilities:")]
 		bool SupportsDisbursements (string [] supportedNetworks, PKMerchantCapability capabilities);
 
-		[NoWatch, NoTV, NoMac, iOS (17, 0), MacCatalyst (17, 0)]
+		[NoWatch, NoTV, Mac (15, 0), iOS (17, 0), MacCatalyst (17, 0)]
 		[Export ("initWithDisbursementRequest:")]
 		NativeHandle Constructor (PKDisbursementRequest request);
 	}
@@ -1726,9 +1737,10 @@ namespace PassKit {
 #endif
 
 	[NoWatch]
-	[iOS (12, 2)]
-	[NoMac] // all members are decorated as such, but not the type itself
-	[MacCatalyst (13, 1)]
+	[iOS (17, 0)]
+	[Mac (15, 0)]
+	[MacCatalyst (17, 0)]
+	[NoTV]
 	[BaseType (typeof (NSObject))]
 	interface PKDisbursementRequest {
 
@@ -1738,48 +1750,37 @@ namespace PassKit {
 		[Export ("summaryItems", ArgumentSemantic.Copy)]
 		PKPaymentSummaryItem [] SummaryItems { get; set; }
 
-		[iOS (17, 0), NoMac, NoWatch, NoTV, NoMacCatalyst]
 		[Export ("merchantIdentifier")]
 		string MerchantIdentifier { get; set; }
 
-		[iOS (17, 0), NoMac, NoWatch, NoTV, NoMacCatalyst]
 		[Export ("regionCode")]
 		string RegionCode { get; set; }
 
-		[iOS (17, 0), NoMac, NoWatch, NoTV, NoMacCatalyst]
 		[Export ("supportedNetworks", ArgumentSemantic.Copy)]
 		string [] SupportedNetworks { get; set; }
 
-		[iOS (17, 0), NoMac, NoWatch, NoTV, NoMacCatalyst]
 		[Export ("merchantCapabilities", ArgumentSemantic.Assign)]
 		PKMerchantCapability MerchantCapabilities { get; set; }
 
-		[iOS (17, 0), NoMac, NoWatch, NoTV, NoMacCatalyst]
 		[Export ("requiredRecipientContactFields", ArgumentSemantic.Strong)]
 		string [] RequiredRecipientContactFields { get; set; }
 
-		[iOS (17, 0), NoMac, NoWatch, NoTV, NoMacCatalyst]
 		[NullAllowed, Export ("recipientContact", ArgumentSemantic.Strong)]
 		PKContact RecipientContact { get; set; }
 
-		[iOS (17, 0), NoMac, NoWatch, NoTV, NoMacCatalyst]
 		[NullAllowed, Export ("supportedRegions", ArgumentSemantic.Copy)]
 		string [] SupportedRegions { get; set; }
 
-		[iOS (17, 0), NoMac, NoWatch, NoTV, NoMacCatalyst]
 		[NullAllowed, Export ("applicationData", ArgumentSemantic.Copy)]
 		NSData ApplicationData { get; set; }
 
-		[iOS (17, 0), NoMac, NoWatch, NoTV, NoMacCatalyst]
 		[Export ("initWithMerchantIdentifier:currencyCode:regionCode:supportedNetworks:merchantCapabilities:summaryItems:")]
 		NativeHandle Constructor (string merchantIdentifier, string currencyCode, string regionCode, string [] supportedNetworks, PKMerchantCapability merchantCapabilities, PKPaymentSummaryItem [] summaryItems);
 
-		[iOS (17, 0), NoMac, NoWatch, NoTV, NoMacCatalyst]
 		[Static]
 		[Export ("disbursementContactInvalidErrorWithContactField:localizedDescription:")]
 		NSError GetDisbursementContactInvalidError (string field, [NullAllowed] string localizedDescription);
 
-		[iOS (17, 0), NoMac, NoWatch, NoTV, NoMacCatalyst]
 		[Static]
 		[Export ("disbursementCardUnsupportedError")]
 		NSError DisbursementCardUnsupportedError { get; }
@@ -1940,7 +1941,7 @@ namespace PassKit {
 	[iOS (14, 0)]
 	[Mac (11, 0)]
 	[MacCatalyst (14, 0)]
-	[BaseType (typeof (NSObject))]
+	[BaseType (typeof (PKPushablePassMetadata))]
 	[DisableDefaultCtor]
 	interface PKShareablePassMetadata {
 
@@ -1965,14 +1966,14 @@ namespace PassKit {
 		[Export ("initWithProvisioningCredentialIdentifier:sharingInstanceIdentifier:cardConfigurationIdentifier:preview:")]
 		NativeHandle InitWithCardConfiguration (string credentialIdentifier, string sharingInstanceIdentifier, string templateIdentifier, PKShareablePassMetadataPreview preview);
 
-		[Export ("credentialIdentifier", ArgumentSemantic.Strong)]
-		string CredentialIdentifier { get; }
+		// [Export ("credentialIdentifier", ArgumentSemantic.Strong)]
+		// string CredentialIdentifier { get; }
 
-		[Export ("cardConfigurationIdentifier", ArgumentSemantic.Strong)]
-		string CardConfigurationIdentifier { get; }
+		// [Export ("cardConfigurationIdentifier", ArgumentSemantic.Strong)]
+		// string CardConfigurationIdentifier { get; }
 
-		[Export ("sharingInstanceIdentifier", ArgumentSemantic.Strong)]
-		string SharingInstanceIdentifier { get; }
+		// [Export ("sharingInstanceIdentifier", ArgumentSemantic.Strong)]
+		// string SharingInstanceIdentifier { get; }
 
 		[Deprecated (PlatformName.iOS, 16, 0)]
 		[Deprecated (PlatformName.MacCatalyst, 16, 0)]
@@ -2007,24 +2008,24 @@ namespace PassKit {
 		[Export ("requiresUnifiedAccessCapableDevice")]
 		bool RequiresUnifiedAccessCapableDevice { get; [iOS (16, 0), Mac (13, 0), Watch (9, 0), NoTV, MacCatalyst (16, 0)] set; }
 
-		[NoWatch, NoTV, iOS (16, 0), Mac (13, 0), MacCatalyst (16, 0)]
-		[Export ("cardTemplateIdentifier", ArgumentSemantic.Strong)]
-		string CardTemplateIdentifier { get; }
+		// [NoWatch, NoTV, iOS (16, 0), Mac (13, 0), MacCatalyst (16, 0)]
+		// [Export ("cardTemplateIdentifier", ArgumentSemantic.Strong)]
+		// string CardTemplateIdentifier { get; }
 
 		[NoWatch, NoTV, iOS (16, 0), Mac (13, 0), MacCatalyst (16, 0)]
 		[Export ("preview", ArgumentSemantic.Strong)]
 		PKShareablePassMetadataPreview Preview { get; }
 
-		[NoWatch, NoTV, iOS (16, 0), Mac (13, 0), MacCatalyst (16, 0)]
-		[Export ("serverEnvironmentIdentifier", ArgumentSemantic.Strong)]
-		string ServerEnvironmentIdentifier { get; set; }
+		// [NoWatch, NoTV, iOS (16, 0), Mac (13, 0), MacCatalyst (16, 0)]
+		// [Export ("serverEnvironmentIdentifier", ArgumentSemantic.Strong)]
+		// string ServerEnvironmentIdentifier { get; set; }
 	}
 
 	[NoWatch, NoTV]
 	[iOS (14, 0)]
 	[Mac (11, 0)]
 	[MacCatalyst (14, 0)]
-	[BaseType (typeof (PKAddSecureElementPassConfiguration))]
+	[BaseType (typeof (PKAddPushablePassConfiguration))]
 	[DisableDefaultCtor]
 	interface PKAddShareablePassConfiguration {
 
@@ -2751,7 +2752,7 @@ namespace PassKit {
 	}
 
 	[NoWatch, NoTV, iOS (16, 0), Mac (13, 0), MacCatalyst (16, 0)]
-	[BaseType (typeof (NSObject))]
+	[BaseType (typeof (PKAddPassMetadataPreview))]
 	[DisableDefaultCtor]
 	interface PKShareablePassMetadataPreview // : NSCoding, NSCopying, NSSecureCoding // https://feedbackassistant.apple.com/feedback/11018799
 	{
@@ -2769,11 +2770,11 @@ namespace PassKit {
 		[Export ("previewWithTemplateIdentifier:")]
 		PKShareablePassMetadataPreview PreviewWithTemplateIdentifier (string templateIdentifier);
 
-		[NullAllowed, Export ("passThumbnailImage", ArgumentSemantic.Assign)]
-		CGImage PassThumbnailImage { get; }
+		// [NullAllowed, Export ("passThumbnailImage", ArgumentSemantic.Assign)]
+		// CGImage PassThumbnailImage { get; }
 
-		[NullAllowed, Export ("localizedDescription", ArgumentSemantic.Strong)]
-		string LocalizedDescription { get; }
+		// [NullAllowed, Export ("localizedDescription", ArgumentSemantic.Strong)]
+		// string LocalizedDescription { get; }
 
 		[NullAllowed, Export ("ownerDisplayName", ArgumentSemantic.Strong)]
 		string OwnerDisplayName { get; set; }
@@ -2922,5 +2923,109 @@ namespace PassKit {
 	[BaseType (typeof (PKPaymentSummaryItem))]
 	[DisableDefaultCtor]
 	interface PKDisbursementSummaryItem : NSCoding, NSCopying, NSSecureCoding {
+	}
+
+	[NoTV, NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
+	[BaseType (typeof (PKPushablePassMetadata))]
+	interface PKIdentityDocumentMetadata {
+	}
+
+	[NoTV, NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
+	[BaseType (typeof (PKIdentityDocumentMetadata))]
+	[DisableDefaultCtor]
+	interface PKJapanIndividualNumberCardMetadata {
+		[Export ("initWithProvisioningCredentialIdentifier:sharingInstanceIdentifier:cardTemplateIdentifier:preview:")]
+		[Internal]
+		NativeHandle _InitWithProvisioningCredentialIdentifier_CardTemplateIdentifier (string credentialIdentifier, string sharingInstanceIdentifier, string cardTemplateIdentifier, PKAddPassMetadataPreview preview);
+
+		[Export ("initWithProvisioningCredentialIdentifier:sharingInstanceIdentifier:cardConfigurationIdentifier:preview:")]
+		[Internal]
+		NativeHandle _InitWithProvisioningCredentialIdentifier_CardConfigurationIdentifier (string credentialIdentifier, string sharingInstanceIdentifier, string cardConfigurationIdentifier, PKAddPassMetadataPreview preview);
+
+		[Export ("authenticationPassword", ArgumentSemantic.Copy), NullAllowed]
+		string AuthenticationPassword { get; set; }
+
+		[Export ("signingPassword", ArgumentSemantic.Copy), NullAllowed]
+		string SigningPassword { get; set; }
+
+		[Export ("preview", ArgumentSemantic.Strong)]
+		PKAddPassMetadataPreview Preview { get; set; }
+	}
+
+	delegate void PKAddIdentityDocumentConfigurationGetConfigurationCompletionHandler (PKAddIdentityDocumentConfiguration credentialConfiguration, NSError error);
+
+	[NoTV, NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
+	[BaseType (typeof (PKAddPushablePassConfiguration))]
+	[DisableDefaultCtor]
+	interface PKAddIdentityDocumentConfiguration {
+		[Static]
+		[Export ("configurationForMetadata:completion:")]
+		void GetConfiguration (PKIdentityDocumentMetadata metadata, PKAddIdentityDocumentConfigurationGetConfigurationCompletionHandler completionHandler);
+
+		[Export ("metadata", ArgumentSemantic.Strong)]
+		PKIdentityDocumentMetadata Metadata { get; }
+	}
+
+	[NoTV, NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface PKPushablePassMetadata {
+		[Export ("credentialIdentifier", ArgumentSemantic.Strong)]
+		string CredentialIdentifier { get; }
+
+		[Export ("sharingInstanceIdentifier", ArgumentSemantic.Strong)]
+		string SharingInstanceIdentifier { get; }
+
+		[Export ("cardTemplateIdentifier", ArgumentSemantic.Strong)]
+		string CardTemplateIdentifier { get; }
+
+		[Export ("cardConfigurationIdentifier", ArgumentSemantic.Strong)]
+		string CardConfigurationIdentifier { get; }
+
+		[Export ("serverEnvironmentIdentifier", ArgumentSemantic.Strong)]
+		string ServerEnvironmentIdentifier { get; set; }
+	}
+
+	[NoTV, NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
+	[BaseType (typeof (PKAddSecureElementPassConfiguration))]
+	[DisableDefaultCtor]
+	interface PKAddPushablePassConfiguration {
+	}
+
+	[NoTV, NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface PKAddPassMetadataPreview {
+		[Export ("initWithPassThumbnail:localizedDescription:")]
+		NativeHandle Constructor (CGImage passThumbnail, string description);
+
+		[Static]
+		[Export ("previewWithPassThumbnail:localizedDescription:")]
+		PKAddPassMetadataPreview PreviewWithPassThumbnail (CGImage passThumbnail, string localizedDescription);
+
+		[Export ("passThumbnailImage", ArgumentSemantic.Assign), NullAllowed]
+		CGImage PassThumbnailImage { get; }
+
+		[Export ("localizedDescription", ArgumentSemantic.Strong), NullAllowed]
+		string LocalizedDescription { get; }
+	}
+
+	[NoTV, NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
+	[BaseType (typeof (NSObject), Name = "PKIdentityNationalIDCardDescriptor")]
+	[DisableDefaultCtor]
+	interface PKIdentityNationalIdCardDescriptor : PKIdentityDocumentDescriptor {
+		[Export ("regionCode", ArgumentSemantic.Copy), NullAllowed]
+		string RegionCode { get; set; }
+	}
+
+	[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface PKPassRelevantDate {
+		[Export ("interval", ArgumentSemantic.Copy), NullAllowed]
+		NSDateInterval Interval { get; }
+
+		[Export ("date", ArgumentSemantic.Copy), NullAllowed]
+		NSDate Date { get; }
 	}
 }

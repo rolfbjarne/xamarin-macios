@@ -1157,6 +1157,13 @@ namespace AVFoundation {
 		[MacCatalyst (13, 1)]
 		[Export ("outputType", ArgumentSemantic.Assign)]
 		AVAudioEnvironmentOutputType OutputType { get; set; }
+
+		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0), NoWatch]
+		[Export ("listenerHeadTrackingEnabled")]
+		bool ListenerHeadTrackingEnabled {
+			[Bind ("isListenerHeadTrackingEnabled")] get;
+			set;
+		}
 	}
 
 	[MacCatalyst (13, 1)]
@@ -1237,6 +1244,14 @@ namespace AVFoundation {
 
 		[Export ("writeFromBuffer:error:")]
 		bool WriteFromBuffer (AVAudioPcmBuffer buffer, out NSError outError);
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("close")]
+		void Close ();
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("isOpen")]
+		bool IsOpen { get; }
 	}
 
 	[MacCatalyst (13, 1)]
@@ -1964,6 +1979,10 @@ namespace AVFoundation {
 		Default = 0,
 		AppWasSuspended = 1,
 		BuiltInMicMuted = 2,
+		// visionOS only // WasBackgrounded = 3,
+		[iOS (17, 0), Watch (10, 0), TV (17, 0), MacCatalyst (17, 0), NoMac]
+		RouteDisconnected = 4,
+		// visionOS only // DeviceUnauthenticated = 5,
 	}
 
 	[Watch (8, 0), TV (15, 0), NoMac, iOS (15, 0), MacCatalyst (15, 0)]

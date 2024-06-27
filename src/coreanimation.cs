@@ -683,6 +683,17 @@ namespace CoreAnimation {
 		Continuous,
 	}
 
+	[Mac (15, 0), iOS (18, 0), TV (18, 0), MacCatalyst (18, 0), NoWatch]
+	enum CAToneMapMode {
+		[DefaultEnumValue]
+		[Field ("CAToneMapModeAutomatic")]
+		Automatic,
+		[Field ("CAToneMapModeNever")]
+		Never,
+		[Field ("CAToneMapModeIfSupported")]
+		IfSupported,
+	}
+
 	interface ICAMetalDrawable { }
 
 	/// <summary>Interface that defines a protocol for a display buffer at the metal layer.</summary>
@@ -781,6 +792,12 @@ namespace CoreAnimation {
 		[NullAllowed]
 		// There's no documentation about which values are valid in this dictionary, so we can't create any strong bindings for it.
 		NSDictionary DeveloperHudProperties { get; set; }
+
+		[Mac (15, 0), iOS (18, 0), TV (18, 0), MacCatalyst (18, 0), NoWatch]
+		[Export ("toneMapMode")]
+		[BindAs (typeof (CAToneMapMode))]
+		NSString ToneMapMode { get; set; }
+
 	}
 
 	/// <summary>Layer whose content can be provided asynchronously, and with multiple levels of detail.</summary>

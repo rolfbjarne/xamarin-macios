@@ -301,6 +301,43 @@ public partial class Generator {
 			indent--;
 			print ("}");
 
+			if (BindingTouch.SupportsXmlDocumentation) {
+				print ($"/// <summary>Converts an array of <see cref=\"global::{type.FullName}\" /> enum values into an array of their corresponding constants..</summary>");
+				print ($"/// <param name=\"values\">The arrat if enum values to convert.</param>");
+			}
+			print ($"public static {backingFieldTypeName}?[]? ToArray (this {type.Name}[]? values)");
+			print ("{");
+			indent++;
+			print ("if (values is null)");
+			print ("\treturn null;");
+			print ($"var rv = new global::System.Collections.Generic.List<{backingFieldTypeName}?> ();");
+			print ("for (var i = 0; i < values.Length; i++) {");
+			indent++;
+			print ("var value = values [i];");
+			print ("rv.Add (value.GetConstant ());");
+			indent--;
+			print ("}");
+			print ("return rv.ToArray ();");
+			indent--;
+			print ("}");
+			print ("");
+			print ($"internal static {type.Name}[]? To{type.Name}Array (this {backingFieldTypeName}[]? values)");
+			print ("{");
+			indent++;
+			print ("if (values is null)");
+			print ("\treturn null;");
+			print ($"var rv = new global::System.Collections.Generic.List<{type.Name}> ();");
+			print ("for (var i = 0; i < values.Length; i++) {");
+			indent++;
+			print ("var value = values [i];");
+			print ("rv.Add (GetValue (value));");
+			indent--;
+			print ("}");
+			print ("return rv.ToArray ();");
+			indent--;
+			print ("}");
+			print ("");
+
 			if (isFlagsEnum) {
 				if (BindingTouch.SupportsXmlDocumentation) {
 					print ($"/// <summary>Retrieves all the <see cref=\"global::{type.FullName}\" /> constants named by the flags <paramref name=\"value\" />.</summary>");

@@ -6326,6 +6326,12 @@ public partial class Generator : IMemberGatherer {
 						print ("_{0} = Runtime.GetNSObject<NSArray> (Dlfcn.GetIndirect (Libraries.{2}.Handle, \"{1}\"))!;", field_pi.Name, fieldAttr.SymbolName, library_name);
 						indent--;
 						print ("return _{0};", field_pi.Name);
+					} else if (field_pi.PropertyType.Name == "NSNumber") {
+						print ("if (_{0} is null)", field_pi.Name);
+						indent++;
+						print ("_{0} = Runtime.GetNSObject<NSNumber> (Dlfcn.GetIndirect (Libraries.{2}.Handle, \"{1}\"))!;", field_pi.Name, fieldAttr.SymbolName, library_name);
+						indent--;
+						print ("return _{0};", field_pi.Name);
 					} else if (field_pi.PropertyType.Name == "UTType") {
 						print ("if (_{0} is null)", field_pi.Name);
 						indent++;

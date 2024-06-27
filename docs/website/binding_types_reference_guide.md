@@ -1415,6 +1415,7 @@ The generated properties are always static.
 Properties flagged with the Field attribute can be of the following types:
 
 * `NSString`
+* `NSNumber`
 * `NSArray`
 * `nint` / `int` / `long`
 * `nuint` / `uint` / `ulong`

@@ -91,6 +91,7 @@ public partial class Generator {
 		Tuple<FieldInfo, FieldAttribute> default_symbol = null;
 		var underlying_type = GetCSharpTypeName (type.GetEnumUnderlyingType ());
 		var is_internal = AttributeManager.HasAttribute<InternalAttribute> (type);
+		var backingFieldType = AttributeManager.GetCustomAttribute<BackingFieldTypeAttribute> (type)?.BackingFieldType ?? TypeCache.NSString;
 		var visibility = is_internal ? "internal" : "public";
 		print ("{0} enum {1} : {2} {{", visibility, type.Name, underlying_type);
 		indent++;
@@ -186,6 +187,7 @@ public partial class Generator {
 			print ("");
 
 			int n = 0;
+			var backingFieldTypeName = TypeManager.FormatType (type, backingFieldType);
 			foreach (var kvp in fields) {
 				var f = kvp.Key;
 				var fa = kvp.Value;
@@ -215,10 +217,10 @@ public partial class Generator {
 			}
 
 			if (BindingTouch.SupportsXmlDocumentation) {
-				print ($"/// <summary>Retrieves the <see cref=\"global::Foundation.NSString\" /> constant that describes <paramref name=\"self\" />.</summary>");
+				print ($"/// <summary>Retrieves the <see cref=\"global::{backingFieldType.FullName}\" /> constant that describes <paramref name=\"self\" />.</summary>");
 				print ($"/// <param name=\"self\">The instance on which this method operates.</param>");
 			}
-			print ("public static NSString? GetConstant (this {0} self)", type.Name);
+			print ("public static {1}? GetConstant (this {0} self)", type.Name, backingFieldTypeName);
 			print ("{");
 			indent++;
 			print ("IntPtr ptr = IntPtr.Zero;");
@@ -239,7 +241,7 @@ public partial class Generator {
 				}
 				print ("}");
 			}
-			print ("return (NSString?) Runtime.GetNSObject (ptr);");
+			print ("return ({0}?) Runtime.GetNSObject (ptr);", backingFieldTypeName);
 			indent--;
 			print ("}");
 
@@ -250,7 +252,7 @@ public partial class Generator {
 				print ($"/// <summary>Retrieves the <see cref=\"global::{type.FullName}\" /> value named by <paramref name=\"constant\" />.</summary>");
 				print ($"/// <param name=\"constant\">The name of the constant to retrieve.</param>");
 			}
-			print ("public static {0} GetValue (NSString{1} constant)", type.Name, nullable ? "?" : "");
+			print ("public static {0} GetValue ({2}{1} constant)", type.Name, nullable ? "?" : "", backingFieldTypeName);
 			print ("{");
 			indent++;
 			print ("if (constant is null)");
@@ -275,20 +277,57 @@ public partial class Generator {
 			indent--;
 			print ("}");
 
+			if (BindingTouch.SupportsXmlDocumentation) {
+				print ($"/// <summary>Converts an array of <see cref=\"global::{type.FullName}\" /> enum values into an array of their corresponding constants..</summary>");
+				print ($"/// <param name=\"values\">The arrat if enum values to convert.</param>");
+			}
+			print ($"public static {backingFieldTypeName}?[]? ToArray (this {type.Name}[]? values)");
+			print ("{");
+			indent++;
+			print ("if (values is null)");
+			print ("\treturn null;");
+			print ($"var rv = new global::System.Collections.Generic.List<{backingFieldTypeName}?> ();");
+			print ("for (var i = 0; i < values.Length; i++) {");
+			indent++;
+			print ("var value = values [i];");
+			print ("rv.Add (value.GetConstant ());");
+			indent--;
+			print ("}");
+			print ("return rv.ToArray ();");
+			indent--;
+			print ("}");
+			print ("");
+			print ($"internal static {type.Name}[]? To{type.Name}Array (this {backingFieldTypeName}[]? values)");
+			print ("{");
+			indent++;
+			print ("if (values is null)");
+			print ("\treturn null;");
+			print ($"var rv = new global::System.Collections.Generic.List<{type.Name}> ();");
+			print ("for (var i = 0; i < values.Length; i++) {");
+			indent++;
+			print ("var value = values [i];");
+			print ("rv.Add (GetValue (value));");
+			indent--;
+			print ("}");
+			print ("return rv.ToArray ();");
+			indent--;
+			print ("}");
+			print ("");
+
 			if (isFlagsEnum) {
 				if (BindingTouch.SupportsXmlDocumentation) {
 					print ($"/// <summary>Retrieves all the <see cref=\"global::{type.FullName}\" /> constants named by the flags <paramref name=\"value\" />.</summary>");
 					print ($"/// <param name=\"value\">The flags to retrieve</param>");
 					print ($"/// <remarks>Any flags that are not recognized will be ignored.</remarks>");
 				}
-				print ($"public static NSString[] ToArray (this {type.Name} value)");
+				print ($"public static {backingFieldTypeName}[] ToArray (this {type.Name} value)");
 				print ("{");
 				indent++;
-				print ("var rv = new global::System.Collections.Generic.List<NSString> ();");
+				print ($"var rv = new global::System.Collections.Generic.List<{backingFieldTypeName}> ();");
 				foreach (var kvp in fields) {
 					print ($"if (value.HasFlag ({type.Name}.{kvp.Key.Name}) && {kvp.Value.SymbolName} != IntPtr.Zero)");
 					indent++;
-					print ($"rv.Add ((NSString) Runtime.GetNSObject ({kvp.Value.SymbolName})!);");
+					print ($"rv.Add (({backingFieldTypeName}) Runtime.GetNSObject ({kvp.Value.SymbolName})!);");
 					indent--;
 				}
 				print ($"// In order to be forward-compatible, any unknown values are ignored.");
@@ -297,7 +336,7 @@ public partial class Generator {
 				print ("}");
 				print ("");
 
-				print ($"public static {type.Name} ToFlags (global::System.Collections.Generic.IEnumerable<NSString{(nullable ? "?" : "")}>{(nullable ? "?" : "")} constants)");
+				print ($"public static {type.Name} ToFlags (global::System.Collections.Generic.IEnumerable<{backingFieldTypeName}{(nullable ? "?" : "")}>{(nullable ? "?" : "")} constants)");
 				print ("{");
 				indent++;
 				print ($"var rv = default ({type.Name});");

@@ -266,6 +266,22 @@ namespace VideoToolbox {
 		[Watch (8, 5), TV (15, 4), Mac (12, 3), iOS (15, 4), MacCatalyst (15, 4)]
 		[Field ("kVTCompressionPropertyKey_OutputBitDepth")]
 		NSString OutputBitDepth { get; }
+
+		[NoWatch, NoTV, Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Field ("kVTCompressionPropertyKey_ProjectionKind")]
+		NSString ProjectionKind { get; }
+
+		[NoWatch, TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Field ("kVTCompressionPropertyKey_ViewPackingKind")]
+		NSString ViewPackingKind { get; }
+
+		[NoWatch, NoTV, Mac (15, 0), NoiOS, NoMacCatalyst]
+		[Field ("kVTCompressionPropertyKey_SuggestedLookAheadFrameCount")]
+		NSString SuggestedLookAheadFrameCount { get; }
+
+		[NoWatch, NoTV, Mac (15, 0), NoiOS, NoMacCatalyst]
+		[Field ("kVTCompressionPropertyKey_SpatialAdaptiveQPLevel")]
+		NSString SpatialAdaptiveQPLevel { get; }
 	}
 
 	[iOS (13, 0), TV (13, 0)]
@@ -457,6 +473,28 @@ namespace VideoToolbox {
 		[Watch (8, 5), TV (15, 4), Mac (12, 3), iOS (15, 4), MacCatalyst (15, 4)]
 		[Export ("OutputBitDepth")]
 		bool OutputBitDepth { get; set; }
+
+		[NoWatch, NoTV, Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("ProjectionKind")]
+		CMFormatDescriptionProjectionKind /* NSString */ ProjectionKind { get; }
+
+		[NoWatch, NoTV, Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("ViewPackingKind")]
+		CMFormatDescriptionViewPackingKind /* NSString */ ViewPackingKind { get; }
+
+		[NoWatch, NoTV, Mac (15, 0), NoiOS, NoMacCatalyst]
+		[Export ("SuggestedLookAheadFrameCount")]
+		nint /* NSNumber */ SuggestedLookAheadFrameCount { get; }
+
+		[NoWatch, NoTV, Mac (15, 0), NoiOS, NoMacCatalyst]
+		[Export ("SpatialAdaptiveQPLevel")]
+		VTQPModulationLevel /* NSNumber */ SpatialAdaptiveQPLevel { get; }
+	}
+
+	[NoWatch, NoTV, Mac (15, 0), NoiOS, NoMacCatalyst]
+	public enum VTQPModulationLevel {
+		Default = -1,
+		Disable = 0,
 	}
 
 	/// <summary>A class that encapsulates keys necessary by <see cref="T:VideoToolbox.VTProfileLevel" />.</summary>
@@ -476,6 +514,13 @@ namespace VideoToolbox {
 		[TV (15, 4), Mac (12, 3), iOS (15, 4), MacCatalyst (15, 4)]
 		[Field ("kVTProfileLevel_HEVC_Main42210_AutoLevel")]
 		NSString Hevc_Main42210_AutoLevel { get; }
+
+		[Field ("kVTProfileLevel_HEVC_Monochrome_AutoLevel")]
+		NSString Hevc_Monochrome_AutoLevel { get; }
+
+		[TV (13, 0), iOS (13, 0), MacCatalyst (13, 0)]
+		[Field ("kVTProfileLevel_HEVC_Monochrome10_AutoLevel")]
+		NSString Hevc_Monochrome10_AutoLevel { get; }
 
 		// H264
 
@@ -1337,5 +1382,230 @@ namespace VideoToolbox {
 
 		[Field ("kVTPixelRotationPropertyKey_FlipVerticalOrientation")]
 		NSString FlipVerticalOrientation { get; }
+	}
+
+	[NoWatch, TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	public enum VTHdrPerFrameMetadataGenerationHdrFormatType {
+		[Field ("kVTHDRPerFrameMetadataGenerationHDRFormatType_DolbyVision")]
+		DolbyVision,
+	}
+
+	[NoWatch, TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	[Static]
+	interface VTHdrPerFrameMetadataGenerationOptionsKey {
+		[Field ("kVTHDRPerFrameMetadataGenerationOptionsKey_HDRFormats")]
+		NSString HdrFormats { get; }
+
+	}
+
+	[NoWatch, TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	[StrongDictionary ("VTHdrPerFrameMetadataGenerationOptionsKey")]
+	interface VTHdrPerFrameMetadataGenerationOptions {
+		[Export ("HdrFormats")]
+		VTHdrPerFrameMetadataGenerationHdrFormatType HdrFormats { get; set; }
+	}
+
+	[NoWatch, NoTV, NoiOS, NoMacCatalyst, Mac (15, 0)]
+	[Static]
+	interface VTDecoderExtensionPropertiesKey {
+		[Field ("kVTDecoderExtensionProperties_ExtensionNameKey")]
+		NSString ExtensionName { get; }
+
+		[Field ("kVTDecoderExtensionProperties_ContainingBundleNameKey")]
+		NSString ContainingBundleName { get; }
+
+		[Field ("kVTDecoderExtensionProperties_ExtensionURLKey")]
+		NSString ExtensionUrl { get; }
+
+		[Field ("kVTDecoderExtensionProperties_ContainingBundleURLKey")]
+		NSString ContainingBundleUrl { get; }
+
+		[Field ("kVTDecoderExtensionProperties_ExtensionIdentifierKey")]
+		NSString ExtensionIdentifier { get; }
+	}
+
+	[NoWatch, NoTV, NoiOS, NoMacCatalyst, Mac (15, 0)]
+	[StrongDictionary ("VTDecoderExtensionPropertiesKey")]
+	interface VTDecoderExtensionProperties {
+		[Export ("ExtensionName")]
+		string ExtensionName { get; set; }
+
+		[Export ("ContainingBundleName")]
+		string ContainingBundleName { get; set; }
+
+		[Export ("ExtensionUrl")]
+		NSUrl ExtensionUrl { get; set; }
+
+		[Export ("ContainingBundleUrl")]
+		NSUrl ContainingBundleUrl { get; set; }
+
+		[Export ("ExtensionIdentifier")]
+		string ExtensionIdentifier { get; set; }
+	}
+
+	[NoWatch, NoTV, NoiOS, NoMacCatalyst, Mac (15, 0)]
+	[Static]
+	interface VTRawProcessingParameterKey {
+		[Field ("kVTRAWProcessingParameter_Key")]
+		NSString Key { get; }
+
+		[Field ("kVTRAWProcessingParameter_Name")]
+		NSString Name { get; }
+
+		[Field ("kVTRAWProcessingParameter_Description")]
+		NSString Description { get; }
+
+		[Field ("kVTRAWProcessingParameter_Enabled")]
+		NSString Enabled { get; }
+
+		[Field ("kVTRAWProcessingParameter_ValueType")]
+		NSString ValueType { get; }
+
+		[Field ("kVTRAWProcessingParameter_ListArray")]
+		NSString ListArray { get; }
+
+		[Field ("kVTRAWProcessingParameter_SubGroup")]
+		NSString SubGroup { get; }
+
+		[Field ("kVTRAWProcessingParameter_MaximumValue")]
+		NSString MaximumValue { get; }
+
+		[Field ("kVTRAWProcessingParameter_MinimumValue")]
+		NSString MinimumValue { get; }
+
+		[Field ("kVTRAWProcessingParameter_InitialValue")]
+		NSString InitialValue { get; }
+
+		[Field ("kVTRAWProcessingParameter_NeutralValue")]
+		NSString NeutralValue { get; }
+
+		[Field ("kVTRAWProcessingParameter_CameraValue")]
+		NSString CameraValue { get; }
+
+		[Field ("kVTRAWProcessingParameter_CurrentValue")]
+		NSString CurrentValue { get; }
+	}
+
+	[NoWatch, NoTV, NoiOS, NoMacCatalyst, Mac (15, 0)]
+	[Static]
+	interface VTRawProcessingParameterListElementKey {
+		[Field ("kVTRAWProcessingParameterListElement_Label")]
+		NSString Label { get; }
+
+		[Field ("kVTRAWProcessingParameterListElement_Description")]
+		NSString Description { get; }
+
+		[Field ("kVTRAWProcessingParameterListElement_ListElementID")]
+		NSString ListElementId { get; }
+	}
+
+	[NoWatch, NoTV, NoiOS, NoMacCatalyst, Mac (15, 0)]
+	[StrongDictionary ("VTRawProcessingParameterListElementKey")]
+	interface VTRawProcessingParametersListElement {
+		[Export ("Label")]
+		string Label { get; set; }
+
+		[Export ("Description")]
+		string Description { get; set; }
+
+		[Export ("ListElementId")]
+		nint ListElementId { get; set; }
+	}
+
+	[NoWatch, NoTV, NoiOS, NoMacCatalyst, Mac (15, 0)]
+	[Static]
+	interface VTRawProcessingParameterValueTypeKey {
+		[Field ("kVTRAWProcessingParameterValueType_Boolean")]
+		NSString Boolean { get; }
+
+		[Field ("kVTRAWProcessingParameterValueType_Integer")]
+		NSString Integer { get; }
+
+		[Field ("kVTRAWProcessingParameterValueType_Float")]
+		NSString Float { get; }
+
+		[Field ("kVTRAWProcessingParameterValueType_List")]
+		NSString List { get; }
+
+		[Field ("kVTRAWProcessingParameterValueType_SubGroup")]
+		NSString SubGroup { get; }
+	}
+
+	[NoWatch, NoTV, NoiOS, NoMacCatalyst, Mac (15, 0)]
+	[StrongDictionary ("VTRawProcessingParameterValueTypeKey")]
+	interface VTRawProcessingParameterValueType {
+		[Export ("Boolean")]
+		bool Boolean { get; set; }
+
+		[Export ("Integer")]
+		int Integer { get; set; }
+
+		[Export ("Float")]
+		float Float { get; set; }
+
+		[Export ("List")]
+		NSObject[] List { get; set; }
+
+		[Export ("SubGroup")]
+		NSDictionary SubGroup { get; set; }
+	}
+
+	[NoWatch, NoTV, NoiOS, NoMacCatalyst, Mac (15, 0)]
+	[StrongDictionary ("VTRawProcessingParameterKey")]
+	interface VTRawProcessingParameters {
+		[Export ("Key")]
+		string Key { get; set; }
+
+		[Export ("Name")]
+		string Name { get; set; }
+
+		[Export ("Description")]
+		string Description { get; set; }
+
+		[Export ("Enabled")]
+		bool Enabled { get; set; }
+
+		[Export ("ValueType")]
+		VTRawProcessingParameterValueType ValueType { get; set; }
+
+		// FIXME: Generated code doesn't compile
+		// [Export ("ListArray")]
+		// VTRawProcessingParametersListElement [] ListArray { get; set; }
+
+		// FIXME: Generated code doesn't compile
+		// [Export ("SubGroup")]
+		// VTRawProcessingParameters[] SubGroup { get; set; }
+
+		[Export ("MaximumValue")]
+		NSObject MaximumValue { get; set; }
+
+		[Export ("MinimumValue")]
+		NSObject MinimumValue { get; set; }
+
+		[Export ("InitialValue")]
+		NSObject InitialValue { get; set; }
+
+		[Export ("NeutralValue")]
+		NSObject NeutralValue { get; set; }
+
+		[Export ("CameraValue")]
+		NSObject CameraValue { get; set; }
+
+		[Export ("CurrentValue")]
+		NSObject CurrentValue { get; set; }
+	}
+
+	[NoWatch, NoTV, NoiOS, NoMacCatalyst, Mac (15, 0)]
+	[Static]
+	interface VTRawProcessingPropertyKey {
+		[Field ("kVTRAWProcessingPropertyKey_MetalDeviceRegistryID")]
+		NSString MetalDeviceRegistryId { get; }
+	}
+
+	[NoWatch, NoTV, NoiOS, NoMacCatalyst, Mac (15, 0)]
+	[StrongDictionary ("VTRawProcessingPropertyKey")]
+	interface VTRawProcessingProperty {
+		[Export ("MetalDeviceRegistryId")]
+		ulong MetalDeviceRegistryId { get; set; }
 	}
 }

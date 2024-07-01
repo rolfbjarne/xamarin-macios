@@ -716,6 +716,11 @@ public partial class Generator : IMemberGatherer {
 					invoke.AppendFormat ("CFArray.ArrayFromHandle<{0}> ({1})!", TypeManager.FormatType (null, et), safe_name);
 					continue;
 				}
+				if (TypeCache.INativeObject.IsAssignableFrom (et)) {
+					pars.Add (new TrampolineParameterInfo (NativeHandleType, safe_name));
+					invoke.AppendFormat ("NSArray.ArrayFromHandle<{0}> ({1})!", TypeManager.FormatType (t, et), safe_name);
+					continue;
+				}
 			}
 
 			if (pi.ParameterType.IsSubclassOf (TypeCache.System_Delegate)) {
@@ -7437,9 +7442,9 @@ public partial class Generator : IMemberGatherer {
 
 		if (pt.IsByRef) {
 			pt = pt.GetElementType ();
-			name += (removeRefTypes ? "" : (p.IsOut ? "out " : "ref ")) + TypeManager.RenderType (pt, p);
+			name += (removeRefTypes ? "" : (p.IsOut ? "out " : "ref ")) + TypeManager.FormatType (p.Member.DeclaringType, pt);
 		} else
-			name += TypeManager.RenderType (pt, p);
+			name += TypeManager.FormatType (p.Member.DeclaringType, pt);
 		if (!pt.IsValueType && AttributeManager.HasAttribute<NullAllowedAttribute> (p))
 			name += "?";
 		return name;

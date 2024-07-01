@@ -67,11 +67,12 @@ namespace CoreFoundation {
 		NSString ModeCommon { get; }
 	}
 
+	[Internal]
 	[Partial]
-	interface DispatchData {
+	interface CoreFoundationFields {
 		[Internal]
 		[Field ("_dispatch_data_destructor_free", "/usr/lib/system/libdispatch.dylib")]
-		IntPtr free { get; }
+		IntPtr dispatch_data_destructor_free { get; }
 	}
 
 #if !WATCH

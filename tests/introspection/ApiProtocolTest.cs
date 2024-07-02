@@ -586,6 +586,7 @@ namespace Introspection {
 				case "UISwipeGestureRecognizer":
 				case "UIScreenEdgePanGestureRecognizer":
 				case "UIHoverGestureRecognizer":
+					return true;
 				}
 				break;
 			// conformance added in Xcode 8 (iOS 10 / macOS 10.12)

@@ -10296,8 +10296,7 @@ namespace CoreImage {
 	[CoreImageFilter]
 	[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 	[BaseType (typeof (CIFilter))]
-	interface CIMaximumScaleTransform : CIMaximumScaleTransformProtocol
-	{
+	interface CIMaximumScaleTransform : CIMaximumScaleTransformProtocol {
 	}
 
 	[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
@@ -10319,8 +10318,7 @@ namespace CoreImage {
 	[CoreImageFilter]
 	[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 	[BaseType (typeof (CIFilter))]
-	interface CIToneMapHeadroom : CIToneMapHeadroomProtocol
-	{
+	interface CIToneMapHeadroom : CIToneMapHeadroomProtocol {
 	}
 
 	[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
@@ -10342,8 +10340,7 @@ namespace CoreImage {
 	[CoreImageFilter]
 	[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 	[BaseType (typeof (CIFilter))]
-	interface CIAreaBoundsRed : CIAreaBoundsRedProtocol
-	{
+	interface CIAreaBoundsRed : CIAreaBoundsRedProtocol {
 	}
 
 	[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]

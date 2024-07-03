@@ -861,6 +861,18 @@ namespace CoreMotion {
 
 		[Export ("stopDeviceMotionUpdates")]
 		void StopDeviceMotionUpdates ();
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("connectionStatusActive")]
+		bool ConnectionStatusActive { [Bind ("isConnectionStatusActive")] get; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("startConnectionStatusUpdates")]
+		void StartConnectionStatusUpdates ();
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("stopConnectionStatusUpdates")]
+		void StopConnectionStatusUpdates ();
 	}
 
 	interface ICMHeadphoneMotionManagerDelegate { }

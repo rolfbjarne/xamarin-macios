@@ -4417,9 +4417,6 @@ namespace WebKit {
 		[Export ("URL", ArgumentSemantic.Copy)]
 		NSUrl Url { get; }
 
-		[Deprecated (PlatformName.MacOSX, 15, 0, message: "No longer supported. Always returns null.")]
-		[Deprecated (PlatformName.iOS, 18, 0, message: "No longer supported. Always returns null.")]
-		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "No longer supported. Always returns null.")]
 		[Export ("title")]
 		[NullAllowed]
 		string Title { get; }
@@ -5638,6 +5635,10 @@ namespace WebKit {
 		[NoiOS, NoMacCatalyst, Mac (14, 0)]
 		[Export ("stopLoading:")]
 		void StopLoading ([NullAllowed] NSObject sender);
+
+		[Mac (15, 0), NoiOS, NoMacCatalyst]
+		[Export ("writingToolsActive")]
+		bool WritingToolsActive { [Bind ("isWritingToolsActive")] get; }
 	}
 
 	/// <param name="result">The result of a successful evaluation. <see langword="null" /> if error occurred.</param>
@@ -5762,6 +5763,18 @@ namespace WebKit {
 		[NoiOS, Mac (14, 0), NoMacCatalyst]
 		[Export ("userInterfaceDirectionPolicy", ArgumentSemantic.Assign)]
 		WKUserInterfaceDirectionPolicy UserInterfaceDirectionPolicy { get; set; }
+
+		[Mac (15, 0), NoiOS, NoMacCatalyst]
+		[Export ("supportsAdaptiveImageGlyph")]
+		bool SupportsAdaptiveImageGlyph { get; set; }
+
+		[Mac (15, 0), NoiOS, MacCatalyst (18, 0)]
+		[Export ("writingToolsBehavior")]
+#if MONOMAC
+		NSWritingToolsBehavior WritingToolsBehavior { get; set; }
+#else
+		UIWritingToolsBehavior WritingToolsBehavior { get; set; }
+#endif
 	}
 
 	/// <summary>A pool of content processes.</summary>

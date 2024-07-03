@@ -162,7 +162,7 @@ namespace Foundation {
 		}
 
 		#region IEnumerable<T> implementation
-		IEnumerator<TKey> IEnumerable<TKey>.GetEnumerator ()
+		public new IEnumerator<TKey> GetEnumerator ()
 		{
 			return new NSFastEnumerator<TKey> (this);
 		}

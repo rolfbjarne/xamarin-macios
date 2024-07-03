@@ -389,7 +389,7 @@ namespace FileProvider {
 		[Export ("replicated")]
 		bool Replicated { [Bind ("isReplicated")] get; }
 
-		[NoWatch, NoTV, NoMacCatalyst, NoiOS, Mac (13, 0)]
+		[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0), Mac (13, 0)]
 		[Export ("supportsSyncingTrash")]
 		bool SupportsSyncingTrash { get; set; }
 

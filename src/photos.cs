@@ -162,7 +162,7 @@ namespace Photos {
 		NSString LocalIdentifierNotFound { get; }
 
 		[TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
-		[NullAllowed, Export ("adjustmentFormatIdentifier")]
+		[NullAllowed, Export ("adjustmentFormatIdentifier", ArgumentSemantic.Copy)]
 		string AdjustmentFormatIdentifier { get; }
 
 		[TV (15, 0), Mac (12, 0), iOS (15, 0)]

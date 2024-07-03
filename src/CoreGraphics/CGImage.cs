@@ -611,7 +611,7 @@ namespace CoreGraphics {
 		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 #endif
 		[DllImport (Constants.CoreGraphicsLibrary)]
-		unsafe static extern /* CGImageRef __nullable */ IntPtr CGImageCreateWithEDRHeadroom (
+		unsafe static extern /* CGImageRef __nullable */ IntPtr CGImageCreateWithContentHeadroom (
 			/* float */ float headroom,
 			/* size_t */ nint width,
 			/* size_t */ nint height,
@@ -667,11 +667,56 @@ namespace CoreGraphics {
 
 			unsafe {
 				fixed (nfloat* decodePtr = decode) {
-					return CGImageCreateWithEDRHeadroom (headroom, width, height, bitsPerComponent, bitsPerPixel, bytesPerRow,
+					return CGImageCreateWithContentHeadroom (headroom, width, height, bitsPerComponent, bitsPerPixel, bytesPerRow,
 						colorSpace.GetHandle (), bitmapFlags, provider.GetHandle (),
 						decodePtr, shouldInterpolate.AsByte (), intent);
 				}
 			}
+		}
+
+#if NET
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("tvos18.0")]
+#else
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+#endif
+		[DllImport (Constants.CoreGraphicsLibrary)]
+		unsafe static extern /* CGImageRef __nullable */ IntPtr CGImageCreateCopyWithContentHeadroom (
+			/* float */ float headroom,
+			/* CGImageRef cg_nullable */ IntPtr image);
+
+		/// <summary>Create a copy of the current image, adding or replacing the current image's headroom.</summary>
+		/// <param name="headroom">Must be either equal to 0 or greater or equal to 1.0.</param>
+#if NET
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("tvos18.0")]
+#else
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+#endif
+		public CGImage? Copy (float headroom)
+		{
+			if (headroom != 0.0f && headroom < 1.0f)
+				throw new ArgumentException (nameof (headroom));
+
+			var rv = CGImageCreateCopyWithContentHeadroom (headroom, GetCheckedHandle ());
+			return Runtime.GetINativeObject<CGImage> (rv, owns: true);
+		}
+
+		/// <summary>Get the default content headroom for HDR images.</summary>
+#if NET
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("tvos18.0")]
+#else
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+#endif
+		public static float DefaultHdrImageContentHeadroom {
+			get => CoreGraphicsFields.DefaultHdrImageContentHeadroom;
 		}
 
 #if NET

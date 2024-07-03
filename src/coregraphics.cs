@@ -368,6 +368,10 @@ namespace CoreGraphics {
 		[Mac (12, 0), iOS (15, 0), TV (15, 0), Watch (8, 0), MacCatalyst (15, 0)]
 		[Field ("kCGColorSpaceLinearITUR_2020")]
 		NSString LinearItur_2020 { get; }
+
+		[Mac (12, 0), iOS (15, 0), TV (15, 0), Watch (8, 0), MacCatalyst (15, 0)]
+		[Field ("kCGColorSpaceCoreMedia709")]
+		NSString CoreMedia709 { get; }
 	}
 
 	[Partial]
@@ -561,4 +565,11 @@ namespace CoreGraphics {
 		float ExrToneMappingGammaKneeHigh { get; set; }
 	}
 
+	[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	[Partial]
+	[Internal]
+	interface CoreGraphicsFields {
+		[Field ("kCGDefaultHDRImageContentHeadroom")]
+		float DefaultHdrImageContentHeadroom { get; }
+	}
 }

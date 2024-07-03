@@ -140,7 +140,8 @@ namespace AppKit {
 		Default = 0,
 		PlainText = 1 << 0,
 		RichText = 1 << 1,
-		Table = 1 << 2,
+		List = 1 << 2,
+		Table = 1 << 3,
 	}
 
 	[NoMacCatalyst]
@@ -19853,6 +19854,16 @@ namespace AppKit {
 		[Export ("writingToolsActive")]
 		bool WritingToolsActive { [Bind ("isWritingToolsActive")] get; }
 
+		// Inlined from the NSTextView (NSSharing) category
+		[Mac (15, 0)]
+		[Export ("writingToolsBehavior")]
+		NSWritingToolsBehavior WritingToolsBehavior { get; set; }
+
+		// Inlined from the NSTextView (NSSharing) category
+		[Mac (15, 0)]
+		[Export ("writingToolsAllowedInputOptions")]
+		NSWritingToolsAllowedInputOptions WritingToolsAllowedInputOptions { get; set; }
+
 		// Inlined from the NSTextView (NSTextChecking) category
 		[Mac (15, 0)]
 		[Export ("mathExpressionCompletionType")]
@@ -21883,6 +21894,10 @@ namespace AppKit {
 		[Mac (15, 0)]
 		[Export ("beginDraggingSessionWithItems:event:source:")]
 		NSDraggingSession BeginDraggingSession (NSDraggingItem [] items, NSEvent evnt, INSDraggingSource source);
+
+		[Mac (15, 0)]
+		[Export ("cascadingReferenceFrame")]
+		CGRect CascadingReferenceFrame { get; }
 	}
 
 	[NoMacCatalyst]

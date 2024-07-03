@@ -3124,6 +3124,34 @@ namespace ImageIO {
 		[MacCatalyst (14, 1)]
 		[Field ("kCGImageDestinationPreserveGainMap")]
 		NSString PreserveGainMapKey { get; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Field ("kCGImageDestinationEncodeRequest")]
+		NSString EncodeRequest { get; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Field ("kCGImageDestinationEncodeToSDR")]
+		NSString EncodeToSdr { get; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Field ("kCGImageDestinationEncodeToISOHDR")]
+		NSString EncodeToIsoHdr { get; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Field ("kCGImageDestinationEncodeToISOGainmap")]
+		NSString EncodeToIsoGainmap { get; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Field ("kCGImageDestinationEncodeRequestOptions")]
+		NSString EncodeRequestOptions { get; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Field ("kCGImageDestinationEncodeBaseIsSDR")]
+		NSString EncodeBaseIsSdr { get; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Field ("kCGImageDestinationEncodeTonemapMode")]
+		NSString EncodeTonemapMode { get; }
 	}
 
 	/// <summary>Class that contains options for copying image sources.</summary>

@@ -1069,6 +1069,9 @@ namespace UIKit {
 		[Export ("accessibilityDirectTouchOptions", ArgumentSemantic.Assign)]
 		UIAccessibilityDirectTouchOptions AccessibilityDirectTouchOptions { get; set; }
 
+		[NoWatch, TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("accessibilityExpandedStatus", ArgumentSemantic.Assign)]
+		UIAccessibilityExpandedStatus AccessibilityExpandedStatus { get; set; }
 	}
 
 	interface UIAccessibilityAnnouncementFinishedEventArgs {
@@ -1218,6 +1221,14 @@ namespace UIKit {
 		[MacCatalyst (14, 0)]
 		[NullAllowed, Export ("image", ArgumentSemantic.Strong)]
 		UIImage Image { get; set; }
+
+		[NoWatch, TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("category", ArgumentSemantic.Copy), NullAllowed]
+		string Category { get; set; }
+
+		[NoWatch, TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Field ("UIAccessibilityCustomActionCategoryEdit")]
+		NSString CategoryEdit { get; }
 	}
 
 	delegate UIAccessibilityCustomRotorItemResult UIAccessibilityCustomRotorSearch (UIAccessibilityCustomRotorSearchPredicate predicate);
@@ -18356,7 +18367,7 @@ namespace UIKit {
 		[Export ("tab", ArgumentSemantic.Weak), NullAllowed]
 		UITab Tab { get; }
 
-		[NoTV, iOS (18, 0), MacCatalyst (18, 0)]
+		[TV (18, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("preferredTransition", ArgumentSemantic.Strong)]
 		UIViewControllerTransition PreferredTransition { get; set; }
 	}
@@ -29492,7 +29503,8 @@ namespace UIKit {
 		Default = 0,
 		PlainText = 1 << 0,
 		RichText = 1 << 1,
-		Table = 1 << 2, 
+		List = 1 << 3, 
+		Table = 1 << 3, 
 	}
 
 	[Native]
@@ -29991,7 +30003,7 @@ namespace UIKit {
 		void UpdateLink (UIView windowScene, NSObject target, Selector selector);
 	}
 
-	[NoTV, NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
+	[TV (18, 0), NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface UIViewControllerTransition {
@@ -30016,7 +30028,7 @@ namespace UIKit {
 		UIViewControllerTransition PartialCurlTransition { get; }
 	}
 
-	[NoTV, NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
+	[TV (18, 0), NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface UIZoomTransitionSourceViewProviderContext {
@@ -30027,7 +30039,7 @@ namespace UIKit {
 		UIViewController ZoomedViewController { get; }
 	}
 
-	[NoTV, NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
+	[TV (18, 0), NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
 	[BaseType (typeof (NSObject))]
 	interface UIZoomTransitionOptions : NSCopying {
 		[Export ("interactiveDismissShouldBegin", ArgumentSemantic.Copy), NullAllowed]
@@ -30043,7 +30055,7 @@ namespace UIKit {
 		UIBlurEffect DimmingVisualEffect { get; set; }
 	}
 
-	[NoTV, NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
+	[TV (18, 0), NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
 	[BaseType (typeof (NSObject))]
 	interface UIZoomTransitionInteractionContext {
 		[Export ("location")]
@@ -30056,7 +30068,7 @@ namespace UIKit {
 		bool WillBegin { get; }
 	}
 
-	[NoTV, NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
+	[TV (18, 0), NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
 	[BaseType (typeof (NSObject))]
 	interface UIZoomTransitionAlignmentRectContext {
 		[Export ("sourceView")]
@@ -30064,5 +30076,59 @@ namespace UIKit {
 
 		[Export ("zoomedViewController")]
 		UIViewController ZoomedViewController { get; }
+	}
+
+	[TV (18, 0), NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
+	[Category]
+	[BaseType (typeof (NSObject))]
+	interface NSObject_UIAccessibilityHitTest {
+		[Export ("accessibilityHitTest:withEvent:")]
+		[return: NullAllowed]
+		NSObject AccessibilityHitTest (CGPoint point, [NullAllowed] UIEvent withEvent);
+	}
+
+	[NoTV, NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
+	[Category]
+	[BaseType (typeof (NSObject))]
+	interface NSObject_UIAccessibilityTextNavigation {
+		[Export ("accessibilityPreviousTextNavigationElement", ArgumentSemantic.Strong)]
+		[return: NullAllowed]
+		NSObject GetAccessibilityPreviousTextNavigationElement ();
+
+		[Export ("setAccessibilityPreviousTextNavigationElement:")]
+		void SetAccessibilityPreviousTextNavigationElement ([NullAllowed] NSObject element);
+
+		[Export ("accessibilityNextTextNavigationElement", ArgumentSemantic.Strong)]
+		[return: NullAllowed]
+		NSObject GetAccessibilityNextTextNavigationElement ();
+
+		[Export ("setAccessibilityNextTextNavigationElement:")]
+		void SetAccessibilityNextTextNavigationElement ([NullAllowed] NSObject element);
+
+		[Export ("accessibilityPreviousTextNavigationElementBlock", ArgumentSemantic.Strong)]
+		[return: NullAllowed]
+		AXObjectReturnBlock GetAccessibilityPreviousTextNavigationElementBlock ();
+
+		[Export ("setAccessibilityPreviousTextNavigationElementBlock:")]
+		void SetAccessibilityPreviousTextNavigationElementBlock ([NullAllowed] AXObjectReturnBlock element);
+
+		[Export ("accessibilityNextTextNavigationElementBlock", ArgumentSemantic.Strong)]
+		[return: NullAllowed]
+		AXObjectReturnBlock GetAccessibilityNextTextNavigationElementBlock ();
+
+		[Export ("setAccessibilityNextTextNavigationElementBlock:")]
+		void SetAccessibilityNextTextNavigationElementBlock ([NullAllowed] AXObjectReturnBlock element);
+	}
+
+	[NoWatch]
+	[return: NullAllowed]
+	delegate NSObject AXObjectReturnBlock ();
+
+	[Native]
+	[TV (18, 0), Watch (11, 0), iOS (18, 0), MacCatalyst (18, 0)]
+	enum UIAccessibilityExpandedStatus : long {
+		Unsupported = 0,
+		Expanded,
+		Collapsed,
 	}
 }

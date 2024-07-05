@@ -12,8 +12,6 @@
 !missing-protocol! ASAuthorizationWebBrowserSecurityKeyPublicKeyCredentialAssertionRequest not bound
 !missing-protocol! ASAuthorizationWebBrowserSecurityKeyPublicKeyCredentialProvider not bound
 !missing-protocol! ASAuthorizationWebBrowserSecurityKeyPublicKeyCredentialRegistrationRequest not bound
-!missing-protocol-conformance! ASAuthorizationPublicKeyCredentialLargeBlobRegistrationOutput should conform to NSCopying
-!missing-protocol-conformance! ASAuthorizationPublicKeyCredentialLargeBlobRegistrationOutput should conform to NSSecureCoding
 !missing-selector! +ASAuthorizationPublicKeyCredentialPRFRegistrationInput::checkForSupport not bound
 !missing-selector! +ASOneTimeCodeCredential::credentialWithCode: not bound
 !missing-selector! +ASWebAuthenticationSessionCallback::callbackWithCustomScheme: not bound

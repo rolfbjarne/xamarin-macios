@@ -2560,7 +2560,7 @@ namespace CoreImage {
 		float ContentHeadroom { get; }
 
 		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
-		[Export ("metalTexture")]
+		[Export ("metalTexture"), NullAllowed]
 		IMTLTexture MetalTexture { get; }
 	}
 

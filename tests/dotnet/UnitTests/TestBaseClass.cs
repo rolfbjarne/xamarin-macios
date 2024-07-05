@@ -31,7 +31,7 @@ namespace Xamarin.Tests {
 			return rv;
 		}
 
-		protected void AddRemoteProperties (Dictionary<string, string> properties)
+		protected static void AddRemoteProperties (Dictionary<string, string> properties)
 		{
 			properties ["ServerAddress"] = Environment.GetEnvironmentVariable ("MAC_AGENT_IP") ?? string.Empty;
 			properties ["ServerUser"] = Environment.GetEnvironmentVariable ("MAC_AGENT_USER") ?? string.Empty;

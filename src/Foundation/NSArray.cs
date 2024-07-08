@@ -232,6 +232,19 @@ namespace Foundation {
 			}
 		}
 
+#if NET
+		static internal NSArray FromIntPtrs (IntPtr [] values)
+		{
+			if (values is null)
+				throw new ArgumentNullException (nameof (values));
+
+			unsafe {
+				fixed (IntPtr *valuesPtr = values)
+					return Runtime.GetNSObject<NSArray> (NSArray.FromObjects ((IntPtr) valuesPtr, values.Length));
+			}
+		}
+#endif
+
 		static public NSArray FromIntPtrs (NativeHandle [] vals)
 		{
 			if (vals is null)

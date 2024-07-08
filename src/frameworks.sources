@@ -731,6 +731,15 @@ COREWLAN_SOURCES = \
 	CoreWlan/CWInterface.cs \
 	CoreWlan/CWKeychain.cs \
 
+# DARWIN
+
+DARWIN_CORE_SOURCES = \
+	Darwin/TimeSpec.cs \
+
+DARWIN_SOURCES = \
+	Darwin/KernelNotification.cs \
+	Darwin/SystemLog.cs \
+
 # DeviceDiscoveryExtension
 
 DEVICEDISCOVERYEXTENSION_API_SOURCES = \
@@ -915,6 +924,18 @@ FOUNDATION_SOURCES = \
 	Foundation/ObjCException.cs \
 	Foundation/ToString.cs \
 	Foundation/NSItemProvider.cs \
+
+# FSKit
+
+FSKIT_CORE_SOURCES = \
+	FSKit/FSMetaReadahead.cs \
+
+FSKIT_SOURCES = \
+	FSKit/FSBlockDeviceResource.cs \
+	FSKit/FSFileName.cs \
+	FSKit/FSKitFunctions.cs \
+	FSKit/FSMessageConnection.cs \
+	FSKit/FSTaskOptionsBundle.cs \
 
 # GameController
 
@@ -2102,6 +2123,7 @@ MACOS_FRAMEWORKS =          \
 	CoreSpotlight           \
 	CoreText                \
 	CoreWlan                \
+	Darwin                  \
 	EventKit                \
 	ExecutionPolicy		\
 	ExtensionKit		\
@@ -2109,6 +2131,7 @@ MACOS_FRAMEWORKS =          \
 	FileProvider	\
 	FileProviderUI	\
 	FinderSync		\
+	FSKit \
 	GameController          \
 	GameplayKit             \
 	GLKit                   \

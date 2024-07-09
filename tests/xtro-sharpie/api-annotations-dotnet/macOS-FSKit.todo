@@ -1,0 +1,37 @@
+!extra-null-allowed! 'System.Void FSKit.FSItemAttributes::AccessTime(Darwin.TimeSpec&)' has a extraneous [NullAllowed] on parameter #0
+!extra-null-allowed! 'System.Void FSKit.FSItemAttributes::AddedTime(Darwin.TimeSpec&)' has a extraneous [NullAllowed] on parameter #0
+!extra-null-allowed! 'System.Void FSKit.FSItemAttributes::BackupTime(Darwin.TimeSpec&)' has a extraneous [NullAllowed] on parameter #0
+!extra-null-allowed! 'System.Void FSKit.FSItemAttributes::BirthTime(Darwin.TimeSpec&)' has a extraneous [NullAllowed] on parameter #0
+!extra-null-allowed! 'System.Void FSKit.FSItemAttributes::ChangeTime(Darwin.TimeSpec&)' has a extraneous [NullAllowed] on parameter #0
+!extra-null-allowed! 'System.Void FSKit.FSItemAttributes::ModifyTime(Darwin.TimeSpec&)' has a extraneous [NullAllowed] on parameter #0
+!extra-null-allowed! 'System.Void FSKit.FSItemAttributes::SetAccessTime(Darwin.TimeSpec&)' has a extraneous [NullAllowed] on parameter #0
+!extra-null-allowed! 'System.Void FSKit.FSItemAttributes::SetAddedTime(Darwin.TimeSpec&)' has a extraneous [NullAllowed] on parameter #0
+!extra-null-allowed! 'System.Void FSKit.FSItemAttributes::SetBackupTime(Darwin.TimeSpec&)' has a extraneous [NullAllowed] on parameter #0
+!extra-null-allowed! 'System.Void FSKit.FSItemAttributes::SetBirthTime(Darwin.TimeSpec&)' has a extraneous [NullAllowed] on parameter #0
+!extra-null-allowed! 'System.Void FSKit.FSItemAttributes::SetChangeTime(Darwin.TimeSpec&)' has a extraneous [NullAllowed] on parameter #0
+!extra-null-allowed! 'System.Void FSKit.FSItemAttributes::SetModifyTime(Darwin.TimeSpec&)' has a extraneous [NullAllowed] on parameter #0
+!incorrect-designated-initializer! FSFileName::initWithBytes:length: is not a constructor
+!missing-field! FSActivateOptionSyntaxKey not bound
+!missing-field! FSCheckOptionSyntaxKey not bound
+!missing-field! FSFormatOptionSyntaxKey not bound
+!missing-protocol-member! FSTaskMessageOps::completed:reply: not found
+!missing-selector! +FSEntityIdentifier::identifierWithUUID:byteQualifier: not bound
+!missing-selector! +FSEntityIdentifier::identifierWithUUID:longByteQualifier: not bound
+!missing-selector! +FSFileName::nameWithCString: not bound
+!missing-selector! +FSKitConstants::forceLoadOption not bound
+!missing-selector! +FSKitConstants::moduleExtensionPointName not bound
+!missing-selector! +FSProbeResult::resultWithResult:name:containerID: not bound
+!missing-selector! FSEntityIdentifier::initWithBytes:length: not bound
+!missing-selector! FSEntityIdentifier::initWithUUID:byteQualifier: not bound
+!missing-selector! FSEntityIdentifier::initWithUUID:longByteQualifier: not bound
+!missing-selector! FSFileName::debugDescription not bound
+!missing-selector! FSFileName::initWithCString: not bound
+!missing-selector! FSMessageConnection::logLocalizedMessage:table:bundle: not bound
+!missing-selector! FSMessageConnection::logLocalizedMessage:table:bundle:arguments: not bound
+!missing-selector! FSProbeResult::containerID not bound
+!missing-selector! FSProbeResult::name not bound
+!missing-selector! FSProbeResult::result not bound
+!missing-type! FSKitConstants not bound
+!missing-type! FSProbeResult not bound
+!unknown-field! FSTaskParameterConstantForceLoad bound
+!unknown-field! FSTaskParameterConstantReadOnly bound

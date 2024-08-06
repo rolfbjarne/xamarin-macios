@@ -117,6 +117,7 @@ $(XMACCATALYST_PCH): .stamp-check-sharpie
 	$(SHARPIE) sdk-db --xcode $(XCODE) -s ios$(MACCATALYST_SDK_VERSION)-macabi -a $(XMACCATALYST_ARCH) \
 	-modules false \
 	-exclude _CoreNFC_UIKit \
+	-exclude AddressBook \
 	-exclude AGL \
 	-exclude AudioVideoBridging \
 	-exclude AssetsLibrary \
@@ -132,11 +133,14 @@ $(XMACCATALYST_PCH): .stamp-check-sharpie
 	-exclude IOBluetoothUI \
 	-exclude JavaNativeFoundation \
 	-exclude LDAP \
+	-exclude FSKit \
 	-exclude Python \
 	-exclude Quartz \
 	-exclude QuickLookUI \
+	-exclude SafariServices \
 	-exclude SecurityInterface \
 	-exclude Virtualization \
+	-exclude WebKit \
 	-i HomeKit/HomeKit.h \
 	$(CORETELEPHONY_HEADERS) \
 

@@ -137,7 +137,6 @@ $(XMACCATALYST_PCH): .stamp-check-sharpie
 	-exclude Python \
 	-exclude Quartz \
 	-exclude QuickLookUI \
-	-exclude SafariServices \
 	-exclude SecurityInterface \
 	-exclude Virtualization \
 	-exclude WebKit \

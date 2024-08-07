@@ -159,7 +159,6 @@
 !missing-selector! AVMusicTrack::usesAutomatedParameters not bound
 !missing-selector! AVMusicUserEvent::initWithData: not bound
 !missing-selector! AVMusicUserEvent::sizeInBytes not bound
-!missing-selector! AVMutableComposition::insertTimeRange:ofAsset:atTime:completionHandler: not bound
 !missing-selector! AVMutableMovie::chapterMetadataGroupsBestMatchingPreferredLanguages: not bound
 !missing-selector! AVMutableMovie::chapterMetadataGroupsWithTitleLocale:containingItemsWithCommonKeys: not bound
 !missing-selector! AVMutableMovie::mediaSelectionGroupForMediaCharacteristic: not bound
@@ -252,7 +251,6 @@
 !missing-selector! AVSpeechSynthesizer::writeUtterance:toBufferCallback:toMarkerCallback: not bound
 !missing-selector! AVSpeechUtterance::initWithSSMLRepresentation: not bound
 !missing-selector! AVURLAsset::httpSessionIdentifier not bound
-!missing-selector! AVVideoComposition::determineValidityForAsset:timeRange:validationDelegate:completionHandler: not bound
 !missing-type! AVAssetPlaybackAssistant not bound
 !missing-type! AVAUPresetEvent not bound
 !missing-type! AVExtendedNoteOnEvent not bound
@@ -301,7 +299,6 @@
 !missing-enum! AVSpeechSynthesisPersonalVoiceAuthorizationStatus not bound
 !missing-enum! AVSpeechSynthesisVoiceTraits not bound
 !missing-enum! CMTagCollectionVideoOutputPreset not bound
-!missing-enum-value! AVAudioSessionInterruptionReason native value AVAudioSessionInterruptionReasonRouteDisconnected = 4 not bound
 !missing-enum-value! AVCaptureColorSpace native value AVCaptureColorSpace_AppleLog = 3 not bound
 !missing-enum-value! AVCaptureSystemPressureFactors native value AVCaptureSystemPressureFactorCameraTemperature = 8 not bound
 !missing-enum-value! AVCaptureVideoStabilizationMode native value AVCaptureVideoStabilizationModePreviewOptimized = 4 not bound
@@ -491,11 +488,8 @@
 !missing-selector! AVSpeechSynthesisMarker::setPhoneme: not bound
 !missing-selector! AVSpeechSynthesisVoice::voiceTraits not bound
 !missing-selector! AVVideoComposition::perFrameHDRDisplayMetadataPolicy not bound
-!missing-selector! AVVideoOutputSpecification::defaultPixelBufferAttributes not bound
 !missing-selector! AVVideoOutputSpecification::initWithTagCollections: not bound
 !missing-selector! AVVideoOutputSpecification::preferredTagCollections not bound
-!missing-selector! AVVideoOutputSpecification::setDefaultPixelBufferAttributes: not bound
-!missing-selector! AVVideoOutputSpecification::setOutputPixelBufferAttributes:forTagCollection: not bound
 !missing-selector! AVVideoPerformanceMetrics::numberOfCorruptedFrames not bound
 !missing-selector! AVVideoPerformanceMetrics::numberOfDroppedFrames not bound
 !missing-selector! AVVideoPerformanceMetrics::numberOfFramesDisplayedUsingOptimizedCompositing not bound

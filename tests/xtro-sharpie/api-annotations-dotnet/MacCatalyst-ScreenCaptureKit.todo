@@ -2,7 +2,6 @@
 !missing-enum! SCContentSharingPickerMode not bound
 !missing-enum! SCPresenterOverlayAlertSetting not bound
 !missing-enum! SCShareableContentStyle not bound
-!missing-enum! SCStreamType not bound
 !missing-field! SCStreamFrameInfoBoundingRect not bound
 !missing-field! SCStreamFrameInfoPresenterOverlayContentRect not bound
 !missing-field! SCStreamFrameInfoScreenRect not bound

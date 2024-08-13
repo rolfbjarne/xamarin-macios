@@ -2551,7 +2551,7 @@ namespace CoreMidi {
 		[SupportedOSPlatform ("macos15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
-		[NoWatch, NoTV, Mac (18, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[NoWatch, NoTV, Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 #endif
 		public int AssociatedEndpoint {
 			get {

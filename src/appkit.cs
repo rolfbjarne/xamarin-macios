@@ -136,7 +136,20 @@ namespace AppKit {
 
 	[Native]
 	[Mac (15, 0), MacCatalyst (18, 0)]
+	[Deprecated (PlatformName.MacOSX, 15, 0, "Use 'NSWritingToolsResultOptions' instead.")]
+	[Deprecated (PlatformName.MacCatalyst, 18, 0, "Use 'NSWritingToolsResultOptions' instead.")]
 	enum NSWritingToolsAllowedInputOptions : ulong {
+		Default = 0,
+		PlainText = 1 << 0,
+		RichText = 1 << 1,
+		List = 1 << 2,
+		Table = 1 << 3,
+	}
+
+	[Flags]
+	[Native]
+	[Mac (15, 0), MacCatalyst (18, 0)]
+	enum NSWritingToolsResultOptions : ulong {
 		Default = 0,
 		PlainText = 1 << 0,
 		RichText = 1 << 1,
@@ -19873,8 +19886,14 @@ namespace AppKit {
 
 		// Inlined from the NSTextView (NSSharing) category
 		[Mac (15, 0)]
+		[Deprecated (PlatformName.MacOSX, 15, 0, "Use 'AllowedWritingToolsResultOptions' instead.")]
 		[Export ("writingToolsAllowedInputOptions")]
 		NSWritingToolsAllowedInputOptions WritingToolsAllowedInputOptions { get; set; }
+
+		// Inlined from the NSTextView (NSSharing) category
+		[Mac (15, 0)]
+		[Export ("allowedWritingToolsResultOptions")]
+		NSWritingToolsResultOptions AllowedWritingToolsResultOptions { get; set; }
 
 		// Inlined from the NSTextView (NSTextChecking) category
 		[Mac (15, 0)]
@@ -27913,7 +27932,13 @@ namespace AppKit {
 
 		[Mac (15, 0)]
 		[Export ("writingToolsAllowedInputOptions", ArgumentSemantic.Assign)]
+		[Deprecated (PlatformName.MacOSX, 15, 0, "Use 'AllowedWritingToolsResultOptions' instead.")]
 		NSWritingToolsAllowedInputOptions WritingToolsAllowedInputOptions { get; set; }
+
+		[Mac (15, 0)]
+		[Export ("allowedWritingToolsResultOptions")]
+		NSWritingToolsResultOptions AllowedWritingToolsResultOptions { get; set; }
+
 	}
 
 	interface INSTextCheckingClient { }

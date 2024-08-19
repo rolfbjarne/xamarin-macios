@@ -8816,6 +8816,10 @@ namespace AppKit {
 		[Static]
 		[Export ("sectionHeaderWithTitle:")]
 		NSMenuItem CreateSectionHeader (string title);
+
+		[Mac (14, 4)]
+		[Export ("subtitle", ArgumentSemantic.Copy), NullAllowed]
+		string Subtitle { get; set; }
 	}
 
 	[NoMacCatalyst]
@@ -13250,6 +13254,10 @@ namespace AppKit {
 
 		[Export ("quickLookPreviewItems:")]
 		void QuickLookPreviewItems ([NullAllowed] NSObject sender);
+
+		[Mac (15, 0)]
+		[Export ("showContextMenuForSelection:")]
+		void ShowContextMenuForSelection ([NullAllowed] NSObject sender);
 	}
 
 	[NoMacCatalyst]
@@ -13438,6 +13446,10 @@ namespace AppKit {
 
 		[Export ("encodeRestorableStateWithCoder:backgroundQueue:")]
 		void EncodeRestorableState (NSCoder coder, NSOperationQueue queue);
+
+		[Mac (15, 0)]
+		[Export ("contextMenuKeyDown:")]
+		void ContextMenuKeyDown (NSEvent @event);
 	}
 
 	[NoMacCatalyst]
@@ -28782,5 +28794,12 @@ namespace AppKit {
 
 		[Export ("initWithDisabledMode:alertTitle:alertMessage:alertDismissButtonTitle:alertRecoverySuggestionButtonTitle:alertRecoverySuggestionButtonLaunchURL:")]
 		NativeHandle Constructor (NSSharingCollaborationMode disabledMode, string alertTitle, string alertMessage, string alertDismissButtonTitle, string alertRecoverySuggestionButtonTitle, NSUrl alertRecoverySuggestionButtonLaunchUrl);
+	}
+
+	[Mac (15, 0), NoMacCatalyst]
+	[Protocol (BackwardsCompatibleCodeGeneration = false)]
+	interface NSViewContentSelectionInfo {
+		[Export ("selectionAnchorRect")]
+		CGRect /* NSRect */ SelectionAnchorRect { get; }
 	}
 }

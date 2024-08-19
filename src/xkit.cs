@@ -4525,6 +4525,9 @@ namespace UIKit {
 		[TV (13, 0)]
 		[Watch (6, 0)]
 		NSTextScalingType SourceTextScaling { get; set; }
+
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		bool TextKit1ListMarkerFormat { get; set; }
 	}
 
 	[Static]
@@ -4581,6 +4584,9 @@ namespace UIKit {
 		[Field ("NSReadAccessURLDocumentOption", "WebKit")]
 		NSString ReadAccessUrlDocumentOption { get; }
 
+		[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Field ("NSTextKit1ListMarkerFormatDocumentOption")]
+		NSString TextKit1ListMarkerFormatDocumentOption { get; }
 	}
 
 	[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]

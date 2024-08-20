@@ -8243,6 +8243,14 @@ namespace UIKit {
 		[NoTV, iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("editable")]
 		bool Editable { [Bind ("isEditable")] get; }
+
+		[TV (12, 0), iOS (12, 0), MacCatalyst (13, 1)]
+		[Export ("insertAttributedText:")]
+		void InsertAttributedText (NSAttributedString text);
+
+		[TV (13, 0), NoWatch, iOS (13, 0), MacCatalyst (13, 1)]
+		[Export ("replaceRange:withAttributedText:")]
+		void ReplaceRange (UITextRange range, NSAttributedString attributedText);
 	}
 
 	/// <summary>A manager for bar button items.</summary>
@@ -16477,6 +16485,24 @@ namespace UIKit {
 		[NoTV, iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("writingToolsActive")]
 		bool WritingToolsActive { [Bind ("isWritingToolsActive")] get; }
+
+		[NoWatch, NoTV, MacCatalyst (18, 0), iOS (18, 0)]
+		[Export ("writingToolsBehavior", ArgumentSemantic.Assign)]
+		UIWritingToolsBehavior WritingToolsBehavior { get; set; }
+
+		[NoWatch, NoTV, MacCatalyst (18, 0), iOS (18, 0)]
+		[Deprecated (PlatformName.iOS, 18, 0, "Use 'AllowedWritingToolsResultOptions' instead.")]
+		[Deprecated (PlatformName.MacCatalyst, 18, 0, "Use 'AllowedWritingToolsResultOptions' instead.")]
+		[Export ("writingToolsAllowedInputOptions", ArgumentSemantic.Assign)]
+		UIWritingToolsAllowedInputOptions WritingToolsAllowedInputOptions { get; set; }
+
+		[NoWatch, NoTV, Mac (15, 0), iOS (18, 0)]
+		[Export ("allowedWritingToolsResultOptions", ArgumentSemantic.Assign)]
+		UIWritingToolsResultOptions AllowedWritingToolsResultOptions { get; set; }
+
+		[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+		[Export ("textFormattingConfiguration", ArgumentSemantic.Copy)]
+		UITextFormattingViewControllerConfiguration TextFormattingConfiguration { get; set; }
 	}
 
 	interface IUITextViewDelegate { }
@@ -16589,6 +16615,22 @@ namespace UIKit {
 		[Export ("textView:writingToolsIgnoredRangesInEnclosingRange:"), DelegateName ("UITextViewRange"), NoDefaultValue]
 		// Can't use BindAs in a protocol [return: BindAs (typeof (NSRange[]))]
 		NSValue [] GetWritingToolsIgnoredRangesInEnclosingRange (UITextView textView, NSRange enclosingRange);
+
+		[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+		[Export ("textView:willBeginFormattingWithViewController:")]
+		void WillBeginFormatting (UITextView textView, UITextFormattingViewController viewController);
+
+		[NoWatch, NoTV, NoMacCatalyst, iOS (18,0)]
+		[Export ("textView:didBeginFormattingWithViewController:")]
+		void DidBeginFormatting (UITextView textView, UITextFormattingViewController viewController);
+
+		[NoWatch, NoTV, NoMacCatalyst, iOS (18,0)]
+		[Export ("textView:willEndFormattingWithViewController:")]
+		void WillEndFormatting (UITextView textView, UITextFormattingViewController viewController);
+
+		[NoWatch, NoTV, NoMacCatalyst, iOS (18,0)]
+		[Export ("textView:didEndFormattingWithViewController:")]
+		void DidEndFormatting (UITextView textView, UITextFormattingViewController viewController);
 	}
 
 	/// <include file="../docs/api/UIKit/UIToolbar.xml" path="/Documentation/Docs[@DocId='T:UIKit.UIToolbar']/*" />
@@ -25871,6 +25913,10 @@ namespace UIKit {
 		[TV (18, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("listFooterConfiguration")]
 		UIBackgroundConfiguration ListFooterConfiguration { get; }
+
+		[TV (18, 0), iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("shadowProperties")]
+		UIShadowProperties ShadowProperties { get; }
 	}
 
 	[NoWatch, TV (14, 0), iOS (14, 0)]
@@ -26620,6 +26666,10 @@ namespace UIKit {
 
 		[Export ("textToSecondaryTextVerticalPadding")]
 		nfloat TextToSecondaryTextVerticalPadding { get; set; }
+
+		[iOS (18, 0), TV (18, 0), MacCatalyst (18, 0))]
+		[Export ("alpha")]
+		nfloat Alpha { get; set; }
 	}
 
 	[NoWatch, TV (14, 0), iOS (14, 0)]
@@ -26680,6 +26730,22 @@ namespace UIKit {
 
 		[Export ("accessibilityIgnoresInvertColors")]
 		bool AccessibilityIgnoresInvertColors { get; set; }
+
+		[iOS (18, 0), TV (18, 0), MacCatalyst (18, 0)]
+		[Export ("strokeWidth")]
+		nfloat StrokeWidth { get; set; }
+
+		[iOS (18, 0), TV (18, 0), MacCatalyst (18, 0)]
+		[Export ("strokeColor", ArgumentSemantic.Strong), NullAllowed]
+		UIColor StrokeColor { get; set; }
+
+		[iOS (18, 0), TV (18, 0), MacCatalyst (18, 0)]
+		[Export ("strokeColorTransformer", ArgumentSemantic.Copy), NullAllowed]
+		UIConfigurationColorTransformer StrokeColorTransformer { get; set; }
+
+		[iOS (18, 0), TV (18, 0), MacCatalyst (18, 0)]
+		[Export ("resolvedStrokeColorForTintColor:")]
+		UIColor GetResolvedStrokeColor (UIColor tintColor);
 	}
 
 	[NoWatch, TV (14, 0), iOS (14, 0)]
@@ -30424,5 +30490,414 @@ namespace UIKit {
 		Unsupported = 0,
 		Expanded,
 		Collapsed,
+	}
+
+	[TV (18, 0), NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
+	[BaseType (typeof (NSObject))]
+	interface UIShadowProperties : NSCopying, NSSecureCoding {
+		[Export ("color", ArgumentSemantic.Strong)]
+		UIColor Color { get; set; }
+
+		[Export ("opacity", ArgumentSemantic.Assign)]
+		nfloat Opacity { get; set; }
+
+		[Export ("radius", ArgumentSemantic.Assign)]
+		nfloat Radius { get; set; }
+
+		[Export ("offset", ArgumentSemantic.Assign)]
+		CGSize Offset { get; set; }
+
+		[Export ("path", ArgumentSemantic.Copy), NullAllowed]
+		UIBezierPath Path { get; set; }
+	}
+
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+	[Protocol (BackwardsCompatibleCodeGeneration = false), Model]
+	[BaseType (typeof (NSObject))]
+	interface UITextFormattingViewControllerDelegate
+	{
+		[Abstract]
+		[Export ("textFormattingViewController:didChangeValue:")]
+		void DidChangeValue (UITextFormattingViewController viewController, UITextFormattingViewControllerChangeValue changeValue);
+
+		[Export ("textFormattingViewController:shouldPresentFontPicker:")]
+		bool ShouldPresentFontPicker (UITextFormattingViewController viewController, UIFontPickerViewController fontPicker);
+
+		[Export ("textFormattingViewController:shouldPresentColorPicker:")]
+		bool ShouldPresentColorPicker (UITextFormattingViewController viewController, UIColorPickerViewController colorPicker);
+
+		[Export ("textFormattingDidFinish:")]
+		void TextFormattingDidFinish (UITextFormattingViewController viewController);
+	}
+
+	interface IUITextFormattingViewControllerDelegate {}
+
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+	[BaseType (typeof (UIViewController))]
+	interface UITextFormattingViewController
+	{
+		[Export ("configuration", ArgumentSemantic.Copy)]
+		UITextFormattingViewControllerConfiguration Configuration { get; }
+
+		[Export ("formattingDescriptor", ArgumentSemantic.Copy)]
+		UITextFormattingViewControllerFormattingDescriptor FormattingDescriptor { get; set; }
+
+		[Wrap ("WeakDelegate")]
+		IUITextFormattingViewControllerDelegate Delegate { get; set; }
+
+		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
+		NSObject WeakDelegate { get; set; }
+
+		[Export ("initWithConfiguration:")]
+		[DesignatedInitializer]
+		NativeHandle Constructor (UITextFormattingViewControllerConfiguration configuration);
+	}
+
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+	enum UITextFormattingViewControllerChangeType
+	{
+		[DefaultEnumValue]
+		[Field ("UITextFormattingViewControllerUndefinedChangeType")]
+		Undefined,
+
+		[Field ("UITextFormattingViewControllerSetBoldChangeType")]
+		SetBold,
+
+		[Field ("UITextFormattingViewControllerRemoveBoldChangeType")]
+		RemoveBold,
+
+		[Field ("UITextFormattingViewControllerSetItalicChangeType")]
+		SetItalic,
+
+		[Field ("UITextFormattingViewControllerRemoveItalicChangeType")]
+		RemoveItalic,
+
+		[Field ("UITextFormattingViewControllerSetUnderlineChangeType")]
+		SetUnderline,
+
+		[Field ("UITextFormattingViewControllerRemoveUnderlineChangeType")]
+		RemoveUnderline,
+
+		[Field ("UITextFormattingViewControllerSetStrikethroughChangeType")]
+		SetStrikethrough,
+
+		[Field ("UITextFormattingViewControllerRemoveStrikethroughChangeType")]
+		RemoveStrikethrough,
+
+		[Field ("UITextFormattingViewControllerFontChangeType")]
+		Font,
+
+		[Field ("UITextFormattingViewControllerFontSizeChangeType")]
+		FontSize,
+
+		[Field ("UITextFormattingViewControllerIncreaseFontSizeChangeType")]
+		IncreaseFontSize,
+
+		[Field ("UITextFormattingViewControllerDecreaseFontSizeChangeType")]
+		DecreaseFontSize,
+
+		[Field ("UITextFormattingViewControllerTextColorChangeType")]
+		TextColor,
+
+		[Field ("UITextFormattingViewControllerLineHeightPointSizeChangeType")]
+		LineHeightPointSize,
+
+		[Field ("UITextFormattingViewControllerIncreaseIndentationChangeType")]
+		IncreaseIndentation,
+
+		[Field ("UITextFormattingViewControllerDecreaseIndentationChangeType")]
+		DecreaseIndentation,
+
+		[Field ("UITextFormattingViewControllerFormattingStyleChangeType")]
+		FormattingStyle,
+
+		[Field ("UITextFormattingViewControllerTextListChangeType")]
+		TextList,
+
+		[Field ("UITextFormattingViewControllerTextAlignmentChangeType")]
+		TextAlignment,
+
+		[Field ("UITextFormattingViewControllerHighlightChangeType")]
+		Highlight,
+	}
+
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18,0)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface UITextFormattingViewControllerChangeValue : NSCopying, NSSecureCoding
+	{
+		// @property (readonly, nonatomic) UITextFormattingViewControllerChangeType _Nonnull changeType;
+		[Export ("changeType")]
+		[BindAs (typeof (UITextFormattingViewControllerChangeType))]
+		NSString ChangeType { get; }
+
+		[NullAllowed, Export ("formattingStyleKey")]
+		string FormattingStyleKey { get; }
+
+		[NullAllowed, Export ("font", ArgumentSemantic.Copy)]
+		UIFont Font { get; }
+
+		[NullAllowed, Export ("color", ArgumentSemantic.Copy)]
+		UIColor Color { get; }
+
+		// This represents any number, so we could in theory bind it as 'double' and it'll
+		// work, but that also seems a bit restrictive, so I'm leaving this as NSNumber for now.
+		[NullAllowed, Export ("numberValue", ArgumentSemantic.Copy)]
+		NSNumber NumberValue { get; }
+
+		[NullAllowed, Export ("textList")]
+		[BindAs (typeof (UITextFormattingViewControllerTextList))]
+		NSString TextList { get; }
+
+		[Export ("textAlignment")]
+		NSTextAlignment TextAlignment { get; }
+
+		[NullAllowed, Export ("highlight")]
+		[BindAss (typeof (UITextFormattingViewControllerHighlight))]
+		NSString Highlight { get; }
+	}
+
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+	enum UITextFormattingViewControllerComponentKey
+	{
+		[Field ("UITextFormattingViewControllerFormattingStylesComponentKey")]
+		FormattingStyles,
+
+		[Field ("UITextFormattingViewControllerFontAttributesComponentKey")]
+		FontAttributes,
+
+		[Field ("UITextFormattingViewControllerFontPickerComponentKey")]
+		FontPicker,
+
+		[Field ("UITextFormattingViewControllerFontSizeComponentKey")]
+		FontSize,
+
+		[Field ("UITextFormattingViewControllerFontPointSizeComponentKey")]
+		FontPointSize,
+
+		[Field ("UITextFormattingViewControllerTextAlignmentComponentKey")]
+		TextAlignment,
+
+		[Field ("UITextFormattingViewControllerTextAlignmentAndJustificationComponentKey")]
+		TextAlignmentAndJustification,
+
+		[Field ("UITextFormattingViewControllerTextIndentationComponentKey")]
+		TextIndentation,
+
+		[Field ("UITextFormattingViewControllerLineHeightComponentKey")]
+		LineHeight,
+
+		[Field ("UITextFormattingViewControllerListStylesComponentKey")]
+		ListStyles,
+
+		[Field ("UITextFormattingViewControllerTextColorComponentKey")]
+		TextColor,
+
+		[Field ("UITextFormattingViewControllerHighlightComponentKey")]
+		Highlight,
+
+		[Field ("UITextFormattingViewControllerHighlightPickerComponentKey")]
+		HighlightPicker,
+	}
+
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+	[Native]
+	public enum UITextFormattingViewControllerComponentSize : long
+	{
+		Automatic = 0,
+		Mini = 1,
+		Small = 2,
+		Regular = 3,
+		Large = 4,
+		ExtraLarge = 5,
+	}
+
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface UITextFormattingViewControllerComponent : NSCopying, NSSecureCoding
+	{
+		[Export ("componentKey")]
+		[BindAs (typeof (UITextFormattingViewControllerComponentKey))]
+		NSString ComponentKey { get; }
+
+		[Export ("preferredSize")]
+		UITextFormattingViewControllerComponentSize PreferredSize { get; }
+
+		[Export ("initWithComponentKey:preferredSize:")]
+		[DesignatedInitializer]
+		NativeHandle Constructor ([BindAs (typeof (UITextFormattingViewControllerComponentKey))] NSString componentKey, UITextFormattingViewControllerComponentSize preferredSize);
+	}
+
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18 ,0)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface UITextFormattingViewControllerComponentGroup : NSCopying, NSSecureCoding
+	{
+		[Export ("components", ArgumentSemantic.Copy)]
+		UITextFormattingViewControllerComponent[] Components { get; }
+
+		[Export ("initWithComponents:")]
+		[DesignatedInitializer]
+		NativeHandle Constructor (UITextFormattingViewControllerComponent[] components);
+	}
+
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18 ,0)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface UITextFormattingViewControllerConfiguration : NSCopying, NSSecureCoding
+	{
+		[Export ("groups", ArgumentSemantic.Copy)]
+		UITextFormattingViewControllerComponentGroup[] Groups { get; }
+
+		[Export ("formattingStyles", ArgumentSemantic.Copy)]
+		UITextFormattingViewControllerFormattingStyle[] FormattingStyles { get; set; }
+
+		[NullAllowed, Export ("fontPickerConfiguration", ArgumentSemantic.Copy)]
+		UIFontPickerViewControllerConfiguration FontPickerConfiguration { get; set; }
+
+		[DesignatedInitializer]
+		[Export ("init")]
+		NativeHandle Constructor ();
+
+		[Export ("initWithGroups:")]
+		NativeHandle Constructor (UITextFormattingViewControllerComponentGroup[] groups);
+	}
+
+	[Flags]
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+	enum UITextFormattingViewControllerTextAlignment {
+		[Field ("UITextFormattingViewControllerTextAlignmentLeft")]
+		Left = 1,
+
+		[Field ("UITextFormattingViewControllerTextAlignmentCenter")]
+		Center = 2,
+
+		[Field ("UITextFormattingViewControllerTextAlignmentRight")]
+		Right = 4,
+
+		[Field ("UITextFormattingViewControllerTextAlignmentJustified")]
+		Justified = 8,
+
+		[Field ("UITextFormattingViewControllerTextAlignmentNatural")]
+		Natural = 16,
+	}
+
+	[Flags]
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+	enum UITextFormattingViewControllerTextList {
+		[Field ("UITextFormattingViewControllerTextListDisc")]
+		Disc = 1,
+
+		[Field ("UITextFormattingViewControllerTextListHyphen")]
+		Hyphen = 2,
+
+		[Field ("UITextFormattingViewControllerTextListDecimal")]
+		Decimal = 4,
+
+		[Field ("UITextFormattingViewControllerTextListOther")]
+		Other = 8,
+	}
+
+	[Flags]
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+	enum UITextFormattingViewControllerHighlight {
+		[DefaultEnumValue]
+		[Field ("UITextFormattingViewControllerHighlightDefault")]
+		Default = 1,
+
+		[Field ("UITextFormattingViewControllerHighlightPurple")]
+		Purple = 2,
+
+		[Field ("UITextFormattingViewControllerHighlightPink")]
+		Pink = 4,
+
+		[Field ("UITextFormattingViewControllerHighlightOrange")]
+		Orange = 8,
+
+		[Field ("UITextFormattingViewControllerHighlightMint")]
+		Mint = 16,
+
+		[Field ("UITextFormattingViewControllerHighlightBlue")]
+		Blue = 32,
+	}
+
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18 ,0)]
+	[BaseType (typeof (NSObject))]
+	interface UITextFormattingViewControllerFormattingDescriptor : NSCopying, NSSecureCoding
+	{
+		[Export ("initWithString:range:")]
+		NativeHandle Constructor (NSAttributedString @string, NSRange range);
+
+		[Export ("initWithAttributes:")]
+		NativeHandle Constructor (NSDictionary attributes);
+
+		[Wrap ("this (attributes.GetDictionary ()!)"))]
+		NativeHandle Constructor (UIStringAttributes attributes);
+
+		[NullAllowed, Export ("fonts", ArgumentSemantic.Copy)]
+		UIFont[] Fonts { get; set; }
+
+		[NullAllowed, Export ("textColors", ArgumentSemantic.Copy)]
+		UIColor[] TextColors { get; set; }
+
+		[Export ("lineHeight")]
+		nfloat LineHeight { get; set; }
+
+		[Export ("underlinePresent")]
+		bool UnderlinePresent { get; set; }
+
+		[Export ("strikethroughPresent")]
+		bool StrikethroughPresent { get; set; }
+
+		[Export ("textAlignments", ArgumentSemantic.Copy)]
+		NSSet<NSString> WeakTextAlignments { get; set; }
+
+		UITextFormattingViewControllerTextAlignment TextAlignments {
+			[Wrap ("WeakTextAlignments.ToBits ()")] get;
+			[Wrap ("value.ToSet ()")] set;
+		}
+
+		[Export ("textLists", ArgumentSemantic.Copy)]
+		NSSet<NSString> WeakTextLists { get; set; }
+
+		UITextFormattingViewControllerTextList TextLists {
+			[Wrap ("WeakTextLists.ToBits ()")] get;
+			[Wrap ("value.ToSet ()")] set;
+		}
+
+		[Export ("highlights", ArgumentSemantic.Copy)]
+		NSSet<NSString> WeakHighlights { get; set; }
+
+		UITextFormattingViewControllerHighlight Highlights {
+			[Wrap ("WeakHighlights.ToBits ()")] get;
+			[Wrap ("value.ToSet ()")] set;
+		}
+
+		[NullAllowed, Export ("formattingStyleKey")]
+		string FormattingStyleKey { get; set; }
+	}
+
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+	[BaseType (typeof (NSObject))]
+	interface UITextFormattingViewControllerFormattingStyle : NSCopying, NSSecureCoding
+	{
+		[Export ("styleKey")]
+		string StyleKey { get; }
+
+		[Export ("title")]
+		string Title { get; }
+
+		[Export ("attributes", ArgumentSemantic.Copy)]
+		NSDictionary WeakAttributes { get; }
+
+		[Wrap ("WeakAttributes")]
+		UIStringAttributes Attributes { get; }
+
+		[Export ("initWithStyleKey:title:attributes:")]
+		NativeHandle Constructor (string styleKey, string title, NSDictionary attributes);
+
+		[Wrap ("this (styleKey, title, attributes.GetDictionary ()!)")]
+		NativeHandle Constructor (string styleKey, string title, UIStringAttributes attributes);
 	}
 }

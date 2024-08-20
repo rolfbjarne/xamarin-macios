@@ -119,15 +119,21 @@ namespace UIKit {
 
 #if __IOS__ && !__MACCATALYST__
 
-	[Flags]
+#if NET
+	[UnsupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("tvos")]
+	[UnsupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios18.0")]
+#else
 	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+#endif
 	internal static class UITextFormattingViewControllerTextAlignment_Extensions {
-		public static NSSet<string> ToSet (this UITextFormattingViewControllerTextAlignment value)
+		public static NSSet<NSString> ToSet (this UITextFormattingViewControllerTextAlignment value)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public static UITextFormattingViewControllerTextAlignment ToBits (this NSSet<NSString> collection)
+		public static UITextFormattingViewControllerTextAlignment ToUITextFormattingViewControllerTextAlignment (this NSSet<NSString> collection)
 		{
 		// [Field ("UITextFormattingViewControllerTextAlignmentLeft")]
 		// Left = 1,
@@ -147,15 +153,21 @@ namespace UIKit {
 		}
 	}
 
-	[Flags]
+#if NET
+	[UnsupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("tvos")]
+	[UnsupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios18.0")]
+#else
 	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+#endif
 	internal static class UITextFormattingViewControllerTextList_Extensions {
-		public static NSSet<string> ToSet (this UITextFormattingViewControllerTextList value)
+		public static NSSet<NSString> ToSet (this UITextFormattingViewControllerTextList value)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public static UITextFormattingViewControllerTextList ToBits (this NSSet<NSString> collection)
+		public static UITextFormattingViewControllerTextList ToUITextFormattingViewControllerTextList (this NSSet<NSString> collection)
 		{
 		// [Field ("UITextFormattingViewControllerTextListDisc")]
 		// Disc = 1,
@@ -172,15 +184,21 @@ namespace UIKit {
 		}
 	}
 
-	[Flags]
+#if NET
+	[UnsupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("tvos")]
+	[UnsupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios18.0")]
+#else
 	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+#endif
 	internal static class UITextFormattingViewControllerHighlight_Extensions {
-		public static NSSet<string> ToSet (this UITextFormattingViewControllerHighlight value)
+		public static NSSet<NSString> ToSet (this UITextFormattingViewControllerHighlight value)
 		{
 			throw new NotImplementedException ();
 		}
 
-		public static UITextFormattingViewControllerHighlight ToBits (this NSSet<NSString> collection)
+		public static UITextFormattingViewControllerHighlight ToUITextFormattingViewControllerHighlight (this NSSet<NSString> collection)
 		{
 		// [DefaultEnumValue]
 		// [Field ("UITextFormattingViewControllerHighlightDefault")]

@@ -136,8 +136,8 @@ namespace AppKit {
 
 	[Native]
 	[Mac (15, 0), MacCatalyst (18, 0)]
-	[Deprecated (PlatformName.MacOSX, 15, 0, "Use 'NSWritingToolsResultOptions' instead.")]
-	[Deprecated (PlatformName.MacCatalyst, 18, 0, "Use 'NSWritingToolsResultOptions' instead.")]
+	[Deprecated (PlatformName.MacOSX, 15, 0, message: "Use 'NSWritingToolsResultOptions' instead.")]
+	[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use 'NSWritingToolsResultOptions' instead.")]
 	enum NSWritingToolsAllowedInputOptions : ulong {
 		Default = 0,
 		PlainText = 1 << 0,
@@ -5333,7 +5333,7 @@ namespace AppKit {
 		[Export ("currentCursor")]
 		NSCursor CurrentCursor { get; }
 
-		[Deprecated (PlatformName.MacOSX,      15, 0, message: "If using ScreenCaptureKit to capture the screen, use the 'SCStreamConfiguration.ShowsCursor' to control whether or not to include the cursor in the capture. Use 'NSCursor.CurrentCursor' to get the current cursor for this application.")]
+		[Deprecated (PlatformName.MacOSX, 15, 0, message: "If using ScreenCaptureKit to capture the screen, use the 'SCStreamConfiguration.ShowsCursor' to control whether or not to include the cursor in the capture. Use 'NSCursor.CurrentCursor' to get the current cursor for this application.")]
 		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "If using ScreenCaptureKit to capture the screen, use the 'SCStreamConfiguration.ShowsCursor' to control whether or not to include the cursor in the capture. Use 'NSCursor.CurrentCursor' to get the current cursor for this application.")]
 		[Static]
 		[Export ("currentSystemCursor")]
@@ -19886,7 +19886,7 @@ namespace AppKit {
 
 		// Inlined from the NSTextView (NSSharing) category
 		[Mac (15, 0)]
-		[Deprecated (PlatformName.MacOSX, 15, 0, "Use 'AllowedWritingToolsResultOptions' instead.")]
+		[Deprecated (PlatformName.MacOSX, 15, 0, message: "Use 'AllowedWritingToolsResultOptions' instead.")]
 		[Export ("writingToolsAllowedInputOptions")]
 		NSWritingToolsAllowedInputOptions WritingToolsAllowedInputOptions { get; set; }
 
@@ -20225,12 +20225,12 @@ namespace AppKit {
 		[Export ("visibleItems")]
 		NSToolbarItem [] VisibleItems { get; }
 
-		[Deprecated (PlatformName.MacOSX,      15, 0, message: "Use the 'ItemIdentifiers' and 'DisplayMode' properties instead.")]
+		[Deprecated (PlatformName.MacOSX, 15, 0, message: "Use the 'ItemIdentifiers' and 'DisplayMode' properties instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use the 'ItemIdentifiers' and 'DisplayMode' properties instead.")]
 		[Export ("setConfigurationFromDictionary:")]
 		void SetConfigurationFromDictionary (NSDictionary configDict);
 
-		[Deprecated (PlatformName.MacOSX,      15, 0, message: "Use the 'ItemIdentifiers' and 'DisplayMode' properties instead.")]
+		[Deprecated (PlatformName.MacOSX, 15, 0, message: "Use the 'ItemIdentifiers' and 'DisplayMode' properties instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use the 'ItemIdentifiers' and 'DisplayMode' properties instead.")]
 		[Export ("configurationDictionary")]
 		NSDictionary ConfigurationDictionary { get; }
@@ -20430,7 +20430,7 @@ namespace AppKit {
 		[Export ("validate")]
 		void Validate ();
 
-		[Deprecated (PlatformName.MacOSX,      15, 0, message: "Duplicates are no longer supported.")]
+		[Deprecated (PlatformName.MacOSX, 15, 0, message: "Duplicates are no longer supported.")]
 		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Duplicates are no longer supported.")]
 		[Export ("allowsDuplicatesInToolbar")]
 		bool AllowsDuplicatesInToolbar { get; }
@@ -27932,7 +27932,7 @@ namespace AppKit {
 
 		[Mac (15, 0)]
 		[Export ("writingToolsAllowedInputOptions", ArgumentSemantic.Assign)]
-		[Deprecated (PlatformName.MacOSX, 15, 0, "Use 'AllowedWritingToolsResultOptions' instead.")]
+		[Deprecated (PlatformName.MacOSX, 15, 0, message: "Use 'AllowedWritingToolsResultOptions' instead.")]
 		NSWritingToolsAllowedInputOptions WritingToolsAllowedInputOptions { get; set; }
 
 		[Mac (15, 0)]

@@ -7657,8 +7657,8 @@ namespace UIKit {
 		UIWritingToolsBehavior WritingToolsBehavior { get; set; }
 
 		[iOS (18, 0), MacCatalyst (18, 0), NoTV]
-		[Deprecated (PlatformName.iOS, 18, 0, "Use 'AllowedWritingToolsResultOptions' instead.")]
-		[Deprecated (PlatformName.MacCatalyst, 18, 0, "Use 'AllowedWritingToolsResultOptions' instead.")]
+		[Deprecated (PlatformName.iOS, 18, 0, message: "Use 'AllowedWritingToolsResultOptions' instead.")]
+		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use 'AllowedWritingToolsResultOptions' instead.")]
 		[Export ("writingToolsAllowedInputOptions", ArgumentSemantic.Assign)]
 		UIWritingToolsAllowedInputOptions WritingToolsAllowedInputOptions { get; set; }
 
@@ -14718,8 +14718,8 @@ namespace UIKit {
 		void DisplayOrderDidChangeForGroup (UITabBarController tabBarController, UITabGroup group);
 
 		[NoTV, iOS (18, 0), MacCatalyst (18, 0)]
-		[Export ("tabBarController:displayedViewControllersForTab:proposedViewControllers:")]
-		UIViewController[] DisplayedViewControllersForTab (UITabBarController tabBarController, UITab tab, UIViewController[] proposedViewControllers);
+		[Export ("tabBarController:displayedViewControllersForTab:proposedViewControllers:"), NoDefaultValue, DelegateName ("UITabBarGetDisplayedViewControllers")]
+		UIViewController [] GetDisplayedViewControllers (UITabBarController tabBarController, UITab tab, UIViewController [] proposedViewControllers);
 	}
 
 	[NoWatch]
@@ -16510,17 +16510,17 @@ namespace UIKit {
 
 		[NoWatch, NoTV, MacCatalyst (18, 0), iOS (18, 0)]
 		[Export ("writingToolsBehavior", ArgumentSemantic.Assign)]
-		UIWritingToolsBehavior WritingToolsBehavior { get; set; }
+		new UIWritingToolsBehavior WritingToolsBehavior { get; set; }
 
 		[NoWatch, NoTV, MacCatalyst (18, 0), iOS (18, 0)]
-		[Deprecated (PlatformName.iOS, 18, 0, "Use 'AllowedWritingToolsResultOptions' instead.")]
-		[Deprecated (PlatformName.MacCatalyst, 18, 0, "Use 'AllowedWritingToolsResultOptions' instead.")]
+		[Deprecated (PlatformName.iOS, 18, 0, message: "Use 'AllowedWritingToolsResultOptions' instead.")]
+		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use 'AllowedWritingToolsResultOptions' instead.")]
 		[Export ("writingToolsAllowedInputOptions", ArgumentSemantic.Assign)]
-		UIWritingToolsAllowedInputOptions WritingToolsAllowedInputOptions { get; set; }
+		new UIWritingToolsAllowedInputOptions WritingToolsAllowedInputOptions { get; set; }
 
 		[NoWatch, NoTV, Mac (15, 0), iOS (18, 0)]
 		[Export ("allowedWritingToolsResultOptions", ArgumentSemantic.Assign)]
-		UIWritingToolsResultOptions AllowedWritingToolsResultOptions { get; set; }
+		new UIWritingToolsResultOptions AllowedWritingToolsResultOptions { get; set; }
 
 		[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
 		[Export ("textFormattingConfiguration", ArgumentSemantic.Copy)]
@@ -16639,19 +16639,19 @@ namespace UIKit {
 		NSValue [] GetWritingToolsIgnoredRangesInEnclosingRange (UITextView textView, NSRange enclosingRange);
 
 		[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
-		[Export ("textView:willBeginFormattingWithViewController:")]
+		[Export ("textView:willBeginFormattingWithViewController:"), EventArgs ("UITextViewTextFormattingViewController")]
 		void WillBeginFormatting (UITextView textView, UITextFormattingViewController viewController);
 
-		[NoWatch, NoTV, NoMacCatalyst, iOS (18,0)]
-		[Export ("textView:didBeginFormattingWithViewController:")]
+		[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+		[Export ("textView:didBeginFormattingWithViewController:"), EventArgs ("UITextViewTextFormattingViewController")]
 		void DidBeginFormatting (UITextView textView, UITextFormattingViewController viewController);
 
-		[NoWatch, NoTV, NoMacCatalyst, iOS (18,0)]
-		[Export ("textView:willEndFormattingWithViewController:")]
+		[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+		[Export ("textView:willEndFormattingWithViewController:"), EventArgs ("UITextViewTextFormattingViewController")]
 		void WillEndFormatting (UITextView textView, UITextFormattingViewController viewController);
 
-		[NoWatch, NoTV, NoMacCatalyst, iOS (18,0)]
-		[Export ("textView:didEndFormattingWithViewController:")]
+		[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+		[Export ("textView:didEndFormattingWithViewController:"), EventArgs ("UITextViewTextFormattingViewController")]
 		void DidEndFormatting (UITextView textView, UITextFormattingViewController viewController);
 	}
 
@@ -26693,7 +26693,7 @@ namespace UIKit {
 		[Export ("textToSecondaryTextVerticalPadding")]
 		nfloat TextToSecondaryTextVerticalPadding { get; set; }
 
-		[iOS (18, 0), TV (18, 0), MacCatalyst (18, 0))]
+		[iOS (18, 0), TV (18, 0), MacCatalyst (18, 0)]
 		[Export ("alpha")]
 		nfloat Alpha { get; set; }
 	}
@@ -26767,7 +26767,7 @@ namespace UIKit {
 
 		[iOS (18, 0), TV (18, 0), MacCatalyst (18, 0)]
 		[Export ("strokeColorTransformer", ArgumentSemantic.Copy), NullAllowed]
-		UIConfigurationColorTransformer StrokeColorTransformer { get; set; }
+		UIConfigurationColorTransformerHandler StrokeColorTransformer { get; set; }
 
 		[iOS (18, 0), TV (18, 0), MacCatalyst (18, 0)]
 		[Export ("resolvedStrokeColorForTintColor:")]
@@ -29854,8 +29854,8 @@ namespace UIKit {
 	[Native]
 	[NoWatch, NoTV, NoMac, iOS (18, 0), MacCatalyst (18, 0)]
 	enum UITabGroupSidebarAppearance : ulong {
-		Automatic   = 0,
-		Inline      = 1,
+		Automatic = 0,
+		Inline = 1,
 		RootSection = 2,
 	}
 
@@ -29880,19 +29880,19 @@ namespace UIKit {
 		None = -1,
 		Default = 0,
 		Complete,
-		Limited, 
+		Limited,
 	}
- 
+
 	[Native]
 	[NoWatch, NoTV, NoMac, iOS (18, 0), MacCatalyst (18, 0)]
-	[Deprecated (PlatformName.iOS, 18, 0, "Use 'UIWritingToolsResultOptions' instead.")]
-	[Deprecated (PlatformName.MacCatalyst, 18, 0, "Use 'UIWritingToolsResultOptions' instead.")]
+	[Deprecated (PlatformName.iOS, 18, 0, message: "Use 'UIWritingToolsResultOptions' instead.")]
+	[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use 'UIWritingToolsResultOptions' instead.")]
 	enum UIWritingToolsAllowedInputOptions : ulong {
 		Default = 0,
 		PlainText = 1 << 0,
 		RichText = 1 << 1,
-		List = 1 << 3, 
-		Table = 1 << 3, 
+		List = 1 << 3,
+		Table = 1 << 3,
 	}
 
 	[Flags]
@@ -29990,7 +29990,7 @@ namespace UIKit {
 		bool CanSelectWeekOfYear (UICalendarSelectionWeekOfYear selection, [NullAllowed] NSDateComponents weekOfYearComponents);
 	}
 
-	interface IUICalendarSelectionWeekOfYearDelegate {}
+	interface IUICalendarSelectionWeekOfYearDelegate { }
 
 	[iOS (18, 0), MacCatalyst (18, 0), NoWatch, NoTV]
 	[BaseType (typeof (NSObject))]
@@ -30165,7 +30165,7 @@ namespace UIKit {
 		UIContextMenuConfiguration GetContextMenuConfigurationForTab (UITabBarController tabBarController, UITabBarControllerSidebar sidebar, UITab tab);
 	}
 
-	interface IUITabBarControllerSidebarDelegate {}
+	interface IUITabBarControllerSidebarDelegate { }
 
 	[TV (18, 0), NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
 	[BaseType (typeof (UITab))]
@@ -30556,8 +30556,7 @@ namespace UIKit {
 	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false), Model]
 	[BaseType (typeof (NSObject))]
-	interface UITextFormattingViewControllerDelegate
-	{
+	interface UITextFormattingViewControllerDelegate {
 		[Abstract]
 		[Export ("textFormattingViewController:didChangeValue:")]
 		void DidChangeValue (UITextFormattingViewController viewController, UITextFormattingViewControllerChangeValue changeValue);
@@ -30572,12 +30571,11 @@ namespace UIKit {
 		void TextFormattingDidFinish (UITextFormattingViewController viewController);
 	}
 
-	interface IUITextFormattingViewControllerDelegate {}
+	interface IUITextFormattingViewControllerDelegate { }
 
 	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
 	[BaseType (typeof (UIViewController))]
-	interface UITextFormattingViewController
-	{
+	interface UITextFormattingViewController {
 		[Export ("configuration", ArgumentSemantic.Copy)]
 		UITextFormattingViewControllerConfiguration Configuration { get; }
 
@@ -30596,8 +30594,7 @@ namespace UIKit {
 	}
 
 	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
-	enum UITextFormattingViewControllerChangeType
-	{
+	enum UITextFormattingViewControllerChangeType {
 		[DefaultEnumValue]
 		[Field ("UITextFormattingViewControllerUndefinedChangeType")]
 		Undefined,
@@ -30663,11 +30660,10 @@ namespace UIKit {
 		Highlight,
 	}
 
-	[NoWatch, NoTV, NoMacCatalyst, iOS (18,0)]
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface UITextFormattingViewControllerChangeValue : NSCopying, NSSecureCoding
-	{
+	interface UITextFormattingViewControllerChangeValue : NSCopying, NSSecureCoding {
 		// @property (readonly, nonatomic) UITextFormattingViewControllerChangeType _Nonnull changeType;
 		[Export ("changeType")]
 		[BindAs (typeof (UITextFormattingViewControllerChangeType))]
@@ -30692,16 +30688,15 @@ namespace UIKit {
 		NSString TextList { get; }
 
 		[Export ("textAlignment")]
-		NSTextAlignment TextAlignment { get; }
+		UITextAlignment TextAlignment { get; }
 
 		[NullAllowed, Export ("highlight")]
-		[BindAss (typeof (UITextFormattingViewControllerHighlight))]
+		[BindAs (typeof (UITextFormattingViewControllerHighlight))]
 		NSString Highlight { get; }
 	}
 
 	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
-	enum UITextFormattingViewControllerComponentKey
-	{
+	enum UITextFormattingViewControllerComponentKey {
 		[Field ("UITextFormattingViewControllerFormattingStylesComponentKey")]
 		FormattingStyles,
 
@@ -30744,8 +30739,7 @@ namespace UIKit {
 
 	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
 	[Native]
-	public enum UITextFormattingViewControllerComponentSize : long
-	{
+	public enum UITextFormattingViewControllerComponentSize : long {
 		Automatic = 0,
 		Mini = 1,
 		Small = 2,
@@ -30757,8 +30751,7 @@ namespace UIKit {
 	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface UITextFormattingViewControllerComponent : NSCopying, NSSecureCoding
-	{
+	interface UITextFormattingViewControllerComponent : NSCopying, NSSecureCoding {
 		[Export ("componentKey")]
 		[BindAs (typeof (UITextFormattingViewControllerComponentKey))]
 		NSString ComponentKey { get; }
@@ -30771,29 +30764,27 @@ namespace UIKit {
 		NativeHandle Constructor ([BindAs (typeof (UITextFormattingViewControllerComponentKey))] NSString componentKey, UITextFormattingViewControllerComponentSize preferredSize);
 	}
 
-	[NoWatch, NoTV, NoMacCatalyst, iOS (18 ,0)]
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface UITextFormattingViewControllerComponentGroup : NSCopying, NSSecureCoding
-	{
+	interface UITextFormattingViewControllerComponentGroup : NSCopying, NSSecureCoding {
 		[Export ("components", ArgumentSemantic.Copy)]
-		UITextFormattingViewControllerComponent[] Components { get; }
+		UITextFormattingViewControllerComponent [] Components { get; }
 
 		[Export ("initWithComponents:")]
 		[DesignatedInitializer]
-		NativeHandle Constructor (UITextFormattingViewControllerComponent[] components);
+		NativeHandle Constructor (UITextFormattingViewControllerComponent [] components);
 	}
 
-	[NoWatch, NoTV, NoMacCatalyst, iOS (18 ,0)]
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface UITextFormattingViewControllerConfiguration : NSCopying, NSSecureCoding
-	{
+	interface UITextFormattingViewControllerConfiguration : NSCopying, NSSecureCoding {
 		[Export ("groups", ArgumentSemantic.Copy)]
-		UITextFormattingViewControllerComponentGroup[] Groups { get; }
+		UITextFormattingViewControllerComponentGroup [] Groups { get; }
 
 		[Export ("formattingStyles", ArgumentSemantic.Copy)]
-		UITextFormattingViewControllerFormattingStyle[] FormattingStyles { get; set; }
+		UITextFormattingViewControllerFormattingStyle [] FormattingStyles { get; set; }
 
 		[NullAllowed, Export ("fontPickerConfiguration", ArgumentSemantic.Copy)]
 		UIFontPickerViewControllerConfiguration FontPickerConfiguration { get; set; }
@@ -30803,7 +30794,7 @@ namespace UIKit {
 		NativeHandle Constructor ();
 
 		[Export ("initWithGroups:")]
-		NativeHandle Constructor (UITextFormattingViewControllerComponentGroup[] groups);
+		NativeHandle Constructor (UITextFormattingViewControllerComponentGroup [] groups);
 	}
 
 	[Flags]
@@ -30864,24 +30855,23 @@ namespace UIKit {
 		Blue = 32,
 	}
 
-	[NoWatch, NoTV, NoMacCatalyst, iOS (18 ,0)]
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
 	[BaseType (typeof (NSObject))]
-	interface UITextFormattingViewControllerFormattingDescriptor : NSCopying, NSSecureCoding
-	{
+	interface UITextFormattingViewControllerFormattingDescriptor : NSCopying, NSSecureCoding {
 		[Export ("initWithString:range:")]
 		NativeHandle Constructor (NSAttributedString @string, NSRange range);
 
 		[Export ("initWithAttributes:")]
 		NativeHandle Constructor (NSDictionary attributes);
 
-		[Wrap ("this (attributes.GetDictionary ()!)"))]
+		[Wrap ("this (attributes.GetDictionary ()!)")]
 		NativeHandle Constructor (UIStringAttributes attributes);
 
 		[NullAllowed, Export ("fonts", ArgumentSemantic.Copy)]
-		UIFont[] Fonts { get; set; }
+		UIFont [] Fonts { get; set; }
 
 		[NullAllowed, Export ("textColors", ArgumentSemantic.Copy)]
-		UIColor[] TextColors { get; set; }
+		UIColor [] TextColors { get; set; }
 
 		[Export ("lineHeight")]
 		nfloat LineHeight { get; set; }
@@ -30896,24 +30886,30 @@ namespace UIKit {
 		NSSet<NSString> WeakTextAlignments { get; set; }
 
 		UITextFormattingViewControllerTextAlignment TextAlignments {
-			[Wrap ("WeakTextAlignments.ToBits ()")] get;
-			[Wrap ("value.ToSet ()")] set;
+			[Wrap ("WeakTextAlignments.ToUITextFormattingViewControllerTextAlignment ()")]
+			get;
+			[Wrap ("value.ToSet ()")]
+			set;
 		}
 
 		[Export ("textLists", ArgumentSemantic.Copy)]
 		NSSet<NSString> WeakTextLists { get; set; }
 
 		UITextFormattingViewControllerTextList TextLists {
-			[Wrap ("WeakTextLists.ToBits ()")] get;
-			[Wrap ("value.ToSet ()")] set;
+			[Wrap ("WeakTextLists.ToUITextFormattingViewControllerTextList ()")]
+			get;
+			[Wrap ("value.ToSet ()")]
+			set;
 		}
 
 		[Export ("highlights", ArgumentSemantic.Copy)]
 		NSSet<NSString> WeakHighlights { get; set; }
 
 		UITextFormattingViewControllerHighlight Highlights {
-			[Wrap ("WeakHighlights.ToBits ()")] get;
-			[Wrap ("value.ToSet ()")] set;
+			[Wrap ("WeakHighlights.ToUITextFormattingViewControllerHighlight ()")]
+			get;
+			[Wrap ("value.ToSet ()")]
+			set;
 		}
 
 		[NullAllowed, Export ("formattingStyleKey")]
@@ -30922,8 +30918,7 @@ namespace UIKit {
 
 	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
 	[BaseType (typeof (NSObject))]
-	interface UITextFormattingViewControllerFormattingStyle : NSCopying, NSSecureCoding
-	{
+	interface UITextFormattingViewControllerFormattingStyle : NSCopying, NSSecureCoding {
 		[Export ("styleKey")]
 		string StyleKey { get; }
 
@@ -30955,8 +30950,7 @@ namespace UIKit {
 	*/
 	[NoWatch, NoTV, iOS (18, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	interface UITabBarControllerSidebarAnimating
-	{
+	interface UITabBarControllerSidebarAnimating {
 		[Abstract]
 		[Export ("addAnimations:")]
 		void AddAnimations (Action animations);
@@ -30966,12 +30960,11 @@ namespace UIKit {
 		void AddCompletion (Action completion);
 	}
 
-	interface IUITabBarControllerSidebarAnimating {}
+	interface IUITabBarControllerSidebarAnimating { }
 
-	[TV (18,0), NoWatch, iOS (18,0), MacCatalyst (18, 0)]
+	[TV (18, 0), NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
 	[Native]
-	public enum UIFocusItemDeferralMode : long
-	{
+	public enum UIFocusItemDeferralMode : long {
 		Automatic,
 		Always,
 		Never,

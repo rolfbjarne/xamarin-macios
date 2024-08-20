@@ -8281,9 +8281,6 @@ namespace UIKit {
 
 		[Export ("trailingBarButtonGroups", ArgumentSemantic.Copy), NullAllowed]
 		UIBarButtonItemGroup [] TrailingBarButtonGroups { get; set; }
-
-		[Export ("keyboardActionButtonItem", ArgumentSemantic.Strong), NullAllowed]
-		UIBarButtonItem KeyboardActionButtonItem { get; set; }
 	}
 
 	interface IUITextInputTokenizer { }

@@ -14717,6 +14717,10 @@ namespace UIKit {
 		[NoTV, iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("tabBarController:displayOrderDidChangeForGroup:"), EventArgs ("UITabBarDisplayOrderChange")]
 		void DisplayOrderDidChangeForGroup (UITabBarController tabBarController, UITabGroup group);
+
+		[NoTV, iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("tabBarController:displayedViewControllersForTab:proposedViewControllers:")]
+		UIViewController[] DisplayedViewControllersForTab (UITabBarController tabBarController, UITab tab, UIViewController[] proposedViewControllers);
 	}
 
 	[NoWatch]
@@ -21841,6 +21845,10 @@ namespace UIKit {
 		[MacCatalyst (13, 1)]
 		[Export ("didHintFocusMovement:")]
 		void DidHintFocusMovement (UIFocusMovementHint hint);
+
+		[iOS (18, 0), MacCatalyst (18, 0), TV (18, 0), NoWatch]
+		[Export ("focusItemDeferralMode")]
+		UIFocusItemDeferralMode FocusItemDeferralMode { get; }
 	}
 
 	[DisableDefaultCtor] // [Assert] -init is not a useful initializer for this class. Use one of the designated initializers instead
@@ -30063,6 +30071,9 @@ namespace UIKit {
 		[Export ("viewController", ArgumentSemantic.Strong), NullAllowed]
 		UIViewController ViewController { get; }
 
+		[NullAllowed, Export ("managingTabGroup", ArgumentSemantic.Strong)]
+		UITabGroup ManagingTabGroup { get; }
+
 		[Export ("hidden", ArgumentSemantic.Assign)]
 		bool Hidden { [Bind ("isHidden")] get; }
 
@@ -30958,4 +30969,13 @@ namespace UIKit {
 	}
 
 	interface IUITabBarControllerSidebarAnimating {}
+
+	[TV (18,0), NoWatch, iOS (18,0), MacCatalyst (18, 0)]
+	[Native]
+	public enum UIFocusItemDeferralMode : long
+	{
+		Automatic,
+		Always,
+		Never,
+	}
 }

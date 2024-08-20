@@ -134,18 +134,6 @@ namespace AppKit {
 		Limited,
 	}
 
-	[Native]
-	[Mac (15, 0), MacCatalyst (18, 0)]
-	[Deprecated (PlatformName.MacOSX, 15, 0, message: "Use 'NSWritingToolsResultOptions' instead.")]
-	[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use 'NSWritingToolsResultOptions' instead.")]
-	enum NSWritingToolsAllowedInputOptions : ulong {
-		Default = 0,
-		PlainText = 1 << 0,
-		RichText = 1 << 1,
-		List = 1 << 2,
-		Table = 1 << 3,
-	}
-
 	[Flags]
 	[Native]
 	[Mac (15, 0), MacCatalyst (18, 0)]
@@ -19886,12 +19874,6 @@ namespace AppKit {
 
 		// Inlined from the NSTextView (NSSharing) category
 		[Mac (15, 0)]
-		[Deprecated (PlatformName.MacOSX, 15, 0, message: "Use 'AllowedWritingToolsResultOptions' instead.")]
-		[Export ("writingToolsAllowedInputOptions")]
-		NSWritingToolsAllowedInputOptions WritingToolsAllowedInputOptions { get; set; }
-
-		// Inlined from the NSTextView (NSSharing) category
-		[Mac (15, 0)]
 		[Export ("allowedWritingToolsResultOptions")]
 		NSWritingToolsResultOptions AllowedWritingToolsResultOptions { get; set; }
 
@@ -20106,15 +20088,15 @@ namespace AppKit {
 		[Export ("textView:shouldSelectCandidateAtIndex:"), DelegateName ("NSTextViewSelectCandidate"), NoDefaultValue]
 		bool ShouldSelectCandidates (NSTextView textView, nuint index);
 
-		[iOS (18, 0), MacCatalyst (18, 0)]
+		[Mac (15, 0), MacCatalyst (18, 0)]
 		[Export ("textViewWritingToolsWillBegin:"), EventArgs ("NSTextView")]
 		void WritingToolsWillBegin (NSTextView textView);
 
-		[iOS (18, 0), MacCatalyst (18, 0)]
+		[Mac (15, 0), MacCatalyst (18, 0)]
 		[Export ("textViewWritingToolsDidEnd:"), EventArgs ("NSTextView")]
 		void WritingToolsDidEnd (NSTextView textView);
 
-		[iOS (18, 0), MacCatalyst (18, 0)]
+		[Mac (15, 0), MacCatalyst (18, 0)]
 		[Export ("textView:writingToolsIgnoredRangesInEnclosingRange:"), DelegateName ("NSTextViewRange"), NoDefaultValue]
 		// Can't use BindAs in a protocol [return: BindAs (typeof (NSRange[]))]
 		NSValue [] GetWritingToolsIgnoredRangesInEnclosingRange (NSTextView textView, NSRange enclosingRange);
@@ -20260,6 +20242,7 @@ namespace AppKit {
 		NSToolbarSizeMode SizeMode { get; set; }
 
 		[Deprecated (PlatformName.MacOSX, 15, 0, message: "No longer supported.")]
+		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "No longer supported.")]
 		[Export ("showsBaselineSeparator")]
 		bool ShowsBaselineSeparator { get; set; }
 
@@ -27929,11 +27912,6 @@ namespace AppKit {
 		[Mac (15, 0)]
 		[Export ("writingToolsBehavior", ArgumentSemantic.Assign)]
 		NSWritingToolsBehavior WritingToolsBehavior { get; set; }
-
-		[Mac (15, 0)]
-		[Export ("writingToolsAllowedInputOptions", ArgumentSemantic.Assign)]
-		[Deprecated (PlatformName.MacOSX, 15, 0, message: "Use 'AllowedWritingToolsResultOptions' instead.")]
-		NSWritingToolsAllowedInputOptions WritingToolsAllowedInputOptions { get; set; }
 
 		[Mac (15, 0)]
 		[Export ("allowedWritingToolsResultOptions")]

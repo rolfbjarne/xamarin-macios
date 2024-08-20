@@ -7658,12 +7658,6 @@ namespace UIKit {
 		UIWritingToolsBehavior WritingToolsBehavior { get; set; }
 
 		[iOS (18, 0), MacCatalyst (18, 0), NoTV]
-		[Deprecated (PlatformName.iOS, 18, 0, message: "Use 'AllowedWritingToolsResultOptions' instead.")]
-		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use 'AllowedWritingToolsResultOptions' instead.")]
-		[Export ("writingToolsAllowedInputOptions", ArgumentSemantic.Assign)]
-		UIWritingToolsAllowedInputOptions WritingToolsAllowedInputOptions { get; set; }
-
-		[iOS (18, 0), MacCatalyst (18, 0), NoTV]
 		[Export ("allowedWritingToolsResultOptions", ArgumentSemantic.Assign)]
 		UIWritingToolsResultOptions AllowedWritingToolsResultOptions { get; set; }
 	}
@@ -16513,12 +16507,6 @@ namespace UIKit {
 		[Export ("writingToolsBehavior", ArgumentSemantic.Assign)]
 		new UIWritingToolsBehavior WritingToolsBehavior { get; set; }
 
-		[NoWatch, NoTV, MacCatalyst (18, 0), iOS (18, 0)]
-		[Deprecated (PlatformName.iOS, 18, 0, message: "Use 'AllowedWritingToolsResultOptions' instead.")]
-		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use 'AllowedWritingToolsResultOptions' instead.")]
-		[Export ("writingToolsAllowedInputOptions", ArgumentSemantic.Assign)]
-		new UIWritingToolsAllowedInputOptions WritingToolsAllowedInputOptions { get; set; }
-
 		[NoWatch, NoTV, Mac (15, 0), iOS (18, 0)]
 		[Export ("allowedWritingToolsResultOptions", ArgumentSemantic.Assign)]
 		new UIWritingToolsResultOptions AllowedWritingToolsResultOptions { get; set; }
@@ -16626,15 +16614,15 @@ namespace UIKit {
 		[Export ("textView:textItemMenuWillEndForTextItem:animator:")]
 		void WillEnd (UITextView textView, UITextItem textItem, IUIContextMenuInteractionAnimating animator);
 
-		[iOS (18, 0), MacCatalyst (18, 0)]
+		[iOS (18, 0), MacCatalyst (18, 0), NoTV]
 		[Export ("textViewWritingToolsWillBegin:"), EventArgs ("UITextView")]
 		void WritingToolsWillBegin (UITextView textView);
 
-		[iOS (18, 0), MacCatalyst (18, 0)]
+		[iOS (18, 0), MacCatalyst (18, 0), NoTV]
 		[Export ("textViewWritingToolsDidEnd:"), EventArgs ("UITextView")]
 		void WritingToolsDidEnd (UITextView textView);
 
-		[iOS (18, 0), MacCatalyst (18, 0)]
+		[iOS (18, 0), MacCatalyst (18, 0), NoTV]
 		[Export ("textView:writingToolsIgnoredRangesInEnclosingRange:"), DelegateName ("UITextViewRange"), NoDefaultValue]
 		// Can't use BindAs in a protocol [return: BindAs (typeof (NSRange[]))]
 		NSValue [] GetWritingToolsIgnoredRangesInEnclosingRange (UITextView textView, NSRange enclosingRange);
@@ -18938,7 +18926,7 @@ namespace UIKit {
 
 		[TV (18, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("listEnvironment")]
-		UIListEnvironment listEnvironment { get; }
+		UIListEnvironment ListEnvironment { get; }
 	}
 
 	[NoWatch]
@@ -29458,7 +29446,7 @@ namespace UIKit {
 
 		[TV (18, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("listEnvironment")]
-		UIListEnvironment listEnvironment { get; set; }
+		UIListEnvironment ListEnvironment { get; set; }
 	}
 
 
@@ -29885,18 +29873,6 @@ namespace UIKit {
 		Limited,
 	}
 
-	[Native]
-	[NoWatch, NoTV, NoMac, iOS (18, 0), MacCatalyst (18, 0)]
-	[Deprecated (PlatformName.iOS, 18, 0, message: "Use 'UIWritingToolsResultOptions' instead.")]
-	[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use 'UIWritingToolsResultOptions' instead.")]
-	enum UIWritingToolsAllowedInputOptions : ulong {
-		Default = 0,
-		PlainText = 1 << 0,
-		RichText = 1 << 1,
-		List = 1 << 3,
-		Table = 1 << 3,
-	}
-
 	[Flags]
 	[Native]
 	[NoWatch, NoTV, NoMac, iOS (18, 0), MacCatalyst (18, 0)]
@@ -29981,7 +29957,7 @@ namespace UIKit {
 	}
 
 	[NoWatch, NoTV, NoMac, iOS (18, 0), MacCatalyst (18, 0)]
-	[Protocol, Model]
+	[Protocol (BackwardsCompatibleCodeGeneration = false), Model]
 	[BaseType (typeof (NSObject))]
 	interface UICalendarSelectionWeekOfYearDelegate {
 		[Abstract]
@@ -30136,7 +30112,7 @@ namespace UIKit {
 	}
 
 	[NoTV, NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
-	[Protocol, Model]
+	[Protocol (BackwardsCompatibleCodeGeneration = false), Model]
 	[BaseType (typeof (NSObject))]
 	interface UITabBarControllerSidebarDelegate {
 		[Export ("tabBarController:sidebarVisibilityWillChange:animator:")]
@@ -30332,13 +30308,13 @@ namespace UIKit {
 		double EstimatedPresentationTime { get; }
 
 		[Export ("immediatePresentationExpected")]
-		bool immediatePresentationExpected { [Bind ("isImmediatePresentationExpected")] get; }
+		bool ImmediatePresentationExpected { [Bind ("isImmediatePresentationExpected")] get; }
 
 		[Export ("lowLatencyEventDispatchConfirmed")]
-		bool lowLatencyEventDispatchConfirmed { [Bind ("isLowLatencyEventDispatchConfirmed")] get; }
+		bool LowLatencyEventDispatchConfirmed { [Bind ("isLowLatencyEventDispatchConfirmed")] get; }
 
 		[Export ("performingLowLatencyPhases")]
-		bool performingLowLatencyPhases { [Bind ("isPerformingLowLatencyPhases")] get; }
+		bool PerformingLowLatencyPhases { [Bind ("isPerformingLowLatencyPhases")] get; }
 	}
 
 	delegate void UIUpdateLinkCallback (UIUpdateLink updateLink, UIUpdateInfo updateInfo);

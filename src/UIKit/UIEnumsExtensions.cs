@@ -116,5 +116,93 @@ namespace UIKit {
 		}
 	}
 #endif // __MACCATALYST__
+
+#if __IOS__ && !__MACCATALYST__
+
+	[Flags]
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+	internal static class UITextFormattingViewControllerTextAlignment_Extensions {
+		public static NSSet<string> ToSet (this UITextFormattingViewControllerTextAlignment value)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public static UITextFormattingViewControllerTextAlignment ToBits (this NSSet<NSString> collection)
+		{
+		// [Field ("UITextFormattingViewControllerTextAlignmentLeft")]
+		// Left = 1,
+
+		// [Field ("UITextFormattingViewControllerTextAlignmentCenter")]
+		// Center = 2,
+
+		// [Field ("UITextFormattingViewControllerTextAlignmentRight")]
+		// Right = 4,
+
+		// [Field ("UITextFormattingViewControllerTextAlignmentJustified")]
+		// Justified = 8,
+
+		// [Field ("UITextFormattingViewControllerTextAlignmentNatural")]
+		// Natural = 16,
+			throw new NotImplementedException ();
+		}
+	}
+
+	[Flags]
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+	internal static class UITextFormattingViewControllerTextList_Extensions {
+		public static NSSet<string> ToSet (this UITextFormattingViewControllerTextList value)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public static UITextFormattingViewControllerTextList ToBits (this NSSet<NSString> collection)
+		{
+		// [Field ("UITextFormattingViewControllerTextListDisc")]
+		// Disc = 1,
+
+		// [Field ("UITextFormattingViewControllerTextListHyphen")]
+		// Hyphen = 2,
+
+		// [Field ("UITextFormattingViewControllerTextListDecimal")]
+		// Decimal = 4,
+
+		// [Field ("UITextFormattingViewControllerTextListOther")]
+		// Other = 8,
+			throw new NotImplementedException ();
+		}
+	}
+
+	[Flags]
+	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
+	internal static class UITextFormattingViewControllerHighlight_Extensions {
+		public static NSSet<string> ToSet (this UITextFormattingViewControllerHighlight value)
+		{
+			throw new NotImplementedException ();
+		}
+
+		public static UITextFormattingViewControllerHighlight ToBits (this NSSet<NSString> collection)
+		{
+		// [DefaultEnumValue]
+		// [Field ("UITextFormattingViewControllerHighlightDefault")]
+		// Default = 1,
+
+		// [Field ("UITextFormattingViewControllerHighlightPurple")]
+		// Purple = 2,
+
+		// [Field ("UITextFormattingViewControllerHighlightPink")]
+		// Pink = 4,
+
+		// [Field ("UITextFormattingViewControllerHighlightOrange")]
+		// Orange = 8,
+
+		// [Field ("UITextFormattingViewControllerHighlightMint")]
+		// Mint = 16,
+
+		// [Field ("UITextFormattingViewControllerHighlightBlue")]
+		// Blue = 32,
+			throw new NotImplementedException ();
+		}
+	}
+#endif
 }
 

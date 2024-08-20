@@ -7657,8 +7657,14 @@ namespace UIKit {
 		UIWritingToolsBehavior WritingToolsBehavior { get; set; }
 
 		[iOS (18, 0), MacCatalyst (18, 0), NoTV]
-		[Export ("writingToolsAllowedInputOptions")]
+		[Deprecated (PlatformName.iOS, 18, 0, "Use 'AllowedWritingToolsResultOptions' instead.")]
+		[Deprecated (PlatformName.MacCatalyst, 18, 0, "Use 'AllowedWritingToolsResultOptions' instead.")]
+		[Export ("writingToolsAllowedInputOptions", ArgumentSemantic.Assign)]
 		UIWritingToolsAllowedInputOptions WritingToolsAllowedInputOptions { get; set; }
+
+		[iOS (18, 0), MacCatalyst (18, 0), NoTV]
+		[Export ("allowedWritingToolsResultOptions", ArgumentSemantic.Assign)]
+		UIWritingToolsResultOptions AllowedWritingToolsResultOptions { get; set; }
 	}
 
 	/// <summary>Provides data for the  event.</summary>
@@ -8248,9 +8254,21 @@ namespace UIKit {
 		[Export ("insertAttributedText:")]
 		void InsertAttributedText (NSAttributedString text);
 
+		[TV (12, 0), NoWatch, MacCatalyst (13, 1), iOS (12, 0)]
+		[Export ("attributedTextInRange:")]
+		NSAttributedString GetAttributedText (UITextRange range);
+
 		[TV (13, 0), NoWatch, iOS (13, 0), MacCatalyst (13, 1)]
 		[Export ("replaceRange:withAttributedText:")]
 		void ReplaceRange (UITextRange range, NSAttributedString attributedText);
+
+		[NoWatch, NoTV, iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("willPresentWritingTools")]
+		void WillPresentWritingTools ();
+
+		[NoWatch, NoTV, iOS (18, 0), MacCatalyst (18, 0)]
+		[Export ("didDismissWritingTools")]
+		void DidDismissWritingTools ();
 	}
 
 	/// <summary>A manager for bar button items.</summary>
@@ -18518,7 +18536,7 @@ namespace UIKit {
 		UITab Tab { get; }
 
 		[TV (18, 0), iOS (18, 0), MacCatalyst (18, 0)]
-		[Export ("preferredTransition", ArgumentSemantic.Strong)]
+		[Export ("preferredTransition", ArgumentSemantic.Strong), NullAllowed]
 		UIViewControllerTransition PreferredTransition { get; set; }
 	}
 
@@ -29859,12 +29877,25 @@ namespace UIKit {
  
 	[Native]
 	[NoWatch, NoTV, NoMac, iOS (18, 0), MacCatalyst (18, 0)]
+	[Deprecated (PlatformName.iOS, 18, 0, "Use 'UIWritingToolsResultOptions' instead.")]
+	[Deprecated (PlatformName.MacCatalyst, 18, 0, "Use 'UIWritingToolsResultOptions' instead.")]
 	enum UIWritingToolsAllowedInputOptions : ulong {
 		Default = 0,
 		PlainText = 1 << 0,
 		RichText = 1 << 1,
 		List = 1 << 3, 
 		Table = 1 << 3, 
+	}
+
+	[Flags]
+	[Native]
+	[NoWatch, NoTV, NoMac, iOS (18, 0), MacCatalyst (18, 0)]
+	enum UIWritingToolsResultOptions : ulong {
+		Default = 0,
+		PlainText = 1 << 0,
+		RichText = 1 << 1,
+		List = 1 << 2,
+		Table = 1 << 3,
 	}
 
 	[Native]
@@ -30095,8 +30126,8 @@ namespace UIKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface UITabBarControllerSidebarDelegate {
-		[Export ("tabBarController:sidebarVisibilityDidChange:")]
-		void SidebarVisibilityDidChange (UITabBarController tabBarController, UITabBarControllerSidebar sidebar);
+		[Export ("tabBarController:sidebarVisibilityWillChange:animator:")]
+		void SidebarVisibilityWillChange (UITabBarController tabBarController, UITabBarControllerSidebar sidebar, IUITabBarControllerSidebarAnimating animator);
 
 		[Export ("tabBarController:sidebar:itemForRequest:"), NoDefaultValue]
 		UITabSidebarItem GetItemForRequest (UITabBarController tabBarController, UITabBarControllerSidebar sidebar, UITabSidebarItemRequest request);
@@ -30900,4 +30931,29 @@ namespace UIKit {
 		[Wrap ("this (styleKey, title, attributes.GetDictionary ()!)")]
 		NativeHandle Constructor (string styleKey, string title, UIStringAttributes attributes);
 	}
+
+	// @protocol UITabBarControllerSidebarAnimating <NSObject>
+	/*
+	  Check whether adding [Model] to this declaration is appropriate.
+	  [Model] is used to generate a C# class that implements this protocol,
+	  and might be useful for protocols that consumers are supposed to implement,
+	  since consumers can subclass the generated class instead of implementing
+	  the generated interface. If consumers are not supposed to implement this
+	  protocol, then [Model] is redundant and will generate code that will never
+	  be used.
+	*/
+	[NoWatch, NoTV, iOS (18, 0)]
+	[Protocol (BackwardsCompatibleCodeGeneration = false)]
+	interface UITabBarControllerSidebarAnimating
+	{
+		[Abstract]
+		[Export ("addAnimations:")]
+		void AddAnimations (Action animations);
+
+		[Abstract]
+		[Export ("addCompletion:")]
+		void AddCompletion (Action completion);
+	}
+
+	interface IUITabBarControllerSidebarAnimating {}
 }

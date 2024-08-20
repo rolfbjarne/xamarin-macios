@@ -16508,7 +16508,7 @@ namespace UIKit {
 		new UIWritingToolsResultOptions AllowedWritingToolsResultOptions { get; set; }
 
 		[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
-		[Export ("textFormattingConfiguration", ArgumentSemantic.Copy)]
+		[Export ("textFormattingConfiguration", ArgumentSemantic.Copy), NullAllowed]
 		UITextFormattingViewControllerConfiguration TextFormattingConfiguration { get; set; }
 	}
 
@@ -29439,6 +29439,9 @@ namespace UIKit {
 		[Export ("typesettingLanguage")]
 		string TypesettingLanguage { get; set; }
 
+#if NET
+		[Abstract]
+#endif
 		[TV (18, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("listEnvironment")]
 		UIListEnvironment ListEnvironment { get; set; }
@@ -30000,8 +30003,9 @@ namespace UIKit {
 	[BaseType (typeof (UITab))]
 	[DisableDefaultCtor]
 	interface UISearchTab {
+		[DesignatedInitializer]
 		[Export ("initWithViewControllerProvider:")]
-		NativeHandle Constructor (Func<UITab, UIViewController> viewControllerProvider);
+		NativeHandle Constructor ([NullAllowed] Func<UITab, UIViewController> viewControllerProvider);
 	}
 
 	[TV (18, 0), iOS (18, 0), MacCatalyst (18, 0), NoWatch]
@@ -30055,7 +30059,7 @@ namespace UIKit {
 		bool AllowsHiding { get; }
 
 		[Export ("initWithTitle:image:identifier:viewControllerProvider:")]
-		NativeHandle Constructor (string title, [NullAllowed] UIImage image, string identifier, Func<UITab, UIViewController> viewControllerProvider);
+		NativeHandle Constructor (string title, [NullAllowed] UIImage image, string identifier, [NullAllowed] Func<UITab, UIViewController> viewControllerProvider);
 	}
 
 	[NoTV, NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
@@ -30177,7 +30181,7 @@ namespace UIKit {
 		UITabGroupSidebarAppearance SidebarAppearance { get; set; }
 
 		[Export ("initWithTitle:image:identifier:children:viewControllerProvider:")]
-		NativeHandle Constructor (string title, [NullAllowed] UIImage image, string identifier, UITab [] children, Func<UITab, UIViewController> viewControllerProvider);
+		NativeHandle Constructor (string title, [NullAllowed] UIImage image, string identifier, UITab [] children, [NullAllowed] Func<UITab, UIViewController> viewControllerProvider);
 	}
 
 	[NoTV, NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
@@ -30228,7 +30232,7 @@ namespace UIKit {
 	interface UITraitListEnvironment : UINSIntegerTraitDefinition {
 	}
 
-	[TV (18, 0), NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
+	[TV (18, 0), NoWatch, iOS (18, 0), NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface UIUpdateActionPhase {
@@ -30281,7 +30285,7 @@ namespace UIKit {
 		UIUpdateActionPhase AfterUpdateComplete { get; set; }
 	}
 
-	[TV (18, 0), NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
+	[TV (18, 0), NoWatch, iOS (18, 0), NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface UIUpdateInfo {
@@ -30314,7 +30318,7 @@ namespace UIKit {
 
 	delegate void UIUpdateLinkCallback (UIUpdateLink updateLink, UIUpdateInfo updateInfo);
 
-	[TV (18, 0), NoWatch, iOS (18, 0), MacCatalyst (18, 0)]
+	[TV (18, 0), NoWatch, iOS (18, 0), NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface UIUpdateLink {
@@ -30548,11 +30552,16 @@ namespace UIKit {
 
 	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
 	[BaseType (typeof (UIViewController))]
+	[DisableDefaultCtor]
 	interface UITextFormattingViewController {
+		[DesignatedInitializer]
+		[Export ("init")]
+		NativeHandle Constructor ();
+
 		[Export ("configuration", ArgumentSemantic.Copy)]
 		UITextFormattingViewControllerConfiguration Configuration { get; }
 
-		[Export ("formattingDescriptor", ArgumentSemantic.Copy)]
+		[Export ("formattingDescriptor", ArgumentSemantic.Copy), NullAllowed]
 		UITextFormattingViewControllerFormattingDescriptor FormattingDescriptor { get; set; }
 
 		[Wrap ("WeakDelegate")]
@@ -30756,7 +30765,7 @@ namespace UIKit {
 		[Export ("groups", ArgumentSemantic.Copy)]
 		UITextFormattingViewControllerComponentGroup [] Groups { get; }
 
-		[Export ("formattingStyles", ArgumentSemantic.Copy)]
+		[Export ("formattingStyles", ArgumentSemantic.Copy), NullAllowed]
 		UITextFormattingViewControllerFormattingStyle [] FormattingStyles { get; set; }
 
 		[NullAllowed, Export ("fontPickerConfiguration", ArgumentSemantic.Copy)]
@@ -30830,7 +30839,12 @@ namespace UIKit {
 
 	[NoWatch, NoTV, NoMacCatalyst, iOS (18, 0)]
 	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
 	interface UITextFormattingViewControllerFormattingDescriptor : NSCopying, NSSecureCoding {
+		[Export ("init")]
+		[DesignatedInitializer]
+		NativeHandle Constructor ();
+
 		[Export ("initWithString:range:")]
 		NativeHandle Constructor (NSAttributedString @string, NSRange range);
 

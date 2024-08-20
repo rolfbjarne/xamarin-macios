@@ -136,7 +136,7 @@ namespace AppKit {
 
 	[Flags]
 	[Native]
-	[Mac (15, 0), MacCatalyst (18, 0)]
+	[Mac (15, 0), NoMacCatalyst]
 	enum NSWritingToolsResultOptions : ulong {
 		Default = 0,
 		PlainText = 1 << 0,
@@ -19884,7 +19884,7 @@ namespace AppKit {
 
 		// Inlined from the NSTextView (NSTextView_TextHighlight) category
 		[Mac (15, 0)]
-		[Export ("textHighlightAttributes", ArgumentSemantic.Copy), NullAllowed]
+		[Export ("textHighlightAttributes", ArgumentSemantic.Copy)]
 		NSDictionary<NSString, NSObject> TextHighlightAttributes { get; set; }
 
 		[Mac (15, 0)]
@@ -20338,6 +20338,10 @@ namespace AppKit {
 		[Mac (15, 0), MacCatalyst (18, 0)]
 		[Export ("itemIdentifiers", ArgumentSemantic.Copy)]
 		string [] ItemIdentifiers { get; set; }
+
+		[Mac (15, 0), MacCatalyst (18, 0)]
+		[Export ("removeItemWithItemIdentifier:")]
+		void RemoveItem (string itemIdentifier);
 	}
 
 	interface INSToolbarDelegate { }
@@ -20372,12 +20376,6 @@ namespace AppKit {
 		[Mac (13, 0), MacCatalyst (16, 0)]
 		[Export ("toolbar:itemIdentifier:canBeInsertedAtIndex:"), DelegateName ("NSToolbarCanInsert"), DefaultValue (true)]
 		bool GetItemCanBeInsertedAt (NSToolbar toolbar, string itemIdentifier, nint index);
-
-		// The NSToolbar class already has a "RemoveItem" method, thus we need to name this delegate method differently.
-		// Note that overloading is not possible, because this delegate method becomes an event in the NSToolbar class.
-		[Mac (15, 0), MacCatalyst (18, 0)]
-		[Export ("removeItemWithItemIdentifier:"), EventArgs ("NSNotification")]
-		void RemoveItemWithIdentifier (string itemIdentifier);
 	}
 
 	[NoMacCatalyst]

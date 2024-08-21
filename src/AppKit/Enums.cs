@@ -22,6 +22,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 using System;
+using System.ComponentModel;
 using ObjCRuntime;
 using Foundation;
 
@@ -1991,6 +1992,9 @@ namespace AppKit {
 #else
 	[MacCatalyst (13, 1)]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "This enum doesn't exist on this platform.")]
+#if __MACCATALYST__
+	[EditorBrowsable (EditorBrowsableState.Never)]
+#endif
 #endif
 	[Native]
 	public enum NSCollectionViewDropOperation : long {
@@ -2002,6 +2006,9 @@ namespace AppKit {
 #else
 	[MacCatalyst (13, 1)]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "This enum doesn't exist on this platform.")]
+#if __MACCATALYST__
+	[EditorBrowsable (EditorBrowsableState.Never)]
+#endif
 #endif
 	[Native]
 	public enum NSCollectionViewItemHighlightState : long {
@@ -2016,6 +2023,9 @@ namespace AppKit {
 #else
 	[MacCatalyst (13, 1)]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "This enum doesn't exist on this platform.")]
+#if __MACCATALYST__
+	[EditorBrowsable (EditorBrowsableState.Never)]
+#endif
 #endif
 	[Native]
 	[Flags]

@@ -7661,7 +7661,7 @@ namespace UIKit {
 		[Export ("allowedWritingToolsResultOptions", ArgumentSemantic.Assign)]
 		UIWritingToolsResultOptions AllowedWritingToolsResultOptions { get; set; }
 
-		[iOS (18, 0), MacCatalyst (18, 0), NoTV]
+		[iOS (18, 0), MacCatalyst (18, 0), TV (18, 0)]
 		[Export ("mathExpressionCompletionType")]
 		UITextMathExpressionCompletionType MathExpressionCompletionType { get; set; }
 	}
@@ -21827,7 +21827,7 @@ namespace UIKit {
 		[Export ("focusGroupPriority")]
 		UIFocusGroupPriority FocusGroupPriority { get; }
 
-		[NoWatch, NoTV, iOS (15, 0), MacCatalyst (15, 0)]
+		[NoWatch, TV (18, 0), iOS (15, 0), MacCatalyst (15, 0)]
 		[Export ("isTransparentFocusItem")]
 		bool IsTransparentFocusItem { get; }
 
@@ -29865,7 +29865,7 @@ namespace UIKit {
 	}
 
 	[Native]
-	[NoWatch, NoTV, NoMac, iOS (18, 0), MacCatalyst (18, 0)]
+	[NoWatch, TV (18, 0), NoMac, iOS (18, 0), MacCatalyst (18, 0)]
 	enum UITextMathExpressionCompletionType : long {
 		Default,
 		No,
@@ -30398,6 +30398,7 @@ namespace UIKit {
 		void UpdateLink (UIView windowScene, UIUpdateLinkCallback handler);
 
 		// From the UIUpdateLink(Convenience) category
+		[Static]
 		[Export ("updateLinkForView:actionTarget:selector:")]
 		void UpdateLink (UIView windowScene, NSObject target, Selector selector);
 	}

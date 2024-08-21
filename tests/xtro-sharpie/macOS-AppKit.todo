@@ -1,3 +1,1 @@
 !extra-enum-value! Managed value 2 for NSWindowSharingType.ReadWrite not found in native headers
-!missing-protocol-member! NSTextInputTraits::setWritingToolsAllowedInputOptions: not found
-!missing-protocol-member! NSTextInputTraits::writingToolsAllowedInputOptions not found

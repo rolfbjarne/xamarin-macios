@@ -23978,6 +23978,15 @@ namespace UIKit {
 		[TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 		[Export ("completeStateRestoration")]
 		void CompleteStateRestoration ();
+
+		// Inlined from the UIScene (SystemProtection) category
+		[iOS (18, 0), NoWatch, NoTV, MacCatalyst (18, 0)]
+		[Export ("systemProtectionManager"), NullAllowed]
+		UISceneSystemProtectionManager SystemProtectionManager { get; }
+
+		[Notification]
+		[Field ("UISceneSystemProtectionDidChangeNotification")]
+		NSString SystemProtectionDidChangeNotification { get; }
 	}
 
 	interface IUISceneDelegate { }
@@ -30974,5 +30983,14 @@ namespace UIKit {
 		Automatic,
 		Always,
 		Never,
+	}
+
+	[NoWatch, NoTV, MacCatalyst (18, 0), iOS (18, 0)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface UISceneSystemProtectionManager {
+		[Export ("userAuthenticationEnabled")]
+		bool UserAuthenticationEnabled { [Bind ("isUserAuthenticationEnabled")] get; }
+
 	}
 }

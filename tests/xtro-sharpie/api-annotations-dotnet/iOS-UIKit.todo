@@ -1,6 +1,2 @@
-#m introduced and deprecated in the same version
-!missing-protocol-member! UITextInputTraits::setWritingToolsAllowedInputOptions: not found
-!missing-protocol-member! UITextInputTraits::writingToolsAllowedInputOptions not found
-
 # Bound on the NSObjectProtocol protocol
 !missing-selector! UIActivityCollaborationModeRestriction::description not bound

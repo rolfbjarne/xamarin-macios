@@ -548,5 +548,3 @@
 !missing-type! NSPICTImageRep not bound
 !missing-type! NSPersistentDocument not bound
 
-# FIX BEFORE PR
-!missing-protocol-conformance! NSAdaptiveImageGlyph should conform to CTAdaptiveImageProviding

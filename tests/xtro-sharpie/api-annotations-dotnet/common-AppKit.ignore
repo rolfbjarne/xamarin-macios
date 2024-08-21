@@ -16,6 +16,3 @@
 !missing-field! NSTypeIdentifierTransitInformationText not bound
 !missing-protocol! NSAnimatablePropertyContainer not bound
 !missing-selector! NSTouchBar::itemIdentifiers not bound
-
-# FIX BEFORE PR
-!missing-protocol-conformance! NSAdaptiveImageGlyph should conform to CTAdaptiveImageProviding

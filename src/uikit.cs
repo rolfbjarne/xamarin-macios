@@ -30341,12 +30341,10 @@ namespace UIKit {
 	interface UIUpdateLink {
 		[Static]
 		[Export ("updateLinkForWindowScene:")]
-		[return: NullAllowed]
 		UIUpdateInfo GetUpdateLink (UIWindowScene windowScene);
 
 		[Static]
 		[Export ("updateLinkForView:")]
-		[return: NullAllowed]
 		UIUpdateInfo GetUpdateLink (UIView windowScene);
 
 		[Export ("addActionToPhase:handler:")]

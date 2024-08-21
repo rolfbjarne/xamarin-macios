@@ -20530,7 +20530,7 @@ namespace AppKit {
 
 		[Mac (15, 0), MacCatalyst (18, 0)]
 		[Export ("hidden")]
-		bool Hidden { [Bind ("isHidden")] get; }
+		bool Hidden { [Bind ("isHidden")] get; set; }
 	}
 
 	[MacCatalyst (13, 1)]

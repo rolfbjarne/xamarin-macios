@@ -30387,7 +30387,7 @@ namespace UIKit {
 
 		// From the UIUpdateLink(Convenience) category
 		[Static]
-		[Export ("updateLinkForWindowScene:target:selector:")]
+		[Export ("updateLinkForWindowScene:actionTarget:selector:")]
 		void UpdateLink (UIWindowScene windowScene, NSObject target, Selector selector);
 
 		// From the UIUpdateLink(Convenience) category
@@ -30396,7 +30396,7 @@ namespace UIKit {
 		void UpdateLink (UIView windowScene, UIUpdateLinkCallback handler);
 
 		// From the UIUpdateLink(Convenience) category
-		[Export ("updateLinkForView:target:selector:")]
+		[Export ("updateLinkForView:actionTarget:selector:")]
 		void UpdateLink (UIView windowScene, NSObject target, Selector selector);
 	}
 

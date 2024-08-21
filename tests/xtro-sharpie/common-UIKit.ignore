@@ -73,3 +73,6 @@
 ## manually bound (better, stronger signature) on `[setS|s]copeBarButtonTitleTextAttributes:forState:` which is decorated with `UI_APPEARANCE_SELECTOR`
 
 ## [Wrap] over `[largeT|t]itleTextAttributes` which is decorated with `UI_APPEARANCE_SELECTOR`
+
+# FIX BEFORE PR
+!missing-protocol-conformance! NSAdaptiveImageGlyph should conform to CTAdaptiveImageProviding

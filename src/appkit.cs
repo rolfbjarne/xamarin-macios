@@ -20402,7 +20402,11 @@ namespace AppKit {
 
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
-	interface NSToolbarItem : NSCopying, NSMenuItemValidation, NSValidatedUserInterfaceItem {
+	interface NSToolbarItem : NSCopying, NSMenuItemValidation, NSValidatedUserInterfaceItem
+#if __MACCATALYST__
+		, UIPopoverPresentationControllerSourceItem
+#endif
+	{
 		[DesignatedInitializer]
 		[Export ("initWithItemIdentifier:")]
 		NativeHandle Constructor (string itemIdentifier);

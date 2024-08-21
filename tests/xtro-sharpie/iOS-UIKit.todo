@@ -1,5 +1,3 @@
-!missing-protocol-member! UITextInputTraits::setWritingToolsAllowedInputOptions: not found
-!missing-protocol-member! UITextInputTraits::writingToolsAllowedInputOptions not found
 !missing-selector! UIActivityCollaborationModeRestriction::description not bound
 !missing-selector! NSObject::accessibilityExpandedStatus not bound
 !missing-selector! NSObject::accessibilityExpandedStatusBlock not bound

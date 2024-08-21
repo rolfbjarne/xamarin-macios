@@ -1,3 +1,131 @@
+## we do not (need to) redefine the tintColor at every level, it will be dispatched to the right type
+!missing-selector! UIRefreshControl::setTintColor: not bound
+!missing-selector! UIRefreshControl::tintColor not bound
+!missing-selector! UIToolbar::setTintColor: not bound
+!missing-selector! UIToolbar::tintColor not bound
+
+# from docs: Important: UIActionSheetDelegate is deprecated in iOS 8.
+!missing-protocol-conformance! UIDocumentInteractionController should conform to UIActionSheetDelegate
+
+## exception name, not clear if useful
+!missing-field! UIApplicationInvalidInterfaceOrientationException not bound
+
+## Special case from UIAccessibilityAction. We added it (completly) on UIResponser but magic tap is also available on app delegate according to docs
+## See comments is uikit.cs for more info
+!extra-protocol-member! unexpected selector UIApplicationDelegate::accessibilityPerformMagicTap found
+
+## the category name is clear enough: UIPrintPaper_Deprecated_Nonfunctional
+!missing-selector! UIPrintPaper::printRect not bound
+
+# Added in UIAccessibility, this is later inlined in UIView, else we will
+# add all of the properties to all objects which is not correct.
+
+!missing-selector! NSObject::accessibilityDragSourceDescriptors not bound
+!missing-selector! NSObject::accessibilityDropPointDescriptors not bound
+!missing-selector! NSObject::setAccessibilityDragSourceDescriptors: not bound
+!missing-selector! NSObject::setAccessibilityDropPointDescriptors: not bound
+!missing-selector! NSObject::accessibilityActivateBlock not bound
+!missing-selector! NSObject::accessibilityActivationPointBlock not bound
+!missing-selector! NSObject::accessibilityAttributedHintBlock not bound
+!missing-selector! NSObject::accessibilityAttributedLabelBlock not bound
+!missing-selector! NSObject::accessibilityAttributedUserInputLabelsBlock not bound
+!missing-selector! NSObject::accessibilityAttributedValueBlock not bound
+!missing-selector! NSObject::accessibilityContainerTypeBlock not bound
+!missing-selector! NSObject::accessibilityCustomActionsBlock not bound
+!missing-selector! NSObject::accessibilityCustomRotorsBlock not bound
+!missing-selector! NSObject::accessibilityDecrementBlock not bound
+!missing-selector! NSObject::accessibilityDirectTouchOptions not bound
+!missing-selector! NSObject::accessibilityElementsBlock not bound
+!missing-selector! NSObject::accessibilityElementsHiddenBlock not bound
+!missing-selector! NSObject::accessibilityFrameBlock not bound
+!missing-selector! NSObject::accessibilityHeaderElementsBlock not bound
+!missing-selector! NSObject::accessibilityHintBlock not bound
+!missing-selector! NSObject::accessibilityIdentifierBlock not bound
+!missing-selector! NSObject::accessibilityIncrementBlock not bound
+!missing-selector! NSObject::accessibilityLabelBlock not bound
+!missing-selector! NSObject::accessibilityLanguageBlock not bound
+!missing-selector! NSObject::accessibilityMagicTapBlock not bound
+!missing-selector! NSObject::accessibilityNavigationStyleBlock not bound
+!missing-selector! NSObject::accessibilityPathBlock not bound
+!missing-selector! NSObject::accessibilityPerformEscapeBlock not bound
+!missing-selector! NSObject::accessibilityRespondsToUserInteractionBlock not bound
+!missing-selector! NSObject::accessibilityShouldGroupAccessibilityChildrenBlock not bound
+!missing-selector! NSObject::accessibilityTextualContextBlock not bound
+!missing-selector! NSObject::accessibilityTraitsBlock not bound
+!missing-selector! NSObject::accessibilityUserInputLabelsBlock not bound
+!missing-selector! NSObject::accessibilityValueBlock not bound
+!missing-selector! NSObject::accessibilityViewIsModalBlock not bound
+!missing-selector! NSObject::accessibilityZoomInAtPoint: not bound
+!missing-selector! NSObject::accessibilityZoomOutAtPoint: not bound
+!missing-selector! NSObject::automationElements not bound
+!missing-selector! NSObject::automationElementsBlock not bound
+!missing-selector! NSObject::isAccessibilityElementBlock not bound
+!missing-selector! NSObject::setAccessibilityActivateBlock: not bound
+!missing-selector! NSObject::setAccessibilityActivationPointBlock: not bound
+!missing-selector! NSObject::setAccessibilityAttributedHintBlock: not bound
+!missing-selector! NSObject::setAccessibilityAttributedLabelBlock: not bound
+!missing-selector! NSObject::setAccessibilityAttributedUserInputLabelsBlock: not bound
+!missing-selector! NSObject::setAccessibilityAttributedValueBlock: not bound
+!missing-selector! NSObject::setAccessibilityContainerTypeBlock: not bound
+!missing-selector! NSObject::setAccessibilityCustomActionsBlock: not bound
+!missing-selector! NSObject::setAccessibilityCustomRotorsBlock: not bound
+!missing-selector! NSObject::setAccessibilityDecrementBlock: not bound
+!missing-selector! NSObject::setAccessibilityDirectTouchOptions: not bound
+!missing-selector! NSObject::setAccessibilityElementsBlock: not bound
+!missing-selector! NSObject::setAccessibilityElementsHiddenBlock: not bound
+!missing-selector! NSObject::setAccessibilityFrameBlock: not bound
+!missing-selector! NSObject::setAccessibilityHeaderElementsBlock: not bound
+!missing-selector! NSObject::setAccessibilityHintBlock: not bound
+!missing-selector! NSObject::setAccessibilityIdentifierBlock: not bound
+!missing-selector! NSObject::setAccessibilityIncrementBlock: not bound
+!missing-selector! NSObject::setAccessibilityLabelBlock: not bound
+!missing-selector! NSObject::setAccessibilityLanguageBlock: not bound
+!missing-selector! NSObject::setAccessibilityMagicTapBlock: not bound
+!missing-selector! NSObject::setAccessibilityNavigationStyleBlock: not bound
+!missing-selector! NSObject::setAccessibilityPathBlock: not bound
+!missing-selector! NSObject::setAccessibilityPerformEscapeBlock: not bound
+!missing-selector! NSObject::setAccessibilityRespondsToUserInteractionBlock: not bound
+!missing-selector! NSObject::setAccessibilityShouldGroupAccessibilityChildrenBlock: not bound
+!missing-selector! NSObject::setAccessibilityTextualContextBlock: not bound
+!missing-selector! NSObject::setAccessibilityTraitsBlock: not bound
+!missing-selector! NSObject::setAccessibilityUserInputLabelsBlock: not bound
+!missing-selector! NSObject::setAccessibilityValueBlock: not bound
+!missing-selector! NSObject::setAccessibilityViewIsModalBlock: not bound
+!missing-selector! NSObject::setAutomationElements: not bound
+!missing-selector! NSObject::setAutomationElementsBlock: not bound
+!missing-selector! NSObject::setIsAccessibilityElementBlock: not bound
+
+## https://github.com/xamarin/xamarin-macios/issues/3213 should be fixed before conformance to 'UIStateRestoring' is restored.
+!missing-protocol-conformance! UIViewController should conform to UIStateRestoring (defined in 'UIStateRestoration' category)
+
+# Xcode 11
+
+## Inherited from another protocol
+!missing-protocol-member! NSCollectionLayoutVisibleItem::bounds not found
+!missing-protocol-member! NSCollectionLayoutVisibleItem::center not found
+!missing-protocol-member! NSCollectionLayoutVisibleItem::setCenter: not found
+!missing-protocol-member! NSCollectionLayoutVisibleItem::setTransform: not found
+!missing-protocol-member! NSCollectionLayoutVisibleItem::transform not found
+
+## Not really useful to have them exposed
+!missing-pinvoke! UIFontWeightForImageSymbolWeight is not bound
+!missing-pinvoke! UIImageSymbolWeightForFontWeight is not bound
+
+## Introduced and deprecated in Xcode 11 and likely it will be removed in a future beta
+!missing-selector! UIGestureRecognizer::initWithCoder: not bound
+!missing-selector! UIKeyCommand::action not bound
+
+## Introduced in Xcode 11 b5 but unlikely to be there at the end of beta, these usualy get replaced by NSCopying protocol
+!missing-selector! UIBarAppearance::copy not bound
+!missing-selector! UIBarButtonItemAppearance::copy not bound
+!missing-selector! UITabBarItemAppearance::copy not bound
+
+## Xcode 11.4 Beta 2
+## Duplicated entry field UIKeyInputF1 FB66299477
+## https://github.com/xamarin/xamarin-macios/wiki/UIKit-iOS-xcode11.4-beta2
+!missing-field! UIKeyInputF1 not bound
+
+# Initial result from new rule extra-null-allowed
 !extra-null-allowed! 'Foundation.NSIndexPath UIKit.UICollectionViewDataSource::GetIndexPath(UIKit.UICollectionView,System.String,System.IntPtr)' has a extraneous [NullAllowed] on return type
 !extra-null-allowed! 'System.Boolean UIKit.NSLayoutManagerDelegate::ShouldSetLineFragmentRect(UIKit.NSLayoutManager,CoreGraphics.CGRect&,CoreGraphics.CGRect&,System.Runtime.InteropServices.NFloat&,UIKit.NSTextContainer,Foundation.NSRange)' has a extraneous [NullAllowed] on parameter #1
 !extra-null-allowed! 'System.Boolean UIKit.NSLayoutManagerDelegate::ShouldSetLineFragmentRect(UIKit.NSLayoutManager,CoreGraphics.CGRect&,CoreGraphics.CGRect&,System.Runtime.InteropServices.NFloat&,UIKit.NSTextContainer,Foundation.NSRange)' has a extraneous [NullAllowed] on parameter #2
@@ -30,13 +158,8 @@
 !extra-null-allowed! 'System.Void UIKit.UIView::set_MotionEffects(UIKit.UIMotionEffect[])' has a extraneous [NullAllowed] on parameter #0
 !extra-null-allowed! 'UIKit.IUITextDocumentProxy UIKit.UIInputViewController::get_TextDocumentProxy()' has a extraneous [NullAllowed] on return type
 !extra-null-allowed! 'UIKit.UIView UIKit.UIScreen::SnapshotView(System.Boolean)' has a extraneous [NullAllowed] on return type
-!incorrect-protocol-member! UICalendarViewDelegate::calendarView:decorationForDateComponents: is OPTIONAL and should NOT be abstract
-!incorrect-protocol-member! UIMenuLeaf::selectedImage is REQUIRED and should be abstract
-!incorrect-protocol-member! UIMenuLeaf::setSelectedImage: is REQUIRED and should be abstract
-!incorrect-protocol-member! UIPopoverPresentationControllerSourceItem::frameInView: is REQUIRED and should be abstract
-!incorrect-protocol-member! UISearchSuggestion::localizedAttributedSuggestion is REQUIRED and should be abstract
-!missing-field! UIApplicationInvalidInterfaceOrientationException not bound
-!missing-field! UIKeyInputF1 not bound
+
+# Initial result from new rule missing-null-allowed
 !missing-null-allowed! 'CoreAnimation.CADisplayLink UIKit.UIScreen::CreateDisplayLink(Foundation.NSObject,ObjCRuntime.Selector)' is missing an [NullAllowed] on return type
 !missing-null-allowed! 'Foundation.NSArray Foundation.NSBundle::LoadNib(System.String,Foundation.NSObject,Foundation.NSDictionary)' is missing an [NullAllowed] on return type
 !missing-null-allowed! 'Foundation.NSAttributedString UIKit.UIButton::get_CurrentAttributedTitle()' is missing an [NullAllowed] on return type
@@ -308,114 +431,51 @@
 !missing-null-allowed! 'UIKit.UIViewController[] UIKit.UIPageViewController::get_ViewControllers()' is missing an [NullAllowed] on return type
 !missing-null-allowed! 'UIKit.UIWindow UIKit.UITouch::get_Window()' is missing an [NullAllowed] on return type
 !missing-null-allowed! 'UIKit.UIWindow UIKit.UIView::get_Window()' is missing an [NullAllowed] on return type
-!missing-pinvoke! UIFontWeightForImageSymbolWeight is not bound
-!missing-pinvoke! UIImageSymbolWeightForFontWeight is not bound
-!missing-protocol-conformance! NSToolbarItem should conform to UIPopoverPresentationControllerSourceItem (defined in 'UIPopoverPresentationControllerSourceItem' category)
-!missing-protocol-conformance! UIDocumentInteractionController should conform to UIActionSheetDelegate
-!missing-protocol-conformance! UIViewController should conform to UIStateRestoring (defined in 'UIStateRestoration' category)
-!missing-protocol-member! NSCollectionLayoutVisibleItem::bounds not found
-!missing-protocol-member! NSCollectionLayoutVisibleItem::center not found
-!missing-protocol-member! NSCollectionLayoutVisibleItem::setCenter: not found
-!missing-protocol-member! NSCollectionLayoutVisibleItem::setTransform: not found
-!missing-protocol-member! NSCollectionLayoutVisibleItem::transform not found
+
+## These are inlined by protocol adoption so you can't really add such decoration
 !missing-requires-super! UIControl::contextMenuInteraction:willDisplayMenuForConfiguration:animator: is missing an [RequiresSuper] attribute
 !missing-requires-super! UIControl::contextMenuInteraction:willEndForConfiguration:animator: is missing an [RequiresSuper] attribute
-!missing-selector! +UITextInputContext::current not bound
-!missing-selector! NSObject::accessibilityActivateBlock not bound
-!missing-selector! NSObject::accessibilityActivationPointBlock not bound
-!missing-selector! NSObject::accessibilityAttributedHintBlock not bound
-!missing-selector! NSObject::accessibilityAttributedLabelBlock not bound
-!missing-selector! NSObject::accessibilityAttributedUserInputLabelsBlock not bound
-!missing-selector! NSObject::accessibilityAttributedValueBlock not bound
-!missing-selector! NSObject::accessibilityContainerTypeBlock not bound
-!missing-selector! NSObject::accessibilityCustomActionsBlock not bound
-!missing-selector! NSObject::accessibilityCustomRotorsBlock not bound
-!missing-selector! NSObject::accessibilityDecrementBlock not bound
-!missing-selector! NSObject::accessibilityDirectTouchOptions not bound
-!missing-selector! NSObject::accessibilityDragSourceDescriptors not bound
-!missing-selector! NSObject::accessibilityDropPointDescriptors not bound
-!missing-selector! NSObject::accessibilityElementsBlock not bound
-!missing-selector! NSObject::accessibilityElementsHiddenBlock not bound
-!missing-selector! NSObject::accessibilityFrameBlock not bound
-!missing-selector! NSObject::accessibilityHeaderElementsBlock not bound
-!missing-selector! NSObject::accessibilityHintBlock not bound
-!missing-selector! NSObject::accessibilityIdentifierBlock not bound
-!missing-selector! NSObject::accessibilityIncrementBlock not bound
-!missing-selector! NSObject::accessibilityLabelBlock not bound
-!missing-selector! NSObject::accessibilityLanguageBlock not bound
-!missing-selector! NSObject::accessibilityMagicTapBlock not bound
-!missing-selector! NSObject::accessibilityNavigationStyleBlock not bound
-!missing-selector! NSObject::accessibilityPathBlock not bound
-!missing-selector! NSObject::accessibilityPerformEscapeBlock not bound
-!missing-selector! NSObject::accessibilityRespondsToUserInteractionBlock not bound
-!missing-selector! NSObject::accessibilityShouldGroupAccessibilityChildrenBlock not bound
-!missing-selector! NSObject::accessibilityTextualContextBlock not bound
-!missing-selector! NSObject::accessibilityTraitsBlock not bound
-!missing-selector! NSObject::accessibilityUserInputLabelsBlock not bound
-!missing-selector! NSObject::accessibilityValueBlock not bound
-!missing-selector! NSObject::accessibilityViewIsModalBlock not bound
-!missing-selector! NSObject::accessibilityZoomInAtPoint: not bound
-!missing-selector! NSObject::accessibilityZoomOutAtPoint: not bound
-!missing-selector! NSObject::automationElements not bound
-!missing-selector! NSObject::automationElementsBlock not bound
-!missing-selector! NSObject::isAccessibilityElementBlock not bound
-!missing-selector! NSObject::setAccessibilityActivateBlock: not bound
-!missing-selector! NSObject::setAccessibilityActivationPointBlock: not bound
-!missing-selector! NSObject::setAccessibilityAttributedHintBlock: not bound
-!missing-selector! NSObject::setAccessibilityAttributedLabelBlock: not bound
-!missing-selector! NSObject::setAccessibilityAttributedUserInputLabelsBlock: not bound
-!missing-selector! NSObject::setAccessibilityAttributedValueBlock: not bound
-!missing-selector! NSObject::setAccessibilityContainerTypeBlock: not bound
-!missing-selector! NSObject::setAccessibilityCustomActionsBlock: not bound
-!missing-selector! NSObject::setAccessibilityCustomRotorsBlock: not bound
-!missing-selector! NSObject::setAccessibilityDecrementBlock: not bound
-!missing-selector! NSObject::setAccessibilityDirectTouchOptions: not bound
-!missing-selector! NSObject::setAccessibilityDragSourceDescriptors: not bound
-!missing-selector! NSObject::setAccessibilityDropPointDescriptors: not bound
-!missing-selector! NSObject::setAccessibilityElementsBlock: not bound
-!missing-selector! NSObject::setAccessibilityElementsHiddenBlock: not bound
-!missing-selector! NSObject::setAccessibilityFrameBlock: not bound
-!missing-selector! NSObject::setAccessibilityHeaderElementsBlock: not bound
-!missing-selector! NSObject::setAccessibilityHintBlock: not bound
-!missing-selector! NSObject::setAccessibilityIdentifierBlock: not bound
-!missing-selector! NSObject::setAccessibilityIncrementBlock: not bound
-!missing-selector! NSObject::setAccessibilityLabelBlock: not bound
-!missing-selector! NSObject::setAccessibilityLanguageBlock: not bound
-!missing-selector! NSObject::setAccessibilityMagicTapBlock: not bound
-!missing-selector! NSObject::setAccessibilityNavigationStyleBlock: not bound
-!missing-selector! NSObject::setAccessibilityPathBlock: not bound
-!missing-selector! NSObject::setAccessibilityPerformEscapeBlock: not bound
-!missing-selector! NSObject::setAccessibilityRespondsToUserInteractionBlock: not bound
-!missing-selector! NSObject::setAccessibilityShouldGroupAccessibilityChildrenBlock: not bound
-!missing-selector! NSObject::setAccessibilityTextualContextBlock: not bound
-!missing-selector! NSObject::setAccessibilityTraitsBlock: not bound
-!missing-selector! NSObject::setAccessibilityUserInputLabelsBlock: not bound
-!missing-selector! NSObject::setAccessibilityValueBlock: not bound
-!missing-selector! NSObject::setAccessibilityViewIsModalBlock: not bound
-!missing-selector! NSObject::setAutomationElements: not bound
-!missing-selector! NSObject::setAutomationElementsBlock: not bound
-!missing-selector! NSObject::setIsAccessibilityElementBlock: not bound
-!missing-selector! NSUIViewToolbarItem::initWithItemIdentifier:uiView: not bound
-!missing-selector! NSUIViewToolbarItem::setUIView: not bound
-!missing-selector! NSUIViewToolbarItem::uiView not bound
-!missing-selector! UIBarAppearance::copy not bound
-!missing-selector! UIBarButtonItemAppearance::copy not bound
-!missing-selector! UIGestureRecognizer::initWithCoder: not bound
-!missing-selector! UIHoverGestureRecognizer::azimuthAngleInView: not bound
-!missing-selector! UIHoverGestureRecognizer::azimuthUnitVectorInView: not bound
-!missing-selector! UIKeyCommand::action not bound
-!missing-selector! UIPrintPaper::printRect not bound
-!missing-selector! UIRefreshControl::setTintColor: not bound
-!missing-selector! UIRefreshControl::tintColor not bound
-!missing-selector! UITabBarItemAppearance::copy not bound
-!missing-selector! UITextInputContext::isDictationInputExpected not bound
-!missing-selector! UITextInputContext::isHardwareKeyboardInputExpected not bound
-!missing-selector! UITextInputContext::isPencilInputExpected not bound
-!missing-selector! UITextInputContext::setDictationInputExpected: not bound
-!missing-selector! UITextInputContext::setHardwareKeyboardInputExpected: not bound
-!missing-selector! UITextInputContext::setPencilInputExpected: not bound
-!missing-selector! UIToolbar::setTintColor: not bound
-!missing-selector! UIToolbar::tintColor not bound
-!missing-type! NSUIViewToolbarItem not bound
-!missing-type! UITextInputContext not bound
+
+## Grouped nint constants
+!unknown-native-enum! UIFocusGroupPriority bound
+
+## macro is used in UIBarCommon.h: #define UIToolbarPosition UIBarPosition
+!unknown-native-enum! UIToolbarPosition bound
+
+## there's no UI_APPEARANCE_SELECTOR in headers - but they can (unofficially) work, YYMV
+!extra-ui-appearance-support! System.Void UIKit.UINavigationBar::SetTitleTextAttributes(UIKit.UITextAttributes) should NOT be decorated with [Appearance]
+!extra-ui-appearance-support! System.Void UIKit.UISlider::set_MaxValueImage(UIKit.UIImage) should NOT be decorated with [Appearance]
+!extra-ui-appearance-support! System.Void UIKit.UISlider::set_MinValueImage(UIKit.UIImage) should NOT be decorated with [Appearance]
+!extra-ui-appearance-support! System.Void UIKit.UISlider::SetMaxTrackImage(UIKit.UIImage,UIKit.UIControlState) should NOT be decorated with [Appearance]
+!extra-ui-appearance-support! System.Void UIKit.UISlider::SetMinTrackImage(UIKit.UIImage,UIKit.UIControlState) should NOT be decorated with [Appearance]
+!extra-ui-appearance-support! System.Void UIKit.UISlider::SetThumbImage(UIKit.UIImage,UIKit.UIControlState) should NOT be decorated with [Appearance]
+!extra-ui-appearance-support! UIKit.UIImage UIKit.UISlider::get_MaxValueImage() should NOT be decorated with [Appearance]
+!extra-ui-appearance-support! UIKit.UIImage UIKit.UISlider::get_MinValueImage() should NOT be decorated with [Appearance]
+!extra-ui-appearance-support! UIKit.UIImage UIKit.UISlider::MaxTrackImage(UIKit.UIControlState) should NOT be decorated with [Appearance]
+!extra-ui-appearance-support! UIKit.UIImage UIKit.UISlider::MinTrackImage(UIKit.UIControlState) should NOT be decorated with [Appearance]
+!extra-ui-appearance-support! UIKit.UIImage UIKit.UISlider::ThumbImage(UIKit.UIControlState) should NOT be decorated with [Appearance]
+!extra-ui-appearance-support! UIKit.UITextAttributes UIKit.UINavigationBar::GetTitleTextAttributes() should NOT be decorated with [Appearance]
+
+## [Wrap] over `[largeT|t]itleTextAttributes` which is decorated with `UI_APPEARANCE_SELECTOR`
+!extra-ui-appearance-support! UIKit.UIStringAttributes UIKit.UINavigationBar::get_LargeTitleTextAttributes() should NOT be decorated with [Appearance]
+!extra-ui-appearance-support! System.Void UIKit.UINavigationBar::set_LargeTitleTextAttributes(UIKit.UIStringAttributes) should NOT be decorated with [Appearance]
+
+## UITextAlignment is deprecated in iOS6 in favor of NSTextAlignment - values added to avoid breaking changes
+!extra-enum-value! Managed value 3 for UITextAlignment.Justified not found in native headers
+!extra-enum-value! Managed value 4 for UITextAlignment.Natural not found in native headers
+
+## manually bound
+!missing-field! UIListSeparatorAutomaticInsets not bound
+
+!incorrect-protocol-member! UISearchSuggestion::localizedAttributedSuggestion is REQUIRED and should be abstract
+!incorrect-protocol-member! UICalendarViewDelegate::calendarView:decorationForDateComponents: is OPTIONAL and should NOT be abstract
+
+# cannot be made abstract until xamcore 5
+!incorrect-protocol-member! UIPopoverPresentationControllerSourceItem::frameInView: is REQUIRED and should be abstract
+!incorrect-protocol-member! UIMenuLeaf::selectedImage is REQUIRED and should be abstract
+!incorrect-protocol-member! UIMenuLeaf::setSelectedImage: is REQUIRED and should be abstract
+
+!missing-protocol! UIItemProviderReadingAugmentationDesignating not bound
+
+# Bound on the NSObjectProtocol protocol
 !missing-selector! UIActivityCollaborationModeRestriction::description not bound

@@ -40,3 +40,6 @@
 !missing-field! UIListSeparatorAutomaticInsets not bound
 
 !missing-protocol! UIItemProviderReadingAugmentationDesignating not bound
+
+# Bound on the NSObjectProtocol protocol
+!missing-selector! UIActivityCollaborationModeRestriction::description not bound

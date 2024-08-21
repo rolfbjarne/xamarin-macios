@@ -187,3 +187,6 @@
 # no bound due to issues with foundation https://github.com/xamarin/xamarin-macios/issues/15577
 !missing-selector! NSDiffableDataSourceSectionTransaction::difference not bound
 !missing-selector! NSDiffableDataSourceTransaction::difference not bound
+
+# FIX BEFORE PR
+!missing-protocol-conformance! NSAdaptiveImageGlyph should conform to CTAdaptiveImageProviding

@@ -1986,13 +1986,23 @@ namespace AppKit {
 		ApplicationOnlyMask = 1
 	}
 
+#if XAMCORE_5_0
+	[NoMacCatalyst]
+#else
 	[MacCatalyst (13, 1)]
+	[Deprecated (PlatformName.MacCatalyst, 13, 1, "This enum doesn't exist on this platform.")]
+#endif
 	[Native]
 	public enum NSCollectionViewDropOperation : long {
 		On = 0, Before = 1
 	}
 
+#if XAMCORE_5_0
+	[NoMacCatalyst]
+#else
 	[MacCatalyst (13, 1)]
+	[Deprecated (PlatformName.MacCatalyst, 13, 1, "This enum doesn't exist on this platform.")]
+#endif
 	[Native]
 	public enum NSCollectionViewItemHighlightState : long {
 		None = 0,
@@ -2001,7 +2011,12 @@ namespace AppKit {
 		AsDropTarget = 3
 	}
 
+#if XAMCORE_5_0
+	[NoMacCatalyst]
+#else
 	[MacCatalyst (13, 1)]
+	[Deprecated (PlatformName.MacCatalyst, 13, 1, "This enum doesn't exist on this platform.")]
+#endif
 	[Native]
 	[Flags]
 	public enum NSCollectionViewScrollPosition : ulong {

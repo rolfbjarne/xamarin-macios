@@ -23,6 +23,5 @@
 !missing-protocol-member! NSTextInputTraits::writingToolsAllowedInputOptions not found
 !missing-selector! +NSPopUpButton::pullDownButtonWithTitle:menu: not bound
 !missing-selector! NSTextView::setMathExpressionCompletionType: not bound
-!missing-selector! NSToolbar::removeItemWithItemIdentifier: not bound
 !missing-selector! NSToolbarItem::isHidden not bound
 !missing-selector! NSToolbarItem::setHidden: not bound

@@ -7659,6 +7659,10 @@ namespace UIKit {
 		[iOS (18, 0), MacCatalyst (18, 0), NoTV]
 		[Export ("allowedWritingToolsResultOptions", ArgumentSemantic.Assign)]
 		UIWritingToolsResultOptions AllowedWritingToolsResultOptions { get; set; }
+
+		[iOS (18, 0), MacCatalyst (18, 0), NoTV]
+		[Export ("mathExpressionCompletionType")]
+		UITextMathExpressionCompletionType MathExpressionCompletionType { get; set; }
 	}
 
 	/// <summary>Provides data for the  event.</summary>
@@ -14580,10 +14584,10 @@ namespace UIKit {
 
 		[TV (18, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("tabBarHidden", ArgumentSemantic.Assign)]
-		bool TabBarHidden { [Bind ("isTabBarHidden")] get; }
+		bool TabBarHidden { [Bind ("isTabBarHidden")] get; set; }
 
 		[TV (18, 0), iOS (18, 0), MacCatalyst (18, 0)]
-		[Export ("SetTabBarHidden:animated:")]
+		[Export ("setTabBarHidden:animated:")]
 		void SetTabBarHidden (bool hidden, bool animated);
 	}
 
@@ -18916,6 +18920,7 @@ namespace UIKit {
 		[Export ("imageDynamicRange")]
 		UIImageDynamicRange ImageDynamicRange { get; }
 
+		[Static]
 		[TV (18, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("traitCollectionWithListEnvironment:")]
 		UITraitCollection GetTraitCollection (UIListEnvironment listEnvironment);
@@ -25913,14 +25918,17 @@ namespace UIKit {
 		[Export ("strokeOutset")]
 		nfloat StrokeOutset { get; set; }
 
+		[Static]
 		[TV (18, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("listCellConfiguration")]
 		UIBackgroundConfiguration ListCellConfiguration { get; }
 
+		[Static]
 		[TV (18, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("listHeaderConfiguration")]
 		UIBackgroundConfiguration ListHeaderConfiguration { get; }
 
+		[Static]
 		[TV (18, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("listFooterConfiguration")]
 		UIBackgroundConfiguration ListFooterConfiguration { get; }
@@ -29995,6 +30003,7 @@ namespace UIKit {
 		[Export ("background", ArgumentSemantic.Strong)]
 		UIBackgroundConfiguration Background { get; set; }
 
+		[Static]
 		[Export ("createDocumentActionWithIntent:")]
 		UIAction CreateDocumentAction (UIDocumentCreationIntent indent);
 	}
@@ -30050,13 +30059,13 @@ namespace UIKit {
 		UITabGroup ManagingTabGroup { get; }
 
 		[Export ("hidden", ArgumentSemantic.Assign)]
-		bool Hidden { [Bind ("isHidden")] get; }
+		bool Hidden { [Bind ("isHidden")] get; set; }
 
 		[Export ("hiddenByDefault", ArgumentSemantic.Assign)]
-		bool HiddenByDefault { [Bind ("isHiddenByDefault")] get; }
+		bool HiddenByDefault { [Bind ("isHiddenByDefault")] get; set; }
 
 		[Export ("allowsHiding", ArgumentSemantic.Assign)]
-		bool AllowsHiding { get; }
+		bool AllowsHiding { get; set; }
 
 		[Export ("initWithTitle:image:identifier:viewControllerProvider:")]
 		NativeHandle Constructor (string title, [NullAllowed] UIImage image, string identifier, [NullAllowed] Func<UITab, UIViewController> viewControllerProvider);
@@ -30066,12 +30075,15 @@ namespace UIKit {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface UITabSidebarScrollTarget {
+		[Static]
 		[Export ("targetForHeader")]
 		UITabSidebarScrollTarget GetTargetForHeader ();
 
+		[Static]
 		[Export ("targetForFooter")]
 		UITabSidebarScrollTarget GetTargetForFooter ();
 
+		[Static]
 		[Export ("targetForTab:")]
 		UITabSidebarScrollTarget GetTargetForTab (UITab tab);
 
@@ -30089,7 +30101,7 @@ namespace UIKit {
 		IUITabBarControllerSidebarDelegate Delegate { get; set; }
 
 		[Export ("hidden", ArgumentSemantic.Assign)]
-		bool Hidden { [Bind ("isHidden")] get; }
+		bool Hidden { [Bind ("isHidden")] get; set; }
 
 		[Export ("preferredLayout", ArgumentSemantic.Assign)]
 		UITabBarControllerSidebarLayout PreferredLayout { get; set; }
@@ -30212,6 +30224,7 @@ namespace UIKit {
 		[Export ("defaultBackgroundConfiguration")]
 		UIBackgroundConfiguration DefaultBackgroundConfiguration { get; }
 
+		[Static]
 		[Export ("itemFromRequest:")]
 		UITabSidebarItem GetItem (UITabSidebarItemRequest request);
 	}
@@ -30289,10 +30302,12 @@ namespace UIKit {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface UIUpdateInfo {
+		[Static]
 		[Export ("currentUpdateInfoForWindowScene:")]
 		[return: NullAllowed]
 		UIUpdateInfo GetCurrentUpdateInfo (UIWindowScene windowScene);
 
+		[Static]
 		[Export ("currentUpdateInfoForView:")]
 		[return: NullAllowed]
 		UIUpdateInfo GetCurrentUpdateInfo (UIView windowScene);
@@ -30322,10 +30337,12 @@ namespace UIKit {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface UIUpdateLink {
+		[Static]
 		[Export ("updateLinkForWindowScene:")]
 		[return: NullAllowed]
 		UIUpdateInfo GetUpdateLink (UIWindowScene windowScene);
 
+		[Static]
 		[Export ("updateLinkForView:")]
 		[return: NullAllowed]
 		UIUpdateInfo GetUpdateLink (UIView windowScene);
@@ -30366,14 +30383,17 @@ namespace UIKit {
 		void AddAction (NSObject target, Selector selector);
 
 		// From the UIUpdateLink(Convenience) category
+		[Static]
 		[Export ("updateLinkForWindowScene:actionHandler:")]
 		void UpdateLink (UIWindowScene windowScene, UIUpdateLinkCallback handler);
 
 		// From the UIUpdateLink(Convenience) category
+		[Static]
 		[Export ("updateLinkForWindowScene:target:selector:")]
 		void UpdateLink (UIWindowScene windowScene, NSObject target, Selector selector);
 
 		// From the UIUpdateLink(Convenience) category
+		[Static]
 		[Export ("updateLinkForView:actionHandler:")]
 		void UpdateLink (UIView windowScene, UIUpdateLinkCallback handler);
 

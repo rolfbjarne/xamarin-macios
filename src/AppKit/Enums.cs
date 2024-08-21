@@ -1990,7 +1990,7 @@ namespace AppKit {
 	[NoMacCatalyst]
 #else
 	[MacCatalyst (13, 1)]
-	[Deprecated (PlatformName.MacCatalyst, 13, 1, "This enum doesn't exist on this platform.")]
+	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "This enum doesn't exist on this platform.")]
 #endif
 	[Native]
 	public enum NSCollectionViewDropOperation : long {
@@ -2001,7 +2001,7 @@ namespace AppKit {
 	[NoMacCatalyst]
 #else
 	[MacCatalyst (13, 1)]
-	[Deprecated (PlatformName.MacCatalyst, 13, 1, "This enum doesn't exist on this platform.")]
+	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "This enum doesn't exist on this platform.")]
 #endif
 	[Native]
 	public enum NSCollectionViewItemHighlightState : long {
@@ -2015,7 +2015,7 @@ namespace AppKit {
 	[NoMacCatalyst]
 #else
 	[MacCatalyst (13, 1)]
-	[Deprecated (PlatformName.MacCatalyst, 13, 1, "This enum doesn't exist on this platform.")]
+	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "This enum doesn't exist on this platform.")]
 #endif
 	[Native]
 	[Flags]

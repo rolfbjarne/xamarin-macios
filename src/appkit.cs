@@ -12940,11 +12940,11 @@ namespace AppKit {
 		[Export ("indeterminate")]
 		bool Indeterminate { [Bind ("isIndeterminate")] get; set; }
 
-		[Deprecated (PlatformName.MacOSX, 14, 0, messge: "This property is not respected anymore.")]
+		[Deprecated (PlatformName.MacOSX, 14, 0, message: "This property is not respected anymore.")]
 		[Export ("bezeled")]
 		bool Bezeled { [Bind ("isBezeled")] get; set; }
 
-		[Deprecated (PlatformName.MacOSX, 14, 0, messge: "This property is not respected anymore.")]
+		[Deprecated (PlatformName.MacOSX, 14, 0, message: "This property is not respected anymore.")]
 		[Export ("controlTint")]
 		NSControlTint ControlTint { get; set; }
 

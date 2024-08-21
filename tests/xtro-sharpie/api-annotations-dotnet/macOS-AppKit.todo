@@ -1,27 +1,3 @@
-!deprecated-attribute-missing! NSEPSImageRep missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSProgressIndicator::controlTint missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSProgressIndicator::isBezeled missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSProgressIndicator::setBezeled: missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSProgressIndicator::setControlTint: missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSShowAnimationEffect missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSSpeechSynthesizer missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSSpeechSynthesizer::delegate missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSSpeechSynthesizer::initWithVoice: missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSSpeechSynthesizer::isSpeaking missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSSpeechSynthesizer::setDelegate: missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSSpeechSynthesizer::setUsesFeedbackWindow: missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSSpeechSynthesizer::startSpeakingString: missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSSpeechSynthesizer::startSpeakingString:toURL: missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSSpeechSynthesizer::stopSpeaking missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSSpeechSynthesizer::usesFeedbackWindow missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSSpeechSynthesizerDelegate::speechSynthesizer:didFinishSpeaking: missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSSpeechSynthesizerDelegate::speechSynthesizer:willSpeakPhoneme: missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSSpeechSynthesizerDelegate::speechSynthesizer:willSpeakWord:ofString: missing a [Deprecated] attribute
-!deprecated-attribute-missing! NSViewController::presentViewControllerInWidget: missing a [Deprecated] attribute
+# introduced and deprecated in the same version
 !missing-protocol-member! NSTextInputTraits::setWritingToolsAllowedInputOptions: not found
 !missing-protocol-member! NSTextInputTraits::writingToolsAllowedInputOptions not found
-!missing-selector! +NSPopUpButton::pullDownButtonWithTitle:menu: not bound
-!missing-selector! NSTextView::setMathExpressionCompletionType: not bound
-!missing-selector! NSToolbar::removeItemWithItemIdentifier: not bound
-!missing-selector! NSToolbarItem::isHidden not bound
-!missing-selector! NSToolbarItem::setHidden: not bound

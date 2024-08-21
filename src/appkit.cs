@@ -7930,6 +7930,7 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[BaseType (typeof (NSImageRep))]
 	[DisableDefaultCtor] // An uncaught exception was raised: -[NSEPSImageRep init]: unrecognized selector sent to instance 0x1db2d90
+	[Deprecated (PlatformName.MacOSX, 14, 0)]
 	interface NSEPSImageRep {
 		[Static]
 		[Export ("imageRepWithData:")]
@@ -12427,7 +12428,7 @@ namespace AppKit {
 
 		[Mac (15, 0)]
 		[Static]
-		[Export ("pullDownButtonWithTitle:title:")]
+		[Export ("pullDownButtonWithTitle:menu:")]
 		NSPopUpButton CreatePullDownButton (string title, NSMenu menu);
 
 		[Mac (15, 0)]
@@ -12939,9 +12940,11 @@ namespace AppKit {
 		[Export ("indeterminate")]
 		bool Indeterminate { [Bind ("isIndeterminate")] get; set; }
 
+		[Deprecated (PlatformName.MacOSX, 14, 0, messge: "This property is not respected anymore.")]
 		[Export ("bezeled")]
 		bool Bezeled { [Bind ("isBezeled")] get; set; }
 
+		[Deprecated (PlatformName.MacOSX, 14, 0, messge: "This property is not respected anymore.")]
 		[Export ("controlTint")]
 		NSControlTint ControlTint { get; set; }
 
@@ -14783,6 +14786,7 @@ namespace AppKit {
 
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
+	[Deprecated (PlatformName.MacOSX, 14, 0, message: "Use 'AVSpeechSynthesizer' in AVFoundation instead.")]
 	interface NSSpeechSynthesizer {
 		[Export ("initWithVoice:")]
 		NativeHandle Constructor (string voice);
@@ -14865,6 +14869,7 @@ namespace AppKit {
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
+	[Deprecated (PlatformName.MacOSX, 14, 0, message: "Use 'AVSpeechSynthesizer' in AVFoundation instead.")]
 	interface NSSpeechSynthesizerDelegate {
 		[Export ("speechSynthesizer:didFinishSpeaking:")]
 		void DidFinishSpeaking (NSSpeechSynthesizer sender, bool finishedSpeaking);
@@ -17183,6 +17188,7 @@ namespace AppKit {
 		[Export ("storyboard", ArgumentSemantic.Strong)]
 		NSStoryboard Storyboard { get; }
 
+		[Deprecated (PlatformName.MacOSX, 11, 0, message: "Use WidgetKit instead.")]
 		[Export ("presentViewControllerInWidget:")]
 		void PresentViewControllerInWidget (NSViewController viewController);
 
@@ -19880,7 +19886,7 @@ namespace AppKit {
 		// Inlined from the NSTextView (NSTextChecking) category
 		[Mac (15, 0)]
 		[Export ("mathExpressionCompletionType")]
-		NSTextInputTraitType MathExpressionCompletionType { get; }
+		NSTextInputTraitType MathExpressionCompletionType { get; set; }
 
 		// Inlined from the NSTextView (NSTextView_TextHighlight) category
 		[Mac (15, 0)]
@@ -20314,7 +20320,7 @@ namespace AppKit {
 		[Export ("centeredItemIdentifiers", ArgumentSemantic.Copy)]
 		NSSet<NSString> CenteredItemIdentifiers { get; set; }
 
-		[NoMacCatalyst]
+		[MacCatalyst (16, 0)]
 		[Mac (13, 0)]
 		[Field ("NSToolbarItemKey")]
 		NSString NSToolbarItemKey { get; }
@@ -20327,7 +20333,7 @@ namespace AppKit {
 		[Field ("NSToolbarInspectorTrackingSeparatorItemIdentifier")]
 		NSString NSToolbarInspectorTrackingSeparatorItemIdentifier { get; }
 
-		[Mac (15, 0), NoMacCatalyst]
+		[Mac (15, 0), MacCatalyst (18, 0)]
 		[Field ("NSToolbarNewIndexKey")]
 		NSString NSToolbarNewIndexKey { get; }
 
@@ -20514,13 +20520,17 @@ namespace AppKit {
 		UIMenuElement ItemMenuFormRepresentation { get; set; }
 
 		[Mac (13, 0)]
-		[NoMacCatalyst]
+		[MacCatalyst (16, 0)]
 		[Export ("possibleLabels", ArgumentSemantic.Copy)]
 		NSSet<NSString> PossibleLabels { get; set; }
 
 		[Mac (14, 0), MacCatalyst (17, 0)]
 		[Export ("visible")]
 		bool Visible { [Bind ("isVisible")] get; }
+
+		[Mac (15, 0), MacCatalyst (18, 0)]
+		[Export ("hidden")]
+		bool Hidden { [Bind ("isHidden")] get; }
 	}
 
 	[MacCatalyst (13, 1)]

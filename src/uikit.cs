@@ -24533,11 +24533,11 @@ namespace UIKit {
 		[Export ("zOffset")]
 		nfloat ZOffset { get; }
 
-		[iOS (16, 4), NoMacCatalyst]
+		[iOS (16, 4), MacCatalyst (16, 4)]
 		[Export ("azimuthAngleInView:")]
 		nfloat GetAzimuthAngle ([NullAllowed] UIView view);
 
-		[iOS (16, 4), NoMacCatalyst]
+		[iOS (16, 4), MacCatalyst (16, 4)]
 		[Export ("azimuthUnitVectorInView:")]
 		CGVector GetAzimuthUnitVector ([NullAllowed] UIView view);
 
@@ -28432,7 +28432,7 @@ namespace UIKit {
 		nfloat Compressed { get; }
 	}
 
-	[NoWatch, NoTV, iOS (16, 4), NoMacCatalyst]
+	[NoWatch, NoTV, iOS (16, 4), MacCatalyst (16, 4)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface UITextInputContext {
@@ -30993,6 +30993,18 @@ namespace UIKit {
 	interface UISceneSystemProtectionManager {
 		[Export ("userAuthenticationEnabled")]
 		bool UserAuthenticationEnabled { [Bind ("isUserAuthenticationEnabled")] get; }
-
 	}
+
+	[NoWatch, NoTV, NoiOS, MacCatalyst (16, 0)]
+	[BaseType (typeof (NSToolbarItem))]
+	[DisableDefaultCtor]
+	interface NSUIViewToolbarItem {
+		[DesignatedInitializer]
+		[Export ("initWithItemIdentifier:uiView:")]
+		NativeHandle Constructor (NSToolbarItemIdentifier identifier, UIView uiView);
+
+		[Export ("uiView", ArgumentSemantic.Strong)]
+		UIView UIView { get; [Bind ("setUIView:")] set; }
+	}
+
 }

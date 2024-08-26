@@ -9,6 +9,7 @@ using ObjCRuntime;
 using CoreAnimation;
 #endif
 using CoreGraphics;
+using CoreText;
 using UniformTypeIdentifiers;
 
 using CGGlyph = System.UInt16;
@@ -4592,7 +4593,7 @@ namespace UIKit {
 	[Watch (11, 0), TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface NSAdaptiveImageGlyph : NSCopying, NSSecureCoding /* This needs CoreText bindings: , CTAdaptiveImageProviding */ {
+	interface NSAdaptiveImageGlyph : NSCopying, NSSecureCoding, CTAdaptiveImageProviding {
 		[DesignatedInitializer]
 		[Export ("initWithImageContent:")]
 		NativeHandle Constructor (NSData imageContent);

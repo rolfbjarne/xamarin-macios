@@ -121,6 +121,7 @@ using AppKit;
 using NSTouchBarProvider = Foundation.NSObject;
 using NSTouchBar = Foundation.NSObject;
 using NSToolbar = Foundation.NSObject;
+using NSToolbarItem = Foundation.NSObject;
 #endif
 
 #if !NET
@@ -31001,7 +31002,7 @@ namespace UIKit {
 	interface NSUIViewToolbarItem {
 		[DesignatedInitializer]
 		[Export ("initWithItemIdentifier:uiView:")]
-		NativeHandle Constructor (NSToolbarItemIdentifier identifier, UIView uiView);
+		NativeHandle Constructor (NSString identifier, UIView uiView);
 
 		[Export ("uiView", ArgumentSemantic.Strong)]
 		UIView UIView { get; [Bind ("setUIView:")] set; }

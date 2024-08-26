@@ -1677,6 +1677,3 @@
 !incorrect-protocol-member! NSAccessibility::accessibilityUserInputLabels is REQUIRED and should be abstract
 !incorrect-protocol-member! NSAccessibility::setAccessibilityAttributedUserInputLabels: is REQUIRED and should be abstract
 !incorrect-protocol-member! NSAccessibility::setAccessibilityUserInputLabels: is REQUIRED and should be abstract
-
-# FIX BEFORE PR
-!missing-protocol-conformance! NSAdaptiveImageGlyph should conform to CTAdaptiveImageProviding

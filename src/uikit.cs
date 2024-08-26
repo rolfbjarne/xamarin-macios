@@ -13804,7 +13804,7 @@ namespace UIKit {
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UISearchDisplayController_Class/index.html">Apple documentation for <c>UISearchDisplayController</c></related>
 	[BaseType (typeof (NSObject))]
 	[Deprecated (PlatformName.iOS, 8, 0, message: "Use 'UISearchController'.")]
-	[NoMacCatalyst, NoWatch] // Objective-C exception thrown.  Name: NSGenericException Reason: UISearchDisplayController is no longer supported when linking against this version of iOS. Please migrate your application to UISearchController.
+	[MacCatalyst (13, 1), NoWatch] // Objective-C exception thrown.  Name: NSGenericException Reason: UISearchDisplayController is no longer supported when linking against this version of iOS. Please migrate your application to UISearchController.
 	[NoTV]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'UISearchController'.")]
 	interface UISearchDisplayController {
@@ -13875,7 +13875,7 @@ namespace UIKit {
 	[Model]
 	[Protocol]
 	[NoTV]
-	[NoMacCatalyst, NoWatch]
+	[MacCatalyst (13, 1), NoWatch]
 	interface UISearchDisplayDelegate {
 
 		[Export ("searchDisplayControllerWillBeginSearch:")]
@@ -23987,6 +23987,7 @@ namespace UIKit {
 		[Export ("systemProtectionManager"), NullAllowed]
 		UISceneSystemProtectionManager SystemProtectionManager { get; }
 
+		[iOS (18, 0), NoWatch, NoTV, MacCatalyst (18, 0)]
 		[Notification]
 		[Field ("UISceneSystemProtectionDidChangeNotification")]
 		NSString SystemProtectionDidChangeNotification { get; }
@@ -30271,7 +30272,7 @@ namespace UIKit {
 
 		[Static]
 		[Export ("afterEventDispatch")]
-		UIUpdateActionPhase AfterEventDispatch { get; set; }
+		UIUpdateActionPhase AfterEventDispatch { get; }
 
 		[Static]
 		[Export ("beforeCADisplayLinkDispatch")]
@@ -30287,27 +30288,27 @@ namespace UIKit {
 
 		[Static]
 		[Export ("afterCATransactionCommit")]
-		UIUpdateActionPhase BfterCATransactionCommit { get; set; }
+		UIUpdateActionPhase AfterCATransactionCommit { get; }
 
 		[Static]
 		[Export ("beforeLowLatencyEventDispatch")]
-		UIUpdateActionPhase BeforeLowLatencyEventDispatch { get; set; }
+		UIUpdateActionPhase BeforeLowLatencyEventDispatch { get; }
 
 		[Static]
 		[Export ("afterLowLatencyEventDispatch")]
-		UIUpdateActionPhase AfterLowLatencyEventDispatch { get; set; }
+		UIUpdateActionPhase AfterLowLatencyEventDispatch { get; }
 
 		[Static]
 		[Export ("beforeLowLatencyCATransactionCommit")]
-		UIUpdateActionPhase BeforeLowLatencyCATransactionCommit { get; set; }
+		UIUpdateActionPhase BeforeLowLatencyCATransactionCommit { get; }
 
 		[Static]
 		[Export ("afterLowLatencyCATransactionCommit")]
-		UIUpdateActionPhase AfterLowLatencyCATransactionCommit { get; set; }
+		UIUpdateActionPhase AfterLowLatencyCATransactionCommit { get; }
 
 		[Static]
 		[Export ("afterUpdateComplete")]
-		UIUpdateActionPhase AfterUpdateComplete { get; set; }
+		UIUpdateActionPhase AfterUpdateComplete { get; }
 	}
 
 	[TV (18, 0), NoWatch, iOS (18, 0), NoMacCatalyst]

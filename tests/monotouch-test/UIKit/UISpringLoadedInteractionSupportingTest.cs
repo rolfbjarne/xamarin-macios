@@ -95,6 +95,30 @@ namespace MonoTouchFixtures.UIKit {
 			Assert.IsTrue (tableView.SpringLoaded);
 		}
 
+		[Test]
+		public void UISearchBarSpringLoadTest ()
+		{
+			using var instanve = new UISearchBar ();
+			instance.SpringLoaded = true;
+			Assert.IsTrue (instance.SpringLoaded);
+		}
+
+		[Test]
+		public void UITabSpringLoadTest ()
+		{
+			using var instanve = new UITab ();
+			instance.SpringLoaded = true;
+			Assert.IsTrue (instance.SpringLoaded);
+		}
+
+		[Test]
+		public void UITabGroupSpringLoadTest ()
+		{
+			using var instanve = new UITabGroup ();
+			instance.SpringLoaded = true;
+			Assert.IsTrue (instance.SpringLoaded);
+		}
+
 #if HAS_INTENTUI
 		[Test]
 		public void INUIAddVoiceShortcutButtonTest ()

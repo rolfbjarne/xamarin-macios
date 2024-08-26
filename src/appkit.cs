@@ -65,6 +65,8 @@ using Color = UIKit.UIColor;
 using NSColorList = Foundation.NSObject;
 #else
 using Color = AppKit.NSColor;
+using IUIActivityItemsConfigurationReading = System.Object;
+using UIBarButtonItem = Foundation.NSObject;
 #endif
 
 #if !NET
@@ -20536,6 +20538,12 @@ namespace AppKit {
 		[Mac (15, 0), MacCatalyst (18, 0)]
 		[Export ("hidden")]
 		bool Hidden { [Bind ("isHidden")] get; set; }
+
+		[Static]
+		[NoMac]
+		[MacCatalyst (13, 1)]
+		[Export ("itemWithItemIdentifier:barButtonItem:")]
+		NSToolbarItem Create (string itemIdentifier, UIBarButtonItem barButtonItem);
 	}
 
 	[MacCatalyst (13, 1)]
@@ -27291,6 +27299,11 @@ namespace AppKit {
 
 		[NullAllowed, Export ("buttonImage", ArgumentSemantic.Retain)]
 		NSImage ButtonImage { get; set; }
+
+		// defined in the NSSharingServicePickerTouchBarItem (UIActivityItemsConfiguration) category in UIKit
+		[NoMac]
+		[Export ("activityItemsConfiguration", ArgumentSemantic.Strong), NullAllowed]
+		IUIActivityItemsConfigurationReading ActivityItemsConfiguration { get; set; }
 	}
 
 	[MacCatalyst (13, 1)]
@@ -28200,6 +28213,11 @@ namespace AppKit {
 		[NoMacCatalyst]
 		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
 		NSObject WeakDelegate { get; set; }
+
+		// Defined in the NSSharingServicePickerToolbarItem (UIActivityItemsConfiguration) category in UIKIt
+		[NoMac]
+		[Export ("activityItemsConfiguration", ArgumentSemantic.Strong), NullAllowed]
+		IUIActivityItemsConfigurationReading ActivityItemsConfiguration { get; set; }
 	}
 
 	public interface INSSharingServicePickerToolbarItemDelegate { }

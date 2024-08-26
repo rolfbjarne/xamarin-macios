@@ -27975,7 +27975,7 @@ namespace UIKit {
 
 	interface IUIPopoverPresentationControllerSourceItem { }
 
-	[NoWatch, NoTV, iOS (16, 0), MacCatalyst (16, 0)]
+	[NoWatch, NoTV, iOS (16, 0), MacCatalyst (16, 0), NoMac]
 	[Protocol]
 	interface UIPopoverPresentationControllerSourceItem {
 

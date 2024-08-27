@@ -30,5 +30,11 @@ namespace BackingField {
 
 		[Export ("nsNumberField")]
 		NSNumberFieldType NSNumberField { get; set; }
+
+		[Export ("shortField")]
+		short ShortField { get; set; }
+
+		[Export ("ushortField")]
+		ushort UshortField { get; set; }
 	}
 }

@@ -238,6 +238,24 @@ namespace GeneratorTests {
 			bgen.AssertNoWarnings ();
 		}
 
+		[Test]
+		[TestCase (Profile.iOS)]
+		public void EditorBrowsable (Profile profile)
+		{
+			var bgen = BuildFile (profile, "tests/editor-browsable.cs");
+			var types = bgen.ApiAssembly.MainModule.Types;
+
+			var hasEditorBrowsableAttribute = new Func<ICustomAttributeProvider, bool> (() =>
+			{
+				return strongEnumType.CustomAttributes.Any (v => v.AttributeType.Name == "EditorBrowsableAttribute");
+			});
+
+			var strongEnumType = types.Single (v => v.Name == "StrongEnum");
+			Assert.IsTrue (hasEditorBrowsableAttribute (strongEnumType), "StrongEnumType");
+			var objcClassType = types.Single (v => v.Name == "ObjCClass");
+			Assert.IsTrue (hasEditorBrowsableAttribute (objcClassType), "ObjCClass");
+		}
+
 		static string RenderArgument (CustomAttributeArgument arg)
 		{
 			var td = arg.Type.Resolve ();

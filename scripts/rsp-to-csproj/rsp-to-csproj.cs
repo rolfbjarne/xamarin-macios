@@ -179,6 +179,9 @@ foreach (var a in arguments) {
 		if (!properties.Contains (("ReportAnalyzer", "true")))
 			properties.Add (new ("ReportAnalyzer", "true"));
 		break;
+	case "analyzerconfig":
+		items.Add (new ("EditorConfigFiles", GetFullPath (value)));
+		break;
 	default:
 		ReportError ($"Didn't understand argument '{a}'");
 		break;

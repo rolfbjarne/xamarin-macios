@@ -375,10 +375,12 @@ namespace AVFoundation {
 
 		public AVSampleCursorSyncInfo ToAVSampleCursorSyncInfo ()
 		{
+#pragma warning disable CA1416
 			var rv = new AVSampleCursorSyncInfo ();
 			rv.IsFullSync = IsFullSync;
 			rv.IsPartialSync = IsPartialSync;
 			rv.IsDroppable = IsDroppable;
+#pragma warning restore CA1416
 			return rv;
 		}
 	}
@@ -501,6 +503,7 @@ namespace AVFoundation {
 
 		public AVSampleCursorDependencyInfo ToAVSampleCursorDependencyInfo ()
 		{
+#pragma warning disable CA1416
 			var rv = new AVSampleCursorDependencyInfo ();
 			rv.IndicatesWhetherItHasDependentSamples = IndicatesWhetherItHasDependentSamples;
 			rv.HasDependentSamples = HasDependentSamples;
@@ -508,6 +511,7 @@ namespace AVFoundation {
 			rv.DependsOnOthers = DependsOnOthers;
 			rv.IndicatesWhetherItHasRedundantCoding = IndicatesWhetherItHasRedundantCoding;
 			rv.HasRedundantCoding = HasRedundantCoding;
+#pragma warning restore CA1416
 			return rv;
 		}
 	}
@@ -605,10 +609,12 @@ namespace AVFoundation {
 
 		public AVSampleCursorChunkInfo ToAVSampleCursorChunkInfo ()
 		{
+#pragma warning disable CA1416
 			var rv = new AVSampleCursorChunkInfo ();
 			rv.HasUniformSampleSizes = HasUniformSampleSizes;
 			rv.HasUniformSampleDurations = HasUniformSampleDurations;
 			rv.HasUniformFormatDescriptions = HasUniformFormatDescriptions;
+#pragma warning restore CA1416
 			return rv;
 		}
 	}
@@ -657,9 +663,11 @@ namespace AVFoundation {
 		public nint PacketRefreshCount;
 		public AVSampleCursorAudioDependencyInfo ToAVSampleCursorAudioDependencyInfo ()
 		{
+#pragma warning disable CA1416
 			var rv = new AVSampleCursorAudioDependencyInfo ();
 			rv.IsIndependentlyDecodable = IsIndependentlyDecodable;
 			rv.PacketRefreshCount = PacketRefreshCount;
+#pragma warning restore CA1416
 			return rv;
 		}
 	}

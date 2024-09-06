@@ -193,6 +193,12 @@ namespace UIKit {
 		public UIFontFeature (CTFontFeatureAllTypographicFeatures.Selector featureSelector) : this (FontFeatureGroup.AllTypographicFeatures, (int) featureSelector, featureSelector) { }
 		public UIFontFeature (CTFontFeatureLigatures.Selector featureSelector) : this (FontFeatureGroup.Ligatures, (int) featureSelector, featureSelector) { }
 		public UIFontFeature (CTFontFeatureCursiveConnection.Selector featureSelector) : this (FontFeatureGroup.CursiveConnection, (int) featureSelector, featureSelector) { }
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[ObsoletedOSPlatform ("macos10.7")]
+		[ObsoletedOSPlatform ("ios6.0")]
 		public UIFontFeature (CTFontFeatureLetterCase.Selector featureSelector) : this (FontFeatureGroup.LetterCase, (int) featureSelector, featureSelector) { }
 		public UIFontFeature (CTFontFeatureVerticalSubstitutionConnection.Selector featureSelector) : this (FontFeatureGroup.VerticalSubstitution, (int) featureSelector, featureSelector) { }
 		public UIFontFeature (CTFontFeatureLinguisticRearrangementConnection.Selector featureSelector) : this (FontFeatureGroup.LinguisticRearrangement, (int) featureSelector, featureSelector) { }

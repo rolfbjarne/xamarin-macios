@@ -56,7 +56,17 @@ DOTNET_REFERENCES = \
 	/r:$(DOTNET_BCL_DIR)/System.Xml.ReaderWriter.dll \
 
 DOTNET_OR_GREATER_DEFINES:=$(foreach version,$(shell seq 6 $(firstword $(subst ., ,$(subst net,,$(DOTNET_TFM))))),/define:NET$(version)_0_OR_GREATER)
-DOTNET_FLAGS=/warnaserror+ /nostdlib+ /deterministic /features:strict /nologo /target:library /debug /unsafe /define:NET /define:NET_TODO $(DOTNET_OR_GREATER_DEFINES) $(DOTNET_REFERENCES)
+
+ifneq ($(ANALYZE),)
+NETANALYZER ?= $(DOTNET_ANALYZERS_DIR)/Microsoft.CodeAnalysis.NetAnalyzers.dll
+CSHARP_NETANALYZER ?= $(DOTNET_ANALYZERS_DIR)/Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll
+DOTNET_ANALYZERS = \
+	/analyzer:$(NETANALYZER)  \
+	/analyzer:$(CSHARP_NETANALYZER) \
+
+endif
+
+DOTNET_FLAGS=/warnaserror+ /nostdlib+ /deterministic /features:strict /nologo /target:library /debug /unsafe /define:NET /define:NET_TODO $(DOTNET_OR_GREATER_DEFINES) $(DOTNET_REFERENCES) $(DOTNET_ANALYZERS)
 
 ifeq ($(XCODE_IS_STABLE),true)
 DOTNET_FLAGS+=/define:XCODE_IS_STABLE
@@ -361,9 +371,11 @@ $$(CORE_$(1)_CSPROJ): $($(2)_DOTNET_BUILD_DIR)/core-$(3).rsp $(RSP_TO_CSPROJ)
 	$$(Q) mv $$@.tmp $$@
 
 rsp:: $($(2)_DOTNET_BUILD_DIR)/core-$(3).rsp
-$($(2)_DOTNET_BUILD_DIR)/core-$(3).rsp: Makefile frameworks.sources | $($(2)_DOTNET_BUILD_DIR)
+$($(2)_DOTNET_BUILD_DIR)/core-$(3).rsp: Makefile frameworks.sources $($(2)_DOTNET_BUILD_DIR)/GeneratedMSBuildEditorConfig.editorconfig | $($(2)_DOTNET_BUILD_DIR)
 	$$(Q_DOTNET_GEN) echo \
 		$(DOTNET_FLAGS) \
+		$(DOTNET_ANALYZERS) \
+		-analyzerconfig:$($(2)_DOTNET_BUILD_DIR)/GeneratedMSBuildEditorConfig.editorconfig \
 		$(DOTNET_CORE_WARNINGS_TO_FIX) \
 		@$(RSP_DIR)/dotnet/$(3)-defines-dotnet.rsp \
 		$($(2)_CORE_DEFINES) \
@@ -376,10 +388,11 @@ $($(2)_DOTNET_BUILD_DIR)/core-$(3).rsp: Makefile frameworks.sources | $($(2)_DOT
 		> $$@.tmp
 	$$(Q) mv $$@.tmp $$@
 
+core:: $($(2)_DOTNET_BUILD_DIR)/core-$(3).dll
 $($(2)_DOTNET_BUILD_DIR)/core-$(3).dll: $($(2)_DOTNET_CORE_SOURCES) $($(2)_DOTNET_BUILD_DIR)/core-$(3).rsp | $($(2)_DOTNET_BUILD_DIR)
 	$$(Q_DOTNET_GEN) $(DOTNET_CSC) @$($(2)_DOTNET_BUILD_DIR)/core-$(3).rsp
 
-$($(2)_DOTNET_BUILD_DIR)/apidefinition-$(3).rsp: Makefile frameworks.sources | $($(2)_DOTNET_BUILD_DIR)
+$($(2)_DOTNET_BUILD_DIR)/apidefinition-$(3).rsp: Makefile frameworks.sources $($(2)_DOTNET_BUILD_DIR)/GeneratedMSBuildEditorConfig.editorconfig | $($(2)_DOTNET_BUILD_DIR)
 	$$(Q_DOTNET_GEN) echo \
 		-debug \
 		-unsafe \
@@ -391,6 +404,7 @@ $($(2)_DOTNET_BUILD_DIR)/apidefinition-$(3).rsp: Makefile frameworks.sources | $
 		-r:$($(2)_DOTNET_BUILD_DIR)/core-$(3).dll \
 		-nostdlib \
 		-nologo \
+		-analyzerconfig:$($(2)_DOTNET_BUILD_DIR)/GeneratedMSBuildEditorConfig.editorconfig \
 		-r:$(DOTNET_BINDING_ATTRIBUTES) \
 		$($(2)_APIS) \
 		$($(2)_GENERATOR_DEFINES) \
@@ -406,6 +420,7 @@ $$(APIDEFINITION_$(1)_CSPROJ): $($(2)_DOTNET_BUILD_DIR)/apidefinition-$(3).rsp $
 	$$(call Q_PROF_GEN,$(1)) $(RSP_TO_CSPROJ_EXEC) --rsp $(abspath $$<) --working-directory $(abspath .) --target-framework $(DOTNET_TFM) --output $$@.tmp
 	$$(Q) mv $$@.tmp $$@
 
+apidefinition:: $($(2)_DOTNET_BUILD_DIR)/apidefinition-$(3).dll
 $($(2)_DOTNET_BUILD_DIR)/apidefinition-$(3).dll: $($(2)_DOTNET_BUILD_DIR)/apidefinition-$(3).rsp $($(2)_DOTNET_BUILD_DIR)/core-$(3).dll $(DOTNET_BINDING_ATTRIBUTES)
 	$$(Q_GEN) $(DOTNET_CSC) $(DOTNET_FLAGS) @$$<
 
@@ -442,6 +457,12 @@ DOTNET_TARGETS_DIRS_$(3) += \
 
 dotnet-gen-$(3):: $($(2)_DOTNET_BUILD_DIR)/$(3)-generated-sources
 dotnet-gen:: dotnet-gen-$(3)
+
+$($(2)_DOTNET_BUILD_DIR)/GeneratedMSBuildEditorConfig.editorconfig: | $($(2)_DOTNET_BUILD_DIR)
+	$$(Q) rm -f "$$@.tmp"
+	$$(Q) printf "is_global = true\n" >> "$$@.tmp"
+	$$(Q) printf "build_property.TargetFramework = $(DOTNET_TFM)-$(3)\n" >> "$$@.tmp"
+	$$(Q) mv "$$@.tmp" "$$@"
 
 $($(2)_DOTNET_BUILD_DIR)/ILLink.LinkAttributes.xml: $(TOP)/src/ILLink.LinkAttributes.xml.in | $($(2)_DOTNET_BUILD_DIR)
 	$$(call Q_PROF_GEN,$(3)) sed < $$< > $$@ 's|@PRODUCT_NAME@|Microsoft.$(1)|g;'
@@ -532,6 +553,7 @@ $($(2)_DOTNET_BUILD_DIR)/Microsoft.$(1).rsp: Makefile | $($(2)_DOTNET_BUILD_DIR)
 		/generatedfilesout:$($(2)_DOTNET_BUILD_DIR)/generated-sources \
 		$$(if $(V),/reportanalyzer:$(ROSLYN_GENERATOR),) \
 		$$(if $(V),/reportanalyzer:$(ROSLYN_ANALYZER),) \
+		-analyzerconfig:$($(2)_DOTNET_BUILD_DIR)/GeneratedMSBuildEditorConfig.editorconfig \
 		-unsafe \
 		-optimize \
 		$$(ARGS_$(1)) \

@@ -6,7 +6,6 @@
 	<ItemGroup Condition="'$(ANALYZE_CSPROJ)' == 'true'">
 		<Analyzer Include="$(DOTNET_ANALYZERS_DIR)/Microsoft.CodeAnalysis.NetAnalyzers.dll" />
 		<Analyzer Include="$(DOTNET_ANALYZERS_DIR)/Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll" />
-		<EditorConfigFiles Include="$(MSBuildThisFileDirectory)build/dotnet/$(LowerCasePlatform)/GeneratedMSBuildEditorConfig.editorconfig" />
 	</ItemGroup>
 	<Target Name="ReportAvailabilityWarnings" Condition="'$(ANALYZE_CSPROJ)' == 'true'" BeforeTargets="CoreCompile">
 		<PropertyGroup>

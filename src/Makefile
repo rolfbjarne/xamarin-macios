@@ -58,7 +58,17 @@ DOTNET_REFERENCES = \
 	/r:$(DOTNET_BCL_DIR)/System.Xml.ReaderWriter.dll \
 
 DOTNET_OR_GREATER_DEFINES:=$(foreach version,$(shell seq 6 $(firstword $(subst ., ,$(subst net,,$(DOTNET_TFM))))),/define:NET$(version)_0_OR_GREATER)
-DOTNET_FLAGS=/warnaserror+ /nostdlib+ /deterministic /features:strict /nologo /target:library /debug /unsafe /define:NET $(DOTNET_OR_GREATER_DEFINES) $(DOTNET_REFERENCES) /fullpaths
+
+#ifneq ($(ANALYZE),)
+#NETANALYZER ?= $(DOTNET_ANALYZERS_DIR)/Microsoft.CodeAnalysis.NetAnalyzers.dll
+#CSHARP_NETANALYZER ?= $(DOTNET_ANALYZERS_DIR)/Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll
+#DOTNET_ANALYZERS = \
+#	/analyzer:$(NETANALYZER)  \
+#	/analyzer:$(CSHARP_NETANALYZER) \
+#
+#endif
+
+DOTNET_FLAGS=/warnaserror+ /nostdlib+ /deterministic /features:strict /nologo /target:library /debug /unsafe /define:NET  $(DOTNET_OR_GREATER_DEFINES) $(DOTNET_REFERENCES) $(DOTNET_ANALYZERS) /fullpaths
 
 ifeq ($(XCODE_IS_STABLE),true)
 DOTNET_FLAGS+=/define:XCODE_IS_STABLE
@@ -106,8 +116,8 @@ CSC_WARNINGS_TO_FIX:=$(CSC_WARNINGS_TO_FIX),1591
 # warning CS8981: The type name 'nfloat' only contains lower-cased ascii characters. Such names may become reserved for the language.
 CSC_WARNINGS_TO_FIX:=$(CSC_WARNINGS_TO_FIX),CS8981
 
-# availability warnings, need to fix https://github.com/dotnet/macios/pull/21185 to stop ignoring this.
-CSC_WARNINGS_TO_FIX:=$(CSC_WARNINGS_TO_FIX),CA1416,CA1422
+# availability warnings, need to fix https://github.com/dotnet/macios/issues/21185 to stop ignoring this.
+#CSC_WARNINGS_TO_FIX:=$(CSC_WARNINGS_TO_FIX),CA1416,CA1422
 
 WARNINGS_TO_FIX = -nowarn:$(CSC_WARNINGS_TO_FIX)
 CORE_WARNINGS_TO_FIX = -nowarn:$(CSC_WARNINGS_TO_FIX),$(BGEN_WARNINGS_TO_FIX)
@@ -181,21 +191,21 @@ $(foreach platform,$(DOTNET_PLATFORMS),$(eval $(call DotNetVariables,$(platform)
 # iOS
 #
 
-IOS_DEFINES += -d:IOS
+IOS_DEFINES += -d:IOS -d:__IOS__
 IOS_GENERATOR_FLAGS = -inline-selectors
 
 #
 # macOS
 #
 
-MACOS_DEFINES += -d:MONOMAC
+MACOS_DEFINES += -d:MONOMAC -d:__MACOS__
 MACOS_GENERATOR_FLAGS =
 
 #
 # tvOS
 #
 
-TVOS_DEFINES += -d:TVOS
+TVOS_DEFINES += -d:TVOS -d:__TVOS__
 TVOS_GENERATOR_FLAGS = -inline-selectors
 
 #
@@ -204,7 +214,7 @@ TVOS_GENERATOR_FLAGS = -inline-selectors
 
 # MacCatalyst is a variant of iOS, so it defines the iOS variables as well.
 # Note that we have to define __IOS__ here, because it won't be in IOS_DEFINES unless iOS is an included platform.
-MACCATALYST_DEFINES += $(IOS_DEFINES) -d:__IOS__ -d:MACCATALYST
+MACCATALYST_DEFINES += $(IOS_DEFINES) -d:MACCATALYST -d:__MACCATALYST__
 MACCATALYST_GENERATOR_FLAGS = -inline-selectors
 
 ### .NET ###
@@ -231,6 +241,8 @@ rsp:: $($(2)_DOTNET_BUILD_DIR)/core-$(3).rsp
 $($(2)_DOTNET_BUILD_DIR)/core-$(3).rsp: Makefile frameworks.sources $($(2)_DOTNET_BUILD_DIR)/GeneratedMSBuildEditorConfig.editorconfig $(RSP_DIR)/dotnet/$(3)-defines-dotnet.rsp | $($(2)_DOTNET_BUILD_DIR)
 	$$(Q_DOTNET_GEN) echo \
 		$(DOTNET_FLAGS) \
+		$(DOTNET_ANALYZERS) \
+		-analyzerconfig:$($(2)_DOTNET_BUILD_DIR)/GeneratedMSBuildEditorConfig.editorconfig \
 		$(DOTNET_CORE_WARNINGS_TO_FIX) \
 		@$(RSP_DIR)/dotnet/$(3)-defines-dotnet.rsp \
 		$($(2)_DEFINES) \
@@ -254,7 +266,7 @@ $($(2)_DOTNET_BUILD_DIR)/apidefinition-$(3).rsp: Makefile frameworks.sources $($
 		-debug \
 		-unsafe \
 		-target:library \
-		-nowarn:436,1591,CA1416,CS8981 \
+		-nowarn:436,1591,CS8981 \
 		-nowarn:$(XML_DOCS_WARNINGS) \
 		-warnaserror+ \
 		-out:$($(2)_DOTNET_BUILD_DIR)/apidefinition-$(3).dll \
@@ -262,6 +274,7 @@ $($(2)_DOTNET_BUILD_DIR)/apidefinition-$(3).rsp: Makefile frameworks.sources $($
 		-r:$($(2)_DOTNET_BUILD_DIR)/core-$(3).dll \
 		-nostdlib \
 		-nologo \
+		-analyzerconfig:$($(2)_DOTNET_BUILD_DIR)/GeneratedMSBuildEditorConfig.editorconfig \
 		-r:$(DOTNET_BINDING_ATTRIBUTES) \
 		$($(2)_APIS) \
 		$($(2)_DEFINES) \
@@ -324,9 +337,6 @@ dotnet-gen:: dotnet-gen-$(3)
 $($(2)_DOTNET_BUILD_DIR)/GeneratedMSBuildEditorConfig.editorconfig: | $($(2)_DOTNET_BUILD_DIR)
 	$$(Q) rm -f "$$@.tmp"
 	$$(Q) printf "is_global = true\n" >> "$$@.tmp"
-	$$(Q) printf "build_property.TargetFramework = $(DOTNET_TFM)-$(3)\n" >> "$$@.tmp"
-	$$(Q) printf "build_property.TargetFrameworkIdentifier = .NETCoreApp\n" >> "$$@.tmp"
-	$$(Q) printf "build_property.TargetFrameworkVersion = v$(DOTNET_MAJOR_VERSION).0\n" >> "$$@.tmp"
 	$$(Q) mv "$$@.tmp" "$$@"
 
 $($(2)_DOTNET_BUILD_DIR)/ILLink.LinkAttributes.xml: $(TOP)/src/ILLink.LinkAttributes.xml.in | $($(2)_DOTNET_BUILD_DIR)
@@ -414,6 +424,7 @@ $($(2)_DOTNET_BUILD_DIR)/Microsoft.$(1).rsp: Makefile frameworks.sources $(RSP_D
 		/generatedfilesout:$($(2)_DOTNET_BUILD_DIR)/generated-sources \
 		$$(if $(V),/reportanalyzer:$(ROSLYN_GENERATOR),) \
 		$$(if $(V),/reportanalyzer:$(ROSLYN_ANALYZER),) \
+		-analyzerconfig:$($(2)_DOTNET_BUILD_DIR)/GeneratedMSBuildEditorConfig.editorconfig \
 		-unsafe \
 		-optimize \
 		$$(ARGS_$(1)) \
@@ -534,9 +545,9 @@ analyze:
 	$(Q) $(MAKE) -j $(CSPROJECTS) $(foreach platform,$(DOTNET_PLATFORMS),$($(call uppercase,$(platform))_DOTNET_PLATFORM_ASSEMBLY_DEPENDENCIES))
 	$(Q) set -e; \
 	for csproj in $(CSPROJECTS); do \
-		echo "Analyzing $$csproj..."; \
+		echo "Analyzing $$csproj... (binlog: $$csproj-analyze.binlog)"; \
 		$(DOTNET) clean $$csproj; \
-		$(DOTNET) build $$csproj /p:ANALYZE_CSPROJ=true /p:TreatWarningsAsErrors=false /p:DOTNET_ANALYZERS_DIR=$(DOTNET_ANALYZERS_DIR) /bl:$$csproj-analyze.binlog; \
+		$(DOTNET) build $$csproj /p:ANALYZE_CSPROJ=true /p:DOTNET_ANALYZERS_DIR=$(DOTNET_ANALYZERS_DIR) /bl:$$csproj-analyze.binlog; \
 		echo "Analyzed $$csproj successfully."; \
 	done
 

@@ -1097,7 +1097,6 @@ IOSURFACE_CORE_SOURCES = \
 
 IOSURFACE_SOURCES = \
 	IOSurface/IOSurface.cs \
-	IOSurface/IOSurfacePropertyKey.cs \
 
 # itunesLibrary
 

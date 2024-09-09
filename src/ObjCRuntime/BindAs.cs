@@ -117,6 +117,10 @@ namespace ObjCRuntime {
 		static CoreMedia.CMTime xamarin_nsvalue_to_cmtime (IntPtr value) { if (value == IntPtr.Zero) return default (CoreMedia.CMTime); return Runtime.GetNSObject<NSValue> (value)?.CMTimeValue ?? default (CoreMedia.CMTime); }
 		static CoreMedia.CMTimeMapping xamarin_nsvalue_to_cmtimemapping (IntPtr value) { if (value == IntPtr.Zero) return default (CoreMedia.CMTimeMapping); return Runtime.GetNSObject<NSValue> (value)?.CMTimeMappingValue ?? default (CoreMedia.CMTimeMapping); }
 		static CoreMedia.CMTimeRange xamarin_nsvalue_to_cmtimerange (IntPtr value) { if (value == IntPtr.Zero) return default (CoreMedia.CMTimeRange); return Runtime.GetNSObject<NSValue> (value)?.CMTimeRangeValue ?? default (CoreMedia.CMTimeRange); }
+		[SupportedOSPlatform ("ios16.0")]
+		[SupportedOSPlatform ("macos13.0")]
+		[SupportedOSPlatform ("maccatalyst16.0")]
+		[SupportedOSPlatform ("tvos16.0")]
 		static CoreMedia.CMVideoDimensions xamarin_nsvalue_to_cmvideodimensions (IntPtr value) { if (value == IntPtr.Zero) return default (CoreMedia.CMVideoDimensions); return Runtime.GetNSObject<NSValue> (value)?.CMVideoDimensionsValue ?? default (CoreMedia.CMVideoDimensions); }
 		static MapKit.MKCoordinateSpan xamarin_nsvalue_to_mkcoordinatespan (IntPtr value) { if (value == IntPtr.Zero) return default (MapKit.MKCoordinateSpan); return Runtime.GetNSObject<NSValue> (value)?.CoordinateSpanValue ?? default (MapKit.MKCoordinateSpan); }
 		static SceneKit.SCNMatrix4 xamarin_nsvalue_to_scnmatrix4 (IntPtr value) { if (value == IntPtr.Zero) return default (SceneKit.SCNMatrix4); return Runtime.GetNSObject<NSValue> (value)?.SCNMatrix4Value ?? default (SceneKit.SCNMatrix4); }
@@ -141,6 +145,10 @@ namespace ObjCRuntime {
 		static IntPtr xamarin_cmtime_to_nsvalue (CoreMedia.CMTime value) { using var rv = NSValue.FromCMTime (value); rv.DangerousRetain ().DangerousAutorelease (); return rv.Handle; }
 		static IntPtr xamarin_cmtimemapping_to_nsvalue (CoreMedia.CMTimeMapping value) { using var rv = NSValue.FromCMTimeMapping (value); rv.DangerousRetain ().DangerousAutorelease (); return rv.Handle; }
 		static IntPtr xamarin_cmtimerange_to_nsvalue (CoreMedia.CMTimeRange value) { using var rv = NSValue.FromCMTimeRange (value); rv.DangerousRetain ().DangerousAutorelease (); return rv.Handle; }
+		[SupportedOSPlatform ("ios16.0")]
+		[SupportedOSPlatform ("macos13.0")]
+		[SupportedOSPlatform ("maccatalyst16.0")]
+		[SupportedOSPlatform ("tvos16.0")]
 		static IntPtr xamarin_cmvideodimensions_to_nsvalue (CoreMedia.CMVideoDimensions value) { using var rv = NSValue.FromCMVideoDimensions (value); rv.DangerousRetain ().DangerousAutorelease (); return rv.Handle; }
 		static IntPtr xamarin_mkcoordinatespan_to_nsvalue (MapKit.MKCoordinateSpan value) { using var rv = NSValue.FromMKCoordinateSpan (value); rv.DangerousRetain ().DangerousAutorelease (); return rv.Handle; }
 		static IntPtr xamarin_scnmatrix4_to_nsvalue (SceneKit.SCNMatrix4 value) { using var rv = NSValue.FromSCNMatrix4 (value); rv.DangerousRetain ().DangerousAutorelease (); return rv.Handle; }

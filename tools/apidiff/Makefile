@@ -49,9 +49,9 @@ $(MONO_API_HTML): $(wildcard $(API_TOOLS_PATH)/mono-api-html/*.cs*)
 # dependencies changed)
 
 define DotNetComputeDiff
-$(OUTPUT_DIR)/diff/Microsoft.$(1)%html $(OUTPUT_DIR)/diff/Microsoft.$(1)%md: $(APIDIFF_DIR)/references/current/Microsoft.$(1)%xml $(APIDIFF_DIR)/references/stable/Microsoft.$(1).xml $(MONO_API_HTML)
+$(OUTPUT_DIR)/diff/Microsoft.$(1)%html $(OUTPUT_DIR)/diff/Microsoft.$(1)%md: $(APIDIFF_DIR)/references/current/Microsoft.$(1)%xml $(APIDIFF_DIR)/references/comparison/Microsoft.$(1).xml $(MONO_API_HTML)
 	$$(Q) mkdir -p $$(dir $$@)
-	$$(QF_GEN) $(MONO_API_HTML_EXEC) $(NEW_REGEX) $(ADD_REGEX) $$(abspath $(APIDIFF_DIR)/references/stable/Microsoft.$(1).xml) $$(abspath $(APIDIFF_DIR)/references/current/Microsoft.$(1).xml) $(APIDIFF_IGNORE) --html "$$(abspath $$(basename $$@).html)" --markdown "$$(abspath $$(basename $$@).md)"
+	$$(QF_GEN) $(MONO_API_HTML_EXEC) $(NEW_REGEX) $(ADD_REGEX) $$(abspath $(APIDIFF_DIR)/references/comparison/Microsoft.$(1).xml) $$(abspath $(APIDIFF_DIR)/references/current/Microsoft.$(1).xml) $(APIDIFF_IGNORE) --html "$$(abspath $$(basename $$@).html)" --markdown "$$(abspath $$(basename $$@).md)"
 	$$(Q) touch $$@
 
 html:: $(OUTPUT_DIR)/diff/Microsoft.$(1).html
@@ -219,20 +219,18 @@ download:: $$(BUNDLE_ZIP_$(1))
 endef
 $(foreach platform,$(DOTNET_PLATFORMS),$(eval $(call DownloadBundle,$(platform))))
 
-# Here we unzip the downloaded nupkg.
+# Here we unzip the downloaded nupkg
 define UnzipBundle
-UNZIP_STAMP_$(1)=$(APIDIFF_DIR)/.unzip.$(1).stamp
-UNZIP_DIR_$(1)=temp/downloads/$(1)
-$$(UNZIP_STAMP_$(1)): $$(BUNDLE_ZIP_$(1))
+ifndef COMPARISON_DLL_$(1)
+UNZIP_DIR_$(1)=temp/comparison/$(1)
+COMPARISON_DLL_$(1)=$$(UNZIP_DIR_$(1))/Microsoft.$(1).dll
+$$(COMPARISON_DLL_$(1)): $$(BUNDLE_ZIP_$(1))
 	$$(Q) rm -Rf "$$(UNZIP_DIR_$(1))"
 	$$(Q) mkdir -p $$(dir $$(UNZIP_DIR_$(1)))
 	$$(Q_GEN) unzip -j $$(if $$(V),,-q) -d $$(UNZIP_DIR_$(1)) $$< 'ref/*/Microsoft.$(1).dll'
-	$$(Q) touch $$@
+endif
 
-# the semi-colon at the end means an empty recipe, and is required for make to consider pattern rules
-$$(UNZIP_DIR_$(1))/%.dll: $$(UNZIP_STAMP_$(1)) ;
-
-unzip:: $$(UNZIP_STAMP_$(1))
+unzip:: $$(COMPARISON_DLL_$(1))
 endef
 $(foreach platform,$(DOTNET_PLATFORMS),$(eval $(call UnzipBundle,$(platform))))
 
@@ -242,14 +240,14 @@ UNZIP_DIR_DOTNET_$(1)=$$(UNZIP_DIR_$$(APIDIFF_HASH_DOTNET_$(1)))
 endef
 $(foreach platform,$(DOTNET_PLATFORMS),$(eval $(call DotNetUnzipDirectory,$(platform))))
 
-define GenerateStableReferenceXml
-$(APIDIFF_DIR)/references/stable/Microsoft.$(1).xml: $(UNZIP_DIR_$(1))/Microsoft.$(1).dll $(MONO_API_INFO)
+define GenerateComparisonReferenceXml
+$(APIDIFF_DIR)/references/comparison/Microsoft.$(1).xml: $$(COMPARISON_DLL_$(1)) $(MONO_API_INFO)
 	$$(Q) mkdir -p $$(dir $$@)
 	$$(QF_GEN) $(MONO_API_INFO_EXEC) $$(abspath $$<) -o $$(abspath $$@)
 
-update-stable-refs:: $(APIDIFF_DIR)/references/stable/Microsoft.$(1).xml
+update-comparison-refs:: $(APIDIFF_DIR)/references/comparison/Microsoft.$(1).xml
 endef
-$(foreach platform,$(DOTNET_PLATFORMS),$(eval $(call GenerateStableReferenceXml,$(platform))))
+$(foreach platform,$(DOTNET_PLATFORMS),$(eval $(call GenerateComparisonReferenceXml,$(platform))))
 
 define GenerateCurrentReferenceXml
 $(APIDIFF_DIR)/references/current/Microsoft.$(1).xml: $(DOTNET_DESTDIR)/$($(1)_NUGET_REF_NAME)/ref/$(DOTNET_TFM)/Microsoft.$(1).dll $(MONO_API_INFO)

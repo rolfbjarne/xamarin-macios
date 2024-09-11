@@ -363,35 +363,59 @@ if test -n "$ENABLE_API_DIFF"; then
 	#
 	echo "💪 ${BLUE}Computing API diff vs ${WHITE}${BASE_HASH}${BLUE}${CLEAR} 💪"
 
-	# Compute the TFM of the previous hash
-	PREVIOUS_DOTNET_TFM=$(make -C "$OUTPUT_SRC_DIR/xamarin-macios/tools/devops" print-variable VARIABLE=DOTNET_TFM)
-	PREVIOUS_DOTNET_TFM=${PREVIOUS_DOTNET_TFM#*=}
+	( # use a sub-shell to be able to set environment variables here and not affect the rest of the script
+		export APIDIFF_DIR="$APIDIFF_TMP_DIR"
+		export OUTPUT_DIR="$APIDIFF_RESULTS_DIR"
 
-	# Calculate apidiff references according to the temporary build
-	echo "    ${BLUE}Updating apidiff references...${CLEAR}"
-	rm -rf "$APIDIFF_RESULTS_DIR" "$APIDIFF_TMP_DIR"
-	if ! make update-refs -C "$ROOT_DIR/tools/apidiff" -j8 APIDIFF_DIR="$APIDIFF_TMP_DIR" OUTPUT_DIR="$APIDIFF_RESULTS_DIR" IOS_DESTDIR="$OUTPUT_SRC_DIR/xamarin-macios/_ios-build" MAC_DESTDIR="$OUTPUT_SRC_DIR/xamarin-macios/_mac-build" DOTNET_DESTDIR="$OUTPUT_SRC_DIR/xamarin-macios/_build" DOTNET_TFM_REFERENCE="$PREVIOUS_DOTNET_TFM" 2>&1 | sed 's/^/        /'; then
-		EC=${PIPESTATUS[0]}
-		report_error_line "${RED}Failed to update apidiff references${CLEAR}"
-		exit "$EC"
-	fi
+		# get all the currently selected platforms
+		FILE=DOTNET_PLATFORMS.txt
+		make print-variable-value-to-file VARIABLE=DOTNET_PLATFORMS FILE=$FILE -C "$ROOT_DIR/tools/devops"
+		DOTNET_PLATFORMS=($(cat $FILE))
+		rm -f "$FILE"
 
-	# Now compare the current build against those references
-	echo "    ${BLUE}Running apidiff...${CLEAR}"
-	APIDIFF_FILE=$APIDIFF_RESULTS_DIR/api-diff.html
-	if ! make all-local -C "$ROOT_DIR/tools/apidiff" -j8 APIDIFF_DIR="$APIDIFF_TMP_DIR" OUTPUT_DIR="$APIDIFF_RESULTS_DIR" DOTNET_TFM_REFERENCE="$PREVIOUS_DOTNET_TFM" 2>&1 | sed 's/^/        /'; then
-		EC=${PIPESTATUS[0]}
-		report_error_line "${RED}Failed to run apidiff${CLEAR}"
-		exit "$EC"
-	fi
+		shopt -s nullglob
 
-	# Now create the markdowns with these references
-	echo "    ${BLUE}Creating markdowns...${CLEAR}"
-	if ! make all-markdowns -C "$ROOT_DIR/tools/apidiff" -j8 APIDIFF_DIR="$APIDIFF_TMP_DIR" OUTPUT_DIR="$APIDIFF_RESULTS_DIR" DOTNET_TFM_REFERENCE="$PREVIOUS_DOTNET_TFM" 2>&1 | sed 's/^/        /'; then
-		EC=${PIPESTATUS[0]}
-		report_error_line "${RED}Failed to create markdowns${CLEAR}"
-		exit "$EC"
-	fi
+		# Point our apidiff to the dlls of the other commit
+		for platform in "${DOTNET_PLATFORMS[@]}"; do
+			dlls=($OUTPUT_SRC_DIR/xamarin-macios/_build/Microsoft.$platform.Ref.*/ref/net*/Microsoft.$platform.dll)
+			if [[ ${#dlls[@]} != 1 ]]; then
+				report_error_line "${RED}Unable to find exactly one assembly, found ${#dlls[@]} assemblies:${CLEAR}"
+				report_error_line "${dlls[@]}"
+				exit 1
+			fi
+			eval COMPARISON_DLL_$platform=\${DLLS[0]}
+			eval "export COMPARISON_DLL_$platform"
+		done
+
+		# FIXME remove this
+		env -0 | sort -z | tr '\0' '\n'
+
+		# Calculate apidiff references according to the temporary build
+		echo "    ${BLUE}Updating apidiff references...${CLEAR}"
+		rm -rf "$APIDIFF_RESULTS_DIR" "$APIDIFF_TMP_DIR"
+		if ! make update-comparison-refs -C "$ROOT_DIR/tools/apidiff" -j8 2>&1 | sed 's/^/        /'; then
+			EC=${PIPESTATUS[0]}
+			report_error_line "${RED}Failed to update apidiff references${CLEAR}"
+			exit "$EC"
+		fi
+
+		# Now compare the current build against those references
+		echo "    ${BLUE}Running apidiff...${CLEAR}"
+		APIDIFF_FILE=$APIDIFF_RESULTS_DIR/api-diff.html
+		if ! make all-local -C "$ROOT_DIR/tools/apidiff" -j8 2>&1 | sed 's/^/        /'; then
+			EC=${PIPESTATUS[0]}
+			report_error_line "${RED}Failed to run apidiff${CLEAR}"
+			exit "$EC"
+		fi
+
+		# Now create the markdowns with these references
+		echo "    ${BLUE}Creating markdowns...${CLEAR}"
+		if ! make all-markdowns -C "$ROOT_DIR/tools/apidiff" -j8 2>&1 | sed 's/^/        /'; then
+			EC=${PIPESTATUS[0]}
+			report_error_line "${RED}Failed to create markdowns${CLEAR}"
+			exit "$EC"
+		fi
+	)
 	echo "    ${BLUE}Computed API diff vs ${WHITE}${BASE_HASH}${BLUE}: ${WHITE}$APIDIFF_FILE${BLUE}.${CLEAR}"
 	echo ""
 else

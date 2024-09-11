@@ -172,6 +172,10 @@ namespace Foundation {
 
 	interface NSArray<TValue> : NSArray { }
 
+
+	[BaseType (typeof (NSObject))]
+	interface NSSomething {}
+
 	[BaseType (typeof (NSObject))]
 	[DesignatedDefaultCtor]
 	interface NSArray : NSSecureCoding, NSMutableCopying, INSFastEnumeration, CKRecordValue {

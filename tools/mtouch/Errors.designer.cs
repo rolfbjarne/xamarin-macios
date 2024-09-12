@@ -948,7 +948,7 @@ namespace Xamarin.Bundler {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {4} {0} does not support a deployment target of {1} for {3} (the minimum is {2}). Please select a newer deployment target in your project&apos;s Info.plist.
+        ///   Looks up a localized string similar to {4} {0} does not support a deployment target of {1} for {3} (the minimum is {2}). Please select a newer deployment target in your project&apos;s Info.plist or change the SupportedOSPlatformVersion property in your project file.
         ///		.
         /// </summary>
         public static string MT0073 {
@@ -3492,7 +3492,7 @@ namespace Xamarin.Bundler {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {4} {0} does not support a deployment target of {1} for {3} (the maximum is {2}). Please select an older deployment target in your project&apos;s Info.plist or upgrade to a newer version of {4}.
+        ///   Looks up a localized string similar to {4} {0} does not support a deployment target of {1} for {3} (the maximum is {2}). Please select an older deployment target in your project&apos;s Info.plist or change the SupportedOSPlatformVersion property in your project file, or upgrade to a newer version of {4}.
         ///		.
         /// </summary>
         public static string MX0074 {
@@ -3920,6 +3920,24 @@ namespace Xamarin.Bundler {
         public static string MX2111 {
             get {
                 return ResourceManager.GetString("MX2111", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not optimize the static constructor in the interface {0} because it did not have the expected instruction sequence (found end of method too soon)..
+        /// </summary>
+        public static string MX2112_A {
+            get {
+                return ResourceManager.GetString("MX2112_A", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not optimize the static constructor in the interface {0} because it had an unexpected instruction {1} at offset {2}..
+        /// </summary>
+        public static string MX2112_B {
+            get {
+                return ResourceManager.GetString("MX2112_B", resourceCulture);
             }
         }
         

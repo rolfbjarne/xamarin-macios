@@ -128,7 +128,7 @@ namespace Xamarin.MacDev {
 				return logicalName;
 			}
 
-			var vpath = GetVirtualProjectPath (projectDir, item, isVSBuild);
+			var vpath = GetVirtualProjectPath (task, projectDir, item, isVSBuild);
 			int matchlen = 0;
 
 			foreach (var prefix in prefixes) {

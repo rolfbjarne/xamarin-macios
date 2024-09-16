@@ -91,7 +91,7 @@ namespace Xamarin.MacDev.Tasks {
 			// group the atlas textures by their parent .atlas directories
 			var prefixes = BundleResource.SplitResourcePrefixes (ResourcePrefix);
 			foreach (var item in AtlasTextures) {
-				var vpp = BundleResource.GetVirtualProjectPath (ProjectDir, item, !string.IsNullOrEmpty (SessionId));
+				var vpp = BundleResource.GetVirtualProjectPath (this, ProjectDir, item, !string.IsNullOrEmpty (SessionId));
 				var atlas = Path.GetDirectoryName (vpp);
 				Log.LogWarning ($"Processing atlas {item.ItemSpec} with LogicalName={item.GetMetadata ("LogicalName")} VirtualProjectPath={vpp} and atlas name {atlas}");
 

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 
 using Xamarin.Utils;
 
@@ -58,21 +59,32 @@ namespace Xamarin.MacDev {
 
 		public static string GetVirtualProjectPath (string projectDir, ITaskItem item, bool isVSBuild)
 		{
+			return GetVirtualProjectPath (null, projectDir, item, isVSBuild);
+		}
+
+		public static string GetVirtualProjectPath (Task? task, string projectDir, ITaskItem item, bool isVSBuild)
+		{
 			var link = item.GetMetadata ("Link");
 
 			// Note: if the Link metadata exists, then it will be the equivalent of the ProjectVirtualPath
 			if (!string.IsNullOrEmpty (link)) {
-				if (Path.DirectorySeparatorChar != '\\')
+				if (Path.DirectorySeparatorChar != '\\') {
+					task?.Log.LogWarning ($"GetVirtualProjectPath ({projectDir}, {item.ItemSpec}, {isVSBuild}) => Link={link.Replace ('\\', '/')} (original {link})");
 					return link.Replace ('\\', '/');
+				}
 
+				task?.Log.LogWarning ($"GetVirtualProjectPath ({projectDir}, {item.ItemSpec}, {isVSBuild}) => Link={link.Replace ('\\', '/')}");
 				return link;
 			}
 
 			// HACK: This is for Visual Studio iOS projects
 			if (isVSBuild) {
 				if (item.GetMetadata ("DefiningProjectFullPath") != item.GetMetadata ("MSBuildProjectFullPath")) {
-					return item.GetMetadata ("FullPath").Replace (item.GetMetadata ("DefiningProjectDirectory"), string.Empty);
+					var rv = item.GetMetadata ("FullPath").Replace (item.GetMetadata ("DefiningProjectDirectory"), string.Empty);
+					task?.Log.LogWarning ($"GetVirtualProjectPath ({projectDir}, {item.ItemSpec}, {isVSBuild}) => DefiningProjectFullPath={item.GetMetadata ("DefiningProjectFullPath")} MSBuildProjectFullPath={item.GetMetadata ("MSBuildProjectFullPath")}");
+					return rv;
 				} else {
+					task?.Log.LogWarning ($"GetVirtualProjectPath ({projectDir}, {item.ItemSpec}, {isVSBuild}) => {item.ItemSpec}");
 					return item.ItemSpec;
 				}
 			}
@@ -88,20 +100,31 @@ namespace Xamarin.MacDev {
 				baseDir = projectDir;
 			}
 
+			task?.Log.LogWarning ($"GetVirtualProjectPath ({projectDir}, {item.ItemSpec}, {isVSBuild}) => isDefaultItem={isDefaultItem} definingProjectFullPath={definingProjectFullPath} FullPath={path} baseDir={baseDir}");
+
 			baseDir = PathUtils.ResolveSymbolicLinks (baseDir);
 			path = PathUtils.ResolveSymbolicLinks (path);
 
-			return PathUtils.AbsoluteToRelative (baseDir, path);
+			var rv2 = PathUtils.AbsoluteToRelative (baseDir, path);
+			task?.Log.LogWarning ($"GetVirtualProjectPath ({projectDir}, {item.ItemSpec}, {isVSBuild}) => isDefaultItem={isDefaultItem} definingProjectFullPath={definingProjectFullPath} FullPath={path} baseDir={baseDir} ==> {rv2}");
+			return rv2;
 		}
 
 		public static string GetLogicalName (string projectDir, IList<string> prefixes, ITaskItem item, bool isVSBuild)
 		{
+			return GetLogicalName (null, projectDir, prefixes, item, isVSBuild);
+		}
+
+		public static string GetLogicalName (Task? task, string projectDir, IList<string> prefixes, ITaskItem item, bool isVSBuild)
+		{
 			var logicalName = item.GetMetadata ("LogicalName");
 
 			if (!string.IsNullOrEmpty (logicalName)) {
-				if (Path.DirectorySeparatorChar != '\\')
+				if (Path.DirectorySeparatorChar != '\\') {
+					task?.Log.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}, {isVSBuild}) => has LogicalName={logicalName.Replace ('\\', '/')} (original {logicalName})");
 					return logicalName.Replace ('\\', '/');
-
+				}
+				task?.Log.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}, {isVSBuild}) => has LogicalName={logicalName}");
 				return logicalName;
 			}
 
@@ -113,9 +136,12 @@ namespace Xamarin.MacDev {
 					matchlen = prefix.Length;
 			}
 
-			if (matchlen > 0)
+			if (matchlen > 0) {
+				task?.Log.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}, {isVSBuild}) => has LogicalName={vpath.Substring (matchlen)} with vpath {vpath} substring {matchlen}");
 				return vpath.Substring (matchlen);
+			}
 
+			task?.Log.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}, {isVSBuild}) => has LogicalName={vpath.Substring (matchlen)} with vpath {vpath}");
 			return vpath;
 		}
 	}

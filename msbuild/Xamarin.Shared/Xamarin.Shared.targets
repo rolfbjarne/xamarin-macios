@@ -1311,6 +1311,10 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		Outputs="$(_TextureAtlasCache)"
 		DependsOnTargets="_BeforeCompileTextureAtlases">
 
+		<ItemGroup>
+			<AtlasTexture LocalDefiningProjectFullPath="%(DefiningProjectFullPath)" />
+		</ItemGroup>
+
 		<TextureAtlas
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"

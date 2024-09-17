@@ -84,11 +84,17 @@ namespace Xamarin.MacDev {
 			}
 
 			var isDefaultItem = item.GetMetadata ("IsDefaultItem") == "true";
-			var definingProjectFullPath = item.GetMetadata (isDefaultItem ? "MSBuildProjectFullPath" : "DefiningProjectFullPath");
+			var msbuildProjectFullPath = item.GetMetadata ("MSBuildProjectFullPath");
+			var definingProjectFullPath = item.GetMetadata ("DefiningProjectFullPath");
+			var localDefiningProjectFullPath = item.GetMetadata ("LocalDefiningProjectFullPath");
 			var path = item.GetMetadata ("FullPath");
 			string baseDir;
 
-			if (!string.IsNullOrEmpty (definingProjectFullPath)) {
+			if (isDefaultItem) {
+				baseDir = msbuildProjectFullPath;
+			} else if (!string.IsNullOrEmpty (localDefiningProjectFullPath)) {
+				baseDir = Path.GetDirectoryName (localDefiningProjectFullPath);
+			} else if (!string.IsNullOrEmpty (definingProjectFullPath)) {
 				baseDir = Path.GetDirectoryName (definingProjectFullPath);
 			} else if (projectDir.Length > 2 && projectDir [1] == ':' && !string.IsNullOrEmpty (macProjectDir)) {
 				baseDir = macProjectDir;
@@ -97,13 +103,21 @@ namespace Xamarin.MacDev {
 				baseDir = projectDir;
 			}
 
-			task?.Log.LogWarning ($"GetVirtualProjectPath ({projectDir}, {item.ItemSpec}, {macProjectDir}) => isDefaultItem={isDefaultItem} definingProjectFullPath={definingProjectFullPath} FullPath={path} baseDir={baseDir}");
+			var originalBaseDir = baseDir;
+			var originalPath = path;
 
 			baseDir = PathUtils.ResolveSymbolicLinks (baseDir);
 			path = PathUtils.ResolveSymbolicLinks (path);
 
 			var rv2 = PathUtils.AbsoluteToRelative (baseDir, path);
-			task?.Log.LogWarning ($"GetVirtualProjectPath ({projectDir}, {item.ItemSpec}, {macProjectDir}) => isDefaultItem={isDefaultItem} definingProjectFullPath={definingProjectFullPath} FullPath={path} baseDir={baseDir} ==> {rv2}");
+			task?.Log.LogWarning ($"GetVirtualProjectPath ({projectDir}, {item.ItemSpec}, {macProjectDir})\n" +
+					$"\t\t\t\tisDefaultItem={isDefaultItem}\n" +
+					$"\t\t\t\tMSBuildProjectFullPath={msbuildProjectFullPath}\n" +
+					$"\t\t\t\tDefiningProjectFullPath={definingProjectFullPath}\n" +
+					$"\t\t\t\tLocalDefiningProjectFullPath={localDefiningProjectFullPath}\n" +
+					$"\t\t\t\tFullPath={path} ({originalPath})\n" +
+					$"\t\t\t\tbaseDir={baseDir} ({originalBaseDir})\n" +
+					$"\t\t\t\t ==> {rv2}");
 			return rv2;
 		}
 

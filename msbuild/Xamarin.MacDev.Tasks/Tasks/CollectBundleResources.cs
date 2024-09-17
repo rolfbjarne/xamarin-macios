@@ -113,7 +113,7 @@ namespace Xamarin.MacDev.Tasks {
 			if (!string.IsNullOrEmpty (publishFolderType))
 				return false;
 
-			var logicalName = BundleResource.GetLogicalName (projectDir, prefixes, item, !string.IsNullOrEmpty (sessionId));
+			var logicalName = BundleResource.GetLogicalName (task, projectDir, prefixes, item);
 			// We need a physical path here, ignore the Link element
 			var path = item.GetMetadata ("FullPath");
 

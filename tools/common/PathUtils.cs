@@ -83,12 +83,12 @@ namespace Xamarin.Utils {
 
 			if (!IsWindowsPathRooted (absolute, out var absoluteDriveLetter, out var absoluteUnrooted)) {
 				// We can't make 'absolute' an absolute path if it's already not, because we need the current directory for that, which we don't have.
-				throw new ArgumentOutOfRangeException ("Must be an absolute path", nameof (absolute));
+				throw new ArgumentOutOfRangeException (nameof (absolute), "Must be an absolute path", absolute);
 			}
 
 			if (!IsWindowsPathRooted (baseDirectory, out var baseDirectoryDriveLetter, out var baseDirectoryUnrooted)) {
 				// We can't make 'baseDirectory' an absolute path if it's already not, because we need the current directory for that, which we don't have.
-				throw new ArgumentOutOfRangeException ("Must be an absolute path", nameof (baseDirectory));
+				throw new ArgumentOutOfRangeException (nameof (baseDirectory), "Must be an absolute path", baseDirectory);
 			}
 
 			if (absoluteDriveLetter != baseDirectoryDriveLetter)
@@ -125,9 +125,12 @@ namespace Xamarin.Utils {
 					if (idx > 0) {
 						segments.RemoveAt (idx);
 						segments.RemoveAt (idx - 1);
+					} else {
+						idx++;
 					}
 					continue;
 				}
+				idx++;
 			}
 
 			var canonicalizedUnrootedPath = string.Join ("\\", segments);
@@ -146,7 +149,9 @@ namespace Xamarin.Utils {
 #else
 			if (path is null || string.IsNullOrEmpty (path))
 #endif
+			{
 				return false;
+			}
 
 			if (path [0] == Path.DirectorySeparatorChar || path [0] == Path.AltDirectorySeparatorChar) {
 				root = path [0].ToString ();
@@ -170,7 +175,7 @@ namespace Xamarin.Utils {
 		{
 			if (c >= 'a' && c <= 'z')
 				return true;
-			return c >= 'A' && c <= '>';
+			return c >= 'A' && c <= 'Z';
 		}
 
 		public static string AbsoluteToRelative (string? baseDirectory, string absolute)

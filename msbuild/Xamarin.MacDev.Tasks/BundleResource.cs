@@ -57,23 +57,29 @@ namespace Xamarin.MacDev {
 				.ToList ();
 		}
 
+		[Obsolete ("DO NOT USE")]
 		public static string GetVirtualProjectPath (string projectDir, ITaskItem item, bool isVSBuild)
 		{
-			return GetVirtualProjectPath (null, projectDir, item, isVSBuild);
+			return GetVirtualProjectPath (null, projectDir, item, "");
 		}
 
-		public static string GetVirtualProjectPath (Task? task, string projectDir, ITaskItem item, bool isVSBuild)
+		public static string GetVirtualProjectPath (string projectDir, ITaskItem item, string macProjectDir)
+		{
+			return GetVirtualProjectPath (null, projectDir, item, macProjectDir);
+		}
+
+		public static string GetVirtualProjectPath (Task? task, string projectDir, ITaskItem item, string macProjectDir)
 		{
 			var link = item.GetMetadata ("Link");
 
 			// Note: if the Link metadata exists, then it will be the equivalent of the ProjectVirtualPath
 			if (!string.IsNullOrEmpty (link)) {
 				if (Path.DirectorySeparatorChar != '\\') {
-					task?.Log.LogWarning ($"GetVirtualProjectPath ({projectDir}, {item.ItemSpec}, {isVSBuild}) => Link={link.Replace ('\\', '/')} (original {link})");
+					task?.Log.LogWarning ($"GetVirtualProjectPath ({projectDir}, {item.ItemSpec}, {macProjectDir}) => Link={link.Replace ('\\', '/')} (original {link})");
 					return link.Replace ('\\', '/');
 				}
 
-				task?.Log.LogWarning ($"GetVirtualProjectPath ({projectDir}, {item.ItemSpec}, {isVSBuild}) => Link={link.Replace ('\\', '/')}");
+				task?.Log.LogWarning ($"GetVirtualProjectPath ({projectDir}, {item.ItemSpec}, {macProjectDir}) => Link={link.Replace ('\\', '/')}");
 				return link;
 			}
 
@@ -84,39 +90,47 @@ namespace Xamarin.MacDev {
 
 			if (!string.IsNullOrEmpty (definingProjectFullPath)) {
 				baseDir = Path.GetDirectoryName (definingProjectFullPath);
+			} else if (projectDir.Length > 2 && projectDir [1] == ':' && !string.IsNullOrEmpty (macProjectDir)) {
+				baseDir = macProjectDir;
 			} else {
 				baseDir = projectDir;
 			}
 
-			task?.Log.LogWarning ($"GetVirtualProjectPath ({projectDir}, {item.ItemSpec}, {isVSBuild}) => isDefaultItem={isDefaultItem} definingProjectFullPath={definingProjectFullPath} FullPath={path} baseDir={baseDir}");
+			task?.Log.LogWarning ($"GetVirtualProjectPath ({projectDir}, {item.ItemSpec}, {macProjectDir}) => isDefaultItem={isDefaultItem} definingProjectFullPath={definingProjectFullPath} FullPath={path} baseDir={baseDir}");
 
 			baseDir = PathUtils.ResolveSymbolicLinks (baseDir);
 			path = PathUtils.ResolveSymbolicLinks (path);
 
 			var rv2 = PathUtils.AbsoluteToRelative (baseDir, path);
-			task?.Log.LogWarning ($"GetVirtualProjectPath ({projectDir}, {item.ItemSpec}, {isVSBuild}) => isDefaultItem={isDefaultItem} definingProjectFullPath={definingProjectFullPath} FullPath={path} baseDir={baseDir} ==> {rv2}");
+			task?.Log.LogWarning ($"GetVirtualProjectPath ({projectDir}, {item.ItemSpec}, {macProjectDir}) => isDefaultItem={isDefaultItem} definingProjectFullPath={definingProjectFullPath} FullPath={path} baseDir={baseDir} ==> {rv2}");
 			return rv2;
 		}
 
+		[Obsolete ("DO NOT USE")]
 		public static string GetLogicalName (string projectDir, IList<string> prefixes, ITaskItem item, bool isVSBuild)
 		{
-			return GetLogicalName (null, projectDir, prefixes, item, isVSBuild);
+			return GetLogicalName (null, projectDir, prefixes, item, "");
 		}
 
-		public static string GetLogicalName (Task? task, string projectDir, IList<string> prefixes, ITaskItem item, bool isVSBuild)
+		public static string GetLogicalName (string projectDir, IList<string> prefixes, ITaskItem item, string macProjectDir)
+		{
+			return GetLogicalName (null, projectDir, prefixes, item, macProjectDir);
+		}
+
+		public static string GetLogicalName (Task? task, string projectDir, IList<string> prefixes, ITaskItem item, string macProjectDir)
 		{
 			var logicalName = item.GetMetadata ("LogicalName");
 
 			if (!string.IsNullOrEmpty (logicalName)) {
 				if (Path.DirectorySeparatorChar != '\\') {
-					task?.Log.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}, {isVSBuild}) => has LogicalName={logicalName.Replace ('\\', '/')} (original {logicalName})");
+					task?.Log.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}, {macProjectDir}) => has LogicalName={logicalName.Replace ('\\', '/')} (original {logicalName})");
 					return logicalName.Replace ('\\', '/');
 				}
-				task?.Log.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}, {isVSBuild}) => has LogicalName={logicalName}");
+				task?.Log.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}, {macProjectDir}) => has LogicalName={logicalName}");
 				return logicalName;
 			}
 
-			var vpath = GetVirtualProjectPath (task, projectDir, item, isVSBuild);
+			var vpath = GetVirtualProjectPath (task, projectDir, item, macProjectDir);
 			int matchlen = 0;
 
 			foreach (var prefix in prefixes) {
@@ -125,11 +139,11 @@ namespace Xamarin.MacDev {
 			}
 
 			if (matchlen > 0) {
-				task?.Log.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}, {isVSBuild}) => has LogicalName={vpath.Substring (matchlen)} with vpath {vpath} substring {matchlen}");
+				task?.Log.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}, {macProjectDir}) => has LogicalName={vpath.Substring (matchlen)} with vpath {vpath} substring {matchlen}");
 				return vpath.Substring (matchlen);
 			}
 
-			task?.Log.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}, {isVSBuild}) => has LogicalName={vpath.Substring (matchlen)} with vpath {vpath}");
+			task?.Log.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}, {macProjectDir}) => has LogicalName={vpath.Substring (matchlen)} with vpath {vpath}");
 			return vpath;
 		}
 	}

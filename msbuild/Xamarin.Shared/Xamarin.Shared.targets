@@ -1312,7 +1312,10 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		DependsOnTargets="_BeforeCompileTextureAtlases">
 
 		<ItemGroup>
-			<AtlasTexture LocalDefiningProjectFullPath="%(DefiningProjectFullPath)" />
+			<AtlasTexture>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>%(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</AtlasTexture>
 		</ItemGroup>
 
 		<TextureAtlas

@@ -71,6 +71,7 @@ namespace Xamarin.MacDev {
 		public static string GetVirtualProjectPath (Task? task, string projectDir, ITaskItem item, string macProjectDir)
 		{
 			var link = item.GetMetadata ("Link");
+			var isVSBuild = !string.IsNullOrEmpty (macProjectDir);
 
 			// Note: if the Link metadata exists, then it will be the equivalent of the ProjectVirtualPath
 			if (!string.IsNullOrEmpty (link)) {
@@ -83,42 +84,86 @@ namespace Xamarin.MacDev {
 				return link;
 			}
 
+			// Evaluate ~
+#if NET
+			if (macProjectDir.StartsWith ('~'))
+#else
+			if (macProjectDir.StartsWith ("~"))
+#endif
+				macProjectDir = Environment.GetEnvironmentVariable ("HOME") + projectDir.Substring (1);
+
 			var isDefaultItem = item.GetMetadata ("IsDefaultItem") == "true";
 			var msbuildProjectFullPath = item.GetMetadata ("MSBuildProjectFullPath");
+			var localMSBuildProjectFullPath = item.GetMetadata ("LocalMSBuildProjectFullPath");
 			var definingProjectFullPath = item.GetMetadata ("DefiningProjectFullPath");
-			var localDefiningProjectFullPath = item.GetMetadata ("LocalDefiningProjectFullPath");
-			var path = item.GetMetadata ("FullPath");
+			var localDefiningProjectFullPath = item.GetMetadata ("LocalDefiningProjectFullPath").Replace ('\\', '/');
+			var fullPath = item.GetMetadata ("FullPath");
+			string path;
 			string baseDir;
 
-			if (isDefaultItem) {
-				baseDir = msbuildProjectFullPath;
-			} else if (!string.IsNullOrEmpty (localDefiningProjectFullPath)) {
-				baseDir = Path.GetDirectoryName (localDefiningProjectFullPath);
-			} else if (!string.IsNullOrEmpty (definingProjectFullPath)) {
-				baseDir = Path.GetDirectoryName (definingProjectFullPath);
-			} else if (projectDir.Length > 2 && projectDir [1] == ':' && !string.IsNullOrEmpty (macProjectDir)) {
-				baseDir = macProjectDir;
-				baseDir = baseDir.Replace ("~", Environment.GetEnvironmentVariable ("HOME"));
+			string rv;
+
+			if (isVSBuild) {
+				// 'path' is full path on Windows
+				path = PathUtils.PathCombineWindows (projectDir, item.ItemSpec);
+
+				// 'baseDir' is the base directory in Windows
+				if (isDefaultItem) {
+					baseDir = Path.GetDirectoryName (localMSBuildProjectFullPath);
+				} else {
+					baseDir = Path.GetDirectoryName (localDefiningProjectFullPath);
+				}
+
+				rv = PathUtils.AbsoluteToRelativeWindows (baseDir, path);
+				// Make it a mac-style path
+				rv = rv.Replace ('\\', '/');
+
+				task?.Log.LogWarning ($"GetVirtualProjectPath" +
+						$"\t\t\t{projectDir}\n" +
+						$"\t\t\t{item.ItemSpec}\n" +
+						$"\t\t\t{macProjectDir}\n" +
+						$"\t\t\t\tisDefaultItem={isDefaultItem}\n" +
+						$"\t\t\t\tMSBuildProjectFullPath={msbuildProjectFullPath}\n" +
+						$"\t\t\t\tLocalMSBuildProjectFullPath={localMSBuildProjectFullPath}\n" +
+						$"\t\t\t\tDefiningProjectFullPath={definingProjectFullPath}\n" +
+						$"\t\t\t\tLocalDefiningProjectFullPath={localDefiningProjectFullPath}\n" +
+						$"\t\t\t\tFullPath={path}\n" +
+						$"\t\t\t\tbaseDir={baseDir}\n" +
+						$"\t\t\t\t ==> {rv}");
 			} else {
-				baseDir = projectDir;
+				path = fullPath;
+
+				if (isDefaultItem) {
+					baseDir = Path.GetDirectoryName (msbuildProjectFullPath);
+				// } else if (!string.IsNullOrEmpty (localDefiningProjectFullPath)) {
+				// 	baseDir = Path.GetDirectoryName (localDefiningProjectFullPath);
+				} else if (!string.IsNullOrEmpty (definingProjectFullPath)) {
+					baseDir = Path.GetDirectoryName (definingProjectFullPath);
+				} else {
+					baseDir = projectDir;
+				}
+
+				var originalBaseDir = baseDir;
+				var originalPath = path;
+
+				baseDir = PathUtils.ResolveSymbolicLinks (baseDir);
+				path = PathUtils.ResolveSymbolicLinks (path);
+
+				rv = PathUtils.AbsoluteToRelative (baseDir, path);
+				task?.Log.LogWarning ($"GetVirtualProjectPath" +
+						$"\t\t\t{projectDir}\n" +
+						$"\t\t\t{item.ItemSpec}\n" +
+						$"\t\t\t{macProjectDir}\n" +
+						$"\t\t\t\tisDefaultItem={isDefaultItem}\n" +
+						$"\t\t\t\tMSBuildProjectFullPath={msbuildProjectFullPath}\n" +
+						$"\t\t\t\tDefiningProjectFullPath={definingProjectFullPath}\n" +
+						$"\t\t\t\tLocalDefiningProjectFullPath={localDefiningProjectFullPath}\n" +
+						$"\t\t\t\tFullPath={path} ({originalPath})\n" +
+						$"\t\t\t\tbaseDir={baseDir} ({originalBaseDir})\n" +
+						$"\t\t\t\t ==> {rv}");
 			}
 
-			var originalBaseDir = baseDir;
-			var originalPath = path;
-
-			baseDir = PathUtils.ResolveSymbolicLinks (baseDir);
-			path = PathUtils.ResolveSymbolicLinks (path);
-
-			var rv2 = PathUtils.AbsoluteToRelative (baseDir, path);
-			task?.Log.LogWarning ($"GetVirtualProjectPath ({projectDir}, {item.ItemSpec}, {macProjectDir})\n" +
-					$"\t\t\t\tisDefaultItem={isDefaultItem}\n" +
-					$"\t\t\t\tMSBuildProjectFullPath={msbuildProjectFullPath}\n" +
-					$"\t\t\t\tDefiningProjectFullPath={definingProjectFullPath}\n" +
-					$"\t\t\t\tLocalDefiningProjectFullPath={localDefiningProjectFullPath}\n" +
-					$"\t\t\t\tFullPath={path} ({originalPath})\n" +
-					$"\t\t\t\tbaseDir={baseDir} ({originalBaseDir})\n" +
-					$"\t\t\t\t ==> {rv2}");
-			return rv2;
+			return rv;
 		}
 
 		[Obsolete ("DO NOT USE")]

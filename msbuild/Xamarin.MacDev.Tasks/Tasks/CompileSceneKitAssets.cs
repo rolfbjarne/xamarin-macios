@@ -152,7 +152,7 @@ namespace Xamarin.MacDev.Tasks {
 				if (!TryGetScnAssetsPath (asset.ItemSpec, out var scnassets))
 					continue;
 
-				var bundleName = BundleResource.GetLogicalName (ProjectDir, prefixes, asset, !string.IsNullOrEmpty (SessionId));
+				var bundleName = BundleResource.GetLogicalName (this, ProjectDir, prefixes, asset);
 				var output = new TaskItem (Path.Combine (intermediate, bundleName));
 
 				if (!modified.Contains (scnassets) && (!File.Exists (output.ItemSpec) || File.GetLastWriteTimeUtc (asset.ItemSpec) > File.GetLastWriteTimeUtc (output.ItemSpec))) {
@@ -211,7 +211,7 @@ namespace Xamarin.MacDev.Tasks {
 
 			var tasks = new List<Task> ();
 			foreach (var item in items) {
-				var bundleDir = BundleResource.GetLogicalName (ProjectDir, prefixes, new TaskItem (item), !string.IsNullOrEmpty (SessionId));
+				var bundleDir = BundleResource.GetLogicalName (this, ProjectDir, prefixes, new TaskItem (item));
 				var output = Path.Combine (intermediate, bundleDir);
 
 				tasks.Add (CopySceneKitAssets (item.ItemSpec, output, intermediate));

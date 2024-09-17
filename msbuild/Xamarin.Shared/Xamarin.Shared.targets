@@ -469,6 +469,15 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<ItemGroup>
 			<BundleResource Remove="@(_ProcessedBundleResources)" />
 			<Content Remove="@(_ProcessedContent)" />
+
+			<Content>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>%(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</Content>
+			<BundleResource>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>%(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</BundleResource>
 		</ItemGroup>
 
 		<!-- This task may be executed locally on Windows (for Hot Restart) -->
@@ -572,6 +581,11 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 		<ItemGroup>
 			<_FontFilesToRegister Include="@(BundleResource)" Condition="'%(BundleResource.RegisterFont)' == 'true'" />
+
+			<_FontFilesToRegister>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>%(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</_FontFilesToRegister>
 		</ItemGroup>
 
 		<CompileAppManifest
@@ -798,6 +812,13 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		Outputs="$(_IBToolCache)"
 		DependsOnTargets="$(_CoreCompileInterfaceDefinitionsDependsOn)">
 
+		<ItemGroup>
+			<InterfaceDefinition>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>%(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</InterfaceDefinition>
+		</ItemGroup>
+
 		<IBTool
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
@@ -919,6 +940,13 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		Outputs="$(_ACTool_PartialAppManifestCache);$(_ACTool_BundleResourceCache)"
 		DependsOnTargets="$(_CoreCompileImageAssetsDependsOn)">
 
+		<ItemGroup>
+			<ImageAsset>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>%(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</ImageAsset>
+		</ItemGroup>
+
 		<ACTool
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true' And '@(ImageAsset)' != ''"
@@ -1027,6 +1055,13 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		Outputs="$(_SceneKitCache)"
 		DependsOnTargets="_BeforeCoreCompileSceneKitAssets;_GenerateBundleName;_ComputeTargetFrameworkMoniker">
 
+		<ItemGroup>
+			<SceneKitAsset>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>%(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</SceneKitAsset>
+		</ItemGroup>
+
 		<CompileSceneKitAssets
 			SessionId="$(BuildSessionId)"
 			AppBundleName="$(_AppBundleName)$(AppBundleExtension)"
@@ -1113,6 +1148,13 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		Inputs="@(Collada)"
 		Outputs="$(_ColladaCache)"
 		>
+
+		<ItemGroup>
+			<Collada>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>%(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</Collada>
+		</ItemGroup>
 
 		<ScnTool
 			SessionId="$(BuildSessionId)"
@@ -1415,6 +1457,13 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		Outputs="$(_CoreMLModel_PartialAppManifestCache);$(_CoreMLModel_BundleResourceCache)"
 		DependsOnTargets="$(_CoreCompileCoreMLModelsDependsOn)">
 
+		<ItemGroup>
+			<CoreMLModel>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>%(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</CoreMLModel>
+		</ItemGroup>
+
 		<CoreMLCompiler
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
@@ -1454,6 +1503,13 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	</PropertyGroup>
 
 	<Target Name="_SmeltMetal" Condition="'$(_CanOutputAppBundle)' == 'true' And '@(Metal)' != ''" DependsOnTargets="$(_SmeltMetalDependsOn)">
+		<ItemGroup>
+			<Metal>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>%(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</Metal>
+		</ItemGroup>
+
 		<Metal
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true' and '%(Metal.Identity)' != ''"
@@ -1484,6 +1540,22 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	</Target>
 
 	<Target Name="_DetectAppManifest" DependsOnTargets="_GenerateBundleName;_ComputeTargetFrameworkMoniker">
+
+		<ItemGroup>
+			<None>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>%(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</None>
+			<BundleResource>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>%(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</BundleResource>
+			<Content>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>%(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</Content>
+		</ItemGroup>
+
 		<!--
 			This targets runs for Library projects as well, so that Library
 			projects can specify an Info.plist with MinimumOSVersion to pass

@@ -92,6 +92,7 @@ namespace Xamarin.MacDev {
 				baseDir = Path.GetDirectoryName (definingProjectFullPath);
 			} else if (projectDir.Length > 2 && projectDir [1] == ':' && !string.IsNullOrEmpty (macProjectDir)) {
 				baseDir = macProjectDir;
+				baseDir = baseDir.Replace ("~", Environment.GetEnvironmentVariable ("HOME"));
 			} else {
 				baseDir = projectDir;
 			}

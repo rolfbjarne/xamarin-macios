@@ -271,10 +271,8 @@ namespace Xamarin.MacDev.Tasks {
 				item.SetMetadata ("BundledInAssembly", assembly);
 
 				if (file.Exists && file.LastWriteTimeUtc >= asmWriteTime) {
-					Log.LogMessage ($"    Up to date (contentType: {contentType} resourceType: {resourceType}: {path}");
+					Log.LogMessage ($"    Up to date (contentType: {contentType} resourceType: {resourceType}): {path}");
 				} else {
-					Log.LogMessage ($"    Unpacking (contentType: {contentType} resourceType: {resourceType}: {path}");
-
 					Directory.CreateDirectory (Path.GetDirectoryName (path));
 
 					using (var stream = File.Open (path, FileMode.Create)) {
@@ -282,46 +280,18 @@ namespace Xamarin.MacDev.Tasks {
 							resource.CopyTo (stream);
 					}
 
-					var path = Path.Combine (intermediatePath, rpath);
-					var file = new FileInfo (path);
-
-					var item = new TaskItem (path);
-					item.SetMetadata ("LogicalName", rpath);
-					item.SetMetadata ("Optimize", "false");
-
-					if (file.Exists && file.LastWriteTimeUtc >= asmWriteTime) {
-						Log.LogMessage ("    Up to date: {0}", rpath);
-					} else {
-						Log.LogMessage ("    Unpacking: {0}", rpath);
-
-						Directory.CreateDirectory (Path.GetDirectoryName (path));
-
-						var resourceDirectory = peReader.GetSectionData (peReader.PEHeaders.CorHeader!.ResourcesDirectory.RelativeVirtualAddress);
-						var reader = resourceDirectory.GetReader ((int) manifestResource.Offset, resourceDirectory.Length - (int) manifestResource.Offset);
-						var length = reader.ReadUInt32 ();
-						if (length > reader.RemainingBytes)
-							throw new BadImageFormatException ();
-#if NET
-						using var fs = new FileStream (path, FileMode.Create, FileAccess.Write, FileShare.Read);
-						unsafe {
-							var span = new ReadOnlySpan<byte> (reader.CurrentPointer, (int) length);
-							fs.Write (span);
-						}
-#else
-						var buffer = new byte [4096];
-						using var fs = new FileStream (path, FileMode.Create, FileAccess.Write, FileShare.Read, buffer.Length);
-						var left = (int) length;
-						while (left > 0) {
-							var read = Math.Min (left, buffer.Length);
-							reader.ReadBytes (read, buffer, 0);
-							fs.Write (buffer, 0, read);
-							left -= read;
-						}
-#endif
-						unpackedResources.Add (item);
+					unpackedResources.Add (item);
+					using var md5 = global::System.Security.Cryptography.MD5.Create ();
+					var bytes = File.ReadAllBytes (path);
+					var md5Hash = string.Join ("", md5.ComputeHash (bytes).Select (v => $"{v:x2}")) + " " + string.Join (" ", md5.ComputeHash (File.ReadAllBytes (path)).Select (v => $"{v:x2}"));
+					Log.LogMessage ($"    Unpacked (contentType: {contentType} resourceType: {resourceType} md5: {md5Hash} length: {bytes.Length}): {path}");
+					if (Path.GetFileName (path) == "Main.storyboard") {
+						var txt = File.ReadAllText (path);
+						File.WriteAllText (path, txt.Replace ("\r", ""));
+						// File.WriteAllText (path, txt.Replace ("\n", "\r\n"));
+						Log.LogMessage (txt);
+						Log.LogMessage (string.Join (" ", bytes.Select (v => $"{v:x2}")));
 					}
-
-					rv.Add (item);
 				}
 
 				yield return (resourceType, item);

@@ -41,6 +41,15 @@ namespace Bindings.Test {
 	 */
 	[BaseType (typeof (NSObject))]
 	partial interface ObjCRegistrarTest {
+		[Export ("sessionOptions")]
+		NSDictionary<NSString, NSFileManagerDelegate> GetSessionOptions ();
+
+		[Export ("setSessionOptions:")]
+		void SetSessionOptions (NSDictionary<NSString, NSFileManagerDelegate> value);
+
+		[Export ("sessionDictionary")]
+		NSDictionary<NSString, NSFileManagerDelegate> SessionDictionary { get; set; }
+
 		[Export ("Pi1")]
 		int Pi1 { get; set; }
 

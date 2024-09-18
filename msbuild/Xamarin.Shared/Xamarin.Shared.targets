@@ -453,6 +453,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			_CompileColladaAssets;
 			_CompileTextureAtlases;
 			_CompileCoreMLModels;
+			_SetResourceMetadata;
 		</CollectBundleResourcesDependsOn>
 	</PropertyGroup>
 
@@ -469,15 +470,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<ItemGroup>
 			<BundleResource Remove="@(_ProcessedBundleResources)" />
 			<Content Remove="@(_ProcessedContent)" />
-
-			<Content>
-				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
-				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
-			</Content>
-			<BundleResource>
-				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
-				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
-			</BundleResource>
 		</ItemGroup>
 
 		<!-- This task may be executed locally on Windows (for Hot Restart) -->
@@ -510,7 +502,60 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ItemGroup>
 	</Target>
 
-	<Target Name="_CollectPackLibraryResources" Condition="'$(_BundleOriginalResources)' == 'true'">
+	<Target Name="_SetResourceMetadata">
+		<!--
+			Set metadata to capture the local (i.e. windows-style paths on builds from Windows, even when building remotely)
+			values for %(DefiningProjectFullPath) + $(MSBuildProjectFullPath).
+		-->
+		<ItemGroup>
+			<AtlasTexture>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</AtlasTexture>
+			<BundleResource>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</BundleResource>
+			<Collada>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</Collada>
+			<Content>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</Content>
+			<CoreMLModel>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</CoreMLModel>
+			<ImageAsset>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</ImageAsset>
+			<InterfaceDefinition>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</InterfaceDefinition>
+			<Metal>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</Metal>
+			<None>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</None>
+			<PartialAppManifest>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</PartialAppManifest>
+			<SceneKitAsset>
+				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
+				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
+			</SceneKitAsset>
+		</ItemGroup>
+	</Target>
+
+	<Target Name="_CollectPackLibraryResources" Condition="'$(_BundleOriginalResources)' == 'true'" DependsOnTargets="_SetResourceMetadata">
 		<CollectPackLibraryResources
 			AtlasTextures="@(AtlasTexture)"
 			BundleResources="@(BundleResource)"
@@ -564,6 +609,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			_GenerateBundleName;
 			_ComputeTargetFrameworkMoniker;
 			_ComputeTargetArchitectures;
+			_SetResourceMetadata;
 		</_CompileAppManifestDependsOn>
 	</PropertyGroup>
 
@@ -581,11 +627,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 		<ItemGroup>
 			<_FontFilesToRegister Include="@(BundleResource)" Condition="'%(BundleResource.RegisterFont)' == 'true'" />
-
-			<_FontFilesToRegister>
-				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
-				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
-			</_FontFilesToRegister>
 		</ItemGroup>
 
 		<CompileAppManifest
@@ -804,6 +845,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			_ReadAppManifest;
 			_DetectSigningIdentity;
 			_ComputeTargetFrameworkMoniker;
+			_SetResourceMetadata;
 		</_CoreCompileInterfaceDefinitionsDependsOn>
 	</PropertyGroup>
 
@@ -811,13 +853,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		Inputs="@(InterfaceDefinition)"
 		Outputs="$(_IBToolCache)"
 		DependsOnTargets="$(_CoreCompileInterfaceDefinitionsDependsOn)">
-
-		<ItemGroup>
-			<InterfaceDefinition>
-				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
-				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
-			</InterfaceDefinition>
-		</ItemGroup>
 
 		<IBTool
 			SessionId="$(BuildSessionId)"
@@ -932,6 +967,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			_BeforeCoreCompileImageAssets;
 			_DetectSigningIdentity;
 			_ComputeTargetFrameworkMoniker;
+			_SetResourceMetadata;
 		</_CoreCompileImageAssetsDependsOn>
 	</PropertyGroup>
 
@@ -939,13 +975,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		Inputs="@(ImageAsset);$(_TemporaryAppManifest)"
 		Outputs="$(_ACTool_PartialAppManifestCache);$(_ACTool_BundleResourceCache)"
 		DependsOnTargets="$(_CoreCompileImageAssetsDependsOn)">
-
-		<ItemGroup>
-			<ImageAsset>
-				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
-				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
-			</ImageAsset>
-		</ItemGroup>
 
 		<ACTool
 			SessionId="$(BuildSessionId)"
@@ -1053,14 +1082,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<Target Name="_CoreCompileSceneKitAssets"
 		Inputs="@(SceneKitAsset)"
 		Outputs="$(_SceneKitCache)"
-		DependsOnTargets="_BeforeCoreCompileSceneKitAssets;_GenerateBundleName;_ComputeTargetFrameworkMoniker">
-
-		<ItemGroup>
-			<SceneKitAsset>
-				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
-				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
-			</SceneKitAsset>
-		</ItemGroup>
+		DependsOnTargets="_BeforeCoreCompileSceneKitAssets;_GenerateBundleName;_ComputeTargetFrameworkMoniker;_SetResourceMetadata">
 
 		<CompileSceneKitAssets
 			SessionId="$(BuildSessionId)"
@@ -1144,17 +1166,10 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	</Target>
 
 	<Target Name="_CoreCompileColladaAssets"
-		DependsOnTargets="_BeforeCoreCompileColladaAssets;_DetectSdkLocations;_ComputeTargetFrameworkMoniker"
+		DependsOnTargets="_BeforeCoreCompileColladaAssets;_DetectSdkLocations;_ComputeTargetFrameworkMoniker;_SetResourceMetadata"
 		Inputs="@(Collada)"
 		Outputs="$(_ColladaCache)"
 		>
-
-		<ItemGroup>
-			<Collada>
-				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
-				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
-			</Collada>
-		</ItemGroup>
 
 		<ScnTool
 			SessionId="$(BuildSessionId)"
@@ -1351,14 +1366,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<Target Name="_CoreCompileTextureAtlases"
 		Inputs="@(AtlasTexture)"
 		Outputs="$(_TextureAtlasCache)"
-		DependsOnTargets="_BeforeCompileTextureAtlases">
-
-		<ItemGroup>
-			<AtlasTexture>
-				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
-				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
-			</AtlasTexture>
-		</ItemGroup>
+		DependsOnTargets="_BeforeCompileTextureAtlases;_SetResourceMetadata">
 
 		<TextureAtlas
 			SessionId="$(BuildSessionId)"
@@ -1449,6 +1457,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			_ReadAppManifest;
 			_DetectSdkLocations;
 			_BeforeCompileCoreMLModels;
+			_SetResourceMetadata;
 		</_CoreCompileCoreMLModelsDependsOn>
 	</PropertyGroup>
 
@@ -1457,12 +1466,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		Outputs="$(_CoreMLModel_PartialAppManifestCache);$(_CoreMLModel_BundleResourceCache)"
 		DependsOnTargets="$(_CoreCompileCoreMLModelsDependsOn)">
 
-		<ItemGroup>
-			<CoreMLModel>
-				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
-				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
-			</CoreMLModel>
-		</ItemGroup>
 
 		<CoreMLCompiler
 			SessionId="$(BuildSessionId)"
@@ -1499,17 +1502,11 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			_DetectSdkLocations;
 			_ComputeTargetFrameworkMoniker;
 			_ReadAppManifest;
+			_SetResourceMetadata;
 		</_SmeltMetalDependsOn>
 	</PropertyGroup>
 
 	<Target Name="_SmeltMetal" Condition="'$(_CanOutputAppBundle)' == 'true' And '@(Metal)' != ''" DependsOnTargets="$(_SmeltMetalDependsOn)">
-		<ItemGroup>
-			<Metal>
-				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
-				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
-			</Metal>
-		</ItemGroup>
-
 		<Metal
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true' and '%(Metal.Identity)' != ''"
@@ -1539,23 +1536,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</MetalLib>
 	</Target>
 
-	<Target Name="_DetectAppManifest" DependsOnTargets="_GenerateBundleName;_ComputeTargetFrameworkMoniker">
-
-		<ItemGroup>
-			<None>
-				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
-				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
-			</None>
-			<BundleResource>
-				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
-				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
-			</BundleResource>
-			<Content>
-				<LocalDefiningProjectFullPath>%(DefiningProjectFullPath)</LocalDefiningProjectFullPath>
-				<LocalMSBuildProjectFullPath>$(MSBuildProjectFullPath)</LocalMSBuildProjectFullPath>
-			</Content>
-		</ItemGroup>
-
+	<Target Name="_DetectAppManifest" DependsOnTargets="_GenerateBundleName;_ComputeTargetFrameworkMoniker;_SetResourceMetadata">
 		<!--
 			This targets runs for Library projects as well, so that Library
 			projects can specify an Info.plist with MinimumOSVersion to pass

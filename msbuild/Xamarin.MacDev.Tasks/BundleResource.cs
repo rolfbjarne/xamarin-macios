@@ -77,15 +77,8 @@ namespace Xamarin.MacDev {
 			return GetVirtualProjectPath (task, projectDir, item, !string.IsNullOrEmpty (task.SessionId));
 		}
 
-		static bool reentry;
-		public static string GetVirtualProjectPath (Task? task, string projectDir, ITaskItem item, bool isVSBuild)
+		public static string GetVirtualProjectPath (Task task, string projectDir, ITaskItem item, bool isVSBuild)
 		{
-			if (reentry)
-				throw new Exception ();
-			reentry = true;
-
-try {
-
 			var link = item.GetMetadata ("Link");
 
 			// Note: if the Link metadata exists, then it will be the equivalent of the ProjectVirtualPath
@@ -108,11 +101,13 @@ try {
 			string rv;
 
 			if (string.IsNullOrEmpty (localDefiningProjectFullPath)) {
-				throw new InvalidOperationException ($"Item {item.ItemSpec} does not have 'LocalDefiningProjectFullPath' set.");
+				task.Log.LogError ($"The item {item.ItemSpec} does not have a 'LocalDefiningProjectFullPath' value set.");
+				return "placeholder";
 			}
 
 			if (string.IsNullOrEmpty (localMSBuildProjectFullPath)) {
-				throw new InvalidOperationException ($"Item {item.ItemSpec} does not have 'LocalMSBuildProjectFullPath' set.");
+				task.Log.LogError ($"The item {item.ItemSpec} does not have a 'LocalMSBuildProjectFullPath' value set.");
+				return "placeholder";
 			}
 
 			if (isVSBuild) {
@@ -171,9 +166,6 @@ try {
 			}
 
 			return rv;
-} finally {
-	reentry = false;
-}
 		}
 
 		static bool GetISVSBuild (Task task)
@@ -185,15 +177,8 @@ try {
 			return false;
 		}
 
-		static bool reentry2;
-
 		public static string GetLogicalName (Task task, string projectDir, IList<string> prefixes, ITaskItem item)
 		{
-			if (reentry2)
-				throw new Exception ();
-			reentry2 = true;
-try {
-
 			var logicalName = item.GetMetadata ("LogicalName");
 
 			if (!string.IsNullOrEmpty (logicalName)) {
@@ -220,9 +205,6 @@ try {
 
 			task?.Log.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}) => has LogicalName={vpath.Substring (matchlen)} with vpath {vpath}");
 			return vpath;
-} finally {
-	reentry2 = false;
-}
 		}
 	}
 }

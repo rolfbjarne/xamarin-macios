@@ -280,10 +280,8 @@ namespace Xamarin.MacDev.Tasks {
 				item.SetMetadata ("BundledInAssembly", assembly);
 
 				if (file.Exists && file.LastWriteTimeUtc >= asmWriteTime) {
-					Log.LogMessage ($"    Up to date (contentType: {contentType} resourceType: {resourceType}: {path}");
+					Log.LogMessage ($"    Up to date (contentType: {contentType} resourceType: {resourceType}): {path}");
 				} else {
-					Log.LogMessage ($"    Unpacking (contentType: {contentType} resourceType: {resourceType}: {path}");
-
 					Directory.CreateDirectory (Path.GetDirectoryName (path));
 
 					using (var stream = File.Open (path, FileMode.Create)) {
@@ -292,6 +290,10 @@ namespace Xamarin.MacDev.Tasks {
 					}
 
 					unpackedResources.Add (item);
+
+				    using var md5 = global::System.Security.Cryptography.MD5.Create ();
+				    var md5Hash = md5.ComputeHash (File.ReadAllBytes (path));
+					Log.LogMessage ($"    Unpacked (contentType: {contentType} resourceType: {resourceType} md5: {md5Hash}): {path}");
 				}
 
 				yield return (resourceType, item);

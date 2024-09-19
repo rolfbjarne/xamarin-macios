@@ -218,6 +218,7 @@ $(IOS_BUILD_DIR)/AssemblyInfo.cs: $(TOP)/src/AssemblyInfo.cs.in | $(IOS_BUILD_DI
 		-e 's|@NUGET_VERSION_REV@|$(IOS_NUGET_VERSION_PATCH)|g' \
 		-e 's|@NUGET_VERSION_BUILD@|$(IOS_NUGET_COMMIT_DISTANCE)|g' \
 		-e 's|@DOTNET_PLATFORM@|iOS|g' \
+		-e 's|@XCODE_VERSION@|$(subst .,_,$(XCODE_VERSION))|g' \
 		< $< > $@.tmp
 	$(Q) diff $@ $@.tmp >/dev/null 2>&1 || mv -f $@.tmp $@
 	$(Q) rm -f $@.tmp
@@ -512,6 +513,7 @@ $(MACOS_BUILD_DIR)/AssemblyInfo.cs: $(TOP)/src/AssemblyInfo.cs.in | $(MACOS_BUIL
 		-e 's|@NUGET_VERSION_REV@|$(MACOS_NUGET_VERSION_PATCH)|g' \
 		-e 's|@NUGET_VERSION_BUILD@|$(MACOS_NUGET_COMMIT_DISTANCE)|g' \
 		-e 's|@DOTNET_PLATFORM@|macOS|g' \
+		-e 's|@XCODE_VERSION@|$(subst .,_,$(XCODE_VERSION))|g' \
 		< $< > $@.tmp
 	$(Q) diff $@ $@.tmp >/dev/null 2>&1 || mv -f $@.tmp $@
 	$(Q) rm -f $@.tmp
@@ -737,6 +739,7 @@ $(WATCH_BUILD_DIR)/AssemblyInfo.cs: $(TOP)/src/AssemblyInfo.cs.in $(TOP)/Make.co
 		-e 's|@PACKAGE_VERSION_MINOR@|$(IOS_PACKAGE_VERSION_MINOR)|g' \
 		-e 's|@PACKAGE_VERSION_REV@|$(IOS_PACKAGE_VERSION_REV)|g' \
 		-e 's|@PACKAGE_VERSION_BUILD@|$(IOS_PACKAGE_VERSION_BUILD)|g' \
+		-e 's|@XCODE_VERSION@|$(subst .,_,$(XCODE_VERSION))|g' \
 		$< > $@.tmp
 	$(Q) diff $@ $@.tmp >/dev/null 2>&1 || mv -f $@.tmp $@
 	$(Q) rm -f $@.tmp
@@ -947,6 +950,7 @@ $(TVOS_BUILD_DIR)/AssemblyInfo.cs: $(TOP)/src/AssemblyInfo.cs.in $(TOP)/Make.con
 		-e 's|@NUGET_VERSION_REV@|$(TVOS_NUGET_VERSION_PATCH)|g' \
 		-e 's|@NUGET_VERSION_BUILD@|$(TVOS_NUGET_COMMIT_DISTANCE)|g' \
 		-e 's|@DOTNET_PLATFORM@|tvOS|g' \
+		-e 's|@XCODE_VERSION@|$(subst .,_,$(XCODE_VERSION))|g' \
 		$< > $@.tmp
 	$(Q) diff $@ $@.tmp >/dev/null 2>&1 || mv -f $@.tmp $@
 	$(Q) rm -f $@.tmp
@@ -1113,6 +1117,7 @@ $(MACCATALYST_BUILD_DIR)/AssemblyInfo.cs: $(TOP)/src/AssemblyInfo.cs.in $(TOP)/M
 		-e 's|@NUGET_VERSION_REV@|$(MACCATALYST_NUGET_VERSION_PATCH)|g' \
 		-e 's|@NUGET_VERSION_BUILD@|$(MACCATALYST_NUGET_COMMIT_DISTANCE)|g' \
 		-e 's|@DOTNET_PLATFORM@|MacCatalyst|g' \
+		-e 's|@XCODE_VERSION@|$(subst .,_,$(XCODE_VERSION))|g' \
 		$< > $@.tmp
 	$(Q) diff $@ $@.tmp >/dev/null 2>&1 || mv -f $@.tmp $@
 	$(Q) rm -f $@.tmp

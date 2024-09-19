@@ -96,7 +96,7 @@ steps:
     github_token: ${{ parameters.gitHubToken }}
   timeoutInMinutes: 250
 
-- bash: $(Build.SourcesDirectory)/xamarin-macios/system-dependencies.sh --ignore-all --provision-simulators
+- bash: $(Build.SourcesDirectory)/xamarin-macios/system-dependencies.sh --ignore-mono --ignore-visual-studio --ignore-mono --ignore-sharpie --ignore-shellcheck --ignore-yamllint --provision-simulators
   displayName: 'Provision simulators'
   timeoutInMinutes: 250
 

@@ -61,7 +61,7 @@ namespace Xamarin.MacDev {
 		static void Log (Task? task, string msg)
 		{
 			if (task is not null) {
-				task.Log.LogWarning (msg);
+				task.Log.LogMessage (MessageImportance.Low, msg);
 			} else {
 				Console.WriteLine (msg);
 			}

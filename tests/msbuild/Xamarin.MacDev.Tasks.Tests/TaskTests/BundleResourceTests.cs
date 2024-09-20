@@ -33,7 +33,7 @@ namespace Xamarin.MacDev.Tasks {
 			Assert.Multiple (() => {
 				Assert.AreEqual ("Archer_Attack.atlas/archer_attack_0001.png",
 					BundleResource.GetVirtualProjectPath (
-						null,
+						null!,
 						"/Users/rolf/work/maccore/windows/xamarin-macios/tests/dotnet/LibraryWithResources/iOS",
 						CreateItem (
 							"../Archer_Attack.atlas/archer_attack_0001.png",
@@ -45,7 +45,7 @@ namespace Xamarin.MacDev.Tasks {
 
 				Assert.AreEqual ("Archer_Attack.atlas/archer_attack_0001.png",
 					BundleResource.GetVirtualProjectPath (
-						null,
+						null!,
 						"C:/src/xamarin-macios/tests/dotnet/LibraryWithResources/iOS",
 						CreateItem (
 							"../Archer_Attack.atlas/archer_attack_0001.png",

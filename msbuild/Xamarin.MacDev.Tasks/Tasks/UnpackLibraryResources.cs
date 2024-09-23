@@ -291,10 +291,13 @@ namespace Xamarin.MacDev.Tasks {
 
 					unpackedResources.Add (item);
 					using var md5 = global::System.Security.Cryptography.MD5.Create ();
-					var md5Hash = string.Join ("", md5.ComputeHash (File.ReadAllBytes (path)).Select (v => $"{v:x2}")) + " " + string.Join (" ", md5.ComputeHash (File.ReadAllBytes (path)).Select (v => $"{v:x2}"));
-					Log.LogMessage ($"    Unpacked (contentType: {contentType} resourceType: {resourceType} md5: {md5Hash}): {path}");
-					if (Path.GetFileName (path) == "Main.storyboard")
+					var bytes = File.ReadAllBytes (path);
+					var md5Hash = string.Join ("", md5.ComputeHash (bytes).Select (v => $"{v:x2}")) + " " + string.Join (" ", md5.ComputeHash (File.ReadAllBytes (path)).Select (v => $"{v:x2}"));
+					Log.LogMessage ($"    Unpacked (contentType: {contentType} resourceType: {resourceType} md5: {md5Hash} length: {bytes.Length}): {path}");
+					if (Path.GetFileName (path) == "Main.storyboard") {
 						Log.LogMessage (File.ReadAllText (path));
+						Log.LogMessage (string.Join (" ", bytes.Select (v => $"{v:x2}")));
+					}
 				}
 
 				yield return (resourceType, item);

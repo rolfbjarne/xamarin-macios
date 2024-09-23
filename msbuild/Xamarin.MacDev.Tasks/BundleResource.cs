@@ -183,10 +183,10 @@ namespace Xamarin.MacDev {
 
 			if (!string.IsNullOrEmpty (logicalName)) {
 				if (Path.DirectorySeparatorChar != '\\') {
-					task?.Log.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}) => has LogicalName={logicalName.Replace ('\\', '/')} (original {logicalName})");
+					task?.Log.LogMessage (MessageImportance.Low, $"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}) => has LogicalName={logicalName.Replace ('\\', '/')} (original {logicalName})");
 					return logicalName.Replace ('\\', '/');
 				}
-				task?.Log.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}) => has LogicalName={logicalName}");
+				task?.Log.LogMessage (MessageImportance.Low, $"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}) => has LogicalName={logicalName}");
 				return logicalName;
 			}
 
@@ -199,11 +199,11 @@ namespace Xamarin.MacDev {
 			}
 
 			if (matchlen > 0) {
-				task?.Log.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}) => has LogicalName={vpath.Substring (matchlen)} with vpath {vpath} substring {matchlen}");
+				task?.Log.LogMessage (MessageImportance.Low, $"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}) => has LogicalName={vpath.Substring (matchlen)} with vpath {vpath} substring {matchlen}");
 				return vpath.Substring (matchlen);
 			}
 
-			task?.Log.LogWarning ($"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}) => has LogicalName={vpath.Substring (matchlen)} with vpath {vpath}");
+			task?.Log.LogMessage (MessageImportance.Low, $"GetLogicalName ({projectDir}, {string.Join (";", prefixes)}, {item.ItemSpec}) => has LogicalName={vpath.Substring (matchlen)} with vpath {vpath}");
 			return vpath;
 		}
 	}

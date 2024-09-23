@@ -388,6 +388,8 @@ namespace Xamarin.MacDev.Tasks {
 			}
 
 			foreach (var resourceName in assembly.GetManifestResourceNames ()) {
+				if (string.IsNullOrEmpty (resourceName))
+					continue;
 				var info = assembly.GetManifestResourceInfo (resourceName);
 				if (!info.ResourceLocation.HasFlag (ResourceLocation.Embedded))
 					continue;

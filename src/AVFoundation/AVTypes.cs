@@ -306,7 +306,7 @@ namespace AVFoundation {
 
 #if NET
 	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios15.0")]
 	[SupportedOSPlatform ("tvos15.0")]
 #else
@@ -388,7 +388,7 @@ namespace AVFoundation {
 
 #if NET
 	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios15.0")]
 	[SupportedOSPlatform ("tvos15.0")]
 #else
@@ -519,7 +519,7 @@ namespace AVFoundation {
 
 #if NET
 	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios15.0")]
 	[SupportedOSPlatform ("tvos15.0")]
 #else
@@ -536,7 +536,7 @@ namespace AVFoundation {
 
 #if NET
 	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios15.0")]
 	[SupportedOSPlatform ("tvos15.0")]
 #else
@@ -631,7 +631,7 @@ namespace AVFoundation {
 
 #if NET
 	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios15.0")]
 	[SupportedOSPlatform ("tvos15.0")]
 #else
@@ -685,7 +685,7 @@ namespace AVFoundation {
 #if MONOMAC
 
 #if NET
-	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("macos")]
 	[UnsupportedOSPlatform ("tvos")]
 	[UnsupportedOSPlatform ("ios")]
 	[UnsupportedOSPlatform ("maccatalyst")]
@@ -693,7 +693,6 @@ namespace AVFoundation {
 	[NoWatch]
 	[NoTV]
 	[NoiOS]
-	[Mac (12,0)]
 	[NoMacCatalyst]
 #endif
 	[Native]
@@ -704,7 +703,7 @@ namespace AVFoundation {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("macos")]
 	[UnsupportedOSPlatform ("tvos")]
 	[UnsupportedOSPlatform ("ios")]
 	[UnsupportedOSPlatform ("maccatalyst")]
@@ -712,7 +711,6 @@ namespace AVFoundation {
 	[NoWatch]
 	[NoTV]
 	[NoiOS]
-	[Mac (12,0)]
 	[NoMacCatalyst]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
@@ -733,7 +731,7 @@ namespace AVFoundation {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("macos")]
 	[UnsupportedOSPlatform ("tvos")]
 	[UnsupportedOSPlatform ("ios")]
 	[UnsupportedOSPlatform ("maccatalyst")]
@@ -741,7 +739,6 @@ namespace AVFoundation {
 	[NoWatch]
 	[NoTV]
 	[NoiOS]
-	[Mac (12,0)]
 	[NoMacCatalyst]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
@@ -757,7 +754,7 @@ namespace AVFoundation {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("macos")]
 	[UnsupportedOSPlatform ("tvos")]
 	[UnsupportedOSPlatform ("ios")]
 	[UnsupportedOSPlatform ("maccatalyst")]
@@ -765,7 +762,6 @@ namespace AVFoundation {
 	[NoWatch]
 	[NoTV]
 	[NoiOS]
-	[Mac (12,0)]
 	[NoMacCatalyst]
 #endif
 	[StructLayout (LayoutKind.Sequential)]

@@ -768,19 +768,19 @@ namespace Foundation {
 		[Wrap ("LoadFromHtml (data, options.GetDictionary ()!, completionHandler)")]
 		void LoadFromHtml (NSData data, NSAttributedStringDocumentAttributes options, NSAttributedStringCompletionHandler completionHandler);
 
-		[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+		[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 		[Export ("initWithContentsOfMarkdownFileAtURL:options:baseURL:error:")]
 		NativeHandle Constructor (NSUrl markdownFile, [NullAllowed] NSAttributedStringMarkdownParsingOptions options, [NullAllowed] NSUrl baseUrl, [NullAllowed] out NSError error);
 
-		[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+		[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 		[Export ("initWithMarkdown:options:baseURL:error:")]
 		NativeHandle Constructor (NSData markdown, [NullAllowed] NSAttributedStringMarkdownParsingOptions options, [NullAllowed] NSUrl baseUrl, [NullAllowed] out NSError error);
 
-		[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+		[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 		[Export ("initWithMarkdownString:options:baseURL:error:")]
 		NativeHandle Constructor (string markdownString, [NullAllowed] NSAttributedStringMarkdownParsingOptions options, [NullAllowed] NSUrl baseUrl, [NullAllowed] out NSError error);
 
-		[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+		[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 		[Export ("attributedStringByInflectingString")]
 		NSAttributedString AttributedStringByInflectingString { get; }
 
@@ -861,7 +861,7 @@ namespace Foundation {
 	}
 
 	// we follow the API found in swift
-	[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+	[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 	public enum NSAttributedStringNameKey {
 
 		[Field ("NSAlternateDescriptionAttributeName")]
@@ -1782,25 +1782,25 @@ namespace Foundation {
 		[NullAllowed, Export ("error", ArgumentSemantic.Copy)]
 		NSError Error { get; }
 
-		[Watch (7, 0), TV (14, 0), Mac (11, 0), iOS (14, 0)]
+		[Watch (7, 0), TV (14, 0), iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Export ("decodeArrayOfObjectsOfClass:forKey:")]
 		[return: NullAllowed]
 		NSObject [] DecodeArrayOfObjects (Class @class, string key);
 
-		[Watch (7, 0), TV (14, 0), Mac (11, 0), iOS (14, 0)]
+		[Watch (7, 0), TV (14, 0), iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Export ("decodeArrayOfObjectsOfClasses:forKey:")]
 		[return: NullAllowed]
 		NSObject [] DecodeArrayOfObjects (NSSet<Class> classes, string key);
 
-		[Watch (7, 0), TV (14, 0), Mac (11, 0), iOS (14, 0)]
+		[Watch (7, 0), TV (14, 0), iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Export ("decodeDictionaryWithKeysOfClass:objectsOfClass:forKey:")]
 		[return: NullAllowed]
 		NSDictionary DecodeDictionary (Class keyClass, Class objectClass, string key);
 
-		[Watch (7, 0), TV (14, 0), Mac (11, 0), iOS (14, 0)]
+		[Watch (7, 0), TV (14, 0), iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Export ("decodeDictionaryWithKeysOfClasses:objectsOfClasses:forKey:")]
 		[return: NullAllowed]
@@ -2720,7 +2720,7 @@ namespace Foundation {
 		[return: NullAllowed]
 		NSPersonNameComponents GetComponents (string @string);
 
-		[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+		[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 		[NullAllowed, Export ("locale", ArgumentSemantic.Copy)]
 		NSLocale Locale { get; set; }
 	}
@@ -3059,28 +3059,28 @@ namespace Foundation {
 		bool GetRequiresSecureCoding ();
 #endif
 
-		[Watch (7, 0), TV (14, 0), Mac (11, 0), iOS (14, 0)]
+		[Watch (7, 0), TV (14, 0), iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Static]
 		[Export ("unarchivedArrayOfObjectsOfClass:fromData:error:")]
 		[return: NullAllowed]
 		NSObject [] GetUnarchivedArray (Class @class, NSData data, [NullAllowed] out NSError error);
 
-		[Watch (7, 0), TV (14, 0), Mac (11, 0), iOS (14, 0)]
+		[Watch (7, 0), TV (14, 0), iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Static]
 		[Export ("unarchivedArrayOfObjectsOfClasses:fromData:error:")]
 		[return: NullAllowed]
 		NSObject [] GetUnarchivedArray (NSSet<Class> classes, NSData data, [NullAllowed] out NSError error);
 
-		[Watch (7, 0), TV (14, 0), Mac (11, 0), iOS (14, 0)]
+		[Watch (7, 0), TV (14, 0), iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Static]
 		[Export ("unarchivedDictionaryWithKeysOfClass:objectsOfClass:fromData:error:")]
 		[return: NullAllowed]
 		NSDictionary GetUnarchivedDictionary (Class keyClass, Class valueClass, NSData data, [NullAllowed] out NSError error);
 
-		[Watch (7, 0), TV (14, 0), Mac (11, 0), iOS (14, 0)]
+		[Watch (7, 0), TV (14, 0), iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Static]
 		[Export ("unarchivedDictionaryWithKeysOfClasses:objectsOfClasses:fromData:error:")]
@@ -4558,7 +4558,7 @@ namespace Foundation {
 		[Export ("helpAnchor")]
 		string HelpAnchor { get; }
 
-		[Watch (7, 4), TV (14, 5), Mac (11, 3), iOS (14, 5)]
+		[Watch (7, 4), TV (14, 5), iOS (14, 5)]
 		[MacCatalyst (14, 5)]
 		[Export ("underlyingErrors", ArgumentSemantic.Copy)]
 		NSError [] UnderlyingErrors { get; }
@@ -4641,7 +4641,7 @@ namespace Foundation {
 		[Field ("NSUnderlyingErrorKey")]
 		NSString UnderlyingErrorKey { get; }
 
-		[Watch (7, 4), TV (14, 5), Mac (11, 3), iOS (14, 5)]
+		[Watch (7, 4), TV (14, 5), iOS (14, 5)]
 		[MacCatalyst (14, 5)]
 		[Field ("NSMultipleUnderlyingErrorsKey")]
 		NSString MultipleUnderlyingErrorsKey { get; }
@@ -4709,7 +4709,6 @@ namespace Foundation {
 		NSError GetFileProviderError (string nonExistentItemIdentifier);
 
 		[iOS (16, 0)]
-		[Mac (11, 0)]
 		[NoMacCatalyst]
 		[NoTV]
 		[NoWatch]
@@ -5921,7 +5920,7 @@ namespace Foundation {
 		[Export ("UUIDString")]
 		string AsString ();
 
-		[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+		[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 		[Export ("compare:")]
 		NSComparisonResult Compare (NSUuid otherUuid);
 	}
@@ -6018,7 +6017,7 @@ namespace Foundation {
 
 		// From NSUserActivity (CIBarcodeDescriptor)
 
-		[TV (11, 3), iOS (11, 3), NoWatch]
+		[NoWatch]
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("detectedBarcodeDescriptor", ArgumentSemantic.Copy)]
 		CIBarcodeDescriptor DetectedBarcodeDescriptor { get; }
@@ -6026,18 +6025,18 @@ namespace Foundation {
 		// From NSUserActivity (CLSDeepLinks)
 
 		[Introduced (PlatformName.MacCatalyst, 14, 0)]
-		[NoWatch, NoTV, Mac (11, 0), iOS (11, 4)]
+		[NoWatch, NoTV]
 		[Export ("isClassKitDeepLink")]
 		bool IsClassKitDeepLink { get; }
 
 		[Introduced (PlatformName.MacCatalyst, 14, 0)]
-		[NoWatch, NoTV, Mac (11, 0), iOS (11, 4)]
+		[NoWatch, NoTV]
 		[NullAllowed, Export ("contextIdentifierPath", ArgumentSemantic.Strong)]
 		string [] ContextIdentifierPath { get; }
 
 		// From NSUserActivity (IntentsAdditions)
 
-		[Watch (5, 0), NoTV, Mac (12, 0), iOS (12, 0)]
+		[Watch (5, 0), NoTV]
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("suggestedInvocationPhrase")]
 		string SuggestedInvocationPhrase {
@@ -6051,24 +6050,24 @@ namespace Foundation {
 			set;
 		}
 
-		[Watch (5, 0), NoTV, NoMac, iOS (12, 0)]
+		[Watch (5, 0), NoTV, NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("eligibleForPrediction")]
 		bool EligibleForPrediction { [Bind ("isEligibleForPrediction")] get; set; }
 
-		[Watch (5, 0), NoTV, iOS (12, 0)]
+		[Watch (5, 0), NoTV]
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("persistentIdentifier")]
 		string PersistentIdentifier { get; set; }
 
-		[Watch (5, 0), NoTV, iOS (12, 0)]
+		[Watch (5, 0), NoTV]
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Async]
 		[Export ("deleteSavedUserActivitiesWithPersistentIdentifiers:completionHandler:")]
 		void DeleteSavedUserActivities (string [] persistentIdentifiers, Action handler);
 
-		[Watch (5, 0), NoTV, iOS (12, 0)]
+		[Watch (5, 0), NoTV]
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Async]
@@ -6793,7 +6792,7 @@ namespace Foundation {
 		[Field ("NSURLVolumeSupportsAccessPermissionsKey")]
 		NSString VolumeSupportsAccessPermissionsKey { get; }
 
-		[Watch (7, 0), TV (14, 0), Mac (11, 0), iOS (14, 0)]
+		[Watch (7, 0), TV (14, 0), iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Field ("NSURLVolumeSupportsFileProtectionKey")]
 		NSString VolumeSupportsFileProtectionKey { get; }
@@ -6973,7 +6972,7 @@ namespace Foundation {
 		[Field ("NSURLUbiquitousItemContainerDisplayNameKey")]
 		NSString UbiquitousItemContainerDisplayNameKey { get; }
 
-		[Watch (7, 4), TV (14, 5), Mac (11, 3), iOS (14, 5)]
+		[Watch (7, 4), TV (14, 5), iOS (14, 5)]
 		[MacCatalyst (14, 5)]
 		[Field ("NSURLUbiquitousItemIsExcludedFromSyncKey")]
 		NSString UbiquitousItemIsExcludedFromSyncKey { get; }
@@ -7029,7 +7028,6 @@ namespace Foundation {
 		[Field ("NSURLIsApplicationKey")]
 		NSString IsApplicationKey { get; }
 
-		[Mac (11, 0)]
 		[MacCatalyst (13, 1)]
 		[Field ("NSURLFileProtectionKey")]
 		NSString FileProtectionKey { get; }
@@ -7060,7 +7058,6 @@ namespace Foundation {
 
 		[Watch (7, 0)]
 		[TV (14, 0)]
-		[Mac (11, 0)]
 		[iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Field ("NSURLContentTypeKey")]
@@ -7068,7 +7065,6 @@ namespace Foundation {
 
 		[Watch (7, 0)]
 		[TV (14, 0)]
-		[Mac (11, 0)]
 		[iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Field ("NSURLFileContentIdentifierKey")]
@@ -7076,7 +7072,6 @@ namespace Foundation {
 
 		[Watch (7, 0)]
 		[TV (14, 0)]
-		[Mac (11, 0)]
 		[iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Field ("NSURLIsPurgeableKey")]
@@ -7084,7 +7079,6 @@ namespace Foundation {
 
 		[Watch (7, 0)]
 		[TV (14, 0)]
-		[Mac (11, 0)]
 		[iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Field ("NSURLIsSparseKey")]
@@ -7092,7 +7086,6 @@ namespace Foundation {
 
 		[Watch (7, 0)]
 		[TV (14, 0)]
-		[Mac (11, 0)]
 		[iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Field ("NSURLMayHaveExtendedAttributesKey")]
@@ -7100,7 +7093,6 @@ namespace Foundation {
 
 		[Watch (7, 0)]
 		[TV (14, 0)]
-		[Mac (11, 0)]
 		[iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Field ("NSURLMayShareFileContentKey")]
@@ -8053,7 +8045,7 @@ namespace Foundation {
 		[Export ("priority")]
 		float Priority { get; set; } /* float, not CGFloat */
 
-		[Watch (7, 4), TV (14, 5), Mac (11, 3), iOS (14, 5)]
+		[Watch (7, 4), TV (14, 5), iOS (14, 5)]
 		[MacCatalyst (14, 5)]
 		[Export ("prefersIncrementalDelivery")]
 		bool PrefersIncrementalDelivery { get; set; }
@@ -8070,11 +8062,11 @@ namespace Foundation {
 		[Export ("countOfBytesClientExpectsToReceive")]
 		long CountOfBytesClientExpectsToReceive { get; set; }
 
-		[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+		[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 		[NullAllowed, Export ("delegate", ArgumentSemantic.Retain)]
 		NSObject WeakDelegate { get; set; }
 
-		[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+		[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 		[Wrap ("WeakDelegate")]
 		[NullAllowed]
 		INSUrlSessionTaskDelegate Delegate { get; set; }
@@ -8225,7 +8217,6 @@ namespace Foundation {
 		[Export ("discretionary")]
 		bool Discretionary { [Bind ("isDiscretionary")] get; set; }
 
-		[Mac (11, 0)]
 		[MacCatalyst (13, 1)]
 		[Export ("sessionSendsLaunchEvents")]
 		bool SessionSendsLaunchEvents { get; set; }
@@ -8354,7 +8345,6 @@ namespace Foundation {
 		[Export ("URLSession:didReceiveChallenge:completionHandler:")]
 		void DidReceiveChallenge (NSUrlSession session, NSUrlAuthenticationChallenge challenge, Action<NSUrlSessionAuthChallengeDisposition, NSUrlCredential> completionHandler);
 
-		[Mac (11, 0)]
 		[MacCatalyst (13, 1)]
 		[Export ("URLSessionDidFinishEventsForBackgroundURLSession:")]
 		void DidFinishEventsForBackgroundSession (NSUrlSession session);
@@ -8776,12 +8766,12 @@ namespace Foundation {
 		[Export ("HTTPShouldHandleCookies")]
 		bool ShouldHandleCookies { get; }
 
-		[Watch (7, 4), TV (14, 5), Mac (11, 3), iOS (14, 5)]
+		[Watch (7, 4), TV (14, 5), iOS (14, 5)]
 		[MacCatalyst (14, 5)]
 		[Export ("assumesHTTP3Capable")]
 		bool AssumesHttp3Capable { get; [NotImplemented] set; }
 
-		[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+		[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 		[Export ("attribution")]
 		NSURLRequestAttribution Attribution { get; }
 
@@ -8985,12 +8975,12 @@ namespace Foundation {
 		[Export ("allowsConstrainedNetworkAccess")]
 		bool AllowsConstrainedNetworkAccess { get; set; }
 
-		[Watch (7, 4), TV (14, 5), Mac (11, 3), iOS (14, 5)]
+		[Watch (7, 4), TV (14, 5), iOS (14, 5)]
 		[MacCatalyst (14, 5)]
 		[Export ("assumesHTTP3Capable")]
 		bool AssumesHttp3Capable { get; set; }
 
-		[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+		[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 		[Export ("attribution", ArgumentSemantic.Assign)]
 		NSURLRequestAttribution Attribution { get; set; }
 
@@ -11034,7 +11024,7 @@ namespace Foundation {
 		[Export ("setPreservationPriority:forTags:")]
 		void SetPreservationPriority (double priority, NSSet<NSString> tags);
 
-		[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+		[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 		[Export ("localizedAttributedStringForKey:value:table:")]
 		NSAttributedString GetLocalizedAttributedString (string key, [NullAllowed] string value, [NullAllowed] string tableName);
 
@@ -12359,13 +12349,13 @@ namespace Foundation {
 		[Field ("NSKeyedUnarchiveFromDataTransformerName")]
 		NSString KeyedUnarchiveFromDataTransformerName { get; }
 
-		[Watch (5, 0), TV (12, 0), iOS (12, 0)]
+		[Watch (5, 0)]
 		[MacCatalyst (13, 1)]
 		[Field ("NSSecureUnarchiveFromDataTransformerName")]
 		NSString SecureUnarchiveFromDataTransformerName { get; }
 	}
 
-	[Watch (5, 0), TV (12, 0), iOS (12, 0)]
+	[Watch (5, 0)]
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSValueTransformer))]
 	interface NSSecureUnarchiveFromDataTransformer {
@@ -13221,7 +13211,6 @@ namespace Foundation {
 		[Export ("lowPowerModeEnabled")]
 		bool LowPowerModeEnabled { [Bind ("isLowPowerModeEnabled")] get; }
 
-		[Mac (12, 0)]
 		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("NSProcessInfoPowerStateDidChangeNotification")]
@@ -13242,7 +13231,7 @@ namespace Foundation {
 		[Export ("macCatalystApp")]
 		bool IsMacCatalystApplication { [Bind ("isMacCatalystApp")] get; }
 
-		[Watch (7, 0), TV (14, 0), Mac (11, 0), iOS (14, 0)]
+		[Watch (7, 0), TV (14, 0), iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Export ("iOSAppOnMac")]
 		bool IsiOSApplicationOnMac { [Bind ("isiOSAppOnMac")] get; }
@@ -13433,7 +13422,7 @@ namespace Foundation {
 		[Field ("NSProgressFileOperationKindCopying")]
 		NSString FileOperationKindCopying { get; }
 
-		[Watch (7, 4), TV (14, 5), Mac (11, 3), iOS (14, 5)]
+		[Watch (7, 4), TV (14, 5), iOS (14, 5)]
 		[MacCatalyst (14, 5)]
 		[Field ("NSProgressFileOperationKindUploading")]
 		NSString FileOperationKindUploading { get; }
@@ -13447,7 +13436,7 @@ namespace Foundation {
 		[Field ("NSProgressFileCompletedCountKey")]
 		NSString FileCompletedCountKey { get; }
 
-		[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+		[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 		[Field ("NSProgressFileOperationKindDuplicating")]
 		NSString FileOperationKindDuplicatingKey { get; }
 
@@ -13713,31 +13702,26 @@ namespace Foundation {
 		[Field ("NSFileBusy")]
 		NSString Busy { get; }
 
-		[Mac (11, 0)]
 		[MacCatalyst (13, 1)]
 		[Field ("NSFileProtectionKey")]
 		NSString FileProtectionKey { get; }
 
 		[Obsolete ("Use the 'NSFileProtectionType' instead.")]
-		[Mac (11, 0)]
 		[MacCatalyst (13, 1)]
 		[Field ("NSFileProtectionNone")]
 		NSString FileProtectionNone { get; }
 
 		[Obsolete ("Use the 'NSFileProtectionType' instead.")]
-		[Mac (11, 0)]
 		[MacCatalyst (13, 1)]
 		[Field ("NSFileProtectionComplete")]
 		NSString FileProtectionComplete { get; }
 
 		[Obsolete ("Use the 'NSFileProtectionType' instead.")]
-		[Mac (11, 0)]
 		[MacCatalyst (13, 1)]
 		[Field ("NSFileProtectionCompleteUnlessOpen")]
 		NSString FileProtectionCompleteUnlessOpen { get; }
 
 		[Obsolete ("Use the 'NSFileProtectionType' instead.")]
-		[Mac (11, 0)]
 		[MacCatalyst (13, 1)]
 		[Field ("NSFileProtectionCompleteUntilFirstUserAuthentication")]
 		NSString FileProtectionCompleteUntilFirstUserAuthentication { get; }
@@ -16319,7 +16303,7 @@ namespace Foundation {
 		[Export ("multipath")]
 		bool Multipath { [Bind ("isMultipath")] get; }
 
-		[Watch (7, 0), TV (14, 0), Mac (11, 0), iOS (14, 0)]
+		[Watch (7, 0), TV (14, 0), iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Export ("domainResolutionProtocol")]
 		NSUrlSessionTaskMetricsDomainResolutionProtocol DomainResolutionProtocol { get; }
@@ -17460,7 +17444,7 @@ namespace Foundation {
 		[Export ("synchronousRemoteObjectProxyWithErrorHandler:"), Internal]
 		IntPtr _CreateSynchronousRemoteObjectProxy ([BlockCallback] Action<NSError> errorHandler);
 
-		[Watch (7, 0), TV (14, 0), Mac (11, 0), iOS (14, 0)]
+		[Watch (7, 0), TV (14, 0), iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Export ("activate")]
 		void Activate ();
@@ -17512,7 +17496,7 @@ namespace Foundation {
 		[Export ("invalidate")]
 		void Invalidate ();
 
-		[Watch (7, 0), TV (14, 0), Mac (11, 0), iOS (14, 0)]
+		[Watch (7, 0), TV (14, 0), iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		[Export ("activate")]
 		void Activate ();
@@ -17964,7 +17948,7 @@ namespace Foundation {
 		bool ShouldDefer { get; }
 	}
 
-	[Watch (7, 0), TV (14, 0), Mac (11, 0), iOS (14, 0)]
+	[Watch (7, 0), TV (14, 0), iOS (14, 0)]
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum NSUrlSessionTaskMetricsDomainResolutionProtocol : long {
@@ -18009,7 +17993,7 @@ namespace Foundation {
 		WithoutUI = 1 << 1,
 	}
 
-	[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+	[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface NSPresentationIntent : NSCopying, NSSecureCoding {
@@ -18098,7 +18082,7 @@ namespace Foundation {
 		bool IsEquivalent (NSPresentationIntent other);
 	}
 
-	[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+	[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 	[BaseType (typeof (NSObject))]
 	interface NSAttributedStringMarkdownParsingOptions : NSCopying {
 		[Export ("allowsExtendedAttributes")]
@@ -18119,7 +18103,7 @@ namespace Foundation {
 		bool AppliesSourcePositionAttributes { get; set; }
 	}
 
-	[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+	[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface NSInflectionRule : NSCopying, NSSecureCoding {
@@ -18127,20 +18111,20 @@ namespace Foundation {
 		[Export ("automaticRule")]
 		NSInflectionRule AutomaticRule { get; }
 
-		[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0)]
+		[Watch (8, 0), TV (15, 0), iOS (15, 0)]
 		[MacCatalyst (15, 0)]
 		[Static]
 		[Export ("canInflectLanguage:")]
 		bool CanInflectLanguage (string language);
 
-		[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0)]
+		[Watch (8, 0), TV (15, 0), iOS (15, 0)]
 		[MacCatalyst (15, 0)]
 		[Static]
 		[Export ("canInflectPreferredLocalization")]
 		bool CanInflectPreferredLocalization { get; }
 	}
 
-	[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+	[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 	[BaseType (typeof (NSInflectionRule))]
 	interface NSInflectionRuleExplicit {
 		[Export ("initWithMorphology:")]
@@ -18151,7 +18135,7 @@ namespace Foundation {
 		NSMorphology Morphology { get; }
 	}
 
-	[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+	[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 	[BaseType (typeof (NSObject))]
 	interface NSMorphology : NSCopying, NSSecureCoding {
 		[Export ("grammaticalGender", ArgumentSemantic.Assign)]
@@ -18213,7 +18197,7 @@ namespace Foundation {
 	[Obsoleted (PlatformName.MacCatalyst, 17, 0, message: "Use 'NSTermOfAddress' instead.")]
 	[Obsoleted (PlatformName.TvOS, 17, 0, message: "Use 'NSTermOfAddress' instead.")]
 	[Obsoleted (PlatformName.WatchOS, 10, 0, message: "Use 'NSTermOfAddress' instead.")]
-	[Watch (8, 0), TV (15, 0), Mac (12, 0), iOS (15, 0), MacCatalyst (15, 0)]
+	[Watch (8, 0), TV (15, 0), iOS (15, 0), MacCatalyst (15, 0)]
 	[BaseType (typeof (NSObject))]
 	interface NSMorphologyCustomPronoun : NSCopying, NSSecureCoding {
 		[Static]
@@ -18456,11 +18440,9 @@ namespace Foundation {
 		// NSTextLayoutSection[] TextLayout { get; set; }
 
 		[iOS (13, 0)]
-		[Mac (10, 15)]
 		NSTextScalingType TextScaling { get; set; }
 
 		[iOS (13, 0)]
-		[Mac (10, 15)]
 		NSTextScalingType SourceTextScaling { get; set; }
 
 		[iOS (13, 0)]

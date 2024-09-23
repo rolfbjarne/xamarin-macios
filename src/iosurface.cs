@@ -24,7 +24,10 @@ namespace IOSurface {
 	// See bug #59201 
 	[MacCatalyst (13, 1)]
 	interface IOSurfacePropertyKey {
-		[iOS (12, 0), TV (12, 0)]
+		[Internal]
+		[Field ("IOSurfacePropertyAllocSizeKey")]
+		NSString _DeprecatedAllocSizeKey { get; }
+
 		[MacCatalyst (13, 1)]
 		[Field ("IOSurfacePropertyKeyAllocSize")]
 		NSString AllocSizeKey { get; }

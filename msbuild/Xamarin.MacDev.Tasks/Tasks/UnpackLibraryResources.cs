@@ -296,7 +296,7 @@ namespace Xamarin.MacDev.Tasks {
 					Log.LogMessage ($"    Unpacked (contentType: {contentType} resourceType: {resourceType} md5: {md5Hash} length: {bytes.Length}): {path}");
 					if (Path.GetFileName (path) == "Main.storyboard") {
 						var txt = File.ReadAllText (path);
-						File.WriteAllText (filename, txt.Replace ("\r", ""));
+						File.WriteAllText (path, txt.Replace ("\r", ""));
 						// File.WriteAllText (path, txt.Replace ("\n", "\r\n"));
 						Log.LogMessage (txt);
 						Log.LogMessage (string.Join (" ", bytes.Select (v => $"{v:x2}")));

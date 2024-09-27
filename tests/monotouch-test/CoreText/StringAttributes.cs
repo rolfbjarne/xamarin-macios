@@ -28,9 +28,6 @@ namespace MonoTouchFixtures.CoreText {
 		[Test]
 		public void SimpleValuesSet ()
 		{
-			if (TestRuntime.CheckXcodeVersion (15, 0))
-				Assert.Ignore ("Test timeouts on Xcode 15 beta 4: https://github.com/xamarin/xamarin-macios/issues/18656");
-
 			var sa = new CTStringAttributes ();
 			sa.ForegroundColor = UIColor.Blue.CGColor;
 			sa.Font = new CTFont ("Georgia-BoldItalic", 24);
@@ -50,10 +47,8 @@ namespace MonoTouchFixtures.CoreText {
 				sa.TrackingAdjustment = 1.0f;
 
 			AdaptiveImageProvider? provider = null;
-#if NET
 			if (TestRuntime.CheckXcodeVersion (16, 0))
 				sa.AdaptiveImageProvider = provider = new AdaptiveImageProvider ();
-#endif
 
 			var size = new CGSize (300, 300);
 			UIGraphics.BeginImageContext (size);
@@ -67,7 +62,6 @@ namespace MonoTouchFixtures.CoreText {
 				textLine.Draw (gctx);
 			}
 
-#if NET
 			if (TestRuntime.CheckXcodeVersion (16, 0))
 				Assert.AreEqual (0, provider!.Count, "AdaptiveImageProvider #0");
 
@@ -78,7 +72,6 @@ namespace MonoTouchFixtures.CoreText {
 
 			if (TestRuntime.CheckXcodeVersion (16, 0))
 				Assert.AreEqual (1, provider!.Count, "AdaptiveImageProvider #1");
-#endif
 
 			UIGraphics.EndImageContext ();
 		}

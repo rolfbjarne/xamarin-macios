@@ -367,7 +367,12 @@ namespace Xamarin.MacDev.Tasks {
 			return true;
 		}
 
-		public bool ShouldCreateOutputFile (ITaskItem item) => UnpackedResources.Contains (item) == true;
+		public bool ShouldCreateOutputFile (ITaskItem item)
+		{
+			// Incremental builds are handled with stamp files in the .targets file, so there's no need to
+			// create any output files on Windows.
+			return false;
+		}
 
 		public IEnumerable<ITaskItem> GetAdditionalItemsToBeCopied () => ItemsFiles;
 

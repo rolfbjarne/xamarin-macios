@@ -446,7 +446,7 @@ namespace Xamarin.Tests {
 				} else {
 					var entries = Directory.GetFileSystemEntries (HotRestartOutputDir, "*", SearchOption.AllDirectories);
 					Console.WriteLine ($"    HotRestartOutputDir: {HotRestartOutputDir} ({entries}):");
-					foreach (var e in entries.OrderBy (v => v))						Console.WriteLine ($"        {e}");
+					foreach (var e in entries.OrderBy (v => v)) Console.WriteLine ($"        {e}");
 				}
 			} else {
 				Console.WriteLine ($"    HotRestartOutputDir: {HotRestartOutputDir} (not set)");
@@ -458,7 +458,7 @@ namespace Xamarin.Tests {
 				} else {
 					var entries = Directory.GetFileSystemEntries (HotRestartAppBundlePath, "*", SearchOption.AllDirectories);
 					Console.WriteLine ($"    HotRestartAppBundlePath: {HotRestartAppBundlePath} ({entries}):");
-					foreach (var e in entries.OrderBy (v => v))						Console.WriteLine ($"        {e}");
+					foreach (var e in entries.OrderBy (v => v)) Console.WriteLine ($"        {e}");
 				}
 			} else {
 				Console.WriteLine ($"    HotRestartAppBundlePath: {HotRestartAppBundlePath} (not set)");

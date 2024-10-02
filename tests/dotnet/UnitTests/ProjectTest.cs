@@ -783,15 +783,24 @@ namespace Xamarin.Tests {
 		}
 
 		[Category ("Windows")]
-		[TestCase (ApplePlatform.iOS, true)]
-		[TestCase (ApplePlatform.TVOS, true)]
-		[TestCase (ApplePlatform.MacCatalyst, true)]
-		[TestCase (ApplePlatform.MacOSX, true)]
-		public void LibraryWithResourcesOnWindows (ApplePlatform platform, bool? bundleOriginalResources)
+		[TestCase (ApplePlatform.iOS)]
+		public void LibraryWithResourcesOnWindows (ApplePlatform platform)
 		{
 			Configuration.IgnoreIfNotOnWindows ();
 
 			// This should all execute locally on Windows when BundleOriginalResources=true
+			LibraryWithResources (platform, true);
+		}
+
+
+		[Category ("RemoteWindows")]
+		[TestCase (ApplePlatform.iOS, true)]
+		[TestCase (ApplePlatform.iOS, false)]
+		public void LibraryWithResourcesOnRemoteWindows (ApplePlatform platform, bool? bundleOriginalResources)
+		{
+			Configuration.IgnoreIfNotOnWindows ();
+
+			// This should all execute locally on Windows when BundleOriginalResources=true, but either should work
 			LibraryWithResources (platform, bundleOriginalResources);
 		}
 
@@ -827,9 +836,12 @@ namespace Xamarin.Tests {
 			if (actualBundleOriginalResources) {
 				Assert.That (allTargets, Does.Not.Contain ("_CompileAppManifest"), "Didn't execute '_CompileAppManifest'");
 				Assert.That (allTargets, Does.Not.Contain ("_DetectSdkLocations"), "Didn't execute '_DetectSdkLocations'");
+				Assert.That (allTargets, Does.Not.Contain ("_SayHello"), "Didn't execute '_SayHello'");
 			} else {
 				Assert.That (allTargets, Does.Contain ("_CompileAppManifest"), "Did execute '_CompileAppManifest'");
 				Assert.That (allTargets, Does.Contain ("_DetectSdkLocations"), "Did execute '_DetectSdkLocations'");
+				if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform (System.Runtime.InteropServices.OSPlatform.Windows))
+					Assert.That (allTargets, Does.Contain ("_SayHello"), "Did execute '_SayHello'");
 			}
 
 			var lines = BinLog.PrintToLines (rv.BinLogPath);
@@ -937,21 +949,31 @@ namespace Xamarin.Tests {
 		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64", false)]
 		public void AppWithLibraryWithResourcesReference (ApplePlatform platform, string runtimeIdentifiers, bool bundleOriginalResources)
 		{
-			AppWithLibraryWithResourcesReferenceImpl (platform, runtimeIdentifiers, bundleOriginalResources, false);
+			AppWithLibraryWithResourcesReferenceImpl (platform, runtimeIdentifiers, bundleOriginalResources, false, false);
 		}
 
 
 		[Category ("RemoteWindows")]
 		[TestCase (ApplePlatform.iOS, "ios-arm64", false)]
 		[TestCase (ApplePlatform.iOS, "ios-arm64", true)]
-		public void AppWithLibraryWithResourcesReferenceOnWindows (ApplePlatform platform, string runtimeIdentifiers, bool bundleOriginalResources)
+		public void AppWithLibraryWithResourcesReferenceOnRemoteWindows (ApplePlatform platform, string runtimeIdentifiers, bool bundleOriginalResources)
 		{
 			Configuration.IgnoreIfNotOnWindows ();
 
-			AppWithLibraryWithResourcesReferenceImpl (platform, runtimeIdentifiers, bundleOriginalResources, true);
+			AppWithLibraryWithResourcesReferenceImpl (platform, runtimeIdentifiers, bundleOriginalResources, true, false);
 		}
 
-		void AppWithLibraryWithResourcesReferenceImpl (ApplePlatform platform, string runtimeIdentifiers, bool bundleOriginalResources, bool remoteWindows)
+		[Category ("Windows")]
+		[TestCase (ApplePlatform.iOS, "ios-arm64", false)]
+		[TestCase (ApplePlatform.iOS, "ios-arm64", true)]
+		public void AppWithLibraryWithResourcesReferenceWithHotRestart (ApplePlatform platform, string runtimeIdentifiers, bool bundleOriginalResources)
+		{
+			Configuration.IgnoreIfNotOnWindows ();
+
+			AppWithLibraryWithResourcesReferenceImpl (platform, runtimeIdentifiers, bundleOriginalResources, false, isUsingHotRestart: true);
+		}
+
+		void AppWithLibraryWithResourcesReferenceImpl (ApplePlatform platform, string runtimeIdentifiers, bool bundleOriginalResources, bool remoteWindows, bool isUsingHotRestart)
 		{
 			var project = "AppWithLibraryWithResourcesReference";
 			var config = bundleOriginalResources ? "DebugOriginal" : "DebugCompiled";
@@ -972,17 +994,23 @@ namespace Xamarin.Tests {
 				properties ["CopyAppBundleToWindows"] = "true";
 			}
 
+			string? tmpdir;
+			string? hotRestartOutputDir = null;
+			string? hotRestartAppBundlePath = null;
+			if (isUsingHotRestart) {
+				tmpdir = Cache.CreateTemporaryDirectory ();
+				AddHotRestartProperties (properties, tmpdir, out hotRestartOutputDir, out hotRestartAppBundlePath);
+			}
+
 			var rv = DotNet.AssertBuild (project_path, properties);
 
 			var appExecutable = GetNativeExecutable (platform, appPath);
 			ExecuteWithMagicWordAndAssert (platform, runtimeIdentifiers, appExecutable);
 
-			var appBundleInfo = new AppBundleInfo (platform, appPath, remoteWindows, runtimeIdentifiers, config);
+			var appBundleInfo = new AppBundleInfo (platform, appPath, remoteWindows, runtimeIdentifiers, config, isUsingHotRestart, hotRestartOutputDir, hotRestartAppBundlePath);
 			var appBundleContents = appBundleInfo.GetAppBundleFiles ().ToHashSet ();
 
-			Console.WriteLine ($"App bundle contents:");
-			foreach (var abc in appBundleContents.OrderBy (v => v))
-				Console.WriteLine ($"    {abc}");
+			appBundleInfo.DumpAppBundleContents ();
 
 			Assert.Multiple (() => {
 				var resourcesDirectory = GetResourcesDirectory (platform, "");

@@ -230,7 +230,6 @@ namespace Xharness {
 		public string MAC_DESTDIR { get; }
 		public string IOS_DESTDIR { get; }
 		public string MONO_IOS_SDK_DESTDIR { get; }
-		public string MONO_MAC_SDK_DESTDIR { get; }
 		public bool ENABLE_DOTNET { get; }
 		public bool INCLUDE_XAMARIN_LEGACY { get; }
 		public string SYSTEM_MONO { get; set; }
@@ -307,7 +306,6 @@ namespace Xharness {
 			MAC_DESTDIR = GetVariable (nameof (MAC_DESTDIR));
 			IOS_DESTDIR = GetVariable (nameof (IOS_DESTDIR));
 			MONO_IOS_SDK_DESTDIR = GetVariable (nameof (MONO_IOS_SDK_DESTDIR));
-			MONO_MAC_SDK_DESTDIR = GetVariable (nameof (MONO_MAC_SDK_DESTDIR));
 			ENABLE_DOTNET = IsVariableSet (nameof (ENABLE_DOTNET));
 			SYSTEM_MONO = GetVariable (nameof (SYSTEM_MONO));
 			DOTNET_DIR = GetVariable (nameof (DOTNET_DIR));
@@ -495,22 +493,6 @@ namespace Xharness {
 				});
 			}
 
-			var monoNativeInfo = new MonoNativeInfo (DevicePlatform.macOS, RootDirectory, Log);
-			var macTestProject = new MacTestProject (TestLabel.Mononative, monoNativeInfo.ProjectPath, targetFrameworkFlavor: MacFlavors.Modern | MacFlavors.Full) {
-				MonoNativeInfo = monoNativeInfo,
-				Name = monoNativeInfo.ProjectName,
-				Platform = "AnyCPU",
-				Ignore = !INCLUDE_XAMARIN_LEGACY,
-
-			};
-			MacTestProjects.Add (macTestProject);
-
-
-			// Generate test projects from templates (mono-native templates)
-			if (generate_projects) {
-				foreach (var mtp in MacTestProjects.Where (x => x.MonoNativeInfo is not null).Select (x => x.MonoNativeInfo))
-					mtp.Convert ();
-			}
 
 			// All test projects should be either Modern projects or NUnit/console executables at this point.
 			// If we need to generate Full/System variations, we do that here.
@@ -613,13 +595,6 @@ namespace Xharness {
 				Configurations = new string [] { "Debug", "Release" },
 			});
 
-			var monoNativeInfo = new MonoNativeInfo (DevicePlatform.iOS, RootDirectory, Log);
-			var iosTestProject = new iOSTestProject (TestLabel.Mononative, monoNativeInfo.ProjectPath) {
-				MonoNativeInfo = monoNativeInfo,
-				Name = monoNativeInfo.ProjectName,
-			};
-			IOSTestProjects.Add (iosTestProject);
-
 			// add all the tests that are using the precompiled mono assemblies
 			WatchOSContainerTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "templates/WatchContainer"));
 			WatchOSAppTemplate = Path.GetFullPath (Path.Combine (RootDirectory, "templates/WatchApp"));
@@ -690,8 +665,6 @@ namespace Xharness {
 		//     * dont link, link all, link sdk
 		// * Each of these test projects can used to generate other platform variations (tvOS, watchOS, macOS full, etc),
 		//   if the the TestProject.GenerateVariations property is true.
-		// * For the mono-native template project, we generate a compat+unified version of the mono-native template project (in MonoNativeInfo.Convert).
-		//   GenerateVariations is true for mono-native projects, which means we'll generate platform variations.
 
 		int ConfigureIOS ()
 		{
@@ -703,9 +676,6 @@ namespace Xharness {
 
 			if (autoConf)
 				AutoConfigureIOS ();
-
-			foreach (var monoNativeInfo in IOSTestProjects.Where (x => x.MonoNativeInfo is not null).Select (x => x.MonoNativeInfo))
-				monoNativeInfo.Convert ();
 
 			foreach (var proj in IOSTestProjects.Where ((v) => v.GenerateVariations)) {
 				var file = proj.Path;

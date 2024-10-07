@@ -144,7 +144,7 @@ namespace CoreGraphics {
 
 		[SupportedOSPlatform ("ios14.0")]
 		[SupportedOSPlatform ("tvos14.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst14.0")]
 		[SupportedOSPlatform ("macos")]
 		static IntPtr Create (CGConstantColor color)
 		{

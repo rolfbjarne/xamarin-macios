@@ -193,6 +193,10 @@ namespace CoreVideo {
 		}
 
 #if !__MACCATALYST__
+		[UnsupportedOSPlatform ("macos")]
+		[UnsupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
 		public bool? OpenGLESCompatibility {
 			set {
 				SetBooleanValue (CVPixelBuffer.OpenGLESCompatibilityKey, value);

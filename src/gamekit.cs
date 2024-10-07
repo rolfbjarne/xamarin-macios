@@ -624,14 +624,6 @@ namespace GameKit {
 	[Deprecated (PlatformName.MacCatalyst, 14, 0, message: "Use 'GKLeaderboardEntry' instead.")]
 	[BaseType (typeof (NSObject))]
 	interface GKScore : NSSecureCoding {
-		[Deprecated (PlatformName.iOS, 7, 0, message: "Use 'InitWithLeaderboardIdentifier' instead.")]
-		[Deprecated (PlatformName.MacOSX, 10, 10, message: "Use 'InitWithLeaderboardIdentifier' instead.")]
-		[MacCatalyst (13, 1)]
-		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'InitWithLeaderboardIdentifier' instead.")]
-		[Internal]
-		[Export ("initWithCategory:")]
-		IntPtr InitWithCategory ([NullAllowed] string category);
-
 		[MacCatalyst (13, 1)]
 		[Export ("initWithLeaderboardIdentifier:player:")]
 		NativeHandle Constructor (string identifier, GKPlayer player);
@@ -643,7 +635,6 @@ namespace GameKit {
 		NativeHandle Constructor (string identifier, string playerID);
 
 		[MacCatalyst (13, 1)]
-		[Internal]
 		[Export ("initWithLeaderboardIdentifier:")]
 		IntPtr InitWithLeaderboardIdentifier (string identifier);
 

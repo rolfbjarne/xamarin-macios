@@ -966,7 +966,6 @@ GAMEKIT_SOURCES = \
 	GameKit/GKLocalPlayerListener.cs \
 	GameKit/GameKit2.cs \
 	GameKit/GKCompat.cs \
-	GameKit/GKScore.cs \
 
 # GameplayKit
 
@@ -1110,7 +1109,6 @@ IOSURFACE_CORE_SOURCES = \
 
 IOSURFACE_SOURCES = \
 	IOSurface/IOSurface.cs \
-	IOSurface/IOSurfacePropertyKey.cs \
 
 # itunesLibrary
 

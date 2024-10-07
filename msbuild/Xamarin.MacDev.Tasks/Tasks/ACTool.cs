@@ -163,7 +163,7 @@ namespace Xamarin.MacDev.Tasks {
 
 			foreach (var alternate in AlternateAppIcons) {
 				args.Add ("--alternate-app-icon");
-				args.Add (alternate.ItemSpec!)
+				args.Add (alternate.ItemSpec!);
 			}
 		}
 

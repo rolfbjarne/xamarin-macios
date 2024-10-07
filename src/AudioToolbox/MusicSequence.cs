@@ -136,6 +136,14 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicSequenceGetAUGraph (/* MusicSequence */ IntPtr inSequence, /* AUGraph* */ IntPtr* outGraph);
 
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[ObsoletedOSPlatform ("tvos14.0", "Use 'AVAudioEngine' instead.")]
+		[ObsoletedOSPlatform ("macos11.0", "Use 'AVAudioEngine' instead.")]
+		[ObsoletedOSPlatform ("ios14.0", "Use 'AVAudioEngine' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst14.0", "Use 'AVAudioEngine' instead.")]
 		public AUGraph? AUGraph {
 			get {
 				IntPtr h;

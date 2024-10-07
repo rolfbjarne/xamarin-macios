@@ -20,6 +20,8 @@ namespace Xamarin.MacDev.Tasks {
 
 		public string AccentColor { get; set; } = string.Empty;
 
+		public ITaskItem [] AlternateAppIcons { get; set; } = Array.Empty<ITaskItem> ();
+
 		public string DeviceModel { get; set; } = string.Empty;
 
 		public string DeviceOSVersion { get; set; } = string.Empty;
@@ -28,6 +30,8 @@ namespace Xamarin.MacDev.Tasks {
 
 		[Required]
 		public ITaskItem [] ImageAssets { get; set; } = Array.Empty<ITaskItem> ();
+
+		public bool IncludeAllAppIcons { get; set; }
 
 		public bool IsWatchApp { get; set; }
 
@@ -153,6 +157,14 @@ namespace Xamarin.MacDev.Tasks {
 
 			if (platform is not null)
 				args.Add ("--platform", platform);
+
+			if (IncludeAllAppIcons)
+				args.Add ("--include-all-app-icons");
+
+			foreach (var alternate in AlternateAppIcons) {
+				args.Add ("--alternate-app-icon");
+				args.Add (alternate.ItemSpec!)
+			}
 		}
 
 		IEnumerable<ITaskItem> GetCompiledBundleResources (PDictionary output, string intermediateBundleDir)

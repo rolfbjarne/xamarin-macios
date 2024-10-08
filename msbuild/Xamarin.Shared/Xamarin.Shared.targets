@@ -897,6 +897,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			ToolPath="$(ACToolPath)"
 			AccentColor="$(AccentColor)"
 			AlternateAppIcons="@(AlternateAppIcon)"
+			AppIcon="$(AppIcon)"
 			BundleIdentifier="$(_BundleIdentifier)"
 			CLKComplicationGroup="$(_CLKComplicationGroup)"
 			DeviceModel="$(TargetDeviceModel)"

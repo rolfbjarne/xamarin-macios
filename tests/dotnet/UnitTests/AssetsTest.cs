@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 
 #nullable enable
@@ -5,35 +6,33 @@ using System.Text.Json;
 namespace Xamarin.Tests {
 
 	// Add the XCAssets before the build
-	[TestFixture (ApplePlatform.iOS, "iossimulator-x64", "iphonesimulator", true)]
-	[TestFixture (ApplePlatform.iOS, "ios-arm64;ios-arm", "iphoneos", true)]
-	[TestFixture (ApplePlatform.TVOS, "tvossimulator-x64", "appletvsimulator", true)]
-	[TestFixture (ApplePlatform.MacCatalyst, "maccatalyst-x64", "macosx", true)]
-	[TestFixture (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64", "macosx", true)]
-	[TestFixture (ApplePlatform.MacOSX, "osx-x64", "macosx", true)]
-	[TestFixture (ApplePlatform.MacOSX, "osx-arm64;osx-x64", "macosx", true)] // https://github.com/xamarin/xamarin-macios/issues/12410
+	[TestFixture (ApplePlatform.iOS, "iossimulator-x64", true)]
+	[TestFixture (ApplePlatform.iOS, "ios-arm64", true)]
+	[TestFixture (ApplePlatform.TVOS, "tvossimulator-x64", true)]
+	[TestFixture (ApplePlatform.MacCatalyst, "maccatalyst-x64", true)]
+	[TestFixture (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64", true)]
+	[TestFixture (ApplePlatform.MacOSX, "osx-x64", true)]
+	[TestFixture (ApplePlatform.MacOSX, "osx-arm64;osx-x64", true)] // https://github.com/xamarin/xamarin-macios/issues/12410
 																			  // Build, add the XCAssets, then build again
-	[TestFixture (ApplePlatform.iOS, "iossimulator-x64", "iphonesimulator", false)]
-	[TestFixture (ApplePlatform.iOS, "ios-arm64;ios-arm", "iphoneos", false)]
-	[TestFixture (ApplePlatform.TVOS, "tvossimulator-x64", "appletvsimulator", false)]
-	[TestFixture (ApplePlatform.MacCatalyst, "maccatalyst-x64", "macosx", false)]
-	[TestFixture (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64", "macosx", false)]
-	[TestFixture (ApplePlatform.MacOSX, "osx-x64", "macosx", false)]
-	[TestFixture (ApplePlatform.MacOSX, "osx-arm64;osx-x64", "macosx", false)] // https://github.com/xamarin/xamarin-macios/issues/12410
+	[TestFixture (ApplePlatform.iOS, "iossimulator-x64", false)]
+	[TestFixture (ApplePlatform.iOS, "ios-arm64", false)]
+	[TestFixture (ApplePlatform.TVOS, "tvossimulator-x64", false)]
+	[TestFixture (ApplePlatform.MacCatalyst, "maccatalyst-x64", false)]
+	[TestFixture (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64", false)]
+	[TestFixture (ApplePlatform.MacOSX, "osx-x64", false)]
+	[TestFixture (ApplePlatform.MacOSX, "osx-arm64;osx-x64", false)] // https://github.com/xamarin/xamarin-macios/issues/12410
 	public class AssetsTest : TestBaseClass {
 
 		readonly ApplePlatform platform;
 		readonly string runtimeIdentifiers;
-		readonly string sdkVersion;
 		readonly bool isStartingWithAssets;
 		string projectPath = string.Empty;
 		string appPath = string.Empty;
 
-		public AssetsTest (ApplePlatform platform, string runtimeIdentifiers, string sdkVersion, bool isStartingWithAssets)
+		public AssetsTest (ApplePlatform platform, string runtimeIdentifiers, bool isStartingWithAssets)
 		{
 			this.platform = platform;
 			this.runtimeIdentifiers = runtimeIdentifiers;
-			this.sdkVersion = sdkVersion;
 			this.isStartingWithAssets = isStartingWithAssets;
 		}
 
@@ -64,20 +63,19 @@ namespace Xamarin.Tests {
 			var assetsCar = Path.Combine (resourcesDirectory, "Assets.car");
 			Assert.That (assetsCar, Does.Exist, "Assets.car");
 
-			var doc = ProcessAssets (assetsCar, GetFullSdkVersion ());
+			var doc = ProcessAssets (assetsCar, AppIconTest.GetFullSdkVersion (platform, runtimeIdentifiers));
 			Assert.IsNotNull (doc, "There was an issue processing the asset binary.");
 
 			var foundAssets = FindAssets (doc);
 
 			// Seems the 2 vectors are not being consumed in MacCatalyst but they still appear in the image Datasets
 			var expectedAssets = platform == ApplePlatform.MacCatalyst ? ExpectedAssetsMacCatalyst : ExpectedAssets;
-			Assert.AreEqual (expectedAssets, foundAssets, "Incorrect assets");
+			CollectionAssert.AreEquivalent (expectedAssets, foundAssets, "Incorrect assets");
+			// Assert.AreEqual (expectedAssets, foundAssets, "Incorrect assets");
 
 			var arm64txt = Path.Combine (resourcesDirectory, "arm64.txt");
-			var armtxt = Path.Combine (resourcesDirectory, "arm.txt");
 			var x64txt = Path.Combine (resourcesDirectory, "x64.txt");
 			Assert.AreEqual (runtimeIdentifiers.Split (';').Any (v => v.EndsWith ("-arm64")), File.Exists (arm64txt), "arm64.txt");
-			Assert.AreEqual (runtimeIdentifiers.Split (';').Any (v => v.EndsWith ("-arm")), File.Exists (armtxt), "arm.txt");
 			Assert.AreEqual (runtimeIdentifiers.Split (';').Any (v => v.EndsWith ("-x64")), File.Exists (x64txt), "x64.txt");
 		}
 
@@ -124,14 +122,6 @@ namespace Xamarin.Tests {
 			Assert.AreEqual (0, rv.ExitCode, $"Creating Symlink Error: {rv.StandardError}. Unexpected ExitCode");
 		}
 
-		string GetFullSdkVersion () => sdkVersion switch {
-			"iphonesimulator" => sdkVersion + Configuration.sdk_version,
-			"iphoneos" => sdkVersion + Configuration.sdk_version,
-			"appletvsimulator" => sdkVersion + Configuration.tvos_sdk_version,
-			"macosx" => sdkVersion + Configuration.macos_sdk_version,
-			_ => throw new ArgumentOutOfRangeException (nameof (sdkVersion), $"Not expected sdkVersion: {sdkVersion}"),
-		};
-
 		// msbuild will only update the assets if they are newer than the outputs from previous build
 		// so we will touch the first (non-DS_Store) file the symlink points to in order to give them newer modified times
 		void ProcessUpdateSymlink (string xcassetsDir)
@@ -148,19 +138,17 @@ namespace Xamarin.Tests {
 			Assert.AreEqual (0, rv.ExitCode, $"Processing Update Symlink Error: {rv.StandardError}. Unexpected ExitCode");
 		}
 
-		JsonDocument ProcessAssets (string assetsPath, string sdkVersion)
+		public static JsonDocument ProcessAssets (string assetsPath, string sdkVersion)
 		{
 			var output = new StringBuilder ();
 			var stderr = new StringBuilder ();
 			var executable = "xcrun";
-			var arguments = new string [] { "--sdk", sdkVersion, "assetutil", "--info", assetsPath };
+			var tmpdir = Cache.CreateTemporaryDirectory ();
+			var tmpfile = Path.Combine (tmpdir, "Assets.json");
+			var arguments = new string [] { "--sdk", sdkVersion, "assetutil", "--info", assetsPath, "-o", tmpfile };
 			var rv = Execution.RunWithStringBuildersAsync (executable, arguments, standardOutput: output, standardError: stderr, timeout: TimeSpan.FromSeconds (120)).Result;
 			Assert.AreEqual (0, rv.ExitCode, $"Processing Assets Error: {stderr}. Unexpected ExitCode");
-			var s = output.ToString ();
-
-			// This Execution call produces an output with an objc warning. We just want the json below it.
-			if (s.StartsWith ("objc", StringComparison.Ordinal))
-				s = s.Substring (s.IndexOf (Environment.NewLine) + 1);
+			var s = File.ReadAllText (tmpfile);
 
 			try {
 				return JsonDocument.Parse (s);
@@ -174,7 +162,7 @@ namespace Xamarin.Tests {
 			}
 		}
 
-		HashSet<string> FindAssets (JsonDocument doc)
+		public static HashSet<string> FindAssets (JsonDocument doc)
 		{
 			var jsonArray = doc.RootElement.EnumerateArray ();
 			var foundElements = new HashSet<string> ();
@@ -187,47 +175,58 @@ namespace Xamarin.Tests {
 			return foundElements;
 		}
 
-		string? GetTarget (JsonElement item)
+		static string? GetTarget (JsonElement item)
 		{
-			if (item.TryGetProperty ("AssetType", out var assetType)) {
+			if (item.TryGetProperty ("SchemaVersion", out var schemaVersion)) {
+				Assert.AreEqual ("2", schemaVersion.ToString (), "Verify SchemaVersion");
+			} else if (item.TryGetProperty ("AssetType", out var assetType)) {
 				foreach (var target in XCAssetTargets) {
-					var result = GetTarget (item, assetType, target);
-					if (result is not null)
+					if (TryGetTarget (item, assetType, target, out var result))
 						return result;
 				}
+				Assert.Fail ($"Unable to match asset type '{assetType}' for {item}'");
+			} else {
+				Assert.Fail ($"Unable to get property 'AssetType' for {item}");
 			}
 			return null;
 		}
 
-		string? GetTarget (JsonElement item, JsonElement assetType, XCAssetTarget target)
+		static bool TryGetTarget (JsonElement item, JsonElement assetType, XCAssetTarget target, [NotNullWhen (true)] out string? result)
 		{
+			result = null;
 			if (assetType.ToString () == target.AssetType && item.TryGetProperty (target.CategoryName, out var value)) {
-				if (target.Values.Contains (value.ToString ()))
-					return string.Concat (assetType.ToString (), ".", value.ToString ());
+				// if (target.Values.Contains (value.ToString ()))
+				result = string.Concat (assetType.ToString (), ":", value.ToString ());
+				return true;
 			}
-			return null;
+			return false;
 		}
 
 		static readonly HashSet<string> ExpectedAssetsMacCatalyst = new HashSet<string> () {
-			"Color.ColorTest",
-			"Contents.SpritesTest",
-			"Data.BmpImageDataTest",
-			"Data.DngImageDataTest",
-			"Data.EpsImageDataTest",
-			"Data.JsonDataTest",
-			"Data.TiffImageDataTest",
-			"Image.samplejpeg.jpeg",
-			"Image.samplejpg.jpg",
-			"Image.samplepdf.pdf",
-			"Image.samplepng2.png",
-			"Image.spritejpeg.jpeg",
-			"Image.xamlogo.svg",
-			"Texture Rendition.TextureTest",
+			"Color:ColorTest",
+			"Contents:SpritesTest",
+			"Data:BmpImageDataTest",
+			"Data:DngImageDataTest",
+			"Data:EpsImageDataTest",
+			"Data:JsonDataTest",
+			"Data:TiffImageDataTest",
+			"Image:Icon16.png",
+			"Image:Icon32.png",
+			"Image:Icon64.png",
+			"Image:samplejpeg.jpeg",
+			"Image:samplejpg.jpg",
+			"Image:samplepdf.pdf",
+			"Image:samplepng.png",
+			"Image:samplepng2.png",
+			"Image:spritejpeg.jpeg",
+			"Image:xamlogo.svg",
+			"PackedImage:ZZZZExplicitlyPackedAsset-1.0.0-gamut0",
+			"Texture Rendition:TextureTest",
 		};
 
 		static readonly HashSet<string> ExpectedAssets = new HashSet<string> (ExpectedAssetsMacCatalyst) {
-			"Vector.samplepdf.pdf",
-			"Vector.xamlogo.svg",
+			"Vector:samplepdf.pdf",
+			"Vector:xamlogo.svg",
 		};
 
 		class XCAssetTarget {
@@ -252,8 +251,11 @@ namespace Xamarin.Tests {
 				new ("Color", "Name", new string [] { "ColorTest" }),
 
 				new ("Contents", "Name", new string [] { "SpritesTest" }),
+				new ("Icon Image", "RenditionName", new string [0]),
+				new ("MultiSized Image", "Name", new string [0]),
 
 				new ("Texture Rendition", "Name", new string [] { "TextureTest" }),
+				new ("PackedImage", "RenditionName", new string [0]),
 
 				new ("Vector", "RenditionName", new string [] { "samplepdf.pdf", "xamlogo.svg" }),
 		};

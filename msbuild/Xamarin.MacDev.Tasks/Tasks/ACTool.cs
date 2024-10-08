@@ -49,6 +49,9 @@ namespace Xamarin.MacDev.Tasks {
 		#region Outputs
 
 		[Output]
+		public ITaskItem? AppIconsManifest { get; set; }
+
+		[Output]
 		public ITaskItem? PartialAppManifest { get; set; }
 
 		#endregion
@@ -168,6 +171,7 @@ namespace Xamarin.MacDev.Tasks {
 			if (platform is not null)
 				args.Add ("--platform", platform);
 
+			var appIconInManifest = AppIcon;
 			if (!string.IsNullOrEmpty (AppIcon)) {
 				if (!appIconSets.Contains (AppIcon)) {
 					Log.LogError ("Can't find the AppIcon '{0}' among the image resources.", AppIcon);
@@ -177,17 +181,54 @@ namespace Xamarin.MacDev.Tasks {
 				args.Add (AppIcon);
 			}
 
-			if (IncludeAllAppIcons)
-				args.Add ("--include-all-app-icons");
-
+			var alternateAppIconsInManifest = new HashSet<string> ();
 			foreach (var alternate in AlternateAppIcons) {
 				var alternateAppIcon = alternate.ItemSpec!;
 				if (!appIconSets.Contains (alternateAppIcon)) {
 					Log.LogError ("Can't find the AlternateAppIcon '{0}' among the image resources.", alternateAppIcon);
 					return;
 				}
+				if (!string.IsNullOrEmpty (AppIcon) && string.Equals (alternate, AppIcon)) {
+					Log.LogError ("The image resource '{0}' is specified as both 'AppIcon' and 'AlternateAppIcon'", AppIcon);
+					return;
+				}
 				args.Add ("--alternate-app-icon");
 				args.Add (alternateAppIcon);
+
+				alternateAppIconsInManifest.Add (alternateAppIcon);
+			}
+
+			if (IncludeAllAppIcons) {
+				args.Add ("--include-all-app-icons");
+				alternateAppIconsInManifest.UnionWith (appIconSets.Except (AppIcon));
+			}
+
+			if (!string.IsNullOrEmpty (appIconInManifest) || alternateAppIconsInManifest.Any ()) {
+				var cfBundleIcons = new PDictionary ();
+
+				if (!string.IsNullOrEmpty (appIconInManifest)) {
+					var cfBundlePrimaryIconFiles = new PArray ();
+					cfBundlePrimaryIconFiles.Add (new PString ("AppIcon60x60"));
+					var cfBundlePrimaryIcon = new PDictionary ();
+					cfBundlePrimaryIcon.Add ("CFBundleIconFiles", cfBundlePrimaryIconFiles);
+					cfBundlePrimaryIcon.Add ("CFBundleIconName", new PString (AppIcon));
+					cfBundleIcons.Add ("CFBundlePrimaryIcon", cfBundlePrimaryIcon);
+				}
+
+				if (alternateAppIconsInManifest.Any ()) {
+					var cfBundleAlternateIcons = new PDictionary ();
+					cfBundleIcons.Add ("CFBundleAlternateIcons", cfBundleAlternateIcons);
+					foreach (var alternateAppIcon in alternateAppIconsInManifest) {
+						var alternateDict = new PDictionary ();
+						alternateDict.Add ("CFBundleIconName", new PString (alternateAppIcon));
+						cfBundleAlternateIcons.Add (alternateAppIcon, alternateDict);
+					}
+				}
+
+				var intermediate = Path.Combine (IntermediateOutputPath, ToolName);
+				var appIconsManifestPath = Path.Combine (intermediate, "app-icons.plist");
+				AppIconsManifest = new TaskItem (appIconsManifestPath);
+				cfBundleIcons.Save (appIconsManifestPath, atomic: true, binary: false);
 			}
 		}
 

@@ -188,7 +188,7 @@ namespace Xamarin.MacDev.Tasks {
 					Log.LogError ("Can't find the AlternateAppIcon '{0}' among the image resources.", alternateAppIcon);
 					return;
 				}
-				if (!string.IsNullOrEmpty (AppIcon) && string.Equals (alternate, AppIcon)) {
+				if (string.Equals (alternateAppIcon, AppIcon, StringComparison.OrdinalIgnoreCase)) {
 					Log.LogError ("The image resource '{0}' is specified as both 'AppIcon' and 'AlternateAppIcon'", AppIcon);
 					return;
 				}
@@ -200,35 +200,58 @@ namespace Xamarin.MacDev.Tasks {
 
 			if (IncludeAllAppIcons) {
 				args.Add ("--include-all-app-icons");
-				alternateAppIconsInManifest.UnionWith (appIconSets.Except (AppIcon));
+				alternateAppIconsInManifest.UnionWith (appIconSets.Except (new string [] { AppIcon }));
 			}
 
-			if (!string.IsNullOrEmpty (appIconInManifest) || alternateAppIconsInManifest.Any ()) {
-				var cfBundleIcons = new PDictionary ();
+			// FIXME: CFBundleIcons~ipad
+			// FIXME: check tvOS
+			// FIXME: check macOS
+			// FIXME: check Mac Catalyst
 
-				if (!string.IsNullOrEmpty (appIconInManifest)) {
-					var cfBundlePrimaryIconFiles = new PArray ();
-					cfBundlePrimaryIconFiles.Add (new PString ("AppIcon60x60"));
-					var cfBundlePrimaryIcon = new PDictionary ();
-					cfBundlePrimaryIcon.Add ("CFBundleIconFiles", cfBundlePrimaryIconFiles);
-					cfBundlePrimaryIcon.Add ("CFBundleIconName", new PString (AppIcon));
-					cfBundleIcons.Add ("CFBundlePrimaryIcon", cfBundlePrimaryIcon);
+			CreateAppIconManifest (appIconInManifest, alternateAppIconsInManifest);
+		}
+
+		void CreateAppIconManifest (string appIconInManifest, HashSet<string> alternateAppIconsInManifest)
+		{
+			if (string.IsNullOrEmpty (appIconInManifest) && !alternateAppIconsInManifest.Any ())
+				return;
+
+			var appIconManifest = new PDictionary ();
+			CreateAppIconManifest (appIconManifest, "CFBundleIcons", appIconManifest, alternateAppIconsInManifest);
+			if (ParsedUIDeviceFamily.HasFlag (IPhoneDeviceType.IPad)) {
+				CreateAppIconManifest (appIconManifest, "CFBundleIcons~ipad", appIconManifest, alternateAppIconsInManifest);
+			}
+
+			var intermediate = Path.Combine (IntermediateOutputPath, ToolName);
+			var appIconsManifestPath = Path.Combine (intermediate, "app-icons.plist");
+			AppIconsManifest = new TaskItem (appIconsManifestPath);
+			appIconManifest.Save (appIconsManifestPath, atomic: true, binary: false);
+		}
+
+		void CreateAppIconManifest (PDictionary appIconManifest, string topLevelName, string appIconInManifest, HashSet<string> alternateAppIconsInManifest)
+		{
+			var cfBundleIcons = new PDictionary ();
+			appIconManifest.Add (topLevelName, cfBundleIcons);
+
+			if (!string.IsNullOrEmpty (appIconInManifest)) {
+				var cfBundlePrimaryIconFiles = new PArray ();
+				cfBundlePrimaryIconFiles.Add (new PString ("AppIcon60x60"));
+				if (topLevelName == "CFBundleIcons~ipad")
+					cfBundlePrimaryIconFiles.Add (new PString ("AppIcon76x76"));
+				var cfBundlePrimaryIcon = new PDictionary ();
+				cfBundlePrimaryIcon.Add ("CFBundleIconFiles", cfBundlePrimaryIconFiles);
+				cfBundlePrimaryIcon.Add ("CFBundleIconName", new PString (AppIcon));
+				cfBundleIcons.Add ("CFBundlePrimaryIcon", cfBundlePrimaryIcon);
+			}
+
+			if (alternateAppIconsInManifest.Any ()) {
+				var cfBundleAlternateIcons = new PDictionary ();
+				cfBundleIcons.Add ("CFBundleAlternateIcons", cfBundleAlternateIcons);
+				foreach (var alternateAppIcon in alternateAppIconsInManifest) {
+					var alternateDict = new PDictionary ();
+					alternateDict.Add ("CFBundleIconName", new PString (alternateAppIcon));
+					cfBundleAlternateIcons.Add (alternateAppIcon, alternateDict);
 				}
-
-				if (alternateAppIconsInManifest.Any ()) {
-					var cfBundleAlternateIcons = new PDictionary ();
-					cfBundleIcons.Add ("CFBundleAlternateIcons", cfBundleAlternateIcons);
-					foreach (var alternateAppIcon in alternateAppIconsInManifest) {
-						var alternateDict = new PDictionary ();
-						alternateDict.Add ("CFBundleIconName", new PString (alternateAppIcon));
-						cfBundleAlternateIcons.Add (alternateAppIcon, alternateDict);
-					}
-				}
-
-				var intermediate = Path.Combine (IntermediateOutputPath, ToolName);
-				var appIconsManifestPath = Path.Combine (intermediate, "app-icons.plist");
-				AppIconsManifest = new TaskItem (appIconsManifestPath);
-				cfBundleIcons.Save (appIconsManifestPath, atomic: true, binary: false);
 			}
 		}
 

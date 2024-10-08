@@ -16,8 +16,10 @@ using Xamarin.Utils;
 namespace Xamarin.MacDev.Tasks {
 	[TestFixture]
 	public class ACBToolTaskTests : TestBase {
-		ACTool CreateACToolTask (ApplePlatform framework, string projectDir, string intermediateOutputPath, params string[] imageAssets)
+		ACTool CreateACToolTask (ApplePlatform framework, string projectDir, out string intermediateOutputPath, params string[] imageAssets)
 		{
+			intermediateOutputPath = Cache.CreateTemporaryDirectory ();
+
 			var sdk = Sdks.GetSdk (framework);
 			var version = AppleSdkVersion.GetDefault (sdk, false);
 			var root = sdk.GetSdkPath (version, false);
@@ -37,7 +39,15 @@ namespace Xamarin.MacDev.Tasks {
 			}
 
 			var task = CreateTask<ACTool> ();
-			task.imageAssets = imageAssets.Select (v => new TaskItem (v));
+			task.ImageAssets = imageAssets
+				.Select (v => {
+					var spl = v.Split ('|');
+					var rv = new TaskItem (spl [0]);
+					rv.SetMetadata ("Link", spl [1]);
+					return rv;
+				})
+				.Cast<ITaskItem> ()
+				.ToArray ();
 			task.IntermediateOutputPath = intermediateOutputPath;
 			task.OutputPath = Path.Combine (intermediateOutputPath, "OutputPath");
 			task.ProjectDir = projectDir;
@@ -46,42 +56,336 @@ namespace Xamarin.MacDev.Tasks {
 			task.SdkVersion = version.ToString ();
 			task.SdkUsrPath = usr;
 			task.SdkBinPath = bin;
-			task.SdkRoot = root;
+			task.TargetFrameworkMoniker = TargetFramework.GetTargetFramework (framework, true).ToString ();
+			task.ToolExe = "true"; // don't actually execute 'actool'
 			return task;
 		}
 
 		[Test]
-		public void TestAppIcon ()
+		public void DefaultAppIcons ()
 		{
-			var tmp = Cache.CreateTemporaryDirectory ();
+			var platform = ApplePlatform.iOS;
+			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
+			var actool = CreateACToolTask (
+				platform,
+				projectDir,
+				out var _,
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png"
+			);
+			ExecuteTask (actool);
 
-			var srcdir = Path.Combine (Configuration.TestProjectsDirectory, "MyIBToolLinkTest");
-			var ibtool = CreateACToolTask (ApplePlatform.iOS, srcdir, tmp);
-			var bundleResources = new HashSet<string> ();
-
-			Assert.IsTrue (ibtool.Execute (), "Execution of IBTool task failed.");
-
-			foreach (var bundleResource in ibtool.BundleResources) {
-				Assert.IsTrue (File.Exists (bundleResource.ItemSpec), "File does not exist: {0}", bundleResource.ItemSpec);
-				Assert.That (bundleResource.GetMetadata ("LogicalName"), Is.Not.Null.Or.Empty, "The 'LogicalName' metadata must be set.");
-				Assert.That (bundleResource.GetMetadata ("Optimize"), Is.Not.Null.Or.Empty, "The 'Optimize' metadata must be set.");
-
-				bundleResources.Add (bundleResource.GetMetadata ("LogicalName"));
-			}
-
-			string [] expected = {
-				"LaunchScreen.nib",
-				"Main.storyboardc/UIViewController-BYZ-38-t0r.nib",
-				"Main.storyboardc/BYZ-38-t0r-view-8bC-Xf-vdC.nib",
-				"Main.storyboardc/Info.plist",
-			};
-
-			var inexistentResource = bundleResources.Except (expected).ToArray ();
-			var unexpectedResource = expected.Except (bundleResources).ToArray ();
-
-			Assert.That (inexistentResource, Is.Empty, "No missing resources");
-			Assert.That (unexpectedResource, Is.Empty, "No extra resources");
+			Assert.IsNull (actool.AppIconsManifest, "AppIconsManifest");
+			Assert.IsNull (actool.PartialAppManifest, "PartialAppManifest");
 		}
 
+		[Test]
+		public void AllAppIcons ()
+		{
+			var platform = ApplePlatform.iOS;
+			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
+			var actool = CreateACToolTask (
+				platform,
+				projectDir,
+				out var _,
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon32.png"
+			);
+			actool.IncludeAllAppIcons = true;
+
+			ExecuteTask (actool);
+
+			Assert.IsNotNull (actool.AppIconsManifest, "AppIconsManifest");
+			Assert.IsNull (actool.PartialAppManifest, "PartialAppManifest");
+
+			var appIconsManifest = PDictionary.FromFile (actool.AppIconsManifest.ItemSpec!)!;
+			var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
+			Assert.IsNotNull (cfBundleIcons, "CFBundleIcons");
+			Assert.IsFalse (cfBundleIcons.ContainsKey ("CFBundlePrimaryIcon"), "CFBundlePrimaryIcon");
+			var cfBundleAlternateIcons = cfBundleIcons.Get<PDictionary> ("CFBundleAlternateIcons");
+			Assert.IsNotNull (cfBundleAlternateIcons, "CFBundleAlternateIcons");
+			Assert.AreEqual (2, cfBundleAlternateIcons.Count, "CFBundleAlternateIcons.Count");
+
+			var alternateAppIcons1 = cfBundleAlternateIcons.Get<PDictionary> ("AppIcons");
+			Assert.IsNotNull (alternateAppIcons1, "AppIcons");
+			Assert.AreEqual ("AppIcons", alternateAppIcons1.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+
+			var alternateAppIcons2 = cfBundleAlternateIcons.Get<PDictionary> ("AlternateAppIcons");
+			Assert.IsNotNull (alternateAppIcons2, "AlternateAppIcons");
+			Assert.AreEqual ("AlternateAppIcons", alternateAppIcons2.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+		}
+
+		[Test]
+		public void AllAppIconsWithAppIcon ()
+		{
+			var platform = ApplePlatform.iOS;
+			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
+			var actool = CreateACToolTask (
+				platform,
+				projectDir,
+				out var _,
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon32.png"
+			);
+			actool.IncludeAllAppIcons = true;
+			actool.AppIcon = "AlternateAppIcons";
+
+			ExecuteTask (actool);
+
+			Assert.IsNotNull (actool.AppIconsManifest, "AppIconsManifest");
+			Assert.IsNull (actool.PartialAppManifest, "PartialAppManifest");
+
+			var appIconsManifest = PDictionary.FromFile (actool.AppIconsManifest.ItemSpec!)!;
+			var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
+			Assert.IsNotNull (cfBundleIcons, "CFBundleIcons");
+
+			var cfBundlePrimaryIcon = cfBundleIcons.Get<PDictionary> ("CFBundlePrimaryIcon");
+			Assert.IsNotNull (cfBundlePrimaryIcon, "CFBundlePrimaryIcon");
+			var cfBundleIconFiles = cfBundlePrimaryIcon.Get<PArray> ("CFBundleIconFiles");
+			Assert.IsNotNull (cfBundleIconFiles, "CFBundleIconFiles");
+			Assert.AreEqual (1, cfBundleIconFiles.Count, "CFBundleIconFiles.Length");
+			Assert.AreEqual ("AppIcon60x60", ((PString) cfBundleIconFiles [0]).Value, "CFBundleIconFiles[0].Value");
+			Assert.AreEqual ("AlternateAppIcons", cfBundlePrimaryIcon.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+
+			var cfBundleAlternateIcons = cfBundleIcons.Get<PDictionary> ("CFBundleAlternateIcons");
+			Assert.IsNotNull (cfBundleAlternateIcons, "CFBundleAlternateIcons");
+			Assert.AreEqual (1, cfBundleAlternateIcons.Count, "CFBundleAlternateIcons.Count");
+
+			var alternateAppIcons1 = cfBundleAlternateIcons.Get<PDictionary> ("AppIcons");
+			Assert.IsNotNull (alternateAppIcons1, "AppIcons");
+			Assert.AreEqual ("AppIcons", alternateAppIcons1.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+		}
+
+		[Test]
+		public void AppIcon ()
+		{
+			var platform = ApplePlatform.iOS;
+			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
+			var actool = CreateACToolTask (
+				platform,
+				projectDir,
+				out var _,
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon32.png"
+			);
+			actool.AppIcon = "AppIcons";
+
+			ExecuteTask (actool);
+
+			Assert.IsNotNull (actool.AppIconsManifest, "AppIconsManifest");
+			Assert.IsNull (actool.PartialAppManifest, "PartialAppManifest");
+
+			Console.WriteLine (actool.AppIconsManifest);
+
+			var appIconsManifest = PDictionary.FromFile (actool.AppIconsManifest.ItemSpec!)!;
+			var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
+			Assert.IsNotNull (cfBundleIcons, "CFBundleIcons");
+			Assert.IsFalse (cfBundleIcons.ContainsKey ("CFBundleAlternateIcons"), "CFBundleAlternateIcons");
+			var cfBundlePrimaryIcon = cfBundleIcons.Get<PDictionary> ("CFBundlePrimaryIcon");
+			Assert.IsNotNull (cfBundlePrimaryIcon, "CFBundlePrimaryIcon");
+			var cfBundleIconFiles = cfBundlePrimaryIcon.Get<PArray> ("CFBundleIconFiles");
+			Assert.IsNotNull (cfBundleIconFiles, "CFBundleIconFiles");
+			Assert.AreEqual (1, cfBundleIconFiles.Count, "CFBundleIconFiles.Length");
+			Assert.AreEqual ("AppIcon60x60", ((PString) cfBundleIconFiles [0]).Value, "CFBundleIconFiles[0].Value");
+			Assert.AreEqual ("AppIcons", cfBundlePrimaryIcon.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+		}
+
+		[Test]
+		public void AppIconAndAlternateIcons ()
+		{
+			var platform = ApplePlatform.iOS;
+			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
+			var actool = CreateACToolTask (
+				platform,
+				projectDir,
+				out var _,
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon32.png"
+			);
+			actool.AppIcon = "AppIcons";
+			actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AlternateAppIcons")};
+
+			ExecuteTask (actool);
+
+			Assert.IsNotNull (actool.AppIconsManifest, "AppIconsManifest");
+			Assert.IsNull (actool.PartialAppManifest, "PartialAppManifest");
+
+			Console.WriteLine (actool.AppIconsManifest);
+
+			var appIconsManifest = PDictionary.FromFile (actool.AppIconsManifest.ItemSpec!)!;
+			var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
+			Assert.IsNotNull (cfBundleIcons, "CFBundleIcons");
+
+			var cfBundleAlternateIcons = cfBundleIcons.Get<PDictionary> ("CFBundleAlternateIcons");
+			Assert.IsNotNull (cfBundleAlternateIcons, "CFBundleAlternateIcons");
+			Assert.AreEqual (1, cfBundleAlternateIcons.Count, "CFBundleAlternateIcons.Count");
+			var alternateAppIcons = cfBundleAlternateIcons.Get<PDictionary> ("AlternateAppIcons");
+			Assert.IsNotNull (alternateAppIcons, "AlternateAppIcons");
+			Assert.AreEqual ("AlternateAppIcons", alternateAppIcons.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+
+			var cfBundlePrimaryIcon = cfBundleIcons.Get<PDictionary> ("CFBundlePrimaryIcon");
+			Assert.IsNotNull (cfBundlePrimaryIcon, "CFBundlePrimaryIcon");
+			var cfBundleIconFiles = cfBundlePrimaryIcon.Get<PArray> ("CFBundleIconFiles");
+			Assert.IsNotNull (cfBundleIconFiles, "CFBundleIconFiles");
+			Assert.AreEqual (1, cfBundleIconFiles.Count, "CFBundleIconFiles.Length");
+			Assert.AreEqual ("AppIcon60x60", ((PString) cfBundleIconFiles [0]).Value, "CFBundleIconFiles[0].Value");
+			Assert.AreEqual ("AppIcons", cfBundlePrimaryIcon.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+		}
+
+		[Test]
+		public void AlternateIcons ()
+		{
+			var platform = ApplePlatform.iOS;
+			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
+			var actool = CreateACToolTask (
+				platform,
+				projectDir,
+				out var _,
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon32.png"
+			);
+			actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AlternateAppIcons")};
+
+			ExecuteTask (actool);
+
+			Assert.IsNotNull (actool.AppIconsManifest, "AppIconsManifest");
+			Assert.IsNull (actool.PartialAppManifest, "PartialAppManifest");
+
+			Console.WriteLine (actool.AppIconsManifest);
+
+			var appIconsManifest = PDictionary.FromFile (actool.AppIconsManifest.ItemSpec!)!;
+			var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
+			Assert.IsNotNull (cfBundleIcons, "CFBundleIcons");
+
+			var cfBundleAlternateIcons = cfBundleIcons.Get<PDictionary> ("CFBundleAlternateIcons");
+			Assert.IsNotNull (cfBundleAlternateIcons, "CFBundleAlternateIcons");
+			Assert.AreEqual (1, cfBundleAlternateIcons.Count, "CFBundleAlternateIcons.Count");
+			var alternateAppIcons = cfBundleAlternateIcons.Get<PDictionary> ("AlternateAppIcons");
+			Assert.IsNotNull (alternateAppIcons, "AlternateAppIcons");
+			Assert.AreEqual ("AlternateAppIcons", alternateAppIcons.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+
+			Assert.IsFalse (cfBundleIcons.ContainsKey ("CFBundlePrimaryIcon"), "CFBundlePrimaryIcon");
+		}
+
+		[Test]
+		public void InexistentAppIcon ()
+		{
+			var platform = ApplePlatform.iOS;
+			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
+			var actool = CreateACToolTask (
+				platform,
+				projectDir,
+				out var _,
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon32.png"
+			);
+			actool.AppIcon = "InexistentAppIcons";
+
+			ExecuteTask (actool, 1);
+			Assert.AreEqual ("Can't find the AppIcon 'InexistentAppIcons' among the image resources.", Engine.Logger.ErrorEvents [0].Message, "Error message");
+		}
+
+		[Test]
+		public void InexistentAlternateIcons ()
+		{
+			var platform = ApplePlatform.iOS;
+			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
+			var actool = CreateACToolTask (
+				platform,
+				projectDir,
+				out var _,
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon32.png"
+			);
+			actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("InexistentAlternateAppIcons")};
+
+			ExecuteTask (actool, 1);
+			Assert.AreEqual ("Can't find the AlternateAppIcon 'InexistentAlternateAppIcons' among the image resources.", Engine.Logger.ErrorEvents [0].Message, "Error message");
+		}
+
+		[Test]
+		public void BothAlternateAndMainIcon ()
+		{
+			var platform = ApplePlatform.iOS;
+			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
+			var actool = CreateACToolTask (
+				platform,
+				projectDir,
+				out var _,
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon32.png"
+			);
+			actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AppIcons")};
+			actool.AppIcon = "AppIcons";
+
+			ExecuteTask (actool, 1);
+			Assert.AreEqual ("The image resource 'AppIcons' is specified as both 'AppIcon' and 'AlternateAppIcon'", Engine.Logger.ErrorEvents [0].Message, "Error message");
+		}
+
+		[Test]
+		public void XSAppIconAssetsAndAppIcon ()
+		{
+			var platform = ApplePlatform.iOS;
+			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
+			var actool = CreateACToolTask (
+				platform,
+				projectDir,
+				out var _,
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Contents.json",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon16.png",
+				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon32.png"
+			);
+			actool.AppIcon = "AppIcons";
+			actool.XSAppIconAssets = "Resources/Images.xcassets/AppIcons.appiconset";
+
+			ExecuteTask (actool, 1);
+			Assert.AreEqual ("Can't specify both 'XSAppIconAssets' in the Info.plist and 'AppIcon' in the project file. Please select one or the other.", Engine.Logger.ErrorEvents [0].Message, "Error message");
+		}
 	}
 }

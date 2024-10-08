@@ -13,7 +13,6 @@ using Xamarin.Utils;
 
 namespace Xamarin.MacDev.Tasks {
 	public class ACTool : XcodeCompilerToolTask, ICancelableTask {
-		ITaskItem? partialAppManifest;
 		string? outputSpecs;
 
 		#region Inputs
@@ -92,13 +91,6 @@ namespace Xamarin.MacDev.Tasks {
 				if (assetDirs is not null && assetDir is not null && assetDirs.Contains (assetDir)) {
 					var assetName = Path.GetFileNameWithoutExtension (rpath);
 
-					if (PartialAppManifest is null && partialAppManifest is not null) {
-						args.Add ("--output-partial-info-plist");
-						args.AddQuoted (partialAppManifest.GetMetadata ("FullPath"));
-
-						PartialAppManifest = partialAppManifest;
-					}
-
 					args.Add ("--app-icon");
 					args.AddQuoted (assetName);
 
@@ -121,14 +113,6 @@ namespace Xamarin.MacDev.Tasks {
 
 				if (assetDirs is not null && assetDir is not null && assetDirs.Contains (assetDir)) {
 					var assetName = Path.GetFileNameWithoutExtension (rpath);
-
-					if (PartialAppManifest is null && partialAppManifest is not null) {
-						args.Add ("--output-partial-info-plist");
-						args.AddQuoted (partialAppManifest.GetMetadata ("FullPath"));
-
-						PartialAppManifest = partialAppManifest;
-					}
-
 					args.Add ("--launch-image");
 					args.AddQuoted (assetName);
 				}
@@ -171,7 +155,6 @@ namespace Xamarin.MacDev.Tasks {
 			if (platform is not null)
 				args.Add ("--platform", platform);
 
-			var appIconInManifest = AppIcon;
 			if (!string.IsNullOrEmpty (AppIcon)) {
 				if (!appIconSets.Contains (AppIcon)) {
 					Log.LogError ("Can't find the AppIcon '{0}' among the image resources.", AppIcon);
@@ -181,7 +164,6 @@ namespace Xamarin.MacDev.Tasks {
 				args.Add (AppIcon);
 			}
 
-			var alternateAppIconsInManifest = new HashSet<string> ();
 			foreach (var alternate in AlternateAppIcons) {
 				var alternateAppIcon = alternate.ItemSpec!;
 				if (!appIconSets.Contains (alternateAppIcon)) {
@@ -194,65 +176,13 @@ namespace Xamarin.MacDev.Tasks {
 				}
 				args.Add ("--alternate-app-icon");
 				args.Add (alternateAppIcon);
-
-				alternateAppIconsInManifest.Add (alternateAppIcon);
 			}
 
-			if (IncludeAllAppIcons) {
+			if (IncludeAllAppIcons)
 				args.Add ("--include-all-app-icons");
-				alternateAppIconsInManifest.UnionWith (appIconSets.Except (new string [] { AppIcon }));
-			}
 
-			// FIXME: CFBundleIcons~ipad
-			// FIXME: check tvOS
-			// FIXME: check macOS
-			// FIXME: check Mac Catalyst
-
-			CreateAppIconManifest (appIconInManifest, alternateAppIconsInManifest);
-		}
-
-		void CreateAppIconManifest (string appIconInManifest, HashSet<string> alternateAppIconsInManifest)
-		{
-			if (string.IsNullOrEmpty (appIconInManifest) && !alternateAppIconsInManifest.Any ())
-				return;
-
-			var appIconManifest = new PDictionary ();
-			CreateAppIconManifest (appIconManifest, "CFBundleIcons", appIconManifest, alternateAppIconsInManifest);
-			if (ParsedUIDeviceFamily.HasFlag (IPhoneDeviceType.IPad)) {
-				CreateAppIconManifest (appIconManifest, "CFBundleIcons~ipad", appIconManifest, alternateAppIconsInManifest);
-			}
-
-			var intermediate = Path.Combine (IntermediateOutputPath, ToolName);
-			var appIconsManifestPath = Path.Combine (intermediate, "app-icons.plist");
-			AppIconsManifest = new TaskItem (appIconsManifestPath);
-			appIconManifest.Save (appIconsManifestPath, atomic: true, binary: false);
-		}
-
-		void CreateAppIconManifest (PDictionary appIconManifest, string topLevelName, string appIconInManifest, HashSet<string> alternateAppIconsInManifest)
-		{
-			var cfBundleIcons = new PDictionary ();
-			appIconManifest.Add (topLevelName, cfBundleIcons);
-
-			if (!string.IsNullOrEmpty (appIconInManifest)) {
-				var cfBundlePrimaryIconFiles = new PArray ();
-				cfBundlePrimaryIconFiles.Add (new PString ("AppIcon60x60"));
-				if (topLevelName == "CFBundleIcons~ipad")
-					cfBundlePrimaryIconFiles.Add (new PString ("AppIcon76x76"));
-				var cfBundlePrimaryIcon = new PDictionary ();
-				cfBundlePrimaryIcon.Add ("CFBundleIconFiles", cfBundlePrimaryIconFiles);
-				cfBundlePrimaryIcon.Add ("CFBundleIconName", new PString (AppIcon));
-				cfBundleIcons.Add ("CFBundlePrimaryIcon", cfBundlePrimaryIcon);
-			}
-
-			if (alternateAppIconsInManifest.Any ()) {
-				var cfBundleAlternateIcons = new PDictionary ();
-				cfBundleIcons.Add ("CFBundleAlternateIcons", cfBundleAlternateIcons);
-				foreach (var alternateAppIcon in alternateAppIconsInManifest) {
-					var alternateDict = new PDictionary ();
-					alternateDict.Add ("CFBundleIconName", new PString (alternateAppIcon));
-					cfBundleAlternateIcons.Add (alternateAppIcon, alternateDict);
-				}
-			}
+			args.Add ("--output-partial-info-plist");
+			args.AddQuoted (PartialAppManifest!.GetMetadata ("FullPath"));
 		}
 
 		IEnumerable<ITaskItem> GetCompiledBundleResources (PDictionary output, string intermediateBundleDir)
@@ -494,7 +424,7 @@ namespace Xamarin.MacDev.Tasks {
 				return !Log.HasLoggedErrors;
 			}
 
-			partialAppManifest = new TaskItem (Path.Combine (intermediate, "partial-info.plist"));
+			PartialAppManifest = new TaskItem (Path.Combine (intermediate, "partial-info.plist"));
 
 			if (specs.Count > 0) {
 				outputSpecs = Path.Combine (intermediate, "output-specifications.plist");
@@ -503,11 +433,13 @@ namespace Xamarin.MacDev.Tasks {
 
 			Directory.CreateDirectory (intermediateBundleDir);
 
-			// Note: Compile() will set the PartialAppManifest property if it is used...
 			if ((Compile (catalogs.ToArray (), intermediateBundleDir, manifest)) != 0)
 				return false;
 
-			if (PartialAppManifest is not null && !File.Exists (PartialAppManifest.GetMetadata ("FullPath")))
+			if (Log.HasLoggedErrors)
+				return false;
+
+			if (!File.Exists (PartialAppManifest.GetMetadata ("FullPath")))
 				Log.LogError (MSBStrings.E0093, PartialAppManifest.GetMetadata ("FullPath"));
 
 			try {

@@ -5,6 +5,9 @@
 
 		<ApplicationTitle>AppWithXCAssets</ApplicationTitle>
 		<ApplicationId>com.xamarin.appwithxcassets</ApplicationId>
+
+		<!-- enable the interpreter to speed up builds -->
+		<UseInterpreter Condition="'$(_PlatformName)' != 'macOS'">true</UseInterpreter>
 	</PropertyGroup>
 
 	<Import Project="../../common/shared-dotnet.csproj" />

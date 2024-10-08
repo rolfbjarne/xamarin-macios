@@ -1,0 +1,56 @@
+#!/bin/bash -eux
+
+set -o pipefail
+IFS=$'\n\t'
+
+cd "$(dirname "${BASH_SOURCE[0]}")"
+INPUT=$1
+OUTPUT_DIR=$2
+
+NAME=$(basename "$INPUT" .png)
+NAME=${NAME/[0-9]*x[0-9]*/}
+NAME=${NAME/[0-9]*/}
+
+echo NAME=$NAME
+
+SIZES=()
+
+# iOS
+SIZES+=(1024x748)
+SIZES+=(1024x768)
+SIZES+=(1125x2436)
+SIZES+=(1242x2208)
+SIZES+=(1242x2688)
+SIZES+=(1536x2008)
+SIZES+=(1536x2048)
+SIZES+=(1668x2224)
+SIZES+=(1668x2388)
+SIZES+=(1792x828)
+SIZES+=(2048x1496)
+SIZES+=(2048x1536)
+SIZES+=(2048x2732)
+SIZES+=(2208x1242)
+SIZES+=(2224x1668)
+SIZES+=(2388x1668)
+SIZES+=(2436x1125)
+SIZES+=(2688x1242)
+SIZES+=(2732x2048)
+SIZES+=(320x480)
+SIZES+=(640x1136)
+SIZES+=(640x960)
+SIZES+=(750x1334)
+SIZES+=(768x1004)
+SIZES+=(768x1024)
+SIZES+=(828x1792)
+
+# tvOS
+SIZES+=(3840x2160)
+SIZES+=(1920x1080)
+
+mkdir -p "$OUTPUT_DIR"
+
+for size in ${SIZES[@]}; do
+	magick "$INPUT" -resize $size'!' "$OUTPUT_DIR/$NAME$size.png"
+done
+
+

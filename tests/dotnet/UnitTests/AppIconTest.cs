@@ -51,7 +51,130 @@ namespace Xamarin.Tests {
 				new string [] { "Icon Image:Icon1024.png", "MultiSized Image:AlternateAppIcons" });
 		}
 
-		void TestXCAssetsImpl (ApplePlatform platform, string runtimeIdentifiers, Dictionary<string, string>? extraProperties = null, IEnumerable<string>? extraAssets = null)
+		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
+		[TestCase (ApplePlatform.TVOS, "tvos-arm64")]
+		// launch images don't exist on Mac Catalyst or macOS.
+		public void XSLaunchImageAssets (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			TestXCAssetsImpl (
+				platform,
+				runtimeIdentifiers,
+				new Dictionary<string, string> () {
+					{ "_XSLaunchImageAssets", $"Resources/Images.xcassets/{platform.AsString ()}LaunchImage.launchimage" }
+				},
+				new string [] { "Icon Image:Icon1024.png", "MultiSized Image:AlternateAppIcons" });
+		}
+
+		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
+		// [TestCase (ApplePlatform.iOS, "ios-arm64")]
+		// [TestCase (ApplePlatform.TVOS, "tvos-arm64")]
+		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
+		// [TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		// [TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
+		public void AlternateAppIcon (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			TestXCAssetsImpl (
+				platform,
+				runtimeIdentifiers,
+				new Dictionary<string, string> () {
+					{ "AddTheseAlternateAppIcons", "AppIcons" }
+				},
+				new string [] { "Icon Image:Icon1024.png", "MultiSized Image:AppIcons" });
+		}
+
+		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
+		// [TestCase (ApplePlatform.iOS, "ios-arm64")]
+		// [TestCase (ApplePlatform.TVOS, "tvos-arm64")]
+		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
+		// [TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		// [TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
+		public void AlternateAppIcons (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			TestXCAssetsImpl (
+				platform,
+				runtimeIdentifiers,
+				new Dictionary<string, string> () {
+					{ "AddTheseAlternateAppIcons", "AppIcons;AlternateAppIcons" }
+				},
+				new string [] { "Icon Image:Icon1024.png", "MultiSized Image:AppIcons", "MultiSized Image:AlternateAppIcons" });
+		}
+
+		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
+		// [TestCase (ApplePlatform.iOS, "ios-arm64")]
+		// [TestCase (ApplePlatform.TVOS, "tvos-arm64")]
+		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
+		// [TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		// [TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
+		public void AlternateAppIcon_Failure (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			TestXCAssetsImpl (
+				platform,
+				runtimeIdentifiers,
+				new Dictionary<string, string> () {
+					{ "AddTheseAlternateAppIcons", "InexistentAppIcon" }
+				},
+				expectedErrorMessages: new string [] { "Couldn't find the app icon 'InexistentAppIcon' among the resources." });
+		}
+
+		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
+		// [TestCase (ApplePlatform.iOS, "ios-arm64")]
+		// [TestCase (ApplePlatform.TVOS, "tvos-arm64")]
+		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
+		// [TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		// [TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
+		public void AppIcon_1 (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			TestXCAssetsImpl (
+				platform,
+				runtimeIdentifiers,
+				new Dictionary<string, string> () {
+					{ "AppIcon", "AppIcons" }
+				},
+				new string [] { "Icon Image:Icon1024.png", "MultiSized Image:AlternateAppIcons" });
+		}
+
+		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
+		// [TestCase (ApplePlatform.iOS, "ios-arm64")]
+		// [TestCase (ApplePlatform.TVOS, "tvos-arm64")]
+		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
+		// [TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		// [TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
+		public void AppIcon_2 (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			TestXCAssetsImpl (
+				platform,
+				runtimeIdentifiers,
+				new Dictionary<string, string> () {
+					{ "AppIcon", "AlternateAppIcons" }
+				},
+				new string [] { "Icon Image:Icon1024.png", "MultiSized Image:AlternateAppIcons" });
+		}
+
+
+		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
+		// [TestCase (ApplePlatform.iOS, "ios-arm64")]
+		// [TestCase (ApplePlatform.TVOS, "tvos-arm64")]
+		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
+		// [TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		// [TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
+		public void AppIcon_Failure (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			TestXCAssetsImpl (
+				platform,
+				runtimeIdentifiers,
+				new Dictionary<string, string> () {
+					{ "AppIcon", "InexistentAppIcon" }
+				},
+				expectedErrorMessages: new string [] { "Couldn't find the app icon 'InexistentAppIcon' among the resources." });
+		}
+
+		void TestXCAssetsImpl (ApplePlatform platform, string runtimeIdentifiers, Dictionary<string, string>? extraProperties = null, IEnumerable<string>? extraAssets = null, string[]? expectedErrorMessages = null)
 		{
 			var projectPath = string.Empty;
 			var appPath = string.Empty;
@@ -64,7 +187,14 @@ namespace Xamarin.Tests {
 			Clean (projectPath);
 
 			var properties = GetDefaultProperties (runtimeIdentifiers, extraProperties);
-			DotNet.AssertBuild (projectPath, properties);
+			if (expectedErrorMessages is not null) {
+				var rv = DotNet.AssertBuildFailure (projectPath, properties);
+				var errors = BinLog.GetBuildLogErrors (rv.BinLogPath).ToArray ();
+				AssertErrorMessages (errors, expectedErrorMessages);
+				return; // nothing else to test here
+			} else {
+				DotNet.AssertBuild (projectPath, properties);
+			}
 
 			var resourcesDirectory = GetResourcesDirectory (platform, appPath);
 			var assetsCar = Path.Combine (resourcesDirectory, "Assets.car");

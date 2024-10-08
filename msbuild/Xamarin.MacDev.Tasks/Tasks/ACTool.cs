@@ -22,6 +22,9 @@ namespace Xamarin.MacDev.Tasks {
 
 		public ITaskItem [] AlternateAppIcons { get; set; } = Array.Empty<ITaskItem> ();
 
+		// The name of an app icon
+		public string AppIcon { get; set; } = string.Empty;
+
 		public string DeviceModel { get; set; } = string.Empty;
 
 		public string DeviceOSVersion { get; set; } = string.Empty;
@@ -50,6 +53,8 @@ namespace Xamarin.MacDev.Tasks {
 
 		#endregion
 
+		HashSet<string> appIconSets = new ();
+
 		protected override string DefaultBinDir {
 			get { return DeveloperRootBinDir; }
 		}
@@ -67,6 +72,11 @@ namespace Xamarin.MacDev.Tasks {
 		protected override void AppendCommandLineArguments (IDictionary<string, string?> environment, CommandLineArgumentBuilder args, ITaskItem [] items)
 		{
 			var assetDirs = new HashSet<string> (items.Select (x => BundleResource.GetVirtualProjectPath (ProjectDir, x, !string.IsNullOrEmpty (SessionId))));
+
+			if (!string.IsNullOrEmpty (XSAppIconAssets) && !string.IsNullOrEmpty (AppIcon)) {
+				Log.LogError ("Can't specify both 'XSAppIconAssets' in the Info.plist and 'AppIcon' in the project file. Please select one or the other.");
+				return;
+			}
 
 			if (!string.IsNullOrEmpty (XSAppIconAssets)) {
 				int index = XSAppIconAssets.IndexOf (".xcassets" + Path.DirectorySeparatorChar, StringComparison.Ordinal);
@@ -158,12 +168,26 @@ namespace Xamarin.MacDev.Tasks {
 			if (platform is not null)
 				args.Add ("--platform", platform);
 
+			if (!string.IsNullOrEmpty (AppIcon)) {
+				if (!appIconSets.Contains (AppIcon)) {
+					Log.LogError ("Can't find the AppIcon '{0}' among the image resources.", AppIcon);
+					return;
+				}
+				args.Add ("--app-icon");
+				args.Add (AppIcon);
+			}
+
 			if (IncludeAllAppIcons)
 				args.Add ("--include-all-app-icons");
 
 			foreach (var alternate in AlternateAppIcons) {
+				var alternateAppIcon = alternate.ItemSpec!;
+				if (!appIconSets.Contains (alternateAppIcon)) {
+					Log.LogError ("Can't find the AlternateAppIcon '{0}' among the image resources.", alternateAppIcon);
+					return;
+				}
 				args.Add ("--alternate-app-icon");
-				args.Add (alternate.ItemSpec!);
+				args.Add (alternateAppIcon);
 			}
 		}
 
@@ -320,6 +344,9 @@ namespace Xamarin.MacDev.Tasks {
 				// get the parent (which will typically be .appiconset, .launchimage, .imageset, .iconset, etc)
 				var catalog = Path.GetDirectoryName (vpath);
 				path = Path.GetDirectoryName (path);
+
+				if (path.EndsWith (".appiconset", StringComparison.OrdinalIgnoreCase))
+					appIconSets.Add (Path.GetFileNameWithoutExtension (path));
 
 				// keep walking up the directory structure until we get to the .xcassets directory
 				while (!string.IsNullOrEmpty (catalog) && Path.GetExtension (catalog) != ".xcassets") {

@@ -61,8 +61,7 @@ namespace Xamarin.Tests {
 				runtimeIdentifiers,
 				new Dictionary<string, string> () {
 					{ "_XSLaunchImageAssets", $"Resources/Images.xcassets/{platform.AsString ()}LaunchImage.launchimage" }
-				},
-				new string [] { "Icon Image:Icon1024.png", "MultiSized Image:AlternateAppIcons" });
+				});
 		}
 
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
@@ -134,7 +133,7 @@ namespace Xamarin.Tests {
 				new Dictionary<string, string> () {
 					{ "AppIcon", "AppIcons" }
 				},
-				new string [] { "Icon Image:Icon1024.png", "MultiSized Image:AlternateAppIcons" });
+				new string [] { "Icon Image:Icon1024.png", "MultiSized Image:AppIcons" });
 		}
 
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
@@ -204,11 +203,7 @@ namespace Xamarin.Tests {
 
 			var foundAssets = AssetsTest.FindAssets (doc);
 
-			var expectedAssets = new HashSet<string> () {
-				"Image:Icon16.png",
-				"Image:Icon32.png",
-				"Image:Icon64.png",
-			};
+			var expectedAssets = new HashSet<string> ();
 			if (extraAssets is not null) {
 				foreach (var asset in extraAssets)
 					expectedAssets.Add (asset);
@@ -216,7 +211,16 @@ namespace Xamarin.Tests {
 
 			switch (platform) {
 			case ApplePlatform.iOS:
+				expectedAssets.Add ("Image:Icon16.png");
+				expectedAssets.Add ("Image:Icon32.png");
+				expectedAssets.Add ("Image:Icon64.png");
+				break;
 			case ApplePlatform.TVOS:
+				expectedAssets.Add ("Image:Icon16.png");
+				expectedAssets.Add ("Image:Icon32.png");
+				expectedAssets.Add ("Image:Icon1920x1080.png");
+				expectedAssets.Add ("Image:Icon3840x2160.png");
+				break;
 			case ApplePlatform.MacOSX:
 			case ApplePlatform.MacCatalyst:
 				break;

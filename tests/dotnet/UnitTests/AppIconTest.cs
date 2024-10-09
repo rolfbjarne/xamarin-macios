@@ -116,7 +116,7 @@ namespace Xamarin.Tests {
 				new Dictionary<string, string> () {
 					{ "AddTheseAlternateAppIcons", "InexistentAppIcon" }
 				},
-				expectedErrorMessages: new string [] { "Couldn't find the app icon 'InexistentAppIcon' among the resources." });
+				expectedErrorMessages: new string [] { "Can't find the AlternateAppIcon 'InexistentAppIcon' among the image resources." });
 		}
 
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
@@ -155,7 +155,6 @@ namespace Xamarin.Tests {
 				new string [] { "Icon Image:Icon1024.png", "MultiSized Image:AlternateAppIcons" });
 		}
 
-
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
 		// [TestCase (ApplePlatform.iOS, "ios-arm64")]
 		// [TestCase (ApplePlatform.TVOS, "tvos-arm64")]
@@ -171,7 +170,7 @@ namespace Xamarin.Tests {
 				new Dictionary<string, string> () {
 					{ "AppIcon", "InexistentAppIcon" }
 				},
-				expectedErrorMessages: new string [] { "Couldn't find the app icon 'InexistentAppIcon' among the resources." });
+				expectedErrorMessages: new string [] { "Can't find the AppIcon 'InexistentAppIcon' among the image resources." });
 		}
 
 		void TestXCAssetsImpl (ApplePlatform platform, string runtimeIdentifiers, Dictionary<string, string>? extraProperties = null, IEnumerable<string>? extraAssets = null, string[]? expectedErrorMessages = null)

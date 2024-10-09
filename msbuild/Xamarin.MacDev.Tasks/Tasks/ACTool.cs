@@ -14,6 +14,7 @@ using Xamarin.Utils;
 namespace Xamarin.MacDev.Tasks {
 	public class ACTool : XcodeCompilerToolTask, ICancelableTask {
 		string? outputSpecs;
+		string? partialAppManifestPath;
 
 		#region Inputs
 
@@ -48,14 +49,13 @@ namespace Xamarin.MacDev.Tasks {
 		#region Outputs
 
 		[Output]
-		public ITaskItem? AppIconsManifest { get; set; }
-
-		[Output]
 		public ITaskItem? PartialAppManifest { get; set; }
 
 		#endregion
 
-		HashSet<string> appIconSets = new ();
+		// ,appiconset on iOS, macOS and Mac Catalyst
+		// .brandassets on tvOS
+		HashSet<string> appIconsInAssets = new ();
 
 		protected override string DefaultBinDir {
 			get { return DeveloperRootBinDir; }
@@ -148,7 +148,8 @@ namespace Xamarin.MacDev.Tasks {
 			foreach (var targetDevice in GetTargetDevices ())
 				args.Add ("--target-device", targetDevice);
 
-			args.Add ("--minimum-deployment-target", MinimumOSVersion);
+			if (!string.IsNullOrEmpty (MinimumOSVersion))
+				args.Add ("--minimum-deployment-target", MinimumOSVersion);
 
 			var platform = PlatformUtils.GetTargetPlatform (SdkPlatform, IsWatchApp);
 
@@ -156,7 +157,7 @@ namespace Xamarin.MacDev.Tasks {
 				args.Add ("--platform", platform);
 
 			if (!string.IsNullOrEmpty (AppIcon)) {
-				if (!appIconSets.Contains (AppIcon)) {
+				if (!appIconsInAssets.Contains (AppIcon)) {
 					Log.LogError (MSBStrings.E7126 /* Can't find the AppIcon '{0}' among the image resources. */, AppIcon);
 					return;
 				}
@@ -166,7 +167,7 @@ namespace Xamarin.MacDev.Tasks {
 
 			foreach (var alternate in AlternateAppIcons) {
 				var alternateAppIcon = alternate.ItemSpec!;
-				if (!appIconSets.Contains (alternateAppIcon)) {
+				if (!appIconsInAssets.Contains (alternateAppIcon)) {
 					Log.LogError (MSBStrings.E7127 /* Can't find the AlternateAppIcon '{0}' among the image resources. */, alternateAppIcon);
 					return;
 				}
@@ -182,7 +183,7 @@ namespace Xamarin.MacDev.Tasks {
 				args.Add ("--include-all-app-icons");
 
 			args.Add ("--output-partial-info-plist");
-			args.AddQuoted (PartialAppManifest!.GetMetadata ("FullPath"));
+			args.AddQuoted (Path.GetFullPath (partialAppManifestPath));
 		}
 
 		IEnumerable<ITaskItem> GetCompiledBundleResources (PDictionary output, string intermediateBundleDir)
@@ -339,8 +340,13 @@ namespace Xamarin.MacDev.Tasks {
 				var catalog = Path.GetDirectoryName (vpath);
 				path = Path.GetDirectoryName (path);
 
-				if (path.EndsWith (".appiconset", StringComparison.OrdinalIgnoreCase))
-					appIconSets.Add (Path.GetFileNameWithoutExtension (path));
+				if (Platform == ApplePlatform.TVOS) {
+					if (path.EndsWith (".brandassets", StringComparison.OrdinalIgnoreCase))
+						appIconsInAssets.Add (Path.GetFileNameWithoutExtension (path));
+				} else {
+					if (path.EndsWith (".appiconset", StringComparison.OrdinalIgnoreCase))
+						appIconsInAssets.Add (Path.GetFileNameWithoutExtension (path));
+				}
 
 				// keep walking up the directory structure until we get to the .xcassets directory
 				while (!string.IsNullOrEmpty (catalog) && Path.GetExtension (catalog) != ".xcassets") {
@@ -424,7 +430,8 @@ namespace Xamarin.MacDev.Tasks {
 				return !Log.HasLoggedErrors;
 			}
 
-			PartialAppManifest = new TaskItem (Path.Combine (intermediate, "partial-info.plist"));
+			partialAppManifestPath = Path.Combine (intermediate, "partial-info.plist");
+			PartialAppManifest = new TaskItem (partialAppManifestPath);
 
 			if (specs.Count > 0) {
 				outputSpecs = Path.Combine (intermediate, "output-specifications.plist");
@@ -439,8 +446,8 @@ namespace Xamarin.MacDev.Tasks {
 			if (Log.HasLoggedErrors)
 				return false;
 
-			if (!File.Exists (PartialAppManifest.GetMetadata ("FullPath")))
-				Log.LogError (MSBStrings.E0093, PartialAppManifest.GetMetadata ("FullPath"));
+			if (!File.Exists (Path.GetFullPath (partialAppManifestPath)))
+				Log.LogError (MSBStrings.E0093, Path.GetFullPath (partialAppManifestPath));
 
 			try {
 				var manifestOutput = PDictionary.FromFile (manifest.ItemSpec)!;

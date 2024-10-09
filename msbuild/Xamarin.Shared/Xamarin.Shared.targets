@@ -850,14 +850,14 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 	<Target Name="_BeforeCoreCompileImageAssets"
 		Inputs="@(ImageAsset);$(_TemporaryAppManifest)"
-		Outputs="$(_ACTool_PartialAppManifestCache);$(_ACTool_AppIconsManifestCache);$(_ACTool_BundleResourceCache)"
+		Outputs="$(_ACTool_PartialAppManifestCache);$(_ACTool_BundleResourceCache)"
 		DependsOnTargets="_ReadAppManifest"
 		>
 
 		<!-- If any ImageAsset or AppManifest is newer than the generated items list, we delete them so that the _CoreCompileImageAssets
 		     target runs again and updates those lists for the next run
 		-->
-		<Delete Files="$(_ACTool_PartialAppManifestCache);$(_ACTool_AppIconsManifestCache);$(_ACTool_BundleResourceCache)" />
+		<Delete Files="$(_ACTool_PartialAppManifestCache);$(_ACTool_BundleResourceCache)" />
 		<RemoveDir Directories="$(DeviceSpecificIntermediateOutputPath)actool" />
 	</Target>
 
@@ -867,9 +867,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<!-- If _BeforeCoreCompileImageAssets did not delete the generated items lists from _CoreCompileImageAsset, then we read them
 		     since that target won't run and we need the output items that are cached in those files, which includes full metadata -->
 		<ReadItemsFromFile File="$(_ACTool_PartialAppManifestCache)" Condition="Exists('$(_ACTool_PartialAppManifestCache)')">
-			<Output TaskParameter="Items" ItemName="_PostCompilePartialAppManifest" />
-		</ReadItemsFromFile>
-		<ReadItemsFromFile File="$(_ACTool_AppIconsManifestCache)" Condition="Exists('$(_ACTool_AppIconsManifestCache)')">
 			<Output TaskParameter="Items" ItemName="_PostCompilePartialAppManifest" />
 		</ReadItemsFromFile>
 		<ReadItemsFromFile File="$(_ACTool_BundleResourceCache)" Condition="Exists('$(_ACTool_BundleResourceCache)')">
@@ -890,7 +887,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 	<Target Name="_CoreCompileImageAssets"
 		Inputs="@(ImageAsset);$(_TemporaryAppManifest)"
-		Outputs="$(_ACTool_PartialAppManifestCache);$(_ACTool_AppIconsManifestCache);$(_ACTool_BundleResourceCache)"
+		Outputs="$(_ACTool_PartialAppManifestCache);$(_ACTool_BundleResourceCache)"
 		DependsOnTargets="$(_CoreCompileImageAssetsDependsOn)">
 
 		<ACTool
@@ -928,23 +925,20 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			XSLaunchImageAssets="$(_XSLaunchImageAssets)"
 			>
 			<Output TaskParameter="PartialAppManifest" ItemName="_PostCompilePartialAppManifest" />
-			<Output TaskParameter="AppIconsManifest" ItemName="_PostCompilePartialAppManifest" />
 			<Output TaskParameter="BundleResources" ItemName="_BundleResourceWithLogicalName" />
 
 			<!-- Local items to be persisted to items files -->
 			<Output TaskParameter="PartialAppManifest" ItemName="_ACTool_PartialAppManifest" />
-			<Output TaskParameter="AppIconsManifest" ItemName="_ACTool_AppIconsManifest" />
 			<Output TaskParameter="BundleResources" ItemName="_ACTool_BundleResources" />
 		</ACTool>
 
 		<!-- Cache the generated outputs items for incremental build support -->
 		<WriteItemsToFile Items="@(_ACTool_PartialAppManifest)" ItemName="_PostCompilePartialAppManifest" File="$(_ACTool_PartialAppManifestCache)" Overwrite="true" IncludeMetadata="true" />
-		<WriteItemsToFile Items="@(_ACTool_AppIconsManifest)" ItemName="_PostCompilePartialAppManifest" File="$(_ACTool_AppIconsManifestCache)" Overwrite="true" IncludeMetadata="true" />
 		<WriteItemsToFile Items="@(_ACTool_BundleResources)" ItemName="_BundleResourceWithLogicalName" File="$(_ACTool_BundleResourceCache)" Overwrite="true" IncludeMetadata="true" />
 		<!-- Write out the list of assets we've processed, so that an inner build in a multi-rid build can skip processing them -->
 		<WriteItemsToFile Items="@(ImageAsset)" Condition="'$(_SaveProcessedItems)' == 'true'" ItemName="ImageAsset" File="$(_ProcessedImageAssetsPath)" Overwrite="true" IncludeMetadata="false" />
 		<ItemGroup>
-			<FileWrites Include="$(_ACTool_PartialAppManifestCache);$(_ACTool_AppIconsManifestCache);$(_ACTool_BundleResourceCache)" />
+			<FileWrites Include="$(_ACTool_PartialAppManifestCache);$(_ACTool_BundleResourceCache)" />
 			<FileWrites Include="$(_ProcessedImageAssetsPath)" />
 		</ItemGroup>
 	</Target>
@@ -1154,7 +1148,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 			<!-- actool output caches -->
 			<_ACTool_PartialAppManifestCache>$(DeviceSpecificIntermediateOutputPath)actool\_PartialAppManifest.items</_ACTool_PartialAppManifestCache>
-			<_ACTool_AppIconsManifestCache>$(DeviceSpecificIntermediateOutputPath)actool\_AppIconsManifest.items</_ACTool_AppIconsManifestCache>
 			<_ACTool_BundleResourceCache>$(DeviceSpecificIntermediateOutputPath)actool\_BundleResourceWithLogicalName.items</_ACTool_BundleResourceCache>
 
 			<!-- coremlc output caches -->

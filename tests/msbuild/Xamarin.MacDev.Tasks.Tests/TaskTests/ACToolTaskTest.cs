@@ -1,391 +1,456 @@
-// using System;
-// using System.IO;
-// using System.Linq;
-// using System.Collections.Generic;
+using System;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
 
-// using Microsoft.Build.Framework;
-// using Microsoft.Build.Utilities;
+using Microsoft.Build.Framework;
+using Microsoft.Build.Utilities;
 
-// using NUnit.Framework;
+using NUnit.Framework;
 
-// using Xamarin.MacDev;
-// using Xamarin.MacDev.Tasks;
-// using Xamarin.Tests;
-// using Xamarin.Utils;
+using Xamarin.MacDev;
+using Xamarin.MacDev.Tasks;
+using Xamarin.Tests;
+using Xamarin.Utils;
 
-// namespace Xamarin.MacDev.Tasks {
-// 	[TestFixture]
-// 	public class ACBToolTaskTests : TestBase {
-// 		ACTool CreateACToolTask (ApplePlatform framework, string projectDir, out string intermediateOutputPath, params string[] imageAssets)
-// 		{
-// 			intermediateOutputPath = Cache.CreateTemporaryDirectory ();
+namespace Xamarin.MacDev.Tasks {
+	[TestFixture]
+	public class ACToolTaskTests : TestBase {
+		ACTool CreateACToolTask (ApplePlatform platform, string projectDir, out string intermediateOutputPath, params string[] imageAssets)
+		{
+			Configuration.IgnoreIfIgnoredPlatform (platform);
 
-// 			var sdk = Sdks.GetSdk (framework);
-// 			var version = AppleSdkVersion.GetDefault (sdk, false);
-// 			var root = sdk.GetSdkPath (version, false);
-// 			var usr = Path.Combine (sdk.DeveloperRoot, "usr");
-// 			var bin = Path.Combine (usr, "bin");
-// 			string platform;
+			intermediateOutputPath = Cache.CreateTemporaryDirectory ();
 
-// 			switch (framework) {
-// 			case ApplePlatform.TVOS:
-// 				platform = "AppleTVOS";
-// 				break;
-// 			case ApplePlatform.iOS:
-// 				platform = "iPhoneOS";
-// 				break;
-// 			default:
-// 				throw new NotImplementedException (framework.ToString ());
-// 			}
+			var sdk = Sdks.GetAppleSdk (platform);
+			var version = AppleSdkVersion.UseDefault.ToString ();
+			var root = sdk.GetSdkPath (version, false);
+			var usr = Path.Combine (sdk.DeveloperRoot, "usr");
+			var bin = Path.Combine (usr, "bin");
+			string sdkPlatform;
+			var uiDeviceFamily = "";
 
-// 			var task = CreateTask<ACTool> ();
-// 			task.ImageAssets = imageAssets
-// 				.Select (v => {
-// 					var spl = v.Split ('|');
-// 					var rv = new TaskItem (spl [0]);
-// 					rv.SetMetadata ("Link", spl [1]);
-// 					return rv;
-// 				})
-// 				.Cast<ITaskItem> ()
-// 				.ToArray ();
-// 			task.IntermediateOutputPath = intermediateOutputPath;
-// 			task.OutputPath = Path.Combine (intermediateOutputPath, "OutputPath");
-// 			task.ProjectDir = projectDir;
-// 			task.SdkDevPath = Configuration.xcode_root;
-// 			task.SdkPlatform = platform;
-// 			task.SdkVersion = version.ToString ();
-// 			task.SdkUsrPath = usr;
-// 			task.SdkBinPath = bin;
-// 			task.TargetFrameworkMoniker = TargetFramework.GetTargetFramework (framework, true).ToString ();
-// 			task.ToolExe = "true"; // don't actually execute 'actool'
-// 			return task;
-// 		}
+			switch (platform) {
+			case ApplePlatform.TVOS:
+				sdkPlatform = "AppleTVOS";
+				uiDeviceFamily = "TV";
+				break;
+			case ApplePlatform.iOS:
+				sdkPlatform = "iPhoneOS";
+				uiDeviceFamily = "IPhone, IPad";
+				break;
+			case ApplePlatform.MacOSX:
+				sdkPlatform = "MacOSX";
+				uiDeviceFamily = "IPhone, IPad";
+				break;
+			case ApplePlatform.MacCatalyst:
+				sdkPlatform = "MacCatalyst";
+				break;
+			default:
+				throw new NotImplementedException (platform.ToString ());
+			}
 
-// 		[Test]
-// 		public void DefaultAppIcons ()
-// 		{
-// 			var platform = ApplePlatform.iOS;
-// 			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
-// 			var actool = CreateACToolTask (
-// 				platform,
-// 				projectDir,
-// 				out var _,
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png"
-// 			);
-// 			ExecuteTask (actool);
+			var task = CreateTask<ACTool> ();
+			task.ImageAssets = imageAssets
+				.Select (v => {
+					var spl = v.Split ('|');
+					var rv = new TaskItem (spl [0]);
+					rv.SetMetadata ("Link", spl [1]);
+					return rv;
+				})
+				.Cast<ITaskItem> ()
+				.ToArray ();
+			task.IntermediateOutputPath = intermediateOutputPath;
+			task.MinimumOSVersion = Xamarin.SdkVersions.GetMinVersion (platform).ToString ();
+			task.OutputPath = Path.Combine (intermediateOutputPath, "OutputPath");
+			task.ProjectDir = projectDir;
+			task.SdkDevPath = Configuration.xcode_root;
+			task.SdkPlatform = sdkPlatform;
+			task.SdkVersion = version.ToString ();
+			task.SdkUsrPath = usr;
+			task.SdkBinPath = bin;
+			task.TargetFrameworkMoniker = TargetFramework.GetTargetFramework (platform, true).ToString ();
+			task.UIDeviceFamily = uiDeviceFamily;
+			return task;
+		}
 
-// 			Assert.IsNull (actool.AppIconsManifest, "AppIconsManifest");
-// 			Assert.IsNull (actool.PartialAppManifest, "PartialAppManifest");
-// 		}
+		ACTool CreateACToolTaskWithResources (ApplePlatform platform)
+		{
+			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
+			var files = Directory.GetFiles (Path.Combine (projectDir, "Resources", "Images.xcassets"), "*", SearchOption.AllDirectories);
+			var imageAssets = files.Select (v => v + "|" + v.Substring (projectDir.Length + 1)).ToArray ();
+			return CreateACToolTask (
+				platform,
+				projectDir,
+				out var _,
+				imageAssets
+			);
+		}
 
-// 		[Test]
-// 		public void AllAppIcons ()
-// 		{
-// 			var platform = ApplePlatform.iOS;
-// 			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
-// 			var actool = CreateACToolTask (
-// 				platform,
-// 				projectDir,
-// 				out var _,
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon32.png"
-// 			);
-// 			actool.IncludeAllAppIcons = true;
+		[Test]
+		[TestCase (ApplePlatform.iOS)]
+		[TestCase (ApplePlatform.TVOS)]
+		[TestCase (ApplePlatform.MacCatalyst)]
+		[TestCase (ApplePlatform.MacOSX)]
+		public void DefaultAppIcons (ApplePlatform platform)
+		{
+			var actool = CreateACToolTaskWithResources (platform);
+			ExecuteTask (actool);
 
-// 			ExecuteTask (actool);
+			Assert.IsNotNull (actool.PartialAppManifest, "PartialAppManifest");
+			var appIconsManifest = PDictionary.FromFile (actool.PartialAppManifest.ItemSpec!)!;
+			Assert.AreEqual (0, appIconsManifest.Count, $"Partial plist contents: {actool.PartialAppManifest.ItemSpec}");
+		}
 
-// 			Assert.IsNotNull (actool.AppIconsManifest, "AppIconsManifest");
-// 			Assert.IsNull (actool.PartialAppManifest, "PartialAppManifest");
+		[Test]
+		[TestCase (ApplePlatform.iOS)]
+		[TestCase (ApplePlatform.TVOS)]
+		[TestCase (ApplePlatform.MacCatalyst)]
+		[TestCase (ApplePlatform.MacOSX)]
+		public void AllAppIcons (ApplePlatform platform)
+		{
+			var actool = CreateACToolTaskWithResources (platform);
+			actool.IncludeAllAppIcons = true;
 
-// 			var appIconsManifest = PDictionary.FromFile (actool.AppIconsManifest.ItemSpec!)!;
-// 			var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
-// 			Assert.IsNotNull (cfBundleIcons, "CFBundleIcons");
-// 			Assert.IsFalse (cfBundleIcons.ContainsKey ("CFBundlePrimaryIcon"), "CFBundlePrimaryIcon");
-// 			var cfBundleAlternateIcons = cfBundleIcons.Get<PDictionary> ("CFBundleAlternateIcons");
-// 			Assert.IsNotNull (cfBundleAlternateIcons, "CFBundleAlternateIcons");
-// 			Assert.AreEqual (2, cfBundleAlternateIcons.Count, "CFBundleAlternateIcons.Count");
+			ExecuteTask (actool);
 
-// 			var alternateAppIcons1 = cfBundleAlternateIcons.Get<PDictionary> ("AppIcons");
-// 			Assert.IsNotNull (alternateAppIcons1, "AppIcons");
-// 			Assert.AreEqual ("AppIcons", alternateAppIcons1.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+			Assert.IsNotNull (actool.PartialAppManifest, "PartialAppManifest");
 
-// 			var alternateAppIcons2 = cfBundleAlternateIcons.Get<PDictionary> ("AlternateAppIcons");
-// 			Assert.IsNotNull (alternateAppIcons2, "AlternateAppIcons");
-// 			Assert.AreEqual ("AlternateAppIcons", alternateAppIcons2.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
-// 		}
+			Console.WriteLine (actool.PartialAppManifest?.ItemSpec);
 
-// 		[Test]
-// 		public void AllAppIconsWithAppIcon ()
-// 		{
-// 			var platform = ApplePlatform.iOS;
-// 			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
-// 			var actool = CreateACToolTask (
-// 				platform,
-// 				projectDir,
-// 				out var _,
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon32.png"
-// 			);
-// 			actool.IncludeAllAppIcons = true;
-// 			actool.AppIcon = "AlternateAppIcons";
+			var appIconsManifest = PDictionary.FromFile (actool.PartialAppManifest.ItemSpec!)!;
+			Assert.AreEqual (0, appIconsManifest.Count, $"Partial plist contents: {actool.PartialAppManifest.ItemSpec}");
+		}
 
-// 			ExecuteTask (actool);
+		[Test]
+		[TestCase (ApplePlatform.iOS)]
+		[TestCase (ApplePlatform.TVOS)]
+		[TestCase (ApplePlatform.MacCatalyst)]
+		[TestCase (ApplePlatform.MacOSX)]
+		public void AllAppIconsWithAppIcon (ApplePlatform platform)
+		{
+			var actool = CreateACToolTaskWithResources (platform);
+			actool.IncludeAllAppIcons = true;
+			if (platform == ApplePlatform.TVOS) {
+				actool.AppIcon = "AlternateBrandAssets";
+			} else {
+				actool.AppIcon = "AlternateAppIcons";
+			}
 
-// 			Assert.IsNotNull (actool.AppIconsManifest, "AppIconsManifest");
-// 			Assert.IsNull (actool.PartialAppManifest, "PartialAppManifest");
+			ExecuteTask (actool);
 
-// 			var appIconsManifest = PDictionary.FromFile (actool.AppIconsManifest.ItemSpec!)!;
-// 			var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
-// 			Assert.IsNotNull (cfBundleIcons, "CFBundleIcons");
+			Assert.IsNotNull (actool.PartialAppManifest, "PartialAppManifest");
 
-// 			var cfBundlePrimaryIcon = cfBundleIcons.Get<PDictionary> ("CFBundlePrimaryIcon");
-// 			Assert.IsNotNull (cfBundlePrimaryIcon, "CFBundlePrimaryIcon");
-// 			var cfBundleIconFiles = cfBundlePrimaryIcon.Get<PArray> ("CFBundleIconFiles");
-// 			Assert.IsNotNull (cfBundleIconFiles, "CFBundleIconFiles");
-// 			Assert.AreEqual (1, cfBundleIconFiles.Count, "CFBundleIconFiles.Length");
-// 			Assert.AreEqual ("AppIcon60x60", ((PString) cfBundleIconFiles [0]).Value, "CFBundleIconFiles[0].Value");
-// 			Assert.AreEqual ("AlternateAppIcons", cfBundlePrimaryIcon.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+			Console.WriteLine (actool.PartialAppManifest?.ItemSpec);
 
-// 			var cfBundleAlternateIcons = cfBundleIcons.Get<PDictionary> ("CFBundleAlternateIcons");
-// 			Assert.IsNotNull (cfBundleAlternateIcons, "CFBundleAlternateIcons");
-// 			Assert.AreEqual (1, cfBundleAlternateIcons.Count, "CFBundleAlternateIcons.Count");
+			var appIconsManifest = PDictionary.FromFile (actool.PartialAppManifest?.ItemSpec)!;
+			Assert.AreEqual (2, appIconsManifest.Count, $"Partial plist contents: {actool.PartialAppManifest.ItemSpec}");
+			if (platform == ApplePlatform.MacOSX || platform == ApplePlatform.MacCatalyst) {
+				Assert.AreEqual ("AlternateAppIcons", appIconsManifest.Get<PString> ("CFBundleIconFile")?.Value, "CFBundleIconFile");
+				Assert.AreEqual ("AlternateAppIcons", appIconsManifest.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+			} else if (platform == ApplePlatform.TVOS) {
+				var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
+				Assert.AreEqual (1, cfBundleIcons.Count, "CFBundleIcons.Count");
+				Assert.AreEqual ("AppIcon", cfBundleIcons.Get<PString> ("CFBundlePrimaryIcon")?.Value, "CFBundlePrimaryIcon");
 
-// 			var alternateAppIcons1 = cfBundleAlternateIcons.Get<PDictionary> ("AppIcons");
-// 			Assert.IsNotNull (alternateAppIcons1, "AppIcons");
-// 			Assert.AreEqual ("AppIcons", alternateAppIcons1.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
-// 		}
+				var tvTopShelfImage = appIconsManifest.Get<PDictionary> ("TVTopShelfImage");
+				Assert.AreEqual (2, tvTopShelfImage.Count, "TVTopShelfImage.Count");
+				Assert.AreEqual ("TopShelfImage", tvTopShelfImage.Get<PString> ("TVTopShelfPrimaryImage")?.Value, "TVTopShelfPrimaryImage");
+				Assert.AreEqual ("TopShelfImageWide", tvTopShelfImage.Get<PString> ("TVTopShelfPrimaryImageWide")?.Value, "TVTopShelfPrimaryImageWide");
+			} else {
+				{
+					// iPhone
+					var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
+					Assert.AreEqual (2, cfBundleIcons.Count, "CFBundleIcons.Count");
 
-// 		[Test]
-// 		public void AppIcon ()
-// 		{
-// 			var platform = ApplePlatform.iOS;
-// 			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
-// 			var actool = CreateACToolTask (
-// 				platform,
-// 				projectDir,
-// 				out var _,
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon32.png"
-// 			);
-// 			actool.AppIcon = "AppIcons";
+					var cfBundlePrimaryIcon = cfBundleIcons.Get<PDictionary> ("CFBundlePrimaryIcon");
+					Assert.AreEqual (2, cfBundlePrimaryIcon.Count, "CFBundlePrimaryIcon.Length");
 
-// 			ExecuteTask (actool);
+					var cfBundleIconFiles = cfBundlePrimaryIcon.Get<PArray> ("CFBundleIconFiles");
+					Assert.AreEqual (1, cfBundleIconFiles.Count, "CFBundleIconFiles.Length");
+					Assert.AreEqual ("AlternateAppIcons60x60", ((PString) cfBundleIconFiles [0]).Value, "CFBundleIconFiles[0].Value");
+					Assert.AreEqual ("AlternateAppIcons", cfBundlePrimaryIcon.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
 
-// 			Assert.IsNotNull (actool.AppIconsManifest, "AppIconsManifest");
-// 			Assert.IsNull (actool.PartialAppManifest, "PartialAppManifest");
+					var cfBundleAlternateIcons = cfBundleIcons.Get<PDictionary> ("CFBundleAlternateIcons");
+					Assert.AreEqual (1, cfBundleAlternateIcons.Count, "CFBundleAlternateIcons.Count");
 
-// 			Console.WriteLine (actool.AppIconsManifest);
+					var alternateAppIcons = cfBundleAlternateIcons.Get<PDictionary> ("AppIcons");
+					Assert.AreEqual (2, alternateAppIcons.Count, "AppIcons.Count");
+					Assert.AreEqual ("AppIcons", alternateAppIcons.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
 
-// 			var appIconsManifest = PDictionary.FromFile (actool.AppIconsManifest.ItemSpec!)!;
-// 			var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
-// 			Assert.IsNotNull (cfBundleIcons, "CFBundleIcons");
-// 			Assert.IsFalse (cfBundleIcons.ContainsKey ("CFBundleAlternateIcons"), "CFBundleAlternateIcons");
-// 			var cfBundlePrimaryIcon = cfBundleIcons.Get<PDictionary> ("CFBundlePrimaryIcon");
-// 			Assert.IsNotNull (cfBundlePrimaryIcon, "CFBundlePrimaryIcon");
-// 			var cfBundleIconFiles = cfBundlePrimaryIcon.Get<PArray> ("CFBundleIconFiles");
-// 			Assert.IsNotNull (cfBundleIconFiles, "CFBundleIconFiles");
-// 			Assert.AreEqual (1, cfBundleIconFiles.Count, "CFBundleIconFiles.Length");
-// 			Assert.AreEqual ("AppIcon60x60", ((PString) cfBundleIconFiles [0]).Value, "CFBundleIconFiles[0].Value");
-// 			Assert.AreEqual ("AppIcons", cfBundlePrimaryIcon.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
-// 		}
+					var appIcons_cfBundleIconFiles = alternateAppIcons.Get<PArray> ("CFBundleIconFiles");
+					Assert.AreEqual (2, appIcons_cfBundleIconFiles.Count, "AppIcons.CFBundleIconFiles.Length");
+					Assert.AreEqual ("AppIcons60x60", ((PString) appIcons_cfBundleIconFiles [0]).Value, "AppIcons.CFBundleIconFiles[0].Value");
+					Assert.AreEqual ("AppIcons76x76", ((PString) appIcons_cfBundleIconFiles [1]).Value, "AppIcons.CFBundleIconFiles[1].Value");
+				}
+				{
+					// iPad
+					var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons~ipad");
+					Assert.AreEqual (2, cfBundleIcons.Count, "CFBundleIcons.Count");
 
-// 		[Test]
-// 		public void AppIconAndAlternateIcons ()
-// 		{
-// 			var platform = ApplePlatform.iOS;
-// 			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
-// 			var actool = CreateACToolTask (
-// 				platform,
-// 				projectDir,
-// 				out var _,
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon32.png"
-// 			);
-// 			actool.AppIcon = "AppIcons";
-// 			actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AlternateAppIcons")};
+					var cfBundlePrimaryIcon = cfBundleIcons.Get<PDictionary> ("CFBundlePrimaryIcon");
+					Assert.AreEqual (2, cfBundlePrimaryIcon.Count, "CFBundlePrimaryIcon.Length");
 
-// 			ExecuteTask (actool);
+					var cfBundleIconFiles = cfBundlePrimaryIcon.Get<PArray> ("CFBundleIconFiles");
+					Assert.AreEqual (2, cfBundleIconFiles.Count, "CFBundleIconFiles.Length");
+					Assert.AreEqual ("AlternateAppIcons60x60", ((PString) cfBundleIconFiles [0]).Value, "CFBundleIconFiles[0].Value");
+					Assert.AreEqual ("AlternateAppIcons76x76", ((PString) cfBundleIconFiles [1]).Value, "CFBundleIconFiles[1].Value");
+					Assert.AreEqual ("AlternateAppIcons", cfBundlePrimaryIcon.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
 
-// 			Assert.IsNotNull (actool.AppIconsManifest, "AppIconsManifest");
-// 			Assert.IsNull (actool.PartialAppManifest, "PartialAppManifest");
+					var cfBundleAlternateIcons = cfBundleIcons.Get<PDictionary> ("CFBundleAlternateIcons");
+					Assert.AreEqual (1, cfBundleAlternateIcons.Count, "CFBundleAlternateIcons.Count");
 
-// 			Console.WriteLine (actool.AppIconsManifest);
+					var appIcons = cfBundleAlternateIcons.Get<PDictionary> ("AppIcons");
+					Assert.AreEqual (2, appIcons.Count, "AppIcons.Count");
+					Assert.AreEqual ("AppIcons", appIcons.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
 
-// 			var appIconsManifest = PDictionary.FromFile (actool.AppIconsManifest.ItemSpec!)!;
-// 			var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
-// 			Assert.IsNotNull (cfBundleIcons, "CFBundleIcons");
+					var appIcons_cfBundleIconFiles = appIcons.Get<PArray> ("CFBundleIconFiles");
+					Assert.AreEqual (2, appIcons_cfBundleIconFiles.Count, "AppIcons.CFBundleIconFiles.Length");
+					Assert.AreEqual ("AppIcons60x60", ((PString) appIcons_cfBundleIconFiles [0]).Value, "AppIcons.CFBundleIconFiles[0].Value");
+					Assert.AreEqual ("AppIcons76x76", ((PString) appIcons_cfBundleIconFiles [1]).Value, "AppIcons.CFBundleIconFiles[1].Value");
+				}
+			}
+		}
 
-// 			var cfBundleAlternateIcons = cfBundleIcons.Get<PDictionary> ("CFBundleAlternateIcons");
-// 			Assert.IsNotNull (cfBundleAlternateIcons, "CFBundleAlternateIcons");
-// 			Assert.AreEqual (1, cfBundleAlternateIcons.Count, "CFBundleAlternateIcons.Count");
-// 			var alternateAppIcons = cfBundleAlternateIcons.Get<PDictionary> ("AlternateAppIcons");
-// 			Assert.IsNotNull (alternateAppIcons, "AlternateAppIcons");
-// 			Assert.AreEqual ("AlternateAppIcons", alternateAppIcons.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+		[Test]
+		[TestCase (ApplePlatform.iOS)]
+		[TestCase (ApplePlatform.TVOS)]
+		[TestCase (ApplePlatform.MacCatalyst)]
+		[TestCase (ApplePlatform.MacOSX)]
+		public void AppIcon (ApplePlatform platform)
+		{
+			var actool = CreateACToolTaskWithResources (platform);
+			if (platform == ApplePlatform.TVOS) {
+				actool.AppIcon = "BrandAssets";
+			} else {
+				actool.AppIcon = "AppIcons";
+			}
 
-// 			var cfBundlePrimaryIcon = cfBundleIcons.Get<PDictionary> ("CFBundlePrimaryIcon");
-// 			Assert.IsNotNull (cfBundlePrimaryIcon, "CFBundlePrimaryIcon");
-// 			var cfBundleIconFiles = cfBundlePrimaryIcon.Get<PArray> ("CFBundleIconFiles");
-// 			Assert.IsNotNull (cfBundleIconFiles, "CFBundleIconFiles");
-// 			Assert.AreEqual (1, cfBundleIconFiles.Count, "CFBundleIconFiles.Length");
-// 			Assert.AreEqual ("AppIcon60x60", ((PString) cfBundleIconFiles [0]).Value, "CFBundleIconFiles[0].Value");
-// 			Assert.AreEqual ("AppIcons", cfBundlePrimaryIcon.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
-// 		}
+			ExecuteTask (actool);
 
-// 		[Test]
-// 		public void AlternateIcons ()
-// 		{
-// 			var platform = ApplePlatform.iOS;
-// 			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
-// 			var actool = CreateACToolTask (
-// 				platform,
-// 				projectDir,
-// 				out var _,
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon32.png"
-// 			);
-// 			actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AlternateAppIcons")};
+			Assert.IsNotNull (actool.PartialAppManifest, "PartialAppManifest");
 
-// 			ExecuteTask (actool);
+			Console.WriteLine (actool.PartialAppManifest.ItemSpec);
 
-// 			Assert.IsNotNull (actool.AppIconsManifest, "AppIconsManifest");
-// 			Assert.IsNull (actool.PartialAppManifest, "PartialAppManifest");
+			var appIconsManifest = PDictionary.FromFile (actool.PartialAppManifest.ItemSpec!)!;
+			if (platform == ApplePlatform.MacOSX || platform == ApplePlatform.MacCatalyst) {
+				Assert.AreEqual (2, appIconsManifest.Count, $"Partial plist contents: {actool.PartialAppManifest.ItemSpec}");
+				Assert.AreEqual ("AppIcons", appIconsManifest.Get<PString> ("CFBundleIconFile")?.Value, "CFBundleIconFile");
+				Assert.AreEqual ("AppIcons", appIconsManifest.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+			} else if (platform == ApplePlatform.TVOS) {
+				Assert.AreEqual (2, appIconsManifest.Count, $"Partial plist contents: {actool.PartialAppManifest.ItemSpec}");
 
-// 			Console.WriteLine (actool.AppIconsManifest);
+				var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
+				Assert.AreEqual (1, cfBundleIcons.Count, "CFBundleIcons.Count");
+				Assert.AreEqual ("AppIcon", cfBundleIcons.Get<PString> ("CFBundlePrimaryIcon")?.Value, "CFBundlePrimaryIcon");
 
-// 			var appIconsManifest = PDictionary.FromFile (actool.AppIconsManifest.ItemSpec!)!;
-// 			var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
-// 			Assert.IsNotNull (cfBundleIcons, "CFBundleIcons");
+				var tvTopShelfImage = appIconsManifest.Get<PDictionary> ("TVTopShelfImage");
+				Assert.AreEqual (2, tvTopShelfImage.Count, "TVTopShelfImage.Count");
+				Assert.AreEqual ("TopShelfImage", tvTopShelfImage.Get<PString> ("TVTopShelfPrimaryImage")?.Value, "TVTopShelfPrimaryImage");
+				Assert.AreEqual ("TopShelfImageWide", tvTopShelfImage.Get<PString> ("TVTopShelfPrimaryImageWide")?.Value, "TVTopShelfPrimaryImageWide");
+			} else {
+				{
+					// iPhone
+					var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
+					Assert.AreEqual (1, cfBundleIcons.Count, "CFBundleIcons.Count");
 
-// 			var cfBundleAlternateIcons = cfBundleIcons.Get<PDictionary> ("CFBundleAlternateIcons");
-// 			Assert.IsNotNull (cfBundleAlternateIcons, "CFBundleAlternateIcons");
-// 			Assert.AreEqual (1, cfBundleAlternateIcons.Count, "CFBundleAlternateIcons.Count");
-// 			var alternateAppIcons = cfBundleAlternateIcons.Get<PDictionary> ("AlternateAppIcons");
-// 			Assert.IsNotNull (alternateAppIcons, "AlternateAppIcons");
-// 			Assert.AreEqual ("AlternateAppIcons", alternateAppIcons.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+					var cfBundlePrimaryIcon = cfBundleIcons.Get<PDictionary> ("CFBundlePrimaryIcon");
+					Assert.AreEqual (2, cfBundlePrimaryIcon.Count, "CFBundlePrimaryIcon.Length");
 
-// 			Assert.IsFalse (cfBundleIcons.ContainsKey ("CFBundlePrimaryIcon"), "CFBundlePrimaryIcon");
-// 		}
+					var cfBundleIconFiles = cfBundlePrimaryIcon.Get<PArray> ("CFBundleIconFiles");
+					Assert.AreEqual (1, cfBundleIconFiles.Count, "CFBundleIconFiles.Length");
+					Assert.AreEqual ("AppIcons60x60", ((PString) cfBundleIconFiles [0]).Value, "CFBundleIconFiles[0].Value");
+					Assert.AreEqual ("AppIcons", cfBundlePrimaryIcon.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+				}
+				{
+					// iPad
+					var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons~ipad");
+					Assert.AreEqual (1, cfBundleIcons.Count, "CFBundleIcons.Count");
 
-// 		[Test]
-// 		public void InexistentAppIcon ()
-// 		{
-// 			var platform = ApplePlatform.iOS;
-// 			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
-// 			var actool = CreateACToolTask (
-// 				platform,
-// 				projectDir,
-// 				out var _,
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon32.png"
-// 			);
-// 			actool.AppIcon = "InexistentAppIcons";
+					var cfBundlePrimaryIcon = cfBundleIcons.Get<PDictionary> ("CFBundlePrimaryIcon");
+					Assert.AreEqual (2, cfBundlePrimaryIcon.Count, "CFBundlePrimaryIcon.Length");
 
-// 			ExecuteTask (actool, 1);
-// 			Assert.AreEqual ("Can't find the AppIcon 'InexistentAppIcons' among the image resources.", Engine.Logger.ErrorEvents [0].Message, "Error message");
-// 		}
+					var cfBundleIconFiles = cfBundlePrimaryIcon.Get<PArray> ("CFBundleIconFiles");
+					Assert.AreEqual (2, cfBundleIconFiles.Count, "CFBundleIconFiles.Length");
+					Assert.AreEqual ("AppIcons60x60", ((PString) cfBundleIconFiles [0]).Value, "CFBundleIconFiles[0].Value");
+					Assert.AreEqual ("AppIcons76x76", ((PString) cfBundleIconFiles [1]).Value, "CFBundleIconFiles[1].Value");
+					Assert.AreEqual ("AppIcons", cfBundlePrimaryIcon.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+				}
+			}
+		}
 
-// 		[Test]
-// 		public void InexistentAlternateIcons ()
-// 		{
-// 			var platform = ApplePlatform.iOS;
-// 			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
-// 			var actool = CreateACToolTask (
-// 				platform,
-// 				projectDir,
-// 				out var _,
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon32.png"
-// 			);
-// 			actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("InexistentAlternateAppIcons")};
+		[Test]
+		[TestCase (ApplePlatform.iOS)]
+		[TestCase (ApplePlatform.TVOS)]
+		[TestCase (ApplePlatform.MacCatalyst)]
+		[TestCase (ApplePlatform.MacOSX)]
+		public void AppIconAndAlternateIcons (ApplePlatform platform)
+		{
+			var actool = CreateACToolTaskWithResources (platform);
+			if (platform == ApplePlatform.TVOS) {
+				actool.AppIcon = "BrandAssets";
+				actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AlternateBrandAssets")};
+			} else {
+				actool.AppIcon = "AppIcons";
+				actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AlternateAppIcons")};
+			}
 
-// 			ExecuteTask (actool, 1);
-// 			Assert.AreEqual ("Can't find the AlternateAppIcon 'InexistentAlternateAppIcons' among the image resources.", Engine.Logger.ErrorEvents [0].Message, "Error message");
-// 		}
+			ExecuteTask (actool);
 
-// 		[Test]
-// 		public void BothAlternateAndMainIcon ()
-// 		{
-// 			var platform = ApplePlatform.iOS;
-// 			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
-// 			var actool = CreateACToolTask (
-// 				platform,
-// 				projectDir,
-// 				out var _,
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon32.png"
-// 			);
-// 			actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AppIcons")};
-// 			actool.AppIcon = "AppIcons";
+			Assert.IsNotNull (actool.PartialAppManifest, "PartialAppManifest");
 
-// 			ExecuteTask (actool, 1);
-// 			Assert.AreEqual ("The image resource 'AppIcons' is specified as both 'AppIcon' and 'AlternateAppIcon'", Engine.Logger.ErrorEvents [0].Message, "Error message");
-// 		}
+			Console.WriteLine (actool.PartialAppManifest.ItemSpec);
 
-// 		[Test]
-// 		public void XSAppIconAssetsAndAppIcon ()
-// 		{
-// 			var platform = ApplePlatform.iOS;
-// 			var projectDir = Path.Combine (Configuration.SourceRoot, "tests", "dotnet", "AppWithXCAssets", platform.AsString ());
-// 			var actool = CreateACToolTask (
-// 				platform,
-// 				projectDir,
-// 				out var _,
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "Contents.json") + "|Resources/Images.xcassets/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AppIcons.appiconset/Icon32.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Contents.json") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Contents.json",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon16.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon16.png",
-// 				Path.Combine (projectDir, "Resources", "Images.xcassets", "AlternateAppIcons.appiconset", "Icon32.png") + "|Resources/Images.xcassets/AlternateAppIcons.appiconset/Icon32.png"
-// 			);
-// 			actool.AppIcon = "AppIcons";
-// 			actool.XSAppIconAssets = "Resources/Images.xcassets/AppIcons.appiconset";
+			var appIconsManifest = PDictionary.FromFile (actool.PartialAppManifest.ItemSpec!)!;
+			Assert.AreEqual (2, appIconsManifest.Count, $"Partial plist contents: {actool.PartialAppManifest.ItemSpec}");
+			if (platform == ApplePlatform.MacOSX || platform == ApplePlatform.MacCatalyst) {
+				Assert.AreEqual ("AppIcons", appIconsManifest.Get<PString> ("CFBundleIconFile")?.Value, "CFBundleIconFile");
+				Assert.AreEqual ("AppIcons", appIconsManifest.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+			} else if (platform == ApplePlatform.TVOS) {
+				var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
+				Assert.AreEqual (1, cfBundleIcons.Count, "CFBundleIcons.Count");
+				Assert.AreEqual ("AppIcon", cfBundleIcons.Get<PString> ("CFBundlePrimaryIcon")?.Value, "CFBundlePrimaryIcon");
 
-// 			ExecuteTask (actool, 1);
-// 			Assert.AreEqual ("Can't specify both 'XSAppIconAssets' in the Info.plist and 'AppIcon' in the project file. Please select one or the other.", Engine.Logger.ErrorEvents [0].Message, "Error message");
-// 		}
-// 	}
-// }
+				var tvTopShelfImage = appIconsManifest.Get<PDictionary> ("TVTopShelfImage");
+				Assert.AreEqual (2, tvTopShelfImage.Count, "TVTopShelfImage.Count");
+				Assert.AreEqual ("TopShelfImage", tvTopShelfImage.Get<PString> ("TVTopShelfPrimaryImage")?.Value, "TVTopShelfPrimaryImage");
+				Assert.AreEqual ("TopShelfImageWide", tvTopShelfImage.Get<PString> ("TVTopShelfPrimaryImageWide")?.Value, "TVTopShelfPrimaryImageWide");
+			} else {
+				{
+					// iPhone
+					var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
+					Assert.AreEqual (2, cfBundleIcons.Count, "CFBundleIcons.Count");
+
+					var cfBundlePrimaryIcon = cfBundleIcons.Get<PDictionary> ("CFBundlePrimaryIcon");
+					Assert.AreEqual (2, cfBundlePrimaryIcon.Count, "CFBundlePrimaryIcon.Length");
+					Assert.AreEqual ("AppIcons", cfBundlePrimaryIcon.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+
+					var cfBundleIconFiles = cfBundlePrimaryIcon.Get<PArray> ("CFBundleIconFiles");
+					Assert.AreEqual (1, cfBundleIconFiles.Count, "CFBundleIconFiles.Length");
+					Assert.AreEqual ("AppIcons60x60", ((PString) cfBundleIconFiles [0]).Value, "CFBundleIconFiles[0].Value");
+
+					var cfBundleAlternateIcons = cfBundleIcons.Get<PDictionary> ("CFBundleAlternateIcons");
+					Assert.AreEqual (1, cfBundleAlternateIcons.Count, "CFBundleAlternateIcons.Count");
+
+					var alternateAppIcons = cfBundleAlternateIcons.Get<PDictionary> ("AlternateAppIcons");
+					Assert.AreEqual (2, alternateAppIcons.Count, "CFBundleAlternateIcons.Count");
+					Assert.AreEqual ("AlternateAppIcons", alternateAppIcons.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+
+					var alternateAppIcons_CFBundleIconFiles = alternateAppIcons.Get<PArray> ("CFBundleIconFiles");
+					Assert.AreEqual (2, alternateAppIcons_CFBundleIconFiles.Count, "AlternateAppIcons.CFBundleIconFiles.Count");
+					Assert.AreEqual ("AlternateAppIcons60x60", ((PString) alternateAppIcons_CFBundleIconFiles [0]).Value, "AlternateAppIcons.CFBundleIconFiles[0]");
+					Assert.AreEqual ("AlternateAppIcons76x76", ((PString) alternateAppIcons_CFBundleIconFiles [1]).Value, "AlternateAppIcons.CFBundleIconFiles[1]");
+				}
+				{
+					// iPad
+					var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons~ipad");
+					Assert.AreEqual (2, cfBundleIcons.Count, "CFBundleIcons.Count");
+
+					var cfBundlePrimaryIcon = cfBundleIcons.Get<PDictionary> ("CFBundlePrimaryIcon");
+					Assert.AreEqual (2, cfBundlePrimaryIcon.Count, "CFBundlePrimaryIcon.Length");
+					Assert.AreEqual ("AppIcons", cfBundlePrimaryIcon.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+
+					var cfBundleIconFiles = cfBundlePrimaryIcon.Get<PArray> ("CFBundleIconFiles");
+					Assert.AreEqual (2, cfBundleIconFiles.Count, "CFBundleIconFiles.Length");
+					Assert.AreEqual ("AppIcons60x60", ((PString) cfBundleIconFiles [0]).Value, "CFBundleIconFiles[0].Value");
+					Assert.AreEqual ("AppIcons76x76", ((PString) cfBundleIconFiles [1]).Value, "CFBundleIconFiles[1].Value");
+
+					var cfBundleAlternateIcons = cfBundleIcons.Get<PDictionary> ("CFBundleAlternateIcons");
+					Assert.AreEqual (1, cfBundleAlternateIcons.Count, "CFBundleAlternateIcons.Count");
+
+					var alternateAppIcons = cfBundleAlternateIcons.Get<PDictionary> ("AlternateAppIcons");
+					Assert.AreEqual (2, alternateAppIcons.Count, "CFBundleAlternateIcons.Count");
+					Assert.AreEqual ("AlternateAppIcons", alternateAppIcons.Get<PString> ("CFBundleIconName")?.Value, "CFBundleIconName");
+
+					var alternateAppIcons_CFBundleIconFiles = alternateAppIcons.Get<PArray> ("CFBundleIconFiles");
+					Assert.AreEqual (2, alternateAppIcons_CFBundleIconFiles.Count, "AlternateAppIcons.CFBundleIconFiles.Count");
+					Assert.AreEqual ("AlternateAppIcons60x60", ((PString) alternateAppIcons_CFBundleIconFiles [0]).Value, "AlternateAppIcons.CFBundleIconFiles[0]");
+					Assert.AreEqual ("AlternateAppIcons76x76", ((PString) alternateAppIcons_CFBundleIconFiles [1]).Value, "AlternateAppIcons.CFBundleIconFiles[1]");
+				}
+			}
+		}
+
+		[Test]
+		[TestCase (ApplePlatform.iOS)]
+		[TestCase (ApplePlatform.TVOS)]
+		[TestCase (ApplePlatform.MacCatalyst)]
+		[TestCase (ApplePlatform.MacOSX)]
+		public void AlternateIcons (ApplePlatform platform)
+		{
+			var actool = CreateACToolTaskWithResources (platform);
+			if (platform == ApplePlatform.TVOS) {
+				actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AlternateBrandAssets")};
+			} else {
+				actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AlternateAppIcons")};
+			}
+
+			ExecuteTask (actool);
+
+			var appIconsManifest = PDictionary.FromFile (actool.PartialAppManifest.ItemSpec!)!;
+			Assert.AreEqual (0, appIconsManifest.Count, $"Partial plist contents: {actool.PartialAppManifest.ItemSpec}");
+		}
+
+		[Test]
+		[TestCase (ApplePlatform.iOS)]
+		[TestCase (ApplePlatform.TVOS)]
+		[TestCase (ApplePlatform.MacCatalyst)]
+		[TestCase (ApplePlatform.MacOSX)]
+		public void InexistentAppIcon (ApplePlatform platform)
+		{
+			var actool = CreateACToolTaskWithResources (platform);
+			actool.AppIcon = "InexistentAppIcons";
+
+			ExecuteTask (actool, 1);
+			Assert.AreEqual ("Can't find the AppIcon 'InexistentAppIcons' among the image resources.", Engine.Logger.ErrorEvents [0].Message, "Error message");
+		}
+
+		[Test]
+		[TestCase (ApplePlatform.iOS)]
+		[TestCase (ApplePlatform.TVOS)]
+		[TestCase (ApplePlatform.MacCatalyst)]
+		[TestCase (ApplePlatform.MacOSX)]
+		public void InexistentAlternateIcons (ApplePlatform platform)
+		{
+			var actool = CreateACToolTaskWithResources (platform);
+			actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("InexistentAlternateAppIcons")};
+
+			ExecuteTask (actool, 1);
+			Assert.AreEqual ("Can't find the AlternateAppIcon 'InexistentAlternateAppIcons' among the image resources.", Engine.Logger.ErrorEvents [0].Message, "Error message");
+		}
+
+		[Test]
+		[TestCase (ApplePlatform.iOS)]
+		[TestCase (ApplePlatform.TVOS)]
+		[TestCase (ApplePlatform.MacCatalyst)]
+		[TestCase (ApplePlatform.MacOSX)]
+		public void BothAlternateAndMainIcon (ApplePlatform platform)
+		{
+			var actool = CreateACToolTaskWithResources (platform);
+			if (platform == ApplePlatform.TVOS) {
+				actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("BrandAssets")};
+				actool.AppIcon = "BrandAssets";
+			} else {
+				actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AppIcons")};
+				actool.AppIcon = "AppIcons";
+			}
+
+			ExecuteTask (actool, 1);
+			Assert.AreEqual ($"The image resource '{actool.AppIcon}' is specified as both 'AppIcon' and 'AlternateAppIcon'", Engine.Logger.ErrorEvents [0].Message, "Error message");
+		}
+
+		[Test]
+		[TestCase (ApplePlatform.iOS)]
+		[TestCase (ApplePlatform.TVOS)]
+		[TestCase (ApplePlatform.MacCatalyst)]
+		[TestCase (ApplePlatform.MacOSX)]
+		public void XSAppIconAssetsAndAppIcon (ApplePlatform platform)
+		{
+			var actool = CreateACToolTaskWithResources (platform);
+			actool.AppIcon = "AppIcons";
+			actool.XSAppIconAssets = "Resources/Images.xcassets/AppIcons.appiconset";
+
+			ExecuteTask (actool, 1);
+			Assert.AreEqual ("Can't specify both 'XSAppIconAssets' in the Info.plist and 'AppIcon' in the project file. Please select one or the other.", Engine.Logger.ErrorEvents [0].Message, "Error message");
+		}
+	}
+}

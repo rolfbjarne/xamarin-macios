@@ -76,7 +76,7 @@ namespace Xamarin.MacDev.Tasks {
 			var assetDirs = new HashSet<string> (items.Select (x => BundleResource.GetVirtualProjectPath (ProjectDir, x, !string.IsNullOrEmpty (SessionId))));
 
 			if (!string.IsNullOrEmpty (XSAppIconAssets) && !string.IsNullOrEmpty (AppIcon)) {
-				Log.LogError ("Can't specify both 'XSAppIconAssets' in the Info.plist and 'AppIcon' in the project file. Please select one or the other.");
+				Log.LogError (MSBStrings.E7125 /* Can't specify both 'XSAppIconAssets' in the Info.plist and 'AppIcon' in the project file. Please select one or the other. */);
 				return;
 			}
 
@@ -157,7 +157,7 @@ namespace Xamarin.MacDev.Tasks {
 
 			if (!string.IsNullOrEmpty (AppIcon)) {
 				if (!appIconSets.Contains (AppIcon)) {
-					Log.LogError ("Can't find the AppIcon '{0}' among the image resources.", AppIcon);
+					Log.LogError (MSBStrings.E7126 /* Can't find the AppIcon '{0}' among the image resources. */, AppIcon);
 					return;
 				}
 				args.Add ("--app-icon");
@@ -167,11 +167,11 @@ namespace Xamarin.MacDev.Tasks {
 			foreach (var alternate in AlternateAppIcons) {
 				var alternateAppIcon = alternate.ItemSpec!;
 				if (!appIconSets.Contains (alternateAppIcon)) {
-					Log.LogError ("Can't find the AlternateAppIcon '{0}' among the image resources.", alternateAppIcon);
+					Log.LogError (MSBStrings.E7127 /* Can't find the AlternateAppIcon '{0}' among the image resources. */, alternateAppIcon);
 					return;
 				}
 				if (string.Equals (alternateAppIcon, AppIcon, StringComparison.OrdinalIgnoreCase)) {
-					Log.LogError ("The image resource '{0}' is specified as both 'AppIcon' and 'AlternateAppIcon'", AppIcon);
+					Log.LogError (MSBStrings.E7128 /* The image resource '{0}' is specified as both 'AppIcon' and 'AlternateAppIcon' */, AppIcon);
 					return;
 				}
 				args.Add ("--alternate-app-icon");

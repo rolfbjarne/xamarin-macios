@@ -6,23 +6,23 @@ using System.Text.Json;
 namespace Xamarin.Tests {
 	public class AppIconTest : TestBaseClass {
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
-		// [TestCase (ApplePlatform.iOS, "ios-arm64")]
-		// [TestCase (ApplePlatform.TVOS, "tvossimulator-x64")]
-		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
-		// [TestCase (ApplePlatform.MacOSX, "osx-x64")]
-		// [TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
+		[TestCase (ApplePlatform.iOS, "ios-arm64")]
+		[TestCase (ApplePlatform.TVOS, "tvossimulator-x64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
 		public void DefaultValues (ApplePlatform platform, string runtimeIdentifiers)
 		{
 			TestXCAssetsImpl (platform, runtimeIdentifiers);
 		}
 
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
-		// [TestCase (ApplePlatform.iOS, "ios-arm64")]
-		// [TestCase (ApplePlatform.TVOS, "tvos-arm64")]
-		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
-		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
-		// [TestCase (ApplePlatform.MacOSX, "osx-x64")]
-		// [TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
+		[TestCase (ApplePlatform.iOS, "ios-arm64")]
+		[TestCase (ApplePlatform.TVOS, "tvos-arm64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
 		public void IncludeAllIcons (ApplePlatform platform, string runtimeIdentifiers)
 		{
 			TestXCAssetsImpl (
@@ -34,12 +34,12 @@ namespace Xamarin.Tests {
 
 
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
-		// [TestCase (ApplePlatform.iOS, "ios-arm64")]
-		// [TestCase (ApplePlatform.TVOS, "tvos-arm64")]
-		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
-		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
-		// [TestCase (ApplePlatform.MacOSX, "osx-x64")]
-		// [TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
+		[TestCase (ApplePlatform.iOS, "ios-arm64")]
+		[TestCase (ApplePlatform.TVOS, "tvos-arm64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
 		public void XSAppIconAssets (ApplePlatform platform, string runtimeIdentifiers)
 		{
 			TestXCAssetsImpl (
@@ -65,12 +65,12 @@ namespace Xamarin.Tests {
 		}
 
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
-		// [TestCase (ApplePlatform.iOS, "ios-arm64")]
-		// [TestCase (ApplePlatform.TVOS, "tvos-arm64")]
-		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
-		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
-		// [TestCase (ApplePlatform.MacOSX, "osx-x64")]
-		// [TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
+		[TestCase (ApplePlatform.iOS, "ios-arm64")]
+		[TestCase (ApplePlatform.TVOS, "tvos-arm64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
 		public void AlternateAppIcon (ApplePlatform platform, string runtimeIdentifiers)
 		{
 			TestXCAssetsImpl (
@@ -83,12 +83,12 @@ namespace Xamarin.Tests {
 		}
 
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
-		// [TestCase (ApplePlatform.iOS, "ios-arm64")]
-		// [TestCase (ApplePlatform.TVOS, "tvos-arm64")]
-		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
-		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
-		// [TestCase (ApplePlatform.MacOSX, "osx-x64")]
-		// [TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
+		[TestCase (ApplePlatform.iOS, "ios-arm64")]
+		[TestCase (ApplePlatform.TVOS, "tvos-arm64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
 		public void AlternateAppIcons (ApplePlatform platform, string runtimeIdentifiers)
 		{
 			TestXCAssetsImpl (
@@ -101,12 +101,12 @@ namespace Xamarin.Tests {
 		}
 
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
-		// [TestCase (ApplePlatform.iOS, "ios-arm64")]
-		// [TestCase (ApplePlatform.TVOS, "tvos-arm64")]
-		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
-		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
-		// [TestCase (ApplePlatform.MacOSX, "osx-x64")]
-		// [TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
+		[TestCase (ApplePlatform.iOS, "ios-arm64")]
+		[TestCase (ApplePlatform.TVOS, "tvos-arm64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
 		public void AlternateAppIcon_Failure (ApplePlatform platform, string runtimeIdentifiers)
 		{
 			TestXCAssetsImpl (
@@ -119,12 +119,12 @@ namespace Xamarin.Tests {
 		}
 
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
-		// [TestCase (ApplePlatform.iOS, "ios-arm64")]
-		// [TestCase (ApplePlatform.TVOS, "tvos-arm64")]
-		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
-		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
-		// [TestCase (ApplePlatform.MacOSX, "osx-x64")]
-		// [TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
+		[TestCase (ApplePlatform.iOS, "ios-arm64")]
+		[TestCase (ApplePlatform.TVOS, "tvos-arm64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
 		public void AppIcon_1 (ApplePlatform platform, string runtimeIdentifiers)
 		{
 			TestXCAssetsImpl (
@@ -137,12 +137,12 @@ namespace Xamarin.Tests {
 		}
 
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
-		// [TestCase (ApplePlatform.iOS, "ios-arm64")]
-		// [TestCase (ApplePlatform.TVOS, "tvos-arm64")]
-		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
-		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
-		// [TestCase (ApplePlatform.MacOSX, "osx-x64")]
-		// [TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
+		[TestCase (ApplePlatform.iOS, "ios-arm64")]
+		[TestCase (ApplePlatform.TVOS, "tvos-arm64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
 		public void AppIcon_2 (ApplePlatform platform, string runtimeIdentifiers)
 		{
 			TestXCAssetsImpl (
@@ -155,12 +155,12 @@ namespace Xamarin.Tests {
 		}
 
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
-		// [TestCase (ApplePlatform.iOS, "ios-arm64")]
-		// [TestCase (ApplePlatform.TVOS, "tvos-arm64")]
-		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
-		// [TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
-		// [TestCase (ApplePlatform.MacOSX, "osx-x64")]
-		// [TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
+		[TestCase (ApplePlatform.iOS, "ios-arm64")]
+		[TestCase (ApplePlatform.TVOS, "tvos-arm64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
 		public void AppIcon_Failure (ApplePlatform platform, string runtimeIdentifiers)
 		{
 			TestXCAssetsImpl (

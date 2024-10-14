@@ -198,6 +198,8 @@ namespace Xamarin.Tests {
 			var assetsCar = Path.Combine (resourcesDirectory, "Assets.car");
 			Assert.That (assetsCar, Does.Exist, "Assets.car");
 
+			Console.WriteLine ($"Assets: {assetsCar}");
+
 			var doc = AssetsTest.ProcessAssets (assetsCar, GetFullSdkVersion (platform, runtimeIdentifiers));
 			Assert.IsNotNull (doc, "There was an issue processing the asset binary.");
 

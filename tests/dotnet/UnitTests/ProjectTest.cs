@@ -827,7 +827,7 @@ namespace Xamarin.Tests {
 			var project = "LibraryWithResources";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
 
-			var actualBundleOriginalResources = bundleOriginalResources ?? Version.Parse (Configuration.DotNetTfm.Replace ("net", "")).Major >= 9;
+			var actualBundleOriginalResources = bundleOriginalResources ?? Version.Parse (Configuration.DotNetTfm.Replace ("net", "")).Major >= 10;
 			var project_path = GetProjectPath (project, platform: platform);
 			Clean (project_path);
 

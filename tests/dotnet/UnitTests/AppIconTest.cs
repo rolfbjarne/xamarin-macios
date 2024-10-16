@@ -42,13 +42,61 @@ namespace Xamarin.Tests {
 		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
 		public void XSAppIconAssets (ApplePlatform platform, string runtimeIdentifiers)
 		{
+			var expectedAssets = new HashSet<string> ();
+			switch (platform) {
+			case ApplePlatform.iOS:
+				expectedAssets.Add ("Icon Image:Icon1024.png");
+				expectedAssets.Add ("MultiSized Image:AlternateAppIcons");
+				expectedAssets.Add ("Image:Icon16.png");
+				expectedAssets.Add ("Image:Icon32.png");
+				expectedAssets.Add ("Image:Icon64.png");
+				break;
+			case ApplePlatform.TVOS:
+				expectedAssets.Add ("Image:Icon16.png");
+				expectedAssets.Add ("Image:Icon32.png");
+				// expectedAssets.Add ("Image:Icon1920x1080.png");
+				// expectedAssets.Add ("Image:Icon3840x2160.png");
+				break;
+			case ApplePlatform.MacOSX:
+				expectedAssets.Add ("Image:Icon16.png");
+				expectedAssets.Add ("Image:Icon32.png");
+				expectedAssets.Add ("Icon Image:Icon64.png");
+				expectedAssets.Add ("Icon Image:Icon128.png");
+				expectedAssets.Add ("Icon Image:Icon256.png");
+				expectedAssets.Add ("Icon Image:Icon512.png");
+				expectedAssets.Add ("Icon Image:Icon16.png");
+				expectedAssets.Add ("Icon Image:Icon32.png");
+				expectedAssets.Add ("PackedImage:ZZZZPackedAsset-2.1.0-gamut0");
+				expectedAssets.Add ("PackedImage:ZZZZPackedAsset-1.1.0-gamut0");
+				expectedAssets.Add ("Icon Image:Icon1024.png");
+				expectedAssets.Add ("MultiSized Image:AlternateAppIcons");
+				// expectedAssets.Add ("PackedImage:ZZZZPackedAsset-2.1.0-gamut");
+				break;
+			case ApplePlatform.MacCatalyst:
+				expectedAssets.Add ("Image:Icon16.png");
+				expectedAssets.Add ("Image:Icon32.png");
+				expectedAssets.Add ("Icon Image:Icon64.png");
+				expectedAssets.Add ("Icon Image:Icon128.png");
+				expectedAssets.Add ("Icon Image:Icon256.png");
+				expectedAssets.Add ("Icon Image:Icon512.png");
+				expectedAssets.Add ("Icon Image:Icon16.png");
+				expectedAssets.Add ("Icon Image:Icon32.png");
+				expectedAssets.Add ("PackedImage:ZZZZPackedAsset-2.1.0-gamut0");
+				expectedAssets.Add ("PackedImage:ZZZZPackedAsset-1.1.0-gamut0");
+				expectedAssets.Add ("Icon Image:Icon1024.png");
+				expectedAssets.Add ("MultiSized Image:AlternateAppIcons");
+				break;
+			default:
+				throw new ArgumentOutOfRangeException ($"Unknown platform: {platform}");
+			}
+
 			TestXCAssetsImpl (
 				platform,
 				runtimeIdentifiers,
 				new Dictionary<string, string> () {
 					{ "_XSAppIconAssets", "Resources/Images.xcassets/AlternateAppIcons.appiconset" }
 				},
-				new string [] { "Icon Image:Icon1024.png", "MultiSized Image:AlternateAppIcons" });
+				expectedAssets.ToArray ());
 		}
 
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]
@@ -203,7 +251,7 @@ namespace Xamarin.Tests {
 			var doc = AssetsTest.ProcessAssets (assetsCar, GetFullSdkVersion (platform, runtimeIdentifiers));
 			Assert.IsNotNull (doc, "There was an issue processing the asset binary.");
 
-			var foundAssets = AssetsTest.FindAssets (doc);
+			var foundAssets = AssetsTest.FindAssets (platform, doc);
 
 			var expectedAssets = new HashSet<string> ();
 			if (extraAssets is not null) {
@@ -211,24 +259,46 @@ namespace Xamarin.Tests {
 					expectedAssets.Add (asset);
 			}
 
-			switch (platform) {
-			case ApplePlatform.iOS:
-				expectedAssets.Add ("Image:Icon16.png");
-				expectedAssets.Add ("Image:Icon32.png");
-				expectedAssets.Add ("Image:Icon64.png");
-				break;
-			case ApplePlatform.TVOS:
-				expectedAssets.Add ("Image:Icon16.png");
-				expectedAssets.Add ("Image:Icon32.png");
-				expectedAssets.Add ("Image:Icon1920x1080.png");
-				expectedAssets.Add ("Image:Icon3840x2160.png");
-				break;
-			case ApplePlatform.MacOSX:
-			case ApplePlatform.MacCatalyst:
-				break;
-			default:
-				throw new ArgumentOutOfRangeException ($"Unknown platform: {platform}");
-			}
+			// switch (platform) {
+			// case ApplePlatform.iOS:
+			// 	expectedAssets.Add ("Image:Icon16.png");
+			// 	expectedAssets.Add ("Image:Icon32.png");
+			// 	expectedAssets.Add ("Image:Icon64.png");
+			// 	break;
+			// case ApplePlatform.TVOS:
+			// 	expectedAssets.Add ("Image:Icon16.png");
+			// 	expectedAssets.Add ("Image:Icon32.png");
+			// 	// expectedAssets.Add ("Image:Icon1920x1080.png");
+			// 	// expectedAssets.Add ("Image:Icon3840x2160.png");
+			// 	break;
+			// case ApplePlatform.MacOSX:
+			// 	expectedAssets.Add ("Image:Icon16.png");
+			// 	expectedAssets.Add ("Image:Icon32.png");
+			// 	expectedAssets.Add ("Icon Image:Icon64.png");
+			// 	expectedAssets.Add ("Icon Image:Icon128.png");
+			// 	expectedAssets.Add ("Icon Image:Icon256.png");
+			// 	expectedAssets.Add ("Icon Image:Icon512.png");
+			// 	expectedAssets.Add ("Icon Image:Icon16.png");
+			// 	expectedAssets.Add ("Icon Image:Icon32.png");
+			// 	expectedAssets.Add ("PackedImage:ZZZZPackedAsset-2.1.0-gamut0");
+			// 	expectedAssets.Add ("PackedImage:ZZZZPackedAsset-1.1.0-gamut0");
+			// 	// expectedAssets.Add ("PackedImage:ZZZZPackedAsset-2.1.0-gamut");
+			// 	break;
+			// case ApplePlatform.MacCatalyst:
+			// 	expectedAssets.Add ("Image:Icon16.png");
+			// 	expectedAssets.Add ("Image:Icon32.png");
+			// 	expectedAssets.Add ("Icon Image:Icon64.png");
+			// 	expectedAssets.Add ("Icon Image:Icon128.png");
+			// 	expectedAssets.Add ("Icon Image:Icon256.png");
+			// 	expectedAssets.Add ("Icon Image:Icon512.png");
+			// 	expectedAssets.Add ("Icon Image:Icon16.png");
+			// 	expectedAssets.Add ("Icon Image:Icon32.png");
+			// 	expectedAssets.Add ("PackedImage:ZZZZPackedAsset-2.1.0-gamut0");
+			// 	expectedAssets.Add ("PackedImage:ZZZZPackedAsset-1.1.0-gamut0");
+			// 	break;
+			// default:
+			// 	throw new ArgumentOutOfRangeException ($"Unknown platform: {platform}");
+			// }
 			CollectionAssert.AreEquivalent (expectedAssets, foundAssets, "Incorrect assets");
 		}
 

@@ -66,7 +66,7 @@ namespace Xamarin.Tests {
 			var doc = ProcessAssets (assetsCar, AppIconTest.GetFullSdkVersion (platform, runtimeIdentifiers));
 			Assert.IsNotNull (doc, "There was an issue processing the asset binary.");
 
-			var foundAssets = FindAssets (doc);
+			var foundAssets = FindAssets (platform, doc);
 
 			// Seems the 2 vectors are not being consumed in MacCatalyst but they still appear in the image Datasets
 			var expectedAssets = platform == ApplePlatform.MacCatalyst ? ExpectedAssetsMacCatalyst : ExpectedAssets;
@@ -162,23 +162,34 @@ namespace Xamarin.Tests {
 			}
 		}
 
-		public static HashSet<string> FindAssets (JsonDocument doc)
+		public static HashSet<string> FindAssets (ApplePlatform platform, JsonDocument doc)
 		{
 			var jsonArray = doc.RootElement.EnumerateArray ();
 			var foundElements = new HashSet<string> ();
 
 			foreach (var item in jsonArray) {
-				var result = GetTarget (item);
+				var result = GetTarget (platform, item);
 				if (result is not null)
 					foundElements.Add (result);
 			}
 			return foundElements;
 		}
 
-		static string? GetTarget (JsonElement item)
+		static string? GetTarget (ApplePlatform platform, JsonElement item)
 		{
 			if (item.TryGetProperty ("SchemaVersion", out var schemaVersion)) {
-				Assert.AreEqual ("2", schemaVersion.ToString (), "Verify SchemaVersion");
+				switch (platform) {
+					case ApplePlatform.MacOSX:
+						Assert.AreEqual ("5", schemaVersion.ToString (), "Verify SchemaVersion");
+						break;
+					case ApplePlatform.MacCatalyst:
+					case ApplePlatform.iOS:
+					case ApplePlatform.TVOS:
+						Assert.AreEqual ("2", schemaVersion.ToString (), "Verify SchemaVersion");
+						break;
+					default:
+						throw new ArgumentOutOfRangeException ($"Unknown platform: {platform}");
+				}
 			} else if (item.TryGetProperty ("AssetType", out var assetType)) {
 				foreach (var target in XCAssetTargets) {
 					if (TryGetTarget (item, assetType, target, out var result))

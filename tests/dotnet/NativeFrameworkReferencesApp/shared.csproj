@@ -11,9 +11,9 @@
 	<Import Project="../../common/shared-dotnet.csproj" />
 
 	<ItemGroup>
-		<NativeReference Include="..\..\..\test-libraries\.libs\$(FatName)\XTest.framework" Kind="Framework" />
-		<NativeReference Include="..\..\..\test-libraries\.libs\$(FatName)\XStaticArTest.framework" Kind="Framework" CopyToAppBundle="false" />
-		<NativeReference Include="..\..\..\test-libraries\.libs\$(FatName)\XStaticObjectTest.framework" Kind="Framework" CopyToAppBundle="false" />
+		<NativeReference Include="..\..\..\test-libraries\.libs\$(FatName)\XTest.framework.zip" Kind="Framework" />
+		<NativeReference Include="..\..\..\test-libraries\.libs\$(FatName)\XStaticArTest.framework.zip" Kind="Framework" CopyToAppBundle="false" />
+		<NativeReference Include="..\..\..\test-libraries\.libs\$(FatName)\XStaticObjectTest.framework.zip" Kind="Framework" CopyToAppBundle="false" />
 	</ItemGroup>
 
 	<ItemGroup>

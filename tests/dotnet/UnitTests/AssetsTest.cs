@@ -255,6 +255,7 @@ namespace Xamarin.Tests {
 		static XCAssetTarget [] XCAssetTargets = {
 				new ("Image", "RenditionName", new string [] { "samplejpeg.jpeg", "samplejpg.jpg",
 					"samplepdf.pdf", "samplepng2.png", "spritejpeg.jpeg", "xamlogo.svg" }),
+				new ("ImageStack", "Name", new string [0]),
 
 				new ("Data", "Name", new string [] { "BmpImageDataTest", "JsonDataTest", "DS_StoreDataTest",
 					"DngImageDataTest", "EpsImageDataTest", "TiffImageDataTest" }),

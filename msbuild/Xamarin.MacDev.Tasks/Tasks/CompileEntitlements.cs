@@ -569,7 +569,13 @@ namespace Xamarin.MacDev.Tasks {
 
 		public bool ShouldCopyToBuildServer (ITaskItem item) => true;
 
-		public bool ShouldCreateOutputFile (ITaskItem item) => true;
+		public bool ShouldCreateOutputFile (ITaskItem item)
+		{
+			if (item == CompiledEntitlements)
+				return false;
+
+			return true;
+		}
 
 		public IEnumerable<ITaskItem> GetAdditionalItemsToBeCopied ()
 		{

@@ -6,55 +6,46 @@ using System.Text.Json;
 namespace Xamarin.Tests {
 
 	// Add the XCAssets before the build
-	[TestFixture (ApplePlatform.iOS, "iossimulator-x64", true)]
-	[TestFixture (ApplePlatform.iOS, "ios-arm64", true)]
-	[TestFixture (ApplePlatform.TVOS, "tvossimulator-x64", true)]
-	[TestFixture (ApplePlatform.MacCatalyst, "maccatalyst-x64", true)]
-	[TestFixture (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64", true)]
-	[TestFixture (ApplePlatform.MacOSX, "osx-x64", true)]
-	[TestFixture (ApplePlatform.MacOSX, "osx-arm64;osx-x64", true)] // https://github.com/xamarin/xamarin-macios/issues/12410
-																			  // Build, add the XCAssets, then build again
-	[TestFixture (ApplePlatform.iOS, "iossimulator-x64", false)]
-	[TestFixture (ApplePlatform.iOS, "ios-arm64", false)]
-	[TestFixture (ApplePlatform.TVOS, "tvossimulator-x64", false)]
-	[TestFixture (ApplePlatform.MacCatalyst, "maccatalyst-x64", false)]
-	[TestFixture (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64", false)]
-	[TestFixture (ApplePlatform.MacOSX, "osx-x64", false)]
-	[TestFixture (ApplePlatform.MacOSX, "osx-arm64;osx-x64", false)] // https://github.com/xamarin/xamarin-macios/issues/12410
+	[TestFixture]
 	public class AssetsTest : TestBaseClass {
-
-		readonly ApplePlatform platform;
-		readonly string runtimeIdentifiers;
-		readonly bool isStartingWithAssets;
-		string projectPath = string.Empty;
-		string appPath = string.Empty;
-
-		public AssetsTest (ApplePlatform platform, string runtimeIdentifiers, bool isStartingWithAssets)
-		{
-			this.platform = platform;
-			this.runtimeIdentifiers = runtimeIdentifiers;
-			this.isStartingWithAssets = isStartingWithAssets;
-		}
-
-		[SetUp]
-		public void Init ()
-		{
-			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
-			var project = "AppWithXCAssets";
-			Configuration.IgnoreIfIgnoredPlatform (platform);
-			projectPath = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out appPath);
-			ConfigureAssets ();
-		}
-
-		[TearDown]
-		public void Cleanup ()
-		{
-			DeleteAssets ();
-		}
+		const string project = "AppWithXCAssets";
 
 		[Test]
-		public void TestXCAssets ()
+		[TestCase (ApplePlatform.iOS, "iossimulator-x64", true)]
+		[TestCase (ApplePlatform.iOS, "ios-arm64", true)]
+		[TestCase (ApplePlatform.TVOS, "tvossimulator-x64", true)]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64", true)]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64", true)]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64", true)]
+		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64", true)] // https://github.com/xamarin/xamarin-macios/issues/12410
+																				  // Build, add the XCAssets, then build again
+		[TestCase (ApplePlatform.iOS, "iossimulator-x64", false)]
+		[TestCase (ApplePlatform.iOS, "ios-arm64", false)]
+		[TestCase (ApplePlatform.TVOS, "tvossimulator-x64", false)]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64", false)]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64", false)]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64", false)]
+		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64", false)] // https://github.com/xamarin/xamarin-macios/issues/12410
+		public void TestXCAssets (ApplePlatform platform, string runtimeIdentifiers, bool isStartingWithAssets)
 		{
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
+			Configuration.IgnoreIfIgnoredPlatform (platform);
+
+			var config = "Debug";
+			var projectPath = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath, configuration: config);
+
+			try {
+				ConfigureAssets (projectPath, runtimeIdentifiers, config, isStartingWithAssets);
+
+				TestXCAssetsImpl (platform, runtimeIdentifiers, isStartingWithAssets, projectPath, appPath);
+			} finally {
+				DeleteAssets (projectPath);
+			}
+		}
+
+		void TestXCAssetsImpl (ApplePlatform platform, string runtimeIdentifiers, bool isStartingWithAssets, string projectPath, string appPath)
+		{
+
 			var appExecutable = GetNativeExecutable (platform, appPath);
 			ExecuteWithMagicWordAndAssert (platform, runtimeIdentifiers, appExecutable);
 
@@ -62,6 +53,7 @@ namespace Xamarin.Tests {
 
 			var assetsCar = Path.Combine (resourcesDirectory, "Assets.car");
 			Assert.That (assetsCar, Does.Exist, "Assets.car");
+			Console.WriteLine ($"Assets: {assetsCar}");
 
 			var doc = ProcessAssets (assetsCar, AppIconTest.GetFullSdkVersion (platform, runtimeIdentifiers));
 			Assert.IsNotNull (doc, "There was an issue processing the asset binary.");
@@ -69,9 +61,25 @@ namespace Xamarin.Tests {
 			var foundAssets = FindAssets (platform, doc);
 
 			// Seems the 2 vectors are not being consumed in MacCatalyst but they still appear in the image Datasets
-			var expectedAssets = platform == ApplePlatform.MacCatalyst ? ExpectedAssetsMacCatalyst : ExpectedAssets;
-			CollectionAssert.AreEquivalent (expectedAssets, foundAssets, "Incorrect assets");
-			// Assert.AreEqual (expectedAssets, foundAssets, "Incorrect assets");
+			HashSet<string> expectedAssets;
+			switch (platform) {
+			case ApplePlatform.iOS:
+				expectedAssets = ExpectedAssetsiOS;
+				break;
+			case ApplePlatform.TVOS:
+				expectedAssets = ExpectedAssetstvOS;
+				break;
+			case ApplePlatform.MacOSX:
+				expectedAssets = ExpectedAssetsmacOS;
+				break;
+			case ApplePlatform.MacCatalyst:
+				expectedAssets = ExpectedAssetsMacCatalyst;
+				break;
+			default:
+				throw new ArgumentOutOfRangeException ($"Unknown platform: {platform}");
+			}
+
+			CollectionAssert.AreEquivalent (expectedAssets, foundAssets, $"Incorrect assets in {assetsCar}");
 
 			var arm64txt = Path.Combine (resourcesDirectory, "arm64.txt");
 			var x64txt = Path.Combine (resourcesDirectory, "x64.txt");
@@ -79,28 +87,31 @@ namespace Xamarin.Tests {
 			Assert.AreEqual (runtimeIdentifiers.Split (';').Any (v => v.EndsWith ("-x64")), File.Exists (x64txt), "x64.txt");
 		}
 
-		void ConfigureAssets ()
+		void ConfigureAssets (string projectPath, string runtimeIdentifiers, string config, bool isStartingWithAssets)
 		{
-			Clean (projectPath);
+			// Clean (projectPath);
 
 			// We either want the assets added before the build, or we will be adding them after the build
 			if (isStartingWithAssets)
-				CopyAssets ();
+				CopyAssets (projectPath);
 
-			DotNet.AssertBuild (projectPath, GetDefaultProperties (runtimeIdentifiers));
+			var properties = GetDefaultProperties (runtimeIdentifiers);
+			properties ["Configuration"] = config;
+
+			DotNet.AssertBuild (projectPath, properties);
 			if (!isStartingWithAssets) {
-				CopyAssets ();
-				DotNet.AssertBuild (projectPath, GetDefaultProperties (runtimeIdentifiers));
+				CopyAssets (projectPath);
+				DotNet.AssertBuild (projectPath, properties);
 			}
 		}
 
-		void DeleteAssets ()
+		void DeleteAssets (string projectPath)
 		{
 			var xcassetsDir = Path.Combine (projectPath, "../Assets.xcassets");
 			File.Delete (xcassetsDir);
 		}
 
-		void CopyAssets ()
+		void CopyAssets (string projectPath)
 		{
 			var testingAssetsDir = new DirectoryInfo (Path.Combine (projectPath, "../../TestingAssets"));
 			var xcassetsDir = new DirectoryInfo (Path.Combine (projectPath, "../Assets.xcassets"));
@@ -213,7 +224,7 @@ namespace Xamarin.Tests {
 			return false;
 		}
 
-		static readonly HashSet<string> ExpectedAssetsMacCatalyst = new HashSet<string> () {
+		static readonly HashSet<string> ExpectedAssetsAllPlatforms = new HashSet<string> () {
 			"Color:ColorTest",
 			"Contents:SpritesTest",
 			"Data:BmpImageDataTest",
@@ -221,9 +232,6 @@ namespace Xamarin.Tests {
 			"Data:EpsImageDataTest",
 			"Data:JsonDataTest",
 			"Data:TiffImageDataTest",
-			"Image:Icon16.png",
-			"Image:Icon32.png",
-			"Image:Icon64.png",
 			"Image:samplejpeg.jpeg",
 			"Image:samplejpg.jpg",
 			"Image:samplepdf.pdf",
@@ -235,9 +243,31 @@ namespace Xamarin.Tests {
 			"Texture Rendition:TextureTest",
 		};
 
-		static readonly HashSet<string> ExpectedAssets = new HashSet<string> (ExpectedAssetsMacCatalyst) {
+		static HashSet<string> ExpectedAssetsMacCatalyst => new HashSet<string> (ExpectedAssetsAllPlatforms) {
+			"Image:Icon16.png",
+			"Image:Icon32.png",
+		};
+
+		static readonly HashSet<string> ExpectedAssetsiOS = new HashSet<string> (ExpectedAssetsAllPlatforms) {
 			"Vector:samplepdf.pdf",
 			"Vector:xamlogo.svg",
+			"Image:Icon16.png",
+			"Image:Icon32.png",
+			"Image:Icon64.png",
+		};
+
+		static readonly HashSet<string> ExpectedAssetstvOS = new HashSet<string> (ExpectedAssetsAllPlatforms) {
+			"Vector:samplepdf.pdf",
+			"Vector:xamlogo.svg",
+			"Image:Icon16.png",
+			"Image:Icon32.png",
+		};
+
+		static readonly HashSet<string> ExpectedAssetsmacOS = new HashSet<string> (ExpectedAssetsAllPlatforms) {
+			"Vector:samplepdf.pdf",
+			"Vector:xamlogo.svg",
+			"Image:Icon16.png",
+			"Image:Icon32.png",
 		};
 
 		class XCAssetTarget {

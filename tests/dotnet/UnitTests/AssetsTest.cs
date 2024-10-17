@@ -18,7 +18,7 @@ namespace Xamarin.Tests {
 		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64", true)]
 		[TestCase (ApplePlatform.MacOSX, "osx-x64", true)]
 		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64", true)] // https://github.com/xamarin/xamarin-macios/issues/12410
-																				  // Build, add the XCAssets, then build again
+																	 // Build, add the XCAssets, then build again
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64", false)]
 		[TestCase (ApplePlatform.iOS, "ios-arm64", false)]
 		[TestCase (ApplePlatform.TVOS, "tvossimulator-x64", false)]
@@ -190,16 +190,16 @@ namespace Xamarin.Tests {
 		{
 			if (item.TryGetProperty ("SchemaVersion", out var schemaVersion)) {
 				switch (platform) {
-					case ApplePlatform.MacOSX:
-						Assert.AreEqual ("5", schemaVersion.ToString (), "Verify SchemaVersion");
-						break;
-					case ApplePlatform.MacCatalyst:
-					case ApplePlatform.iOS:
-					case ApplePlatform.TVOS:
-						Assert.AreEqual ("2", schemaVersion.ToString (), "Verify SchemaVersion");
-						break;
-					default:
-						throw new ArgumentOutOfRangeException ($"Unknown platform: {platform}");
+				case ApplePlatform.MacOSX:
+					Assert.AreEqual ("5", schemaVersion.ToString (), "Verify SchemaVersion");
+					break;
+				case ApplePlatform.MacCatalyst:
+				case ApplePlatform.iOS:
+				case ApplePlatform.TVOS:
+					Assert.AreEqual ("2", schemaVersion.ToString (), "Verify SchemaVersion");
+					break;
+				default:
+					throw new ArgumentOutOfRangeException ($"Unknown platform: {platform}");
 				}
 			} else if (item.TryGetProperty ("AssetType", out var assetType)) {
 				foreach (var target in XCAssetTargets) {

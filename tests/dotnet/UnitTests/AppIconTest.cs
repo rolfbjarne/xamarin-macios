@@ -477,7 +477,7 @@ namespace Xamarin.Tests {
 				expectedErrorMessages: new string [] { "Can't find the AppIcon 'InexistentAppIcon' among the image resources." });
 		}
 
-		void TestXCAssetsImpl (ApplePlatform platform, string runtimeIdentifiers, Dictionary<string, string>? extraProperties = null, IEnumerable<string>? extraAssets = null, string[]? expectedErrorMessages = null)
+		void TestXCAssetsImpl (ApplePlatform platform, string runtimeIdentifiers, Dictionary<string, string>? extraProperties = null, IEnumerable<string>? extraAssets = null, string []? expectedErrorMessages = null)
 		{
 			var projectPath = string.Empty;
 			var appPath = string.Empty;

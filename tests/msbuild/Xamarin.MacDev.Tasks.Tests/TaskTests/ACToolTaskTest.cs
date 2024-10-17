@@ -16,7 +16,7 @@ using Xamarin.Utils;
 namespace Xamarin.MacDev.Tasks {
 	[TestFixture]
 	public class ACToolTaskTests : TestBase {
-		ACTool CreateACToolTask (ApplePlatform platform, string projectDir, out string intermediateOutputPath, params string[] imageAssets)
+		ACTool CreateACToolTask (ApplePlatform platform, string projectDir, out string intermediateOutputPath, params string [] imageAssets)
 		{
 			Configuration.IgnoreIfIgnoredPlatform (platform);
 
@@ -289,10 +289,10 @@ namespace Xamarin.MacDev.Tasks {
 			var actool = CreateACToolTaskWithResources (platform);
 			if (platform == ApplePlatform.TVOS) {
 				actool.AppIcon = "BrandAssets";
-				actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AlternateBrandAssets")};
+				actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AlternateBrandAssets") };
 			} else {
 				actool.AppIcon = "AppIcons";
-				actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AlternateAppIcons")};
+				actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AlternateAppIcons") };
 			}
 
 			ExecuteTask (actool);
@@ -379,9 +379,9 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			var actool = CreateACToolTaskWithResources (platform);
 			if (platform == ApplePlatform.TVOS) {
-				actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AlternateBrandAssets")};
+				actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AlternateBrandAssets") };
 			} else {
-				actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AlternateAppIcons")};
+				actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AlternateAppIcons") };
 			}
 
 			ExecuteTask (actool);
@@ -412,7 +412,7 @@ namespace Xamarin.MacDev.Tasks {
 		public void InexistentAlternateIcons (ApplePlatform platform)
 		{
 			var actool = CreateACToolTaskWithResources (platform);
-			actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("InexistentAlternateAppIcons")};
+			actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("InexistentAlternateAppIcons") };
 
 			ExecuteTask (actool, 1);
 			Assert.AreEqual ("Can't find the AlternateAppIcon 'InexistentAlternateAppIcons' among the image resources.", Engine.Logger.ErrorEvents [0].Message, "Error message");
@@ -427,10 +427,10 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			var actool = CreateACToolTaskWithResources (platform);
 			if (platform == ApplePlatform.TVOS) {
-				actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("BrandAssets")};
+				actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("BrandAssets") };
 				actool.AppIcon = "BrandAssets";
 			} else {
-				actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AppIcons")};
+				actool.AlternateAppIcons = new ITaskItem [] { new TaskItem ("AppIcons") };
 				actool.AppIcon = "AppIcons";
 			}
 

@@ -571,7 +571,9 @@ namespace Xamarin.MacDev.Tasks {
 
 		public bool ShouldCreateOutputFile (ITaskItem item)
 		{
-			if (item == CompiledEntitlements)
+			var rv = item == CompiledEntitlements;
+			Log.LogMessage ($"Checking whether creating output file '{item.ItemSpec}' is compiled entitlements: {rv}");
+			if (rv)
 				return false;
 
 			return true;

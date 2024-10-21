@@ -54,7 +54,7 @@ namespace Xamarin.MacDev.Tasks {
 		public string BundleIdentifier { get; set; } = string.Empty;
 
 		[Required]
-		[Output] // this is required to create an output file on Windows.
+		[Output] // this is required to create an output file on Windows. Note: this is a relative path.
 		public ITaskItem? CompiledEntitlements { get; set; }
 
 		public ITaskItem [] CustomEntitlements { get; set; } = Array.Empty<ITaskItem> ();
@@ -572,12 +572,10 @@ namespace Xamarin.MacDev.Tasks {
 
 		public bool ShouldCreateOutputFile (ITaskItem item)
 		{
-			var rv = item == EntitlementsInExecutable || item ==EntitlementsInSignature;
-			Log.LogMessage ($"Checking whether creating output file '{item.ItemSpec}' is '{EntitlementsInExecutable?.ItemSpec}' or '{EntitlementsInSignature?.ItemSpec}': {rv}");
-			if (rv)
-				return false;
-
-			return true;
+			// EntitlementsInExecutable and EntitlementsInSignature are full paths on macOS,
+			// which doesn't work correctly when trying to create such output files on Windows.
+			var isFullPath = item == EntitlementsInExecutable || item == EntitlementsInSignature;
+			return !isFullPath;
 		}
 
 		public IEnumerable<ITaskItem> GetAdditionalItemsToBeCopied ()

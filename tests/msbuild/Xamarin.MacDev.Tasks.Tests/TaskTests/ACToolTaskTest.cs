@@ -151,7 +151,7 @@ namespace Xamarin.MacDev.Tasks {
 			} else if (platform == ApplePlatform.TVOS) {
 				var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
 				Assert.AreEqual (1, cfBundleIcons.Count, "CFBundleIcons.Count");
-				Assert.AreEqual ("AppIcon", cfBundleIcons.Get<PString> ("CFBundlePrimaryIcon")?.Value, "CFBundlePrimaryIcon");
+				Assert.AreEqual ("AlternateAppIcons", cfBundleIcons.Get<PString> ("CFBundlePrimaryIcon")?.Value, "CFBundlePrimaryIcon");
 
 				var tvTopShelfImage = appIconsManifest.Get<PDictionary> ("TVTopShelfImage");
 				Assert.AreEqual (2, tvTopShelfImage.Count, "TVTopShelfImage.Count");
@@ -242,7 +242,7 @@ namespace Xamarin.MacDev.Tasks {
 
 				var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
 				Assert.AreEqual (1, cfBundleIcons.Count, "CFBundleIcons.Count");
-				Assert.AreEqual ("AppIcon", cfBundleIcons.Get<PString> ("CFBundlePrimaryIcon")?.Value, "CFBundlePrimaryIcon");
+				Assert.AreEqual ("AppIcons", cfBundleIcons.Get<PString> ("CFBundlePrimaryIcon")?.Value, "CFBundlePrimaryIcon");
 
 				var tvTopShelfImage = appIconsManifest.Get<PDictionary> ("TVTopShelfImage");
 				Assert.AreEqual (2, tvTopShelfImage.Count, "TVTopShelfImage.Count");
@@ -309,7 +309,7 @@ namespace Xamarin.MacDev.Tasks {
 			} else if (platform == ApplePlatform.TVOS) {
 				var cfBundleIcons = appIconsManifest.Get<PDictionary> ("CFBundleIcons");
 				Assert.AreEqual (1, cfBundleIcons.Count, "CFBundleIcons.Count");
-				Assert.AreEqual ("AppIcon", cfBundleIcons.Get<PString> ("CFBundlePrimaryIcon")?.Value, "CFBundlePrimaryIcon");
+				Assert.AreEqual ("AppIcons", cfBundleIcons.Get<PString> ("CFBundlePrimaryIcon")?.Value, "CFBundlePrimaryIcon");
 
 				var tvTopShelfImage = appIconsManifest.Get<PDictionary> ("TVTopShelfImage");
 				Assert.AreEqual (2, tvTopShelfImage.Count, "TVTopShelfImage.Count");

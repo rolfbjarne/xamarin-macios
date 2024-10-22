@@ -9,11 +9,14 @@ using System.Threading;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 
+using Xamarin.Localization.MSBuild;
 using Xamarin.Messaging.Build.Client;
 using Xamarin.Utils;
 
 namespace Xamarin.MacDev.Tasks {
 	public class Ditto : XamarinTask, ITaskCallback, ICancelableTask {
+		CancellationTokenSource? cancellationTokenSource;
+
 		#region Inputs
 
 		public string? AdditionalArguments { get; set; }
@@ -27,6 +30,8 @@ namespace Xamarin.MacDev.Tasks {
 		// copy the entire input to the Mac - so we need an option to select
 		// the mode.
 		public bool CopyFromWindows { get; set; }
+
+		public string? DittoPath { get; set; }
 
 		[Required]
 		public ITaskItem? Source { get; set; }
@@ -42,8 +47,6 @@ namespace Xamarin.MacDev.Tasks {
 
 		#endregion
 
-		CancellationTokenSource? cancellationTokenSource;
-
 		public override bool Execute ()
 		{
 			if (ShouldExecuteRemotely ()) {
@@ -54,6 +57,13 @@ namespace Xamarin.MacDev.Tasks {
 				return taskRunner.RunAsync (this).Result;
 			}
 
+			var src = Source!.ItemSpec;
+			if (!File.Exists (src) && !Directory.Exists (src)) {
+				Log.LogError (MSBStrings.E7131 /* The source '{0}' does not exist. */, src);
+				return false;
+			}
+
+			var executable = string.IsNullOrEmpty (DittoPath) ? "/usr/bin/ditto" : DittoPath!;
 			var args = new List<string> ();
 			args.Add (Path.GetFullPath (Source!.ItemSpec));
 			args.Add (Path.GetFullPath (Destination!.ItemSpec));
@@ -65,14 +75,13 @@ namespace Xamarin.MacDev.Tasks {
 				if (StringUtils.TryParseArguments (AdditionalArguments, out var additionalArgs, out var ex)) {
 					args.AddRange (additionalArgs);
 				} else {
-					Log.LogError ("Unable to parse the AdditionalArguments: {0}", AdditionalArguments);
+					Log.LogError (MSBStrings.E7132 /* Unable to parse the 'AdditionalArguments' value: {0} */, AdditionalArguments);
 					return false;
 				}
 			}
 
 			cancellationTokenSource = new CancellationTokenSource ();
-			cancellationTokenSource.CancelAfter (TimeSpan.FromMinutes (2)); // FIXME: remove this
-			ExecuteAsync (Log, "/usr/bin/ditto", args, cancellationToken: cancellationTokenSource.Token).Wait ();
+			ExecuteAsync (Log, executable, args, cancellationToken: cancellationTokenSource.Token).Wait ();
 
 			// Create a list of all the files we've copied
 			var copiedFiles = new List<ITaskItem> ();

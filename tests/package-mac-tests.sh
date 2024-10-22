@@ -23,7 +23,6 @@ export MD_APPLE_SDK_ROOT="$(dirname "$(dirname "$XCODE_DEVELOPER_ROOT")")"
 export RootTestsDirectory="$(pwd)"
 
 make
-make .stamp-xharness-configure
 
 TEST_SUITE_DEPENDENCIES+=(bindings-test)
 TEST_SUITE_DEPENDENCIES+=(EmbeddedResources)
@@ -44,11 +43,6 @@ TEST_SUITES+=(build-linksdk)
 TEST_SUITES+=(build-linkall)
 TEST_SUITES+=(build-introspection)
 TEST_SUITES+=(build-monotouch-test)
-
-# Don't build in parallel in CI, it fails randomly due to trying to write to the same files.
-if test -z "$BUILD_REVISION"; then
-	MAKE_FLAGS=-j
-fi
 
 make -f packaged-macos-tests.mk "${TEST_SUITES[@]}" $MAKE_FLAGS
 

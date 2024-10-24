@@ -367,6 +367,7 @@ namespace Xamarin.Tests {
 		public readonly bool IsRemoteBuild;
 		public readonly bool IsHotRestartBuild;
 		public readonly string AppPath;
+		public readonly string ProjectPath;
 		public readonly ApplePlatform Platform;
 		public readonly string Configuration;
 		public readonly string RuntimeIdentifiers;
@@ -379,7 +380,7 @@ namespace Xamarin.Tests {
 				if (zippedAppBundlePath is null) {
 					if (!IsRemoteBuild)
 						throw new InvalidOperationException ($"Can't get the zipped app bundle path unless it's for a remote build.");
-					var objDir = TestBaseClass.GetObjDir (AppPath, Platform, RuntimeIdentifiers, Configuration);
+					var objDir = TestBaseClass.GetObjDir (ProjectPath, Platform, RuntimeIdentifiers, Configuration);
 					zippedAppBundlePath = Path.Combine (objDir, "AppBundle.zip");
 					Assert.That (zippedAppBundlePath, Does.Exist, "AppBundle.zip");
 				}
@@ -387,10 +388,11 @@ namespace Xamarin.Tests {
 			}
 		}
 
-		public AppBundleInfo (ApplePlatform platform, string appPath, bool isRemoteBuild, string runtimeIdentifiers, string configuration, bool isHotRestartBuild, string? hotRestartOutputDir, string? hotRestartAppBundlePath)
+		public AppBundleInfo (ApplePlatform platform, string appPath, string projectPath, bool isRemoteBuild, string runtimeIdentifiers, string configuration, bool isHotRestartBuild, string? hotRestartOutputDir, string? hotRestartAppBundlePath)
 		{
 			Platform = platform;
 			AppPath = appPath;
+			ProjectPath = projectPath;
 			IsRemoteBuild = isRemoteBuild;
 			Configuration = configuration;
 			RuntimeIdentifiers = runtimeIdentifiers;

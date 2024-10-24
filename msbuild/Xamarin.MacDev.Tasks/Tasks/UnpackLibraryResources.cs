@@ -315,11 +315,13 @@ namespace Xamarin.MacDev.Tasks {
 					var contentType = resourceName.Substring (startsWith.Length, underscoreIndex - startsWith.Length);
 					var contentValue = resourceName.Substring (underscoreIndex + 1);
 					ResourceType resourceType;
+					string itemType;
 					switch (contentType) {
 					case "content":
 					case "page":
 						rpath = UnmangleResource (contentValue);
 						resourceType = ResourceType.BundleResource;
+						itemType = contentType;
 						break;
 					case "item":
 						var itemUnderscoreIndex = contentValue.IndexOf ('_');
@@ -327,7 +329,7 @@ namespace Xamarin.MacDev.Tasks {
 							Log.LogMessage (MessageImportance.Low, $"    Not applicable resource (no item type in '{contentValue}'): {resourceName}");
 							continue;
 						}
-						var itemType = contentValue.Substring (0, itemUnderscoreIndex);
+						itemType = contentValue.Substring (0, itemUnderscoreIndex);
 						var itemValue = contentValue.Substring (itemUnderscoreIndex + 1);
 						rpath = UnmangleResource (itemValue);
 						switch (itemType) {

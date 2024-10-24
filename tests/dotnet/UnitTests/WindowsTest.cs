@@ -414,15 +414,42 @@ namespace Xamarin.Tests {
 			}
 		}
 
-		public IEnumerable<string> GetAppBundleFiles ()
+		public IEnumerable<string> GetAppBundleFiles (bool merged = false)
 		{
 			if (IsRemoteBuild) {
 				return ZipHelpers.List (ZippedAppBundlePath);
 			} else {
-				return Directory
-					.GetFileSystemEntries (AppPath, "*", SearchOption.AllDirectories)
-					.Select (v => v.Substring (AppPath.Length + 1));
+				var rv = new HashSet<string> ();
+
+				rv.UnionWith (GetAllFilesInDirectory (AppPath));
+
+				if (!IsHotRestartBuild)
+					return rv;
+
+				rv.UnionWith (GetAllFilesInDirectory (HotRestartOutputDir!, "*.content"));
+				rv.UnionWith (GetAllFilesInDirectory (HotRestartAppBundlePath!));
+				return rv;
 			}
+		}
+
+		static IEnumerable<string> GetAllFilesInDirectory (string? directory, string subdir = "")
+		{
+			if (string.IsNullOrEmpty (directory))
+				return Enumerable.Empty<string> ();
+
+			if (!string.IsNullOrEmpty (subdir)) {
+				var subdirs = Directory.GetDirectories (directory, subdir);
+				if (subdirs.Length != 1)
+					throw new InvalidOperationException ($"Found {subdirs.Length} (expected 1) subdirs for glob '{subdir}' in '{directory}': {string.Join (", ", subdirs)}");
+				directory = subdirs [0];
+			}
+
+			if (!Directory.Exists (directory))
+				return Array.Empty<string> ();
+
+			return Directory
+					.GetFileSystemEntries (directory, "*", SearchOption.AllDirectories)
+					.Select (v => v.Substring (directory.Length + 1));
 		}
 
 		public void DumpAppBundleContents ()

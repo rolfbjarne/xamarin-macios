@@ -29,6 +29,7 @@ namespace Xamarin.MacDev.Tasks {
 
 		#endregion
 
+		// The opposite function is UnpackLibraryResources.UnmangleResource
 		public static string EscapeMangledResource (string name)
 		{
 			var mangled = new StringBuilder ();

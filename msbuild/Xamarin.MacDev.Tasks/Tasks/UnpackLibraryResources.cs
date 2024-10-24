@@ -391,6 +391,7 @@ namespace Xamarin.MacDev.Tasks {
 			return rv;
 		}
 
+		// The opposite function is PackLibraryResources.EscapeMangledResource
 		static string UnmangleResource (string mangled)
 		{
 			var unmangled = new StringBuilder (mangled.Length);

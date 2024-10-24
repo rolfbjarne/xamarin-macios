@@ -315,11 +315,13 @@ namespace Xamarin.MacDev.Tasks {
 					var contentType = resourceName.Substring (startsWith.Length, underscoreIndex - startsWith.Length);
 					var contentValue = resourceName.Substring (underscoreIndex + 1);
 					ResourceType resourceType;
+					string itemType;
 					switch (contentType) {
 					case "content":
 					case "page":
 						rpath = UnmangleResource (contentValue);
 						resourceType = ResourceType.BundleResource;
+						itemType = contentType;
 						break;
 					case "item":
 						var itemUnderscoreIndex = contentValue.IndexOf ('_');
@@ -327,7 +329,7 @@ namespace Xamarin.MacDev.Tasks {
 							Log.LogMessage (MessageImportance.Low, $"    Not applicable resource (no item type in '{contentValue}'): {resourceName}");
 							continue;
 						}
-						var itemType = contentValue.Substring (0, itemUnderscoreIndex);
+						itemType = contentValue.Substring (0, itemUnderscoreIndex);
 						var itemValue = contentValue.Substring (itemUnderscoreIndex + 1);
 						rpath = UnmangleResource (itemValue);
 						switch (itemType) {
@@ -365,7 +367,7 @@ namespace Xamarin.MacDev.Tasks {
 						continue;
 					}
 
-					var path = Path.Combine (intermediatePath, rpath);
+					var path = Path.Combine (intermediatePath, itemType, rpath);
 					var file = new FileInfo (path);
 
 					var item = new TaskItem (path);
@@ -374,22 +376,11 @@ namespace Xamarin.MacDev.Tasks {
 					item.SetMetadata ("BundledInAssembly", assembly);
 
 					if (file.Exists && file.LastWriteTimeUtc >= asmWriteTime) {
-						Log.LogMessage ($"    Up to date (contentType: {contentType} resourceType: {resourceType}): {path}");
+						Log.LogMessage ($"    Up to date (contentType: {contentType} resourceType: {resourceType} resourceName: {resourceName}): {path}");
 					} else {
 						extractor.WriteResourceTo (embedded, path);
 						unpackedResources.Add (item);
-
-						using var md5 = global::System.Security.Cryptography.MD5.Create ();
-						var bytes = File.ReadAllBytes (path);
-						var md5Hash = string.Join ("", md5.ComputeHash (bytes).Select (v => $"{v:x2}")) + " " + string.Join (" ", md5.ComputeHash (File.ReadAllBytes (path)).Select (v => $"{v:x2}"));
-						Log.LogMessage ($"    Unpacked (contentType: {contentType} resourceType: {resourceType} md5: {md5Hash} length: {bytes.Length}): {path}");
-						if (Path.GetFileName (path) == "Main.storyboard") {
-							var txt = File.ReadAllText (path);
-							File.WriteAllText (path, txt.Replace ("\r", ""));
-							// File.WriteAllText (path, txt.Replace ("\n", "\r\n"));
-							Log.LogMessage (txt);
-							Log.LogMessage (string.Join (" ", bytes.Select (v => $"{v:x2}")));
-						}
+						Log.LogMessage ($"    Unpacked (contentType: {contentType} resourceType: {resourceType}  resourceName: {resourceName}): {path}");
 					}
 					rv.Add (new AssemblyContentResource (resourceType, item));
 				}

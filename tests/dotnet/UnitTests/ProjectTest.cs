@@ -1014,7 +1014,7 @@ namespace Xamarin.Tests {
 			ExecuteWithMagicWordAndAssert (platform, runtimeIdentifiers, appExecutable);
 
 			var appBundleInfo = new AppBundleInfo (platform, appPath, remoteWindows, runtimeIdentifiers, config, isUsingHotRestart, hotRestartOutputDir, hotRestartAppBundlePath);
-			var appBundleContents = appBundleInfo.GetAppBundleFiles ().ToHashSet ();
+			var appBundleContents = appBundleInfo.GetAppBundleFiles (true).ToHashSet ();
 
 			appBundleInfo.DumpAppBundleContents ();
 
@@ -1031,37 +1031,37 @@ namespace Xamarin.Tests {
 				Assert.That (appBundleContents, Does.Contain (fontCFile), "C.ttf existence");
 
 				var atlasTexture = Path.Combine (resourcesDirectory, "Archer_Attack.atlasc", "Archer_Attack.plist");
-				Assert.That (appBundleContents, Does.Contain (atlasTexture), "AtlasTexture - Archer_Attack");
+				AssertExistsOrUsingHotRestart (atlasTexture, "AtlasTexture - Archer_Attack");
 
 				var scnAssetsDir = Path.Combine (resourcesDirectory, "art.scnassets");
-				Assert.That (appBundleContents, Does.Contain (Path.Combine (scnAssetsDir, "scene.scn")), "scene.scn");
-				Assert.That (appBundleContents, Does.Contain (Path.Combine (scnAssetsDir, "texture.png")), "texture.png");
+				AssertExistsOrUsingHotRestart (Path.Combine (scnAssetsDir, "scene.scn"), "scene.scn");
+				AssertExistsOrUsingHotRestart (Path.Combine (scnAssetsDir, "texture.png"), "texture.png");
 
-				Assert.That (appBundleContents, Does.Contain (Path.Combine (resourcesDirectory, "Assets.car")), "Assets.car");
+				AssertExistsOrUsingHotRestart (Path.Combine (resourcesDirectory, "Assets.car"), "Assets.car");
 
-				Assert.That (appBundleContents, Does.Contain (Path.Combine (resourcesDirectory, "DirWithResources", "linkedArt.scnassets", "scene.scn")), "DirWithResources/linkedArt.scnassets/scene.scn");
-				Assert.That (appBundleContents, Does.Contain (Path.Combine (resourcesDirectory, "DirWithResources", "linkedArt.scnassets", "texture.png")), "DirWithResources/linkedArt.scnassets/texture.png");
+				AssertExistsOrUsingHotRestart (Path.Combine (resourcesDirectory, "DirWithResources", "linkedArt.scnassets", "scene.scn"), "DirWithResources/linkedArt.scnassets/scene.scn");
+				AssertExistsOrUsingHotRestart (Path.Combine (resourcesDirectory, "DirWithResources", "linkedArt.scnassets", "texture.png"), "DirWithResources/linkedArt.scnassets/texture.png");
 
 				var mainStoryboard = Path.Combine (resourcesDirectory, "Main.storyboardc");
-				Assert.That (appBundleContents, Does.Contain (mainStoryboard), "Main.storyboardc");
-				Assert.That (appBundleContents, Does.Contain (Path.Combine (mainStoryboard, "Info.plist")), "Main.storyboardc/Info.plist");
+				AssertExistsOrUsingHotRestart (mainStoryboard, "Main.storyboardc");
+				AssertExistsOrUsingHotRestart (Path.Combine (mainStoryboard, "Info.plist"), "Main.storyboardc/Info.plist");
 
 				var colladaScene = Path.Combine (resourcesDirectory, "scene.dae");
-				Assert.That (appBundleContents, Does.Contain (colladaScene), "Collada - scene.dae");
+				AssertExistsOrUsingHotRestart (colladaScene, "Collada - scene.dae");
 
 				var mlModel = Path.Combine (resourcesDirectory, "SqueezeNet.mlmodelc");
-				Assert.That (appBundleContents, Does.Contain (mlModel), "CoreMLModel");
-				Assert.That (appBundleContents, Does.Contain (Path.Combine (mlModel, "analytics")), "CoreMLModel/analytics");
-				Assert.That (appBundleContents, Does.Contain (Path.Combine (mlModel, "analytics", "coremldata.bin")), "CoreMLModel/analytics/coremldata.bin");
-				Assert.That (appBundleContents, Does.Contain (Path.Combine (mlModel, "coremldata.bin")), "CoreMLModel/coremldata.bin");
-				Assert.That (appBundleContents, Does.Contain (Path.Combine (mlModel, "metadata.json")), "CoreMLModel/metadata.json");
-				Assert.That (appBundleContents, Does.Contain (Path.Combine (mlModel, "model")), "CoreMLModel/model");
-				Assert.That (appBundleContents, Does.Contain (Path.Combine (mlModel, "model.espresso.net")), "CoreMLModel/model.espresso.net");
-				Assert.That (appBundleContents, Does.Contain (Path.Combine (mlModel, "model.espresso.shape")), "CoreMLModel/model.espresso.shape");
-				Assert.That (appBundleContents, Does.Contain (Path.Combine (mlModel, "model.espresso.weights")), "CoreMLModel/model.espresso.weights");
-				Assert.That (appBundleContents, Does.Contain (Path.Combine (mlModel, "model", "coremldata.bin")), "CoreMLModel/model/coremldata.bin");
-				Assert.That (appBundleContents, Does.Contain (Path.Combine (mlModel, "neural_network_optionals")), "CoreMLModel/neural_network_optionals");
-				Assert.That (appBundleContents, Does.Contain (Path.Combine (mlModel, "neural_network_optionals", "coremldata.bin")), "CoreMLModel/neural_network_optionals/coremldata.bin");
+				AssertExistsOrUsingHotRestart (mlModel, "CoreMLModel");
+				AssertExistsOrUsingHotRestart (Path.Combine (mlModel, "analytics"), "CoreMLModel/analytics");
+				AssertExistsOrUsingHotRestart (Path.Combine (mlModel, "analytics", "coremldata.bin"), "CoreMLModel/analytics/coremldata.bin");
+				AssertExistsOrUsingHotRestart (Path.Combine (mlModel, "coremldata.bin"), "CoreMLModel/coremldata.bin");
+				AssertExistsOrUsingHotRestart (Path.Combine (mlModel, "metadata.json"), "CoreMLModel/metadata.json");
+				AssertExistsOrUsingHotRestart (Path.Combine (mlModel, "model"), "CoreMLModel/model");
+				AssertExistsOrUsingHotRestart (Path.Combine (mlModel, "model.espresso.net"), "CoreMLModel/model.espresso.net");
+				AssertExistsOrUsingHotRestart (Path.Combine (mlModel, "model.espresso.shape"), "CoreMLModel/model.espresso.shape");
+				AssertExistsOrUsingHotRestart (Path.Combine (mlModel, "model.espresso.weights"), "CoreMLModel/model.espresso.weights");
+				AssertExistsOrUsingHotRestart (Path.Combine (mlModel, "model", "coremldata.bin"), "CoreMLModel/model/coremldata.bin");
+				AssertExistsOrUsingHotRestart (Path.Combine (mlModel, "neural_network_optionals"), "CoreMLModel/neural_network_optionals");
+				AssertExistsOrUsingHotRestart (Path.Combine (mlModel, "neural_network_optionals", "coremldata.bin"), "CoreMLModel/neural_network_optionals/coremldata.bin");
 
 				if (bundleOriginalResources) {
 					var infoPlist = appBundleInfo.GetFile (GetInfoPListPath (platform, ""));
@@ -1069,6 +1069,14 @@ namespace Xamarin.Tests {
 					Assert.AreEqual ("Here I am", appManifest.GetString ("LibraryWithResources").Value, "Partial plist entry");
 				}
 			});
+
+			void AssertExistsOrUsingHotRestart (string path, string message)
+			{
+				var exists = appBundleContents.Contains (path);
+				if (exists ^ isUsingHotRestart)
+					return;
+				Assert.Fail ($"Expected either hot restart to be enabled ({isUsingHotRestart}) or the file '{path}' to be in the app bundle ({exists}): {message}");
+			}
 		}
 
 		[TestCase (ApplePlatform.iOS, "iossimulator-x64")]

@@ -1013,7 +1013,7 @@ namespace Xamarin.Tests {
 			var appExecutable = GetNativeExecutable (platform, appPath);
 			ExecuteWithMagicWordAndAssert (platform, runtimeIdentifiers, appExecutable);
 
-			var appBundleInfo = new AppBundleInfo (platform, appPath, remoteWindows, runtimeIdentifiers, config, isUsingHotRestart, hotRestartOutputDir, hotRestartAppBundlePath);
+			var appBundleInfo = new AppBundleInfo (platform, appPath, project_path, remoteWindows, runtimeIdentifiers, config, isUsingHotRestart, hotRestartOutputDir, hotRestartAppBundlePath);
 			var appBundleContents = appBundleInfo.GetAppBundleFiles (true).ToHashSet ();
 
 			appBundleInfo.DumpAppBundleContents ();

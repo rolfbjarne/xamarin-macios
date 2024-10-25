@@ -859,7 +859,7 @@ namespace Xamarin.Tests {
 			var asm = assemblies.First ();
 			Assert.That (asm, Does.Exist, "Assembly existence");
 
-			var ad = AssemblyDefinition.ReadAssembly (asm, new ReaderParameters { ReadingMode = ReadingMode.Deferred });
+			using var ad = AssemblyDefinition.ReadAssembly (asm, new ReaderParameters { ReadingMode = ReadingMode.Deferred });
 			var actualResources = ad.MainModule.Resources.Select (v => v.Name).OrderBy (v => v).ToArray ();
 
 			string [] expectedResources;

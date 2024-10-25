@@ -405,10 +405,11 @@ namespace Xamarin.Tests {
 		{
 			Assert.That (GetAppBundleFiles (), Does.Contain (appBundleRelativePath), "File does not exist in app bundle");
 			if (IsRemoteBuild) {
+				Console.WriteLine ($"Opening {ZippedAppBundlePath}");
 				using var zip = ZipFile.OpenRead (ZippedAppBundlePath);
 				var entry = zip.GetEntry (appBundleRelativePath.Replace (Path.DirectorySeparatorChar, '/'))!;
 				using var stream = entry.Open ();
-				using var memoryStream = new MemoryStream ((int) stream.Length);
+				using var memoryStream = new MemoryStream (stream.CanSeek ? (int) stream.Length : 4096);
 				stream.CopyTo (memoryStream);
 				return memoryStream.ToArray ();
 			} else {

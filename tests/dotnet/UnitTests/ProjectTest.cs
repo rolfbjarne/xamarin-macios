@@ -804,14 +804,14 @@ namespace Xamarin.Tests {
 		{
 			Configuration.IgnoreIfNotOnWindows ();
 
-			LibraryWithResources (platform);
+			LibraryWithResources (platform, anyLibraryResources: false);
 		}
 
 		[TestCase (ApplePlatform.iOS)]
 		[TestCase (ApplePlatform.TVOS)]
 		[TestCase (ApplePlatform.MacCatalyst)]
 		[TestCase (ApplePlatform.MacOSX)]
-		public void LibraryWithResources (ApplePlatform platform)
+		public void LibraryWithResources (ApplePlatform platform, bool anyLibraryResources = true)
 		{
 			var project = "LibraryWithResources";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
@@ -843,50 +843,54 @@ namespace Xamarin.Tests {
 
 			string [] expectedResources;
 
-			var platformPrefix = (platform == ApplePlatform.MacOSX) ? "xammac" : "monotouch";
-			var expectedList = new List<string> ();
-			expectedList.Add ($"__{platformPrefix}_content_A.ttc");
-			expectedList.Add ($"__{platformPrefix}_content_Archer__Attack.atlasc_sArcher__Attack.plist");
-			expectedList.Add ($"__{platformPrefix}_content_art.scnassets_sscene.scn");
-			expectedList.Add ($"__{platformPrefix}_content_art.scnassets_stexture.png");
-			expectedList.Add ($"__{platformPrefix}_content_Assets.car");
-			expectedList.Add ($"__{platformPrefix}_content_B.otf");
-			expectedList.Add ($"__{platformPrefix}_content_C.ttf");
-			expectedList.Add ($"__{platformPrefix}_content_DirWithResources_slinkedArt.scnassets_sscene.scn");
-			expectedList.Add ($"__{platformPrefix}_content_DirWithResources_slinkedArt.scnassets_stexture.png");
-			expectedList.Add ($"__{platformPrefix}_content_scene.dae");
-			switch (platform) {
-			case ApplePlatform.iOS:
-				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sBYZ-38-t0r-view-8bC-Xf-vdC.nib");
-				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sInfo.plist");
-				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sUIViewController-BYZ-38-t0r.nib");
-				break;
-			case ApplePlatform.TVOS:
-				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_s1-view-2.nib");
-				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sInfo.plist");
-				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sUIViewController-1.nib");
-				break;
-			case ApplePlatform.MacCatalyst:
-				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_s1-view-2.nib");
-				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sInfo.plist");
-				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sUIViewController-1.nib");
-				break;
-			case ApplePlatform.MacOSX:
-				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sInfo.plist");
-				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sMainMenu.nib");
-				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sNSWindowController-B8D-0N-5wS.nib");
-				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sXfG-lQ-9wD-view-m2S-Jp-Qdl.nib");
-				break;
+			if (anyLibraryResources) {
+				var platformPrefix = (platform == ApplePlatform.MacOSX) ? "xammac" : "monotouch";
+				var expectedList = new List<string> ();
+				expectedList.Add ($"__{platformPrefix}_content_A.ttc");
+				expectedList.Add ($"__{platformPrefix}_content_Archer__Attack.atlasc_sArcher__Attack.plist");
+				expectedList.Add ($"__{platformPrefix}_content_art.scnassets_sscene.scn");
+				expectedList.Add ($"__{platformPrefix}_content_art.scnassets_stexture.png");
+				expectedList.Add ($"__{platformPrefix}_content_Assets.car");
+				expectedList.Add ($"__{platformPrefix}_content_B.otf");
+				expectedList.Add ($"__{platformPrefix}_content_C.ttf");
+				expectedList.Add ($"__{platformPrefix}_content_DirWithResources_slinkedArt.scnassets_sscene.scn");
+				expectedList.Add ($"__{platformPrefix}_content_DirWithResources_slinkedArt.scnassets_stexture.png");
+				expectedList.Add ($"__{platformPrefix}_content_scene.dae");
+				switch (platform) {
+				case ApplePlatform.iOS:
+					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sBYZ-38-t0r-view-8bC-Xf-vdC.nib");
+					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sInfo.plist");
+					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sUIViewController-BYZ-38-t0r.nib");
+					break;
+				case ApplePlatform.TVOS:
+					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_s1-view-2.nib");
+					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sInfo.plist");
+					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sUIViewController-1.nib");
+					break;
+				case ApplePlatform.MacCatalyst:
+					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_s1-view-2.nib");
+					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sInfo.plist");
+					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sUIViewController-1.nib");
+					break;
+				case ApplePlatform.MacOSX:
+					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sInfo.plist");
+					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sMainMenu.nib");
+					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sNSWindowController-B8D-0N-5wS.nib");
+					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sXfG-lQ-9wD-view-m2S-Jp-Qdl.nib");
+					break;
+				}
+				expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_sanalytics_scoremldata.bin");
+				expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_scoremldata.bin");
+				expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smetadata.json");
+				expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smodel.espresso.net");
+				expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smodel.espresso.shape");
+				expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smodel.espresso.weights");
+				expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smodel_scoremldata.bin");
+				expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_sneural__network__optionals_scoremldata.bin");
+				expectedResources = expectedList.ToArray ();
+			} else {
+				expectedResources = new string [0];
 			}
-			expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_sanalytics_scoremldata.bin");
-			expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_scoremldata.bin");
-			expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smetadata.json");
-			expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smodel.espresso.net");
-			expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smodel.espresso.shape");
-			expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smodel.espresso.weights");
-			expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smodel_scoremldata.bin");
-			expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_sneural__network__optionals_scoremldata.bin");
-			expectedResources = expectedList.ToArray ();
 			CollectionAssert.AreEquivalent (expectedResources, actualResources, "Resources");
 		}
 

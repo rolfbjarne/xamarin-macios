@@ -799,8 +799,7 @@ namespace Xamarin.Tests {
 
 
 		[Category ("RemoteWindows")]
-		[TestCase (ApplePlatform.iOS, true)]
-		[TestCase (ApplePlatform.iOS, false)]
+		[TestCase (ApplePlatform.iOS)]
 		public void LibraryWithResourcesOnRemoteWindows (ApplePlatform platform)
 		{
 			Configuration.IgnoreIfNotOnWindows ();
@@ -808,18 +807,10 @@ namespace Xamarin.Tests {
 			LibraryWithResources (platform);
 		}
 
-		[TestCase (ApplePlatform.iOS, true)]
-		[TestCase (ApplePlatform.iOS, false)]
-		[TestCase (ApplePlatform.iOS, null)]
-		[TestCase (ApplePlatform.TVOS, true)]
-		[TestCase (ApplePlatform.TVOS, false)]
-		[TestCase (ApplePlatform.TVOS, null)]
-		[TestCase (ApplePlatform.MacCatalyst, true)]
-		[TestCase (ApplePlatform.MacCatalyst, false)]
-		[TestCase (ApplePlatform.MacCatalyst, null)]
-		[TestCase (ApplePlatform.MacOSX, true)]
-		[TestCase (ApplePlatform.MacOSX, false)]
-		[TestCase (ApplePlatform.MacOSX, null)]
+		[TestCase (ApplePlatform.iOS)]
+		[TestCase (ApplePlatform.TVOS)]
+		[TestCase (ApplePlatform.MacCatalyst)]
+		[TestCase (ApplePlatform.MacOSX)]
 		public void LibraryWithResources (ApplePlatform platform)
 		{
 			var project = "LibraryWithResources";
@@ -899,14 +890,12 @@ namespace Xamarin.Tests {
 			CollectionAssert.AreEquivalent (expectedResources, actualResources, "Resources");
 		}
 
-		[TestCase (ApplePlatform.iOS, "ios-arm64", false)]
-		[TestCase (ApplePlatform.iOS, "ios-arm64", true)]
-		[TestCase (ApplePlatform.TVOS, "tvossimulator-arm64", false)]
-		[TestCase (ApplePlatform.TVOS, "tvossimulator-arm64", true)]
-		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64", false)]
-		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64", true)]
-		[TestCase (ApplePlatform.MacOSX, "osx-x64", true)]
-		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64", false)]
+		[TestCase (ApplePlatform.iOS, "ios-arm64")]
+		[TestCase (ApplePlatform.TVOS, "tvossimulator-arm64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64")]
+		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
 		public void AppWithLibraryWithResourcesReference (ApplePlatform platform, string runtimeIdentifiers)
 		{
 			AppWithLibraryWithResourcesReferenceImpl (platform, runtimeIdentifiers, false, false);
@@ -914,8 +903,7 @@ namespace Xamarin.Tests {
 
 
 		[Category ("RemoteWindows")]
-		[TestCase (ApplePlatform.iOS, "ios-arm64", false)]
-		[TestCase (ApplePlatform.iOS, "ios-arm64", true)]
+		[TestCase (ApplePlatform.iOS, "ios-arm64")]
 		public void AppWithLibraryWithResourcesReferenceOnRemoteWindows (ApplePlatform platform, string runtimeIdentifiers)
 		{
 			Configuration.IgnoreIfNotOnWindows ();
@@ -924,8 +912,7 @@ namespace Xamarin.Tests {
 		}
 
 		[Category ("Windows")]
-		[TestCase (ApplePlatform.iOS, "ios-arm64", false)]
-		[TestCase (ApplePlatform.iOS, "ios-arm64", true)]
+		[TestCase (ApplePlatform.iOS, "ios-arm64")]
 		public void AppWithLibraryWithResourcesReferenceWithHotRestart (ApplePlatform platform, string runtimeIdentifiers)
 		{
 			Configuration.IgnoreIfNotOnWindows ();

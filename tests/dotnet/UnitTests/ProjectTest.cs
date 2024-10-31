@@ -794,20 +794,18 @@ namespace Xamarin.Tests {
 		{
 			Configuration.IgnoreIfNotOnWindows ();
 
-			// This should all execute locally on Windows when BundleOriginalResources=true
-			LibraryWithResources (platform, true);
+			LibraryWithResources (platform);
 		}
 
 
 		[Category ("RemoteWindows")]
 		[TestCase (ApplePlatform.iOS, true)]
 		[TestCase (ApplePlatform.iOS, false)]
-		public void LibraryWithResourcesOnRemoteWindows (ApplePlatform platform, bool? bundleOriginalResources)
+		public void LibraryWithResourcesOnRemoteWindows (ApplePlatform platform)
 		{
 			Configuration.IgnoreIfNotOnWindows ();
 
-			// This should all execute locally on Windows when BundleOriginalResources=true, but either should work
-			LibraryWithResources (platform, bundleOriginalResources);
+			LibraryWithResources (platform);
 		}
 
 		[TestCase (ApplePlatform.iOS, true)]
@@ -822,33 +820,23 @@ namespace Xamarin.Tests {
 		[TestCase (ApplePlatform.MacOSX, true)]
 		[TestCase (ApplePlatform.MacOSX, false)]
 		[TestCase (ApplePlatform.MacOSX, null)]
-		public void LibraryWithResources (ApplePlatform platform, bool? bundleOriginalResources)
+		public void LibraryWithResources (ApplePlatform platform)
 		{
 			var project = "LibraryWithResources";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
 
-			var actualBundleOriginalResources = bundleOriginalResources ?? Version.Parse (Configuration.DotNetTfm.Replace ("net", "")).Major >= 10;
 			var project_path = GetProjectPath (project, platform: platform);
 			Clean (project_path);
 
 			var properties = GetDefaultProperties ();
-			if (bundleOriginalResources.HasValue)
-				properties ["BundleOriginalResources"] = bundleOriginalResources.Value ? "true" : "false";
-
 			var rv = DotNet.AssertBuild (project_path, properties);
 
 			var allTargets = BinLog.GetAllTargets (rv.BinLogPath).Where (v => !v.Skipped).Select (v => v.TargetName);
 			// https://github.com/xamarin/xamarin-macios/issues/15031
-			if (actualBundleOriginalResources) {
-				Assert.That (allTargets, Does.Not.Contain ("_CompileAppManifest"), "Didn't execute '_CompileAppManifest'");
-				Assert.That (allTargets, Does.Not.Contain ("_DetectSdkLocations"), "Didn't execute '_DetectSdkLocations'");
-				Assert.That (allTargets, Does.Not.Contain ("_SayHello"), "Didn't execute '_SayHello'");
-			} else {
-				Assert.That (allTargets, Does.Contain ("_CompileAppManifest"), "Did execute '_CompileAppManifest'");
-				Assert.That (allTargets, Does.Contain ("_DetectSdkLocations"), "Did execute '_DetectSdkLocations'");
-				if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform (System.Runtime.InteropServices.OSPlatform.Windows))
-					Assert.That (allTargets, Does.Contain ("_SayHello"), "Did execute '_SayHello'");
-			}
+			Assert.That (allTargets, Does.Contain ("_CompileAppManifest"), "Did execute '_CompileAppManifest'");
+			Assert.That (allTargets, Does.Contain ("_DetectSdkLocations"), "Did execute '_DetectSdkLocations'");
+			if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform (System.Runtime.InteropServices.OSPlatform.Windows))
+				Assert.That (allTargets, Does.Contain ("_SayHello"), "Did execute '_SayHello'");
 
 			var lines = BinLog.PrintToLines (rv.BinLogPath);
 			// Find the resulting binding assembly from the build log
@@ -865,83 +853,49 @@ namespace Xamarin.Tests {
 			string [] expectedResources;
 
 			var platformPrefix = (platform == ApplePlatform.MacOSX) ? "xammac" : "monotouch";
-			if (actualBundleOriginalResources) {
-				expectedResources = new string [] {
-					$"__{platformPrefix}_content_A.ttc",
-					$"__{platformPrefix}_content_B.otf",
-					$"__{platformPrefix}_content_C.ttf",
-					$"__{platformPrefix}_item_AtlasTexture_Archer__Attack.atlas_sarcher__attack__0001.png",
-					$"__{platformPrefix}_item_AtlasTexture_Archer__Attack.atlas_sarcher__attack__0002.png",
-					$"__{platformPrefix}_item_AtlasTexture_Archer__Attack.atlas_sarcher__attack__0003.png",
-					$"__{platformPrefix}_item_AtlasTexture_Archer__Attack.atlas_sarcher__attack__0004.png",
-					$"__{platformPrefix}_item_AtlasTexture_Archer__Attack.atlas_sarcher__attack__0005.png",
-					$"__{platformPrefix}_item_AtlasTexture_Archer__Attack.atlas_sarcher__attack__0006.png",
-					$"__{platformPrefix}_item_AtlasTexture_Archer__Attack.atlas_sarcher__attack__0007.png",
-					$"__{platformPrefix}_item_AtlasTexture_Archer__Attack.atlas_sarcher__attack__0008.png",
-					$"__{platformPrefix}_item_AtlasTexture_Archer__Attack.atlas_sarcher__attack__0009.png",
-					$"__{platformPrefix}_item_AtlasTexture_Archer__Attack.atlas_sarcher__attack__0010.png",
-					$"__{platformPrefix}_item_BundleResource_A.ttc",
-					$"__{platformPrefix}_item_BundleResource_B.otf",
-					$"__{platformPrefix}_item_BundleResource_C.ttf",
-					$"__{platformPrefix}_item_Collada_scene.dae",
-					$"__{platformPrefix}_item_CoreMLModel_SqueezeNet.mlmodel",
-					$"__{platformPrefix}_item_ImageAsset_Images.xcassets_sContents.json",
-					$"__{platformPrefix}_item_ImageAsset_Images.xcassets_sImage.imageset_sContents.json",
-					$"__{platformPrefix}_item_ImageAsset_Images.xcassets_sImage.imageset_sIcon16.png",
-					$"__{platformPrefix}_item_ImageAsset_Images.xcassets_sImage.imageset_sIcon32.png",
-					$"__{platformPrefix}_item_ImageAsset_Images.xcassets_sImage.imageset_sIcon64.png",
-					$"__{platformPrefix}_item_InterfaceDefinition_Main.storyboard",
-					$"__{platformPrefix}_item_PartialAppManifest_shared.plist",
-					$"__{platformPrefix}_item_SceneKitAsset_art.scnassets_sscene.scn",
-					$"__{platformPrefix}_item_SceneKitAsset_art.scnassets_stexture.png",
-					$"__{platformPrefix}_item_SceneKitAsset_DirWithResources_slinkedArt.scnassets_sscene.scn",
-					$"__{platformPrefix}_item_SceneKitAsset_DirWithResources_slinkedArt.scnassets_stexture.png",
-				};
-			} else {
-				var expectedList = new List<string> ();
-				expectedList.Add ($"__{platformPrefix}_content_A.ttc");
-				expectedList.Add ($"__{platformPrefix}_content_Archer__Attack.atlasc_sArcher__Attack.plist");
-				expectedList.Add ($"__{platformPrefix}_content_art.scnassets_sscene.scn");
-				expectedList.Add ($"__{platformPrefix}_content_art.scnassets_stexture.png");
-				expectedList.Add ($"__{platformPrefix}_content_Assets.car");
-				expectedList.Add ($"__{platformPrefix}_content_B.otf");
-				expectedList.Add ($"__{platformPrefix}_content_C.ttf");
-				expectedList.Add ($"__{platformPrefix}_content_DirWithResources_slinkedArt.scnassets_sscene.scn");
-				expectedList.Add ($"__{platformPrefix}_content_DirWithResources_slinkedArt.scnassets_stexture.png");
-				expectedList.Add ($"__{platformPrefix}_content_scene.dae");
-				switch (platform) {
-				case ApplePlatform.iOS:
-					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sBYZ-38-t0r-view-8bC-Xf-vdC.nib");
-					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sInfo.plist");
-					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sUIViewController-BYZ-38-t0r.nib");
-					break;
-				case ApplePlatform.TVOS:
-					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_s1-view-2.nib");
-					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sInfo.plist");
-					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sUIViewController-1.nib");
-					break;
-				case ApplePlatform.MacCatalyst:
-					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_s1-view-2.nib");
-					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sInfo.plist");
-					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sUIViewController-1.nib");
-					break;
-				case ApplePlatform.MacOSX:
-					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sInfo.plist");
-					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sMainMenu.nib");
-					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sNSWindowController-B8D-0N-5wS.nib");
-					expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sXfG-lQ-9wD-view-m2S-Jp-Qdl.nib");
-					break;
-				}
-				expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_sanalytics_scoremldata.bin");
-				expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_scoremldata.bin");
-				expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smetadata.json");
-				expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smodel.espresso.net");
-				expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smodel.espresso.shape");
-				expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smodel.espresso.weights");
-				expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smodel_scoremldata.bin");
-				expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_sneural__network__optionals_scoremldata.bin");
-				expectedResources = expectedList.ToArray ();
+			var expectedList = new List<string> ();
+			expectedList.Add ($"__{platformPrefix}_content_A.ttc");
+			expectedList.Add ($"__{platformPrefix}_content_Archer__Attack.atlasc_sArcher__Attack.plist");
+			expectedList.Add ($"__{platformPrefix}_content_art.scnassets_sscene.scn");
+			expectedList.Add ($"__{platformPrefix}_content_art.scnassets_stexture.png");
+			expectedList.Add ($"__{platformPrefix}_content_Assets.car");
+			expectedList.Add ($"__{platformPrefix}_content_B.otf");
+			expectedList.Add ($"__{platformPrefix}_content_C.ttf");
+			expectedList.Add ($"__{platformPrefix}_content_DirWithResources_slinkedArt.scnassets_sscene.scn");
+			expectedList.Add ($"__{platformPrefix}_content_DirWithResources_slinkedArt.scnassets_stexture.png");
+			expectedList.Add ($"__{platformPrefix}_content_scene.dae");
+			switch (platform) {
+			case ApplePlatform.iOS:
+				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sBYZ-38-t0r-view-8bC-Xf-vdC.nib");
+				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sInfo.plist");
+				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sUIViewController-BYZ-38-t0r.nib");
+				break;
+			case ApplePlatform.TVOS:
+				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_s1-view-2.nib");
+				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sInfo.plist");
+				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sUIViewController-1.nib");
+				break;
+			case ApplePlatform.MacCatalyst:
+				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_s1-view-2.nib");
+				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sInfo.plist");
+				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sUIViewController-1.nib");
+				break;
+			case ApplePlatform.MacOSX:
+				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sInfo.plist");
+				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sMainMenu.nib");
+				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sNSWindowController-B8D-0N-5wS.nib");
+				expectedList.Add ($"__{platformPrefix}_content_Main.storyboardc_sXfG-lQ-9wD-view-m2S-Jp-Qdl.nib");
+				break;
 			}
+			expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_sanalytics_scoremldata.bin");
+			expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_scoremldata.bin");
+			expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smetadata.json");
+			expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smodel.espresso.net");
+			expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smodel.espresso.shape");
+			expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smodel.espresso.weights");
+			expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_smodel_scoremldata.bin");
+			expectedList.Add ($"__{platformPrefix}_content_SqueezeNet.mlmodelc_sneural__network__optionals_scoremldata.bin");
+			expectedResources = expectedList.ToArray ();
 			CollectionAssert.AreEquivalent (expectedResources, actualResources, "Resources");
 		}
 
@@ -953,36 +907,36 @@ namespace Xamarin.Tests {
 		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64;maccatalyst-x64", true)]
 		[TestCase (ApplePlatform.MacOSX, "osx-x64", true)]
 		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64", false)]
-		public void AppWithLibraryWithResourcesReference (ApplePlatform platform, string runtimeIdentifiers, bool bundleOriginalResources)
+		public void AppWithLibraryWithResourcesReference (ApplePlatform platform, string runtimeIdentifiers)
 		{
-			AppWithLibraryWithResourcesReferenceImpl (platform, runtimeIdentifiers, bundleOriginalResources, false, false);
+			AppWithLibraryWithResourcesReferenceImpl (platform, runtimeIdentifiers, false, false);
 		}
 
 
 		[Category ("RemoteWindows")]
 		[TestCase (ApplePlatform.iOS, "ios-arm64", false)]
 		[TestCase (ApplePlatform.iOS, "ios-arm64", true)]
-		public void AppWithLibraryWithResourcesReferenceOnRemoteWindows (ApplePlatform platform, string runtimeIdentifiers, bool bundleOriginalResources)
+		public void AppWithLibraryWithResourcesReferenceOnRemoteWindows (ApplePlatform platform, string runtimeIdentifiers)
 		{
 			Configuration.IgnoreIfNotOnWindows ();
 
-			AppWithLibraryWithResourcesReferenceImpl (platform, runtimeIdentifiers, bundleOriginalResources, true, false);
+			AppWithLibraryWithResourcesReferenceImpl (platform, runtimeIdentifiers, true, false);
 		}
 
 		[Category ("Windows")]
 		[TestCase (ApplePlatform.iOS, "ios-arm64", false)]
 		[TestCase (ApplePlatform.iOS, "ios-arm64", true)]
-		public void AppWithLibraryWithResourcesReferenceWithHotRestart (ApplePlatform platform, string runtimeIdentifiers, bool bundleOriginalResources)
+		public void AppWithLibraryWithResourcesReferenceWithHotRestart (ApplePlatform platform, string runtimeIdentifiers)
 		{
 			Configuration.IgnoreIfNotOnWindows ();
 
-			AppWithLibraryWithResourcesReferenceImpl (platform, runtimeIdentifiers, bundleOriginalResources, false, isUsingHotRestart: true);
+			AppWithLibraryWithResourcesReferenceImpl (platform, runtimeIdentifiers, false, isUsingHotRestart: true);
 		}
 
-		void AppWithLibraryWithResourcesReferenceImpl (ApplePlatform platform, string runtimeIdentifiers, bool bundleOriginalResources, bool remoteWindows, bool isUsingHotRestart)
+		void AppWithLibraryWithResourcesReferenceImpl (ApplePlatform platform, string runtimeIdentifiers, bool remoteWindows, bool isUsingHotRestart)
 		{
 			var project = "AppWithLibraryWithResourcesReference";
-			var config = bundleOriginalResources ? "DebugOriginal" : "DebugCompiled";
+			var config = "Debug";
 
 			Configuration.IgnoreIfIgnoredPlatform (platform);
 			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
@@ -1003,7 +957,6 @@ namespace Xamarin.Tests {
 
 			var properties = GetDefaultProperties (runtimeIdentifiers, extraProperties);
 			properties ["Configuration"] = config;
-			properties ["BundleOriginalResources"] = bundleOriginalResources ? "true" : "false";
 			if (remoteWindows) {
 				// Copy the app bundle to Windows so that we can inspect the results.
 				properties ["CopyAppBundleToWindows"] = "true";
@@ -1063,12 +1016,6 @@ namespace Xamarin.Tests {
 				AssertExistsOrUsingHotRestart (Path.Combine (mlModel, "model", "coremldata.bin"), "CoreMLModel/model/coremldata.bin");
 				AssertExistsOrUsingHotRestart (Path.Combine (mlModel, "neural_network_optionals"), "CoreMLModel/neural_network_optionals");
 				AssertExistsOrUsingHotRestart (Path.Combine (mlModel, "neural_network_optionals", "coremldata.bin"), "CoreMLModel/neural_network_optionals/coremldata.bin");
-
-				if (bundleOriginalResources) {
-					var infoPlist = appBundleInfo.GetFile (GetInfoPListPath (platform, ""));
-					var appManifest = PDictionary.FromByteArray (infoPlist, out var _)!;
-					Assert.AreEqual ("Here I am", appManifest.GetString ("LibraryWithResources").Value, "Partial plist entry");
-				}
 			});
 
 			void AssertExistsOrUsingHotRestart (string path, string message)

@@ -794,7 +794,7 @@ namespace Xamarin.Tests {
 		{
 			Configuration.IgnoreIfNotOnWindows ();
 
-			LibraryWithResources (platform);
+			LibraryWithResources (platform, anyLibraryResources: false);
 		}
 
 
@@ -804,7 +804,7 @@ namespace Xamarin.Tests {
 		{
 			Configuration.IgnoreIfNotOnWindows ();
 
-			LibraryWithResources (platform, anyLibraryResources: false);
+			LibraryWithResources (platform);
 		}
 
 		[TestCase (ApplePlatform.iOS)]

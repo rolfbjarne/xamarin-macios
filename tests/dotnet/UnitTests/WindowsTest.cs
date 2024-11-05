@@ -24,7 +24,7 @@ namespace Xamarin.Tests {
 			var project_dir = Path.GetDirectoryName (Path.GetDirectoryName (project_path))!;
 			Clean (project_path);
 
-			var extraProperties = GetHotRestartProperties (tmpdir, out var hotRestartOutputDir, out var hotRestartAppBundlePath)
+			var extraProperties = GetHotRestartProperties (tmpdir, out var hotRestartOutputDir, out var hotRestartAppBundlePath);
 			var properties = GetDefaultProperties (runtimeIdentifiers, extraProperties);
 			if (!string.IsNullOrWhiteSpace (configuration))
 				properties ["Configuration"] = configuration;

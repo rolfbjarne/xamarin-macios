@@ -13,7 +13,7 @@ using Xamarin.Messaging.Build.Client;
 
 namespace Xamarin.MacDev.Tasks {
 	public class TextureAtlas : XcodeToolTaskBase, ICancelableTask {
-		readonly Dictionary<string, List<ITaskItem>> atlases = new Dictionary<string, List<ITaskItem>> ();
+		readonly Dictionary<string, (ITaskItem Item, List<ITaskItem> Items)> atlases = new ();
 
 		#region Inputs
 
@@ -78,9 +78,9 @@ namespace Xamarin.MacDev.Tasks {
 			if (!File.Exists (plist))
 				return true;
 
-			var items = atlases [input.ItemSpec];
+			var atlas = atlases [input.ItemSpec];
 
-			foreach (var item in items) {
+			foreach (var item in atlas.Items) {
 				if (File.GetLastWriteTimeUtc (item.ItemSpec) > File.GetLastWriteTimeUtc (plist))
 					return true;
 			}
@@ -96,26 +96,28 @@ namespace Xamarin.MacDev.Tasks {
 			// group the atlas textures by their parent .atlas directories
 			foreach (var item in AtlasTextures) {
 				var vpp = BundleResource.GetVirtualProjectPath (this, ProjectDir, item);
-				var atlas = Path.GetDirectoryName (vpp);
+				var atlasName = Path.GetDirectoryName (vpp);
 				var logicalName = item.GetMetadata ("LogicalName");
-				List<ITaskItem> items;
-				Log.LogMessage ($"TextureAtlas.Processing atlas {item.ItemSpec} with LogicalName={logicalName} VirtualProjectPath={vpp} and atlas name {atlas}");
+				Log.LogMessage ($"TextureAtlas.Processing atlas {item.ItemSpec} with LogicalName={logicalName} VirtualProjectPath={vpp} and atlas name {atlasName}");
 
-				if (!atlases.TryGetValue (atlas, out items)) {
-					items = new List<ITaskItem> ();
-					atlases.Add (atlas, items);
-					Log.LogMessage ($"    => created new atlas {atlas}");
+				if (!atlases.TryGetValue (atlasName, out var atlas)) {
+					var atlasItem = new TaskItem (atlasName);
+					atlasItem.SetMetadata ("LocalDefiningProjectFullPath", item.GetMetadata ("LocalDefiningProjectFullPath"));
+					atlasItem.SetMetadata ("LocalMSBuildProjectFullPath", item.GetMetadata ("LocalMSBuildProjectFullPath"));
+					var atlasLogicalName = Path.GetFileNameWithoutExtension (atlasName) + ".plist";
+					atlasItem.SetMetadata ("LogicalName", atlasLogicalName);
+					atlas = new (atlasItem, new List<ITaskItem> ());
+					atlases.Add (atlasName, atlas);
+					Log.LogMessage ($"    => created new atlas {atlasName}");
 				} else {
-					Log.LogMessage ($"    => added to atlas {atlas}");
+					Log.LogMessage ($"    => added to existing atlas {atlasName}");
 				}
 
-				items.Add (item);
+				atlas.Items.Add (item);
 			}
 
-			foreach (var atlas in atlases.Keys)
-				yield return new TaskItem (atlas);
-
-			yield break;
+			foreach (var atlas in atlases)
+				yield return atlas.Value.Item;
 		}
 
 		public override bool Execute ()

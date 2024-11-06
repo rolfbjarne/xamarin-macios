@@ -305,15 +305,24 @@ $(foreach platform,$(DOTNET_PLATFORMS),$(foreach rid,$(DOTNET_$(shell echo $(pla
 #
 
 EXTRA_libSwiftTest_FLAGS=-enable-library-evolution -emit-objc-header
+EXTRA_libSwiftTest2_FLAGS=-lSwiftTest
 
 # SwiftTest is a framework where the binary code is a (fat) dynamic library
 SWIFT_TESTS+=SwiftTest
+# SwiftTest2 is a framework where the binary code is a (fat) dynamic library, and which depends on SwiftTest.
+SWIFT_TESTS+=SwiftTest2
 
 define SwiftTestsPerPlatform
 .libs/$(1)/$(3).dylib: $$(foreach rid,$(2),.libs/$(1)/$(3).dylib) | .libs/$(1)
 	$$(call Q_2,LIPO   [$(1)]) $(XCODE_DEVELOPER_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/lipo $$^ -create -output $$@
 endef
 $(foreach swiftTest,$(SWIFT_TESTS),$(foreach platform,$(DOTNET_PLATFORMS),$(eval $(call SwiftTestsPerPlatform,$(platform),$(DOTNET_$(shell echo $(platform) | tr 'a-z' 'A-Z')_RUNTIME_IDENTIFIERS),$(swiftTest)))))
+
+# Make sure libSwiftTest is built before libSwiftTest2, because libSwiftTest2 depends on libSwiftTest
+define SwiftTest2AddDependency
+.libs/$(1)/libSwiftTest2.dylib: .libs/$(1)/libSwiftTest.dylib
+endef
+$(foreach rid,$(DOTNET_RUNTIME_IDENTIFIERS),$(eval $(call SwiftTest2AddDependency,$(rid))))
 
 # create an xcframework of frameworks
 define TestFrameworkXCFramework

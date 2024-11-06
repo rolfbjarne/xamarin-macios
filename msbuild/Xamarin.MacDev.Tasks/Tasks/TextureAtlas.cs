@@ -57,6 +57,8 @@ namespace Xamarin.MacDev.Tasks {
 				var relative = Path.Combine (output.ItemSpec, fileName);
 				var logical = Path.Combine (bundleDir, fileName);
 				var item = new TaskItem (relative);
+				item.SetMetadata ("LocalDefiningProjectFullPath", input.GetMetadata ("LocalDefiningProjectFullPath"));
+				item.SetMetadata ("LocalMSBuildProjectFullPath", input.GetMetadata ("LocalMSBuildProjectFullPath"));
 
 				item.SetMetadata ("LogicalName", logical);
 				item.SetMetadata ("Optimize", "false");

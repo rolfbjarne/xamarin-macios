@@ -21,291 +21,203 @@ define NativeCompilationTemplate
 
 ## ios simulator
 
-### X86
-
-.libs/iphonesimulator/%$(1).x86.o: %.m $(EXTRA_DEPENDENCIES) | .libs/iphonesimulator
-	$$(call Q_2,OBJC,  [iphonesimulator]) $(SIMULATOR_CC) $(SIMULATOR86_OBJC_CFLAGS) $$(EXTRA_DEFINES) $(SIM32_I) -g $(2) -c $$< -o $$@
-
-.libs/iphonesimulator/%$(1).x86.o: %.c $(EXTRA_DEPENDENCIES) | .libs/iphonesimulator
-	$$(call Q_2,CC,    [iphonesimulator]) $(SIMULATOR_CC) $(SIMULATOR86_CFLAGS)      $$(EXTRA_DEFINES) $(SIM32_I) -g $(2) -c $$< -o $$@
-
-.libs/iphonesimulator/%$(1).x86.o: %.s $(EXTRA_DEPENDENCIES) | .libs/iphonesimulator
-	$$(call Q_2,ASM,   [iphonesimulator]) $(SIMULATOR_CC) $(SIMULATOR86_CFLAGS)      $$(EXTRA_DEFINES) $(SIM32_I) -g $(2) -c $$< -o $$@
-
-.libs/iphonesimulator/%$(1).x86.dylib: | .libs/iphonesimulator
-	$$(call Q_2,LD,    [iphonesimulator]) $(SIMULATOR_CC) $(SIMULATOR86_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -L$(IOS_DESTDIR)$(XAMARIN_IOSSIMULATOR_SDK)/lib -fapplication-extension
-
-.libs/iphonesimulator/%$(1).x86.framework: | .libs/iphonesimulator
-	$$(call Q_2,LD,    [iphonesimulator]) $(SIMULATOR_CC) $(SIMULATOR86_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -F$(IOS_DESTDIR)$(XAMARIN_IOSSIMULATOR_SDK)/Frameworks -fapplication-extension
-
 ### X64
 
-.libs/iphonesimulator/%$(1).x86_64.o: %.m $(EXTRA_DEPENDENCIES) | .libs/iphonesimulator
-	$$(call Q_2,OBJC,  [iphonesimulator]) $(SIMULATOR_CC) $(SIMULATOR64_OBJC_CFLAGS) $$(EXTRA_DEFINES) $(SIM64_I) -g $(2) -c $$< -o $$@
+.libs/iossimulator-x64/%$(1).o: %.m $(EXTRA_DEPENDENCIES) | .libs/iossimulator-x64
+	$$(call Q_2,OBJC,  [iossimulator-x64]) $(SIMULATOR_CC) $(SIMULATOR64_OBJC_CFLAGS) $$(EXTRA_DEFINES) $(SIM64_I) -g $(2) -c $$< -o $$@
 
-.libs/iphonesimulator/%$(1).x86_64.o: %.c $(EXTRA_DEPENDENCIES) | .libs/iphonesimulator
-	$$(call Q_2,CC,    [iphonesimulator]) $(SIMULATOR_CC) $(SIMULATOR64_CFLAGS)      $$(EXTRA_DEFINES) $(SIM64_I) -g $(2) -c $$< -o $$@
+.libs/iossimulator-x64/%$(1).o: %.c $(EXTRA_DEPENDENCIES) | .libs/iossimulator-x64
+	$$(call Q_2,CC,    [iossimulator-x64]) $(SIMULATOR_CC) $(SIMULATOR64_CFLAGS)      $$(EXTRA_DEFINES) $(SIM64_I) -g $(2) -c $$< -o $$@
 
-.libs/iphonesimulator/%$(1).x86_64.o: %.s $(EXTRA_DEPENDENCIES) | .libs/iphonesimulator
-	$$(call Q_2,ASM,   [iphonesimulator]) $(SIMULATOR_CC) $(SIMULATOR64_CFLAGS)      $(SIM64_I) -g $(2) -c $$< -o $$@
+.libs/iossimulator-x64/%$(1).o: %.s $(EXTRA_DEPENDENCIES) | .libs/iossimulator-x64
+	$$(call Q_2,ASM,   [iossimulator-x64]) $(SIMULATOR_CC) $(SIMULATOR64_CFLAGS)      $(SIM64_I) -g $(2) -c $$< -o $$@
 
-.libs/iphonesimulator/%$(1).x86_64.dylib: %.swift | .libs/iphonesimulator
-	$$(call Q_2,SWIFT, [iphonesimulator]) $(SWIFTC)       $(IOS_SIMULATOR_X64_SWIFTFLAGS)                 $$< -o $$@
+.libs/iossimulator-x64/%$(1).dylib: %.swift | .libs/iossimulator-x64
+	$$(call Q_2,SWIFT, [iossimulator-x64$(1)]) $(SWIFTC)       $(IOS_SIMULATOR_X64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                 $$< -o $$@ -emit-module -L$$(dir $$@) -I$$(dir $$@) -module-name $$*
 
-.libs/iphonesimulator/%$(1).x86_64.o: %.swift | .libs/iphonesimulator
-	$$(call Q_2,SWIFT, [iphonesimulator]) $(SWIFTC)       $(IOS_SIMULATOR_X64_SWIFTFLAGS)                 $$< -o $$@ -emit-object
+.libs/iossimulator-x64/%$(1).o: %.swift | .libs/iossimulator-x64
+	$$(call Q_2,SWIFT, [iossimulator-x64$(1)]) $(SWIFTC)       $(IOS_SIMULATOR_X64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                 $$< -o $$@ -emit-object
 
-.libs/iphonesimulator/%$(1).x86_64.dylib: | .libs/iphonesimulator
-	$$(call Q_2,LD,    [iphonesimulator]) $(SIMULATOR_CC) $(SIMULATOR64_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -L$(IOS_DESTDIR)$(XAMARIN_IOSSIMULATOR_SDK)/lib -fapplication-extension
-
-.libs/iphonesimulator/%$(1).x86_64.framework: | .libs/iphonesimulator
-	$$(call Q_2,LD,    [iphonesimulator]) $(SIMULATOR_CC) $(SIMULATOR64_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -F$(IOS_DESTDIR)$(XAMARIN_IOSSIMULATOR_SDK)/Frameworks -fapplication-extension
+.libs/iossimulator-x64/%$(1).dylib: | .libs/iossimulator-x64
+	$$(call Q_2,LD,    [iossimulator-x64]) $(SIMULATOR_CC) $(SIMULATOR64_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -fapplication-extension -framework Foundation
 
 ### ARM64
 
-.libs/iphonesimulator/%$(1).arm64.o: %.m $(EXTRA_DEPENDENCIES) | .libs/iphonesimulator
-	$$(call Q_2,OBJC,  [iphonesimulator]) $(SIMULATOR_CC) $(SIMULATOR_ARM64_OBJC_CFLAGS) $$(EXTRA_DEFINES) $(SIM_ARM64_I) -g $(2) -c $$< -o $$@
+.libs/iossimulator-arm64/%$(1).o: %.m $(EXTRA_DEPENDENCIES) | .libs/iossimulator-arm64
+	$$(call Q_2,OBJC,  [iossimulator-arm64]) $(SIMULATOR_CC) $(SIMULATOR_ARM64_OBJC_CFLAGS) $$(EXTRA_DEFINES) $(SIM_ARM64_I) -g $(2) -c $$< -o $$@
 
-.libs/iphonesimulator/%$(1).arm64.o: %.c $(EXTRA_DEPENDENCIES) | .libs/iphonesimulator
-	$$(call Q_2,CC,    [iphonesimulator]) $(SIMULATOR_CC) $(SIMULATOR_ARM64_CFLAGS)      $$(EXTRA_DEFINES) $(SIM_ARM64_I) -g $(2) -c $$< -o $$@
+.libs/iossimulator-arm64/%$(1).o: %.c $(EXTRA_DEPENDENCIES) | .libs/iossimulator-arm64
+	$$(call Q_2,CC,    [iossimulator-arm64]) $(SIMULATOR_CC) $(SIMULATOR_ARM64_CFLAGS)      $$(EXTRA_DEFINES) $(SIM_ARM64_I) -g $(2) -c $$< -o $$@
 
-.libs/iphonesimulator/%$(1).arm64.o: %.s $(EXTRA_DEPENDENCIES) | .libs/iphonesimulator
-	$$(call Q_2,ASM,   [iphonesimulator]) $(SIMULATOR_CC) $(SIMULATOR_ARM64_CFLAGS)      $(SIM64_I) -g $(2) -c $$< -o $$@
+.libs/iossimulator-arm64/%$(1).o: %.s $(EXTRA_DEPENDENCIES) | .libs/iossimulator-arm64
+	$$(call Q_2,ASM,   [iossimulator-arm64]) $(SIMULATOR_CC) $(SIMULATOR_ARM64_CFLAGS)      $(SIM64_I) -g $(2) -c $$< -o $$@
 
-.libs/iphonesimulator/%$(1).arm64.dylib: %.swift | .libs/iphonesimulator
-	$$(call Q_2,SWIFT, [iphonesimulator]) $(SWIFTC)       $(IOS_SIMULATOR_ARM64_SWIFTFLAGS)                    $$< -o $$@
+.libs/iossimulator-arm64/%$(1).dylib: %.swift | .libs/iossimulator-arm64
+	$$(call Q_2,SWIFT, [iossimulator-arm64]) $(SWIFTC)       $(IOS_SIMULATOR_ARM64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                $$< -o $$@ -emit-module -L$$(dir $$@) -I$$(dir $$@) -module-name $$*
 
-.libs/iphonesimulator/%$(1).arm64.o: %.swift | .libs/iphonesimulator
-	$$(call Q_2,SWIFT, [iphonesimulator]) $(SWIFTC)       $(IOS_SIMULATOR_ARM64_SWIFTFLAGS)                    $$< -o $$@ -emit-object
+.libs/iossimulator-arm64/%$(1).o: %.swift | .libs/iossimulator-arm64
+	$$(call Q_2,SWIFT, [iossimulator-arm64]) $(SWIFTC)       $(IOS_SIMULATOR_ARM64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                    $$< -o $$@ -emit-object
 
-.libs/iphonesimulator/%$(1).arm64.dylib: | .libs/iphonesimulator
-	$$(call Q_2,LD,    [iphonesimulator]) $(SIMULATOR_CC) $(SIMULATOR_ARM64_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -L$(IOS_DESTDIR)$(XAMARIN_IOSSIMULATOR_SDK)/lib -fapplication-extension
-
-.libs/iphonesimulator/%$(1).arm64.framework: | .libs/iphonesimulator
-	$$(call Q_2,LD,    [iphonesimulator]) $(SIMULATOR_CC) $(SIMULATOR_ARM64_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -F$(IOS_DESTDIR)$(XAMARIN_IOSSIMULATOR_SDK)/Frameworks -fapplication-extension
-
+.libs/iossimulator-arm64/%$(1).dylib: | .libs/iossimulator-arm64
+	$$(call Q_2,LD,    [iossimulator-arm64]) $(SIMULATOR_CC) $(SIMULATOR_ARM64_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -fapplication-extension -framework Foundation
 
 ## ios device
 
-.libs/iphoneos/%$(1).armv7.o: %.m $(EXTRA_DEPENDENCIES) | .libs/iphoneos
-	$$(call Q_2,OBJC,  [iphoneos]) $(DEVICE_CC) $(DEVICE7_OBJC_CFLAGS)  $$(EXTRA_DEFINES) $(DEV7_I)  -g $(2) -c $$< -o $$@ 
+.libs/ios-arm64/%$(1).o: %.m $(EXTRA_DEPENDENCIES) | .libs/ios-arm64
+	$$(call Q_2,OBJC,  [ios-arm64]) $(DEVICE_CC) $(DEVICE64_OBJC_CFLAGS) $$(EXTRA_DEFINES) $(DEV64_I) -g $(2) -c $$< -o $$@
 
-.libs/iphoneos/%$(1).armv7.o: %.c $(EXTRA_DEPENDENCIES) | .libs/iphoneos
-	$$(call Q_2,CC,    [iphoneos]) $(DEVICE_CC) $(DEVICE7_CFLAGS)       $$(EXTRA_DEFINES) $(DEV7_I)  -g $(2) -c $$< -o $$@ 
+.libs/ios-arm64/%$(1).o: %.c $(EXTRA_DEPENDENCIES) | .libs/ios-arm64
+	$$(call Q_2,CC,    [ios-arm64]) $(DEVICE_CC) $(DEVICE64_CFLAGS)      $$(EXTRA_DEFINES) $(DEV64_I) -g $(2) -c $$< -o $$@
 
-.libs/iphoneos/%$(1).armv7.dylib: | .libs/iphoneos
-	$$(call Q_2,LD,    [iphoneos]) $(DEVICE_CC) $(DEVICE7_CFLAGS)       $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -L$(IOS_DESTDIR)$(XAMARIN_IPHONEOS_SDK)/lib -fapplication-extension
+.libs/ios-arm64/%$(1).o: %.s $(EXTRA_DEPENDENCIES) | .libs/ios-arm64
+	$$(call Q_2,ASM,   [ios-arm64]) $(DEVICE_CC) $(DEVICE64_CFLAGS)      $$(EXTRA_DEFINES) $(DEV64_I) -g $(2) -c $$< -o $$@
 
-.libs/iphoneos/%$(1).armv7.framework: | .libs/iphoneos
-	$$(call Q_2,LD,    [iphoneos]) $(DEVICE_CC) $(DEVICE7_CFLAGS)       $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -F$(IOS_DESTDIR)$(XAMARIN_IPHONEOS_SDK)/Frameworks -fapplication-extension
+.libs/ios-arm64/%$(1).dylib: %.swift | .libs/ios-arm64
+	$$(call Q_2,SWIFT, [ios-arm64]) $(SWIFTC)    $(IOS_DEVICE_ARM64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                                  $$< -o $$@ -emit-module -L$$(dir $$@) -I$$(dir $$@) -module-name $$*
 
-.libs/iphoneos/%$(1).armv7s.o: %.m $(EXTRA_DEPENDENCIES) | .libs/iphoneos
-	$$(call Q_2,OBJC,  [iphoneos]) $(DEVICE_CC) $(DEVICE7S_OBJC_CFLAGS) $$(EXTRA_DEFINES) $(DEV7s_I) -g $(2) -c $$< -o $$@ 
+.libs/ios-arm64/%$(1).o: %.swift | .libs/ios-arm64
+	$$(call Q_2,SWIFT, [ios-arm64]) $(SWIFTC)    $(IOS_DEVICE_ARM64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                                  $$< -o $$@ -emit-object
 
-.libs/iphoneos/%$(1).armv7s.o: %.c $(EXTRA_DEPENDENCIES) | .libs/iphoneos
-	$$(call Q_2,CC,    [iphoneos]) $(DEVICE_CC) $(DEVICE7S_CFLAGS)      $$(EXTRA_DEFINES) $(DEV7s_I) -g $(2) -c $$< -o $$@ 
-
-.libs/iphoneos/%$(1).armv7s.dylib: | .libs/iphoneos
-	$$(call Q_2,LD,    [iphoneos]) $(DEVICE_CC) $(DEVICE7S_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -L$(IOS_DESTDIR)$(XAMARIN_IPHONEOS_SDK)/lib -fapplication-extension
-
-.libs/iphoneos/%$(1).armv7s.framework: | .libs/iphoneos
-	$$(call Q_2,LD,    [iphoneos]) $(DEVICE_CC) $(DEVICE7S_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -F$(IOS_DESTDIR)$(XAMARIN_IPHONEOS_SDK)/Frameworks -fapplication-extension
-
-.libs/iphoneos/%$(1).arm64.o: %.m $(EXTRA_DEPENDENCIES) | .libs/iphoneos
-	$$(call Q_2,OBJC,  [iphoneos]) $(DEVICE_CC) $(DEVICE64_OBJC_CFLAGS) $$(EXTRA_DEFINES) $(DEV64_I) -g $(2) -c $$< -o $$@ 
-
-.libs/iphoneos/%$(1).arm64.o: %.c $(EXTRA_DEPENDENCIES) | .libs/iphoneos
-	$$(call Q_2,CC,    [iphoneos]) $(DEVICE_CC) $(DEVICE64_CFLAGS)      $$(EXTRA_DEFINES) $(DEV64_I) -g $(2) -c $$< -o $$@ 
-
-.libs/iphoneos/%$(1).arm64.o: %.s $(EXTRA_DEPENDENCIES) | .libs/iphoneos
-	$$(call Q_2,ASM,   [iphoneos]) $(DEVICE_CC) $(DEVICE64_CFLAGS)      $$(EXTRA_DEFINES) $(DEV64_I) -g $(2) -c $$< -o $$@
-
-.libs/iphoneos/%$(1).arm64.dylib: %.swift | .libs/iphoneos
-	$$(call Q_2,SWIFT, [iphoneos]) $(SWIFTC)    $(IOS_DEVICE_ARM64_SWIFTFLAGS)                                  $$< -o $$@
-
-.libs/iphoneos/%$(1).arm64.o: %.swift | .libs/iphoneos
-	$$(call Q_2,SWIFT, [iphoneos]) $(SWIFTC)    $(IOS_DEVICE_ARM64_SWIFTFLAGS)                                  $$< -o $$@ -emit-object
-
-.libs/iphoneos/%$(1).arm64.dylib: | .libs/iphoneos
-	$$(call Q_2,LD,    [iphoneos]) $(DEVICE_CC) $(DEVICE64_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -L$(IOS_DESTDIR)$(XAMARIN_IPHONEOS_SDK)/lib -fapplication-extension
-
-.libs/iphoneos/%$(1).arm64.framework: | .libs/iphoneos
-	$$(call Q_2,LD,    [iphoneos]) $(DEVICE_CC) $(DEVICE64_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -F$(IOS_DESTDIR)$(XAMARIN_IPHONEOS_SDK)/Frameworks -fapplication-extension  -miphoneos-version-min=$(MIN_IOS_SDK_VERSION)
+.libs/ios-arm64/%$(1).dylib: | .libs/ios-arm64
+	$$(call Q_2,LD,    [ios-arm64]) $(DEVICE_CC) $(DEVICE64_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -fapplication-extension -framework Foundation
 
 ## maccatalyst (ios on macOS / Catalyst)
 
-.libs/maccatalyst/%$(1).x86_64.o: %.m $(EXTRA_DEPENDENCIES) | .libs/maccatalyst
-	$$(call Q_2,OBJC,  [maccatalyst]) $(XCODE_CC) $(MACCATALYST_X86_64_OBJC_CFLAGS) $$(EXTRA_DEFINES) $(COMMON_I) -g $(2) -c $$< -o $$@
+.libs/maccatalyst-x64/%$(1).o: %.m $(EXTRA_DEPENDENCIES) | .libs/maccatalyst-x64
+	$$(call Q_2,OBJC,  [maccatalyst-x64]) $(XCODE_CC) $(MACCATALYST_X86_64_OBJC_CFLAGS) $$(EXTRA_DEFINES) $(COMMON_I) -g $(2) -c $$< -o $$@
 
-.libs/maccatalyst/%$(1).x86_64.o: %.c $(EXTRA_DEPENDENCIES) | .libs/maccatalyst
-	$$(call Q_2,CC,    [maccatalyst]) $(XCODE_CC) $(MACCATALYST_X86_64_CFLAGS)      $$(EXTRA_DEFINES) $(COMMON_I) -g $(2) -c $$< -o $$@
+.libs/maccatalyst-x64/%$(1).o: %.c $(EXTRA_DEPENDENCIES) | .libs/maccatalyst-x64
+	$$(call Q_2,CC,    [maccatalyst-x64]) $(XCODE_CC) $(MACCATALYST_X86_64_CFLAGS)      $$(EXTRA_DEFINES) $(COMMON_I) -g $(2) -c $$< -o $$@
 
-.libs/maccatalyst/%$(1).x86_64.o: %.s $(EXTRA_DEPENDENCIES) | .libs/maccatalyst
-	$$(call Q_2,ASM,   [maccatalyst]) $(XCODE_CC) $(MACCATALYST_X86_64_CFLAGS)                        $(COMMON_I) -g $(2) -c $$< -o $$@
+.libs/maccatalyst-x64/%$(1).o: %.s $(EXTRA_DEPENDENCIES) | .libs/maccatalyst-x64
+	$$(call Q_2,ASM,   [maccatalyst-x64]) $(XCODE_CC) $(MACCATALYST_X86_64_CFLAGS)                        $(COMMON_I) -g $(2) -c $$< -o $$@
 
-.libs/maccatalyst/%$(1).x86_64.dylib: %.swift | .libs/maccatalyst
-	$$(call Q_2,SWIFT, [maccatalyst]) $(SWIFTC)   $(MACCATALYST_X64_SWIFTFLAGS)                                              $$< -o $$@
+.libs/maccatalyst-x64/%$(1).dylib: %.swift | .libs/maccatalyst-x64
+	$$(call Q_2,SWIFT, [maccatalyst-x64]) $(SWIFTC)   $(MACCATALYST_X64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                                              $$< -o $$@ -emit-module -L$$(dir $$@) -I$$(dir $$@) -module-name $$*
 
-.libs/maccatalyst/%$(1).x86_64.o: %.swift | .libs/maccatalyst
-	$$(call Q_2,SWIFT, [maccatalyst]) $(SWIFTC)   $(MACCATALYST_X64_SWIFTFLAGS)                                              $$< -o $$@ -emit-object
+.libs/maccatalyst-x64/%$(1).o: %.swift | .libs/maccatalyst-x64
+	$$(call Q_2,SWIFT, [maccatalyst-x64]) $(SWIFTC)   $(MACCATALYST_X64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                                              $$< -o $$@ -emit-object
 
-.libs/maccatalyst/%$(1).x86_64.dylib: | .libs/maccatalyst
-	$$(call Q_2,LD,    [maccatalyst]) $(XCODE_CC) $(MACCATALYST_X86_64_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -L$(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/lib -fapplication-extension
+.libs/maccatalyst-x64/%$(1).dylib: | .libs/maccatalyst-x64
+	$$(call Q_2,LD,    [maccatalyst-x64]) $(XCODE_CC) $(MACCATALYST_X86_64_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -fapplication-extension -framework Foundation
 
-.libs/maccatalyst/%$(1).x86_64.framework: | .libs/maccatalyst
-	$$(call Q_2,LD,    [maccatalyst]) $(XCODE_CC) $(MACCATALYST_X86_64_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -F$(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/Frameworks -fapplication-extension
+.libs/maccatalyst-arm64/%$(1).o: %.m $(EXTRA_DEPENDENCIES) | .libs/maccatalyst-arm64
+	$$(call Q_2,OBJC,  [maccatalyst-arm64]) $(XCODE_CC) $(MACCATALYST_ARM64_OBJC_CFLAGS) $$(EXTRA_DEFINES) $(COMMON_I) -g $(2) -c $$< -o $$@
 
-.libs/maccatalyst/%$(1).arm64.o: %.m $(EXTRA_DEPENDENCIES) | .libs/maccatalyst
-	$$(call Q_2,OBJC,  [maccatalyst]) $(XCODE_CC) $(MACCATALYST_ARM64_OBJC_CFLAGS) $$(EXTRA_DEFINES) $(COMMON_I) -g $(2) -c $$< -o $$@
+.libs/maccatalyst-arm64/%$(1).o: %.c $(EXTRA_DEPENDENCIES) | .libs/maccatalyst-arm64
+	$$(call Q_2,CC,    [maccatalyst-arm64]) $(XCODE_CC) $(MACCATALYST_ARM64_CFLAGS)      $$(EXTRA_DEFINES) $(COMMON_I) -g $(2) -c $$< -o $$@
 
-.libs/maccatalyst/%$(1).arm64.o: %.c $(EXTRA_DEPENDENCIES) | .libs/maccatalyst
-	$$(call Q_2,CC,    [maccatalyst]) $(XCODE_CC) $(MACCATALYST_ARM64_CFLAGS)      $$(EXTRA_DEFINES) $(COMMON_I) -g $(2) -c $$< -o $$@
+.libs/maccatalyst-arm64/%$(1).o: %.s $(EXTRA_DEPENDENCIES) | .libs/maccatalyst-arm64
+	$$(call Q_2,ASM,   [maccatalyst-arm64]) $(XCODE_CC) $(MACCATALYST_ARM64_CFLAGS)                        $(COMMON_I) -g $(2) -c $$< -o $$@
 
-.libs/maccatalyst/%$(1).arm64.o: %.s $(EXTRA_DEPENDENCIES) | .libs/maccatalyst
-	$$(call Q_2,ASM,   [maccatalyst]) $(XCODE_CC) $(MACCATALYST_ARM64_CFLAGS)                        $(COMMON_I) -g $(2) -c $$< -o $$@
+.libs/maccatalyst-arm64/%$(1).dylib: %.swift | .libs/maccatalyst-arm64
+	$$(call Q_2,SWIFT, [maccatalyst-arm64]) $(SWIFTC)   $(MACCATALYST_ARM64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                                           $$< -o $$@ -emit-module -L$$(dir $$@) -I$$(dir $$@) -module-name $$*
 
-.libs/maccatalyst/%$(1).arm64.dylib: %.swift | .libs/maccatalyst
-	$$(call Q_2,SWIFT, [maccatalyst]) $(SWIFTC)   $(MACCATALYST_ARM64_SWIFTFLAGS)                                           $$< -o $$@
+.libs/maccatalyst-arm64/%$(1).o: %.swift | .libs/maccatalyst-arm64
+	$$(call Q_2,SWIFT, [maccatalyst-arm64]) $(SWIFTC)   $(MACCATALYST_ARM64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                                           $$< -o $$@ -emit-object
 
-.libs/maccatalyst/%$(1).arm64.o: %.swift | .libs/maccatalyst
-	$$(call Q_2,SWIFT, [maccatalyst]) $(SWIFTC)   $(MACCATALYST_ARM64_SWIFTFLAGS)                                           $$< -o $$@ -emit-object
-
-.libs/maccatalyst/%$(1).arm64.dylib: | .libs/maccatalyst
-	$$(call Q_2,LD,    [maccatalyst]) $(XCODE_CC) $(MACCATALYST_ARM64_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -L$(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/lib -fapplication-extension
-
-.libs/maccatalyst/%$(1).arm64.framework: | .libs/maccatalyst
-	$$(call Q_2,LD,    [maccatalyst]) $(XCODE_CC) $(MACCATALYST_ARM64_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -F$(IOS_DESTDIR)$(XAMARIN_MACCATALYST_SDK)/Frameworks -fapplication-extension
+.libs/maccatalyst-arm64/%$(1).dylib: | .libs/maccatalyst-arm64
+	$$(call Q_2,LD,    [maccatalyst-arm64]) $(XCODE_CC) $(MACCATALYST_ARM64_CFLAGS)      $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -fapplication-extension -framework Foundation
 
 ## tv simulator
 
 ### X64
 
-.libs/tvsimulator/%$(1).x86_64.o: %.m $(EXTRA_DEPENDENCIES) | .libs/tvsimulator
-	$$(call Q_2,OBJC,  [tvsimulator]) $(SIMULATOR_CC) $(SIMULATORTV_OBJC_CFLAGS)    $$(EXTRA_DEFINES) $(SIM_TV_I) -g $(2) -c $$< -o $$@
+.libs/tvossimulator-x64/%$(1).o: %.m $(EXTRA_DEPENDENCIES) | .libs/tvossimulator-x64
+	$$(call Q_2,OBJC,  [tvossimulator-x64]) $(SIMULATOR_CC) $(SIMULATORTV_OBJC_CFLAGS)    $$(EXTRA_DEFINES) $(SIM_TV_I) -g $(2) -c $$< -o $$@
 
-.libs/tvsimulator/%$(1).x86_64.o: %.c $(EXTRA_DEPENDENCIES) | .libs/tvsimulator
-	$$(call Q_2,CC,    [tvsimulator]) $(SIMULATOR_CC) $(SIMULATORTV_CFLAGS)         $$(EXTRA_DEFINES) $(SIM_TV_I) -g $(2) -c $$< -o $$@
+.libs/tvossimulator-x64/%$(1).o: %.c $(EXTRA_DEPENDENCIES) | .libs/tvossimulator-x64
+	$$(call Q_2,CC,    [tvossimulator-x64]) $(SIMULATOR_CC) $(SIMULATORTV_CFLAGS)         $$(EXTRA_DEFINES) $(SIM_TV_I) -g $(2) -c $$< -o $$@
 
-.libs/tvsimulator/%$(1).x86_64.o: %.s $(EXTRA_DEPENDENCIES) | .libs/tvsimulator
-	$$(call Q_2,ASM,   [tvsimulator]) $(SIMULATOR_CC) $(SIMULATORTV_CFLAGS)         $$(EXTRA_DEFINES) $(SIM_TV_I) -g $(2) -c $$< -o $$@
+.libs/tvossimulator-x64/%$(1).o: %.s $(EXTRA_DEPENDENCIES) | .libs/tvossimulator-x64
+	$$(call Q_2,ASM,   [tvossimulator-x64]) $(SIMULATOR_CC) $(SIMULATORTV_CFLAGS)         $$(EXTRA_DEFINES) $(SIM_TV_I) -g $(2) -c $$< -o $$@
 
-.libs/tvsimulator/%$(1).x86_64.dylib: %.swift | .libs/tvsimulator
-	$$(call Q_2,SWIFT, [tvsimulator]) $(SWIFTC)      $(TVOS_SIMULATOR_X64_SWIFTFLAGS)                                        $$< -o $$@
+.libs/tvossimulator-x64/%$(1).dylib: %.swift | .libs/tvossimulator-x64
+	$$(call Q_2,SWIFT, [tvossimulator-x64]) $(SWIFTC)      $(TVOS_SIMULATOR_X64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                                        $$< -o $$@ -emit-module -L$$(dir $$@) -I$$(dir $$@) -module-name $$*
 
-.libs/tvsimulator/%$(1).x86_64.o: %.swift | .libs/tvsimulator
-	$$(call Q_2,SWIFT, [tvsimulator]) $(SWIFTC)      $(TVOS_SIMULATOR_X64_SWIFTFLAGS)                                        $$< -o $$@ -emit-object
+.libs/tvossimulator-x64/%$(1).o: %.swift | .libs/tvossimulator-x64
+	$$(call Q_2,SWIFT, [tvossimulator-x64]) $(SWIFTC)      $(TVOS_SIMULATOR_X64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                                        $$< -o $$@ -emit-object
 
-.libs/tvsimulator/%$(1).x86_64.dylib: | .libs/tvsimulator
-	$$(call Q_2,LD,    [tvsimulator]) $(SIMULATOR_CC) $(SIMULATORTV_CFLAGS)         $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -L$(IOS_DESTDIR)$(XAMARIN_TVSIMULATOR_SDK)/lib -fapplication-extension
-
-.libs/tvsimulator/%$(1).x86_64.framework: | .libs/tvsimulator
-	$$(call Q_2,LD,    [tvsimulator]) $(SIMULATOR_CC) $(SIMULATORTV_CFLAGS)         $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -F$(IOS_DESTDIR)$(XAMARIN_TVSIMULATOR_SDK)/Frameworks -fapplication-extension
+.libs/tvossimulator-x64/%$(1).dylib: | .libs/tvossimulator-x64
+	$$(call Q_2,LD,    [tvossimulator-x64]) $(SIMULATOR_CC) $(SIMULATORTV_CFLAGS)         $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -fapplication-extension -framework Foundation
 
 ### ARM64
 
-.libs/tvsimulator/%$(1).arm64.o: %.m $(EXTRA_DEPENDENCIES) | .libs/tvsimulator
-	$$(call Q_2,OBJC,  [tvsimulator]) $(SIMULATOR_CC) $(SIMULATORTV_ARM64_OBJC_CFLAGS)    $$(EXTRA_DEFINES) $(SIM_ARM64_TV_I) -g $(2) -c $$< -o $$@
+.libs/tvossimulator-arm64/%$(1).o: %.m $(EXTRA_DEPENDENCIES) | .libs/tvossimulator-arm64
+	$$(call Q_2,OBJC,  [tvossimulator-arm64]) $(SIMULATOR_CC) $(SIMULATORTV_ARM64_OBJC_CFLAGS)    $$(EXTRA_DEFINES) $(SIM_ARM64_TV_I) -g $(2) -c $$< -o $$@
 
-.libs/tvsimulator/%$(1).arm64.o: %.c $(EXTRA_DEPENDENCIES) | .libs/tvsimulator
-	$$(call Q_2,CC,    [tvsimulator]) $(SIMULATOR_CC) $(SIMULATORTV_ARM64_CFLAGS)         $$(EXTRA_DEFINES) $(SIM_ARM64_TV_I) -g $(2) -c $$< -o $$@
+.libs/tvossimulator-arm64/%$(1).o: %.c $(EXTRA_DEPENDENCIES) | .libs/tvossimulator-arm64
+	$$(call Q_2,CC,    [tvossimulator-arm64]) $(SIMULATOR_CC) $(SIMULATORTV_ARM64_CFLAGS)         $$(EXTRA_DEFINES) $(SIM_ARM64_TV_I) -g $(2) -c $$< -o $$@
 
-.libs/tvsimulator/%$(1).arm64.o: %.s $(EXTRA_DEPENDENCIES) | .libs/tvsimulator
-	$$(call Q_2,ASM,   [tvsimulator]) $(SIMULATOR_CC) $(SIMULATORTV_ARM64_CFLAGS)         $$(EXTRA_DEFINES) $(SIM_ARM64_TV_I) -g $(2) -c $$< -o $$@
+.libs/tvossimulator-arm64/%$(1).o: %.s $(EXTRA_DEPENDENCIES) | .libs/tvossimulator-arm64
+	$$(call Q_2,ASM,   [tvossimulator-arm64]) $(SIMULATOR_CC) $(SIMULATORTV_ARM64_CFLAGS)         $$(EXTRA_DEFINES) $(SIM_ARM64_TV_I) -g $(2) -c $$< -o $$@
 
-.libs/tvsimulator/%$(1).arm64.dylib: %.swift | .libs/tvsimulator
-	$$(call Q_2,SWIFT, [tvsimulator]) $(SWIFTC)      $(TVOS_SIMULATOR_ARM64_SWIFTFLAGS)                                                  $$< -o $$@
+.libs/tvossimulator-arm64/%$(1).dylib: %.swift | .libs/tvossimulator-arm64
+	$$(call Q_2,SWIFT, [tvossimulator-arm64]) $(SWIFTC)      $(TVOS_SIMULATOR_ARM64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                                                  $$< -o $$@ -emit-module -L$$(dir $$@) -I$$(dir $$@) -module-name $$*
 
-.libs/tvsimulator/%$(1).arm64.o: %.swift | .libs/tvsimulator
-	$$(call Q_2,SWIFT, [tvsimulator]) $(SWIFTC)      $(TVOS_SIMULATOR_ARM64_SWIFTFLAGS)                                                  $$< -o $$@ -emit-object
+.libs/tvossimulator-arm64/%$(1).o: %.swift | .libs/tvossimulator-arm64
+	$$(call Q_2,SWIFT, [tvossimulator-arm64]) $(SWIFTC)      $(TVOS_SIMULATOR_ARM64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                                                  $$< -o $$@ -emit-object
 
-.libs/tvsimulator/%$(1).arm64.dylib: | .libs/tvsimulator
-	$$(call Q_2,LD,    [tvsimulator]) $(SIMULATOR_CC) $(SIMULATORTV_ARM64_CFLAGS)         $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -L$(IOS_DESTDIR)$(XAMARIN_TVSIMULATOR_SDK)/lib -fapplication-extension
-
-.libs/tvsimulator/%$(1).arm64.framework: | .libs/tvsimulator
-	$$(call Q_2,LD,    [tvsimulator]) $(SIMULATOR_CC) $(SIMULATORTV_ARM64_CFLAGS)         $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -F$(IOS_DESTDIR)$(XAMARIN_TVSIMULATOR_SDK)/Frameworks -fapplication-extension
+.libs/tvossimulator-arm64/%$(1).dylib: | .libs/tvossimulator-arm64
+	$$(call Q_2,LD,    [tvossimulator-arm64]) $(SIMULATOR_CC) $(SIMULATORTV_ARM64_CFLAGS)         $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -fapplication-extension -framework Foundation
 
 ## tv device
 
-.libs/tvos/%$(1).arm64.o: %.m $(EXTRA_DEPENDENCIES) | .libs/tvos
-	$$(call Q_2,OBJC,  [tvos]) $(DEVICE_CC)       $(DEVICETV_OBJC_CFLAGS)       $$(EXTRA_DEFINES) $(DEV_TV_I) -g $(2) -c $$< -o $$@ 
+.libs/tvos-arm64/%$(1).o: %.m $(EXTRA_DEPENDENCIES) | .libs/tvos-arm64
+	$$(call Q_2,OBJC,  [tvos-arm64]) $(DEVICE_CC)       $(DEVICETV_OBJC_CFLAGS)       $$(EXTRA_DEFINES) $(DEV_TV_I) -g $(2) -c $$< -o $$@
 
-.libs/tvos/%$(1).arm64.o: %.c $(EXTRA_DEPENDENCIES) | .libs/tvos
-	$$(call Q_2,CC,    [tvos]) $(DEVICE_CC)    $(DEVICETV_CFLAGS)            $$(EXTRA_DEFINES) $(DEV_TV_I) -g $(2) -c $$< -o $$@ 
+.libs/tvos-arm64/%$(1).o: %.c $(EXTRA_DEPENDENCIES) | .libs/tvos-arm64
+	$$(call Q_2,CC,    [tvos-arm64]) $(DEVICE_CC)    $(DEVICETV_CFLAGS)            $$(EXTRA_DEFINES) $(DEV_TV_I) -g $(2) -c $$< -o $$@
 
-.libs/tvos/%$(1).arm64.o: %.s $(EXTRA_DEPENDENCIES) | .libs/tvos
-	$$(call Q_2,ASM,   [tvos]) $(DEVICE_CC)    $(DEVICETV_CFLAGS)            $$(EXTRA_DEFINES) $(DEV_TV_I) -g $(2) -c $$< -o $$@
+.libs/tvos-arm64/%$(1).o: %.s $(EXTRA_DEPENDENCIES) | .libs/tvos-arm64
+	$$(call Q_2,ASM,   [tvos-arm64]) $(DEVICE_CC)    $(DEVICETV_CFLAGS)            $$(EXTRA_DEFINES) $(DEV_TV_I) -g $(2) -c $$< -o $$@
 
-.libs/tvos/%$(1).arm64.dylib: %.swift | .libs/tvos
-	$$(call Q_2,SWIFT, [tvos]) $(SWIFTC)      $(TVOS_DEVICE_ARM64_SWIFTFLAGS)                                         $$< -o $$@
+.libs/tvos-arm64/%$(1).dylib: %.swift | .libs/tvos-arm64
+	$$(call Q_2,SWIFT, [tvos-arm64]) $(SWIFTC)      $(TVOS_DEVICE_ARM64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                                         $$< -o $$@ -emit-module -L$$(dir $$@) -I$$(dir $$@) -module-name $$*
 
-.libs/tvos/%$(1).arm64.o: %.swift | .libs/tvos
-	$$(call Q_2,SWIFT, [tvos]) $(SWIFTC)      $(TVOS_DEVICE_ARM64_SWIFTFLAGS)                                         $$< -o $$@ -emit-object
+.libs/tvos-arm64/%$(1).o: %.swift | .libs/tvos-arm64
+	$$(call Q_2,SWIFT, [tvos-arm64]) $(SWIFTC)      $(TVOS_DEVICE_ARM64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                                         $$< -o $$@ -emit-object
 
-.libs/tvos/%$(1).arm64.dylib: | .libs/tvos
-	$$(call Q_2,LD,    [tvos]) $(DEVICE_CC)    $(DEVICETV_CFLAGS)            $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -L$(IOS_DESTDIR)$(XAMARIN_TVOS_SDK)/lib -fapplication-extension
-
-.libs/tvos/%$(1).arm64.framework: | .libs/tvos
-	$$(call Q_2,LD,    [tvos]) $(DEVICE_CC)    $(DEVICETV_CFLAGS)            $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -F$(IOS_DESTDIR)$(XAMARIN_TVOS_SDK)/Frameworks -fapplication-extension
+.libs/tvos-arm64/%$(1).dylib: | .libs/tvos-arm64
+	$$(call Q_2,LD,    [tvos-arm64]) $(DEVICE_CC)    $(DEVICETV_CFLAGS)            $$(EXTRA_FLAGS) -dynamiclib -o $$@ $$^ -fapplication-extension -framework Foundation
 
 ## macOS
 
-.libs/mac/%$(1).x86_64.o: %.m $(EXTRA_DEPENDENCIES) | .libs/mac
-	$$(call Q_2,OBJC,  [mac]) $(MAC_CC) $(MAC_OBJC_CFLAGS) $$(EXTRA_DEFINES) -arch x86_64 $(COMMON_I) -g $(2) -c $$< -o $$@
+.libs/osx-x64/%$(1).o: %.m $(EXTRA_DEPENDENCIES) | .libs/osx-x64
+	$$(call Q_2,OBJC,  [osx-x64]) $(MAC_CC) $(MAC_OBJC_CFLAGS) $$(EXTRA_DEFINES) -arch x86_64 $(COMMON_I) -g $(2) -c $$< -o $$@
 
-.libs/mac/%$(1).x86_64.o: %.c $(EXTRA_DEPENDENCIES) | .libs/mac
-	$$(call Q_2,CC,    [mac]) $(MAC_CC) $(MAC_CFLAGS)      $$(EXTRA_DEFINES) -arch x86_64 $(COMMON_I) -g $(2) -c $$< -o $$@
+.libs/osx-x64/%$(1).o: %.c $(EXTRA_DEPENDENCIES) | .libs/osx-x64
+	$$(call Q_2,CC,    [osx-x64]) $(MAC_CC) $(MAC_CFLAGS)      $$(EXTRA_DEFINES) -arch x86_64 $(COMMON_I) -g $(2) -c $$< -o $$@
 
-.libs/mac/%$(1).x86_64.o: %.s $(EXTRA_DEPENDENCIES) | .libs/mac
-	$$(call Q_2,ASM,   [mac]) $(MAC_CC) $(MAC_CFLAGS)                        -arch x86_64  $(COMMON_I) -g $(2) -c $$< -o $$@
+.libs/osx-x64/%$(1).o: %.s $(EXTRA_DEPENDENCIES) | .libs/osx-x64
+	$$(call Q_2,ASM,   [osx-x64]) $(MAC_CC) $(MAC_CFLAGS)                        -arch x86_64  $(COMMON_I) -g $(2) -c $$< -o $$@
 
-.libs/mac/%$(1).x86_64.dylib: %.swift | .libs/mac
-	$$(call Q_2,SWIFT, [mac]) $(SWIFTC) $(MACOS_X64_SWIFTFLAGS)                                                   $$< -o $$@
+.libs/osx-x64/%$(1).dylib: %.swift | .libs/osx-x64
+	$$(call Q_2,SWIFT, [osx-x64]) $(SWIFTC) $(MACOS_X64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                                                 $$< -o $$@ -emit-module -L$$(dir $$@) -I$$(dir $$@) -module-name $$*
 
-.libs/mac/%$(1).x86_64.o: %.swift | .libs/mac
-	$$(call Q_2,SWIFT, [mac]) $(SWIFTC) $(MACOS_X64_SWIFTFLAGS)                                                   $$< -o $$@ -emit-object
+.libs/osx-x64/%$(1).o: %.swift | .libs/osx-x64
+	$$(call Q_2,SWIFT, [osx-x64]) $(SWIFTC) $(MACOS_X64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                                                 $$< -o $$@ -emit-object
 
-.libs/macos/%$(1).x86_64.dylib: %.swift | .libs/mac
-	$$(call Q_2,SWIFT, [macos]) $(SWIFTC) $(MACOS_X64_SWIFTFLAGS)                                                 $$< -o $$@
+.libs/osx-x64/%$(1).dylib: | .libs/osx-x64
+	$$(call Q_2,LD,    [osx-x64]) $(MAC_CC) $(MAC_CFLAGS)      $$(EXTRA_FLAGS) -arch x86_64 -dynamiclib -o $$@ $$^ -fapplication-extension -framework Foundation
 
-.libs/macos/%$(1).x86_64.o: %.swift | .libs/mac
-	$$(call Q_2,SWIFT, [mac]) $(SWIFTC) $(MACOS_X64_SWIFTFLAGS)                                                   $$< -o $$@ -emit-object
+.libs/osx-arm64/%$(1).o: %.m $(EXTRA_DEPENDENCIES) | .libs/osx-arm64
+	$$(call Q_2,OBJC,  [osx-arm64]) $(MAC_CC) $(MAC_OBJC_CFLAGS) $$(EXTRA_DEFINES) -arch arm64 $(COMMON_I) -g $(2) -c $$< -o $$@
 
-.libs/macos/%$(1).x86_64.dylib: %.swift | .libs/mac
-	$$(call Q_2,SWIFT, [macos]) $(SWIFTC) $(MACOS_X64_SWIFTFLAGS)                                                 $$< -o $$@
+.libs/osx-arm64/%$(1).o: %.c $(EXTRA_DEPENDENCIES) | .libs/osx-arm64
+	$$(call Q_2,CC,    [osx-arm64]) $(MAC_CC) $(MAC_CFLAGS)      $$(EXTRA_DEFINES) -arch arm64 $(COMMON_I) -g $(2) -c $$< -o $$@
 
-.libs/mac/%$(1).x86_64.dylib: | .libs/mac
-	$$(call Q_2,LD,    [mac]) $(MAC_CC) $(MAC_CFLAGS)      $$(EXTRA_FLAGS) -arch x86_64 -dynamiclib -o $$@ $$^ -L$(MAC_DESTDIR)$(XAMARIN_MACOS_SDK)/lib -fapplication-extension
+.libs/osx-arm64/%$(1).o: %.s $(EXTRA_DEPENDENCIES) | .libs/osx-arm64
+	$$(call Q_2,ASM,   [osx-arm64]) $(MAC_CC) $(MAC_CFLAGS)                        -arch arm64  $(COMMON_I) -g $(2) -c $$< -o $$@
 
-.libs/mac/%$(1).x86_64.framework: | .libs/mac
-	$$(call Q_2,LD,    [mac]) $(MAC_CC) $(MAC_CFLAGS)      $$(EXTRA_FLAGS) -arch x86_64 -dynamiclib -o $$@ $$^ -F$(MAC_DESTDIR)$(XAMARIN_MACOS_SDK)/Frameworks -fapplication-extension
+.libs/osx-arm64/%$(1).dylib: %.swift | .libs/osx-arm64
+	$$(call Q_2,SWIFT, [osx-arm64]) $(SWIFTC) $(MACOS_ARM64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                                                $$< -o $$@ -emit-module -L$$(dir $$@) -I$$(dir $$@) -module-name $$*
 
-.libs/mac/%$(1).arm64.o: %.m $(EXTRA_DEPENDENCIES) | .libs/mac
-	$$(call Q_2,OBJC,  [mac]) $(MAC_CC) $(MAC_OBJC_CFLAGS) $$(EXTRA_DEFINES) -arch arm64 $(COMMON_I) -g $(2) -c $$< -o $$@
+.libs/osx-arm64/%$(1).o: %.swift | .libs/osx-arm64
+	$$(call Q_2,SWIFT, [osx-arm64]) $(SWIFTC) $(MACOS_ARM64_SWIFTFLAGS) $(EXTRA_SWIFTFLAGS) $$(EXTRA_$$*_FLAGS)                                                $$< -o $$@ -emit-object
 
-.libs/mac/%$(1).arm64.o: %.c $(EXTRA_DEPENDENCIES) | .libs/mac
-	$$(call Q_2,CC,    [mac]) $(MAC_CC) $(MAC_CFLAGS)      $$(EXTRA_DEFINES) -arch arm64 $(COMMON_I) -g $(2) -c $$< -o $$@
-
-.libs/mac/%$(1).arm64.o: %.s $(EXTRA_DEPENDENCIES) | .libs/mac
-	$$(call Q_2,ASM,   [mac]) $(MAC_CC) $(MAC_CFLAGS)                        -arch arm64  $(COMMON_I) -g $(2) -c $$< -o $$@
-
-.libs/mac/%$(1).arm64.dylib: %.swift | .libs/mac
-	$$(call Q_2,SWIFT, [mac]) $(SWIFTC) $(MACOS_ARM64_SWIFTFLAGS)                                                $$< -o $$@
-
-.libs/mac/%$(1).arm64.o: %.swift | .libs/mac
-	$$(call Q_2,SWIFT, [mac]) $(SWIFTC) $(MACOS_ARM64_SWIFTFLAGS)                                                $$< -o $$@ -emit-object
-
-.libs/macos/%$(1).arm64.dylib: %.swift | .libs/mac
-	$$(call Q_2,SWIFT, [macos]) $(SWIFTC) $(MACOS_ARM64_SWIFTFLAGS)                                              $$< -o $$@
-
-.libs/macos/%$(1).arm64.o: %.swift | .libs/mac
-	$$(call Q_2,SWIFT, [macos]) $(SWIFTC) $(MACOS_ARM64_SWIFTFLAGS)                                              $$< -o $$@ -emit-object
-
-.libs/mac/%$(1).arm64.dylib: | .libs/mac
-	$$(call Q_2,LD,    [mac]) $(MAC_CC) $(MAC_CFLAGS)      $$(EXTRA_FLAGS) -arch arm64 -dynamiclib -o $$@ $$^ -L$(MAC_DESTDIR)$(XAMARIN_MACOS_SDK)/lib -fapplication-extension
-
-.libs/mac/%$(1).arm64.framework: | .libs/mac
-	$$(call Q_2,LD,    [mac]) $(MAC_CC) $(MAC_CFLAGS)      $$(EXTRA_FLAGS) -arch arm64 -dynamiclib -o $$@ $$^ -F$(MAC_DESTDIR)$(XAMARIN_MACOS_SDK)/Frameworks -fapplication-extension
-
+.libs/osx-arm64/%$(1).dylib: | .libs/osx-arm64
+	$$(call Q_2,LD,    [osx-arm64]) $(MAC_CC) $(MAC_CFLAGS)      $$(EXTRA_FLAGS) -arch arm64 -dynamiclib -o $$@ $$^ -fapplication-extension -framework Foundation
 endef
 
 DEBUG_FLAGS=-DDEBUG -D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_DEBUG
@@ -325,3 +237,6 @@ $(eval $(call NativeCompilationTemplate,-dotnet-nativeaot-debug,$(DEBUG_FLAGS) -
 
 %.csproj.inc: %.csproj $(TOP)/Make.config $(TOP)/mk/mono.mk $(TOP)/tools/common/create-makefile-fragment.sh
 	$(Q) $(TOP)/tools/common/create-makefile-fragment.sh $(abspath $<) $(abspath $@)
+
+$(foreach rid,$(DOTNET_RUNTIME_IDENTIFIERS),.libs/$(rid)):
+	$(Q) mkdir -p $@

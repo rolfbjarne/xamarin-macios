@@ -1,5 +1,6 @@
 // #define TRACE
 
+using System.Collections;
 using System.IO;
 using System.IO.Compression;
 
@@ -8,6 +9,16 @@ using System.IO.Compression;
 namespace Xamarin.Tests {
 	[TestFixture]
 	public class WindowsTest : TestBaseClass {
+
+		[Category ("Windows")]
+		[Category ("RemoteWindows")]
+		[Test]
+		public void ShowEnvironment ()
+		{
+			Console.WriteLine ("        GetEnvironmentVariables: ");
+			foreach (DictionaryEntry de in Environment.GetEnvironmentVariables ().Cast<DictionaryEntry> ().OrderBy (v => v.Key))
+				Console.WriteLine("            {0}={1}", de.Key, de.Value);
+		}
 
 		[Category ("Windows")]
 		[TestCase (ApplePlatform.iOS, "ios-arm64")]

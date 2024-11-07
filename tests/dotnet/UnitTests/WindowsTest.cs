@@ -17,7 +17,7 @@ namespace Xamarin.Tests {
 		{
 			Console.WriteLine ("        GetEnvironmentVariables: ");
 			foreach (DictionaryEntry de in Environment.GetEnvironmentVariables ().Cast<DictionaryEntry> ().OrderBy (v => v.Key))
-				Console.WriteLine("            {0}={1}", de.Key, de.Value);
+				Console.WriteLine ("            {0}={1}", de.Key, de.Value);
 		}
 
 		[Category ("Windows")]

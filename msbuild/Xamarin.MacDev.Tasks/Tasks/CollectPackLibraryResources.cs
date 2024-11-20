@@ -12,7 +12,7 @@ namespace Xamarin.MacDev.Tasks {
 	// add/compute the LogicalName value for each of them, and then add them to the
 	// ItemsWithLogicalNames item group. The items in this item group will have the
 	// 'OriginalItemGroup' metadata set indicating where they came from.
-	public class CollectPackLibraryResources : XamarinTask {
+	public class CollectPackLibraryResources : XamarinTask, IHasProjectDir, IHasResourcePrefix {
 		#region Inputs
 
 		public ITaskItem [] AtlasTextures { get; set; } = Array.Empty<ITaskItem> ();
@@ -70,7 +70,7 @@ namespace Xamarin.MacDev.Tasks {
 				var items = kvp.Items;
 
 				foreach (var item in items) {
-					if (!CollectBundleResources.TryCreateItemWithLogicalName (this, item, ProjectDir, prefixes, SessionId, out var itemWithLogicalName))
+					if (!CollectBundleResources.TryCreateItemWithLogicalName (this, item, out var itemWithLogicalName))
 						continue;
 
 					itemWithLogicalName.SetMetadata ("OriginalItemGroup", itemName);

@@ -72,7 +72,7 @@ namespace Xamarin.MacDev.Tasks {
 			var bundleResources = new List<ITaskItem> ();
 
 			foreach (var item in BundleResources) {
-				if (!TryCreateItemWithLogicalName (this, item, ProjectDir, prefixes, SessionId, out var bundleResource))
+				if (!TryCreateItemWithLogicalName (this, item, out var bundleResource))
 					continue;
 
 				bool optimize = false;
@@ -104,7 +104,7 @@ namespace Xamarin.MacDev.Tasks {
 			return !Log.HasLoggedErrors;
 		}
 
-		public static bool TryCreateItemWithLogicalName (Task task, ITaskItem item, string projectDir, IList<string> prefixes, string sessionId, [NotNullWhen (true)] out TaskItem? itemWithLogicalName)
+		public static bool TryCreateItemWithLogicalName<T> (T task, ITaskItem item, [NotNullWhen (true)] out TaskItem? itemWithLogicalName) where T : Task, IHasProjectDir, IHasResourcePrefix, IHasSessionId
 		{
 			itemWithLogicalName = null;
 

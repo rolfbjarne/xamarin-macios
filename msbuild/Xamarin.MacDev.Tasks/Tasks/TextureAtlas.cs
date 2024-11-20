@@ -101,8 +101,6 @@ namespace Xamarin.MacDev.Tasks {
 					atlas = new (atlasItem, new List<ITaskItem> ());
 					atlases.Add (atlasName, atlas);
 				}
-				var items = tuple.Items;
-
 				atlas.Items.Add (item);
 			}
 

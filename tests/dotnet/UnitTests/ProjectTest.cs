@@ -791,13 +791,13 @@ namespace Xamarin.Tests {
 		[Category ("Windows")]
 		[TestCase (ApplePlatform.iOS, true)]
 		[TestCase (ApplePlatform.iOS, false)]
-		[TestCase (ApplePlatform.iOS, null]
+		[TestCase (ApplePlatform.iOS, null)]
 		public void LibraryWithResourcesOnWindows (ApplePlatform platform, bool? bundleOriginalResources)
 		{
 			Configuration.IgnoreIfNotOnWindows ();
 
 			// This should all execute locally on Windows when BundleOriginalResources=true
-			LibraryWithResources (platform, anyResources: bundleOriginalResources == true, bundleOriginalResources: bundleOriginalResources);
+			LibraryWithResources (platform, anyLibraryResources: bundleOriginalResources == true, bundleOriginalResources: bundleOriginalResources);
 		}
 
 
@@ -824,7 +824,7 @@ namespace Xamarin.Tests {
 		[TestCase (ApplePlatform.MacOSX, true)]
 		[TestCase (ApplePlatform.MacOSX, false)]
 		[TestCase (ApplePlatform.MacOSX, null)]
-		public void LibraryWithResources (ApplePlatform platform, bool? bundleOriginalResources, bool anyResources = true)
+		public void LibraryWithResources (ApplePlatform platform, bool? bundleOriginalResources, bool anyLibraryResources = true)
 		{
 			var project = "LibraryWithResources";
 			Configuration.IgnoreIfIgnoredPlatform (platform);

@@ -314,6 +314,16 @@ endef
 $(eval $(call TestLibraryXCFramework,libtest))
 $(eval $(call TestLibraryXCFramework,libtest2))
 
+define ZippedXcframework
+.libs/$(1).xcframework.zip: .libs/$(1).xcframework
+	$$(Q_ZIP) cd .libs && $(ZIP) -r "$$(notdir $$@)" "$$(notdir $$<)"
+all-local:: .libs/$(1).xcframework.zip
+endef
+#$(foreach testFramework,$(TEST_FRAMEWORKS),$(call ZippedXcframework,$(testFramework)))
+$(foreach testFramework,$(TEST_FRAMEWORKS),$(eval $(call ZippedXcframework,$(testFramework))))
+$(eval $(call ZippedXcframework,libtest))
+$(eval $(call ZippedXcframework,libtest2))
+
 include $(TOP)/mk/rules.mk
 
 .SECONDARY:

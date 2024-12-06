@@ -1955,6 +1955,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			SigningKey="$(_SpecifiedCodesignKey)"
 			DetectedCodeSigningKey="$(_CodeSigningKey)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+			ValidateEntitlements="$(CodesignValidateEntitlements)"
 			>
 
 			<Output TaskParameter="DetectedAppId" PropertyName="_AppIdentifier" />

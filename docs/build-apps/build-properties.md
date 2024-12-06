@@ -61,6 +61,16 @@ The directory to where the `bgen` ([BGenToolExe](#BGenToolExe)) is located.
 
 The default behavior is to use the `bgen` tool shipped with our workload.
 
+## CodesignValidateEntitlements
+
+Whether entitlements the app requests should be validated.
+
+Valid values for this property:
+
+* `disable`: Validation is disabled.
+* `warn`: Any validation failures are shown as warnings.
+* `error`: Any validation failures are shown as errors. This is the default.
+
 ## DittoPath
 
 The full path to the `ditto` executable.

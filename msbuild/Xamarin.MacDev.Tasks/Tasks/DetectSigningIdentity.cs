@@ -17,6 +17,8 @@ using SecKeychain = Xamarin.MacDev.Keychain;
 
 namespace Xamarin.MacDev.Tasks {
 	public class DetectSigningIdentity : XamarinTask, ITaskCallback, ICancelableTask {
+		CodeSignIdentity detectedIdentity;
+
 		const string AutomaticProvision = "Automatic";
 		const string AutomaticAdHocProvision = "Automatic:AdHoc";
 		const string AutomaticAppStoreProvision = "Automatic:AppStore";
@@ -124,6 +126,8 @@ namespace Xamarin.MacDev.Tasks {
 		public bool SdkIsSimulator { get; set; }
 
 		public bool RequireCodeSigning { get; set; }
+
+		public string ValidateEntitlements { get; set; }
 
 		#endregion
 
@@ -284,10 +288,85 @@ namespace Xamarin.MacDev.Tasks {
 			Log.LogMessage (MessageImportance.High, MSBStrings.M0125);
 			if (codesignCommonName is not null || !string.IsNullOrEmpty (DetectedCodeSigningKey))
 				Log.LogMessage (MessageImportance.High, "  Code Signing Key: \"{0}\" ({1})", codesignCommonName, DetectedCodeSigningKey);
-			if (provisioningProfileName is not null)
-				Log.LogMessage (MessageImportance.High, "  Provisioning Profile: \"{0}\" ({1})", provisioningProfileName, DetectedProvisioningProfile);
+			if (provisioningProfileName is not null) {
+				var profileEntitlements = detectedIdentity.Profile?.Entitlements;
+				var entitlements = profileEntitlements?.ToXml ().TrimEnd ().Replace ("\n", "\n      ");
+				if (string.IsNullOrEmpty (entitlements)) {
+					Log.LogMessage (MessageImportance.High, "  Provisioning Profile: \"{0}\" ({1}) - no entitlements", provisioningProfileName, DetectedProvisioningProfile);
+				} else {
+					Log.LogMessage (MessageImportance.High, "  Provisioning Profile: \"{0}\" ({1}) - {2} entitlements", provisioningProfileName, DetectedProvisioningProfile, profileEntitlements?.Count ?? 0);
+					Log.LogMessage (MessageImportance.Low, $"    Entitlements granted by the provisioning profile:");
+					Log.LogMessage (MessageImportance.Low, $"      {entitlements}");
+				}
+			}
 			Log.LogMessage (MessageImportance.High, "  Bundle Id: {0}", BundleIdentifier);
 			Log.LogMessage (MessageImportance.High, "  App Id: {0}", DetectedAppId);
+		}
+
+		void ValidateAppEntitlements ()
+		{
+			var onlyWarn = false;
+			switch (ValidateEntitlements?.ToLowerInvariant ()) {
+			case "disable":
+				return;
+			case "warn":
+				onlyWarn = true;
+				break;
+			case null: // default to 'error'
+			case "":
+			case "error":
+				onlyWarn = false;
+				break;
+			default:
+				Log.LogError ("Invalid value '{0}' for the 'ValidateEntitlements' property. Valid values are: 'disable', 'warn' or 'error.", ValidateEntitlements);
+				return;
+			}
+
+			var requestedEntitlementsPath = CodesignEntitlements?.ItemSpec;
+			if (string.IsNullOrEmpty (requestedEntitlementsPath)) {
+				// Everything is OK if the app doesn't request any entitlements.
+				return;
+			}
+
+			var logError = new Action<string> ((msg) =>
+			{
+				if (onlyWarn) {
+					if (CodesignEntitlements is not null) {
+						Log.LogWarning (null, null, null, CodesignEntitlements.ItemSpec, 0, 0, 0, 0, msg);
+					} else {
+						Log.LogWarning (msg);
+					}
+				} else {
+					if (CodesignEntitlements is not null) {
+						Log.LogError (null, null, null, CodesignEntitlements.ItemSpec, 0, 0, 0, 0, msg);
+					} else {
+						Log.LogError (msg);
+					}
+				}
+			});
+
+			var requestedEntitlements = PDictionary.FromFile (requestedEntitlementsPath)!;
+			var provisioningEntitlements = detectedIdentity.Profile?.Entitlements;
+			foreach (var kvp in requestedEntitlements) {
+				var key = kvp.Key;
+				switch (key) {
+				case "aps-environment":
+					var requestedApsEnvironment = (kvp.Value as PString)?.Value;
+					if (detectedIdentity.Profile is null) {
+						logError (string.Format ("The app requests the entitlement '{0}', but no provisioning profile has been specified. Please specify the name of the provisioning profile to use with the 'CodesignProvision' property in the project file.", key));
+					} else if (provisioningEntitlements?.TryGetValue<PString> (key, out var provisioningApsEnvironment) != true) {
+						logError (string.Format ("The app requests the entitlement '{0}', but the provisioning profile '{DetectedProvisioningProfile}' does not contain this entitlement.", key, provisioningProfileName));
+					} else if (requestedApsEnvironment != provisioningApsEnvironment.Value) {
+						logError (string.Format ("The app requests the entitlement '{0}' with the value '{1}', but the provisioning profile '{2}' grants it for the value '{3}'.", key, requestedApsEnvironment, provisioningProfileName, provisioningApsEnvironment.Value));
+					} else {
+						Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}' with the value '{requestedApsEnvironment}', which the provisioning profile '{provisioningProfileName}' grants.");
+					}
+					break;
+				default:
+					Log.LogMessage (MessageImportance.Low, $"The app requests entitlement '{key}', but no validation has been implemented for this entitlement. Assuming everything is OK.");
+					break;
+				}
+			}
 		}
 
 		static bool MatchesAny (string name, string [] names)
@@ -528,6 +607,7 @@ namespace Xamarin.MacDev.Tasks {
 				ExecuteImpl ();
 				if (!Log.HasLoggedErrors) {
 					ReportDetectedCodesignInfo ();
+					ValidateAppEntitlements ();
 				}
 				return !Log.HasLoggedErrors;
 			} finally {
@@ -542,6 +622,7 @@ namespace Xamarin.MacDev.Tasks {
 
 			var type = MobileProvisionDistributionType.Any;
 			var identity = new CodeSignIdentity ();
+			detectedIdentity = identity;
 			MobileProvisionPlatform platform;
 			IList<MobileProvision> profiles;
 			IList<X509Certificate2> certs;

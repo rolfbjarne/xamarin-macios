@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Pipes;
 using System.Linq;
+using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
@@ -256,6 +258,74 @@ namespace Xamarin.MacDev.Tasks {
 			Assert.IsTrue (archived.ContainsKey ("keychain-access-group"), "archived");
 			var archivedKag = ((PString?) archived ["keychain-access-group"])?.Value;
 			Assert.That (archivedKag, Is.EqualTo ("Z8CSQKJE7R.org.xamarin"), "archived value 1");
+		}
+
+		[Test]
+		[TestCase (true)]
+		[TestCase (false)]
+		public void ValidateEntitlements_Invalid (bool useFile)
+		{
+			var task = ValidateEntitlementsImpl ("invalid", 1, useFile);
+			Assert.AreEqual (Engine.Logger.ErrorEvents [0].Message, "Invalid value 'invalid' for the 'ValidateEntitlements' property. Valid values are: 'disable', 'warn' or 'error'.", "Error message");
+			Assert.AreEqual (0, Engine.Logger.WarningsEvents.Count, "WarningCount");
+		}
+
+		[Test]
+		[TestCase (true)]
+		[TestCase (false)]
+		public void ValidateEntitlements_Default (bool useFile)
+		{
+			var task = ValidateEntitlementsImpl ("", 1, useFile);
+			Assert.AreEqual (Engine.Logger.ErrorEvents [0].Message, "The app requests the entitlement 'aps-environment', but the provisioning profile 'iOS Team Provisioning Profile: *' does not contain this entitlement.", "Error message");
+			Assert.AreEqual (0, Engine.Logger.WarningsEvents.Count, "WarningCount");
+		}
+
+		[Test]
+		[TestCase (true)]
+		[TestCase (false)]
+		public void ValidateEntitlements_Error (bool useFile)
+		{
+			var task = ValidateEntitlementsImpl ("error", 1, useFile);
+			Assert.AreEqual (Engine.Logger.ErrorEvents [0].Message, "The app requests the entitlement 'aps-environment', but the provisioning profile 'iOS Team Provisioning Profile: *' does not contain this entitlement.", "Error message");
+			Assert.AreEqual (0, Engine.Logger.WarningsEvents.Count, "WarningCount");
+		}
+
+		[Test]
+		[TestCase (true)]
+		[TestCase (false)]
+		public void ValidateEntitlements_Warning (bool useFile)
+		{
+			ValidateEntitlementsImpl ("warn", 0, useFile);
+			Assert.AreEqual (1, Engine.Logger.WarningsEvents.Count, "WarningCount");
+			Assert.AreEqual (Engine.Logger.WarningsEvents [0].Message, "The app requests the entitlement 'aps-environment', but the provisioning profile 'iOS Team Provisioning Profile: *' does not contain this entitlement.", "Warning message");
+		}
+
+		[Test]
+		[TestCase (true)]
+		[TestCase (false)]
+		public void ValidateEntitlements_Disabled (bool useFile)
+		{
+			var task = ValidateEntitlementsImpl ("disable", 0, useFile);
+			Assert.AreEqual (0, Engine.Logger.WarningsEvents.Count, "WarningCount");
+		}
+
+		CompileEntitlements ValidateEntitlementsImpl (string validateEntitlements, int expectedErrorCount, bool useFile)
+		{
+			var dir = Cache.CreateTemporaryDirectory ();
+			var task = CreateEntitlementsTask (out var _);
+			task.ValidateEntitlements = validateEntitlements;
+			if (useFile) {
+				var path = Path.Combine (dir, "Entitlements.plist");
+				File.WriteAllText (path, "<plist version=\"1.0\"><dict><key>aps-environment</key><string>production</string></dict></plist>");
+				task.Entitlements = path;
+			} else {
+				var apsEnvironment = new TaskItem ("aps-environment");
+				apsEnvironment.SetMetadata ("Type", "String");
+				apsEnvironment.SetMetadata ("Value", "production");
+				task.CustomEntitlements = new [] { apsEnvironment };
+			}
+			ExecuteTask (task, expectedErrorCount);
+			return task;
 		}
 	}
 }

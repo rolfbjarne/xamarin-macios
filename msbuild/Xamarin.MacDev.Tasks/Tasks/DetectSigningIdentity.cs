@@ -328,8 +328,7 @@ namespace Xamarin.MacDev.Tasks {
 				return;
 			}
 
-			var logError = new Action<string> ((msg) =>
-			{
+			var logError = new Action<string> ((msg) => {
 				if (onlyWarn) {
 					if (CodesignEntitlements is not null) {
 						Log.LogWarning (null, null, null, CodesignEntitlements.ItemSpec, 0, 0, 0, 0, msg);

@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
@@ -192,13 +193,25 @@ namespace Xamarin.MacDev.Tasks {
 					} else if (string.IsNullOrEmpty (CodesignEntitlements?.ItemSpec)) {
 						// If no CodesignEntitlements was specified, we don't have any entitlements
 						hasEntitlements = false;
-					} else {
+					} else if (TryReadCodesignEntitlements (out var entitlements)) {
 						// Check the file to see if there are any entitlements inside
-						var entitlements = PDictionary.FromFile (CodesignEntitlements.ItemSpec);
 						hasEntitlements = entitlements.Count > 0;
 					}
 				}
 				return hasEntitlements.Value;
+			}
+		}
+
+		bool TryReadCodesignEntitlements ([NotNullWhen (true)] out PDictionary dictionary)
+		{
+			dictionary = null;
+			var path = CodesignEntitlements!.ItemSpec;
+			try {
+				dictionary = PDictionary.FromFile (path)!;
+				return true;
+			} catch (Exception ex) {
+				Log.LogError (MSBStrings.E0113 /* Error loading Entitlements.plist template '{0}': {1} */, path, ex.Message);
+				return false;
 			}
 		}
 
@@ -344,7 +357,9 @@ namespace Xamarin.MacDev.Tasks {
 				}
 			});
 
-			var requestedEntitlements = PDictionary.FromFile (requestedEntitlementsPath)!;
+			if (!TryReadCodesignEntitlements (out var requestedEntitlements))
+				return;
+
 			var provisioningEntitlements = detectedIdentity.Profile?.Entitlements;
 			foreach (var kvp in requestedEntitlements) {
 				var key = kvp.Key;

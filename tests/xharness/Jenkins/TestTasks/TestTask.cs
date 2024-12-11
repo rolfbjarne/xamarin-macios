@@ -136,6 +136,9 @@ namespace Xharness.Jenkins.TestTasks {
 				if (testName is not null)
 					return testName;
 
+				if (TestProject?.Name is not null)
+					return TestProject.Name;
+
 				var rv = Path.GetFileNameWithoutExtension (ProjectFile);
 				if (rv is null)
 					return $"unknown test name ({GetType ().Name}";

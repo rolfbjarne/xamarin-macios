@@ -14,19 +14,19 @@
 
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <StartAction>Project</StartAction>
-    <StartArguments>--verbose --jenkins:server --autoconf --rootdir ..</StartArguments>
+    <StartArguments>--verbose --jenkins:server --rootdir ..</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Run Jenkins tests' ">
     <StartAction>Project</StartAction>
-    <StartArguments>--verbose --jenkins --autoconf --rootdir ..</StartArguments>
+    <StartArguments>--verbose --jenkins --rootdir ..</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Run Jenkins (internal) tests' ">
     <StartAction>Project</StartAction>
-    <StartArguments>--verbose --jenkins --autoconf --rootdir .. --label run-all-tests,skip-ios-device-tests,skip-mac-32-tests --markdown-summary=../TestSummary.md</StartArguments>
+    <StartArguments>--verbose --jenkins --rootdir .. --label run-all-tests,skip-ios-device-tests,skip-mac-32-tests --markdown-summary=../TestSummary.md</StartArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Run device tests' ">
     <StartAction>Project</StartAction>
-    <StartArguments>--verbose --jenkins --autoconf --rootdir .. --label=skip-mac-tests,skip-ios-simulator-tests,skip-ios-msbuild-tests,skip-system-permission-tests,run-ios-device-tests,run-ios-extensions-tests --markdown-summary=../TestSummary.md</StartArguments>
+    <StartArguments>--verbose --jenkins --rootdir .. --label=skip-mac-tests,skip-ios-simulator-tests,skip-ios-msbuild-tests,skip-system-permission-tests,run-ios-device-tests,run-ios-extensions-tests --markdown-summary=../TestSummary.md</StartArguments>
     <EnvironmentVariables>
       <Variable name="MONO_ENV_OPTIONS" value="--trace=E:all" />
     </EnvironmentVariables>
@@ -47,12 +47,11 @@
     <Compile Include="Harness.cs" />
     <Compile Include="IEnvManager.cs" />
     <Compile Include="IHarness.cs" />
-    <Compile Include="iOSTestProject.cs" />
     <Compile Include="Jenkins\ErrorKnowledgeBase.cs" />
     <Compile Include="Jenkins\Jenkins.cs" />
     <Compile Include="Jenkins\JenkinsDeviceLoader.cs" />
-    <Compile Include="Jenkins\MacTestTasksEnumerable.cs" />
     <Compile Include="Jenkins\NUnitTestTasksEnumerable.cs" />
+    <Compile Include="Jenkins\MacTaskTestsFactory.cs" />
     <Compile Include="Jenkins\PeriodicCommand.cs" />
     <Compile Include="Jenkins\Reports\HtmlReportWriter.cs" />
     <Compile Include="Jenkins\Reports\IReportWriter.cs" />
@@ -98,8 +97,6 @@
     <Compile Include="Jenkins\TestTasks\RunXtroTask.cs" />
     <Compile Include="Jenkins\TestTasks\TestTask.cs" />
     <Compile Include="Jenkins\TestVariationsFactory.cs" />
-    <Compile Include="MacFlavorsExtensions.cs" />
-    <Compile Include="MacTestProject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimulatorLoaderFactory.cs" />

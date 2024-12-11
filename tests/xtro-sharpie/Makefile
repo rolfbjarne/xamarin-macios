@@ -178,9 +178,6 @@ endif
 
 gen-all: gen-ios gen-tvos gen-macos gen-maccatalyst
 
-dotnet-wrench:
-	$(MAKE) -j8 dotnet-classify
-
 report-dotnet/index.html: $(XTRO_REPORT) .stamp-dotnet-classify
 	$(Q) rm -rf report-dotnet
 	$(Q_GEN) $(XTRO_REPORT_EXEC) $(DOTNET_ANNOTATIONS_DIR) report-dotnet

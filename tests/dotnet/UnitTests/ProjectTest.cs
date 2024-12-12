@@ -1995,7 +1995,7 @@ namespace Xamarin.Tests {
 		[TestCase (ApplePlatform.TVOS, "tvossimulator-x64", "Release")]
 		public void PublishAot (ApplePlatform platform, string runtimeIdentifiers, string configuration)
 		{
-			PublishAotImpl (platform, runtimeIdentifiers, configuration)
+			PublishAotImpl (platform, runtimeIdentifiers, configuration);
 		}
 
 		[TestCase (ApplePlatform.iOS, "ios-arm64", "Release")]
@@ -2004,7 +2004,7 @@ namespace Xamarin.Tests {
 		{
 			Configuration.IgnoreIfNotOnWindows ();
 
-			PublishAotImpl (platform, runtimeIdentifiers, configuration)
+			PublishAotImpl (platform, runtimeIdentifiers, configuration);
 		}
 
 		void PublishAotImpl (ApplePlatform platform, string runtimeIdentifiers, string configuration)

@@ -361,6 +361,23 @@ namespace Xamarin.Tests {
 			Assert.AreEqual ("3.14", infoPlist.GetString ("CFBundleVersion").Value, "CFBundleVersion");
 			Assert.AreEqual ("3.14", infoPlist.GetString ("CFBundleShortVersionString").Value, "CFBundleShortVersionString");
 		}
+
+		[Test]
+		[Category ("Windows")]
+		[TestCase ("NativeFileReferencesApp", ApplePlatform.iOS, "ios-arm64")]
+		public void StaticLibrariesWithHotRestart (string project, ApplePlatform platform, string runtimeIdentifier)
+		{
+			Configuration.IgnoreIfIgnoredPlatform (platform);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifier);
+			Configuration.IgnoreIfNotOnWindows ();
+
+			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifier, platform: platform);
+			Clean (project_path);
+			var properties = GetDefaultProperties (runtimeIdentifier, GetHotRestartProperties ());
+			var rv = DotNet.AssertBuildFailure (project_path, properties);
+			var errors = BinLog.GetBuildLogErrors (rv.BinLogPath);
+			AssertErrorMessages (errors, $"Not sure exactly yet");
+		}
 	}
 
 	public class AppBundleInfo {

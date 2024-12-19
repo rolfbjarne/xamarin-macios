@@ -371,11 +371,11 @@ namespace Xamarin.Tests {
 			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifier);
 			Configuration.IgnoreIfNotOnWindows ();
 
-			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifier, platform: platform);
+			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifier, platform: platform, out var _);
 			Clean (project_path);
 			var properties = GetDefaultProperties (runtimeIdentifier, GetHotRestartProperties ());
 			var rv = DotNet.AssertBuildFailure (project_path, properties);
-			var errors = BinLog.GetBuildLogErrors (rv.BinLogPath);
+			var errors = BinLog.GetBuildLogErrors (rv.BinLogPath).ToList ();
 			AssertErrorMessages (errors, $"Not sure exactly yet");
 		}
 	}

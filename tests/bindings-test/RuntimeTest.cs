@@ -128,9 +128,12 @@ namespace Xamarin.Tests {
 		[Test]
 		public void SwiftTestClass2 ()
 		{
+			if (global::XamarinTests.ObjCRuntime.Registrar.IsDynamicRegistrar)
+				Assert.Ignore ("This test does not work with the dynamic registrar.");
+
 			TestRuntime.AssertXcodeVersion (13, 0);
 			using var obj = new SwiftTestClass2 ();
-			Assert.AreEqual ("Hello from Swift 2", obj.SayHello (), "Hello");
+			Assert.AreEqual ("Hello from Swift 2", obj.SayHello2 (), "Hello");
 		}
 	}
 }

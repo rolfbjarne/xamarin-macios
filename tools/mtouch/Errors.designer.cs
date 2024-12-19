@@ -4292,5 +4292,14 @@ namespace Xamarin.Bundler {
                 return ResourceManager.GetString("MX8058", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Detected a stub Objective-C class (&apos;{0}&apos;, for the managed type &apos;{1}&apos;) while using the dynamic registrar. Stub Objective-C classes won&apos;t work correctly when using the dynamic registrar; please use any of the static registrars instead..
+        /// </summary>
+        public static string MX8059 {
+            get {
+                return ResourceManager.GetString("MX8059", resourceCulture);
+            }
+        }
     }
 }

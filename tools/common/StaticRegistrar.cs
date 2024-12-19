@@ -3036,8 +3036,11 @@ namespace Registrar {
 									GetAssemblyQualifiedName (@class.Type), @class.ClassMapIndex,
 									(int) flags, flags);
 
-					var use_dynamic = @class.RegisterAttribute?.IsStubClass;
-					if (use_dynamic != true) {
+					bool? use_dynamic = null;
+					if (@class.RegisterAttribute?.IsStubClass == true)
+						use_dynamic = false;
+
+					if (!use_dynamic.HasValue) {
 						if (@class.Type.Resolve ().Module.Assembly.Name.Name == PlatformAssembly) {
 							// we don't need to use the static ref to prevent the linker from removing (otherwise unreferenced) code for monotouch.dll types.
 							use_dynamic = true;
@@ -3115,6 +3118,9 @@ namespace Registrar {
 					iface.Write ("@protocol ").Write (exportedName);
 					declarations.AppendFormat ("@protocol {0};\n", exportedName);
 				} else {
+					var is_stub_class = @class.RegisterAttribute?.IsStubClass;
+					if (is_stub_class == true)
+						iface.WriteLine ("__attribute__((objc_class_stub)) __attribute__((objc_subclassing_restricted))");
 					iface.Write ("@interface {0} : {1}", class_name, EncodeNonAsciiCharacters (@class.SuperType.ExportedName));
 					declarations.AppendFormat ("@class {0};\n", class_name);
 				}

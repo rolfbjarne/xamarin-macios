@@ -20,6 +20,8 @@ using ObjCRuntime;
 using UIKit;
 #endif
 
+using Xamarin.Bundler;
+
 // Disable until we get around to enable + fix any issues.
 #nullable disable
 
@@ -944,6 +946,11 @@ namespace Registrar {
 				if (!type_map.ContainsKey (type.Handle))
 					type_map [type.Handle] = type;
 				return;
+			}
+
+			if (type.RegisterAttribute?.IsStubClass == true) {
+				ErrorHelper.Show (ErrorHelper.CreateWarning (8059, Errors.MX8059, type.ExportedName, type.Type.FullName)); // Detected a stub Objective-C class ('{0}', for the managed type '{1}') while using the dynamic registrar. Stub Objective-C classes won't work correctly when using the dynamic registrar; please use any of the static registrars instead.
+				// keep going, things may just happen to work.
 			}
 
 			/*FIXME try to guess the name of the missing library - quite trivial for monotouch.dll*/

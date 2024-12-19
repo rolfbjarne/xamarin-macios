@@ -2284,4 +2284,8 @@
 	<data name="MX8058" xml:space="preserve">
 		<value>The dynamic registrar does not support calling base Objective-C constructors with arguments (type: %s, selector: %s). Please use any of the static registrars.</value>
 	</data>
+
+	<data name="MX8059" xml:space="preserve">
+		<value>Detected a stub Objective-C class ('{0}', for the managed type '{1}') while using the dynamic registrar. Stub Objective-C classes won't work correctly when using the dynamic registrar; please use any of the static registrars instead.</value>
+	</data>
 </root>

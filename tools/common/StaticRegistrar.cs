@@ -3036,34 +3036,31 @@ namespace Registrar {
 									GetAssemblyQualifiedName (@class.Type), @class.ClassMapIndex,
 									(int) flags, flags);
 
-					bool? use_dynamic = null;
-					if (@class.RegisterAttribute?.IsStubClass == true)
+					bool use_dynamic;
+					if (@class.RegisterAttribute?.IsStubClass == true) {
 						use_dynamic = false;
+					} else if (@class.Type.Resolve ().Module.Assembly.Name.Name == PlatformAssembly) {
+						// we don't need to use the static ref to prevent the linker from removing (otherwise unreferenced) code for monotouch.dll types.
+						use_dynamic = true;
+						// be smarter: we don't need to use dynamic refs for types available in the lowest version (target deployment) we building for.
+						// We do need to use dynamic class lookup when the following conditions are all true:
+						// * The class is not available in the target deployment version.
+						// * The class is not in a weakly linked framework (for instance if an existing framework introduces a new class, we don't
+						//   weakly link the framework because it already exists in the target deployment version - but since the class doesn't, we
+						//   must use dynamic class lookup to determine if it's available or not.
+					} else {
+						use_dynamic = false;
+					}
 
-					if (!use_dynamic.HasValue) {
-						if (@class.Type.Resolve ().Module.Assembly.Name.Name == PlatformAssembly) {
-							// we don't need to use the static ref to prevent the linker from removing (otherwise unreferenced) code for monotouch.dll types.
-							use_dynamic = true;
-							// be smarter: we don't need to use dynamic refs for types available in the lowest version (target deployment) we building for.
-							// We do need to use dynamic class lookup when the following conditions are all true:
-							// * The class is not available in the target deployment version.
-							// * The class is not in a weakly linked framework (for instance if an existing framework introduces a new class, we don't
-							//   weakly link the framework because it already exists in the target deployment version - but since the class doesn't, we
-							//   must use dynamic class lookup to determine if it's available or not.
-						} else {
-							use_dynamic = false;
-						}
-
-						switch (@class.ExportedName) {
-						case "EKObject":
-							// EKObject's class is a private symbol, so we can't link with it...
-							use_dynamic = true;
-							break;
-						}
+					switch (@class.ExportedName) {
+					case "EKObject":
+						// EKObject's class is a private symbol, so we can't link with it...
+						use_dynamic = true;
+						break;
 					}
 
 					string get_class;
-					if (use_dynamic == true) {
+					if (use_dynamic) {
 						get_class = string.Format ("objc_getClass (\"{0}\")", @class.ExportedName);
 					} else {
 						get_class = string.Format ("[{0} class]", EncodeNonAsciiCharacters (@class.ExportedName));

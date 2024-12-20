@@ -22,7 +22,7 @@ namespace Xamarin.MacDev.Tasks {
 			bool onlyWarn = false;
 			switch (SkipStaticLibraryValidation.ToLowerInvariant ()) {
 			case "true":
-			case "disable"
+			case "disable":
 				return true;
 			case "":
 			case "error":
@@ -34,7 +34,7 @@ namespace Xamarin.MacDev.Tasks {
 				break;
 			default:
 				// TODO: localize
-				Log.LogError (7142, null, MSBStrings.MX7142, SkipStaticLibraryValidation); // Unknown value for 'SkipStaticLibraryValidation': {0}
+				Log.LogError (7142, null, MSBStrings.E7142, SkipStaticLibraryValidation); // Unknown value for 'SkipStaticLibraryValidation': {0}
 				return false;
 			}
 
@@ -49,9 +49,9 @@ namespace Xamarin.MacDev.Tasks {
 					continue;
 
 				if (onlyWarn) {
-					Log.LogWarning (7141, item.ItemSpec, MSBStrings.MX7141, path); // "The library {0} is a static library, and static libraries are not supported with Hot Restart.
+					Log.LogWarning (7141, item.ItemSpec, MSBStrings.E7141, path); // "The library {0} is a static library, and static libraries are not supported with Hot Restart.
 				} else {
-					Log.LogError (7141, item.ItemSpec, MSBStrings.MX7141, path); // The library {0} is a static library, and static libraries are not supported with Hot Restart.
+					Log.LogError (7141, item.ItemSpec, MSBStrings.E7141, path); // The library {0} is a static library, and static libraries are not supported with Hot Restart.
 				}
 			}
 

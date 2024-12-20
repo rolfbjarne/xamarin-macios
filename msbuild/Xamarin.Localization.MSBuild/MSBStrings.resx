@@ -1654,4 +1654,18 @@
             {1}: the exit code of a process
         </comment>
     </data>
+
+    <data name="E7141" xml:space="preserve">
+        <value>The library {0} is a static library, and static libraries are not supported with Hot Restart.</value>
+        <comment>
+            {0}: the path to a file
+        </comment>
+    </data>
+
+    <data name="E7142" xml:space="preserve">
+        <value>Unknown value for 'SkipStaticLibraryValidation': {0}</value>
+        <comment>
+            The following are literal names and should not be translated: SkipStaticLibraryValidation
+        </comment>
+    </data>
 </root>

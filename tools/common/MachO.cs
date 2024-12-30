@@ -477,6 +477,27 @@ namespace Xamarin {
 			return Abi.None;
 		}
 
+		public static bool IsStaticLibrary (string filename, bool throw_if_error)
+		{
+			using var fs = File.OpenRead (filename);
+			using var reader = new BinaryReader (fs);
+			if (StaticLibrary.IsStaticLibrary (reader, throw_if_error))
+				return true;
+			if (!MachOFile.IsMachOLibrary (null, reader, throw_if_error))
+				return false;
+			var f = ReadFile (reader, filename);
+			if (f is StaticLibrary)
+				return true;
+			var fat = f as FatFile;
+			if (fat is null)
+				return false;
+			foreach (var entry in fat.entries!) {
+				if (entry.IsStaticLibrary)
+					return true;
+			}
+			return false;
+		}
+
 		public static bool IsDynamicFramework (string filename)
 		{
 			var f = ReadFile (filename);
@@ -928,6 +949,7 @@ namespace Xamarin {
 		public StaticLibrary? static_library;
 
 		public bool IsDynamicLibrary { get { return entry?.IsDynamicLibrary == true; } }
+		public bool IsStaticLibrary { get => static_library is not null; }
 		public FatFile Parent { get { return parent!; } }
 
 		internal void WriteHeader (BinaryWriter writer)

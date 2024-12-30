@@ -45,7 +45,7 @@ namespace Xamarin.MacDev.Tasks {
 					continue;
 				}
 
-				if (MachO.IsDynamicFramework (path))
+				if (!MachO.IsStaticLibrary (path, throw_if_error: false))
 					continue;
 
 				if (onlyWarn) {

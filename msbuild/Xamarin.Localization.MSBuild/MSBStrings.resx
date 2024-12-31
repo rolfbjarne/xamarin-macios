@@ -1668,4 +1668,11 @@
             The following are literal names and should not be translated: SkipStaticLibraryValidation
         </comment>
     </data>
+
+    <data name="E7143" xml:space="preserve">
+        <value>The file {0} is an object file, and object files are not supported with Hot Restart.</value>
+        <comment>
+            {0}: the path to a file
+        </comment>
+    </data>
 </root>

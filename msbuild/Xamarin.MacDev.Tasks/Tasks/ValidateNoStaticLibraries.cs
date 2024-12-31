@@ -45,13 +45,21 @@ namespace Xamarin.MacDev.Tasks {
 					continue;
 				}
 
-				if (!MachO.IsStaticLibrary (path, throw_if_error: false))
+				if (!MachO.IsStaticLibraryOrObjectFile (path, throw_if_error: false, out var objectFile))
 					continue;
 
-				if (onlyWarn) {
-					Log.LogWarning (7141, item.ItemSpec, MSBStrings.E7141, path); // "The library {0} is a static library, and static libraries are not supported with Hot Restart.
+				if (objectFile) {
+					if (onlyWarn) {
+						Log.LogWarning (7143, item.ItemSpec, MSBStrings.E7143, path); // The file {0} is an object file, and an object files are not supported with Hot Restart.
+					} else {
+						Log.LogError (7143, item.ItemSpec, MSBStrings.E7143, path); // The file {0} is an object file, and an object files are not supported with Hot Restart.
+					}
 				} else {
-					Log.LogError (7141, item.ItemSpec, MSBStrings.E7141, path); // The library {0} is a static library, and static libraries are not supported with Hot Restart.
+					if (onlyWarn) {
+						Log.LogWarning (7141, item.ItemSpec, MSBStrings.E7141, path); // The library {0} is a static library, and static libraries are not supported with Hot Restart.
+					} else {
+						Log.LogError (7141, item.ItemSpec, MSBStrings.E7141, path); // The library {0} is a static library, and static libraries are not supported with Hot Restart.
+					}
 				}
 			}
 

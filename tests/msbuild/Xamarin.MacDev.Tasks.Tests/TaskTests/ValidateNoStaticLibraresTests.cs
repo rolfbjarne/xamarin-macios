@@ -39,9 +39,9 @@ namespace Xamarin.MacDev.Tasks {
 			var task = CreateTask (skipStaticLibraryValidation, paths);
 			ExecuteTask (task, expectedErrorCount: 3);
 			Assert.AreEqual (0, Engine.Logger.WarningsEvents.Count, "Warning Count");
-			Assert.AreEqual ($"The library {paths [0]} is a static library, and static libraries are not supported with Hot Restart.", Engine.Logger.ErrorEvents [0].Message, "Error message 1");
-			Assert.AreEqual ($"The library {paths [5]} is a static library, and static libraries are not supported with Hot Restart.", Engine.Logger.ErrorEvents [1].Message, "Error message 2");
-			Assert.AreEqual ($"The file {paths [6]} is an object file, and object files are not supported with Hot Restart.", Engine.Logger.ErrorEvents [2].Message, "Error message 3");
+			Assert.AreEqual ($"The library {paths [0]} is a static library, and static libraries are not supported with Hot Restart. Set 'SkipStaticLibraryValidation=true' in the project file to ignore this error.", Engine.Logger.ErrorEvents [0].Message, "Error message 1");
+			Assert.AreEqual ($"The library {paths [5]} is a static library, and static libraries are not supported with Hot Restart. Set 'SkipStaticLibraryValidation=true' in the project file to ignore this error.", Engine.Logger.ErrorEvents [1].Message, "Error message 2");
+			Assert.AreEqual ($"The file {paths [6]} is an object file, and object files are not supported with Hot Restart. Set 'SkipStaticLibraryValidation=true' in the project file to ignore this error.", Engine.Logger.ErrorEvents [2].Message, "Error message 3");
 		}
 
 		[Test]
@@ -58,7 +58,7 @@ namespace Xamarin.MacDev.Tasks {
 			var task = CreateTask (skipStaticLibraryValidation, paths);
 			ExecuteTask (task, expectedErrorCount: 0);
 			Assert.AreEqual (1, Engine.Logger.WarningsEvents.Count, "Warning Count");
-			Assert.AreEqual ($"The library {paths [0]} is a static library, and static libraries are not supported with Hot Restart.", Engine.Logger.WarningsEvents [0].Message, "Error message");
+			Assert.AreEqual ($"The library {paths [0]} is a static library, and static libraries are not supported with Hot Restart. Set 'SkipStaticLibraryValidation=true' in the project file to ignore this error.", Engine.Logger.WarningsEvents [0].Message, "Error message");
 		}
 
 		[Test]
@@ -93,13 +93,13 @@ namespace Xamarin.MacDev.Tasks {
 			var task = CreateTask (skipStaticLibraryValidation, paths);
 			ExecuteTask (task, expectedErrorCount: 1);
 			Assert.AreEqual (0, Engine.Logger.WarningsEvents.Count, "Warning Count");
-			Assert.AreEqual ($"Unknown value for 'SkipStaticLibraryValidation': {skipStaticLibraryValidation}", Engine.Logger.ErrorEvents [0].Message, "Error Message");
+			Assert.AreEqual ($"Unknown value for 'SkipStaticLibraryValidation': {skipStaticLibraryValidation}. Valid values are: 'true', 'false', 'warn'.", Engine.Logger.ErrorEvents [0].Message, "Error Message");
 		}
 
 		[Test]
-		[TestCase ("warn")]
+		[TestCase ("")]
 		[TestCase ("error")]
-		public void StaticLibraries_Inexistent (string skipStaticLibraryValidation)
+		public void StaticLibraries_Error_Inexistent (string skipStaticLibraryValidation)
 		{
 			var task = CreateTask (skipStaticLibraryValidation, "/does/not/exist");
 			ExecuteTask (task, expectedErrorCount: 1);
@@ -107,5 +107,14 @@ namespace Xamarin.MacDev.Tasks {
 			Assert.AreEqual ($"The file '/does/not/exist' does not exist.", Engine.Logger.ErrorEvents [0].Message.TrimEnd (), "Error Message");
 		}
 
+		[Test]
+		[TestCase ("warn")]
+		public void StaticLibraries_Warn_Inexistent (string skipStaticLibraryValidation)
+		{
+			var task = CreateTask (skipStaticLibraryValidation, "/does/not/exist");
+			ExecuteTask (task, expectedErrorCount: 0);
+			Assert.AreEqual (1, Engine.Logger.WarningsEvents.Count, "Warning Count");
+			Assert.AreEqual ($"The file '/does/not/exist' does not exist.", Engine.Logger.WarningsEvents [0].Message.TrimEnd (), "Error Message");
+		}
 	}
 }

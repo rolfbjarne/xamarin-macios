@@ -33,15 +33,21 @@ namespace Xamarin.MacDev.Tasks {
 				onlyWarn = true;
 				break;
 			default:
-				// TODO: localize
 				Log.LogError (7142, null, MSBStrings.E7142, SkipStaticLibraryValidation); // Unknown value for 'SkipStaticLibraryValidation': {0}
 				return false;
 			}
 
 			foreach (var item in ValidateItems) {
 				var path = item.ItemSpec;
+				if (Directory.Exists (path))
+					continue; // directories are neither static libraries nor object files.
+
 				if (!File.Exists (path)) {
-					Log.LogError (158, path, MSBStrings.E0158 /* The file '{0}' does not exist. */, path);
+					if (onlyWarn) {
+						Log.LogWarning (158, path, MSBStrings.E0158 /* The file '{0}' does not exist. */, path);
+					} else {
+						Log.LogError (158, path, MSBStrings.E0158 /* The file '{0}' does not exist. */, path);
+					}
 					continue;
 				}
 

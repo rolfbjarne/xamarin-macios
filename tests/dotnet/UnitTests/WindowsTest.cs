@@ -377,7 +377,7 @@ namespace Xamarin.Tests {
 			var rv = DotNet.AssertBuildFailure (project_path, properties);
 			var errors = BinLog.GetBuildLogErrors (rv.BinLogPath).ToList ();
 			AssertErrorMessages (errors,
-				$@"The library ..\..\..\test-libraries\.libs\iossimulator\libtest.a is a static library, and static libraries are not supported with Hot Restart."
+				$@"The library ..\..\..\test-libraries\.libs\iossimulator\libtest.a is a static library, and static libraries are not supported with Hot Restart.",
 				$@"The library ..\..\..\test-libraries\.libs\iossimulator\libtest2.a is a static library, and static libraries are not supported with Hot Restart."
 			);
 		}

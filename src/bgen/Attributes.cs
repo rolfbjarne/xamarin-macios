@@ -1007,6 +1007,13 @@ public abstract class AvailabilityBaseAttribute : Attribute {
 
 		if (Version is not null)
 			builder.Append (Version.ToString (Version.Build >= 0 ? 3 : 2));
+
+#if BGENERATOR
+		// workaround for https://github.com/dotnet/roslyn-analyzers/issues/7239
+		// the analyzer gets confused with a version-less 'maccatalyst' string, so provide the minimum version.
+		if (Platform == PlatformName.MacCatalyst && Version is null)
+			builder.Append (Xamarin.SdkVersions.DotNetMinMacCatalyst);
+#endif
 	}
 
 	public override string ToString ()

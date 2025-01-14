@@ -44,9 +44,9 @@ namespace Accounts {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public class AccountStoreOptions : DictionaryContainer {
 #if !COREBUILD

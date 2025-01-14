@@ -141,10 +141,10 @@ namespace CoreText {
 #endif // !NET
 
 #if NET
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public class CTFontDescriptorAttributes {
 
@@ -405,7 +405,7 @@ namespace CoreText {
 #if NET && (__IOS__ || __MACCATALYST__)
 		[SupportedOSPlatform ("ios13.0")]
 		[UnsupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("macos")]
 		public string? RegistrationUserInfo {
 			get { return Adapter.GetStringValue (Dictionary, CTFontDescriptorAttributeKey.RegistrationUserInfo); }
@@ -415,10 +415,10 @@ namespace CoreText {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public partial class CTFontDescriptor : NativeObject {
 		[Preserve (Conditional = true)]
@@ -767,10 +767,10 @@ namespace CoreText {
 		}
 		#endregion
 #if NET
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		[DllImport (Constants.CoreTextLibrary)]
 		static unsafe extern byte CTFontDescriptorMatchFontDescriptorsWithProgressHandler (IntPtr descriptors, IntPtr mandatoryAttributes, BlockLiteral* progressBlock);
@@ -798,10 +798,10 @@ namespace CoreText {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public static bool MatchFontDescriptors (CTFontDescriptor [] descriptors, NSSet? mandatoryAttributes, CTFontDescriptorProgressHandler progressHandler)

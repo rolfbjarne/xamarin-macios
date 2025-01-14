@@ -95,10 +95,10 @@ namespace SceneKit {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public class SCNPhysicsShapeOptions {
 		public SCNPhysicsShapeType? ShapeType { get; set; }

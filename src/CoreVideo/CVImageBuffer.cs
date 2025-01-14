@@ -42,10 +42,10 @@ namespace CoreVideo {
 
 	// CVImageBuffer.h
 #if NET
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public partial class CVImageBuffer : CVBuffer {
 #if !COREBUILD
@@ -100,7 +100,7 @@ namespace CoreVideo {
 		[UnsupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos10.4")]
 #else
 		[Deprecated (PlatformName.MacOSX, 10, 4)]
@@ -128,19 +128,19 @@ namespace CoreVideo {
 #endif
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.CoreVideoLibrary)]
 		extern static int CVYCbCrMatrixGetIntegerCodePointForString (IntPtr yCbCrMatrixString);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public static int GetCodePoint (CVImageBufferYCbCrMatrix yCbCrMatrix)
 		{
@@ -148,19 +148,19 @@ namespace CoreVideo {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.CoreVideoLibrary)]
 		extern static int CVColorPrimariesGetIntegerCodePointForString (IntPtr colorPrimariesString);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public static int GetCodePoint (CVImageBufferColorPrimaries color)
 		{
@@ -168,19 +168,19 @@ namespace CoreVideo {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.CoreVideoLibrary)]
 		extern static int CVTransferFunctionGetIntegerCodePointForString (IntPtr colorPrimariesString);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public static int GetCodePoint (CVImageBufferTransferFunction function)
 		{
@@ -188,19 +188,19 @@ namespace CoreVideo {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.CoreVideoLibrary)]
 		extern static IntPtr CVYCbCrMatrixGetStringForIntegerCodePoint (int yCbCrMatrixCodePoint);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public static CVImageBufferYCbCrMatrix GetYCbCrMatrixOption (int yCbCrMatrixCodePoint)
 		{
@@ -209,19 +209,19 @@ namespace CoreVideo {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.CoreVideoLibrary)]
 		extern static IntPtr CVColorPrimariesGetStringForIntegerCodePoint (int colorPrimariesCodePoint);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public static CVImageBufferColorPrimaries GetColorPrimariesOption (int colorPrimariesCodePoint)
 		{
@@ -230,19 +230,19 @@ namespace CoreVideo {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.CoreVideoLibrary)]
 		extern static IntPtr CVTransferFunctionGetStringForIntegerCodePoint (int transferFunctionCodePoint);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public static CVImageBufferTransferFunction GetTransferFunctionOption (int transferFunctionCodePoint)
 		{

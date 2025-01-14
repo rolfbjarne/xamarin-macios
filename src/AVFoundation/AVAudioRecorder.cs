@@ -62,9 +62,9 @@ namespace AVFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 #endif
 		public static AVAudioRecorder? Create (NSUrl url, AVAudioFormat? format, out NSError? error)

@@ -46,8 +46,8 @@ using NativeHandle = System.IntPtr;
 
 namespace AddressBook {
 #if NET
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("ios12.2")]
 	[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]
 	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
 #else
@@ -112,8 +112,8 @@ namespace AddressBook {
 	}
 
 #if NET
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("ios12.2")]
 	[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]
 	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
 #else
@@ -131,8 +131,8 @@ namespace AddressBook {
 		internal extern static IntPtr ABAddressBookCreate ();
 
 #if NET
-		[SupportedOSPlatform ("maccatalyst")]
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("ios12.2")]
 		[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]
 		[ObsoletedOSPlatform ("ios6.0", "Use the static Create method instead.")]
 #else

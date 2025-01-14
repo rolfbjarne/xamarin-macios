@@ -18,10 +18,10 @@ namespace CoreVideo {
 	public partial class CVPixelBuffer : CVImageBuffer {
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.CoreVideoLibrary)]
 		extern static IntPtr /* IOSurfaceRef */ CVPixelBufferGetIOSurface (
@@ -29,10 +29,10 @@ namespace CoreVideo {
 		);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public IOSurface.IOSurface? GetIOSurface ()
 		{
@@ -47,10 +47,10 @@ namespace CoreVideo {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.CoreVideoLibrary)]
 		unsafe extern static CVReturn /* IOSurfaceRef */ CVPixelBufferCreateWithIOSurface (
@@ -61,10 +61,10 @@ namespace CoreVideo {
 		);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public static CVPixelBuffer? Create (IOSurface.IOSurface surface, out CVReturn result, CVPixelBufferAttributes? pixelBufferAttributes = null)
 		{
@@ -88,10 +88,10 @@ namespace CoreVideo {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public static CVPixelBuffer? Create (IOSurface.IOSurface surface, CVPixelBufferAttributes? pixelBufferAttributes = null)
 		{

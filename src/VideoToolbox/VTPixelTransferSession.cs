@@ -25,7 +25,7 @@ using NativeHandle = System.IntPtr;
 namespace VideoToolbox {
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("ios16.0")]
 	[SupportedOSPlatform ("maccatalyst16.0")]
 	[SupportedOSPlatform ("watchos9.0")]

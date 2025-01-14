@@ -24,10 +24,10 @@ using Vector3 = global::OpenTK.Vector3;
 namespace GameplayKit {
 
 #if NET
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("tvos")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("tvos12.2")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct GKBox {
@@ -36,10 +36,10 @@ namespace GameplayKit {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("tvos")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("tvos12.2")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct GKQuad {
@@ -48,10 +48,10 @@ namespace GameplayKit {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("tvos")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("tvos12.2")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct GKTriangle {

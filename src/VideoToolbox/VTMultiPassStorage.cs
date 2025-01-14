@@ -24,10 +24,10 @@ using NativeHandle = System.IntPtr;
 namespace VideoToolbox {
 
 #if NET
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("tvos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("tvos12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 	public class VTMultiPassStorage : NativeObject {
 		bool closed;

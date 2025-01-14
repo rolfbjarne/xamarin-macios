@@ -104,8 +104,8 @@ namespace UIKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public PHLivePhoto LivePhoto {
 			get {
@@ -126,8 +126,8 @@ namespace UIKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public PHAsset PHAsset {
 			get {
@@ -136,8 +136,8 @@ namespace UIKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public NSUrl ImageUrl {
 			get {

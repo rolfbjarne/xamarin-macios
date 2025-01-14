@@ -8,7 +8,7 @@ namespace SensorKit {
 
 #if NET
 	[SupportedOSPlatform ("ios14.0")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[UnsupportedOSPlatform ("tvos")]
 	[UnsupportedOSPlatform ("macos")]
 #else

@@ -44,8 +44,8 @@ namespace CoreGraphics {
 #if MONOMAC || __MACCATALYST__
 	// uint32_t -> CGWindow.h (OSX SDK only)
 #if NET
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif
@@ -61,8 +61,8 @@ namespace CoreGraphics {
 
 	// uint32_t -> CGWindow.h (OSX SDK only)
 #if NET
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif
@@ -134,10 +134,10 @@ namespace CoreGraphics {
 
 
 #if NET
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	// CGImage.h
 	public class CGImage : NativeObject {
@@ -252,10 +252,10 @@ namespace CoreGraphics {
 
 #if MONOMAC || __MACCATALYST__
 #if NET
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("maccatalyst18.0", "Use ScreenCaptureKit instead.")]
 		[UnsupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos15.0", "Use ScreenCaptureKit instead.")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -267,10 +267,10 @@ namespace CoreGraphics {
 		static extern IntPtr CGWindowListCreateImage(CGRect screenBounds, CGWindowListOption windowOption, uint windowID, CGWindowImageOption imageOption);
         
 #if NET
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("maccatalyst18.0", "Use ScreenCaptureKit instead.")]
 		[UnsupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos15.0", "Use ScreenCaptureKit instead.")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -282,10 +282,10 @@ namespace CoreGraphics {
 		}
 
 #if NET
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("maccatalyst18.0", "Use ScreenCaptureKit instead.")]
 		[UnsupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos15.0", "Use ScreenCaptureKit instead.")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -537,20 +537,20 @@ namespace CoreGraphics {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		static extern IntPtr /* CFStringRef */ CGImageGetUTType (/* __nullable CGImageRef* */ IntPtr image);
 
 		// we return an NSString, instead of a string, as all our UTType constants are NSString (see mobilecoreservices.cs)
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public NSString? UTType {
 			get {
@@ -560,36 +560,36 @@ namespace CoreGraphics {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		static extern CGImagePixelFormatInfo CGImageGetPixelFormatInfo (/* __nullable CGImageRef */ IntPtr handle);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public CGImagePixelFormatInfo PixelFormatInfo => CGImageGetPixelFormatInfo (Handle);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		static extern CGImageByteOrderInfo CGImageGetByteOrderInfo (/* __nullable CGImageRef */ IntPtr handle);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public CGImageByteOrderInfo ByteOrderInfo => CGImageGetByteOrderInfo (Handle);
 

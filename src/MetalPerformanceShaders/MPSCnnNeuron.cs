@@ -8,10 +8,10 @@ using ObjCRuntime;
 namespace MetalPerformanceShaders {
 	public partial class MPSCnnNeuronPReLU {
 #if NET
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("tvos12.0", "Please use the '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[ObsoletedOSPlatform ("macos10.14", "Please use the '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[ObsoletedOSPlatform ("ios12.0", "Please use the '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]

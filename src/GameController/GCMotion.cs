@@ -19,9 +19,9 @@ namespace GameController {
 
 #if NET
 	[SupportedOSPlatform ("ios13.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("tvos13.0")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[Introduced (PlatformName.iOS, 13, 0)]
 	[Introduced (PlatformName.TvOS, 13, 0)]
@@ -33,9 +33,9 @@ namespace GameController {
 	}
 #if NET
 	[SupportedOSPlatform ("ios13.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("tvos13.0")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[Introduced (PlatformName.iOS, 13, 0)]
 	[Introduced (PlatformName.TvOS, 13, 0)]
@@ -48,9 +48,9 @@ namespace GameController {
 
 #if NET
 	[SupportedOSPlatform ("ios13.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("tvos13.0")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[Introduced (PlatformName.iOS, 13, 0)]
 	[Introduced (PlatformName.TvOS, 13, 0)]

@@ -23,9 +23,9 @@ namespace MapKit {
 		Walking,
 		Transit,
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
 		[NoTV]
@@ -34,9 +34,9 @@ namespace MapKit {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public class MKLaunchOptions {
 		public MKDirectionsMode? DirectionsMode { get; set; }
@@ -47,9 +47,9 @@ namespace MapKit {
 
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 #endif
 		public MKMapCamera? Camera { get; set; }
 

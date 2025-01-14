@@ -157,10 +157,10 @@ namespace CoreVideo {
 		[Obsolete ("Use 'CVPixelFormatKeys.ContainsGrayscale' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public static readonly NSString ContainsGrayscaleKey;
 
@@ -289,10 +289,10 @@ namespace CoreVideo {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("tvos15.0")]
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[iOS (15, 0), MacCatalyst (15, 0), TV (15, 0), Mac (12, 0)]
 #endif
@@ -303,10 +303,10 @@ namespace CoreVideo {
 		/// <param name="pixelFormat">The pixel format to check.</param>
 		/// <returns>Whether the specified pixel format is supported or not.</returns>
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("tvos15.0")]
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[iOS (15, 0), MacCatalyst (15, 0), TV (15, 0), Mac (12, 0)]
 #endif
@@ -316,10 +316,10 @@ namespace CoreVideo {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		public CVFillExtendedPixelsCallBackDataStruct? FillExtendedPixelsCallbackStruct {
 			get {
 				var data = FillExtendedPixelsCallback;

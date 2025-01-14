@@ -36,10 +36,10 @@ using NativeHandle = System.IntPtr;
 namespace CoreFoundation {
 
 #if NET
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("tvos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("tvos12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 	public sealed class OSLog : NativeObject {
 

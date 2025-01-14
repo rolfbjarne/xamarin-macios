@@ -8,8 +8,8 @@ using ObjCRuntime;
 
 namespace CoreGraphics {
 
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
 	[UnsupportedOSPlatform ("ios")]
 	[UnsupportedOSPlatform ("tvos")]
 	public static class CGSession {
@@ -32,8 +32,8 @@ namespace CoreGraphics {
 	// This looks like it should be in an api definition bound using [Field] attributes,
 	// but these aren't actual native fields, in the headers they're declared as constants:
 	//     #define kCGSession*Key @"SomeStringValue"
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
 	[UnsupportedOSPlatform ("ios")]
 	[UnsupportedOSPlatform ("tvos")]
 	public static class CGSessionKeys {

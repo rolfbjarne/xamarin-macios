@@ -10,9 +10,9 @@ namespace CoreAnimation {
 
 #if NET
 	[SupportedOSPlatform ("tvos15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("ios15.0")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[TV (15, 0)]
 	[iOS (15, 0)]

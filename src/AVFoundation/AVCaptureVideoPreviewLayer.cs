@@ -15,9 +15,9 @@ namespace AVFoundation {
 		public enum InitMode {
 			WithConnection,
 #if NET
-			[SupportedOSPlatform ("ios")]
-			[SupportedOSPlatform ("macos")]
-			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios12.2")]
+			[SupportedOSPlatform ("macos12.0")]
+			[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 			WithNoConnection,
 		}

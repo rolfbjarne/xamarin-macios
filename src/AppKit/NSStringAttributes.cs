@@ -17,6 +17,10 @@ using Foundation;
 #nullable enable
 
 namespace AppKit {
+	[SupportedOSPlatform ("macos")]
+	[UnsupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("ios")]
+	[UnsupportedOSPlatform ("tvos")]
 	public partial class NSStringAttributes : DictionaryContainer {
 		static internal NSDictionary? ToDictionary (
 			NSFont? font,

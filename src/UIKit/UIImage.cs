@@ -65,12 +65,6 @@ namespace UIKit {
 				return Runtime.GetNSObject<NSData> (UIImageJPEGRepresentation (Handle, compressionQuality));
 		}
 
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
-		[UnsupportedOSPlatform ("ios17.0")]
-		[UnsupportedOSPlatform ("tvos17.0")]
-		[UnsupportedOSPlatform ("maccatalyst17.0")]
 		public UIImage Scale (CGSize newSize, nfloat scaleFactor)
 		{
 			UIGraphics.BeginImageContextWithOptions (newSize, false, scaleFactor);
@@ -83,12 +77,6 @@ namespace UIKit {
 			return scaledImage;
 		}
 
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
-		[UnsupportedOSPlatform ("ios17.0")]
-		[UnsupportedOSPlatform ("tvos17.0")]
-		[UnsupportedOSPlatform ("maccatalyst17.0")]
 		public UIImage Scale (CGSize newSize)
 		{
 			UIGraphics.BeginImageContext (newSize);

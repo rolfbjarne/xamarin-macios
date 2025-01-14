@@ -37,7 +37,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 #endif
@@ -46,7 +46,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 #endif
@@ -101,7 +101,7 @@ namespace Security {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		[DllImport (Constants.SecurityLibrary)]
@@ -110,7 +110,7 @@ namespace Security {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		[DllImport (Constants.SecurityLibrary)]
@@ -119,7 +119,7 @@ namespace Security {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		public bool NetworkFetchAllowed {
@@ -142,7 +142,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 #endif
@@ -151,7 +151,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 #endif
@@ -169,7 +169,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Evaluate (DispatchQueue, SecTrustWithErrorCallback)' instead.")]
@@ -202,7 +202,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Evaluate (DispatchQueue, SecTrustWithErrorCallback)' instead.")]
@@ -238,7 +238,7 @@ namespace Security {
 		[SupportedOSPlatform ("tvos13.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios13.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[TV (13, 0)]
 		[iOS (13, 0)]
@@ -268,7 +268,7 @@ namespace Security {
 		[SupportedOSPlatform ("tvos13.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios13.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[TV (13, 0)]
 		[iOS (13, 0)]
@@ -295,7 +295,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 #endif
@@ -304,7 +304,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 #endif
@@ -324,7 +324,7 @@ namespace Security {
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe static extern byte SecTrustEvaluateWithError (/* SecTrustRef */ IntPtr trust, /* CFErrorRef** */ IntPtr* error);
@@ -333,7 +333,7 @@ namespace Security {
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public bool Evaluate (out NSError? error)
 		{
@@ -349,7 +349,7 @@ namespace Security {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		[DllImport (Constants.SecurityLibrary)]
@@ -358,7 +358,7 @@ namespace Security {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		public NSDictionary GetResult ()
@@ -369,7 +369,7 @@ namespace Security {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		[DllImport (Constants.SecurityLibrary)]
@@ -379,7 +379,7 @@ namespace Security {
 #if NET
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		void SetOCSPResponse (IntPtr ocsp)
@@ -391,7 +391,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 #endif
@@ -405,7 +405,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 #endif
@@ -420,7 +420,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 #endif
@@ -436,7 +436,7 @@ namespace Security {
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.SecurityLibrary)]
 		static extern SecStatusCode /* OSStatus */ SecTrustSetSignedCertificateTimestamps (/* SecTrustRef* */ IntPtr trust, /* CFArrayRef* */ IntPtr sctArray);
@@ -445,7 +445,7 @@ namespace Security {
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public SecStatusCode SetSignedCertificateTimestamps (IEnumerable<NSData> sct)
 		{
@@ -460,7 +460,7 @@ namespace Security {
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public SecStatusCode SetSignedCertificateTimestamps (NSArray<NSData> sct)
 		{

@@ -27,7 +27,7 @@ namespace CoreVideo {
 	// CVPixelBufferPool.h
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 #endif
@@ -166,7 +166,7 @@ namespace CoreVideo {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		[DllImport (Constants.CoreVideoLibrary)]
@@ -176,7 +176,7 @@ namespace CoreVideo {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		public void Flush (CVPixelBufferPoolFlushFlags options)

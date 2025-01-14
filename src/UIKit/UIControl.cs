@@ -197,7 +197,7 @@ namespace UIKit {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		public event EventHandler PrimaryActionTriggered {

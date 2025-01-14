@@ -17,7 +17,7 @@ using ObjCRuntime;
 namespace EventKitUI {
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 	public static class EKUIBundle {
 

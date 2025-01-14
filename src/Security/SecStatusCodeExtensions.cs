@@ -17,7 +17,7 @@ using Foundation;
 namespace Security {
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 #endif
@@ -26,7 +26,7 @@ namespace Security {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 #endif
 		[DllImport (Constants.SecurityLibrary)]
@@ -37,7 +37,7 @@ namespace Security {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 #endif
 		public static string GetStatusDescription (this SecStatusCode status)

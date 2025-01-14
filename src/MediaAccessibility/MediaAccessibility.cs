@@ -22,7 +22,7 @@ namespace MediaAccessibility {
 #if NET
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("tvos")]
 #endif
 	public static partial class MACaptionAppearance {
@@ -262,7 +262,7 @@ namespace MediaAccessibility {
 		[SupportedOSPlatform ("tvos13.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios13.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[TV (13, 0)]
 		[iOS (13, 0)]
@@ -274,7 +274,7 @@ namespace MediaAccessibility {
 		[SupportedOSPlatform ("tvos13.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios13.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[TV (13, 0)]
 		[iOS (13, 0)]
@@ -293,7 +293,7 @@ namespace MediaAccessibility {
 		[SupportedOSPlatform ("tvos13.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios13.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[TV (13, 0)]
 		[iOS (13, 0)]
@@ -340,7 +340,7 @@ namespace MediaAccessibility {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 #endif
@@ -348,7 +348,7 @@ namespace MediaAccessibility {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		[DllImport (Constants.MediaAccessibilityLibrary)]

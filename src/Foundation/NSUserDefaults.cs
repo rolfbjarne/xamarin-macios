@@ -14,7 +14,7 @@ namespace Foundation {
 #if NET
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("macos10.10")]
 		[ObsoletedOSPlatform ("ios7.0")]
@@ -28,7 +28,7 @@ namespace Foundation {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 #endif

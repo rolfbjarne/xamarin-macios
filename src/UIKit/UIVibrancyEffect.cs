@@ -23,7 +23,7 @@ namespace UIKit {
 		// note: we cannot reuse the same method name - as it would break compilation of existing apps
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("ios10.0", "Use 'CreatePrimaryVibrancyEffectForNotificationCenter' instead.")]
 #else
@@ -36,7 +36,7 @@ namespace UIKit {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("ios13.0", "Use 'UIVibrancyEffect.CreateWidgetEffectForNotificationCenter' instead.")]
 #else
@@ -49,7 +49,7 @@ namespace UIKit {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("ios13.0", "Use 'UIVibrancyEffect.CreateWidgetEffectForNotificationCenter' instead.")]
 #else
@@ -62,7 +62,7 @@ namespace UIKit {
 
 #if NET
 		[SupportedOSPlatform ("ios13.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #else
 		[iOS (13,0)]

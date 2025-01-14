@@ -64,7 +64,7 @@ namespace SystemConfiguration {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios14.0")]
 		[ObsoletedOSPlatform ("maccatalyst14.0")]
 #else
@@ -76,7 +76,7 @@ namespace SystemConfiguration {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios14.0")]
 		[ObsoletedOSPlatform ("maccatalyst14.0")]
 #else
@@ -106,7 +106,7 @@ namespace SystemConfiguration {
 #if NET
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'NEHotspotNetwork.FetchCurrent' instead.")]
 		[ObsoletedOSPlatform ("ios14.0", "Use 'NEHotspotNetwork.FetchCurrent' instead.")]
 #else
@@ -128,7 +128,7 @@ namespace SystemConfiguration {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios9.0")]
 		[ObsoletedOSPlatform ("maccatalyst13.1")]
 #else
@@ -140,7 +140,7 @@ namespace SystemConfiguration {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios9.0")]
 		[ObsoletedOSPlatform ("maccatalyst13.1")]
 #else
@@ -152,7 +152,7 @@ namespace SystemConfiguration {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("maccatalyst13.1")]
 		[ObsoletedOSPlatform ("ios9.0")]
 #else
@@ -168,7 +168,7 @@ namespace SystemConfiguration {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("maccatalyst13.1")]
 		[ObsoletedOSPlatform ("ios9.0")]
 #else
@@ -184,7 +184,7 @@ namespace SystemConfiguration {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("maccatalyst13.1")]
 		[ObsoletedOSPlatform ("ios9.0")]
 #else
@@ -196,7 +196,7 @@ namespace SystemConfiguration {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("maccatalyst13.1")]
 		[ObsoletedOSPlatform ("ios9.0")]
 #else

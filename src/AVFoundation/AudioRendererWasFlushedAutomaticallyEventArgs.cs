@@ -10,7 +10,7 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 	public partial class AudioRendererWasFlushedAutomaticallyEventArgs {
 		public CMTime AudioRendererFlushTime {

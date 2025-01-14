@@ -10,7 +10,7 @@ namespace MetalPerformanceShaders {
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[Introduced (PlatformName.TvOS, 11, 0, PlatformArchitecture.All, null)]
 #endif

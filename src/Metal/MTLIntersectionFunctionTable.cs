@@ -10,7 +10,7 @@ namespace Metal {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	// add some extension methods to make the API of the protocol nicer
@@ -19,7 +19,7 @@ namespace Metal {
 #if NET
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios14.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
 		[iOS (14, 0)]

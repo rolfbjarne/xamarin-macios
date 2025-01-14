@@ -24,7 +24,7 @@ namespace Network {
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 	public class NWIPMetadata : NWProtocolMetadata {
 

@@ -10,7 +10,7 @@ namespace CoreBluetooth {
 #if NET
 		[SupportedOSPlatform ("ios13.0")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #else
 		[iOS (13,0)]

@@ -22,7 +22,7 @@ namespace SpriteKit {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		public static T? FromFile<T> (string file) where T : SKNode
@@ -64,7 +64,7 @@ namespace SpriteKit {
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public static SKNode? Create (string filename, Type [] types, out NSError error)
 		{
@@ -87,7 +87,7 @@ namespace SpriteKit {
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public static SKNode? Create (string filename, NSSet<Class> classes, out NSError error)
 		{

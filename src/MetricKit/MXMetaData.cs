@@ -14,7 +14,7 @@ namespace MetricKit {
 
 #if NET
 		[SupportedOSPlatform ("ios14.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("tvos")]
 #else

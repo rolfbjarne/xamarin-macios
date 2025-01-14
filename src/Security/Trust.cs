@@ -134,7 +134,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("tvos12.1", "Use 'SecTrust.Evaluate (out NSError)' instead.")]
@@ -150,7 +150,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("tvos12.1", "Use 'SecTrust.Evaluate (out NSError)' instead.")]
@@ -186,7 +186,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("macos12.0")]
@@ -204,7 +204,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("macos12.0", "Use the 'GetCertificateChain' method instead.")]
@@ -230,7 +230,7 @@ namespace Security {
 		[SupportedOSPlatform ("tvos15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[TV (15, 0)]
 		[iOS (15, 0)]
@@ -243,7 +243,7 @@ namespace Security {
 		[SupportedOSPlatform ("tvos15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[TV (15, 0)]
 		[iOS (15, 0)]
@@ -254,7 +254,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("macos11.0")]
@@ -271,7 +271,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("macos11.0", "Use 'GetKey' instead.")]
@@ -291,7 +291,7 @@ namespace Security {
 		[SupportedOSPlatform ("ios14.0")]
 		[SupportedOSPlatform ("tvos14.0")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[iOS (14, 0)]
 		[TV (14, 0)]
@@ -304,7 +304,7 @@ namespace Security {
 		[SupportedOSPlatform ("ios14.0")]
 		[SupportedOSPlatform ("tvos14.0")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[iOS (14, 0)]
 		[TV (14, 0)]
@@ -318,7 +318,7 @@ namespace Security {
 #if NET
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		[DllImport (Constants.SecurityLibrary)]
@@ -327,7 +327,7 @@ namespace Security {
 #if NET
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		public NSData? GetExceptions ()
@@ -338,7 +338,7 @@ namespace Security {
 #if NET
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		[DllImport (Constants.SecurityLibrary)]
@@ -347,7 +347,7 @@ namespace Security {
 #if NET
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		public bool SetExceptions (NSData data)

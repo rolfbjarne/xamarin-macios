@@ -26,7 +26,7 @@ namespace CoreGraphics {
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 #if NET
@@ -44,7 +44,7 @@ namespace CoreGraphics {
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 	public partial class CGColorConversionInfo : NativeObject {
 		[Preserve (Conditional = true)]
@@ -134,7 +134,7 @@ namespace CoreGraphics {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios13.0")]
 		[SupportedOSPlatform ("tvos13.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[iOS (13, 0)]
 		[TV (13, 0)]
@@ -145,7 +145,7 @@ namespace CoreGraphics {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios13.0")]
 		[SupportedOSPlatform ("tvos13.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		static IntPtr Create (CGColorSpace source, CGColorSpace destination, NSDictionary? options)
 		{
 			if (source is null)
@@ -160,7 +160,7 @@ namespace CoreGraphics {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios13.0")]
 		[SupportedOSPlatform ("tvos13.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[iOS (13, 0)]
 		[TV (13, 0)]
@@ -174,7 +174,7 @@ namespace CoreGraphics {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios13.0")]
 		[SupportedOSPlatform ("tvos13.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[iOS (13, 0)]
 		[TV (13, 0)]

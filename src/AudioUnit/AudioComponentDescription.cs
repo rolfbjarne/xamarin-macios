@@ -51,7 +51,7 @@ namespace AudioUnit {
 		Generator = 0x6175676e, // 'augn'
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 #endif
@@ -69,25 +69,25 @@ namespace AudioUnit {
 #if !MONOMAC
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		RemoteEffect = 0x61757278, // 'aurx',
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		RemoteGenerator = 0x61757267, // 'aurg',
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		RemoteInstrument = 0x61757269, // 'auri',
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		RemoteMusicEffect = 0x6174726d, // 'aurm'
@@ -104,7 +104,7 @@ namespace AudioUnit {
 #if NET
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		Remote = 0x72696f63, // 'rioc'
@@ -119,7 +119,7 @@ namespace AudioUnit {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 #endif
@@ -141,7 +141,7 @@ namespace AudioUnit {
 #else
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'AudioTypeConverter.NewTimePitch' instead.")]
@@ -164,7 +164,7 @@ namespace AudioUnit {
 		LowShelfFilter = 0x6c736866, // 'lshf'
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("ios7.0")]
@@ -180,7 +180,7 @@ namespace AudioUnit {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 #endif
@@ -284,7 +284,7 @@ namespace AudioUnit {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 #endif

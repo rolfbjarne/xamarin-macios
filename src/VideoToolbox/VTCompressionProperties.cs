@@ -291,7 +291,7 @@ namespace VideoToolbox {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public VTH264EntropyMode H264EntropyMode {
 			get {
@@ -502,7 +502,7 @@ namespace VideoToolbox {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios13.0")]
 		[SupportedOSPlatform ("tvos13.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[Introduced (PlatformName.iOS, 13, 0)]
 		[Introduced (PlatformName.TvOS, 13, 0)]

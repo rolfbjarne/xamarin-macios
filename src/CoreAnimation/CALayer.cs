@@ -139,7 +139,7 @@ namespace CoreAnimation {
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public CAContentsFormat ContentsFormat {
 			get { return CAContentsFormatExtensions.GetValue (_ContentsFormat); }

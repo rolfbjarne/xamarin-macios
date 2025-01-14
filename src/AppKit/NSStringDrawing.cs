@@ -12,7 +12,7 @@ namespace AppKit {
 #if NET
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("tvos")]
 #endif
 	// Manual bindings, easier than make the generator support extension methods on non-NSObject-derived types (string in this case).

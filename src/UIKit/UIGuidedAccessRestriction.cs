@@ -23,7 +23,7 @@ namespace UIKit {
 #if !COREBUILD
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		[DllImport (Constants.UIKitLibrary)]
@@ -31,7 +31,7 @@ namespace UIKit {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		public static UIGuidedAccessRestrictionState GetState (string restrictionIdentifier)
@@ -45,7 +45,7 @@ namespace UIKit {
 #if IOS
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		[DllImport (Constants.UIKitLibrary)]
@@ -53,7 +53,7 @@ namespace UIKit {
 
 #if NET
 		// [SupportedOSPlatform ("ios")] -- Not valid for Delegates
-		// [SupportedOSPlatform ("maccatalyst")]
+		// [SupportedOSPlatform ("maccatalyst15.0")]
 		// [SupportedOSPlatform ("tvos")]
 #endif
 		public delegate void UIGuidedAccessConfigureAccessibilityFeaturesCompletionHandler (bool success, NSError error);
@@ -84,7 +84,7 @@ namespace UIKit {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		[BindingImpl (BindingImplOptions.Optimizable)]
@@ -107,7 +107,7 @@ namespace UIKit {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 #endif
 		[BindingImpl (BindingImplOptions.Optimizable)]

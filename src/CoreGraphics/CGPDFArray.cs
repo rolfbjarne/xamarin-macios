@@ -46,7 +46,7 @@ namespace CoreGraphics {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 #endif
@@ -266,7 +266,7 @@ namespace CoreGraphics {
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		unsafe extern static byte CGPDFArrayApplyBlock (/* CGPDFArrayRef */ IntPtr array, /* CGPDFArrayApplierBlock */ BlockLiteral* block, /* void* */ IntPtr info);
@@ -275,7 +275,7 @@ namespace CoreGraphics {
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public bool Apply (ApplyCallback callback, object? info = null)

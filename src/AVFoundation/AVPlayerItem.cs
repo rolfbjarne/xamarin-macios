@@ -12,7 +12,7 @@ namespace AVFoundation {
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public AVVideoApertureMode VideoApertureMode {
 			get { return AVVideoApertureModeExtensions.GetValue (_VideoApertureMode); }

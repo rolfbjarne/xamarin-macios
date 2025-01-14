@@ -128,7 +128,7 @@ namespace GLKit {
 #if NET
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("tvos")]
 	[ObsoletedOSPlatform ("tvos12.0", "Use 'Metal' instead.")]
 	[ObsoletedOSPlatform ("macos10.14", "Use 'Metal' instead.")]

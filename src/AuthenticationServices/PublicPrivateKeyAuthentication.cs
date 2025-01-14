@@ -23,7 +23,7 @@ namespace AuthenticationServices {
 #if NET
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios15.0")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[UnsupportedOSPlatform ("tvos")]
 #else
 	[NoTV]

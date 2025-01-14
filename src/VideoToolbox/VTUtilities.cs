@@ -24,7 +24,7 @@ namespace VideoToolbox {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 	public static class VTUtilities {
 		[DllImport (Constants.VideoToolboxLibrary)]

@@ -26,7 +26,7 @@ namespace PassKit {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 #endif
 		public PKContactFields RequiredBillingContactFields {
@@ -37,7 +37,7 @@ namespace PassKit {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 #endif
 		public PKContactFields RequiredShippingContactFields {

@@ -21,7 +21,7 @@ namespace Compression {
 #if NET
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("tvos")]
 #endif
 	public partial class CompressionStream : Stream {

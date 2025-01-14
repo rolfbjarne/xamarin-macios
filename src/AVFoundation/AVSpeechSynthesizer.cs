@@ -15,7 +15,7 @@ namespace AVFoundation {
 #if NET
 		[SupportedOSPlatform ("tvos13.0")]
 		[SupportedOSPlatform ("ios13.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 #endif
 		[BindingImpl (BindingImplOptions.Optimizable)]

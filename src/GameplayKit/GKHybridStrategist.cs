@@ -16,7 +16,7 @@ namespace GameplayKit {
 	[Register ("GKHybridStrategist", SkipRegistration = true)]
 #if NET
 	[UnsupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 #endif

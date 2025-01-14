@@ -28,7 +28,7 @@ namespace VideoToolbox {
 #if NET
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class VTDecompressionSession : VTSession {
@@ -377,7 +377,7 @@ namespace VideoToolbox {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.VideoToolboxLibrary)]
 		extern static byte VTIsHardwareDecodeSupported (CMVideoCodecType codecType);
@@ -386,7 +386,7 @@ namespace VideoToolbox {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public static bool IsHardwareDecodeSupported (CMVideoCodecType codecType)
 		{

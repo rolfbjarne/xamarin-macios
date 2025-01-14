@@ -15,7 +15,7 @@ namespace WebKit {
 #if NET
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios14.5")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
 		[iOS (14, 5)]

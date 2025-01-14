@@ -40,7 +40,7 @@ namespace MobileCoreServices {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("tvos14.0", "Use the 'UniformTypeIdentifiers.UTType' API instead.")]
 		[ObsoletedOSPlatform ("macos11.0", "Use the 'UniformTypeIdentifiers.UTType' API instead.")]
@@ -52,7 +52,7 @@ namespace MobileCoreServices {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("tvos14.0", "Use the 'UniformTypeIdentifiers.UTType' API instead.")]
 		[ObsoletedOSPlatform ("macos11.0", "Use the 'UniformTypeIdentifiers.UTType' API instead.")]
@@ -64,7 +64,7 @@ namespace MobileCoreServices {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("tvos14.0", "Use the 'UniformTypeIdentifiers.UTType' API instead.")]
 		[ObsoletedOSPlatform ("macos11.0", "Use the 'UniformTypeIdentifiers.UTType' API instead.")]
@@ -84,7 +84,7 @@ namespace MobileCoreServices {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("tvos14.0", "Use the 'UniformTypeIdentifiers.UTType' API instead.")]
 		[ObsoletedOSPlatform ("macos11.0", "Use the 'UniformTypeIdentifiers.UTType' API instead.")]
@@ -139,7 +139,7 @@ namespace MobileCoreServices {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("tvos14.0", "Use the 'UniformTypeIdentifiers.UTType' API instead.")]
 		[ObsoletedOSPlatform ("macos11.0", "Use the 'UniformTypeIdentifiers.UTType' API instead.")]
@@ -151,7 +151,7 @@ namespace MobileCoreServices {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("tvos14.0", "Use the 'UniformTypeIdentifiers.UTType' API instead.")]
 		[ObsoletedOSPlatform ("macos11.0", "Use the 'UniformTypeIdentifiers.UTType' API instead.")]
@@ -260,7 +260,7 @@ namespace MobileCoreServices {
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("tvos14.0", "Use the 'UniformTypeIdentifiers.UTType' API instead.")]
 		[ObsoletedOSPlatform ("macos11.0", "Use the 'UniformTypeIdentifiers.UTType' API instead.")]

@@ -38,7 +38,7 @@ namespace AVFoundation {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 #endif
@@ -53,7 +53,7 @@ namespace AVFoundation {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 #endif
@@ -266,7 +266,7 @@ namespace AVFoundation {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 #endif
@@ -280,7 +280,7 @@ namespace AVFoundation {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 #endif
@@ -294,7 +294,7 @@ namespace AVFoundation {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 #endif
@@ -361,7 +361,7 @@ namespace AVFoundation {
 #if NET
 		[UnsupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("ios6.0", "Use 'AVAudioSession.Notification.ObserveInterruption' instead.")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'AVAudioSession.Notification.ObserveInterruption' instead.")]
@@ -381,7 +381,7 @@ namespace AVFoundation {
 #if NET
 		[UnsupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("ios6.0", "Use 'AVAudioSession.Notification.ObserveInterruption' instead.")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'AVAudioSession.Notification.ObserveInterruption' instead.")]
@@ -401,7 +401,7 @@ namespace AVFoundation {
 #if NET
 		[UnsupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("ios6.0", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
@@ -421,7 +421,7 @@ namespace AVFoundation {
 #if NET
 		[UnsupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("ios6.0", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
@@ -441,7 +441,7 @@ namespace AVFoundation {
 #if NET
 		[UnsupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("ios6.0", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
@@ -462,7 +462,7 @@ namespace AVFoundation {
 #if NET
 		[UnsupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("ios6.0", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
@@ -483,7 +483,7 @@ namespace AVFoundation {
 #if NET
 		[UnsupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("ios6.0", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]

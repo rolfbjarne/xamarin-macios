@@ -12,7 +12,7 @@ namespace CoreAnimation {
 	[SupportedOSPlatform ("tvos15.0")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios15.0")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[TV (15, 0)]
 	[iOS (15, 0)]

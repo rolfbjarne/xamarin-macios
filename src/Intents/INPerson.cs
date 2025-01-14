@@ -13,7 +13,7 @@ namespace Intents {
 #if NET
 		[SupportedOSPlatform ("ios15.0")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
 		[Introduced (PlatformName.iOS, 15, 0)]
@@ -27,7 +27,7 @@ namespace Intents {
 #if NET
 		[SupportedOSPlatform ("ios15.0")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
 		[Introduced (PlatformName.iOS, 15, 0)]
@@ -41,7 +41,7 @@ namespace Intents {
 #if NET
 		[SupportedOSPlatform ("ios15.0")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
 		[Introduced (PlatformName.iOS, 15, 0)]

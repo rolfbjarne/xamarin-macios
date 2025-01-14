@@ -45,7 +45,7 @@ using NativeHandle = System.IntPtr;
 namespace AddressBook {
 
 #if NET
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]
 	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]

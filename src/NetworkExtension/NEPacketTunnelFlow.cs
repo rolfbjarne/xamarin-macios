@@ -11,7 +11,7 @@ namespace NetworkExtension {
 	// avoid generator default `Arg1` and `Arg2` since Action<> was used
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos17.0")]
 #endif

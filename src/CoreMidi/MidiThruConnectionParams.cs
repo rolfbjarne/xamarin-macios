@@ -44,7 +44,7 @@ namespace CoreMidi {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	[NativeName ("MIDITransform")]
@@ -62,7 +62,7 @@ namespace CoreMidi {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	[NativeName ("MIDIValueMap")]
@@ -85,7 +85,7 @@ namespace CoreMidi {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	[NativeName ("MIDIControlTransform")]
@@ -112,7 +112,7 @@ namespace CoreMidi {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	[NativeName ("MIDIThruConnectionEndpoint")]
@@ -310,7 +310,7 @@ namespace CoreMidi {
 #if !COREBUILD
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class MidiThruConnectionParams {

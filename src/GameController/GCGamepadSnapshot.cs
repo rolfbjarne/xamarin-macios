@@ -21,7 +21,7 @@ namespace GameController {
 #if NET
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("tvos")]
 	[ObsoletedOSPlatform ("macos10.15", "Use 'GCExtendedGamepad' instead.")]
 	[ObsoletedOSPlatform ("tvos13.0", "Use 'GCExtendedGamepad' instead.")]

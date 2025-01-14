@@ -28,7 +28,7 @@ namespace VideoToolbox {
 #if NET
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class VTCompressionSession : VTSession {
@@ -228,7 +228,7 @@ namespace VideoToolbox {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.VideoToolboxLibrary)]
 		extern static VTStatus VTCompressionSessionPrepareToEncodeFrames (IntPtr handle);
@@ -237,7 +237,7 @@ namespace VideoToolbox {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public VTStatus PrepareToEncodeFrames ()
 		{
@@ -348,7 +348,7 @@ namespace VideoToolbox {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.VideoToolboxLibrary)]
 		extern static VTStatus VTCompressionSessionBeginPass (IntPtr session, VTCompressionSessionOptionFlags flags, IntPtr reserved);
@@ -357,7 +357,7 @@ namespace VideoToolbox {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public VTStatus BeginPass (VTCompressionSessionOptionFlags flags)
 		{
@@ -368,7 +368,7 @@ namespace VideoToolbox {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.VideoToolboxLibrary)]
 		unsafe extern static VTStatus VTCompressionSessionEndPass (IntPtr session, byte* furtherPassesRequestedOut, IntPtr reserved);
@@ -377,7 +377,7 @@ namespace VideoToolbox {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public VTStatus EndPass (out bool furtherPassesRequested)
 		{
@@ -402,7 +402,7 @@ namespace VideoToolbox {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.VideoToolboxLibrary)]
 		unsafe extern static VTStatus VTCompressionSessionGetTimeRangesForNextPass (
@@ -414,7 +414,7 @@ namespace VideoToolbox {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public VTStatus GetTimeRangesForNextPass (out CMTimeRange []? timeRanges)
 		{

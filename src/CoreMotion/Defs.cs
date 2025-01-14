@@ -16,7 +16,7 @@ namespace CoreMotion {
 	// CMAccelerometer.h
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
@@ -41,7 +41,7 @@ namespace CoreMotion {
 	// CMAttitude.h
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
@@ -60,7 +60,7 @@ namespace CoreMotion {
 	// CMAttitude.h
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
@@ -87,7 +87,7 @@ namespace CoreMotion {
 	// CMGyro.h
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]

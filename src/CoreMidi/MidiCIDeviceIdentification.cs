@@ -14,7 +14,7 @@ namespace CoreMidi {
 #if NET
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[UnsupportedOSPlatform ("tvos")]
 #else
 	[NoTV]
@@ -38,7 +38,7 @@ namespace CoreMidi {
 #if NET
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[UnsupportedOSPlatform ("tvos")]
 #else
 	[NoTV]

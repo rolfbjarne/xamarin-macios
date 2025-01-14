@@ -159,7 +159,7 @@ namespace CoreMidi {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class MidiObject
@@ -404,7 +404,7 @@ namespace CoreMidi {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class MidiException : Exception {
@@ -420,7 +420,7 @@ namespace CoreMidi {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class MidiClient : MidiObject {
@@ -437,7 +437,7 @@ namespace CoreMidi {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos11.0")]
 		[ObsoletedOSPlatform ("ios14.0")]
@@ -492,7 +492,7 @@ namespace CoreMidi {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos11.0")]
 		[ObsoletedOSPlatform ("ios14.0")]
@@ -519,7 +519,7 @@ namespace CoreMidi {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos11.0")]
 		[ObsoletedOSPlatform ("ios14.0")]
@@ -678,7 +678,7 @@ namespace CoreMidi {
 	//
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class MidiPacket
@@ -867,7 +867,7 @@ namespace CoreMidi {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class MidiPort : MidiObject {
@@ -875,7 +875,7 @@ namespace CoreMidi {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos11.0")]
 		[ObsoletedOSPlatform ("ios14.0")]
@@ -1011,7 +1011,7 @@ namespace CoreMidi {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos11.0")]
 		[ObsoletedOSPlatform ("ios14.0")]
@@ -1024,7 +1024,7 @@ namespace CoreMidi {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos11.0")]
 		[ObsoletedOSPlatform ("ios14.0")]
@@ -1048,7 +1048,7 @@ namespace CoreMidi {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class MidiEntity : MidiObject {
@@ -1462,7 +1462,7 @@ namespace CoreMidi {
 
 #if NET
 		[SupportedOSPlatform ("ios14.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -1515,7 +1515,7 @@ namespace CoreMidi {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class MidiDevice : MidiObject {
@@ -1528,7 +1528,7 @@ namespace CoreMidi {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos11.0")]
 		[ObsoletedOSPlatform ("ios14.0")]
@@ -1551,7 +1551,7 @@ namespace CoreMidi {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("ios14.0")]
 #else
@@ -1685,7 +1685,7 @@ namespace CoreMidi {
 #if NET
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios13.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[iOS (13, 0)]
 #endif
@@ -2049,7 +2049,7 @@ namespace CoreMidi {
 
 #if NET
 		[SupportedOSPlatform ("ios14.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -2076,7 +2076,7 @@ namespace CoreMidi {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class MidiDeviceList : MidiObject {
@@ -2140,7 +2140,7 @@ namespace CoreMidi {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class MidiEndpoint : MidiObject {
@@ -2152,7 +2152,7 @@ namespace CoreMidi {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos11.0")]
 		[ObsoletedOSPlatform ("ios14.0")]
@@ -2173,7 +2173,7 @@ namespace CoreMidi {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos11.0")]
 		[ObsoletedOSPlatform ("ios14.0")]
@@ -2294,7 +2294,7 @@ namespace CoreMidi {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos11.0")]
 		[ObsoletedOSPlatform ("ios14.0")]
@@ -2496,7 +2496,7 @@ namespace CoreMidi {
 
 #if NET
 		[SupportedOSPlatform ("ios14.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -2577,7 +2577,7 @@ namespace CoreMidi {
 #if !MONOMAC
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("macos")]
 #endif
 		InternalStart = 0x1000,
@@ -2589,7 +2589,7 @@ namespace CoreMidi {
 	//
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class ObjectAddedOrRemovedEventArgs : EventArgs {
@@ -2604,7 +2604,7 @@ namespace CoreMidi {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class ObjectPropertyChangedEventArgs : EventArgs {
@@ -2619,7 +2619,7 @@ namespace CoreMidi {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class IOErrorEventArgs : EventArgs {
@@ -2634,7 +2634,7 @@ namespace CoreMidi {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class MidiPacketsEventArgs : EventArgs

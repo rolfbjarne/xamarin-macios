@@ -31,7 +31,7 @@ namespace Security {
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 	public class SecCertificate2 : NativeObject {
 		[Preserve (Conditional = true)]

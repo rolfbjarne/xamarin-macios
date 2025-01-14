@@ -119,14 +119,5 @@ namespace CoreServices {
 		[Internal]
 		[Field ("kCFHTTPAuthenticationAccountDomain", "CFNetwork")]
 		NSString _AuthenticationAccountDomain { get; }
-
-		// misdocumented by Apple (feedback left)
-		// OSX headers says it's 10.9 only
-		// iOS headers says it's iOS 7.0 only (but comments talks about OSX)
-		// yet both 7.0+ and 10.9 returns null
-		[MacCatalyst (13, 1)]
-		[Internal]
-		[Field ("kCFHTTPAuthenticationSchemeOAuth1", "CFNetwork")]
-		IntPtr _AuthenticationSchemeOAuth1 { get; }
 	}
 }

@@ -49,8 +49,10 @@ namespace CoreServices {
 
 			if (version.Major == 3 && version.Minor == 0) {
 				// HTTP 3.0 requires OS X 10.16 or later.
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'CFHTTPMessage._HTTPVersion3_0' is only supported on: 'ios' 14.0 and later, 'tvos' 14.0 and later.
 				if (_HTTPVersion3_0 != IntPtr.Zero)
 					return _HTTPVersion3_0;
+#pragma warning restore CA1416
 				else if (_HTTPVersion2_0 != IntPtr.Zero)
 					return _HTTPVersion2_0;
 				else
@@ -328,10 +330,6 @@ namespace CoreServices {
 				return _AuthenticationSchemeNTLM;
 			case AuthenticationScheme.Digest:
 				return _AuthenticationSchemeDigest;
-			case AuthenticationScheme.OAuth1:
-				if (_AuthenticationSchemeOAuth1 == IntPtr.Zero)
-					throw new NotSupportedException ("Requires iOS 7.0 or macOS 10.9 and lower than iOS 12 or macOS 10.14");
-				return _AuthenticationSchemeOAuth1;
 			default:
 				throw new ArgumentException ();
 			}

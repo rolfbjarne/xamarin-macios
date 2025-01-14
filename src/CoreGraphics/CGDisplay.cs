@@ -96,7 +96,7 @@ namespace CoreGraphics
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		static extern byte CGDisplayIsCaptured (uint display);
 
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos10.9")]
 		[ObsoletedOSPlatform ("maccatalyst13.1")]

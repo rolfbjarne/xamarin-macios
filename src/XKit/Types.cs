@@ -39,7 +39,7 @@ namespace UIKit {
 #if NET
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]

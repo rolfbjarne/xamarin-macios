@@ -62,7 +62,7 @@ namespace GameplayKit {
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public static GKPath FromPoints (Vector3 [] points, float radius, bool cyclical)
 		{
@@ -84,7 +84,7 @@ namespace GameplayKit {
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public GKPath (Vector3 [] points, float radius, bool cyclical)
 		{

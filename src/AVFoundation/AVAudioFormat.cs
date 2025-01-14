@@ -41,14 +41,14 @@ namespace AVFoundation {
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public virtual AudioStreamBasicDescription StreamDescription {
 #if NET
 			[SupportedOSPlatform ("ios")]
 			[SupportedOSPlatform ("macos")]
 			[SupportedOSPlatform ("tvos")]
-			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 			get {
 				var ptr = _StreamDescription;

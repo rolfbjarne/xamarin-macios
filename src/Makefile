@@ -368,6 +368,7 @@ $($(2)_DOTNET_BUILD_DIR)/core-$(3).rsp: Makefile frameworks.sources $($(2)_DOTNE
 		> $$@.tmp
 	$$(Q) mv $$@.tmp $$@
 
+core:: $($(2)_DOTNET_BUILD_DIR)/core-$(3).dll
 $($(2)_DOTNET_BUILD_DIR)/core-$(3).dll: $($(2)_DOTNET_CORE_SOURCES) $($(2)_DOTNET_BUILD_DIR)/core-$(3).rsp | $($(2)_DOTNET_BUILD_DIR)
 	$$(Q_DOTNET_GEN) $(DOTNET_CSC) @$($(2)_DOTNET_BUILD_DIR)/core-$(3).rsp
 
@@ -391,6 +392,7 @@ $($(2)_DOTNET_BUILD_DIR)/apidefinition-$(3).rsp: Makefile frameworks.sources $($
 		> $$@.tmp
 	$$(Q) mv $$@.tmp $$@
 
+apidefinition:: $($(2)_DOTNET_BUILD_DIR)/apidefinition-$(3).dll
 $($(2)_DOTNET_BUILD_DIR)/apidefinition-$(3).dll: $($(2)_DOTNET_BUILD_DIR)/apidefinition-$(3).rsp $($(2)_DOTNET_BUILD_DIR)/core-$(3).dll $(DOTNET_BINDING_ATTRIBUTES)
 	$$(Q_GEN) $(DOTNET_CSC) $(DOTNET_FLAGS) @$$<
 

@@ -10,14 +10,14 @@ using ObjCRuntime;
 namespace Metal {
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 #endif
 	public static class IMTLRenderCommandEncoder_Extensions {
 #if NET
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos14.5")]
 #else
@@ -31,7 +31,7 @@ namespace Metal {
 
 #if NET
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos14.5")]
 #else
@@ -45,7 +45,7 @@ namespace Metal {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos14.5")]
 		[SupportedOSPlatform ("macos")]
 #else
@@ -59,7 +59,7 @@ namespace Metal {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos14.5")]
 		[SupportedOSPlatform ("macos")]
 #else

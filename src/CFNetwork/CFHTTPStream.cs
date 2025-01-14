@@ -28,7 +28,7 @@ namespace CoreServices {
 	// all fields constants that this is using are deprecated in Xcode 7
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	[ObsoletedOSPlatform ("macos10.11", "Use 'NSUrlSession'.")]

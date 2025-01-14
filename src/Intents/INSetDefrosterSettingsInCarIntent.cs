@@ -10,7 +10,7 @@ namespace Intents {
 
 	public partial class INSetDefrosterSettingsInCarIntent {
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios12.0", "Use the overload that takes 'INSpeakableString carName'.")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use the overload that takes 'INSpeakableString carName'.")]
 		[UnsupportedOSPlatform ("macos")]

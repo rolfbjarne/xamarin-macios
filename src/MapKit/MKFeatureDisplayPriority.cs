@@ -9,7 +9,7 @@ namespace MapKit {
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 	// .net does not allow float-based enumerations
 	public static class MKFeatureDisplayPriority {

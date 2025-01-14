@@ -31,7 +31,7 @@ using System.Runtime.Versioning;
 namespace AppKit {
 #if NET
 	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct NSEdgeInsets {

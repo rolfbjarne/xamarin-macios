@@ -10,7 +10,7 @@ namespace UIKit {
 #if NET
 		[SupportedOSPlatformGuard ("ios")]
 		[SupportedOSPlatformGuard ("tvos")]
-		[SupportedOSPlatformGuard ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public bool CheckSystemVersion (int major, int minor)
 		{

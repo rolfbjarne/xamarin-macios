@@ -29,7 +29,7 @@ namespace CoreServices {
 
 #if NET
 	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	[ObsoletedOSPlatform ("tvos15.0", Constants.UseNetworkInstead)]

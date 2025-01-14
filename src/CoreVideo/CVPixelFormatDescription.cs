@@ -160,7 +160,7 @@ namespace CoreVideo {
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public static readonly NSString ContainsGrayscaleKey;
 
@@ -292,7 +292,7 @@ namespace CoreVideo {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos15.0")]
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[iOS (15, 0), MacCatalyst (15, 0), TV (15, 0), Mac (12, 0)]
 #endif
@@ -306,7 +306,7 @@ namespace CoreVideo {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos15.0")]
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[iOS (15, 0), MacCatalyst (15, 0), TV (15, 0), Mac (12, 0)]
 #endif
@@ -317,7 +317,7 @@ namespace CoreVideo {
 
 #if NET
 		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		public CVFillExtendedPixelsCallBackDataStruct? FillExtendedPixelsCallbackStruct {

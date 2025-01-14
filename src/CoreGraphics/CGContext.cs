@@ -1454,6 +1454,10 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		static extern void CGContextDrawConicGradient (/* CGContext */ IntPtr context, /*[NullAllowed] CGGradient*/ IntPtr gradient, CGPoint center, nfloat angle);
 
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("tvos17.0")]
 		public void DrawConicGradient (CGGradient? gradient, CGPoint point, nfloat angle) =>
 			CGContextDrawConicGradient (Handle, gradient.GetHandle (), point, angle);
 

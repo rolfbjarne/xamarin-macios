@@ -6,17 +6,11 @@
 // Copyright 2014 Xamarin
 //
 
-using System.Runtime.Versioning;
-
 // Disable until we get around to enable + fix any issues.
 #nullable disable
 
 namespace UIKit {
 	public static partial class UIViewControllerTransitionCoordinatorContext_Extensions {
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
-		[UnsupportedOSPlatform ("macos")]
 		public static UIView GetTransitionViewController (this IUIViewControllerTransitionCoordinatorContext This, UITransitionViewControllerKind kind)
 		{
 			switch (kind) {

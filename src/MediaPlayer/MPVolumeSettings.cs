@@ -20,8 +20,8 @@ namespace MediaPlayer {
 	// MPVolumeSettings.h
 	public static class MPVolumeSettings {
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios11.3", "Use 'MPVolumeView' to present volume controls.")]
 #else
 		[Deprecated (PlatformName.iOS, 11, 3, message: "Use 'MPVolumeView' to present volume controls.")]
@@ -30,8 +30,8 @@ namespace MediaPlayer {
 		public extern static void AlertShow ();
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios11.3", "Use 'MPVolumeView' to present volume controls.")]
 #else
 		[Deprecated (PlatformName.iOS, 11, 3, message: "Use 'MPVolumeView' to present volume controls.")]
@@ -40,8 +40,8 @@ namespace MediaPlayer {
 		public extern static void AlertHide ();
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios11.3", "Use 'MPVolumeView' to present volume controls.")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'MPVolumeView' to present volume controls.")]
 #else
@@ -51,8 +51,8 @@ namespace MediaPlayer {
 		extern static /* BOOL */ byte MPVolumeSettingsAlertIsVisible ();
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios11.3", "Use 'MPVolumeView' to present volume controls.")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'MPVolumeView' to present volume controls.")]
 #else

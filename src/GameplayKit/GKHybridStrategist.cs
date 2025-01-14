@@ -16,9 +16,9 @@ namespace GameplayKit {
 	[Register ("GKHybridStrategist", SkipRegistration = true)]
 #if NET
 	[UnsupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[EditorBrowsable (EditorBrowsableState.Never)]
 	public class GKHybridStrategist : NSObject, IGKStrategist {

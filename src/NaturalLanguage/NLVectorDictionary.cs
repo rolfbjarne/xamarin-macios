@@ -10,10 +10,10 @@ namespace NaturalLanguage {
 
 
 #if NET
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	// nicer replacement for `NSDictionary<NSString, NSArray<NSNumber>>`
 	public class NLVectorDictionary : DictionaryContainer {

@@ -28,7 +28,7 @@ using NativeHandle = System.IntPtr;
 
 namespace PrintCore {
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public class PMPrintCoreBase : NativeObject {
 		[Preserve (Conditional = true)]
@@ -55,14 +55,14 @@ namespace PrintCore {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public class PMPrintException : Exception {
 		public PMPrintException (PMStatusCode code) : base (code.ToString ()) { }
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public class PMPrintSession : PMPrintCoreBase {
 		[DllImport (Constants.PrintCoreLibrary)]
@@ -188,7 +188,7 @@ namespace PrintCore {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public class PMPrintSettings : PMPrintCoreBase {
 		[DllImport (Constants.PrintCoreLibrary)]
@@ -386,7 +386,7 @@ namespace PrintCore {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public class PMPageFormat : PMPrintCoreBase {
 		[DllImport (Constants.PrintCoreLibrary)]
@@ -495,7 +495,7 @@ namespace PrintCore {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public class PMPaper : PMPrintCoreBase {
 		[Preserve (Conditional = true)]
@@ -580,7 +580,7 @@ namespace PrintCore {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public class PMPrinter : PMPrintCoreBase {
 		[DllImport (Constants.PrintCoreLibrary)]
@@ -899,7 +899,7 @@ namespace PrintCore {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public class PMServer : PMPrintCoreBase {
 		// A private constructor so that nobody can create an instance of this class.

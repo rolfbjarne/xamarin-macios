@@ -15,7 +15,7 @@ using ObjCRuntime;
 namespace UIKit {
 #if NET
 	[SupportedOSPlatform ("ios13.4")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[Introduced (PlatformName.iOS, 13,4, PlatformArchitecture.All)]
 #endif

@@ -26,8 +26,8 @@ using OpenGLES;
 namespace CoreVideo {
 
 	// CVOpenGLESTextureCache.h
-	[SupportedOSPlatform ("tvos")]
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos12.2")]
+	[SupportedOSPlatform ("ios12.2")]
 	[ObsoletedOSPlatform ("tvos12.0", "Use 'CVMetalTextureCache' instead.")]
 	[ObsoletedOSPlatform ("ios12.0", "Use 'CVMetalTextureCache' instead.")]
 	public class CVOpenGLESTextureCache : INativeObject, IDisposable {

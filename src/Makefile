@@ -57,9 +57,12 @@ DOTNET_REFERENCES = \
 
 DOTNET_OR_GREATER_DEFINES:=$(foreach version,$(shell seq 6 $(firstword $(subst ., ,$(subst net,,$(DOTNET_TFM))))),/define:NET$(version)_0_OR_GREATER)
 
+ifneq ($(ANALYZE),)
 DOTNET_ANALYZERS = \
 	/analyzer:$(DOTNET_ANALYZERS_DIR)/Microsoft.CodeAnalysis.NetAnalyzers.dll  \
 	/analyzer:$(DOTNET_ANALYZERS_DIR)/Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll \
+
+endif
 
 DOTNET_FLAGS=/warnaserror+ /nostdlib+ /deterministic /features:strict /nologo /target:library /debug /unsafe /define:NET /define:NET_TODO $(DOTNET_OR_GREATER_DEFINES) $(DOTNET_REFERENCES) $(DOTNET_ANALYZERS)
 

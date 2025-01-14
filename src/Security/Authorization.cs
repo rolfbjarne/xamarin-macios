@@ -41,8 +41,8 @@ using NativeHandle = System.IntPtr;
 namespace Security {
 
 #if NET
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (15,0)]
 #endif
@@ -66,8 +66,8 @@ namespace Security {
 	}
 
 #if NET
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (15,0)]
 #endif
@@ -95,8 +95,8 @@ namespace Security {
 	// create the structure for them with the proper data
 	//
 #if NET
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (15,0)]
 #endif
@@ -107,8 +107,8 @@ namespace Security {
 	}
 
 #if NET
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (15,0)]
 #endif
@@ -119,8 +119,8 @@ namespace Security {
 	}
 
 #if NET
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (15,0)]
 #endif
@@ -133,8 +133,8 @@ namespace Security {
 	}
 
 #if NET
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (15,0)]
 #endif
@@ -144,8 +144,8 @@ namespace Security {
 	}
 
 #if NET
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (15,0)]
 #endif
@@ -154,8 +154,8 @@ namespace Security {
 		unsafe extern static int /* OSStatus = int */ AuthorizationCreate (AuthorizationItemSet* rights, AuthorizationItemSet* environment, AuthorizationFlags flags, IntPtr* auth);
 
 #if NET
-		[SupportedOSPlatform ("maccatalyst")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos10.7", "Use the Service Management framework or the launchd-launched helper tool instead.")]
 #else
 		[Deprecated (PlatformName.MacOSX, 10,7)]
@@ -178,8 +178,8 @@ namespace Security {
 		}
 
 #if NET
-		[SupportedOSPlatform ("maccatalyst")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos10.7", "Use the Service Management framework or the launchd-launched helper tool instead.")]
 #else
 		[Deprecated (PlatformName.MacOSX, 10,7)]

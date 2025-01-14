@@ -24,9 +24,9 @@ namespace Network {
 
 #if NET
 	// [SupportedOSPlatform ("tvos14.0")]  -  Not valid on Delegates
-	// [SupportedOSPlatform ("macos")]
+	// [SupportedOSPlatform ("macos12.0")]
 	// [SupportedOSPlatform ("ios14.0")]
-	// [SupportedOSPlatform ("maccatalyst")]
+	// [SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[TV (14, 0)]
 	[iOS (14, 0)]
@@ -36,9 +36,9 @@ namespace Network {
 
 #if NET
 	// [SupportedOSPlatform ("tvos14.0")]  -  Not valid on Delegates
-	// [SupportedOSPlatform ("macos")]
+	// [SupportedOSPlatform ("macos12.0")]
 	// [SupportedOSPlatform ("ios14.0")]
-	// [SupportedOSPlatform ("maccatalyst")]
+	// [SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[TV (14, 0)]
 	[iOS (14, 0)]
@@ -48,9 +48,9 @@ namespace Network {
 
 #if NET
 	[SupportedOSPlatform ("tvos14.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("ios14.0")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[TV (14, 0)]
 	[iOS (14, 0)]
@@ -310,9 +310,9 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[TV (15, 0)]
 		[iOS (15, 0)]
@@ -323,9 +323,9 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[TV (15, 0)]
 		[iOS (15, 0)]
@@ -341,9 +341,9 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[TV (15, 0)]
 		[iOS (15, 0)]
@@ -354,9 +354,9 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[TV (15, 0)]
 		[iOS (15, 0)]
@@ -374,9 +374,9 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[TV (15, 0)]
 		[iOS (15, 0)]
@@ -387,9 +387,9 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[TV (15, 0)]
 		[iOS (15, 0)]
@@ -403,9 +403,9 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[TV (15, 0)]
 		[iOS (15, 0)]
@@ -416,9 +416,9 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[TV (15, 0)]
 		[iOS (15, 0)]
@@ -433,9 +433,9 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[TV (15, 0)]
 		[iOS (15, 0)]
@@ -464,9 +464,9 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[TV (15, 0)]
 		[iOS (15, 0)]

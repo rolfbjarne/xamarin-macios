@@ -50,10 +50,10 @@ using CoreGraphics;
 
 namespace Foundation {
 
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 	public enum NSObjectFlag {
 		Empty,
 	}
@@ -68,10 +68,10 @@ namespace Foundation {
 
 #if !COREBUILD
 	[ObjectiveCTrackedType]
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public partial class NSObject : INativeObject
@@ -1020,10 +1020,10 @@ namespace Foundation {
 	}
 
 #if !COREBUILD
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 	public class NSObservedChange {
 		NSDictionary dict;
 		public NSObservedChange (NSDictionary source)

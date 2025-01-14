@@ -7,10 +7,10 @@ using ObjCRuntime;
 namespace AVFoundation {
 
 #if NET
-	[SupportedOSPlatform ("tvos")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("tvos12.2")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 	public partial class AudioRendererWasFlushedAutomaticallyEventArgs {
 		public CMTime AudioRendererFlushTime {

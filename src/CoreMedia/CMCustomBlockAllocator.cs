@@ -18,10 +18,10 @@ using ObjCRuntime;
 
 namespace CoreMedia {
 
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 	public class CMCustomBlockAllocator : IDisposable {
 
 		GCHandle gch;

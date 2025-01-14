@@ -19,9 +19,9 @@ using ObjCRuntime;
 namespace PdfKit {
 	public partial class PdfAnnotation {
 
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos18.2")]
 		public bool SetValue<T> (T value, PdfAnnotationKey key) where T : class, INativeObject
 		{
@@ -31,9 +31,9 @@ namespace PdfKit {
 			return _SetValue (value.Handle, key.GetConstant ()!);
 		}
 
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos18.2")]
 		public bool SetValue (string str, PdfAnnotationKey key)
 		{
@@ -45,9 +45,9 @@ namespace PdfKit {
 			}
 		}
 
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos18.2")]
 		public T GetValue<T> (PdfAnnotationKey key) where T : class, INativeObject
 		{
@@ -59,9 +59,9 @@ namespace PdfKit {
 			set { Type = value.GetConstant ()!; }
 		}
 
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos18.2")]
 		public CGPoint [] QuadrilateralPoints {
 			get {

@@ -26,10 +26,10 @@ namespace Network {
 	// available as static properties on this class
 	//
 #if NET
-	[SupportedOSPlatform ("tvos")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("tvos12.2")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 	public class NWContentContext : NativeObject {
 		bool global;

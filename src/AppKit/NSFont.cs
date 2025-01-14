@@ -22,7 +22,7 @@ namespace AppKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #endif
 		public unsafe CGRect [] GetBoundingRects (CGGlyph [] glyphs)
@@ -42,7 +42,7 @@ namespace AppKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #endif
 		public unsafe CGSize [] GetAdvancements (CGGlyph [] glyphs)
@@ -152,7 +152,7 @@ namespace AppKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos10.13")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #else
@@ -166,7 +166,7 @@ namespace AppKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos10.13")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #else
@@ -180,7 +180,7 @@ namespace AppKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos10.13")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #else
@@ -199,7 +199,7 @@ namespace AppKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #endif
 		public static NSFont? SystemFontOfSize (nfloat fontSize, nfloat weight)
@@ -221,7 +221,7 @@ namespace AppKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #endif
 		public static NSFont? MonospacedDigitSystemFontOfSize (nfloat fontSize, nfloat weight)
@@ -231,7 +231,7 @@ namespace AppKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #endif
 		public static NSFont? MonospacedSystemFont (nfloat fontSize, nfloat weight)

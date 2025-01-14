@@ -36,48 +36,48 @@ using ObjCRuntime;
 namespace CoreVideo {
 
 	// CVPixelBuffer.h
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 	public struct CVPlanarComponentInfo {
 		public /* int32_t */ int Offset;
 		public /* uint32_t */ uint RowBytes;
 	}
 
 	// CVPixelBuffer.h
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 	public struct CVPlanarPixelBufferInfo {
 		public CVPlanarComponentInfo [] ComponentInfo;
 	}
 
 	// CVPixelBuffer.h
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 	public struct CVPlanarPixelBufferInfo_YCbCrPlanar {
 		public CVPlanarComponentInfo ComponentInfoY;
 		public CVPlanarComponentInfo ComponentInfoCb;
 		public CVPlanarComponentInfo ComponentInfoCr;
 	}
 
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 	public struct CVPlanarPixelBufferInfo_YCbCrBiPlanar {
 		public CVPlanarComponentInfo ComponentInfoY;
 		public CVPlanarComponentInfo ComponentInfoCbCr;
 	}
 
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 	public struct CVTimeStamp {
 		public UInt32 Version;
 		public Int32 VideoTimeScale;
@@ -90,10 +90,10 @@ namespace CoreVideo {
 		public UInt64 Reserved;
 	}
 
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 	public struct CVSMPTETime {
 		public Int16 Subframes;
 		public Int16 SubframeDivisor;
@@ -107,10 +107,10 @@ namespace CoreVideo {
 	}
 
 #if !XAMCORE_5_0
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 	public struct CVFillExtendedPixelsCallBackData {
 		public nint /* CFIndex */ Version;
 		public CVFillExtendedPixelsCallBack FillCallBack;
@@ -120,10 +120,10 @@ namespace CoreVideo {
 	public delegate bool CVFillExtendedPixelsCallBack (IntPtr pixelBuffer, IntPtr refCon);
 #endif // !XAMCORE_5_0
 
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #if XAMCORE_5_0
 	public unsafe struct CVFillExtendedPixelsCallBackData {
 #else

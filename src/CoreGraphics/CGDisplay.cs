@@ -9,8 +9,8 @@ using Foundation;
 namespace CoreGraphics {
 
 #if NET
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif
@@ -20,8 +20,8 @@ namespace CoreGraphics {
 	}
 
 #if NET
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif
@@ -83,8 +83,8 @@ namespace CoreGraphics {
 		public static extern void RestoreColorSyncSettings ();
 
 #if NET
-		[SupportedOSPlatform ("maccatalyst")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos10.9")]
 		[ObsoletedOSPlatform ("maccatalyst13.1")]
 #else
@@ -93,8 +93,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		static extern byte CGDisplayIsCaptured (uint display);
 
-		[SupportedOSPlatform ("maccatalyst")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos10.9")]
 		[ObsoletedOSPlatform ("maccatalyst13.1")]
 		public static bool IsCaptured (int display)

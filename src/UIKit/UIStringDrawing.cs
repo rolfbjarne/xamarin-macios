@@ -10,8 +10,8 @@ using ObjCRuntime;
 namespace UIKit {
 	public unsafe static partial class UIStringDrawing {
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios7.0", "Use NSString.DrawString(CGPoint, UIStringAttributes) instead.")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -24,8 +24,8 @@ namespace UIKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios7.0", "Use NSString.DrawString(CGRect, UIStringAttributes) instead.")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -38,8 +38,8 @@ namespace UIKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios7.0", "Use NSString.DrawString(CGRect, UIStringAttributes) instead.")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -52,8 +52,8 @@ namespace UIKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios7.0", "Use NSString.DrawString(CGRect, UIStringAttributes) instead.")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -66,8 +66,8 @@ namespace UIKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios7.0", "Use NSString.DrawString(CGRect, UIStringAttributes) instead.")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -80,8 +80,8 @@ namespace UIKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios7.0", "Use NSString.DrawString(CGRect, UIStringAttributes) instead.")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -94,8 +94,8 @@ namespace UIKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios7.0", "Use NSString.DrawString(CGRect, UIStringAttributes) instead.")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -108,8 +108,8 @@ namespace UIKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios7.0", "Use NSString.GetSizeUsingAttributes(UIStringAttributes) instead.")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -122,8 +122,8 @@ namespace UIKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios7.0", "Use NSString.GetBoundingRect (CGSize, NSStringDrawingOptions, UIStringAttributes, NSStringDrawingContext) instead.")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -136,8 +136,8 @@ namespace UIKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios7.0", "Use NSString.GetBoundingRect (CGSize, NSStringDrawingOptions, UIStringAttributes, NSStringDrawingContext) instead.")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -150,8 +150,8 @@ namespace UIKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios7.0", "Use NSString.GetBoundingRect (CGSize, NSStringDrawingOptions, UIStringAttributes, NSStringDrawingContext) instead.")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -164,8 +164,8 @@ namespace UIKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios7.0")]
 		[UnsupportedOSPlatform ("tvos")]
 #else

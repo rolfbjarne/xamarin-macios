@@ -49,9 +49,9 @@ namespace UIKit {
 		public extern static void RectClip (CGRect rect);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("ios17.0")]
 		[UnsupportedOSPlatform ("tvos17.0")]
 		[UnsupportedOSPlatform ("maccatalyst17.0")]
@@ -63,9 +63,9 @@ namespace UIKit {
 		public extern static void BeginImageContext (CGSize size);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("ios17.0")]
 		[UnsupportedOSPlatform ("tvos17.0")]
 		[UnsupportedOSPlatform ("maccatalyst17.0")]
@@ -77,9 +77,9 @@ namespace UIKit {
 		extern static void BeginImageContextWithOptions (CGSize size, byte opaque, nfloat scale);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("ios17.0")]
 		[UnsupportedOSPlatform ("tvos17.0")]
 		[UnsupportedOSPlatform ("maccatalyst17.0")]
@@ -93,9 +93,9 @@ namespace UIKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("ios17.0")]
 		[UnsupportedOSPlatform ("tvos17.0")]
 		[UnsupportedOSPlatform ("maccatalyst17.0")]
@@ -107,9 +107,9 @@ namespace UIKit {
 		static extern IntPtr UIGraphicsGetImageFromCurrentImageContext ();
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("ios17.0")]
 		[UnsupportedOSPlatform ("tvos17.0")]
 		[UnsupportedOSPlatform ("maccatalyst17.0")]
@@ -212,9 +212,9 @@ namespace UIKit {
 #endif
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("ios17.0")]
 		[UnsupportedOSPlatform ("tvos17.0")]
 		[UnsupportedOSPlatform ("maccatalyst17.0")]

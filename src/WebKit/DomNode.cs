@@ -31,7 +31,7 @@ using System.Runtime.Versioning;
 namespace WebKit {
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public class DomEventArgs : EventArgs {
 		public DomEventArgs (DomEvent evt)

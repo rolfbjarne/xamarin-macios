@@ -19,10 +19,10 @@ using ObjCRuntime;
 namespace AVFoundation {
 
 #if NET
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AVAudio3DVectorOrientation {
@@ -71,10 +71,10 @@ namespace AVFoundation {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AVAudio3DAngularOrientation {
@@ -122,10 +122,10 @@ namespace AVFoundation {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AVCaptureWhiteBalanceGains {
@@ -179,10 +179,10 @@ namespace AVFoundation {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AVCaptureWhiteBalanceChromaticityValues {
@@ -230,10 +230,10 @@ namespace AVFoundation {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AVCaptureWhiteBalanceTemperatureAndTintValues {
@@ -286,10 +286,10 @@ namespace AVFoundation {
 #endif
 
 #if NET
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public static class AVUtilities {
 
@@ -303,8 +303,8 @@ namespace AVFoundation {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("ios15.0")]
 	[SupportedOSPlatform ("tvos15.0")]
 #else
@@ -348,8 +348,8 @@ namespace AVFoundation {
 #if !XAMCORE_5_0
 	[StructLayout (LayoutKind.Sequential)]
 	[NativeName ("AVSampleCursorSyncInfo")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("ios15.0")]
 	[SupportedOSPlatform ("tvos15.0")]
 #if COREBUILD
@@ -386,8 +386,8 @@ namespace AVFoundation {
 #endif // !XAMCORE_5_0
 
 #if NET
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("ios15.0")]
 	[SupportedOSPlatform ("tvos15.0")]
 #else
@@ -458,8 +458,8 @@ namespace AVFoundation {
 #if !XAMCORE_5_0
 	[StructLayout (LayoutKind.Sequential)]
 	[NativeName ("AVSampleCursorDependencyInfo")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("ios15.0")]
 	[SupportedOSPlatform ("tvos15.0")]
 #if COREBUILD
@@ -518,8 +518,8 @@ namespace AVFoundation {
 #endif // !XAMCORE_5_0
 
 #if NET
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("ios15.0")]
 	[SupportedOSPlatform ("tvos15.0")]
 #else
@@ -534,8 +534,8 @@ namespace AVFoundation {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("ios15.0")]
 	[SupportedOSPlatform ("tvos15.0")]
 #else
@@ -590,8 +590,8 @@ namespace AVFoundation {
 #if !XAMCORE_5_0
 	[StructLayout (LayoutKind.Sequential)]
 	[NativeName ("AVSampleCursorChunkInfo")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("ios15.0")]
 	[SupportedOSPlatform ("tvos15.0")]
 #if COREBUILD
@@ -630,8 +630,8 @@ namespace AVFoundation {
 #endif // !XAMCORE_5_0
 
 #if NET
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("ios15.0")]
 	[SupportedOSPlatform ("tvos15.0")]
 #else
@@ -659,8 +659,8 @@ namespace AVFoundation {
 #if !XAMCORE_5_0 && !(__IOS__ && !__MACCATALYST__) && !__TVOS__
 	[StructLayout (LayoutKind.Sequential)]
 	[NativeName ("AVSampleCursorAudioDependencyInfo")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("ios15.0")]
 	[SupportedOSPlatform ("tvos15.0")]
 #if COREBUILD
@@ -684,7 +684,7 @@ namespace AVFoundation {
 #endif // !XAMCORE_5_0 && !__IOS__ && !__TVOS__
 
 #if !__TVOS__
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[UnsupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("ios18.0")]
 	[SupportedOSPlatform ("maccatalyst18.0")]
@@ -697,7 +697,7 @@ namespace AVFoundation {
 #endif // __TVOS__
 
 #if !__TVOS__
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[UnsupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("ios18.0")]
 	[SupportedOSPlatform ("maccatalyst18.0")]
@@ -720,7 +720,7 @@ namespace AVFoundation {
 #endif // __TVOS__
 
 #if !__TVOS__
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[UnsupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("ios18.0")]
 	[SupportedOSPlatform ("maccatalyst18.0")]
@@ -738,7 +738,7 @@ namespace AVFoundation {
 #endif // __TVOS__
 
 #if !__TVOS__
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[UnsupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("ios18.0")]
 	[SupportedOSPlatform ("maccatalyst18.0")]

@@ -11,7 +11,7 @@ using ObjCRuntime;
 namespace Metal {
 	public partial class MTLRasterizationRateLayerDescriptor {
 #if NET
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("ios13.0")]
 		[UnsupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("tvos")]
@@ -28,7 +28,7 @@ namespace Metal {
 		}
 
 #if NET
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("ios13.0")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("macos")]
@@ -45,7 +45,7 @@ namespace Metal {
 		}
 
 #if NET
-		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("ios13.0")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("macos")]

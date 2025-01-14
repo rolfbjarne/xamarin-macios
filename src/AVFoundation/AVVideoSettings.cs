@@ -163,9 +163,9 @@ namespace AVFoundation {
 		public AVVideoCodec? Codec {
 			get {
 				var k = GetNSStringValue (AVVideo.CodecKey);
-				if (k == AVVideo.CodecH264)
+				if (k == AVVideoCodecType.H264.GetConstant ())
 					return AVVideoCodec.H264;
-				if (k == AVVideo.CodecJPEG)
+				if (k == AVVideoCodecType.Jpeg.GetConstant ())
 					return AVVideoCodec.JPEG;
 				return null;
 			}
@@ -174,10 +174,10 @@ namespace AVFoundation {
 				NSString? v;
 				switch (value) {
 				case AVVideoCodec.H264:
-					v = AVVideo.CodecH264;
+					v = AVVideoCodecType.H264.GetConstant ();
 					break;
 				case AVVideoCodec.JPEG:
-					v = AVVideo.CodecJPEG;
+					v = AVVideoCodecType.Jpeg.GetConstant ();
 					break;
 				case null:
 					v = null;

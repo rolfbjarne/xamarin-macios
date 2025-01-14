@@ -142,10 +142,6 @@ namespace CoreGraphics {
 		{
 		}
 
-		[SupportedOSPlatform ("ios14.0")]
-		[SupportedOSPlatform ("tvos14.0")]
-		[SupportedOSPlatform ("maccatalyst14.0")]
-		[SupportedOSPlatform ("macos")]
 		static IntPtr Create (CGConstantColor color)
 		{
 			var constant = color.GetConstant ();

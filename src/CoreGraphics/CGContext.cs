@@ -1046,23 +1046,11 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextShowTextAtPoint (/* CGContextRef */ IntPtr c, /* CGFloat */ nfloat x, /* CGFloat */ nfloat y, /* const char* */ byte []? bytes, /* size_t */ nint length);
 
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[ObsoletedOSPlatform ("macos10.9")]
-		[ObsoletedOSPlatform ("ios7.0")]
 		public void ShowTextAtPoint (nfloat x, nfloat y, byte []? bytes, int length)
 		{
 			CGContextShowTextAtPoint (Handle, x, y, bytes, length);
 		}
 
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("maccatalyst")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
-		[ObsoletedOSPlatform ("macos10.9")]
-		[ObsoletedOSPlatform ("ios7.0")]
 		public void ShowTextAtPoint (nfloat x, nfloat y, byte []? bytes)
 		{
 			CGContextShowTextAtPoint (Handle, x, y, bytes, bytes is null ? 0 : bytes.Length);
@@ -1442,10 +1430,6 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		static extern void CGContextDrawConicGradient (/* CGContext */ IntPtr context, /*[NullAllowed] CGGradient*/ IntPtr gradient, CGPoint center, nfloat angle);
 
-		[SupportedOSPlatform ("ios17.0")]
-		[SupportedOSPlatform ("maccatalyst17.0")]
-		[SupportedOSPlatform ("macos14.0")]
-		[SupportedOSPlatform ("tvos17.0")]
 		public void DrawConicGradient (CGGradient? gradient, CGPoint point, nfloat angle) =>
 			CGContextDrawConicGradient (Handle, gradient.GetHandle (), point, angle);
 

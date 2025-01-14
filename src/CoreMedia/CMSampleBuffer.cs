@@ -1039,10 +1039,6 @@ namespace CoreMedia {
 		}
 
 #if !MONOMAC
-		[UnsupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("maccatalyst")]
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
 		public string? DroppedFrameReason {
 			get {
 				return GetStringValue (CMSampleAttachmentKey.DroppedFrameReason);

@@ -58,9 +58,7 @@ namespace ObjCRuntime {
 		static RuntimeTypeHandleEqualityComparer RuntimeTypeHandleEqualityComparer;
 #pragma warning restore 8618
 
-#pragma warning disable CA2255 // The 'ModuleInitializer' attribute is only intended to be used in application code or advanced source generator scenarios (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca2255)
 		[ModuleInitializer]
-#pragma warning restore CA2255
 		internal static void Initialize ()
 		{
 			StringEqualityComparer = new StringEqualityComparer ();

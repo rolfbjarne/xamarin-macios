@@ -468,10 +468,6 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		static extern CGAffineTransformComponents CGAffineTransformDecompose (CGAffineTransform transform);
 
-		[SupportedOSPlatform ("ios16.0")]
-		[SupportedOSPlatform ("maccatalyst16.0")]
-		[SupportedOSPlatform ("macos13.0")]
-		[SupportedOSPlatform ("tvos16.0")]
 		public CGAffineTransformComponents Decompose ()
 		{
 			return CGAffineTransformDecompose (this);
@@ -488,10 +484,6 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		static extern CGAffineTransform CGAffineTransformMakeWithComponents (CGAffineTransformComponents components);
 
-		[SupportedOSPlatform ("ios16.0")]
-		[SupportedOSPlatform ("maccatalyst16.0")]
-		[SupportedOSPlatform ("macos13.0")]
-		[SupportedOSPlatform ("tvos16.0")]
 		public static CGAffineTransform MakeWithComponents (CGAffineTransformComponents components)
 		{
 			return CGAffineTransformMakeWithComponents (components);

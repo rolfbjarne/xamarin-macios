@@ -20,6 +20,14 @@ using UIKit;
 using System;
 
 namespace StoreKit {
+	[ObsoletedOSPlatform ("ios18.0")]
+	[ObsoletedOSPlatform ("maccatalyst18.0")]
+	[ObsoletedOSPlatform ("macos15.0")]
+	[ObsoletedOSPlatform ("tvos18.0")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 	public partial class SKReceiptProperties : DictionaryContainer {
 #if !COREBUILD
 		public SKReceiptProperties ()

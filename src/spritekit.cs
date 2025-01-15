@@ -1803,113 +1803,31 @@ interface SKUniform : NSCopying, NSSecureCoding {
 	[Export ("initWithName:float:")]
 	NativeHandle Constructor (string name, float /* float, not CGFloat */ value);
 
-	[Internal]
-	[Deprecated (PlatformName.iOS, 10, 0)]
-	[Deprecated (PlatformName.TvOS, 10, 0)]
-	[Deprecated (PlatformName.MacOSX, 10, 12)]
-	[MacCatalyst (13, 1)]
-	[Deprecated (PlatformName.MacCatalyst, 13, 1)]
-	[Export ("initWithName:floatVector2:")]
-	IntPtr InitWithNameFloatVector2 (string name, Vector2 value);
-
 	[MacCatalyst (13, 1)]
 	[Export ("initWithName:vectorFloat2:")]
 	[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 	[MarshalNativeExceptions]
-	[Internal]
-	IntPtr InitWithNameVectorFloat2 (string name, Vector2 value);
-
-	[Internal]
-	[Deprecated (PlatformName.iOS, 10, 0)]
-	[Deprecated (PlatformName.TvOS, 10, 0)]
-	[Deprecated (PlatformName.MacOSX, 10, 12)]
-	[MacCatalyst (13, 1)]
-	[Deprecated (PlatformName.MacCatalyst, 13, 1)]
-	[Export ("initWithName:floatVector3:")]
-	IntPtr InitWithNameFloatVector3 (string name, Vector3 value);
+	NativeHandle Constructor (string name, Vector2 value);
 
 	[MacCatalyst (13, 1)]
 	[Export ("initWithName:vectorFloat3:")]
 	[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
-	[Internal]
-	IntPtr InitWithNameVectorFloat3 (string name, Vector3 value);
-
-	[Internal]
-	[Deprecated (PlatformName.iOS, 10, 0)]
-	[Deprecated (PlatformName.TvOS, 10, 0)]
-	[Deprecated (PlatformName.MacOSX, 10, 12)]
-	[MacCatalyst (13, 1)]
-	[Deprecated (PlatformName.MacCatalyst, 13, 1)]
-	[Export ("initWithName:floatVector4:")]
-	IntPtr InitWithNameFloatVector4 (string name, Vector4 value);
+	NativeHandle Constructor (string name, Vector3 value);
 
 	[MacCatalyst (13, 1)]
 	[Export ("initWithName:vectorFloat4:")]
 	[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
-	[Internal]
-	IntPtr InitWithNameVectorFloat4 (string name, Vector4 value);
-
-#if !NET
-	[Internal]
-	[Deprecated (PlatformName.iOS, 10, 0)]
-	[Deprecated (PlatformName.TvOS, 10, 0)]
-	[Deprecated (PlatformName.MacOSX, 10, 12)]
-	[Export ("initWithName:floatMatrix2:")]
-	IntPtr InitWithNameFloatMatrix2 (string name, Matrix2 value);
-#endif
-
-#if !NET
-	[Obsolete ("Use the '(string, MatrixFloat2x2)' overload instead.")]
-	[Sealed]
-	[Export ("initWithName:matrixFloat2x2:")]
-	[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
-	[Internal]
-	IntPtr InitWithNameMatrixFloat2x2 (string name, Matrix2 value);
-#endif // !NET
+	NativeHandle Constructor (string name, Vector4 value);
 
 	[MacCatalyst (13, 1)]
 	[Export ("initWithName:matrixFloat2x2:")]
 	[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 	NativeHandle Constructor (string name, MatrixFloat2x2 value);
 
-#if !NET
-	[Internal]
-	[Deprecated (PlatformName.iOS, 10, 0)]
-	[Deprecated (PlatformName.TvOS, 10, 0)]
-	[Deprecated (PlatformName.MacOSX, 10, 12)]
-	[Export ("initWithName:floatMatrix3:")]
-	IntPtr InitWithNameFloatMatrix3 (string name, Matrix3 value);
-
-	[Obsolete ("Use the '(string, MatrixFloat3x3)' overload instead.")]
-	[Sealed]
-	[Export ("initWithName:matrixFloat3x3:")]
-	[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
-	[Internal]
-	IntPtr InitWithNameMatrixFloat3x3 (string name, Matrix3 value);
-#endif // !NET
-
 	[MacCatalyst (13, 1)]
 	[Export ("initWithName:matrixFloat3x3:")]
 	[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 	NativeHandle Constructor (string name, MatrixFloat3x3 value);
-
-#if !NET
-	[Internal]
-	[Deprecated (PlatformName.iOS, 10, 0)]
-	[Deprecated (PlatformName.TvOS, 10, 0)]
-	[Deprecated (PlatformName.MacOSX, 10, 12)]
-	[Export ("initWithName:floatMatrix4:")]
-	IntPtr InitWithNameFloatMatrix4 (string name, Matrix4 value);
-#endif // !NET
-
-#if !NET
-	[Obsolete ("Use the '(string, MatrixFloat4x4)' overload instead.")]
-	[Export ("initWithName:matrixFloat4x4:")]
-	[Sealed]
-	[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
-	[Internal]
-	IntPtr InitWithNameMatrixFloat4x4 (string name, Matrix4 value);
-#endif // !NET
 
 	[MacCatalyst (13, 1)]
 	[Export ("initWithName:matrixFloat4x4:")]
@@ -1929,57 +1847,27 @@ interface SKUniform : NSCopying, NSSecureCoding {
 	[Export ("floatValue")]
 	float FloatValue { get; set; } /* float, not CGFloat */
 
-	[Internal]
-	[Deprecated (PlatformName.iOS, 10, 0)]
-	[Deprecated (PlatformName.TvOS, 10, 0)]
-	[Deprecated (PlatformName.MacOSX, 10, 12)]
-	[MacCatalyst (13, 1)]
-	[Deprecated (PlatformName.MacCatalyst, 13, 1)]
-	[Export ("floatVector2Value")]
-	Vector2 _FloatVector2Value { get; set; }
-
 	[MacCatalyst (13, 1)]
 	[Export ("vectorFloat2Value", ArgumentSemantic.Assign)]
-	[Internal]
-	Vector2 _VectorFloat2Value {
+	Vector2 FloatVector2Value {
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		get;
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		set;
 	}
-
-	[Internal]
-	[Deprecated (PlatformName.iOS, 10, 0)]
-	[Deprecated (PlatformName.TvOS, 10, 0)]
-	[Deprecated (PlatformName.MacOSX, 10, 12)]
-	[MacCatalyst (13, 1)]
-	[Deprecated (PlatformName.MacCatalyst, 13, 1)]
-	[Export ("floatVector3Value")]
-	Vector3 _FloatVector3Value { get; set; }
 
 	[MacCatalyst (13, 1)]
 	[Export ("vectorFloat3Value", ArgumentSemantic.Assign)]
-	[Internal]
-	Vector3 _VectorFloat3Value {
+	Vector3 VectorFloat3Value {
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		get;
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		set;
 	}
 
-	[Internal]
-	[Deprecated (PlatformName.iOS, 10, 0)]
-	[Deprecated (PlatformName.TvOS, 10, 0)]
-	[Deprecated (PlatformName.MacOSX, 10, 12)]
-	[MacCatalyst (13, 1)]
-	[Deprecated (PlatformName.MacCatalyst, 13, 1)]
-	[Export ("floatVector4Value")]
-	Vector4 _FloatVector4Value { get; set; }
-
 	[MacCatalyst (13, 1)]
 	[Export ("vectorFloat4Value", ArgumentSemantic.Assign)]
-	[Internal]
-	Vector4 _VectorFloat4Value {
+	Vector4 VectorFloat4Value {
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		get;
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]

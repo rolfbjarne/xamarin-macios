@@ -24,6 +24,11 @@ namespace WebKit {
 		Right = 2
 	}
 
+	[UnsupportedOSPlatform ("ios12.2")]
+	[UnsupportedOSPlatform ("tvos12.2")]
+	[UnsupportedOSPlatform ("maccatalyst15.0")]
+	[ObsoletedOSPlatform ("macos10.14", "No longer supported.")]
+	[SupportedOSPlatform ("macos12.0")]
 	partial class WebNavigationPolicyEventArgs {
 
 		public WebNavigationType NavigationType {

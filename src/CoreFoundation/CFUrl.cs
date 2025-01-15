@@ -51,10 +51,10 @@ namespace CoreFoundation {
 
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	// CFURL.h
 	public class CFUrl : NativeObject {
@@ -135,19 +135,19 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* Boolean */ byte CFURLIsFileReferenceURL (/* CFURLRef */IntPtr url);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public bool IsFileReference {
 			get {

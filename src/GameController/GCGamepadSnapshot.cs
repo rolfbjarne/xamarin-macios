@@ -19,10 +19,10 @@ namespace GameController {
 	// GCGamepadSnapshot.h
 	// float_t are 4 bytes (at least for ARM64)
 #if NET
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("tvos12.2")]
 	[ObsoletedOSPlatform ("macos10.15", "Use 'GCExtendedGamepad' instead.")]
 	[ObsoletedOSPlatform ("tvos13.0", "Use 'GCExtendedGamepad' instead.")]
 	[ObsoletedOSPlatform ("ios13.0", "Use 'GCExtendedGamepad' instead.")]

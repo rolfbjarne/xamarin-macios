@@ -54,10 +54,10 @@ namespace CoreFoundation {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public class DispatchSource : DispatchObject {
 		DispatchQueue? queue;
@@ -226,10 +226,10 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public class Data : DispatchSource {
 			internal Data () { }
@@ -248,10 +248,10 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public class DataAdd : Data {
 			static IntPtr type_data_add;
@@ -275,10 +275,10 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public class DataOr : Data {
 			static IntPtr type_data_or;
@@ -301,10 +301,10 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public class Mach : DispatchSource {
 			internal Mach (IntPtr handle, bool owns) : base (handle, owns) { }
@@ -320,10 +320,10 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public class MachSend : Mach {
 			static IntPtr type_mach_send;
@@ -351,10 +351,10 @@ namespace CoreFoundation {
 			}
 		}
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public class MachReceive : DispatchSource {
 			static IntPtr type_mach_recv;
@@ -378,10 +378,10 @@ namespace CoreFoundation {
 
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public class MemoryPressure : DispatchSource {
 			static IntPtr type_memorypressure;
@@ -409,10 +409,10 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public class ProcessMonitor : DispatchSource {
 			static IntPtr type_proc;
@@ -447,10 +447,10 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public class ReadMonitor : DispatchSource {
 			static IntPtr type_read;
@@ -484,10 +484,10 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public class SignalMonitor : DispatchSource {
 			static IntPtr type_signal;
@@ -520,10 +520,10 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public class Timer : DispatchSource {
 			static IntPtr type_timer;
@@ -559,10 +559,10 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public class VnodeMonitor : DispatchSource {
 			static IntPtr type_vnode;
@@ -639,10 +639,10 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public class WriteMonitor : DispatchSource {
 			static IntPtr type_write;

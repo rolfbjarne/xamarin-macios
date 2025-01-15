@@ -9,7 +9,7 @@ using ObjCRuntime;
 namespace Intents {
 
 	public partial class INSetClimateSettingsInCarIntent {
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("ios12.0", "Use the overload that takes 'INSpeakableString carName'.")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use the overload that takes 'INSpeakableString carName'.")]

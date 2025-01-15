@@ -74,10 +74,10 @@ namespace AudioToolbox {
 		InvalidOfflineMode = -66626,
 		BufferEnqueuedTwice = -66666,
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		CannotStartYet = -66665,
 
@@ -91,10 +91,10 @@ namespace AudioToolbox {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public class AudioQueueException : Exception {
 		static string Lookup (int k)
@@ -249,10 +249,10 @@ namespace AudioToolbox {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AudioQueueBuffer {
@@ -278,10 +278,10 @@ namespace AudioToolbox {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[StructLayout (LayoutKind.Explicit)]
 	public struct AudioQueueParameterEvent {
@@ -304,10 +304,10 @@ namespace AudioToolbox {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AudioQueueLevelMeterState {
@@ -316,10 +316,10 @@ namespace AudioToolbox {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AudioQueueChannelAssignment {
@@ -340,10 +340,10 @@ namespace AudioToolbox {
 	delegate void AudioQueuePropertyListener (IntPtr userData, IntPtr AQ, AudioQueueProperty id);
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public class BufferCompletedEventArgs : EventArgs {
 		public BufferCompletedEventArgs (IntPtr audioQueueBuffer)
@@ -364,10 +364,10 @@ namespace AudioToolbox {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public class InputCompletedEventArgs : EventArgs {
 		public unsafe InputCompletedEventArgs (IntPtr audioQueueBuffer, AudioTimeStamp timeStamp, AudioStreamPacketDescription []? pdec)
@@ -390,10 +390,10 @@ namespace AudioToolbox {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public abstract class AudioQueue : IDisposable {
 		internal protected IntPtr handle;
@@ -1331,10 +1331,10 @@ namespace AudioToolbox {
 														  AudioBuffers data);
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public class AudioQueueProcessingTap : IDisposable {
 #if !NET
@@ -1450,10 +1450,10 @@ namespace AudioToolbox {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public class OutputAudioQueue : AudioQueue {
 #if NET
@@ -1568,10 +1568,10 @@ namespace AudioToolbox {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public class InputAudioQueue : AudioQueue {
 #if !NET
@@ -1662,10 +1662,10 @@ namespace AudioToolbox {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public class AudioQueueTimeline : IDisposable {
 		internal protected IntPtr timelineHandle;

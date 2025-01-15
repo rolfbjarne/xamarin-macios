@@ -8,16 +8,16 @@ namespace UIKit {
 	static public partial class UIContentSizeCategoryExtensions {
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.UIKitLibrary)]
 		static extern nint /* NSComparisonResult */ UIContentSizeCategoryCompareToCategory (IntPtr /* NSString */ lhs, IntPtr /* NSString */ rhs);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public static NSComparisonResult Compare (UIContentSizeCategory category1, UIContentSizeCategory category2)
@@ -34,16 +34,16 @@ namespace UIKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.UIKitLibrary)]
 		static extern byte UIContentSizeCategoryIsAccessibilityCategory (IntPtr /* NSString */ category);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		static public bool IsAccessibilityCategory (this UIContentSizeCategory self)

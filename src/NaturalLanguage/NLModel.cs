@@ -12,7 +12,7 @@ namespace NaturalLanguage {
 
 #if NET
 		[SupportedOSPlatform ("tvos14.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios14.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
@@ -28,7 +28,7 @@ namespace NaturalLanguage {
 
 #if NET
 		[SupportedOSPlatform ("tvos14.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios14.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #else

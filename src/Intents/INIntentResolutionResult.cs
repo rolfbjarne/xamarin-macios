@@ -15,8 +15,8 @@ using ObjCRuntime;
 
 namespace Intents {
 
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("tvos14.0")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
 	[Register ("INIntentResolutionResult", SkipRegistration = true)]
@@ -48,13 +48,13 @@ namespace Intents {
 		}
 
 		[SupportedOSPlatform ("ios13.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("tvos14.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		public static INIntentResolutionResult GetUnsupported (nint reason) => throw new NotImplementedException ("All subclasses of INIntentResolutionResult must re-implement this method");
 
 		[SupportedOSPlatform ("ios13.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("tvos14.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		public static INIntentResolutionResult GetConfirmationRequired (NSObject itemToConfirm, nint reason) => throw new NotImplementedException ("All subclasses of INIntentResolutionResult must re-implement this method");

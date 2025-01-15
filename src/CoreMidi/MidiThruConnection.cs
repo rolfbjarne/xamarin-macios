@@ -22,9 +22,9 @@ using System.Runtime.Versioning;
 namespace CoreMidi {
 #if !COREBUILD
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public class MidiThruConnection : IDisposable {
 		MidiThruConnectionRef handle;

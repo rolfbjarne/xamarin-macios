@@ -32,10 +32,10 @@ using NativeHandle = System.IntPtr;
 namespace CoreMedia {
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public class CMFormatDescription : NativeObject {
 		[Preserve (Conditional = true)]
@@ -308,10 +308,10 @@ namespace CoreMedia {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public class CMAudioFormatDescription : CMFormatDescription {
 		[Preserve (Conditional = true)]
@@ -324,10 +324,10 @@ namespace CoreMedia {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public partial class CMVideoFormatDescription : CMFormatDescription {
 		[Preserve (Conditional = true)]
@@ -391,10 +391,10 @@ namespace CoreMedia {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		[DllImport (Constants.CoreMediaLibrary)]
 		unsafe static extern /* OSStatus */ CMFormatDescriptionError CMVideoFormatDescriptionCreateFromH264ParameterSets (
@@ -406,10 +406,10 @@ namespace CoreMedia {
 			/* CMFormatDescriptionRef* */ IntPtr* formatDescriptionOut);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public static CMVideoFormatDescription? FromH264ParameterSets (List<byte []> parameterSets, int nalUnitHeaderLength, out CMFormatDescriptionError error)
 		{
@@ -454,10 +454,10 @@ namespace CoreMedia {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		[DllImport (Constants.CoreMediaLibrary)]
 		unsafe static extern /* OSStatus */ CMFormatDescriptionError CMVideoFormatDescriptionGetH264ParameterSetAtIndex (
@@ -469,10 +469,10 @@ namespace CoreMedia {
 			/* int* */ int* nalUnitHeaderLengthOut);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public byte []? GetH264ParameterSet (nuint index, out nuint parameterSetCount, out int nalUnitHeaderLength, out CMFormatDescriptionError error)
 		{
@@ -522,9 +522,9 @@ namespace CoreMedia {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.CoreMediaLibrary)]
@@ -538,9 +538,9 @@ namespace CoreMedia {
 			/* CMFormatDescriptionRef* */ IntPtr* formatDescriptionOut);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public static CMVideoFormatDescription? FromHevcParameterSets (List<byte []> parameterSets, int nalUnitHeaderLength, NSDictionary extensions, out CMFormatDescriptionError error)
@@ -586,9 +586,9 @@ namespace CoreMedia {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.CoreMediaLibrary)]
@@ -601,9 +601,9 @@ namespace CoreMedia {
 			/* int* */ int* nalUnitHeaderLengthOut);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public byte []? GetHevcParameterSet (nuint index, out nuint parameterSetCount, out int nalUnitHeaderLength, out CMFormatDescriptionError error)

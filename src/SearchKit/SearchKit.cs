@@ -50,7 +50,7 @@ namespace SearchKit {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public class SKSearch : NativeObject {
 		[Preserve (Conditional = true)]
@@ -117,7 +117,7 @@ namespace SearchKit {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public class SKDocument : NativeObject {
 		[DllImport (Constants.SearchKitLibrary)]
@@ -193,7 +193,7 @@ namespace SearchKit {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	public class SKIndex : DisposableObject
 #else
 	public class SKIndex : NativeObject
@@ -498,7 +498,7 @@ namespace SearchKit {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public class SKSummary : NativeObject {
 		[Preserve (Conditional = true)]

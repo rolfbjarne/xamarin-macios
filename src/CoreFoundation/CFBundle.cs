@@ -26,10 +26,10 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public struct PackageInfo {
 			public PackageInfo (CFBundle.PackageType type, string creator)
@@ -597,7 +597,7 @@ namespace CoreFoundation {
 
 #if MONOMAC
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #else
 		[NoMacCatalyst]
@@ -606,7 +606,7 @@ namespace CoreFoundation {
 		extern static byte CFBundleIsExecutableLoadable (IntPtr bundle);
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #else
 		[NoMacCatalyst]
@@ -620,7 +620,7 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #else
 		[NoMacCatalyst]
@@ -629,7 +629,7 @@ namespace CoreFoundation {
 		extern static byte CFBundleIsExecutableLoadableForURL (IntPtr bundle);
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #else
 		[NoMacCatalyst]
@@ -643,7 +643,7 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #else
 		[NoMacCatalyst]
@@ -652,7 +652,7 @@ namespace CoreFoundation {
 		extern static byte CFBundleIsArchitectureLoadable (/*cpu_type_t => integer_t => int*/ Architecture architecture);
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #else
 		[NoMacCatalyst]

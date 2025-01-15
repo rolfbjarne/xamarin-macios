@@ -27,10 +27,10 @@ using NativeHandle = System.IntPtr;
 
 namespace Security {
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 	[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 	[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
 	[ObsoletedOSPlatform ("ios13.0", "Use 'Network.framework' instead.")]
@@ -544,10 +544,10 @@ namespace Security {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[ObsoletedOSPlatform ("macos10.11")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("ios9.0", "The use of different RSA certificates for signing and encryption is no longer allowed.")]
@@ -559,10 +559,10 @@ namespace Security {
 		extern unsafe static /* OSStatus */ SslStatus SSLSetEncryptionCertificate (/* SSLContextRef */ IntPtr context, /* CFArrayRef */ IntPtr certRefs);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[ObsoletedOSPlatform ("macos10.11", "Export ciphers are not available anymore.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Export ciphers are not available anymore.")]
 		[ObsoletedOSPlatform ("ios9.0", "Export ciphers are not available anymore.")]
@@ -623,9 +623,9 @@ namespace Security {
 #endif // !XAMCORE_5_0
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
@@ -635,9 +635,9 @@ namespace Security {
 		static extern int SSLSetSessionConfig (IntPtr /* SSLContextRef* */ context, IntPtr /* CFStringRef* */ config);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
@@ -653,9 +653,9 @@ namespace Security {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
@@ -667,9 +667,9 @@ namespace Security {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
@@ -679,9 +679,9 @@ namespace Security {
 		static extern int SSLReHandshake (IntPtr /* SSLContextRef* */ context);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
@@ -693,10 +693,10 @@ namespace Security {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("ios13.0", "Use 'Network.framework' instead.")]
@@ -705,10 +705,10 @@ namespace Security {
 		unsafe static extern /* OSStatus */ SslStatus SSLCopyRequestedPeerName (IntPtr /* SSLContextRef* */ context, byte* /* char* */ peerName, nuint* /* size_t */ peerNameLen);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("ios13.0", "Use 'Network.framework' instead.")]
@@ -717,10 +717,10 @@ namespace Security {
 		unsafe static extern /* OSStatus */ SslStatus SSLCopyRequestedPeerNameLength (IntPtr /* SSLContextRef* */ context, nuint* /* size_t */ peerNameLen);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("ios13.0", "Use 'Network.framework' instead.")]
@@ -742,9 +742,9 @@ namespace Security {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
@@ -754,9 +754,9 @@ namespace Security {
 		static extern /* OSStatus */ int SSLSetSessionTicketsEnabled (IntPtr /* SSLContextRef */ context, byte /* Boolean */ enabled);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
@@ -768,9 +768,9 @@ namespace Security {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
@@ -780,9 +780,9 @@ namespace Security {
 		static extern /* OSStatus */ int SSLSetError (IntPtr /* SSLContextRef */ context, SecStatusCode /* OSStatus */ status);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
@@ -794,9 +794,9 @@ namespace Security {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
@@ -806,9 +806,9 @@ namespace Security {
 		static extern /* OSStatus */ int SSLSetOCSPResponse (IntPtr /* SSLContextRef */ context, IntPtr /* CFDataRef __nonnull */ response);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
@@ -822,9 +822,9 @@ namespace Security {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
@@ -834,9 +834,9 @@ namespace Security {
 		static extern /* OSStatus */ int SSLSetALPNProtocols (IntPtr /* SSLContextRef */ context, IntPtr /* CFArrayRef */ protocols);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
@@ -849,9 +849,9 @@ namespace Security {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
@@ -861,9 +861,9 @@ namespace Security {
 		unsafe static extern /* OSStatus */ int SSLCopyALPNProtocols (IntPtr /* SSLContextRef */ context, IntPtr* /* CFArrayRef* */ protocols);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]
@@ -882,9 +882,9 @@ namespace Security {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'Network.framework' instead.")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'Network.framework' instead.")]

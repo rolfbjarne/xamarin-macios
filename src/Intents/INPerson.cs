@@ -10,7 +10,7 @@ namespace Intents {
 #if !TVOS
 	public partial class INPerson {
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 		public enum INPersonType {
@@ -19,7 +19,7 @@ namespace Intents {
 		}
 
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 		public INPerson (INPersonHandle personHandle, NSPersonNameComponents? nameComponents, string? displayName, INImage? image, string? contactIdentifier, string? customIdentifier, bool isMe, INPersonSuggestionType suggestionType) :
@@ -28,7 +28,7 @@ namespace Intents {
 		}
 
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 		public INPerson (INPersonHandle personHandle, NSPersonNameComponents? nameComponents, string? displayName, INImage? image, string? contactIdentifier, string? customIdentifier, bool isMe, INPersonSuggestionType suggestionType, INPersonType personType) : base (NSObjectFlag.Empty)

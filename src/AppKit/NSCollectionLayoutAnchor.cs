@@ -11,7 +11,7 @@ using CoreGraphics;
 namespace AppKit {
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public enum NSCollectionLayoutAnchorOffsetType {
 		Absolute,

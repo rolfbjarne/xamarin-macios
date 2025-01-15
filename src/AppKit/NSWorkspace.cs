@@ -13,7 +13,7 @@ namespace AppKit {
 	public partial class NSWorkspace {
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos11.0", "Use 'NSWorkspace.OpenUrls' with completion handler.")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #else
@@ -26,7 +26,7 @@ namespace AppKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos11.0", "Use 'NSWorkspace.OpenUrls' with completion handler.")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #else

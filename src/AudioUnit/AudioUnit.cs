@@ -49,10 +49,10 @@ using NativeHandle = System.IntPtr;
 namespace AudioUnit {
 #if !COREBUILD
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public class AudioUnitException : Exception {
 		static string Lookup (int k)
@@ -156,10 +156,10 @@ namespace AudioUnit {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public class SamplerInstrumentData {
 #if !COREBUILD
@@ -240,10 +240,10 @@ namespace AudioUnit {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public class AudioUnitParameterInfo {
 #if !COREBUILD
@@ -292,10 +292,10 @@ namespace AudioUnit {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AudioUnitParameterEvent {
@@ -305,10 +305,10 @@ namespace AudioUnit {
 		public AUParameterEventType EventType;
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		[StructLayout (LayoutKind.Explicit)]
 		public struct EventValuesStruct {
@@ -338,10 +338,10 @@ namespace AudioUnit {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public class AudioUnit : DisposableObject {
 #if !COREBUILD
@@ -427,7 +427,7 @@ namespace AudioUnit {
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 #else
 		[MacCatalyst (15, 0)]
 #endif
@@ -784,9 +784,9 @@ namespace AudioUnit {
 
 #if !MONOMAC
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[ObsoletedOSPlatform ("tvos13.0")]
 		[ObsoletedOSPlatform ("maccatalyst14.0")]
 		[ObsoletedOSPlatform ("ios13.0")]
@@ -800,9 +800,9 @@ namespace AudioUnit {
 		static extern AudioComponentStatus AudioOutputUnitPublish (AudioComponentDescription inDesc, IntPtr /* CFStringRef */ inName, uint /* UInt32 */ inVersion, IntPtr /* AudioUnit */ inOutputUnit);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[UnsupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'AudioUnit' instead.")]
 		[ObsoletedOSPlatform ("maccatalyst14.0", "Use 'AudioUnit' instead.")]
@@ -828,9 +828,9 @@ namespace AudioUnit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[UnsupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("tvos13.0")]
 		[ObsoletedOSPlatform ("maccatalyst14.0")]
@@ -845,9 +845,9 @@ namespace AudioUnit {
 		static extern IntPtr AudioOutputUnitGetHostIcon (IntPtr /* AudioUnit */ au, float /* float */ desiredPointSize);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[UnsupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("tvos13.0", "Use 'AudioUnit' instead.")]
 		[ObsoletedOSPlatform ("maccatalyst14.0", "Use 'AudioUnit' instead.")]
@@ -1060,7 +1060,7 @@ namespace AudioUnit {
 #if MONOMAC || __MACCATALYST__
 #if NET
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 #else
 		[MacCatalyst (15,0)]
 #endif
@@ -1166,10 +1166,10 @@ namespace AudioUnit {
 #endif // MONOMAC || __MACCATALYST__
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public unsafe class AURenderEventEnumerator : INativeObject
 #if COREBUILD
@@ -1264,7 +1264,7 @@ namespace AudioUnit {
 #if NET
 		[SupportedOSPlatform ("ios15.0")]
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 		[iOS (15, 0)]
@@ -1275,10 +1275,10 @@ namespace AudioUnit {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public unsafe struct AURenderEventHeader {
@@ -1300,10 +1300,10 @@ namespace AudioUnit {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AUParameterObserverToken {
@@ -1315,10 +1315,10 @@ namespace AudioUnit {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public unsafe struct AUParameterEvent {
@@ -1375,10 +1375,10 @@ namespace AudioUnit {
 	// 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[StructLayout (LayoutKind.Explicit)]
 	public struct AURenderEvent {
@@ -1393,10 +1393,10 @@ namespace AudioUnit {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AURecordedParameterEvent {
@@ -1408,10 +1408,10 @@ namespace AudioUnit {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AUParameterAutomationEvent {
@@ -1429,10 +1429,10 @@ namespace AudioUnit {
 
 #if !COREBUILD
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	//	Configuration Info Keys
 	public static class AudioUnitConfigurationInfo {

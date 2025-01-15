@@ -58,9 +58,11 @@ DOTNET_REFERENCES = \
 DOTNET_OR_GREATER_DEFINES:=$(foreach version,$(shell seq 6 $(firstword $(subst ., ,$(subst net,,$(DOTNET_TFM))))),/define:NET$(version)_0_OR_GREATER)
 
 ifneq ($(ANALYZE),)
+NETANALYZER ?= $(DOTNET_ANALYZERS_DIR)/Microsoft.CodeAnalysis.NetAnalyzers.dll
+CSHARP_NETANALYZER ?= $(DOTNET_ANALYZERS_DIR)/Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll
 DOTNET_ANALYZERS = \
-	/analyzer:$(DOTNET_ANALYZERS_DIR)/Microsoft.CodeAnalysis.NetAnalyzers.dll  \
-	/analyzer:$(DOTNET_ANALYZERS_DIR)/Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll \
+	/analyzer:$(NETANALYZER)  \
+	/analyzer:$(CSHARP_NETANALYZER) \
 
 endif
 

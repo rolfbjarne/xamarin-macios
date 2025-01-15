@@ -128,6 +128,9 @@ namespace CoreMidi {
 		}
 	}
 
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
 	[StructLayout (LayoutKind.Sequential)]
 	struct MidiThruConnectionParamsStruct {
 		public uint Version;

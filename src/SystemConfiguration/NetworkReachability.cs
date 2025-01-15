@@ -324,6 +324,14 @@ namespace SystemConfiguration {
 			return handle;
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("ios17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("tvos17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("macos14.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
 		static IntPtr Create (IPAddress ip)
 		{
 			if (ip is null)
@@ -335,11 +343,27 @@ namespace SystemConfiguration {
 			}
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("ios17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("tvos17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("macos14.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
 		public NetworkReachability (IPAddress ip)
 			: base (Create (ip), true)
 		{
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("ios17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("tvos17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("macos14.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
 		static IntPtr Create (string address)
 		{
 			if (address is null)
@@ -349,11 +373,27 @@ namespace SystemConfiguration {
 			return CheckFailure (SCNetworkReachabilityCreateWithName (IntPtr.Zero, addressStr));
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("ios17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("tvos17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("macos14.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
 		public NetworkReachability (string address)
 			: base (Create (address), true)
 		{
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("ios17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("tvos17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("macos14.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
 		static IntPtr Create (IPAddress localAddress, IPAddress remoteAddress)
 		{
 			if (localAddress is null && remoteAddress is null)
@@ -384,6 +424,14 @@ namespace SystemConfiguration {
 			return CheckFailure (handle);
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("ios17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("tvos17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("macos14.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
 		public NetworkReachability (IPAddress localAddress, IPAddress remoteAddress)
 			: base (Create (localAddress, remoteAddress), true)
 		{
@@ -408,6 +456,14 @@ namespace SystemConfiguration {
 		unsafe static extern int SCNetworkReachabilityGetFlags (/* SCNetworkReachabilityRef __nonnull */ IntPtr target,
 			/* SCNetworkReachabilityFlags* __nonnull */ NetworkReachabilityFlags* flags);
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("ios17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("tvos17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("macos14.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
 		public bool TryGetFlags (out NetworkReachabilityFlags flags)
 		{
 			return GetFlags (out flags) == StatusCode.OK;
@@ -603,6 +659,14 @@ namespace SystemConfiguration {
 			}
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("ios17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("tvos17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("macos14.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
 		public bool Schedule ()
 		{
 			return Schedule (CFRunLoop.Current, CFRunLoop.ModeDefault);
@@ -657,6 +721,14 @@ namespace SystemConfiguration {
 			}
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("ios17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("tvos17.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
+		[ObsoletedOSPlatform ("macos14.4", "Use 'NSUrlSession' or 'NWConnection' instead.")]
 		public bool Unschedule ()
 		{
 			return Unschedule (CFRunLoop.Current, CFRunLoop.ModeDefault);

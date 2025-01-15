@@ -19,10 +19,13 @@ namespace WebKit {
 		public bool TextInteractionEnabled {
 			get {
 #if IOS || __MACCATALYST__
-				if (!SystemVersion.CheckiOS (15, 0))
+				if (!SystemVersion.IsAtLeastXcode13)
 					return _OldTextInteractionEnabled;
 #endif
+				// The CA1416 here is an analyzer bug: https://github.com/dotnet/roslyn-analyzers/issues/7530
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 14.5 and later, 'maccatalyst' 14.5 and later, 'macOS/OSX' 12.0 and later. 'WKPreferences._NewGetTextInteractionEnabled()' is only supported on: 'ios' 15.0 and later, 'maccatalyst' 15.0 and later.
 				return _NewGetTextInteractionEnabled ();
+#pragma warning restore CA1416
 			}
 			set => _OldTextInteractionEnabled = value;
 		}

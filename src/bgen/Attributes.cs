@@ -1010,9 +1010,9 @@ public abstract class AvailabilityBaseAttribute : Attribute {
 
 #if BGENERATOR
 		// workaround for https://github.com/dotnet/roslyn-analyzers/issues/7239
-		// the analyzer gets confused with a version-less 'maccatalyst' string, so provide the minimum version.
-		if (Platform == PlatformName.MacCatalyst && Version is null)
-			builder.Append (Xamarin.SdkVersions.DotNetMinMacCatalyst);
+		// the analyzer gets confused with a version-less platform string, so provide the minimum version.
+		if (Version is null)
+			builder.Append (Xamarin.SdkVersions.GetMinVersion (Platform.AsApplePlatform ()));
 #endif
 	}
 

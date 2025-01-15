@@ -162,54 +162,70 @@ namespace VideoToolbox {
 
 			// added in Xcode 11 so the constants won't exists in earlier SDK, making all values optional
 
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'VTVideoEncoderList.GpuRegistryId' is only supported on: 'ios' 13.0 and later, 'maccatalyst' 13.0 and later, 'tvos' 13.0 and later.
 			var constant = VTVideoEncoderList.GpuRegistryId;
 			if (constant is not null) {
 				var gri = dict [constant] as NSNumber;
 				GpuRegistryId = gri?.UInt64Value; // optional
 			}
+#pragma warning restore CA1416
 
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'VTVideoEncoderList.SupportedSelectionProperties' is only supported on: 'ios' 13.0 and later, 'maccatalyst' 13.0 and later, 'tvos' 13.0 and later.
 			constant = VTVideoEncoderList.SupportedSelectionProperties;
 			if (constant is not null) {
 				if (dict.TryGetValue (constant, out NSDictionary d)) // optional
 					SupportedSelectionProperties = d;
 			}
+#pragma warning restore CA1416
 
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'VTVideoEncoderList.PerformanceRating' is only supported on: 'ios' 13.0 and later, 'maccatalyst' 13.0 and later, 'tvos' 13.0 and later.
 			constant = VTVideoEncoderList.PerformanceRating;
 			if (constant is not null) {
 				PerformanceRating = dict [constant] as NSNumber; // optional
 			}
+#pragma warning restore CA1416
 
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'VTVideoEncoderList.QualityRating' is only supported on: 'ios' 13.0 and later, 'maccatalyst' 13.0 and later, 'tvos' 13.0 and later.
 			constant = VTVideoEncoderList.QualityRating;
 			if (constant is not null) {
 				QualityRating = dict [constant] as NSNumber; // optional
 			}
+#pragma warning restore CA1416
 
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'VTVideoEncoderList.InstanceLimit' is only supported on: 'ios' 13.0 and later, 'maccatalyst' 13.0 and later, 'tvos' 13.0 and later.
 			constant = VTVideoEncoderList.InstanceLimit;
 			if (constant is not null) {
 				var il = dict [constant] as NSNumber;
 				InstanceLimit = il?.BoolValue; // optional
 			}
+#pragma warning restore CA1416
 
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'VTVideoEncoderList.IsHardwareAccelerated' is only supported on: 'ios' 13.0 and later, 'maccatalyst' 13.0 and later, 'tvos' 13.0 and later.
 			constant = VTVideoEncoderList.IsHardwareAccelerated;
 			if (constant is not null) {
 				var ha = dict [constant] as NSNumber;
 				IsHardwareAccelerated = ha?.BoolValue; // optional
 			}
+#pragma warning restore CA1416
 
 			// added in xcode 12.2 so the constant won't exists in earlier SDK
 
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'VTVideoEncoderList.SupportsFrameReordering' is only supported on: 'ios' 14.2 and later, 'maccatalyst' 14.2 and later, 'tvos' 14.2 and later.
 			constant = VTVideoEncoderList.SupportsFrameReordering;
 			if (constant is not null) {
 				var sfr = dict [constant] as NSNumber;
 				SupportsFrameReordering = sfr?.BoolValue ?? true; // optional, default true
 			}
+#pragma warning restore CA1416
 
 			// added in xcode 13
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'VTVideoEncoderList.IncludeStandardDefinitionDVEncoders' is only supported on: 'ios' 15.0 and later, 'maccatalyst' 15.0 and later, 'tvos' 15.0 and later.
 			constant = VTVideoEncoderList.IncludeStandardDefinitionDVEncoders;
 			if (constant is not null) {
 				var includeDef = dict [constant] as NSNumber;
 				IncludeStandardDefinitionDVEncoders = includeDef?.BoolValue ?? false; // optional, default false 
 			}
+#pragma warning restore CA1416
 		}
 
 #if NET

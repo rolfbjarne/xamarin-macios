@@ -47,6 +47,14 @@ using CF = CoreFoundation;
 #nullable disable
 
 namespace System.Net.Http {
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
+	[ObsoletedOSPlatform ("macos10.11", "Use 'NSUrlSession'.")]
+	[ObsoletedOSPlatform ("ios9.0", "Use 'NSUrlSession'.")]
+	[ObsoletedOSPlatform ("maccatalyst", "Use 'NSUrlSession'.")]
+	[ObsoletedOSPlatform ("tvos", "Use 'NSUrlSession'.")]
 	public class CFNetworkHandler : HttpMessageHandler {
 		class StreamBucket {
 			public TaskCompletionSource<HttpResponseMessage> Response;

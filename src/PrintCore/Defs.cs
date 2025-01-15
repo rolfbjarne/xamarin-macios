@@ -164,7 +164,7 @@ namespace PrintCore {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct PMResolution {
@@ -184,7 +184,7 @@ namespace PrintCore {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct PMRect {
@@ -210,7 +210,7 @@ namespace PrintCore {
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct PMPaperMargins {

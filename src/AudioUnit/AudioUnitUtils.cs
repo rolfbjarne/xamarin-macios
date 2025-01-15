@@ -40,10 +40,10 @@ using System.Runtime.Versioning;
 
 namespace AudioUnit {
 #if NET
-    [SupportedOSPlatform ("ios")]
+    [SupportedOSPlatform ("ios12.2")]
     [SupportedOSPlatform ("maccatalyst15.0")]
-    [SupportedOSPlatform ("macos")]
-    [SupportedOSPlatform ("tvos")]
+    [SupportedOSPlatform ("macos12.0")]
+    [SupportedOSPlatform ("tvos12.2")]
 #endif
 	public static class AudioUnitUtils {
 		public const int SampleFractionBits = 24;

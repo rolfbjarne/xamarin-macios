@@ -24,7 +24,7 @@ namespace Network {
 
 #if NET
 	// [SupportedOSPlatform ("tvos14.0")]  -  Not valid on Delegates
-	// [SupportedOSPlatform ("macos")]
+	// [SupportedOSPlatform ("macos12.0")]
 	// [SupportedOSPlatform ("ios14.0")]
 	// [SupportedOSPlatform ("maccatalyst15.0")]
 #else
@@ -36,7 +36,7 @@ namespace Network {
 
 #if NET
 	// [SupportedOSPlatform ("tvos14.0")]  -  Not valid on Delegates
-	// [SupportedOSPlatform ("macos")]
+	// [SupportedOSPlatform ("macos12.0")]
 	// [SupportedOSPlatform ("ios14.0")]
 	// [SupportedOSPlatform ("maccatalyst15.0")]
 #else
@@ -48,7 +48,7 @@ namespace Network {
 
 #if NET
 	[SupportedOSPlatform ("tvos14.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("ios14.0")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
@@ -310,7 +310,7 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
@@ -323,7 +323,7 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
@@ -341,7 +341,7 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
@@ -354,7 +354,7 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
@@ -374,7 +374,7 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
@@ -387,7 +387,7 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
@@ -403,7 +403,7 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
@@ -416,7 +416,7 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
@@ -433,7 +433,7 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #else
@@ -464,7 +464,7 @@ namespace Network {
 
 #if NET
 		[SupportedOSPlatform ("tvos15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("ios15.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #else

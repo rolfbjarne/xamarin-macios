@@ -39,7 +39,7 @@ using NativeHandle = System.IntPtr;
 
 namespace AppKit {
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public static class NSGraphics {
 		public static readonly float White = 1;
@@ -180,7 +180,7 @@ namespace AppKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos14.0", "Use 'NSCursor.DisappearingItemCursor' instead."	)]
 #else
 		[Deprecated (PlatformName.MacOSX, 14, 0, message: "Use 'NSCursor.DisappearingItemCursor' instead.")]
@@ -189,7 +189,7 @@ namespace AppKit {
 		extern static void NSShowAnimationEffect (nuint animationEffect, CGPoint centerLocation, CGSize size, NativeHandle animationDelegate, NativeHandle didEndSelector, IntPtr contextInfo);
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos14.0", "Use 'NSCursor.DisappearingItemCursor' instead."	)]
 #else
 		[Deprecated (PlatformName.MacOSX, 14, 0, message: "Use 'NSCursor.DisappearingItemCursor' instead.")]
@@ -251,7 +251,7 @@ namespace AppKit {
 		public extern static void DrawWindowBackground (CGRect aRect);
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos10.11", "Not usually necessary, 'NSAnimationContext.RunAnimation' can be used instead and not suffer from performance issues.")]
 #else
 		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Not usually necessary, 'NSAnimationContext.RunAnimation' can be used instead and not suffer from performance issues.")]
@@ -260,7 +260,7 @@ namespace AppKit {
 		public extern static void DisableScreenUpdates ();
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos10.11", "Not usually necessary, 'NSAnimationContext.RunAnimation' can be used instead and not suffer from performance issues.")]
 #else
 		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Not usually necessary, 'NSAnimationContext.RunAnimation' can be used instead and not suffer from performance issues.")]

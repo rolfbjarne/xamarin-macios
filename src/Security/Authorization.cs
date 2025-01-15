@@ -42,7 +42,7 @@ namespace Security {
 
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (15,0)]
 #endif
@@ -67,7 +67,7 @@ namespace Security {
 
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (15,0)]
 #endif
@@ -96,7 +96,7 @@ namespace Security {
 	//
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (15,0)]
 #endif
@@ -108,7 +108,7 @@ namespace Security {
 
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (15,0)]
 #endif
@@ -120,7 +120,7 @@ namespace Security {
 
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (15,0)]
 #endif
@@ -134,7 +134,7 @@ namespace Security {
 
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (15,0)]
 #endif
@@ -145,7 +145,7 @@ namespace Security {
 
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (15,0)]
 #endif
@@ -155,7 +155,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos10.7", "Use the Service Management framework or the launchd-launched helper tool instead.")]
 #else
 		[Deprecated (PlatformName.MacOSX, 10,7)]
@@ -179,7 +179,7 @@ namespace Security {
 
 #if NET
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos10.7", "Use the Service Management framework or the launchd-launched helper tool instead.")]
 #else
 		[Deprecated (PlatformName.MacOSX, 10,7)]

@@ -12,7 +12,7 @@ namespace Intents {
 
 #if NET
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -26,7 +26,7 @@ namespace Intents {
 
 #if NET
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 #else
@@ -40,7 +40,7 @@ namespace Intents {
 
 #if NET
 		[SupportedOSPlatform ("ios15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[UnsupportedOSPlatform ("tvos")]
 #else

@@ -27,10 +27,10 @@ namespace Foundation {
 	internal delegate bool NSOrderedCollectionDifferenceEquivalenceTestProxy (IntPtr blockLiteral, /* NSObject */ IntPtr first, /* NSObject */ IntPtr second);
 #endif
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	[Register (SkipRegistration = true)]
 	public sealed partial class NSArray<TKey> : NSArray, IEnumerable<TKey>
@@ -108,7 +108,7 @@ namespace Foundation {
 #if !NET
 		[TV (13,0), iOS (13,0)]
 #else
-		[SupportedOSPlatform ("ios13.0"), SupportedOSPlatform ("tvos13.0"), SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 #endif
 		public NSOrderedCollectionDifference<TKey>? GetDifference (TKey[] other, NSOrderedCollectionDifferenceCalculationOptions options)
 			=> Runtime.GetNSObject <NSOrderedCollectionDifference<TKey>> (_GetDifference (NSArray.FromNSObjects (other), options));
@@ -116,7 +116,7 @@ namespace Foundation {
 #if !NET
 		[TV (13,0), iOS (13,0)]
 #else
-		[SupportedOSPlatform ("ios13.0"), SupportedOSPlatform ("tvos13.0"), SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 #endif
 		public NSOrderedCollectionDifference<TKey>? GetDifference (TKey[] other)
 			=> Runtime.GetNSObject <NSOrderedCollectionDifference<TKey>> (_GetDifference (NSArray.FromNSObjects (other)));
@@ -124,7 +124,7 @@ namespace Foundation {
 #if !NET
 		[TV (13,0), iOS (13,0)]
 #else
-		[SupportedOSPlatform ("ios13.0"), SupportedOSPlatform ("tvos13.0"), SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 #endif
 		public TKey[]? GetArrayByApplyingDifference (NSOrderedCollectionDifference difference)
 			=> NSArray.ArrayFromHandle<TKey> (_GetArrayByApplyingDifference (difference));
@@ -145,7 +145,7 @@ namespace Foundation {
 #if !NET
 		[TV (13,0), iOS (13,0)]
 #else
-		[SupportedOSPlatform ("ios13.0"), SupportedOSPlatform ("tvos13.0"), SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 #endif
 		public NSOrderedCollectionDifference<TKey>? GetDifferenceFromArray (NSArray<TKey> other, NSOrderedCollectionDifferenceCalculationOptions options, NSOrderedCollectionDifferenceEquivalenceTest<TKey> equivalenceTest) 
 		{

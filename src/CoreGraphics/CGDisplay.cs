@@ -11,7 +11,7 @@ namespace CoreGraphics
 
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif
@@ -23,7 +23,7 @@ namespace CoreGraphics
 
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif
@@ -87,7 +87,7 @@ namespace CoreGraphics
 
 #if NET
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos10.9")]
 		[ObsoletedOSPlatform ("maccatalyst13.1")]
 #else
@@ -97,7 +97,7 @@ namespace CoreGraphics
 		static extern byte CGDisplayIsCaptured (uint display);
 
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos10.9")]
 		[ObsoletedOSPlatform ("maccatalyst13.1")]
 		public static bool IsCaptured (int display)

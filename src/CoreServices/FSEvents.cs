@@ -30,15 +30,15 @@ namespace CoreServices
 		IgnoreSelf = 0x00000008,
 		FileEvents = 0x00000010,
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 #endif
 		MarkSelf = 0x00000020,
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 #endif
 		UseExtendedData = 0x00000040,
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 #endif
 		FullHistory = 0x00000080,
 	}
@@ -70,13 +70,13 @@ namespace CoreServices
 		ItemIsHardlink = 0x00100000,
 		ItemIsLastHardlink = 0x00200000,
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 #endif
 		ItemCloned = 0x00400000,
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public struct FSEvent
 	{
@@ -149,7 +149,7 @@ namespace CoreServices
 	public delegate void FSEventStreamEventsHandler (object sender, FSEventStreamEventsArgs args);
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public sealed class FSEventStreamEventsArgs : EventArgs
 	{
@@ -165,7 +165,7 @@ namespace CoreServices
 	/// Creation options for <see cref="FSEventStream"/>.
 	/// </summary>
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public sealed class FSEventStreamCreateOptions
 	{
@@ -241,7 +241,7 @@ namespace CoreServices
 	}
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public class FSEventStream : NativeObject
 	{
@@ -499,7 +499,7 @@ namespace CoreServices
 			IntPtr runLoop, IntPtr runLoopMode);
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos13.0", "Use 'SetDispatchQueue' instead.")]
 #else
 		[Deprecated (PlatformName.MacOSX, 13,0, message: "Use 'SetDispatchQueue' instead.")]
@@ -529,7 +529,7 @@ namespace CoreServices
 			IntPtr runLoop, IntPtr runLoopMode);
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos13.0", "Use 'SetDispatchQueue' instead.")]
 #else
 		[Deprecated (PlatformName.MacOSX, 13,0, message: "Use 'SetDispatchQueue' instead.")]

@@ -27,12 +27,12 @@ namespace AppKit {
 	public partial interface INSAccessibility { }
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public partial class NSAccessibility {
 #if !COREBUILD
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 #endif
 		[DllImport (Constants.AppKitLibrary)]
 		static extern CGRect NSAccessibilityFrameInView (NativeHandle parentView, CGRect frame);
@@ -43,7 +43,7 @@ namespace AppKit {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 #endif
 		[DllImport (Constants.AppKitLibrary)]
 		static extern CGPoint NSAccessibilityPointInView (NativeHandle parentView, CGPoint point);

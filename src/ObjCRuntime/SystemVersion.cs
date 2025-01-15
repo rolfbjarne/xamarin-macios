@@ -29,7 +29,7 @@ namespace ObjCRuntime {
 
 		// Deprecated in OSX 10.8 - but no good alternative is (yet) available
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[ObsoletedOSPlatform ("macos10.8")]
 #else
 		[Deprecated (PlatformName.MacOSX, 10, 8)]

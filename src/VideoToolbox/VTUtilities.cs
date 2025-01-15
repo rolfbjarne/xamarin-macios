@@ -21,9 +21,9 @@ using Foundation;
 namespace VideoToolbox {
 
 #if NET
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("ios")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("tvos12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 	public static class VTUtilities {
@@ -57,7 +57,7 @@ namespace VideoToolbox {
 #if MONOMAC
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("ios")]
@@ -69,7 +69,7 @@ namespace VideoToolbox {
 		static extern void VTRegisterSupplementalVideoDecoderIfAvailable (uint codecType);
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("ios")]

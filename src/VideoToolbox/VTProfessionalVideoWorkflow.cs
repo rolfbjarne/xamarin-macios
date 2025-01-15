@@ -20,7 +20,7 @@ using Foundation;
 namespace VideoToolbox {
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[UnsupportedOSPlatform ("ios")]
 	[UnsupportedOSPlatform ("maccatalyst")]
 	[UnsupportedOSPlatform ("watchos")]

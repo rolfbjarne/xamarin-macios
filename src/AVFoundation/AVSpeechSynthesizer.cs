@@ -16,7 +16,7 @@ namespace AVFoundation {
 		[SupportedOSPlatform ("tvos13.0")]
 		[SupportedOSPlatform ("ios13.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 #endif
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		[Obsolete ("Do not use this API, it doesn't work correctly. Use the non-Async version (WriteUtterance) instead.")]

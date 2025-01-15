@@ -18,7 +18,7 @@ namespace GameKit {
 #if NET
 		[SupportedOSPlatform ("ios14.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("tvos14.0")]
 #else
 		[TV (14, 0), Mac (11, 0), iOS (14, 0), MacCatalyst (14, 0)]

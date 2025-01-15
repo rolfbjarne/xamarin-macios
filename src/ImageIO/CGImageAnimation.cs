@@ -19,17 +19,17 @@ using ObjCRuntime;
 namespace ImageIO {
 
 #if NET
-    [SupportedOSPlatform ("ios")]
+    [SupportedOSPlatform ("ios12.2")]
     [SupportedOSPlatform ("maccatalyst15.0")]
-    [SupportedOSPlatform ("macos")]
-    [SupportedOSPlatform ("tvos")]
+    [SupportedOSPlatform ("macos12.0")]
+    [SupportedOSPlatform ("tvos12.2")]
 #endif
 	public static class CGImageAnimation {
 
 		public delegate void CGImageSourceAnimationHandler (nint index, CGImage image, out bool stop);
 
 #if NET
-        [SupportedOSPlatform ("macos")]
+        [SupportedOSPlatform ("macos12.0")]
         [SupportedOSPlatform ("ios13.0")]
         [SupportedOSPlatform ("tvos13.0")]
         [SupportedOSPlatform ("maccatalyst15.0")]
@@ -41,7 +41,7 @@ namespace ImageIO {
 		unsafe static extern /* OSStatus */ CGImageAnimationStatus CGAnimateImageAtURLWithBlock ( /* CFURLRef */ IntPtr url, /* CFDictionaryRef _iio_Nullable */ IntPtr options, /* CGImageSourceAnimationHandler */ BlockLiteral* block);
 
 #if NET
-        [SupportedOSPlatform ("macos")]
+        [SupportedOSPlatform ("macos12.0")]
         [SupportedOSPlatform ("ios13.0")]
         [SupportedOSPlatform ("tvos13.0")]
         [SupportedOSPlatform ("maccatalyst15.0")]
@@ -53,7 +53,7 @@ namespace ImageIO {
 		unsafe static extern /* OSStatus */ CGImageAnimationStatus CGAnimateImageDataWithBlock ( /* CFDataRef _Nonnull */ IntPtr data, /* CFDictionaryRef _Nullable */ IntPtr options, /* CGImageSourceAnimationHandler _Nonnull */ BlockLiteral* block);
 
 #if NET
-        [SupportedOSPlatform ("macos")]
+        [SupportedOSPlatform ("macos12.0")]
         [SupportedOSPlatform ("ios13.0")]
         [SupportedOSPlatform ("tvos13.0")]
         [SupportedOSPlatform ("maccatalyst15.0")]
@@ -82,7 +82,7 @@ namespace ImageIO {
 		}
 
 #if NET
-        [SupportedOSPlatform ("macos")]
+        [SupportedOSPlatform ("macos12.0")]
         [SupportedOSPlatform ("ios13.0")]
         [SupportedOSPlatform ("tvos13.0")]
         [SupportedOSPlatform ("maccatalyst15.0")]

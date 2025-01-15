@@ -25,10 +25,10 @@ namespace Security {
 #endif
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 	[ObsoletedOSPlatform ("macos10.15", Constants.UseNetworkInstead)]
 	[ObsoletedOSPlatform ("tvos13.0", Constants.UseNetworkInstead)]
 	[ObsoletedOSPlatform ("ios13.0", Constants.UseNetworkInstead)]
@@ -110,10 +110,10 @@ namespace Security {
 
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	// a concrete connection based on a managed Stream
 	public class SslStreamConnection : SslConnection {

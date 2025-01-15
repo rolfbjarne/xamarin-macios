@@ -17,10 +17,10 @@ using JavaScriptCore;
 
 namespace SceneKit {
 #if NET
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public static class SCNJavaScript {
 		[DllImport (Constants.SceneKitLibrary)]

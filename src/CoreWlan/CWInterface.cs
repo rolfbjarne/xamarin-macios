@@ -46,7 +46,7 @@ namespace CoreWlan {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #endif
 		public CWNetwork []? ScanForNetworksWithSsid (NSData ssid, bool includeHidden, out NSError? error)
@@ -56,7 +56,7 @@ namespace CoreWlan {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("macos12.0")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #endif
 		public CWNetwork []? ScanForNetworksWithName (string networkName, bool includeHidden, out NSError? error)

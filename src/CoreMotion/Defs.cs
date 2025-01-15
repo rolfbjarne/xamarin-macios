@@ -15,9 +15,9 @@ namespace CoreMotion {
 
 	// CMAccelerometer.h
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct CMAcceleration {
@@ -40,9 +40,9 @@ namespace CoreMotion {
 
 	// CMAttitude.h
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct CMRotationMatrix {
@@ -59,9 +59,9 @@ namespace CoreMotion {
 
 	// CMAttitude.h
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct CMQuaternion {
@@ -86,9 +86,9 @@ namespace CoreMotion {
 
 	// CMGyro.h
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct CMRotationRate {

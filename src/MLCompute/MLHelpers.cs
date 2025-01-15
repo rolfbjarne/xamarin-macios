@@ -12,7 +12,7 @@ namespace MLCompute {
 #if NET
 	[SupportedOSPlatform ("ios14.0")]
 	[SupportedOSPlatform ("tvos14.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[iOS (14, 0)]
@@ -32,7 +32,7 @@ namespace MLCompute {
 #if NET
 	[SupportedOSPlatform ("ios14.0")]
 	[SupportedOSPlatform ("tvos14.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[iOS (14, 0)]
@@ -52,7 +52,7 @@ namespace MLCompute {
 #if NET
 	[SupportedOSPlatform ("ios14.0")]
 	[SupportedOSPlatform ("tvos14.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[iOS (14, 0)]
@@ -72,7 +72,7 @@ namespace MLCompute {
 #if NET
 	[SupportedOSPlatform ("ios14.0")]
 	[SupportedOSPlatform ("tvos14.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[iOS (14, 0)]
@@ -92,7 +92,7 @@ namespace MLCompute {
 #if NET
 	[SupportedOSPlatform ("ios14.0")]
 	[SupportedOSPlatform ("tvos14.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[iOS (14, 0)]
@@ -112,7 +112,7 @@ namespace MLCompute {
 #if NET
 	[SupportedOSPlatform ("ios14.0")]
 	[SupportedOSPlatform ("tvos14.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[iOS (14, 0)]
@@ -132,7 +132,7 @@ namespace MLCompute {
 #if NET
 	[SupportedOSPlatform ("ios14.0")]
 	[SupportedOSPlatform ("tvos14.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[iOS (14, 0)]
@@ -152,7 +152,7 @@ namespace MLCompute {
 #if NET
 	[SupportedOSPlatform ("ios14.0")]
 	[SupportedOSPlatform ("tvos14.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[iOS (14, 0)]
@@ -172,7 +172,7 @@ namespace MLCompute {
 #if NET
 	[SupportedOSPlatform ("ios14.0")]
 	[SupportedOSPlatform ("tvos14.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[iOS (14, 0)]
@@ -192,7 +192,7 @@ namespace MLCompute {
 #if NET
 	[SupportedOSPlatform ("ios14.0")]
 	[SupportedOSPlatform ("tvos14.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[iOS (14, 0)]
@@ -212,7 +212,7 @@ namespace MLCompute {
 #if NET
 	[SupportedOSPlatform ("ios14.0")]
 	[SupportedOSPlatform ("tvos14.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
 	[iOS (14, 0)]
@@ -231,7 +231,7 @@ namespace MLCompute {
 
 #if NET
 	[SupportedOSPlatform ("tvos14.5")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("ios14.5")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
 #else
@@ -251,7 +251,7 @@ namespace MLCompute {
 
 #if NET
 	[SupportedOSPlatform ("tvos15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("ios15.0")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
 #else

@@ -10,9 +10,9 @@ namespace NetworkExtension {
 
 	// avoid generator default `Arg1` and `Arg2` since Action<> was used
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("tvos17.0")]
 #endif
 	public class NEPacketTunnelFlowReadResult {

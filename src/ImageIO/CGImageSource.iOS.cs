@@ -27,9 +27,9 @@ namespace ImageIO {
 			/* CFDictionaryRef __nullable */ IntPtr options);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[UnsupportedOSPlatform ("macos")]
 #endif
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
@@ -40,9 +40,9 @@ namespace ImageIO {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[UnsupportedOSPlatform ("macos")]
 #endif
 		public CGImageMetadata? CopyMetadata (nint index, CGImageOptions? options)
@@ -53,9 +53,9 @@ namespace ImageIO {
 
 		// CGImageSource.h
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[UnsupportedOSPlatform ("macos")]
 #endif
 		[DllImport (Constants.ImageIOLibrary)]
@@ -63,9 +63,9 @@ namespace ImageIO {
 			/* size_t */ nint index);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[UnsupportedOSPlatform ("macos")]
 #endif
 		public void RemoveCache (nint index)

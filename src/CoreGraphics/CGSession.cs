@@ -9,7 +9,7 @@ using ObjCRuntime;
 namespace CoreGraphics {
 
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[UnsupportedOSPlatform ("ios")]
 	[UnsupportedOSPlatform ("tvos")]
 	public static class CGSession {
@@ -33,7 +33,7 @@ namespace CoreGraphics {
 	// but these aren't actual native fields, in the headers they're declared as constants:
 	//     #define kCGSession*Key @"SomeStringValue"
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[UnsupportedOSPlatform ("ios")]
 	[UnsupportedOSPlatform ("tvos")]
 	public static class CGSessionKeys {

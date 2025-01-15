@@ -12,7 +12,7 @@ namespace FileProvider {
 #if !(XAMCORE_5_0 && __MACCATALYST__)
 
 #if NET
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 	[SupportedOSPlatform ("ios16.0")]
 	[UnsupportedOSPlatform ("maccatalyst")]
 #if __MACCATALYST__

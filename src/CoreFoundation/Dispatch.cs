@@ -67,10 +67,10 @@ namespace CoreFoundation {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public abstract class DispatchObject : NativeObject {
 #if !COREBUILD
@@ -165,9 +165,9 @@ namespace CoreFoundation {
 		internal extern static void dispatch_suspend (IntPtr o);
 
 #if NET
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public void Activate ()
@@ -176,9 +176,9 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[DllImport (Constants.libcLibrary)]
@@ -187,10 +187,10 @@ namespace CoreFoundation {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public sealed class DispatchQueue : DispatchObject {
 #if !COREBUILD
@@ -229,9 +229,9 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		public DispatchQueue (string label, Attributes attributes, DispatchQueue? target = null)
@@ -250,10 +250,10 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public static string? CurrentQueueLabel {
 			get {
@@ -295,10 +295,10 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[ObsoletedOSPlatform ("macos10.9")]
 		[ObsoletedOSPlatform ("ios6.0")]
 #else
@@ -567,10 +567,10 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public DispatchQualityOfService GetQualityOfService (out int relative_priority)
 		{
@@ -581,10 +581,10 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		public DispatchQualityOfService QualityOfService {
 			get {
@@ -606,9 +606,9 @@ namespace CoreFoundation {
 		extern static IntPtr dispatch_queue_create (IntPtr label, IntPtr attr);
 
 #if NET
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		static IntPtr dispatch_queue_create_with_target (string label, IntPtr attr, IntPtr target)
@@ -676,10 +676,10 @@ namespace CoreFoundation {
 		extern static void dispatch_after (/* dispath_time_t */ ulong time, IntPtr queue, IntPtr block);
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[ObsoletedOSPlatform ("macos10.9")]
 		[ObsoletedOSPlatform ("ios6.0")]
 #else
@@ -709,10 +709,10 @@ namespace CoreFoundation {
 		extern static IntPtr dispatch_queue_get_specific (IntPtr queue, /* const void* */ IntPtr key);
 
 #if NET
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("tvos12.2")]
 #endif
 		[DllImport (Constants.libcLibrary)]
 		unsafe extern static /* dispatch_qos_class_t */ DispatchQualityOfService dispatch_queue_get_qos_class (/* dispatch_queue_t */ IntPtr queue, /* int *_Nullable */ int* relative_priority);
@@ -767,33 +767,33 @@ namespace CoreFoundation {
 			public bool Concurrent { get; set; }
 
 #if NET
-			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("macos12.0")]
 			[SupportedOSPlatform ("maccatalyst15.0")]
-			[SupportedOSPlatform ("ios")]
-			[SupportedOSPlatform ("tvos")]
+			[SupportedOSPlatform ("ios12.2")]
+			[SupportedOSPlatform ("tvos12.2")]
 #endif
 			public bool IsInitiallyInactive { get; set; }
 
 #if NET
-			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("macos12.0")]
 			[SupportedOSPlatform ("maccatalyst15.0")]
-			[SupportedOSPlatform ("ios")]
-			[SupportedOSPlatform ("tvos")]
+			[SupportedOSPlatform ("ios12.2")]
+			[SupportedOSPlatform ("tvos12.2")]
 #endif
 			public AutoreleaseFrequency? AutoreleaseFrequency { get; set; }
 
 #if NET
-			[SupportedOSPlatform ("macos")]
-			[SupportedOSPlatform ("ios")]
-			[SupportedOSPlatform ("tvos")]
+			[SupportedOSPlatform ("macos12.0")]
+			[SupportedOSPlatform ("ios12.2")]
+			[SupportedOSPlatform ("tvos12.2")]
 			[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 			public int RelativePriority { get; set; }
 
 #if NET
-			[SupportedOSPlatform ("macos")]
-			[SupportedOSPlatform ("ios")]
-			[SupportedOSPlatform ("tvos")]
+			[SupportedOSPlatform ("macos12.0")]
+			[SupportedOSPlatform ("ios12.2")]
+			[SupportedOSPlatform ("tvos12.2")]
 			[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 			public DispatchQualityOfService? QualityOfService { get; set; }
@@ -818,33 +818,33 @@ namespace CoreFoundation {
 			}
 
 #if NET
-			[SupportedOSPlatform ("macos")]
-			[SupportedOSPlatform ("ios")]
-			[SupportedOSPlatform ("tvos")]
+			[SupportedOSPlatform ("macos12.0")]
+			[SupportedOSPlatform ("ios12.2")]
+			[SupportedOSPlatform ("tvos12.2")]
 #endif
 			[DllImport (Constants.libcLibrary)]
 			static extern /* dispatch_queue_attr_t */ IntPtr dispatch_queue_attr_make_initially_inactive (/* dispatch_queue_attr_t _Nullable */ IntPtr attr);
 
 #if NET
-			[SupportedOSPlatform ("macos")]
-			[SupportedOSPlatform ("ios")]
-			[SupportedOSPlatform ("tvos")]
+			[SupportedOSPlatform ("macos12.0")]
+			[SupportedOSPlatform ("ios12.2")]
+			[SupportedOSPlatform ("tvos12.2")]
 #endif
 			[DllImport (Constants.libcLibrary)]
 			static extern /* dispatch_queue_attr_t */ IntPtr dispatch_queue_attr_make_with_autorelease_frequency (/* dispatch_queue_attr_t _Nullable */ IntPtr attr, /* dispatch_autorelease_frequency_t */ nuint frequency);
 
 #if NET
-			[SupportedOSPlatform ("macos")]
-			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos12.0")]
+			[SupportedOSPlatform ("ios12.2")]
 #endif
 			[DllImport (Constants.libcLibrary)]
 			static extern /* dispatch_queue_attr_t */ IntPtr dispatch_queue_attr_make_with_qos_class (/* dispatch_queue_attr_t _Nullable */ IntPtr attr, /* dispatch_qos_class_t */ DispatchQualityOfService qos_class, int relative_priority);
 		}
 
 #if NET
-		[SupportedOSPlatform ("macos")]
-		[SupportedOSPlatform ("ios")]
-		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("tvos12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 #endif
 		[Native]
@@ -860,10 +860,10 @@ namespace CoreFoundation {
 	// Some insights from: https://opensource.apple.com/source/libdispatch/libdispatch-442.1.4/src/time.c
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public struct DispatchTime {
 #if !COREBUILD
@@ -907,10 +907,10 @@ namespace CoreFoundation {
 	}
 
 #if NET
-	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
-	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos12.0")]
+	[SupportedOSPlatform ("tvos12.2")]
 #endif
 	public class DispatchGroup : DispatchObject {
 #if !COREBUILD

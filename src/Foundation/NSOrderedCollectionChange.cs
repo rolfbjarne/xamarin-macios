@@ -13,7 +13,7 @@ namespace Foundation {
 #if !NET
 	[iOS (13,0), TV (13,0)]
 #else
-	[SupportedOSPlatform ("ios13.0"), SupportedOSPlatform ("tvos13.0"), SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #endif
 	public partial class NSOrderedCollectionChange
 	{

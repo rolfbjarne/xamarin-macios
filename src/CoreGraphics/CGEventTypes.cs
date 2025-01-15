@@ -26,7 +26,7 @@ namespace CoreGraphics {
 	// CGEventTypes.h:typedef uint32_t CGEventTapLocation;
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif
@@ -39,7 +39,7 @@ namespace CoreGraphics {
 	// CGEventTypes.h:typedef uint32_t CGEventTapPlacement;
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif
@@ -51,7 +51,7 @@ namespace CoreGraphics {
 	// CGEventTypes.h:typedef uint32_t CGEventTapOptions;
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif
@@ -63,7 +63,7 @@ namespace CoreGraphics {
 	// CGEventTypes.h:typedef uint32_t CGMouseButton;
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif
@@ -74,7 +74,7 @@ namespace CoreGraphics {
 	// CGEventTypes.h:typedef uint32_t CGScrollEventUnit;
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif
@@ -85,7 +85,7 @@ namespace CoreGraphics {
 	// CGEventTypes.h:typedef uint64_t CGEventMask;
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif
@@ -113,7 +113,7 @@ namespace CoreGraphics {
 	// CGEventTypes.h:typedef uint64_t CGEventFlags;
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif
@@ -135,7 +135,7 @@ namespace CoreGraphics {
 	/// <remarks>Call <see cref="CGEvent.GetLongValueField" /> or <see cref="CGEvent.GetDoubleValueField" /> to fetch the field values, and <see cref="CGEvent.SetValueField(CGEventField,long)" /> or <see cref="CGEvent.SetValueField(CGEventField,double)" /> to set the field values represented by the constants in this enum.</remarks>
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif
@@ -401,7 +401,7 @@ namespace CoreGraphics {
 	// CGEventTypes.h:typedef uint32_t CGEventType;
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif
@@ -430,7 +430,7 @@ namespace CoreGraphics {
 	// CGEventTypes.h:typedef uint32_t CGEventMouseSubtype;
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif
@@ -441,7 +441,7 @@ namespace CoreGraphics {
 	// CGEventTypes.h:typedef uint32_t CGEventSourceStateID;
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif
@@ -452,7 +452,7 @@ namespace CoreGraphics {
 	// CGRemoteOperation.h:typedef uint32_t CGEventFilterMask;
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif
@@ -466,7 +466,7 @@ namespace CoreGraphics {
 	// CGRemoteOperation.h:typedef uint32_t CGEventSuppressionState;
 #if NET
 	[SupportedOSPlatform ("maccatalyst15.0")]
-	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("macos12.0")]
 #else
 	[MacCatalyst (13,1)]
 #endif

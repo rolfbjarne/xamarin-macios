@@ -60,6 +60,12 @@ namespace Accounts {
 		{
 		}
 
+		[ObsoletedOSPlatform ("ios11.0", "Use Facebook SDK instead.")]
+		[ObsoletedOSPlatform ("macos10.13", "Use Facebook SDK instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use Facebook SDK instead.")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		public string? FacebookAppId {
 			set {
 				SetStringValue (ACFacebookKey.AppId, value);
@@ -69,6 +75,12 @@ namespace Accounts {
 			}
 		}
 
+		[ObsoletedOSPlatform ("ios11.0", "Use Facebook SDK instead.")]
+		[ObsoletedOSPlatform ("macos10.13", "Use Facebook SDK instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use Facebook SDK instead.")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		public void SetPermissions (ACFacebookAudience audience, params string [] permissions)
 		{
 			if (permissions is null)
@@ -97,6 +109,12 @@ namespace Accounts {
 			SetNativeValue (ACFacebookKey.Audience, v);
 		}
 
+		[ObsoletedOSPlatform ("ios11.0", "Use Tencent Weibo SDK instead.")]
+		[ObsoletedOSPlatform ("macos10.13", "Use Tencent Weibo SDK instead.")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use Tencent Weibo SDK instead.")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		public string? TencentWeiboAppId {
 			set {
 				SetStringValue (ACTencentWeiboKey.AppId, value);

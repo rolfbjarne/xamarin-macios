@@ -69,28 +69,43 @@ namespace AppKit {
 	public partial class NSAlert {
 		public void BeginSheet (NSWindow window)
 		{
-			BeginSheet (window, null, null, IntPtr.Zero);
+			BeginSheet (window, (v) => { });
 		}
 
+#if !XAMCORE_5_0
+		[Obsolete ("Use 'BeginSheet (NSWindow, Action<NSModalResponse>) instead.")]
 		public void BeginSheet (NSWindow window, Action? onEnded)
 		{
-			BeginSheetForResponse (window, r => {
+			BeginSheet (window, r => {
 				if (onEnded is not null)
 					onEnded ();
 			});
 		}
+#endif
 
+#if !XAMCORE_5_0
+		[Obsolete ("Use 'BeginSheet (NSWindow, Action<NSModalResponse>) instead.")]
 		public void BeginSheetForResponse (NSWindow window, Action<nint> onEnded)
 		{
-			BeginSheet (window, new NSAlertDidEndDispatcher (onEnded), NSAlertDidEndDispatcher.Selector, IntPtr.Zero);
+			BeginSheet (window, (NSModalResponse response) => onEnded ((nint) response));
 		}
+#endif
 
+
+#if XAMCORE_5_0
+		public NSModalResponse RunSheetModal (NSWindow window)
+#else
 		public nint RunSheetModal (NSWindow window)
+#endif
 		{
 			return RunSheetModal (window, NSApplication.SharedApplication);
 		}
 
+#if XAMCORE_5_0
+		public NSModalResponse RunSheetModal (NSWindow? window, NSApplication application)
+#else
 		public nint RunSheetModal (NSWindow? window, NSApplication application)
+#endif
 		{
 			if (application is null)
 				throw new ArgumentNullException ("application");
@@ -99,10 +114,18 @@ namespace AppKit {
 			if (window is null)
 				return RunModal ();
 
+#if XAMCORE_5_0
+			var returnCode = NSModalResponse.Stop;
+#else
 			nint returnCode = -1000;
+#endif
 
-			BeginSheetForResponse (window, r => {
+			BeginSheet (window, (NSModalResponse r) => {
+#if XAMCORE_5_0
 				returnCode = r;
+#else
+				returnCode = (nint) r;
+#endif
 				application.StopModal ();
 			});
 

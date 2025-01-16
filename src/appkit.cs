@@ -431,7 +431,7 @@ namespace AppKit {
 		[Export ("runModal")]
 		nint RunModal ();
 
-		[Deprecated (PlatformName.MacOSX, 10, 10, message: "Use BeginSheetModalForWindow (NSWindow sheetWindow, Action<nint> handler) instead.")]
+		[Deprecated (PlatformName.MacOSX, 10, 10, message: "Use BeginSheet (NSWindow sheetWindow, Action<nint> handler) instead.")]
 		[Export ("beginSheetModalForWindow:modalDelegate:didEndSelector:contextInfo:")]
 		void BeginSheet ([NullAllowed] NSWindow window, [NullAllowed] NSObject modalDelegate, [NullAllowed] Selector didEndSelector, IntPtr contextInfo);
 

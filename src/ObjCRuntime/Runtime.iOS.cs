@@ -61,6 +61,10 @@ namespace ObjCRuntime {
 #endif
 #endif
 
+		[UnsupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
 		unsafe static void InitializePlatform (InitializationOptions* options)
 		{
 #if !__MACCATALYST__ && !NET

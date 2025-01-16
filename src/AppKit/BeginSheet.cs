@@ -36,11 +36,17 @@ using Foundation;
 
 namespace AppKit {
 	public partial class NSApplication {
+		[ObsoletedOSPlatform ("macos10.10", "Use NSWindow.BeginSheet instead.")]
+		[UnsupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		public void BeginSheet (NSWindow sheet, NSWindow docWindow)
 		{
 			BeginSheet (sheet, docWindow, null, null, IntPtr.Zero);
 		}
 
+		[ObsoletedOSPlatform ("macos10.10", "Use NSWindow.BeginSheet instead.")]
+		[UnsupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		public void BeginSheet (NSWindow sheet, NSWindow docWindow, Action onEnded)
 		{
 			var obj = new NSAsyncActionDispatcher (onEnded);
@@ -49,11 +55,17 @@ namespace AppKit {
 	}
 
 	public partial class NSOpenPanel {
+		[ObsoletedOSPlatform ("macos10.6", "Use NSApplication.RunModal instead.")]
+		[UnsupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		public void BeginSheet (string directory, string fileName, string [] fileTypes, NSWindow modalForWindow)
 		{
 			BeginSheet (directory, fileName, fileTypes, modalForWindow, null, null, IntPtr.Zero);
 		}
 
+		[ObsoletedOSPlatform ("macos10.6", "Use NSApplication.RunModal instead.")]
+		[UnsupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		public void BeginSheet (string directory, string fileName, string [] fileTypes, NSWindow modalForWindow, Action onEnded)
 		{
 			var obj = new NSAsyncActionDispatcher (onEnded);
@@ -62,11 +74,17 @@ namespace AppKit {
 	}
 
 	public partial class NSPageLayout {
+		[ObsoletedOSPlatform ("macos14.0")]
+		[UnsupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		public void BeginSheet (NSPrintInfo printInfo, NSWindow docWindow)
 		{
 			BeginSheet (printInfo, docWindow, null, null, IntPtr.Zero);
 		}
 
+		[ObsoletedOSPlatform ("macos14.0")]
+		[UnsupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		public void BeginSheet (NSPrintInfo printInfo, NSWindow docWindow, Action onEnded)
 		{
 			var obj = new NSAsyncActionDispatcher (onEnded);

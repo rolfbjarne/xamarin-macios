@@ -342,8 +342,10 @@ namespace CoreText {
 			case FontFeatureGroup.CursiveConnection:
 				return new CTFontFeatureCursiveConnection (dictionary);
 #pragma warning disable 618
+#pragma warning disable CA1422 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'CTFontFeatureLetterCase' is obsoleted on: 'ios' 6.0 and later, 'maccatalyst' 6.0 and later, 'macOS/OSX' 10.7 and later.
 			case FontFeatureGroup.LetterCase:
 				return new CTFontFeatureLetterCase (dictionary);
+#pragma warning restore CA1422
 #pragma warning restore 618
 			case FontFeatureGroup.VerticalSubstitution:
 				return new CTFontFeatureVerticalSubstitutionConnection (dictionary);

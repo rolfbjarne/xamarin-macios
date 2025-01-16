@@ -23,12 +23,8 @@ namespace WebKit {
 #endif
 		public bool TextInteractionEnabled {
 			get {
-#if IOS || __MACCATALYST__
-				if (SystemVersion.CheckiOS (15, 0))
-#elif MONOMAC
-				if (SystemVersion.CheckmacOS (12, 0))
-#endif
-				return _NewGetTextInteractionEnabled ();
+				if (SystemVersion.IsAtLeastXcode13)
+					return _NewGetTextInteractionEnabled ();
 				else
 					return _OldTextInteractionEnabled;
 			}

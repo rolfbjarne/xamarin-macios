@@ -18,6 +18,9 @@ namespace AppKit {
 	public partial class NSSegmentedControl {
 		NSActionDispatcher? dispatcher;
 
+		[ObsoletedOSPlatform ("macos10.10")]
+		[UnsupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		public new NSSegmentedCell Cell {
 			get { return (NSSegmentedCell) base.Cell; }
 			set { base.Cell = value; }
@@ -47,6 +50,9 @@ namespace AppKit {
 			return control;
 		}
 
+		[ObsoletedOSPlatform ("macos10.10")]
+		[UnsupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		public void UnselectAllSegments ()
 		{
 			NSSegmentSwitchTracking current = this.Cell.TrackingMode;

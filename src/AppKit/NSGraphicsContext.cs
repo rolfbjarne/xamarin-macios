@@ -37,6 +37,9 @@ using CoreGraphics;
 
 namespace AppKit {
 	public partial class NSGraphicsContext {
+		[ObsoletedOSPlatform ("macos10.14", "Use 'FromCGContext' instead.")]
+		[UnsupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		public static NSGraphicsContext FromGraphicsPort (CGContext context, bool initialFlippedState)
 		{
 			if (context is null)
@@ -44,6 +47,9 @@ namespace AppKit {
 			return FromGraphicsPort (context.Handle, initialFlippedState);
 		}
 
+		[ObsoletedOSPlatform ("macos10.14", "Use 'CGContext' instead.")]
+		[UnsupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		public virtual CGContext GraphicsPort {
 			get { return new CGContext (GraphicsPortHandle, false); }
 		}

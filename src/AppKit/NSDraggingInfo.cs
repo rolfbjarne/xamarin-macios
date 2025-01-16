@@ -10,6 +10,10 @@ using ObjCRuntime;
 
 namespace AppKit {
 #if NET
+	[SupportedOSPlatform ("macos")]
+	[UnsupportedOSPlatform ("ios")]
+	[UnsupportedOSPlatform ("tvos")]
+	[UnsupportedOSPlatform ("maccatalyst")]
 	public static partial class INSDraggingInfo_Extensions {
 		public static void EnumerateDraggingItems (this INSDraggingInfo self, NSDraggingItemEnumerationOptions enumOpts, NSView view, INSPasteboardReading [] classArray, NSDictionary searchOptions, NSDraggingEnumerator enumerator)
 		{

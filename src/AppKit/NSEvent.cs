@@ -33,11 +33,16 @@ namespace AppKit {
 			#region Generic Event Information
 
 			// FIXME: broken
+#if !XAMCORE_5_0
+			[ObsoletedOSPlatform ("macos10.12", "This method always returns null. If you need access to the current drawing context, use NSGraphicsContext.CurrentContext inside of a draw operation.")]
+			[UnsupportedOSPlatform ("maccatalyst15.0")]
+			[SupportedOSPlatform ("macos12.0")]
 			internal NSGraphicsContext Context {
 				get {
 					return target.Context;
 				}
 			}
+#endif
 
 			public CGPoint LocationInWindow {
 				get {

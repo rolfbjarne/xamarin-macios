@@ -199,6 +199,8 @@ namespace AppKit {
 			NSShowAnimationEffect ((nuint) (ulong) animationEffect, centerLocation, size, animationDelegate.GetHandle (), didEndSelector.Handle, contextInfo);
 		}
 
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("macos14.0", "Use 'NSCursor.DisappearingItemCursor' instead."	)]
 		public static void ShowAnimationEffect (NSAnimationEffect animationEffect, CGPoint centerLocation, CGSize size, Action endedCallback)
 		{
 			var d = new NSAsyncActionDispatcher (endedCallback);

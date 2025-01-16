@@ -79,6 +79,9 @@ namespace AppKit {
 		}
 #endif
 
+		[ObsoletedOSPlatform ("macos15.0", "Do not use this method.")]
+		[UnsupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		static public NSWindow FromWindowRef (IntPtr windowRef)
 		{
 #if NET

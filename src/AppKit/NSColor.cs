@@ -209,22 +209,23 @@ namespace AppKit {
 		public override string ToString ()
 		{
 			try {
-				string name = this.ColorSpaceName;
-				if (name == "NSNamedColorSpace")
-					return this.LocalizedCatalogNameComponent + "/" + this.LocalizedColorNameComponent;
-				if (name == "NSPatternColorSpace")
+				switch (this.Type) {
+				case NSColorType.ComponentBased:
+					var sb = new StringBuilder (this.ColorSpace.LocalizedName);
+					this.GetComponents (out var components);
+					if (components.Length > 0)
+						sb.Append ('(').Append (components [0]);
+					for (int i = 1; i < components.Length; i++)
+						sb.Append (',').Append (components [i]);
+					sb.Append (')');
+					return sb.ToString ();
+				case NSColorType.Pattern:
 					return "Pattern Color: " + this.PatternImage.Name;
-
-				StringBuilder sb = new StringBuilder (this.ColorSpace.LocalizedName);
-				nfloat [] components;
-				this.GetComponents (out components);
-				if (components.Length > 0)
-					sb.Append ("(" + components [0]);
-				for (int i = 1; i < components.Length; i++)
-					sb.Append ("," + components [i]);
-				sb.Append (")");
-
-				return sb.ToString ();
+				case NSColorType.Catalog:
+					return this.LocalizedCatalogNameComponent + "/" + this.LocalizedColorNameComponent;
+				default:
+					return base.ToString ();
+				}
 			} catch {
 				//fallback to base method if we have an unexpected condition.
 				return base.ToString ();

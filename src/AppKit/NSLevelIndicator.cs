@@ -16,6 +16,9 @@ using Foundation;
 namespace AppKit {
 
 	public partial class NSLevelIndicator {
+		[ObsoletedOSPlatform ("macos10.10")]
+		[UnsupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		public new NSLevelIndicatorCell Cell {
 			get { return (NSLevelIndicatorCell) base.Cell; }
 			set { base.Cell = value; }

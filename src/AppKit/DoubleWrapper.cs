@@ -81,8 +81,13 @@ namespace AppKit {
 	}
 
 	public partial class NSStatusItem {
+		[ObsoletedOSPlatform ("macos10.10", "Use the 'Button' property instead.")]
+		[UnsupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		public event EventHandler DoubleClick {
 			add {
+				// 'Target' and 'DoubleAction' are both deprecated, and the headers say to use this.Button.Target and this.Button.DoubleAction instead
+				// but there's no NSStatusBarButton.DoubleAction property...
 				Target = ActionDispatcher.SetupDoubleAction (Target, value);
 				DoubleAction = ActionDispatcher.DoubleAction;
 			}

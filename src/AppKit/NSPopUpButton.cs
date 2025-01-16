@@ -37,6 +37,9 @@ using Foundation;
 namespace AppKit {
 
 	public partial class NSPopUpButton {
+		[ObsoletedOSPlatform ("macos10.10")]
+		[UnsupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		public new NSPopUpButtonCell Cell {
 			get { return (NSPopUpButtonCell) base.Cell; }
 			set { base.Cell = value; }

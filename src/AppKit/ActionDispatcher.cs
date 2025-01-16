@@ -32,6 +32,10 @@ using Foundation;
 #nullable enable
 
 namespace AppKit {
+	[SupportedOSPlatform ("macos")]
+	[UnsupportedOSPlatform ("ios")]
+	[UnsupportedOSPlatform ("tvos")]
+	[UnsupportedOSPlatform ("maccatalyst")]
 	[Register ("__monomac_internal_ActionDispatcher")]
 	internal class ActionDispatcher : NSObject
 #if !__MACCATALYST__

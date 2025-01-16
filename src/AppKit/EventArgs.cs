@@ -41,6 +41,10 @@ namespace AppKit {
 		Renamed
 	}
 
+	[SupportedOSPlatform ("macos")]
+	[UnsupportedOSPlatform ("ios")]
+	[UnsupportedOSPlatform ("tvos")]
+	[UnsupportedOSPlatform ("maccatalyst")]
 	public partial class NSFontCollectionChangedEventArgs {
 		public NSFontCollectionAction Action {
 			get {
@@ -67,6 +71,10 @@ namespace AppKit {
 		DetachToWindow
 	}
 
+	[SupportedOSPlatform ("macos")]
+	[UnsupportedOSPlatform ("ios")]
+	[UnsupportedOSPlatform ("tvos")]
+	[UnsupportedOSPlatform ("maccatalyst")]
 	public partial class NSPopoverCloseEventArgs {
 		public NSPopoverCloseReason Reason {
 			get {

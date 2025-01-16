@@ -11,6 +11,9 @@ using Foundation;
 
 namespace AppKit {
 
+	[ObsoletedOSPlatform ("macos", "Use 'Metal' Framework instead.")]
+	[UnsupportedOSPlatform ("maccatalyst15.0")]
+	[SupportedOSPlatform ("macos")]
 	public partial class NSOpenGLContext {
 
 		unsafe void SetValue (int /* GLint */ val, NSOpenGLContextParameter par)

@@ -46,6 +46,9 @@ namespace AppKit {
 			}
 		}
 
+		[ObsoletedOSPlatform ("macos10.10")]
+		[UnsupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		public new NSButtonCell Cell {
 			get { return (NSButtonCell) base.Cell; }
 			set { base.Cell = value; }

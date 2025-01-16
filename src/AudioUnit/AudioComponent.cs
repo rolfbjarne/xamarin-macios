@@ -386,13 +386,9 @@ namespace AudioUnit {
 		public UIImage? CopyIcon ()
 		{
 			var ptr = AudioComponentCopyIcon (Handle);
-#if __MACOS__
-			if (OperatingSystem.IsMacOS ())
-#else
-			if (!OperatingSystem.IsMacOS ())
-#endif
-				return Runtime.GetNSObject<UIImage> (ptr, owns: true);
-			return null;
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 14.0 and later, 'maccatalyst' 14.0 and later, 'macOS/OSX' all versions, 'tvos' 14.0 and later. 'NSImage' is only supported on: 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later.
+			return Runtime.GetNSObject<UIImage> (ptr, owns: true);
+#pragma warning restore CA1416
 		}
 
 #if !MONOMAC

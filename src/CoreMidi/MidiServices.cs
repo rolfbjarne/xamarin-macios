@@ -537,11 +537,21 @@ namespace CoreMidi {
 			return null;
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("macos11.0")]
+		[ObsoletedOSPlatform ("ios14.0")]
 		public MidiPort CreateInputPort (string name)
 		{
 			return new MidiPort (this, name, true);
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("macos11.0")]
+		[ObsoletedOSPlatform ("ios14.0")]
 		public MidiPort CreateOutputPort (string name)
 		{
 			return new MidiPort (this, name, false);
@@ -899,6 +909,11 @@ namespace CoreMidi {
 		GCHandle gch;
 		bool input;
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("macos11.0")]
+		[ObsoletedOSPlatform ("ios14.0")]
 		internal MidiPort (MidiClient client, string portName, bool input)
 		{
 			using (var nsstr = new NSString (portName)) {
@@ -1553,6 +1568,7 @@ namespace CoreMidi {
 		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("macos11.0")]
 		[ObsoletedOSPlatform ("ios14.0")]
 #else
 		[Deprecated (PlatformName.iOS, 14, 0)]
@@ -2234,6 +2250,11 @@ namespace CoreMidi {
 			return new MidiEndpoint (h, "Destination" + destinationIndex, false);
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("macos11.0")]
+		[ObsoletedOSPlatform ("ios14.0")]
 		internal MidiEndpoint (MidiClient client, string name, out MidiError code)
 		{
 			using (var nsstr = new NSString (name)) {

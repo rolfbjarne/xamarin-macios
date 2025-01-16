@@ -37,7 +37,9 @@ namespace AppKit {
 			return _OpenUrls (urls, bundleIdentifier, options, descriptor, null);
 		}
 
-		[Advice ("Use 'NSWorkSpace.IconForContentType' instead.")]
+		[ObsoletedOSPlatform ("macos12.0", "Use 'NSWorkspace.GetIcon' instead.")]
+		[UnsupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		public virtual NSImage IconForFileType (string fileType)
 		{
 			var nsFileType = NSString.CreateNative (fileType);
@@ -48,7 +50,9 @@ namespace AppKit {
 			}
 		}
 
-		[Advice ("Use 'NSWorkSpace.IconForContentType' instead.")]
+		[ObsoletedOSPlatform ("macos12.0", "Use 'NSWorkspace.GetIcon' instead.")]
+		[UnsupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		public virtual NSImage IconForFileType (HfsTypeCode typeCode)
 		{
 			var nsFileType = GetNSFileType ((uint) typeCode);

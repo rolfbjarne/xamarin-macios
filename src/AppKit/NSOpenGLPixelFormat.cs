@@ -83,6 +83,7 @@ namespace AppKit {
 
 			var list = new List<uint> ();
 			for (int i = 0; i < args.Length; i++) {
+#pragma warning disable CA1422 // This call site is reachable on: 'macOS/OSX' 12.0 and later. 'NSOpenGLPixelFormatAttribute' is obsoleted on: 'macOS/OSX' 10.14 and later.
 				if (args [i] is NSOpenGLPixelFormatAttribute) {
 					NSOpenGLPixelFormatAttribute v = (NSOpenGLPixelFormatAttribute) args [i];
 					switch (v) {
@@ -138,6 +139,7 @@ namespace AppKit {
 						list.Add ((uint) (int) args [i]);
 						break;
 					}
+#pragma warning restore CA1422
 				} else if (args [i] is int && (int) args [i] == 0 && i == args.Length - 1)
 					list.Add (0);
 				else

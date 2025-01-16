@@ -453,7 +453,9 @@ namespace Security {
 		public NSData? GetSerialNumber ()
 		{
 #if MONOMAC
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'SecCertificate.SecCertificateCopySerialNumber(nint, nint)' is only supported on: 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later.
 			IntPtr data = SecCertificateCopySerialNumber (Handle, IntPtr.Zero);
+#pragma warning restore CA1416
 #else
 			IntPtr data = SecCertificateCopySerialNumber (Handle);
 #endif
@@ -771,6 +773,14 @@ namespace Security {
 			return res;
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[ObsoletedOSPlatform ("macos12.0", "Use 'CreateRandomKey' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst15.0", "Use 'CreateRandomKey' instead.")]
+		[ObsoletedOSPlatform ("tvos15.0", "Use 'CreateRandomKey' instead.")]
+		[ObsoletedOSPlatform ("ios15.0", "Use 'CreateRandomKey' instead.")]
 		[Advice ("On iOS this method applies the attributes to both public and private key. To apply different attributes to each key, use 'GenerateKeyPair (SecKeyType, int, SecPublicPrivateKeyAttrs, SecPublicPrivateKeyAttrs, out SecKey, out SecKey)' instead.")]
 		public static SecStatusCode GenerateKeyPair (SecKeyType type, int keySizeInBits, SecPublicPrivateKeyAttrs publicAndPrivateKeyAttrs, out SecKey? publicKey, out SecKey? privateKey)
 		{
@@ -793,6 +803,12 @@ namespace Security {
 #endif
 		}
 #if !MONOMAC
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[ObsoletedOSPlatform ("maccatalyst15.0", "Use 'CreateRandomKey' instead.")]
+		[ObsoletedOSPlatform ("tvos15.0", "Use 'CreateRandomKey' instead.")]
+		[ObsoletedOSPlatform ("ios15.0", "Use 'CreateRandomKey' instead.")]
 		public static SecStatusCode GenerateKeyPair (SecKeyType type, int keySizeInBits, SecPublicPrivateKeyAttrs publicKeyAttrs, SecPublicPrivateKeyAttrs privateKeyAttrs, out SecKey? publicKey, out SecKey? privateKey)
 		{
 			if (type == SecKeyType.Invalid)
@@ -1009,6 +1025,13 @@ namespace Security {
 			}
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[ObsoletedOSPlatform ("tvos15.0", "Use 'CreateEncryptedData' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst15.0", "Use 'CreateEncryptedData' instead.")]
+		[ObsoletedOSPlatform ("ios15.0", "Use 'CreateEncryptedData' instead.")]
 		public SecStatusCode Encrypt (SecPadding padding, byte [] plainText, out byte [] cipherText)
 		{
 			cipherText = new byte [BlockSize];
@@ -1049,6 +1072,13 @@ namespace Security {
 			return SecKeyDecrypt (GetCheckedHandle (), padding, cipherText, cipherTextLen, plainText, (nint*) Unsafe.AsPointer<nint> (ref plainTextLen));
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[ObsoletedOSPlatform ("tvos15.0", "Use 'CreateDecryptedData' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst15.0", "Use 'CreateDecryptedData' instead.")]
+		[ObsoletedOSPlatform ("ios15.0", "Use 'CreateDecryptedData' instead.")]
 		SecStatusCode _Decrypt (SecPadding padding, byte [] cipherText, ref byte []? plainText)
 		{
 			if (cipherText is null)
@@ -1069,6 +1099,13 @@ namespace Security {
 			}
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[ObsoletedOSPlatform ("tvos15.0", "Use 'CreateDecryptedData' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst15.0", "Use 'CreateDecryptedData' instead.")]
+		[ObsoletedOSPlatform ("ios15.0", "Use 'CreateDecryptedData' instead.")]
 		public SecStatusCode Decrypt (SecPadding padding, byte [] cipherText, out byte []? plainText)
 		{
 			plainText = null;

@@ -67,6 +67,78 @@ namespace ObjCRuntime {
 #else
 #error Unknown platform
 #endif
+
+		[SupportedOSPlatformGuard ("ios15.0")]
+		[SupportedOSPlatformGuard ("maccatalyst15.0")]
+		[SupportedOSPlatformGuard ("macos12.0")]
+		[SupportedOSPlatformGuard ("tvos15.0")]
+		internal static bool IsAtLeastXcode13 {
+			get {
+				if (is_at_least_xcode_13 is null) {
+#if __MACOS__
+					is_at_least_xcode_13 = OperatingSystem.IsMacOSVersionAtLeast (12, 0);
+#elif __MACCATALYST__
+					is_at_least_xcode_13 = OperatingSystem.IsMacCatalystVersionAtLeast (15, 0);
+#elif __IOS__
+					is_at_least_xcode_13 = OperatingSystem.IsIOSVersionAtLeast (15, 0);
+#elif __TVOS__
+					is_at_least_xcode_13 = OperatingSystem.IsTvOSVersionAtLeast (15, 0);
+#else
+#error Unknown platform
+#endif
+				}
+				return is_at_least_xcode_13.Value;
+			}
+		}
+		static bool? is_at_least_xcode_13;
+
+		[SupportedOSPlatformGuard ("ios17.0")]
+		[SupportedOSPlatformGuard ("maccatalyst17.0")]
+		[SupportedOSPlatformGuard ("macos14.0")]
+		[SupportedOSPlatformGuard ("tvos17.0")]
+		internal static bool IsAtLeastXcode15 {
+			get {
+				if (is_at_least_xcode_15 is null) {
+#if __MACOS__
+					is_at_least_xcode_15 = OperatingSystem.IsMacOSVersionAtLeast (14, 0);
+#elif __MACCATALYST__
+					is_at_least_xcode_15 = OperatingSystem.IsMacCatalystVersionAtLeast (17, 0);
+#elif __IOS__
+					is_at_least_xcode_15 = OperatingSystem.IsIOSVersionAtLeast (17, 0);
+#elif __TVOS__
+					is_at_least_xcode_15 = OperatingSystem.IsTvOSVersionAtLeast (17, 0);
+#else
+#error Unknown platform
+#endif
+				}
+				return is_at_least_xcode_15.Value;
+			}
+		}
+		static bool? is_at_least_xcode_15;
+
+		[SupportedOSPlatformGuard ("ios18.0")]
+		[SupportedOSPlatformGuard ("maccatalyst18.0")]
+		[SupportedOSPlatformGuard ("macos15.0")]
+		[SupportedOSPlatformGuard ("tvos18.0")]
+		internal static bool IsAtLeastXcode16 {
+			get {
+				if (is_at_least_xcode_16 is null) {
+#if __MACOS__
+					is_at_least_xcode_16 = OperatingSystem.IsMacOSVersionAtLeast (15, 0);
+#elif __MACCATALYST__
+					is_at_least_xcode_16 = OperatingSystem.IsMacCatalystVersionAtLeast (18, 0);
+#elif __IOS__
+					is_at_least_xcode_16 = OperatingSystem.IsIOSVersionAtLeast (18, 0);
+#elif __TVOS__
+					is_at_least_xcode_16 = OperatingSystem.IsTvOSVersionAtLeast (18, 0);
+#else
+#error Unknown platform
+#endif
+				}
+				return is_at_least_xcode_16.Value;
+			}
+		}
+		static bool? is_at_least_xcode_16;
 	}
 }
 #endif

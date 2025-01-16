@@ -147,10 +147,10 @@ namespace CoreMedia {
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("tvos12.2")]
-		[ObsoletedOSPlatform ("maccatalyst13.0")]
-		[ObsoletedOSPlatform ("tvos9.0")]
-		[ObsoletedOSPlatform ("macos10.10")]
-		[ObsoletedOSPlatform ("ios9.0")]
+		[ObsoletedOSPlatform ("maccatalyst13.0", message: "Use 'CMTimebaseCreateWithSourceClock' instead.")]
+		[ObsoletedOSPlatform ("tvos9.0", message: "Use 'CMTimebaseCreateWithSourceClock' instead.")]
+		[ObsoletedOSPlatform ("macos10.10", message: "Use 'CMTimebaseCreateWithSourceClock' instead.")]
+		[ObsoletedOSPlatform ("ios9.0", message: "Use 'CMTimebaseCreateWithSourceClock' instead.")]
 #else
 		[Deprecated (PlatformName.iOS, 8, 0)]
 		[Deprecated (PlatformName.TvOS, 9, 0)]
@@ -159,6 +159,14 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		unsafe extern static /* OSStatus */ CMTimebaseError CMTimebaseCreateWithMasterClock (/* CFAllocatorRef */ IntPtr allocator, /* CMClockRef */ IntPtr masterClock, /* CMTimebaseRef* */ IntPtr* timebaseOut);
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[ObsoletedOSPlatform ("maccatalyst13.0", message: "Use 'CMTimebaseCreateWithSourceClock' instead.")]
+		[ObsoletedOSPlatform ("tvos9.0", message: "Use 'CMTimebaseCreateWithSourceClock' instead.")]
+		[ObsoletedOSPlatform ("macos10.10", message: "Use 'CMTimebaseCreateWithSourceClock' instead.")]
+		[ObsoletedOSPlatform ("ios9.0", message: "Use 'CMTimebaseCreateWithSourceClock' instead.")]
 		static IntPtr Create (CMClock masterClock)
 		{
 			if (masterClock is null)
@@ -174,6 +182,14 @@ namespace CoreMedia {
 			return handle;
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[ObsoletedOSPlatform ("maccatalyst13.0", message: "Use the (CFAllocator, CMClock) overload instead.")]
+		[ObsoletedOSPlatform ("tvos9.0", message: "Use the (CFAllocator, CMClock) overload instead.")]
+		[ObsoletedOSPlatform ("macos10.10", message: "Use the (CFAllocator, CMClock) overload instead.")]
+		[ObsoletedOSPlatform ("ios9.0", message: "Use the (CFAllocator, CMClock) overload instead.")]
 		public CMTimebase (CMClock masterClock)
 			: base (Create (masterClock), true)
 		{
@@ -184,10 +200,10 @@ namespace CoreMedia {
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("tvos12.2")]
-		[ObsoletedOSPlatform ("tvos9.0")]
-		[ObsoletedOSPlatform ("macos10.10")]
-		[ObsoletedOSPlatform ("ios8.0")]
-		[ObsoletedOSPlatform ("maccatalyst13.0")]
+		[ObsoletedOSPlatform ("tvos9.0", message: "Use 'CMTimebaseCreateWithSourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("macos10.10", message: "Use 'CMTimebaseCreateWithSourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("ios8.0", message: "Use 'CMTimebaseCreateWithSourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.0", message: "Use 'CMTimebaseCreateWithSourceTimebase' instead.")]
 #else
 		[Deprecated (PlatformName.iOS, 8, 0)]
 		[Deprecated (PlatformName.TvOS, 9, 0)]
@@ -196,6 +212,14 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		unsafe extern static /* OSStatus */ CMTimebaseError CMTimebaseCreateWithMasterTimebase (/* CFAllocatorRef */ IntPtr allocator, /* CMTimebaseRef */ IntPtr masterTimebase, /* CMTimebaseRef* */ IntPtr* timebaseOut);
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[ObsoletedOSPlatform ("tvos9.0", message: "Use 'CMTimebaseCreateWithSourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("macos10.10", message: "Use 'CMTimebaseCreateWithSourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("ios8.0", message: "Use 'CMTimebaseCreateWithSourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.0", message: "Use 'CMTimebaseCreateWithSourceTimebase' instead.")]
 		static IntPtr Create (CMTimebase masterTimebase)
 		{
 			if (masterTimebase is null)
@@ -211,6 +235,14 @@ namespace CoreMedia {
 			return handle;
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[ObsoletedOSPlatform ("tvos9.0", message: "Use the (CFAllocator, CMTimebase) overload instead.")]
+		[ObsoletedOSPlatform ("macos10.10", message: "Use the (CFAllocator, CMTimebase) overload instead.")]
+		[ObsoletedOSPlatform ("ios8.0", message: "Use the (CFAllocator, CMTimebase) overload instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.0", message: "Use the (CFAllocator, CMTimebase) overload instead.")]
 		public CMTimebase (CMTimebase masterTimebase)
 			: base (Create (masterTimebase), true)
 		{
@@ -229,6 +261,10 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		unsafe static extern CMTimebaseError CMTimebaseCreateWithSourceClock (/* [NullAllowed] CFAllocatorRef */ IntPtr allocator, /* CMClock */ IntPtr sourceClock, /* CMTimebase */ IntPtr* timebaseOut);
 
+		[SupportedOSPlatform ("tvos15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		static IntPtr Create (CFAllocator? allocator, CMClock sourceClock)
 		{
 			if (sourceClock is null)
@@ -272,6 +308,10 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		unsafe static extern CMTimebaseError CMTimebaseCreateWithSourceTimebase (/* [NullAllowed] CFAllocatorRef */ IntPtr allocator, /* CMTimebase */ IntPtr sourceTimebase, /* CMTimebase */ IntPtr* timebaseOut);
 
+		[SupportedOSPlatform ("tvos15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		static IntPtr Create (CFAllocator? allocator, CMTimebase sourceTimebase)
 		{
 			if (sourceTimebase is null)
@@ -350,10 +390,10 @@ namespace CoreMedia {
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("tvos12.2")]
-		[ObsoletedOSPlatform ("maccatalyst13.0")]
-		[ObsoletedOSPlatform ("tvos9.0")]
-		[ObsoletedOSPlatform ("macos10.10")]
-		[ObsoletedOSPlatform ("ios9.0")]
+		[ObsoletedOSPlatform ("maccatalyst13.0", message: "Use 'CMTimebaseCopySourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("tvos9.0", message: "Use 'CMTimebaseCopySourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("macos10.10", message: "Use 'CMTimebaseCopySourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("ios9.0", message: "Use 'CMTimebaseCopySourceTimebase' instead.")]
 #else
 		[Deprecated (PlatformName.iOS, 9, 0)]
 		[Deprecated (PlatformName.MacOSX, 10, 11)]
@@ -367,13 +407,13 @@ namespace CoreMedia {
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("tvos12.2")]
-		[ObsoletedOSPlatform ("macos10.11", "Use 'CopyMasterTimebase' instead.")]
-		[ObsoletedOSPlatform ("ios9.0", "Use 'CopyMasterTimebase' instead.")]
-		[ObsoletedOSPlatform ("tvos9.0", "Use 'CopyMasterTimebase' instead.")]
-		[ObsoletedOSPlatform ("maccatalyst13.0", "Use 'CopyMasterTimebase' instead.")]
+		[ObsoletedOSPlatform ("macos10.10", "Use 'SourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("ios9.0", "Use 'SourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("tvos9.0", "Use 'SourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.0", "Use 'SourceTimebase' instead.")]
 #else
-		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'CopyMasterTimebase' instead.")]
-		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'CopyMasterTimebase' instead.")]
+		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'SourceTimebase' instead.")]
+		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'SourceTimebase' instead.")]
 #endif
 		public CMTimebase? GetMasterTimebase ()
 		{
@@ -389,10 +429,10 @@ namespace CoreMedia {
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("tvos12.2")]
-		[ObsoletedOSPlatform ("maccatalyst13.0")]
-		[ObsoletedOSPlatform ("tvos9.0")]
-		[ObsoletedOSPlatform ("macos10.10")]
-		[ObsoletedOSPlatform ("ios9.0")]
+		[ObsoletedOSPlatform ("maccatalyst13.0", message: "Use 'CMTimebaseCopySourceClock' instead.")]
+		[ObsoletedOSPlatform ("tvos9.0", message: "Use 'CMTimebaseCopySourceClock' instead.")]
+		[ObsoletedOSPlatform ("macos10.10", message: "Use 'CMTimebaseCopySourceClock' instead.")]
+		[ObsoletedOSPlatform ("ios9.0", message: "Use 'CMTimebaseCopySourceClock' instead.")]
 #else
 		[Deprecated (PlatformName.iOS, 9, 0)]
 		[Deprecated (PlatformName.MacOSX, 10, 11)]
@@ -406,13 +446,13 @@ namespace CoreMedia {
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("tvos12.2")]
-		[ObsoletedOSPlatform ("macos10.11", "Use 'CopyMasterClock' instead.")]
-		[ObsoletedOSPlatform ("ios9.0", "Use 'CopyMasterClock' instead.")]
-		[ObsoletedOSPlatform ("tvos9.0", "Use 'CopyMasterClock' instead.")]
-		[ObsoletedOSPlatform ("maccatalyst13.0", "Use 'CopyMasterClock' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.0", message: "Use 'SourceClock' instead.")]
+		[ObsoletedOSPlatform ("tvos9.0", message: "Use 'SourceClock' instead.")]
+		[ObsoletedOSPlatform ("macos10.10", message: "Use 'SourceClock' instead.")]
+		[ObsoletedOSPlatform ("ios9.0", message: "Use 'SourceClock' instead.")]
 #else
-		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'CopyMasterClock' instead.")]
-		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'CopyMasterClock' instead.")]
+		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'SourceClock' instead.")]
+		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'SourceClock' instead.")]
 #endif
 		public CMClock? GetMasterClock ()
 		{
@@ -428,10 +468,10 @@ namespace CoreMedia {
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("tvos12.2")]
-		[ObsoletedOSPlatform ("maccatalyst13.0")]
-		[ObsoletedOSPlatform ("tvos9.0")]
-		[ObsoletedOSPlatform ("macos10.11")]
-		[ObsoletedOSPlatform ("ios9.0")]
+		[ObsoletedOSPlatform ("maccatalyst13.0", message: "Use 'CMTimebaseCopySource' instead.")]
+		[ObsoletedOSPlatform ("tvos9.0", message: "Use 'CMTimebaseCopySource' instead.")]
+		[ObsoletedOSPlatform ("macos10.11", message: "Use 'CMTimebaseCopySource' instead.")]
+		[ObsoletedOSPlatform ("ios9.0", message: "Use 'CMTimebaseCopySource' instead.")]
 #else
 		[Deprecated (PlatformName.iOS, 9, 0)]
 		[Deprecated (PlatformName.MacOSX, 10, 11)]
@@ -467,10 +507,10 @@ namespace CoreMedia {
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("tvos12.2")]
-		[ObsoletedOSPlatform ("maccatalyst13.0")]
-		[ObsoletedOSPlatform ("tvos9.0")]
-		[ObsoletedOSPlatform ("macos10.11")]
-		[ObsoletedOSPlatform ("ios9.0")]
+		[ObsoletedOSPlatform ("maccatalyst13.0", message: "Use 'CMTimebaseCopyUltimateSourceClock' instead.")]
+		[ObsoletedOSPlatform ("tvos9.0", message: "Use 'CMTimebaseCopyUltimateSourceClock' instead.")]
+		[ObsoletedOSPlatform ("macos10.11", message: "Use 'CMTimebaseCopyUltimateSourceClock' instead.")]
+		[ObsoletedOSPlatform ("ios9.0", message: "Use 'CMTimebaseCopyUltimateSourceClock' instead.")]
 #else
 		[Deprecated (PlatformName.iOS, 9, 0)]
 		[Deprecated (PlatformName.MacOSX, 10, 11)]
@@ -484,13 +524,13 @@ namespace CoreMedia {
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("tvos12.2")]
-		[ObsoletedOSPlatform ("macos10.11", "Use 'CopyUltimateMasterClock' instead.")]
-		[ObsoletedOSPlatform ("ios9.0", "Use 'CopyUltimateMasterClock' instead.")]
-		[ObsoletedOSPlatform ("tvos9.0", "Use 'CopyUltimateMasterClock' instead.")]
-		[ObsoletedOSPlatform ("maccatalyst13.0", "Use 'CopyUltimateMasterClock' instead.")]
+		[ObsoletedOSPlatform ("macos10.11", "Use 'UltimateSourceClock' instead.")]
+		[ObsoletedOSPlatform ("ios9.0", "Use 'UltimateSourceClock' instead.")]
+		[ObsoletedOSPlatform ("tvos9.0", "Use 'UltimateSourceClock' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.0", "Use 'UltimateSourceClock' instead.")]
 #else
-		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'CopyUltimateMasterClock' instead.")]
-		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'CopyUltimateMasterClock' instead.")]
+		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'UltimateSourceClock' instead.")]
+		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'UltimateSourceClock' instead.")]
 #endif
 		public CMClock? GetUltimateMasterClock ()
 		{
@@ -601,9 +641,9 @@ namespace CoreMedia {
 		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos12.0")]
-		[ObsoletedOSPlatform ("tvos9.0")]
-		[ObsoletedOSPlatform ("macos10.10")]
-		[ObsoletedOSPlatform ("ios8.0")]
+		[ObsoletedOSPlatform ("tvos9.0", message: "Use 'CMTimebaseSetSourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("macos10.10", message: "Use 'CMTimebaseSetSourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("ios8.0", message: "Use 'CMTimebaseSetSourceTimebase' instead.")]
 #else
 		[Deprecated (PlatformName.iOS, 8, 0)]
 		[Deprecated (PlatformName.TvOS, 9, 0)]
@@ -617,10 +657,10 @@ namespace CoreMedia {
 		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos12.0")]
-		[ObsoletedOSPlatform ("maccatalyst13.0")]
-		[ObsoletedOSPlatform ("tvos9.0")]
-		[ObsoletedOSPlatform ("macos10.10")]
-		[ObsoletedOSPlatform ("ios8.0")]
+		[ObsoletedOSPlatform ("maccatalyst13.0", message: "Use 'SourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("tvos9.0", message: "Use 'SourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("macos10.10", message: "Use 'SourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("ios8.0", message: "Use 'SourceTimebase' instead.")]
 #else
 		[Deprecated (PlatformName.iOS, 8, 0)]
 		[Deprecated (PlatformName.TvOS, 9, 0)]
@@ -639,10 +679,10 @@ namespace CoreMedia {
 		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos12.0")]
-		[ObsoletedOSPlatform ("maccatalyst13.0")]
-		[ObsoletedOSPlatform ("tvos9.0")]
-		[ObsoletedOSPlatform ("macos10.10")]
-		[ObsoletedOSPlatform ("ios8.0")]
+		[ObsoletedOSPlatform ("maccatalyst13.0", message: "Use 'CMTimebaseSetSourceClock' instead.")]
+		[ObsoletedOSPlatform ("tvos9.0", message: "Use 'CMTimebaseSetSourceClock' instead.")]
+		[ObsoletedOSPlatform ("macos10.10", message: "Use 'CMTimebaseSetSourceClock' instead.")]
+		[ObsoletedOSPlatform ("ios8.0", message: "Use 'CMTimebaseSetSourceClock' instead.")]
 #else
 		[Deprecated (PlatformName.iOS, 8, 0)]
 		[Deprecated (PlatformName.TvOS, 9, 0)]
@@ -656,10 +696,10 @@ namespace CoreMedia {
 		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("macos12.0")]
-		[ObsoletedOSPlatform ("maccatalyst13.0")]
-		[ObsoletedOSPlatform ("tvos9.0")]
-		[ObsoletedOSPlatform ("macos10.10")]
-		[ObsoletedOSPlatform ("ios8.0")]
+		[ObsoletedOSPlatform ("maccatalyst13.0", message: "Use 'SourceClock' instead.")]
+		[ObsoletedOSPlatform ("tvos9.0", message: "Use 'SourceClock' instead.")]
+		[ObsoletedOSPlatform ("macos10.10", message: "Use 'SourceClock' instead.")]
+		[ObsoletedOSPlatform ("ios8.0", message: "Use 'SourceClock' instead.")]
 #else
 		[Deprecated (PlatformName.iOS, 8, 0)]
 		[Deprecated (PlatformName.TvOS, 9, 0)]
@@ -675,92 +715,88 @@ namespace CoreMedia {
 #endif
 
 #if !COREBUILD
-		bool IsDeprecated ()
-		{
-#if __MACCATALYST__
-			return true;
-#elif IOS
-			return SystemVersion.CheckiOS (9, 0);
-#elif MONOMAC
-			return SystemVersion.CheckmacOS (10, 11);
-#elif TVOS
-			return true;
-#endif
-		}
-
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[ObsoletedOSPlatform ("tvos9.0", "Use 'SourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("macos10.11", "Use 'SourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("ios9.0", "Use 'SourceTimebase' instead.")]
+		[UnsupportedOSPlatform ("maccatalyst")]
 		public CMTimebase? CopyMasterTimebase ()
 		{
-			IntPtr ptr = IntPtr.Zero;
-			bool deprecated = IsDeprecated ();
-			if (deprecated)
-				ptr = CMTimebaseCopyMasterTimebase (Handle);
-			else
-				ptr = CMTimebaseGetMasterTimebase (Handle);
-
+			var ptr = CMTimebaseCopyMasterTimebase (Handle);
 			if (ptr == IntPtr.Zero)
 				return null;
-
-			return new CMTimebase (ptr, deprecated);
+			return new CMTimebase (ptr, true);
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[ObsoletedOSPlatform ("maccatalyst13.0", "Use 'SourceClock' instead.")]
+		[ObsoletedOSPlatform ("tvos9.0", "Use 'SourceClock' instead.")]
+		[ObsoletedOSPlatform ("macos10.11", "Use 'SourceClock' instead.")]
+		[ObsoletedOSPlatform ("ios9.0", "Use 'SourceClock' instead.")]
 		public CMClock? CopyMasterClock ()
 		{
-			IntPtr ptr = IntPtr.Zero;
-			bool deprecated = IsDeprecated ();
-			if (deprecated)
-				ptr = CMTimebaseCopyMasterClock (Handle);
-			else
-				ptr = CMTimebaseGetMasterClock (Handle);
-
+			var	ptr = CMTimebaseCopyMasterClock (Handle);
 			if (ptr == IntPtr.Zero)
 				return null;
-
-			return new CMClock (ptr, deprecated);
+			return new CMClock (ptr, true);
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[ObsoletedOSPlatform ("tvos9.0", "Use 'CopySource' instead.")]
+		[ObsoletedOSPlatform ("macos10.11", "Use 'CopySource' instead.")]
+		[ObsoletedOSPlatform ("ios9.0", "Use 'CopySource' instead.")]
+		[UnsupportedOSPlatform ("maccatalyst")]
 		public CMClockOrTimebase? CopyMaster ()
 		{
-			IntPtr ptr = IntPtr.Zero;
-			bool deprecated = IsDeprecated ();
-			if (deprecated)
-				ptr = CMTimebaseCopyMaster (Handle);
-			else
-				ptr = CMTimebaseGetMaster (Handle);
-
+			var ptr = CMTimebaseCopyMaster (Handle);
 			if (ptr == IntPtr.Zero)
 				return null;
-
-			return new CMClockOrTimebase (ptr, deprecated);
+			return new CMClockOrTimebase (ptr, true);
 		}
 
-		public CMClock? CopyUltimateMasterClock ()
+		public CMClockOrTimebase? CopySource ()
 		{
-			IntPtr ptr = IntPtr.Zero;
-			bool deprecated = IsDeprecated ();
-			if (deprecated)
-				ptr = CMTimebaseCopyUltimateMasterClock (Handle);
-			else
-				ptr = CMTimebaseGetUltimateMasterClock (Handle);
-
+			var ptr = CMTimebaseCopySource (Handle);
 			if (ptr == IntPtr.Zero)
 				return null;
+			return new CMClockOrTimebase (ptr, true);
+		}
 
-			return new CMClock (ptr, deprecated);
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[ObsoletedOSPlatform ("tvos9.0", "Use 'UltimateSourceClock' instead.")]
+		[ObsoletedOSPlatform ("macos10.11", "Use 'UltimateSourceClock' instead.")]
+		[ObsoletedOSPlatform ("ios9.0", "Use 'UltimateSourceClock' instead.")]
+		[UnsupportedOSPlatform ("maccatalyst")]
+		public CMClock? CopyUltimateMasterClock ()
+		{
+			var ptr = CMTimebaseCopyUltimateMasterClock (Handle);
+			if (ptr == IntPtr.Zero)
+				return null;
+			return new CMClock (ptr, true);
 		}
 
 #if NET
 		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("tvos12.2")]
-		[ObsoletedOSPlatform ("tvos9.0", "Use 'CMTimebaseGetMasterTimebase' instead.")]
-		[ObsoletedOSPlatform ("macos10.11", "Use 'CMTimebaseGetMasterTimebase' instead.")]
-		[ObsoletedOSPlatform ("ios9.0", "Use 'CMTimebaseGetMasterTimebase' instead.")]
+		[ObsoletedOSPlatform ("tvos9.0", "Use 'CMTimebaseCopySourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("macos10.11", "Use 'CMTimebaseCopySourceTimebase' instead.")]
+		[ObsoletedOSPlatform ("ios9.0", "Use 'CMTimebaseCopySourceTimebase' instead.")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #else
 		[NoMacCatalyst]
-		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'CMTimebaseGetMasterTimebase' instead.")]
-		[Deprecated (PlatformName.TvOS, 9, 0, message: "Use 'CMTimebaseGetMasterTimebase' instead.")]
-		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'CMTimebaseGetMasterTimebase' instead.")]
+		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'CMTimebaseCopySourceTimebase' instead.")]
+		[Deprecated (PlatformName.TvOS, 9, 0, message: "Use 'CMTimebaseCopySourceTimebase' instead.")]
+		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'CMTimebaseCopySourceTimebase' instead.")]
 #endif
 		[DllImport (Constants.CoreMediaLibrary)]
 		static extern unsafe /* CMTimebaseRef */ IntPtr CMTimebaseCopyMasterTimebase (/* CMTimebaseRef */ IntPtr timebase);
@@ -770,14 +806,14 @@ namespace CoreMedia {
 		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("maccatalyst15.0")]
 		[SupportedOSPlatform ("tvos12.2")]
-		[ObsoletedOSPlatform ("maccatalyst13.0", "Use 'CMTimebaseGetMasterClock' instead.")]
-		[ObsoletedOSPlatform ("tvos9.0", "Use 'CMTimebaseGetMasterClock' instead.")]
-		[ObsoletedOSPlatform ("macos10.11", "Use 'CMTimebaseGetMasterClock' instead.")]
-		[ObsoletedOSPlatform ("ios9.0", "Use 'CMTimebaseGetMasterClock' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.0", "Use 'CMTimebaseCopySourceClock' instead.")]
+		[ObsoletedOSPlatform ("tvos9.0", "Use 'CMTimebaseCopySourceClock' instead.")]
+		[ObsoletedOSPlatform ("macos10.11", "Use 'CMTimebaseCopySourceClock' instead.")]
+		[ObsoletedOSPlatform ("ios9.0", "Use 'CMTimebaseCopySourceClock' instead.")]
 #else
-		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'CMTimebaseGetMasterClock' instead.")]
-		[Deprecated (PlatformName.TvOS, 9, 0, message: "Use 'CMTimebaseGetMasterClock' instead.")]
-		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'CMTimebaseGetMasterClock' instead.")]
+		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'CMTimebaseCopySourceClock' instead.")]
+		[Deprecated (PlatformName.TvOS, 9, 0, message: "Use 'CMTimebaseCopySourceClock' instead.")]
+		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'CMTimebaseCopySourceClock' instead.")]
 #endif
 		[DllImport (Constants.CoreMediaLibrary)]
 		static extern unsafe /* CMClockRef */ IntPtr CMTimebaseCopyMasterClock (/* CMTimebaseRef */ IntPtr timebase);
@@ -786,15 +822,15 @@ namespace CoreMedia {
 		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("tvos12.2")]
-		[ObsoletedOSPlatform ("tvos9.0", "Use 'CMTimebaseGetMaster' instead.")]
-		[ObsoletedOSPlatform ("macos10.11", "Use 'CMTimebaseGetMaster' instead.")]
-		[ObsoletedOSPlatform ("ios9.0", "Use 'CMTimebaseGetMaster' instead.")]
+		[ObsoletedOSPlatform ("tvos9.0", "Use 'CMTimebaseCopySource' instead.")]
+		[ObsoletedOSPlatform ("macos10.11", "Use 'CMTimebaseCopySource' instead.")]
+		[ObsoletedOSPlatform ("ios9.0", "Use 'CMTimebaseCopySource' instead.")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #else
 		[NoMacCatalyst]
-		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'CMTimebaseGetMaster' instead.")]
-		[Deprecated (PlatformName.TvOS, 9, 0, message: "Use 'CMTimebaseGetMaster' instead.")]
-		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'CMTimebaseGetMaster' instead.")]
+		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'CMTimebaseCopySource' instead.")]
+		[Deprecated (PlatformName.TvOS, 9, 0, message: "Use 'CMTimebaseCopySource' instead.")]
+		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'CMTimebaseCopySource' instead.")]
 #endif
 		[DllImport (Constants.CoreMediaLibrary)]
 		static extern unsafe IntPtr /* void* */ CMTimebaseCopyMaster (/* CMTimebaseRef */ IntPtr timebase);
@@ -803,19 +839,23 @@ namespace CoreMedia {
 		[SupportedOSPlatform ("ios12.2")]
 		[SupportedOSPlatform ("macos12.0")]
 		[SupportedOSPlatform ("tvos12.2")]
-		[ObsoletedOSPlatform ("tvos9.0", "Use 'CMTimebaseGetUltimateMasterClock' instead.")]
-		[ObsoletedOSPlatform ("macos10.11", "Use 'CMTimebaseGetUltimateMasterClock' instead.")]
-		[ObsoletedOSPlatform ("ios9.0", "Use 'CMTimebaseGetUltimateMasterClock' instead.")]
+		[ObsoletedOSPlatform ("tvos9.0", "Use 'CMTimebaseCopyUltimateSourceClock' instead.")]
+		[ObsoletedOSPlatform ("macos10.11", "Use 'CMTimebaseCopyUltimateSourceClock' instead.")]
+		[ObsoletedOSPlatform ("ios9.0", "Use 'CMTimebaseCopyUltimateSourceClock' instead.")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #else
 		[NoMacCatalyst]
-		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'CMTimebaseGetUltimateMasterClock' instead.")]
-		[Deprecated (PlatformName.TvOS, 9, 0, message: "Use 'CMTimebaseGetUltimateMasterClock' instead.")]
-		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'CMTimebaseGetUltimateMasterClock' instead.")]
+		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'CMTimebaseCopyUltimateSourceClock' instead.")]
+		[Deprecated (PlatformName.TvOS, 9, 0, message: "Use 'CMTimebaseCopyUltimateSourceClock' instead.")]
+		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'CMTimebaseCopyUltimateSourceClock' instead.")]
 #endif
 		[DllImport (Constants.CoreMediaLibrary)]
 		static extern unsafe /* CMClockRef */ IntPtr CMTimebaseCopyUltimateMasterClock (/* CMTimebaseRef */ IntPtr timebase);
 #endif
+
+		[DllImport (Constants.CoreMediaLibrary)]
+		static extern unsafe IntPtr /* CMClockOrTimebaseRef * */ CMTimebaseCopySource (/* CMTimebaseRef */ IntPtr timebase);
+
 		//
 		// Dispatch timers not supported
 		//

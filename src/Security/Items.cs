@@ -387,6 +387,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static SecStatusCode SecKeychainItemFreeContent (IntPtr attrList, IntPtr data);
 
+		[ObsoletedOSPlatform ("macos10.10")]
 		public static SecStatusCode AddInternetPassword (
 			string serverName,
 			string accountName,
@@ -433,6 +434,7 @@ namespace Security {
 		}
 		
 		
+		[ObsoletedOSPlatform ("macos10.10")]
 		public static SecStatusCode FindInternetPassword(
 			string serverName,
 			string accountName,
@@ -508,6 +510,7 @@ namespace Security {
 			}
 		}
 
+		[ObsoletedOSPlatform ("macos10.10")]
 		public static SecStatusCode AddGenericPassword (string serviceName, string accountName, byte[] password)
 		{
 			byte[]? serviceNameBytes = null;
@@ -531,6 +534,7 @@ namespace Security {
 				);
 		}
 
+		[ObsoletedOSPlatform ("macos10.10")]
 		public static SecStatusCode FindGenericPassword (string serviceName, string accountName, out byte[]? password)
 		{
 			password = null;
@@ -1621,14 +1625,18 @@ namespace Security {
 				return WhenUnlocked;
 			case SecAccessible.AfterFirstUnlock:
 				return AfterFirstUnlock;
+#pragma warning disable CA1422 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'SecAccessible.Always' is obsoleted on: 'ios' 12.0 and later (Use 'AfterFirstUnlock' or a better suited option instead.), 'maccatalyst' 12.0 and later (Use 'AfterFirstUnlock' or a better suited option instead.), 'macOS/OSX' 10.14 and later (Use 'AfterFirstUnlock' or a better suited option instead.).
 			case SecAccessible.Always:
 				return Always;
+#pragma warning restore CA1422
 			case SecAccessible.WhenUnlockedThisDeviceOnly:
 				return WhenUnlockedThisDeviceOnly;
 			case SecAccessible.AfterFirstUnlockThisDeviceOnly:
 				return AfterFirstUnlockThisDeviceOnly;
+#pragma warning disable CA1422 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'SecAccessible.AlwaysThisDeviceOnly' is obsoleted on: 'ios' 12.0 and later (Use 'AfterFirstUnlockThisDeviceOnly' or a better suited option instead.), 'maccatalyst' 12.0 and later (Use 'AfterFirstUnlockThisDeviceOnly' or a better suited option instead.), 'macOS/OSX' 10.14 and later (Use 'AfterFirstUnlockThisDeviceOnly' or a better suited option instead.).
 			case SecAccessible.AlwaysThisDeviceOnly:
 				return AlwaysThisDeviceOnly;
+#pragma warning restore CA1422
 			case SecAccessible.WhenPasscodeSetThisDeviceOnly:
 				return WhenPasscodeSetThisDeviceOnly;
 			default:
@@ -1646,14 +1654,18 @@ namespace Security {
 				return SecAccessible.WhenUnlocked;
 			if (CFType.Equal (handle, AfterFirstUnlock))
 				return SecAccessible.AfterFirstUnlock;
+#pragma warning disable CA1422 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'SecAccessible.Always' is obsoleted on: 'ios' 12.0 and later (Use 'AfterFirstUnlock' or a better suited option instead.), 'maccatalyst' 12.0 and later (Use 'AfterFirstUnlock' or a better suited option instead.), 'macOS/OSX' 10.14 and later (Use 'AfterFirstUnlock' or a better suited option instead.).
 			if (CFType.Equal (handle, Always))
 				return SecAccessible.Always;
+#pragma warning restore CA1422
 			if (CFType.Equal (handle, WhenUnlockedThisDeviceOnly))
 				return SecAccessible.WhenUnlockedThisDeviceOnly;
 			if (CFType.Equal (handle, AfterFirstUnlockThisDeviceOnly))
 				return SecAccessible.AfterFirstUnlockThisDeviceOnly;
+#pragma warning disable CA1422 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'SecAccessible.AlwaysThisDeviceOnly' is obsoleted on: 'ios' 12.0 and later (Use 'AfterFirstUnlockThisDeviceOnly' or a better suited option instead.), 'maccatalyst' 12.0 and later (Use 'AfterFirstUnlockThisDeviceOnly' or a better suited option instead.), 'macOS/OSX' 10.14 and later (Use 'AfterFirstUnlockThisDeviceOnly' or a better suited option instead.).
 			if (CFType.Equal (handle, AlwaysThisDeviceOnly))
 				return SecAccessible.AlwaysThisDeviceOnly;
+#pragma warning restore CA1422
 			if (CFType.Equal (handle, WhenUnlockedThisDeviceOnly))
 				return SecAccessible.WhenUnlockedThisDeviceOnly;
 			return SecAccessible.Invalid;

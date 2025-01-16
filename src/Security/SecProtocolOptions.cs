@@ -412,6 +412,14 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		static extern void sec_protocol_options_add_pre_shared_key (IntPtr handle, IntPtr dispatchDataParameter);
 
+		[SupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[ObsoletedOSPlatform ("macos10.15", "Use non-DHE cipher suites instead.")]
+		[ObsoletedOSPlatform ("tvos13.0", "Use non-DHE cipher suites instead.")]
+		[ObsoletedOSPlatform ("ios13.0", "Use non-DHE cipher suites instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use non-DHE cipher suites instead.")]
 		public void AddPreSharedKey (DispatchData parameters)
 		{
 			if (parameters is null)

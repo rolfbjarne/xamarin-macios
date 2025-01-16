@@ -858,6 +858,13 @@ namespace Security {
 			return _RawSign (padding, dataToSign, dataToSignLen, out result);
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[ObsoletedOSPlatform ("maccatalyst15.0", "Use 'CreateSignature' instead.")]
+		[ObsoletedOSPlatform ("tvos15.0", "Use 'CreateSignature' instead.")]
+		[ObsoletedOSPlatform ("ios15.0", "Use 'CreateSignature' instead.")]
 		public unsafe SecStatusCode RawSign (SecPadding padding, byte [] dataToSign, out byte [] result)
 		{
 			if (dataToSign is null)
@@ -867,6 +874,13 @@ namespace Security {
 				return _RawSign (padding, (IntPtr) bp, dataToSign.Length, out result);
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[ObsoletedOSPlatform ("maccatalyst15.0", "Use 'CreateSignature' instead.")]
+		[ObsoletedOSPlatform ("tvos15.0", "Use 'CreateSignature' instead.")]
+		[ObsoletedOSPlatform ("ios15.0", "Use 'CreateSignature' instead.")]
 		unsafe SecStatusCode _RawSign (SecPadding padding, IntPtr dataToSign, int dataToSignLen, out byte [] result)
 		{
 			SecStatusCode status;
@@ -913,6 +927,13 @@ namespace Security {
 			return SecKeyRawVerify (GetCheckedHandle (), padding, signedData, (nint) signedDataLen, signature, (nint) signatureLen);
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[ObsoletedOSPlatform ("maccatalyst15.0", "Use 'VerifySignature' instead.")]
+		[ObsoletedOSPlatform ("tvos15.0", "Use 'VerifySignature' instead.")]
+		[ObsoletedOSPlatform ("ios15.0", "Use 'VerifySignature' instead.")]
 		public SecStatusCode RawVerify (SecPadding padding, byte [] signedData, byte [] signature)
 		{
 			if (signature is null)
@@ -966,6 +987,13 @@ namespace Security {
 			return SecKeyEncrypt (GetCheckedHandle (), padding, plainText, plainTextLen, cipherText, (nint*) Unsafe.AsPointer<nint> (ref cipherTextLen));
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[ObsoletedOSPlatform ("tvos15.0", "Use 'CreateEncryptedData' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst15.0", "Use 'CreateEncryptedData' instead.")]
+		[ObsoletedOSPlatform ("ios15.0", "Use 'CreateEncryptedData' instead.")]
 		public SecStatusCode Encrypt (SecPadding padding, byte [] plainText, byte [] cipherText)
 		{
 			if (cipherText is null)

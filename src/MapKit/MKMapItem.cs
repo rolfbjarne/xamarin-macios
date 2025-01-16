@@ -113,11 +113,19 @@ namespace MapKit {
 	}
 
 	public partial class MKMapItem {
+		[UnsupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		public void OpenInMaps (MKLaunchOptions? launchOptions = null)
 		{
 			_OpenInMaps (launchOptions?.ToDictionary ());
 		}
 
+		[UnsupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
 		public static bool OpenMaps (MKMapItem [] mapItems, MKLaunchOptions? launchOptions = null)
 		{
 			return _OpenMaps (mapItems, launchOptions?.ToDictionary ());

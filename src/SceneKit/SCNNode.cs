@@ -53,6 +53,14 @@ namespace SceneKit {
 			}
 		}
 
+		[ObsoletedOSPlatform ("tvos11.0", "Use 'RemoveAnimationUsingBlendOutDuration' instead.")]
+		[ObsoletedOSPlatform ("ios11.0", "Use 'RemoveAnimationUsingBlendOutDuration' instead.")]
+		[ObsoletedOSPlatform ("macos10.13", "Use 'RemoveAnimationUsingBlendOutDuration' instead.")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'RemoveAnimationUsingBlendOutDuration' instead.")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		public void RemoveAnimation (string key, nfloat duration)
 		{
 			if (string.IsNullOrEmpty (key))
@@ -71,6 +79,14 @@ namespace SceneKit {
 				((ISCNAnimatable) this).RemoveAnimation (s);
 		}
 
+		[ObsoletedOSPlatform ("tvos11.0", "Use 'GetAnimationPlayer' instead.")]
+		[ObsoletedOSPlatform ("ios11.0", "Use 'GetAnimationPlayer' instead.")]
+		[ObsoletedOSPlatform ("macos10.13", "Use 'GetAnimationPlayer' instead.")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'GetAnimationPlayer' instead.")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		public CAAnimation? GetAnimation (string key)
 		{
 			if (string.IsNullOrEmpty (key))
@@ -80,6 +96,14 @@ namespace SceneKit {
 				return ((ISCNAnimatable) this).GetAnimation (s);
 		}
 
+		[ObsoletedOSPlatform ("tvos11.0", "Use 'SCNAnimationPlayer.Paused' instead.")]
+		[ObsoletedOSPlatform ("ios11.0", "Use 'SCNAnimationPlayer.Paused' instead.")]
+		[ObsoletedOSPlatform ("macos10.13", "Use 'SCNAnimationPlayer.Paused' instead.")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'SCNAnimationPlayer.Paused' instead.")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		public void PauseAnimation (string key)
 		{
 			if (string.IsNullOrEmpty (key))
@@ -89,6 +113,14 @@ namespace SceneKit {
 				((ISCNAnimatable) this).PauseAnimation (s);
 		}
 
+		[ObsoletedOSPlatform ("tvos11.0", "Use 'SCNAnimationPlayer.Paused' instead.")]
+		[ObsoletedOSPlatform ("ios11.0", "Use 'SCNAnimationPlayer.Paused' instead.")]
+		[ObsoletedOSPlatform ("macos10.13", "Use 'SCNAnimationPlayer.Paused' instead.")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'SCNAnimationPlayer.Paused' instead.")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		public void ResumeAnimation (string key)
 		{
 			if (string.IsNullOrEmpty (key))
@@ -98,6 +130,14 @@ namespace SceneKit {
 				((ISCNAnimatable) this).ResumeAnimation (s);
 		}
 
+		[ObsoletedOSPlatform ("tvos11.0", "Use 'SCNAnimationPlayer.Paused' instead.")]
+		[ObsoletedOSPlatform ("ios11.0", "Use 'SCNAnimationPlayer.Paused' instead.")]
+		[ObsoletedOSPlatform ("macos10.13", "Use 'SCNAnimationPlayer.Paused' instead.")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'SCNAnimationPlayer.Paused' instead.")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		public bool IsAnimationPaused (string key)
 		{
 			if (string.IsNullOrEmpty (key))

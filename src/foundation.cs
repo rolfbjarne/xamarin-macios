@@ -11994,10 +11994,11 @@ namespace Foundation {
 #endif
 		CGPoint CGPointValue { get; }
 
-		[NoMac]
+#if !MONOMAC // we have a manual implementation for macOS, which means [NoMac] will generate the wrong availability attributes
 		[MacCatalyst (13, 1)]
 		[Export ("CGAffineTransformValue")]
 		CoreGraphics.CGAffineTransform CGAffineTransformValue { get; }
+#endif
 
 		[NoMac]
 		[MacCatalyst (13, 1)]
@@ -12009,11 +12010,12 @@ namespace Foundation {
 		[Export ("directionalEdgeInsetsValue")]
 		NSDirectionalEdgeInsets DirectionalEdgeInsetsValue { get; }
 
-		[NoMac]
+#if !MONOMAC // we have a manual implementation for macOS, which means [NoMac] will generate the wrong availability attributes
 		[MacCatalyst (13, 1)]
 		[Export ("valueWithCGAffineTransform:")]
 		[Static]
 		NSValue FromCGAffineTransform (CoreGraphics.CGAffineTransform tran);
+#endif
 
 		[NoMac]
 		[MacCatalyst (13, 1)]

@@ -287,8 +287,10 @@ namespace CoreText {
 				values.Add (CreateValue (CTParagraphStyleSpecifier.MaximumLineHeight, MaximumLineHeight.Value));
 			if (MinimumLineHeight.HasValue)
 				values.Add (CreateValue (CTParagraphStyleSpecifier.MinimumLineHeight, MinimumLineHeight.Value));
+#pragma warning disable CA1422 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'CTParagraphStyleSpecifier.LineSpacing' is obsoleted on: 'ios' 6.0 and later (Use 'MaximumLineSpacing' instead.), 'maccatalyst' 6.0 and later (Use 'MaximumLineSpacing' instead.), 'macOS/OSX' 10.8 and later (Use 'MaximumLineSpacing' instead.), 'tvos' 16.0 and later (Use 'MaximumLineSpacing' instead.).
 			if (LineSpacing.HasValue)
 				values.Add (CreateValue (CTParagraphStyleSpecifier.LineSpacing, LineSpacing.Value));
+#pragma warning restore CA1422
 			if (ParagraphSpacing.HasValue)
 				values.Add (CreateValue (CTParagraphStyleSpecifier.ParagraphSpacing, ParagraphSpacing.Value));
 			if (ParagraphSpacingBefore.HasValue)
@@ -502,6 +504,14 @@ namespace CoreText {
 			get { return GetFloatValue (CTParagraphStyleSpecifier.MinimumLineHeight); }
 		}
 
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
+		[ObsoletedOSPlatform ("macos10.8", "Use 'MaximumLineSpacing' instead.")]
+		[ObsoletedOSPlatform ("ios6.0", "Use 'MaximumLineSpacing' instead.")]
+		[ObsoletedOSPlatform ("tvos16.0", "Use 'MaximumLineSpacing' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'MaximumLineSpacing' instead.")]
 #if NET
 		public nfloat LineSpacing {
 #else

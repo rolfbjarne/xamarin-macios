@@ -37,6 +37,10 @@ namespace MetalPerformanceShadersGraph {
 			}
 		}
 
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		public static MPSGraphTensor Variable (this MPSGraph graph, float initialValue, int [] shape, string? name = null)
 		{
 			var length = 1;

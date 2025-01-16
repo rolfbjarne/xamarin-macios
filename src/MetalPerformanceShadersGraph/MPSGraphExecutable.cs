@@ -52,8 +52,10 @@ namespace MetalPerformanceShadersGraph {
 			: base (NSObjectFlag.Empty)
 		{
 			switch (option) {
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 17.0 and later, 'maccatalyst' 17.0 and later, 'macOS/OSX' 14.0 and later, 'tvos' 17.0 and later. 'MPSGraphExecutableInitializationOption.CoreMLPackage' is only supported on: 'ios' 18.0 and later, 'maccatalyst' 18.0 and later, 'macOS/OSX' 15.0 and later, 'tvos' 18.0 and later.
 			case MPSGraphExecutableInitializationOption.CoreMLPackage:
 				InitializeHandle (_InitWithCoreMLPackage (packageUrl, compilationDescriptor));
+#pragma warning restore CA1416
 				break;
 			case MPSGraphExecutableInitializationOption.MPSGraphPackage:
 				InitializeHandle (_InitWithMPSGraphPackage (packageUrl, compilationDescriptor));

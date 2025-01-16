@@ -509,16 +509,22 @@ namespace CoreServices
 			FSEventStreamScheduleWithRunLoop (GetCheckedHandle (), runLoop.Handle, runLoopMode.Handle);
 		}
 
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("macos13.0", "Use 'SetDispatchQueue' instead.")]
 		public void ScheduleWithRunLoop (CFRunLoop runLoop)
 		{
 			ScheduleWithRunLoop (runLoop, CFRunLoop.ModeDefault);
 		}
 
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("macos13.0", "Use 'SetDispatchQueue' instead.")]
 		public void ScheduleWithRunLoop (NSRunLoop runLoop, NSString runLoopMode)
 		{
 			ScheduleWithRunLoop (runLoop.GetCFRunLoop (), runLoopMode);
 		}
 
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("macos13.0", "Use 'SetDispatchQueue' instead.")]
 		public void ScheduleWithRunLoop (NSRunLoop runLoop)
 		{
 			ScheduleWithRunLoop (runLoop.GetCFRunLoop (), CFRunLoop.ModeDefault);
@@ -539,16 +545,22 @@ namespace CoreServices
 			FSEventStreamScheduleWithRunLoop (GetCheckedHandle (), runLoop.Handle, runLoopMode.Handle);
 		}
 
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("macos13.0", "Use 'SetDispatchQueue' instead.")]
 		public void UnscheduleFromRunLoop (CFRunLoop runLoop)
 		{
 			UnscheduleFromRunLoop (runLoop, CFRunLoop.ModeDefault);
 		}
 
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("macos13.0", "Use 'SetDispatchQueue' instead.")]
 		public void UnscheduleFromRunLoop (NSRunLoop runLoop, NSString runLoopMode)
 		{
 			UnscheduleFromRunLoop (runLoop.GetCFRunLoop (), runLoopMode);
 		}
 
+		[SupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("macos13.0", "Use 'SetDispatchQueue' instead.")]
 		public void UnscheduleFromRunLoop (NSRunLoop runLoop)
 		{
 			UnscheduleFromRunLoop (runLoop.GetCFRunLoop (), CFRunLoop.ModeDefault);

@@ -81,10 +81,14 @@ namespace Network {
 						castedOptions = new NWProtocolUdpOptions (options, owns: false);
 					} else if (definition.Equals (NWProtocolDefinition.CreateTlsDefinition ())) {
 						castedOptions = new NWProtocolTlsOptions (options, owns: false);
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'NWProtocolIPOptions' is only supported on: 'ios' 13.0 and later, 'maccatalyst' 13.0 and later, 'tvos' 13.0 and later.
 					} else if (definition.Equals (NWProtocolDefinition.CreateIPDefinition ())) {
 						castedOptions = new NWProtocolIPOptions (options, owns: false);
+#pragma warning restore CA1416
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'NWWebSocketOptions' is only supported on: 'ios' 13.0 and later, 'maccatalyst' 13.0 and later, 'tvos' 13.0 and later.
 					} else if (definition.Equals (NWProtocolDefinition.CreateWebSocketDefinition ())) {
 						castedOptions = new NWWebSocketOptions (options, owns: false);
+#pragma warning restore CA1416
 					}
 
 					del (castedOptions ?? tempOptions);
@@ -147,6 +151,10 @@ namespace Network {
 		extern static IntPtr nw_protocol_stack_copy_internet_protocol (nw_protocol_stack_t stack);
 
 #if NET
+		[SupportedOSPlatform ("tvos13.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios13.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		public NWProtocolIPOptions? InternetProtocol {
 #else
 		public NWProtocolOptions? InternetProtocol {

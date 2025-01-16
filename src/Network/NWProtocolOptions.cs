@@ -171,6 +171,10 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		internal static extern void nw_ip_options_set_local_address_preference (IntPtr options, NWIPLocalAddressPreference preference);
 
+		[SupportedOSPlatform ("tvos13.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios13.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 #if !NET
 		[TV (13, 0)]
 		[iOS (13, 0)]
@@ -339,6 +343,10 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		static extern byte nw_protocol_options_is_quic (IntPtr options);
 
+		[SupportedOSPlatform ("tvos15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		public bool IsQuic => nw_protocol_options_is_quic (GetCheckedHandle ()) != 0;
 	}
 }

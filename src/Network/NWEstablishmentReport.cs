@@ -176,6 +176,10 @@ namespace Network {
 #else
 		[UnmanagedCallersOnly]
 #endif
+		[SupportedOSPlatform ("tvos15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		static void TrampolineEnumerateResolutionReport (IntPtr block, nw_resolution_report_t report)
 		{
 			var del = BlockLiteral.GetTarget<Action<NWResolutionReport>> (block);

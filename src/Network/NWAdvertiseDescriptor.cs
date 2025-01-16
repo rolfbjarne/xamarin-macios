@@ -51,6 +51,10 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		static extern OS_nw_advertise_descriptor nw_advertise_descriptor_create_application_service (IntPtr application_service_name);
 
+		[SupportedOSPlatform ("tvos16.0")]
+		[SupportedOSPlatform ("macos13.0")]
+		[SupportedOSPlatform ("ios16.0")]
+		[SupportedOSPlatform ("maccatalyst16.0")]
 		static OS_nw_advertise_descriptor nw_advertise_descriptor_create_application_service (string application_service_name)
 		{
 			using var namePtr = new TransientString (application_service_name);

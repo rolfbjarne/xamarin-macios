@@ -7,6 +7,10 @@ using ObjCRuntime;
 
 namespace SceneKit {
 	public partial class SCNRenderingOptions {
+		[UnsupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		public SCNRenderingApi? RenderingApi {
 			get {
 				var val = GetNUIntValue (SCNRenderingOptionsKeys.RenderingApiKey);

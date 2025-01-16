@@ -475,6 +475,8 @@ namespace CoreImage {
 			case "CIMinimumComponent":
 				return new CIMinimumComponent (handle);
 			case "CIPersonSegmentation":
+				if (!SystemVersion.IsAtLeastXcode13)
+					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
 				return new CIPersonSegmentation (handle);
 			case "CIPerspectiveTile":
 				return new CIPerspectiveTile (handle);
@@ -529,14 +531,24 @@ namespace CoreImage {
 			case "CIConvolution9Vertical":
 				return new CIConvolution9Vertical (handle);
 			case "CIConvolutionRGB3X3":
+				if (!SystemVersion.IsAtLeastXcode13)
+					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
 				return new CIConvolutionRGB3X3 (handle);
 			case "CIConvolutionRGB5X5":
+				if (!SystemVersion.IsAtLeastXcode13)
+					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
 				return new CIConvolutionRGB5X5 (handle);
 			case "CIConvolutionRGB7X7":
+				if (!SystemVersion.IsAtLeastXcode13)
+					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
 				return new CIConvolutionRGB7X7 (handle);
 			case "CIConvolutionRGB9Horizontal":
+				if (!SystemVersion.IsAtLeastXcode13)
+					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
 				return new CIConvolutionRGB9Horizontal (handle);
 			case "CIConvolutionRGB9Vertical":
+				if (!SystemVersion.IsAtLeastXcode13)
+					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
 				return new CIConvolutionRGB9Vertical (handle);
 			case "CILinearToSRGBToneCurve":
 				return new CILinearToSRGBToneCurve (handle);
@@ -585,6 +597,8 @@ namespace CoreImage {
 			case "CILinearDodgeBlendMode":
 				return new CILinearDodgeBlendMode (handle);
 			case "CILinearLightBlendMode":
+				if (!SystemVersion.IsAtLeastXcode13)
+					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
 				return new CILinearLightBlendMode (handle);
 			case "CIPerspectiveCorrection":
 				return new CIPerspectiveCorrection (handle);
@@ -593,6 +607,8 @@ namespace CoreImage {
 			case "CISubtractBlendMode":
 				return new CISubtractBlendMode (handle);
 			case "CIVividLightBlendMode":
+				if (!SystemVersion.IsAtLeastXcode13)
+					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
 				return new CIVividLightBlendMode (handle);
 			case "CIAccordionFoldTransition":
 				return new CIAccordionFoldTransition (handle);
@@ -715,10 +731,16 @@ namespace CoreImage {
 			case "CIBlendWithRedMask":
 				return new CIBlendWithRedMask (handle);
 			case "CIMaximumScaleTransform":
+				if (!SystemVersion.IsAtLeastXcode16)
+					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
 				return new CIMaximumScaleTransform (handle);
 			case "CIToneMapHeadroom":
+				if (!SystemVersion.IsAtLeastXcode16)
+					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
 				return new CIToneMapHeadroom (handle);
 			case "CIAreaBoundsRed":
+				if (!SystemVersion.IsAtLeastXcode16)
+					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
 				return new CIAreaBoundsRed (handle);
 			default:
 				throw new NotImplementedException (String.Format ("Unknown filter type returned: `{0}', returning a default CIFilter", filterName));

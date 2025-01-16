@@ -114,6 +114,7 @@ namespace CoreMidi {
 	[SupportedOSPlatform ("ios12.2")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("macos12.0")]
+	[UnsupportedOSPlatform ("tvos")]
 #endif
 	[NativeName ("MIDIThruConnectionEndpoint")]
 	[StructLayout (LayoutKind.Sequential)]

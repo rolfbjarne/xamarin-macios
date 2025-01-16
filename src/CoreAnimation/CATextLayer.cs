@@ -96,8 +96,12 @@ namespace CoreAnimation {
 				else if (type == CFString.GetTypeID ())
 					return CFString.FromHandle (handle);
 #if MONOMAC
-				if (OperatingSystem.IsMacOS ())
+				if (OperatingSystem.IsMacOS ()) {
+// The CA1416 here is an analyzer bug: https://github.com/dotnet/roslyn-analyzers/issues/7530
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' all versions, 'tvos' 12.2 and later. 'NSFont' is only supported on: 'macOS/OSX' 12.0 and later.
 					return Runtime.GetNSObject<NSFont> (handle);
+#pragma warning restore CA1416
+				}
 #endif
 				return null;
 			}

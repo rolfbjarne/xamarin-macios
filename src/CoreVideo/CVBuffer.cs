@@ -140,24 +140,35 @@ namespace CoreVideo {
 		[DllImport (Constants.CoreVideoLibrary)]
 		unsafe extern static /* CFTypeRef */ IntPtr CVBufferCopyAttachment (/* CVBufferRef */ IntPtr buffer, /* CFStringRef */ IntPtr key, CVAttachmentMode* attachmentMode);
 
+		[SupportedOSPlatform ("tvos15.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		unsafe static IntPtr CVBufferCopyAttachment (IntPtr buffer, IntPtr key, out CVAttachmentMode attachmentMode)
 		{
 			attachmentMode = default;
 			return CVBufferCopyAttachment (buffer, key, (CVAttachmentMode*) Unsafe.AsPointer<CVAttachmentMode> (ref attachmentMode));
 		}
 
-		// FIXME: we need to bring the new API to xamcore
-#if !MONOMAC
-		// any CF object can be attached
 		public T? GetAttachment<T> (NSString key, out CVAttachmentMode attachmentMode) where T : class, INativeObject
 		{
 			if (key is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (key));
-			if (SystemVersion.IsAtLeastXcode16)
+			if (SystemVersion.IsAtLeastXcode13) {
+				// The CA1416 here is an analyzer bug: https://github.com/dotnet/roslyn-analyzers/issues/7530
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'CVBuffer.CVBufferCopyAttachment(nint, nint, out CVAttachmentMode)' is only supported on: 'ios' 15.0 and later, 'maccatalyst' 15.0 and later, 'tvos' 15.0 and later.
 				return Runtime.GetINativeObject<T> (CVBufferCopyAttachment (Handle, key.Handle, out attachmentMode), true);
+#pragma warning restore CA1416
+			}
 			return Runtime.GetINativeObject<T> (CVBufferGetAttachment (Handle, key.Handle, out attachmentMode), false);
 		}
-#else
+
+#if MONOMAC && !XAMCORE_5_0
+		[Obsolete ("Use 'GetAttachment<T>' instead.")]
+		[SupportedOSPlatform ("macos")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[UnsupportedOSPlatform ("maccatalyst")]
 		public NSObject? GetAttachment (NSString key, out CVAttachmentMode attachmentMode)
 		{
 			if (key is null)
@@ -199,8 +210,12 @@ namespace CoreVideo {
 
 		public NSDictionary? GetAttachments (CVAttachmentMode attachmentMode)
 		{
-			if (SystemVersion.IsAtLeastXcode13)
+			if (SystemVersion.IsAtLeastXcode13) {
+				// The CA1416 here is an analyzer bug: https://github.com/dotnet/roslyn-analyzers/issues/7530
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'CVBuffer.CVBufferCopyAttachments(nint, CVAttachmentMode)' is only supported on: 'ios' 15.0 and later, 'maccatalyst' 15.0 and later, 'tvos' 15.0 and later.
 				return Runtime.GetINativeObject<NSDictionary> (CVBufferCopyAttachments (Handle, attachmentMode), true);
+#pragma warning restore CA1416
+			}
 			return Runtime.GetNSObject<NSDictionary> (CVBufferGetAttachments (Handle, attachmentMode), false);
 		}
 
@@ -210,7 +225,13 @@ namespace CoreVideo {
 			where TKey : class, INativeObject
 			where TValue : class, INativeObject
 		{
-			return Runtime.GetNSObject<NSDictionary<TKey, TValue>> (CVBufferGetAttachments (Handle, attachmentMode));
+			if (SystemVersion.IsAtLeastXcode13) {
+				// The CA1416 here is an analyzer bug: https://github.com/dotnet/roslyn-analyzers/issues/7530
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'CVBuffer.CVBufferCopyAttachments(nint, CVAttachmentMode)' is only supported on: 'ios' 15.0 and later, 'maccatalyst' 15.0 and later, 'tvos' 15.0 and later.
+				return Runtime.GetNSObject<NSDictionary<TKey, TValue>> (CVBufferCopyAttachments (Handle, attachmentMode), true);
+#pragma warning restore CA1416
+			}
+			return Runtime.GetNSObject<NSDictionary<TKey, TValue>> (CVBufferGetAttachments (Handle, attachmentMode), false);
 		}
 
 		[DllImport (Constants.CoreVideoLibrary)]

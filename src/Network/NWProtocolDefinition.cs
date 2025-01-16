@@ -139,6 +139,10 @@ namespace Network {
 #else
 		[UnmanagedCallersOnly]
 #endif
+		[SupportedOSPlatform ("tvos13.0")]
+		[SupportedOSPlatform ("ios13.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[SupportedOSPlatform ("macos12.0")]
 		static NWFramerStartResult TrampolineCreateFramerHandler (IntPtr block, IntPtr framer)
 		{
 			// get and call, this is internal and we are trying to do all the magic in the call

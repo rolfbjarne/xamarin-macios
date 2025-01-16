@@ -45,6 +45,7 @@ using System.Diagnostics.CodeAnalysis;
 using CoreFoundation;
 using Foundation;
 using Security;
+using ObjCRuntime;
 
 #if !MONOMAC
 using UIKit;
@@ -124,7 +125,7 @@ namespace Foundation {
 		readonly Dictionary<NSUrlSessionTask, InflightData> inflightRequests;
 		readonly object inflightRequestsLock = new object ();
 		readonly NSUrlSessionConfiguration.SessionConfigurationType sessionType;
-#if !MONOMAC
+#if !MONOMAC && !NET8_0_OR_GREATER
 		NSObject? notificationToken;  // needed to make sure we do not hang if not using a background session
 		readonly object notificationTokenLock = new object (); // need to make sure that threads do no step on each other with a dispose and a remove  inflight data
 #endif
@@ -155,27 +156,47 @@ namespace Foundation {
 			allowsCellularAccess = configuration.AllowsCellularAccess;
 			AllowAutoRedirect = true;
 
+#if !NET10_0_OR_GREATER
+			// BREAKING CHANGE: DOCUMENT NO LONGER HONORING ServicePointManager.SecurityProtocol in RELEASE NOTES.
 #pragma warning disable SYSLIB0014
 			// SYSLIB0014: 'ServicePointManager' is obsolete: 'WebRequest, HttpWebRequest, ServicePoint, and WebClient are obsolete. Use HttpClient instead. Settings on ServicePointManager no longer affect SslStream or HttpClient.' (https://aka.ms/dotnet-warnings/SYSLIB0014)
 			// https://github.com/xamarin/xamarin-macios/issues/20764
 			var sp = ServicePointManager.SecurityProtocol;
 #pragma warning restore SYSLIB0014
-			if ((sp & SecurityProtocolType.Ssl3) != 0)
-				configuration.TLSMinimumSupportedProtocol = SslProtocol.Ssl_3_0;
-			else if ((sp & SecurityProtocolType.Tls) != 0)
-				configuration.TLSMinimumSupportedProtocol = SslProtocol.Tls_1_0;
-			else if ((sp & SecurityProtocolType.Tls11) != 0)
-				configuration.TLSMinimumSupportedProtocol = SslProtocol.Tls_1_1;
-			else if ((sp & SecurityProtocolType.Tls12) != 0)
-				configuration.TLSMinimumSupportedProtocol = SslProtocol.Tls_1_2;
-			else if ((sp & (SecurityProtocolType) 12288) != 0) // Tls13 value not yet in monno
-				configuration.TLSMinimumSupportedProtocol = SslProtocol.Tls_1_3;
+			if (SystemVersion.IsAtLeastXcode11) {
+				// The CA1416 here is an analyzer bug: https://github.com/dotnet/roslyn-analyzers/issues/7530
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX', 'tvos' 12.2 and later. 'NSUrlSessionConfiguration.TlsMinimumSupportedProtocolVersion' is only supported on: 'ios' 13.0 and later, 'maccatalyst' 13.0 and later, 'tvos' 13.0 and later.
+				if ((sp & SecurityProtocolType.Ssl3) != 0) {
+					// no equivalent
+				} else if ((sp & SecurityProtocolType.Tls) != 0) {
+					configuration.TlsMinimumSupportedProtocolVersion = TlsProtocolVersion.Tls10;
+				} else if ((sp & SecurityProtocolType.Tls11) != 0) {
+					configuration.TlsMinimumSupportedProtocolVersion = TlsProtocolVersion.Tls11;
+				} else if ((sp & SecurityProtocolType.Tls12) != 0) {
+					configuration.TlsMinimumSupportedProtocolVersion = TlsProtocolVersion.Tls12;
+				} else if ((sp & SecurityProtocolType.Tls13) != 0) {
+					configuration.TlsMinimumSupportedProtocolVersion = TlsProtocolVersion.Tls13;
+				}
+#pragma warning restore CA1416
+			} else {
+				if ((sp & SecurityProtocolType.Ssl3) != 0)
+					configuration.TLSMinimumSupportedProtocol = SslProtocol.Ssl_3_0;
+				else if ((sp & SecurityProtocolType.Tls) != 0)
+					configuration.TLSMinimumSupportedProtocol = SslProtocol.Tls_1_0;
+				else if ((sp & SecurityProtocolType.Tls11) != 0)
+					configuration.TLSMinimumSupportedProtocol = SslProtocol.Tls_1_1;
+				else if ((sp & SecurityProtocolType.Tls12) != 0)
+					configuration.TLSMinimumSupportedProtocol = SslProtocol.Tls_1_2;
+				else if ((sp & (SecurityProtocolType) 12288) != 0) // Tls13 value not yet in monno
+					configuration.TLSMinimumSupportedProtocol = SslProtocol.Tls_1_3;
+			}
+#endif // NET10_0_OR_GREATER
 
 			session = NSUrlSession.FromConfiguration (configuration, (INSUrlSessionDelegate) new NSUrlSessionHandlerDelegate (this), null);
 			inflightRequests = new Dictionary<NSUrlSessionTask, InflightData> ();
 		}
 
-#if !MONOMAC && !NET8_0
+#if !MONOMAC && !NET8_0_OR_GREATER
 
 		void AddNotification ()
 		{
@@ -224,7 +245,7 @@ namespace Foundation {
 						data.CancellationTokenSource.Cancel ();
 					inflightRequests.Remove (task);
 				}
-#if !MONOMAC && !NET8_0
+#if !MONOMAC && !NET8_0_OR_GREATER
 				// do we need to be notified? If we have not inflightData, we do not
 				if (inflightRequests.Count == 0)
 					RemoveNotification ();
@@ -240,7 +261,7 @@ namespace Foundation {
 		protected override void Dispose (bool disposing)
 		{
 			lock (inflightRequestsLock) {
-#if !MONOMAC && !NET8_0
+#if !MONOMAC && !NET8_0_OR_GREATER
 				// remove the notification if present, method checks against null
 				RemoveNotification ();
 #endif
@@ -313,7 +334,7 @@ namespace Foundation {
 				trustOverrideForUrl = value;
 			}
 		}
-#if !NET8_0
+#if !NET8_0_OR_GREATER
 		// we do check if a user does a request and the application goes to the background, but
 		// in certain cases the user does that on purpose (BeingBackgroundTask) and wants to be able
 		// to use the network. In those cases, which are few, we want the developer to explicitly 
@@ -323,21 +344,21 @@ namespace Foundation {
 
 #if !XAMCORE_5_0
 		[EditorBrowsable (EditorBrowsableState.Never)]
-#if NET8_0
+#if NET8_0_OR_GREATER
 		[Obsolete ("This property is ignored.")]
 #else
 		[Obsolete ("This property will be ignored in .NET 8.")]
 #endif
 		public bool BypassBackgroundSessionCheck {
 			get {
-#if NET8_0
+#if NET8_0_OR_GREATER
 				return true;
 #else
 				return bypassBackgroundCheck;
 #endif
 			}
 			set {
-#if !NET8_0
+#if !NET8_0_OR_GREATER
 				EnsureModifiability ();
 				bypassBackgroundCheck = value;
 #endif
@@ -494,7 +515,7 @@ namespace Foundation {
 			var inflightData = new InflightData (request.RequestUri?.AbsoluteUri!, cancellationToken, request);
 
 			lock (inflightRequestsLock) {
-#if !MONOMAC && !NET8_0
+#if !MONOMAC && !NET8_0_OR_GREATER
 				// Add the notification whenever needed
 				AddNotification ();
 #endif
@@ -558,13 +579,6 @@ namespace Foundation {
 			}
 		}
 
-		// We're ignoring this property, just like Xamarin.Android does:
-		// https://github.com/xamarin/xamarin-android/blob/09e8cb5c07ea6c39383185a3f90e53186749b802/src/Mono.Android/Xamarin.Android.Net/AndroidMessageHandler.cs#L148
-		[UnsupportedOSPlatform ("ios")]
-		[UnsupportedOSPlatform ("maccatalyst")]
-		[UnsupportedOSPlatform ("tvos")]
-		[UnsupportedOSPlatform ("macos")]
-		[EditorBrowsable (EditorBrowsableState.Never)]
 		public ClientCertificateOption ClientCertificateOptions { get; set; }
 
 		// We're ignoring this property, just like Xamarin.Android does:
@@ -696,8 +710,11 @@ namespace Foundation {
 			{
 				var certificates = new X509Certificate2 [secTrust.Count];
 
-				if (IsSecTrustGetCertificateChainSupported) {
+				if (SystemVersion.IsAtLeastXcode13) {
+					// The CA1416 here is an analyzer bug: https://github.com/dotnet/roslyn-analyzers/issues/7530
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'SecTrust.GetCertificateChain()' is only supported on: 'ios' 15.0 and later, 'maccatalyst' 15.0 and later, 'tvos' 15.0 and later.
 					var originalChain = secTrust.GetCertificateChain ();
+#pragma warning restore CA1416
 					for (int i = 0; i < originalChain.Length; i++)
 						certificates [i] = originalChain [i].ToX509Certificate2 ();
 				} else {

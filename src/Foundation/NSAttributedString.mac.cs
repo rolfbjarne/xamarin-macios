@@ -20,6 +20,10 @@ namespace Foundation
 {
 	public partial class NSAttributedString
 	{
+		[SupportedOSPlatform ("macos")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[UnsupportedOSPlatform ("maccatalyst")]
 		public NSAttributedString (string str,
 			NSFont? font = null,
 			NSColor? foregroundColor = null,
@@ -81,6 +85,10 @@ namespace Foundation
 		{
 		}
 
+		[SupportedOSPlatform ("macos")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[UnsupportedOSPlatform ("maccatalyst")]
 		internal NSAttributedString (NSData data, NSAttributedStringDataType type, out NSDictionary resultDocumentAttributes)
 		{
 			switch (type) {
@@ -104,32 +112,56 @@ namespace Foundation
 				throw new ArgumentException("Error creating NSAttributedString.");
 		}
 
+		[SupportedOSPlatform ("macos")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[UnsupportedOSPlatform ("maccatalyst")]
 		public static NSAttributedString CreateWithRTF (NSData rtfData, out NSDictionary resultDocumentAttributes)
 		{
 			return new NSAttributedString (rtfData, NSAttributedStringDataType.RTF, out resultDocumentAttributes);
 		}
 
+		[SupportedOSPlatform ("macos")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[UnsupportedOSPlatform ("maccatalyst")]
 		public static NSAttributedString CreateWithRTFD (NSData rtfdData, out NSDictionary resultDocumentAttributes)
 		{
 			return new NSAttributedString (rtfdData, NSAttributedStringDataType.RTFD, out resultDocumentAttributes);
 		}
 
+		[SupportedOSPlatform ("macos")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[UnsupportedOSPlatform ("maccatalyst")]
 		public static NSAttributedString CreateWithHTML (NSData htmlData, out NSDictionary resultDocumentAttributes)
 		{
 			return new NSAttributedString (htmlData, NSAttributedStringDataType.HTML, out resultDocumentAttributes);
 		}
 
+		[SupportedOSPlatform ("macos")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[UnsupportedOSPlatform ("maccatalyst")]
 		public static NSAttributedString CreateWithDocFormat (NSData wordDocFormat, out NSDictionary docAttributes)
 		{
 			return new NSAttributedString (wordDocFormat, NSAttributedStringDataType.DocFormat, out docAttributes);
 		}
 
+		[SupportedOSPlatform ("macos")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[UnsupportedOSPlatform ("maccatalyst")]
 		public NSStringAttributes? GetAppKitAttributes (nint location, out NSRange effectiveRange)
 		{
 			var attr = GetAttributes (location, out effectiveRange);
 			return attr is null ? null : new NSStringAttributes (attr);
 		}
 
+		[SupportedOSPlatform ("macos")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[UnsupportedOSPlatform ("maccatalyst")]
 		public NSStringAttributes? GetAppKitAttributes (nint location, out NSRange longestEffectiveRange, NSRange rangeLimit)
 		{
 			var attr = GetAttributes (location, out longestEffectiveRange, rangeLimit);

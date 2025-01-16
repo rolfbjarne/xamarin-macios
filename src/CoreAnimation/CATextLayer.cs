@@ -96,10 +96,10 @@ namespace CoreAnimation {
 				else if (type == CFString.GetTypeID ())
 					return CFString.FromHandle (handle);
 #if MONOMAC
-				else return Runtime.GetNSObject<NSFont> (handle);
-#else
-				return null;
+				if (OperatingSystem.IsMacOS ())
+					return Runtime.GetNSObject<NSFont> (handle);
 #endif
+				return null;
 			}
 
 			// Allows CTFont, CGFont, string and in OSX NSFont settings

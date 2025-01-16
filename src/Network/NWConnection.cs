@@ -661,6 +661,10 @@ namespace Network {
 #else
 		[UnmanagedCallersOnly]
 #endif
+		[SupportedOSPlatform ("tvos13.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios13.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		static void TrampolineGetEstablishmentReportHandler (IntPtr block, nw_establishment_report_t report)
 		{
 			var del = BlockLiteral.GetTarget<Action<NWEstablishmentReport>> (block);

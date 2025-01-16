@@ -350,6 +350,10 @@ namespace Network {
 #else
 		[UnmanagedCallersOnly]
 #endif
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
 		static void TrampolineNewConnectionGroup (IntPtr block, nw_connection_group_t connectionGroup)
 		{
 			var del = BlockLiteral.GetTarget<Action<NWConnectionGroup>> (block);

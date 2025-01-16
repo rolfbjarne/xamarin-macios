@@ -477,7 +477,10 @@ namespace CoreImage {
 			case "CIPersonSegmentation":
 				if (!SystemVersion.IsAtLeastXcode13)
 					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
+// The CA1416 here is an analyzer bug: https://github.com/dotnet/roslyn-analyzers/issues/7530
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'CIPersonSegmentation' is only supported on: 'ios' 15.0 and later, 'maccatalyst' 15.0 and later, 'tvos' 15.0 and later.
 				return new CIPersonSegmentation (handle);
+#pragma warning restore CA1416
 			case "CIPerspectiveTile":
 				return new CIPerspectiveTile (handle);
 			case "CIPerspectiveTransform":
@@ -533,23 +536,38 @@ namespace CoreImage {
 			case "CIConvolutionRGB3X3":
 				if (!SystemVersion.IsAtLeastXcode13)
 					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
+// The CA1416 here is an analyzer bug: https://github.com/dotnet/roslyn-analyzers/issues/7530
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'CIConvolutionRGB3X3' is only supported on: 'ios' 15.0 and later, 'maccatalyst' 15.0 and later, 'tvos' 15.0 and later.
 				return new CIConvolutionRGB3X3 (handle);
+#pragma warning restore CA1416
 			case "CIConvolutionRGB5X5":
 				if (!SystemVersion.IsAtLeastXcode13)
 					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
+// The CA1416 here is an analyzer bug: https://github.com/dotnet/roslyn-analyzers/issues/7530
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'CIConvolutionRGB5X5' is only supported on: 'ios' 15.0 and later, 'maccatalyst' 15.0 and later, 'tvos' 15.0 and later.
 				return new CIConvolutionRGB5X5 (handle);
+#pragma warning restore CA1416
 			case "CIConvolutionRGB7X7":
 				if (!SystemVersion.IsAtLeastXcode13)
 					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
+// The CA1416 here is an analyzer bug: https://github.com/dotnet/roslyn-analyzers/issues/7530
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'CIConvolutionRGB7X7' is only supported on: 'ios' 15.0 and later, 'maccatalyst' 15.0 and later, 'tvos' 15.0 and later.
 				return new CIConvolutionRGB7X7 (handle);
+#pragma warning restore CA1416
 			case "CIConvolutionRGB9Horizontal":
 				if (!SystemVersion.IsAtLeastXcode13)
 					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
+// The CA1416 here is an analyzer bug: https://github.com/dotnet/roslyn-analyzers/issues/7530
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'CIConvolutionRGB9Horizontal' is only supported on: 'ios' 15.0 and later, 'maccatalyst' 15.0 and later, 'tvos' 15.0 and later.
 				return new CIConvolutionRGB9Horizontal (handle);
+#pragma warning restore CA1416
 			case "CIConvolutionRGB9Vertical":
 				if (!SystemVersion.IsAtLeastXcode13)
 					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
+// The CA1416 here is an analyzer bug: https://github.com/dotnet/roslyn-analyzers/issues/7530
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'CIConvolutionRGB9Vertical' is only supported on: 'ios' 15.0 and later, 'maccatalyst' 15.0 and later, 'tvos' 15.0 and later.
 				return new CIConvolutionRGB9Vertical (handle);
+#pragma warning restore CA1416
 			case "CILinearToSRGBToneCurve":
 				return new CILinearToSRGBToneCurve (handle);
 			case "CIPerspectiveTransformWithExtent":
@@ -599,7 +617,10 @@ namespace CoreImage {
 			case "CILinearLightBlendMode":
 				if (!SystemVersion.IsAtLeastXcode13)
 					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
+// The CA1416 here is an analyzer bug: https://github.com/dotnet/roslyn-analyzers/issues/7530
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'CILinearLightBlendMode' is only supported on: 'ios' 15.0 and later, 'maccatalyst' 15.0 and later, 'tvos' 15.0 and later.
 				return new CILinearLightBlendMode (handle);
+#pragma warning restore CA1416
 			case "CIPerspectiveCorrection":
 				return new CIPerspectiveCorrection (handle);
 			case "CIPinLightBlendMode":
@@ -609,7 +630,10 @@ namespace CoreImage {
 			case "CIVividLightBlendMode":
 				if (!SystemVersion.IsAtLeastXcode13)
 					throw new PlatformNotSupportedException (string.Format ("The filter '{0}' is not supported on the current version of this platform.", filterName));
+// The CA1416 here is an analyzer bug: https://github.com/dotnet/roslyn-analyzers/issues/7530
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'CIVividLightBlendMode' is only supported on: 'ios' 15.0 and later, 'maccatalyst' 15.0 and later, 'tvos' 15.0 and later.
 				return new CIVividLightBlendMode (handle);
+#pragma warning restore CA1416
 			case "CIAccordionFoldTransition":
 				return new CIAccordionFoldTransition (handle);
 			case "CIAreaAverage":

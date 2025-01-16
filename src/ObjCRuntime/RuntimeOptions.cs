@@ -166,7 +166,7 @@ namespace ObjCRuntime {
 			if (!File.Exists (plist_path))
 				return null;
 
-			using (var plist = NSDictionary.FromFile (plist_path)) {
+			using (var plist = NSMutableDictionary.FromFile (plist_path)) {
 				var options = new RuntimeOptions ();
 				options.http_message_handler = (NSString) plist ["HttpMessageHandler"];
 				return options;
@@ -185,7 +185,9 @@ namespace ObjCRuntime {
 			// creating a SocketsHttpHandler when configured to do so.
 			switch (handler_name) {
 			case CFNetworkHandlerValue:
+#pragma warning disable CA1422 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'CFNetworkHandler' is obsoleted on: 'ios' 9.0 and later (Use 'NSUrlSession'.), 'maccatalyst' all versions, 'macOS/OSX' 10.11 and later (Use 'NSUrlSession'.), 'tvos' all versions.
 				return new CFNetworkHandler ();
+#pragma warning restore CA1422
 			default:
 				if (handler_name is not null && handler_name != NSUrlSessionHandlerValue)
 					Runtime.NSLog ($"{handler_name} is not a valid HttpMessageHandler, defaulting to System.Net.Http.NSUrlSessionHandlerValue");

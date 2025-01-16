@@ -130,6 +130,7 @@ namespace ObjCRuntime {
 			log_coreclr (string.Format (message, args));
 		}
 
+		[SupportedOSPlatform ("macos")]
 		static unsafe void InitializeCoreCLRBridge (InitializationOptions* options)
 		{
 			if (options->xamarin_objc_msgsend != IntPtr.Zero)
@@ -205,6 +206,7 @@ namespace ObjCRuntime {
 			public NSObject.Flags Flags;
 		}
 
+		[SupportedOSPlatform ("macos")]
 		internal static GCHandle CreateTrackingGCHandle (NSObject obj, IntPtr handle)
 		{
 			var gchandle = ObjectiveCMarshal.CreateReferenceTrackingHandle (obj, out var info);
@@ -299,6 +301,7 @@ namespace ObjCRuntime {
 			throw new InvalidOperationException ($"Could not find any assemblies named {name}");
 		}
 
+		[SupportedOSPlatform ("macos")]
 		static unsafe void SetPendingException (MonoObject* exception_obj)
 		{
 			var exc = (Exception?) GetMonoObjectTarget (exception_obj);

@@ -20,7 +20,7 @@ using Foundation;
 
 namespace UIKit {
 	[UnsupportedOSPlatform ("tvos12.2")]
-	[ObsoletedOSPlatform ("ios8.3", "Use 'UIAlertController' with 'UIAlertControllerStyle.ActionSheet' instead.")]
+	[ObsoletedOSPlatform ("ios", "Use 'UIAlertController' with 'UIAlertControllerStyle.ActionSheet' instead.")]
 	[SupportedOSPlatform ("maccatalyst15.0")]
 	[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'UIAlertController' with 'UIAlertControllerStyle.ActionSheet' instead.")]
 	[SupportedOSPlatform ("ios12.2")]

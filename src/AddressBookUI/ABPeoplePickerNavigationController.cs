@@ -88,6 +88,8 @@ namespace AddressBookUI {
 		public int? Identifier { get; private set; }
 	}
 
+	[SupportedOSPlatform ("ios12.2")]
+	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
 	class InternalABPeoplePickerNavigationControllerDelegate : ABPeoplePickerNavigationControllerDelegate {
 		internal EventHandler<ABPeoplePickerSelectPersonEventArgs>? selectPerson;
 		internal EventHandler<ABPeoplePickerPerformActionEventArgs>? performAction;

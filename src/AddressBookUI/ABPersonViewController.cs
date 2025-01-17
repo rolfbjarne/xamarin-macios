@@ -36,6 +36,8 @@ namespace AddressBookUI {
 		public bool ShouldPerformDefaultAction { get; set; }
 	}
 
+	[SupportedOSPlatform ("ios12.2")]
+	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
 	class InternalABPersonViewControllerDelegate : ABPersonViewControllerDelegate {
 
 		internal EventHandler<ABPersonViewPerformDefaultActionEventArgs>? performDefaultAction;

@@ -35,6 +35,8 @@ namespace AddressBookUI {
 		}
 	}
 
+	[SupportedOSPlatform ("ios12.2")]
+	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
 	class InternalABNewPersonViewControllerDelegate : ABNewPersonViewControllerDelegate {
 
 		internal EventHandler<ABNewPersonCompleteEventArgs>? newPersonComplete;

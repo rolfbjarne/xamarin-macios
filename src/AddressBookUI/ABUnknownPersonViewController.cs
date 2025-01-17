@@ -31,6 +31,8 @@ namespace AddressBookUI {
 		public ABPerson? Person { get; private set; }
 	}
 
+	[SupportedOSPlatform ("ios12.2")]
+	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
 	class InternalABUnknownPersonViewControllerDelegate : ABUnknownPersonViewControllerDelegate {
 		internal EventHandler<ABPersonViewPerformDefaultActionEventArgs>? performDefaultAction;
 		internal EventHandler<ABUnknownPersonCreatedEventArgs>? personCreated;
@@ -58,6 +60,8 @@ namespace AddressBookUI {
 		}
 	}
 
+	[SupportedOSPlatform ("ios12.2")]
+	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
 	partial class ABUnknownPersonViewController {
 
 		ABPerson? displayedPerson;

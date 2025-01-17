@@ -348,6 +348,12 @@ namespace AVFoundation {
 	}
 
 	public partial class AVAudioSession {
+		[UnsupportedOSPlatform ("macos12.0")]
+		[ObsoletedOSPlatform ("ios6.0", "Use 'AVAudioSession.Notification.Observe*' methods instead.")]
+		[UnsupportedOSPlatform ("tvos12.2")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'AVAudioSession.Notification.Observe*' methods instead.")]
+		[SupportedOSPlatform ("ios12.2")]
 		InternalAVAudioSessionDelegate EnsureEventDelegate ()
 		{
 			var del = WeakDelegate as InternalAVAudioSessionDelegate;

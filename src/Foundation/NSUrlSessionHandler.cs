@@ -128,7 +128,7 @@ namespace Foundation {
 		readonly Dictionary<NSUrlSessionTask, InflightData> inflightRequests;
 		readonly object inflightRequestsLock = new object ();
 		readonly NSUrlSessionConfiguration.SessionConfigurationType sessionType;
-#if !MONOMAC
+#if !MONOMAC && !NET8_0_OR_GREATER
 		NSObject? notificationToken;  // needed to make sure we do not hang if not using a background session
 		readonly object notificationTokenLock = new object (); // need to make sure that threads do no step on each other with a dispose and a remove  inflight data
 #endif

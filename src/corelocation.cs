@@ -438,6 +438,12 @@ namespace CoreLocation {
 		bool IsMonitoringAvailable (Class regionClass);
 
 		[NoTV]
+		[MacCatalyst (13, 1)]
+		[Static]
+		[Wrap ("IsMonitoringAvailable (new Class (t))")]
+		bool IsMonitoringAvailable (Type t);
+
+		[NoTV]
 		[NoMac]
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'RangedBeaconConstraints' instead.")]
 		[MacCatalyst (13, 1)]

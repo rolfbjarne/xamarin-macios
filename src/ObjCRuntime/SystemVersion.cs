@@ -50,16 +50,28 @@ namespace ObjCRuntime {
 #endif // NET
 #elif __IOS__ || __MACCATALYST__ || __TVOS__
 		// These three can be used interchangeably, the OS versions are the same.
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
 		internal static bool CheckiOS (int major, int minor)
 		{
 			return UIKit.UIDevice.CurrentDevice.CheckSystemVersion (major, minor);
 		}
 
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
 		internal static bool ChecktvOS (int major, int minor)
 		{
 			return UIKit.UIDevice.CurrentDevice.CheckSystemVersion (major, minor);
 		}
 
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
 		internal static bool CheckMacCatalyst (int major, int minor)
 		{
 			return UIKit.UIDevice.CurrentDevice.CheckSystemVersion (major, minor);

@@ -110,6 +110,10 @@ namespace ObjCRuntime {
 		static CoreGraphics.CGRect xamarin_nsvalue_to_cgrect (IntPtr value) { if (value == IntPtr.Zero) return default (CoreGraphics.CGRect); return Runtime.GetNSObject<NSValue> (value)?.CGRectValue ?? default (CoreGraphics.CGRect); }
 		static CoreGraphics.CGSize xamarin_nsvalue_to_cgsize (IntPtr value) { if (value == IntPtr.Zero) return default (CoreGraphics.CGSize); return Runtime.GetNSObject<NSValue> (value)?.CGSizeValue ?? default (CoreGraphics.CGSize); }
 #if !__MACOS__
+		[SupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("tvos")]
 		static CoreGraphics.CGVector xamarin_nsvalue_to_cgvector (IntPtr value) { if (value == IntPtr.Zero) return default (CoreGraphics.CGVector); return Runtime.GetNSObject<NSValue> (value)?.CGVectorValue ?? default (CoreGraphics.CGVector); }
 #endif
 		static CoreAnimation.CATransform3D xamarin_nsvalue_to_catransform3d (IntPtr value) { if (value == IntPtr.Zero) return default (CoreAnimation.CATransform3D); return Runtime.GetNSObject<NSValue> (value)?.CATransform3DValue ?? default (CoreAnimation.CATransform3D); }
@@ -127,8 +131,20 @@ namespace ObjCRuntime {
 		static SceneKit.SCNVector3 xamarin_nsvalue_to_scnvector3 (IntPtr value) { if (value == IntPtr.Zero) return default (SceneKit.SCNVector3); return Runtime.GetNSObject<NSValue> (value)?.Vector3Value ?? default (SceneKit.SCNVector3); }
 		static SceneKit.SCNVector4 xamarin_nsvalue_to_scnvector4 (IntPtr value) { if (value == IntPtr.Zero) return default (SceneKit.SCNVector4); return Runtime.GetNSObject<NSValue> (value)?.Vector4Value ?? default (SceneKit.SCNVector4); }
 #if HAS_UIKIT
+		[SupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("tvos")]
 		static UIKit.UIEdgeInsets xamarin_nsvalue_to_uiedgeinsets (IntPtr value) { if (value == IntPtr.Zero) return default (UIKit.UIEdgeInsets); return Runtime.GetNSObject<NSValue> (value)?.UIEdgeInsetsValue ?? default (UIKit.UIEdgeInsets); }
+		[SupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("tvos")]
 		static UIKit.UIOffset xamarin_nsvalue_to_uioffset (IntPtr value) { if (value == IntPtr.Zero) return default (UIKit.UIOffset); return Runtime.GetNSObject<NSValue> (value)?.UIOffsetValue ?? default (UIKit.UIOffset); }
+		[SupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("tvos")]
 		static UIKit.NSDirectionalEdgeInsets xamarin_nsvalue_to_nsdirectionaledgeinsets (IntPtr value) { if (value == IntPtr.Zero) return default (UIKit.NSDirectionalEdgeInsets); return Runtime.GetNSObject<NSValue> (value)?.DirectionalEdgeInsetsValue ?? default (UIKit.NSDirectionalEdgeInsets); }
 #endif
 
@@ -138,6 +154,10 @@ namespace ObjCRuntime {
 		static IntPtr xamarin_cgrect_to_nsvalue (CoreGraphics.CGRect value) { using var rv = NSValue.FromCGRect (value); rv.DangerousRetain ().DangerousAutorelease (); return rv.Handle; }
 		static IntPtr xamarin_cgsize_to_nsvalue (CoreGraphics.CGSize value) { using var rv = NSValue.FromCGSize (value); rv.DangerousRetain ().DangerousAutorelease (); return rv.Handle; }
 #if !__MACOS__
+		[SupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("tvos")]
 		static IntPtr xamarin_cgvector_to_nsvalue (CoreGraphics.CGVector value) { using var rv = NSValue.FromCGVector (value); rv.DangerousRetain ().DangerousAutorelease (); return rv.Handle; }
 #endif
 		static IntPtr xamarin_catransform3d_to_nsvalue (CoreAnimation.CATransform3D value) { using var rv = NSValue.FromCATransform3D (value); rv.DangerousRetain ().DangerousAutorelease (); return rv.Handle; }
@@ -155,8 +175,20 @@ namespace ObjCRuntime {
 		static IntPtr xamarin_scnvector3_to_nsvalue (SceneKit.SCNVector3 value) { using var rv = NSValue.FromVector (value); rv.DangerousRetain ().DangerousAutorelease (); return rv.Handle; }
 		static IntPtr xamarin_scnvector4_to_nsvalue (SceneKit.SCNVector4 value) { using var rv = NSValue.FromVector (value); rv.DangerousRetain ().DangerousAutorelease (); return rv.Handle; }
 #if HAS_UIKIT
+		[SupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("tvos")]
 		static IntPtr xamarin_uiedgeinsets_to_nsvalue (UIKit.UIEdgeInsets value) { using var rv = NSValue.FromUIEdgeInsets (value); rv.DangerousRetain ().DangerousAutorelease (); return rv.Handle; }
+		[SupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("tvos")]
 		static IntPtr xamarin_uioffset_to_nsvalue (UIKit.UIOffset value) { using var rv = NSValue.FromUIOffset (value); rv.DangerousRetain ().DangerousAutorelease (); return rv.Handle; }
+		[SupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("tvos")]
 		static IntPtr xamarin_nsdirectionaledgeinsets_to_nsvalue (UIKit.NSDirectionalEdgeInsets value) { using var rv = NSValue.FromDirectionalEdgeInsets (value); rv.DangerousRetain ().DangerousAutorelease (); return rv.Handle; }
 #endif
 

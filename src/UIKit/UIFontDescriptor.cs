@@ -16,6 +16,10 @@ using Foundation;
 
 namespace UIKit {
 
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("macos")]
 	public class UIFontAttributes : DictionaryContainer {
 		public UIFontAttributes () { }
 

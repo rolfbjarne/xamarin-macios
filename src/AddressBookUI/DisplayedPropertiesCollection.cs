@@ -22,6 +22,8 @@ namespace AddressBookUI {
 
 #if NET
 	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[ObsoletedOSPlatform ("maccatalyst13.1", "Use the 'Contacts' API instead.")]
 	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
 #else
 	[Deprecated (PlatformName.iOS, 9, 0, message: "Use the 'Contacts' API instead.")]

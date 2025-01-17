@@ -32,6 +32,8 @@ namespace AddressBookUI {
 	}
 
 	[SupportedOSPlatform ("ios12.2")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[ObsoletedOSPlatform ("maccatalyst13.1", "Use the 'Contacts' API instead.")]
 	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
 	class InternalABUnknownPersonViewControllerDelegate : ABUnknownPersonViewControllerDelegate {
 		internal EventHandler<ABPersonViewPerformDefaultActionEventArgs>? performDefaultAction;
@@ -62,6 +64,10 @@ namespace AddressBookUI {
 
 	[SupportedOSPlatform ("ios12.2")]
 	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
+	[UnsupportedOSPlatform ("macos")]
+	[UnsupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[ObsoletedOSPlatform ("maccatalyst13.1", "Use the 'Contacts' API instead.")]
 	partial class ABUnknownPersonViewController {
 
 		ABPerson? displayedPerson;

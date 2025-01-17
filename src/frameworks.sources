@@ -587,7 +587,6 @@ CORELOCATION_CORE_SOURCES = \
 CORELOCATION_SOURCES = \
 	CoreLocation/CLBeaconRegion.cs \
 	CoreLocation/CLCompat.cs \
-	CoreLocation/CLLocationManager.cs \
 
 # CoreMedia
 

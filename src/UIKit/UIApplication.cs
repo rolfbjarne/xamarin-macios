@@ -111,7 +111,10 @@ namespace UIKit {
 				throw new InvalidOperationException (string.Format ("Event registration is overwriting existing delegate. Either just use events or your own delegate: {0} {1}", newDelegateValue.GetType (), internalDelegateType));
 		}
 	}
-
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("macos")]
 	public partial class UIContentSizeCategoryChangedEventArgs {
 		public UIContentSizeCategory NewValue {
 			get {

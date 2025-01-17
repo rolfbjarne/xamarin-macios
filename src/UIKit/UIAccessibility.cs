@@ -35,6 +35,10 @@ namespace UIKit {
 		InsertionPoint,
 	}
 
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("macos")]
 	public static partial class UIAccessibility {
 		// UIAccessibility.h
 		[DllImport (Constants.UIKitLibrary)]

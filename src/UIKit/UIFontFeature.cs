@@ -20,6 +20,10 @@ using NativeHandle = System.IntPtr;
 #endif
 
 namespace UIKit {
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("macos")]
 	public class UIFontFeature : INativeObject {
 		static NSObject [] keys = new NSObject [] { UIFontDescriptor.UIFontFeatureTypeIdentifierKey, UIFontDescriptor.UIFontFeatureSelectorIdentifierKey };
 

@@ -30,40 +30,14 @@ namespace UIKit {
 
 		public UIImage Capture ()
 		{
-			if (SystemVersion.CheckiOS (7, 0)) {
-				// This is from https://developer.apple.com/library/content/qa/qa1817/_index.html
-				try {
-					var view = UIApplication.SharedApplication.KeyWindow;
-					UIGraphics.BeginImageContextWithOptions (view.Bounds.Size, view.Opaque, 0);
-					view.DrawViewHierarchy (view.Bounds, true);
-					return UIGraphics.GetImageFromCurrentImageContext ();
-				} finally {
-					UIGraphics.EndImageContext ();
-				}
-			}
-
-			// This is from: https://developer.apple.com/library/ios/#qa/qa2010/qa1703.html
-			var selScreen = new Selector ("screen");
-			var size = Bounds.Size;
-
-			UIGraphics.BeginImageContextWithOptions (size, false, 0);
-
+			// This is from https://developer.apple.com/library/content/qa/qa1817/_index.html
 			try {
-				var context = UIGraphics.GetCurrentContext ();
-
-				foreach (var window in UIApplication.SharedApplication.Windows) {
-					if (window.RespondsToSelector (selScreen) && window.Screen != this)
-						continue;
-
-					context.SaveState ();
-					context.TranslateCTM (window.Center.X, window.Center.Y);
-					context.ConcatCTM (window.Transform);
-					context.TranslateCTM (-window.Bounds.Size.Width * window.Layer.AnchorPoint.X, -window.Bounds.Size.Height * window.Layer.AnchorPoint.Y);
-
-					window.Layer.RenderInContext (context);
-					context.RestoreState ();
-				}
-
+				// Ignore this CA1422 warning, because it only applies for apps that support multiple windows (the code still works as expected for single-window apps).
+#pragma warning disable CA1422 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'tvos' 12.2 and later. 'UIApplication.KeyWindow' is obsoleted on: 'ios' 13.0 and later (Should not be used for applications that support multiple scenes because it returns a key window across all connected scenes.), 'maccatalyst' 13.0 and later (Should not be used for applications that support multiple scenes because it returns a key window across all connected scenes.), 'tvos' 13.0 and later (Should not be used for applications that support multiple scenes because it returns a key window across all connected scenes.).
+				var view = UIApplication.SharedApplication.KeyWindow;
+#pragma warning restore CA1422
+				UIGraphics.BeginImageContextWithOptions (view.Bounds.Size, view.Opaque, 0);
+				view.DrawViewHierarchy (view.Bounds, true);
 				return UIGraphics.GetImageFromCurrentImageContext ();
 			} finally {
 				UIGraphics.EndImageContext ();

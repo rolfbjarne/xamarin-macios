@@ -10,6 +10,10 @@
 #nullable disable
 
 namespace UIKit {
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("macos")]
 	public static partial class UIViewControllerTransitionCoordinatorContext_Extensions {
 		public static UIView GetTransitionViewController (this IUIViewControllerTransitionCoordinatorContext This, UITransitionViewControllerKind kind)
 		{

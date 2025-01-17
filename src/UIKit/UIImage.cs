@@ -22,6 +22,10 @@ using CoreGraphics;
 
 namespace UIKit {
 
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("macos")]
 	partial class UIImage {
 #if IOS
 		public delegate void SaveStatus (UIImage image, NSError error);

@@ -20,9 +20,17 @@ namespace CoreSpotlight {
 	public partial class CSSearchableIndex {
 
 		// Strongly typed version of initWithName:protectionClass:
+		[UnsupportedOSPlatform ("macos")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("maccatalyst")]
 		public CSSearchableIndex (string name, CSFileProtection protectionOption = CSFileProtection.None) : this (name, Translate (protectionOption))
 			{}
 
+		[UnsupportedOSPlatform ("macos")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("maccatalyst")]
 		static NSString? Translate (CSFileProtection protectionOption)
 		{
 			switch (protectionOption) {

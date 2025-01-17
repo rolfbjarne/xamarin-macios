@@ -15,6 +15,11 @@ using ObjCRuntime;
 using Foundation;
 
 namespace UIKit {
+	[UnsupportedOSPlatform ("tvos")]
+	[ObsoletedOSPlatform ("ios", "Use 'UIAlertController' with a 'UIAlertControllerStyle.Alert' type instead.")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[ObsoletedOSPlatform ("maccatalyst", "Use 'UIAlertController' with a 'UIAlertControllerStyle.Alert' type instead.")]
+	[SupportedOSPlatform ("ios")]
 	public partial class UIAlertView {
 		public UIAlertView (string title, string message, IUIAlertViewDelegate del, string cancelButtonTitle, params string [] otherButtons)
 			: this (title, message, del, cancelButtonTitle, otherButtons is null || otherButtons.Length == 0 ? IntPtr.Zero : new NSString (otherButtons [0]).Handle, IntPtr.Zero, IntPtr.Zero)

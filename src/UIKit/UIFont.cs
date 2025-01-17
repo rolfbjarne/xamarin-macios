@@ -18,6 +18,10 @@ using Foundation;
 
 namespace UIKit {
 
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("macos")]
 	public static class UIFontWeightExtensions {
 		public static nfloat GetWeight (this UIFontWeight weight)
 		{

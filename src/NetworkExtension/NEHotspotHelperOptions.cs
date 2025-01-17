@@ -6,6 +6,10 @@ using Foundation;
 
 namespace NetworkExtension {
 
+	[SupportedOSPlatform ("ios")]
+	[UnsupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("macos")]
 	public class NEHotspotHelperOptions : DictionaryContainer {
 
 #if !COREBUILD

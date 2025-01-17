@@ -209,6 +209,10 @@ namespace CoreImage {
 		}
 
 #if HAS_OPENGLES
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
 		public static CIContext FromContext (EAGLContext eaglContext, CIContextOptions? options)
 		{
 			if (options is null)
@@ -217,6 +221,10 @@ namespace CoreImage {
 			return FromContext (eaglContext, options.Dictionary);
 		}
 
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
 		public static CIContext FromMetalDevice (IMTLDevice device, CIContextOptions? options)
 		{
 			if (options is null)

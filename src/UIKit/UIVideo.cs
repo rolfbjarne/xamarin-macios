@@ -39,6 +39,10 @@ namespace UIKit {
 		}
 	}
 	
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("macos")]
 	public static class UIVideo {
 		public delegate void SaveStatus (string path, NSError error);
 		

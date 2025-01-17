@@ -18,6 +18,10 @@ using Foundation;
 
 namespace UIKit {
 
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("macos")]
 	public static class UIDragDropSessionExtensions {
 
 		public static NSProgress LoadObjects<T> (this IUIDropSession session, Action<T []> completion) where T : NSObject, INSItemProviderReading

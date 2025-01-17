@@ -16,6 +16,10 @@ using ObjCRuntime;
 
 namespace UIKit {
 
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("macos")]
 	public class UITextAttributes {
 		public UIFont Font;
 		public UIColor TextColor;

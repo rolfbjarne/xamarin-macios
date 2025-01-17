@@ -69,6 +69,10 @@ namespace UIKit {
 #endif
 	}
 
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("macos")]
 	public partial class UIImagePickerMediaPickedEventArgs {
 		public string MediaType {
 			get {

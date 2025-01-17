@@ -636,7 +636,7 @@ namespace GameKit {
 
 		[MacCatalyst (13, 1)]
 		[Export ("initWithLeaderboardIdentifier:")]
-		NatieHandle Constructor (string identifier);
+		NativeHandle Constructor (string identifier);
 
 		[NullAllowed]
 		[MacCatalyst (13, 1)]

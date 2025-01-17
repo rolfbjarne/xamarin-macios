@@ -864,9 +864,13 @@ namespace Foundation {
 
 #if !MONOMAC
 				if (t == typeof (CGAffineTransform))
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'NSValue.FromCGAffineTransform(CGAffineTransform)' is only supported on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'tvos' 12.2 and later.
 					return NSValue.FromCGAffineTransform ((CGAffineTransform) obj);
+#pragma warning restore CA1416
 				else if (t == typeof (UIEdgeInsets))
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'NSValue.FromUIEdgeInsets(UIEdgeInsets)' is only supported on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'tvos' 12.2 and later.
 					return NSValue.FromUIEdgeInsets ((UIEdgeInsets) obj);
+#pragma warning restore CA1416
 				else if (t == typeof (CATransform3D))
 					return NSValue.FromCATransform3D ((CATransform3D) obj);
 #endif

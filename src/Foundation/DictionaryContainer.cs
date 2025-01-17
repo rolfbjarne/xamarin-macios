@@ -349,6 +349,10 @@ namespace Foundation {
 		}
 
 #if HAS_UIKIT
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
 		protected UIEdgeInsets? GetUIEdgeInsets (NSString key)
 		{
 			if (key is null)
@@ -519,6 +523,10 @@ namespace Foundation {
 		}
 
 #if HAS_UIKIT
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
 		protected void SetUIEdgeInsets (NSString key, UIEdgeInsets? value)
 		{
 			SetNativeValue (key, value is null ? null : NSValue.FromUIEdgeInsets (value.Value));

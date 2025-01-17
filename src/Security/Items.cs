@@ -1030,6 +1030,14 @@ namespace Security {
 		}
 
 #if !MONOMAC
+		[ObsoletedOSPlatform ("macos11.0", "Use 'LAContext.InteractionNotAllowed' instead.")]
+		[ObsoletedOSPlatform ("ios14.0", "Use 'LAContext.InteractionNotAllowed' instead.")]
+		[ObsoletedOSPlatform ("tvos14.0", "Use 'LAContext.InteractionNotAllowed' instead.")]
+		[SupportedOSPlatform ("maccatalyst15.0")]
+		[ObsoletedOSPlatform ("maccatalyst14.0", "Use 'LAContext.InteractionNotAllowed' instead.")]
+		[SupportedOSPlatform ("ios12.2")]
+		[SupportedOSPlatform ("macos12.0")]
+		[SupportedOSPlatform ("tvos12.2")]
 		public string? UseOperationPrompt {
 			get {
 				return FetchString (SecItem.UseOperationPrompt);

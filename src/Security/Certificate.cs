@@ -787,7 +787,9 @@ namespace Security {
 #if !MONOMAC
 			// iOS (+friends) need to pass the strong dictionary for public and private key attributes to specific keys
 			// instead of merging them with other attributes.
+#pragma warning disable CA1416 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'UIApplication.Initialize()' is only supported on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'tvos' 12.2 and later.
 			return GenerateKeyPair (type, keySizeInBits, publicAndPrivateKeyAttrs, publicAndPrivateKeyAttrs, out publicKey, out privateKey);
+#pragma warning restore CA1416
 #else
 			if (type == SecKeyType.Invalid)
 				throw new ArgumentException ("invalid 'SecKeyType'", nameof (type));

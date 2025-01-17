@@ -20,6 +20,10 @@ using CoreGraphics;
 #nullable enable
 
 namespace MediaPlayer {
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
 	public partial class MPMediaItem {
 		ulong UInt64ForProperty (NSString property)
 		{

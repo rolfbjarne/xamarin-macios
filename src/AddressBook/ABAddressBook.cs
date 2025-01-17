@@ -78,6 +78,12 @@ namespace AddressBook {
 	// Note that the above comment was removed from iOS 6.0+ documentation (and were not part of OSX docs AFAIK).
 	// It make sense since it's not possible to call those functions, from 6.0+ they will return NULL on devices,
 	// unless the application has been authorized to access the address book.
+	[SupportedOSPlatform ("ios12.2")]
+	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
+	[UnsupportedOSPlatform ("macos")]
+	[UnsupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[ObsoletedOSPlatform ("maccatalyst", "Use the 'Contacts' API instead.")]
 	static class InitConstants {
 		public static void Init () { }
 
@@ -112,10 +118,12 @@ namespace AddressBook {
 	}
 
 #if NET
-	[SupportedOSPlatform ("maccatalyst15.0")]
 	[SupportedOSPlatform ("ios12.2")]
-	[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]
 	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
+	[UnsupportedOSPlatform ("macos")]
+	[UnsupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[ObsoletedOSPlatform ("maccatalyst", "Use the 'Contacts' API instead.")]
 #else
 	[Deprecated (PlatformName.iOS, 9, 0, message: "Use the 'Contacts' API instead.")]
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]

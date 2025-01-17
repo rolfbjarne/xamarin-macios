@@ -18,6 +18,10 @@ namespace AddressBookUI {
 #if NET
 	[SupportedOSPlatform ("ios12.2")]
 	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
+	[UnsupportedOSPlatform ("macos")]
+	[UnsupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[ObsoletedOSPlatform ("maccatalyst", "Use the 'Contacts' API instead.")]
 #else
 	[Deprecated (PlatformName.iOS, 9, 0, message: "Use the 'Contacts' API instead.")]
 #endif
@@ -38,6 +42,10 @@ namespace AddressBookUI {
 
 	[SupportedOSPlatform ("ios12.2")]
 	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
+	[UnsupportedOSPlatform ("macos")]
+	[UnsupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[ObsoletedOSPlatform ("maccatalyst", "Use the 'Contacts' API instead.")]
 	class InternalABPersonViewControllerDelegate : ABPersonViewControllerDelegate {
 
 		internal EventHandler<ABPersonViewPerformDefaultActionEventArgs>? performDefaultAction;
@@ -59,6 +67,12 @@ namespace AddressBookUI {
 		}
 	}
 
+	[SupportedOSPlatform ("ios12.2")]
+	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
+	[UnsupportedOSPlatform ("macos")]
+	[UnsupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[ObsoletedOSPlatform ("maccatalyst", "Use the 'Contacts' API instead.")]
 	partial class ABPersonViewController {
 
 		ABPerson? displayedPerson;

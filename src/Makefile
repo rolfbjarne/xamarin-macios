@@ -57,14 +57,14 @@ DOTNET_REFERENCES = \
 
 DOTNET_OR_GREATER_DEFINES:=$(foreach version,$(shell seq 6 $(firstword $(subst ., ,$(subst net,,$(DOTNET_TFM))))),/define:NET$(version)_0_OR_GREATER)
 
-ifneq ($(ANALYZE),)
+#ifneq ($(ANALYZE),)
 NETANALYZER ?= $(DOTNET_ANALYZERS_DIR)/Microsoft.CodeAnalysis.NetAnalyzers.dll
 CSHARP_NETANALYZER ?= $(DOTNET_ANALYZERS_DIR)/Microsoft.CodeAnalysis.CSharp.NetAnalyzers.dll
 DOTNET_ANALYZERS = \
 	/analyzer:$(NETANALYZER)  \
 	/analyzer:$(CSHARP_NETANALYZER) \
 
-endif
+#endif
 
 DOTNET_FLAGS=/warnaserror+ /nostdlib+ /deterministic /features:strict /nologo /target:library /debug /unsafe /define:NET /define:NET_TODO $(DOTNET_OR_GREATER_DEFINES) $(DOTNET_REFERENCES) $(DOTNET_ANALYZERS)
 

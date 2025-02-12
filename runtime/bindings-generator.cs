@@ -1162,6 +1162,19 @@ namespace Xamarin.BindingMethods.Generator {
 						MarshalExceptions = true,
 					}
 				);
+
+				data.Add (
+					new FunctionData {
+						Comment = " // NativeHandleType func (NativeHandleType, Vector2)",
+						Prefix = "simd__",
+						Variants = Variants.msgSend | Variants.msgSendSuper,
+						ReturnType = Types.NativeHandleType,
+						Parameters = new ParameterData [] {
+							new ParameterData { TypeData = Types.NativeHandleType },
+							new ParameterData { TypeData = Types.Vector2 },
+						},
+					}
+				);
 			}
 
 			data.Add (

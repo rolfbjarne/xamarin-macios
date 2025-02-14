@@ -18,7 +18,6 @@ using WebKit;
 
 namespace Foundation {
 	public partial class NSAttributedString {
-	{
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]

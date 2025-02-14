@@ -138,7 +138,7 @@ namespace CoreVideo {
 			if (key is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (key));
 #if IOS || __MACCATALYST__ || TVOS
-			if (!SystemVersion.IsAtLeastXcode13) {
+			if (!SystemVersion.IsAtLeastXcode13)
 				return Runtime.GetINativeObject<T> (CVBufferGetAttachment (Handle, key.Handle, out attachmentMode), false);
 #endif
 // The CA1416 here is an analyzer bug: https://github.com/dotnet/roslyn-analyzers/issues/7530
@@ -179,7 +179,7 @@ namespace CoreVideo {
 		public NSDictionary? GetAttachments (CVAttachmentMode attachmentMode)
 		{
 #if IOS || __MACCATALYST__ || TVOS
-			if (!SystemVersion.IsAtLeastXcode13) {
+			if (!SystemVersion.IsAtLeastXcode13)
 				return Runtime.GetNSObject<NSDictionary> (CVBufferGetAttachments (Handle, attachmentMode), false);
 #endif
 // The CA1416 here is an analyzer bug: https://github.com/dotnet/roslyn-analyzers/issues/7530

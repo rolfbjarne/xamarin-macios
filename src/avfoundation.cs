@@ -2780,7 +2780,7 @@ namespace AVFoundation {
 		NSString InterruptionNotification { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVAudioSession.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVAudioSession.RouteChangeNotification']/*" />
-	[NoMac]
+		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Field ("AVAudioSessionRouteChangeNotification")]
 		[Notification (typeof (AVAudioSessionRouteChangeEventArgs))]
@@ -3187,7 +3187,7 @@ namespace AVFoundation {
 		bool SecondaryAudioShouldBeSilencedHint { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVAudioSession.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVAudioSession.SilenceSecondaryAudioHintNotification']/*" />
-	[NoMac]
+		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Field ("AVAudioSessionSilenceSecondaryAudioHintNotification")]
 		[Notification (typeof (AVAudioSessionSecondaryAudioHintEventArgs))]
@@ -14202,13 +14202,13 @@ namespace AVFoundation {
 		AVCaptureDevicePosition Position { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVCaptureDevice.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVCaptureDevice.WasConnectedNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Field ("AVCaptureDeviceWasConnectedNotification")]
 		[Notification]
 		NSString WasConnectedNotification { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVCaptureDevice.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVCaptureDevice.WasDisconnectedNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Field ("AVCaptureDeviceWasDisconnectedNotification")]
 		[Notification]
 		NSString WasDisconnectedNotification { get; }
@@ -14226,7 +14226,7 @@ namespace AVFoundation {
 		float MaxAvailableTorchLevel { get; } // defined as 'float'
 
 		/// <include file="../docs/api/AVFoundation/AVCaptureDevice.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVCaptureDevice.SubjectAreaDidChangeNotification']/*" />
-	[NoMac]
+		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Field ("AVCaptureDeviceSubjectAreaDidChangeNotification")]
 		[Notification]
@@ -14678,7 +14678,7 @@ namespace AVFoundation {
 		bool AutomaticallyAdjustsVideoHdrEnabled { get; set; }
 
 		/// <include file="../docs/api/AVFoundation/AVCaptureDevice.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVCaptureDevice.VideoHdrEnabled']/*" />
-	[NoMac]
+		[NoMac]
 		[MacCatalyst (14, 0)]
 		[Export ("videoHDREnabled")]
 		bool VideoHdrEnabled { [Bind ("isVideoHDREnabled")] get; set; }
@@ -15596,7 +15596,7 @@ namespace AVFoundation {
 		AVPlayerHdrMode AvailableHdrModes { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVPlayer.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVPlayer.AvailableHdrModesDidChangeNotification']/*" />
-	[NoMac]
+		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Field ("AVPlayerAvailableHDRModesDidChangeNotification")]
 		[Notification]
@@ -17503,12 +17503,12 @@ namespace AVFoundation {
 		CMTimebase Timebase { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVSampleBufferDisplayLayer.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVSampleBufferDisplayLayer.FailedToDecodeNotification']/*" />
-	[Field ("AVSampleBufferDisplayLayerFailedToDecodeNotification")]
+		[Field ("AVSampleBufferDisplayLayerFailedToDecodeNotification")]
 		[Notification]
 		NSString FailedToDecodeNotification { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVSampleBufferDisplayLayer.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVSampleBufferDisplayLayer.FailedToDecodeNotificationErrorKey']/*" />
-	[Field ("AVSampleBufferDisplayLayerFailedToDecodeNotificationErrorKey")]
+		[Field ("AVSampleBufferDisplayLayerFailedToDecodeNotificationErrorKey")]
 		NSString FailedToDecodeNotificationErrorKey { get; }
 
 		// AVSampleBufferDisplayLayerImageProtection

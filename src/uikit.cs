@@ -2536,37 +2536,37 @@ namespace UIKit {
 		UIRemoteNotificationType EnabledRemoteNotificationTypes { get; }
 
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.DidFinishLaunchingNotification']/*" />
-	[Field ("UIApplicationDidFinishLaunchingNotification")]
+		[Field ("UIApplicationDidFinishLaunchingNotification")]
 		[Notification (typeof (UIApplicationLaunchEventArgs))]
 		NSString DidFinishLaunchingNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.DidBecomeActiveNotification']/*" />
-	[Field ("UIApplicationDidBecomeActiveNotification")]
+		[Field ("UIApplicationDidBecomeActiveNotification")]
 		[Notification]
 		NSString DidBecomeActiveNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.WillResignActiveNotification']/*" />
-	[Field ("UIApplicationWillResignActiveNotification")]
+		[Field ("UIApplicationWillResignActiveNotification")]
 		[Notification]
 		NSString WillResignActiveNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.DidReceiveMemoryWarningNotification']/*" />
-	[Field ("UIApplicationDidReceiveMemoryWarningNotification")]
+		[Field ("UIApplicationDidReceiveMemoryWarningNotification")]
 		[Notification]
 		NSString DidReceiveMemoryWarningNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.WillTerminateNotification']/*" />
-	[Field ("UIApplicationWillTerminateNotification")]
+		[Field ("UIApplicationWillTerminateNotification")]
 		[Notification]
 		NSString WillTerminateNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.SignificantTimeChangeNotification']/*" />
-	[Field ("UIApplicationSignificantTimeChangeNotification")]
+		[Field ("UIApplicationSignificantTimeChangeNotification")]
 		[Notification]
 		NSString SignificantTimeChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.WillChangeStatusBarOrientationNotification']/*" />
-	[NoTV]
+		[NoTV]
 		[Field ("UIApplicationWillChangeStatusBarOrientationNotification")]
 		[Notification (typeof (UIStatusBarOrientationChangeEventArgs))]
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'ViewWillTransitionToSize' instead.")]
@@ -2575,7 +2575,7 @@ namespace UIKit {
 		NSString WillChangeStatusBarOrientationNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.DidChangeStatusBarOrientationNotification']/*" />
-	[NoTV]
+		[NoTV]
 		[Field ("UIApplicationDidChangeStatusBarOrientationNotification")]
 		[Notification (typeof (UIStatusBarOrientationChangeEventArgs))]
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'ViewWillTransitionToSize' instead.")]
@@ -2595,7 +2595,7 @@ namespace UIKit {
 		NSString StatusBarOrientationUserInfoKey { get; }
 
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.WillChangeStatusBarFrameNotification']/*" />
-	[NoTV]
+		[NoTV]
 		[Field ("UIApplicationWillChangeStatusBarFrameNotification")]
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'ViewWillTransitionToSize' instead.")]
 		[MacCatalyst (13, 1)]
@@ -2604,7 +2604,7 @@ namespace UIKit {
 		NSString WillChangeStatusBarFrameNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.DidChangeStatusBarFrameNotification']/*" />
-	[NoTV]
+		[NoTV]
 		[Field ("UIApplicationDidChangeStatusBarFrameNotification")]
 		[Notification (typeof (UIStatusBarFrameChangeEventArgs))]
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'ViewWillTransitionToSize' instead.")]
@@ -2769,12 +2769,12 @@ namespace UIKit {
 		double /* NSTimeInternal */ MinimumKeepAliveTimeout { get; }
 
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.ProtectedDataWillBecomeUnavailable']/*" />
-	[Field ("UIApplicationProtectedDataWillBecomeUnavailable")]
+		[Field ("UIApplicationProtectedDataWillBecomeUnavailable")]
 		[Notification]
 		NSString ProtectedDataWillBecomeUnavailable { get; }
 
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.ProtectedDataDidBecomeAvailable']/*" />
-	[Field ("UIApplicationProtectedDataDidBecomeAvailable")]
+		[Field ("UIApplicationProtectedDataDidBecomeAvailable")]
 		[Notification]
 		NSString ProtectedDataDidBecomeAvailable { get; }
 
@@ -2788,12 +2788,12 @@ namespace UIKit {
 		NSString LaunchOptionsLocationKey { get; }
 
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.DidEnterBackgroundNotification']/*" />
-	[Field ("UIApplicationDidEnterBackgroundNotification")]
+		[Field ("UIApplicationDidEnterBackgroundNotification")]
 		[Notification]
 		NSString DidEnterBackgroundNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.WillEnterForegroundNotification']/*" />
-	[Field ("UIApplicationWillEnterForegroundNotification")]
+		[Field ("UIApplicationWillEnterForegroundNotification")]
 		[Notification]
 		NSString WillEnterForegroundNotification { get; }
 
@@ -2827,7 +2827,7 @@ namespace UIKit {
 		void SetNewsstandIconImage ([NullAllowed] UIImage image);
 
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.LaunchOptionsNewsstandDownloadsKey']/*" />
-	[NoTV]
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Field ("UIApplicationLaunchOptionsNewsstandDownloadsKey")]
 		NSString LaunchOptionsNewsstandDownloadsKey { get; }
@@ -2907,7 +2907,7 @@ namespace UIKit {
 		// 7.0
 		//
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.ContentSizeCategoryChangedNotification']/*" />
-	[Field ("UIContentSizeCategoryDidChangeNotification")]
+		[Field ("UIContentSizeCategoryDidChangeNotification")]
 		[Notification (typeof (UIContentSizeCategoryChangedEventArgs))]
 		NSString ContentSizeCategoryChangedNotification { get; }
 
@@ -3007,13 +3007,13 @@ namespace UIKit {
 		UIBackgroundRefreshStatus BackgroundRefreshStatus { get; }
 
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.BackgroundRefreshStatusDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("UIApplicationBackgroundRefreshStatusDidChangeNotification")]
 		NSString BackgroundRefreshStatusDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.UserDidTakeScreenshotNotification']/*" />
-	[Notification]
+		[Notification]
 		[Field ("UIApplicationUserDidTakeScreenshotNotification")]
 		NSString UserDidTakeScreenshotNotification { get; }
 

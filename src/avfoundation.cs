@@ -1120,7 +1120,7 @@ namespace AVFoundation {
 		AVAudioConnectionPoint [] OutputConnectionPoints (AVAudioNode node, nuint bus);
 
 		/// <include file="../docs/api/AVFoundation/AVAudioEngine.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVAudioEngine.ConfigurationChangeNotification']/*" />
-	[Notification]
+		[Notification]
 		[Field ("AVAudioEngineConfigurationChangeNotification")]
 		NSString ConfigurationChangeNotification { get; }
 

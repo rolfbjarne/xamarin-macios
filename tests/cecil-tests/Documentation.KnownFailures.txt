@@ -41493,7 +41493,6 @@ M:NotificationCenter.NSExtensionContext_NCWidgetAdditions.SetWidgetLargestAvaila
 M:NotificationCenter.NSWidgetSearchForTermEventArgs.#ctor(System.String,System.UIntPtr)
 M:NotificationCenter.NSWidgetSearchResultSelectedEventArgs.#ctor(Foundation.NSObject)
 M:ObjCBindings.BindingTypeAttribute.#ctor
-M:ObjCBindings.BindingTypeAttribute`1.#ctor
 M:ObjCBindings.ExportAttribute`1.#ctor
 M:ObjCRuntime.AdoptsAttribute.#ctor(System.String)
 M:ObjCRuntime.AssemblyRegistrationEventArgs.#ctor

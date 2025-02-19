@@ -4488,6 +4488,9 @@ namespace WebKit {
 	[BaseType (typeof (NSObject))]
 	interface WKFrameInfo : NSCopying {
 
+		/// <summary>Gets a value that indicates whether the frame is the main frame or a subframe.</summary>
+		///         <value>To be added.</value>
+		///         <remarks>To be added.</remarks>
 		[Export ("mainFrame")]
 		bool MainFrame { [Bind ("isMainFrame")] get; }
 
@@ -5228,6 +5231,15 @@ namespace WebKit {
 		[NullAllowed]
 		NSObject WeakNavigationDelegate { get; set; }
 
+		/// <summary>The web view's navigation delegate.</summary>
+		///         <value>
+		///           <para>This value can be <see langword="null" />.</para>
+		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
+		///         </value>
+		///         <remarks>
+		///           <para>
+		///           </para>
+		///         </remarks>
 		[Wrap ("WeakNavigationDelegate")]
 		IWKNavigationDelegate NavigationDelegate { get; set; }
 
@@ -5235,6 +5247,15 @@ namespace WebKit {
 		[NullAllowed]
 		NSObject WeakUIDelegate { get; set; }
 
+		/// <summary>The web view's user interface delegate. </summary>
+		///         <value>
+		///           <para>This value can be <see langword="null" />.</para>
+		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
+		///         </value>
+		///         <remarks>
+		///           <para>
+		///           </para>
+		///         </remarks>
 		[Wrap ("WeakUIDelegate")]
 		IWKUIDelegate UIDelegate { get; set; }
 
@@ -5249,6 +5270,13 @@ namespace WebKit {
 		[NullAllowed]
 		NSUrl Url { get; }
 
+		/// <summary>A Boolean value indicating whether the view is currently loading content.</summary>
+		///         <value>
+		///           <para />
+		///         </value>
+		///         <remarks>
+		///           <para />
+		///         </remarks>
 		[Export ("loading")]
 		bool IsLoading { [Bind ("isLoading")] get; }
 

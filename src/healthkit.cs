@@ -943,7 +943,7 @@ namespace HealthKit {
 		void GetPreferredUnits (NSSet quantityTypes, Action<NSDictionary, NSError> completion);
 
 		/// <include file="../docs/api/HealthKit/HKHealthStore.xml" path="/Documentation/Docs[@DocId='P:HealthKit.HKHealthStore.UserPreferencesDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("HKUserPreferencesDidChangeNotification")]
 		NSString UserPreferencesDidChangeNotification { get; }

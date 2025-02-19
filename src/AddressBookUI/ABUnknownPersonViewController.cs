@@ -28,6 +28,9 @@ namespace AddressBookUI {
 			Person = person;
 		}
 
+		/// <summary>To be added.</summary>
+		///         <value>To be added.</value>
+		///         <remarks>To be added.</remarks>
 		public ABPerson? Person { get; private set; }
 	}
 
@@ -61,6 +64,9 @@ namespace AddressBookUI {
 	partial class ABUnknownPersonViewController {
 
 		ABPerson? displayedPerson;
+		/// <summary>Gets or sets the <see cref="T:AddressBook.ABPerson" /> whose data is being displayed.</summary>
+		///         <value>To be added.</value>
+		///         <remarks>To be added.</remarks>
 		public ABPerson? DisplayedPerson {
 			get {
 				MarkDirty ();
@@ -73,6 +79,9 @@ namespace AddressBookUI {
 		}
 
 		ABAddressBook? addressBook;
+		/// <summary>Gets or sets the <see cref="T:AddressBook.ABAddressBook" /> to which the controller will save data.</summary>
+		///         <value>To be added.</value>
+		///         <remarks>To be added.</remarks>
 		public ABAddressBook? AddressBook {
 			get {
 				MarkDirty ();

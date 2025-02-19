@@ -7750,42 +7750,42 @@ namespace UIKit {
 	[Static]
 	interface UIKeyboard {
 		/// <include file="../docs/api/UIKit/UIKeyboard.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIKeyboard.WillShowNotification']/*" />
-	[NoTV]
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Field ("UIKeyboardWillShowNotification")]
 		[Notification (typeof (UIKeyboardEventArgs))]
 		NSString WillShowNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIKeyboard.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIKeyboard.DidShowNotification']/*" />
-	[NoTV]
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Field ("UIKeyboardDidShowNotification")]
 		[Notification (typeof (UIKeyboardEventArgs))]
 		NSString DidShowNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIKeyboard.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIKeyboard.WillHideNotification']/*" />
-	[NoTV]
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Field ("UIKeyboardWillHideNotification")]
 		[Notification (typeof (UIKeyboardEventArgs))]
 		NSString WillHideNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIKeyboard.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIKeyboard.DidHideNotification']/*" />
-	[NoTV]
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Field ("UIKeyboardDidHideNotification")]
 		[Notification (typeof (UIKeyboardEventArgs))]
 		NSString DidHideNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIKeyboard.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIKeyboard.WillChangeFrameNotification']/*" />
-	[NoTV]
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Field ("UIKeyboardWillChangeFrameNotification")]
 		[Notification (typeof (UIKeyboardEventArgs))]
 		NSString WillChangeFrameNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIKeyboard.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIKeyboard.DidChangeFrameNotification']/*" />
-	[NoTV]
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Field ("UIKeyboardDidChangeFrameNotification")]
 		[Notification (typeof (UIKeyboardEventArgs))]
@@ -10712,28 +10712,28 @@ namespace UIKit {
 		UIUserInterfaceIdiom UserInterfaceIdiom { get; }
 
 		/// <include file="../docs/api/UIKit/UIDevice.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIDevice.OrientationDidChangeNotification']/*" />
-	[NoTV]
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Field ("UIDeviceOrientationDidChangeNotification")]
 		[Notification]
 		NSString OrientationDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIDevice.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIDevice.BatteryStateDidChangeNotification']/*" />
-	[NoTV]
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Field ("UIDeviceBatteryStateDidChangeNotification")]
 		[Notification]
 		NSString BatteryStateDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIDevice.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIDevice.BatteryLevelDidChangeNotification']/*" />
-	[NoTV]
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Field ("UIDeviceBatteryLevelDidChangeNotification")]
 		[Notification]
 		NSString BatteryLevelDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIDevice.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIDevice.ProximityStateDidChangeNotification']/*" />
-	[Field ("UIDeviceProximityStateDidChangeNotification")]
+		[Field ("UIDeviceProximityStateDidChangeNotification")]
 		[Notification]
 		NSString ProximityStateDidChangeNotification { get; }
 
@@ -12156,7 +12156,7 @@ namespace UIKit {
 		void AddItems (NSDictionary [] items);
 
 		/// <include file="../docs/api/UIKit/UIPasteboard.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIPasteboard.ChangedNotification']/*" />
-	[Field ("UIPasteboardChangedNotification")]
+		[Field ("UIPasteboardChangedNotification")]
 		[Notification (typeof (UIPasteboardChangeEventArgs))]
 		NSString ChangedNotification { get; }
 
@@ -12175,7 +12175,7 @@ namespace UIKit {
 		NSString ChangedTypesRemovedKey { get; }
 
 		/// <include file="../docs/api/UIKit/UIPasteboard.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIPasteboard.RemovedNotification']/*" />
-	[Field ("UIPasteboardRemovedNotification")]
+		[Field ("UIPasteboardRemovedNotification")]
 		[Notification (typeof (UIPasteboardChangeEventArgs))]
 		NSString RemovedNotification { get; }
 

@@ -227,7 +227,7 @@ namespace UIKit {
 		}
 
 		/// <include file="../../docs/api/UIKit/UIFontAttributes.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIFontAttributes.FeatureSettings']/*" />
-	public UIFontFeature [] FeatureSettings {
+		public UIFontFeature [] FeatureSettings {
 			get {
 				var dictArray = WeakFeatureSettings;
 				if (dictArray is null)
@@ -594,7 +594,7 @@ namespace UIKit {
 		}
 
 		/// <include file="../../docs/api/UIKit/UIFontDescriptor.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIFontDescriptor.FeatureSettings']/*" />
-	public UIFontFeature [] FeatureSettings {
+		public UIFontFeature [] FeatureSettings {
 			get {
 				var dictArray = WeakFeatureSettings;
 				if (dictArray is null)

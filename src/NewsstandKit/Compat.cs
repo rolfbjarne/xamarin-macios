@@ -149,7 +149,7 @@ namespace NewsstandKit {
 		}
 
 		/// <include file="../../docs/api/NewsstandKit/NKIssue.xml" path="/Documentation/Docs[@DocId='P:NewsstandKit.NKIssue.DownloadCompletedNotification']/*" />
-	public static NSString DownloadCompletedNotification {
+		public static NSString DownloadCompletedNotification {
 			get {
 				throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 			}

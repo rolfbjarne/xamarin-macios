@@ -1890,7 +1890,7 @@ namespace NetworkExtension {
 #endif
 
 		/// <include file="../docs/api/NetworkExtension/NEVpnManager.xml" path="/Documentation/Docs[@DocId='P:NetworkExtension.NEVpnManager.ConfigurationChangeNotification']/*" />
-	[Notification]
+		[Notification]
 		[Field ("NEVPNConfigurationChangeNotification")]
 		NSString ConfigurationChangeNotification { get; }
 	}
@@ -1938,7 +1938,7 @@ namespace NetworkExtension {
 		NEVpnManager Manager { get; }
 
 		/// <include file="../docs/api/NetworkExtension/NEVpnConnection.xml" path="/Documentation/Docs[@DocId='P:NetworkExtension.NEVpnConnection.StatusDidChangeNotification']/*" />
-	[Notification]
+		[Notification]
 		[Field ("NEVPNStatusDidChangeNotification")]
 		NSString StatusDidChangeNotification { get; }
 

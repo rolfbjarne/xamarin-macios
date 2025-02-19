@@ -2659,22 +2659,22 @@ namespace Foundation {
 		NSString OperationException { get; }
 
 		/// <include file="../docs/api/Foundation/NSFileHandle.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSFileHandle.ReadCompletionNotification']/*" />
-	[Field ("NSFileHandleReadCompletionNotification")]
+		[Field ("NSFileHandleReadCompletionNotification")]
 		[Notification (typeof (NSFileHandleReadEventArgs))]
 		NSString ReadCompletionNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSFileHandle.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSFileHandle.ReadToEndOfFileCompletionNotification']/*" />
-	[Field ("NSFileHandleReadToEndOfFileCompletionNotification")]
+		[Field ("NSFileHandleReadToEndOfFileCompletionNotification")]
 		[Notification (typeof (NSFileHandleReadEventArgs))]
 		NSString ReadToEndOfFileCompletionNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSFileHandle.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSFileHandle.ConnectionAcceptedNotification']/*" />
-	[Field ("NSFileHandleConnectionAcceptedNotification")]
+		[Field ("NSFileHandleConnectionAcceptedNotification")]
 		[Notification (typeof (NSFileHandleConnectionAcceptedEventArgs))]
 		NSString ConnectionAcceptedNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSFileHandle.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSFileHandle.DataAvailableNotification']/*" />
-	[Field ("NSFileHandleDataAvailableNotification")]
+		[Field ("NSFileHandleDataAvailableNotification")]
 		[Notification]
 		NSString DataAvailableNotification { get; }
 	}

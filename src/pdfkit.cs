@@ -3141,17 +3141,17 @@ namespace PdfKit {
 		NSString ChangedHistoryNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfView.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfView.DocumentChangedNotification']/*" />
-	[Field ("PDFViewDocumentChangedNotification", "+PDFKit")]
+		[Field ("PDFViewDocumentChangedNotification", "+PDFKit")]
 		[Notification]
 		NSString DocumentChangedNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfView.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfView.PageChangedNotification']/*" />
-	[Field ("PDFViewPageChangedNotification", "+PDFKit")]
+		[Field ("PDFViewPageChangedNotification", "+PDFKit")]
 		[Notification]
 		NSString PageChangedNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfView.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfView.ScaleChangedNotification']/*" />
-	[Field ("PDFViewScaleChangedNotification", "+PDFKit")]
+		[Field ("PDFViewScaleChangedNotification", "+PDFKit")]
 		[Notification]
 		NSString ScaleChangedNotification { get; }
 
@@ -3166,7 +3166,7 @@ namespace PdfKit {
 		NSString CopyPermissionNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfView.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfView.PrintPermissionNotification']/*" />
-	[Field ("PDFViewPrintPermissionNotification", "+PDFKit")]
+		[Field ("PDFViewPrintPermissionNotification", "+PDFKit")]
 		[Notification]
 		NSString PrintPermissionNotification { get; }
 
@@ -3176,12 +3176,12 @@ namespace PdfKit {
 		NSString AnnotationWillHitNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfView.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfView.SelectionChangedNotification']/*" />
-	[Field ("PDFViewSelectionChangedNotification", "+PDFKit")]
+		[Field ("PDFViewSelectionChangedNotification", "+PDFKit")]
 		[Notification]
 		NSString SelectionChangedNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfView.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfView.DisplayModeChangedNotification']/*" />
-	[Field ("PDFViewDisplayModeChangedNotification", "+PDFKit")]
+		[Field ("PDFViewDisplayModeChangedNotification", "+PDFKit")]
 		[Notification]
 		NSString DisplayModeChangedNotification { get; }
 
@@ -3191,7 +3191,7 @@ namespace PdfKit {
 		NSString DisplayBoxChangedNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfView.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfView.VisiblePagesChangedNotification']/*" />
-	[Field ("PDFViewVisiblePagesChangedNotification", "+PDFKit")]
+		[Field ("PDFViewVisiblePagesChangedNotification", "+PDFKit")]
 		[Notification]
 		NSString VisiblePagesChangedNotification { get; }
 

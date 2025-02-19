@@ -163,13 +163,13 @@ namespace CoreGraphics {
 		}
 
 		/// <include file="../../docs/api/CoreGraphics/CGRect.xml" path="/Documentation/Docs[@DocId='P:CoreGraphics.CGRect.Width']/*" />
-	public nfloat Width {
+		public nfloat Width {
 			get { return width; }
 			set { width = value; }
 		}
 
 		/// <include file="../../docs/api/CoreGraphics/CGRect.xml" path="/Documentation/Docs[@DocId='P:CoreGraphics.CGRect.Height']/*" />
-	public nfloat Height {
+		public nfloat Height {
 			get { return height; }
 			set { height = value; }
 		}

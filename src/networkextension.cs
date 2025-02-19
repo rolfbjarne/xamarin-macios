@@ -830,7 +830,7 @@ namespace NetworkExtension {
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
 		/// <include file="../docs/api/NetworkExtension/NEFilterManager.xml" path="/Documentation/Docs[@DocId='P:NetworkExtension.NEFilterManager.ConfigurationDidChangeNotification']/*" />
-	[Field ("NEFilterConfigurationDidChangeNotification")]
+		[Field ("NEFilterConfigurationDidChangeNotification")]
 		[Notification]
 		NSString ConfigurationDidChangeNotification { get; }
 
@@ -2658,7 +2658,7 @@ namespace NetworkExtension {
 	interface NEDnsProxyManager {
 
 		/// <include file="../docs/api/NetworkExtension/NEDnsProxyManager.xml" path="/Documentation/Docs[@DocId='P:NetworkExtension.NEDnsProxyManager.ProxyConfigurationDidChangeNotification']/*" />
-	[Notification]
+		[Notification]
 		[Field ("NEDNSProxyConfigurationDidChangeNotification")]
 		NSString ProxyConfigurationDidChangeNotification { get; }
 

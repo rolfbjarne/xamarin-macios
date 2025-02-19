@@ -83,7 +83,7 @@ namespace CoreImage {
 		}
 
 		/// <include file="../../docs/api/CoreImage/CIContextOptions.xml" path="/Documentation/Docs[@DocId='P:CoreImage.CIContextOptions.UseSoftwareRenderer']/*" />
-	public bool UseSoftwareRenderer {
+		public bool UseSoftwareRenderer {
 			get {
 				var b = GetBoolValue (CIContext.UseSoftwareRenderer);
 				return b.HasValue ? b.Value : false;

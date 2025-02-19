@@ -609,7 +609,7 @@ namespace EventKit {
 		NSPredicate PredicateForEvents (NSDate startDate, NSDate endDate, [NullAllowed] EKCalendar [] calendars);
 
 		/// <include file="../docs/api/EventKit/EKEventStore.xml" path="/Documentation/Docs[@DocId='P:EventKit.EKEventStore.ChangedNotification']/*" />
-	[Field ("EKEventStoreChangedNotification")]
+		[Field ("EKEventStoreChangedNotification")]
 		[Notification]
 		NSString ChangedNotification { get; }
 

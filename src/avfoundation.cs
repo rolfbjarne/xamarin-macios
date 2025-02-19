@@ -10124,17 +10124,17 @@ namespace AVFoundation {
 		NSString ErrorKey { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVCaptureSession.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVCaptureSession.DidStartRunningNotification']/*" />
-	[Field ("AVCaptureSessionDidStartRunningNotification")]
+		[Field ("AVCaptureSessionDidStartRunningNotification")]
 		[Notification]
 		NSString DidStartRunningNotification { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVCaptureSession.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVCaptureSession.DidStopRunningNotification']/*" />
-	[Field ("AVCaptureSessionDidStopRunningNotification")]
+		[Field ("AVCaptureSessionDidStopRunningNotification")]
 		[Notification]
 		NSString DidStopRunningNotification { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVCaptureSession.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVCaptureSession.InterruptionEndedNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Field ("AVCaptureSessionInterruptionEndedNotification")]
 		[Notification]
 		NSString InterruptionEndedNotification { get; }
@@ -16643,7 +16643,7 @@ namespace AVFoundation {
 		AudioComponentDescription AudioComponentDescription { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVAudioUnitComponent.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVAudioUnitComponent.TagsDidChangeNotification']/*" />
-	[Field ("AVAudioUnitComponentTagsDidChangeNotification")]
+		[Field ("AVAudioUnitComponentTagsDidChangeNotification")]
 		[Notification]
 		NSString TagsDidChangeNotification { get; }
 	}

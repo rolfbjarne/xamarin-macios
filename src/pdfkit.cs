@@ -2615,7 +2615,7 @@ namespace PdfKit {
 		NativeHandle Constructor (CGRect frame);
 
 		/// <include file="../docs/api/PdfKit/PdfThumbnailView.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfThumbnailView.DocumentEditedNotification']/*" />
-	[Field ("PDFThumbnailViewDocumentEditedNotification", "+PDFKit")]
+		[Field ("PDFThumbnailViewDocumentEditedNotification", "+PDFKit")]
 		[Notification]
 		NSString DocumentEditedNotification { get; }
 

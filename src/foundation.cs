@@ -5360,7 +5360,7 @@ namespace Foundation {
 		NSLocale FromLocaleIdentifier (string ident);
 
 		/// <include file="../docs/api/Foundation/NSLocale.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSLocale.CurrentLocaleDidChangeNotification']/*" />
-	[Field ("NSCurrentLocaleDidChangeNotification")]
+		[Field ("NSCurrentLocaleDidChangeNotification")]
 		[Notification]
 		NSString CurrentLocaleDidChangeNotification { get; }
 

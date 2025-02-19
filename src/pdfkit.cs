@@ -3127,7 +3127,7 @@ namespace PdfKit {
 		bool EnableDataDetectors { get; set; }
 
 		/// <include file="../docs/api/PdfKit/PdfView.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfView.ChangedHistoryNotification']/*" />
-	[Field ("PDFViewChangedHistoryNotification", "+PDFKit")]
+		[Field ("PDFViewChangedHistoryNotification", "+PDFKit")]
 		[Notification]
 		NSString ChangedHistoryNotification { get; }
 
@@ -3144,12 +3144,12 @@ namespace PdfKit {
 		NSString ScaleChangedNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfView.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfView.AnnotationHitNotification']/*" />
-	[Field ("PDFViewAnnotationHitNotification", "+PDFKit")]
+		[Field ("PDFViewAnnotationHitNotification", "+PDFKit")]
 		[Notification (typeof (PdfViewAnnotationHitEventArgs))]
 		NSString AnnotationHitNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfView.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfView.CopyPermissionNotification']/*" />
-	[Field ("PDFViewCopyPermissionNotification", "+PDFKit")]
+		[Field ("PDFViewCopyPermissionNotification", "+PDFKit")]
 		[Notification]
 		NSString CopyPermissionNotification { get; }
 
@@ -3158,7 +3158,7 @@ namespace PdfKit {
 		NSString PrintPermissionNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfView.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfView.AnnotationWillHitNotification']/*" />
-	[Field ("PDFViewAnnotationWillHitNotification", "+PDFKit")]
+		[Field ("PDFViewAnnotationWillHitNotification", "+PDFKit")]
 		[Notification]
 		NSString AnnotationWillHitNotification { get; }
 
@@ -3171,7 +3171,7 @@ namespace PdfKit {
 		NSString DisplayModeChangedNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfView.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfView.DisplayBoxChangedNotification']/*" />
-	[Field ("PDFViewDisplayBoxChangedNotification", "+PDFKit")]
+		[Field ("PDFViewDisplayBoxChangedNotification", "+PDFKit")]
 		[Notification]
 		NSString DisplayBoxChangedNotification { get; }
 

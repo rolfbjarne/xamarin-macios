@@ -3952,30 +3952,30 @@ namespace AVFoundation {
 		bool CompatibleWithAirPlayVideo { [Bind ("isCompatibleWithAirPlayVideo")] get; }
 
 		/// <include file="../docs/api/AVFoundation/AVAsset.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVAsset.DurationDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Field ("AVAssetDurationDidChangeNotification")]
 		[Notification]
 		NSString DurationDidChangeNotification { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVAsset.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVAsset.ChapterMetadataGroupsDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Field ("AVAssetChapterMetadataGroupsDidChangeNotification")]
 		[Notification]
 		NSString ChapterMetadataGroupsDidChangeNotification { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVAsset.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVAsset.MediaSelectionGroupsDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Notification, Field ("AVAssetMediaSelectionGroupsDidChangeNotification")]
 		NSString MediaSelectionGroupsDidChangeNotification { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVAsset.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVAsset.ContainsFragmentsDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Field ("AVAssetContainsFragmentsDidChangeNotification")]
 		[Notification]
 		NSString ContainsFragmentsDidChangeNotification { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVAsset.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVAsset.WasDefragmentedNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Field ("AVAssetWasDefragmentedNotification")]
 		[Notification]
 		NSString WasDefragmentedNotification { get; }
@@ -14193,12 +14193,12 @@ namespace AVFoundation {
 		NSError Error { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVPlayerItem.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVPlayerItem.DidPlayToEndTimeNotification']/*" />
-	[Field ("AVPlayerItemDidPlayToEndTimeNotification")]
+		[Field ("AVPlayerItemDidPlayToEndTimeNotification")]
 		[Notification]
 		NSString DidPlayToEndTimeNotification { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVPlayerItem.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVPlayerItem.ItemFailedToPlayToEndTimeNotification']/*" />
-	[Field ("AVPlayerItemFailedToPlayToEndTimeNotification")]
+		[Field ("AVPlayerItemFailedToPlayToEndTimeNotification")]
 		[Notification (typeof (AVPlayerItemErrorEventArgs))]
 		NSString ItemFailedToPlayToEndTimeNotification { get; }
 
@@ -14228,7 +14228,7 @@ namespace AVFoundation {
 		bool CanPlayFastForward { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVPlayerItem.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVPlayerItem.TimeJumpedNotification']/*" />
-	[Field ("AVPlayerItemTimeJumpedNotification")]
+		[Field ("AVPlayerItemTimeJumpedNotification")]
 #if !NET
 		[Notification]
 #else
@@ -14305,19 +14305,19 @@ namespace AVFoundation {
 		AVTextStyleRule [] TextStyleRules { get; set; }
 
 		/// <include file="../docs/api/AVFoundation/AVPlayerItem.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVPlayerItem.PlaybackStalledNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Field ("AVPlayerItemPlaybackStalledNotification")]
 		[Notification]
 		NSString PlaybackStalledNotification { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVPlayerItem.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVPlayerItem.NewAccessLogEntryNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Field ("AVPlayerItemNewAccessLogEntryNotification")]
 		[Notification]
 		NSString NewAccessLogEntryNotification { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVPlayerItem.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVPlayerItem.NewErrorLogEntryNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Field ("AVPlayerItemNewErrorLogEntryNotification")]
 		[Notification]
 		NSString NewErrorLogEntryNotification { get; }

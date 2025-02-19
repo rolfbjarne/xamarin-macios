@@ -1363,7 +1363,7 @@ namespace UIKit {
 		NSTypesetterBehavior TypesetterBehavior { get; set; }
 
 		/// <include file="../docs/api/UIKit/NSLayoutManager.xml" path="/Documentation/Docs[@DocId='P:UIKit.NSLayoutManager.AllowsNonContiguousLayout']/*" />
-	[Export ("allowsNonContiguousLayout")]
+		[Export ("allowsNonContiguousLayout")]
 		bool AllowsNonContiguousLayout { get; set; }
 
 		/// <summary>Whether the <see cref="T:UIKit.NSLayoutManager" /> should use the leading provided in the font.</summary>

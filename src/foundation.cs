@@ -4997,28 +4997,28 @@ namespace Foundation {
 		NSString ItemsAndErrorsKey { get; }
 
 		/// <include file="../docs/api/Foundation/NSExtensionContext.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSExtensionContext.HostWillEnterForegroundNotification']/*" />
-	[NoMac]
+		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("NSExtensionHostWillEnterForegroundNotification")]
 		NSString HostWillEnterForegroundNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSExtensionContext.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSExtensionContext.HostDidEnterBackgroundNotification']/*" />
-	[NoMac]
+		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("NSExtensionHostDidEnterBackgroundNotification")]
 		NSString HostDidEnterBackgroundNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSExtensionContext.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSExtensionContext.HostWillResignActiveNotification']/*" />
-	[NoMac]
+		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("NSExtensionHostWillResignActiveNotification")]
 		NSString HostWillResignActiveNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSExtensionContext.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSExtensionContext.HostDidBecomeActiveNotification']/*" />
-	[NoMac]
+		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("NSExtensionHostDidBecomeActiveNotification")]
@@ -6000,7 +6000,7 @@ namespace Foundation {
 		bool Synchronize ();
 
 		/// <include file="../docs/api/Foundation/NSUbiquitousKeyValueStore.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSUbiquitousKeyValueStore.DidChangeExternallyNotification']/*" />
-	[Field ("NSUbiquitousKeyValueStoreDidChangeExternallyNotification")]
+		[Field ("NSUbiquitousKeyValueStoreDidChangeExternallyNotification")]
 		[Notification (typeof (NSUbiquitousKeyValueStoreChangeEventArgs))]
 		NSString DidChangeExternallyNotification { get; }
 
@@ -6417,35 +6417,35 @@ namespace Foundation {
 		NSString RegistrationDomain { get; }
 
 		/// <include file="../docs/api/Foundation/NSUserDefaults.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSUserDefaults.SizeLimitExceededNotification']/*" />
-	[NoMac]
+		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("NSUserDefaultsSizeLimitExceededNotification")]
 		NSString SizeLimitExceededNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSUserDefaults.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSUserDefaults.NoCloudAccountNotification']/*" />
-	[NoMac]
+		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("NSUbiquitousUserDefaultsNoCloudAccountNotification")]
 		NSString NoCloudAccountNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSUserDefaults.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSUserDefaults.DidChangeAccountsNotification']/*" />
-	[NoMac]
+		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("NSUbiquitousUserDefaultsDidChangeAccountsNotification")]
 		NSString DidChangeAccountsNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSUserDefaults.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSUserDefaults.CompletedInitialSyncNotification']/*" />
-	[NoMac]
+		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("NSUbiquitousUserDefaultsCompletedInitialSyncNotification")]
 		NSString CompletedInitialSyncNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSUserDefaults.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSUserDefaults.DidChangeNotification']/*" />
-	[Notification]
+		[Notification]
 		[Field ("NSUserDefaultsDidChangeNotification")]
 		NSString DidChangeNotification { get; }
 	}
@@ -9132,37 +9132,37 @@ namespace Foundation {
 		string RedoMenuTitleForUndoActionName (string name);
 
 		/// <include file="../docs/api/Foundation/NSUndoManager.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSUndoManager.CheckpointNotification']/*" />
-	[Field ("NSUndoManagerCheckpointNotification")]
+		[Field ("NSUndoManagerCheckpointNotification")]
 		[Notification]
 		NSString CheckpointNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSUndoManager.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSUndoManager.DidOpenUndoGroupNotification']/*" />
-	[Field ("NSUndoManagerDidOpenUndoGroupNotification")]
+		[Field ("NSUndoManagerDidOpenUndoGroupNotification")]
 		[Notification]
 		NSString DidOpenUndoGroupNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSUndoManager.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSUndoManager.DidRedoChangeNotification']/*" />
-	[Field ("NSUndoManagerDidRedoChangeNotification")]
+		[Field ("NSUndoManagerDidRedoChangeNotification")]
 		[Notification]
 		NSString DidRedoChangeNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSUndoManager.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSUndoManager.DidUndoChangeNotification']/*" />
-	[Field ("NSUndoManagerDidUndoChangeNotification")]
+		[Field ("NSUndoManagerDidUndoChangeNotification")]
 		[Notification]
 		NSString DidUndoChangeNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSUndoManager.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSUndoManager.WillCloseUndoGroupNotification']/*" />
-	[Field ("NSUndoManagerWillCloseUndoGroupNotification")]
+		[Field ("NSUndoManagerWillCloseUndoGroupNotification")]
 		[Notification (typeof (NSUndoManagerCloseUndoGroupEventArgs))]
 		NSString WillCloseUndoGroupNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSUndoManager.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSUndoManager.WillRedoChangeNotification']/*" />
-	[Field ("NSUndoManagerWillRedoChangeNotification")]
+		[Field ("NSUndoManagerWillRedoChangeNotification")]
 		[Notification]
 		NSString WillRedoChangeNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSUndoManager.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSUndoManager.WillUndoChangeNotification']/*" />
-	[Field ("NSUndoManagerWillUndoChangeNotification")]
+		[Field ("NSUndoManagerWillUndoChangeNotification")]
 		[Notification]
 		NSString WillUndoChangeNotification { get; }
 
@@ -9183,7 +9183,7 @@ namespace Foundation {
 		NSString GroupIsDiscardableKey { get; }
 
 		/// <include file="../docs/api/Foundation/NSUndoManager.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSUndoManager.DidCloseUndoGroupNotification']/*" />
-	[Field ("NSUndoManagerDidCloseUndoGroupNotification")]
+		[Field ("NSUndoManagerDidCloseUndoGroupNotification")]
 		[Notification (typeof (NSUndoManagerCloseUndoGroupEventArgs))]
 		NSString DidCloseUndoGroupNotification { get; }
 
@@ -11552,12 +11552,12 @@ namespace Foundation {
 		void StoreCookies (NSHttpCookie [] cookies, NSUrlSessionTask task);
 
 		/// <include file="../docs/api/Foundation/NSHttpCookieStorage.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSHttpCookieStorage.CookiesChangedNotification']/*" />
-	[Notification]
+		[Notification]
 		[Field ("NSHTTPCookieManagerAcceptPolicyChangedNotification")]
 		NSString CookiesChangedNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSHttpCookieStorage.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSHttpCookieStorage.AcceptPolicyChangedNotification']/*" />
-	[Notification]
+		[Notification]
 		[Field ("NSHTTPCookieManagerCookiesChangedNotification")]
 		NSString AcceptPolicyChangedNotification { get; }
 	}

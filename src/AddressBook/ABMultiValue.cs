@@ -286,7 +286,7 @@ namespace AddressBook {
 		}
 
 		/// <include file="../../docs/api/AddressBook/ABMultiValue`1.xml" path="/Documentation/Docs[@DocId='P:AddressBook.ABMultiValue`1.IsReadOnly']/*" />
-	public virtual bool IsReadOnly {
+		public virtual bool IsReadOnly {
 			get {
 				GetCheckedHandle ();
 				return true;

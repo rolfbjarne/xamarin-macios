@@ -335,7 +335,7 @@ namespace CloudKit {
 		void DiscoverUserIdentity (CKRecordID userRecordID, Action<CKUserIdentity, NSError> completionHandler);
 
 		/// <include file="../docs/api/CloudKit/CKContainer.xml" path="/Documentation/Docs[@DocId='P:CloudKit.CKContainer.AccountChangedNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Field ("CKAccountChangedNotification")]
 		[Notification]
 		NSString AccountChangedNotification { get; }

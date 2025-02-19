@@ -14018,7 +14018,7 @@ namespace Foundation {
 		NSObject UbiquityIdentityToken { get; }
 
 		/// <include file="../docs/api/Foundation/NSFileManager.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSFileManager.UbiquityIdentityDidChangeNotification']/*" />
-	[Field ("NSUbiquityIdentityDidChangeNotification")]
+		[Field ("NSUbiquityIdentityDidChangeNotification")]
 		[Notification]
 		NSString UbiquityIdentityDidChangeNotification { get; }
 

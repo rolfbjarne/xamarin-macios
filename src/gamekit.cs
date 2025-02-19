@@ -882,7 +882,7 @@ namespace GameKit {
 		void LoadFriends ([NullAllowed] GKFriendsHandler handler);
 
 		/// <include file="../docs/api/GameKit/GKLocalPlayer.xml" path="/Documentation/Docs[@DocId='P:GameKit.GKLocalPlayer.AuthenticationDidChangeNotificationName']/*" />
-	[Field ("GKPlayerAuthenticationDidChangeNotificationName")]
+		[Field ("GKPlayerAuthenticationDidChangeNotificationName")]
 		[Notification]
 		NSString AuthenticationDidChangeNotificationName { get; }
 

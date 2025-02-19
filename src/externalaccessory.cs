@@ -162,12 +162,12 @@ namespace ExternalAccessory {
 		EAAccessory [] ConnectedAccessories { get; }
 
 		/// <include file="../docs/api/ExternalAccessory/EAAccessoryManager.xml" path="/Documentation/Docs[@DocId='P:ExternalAccessory.EAAccessoryManager.DidConnectNotification']/*" />
-	[Field ("EAAccessoryDidConnectNotification")]
+		[Field ("EAAccessoryDidConnectNotification")]
 		[Notification (typeof (EAAccessoryEventArgs))]
 		NSString DidConnectNotification { get; }
 
 		/// <include file="../docs/api/ExternalAccessory/EAAccessoryManager.xml" path="/Documentation/Docs[@DocId='P:ExternalAccessory.EAAccessoryManager.DidDisconnectNotification']/*" />
-	[Field ("EAAccessoryDidDisconnectNotification")]
+		[Field ("EAAccessoryDidDisconnectNotification")]
 		[Notification (typeof (EAAccessoryEventArgs))]
 		NSString DidDisconnectNotification { get; }
 

@@ -1834,52 +1834,52 @@ namespace PdfKit {
 	interface PdfDocument : NSCopying {
 
 		/// <include file="../docs/api/PdfKit/PdfDocument.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfDocument.DidUnlockNotification']/*" />
-	[Field ("PDFDocumentDidUnlockNotification", "+PDFKit")]
+		[Field ("PDFDocumentDidUnlockNotification", "+PDFKit")]
 		[Notification]
 		NSString DidUnlockNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfDocument.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfDocument.DidBeginFindNotification']/*" />
-	[Field ("PDFDocumentDidBeginFindNotification", "+PDFKit")]
+		[Field ("PDFDocumentDidBeginFindNotification", "+PDFKit")]
 		[Notification]
 		NSString DidBeginFindNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfDocument.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfDocument.DidEndFindNotification']/*" />
-	[Field ("PDFDocumentDidEndFindNotification", "+PDFKit")]
+		[Field ("PDFDocumentDidEndFindNotification", "+PDFKit")]
 		[Notification]
 		NSString DidEndFindNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfDocument.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfDocument.DidBeginPageFindNotification']/*" />
-	[Field ("PDFDocumentDidBeginPageFindNotification", "+PDFKit")]
+		[Field ("PDFDocumentDidBeginPageFindNotification", "+PDFKit")]
 		[Notification]
 		NSString DidBeginPageFindNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfDocument.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfDocument.DidEndPageFindNotification']/*" />
-	[Field ("PDFDocumentDidEndPageFindNotification", "+PDFKit")]
+		[Field ("PDFDocumentDidEndPageFindNotification", "+PDFKit")]
 		[Notification]
 		NSString DidEndPageFindNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfDocument.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfDocument.DidFindMatchNotification']/*" />
-	[Field ("PDFDocumentDidFindMatchNotification", "+PDFKit")]
+		[Field ("PDFDocumentDidFindMatchNotification", "+PDFKit")]
 		[Notification]
 		NSString DidFindMatchNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfDocument.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfDocument.DidBeginWriteNotification']/*" />
-	[Field ("PDFDocumentDidBeginWriteNotification", "+PDFKit")]
+		[Field ("PDFDocumentDidBeginWriteNotification", "+PDFKit")]
 		[Notification]
 		NSString DidBeginWriteNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfDocument.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfDocument.DidEndWriteNotification']/*" />
-	[Field ("PDFDocumentDidEndWriteNotification", "+PDFKit")]
+		[Field ("PDFDocumentDidEndWriteNotification", "+PDFKit")]
 		[Notification]
 		NSString DidEndWriteNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfDocument.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfDocument.DidBeginPageWriteNotification']/*" />
-	[Field ("PDFDocumentDidBeginPageWriteNotification", "+PDFKit")]
+		[Field ("PDFDocumentDidBeginPageWriteNotification", "+PDFKit")]
 		[Notification]
 		NSString DidBeginPageWriteNotification { get; }
 
 		/// <include file="../docs/api/PdfKit/PdfDocument.xml" path="/Documentation/Docs[@DocId='P:PdfKit.PdfDocument.DidEndPageWriteNotification']/*" />
-	[Field ("PDFDocumentDidEndPageWriteNotification", "+PDFKit")]
+		[Field ("PDFDocumentDidEndPageWriteNotification", "+PDFKit")]
 		[Notification]
 		NSString DidEndPageWriteNotification { get; }
 

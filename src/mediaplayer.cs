@@ -568,7 +568,7 @@ namespace MediaPlayer {
 		void EndGeneratingLibraryChangeNotifications ();
 
 		/// <include file="../docs/api/MediaPlayer/MPMediaLibrary.xml" path="/Documentation/Docs[@DocId='P:MediaPlayer.MPMediaLibrary.DidChangeNotification']/*" />
-	[Field ("MPMediaLibraryDidChangeNotification")]
+		[Field ("MPMediaLibraryDidChangeNotification")]
 		[Notification]
 		NSString DidChangeNotification { get; }
 

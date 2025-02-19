@@ -1554,17 +1554,17 @@ namespace CoreData {
 		NSManagedObjectContext ParentContext { get; set; }
 
 		/// <include file="../docs/api/CoreData/NSManagedObjectContext.xml" path="/Documentation/Docs[@DocId='P:CoreData.NSManagedObjectContext.ObjectsDidChangeNotification']/*" />
-	[Field ("NSManagedObjectContextObjectsDidChangeNotification")]
+		[Field ("NSManagedObjectContextObjectsDidChangeNotification")]
 		[Notification (typeof (NSManagedObjectChangeEventArgs))]
 		NSString ObjectsDidChangeNotification { get; }
 
 		/// <include file="../docs/api/CoreData/NSManagedObjectContext.xml" path="/Documentation/Docs[@DocId='P:CoreData.NSManagedObjectContext.DidSaveNotification']/*" />
-	[Field ("NSManagedObjectContextDidSaveNotification")]
+		[Field ("NSManagedObjectContextDidSaveNotification")]
 		[Notification (typeof (NSManagedObjectChangeEventArgs))]
 		NSString DidSaveNotification { get; }
 
 		/// <include file="../docs/api/CoreData/NSManagedObjectContext.xml" path="/Documentation/Docs[@DocId='P:CoreData.NSManagedObjectContext.WillSaveNotification']/*" />
-	[Field ("NSManagedObjectContextWillSaveNotification")]
+		[Field ("NSManagedObjectContextWillSaveNotification")]
 		[Notification ()]
 		NSString WillSaveNotification { get; }
 

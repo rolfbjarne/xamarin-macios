@@ -348,7 +348,8 @@ namespace CoreGraphics {
 			return FromHandle (imageRef, true);
 		}
 #else
-		[SupportedOSPlatform ("ios")]
+		/// <include file="../../docs/api/CoreGraphics/CGImage.xml" path="/Documentation/Docs[@DocId='P:CoreGraphics.CGImage.ScreenImage']/*" />
+	[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("macos")]

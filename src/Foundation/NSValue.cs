@@ -37,6 +37,9 @@ using CoreGraphics;
 namespace Foundation {
 	public partial class NSValue : NSObject {
 #if !COREBUILD
+		/// <summary>To be added.</summary>
+		///         <value>To be added.</value>
+		///         <remarks>To be added.</remarks>
 		public string ObjCType {
 			get {
 				return Marshal.PtrToStringAnsi (ObjCTypePtr ());
@@ -59,14 +62,25 @@ namespace Foundation {
 			return FromCGPoint (point);
 		}
 
+		/// <summary>Returns the RectangleF value wrapped by this NSValue object.</summary>
+		///         <value>To be added.</value>
+		///         <remarks>To be added.</remarks>
 		public RectangleF RectangleFValue {
 			get { return (RectangleF) CGRectValue; }
 		}
 
+		/// <summary>Returns the SizeF value wrapped by this NSValue object.</summary>
+		///         <value>
+		///         </value>
+		///         <remarks>
+		///         </remarks>
 		public SizeF SizeFValue {
 			get { return (SizeF) CGSizeValue; }
 		}
 
+		/// <summary>Returns the PointF value wrapped by this NSValue object.</summary>
+		///         <value>To be added.</value>
+		///         <remarks>To be added.</remarks>
 		public PointF PointFValue {
 			get { return (PointF) CGPointValue; }
 		}

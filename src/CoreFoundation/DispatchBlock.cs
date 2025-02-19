@@ -158,6 +158,9 @@ namespace CoreFoundation {
 			return dispatch_block_testcancel (GetCheckedHandle ());
 		}
 
+		/// <summary>To be added.</summary>
+		///         <value>To be added.</value>
+		///         <remarks>To be added.</remarks>
 		public bool Cancelled {
 			get { return TestCancel () != 0; }
 		}
@@ -199,12 +202,19 @@ namespace CoreFoundation {
 	[Flags]
 	[Native]
 	public enum DispatchBlockFlags : ulong {
+		/// <summary>To be added.</summary>
 		None,
+		/// <summary>To be added.</summary>
 		Barrier = 1,
+		/// <summary>To be added.</summary>
 		Detached = 2,
+		/// <summary>To be added.</summary>
 		AssignCurrent = 4,
+		/// <summary>To be added.</summary>
 		NoQosClass = 8,
+		/// <summary>To be added.</summary>
 		InheritQosClass = 16,
+		/// <summary>To be added.</summary>
 		EnforceQosClass = 32,
 	}
 #endif // !COREBUILD

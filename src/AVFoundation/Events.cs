@@ -281,6 +281,9 @@ namespace AVFoundation {
 		{
 			SampleRate = sampleRate;
 		}
+		/// <summary>To be added.</summary>
+		///         <value>To be added.</value>
+		///         <remarks>To be added.</remarks>
 		public double SampleRate { get; private set; }
 	}
 
@@ -295,6 +298,9 @@ namespace AVFoundation {
 		{
 			NumberOfChannels = numberOfChannels;
 		}
+		/// <summary>To be added.</summary>
+		///         <value>To be added.</value>
+		///         <remarks>To be added.</remarks>
 		public int NumberOfChannels { get; private set; }
 	}
 
@@ -310,6 +316,9 @@ namespace AVFoundation {
 			Category = category;
 		}
 
+		/// <summary>To be added.</summary>
+		///         <value>To be added.</value>
+		///         <remarks>To be added.</remarks>
 		public string Category { get; private set; }
 	}
 

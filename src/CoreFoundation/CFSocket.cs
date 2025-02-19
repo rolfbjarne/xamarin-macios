@@ -642,6 +642,9 @@ namespace CoreFoundation {
 				private set;
 			}
 
+			/// <summary>The remote end points that connected</summary>
+			///         <value>To be added.</value>
+			///         <remarks>To be added.</remarks>
 			public IPEndPoint RemoteEndPoint {
 				get;
 				private set;
@@ -671,6 +674,9 @@ namespace CoreFoundation {
 		[SupportedOSPlatform ("tvos")]
 #endif
 		public class CFSocketConnectEventArgs : EventArgs {
+			/// <summary>To be added.</summary>
+			///         <value>To be added.</value>
+			///         <remarks>To be added.</remarks>
 			public CFSocketError Result {
 				get;
 				private set;
@@ -694,11 +700,17 @@ namespace CoreFoundation {
 		[SupportedOSPlatform ("tvos")]
 #endif
 		public class CFSocketDataEventArgs : EventArgs {
+			/// <summary>The remote end points that connected</summary>
+			///         <value>To be added.</value>
+			///         <remarks>To be added.</remarks>
 			public IPEndPoint RemoteEndPoint {
 				get;
 				private set;
 			}
 
+			/// <summary>The data that was received on the socket.</summary>
+			///         <value>To be added.</value>
+			///         <remarks>To be added.</remarks>
 			public byte [] Data {
 				get;
 				private set;

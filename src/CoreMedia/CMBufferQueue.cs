@@ -69,7 +69,8 @@ namespace CoreMedia {
 			internal IntPtr XgetSize;
 		}
 
-		protected override void Dispose (bool disposing)
+		/// <include file="../../docs/api/CoreMedia/CMBufferQueue.xml" path="/Documentation/Docs[@DocId='M:CoreMedia.CMBufferQueue.Dispose(System.Boolean)']/*" />
+	protected override void Dispose (bool disposing)
 		{
 			queueObjects.Clear ();
 			if (gch.IsAllocated)
@@ -95,6 +96,16 @@ namespace CoreMedia {
 		}
 
 		// for compatibility with 7.0 and earlier
+		/// <param name="count">Number of items in the queue.</param>
+		///         <param name="getDecodeTimeStamp">To be added.</param>
+		///         <param name="getPresentationTimeStamp">To be added.</param>
+		///         <param name="getDuration">To be added.</param>
+		///         <param name="isDataReady">To be added.</param>
+		///         <param name="compare">To be added.</param>
+		///         <param name="dataBecameReadyNotification">To be added.</param>
+		///         <summary>Creates a custom CMBufferQueue that sorts and returns the objects in the queue based on the various callbacks you provide.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static CMBufferQueue? FromCallbacks (int count, CMBufferGetTime? getDecodeTimeStamp, CMBufferGetTime? getPresentationTimeStamp, CMBufferGetTime? getDuration,
 			CMBufferGetBool? isDataReady, CMBufferCompare? compare, NSString dataBecameReadyNotification)
 		{
@@ -102,6 +113,17 @@ namespace CoreMedia {
 				compare, dataBecameReadyNotification, null);
 		}
 
+		/// <param name="count">To be added.</param>
+		///         <param name="getDecodeTimeStamp">To be added.</param>
+		///         <param name="getPresentationTimeStamp">To be added.</param>
+		///         <param name="getDuration">To be added.</param>
+		///         <param name="isDataReady">To be added.</param>
+		///         <param name="compare">To be added.</param>
+		///         <param name="dataBecameReadyNotification">To be added.</param>
+		///         <param name="getTotalSize">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static CMBufferQueue? FromCallbacks (int count, CMBufferGetTime? getDecodeTimeStamp, CMBufferGetTime? getPresentationTimeStamp, CMBufferGetTime? getDuration,
 			CMBufferGetBool? isDataReady, CMBufferCompare? compare, NSString dataBecameReadyNotification, CMBufferGetSize? getTotalSize)
 		{
@@ -145,6 +167,10 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		unsafe extern static /* CMBufferCallbacks */ CMBufferCallbacks* CMBufferQueueGetCallbacksForUnsortedSampleBuffers ();
 
+		/// <param name="count">Number of items in the queue.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static CMBufferQueue? CreateUnsorted (int count)
 		{
 			// note: different version of iOS can return a different (size) structure, e.g. iOS 7.1,
@@ -169,6 +195,9 @@ namespace CoreMedia {
 		//
 		// It really should be ICFType, and we should pepper various classes with ICFType
 		//
+		/// <param name="cftypeBuffer">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void Enqueue (INativeObject cftypeBuffer)
 		{
 			if (cftypeBuffer is null)
@@ -184,6 +213,9 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* CMBufferRef */ IntPtr CMBufferQueueDequeueAndRetain (/* CMBufferQueueRef */ IntPtr queue);
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public INativeObject? Dequeue ()
 		{
 			//
@@ -207,6 +239,9 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* CMBufferRef */ IntPtr CMBufferQueueDequeueIfDataReadyAndRetain (/* CMBufferQueueRef */ IntPtr queue);
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public INativeObject? DequeueIfDataReady ()
 		{
 			//
@@ -241,6 +276,9 @@ namespace CoreMedia {
 
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static OSStatus CMBufferQueueMarkEndOfData (/* CMBufferQueueRef */ IntPtr queue);
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public int MarkEndOfData ()
 		{
 			return CMBufferQueueMarkEndOfData (Handle);
@@ -270,6 +308,9 @@ namespace CoreMedia {
 
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static OSStatus CMBufferQueueReset (/* CMBufferQueueRef */ IntPtr queue);
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public OSStatus Reset ()
 		{
 			return CMBufferQueueReset (Handle);
@@ -304,6 +345,9 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* size_t */ nint CMBufferQueueGetTotalSize (/* CMBufferQueueRef */ IntPtr queue);
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

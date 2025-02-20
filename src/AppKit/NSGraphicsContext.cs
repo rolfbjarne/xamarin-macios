@@ -44,6 +44,9 @@ namespace AppKit {
 			return FromGraphicsPort (context.Handle, initialFlippedState);
 		}
 
+		/// <summary>To be added.</summary>
+		///         <value>To be added.</value>
+		///         <remarks>To be added.</remarks>
 		public virtual CGContext GraphicsPort {
 			get { return new CGContext (GraphicsPortHandle, false); }
 		}

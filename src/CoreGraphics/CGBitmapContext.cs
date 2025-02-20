@@ -106,7 +106,8 @@ namespace CoreGraphics {
 			this.buffer = buffer;
 		}
 
-		protected override void Dispose (bool disposing)
+		/// <include file="../../docs/api/CoreGraphics/CGBitmapContext.xml" path="/Documentation/Docs[@DocId='M:CoreGraphics.CGBitmapContext.Dispose(System.Boolean)']/*" />
+	protected override void Dispose (bool disposing)
 		{
 			if (buffer.IsAllocated)
 				buffer.Free ();
@@ -213,6 +214,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGImageRef */ IntPtr CGBitmapContextCreateImage (/* CGContextRef */ IntPtr context);
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public CGImage? ToImage ()
 		{
 			var h = CGBitmapContextCreateImage (Handle);

@@ -125,7 +125,8 @@ namespace AudioToolbox {
 		{
 		}
 
-		protected override void Dispose (bool disposing)
+		/// <include file="../../docs/api/AudioToolbox/MusicPlayer.xml" path="/Documentation/Docs[@DocId='M:AudioToolbox.MusicPlayer.Dispose(System.Boolean)']/*" />
+	protected override void Dispose (bool disposing)
 		{
 			currentSequence = null;
 			if (Owns && Handle != IntPtr.Zero)
@@ -142,11 +143,17 @@ namespace AudioToolbox {
 			throw new Exception ("Unable to create MusicPlayer: " + result);
 		}
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public MusicPlayer ()
 			: base (Create (), true)
 		{
 		}
 
+		/// <param name="OSstatus">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		static public MusicPlayer? Create (out MusicPlayerStatus OSstatus)
 		{
 			IntPtr handle;
@@ -200,6 +207,9 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicPlayerPreroll (/* MusicPlayer */ IntPtr inPlayer);
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus Preroll ()
 		{
 			return MusicPlayerPreroll (Handle);
@@ -208,6 +218,9 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicPlayerStart (/* MusicPlayer */ IntPtr inPlayer);
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus Start ()
 		{
 			return MusicPlayerStart (Handle);
@@ -216,6 +229,9 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		extern static /* OSStatus */ MusicPlayerStatus MusicPlayerStop (/* MusicPlayer */ IntPtr inPlayer);
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus Stop ()
 		{
 			return MusicPlayerStop (Handle);
@@ -262,6 +278,11 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicPlayerGetHostTimeForBeats (/* MusicPlayer */ IntPtr inPlayer, /* MusicTimeStamp */ double inBeats, /* UInt64* */ long* outHostTime);
 
+		/// <param name="beats">To be added.</param>
+		///         <param name="hostTime">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus GetHostTimeForBeats (double beats, out long hostTime)
 		{
 			hostTime = 0;
@@ -273,6 +294,11 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicPlayerGetBeatsForHostTime (/* MusicPlayer */ IntPtr inPlayer, /* UInt64 */ long inHostTime, /* MusicTimeStamp* */ double* outBeats);
 
+		/// <param name="hostTime">To be added.</param>
+		///         <param name="beats">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus GetBeatsForHostTime (long hostTime, out double beats)
 		{
 			beats = 0;

@@ -219,21 +219,37 @@ namespace CoreGraphics {
 		{
 		}
 
+		/// <param name="dataConsumer">To be added.</param>
+		///         <param name="mediaBox">To be added.</param>
+		///         <param name="info">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe CGContextPDF (CGDataConsumer dataConsumer, CGRect mediaBox, CGPDFInfo? info) :
 			this (dataConsumer, &mediaBox, info)
 		{
 		}
 
+		/// <param name="dataConsumer">To be added.</param>
+		///         <param name="mediaBox">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe CGContextPDF (CGDataConsumer dataConsumer, CGRect mediaBox) :
 			this (dataConsumer, &mediaBox, null)
 		{
 		}
 
+		/// <param name="dataConsumer">To be added.</param>
+		///         <param name="info">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe CGContextPDF (CGDataConsumer dataConsumer, CGPDFInfo? info) :
 			this (dataConsumer, null, info)
 		{
 		}
 
+		/// <param name="dataConsumer">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe CGContextPDF (CGDataConsumer dataConsumer) :
 			this (dataConsumer, null, null)
 		{
@@ -250,21 +266,40 @@ namespace CoreGraphics {
 		{
 		}
 
+		/// <param name="url">To be added.</param>
+		///         <param name="mediaBox">To be added.</param>
+		///         <param name="info">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe CGContextPDF (NSUrl url, CGRect mediaBox, CGPDFInfo? info) :
 			this (url, &mediaBox, info)
 		{
 		}
 
+		/// <param name="url">The PDF file will be stored in this url</param>
+		///         <param name="mediaBox">The size of the media box to generate, specified in points.</param>
+		///         <summary>Creates a new CGContext that records its commands into a PDF file with the mediaBox dimensions stored in the specified url.</summary>
+		///         <remarks>
+		///         </remarks>
 		public unsafe CGContextPDF (NSUrl url, CGRect mediaBox) :
 			this (url, &mediaBox, null)
 		{
 		}
 
+		/// <param name="url">The PDF file will be stored in this url</param>
+		///         <param name="info">PDF Configuration options</param>
+		///         <summary>Creates a new CGContext that records its commands into a PDF file in the specified url.</summary>
+		///         <remarks>
+		///         </remarks>
 		public unsafe CGContextPDF (NSUrl url, CGPDFInfo? info) :
 			this (url, null, info)
 		{
 		}
 
+		/// <param name="url">The PDF file will be stored in this url</param>
+		///         <summary>Creates a new CGContext that records its commands into a PDF file with the mediaBox dimensions stored in the specified url.</summary>
+		///         <remarks>
+		///         </remarks>
 		public unsafe CGContextPDF (NSUrl url) :
 			this (url, null, null)
 		{
@@ -273,6 +308,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGPDFContextClose (/* CGContextRef */ IntPtr context);
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void Close ()
 		{
 			if (closed)
@@ -284,6 +321,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGPDFContextBeginPage (/* CGContextRef */ IntPtr context, /* CFDictionaryRef */ IntPtr pageInfo);
 
+		/// <param name="info">PDF Configuration options</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void BeginPage (CGPDFPageInfo? info)
 		{
 			using (var dict = info?.ToDictionary ())
@@ -293,6 +333,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGPDFContextEndPage (/* CGContextRef */ IntPtr context);
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void EndPage ()
 		{
 			CGPDFContextEndPage (Handle);
@@ -301,6 +343,10 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGPDFContextAddDocumentMetadata (/* CGContextRef */ IntPtr context, /* CFDataRef */ IntPtr metadata);
 
+		/// <param name="data">PDF Metadata encoded in XML format following the specification of the "Extensible Metadata Platform" from the PDF spec.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>
+		///         </remarks>
 		public void AddDocumentMetadata (NSData data)
 		{
 			if (data is null)
@@ -311,6 +357,10 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGPDFContextSetURLForRect (/* CGContextRef */ IntPtr context, /* CFURLRef */ IntPtr url, CGRect rect);
 
+		/// <param name="url">The target url.</param>
+		///         <param name="region">The region.</param>
+		///         <summary>Associates a region in the screen with a url.   When the user clicks or taps in that region, he will be redirected to that url on their PDF viewer.</summary>
+		///         <remarks>To be added.</remarks>
 		public void SetUrl (NSUrl url, CGRect region)
 		{
 			if (url is null)
@@ -321,6 +371,10 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGPDFContextAddDestinationAtPoint (/* CGContextRef */ IntPtr context, /* CFStringRef */ IntPtr name, CGPoint point);
 
+		/// <param name="name">The name of the destination point.</param>
+		///         <param name="point">The location of the destination.</param>
+		///         <summary>Adds a destination name at the specified location.</summary>
+		///         <remarks>Use this to add destinations in a PDF document.   These destinations can be reached by the user when they click on a region of the document that was defined with SetDestination.</remarks>
 		public void AddDestination (string name, CGPoint point)
 		{
 			if (name is null)
@@ -337,6 +391,10 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGPDFContextSetDestinationForRect (/* CGContextRef */ IntPtr context, /* CFStringRef */ IntPtr name, CGRect rect);
 
+		/// <param name="name">The name for the destination.</param>
+		///         <param name="rect">The region that will respond to user input.</param>
+		///         <summary>If the user clicks or taps in the specified region, the PDF viewer will jump to the named destination</summary>
+		///         <remarks>To be added.</remarks>
 		public void SetDestination (string name, CGRect rect)
 		{
 			if (name is null)

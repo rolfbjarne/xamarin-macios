@@ -125,6 +125,10 @@ namespace CoreGraphics {
 			return CGColorConversionInfoCreate (source.Handle, destination.Handle);
 		}
 
+		/// <param name="source">To be added.</param>
+		///         <param name="destination">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGColorConversionInfo (CGColorSpace source, CGColorSpace destination)
 			: base (Create (source, destination), true, verify: true)
 		{

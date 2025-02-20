@@ -23,6 +23,12 @@ namespace GameplayKit {
 #endif
 	public static class NSArray_GameplayKit {
 
+		/// <typeparam name="T">To be added.</typeparam>
+		///         <param name="This">The instance on which this method operates.</param>
+		///         <param name="randomSource">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[Export ("shuffledArrayWithRandomSource:")]
 		public static T [] GetShuffledArray<T> (this NSArray This, GKRandomSource randomSource) where T : class, INativeObject
 		{
@@ -31,6 +37,11 @@ namespace GameplayKit {
 			return NSArray.ArrayFromHandle<T> (Messaging.IntPtr_objc_msgSend_IntPtr (This.Handle, Selector.GetHandle ("shuffledArrayWithRandomSource:"), randomSource.Handle));
 		}
 
+		/// <typeparam name="T">To be added.</typeparam>
+		///         <param name="This">The instance on which this method operates.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[Export ("shuffledArray")]
 		public static T [] GetShuffledArray<T> (this NSArray This) where T : class, INativeObject
 		{

@@ -76,6 +76,9 @@ namespace CoreAnimation {
 			}
 		}
 
+		/// <param name="fontName">To be added.</param>
+		///         <summary>Sets the font.</summary>
+		///         <remarks>To be added.</remarks>
 		public void SetFont (string fontName)
 		{
 			if (fontName is null)
@@ -84,6 +87,9 @@ namespace CoreAnimation {
 				_Font = nss.Handle;
 		}
 
+		/// <param name="font">To be added.</param>
+		///         <summary>Sets the font.</summary>
+		///         <remarks>To be added.</remarks>
 		public void SetFont (CGFont font)
 		{
 			if (font is null)
@@ -91,6 +97,9 @@ namespace CoreAnimation {
 			_Font = font.Handle;
 		}
 
+		/// <param name="font">To be added.</param>
+		///         <summary>Sets the font.</summary>
+		///         <remarks>To be added.</remarks>
 		public void SetFont (CTFont font)
 		{
 			if (font is null)
@@ -99,6 +108,9 @@ namespace CoreAnimation {
 		}
 
 #if MONOMAC
+		/// <param name="font">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void SetFont (NSFont font)
 		{
 			if (font is null)

@@ -59,6 +59,10 @@ namespace AudioToolbox {
 		///         </remarks>
 		public AudioChannelLayoutTag AudioChannelLayoutTag;
 
+		/// <param name="formatList">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public unsafe static AudioFormat? GetFirstPlayableFormat (AudioFormat [] formatList)
 		{
 			if (formatList is null)
@@ -76,6 +80,9 @@ namespace AudioToolbox {
 			}
 		}
 
+		/// <summary>Returns a human-readable reprensetation of the tuple.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
 			return AudioChannelLayoutTag + ":" + AudioStreamBasicDescription.ToString ();
@@ -143,6 +150,9 @@ namespace AudioToolbox {
 			public IntPtr ChannelLayoutWeak;
 		}
 
+		/// <param name="channelLayout">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public AudioBalanceFade (AudioChannelLayout channelLayout)
 		{
 			if (channelLayout is null)
@@ -168,6 +178,9 @@ namespace AudioToolbox {
 		///         <remarks>To be added.</remarks>
 		public AudioChannelLayout ChannelLayout { get; private set; }
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public unsafe float []? GetBalanceFade ()
 		{
 			var type_size = sizeof (Layout);
@@ -237,6 +250,9 @@ namespace AudioToolbox {
 			public IntPtr OutputChannelMapWeak;
 		}
 
+		/// <param name="outputChannelMap">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public AudioPanningInfo (AudioChannelLayout outputChannelMap)
 		{
 			if (outputChannelMap is null)

@@ -850,6 +850,12 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr ABPersonCreate ();
 
+		/// <summary>
+		///           Constructs and initializes a
+		///           <see cref="T:AddressBook.ABPerson" /> instance.
+		///         </summary>
+		///         <remarks>
+		///         </remarks>
 		public ABPerson ()
 			: base (ABPersonCreate (), true)
 		{
@@ -859,6 +865,9 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr ABPersonCreateInSource (IntPtr source);
 
+		/// <param name="source">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public ABPerson (ABRecord source)
 			: base (ABPersonCreateInSource (ObjCRuntime.Runtime.ThrowOnNull (source, nameof (source)).Handle), true)
 		{
@@ -876,7 +885,8 @@ namespace AddressBook {
 			AddressBook = addressbook;
 		}
 
-		int IComparable.CompareTo (object? o)
+		/// <include file="../../docs/api/AddressBook/ABPerson.xml" path="/Documentation/Docs[@DocId='M:AddressBook.ABPerson.System#IComparable#CompareTo(System.Object)']/*" />
+	int IComparable.CompareTo (object? o)
 		{
 			var other = o as ABPerson;
 			if (other is null)
@@ -884,14 +894,16 @@ namespace AddressBook {
 			return CompareTo (other);
 		}
 
-		public int CompareTo (ABPerson? other)
+		/// <include file="../../docs/api/AddressBook/ABPerson.xml" path="/Documentation/Docs[@DocId='M:AddressBook.ABPerson.CompareTo(AddressBook.ABPerson)']/*" />
+	public int CompareTo (ABPerson? other)
 		{
 			return CompareTo (other!, ABPersonSortBy.LastName);
 		}
 
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static int ABPersonComparePeopleByName (IntPtr person1, IntPtr person2, ABPersonSortBy ordering);
-		public int CompareTo (ABPerson other, ABPersonSortBy ordering)
+		/// <include file="../../docs/api/AddressBook/ABPerson.xml" path="/Documentation/Docs[@DocId='M:AddressBook.ABPerson.CompareTo(AddressBook.ABPerson,AddressBook.ABPersonSortBy)']/*" />
+	public int CompareTo (ABPerson other, ABPersonSortBy ordering)
 		{
 			if (other is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (other));
@@ -1564,10 +1576,15 @@ namespace AddressBook {
 	[Deprecated (PlatformName.MacCatalyst, 14, 0, message: "Use the 'Contacts' API instead.")]
 #endif
 	public class SocialProfile : DictionaryContainer {
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public SocialProfile ()
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public SocialProfile (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -1637,10 +1654,15 @@ namespace AddressBook {
 	[Deprecated (PlatformName.MacCatalyst, 14, 0, message: "Use the 'Contacts' API instead.")]
 #endif
 	public class InstantMessageService : DictionaryContainer {
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public InstantMessageService ()
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public InstantMessageService (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -1687,10 +1709,15 @@ namespace AddressBook {
 	[Deprecated (PlatformName.MacCatalyst, 14, 0, message: "Use the 'Contacts' API instead.")]
 #endif
 	public class PersonAddress : DictionaryContainer {
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public PersonAddress ()
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public PersonAddress (NSDictionary dictionary)
 			: base (dictionary)
 		{

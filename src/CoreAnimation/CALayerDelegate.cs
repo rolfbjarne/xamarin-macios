@@ -43,7 +43,8 @@ namespace CoreAnimation {
 			calayer = layer.GetHandle ();
 		}
 
-		protected override void Dispose (bool disposing)
+		/// <include file="../../docs/api/CoreAnimation/CALayerDelegate.xml" path="/Documentation/Docs[@DocId='M:CoreAnimation.CALayerDelegate.Dispose(System.Boolean)']/*" />
+	protected override void Dispose (bool disposing)
 		{
 			if (calayer != IntPtr.Zero)
 				Messaging.void_objc_msgSend_IntPtr (calayer, Selector.GetHandle ("setDelegate:"), IntPtr.Zero);

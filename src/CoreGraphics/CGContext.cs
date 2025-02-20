@@ -84,11 +84,15 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextRestoreGState (/* CGContextRef */ IntPtr c);
 
+		/// <summary>Stores the state of the <see cref="T:CoreGraphics.CGContext" />. (See <see cref="M:CoreGraphics.CGContext.RestoreState" />.)</summary>
+		///         <remarks>To be added.</remarks>
 		public void SaveState ()
 		{
 			CGContextSaveGState (Handle);
 		}
 
+		/// <summary>Sets the state of the <see cref="T:CoreGraphics.CGContext" /> to what it was when <see cref="M:CoreGraphics.CGContext.SaveState" /> was last called.</summary>
+		///         <remarks>To be added.</remarks>
 		public void RestoreState ()
 		{
 			CGContextRestoreGState (Handle);
@@ -125,6 +129,11 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextConcatCTM (/* CGContextRef */ IntPtr c, CGAffineTransform transform);
 
+		/// <param name="transform">The <see cref="T:CoreGraphics.CGAffineTransform" /> to concatenate onto the current context transformation matrix.</param>
+		///         <summary>Concatenates the specified <paramref name="transform" /> onto the current transformation matrix.</summary>
+		///         <remarks>
+		///           <para>The <paramref name="transform" /> is concatenated to the current context transformation matrix to create the new CTM. (The example in the discussion of <see cref="M:CoreGraphics.CGContext.GetCTM" /> illustrates <see cref="M:CoreGraphics.CGContext.ConcatCTM(CoreGraphics.CGAffineTransform)" />.)</para>
+		///         </remarks>
 		public void ConcatCTM (CGAffineTransform transform)
 		{
 			CGContextConcatCTM (Handle, transform);
@@ -142,6 +151,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextSetLineCap (/* CGContextRef */ IntPtr c, CGLineCap cap);
 
+		/// <param name="cap">The desired <see cref="T:CoreGraphics.CGLineCap" />.</param>
+		///         <summary>Sets the style for the ends of lines.</summary>
+		///         <remarks>To be added.</remarks>
 		public void SetLineCap (CGLineCap cap)
 		{
 			CGContextSetLineCap (Handle, cap);
@@ -150,6 +162,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextSetLineJoin (/* CGContextRef */  IntPtr c, CGLineJoin join);
 
+		/// <param name="join">The desired <see cref="T:CoreGraphics.CGLineJoin" />.</param>
+		///         <summary>Sets the way lines are joined.</summary>
+		///         <remarks>To be added.</remarks>
 		public void SetLineJoin (CGLineJoin join)
 		{
 			CGContextSetLineJoin (Handle, join);
@@ -208,6 +223,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextSetBlendMode (/* CGContextRef */ IntPtr c, CGBlendMode mode);
 
+		/// <param name="mode">The desired <see cref="T:CoreGraphics.CGBlendMode" />.</param>
+		///         <summary>Specifies the compositing mode.</summary>
+		///         <remarks>To be added.</remarks>
 		public void SetBlendMode (CGBlendMode mode)
 		{
 			CGContextSetBlendMode (Handle, mode);
@@ -216,7 +234,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static CGAffineTransform CGContextGetCTM (/* CGContextRef */ IntPtr c);
 
-		public CGAffineTransform GetCTM ()
+		/// <include file="../../docs/api/CoreGraphics/CGContext.xml" path="/Documentation/Docs[@DocId='M:CoreGraphics.CGContext.GetCTM']/*" />
+	public CGAffineTransform GetCTM ()
 		{
 			return CGContextGetCTM (Handle);
 		}
@@ -224,6 +243,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextBeginPath (/* CGContextRef */ IntPtr c);
 
+		/// <summary>Starts a new path in the graphics context.</summary>
+		///         <remarks>To be added.</remarks>
 		public void BeginPath ()
 		{
 			CGContextBeginPath (Handle);
@@ -264,6 +285,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextClosePath (/* CGContextRef */ IntPtr c);
 
+		/// <summary>Closes and completes the current path.</summary>
+		///         <remarks>To be added.</remarks>
 		public void ClosePath ()
 		{
 			CGContextClosePath (Handle);
@@ -272,6 +295,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextAddRect (/* CGContextRef */ IntPtr c, CGRect rect);
 
+		/// <param name="rect">A rectangle.</param>
+		///         <summary>Adds a rectangular path to the current path.</summary>
+		///         <remarks>To be added.</remarks>
 		public void AddRect (CGRect rect)
 		{
 			CGContextAddRect (Handle, rect);
@@ -280,6 +306,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextAddRects (/* CGContextRef */ IntPtr c, CGRect [] rects, /* size_t */ nint count);
 
+		/// <param name="rects">An array of rectangles.</param>
+		///         <summary>Adds an array of rectangular paths to the current path.</summary>
+		///         <remarks>To be added.</remarks>
 		public void AddRects (CGRect [] rects)
 		{
 			if (rects is null)
@@ -289,7 +318,8 @@ namespace CoreGraphics {
 
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextAddLines (/* CGContextRef */ IntPtr c, CGPoint [] points, /* size_t */ nint count);
-		public void AddLines (CGPoint [] points)
+		/// <include file="../../docs/api/CoreGraphics/CGContext.xml" path="/Documentation/Docs[@DocId='M:CoreGraphics.CGContext.AddLines(CoreGraphics.CGPoint[])']/*" />
+	public void AddLines (CGPoint [] points)
 		{
 			if (points is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (points));
@@ -299,6 +329,11 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextAddEllipseInRect (/* CGContextRef */ IntPtr c, CGRect rect);
 
+		/// <param name="rect">The bounding rectangle of the ellipse.</param>
+		///         <summary>Adds an ellipse that fits in the specified <paramref name="rect" />.</summary>
+		///         <remarks>
+		///           <para>The ellipse is centered in the <paramref name="rect" />, with major and minor axes defined such that the ellipse touches the <paramref name="rect" />'s edges. The ellipse is a complete subpath, with control points specified in clockwise order.</para>
+		///         </remarks>
 		public void AddEllipseInRect (CGRect rect)
 		{
 			CGContextAddEllipseInRect (Handle, rect);
@@ -323,6 +358,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextAddPath (/* CGContextRef */ IntPtr c, /* CGPathRef */ IntPtr path);
 
+		/// <param name="path">The <see cref="T:CoreGraphics.CGPath" /> to be added.</param>
+		///         <summary>Adds the specified path to the current path.</summary>
+		///         <remarks>To be added.</remarks>
 		public void AddPath (CGPath path)
 		{
 			if (path is null)
@@ -333,6 +371,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextReplacePathWithStrokedPath (/* CGContextRef */ IntPtr c);
 
+		/// <summary>Replaces the current path with the stroked version of the path, based on the stroke paremeters.</summary>
+		///         <remarks>To be added.</remarks>
 		public void ReplacePathWithStrokedPath ()
 		{
 			CGContextReplacePathWithStrokedPath (Handle);
@@ -342,6 +382,10 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static byte CGContextIsPathEmpty (/* CGContextRef */ IntPtr context);
 
+		/// <summary>Whether the current path contains any subpaths.</summary>
+		///         <returns>
+		///           <see langword="true" /> if the current path does not contain any subpaths.</returns>
+		///         <remarks>To be added.</remarks>
 		public bool IsPathEmpty ()
 		{
 			return CGContextIsPathEmpty (Handle) != 0;
@@ -350,6 +394,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static CGPoint CGContextGetPathCurrentPoint (/* CGContextRef */ IntPtr context);
 
+		/// <summary>The current point in the <see cref="T:CoreGraphics.CGContext" />'s path.</summary>
+		///         <returns>The current point in the <see cref="T:CoreGraphics.CGContext" />'s path.</returns>
+		///         <remarks>To be added.</remarks>
 		public CGPoint GetPathCurrentPoint ()
 		{
 			return CGContextGetPathCurrentPoint (Handle);
@@ -358,6 +405,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static CGRect CGContextGetPathBoundingBox (/* CGContextRef */ IntPtr context);
 
+		/// <summary>Returns the bounding box for the current path.</summary>
+		///         <returns>The bounding box for the current path.</returns>
+		///         <remarks>To be added.</remarks>
 		public CGRect GetPathBoundingBox ()
 		{
 			return CGContextGetPathBoundingBox (Handle);
@@ -366,6 +416,11 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static byte CGContextPathContainsPoint (/* CGContextRef */ IntPtr context, CGPoint point, CGPathDrawingMode mode);
 
+		/// <param name="point">To be added.</param>
+		///         <param name="mode">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public bool PathContainsPoint (CGPoint point, CGPathDrawingMode mode)
 		{
 			return CGContextPathContainsPoint (Handle, point, mode) != 0;
@@ -374,6 +429,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextDrawPath (/* CGContextRef */ IntPtr context, CGPathDrawingMode mode);
 
+		/// <param name="mode">The <see cref="T:CoreGraphics.CGPathDrawingMode" /> for the the path.</param>
+		///         <summary>Draws the <see cref="T:CoreGraphics.CGContext" />'s current path.</summary>
+		///         <remarks>To be added.</remarks>
 		public void DrawPath (CGPathDrawingMode mode)
 		{
 			CGContextDrawPath (Handle, mode);
@@ -382,6 +440,10 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextFillPath (/* CGContextRef */ IntPtr c);
 
+		/// <summary>Fills the current path, using Non-Zero Winding rule.</summary>
+		///         <remarks>
+		///           <para>For an explanation of the Even-Odd and Non-Zero Winding rule, see <see cref="T:CoreGraphics.CGPathDrawingMode" />.</para>
+		///         </remarks>
 		public void FillPath ()
 		{
 			CGContextFillPath (Handle);
@@ -390,6 +452,10 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextEOFillPath (/* CGContextRef */ IntPtr c);
 
+		/// <summary>Fills the current path, using the Even-Odd rule.</summary>
+		///         <remarks>
+		///           <para>For an explanation of the Even-Odd and Non-Zero Winding rule, see <see cref="T:CoreGraphics.CGPathDrawingMode" />.</para>
+		///         </remarks>
 		public void EOFillPath ()
 		{
 			CGContextEOFillPath (Handle);
@@ -398,6 +464,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextStrokePath (/* CGContextRef */ IntPtr c);
 
+		/// <summary>Strokes the current path. Afterwards, the current path is reset.</summary>
+		///         <remarks>To be added.</remarks>
 		public void StrokePath ()
 		{
 			CGContextStrokePath (Handle);
@@ -406,6 +474,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextFillRect (/* CGContextRef */ IntPtr c, CGRect rect);
 
+		/// <param name="rect">The <see cref="T:System.Drawing.RectangleF" /> to be filled.</param>
+		///         <summary>Paints the specified <paramref name="rect" />.</summary>
+		///         <remarks>To be added.</remarks>
 		public void FillRect (CGRect rect)
 		{
 			CGContextFillRect (Handle, rect);
@@ -414,6 +485,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextFillRects (/* CGContextRef */ IntPtr c, CGRect [] rects, /* size_t */ nint count);
 
+		/// <param name="rects">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void ContextFillRects (CGRect [] rects)
 		{
 			if (rects is null)
@@ -424,6 +498,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextStrokeRect (/* CGContextRef */ IntPtr c, CGRect rect);
 
+		/// <param name="rect">The rectangle to be stroked.</param>
+		///         <summary>Strokes the specified <paramref name="rect" />. Afterwards, the current path is reset.</summary>
+		///         <remarks>To be added.</remarks>
 		public void StrokeRect (CGRect rect)
 		{
 			CGContextStrokeRect (Handle, rect);
@@ -440,6 +517,11 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextClearRect (/* CGContextRef */ IntPtr c, CGRect rect);
 
+		/// <param name="rect">The rectangle to clear.</param>
+		///         <summary>Paints the rectangle transparently.</summary>
+		///         <remarks>
+		///           <para>This method should only be used in window and bitmap contexts. In those situations, it effectively clears the <paramref name="rect" />.</para>
+		///         </remarks>
 		public void ClearRect (CGRect rect)
 		{
 			CGContextClearRect (Handle, rect);
@@ -448,6 +530,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextFillEllipseInRect (/* CGContextRef */ IntPtr context, CGRect rect);
 
+		/// <param name="rect">The <see cref="T:System.Drawing.RectangleF" /> defining the ellipse's extent.</param>
+		///         <summary>Paints the ellipse defined by <paramref name="rect" />. Afterwards, the current path is reset.</summary>
+		///         <remarks>To be added.</remarks>
 		public void FillEllipseInRect (CGRect rect)
 		{
 			CGContextFillEllipseInRect (Handle, rect);
@@ -456,6 +541,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextStrokeEllipseInRect (/* CGContextRef */ IntPtr context, CGRect rect);
 
+		/// <param name="rect">The <see cref="T:System.Drawing.RectangleF" /> defining the ellipse's extent.</param>
+		///         <summary>Strokes the ellipse defined by <paramref name="rect" />. Afterwards, the current path is reset.</summary>
+		///         <remarks>To be added.</remarks>
 		public void StrokeEllipseInRect (CGRect rect)
 		{
 			CGContextStrokeEllipseInRect (Handle, rect);
@@ -466,6 +554,9 @@ namespace CoreGraphics {
 			/* const CGPoint* __nullable */ CGPoint []? points,
 			/* size_t */ nint count);
 
+		/// <param name="points">An array of points, defining starting and ending positions of the lines. The array must contain an even number of points.</param>
+		///         <summary>Strokes the lines defined by the pairs in <paramref name="points" />. Afterwards, the current path is reset.</summary>
+		///         <remarks>To be added.</remarks>
 		public void StrokeLineSegments (CGPoint []? points)
 		{
 			CGContextStrokeLineSegments (Handle, points, points is null ? 0 : points.Length);

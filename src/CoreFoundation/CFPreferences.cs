@@ -52,6 +52,10 @@ namespace CoreFoundation {
 			AnyUser = Dlfcn.GetStringConstant (handle, "kCFPreferencesAnyUser");*/
 		}
 
+		/// <param name="key">To be added.</param>
+		///         <summary>Gets the preference value that is identified by <paramref name="key" />, for the current application.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static object? GetAppValue (string key)
 		{
 			if (CurrentApplication is null)
@@ -59,6 +63,11 @@ namespace CoreFoundation {
 			return GetAppValue (key, CurrentApplication);
 		}
 
+		/// <param name="key">To be added.</param>
+		///         <param name="applicationId">To be added.</param>
+		///         <summary>Gets the preference value that is identified by <paramref name="key" />, for the specified application.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static object? GetAppValue (string key, string applicationId)
 		{
 			if (applicationId is null) {
@@ -70,6 +79,11 @@ namespace CoreFoundation {
 			}
 		}
 
+		/// <param name="key">To be added.</param>
+		///         <param name="applicationId">To be added.</param>
+		///         <summary>Gets the preference value that is identified by <paramref name="key" />, for the specified application.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static object? GetAppValue (string key, NSString applicationId)
 		{
 			if (key is null) {
@@ -96,6 +110,10 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		static extern void CFPreferencesSetAppValue (IntPtr key, IntPtr value, IntPtr applicationId);
 
+		/// <param name="key">To be added.</param>
+		///         <param name="value">To be added.</param>
+		///         <summary>Sets a key-value preference pair for the current application.</summary>
+		///         <remarks>To be added.</remarks>
 		public static void SetAppValue (string key, object value)
 		{
 			if (CurrentApplication is null)
@@ -103,6 +121,11 @@ namespace CoreFoundation {
 			SetAppValue (key, value, CurrentApplication);
 		}
 
+		/// <param name="key">To be added.</param>
+		///         <param name="value">To be added.</param>
+		///         <param name="applicationId">To be added.</param>
+		///         <summary>Sets a key-value preference pair for the specified application.</summary>
+		///         <remarks>To be added.</remarks>
 		public static void SetAppValue (string key, object? value, string applicationId)
 		{
 			if (applicationId is null) {
@@ -114,6 +137,11 @@ namespace CoreFoundation {
 			}
 		}
 
+		/// <param name="key">To be added.</param>
+		///         <param name="value">To be added.</param>
+		///         <param name="applicationId">To be added.</param>
+		///         <summary>Sets a key-value preference pair for the specified application.</summary>
+		///         <remarks>To be added.</remarks>
 		public static void SetAppValue (string key, object? value, NSString applicationId)
 		{
 			if (key is null) {
@@ -153,6 +181,9 @@ namespace CoreFoundation {
 			}
 		}
 
+		/// <param name="key">To be added.</param>
+		///         <summary>Removes the preference value that is identified by <paramref name="key" />, for the current application.</summary>
+		///         <remarks>To be added.</remarks>
 		public static void RemoveAppValue (string key)
 		{
 			if (CurrentApplication is null)
@@ -160,11 +191,19 @@ namespace CoreFoundation {
 			SetAppValue (key, null, CurrentApplication);
 		}
 
+		/// <param name="key">To be added.</param>
+		///         <param name="applicationId">To be added.</param>
+		///         <summary>Removes the preference value that is identified by <paramref name="key" />, for the specified application.</summary>
+		///         <remarks>To be added.</remarks>
 		public static void RemoveAppValue (string key, string applicationId)
 		{
 			SetAppValue (key, null, applicationId);
 		}
 
+		/// <param name="key">To be added.</param>
+		///         <param name="applicationId">To be added.</param>
+		///         <summary>Removes the preference value that is identified by <paramref name="key" />, for the specified application.</summary>
+		///         <remarks>To be added.</remarks>
 		public static void RemoveAppValue (string key, NSString applicationId)
 		{
 			SetAppValue (key, null, applicationId);
@@ -174,6 +213,10 @@ namespace CoreFoundation {
 		static extern byte CFPreferencesGetAppBooleanValue (IntPtr key, IntPtr applicationId,
 			/*out bool*/ IntPtr keyExistsAndHasValidFormat);
 
+		/// <param name="key">To be added.</param>
+		///         <summary>Gets the preference Boolean value that is identified by <paramref name="key" />, for the current application.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static bool GetAppBooleanValue (string key)
 		{
 			if (CurrentApplication is null)
@@ -181,6 +224,11 @@ namespace CoreFoundation {
 			return GetAppBooleanValue (key, CurrentApplication);
 		}
 
+		/// <param name="key">To be added.</param>
+		///         <param name="applicationId">To be added.</param>
+		///         <summary>Gets the preference Boolean value that is identified by <paramref name="key" />, for the specified application.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static bool GetAppBooleanValue (string key, string applicationId)
 		{
 			if (applicationId is null) {
@@ -192,6 +240,11 @@ namespace CoreFoundation {
 			}
 		}
 
+		/// <param name="key">To be added.</param>
+		///         <param name="applicationId">To be added.</param>
+		///         <summary>Gets the preference Boolean value that is identified by <paramref name="key" />, for the specified application.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static bool GetAppBooleanValue (string key, NSString applicationId)
 		{
 			if (key is null) {
@@ -209,6 +262,10 @@ namespace CoreFoundation {
 		static extern nint CFPreferencesGetAppIntegerValue (IntPtr key, IntPtr applicationId,
 			/*out bool*/ IntPtr keyExistsAndHasValidFormat);
 
+		/// <param name="key">To be added.</param>
+		///         <summary>Gets the preference integer value that is identified by <paramref name="key" />, for the current application.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static nint GetAppIntegerValue (string key)
 		{
 			if (CurrentApplication is null)
@@ -216,6 +273,11 @@ namespace CoreFoundation {
 			return GetAppIntegerValue (key, CurrentApplication);
 		}
 
+		/// <param name="key">To be added.</param>
+		///         <param name="applicationId">To be added.</param>
+		///         <summary>Gets the preference integer value that is identified by <paramref name="key" />, for the specified application.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static nint GetAppIntegerValue (string key, string applicationId)
 		{
 			if (applicationId is null) {
@@ -227,6 +289,11 @@ namespace CoreFoundation {
 			}
 		}
 
+		/// <param name="key">To be added.</param>
+		///         <param name="applicationId">To be added.</param>
+		///         <summary>Gets the preference integer value that is identified by <paramref name="key" />, for the specified application.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static nint GetAppIntegerValue (string key, NSString applicationId)
 		{
 			if (key is null) {
@@ -243,6 +310,9 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		static extern void CFPreferencesAddSuitePreferencesToApp (IntPtr applicationId, IntPtr suiteId);
 
+		/// <param name="suiteId">To be added.</param>
+		///         <summary>Adds the specified suite preferences to the searchable list of suite preferences for the current application.</summary>
+		///         <remarks>To be added.</remarks>
 		public static void AddSuitePreferencesToApp (string suiteId)
 		{
 			if (CurrentApplication is null)
@@ -250,6 +320,10 @@ namespace CoreFoundation {
 			AddSuitePreferencesToApp (CurrentApplication, suiteId);
 		}
 
+		/// <param name="applicationId">To be added.</param>
+		///         <param name="suiteId">To be added.</param>
+		///         <summary>Adds the specified suite preferences to the searchable list of suite preferences for the specified <paramref name="applicationId" />.</summary>
+		///         <remarks>To be added.</remarks>
 		public static void AddSuitePreferencesToApp (string applicationId, string suiteId)
 		{
 			if (applicationId is null) {
@@ -261,6 +335,10 @@ namespace CoreFoundation {
 			}
 		}
 
+		/// <param name="applicationId">To be added.</param>
+		///         <param name="suiteId">To be added.</param>
+		///         <summary>Adds the specified suite preferences to the searchable list of suite preferences for the specified <paramref name="applicationId" />.</summary>
+		///         <remarks>To be added.</remarks>
 		public static void AddSuitePreferencesToApp (NSString applicationId, string suiteId)
 		{
 			if (applicationId is null) {
@@ -277,6 +355,9 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		static extern void CFPreferencesRemoveSuitePreferencesFromApp (IntPtr applicationId, IntPtr suiteId);
 
+		/// <param name="suiteId">To be added.</param>
+		///         <summary>Removes the specified suite preferences from the searchable list of suite preferences for the current application.</summary>
+		///         <remarks>To be added.</remarks>
 		public static void RemoveSuitePreferencesFromApp (string suiteId)
 		{
 			if (CurrentApplication is null)
@@ -284,6 +365,10 @@ namespace CoreFoundation {
 			RemoveSuitePreferencesFromApp (CurrentApplication, suiteId);
 		}
 
+		/// <param name="applicationId">To be added.</param>
+		///         <param name="suiteId">To be added.</param>
+		///         <summary>Removes the specified suite preferences from the searchable list of suite preferences for the specified <paramref name="applicationId" />.</summary>
+		///         <remarks>To be added.</remarks>
 		public static void RemoveSuitePreferencesFromApp (string applicationId, string suiteId)
 		{
 			if (applicationId is null) {
@@ -295,6 +380,10 @@ namespace CoreFoundation {
 			}
 		}
 
+		/// <param name="applicationId">To be added.</param>
+		///         <param name="suiteId">To be added.</param>
+		///         <summary>Removes the specified suite preferences from the searchable list of suite preferences for the specified <paramref name="applicationId" />.</summary>
+		///         <remarks>To be added.</remarks>
 		public static void RemoveSuitePreferencesFromApp (NSString applicationId, string suiteId)
 		{
 			if (applicationId is null) {

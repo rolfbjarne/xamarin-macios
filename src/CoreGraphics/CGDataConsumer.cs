@@ -83,6 +83,9 @@ namespace CoreGraphics {
 			return CGDataConsumerCreateWithCFData (data.Handle);
 		}
 
+		/// <param name="data">To be added.</param>
+		///         <summary>Creates a data sink that saves the data on the specified NSData.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGDataConsumer (NSMutableData data)
 			: base (Create (data), true)
 		{
@@ -99,6 +102,9 @@ namespace CoreGraphics {
 			return CGDataConsumerCreateWithURL (url.Handle);
 		}
 
+		/// <param name="url">To be added.</param>
+		///         <summary>Creates a data sink that saves the data on a file specified by the url.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGDataConsumer (NSUrl url)
 			: base (Create (url), true)
 		{

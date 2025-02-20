@@ -43,6 +43,10 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("tvos")]
 #endif
 	public class AVErrorEventArgs : EventArgs {
+		/// <param name="error">To be added.</param>
+		///         <summary>Initializes a new instance of the AVErrorEventArgs class.</summary>
+		///         <remarks>
+		///         </remarks>
 		public AVErrorEventArgs (NSError error)
 		{
 			Error = error;
@@ -61,6 +65,10 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("tvos")]
 #endif
 	public class AVStatusEventArgs : EventArgs {
+		/// <param name="status">To be added.</param>
+		///         <summary>Initializes a new instance of the AVStatusEventArgs class.</summary>
+		///         <remarks>
+		///         </remarks>
 		public AVStatusEventArgs (bool status)
 		{
 			Status = status;
@@ -277,6 +285,10 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("tvos")]
 #endif
 	public class AVSampleRateEventArgs : EventArgs {
+		/// <param name="sampleRate">To be added.</param>
+		///         <summary>Initializes a new instance of the AVSampleRateEventArgs class.</summary>
+		///         <remarks>
+		///         </remarks>
 		public AVSampleRateEventArgs (double sampleRate)
 		{
 			SampleRate = sampleRate;
@@ -294,6 +306,10 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("tvos")]
 #endif
 	public class AVChannelsEventArgs : EventArgs {
+		/// <param name="numberOfChannels">To be added.</param>
+		///         <summary>Initializes a new instance of the AVChannelsEventArgs class.</summary>
+		///         <remarks>
+		///         </remarks>
 		public AVChannelsEventArgs (int numberOfChannels)
 		{
 			NumberOfChannels = numberOfChannels;
@@ -311,6 +327,10 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("tvos")]
 #endif
 	public class AVCategoryEventArgs : EventArgs {
+		/// <param name="category">To be added.</param>
+		///         <summary>Initializes a new instance of the AVCategoryEventArgs class.</summary>
+		///         <remarks>
+		///         </remarks>
 		public AVCategoryEventArgs (string category)
 		{
 			Category = category;

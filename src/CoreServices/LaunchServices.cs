@@ -134,6 +134,11 @@ namespace CoreServices {
 		static extern IntPtr LSCopyDefaultApplicationURLForURL (IntPtr inUrl, LSRoles inRole, /*out*/ IntPtr outError);
 
 #if NET
+		/// <param name="url">To be added.</param>
+		///         <param name="roles">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
 #else
@@ -159,6 +164,11 @@ namespace CoreServices {
 		static extern IntPtr LSCopyDefaultApplicationURLForContentType (IntPtr inContentType, LSRoles inRole, /*out*/ IntPtr outError);
 
 #if NET
+		/// <param name="contentType">To be added.</param>
+		///         <param name="roles">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
 #else
@@ -184,6 +194,11 @@ namespace CoreServices {
 		static extern IntPtr LSCopyApplicationURLsForURL (IntPtr inUrl, LSRoles inRole);
 
 #if NET
+		/// <param name="url">To be added.</param>
+		///         <param name="roles">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
 #else
@@ -205,6 +220,14 @@ namespace CoreServices {
 
 		// NOTE: intentionally inverting the status results (return bool, with an out
 		// LSResult vs return LSResult with an out bool) to make the API nicer to use
+		/// <param name="itemUrl">To be added.</param>
+		///         <param name="targetUrl">To be added.</param>
+		///         <param name="roles">To be added.</param>
+		///         <param name="acceptanceFlags">To be added.</param>
+		///         <param name="result">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static bool CanUrlAcceptUrl (NSUrl itemUrl, NSUrl targetUrl,
 			LSRoles roles, LSAcceptanceFlags acceptanceFlags, out LSResult result)
 		{
@@ -220,6 +243,13 @@ namespace CoreServices {
 			return acceptsItem != 0;
 		}
 
+		/// <param name="itemUrl">To be added.</param>
+		///         <param name="targetUrl">To be added.</param>
+		///         <param name="roles">To be added.</param>
+		///         <param name="acceptanceFlags">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static bool CanUrlAcceptUrl (NSUrl itemUrl, NSUrl targetUrl,
 			LSRoles roles = LSRoles.All, LSAcceptanceFlags acceptanceFlags = LSAcceptanceFlags.Default)
 		{
@@ -237,6 +267,10 @@ namespace CoreServices {
 		static extern IntPtr LSCopyApplicationURLsForBundleIdentifier (IntPtr inBundleIdentifier, /*out*/ IntPtr outError);
 
 #if NET
+		/// <param name="bundleIdentifier">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
 #else
@@ -259,6 +293,10 @@ namespace CoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		unsafe static extern LSResult LSOpenCFURLRef (IntPtr inUrl, void** outLaunchedUrl);
 
+		/// <param name="url">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public unsafe static LSResult Open (NSUrl url)
 		{
 			if (url is null)
@@ -267,6 +305,11 @@ namespace CoreServices {
 			return LSOpenCFURLRef (url.Handle, (void**) 0);
 		}
 
+		/// <param name="url">To be added.</param>
+		///         <param name="launchedUrl">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public unsafe static LSResult Open (NSUrl url, out NSUrl? launchedUrl)
 		{
 			if (url is null)
@@ -285,6 +328,11 @@ namespace CoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		static extern LSResult LSRegisterURL (IntPtr inUrl, byte inUpdate);
 
+		/// <param name="url">To be added.</param>
+		///         <param name="update">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static LSResult Register (NSUrl url, bool update)
 		{
 			if (url is null)
@@ -307,6 +355,11 @@ namespace CoreServices {
 		static extern IntPtr LSCopyAllRoleHandlersForContentType (IntPtr inContentType, LSRoles inRole);
 
 #if NET
+		/// <param name="contentType">To be added.</param>
+		///         <param name="roles">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
 #else
@@ -332,6 +385,11 @@ namespace CoreServices {
 		static extern IntPtr LSCopyDefaultRoleHandlerForContentType (IntPtr inContentType, LSRoles inRole);
 
 #if NET
+		/// <param name="contentType">To be added.</param>
+		///         <param name="roles">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
 #else
@@ -358,6 +416,12 @@ namespace CoreServices {
 			LSRoles inRole, IntPtr inHandlerBundleID);
 
 #if NET
+		/// <param name="contentType">To be added.</param>
+		///         <param name="handlerBundleId">To be added.</param>
+		///         <param name="roles">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
 #else
@@ -389,6 +453,10 @@ namespace CoreServices {
 		static extern IntPtr LSCopyAllHandlersForURLScheme (IntPtr inUrlScheme);
 
 #if NET
+		/// <param name="urlScheme">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'GetApplicationUrlsForUrl' instead.")]
 #else
@@ -414,6 +482,10 @@ namespace CoreServices {
 		static extern IntPtr LSCopyDefaultHandlerForURLScheme (IntPtr inUrlScheme);
 
 #if NET
+		/// <param name="urlScheme">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'GetDefaultApplicationUrlForUrl' instead.")]
 #else
@@ -439,6 +511,11 @@ namespace CoreServices {
 		static extern LSResult LSSetDefaultHandlerForURLScheme (IntPtr inUrlScheme, IntPtr inHandlerBundleId);
 
 #if NET
+		/// <param name="urlScheme">To be added.</param>
+		///         <param name="handlerBundleId">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
 #else

@@ -26,6 +26,8 @@ namespace CoreMedia {
 
 		GCHandle gch;
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CMCustomBlockAllocator ()
 		{
 			gch = GCHandle.Alloc (this);
@@ -84,13 +86,19 @@ namespace CoreMedia {
 			Dispose (false);
 		}
 
+		/// <summary>Releases the resources used by the CMCustomBlockAllocator object.</summary>
+		///         <remarks>
+		///           <para>The Dispose method releases the resources used by the CMCustomBlockAllocator class.</para>
+		///           <para>Calling the Dispose method when the application is finished using the CMCustomBlockAllocator ensures that all external resources used by this managed object are released as soon as possible.  Once developers have invoked the Dispose method, the object is no longer useful and developers should no longer make any calls to it.  For more information on releasing resources see ``Cleaning up Unmananaged Resources'' at https://msdn.microsoft.com/en-us/library/498928w2.aspx</para>
+		///         </remarks>
 		public void Dispose ()
 		{
 			Dispose (true);
 			GC.SuppressFinalize (this);
 		}
 
-		protected virtual void Dispose (bool disposing)
+		/// <include file="../../docs/api/CoreMedia/CMCustomBlockAllocator.xml" path="/Documentation/Docs[@DocId='M:CoreMedia.CMCustomBlockAllocator.Dispose(System.Boolean)']/*" />
+	protected virtual void Dispose (bool disposing)
 		{
 			if (gch.IsAllocated)
 				gch.Free ();

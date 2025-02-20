@@ -47,12 +47,19 @@ namespace AVFoundation {
 		///         <remarks>To be added.</remarks>
 		public double Length;
 
+		/// <param name="startBeat">To be added.</param>
+		///         <param name="lengthInBeats">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public AVBeatRange (double startBeat, double lengthInBeats)
 		{
 			Start = startBeat;
 			Length = lengthInBeats;
 		}
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
 			return $"(Start={Start},Length={Length})";
@@ -68,6 +75,10 @@ namespace AVFoundation {
 			return !left.Equals (right);
 		}
 
+		/// <param name="obj">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public override bool Equals (object? obj)
 		{
 			if (!(obj is AVBeatRange))
@@ -76,11 +87,18 @@ namespace AVFoundation {
 			return this.Equals ((AVBeatRange) obj);
 		}
 
+		/// <param name="other">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public bool Equals (AVBeatRange other)
 		{
 			return Start == other.Start && Length == other.Length;
 		}
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (Start, Length);

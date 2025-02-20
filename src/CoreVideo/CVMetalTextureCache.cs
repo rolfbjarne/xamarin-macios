@@ -54,11 +54,18 @@ namespace CoreVideo {
 			throw new Exception ($"Could not create the texture cache, Reason: {err}.");
 		}
 
+		/// <param name="metalDevice">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CVMetalTextureCache (IMTLDevice metalDevice)
 			: base (Create (metalDevice, null), true)
 		{
 		}
 
+		/// <param name="metalDevice">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static CVMetalTextureCache? FromDevice (IMTLDevice metalDevice)
 		{
 			if (metalDevice is null)
@@ -77,11 +84,21 @@ namespace CoreVideo {
 			return null;
 		}
 
+		/// <param name="metalDevice">To be added.</param>
+		///         <param name="textureAttributes">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CVMetalTextureCache (IMTLDevice metalDevice, CVMetalTextureAttributes textureAttributes)
 			: base (Create (metalDevice, textureAttributes), true)
 		{
 		}
 
+		/// <param name="metalDevice">To be added.</param>
+		///         <param name="textureAttributes">To be added.</param>
+		///         <param name="creationErr">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static CVMetalTextureCache? FromDevice (IMTLDevice metalDevice, CVMetalTextureAttributes? textureAttributes, out CVReturn creationErr)
 		{
 			if (metalDevice is null)
@@ -99,6 +116,11 @@ namespace CoreVideo {
 			return null;
 		}
 
+		/// <param name="metalDevice">To be added.</param>
+		///         <param name="textureAttributes">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static CVMetalTextureCache? FromDevice (IMTLDevice metalDevice, CVMetalTextureAttributes textureAttributes)
 		{
 			CVReturn creationErr;
@@ -132,6 +154,9 @@ namespace CoreVideo {
 		extern static void CVMetalTextureCacheFlush (
 			/* CVMetalTextureCacheRef __nonnull */ IntPtr textureCache, CVOptionFlags flags);
 
+		/// <param name="flags">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void Flush (CVOptionFlags flags)
 		{
 			CVMetalTextureCacheFlush (Handle, flags);

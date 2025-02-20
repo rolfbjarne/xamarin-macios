@@ -61,11 +61,16 @@ namespace CoreGraphics {
 	public class CGImageProperties : DictionaryContainer {
 #if !COREBUILD
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImageProperties ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImageProperties (NSDictionary? dictionary)
 			: base (dictionary)
 		{
@@ -313,11 +318,16 @@ namespace CoreGraphics {
 	[SupportedOSPlatform ("tvos")]
 #endif
 	public class CGImagePropertiesExif : DictionaryContainer {
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesExif ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesExif (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -558,11 +568,16 @@ namespace CoreGraphics {
 	[SupportedOSPlatform ("tvos")]
 #endif
 	public class CGImagePropertiesTiff : DictionaryContainer {
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesTiff ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesTiff (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -626,11 +641,16 @@ namespace CoreGraphics {
 	[SupportedOSPlatform ("tvos")]
 #endif
 	public class CGImagePropertiesJfif : DictionaryContainer {
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesJfif ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesJfif (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -670,11 +690,16 @@ namespace CoreGraphics {
 	[SupportedOSPlatform ("tvos")]
 #endif
 	public class CGImagePropertiesPng : DictionaryContainer {
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesPng ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesPng (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -774,11 +799,16 @@ namespace CoreGraphics {
 	[SupportedOSPlatform ("tvos")]
 #endif
 	public class CGImagePropertiesGps : DictionaryContainer {
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesGps ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesGps (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -849,11 +879,16 @@ namespace CoreGraphics {
 	[SupportedOSPlatform ("tvos")]
 #endif
 	public class CGImagePropertiesIptc : DictionaryContainer {
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesIptc ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesIptc (NSDictionary dictionary)
 			: base (dictionary)
 		{

@@ -13,7 +13,8 @@ using ObjCRuntime;
 namespace UIKit {
 	public partial class UIButton {
 
-		public UIButton (UIButtonType type)
+		/// <include file="../../docs/api/UIKit/UIButton.xml" path="/Documentation/Docs[@DocId='M:UIKit.UIButton.#ctor(UIKit.UIButtonType)']/*" />
+	public UIButton (UIButtonType type)
 #if NET
 		: base (ObjCRuntime.Messaging.NativeHandle_objc_msgSend_int (class_ptr, Selector.GetHandle ("buttonWithType:"), (int) type))
 #else

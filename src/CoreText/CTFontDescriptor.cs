@@ -596,6 +596,19 @@ namespace CoreText {
 
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTFontDescriptorCreateWithAttributes (IntPtr attributes);
+		/// <param name="attributes">Font attributes to use for the font descriptor.</param>
+		///         <summary>Creates a font descriptor from a set of attributes.</summary>
+		///         <remarks>
+		///           <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// var attributes = new CTFontDescriptorAttributes () {
+		/// 	FamilyName = "Times New Roman"
+		/// };
+		///
+		/// var fontDescriptor = new CTFontDescriptor (attributes);
+		/// ]]></code>
+		///           </example>
+		///         </remarks>
 		public CTFontDescriptor (CTFontDescriptorAttributes attributes)
 			: base (CTFontDescriptorCreateWithAttributes (Runtime.ThrowOnNull (attributes, nameof (attributes)).Dictionary.Handle), true, true)
 		{

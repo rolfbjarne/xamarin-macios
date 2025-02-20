@@ -42,9 +42,17 @@ namespace AppKit {
 	[SupportedOSPlatform ("macos")]
 #endif
 	public static class NSGraphics {
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public static readonly float White = 1;
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public static readonly float Black = 0;
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public static readonly float LightGray = (float) 2 / 3.0f;
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public static readonly float DarkGray = (float) 1 / 3.0f;
 
 		[DllImport (Constants.AppKitLibrary)]
@@ -117,6 +125,9 @@ namespace AppKit {
 		[DllImport (Constants.AppKitLibrary)]
 		extern static IntPtr NSAvailableWindowDepths ();
 
+		/// <summary>To be added.</summary>
+		///         <value>To be added.</value>
+		///         <remarks>To be added.</remarks>
 		public static NSWindowDepth [] AvailableWindowDepths {
 			get {
 				IntPtr depPtr = NSAvailableWindowDepths ();

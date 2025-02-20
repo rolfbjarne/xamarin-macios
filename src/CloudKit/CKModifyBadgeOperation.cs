@@ -41,7 +41,7 @@ namespace CloudKit {
 		}
 
 		/// <include file="../../docs/api/CloudKit/CKModifyBadgeOperation.xml" path="/Documentation/Docs[@DocId='M:CloudKit.CKModifyBadgeOperation.#ctor(Foundation.NSObjectFlag)']/*" />
-	protected CKModifyBadgeOperation (NSObjectFlag t) : base (t)
+		protected CKModifyBadgeOperation (NSObjectFlag t) : base (t)
 		{
 			throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		}

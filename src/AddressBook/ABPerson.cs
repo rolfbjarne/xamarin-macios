@@ -886,7 +886,7 @@ namespace AddressBook {
 		}
 
 		/// <include file="../../docs/api/AddressBook/ABPerson.xml" path="/Documentation/Docs[@DocId='M:AddressBook.ABPerson.System#IComparable#CompareTo(System.Object)']/*" />
-	int IComparable.CompareTo (object? o)
+		int IComparable.CompareTo (object? o)
 		{
 			var other = o as ABPerson;
 			if (other is null)
@@ -895,7 +895,7 @@ namespace AddressBook {
 		}
 
 		/// <include file="../../docs/api/AddressBook/ABPerson.xml" path="/Documentation/Docs[@DocId='M:AddressBook.ABPerson.CompareTo(AddressBook.ABPerson)']/*" />
-	public int CompareTo (ABPerson? other)
+		public int CompareTo (ABPerson? other)
 		{
 			return CompareTo (other!, ABPersonSortBy.LastName);
 		}
@@ -903,7 +903,7 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static int ABPersonComparePeopleByName (IntPtr person1, IntPtr person2, ABPersonSortBy ordering);
 		/// <include file="../../docs/api/AddressBook/ABPerson.xml" path="/Documentation/Docs[@DocId='M:AddressBook.ABPerson.CompareTo(AddressBook.ABPerson,AddressBook.ABPersonSortBy)']/*" />
-	public int CompareTo (ABPerson other, ABPersonSortBy ordering)
+		public int CompareTo (ABPerson other, ABPersonSortBy ordering)
 		{
 			if (other is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (other));

@@ -1119,7 +1119,7 @@ namespace CoreFoundation {
 		}
 
 		/// <include file="../../docs/api/CoreFoundation/DispatchGroup.xml" path="/Documentation/Docs[@DocId='M:CoreFoundation.DispatchGroup.Wait(CoreFoundation.DispatchTime)']/*" />
-	public bool Wait (DispatchTime timeout)
+		public bool Wait (DispatchTime timeout)
 		{
 			return dispatch_group_wait (GetCheckedHandle (), timeout.Nanoseconds) == 0;
 		}

@@ -235,7 +235,7 @@ namespace CoreGraphics {
 		extern static CGAffineTransform CGContextGetCTM (/* CGContextRef */ IntPtr c);
 
 		/// <include file="../../docs/api/CoreGraphics/CGContext.xml" path="/Documentation/Docs[@DocId='M:CoreGraphics.CGContext.GetCTM']/*" />
-	public CGAffineTransform GetCTM ()
+		public CGAffineTransform GetCTM ()
 		{
 			return CGContextGetCTM (Handle);
 		}
@@ -319,7 +319,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextAddLines (/* CGContextRef */ IntPtr c, CGPoint [] points, /* size_t */ nint count);
 		/// <include file="../../docs/api/CoreGraphics/CGContext.xml" path="/Documentation/Docs[@DocId='M:CoreGraphics.CGContext.AddLines(CoreGraphics.CGPoint[])']/*" />
-	public void AddLines (CGPoint [] points)
+		public void AddLines (CGPoint [] points)
 		{
 			if (points is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (points));

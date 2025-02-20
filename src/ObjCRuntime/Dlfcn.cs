@@ -167,7 +167,7 @@ namespace ObjCRuntime {
 		static extern IntPtr dlsym (IntPtr handle, IntPtr symbol);
 
 		/// <include file="../../docs/api/ObjCRuntime/Dlfcn.xml" path="/Documentation/Docs[@DocId='M:ObjCRuntime.Dlfcn.dlsym(System.IntPtr,System.String)']/*" />
-	public static IntPtr dlsym (IntPtr handle, string symbol)
+		public static IntPtr dlsym (IntPtr handle, string symbol)
 		{
 			using var symbolPtr = new TransientString (symbol);
 			return dlsym (handle, symbolPtr);

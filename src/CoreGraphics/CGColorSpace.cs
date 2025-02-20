@@ -243,7 +243,7 @@ namespace CoreGraphics {
 			/* size_t */ nint lastIndex, /* const unsigned char* */ byte [] colorTable);
 
 		/// <include file="../../docs/api/CoreGraphics/CGColorSpace.xml" path="/Documentation/Docs[@DocId='M:CoreGraphics.CGColorSpace.CreateIndexed(CoreGraphics.CGColorSpace,System.Int32,System.Byte[])']/*" />
-	public static CGColorSpace? CreateIndexed (CGColorSpace baseSpace, int lastIndex, byte [] colorTable)
+		public static CGColorSpace? CreateIndexed (CGColorSpace baseSpace, int lastIndex, byte [] colorTable)
 		{
 			var ptr = CGColorSpaceCreateIndexed (baseSpace.GetHandle (), lastIndex, colorTable);
 			return FromHandle (ptr, true);

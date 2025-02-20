@@ -107,7 +107,7 @@ namespace CoreGraphics {
 		}
 
 		/// <include file="../../docs/api/CoreGraphics/CGBitmapContext.xml" path="/Documentation/Docs[@DocId='M:CoreGraphics.CGBitmapContext.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			if (buffer.IsAllocated)
 				buffer.Free ();

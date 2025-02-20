@@ -70,7 +70,7 @@ namespace CoreMedia {
 		}
 
 		/// <include file="../../docs/api/CoreMedia/CMBufferQueue.xml" path="/Documentation/Docs[@DocId='M:CoreMedia.CMBufferQueue.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			queueObjects.Clear ();
 			if (gch.IsAllocated)

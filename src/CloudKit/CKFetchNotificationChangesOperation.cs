@@ -32,7 +32,7 @@ namespace CloudKit {
 		public override NativeHandle ClassHandle { get => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms); }
 
 		/// <include file="../../docs/api/CloudKit/CKFetchNotificationChangesOperation.xml" path="/Documentation/Docs[@DocId='M:CloudKit.CKFetchNotificationChangesOperation.#ctor(Foundation.NSObjectFlag)']/*" />
-	protected CKFetchNotificationChangesOperation (NSObjectFlag t) : base (t)
+		protected CKFetchNotificationChangesOperation (NSObjectFlag t) : base (t)
 		{
 			throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		}

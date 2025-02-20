@@ -589,7 +589,7 @@ namespace AudioToolbox {
 		extern static OSStatus AudioQueueDispose (IntPtr AQ, byte immediate);
 
 		/// <include file="../../docs/api/AudioToolbox/AudioQueue.xml" path="/Documentation/Docs[@DocId='M:AudioToolbox.AudioQueue.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 			Dispose (disposing, true);
 		}
@@ -848,9 +848,9 @@ namespace AudioToolbox {
 			AudioTimeStamp* actualStartTime);
 
 		/// <include file="../../docs/api/AudioToolbox/AudioQueue.xml" path="/Documentation/Docs[@DocId='M:AudioToolbox.AudioQueue.EnqueueBuffer(System.IntPtr,System.Int32,AudioToolbox.AudioStreamPacketDescription[],System.Int32,System.Int32,AudioToolbox.AudioQueueParameterEvent[],AudioToolbox.AudioTimeStamp@,AudioToolbox.AudioTimeStamp@)']/*" />
-	public AudioQueueStatus EnqueueBuffer (IntPtr audioQueueBuffer, int bytes, AudioStreamPacketDescription [] desc,
-							   int trimFramesAtStart, int trimFramesAtEnd, AudioQueueParameterEvent [] parameterEvents,
-							   ref AudioTimeStamp startTime, out AudioTimeStamp actualStartTime)
+		public AudioQueueStatus EnqueueBuffer (IntPtr audioQueueBuffer, int bytes, AudioStreamPacketDescription [] desc,
+								   int trimFramesAtStart, int trimFramesAtEnd, AudioQueueParameterEvent [] parameterEvents,
+								   ref AudioTimeStamp startTime, out AudioTimeStamp actualStartTime)
 		{
 			if (audioQueueBuffer == IntPtr.Zero)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (audioQueueBuffer));
@@ -909,9 +909,9 @@ namespace AudioToolbox {
 		}
 
 		/// <include file="../../docs/api/AudioToolbox/AudioQueue.xml" path="/Documentation/Docs[@DocId='M:AudioToolbox.AudioQueue.EnqueueBuffer(AudioToolbox.AudioQueueBuffer*,System.Int32,AudioToolbox.AudioStreamPacketDescription[],System.Int32,System.Int32,AudioToolbox.AudioQueueParameterEvent[],AudioToolbox.AudioTimeStamp@,AudioToolbox.AudioTimeStamp@)']/*" />
-	public unsafe AudioQueueStatus EnqueueBuffer (AudioQueueBuffer* audioQueueBuffer, int bytes, AudioStreamPacketDescription [] desc,
-							   int trimFramesAtStart, int trimFramesAtEnd, AudioQueueParameterEvent [] parameterEvents,
-							   ref AudioTimeStamp startTime, out AudioTimeStamp actualStartTime)
+		public unsafe AudioQueueStatus EnqueueBuffer (AudioQueueBuffer* audioQueueBuffer, int bytes, AudioStreamPacketDescription [] desc,
+								   int trimFramesAtStart, int trimFramesAtEnd, AudioQueueParameterEvent [] parameterEvents,
+								   ref AudioTimeStamp startTime, out AudioTimeStamp actualStartTime)
 		{
 			if (audioQueueBuffer is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (audioQueueBuffer));
@@ -1710,8 +1710,8 @@ namespace AudioToolbox {
 #endif
 
 		/// <include file="../../docs/api/AudioToolbox/AudioQueue.xml" path="/Documentation/Docs[@DocId='M:AudioToolbox.AudioQueue.CreateProcessingTap(AudioToolbox.AudioQueueProcessingTapDelegate,AudioToolbox.AudioQueueProcessingTapFlags,AudioToolbox.AudioQueueStatus@)']/*" />
-	public AudioQueueProcessingTap? CreateProcessingTap (AudioQueueProcessingTapDelegate processingCallback, AudioQueueProcessingTapFlags flags,
-															out AudioQueueStatus status)
+		public AudioQueueProcessingTap? CreateProcessingTap (AudioQueueProcessingTapDelegate processingCallback, AudioQueueProcessingTapFlags flags,
+																out AudioQueueStatus status)
 		{
 			var aqpt = new AudioQueueProcessingTap (processingCallback);
 			uint maxFrames;
@@ -1811,7 +1811,7 @@ namespace AudioToolbox {
 		}
 
 		/// <include file="../../docs/api/AudioToolbox/AudioQueueProcessingTap.xml" path="/Documentation/Docs[@DocId='M:AudioToolbox.AudioQueueProcessingTap.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 			if (disposing) {
 				callback = null;
@@ -1832,8 +1832,8 @@ namespace AudioToolbox {
 																	   IntPtr ioData);
 
 		/// <include file="../../docs/api/AudioToolbox/AudioQueueProcessingTap.xml" path="/Documentation/Docs[@DocId='M:AudioToolbox.AudioQueueProcessingTap.GetSourceAudio(System.UInt32,AudioToolbox.AudioTimeStamp@,AudioToolbox.AudioQueueProcessingTapFlags@,System.UInt32@,AudioToolbox.AudioBuffers)']/*" />
-	public AudioQueueStatus GetSourceAudio (uint numberOfFrames, ref AudioTimeStamp timeStamp,
-												out AudioQueueProcessingTapFlags flags, out uint parentNumberOfFrames, AudioBuffers data)
+		public AudioQueueStatus GetSourceAudio (uint numberOfFrames, ref AudioTimeStamp timeStamp,
+													out AudioQueueProcessingTapFlags flags, out uint parentNumberOfFrames, AudioBuffers data)
 		{
 			if (data is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (data));
@@ -2214,7 +2214,7 @@ namespace AudioToolbox {
 		}
 
 		/// <include file="../../docs/api/AudioToolbox/AudioQueueTimeline.xml" path="/Documentation/Docs[@DocId='M:AudioToolbox.AudioQueueTimeline.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 			if (timelineHandle != IntPtr.Zero) {
 				AudioQueueDisposeTimeline (queueHandle, timelineHandle);

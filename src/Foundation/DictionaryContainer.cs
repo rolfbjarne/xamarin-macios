@@ -54,13 +54,13 @@ namespace Foundation {
 	public abstract class DictionaryContainer {
 #if !COREBUILD
 		/// <include file="../../docs/api/Foundation/DictionaryContainer.xml" path="/Documentation/Docs[@DocId='M:Foundation.DictionaryContainer.#ctor']/*" />
-	protected DictionaryContainer ()
+		protected DictionaryContainer ()
 		{
 			Dictionary = new NSMutableDictionary ();
 		}
 
 		/// <include file="../../docs/api/Foundation/DictionaryContainer.xml" path="/Documentation/Docs[@DocId='M:Foundation.DictionaryContainer.#ctor(Foundation.NSDictionary)']/*" />
-	protected DictionaryContainer (NSDictionary? dictionary)
+		protected DictionaryContainer (NSDictionary? dictionary)
 		{
 			Dictionary = dictionary ?? new NSMutableDictionary ();
 		}

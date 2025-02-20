@@ -176,7 +176,7 @@ namespace CoreFoundation {
 		}
 
 		/// <include file="../../docs/api/CoreFoundation/DispatchSource.xml" path="/Documentation/Docs[@DocId='M:CoreFoundation.DispatchSource.SetRegistrationHandler(System.Action)']/*" />
-	public void SetRegistrationHandler (Action handler)
+		public void SetRegistrationHandler (Action handler)
 		{
 			if (handler is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (handler));
@@ -237,13 +237,13 @@ namespace CoreFoundation {
 		}
 
 		/// <include file="../../docs/api/CoreFoundation/DispatchSource.xml" path="/Documentation/Docs[@DocId='M:CoreFoundation.DispatchSource.Cancel']/*" />
-	public void Cancel ()
+		public void Cancel ()
 		{
 			dispatch_source_cancel (GetCheckedHandle ());
 		}
 
 		/// <include file="../../docs/api/CoreFoundation/DispatchSource.xml" path="/Documentation/Docs[@DocId='M:CoreFoundation.DispatchSource.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			// Do not call the Cancel method here
 			// This is important because the Dispathc Source might be electible for garbage collection

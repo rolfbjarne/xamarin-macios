@@ -158,7 +158,7 @@ namespace AudioUnit {
 		}
 
 		/// <include file="../../docs/api/AudioUnit/AUScheduledAudioFileRegion.xml" path="/Documentation/Docs[@DocId='M:AudioUnit.AUScheduledAudioFileRegion.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 			if (disposing)
 				completionHandler = null;

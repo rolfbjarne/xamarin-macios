@@ -88,7 +88,7 @@ namespace UIKit {
 		}
 
 		/// <include file="../../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='M:UIKit.UIApplication.Main(System.String[],System.String,System.String)']/*" />
-	[Obsolete ("Use the overload with 'Type' instead of 'String' parameters for type safety.")]
+		[Obsolete ("Use the overload with 'Type' instead of 'String' parameters for type safety.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static void Main (string []? args, string? principalClassName, string? delegateClassName)
 		{
@@ -99,7 +99,7 @@ namespace UIKit {
 		}
 
 		/// <include file="../../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='M:UIKit.UIApplication.Main(System.String[],System.Type,System.Type)']/*" />
-	public static void Main (string []? args, Type? principalClass, Type? delegateClass)
+		public static void Main (string []? args, Type? principalClass, Type? delegateClass)
 		{
 			using var p = new TransientCFString (principalClass is null ? null : new Class (principalClass).Name);
 			using var d = new TransientCFString (delegateClass is null ? null : new Class (delegateClass).Name);

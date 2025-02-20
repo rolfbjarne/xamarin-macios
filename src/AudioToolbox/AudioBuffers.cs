@@ -269,7 +269,7 @@ namespace AudioToolbox {
 		}
 
 		/// <include file="../../docs/api/AudioToolbox/AudioBuffers.xml" path="/Documentation/Docs[@DocId='M:AudioToolbox.AudioBuffers.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 			if (owns && address != IntPtr.Zero) {
 				Marshal.FreeHGlobal (address);

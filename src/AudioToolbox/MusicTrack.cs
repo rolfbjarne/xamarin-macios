@@ -303,7 +303,7 @@ namespace AudioToolbox {
 		}
 
 		/// <include file="../../docs/api/AudioToolbox/MusicTrack.xml" path="/Documentation/Docs[@DocId='M:AudioToolbox.MusicTrack.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			if (Handle != IntPtr.Zero && Owns) {
 				if (sequence is not null)

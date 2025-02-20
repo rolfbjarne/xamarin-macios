@@ -241,7 +241,7 @@ namespace AddressBook {
 		}
 
 		/// <include file="../../docs/api/AddressBook/ABAddressBook.xml" path="/Documentation/Docs[@DocId='M:AddressBook.ABAddressBook.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			if (sender.IsAllocated)
 				sender.Free ();
@@ -266,7 +266,7 @@ namespace AddressBook {
 		unsafe extern static void ABAddressBookRequestAccessWithCompletion (IntPtr addressbook, BlockLiteral* completion);
 
 		/// <include file="../../docs/api/AddressBook/ABAddressBook.xml" path="/Documentation/Docs[@DocId='M:AddressBook.ABAddressBook.RequestAccess(System.Action{System.Boolean,Foundation.NSError})']/*" />
-	[BindingImpl (BindingImplOptions.Optimizable)]
+		[BindingImpl (BindingImplOptions.Optimizable)]
 		public void RequestAccess (Action<bool, NSError?> onCompleted)
 		{
 			if (onCompleted is null)

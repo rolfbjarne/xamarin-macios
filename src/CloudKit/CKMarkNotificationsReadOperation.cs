@@ -30,7 +30,7 @@ namespace CloudKit {
 		public override NativeHandle ClassHandle { get => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms); }
 
 		/// <include file="../../docs/api/CloudKit/CKMarkNotificationsReadOperation.xml" path="/Documentation/Docs[@DocId='M:CloudKit.CKMarkNotificationsReadOperation.#ctor(Foundation.NSObjectFlag)']/*" />
-	protected CKMarkNotificationsReadOperation (NSObjectFlag t) : base (t)
+		protected CKMarkNotificationsReadOperation (NSObjectFlag t) : base (t)
 		{
 			throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		}

@@ -621,7 +621,7 @@ namespace CoreLocation {
 		double MaxTimeInterval { get; }
 
 		/// <include file="../docs/api/CoreLocation/CLLocationManager.xml" path="/Documentation/Docs[@DocId='M:CoreLocation.CLLocationManager.IsMonitoringAvailable(ObjCRuntime.Class)']/*" />
-	[NoTV]
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Static, Export ("isMonitoringAvailableForClass:")]
 		bool IsMonitoringAvailable (Class regionClass);

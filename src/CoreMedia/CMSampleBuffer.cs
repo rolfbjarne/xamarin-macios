@@ -52,7 +52,7 @@ namespace CoreMedia {
 		}
 
 		/// <include file="../../docs/api/CoreMedia/CMSampleBuffer.xml" path="/Documentation/Docs[@DocId='M:CoreMedia.CMSampleBuffer.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			if (invalidate.IsAllocated)
 				invalidate.Free ();

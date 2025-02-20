@@ -849,7 +849,7 @@ namespace CoreMidi {
 		}
 
 		/// <include file="../../docs/api/CoreMidi/MidiPacket.xml" path="/Documentation/Docs[@DocId='M:CoreMidi.MidiPacket.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 			// make sure we don't leave pointers to potentially freed memory.
 			byteptr = IntPtr.Zero;
@@ -1070,7 +1070,7 @@ namespace CoreMidi {
 		}
 
 		/// <include file="../../docs/api/CoreMidi/MidiPort.xml" path="/Documentation/Docs[@DocId='M:CoreMidi.MidiPort.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			MessageReceived = null;
 			base.Dispose (disposing);

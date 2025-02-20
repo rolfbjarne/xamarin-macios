@@ -297,7 +297,7 @@ namespace Compression {
 		}
 
 		/// <include file="../../docs/api/Compression/CompressionStream.xml" path="/Documentation/Docs[@DocId='M:Compression.CompressionStream.Read(System.Byte[],System.Int32,System.Int32)']/*" />
-	public override int Read (byte [] array, int offset, int count)
+		public override int Read (byte [] array, int offset, int count)
 		{
 			ValidateParameters (array, offset, count);
 			return ReadCore (new Span<byte> (array, offset, count));

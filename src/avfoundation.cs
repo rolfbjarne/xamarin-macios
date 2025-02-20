@@ -13770,7 +13770,7 @@ namespace AVFoundation {
 		AVCaptureInputPort [] Ports { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVCaptureInput.xml" path="/Documentation/Docs[@DocId='P:AVFoundation.AVCaptureInput.PortFormatDescriptionDidChangeNotification']/*" />
-	[Field ("AVCaptureInputPortFormatDescriptionDidChangeNotification")]
+		[Field ("AVCaptureInputPortFormatDescriptionDidChangeNotification")]
 		[Notification]
 		NSString PortFormatDescriptionDidChangeNotification { get; }
 	}

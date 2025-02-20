@@ -409,7 +409,7 @@ namespace AddressBook {
 		}
 
 		/// <include file="../../docs/api/AddressBook/ABMultiValue`1.xml" path="/Documentation/Docs[@DocId='M:AddressBook.ABMultiValue`1.GetIndexForIdentifier(System.Int32)']/*" />
-	public nint GetIndexForIdentifier (int identifier)
+		public nint GetIndexForIdentifier (int identifier)
 		{
 			return ABMultiValue.GetIndexForIdentifier (Handle, identifier);
 		}

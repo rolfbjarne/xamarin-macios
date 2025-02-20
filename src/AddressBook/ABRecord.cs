@@ -123,7 +123,7 @@ namespace AddressBook {
 		}
 
 		/// <include file="../../docs/api/AddressBook/ABRecord.xml" path="/Documentation/Docs[@DocId='M:AddressBook.ABRecord.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			AddressBook = null;
 			base.Dispose (disposing);

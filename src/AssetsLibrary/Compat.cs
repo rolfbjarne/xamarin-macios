@@ -156,7 +156,7 @@ namespace AssetsLibrary {
 		}
 
 		/// <include file="../../docs/api/AssetsLibrary/ALAsset.xml" path="/Documentation/Docs[@DocId='M:AssetsLibrary.ALAsset.#ctor(Foundation.NSObjectFlag)']/*" />
-	protected ALAsset (NSObjectFlag t) : base (t)
+		protected ALAsset (NSObjectFlag t) : base (t)
 		{
 			throw new InvalidOperationException (Constants.AssetsLibraryRemoved);
 		}
@@ -167,7 +167,7 @@ namespace AssetsLibrary {
 		}
 
 		/// <include file="../../docs/api/AssetsLibrary/ALAsset.xml" path="/Documentation/Docs[@DocId='M:AssetsLibrary.ALAsset.AspectRatioThumbnail']/*" />
-	public virtual CGImage AspectRatioThumbnail ()
+		public virtual CGImage AspectRatioThumbnail ()
 		{
 			throw new InvalidOperationException (Constants.AssetsLibraryRemoved);
 		}
@@ -220,7 +220,7 @@ namespace AssetsLibrary {
 		}
 
 		/// <include file="../../docs/api/AssetsLibrary/ALAsset.xml" path="/Documentation/Docs[@DocId='M:AssetsLibrary.ALAsset.SetVideoAtPathAsync(Foundation.NSUrl)']/*" />
-	public unsafe virtual Task<NSUrl> SetVideoAtPathAsync (NSUrl videoPathURL)
+		public unsafe virtual Task<NSUrl> SetVideoAtPathAsync (NSUrl videoPathURL)
 		{
 			throw new InvalidOperationException (Constants.AssetsLibraryRemoved);
 		}
@@ -496,7 +496,7 @@ namespace AssetsLibrary {
 		}
 
 		/// <include file="../../docs/api/AssetsLibrary/ALAssetRepresentation.xml" path="/Documentation/Docs[@DocId='M:AssetsLibrary.ALAssetRepresentation.#ctor(Foundation.NSObjectFlag)']/*" />
-	protected ALAssetRepresentation (NSObjectFlag t) : base (t)
+		protected ALAssetRepresentation (NSObjectFlag t) : base (t)
 		{
 			throw new InvalidOperationException (Constants.AssetsLibraryRemoved);
 		}
@@ -626,7 +626,7 @@ namespace AssetsLibrary {
 		}
 
 		/// <include file="../../docs/api/AssetsLibrary/ALAssetsFilter.xml" path="/Documentation/Docs[@DocId='M:AssetsLibrary.ALAssetsFilter.#ctor(Foundation.NSObjectFlag)']/*" />
-	protected ALAssetsFilter (NSObjectFlag t) : base (t)
+		protected ALAssetsFilter (NSObjectFlag t) : base (t)
 		{
 			throw new InvalidOperationException (Constants.AssetsLibraryRemoved);
 		}
@@ -685,7 +685,7 @@ namespace AssetsLibrary {
 		}
 
 		/// <include file="../../docs/api/AssetsLibrary/ALAssetsGroup.xml" path="/Documentation/Docs[@DocId='M:AssetsLibrary.ALAssetsGroup.#ctor(Foundation.NSObjectFlag)']/*" />
-	protected ALAssetsGroup (NSObjectFlag t) : base (t)
+		protected ALAssetsGroup (NSObjectFlag t) : base (t)
 		{
 			throw new InvalidOperationException (Constants.AssetsLibraryRemoved);
 		}
@@ -853,7 +853,7 @@ namespace AssetsLibrary {
 		}
 
 		/// <include file="../../docs/api/AssetsLibrary/ALAssetsLibrary.xml" path="/Documentation/Docs[@DocId='M:AssetsLibrary.ALAssetsLibrary.#ctor(Foundation.NSObjectFlag)']/*" />
-	protected ALAssetsLibrary (NSObjectFlag t) : base (t)
+		protected ALAssetsLibrary (NSObjectFlag t) : base (t)
 		{
 			throw new InvalidOperationException (Constants.AssetsLibraryRemoved);
 		}
@@ -1032,7 +1032,7 @@ namespace AssetsLibrary {
 		}
 
 		/// <include file="../../docs/api/AssetsLibrary/ALAssetsLibrary.xml" path="/Documentation/Docs[@DocId='P:AssetsLibrary.ALAssetsLibrary.ChangedNotification']/*" />
-	[Advice ("Use ALAssetsLibrary.Notifications.ObserveChanged helper method instead.")]
+		[Advice ("Use ALAssetsLibrary.Notifications.ObserveChanged helper method instead.")]
 		public static NSString ChangedNotification {
 			get {
 				throw new InvalidOperationException (Constants.AssetsLibraryRemoved);
@@ -1086,22 +1086,22 @@ namespace AssetsLibrary {
 		[Obsolete (Constants.AssetsLibraryRemoved)]
 		public static partial class Notifications {
 			/// <include file="../../docs/api/AssetsLibrary.ALAssetsLibrary/Notifications.xml" path="/Documentation/Docs[@DocId='M:AssetsLibrary.ALAssetsLibrary.Notifications.ObserveChanged(System.EventHandler{Foundation.NSNotificationEventArgs})']/*" />
-	public static NSObject ObserveChanged (EventHandler<NSNotificationEventArgs> handler)
+			public static NSObject ObserveChanged (EventHandler<NSNotificationEventArgs> handler)
 			{
 				throw new InvalidOperationException (Constants.AssetsLibraryRemoved);
 			}
 			/// <include file="../../docs/api/AssetsLibrary.ALAssetsLibrary/Notifications.xml" path="/Documentation/Docs[@DocId='M:AssetsLibrary.ALAssetsLibrary.Notifications.ObserveChanged(Foundation.NSObject,System.EventHandler{Foundation.NSNotificationEventArgs})']/*" />
-	public static NSObject ObserveChanged (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)
+			public static NSObject ObserveChanged (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)
 			{
 				throw new InvalidOperationException (Constants.AssetsLibraryRemoved);
 			}
 			/// <include file="../../docs/api/AssetsLibrary.ALAssetsLibrary/Notifications.xml" path="/Documentation/Docs[@DocId='M:AssetsLibrary.ALAssetsLibrary.Notifications.ObserveChanged(System.EventHandler{AssetsLibrary.ALAssetLibraryChangedEventArgs})']/*" />
-	public static NSObject ObserveChanged (EventHandler<AssetsLibrary.ALAssetLibraryChangedEventArgs> handler)
+			public static NSObject ObserveChanged (EventHandler<AssetsLibrary.ALAssetLibraryChangedEventArgs> handler)
 			{
 				throw new InvalidOperationException (Constants.AssetsLibraryRemoved);
 			}
 			/// <include file="../../docs/api/AssetsLibrary.ALAssetsLibrary/Notifications.xml" path="/Documentation/Docs[@DocId='M:AssetsLibrary.ALAssetsLibrary.Notifications.ObserveChanged(Foundation.NSObject,System.EventHandler{AssetsLibrary.ALAssetLibraryChangedEventArgs})']/*" />
-	public static NSObject ObserveChanged (NSObject objectToObserve, EventHandler<AssetsLibrary.ALAssetLibraryChangedEventArgs> handler)
+			public static NSObject ObserveChanged (NSObject objectToObserve, EventHandler<AssetsLibrary.ALAssetLibraryChangedEventArgs> handler)
 			{
 				throw new InvalidOperationException (Constants.AssetsLibraryRemoved);
 			}

@@ -564,7 +564,7 @@ namespace AudioToolbox {
 		}
 
 		/// <include file="../../docs/api/AudioToolbox/AudioFileMarkerList.xml" path="/Documentation/Docs[@DocId='M:AudioToolbox.AudioFileMarkerList.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 			if (!owns || ptr == IntPtr.Zero)
 				return;
@@ -780,7 +780,7 @@ namespace AudioToolbox {
 		}
 
 		/// <include file="../../docs/api/AudioToolbox/AudioFileRegionList.xml" path="/Documentation/Docs[@DocId='M:AudioToolbox.AudioFileRegionList.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 			if (!owns || ptr == IntPtr.Zero)
 				return;
@@ -823,7 +823,7 @@ namespace AudioToolbox {
 		extern static OSStatus AudioFileClose (AudioFileID handle);
 
 		/// <include file="../../docs/api/AudioToolbox/AudioFile.xml" path="/Documentation/Docs[@DocId='M:AudioToolbox.AudioFile.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			if (Handle != IntPtr.Zero && Owns)
 				AudioFileClose (Handle);

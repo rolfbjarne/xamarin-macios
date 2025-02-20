@@ -47,7 +47,7 @@ namespace UIKit
 		}
 
 		/// <include file="../../docs/api/UIKit/NSLayoutConstraint.xml" path="/Documentation/Docs[@DocId='M:UIKit.NSLayoutConstraint.FromVisualFormat(System.String,UIKit.NSLayoutFormatOptions,System.Object[])']/*" />
-	static public NSLayoutConstraint [] FromVisualFormat (string format, NSLayoutFormatOptions formatOptions, params object [] viewsAndMetrics)
+		static public NSLayoutConstraint [] FromVisualFormat (string format, NSLayoutFormatOptions formatOptions, params object [] viewsAndMetrics)
 		{
 			NSMutableDictionary views = null, metrics = null;
 			var count = viewsAndMetrics.Length;

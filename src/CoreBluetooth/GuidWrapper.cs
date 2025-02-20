@@ -27,7 +27,7 @@ namespace CoreBluetooth {
 	public partial class CBCentralManager {
 
 		/// <include file="../../docs/api/CoreBluetooth/CBCentralManager.xml" path="/Documentation/Docs[@DocId='M:CoreBluetooth.CBCentralManager.ConnectPeripheral(CoreBluetooth.CBPeripheral,CoreBluetooth.PeripheralConnectionOptions)']/*" />
-	public void ConnectPeripheral (CBPeripheral peripheral, PeripheralConnectionOptions? options = null)
+		public void ConnectPeripheral (CBPeripheral peripheral, PeripheralConnectionOptions? options = null)
 		{
 			ConnectPeripheral (peripheral, options?.Dictionary);
 		}

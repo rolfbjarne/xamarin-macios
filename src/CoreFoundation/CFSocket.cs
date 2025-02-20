@@ -344,7 +344,7 @@ namespace CoreFoundation {
 		}
 
 		/// <include file="../../docs/api/CoreFoundation/CFSocket.xml" path="/Documentation/Docs[@DocId='M:CoreFoundation.CFSocket.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			if (Handle != NativeHandle.Zero)
 				CFSocketInvalidate (Handle);

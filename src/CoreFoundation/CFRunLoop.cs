@@ -280,7 +280,7 @@ namespace CoreFoundation {
 		protected abstract void OnPerform ();
 
 		/// <include file="../../docs/api/CoreFoundation/CFRunLoopSourceCustom.xml" path="/Documentation/Docs[@DocId='M:CoreFoundation.CFRunLoopSourceCustom.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			if (disposing) {
 				if (gch.IsAllocated)

@@ -3271,22 +3271,22 @@ namespace Foundation {
 
 		// There is no info associated with these notifications
 		/// <include file="../docs/api/Foundation/NSMetadataQuery.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSMetadataQuery.DidStartGatheringNotification']/*" />
-	[Field ("NSMetadataQueryDidStartGatheringNotification")]
+		[Field ("NSMetadataQueryDidStartGatheringNotification")]
 		[Notification]
 		NSString DidStartGatheringNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSMetadataQuery.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSMetadataQuery.GatheringProgressNotification']/*" />
-	[Field ("NSMetadataQueryGatheringProgressNotification")]
+		[Field ("NSMetadataQueryGatheringProgressNotification")]
 		[Notification]
 		NSString GatheringProgressNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSMetadataQuery.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSMetadataQuery.DidFinishGatheringNotification']/*" />
-	[Field ("NSMetadataQueryDidFinishGatheringNotification")]
+		[Field ("NSMetadataQueryDidFinishGatheringNotification")]
 		[Notification]
 		NSString DidFinishGatheringNotification { get; }
 
 		/// <include file="../docs/api/Foundation/NSMetadataQuery.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSMetadataQuery.DidUpdateNotification']/*" />
-	[Field ("NSMetadataQueryDidUpdateNotification")]
+		[Field ("NSMetadataQueryDidUpdateNotification")]
 		[Notification]
 		NSString DidUpdateNotification { get; }
 
@@ -8614,7 +8614,7 @@ namespace Foundation {
 		NSString RemoveSynchronizableCredentials { get; }
 
 		/// <include file="../docs/api/Foundation/NSUrlCredentialStorage.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSUrlCredentialStorage.ChangedNotification']/*" />
-	[Field ("NSURLCredentialStorageChangedNotification")]
+		[Field ("NSURLCredentialStorageChangedNotification")]
 		[Notification]
 		NSString ChangedNotification { get; }
 
@@ -14552,7 +14552,7 @@ namespace Foundation {
 		bool LowPowerModeEnabled { [Bind ("isLowPowerModeEnabled")] get; }
 
 		/// <include file="../docs/api/Foundation/NSProcessInfo.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSProcessInfo.PowerStateDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("NSProcessInfoPowerStateDidChangeNotification")]
 		NSString PowerStateDidChangeNotification { get; }
@@ -14562,7 +14562,7 @@ namespace Foundation {
 		NSProcessInfoThermalState ThermalState { get; }
 
 		/// <include file="../docs/api/Foundation/NSProcessInfo.xml" path="/Documentation/Docs[@DocId='P:Foundation.NSProcessInfo.ThermalStateDidChangeNotification']/*" />
-	[Field ("NSProcessInfoThermalStateDidChangeNotification")]
+		[Field ("NSProcessInfoThermalStateDidChangeNotification")]
 		[MacCatalyst (13, 1)]
 		[Notification]
 		NSString ThermalStateDidChangeNotification { get; }

@@ -2331,7 +2331,7 @@ namespace UIKit {
 	[Static]
 	interface UIStateRestoration {
 		/// <include file="../docs/api/UIKit/UIStateRestoration.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIStateRestoration.ViewControllerStoryboardKey']/*" />
-	[Field ("UIStateRestorationViewControllerStoryboardKey")]
+		[Field ("UIStateRestorationViewControllerStoryboardKey")]
 		NSString ViewControllerStoryboardKey { get; }
 
 	}
@@ -6874,7 +6874,7 @@ namespace UIKit {
 		void RevertToContentsOfUrl (NSUrl url, [NullAllowed] UIOperationHandler completionHandler);
 
 		/// <include file="../docs/api/UIKit/UIDocument.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIDocument.StateChangedNotification']/*" />
-	[Field ("UIDocumentStateChangedNotification")]
+		[Field ("UIDocumentStateChangedNotification")]
 		[Notification]
 		NSString StateChangedNotification { get; }
 
@@ -10148,22 +10148,22 @@ namespace UIKit {
 		}
 
 		/// <include file="../docs/api/UIKit/UIWindow.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIWindow.DidBecomeVisibleNotification']/*" />
-	[Field ("UIWindowDidBecomeVisibleNotification")]
+		[Field ("UIWindowDidBecomeVisibleNotification")]
 		[Notification]
 		NSString DidBecomeVisibleNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIWindow.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIWindow.DidBecomeHiddenNotification']/*" />
-	[Field ("UIWindowDidBecomeHiddenNotification")]
+		[Field ("UIWindowDidBecomeHiddenNotification")]
 		[Notification]
 		NSString DidBecomeHiddenNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIWindow.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIWindow.DidBecomeKeyNotification']/*" />
-	[Field ("UIWindowDidBecomeKeyNotification")]
+		[Field ("UIWindowDidBecomeKeyNotification")]
 		[Notification]
 		NSString DidBecomeKeyNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIWindow.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIWindow.DidResignKeyNotification']/*" />
-	[Field ("UIWindowDidResignKeyNotification")]
+		[Field ("UIWindowDidResignKeyNotification")]
 		[Notification]
 		NSString DidResignKeyNotification { get; }
 
@@ -11671,27 +11671,27 @@ namespace UIKit {
 		UIMenuItem [] MenuItems { get; set; }
 
 		/// <include file="../docs/api/UIKit/UIMenuController.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIMenuController.WillShowMenuNotification']/*" />
-	[Field ("UIMenuControllerWillShowMenuNotification")]
+		[Field ("UIMenuControllerWillShowMenuNotification")]
 		[Notification]
 		NSString WillShowMenuNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIMenuController.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIMenuController.DidShowMenuNotification']/*" />
-	[Field ("UIMenuControllerDidShowMenuNotification")]
+		[Field ("UIMenuControllerDidShowMenuNotification")]
 		[Notification]
 		NSString DidShowMenuNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIMenuController.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIMenuController.WillHideMenuNotification']/*" />
-	[Field ("UIMenuControllerWillHideMenuNotification")]
+		[Field ("UIMenuControllerWillHideMenuNotification")]
 		[Notification]
 		NSString WillHideMenuNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIMenuController.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIMenuController.DidHideMenuNotification']/*" />
-	[Field ("UIMenuControllerDidHideMenuNotification")]
+		[Field ("UIMenuControllerDidHideMenuNotification")]
 		[Notification]
 		NSString DidHideMenuNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIMenuController.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIMenuController.MenuFrameDidChangeNotification']/*" />
-	[Field ("UIMenuControllerMenuFrameDidChangeNotification")]
+		[Field ("UIMenuControllerMenuFrameDidChangeNotification")]
 		[Notification]
 		NSString MenuFrameDidChangeNotification { get; }
 	}
@@ -13730,22 +13730,22 @@ namespace UIKit {
 		UIScreenOverscanCompensation OverscanCompensation { get; set; }
 
 		/// <include file="../docs/api/UIKit/UIScreen.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIScreen.BrightnessDidChangeNotification']/*" />
-	[Field ("UIScreenBrightnessDidChangeNotification")]
+		[Field ("UIScreenBrightnessDidChangeNotification")]
 		[Notification]
 		NSString BrightnessDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIScreen.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIScreen.ModeDidChangeNotification']/*" />
-	[Field ("UIScreenModeDidChangeNotification")]
+		[Field ("UIScreenModeDidChangeNotification")]
 		[Notification]
 		NSString ModeDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIScreen.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIScreen.DidDisconnectNotification']/*" />
-	[Field ("UIScreenDidDisconnectNotification")]
+		[Field ("UIScreenDidDisconnectNotification")]
 		[Notification]
 		NSString DidDisconnectNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIScreen.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIScreen.DidConnectNotification']/*" />
-	[Field ("UIScreenDidConnectNotification")]
+		[Field ("UIScreenDidConnectNotification")]
 		[Notification]
 		NSString DidConnectNotification { get; }
 
@@ -13755,7 +13755,7 @@ namespace UIKit {
 		NSString ReferenceDisplayModeStatusDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIScreen.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIScreen.CapturedDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Field ("UIScreenCapturedDidChangeNotification")]
 		[Notification]
 		NSString CapturedDidChangeNotification { get; }
@@ -13941,7 +13941,7 @@ namespace UIKit {
 		UIScrollViewIndexDisplayMode IndexDisplayMode { get; set; }
 
 		/// <include file="../docs/api/UIKit/UIScrollView.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIScrollView.PagingEnabled']/*" />
-	[NoTV]
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("pagingEnabled")]
 		bool PagingEnabled { [Bind ("isPagingEnabled")] get; set; }
@@ -16009,7 +16009,7 @@ namespace UIKit {
 		void RegisterNibForCellReuse ([NullAllowed] UINib nib, NSString reuseIdentifier);
 
 		/// <include file="../docs/api/UIKit/UITableView.xml" path="/Documentation/Docs[@DocId='P:UIKit.UITableView.SelectionDidChangeNotification']/*" />
-	[Field ("UITableViewSelectionDidChangeNotification")]
+		[Field ("UITableViewSelectionDidChangeNotification")]
 		[Notification]
 		NSString SelectionDidChangeNotification { get; }
 
@@ -16559,7 +16559,7 @@ namespace UIKit {
 		bool Selected { [Bind ("isSelected")] get; set; }
 
 		/// <include file="../docs/api/UIKit/UITableViewCell.xml" path="/Documentation/Docs[@DocId='P:UIKit.UITableViewCell.Highlighted']/*" />
-	[Export ("highlighted")]
+		[Export ("highlighted")]
 		bool Highlighted { [Bind ("isHighlighted")] get; set; }
 
 		[Export ("setSelected:animated:")]
@@ -17196,17 +17196,17 @@ namespace UIKit {
 		UIView InputView { get; set; }
 
 		/// <include file="../docs/api/UIKit/UITextField.xml" path="/Documentation/Docs[@DocId='P:UIKit.UITextField.TextDidBeginEditingNotification']/*" />
-	[Field ("UITextFieldTextDidBeginEditingNotification")]
+		[Field ("UITextFieldTextDidBeginEditingNotification")]
 		[Notification]
 		NSString TextDidBeginEditingNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UITextField.xml" path="/Documentation/Docs[@DocId='P:UIKit.UITextField.TextDidEndEditingNotification']/*" />
-	[Field ("UITextFieldTextDidEndEditingNotification")]
+		[Field ("UITextFieldTextDidEndEditingNotification")]
 		[Notification]
 		NSString TextDidEndEditingNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UITextField.xml" path="/Documentation/Docs[@DocId='P:UIKit.UITextField.TextFieldTextDidChangeNotification']/*" />
-	[Field ("UITextFieldTextDidChangeNotification")]
+		[Field ("UITextFieldTextDidChangeNotification")]
 		[Notification]
 		NSString TextFieldTextDidChangeNotification { get; }
 
@@ -17385,17 +17385,17 @@ namespace UIKit {
 		UIView InputView { get; set; }
 
 		/// <include file="../docs/api/UIKit/UITextView.xml" path="/Documentation/Docs[@DocId='P:UIKit.UITextView.TextDidBeginEditingNotification']/*" />
-	[Field ("UITextViewTextDidBeginEditingNotification")]
+		[Field ("UITextViewTextDidBeginEditingNotification")]
 		[Notification]
 		NSString TextDidBeginEditingNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UITextView.xml" path="/Documentation/Docs[@DocId='P:UIKit.UITextView.TextDidChangeNotification']/*" />
-	[Field ("UITextViewTextDidChangeNotification")]
+		[Field ("UITextViewTextDidChangeNotification")]
 		[Notification]
 		NSString TextDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UITextView.xml" path="/Documentation/Docs[@DocId='P:UIKit.UITextView.TextDidEndEditingNotification']/*" />
-	[Field ("UITextViewTextDidEndEditingNotification")]
+		[Field ("UITextViewTextDidEndEditingNotification")]
 		[Notification]
 		NSString TextDidEndEditingNotification { get; }
 
@@ -19144,7 +19144,7 @@ namespace UIKit {
 		void ViewDidLayoutSubviews ();
 
 		/// <include file="../docs/api/UIKit/UIViewController.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIViewController.IsBeingPresented']/*" />
-	[Export ("isBeingPresented")]
+		[Export ("isBeingPresented")]
 		bool IsBeingPresented { get; }
 
 		/// <summary>
@@ -19160,11 +19160,11 @@ namespace UIKit {
 		bool IsBeingDismissed { get; }
 
 		/// <include file="../docs/api/UIKit/UIViewController.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIViewController.IsMovingToParentViewController']/*" />
-	[Export ("isMovingToParentViewController")]
+		[Export ("isMovingToParentViewController")]
 		bool IsMovingToParentViewController { get; }
 
 		/// <include file="../docs/api/UIKit/UIViewController.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIViewController.IsMovingFromParentViewController']/*" />
-	[Export ("isMovingFromParentViewController")]
+		[Export ("isMovingFromParentViewController")]
 		bool IsMovingFromParentViewController { get; }
 
 		[Export ("presentViewController:animated:completion:")]
@@ -19451,7 +19451,7 @@ namespace UIKit {
 		UISheetPresentationController SheetPresentationController { get; }
 
 		/// <include file="../docs/api/UIKit/UIViewController.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIViewController.ShowDetailTargetDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Field ("UIViewControllerShowDetailTargetDidChangeNotification")]
 		[Notification]
 		NSString ShowDetailTargetDidChangeNotification { get; }
@@ -21552,7 +21552,7 @@ namespace UIKit {
 		string PrimaryLanguage { get; }
 
 		/// <include file="../docs/api/UIKit/UITextInputMode.xml" path="/Documentation/Docs[@DocId='P:UIKit.UITextInputMode.CurrentInputModeDidChangeNotification']/*" />
-	[Field ("UITextInputCurrentInputModeDidChangeNotification")]
+		[Field ("UITextInputCurrentInputModeDidChangeNotification")]
 		[Notification]
 		NSString CurrentInputModeDidChangeNotification { get; }
 
@@ -23149,13 +23149,13 @@ namespace UIKit {
 		IUIFocusItem NextFocusedItem { get; }
 
 		/// <include file="../docs/api/UIKit/UIFocusUpdateContext.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIFocusUpdateContext.DidUpdateNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("UIFocusDidUpdateNotification")]
 		NSString DidUpdateNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIFocusUpdateContext.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIFocusUpdateContext.MovementDidFailNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("UIFocusMovementDidFailNotification")]
 		NSString MovementDidFailNotification { get; }

@@ -132,8 +132,8 @@ namespace CoreFoundation {
 		Dictionary<string, List<CFNotificationObserverToken>> listeners = new Dictionary<string, List<CFNotificationObserverToken>> ();
 		const string NullNotificationName = "NullNotificationName";
 		/// <include file="../../docs/api/CoreFoundation/CFNotificationCenter.xml" path="/Documentation/Docs[@DocId='M:CoreFoundation.CFNotificationCenter.AddObserver(System.String,ObjCRuntime.INativeObject,System.Action{System.String,Foundation.NSDictionary},CoreFoundation.CFNotificationSuspensionBehavior)']/*" />
-	public CFNotificationObserverToken AddObserver (string name, INativeObject objectToObserve, Action<string, NSDictionary?> notificationHandler,
-								CFNotificationSuspensionBehavior suspensionBehavior = CFNotificationSuspensionBehavior.DeliverImmediately)
+		public CFNotificationObserverToken AddObserver (string name, INativeObject objectToObserve, Action<string, NSDictionary?> notificationHandler,
+									CFNotificationSuspensionBehavior suspensionBehavior = CFNotificationSuspensionBehavior.DeliverImmediately)
 		{
 			if (darwinnc is not null && darwinnc.Handle == Handle && name is null) {
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (name), "When using the Darwin Notification Center, the value passed must not be null");

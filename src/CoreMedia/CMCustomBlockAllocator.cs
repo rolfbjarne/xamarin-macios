@@ -98,7 +98,7 @@ namespace CoreMedia {
 		}
 
 		/// <include file="../../docs/api/CoreMedia/CMCustomBlockAllocator.xml" path="/Documentation/Docs[@DocId='M:CoreMedia.CMCustomBlockAllocator.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 			if (gch.IsAllocated)
 				gch.Free ();

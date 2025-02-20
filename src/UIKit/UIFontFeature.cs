@@ -298,7 +298,7 @@ namespace UIKit {
 		/// 	</remarks>
 		public UIFontFeature (CTFontFeatureOrnamentSets.Selector featureSelector) : this (FontFeatureGroup.OrnamentSets, (int) featureSelector, featureSelector) { }
 		/// <include file="../../docs/api/UIKit/UIFontFeature.xml" path="/Documentation/Docs[@DocId='M:UIKit.UIFontFeature.#ctor(CoreText.CTFontFeatureCharacterAlternatives.Selector)']/*" />
-	public UIFontFeature (CTFontFeatureCharacterAlternatives.Selector featureSelector) : this (FontFeatureGroup.CharacterAlternatives, (int) featureSelector, featureSelector) { }
+		public UIFontFeature (CTFontFeatureCharacterAlternatives.Selector featureSelector) : this (FontFeatureGroup.CharacterAlternatives, (int) featureSelector, featureSelector) { }
 		/// <param name="characterAlternatives">Requests that the specified item be used as a Character Alternative. </param>
 		///         <summary>Creates a new UIFontFeature that describes a CoreText CTFontFeatureCharacterAlternatives with the given value.</summary>
 		///         <remarks>

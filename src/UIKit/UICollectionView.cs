@@ -64,14 +64,14 @@ namespace UIKit {
 		}
 
 		/// <include file="../../docs/api/UIKit/UICollectionView.xml" path="/Documentation/Docs[@DocId='M:UIKit.UICollectionView.RegisterClassForCell(System.Type,System.String)']/*" />
-	public void RegisterClassForCell (Type cellType, string reuseIdentifier)
+		public void RegisterClassForCell (Type cellType, string reuseIdentifier)
 		{
 			using (var str = (NSString) reuseIdentifier)
 				RegisterClassForCell (cellType, str);
 		}
 
 		/// <include file="../../docs/api/UIKit/UICollectionView.xml" path="/Documentation/Docs[@DocId='M:UIKit.UICollectionView.RegisterClassForCell(System.Type,Foundation.NSString)']/*" />
-	public void RegisterClassForCell (Type cellType, NSString reuseIdentifier)
+		public void RegisterClassForCell (Type cellType, NSString reuseIdentifier)
 		{
 			if (cellType is null)
 				throw new ArgumentNullException ("cellType");
@@ -112,7 +112,7 @@ namespace UIKit {
 		}
 
 		/// <include file="../../docs/api/UIKit/UICollectionView.xml" path="/Documentation/Docs[@DocId='M:UIKit.UICollectionView.RegisterClassForSupplementaryView(System.Type,UIKit.UICollectionElementKindSection,Foundation.NSString)']/*" />
-	public void RegisterClassForSupplementaryView (Type cellType, UICollectionElementKindSection section, NSString reuseIdentifier)
+		public void RegisterClassForSupplementaryView (Type cellType, UICollectionElementKindSection section, NSString reuseIdentifier)
 		{
 			if (cellType is null)
 				throw new ArgumentNullException ("cellType");
@@ -132,13 +132,13 @@ namespace UIKit {
 		}
 
 		/// <include file="../../docs/api/UIKit/UICollectionView.xml" path="/Documentation/Docs[@DocId='M:UIKit.UICollectionView.RegisterNibForSupplementaryView(UIKit.UINib,UIKit.UICollectionElementKindSection,Foundation.NSString)']/*" />
-	public void RegisterNibForSupplementaryView (UINib nib, UICollectionElementKindSection section, NSString reuseIdentifier)
+		public void RegisterNibForSupplementaryView (UINib nib, UICollectionElementKindSection section, NSString reuseIdentifier)
 		{
 			RegisterNibForSupplementaryView (nib, KindToString (section), reuseIdentifier);
 		}
 
 		/// <include file="../../docs/api/UIKit/UICollectionView.xml" path="/Documentation/Docs[@DocId='M:UIKit.UICollectionView.DequeueReusableSupplementaryView(UIKit.UICollectionElementKindSection,Foundation.NSString,Foundation.NSIndexPath)']/*" />
-	public NSObject DequeueReusableSupplementaryView (UICollectionElementKindSection section, NSString reuseIdentifier, NSIndexPath indexPath)
+		public NSObject DequeueReusableSupplementaryView (UICollectionElementKindSection section, NSString reuseIdentifier, NSIndexPath indexPath)
 		{
 			return DequeueReusableSupplementaryView (KindToString (section), reuseIdentifier, indexPath);
 		}

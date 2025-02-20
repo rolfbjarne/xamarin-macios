@@ -79,7 +79,7 @@ namespace UIKit {
 		}
 
 		/// <include file="../../docs/api/UIKit/UIView.xml" path="/Documentation/Docs[@DocId='M:UIKit.UIView.BeginAnimations(System.String)']/*" />
-	public static void BeginAnimations (string animation)
+		public static void BeginAnimations (string animation)
 		{
 			BeginAnimations (animation, IntPtr.Zero);
 		}

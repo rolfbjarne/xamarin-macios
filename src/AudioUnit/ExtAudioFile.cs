@@ -505,7 +505,7 @@ namespace AudioUnit {
 		}
 
 		/// <include file="../../docs/api/AudioUnit/ExtAudioFile.xml" path="/Documentation/Docs[@DocId='M:AudioUnit.ExtAudioFile.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 			if (_extAudioFile != IntPtr.Zero) {
 				ExtAudioFileDispose (_extAudioFile);

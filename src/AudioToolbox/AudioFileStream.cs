@@ -238,7 +238,7 @@ namespace AudioToolbox {
 		}
 
 		/// <include file="../../docs/api/AudioToolbox/AudioFileStream.xml" path="/Documentation/Docs[@DocId='M:AudioToolbox.AudioFileStream.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 			if (disposing) {
 				if (gch.IsAllocated)

@@ -718,7 +718,7 @@ namespace AudioToolbox {
 		}
 
 		/// <include file="../../docs/api/AudioToolbox/AudioConverter.xml" path="/Documentation/Docs[@DocId='M:AudioToolbox.AudioConverter.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			if (Handle != IntPtr.Zero && Owns)
 				AudioConverterDispose (Handle);

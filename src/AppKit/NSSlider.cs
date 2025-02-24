@@ -40,6 +40,10 @@ namespace AppKit {
 		NSActionDispatcher? dispatcher;
 
 #if NET
+		/// <param name="action">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #endif
@@ -52,6 +56,13 @@ namespace AppKit {
 		}
 
 #if NET
+		/// <param name="value">To be added.</param>
+		///         <param name="minValue">To be added.</param>
+		///         <param name="maxValue">To be added.</param>
+		///         <param name="action">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #endif

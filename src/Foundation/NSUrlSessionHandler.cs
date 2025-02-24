@@ -140,10 +140,15 @@ namespace Foundation {
 			return config;
 		}
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public NSUrlSessionHandler () : this (CreateConfig ())
 		{
 		}
 
+		/// <param name="configuration">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		[CLSCompliant (false)]
 		public NSUrlSessionHandler (NSUrlSessionConfiguration configuration)
 		{
@@ -240,6 +245,9 @@ namespace Foundation {
 			task?.Dispose ();
 		}
 
+		/// <param name="disposing">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		protected override void Dispose (bool disposing)
 		{
 			lock (inflightRequestsLock) {
@@ -496,6 +504,11 @@ namespace Foundation {
 			return nsrequest;
 		}
 
+		/// <param name="request">To be added.</param>
+		///         <param name="cancellationToken">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		protected override async Task<HttpResponseMessage> SendAsync (HttpRequestMessage request, CancellationToken cancellationToken)
 		{
 			Volatile.Write (ref sentRequest, true);

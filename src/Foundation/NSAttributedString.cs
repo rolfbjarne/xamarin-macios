@@ -370,7 +370,8 @@ namespace Foundation {
 			return dict.Count == 0 ? null : dict;
 		}
 
-		public NSAttributedString (string str,
+		/// <include file="../../docs/api/Foundation/NSAttributedString.xml" path="/Documentation/Docs[@DocId='M:Foundation.NSAttributedString.#ctor(System.String,UIKit.UIFont,UIKit.UIColor,UIKit.UIColor,UIKit.UIColor,UIKit.NSParagraphStyle,Foundation.NSLigatureType,System.Single,Foundation.NSUnderlineStyle,UIKit.NSShadow,System.Single,Foundation.NSUnderlineStyle)']/*" />
+	public NSAttributedString (string str,
 					   UIFont? font = null,
 					   UIColor? foregroundColor = null,
 					   UIColor? backgroundColor = null,

@@ -36,6 +36,9 @@ namespace Foundation {
 
 	public partial class NSIndexSet : IEnumerable, IEnumerable<nuint> {
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			if (this.Count == 0)
@@ -60,6 +63,9 @@ namespace Foundation {
 			}
 		}
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public nuint [] ToArray ()
 		{
 			nuint [] indexes = new nuint [Count];
@@ -86,6 +92,10 @@ namespace Foundation {
 			return indexSet;
 		}
 
+		/// <param name="items">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static NSIndexSet FromArray (uint [] items)
 		{
 			if (items is null)
@@ -97,6 +107,10 @@ namespace Foundation {
 			return indexSet;
 		}
 
+		/// <param name="items">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static NSIndexSet FromArray (int [] items)
 		{
 			if (items is null)
@@ -111,6 +125,9 @@ namespace Foundation {
 			return indexSet;
 		}
 
+		/// <param name="value">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public NSIndexSet (uint value) : this ((nuint) value)
 		{
 		}
@@ -122,6 +139,9 @@ namespace Foundation {
 			// init done by the base ctor
 		}
 
+		/// <param name="value">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public NSIndexSet (int value) : this ((nuint) (uint) value)
 		{
 			if (value < 0)

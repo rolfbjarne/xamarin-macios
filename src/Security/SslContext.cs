@@ -48,6 +48,10 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static /* SSLContextRef */ IntPtr SSLCreateContext (/* CFAllocatorRef */ IntPtr alloc, SslProtocolSide protocolSide, SslConnectionType connectionType);
 
+		/// <param name="protocolSide">To be added.</param>
+		///         <param name="connectionType">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public SslContext (SslProtocolSide protocolSide, SslConnectionType connectionType)
 			: base (SSLCreateContext (IntPtr.Zero, protocolSide, connectionType), true)
 		{
@@ -56,7 +60,8 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static /* OSStatus */ SslStatus SSLClose (/* SSLContextRef */ IntPtr context);
 
-		protected override void Dispose (bool disposing)
+		/// <include file="../../docs/api/Security/SslContext.xml" path="/Documentation/Docs[@DocId='M:Security.SslContext.Dispose(System.Boolean)']/*" />
+	protected override void Dispose (bool disposing)
 		{
 			if (Handle != IntPtr.Zero)
 				result = SSLClose (Handle);
@@ -71,6 +76,9 @@ namespace Security {
 			base.Dispose (disposing);
 		}
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public SslStatus GetLastStatus ()
 		{
 			return result;
@@ -186,6 +194,11 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe extern static /* OSStatus */ SslStatus SSLGetSessionOption (/* SSLContextRef */ IntPtr context, SslSessionOption option, byte* value);
 
+		/// <param name="option">To be added.</param>
+		///         <param name="value">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public SslStatus GetSessionOption (SslSessionOption option, out bool value)
 		{
 			byte byteValue;
@@ -199,6 +212,11 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static /* OSStatus */ SslStatus SSLSetSessionOption (/* SSLContextRef */ IntPtr context, SslSessionOption option, byte value);
 
+		/// <param name="option">To be added.</param>
+		///         <param name="value">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public SslStatus SetSessionOption (SslSessionOption option, bool value)
 		{
 			result = SSLSetSessionOption (Handle, option, value.AsByte ());
@@ -208,6 +226,10 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static /* OSStatus */ SslStatus SSLSetClientSideAuthenticate (/* SSLContextRef */ IntPtr context, SslAuthenticate auth);
 
+		/// <param name="auth">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public SslStatus SetClientSideAuthenticate (SslAuthenticate auth)
 		{
 			result = SSLSetClientSideAuthenticate (Handle, auth);
@@ -217,6 +239,9 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static /* OSStatus */ SslStatus SSLHandshake (/* SSLContextRef */ IntPtr context);
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public SslStatus Handshake ()
 		{
 			result = SSLHandshake (Handle);
@@ -442,6 +467,10 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern unsafe static /* OSStatus */ SslStatus SSLSetDatagramHelloCookie (/* SSLContextRef */ IntPtr context, /* const void* */ byte* cookie, nint cookieLength);
 
+		/// <param name="cookie">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public unsafe SslStatus SetDatagramHelloCookie (byte [] cookie)
 		{
 			nint len = cookie is null ? 0 : cookie.Length;
@@ -552,6 +581,11 @@ namespace Security {
 			return NSArray.FromIntPtrs (ptrs);
 		}
 
+		/// <param name="identify">To be added.</param>
+		///         <param name="certificates">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public SslStatus SetCertificate (SecIdentity identify, IEnumerable<SecCertificate> certificates)
 		{
 			using (var array = Bundle (identify, certificates)) {
@@ -592,6 +626,11 @@ namespace Security {
 		extern unsafe static /* OSStatus */ SslStatus SSLSetEncryptionCertificate (/* SSLContextRef */ IntPtr context, /* CFArrayRef */ IntPtr certRefs);
 
 #if NET
+		/// <param name="identify">To be added.</param>
+		///         <param name="certificates">To be added.</param>
+		///         <summary>Developers should not use this deprecated method. Export ciphers are not available anymore.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -630,6 +669,9 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern unsafe static /* CFType */ IntPtr SSLContextGetTypeID ();
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static IntPtr GetTypeId ()
 		{
 			return SSLContextGetTypeID ();
@@ -641,6 +683,10 @@ namespace Security {
 
 #if !XAMCORE_5_0
 #if NET
+		/// <param name="policyStrength">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[UnsupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("ios")]
@@ -671,6 +717,10 @@ namespace Security {
 		static extern int SSLSetSessionConfig (IntPtr /* SSLContextRef* */ context, IntPtr /* CFStringRef* */ config);
 
 #if NET
+		/// <param name="config">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -689,6 +739,10 @@ namespace Security {
 		}
 
 #if NET
+		/// <param name="config">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -715,6 +769,9 @@ namespace Security {
 		static extern int SSLReHandshake (IntPtr /* SSLContextRef* */ context);
 
 #if NET
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -753,6 +810,9 @@ namespace Security {
 		unsafe static extern /* OSStatus */ SslStatus SSLCopyRequestedPeerNameLength (IntPtr /* SSLContextRef* */ context, nuint* /* size_t */ peerNameLen);
 
 #if NET
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -790,6 +850,10 @@ namespace Security {
 		static extern /* OSStatus */ int SSLSetSessionTicketsEnabled (IntPtr /* SSLContextRef */ context, byte /* Boolean */ enabled);
 
 #if NET
+		/// <param name="enabled">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -816,6 +880,10 @@ namespace Security {
 		static extern /* OSStatus */ int SSLSetError (IntPtr /* SSLContextRef */ context, SecStatusCode /* OSStatus */ status);
 
 #if NET
+		/// <param name="status">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -842,6 +910,10 @@ namespace Security {
 		static extern /* OSStatus */ int SSLSetOCSPResponse (IntPtr /* SSLContextRef */ context, IntPtr /* CFDataRef __nonnull */ response);
 
 #if NET
+		/// <param name="response">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -870,6 +942,10 @@ namespace Security {
 		static extern /* OSStatus */ int SSLSetALPNProtocols (IntPtr /* SSLContextRef */ context, IntPtr /* CFArrayRef */ protocols);
 
 #if NET
+		/// <param name="protocols">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -897,6 +973,10 @@ namespace Security {
 		unsafe static extern /* OSStatus */ int SSLCopyALPNProtocols (IntPtr /* SSLContextRef */ context, IntPtr* /* CFArrayRef* */ protocols);
 
 #if NET
+		/// <param name="error">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -918,6 +998,9 @@ namespace Security {
 		}
 
 #if NET
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]

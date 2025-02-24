@@ -20,7 +20,8 @@ namespace NewsstandKit {
 		///         <remarks>Each Xamarin.iOS class mirrors an unmanaged Objective-C class.   This value contains the pointer to the Objective-C class, it is similar to calling objc_getClass with the object name.</remarks>
 		public override NativeHandle ClassHandle { get { throw new InvalidOperationException (Constants.NewsstandKitRemoved); } }
 
-		protected NKAssetDownload (NSObjectFlag t) : base (t)
+		/// <include file="../../docs/api/NewsstandKit/NKAssetDownload.xml" path="/Documentation/Docs[@DocId='M:NewsstandKit.NKAssetDownload.#ctor(Foundation.NSObjectFlag)']/*" />
+	protected NKAssetDownload (NSObjectFlag t) : base (t)
 		{
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 		}
@@ -30,6 +31,10 @@ namespace NewsstandKit {
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 		}
 
+		/// <param name="downloadDelegate">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public virtual NSUrlConnection DownloadWithDelegate (INSUrlConnectionDownloadDelegate downloadDelegate)
 		{
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
@@ -74,7 +79,8 @@ namespace NewsstandKit {
 			}
 		}
 
-		protected override void Dispose (bool disposing)
+		/// <include file="../../docs/api/NewsstandKit/NKAssetDownload.xml" path="/Documentation/Docs[@DocId='M:NewsstandKit.NKAssetDownload.Dispose(System.Boolean)']/*" />
+	protected override void Dispose (bool disposing)
 		{
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 		}
@@ -88,7 +94,8 @@ namespace NewsstandKit {
 		///         <remarks>Each Xamarin.iOS class mirrors an unmanaged Objective-C class.   This value contains the pointer to the Objective-C class, it is similar to calling objc_getClass with the object name.</remarks>
 		public override NativeHandle ClassHandle { get { throw new InvalidOperationException (Constants.NewsstandKitRemoved); } }
 
-		protected NKIssue (NSObjectFlag t) : base (t)
+		/// <include file="../../docs/api/NewsstandKit/NKIssue.xml" path="/Documentation/Docs[@DocId='M:NewsstandKit.NKIssue.#ctor(Foundation.NSObjectFlag)']/*" />
+	protected NKIssue (NSObjectFlag t) : base (t)
 		{
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 		}
@@ -98,6 +105,10 @@ namespace NewsstandKit {
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 		}
 
+		/// <param name="request">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public virtual NKAssetDownload AddAsset (NSUrlRequest request)
 		{
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
@@ -159,11 +170,13 @@ namespace NewsstandKit {
 		// Notifications
 		//
 		public static partial class Notifications {
-			public static NSObject ObserveDownloadCompleted (EventHandler<NSNotificationEventArgs> handler)
+			/// <include file="../../docs/api/NewsstandKit.NKIssue/Notifications.xml" path="/Documentation/Docs[@DocId='M:NewsstandKit.NKIssue.Notifications.ObserveDownloadCompleted(System.EventHandler{Foundation.NSNotificationEventArgs})']/*" />
+	public static NSObject ObserveDownloadCompleted (EventHandler<NSNotificationEventArgs> handler)
 			{
 				throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 			}
-			public static NSObject ObserveDownloadCompleted (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)
+			/// <include file="../../docs/api/NewsstandKit.NKIssue/Notifications.xml" path="/Documentation/Docs[@DocId='M:NewsstandKit.NKIssue.Notifications.ObserveDownloadCompleted(Foundation.NSObject,System.EventHandler{Foundation.NSNotificationEventArgs})']/*" />
+	public static NSObject ObserveDownloadCompleted (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)
 			{
 				throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 			}
@@ -189,7 +202,8 @@ namespace NewsstandKit {
 		///         <remarks>Each Xamarin.iOS class mirrors an unmanaged Objective-C class.   This value contains the pointer to the Objective-C class, it is similar to calling objc_getClass with the object name.</remarks>
 		public override NativeHandle ClassHandle { get { throw new InvalidOperationException (Constants.NewsstandKitRemoved); } }
 
-		protected NKLibrary (NSObjectFlag t) : base (t)
+		/// <include file="../../docs/api/NewsstandKit/NKLibrary.xml" path="/Documentation/Docs[@DocId='M:NewsstandKit.NKLibrary.#ctor(Foundation.NSObjectFlag)']/*" />
+	protected NKLibrary (NSObjectFlag t) : base (t)
 		{
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 		}
@@ -199,16 +213,28 @@ namespace NewsstandKit {
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 		}
 
+		/// <param name="name">To be added.</param>
+		///         <param name="date">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public virtual NKIssue AddIssue (string name, NSDate date)
 		{
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 		}
 
+		/// <param name="name">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public virtual NKIssue? GetIssue (string name)
 		{
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 		}
 
+		/// <param name="issue">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public virtual void RemoveIssue (NKIssue issue)
 		{
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);

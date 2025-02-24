@@ -425,6 +425,10 @@ namespace CoreText {
 		static extern /* CFArrayRef */ IntPtr CTFontManagerCreateFontDescriptorsFromURL (/* CFURLRef */ IntPtr fileURL);
 
 #if NET
+		/// <param name="url">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -467,6 +471,36 @@ namespace CoreText {
 		unsafe static extern byte CTFontManagerRegisterGraphicsFont (IntPtr cgfont, IntPtr* error);
 
 #if NET
+		/// <param name="font">The CoreGraphics font to register with the CoreText font system.</param>
+		///         <param name="error">On return the error, if any.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>True on success, false on error.</returns>
+		///         <remarks>
+		///           <para>
+		/// 	    You can use this feature to register fonts that you
+		/// 	    download from the network, or to use fonts that are for
+		/// 	    example embedded as a resource in your executable or some
+		/// 	    other database.
+		///
+		/// 	  </para>
+		///           <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// // 
+		/// // Load font into byte array from a file.
+		/// //
+		/// byte [] myBuffer = GetEmbeddedResource ("myResource");
+		/// CGFont font = CGFont.CreateFromProvider (new CGDataProvider (myBuffer, 0, myBuffer.Count));
+		/// if (CTFontManager.RegisterGraphicsFont (font, out error)){
+		/// 	//
+		/// 	// access font
+		/// 	//
+		///
+		/// 	// Release font after we use it.
+		/// 	CTFontManager.UnregisterGraphicsFont (font, out error);
+		/// }
+		/// ]]></code>
+		///           </example>
+		///         </remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("ios")]
@@ -521,6 +555,29 @@ namespace CoreText {
 		unsafe static extern byte CTFontManagerUnregisterGraphicsFont (IntPtr cgfont, IntPtr* error);
 
 #if NET
+		/// <param name="font">The CoreGraphics font to unregister with the CoreText font system.</param>
+		///         <param name="error">On return the error, if any.</param>
+		///         <summary>Unregisters a CoreGraphics Font from the CoreText font system.</summary>
+		///         <returns>True on success, false on error.</returns>
+		///         <remarks>
+		///           <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// // 
+		/// // Load font into byte array from a file.
+		/// //
+		/// byte [] myBuffer = GetEmbeddedResource ("myResource");
+		/// CGFont font = CGFont.CreateFromProvider (new CGDataProvider (myBuffer, 0, myBuffer.Count));
+		/// if (CTFontManager.RegisterGraphicsFont (font, out error)){
+		/// 	//
+		/// 	// access font
+		/// 	//
+		///
+		/// 	// Release font after we use it.
+		/// 	CTFontManager.UnregisterGraphicsFont (font, out error);
+		/// }
+		/// ]]></code>
+		///           </example>
+		///         </remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("ios")]
@@ -588,7 +645,8 @@ namespace CoreText {
 #endif
 
 		public static partial class Notifications {
-			public static NSObject ObserveRegisteredFontsChanged (EventHandler<NSNotificationEventArgs> handler)
+			/// <include file="../../docs/api/CoreText.CTFontManager/Notifications.xml" path="/Documentation/Docs[@DocId='M:CoreText.CTFontManager.Notifications.ObserveRegisteredFontsChanged(System.EventHandler{Foundation.NSNotificationEventArgs})']/*" />
+	public static NSObject ObserveRegisteredFontsChanged (EventHandler<NSNotificationEventArgs> handler)
 			{
 				return NSNotificationCenter.DefaultCenter.AddObserver (RegisteredFontsChangedNotification, notification => handler (null, new NSNotificationEventArgs (notification)));
 			}

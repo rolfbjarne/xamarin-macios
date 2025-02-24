@@ -504,6 +504,10 @@ namespace AudioUnit {
 		static extern IntPtr AudioComponentGetIcon (IntPtr comp, float /* float */ desiredPointSize);
 
 #if NET
+		/// <param name="desiredPointSize">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("maccatalyst")]

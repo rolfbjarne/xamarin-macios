@@ -2201,6 +2201,9 @@ namespace CoreText {
 			UpperCasePetiteCaps = 2
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CTFontFeatureUpperCase (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -2234,6 +2237,9 @@ namespace CoreText {
 			FullWidthCJKRoman = 3
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CTFontFeatureCJKRomanSpacing (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -2296,11 +2302,16 @@ namespace CoreText {
 #endif
 	public class CTFontVariationAxes {
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CTFontVariationAxes ()
 			: this (new NSMutableDictionary ())
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CTFontVariationAxes (NSDictionary dictionary)
 		{
 			if (dictionary is null)
@@ -2376,11 +2387,16 @@ namespace CoreText {
 #endif
 	public class CTFontVariation {
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CTFontVariation ()
 			: this (new NSMutableDictionary ())
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CTFontVariation (NSDictionary dictionary)
 		{
 			if (dictionary is null)

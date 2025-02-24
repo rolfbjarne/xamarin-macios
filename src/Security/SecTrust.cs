@@ -27,6 +27,10 @@ namespace Security {
 
 	public partial class SecTrust {
 
+		/// <param name="certificate">To be added.</param>
+		///         <param name="policy">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public SecTrust (SecCertificate certificate, SecPolicy policy)
 		{
 			if (certificate is null)
@@ -45,6 +49,9 @@ namespace Security {
 		unsafe extern static SecStatusCode /* OSStatus */ SecTrustCopyPolicies (IntPtr /* SecTrustRef */ trust, IntPtr* /* CFArrayRef* */ policies);
 
 #if NET
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -73,6 +80,9 @@ namespace Security {
 				throw new InvalidOperationException (result.ToString ());
 		}
 
+		/// <param name="policy">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void SetPolicy (SecPolicy policy)
 		{
 			if (policy is null)
@@ -81,6 +91,9 @@ namespace Security {
 			SetPolicies (policy.Handle);
 		}
 
+		/// <param name="policies">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void SetPolicies (IEnumerable<SecPolicy> policies)
 		{
 			if (policies is null)
@@ -90,6 +103,9 @@ namespace Security {
 				SetPolicies (array.Handle);
 		}
 
+		/// <param name="policies">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void SetPolicies (NSArray policies)
 		{
 			if (policies is null)
@@ -153,6 +169,9 @@ namespace Security {
 		unsafe extern static SecStatusCode /* OSStatus */ SecTrustCopyCustomAnchorCertificates (IntPtr /* SecTrustRef */ trust, IntPtr* /* CFArrayRef* */ anchors);
 
 #if NET
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -306,6 +325,9 @@ namespace Security {
 		unsafe extern static SecStatusCode /* OSStatus */ SecTrustGetTrustResult (IntPtr /* SecTrustRef */ trust, SecTrustResult* /* SecTrustResultType */ result);
 
 #if NET
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -333,6 +355,10 @@ namespace Security {
 		unsafe static extern byte SecTrustEvaluateWithError (/* SecTrustRef */ IntPtr trust, /* CFErrorRef** */ IntPtr* error);
 
 #if NET
+		/// <param name="error">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -359,6 +385,9 @@ namespace Security {
 		extern static IntPtr /* CFDictionaryRef */ SecTrustCopyResult (IntPtr /* SecTrustRef */ trust);
 
 #if NET
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -393,6 +422,9 @@ namespace Security {
 		}
 
 #if NET
+		/// <param name="ocspResponse">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -407,6 +439,9 @@ namespace Security {
 		}
 
 #if NET
+		/// <param name="ocspResponses">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -422,6 +457,9 @@ namespace Security {
 		}
 
 #if NET
+		/// <param name="ocspResponses">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -445,6 +483,10 @@ namespace Security {
 		static extern SecStatusCode /* OSStatus */ SecTrustSetSignedCertificateTimestamps (/* SecTrustRef* */ IntPtr trust, /* CFArrayRef* */ IntPtr sctArray);
 
 #if NET
+		/// <param name="sct">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -460,6 +502,10 @@ namespace Security {
 		}
 
 #if NET
+		/// <param name="sct">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]

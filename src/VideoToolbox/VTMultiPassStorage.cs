@@ -46,7 +46,8 @@ namespace VideoToolbox {
 		{
 		}
 
-		protected override void Dispose (bool disposing)
+		/// <include file="../../docs/api/VideoToolbox/VTMultiPassStorage.xml" path="/Documentation/Docs[@DocId='M:VideoToolbox.VTMultiPassStorage.Dispose(System.Boolean)']/*" />
+	protected override void Dispose (bool disposing)
 		{
 			if (Handle != IntPtr.Zero)
 				Close ();
@@ -62,6 +63,12 @@ namespace VideoToolbox {
 			/* VTMultiPassStorageRef */ IntPtr* multiPassStorageOut);
 
 		// Convenience method taking a strong dictionary
+		/// <param name="options">To be added.</param>
+		///         <param name="fileUrl">To be added.</param>
+		///         <param name="timeRange">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static VTMultiPassStorage? Create (
 			VTMultiPassStorageCreationOptions? options,
 			NSUrl? fileUrl = null,
@@ -70,6 +77,12 @@ namespace VideoToolbox {
 			return Create (fileUrl, timeRange, options?.Dictionary);
 		}
 
+		/// <param name="fileUrl">To be added.</param>
+		///         <param name="timeRange">To be added.</param>
+		///         <param name="options">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static VTMultiPassStorage? Create (
 			NSUrl? fileUrl = null,
 			CMTimeRange? timeRange = null,
@@ -95,6 +108,9 @@ namespace VideoToolbox {
 		[DllImport (Constants.VideoToolboxLibrary)]
 		extern static /* OSStatus */ VTStatus VTMultiPassStorageClose (/* VTMultiPassStorage */ IntPtr multiPassStorage);
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public VTStatus Close ()
 		{
 			if (closed)

@@ -61,6 +61,10 @@ namespace VideoToolbox {
 		[DllImport (Constants.VideoToolboxLibrary)]
 		unsafe extern static VTStatus VTSessionCopySupportedPropertyDictionary (/* VTSessionRef */ IntPtr session, /* CFDictionaryRef* */ IntPtr* supportedPropertyDictionaryOut);
 
+		/// <param name="options">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public VTStatus SetProperties (VTPropertyOptions options)
 		{
 			if (options is null)
@@ -69,6 +73,11 @@ namespace VideoToolbox {
 			return VTSessionSetProperties (Handle, options.Dictionary.Handle);
 		}
 
+		/// <param name="propertyKey">To be added.</param>
+		///         <param name="value">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public VTStatus SetProperty (NSString propertyKey, NSObject? value)
 		{
 			if (propertyKey is null)
@@ -77,6 +86,9 @@ namespace VideoToolbox {
 			return VTSessionSetProperty (Handle, propertyKey.Handle, value.GetHandle ());
 		}
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public VTPropertyOptions? GetProperties ()
 		{
 			VTStatus result;
@@ -93,6 +105,10 @@ namespace VideoToolbox {
 			return new VTPropertyOptions (dict);
 		}
 
+		/// <param name="propertyKey">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public NSObject? GetProperty (NSString propertyKey)
 		{
 			if (propertyKey is null)
@@ -108,6 +124,9 @@ namespace VideoToolbox {
 			return Runtime.GetNSObject<NSObject> (ret, true);
 		}
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public NSDictionary? GetSerializableProperties ()
 		{
 			VTStatus result;
@@ -121,6 +140,9 @@ namespace VideoToolbox {
 			return Runtime.GetNSObject<NSDictionary> (ret, true);
 		}
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		public NSDictionary? GetSupportedProperties ()
 		{

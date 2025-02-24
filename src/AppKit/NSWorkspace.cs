@@ -13,6 +13,14 @@ namespace AppKit {
 	public partial class NSWorkspace {
 
 #if NET
+		/// <param name="urls">To be added.</param>
+		///         <param name="bundleIdentifier">To be added.</param>
+		///         <param name="options">To be added.</param>
+		///         <param name="descriptor">To be added.</param>
+		///         <param name="identifiers">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos11.0", "Use 'NSWorkspace.OpenUrls' with completion handler.")]
 		[UnsupportedOSPlatform ("maccatalyst")]
@@ -26,6 +34,13 @@ namespace AppKit {
 		}
 
 #if NET
+		/// <param name="urls">To be added.</param>
+		///         <param name="bundleIdentifier">To be added.</param>
+		///         <param name="options">To be added.</param>
+		///         <param name="descriptor">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos11.0", "Use 'NSWorkspace.OpenUrls' with completion handler.")]
 		[UnsupportedOSPlatform ("maccatalyst")]
@@ -37,6 +52,10 @@ namespace AppKit {
 			return _OpenUrls (urls, bundleIdentifier, options, descriptor, null);
 		}
 
+		/// <param name="fileType">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[Advice ("Use 'NSWorkSpace.IconForContentType' instead.")]
 		public virtual NSImage IconForFileType (string fileType)
 		{

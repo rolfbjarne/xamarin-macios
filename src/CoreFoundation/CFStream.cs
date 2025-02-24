@@ -721,6 +721,9 @@ namespace CoreFoundation {
 				e (this, args);
 		}
 
+		/// <param name="args">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		protected virtual void OnCanAcceptBytesEvent (StreamEventArgs args)
 		{
 			var e = CanAcceptBytesEvent;
@@ -728,6 +731,9 @@ namespace CoreFoundation {
 				e (this, args);
 		}
 
+		/// <param name="args">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		protected virtual void OnErrorEvent (StreamEventArgs args)
 		{
 			var e = ErrorEvent;
@@ -735,6 +741,9 @@ namespace CoreFoundation {
 				e (this, args);
 		}
 
+		/// <param name="args">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		protected virtual void OnClosedEvent (StreamEventArgs args)
 		{
 			var e = ClosedEvent;
@@ -744,8 +753,16 @@ namespace CoreFoundation {
 
 		#endregion
 
+		/// <param name="loop">To be added.</param>
+		///         <param name="mode">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		protected abstract void ScheduleWithRunLoop (CFRunLoop loop, NSString? mode);
 
+		/// <param name="loop">To be added.</param>
+		///         <param name="mode">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		protected abstract void UnscheduleFromRunLoop (CFRunLoop loop, NSString? mode);
 
 		protected delegate void CFStreamCallback (IntPtr s, nint type, IntPtr info);
@@ -765,6 +782,9 @@ namespace CoreFoundation {
 		static CFStreamCallback OnCallbackDelegate = NativeCallback;
 #endif
 
+		/// <param name="type">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		protected virtual void OnCallback (CFStreamEventType type)
 		{
 			var args = new StreamEventArgs (type);
@@ -787,6 +807,10 @@ namespace CoreFoundation {
 			}
 		}
 
+		/// <param name="runLoop">To be added.</param>
+		///         <param name="runLoopMode">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void EnableEvents (CFRunLoop runLoop, NSString runLoopMode)
 		{
 			if (open || closed || (loop is not null))
@@ -862,7 +886,8 @@ namespace CoreFoundation {
 		{
 		}
 
-		protected override void Dispose (bool disposing)
+		/// <include file="../../docs/api/CoreFoundation/CFStream.xml" path="/Documentation/Docs[@DocId='M:CoreFoundation.CFStream.Dispose(System.Boolean)']/*" />
+	protected override void Dispose (bool disposing)
 		{
 			if (disposing) {
 				Close ();

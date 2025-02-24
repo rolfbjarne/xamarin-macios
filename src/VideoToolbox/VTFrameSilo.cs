@@ -52,6 +52,11 @@ namespace VideoToolbox {
 			/* CFDictionaryRef */ IntPtr options, /* Reserved, always null */
 			/* VTFrameSiloRef */ IntPtr* siloOut);
 
+		/// <param name="fileUrl">To be added.</param>
+		///         <param name="timeRange">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static VTFrameSilo? Create (NSUrl? fileUrl = null, CMTimeRange? timeRange = null)
 		{
 			VTStatus status;
@@ -76,6 +81,10 @@ namespace VideoToolbox {
 			/* VTFrameSiloRef */ IntPtr silo,
 			/* CMSampleBufferRef */ IntPtr sampleBuffer);
 
+		/// <param name="sampleBuffer">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public VTStatus AddSampleBuffer (CMSampleBuffer sampleBuffer)
 		{
 			if (sampleBuffer is null)
@@ -90,6 +99,10 @@ namespace VideoToolbox {
 			/* CMItemCount */ nint timeRangeCount,
 			/* const CMTimeRange * */ IntPtr timeRangeArray);
 
+		/// <param name="ranges">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public unsafe VTStatus SetTimeRangesForNextPass (CMTimeRange [] ranges)
 		{
 			if (ranges is null)
@@ -108,6 +121,10 @@ namespace VideoToolbox {
 			/* VTFrameSiloRef */ IntPtr silo,
 			/* Float32* */ float* progressOut);
 
+		/// <param name="progress">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public VTStatus GetProgressOfCurrentPass (out float progress)
 		{
 			progress = default;
@@ -150,6 +167,11 @@ namespace VideoToolbox {
 			/* */ EachSampleBufferCallback callback);
 #endif
 
+		/// <param name="callback">To be added.</param>
+		///         <param name="range">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public unsafe VTStatus ForEach (Func<CMSampleBuffer, VTStatus> callback, CMTimeRange? range = null)
 		{
 			var callbackHandle = GCHandle.Alloc (callback);

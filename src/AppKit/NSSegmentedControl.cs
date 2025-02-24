@@ -27,6 +27,12 @@ namespace AppKit {
 		}
 
 #if NET
+		/// <param name="labels">To be added.</param>
+		///         <param name="trackingMode">To be added.</param>
+		///         <param name="action">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #endif
@@ -39,6 +45,12 @@ namespace AppKit {
 		}
 
 #if NET
+		/// <param name="images">To be added.</param>
+		///         <param name="trackingMode">To be added.</param>
+		///         <param name="action">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #endif
@@ -50,6 +62,8 @@ namespace AppKit {
 			return control;
 		}
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void UnselectAllSegments ()
 		{
 			NSSegmentSwitchTracking current = this.Cell.TrackingMode;

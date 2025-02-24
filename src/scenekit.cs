@@ -2983,6 +2983,11 @@ namespace SceneKit {
 		[Static, Export ("rendererWithContext:options:")]
 		SCNRenderer FromContext (IntPtr context, [NullAllowed] NSDictionary options);
 
+		/// <param name="context">To be added.</param>
+		///         <param name="options">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[NoMacCatalyst]
 		[Static]
 		[Wrap ("FromContext (context.GetHandle (), options)")]

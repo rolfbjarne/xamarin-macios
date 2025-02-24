@@ -277,6 +277,9 @@ namespace Security {
 		extern static /* CFDictionaryRef */ IntPtr SecCertificateCopyValues (/* SecCertificateRef */ IntPtr certificate, /* CFArrayRef */ IntPtr keys, /* CFErrorRef _Nullable * */ IntPtr error);
 
 #if NET
+		/// <summary>To be added.</summary>
+		///         <returns>The return type is <see cref="T:Security.SecKey" /> on iOS and <see cref="T:Foundation.NSData" /> on MacOS.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]

@@ -522,6 +522,17 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static SecStatusCode SecKeychainItemFreeContent (IntPtr attrList, IntPtr data);
 
+		/// <param name="serverName">To be added.</param>
+		///         <param name="accountName">To be added.</param>
+		///         <param name="password">To be added.</param>
+		///         <param name="protocolType">To be added.</param>
+		///         <param name="port">To be added.</param>
+		///         <param name="path">To be added.</param>
+		///         <param name="authenticationType">To be added.</param>
+		///         <param name="securityDomain">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static SecStatusCode AddInternetPassword (
 			string serverName,
 			string accountName,
@@ -568,6 +579,17 @@ namespace Security {
 		}
 
 
+		/// <param name="serverName">To be added.</param>
+		///         <param name="accountName">To be added.</param>
+		///         <param name="password">To be added.</param>
+		///         <param name="protocolType">To be added.</param>
+		///         <param name="port">To be added.</param>
+		///         <param name="path">To be added.</param>
+		///         <param name="authenticationType">To be added.</param>
+		///         <param name="securityDomain">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static SecStatusCode FindInternetPassword (
 			string serverName,
 			string accountName,
@@ -643,6 +665,12 @@ namespace Security {
 			}
 		}
 
+		/// <param name="serviceName">To be added.</param>
+		///         <param name="accountName">To be added.</param>
+		///         <param name="password">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static SecStatusCode AddGenericPassword (string serviceName, string accountName, byte [] password)
 		{
 			byte []? serviceNameBytes = null;
@@ -666,6 +694,12 @@ namespace Security {
 				);
 		}
 
+		/// <param name="serviceName">To be added.</param>
+		///         <param name="accountName">To be added.</param>
+		///         <param name="password">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static SecStatusCode FindGenericPassword (string serviceName, string accountName, out byte []? password)
 		{
 			password = null;

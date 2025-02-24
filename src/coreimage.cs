@@ -487,6 +487,8 @@ namespace CoreImage {
 		//[Export ("render:toIOSurface:bounds:colorSpace:")]
 		//void RendertoIOSurfaceboundscolorSpace (CIImage im, IOSurfaceRef surface, CGRect r, CGColorSpaceRef cs, );
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -549,6 +551,10 @@ namespace CoreImage {
 		[Static]
 		int OfflineGPUCount { get; }
 
+		/// <param name="gpuIndex">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -877,6 +883,12 @@ namespace CoreImage {
 #endif
 #endif
 
+		/// <param name="k">To be added.</param>
+		///         <param name="args">To be added.</param>
+		///         <param name="options">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -884,6 +896,11 @@ namespace CoreImage {
 		[return: NullAllowed]
 		CIImage Apply (CIKernel k, [NullAllowed] NSArray args, [NullAllowed] NSDictionary options);
 
+		/// <param name="configurationOptions">To be added.</param>
+		///         <param name="excludedKeys">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -2593,6 +2610,10 @@ namespace CoreImage {
 		[Wrap ("FromCGImageSource (source, index, options.GetDictionary ())")]
 		CIImage FromCGImageSource (CGImageSource source, nuint index, [NullAllowed] CIImageInitializationOptionsWithMetadata options);
 
+		/// <param name="layer">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -2601,6 +2622,11 @@ namespace CoreImage {
 		[Export ("imageWithCGLayer:")]
 		CIImage FromLayer (CGLayer layer);
 
+		/// <param name="layer">To be added.</param>
+		///         <param name="options">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -4136,11 +4162,15 @@ namespace CoreImage {
 	[NoTV]
 	[BaseType (typeof (NSObject))]
 	interface CIPlugIn {
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.MacOSX, 10, 15, message: "Use 'LoadNonExecutablePlugIns' for non-executable plugins instead.")]
 		[Static]
 		[Export ("loadAllPlugIns")]
 		void LoadAllPlugIns ();
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("loadNonExecutablePlugIns")]
 		void LoadNonExecutablePlugIns ();
@@ -4149,6 +4179,10 @@ namespace CoreImage {
 		[Export ("loadNonExecutablePlugIn:")]
 		void LoadNonExecutablePlugIn (NSUrl url);
 
+		/// <param name="pluginUrl">To be added.</param>
+		///         <param name="allowNonExecutable">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.MacOSX, 10, 7)]
 		[Static]
 		[Export ("loadPlugIn:allowNonExecutable:")]

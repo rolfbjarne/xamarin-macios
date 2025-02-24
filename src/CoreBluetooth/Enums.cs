@@ -148,7 +148,9 @@ namespace CoreBluetooth {
 		UnlikelyError,
 		InsufficientEncryption,
 		UnsupportedGroupType,
-		InsufficientResources
+		InsufficientResources,
+		DatabaseOutOfSync = 0x12,
+		ValueNotAllowed = 0x13,
 	}
 
 	// NSInteger -> CBPeripheral.h

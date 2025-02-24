@@ -2240,7 +2240,7 @@ namespace CoreAnimation {
 	[BaseType (typeof (CAAnimation))]
 	interface CAPropertyAnimation {
 		/// <include file="../docs/api/CoreAnimation/CAPropertyAnimation.xml" path="/Documentation/Docs[@DocId='M:CoreAnimation.CAPropertyAnimation.FromKeyPath(System.String)']/*" />
-	[Static]
+		[Static]
 		[Export ("animationWithKeyPath:")]
 		CAPropertyAnimation FromKeyPath ([NullAllowed] string path);
 

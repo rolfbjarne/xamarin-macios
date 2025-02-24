@@ -424,7 +424,7 @@ namespace CoreMidi {
 		}
 
 		/// <include file="../../docs/api/CoreMidi/MidiObject.xml" path="/Documentation/Docs[@DocId='M:CoreMidi.MidiObject.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 			DisposeHandle ();
 		}
@@ -750,7 +750,7 @@ namespace CoreMidi {
 		}
 
 		/// <include file="../../docs/api/CoreMidi/MidiClient.xml" path="/Documentation/Docs[@DocId='M:CoreMidi.MidiClient.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			SetupChanged = null;
 			ObjectAdded = null;
@@ -2709,7 +2709,7 @@ namespace CoreMidi {
 		}
 
 		/// <include file="../../docs/api/CoreMidi/MidiEndpoint.xml" path="/Documentation/Docs[@DocId='M:CoreMidi.MidiEndpoint.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			MessageReceived = null;
 			base.Dispose (disposing);
@@ -3258,7 +3258,7 @@ namespace CoreMidi {
 		}
 
 		/// <include file="../../docs/api/CoreMidi/MidiPacketsEventArgs.xml" path="/Documentation/Docs[@DocId='M:CoreMidi.MidiPacketsEventArgs.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 			// The list of packets may have pointers into packetList, make sure
 			// we invalidate those pointers.

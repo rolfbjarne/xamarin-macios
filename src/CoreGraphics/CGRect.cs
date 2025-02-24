@@ -123,7 +123,7 @@ namespace CoreGraphics {
 		}
 
 		/// <include file="../../docs/api/CoreGraphics/CGRect.xml" path="/Documentation/Docs[@DocId='M:CoreGraphics.CGRect.Union(CoreGraphics.CGRect,CoreGraphics.CGRect)']/*" />
-	public static CGRect Union (CGRect a, CGRect b)
+		public static CGRect Union (CGRect a, CGRect b)
 		{
 			return FromLTRB (
 				(nfloat) Math.Min (a.Left, b.Left),
@@ -483,13 +483,13 @@ namespace CoreGraphics {
 #endif // !COREBUILD
 
 		/// <include file="../../docs/api/CoreGraphics/CGRect.xml" path="/Documentation/Docs[@DocId='M:CoreGraphics.CGRect.Equals(System.Object)']/*" />
-	public override bool Equals (object? obj)
+		public override bool Equals (object? obj)
 		{
 			return (obj is CGRect rect) && Equals (rect);
 		}
 
 		/// <include file="../../docs/api/CoreGraphics/CGRect.xml" path="/Documentation/Docs[@DocId='M:CoreGraphics.CGRect.Equals(CoreGraphics.CGRect)']/*" />
-	public bool Equals (CGRect rect)
+		public bool Equals (CGRect rect)
 		{
 			return
 				x == rect.x &&

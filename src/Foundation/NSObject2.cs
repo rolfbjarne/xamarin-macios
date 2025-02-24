@@ -198,7 +198,7 @@ namespace Foundation {
 		// This is just here as a constructor chain that can will
 		// only do Init at the most derived class.
 		/// <include file="../../docs/api/Foundation/NSObject.xml" path="/Documentation/Docs[@DocId='M:Foundation.NSObject.#ctor(Foundation.NSObjectFlag)']/*" />
-	public NSObject (NSObjectFlag x)
+		public NSObject (NSObjectFlag x)
 		{
 			bool alloced = AllocIfNeeded ();
 			InitializeObject (alloced);

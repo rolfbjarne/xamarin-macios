@@ -1188,7 +1188,7 @@ namespace AudioUnit {
 		static extern int AudioComponentInstanceDispose (IntPtr inInstance);
 
 		/// <include file="../../docs/api/AudioUnit/AudioUnit.xml" path="/Documentation/Docs[@DocId='M:AudioUnit.AudioUnit.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			if (Handle != IntPtr.Zero && Owns) {
 				Stop ();

@@ -149,7 +149,7 @@ namespace MultipeerConnectivity {
 		void NearbyConnectionDataForPeer (MCPeerID peerID, MCSessionNearbyConnectionDataForPeerCompletionHandler completionHandler);
 
 		/// <include file="../docs/api/MultipeerConnectivity/MCSession.xml" path="/Documentation/Docs[@DocId='M:MultipeerConnectivity.MCSession.ConnectPeer(MultipeerConnectivity.MCPeerID,Foundation.NSData)']/*" />
-	[Export ("connectPeer:withNearbyConnectionData:")]
+		[Export ("connectPeer:withNearbyConnectionData:")]
 		void ConnectPeer (MCPeerID peerID, NSData data);
 
 		/// <param name="peerID">The ID of the peer whose connection should be cancelled.</param>
@@ -341,7 +341,7 @@ namespace MultipeerConnectivity {
 	partial interface MCNearbyServiceAdvertiserDelegate {
 
 		/// <include file="../docs/api/MultipeerConnectivity/MCNearbyServiceAdvertiserDelegate.xml" path="/Documentation/Docs[@DocId='M:MultipeerConnectivity.MCNearbyServiceAdvertiserDelegate.DidReceiveInvitationFromPeer(MultipeerConnectivity.MCNearbyServiceAdvertiser,MultipeerConnectivity.MCPeerID,Foundation.NSData,MultipeerConnectivity.MCNearbyServiceAdvertiserInvitationHandler)']/*" />
-	[Abstract]
+		[Abstract]
 		[Export ("advertiser:didReceiveInvitationFromPeer:withContext:invitationHandler:")]
 		void DidReceiveInvitationFromPeer (MCNearbyServiceAdvertiser advertiser, MCPeerID peerID, [NullAllowed] NSData context, MCNearbyServiceAdvertiserInvitationHandler invitationHandler);
 

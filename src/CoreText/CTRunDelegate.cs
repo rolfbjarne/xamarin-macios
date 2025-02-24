@@ -107,7 +107,7 @@ namespace CoreText {
 		}
 
 		/// <include file="../../docs/api/CoreText/CTRunDelegateOperations.xml" path="/Documentation/Docs[@DocId='M:CoreText.CTRunDelegateOperations.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 		}
 

@@ -1427,7 +1427,7 @@ namespace CoreGraphics {
 			/* CGPDFPageRef __nullable */ IntPtr page);
 
 		/// <include file="../../docs/api/CoreGraphics/CGContext.xml" path="/Documentation/Docs[@DocId='M:CoreGraphics.CGContext.DrawPDFPage(CoreGraphics.CGPDFPage)']/*" />
-	public void DrawPDFPage (CGPDFPage? page)
+		public void DrawPDFPage (CGPDFPage? page)
 		{
 			CGContextDrawPDFPage (Handle, page.GetHandle ());
 		}
@@ -1745,7 +1745,7 @@ namespace CoreGraphics {
 		}
 
 		/// <include file="../../docs/api/CoreGraphics/CGContext.xml" path="/Documentation/Docs[@DocId='M:CoreGraphics.CGContext.AsBitmapContext']/*" />
-	public CGBitmapContext AsBitmapContext ()
+		public CGBitmapContext AsBitmapContext ()
 		{
 			return new CGBitmapContext (Handle, false);
 		}

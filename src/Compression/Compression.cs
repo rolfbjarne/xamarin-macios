@@ -405,8 +405,8 @@ namespace Compression {
 		}
 
 		/// <include file="../../docs/api/Compression/CompressionStream.xml" path="/Documentation/Docs[@DocId='M:Compression.CompressionStream.BeginRead(System.Byte[],System.Int32,System.Int32,System.AsyncCallback,System.Object)']/*" />
-	public override IAsyncResult BeginRead (byte [] buffer, int offset, int count, AsyncCallback? asyncCallback, object? asyncState) =>
-			TaskToApm.Begin (ReadAsync (buffer, offset, count, CancellationToken.None), asyncCallback, asyncState);
+		public override IAsyncResult BeginRead (byte [] buffer, int offset, int count, AsyncCallback? asyncCallback, object? asyncState) =>
+				TaskToApm.Begin (ReadAsync (buffer, offset, count, CancellationToken.None), asyncCallback, asyncState);
 
 		/// <param name="asyncResult">The reference to the pending asynchronous request to finish.</param>
 		///         <summary>Waits for the pending asynchronous read to complete.</summary>
@@ -419,7 +419,7 @@ namespace Compression {
 			TaskToApm.End<int> (asyncResult);
 
 		/// <include file="../../docs/api/Compression/CompressionStream.xml" path="/Documentation/Docs[@DocId='M:Compression.CompressionStream.ReadAsync(System.Byte[],System.Int32,System.Int32,System.Threading.CancellationToken)']/*" />
-	public override Task<int> ReadAsync (byte [] array, int offset, int count, CancellationToken cancellationToken)
+		public override Task<int> ReadAsync (byte [] array, int offset, int count, CancellationToken cancellationToken)
 		{
 			ValidateParameters (array, offset, count);
 			return ReadAsyncMemory (new Memory<byte> (array, offset, count), cancellationToken).AsTask ();
@@ -677,8 +677,8 @@ namespace Compression {
 		}
 
 		/// <include file="../../docs/api/Compression/CompressionStream.xml" path="/Documentation/Docs[@DocId='M:Compression.CompressionStream.BeginWrite(System.Byte[],System.Int32,System.Int32,System.AsyncCallback,System.Object)']/*" />
-	public override IAsyncResult BeginWrite (byte [] array, int offset, int count, AsyncCallback? asyncCallback, object? asyncState) =>
-			TaskToApm.Begin (WriteAsync (array, offset, count, CancellationToken.None), asyncCallback, asyncState);
+		public override IAsyncResult BeginWrite (byte [] array, int offset, int count, AsyncCallback? asyncCallback, object? asyncState) =>
+				TaskToApm.Begin (WriteAsync (array, offset, count, CancellationToken.None), asyncCallback, asyncState);
 
 		/// <param name="asyncResult">The reference to the pending asynchronous request to finish.</param>
 		///         <summary>Ends an asynchronous write operation.</summary>
@@ -763,7 +763,7 @@ namespace Compression {
 		}
 
 		/// <include file="../../docs/api/Compression/CompressionStream.xml" path="/Documentation/Docs[@DocId='M:Compression.CompressionStream.CopyToAsync(System.IO.Stream,System.Int32,System.Threading.CancellationToken)']/*" />
-	public override Task CopyToAsync (Stream destination, int bufferSize, CancellationToken cancellationToken)
+		public override Task CopyToAsync (Stream destination, int bufferSize, CancellationToken cancellationToken)
 		{
 			// Validation as base CopyToAsync would do
 			// StreamHelpers.ValidateCopyToArgs(this, destination, bufferSize);

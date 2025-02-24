@@ -16061,7 +16061,7 @@ namespace UIKit {
 		UITableViewCell DequeueReusableCell (string identifier);
 
 		/// <include file="../docs/api/UIKit/UITableView.xml" path="/Documentation/Docs[@DocId='M:UIKit.UITableView.DequeueReusableCell(Foundation.NSString)']/*" />
-	[Export ("dequeueReusableCellWithIdentifier:")]
+		[Export ("dequeueReusableCellWithIdentifier:")]
 		[Sealed]
 		[return: NullAllowed]
 		UITableViewCell DequeueReusableCell (NSString identifier);

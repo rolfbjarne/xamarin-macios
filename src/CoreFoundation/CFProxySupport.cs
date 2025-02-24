@@ -1105,7 +1105,7 @@ namespace CoreFoundation {
 		}
 
 		/// <include file="../../docs/api/CoreFoundation/CFNetwork.xml" path="/Documentation/Docs[@DocId='M:CoreFoundation.CFNetwork.GetDefaultProxy']/*" />
-	public static IWebProxy GetDefaultProxy ()
+		public static IWebProxy GetDefaultProxy ()
 		{
 			return new CFWebProxy ();
 		}

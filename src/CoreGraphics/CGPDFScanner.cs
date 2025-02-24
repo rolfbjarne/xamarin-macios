@@ -92,7 +92,7 @@ namespace CoreGraphics {
 		}
 
 		/// <include file="../../docs/api/CoreGraphics/CGPDFScanner.xml" path="/Documentation/Docs[@DocId='M:CoreGraphics.CGPDFScanner.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			if (gch.IsAllocated)
 				gch.Free ();

@@ -603,7 +603,7 @@ namespace AudioUnit {
 		}
 
 		/// <include file="../../docs/api/AudioUnit/AUGraph.xml" path="/Documentation/Docs[@DocId='M:AudioUnit.AUGraph.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			if (Handle != IntPtr.Zero && Owns) {
 				AUGraphUninitialize (Handle);

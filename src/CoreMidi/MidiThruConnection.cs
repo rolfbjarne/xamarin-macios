@@ -66,7 +66,7 @@ namespace CoreMidi {
 			/* MIDIThruConnectionRef* */ MidiThruConnectionRef connection);
 
 		/// <include file="../../docs/api/CoreMidi/MidiThruConnection.xml" path="/Documentation/Docs[@DocId='M:CoreMidi.MidiThruConnection.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 			if (handle != InvalidRef) {
 				MIDIThruConnectionDispose (handle);

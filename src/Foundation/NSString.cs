@@ -93,7 +93,7 @@ namespace Foundation {
 		}
 
 		/// <include file="../../docs/api/Foundation/NSString.xml" path="/Documentation/Docs[@DocId='M:Foundation.NSString.CreateNative(System.String)']/*" />
-	[Obsolete ("Use of 'CFString.CreateNative' offers better performance.")]
+		[Obsolete ("Use of 'CFString.CreateNative' offers better performance.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static NativeHandle CreateNative (string str)
 		{

@@ -255,8 +255,8 @@ namespace CoreFoundation {
 		}
 
 		/// <include file="../../docs/api/CoreFoundation/DispatchQueue.xml" path="/Documentation/Docs[@DocId='M:CoreFoundation.DispatchQueue.#ctor(System.String,System.Boolean)']/*" />
-	public DispatchQueue (string label, bool concurrent)
-			: base (dispatch_queue_create (label, concurrent ? ConcurrentQueue : IntPtr.Zero), true)
+		public DispatchQueue (string label, bool concurrent)
+				: base (dispatch_queue_create (label, concurrent ? ConcurrentQueue : IntPtr.Zero), true)
 		{
 			if (Handle == IntPtr.Zero)
 				throw new Exception ("Error creating dispatch queue");

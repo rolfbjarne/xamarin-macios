@@ -50,7 +50,7 @@ namespace Foundation {
 		}
 
 		/// <include file="../../docs/api/Foundation/NSUrlSessionDownloadTaskRequest.xml" path="/Documentation/Docs[@DocId='M:Foundation.NSUrlSessionDownloadTaskRequest.Dispose(System.Boolean)']/*" />
-	protected void Dispose (bool disposing)
+		protected void Dispose (bool disposing)
 		{
 			if (tmpfile is not null) {
 				try {

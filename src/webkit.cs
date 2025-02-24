@@ -5389,7 +5389,7 @@ namespace WebKit {
 		void EvaluateJavaScript (NSString javascript, [NullAllowed] WKJavascriptEvaluationResult completionHandler);
 
 		/// <include file="../docs/api/WebKit/WKWebView.xml" path="/Documentation/Docs[@DocId='M:WebKit.WKWebView.EvaluateJavaScript(System.String,WebKit.WKJavascriptEvaluationResult)']/*" />
-	[Wrap ("EvaluateJavaScript ((NSString)javascript, completionHandler)")]
+		[Wrap ("EvaluateJavaScript ((NSString)javascript, completionHandler)")]
 		[Async]
 		void EvaluateJavaScript (string javascript, WKJavascriptEvaluationResult completionHandler);
 

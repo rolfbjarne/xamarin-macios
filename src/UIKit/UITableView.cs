@@ -39,7 +39,7 @@ namespace UIKit {
 		}
 
 		/// <include file="../../docs/api/UIKit/UITableView.xml" path="/Documentation/Docs[@DocId='M:UIKit.UITableView.RegisterClassForCellReuse(System.Type,Foundation.NSString)']/*" />
-	public void RegisterClassForCellReuse (Type cellType, NSString reuseIdentifier)
+		public void RegisterClassForCellReuse (Type cellType, NSString reuseIdentifier)
 		{
 			RegisterClassForCellReuse (cellType is null ? IntPtr.Zero : Class.GetHandle (cellType), reuseIdentifier);
 		}
@@ -65,7 +65,7 @@ namespace UIKit {
 		}
 
 		/// <include file="../../docs/api/UIKit/UITableView.xml" path="/Documentation/Docs[@DocId='M:UIKit.UITableView.RegisterClassForHeaderFooterViewReuse(System.Type,Foundation.NSString)']/*" />
-	public void RegisterClassForHeaderFooterViewReuse (Type cellType, NSString reuseIdentifier)
+		public void RegisterClassForHeaderFooterViewReuse (Type cellType, NSString reuseIdentifier)
 		{
 			RegisterClassForHeaderFooterViewReuse (cellType is null ? IntPtr.Zero : Class.GetHandle (cellType), reuseIdentifier);
 		}

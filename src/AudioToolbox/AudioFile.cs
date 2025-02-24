@@ -2797,7 +2797,7 @@ namespace AudioToolbox {
 		public abstract long Size { get; set; }
 
 		/// <include file="../../docs/api/AudioToolbox/AudioSource.xml" path="/Documentation/Docs[@DocId='M:AudioToolbox.AudioSource.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			base.Dispose (disposing);
 			if (gch.IsAllocated)

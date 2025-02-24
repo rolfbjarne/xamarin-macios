@@ -182,7 +182,7 @@ namespace AudioToolbox {
 		}
 
 		/// <include file="../../docs/api/AudioToolbox/SystemSound.xml" path="/Documentation/Docs[@DocId='M:AudioToolbox.SystemSound.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 			Cleanup (false);
 		}

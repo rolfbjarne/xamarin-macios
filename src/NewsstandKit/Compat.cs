@@ -21,7 +21,7 @@ namespace NewsstandKit {
 		public override NativeHandle ClassHandle { get { throw new InvalidOperationException (Constants.NewsstandKitRemoved); } }
 
 		/// <include file="../../docs/api/NewsstandKit/NKAssetDownload.xml" path="/Documentation/Docs[@DocId='M:NewsstandKit.NKAssetDownload.#ctor(Foundation.NSObjectFlag)']/*" />
-	protected NKAssetDownload (NSObjectFlag t) : base (t)
+		protected NKAssetDownload (NSObjectFlag t) : base (t)
 		{
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 		}
@@ -80,7 +80,7 @@ namespace NewsstandKit {
 		}
 
 		/// <include file="../../docs/api/NewsstandKit/NKAssetDownload.xml" path="/Documentation/Docs[@DocId='M:NewsstandKit.NKAssetDownload.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 		}
@@ -95,7 +95,7 @@ namespace NewsstandKit {
 		public override NativeHandle ClassHandle { get { throw new InvalidOperationException (Constants.NewsstandKitRemoved); } }
 
 		/// <include file="../../docs/api/NewsstandKit/NKIssue.xml" path="/Documentation/Docs[@DocId='M:NewsstandKit.NKIssue.#ctor(Foundation.NSObjectFlag)']/*" />
-	protected NKIssue (NSObjectFlag t) : base (t)
+		protected NKIssue (NSObjectFlag t) : base (t)
 		{
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 		}
@@ -171,12 +171,12 @@ namespace NewsstandKit {
 		//
 		public static partial class Notifications {
 			/// <include file="../../docs/api/NewsstandKit.NKIssue/Notifications.xml" path="/Documentation/Docs[@DocId='M:NewsstandKit.NKIssue.Notifications.ObserveDownloadCompleted(System.EventHandler{Foundation.NSNotificationEventArgs})']/*" />
-	public static NSObject ObserveDownloadCompleted (EventHandler<NSNotificationEventArgs> handler)
+			public static NSObject ObserveDownloadCompleted (EventHandler<NSNotificationEventArgs> handler)
 			{
 				throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 			}
 			/// <include file="../../docs/api/NewsstandKit.NKIssue/Notifications.xml" path="/Documentation/Docs[@DocId='M:NewsstandKit.NKIssue.Notifications.ObserveDownloadCompleted(Foundation.NSObject,System.EventHandler{Foundation.NSNotificationEventArgs})']/*" />
-	public static NSObject ObserveDownloadCompleted (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)
+			public static NSObject ObserveDownloadCompleted (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)
 			{
 				throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 			}
@@ -203,7 +203,7 @@ namespace NewsstandKit {
 		public override NativeHandle ClassHandle { get { throw new InvalidOperationException (Constants.NewsstandKitRemoved); } }
 
 		/// <include file="../../docs/api/NewsstandKit/NKLibrary.xml" path="/Documentation/Docs[@DocId='M:NewsstandKit.NKLibrary.#ctor(Foundation.NSObjectFlag)']/*" />
-	protected NKLibrary (NSObjectFlag t) : base (t)
+		protected NKLibrary (NSObjectFlag t) : base (t)
 		{
 			throw new InvalidOperationException (Constants.NewsstandKitRemoved);
 		}

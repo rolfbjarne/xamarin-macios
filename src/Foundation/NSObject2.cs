@@ -778,7 +778,7 @@ namespace Foundation {
 		}
 
 		/// <include file="../../docs/api/Foundation/NSObject.xml" path="/Documentation/Docs[@DocId='M:Foundation.NSObject.FromObject(System.Object)']/*" />
-	public static NSObject FromObject (object obj)
+		public static NSObject FromObject (object obj)
 		{
 			if (obj is null)
 				return NSNull.Null;
@@ -943,7 +943,7 @@ namespace Foundation {
 		}
 
 		/// <include file="../../docs/api/Foundation/NSObject.xml" path="/Documentation/Docs[@DocId='M:Foundation.NSObject.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 			if (disposed)
 				return;
@@ -1084,13 +1084,13 @@ namespace Foundation {
 		}
 
 		/// <include file="../../docs/api/Foundation/NSObject.xml" path="/Documentation/Docs[@DocId='M:Foundation.NSObject.AddObserver(System.String,Foundation.NSKeyValueObservingOptions,System.Action{Foundation.NSObservedChange})']/*" />
-	public IDisposable AddObserver (string key, NSKeyValueObservingOptions options, Action<NSObservedChange> observer)
+		public IDisposable AddObserver (string key, NSKeyValueObservingOptions options, Action<NSObservedChange> observer)
 		{
 			return AddObserver (new NSString (key), options, observer);
 		}
 
 		/// <include file="../../docs/api/Foundation/NSObject.xml" path="/Documentation/Docs[@DocId='M:Foundation.NSObject.AddObserver(Foundation.NSString,Foundation.NSKeyValueObservingOptions,System.Action{Foundation.NSObservedChange})']/*" />
-	public IDisposable AddObserver (NSString key, NSKeyValueObservingOptions options, Action<NSObservedChange> observer)
+		public IDisposable AddObserver (NSString key, NSKeyValueObservingOptions options, Action<NSObservedChange> observer)
 		{
 			var o = new Observer (this, key, observer);
 			AddObserver (o, key, options, o.Handle);

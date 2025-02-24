@@ -608,7 +608,7 @@ namespace CoreLocation {
 		bool PausesLocationUpdatesAutomatically { get; set; }
 
 		/// <include file="../docs/api/CoreLocation/CLLocationManager.xml" path="/Documentation/Docs[@DocId='M:CoreLocation.CLLocationManager.AllowDeferredLocationUpdatesUntil(System.Double,System.Double)']/*" />
-	[NoTV]
+		[NoTV]
 		[NoMac]
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Not used anymore. Call will not have any effect.")]
 		[NoMacCatalyst]

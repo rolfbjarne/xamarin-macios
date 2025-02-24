@@ -47,7 +47,7 @@ namespace VideoToolbox {
 		}
 
 		/// <include file="../../docs/api/VideoToolbox/VTDecompressionSession.xml" path="/Documentation/Docs[@DocId='M:VideoToolbox.VTDecompressionSession.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			if (Handle != IntPtr.Zero)
 				VTDecompressionSessionInvalidate (Handle);

@@ -788,7 +788,7 @@ namespace CoreImage {
 		}
 
 		/// <include file="../docs/api/CoreImage/CIFilter.xml" path="/Documentation/Docs[@DocId='M:CoreImage.CIFilter.FromName(System.String)']/*" />
-	[Static]
+		[Static]
 		[Export ("filterWithName:")]
 		[return: NullAllowed]
 		CIFilter FromName (string name);
@@ -4800,7 +4800,7 @@ namespace CoreImage {
 		bool Process ([NullAllowed] ICIImageProcessorInput [] inputs, [NullAllowed] NSDictionary<NSString, NSObject> arguments, ICIImageProcessorOutput output, out NSError error);
 
 		/// <include file="../docs/api/CoreImage/CIImageProcessorKernel.xml" path="/Documentation/Docs[@DocId='M:CoreImage.CIImageProcessorKernel.GetRegionOfInterest(System.Int32,Foundation.NSDictionary{Foundation.NSString,Foundation.NSObject},CoreGraphics.CGRect)']/*" />
-	[Static]
+		[Static]
 		[Export ("roiForInput:arguments:outputRect:")]
 		CGRect GetRegionOfInterest (int input, [NullAllowed] NSDictionary<NSString, NSObject> arguments, CGRect outputRect);
 

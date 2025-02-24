@@ -73,7 +73,7 @@ namespace Security {
 		}
 
 		/// <include file="../../docs/api/Security/SslConnection.xml" path="/Documentation/Docs[@DocId='M:Security.SslConnection.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 			if (handle.IsAllocated)
 				handle.Free ();

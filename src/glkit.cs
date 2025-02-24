@@ -1203,7 +1203,7 @@ namespace GLKit {
 
 		// Pseudo-documented, if the user overrides it, call this instead of the delegate method
 		/// <include file="../docs/api/GLKit/GLKViewController.xml" path="/Documentation/Docs[@DocId='M:GLKit.GLKViewController.Update']/*" />
-	[Export ("update")]
+		[Export ("update")]
 		void Update ();
 	}
 

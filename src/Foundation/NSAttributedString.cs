@@ -371,21 +371,21 @@ namespace Foundation {
 		}
 
 		/// <include file="../../docs/api/Foundation/NSAttributedString.xml" path="/Documentation/Docs[@DocId='M:Foundation.NSAttributedString.#ctor(System.String,UIKit.UIFont,UIKit.UIColor,UIKit.UIColor,UIKit.UIColor,UIKit.NSParagraphStyle,Foundation.NSLigatureType,System.Single,Foundation.NSUnderlineStyle,UIKit.NSShadow,System.Single,Foundation.NSUnderlineStyle)']/*" />
-	public NSAttributedString (string str,
-					   UIFont? font = null,
-					   UIColor? foregroundColor = null,
-					   UIColor? backgroundColor = null,
-					   UIColor? strokeColor = null,
-					   NSParagraphStyle? paragraphStyle = null,
-					   NSLigatureType ligatures = NSLigatureType.Default,
-					   float kerning = 0,
-					   NSUnderlineStyle underlineStyle = NSUnderlineStyle.None,
-					   NSShadow? shadow = null,
-					   float strokeWidth = 0,
-					   NSUnderlineStyle strikethroughStyle = NSUnderlineStyle.None)
-		: this (str, ToDictionary (font, foregroundColor, backgroundColor, strokeColor, paragraphStyle, ligatures, kerning, underlineStyle,
-			shadow,
-			strokeWidth, strikethroughStyle))
+		public NSAttributedString (string str,
+						   UIFont? font = null,
+						   UIColor? foregroundColor = null,
+						   UIColor? backgroundColor = null,
+						   UIColor? strokeColor = null,
+						   NSParagraphStyle? paragraphStyle = null,
+						   NSLigatureType ligatures = NSLigatureType.Default,
+						   float kerning = 0,
+						   NSUnderlineStyle underlineStyle = NSUnderlineStyle.None,
+						   NSShadow? shadow = null,
+						   float strokeWidth = 0,
+						   NSUnderlineStyle strikethroughStyle = NSUnderlineStyle.None)
+			: this (str, ToDictionary (font, foregroundColor, backgroundColor, strokeColor, paragraphStyle, ligatures, kerning, underlineStyle,
+				shadow,
+				strokeWidth, strikethroughStyle))
 		{
 		}
 #endif

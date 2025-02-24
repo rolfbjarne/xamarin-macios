@@ -646,7 +646,7 @@ namespace CoreText {
 
 		public static partial class Notifications {
 			/// <include file="../../docs/api/CoreText.CTFontManager/Notifications.xml" path="/Documentation/Docs[@DocId='M:CoreText.CTFontManager.Notifications.ObserveRegisteredFontsChanged(System.EventHandler{Foundation.NSNotificationEventArgs})']/*" />
-	public static NSObject ObserveRegisteredFontsChanged (EventHandler<NSNotificationEventArgs> handler)
+			public static NSObject ObserveRegisteredFontsChanged (EventHandler<NSNotificationEventArgs> handler)
 			{
 				return NSNotificationCenter.DefaultCenter.AddObserver (RegisteredFontsChangedNotification, notification => handler (null, new NSNotificationEventArgs (notification)));
 			}

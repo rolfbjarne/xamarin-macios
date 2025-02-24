@@ -174,7 +174,7 @@ namespace MultipeerConnectivity {
 		#region Custom Discovery Category
 
 		/// <include file="../docs/api/MultipeerConnectivity/MCSession.xml" path="/Documentation/Docs[@DocId='M:MultipeerConnectivity.MCSession.NearbyConnectionDataForPeer(MultipeerConnectivity.MCPeerID,MultipeerConnectivity.MCSessionNearbyConnectionDataForPeerCompletionHandler)']/*" />
-	[Async]
+		[Async]
 		[Export ("nearbyConnectionDataForPeer:withCompletionHandler:")]
 		void NearbyConnectionDataForPeer (MCPeerID peerID, MCSessionNearbyConnectionDataForPeerCompletionHandler completionHandler);
 

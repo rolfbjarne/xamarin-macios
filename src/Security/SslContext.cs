@@ -61,7 +61,7 @@ namespace Security {
 		extern static /* OSStatus */ SslStatus SSLClose (/* SSLContextRef */ IntPtr context);
 
 		/// <include file="../../docs/api/Security/SslContext.xml" path="/Documentation/Docs[@DocId='M:Security.SslContext.Dispose(System.Boolean)']/*" />
-	protected override void Dispose (bool disposing)
+		protected override void Dispose (bool disposing)
 		{
 			if (Handle != IntPtr.Zero)
 				result = SSLClose (Handle);

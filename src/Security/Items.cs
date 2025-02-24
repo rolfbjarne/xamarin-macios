@@ -230,7 +230,7 @@ namespace Security {
 		}
 
 		/// <include file="../../docs/api/Security/SecKeyChain.xml" path="/Documentation/Docs[@DocId='M:Security.SecKeyChain.QueryAsData(Security.SecRecord,System.Boolean,Security.SecStatusCode@)']/*" />
-	public static NSData? QueryAsData (SecRecord query, bool wantPersistentReference, out SecStatusCode status)
+		public static NSData? QueryAsData (SecRecord query, bool wantPersistentReference, out SecStatusCode status)
 		{
 			if (query is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (query));
@@ -250,7 +250,7 @@ namespace Security {
 		}
 
 		/// <include file="../../docs/api/Security/SecKeyChain.xml" path="/Documentation/Docs[@DocId='M:Security.SecKeyChain.QueryAsData(Security.SecRecord,System.Boolean,System.Int32,Security.SecStatusCode@)']/*" />
-	public static NSData []? QueryAsData (SecRecord query, bool wantPersistentReference, int max, out SecStatusCode status)
+		public static NSData []? QueryAsData (SecRecord query, bool wantPersistentReference, int max, out SecStatusCode status)
 		{
 			if (query is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (query));
@@ -280,14 +280,14 @@ namespace Security {
 		}
 
 		/// <include file="../../docs/api/Security/SecKeyChain.xml" path="/Documentation/Docs[@DocId='M:Security.SecKeyChain.QueryAsData(Security.SecRecord)']/*" />
-	public static NSData? QueryAsData (SecRecord query)
+		public static NSData? QueryAsData (SecRecord query)
 		{
 			SecStatusCode status;
 			return QueryAsData (query, false, out status);
 		}
 
 		/// <include file="../../docs/api/Security/SecKeyChain.xml" path="/Documentation/Docs[@DocId='M:Security.SecKeyChain.QueryAsData(Security.SecRecord,System.Int32)']/*" />
-	public static NSData []? QueryAsData (SecRecord query, int max)
+		public static NSData []? QueryAsData (SecRecord query, int max)
 		{
 			SecStatusCode status;
 			return QueryAsData (query, false, max, out status);
@@ -329,7 +329,7 @@ namespace Security {
 		}
 
 		/// <include file="../../docs/api/Security/SecKeyChain.xml" path="/Documentation/Docs[@DocId='M:Security.SecKeyChain.QueryAsRecord(Security.SecRecord,System.Int32,Security.SecStatusCode@)']/*" />
-	public static SecRecord []? QueryAsRecord (SecRecord query, int max, out SecStatusCode result)
+		public static SecRecord []? QueryAsRecord (SecRecord query, int max, out SecStatusCode result)
 		{
 			if (query is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (query));
@@ -717,7 +717,7 @@ namespace Security {
 		}
 #else
 		/// <include file="../../docs/api/Security/SecKeyChain.xml" path="/Documentation/Docs[@DocId='M:Security.SecKeyChain.QueryAsConcreteType(Security.SecRecord,Security.SecStatusCode@)']/*" />
-	public static object? QueryAsConcreteType (SecRecord query, out SecStatusCode result)
+		public static object? QueryAsConcreteType (SecRecord query, out SecStatusCode result)
 		{
 			if (query is null) {
 				result = SecStatusCode.Param;
@@ -857,7 +857,7 @@ namespace Security {
 		}
 
 		/// <include file="../../docs/api/Security/SecRecord.xml" path="/Documentation/Docs[@DocId='M:Security.SecRecord.#ctor(Security.SecKind)']/*" />
-	public SecRecord (SecKind secKind)
+		public SecRecord (SecKind secKind)
 		{
 			var kind = SecClass.FromSecKind (secKind);
 #if MONOMAC
@@ -959,7 +959,7 @@ namespace Security {
 		}
 
 		/// <include file="../../docs/api/Security/SecRecord.xml" path="/Documentation/Docs[@DocId='M:Security.SecRecord.Dispose(System.Boolean)']/*" />
-	protected virtual void Dispose (bool disposing)
+		protected virtual void Dispose (bool disposing)
 		{
 			if (disposing)
 				queryDict?.Dispose ();

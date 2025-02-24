@@ -2932,13 +2932,13 @@ namespace AVFoundation {
 #endif // !NET
 
 		/// <include file="../docs/api/AVFoundation/AVAudioSession.xml" path="/Documentation/Docs[@DocId='M:AVFoundation.AVAudioSession.SetCategory(Foundation.NSString,Foundation.NSError@)']/*" />
-	[NoMac]
+		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("setCategory:error:")]
 		bool SetCategory (NSString theCategory, out NSError outError);
 
 		/// <include file="../docs/api/AVFoundation/AVAudioSession.xml" path="/Documentation/Docs[@DocId='M:AVFoundation.AVAudioSession.SetCategory(Foundation.NSString)']/*" />
-	[return: NullAllowed]
+		[return: NullAllowed]
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Wrap ("SetCategory (theCategory, out var outError) ? null : outError")]
@@ -3263,7 +3263,7 @@ namespace AVFoundation {
 		string [] AvailableCategories { get; }
 
 		/// <include file="../docs/api/AVFoundation/AVAudioSession.xml" path="/Documentation/Docs[@DocId='M:AVFoundation.AVAudioSession.SetCategory(System.String,AVFoundation.AVAudioSessionCategoryOptions,Foundation.NSError@)']/*" />
-	[NoMac]
+		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("setCategory:withOptions:error:")]
 		bool SetCategory (string category, AVAudioSessionCategoryOptions options, out NSError outError);

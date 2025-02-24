@@ -72,6 +72,9 @@ namespace CoreGraphics {
 		///         <remarks>Depending on the value, the values of Point1, Point2 and Point3 will be valid.</remarks>
 		public CGPathElementType Type;
 
+		/// <param name="t">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGPathElement (int t)
 		{
 			Type = (CGPathElementType) t;
@@ -105,6 +108,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGMutablePathRef */ IntPtr CGPathCreateMutable ();
 
+		/// <summary>Creates an empty <see cref="T:CoreGraphics.CGPath" />.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGPath ()
 			: base (CGPathCreateMutable (), true)
 		{
@@ -113,6 +118,10 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		unsafe extern static /* CGMutablePathRef */ IntPtr CGPathCreateMutableCopyByTransformingPath (/* CGPathRef */ IntPtr path, /* const CGAffineTransform* */ CGAffineTransform* transform);
 
+		/// <param name="reference">To be added.</param>
+		///         <param name="transform">To be added.</param>
+		///         <summary>Creates an new <see cref="T:CoreGraphics.CGPath" /> from the provided <paramref name="reference" /> path by applying the provided <paramref name="transform" /></summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe CGPath (CGPath reference, CGAffineTransform transform)
 			: base (CGPathCreateMutableCopyByTransformingPath (Runtime.ThrowOnNull (reference, nameof (reference)).Handle, &transform), true)
 		{
@@ -121,6 +130,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGMutablePathRef */ IntPtr CGPathCreateMutableCopy (/* CGPathRef */ IntPtr path);
 
+		/// <param name="basePath">To be added.</param>
+		///         <summary>Creates an new <see cref="T:CoreGraphics.CGPath" /> from the provided <paramref name="basePath" />.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGPath (CGPath basePath)
 			: base (CGPathCreateMutableCopy (Runtime.ThrowOnNull (basePath, nameof (basePath)).Handle), true)
 		{
@@ -172,6 +184,9 @@ namespace CoreGraphics {
 			return !path1.Equals (path2);
 		}
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public override int GetHashCode ()
 		{
 			// looks weird but it's valid
@@ -180,6 +195,10 @@ namespace CoreGraphics {
 			return 0;
 		}
 
+		/// <param name="o">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public override bool Equals (object? o)
 		{
 			var other = o as CGPath;
@@ -197,6 +216,9 @@ namespace CoreGraphics {
 			CGPathMoveToPoint (Handle, null, x, y);
 		}
 
+		/// <param name="point">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void MoveToPoint (CGPoint point)
 		{
 			CGPathMoveToPoint (Handle, null, point.X, point.Y);
@@ -207,6 +229,10 @@ namespace CoreGraphics {
 			CGPathMoveToPoint (Handle, &transform, x, y);
 		}
 
+		/// <param name="transform">To be added.</param>
+		///         <param name="point">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void MoveToPoint (CGAffineTransform transform, CGPoint point)
 		{
 			CGPathMoveToPoint (Handle, &transform, point.X, point.Y);
@@ -220,6 +246,9 @@ namespace CoreGraphics {
 			CGPathAddLineToPoint (Handle, null, x, y);
 		}
 
+		/// <param name="point">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void AddLineToPoint (CGPoint point)
 		{
 			CGPathAddLineToPoint (Handle, null, point.X, point.Y);
@@ -230,6 +259,10 @@ namespace CoreGraphics {
 			CGPathAddLineToPoint (Handle, &transform, x, y);
 		}
 
+		/// <param name="transform">To be added.</param>
+		///         <param name="point">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void AddLineToPoint (CGAffineTransform transform, CGPoint point)
 		{
 			CGPathAddLineToPoint (Handle, &transform, point.X, point.Y);
@@ -256,6 +289,12 @@ namespace CoreGraphics {
 			CGPathAddCurveToPoint (Handle, &transform, cp1x, cp1y, cp2x, cp2y, x, y);
 		}
 
+		/// <param name="transform">To be added.</param>
+		///         <param name="cp1">To be added.</param>
+		///         <param name="cp2">To be added.</param>
+		///         <param name="point">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void AddCurveToPoint (CGAffineTransform transform, CGPoint cp1, CGPoint cp2, CGPoint point)
 		{
 			CGPathAddCurveToPoint (Handle, &transform, cp1.X, cp1.Y, cp2.X, cp2.Y, point.X, point.Y);
@@ -266,6 +305,11 @@ namespace CoreGraphics {
 			CGPathAddCurveToPoint (Handle, null, cp1x, cp1y, cp2x, cp2y, x, y);
 		}
 
+		/// <param name="cp1">To be added.</param>
+		///         <param name="cp2">To be added.</param>
+		///         <param name="point">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void AddCurveToPoint (CGPoint cp1, CGPoint cp2, CGPoint point)
 		{
 			CGPathAddCurveToPoint (Handle, null, cp1.X, cp1.Y, cp2.X, cp2.Y, point.X, point.Y);
@@ -274,6 +318,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGPathCloseSubpath (/* CGMutablePathRef */ IntPtr path);
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void CloseSubpath ()
 		{
 			CGPathCloseSubpath (Handle);
@@ -282,11 +328,18 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		unsafe extern static void CGPathAddRect (/* CGMutablePathRef */ IntPtr path, CGAffineTransform* m, CGRect rect);
 
+		/// <param name="transform">To be added.</param>
+		///         <param name="rect">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void AddRect (CGAffineTransform transform, CGRect rect)
 		{
 			CGPathAddRect (Handle, &transform, rect);
 		}
 
+		/// <param name="rect">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void AddRect (CGRect rect)
 		{
 			CGPathAddRect (Handle, null, rect);
@@ -295,6 +348,10 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		unsafe extern static void CGPathAddRects (/* CGMutablePathRef */ IntPtr path, CGAffineTransform* m, CGRect [] rects, /* size_t */ nint count);
 
+		/// <param name="m">To be added.</param>
+		///         <param name="rects">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void AddRects (CGAffineTransform m, CGRect [] rects)
 		{
 			if (rects is null)
@@ -302,6 +359,11 @@ namespace CoreGraphics {
 			CGPathAddRects (Handle, &m, rects, rects.Length);
 		}
 
+		/// <param name="m">To be added.</param>
+		///         <param name="rects">To be added.</param>
+		///         <param name="count">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void AddRects (CGAffineTransform m, CGRect [] rects, int count)
 		{
 			if (rects is null)
@@ -311,6 +373,9 @@ namespace CoreGraphics {
 			CGPathAddRects (Handle, &m, rects, count);
 		}
 
+		/// <param name="rects">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void AddRects (CGRect [] rects)
 		{
 			if (rects is null)
@@ -318,6 +383,10 @@ namespace CoreGraphics {
 			CGPathAddRects (Handle, null, rects, rects.Length);
 		}
 
+		/// <param name="rects">To be added.</param>
+		///         <param name="count">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void AddRects (CGRect [] rects, int count)
 		{
 			if (rects is null)
@@ -330,6 +399,10 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		unsafe extern static void CGPathAddLines (/* CGMutablePathRef */ IntPtr path, CGAffineTransform* m, CGPoint [] points, /* size_t */ nint count);
 
+		/// <param name="m">To be added.</param>
+		///         <param name="points">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void AddLines (CGAffineTransform m, CGPoint [] points)
 		{
 			if (points is null)
@@ -337,6 +410,11 @@ namespace CoreGraphics {
 			CGPathAddLines (Handle, &m, points, points.Length);
 		}
 
+		/// <param name="m">To be added.</param>
+		///         <param name="points">To be added.</param>
+		///         <param name="count">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void AddLines (CGAffineTransform m, CGPoint [] points, int count)
 		{
 			if (points is null)
@@ -346,6 +424,9 @@ namespace CoreGraphics {
 			CGPathAddLines (Handle, &m, points, count);
 		}
 
+		/// <param name="points">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void AddLines (CGPoint [] points)
 		{
 			if (points is null)
@@ -353,6 +434,10 @@ namespace CoreGraphics {
 			CGPathAddLines (Handle, null, points, points.Length);
 		}
 
+		/// <param name="points">To be added.</param>
+		///         <param name="count">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void AddLines (CGPoint [] points, int count)
 		{
 			if (points is null)
@@ -365,11 +450,18 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		unsafe extern static void CGPathAddEllipseInRect (/* CGMutablePathRef */ IntPtr path, CGAffineTransform* m, CGRect rect);
 
+		/// <param name="m">To be added.</param>
+		///         <param name="rect">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void AddEllipseInRect (CGAffineTransform m, CGRect rect)
 		{
 			CGPathAddEllipseInRect (Handle, &m, rect);
 		}
 
+		/// <param name="rect">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void AddEllipseInRect (CGRect rect)
 		{
 			CGPathAddEllipseInRect (Handle, null, rect);
@@ -417,6 +509,10 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		unsafe extern static void CGPathAddPath (/* CGMutablePathRef */ IntPtr path1, CGAffineTransform* m, /* CGMutablePathRef */ IntPtr path2);
 
+		/// <param name="t">To be added.</param>
+		///         <param name="path2">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void AddPath (CGAffineTransform t, CGPath path2)
 		{
 			if (path2 is null)
@@ -424,6 +520,9 @@ namespace CoreGraphics {
 			CGPathAddPath (Handle, &t, path2.Handle);
 		}
 
+		/// <param name="path2">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public unsafe void AddPath (CGPath path2)
 		{
 			if (path2 is null)
@@ -446,6 +545,10 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		unsafe extern static byte CGPathIsRect (/* CGPathRef */ IntPtr path, CGRect* rect);
 
+		/// <param name="rect">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public bool IsRect (out CGRect rect)
 		{
 			unsafe {
@@ -493,11 +596,22 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		unsafe extern static byte CGPathContainsPoint (IntPtr path, CGAffineTransform* m, CGPoint point, byte eoFill);
 
+		/// <param name="m">To be added.</param>
+		///         <param name="point">To be added.</param>
+		///         <param name="eoFill">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public unsafe bool ContainsPoint (CGAffineTransform m, CGPoint point, bool eoFill)
 		{
 			return CGPathContainsPoint (Handle, &m, point, eoFill.AsByte ()) != 0;
 		}
 
+		/// <param name="point">To be added.</param>
+		///         <param name="eoFill">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public unsafe bool ContainsPoint (CGPoint point, bool eoFill)
 		{
 			return CGPathContainsPoint (Handle, null, point, eoFill.AsByte ()) != 0;
@@ -557,6 +671,9 @@ namespace CoreGraphics {
 		extern static void CGPathApply (/* CGPathRef */ IntPtr path, /* void* */ IntPtr info, CGPathApplierFunction function);
 #endif
 
+		/// <param name="func">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void Apply (ApplierFunction func)
 		{
 			GCHandle gch = GCHandle.Alloc (func);
@@ -814,6 +931,9 @@ namespace CoreGraphics {
 			}
 		}
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public unsafe CGPath Copy ()
 		{
 			return MakeMutable (Handle, false);
@@ -835,6 +955,10 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		unsafe extern static IntPtr CGPathCreateCopyByTransformingPath (/* CGPathRef */ IntPtr path, CGAffineTransform* transform);
 
+		/// <param name="transform">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public CGPath CopyByTransformingPath (CGAffineTransform transform)
 		{
 			unsafe {
@@ -845,11 +969,20 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		unsafe extern static IntPtr CGPathCreateWithEllipseInRect (CGRect boundingRect, CGAffineTransform* transform);
 
+		/// <param name="boundingRect">To be added.</param>
+		///         <param name="transform">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		static public unsafe CGPath EllipseFromRect (CGRect boundingRect, CGAffineTransform transform)
 		{
 			return MakeMutable (CGPathCreateWithEllipseInRect (boundingRect, &transform), true);
 		}
 
+		/// <param name="boundingRect">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		static public unsafe CGPath EllipseFromRect (CGRect boundingRect)
 		{
 			return MakeMutable (CGPathCreateWithEllipseInRect (boundingRect, null), true);
@@ -858,11 +991,20 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		unsafe extern static IntPtr CGPathCreateWithRect (CGRect boundingRect, CGAffineTransform* transform);
 
+		/// <param name="rectangle">To be added.</param>
+		///         <param name="transform">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		static public unsafe CGPath FromRect (CGRect rectangle, CGAffineTransform transform)
 		{
 			return MakeMutable (CGPathCreateWithRect (rectangle, &transform), true);
 		}
 
+		/// <param name="rectangle">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		static public unsafe CGPath FromRect (CGRect rectangle)
 		{
 			return MakeMutable (CGPathCreateWithRect (rectangle, null), true);

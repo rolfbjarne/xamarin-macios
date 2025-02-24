@@ -252,6 +252,8 @@ namespace CoreText {
 #endif
 	public class CTParagraphStyleSettings {
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CTParagraphStyleSettings ()
 		{
 		}
@@ -412,6 +414,9 @@ namespace CoreText {
 		#region Paragraph Style Creation
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTParagraphStyleCreate (CTParagraphStyleSetting []? settings, nint settingCount);
+		/// <param name="settings">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CTParagraphStyle (CTParagraphStyleSettings? settings)
 			: base (settings is null ? CTParagraphStyleCreate (null, 0) : CreateFromSettings (settings), true, true)
 		{
@@ -453,6 +458,8 @@ namespace CoreText {
 			return handle;
 		}
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CTParagraphStyle ()
 			: this (null)
 		{
@@ -460,6 +467,9 @@ namespace CoreText {
 
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTParagraphStyleCreateCopy (IntPtr paragraphStyle);
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public CTParagraphStyle Clone ()
 		{
 			return new CTParagraphStyle (CTParagraphStyleCreateCopy (Handle), true);
@@ -470,6 +480,9 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern unsafe byte CTParagraphStyleGetValueForSpecifier (IntPtr paragraphStyle, CTParagraphStyleSpecifier spec, nuint valueBufferSize, void* valueBuffer);
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public unsafe CTTextTab? []? GetTabStops ()
 		{
 			IntPtr cfArrayRef;

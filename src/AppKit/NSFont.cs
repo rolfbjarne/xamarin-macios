@@ -14,6 +14,10 @@ using CGGlyph = System.UInt16;
 
 namespace AppKit {
 	public partial class NSFont {
+		/// <param name="font">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static NSFont? FromCTFont (CTFont? font)
 		{
 			if (font is null)
@@ -22,6 +26,10 @@ namespace AppKit {
 		}
 
 #if NET
+		/// <param name="glyphs">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #endif
@@ -42,6 +50,10 @@ namespace AppKit {
 		}
 
 #if NET
+		/// <param name="glyphs">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #endif
@@ -73,6 +85,11 @@ namespace AppKit {
 			return ptr == IntPtr.Zero ? null : new NSFont (ptr);
 		}
 
+		/// <param name="fontDescriptor">To be added.</param>
+		///         <param name="textTransform">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static NSFont? FromDescription (NSFontDescriptor fontDescriptor, NSAffineTransform textTransform)
 		{
 			var ptr = _FromDescription (fontDescriptor, textTransform);
@@ -186,6 +203,10 @@ namespace AppKit {
 		}
 
 #if NET
+		/// <param name="renderingMode">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos10.13")]
 		[UnsupportedOSPlatform ("maccatalyst")]
@@ -198,6 +219,9 @@ namespace AppKit {
 			return ptr == IntPtr.Zero ? null : new NSFont (ptr);
 		}
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public virtual NSFont? GetVerticalFont ()
 		{
 			var ptr = _GetVerticalFont ();

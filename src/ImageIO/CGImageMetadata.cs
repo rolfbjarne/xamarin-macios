@@ -100,6 +100,11 @@ namespace ImageIO {
 			/* CGImageMetadataRef __nonnull */ IntPtr metadata, /* CGImageMetadataTagRef __nullable */ IntPtr parent,
 			/* CFStringRef __nonnull*/ IntPtr path);
 
+		/// <param name="parent">To be added.</param>
+		///         <param name="path">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public NSString? GetStringValue (CGImageMetadata? parent, NSString path)
 		{
 			// parent may be null
@@ -113,6 +118,9 @@ namespace ImageIO {
 		extern static /* CFArrayRef __nullable */ IntPtr CGImageMetadataCopyTags (
 			/* CGImageMetadataRef __nonnull */ IntPtr metadata);
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public CGImageMetadataTag []? GetTags ()
 		{
 			var result = CGImageMetadataCopyTags (Handle);
@@ -124,6 +132,11 @@ namespace ImageIO {
 			/* CGImageMetadataRef __nonnull */ IntPtr metadata, /* CGImageMetadataTagRef __nullable */ IntPtr parent,
 			/* CFStringRef __nonnull */ IntPtr path);
 
+		/// <param name="parent">To be added.</param>
+		///         <param name="path">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public CGImageMetadataTag? GetTag (CGImageMetadata? parent, NSString path)
 		{
 			// parent may be null
@@ -156,6 +169,11 @@ namespace ImageIO {
 		static unsafe readonly TrampolineCallback static_action = TagEnumerator;
 #endif
 
+		/// <param name="rootPath">To be added.</param>
+		///         <param name="options">To be added.</param>
+		///         <param name="block">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public void EnumerateTags (NSString? rootPath, CGImageMetadataEnumerateOptions? options, CGImageMetadataTagBlock block)
 		{
@@ -176,6 +194,9 @@ namespace ImageIO {
 		extern static /* CFDataRef __nullable */ IntPtr CGImageMetadataCreateXMPData (
 			/* CGImageMetadataRef __nonnull */ IntPtr metadata, /* CFDictionaryRef __nullable */ IntPtr options);
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public NSData? CreateXMPData ()
 		{
 			// note: there's no options defined for iOS7 (needs to be null)
@@ -189,6 +210,11 @@ namespace ImageIO {
 			/* CGImageMetadataRef __nonnull */ IntPtr metadata, /* CFStringRef __nonnull */ IntPtr dictionaryName,
 			/* CFStringRef __nonnull */ IntPtr propertyName);
 
+		/// <param name="dictionaryName">To be added.</param>
+		///         <param name="propertyName">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public CGImageMetadataTag? CopyTagMatchingImageProperty (NSString dictionaryName, NSString propertyName)
 		{
 			if (dictionaryName is null)

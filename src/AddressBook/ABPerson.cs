@@ -914,11 +914,45 @@ namespace AddressBook {
 
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr ABPersonCopyLocalizedPropertyName (int /* ABPropertyID = int32_t */ propertyId);
+		/// <param name="property">
+		///           A <see cref="T:AddressBook.ABPersonProperty" />
+		///           containing the property to get the localized name of.
+		///         </param>
+		///         <summary>
+		///           Gets the localized name of a <paramref name="property" />.
+		///         </summary>
+		///         <returns>
+		///           A <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=System%20String&amp;scope=Xamarin" title="T:System.String">T:System.String</a></format> containing the localized
+		///           name of a <paramref name="property" />.
+		///         </returns>
+		///         <remarks>
+		///         </remarks>
 		public static string? LocalizedPropertyName (ABPersonProperty property)
 		{
 			return CFString.FromHandle (ABPersonCopyLocalizedPropertyName (ABPersonPropertyId.ToId (property)));
 		}
 
+		/// <param name="propertyId">A value that corresponds to one of the low-level kABPersonProperty fields.
+		///         </param>
+		///         <summary>
+		///           Gets the localized name of a <paramref name="propertyId" />.
+		///         </summary>
+		///         <returns>
+		///           A <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=System%20String&amp;scope=Xamarin" title="T:System.String">T:System.String</a></format> containing the localized
+		///           name of a <paramref name="propertyId" />.
+		///         </returns>
+		///         <remarks>
+		///           <para>
+		/// 	    Unlike the overload that takes a ABPersonProperty, the value
+		/// 	    of the <paramref name="propertyId" /> is actually not a
+		/// 	    constant and can vary at runtime (this is the native C
+		/// 	    interface).
+		/// 	  </para>
+		///           <para>
+		/// 	    This method is typically used on callbacks that provide an
+		/// 	    "int propertyId" as a parameter.
+		/// 	  </para>
+		///         </remarks>
 		public static string? LocalizedPropertyName (int propertyId)
 		{
 			return CFString.FromHandle (ABPersonCopyLocalizedPropertyName (propertyId));
@@ -926,11 +960,43 @@ namespace AddressBook {
 
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static ABPropertyType ABPersonGetTypeOfProperty (int /* ABPropertyID = int32_t */ propertyId);
+		/// <param name="property">
+		///           A <see cref="T:AddressBook.ABPersonProperty" />
+		///           specifying which property to query.
+		///         </param>
+		///         <summary>
+		///           Gets the type of the property <paramref name="property" />.
+		///         </summary>
+		///         <returns>
+		///           A <see cref="T:AddressBook.ABPropertyType" /> value containing
+		///           the type of the property <paramref name="property" />.
+		///         </returns>
+		///         <remarks>
+		///         </remarks>
 		public static ABPropertyType GetPropertyType (ABPersonProperty property)
 		{
 			return ABPersonGetTypeOfProperty (ABPersonPropertyId.ToId (property));
 		}
 
+		/// <param name="propertyId">A value that corresponds to one of
+		/// 	the low-level kABPersonProperty fields.</param>
+		///         <summary>Gets the type of the property <paramref name="propertyId" />.</summary>
+		///         <returns>
+		///           A <see cref="T:AddressBook.ABPropertyType" /> value containing
+		///           the type of the property <paramref name="propertyId" />.
+		///         </returns>
+		///         <remarks>
+		///           <para>
+		/// 	    Unlike the overload that takes a ABPersonProperty, the value
+		/// 	    of the <paramref name="propertyId" /> is actually not a
+		/// 	    constant and can vary at runtime (this is the native C
+		/// 	    interface).
+		/// 	  </para>
+		///           <para>
+		/// 	    This method is typically used on callbacks that provide an
+		/// 	    "int propertyId" as a parameter.
+		/// 	  </para>
+		///         </remarks>
 		public static ABPropertyType GetPropertyType (int propertyId)
 		{
 			return ABPersonGetTypeOfProperty (propertyId);
@@ -986,6 +1052,15 @@ namespace AddressBook {
 
 		[DllImport (Constants.AddressBookLibrary)]
 		unsafe extern static byte ABPersonRemoveImageData (IntPtr person, IntPtr* error);
+		/// <summary>
+		///           Removes a <see cref="T:AddressBook.ABPerson" />'s picture.
+		///         </summary>
+		///         <remarks>
+		///         </remarks>
+		///         <exception cref="T:CoreFoundation.CFException">
+		///           The reason the picture couldn't be removed.
+		///         </exception>
+		///         <altmember cref="P:AddressBook.ABPerson.Image" />
 		public void RemoveImage ()
 		{
 			IntPtr error;
@@ -1027,6 +1102,10 @@ namespace AddressBook {
 		extern static ABPersonCompositeNameFormat ABPersonGetCompositeNameFormatForRecord (IntPtr record);
 
 #if NET
+		/// <param name="record">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]
@@ -1047,6 +1126,10 @@ namespace AddressBook {
 		extern static IntPtr ABPersonCopyCompositeNameDelimiterForRecord (IntPtr record);
 
 #if NET
+		/// <param name="record">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]
@@ -1266,6 +1349,16 @@ namespace AddressBook {
 			return CFString.FromHandle (value)!;
 		}
 
+		/// <summary>
+		///           Gets the <see cref="T:AddressBook.ABPerson" />'s email addresses.
+		///         </summary>
+		///         <returns>
+		///           A <see cref="T:AddressBook.ABMultiValue`1" />
+		///           containing the <see cref="T:AddressBook.ABPerson" />'s email addresses.
+		///         </returns>
+		///         <remarks>
+		///         </remarks>
+		///         <altmember cref="M:AddressBook.ABPerson.SetEmails(AddressBook.ABMultiValue`1)" />
 		public ABMultiValue<string>? GetEmails ()
 		{
 			return CreateStringMultiValue (CopyValue (ABPersonPropertyId.Email));
@@ -1278,6 +1371,16 @@ namespace AddressBook {
 			return new ABMultiValue<string> (handle, ABPerson.ToString, CFString.CreateNative, true);
 		}
 
+		/// <param name="value">
+		///           A <see cref="T:AddressBook.ABMultiValue`1" />
+		///           containing the <see cref="T:AddressBook.ABPerson" />'s new email addresses
+		///         </param>
+		///         <summary>
+		///           Sets the <see cref="T:AddressBook.ABPerson" />'s new email addresses.
+		///         </summary>
+		///         <remarks>
+		///         </remarks>
+		///         <altmember cref="T:AddressBook.ABPerson.GetEmails" />
 		public void SetEmails (ABMultiValue<string>? value)
 		{
 			SetValue (ABPersonPropertyId.Email, value.GetHandle ());
@@ -1339,17 +1442,34 @@ namespace AddressBook {
 			set { SetValue (ABPersonPropertyId.ModificationDate, value); }
 		}
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public ABMultiValue<PersonAddress>? GetAllAddresses ()
 		{
 			return CreateDictionaryMultiValue<PersonAddress> (CopyValue (ABPersonPropertyId.Address), l => new PersonAddress (l));
 		}
 
 		// Obsolete
+		/// <param name="value">
+		///           A <see cref="T:AddressBook.ABMultiValue{Foundation.NSDictionary}" />
+		///           containing the <see cref="T:AddressBook.ABPerson" />'s new addresses.
+		///         </param>
+		///         <summary>
+		///           Sets the <see cref="T:AddressBook.ABPerson" />'s new addresses.
+		///         </summary>
+		///         <remarks>
+		///         </remarks>
+		///         <altmember cref="T:AddressBook.ABPersonAddressKey" />
+		///         <altmember cref="T:AddressBook.ABPerson.GetAddresses" />
 		public void SetAddresses (ABMultiValue<NSDictionary>? value)
 		{
 			SetValue (ABPersonPropertyId.Address, value.GetHandle ());
 		}
 
+		/// <param name="addresses">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void SetAddresses (ABMultiValue<PersonAddress>? addresses)
 		{
 			SetValue (ABPersonPropertyId.Address, addresses.GetHandle ());
@@ -1374,6 +1494,17 @@ namespace AddressBook {
 				false);
 		}
 
+		/// <summary>
+		///           Gets the <see cref="T:AddressBook.ABPerson" />'s dates.
+		///         </summary>
+		///         <returns>
+		///           A <see cref="T:AddressBook.ABMultiValue{Foundation.NSDate}" />
+		///           containing the <see cref="T:AddressBook.ABPerson" />'s dates.
+		///         </returns>
+		///         <remarks>
+		///         </remarks>
+		///         <altmember cref="T:AddressBook.ABPersonDateLabel" />
+		///         <altmember cref="M:AddressBook.ABPerson.SetDates(AddressBook.ABMultiValue{Foundation.NSDate})" />
 		public ABMultiValue<NSDate>? GetDates ()
 		{
 			return CreateDateMultiValue (CopyValue (ABPersonPropertyId.Date));
@@ -1386,6 +1517,17 @@ namespace AddressBook {
 			return new ABMultiValue<NSDate> (handle, true);
 		}
 
+		/// <param name="value">
+		///           A <see cref="T:AddressBook.ABMultiValue{Foundation.NSDate}" />
+		///           containing the <see cref="T:AddressBook.ABPerson" />'s new dates.
+		///         </param>
+		///         <summary>
+		///           Sets the <see cref="T:AddressBook.ABPerson" />'s new dates.
+		///         </summary>
+		///         <remarks>
+		///         </remarks>
+		///         <altmember cref="T:AddressBook.ABPersonDateLabel" />
+		///         <altmember cref="T:AddressBook.ABPerson.GetDates" />
 		public void SetDates (ABMultiValue<NSDate>? value)
 		{
 			SetValue (ABPersonPropertyId.Date, value.GetHandle ());
@@ -1410,11 +1552,31 @@ namespace AddressBook {
 			set { SetValue (ABPersonPropertyId.Kind!, ABPersonKindId.FromPersonKind (value)); }
 		}
 
+		/// <summary>
+		///           Gets the <see cref="T:AddressBook.ABPerson" />'s phone numbers.
+		///         </summary>
+		///         <returns>
+		///           A <see cref="T:AddressBook.ABMultiValue`1" />
+		///           containing the <see cref="T:AddressBook.ABPerson" />'s phone numbers.
+		///         </returns>
+		///         <remarks>
+		///         </remarks>
+		///         <altmember cref="M:AddressBook.ABPerson.SetPhones(AddressBook.ABMultiValue`1)" />
 		public ABMultiValue<string>? GetPhones ()
 		{
 			return CreateStringMultiValue (CopyValue (ABPersonPropertyId.Phone));
 		}
 
+		/// <param name="value">
+		///           A <see cref="T:AddressBook.ABMultiValue`1" />
+		///           containing the <see cref="T:AddressBook.ABPerson" />'s new phone numbers.
+		///         </param>
+		///         <summary>
+		///           Sets the <see cref="T:AddressBook.ABPerson" />'s new phone numbers.
+		///         </summary>
+		///         <remarks>
+		///         </remarks>
+		///         <altmember cref="T:AddressBook.ABPerson.GetPhones" />
 		public void SetPhones (ABMultiValue<string>? value)
 		{
 			SetValue (ABPersonPropertyId.Phone, value.GetHandle ());
@@ -1426,17 +1588,33 @@ namespace AddressBook {
 			return CreateDictionaryMultiValue (CopyValue (ABPersonPropertyId.InstantMessage));
 		}
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public ABMultiValue<InstantMessageService>? GetInstantMessageServices ()
 		{
 			return CreateDictionaryMultiValue<InstantMessageService> (CopyValue (ABPersonPropertyId.InstantMessage), l => new InstantMessageService (l));
 		}
 
 		// Obsolete
+		/// <param name="value">
+		///           A <see cref="T:AddressBook.ABMultiValue{Foundation.NSDictionary}" />
+		///           containing the <see cref="T:AddressBook.ABPerson" />'s new instant messaging services.
+		///         </param>
+		///         <summary>
+		///           Sets the <see cref="T:AddressBook.ABPerson" />'s new instant messaging services.
+		///         </summary>
+		///         <remarks>
+		///         </remarks>
+		///         <altmember cref="T:AddressBook.ABPerson.GetInstantMessages" />
 		public void SetInstantMessages (ABMultiValue<NSDictionary>? value)
 		{
 			SetValue (ABPersonPropertyId.InstantMessage, value.GetHandle ());
 		}
 
+		/// <param name="services">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void SetInstantMessages (ABMultiValue<InstantMessageService>? services)
 		{
 			SetValue (ABPersonPropertyId.InstantMessage, services.GetHandle ());
@@ -1448,42 +1626,103 @@ namespace AddressBook {
 			return CreateDictionaryMultiValue (CopyValue (ABPersonPropertyId.SocialProfile));
 		}
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public ABMultiValue<SocialProfile>? GetSocialProfiles ()
 		{
 			return CreateDictionaryMultiValue<SocialProfile> (CopyValue (ABPersonPropertyId.SocialProfile), l => new SocialProfile (l));
 		}
 
 		// Obsolete
+		/// <param name="value">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void SetSocialProfile (ABMultiValue<NSDictionary>? value)
 		{
 			SetValue (ABPersonPropertyId.SocialProfile, value.GetHandle ());
 		}
 
+		/// <param name="profiles">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void SetSocialProfile (ABMultiValue<SocialProfile>? profiles)
 		{
 			SetValue (ABPersonPropertyId.SocialProfile, profiles.GetHandle ());
 		}
 
+		/// <summary>
+		///           Gets the <see cref="T:AddressBook.ABPerson" />'s URLs.
+		///         </summary>
+		///         <returns>
+		///           A <see cref="T:AddressBook.ABMultiValue`1" />
+		///           containing the <see cref="T:AddressBook.ABPerson" />'s URLs.
+		///         </returns>
+		///         <remarks>
+		///         </remarks>
+		///         <altmember cref="M:AddressBook.ABPerson.SetUrls(AddressBook.ABMultiValue`1)" />
 		public ABMultiValue<string>? GetUrls ()
 		{
 			return CreateStringMultiValue (CopyValue (ABPersonPropertyId.Url));
 		}
 
+		/// <param name="value">
+		///           A <see cref="T:AddressBook.ABMultiValue`1" />
+		///           containing the <see cref="T:AddressBook.ABPerson" />'s new URLs.
+		///         </param>
+		///         <summary>
+		///           Sets the <see cref="T:AddressBook.ABPerson" />'s new URLs.
+		///         </summary>
+		///         <remarks>
+		///         </remarks>
+		///         <altmember cref="T:AddressBook.ABPerson.GetUrls" />
 		public void SetUrls (ABMultiValue<string>? value)
 		{
 			SetValue (ABPersonPropertyId.Url, value.GetHandle ());
 		}
 
+		/// <summary>
+		///           Gets the <see cref="T:AddressBook.ABPerson" />'s related names.
+		///         </summary>
+		///         <returns>
+		///           A <see cref="T:AddressBook.ABMultiValue`1" />
+		///           containing the <see cref="T:AddressBook.ABPerson" />'s related names.
+		///         </returns>
+		///         <remarks>
+		///         </remarks>
+		///         <altmember cref="M:AddressBook.ABPerson.SetRelatedNames(AddressBook.ABMultiValue`1)" />
 		public ABMultiValue<string>? GetRelatedNames ()
 		{
 			return CreateStringMultiValue (CopyValue (ABPersonPropertyId.RelatedNames));
 		}
 
+		/// <param name="value">
+		///           A <see cref="T:AddressBook.ABMultiValue`1" />
+		///           containing the <see cref="T:AddressBook.ABPerson" />'s new related names.
+		///         </param>
+		///         <summary>
+		///           Sets the <see cref="T:AddressBook.ABPerson" />'s new related names.
+		///         </summary>
+		///         <remarks>
+		///         </remarks>
+		///         <altmember cref="T:AddressBook.ABPerson.GetRelatedNames" />
 		public void SetRelatedNames (ABMultiValue<string>? value)
 		{
 			SetValue (ABPersonPropertyId.RelatedNames, value.GetHandle ());
 		}
 
+		/// <param name="property">
+		///           A <see cref="T:AddressBook.ABPersonProperty" />
+		///           specifying which property to return.
+		///         </param>
+		///         <summary>
+		///           Gets the specified property.
+		///         </summary>
+		///         <returns>
+		///           A <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=System%20Object&amp;scope=Xamarin" title="T:System.Object">T:System.Object</a></format> containing the value of the specified property.
+		///         </returns>
+		///         <remarks>
+		///         </remarks>
 		public object? GetProperty (ABPersonProperty property)
 		{
 			switch (property) {
@@ -1519,6 +1758,9 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr ABPersonCopyArrayOfAllLinkedPeople (IntPtr person);
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public ABPerson? []? GetLinkedPeople ()
 		{
 			var linked = ABPersonCopyArrayOfAllLinkedPeople (Handle);
@@ -1528,6 +1770,10 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr ABPersonCopyImageDataWithFormat (IntPtr handle, nint format);
 
+		/// <param name="format">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public NSData? GetImage (ABPersonImageFormat format)
 		{
 			return Runtime.GetNSObject<NSData> (ABPersonCopyImageDataWithFormat (Handle, (nint) (long) format));
@@ -1536,6 +1782,10 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr ABPersonCreateVCardRepresentationWithPeople (IntPtr people);
 
+		/// <param name="people">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static NSData? GetVCards (params ABPerson [] people)
 		{
 			if (people is null)
@@ -1553,6 +1803,11 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr ABPersonCreatePeopleInSourceWithVCardRepresentation (IntPtr source, IntPtr vCardData);
 
+		/// <param name="source">To be added.</param>
+		///         <param name="vCardData">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static ABPerson? []? CreateFromVCard (ABRecord? source, NSData vCardData)
 		{
 			if (vCardData is null)

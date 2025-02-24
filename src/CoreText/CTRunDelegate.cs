@@ -83,6 +83,8 @@ namespace CoreText {
 			get { return GCHandle.ToIntPtr (handle); }
 		}
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		protected CTRunDelegateOperations ()
 		{
 			handle = GCHandle.Alloc (this);
@@ -93,27 +95,42 @@ namespace CoreText {
 			Dispose (false);
 		}
 
+		/// <summary>Releases the resources used by the CTRunDelegateOperations object.</summary>
+		///         <remarks>
+		///           <para>The Dispose method releases the resources used by the CTRunDelegateOperations class.</para>
+		///           <para>Calling the Dispose method when the application is finished using the CTRunDelegateOperations ensures that all external resources used by this managed object are released as soon as possible.  Once developers have invoked the Dispose method, the object is no longer useful and developers should no longer make any calls to it.  For more information on releasing resources see ``Cleaning up Unmananaged Resources'' at https://msdn.microsoft.com/en-us/library/498928w2.aspx</para>
+		///         </remarks>
 		public void Dispose ()
 		{
 			Dispose (true);
 			GC.SuppressFinalize (this);
 		}
 
-		protected virtual void Dispose (bool disposing)
+		/// <include file="../../docs/api/CoreText/CTRunDelegateOperations.xml" path="/Documentation/Docs[@DocId='M:CoreText.CTRunDelegateOperations.Dispose(System.Boolean)']/*" />
+	protected virtual void Dispose (bool disposing)
 		{
 		}
 
 #if NET
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public virtual nfloat GetAscent ()
 		{
 			return 0;
 		}
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public virtual nfloat GetDescent ()
 		{
 			return 0;
 		}
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public virtual nfloat GetWidth ()
 		{
 			return 0;
@@ -259,6 +276,9 @@ namespace CoreText {
 			}
 		}
 
+		/// <param name="operations">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CTRunDelegate (CTRunDelegateOperations operations)
 			: base (Create (operations), true)
 		{

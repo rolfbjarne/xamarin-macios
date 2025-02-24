@@ -705,17 +705,27 @@ namespace CoreFoundation {
 				private set;
 			}
 
+			/// <param name="handle">To be added.</param>
+			///         <param name="remote">To be added.</param>
+			///         <summary>To be added.</summary>
+			///         <remarks>To be added.</remarks>
 			public CFSocketAcceptEventArgs (CFSocketNativeHandle handle, IPEndPoint remote)
 			{
 				this.SocketHandle = handle;
 				this.RemoteEndPoint = remote;
 			}
 
+			/// <summary>Creates a new <see cref="T:CoreFoundation.CFSocket" /> from the accepted connection</summary>
+			///         <returns>The new instance of the created socket</returns>
+			///         <remarks>This could throw a <see cref="T:CoreFoundation.CFSocketException" /> if there is an error trying to create the socket.</remarks>
 			public CFSocket CreateSocket ()
 			{
 				return new CFSocket (SocketHandle);
 			}
 
+			/// <summary>Human readable description of the event arguments.</summary>
+			///         <returns>To be added.</returns>
+			///         <remarks>To be added.</remarks>
 			public override string ToString ()
 			{
 				return string.Format ("[CFSocketAcceptEventArgs: RemoteEndPoint={0}]", RemoteEndPoint);
@@ -737,11 +747,17 @@ namespace CoreFoundation {
 				private set;
 			}
 
+			/// <param name="result">To be added.</param>
+			///         <summary>To be added.</summary>
+			///         <remarks>To be added.</remarks>
 			public CFSocketConnectEventArgs (CFSocketError result)
 			{
 				this.Result = result;
 			}
 
+			/// <summary>Human readable description of the event arguments.</summary>
+			///         <returns>To be added.</returns>
+			///         <remarks>To be added.</remarks>
 			public override string ToString ()
 			{
 				return string.Format ("[CFSocketConnectEventArgs: Result={0}]", Result);
@@ -771,6 +787,10 @@ namespace CoreFoundation {
 				private set;
 			}
 
+			/// <param name="remote">To be added.</param>
+			///         <param name="data">To be added.</param>
+			///         <summary>Constructs a new instance with an endpoint and a byte buffer.</summary>
+			///         <remarks>To be added.</remarks>
 			public CFSocketDataEventArgs (IPEndPoint remote, byte [] data)
 			{
 				this.RemoteEndPoint = remote;
@@ -785,6 +805,8 @@ namespace CoreFoundation {
 		[SupportedOSPlatform ("tvos")]
 #endif
 		public class CFSocketReadEventArgs : EventArgs {
+			/// <summary>To be added.</summary>
+			///         <remarks>To be added.</remarks>
 			public CFSocketReadEventArgs () { }
 		}
 
@@ -795,6 +817,8 @@ namespace CoreFoundation {
 		[SupportedOSPlatform ("tvos")]
 #endif
 		public class CFSocketWriteEventArgs : EventArgs {
+			/// <summary>To be added.</summary>
+			///         <remarks>To be added.</remarks>
 			public CFSocketWriteEventArgs () { }
 		}
 

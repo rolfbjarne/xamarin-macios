@@ -224,6 +224,20 @@ namespace CoreFoundation {
 		}
 #endif
 
+		/// <param name="label">Name for the dispatch queue, as a convention, use reverse-style DNS names for your queue name.</param>
+		///         <summary>Creates a named dispatch queue that serializes all
+		/// 	submitted blocks.</summary>
+		///         <remarks>
+		///           <para>
+		/// 	    Creates a dispatching queue that executes code blocks
+		/// 	    serially.   
+		/// 	  </para>
+		///           <para>
+		/// 	    If you want to create a dispatch queue that can execute
+		/// 	    the submitted code concurrently, use the constructor that
+		/// 	    takes a boolean "concurrent" argument. 
+		/// 	  </para>
+		///         </remarks>
 		public DispatchQueue (string label)
 			: base (dispatch_queue_create (label, IntPtr.Zero), true)
 		{
@@ -240,7 +254,8 @@ namespace CoreFoundation {
 			}
 		}
 
-		public DispatchQueue (string label, bool concurrent)
+		/// <include file="../../docs/api/CoreFoundation/DispatchQueue.xml" path="/Documentation/Docs[@DocId='M:CoreFoundation.DispatchQueue.#ctor(System.String,System.Boolean)']/*" />
+	public DispatchQueue (string label, bool concurrent)
 			: base (dispatch_queue_create (label, concurrent ? ConcurrentQueue : IntPtr.Zero), true)
 		{
 			if (Handle == IntPtr.Zero)
@@ -248,6 +263,11 @@ namespace CoreFoundation {
 		}
 
 #if NET
+		/// <param name="label">To be added.</param>
+		///         <param name="attributes">To be added.</param>
+		///         <param name="target">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
@@ -289,11 +309,15 @@ namespace CoreFoundation {
 			}
 		}
 
+		/// <summary>Suspends the execution of the queue.</summary>
+		///         <remarks>Suspend and Resume calls should be always balanced.</remarks>
 		public void Suspend ()
 		{
 			dispatch_suspend (GetCheckedHandle ());
 		}
 
+		/// <summary>Resumes execution of the queue.</summary>
+		///         <remarks>Resume and Suspend calls should be always balanced.</remarks>
 		public void Resume ()
 		{
 			dispatch_resume (GetCheckedHandle ());
@@ -348,6 +372,23 @@ namespace CoreFoundation {
 			}
 		}
 
+		/// <param name="priority">Determines the priority of the queue to be returned.</param>
+		///         <summary>Returns one of the global dispatch queues based on the requested priority.</summary>
+		///         <returns>The queue priority.</returns>
+		///         <remarks>
+		///           <para>
+		/// 	    Unlike the main queue or queues allocated with the named
+		/// 	    DispatchQueue constructor, the global concurrent queues
+		/// 	    schedule blocks as soon as threads become available
+		/// 	    (non-FIFO completion order). The global concurrent queues
+		/// 	    represent three priority bands: DispatchQueuePriority.High, DispatchQueuePriority.Default and DispatchQueuePriority.Low.
+		/// 	  </para>
+		///           <para>
+		/// 	    Tasks submitted to the high priority global queue will be invoked before those submitted to the
+		/// 	    default or low priority global queues. Blocks submitted to the low priority global queue will only be
+		/// 	    invoked if no blocks are pending on the default or high priority queues.
+		/// 	  </para>
+		///         </remarks>
 		public static DispatchQueue GetGlobalQueue (DispatchQueuePriority priority)
 		{
 			return new DispatchQueue (dispatch_get_global_queue ((nint) (int) priority, 0), false);
@@ -481,6 +522,9 @@ namespace CoreFoundation {
 			GCHandle.FromIntPtr (context).Free ();
 		}
 
+		/// <param name="action">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void DispatchAsync (Action action)
 		{
 			if (action is null)
@@ -494,6 +538,9 @@ namespace CoreFoundation {
 #endif
 		}
 
+		/// <param name="block">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void DispatchAsync (DispatchBlock block)
 		{
 			if (block is null)
@@ -502,6 +549,9 @@ namespace CoreFoundation {
 			dispatch_async (GetCheckedHandle (), block.GetCheckedHandle ());
 		}
 
+		/// <param name="action">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void DispatchSync (Action action)
 		{
 			if (action is null)
@@ -516,6 +566,9 @@ namespace CoreFoundation {
 #endif
 		}
 
+		/// <param name="block">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void DispatchSync (DispatchBlock block)
 		{
 			if (block is null)
@@ -524,6 +577,25 @@ namespace CoreFoundation {
 			dispatch_sync (GetCheckedHandle (), block.GetCheckedHandle ());
 		}
 
+		/// <param name="action">Code block to submit as a barrier.</param>
+		///         <summary>Submits a barrier block for asynchronous execution on a dispatch queue</summary>
+		///         <remarks>
+		///           <para>
+		/// 	    Submits a block to a dispatch queue like <see cref="M:CoreFoundation.DispatchQueue.DispatchAsync(System.Action)" />
+		/// 	    does and marks that block as a barrier.  
+		/// 	  </para>
+		///           <para>
+		/// 	    This is only relevant for concurrent queues.
+		/// 	  </para>
+		///           <para>
+		/// 	    The  submitted code block will wait for all
+		/// 	    pending concurrent blocks to complete execution, then it
+		/// 	    will execute the code block to completion.   During the
+		/// 	    time that the barrier executes, any other code blocks
+		/// 	    submitted are queued, and will be scheduled to run
+		/// 	    (possibly concurrently) after the barrier method completes.
+		/// 	  </para>
+		///         </remarks>
 		public void DispatchBarrierAsync (Action action)
 		{
 			if (action is null)
@@ -538,6 +610,9 @@ namespace CoreFoundation {
 #endif
 		}
 
+		/// <param name="block">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void DispatchBarrierAsync (DispatchBlock block)
 		{
 			if (block is null)
@@ -546,6 +621,9 @@ namespace CoreFoundation {
 			dispatch_barrier_async (GetCheckedHandle (), block.GetCheckedHandle ());
 		}
 
+		/// <param name="action">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void DispatchBarrierSync (Action action)
 		{
 			if (action is null)
@@ -560,6 +638,9 @@ namespace CoreFoundation {
 #endif
 		}
 
+		/// <param name="block">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void DispatchBarrierSync (DispatchBlock block)
 		{
 			if (block is null)
@@ -568,6 +649,11 @@ namespace CoreFoundation {
 			dispatch_barrier_sync (GetCheckedHandle (), block.GetCheckedHandle ());
 		}
 
+		/// <param name="when">Time at which the code block will be executed.</param>
+		///         <param name="action">Code block to execute at some time in the
+		/// 	future.</param>
+		///         <summary>Executes this time on or after the specified time.</summary>
+		///         <remarks>To be added.</remarks>
 		public void DispatchAfter (DispatchTime when, Action action)
 		{
 			if (action is null)
@@ -581,6 +667,10 @@ namespace CoreFoundation {
 #endif
 		}
 
+		/// <param name="when">To be added.</param>
+		///         <param name="block">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void DispatchAfter (DispatchTime when, DispatchBlock block)
 		{
 			if (block is null)
@@ -589,6 +679,10 @@ namespace CoreFoundation {
 			dispatch_after (when.Nanoseconds, GetCheckedHandle (), block.GetCheckedHandle ());
 		}
 
+		/// <param name="action">To be added.</param>
+		///         <param name="times">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void Submit (Action<int> action, long times)
 		{
 			if (action is null)
@@ -602,6 +696,10 @@ namespace CoreFoundation {
 #endif
 		}
 
+		/// <param name="key">To be added.</param>
+		///         <param name="context">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void SetSpecific (IntPtr key, object context)
 		{
 #if NET
@@ -613,6 +711,10 @@ namespace CoreFoundation {
 #endif
 		}
 
+		/// <param name="key">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public object? GetSpecific (IntPtr key)
 		{
 			GCHandle gchandle = (GCHandle) dispatch_queue_get_specific (GetCheckedHandle (), key);
@@ -620,6 +722,10 @@ namespace CoreFoundation {
 		}
 
 #if NET
+		/// <param name="relative_priority">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]

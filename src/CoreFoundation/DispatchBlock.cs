@@ -170,6 +170,8 @@ namespace CoreFoundation {
 		[DllImport (Constants.libcLibrary)]
 		extern static void dispatch_block_cancel (IntPtr block);
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void Cancel ()
 		{
 			dispatch_block_cancel (GetCheckedHandle ());
@@ -178,6 +180,10 @@ namespace CoreFoundation {
 		[DllImport (Constants.libcLibrary)]
 		extern static void dispatch_block_notify (IntPtr block, IntPtr queue, IntPtr notification);
 
+		/// <param name="queue">To be added.</param>
+		///         <param name="notification">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void Notify (DispatchQueue queue, Action notification)
 		{
 			if (notification is null)
@@ -186,6 +192,10 @@ namespace CoreFoundation {
 				Notify (queue, block);
 		}
 
+		/// <param name="queue">To be added.</param>
+		///         <param name="notification">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void Notify (DispatchQueue queue, DispatchBlock notification)
 		{
 			if (queue is null)
@@ -198,6 +208,9 @@ namespace CoreFoundation {
 		[DllImport (Constants.libcLibrary)]
 		extern static nint dispatch_block_testcancel (IntPtr block);
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public nint TestCancel ()
 		{
 			return dispatch_block_testcancel (GetCheckedHandle ());
@@ -213,11 +226,19 @@ namespace CoreFoundation {
 		[DllImport (Constants.libcLibrary)]
 		extern static nint dispatch_block_wait (IntPtr block, DispatchTime time);
 
+		/// <param name="time">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public nint Wait (DispatchTime time)
 		{
 			return dispatch_block_wait (GetCheckedHandle (), time);
 		}
 
+		/// <param name="timeout">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public nint Wait (TimeSpan timeout)
 		{
 			return Wait (new DispatchTime (DispatchTime.Now, timeout));
@@ -238,6 +259,8 @@ namespace CoreFoundation {
 			}
 		}
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void Invoke ()
 		{
 			((Action) this!) ();

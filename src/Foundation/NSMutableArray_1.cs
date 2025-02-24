@@ -43,10 +43,19 @@ namespace Foundation {
 	[Register ("NSMutableArray", SkipRegistration = true)]
 	public sealed partial class NSMutableArray<TValue> : NSMutableArray, IEnumerable<TValue>
 		where TValue : class, INativeObject {
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public NSMutableArray ()
 		{
 		}
 
+		/// <param name="coder">The unarchiver object.</param>
+		///         <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		///         <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		public NSMutableArray (NSCoder coder)
 			: base (coder)
 		{
@@ -62,6 +71,9 @@ namespace Foundation {
 		{
 		}
 
+		/// <param name="values">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public NSMutableArray (params TValue [] values)
 		{
 			if (values is null)
@@ -72,6 +84,10 @@ namespace Foundation {
 		}
 
 		// Strongly typed methods from NSArray
+		/// <param name="obj">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public bool Contains (TValue obj)
 		{
 			if (obj is null)
@@ -80,6 +96,10 @@ namespace Foundation {
 			return _Contains (obj.Handle);
 		}
 
+		/// <param name="obj">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public nuint IndexOf (TValue obj)
 		{
 			if (obj is null)
@@ -89,6 +109,9 @@ namespace Foundation {
 		}
 
 		// Strongly typed methods from NSMutableArray
+		/// <param name="obj">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void Add (TValue obj)
 		{
 			if (obj is null)
@@ -117,6 +140,9 @@ namespace Foundation {
 			_ReplaceObject (index, withObject.Handle);
 		}
 
+		/// <param name="source">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void AddObjects (params TValue [] source)
 		{
 			if (source is null)
@@ -130,6 +156,10 @@ namespace Foundation {
 				_Add (source [i].Handle);
 		}
 
+		/// <param name="objects">To be added.</param>
+		///         <param name="atIndexes">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void InsertObjects (TValue [] objects, NSIndexSet atIndexes)
 		{
 			if (objects is null)
@@ -194,6 +224,9 @@ namespace Foundation {
 		#endregion
 
 		#region IEnumerable implementation
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
 		{
 			return GetEnumerator ();

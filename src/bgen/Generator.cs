@@ -6822,6 +6822,19 @@ public partial class Generator : IMemberGatherer {
 				if (has_dispose_attributes || (instance_fields_to_clear_on_dispose.Count > 0)) {
 					// if there'a any [Dispose] attribute then they all must opt-in in order for the generated Dispose method to be optimizable
 					bool optimizable = !has_dispose_attributes || IsOptimizable (type);
+					if (BindingTouch.SupportsXmlDocumentation) {
+						print ($"/// <summary>Releases any resources used by this object.</summary>");
+						print ($"/// <param name=\"disposing\">");
+						print ($"///   <para>If set to <see langword=\"true\" />, the method is invoked directly and will dispose both managed and unmanaged resources. If set to <see langword=\"false\" /> the method is being called by the garbage collector finalizer and should only release unmanaged resources.</para>");
+						print ($"/// </param>");
+						print ($"/// <remarks>");
+						print ($"///   <para>This Dispose method releases the resources used by the {type.Name} class.</para>");
+						print ($"///   <para>This method is called by both the <see cref=\"NSObject.Dispose()\" /> method and the object finalizer (<see cref=\"object.Finalize\" />). When invoked by the <see cref=\"NSObject.Dispose()\" /> method, the parameter <paramref name=\"disposing\" /> is set to <see langword=\"true\" /> and any managed object references that this object holds are also disposed or released. When invoked by the object finalizer (on the finalizer thread), the <paramref name=\"disposing\" /> parameter is set to <see langword=\"false\" />. </para>");
+						print ($"///   <para>Calling the <see cref=\"NSObject.Dispose()\" /> method when the application is finished using the {type.Name} instance ensures that all external resources used by this managed object are released as soon as possible. Once developers have invoked the <see cref=\"NSObject.Dispose()\" /> method, the object is no longer useful and developers should no longer make any calls to it.</para>");
+						print ($"///   <para>For more information on how to override this method and on the Dispose/IDisposable pattern, read the <see href=\"https://learn.microsoft.com/dotnet/standard/garbage-collection/implementing-dispose\">Implementing a Dispose Method</see>.</para>");
+						print ($"/// </remarks>");
+						print ($"/// <seealso href=\"https://learn.microsoft.com/dotnet/standard/garbage-collection/implementing-dispose\">Implement a Dispose method</seealso>");
+					}
 					print_generated_code (optimizable: optimizable);
 					print ("protected override void Dispose (bool disposing)");
 					print ("{");

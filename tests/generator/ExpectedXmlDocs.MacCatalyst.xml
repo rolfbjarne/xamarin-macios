@@ -424,6 +424,19 @@
             Summary for T1.Property
             </summary>
         </member>
+        <member name="M:XmlDocumentation.T1.Dispose(System.Boolean)">
+            <summary>Releases any resources used by this object.</summary>
+            <param name="disposing">
+              <para>If set to <see langword="true" />, the method is invoked directly and will dispose both managed and unmanaged resources. If set to <see langword="false" /> the method is being called by the garbage collector finalizer and should only release unmanaged resources.</para>
+            </param>
+            <remarks>
+              <para>This Dispose method releases the resources used by the T1 class.</para>
+              <para>This method is called by both the <see cref="M:Foundation.NSObject.Dispose" /> method and the object finalizer (<see cref="M:System.Object.Finalize" />). When invoked by the <see cref="M:Foundation.NSObject.Dispose" /> method, the parameter <paramref name="disposing" /> is set to <see langword="true" /> and any managed object references that this object holds are also disposed or released. When invoked by the object finalizer (on the finalizer thread), the <paramref name="disposing" /> parameter is set to <see langword="false" />. </para>
+              <para>Calling the <see cref="M:Foundation.NSObject.Dispose" /> method when the application is finished using the T1 instance ensures that all external resources used by this managed object are released as soon as possible. Once developers have invoked the <see cref="M:Foundation.NSObject.Dispose" /> method, the object is no longer useful and developers should no longer make any calls to it.</para>
+              <para>For more information on how to override this method and on the Dispose/IDisposable pattern, read the <see href="https://learn.microsoft.com/dotnet/standard/garbage-collection/implementing-dispose">Implementing a Dispose Method</see>.</para>
+            </remarks>
+            <seealso href="https://learn.microsoft.com/dotnet/standard/garbage-collection/implementing-dispose">Implement a Dispose method</seealso>
+        </member>
         <member name="T:XmlDocumentation.TG1`2">
             <summary>
             Summary for TG1

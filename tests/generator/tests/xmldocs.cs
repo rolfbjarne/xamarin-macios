@@ -9,6 +9,7 @@ namespace XmlDocumentation {
 	/// Summary for T1
 	/// </summary>
 	[BaseType (typeof (NSObject))]
+	[Dispose ("")]
 	interface T1 : P1 {
 		/// <summary>
 		/// Summary for T2.#ctor(String)

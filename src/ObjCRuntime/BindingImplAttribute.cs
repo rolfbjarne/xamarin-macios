@@ -32,4 +32,14 @@ namespace ObjCRuntime {
 		/// <summary>If the method contains code that can be optimized by the Xamarin.iOS build process.</summary>
 		Optimizable = 2,
 	}
+
+	[AttributeUsage (AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Constructor | AttributeTargets.Field | AttributeTargets.Class, AllowMultiple = false)]
+	public class BindingDocIdAttribute : Attribute {
+		public BindingDocIdAttribute (string docId)
+		{
+			this.DocId = docId;
+		}
+
+		public string DocId { get; set; }
+	}
 }

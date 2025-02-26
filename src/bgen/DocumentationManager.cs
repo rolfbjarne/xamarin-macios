@@ -87,7 +87,7 @@ public class DocumentationManager {
 
 	static string GetDocId (EventInfo ed) => GetDocId (ed.DeclaringType!) + "." + ed.Name;
 
-	static string GetDocId (PropertyInfo pd)
+	public static string GetDocId (PropertyInfo pd)
 	{
 		var name = GetDocId (pd.DeclaringType!) + "." + pd.Name;
 		var parameters = pd.GetIndexParameters ();
@@ -97,8 +97,13 @@ public class DocumentationManager {
 		return name;
 	}
 
+	public static string? GetDocIdOrNull (MemberInfo member)
+	{
+		TryGetId (member, out var name);
+		return name;
+	}
 
-	static bool TryGetId (MemberInfo member, [NotNullWhen (true)] out string? name)
+	public static bool TryGetId (MemberInfo member, [NotNullWhen (true)] out string? name)
 	{
 		name = null;
 

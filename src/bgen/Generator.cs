@@ -2066,6 +2066,7 @@ public partial class Generator : IMemberGatherer {
 					print ("");
 					// linker will remove the attributes (but it's useful for testing)
 					print_generated_code ();
+					PrintBindingDocId (prop);
 					print ("{0} {1}{2} {3} {{",
 						   is_internal ? "internal" : "public",
 						   propertyType,
@@ -2186,7 +2187,7 @@ public partial class Generator : IMemberGatherer {
 
 	// this attribute allows the linker to be more clever in removing unused code in bindings - without risking breaking user code
 	// only generate those for monotouch now since we can ensure they will be linked away before reaching the devices
-	public void GeneratedCode (StreamWriter sw, int tabs, bool optimizable = true)
+	public void GeneratedCode (StreamWriter sw, int tabs, bool optimizable = true, string? docId = null)
 	{
 		for (int i = 0; i < tabs; i++)
 			sw.Write ('\t');
@@ -2194,6 +2195,28 @@ public partial class Generator : IMemberGatherer {
 		if (optimizable)
 			sw.Write (" | BindingImplOptions.Optimizable");
 		sw.WriteLine (")]");
+	}
+
+	void PrintBindingDocId (MethodInfo minfo)
+	{
+		PrintBindingDocId (DocumentationManager.GetDocIdOrNull (minfo));
+	}
+
+	void PrintBindingDocId (PropertyInfo pinfo)
+	{
+		PrintBindingDocId (DocumentationManager.GetDocIdOrNull (pinfo));
+	}
+
+	void PrintBindingDocId (string? docId = null)
+	{
+		if (string.IsNullOrEmpty (docId))
+			return;
+
+		for (int i = 0; i < indent; i++)
+			sw.Write ('\t');
+		sw.Write ("[BindingDocId (\"");
+		sw.Write (docId);
+		sw.WriteLine ("\")]");
 	}
 
 	static void WriteIsDirectBindingCondition (StreamWriter sw, ref int tabs, bool? is_direct_binding, string is_direct_binding_value, Func<string> trueCode, Func<string> falseCode)
@@ -3986,6 +4009,7 @@ public partial class Generator : IMemberGatherer {
 
 		if (wrap is not null) {
 			print_generated_code ();
+			PrintBindingDocId (pi);
 			PrintPropertyAttributes (pi, minfo);
 			PrintAttributes (pi, preserve: true, advice: true);
 			print ("{0} {1}{2}{3} {4} {{",
@@ -4057,6 +4081,7 @@ public partial class Generator : IMemberGatherer {
 			var_name = string.Format ("__mt_{0}_var{1}", pi.Name, minfo.is_static ? "_static" : "");
 
 			print_generated_code ();
+			PrintBindingDocId (pi);
 
 			if (minfo.is_thread_static)
 				print ("[ThreadStatic]");
@@ -4068,6 +4093,7 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		print_generated_code (optimizable: IsOptimizable (pi));
+		PrintBindingDocId (pi);
 		PrintPropertyAttributes (pi, minfo);
 
 		PrintAttributes (pi, preserve: true, advice: true, bindAs: true);
@@ -4296,6 +4322,7 @@ public partial class Generator : IMemberGatherer {
 	void PrintAsyncHeader (AsyncMethodInfo minfo, AsyncMethodKind asyncKind)
 	{
 		print_generated_code ();
+		PrintBindingDocId (minfo.MethodInfo);
 		string extra = "";
 
 		if (asyncKind == AsyncMethodKind.WithResultOutParameter) {
@@ -4570,6 +4597,7 @@ public partial class Generator : IMemberGatherer {
 		var do_not_call_base = minfo.is_model;
 #endif
 		print_generated_code (optimizable: IsOptimizable (minfo.mi));
+		PrintBindingDocId (mi);
 		print ("{0} {1}{2}{3}",
 			   mod,
 			   minfo.GetModifiers (),
@@ -5056,6 +5084,7 @@ public partial class Generator : IMemberGatherer {
 			WriteDocumentation (mi);
 			PrintMethodAttributes (minfo);
 			print_generated_code ();
+			PrintBindingDocId (minfo.mi);
 			PrintDelegateProxy (minfo);
 			PrintExport (minfo);
 			print ("[Preserve (Conditional = true)]");
@@ -6626,6 +6655,7 @@ public partial class Generator : IMemberGatherer {
 						} else
 							print ("internal {0}? {1};", Nomenclator.GetDelegateName (mi), miname);
 
+						PrintBindingDocId (mi);
 						print ("[Preserve (Conditional = true)]");
 						if (isProtocolEventBacked)
 							print ("[Export (\"{0}\")]", FindSelector (dtype, mi));

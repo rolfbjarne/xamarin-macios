@@ -63,8 +63,8 @@ param_read_primitive (struct ParamIterator *it, const char **type_ptr, uint8_t *
 	char type = **type_ptr;
 	void *target = *target_ptr;
 
-	LOGZ (" reading primitive: type=%c target_ptr=%p target=%p total_size=%i fp_struct=%i float_in_register_candidate=%i read_register=%i it->byte_count=%i it->float_count=%i\n",
-			type, target_ptr, target, (int) total_size, (int) fp_struct, (int) float_in_register_candidate, (int) read_register, it->byte_count, it->float_count);
+	LOGZ ("    reading primitive: type_ptr=%p type=%c target_ptr=%p target=%p total_size=%i fp_struct=%i float_in_register_candidate=%i read_register=%i it->byte_count=%i it->float_count=%i\n",
+			type_ptr, type, target_ptr, target, (int) total_size, (int) fp_struct, (int) float_in_register_candidate, (int) read_register, it->byte_count, it->float_count);
 
 	// compute size
 	size_t size = xamarin_get_primitive_size (type);
@@ -84,7 +84,7 @@ param_read_primitive (struct ParamIterator *it, const char **type_ptr, uint8_t *
 		} else if ((read_register || fp_struct) && it->float_count <= 29) {
 			if (target != NULL) {
 				*(float*) target = *(it->float_count + (float*) &it->state->xmm0);
-				LOGZ (" reading float at xmm%i (%s half) into %p: %f\n", it->float_count / 4, it->float_count % 2 ? "second" : "first", target, *(float *) target);
+				LOGZ ("         reading float at xmm%i (%s half) into %p: %f\n", it->float_count / 4, it->float_count % 2 ? "second" : "first", target, *(float *) target);
 			}
 			it->float_count++;
 			if (it->float_count % 2 == 0)
@@ -93,7 +93,7 @@ param_read_primitive (struct ParamIterator *it, const char **type_ptr, uint8_t *
 			it->stack_next = (uint8_t *) align_ptr (it->stack_next, size); // align to natural alignment for the value we want to read
 			if (target != NULL) {
 				*(float*) target = *(float*) it->stack_next;
-				LOGZ (" reading float at stack %p into %p: %f\n", it->stack_next, target, *(float*)target);
+				LOGZ ("         reading float at stack %p into %p: %f\n", it->stack_next, target, *(float*)target);
 			}
 			it->stack_next += 4;
 		}
@@ -102,7 +102,7 @@ param_read_primitive (struct ParamIterator *it, const char **type_ptr, uint8_t *
 	case _C_DBL: {
 		if (it->float_count % 4 != 0) {
 			it->float_count = align_int32 (it->float_count, 4);
-			LOGZ (" advancing float pointer to read double value from full register\n");
+			LOGZ ("        advancing float pointer to read double value from full register\n");
 		}
 		// there are 8 xmm registers, each 4 floats big.
 		// only 1 double is ever put in each xmm register.
@@ -113,30 +113,18 @@ param_read_primitive (struct ParamIterator *it, const char **type_ptr, uint8_t *
 		} else */if (read_register && it->float_count <= 28) {
 			if (target != NULL) {
 				*(double*) target = *(double*) (it->float_count + (float*) &it->state->xmm0);
-				LOGZ (" reading double at xmm%i = %p into %p: %f\n", it->float_count / 4, (double *) target, target, *(double *) target);
+				LOGZ ("        reading double at xmm%i = %p into %p: %f\n", it->float_count / 4, (double *) target, target, *(double *) target);
 			}
 			it->float_count += 4; // each xmm register is 128-bit = 4 floats
 		} else {
 			it->stack_next = (uint8_t *) align_ptr (it->stack_next, size); // align to natural alignment for the value we want to read
 			if (target != NULL) {
 				*(double*) target = *(double*) it->stack_next;
-				LOGZ (" reading double at stack %p into %p: %f\n", it->stack_next, target, *(double *) target);
+				LOGZ ("        reading double at stack %p into %p: %f\n", it->stack_next, target, *(double *) target);
 			}
 			it->stack_next += 8;
 		}
 		break;
-	}
-	case _C_PTR: { // ^
-		// Need to skip what's pointed to
-		int nesting = 0;
-		do {
-			(*type_ptr)++;
-			if (**type_ptr == '{')
-				nesting++;
-			else if (**type_ptr == '}')
-				nesting--;
-		} while (**type_ptr != 0 && nesting > 0);
-		// fallthrough
 	}
 DEFAULT:
 	default: {
@@ -152,18 +140,18 @@ DEFAULT:
 				// align to next register if the one we're currently reading
 				// doesn't contain the entire value we need.
 				it->byte_count = align_int32 (it->byte_count, 8);
-				LOGZ (" skipping until next register #%i = %s, can't read primitive of size %i from current register\n", (it->byte_count / 8) + 1, registers [it->byte_count / 8], (int) size);
+				LOGZ ("        skipping until next register #%i = %s, can't read primitive of size %i from current register\n", (it->byte_count / 8) + 1, registers [it->byte_count / 8], (int) size);
 			}
 			 
 			ptr = it->byte_count + (uint8_t *) &it->state->rdi;
 			if (target != NULL)
-				LOGZ (" reading primitive of size %i from register #%i = %s (byte count %i offset %i) at %p into %p; ", (int) size, (it->byte_count / 8) + 1, registers [it->byte_count / 8], it->byte_count, it->byte_count % 8, ptr, target);
+				LOGZ ("        reading primitive of size %i from register #%i = %s (byte count %i offset %i) at %p into %p; ", (int) size, (it->byte_count / 8) + 1, registers [it->byte_count / 8], it->byte_count, it->byte_count % 8, ptr, target);
 			it->byte_count += size;
 		} else {
 			it->stack_next = (uint8_t *) align_ptr (it->stack_next, size); // align to natural alignment for the value we want to read
 			ptr = (uint8_t *) it->stack_next;
 			if (target != NULL)
-				LOGZ (" reading primitive of size %i from stack (byte count %i offset %i) at %p into %p:  ", (int) size, it->byte_count, it->byte_count % 8, ptr, target);
+				LOGZ ("        reading primitive of size %i from stack (byte count %i offset %i) at %p into %p:  ", (int) size, it->byte_count, it->byte_count % 8, ptr, target);
 			it->stack_next += size;
 		}
 
@@ -201,7 +189,7 @@ DEFAULT:
 static void
 inc_register (int offset, bool* is_fp, int* fp_registers, int* i_registers, char type, const char* msg)
 {
-	LOGZ(" inc_register (%i, %i, %i, %i, %c, %s)\n", offset, (int) *is_fp, *fp_registers, *i_registers, type, msg);
+	LOGZ("     inc_register (%i, %i, %i, %i, %c, %s)\n", offset, (int) *is_fp, *fp_registers, *i_registers, type, msg);
 	if (offset % 8 != 0)
 		return;
 
@@ -262,7 +250,7 @@ compute_register_usage (const char *type, int* fp_registers, int* i_registers)
 	if (size > 0)
 		inc_register (0 /* force inc by passing 0 */, &is_fp, fp_registers, i_registers, '?', "E");
 
-	LOGZ(" compute_register_usage (%s) => fp=%i i=%i\n", type, *fp_registers, *i_registers);
+	LOGZ("     compute_register_usage (%s) => fp=%i i=%i\n", type, *fp_registers, *i_registers);
 }
 
 static void
@@ -325,7 +313,7 @@ param_iter_next (enum IteratorAction action, void *context, const char *type, si
 
 	if (fp_registers > fp_registers_left || i_registers > i_registers_left) {
 		read_register = false;
-		LOGZ (" not enough registers left, passing on stack. type %s requires %i integer registers and %i fp registers, there are only %i integer and %i fp registers left.\n",
+		LOGZ ("     not enough registers left, passing on stack. type %s requires %i integer registers and %i fp registers, there are only %i integer and %i fp registers left.\n",
 			type, (int) i_registers, (int) fp_registers, (int) i_registers_left, (int) fp_registers_left);
 	}
 
@@ -373,14 +361,14 @@ param_iter_next (enum IteratorAction action, void *context, const char *type, si
 
 #ifdef TRACE
 	if (target == NULL) {
-		LOGZ (" output buffer is NULL\n");
+		LOGZ ("    output buffer is NULL\n");
 	} else {
-		LOGZ (" output buffer of size %i:", (int) size);
+		LOGZ ("    output buffer of size %i:", (int) size);
 		if (size > 8)
 				LOGZ ("\n     ");
 		for (int i = 0; i < size; i++) {
 			if (i > 0 && i % 8 == 0)
-				LOGZ ("\n     ");
+				LOGZ ("\n         ");
 			LOGZ (" 0x%.2x", ((uint8_t *) target) [i]);
 		}
 		LOGZ ("\n");

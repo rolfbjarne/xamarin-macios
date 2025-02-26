@@ -219,6 +219,7 @@ param_iter_next (enum IteratorAction action, void *context, const char *type, si
 	size_t struct_length = strlen (struct_name);
 	bool in_fp_registers = struct_length >= 2 && struct_length <= 4;
 	if (in_fp_registers) {
+		in_fp_registers = struct_name [0] == 'f' || struct_name [0] == 'd';
 		for (int i = 1; i < struct_length; i++)
 			in_fp_registers &= struct_name [i] == struct_name [0];
 	}
@@ -244,7 +245,7 @@ param_iter_next (enum IteratorAction action, void *context, const char *type, si
 
 	int ngrn_registers_left = 8 - it->ngrn;
 	bool read_register = ngrn_registers_left > 0;
-	if (read_register) {
+	if (read_register && !in_fp_registers) {
 		// compute struct size including padding
 		size_t ssize = 0;
 		for (int i = 0; struct_name [i] != 0; i++) {
@@ -255,6 +256,8 @@ param_iter_next (enum IteratorAction action, void *context, const char *type, si
 		size_t required_registers = (ssize + 7) / 8;
 		read_register = ngrn_registers_left >= required_registers;
 		LOGZ ("        ngrn registers left: %i required registers: %i read_register: %i\n", (int) ngrn_registers_left, (int) required_registers, (int) read_register);
+		if (!read_register)
+			it->ngrn = 8; // nothing more will be read from registers
 	}
 
 	do {

@@ -372,15 +372,19 @@ param_iter_next (enum IteratorAction action, void *context, const char *type, si
 	it->stack_next = (uint8_t *) align_ptr (it->stack_next, 8);
 
 #ifdef TRACE
-	LOGZ (" output buffer of size %i:", (int) size);
-	if (size > 8)
-			LOGZ ("\n     ");
-	for (int i = 0; i < size; i++) {
-		if (i > 0 && i % 8 == 0)
-			LOGZ ("\n     ");
-		LOGZ (" 0x%.2x", ((uint8_t *) target) [i]);
+	if (target == NULL) {
+		LOGZ (" output buffer is NULL\n");
+	} else {
+		LOGZ (" output buffer of size %i:", (int) size);
+		if (size > 8)
+				LOGZ ("\n     ");
+		for (int i = 0; i < size; i++) {
+			if (i > 0 && i % 8 == 0)
+				LOGZ ("\n     ");
+			LOGZ (" 0x%.2x", ((uint8_t *) target) [i]);
+		}
+		LOGZ ("\n");
 	}
-	LOGZ ("\n");
 #endif
 }
 

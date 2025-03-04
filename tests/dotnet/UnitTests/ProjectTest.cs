@@ -237,12 +237,20 @@ namespace Xamarin.Tests {
 			Assert.That (resourceBundle, Does.Exist, "Bundle existence");
 		}
 
-		[TestCase ("iOS", "monotouch")]
-		[TestCase ("tvOS", "monotouch")]
-		[TestCase ("macOS", "xammac")]
-		[TestCase ("MacCatalyst", "monotouch")]
+		[TestCase ("iOS", "monotouch", true)]
+		[TestCase ("tvOS", "monotouch", true)]
+		[TestCase ("macOS", "xammac", true)]
+		[TestCase ("MacCatalyst", "monotouch", true)]
+		[TestCase ("iOS", "monotouch", false)]
+		[TestCase ("tvOS", "monotouch", false)]
+		[TestCase ("macOS", "xammac", false)]
+		[TestCase ("MacCatalyst", "monotouch", false)]
+		[TestCase ("iOS", "monotouch", null)]
+		[TestCase ("tvOS", "monotouch", null)]
+		[TestCase ("macOS", "xammac", null)]
+		[TestCase ("MacCatalyst", "monotouch", null)]
 		// [Category ("AllPlatforms")]
-		public void BuildBundledResources (string platform, string prefix)
+		public void BuildBundledResources (string platform, string prefix, bool? bundleOriginalResources)
 		{
 			Configuration.IgnoreIfIgnoredPlatform (platform);
 			var assemblyName = "BundledResources";
@@ -251,7 +259,11 @@ namespace Xamarin.Tests {
 			var project_path = Path.Combine (project_dir, $"{assemblyName}.csproj");
 
 			Clean (project_path);
-			var result = DotNet.AssertBuild (project_path, verbosity);
+
+			var properties = GetDefaultProperties ();
+			if (bundleOriginalResources.HasValue)
+				properties ["BundleOriginalResources"] = bundleOriginalResources.Value ? "true" : "false";
+			var result = DotNet.AssertBuild (project_path, properties);
 			var lines = BinLog.PrintToLines (result.BinLogPath);
 			// Find the resulting binding assembly from the build log
 			var assemblies = FilterToAssembly (lines, assemblyName);
@@ -261,16 +273,17 @@ namespace Xamarin.Tests {
 			var asm = assemblies.First ();
 			Assert.That (asm, Does.Exist, "Assembly existence");
 
-			// Verify that there's one resource in the binding assembly, and its name
+			// Verify the resource count in the binding assembly, and their names
 			var ad = AssemblyDefinition.ReadAssembly (asm, new ReaderParameters { ReadingMode = ReadingMode.Deferred });
-			// Sort the resources before we assert, since we don't care about the order, and sorted order makes the asserts simpler.
-			var resources = ad.MainModule.Resources.OrderBy (v => v.Name).Select (v => v.Name).ToArray ();
+			var resources = ad.MainModule.Resources.Select (v => v.Name).ToArray ();
 			var expectedResources = new string [] {
-				$"__{prefix}_content_basn3p08__with__loc.png",
-				$"__{prefix}_content_basn3p08.png",
-				$"__{prefix}_content_xamvideotest.mp4",
+				"basn3p08.png",
+				"basn3p08__with__loc.png",
+				"xamvideotest.mp4",
 			};
-			Assert.That (resources, Is.EqualTo (expectedResources), "Resources");
+			var oldPrefixed = expectedResources.Select (v => $"__{prefix}_content_{v}").ToArray ();
+			var newPrefixed = expectedResources.Select (v => $"__{prefix}_item_BundleResource_{v}").ToArray ();
+			Assert.That (resources, Is.EquivalentTo (oldPrefixed).Or.EquivalentTo (newPrefixed), "Resources");
 		}
 
 		[TestCase ("iOS")]
@@ -866,9 +879,6 @@ namespace Xamarin.Tests {
 				var platformPrefix = (platform == ApplePlatform.MacOSX) ? "xammac" : "monotouch";
 				if (actualBundleOriginalResources) {
 					expectedResources = new string [] {
-						$"__{platformPrefix}_content_A.ttc",
-						$"__{platformPrefix}_content_B.otf",
-						$"__{platformPrefix}_content_C.ttf",
 						$"__{platformPrefix}_item_AtlasTexture_Archer__Attack.atlas_sarcher__attack__0001.png",
 						$"__{platformPrefix}_item_AtlasTexture_Archer__Attack.atlas_sarcher__attack__0002.png",
 						$"__{platformPrefix}_item_AtlasTexture_Archer__Attack.atlas_sarcher__attack__0003.png",
@@ -2876,6 +2886,7 @@ namespace Xamarin.Tests {
 			"/System/Library/Frameworks/CoreBluetooth.framework/Versions/A/CoreBluetooth",
 			"/System/Library/Frameworks/CoreData.framework/Versions/A/CoreData",
 			"/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation",
+			"/System/Library/Frameworks/CoreHaptics.framework/Versions/A/CoreHaptics",
 			"/System/Library/Frameworks/CoreImage.framework/Versions/A/CoreImage",
 			"/System/Library/Frameworks/CoreLocation.framework/Versions/A/CoreLocation",
 			"/System/Library/Frameworks/CoreMedia.framework/Versions/A/CoreMedia",

@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Macios.Generator.DataModel;
@@ -8,7 +10,7 @@ using Xunit;
 namespace Microsoft.Macios.Generator.Tests.DataModel;
 
 public class EnumDeclarationCodeChangesTests : BaseGeneratorTestClass {
-	CodeChanges CreateCodeChanges (ApplePlatform platform, string name, string inputText)
+	Binding CreateCodeChanges (ApplePlatform platform, string name, string inputText)
 	{
 		var (compilation, sourceTrees) = CreateCompilation (platform, sources: inputText);
 		Assert.Single (sourceTrees);
@@ -18,7 +20,7 @@ public class EnumDeclarationCodeChangesTests : BaseGeneratorTestClass {
 			.FirstOrDefault ();
 		Assert.NotNull (enumDeclaration);
 		var semanticModel = compilation.GetSemanticModel (sourceTrees [0]);
-		var codeChange = CodeChanges.FromDeclaration (enumDeclaration, semanticModel);
+		var codeChange = Binding.FromDeclaration (enumDeclaration, semanticModel);
 		Assert.NotNull (codeChange);
 		return codeChange.Value;
 	}
@@ -34,7 +36,7 @@ using ObjCBindings;
 
 namespace AVFoundation;
 
-[BindingType]
+[BindingType<SmartEnum>]
 public enum AVCaptureDeviceType {
 }
 ";
@@ -43,7 +45,7 @@ public enum AVCaptureDeviceType {
 		Assert.Equal ("AVFoundation.AVCaptureDeviceType", codeChanges.FullyQualifiedSymbol);
 		Assert.Equal (BindingType.SmartEnum, codeChanges.BindingType);
 		Assert.Single (codeChanges.Attributes);
-		Assert.Equal (AttributesNames.BindingAttribute, codeChanges.Attributes [0].Name);
+		Assert.Equal (AttributesNames.BindingSmartEnumAttribute, codeChanges.Attributes [0].Name);
 		Assert.Empty (codeChanges.EnumMembers);
 		Assert.Equal (BindingType.SmartEnum, codeChanges.BindingType);
 	}
@@ -59,7 +61,7 @@ using ObjCBindings;
 
 namespace AVFoundation;
 
-[BindingType]
+[BindingType<SmartEnum>]
 public enum AVCaptureDeviceType {
 
 	[Field<EnumValue> (""AVCaptureDeviceTypeBuiltInMicrophone"")]
@@ -78,7 +80,7 @@ public enum AVCaptureDeviceType {
 		Assert.Equal ("AVFoundation.AVCaptureDeviceType", codeChanges.FullyQualifiedSymbol);
 		Assert.Equal (BindingType.SmartEnum, codeChanges.BindingType);
 		Assert.Single (codeChanges.Attributes);
-		Assert.Equal (AttributesNames.BindingAttribute, codeChanges.Attributes [0].Name);
+		Assert.Equal (AttributesNames.BindingSmartEnumAttribute, codeChanges.Attributes [0].Name);
 		Assert.Equal (BindingType.SmartEnum, codeChanges.BindingType);
 		// validate that we have the 3 members and their attrs
 		Assert.Equal (3, codeChanges.EnumMembers.Length);
@@ -105,7 +107,7 @@ using ObjCBindings;
 
 namespace AVFoundation;
 
-[BindingType]
+[BindingType<SmartEnum>]
 public enum AVCaptureDeviceType {
 	// should be ignored
 	BuiltInMicrophone,
@@ -121,7 +123,7 @@ public enum AVCaptureDeviceType {
 		Assert.Equal ("AVFoundation.AVCaptureDeviceType", codeChanges.FullyQualifiedSymbol);
 		Assert.Equal (BindingType.SmartEnum, codeChanges.BindingType);
 		Assert.Single (codeChanges.Attributes);
-		Assert.Equal (AttributesNames.BindingAttribute, codeChanges.Attributes [0].Name);
+		Assert.Equal (AttributesNames.BindingSmartEnumAttribute, codeChanges.Attributes [0].Name);
 		Assert.Empty (codeChanges.EnumMembers);
 		Assert.Equal (BindingType.SmartEnum, codeChanges.BindingType);
 	}
@@ -138,7 +140,7 @@ using ObjCBindings;
 
 namespace AVFoundation;
 
-[BindingType]
+[BindingType<SmartEnum>]
 public enum AVCaptureDeviceType {
 
 	[Field<EnumValue> (""AVCaptureDeviceTypeBuiltInMicrophone"")]
@@ -157,7 +159,7 @@ public enum AVCaptureDeviceType {
 		Assert.Equal ("AVFoundation.AVCaptureDeviceType", codeChanges.FullyQualifiedSymbol);
 		Assert.Equal (BindingType.SmartEnum, codeChanges.BindingType);
 		Assert.Single (codeChanges.Attributes);
-		Assert.Equal (AttributesNames.BindingAttribute, codeChanges.Attributes [0].Name);
+		Assert.Equal (AttributesNames.BindingSmartEnumAttribute, codeChanges.Attributes [0].Name);
 		Assert.Equal (BindingType.SmartEnum, codeChanges.BindingType);
 		// validate that we have the 3 members and their attrs
 		Assert.Equal (2, codeChanges.EnumMembers.Length);

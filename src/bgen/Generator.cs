@@ -1822,6 +1822,7 @@ public partial class Generator : IMemberGatherer {
 				WriteDocumentation (dictType);
 				PrintPlatformAttributes (dictType);
 				PrintExperimentalAttribute (dictType);
+				PrintBindingDocId (dictType);
 				print ("public partial class {0} : DictionaryContainer {{", typeName);
 				indent++;
 				sw.WriteLine ("#if !COREBUILD");
@@ -2028,6 +2029,7 @@ public partial class Generator : IMemberGatherer {
 				indent++;
 			}
 
+			PrintBindingDocId (eventType);
 			print ("public partial class {0} : NSNotificationEventArgs {{", eventType.Name); indent++;
 			print ("public {0} (NSNotification notification) : base (notification) \n{{\n}}\n", eventType.Name);
 			int i = 0;
@@ -2195,6 +2197,11 @@ public partial class Generator : IMemberGatherer {
 		if (optimizable)
 			sw.Write (" | BindingImplOptions.Optimizable");
 		sw.WriteLine (")]");
+	}
+
+	void PrintBindingDocId (Type type)
+	{
+		PrintBindingDocId (DocumentationManager.GetDocIdOrNull (type));
 	}
 
 	void PrintBindingDocId (MethodInfo minfo)
@@ -4711,6 +4718,7 @@ public partial class Generator : IMemberGatherer {
 					continue;
 
 				WriteDocumentation (mi.DeclaringType);
+				PrintBindingDocId (mi.DeclaringType);
 
 				var del = mi.DeclaringType;
 
@@ -4891,6 +4899,7 @@ public partial class Generator : IMemberGatherer {
 
 		WriteDocumentation (type);
 
+		PrintBindingDocId (type);
 		PrintAttributes (type, platform: true, preserve: true, advice: true);
 		print ("[Protocol (Name = \"{1}\", WrapperType = typeof ({0}Wrapper){2}{3}{4})]",
 			   TypeName,
@@ -5196,6 +5205,7 @@ public partial class Generator : IMemberGatherer {
 				print ($"///   <para>The extension methods for <see cref=\"I{TypeName}\" /> interface allow developers to treat instances of the interface as having all the optional methods of the original {protocol_name} protocol. Since the interface only contains the required members, these extension methods allow developers to call the optional members of the protocol.</para>");
 				print ($"/// </remarks>");
 			}
+			PrintBindingDocId (type);
 			PrintAttributes (type, preserve: true, advice: true);
 			print ("{1} unsafe static partial class {0}_Extensions {{", TypeName, class_visibility);
 			indent++;
@@ -5731,7 +5741,6 @@ public partial class Generator : IMemberGatherer {
 			}
 
 			WriteDocumentation (type);
-
 			bool core_image_filter = false;
 			string class_mod = null;
 
@@ -5862,6 +5871,8 @@ public partial class Generator : IMemberGatherer {
 				print ("partial class {0} {{", container);
 				indent++;
 			}
+
+			PrintBindingDocId (type);
 
 			var class_name = TypeName;
 			var where_list = string.Empty;
@@ -7209,6 +7220,7 @@ public partial class Generator : IMemberGatherer {
 
 				var pars = eventArgTypes [eaclass];
 
+				print ("[BindingDocId (\"\")] // fully generated, not possible to add xml docs to api definition atm");
 				print ("public partial class {0} : EventArgs {{", eaclass); indent++;
 				print ("public {0} ({1})", eaclass, RenderParameterDecl (pars.Skip (1), true));
 				print ("{");
@@ -7242,6 +7254,7 @@ public partial class Generator : IMemberGatherer {
 					continue;
 				async_result_types_emitted.Add (async_type.Item1);
 
+				print ("[BindingDocId (\"\")] // fully generated, not possible to add xml docs to api definition atm");
 				print ("public partial class {0} {{", async_type.Item1); indent++;
 
 				StringBuilder ctor = new StringBuilder ();

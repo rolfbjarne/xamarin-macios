@@ -40,6 +40,8 @@ public partial class Generator {
 			interfaces += $", I{i.Name}";
 		}
 
+		PrintBindingDocId (type);
+
 		// type declaration
 		print ("public{0} partial class {1} : {2}{3} {{",
 			is_abstract ? " abstract" : String.Empty,

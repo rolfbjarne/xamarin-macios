@@ -52,6 +52,8 @@ public partial class Generator {
 		if (isFlagsEnum)
 			print ("[Flags]");
 
+		PrintBindingDocId (type);
+
 		var native = AttributeManager.GetCustomAttribute<NativeAttribute> (type);
 		if (native is not null) {
 			var sb = new StringBuilder ();
@@ -156,6 +158,8 @@ public partial class Generator {
 			PrintPlatformAttributes (type);
 			PrintExperimentalAttribute (type);
 			print_generated_code ();
+			if (type.Name != "ASExtensionErrorCode") // avoid some weirdness, we have an api definition for both ASExtensionErrorCode and ASExtensionErrorCodeExtensions, and then the generator generates an ASExtensionErrorCodeExtension class as well from ASExtensionErrorCode.
+				print ("[BindingDocId (\"\")] // fully generated, not possible to add xml docs to api definition atm");
 			print ("static {1} partial class {0}Extensions {{", type.Name, visibility);
 			indent++;
 

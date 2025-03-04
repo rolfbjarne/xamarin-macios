@@ -33,7 +33,7 @@ namespace ObjCRuntime {
 		Optimizable = 2,
 	}
 
-	[AttributeUsage (AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Constructor | AttributeTargets.Field | AttributeTargets.Class, AllowMultiple = false)]
+	[AttributeUsage (AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Constructor | AttributeTargets.Field | AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Delegate | AttributeTargets.Struct | AttributeTargets.Interface, AllowMultiple = false)]
 	public class BindingDocIdAttribute : Attribute {
 		public BindingDocIdAttribute (string docId)
 		{

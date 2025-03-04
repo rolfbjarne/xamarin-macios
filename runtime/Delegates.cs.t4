@@ -20,9 +20,11 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 using Foundation;
+using ObjCRuntime;
 using Registrar;
 
 namespace ObjCRuntime {
+	[BindingDocId ("")] // fully generated, not possible to add xml docs to api definition atm");
 	public unsafe partial class Runtime {
 		
 #if !NET

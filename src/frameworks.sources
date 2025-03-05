@@ -248,13 +248,12 @@ AVFOUNDATION_CORE_SOURCES = \
 	AVFoundation/AVUrlAssetOptions.cs \
 	AVFoundation/AVVideoSettings.cs \
 	AVFoundation/AVTypes.cs \
+	AVFoundation/AVAudioVoiceProcessingOtherAudioDuckingConfiguration.cs \
 
 AVFOUNDATION_SOURCES = \
 	AVFoundation/AVAssetDownloadStorageManagementPolicy.cs \
 	AVFoundation/AVAssetDownloadTask.cs \
 	AVFoundation/AVAssetDownloadUrlSession.cs \
-	AVFoundation/AVAssetImageGenerator.cs \
-	AVFoundation/AVAssetReaderVideoCompositionOutput.cs \
 	AVFoundation/AVAssetResourceLoadingDataRequest.cs \
 	AVFoundation/AVAudioBuffer.cs \
 	AVFoundation/AVAudioChannelLayout.cs \
@@ -277,7 +276,6 @@ AVFOUNDATION_SOURCES = \
 	AVFoundation/AVContentKeyResponse.cs \
 	AVFoundation/AVDepthData.cs \
 	AVFoundation/AVLayerVideoGravity.cs \
-	AVFoundation/AVMetadataItemFilter.cs \
 	AVFoundation/AVMetadataMachineReadableCodeObject.cs \
 	AVFoundation/AVMetadataObject.cs \
 	AVFoundation/AVOutputSettingsAssistant.cs \
@@ -287,11 +285,15 @@ AVFOUNDATION_SOURCES = \
 	AVFoundation/AVSampleBufferExtensions.cs \
 	AVFoundation/AVSampleCursor.cs \
 	AVFoundation/AVSpeechSynthesizer.cs \
+	AVFoundation/AVSpeechSynthesisMarker.cs \
+	AVFoundation/AVSpeechSynthesisProviderAudioUnit.cs \
+	AVFoundation/AVSpeechUtterance.cs \
 	AVFoundation/AVTextStyleRule.cs \
 	AVFoundation/Events.cs \
 	AVFoundation/AVPlayerLooper.cs \
 	AVFoundation/AudioRendererWasFlushedAutomaticallyEventArgs.cs \
 	AVFoundation/AVCaptureReactionType.rgen.cs \
+	AVFoundation/CMTagCollectionVideoOutputPreset.cs \
 
 # AVKit
 
@@ -430,6 +432,7 @@ COREANIMATION_SOURCES = \
 	CoreAnimation/CAMediaTimingFunction.cs \
 	CoreAnimation/CAScrollLayer.cs \
 	CoreAnimation/CATextLayer.cs \
+	CoreAnimation/NSValue.cs \
 
 # CoreBluetooth
 
@@ -550,6 +553,7 @@ COREGRAPHICS_SOURCES = \
 	CoreGraphics/CGSession.cs \
 	CoreGraphics/CGShading.cs \
 	CoreGraphics/NativeDrawingMethods.cs \
+	CoreGraphics/NSValue.cs \
 
 # CoreHaptics
 
@@ -586,6 +590,7 @@ CORELOCATION_SOURCES = \
 	CoreLocation/CLBeaconRegion.cs \
 	CoreLocation/CLCompat.cs \
 	CoreLocation/CLLocationManager.cs \
+	CoreLocation/NSValue.cs \
 
 # CoreMedia
 
@@ -611,6 +616,7 @@ COREMEDIA_SOURCES = \
 	CoreMedia/CMCustomBlockAllocator.cs \
 	CoreMedia/CMBufferQueue.cs \
 	CoreMedia/CMMemoryPool.cs \
+	CoreMedia/NSValue.cs \
 
 # CoreMidi
 
@@ -833,7 +839,6 @@ FOUNDATION_CORE_SOURCES = \
 FOUNDATION_SOURCES = \
 	Foundation/Additions.cs \
 	Foundation/Compat.cs \
-	Foundation/MonoTouchException.cs \
 	Foundation/NSAppleEventDescriptor.cs \
 	Foundation/NSArray.cs \
 	Foundation/NSArray_1.cs \
@@ -911,7 +916,6 @@ FOUNDATION_SOURCES = \
 	Foundation/NSUnit.cs \
 	Foundation/NSUrl.cs \
 	Foundation/NSUrlComponents.cs \
-	Foundation/NSUrlConnection.cs \
 	Foundation/NSUrlCredential.cs \
 	Foundation/NSUrlDownload.cs \
 	Foundation/NSUrlProtectionSpace.cs \
@@ -1061,47 +1065,19 @@ IMAGEKIT_CORE_SOURCES = \
 # Intents
 
 INTENTS_SOURCES = \
-	Intents/INBillTypeResolutionResult.cs \
 	Intents/INCallRecord.cs \
-	Intents/INCallRecordTypeResolutionResult.cs \
-	Intents/INCarAirCirculationModeResolutionResult.cs \
-	Intents/INCarAudioSourceResolutionResult.cs \
-	Intents/INCarDefrosterResolutionResult.cs \
-	Intents/INCarSeatResolutionResult.cs \
-	Intents/INCarSignalOptionsResolutionResult.cs \
-	Intents/INCompat.cs \
-	Intents/INGetCarLockStatusIntentResponse.cs \
-	Intents/INGetCarPowerLevelStatusIntentResponse.cs \
 	Intents/INIntentResolutionResult.cs \
 	Intents/INInteraction.cs \
-	Intents/INMessageAttributeOptionsResolutionResult.cs \
-	Intents/INMessageAttributeResolutionResult.cs \
-	Intents/INPaymentStatusResolutionResult.cs \
 	Intents/INPerson.cs \
 	Intents/INPriceRange.cs \
-	Intents/INRadioTypeResolutionResult.cs \
-	Intents/INRelativeReferenceResolutionResult.cs \
-	Intents/INRelativeSettingResolutionResult.cs \
-	Intents/INRideOption.cs \
 	Intents/INPlayMediaIntentResponse.cs \
-	Intents/INSaveProfileInCarIntent.cs \
 	Intents/INSearchCallHistoryIntent.cs \
 	Intents/INSetCarLockStatusIntent.cs \
 	Intents/INSetClimateSettingsInCarIntent.cs \
 	Intents/INSetDefrosterSettingsInCarIntent.cs \
 	Intents/INSetProfileInCarIntent.cs \
 	Intents/INSetSeatSettingsInCarIntent.cs \
-	Intents/INSpeakableString.cs \
 	Intents/INStartWorkoutIntent.cs \
-	Intents/INWorkoutGoalUnitTypeResolutionResult.cs \
-	Intents/INWorkoutLocationTypeResolutionResult.cs \
-	Intents/INCarAirCirculationModeResolutionResult.watchOS.cs \
-	Intents/INCarAudioSourceResolutionResult.watchOS.cs \
-	Intents/INCarDefrosterResolutionResult.watchOS.cs \
-	Intents/INCarSeatResolutionResult.watchOS.cs \
-	Intents/INRadioTypeResolutionResult.watchOS.cs \
-	Intents/INRelativeReferenceResolutionResult.watchOS.cs \
-	Intents/INRelativeSettingResolutionResult.watchOS.cs \
 
 # IOSurface
 IOSURFACE_CORE_SOURCES = \
@@ -1158,6 +1134,7 @@ MAPKIT_SOURCES = \
 	MapKit/MKPolygon.cs \
 	MapKit/MKPolyline.cs \
 	MapKit/MKUserLocation.cs \
+	MapKit/NSValue.cs \
 
 # MediaAccessibility
 
@@ -1619,6 +1596,7 @@ SCENEKIT_SOURCES = \
 	SceneKit/SCNSceneSource.cs \
 	SceneKit/SCNSkinner.cs \
 	SceneKit/SCNTechnique.cs \
+	SceneKit/NSValue.cs \
 
 # ScreenCaptureKit
 
@@ -1692,7 +1670,6 @@ SOCIAL_API_SOURCES = \
 
 SOCIAL_SOURCES = \
 	Social/SLComposeViewController.cs \
-	Social/SLRequest.cs \
 
 # Speech
 
@@ -1778,7 +1755,6 @@ UIKIT_SOURCES = \
 	UIKit/Compat.cs \
 	UIKit/NSLayoutManager.cs \
 	AppKit/NSLayoutManager.cs \
-	UIKit/NSTextAttachmentContainer.cs \
 	UIKit/UIAccessibility.cs \
 	UIKit/UIAccessibilityCustomAction.cs \
 	UIKit/UIActionSheet.cs \
@@ -1846,6 +1822,7 @@ UIKIT_SOURCES = \
 	UIKit/UIViewControllerTransitionCoordinatorContext.cs \
 	UIKit/UIWindow.cs \
 	UIKit/UIWindowScene.cs \
+	UIKit/NSValue.cs \
 
 # UserNotifications
 
@@ -1936,6 +1913,7 @@ SHARED_CORE_SOURCES = \
 	DotNetGlobals.cs \
 	MinimumVersions.cs \
 	MonoPInvokeCallbackAttribute.cs \
+	ObjCBindings/BindFromAttribute.cs \
 	ObjCBindings/BindingTypeAttribute.cs \
 	ObjCBindings/BindingTypeTag.cs \
 	ObjCBindings/ExportAttribute.cs \
@@ -2086,6 +2064,7 @@ MACOS_FRAMEWORKS =          \
 	CoreAnimation           \
 	CoreAudioKit            \
 	CoreGraphics            \
+	CoreHaptics             \
 	CoreImage               \
 	CoreLocation            \
 	CoreMotion		\

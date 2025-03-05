@@ -28,20 +28,12 @@ using UIKit;
 #endif
 #endif
 
-#if !NET
-using NativeHandle = System.IntPtr;
-#endif
-
 namespace CoreMedia {
 
-#if NET
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
-#else
-	[Watch (6, 0)]
-#endif
 	public class CMSampleBuffer : NativeObject, ICMAttachmentBearer {
 #if !COREBUILD
 		GCHandle invalidate;
@@ -169,24 +161,10 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		unsafe static extern CMSampleBufferError CMSampleBufferCallForEachSample (
 			/* CMSampleBufferRef */ IntPtr sbuf,
-#if NET
-			delegate* unmanaged<IntPtr, int, IntPtr, CMSampleBufferError> callback, 
-#else
-			CMSampleBufferCallForEachSampleCallback callback,
-#endif
+			delegate* unmanaged<IntPtr, int, IntPtr, CMSampleBufferError> callback,
 		   /* void* */ IntPtr refcon);
-#if !NET
-		delegate CMSampleBufferError CMSampleBufferCallForEachSampleCallback (/* CMSampleBufferRef */ IntPtr
-			sampleBuffer, int index, /* void* */ IntPtr refcon);
-#endif
 
-#if NET
 		[UnmanagedCallersOnly]
-#else
-#if !MONOMAC
-		[MonoPInvokeCallback (typeof (CMSampleBufferCallForEachSampleCallback))]
-#endif
-#endif
 		static CMSampleBufferError ForEachSampleHandler (IntPtr sbuf, int index, IntPtr refCon)
 		{
 			GCHandle gch = GCHandle.FromIntPtr (refCon);
@@ -204,13 +182,9 @@ namespace CoreMedia {
 
 			GCHandle h = GCHandle.Alloc (Tuple.Create (callback, this));
 			try {
-#if NET
 				unsafe {
 					return CMSampleBufferCallForEachSample (Handle, &ForEachSampleHandler, (IntPtr) h);
 				}
-#else
-				return CMSampleBufferCallForEachSample (Handle, ForEachSampleHandler, (IntPtr) h);
-#endif
 			} finally {
 				h.Free ();
 			}
@@ -622,33 +596,12 @@ namespace CoreMedia {
 		// however there was already a similar call that we did not bound (not sure why) 
 		// and can provide the same feature (since iOS 4 not 8.0)
 		[DllImport (Constants.CoreMediaLibrary)]
-#if NET
 		extern unsafe static /* OSStatus */ CMSampleBufferError CMSampleBufferSetInvalidateCallback (
-#else
-		extern static /* OSStatus */ CMSampleBufferError CMSampleBufferSetInvalidateCallback (
-#endif
 			/* CMSampleBufferRef */ IntPtr sbuf,
-#if NET
 			delegate* unmanaged<IntPtr, ulong, void> invalidateCallback,
-#else
-			/* CMSampleBufferInvalidateCallback */ CMSampleBufferInvalidateCallback? invalidateCallback,
-#endif
 			/* uint64_t */ ulong invalidateRefCon);
 
-#if !NET
-		delegate void CMSampleBufferInvalidateCallback (/* CMSampleBufferRef */ IntPtr sbuf,
-			/* uint64_t */ ulong invalidateRefCon);
-
-		static CMSampleBufferInvalidateCallback invalidate_handler = InvalidateHandler;
-#endif
-
-#if NET
 		[UnmanagedCallersOnly]
-#else
-#if !MONOMAC
-		[MonoPInvokeCallback (typeof (CMSampleBufferInvalidateCallback))]
-#endif
-#endif
 		static void InvalidateHandler (IntPtr sbuf, ulong invalidateRefCon)
 		{
 			GCHandle gch = GCHandle.FromIntPtr ((IntPtr) invalidateRefCon);
@@ -662,13 +615,9 @@ namespace CoreMedia {
 			if (invalidateHandler is null) {
 				if (invalidate.IsAllocated)
 					invalidate.Free ();
-#if NET
 				unsafe {
-#endif
-				return CMSampleBufferSetInvalidateCallback (Handle, null, 0);
-#if NET
+					return CMSampleBufferSetInvalidateCallback (Handle, null, 0);
 				}
-#endif
 			}
 
 			// only one callback can be assigned - and ObjC does not let you re-assign a different one,
@@ -678,13 +627,9 @@ namespace CoreMedia {
 				return CMSampleBufferError.RequiredParameterMissing;
 
 			invalidate = GCHandle.Alloc (Tuple.Create (invalidateHandler, this));
-#if NET
 			unsafe {
-				return CMSampleBufferSetInvalidateCallback (Handle, &InvalidateHandler, (ulong)(IntPtr)invalidate);
+				return CMSampleBufferSetInvalidateCallback (Handle, &InvalidateHandler, (ulong) (IntPtr) invalidate);
 			}
-#else
-			return CMSampleBufferSetInvalidateCallback (Handle, invalidate_handler, (ulong) (IntPtr) invalidate);
-#endif
 		}
 
 		[DllImport (Constants.CoreMediaLibrary)]
@@ -695,21 +640,17 @@ namespace CoreMedia {
 			return CMSampleBufferTrackDataReadiness (Handle, bufferToTrack.GetHandle ());
 		}
 
-#if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
-#endif
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* OSStatus */ CMSampleBufferError CMSampleBufferCopyPCMDataIntoAudioBufferList (/* CMSampleBufferRef */ IntPtr sbuf, /* int32_t */ int frameOffset, /* int32_t */ int numFrames, /* AudioBufferList* */ IntPtr bufferList);
 
-#if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
-#endif
 		public CMSampleBufferError CopyPCMDataIntoAudioBufferList (int frameOffset, int numFrames, AudioBuffers bufferList)
 		{
 			if (bufferList is null)
@@ -718,12 +659,10 @@ namespace CoreMedia {
 			return CMSampleBufferCopyPCMDataIntoAudioBufferList (Handle, frameOffset, numFrames, (IntPtr) bufferList);
 		}
 
-#if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
-#endif
 		[DllImport (Constants.CoreMediaLibrary)]
 		unsafe extern static /* OSStatus */ CMSampleBufferError CMAudioSampleBufferCreateReadyWithPacketDescriptions (
 			/* CFAllocatorRef */ IntPtr allocator,
@@ -734,12 +673,10 @@ namespace CoreMedia {
 			/* AudioStreamPacketDescription* */ AudioStreamPacketDescription* packetDescriptions,
 			/* CMSampleBufferRef* */ IntPtr* sBufOut);
 
-#if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
-#endif
 		public static CMSampleBuffer? CreateReadyWithPacketDescriptions (CMBlockBuffer dataBuffer, CMFormatDescription formatDescription, int samplesCount,
 			CMTime sampleTimestamp, AudioStreamPacketDescription []? packetDescriptions, out CMSampleBufferError error)
 		{
@@ -770,12 +707,10 @@ namespace CoreMedia {
 			return new CMSampleBuffer (buffer, true);
 		}
 
-#if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
-#endif
 		[DllImport (Constants.CoreMediaLibrary)]
 		unsafe extern static /* OSStatus */ CMSampleBufferError CMSampleBufferCreateReady (
 			/* CFAllocatorRef */ IntPtr allocator,
@@ -788,12 +723,10 @@ namespace CoreMedia {
 			/* size_t* */ nuint* sampleSizeArray,                    // can be null
 			/* CMSampleBufferRef* */ IntPtr* sBufOut);
 
-#if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
-#endif
 		public static CMSampleBuffer? CreateReady (CMBlockBuffer dataBuffer, CMFormatDescription? formatDescription,
 			int samplesCount, CMSampleTimingInfo []? sampleTimingArray, nuint []? sampleSizeArray,
 			out CMSampleBufferError error)
@@ -830,12 +763,10 @@ namespace CoreMedia {
 			return new CMSampleBuffer (buffer, true);
 		}
 
-#if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
-#endif
 		[DllImport (Constants.CoreMediaLibrary)]
 		unsafe extern static /* OSStatus */ CMSampleBufferError CMSampleBufferCreateReadyWithImageBuffer (
 			/* CFAllocatorRef */ IntPtr allocator,
@@ -844,26 +775,10 @@ namespace CoreMedia {
 			/* const CMSampleTimingInfo * CM_NONNULL */ CMSampleTimingInfo* sampleTiming,
 			/* CMSampleBufferRef* */ IntPtr* sBufOut);
 
-#if !NET
-#if !WATCH
-		[Obsolete ("Use the 'CreateReadyWithImageBuffer' overload with a single ref, not array, 'CMSampleTimingInfo' parameter.")]
-		public static CMSampleBuffer CreateReadyWithImageBuffer (CVImageBuffer imageBuffer,
-			CMFormatDescription formatDescription, CMSampleTimingInfo [] sampleTiming, out CMSampleBufferError error)
-		{
-			if (sampleTiming is null)
-				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (sampleTiming));
-			if (sampleTiming.Length != 1)
-				ObjCRuntime.ThrowHelper.ThrowArgumentException (nameof (sampleTiming), "Only a single sample is allowed.");
-			return CreateReadyWithImageBuffer (imageBuffer, formatDescription, sampleTiming, out error);
-		}
-#endif // !WATCH
-#endif // !NET
-#if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
-#endif
 		public static CMSampleBuffer? CreateReadyWithImageBuffer (CVImageBuffer imageBuffer,
 			CMFormatDescription formatDescription, ref CMSampleTimingInfo sampleTiming, out CMSampleBufferError error)
 		{
@@ -1049,13 +964,10 @@ namespace CoreMedia {
 			}
 		}
 
-#if !WATCH
-#if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("macos")]
-#endif
 		public LensStabilizationStatus StillImageLensStabilizationStatus {
 			get {
 				var reason = GetStringValue (CMSampleAttachmentKey.StillImageLensStabilizationInfo);
@@ -1074,7 +986,6 @@ namespace CoreMedia {
 				return LensStabilizationStatus.None;
 			}
 		}
-#endif // !WATCH
 #endif // !MONOMAC
 	}
 #endif

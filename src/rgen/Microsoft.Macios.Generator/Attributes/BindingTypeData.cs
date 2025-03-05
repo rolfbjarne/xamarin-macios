@@ -1,5 +1,8 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Microsoft.CodeAnalysis;
 
 namespace Microsoft.Macios.Generator.Attributes;
@@ -100,9 +103,34 @@ readonly struct BindingTypeData<T> : IEquatable<BindingTypeData<T>> where T : En
 	public string? Name { get; }
 
 	/// <summary>
+	/// The domain of an error enumerator. This has to be used with the SmartEnum flag.
+	/// </summary>
+	public string? ErrorDomain { get; init; }
+
+	/// <summary>
+	/// The library name of an error/smart enum.
+	/// </summary>
+	public string? LibraryName { get; init; }
+
+	/// <summary>
 	/// The configuration flags used on the exported class/interface.
 	/// </summary>
 	public T? Flags { get; } = default;
+
+	/// <summary>
+	/// The visibility of the default constructor for a core image filter.
+	/// </summary>
+	public MethodAttributes DefaultCtorVisibility { get; init; } = MethodAttributes.Public;
+
+	/// <summary>
+	/// The visibility of the IntPtr constructor for a core image filter.
+	/// </summary>
+	public MethodAttributes IntPtrCtorVisibility { get; init; } = MethodAttributes.PrivateScope;
+
+	/// <summary>
+	/// The visibility of the string constructor for a core image filter.
+	/// </summary>
+	public MethodAttributes StringCtorVisibility { get; init; } = MethodAttributes.PrivateScope;
 
 	public BindingTypeData (string? name)
 	{
@@ -132,8 +160,14 @@ readonly struct BindingTypeData<T> : IEquatable<BindingTypeData<T>> where T : En
 	{
 		data = null;
 		var count = attributeData.ConstructorArguments.Length;
-		string? name;
+		string? name = null;
 		T? flags = default;
+		string? errorDomain = null;
+		string? libraryName = null;
+		var defaultCtorVisibility = MethodAttributes.Public;
+		var intPtrCtorVisibility = MethodAttributes.PrivateScope;
+		var stringCtorVisibility = MethodAttributes.PrivateScope;
+
 		switch (count) {
 		case 0:
 			// use the defaults
@@ -141,7 +175,11 @@ readonly struct BindingTypeData<T> : IEquatable<BindingTypeData<T>> where T : En
 			flags = default;
 			break;
 		case 1:
-			name = (string?) attributeData.ConstructorArguments [0].Value!;
+			if (attributeData.ConstructorArguments [0].Value is string) {
+				name = (string?) attributeData.ConstructorArguments [0].Value!;
+			} else {
+				flags = (T) attributeData.ConstructorArguments [0].Value!;
+			}
 			break;
 		case 2:
 			// we have the name and the config flags present
@@ -166,14 +204,42 @@ readonly struct BindingTypeData<T> : IEquatable<BindingTypeData<T>> where T : En
 			case "Flags":
 				flags = (T) value.Value!;
 				break;
+			case "ErrorDomain":
+				errorDomain = (string?) value.Value!;
+				break;
+			case "LibraryName":
+				libraryName = (string?) value.Value!;
+				break;
+			case "DefaultCtorVisibility":
+				defaultCtorVisibility = (MethodAttributes) Convert.ToSingle ((int) value.Value!);
+				break;
+			case "IntPtrCtorVisibility":
+				intPtrCtorVisibility = (MethodAttributes) Convert.ToSingle ((int) value.Value!);
+				break;
+			case "StringCtorVisibility":
+				stringCtorVisibility = (MethodAttributes) Convert.ToSingle ((int) value.Value!);
+				break;
 			default:
 				data = null;
 				return false;
 			}
 		}
 
-		data = flags is not null ?
-			new (name, flags) : new (name);
+		data = flags is not null
+			? new (name, flags) {
+				ErrorDomain = errorDomain,
+				LibraryName = libraryName,
+				DefaultCtorVisibility = defaultCtorVisibility,
+				IntPtrCtorVisibility = intPtrCtorVisibility,
+				StringCtorVisibility = stringCtorVisibility,
+			}
+			: new (name) {
+				ErrorDomain = errorDomain,
+				LibraryName = libraryName,
+				DefaultCtorVisibility = defaultCtorVisibility,
+				IntPtrCtorVisibility = intPtrCtorVisibility,
+				StringCtorVisibility = stringCtorVisibility,
+			};
 		return true;
 	}
 

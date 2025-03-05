@@ -424,14 +424,11 @@ public partial class Generator : IMemberGatherer {
 			temp = string.Format ("{3}new NSNumber ({2}{1}{0});", denullify, parameterName, enumCast, nullCheck);
 		} else if (originalType == TypeCache.NSValue) {
 			var typeStr = string.Empty;
-			if (!TypeCache.NSValueCreateMap.TryGetValue (retType, out typeStr)) {
-				// HACK: These are problematic for X.M due to we do not ship System.Drawing for Full profile
-				if (retType.Name == "RectangleF" || retType.Name == "SizeF" || retType.Name == "PointF")
-					typeStr = retType.Name;
-				else
-					throw GetBindAsException ("box", retType.Name, originalType.Name, "container", minfo?.mi, pi);
+			if (TypeCache.NSValueCreateMap.TryGetValue (retType, out typeStr)) {
+				temp = string.Format ("{3}NSValue.From{0} ({2}{1});", typeStr, denullify, parameterName, nullCheck);
+			} else {
+				throw GetBindAsException ("box", retType.Name, originalType.Name, "container", minfo?.mi, pi);
 			}
-			temp = string.Format ("{3}NSValue.From{0} ({2}{1});", typeStr, denullify, parameterName, nullCheck);
 		} else if (originalType == TypeCache.NSString && IsSmartEnum (retType)) {
 			temp = isNullable ? $"{parameterName} is null ? null : " : string.Empty;
 			temp += $"{TypeManager.FormatType (retType.DeclaringType, retType)}Extensions.GetConstant ({parameterName}{denullify});";
@@ -452,13 +449,11 @@ public partial class Generator : IMemberGatherer {
 				valueConverter = $"new NSNumber ({cast}o{denullify}), {parameterName});";
 			} else if (arrType == TypeCache.NSValue && !isNullable) {
 				var typeStr = string.Empty;
-				if (!TypeCache.NSValueCreateMap.TryGetValue (arrRetType, out typeStr)) {
-					if (arrRetType.Name == "RectangleF" || arrRetType.Name == "SizeF" || arrRetType.Name == "PointF")
-						typeStr = retType.Name;
-					else
-						throw GetBindAsException ("box", arrRetType.Name, originalType.Name, "array", minfo?.mi, pi);
+				if (TypeCache.NSValueCreateMap.TryGetValue (arrRetType, out typeStr)) {
+					valueConverter = $"NSValue.From{typeStr} (o{denullify}), {parameterName});";
+				} else {
+					throw GetBindAsException ("box", arrRetType.Name, originalType.Name, "array", minfo?.mi, pi);
 				}
-				valueConverter = $"NSValue.From{typeStr} (o{denullify}), {parameterName});";
 			} else
 				throw new BindingException (1048, true, isNullable ? arrRetType.Name + "?[]" : retType.Name);
 			temp = $"NSArray.FromNSObjects (o => {valueConverter}";
@@ -498,15 +493,12 @@ public partial class Generator : IMemberGatherer {
 			if (isNullable)
 				append = $"?{append}";
 		} else if (originalReturnType == TypeCache.NSValue) {
-			if (!TypeManager.NSValueReturnMap.TryGetValue (retType, out append)) {
-				// HACK: These are problematic for X.M due to we do not ship System.Drawing for Full profile
-				if (retType.Name == "RectangleF" || retType.Name == "SizeF" || retType.Name == "PointF")
-					append = $".{retType.Name}Value";
-				else
-					throw GetBindAsException ("unbox", retType.Name, originalReturnType.Name, "container", minfo.mi);
+			if (TypeManager.NSValueReturnMap.TryGetValue (retType, out append)) {
+				if (isNullable)
+					append = $"?{append}";
+			} else {
+				throw GetBindAsException ("unbox", retType.Name, originalReturnType.Name, "container", minfo.mi);
 			}
-			if (isNullable)
-				append = $"?{append}";
 		} else if (originalReturnType == TypeCache.NSString && IsSmartEnum (retType)) {
 			append = $"{TypeManager.FormatType (retType.DeclaringType, retType)}Extensions.GetValue (";
 			suffix = ")";
@@ -517,20 +509,26 @@ public partial class Generator : IMemberGatherer {
 			var arrRetType = arrIsNullable ? nullableElementType : retType.GetElementType ();
 			var valueFetcher = string.Empty;
 			if (arrType == TypeCache.NSString && !arrIsNullable)
-				append = $"ptr => {{\n\tusing (var str = Runtime.GetNSObject<NSString> (ptr)!) {{\n\t\treturn {TypeManager.FormatType (arrRetType.DeclaringType, arrRetType)}Extensions.GetValue (str);\n\t}}\n}}";
+				append = $"{TypeManager.FormatType (arrRetType.DeclaringType, arrRetType)}Extensions.GetValue ";
 			else if (arrType == TypeCache.NSNumber && !arrIsNullable) {
-				if (TypeManager.NSNumberReturnMap.TryGetValue (arrRetType, out valueFetcher) || arrRetType.IsEnum) {
-					var getterStr = string.Format ("{0}{1}", arrIsNullable ? "?" : string.Empty, arrRetType.IsEnum ? ".Int32Value" : valueFetcher);
-					append = string.Format ("ptr => {{\n\tusing (var num = Runtime.GetNSObject<NSNumber> (ptr)!) {{\n\t\treturn ({1}) num{0};\n\t}}\n}}", getterStr, TypeManager.FormatType (arrRetType.DeclaringType, arrRetType));
+				if (arrRetType.IsEnum) {
+					// get the underlying type of the enum and use a callback with the appropiate one
+					var enumType = arrRetType.GetEnumUnderlyingType ();
+					if (TypeManager.NSNumberToValueMap.TryGetValue (enumType, out valueFetcher)) {
+						append = $"ptr => ({TypeManager.FormatType (arrRetType.DeclaringType, arrRetType)}) NSNumber.{valueFetcher} (ptr)";
+					} else {
+						throw GetBindAsException ("unbox", retType.Name, arrType.Name, "array", minfo.mi);
+					}
+				} else if (TypeManager.NSNumberToValueMap.TryGetValue (arrRetType, out valueFetcher)) {
+					append = $"NSNumber.{valueFetcher}";
 				} else
 					throw GetBindAsException ("unbox", retType.Name, arrType.Name, "array", minfo.mi);
 			} else if (arrType == TypeCache.NSValue && !arrIsNullable) {
-				if (arrRetType.Name == "RectangleF" || arrRetType.Name == "SizeF" || arrRetType.Name == "PointF")
-					valueFetcher = $"{(arrIsNullable ? "?" : string.Empty)}.{arrRetType.Name}Value";
-				else if (!TypeManager.NSValueReturnMap.TryGetValue (arrRetType, out valueFetcher))
+				if (TypeManager.NSValueBindAsMap.TryGetValue (arrRetType, out valueFetcher)) {
+					append = string.Format ("NSValue.{0}", valueFetcher);
+				} else {
 					throw GetBindAsException ("unbox", retType.Name, arrType.Name, "array", minfo.mi);
-
-				append = string.Format ("ptr => {{\n\tusing (var val = Runtime.GetNSObject<NSValue> (ptr)!) {{\n\t\treturn val{0};\n\t}}\n}}", valueFetcher);
+				}
 			} else
 				throw new BindingException (1048, true, arrIsNullable ? arrRetType.Name + "?[]" : retType.Name);
 		} else
@@ -1536,6 +1534,7 @@ public partial class Generator : IMemberGatherer {
 		if (exceptions.All (v => v is BindingException pe && !pe.Error)) {
 			foreach (var e in exceptions)
 				ErrorHelper.Show (e);
+			return;
 		}
 
 		throw new AggregateException (exceptions);
@@ -1820,6 +1819,7 @@ public partial class Generator : IMemberGatherer {
 
 				print ("namespace {0} {{", dictType.Namespace);
 				indent++;
+				WriteDocumentation (dictType);
 				PrintPlatformAttributes (dictType);
 				PrintExperimentalAttribute (dictType);
 				print ("public partial class {0} : DictionaryContainer {{", typeName);
@@ -1844,6 +1844,7 @@ public partial class Generator : IMemberGatherer {
 							keyname = keyContainerType + "." + keyname + "!";
 					}
 
+					WriteDocumentation (pi);
 					PrintPlatformAttributes (pi);
 					string modifier = pi.IsInternal (this) ? "internal" : "public";
 
@@ -2127,12 +2128,6 @@ public partial class Generator : IMemberGatherer {
 						print (GenerateNSNumber ("", "DoubleValue"));
 					else if (propertyType == TypeCache.System_Float)
 						print (GenerateNSNumber ("", "FloatValue"));
-					else if (fullname == "System.Drawing.PointF")
-						print (GenerateNSValue ("PointFValue"));
-					else if (fullname == "System.Drawing.SizeF")
-						print (GenerateNSValue ("SizeFValue"));
-					else if (fullname == "System.Drawing.RectangleF")
-						print (GenerateNSValue ("RectangleFValue"));
 					else if (fullname == "CoreGraphics.CGPoint")
 						print (GenerateNSValue ("CGPointValue"));
 					else if (fullname == "CoreGraphics.CGSize")
@@ -2950,11 +2945,8 @@ public partial class Generator : IMemberGatherer {
 				}
 				var bindAsT = bindAttrType.GetElementType ();
 				var suffix = string.Empty;
-				print ("{0} retvalarrtmp;", NativeHandleType);
-				cast_a = "((retvalarrtmp = ";
-				cast_b = ") == IntPtr.Zero ? null! : (";
-				cast_b += $"NSArray.ArrayFromHandleFunc <{TypeManager.FormatType (bindAsT.DeclaringType, bindAsT)}> (retvalarrtmp, {GetFromBindAsWrapper (minfo, out suffix)}, {owns})" + suffix;
-				cast_b += $"))";
+				cast_a = $"NSArray.ArrayFromHandleFunc <{TypeManager.FormatType (bindAsT.DeclaringType, bindAsT)}> (";
+				cast_b = $", {GetFromBindAsWrapper (minfo, out suffix)}, {owns})!" + suffix;
 			} else if (etype == TypeCache.System_String) {
 				cast_a = "CFArray.StringArrayFromHandle (";
 				cast_b = $", {owns})!";
@@ -3431,7 +3423,7 @@ public partial class Generator : IMemberGatherer {
 	void GenerateArgumentChecks (MethodInfo mi, bool null_allowed_override, PropertyInfo propInfo = null)
 	{
 		if (AttributeManager.IsNullable (mi))
-			ErrorHelper.Show (new BindingException (1118, false, mi));
+			exceptions.Add (ErrorHelper.CreateWarning (1118, mi));
 
 		foreach (var pi in mi.GetParameters ()) {
 			var safe_name = pi.Name.GetSafeParamName ();
@@ -4188,7 +4180,7 @@ public partial class Generator : IMemberGatherer {
 			var ba = GetBindAttribute (setter);
 			bool null_allowed = AttributeManager.IsNullable (setter);
 			if (null_allowed)
-				ErrorHelper.Show (new BindingException (1118, false, setter));
+				exceptions.Add (ErrorHelper.CreateWarning (1118, setter));
 			null_allowed |= AttributeManager.IsNullable (pi);
 			var not_implemented_attr = AttributeManager.GetCustomAttribute<NotImplementedAttribute> (setter);
 			string sel;
@@ -4863,6 +4855,9 @@ public partial class Generator : IMemberGatherer {
 		var extensionMethods = optionalInstanceMethods.Concat (requiredInstanceMethods.Where (v => IsRequired (v, out var generateExtensionMethod) && generateExtensionMethod));
 		var extensionProperties = optionalInstanceProperties.Concat (requiredInstanceProperties.Where (v => IsRequired (v, out var generateExtensionMethod) && generateExtensionMethod));
 
+		// disable CS1573, which can happen when the original member in the api definition has xml comments and we copy that xml comment into the generated interface - because we may add parameters to method signatures, and the new parameters won't have an xml comment.
+		print ("#pragma warning disable CS1573"); // Parameter 'This' has no matching param tag in the XML comment for '...' (but other parameters do)
+
 		WriteDocumentation (type);
 
 		PrintAttributes (type, platform: true, preserve: true, advice: true);
@@ -5153,12 +5148,16 @@ public partial class Generator : IMemberGatherer {
 		print ("}");
 		print ("");
 
+		print ("#pragma warning restore CS1573");
+
 		// avoid (for unified) all the metadata for empty static classes, we can introduce them later when required
 		bool include_extensions = false;
 		if (backwardsCompatibleCodeGeneration)
 			include_extensions = extensionMethods.Any () || extensionProperties.Any () || requiredInstanceAsyncMethods.Any ();
 		if (include_extensions) {
-			// extension methods
+			// disable CS1573, which can happen when the original member in the api definition has xml comments and we copy that xml comment into the generated extension member - because we may add parameters to method signatures, and the new parameters won't have an xml comment.
+			print ("#pragma warning disable CS1573"); // Parameter 'This' has no matching param tag in the XML comment for '...' (but other parameters do)
+													  // extension methods
 			if (BindingTouch.SupportsXmlDocumentation) {
 				print ($"/// <summary>Extension methods to the <see cref=\"I{TypeName}\" /> interface to support all the methods from the {protocol_name} protocol.</summary>");
 				print ($"/// <remarks>");
@@ -5199,6 +5198,7 @@ public partial class Generator : IMemberGatherer {
 			indent--;
 			print ("}");
 			print ("");
+			print ("#pragma warning restore CS1573");
 		}
 
 		// Add API from base interfaces we also need to implement.
@@ -5619,7 +5619,7 @@ public partial class Generator : IMemberGatherer {
 
 		// check if the type has been marked as a type that will be generated by the new code generator, if that
 		// is the case, bgen will ignore it allowing the rgen code generator add the type to the final assembly
-		bool is_rgen_type = AttributeManager.HasAttribute<BindingTypeAttribute> (type);
+		bool is_rgen_type = AttributeManager.HasAttribute<BindingTypeAttribute<SmartEnum>> (type);
 		if (is_rgen_type)
 			return;
 
@@ -6257,6 +6257,7 @@ public partial class Generator : IMemberGatherer {
 						print ("static {0}? _{1};", fieldTypeName, field_pi.Name);
 					}
 
+					WriteDocumentation (field_pi);
 					PrintAttributes (field_pi, preserve: true, advice: true);
 					PrintObsoleteAttributes (field_pi);
 					print ("[Field (\"{0}\",  \"{1}\")]", fieldAttr.SymbolName, library_path ?? library_name);
@@ -6322,8 +6323,6 @@ public partial class Generator : IMemberGatherer {
 						print ("return Dlfcn.GetIntPtr (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
 					} else if (field_pi.PropertyType == TypeCache.System_UIntPtr) {
 						print ("return Dlfcn.GetUIntPtr (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
-					} else if (field_pi.PropertyType.FullName == "System.Drawing.SizeF") {
-						print ("return Dlfcn.GetSizeF (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
 					} else if (field_pi.PropertyType == TypeCache.System_Int64) {
 						print ("return Dlfcn.GetInt64 (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
 					} else if (field_pi.PropertyType == TypeCache.System_UInt64) {
@@ -6408,8 +6407,6 @@ public partial class Generator : IMemberGatherer {
 							print ("Dlfcn.SetIntPtr (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
 						} else if (field_pi.PropertyType == TypeCache.System_UIntPtr) {
 							print ("Dlfcn.SetUIntPtr (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
-						} else if (field_pi.PropertyType.FullName == "System.Drawing.SizeF") {
-							print ("Dlfcn.SetSizeF (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
 						} else if (field_pi.PropertyType == TypeCache.System_Int64) {
 							print ("Dlfcn.SetInt64 (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
 						} else if (field_pi.PropertyType == TypeCache.System_UInt64) {
@@ -7482,9 +7479,6 @@ public partial class Generator : IMemberGatherer {
 
 		var type = def as Type;
 		if (type is not null && (
-			type.FullName == "System.Drawing.PointF" ||
-			type.FullName == "System.Drawing.SizeF" ||
-			type.FullName == "System.Drawing.RectangleF" ||
 			type.FullName == "CoreGraphics.CGPoint" ||
 			type.FullName == "CoreGraphics.CGSize" ||
 			type.FullName == "CoreGraphics.CGRect"))

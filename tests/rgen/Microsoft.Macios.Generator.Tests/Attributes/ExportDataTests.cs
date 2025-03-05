@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 #pragma warning disable APL0003
 using System;
 using System.Collections;
@@ -14,8 +16,8 @@ public class ExportDataTests {
 	[Fact]
 	public void TestExportDataEqualsDiffSelector ()
 	{
-		var x = new ExportData<Field> ("field1");
-		var y = new ExportData<Field> ("field2");
+		var x = new ExportData<Method> ("field1");
+		var y = new ExportData<Method> ("field2");
 		Assert.False (x.Equals (y));
 		Assert.False (y.Equals (x));
 		Assert.False (x == y);
@@ -25,8 +27,8 @@ public class ExportDataTests {
 	[Fact]
 	public void TestExportDataEqualsDiffArgumentSemantic ()
 	{
-		var x = new ExportData<Field> ("property", ArgumentSemantic.None);
-		var y = new ExportData<Field> ("property", ArgumentSemantic.Retain);
+		var x = new ExportData<Method> ("property", ArgumentSemantic.None);
+		var y = new ExportData<Method> ("property", ArgumentSemantic.Retain);
 		Assert.False (x.Equals (y));
 		Assert.False (y.Equals (x));
 		Assert.False (x == y);
@@ -50,24 +52,33 @@ public class ExportDataTests {
 		public IEnumerator<object []> GetEnumerator ()
 		{
 			yield return [
-				Field.Default,
-				new ExportData<Field> ("symbol", ArgumentSemantic.None, Field.Default),
-				"{ Type: 'ObjCBindings.Field', Selector: 'symbol', ArgumentSemantic: 'None', Flags: 'Default' }"
+				Method.Default,
+				new ExportData<Method> ("symbol", ArgumentSemantic.None, Method.Default),
+				"{ Type: 'ObjCBindings.Method', Selector: 'symbol', ArgumentSemantic: 'None', Flags: 'Default', NativePrefix: 'null', NativeSuffix: 'null', Library: 'null' }"
 			];
 			yield return [
-				Field.Default,
-				new ExportData<Field> ("symbol"),
-				"{ Type: 'ObjCBindings.Field', Selector: 'symbol', ArgumentSemantic: 'None', Flags: 'Default' }"
+				Method.Default,
+				new ExportData<Method> ("symbol"),
+				"{ Type: 'ObjCBindings.Method', Selector: 'symbol', ArgumentSemantic: 'None', Flags: 'Default', NativePrefix: 'null', NativeSuffix: 'null', Library: 'null' }"
 			];
 			yield return [
 				Property.Default,
 				new ExportData<Property> ("symbol", ArgumentSemantic.Retain, Property.Default),
-				"{ Type: 'ObjCBindings.Property', Selector: 'symbol', ArgumentSemantic: 'Retain', Flags: 'Default' }"
+				"{ Type: 'ObjCBindings.Property', Selector: 'symbol', ArgumentSemantic: 'Retain', Flags: 'Default', NativePrefix: 'null', NativeSuffix: 'null', Library: 'null' }"
 			];
 			yield return [
 				Property.Default,
 				new ExportData<Property> ("symbol"),
-				"{ Type: 'ObjCBindings.Property', Selector: 'symbol', ArgumentSemantic: 'None', Flags: 'Default' }"
+				"{ Type: 'ObjCBindings.Property', Selector: 'symbol', ArgumentSemantic: 'None', Flags: 'Default', NativePrefix: 'null', NativeSuffix: 'null', Library: 'null' }"
+			];
+			yield return [
+				Method.Default,
+				new ExportData<Method> ("symbol", ArgumentSemantic.None,
+				Method.Default | Method.CustomMarshalDirective) {
+					NativePrefix = "xamarin_",
+					Library = "__Internal"
+				},
+				"{ Type: 'ObjCBindings.Method', Selector: 'symbol', ArgumentSemantic: 'None', Flags: 'CustomMarshalDirective', NativePrefix: 'xamarin_', NativeSuffix: 'null', Library: '__Internal' }"
 			];
 		}
 
@@ -79,6 +90,7 @@ public class ExportDataTests {
 	[ClassData (typeof (TestDataToString))]
 	void TestFieldDataToString<T> (T @enum, ExportData<T> x, string expected) where T : Enum
 	{
+		var str = x.ToString ();
 		Assert.NotNull (@enum);
 		Assert.Equal (expected, x.ToString ());
 	}

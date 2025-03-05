@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -208,8 +210,8 @@ public class TestClass {
 					],
 					accessors: [
 						new (
-							accessorKind: AccessorKind.Add
-							, symbolAvailability: new (),
+							accessorKind: AccessorKind.Add,
+							symbolAvailability: eventAvailabilityBuilder.ToImmutable (),
 							exportPropertyData: null,
 							attributes: [],
 							modifiers: []

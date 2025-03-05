@@ -35,6 +35,8 @@ GENERATED_FILES = \
 	TrampolineTest.generated.cs \
 
 GENERATED_FILES_PATTERN = \
+	libtest.methods%h \
+	libtest.methods%m \
 	libtest.structs%h \
 	libtest.decompile%m \
 	libtest.properties%h \
@@ -332,7 +334,7 @@ $(foreach rid,$(DOTNET_RUNTIME_IDENTIFIERS),$(eval $(call SwiftTest2AddDependenc
 # create an xcframework of frameworks
 define TestFrameworkXCFramework
 $(1)_XCFRAMEWORKS += $$(foreach xcframeworkPlatform,$$(XCFRAMEWORK_PLATFORMS),.libs/$$(xcframeworkPlatform)/$(1).framework)
-$(1)_XCTARGETS += $$(foreach xcframeworkPlatform,$$(XCFRAMEWORK_PLATFORMS),.libs/$$(xcframeworkPlatform)/$(1).framework/$(1))
+$(1)_XCTARGETS += $$(foreach xcframeworkPlatform,$$(XCFRAMEWORK_PLATFORMS),.libs/$$(xcframeworkPlatform)/$(1).framework.stamp)
 .libs/$(1).xcframework: $$($(1)_XCTARGETS) Makefile
 	$$(Q) rm -rf $$@
 	$$(Q_GEN) $$(XCODE_DEVELOPER_ROOT)/usr/bin/xcodebuild -quiet -create-xcframework $$(foreach fw,$$($(1)_XCFRAMEWORKS),-framework $$(fw)) -output $$@

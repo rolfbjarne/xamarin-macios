@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
@@ -11,6 +13,7 @@ using Microsoft.Macios.Generator.Context;
 using Microsoft.Macios.Generator.DataModel;
 using Microsoft.Macios.Generator.Emitters;
 using Microsoft.Macios.Generator.Extensions;
+using Microsoft.Macios.Generator.IO;
 
 namespace Microsoft.Macios.Generator;
 
@@ -22,7 +25,7 @@ namespace Microsoft.Macios.Generator;
 /// </summary>
 [Generator]
 public class BindingSourceGeneratorGenerator : IIncrementalGenerator {
-	static readonly CodeChangesEqualityComparer equalityComparer = new ();
+	static readonly RootBindingEqualityComparer equalityComparer = new ();
 
 	/// <inheritdoc cref="IIncrementalGenerator"/>
 	public void Initialize (IncrementalGeneratorInitializationContext context)
@@ -41,12 +44,22 @@ public class BindingSourceGeneratorGenerator : IIncrementalGenerator {
 		var provider = context.SyntaxProvider
 			.CreateSyntaxProvider (static (node, _) => IsValidNode (node),
 				static (ctx, _) => GetChangesForSourceGen (ctx))
-			.Where (tuple => tuple.BindingAttributeFound)
-			.Select (static (tuple, _) => tuple.Changes)
+			.Where (tuple => tuple.BindingAttributeFound);
+
+		var bindings = provider
+			.Select (static (tuple, _) => (tuple.RootBindingContext, tuple.Bindings))
 			.WithComparer (equalityComparer);
 
-		context.RegisterSourceOutput (context.CompilationProvider.Combine (provider.Collect ()),
-			((ctx, t) => GenerateCode (ctx, t.Left, t.Right)));
+		// ideally we could do a distinct, because each code change can return the same libs, this makes the library
+		// generation more common than what we would like, but it is the smallest code generation.
+		var libraryProvider = provider
+			.Select ((tuple, _) => (tuple.RootBindingContext, tuple.Bindings.LibraryPaths));
+
+		context.RegisterSourceOutput (context.CompilationProvider.Combine (bindings.Collect ()),
+			((ctx, t) => GenerateCode (ctx, t.Right)));
+
+		context.RegisterSourceOutput (context.CompilationProvider.Combine (libraryProvider.Collect ()),
+			((ctx, t) => GenerateLibraryCode (ctx, t.Right)));
 	}
 
 	/// <summary>
@@ -59,8 +72,9 @@ public class BindingSourceGeneratorGenerator : IIncrementalGenerator {
 		_ => false,
 	};
 
-	static (CodeChanges Changes, bool BindingAttributeFound) GetChangesForSourceGen (GeneratorSyntaxContext context)
+	static (RootContext RootBindingContext, Binding Bindings, bool BindingAttributeFound) GetChangesForSourceGen (GeneratorSyntaxContext context)
 	{
+		var bindingContext = new RootContext (context.SemanticModel);
 		// we do know that the context node has to be one of the base type declarations
 		var declarationSyntax = Unsafe.As<BaseTypeDeclarationSyntax> (context.Node);
 
@@ -69,41 +83,44 @@ public class BindingSourceGeneratorGenerator : IIncrementalGenerator {
 
 		if (!isBindingType) {
 			// return empty data + false
-			return (default, false);
+			return (bindingContext, default, false);
 		}
 
-		var codeChanges = CodeChanges.FromDeclaration (declarationSyntax, context.SemanticModel);
+		var binding = Binding.FromDeclaration (declarationSyntax, bindingContext);
 		// if code changes are null, return the default value and a false to later ignore the change
-		return codeChanges is not null
-			? (codeChanges.Value, isBindingType)
-			: (default, false);
+		return binding is not null
+			? (bindingContext, binding.Value, isBindingType)
+			: (bindingContext, default, false);
 	}
 
-	static void GenerateCode (SourceProductionContext context, Compilation compilation,
-		in ImmutableArray<CodeChanges> changesList)
+	static void GenerateCode (SourceProductionContext context, in ImmutableArray<(RootContext Context, Binding Binding)> bindingsList)
 	{
+		if (bindingsList.Length == 0)
+			return;
+		// all items contain the same root context, we can get it from the first item
+		var rootBindingContext = bindingsList [0].Context;
+
 		// The process is as follows, get all the changes we have received from the incremental generator,
 		// loop over them, and based on the CodeChange.BindingType we are going to build the symbol context
 		// and emitter. Those are later used to generate the code.
 		//
 		// Once all the enums, classes and interfaces have been processed, we will use the data collected
 		// in the RootBindingContext to generate the library and trampoline code.
-		var rootContext = new RootBindingContext (compilation);
 		var sb = new TabbedStringBuilder (new ());
-		foreach (var change in changesList) {
+		foreach (var (_, binding) in bindingsList) {
 			// init sb and add the header
 			sb.Clear ();
 			sb.WriteHeader ();
-			if (EmitterFactory.TryCreate (change, out var emitter)) {
+			if (EmitterFactory.TryCreate (binding, out var emitter)) {
 				// write the using statements
-				CollectUsingStatements (change, sb, emitter);
+				CollectUsingStatements (binding, sb, emitter);
 
-				var bindingContext = new BindingContext (rootContext, sb, change);
+				var bindingContext = new BindingContext (rootBindingContext, sb, binding);
 				if (emitter.TryEmit (bindingContext, out var diagnostics)) {
 					// only add a file when we do generate code
-					var code = sb.ToString ();
-					var namespacePath = Path.Combine (change.Namespace.ToArray ());
-					var fileName = emitter.GetSymbolName (change);
+					var code = sb.ToCode ();
+					var namespacePath = Path.Combine (binding.Namespace.ToArray ());
+					var fileName = emitter.GetSymbolName (binding);
 					context.AddSource ($"{Path.Combine (namespacePath, fileName)}.g.cs",
 						SourceText.From (code, Encoding.UTF8));
 				} else {
@@ -117,12 +134,9 @@ public class BindingSourceGeneratorGenerator : IIncrementalGenerator {
 					Diagnostics
 						.RBI0000, // An unexpected error ocurred while processing '{0}'. Please fill a bug report at https://github.com/xamarin/xamarin-macios/issues/new.
 					null,
-					change.FullyQualifiedSymbol));
+					binding.FullyQualifiedSymbol));
 			}
 		}
-
-		// we are done with the types, generate the library and trampoline code
-		GenerateLibraryCode (context, rootContext);
 	}
 
 	/// <summary>
@@ -130,17 +144,30 @@ public class BindingSourceGeneratorGenerator : IIncrementalGenerator {
 	/// by the binding. This is a single generated file.
 	/// </summary>
 	/// <param name="context">Source production context.</param>
-	/// <param name="rootContext">The root context of the current generation.</param>
-	static void GenerateLibraryCode (SourceProductionContext context, RootBindingContext rootContext)
+	/// <param name="libraryChanges">The root context of the current generation.</param>
+	static void GenerateLibraryCode (SourceProductionContext context,
+		ImmutableArray<(RootContext RootBindingContext, IEnumerable<(string LibraryName, string? LibraryPath)> LibraryPaths)> libraryChanges)
 	{
+		if (libraryChanges.Length == 0)
+			return;
+		// we have at least one, we can get the root binding changes from it
+		var rootBindingContext = libraryChanges [0].RootBindingContext;
 		var sb = new TabbedStringBuilder (new ());
 		sb.WriteHeader ();
-		// no need to collect the using statements, this file is completely generated
-		var emitter = new LibraryEmitter (rootContext, sb);
 
-		if (emitter.TryEmit (out var diagnostics)) {
+		// Each code change might have returned the same list of libraries, we need to get the distinct ones
+		var libComparer = new LibraryPathsComparer ();
+		var distinctLibraryPaths = libraryChanges
+			.SelectMany (library => library.LibraryPaths)
+			.Distinct (libComparer)
+			.ToImmutableArray ();
+
+		// no need to collect the using statements, this file is completely generated
+		var emitter = new LibraryEmitter (rootBindingContext, sb);
+
+		if (emitter.TryEmit (distinctLibraryPaths, out var diagnostics)) {
 			// only add a file when we do generate code
-			var code = sb.ToString ();
+			var code = sb.ToCode ();
 			context.AddSource ($"{Path.Combine (emitter.SymbolNamespace, emitter.SymbolName)}.g.cs",
 				SourceText.From (code, Encoding.UTF8));
 		} else {
@@ -154,14 +181,14 @@ public class BindingSourceGeneratorGenerator : IIncrementalGenerator {
 	/// that will be used to generate the code. This way we ensure that we have all the namespaces needed by the
 	/// generated code.
 	/// </summary>
-	/// <param name="codeChanges">The code changes for a given named type.</param>
+	/// <param name="binding">The code changes for a given named type.</param>
 	/// <param name="sb">String builder that will be used for the generated code.</param>
 	/// <param name="emitter">The emitter that will generate the code. Provides any extra needed namespace.</param>
-	static void CollectUsingStatements (in CodeChanges codeChanges, TabbedStringBuilder sb, ICodeEmitter emitter)
+	static void CollectUsingStatements (in Binding binding, TabbedStringBuilder sb, ICodeEmitter emitter)
 	{
 		// collect all using from the syntax tree, add them to a hash to make sure that we don't have duplicates
 		// and add those usings that we do know we need for bindings.
-		var usingDirectivesToKeep = new SortedSet<string> (codeChanges.UsingDirectives) {
+		var usingDirectivesToKeep = new SortedSet<string> (binding.UsingDirectives) {
 			// add the using statements that we know we need and print them to the sb
 		};
 
@@ -174,7 +201,7 @@ public class BindingSourceGeneratorGenerator : IIncrementalGenerator {
 		foreach (var ns in usingDirectivesToKeep) {
 			if (string.IsNullOrEmpty (ns))
 				continue;
-			sb.AppendLine ($"using {ns};");
+			sb.WriteLine ($"using {ns};");
 		}
 	}
 }

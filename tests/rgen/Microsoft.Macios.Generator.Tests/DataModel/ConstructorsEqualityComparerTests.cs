@@ -1,7 +1,10 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 using Microsoft.Macios.Generator.Attributes;
 using Microsoft.Macios.Generator.Availability;
 using Microsoft.Macios.Generator.DataModel;
 using Xunit;
+using static Microsoft.Macios.Generator.Tests.TestDataFactory;
 
 namespace Microsoft.Macios.Generator.Tests.DataModel;
 
@@ -20,15 +23,15 @@ public class ConstructorsEqualityComparerTests {
 			attributes: [],
 			modifiers: [],
 			parameters: [
-				new (position: 0, type: "string", name: "name", isBlittable: false),
-				new (position: 0, type: "string", name: "surname", isBlittable: false),
+				new (position: 0, type: ReturnTypeForString (), name: "name"),
+				new (position: 0, type: ReturnTypeForString (), name: "surname"),
 			]);
 		var y = new Constructor ("MyClass",
 			symbolAvailability: new (),
 			attributes: [],
 			modifiers: [],
 			parameters: [
-				new (position: 0, type: "string", name: "name", isBlittable: false),
+				new (position: 0, type: ReturnTypeForString (), name: "name"),
 			]);
 		Assert.False (compare.Equals ([x], [y]));
 	}
@@ -41,14 +44,14 @@ public class ConstructorsEqualityComparerTests {
 			attributes: [],
 			modifiers: [],
 			parameters: [
-				new (position: 0, type: "string", name: "surname", isBlittable: false),
+				new (position: 0, type: ReturnTypeForString (), name: "surname"),
 			]);
 		var y = new Constructor ("MyClass",
 			symbolAvailability: new (),
 			attributes: [],
 			modifiers: [],
 			parameters: [
-				new (position: 0, type: "string", name: "name", isBlittable: false),
+				new (position: 0, type: ReturnTypeForString (), name: "name"),
 			]);
 		Assert.False (compare.Equals ([x], [y]));
 	}
@@ -61,14 +64,14 @@ public class ConstructorsEqualityComparerTests {
 			attributes: [],
 			modifiers: [],
 			parameters: [
-				new (position: 0, type: "string", name: "surname", isBlittable: false),
+				new (position: 0, type: ReturnTypeForString (), name: "surname"),
 			]);
 		var y = new Constructor ("MyClass",
 			symbolAvailability: new (),
 			attributes: [],
 			modifiers: [],
 			parameters: [
-				new (position: 0, type: "string", name: "name", isBlittable: false),
+				new (position: 0, type: ReturnTypeForString (), name: "name"),
 			]);
 		Assert.False (compare.Equals ([x, y], [y]));
 	}
@@ -81,14 +84,14 @@ public class ConstructorsEqualityComparerTests {
 			attributes: [],
 			modifiers: [],
 			parameters: [
-				new (position: 0, type: "string", name: "surname", isBlittable: false),
+				new (position: 0, type: ReturnTypeForString (), name: "surname"),
 			]);
 		var y = new Constructor ("MyClass",
 			symbolAvailability: new (),
 			attributes: [],
 			modifiers: [],
 			parameters: [
-				new (position: 0, type: "string", name: "name", isBlittable: false),
+				new (position: 0, type: ReturnTypeForString (), name: "name"),
 			]);
 		Assert.True (compare.Equals ([x, y], [y, x]));
 	}
@@ -106,7 +109,7 @@ public class ConstructorsEqualityComparerTests {
 			attributes: [],
 			modifiers: [],
 			parameters: [
-				new (position: 0, type: "string", name: "surname", isBlittable: false),
+				new (position: 0, type: ReturnTypeForString (), name: "surname"),
 			]);
 
 		var yBuilder = SymbolAvailability.CreateBuilder ();
@@ -118,7 +121,7 @@ public class ConstructorsEqualityComparerTests {
 			attributes: [],
 			modifiers: [],
 			parameters: [
-				new (position: 0, type: "string", name: "name", isBlittable: false),
+				new (position: 0, type: ReturnTypeForString (), name: "name"),
 			]);
 		Assert.False (compare.Equals ([x], [y]));
 	}
@@ -136,7 +139,7 @@ public class ConstructorsEqualityComparerTests {
 			attributes: [],
 			modifiers: [],
 			parameters: [
-				new (position: 0, type: "string", name: "surname", isBlittable: false),
+				new (position: 0, type: ReturnTypeForString (), name: "surname"),
 			]);
 
 		var y = new Constructor ("MyClass",
@@ -144,7 +147,7 @@ public class ConstructorsEqualityComparerTests {
 			attributes: [],
 			modifiers: [],
 			parameters: [
-				new (position: 0, type: "string", name: "surname", isBlittable: false),
+				new (position: 0, type: ReturnTypeForString (), name: "surname"),
 			]);
 		Assert.True (compare.Equals ([x], [y]));
 

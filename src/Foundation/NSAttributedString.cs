@@ -181,22 +181,22 @@ namespace Foundation {
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[Obsolete ("Use the 'Create' method instead, because there's no way to return an error from a constructor.")]
 		public NSAttributedString (NSUrl url, NSAttributedStringDocumentAttributes documentAttributes, out NSError error)
-		: this (url, documentAttributes, out var _, out error) {}
+		: this (url, documentAttributes, out var _, out error) { }
 
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[Obsolete ("Use the 'Create' method instead, because there's no way to return an error from a constructor.")]
 		public NSAttributedString (NSData data, NSAttributedStringDocumentAttributes documentAttributes, out NSError error)
-		: this (data, documentAttributes, out var _, out error) {}
+		: this (data, documentAttributes, out var _, out error) { }
 
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[Obsolete ("Use the 'Create' method instead, because there's no way to return an error from a constructor.")]
 		public NSAttributedString (NSUrl url, out NSError error)
-		: this (url, new NSDictionary (), out var _, out error) {}
+		: this (url, new NSDictionary (), out var _, out error) { }
 
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[Obsolete ("Use the 'Create' method instead, because there's no way to return an error from a constructor.")]
 		public NSAttributedString (NSData data, out NSError error)
-		: this (data, new NSDictionary (), out var _, out error) {}
+		: this (data, new NSDictionary (), out var _, out error) { }
 #else
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[Obsolete ("Use the 'Create' method instead, because there's no way to return an error from a constructor.")]
@@ -226,6 +226,12 @@ namespace Foundation {
 		}
 #endif // __MACOS__
 
+		/// <summary>Contents of the object as a string.</summary>
+		///         <value>
+		///         </value>
+		///         <remarks>
+		/// 	  Contains the string representation of the attributed string, without including any attributes in the return value.
+		/// 	</remarks>
 		public string? Value {
 			get {
 				return CFString.FromHandle (LowLevelValue);
@@ -237,16 +243,14 @@ namespace Foundation {
 			return Runtime.GetNSObject<NSDictionary> (LowLevelGetAttributes (location, out effectiveRange));
 		}
 
-#if NET
 		public IntPtr LowLevelGetAttributes (nint location, out NSRange effectiveRange)
 		{
 			unsafe {
-				fixed (NSRange *effectiveRangePtr = &effectiveRange) {
+				fixed (NSRange* effectiveRangePtr = &effectiveRange) {
 					return LowLevelGetAttributes (location, (IntPtr) effectiveRangePtr);
 				}
 			}
 		}
-#endif
 
 		public NSAttributedString (string str, CTStringAttributes? attributes)
 			: this (str, attributes?.Dictionary)
@@ -297,9 +301,7 @@ namespace Foundation {
 						  NSLigatureType ligature,
 						  float kerning,
 						  NSUnderlineStyle underlineStyle,
-#if !WATCH
 						  NSShadow? shadow,
-#endif
 						  float strokeWidth,
 						  NSUnderlineStyle strikethroughStyle)
 		{
@@ -328,11 +330,9 @@ namespace Foundation {
 			if (underlineStyle != NSUnderlineStyle.None) {
 				attr.UnderlineStyle = underlineStyle;
 			}
-#if !WATCH
 			if (shadow is not null) {
 				attr.Shadow = shadow;
 			}
-#endif
 			if (strokeWidth != 0) {
 				attr.StrokeWidth = strokeWidth;
 			}
@@ -352,15 +352,11 @@ namespace Foundation {
 					   NSLigatureType ligatures = NSLigatureType.Default,
 					   float kerning = 0,
 					   NSUnderlineStyle underlineStyle = NSUnderlineStyle.None,
-#if !WATCH
 					   NSShadow? shadow = null,
-#endif
 					   float strokeWidth = 0,
 					   NSUnderlineStyle strikethroughStyle = NSUnderlineStyle.None)
 		: this (str, ToDictionary (font, foregroundColor, backgroundColor, strokeColor, paragraphStyle, ligatures, kerning, underlineStyle,
-#if !WATCH
 			shadow,
-#endif
 			strokeWidth, strikethroughStyle))
 		{
 		}

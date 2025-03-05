@@ -100,7 +100,7 @@ namespace Foundation {
 		static IntPtr nl = Dlfcn.dlopen (Constants.NaturalLanguageLibrary, 1);
 		static IntPtr vs = Dlfcn.dlopen (Constants.VideoSubscriberAccountLibrary, 1);
 		static IntPtr un = Dlfcn.dlopen (Constants.UserNotificationsLibrary, 1);
-		static IntPtr il  = Dlfcn.dlopen (Constants.iTunesLibraryLibrary, 1);
+		static IntPtr il = Dlfcn.dlopen (Constants.iTunesLibraryLibrary, 1);
 		static IntPtr exl = Dlfcn.dlopen (Constants.ExtensionKitLibrary, 1);
 		static IntPtr sw = Dlfcn.dlopen (Constants.SharedWithYouLibrary, 1);
 		static IntPtr swc = Dlfcn.dlopen (Constants.SharedWithYouCoreLibrary, 1);
@@ -114,6 +114,7 @@ namespace Foundation {
 		// FSKit was removed from Xcode 16 RC, but keeping it commented, because it's likely to return in a later release
 		// static IntPtr fk = Dlfcn.dlopen (Constants.FSKitLibrary, 1);
 		static IntPtr be = Dlfcn.dlopen (Constants.BrowserEngineKitLibrary, 1);
+		static IntPtr ce = Dlfcn.dlopen (Constants.CoreHapticsLibrary, 1);
 
 #if !NET
 		[Obsolete ("Use PlatformAssembly for easier code sharing across platforms.")]

@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 namespace Microsoft.Macios.Generator.DataModel;
 
 /// <summary>
@@ -10,9 +12,9 @@ enum BindingType : ulong {
 	/// </summary>
 	Unknown = 0,
 	/// <summary>
-	/// Binding type for a enum with backing fields.
+	/// Binding type for an objc category.
 	/// </summary>
-	SmartEnum,
+	Category,
 	/// <summary>
 	/// Binding type for an objc class.
 	/// </summary>
@@ -22,7 +24,16 @@ enum BindingType : ulong {
 	/// </summary>
 	Protocol,
 	/// <summary>
-	/// Binding type for an objc category.
+	/// Binding type for a enum with backing fields.
 	/// </summary>
-	Category,
+	SmartEnum,
+	/// <summary>
+	/// Binding type for a dictionary with strong value.
+	/// </summary>
+	StrongDictionary,
+	/// <summary>
+	/// Binding type for a core image filter.
+	/// </summary>
+	CoreImageFilter,
 }
+

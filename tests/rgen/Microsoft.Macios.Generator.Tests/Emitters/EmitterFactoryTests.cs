@@ -1,3 +1,5 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
 using System.Linq;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -10,7 +12,7 @@ using Xunit;
 namespace Microsoft.Macios.Generator.Tests.Emitters;
 
 public class EmitterFactoryTests : BaseGeneratorTestClass {
-	CodeChanges CreateSymbol<T> (ApplePlatform platform, string inputText) where T : BaseTypeDeclarationSyntax
+	Binding CreateSymbol<T> (ApplePlatform platform, string inputText) where T : BaseTypeDeclarationSyntax
 	{
 		var (compilation, syntaxTrees) = CreateCompilation (platform, sources: inputText);
 		Assert.Single (syntaxTrees);
@@ -23,7 +25,7 @@ public class EmitterFactoryTests : BaseGeneratorTestClass {
 		var semanticModel = compilation.GetSemanticModel (syntaxTrees [0]);
 		var symbol = semanticModel.GetDeclaredSymbol (declaration);
 		Assert.NotNull (symbol);
-		var changes = CodeChanges.FromDeclaration (declaration, semanticModel);
+		var changes = Binding.FromDeclaration (declaration, semanticModel);
 		Assert.NotNull (changes);
 		return changes.Value;
 	}

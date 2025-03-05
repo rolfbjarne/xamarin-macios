@@ -27,7 +27,7 @@ namespace AddressBookUI {
 	///         <code lang="csharp lang-csharp"><![CDATA[
 	/// 				NSError err;
 	/// 				var ab = ABAddressBook.Create(out err);
-	/// 				if(err == null && ABAddressBook.GetAuthorizationStatus() == ABAuthorizationStatus.Authorized)
+	/// 				if(err is null && ABAddressBook.GetAuthorizationStatus() == ABAuthorizationStatus.Authorized)
 	/// 				{
 	/// 					var person = ab.GetPeople()[0];
 	/// 					var address = person.GetAddresses()[0];

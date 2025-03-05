@@ -48,8 +48,8 @@ using CF = CoreFoundation;
 
 namespace System.Net.Http {
 	/// <summary>To be added.</summary>
-			///     <remarks>To be added.</remarks>
-			public class CFNetworkHandler : HttpMessageHandler {
+	///     <remarks>To be added.</remarks>
+	public class CFNetworkHandler : HttpMessageHandler {
 		class StreamBucket {
 			public TaskCompletionSource<HttpResponseMessage> Response;
 			public HttpRequestMessage Request;

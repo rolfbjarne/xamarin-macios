@@ -43,6 +43,8 @@ using NativeHandle = System.IntPtr;
 namespace CoreGraphics {
 
 	// untyped enum -> CGColorSpace.h
+	/// <summary>Determines how Quartz maps colors from the source color space to the gamut of the destination.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum CGColorRenderingIntent {
 		/// <summary>The default rendering intent.</summary>
 		Default,
@@ -57,6 +59,8 @@ namespace CoreGraphics {
 	};
 
 	// untyped enum -> CGColorSpace.h
+	/// <summary>Color space model.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum CGColorSpaceModel {
 		/// <summary>Unknown color space model.</summary>
 		Unknown = -1,
@@ -79,6 +83,9 @@ namespace CoreGraphics {
 	}
 
 #if NET
+	/// <summary>Colorspace, determines how Quartz interprets color information.</summary>
+	///     <remarks>To be added.</remarks>
+	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/Drawing/">Example_Drawing</related>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

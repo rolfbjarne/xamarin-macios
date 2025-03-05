@@ -49,6 +49,8 @@ using NativeHandle = System.IntPtr;
 namespace CoreFoundation {
 
 #if NET
+	/// <summary>Represents a range from two integers: location and length.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -124,6 +126,8 @@ namespace CoreFoundation {
 
 #if NET
 	// nothing is exposed publicly
+	/// <summary>Base class for CoreFoundation objects.</summary>
+	///     <remarks>To be added.</remarks>
 	internal static class CFObject {
 #else
 	public static class CFObject {
@@ -137,6 +141,8 @@ namespace CoreFoundation {
 	}
 
 #if NET
+	/// <summary>String class used by C-only Cocoa APIs.</summary>
+	///     <remarks>Use this class for creating strings that must be passed to methods in the low-level MonoTouch.CoreGraphics API.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

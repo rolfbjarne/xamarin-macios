@@ -62,6 +62,32 @@ namespace AddressBook {
 	}
 
 #if NET
+	/// <summary>
+	///       A grouping of <see cref="T:AddressBook.ABPerson" /> and
+	///       other <see cref="T:AddressBook.ABGroup" /> records.
+	///     </summary>
+	///     <remarks>
+	///       <para>
+	///         <c>ABGroup</c> supports:
+	///       </para>
+	///       <list type="bullet">
+	///         <item>
+	///           <term>
+	///             Creating groups:
+	///             <see cref="C:AddressBook.ABGroup" />.
+	///           </term>
+	///         </item>
+	///         <item>
+	///           <term>
+	///             Managing group members:
+	///             <see cref="M:AddressBook.ABGroup.Add(AddressBook.ABRecord)" />,
+	///             <see cref="M:AddressBook.ABGroup.Remove(AddressBook.ABRecord)" />,
+	///             <see cref="M:AddressBook.ABGroup.System#Collections#IEnumerable#GetEnumerator" />,
+	///             <see cref="M:AddressBook.ABGroup.GetMembers(AddressBook.ABPersonSortBy)" />.
+	///           </term>
+	///         </item>
+	///       </list>
+	///     </remarks>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]

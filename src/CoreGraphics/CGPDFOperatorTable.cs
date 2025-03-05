@@ -24,6 +24,8 @@ namespace CoreGraphics {
 
 
 #if NET
+	/// <summary>Class for storing callbacks for processing PDF documents.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

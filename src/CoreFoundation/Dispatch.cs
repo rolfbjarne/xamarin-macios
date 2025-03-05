@@ -48,6 +48,8 @@ namespace CoreFoundation {
 
 	// The native constants are defined in usr/include/dispatch/queue.h, but since they're
 	// not in any enum, they're untyped.
+	/// <summary>An enumeration whose values define priorities available to <see cref="T:CoreFoundation.DispatchQueue" />s.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum DispatchQueuePriority : int {
 		/// <summary>To be added.</summary>
 		High = 2,
@@ -61,6 +63,8 @@ namespace CoreFoundation {
 
 	// dispatch_qos_class_t is defined in usr/include/dispatch/queue.h, but redirects to qos_class_t
 	// the qos_class_t enum is defined in usr/include/sys/qos.h (typed as 'unsigned int')
+	/// <summary>To be added.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum DispatchQualityOfService : uint {
 		/// <summary>To be added.</summary>
 		UserInteractive = 0x21,
@@ -77,6 +81,7 @@ namespace CoreFoundation {
 	}
 
 #if NET
+	/// <include file="../../docs/api/CoreFoundation/DispatchObject.xml" path="/Documentation/Docs[@DocId='T:CoreFoundation.DispatchObject']/*" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -206,6 +211,7 @@ namespace CoreFoundation {
 	}
 
 #if NET
+	/// <include file="../../docs/api/CoreFoundation/DispatchQueue.xml" path="/Documentation/Docs[@DocId='T:CoreFoundation.DispatchQueue']/*" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -927,6 +933,8 @@ namespace CoreFoundation {
 		}
 #endif
 
+		/// <summary>To be added.</summary>
+		///     <remarks>To be added.</remarks>
 		public class Attributes {
 			/// <summary>To be added.</summary>
 			///         <value>To be added.</value>
@@ -1021,6 +1029,8 @@ namespace CoreFoundation {
 		}
 
 #if NET
+		/// <summary>To be added.</summary>
+		///     <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
@@ -1042,6 +1052,14 @@ namespace CoreFoundation {
 	// Some insights from: https://opensource.apple.com/source/libdispatch/libdispatch-442.1.4/src/time.c
 
 #if NET
+	/// <summary>Dispatch time and time-out representation.</summary>
+	///     <remarks>
+	///       <para>The DispatchTime class provides a simple mechanism for expressing temporal milestones for use</para>
+	///       <para>with dispatch functions that need timeouts or operate on a schedule.</para>
+	///       <para>
+	///       </para>
+	///       <para>To create an absolute wall time, invoke the DispatchTime constructor with the number of nanoseconds for a particular point in time with a negative time.</para>
+	///     </remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -1118,6 +1136,8 @@ namespace CoreFoundation {
 	}
 
 #if NET
+	/// <summary>Manages group of code blocks allows for aggregate synchronization.</summary>
+	///     <remarks>Code block can be executed on different dispatch queues but managed as a group.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

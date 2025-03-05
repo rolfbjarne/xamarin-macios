@@ -16,6 +16,8 @@ using Foundation;
 namespace AudioToolbox {
 
 #if NET
+	/// <summary>Information on an instrument. Returned by <see cref="M:AudioToolbox.SoundBank.GetInstrumentInfo(Foundation.NSUrl)" />.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -78,6 +80,8 @@ namespace AudioToolbox {
 	}
 
 #if NET
+	/// <summary>A MIDI sound bank.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

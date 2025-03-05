@@ -17,6 +17,9 @@ using ObjCRuntime;
 namespace AddressBookUI {
 
 #if NET
+	/// <summary>Provides data for the <see cref="E:AddressBookUI.ABNewPersonViewController.NewPersonComplete" /> event.</summary>
+	///     <remarks>
+	///     </remarks>
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
 #else

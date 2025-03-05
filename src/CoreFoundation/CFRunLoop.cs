@@ -52,6 +52,11 @@ using NativeHandle = System.IntPtr;
 namespace CoreFoundation {
 
 	// anonymous and typeless native enum - System/Library/Frameworks/CoreFoundation.framework/Headers/CFRunLoop.h
+	/// <summary>The reason for a <see cref="T:CoreFoundation.CFRunLoop" /> to stop running.</summary>
+	///     <remarks>
+	///       <para>
+	///       </para>
+	///     </remarks>
 	public enum CFRunLoopExitReason : int {
 		/// <summary>The run loop terminated.</summary>
 		Finished = 1,
@@ -89,6 +94,8 @@ namespace CoreFoundation {
 	}
 
 #if NET
+	/// <summary>An input source that generates asynchronous events and is intended to be used with a <see cref="T:CoreFoundation.CFRunLoop" />.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -159,6 +166,8 @@ namespace CoreFoundation {
 
 #if !COREBUILD
 #if NET
+	/// <summary>An abstract <see cref="T:CoreFoundation.CFRunLoop" /> that, when extended, gives the application developer fine-grained control over lifecycle events. </summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

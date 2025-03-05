@@ -39,6 +39,8 @@ using System.Runtime.Versioning;
 namespace AudioToolbox {
 
 #if NET
+	/// <summary>The application developer can use this class to retrieve the properties of available encoders and decoders.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

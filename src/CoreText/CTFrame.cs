@@ -43,6 +43,8 @@ using NativeHandle = System.IntPtr;
 
 namespace CoreText {
 
+	/// <summary>An enumeration whose values can be used as flags with the <see cref="P:CoreText.CTFrameAttributes.Progression" /> property.</summary>
+	///     <remarks>Specifies the line-stacking behavior of a frame. <see cref="F:CoreText.CTFrameProgression.RightToLeft" /> stacks lines left-to-right when used with vertical text, <see cref="F:CoreText.CTFrameProgression.TopToBottom" /> stacks lines top-to-bottom for horizontal text.</remarks>
 	[Flags]
 	public enum CTFrameProgression : uint {
 		/// <summary>To be added.</summary>
@@ -52,6 +54,8 @@ namespace CoreText {
 		LeftToRight = 2,
 	}
 
+	/// <summary>An enumeration whose values specify the fill rule used by a <see cref="T:CoreText.CTFrame" />.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum CTFramePathFillRule {
 		/// <summary>To be added.</summary>
 		EvenOdd,
@@ -82,6 +86,9 @@ namespace CoreText {
 #endif
 
 #if NET
+	/// <summary>Encapsulates the attributes used in the creation of a <see cref="T:CoreText.CTFrame" />.</summary>
+	///     <remarks>To be added.</remarks>
+	///     <altmember cref="T:CoreText.CTFrameAttributeKey" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -136,6 +143,10 @@ namespace CoreText {
 	}
 
 #if NET
+	/// <summary>A rectangular area containing lines of text.</summary>
+	///     <remarks>To be added.</remarks>
+	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/SimpleTextInput/">SimpleTextInput</related>
+	///     <altmember cref="T:CoreText.CTLine" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

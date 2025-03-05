@@ -41,6 +41,8 @@ using Keys = ImageIO.CGImageProperties;
 namespace CoreGraphics {
 
 	// convenience enum mapped to kCGImagePropertyColorModelXXX fields (see imageio.cs)
+	/// <summary>An enumeration of valid color models.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum CGImageColorModel {
 		/// <summary>To be added.</summary>
 		RGB,
@@ -53,6 +55,8 @@ namespace CoreGraphics {
 	}
 
 #if NET
+	/// <summary>Properties of bitmap images.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -312,6 +316,10 @@ namespace CoreGraphics {
 
 #if !COREBUILD
 #if NET
+	/// <summary>Standard Exif metadata of an image. </summary>
+	///     <remarks>To be added.</remarks>
+	///     <altmember cref="T:CoreGraphics.CGImageProperties" />
+	///     <altmember cref="T:CoreGraphics.CGImagePropertiesIptc" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -562,6 +570,9 @@ namespace CoreGraphics {
 	}
 
 #if NET
+	/// <summary>Properties associated with TIFF images.</summary>
+	///     <remarks>To be added.</remarks>
+	///     <altmember cref="T:CoreGraphics.CGImageProperties" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -635,6 +646,9 @@ namespace CoreGraphics {
 	}
 
 #if NET
+	/// <summary>Properties associated with JFIF bitmap images.</summary>
+	///     <remarks>To be added.</remarks>
+	///     <altmember cref="T:CoreGraphics.CGImageProperties" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -684,6 +698,9 @@ namespace CoreGraphics {
 	}
 
 #if NET
+	/// <summary>Properties associated with PNG bitmap images.</summary>
+	///     <remarks>To be added.</remarks>
+	///     <altmember cref="T:CoreGraphics.CGImageProperties" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -793,6 +810,9 @@ namespace CoreGraphics {
 	}
 
 #if NET
+	/// <summary>Location properties associated with an image.</summary>
+	///     <remarks>To be added.</remarks>
+	///     <altmember cref="T:CoreGraphics.CGImageProperties" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -873,6 +893,10 @@ namespace CoreGraphics {
 
 
 #if NET
+	/// <summary>Properties with IPTC metadata in an image.</summary>
+	///     <remarks>To be added.</remarks>
+	///     <altmember cref="T:CoreGraphics.CGImageProperties" />
+	///     <altmember cref="T:CoreGraphics.CGImagePropertiesExif" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

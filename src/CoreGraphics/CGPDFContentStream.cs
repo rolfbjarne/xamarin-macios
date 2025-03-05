@@ -23,6 +23,8 @@ namespace CoreGraphics {
 
 
 #if NET
+	/// <summary>Class that gets PDF resources as an object or stream.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

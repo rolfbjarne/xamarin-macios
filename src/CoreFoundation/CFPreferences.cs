@@ -21,6 +21,8 @@ using System.Runtime.Versioning;
 
 namespace CoreFoundation {
 #if NET
+	/// <summary>A collection of utility methods for setting Core Foundation preferences.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

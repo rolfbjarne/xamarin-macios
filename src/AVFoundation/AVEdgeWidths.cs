@@ -33,6 +33,8 @@ using System.Runtime.Versioning;
 namespace AVFoundation {
 
 #if NET
+	/// <summary>A class that encapsulates the edge-widths used by an <see cref="T:AVFoundation.AVVideoCompositionRenderContext" />.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

@@ -27,6 +27,8 @@ using NativeHandle = System.IntPtr;
 
 namespace CoreFoundation {
 
+	/// <summary>Memory pressure flags surfaced by the <see cref="T:CoreFoundation.DispatchSource.MemoryPressure" /> dispatch source.</summary>
+	///     <remarks>Determins the reason for invoking a memory pressure handler, or to configure the memory pressure handler.</remarks>
 	[Flags]
 	public enum MemoryPressureFlags {
 		/// <summary>The system memory pressure condition has returned to normal.</summary>
@@ -37,6 +39,8 @@ namespace CoreFoundation {
 		Critical = 4,
 	}
 
+	/// <summary>Enumerates process state transitions to monitor for <see cref="T:CoreFoundation.DispatchSource.ProcessMonitor" />.</summary>
+	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum ProcessMonitorFlags : uint {
 		/// <summary>To be added.</summary>
@@ -49,6 +53,8 @@ namespace CoreFoundation {
 		Signal = 0x08000000,
 	}
 
+	/// <summary>Type of Vnode monitoring operation to perform on a file.</summary>
+	///     <remarks>This enumeration is used with the <see cref="T:CoreFoundation.DispatchSource.VnodeMonitor" /> class.</remarks>
 	[Flags]
 	public enum VnodeMonitorKind : uint {
 		/// <summary>The file was removed from the file system due to the unlink(2) system call.</summary>
@@ -68,6 +74,7 @@ namespace CoreFoundation {
 	}
 
 #if NET
+	/// <include file="../../docs/api/CoreFoundation/DispatchSource.xml" path="/Documentation/Docs[@DocId='T:CoreFoundation.DispatchSource']/*" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -264,6 +271,13 @@ namespace CoreFoundation {
 		}
 
 #if NET
+		/// <summary>Base class for dispatch sources that allow applications to trigger an event handler on the target queue.</summary>
+		///     <remarks>
+		///       <para>Applications can post data onto a <see cref="T:CoreFoundation.DispatchSource.Data" /> by calling the <see cref="M:CoreFoundation.DispatchSource.Data.MergeData(System.IntPtr)" /> method.   The data is surfaced is then available in to the handler in the <see cref="P:CoreFoundation.DispatchSource.Data.PendingData" /> property.   </para>
+		///       <para>
+		///       </para>
+		///       <para>If multiple calls to MergeData are done, the result surfaced by PendingData will depend on whether you created a <see cref="T:CoreFoundation.DispatchSource.DataAdd" /> which will add the values together or a <see cref="T:CoreFoundation.DispatchSource.DataOr" /> which will or the values together.</para>
+		///     </remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -299,6 +313,12 @@ namespace CoreFoundation {
 		}
 
 #if NET
+		/// <summary>Dispatch sources that allow applications to trigger an event handler on the target queue.</summary>
+		///     <remarks>
+		///       <para>Applications can post data onto a <see cref="T:CoreFoundation.DispatchSource.DataAdd" /> by calling the <see cref="M:CoreFoundation.DispatchSource.Data.MergeData(System.IntPtr)" /> method.   The data is surfaced is then available in to the handler in the <see cref="P:CoreFoundation.DispatchSource.Data.PendingData" /> property which will contain the cumulative addition of all the values posted with MergeData.</para>
+		///       <para>
+		///       </para>
+		///     </remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -336,6 +356,8 @@ namespace CoreFoundation {
 		}
 
 #if NET
+		/// <summary>Dispatch sources that allow applications to trigger an event handler on the target queue.</summary>
+		///     <remarks>Applications can post data onto a <see cref="T:CoreFoundation.DispatchSource.DataOr" /> by calling the <see cref="M:CoreFoundation.DispatchSource.Data.MergeData(System.IntPtr)" /> method.   The data is surfaced is then available in to the handler in the <see cref="P:CoreFoundation.DispatchSource.Data.PendingData" /> property which will contain the cumulative logical or of all the values posted with MergeData.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -372,6 +394,25 @@ namespace CoreFoundation {
 		}
 
 #if NET
+		/// <summary>Base class for dispatch sources that allow applications to monitor a Mach port.</summary>
+		///     <remarks>
+		///       <para>This is a base class that exposes the <see cref="P:CoreFoundation.DispatchSource.Mach.MachPort" /> property.   Use one of the subclasses to monitor a state changes in mach ports.</para>
+		///       <list type="bullet">
+		///         <item>
+		///           <term>
+		///             <see cref="T:CoreFoundation.DispatchSource.MachReceive" />
+		///             <para />
+		///           </term>
+		///         </item>
+		///         <item>
+		///           <term>
+		///             <see cref="T:CoreFoundation.DispatchSource.MachSend" />
+		///             <para />
+		///           </term>
+		///         </item>
+		///       </list>
+		///       <para />
+		///     </remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -394,6 +435,8 @@ namespace CoreFoundation {
 		}
 
 #if NET
+		/// <summary>Dispatch sources of this type monitors a mach port with a send right for state changes. </summary>
+		///     <remarks>You can use this DispatchSource to monitor both send right state changes as well as the destruction of the corresponding port’s receiver rights.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -442,6 +485,8 @@ namespace CoreFoundation {
 			}
 		}
 #if NET
+		/// <summary>Dispatch Sources of this type monitor a mach port with a receive right for state changes.  </summary>
+		///     <remarks>The event handler will be invoked on the target queue when a message on the mach port is waiting to be received.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -482,7 +527,8 @@ namespace CoreFoundation {
 
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		/// <include file="../../docs/api/CoreFoundation.DispatchSource/MemoryPressure.xml" path="/Documentation/Docs[@DocId='T:CoreFoundation.DispatchSource.MemoryPressure']/*" />
+	[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -530,6 +576,8 @@ namespace CoreFoundation {
 		}
 
 #if NET
+		/// <summary>Dispatch Source of this type monitor processes for state changes</summary>
+		///     <remarks>This dispatch source can monitor processes terminating, forking, exceeding or being signaled.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -588,7 +636,8 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		/// <include file="../../docs/api/CoreFoundation.DispatchSource/ReadMonitor.xml" path="/Documentation/Docs[@DocId='T:CoreFoundation.DispatchSource.ReadMonitor']/*" />
+	[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -651,6 +700,11 @@ namespace CoreFoundation {
 		}
 
 #if NET
+		/// <summary>Sources of this type monitor signals delivered to the current process.</summary>
+		///     <remarks>
+		///       <para>Unlike signal handlers specified via sigaction(), the execution of the event handler block does not interrupt the current thread of execution; therefore the handler block is not limited to the use of signal safe interfaces defined in sigaction(2).  Furthermore, multiple observers of a given signal are supported; thus allowing applications and libraries to cooperate safely. However, a dispatch source does not install a signal handler or otherwise alter the behavior of signal delivery.  Therefore, applications must ignore or at least catch any signal that terminates a process by default. </para>
+		///       <para />
+		///     </remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -706,7 +760,8 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		/// <include file="../../docs/api/CoreFoundation.DispatchSource/Timer.xml" path="/Documentation/Docs[@DocId='T:CoreFoundation.DispatchSource.Timer']/*" />
+	[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -774,7 +829,8 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		/// <include file="../../docs/api/CoreFoundation.DispatchSource/VnodeMonitor.xml" path="/Documentation/Docs[@DocId='T:CoreFoundation.DispatchSource.VnodeMonitor']/*" />
+	[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -880,7 +936,8 @@ namespace CoreFoundation {
 		}
 
 #if NET
-		[SupportedOSPlatform ("ios")]
+		/// <include file="../../docs/api/CoreFoundation.DispatchSource/WriteMonitor.xml" path="/Documentation/Docs[@DocId='T:CoreFoundation.DispatchSource.WriteMonitor']/*" />
+	[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

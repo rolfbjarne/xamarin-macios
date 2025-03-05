@@ -57,6 +57,32 @@ namespace CoreText {
 	}
 #endif
 
+	/// <summary>Describes the style of a font.</summary>
+	///     <remarks>
+	///       <para>
+	/// 	You can use this to query trait information about a font.
+	///       </para>
+	///       <example>
+	///         <code lang="csharp lang-csharp"><![CDATA[
+	/// void ShowInfo (CTFont font)
+	/// {
+	///     var traits = font.GetTraits ();
+	///     if (traits.Bold)
+	/// 	Console.WriteLine ("Bold font, weight={0}", traits.Weight);
+	///     if (traits.Italic)
+	/// 	Console.WriteLine ("Italic font, slant={0}", traits.Slant);
+	///     if (traits.Condensed || traits.Expanded)
+	/// 	Console.WriteLine ("Condensed/Expanded font, width={0}", traits.Width);
+	///     if (traits.ColorGlyphs)
+	/// 	Console.WriteLine ("Font has colored glyphs");
+	///     if (traits.MonoSpace)
+	/// 	Console.WriteLine ("Font is monospaced");
+	///     if (traits.Vertical)
+	/// 	Console.WriteLine ("Font contains vertical metrics");
+	/// }
+	/// 	]]></code>
+	///       </example>
+	///     </remarks>
 	[Flags]
 	// defined as uint32_t - /System/Library/Frameworks/CoreText.framework/Headers/CTFontTraits.h
 	public enum CTFontSymbolicTraits : uint {
@@ -91,6 +117,8 @@ namespace CoreText {
 	}
 
 	// defined as uint32_t - /System/Library/Frameworks/CoreText.framework/Headers/CTFontTraits.h
+	/// <summary>An enumeration whose values specify the serif style of a <see cref="T:CoreText.CTFont" />.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum CTFontStylisticClass : uint {
 		/// <summary>To be added.</summary>
 		None = 0,
@@ -119,6 +147,8 @@ namespace CoreText {
 	}
 
 #if NET
+	/// <summary>The standard traits for a <see cref="T:CoreText.CTFontDescriptor" />.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

@@ -32,6 +32,8 @@ using ObjCRuntime;
 namespace AVFoundation {
 
 #if NET
+	/// <summary>Defines a range within a specific <see cref="T:AVFoundation.AVMusicTrack" />.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]

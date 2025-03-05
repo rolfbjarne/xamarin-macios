@@ -51,6 +51,8 @@ namespace CoreText {
 
 	#region CFAttributedStringRef AttributeKey Prototypes
 	// defined as int32_t - System/Library/Frameworks/CoreText.framework/Headers/CTStringAttributes.h
+	/// <summary>Specifies the style of an underline ornament.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum CTUnderlineStyle : int {
 		/// <summary>To be added.</summary>
 		None = 0x00,
@@ -63,6 +65,8 @@ namespace CoreText {
 	}
 
 	// defined as int32_t - System/Library/Frameworks/CoreText.framework/Headers/CTStringAttributes.h
+	/// <summary>An enumeration whose values specify options for <see cref="T:CoreText.CTUnderlineStyle" />s.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum CTUnderlineStyleModifiers : int {
 		/// <summary>To be added.</summary>
 		PatternSolid = 0x0000,
@@ -76,6 +80,9 @@ namespace CoreText {
 		PatternDashDotDot = 0x0400,
 	}
 
+	/// <summary>An enumeration whose values specify the importance of ligatures in a <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=Core%20Text%20CTString&amp;scope=Xamarin" title="T:CoreText.CTString">T:CoreText.CTString</a></format>.</summary>
+	///     <remarks>To be added.</remarks>
+	///     <altmember cref="T:CoreText.CTStringAttributes.LigatureFormation" />
 	public enum CTLigatureFormation {
 		/// <summary>To be added.</summary>
 		Essential = 0,
@@ -85,6 +92,8 @@ namespace CoreText {
 		All = 2,
 	}
 
+	/// <summary>An enumeration whose values describe the style of super- and sub- -scripts.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum CTSuperscriptStyle {
 		/// <summary>To be added.</summary>
 		None = 0,
@@ -151,6 +160,10 @@ namespace CoreText {
 	#endregion
 
 #if NET
+	/// <summary>Specifies the attributes of a <see cref="T:CoreText.CTRun" />.</summary>
+	///     <remarks>To be added.</remarks>
+	///     <altmember cref="M:CoreText.CTRun.GetAttributes" />
+	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/SimpleTextInput/">SimpleTextInput</related>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

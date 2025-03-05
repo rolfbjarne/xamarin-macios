@@ -34,6 +34,8 @@ using NativeHandle = System.IntPtr;
 #endif
 
 namespace SearchKit {
+	/// <summary>To be added.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum SKIndexType {
 		/// <summary>To be added.</summary>
 		Unknown,
@@ -45,6 +47,8 @@ namespace SearchKit {
 		InvertedVector,
 	};
 
+	/// <summary>To be added.</summary>
+	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum SKSearchOptions {
 		/// <summary>To be added.</summary>
@@ -58,6 +62,8 @@ namespace SearchKit {
 	}
 
 #if NET
+	/// <summary>To be added.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class SKSearch : NativeObject {
@@ -127,6 +133,8 @@ namespace SearchKit {
 	}
 
 #if NET
+	/// <summary>To be added.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class SKDocument : NativeObject {
@@ -223,6 +231,8 @@ namespace SearchKit {
 	}
 
 #if NET
+	/// <summary>To be added.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	public class SKIndex : DisposableObject
 #else
@@ -621,6 +631,8 @@ namespace SearchKit {
 	}
 
 #if NET
+	/// <summary>To be added.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 #endif
 	public class SKSummary : NativeObject {

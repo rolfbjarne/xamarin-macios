@@ -43,6 +43,8 @@ using System.Runtime.Versioning;
 namespace AudioToolbox {
 
 #if NET
+	/// <summary>Encapsulates global audio-file information.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

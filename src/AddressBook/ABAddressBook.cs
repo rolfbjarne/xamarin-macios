@@ -46,6 +46,9 @@ using NativeHandle = System.IntPtr;
 
 namespace AddressBook {
 #if NET
+	/// <summary>Provides data for the <see cref="E:AddressBook.ABAddressBook.ExternalChange" /> event.</summary>
+	///     <remarks>
+	///     </remarks>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]
@@ -157,6 +160,7 @@ namespace AddressBook {
 	}
 
 #if NET
+	/// <include file="../../docs/api/AddressBook/ABAddressBook.xml" path="/Documentation/Docs[@DocId='T:AddressBook.ABAddressBook']/*" />
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]

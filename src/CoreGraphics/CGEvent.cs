@@ -27,6 +27,8 @@ using NativeHandle = System.IntPtr;
 namespace CoreGraphics {
 
 #if NET
+	/// <summary>To be added.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 #else
@@ -34,6 +36,13 @@ namespace CoreGraphics {
 #endif
 	public sealed class CGEvent : NativeObject {
 #if !COREBUILD
+		/// <param name="tapProxyEvent">To be added.</param>
+		///     <param name="eventType">To be added.</param>
+		///     <param name="eventRef">To be added.</param>
+		///     <param name="userInfo">To be added.</param>
+		///     <summary>To be added.</summary>
+		///     <returns>To be added.</returns>
+		///     <remarks>To be added.</remarks>
 		public delegate IntPtr CGEventTapCallback (IntPtr tapProxyEvent, CGEventType eventType, IntPtr eventRef, IntPtr userInfo);
 
 		static ConditionalWeakTable<CFMachPort, TapData>? tap_table;
@@ -798,6 +807,8 @@ namespace CoreGraphics {
 
 #if !COREBUILD
 #if NET
+	/// <summary>To be added.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 #endif

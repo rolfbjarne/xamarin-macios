@@ -42,6 +42,8 @@ using NativeHandle = System.IntPtr;
 namespace CoreFoundation {
 
 	// CFURLPathStyle -> CFIndex -> CFURL.h
+	/// <summary>Url Style.</summary>
+	///     <remarks>How should the path be interpreted by the CFUrl methods.</remarks>
 	[Native]
 	public enum CFUrlPathStyle : long {
 		/// <summary>As a POSIX filename.   Path elements are separated with a slash character.</summary>
@@ -54,6 +56,8 @@ namespace CoreFoundation {
 
 
 #if NET
+	/// <summary>URL class used by C-only Cocoa APIs.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

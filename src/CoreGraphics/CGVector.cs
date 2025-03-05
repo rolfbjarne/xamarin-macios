@@ -39,6 +39,11 @@ namespace CoreGraphics {
 
 
 #if NET
+	/// <summary>A mathematical vector, with value equality implemented.</summary>
+	///     <remarks>
+	///       <para>
+	///       </para>
+	///     </remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

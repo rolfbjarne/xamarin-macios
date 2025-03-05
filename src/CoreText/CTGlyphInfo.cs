@@ -44,6 +44,8 @@ using NativeHandle = System.IntPtr;
 namespace CoreText {
 
 	#region Glyph Info Values
+	/// <summary>A class whose static fields specify character collections.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum CTCharacterCollection : ushort {
 		/// <summary>The character identifier is the same as the glyph index.</summary>
 		IdentityMapping = 0,
@@ -61,6 +63,8 @@ namespace CoreText {
 	#endregion
 
 #if NET
+	/// <summary>Provides the ability to override the Unicode-to-glyph mapping for a <see cref="T:CoreText.CTFont" />.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

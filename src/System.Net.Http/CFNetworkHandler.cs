@@ -47,7 +47,9 @@ using CF = CoreFoundation;
 #nullable disable
 
 namespace System.Net.Http {
-	public class CFNetworkHandler : HttpMessageHandler {
+	/// <summary>To be added.</summary>
+			///     <remarks>To be added.</remarks>
+			public class CFNetworkHandler : HttpMessageHandler {
 		class StreamBucket {
 			public TaskCompletionSource<HttpResponseMessage> Response;
 			public HttpRequestMessage Request;

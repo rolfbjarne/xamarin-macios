@@ -58,6 +58,9 @@ using NativeHandle = System.IntPtr;
 namespace CoreFoundation {
 
 	// CFOptionFlags
+	/// <summary>Constants for stream-related events.</summary>
+	///     <remarks>
+	///     </remarks>
 	[Flags]
 	[Native] // System/Library/Frameworks/Foundation.framework/Headers/NSStream.h
 	public enum CFStreamEventType : ulong {
@@ -77,6 +80,9 @@ namespace CoreFoundation {
 
 	// NSStream.h
 #if NET
+	/// <summary>A structure used to support custom stream-related events.</summary>
+	///     <remarks>
+	///     </remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -175,6 +181,8 @@ namespace CoreFoundation {
 	}
 
 	// CFIndex
+	/// <summary>An enumeration whose values specify valid statuses for a <see cref="T:CoreFoundation.CFStream" />.</summary>
+	///     <remarks>To be added.</remarks>
 	[Native] // System/Library/Frameworks/CoreFoundation.framework/Headers/CFStream.h
 	public enum CFStreamStatus : long {
 		/// <summary>To be added.</summary>
@@ -196,6 +204,7 @@ namespace CoreFoundation {
 	}
 
 #if NET
+	/// <include file="../../docs/api/CoreFoundation/CFStream.xml" path="/Documentation/Docs[@DocId='T:CoreFoundation.CFStream']/*" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -664,6 +673,8 @@ namespace CoreFoundation {
 		#region Events
 
 #if NET
+		/// <summary>An <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=System%20Event%20Args&amp;scope=Xamarin" title="T:System.EventArgs">T:System.EventArgs</a></format> used by several events in <see cref="T:CoreFoundation.CFString" />.</summary>
+		///     <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -765,6 +776,11 @@ namespace CoreFoundation {
 		///         <remarks>To be added.</remarks>
 		protected abstract void UnscheduleFromRunLoop (CFRunLoop loop, NSString? mode);
 
+		/// <param name="s">To be added.</param>
+		///     <param name="type">To be added.</param>
+		///     <param name="info">To be added.</param>
+		///     <summary>A delegate used as a callback in various <see cref="T:CoreFoundation.CFStream" /> methods.</summary>
+		///     <remarks>To be added.</remarks>
 		protected delegate void CFStreamCallback (IntPtr s, nint type, IntPtr info);
 
 #if NET8_0_OR_GREATER

@@ -19,6 +19,8 @@ using ObjCRuntime;
 namespace AVFoundation {
 
 #if NET
+	/// <summary>Defines the listener's position in 3D space as orthogonal 'Up' and 'Forward' vectors.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -89,6 +91,8 @@ namespace AVFoundation {
 	}
 
 #if NET
+	/// <summary>Holds the angular orientation of the listener in 3D space.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -160,6 +164,8 @@ namespace AVFoundation {
 	}
 
 #if NET
+	/// <summary>Contains RGB gain values for white balance.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -242,6 +248,8 @@ namespace AVFoundation {
 	}
 
 #if NET
+	/// <summary>Structure holding CIE 1931 xy chromaticity values.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -315,6 +323,8 @@ namespace AVFoundation {
 	}
 
 #if NET
+	/// <summary>Values used for white-balancing; including correlated temperatures and tints.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -388,11 +398,15 @@ namespace AVFoundation {
 	}
 
 #if !COREBUILD
+	/// <summary>AV metadata identifiers.</summary>
+	///     <remarks>To be added.</remarks>
 	public static partial class AVMetadataIdentifiers {
 	}
 #endif
 
 #if NET
+	/// <summary>Defines an extension method for <see cref="T:System.Drawing.RectangleF" /> that generates another rectangle with a specified aspect ratio.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -415,6 +429,8 @@ namespace AVFoundation {
 	}
 
 #if NET
+	/// <summary>Contains media sample synchronization attributes.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios15.0")]
@@ -503,6 +519,8 @@ namespace AVFoundation {
 #endif // !XAMCORE_5_0
 
 #if NET
+	/// <summary>Contains media sample interdependency data for a sample and other samples in the sequence.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios15.0")]
@@ -649,6 +667,8 @@ namespace AVFoundation {
 #endif // !XAMCORE_5_0
 
 #if NET
+	/// <summary>Contains the location and size of a media sample or chunk.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios15.0")]
@@ -669,6 +689,8 @@ namespace AVFoundation {
 	}
 
 #if NET
+	/// <summary>Contains media sample chunk metadata.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios15.0")]

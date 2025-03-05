@@ -48,6 +48,9 @@ using NativeHandle = System.IntPtr;
 
 namespace Security {
 
+	/// <summary>Represents digital certificates on iOS/OSX.</summary>
+	///     <remarks>
+	///     </remarks>
 	public partial class SecCertificate : NativeObject {
 #if !NET
 		public SecCertificate (NativeHandle handle)
@@ -612,6 +615,8 @@ namespace Security {
 #endif // COREBUILD
 	}
 
+	/// <summary>Encapsulate a security identity. A security identity comprises a certificate and its private key.</summary>
+	///     <remarks>To be added.</remarks>
 	public partial class SecIdentity : NativeObject {
 #if !NET
 		public SecIdentity (NativeHandle handle)
@@ -779,6 +784,8 @@ namespace Security {
 #endif
 	}
 
+	/// <summary>Encapsulates a security key, one half of a public-private key-pair.</summary>
+	///     <remarks>To be added.</remarks>
 	public partial class SecKey : NativeObject {
 #if !NET
 		public SecKey (IntPtr handle)

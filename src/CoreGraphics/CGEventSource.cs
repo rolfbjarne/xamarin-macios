@@ -25,6 +25,8 @@ using NativeHandle = System.IntPtr;
 
 namespace CoreGraphics {
 #if NET
+	/// <summary>To be added.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 #else

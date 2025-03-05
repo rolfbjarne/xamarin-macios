@@ -106,6 +106,20 @@ namespace AddressBook {
 	}
 
 #if NET
+	/// <typeparam name="T">
+	///       The type of the value to store.
+	///     </typeparam>
+	///     <summary>
+	///       A <see cref="T:AddressBook.ABMultiValue`1" /> entry.
+	///     </summary>
+	///     <remarks>
+	///       <para>
+	///         A "tuple" of
+	///         (<see cref="P:AddressBook.ABMultiValueEntry`1.Value" />,
+	///         <see cref="P:AddressBook.ABMultiValueEntry`1.Label" />,
+	///         <see cref="P:AddressBook.ABMultiValueEntry`1.Identifier" />).
+	///       </para>
+	///     </remarks>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]
@@ -250,6 +264,7 @@ namespace AddressBook {
 	}
 
 #if NET
+	/// <include file="../../docs/api/AddressBook/ABMultiValue`1.xml" path="/Documentation/Docs[@DocId='T:AddressBook.ABMultiValue`1']/*" />
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]
@@ -432,6 +447,7 @@ namespace AddressBook {
 	}
 
 #if NET
+	/// <include file="../../docs/api/AddressBook/ABMutableMultiValue`1.xml" path="/Documentation/Docs[@DocId='T:AddressBook.ABMutableMultiValue`1']/*" />
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]
@@ -514,6 +530,12 @@ namespace AddressBook {
 	}
 
 #if NET
+	/// <summary>
+	///       A <see cref="T:AddressBook.ABMultiValue{Foundation.NSDate}" />
+	///       which supports changing values.
+	///     </summary>
+	///     <remarks>
+	///     </remarks>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]
@@ -538,6 +560,12 @@ namespace AddressBook {
 	}
 
 #if NET
+	/// <summary>
+	///       A <see cref="T:AddressBook.ABMultiValue{Foundation.NSDictionary}" />
+	///       which supports changing values.
+	///     </summary>
+	///     <remarks>
+	///     </remarks>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]
@@ -562,6 +590,12 @@ namespace AddressBook {
 	}
 
 #if NET
+	/// <summary>
+	///       A <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=T:AddressBook.ABMultiValue{Foundation.NSString}&amp;scope=Xamarin" title="T:AddressBook.ABMultiValue{Foundation.NSString}">T:AddressBook.ABMultiValue{Foundation.NSString}</a></format>
+	///       which supports changing values.
+	///     </summary>
+	///     <remarks>
+	///     </remarks>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]

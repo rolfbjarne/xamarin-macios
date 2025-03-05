@@ -7,6 +7,9 @@ using ObjCRuntime;
 namespace AVFoundation {
 
 #if NET
+	/// <summary>Provides data for the  event.</summary>
+	///     <remarks>
+	///     </remarks>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]

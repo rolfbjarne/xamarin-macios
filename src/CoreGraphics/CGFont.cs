@@ -46,6 +46,8 @@ namespace CoreGraphics {
 
 
 #if NET
+	/// <summary>Font support.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

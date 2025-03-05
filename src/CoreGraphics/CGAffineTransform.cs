@@ -41,6 +41,14 @@ namespace CoreGraphics {
 
 	// CGAffineTransform.h
 #if NET
+	/// <summary>2D Affine transformation used to convert between coordinate spaces.</summary>
+	///     <remarks>
+	///       <para>An affine transformation uses a matrix to transform poitns between coordinate spaces.   
+	/// </para>
+	///       <para>
+	/// These transformation can be used to rotate, scale, shear and translate points and rectangles from one coordinate system into another.
+	/// </para>
+	///     </remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

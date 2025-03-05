@@ -44,6 +44,8 @@ namespace AppKit {
 		}
 
 #if NET
+		/// <summary>To be added.</summary>
+		///     <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #endif
@@ -59,6 +61,8 @@ namespace AppKit {
 		}
 
 #if NET
+		/// <summary>To be added.</summary>
+		///     <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #endif
@@ -83,6 +87,8 @@ namespace AppKit {
 		}
 
 #if NET
+		/// <summary>To be added.</summary>
+		///     <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 #endif

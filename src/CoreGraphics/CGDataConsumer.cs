@@ -42,6 +42,8 @@ using NativeHandle = System.IntPtr;
 namespace CoreGraphics {
 
 	// CGDataConsumer.h
+	/// <summary>Data sink for <see cref="T:CoreGraphics.CGContextPDF" /> or <see cref="T:ImageIO.CGImageDestination" /> to store data on.</summary>
+	///     <remarks>To be added.</remarks>
 	public partial class CGDataConsumer : NativeObject {
 #if !NET
 		public CGDataConsumer (NativeHandle handle)

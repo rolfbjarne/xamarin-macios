@@ -44,6 +44,9 @@ using NativeHandle = System.IntPtr;
 namespace CoreText {
 
 	// defined as uint32_t - /System/Library/Frameworks/CoreText.framework/Headers/CTLine.h
+	/// <summary>An enumeration whose values specify valid options for line truncation.</summary>
+	///     <remarks>To be added.</remarks>
+	///     <altmember cref="M:CoreText.CTLine.GetTruncatedLine" />
 	public enum CTLineTruncation : uint {
 		/// <summary>To be added.</summary>
 		Start = 0,
@@ -54,6 +57,18 @@ namespace CoreText {
 	}
 
 	// defined as CFOptionFlags (unsigned long [long] = nuint) - /System/Library/Frameworks/CoreText.framework/Headers/CTLine.h
+	/// <summary>The kind of bounds computation that we want to perform on a CTLine.</summary>
+	///     <remarks>
+	///       <para>
+	/// 	These options can be combined.   In the graphic below, you can see the different bounds that are computed based on this flag.
+	///       </para>
+	///       <para>
+	/// 	The following image shows the effect that the options have on measuring text.
+	///       </para>
+	///       <para>
+	///         <img href="~/CoreText/_images/CoreTextBoundOptions.png" alt="Illustration of the area defined by the various bounds options" />
+	///       </para>
+	///     </remarks>
 	[Native]
 	[Flags]
 	public enum CTLineBoundsOptions : ulong {
@@ -86,6 +101,9 @@ namespace CoreText {
 	}
 
 #if NET
+	/// <summary>A line of text, comprising an array of <see cref="T:CoreText.CTRun" />s.</summary>
+	///     <remarks>To be added.</remarks>
+	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/SimpleTextInput/">SimpleTextInput</related>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -283,6 +301,12 @@ namespace CoreText {
 			return CTLineGetOffsetForStringIndex (Handle, charIndex, IntPtr.Zero);
 		}
 
+		/// <param name="offset">To be added.</param>
+		///     <param name="charIndex">To be added.</param>
+		///     <param name="leadingEdge">To be added.</param>
+		///     <param name="stop">To be added.</param>
+		///     <summary>To be added.</summary>
+		///     <remarks>To be added.</remarks>
 		public delegate void CaretEdgeEnumerator (double offset, nint charIndex, bool leadingEdge, ref bool stop);
 #if !NET
 		unsafe delegate void CaretEdgeEnumeratorProxy (IntPtr block, double offset, nint charIndex, byte leadingEdge, byte* stop);

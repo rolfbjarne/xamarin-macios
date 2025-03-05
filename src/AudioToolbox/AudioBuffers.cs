@@ -42,6 +42,7 @@ using NativeHandle = System.IntPtr;
 namespace AudioToolbox {
 
 #if NET
+	/// <include file="../../docs/api/AudioToolbox/AudioBuffers.xml" path="/Documentation/Docs[@DocId='T:AudioToolbox.AudioBuffers']/*" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

@@ -41,6 +41,8 @@ using NativeHandle = System.IntPtr;
 
 namespace CoreFoundation {
 
+	/// <summary>To be added.</summary>
+	///     <remarks>To be added.</remarks>
 	public partial class DispatchData : DispatchObject {
 #if !COREBUILD
 		[Preserve (Conditional = true)]

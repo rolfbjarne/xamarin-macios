@@ -33,6 +33,8 @@ using System.Runtime.Versioning;
 namespace AVFoundation {
 
 #if NET
+	/// <summary>Encapsulates the aspect ratio of a pixel. Used with <see cref="P:AVFoundation.AVVideoCompositionRenderContext.PixelAspectRatio" />.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

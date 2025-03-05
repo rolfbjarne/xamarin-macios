@@ -24,6 +24,8 @@ using NativeHandle = System.IntPtr;
 namespace CoreGraphics {
 
 #if NET
+	/// <summary>Class that enables app developers to parse values from a PDF stream.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

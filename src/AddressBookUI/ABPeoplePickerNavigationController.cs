@@ -17,6 +17,10 @@ using ObjCRuntime;
 
 namespace AddressBookUI {
 #if NET
+	/// <summary>Provides data for the <see cref="E:AddressBookUI.ABPeoplePickerNavigationController.SelectPerson" /> event.</summary>
+	///     <remarks>
+	///     </remarks>
+	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/MonoCatalog-MonoDevelop/">monocatalog</related>
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
 #else
@@ -45,6 +49,10 @@ namespace AddressBookUI {
 	}
 
 #if NET
+	/// <summary>Provides data for the <see cref="E:AddressBookUI.ABPeoplePickerNavigationController.PerformAction" /> event.</summary>
+	///     <remarks>
+	///     </remarks>
+	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/MonoCatalog-MonoDevelop/">monocatalog</related>
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
 #else
@@ -76,6 +84,9 @@ namespace AddressBookUI {
 	}
 
 #if NET
+	/// <summary>Provides data for the <see cref="E:AddressBookUI.ABPeoplePickerNavigationController.SelectPerson2" /> event.</summary>
+	///     <remarks>
+	///     </remarks>
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
 #else
@@ -99,6 +110,9 @@ namespace AddressBookUI {
 	}
 
 #if NET
+	/// <summary>Provides data for the <see cref="E:AddressBookUI.ABPeoplePickerNavigationController.PerformAction2" /> event.</summary>
+	///     <remarks>
+	///     </remarks>
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("ios9.0", "Use the 'Contacts' API instead.")]
 #else

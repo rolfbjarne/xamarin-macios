@@ -45,6 +45,8 @@ using NativeHandle = System.IntPtr;
 namespace AddressBook {
 
 #if NET
+	/// <summary>A data source that produces address book data. (See <see cref="T:AddressBook.ABSourceType" />.)</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("maccatalyst14.0", "Use the 'Contacts' API instead.")]

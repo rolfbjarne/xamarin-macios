@@ -50,6 +50,8 @@ using NativeHandle = System.IntPtr;
 namespace CoreFoundation {
 
 #if NET
+	/// <summary>A <see cref="T:CoreFoundation.CFStream" /> that writes streams of bytes.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

@@ -29,6 +29,8 @@ namespace AudioToolbox {
 
 	// MusicPlayer.h
 #if NET
+	/// <summary>Encapsulates a MIDI musical note.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -71,6 +73,8 @@ namespace AudioToolbox {
 
 	// MusicPlayer.h
 #if NET
+	/// <summary>A struct describing a MIDI channel message. Used by the <see cref="M:AudioToolbox.MusicTrack.AddMidiChannelEvent(System.Double,AudioToolbox.MidiChannelMessage)" /> method.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -111,6 +115,8 @@ namespace AudioToolbox {
 	// IntPtr buffer with the data
 	//
 #if NET
+	/// <summary>An abstract base class for <see cref="T:AudioToolbox.MidiMetaEvent" /> and <see cref="T:AudioToolbox.MidiRawData" />.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -160,6 +166,8 @@ namespace AudioToolbox {
 
 #if !COREBUILD
 #if NET
+	/// <summary>Encapsulates a MIDI System-Exclusive (SysEx) message.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -190,6 +198,8 @@ namespace AudioToolbox {
 	}
 
 #if NET
+	/// <summary>A subclass of <see cref="T:AudioToolbox.MidiRawData" /> that describes a user-defined event.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -221,6 +231,8 @@ namespace AudioToolbox {
 	// IntPtr buffer with the data
 	//
 #if NET
+	/// <summary>Encapsulates a MIDI meta-event such as a time signature, lyrics, etc.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -254,6 +266,8 @@ namespace AudioToolbox {
 
 	// MusicPlayer.h
 #if NET
+	/// <summary>A struct that describes a note-on event with extended parameters.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -287,6 +301,8 @@ namespace AudioToolbox {
 #endif
 
 #if NET
+	/// <summary>A music track is a series of time-stamped music events and is a component of a <see cref="T:AudioToolbox.MusicSequence" />.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

@@ -29,6 +29,8 @@ namespace CFNetwork {
 namespace CoreServices {
 #endif
 
+	/// <summary>An HTTP message.</summary>
+	///     <remarks>To be added.</remarks>
 	public partial class CFHTTPMessage : CFType {
 		[Preserve (Conditional = true)]
 		internal CFHTTPMessage (NativeHandle handle, bool owns)
@@ -293,6 +295,8 @@ namespace CoreServices {
 		}
 
 		// convenience enum on top of kCFHTTPAuthenticationScheme* fields
+		/// <summary>An enumeration whose values specify HTTP authentication schemes.</summary>
+		///     <remarks>To be added.</remarks>
 		public enum AuthenticationScheme {
 			Default,
 			Basic,

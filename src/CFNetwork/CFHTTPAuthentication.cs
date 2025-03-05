@@ -29,6 +29,8 @@ namespace CoreServices {
 #endif
 
 #if NET
+	/// <summary>Represents HTTP authentication information for use with <see cref="T:CoreServices.CFHTTPMessage" />.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

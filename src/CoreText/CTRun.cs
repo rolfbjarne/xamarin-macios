@@ -44,6 +44,8 @@ using NativeHandle = System.IntPtr;
 namespace CoreText {
 
 	// defined as uint32_t - System/Library/Frameworks/CoreText.framework/Headers/CTRun.h
+	/// <summary>An enumeration whose values describe the <see cref="P:CoreText.CTRun.Status" /> of a <see cref="T:CoreText.CTRun" />.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum CTRunStatus {
 		/// <summary>To be added.</summary>
 		NoStatus = 0,
@@ -56,6 +58,8 @@ namespace CoreText {
 	}
 
 #if NET
+	/// <summary>A glyph run. That is, a series of consecutive glyphs with the same attributes and direction.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

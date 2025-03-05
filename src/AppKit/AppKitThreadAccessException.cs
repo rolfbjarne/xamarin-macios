@@ -5,6 +5,8 @@ using System.Runtime.Versioning;
 
 namespace AppKit {
 #if NET
+	/// <summary>To be added.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 #endif

@@ -32,6 +32,8 @@ using ObjCRuntime;
 namespace AVFoundation {
 
 #if NET
+	/// <summary>Audio conversion priming information.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]

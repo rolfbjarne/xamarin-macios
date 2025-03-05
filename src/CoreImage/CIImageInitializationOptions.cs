@@ -55,6 +55,8 @@ namespace CoreImage {
 
 
 #if NET
+	/// <summary>A type of <see cref="T:CoreImage.CIImageInitializationOptions" /> that has additional metadata properties.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

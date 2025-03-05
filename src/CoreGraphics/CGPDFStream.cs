@@ -43,6 +43,8 @@ using NativeHandle = System.IntPtr;
 namespace CoreGraphics {
 
 	// untyped enum -> CGPDFStream.h
+	/// <summary>Enumerates values that indicate the data format of a PDF.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum CGPDFDataFormat {
 		/// <summary>To be added.</summary>
 		Raw,
@@ -54,6 +56,8 @@ namespace CoreGraphics {
 
 
 #if NET
+	/// <summary>A PDF Stream.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

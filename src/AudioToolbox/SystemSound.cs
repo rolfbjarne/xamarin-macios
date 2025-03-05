@@ -43,6 +43,7 @@ namespace AudioToolbox {
 	}
 
 #if NET
+	/// <include file="../../docs/api/AudioToolbox/SystemSound.xml" path="/Documentation/Docs[@DocId='T:AudioToolbox.SystemSound']/*" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

@@ -61,6 +61,9 @@ namespace CoreText {
 #endif
 
 #if NET
+	/// <summary>Options that can be used for creating <see cref="T:CoreText.CTFontCollection" /> objects.</summary>
+	///     <remarks>
+	///     </remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -127,6 +130,8 @@ namespace CoreText {
 	}
 
 #if NET
+	/// <summary>Font collections are the standard mechanism used to enumerate fonts descriptors.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

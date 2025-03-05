@@ -44,6 +44,9 @@ using ObjCRuntime;
 using Foundation;
 
 namespace AudioToolbox {
+	/// <summary>Audio format identifiers used by <see cref="T:AudioToolbox.AudioStreamBasicDescription" />.</summary>
+	///     <remarks>
+	///     </remarks>
 	public enum AudioFormatType : uint { // UInt32 in AudioStreamBasicDescription -- CoreAudio.framework CoreAudioTypes.h
 		/// <summary>Uncompressed Linear Pulse Code Modulation (LCPM) format.  Each packet contains a single frame.</summary>
 		LinearPCM = 0x6c70636d,
@@ -152,6 +155,16 @@ namespace AudioToolbox {
 		Apac = 0x61706163, // 'apac'
 	}
 
+	/// <summary>Flags describing the stream in the <see cref="T:AudioToolbox.AudioStreamBasicDescription" />.</summary>
+	///     <remarks>
+	///       <para> The core set of flags describe properties of the audio
+	/// 	stream (integer vs float values, endianess, interleaved) while
+	/// 	the other flags are only used if the AudioFormatType is set to
+	/// 	either LinearPCM (those are the values prefixed with
+	/// 	LinearPCM) or AppleLossles (enumeration values prefixed with
+	/// 	AppleLossles).
+	///       </para>
+	///     </remarks>
 	[Flags]
 	public enum AudioFormatFlags : uint // UInt32 in AudioStreamBasicDescription
 	{
@@ -219,6 +232,7 @@ namespace AudioToolbox {
 	}
 
 #if NET
+	/// <include file="../../docs/api/AudioToolbox/AudioStreamBasicDescription.xml" path="/Documentation/Docs[@DocId='T:AudioToolbox.AudioStreamBasicDescription']/*" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -532,6 +546,8 @@ namespace AudioToolbox {
 	}
 
 #if NET
+	/// <summary>Describes audio packets that do not have a standard size and packets that are interleaved with non-audio data.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -558,6 +574,8 @@ namespace AudioToolbox {
 		}
 	}
 
+	/// <summary>Flags for the <see cref="F:AudioToolbox.AudioChannelDescription.Flags" /> property.</summary>
+	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum AudioChannelFlags : uint { // UInt32 in AudioPanningInfo -- AudioFormat.h
 		/// <summary>To be added.</summary>
@@ -570,6 +588,8 @@ namespace AudioToolbox {
 		Meters = 1 << 2
 	}
 
+	/// <summary>An enumeration whose values specify the <see cref="F:AudioToolbox.AudioChannelDescription.Label" /> property.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum AudioChannelLabel : int { // UInt32 AudioChannelLabel
 		/// <summary>To be added.</summary>
 		Unknown = -1,
@@ -777,6 +797,8 @@ namespace AudioToolbox {
 
 #if !COREBUILD
 #if NET
+	/// <summary>To be added.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -794,6 +816,8 @@ namespace AudioToolbox {
 	}
 #endif
 
+	/// <summary>An enumeration whose values specify constants in the <see cref="P:AudioToolbox.AudioChannelLayout.Bitmap" /> property.</summary>
+	///     <remarks>To be added.</remarks>
 	[Flags]
 	[NativeName ("AudioChannelBitmap")]
 	public enum AudioChannelBit : uint // UInt32 mChannelBitmap in AudioChannelLayout
@@ -848,6 +872,8 @@ namespace AudioToolbox {
 	}
 
 #if NET
+	/// <summary>Describes an Audio Channel.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -936,6 +962,8 @@ namespace AudioToolbox {
 	}
 
 	// CoreAudioTypes.framework/Headers/CoreAudioBaseTypes.h
+	/// <summary>An enumeration whose values are valid for channel layout tags.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum AudioChannelLayoutTag : uint { // UInt32 AudioChannelLayoutTag
 		/// <summary>To be added.</summary>
 		UseChannelDescriptions = (0 << 16) | 0,
@@ -1386,6 +1414,8 @@ namespace AudioToolbox {
 
 #if !COREBUILD
 #if NET
+	/// <summary>An extension class that provides a <see cref="M:AudioToolbox.AudioChannelLayoutTagExtensions.ToAudioChannel(AudioToolbox.AudioChannelLayoutTag)" /> extension method to the <see cref="T:AudioToolbox.AudioChannelLayoutTag" /> class.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -1431,6 +1461,8 @@ namespace AudioToolbox {
 #endif // !COREBUILD
 
 #if NET
+	/// <summary>Specifies the file or hardware audio channel layout.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -1792,6 +1824,8 @@ namespace AudioToolbox {
 #endif // !COREBUILD
 	}
 
+	/// <summary>Enumerates SMTPE time states.</summary>
+	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum SmpteTimeFlags : uint { // UInt32
 		/// <summary>The time state is unknown.</summary>
@@ -1802,6 +1836,8 @@ namespace AudioToolbox {
 		TimeRunning = 1 << 1
 	}
 
+	/// <summary>Enumerates MPEG-4 audio data types.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum MPEG4ObjectID { // long
 		/// <summary>MPEG-4 MAIN audio profile AAC Main.</summary>
 		AacMain = 1,
@@ -1824,6 +1860,8 @@ namespace AudioToolbox {
 	}
 
 #if NET
+	/// <summary>SMPTE-based time representation.   SMPTE times are used to synchronize an point in the audio stream with some external event.</summary>
+	///     <remarks>SMPTE stands for "Society of Motion Picture and Television Engineers"</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -1892,6 +1930,8 @@ namespace AudioToolbox {
 		}
 	}
 
+	/// <summary>An enumeration whose values specify the version of SMPTE time used by a <see cref="T:AudioToolbox.SmpteTime" />.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum SmpteTimeType : uint // UInt32 in AudioFileRegionList
 	{
 #if !NET
@@ -1925,6 +1965,8 @@ namespace AudioToolbox {
 	}
 
 #if NET
+	/// <summary>Represents an audio time stamp in various formats.  </summary>
+	///     <remarks>The Flags property specifies which fields are valid.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -1933,6 +1975,8 @@ namespace AudioToolbox {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AudioTimeStamp {
 
+		/// <summary>Represents the valid elements in an AudioTimeStamp structure.</summary>
+		///     <remarks>The values on this enumeration are used to signal which fields of the AudioTimeStamp are valid.</remarks>
 		[Flags]
 		public enum AtsFlags : uint { // UInt32 in AudioTimeStamp
 			/// <summary>No time stamp fields are valid.</summary>
@@ -2013,6 +2057,14 @@ namespace AudioToolbox {
 	}
 
 #if NET
+	/// <summary>Represents a collection of audio samples.</summary>
+	///     <remarks>
+	///       <para> The samples stored on the audio buffer can either contain
+	/// 	monophonic samples, in which case the NumberOfChannels
+	/// 	property will be set to one.  If the samples stored are
+	/// 	stereo, then the NumberOfChannels will be set to two, and the
+	/// 	samples are interleaved in the buffer. </para>
+	///     </remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -2108,6 +2160,8 @@ namespace AudioToolbox {
 	// CoreAudioClock.h (inside AudioToolbox)
 	// It was a confusion between CA (CoreAudio) and CA (CoreAnimation)
 #if NET
+	/// <summary>Struct defining bar beat time, for use with <see cref="T:AudioToolbox.MusicSequence" /> methods such as <see cref="M:AudioToolbox.MusicSequence.BarBeatTimeToBeats(AudioToolbox.CABarBeatTime,System.Double@)" />.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

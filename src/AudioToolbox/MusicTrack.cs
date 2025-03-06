@@ -117,6 +117,8 @@ namespace AudioToolbox {
 #if NET
 	/// <summary>An abstract base class for <see cref="T:AudioToolbox.MidiMetaEvent" /> and <see cref="T:AudioToolbox.MidiRawData" />.</summary>
 	///     <remarks>To be added.</remarks>
+	/// <summary>An abstract base class for <see cref="T:AudioToolbox.MidiMetaEvent" /> and <see cref="T:AudioToolbox.MidiRawData" />.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

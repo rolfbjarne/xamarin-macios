@@ -55,6 +55,8 @@ namespace CoreGraphics {
 #if NET
 	/// <summary>Extensions to the RectangleF class that are useful when using CoreGraphics.</summary>
 	///     <remarks>To be added.</remarks>
+	/// <summary>Extensions to the RectangleF class that are useful when using CoreGraphics.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

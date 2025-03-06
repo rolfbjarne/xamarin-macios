@@ -29,6 +29,8 @@ namespace CoreServices {
 #if NET
 	/// <summary>A <see cref="T:CoreFoundation.CFReadStream" /> that reads HTTP stream data.</summary>
 	///     <remarks>To be added.</remarks>
+	/// <summary>A <see cref="T:CoreFoundation.CFReadStream" /> that reads HTTP stream data.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

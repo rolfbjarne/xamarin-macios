@@ -37,6 +37,8 @@ namespace Foundation {
 #endif
 	/// <summary>To be added.</summary>
 	///     <remarks>To be added.</remarks>
+	/// <summary>To be added.</summary>
+	///     <remarks>To be added.</remarks>
 	public class ObjCException : Exception {
 		NSException native_exc;
 

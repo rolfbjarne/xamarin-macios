@@ -176,6 +176,9 @@ namespace ObjCRuntime {
 	}
 
 #if !__MACCATALYST__
+	/// <summary>Used to represent the host on which Xamarin.iOS is running.</summary>
+	///     <remarks>
+	///     </remarks>
 	public enum Arch {
 		/// <summary>Running on a physical device.</summary>
 		DEVICE,

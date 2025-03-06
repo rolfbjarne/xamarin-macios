@@ -22,6 +22,10 @@ using NativeHandle = System.IntPtr;
 
 namespace Metal {
 #if MONOMAC
+	/// <param name="device">To be added.</param>
+	///     <param name="notifyName">To be added.</param>
+	///     <summary>To be added.</summary>
+	///     <remarks>To be added.</remarks>
 	[Advice ("The 'NSString' argument will match a property of 'MTLDeviceNotificationHandler'.")]
 	public delegate void MTLDeviceNotificationHandler (IMTLDevice device, NSString notifyName);
 #endif

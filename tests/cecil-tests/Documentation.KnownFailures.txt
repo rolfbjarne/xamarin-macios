@@ -40452,7 +40452,6 @@ T:Metal.MTLCurveBasis
 T:Metal.MTLCurveEndCaps
 T:Metal.MTLCurveType
 T:Metal.MTLDeviceLocation
-T:Metal.MTLDeviceNotificationHandler
 T:Metal.MTLDispatchType
 T:Metal.MTLDynamicLibraryError
 T:Metal.MTLFunctionLogType
@@ -41206,7 +41205,6 @@ T:NotificationCenter.NSWidgetSearchForTermEventArgs
 T:NotificationCenter.NSWidgetSearchResultSelectedEventArgs
 T:ObjCBindings.BindingTypeAttribute`1
 T:ObjCBindings.ExportAttribute`1
-T:ObjCRuntime.Arch
 T:ObjCRuntime.BindingDocIdAttribute
 T:ObjCRuntime.DisposableObject
 T:ObjCRuntime.Dlfcn.Mode

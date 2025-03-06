@@ -492,14 +492,26 @@ class ParallelTestsResults {
             foreach ($name in $outputs.Keys) {
                 if ($name.EndsWith(".TESTS_LABEL")) {
                     $label = $outputs[$name]
-                    $jobName = $name.Substring(0, $name.IndexOf('.'))
-                    $statusKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith("." + "TESTS_JOBSTATUS") } | Sort-Object | Select-Object -Last 1
-                    $botKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith("." + "TESTS_BOT") }
-                    $platformKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith("." + "TESTS_PLATFORM") }
-                    $attemptKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith("." + "TESTS_ATTEMPT") }
-                    $titleKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith("." + "TESTS_TITLE") }
 
-                    Write-Host "Keys for Label='$label', Title='$titleKey' and JobName='$jobName': StatusKey=$statusKey BotKey=$botKey PlatformKey=$platformKey AttemptKey=$attemptKey"
+                    $dotCount = $name.Split('.').Length - 1
+                    if ($dotCount -eq 1) {
+                        $jobName = $testStage
+                        $statusKey = $outputs.Keys | Where-Object { $_.EndsWith(".TESTS_JOBSTATUS") } | Sort-Object | Select-Object -Last 1
+                        $botKey = $outputs.Keys | Where-Object { $_.EndsWith(".TESTS_BOT") }
+                        $platformKey = $outputs.Keys | Where-Object { $_.EndsWith(".TESTS_PLATFORM") }
+                        $attemptKey = $outputs.Keys | Where-Object { $_.EndsWith(".TESTS_ATTEMPT") }
+                        $titleKey = $outputs.Keys | Where-Object { $_.EndsWith(".TESTS_TITLE") }
+                    } else {
+                        # matrix job
+                        $jobName = $name.Substring(0, $name.IndexOf('.'))
+                        $statusKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith(".TESTS_JOBSTATUS") } | Sort-Object | Select-Object -Last 1
+                        $botKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith(".TESTS_BOT") }
+                        $platformKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith(".TESTS_PLATFORM") }
+                        $attemptKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith(".TESTS_ATTEMPT") }
+                        $titleKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith(".TESTS_TITLE") }
+                    }
+
+                    Write-Host "Keys for Label='$label' and JobName='$jobName' (dotCount=$dotCount): TitleKey='$titleKey'  StatusKey=$statusKey BotKey=$botKey PlatformKey=$platformKey AttemptKey=$attemptKey"
 
                     if (-not $titleKey) {
                         Write-Host "Missing TESTS_TITLE value for this entry"
@@ -550,6 +562,7 @@ class ParallelTestsResults {
                         Write-Host "`t`tFound results for title '$title': $testResult"
                     } else {
                         Write-Host "`t`tFound NO results for title: $title"
+                        Write-Host $testInfo
                     }
                 } else {
                     Write-Host "`tFound NO results for label: $label"

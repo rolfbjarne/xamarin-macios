@@ -103,7 +103,7 @@ steps:
   displayName: Set output variables
   env:
     TESTS_LABEL: windows
-    # TESTS_PLATFORM:
+    LABEL_WITH_PLATFORM: windows
 
 - pwsh: |
     & dotnet --version

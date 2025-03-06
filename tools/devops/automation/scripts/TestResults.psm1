@@ -428,6 +428,160 @@ class ParallelTestsResults {
         $stringBuilder.AppendLine()
         $stringBuilder.AppendLine("[comment]: <> (This is a test result report added by Azure DevOps)")
     }
+
+    static [ParallelTestsResults] Create(
+            [string]
+            $Path,
+            [string]
+            $StageDependencies,
+            [string]
+            $UploadPrefix="",
+            [string]
+            $Context,
+            [string]
+            $VSDropsIndex
+        )
+    {
+
+        Write-Host "Stage dependencies:`n$($StageDependencies)"
+        Write-Host "Test Summaries:"
+        Get-ChildItem $Path -Recurse *.md | Select-Object -Property FullName | Format-Table | Out-String | Write-Host
+
+        $stageDep = $StageDependencies | ConvertFrom-Json -AsHashtable
+
+        $matrix = $stageDep.configure_build.configure.outputs["test_matrix.TEST_MATRIX"] | ConvertFrom-Json -AsHashtable
+        $suites = [System.Collections.SortedList]::new()
+        foreach ($title in $matrix.Keys) {
+            Write-Host "Got title: $title"
+            $entry = $matrix[$title]
+            Write-Host "Got title: $title with entry: $( $entry | ConvertTo-Json -Depth 100 )"
+            $platform = $entry["TEST_PLATFORM"]
+            $label = $entry["LABEL"]
+            $testStage = $entry["TEST_STAGE"]
+
+            if ($suites.Contains($label)) {
+                $suite = $suites[$label]
+            } else {
+                $suite = [TestSuite]::new($label)
+                $suites[$label] = $suite
+            }
+            $testConfig = [TestConfiguration]::new($suite, $title, $platform, "$Context - $title", $testStage)
+            $suite.TestConfigurations += $testConfig
+            Write-Host "Added test config: $( $testConfig.Title )"
+            Write-Host "To suite: $( $suite.Label )"
+            Write-Host "Which now has $($suite.TestConfigurations.Length) configuration:"
+            Write-Host $( $suite.TestConfigurations | Select-Object -ExpandProperty Title )
+        }
+
+        Write-Host "Test suites:"
+        Write-Host $suites.Keys
+
+        $tests = [System.Collections.SortedList]::new()
+        foreach ($kvp in $stageDep.GetEnumerator()) {
+            $candidate = $kvp.Value
+            if ($candidate.tests.outputs -eq $null) {
+                Write-Host "Stage dependency $($kvp.Name) is not a test dependency"
+                continue
+            }
+            Write-Host "Stage dependency $($kvp.Name) is a test dependency"
+
+            $testStage = $kvp.Name
+            $outputs = $candidate.tests.outputs
+
+            Write-Host "Outputs for $($testStage):  $( $outputs | ConvertTo-Json -Depth 100 )"
+            foreach ($name in $outputs.Keys) {
+                if ($name.EndsWith(".TESTS_LABEL")) {
+                    $label = $outputs[$name]
+                    $jobName = $name.Substring(0, $name.IndexOf('.'))
+                    $statusKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith("." + "TESTS_JOBSTATUS") } | Sort-Object | Select-Object -Last 1
+                    $botKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith("." + "TESTS_BOT") }
+                    $platformKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith("." + "TESTS_PLATFORM") }
+                    $attemptKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith("." + "TESTS_ATTEMPT") }
+                    $titleKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith("." + "TESTS_TITLE") }
+
+                    Write-Host "Keys for Label='$label', Title='$titleKey' and JobName='$jobName': StatusKey=$statusKey BotKey=$botKey PlatformKey=$platformKey AttemptKey=$attemptKey"
+
+                    if (-not $titleKey) {
+                        Write-Host "Missing TESTS_TITLE value for this entry"
+                        continue
+                    }
+
+                    $status =  if ($statusKey -eq $null) { "NotFound"} else { $outputs[$statusKey] }
+                    $bot = if ($botKey -eq $null) { "NotFound" } else { $outputs[$botKey] }
+                    $platform = if ($platformKey -eq $null) { "NotFound" } else { $outputs[$platformKey] }
+                    $attempt = if ($attemptKey -eq $null) { -2 } else { [int]$outputs[$attemptKey] }
+                    $title = if ($titleKey -eq $null) { "NotFound" } else { $outputs[$titleKey] }
+                    $testResult = [PSCustomObject]@{
+                        Label = $label
+                        Title = $title
+                        Status = $status
+                        Bot = $bot
+                        Platform = $platform
+                        Attempt = $attempt
+                        TestStage = $testStage
+                    }
+                    if ($tests.Contains($label)) {
+                        $testInfo = $tests[$label]
+                    } else {
+                        $testInfo = [System.Collections.SortedList]::new()
+                        $tests[$label] = $testInfo
+                    }
+                    $testInfo[$title] = $testResult
+                    Write-Host "Added $label to tests ($title) Name: $name status: $($testResult.Status) bot: $($testResult.Bot) Platform: $($testResult.Platform) Attempt: $($testResult.Attempt)"
+                }
+            }
+        }
+
+        $testResults = [System.Collections.ArrayList]@()
+        foreach ($suite in $suites.Values | Sort-Object -Property Label) {
+            $label = $suite.Label
+            Write-Host "Processing results for $label with $($suite.TestConfigurations.Length) configurations"
+            foreach ($testConfig in $suite.TestConfigurations | Sort-Object -Property Title) {
+                $title = $testConfig.Title
+                $testResult = $null
+                Write-Host "`tProcessing config '$title':"
+                $testConfig | Out-String
+                if ($tests.Contains($label)) {
+                    $testInfo = $tests[$label]
+                    Write-Host "`t`tFound results for label '$label':"
+                    $testInfo | Out-String
+                    if ($testInfo.Contains($title)) {
+                        $testResult = $testInfo[$title]
+                        Write-Host "`t`tFound results for title '$title': $testResult"
+                    } else {
+                        Write-Host "`t`tFound NO results for title: $title"
+                    }
+                } else {
+                    Write-Host "`tFound NO results for label: $label"
+                }
+
+
+                $platform = $testConfig.Platform
+                $title = $testConfig.Title
+                if ($null -eq $testResult) {
+                    $result = [TestResult]::new($null, "None", $testConfig, -1)
+                } else {
+                    $status = $testResult.Status
+                    $testAttempt = $testResult.Attempt
+                    $testStage = $testResult.TestStage
+
+                    $testSummaryPath = Join-Path "$Path" "${UploadPrefix}TestSummary-$testStage$($title.Replace('-','_'))-$testAttempt" "TestSummary.md"
+
+                    Write-Host "`t`tTest results for $label on attempt $testAttempt is '$status' in $testSummaryPath"
+
+                    if (-not (Test-Path -Path $testSummaryPath -PathType Leaf)) {
+                        Write-Host "`t`tWARNING: Path $testSummaryPath does not exist"
+                    }
+
+                    $result = [TestResult]::new($testSummaryPath, $status, $testConfig, $testAttempt)
+                }
+
+                $testResults += $result
+            }
+        }
+
+        return [ParallelTestsResults]::new($testResults, $Context, $VSDropsIndex)
+    }
 }
 
 <#
@@ -475,137 +629,7 @@ function New-ParallelTestsResults {
         [string]
         $VSDropsIndex
     )
-
-    Write-Host "Stage dependencies:`n$($StageDependencies)"
-    Write-Host "Test Summaries:"
-    Get-ChildItem $Path -Recurse *.md | Select-Object -Property FullName | Format-Table | Out-String | Write-Host
-
-    $stageDep = $StageDependencies | ConvertFrom-Json -AsHashtable
-
-    $matrix = $stageDep.configure_build.configure.outputs["test_matrix.TEST_MATRIX"] | ConvertFrom-Json -AsHashtable
-    $suites = [System.Collections.SortedList]::new()
-    foreach ($title in $matrix.Keys) {
-        Write-Host "Got title: $title"
-        $entry = $matrix[$title]
-        Write-Host "Got title: $title with entry: $( $entry | ConvertTo-Json -Depth 100 )"
-        $platform = $entry["TEST_PLATFORM"]
-        $label = $entry["LABEL"]
-        $testStage = $entry["TEST_STAGE"]
-
-        if ($suites.Contains($label)) {
-            $suite = $suites[$label]
-        } else {
-            $suite = [TestSuite]::new($label)
-            $suites[$label] = $suite
-        }
-        $testConfig = [TestConfiguration]::new($suite, $title, $platform, "$Context - $title", $testStage)
-        $suite.TestConfigurations += $testConfig
-        Write-Host "Added test config: $( $testConfig.Title )"
-        Write-Host "To suite: $( $suite.Label )"
-        Write-Host "Which now has $($suite.TestConfigurations.Length) configuration:"
-        Write-Host $( $suite.TestConfigurations | Select-Object -ExpandProperty Title )
-    }
-
-    Write-Host "Test suites:"
-    Write-Host $suites.Keys
-
-    $tests = [System.Collections.SortedList]::new()
-    foreach ($kvp in $stageDep.GetEnumerator()) {
-        $candidate = $kvp.Value
-        if ($candidate.tests.outputs -eq $null) {
-            Write-Host "Stage dependency $($kvp.Name) is not a test dependency"
-            continue
-        }
-        Write-Host "Stage dependency $($kvp.Name) is a test dependency"
-
-        $testStage = $kvp.Name
-        $outputs = $candidate.tests.outputs
-
-        Write-Host "Outputs for $($testStage):  $( $outputs | ConvertTo-Json -Depth 100 )"
-        foreach ($name in $outputs.Keys) {
-            if ($name.EndsWith(".TESTS_LABEL")) {
-                $label = $outputs[$name]
-                $jobName = $name.Substring(0, $name.IndexOf('.'))
-                $statusKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith("." + "TESTS_JOBSTATUS") } | Sort-Object | Select-Object -Last 1
-                $botKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith("." + "TESTS_BOT") }
-                $platformKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith("." + "TESTS_PLATFORM") }
-                $attemptKey = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith("." + "TESTS_ATTEMPT") }
-                $title = $outputs.Keys | Where-Object { $_.StartsWith($jobName + ".") -and $_.EndsWith("." + "TESTS_TITLE") }
-                Write-Host "Keys for Label='$label', Title='$title' and JobName='$jobName': StatusKey=$statusKey BotKey=$botKey PlatformKey=$platformKey AttemptKey=$attemptKey"
-                $status =  if ($statusKey -eq $null) { "NotFound"} else { $outputs[$statusKey] }
-                $bot = if ($botKey -eq $null) { "NotFound" } else { $outputs[$botKey] }
-                $platform = if ($platformKey -eq $null) { "NotFound" } else { $outputs[$platformKey] }
-                $attempt = if ($attemptKey -eq $null) { -2 } else { [int]$outputs[$attemptKey] }
-                $testResult = [PSCustomObject]@{
-                    Label = $label
-                    Title = $title
-                    Status = $status
-                    Bot = $bot
-                    Platform = $platform
-                    Attempt = $attempt
-                    TestStage = $testStage
-                }
-                if ($tests.Contains($label)) {
-                    $testInfo = $tests[$label]
-                } else {
-                    $testInfo = [System.Collections.SortedList]::new()
-                    $tests[$label] = $testInfo
-                }
-                $testInfo[$title] = $testResult
-                Write-Host "Added $label to tests ($title) Name: $name status: $($testResult.Status) bot: $($testResult.Bot) Platform: $($testResult.Platform) Attempt: $($testResult.Attempt)"
-            }
-        }
-    }
-
-    $testResults = [System.Collections.ArrayList]@()
-    foreach ($suite in $suites.Values | Sort-Object -Property Label) {
-        $label = $suite.Label
-        Write-Host "Processing results for $label with $($suite.TestConfigurations.Length) configurations"
-        foreach ($testConfig in $suite.TestConfigurations | Sort-Object -Property Title) {
-            $title = $testConfig.Title
-            $testResult = $null
-            Write-Host "`tProcessing config '$title':"
-            $testConfig | Out-String
-            if ($tests.Contains($label)) {
-                $testInfo = $tests[$label]
-                Write-Host "`t`tFound results for label '$label':"
-                $testInfo | Out-String
-                if ($testInfo.Contains($title)) {
-                    $testResult = $testInfo[$title]
-                    Write-Host "`t`tFound results for title '$title': $testResult"
-                } else {
-                    Write-Host "`t`tFound NO results for title: $title"
-                }
-            } else {
-                Write-Host "`tFound NO results for label: $label"
-            }
-
-
-            $platform = $testConfig.Platform
-            $title = $testConfig.Title
-            if ($null -eq $testResult) {
-                $result = [TestResult]::new($null, "None", $testConfig, -1)
-            } else {
-                $status = $testResult.Status
-                $testAttempt = $testResult.Attempt
-                $testStage = $testResult.TestStage
-
-                $testSummaryPath = Join-Path "$Path" "${UploadPrefix}TestSummary-$testStage$($title.Replace('-','_'))-$testAttempt" "TestSummary.md"
-
-                Write-Host "`t`tTest results for $label on attempt $testAttempt is '$status' in $testSummaryPath"
-
-                if (-not (Test-Path -Path $testSummaryPath -PathType Leaf)) {
-                    Write-Host "`t`tWARNING: Path $testSummaryPath does not exist"
-                }
-
-                $result = [TestResult]::new($testSummaryPath, $status, $testConfig, $testAttempt)
-            }
-
-            $testResults += $result
-        }
-    }
-
-    return [ParallelTestsResults]::new($testResults, $Context, $VSDropsIndex)
+    return [ParallelTestsResults]::Create($Path, $StageDependencies, $UploadPrefix, $Context, $VSDropsIndex)
 }
 
 Export-ModuleMember -Function New-TestResults

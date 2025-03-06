@@ -25,4 +25,4 @@ Invoke-SshDownload `
   -Target "$Env:BUILD_ARTIFACTSTAGINGDIRECTORY\windows-binlogs\windows-remote-logs.zip"
 
 # Copy the binlogs to the html report
-Copy-Item "$Env:BUILD_ARTIFACTSTAGINGDIRECTORY\windows-binlogs\windows-remote-logs.zip" -Destination "$Env:BUILD_SOURCESDIRECTORY\xamarin-macios\jenkins-results"
+Copy-Item "$Env:BUILD_ARTIFACTSTAGINGDIRECTORY\windows-binlogs\windows-remote-logs.zip" -Destination "$Env:BUILD_SOURCESDIRECTORY\$Env:BUILD_REPOSITORY_TITLE\jenkins-results"

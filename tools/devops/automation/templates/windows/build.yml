@@ -278,7 +278,7 @@ steps:
 - pwsh: $(System.DefaultWorkingDirectory)/$(BUILD_REPOSITORY_TITLE)/tools/devops/automation/scripts/run-generator-tests-on-windows.ps1
   displayName: 'Run generator tests'
 
-- pwsh: $(Build.SourcesDirectory)\xamarin-macios\tools\devops\automation\scripts\prepare-windows-test-results.ps1
+- pwsh: '& "$(Build.SourcesDirectory)\$Env:BUILD_REPOSITORY_TITLE\tools\devops\automation\scripts\prepare-windows-test-results.ps1"'
   displayName: 'Prepare tests results and Html Report'
   timeoutInMinutes: 5
   condition: always()
@@ -287,14 +287,14 @@ steps:
 - task: PublishPipelineArtifact@1
   displayName: 'Publish Artifact: TestSummary'
   inputs:
-    targetPath: 'xamarin-macios/tests/TestSummary.md'
+    targetPath: '$(BUILD_REPOSITORY_TITLE)/tests/TestSummary.md'
     artifactName: '${{ parameters.uploadPrefix }}TestSummary-windows-integration-$(System.JobAttempt)'
   continueOnError: true
   condition: succeededOrFailed()
 
 - pwsh: |
     $summaryName = "TestSummary-windows-integration.md"
-    $summaryPath = "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/xamarin-macios/tests/TestSummary.md"
+    $summaryPath = "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/$Env:BUILD_REPOSITORY_TITLE/tests/TestSummary.md"
     if (Test-Path -Path $summaryPath -PathType Leaf) {
       Write-Host "##vso[task.addattachment type=Distributedtask.Core.Summary;name=$summaryName;]$summaryPath"
     }

@@ -581,6 +581,9 @@ namespace NetworkExtension {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface NEAppRule : NSSecureCoding, NSCopying {
+		/// <param name="signingIdentifier">To be added.</param>
+		/// <summary>Creates a new app rule with the provided signing identifier.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 #if NET
 		[NoMac]
@@ -633,6 +636,9 @@ namespace NetworkExtension {
 	[BaseType (typeof (NSObject), Name = "NEDNSSettings")]
 	[DisableDefaultCtor]
 	interface NEDnsSettings : NSSecureCoding, NSCopying {
+		/// <param name="servers">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithServers:")]
 		NativeHandle Constructor (string [] servers);
 
@@ -1585,6 +1591,10 @@ namespace NetworkExtension {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface NEIPv4Route : NSSecureCoding, NSCopying {
+		/// <param name="address">To be added.</param>
+		/// <param name="subnetMask">To be added.</param>
+		/// <summary>Creates a new IPv4 route with the specified address and subnet mask.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDestinationAddress:subnetMask:")]
 		NativeHandle Constructor (string address, string subnetMask);
 
@@ -1621,6 +1631,10 @@ namespace NetworkExtension {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface NEIPv6Route : NSSecureCoding, NSCopying {
+		/// <param name="address">To be added.</param>
+		/// <param name="networkPrefixLength">To be added.</param>
+		/// <summary>Creates a new IPv6 route with the specified destination address and prefix length.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDestinationAddress:networkPrefixLength:")]
 		NativeHandle Constructor (string address, NSNumber networkPrefixLength);
 
@@ -1657,6 +1671,10 @@ namespace NetworkExtension {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface NEIPv4Settings : NSSecureCoding, NSCopying {
+		/// <param name="addresses">To be added.</param>
+		/// <param name="subnetMasks">To be added.</param>
+		/// <summary>Creates a new IPv4 route with the specified addresses and subnet masks..</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithAddresses:subnetMasks:")]
 		NativeHandle Constructor (string [] addresses, string [] subnetMasks);
 
@@ -1701,6 +1719,10 @@ namespace NetworkExtension {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface NEIPv6Settings : NSSecureCoding, NSCopying {
+		/// <param name="addresses">To be added.</param>
+		/// <param name="networkPrefixLengths">To be added.</param>
+		/// <summary>Creates a new IPv6 settings object with the specified addresses and prefix lengths.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithAddresses:networkPrefixLengths:")]
 		NativeHandle Constructor (string [] addresses, NSNumber [] networkPrefixLengths);
 
@@ -1959,6 +1981,9 @@ namespace NetworkExtension {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface NETunnelNetworkSettings : NSSecureCoding, NSCopying {
+		/// <param name="address">To be added.</param>
+		/// <summary>Creates a new tunnel network settings object for the specified remote address.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithTunnelRemoteAddress:")]
 		NativeHandle Constructor (string address);
 
@@ -2733,6 +2758,10 @@ namespace NetworkExtension {
 	[BaseType (typeof (NSObject))]
 	interface NEEvaluateConnectionRule : NSSecureCoding, NSCopying {
 
+		/// <param name="domains">To be added.</param>
+		/// <param name="action">To be added.</param>
+		/// <summary>Creates a new connection rule for the provided domains and action.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithMatchDomains:andAction:")]
 		NativeHandle Constructor (string [] domains, NEEvaluateConnectionRuleAction action);
 
@@ -2933,6 +2962,9 @@ namespace NetworkExtension {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject), Name = "NWTCPConnection")]
 	interface NWTcpConnection {
+		/// <param name="connection">To be added.</param>
+		/// <summary>Creates a new connection from the provided <paramref name="connection" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 18, 0, message: "Use the 'Network.NWConnection' constructor instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use the 'Network.NWConnection' constructor instead.")]
 		[Deprecated (PlatformName.MacOSX, 15, 0, message: "Use the 'Network.NWConnection' constructor instead.")]
@@ -3234,6 +3266,9 @@ namespace NetworkExtension {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject), Name = "NWUDPSession")]
 	interface NWUdpSession {
+		/// <param name="session">To be added.</param>
+		/// <summary>Creates a new UDP session from an existing session.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 18, 0, message: "Use the 'Network.NWConnection' constructor instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use the 'Network.NWConnection' constructor instead.")]
 		[Deprecated (PlatformName.MacOSX, 15, 0, message: "Use the 'Network.NWConnection' constructor instead.")]
@@ -3545,6 +3580,9 @@ namespace NetworkExtension {
 	[BaseType (typeof (NETunnelNetworkSettings))]
 	[DisableDefaultCtor]
 	interface NEPacketTunnelNetworkSettings {
+		/// <param name="address">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithTunnelRemoteAddress:")]
 		NativeHandle Constructor (string address);
 
@@ -3777,6 +3815,10 @@ namespace NetworkExtension {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	interface NEPacket : NSCopying, NSSecureCoding {
+		/// <param name="data">To be added.</param>
+		/// <param name="protocolFamily">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithData:protocolFamily:")]
 		NativeHandle Constructor (NSData data, /* sa_family_t */ byte protocolFamily);
 
@@ -4012,6 +4054,10 @@ namespace NetworkExtension {
 		[Export ("MCCAndMNCs", ArgumentSemantic.Copy)]
 		string [] MccAndMncs { get; set; }
 
+		/// <param name="domainName">To be added.</param>
+		/// <param name="roamingEnabled">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDomainName:roamingEnabled:")]
 		NativeHandle Constructor (string domainName, bool roamingEnabled);
 	}
@@ -4117,9 +4163,17 @@ namespace NetworkExtension {
 		[Export ("initWithSSID:passphrase:isWEP:")]
 		IntPtr initWithSsid (string ssid, string passphrase, bool isWep);
 
+		/// <param name="ssid">To be added.</param>
+		/// <param name="eapSettings">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSSID:eapSettings:")]
 		NativeHandle Constructor (string ssid, NEHotspotEapSettings eapSettings);
 
+		/// <param name="hs20Settings">To be added.</param>
+		/// <param name="eapSettings">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithHS20Settings:eapSettings:")]
 		NativeHandle Constructor (NEHotspotHS20Settings hs20Settings, NEHotspotEapSettings eapSettings);
 

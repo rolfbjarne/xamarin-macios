@@ -1137,6 +1137,10 @@ namespace AVFoundation {
 		[Export ("initWithFormat:packetCapacity:maximumPacketSize:")]
 		NativeHandle Constructor (AVAudioFormat format, uint packetCapacity, nint maximumPacketSize);
 
+		/// <param name="format">To be added.</param>
+		/// <param name="packetCapacity">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithFormat:packetCapacity:")]
 		NativeHandle Constructor (AVAudioFormat format, uint packetCapacity);
 
@@ -1614,21 +1618,43 @@ namespace AVFoundation {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	interface AVAudioFile {
+		/// <param name="fileUrl">To be added.</param>
+		/// <param name="outError">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initForReading:error:")]
 		NativeHandle Constructor (NSUrl fileUrl, out NSError outError);
 
+		/// <param name="fileUrl">To be added.</param>
+		/// <param name="format">To be added.</param>
+		/// <param name="interleaved">To be added.</param>
+		/// <param name="outError">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initForReading:commonFormat:interleaved:error:")]
 		NativeHandle Constructor (NSUrl fileUrl, AVAudioCommonFormat format, bool interleaved, out NSError outError);
 
 		[Export ("initForWriting:settings:error:"), Internal]
 		NativeHandle Constructor (NSUrl fileUrl, NSDictionary settings, out NSError outError);
 
+		/// <param name="fileUrl">To be added.</param>
+		/// <param name="settings">To be added.</param>
+		/// <param name="outError">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("this (fileUrl, settings.GetDictionary ()!, out outError)")]
 		NativeHandle Constructor (NSUrl fileUrl, AudioSettings settings, out NSError outError);
 
 		[Export ("initForWriting:settings:commonFormat:interleaved:error:"), Internal]
 		NativeHandle Constructor (NSUrl fileUrl, NSDictionary settings, AVAudioCommonFormat format, bool interleaved, out NSError outError);
 
+		/// <param name="fileUrl">To be added.</param>
+		/// <param name="settings">To be added.</param>
+		/// <param name="format">To be added.</param>
+		/// <param name="interleaved">To be added.</param>
+		/// <param name="outError">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("this (fileUrl, settings.GetDictionary ()!, format, interleaved, out outError)")]
 		NativeHandle Constructor (NSUrl fileUrl, AudioSettings settings, AVAudioCommonFormat format, bool interleaved, out NSError outError);
 
@@ -2099,6 +2125,10 @@ namespace AVFoundation {
 	[DisableDefaultCtor] // crash in tests
 	interface AVAudioPcmBuffer {
 
+		/// <param name="format">To be added.</param>
+		/// <param name="frameCapacity">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		[Export ("initWithPCMFormat:frameCapacity:")]
 		NativeHandle Constructor (AVAudioFormat format, uint /* AVAudioFrameCount = uint32_t */ frameCapacity);
@@ -4657,6 +4687,9 @@ namespace AVFoundation {
 	[BaseType (typeof (AVAudioUnit))]
 	[DisableDefaultCtor] // returns a nil handle
 	interface AVAudioUnitEffect {
+		/// <param name="audioComponentDescription">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithAudioComponentDescription:")]
 		NativeHandle Constructor (AudioComponentDescription audioComponentDescription);
 
@@ -4725,6 +4758,9 @@ namespace AVFoundation {
 	[BaseType (typeof (AVAudioUnit))]
 	[DisableDefaultCtor] // returns a nil handle
 	interface AVAudioUnitGenerator : AVAudioMixing {
+		/// <param name="audioComponentDescription">To be added.</param>
+		/// <summary>Creates a new <see cref="T:AVFoundation.AVAudioUnitGenerator" /> generator or remote generator.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithAudioComponentDescription:")]
 		NativeHandle Constructor (AudioComponentDescription audioComponentDescription);
 
@@ -4739,6 +4775,9 @@ namespace AVFoundation {
 	[BaseType (typeof (AVAudioUnit), Name = "AVAudioUnitMIDIInstrument")]
 	[DisableDefaultCtor] // returns a nil handle
 	interface AVAudioUnitMidiInstrument : AVAudioMixing {
+		/// <param name="audioComponentDescription">To be added.</param>
+		/// <summary>Creates a new <see cref="T:AVFoundation.AVAudioUnitMidiInstrument" /> from the specified description.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithAudioComponentDescription:")]
 		NativeHandle Constructor (AudioComponentDescription audioComponentDescription);
 
@@ -4904,6 +4943,9 @@ namespace AVFoundation {
 	[BaseType (typeof (AVAudioUnit))]
 	[DisableDefaultCtor] // returns a nil handle
 	interface AVAudioUnitTimeEffect {
+		/// <param name="audioComponentDescription">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithAudioComponentDescription:")]
 		NativeHandle Constructor (AudioComponentDescription audioComponentDescription);
 
@@ -4917,6 +4959,9 @@ namespace AVFoundation {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (AVAudioUnitTimeEffect))]
 	interface AVAudioUnitTimePitch {
+		/// <param name="audioComponentDescription">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithAudioComponentDescription:")]
 		NativeHandle Constructor (AudioComponentDescription audioComponentDescription);
 
@@ -4940,6 +4985,9 @@ namespace AVFoundation {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (AVAudioUnitTimeEffect))]
 	interface AVAudioUnitVarispeed {
+		/// <param name="audioComponentDescription">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithAudioComponentDescription:")]
 		NativeHandle Constructor (AudioComponentDescription audioComponentDescription);
 
@@ -4950,15 +4998,31 @@ namespace AVFoundation {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	interface AVAudioTime {
+		/// <param name="timestamp">To be added.</param>
+		/// <param name="sampleRate">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithAudioTimeStamp:sampleRate:")]
 		NativeHandle Constructor (ref AudioTimeStamp timestamp, double sampleRate);
 
+		/// <param name="hostTime">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithHostTime:")]
 		NativeHandle Constructor (ulong hostTime);
 
+		/// <param name="sampleTime">To be added.</param>
+		/// <param name="sampleRate">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSampleTime:atRate:")]
 		NativeHandle Constructor (long sampleTime, double sampleRate);
 
+		/// <param name="hostTime">To be added.</param>
+		/// <param name="sampleTime">To be added.</param>
+		/// <param name="sampleRate">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithHostTime:sampleTime:atRate:")]
 		NativeHandle Constructor (ulong hostTime, long sampleTime, double sampleRate);
 
@@ -5059,6 +5123,10 @@ namespace AVFoundation {
 						 // you get an instance that way and try to use it, it will inmediatelly crash also tested in ObjC app same result
 	interface AVAudioConverter {
 
+		/// <param name="fromFormat">To be added.</param>
+		/// <param name="toFormat">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initFromFormat:toFormat:")]
 		NativeHandle Constructor (AVAudioFormat fromFormat, AVAudioFormat toFormat);
 
@@ -6294,9 +6362,17 @@ namespace AVFoundation {
 		[Export ("initWithTrack:outputSettings:")]
 		NativeHandle Constructor (AVAssetTrack track, [NullAllowed] NSDictionary outputSettings);
 
+		/// <param name="track">To be added.</param>
+		/// <param name="settings">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("this (track, settings.GetDictionary ())")]
 		NativeHandle Constructor (AVAssetTrack track, [NullAllowed] AudioSettings settings);
 
+		/// <param name="track">To be added.</param>
+		/// <param name="settings">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("this (track, settings.GetDictionary ())")]
 		NativeHandle Constructor (AVAssetTrack track, [NullAllowed] AVVideoSettingsUncompressed settings);
 
@@ -6340,6 +6416,10 @@ namespace AVFoundation {
 		[Export ("initWithAudioTracks:audioSettings:")]
 		NativeHandle Constructor (AVAssetTrack [] audioTracks, [NullAllowed] NSDictionary audioSettings);
 
+		/// <param name="audioTracks">To be added.</param>
+		/// <param name="settings">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("this (audioTracks, settings.GetDictionary ())")]
 		NativeHandle Constructor (AVAssetTrack [] audioTracks, [NullAllowed] AudioSettings settings);
 
@@ -6393,6 +6473,10 @@ namespace AVFoundation {
 		[Export ("initWithVideoTracks:videoSettings:")]
 		NativeHandle Constructor (AVAssetTrack [] videoTracks, [NullAllowed] NSDictionary videoSettings);
 
+		/// <param name="videoTracks">To be added.</param>
+		/// <param name="settings">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("this (videoTracks, settings.GetDictionary ())")]
 		NativeHandle Constructor (AVAssetTrack [] videoTracks, [NullAllowed] CVPixelBufferAttributes settings);
 
@@ -6812,9 +6896,19 @@ namespace AVFoundation {
 		[Export ("initWithMediaType:outputSettings:sourceFormatHint:")]
 		NativeHandle Constructor (string mediaType, [NullAllowed] NSDictionary outputSettings, [NullAllowed] CMFormatDescription sourceFormatHint);
 
+		/// <param name="mediaType">To be added.</param>
+		/// <param name="outputSettings">To be added.</param>
+		/// <param name="sourceFormatHint">To be added.</param>
+		/// <summary>Creates a new <see cref="T:AVFoundation.AVAssetWriterInput" /> with the specified <paramref name="mediaType" />, <paramref name="outputSettings" />, and <paramref name="sourceFormatHint" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("this (mediaType, outputSettings.GetDictionary (), sourceFormatHint)")]
 		NativeHandle Constructor (string mediaType, [NullAllowed] AudioSettings outputSettings, [NullAllowed] CMFormatDescription sourceFormatHint);
 
+		/// <param name="mediaType">To be added.</param>
+		/// <param name="outputSettings">To be added.</param>
+		/// <param name="sourceFormatHint">To be added.</param>
+		/// <summary>Creates a new <see cref="T:AVFoundation.AVAssetWriterInput" /> with the specified <paramref name="mediaType" />, <paramref name="outputSettings" />, and <paramref name="sourceFormatHint" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("this (mediaType, outputSettings.GetDictionary (), sourceFormatHint)")]
 		NativeHandle Constructor (string mediaType, [NullAllowed] AVVideoSettingsCompressed outputSettings, [NullAllowed] CMFormatDescription sourceFormatHint);
 
@@ -6892,9 +6986,17 @@ namespace AVFoundation {
 		[Export ("initWithMediaType:outputSettings:")]
 		NativeHandle Constructor (string mediaType, [NullAllowed] NSDictionary outputSettings);
 
+		/// <param name="mediaType">To be added.</param>
+		/// <param name="outputSettings">To be added.</param>
+		/// <summary>Creates a new <see cref="T:AVFoundation.AVAssetWriterInput" /> with the specified <paramref name="mediaType" /> and <paramref name="outputSettings" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("this (mediaType, outputSettings.GetDictionary ())")]
 		NativeHandle Constructor (string mediaType, [NullAllowed] AudioSettings outputSettings);
 
+		/// <param name="mediaType">To be added.</param>
+		/// <param name="outputSettings">To be added.</param>
+		/// <summary>Creates a new <see cref="T:AVFoundation.AVAssetWriterInput" /> with the specified <paramref name="mediaType" /> and <paramref name="outputSettings" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("this (mediaType, outputSettings.GetDictionary ())")]
 		NativeHandle Constructor (string mediaType, [NullAllowed] AVVideoSettingsCompressed outputSettings);
 
@@ -7066,6 +7168,10 @@ namespace AVFoundation {
 		[Export ("initWithAssetWriterInput:sourcePixelBufferAttributes:")]
 		NativeHandle Constructor (AVAssetWriterInput input, [NullAllowed] NSDictionary sourcePixelBufferAttributes);
 
+		/// <param name="input">To be added.</param>
+		/// <param name="attributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("this (input, attributes.GetDictionary ())")]
 		NativeHandle Constructor (AVAssetWriterInput input, [NullAllowed] CVPixelBufferAttributes attributes);
 
@@ -7123,9 +7229,16 @@ namespace AVFoundation {
 		[Export ("initWithURL:options:")]
 		NativeHandle Constructor (NSUrl url, [NullAllowed] NSDictionary options);
 
+		/// <param name="url">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>Creates a new <see cref="T:AVFoundation.AVUrlAsset" /> for the specified <paramref name="url" /> and <paramref name="options" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("this (url, options.GetDictionary ())")]
 		NativeHandle Constructor (NSUrl url, [NullAllowed] AVUrlAssetOptions options);
 
+		/// <param name="url">To be added.</param>
+		/// <summary>Creates a new <see cref="T:AVFoundation.AVUrlAsset" /> for the specified <paramref name="url" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("this (url, (NSDictionary) null!)")]
 		NativeHandle Constructor (NSUrl url);
 
@@ -12057,9 +12170,25 @@ namespace AVFoundation {
 	[BaseType (typeof (NSObject), Name = "AVMIDIPlayer")]
 	interface AVMidiPlayer {
 
+		/// <param name="contentsUrl">To be added.</param>
+		/// <param name="soundBankUrl">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="outError">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithContentsOfURL:soundBankURL:error:")]
 		NativeHandle Constructor (NSUrl contentsUrl, [NullAllowed] NSUrl soundBankUrl, out NSError outError);
 
+		/// <param name="data">To be added.</param>
+		/// <param name="sounddBankUrl">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="outError">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithData:soundBankURL:error:")]
 		NativeHandle Constructor (NSData data, [NullAllowed] NSUrl sounddBankUrl, out NSError outError);
 
@@ -13213,6 +13342,10 @@ namespace AVFoundation {
 		[Export ("initWithAsset:presetName:")]
 		NativeHandle Constructor (AVAsset asset, string presetName);
 
+		/// <param name="asset">To be added.</param>
+		/// <param name="preset">To be added.</param>
+		/// <summary>Creates an export session from an AVAsset and a preset.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("this (asset, preset.GetConstant ())")]
 		NativeHandle Constructor (AVAsset asset, AVAssetExportSessionPreset preset);
 
@@ -18544,6 +18677,9 @@ namespace AVFoundation {
 		[Protected]
 		NativeHandle Constructor (NSDictionary textMarkupAttributes);
 
+		/// <param name="attributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("this (attributes.GetDictionary ()!)")]
 		NativeHandle Constructor (CMTextMarkupAttributes attributes);
 
@@ -18552,6 +18688,10 @@ namespace AVFoundation {
 		[Protected]
 		NativeHandle Constructor (NSDictionary textMarkupAttributes, [NullAllowed] string textSelector);
 
+		/// <param name="attributes">To be added.</param>
+		/// <param name="textSelector">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("this (attributes.GetDictionary ()!, textSelector)")]
 		NativeHandle Constructor (CMTextMarkupAttributes attributes, string textSelector);
 	}
@@ -19527,10 +19667,16 @@ namespace AVFoundation {
 		[Export ("initWithOutputSettings:")]
 		IntPtr _FromOutputSettings ([NullAllowed] NSDictionary outputSettings);
 
+		/// <param name="attributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		[Wrap ("this (attributes.GetDictionary (), AVPlayerItemVideoOutput.InitMode.PixelAttributes)")]
 		NativeHandle Constructor (CVPixelBufferAttributes attributes);
 
+		/// <param name="settings">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		[MacCatalyst (13, 1)]
 		[Wrap ("this (settings.GetDictionary (), AVPlayerItemVideoOutput.InitMode.OutputSettings)")]
@@ -21343,6 +21489,9 @@ namespace AVFoundation {
 	[BaseType (typeof (NSObject))]
 	interface AVAudioSequencer {
 
+		/// <param name="engine">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithAudioEngine:")]
 		NativeHandle Constructor (AVAudioEngine engine);
 

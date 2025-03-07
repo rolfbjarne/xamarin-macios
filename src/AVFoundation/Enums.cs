@@ -621,6 +621,7 @@ namespace AVFoundation {
 		[Obsolete ("Use 'ResourceNotAvailable' instead.")]
 		CodeResourceNotAvailable = 0x21726573,
 #endif
+		/// <summary>Indicates that a required resource, such as an audio input, is not available on the device.</summary>
 		ResourceNotAvailable = 0x21726573, // '!res'
 		/// <summary>Indicates that an unspecified error occurred.</summary>
 		Unspecified = 0x77686174, // 'what'

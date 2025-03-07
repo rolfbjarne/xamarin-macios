@@ -49,9 +49,20 @@ namespace MetalPerformanceShaders {
 
 		// inlining .ctor from base class
 
+		/// <param name="device">The device on which the filter will run.</param>
+		/// <summary>Constructs a new <c>MPSImageConvolution</c> for the specified device.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -74,10 +85,21 @@ namespace MetalPerformanceShaders {
 
 		// inlining .ctor from base class
 
+		/// <param name="device">To be added.</param>
+		/// <summary>Creates a new <see cref="T:MetalPerformanceShaders.MPSImageLaplacian" /> object for the specified <paramref name="device" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		NativeHandle Constructor (IMTLDevice device);
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -91,6 +113,14 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSUnaryImageKernel))]
 	[DisableDefaultCtor]
 	interface MPSImageBox {
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -137,11 +167,23 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSUnaryImageKernel))]
 	[DisableDefaultCtor]
 	interface MPSImageGaussianBlur {
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
 
+		/// <param name="device">The device on which the filter will run.</param>
+		/// <param name="sigma">A value that controls the blurriness of the resulting image.</param>
+		/// <summary>Constructs a new <c>MPSImageGaussianBlur</c> with the specified values.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:sigma:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, float sigma);
@@ -163,11 +205,22 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSImageSobel {
 		// inlining .ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
 
+		/// <param name="device">The device on which the filter will run.</param>
+		/// <summary>Constructs a new <c>MPSImageSobel</c> with the specified values.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		NativeHandle Constructor (IMTLDevice device);
 
@@ -187,14 +240,29 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSUnaryImageKernel))]
 	[DisableDefaultCtor]
 	interface MPSImagePyramid {
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
 
+		/// <param name="device">To be added.</param>
+		/// <summary>Creates a new <see cref="T:MetalPerformanceShaders.MPSImagePyramid" /> object for the specified <paramref name="device" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="centerWeight">To be added.</param>
+		/// <summary>Creates a new <see cref="T:MetalPerformanceShaders.MPSImagePyramid" /> object for the specified <paramref name="device" />, with the specified <paramref name="centerWeight" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:centerWeight:")]
 		NativeHandle Constructor (IMTLDevice device, float centerWeight);
 
@@ -230,6 +298,14 @@ namespace MetalPerformanceShaders {
 		IntPtr InitWithDevice (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, /* float* */ IntPtr kernelWeights);
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -245,6 +321,14 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSKernel))]
 	[DisableDefaultCtor]
 	interface MPSImageHistogram {
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -275,6 +359,10 @@ namespace MetalPerformanceShaders {
 		//		[Export ("initWithDevice:")]
 		//		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="device">The device on which the histogram filter will be run.</param>
+		/// <param name="histogramInfo">Configuration data for the histogram.</param>
+		/// <summary>Creates a new <c>MPSImageHistogram</c> for the specified <paramref name="device" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:histogramInfo:")]
 		[DesignatedInitializer]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
@@ -310,6 +398,10 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSUnaryImageKernel))]
 	[DisableDefaultCtor]
 	interface MPSImageHistogramEqualization {
+		/// <param name="device">The device on which the histogram equalization will be run.</param>
+		/// <param name="histogramInfo">The histogram format.</param>
+		/// <summary>Creates a new <c>MPSImageHistogramEqualization</c> for the specified <paramref name="device" /> and <paramref name="histogramInfo" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:histogramInfo:")]
 		[DesignatedInitializer]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
@@ -327,6 +419,14 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeTransformToCommandBuffer:sourceTexture:histogram:histogramOffset:")]
 		void EncodeTransformToCommandBuffer (IMTLCommandBuffer commandBuffer, IMTLTexture source, IMTLBuffer histogram, nuint histogramOffset);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -340,6 +440,10 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSUnaryImageKernel))]
 	[DisableDefaultCtor]
 	interface MPSImageHistogramSpecification {
+		/// <param name="device">The device on which the histogram specification will be run.</param>
+		/// <param name="histogramInfo">The histogram format.</param>
+		/// <summary>Creates a new <c>MPSImageHistogramSpecification</c> for the specified <paramref name="device" /> and <paramref name="histogramInfo" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:histogramInfo:")]
 		[DesignatedInitializer]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
@@ -357,6 +461,14 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeTransformToCommandBuffer:sourceTexture:sourceHistogram:sourceHistogramOffset:desiredHistogram:desiredHistogramOffset:")]
 		void EncodeTransformToCommandBuffer (IMTLCommandBuffer commandBuffer, IMTLTexture source, IMTLBuffer sourceHistogram, nuint sourceHistogramOffset, IMTLBuffer desiredHistogram, nuint desiredHistogramOffset);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -376,10 +488,21 @@ namespace MetalPerformanceShaders {
 	interface MPSImageIntegral {
 		// inlining .ctor from base class
 
+		/// <param name="device">The device on which the filter will run.</param>
+		/// <summary>Constructs a new <c>MPSImageIntegral</c> with the specified values.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		NativeHandle Constructor (IMTLDevice device);
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -397,10 +520,21 @@ namespace MetalPerformanceShaders {
 	interface MPSImageIntegralOfSquares {
 		// inlining .ctor from base class
 
+		/// <param name="device">The device on which the filter will run.</param>
+		/// <summary>Constructs a new <c>MPSImageIntegralOfSquares</c> with the specified values.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		NativeHandle Constructor (IMTLDevice device);
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -475,10 +609,21 @@ namespace MetalPerformanceShaders {
 
 		// inlining .ctor from base class
 
+		/// <param name="device">To be added.</param>
+		/// <summary>Creates a new <see cref="T:MetalPerformanceShaders.MPSUnaryImageKernel" /> for the specified <paramref name="device" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -492,6 +637,14 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSKernel))]
 	[DisableDefaultCtor]
 	interface MPSBinaryImageKernel {
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -592,6 +745,9 @@ namespace MetalPerformanceShaders {
 
 		// inlining .ctor from base class
 
+		/// <param name="device">To be added.</param>
+		/// <summary>Creates a new MPSBinaryImageKernel for the specified metal device.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -632,6 +788,14 @@ namespace MetalPerformanceShaders {
 		[Export ("minKernelDiameter")]
 		nuint MinKernelDiameter { get; }
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -665,6 +829,14 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -716,6 +888,14 @@ namespace MetalPerformanceShaders {
 		// [Export ("initWithDevice:")] is NS_UNAVAILABLE - You must use initWithDevice:kernelWidth:kernelHeight:values: instead. instead.
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -733,6 +913,14 @@ namespace MetalPerformanceShaders {
 		// inlining ctor from base class -> done in manual bindings (wrt float* argument)
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -750,11 +938,22 @@ namespace MetalPerformanceShaders {
 	interface MPSImageLanczosScale {
 		// inlining .ctor from base class
 
+		/// <param name="device">The device on which the filter will run.</param>
+		/// <summary>Constructs a new <c>MPSImageLanczosScale</c> with the specified values.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -793,6 +992,14 @@ namespace MetalPerformanceShaders {
 		IntPtr _Transform { get; }
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -829,6 +1036,14 @@ namespace MetalPerformanceShaders {
 		IntPtr _Transform { get; }
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -859,6 +1074,14 @@ namespace MetalPerformanceShaders {
 		IntPtr _Transform { get; }
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -889,6 +1112,14 @@ namespace MetalPerformanceShaders {
 		IntPtr _Transform { get; }
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -919,6 +1150,14 @@ namespace MetalPerformanceShaders {
 		IntPtr _Transform { get; }
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -932,6 +1171,14 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface MPSKernel : NSCopying, NSSecureCoding {
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -960,6 +1207,11 @@ namespace MetalPerformanceShaders {
 		[NullAllowed, Export ("label")]
 		string Label { get; set; }
 
+		/// <param name="device">The device for which to create a new kernel.</param>
+		/// <summary>Creates a new kernel that can run on the specified device, if supported.</summary>
+		/// <remarks>
+		///           <para>Application developers should call the <see cref="M:MetalPerformanceShaders.MPSKernel.Supports(Metal.IMTLDevice)" /> method to determine if the <paramref name="device" /> is supported.</para>
+		///         </remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -997,10 +1249,21 @@ namespace MetalPerformanceShaders {
 
 		// inlining .ctor from base class
 
+		/// <param name="device">The device on which the filter will run.</param>
+		/// <summary>Constructs a new <c>MPSImageTranspose</c> with the specified values.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		NativeHandle Constructor (IMTLDevice device);
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -1019,6 +1282,9 @@ namespace MetalPerformanceShaders {
 	interface MPSCnnKernel {
 		// inlining .ctor from base class
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -1106,6 +1372,14 @@ namespace MetalPerformanceShaders {
 		MPSRegion GetSourceRegion (MTLSize destinationSize);
 
 		//inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -1301,10 +1575,21 @@ namespace MetalPerformanceShaders {
 	interface MPSCnnNeuron {
 		// inlining .ctor from base class
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		NativeHandle Constructor (IMTLDevice device);
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[DesignatedInitializer]
 		[Export ("initWithCoder:device:")]
@@ -1345,6 +1630,10 @@ namespace MetalPerformanceShaders {
 		[NullAllowed, Export ("data", ArgumentSemantic.Retain)]
 		NSData Data { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="neuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:neuronDescriptor:")]
 		[DesignatedInitializer]
@@ -1371,6 +1660,11 @@ namespace MetalPerformanceShaders {
 		[Export ("b")]
 		float B { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <param name="b">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.TvOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.iOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
@@ -1378,6 +1672,10 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithDevice:a:b:")]
 		NativeHandle Constructor (IMTLDevice device, float a, float b);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="neuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:neuronDescriptor:")]
 		[DesignatedInitializer]
@@ -1398,6 +1696,10 @@ namespace MetalPerformanceShaders {
 		[Export ("a")]
 		float A { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.TvOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.iOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
@@ -1405,6 +1707,10 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithDevice:a:")]
 		NativeHandle Constructor (IMTLDevice device, float a);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="neuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:neuronDescriptor:")]
 		[DesignatedInitializer]
@@ -1419,6 +1725,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnNeuronSigmoid {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.TvOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.iOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
@@ -1426,6 +1735,10 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithDevice:")]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="neuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:neuronDescriptor:")]
 		[DesignatedInitializer]
@@ -1452,6 +1765,11 @@ namespace MetalPerformanceShaders {
 		[Export ("b")]
 		float B { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <param name="b">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.TvOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.iOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
@@ -1461,6 +1779,10 @@ namespace MetalPerformanceShaders {
 
 		// [Export ("initWithDevice:")] marked as NS_UNAVAILABLE - Use initWithDevice:a:b: instead
 
+		/// <param name="device">To be added.</param>
+		/// <param name="neuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:neuronDescriptor:")]
 		[DesignatedInitializer]
@@ -1475,6 +1797,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnNeuronAbsolute {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.TvOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.iOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
@@ -1483,6 +1808,10 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="neuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:neuronDescriptor:")]
 		[DesignatedInitializer]
@@ -1742,11 +2071,23 @@ namespace MetalPerformanceShaders {
 
 		// [Export ("initWithDevice:")] marked as NS_UNAVAILABLE - Use initWithDevice:convolutionDescriptor:kernelWeights:biasTerms instead
 
+		/// <param name="device">To be added.</param>
+		/// <param name="weights">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:weights:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, IMPSCnnConvolutionDataSource weights);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -1934,11 +2275,23 @@ namespace MetalPerformanceShaders {
 		// [Export ("initWithDevice:")] marked as NS_UNAVAILABLE - Use initWithDevice:convolutionDescriptor:kernelWeights:biasTerms instead
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="weights">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:weights:")]
 		[DesignatedInitializer]
@@ -1990,6 +2343,14 @@ namespace MetalPerformanceShaders {
 
 		// [Export ("initWithDevice:")] marked as NS_UNAVAILABLE - Use initWithDevice:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY: instead
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -2010,6 +2371,14 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -2030,6 +2399,14 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -2096,6 +2473,14 @@ namespace MetalPerformanceShaders {
 
 		// [Export ("initWithDevice:")] marked as NS_UNAVAILABLE - Use initWithDevice:kernelWidth:kernelHeight instead
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -2129,6 +2514,10 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -2198,6 +2587,14 @@ namespace MetalPerformanceShaders {
 
 		// [Export ("initWithDevice:")] marked as NS_UNAVAILABLE - Use initWithDevice:kernelWidth:kernelHeight instead
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -2249,6 +2646,10 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -2292,6 +2693,14 @@ namespace MetalPerformanceShaders {
 
 		// [Export ("initWithDevice:")] marked as NS_UNAVAILABLE - Use initWithDevice:kernelSize: instead
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -2331,6 +2740,10 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelSize);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -2346,6 +2759,9 @@ namespace MetalPerformanceShaders {
 
 		// inlining .ctor from base class
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -2356,10 +2772,17 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnSoftMaxGradient {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -2375,6 +2798,9 @@ namespace MetalPerformanceShaders {
 
 		// inlining .ctor from base class
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -2385,10 +2811,17 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnLogSoftMaxGradient {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -2587,6 +3020,10 @@ namespace MetalPerformanceShaders {
 		[NullAllowed, Export ("parent", ArgumentSemantic.Retain)]
 		MPSImage Parent { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="imageDescriptor">To be added.</param>
+		/// <summary>Creates a new <see cref="T:MetalPerformanceShaders.MPSImage" /> for the specified <paramref name="device" /> with the specified <paramref name="imageDescriptor" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:imageDescriptor:")]
 		NativeHandle Constructor (IMTLDevice device, MPSImageDescriptor imageDescriptor);
 
@@ -2833,6 +3270,14 @@ namespace MetalPerformanceShaders {
 		IntPtr InitWithDevice (IMTLDevice device, MPSAlphaType srcAlpha, MPSAlphaType destAlpha, [NullAllowed] /* nfloat* */ IntPtr backgroundColor, [NullAllowed] CGColorConversionInfo conversionInfo);
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -2963,6 +3408,10 @@ namespace MetalPerformanceShaders {
 		[Export ("data")]
 		IMTLBuffer Data { get; }
 
+		/// <param name="buffer">To be added.</param>
+		/// <param name="descriptor">To be added.</param>
+		/// <summary>Creates a new <see cref="T:MetalPerformanceShaders.MPSMatrix" /> object with the specified <paramref name="buffer" /> and <paramref name="descriptor" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithBuffer:descriptor:")]
 		NativeHandle Constructor (IMTLBuffer buffer, MPSMatrixDescriptor descriptor);
 
@@ -2971,6 +3420,10 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithBuffer:offset:descriptor:")]
 		NativeHandle Constructor (IMTLBuffer buffer, nuint offset, MPSMatrixDescriptor descriptor);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="descriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:descriptor:")]
 		NativeHandle Constructor (IMTLDevice device, MPSMatrixDescriptor descriptor);
@@ -3055,6 +3508,14 @@ namespace MetalPerformanceShaders {
 		// [Export ("initWithDevice:")] marked as NS_UNAVAILABLE - Use the above initialization method instead.
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
@@ -3120,14 +3581,25 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithDevice:bufferSize:")]
 		NativeHandle Constructor (IMTLDevice device, nuint bufferSize);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="descriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:textureDescriptor:")]
 		NativeHandle Constructor (IMTLDevice device, MTLTextureDescriptor descriptor);
 
+		/// <param name="resource">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithResource:")]
 		NativeHandle Constructor ([NullAllowed] IMTLResource resource);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="resourceList">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:resourceList:")]
 		NativeHandle Constructor (IMTLDevice device, MPSStateResourceList resourceList);
@@ -3142,6 +3614,9 @@ namespace MetalPerformanceShaders {
 		[Export ("temporaryStateWithCommandBuffer:resourceList:")]
 		MPSState CreateTemporaryState (IMTLCommandBuffer commandBuffer, MPSStateResourceList resourceList);
 
+		/// <param name="resources">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithResources:")]
 		NativeHandle Constructor ([NullAllowed] IMTLResource [] resources);
@@ -3298,6 +3773,10 @@ namespace MetalPerformanceShaders {
 		[Export ("data")]
 		IMTLBuffer Data { get; }
 
+		/// <param name="buffer">To be added.</param>
+		/// <param name="descriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithBuffer:descriptor:")]
 		NativeHandle Constructor (IMTLBuffer buffer, MPSVectorDescriptor descriptor);
 
@@ -3306,6 +3785,10 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithBuffer:offset:descriptor:")]
 		NativeHandle Constructor (IMTLBuffer buffer, nuint offset, MPSVectorDescriptor descriptor);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="descriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:descriptor:")]
 		NativeHandle Constructor (IMTLDevice device, MPSVectorDescriptor descriptor);
@@ -3402,10 +3885,21 @@ namespace MetalPerformanceShaders {
 		nuint BatchSize { get; set; }
 
 		// inlining ctor from base class
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -3447,10 +3941,21 @@ namespace MetalPerformanceShaders {
 		nuint BatchSize { get; set; }
 
 		// inlining ctor from base class
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -3477,10 +3982,21 @@ namespace MetalPerformanceShaders {
 		void EncodeToCommandBuffer (IMTLCommandBuffer commandBuffer, MPSMatrix inputMatrix, MPSVector inputVector, MPSVector resultVector);
 
 		// inlining ctor from base class
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -3504,10 +4020,21 @@ namespace MetalPerformanceShaders {
 		void EncodeToCommandBuffer (IMTLCommandBuffer commandBuffer, MPSMatrix sourceMatrix, MPSMatrix rightHandSideMatrix, MPSMatrix solutionMatrix);
 
 		// inlining ctor from base class
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -3531,10 +4058,21 @@ namespace MetalPerformanceShaders {
 		void EncodeToCommandBuffer (IMTLCommandBuffer commandBuffer, MPSMatrix sourceMatrix, MPSMatrix rightHandSideMatrix, MPSMatrix pivotIndices, MPSMatrix solutionMatrix);
 
 		// inlining ctor from base class
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -3558,10 +4096,21 @@ namespace MetalPerformanceShaders {
 		void EncodeToCommandBuffer (IMTLCommandBuffer commandBuffer, MPSMatrix sourceMatrix, MPSMatrix rightHandSideMatrix, MPSMatrix solutionMatrix);
 
 		// inlining ctor from base class
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -3589,10 +4138,21 @@ namespace MetalPerformanceShaders {
 		void EncodeToCommandBuffer (IMTLCommandBuffer commandBuffer, MPSMatrix sourceMatrix, MPSMatrix resultMatrix, MPSMatrix pivotIndices, [NullAllowed] IMTLBuffer status);
 
 		// inlining ctor from base class
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -3619,10 +4179,21 @@ namespace MetalPerformanceShaders {
 		void EncodeToCommandBuffer (IMTLCommandBuffer commandBuffer, MPSMatrix sourceMatrix, MPSMatrix resultMatrix, [NullAllowed] IMTLBuffer status);
 
 		// inlining ctor from base class
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -3699,6 +4270,14 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeToCommandBuffer:copyDescriptor:rowPermuteIndices:rowPermuteOffset:columnPermuteIndices:columnPermuteOffset:")]
 		void EncodeToCommandBuffer (IMTLCommandBuffer commandBuffer, MPSMatrixCopyDescriptor copyDescriptor, [NullAllowed] MPSVector rowPermuteIndices, nuint rowPermuteOffset, [NullAllowed] MPSVector columnPermuteIndices, nuint columnPermuteOffset);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -3823,10 +4402,22 @@ namespace MetalPerformanceShaders {
 		[Export ("dataLayout")]
 		MPSDataLayout DataLayout { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="dataLayout">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:dataLayout:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, MPSDataLayout dataLayout);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -3859,10 +4450,22 @@ namespace MetalPerformanceShaders {
 		[Export ("keypointRangeInfo")]
 		MPSImageKeypointRangeInfo KeypointRangeInfo { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="info">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:info:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, MPSImageKeypointRangeInfo info);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -3923,6 +4526,14 @@ namespace MetalPerformanceShaders {
 		float MaximumValue { get; set; }
 
 		//inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -3933,6 +4544,9 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSImageArithmetic))]
 	[DisableDefaultCtor]
 	interface MPSImageAdd {
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -3943,6 +4557,9 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSImageArithmetic))]
 	[DisableDefaultCtor]
 	interface MPSImageSubtract {
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -3953,6 +4570,9 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSImageArithmetic))]
 	[DisableDefaultCtor]
 	interface MPSImageMultiply {
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -3963,6 +4583,9 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSImageArithmetic))]
 	[DisableDefaultCtor]
 	interface MPSImageDivide {
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -3973,6 +4596,9 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSUnaryImageKernel))]
 	[DisableDefaultCtor]
 	interface MPSImageScale {
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -3988,6 +4614,14 @@ namespace MetalPerformanceShaders {
 		[Internal]
 		void _SetScaleTransform (IntPtr value);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -3998,10 +4632,21 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSImageScale))]
 	[DisableDefaultCtor]
 	interface MPSImageBilinearScale {
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -4018,10 +4663,21 @@ namespace MetalPerformanceShaders {
 		[Export ("clipRectSource", ArgumentSemantic.Assign)]
 		MTLRegion ClipRectSource { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -4038,10 +4694,21 @@ namespace MetalPerformanceShaders {
 		[Export ("clipRectSource", ArgumentSemantic.Assign)]
 		MTLRegion ClipRectSource { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -4058,10 +4725,21 @@ namespace MetalPerformanceShaders {
 		[Export ("clipRectSource", ArgumentSemantic.Assign)]
 		MTLRegion ClipRectSource { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -4102,6 +4780,9 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSKernel), Name = "MPSCNNBinaryKernel")]
 	[DisableDefaultCtor]
 	interface MPSCnnBinaryKernel {
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -4293,6 +4974,14 @@ namespace MetalPerformanceShaders {
 		[Export ("destinationImageAllocator", ArgumentSemantic.Retain)]
 		IMPSImageAllocator DestinationImageAllocator { get; set; }
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -4442,12 +5131,24 @@ namespace MetalPerformanceShaders {
 		[Internal, Sealed]
 		IntPtr InitWithDevice (IMTLDevice device, IntPtr /* float* */ a, nuint count);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="neuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:neuronDescriptor:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, MPSNNNeuronDescriptor neuronDescriptor);
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -4470,6 +5171,11 @@ namespace MetalPerformanceShaders {
 		[Export ("b")]
 		float B { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <param name="b">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.TvOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.iOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
@@ -4478,6 +5184,10 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, float a, float b);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="neuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:neuronDescriptor:")]
 		[DesignatedInitializer]
@@ -4501,6 +5211,11 @@ namespace MetalPerformanceShaders {
 		[Export ("b")]
 		float B { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <param name="b">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.TvOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.iOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
@@ -4508,6 +5223,10 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithDevice:a:b:")]
 		NativeHandle Constructor (IMTLDevice device, float a, float b);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="neuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:neuronDescriptor:")]
 		[DesignatedInitializer]
@@ -4519,6 +5238,9 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSCnnNeuron), Name = "MPSCNNNeuronSoftSign")]
 	[DisableDefaultCtor]
 	interface MPSCnnNeuronSoftSign {
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.TvOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.iOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
@@ -4527,6 +5249,10 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="neuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:neuronDescriptor:")]
 		[DesignatedInitializer]
@@ -4544,6 +5270,10 @@ namespace MetalPerformanceShaders {
 		[Export ("a")]
 		float A { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.TvOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.iOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
@@ -4551,6 +5281,10 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithDevice:a:")]
 		NativeHandle Constructor (IMTLDevice device, float a);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="neuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:neuronDescriptor:")]
 		[DesignatedInitializer]
@@ -4574,6 +5308,11 @@ namespace MetalPerformanceShaders {
 		[Export ("b")]
 		float B { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <param name="b">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.TvOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.iOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
@@ -4581,6 +5320,10 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithDevice:a:b:")]
 		NativeHandle Constructor (IMTLDevice device, float a, float b);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="neuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:neuronDescriptor:")]
 		[DesignatedInitializer]
@@ -4592,6 +5335,12 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnNeuronPower {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <param name="b">To be added.</param>
+		/// <param name="c">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.TvOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.iOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
@@ -4599,6 +5348,10 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithDevice:a:b:c:")]
 		NativeHandle Constructor (IMTLDevice device, float a, float b, float c);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="neuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:neuronDescriptor:")]
 		[DesignatedInitializer]
@@ -4610,6 +5363,12 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnNeuronExponential {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <param name="b">To be added.</param>
+		/// <param name="c">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.TvOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.iOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
@@ -4617,6 +5376,10 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithDevice:a:b:c:")]
 		NativeHandle Constructor (IMTLDevice device, float a, float b, float c);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="neuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:neuronDescriptor:")]
 		[DesignatedInitializer]
@@ -4628,6 +5391,12 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnNeuronLogarithm {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <param name="b">To be added.</param>
+		/// <param name="c">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.TvOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.iOS, 12, 0, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Please use '.ctor (IMTLDevice, MPSNNNeuronDescriptor)' overload instead.")]
@@ -4635,6 +5404,10 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithDevice:a:b:c:")]
 		NativeHandle Constructor (IMTLDevice device, float a, float b, float c);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="neuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:neuronDescriptor:")]
 		[DesignatedInitializer]
@@ -4707,10 +5480,22 @@ namespace MetalPerformanceShaders {
 		[Export ("accumulatorPrecisionOption", ArgumentSemantic.Assign)]
 		MPSNNConvolutionAccumulatorPrecisionOption AccumulatorPrecisionOption { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="weights">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:weights:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, IMPSCnnConvolutionDataSource weights);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -4773,12 +5558,27 @@ namespace MetalPerformanceShaders {
 		[Export ("outputFeatureChannels")]
 		nuint OutputFeatureChannels { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="convolutionData">To be added.</param>
+		/// <param name="scaleValue">To be added.</param>
+		/// <param name="type">To be added.</param>
+		/// <param name="flags">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:convolutionData:scaleValue:type:flags:")]
 		NativeHandle Constructor (IMTLDevice device, IMPSCnnConvolutionDataSource convolutionData, float scaleValue, MPSCnnBinaryConvolutionType type, MPSCnnBinaryConvolutionFlags flags);
 
 		[Internal, Sealed, Export ("initWithDevice:convolutionData:outputBiasTerms:outputScaleTerms:inputBiasTerms:inputScaleTerms:type:flags:")]
 		IntPtr InitWithDevice (IMTLDevice device, IMPSCnnConvolutionDataSource convolutionData, [NullAllowed] IntPtr /* float* */ outputBiasTerms, [NullAllowed] IntPtr /* float* */ outputScaleTerms, [NullAllowed] IntPtr /* float* */ inputBiasTerms, [NullAllowed] IntPtr /* float* */ inputScaleTerms, MPSCnnBinaryConvolutionType type, MPSCnnBinaryConvolutionFlags flags);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -4789,12 +5589,27 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSCnnBinaryConvolution), Name = "MPSCNNBinaryFullyConnected")]
 	[DisableDefaultCtor]
 	interface MPSCnnBinaryFullyConnected {
+		/// <param name="device">To be added.</param>
+		/// <param name="convolutionData">To be added.</param>
+		/// <param name="scaleValue">To be added.</param>
+		/// <param name="type">To be added.</param>
+		/// <param name="flags">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:convolutionData:scaleValue:type:flags:")]
 		NativeHandle Constructor (IMTLDevice device, IMPSCnnConvolutionDataSource convolutionData, float scaleValue, MPSCnnBinaryConvolutionType type, MPSCnnBinaryConvolutionFlags flags);
 
 		[Internal, Sealed, Export ("initWithDevice:convolutionData:outputBiasTerms:outputScaleTerms:inputBiasTerms:inputScaleTerms:type:flags:")]
 		IntPtr InitWithDevice (IMTLDevice device, IMPSCnnConvolutionDataSource convolutionData, [NullAllowed] IntPtr /* float* */ outputBiasTerms, [NullAllowed] IntPtr /* float* */ outputScaleTerms, [NullAllowed] IntPtr /* float* */ inputBiasTerms, [NullAllowed] IntPtr /* float* */ inputScaleTerms, MPSCnnBinaryConvolutionType type, MPSCnnBinaryConvolutionFlags flags);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -4809,6 +5624,14 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -4835,6 +5658,14 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint dilationRateX, nuint dilationRateY, nuint strideInPixelsX, nuint strideInPixelsY);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -4858,6 +5689,10 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -4884,6 +5719,10 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -4898,6 +5737,10 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -4912,6 +5755,10 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -4926,6 +5773,10 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint dilationRateX, nuint dilationRateY, nuint strideInPixelsX, nuint strideInPixelsY);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -4956,6 +5807,14 @@ namespace MetalPerformanceShaders {
 		bool AlignCorners { get; }
 
 		// inlining ctor from base class
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -5002,10 +5861,17 @@ namespace MetalPerformanceShaders {
 		[Export ("scaleFactorY")]
 		double ScaleFactorY { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -5380,10 +6246,18 @@ namespace MetalPerformanceShaders {
 		[Export ("bidirectionalCombineMode", ArgumentSemantic.Assign)]
 		MPSRnnBidirectionalCombineMode BidirectionalCombineMode { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="rnnDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:rnnDescriptor:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, MPSRnnDescriptor rnnDescriptor);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="rnnDescriptors">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:rnnDescriptors:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, MPSRnnDescriptor [] rnnDescriptors);
@@ -5416,6 +6290,14 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeBidirectionalSequenceToCommandBuffer:sourceSequence:destinationForwardImages:destinationBackwardImages:")]
 		void EncodeBidirectionalSequence (IMTLCommandBuffer commandBuffer, MPSImage [] sourceSequence, MPSImage [] destinationForwardImages, [NullAllowed] MPSImage [] destinationBackwardImages);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -5491,10 +6373,18 @@ namespace MetalPerformanceShaders {
 		[Export ("bidirectionalCombineMode", ArgumentSemantic.Assign)]
 		MPSRnnBidirectionalCombineMode BidirectionalCombineMode { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="rnnDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:rnnDescriptor:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, MPSRnnDescriptor rnnDescriptor);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="rnnDescriptors">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:rnnDescriptors:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, MPSRnnDescriptor [] rnnDescriptors);
@@ -5540,6 +6430,14 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeBidirectionalSequenceToCommandBuffer:sourceSequence:destinationForwardMatrices:destinationBackwardMatrices:")]
 		void EncodeBidirectionalSequence (IMTLCommandBuffer commandBuffer, MPSMatrix [] sourceSequence, MPSMatrix [] destinationForwardMatrices, [NullAllowed] MPSMatrix [] destinationBackwardMatrices);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -5565,6 +6463,12 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface MPSNNImageNode {
+		/// <param name="handle">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithHandle:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor ([NullAllowed] IMPSHandle handle);
@@ -5779,6 +6683,10 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:weights:")]
 		MPSCnnConvolutionNode Create (MPSNNImageNode sourceNode, IMPSCnnConvolutionDataSource weights);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="weights">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:weights:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, IMPSCnnConvolutionDataSource weights);
 
@@ -5804,6 +6712,10 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:weights:")]
 		MPSCnnFullyConnectedNode Create (MPSNNImageNode sourceNode, IMPSCnnConvolutionDataSource weights);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="weights">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:weights:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, IMPSCnnConvolutionDataSource weights);
 	}
@@ -5825,6 +6737,13 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:weights:scaleValue:type:flags:")]
 		MPSCnnBinaryConvolutionNode Create (MPSNNImageNode sourceNode, IMPSCnnConvolutionDataSource weights, float scaleValue, MPSCnnBinaryConvolutionType type, MPSCnnBinaryConvolutionFlags flags);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="weights">To be added.</param>
+		/// <param name="scaleValue">To be added.</param>
+		/// <param name="type">To be added.</param>
+		/// <param name="flags">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:weights:scaleValue:type:flags:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, IMPSCnnConvolutionDataSource weights, float scaleValue, MPSCnnBinaryConvolutionType type, MPSCnnBinaryConvolutionFlags flags);
 
@@ -5857,6 +6776,13 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:weights:scaleValue:type:flags:")]
 		MPSCnnBinaryFullyConnectedNode Create (MPSNNImageNode sourceNode, IMPSCnnConvolutionDataSource weights, float scaleValue, MPSCnnBinaryConvolutionType type, MPSCnnBinaryConvolutionFlags flags);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="weights">To be added.</param>
+		/// <param name="scaleValue">To be added.</param>
+		/// <param name="type">To be added.</param>
+		/// <param name="flags">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:weights:scaleValue:type:flags:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, IMPSCnnConvolutionDataSource weights, float scaleValue, MPSCnnBinaryConvolutionType type, MPSCnnBinaryConvolutionFlags flags);
 
@@ -5888,6 +6814,11 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:convolutionGradientState:weights:")]
 		MPSCnnConvolutionTransposeNode Create (MPSNNImageNode sourceNode, [NullAllowed] MPSCnnConvolutionGradientStateNode convolutionGradientState, IMPSCnnConvolutionDataSource weights);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="convolutionGradientState">To be added.</param>
+		/// <param name="weights">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithSource:convolutionGradientState:weights:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, [NullAllowed] MPSCnnConvolutionGradientStateNode convolutionGradientState, IMPSCnnConvolutionDataSource weights);
@@ -5909,6 +6840,12 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSourceGradient:sourceImage:convolutionGradientState:weights:")]
 		MPSCnnConvolutionGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSCnnConvolutionGradientStateNode gradientState, [NullAllowed] IMPSCnnConvolutionDataSource weights);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="weights">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:convolutionGradientState:weights:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSCnnConvolutionGradientStateNode gradientState, [NullAllowed] IMPSCnnConvolutionDataSource weights);
 	}
@@ -5965,6 +6902,12 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:a:b:c:")]
 		MPSCnnNeuronPowerNode Create (MPSNNImageNode sourceNode, float a, float b, float c);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <param name="b">To be added.</param>
+		/// <param name="c">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:a:b:c:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, float a, float b, float c);
 
@@ -5976,6 +6919,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSCnnNeuronPowerNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -5996,6 +6942,12 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:a:b:c:")]
 		MPSCnnNeuronExponentialNode Create (MPSNNImageNode sourceNode, float a, float b, float c);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <param name="b">To be added.</param>
+		/// <param name="c">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:a:b:c:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, float a, float b, float c);
 
@@ -6007,6 +6959,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSCnnNeuronExponentialNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6027,6 +6982,12 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:a:b:c:")]
 		MPSCnnNeuronLogarithmNode Create (MPSNNImageNode sourceNode, float a, float b, float c);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <param name="b">To be added.</param>
+		/// <param name="c">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:a:b:c:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, float a, float b, float c);
 
@@ -6038,6 +6999,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSCnnNeuronLogarithmNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6058,6 +7022,12 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:descriptor:")]
 		MPSCnnNeuronGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, MPSNNNeuronDescriptor descriptor);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="descriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:descriptor:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, MPSNNNeuronDescriptor descriptor);
 
@@ -6087,6 +7057,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSNNUnaryReductionNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6105,6 +7078,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSNNReductionRowMinNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6123,6 +7099,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSNNReductionColumnMinNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6141,6 +7120,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSNNReductionFeatureChannelsMinNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6159,6 +7141,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSNNReductionFeatureChannelsArgumentMinNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6177,6 +7162,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSNNReductionRowMaxNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6195,6 +7183,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSNNReductionColumnMaxNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6213,6 +7204,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSNNReductionFeatureChannelsMaxNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6231,6 +7225,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSNNReductionFeatureChannelsArgumentMaxNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6249,6 +7246,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSNNReductionRowMeanNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6267,6 +7267,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSNNReductionColumnMeanNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6285,6 +7288,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSNNReductionFeatureChannelsMeanNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6303,6 +7309,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSNNReductionSpatialMeanNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6321,6 +7330,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSNNReductionRowSumNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6339,6 +7351,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSNNReductionColumnSumNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6357,6 +7372,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSNNReductionFeatureChannelsSumNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 
@@ -6380,6 +7398,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSCnnNeuronAbsoluteNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6406,9 +7427,16 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSCnnNeuronEluNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:a:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, float a);
 	}
@@ -6428,6 +7456,11 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:a:b:")]
 		MPSCnnNeuronReLunNode Create (MPSNNImageNode sourceNode, float a, float b);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <param name="b">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:a:b:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, float a, float b);
 
@@ -6439,6 +7472,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSCnnNeuronReLunNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6458,6 +7494,11 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:a:b:")]
 		MPSCnnNeuronLinearNode Create (MPSNNImageNode sourceNode, float a, float b);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <param name="b">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.TvOS, 12, 0)]
 		[Deprecated (PlatformName.iOS, 12, 0)]
 		[Deprecated (PlatformName.MacOSX, 10, 14)]
@@ -6473,6 +7514,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSCnnNeuronLinearNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6499,9 +7543,16 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSCnnNeuronReLUNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:a:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, float a);
 	}
@@ -6519,6 +7570,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSCnnNeuronSigmoidNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6538,6 +7592,11 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:a:b:")]
 		MPSCnnNeuronHardSigmoidNode Create (MPSNNImageNode sourceNode, float a, float b);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <param name="b">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:a:b:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, float a, float b);
 
@@ -6549,6 +7608,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSCnnNeuronHardSigmoidNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6568,6 +7630,11 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:a:b:")]
 		MPSCnnNeuronSoftPlusNode Create (MPSNNImageNode sourceNode, float a, float b);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <param name="b">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:a:b:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, float a, float b);
 
@@ -6579,6 +7646,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSCnnNeuronSoftPlusNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6596,6 +7666,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSCnnNeuronSoftSignNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6615,6 +7688,11 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:a:b:")]
 		MPSCnnNeuronTanHNode Create (MPSNNImageNode sourceNode, float a, float b);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="a">To be added.</param>
+		/// <param name="b">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:a:b:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, float a, float b);
 
@@ -6626,6 +7704,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSCnnNeuronTanHNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -6644,6 +7725,10 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:aData:")]
 		MPSCnnNeuronPReLUNode Create (MPSNNImageNode sourceNode, NSData aData);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="aData">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:aData:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, NSData aData);
 	}
@@ -6941,6 +8026,10 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:dataSource:")]
 		MPSCnnInstanceNormalizationNode Create (MPSNNImageNode source, IMPSCnnInstanceNormalizationDataSource dataSource);
 
+		/// <param name="source">To be added.</param>
+		/// <param name="dataSource">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:dataSource:")]
 		NativeHandle Constructor (MPSNNImageNode source, IMPSCnnInstanceNormalizationDataSource dataSource);
 	}
@@ -6960,6 +8049,11 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:")]
 		MPSCnnInstanceNormalizationGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState);
 	}
@@ -6984,6 +8078,10 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:dataSource:")]
 		MPSCnnBatchNormalizationNode Create (MPSNNImageNode source, IMPSCnnBatchNormalizationDataSource dataSource);
 
+		/// <param name="source">To be added.</param>
+		/// <param name="dataSource">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:dataSource:")]
 		NativeHandle Constructor (MPSNNImageNode source, IMPSCnnBatchNormalizationDataSource dataSource);
 	}
@@ -7003,6 +8101,11 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:")]
 		MPSCnnBatchNormalizationGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState);
 	}
@@ -7073,6 +8176,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSCnnNormalizationNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
@@ -7103,6 +8209,9 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint kernelSize);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
@@ -7151,6 +8260,9 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint kernelSize);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
@@ -7175,6 +8287,9 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint kernelSize);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
@@ -7207,9 +8322,21 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:transformProvider:outputSize:")]
 		MPSNNScaleNode Create (MPSNNImageNode sourceNode, [NullAllowed] IMPSImageTransformProvider transformProvider, MTLSize size);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="size">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:outputSize:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, MTLSize size);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="transformProvider">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="size">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:transformProvider:outputSize:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, [NullAllowed] IMPSImageTransformProvider transformProvider, MTLSize size);
 	}
@@ -7236,9 +8363,16 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithLeftSource:rightSource:")]
 		MPSNNBinaryArithmeticNode Create (MPSNNImageNode left, MPSNNImageNode right);
 
+		/// <param name="sourceNodes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSources:")]
 		NativeHandle Constructor (MPSNNImageNode [] sourceNodes);
 
+		/// <param name="left">To be added.</param>
+		/// <param name="right">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithLeftSource:rightSource:")]
 		NativeHandle Constructor (MPSNNImageNode left, MPSNNImageNode right);
 
@@ -7352,9 +8486,20 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:isSecondarySourceFilter:")]
 		MPSNNArithmeticGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNBinaryGradientStateNode gradientState, bool isSecondarySourceFilter);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="isSecondarySourceFilter">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:isSecondarySourceFilter:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNBinaryGradientStateNode gradientState, bool isSecondarySourceFilter);
 
+		/// <param name="gradientImages">To be added.</param>
+		/// <param name="filter">To be added.</param>
+		/// <param name="isSecondarySourceFilter">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithGradientImages:forwardFilter:isSecondarySourceFilter:")]
 		NativeHandle Constructor (MPSNNImageNode [] gradientImages, MPSNNFilterNode filter, bool isSecondarySourceFilter);
 
@@ -7430,9 +8575,20 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:isSecondarySourceFilter:")]
 		MPSNNAdditionGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNBinaryGradientStateNode gradientState, bool isSecondarySourceFilter);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="isSecondarySourceFilter">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:isSecondarySourceFilter:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNBinaryGradientStateNode gradientState, bool isSecondarySourceFilter);
 
+		/// <param name="gradientImages">To be added.</param>
+		/// <param name="filter">To be added.</param>
+		/// <param name="isSecondarySourceFilter">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithGradientImages:forwardFilter:isSecondarySourceFilter:")]
 		NativeHandle Constructor (MPSNNImageNode [] gradientImages, MPSNNFilterNode filter, bool isSecondarySourceFilter);
 	}
@@ -7454,9 +8610,20 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:isSecondarySourceFilter:")]
 		MPSNNSubtractionGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNBinaryGradientStateNode gradientState, bool isSecondarySourceFilter);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="isSecondarySourceFilter">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:isSecondarySourceFilter:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNBinaryGradientStateNode gradientState, bool isSecondarySourceFilter);
 
+		/// <param name="gradientImages">To be added.</param>
+		/// <param name="filter">To be added.</param>
+		/// <param name="isSecondarySourceFilter">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithGradientImages:forwardFilter:isSecondarySourceFilter:")]
 		NativeHandle Constructor (MPSNNImageNode [] gradientImages, MPSNNFilterNode filter, bool isSecondarySourceFilter);
 	}
@@ -7478,9 +8645,20 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:isSecondarySourceFilter:")]
 		MPSNNMultiplicationGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNBinaryGradientStateNode gradientState, bool isSecondarySourceFilter);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="isSecondarySourceFilter">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:isSecondarySourceFilter:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNBinaryGradientStateNode gradientState, bool isSecondarySourceFilter);
 
+		/// <param name="gradientImages">To be added.</param>
+		/// <param name="filter">To be added.</param>
+		/// <param name="isSecondarySourceFilter">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithGradientImages:forwardFilter:isSecondarySourceFilter:")]
 		NativeHandle Constructor (MPSNNImageNode [] gradientImages, MPSNNFilterNode filter, bool isSecondarySourceFilter);
 	}
@@ -7498,6 +8676,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSCnnDropoutNode Create (MPSNNImageNode source);
 
+		/// <param name="source">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode source);
 
@@ -7510,6 +8691,10 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:keepProbability:")]
 		MPSCnnDropoutNode Create (MPSNNImageNode source, float keepProbability);
 
+		/// <param name="source">To be added.</param>
+		/// <param name="keepProbability">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:keepProbability:")]
 		NativeHandle Constructor (MPSNNImageNode source, float keepProbability);
 
@@ -7592,6 +8777,10 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:lossDescriptor:")]
 		MPSCnnLossNode Create (MPSNNImageNode source, MPSCnnLossDescriptor descriptor);
 
+		/// <param name="source">To be added.</param>
+		/// <param name="descriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:lossDescriptor:")]
 		NativeHandle Constructor (MPSNNImageNode source, MPSCnnLossDescriptor descriptor);
 
@@ -7617,6 +8806,10 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:lossDescriptor:")]
 		MPSCnnYoloLossNode Create (MPSNNImageNode source, MPSCnnYoloLossDescriptor descriptor);
 
+		/// <param name="source">To be added.</param>
+		/// <param name="descriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:lossDescriptor:")]
 		NativeHandle Constructor (MPSNNImageNode source, MPSCnnYoloLossDescriptor descriptor);
 
@@ -7640,6 +8833,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSources:")]
 		MPSNNConcatenationNode Create (MPSNNImageNode [] sourceNodes);
 
+		/// <param name="sourceNodes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSources:")]
 		NativeHandle Constructor (MPSNNImageNode [] sourceNodes);
 	}
@@ -7659,6 +8855,11 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:")]
 		MPSNNConcatenationGradientNode Create (MPSNNImageNode gradientSourceNode, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState);
 
+		/// <param name="gradientSourceNode">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:")]
 		NativeHandle Constructor (MPSNNImageNode gradientSourceNode, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState);
 	}
@@ -7691,6 +8892,11 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:")]
 		MPSNNReshapeGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState);
 	}
@@ -7710,6 +8916,11 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:")]
 		MPSNNReductionSpatialMeanGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState);
 	}
@@ -7736,6 +8947,12 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:paddingSizeBefore:paddingSizeAfter:edgeMode:")]
 		MPSNNPadNode Create (MPSNNImageNode source, MPSImageCoordinate paddingSizeBefore, MPSImageCoordinate paddingSizeAfter, MPSImageEdgeMode edgeMode);
 
+		/// <param name="source">To be added.</param>
+		/// <param name="paddingSizeBefore">To be added.</param>
+		/// <param name="paddingSizeAfter">To be added.</param>
+		/// <param name="edgeMode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:paddingSizeBefore:paddingSizeAfter:edgeMode:")]
 		NativeHandle Constructor (MPSNNImageNode source, MPSImageCoordinate paddingSizeBefore, MPSImageCoordinate paddingSizeAfter, MPSImageEdgeMode edgeMode);
 	}
@@ -7755,6 +8972,11 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:")]
 		MPSNNPadGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState);
 	}
@@ -7774,6 +8996,11 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:")]
 		MPSCnnSoftMaxGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState);
 	}
@@ -7793,6 +9020,11 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:")]
 		MPSCnnLogSoftMaxGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState);
 	}
@@ -7810,6 +9042,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSCnnSoftMaxNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -7827,6 +9062,9 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSource:")]
 		MPSCnnLogSoftMaxNode Create (MPSNNImageNode sourceNode);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode);
 	}
@@ -7914,6 +9152,13 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:scaleFactorX:scaleFactorY:")]
 		MPSCnnUpsamplingNearestGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, double scaleFactorX, double scaleFactorY);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="scaleFactorX">To be added.</param>
+		/// <param name="scaleFactorY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:scaleFactorX:scaleFactorY:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, double scaleFactorX, double scaleFactorY);
 
@@ -7947,6 +9192,13 @@ namespace MetalPerformanceShaders {
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:scaleFactorX:scaleFactorY:")]
 		MPSCnnUpsamplingBilinearGradientNode NodeWithSourceGradient (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, double scaleFactorX, double scaleFactorY);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="scaleFactorX">To be added.</param>
+		/// <param name="scaleFactorY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:scaleFactorX:scaleFactorY:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, double scaleFactorX, double scaleFactorY);
 
@@ -8108,6 +9360,11 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor] // There is a DesignatedInitializer, file a bug if needed.
 	interface MPSNNGraph : NSCopying, NSSecureCoding {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="resultImage">To be added.</param>
+		/// <param name="resultIsNeeded">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:resultImage:resultImageIsNeeded:")]
 		[DesignatedInitializer]
@@ -8125,6 +9382,10 @@ namespace MetalPerformanceShaders {
 		[return: NullAllowed]
 		MPSNNGraph Create (IMTLDevice device, MPSNNImageNode resultImage, bool resultIsNeeded);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="resultImage">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.TvOS, 11, 3, message: "Use '.ctor (IMTLDevice, MPSNNImageNode, bool)' instead.")]
 		[Deprecated (PlatformName.iOS, 11, 3, message: "Use '.ctor (IMTLDevice, MPSNNImageNode, bool)' instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 13, 4, message: "Use '.ctor (IMTLDevice, MPSNNImageNode, bool)' instead.")]
@@ -8156,6 +9417,14 @@ namespace MetalPerformanceShaders {
 		//[return: NullAllowed]
 		//MPSNNGraph Create (IMTLDevice device, MPSNNImageNode resultImage);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -8605,9 +9874,16 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSNNBinaryArithmeticNode))]
 	[DisableDefaultCtor] // 'init' is unavailable
 	interface MPSNNAdditionNode {
+		/// <param name="sourceNodes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSources:")]
 		NativeHandle Constructor (MPSNNImageNode [] sourceNodes);
 
+		/// <param name="left">To be added.</param>
+		/// <param name="right">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithLeftSource:rightSource:")]
 		NativeHandle Constructor (MPSNNImageNode left, MPSNNImageNode right);
 	}
@@ -8617,9 +9893,21 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSNNScaleNode))]
 	[DisableDefaultCtor] // 'init' is unavailable
 	interface MPSNNBilinearScaleNode {
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="size">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:outputSize:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, MTLSize size);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="transformProvider">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="size">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:transformProvider:outputSize:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, [NullAllowed] IMPSImageTransformProvider transformProvider, MTLSize size);
 	}
@@ -8629,9 +9917,16 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSNNBinaryArithmeticNode))]
 	[DisableDefaultCtor] // 'init' is unavailable
 	interface MPSNNDivisionNode {
+		/// <param name="sourceNodes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSources:")]
 		NativeHandle Constructor (MPSNNImageNode [] sourceNodes);
 
+		/// <param name="left">To be added.</param>
+		/// <param name="right">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithLeftSource:rightSource:")]
 		NativeHandle Constructor (MPSNNImageNode left, MPSNNImageNode right);
 	}
@@ -8641,9 +9936,21 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSNNScaleNode))]
 	[DisableDefaultCtor] // 'init' is unavailable
 	interface MPSNNLanczosScaleNode {
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="size">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:outputSize:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, MTLSize size);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="transformProvider">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="size">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:transformProvider:outputSize:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, [NullAllowed] IMPSImageTransformProvider transformProvider, MTLSize size);
 	}
@@ -8653,9 +9960,16 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSNNBinaryArithmeticNode))]
 	[DisableDefaultCtor] // 'init' is unavailable
 	interface MPSNNMultiplicationNode {
+		/// <param name="sourceNodes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSources:")]
 		NativeHandle Constructor (MPSNNImageNode [] sourceNodes);
 
+		/// <param name="left">To be added.</param>
+		/// <param name="right">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithLeftSource:rightSource:")]
 		NativeHandle Constructor (MPSNNImageNode left, MPSNNImageNode right);
 	}
@@ -8665,9 +9979,16 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSNNBinaryArithmeticNode))]
 	[DisableDefaultCtor] // 'init' is unavailable
 	interface MPSNNSubtractionNode {
+		/// <param name="sourceNodes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSources:")]
 		NativeHandle Constructor (MPSNNImageNode [] sourceNodes);
 
+		/// <param name="left">To be added.</param>
+		/// <param name="right">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithLeftSource:rightSource:")]
 		NativeHandle Constructor (MPSNNImageNode left, MPSNNImageNode right);
 	}
@@ -8773,6 +10094,14 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeToCommandBuffer:sourceMatrices:resultMatrix:scaleVector:offsetVector:biasVector:startIndex:")]
 		void EncodeToCommandBuffer (IMTLCommandBuffer buffer, MPSMatrix [] sourceMatrices, MPSMatrix resultMatrix, [NullAllowed] MPSVector scaleVector, [NullAllowed] MPSVector offsetVector, [NullAllowed] MPSVector biasVector, nuint startIndex);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -8795,6 +10124,9 @@ namespace MetalPerformanceShaders {
 		[Export ("sourceColumns")]
 		nuint SourceColumns { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -8808,6 +10140,14 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeToCommandBuffer:inputMatrix:resultMatrix:")]
 		void EncodeToCommandBuffer (IMTLCommandBuffer commandBuffer, MPSMatrix inputMatrix, MPSMatrix resultMatrix);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -8890,6 +10230,9 @@ namespace MetalPerformanceShaders {
 		[Export ("setNeuronToPReLUWithParametersA:")]
 		void SetNeuronToPReLU (NSData parametersA);
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -8907,6 +10250,14 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeToCommandBuffer:inputMatrix:biasVector:resultMatrix:")]
 		void EncodeToCommandBuffer (IMTLCommandBuffer commandBuffer, MPSMatrix inputMatrix, [NullAllowed] MPSVector biasVector, MPSMatrix resultMatrix);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -8989,6 +10340,9 @@ namespace MetalPerformanceShaders {
 		[Export ("setNeuronToPReLUWithParametersA:")]
 		void SetNeuronToPReLU (NSData a);
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -9004,6 +10358,10 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeToCommandBuffer:gradientMatrix:inputMatrix:biasVector:resultGradientForDataMatrix:resultGradientForBiasVector:")]
 		void Encode (IMTLCommandBuffer commandBuffer, MPSMatrix gradientMatrix, MPSMatrix inputMatrix, [NullAllowed] MPSVector biasVector, MPSMatrix resultGradientForDataMatrix, [NullAllowed] MPSVector resultGradientForBiasVector);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -9047,6 +10405,9 @@ namespace MetalPerformanceShaders {
 		[Export ("alpha")]
 		double Alpha { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -9070,6 +10431,10 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeGradientForWeightsAndBiasToCommandBuffer:gradientMatrix:inputMatrix:resultGradientForWeightMatrix:resultGradientForBiasVector:")]
 		void EncodeGradientForWeightsAndBias (IMTLCommandBuffer commandBuffer, MPSMatrix gradientMatrix, MPSMatrix inputMatrix, MPSMatrix resultGradientForWeightMatrix, [NullAllowed] MPSVector resultGradientForBiasVector);
 
+		/// <param name="aDecoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -9089,10 +10454,21 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSMatrixLogSoftMax {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -9160,6 +10536,9 @@ namespace MetalPerformanceShaders {
 		[Export ("neuronParameterC")]
 		float NeuronParameterC { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -9178,6 +10557,14 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeToCommandBuffer:inputMatrix:weightMatrix:biasVector:resultMatrix:")]
 		void EncodeToCommandBuffer (IMTLCommandBuffer commandBuffer, MPSMatrix inputMatrix, MPSMatrix weightMatrix, [NullAllowed] MPSVector biasVector, MPSMatrix resultMatrix);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -9241,6 +10628,14 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeToCommandBuffer:inputMatrix:resultIndexMatrix:resultValueMatrix:")]
 		void EncodeToCommandBuffer (IMTLCommandBuffer commandBuffer, MPSMatrix inputMatrix, MPSMatrix resultIndexMatrix, MPSMatrix resultValueMatrix);
 
+		/// <param name="aDecoder">The unarchiver object.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <remarks>
+		///           <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization).   This is part of the <see cref="T:Foundation.NSCoding" />  protocol.</para>
+		///           <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="T:Foundation.NSCoder" /> and decorate it with the [Export("initWithCoder:"] attribute declaration.</para>
+		///           <para>The state of this object can also be serialized by using the companion method, EncodeTo.</para>
+		///         </remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -9322,6 +10717,11 @@ namespace MetalPerformanceShaders {
 		[return: NullAllowed]
 		NSObject GetUnarchivedObject (Class @class, NSData data, IMTLDevice device, [NullAllowed] out NSError error);
 
+		/// <param name="data">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initForReadingFromData:device:error:")]
 		NativeHandle Constructor (NSData data, IMTLDevice device, [NullAllowed] out NSError error);
@@ -9655,10 +11055,18 @@ namespace MetalPerformanceShaders {
 		[Export ("dataLayout")]
 		MPSDataLayout DataLayout { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="dataLayout">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:dataLayout:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, MPSDataLayout dataLayout);
 
+		/// <param name="aDecoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -9685,10 +11093,17 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSImageEuclideanDistanceTransform {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -9727,6 +11142,10 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelDiameter);
 
+		/// <param name="aDecoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -9777,11 +11196,19 @@ namespace MetalPerformanceShaders {
 			get;
 		}
 
+		/// <param name="device">To be added.</param>
+		/// <param name="histogramInfo">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:histogramInfo:")]
 		[DesignatedInitializer]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		NativeHandle Constructor (IMTLDevice device, ref MPSImageHistogramInfo histogramInfo);
 
+		/// <param name="aDecoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -9814,6 +11241,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSImageReduceRowMin {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -9824,6 +11254,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSImageReduceColumnMin {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -9834,6 +11267,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSImageReduceRowMax {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -9844,6 +11280,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSImageReduceColumnMax {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -9854,6 +11293,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSImageReduceRowMean {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -9864,6 +11306,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSImageReduceColumnMean {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -9874,6 +11319,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSImageReduceRowSum {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -9884,6 +11332,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSImageReduceColumnSum {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -9906,6 +11357,9 @@ namespace MetalPerformanceShaders {
 		[Export ("sourceColumns")]
 		nuint SourceColumns { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -9920,6 +11374,10 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeToCommandBuffer:gradientMatrix:forwardOutputMatrix:resultMatrix:")]
 		void EncodeToCommandBuffer (IMTLCommandBuffer commandBuffer, MPSMatrix gradientMatrix, MPSMatrix forwardOutputMatrix, MPSMatrix resultMatrix);
 
+		/// <param name="aDecoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -9939,10 +11397,17 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSMatrixLogSoftMaxGradient {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -10007,10 +11472,17 @@ namespace MetalPerformanceShaders {
 		[Export ("intersectionDataType", ArgumentSemantic.Assign)]
 		MPSIntersectionDataType IntersectionDataType { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -10051,6 +11523,9 @@ namespace MetalPerformanceShaders {
 		[Export ("device")]
 		IMTLDevice Device { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		NativeHandle Constructor (IMTLDevice device);
 	}
@@ -10114,18 +11589,32 @@ namespace MetalPerformanceShaders {
 		[Export ("instanceCount")]
 		nuint InstanceCount { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
 
+		/// <param name="group">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithGroup:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (MPSAccelerationStructureGroup group);
 
+		/// <param name="aDecoder">To be added.</param>
+		/// <param name="group">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:group:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, MPSAccelerationStructureGroup group);
@@ -10165,18 +11654,32 @@ namespace MetalPerformanceShaders {
 		[Export ("usage", ArgumentSemantic.Assign)]
 		MPSAccelerationStructureUsage Usage { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
 
+		/// <param name="group">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithGroup:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (MPSAccelerationStructureGroup group);
 
+		/// <param name="aDecoder">To be added.</param>
+		/// <param name="group">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:group:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, MPSAccelerationStructureGroup group);
@@ -10283,18 +11786,32 @@ namespace MetalPerformanceShaders {
 		[Export ("triangleCount")]
 		nuint TriangleCount { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
 
+		/// <param name="group">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithGroup:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (MPSAccelerationStructureGroup group);
 
+		/// <param name="aDecoder">To be added.</param>
+		/// <param name="group">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:group:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, MPSAccelerationStructureGroup group);
@@ -10370,6 +11887,10 @@ namespace MetalPerformanceShaders {
 		[Export ("variance")]
 		IMTLBuffer Variance { get; }
 
+		/// <param name="mean">To be added.</param>
+		/// <param name="variance">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithMean:variance:")]
 		NativeHandle Constructor (IMTLBuffer mean, IMTLBuffer variance);
 
@@ -10490,6 +12011,9 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeWithCoder:")]
 		void Encode (NSCoder coder);
 
+		/// <param name="decoder">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:")]
 		NativeHandle Constructor (NSCoder decoder);
 
@@ -10534,14 +12058,27 @@ namespace MetalPerformanceShaders {
 		[Export ("dataSource", ArgumentSemantic.Retain)]
 		IMPSCnnBatchNormalizationDataSource DataSource { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="dataSource">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:dataSource:")]
 		NativeHandle Constructor (IMTLDevice device, IMPSCnnBatchNormalizationDataSource dataSource);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="dataSource">To be added.</param>
+		/// <param name="fusedNeuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:dataSource:fusedNeuronDescriptor:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, IMPSCnnBatchNormalizationDataSource dataSource, [NullAllowed] MPSNNNeuronDescriptor fusedNeuronDescriptor);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -10624,10 +12161,17 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnBatchNormalizationStatistics {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -10646,11 +12190,19 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnBatchNormalizationGradient {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="fusedNeuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:fusedNeuronDescriptor:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, [NullAllowed] MPSNNNeuronDescriptor fusedNeuronDescriptor);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -10701,11 +12253,19 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnBatchNormalizationStatisticsGradient {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="fusedNeuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:fusedNeuronDescriptor:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, [NullAllowed] MPSNNNeuronDescriptor fusedNeuronDescriptor);
 
+		/// <param name="aDecoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -10761,9 +12321,17 @@ namespace MetalPerformanceShaders {
 		[NullAllowed, Export ("biases")]
 		IMTLBuffer Biases { get; }
 
+		/// <param name="weights">To be added.</param>
+		/// <param name="biases">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithWeights:biases:")]
 		NativeHandle Constructor (IMTLBuffer weights, [NullAllowed] IMTLBuffer biases);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="descriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:cnnConvolutionDescriptor:")]
 		NativeHandle Constructor (IMTLDevice device, MPSCnnConvolutionDescriptor descriptor);
 
@@ -10825,10 +12393,18 @@ namespace MetalPerformanceShaders {
 		//[Export ("serializeWeightsAndBiases")]
 		//bool SerializeWeightsAndBiases { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="weights">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:weights:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, IMPSCnnConvolutionDataSource weights);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -10852,10 +12428,18 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnFullyConnectedGradient {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="weights">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:weights:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, IMPSCnnConvolutionDataSource weights);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -10896,6 +12480,10 @@ namespace MetalPerformanceShaders {
 		[Export ("maskStrideInPixels")]
 		MTLSize MaskStrideInPixels { get; }
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -10928,6 +12516,10 @@ namespace MetalPerformanceShaders {
 		[Export ("maskStrideInPixels")]
 		MTLSize MaskStrideInPixels { get; }
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -11040,6 +12632,9 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeWithCoder:")]
 		void Encode (NSCoder coder);
 
+		/// <param name="decoder">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:")]
 		NativeHandle Constructor (NSCoder decoder);
 
@@ -11076,10 +12671,18 @@ namespace MetalPerformanceShaders {
 		[Export ("dataSource", ArgumentSemantic.Retain)]
 		IMPSCnnInstanceNormalizationDataSource DataSource { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="dataSource">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:dataSource:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, IMPSCnnInstanceNormalizationDataSource dataSource);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -11134,10 +12737,17 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnInstanceNormalizationGradient {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -11148,10 +12758,17 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnGradientKernel {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -11255,9 +12872,19 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnLossLabels {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="labelsDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:labelsDescriptor:")]
 		NativeHandle Constructor (IMTLDevice device, MPSCnnLossDataDescriptor labelsDescriptor);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="lossImageSize">To be added.</param>
+		/// <param name="labelsDescriptor">To be added.</param>
+		/// <param name="weightsDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:lossImageSize:labelsDescriptor:weightsDescriptor:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, MTLSize lossImageSize, MPSCnnLossDataDescriptor labelsDescriptor, [NullAllowed] MPSCnnLossDataDescriptor weightsDescriptor);
@@ -11387,10 +13014,18 @@ namespace MetalPerformanceShaders {
 		[Export ("delta")]
 		float Delta { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="lossDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:lossDescriptor:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, MPSCnnLossDescriptor lossDescriptor);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -11621,10 +13256,18 @@ namespace MetalPerformanceShaders {
 		[Export ("anchorBoxes", ArgumentSemantic.Retain)]
 		NSData AnchorBoxes { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="lossDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:lossDescriptor:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, MPSCnnYoloLossDescriptor lossDescriptor);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -11755,6 +13398,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnAdd {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -11765,6 +13411,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnSubtract {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -11775,6 +13424,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnMultiply {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -11785,6 +13437,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnDivide {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -11807,6 +13462,9 @@ namespace MetalPerformanceShaders {
 		[Export ("threshold")]
 		float Threshold { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -11874,6 +13532,10 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnAddGradient {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="isSecondarySourceFilter">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:isSecondarySourceFilter:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, bool isSecondarySourceFilter);
@@ -11884,6 +13546,10 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnSubtractGradient {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="isSecondarySourceFilter">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:isSecondarySourceFilter:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, bool isSecondarySourceFilter);
@@ -11894,6 +13560,10 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnMultiplyGradient {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="isSecondarySourceFilter">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:isSecondarySourceFilter:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, bool isSecondarySourceFilter);
@@ -12017,10 +13687,18 @@ namespace MetalPerformanceShaders {
 		[NullAllowed, Export ("data", ArgumentSemantic.Retain)]
 		NSData Data { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="neuronDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:neuronDescriptor:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, MPSNNNeuronDescriptor neuronDescriptor);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -12043,6 +13721,10 @@ namespace MetalPerformanceShaders {
 		[Export ("beta")]
 		IMTLBuffer Beta { get; }
 
+		/// <param name="gamma">To be added.</param>
+		/// <param name="beta">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithGamma:beta:")]
 		NativeHandle Constructor (IMTLBuffer gamma, IMTLBuffer beta);
 
@@ -12113,6 +13795,9 @@ namespace MetalPerformanceShaders {
 		[Export ("neuronParameterC")]
 		float NeuronParameterC { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -12129,6 +13814,10 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeToCommandBuffer:inputMatrix:meanVector:varianceVector:gammaVector:betaVector:resultMatrix:")]
 		void Encode (IMTLCommandBuffer commandBuffer, MPSMatrix inputMatrix, MPSVector meanVector, MPSVector varianceVector, [NullAllowed] MPSVector gammaVector, [NullAllowed] MPSVector betaVector, MPSMatrix resultMatrix);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -12199,6 +13888,9 @@ namespace MetalPerformanceShaders {
 		[Export ("neuronParameterC")]
 		float NeuronParameterC { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -12218,6 +13910,10 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeToCommandBuffer:gradientMatrix:inputMatrix:meanVector:varianceVector:gammaVector:betaVector:resultGradientForDataMatrix:resultGradientForGammaVector:resultGradientForBetaVector:")]
 		void Encode (IMTLCommandBuffer commandBuffer, MPSMatrix gradientMatrix, MPSMatrix inputMatrix, MPSVector meanVector, MPSVector varianceVector, [NullAllowed] MPSVector gammaVector, [NullAllowed] MPSVector betaVector, MPSMatrix resultGradientForDataMatrix, [NullAllowed] MPSVector resultGradientForGammaVector, [NullAllowed] MPSVector resultGradientForBetaVector);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -12264,12 +13960,23 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithDevice:bufferSize:")]
 		NativeHandle Constructor (IMTLDevice device, nuint bufferSize);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="descriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:textureDescriptor:")]
 		NativeHandle Constructor (IMTLDevice device, MTLTextureDescriptor descriptor);
 
+		/// <param name="resource">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithResource:")]
 		NativeHandle Constructor ([NullAllowed] IMTLResource resource);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="resourceList">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:resourceList:")]
 		NativeHandle Constructor (IMTLDevice device, MPSStateResourceList resourceList);
 
@@ -12283,6 +13990,9 @@ namespace MetalPerformanceShaders {
 		[Export ("temporaryStateWithCommandBuffer:resourceList:")]
 		MPSNNGradientState CreateTemporaryState (IMTLCommandBuffer commandBuffer, MPSStateResourceList resourceList);
 
+		/// <param name="resources">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithResources:")]
 		NativeHandle Constructor ([NullAllowed] IMTLResource [] resources);
 	}
@@ -12319,12 +14029,23 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithDevice:bufferSize:")]
 		NativeHandle Constructor (IMTLDevice device, nuint bufferSize);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="descriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:textureDescriptor:")]
 		NativeHandle Constructor (IMTLDevice device, MTLTextureDescriptor descriptor);
 
+		/// <param name="resource">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithResource:")]
 		NativeHandle Constructor ([NullAllowed] IMTLResource resource);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="resourceList">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:resourceList:")]
 		NativeHandle Constructor (IMTLDevice device, MPSStateResourceList resourceList);
 
@@ -12338,6 +14059,9 @@ namespace MetalPerformanceShaders {
 		[Export ("temporaryStateWithCommandBuffer:resourceList:")]
 		MPSNNBinaryGradientState CreateTemporaryState (IMTLCommandBuffer commandBuffer, MPSStateResourceList resourceList);
 
+		/// <param name="resources">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithResources:")]
 		NativeHandle Constructor ([NullAllowed] IMTLResource [] resources);
 	}
@@ -12399,9 +14123,24 @@ namespace MetalPerformanceShaders {
 		[Export ("regularizationType", ArgumentSemantic.Assign)]
 		MPSNNRegularizationType RegularizationType { get; set; }
 
+		/// <param name="learningRate">To be added.</param>
+		/// <param name="gradientRescale">To be added.</param>
+		/// <param name="regularizationType">To be added.</param>
+		/// <param name="regularizationScale">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithLearningRate:gradientRescale:regularizationType:regularizationScale:")]
 		NativeHandle Constructor (float learningRate, float gradientRescale, MPSNNRegularizationType regularizationType, float regularizationScale);
 
+		/// <param name="learningRate">To be added.</param>
+		/// <param name="gradientRescale">To be added.</param>
+		/// <param name="applyGradientClipping">To be added.</param>
+		/// <param name="gradientClipMax">To be added.</param>
+		/// <param name="gradientClipMin">To be added.</param>
+		/// <param name="regularizationType">To be added.</param>
+		/// <param name="regularizationScale">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithLearningRate:gradientRescale:applyGradientClipping:gradientClipMax:gradientClipMin:regularizationType:regularizationScale:")]
 		NativeHandle Constructor (float learningRate, float gradientRescale, bool applyGradientClipping, float gradientClipMax, float gradientClipMin, MPSNNRegularizationType regularizationType, float regularizationScale);
 
@@ -12502,9 +14241,19 @@ namespace MetalPerformanceShaders {
 		[Export ("useNestrovMomentum")]
 		bool UseNestrovMomentum { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="learningRate">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:learningRate:")]
 		NativeHandle Constructor (IMTLDevice device, float learningRate);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="momentumScale">To be added.</param>
+		/// <param name="useNestrovMomentum">To be added.</param>
+		/// <param name="optimizerDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:momentumScale:useNestrovMomentum:optimizerDescriptor:")]
 		NativeHandle Constructor (IMTLDevice device, float momentumScale, bool useNestrovMomentum, MPSNNOptimizerDescriptor optimizerDescriptor);
 
@@ -12565,9 +14314,19 @@ namespace MetalPerformanceShaders {
 		[Export ("epsilon")]
 		float Epsilon { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="learningRate">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:learningRate:")]
 		NativeHandle Constructor (IMTLDevice device, float learningRate);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="decay">To be added.</param>
+		/// <param name="epsilon">To be added.</param>
+		/// <param name="optimizerDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:decay:epsilon:optimizerDescriptor:")]
 		NativeHandle Constructor (IMTLDevice device, double decay, float epsilon, MPSNNOptimizerDescriptor optimizerDescriptor);
 
@@ -12640,6 +14399,10 @@ namespace MetalPerformanceShaders {
 		[Export ("timeStep")]
 		nuint TimeStep { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="learningRate">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:learningRate:")]
 		NativeHandle Constructor (IMTLDevice device, float learningRate);
 
@@ -12707,6 +14470,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNReduceRowMin {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -12717,6 +14483,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNReduceColumnMin {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -12727,6 +14496,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNReduceFeatureChannelsMin {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -12737,6 +14509,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNReduceFeatureChannelsArgumentMin {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -12747,6 +14522,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNReduceRowMax {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -12757,6 +14535,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNReduceColumnMax {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -12767,6 +14548,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNReduceFeatureChannelsMax {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -12777,6 +14561,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNReduceFeatureChannelsArgumentMax {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -12787,6 +14574,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNReduceRowMean {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -12797,6 +14587,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNReduceColumnMean {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -12807,6 +14600,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNReduceFeatureChannelsMean {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -12817,6 +14613,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNReduceRowSum {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -12827,6 +14626,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNReduceColumnSum {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -12843,6 +14645,9 @@ namespace MetalPerformanceShaders {
 		[Export ("weight")]
 		float Weight { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -12871,6 +14676,9 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNReduceFeatureChannelsAndWeightsMean {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
@@ -12887,9 +14695,16 @@ namespace MetalPerformanceShaders {
 		[Export ("doWeightedSumByNonZeroWeights")]
 		bool DoWeightedSumByNonZeroWeights { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="doWeightedSumByNonZeroWeights">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:doWeightedSumByNonZeroWeights:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, bool doWeightedSumByNonZeroWeights);
@@ -12900,10 +14715,17 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNReshape {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -12914,10 +14736,17 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNReshapeGradient {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -12946,16 +14775,34 @@ namespace MetalPerformanceShaders {
 		[Export ("fillValue")]
 		float FillValue { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="paddingSizeBefore">To be added.</param>
+		/// <param name="paddingSizeAfter">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:paddingSizeBefore:paddingSizeAfter:")]
 		NativeHandle Constructor (IMTLDevice device, MPSImageCoordinate paddingSizeBefore, MPSImageCoordinate paddingSizeAfter);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="paddingSizeBefore">To be added.</param>
+		/// <param name="paddingSizeAfter">To be added.</param>
+		/// <param name="fillValueArray">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:paddingSizeBefore:paddingSizeAfter:fillValueArray:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, MPSImageCoordinate paddingSizeBefore, MPSImageCoordinate paddingSizeAfter, [NullAllowed] NSData fillValueArray);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -12966,10 +14813,17 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNPadGradient {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="aDecoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -13002,6 +14856,10 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint resizeWidth, nuint resizeHeight, bool alignCorners);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -13040,6 +14898,10 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint resizeWidth, nuint resizeHeight, nuint numberOfRegions, IntPtr regions);
 
+		/// <param name="aDecoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
@@ -13050,10 +14912,17 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNSlice {
 
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
@@ -13091,12 +14960,23 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithDevice:bufferSize:")]
 		NativeHandle Constructor (IMTLDevice device, nuint bufferSize);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="descriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:textureDescriptor:")]
 		NativeHandle Constructor (IMTLDevice device, MTLTextureDescriptor descriptor);
 
+		/// <param name="resource">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithResource:")]
 		NativeHandle Constructor ([NullAllowed] IMTLResource resource);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="resourceList">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:resourceList:")]
 		NativeHandle Constructor (IMTLDevice device, MPSStateResourceList resourceList);
 
@@ -13110,6 +14990,9 @@ namespace MetalPerformanceShaders {
 		[Export ("temporaryStateWithCommandBuffer:resourceList:")]
 		MPSRnnMatrixTrainingState CreateTemporaryState (IMTLCommandBuffer commandBuffer, MPSStateResourceList resourceList);
 
+		/// <param name="resources">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithResources:")]
 		NativeHandle Constructor ([NullAllowed] IMTLResource [] resources);
 	}
@@ -13155,6 +15038,11 @@ namespace MetalPerformanceShaders {
 		[Export ("accumulateWeightGradients")]
 		bool AccumulateWeightGradients { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="rnnDescriptor">To be added.</param>
+		/// <param name="trainableWeights">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:rnnDescriptor:trainableWeights:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, MPSRnnDescriptor rnnDescriptor, NSMutableArray<MPSMatrix> trainableWeights);
@@ -13244,6 +15132,10 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeGradientSequenceToCommandBuffer:forwardSources:sourceGradients:destinationGradients:weightGradients:trainingStates:weights:")]
 		void EncodeGradientSequence (IMTLCommandBuffer commandBuffer, MPSMatrix [] forwardSources, MPSMatrix [] sourceGradients, [NullAllowed] MPSMatrix [] destinationGradients, [NullAllowed] MPSMatrix [] weightGradients, MPSRnnMatrixTrainingState [] trainingStates, MPSMatrix [] weights);
 
+		/// <param name="decoder">To be added.</param>
+		/// <param name="device">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCoder:device:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);

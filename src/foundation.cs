@@ -3049,7 +3049,7 @@ namespace Foundation {
 		void EncodeTo (NSCoder encoder);
 	}
 
-	interface INSCoding {}
+	interface INSCoding { }
 
 	[Protocol]
 	interface NSSecureCoding : NSCoding {

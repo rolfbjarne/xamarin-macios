@@ -64,7 +64,7 @@ public class Program {
 
 		var trxFiles = new [] {
 			new { Name = "Remote .NET tests", TestResults = Path.Combine (outputDirectory, "windows-remote-dotnet-tests.trx") },
-			new { Name = "Local .NET tests", TestResults = Path.Combine (outputDirectory, "windows-dotnet-tests.trx") },
+			new { Name = "Local .NET tests", TestResults = Path.Combine (outputDirectory, "windows-local-dotnet-tests.trx") },
 			new { Name = "BGen tests", TestResults = Path.Combine (outputDirectory, "windows", "bgen-tests", "results.trx") },
 		};
 

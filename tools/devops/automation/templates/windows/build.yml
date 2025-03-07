@@ -302,6 +302,18 @@ steps:
   continueOnError: true
   condition: succeededOrFailed()
 
+- task: artifactDropTask@1
+  displayName: 'Publish to Artifact Services Drop'
+  inputs:
+    dropServiceURI: 'https://devdiv.artifacts.visualstudio.com/DefaultCollection'
+    dropMetadataContainerName: '${{ parameters.uploadPrefix }}DropMetadata-windows_integrationwindows-$(System.JobAttempt)'
+    buildNumber: '$(BUILD_REPOSITORY_TITLE)/device-tests/$(Build.BuildNumber)/$(Build.BuildId)/windows_integration-$(System.JobAttempt)'
+    sourcePath: '$(BUILD_REPOSITORY_TITLE)/jenkins-results'
+    detailedLog: true
+    usePat: true
+  continueOnError: true
+  condition: succeededOrFailed()
+
 # Archive files for the Html Report so that the report can be easily uploaded as artifacts of the build.
 - task: ArchiveFiles@1
   displayName: 'Archive HtmlReport'

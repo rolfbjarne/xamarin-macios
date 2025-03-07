@@ -288,12 +288,12 @@ steps:
   displayName: 'Publish Artifact: TestSummary'
   inputs:
     targetPath: '$(BUILD_REPOSITORY_TITLE)/tests/TestSummary.md'
-    artifactName: '${{ parameters.uploadPrefix }}TestSummary-windows-integration-$(System.JobAttempt)'
+    artifactName: '${{ parameters.uploadPrefix }}TestSummary-windows_integrationwindows-$(System.JobAttempt)'
   continueOnError: true
   condition: succeededOrFailed()
 
 - pwsh: |
-    $summaryName = "TestSummary-windows-integration.md"
+    $summaryName = "TestSummary-windows_integrationwindows.md"
     $summaryPath = "$Env:SYSTEM_DEFAULTWORKINGDIRECTORY/$Env:BUILD_REPOSITORY_TITLE/tests/TestSummary.md"
     if (Test-Path -Path $summaryPath -PathType Leaf) {
       Write-Host "##vso[task.addattachment type=Distributedtask.Core.Summary;name=$summaryName;]$summaryPath"
@@ -319,7 +319,7 @@ steps:
   displayName: 'Publish Artifact: HtmlReport'
   inputs:
     targetPath: '$(Build.ArtifactStagingDirectory)/HtmlReport.zip'
-    artifactName: '${{ parameters.uploadPrefix }}HtmlReport-windows-integration-$(System.JobAttempt)'
+    artifactName: '${{ parameters.uploadPrefix }}HtmlReport-windows_integrationwindows-$(System.JobAttempt)'
   continueOnError: true
   condition: succeededOrFailed()
 

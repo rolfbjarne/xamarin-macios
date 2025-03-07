@@ -1121,7 +1121,7 @@ namespace Xamarin.Tests {
 			var project = "LibraryReferencingBindingLibrary";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
 
-			var projectPath = GetProjectPath (project, runtimeIdentifiers: string.Empty, platform: platform, out _);
+			var projectPath = GetProjectPath (project, platform: platform);
 			Clean (projectPath);
 
 			DotNet.AssertBuild (projectPath, GetDefaultProperties ());

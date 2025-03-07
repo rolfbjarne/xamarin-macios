@@ -330,9 +330,8 @@ namespace Xamarin.Tests {
 		{
 			var project = "BindingWithCompressedXCFramework";
 			var assemblyName = project;
-			var configuration = "Release";
 			Configuration.IgnoreIfIgnoredPlatform (platform);
-			var project_path = GetProjectPath (project, runtimeIdentifiers: string.Empty, platform: platform, out var appPath, configuration: configuration);
+			var project_path = GetProjectPath (project, platform: platform);
 			Clean (project_path);
 
 			var tmpdir = Cache.CreateTemporaryDirectory ();

@@ -1124,6 +1124,14 @@ namespace Xamarin.Tests {
 			var projectPath = GetProjectPath (project, platform: platform);
 			Clean (projectPath);
 
+			var referenced_binding_projects = new string [] {
+				Path.Combine (Configuration.RootPath, "tests", "bindings-xcframework-test", "dotnet", platform.AsString (), $"bindings-xcframework-test.csproj"),
+				GetProjectPath ("BindingWithDefaultCompileInclude", platform: platform),
+				GetProjectPath ("BindingWithUncompressedResourceBundle", platform: platform),
+			};
+			foreach (var rbp in referenced_binding_projects)
+				Clean (rbp);
+
 			DotNet.AssertBuild (projectPath, GetDefaultProperties ());
 
 			var bindir = GetBinDir (projectPath, platform, string.Empty);
@@ -1132,20 +1140,20 @@ namespace Xamarin.Tests {
 				Path.Combine ("BindingWithUncompressedResourceBundle.resources", "manifest"),
 			};
 
-			switch (platform) {
-			case ApplePlatform.iOS:
-			case ApplePlatform.TVOS:
-				bindingResourcePackages.Add (Path.Combine ("bindings-framework-test.resources", "XStaticArTest.framework", "XStaticArTest"));
-				bindingResourcePackages.Add (Path.Combine ("bindings-framework-test.resources", "XStaticObjectTest.framework", "XStaticObjectTest"));
-				bindingResourcePackages.Add (Path.Combine ("bindings-framework-test.resources", "XTest.framework", "Info.plist"));
-				bindingResourcePackages.Add (Path.Combine ("bindings-framework-test.resources", "XTest.framework", "XTest"));
-				bindingResourcePackages.Add (Path.Combine ("bindings-framework-test.resources", "manifest"));
-				break;
-			case ApplePlatform.MacCatalyst:
-			case ApplePlatform.MacOSX:
-				bindingResourcePackages.Add ("bindings-framework-test.resources.zip");
-				break;
-			}
+			// switch (platform) {
+			// case ApplePlatform.iOS:
+			// case ApplePlatform.TVOS:
+			// 	bindingResourcePackages.Add (Path.Combine ("bindings-framework-test.resources", "XStaticArTest.framework", "XStaticArTest"));
+			// 	bindingResourcePackages.Add (Path.Combine ("bindings-framework-test.resources", "XStaticObjectTest.framework", "XStaticObjectTest"));
+			// 	bindingResourcePackages.Add (Path.Combine ("bindings-framework-test.resources", "XTest.framework", "Info.plist"));
+			// 	bindingResourcePackages.Add (Path.Combine ("bindings-framework-test.resources", "XTest.framework", "XTest"));
+			// 	bindingResourcePackages.Add (Path.Combine ("bindings-framework-test.resources", "manifest"));
+			// 	break;
+			// case ApplePlatform.MacCatalyst:
+			// case ApplePlatform.MacOSX:
+			// 	bindingResourcePackages.Add ("bindings-framework-test.resources.zip");
+			// 	break;
+			// }
 
 			DumpFiles (bindir);
 

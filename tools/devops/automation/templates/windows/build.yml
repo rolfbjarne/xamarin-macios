@@ -278,10 +278,26 @@ steps:
 - pwsh: $(System.DefaultWorkingDirectory)/$(BUILD_REPOSITORY_TITLE)/tools/devops/automation/scripts/run-generator-tests-on-windows.ps1
   displayName: 'Run generator tests'
 
+# Copy the binlogs to the html report
+- pwsh: |
+    $sourceDir = '$(Build.SourcesDirectory)\$(BUILD_REPOSITORY_TITLE)\tests'
+    $targetDir = '$(Build.SourcesDirectory)\$(BUILD_REPOSITORY_TITLE)\jenkins-results\tests'
+    New-Item -Path "$targetDir" -ItemType "directory" -Force
+
+    $binlogs = Get-ChildItem $sourceDir -Recurse -Include "*.binlog"
+    foreach ($binlog in $binlogs) {
+        $targetFile = $targetDir + $binlog.FullName.SubString($sourceDir.Length);
+        New-Item -ItemType File -Path $targetFile -Force
+        Copy-Item $binlog.FullName -destination $targetFile
+    }
+  displayName: Copy test binlogs to the html report
+  continueOnError: true
+  condition: succeededOrFailed()
+
 - pwsh: '& "$(Build.SourcesDirectory)\$Env:BUILD_REPOSITORY_TITLE\tools\devops\automation\scripts\prepare-windows-test-results.ps1"'
   displayName: 'Prepare tests results and Html Report'
   timeoutInMinutes: 5
-  condition: always()
+  condition: succeededOrFailed()
 
 # Upload TestSummary as an artifact.
 - task: PublishPipelineArtifact@1
@@ -354,6 +370,9 @@ steps:
 
     $binlogs = Get-ChildItem $sourceDir -Recurse -Include "*.binlog"
     foreach ($binlog in $binlogs) {
+        if ($binlog.FullName.Contains("jenkins-results")) {
+          continue
+        }
         $targetFile = $targetDir + $binlog.FullName.SubString($sourceDir.Length);
         New-Item -ItemType File -Path $targetFile -Force
         Copy-Item $binlog.FullName -destination $targetFile

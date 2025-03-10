@@ -1,6 +1,5 @@
 /*
 # Expected files:
-# Expected files:
 #
 #  $Env:BUILD_SOURCESDIRECTORY/xamarin-macios/jenkins-results/windows-remote-dotnet-tests.trx"
 #  $(Build.SourcesDirectory)/xamarin-macios/jenkins-results/windows-dotnet-tests.trx"
@@ -21,6 +20,8 @@ public class Program {
 		case "passed":
 		case "completed":
 			return "green";
+		case "notexecuted":
+			return "orange";
 		default:
 			return "red";
 		}
@@ -76,9 +77,10 @@ public class Program {
 			new { Name = "BGen tests", TestResults = Path.Combine (outputDirectory, "windows", "bgen-tests", "results.trx") },
 		};
 
-		var extraFiles = new []{
-			Path.Combine(outputDirectory, "windows-remote-logs.zip"),
+		var extraFiles = new List<string> () {
+			Path.Combine (outputDirectory, "windows-remote-logs.zip"),
 		};
+		extraFiles.AddRange (Directory.GetFiles (outputDirectory, "*.binlog", SearchOption.AllDirectories));
 
 		var indexContents = new StringBuilder ();
 		var summaryContents = new StringBuilder ();
@@ -97,6 +99,25 @@ public class Program {
 		indexContents.AppendLine ($"  </head>");
 		indexContents.AppendLine ($"  <body>");
 		indexContents.AppendLine ($"    <h1>Test results</h1>");
+
+		indexContents.AppendLine ($"    <div>");
+		var stepUrl = $"{Environment.GetEnvironmentVariable ("SYSTEM_TEAMFOUNDATIONCOLLECTIONURI")}" +
+						$"{Environment.GetEnvironmentVariable ("SYSTEM_TEAMPROJECT")}" + 
+						$"/_build" +
+						$"/results?buildId={Environment.GetEnvironmentVariable ("BUILD_BUILDID")}" +
+						$"&view=logs" +
+						$"&j={Environment.GetEnvironmentVariable ("SYSTEM_JOBID")}";
+		indexContents.AppendLine ($"        Step: <a href='{stepUrl}'>{stepUrl}</a> <br />");
+		var artifactsUrl = $"{Environment.GetEnvironmentVariable ("SYSTEM_TEAMFOUNDATIONCOLLECTIONURI")}" +
+						$"{Environment.GetEnvironmentVariable ("SYSTEM_TEAMPROJECT")}" + 
+						$"/_build" +
+						$"/results?buildId={Environment.GetEnvironmentVariable ("BUILD_BUILDID")}" +
+						$"&view=artifacts" +
+						$"&pathAsName=false" +
+						$"&type=publishedArtifacts";
+		indexContents.AppendLine ($"        Artifacts: <a href='{artifactsUrl}'>{artifactsUrl}</a> <br />");
+		indexContents.AppendLine ($"    </div>");
+
 		foreach (var trx in trxFiles) {
 			var name = trx.Name;
 			var path = trx.TestResults;
@@ -117,8 +138,19 @@ public class Program {
 							var testName = node.Attributes? ["testName"]?.Value ?? "<unknown test name>";
 							var testOutcome = node.Attributes? ["outcome"]?.Value ?? "<unknown test outcome>";
 							var testMessage = node.SelectSingleNode ("*[local-name() = 'Output']/*[local-name() = 'ErrorInfo']/*[local-name() = 'Message']")?.InnerText;
+
+							var testId = node.Attributes? ["testId"]?.Value;
+							if (!string.IsNullOrEmpty (testId)) {
+								var testMethod = xml.SelectSingleNode ($"/*[local-name() = 'TestRun']/*[local-name() = 'TestDefinitions']/*[local-name() = 'UnitTest'][@id='{testId}']/*[local-name() = 'TestMethod']");
+								var className = testMethod?.Attributes? ["className"]?.Value ?? string.Empty;
+								if (!string.IsNullOrEmpty (className))
+									testName = className + "." + testName;
+							}
+
 							if (string.IsNullOrEmpty (testMessage)) {
 								messageLines.Add ($"        <li>{testName} (<span style='color: {GetOutcomeColor (testOutcome)}'>{testOutcome}</span>)</li>");
+							} else if (testMessage.Split ('\n').Length == 1) {
+								messageLines.Add ($"        <li>{testName} (<span style='color: {GetOutcomeColor (testOutcome)}'>{testOutcome}</span>): {FormatHtml (testMessage)}</li>");
 							} else {
 								messageLines.Add ($"        <li>{testName} (<span style='color: {GetOutcomeColor (testOutcome)}'>{testOutcome}</span>)");
 								messageLines.Add ($"            <div class='pdiv' style='margin-left: 20px;'>");
@@ -136,8 +168,11 @@ public class Program {
 				var htmlPath = Path.ChangeExtension (path, "html");
 				if (File.Exists (htmlPath)) {
 					var relativeHtmlPath = Path.GetRelativePath (outputDirectory, htmlPath);
-					messageLines.Add ($"Html results: <a href='{relativeHtmlPath}'>{Path.GetFileName (relativeHtmlPath).Replace ('\\', '/')}</a>");
+					messageLines.Add ($"Html results: <a href='{relativeHtmlPath}'>{Path.GetFileName (relativeHtmlPath).Replace ('\\', '/')}</a> <br />");
 				}
+				var relativeTrxPath = Path.GetRelativePath (outputDirectory, path);
+				messageLines.Add ($"Trx results: <a href='{relativeTrxPath}'>{Path.GetFileName (relativeTrxPath).Replace ('\\', '/')}</a> <br />");
+
 			} catch (Exception e) {
 				outcome = "Failed to parse test results";
 				messageLines.Add ($"<div>{FormatHtml (e.ToString ())}</div>");
@@ -158,7 +193,7 @@ public class Program {
 			indexContents.AppendLine ($"    <ul>");
 			foreach (var ef in existingExtraFiles) {
 				var relative = Path.GetRelativePath (outputDirectory, ef);
-				indexContents.AppendLine ($"      <li><a href='{relative}'>{Path.GetFileName (ef).Replace ('\\', '/')}</a></li>");
+				indexContents.AppendLine ($"      <li><a href='{relative}'>{relative.Replace ('\\', '/')}</a></li>");
 			}
 			indexContents.AppendLine ($"    </ul>");
 		}
@@ -177,7 +212,11 @@ public class Program {
 		File.WriteAllText (indexFile, indexContents.ToString ());
 		File.WriteAllText (summaryFile, summaryContents.ToString ());
 
-		var vstsIndexContents = indexContentsValue.Replace ("a href='", "a href='" + vsdropsUri);
+		var vstsIndexContents = indexContentsValue
+								.Replace ("a href='https", "a href=@https") // we don't want to rewrite https links, so make them look like something else
+								.Replace ("a href='", "a href='" + vsdropsUri) // rewrite local links to vsdrops
+								.Replace ("a href=@https", "a href='https"); // rewrite https links back to normal
+								
 		Directory.CreateDirectory (vsdropsDirectory);
 		File.WriteAllText (vsdropsFile, vstsIndexContents);
 

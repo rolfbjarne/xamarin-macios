@@ -53,8 +53,9 @@ namespace Xamarin.MacDev.Tasks {
 			var workingDirectory = GetWorkingDirectory ();
 			var sources = new List<string> ();
 			for (int i = 0; i < Sources.Length; i++) {
-				var relative = PathUtils.AbsoluteToRelative (workingDirectory, Sources [i].GetMetadata ("FullPath"));
-				sources.Add (relative);
+//				var relative = PathUtils.AbsoluteToRelative (workingDirectory, Sources [i].GetMetadata ("FullPath"));
+//				Log.LogMessage ($"workingDirectory: {workingDirectory} Sources[{i}]: {Sources [i].GetMetadata ("FullPath")} relative: {relative} zip: {zip}");
+				sources.Add (Sources [i].GetMetadata ("FullPath"));
 			}
 
 			if (!CompressionHelper.TryCompress (this.Log, zip, sources, false, workingDirectory, false))

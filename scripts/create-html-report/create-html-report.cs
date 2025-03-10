@@ -64,10 +64,10 @@ public class Program {
 		var vsdropsDirectory = Path.Combine (outputDirectory, "tests");
 		var vsdropsFile = Path.Combine (vsdropsDirectory, "vsdrops_index.html");
 
-		var vsdropsPrefix = Environment.GetEnvironmentVariable ("VSDROPSPREFIX");
-		var vsdropsBuildNumber = Environment.GetEnvironmentVariable ("BUILD_BUILDNUMBER");
-		var vsdropsBuildId = Environment.GetEnvironmentVariable ("BUILD_BUILDID");
-		var vsdropsJobAttempt = Environment.GetEnvironmentVariable ("SYSTEM_JOBATTEMPT");
+		var vsdropsPrefix = Environment.GetEnvironmentVariable ("VSDROPSPREFIX") ?? string.Empty;
+		var vsdropsBuildNumber = Environment.GetEnvironmentVariable ("BUILD_BUILDNUMBER") ?? string.Empty;
+		var vsdropsBuildId = Environment.GetEnvironmentVariable ("BUILD_BUILDID") ?? string.Empty;
+		var vsdropsJobAttempt = Environment.GetEnvironmentVariable ("SYSTEM_JOBATTEMPT") ?? string.Empty;
 		var vsdropsUri = Path.Combine (vsdropsPrefix, vsdropsBuildNumber, vsdropsBuildId, $"windows_integrationwindows-{vsdropsJobAttempt}").Replace ('\\', '/') + "/;";
 
 		var trxFiles = new [] {
@@ -173,7 +173,7 @@ public class Program {
 
 
 		Directory.CreateDirectory (outputDirectory);
-		var indexContentValue = indexContents.ToString ();
+		var indexContentsValue = indexContents.ToString ();
 		File.WriteAllText (indexFile, indexContents.ToString ());
 		File.WriteAllText (summaryFile, summaryContents.ToString ());
 

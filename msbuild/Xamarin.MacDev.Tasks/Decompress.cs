@@ -318,6 +318,8 @@ namespace Xamarin.MacDev {
 		{
 			var rv = true;
 
+			log.LogMessage (MessageImportance.Low, "Creating new zip file {0} using System.IO.Compression with {1} and workingDirectory = {2}", zip, string.Join (", ", resources), workingDirectory);
+
 			workingDirectory = Path.GetFullPath (workingDirectory);
 
 			var resourcePaths = resources.Select ((v) => Path.Combine (workingDirectory, v)).ToList ();

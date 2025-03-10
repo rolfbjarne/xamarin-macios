@@ -61,6 +61,14 @@ public class Program {
 		var outputDirectory = Path.Combine (sourcesDirectory, "jenkins-results");
 		var indexFile = Path.Combine (outputDirectory, "index.html");
 		var summaryFile = Path.Combine (sourcesDirectory, "tests", "TestSummary.md");
+		var vsdropsDirectory = Path.Combine (outputDirectory, "tests");
+		var vsdropsFile = Path.Combine (vsdropsDirectory, "vsdrops_index.html");
+
+		var vsdropsPrefix = Environment.GetEnvironmentVariable ("VSDROPSPREFIX");
+		var vsdropsBuildNumber = Environment.GetEnvironmentVariable ("BUILD_BUILDNUMBER");
+		var vsdropsBuildId = Environment.GetEnvironmentVariable ("BUILD_BUILDID");
+		var vsdropsJobAttempt = Environment.GetEnvironmentVariable ("SYSTEM_JOBATTEMPT");
+		var vsdropsUri = Path.Combine (vsdropsPrefix, vsdropsBuildNumber, vsdropsBuildId, $"windows_integrationwindows-{vsdropsJobAttempt}").Replace ('\\', '/') + "/;";
 
 		var trxFiles = new [] {
 			new { Name = "Remote .NET tests", TestResults = Path.Combine (outputDirectory, "windows-remote-dotnet-tests.trx") },
@@ -112,10 +120,11 @@ public class Program {
 							if (string.IsNullOrEmpty (testMessage)) {
 								messageLines.Add ($"        <li>{testName} (<span style='color: {GetOutcomeColor (testOutcome)}'>{testOutcome}</span>)</li>");
 							} else {
-								messageLines.Add ($"        <li>{testName} (<span style='color: {GetOutcomeColor (testOutcome)}'>{testOutcome}</span>)</li>");
-								messageLines.Add ($"        <div class='pdiv' style='margin-left: 20px;'>");
+								messageLines.Add ($"        <li>{testName} (<span style='color: {GetOutcomeColor (testOutcome)}'>{testOutcome}</span>)");
+								messageLines.Add ($"            <div class='pdiv' style='margin-left: 20px;'>");
 								messageLines.Add (FormatHtml (testMessage));
-								messageLines.Add ($"        </div>");
+								messageLines.Add ($"            </div>");
+								messageLines.Add ($"        </li>");
 							}
 						}
 						messageLines.Add ("        </ul>");
@@ -127,7 +136,7 @@ public class Program {
 				var htmlPath = Path.ChangeExtension (path, "html");
 				if (File.Exists (htmlPath)) {
 					var relativeHtmlPath = Path.GetRelativePath (outputDirectory, htmlPath);
-					messageLines.Add ($"Html results: <a href='{relativeHtmlPath}'>{Path.GetFileName (relativeHtmlPath)}</a>");
+					messageLines.Add ($"Html results: <a href='{relativeHtmlPath}'>{Path.GetFileName (relativeHtmlPath).Replace ('\\', '/')}</a>");
 				}
 			} catch (Exception e) {
 				outcome = "Failed to parse test results";
@@ -149,7 +158,7 @@ public class Program {
 			indexContents.AppendLine ($"    <ul>");
 			foreach (var ef in existingExtraFiles) {
 				var relative = Path.GetRelativePath (outputDirectory, ef);
-				indexContents.AppendLine ($"      <li><a href='{relative}'>{Path.GetFileName (ef)}</a></li>");
+				indexContents.AppendLine ($"      <li><a href='{relative}'>{Path.GetFileName (ef).Replace ('\\', '/')}</a></li>");
 			}
 			indexContents.AppendLine ($"    </ul>");
 		}
@@ -164,13 +173,20 @@ public class Program {
 
 
 		Directory.CreateDirectory (outputDirectory);
+		var indexContentValue = indexContents.ToString ();
 		File.WriteAllText (indexFile, indexContents.ToString ());
 		File.WriteAllText (summaryFile, summaryContents.ToString ());
+
+		var vstsIndexContents = indexContentsValue.Replace ("a href='", "a href='" + vsdropsUri);
+		Directory.CreateDirectory (vsdropsDirectory);
+		File.WriteAllText (vsdropsFile, vstsIndexContents);
 
 		Console.WriteLine ($"Created {indexFile} successfully.");
 		Console.WriteLine (indexContents);
 		Console.WriteLine ($"Created {summaryFile} successfully.");
 		Console.WriteLine (summaryContents);
+		Console.WriteLine ($"Created {vsdropsFile} successfully.");
+		Console.WriteLine (vstsIndexContents);
 		Console.WriteLine ($"All tests succeeded: {allTestsSucceeded}");
 		return 0;
 	}

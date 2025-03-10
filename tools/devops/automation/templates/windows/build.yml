@@ -307,7 +307,7 @@ steps:
   inputs:
     dropServiceURI: 'https://devdiv.artifacts.visualstudio.com/DefaultCollection'
     dropMetadataContainerName: '${{ parameters.uploadPrefix }}DropMetadata-windows_integrationwindows-$(System.JobAttempt)'
-    buildNumber: '$(BUILD_REPOSITORY_TITLE)/device-tests/$(Build.BuildNumber)/$(Build.BuildId)/windows_integration-$(System.JobAttempt)'
+    buildNumber: '$(BUILD_REPOSITORY_TITLE)/device-tests/$(Build.BuildNumber)/$(Build.BuildId)/windows_integrationwindows-$(System.JobAttempt)'
     sourcePath: '$(BUILD_REPOSITORY_TITLE)/jenkins-results'
     detailedLog: true
     usePat: true

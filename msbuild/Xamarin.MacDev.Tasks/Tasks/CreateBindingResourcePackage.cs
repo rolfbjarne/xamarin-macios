@@ -86,7 +86,7 @@ namespace Xamarin.MacDev.Tasks {
 					File.Delete (zipFile);
 				Directory.CreateDirectory (Path.GetDirectoryName (zipFile));
 
-				var filesToZip = NativeReferences.Select (v => v.ItemSpec.Replace ('\\', Path.DirectorySeparatorChar)).ToList ();
+				var filesToZip = NativeReferences.Select (v => v.ItemSpec.Replace ('\\', Path.DirectorySeparatorChar).Replace ('/', Path.DirectorySeparatorChar)).ToList ();
 				filesToZip.Add (manifestPath);
 
 				foreach (var nativeRef in filesToZip) {

@@ -290,6 +290,9 @@ namespace Xamarin.MacDev {
 		// Will add to an existing zip file (not replace)
 		static bool TryCompressUsingZip (TaskLoggingHelper log, string zip, IEnumerable<string> resources, string workingDirectory, bool maxCompression)
 		{
+
+			Console.WriteLine ("Creating new zip file {0} using zip workingDirectory = {2}:\n\t{1}", zip, string.Join ("\n\t", resources), workingDirectory);
+
 			var zipArguments = new List<string> ();
 			if (maxCompression)
 				zipArguments.Add ("-9");
@@ -301,7 +304,12 @@ namespace Xamarin.MacDev {
 				var fullPath = Path.GetFullPath (resource);
 				var relativePath = PathUtils.AbsoluteToRelative (workingDirectory, fullPath);
 				zipArguments.Add (relativePath);
+				Console.WriteLine ($"    Resource: {resource}");
+				Console.WriteLine ($"        Full path: {fullPath}");
+				Console.WriteLine ($"        Relative path: {relativePath}");
 			}
+			Console.WriteLine ($"cd {workingDirectory} && zip {string.Join (" ", zipArguments)}");
+			Console.WriteLine ();
 			var rv = XamarinTask.ExecuteAsync (log, "zip", zipArguments, workingDirectory: workingDirectory).Result;
 			log.LogMessage (MessageImportance.Low, "Updated {0} with {1}: {2}", zip, string.Join (", ", resources), rv.ExitCode == 0);
 			return rv.ExitCode == 0;

@@ -91,6 +91,8 @@ namespace Xamarin.MacDev.Tasks {
 
 				foreach (var nativeRef in filesToZip) {
 					var workingDirectory = Path.GetDirectoryName (nativeRef);
+					if (string.IsNullOrEmpty (workingDirectory))
+						workingDirectory = Directory.GetCurrentDirectory ();
 					CompressionHelper.TryCompress (Log, zipFile, new string [] { nativeRef }, false, workingDirectory, true);
 				}
 				packagedFiles.Add (zipFile);

@@ -10,6 +10,7 @@ using Mono.Tuner;
 
 using Xamarin.Bundler;
 using Xamarin.Linker;
+using Xamarin.Utils;
 
 #nullable enable
 
@@ -61,6 +62,8 @@ namespace Xamarin.Linker {
 			// Find corlib and the platform assemblies
 			foreach (var asm in configuration.Assemblies) {
 				if (asm.Name.Name == Driver.CorlibName) {
+					if (corlib_assembly is not null)
+						throw new InvalidOperationException ($"Already have a corlib assembly named {corlib_assembly.Name}");
 					corlib_assembly = asm;
 				} else if (asm.Name.Name == configuration.PlatformAssembly) {
 					platform_assembly = asm;
@@ -1268,13 +1271,51 @@ namespace Xamarin.Linker {
 			return attribute;
 		}
 
+#if NET
 		public CustomAttribute CreateDynamicDependencyAttribute (DynamicallyAccessedMemberTypes memberTypes, TypeDefinition type)
+#else
+		public CustomAttribute CreateDynamicDependencyAttribute (int memberTypes, TypeDefinition type)
+#endif
 		{
 			var attribute = new CustomAttribute (DynamicDependencyAttribute_ctor__DynamicallyAccessedMemberTypes_Type);
 			// typed as 'int' because that's how the linker expects it: https://github.com/dotnet/runtime/blob/3c5ad6c677b4a3d12bc6a776d654558cca2c36a9/src/tools/illink/src/linker/Linker/DynamicDependency.cs#L97
 			attribute.ConstructorArguments.Add (new CustomAttributeArgument (System_Diagnostics_CodeAnalysis_DynamicallyAccessedMemberTypes, (int) memberTypes));
 			attribute.ConstructorArguments.Add (new CustomAttributeArgument (System_Type, type));
 			return attribute;
+		}
+
+		public void AddDynamicDependencyAttributeToStaticConstructor (TypeDefinition onType, MethodDefinition forMethod)
+		{
+			AddDynamicDependencyAttributeToStaticConstructor (onType, DocumentationComments.GetSignature (forMethod));
+		}
+
+		public void AddDynamicDependencyAttributeToStaticConstructor (TypeDefinition onType, FieldDefinition forField)
+		{
+			AddDynamicDependencyAttributeToStaticConstructor (onType, DocumentationComments.GetSignature (forField));
+		}
+
+		void AddDynamicDependencyAttributeToStaticConstructor (TypeDefinition onType, string signature)
+		{
+			ClearCurrentAssembly ();
+			SetCurrentAssembly (onType.Module.Assembly);
+
+			var cctor = GetOrCreateStaticConstructor (onType);
+			var attrib = CreateDynamicDependencyAttribute (signature, onType);
+			cctor.CustomAttributes.Add (attrib);
+
+			ClearCurrentAssembly ();
+		}
+
+		MethodDefinition GetOrCreateStaticConstructor (TypeDefinition type)
+		{
+			var staticCtor = type.GetTypeConstructor ();
+			if (staticCtor is null) {
+				staticCtor = type.AddMethod (".cctor", MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.RTSpecialName | MethodAttributes.SpecialName | MethodAttributes.Static, System_Void);
+				staticCtor.CreateBody (out var il);
+				il.Emit (OpCodes.Ret);
+			}
+
+			return staticCtor;
 		}
 	}
 }

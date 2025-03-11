@@ -597,6 +597,51 @@ namespace Xamarin.Tests {
 		{
 			return GetBaseLibrary (platform);
 		}
+
+		public static List<string> GetBCLAssemblies (ApplePlatform platform)
+		{
+			var assemblies = new List<string> ();
+			string rid;
+			string packageName;
+			switch (platform) {
+			case ApplePlatform.MacCatalyst:
+				rid = "maccatalyst-arm64";
+				packageName = "microsoft.netcore.app.runtime.mono.maccatalyst-arm64";
+				break;
+			case ApplePlatform.iOS:
+				rid = "ios-arm64";
+				packageName = "microsoft.netcore.app.runtime.mono.ios-arm64";
+				break;
+			case ApplePlatform.TVOS:
+				rid = "tvos-arm64";
+				packageName = "microsoft.netcore.app.runtime.mono.tvos-arm64";
+				break;
+			case ApplePlatform.MacOSX:
+				rid = "osx-arm64";
+				packageName = "microsoft.netcore.app.runtime.osx-arm64";
+				break;
+			default:
+				throw new NotSupportedException ($"Unsupported platform: {platform}");
+			}
+			var microsoftNetCoreAppRefPackageVersion = File.ReadAllLines (Path.Combine (RootPath, "dotnet.config")).Single (v => v.StartsWith ("BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION=", StringComparison.Ordinal)).Replace ("BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION=", "");
+			var bclDir = Path.Combine (RootPath, "packages", packageName, microsoftNetCoreAppRefPackageVersion, "runtimes", rid, "lib", DotNetTfm);
+			var nativeDir = Path.Combine (RootPath, "packages", packageName, microsoftNetCoreAppRefPackageVersion, "runtimes", rid, "native");
+
+			assemblies.AddRange (Directory.GetFiles (bclDir, "*.dll"));
+			assemblies.AddRange (Directory.GetFiles (nativeDir, "*.dll"));
+
+			return assemblies;
+		}
+
+		public static List<string> GetReferenceAssemblies (ApplePlatform platform)
+		{
+			var assemblies = new List<string> ();
+			
+			assemblies.AddRange (GetBCLAssemblies (platform));
+			assemblies.AddRange (GetRefLibrary (platform));
+
+			return assemblies;
+		}
 #endif // !XAMMAC_TESTS
 
 		public static IEnumerable<ApplePlatform> GetIncludedPlatforms ()

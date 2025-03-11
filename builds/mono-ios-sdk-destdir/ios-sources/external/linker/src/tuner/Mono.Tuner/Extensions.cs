@@ -5,6 +5,8 @@ using Mono.Cecil;
 
 using Mono.Linker;
 
+#nullable disable
+
 namespace Mono.Tuner {
 
 	public static partial class Extensions {

@@ -11,6 +11,7 @@
 		<NUnitPackageVersion>4.4.0</NUnitPackageVersion>
 		<NUnitConsoleRunnerPackageVersion>3.22.0</NUnitConsoleRunnerPackageVersion>
 		<NUnit3TestAdapterPackageVersion>6.1.0</NUnit3TestAdapterPackageVersion>
+		<NUnitAnalyzersPackageVersion>4.10.0</NUnitAnalyzersPackageVersion><!-- 4.11.2 -->
 		<NUnitXmlTestLoggerPackageVersion>3.1.15</NUnitXmlTestLoggerPackageVersion>
 		<MicrosoftNETTestSdkPackageVersion>18.0.1</MicrosoftNETTestSdkPackageVersion>
 		<!-- Fix transient dependency issue found by component governance 4.7.0 -> 4.7.2 brought by Microsoft.Build package -->

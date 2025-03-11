@@ -2,7 +2,8 @@ using System;
 using System.Linq;
 
 using Mono.Cecil;
-
+using Mono.Cecil.Cil;
+using Mono.Cecil.Rocks;
 using Mono.Linker;
 using Mono.Linker.Steps;
 using Mono.Tuner;
@@ -18,6 +19,7 @@ namespace Xamarin.Linker.Steps {
 		protected override string Name { get; } = "Preserve Block Code";
 		protected override int ErrorCode { get; } = 2240;
 
+		AppBundleRewriter abr { get { return Configuration.AppBundleRewriter; } }
 		public override void Initialize (LinkContext context, MarkContext markContext)
 		{
 			base.Initialize (context);
@@ -79,9 +81,16 @@ namespace Xamarin.Linker.Steps {
 			if (method is null)
 				return;
 
-			// The type was used, so preserve the method and field
-			Context.Annotations.Mark (method);
-			Context.Annotations.Mark (field);
+			// Preserve the method and field on the static constructor of the type.
+			abr.AddDynamicDependencyAttributeToStaticConstructor (type, method);
+			abr.AddDynamicDependencyAttributeToStaticConstructor (type, field);
+			// Remove the BeforeFieldInit attribute from the type, otherwise the linker may trim away the static constructor, and taking our DynamicDependency attributes with it.
+			type.Attributes &= ~TypeAttributes.BeforeFieldInit;
+
+#if ASSEMBLY_PREPARER
+			abr.SetCurrentAssembly (type.Module.Assembly);
+			abr.SaveCurrentAssembly ();
+#endif
 		}
 	}
 }

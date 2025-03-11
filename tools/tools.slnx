@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="assembly-preparer/assembly-preparer.csproj" />
+  <Project Path="dotnet-linker/dotnet-linker.csproj" />
+  <Project Path="mmp/mmp.csproj" />
+  <Project Path="mtouch/mtouch.csproj" />
+</Solution>

@@ -1,0 +1,134 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<AssemblyName>assembly-preparer</AssemblyName>
+		<TargetFrameworks>net$(BundledNETCoreAppTargetFrameworkVersion);netstandard2.0</TargetFrameworks>
+		<DefineConstants>$(DefineConstants);PRETRIM;ASSEMBLY_PREPARER</DefineConstants>
+		<OutputType>Library</OutputType>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+		<WarningsAsErrors>true</WarningsAsErrors>
+		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	</PropertyGroup>
+
+	<Import Project="..\..\eng\Versions.props" />
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.DotNet.Cecil" Version="$(MicrosoftDotNetCecilPackageVersion)" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="../common/ApplePlatform.cs">
+			<Link>external/tools/common/ApplePlatform.cs</Link>
+		</Compile>
+		<Compile Include="../common/error.cs">
+			<Link>external/tools/common/error.cs</Link>
+		</Compile>
+		<Compile Include="../common/ErrorHelper.tools.cs">
+			<Link>external/tools/common/ErrorHelper.tools.cs</Link>
+		</Compile>
+		<Compile Include="../dotnet-linker/AppBundleRewriter.cs">
+			<Link>external/tools/dotnet-linker/AppBundleRewriter.cs</Link>
+		</Compile>
+		<Compile Include="../dotnet-linker/Steps/ConfigurationAwareMarkHandler.cs">
+			<Link>external/tools/dotnet-linker/Steps/ConfigurationAwareMarkHandler.cs</Link>
+		</Compile>
+		<Compile Include="../dotnet-linker/Steps/ExceptionalMarkHandler.cs">
+			<Link>external/tools/dotnet-linker/Steps/ExceptionalMarkHandler.cs</Link>
+		</Compile>
+		<Compile Include="../dotnet-linker/Steps/PreserveBlockCodeHandler.cs">
+			<Link>external/tools/dotnet-linker/Steps/PreserveBlockCodeHandler.cs</Link>
+		</Compile>
+		<Compile Include="../linker/CustomSymbolWriter.cs">
+			<Link>external/tools/linker/CustomSymbolWriter.cs</Link>
+		</Compile>
+		<Compile Include="../../src/ObjCRuntime/ErrorHelper.cs">
+			<Link>external/src/ObjCRuntime/ErrorHelper.cs</Link>
+		</Compile>
+		<Compile Include="../../builds/mono-ios-sdk-destdir/ios-sources/external/linker/src/tuner/Mono.Tuner/Extensions.cs">
+			<Link>external/builds/mono-ios-sdk-destdir/ios-sources/external/linker/src/tuner/Mono.Tuner/Extensions.cs</Link>
+		</Compile>
+		<Compile Include="../../builds/mono-ios-sdk-destdir/ios-sources/external/linker/src/linker/Linker/MethodDefinitionExtensions.cs">
+			<Link>external/builds/mono-ios-sdk-destdir/ios-sources/external/linker/src/linker/Linker/MethodDefinitionExtensions.cs</Link>
+		</Compile>
+		<Compile Include="../../builds/mono-ios-sdk-destdir/ios-sources/external/linker/src/tuner/Mono.Tuner/CecilRocks.cs">
+			<Link>external/builds/mono-ios-sdk-destdir/ios-sources/external/linker/src/tuner/Mono.Tuner/CecilRocks.cs</Link>
+		</Compile>
+		<Compile Include="../dotnet-linker/CecilExtensions.cs">
+			<Link>external/tools/dotnet-linker/CecilExtensions.cs</Link>
+		</Compile>
+		<Compile Include="../dotnet-linker/DocumentionComments.cs">
+			<Link>external/tools/dotnet-linker/DocumentionComments.cs</Link>
+		</Compile>
+		<Compile Include="../common/SdkVersions.cs">
+			<Link>external/tools/common/SdkVersions.cs</Link>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="..\mtouch\Errors.designer.cs">
+			<Link>external/tools/mtouch/Errors.designer.cs</Link>
+			<DependentUpon>Errors.resx</DependentUpon>
+		</Compile>
+		<EmbeddedResource Include="..\mtouch\Errors.resx">
+			<Link>external/tools/mtouch/Errors.resx</Link>
+			<Generator>ResXFileCodeGenerator</Generator>
+			<LastGenOutput>Errors.designer.cs</LastGenOutput>
+			<CustomToolNamespace>Xamarin.Bundler</CustomToolNamespace>
+			<ManifestResourceName>Xamarin.Bundler.Errors</ManifestResourceName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="..\mtouch\TranslatedAssemblies\Errors.cs.resx">
+			<Link>external/tools/mtouch/Errors.cs.resx</Link>
+			<ManifestResourceName>Xamarin.Bundler.Errors.cs</ManifestResourceName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="..\mtouch\TranslatedAssemblies\Errors.de.resx">
+			<Link>external/tools/mtouch/Errors.de.resx</Link>
+			<ManifestResourceName>Xamarin.Bundler.Errors.de</ManifestResourceName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="..\mtouch\TranslatedAssemblies\Errors.es.resx">
+			<Link>external/tools/mtouch/Errors.es.resx</Link>
+			<ManifestResourceName>Xamarin.Bundler.Errors.es</ManifestResourceName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="..\mtouch\TranslatedAssemblies\Errors.fr.resx">
+			<Link>external/tools/mtouch/Errors.fr.resx</Link>
+			<ManifestResourceName>Xamarin.Bundler.Errors.fr</ManifestResourceName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="..\mtouch\TranslatedAssemblies\Errors.it.resx">
+			<Link>external/tools/mtouch/Errors.it.resx</Link>
+			<ManifestResourceName>Xamarin.Bundler.Errors.it</ManifestResourceName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="..\mtouch\TranslatedAssemblies\Errors.ja.resx">
+			<Link>external/tools/mtouch/Errors.ja.resx</Link>
+			<ManifestResourceName>Xamarin.Bundler.Errors.ja</ManifestResourceName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="..\mtouch\TranslatedAssemblies\Errors.ko.resx">
+			<Link>external/tools/mtouch/Errors.ko.resx</Link>
+			<ManifestResourceName>Xamarin.Bundler.Errors.ko</ManifestResourceName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="..\mtouch\TranslatedAssemblies\Errors.pl.resx">
+			<Link>external/tools/mtouch/Errors.pl.resx</Link>
+			<ManifestResourceName>Xamarin.Bundler.Errors.pl</ManifestResourceName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="..\mtouch\TranslatedAssemblies\Errors.pt-BR.resx">
+			<Link>external/tools/mtouch/Errors.pt-BR.resx</Link>
+			<ManifestResourceName>Xamarin.Bundler.Errors.pt-BR</ManifestResourceName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="..\mtouch\TranslatedAssemblies\Errors.ru.resx">
+			<Link>external/tools/mtouch/Errors.ru.resx</Link>
+			<ManifestResourceName>Xamarin.Bundler.Errors.ru</ManifestResourceName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="..\mtouch\TranslatedAssemblies\Errors.tr.resx">
+			<Link>external/tools/mtouch/Errors.tr.resx</Link>
+			<ManifestResourceName>Xamarin.Bundler.Errors.tr</ManifestResourceName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="..\mtouch\TranslatedAssemblies\Errors.zh-Hans.resx">
+			<Link>external/tools/mtouch/Errors.zh-Hans.resx</Link>
+			<ManifestResourceName>Xamarin.Bundler.Errors.zh-Hans</ManifestResourceName>
+		</EmbeddedResource>
+		<EmbeddedResource Include="..\mtouch\TranslatedAssemblies\Errors.zh-Hant.resx">
+			<Link>external/tools/mtouch/Errors.zh-Hant.resx</Link>
+			<ManifestResourceName>Xamarin.Bundler.Errors.zh-Hant</ManifestResourceName>
+		</EmbeddedResource>
+	</ItemGroup>
+</Project>

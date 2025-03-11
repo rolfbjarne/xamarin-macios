@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-#if MTOUCH || MMP || BUNDLER
+#if MTOUCH || MMP || BUNDLER || PRETRIM
 using Mono.Cecil;
 
 using Xamarin.Bundler;
@@ -32,7 +32,7 @@ public class Framework {
 		}
 	}
 
-#if MTOUCH || MMP || BUNDLER
+#if MTOUCH || MMP || BUNDLER || PRETRIM
 	public bool IsFrameworkAvailableInSimulator (Application app)
 	{
 		if (VersionAvailableInSimulator is null)
@@ -701,7 +701,7 @@ public class Frameworks : Dictionary<string, Framework> {
 		}
 	}
 
-#if MTOUCH || MMP || BUNDLER
+#if MTOUCH || MMP || BUNDLER || PRETRIM
 	static void Gather (Application app, AssemblyDefinition product_assembly, HashSet<string> frameworks, HashSet<string> weak_frameworks, Func<Framework, bool> include_framework)
 	{
 		var namespaces = new HashSet<string> ();

@@ -90,6 +90,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.PackLibraryResources" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.ParseBundlerArguments" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.ParseDeviceSpecificBuildInformation" AssemblyFile="$(_TaskAssemblyName)" />
+	<UsingTask TaskName="Xamarin.MacDev.Tasks.PrepareAssemblies" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.PrepareNativeReferences" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.PrepareResourceRules" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.PropertyListEditor" AssemblyFile="$(_TaskAssemblyName)" />
@@ -3306,6 +3307,44 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	</PropertyGroup>
 
 	<Target Name="_BeforeCreateIpaForDistribution" Condition="'$(IsAppDistribution)' == 'true'" DependsOnTargets="$(_BeforeCreateIpaForDistributionDependsOn)" />
+
+	<PropertyGroup>
+		<PrepareAssemblies Condition="'$(PrepareAssemblies)' == ''">false</PrepareAssemblies>
+	</PropertyGroup>
+
+	<Target
+		Name="_PrepareAssembliesForPreparation"
+		DependsOnTargets="_ComputeAssembliesToPostprocessOnPublish"
+		>
+		<ItemGroup>
+			<_AssembliesToPrepare Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.PostprocessAssembly)' == 'true'" />
+		</ItemGroup>
+		<PropertyGroup>
+			<PreparedAssembliesDirectory>$([MSBuild]::EnsureTrailingSlash('$(DeviceSpecificIntermediateOutputPath)prepared-assemblies'))</PreparedAssembliesDirectory>
+		</PropertyGroup>
+	</Target>
+
+	<Target
+		Name="_PrepareAssemblies"
+		Condition="'$(PrepareAssemblies)' == 'true'"
+		Inputs="@(_AssembliesToPrepare)"
+		Outputs="@(_AssembliesToPrepare->'$(PreparedAssembliesDirectory)%(Filename)%(Extension)')"
+		DependsOnTargets="_PrepareAssembliesForPreparation;_ComputeAssembliesToPostprocessOnPublish"
+		>
+		<PrepareAssemblies
+			InputAssemblies="@(_AssembliesToPrepare)"
+			MakeReproPath="$(_PrepareAssembliesMakeReproPath)"
+			OutputDirectory="$(PreparedAssembliesDirectory)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+		>
+			<Output TaskParameter="OutputAssemblies" ItemName="_PreparedAssemblies" />
+		</PrepareAssemblies>
+
+		<ItemGroup>
+			<ResolvedFileToPublish Remove="@(_AssembliesToPrepare)" />
+			<ResolvedFileToPublish Include="@(_PreparedAssemblies)" />
+		</ItemGroup>
+	</Target>
 
 	<Target Name="CreateIpa" Condition="'$(_CanArchive)' == 'true' And '$(_PlatformName)' != 'macOS' And '$(_PlatformName)' != 'MacCatalyst'" DependsOnTargets="$(CreateIpaDependsOn)" />
 

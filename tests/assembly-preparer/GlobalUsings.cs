@@ -1,0 +1,8 @@
+global using System.IO;
+
+global using Mono.Cecil;
+global using NUnit.Framework;
+
+global using Xamarin;
+global using Xamarin.Tests;
+global using Xamarin.Utils;

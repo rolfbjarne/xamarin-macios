@@ -24,7 +24,7 @@ using Foundation;
 using ObjCRuntime;
 using Xamarin.Bundler;
 
-#if MTOUCH || MMP || BUNDLER
+#if MTOUCH || MMP || BUNDLER || PRETRIM
 using Xamarin.Utils;
 using TAssembly = Mono.Cecil.AssemblyDefinition;
 using TType = Mono.Cecil.TypeReference;
@@ -91,7 +91,7 @@ namespace Registrar {
 	}
 
 	abstract partial class Registrar {
-#if MTOUCH || MMP || BUNDLER
+#if MTOUCH || MMP || BUNDLER || PRETRIM
 		public Application App { get; protected set; }
 #endif
 
@@ -156,7 +156,7 @@ namespace Registrar {
 
 			public bool IsCategory { get { return CategoryAttribute is not null; } }
 
-#if MTOUCH || MMP || BUNDLER
+#if MTOUCH || MMP || BUNDLER || PRETRIM
 			HashSet<ObjCType> all_protocols;
 			// This contains all protocols in the type hierarchy.
 			// Given a type T that implements a protocol with super protocols:
@@ -883,7 +883,7 @@ namespace Registrar {
 					if (trampoline != Trampoline.None)
 						return trampoline;
 
-#if MTOUCH || MMP || BUNDLER
+#if MTOUCH || MMP || BUNDLER || PRETRIM
 					throw ErrorHelper.CreateError (8018, Errors.MT8018);
 #else
 					var mi = (System.Reflection.MethodInfo) Method;
@@ -1335,7 +1335,7 @@ namespace Registrar {
 		}
 #endif
 
-#if MTOUCH || MMP || BUNDLER
+#if MTOUCH || MMP || BUNDLER || PRETRIM
 		internal string AssemblyName {
 			get {
 				switch (App.Platform) {
@@ -1399,7 +1399,7 @@ namespace Registrar {
 			}
 		}
 
-#if MTOUCH || MMP || BUNDLER
+#if MTOUCH || MMP || BUNDLER || PRETRIM
 		// "#if MTOUCH" code does not need locking when accessing 'types', because mtouch is single-threaded.
 		public Dictionary<TType, ObjCType> Types {
 			get { return types; }
@@ -2218,7 +2218,7 @@ namespace Registrar {
 						}
 					} else {
 						TMethod method = null;
-#if MTOUCH || MMP || BUNDLER
+#if MTOUCH || MMP || BUNDLER || PRETRIM
 						method = attrib.Method;
 #endif
 						var objcMethod = new ObjCMethod (this, objcType, method) {
@@ -2274,7 +2274,7 @@ namespace Registrar {
 							FieldType = "@",
 							IsProperty = true,
 							IsStatic = IsStatic (property),
-#if MTOUCH || MMP || BUNDLER
+#if MTOUCH || MMP || BUNDLER || PRETRIM
 							Property = property,
 #endif
 						}, ref exceptions);
@@ -2689,7 +2689,7 @@ namespace Registrar {
 			case "System.Double": return "d";
 			case "System.Boolean":
 				// map managed 'bool' to ObjC BOOL = 'unsigned char' in OSX and 32bit iOS architectures and 'bool' in 64bit iOS architectures
-#if MTOUCH || MMP || BUNDLER
+#if MTOUCH || MMP || BUNDLER || PRETRIM
 				switch (App.Platform) {
 				case ApplePlatform.iOS:
 				case ApplePlatform.TVOS:
@@ -2802,7 +2802,7 @@ namespace Registrar {
 			System.Threading.Monitor.Exit (types);
 		}
 
-#if MTOUCH || MMP || BUNDLER
+#if MTOUCH || MMP || BUNDLER || PRETRIM
 		internal static void NSLog (string format, params object [] args)
 		{
 			Console.WriteLine (format, args);

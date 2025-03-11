@@ -18,6 +18,7 @@ namespace Xamarin.Linker.Steps {
 		protected override string Name { get; } = "Preserve Block Code";
 		protected override int ErrorCode { get; } = 2240;
 
+		AppBundleRewriter abr { get { return Configuration.AppBundleRewriter; } }
 		public override void Initialize (LinkContext context, MarkContext markContext)
 		{
 			base.Initialize (context);
@@ -79,9 +80,9 @@ namespace Xamarin.Linker.Steps {
 			if (method is null)
 				return;
 
-			// The type was used, so preserve the method and field
-			Context.Annotations.Mark (method);
-			Context.Annotations.Mark (field);
+			// Preserve the method and field on the static constructor of the type.
+			abr.AddDynamicDependencyAttributeToStaticConstructor (type, method);
+			abr.AddDynamicDependencyAttributeToStaticConstructor (type, field);
 		}
 	}
 }

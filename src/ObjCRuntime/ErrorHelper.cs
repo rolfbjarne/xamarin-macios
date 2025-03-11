@@ -2,7 +2,7 @@
 
 #nullable enable
 
-#if MTOUCH || MMP || MMP_TEST || MTOUCH_TESTS
+#if MTOUCH || MMP || MMP_TEST || MTOUCH_TESTS || ASSEMBLY_PREPARER
 #define BUNDLER
 #endif
 

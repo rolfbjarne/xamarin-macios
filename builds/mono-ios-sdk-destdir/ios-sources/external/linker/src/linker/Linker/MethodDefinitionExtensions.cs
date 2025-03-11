@@ -1,5 +1,7 @@
 using Mono.Cecil;
 
+#nullable disable
+
 namespace Mono.Linker {
 	public static class MethodDefinitionExtensions {
 		public static bool IsDefaultConstructor (this MethodDefinition method)

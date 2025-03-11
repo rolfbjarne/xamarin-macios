@@ -1,0 +1,30 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "assembly-preparer-tests", "assembly-preparer-tests.csproj", "{7FC61F95-BECF-E3B2-CFB2-185C4687F051}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "assembly-preparer", "..\..\tools\assembly-preparer\assembly-preparer.csproj", "{38C6599D-4B02-4F6B-A778-B468595C66BB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7FC61F95-BECF-E3B2-CFB2-185C4687F051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FC61F95-BECF-E3B2-CFB2-185C4687F051}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FC61F95-BECF-E3B2-CFB2-185C4687F051}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FC61F95-BECF-E3B2-CFB2-185C4687F051}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38C6599D-4B02-4F6B-A778-B468595C66BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38C6599D-4B02-4F6B-A778-B468595C66BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38C6599D-4B02-4F6B-A778-B468595C66BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38C6599D-4B02-4F6B-A778-B468595C66BB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6D0A58D0-09F3-4518-8D2E-577564445FB3}
+	EndGlobalSection
+EndGlobal

@@ -33,6 +33,8 @@ using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
+#nullable disable
+
 namespace Mono.Tuner {
 
 	public static class MethodBodyRocks {

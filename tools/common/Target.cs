@@ -34,6 +34,7 @@ using PlatformLinkContext = Xamarin.Tuner.DerivedLinkContext;
 using LinkerOptions = Xamarin.Linker.LinkerConfiguration;
 using PlatformLinkContext = Xamarin.Tuner.DerivedLinkContext;
 using PlatformResolver = Xamarin.Linker.DotNetResolver;
+#elif PRETRIM
 #else
 #error Invalid defines
 #endif

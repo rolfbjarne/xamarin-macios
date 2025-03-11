@@ -40,7 +40,7 @@ namespace Xamarin.MacDev.Tasks {
 		[TestCase (false, false)]
 		public void Compressed (bool symlinks, bool useSystemIOCompression)
 		{
-			var usedSystemIOCompression  = Environment.GetEnvironmentVariable ("XAMARIN_USE_SYSTEM_IO_COMPRESSION");
+			var usedSystemIOCompression = Environment.GetEnvironmentVariable ("XAMARIN_USE_SYSTEM_IO_COMPRESSION");
 			try {
 				Environment.SetEnvironmentVariable ("XAMARIN_USE_SYSTEM_IO_COMPRESSION", useSystemIOCompression ? "1" : null);
 

@@ -94,7 +94,7 @@ namespace Xamarin.Tests {
 			var nupkg = Path.Combine (outputPath, project + ".1.0.0.nupkg");
 			Assert.That (nupkg, Does.Exist, "nupkg existence");
 
-			var archive = ZipFile.OpenRead (nupkg);
+			using var archive = ZipFile.OpenRead (nupkg);
 			var files = archive.Entries.Select (v => v.FullName).ToHashSet ();
 			var tfm = platform.ToFrameworkWithPlatformVersion (isExecutable: false);
 			var hasSymlinks = noBindingEmbedding && (platform == ApplePlatform.MacCatalyst || platform == ApplePlatform.MacOSX);
@@ -361,7 +361,7 @@ namespace Xamarin.Tests {
 			}
 			Assert.That (nupkg, Does.Exist, "nupkg existence");
 
-			var archive = ZipFile.OpenRead (nupkg);
+			using var archive = ZipFile.OpenRead (nupkg);
 			var files = archive.Entries.Select (v => v.FullName).ToHashSet ();
 			var tfm = platform.ToFrameworkWithPlatformVersion (isExecutable: false);
 			Assert.AreEqual (compressed ? 6 : 9, archive.Entries.Count, $"nupkg file count - {nupkg}");
@@ -467,7 +467,7 @@ namespace Xamarin.Tests {
 			var nupkg = Path.Combine (Path.GetDirectoryName (project_path)!, "bin", configuration, project + ".1.0.0.nupkg");
 			Assert.That (nupkg, Does.Exist, "nupkg existence");
 
-			var archive = ZipFile.OpenRead (nupkg);
+			using var archive = ZipFile.OpenRead (nupkg);
 			var files = archive.Entries.Select (v => v.FullName).ToHashSet ();
 			Console.WriteLine ($"Got {files.Count ()} files in nupkg:");
 			foreach (var file in files)
@@ -507,7 +507,7 @@ namespace Xamarin.Tests {
 			var nupkg = Path.Combine (Path.GetDirectoryName (project_path)!, "bin", configuration, project + ".1.0.0.nupkg");
 			Assert.That (nupkg, Does.Exist, "nupkg existence");
 
-			var archive = ZipFile.OpenRead (nupkg);
+			using var archive = ZipFile.OpenRead (nupkg);
 			var files = archive.Entries.Select (v => v.FullName).ToHashSet ();
 			Assert.That (archive.Entries.Count, Is.EqualTo (4 + supportedApiVersion.Count), "nupkg file count");
 			Assert.That (files, Does.Contain (project + ".nuspec"), "nuspec");

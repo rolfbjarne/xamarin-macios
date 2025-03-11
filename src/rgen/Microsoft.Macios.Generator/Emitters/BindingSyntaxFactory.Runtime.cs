@@ -238,8 +238,14 @@ static partial class BindingSyntaxFactory {
 	/// <returns>The member access to the correct NSNumber method.</returns>
 	internal static MemberAccessExpressionSyntax? NSNumberFromHandle (TypeInfo returnType)
 	{
+		// create a tuple to store the name and special type depending if it is an array 
+		// or a non array type
+		var info = returnType.IsArray
+			? (Name: returnType.Name, SpecialType: returnType.ArrayElementType)
+			: (Name: returnType.Name, SpecialType: returnType.SpecialType);
+
 #pragma warning disable format
-		var memberName = returnType switch {
+		var memberName = info switch {
 			// name must be before SpecialType or you'll get them wrong values because
 			// the type we want by name also have a valid special type, the tests should catch
 			// mistakes here
@@ -268,6 +274,28 @@ static partial class BindingSyntaxFactory {
 			IdentifierName (memberName));
 	}
 
+	/// <summary>
+	/// Generates the correct call to the To* methods in the NSNumber class that converts a NativeHandle
+	/// to the return type of the method/property.
+	/// </summary>
+	/// <param name="returnType">The return method of the method/property.</param>
+	/// <param name="arguments">The arguments to pass to the NSNumber method.</param>
+	/// <returns>The expression needed to call the NSNumber method iwth the given args.</returns>
+	internal static InvocationExpressionSyntax? NSNumberFromHandle (TypeInfo returnType,
+		ImmutableArray<ArgumentSyntax> arguments)
+	{
+		// generate: (arg1, arg2, arg3)
+		var argumentList = ArgumentList (
+			SeparatedList<ArgumentSyntax> (arguments.ToSyntaxNodeOrTokenArray ()));
+
+		// generate: NSNumber.ToInt (arg1, arg2, arg3)
+		var nsNumberFromHandle = NSNumberFromHandle (returnType);
+		if (nsNumberFromHandle is null)
+			return null;
+		return InvocationExpression (
+				nsNumberFromHandle.WithTrailingTrivia (Space))
+			.WithArgumentList (argumentList);
+	}
 
 	/// <summary>
 	/// Generates a call to the NSArray.ArrayFromHandleFunc with the given arguments.

@@ -326,11 +326,11 @@ namespace Xamarin.MacDev {
 		{
 			var rv = true;
 
-			log.LogMessage (MessageImportance.Low, "Creating new zip file {0} using System.IO.Compression with {1} and workingDirectory = {2}", zip, string.Join (", ", resources), workingDirectory);
+			log.LogMessage (MessageImportance.Low, "Creating new zip file using System.IO.Compression\n\tTarget zip: {0}\n\tWorking directory: {2}\n\tCurrent directory:\n\t{3}\n\tResources:\n\t\t{1}", zip, string.Join ("\n\t\t", resources), workingDirectory, Environment.CurrentDirectory);
 
 			workingDirectory = Path.GetFullPath (workingDirectory);
 
-			var resourcePaths = resources.Select ((v) => Path.Combine (workingDirectory, v)).ToList ();
+			var resourcePaths = resources.Select (Path.GetFullPath).ToList ();
 			foreach (var resource in resourcePaths) {
 				if (!resource.StartsWith (workingDirectory, StringComparison.Ordinal))
 					throw new InvalidOperationException ($"The resource to compress '{resource}' must be inside the working directory '{workingDirectory}'");
@@ -338,8 +338,9 @@ namespace Xamarin.MacDev {
 
 			using var archive = ZipFile.Open (zip, File.Exists (zip) ? ZipArchiveMode.Update : ZipArchiveMode.Create);
 
-			var rootDirLength = workingDirectory.Length;
+			var rootDirLength = workingDirectory.Length + 1;
 			foreach (var resource in resourcePaths) {
+				log.LogMessage (MessageImportance.Low, $"Procesing {resource}");
 				if (Directory.Exists (resource)) {
 					var entries = Directory.GetFileSystemEntries (resource, "*", SearchOption.AllDirectories);
 					var entriesWithZipName = entries.Select (v => new { Path = v, ZipName = v.Substring (rootDirLength) });

@@ -36,6 +36,7 @@ namespace Xharness.Jenkins {
 			var x64_runtime_identifier = string.Empty;
 			var arm64_sim_runtime_identifier = string.Empty;
 			var x64_sim_runtime_identifier = string.Empty;
+			var isDebug = test.ProjectConfiguration == "Debug";
 
 			switch (test.Platform) {
 			case TestPlatform.Mac:
@@ -68,6 +69,15 @@ namespace Xharness.Jenkins {
 						yield return new TestData { Variation = "Debug (don't bundle original resources)", TestVariation = "do-not-bundle-original-resources", Debug = true };
 					}
 				}
+				break;
+			}
+
+			switch (test.TestName) {
+			case "monotouch-test":
+			case "link all":
+			case "dont link":
+			case "link sdk":
+				yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies)", TestVariation = "prepare-assemblies", Debug = isDebug, Ignored = ignore };
 				break;
 			}
 

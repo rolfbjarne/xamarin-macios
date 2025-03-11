@@ -9,3 +9,5 @@ SUBDIRS += mtouch
 SUBDIRS+=mlaunch
 
 SUBDIRS += dotnet-linker
+
+SUBDIRS += assembly-preparer

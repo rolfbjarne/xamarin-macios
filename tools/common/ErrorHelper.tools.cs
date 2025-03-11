@@ -13,7 +13,7 @@ using Xamarin.Utils;
 #nullable disable
 
 namespace Xamarin.Bundler {
-	public static partial class ErrorHelper {
+	static partial class ErrorHelper {
 		public static ApplePlatform Platform;
 
 		internal static string Prefix {

@@ -28,6 +28,7 @@ using ClassRedirector;
 using PlatformResolver = MonoTouch.Tuner.MonoTouchResolver;
 #elif NET
 using PlatformResolver = Xamarin.Linker.DotNetResolver;
+#elif PRETRIM
 #else
 #error Invalid defines
 #endif

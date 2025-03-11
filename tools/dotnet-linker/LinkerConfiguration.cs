@@ -601,6 +601,11 @@ namespace Xamarin.Linker {
 				yield return assembly;
 			}
 		}
+
+		public void Log (int level, string message)
+		{
+			Driver.Log (level, message);
+		}
 	}
 }
 

@@ -74,15 +74,18 @@ namespace Xamarin.Linker {
 				return optimizable is not null;
 			}
 			// we're sure "pure" SDK assemblies don't use XamMac.dll (i.e. they are the Product assemblies)
-			if (Profile.IsSdkAssembly (assembly)) {
+#if !ASSEMBLY_PREPARER
+			if (Configuration.Profile.IsSdkAssembly (assembly)) {
 #if DEBUG
 				Console.WriteLine ("Assembly {0} : skipped (SDK)", assembly);
 #endif
 				HasOptimizableCode.Add (assembly, null);
 				return false;
 			}
+#endif
 
 			// process only assemblies where the linker is enabled (e.g. --linksdk, --linkskip) 
+#if !ASSEMBLY_PREPARER
 			AssemblyAction action = Annotations.GetAction (assembly);
 			if (action != AssemblyAction.Link) {
 #if DEBUG
@@ -91,6 +94,7 @@ namespace Xamarin.Linker {
 				HasOptimizableCode.Add (assembly, null);
 				return false;
 			}
+#endif
 
 			// if the assembly does not refer to [CompilerGeneratedAttribute] then there's not much we can do
 			foreach (TypeReference tr in assembly.MainModule.GetTypeReferences ()) {
@@ -612,11 +616,20 @@ namespace Xamarin.Linker {
 				instr.Clear ();
 				instr.Add (Instruction.Create (is_arm64_calling_convention.Value ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0));
 				instr.Add (Instruction.Create (OpCodes.Ret));
+#if ASSEMBLY_PREPARER
+				abr.SetCurrentAssembly (method.DeclaringType.Module.Assembly);
+				abr.SaveCurrentAssembly ();
+#endif
 				return; // nothing else to do here.
 			}
 
-			if (ProcessProtocolInterfaceStaticConstructor (method))
+			if (ProcessProtocolInterfaceStaticConstructor (method)) {
+#if ASSEMBLY_PREPARER
+				abr.SetCurrentAssembly (method.DeclaringType.Module.Assembly);
+				abr.SaveCurrentAssembly ();
+#endif
 				return;
+			}
 
 			var instructions = method.Body.Instructions;
 			for (int i = 0; i < instructions.Count; i++) {
@@ -633,6 +646,11 @@ namespace Xamarin.Linker {
 			}
 
 			EliminateDeadCode (method);
+
+#if ASSEMBLY_PREPARER
+			abr.SetCurrentAssembly (method.DeclaringType.Module.Assembly);
+			abr.SaveCurrentAssembly ();
+#endif
 		}
 
 		// Returns the number of instructions added (or removed).
@@ -1131,7 +1149,7 @@ namespace Xamarin.Linker {
 		MethodReference GetBlockSetupImpl (MethodDefinition caller, Instruction ins)
 		{
 			if (setupblock_def is null) {
-				var type = LinkContext.GetAssembly (Driver.GetProductAssembly (LinkContext.App)).MainModule.GetType (Namespaces.ObjCRuntime, "BlockLiteral");
+				var type = LinkContext.GetAssembly (Driver.GetProductAssembly (LinkContext.App))!.MainModule.GetType (Namespaces.ObjCRuntime, "BlockLiteral");
 				foreach (var method in type.Methods) {
 					if (method.Name != "SetupBlockImpl")
 						continue;
@@ -1149,7 +1167,7 @@ namespace Xamarin.Linker {
 		MethodReference GetBlockLiteralConstructor (MethodDefinition caller, Instruction ins)
 		{
 			if (block_ctor_def is null) {
-				var type = LinkContext.GetAssembly (Driver.GetProductAssembly (LinkContext.App)).MainModule.GetType (Namespaces.ObjCRuntime, "BlockLiteral");
+				var type = LinkContext.GetAssembly (Driver.GetProductAssembly (LinkContext.App))!.MainModule.GetType (Namespaces.ObjCRuntime, "BlockLiteral");
 				foreach (var method in type.Methods) {
 					if (!method.IsConstructor)
 						continue;

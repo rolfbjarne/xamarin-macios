@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../../tests/assembly-preparer/assembly-preparer-tests.csproj" />
+  <Project Path="assembly-preparer.csproj" />
+</Solution>

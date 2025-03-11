@@ -254,6 +254,7 @@
 			_ResolveAppExtensionReferences;
 			_ExtendAppExtensionReferences;
 			_ComputeLinkerArguments;
+			_PrepareAssemblies;
 			_ComputeFrameworkFilesToPublish;
 			_ComputeDynamicLibrariesToPublish;
 			ComputeFilesToPublish;
@@ -729,6 +730,7 @@
 			<!-- Load the list of assemblies loaded by the linker. -->
 			<!-- This would not be needed if LinkContext.GetAssemblies () was exposed to us. -->
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" BeforeStep="MarkStep" Type="Xamarin.Linker.CollectAssembliesStep" />
+			<!-- CoreTypeMapStep is used by other steps, so it can't be disabled (if PrepareAssemblies=true) until support for those other steps has been added to assembly-preparer -->
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" BeforeStep="MarkStep" Type="MonoTouch.Tuner.CoreTypeMapStep" />
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" BeforeStep="MarkStep" Type="MonoTouch.Tuner.ProcessExportedFields" />
 			<!-- The final decision to remove/keep the dynamic registrar must be done before the linking step -->
@@ -740,13 +742,13 @@
 			<!--
 				IMarkHandlers which run during Mark
 			-->
-			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true'" Type="Xamarin.Linker.Steps.PreserveBlockCodeHandler" />
-			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true'" Type="Xamarin.Linker.OptimizeGeneratedCodeHandler" />
+			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true' And '$(PrepareAssemblies)' != 'true'" Type="Xamarin.Linker.Steps.PreserveBlockCodeHandler" />
+			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true' And '$(PrepareAssemblies)' != 'true'" Type="Xamarin.Linker.OptimizeGeneratedCodeHandler" />
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true'" Type="Xamarin.Linker.BackingFieldDelayHandler" />
-			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true'" Type="Xamarin.Linker.MarkIProtocolHandler" />
+			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true' And '$(PrepareAssemblies)' != 'true'" Type="Xamarin.Linker.MarkIProtocolHandler" />
 			<!-- MarkDispatcher substeps will run for all marked assemblies. -->
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true'" Type="Xamarin.Linker.Steps.MarkDispatcher" />
-			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true'" Type="Xamarin.Linker.Steps.PreserveSmartEnumConversionsHandler" />
+			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true' And '$(PrepareAssemblies)' != 'true'" Type="Xamarin.Linker.Steps.PreserveSmartEnumConversionsHandler" />
 
 			<!--
 				pre-sweep custom steps
@@ -1320,15 +1322,28 @@
 		</ItemGroup>
 	</Target>
 
-	<!-- https://github.com/dotnet/macios/issues/19037 -->
-	<!-- The trimmer will set the RootMode for the current assembly to 'EntryPoint', but that doesn't work for app extension projects, because those are library projects that don't have entry points.
-		 So here we set RootMode=Library for these cases. -->
-	<Target Name="_FixRootAssemblyForAppExtensions" AfterTargets="PrepareForILLink" Condition="'$(IsAppExtension)' == 'true'">
-		<ItemGroup>
+	<Target Name="_PostPrepareForILLinkFixups" AfterTargets="PrepareForILLink">
+		<ItemGroup Condition="'$(IsAppExtension)' == 'true'">
+			<!-- https://github.com/xamarin/xamarin-macios/issues/19037 -->
+			<!-- The trimmer will set the RootMode for the current assembly to 'EntryPoint', but that doesn't work for app extension projects, because those are library projects that don't have entry points.
+				 So here we set RootMode=Library for these cases. -->
 			<TrimmerRootAssembly Update="@(TrimmerRootAssembly)" Condition=" '%(TrimmerRootAssembly.RootMode)' == 'EntryPoint' " RootMode="Library" />
 		</ItemGroup>
+		<!-- If $(IntermediateAssembly) was modified by the AssemblyPreparer task, then we must update the TrimmerRootAssembly item group to point to the updated version of the intermediate assembly. -->
+		<!-- It turned out a bit complicated, because we want to preserve any existing metadata on the items in the TrimmerRootAssembly item group. -->
+		<ItemGroup>
+			<PreparedIntermediateAssembly Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.BeforePrepareAssembliesPath)' == '@(IntermediateAssembly)'" />
+		</ItemGroup>
+		<PropertyGroup>
+			<_IntermediateAssemblyProperty>@(IntermediateAssembly)</_IntermediateAssemblyProperty>
+			<_PreparedIntermediateAssemblyProperty>@(PreparedIntermediateAssembly->WithMetadataValue('BeforePrepareAssembliesPath','$(_IntermediateAssemblyProperty)'))</_PreparedIntermediateAssemblyProperty>
+		</PropertyGroup>
+		<ItemGroup Condition="@(PreparedIntermediateAssembly->Count()) &gt; 0">
+			<_PreparedRootedIntermediateAssembly Include="@(TrimmerRootAssembly->'$(_PreparedIntermediateAssemblyProperty)')" Condition="'%(Identity)' == '$(_IntermediateAssemblyProperty)'" />
+			<TrimmerRootAssembly Remove="@(IntermediateAssembly)" />
+			<TrimmerRootAssembly Include="@(_PreparedRootedIntermediateAssembly)" />
+		</ItemGroup>
 	</Target>
-
 	<Target Name="_CreateAOTDedupAssembly"
 			Condition="'$(_IsDedupEnabled)' == 'true'"
 			DependsOnTargets="_ComputeManagedAssemblyToLink"

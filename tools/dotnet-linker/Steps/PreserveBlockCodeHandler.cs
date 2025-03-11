@@ -2,7 +2,8 @@ using System;
 using System.Linq;
 
 using Mono.Cecil;
-
+using Mono.Cecil.Cil;
+using Mono.Cecil.Rocks;
 using Mono.Linker;
 using Mono.Linker.Steps;
 using Mono.Tuner;
@@ -79,9 +80,14 @@ namespace Xamarin.Linker.Steps {
 			if (method is null)
 				return;
 
-			// The type was used, so preserve the method and field
-			Context.Annotations.Mark (method);
-			Context.Annotations.Mark (field);
+			// Preserve the method and field on the static constructor of the type.
+			abr.AddDynamicDependencyAttributeToStaticConstructor (type, method);
+			abr.AddDynamicDependencyAttributeToStaticConstructor (type, field);
+
+#if ASSEMBLY_PREPARER
+			abr.SetCurrentAssembly (type.Module.Assembly);
+			abr.SaveCurrentAssembly ();
+#endif
 		}
 	}
 }

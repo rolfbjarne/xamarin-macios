@@ -6,11 +6,12 @@ using Mono.Linker;
 using Mono.Collections.Generic;
 
 using Registrar;
+
 using Mono.Tuner;
 using Xamarin.Bundler;
 using Xamarin.Linker;
 
-#if !LEGACY_TOOLS
+#if !LEGACY_TOOLS && !ASSEMBLY_PREPARER
 using LinkContext = Xamarin.Bundler.DotNetLinkContext;
 #endif
 
@@ -57,6 +58,11 @@ namespace Xamarin.Tuner {
 		}
 
 		AssemblyDefinition? corlib;
+
+#if !LEGACY_TOOLS
+		public RegistrarMode Registrar => App.Registrar;
+#endif // !LEGACY_TOOLS
+
 		public AssemblyDefinition Corlib {
 			get {
 				if (corlib is null) {

@@ -58,7 +58,11 @@ namespace Xamarin.Bundler {
 
 		public Profile Profile {
 			get {
+#if ASSEMBLY_PREPARER
+				throw new NotImplementedException ();
+#else
 				return Configuration.Profile;
+#endif
 			}
 		}
 	}
@@ -102,7 +106,11 @@ namespace Xamarin.Bundler {
 
 		public AssemblyDefinition GetAssembly (string name)
 		{
+#if ASSEMBLY_PREPARER
+			throw new NotFiniteNumberException ();
+#else
 			return LinkerConfiguration.Context.GetLoadedAssembly (name);
+#endif
 		}
 	}
 
@@ -147,12 +155,20 @@ namespace Xamarin.Linker {
 
 		public bool IsSdkAssembly (AssemblyDefinition assembly)
 		{
+#if ASSEMBLY_PREPARER
+			throw new NotImplementedException ();
+#else
 			return Configuration.FrameworkAssemblies.Contains (Assembly.GetIdentity (assembly));
+#endif
 		}
 
 		public bool IsSdkAssembly (string assemblyName)
 		{
+#if ASSEMBLY_PREPARER
+			throw new NotImplementedException ();
+#else
 			return Configuration.FrameworkAssemblies.Contains (assemblyName);
+#endif
 		}
 	}
 }

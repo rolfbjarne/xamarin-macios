@@ -20,16 +20,14 @@ using ObjCRuntime;
 
 using Registrar;
 
-#if !LEGACY_TOOLS
+#if !LEGACY_TOOLS && !ASSEMBLY_PREPARER
 using ClassRedirector;
 #endif
 
 #if LEGACY_TOOLS
 using PlatformResolver = MonoTouch.Tuner.MonoTouchResolver;
-#elif NET
-using PlatformResolver = Xamarin.Linker.DotNetResolver;
 #else
-#error Invalid defines
+using PlatformResolver = Xamarin.Linker.DotNetResolver;
 #endif
 
 #nullable enable
@@ -93,7 +91,11 @@ namespace Xamarin.Bundler {
 		public HashSet<string> WeakFrameworks = new HashSet<string> ();
 
 		public bool IsExtension;
+#if ASSEMBLY_PREPARER
+		public ApplePlatform Platform { get; set; }
+#else
 		public ApplePlatform Platform { get { return Driver.TargetFramework.Platform; } }
+#endif
 
 		public List<string> MonoLibraries = new List<string> ();
 		public List<string> InterpretedAssemblies = new List<string> ();
@@ -257,7 +259,11 @@ namespace Xamarin.Bundler {
 			return value;
 		}
 
+#if !LEGACY_TOOLS
 		public Application (LinkerConfiguration configuration)
+#else
+		public Application ()
+#endif
 		{
 #if !LEGACY_TOOLS
 			this.configuration = configuration;
@@ -531,6 +537,7 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+#if !ASSEMBLY_PREPARER
 		public void RunRegistrar ()
 		{
 			// The static registrar.
@@ -597,6 +604,7 @@ namespace Xamarin.Bundler {
 				registrar.Generate (resolver, resolvedAssemblies.Values, Path.ChangeExtension (registrar_m, "h"), registrar_m, out var _);
 			}
 		}
+#endif // !ASSEMBLY_PREPARER
 
 		public Abi Abi {
 			get { return abi; }
@@ -667,12 +675,19 @@ namespace Xamarin.Bundler {
 		}
 
 #if !LEGACY_TOOLS
-		public void ParseRegistrar (string v)
+		public void ParseRegistrar (string? v)
 		{
+#if NET
+			if (string.IsNullOrEmpty (v))
+#else
+			if (string.IsNullOrEmpty (v) || v is null)
+#endif
+				return;
+
 			var split = v.Split ('=');
 			var name = split [0];
 			var value = split.Length > 1 ? split [1] : string.Empty;
-			switch (name) {
+			switch (name.ToLowerInvariant ()) {
 			case "static":
 				Registrar = RegistrarMode.Static;
 				break;

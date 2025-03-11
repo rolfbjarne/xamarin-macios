@@ -8,7 +8,7 @@ using System.Linq;
 using System.Xml;
 using Mono.Cecil;
 using Mono.Tuner;
-using MonoTouch.Tuner;
+// REMOVE? // using MonoTouch.Tuner;
 using ObjCRuntime;
 using Xamarin;
 using Xamarin.Utils;
@@ -58,6 +58,7 @@ namespace Xamarin.Bundler {
 
 		public AssemblyDefinition AssemblyDefinition;
 		public bool? IsFrameworkAssembly { get { return is_framework_assembly; } }
+
 		public string FullPath {
 			get {
 				return full_path;
@@ -66,7 +67,10 @@ namespace Xamarin.Bundler {
 			set {
 				full_path = value;
 				if (!is_framework_assembly.HasValue && !string.IsNullOrEmpty (full_path)) {
-#if !LEGACY_TOOLS
+#if ASSEMBLY_PREPARER
+					is_framework_assembly = false; // silence compiler warning
+					throw new NotImplementedException ();
+#elif !LEGACY_TOOLS
 					is_framework_assembly = App.Configuration.FrameworkAssemblies.Contains (GetIdentity (full_path));
 #else
 					var real_full_path = Application.GetRealPath (full_path);
@@ -177,38 +181,6 @@ namespace Xamarin.Bundler {
 				LinkerFlags.Add ("-lgcc_eh");
 			}
 		}
-
-		IEnumerable<NativeReferenceMetadata> ReadManifest (string manifestPath)
-		{
-			var document = new XmlDocument ();
-			document.LoadWithoutNetworkAccess (manifestPath);
-
-			foreach (XmlNode referenceNode in document.GetElementsByTagName ("NativeReference")) {
-
-				var metadata = new NativeReferenceMetadata ();
-				metadata.LibraryName = Path.Combine (Path.GetDirectoryName (manifestPath)!, referenceNode.Attributes? ["Name"]?.Value!);
-
-				var attributes = new Dictionary<string, string> ();
-				foreach (XmlNode attribute in referenceNode.ChildNodes)
-					attributes [attribute.Name] = attribute.InnerText;
-
-				metadata.ForceLoad = ParseAttributeWithDefault (attributes ["ForceLoad"], false);
-				metadata.Frameworks = attributes ["Frameworks"];
-				metadata.WeakFrameworks = attributes ["WeakFrameworks"];
-				metadata.LinkerFlags = attributes ["LinkerFlags"];
-				metadata.NeedsGccExceptionHandling = ParseAttributeWithDefault (attributes ["NeedsGccExceptionHandling"], false);
-				metadata.IsCxx = ParseAttributeWithDefault (attributes ["IsCxx"], false);
-				metadata.LinkWithSwiftSystemLibraries = ParseAttributeWithDefault (attributes ["LinkWithSwiftSystemLibraries"], false);
-				metadata.SmartLink = ParseAttributeWithDefault (attributes ["SmartLink"], true);
-
-				// TODO - The project attributes do not contain these bits, is that OK?
-				//metadata.LinkTarget = (LinkTarget) Enum.Parse (typeof (LinkTarget), attributes ["LinkTarget"]);
-				//metadata.Dlsym = (DlsymOption)Enum.Parse (typeof (DlsymOption), attributes ["Dlsym"]);
-				yield return metadata;
-			}
-		}
-
-		static bool ParseAttributeWithDefault (string attribute, bool defaultValue) => string.IsNullOrEmpty (attribute) ? defaultValue : bool.Parse (attribute);
 
 		void ProcessLinkWithAttributes (AssemblyDefinition assembly)
 		{

@@ -5,6 +5,25 @@ using System.IO.Compression;
 namespace Xamarin.Tests {
 	public class PackTest : TestBaseClass {
 
+		// Create a temporary directory for OutputPath
+		// Uses a path relative to the current directory on Windows (as opposed to an absolute path),
+		// because otherwise we run into limitations in our build where building with an absolute
+		// OutputPath doesn't work.
+		static string CreateTemporaryDirectoryForOutputPath ()
+		{
+			string tmpdir;
+			if (Configuration.IsBuildingRemotely) {
+				int counter = 0;
+				do {
+					tmpdir = Path.Combine ("bin", $"tmp-dir-{++counter}");
+					if (counter > 10000)
+						throw new InvalidOperationException ("Too many temporary directories");
+				} while (Directory.Exists (tmpdir));
+			} else {
+				tmpdir = Cache.CreateTemporaryDirectory ();
+			}
+			return tmpdir;
+		}
 
 		[Test]
 		[TestCase (ApplePlatform.iOS)]
@@ -34,12 +53,7 @@ namespace Xamarin.Tests {
 			var project_path = GetProjectPath (project, platform: platform);
 			Clean (project_path);
 
-			string tmpdir;
-			if (Configuration.IsBuildingRemotely) {
-				tmpdir = Path.Combine ("bin", "tmp-dir");
-			} else {
-				tmpdir = Cache.CreateTemporaryDirectory ();
-			}
+			var tmpdir = CreateTemporaryDirectoryForOutputPath ();
 			var outputPath = Path.Combine (tmpdir, "OutputPath");
 			var intermediateOutputPath = Path.Combine (tmpdir, "IntermediateOutputPath");
 			properties = GetDefaultProperties (extraProperties: properties);
@@ -334,7 +348,7 @@ namespace Xamarin.Tests {
 			var project_path = GetProjectPath (project, platform: platform);
 			Clean (project_path);
 
-			var tmpdir = Cache.CreateTemporaryDirectory ();
+			var tmpdir = CreateTemporaryDirectoryForOutputPath ();
 			var outputPath = Path.Combine (tmpdir, "OutputPath");
 			var intermediateOutputPath = Path.Combine (tmpdir, "IntermediateOutputPath");
 			properties = GetDefaultProperties (extraProperties: properties);

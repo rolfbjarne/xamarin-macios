@@ -1,14 +1,13 @@
-﻿using Mono.Cecil.Rocks;
+using Mono.Cecil.Rocks;
 
 namespace AssemblyPreparerTests;
 
-public class PreserveBlockCodeHandlerTests
-{
-    [Test]
-    [TestCase (ApplePlatform.MacCatalyst)]
-    public void First (ApplePlatform platform)
-    {
-        var code = @"
+public class PreserveBlockCodeHandlerTests {
+	[Test]
+	[TestCase (ApplePlatform.MacCatalyst)]
+	public void First (ApplePlatform platform)
+	{
+		var code = @"
         using System;
         using ObjCRuntime;
         namespace ObjCRuntime;
@@ -25,8 +24,8 @@ public class PreserveBlockCodeHandlerTests
                 public delegate void DInnerBlock (IntPtr block, int magic_number);
 			}
         }";
-        
-    var csproj = $@"
+
+		var csproj = $@"
 <Project Sdk=""Microsoft.NET.Sdk"">
 	<PropertyGroup>
 		<TargetFramework>net$(BundledNETCoreAppTargetFrameworkVersion)-{platform.AsString ().ToLower ()}</TargetFramework>
@@ -36,32 +35,32 @@ public class PreserveBlockCodeHandlerTests
 </Project>
     ";
 
-        var tmpdir = Cache.CreateTemporaryDirectory ();
-        File.WriteAllText (Path.Combine (tmpdir, "Test.cs"), code);
-        var csprojPath = Path.Combine (tmpdir, "Test.csproj");
-        File.WriteAllText (csprojPath, csproj);
-        DotNet.AssertBuild (csprojPath);
-        var assemblyDir = Path.Combine (tmpdir, "bin", "Debug");
-        
-        var assemblies = new List<string> ();
-        assemblies.Add (Path.Combine (assemblyDir, "Test.dll"));
-        assemblies.Add (Path.Combine (Configuration.DotNetBclDir, "System.Runtime.dll"));
-        var infos = assemblies.Select (v => new AssemblyPreparerInfo (v, Path.Combine (assemblyDir, "out", Path.GetFileName (v)))).ToArray ();
-        var preparer = new AssemblyPreparer (infos, platform);
-        Assert.That (preparer.Prepare (out var exceptions), Is.True, "Prepare");
-        Assert.That (exceptions, Is.Empty, "Exceptions");
+		var tmpdir = Cache.CreateTemporaryDirectory ();
+		File.WriteAllText (Path.Combine (tmpdir, "Test.cs"), code);
+		var csprojPath = Path.Combine (tmpdir, "Test.csproj");
+		File.WriteAllText (csprojPath, csproj);
+		DotNet.AssertBuild (csprojPath);
+		var assemblyDir = Path.Combine (tmpdir, "bin", "Debug");
 
-        var outputPath = Path.Combine (assemblyDir, "out", "Test.dll");
-        var assemblyDefinition = AssemblyDefinition.ReadAssembly (outputPath);
-        var type = assemblyDefinition.MainModule.Types.Single (v => v.Name == "Trampolines").NestedTypes.Single (v => v.Name == "SDInnerBlock");
-        var cctor = type.GetStaticConstructor ();
-        var attribs = cctor.CustomAttributes?.OrderBy (v => string.Join (", ", v.ConstructorArguments.Select (v => v.Value?.ToString()))).ToArray ();
-        Assert.That (attribs, Is.Not.Null, "Attributes");
-        Assert.That (attribs.Count, Is.EqualTo (2), "Attribute count");
-        Assert.That (attribs.All (v => v.AttributeType.Name == "DynamicDependencyAttribute"), Is.True, "Attribute name");
-        Assert.That ((string) attribs[0].ConstructorArguments[0].Value, Is.EqualTo ("Handler"), "First attribute's first argument");
-        Assert.That ((string) attribs[1].ConstructorArguments[0].Value, Is.EqualTo ("Invoke(System.IntPtr,System.Int32)"), "Second attribute's first argument");
-        Assert.That (((TypeDefinition) attribs[0].ConstructorArguments[1].Value).FullName, Is.EqualTo ("ObjCRuntime.Trampolines/SDInnerBlock"), "First attribute's second argument");
-        Assert.That (((TypeDefinition) attribs[1].ConstructorArguments[1].Value).FullName, Is.EqualTo ("ObjCRuntime.Trampolines/SDInnerBlock"), "Second attribute's second argument");
-    }
+		var assemblies = new List<string> ();
+		assemblies.Add (Path.Combine (assemblyDir, "Test.dll"));
+		assemblies.Add (Path.Combine (Configuration.DotNetBclDir, "System.Runtime.dll"));
+		var infos = assemblies.Select (v => new AssemblyPreparerInfo (v, Path.Combine (assemblyDir, "out", Path.GetFileName (v)))).ToArray ();
+		var preparer = new AssemblyPreparer (infos, platform);
+		Assert.That (preparer.Prepare (out var exceptions), Is.True, "Prepare");
+		Assert.That (exceptions, Is.Empty, "Exceptions");
+
+		var outputPath = Path.Combine (assemblyDir, "out", "Test.dll");
+		var assemblyDefinition = AssemblyDefinition.ReadAssembly (outputPath);
+		var type = assemblyDefinition.MainModule.Types.Single (v => v.Name == "Trampolines").NestedTypes.Single (v => v.Name == "SDInnerBlock");
+		var cctor = type.GetStaticConstructor ();
+		var attribs = cctor.CustomAttributes?.OrderBy (v => string.Join (", ", v.ConstructorArguments.Select (v => v.Value?.ToString ()))).ToArray ();
+		Assert.That (attribs, Is.Not.Null, "Attributes");
+		Assert.That (attribs.Count, Is.EqualTo (2), "Attribute count");
+		Assert.That (attribs.All (v => v.AttributeType.Name == "DynamicDependencyAttribute"), Is.True, "Attribute name");
+		Assert.That ((string) attribs [0].ConstructorArguments [0].Value, Is.EqualTo ("Handler"), "First attribute's first argument");
+		Assert.That ((string) attribs [1].ConstructorArguments [0].Value, Is.EqualTo ("Invoke(System.IntPtr,System.Int32)"), "Second attribute's first argument");
+		Assert.That (((TypeDefinition) attribs [0].ConstructorArguments [1].Value).FullName, Is.EqualTo ("ObjCRuntime.Trampolines/SDInnerBlock"), "First attribute's second argument");
+		Assert.That (((TypeDefinition) attribs [1].ConstructorArguments [1].Value).FullName, Is.EqualTo ("ObjCRuntime.Trampolines/SDInnerBlock"), "Second attribute's second argument");
+	}
 }

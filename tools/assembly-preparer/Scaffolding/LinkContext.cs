@@ -5,15 +5,15 @@ using Xamarin.Bundler;
 namespace Mono.Linker;
 
 public class LinkContext {
-    public AnnotationStore Annotations { get => throw new NotImplementedException (); }
+	public AnnotationStore Annotations { get => throw new NotImplementedException (); }
 
-    public List<AssemblyDefinition> Assemblies = new List<AssemblyDefinition> ();
-    public AssemblyDefinition[] GetAssemblies () { return Assemblies.ToArray (); }
+	public List<AssemblyDefinition> Assemblies = new List<AssemblyDefinition> ();
+	public AssemblyDefinition [] GetAssemblies () { return Assemblies.ToArray (); }
 
-    public LinkerConfiguration Configuration { get; private set; }
+	public LinkerConfiguration Configuration { get; private set; }
 
-    public LinkContext (LinkerConfiguration configuration)
-    {
-        Configuration = configuration;
-    }
+	public LinkContext (LinkerConfiguration configuration)
+	{
+		Configuration = configuration;
+	}
 }

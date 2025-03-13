@@ -15,17 +15,17 @@ using Xamarin.Utils;
 
 namespace Xamarin.MacDev.Tasks {
 	public class PrepareAssemblies : XamarinTask {
-#region Inputs
+		#region Inputs
 		[Required]
-		public ITaskItem[] InputAssemblies { get; set; } = [];
+		public ITaskItem [] InputAssemblies { get; set; } = [];
 
 		public string OutputDirectory { get; set; } = "";
-#endregion
+		#endregion
 
-#region Outputs
+		#region Outputs
 		[Output]
-		public ITaskItem[] OutputAssemblies { get; set; } = [];
-#endregion
+		public ITaskItem [] OutputAssemblies { get; set; } = [];
+		#endregion
 
 		Dictionary<AssemblyPreparerInfo, ITaskItem> map = new ();
 

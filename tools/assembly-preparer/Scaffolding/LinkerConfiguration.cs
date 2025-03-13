@@ -29,10 +29,11 @@ public class LinkerConfiguration {
 	}
 	public DerivedLinkContext Context { get => DerivedLinkContext; }
 	public Profile Profile { get => throw new NotImplementedException (); }
-	public AssemblyDefinition[] Assemblies { get => Context.GetAssemblies (); }
+	public AssemblyDefinition [] Assemblies { get => Context.GetAssemblies (); }
 
 	public ApplePlatform Platform { get; set; }
-	public string PlatformAssembly { get {
+	public string PlatformAssembly {
+		get {
 			return $"Microsoft.{Platform.AsString ()}";
 		}
 	}

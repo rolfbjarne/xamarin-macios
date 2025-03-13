@@ -13,9 +13,9 @@ namespace Xamarin.Build;
 public class AssemblyPreparer : IDisposable {
 	LinkerConfiguration configuration = new LinkerConfiguration ();
 
-	public AssemblyPreparerInfo[] Assemblies { get; set; }
+	public AssemblyPreparerInfo [] Assemblies { get; set; }
 
-	public AssemblyPreparer (AssemblyPreparerInfo[] assemblies, string platform)
+	public AssemblyPreparer (AssemblyPreparerInfo [] assemblies, string platform)
 #if NET
 	: this (assemblies, Enum.Parse<ApplePlatform> (platform, true))
 #else
@@ -24,14 +24,14 @@ public class AssemblyPreparer : IDisposable {
 	{
 	}
 
-	public AssemblyPreparer (AssemblyPreparerInfo[] assemblies, ApplePlatform platform)
+	public AssemblyPreparer (AssemblyPreparerInfo [] assemblies, ApplePlatform platform)
 	{
 		Assemblies = assemblies;
 		configuration.Platform = platform;
 	}
 
 	public bool Prepare (out List<Exception> exceptions)
-	{		
+	{
 		exceptions = new List<Exception> ();
 
 		var markHandlers = new IMarkHandler [] {

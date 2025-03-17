@@ -66,7 +66,12 @@ public class AssemblyPreparer : IDisposable {
 		}
 
 		foreach (var assembly in linkContext.GetAssemblies ()) {
-			//assembly.MainModule.ReadSymbols ();
+			// Skip SDK asemblies, they have nothing we need to process at the moment.
+			if (!assembly.MainModule.HasAssemblyReferences)
+				continue;
+			if (!configuration.IsProductAssembly (assembly) && !assembly.MainModule.AssemblyReferences.Any (v => configuration.IsProductAssembly (v.Name)))
+				continue;
+
 			foreach (var type in assembly.MainModule.Types) {
 				markContext.MarkType (type);
 			}
@@ -77,27 +82,18 @@ public class AssemblyPreparer : IDisposable {
 		foreach (var assembly in Assemblies) {
 			var assemblyDefinition = assembly.Assembly!;
 
-		var action = configuration.Context.Annotations.GetAction (assemblyDefinition);
-		switch (action) {
-			case AssemblyAction.Copy:
-				// FIXME: optimization if nothing changed: don't copy
-				Console.WriteLine ($"No modifications to {assembly.InputPath}, so copying input assembly.");
-				Directory.CreateDirectory (Path.GetDirectoryName (assembly.OutputPath)!);
-				File.Copy (assembly.InputPath, assembly.OutputPath, true);
-				if (assemblyDefinition.MainModule.HasSymbols) {
-					// Copy the symbols too
-					var inputSymbolPath = Path.ChangeExtension (assembly.InputPath, ".pdb");
-					var outputSymbolPath = Path.ChangeExtension (assembly.OutputPath, ".pdb");
-					File.Copy (inputSymbolPath, outputSymbolPath, true);
-				}
-				break;
-			case AssemblyAction.Link:
-			case AssemblyAction.Save:
-				Console.WriteLine ($"Saving {assembly.InputPath} to {assembly.OutputPath}");
-				break;
-			default:
-			throw new NotImplementedException ($"Unknown link action: {action}");
-		}
+			var action = configuration.Context.Annotations.GetAction (assemblyDefinition);
+			switch (action) {
+				case AssemblyAction.Copy:
+					assembly.OutputPath = assembly.InputPath;
+					continue;
+				case AssemblyAction.Link:
+				case AssemblyAction.Save:
+					Console.WriteLine ($"Saving {assembly.InputPath} to {assembly.OutputPath}");
+					break;
+				default:
+				throw new NotImplementedException ($"Unknown link action: {action}");
+			}
 
 			Directory.CreateDirectory (Path.GetDirectoryName (assembly.OutputPath)!);
 			var writerParameters = new WriterParameters ();
@@ -109,7 +105,7 @@ public class AssemblyPreparer : IDisposable {
 					writerParameters.WriteSymbols = true;
 					writerParameters.SymbolWriterProvider = provider;
 				} catch (Exception e) {
-					Console.WriteLine ($"Failed to create symbol writer for {assembly.OutputPath}, not writing symbols.");
+					Console.WriteLine ($"Failed to create symbol writer for {assembly.OutputPath}, not writing symbols: {e.Message}");
 				}
 			}
 			try {
@@ -134,7 +130,7 @@ public class AssemblyPreparerInfo {
 	internal AssemblyDefinition? Assembly { get; set; }
 
 	public string InputPath { get; private set; }
-	public string OutputPath { get; private set; }
+	public string OutputPath { get; set; }
 
 	public AssemblyPreparerInfo (string inputPath, string outputPath)
 	{

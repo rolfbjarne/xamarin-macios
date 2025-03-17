@@ -50,4 +50,15 @@ public class LinkerConfiguration {
 	{
 		throw new NotImplementedException ();
 	}
+
+	public bool IsProductAssembly (string assemblyName)
+	{
+		return assemblyName == PlatformAssembly;
+	}
+
+	public bool IsProductAssembly (AssemblyDefinition assembly)
+	{
+		return assembly.Name.Name == PlatformAssembly;
+	}
+
 }

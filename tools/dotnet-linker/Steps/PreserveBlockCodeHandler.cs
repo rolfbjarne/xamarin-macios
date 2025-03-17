@@ -83,6 +83,9 @@ namespace Xamarin.Linker.Steps {
 			// Preserve the method and field on the static constructor of the type.
 			abr.AddDynamicDependencyAttributeToStaticConstructor (type, method);
 			abr.AddDynamicDependencyAttributeToStaticConstructor (type, field);
+#if ASSEMBLY_PREPARER
+			abr.SaveCurrentAssembly ();
+#endif
 		}
 	}
 }

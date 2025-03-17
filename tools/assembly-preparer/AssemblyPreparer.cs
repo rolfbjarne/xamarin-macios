@@ -62,6 +62,7 @@ public class AssemblyPreparer : IDisposable {
 			var assemblyDefinition = AssemblyDefinition.ReadAssembly (assembly.InputPath, parameters); // FIXME: symbols
 			linkContext.Assemblies.Add (assemblyDefinition);
 			assembly.Assembly = assemblyDefinition;
+			configuration.Context.Annotations.SetAction (assemblyDefinition, AssemblyAction.Copy);
 		}
 
 		foreach (var assembly in linkContext.GetAssemblies ()) {
@@ -75,6 +76,27 @@ public class AssemblyPreparer : IDisposable {
 
 		foreach (var assembly in Assemblies) {
 			var assemblyDefinition = assembly.Assembly!;
+
+		var action = configuration.Context.Annotations.GetAction (assemblyDefinition);
+		switch (action) {
+			case AssemblyAction.Copy:
+				// FIXME: optimization if nothing changed: don't copy
+				Console.WriteLine ($"No modifications to {assembly.InputPath}, so copying input assembly.");
+				File.Copy (assembly.InputPath, assembly.OutputPath, true);
+				if (assemblyDefinition.MainModule.HasSymbols) {
+					// Copy the symbols too
+					var symbolPath = Path.ChangeExtension (assembly.OutputPath, ".pdb");
+					File.Copy (assembly.InputPath + ".pdb", symbolPath, true);
+				}
+				break;
+			case AssemblyAction.Link:
+			case AssemblyAction.Save:
+				Console.WriteLine ($"Saving {assembly.InputPath} to {assembly.OutputPath}");
+				break;
+			default:
+			throw new NotImplementedException ($"Unknown link action: {action}");
+		}
+
 			Directory.CreateDirectory (Path.GetDirectoryName (assembly.OutputPath)!);
 			var writerParameters = new WriterParameters ();
 			if (assemblyDefinition.MainModule.HasSymbols) {

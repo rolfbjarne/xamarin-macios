@@ -52,7 +52,7 @@ namespace Xamarin.MacDev.Tasks {
 				}).ToArray ();
 				return rv && !Log.HasLoggedErrors;
 			} catch (Exception e) {
-				Log.LogError ("Unexpected error while preparing assemblies: {0}", e.Message);
+				Log.LogError ("Unexpected error while preparing assemblies: {0}", e);
 				return false;
 			}
 		}

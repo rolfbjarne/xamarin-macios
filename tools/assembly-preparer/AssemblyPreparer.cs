@@ -82,11 +82,13 @@ public class AssemblyPreparer : IDisposable {
 			case AssemblyAction.Copy:
 				// FIXME: optimization if nothing changed: don't copy
 				Console.WriteLine ($"No modifications to {assembly.InputPath}, so copying input assembly.");
+				Directory.CreateDirectory (Path.GetDirectoryName (assembly.OutputPath)!);
 				File.Copy (assembly.InputPath, assembly.OutputPath, true);
 				if (assemblyDefinition.MainModule.HasSymbols) {
 					// Copy the symbols too
-					var symbolPath = Path.ChangeExtension (assembly.OutputPath, ".pdb");
-					File.Copy (assembly.InputPath + ".pdb", symbolPath, true);
+					var inputSymbolPath = Path.ChangeExtension (assembly.InputPath, ".pdb");
+					var outputSymbolPath = Path.ChangeExtension (assembly.OutputPath, ".pdb");
+					File.Copy (inputSymbolPath, outputSymbolPath, true);
 				}
 				break;
 			case AssemblyAction.Link:
@@ -100,10 +102,22 @@ public class AssemblyPreparer : IDisposable {
 			Directory.CreateDirectory (Path.GetDirectoryName (assembly.OutputPath)!);
 			var writerParameters = new WriterParameters ();
 			if (assemblyDefinition.MainModule.HasSymbols) {
-				writerParameters.WriteSymbols = true;
-				writerParameters.SymbolWriterProvider = new DefaultSymbolWriterProvider ();
+				var provider = new CustomSymbolWriterProvider ();
+				try {
+					using (var tmp = provider.GetSymbolWriter (assemblyDefinition.MainModule, Path.ChangeExtension (assembly.OutputPath, ".pdb"))) {}
+					File.Delete (Path.ChangeExtension (assembly.OutputPath, ".pdb"));
+					writerParameters.WriteSymbols = true;
+					writerParameters.SymbolWriterProvider = provider;
+				} catch (Exception e) {
+					Console.WriteLine ($"Failed to create symbol writer for {assembly.OutputPath}, not writing symbols.");
+				}
 			}
-			assemblyDefinition.Write (assembly.OutputPath, writerParameters);
+			try {
+				assemblyDefinition.Write (assembly.OutputPath, writerParameters);
+			} catch (Exception e) {
+				Console.WriteLine ($"Failed to write {assembly.OutputPath}: {e}");
+				throw;
+			}
 		}
 
 		return true;

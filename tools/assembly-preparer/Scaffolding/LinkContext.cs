@@ -5,7 +5,8 @@ using Xamarin.Bundler;
 namespace Mono.Linker;
 
 public class LinkContext {
-	public AnnotationStore Annotations { get => throw new NotImplementedException (); }
+	AnnotationStore annotations = new AnnotationStore ();
+	public AnnotationStore Annotations { get => annotations; }
 
 	public List<AssemblyDefinition> Assemblies = new List<AssemblyDefinition> ();
 	public AssemblyDefinition [] GetAssemblies () { return Assemblies.ToArray (); }

@@ -43,6 +43,7 @@ public class LinkerConfiguration {
 	}
 	public static void Report (LinkContext context, Exception exception)
 	{
+		Console.WriteLine ($"Linker error: {exception}");
 		throw new NotImplementedException ();
 	}
 	public static void Report (LinkContext context, List<Exception> exceptions)

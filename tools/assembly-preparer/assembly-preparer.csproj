@@ -38,6 +38,9 @@
 		<Compile Include="../dotnet-linker/Steps/PreserveBlockCodeHandler.cs">
 			<Link>external/tools/dotnet-linker/Steps/PreserveBlockCodeHandler.cs</Link>
 		</Compile>
+		<Compile Include="../linker/CustomSymbolWriter.cs">
+			<Link>external/tools/linker/CustomSymbolWriter.cs</Link>
+		</Compile>
 		<Compile Include="../../src/ObjCRuntime/ErrorHelper.cs">
 			<Link>external/src/ObjCRuntime/ErrorHelper.cs</Link>
 		</Compile>

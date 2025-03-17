@@ -84,6 +84,7 @@ namespace Xamarin.Linker.Steps {
 			abr.AddDynamicDependencyAttributeToStaticConstructor (type, method);
 			abr.AddDynamicDependencyAttributeToStaticConstructor (type, field);
 #if ASSEMBLY_PREPARER
+			abr.SetCurrentAssembly (type.Module.Assembly);
 			abr.SaveCurrentAssembly ();
 #endif
 		}

@@ -3256,7 +3256,10 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		DependsOnTargets="_ComputeAssembliesToPostprocessOnPublish"
 		>
 		<ItemGroup>
-			<AssembliesToPrepare Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.PostprocessAssembly)' == 'true'" />
+			<_AssembliesToPrepare Include="@(ResolvedFileToPublish)" Condition="'%(ResolvedFileToPublish.PostprocessAssembly)' == 'true'" />
+	    <!-- We implicitly pick up PDBs next to input assemblies. We will filter these out of the publish set. -->
+      <__PDBToPrepare Include="@(ResolvedFileToPublish)" Exclude="@(_AssembliesToPrepare->'%(RelativeDir)%(Filename).pdb')" />
+      <_PDBToPrepare Include="@(ResolvedFileToPublish)" Exclude="@(__PDBToLink)" />
 		</ItemGroup>
 		<PropertyGroup>
 			<PreparedAssembliesDirectory>$([MSBuild]::EnsureTrailingSlash('$(DeviceSpecificIntermediateOutputPath)prepared-assemblies'))</PreparedAssembliesDirectory>
@@ -3267,12 +3270,12 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<Target
 		Name="_PrepareAssemblies"
 		Condition="'$(PrepareAssemblies)' == 'true'"
-		Inputs="@(AssembliesToPrepare)"
-		Outputs="@(AssembliesToPrepare->'$(PreparedAssembliesDirectory)%(Filename)%(Extension)')"
+		Inputs="@(_AssembliesToPrepare)"
+		Outputs="@(_AssembliesToPrepare->'$(PreparedAssembliesDirectory)%(Filename)%(Extension)')"
 		DependsOnTargets="_PrepareAssembliesForPreparation;_ComputeAssembliesToPostprocessOnPublish"
 		>
 		<PrepareAssemblies
-			InputAssemblies="@(AssembliesToPrepare)"
+			InputAssemblies="@(_AssembliesToPrepare)"
 			OutputDirectory="$(PreparedAssembliesDirectory)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 		>
@@ -3280,7 +3283,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</PrepareAssemblies>
 
 		<ItemGroup>
-			<ResolvedFileToPublish Remove="@(AssembliesToPrepare)" />
+			<ResolvedFileToPublish Remove="@(_AssembliesToPrepare)" />
 			<ResolvedFileToPublish Include="@(_PreparedAssemblies)" />
 		</ItemGroup>
 	</Target>

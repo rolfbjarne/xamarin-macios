@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Mono.Cecil;
+using Mono.Cecil.Cil;
 using Mono.Linker;
 using Xamarin.Bundler;
 using Xamarin.Linker.Steps;
@@ -48,8 +49,17 @@ public class AssemblyPreparer : IDisposable {
 
 		// load assemblies
 
+		var assemblyResolver = new DefaultAssemblyResolver ();
+		// var metadataResolver = new DefaultMetadataResolver ();
+
+		var parameters = new ReaderParameters {
+				AssemblyResolver = assemblyResolver,
+				// MetadataResolver = metadataResolver,
+				ReadSymbols = true,
+				SymbolReaderProvider = new DefaultSymbolReaderProvider (throwIfNoSymbol: false),
+		};
 		foreach (var assembly in Assemblies) {
-			var assemblyDefinition = AssemblyDefinition.ReadAssembly (assembly.InputPath); // FIXME: symbols
+			var assemblyDefinition = AssemblyDefinition.ReadAssembly (assembly.InputPath, parameters); // FIXME: symbols
 			linkContext.Assemblies.Add (assemblyDefinition);
 			assembly.Assembly = assemblyDefinition;
 		}
@@ -66,7 +76,12 @@ public class AssemblyPreparer : IDisposable {
 		foreach (var assembly in Assemblies) {
 			var assemblyDefinition = assembly.Assembly!;
 			Directory.CreateDirectory (Path.GetDirectoryName (assembly.OutputPath)!);
-			assemblyDefinition.Write (assembly.OutputPath);
+			var writerParameters = new WriterParameters ();
+			if (assemblyDefinition.MainModule.HasSymbols) {
+				writerParameters.WriteSymbols = true;
+				writerParameters.SymbolWriterProvider = new DefaultSymbolWriterProvider ();
+			}
+			assemblyDefinition.Write (assembly.OutputPath, writerParameters);
 		}
 
 		return true;

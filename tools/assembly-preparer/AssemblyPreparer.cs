@@ -53,10 +53,10 @@ public class AssemblyPreparer : IDisposable {
 		// var metadataResolver = new DefaultMetadataResolver ();
 
 		var parameters = new ReaderParameters {
-				AssemblyResolver = assemblyResolver,
-				// MetadataResolver = metadataResolver,
-				ReadSymbols = true,
-				SymbolReaderProvider = new DefaultSymbolReaderProvider (throwIfNoSymbol: false),
+			AssemblyResolver = assemblyResolver,
+			// MetadataResolver = metadataResolver,
+			ReadSymbols = true,
+			SymbolReaderProvider = new DefaultSymbolReaderProvider (throwIfNoSymbol: false),
 		};
 		foreach (var assembly in Assemblies) {
 			var assemblyDefinition = AssemblyDefinition.ReadAssembly (assembly.InputPath, parameters); // FIXME: symbols
@@ -84,14 +84,14 @@ public class AssemblyPreparer : IDisposable {
 
 			var action = configuration.Context.Annotations.GetAction (assemblyDefinition);
 			switch (action) {
-				case AssemblyAction.Copy:
-					assembly.OutputPath = assembly.InputPath;
-					continue;
-				case AssemblyAction.Link:
-				case AssemblyAction.Save:
-					Console.WriteLine ($"Saving {assembly.InputPath} to {assembly.OutputPath}");
-					break;
-				default:
+			case AssemblyAction.Copy:
+				assembly.OutputPath = assembly.InputPath;
+				continue;
+			case AssemblyAction.Link:
+			case AssemblyAction.Save:
+				Console.WriteLine ($"Saving {assembly.InputPath} to {assembly.OutputPath}");
+				break;
+			default:
 				throw new NotImplementedException ($"Unknown link action: {action}");
 			}
 
@@ -100,7 +100,7 @@ public class AssemblyPreparer : IDisposable {
 			if (assemblyDefinition.MainModule.HasSymbols) {
 				var provider = new CustomSymbolWriterProvider ();
 				try {
-					using (var tmp = provider.GetSymbolWriter (assemblyDefinition.MainModule, Path.ChangeExtension (assembly.OutputPath, ".pdb"))) {}
+					using (var tmp = provider.GetSymbolWriter (assemblyDefinition.MainModule, Path.ChangeExtension (assembly.OutputPath, ".pdb"))) { }
 					File.Delete (Path.ChangeExtension (assembly.OutputPath, ".pdb"));
 					writerParameters.WriteSymbols = true;
 					writerParameters.SymbolWriterProvider = provider;

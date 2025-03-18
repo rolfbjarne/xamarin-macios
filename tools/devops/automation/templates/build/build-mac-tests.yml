@@ -83,7 +83,7 @@ steps:
           continueOnError: true
           condition: succeededOrFailed()
       - ${{ else }}:
-          - task: PublishPipelineArtifact@1
+        - task: PublishPipelineArtifact@1
           displayName: 'Publish Artifact: All binlogs'
           inputs:
             targetPath: $(Build.ArtifactStagingDirectory)/mactests-binlogs

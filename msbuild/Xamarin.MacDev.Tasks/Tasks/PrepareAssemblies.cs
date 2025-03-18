@@ -42,7 +42,7 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			try {
 				var infos = InputAssemblies.Select (GetAssemblyInfo).ToArray ();
-				using var preparer = new AssemblyPreparer (infos, Platform.AsString ());
+				using var preparer = new AssemblyPreparer (infos, Platform);
 				var rv = preparer.Prepare (out var exceptions);
 				// TODO: report warnings & errors
 				OutputAssemblies = preparer.Assemblies.Select (v => {

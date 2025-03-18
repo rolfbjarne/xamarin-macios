@@ -45,7 +45,7 @@ parameters:
 
 - name: dependentStage
   type: string
-  default: build_macos_tests
+  default: build_macos_tests2
 
 stages:
 

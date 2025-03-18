@@ -290,7 +290,7 @@ stages:
       pool: $(PRBuildPool)
 
 - ${{ each config in parameters.macTestsConfigurations }}:
-  - template: ../mac/stage.yml
+  - template: ./mac/stage.yml
     parameters:
       dependentStage: build_macos_tests2
       isPR: ${{ parameters.isPR }}

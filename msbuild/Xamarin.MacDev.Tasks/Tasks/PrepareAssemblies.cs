@@ -15,6 +15,8 @@ using Xamarin.Utils;
 
 namespace Xamarin.MacDev.Tasks {
 	public class PrepareAssemblies : XamarinTask {
+		const string ErrorPrefix = "AP";
+
 		#region Inputs
 		[Required]
 		public ITaskItem [] InputAssemblies { get; set; } = [];
@@ -44,7 +46,20 @@ namespace Xamarin.MacDev.Tasks {
 				var infos = InputAssemblies.Select (GetAssemblyInfo).ToArray ();
 				using var preparer = new AssemblyPreparer (infos, Platform);
 				var rv = preparer.Prepare (out var exceptions);
-				// TODO: report warnings & errors
+
+				foreach (var pe in exceptions) {
+					if (pe.Error) {
+						Log.LogError (null, $"{ErrorPrefix}{pe.Code}", null, pe.FileName ?? "MSBuild", 0, 0, 0, 0, message: pe.Message);
+						Exception? ie = pe.InnerException;
+						while (ie is not null) {
+							Log.LogMessage (MessageImportance.Low, "Inner exception: {0}\n{1}", ie.Message, ie.StackTrace);
+							ie = ie.InnerException;
+						}
+					} else {
+						Log.LogWarning (null, $"{ErrorPrefix}{pe.Code}", null, pe.FileName ?? "MSBuild", 0, 0, 0, 0, message: pe.Message);
+					}
+				}
+
 				OutputAssemblies = preparer.Assemblies.Select (v => {
 					var item = map [v];
 					item.ItemSpec = v.OutputPath;

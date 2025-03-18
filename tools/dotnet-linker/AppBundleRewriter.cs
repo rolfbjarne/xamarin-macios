@@ -63,14 +63,8 @@ namespace Xamarin.Linker {
 			foreach (var asm in configuration.Assemblies) {
 				if (asm.Name.Name == Driver.CorlibName) {
 					if (corlib_assembly is not null)
-						throw new InvalidOperationException ();
+						throw new InvalidOperationException ($"Already have a corlib assembly named {corlib_assembly.Name}");
 					corlib_assembly = asm;
-#if ASSEMBLY_PREPARER
-				} else if (asm.Name.Name == "System.Runtime") {
-					if (corlib_assembly is not null)
-						throw new InvalidOperationException ();
-					corlib_assembly = asm;
-#endif
 				} else if (asm.Name.Name == configuration.PlatformAssembly) {
 					platform_assembly = asm;
 				}

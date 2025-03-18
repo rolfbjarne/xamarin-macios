@@ -47,9 +47,8 @@ public class PreserveBlockCodeHandlerTests {
 		DotNet.AssertBuild (csprojPath);
 		var assemblyDir = Path.Combine (tmpdir, "bin", "Debug");
 
-		var assemblies = new List<string> ();
+		var assemblies = GetAssemblies (platform);
 		assemblies.Add (Path.Combine (assemblyDir, "Test.dll"));
-		assemblies.Add (Path.Combine (Configuration.DotNetBclDir, "System.Runtime.dll"));
 		var infos = assemblies.Select (v => new AssemblyPreparerInfo (v, Path.Combine (assemblyDir, "out", Path.GetFileName (v)))).ToArray ();
 		var preparer = new AssemblyPreparer (infos, platform);
 		Assert.That (preparer.Prepare (out var exceptions), Is.True, "Prepare");
@@ -67,5 +66,41 @@ public class PreserveBlockCodeHandlerTests {
 		Assert.That ((string) attribs [1].ConstructorArguments [0].Value, Is.EqualTo ("Invoke(System.IntPtr,System.Int32)"), "Second attribute's first argument");
 		Assert.That (((TypeDefinition) attribs [0].ConstructorArguments [1].Value).FullName, Is.EqualTo ("ObjCRuntime.Trampolines/SDInnerBlock"), "First attribute's second argument");
 		Assert.That (((TypeDefinition) attribs [1].ConstructorArguments [1].Value).FullName, Is.EqualTo ("ObjCRuntime.Trampolines/SDInnerBlock"), "Second attribute's second argument");
+	}
+
+	List<string> GetAssemblies (ApplePlatform platform)
+	{
+		var assemblies = new List<string> ();
+		string rid;
+		string packageName;
+		switch (platform) {
+			case ApplePlatform.MacCatalyst:
+				rid = "maccatalyst-arm64";
+				packageName = "microsoft.netcore.app.runtime.mono.maccatalyst-arm64";
+				break;
+			case ApplePlatform.iOS:
+				rid = "ios-arm64";
+				packageName = "microsoft.netcore.app.runtime.mono.ios-arm64";
+				break;
+			case ApplePlatform.TVOS:
+				rid = "tvos-arm64";
+				packageName = "microsoft.netcore.app.runtime.mono.tvos-arm64";
+				break;
+			case ApplePlatform.MacOSX:
+				rid = "osx-arm64";
+				packageName = "microsoft.netcore.app.runtime.osx-arm64";
+				break;
+			default:
+				throw new NotSupportedException ($"Unsupported platform: {platform}");
+		}
+		var microsoftNetCoreAppRefPackageVersion = File.ReadAllLines (Path.Combine (Configuration.RootPath, "dotnet.config")).Single (v => v.StartsWith ("BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION=", StringComparison.Ordinal)).Replace ("BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION=","");
+		var bclDir = Path.Combine (Configuration.RootPath, "packages", packageName, microsoftNetCoreAppRefPackageVersion, "runtimes", rid, "lib", Configuration.DotNetTfm);
+		var nativeDir = Path.Combine (Configuration.RootPath, "packages", packageName, microsoftNetCoreAppRefPackageVersion, "runtimes", rid, "native");
+
+		assemblies.AddRange (Directory.GetFiles (bclDir, "*.dll"));
+		assemblies.AddRange (Directory.GetFiles (nativeDir, "*.dll"));
+		assemblies.Add (Path.Combine (Configuration.GetRuntimeDirectory (platform, rid), "lib", Configuration.DotNetTfm, Configuration.GetBaseLibraryName (platform)));
+
+		return assemblies;
 	}
 }

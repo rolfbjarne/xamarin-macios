@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
@@ -12,18 +10,11 @@ using Xamarin.Utils;
 namespace Xamarin.Build;
 
 public class AssemblyPreparer : IDisposable {
+	AggregateLog log = new AggregateLog ();
+	
 	LinkerConfiguration configuration = new LinkerConfiguration ();
 
 	public AssemblyPreparerInfo [] Assemblies { get; set; }
-
-	public AssemblyPreparer (AssemblyPreparerInfo [] assemblies, string platform)
-#if NET
-	: this (assemblies, Enum.Parse<ApplePlatform> (platform, true))
-#else
-	: this (assemblies, (ApplePlatform) Enum.Parse (typeof (ApplePlatform), platform, true))
-#endif
-	{
-	}
 
 	public AssemblyPreparer (AssemblyPreparerInfo [] assemblies, ApplePlatform platform)
 	{
@@ -31,10 +22,15 @@ public class AssemblyPreparer : IDisposable {
 		configuration.Platform = platform;
 	}
 
-	public bool Prepare (out List<Exception> exceptions)
+	public void AddLog (IAssemblyPreparerLog log)
 	{
-		exceptions = new List<Exception> ();
+		if (log is null)
+			throw new ArgumentNullException (nameof (log));
+		this.log.Add (log);
+	}
 
+	public bool Prepare (out List<ProductException> exceptions)
+	{
 		var markHandlers = new IMarkHandler [] {
 			new PreserveBlockCodeHandler (),
 		};
@@ -115,6 +111,8 @@ public class AssemblyPreparer : IDisposable {
 				throw;
 			}
 		}
+
+		exceptions = configuration.Exceptions;
 
 		return true;
 	}

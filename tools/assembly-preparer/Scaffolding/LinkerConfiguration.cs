@@ -9,6 +9,13 @@ using Xamarin.Utils;
 namespace Xamarin.Bundler;
 
 public class LinkerConfiguration {
+	List<ProductException> exceptions = new List<ProductException> ();
+	public List<ProductException> Exceptions {
+		get {
+			return exceptions;
+		}
+	}
+
 	AppBundleRewriter? abr;
 	internal AppBundleRewriter AppBundleRewriter {
 		get {
@@ -43,12 +50,17 @@ public class LinkerConfiguration {
 	}
 	public static void Report (LinkContext context, Exception exception)
 	{
-		Console.WriteLine ($"Linker error: {exception}");
-		throw new NotImplementedException ();
+		var pe = exception as ProductException;
+		if (pe is null)
+			pe = ErrorHelper.CreateError (99, exception, "Unexpected error: {0}}", exception.Message);
+		GetInstance (context).exceptions.Add (pe);
 	}
+
 	public static void Report (LinkContext context, List<Exception> exceptions)
 	{
-		throw new NotImplementedException ();
+		foreach (var exception in exceptions) {
+			Report (context, exception);
+		}
 	}
 
 	public bool IsProductAssembly (string assemblyName)

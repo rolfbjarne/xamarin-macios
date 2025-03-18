@@ -7,6 +7,9 @@ namespace AssemblyPreparerTests;
 public class PreserveBlockCodeHandlerTests {
 	[Test]
 	[TestCase (ApplePlatform.MacCatalyst)]
+	[TestCase (ApplePlatform.iOS)]
+	[TestCase (ApplePlatform.TVOS)]
+	[TestCase (ApplePlatform.MacOSX)]
 	public void First (ApplePlatform platform)
 	{
 		var code = @"

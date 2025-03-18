@@ -65,10 +65,12 @@ namespace Xamarin.Linker {
 					if (corlib_assembly is not null)
 						throw new InvalidOperationException ();
 					corlib_assembly = asm;
+#if ASSEMBLY_PREPARER
 				} else if (asm.Name.Name == "System.Runtime") {
 					if (corlib_assembly is not null)
 						throw new InvalidOperationException ();
 					corlib_assembly = asm;
+#endif
 				} else if (asm.Name.Name == configuration.PlatformAssembly) {
 					platform_assembly = asm;
 				}

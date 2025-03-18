@@ -74,26 +74,26 @@ public class PreserveBlockCodeHandlerTests {
 		string rid;
 		string packageName;
 		switch (platform) {
-			case ApplePlatform.MacCatalyst:
-				rid = "maccatalyst-arm64";
-				packageName = "microsoft.netcore.app.runtime.mono.maccatalyst-arm64";
-				break;
-			case ApplePlatform.iOS:
-				rid = "ios-arm64";
-				packageName = "microsoft.netcore.app.runtime.mono.ios-arm64";
-				break;
-			case ApplePlatform.TVOS:
-				rid = "tvos-arm64";
-				packageName = "microsoft.netcore.app.runtime.mono.tvos-arm64";
-				break;
-			case ApplePlatform.MacOSX:
-				rid = "osx-arm64";
-				packageName = "microsoft.netcore.app.runtime.osx-arm64";
-				break;
-			default:
-				throw new NotSupportedException ($"Unsupported platform: {platform}");
+		case ApplePlatform.MacCatalyst:
+			rid = "maccatalyst-arm64";
+			packageName = "microsoft.netcore.app.runtime.mono.maccatalyst-arm64";
+			break;
+		case ApplePlatform.iOS:
+			rid = "ios-arm64";
+			packageName = "microsoft.netcore.app.runtime.mono.ios-arm64";
+			break;
+		case ApplePlatform.TVOS:
+			rid = "tvos-arm64";
+			packageName = "microsoft.netcore.app.runtime.mono.tvos-arm64";
+			break;
+		case ApplePlatform.MacOSX:
+			rid = "osx-arm64";
+			packageName = "microsoft.netcore.app.runtime.osx-arm64";
+			break;
+		default:
+			throw new NotSupportedException ($"Unsupported platform: {platform}");
 		}
-		var microsoftNetCoreAppRefPackageVersion = File.ReadAllLines (Path.Combine (Configuration.RootPath, "dotnet.config")).Single (v => v.StartsWith ("BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION=", StringComparison.Ordinal)).Replace ("BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION=","");
+		var microsoftNetCoreAppRefPackageVersion = File.ReadAllLines (Path.Combine (Configuration.RootPath, "dotnet.config")).Single (v => v.StartsWith ("BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION=", StringComparison.Ordinal)).Replace ("BUNDLED_NETCORE_PLATFORMS_PACKAGE_VERSION=", "");
 		var bclDir = Path.Combine (Configuration.RootPath, "packages", packageName, microsoftNetCoreAppRefPackageVersion, "runtimes", rid, "lib", Configuration.DotNetTfm);
 		var nativeDir = Path.Combine (Configuration.RootPath, "packages", packageName, microsoftNetCoreAppRefPackageVersion, "runtimes", rid, "native");
 

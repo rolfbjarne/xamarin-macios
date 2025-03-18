@@ -11,7 +11,7 @@ namespace Xamarin.Build;
 
 public class AssemblyPreparer : IDisposable {
 	AggregateLog log = new AggregateLog ();
-	
+
 	LinkerConfiguration configuration = new LinkerConfiguration ();
 
 	public AssemblyPreparerInfo [] Assemblies { get; set; }

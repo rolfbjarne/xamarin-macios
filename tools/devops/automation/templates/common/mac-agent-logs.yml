@@ -54,7 +54,7 @@ steps:
 # only upload when told so
 - ${{ if eq(parameters.uploadLogs, true) }}:
   - ${{ if eq(parameters.use1ES, true) }}:
-    - task: 1ES.PublishPipelineArtifactD@1
+    - task: 1ES.PublishPipelineArtifact@1
       displayName: 'Publish Artifact: Agent logs'
       condition: always()
       inputs:

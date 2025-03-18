@@ -56,7 +56,7 @@ steps:
           name: workload_file
           displayName: 'Generate "WorkloadRollback.json"'
 
-        - task: 1ES.PublishPipelineArtifact@1
+        - task: 1ES.PublishPipelineArtifactK@1
           displayName: 'Publish WorkloadRollback.json'
           inputs:
             path: $(Build.SourcesDirectory)/WorkloadRollback.json
@@ -64,7 +64,7 @@ steps:
           continueOnError: true
 
         # upload each of the pkgs into the pipeline artifacts
-        - task: 1ES.PublishPipelineArtifact@1
+        - task: 1ES.PublishPipelineArtifactJ@1
           displayName: 'Publish Build Artifacts'
           inputs:
             path: $(Build.SourcesDirectory)/package
@@ -81,14 +81,14 @@ steps:
           continueOnError: true  # not a terrible blocking issue
           timeoutInMinutes: 60
 
-        - task: 1ES.PublishPipelineArtifact@1
+        - task: 1ES.PublishPipelineArtifactI@1
           displayName: 'Publish test libraries dependencies'
           inputs:
             path: $(Build.SourcesDirectory)/$(BUILD_REPOSITORY_TITLE)/tests/package-test-libraries.zip
             artifact: '${{ parameters.uploadPrefix }}package-test-libraries'
           continueOnError: true
 
-        - task: 1ES.PublishPipelineArtifact@1
+        - task: 1ES.PublishPipelineArtifactH@1
           displayName: 'Publish Build.props'
           inputs:
             path: $(Build.SourcesDirectory)/$(BUILD_REPOSITORY_TITLE)/Build.props
@@ -106,7 +106,7 @@ steps:
               condition: succeededOrFailed()
 
             # Publish all the binlogs we collected in the previous step
-            - task: 1ES.PublishPipelineArtifact@1
+            - task: 1ES.PublishPipelineArtifactG@1
               displayName: 'Publish Artifact: All binlogs'
               inputs:
                 path: $(Build.ArtifactStagingDirectory)/all-binlogs

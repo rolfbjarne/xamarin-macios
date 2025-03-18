@@ -75,7 +75,7 @@ steps:
 
       # Publish all the binlogs we collected in the previous step
       - ${{ if eq(parameters.use1ES, true) }}:
-        - task: 1ES.PublishPipelineArtifact@1
+        - task: 1ES.PublishPipelineArtifactL@1
           displayName: 'Publish Artifact: All binlogs'
           inputs:
             path: $(Build.ArtifactStagingDirectory)/mactests-binlogs

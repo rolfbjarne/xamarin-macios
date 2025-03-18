@@ -114,7 +114,7 @@ steps:
     GdnBreakOutputSuppressionSet: falsepositives
 
 - ${{ if eq(parameters.use1ES, true) }}:
-  - task: 1ES.PublishPipelineArtifact@1
+  - task: 1ES.PublishPipelineArtifactB@1
     displayName: Publish Artifact for Guardian Supressions
     inputs:
       path: $(Build.ArtifactStagingDirectory)\GuardianSuppressions

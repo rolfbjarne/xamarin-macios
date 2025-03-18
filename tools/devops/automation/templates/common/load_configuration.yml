@@ -94,7 +94,7 @@ steps:
   # upload config to be consumed later
   - ${{ if eq(parameters.uploadArtifacts, true) }}:
       - ${{ if eq(parameters.use1ES, true) }}:
-          - task: 1ES.PublishPipelineArtifact@1
+          - task: 1ES.PublishPipelineArtifactE@1
             displayName: 'Publish Artifact: configuration.json'
             inputs:
               path: '$(Build.ArtifactStagingDirectory)/configuration.json'

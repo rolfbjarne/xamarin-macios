@@ -43,6 +43,9 @@ parameters:
   type: string
   default: ''
 
+- name: dependentStage
+  type: string
+  default: build_macos_tests
 
 stages:
 
@@ -50,7 +53,7 @@ stages:
   displayName: ${{ parameters.displayName }}
   dependsOn:
   - ${{ if eq(parameters.postPipeline, false) }}:
-    - build_macos_tests
+    - ${{ parameters.dependentStage }}
   - configure_build
   condition: and(succeeded(), eq(stageDependencies.configure_build.outputs['configure.decisions.RUN_MAC_TESTS'], 'true'))
   variables:

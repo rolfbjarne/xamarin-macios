@@ -23,7 +23,7 @@ parameters:
 
 steps:
 - ${{ if eq(parameters.use1ES, true) }}:
-  - task: 1ES.PublishPipelineArtifactC@1
+  - task: 1ES.PublishPipelineArtifact@1
     displayName: ${{ parameters.displayName }}
     ${{ if ne(parameters.condition, '') }}:
       condition: ${{ parameters.condition }}

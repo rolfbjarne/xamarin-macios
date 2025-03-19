@@ -1,7 +1,5 @@
 using Mono.Cecil.Rocks;
 
-using Xamarin.Build;
-
 namespace AssemblyPreparerTests;
 
 public class PreserveBlockCodeHandlerTests {

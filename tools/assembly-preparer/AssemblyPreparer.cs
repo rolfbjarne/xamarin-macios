@@ -1,4 +1,5 @@
 using System.IO;
+using System.Runtime.Serialization;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Linker;
@@ -13,6 +14,8 @@ public class AssemblyPreparer : IDisposable {
 	AggregateLog log = new AggregateLog ();
 
 	LinkerConfiguration configuration = new LinkerConfiguration ();
+
+	public string MakeReproPath { get; set; } = string.Empty;
 
 	public AssemblyPreparerInfo [] Assemblies { get; set; }
 
@@ -31,6 +34,24 @@ public class AssemblyPreparer : IDisposable {
 
 	public bool Prepare (out List<ProductException> exceptions)
 	{
+		exceptions = configuration.Exceptions;
+
+		if (!string.IsNullOrEmpty (MakeReproPath)) {
+			if (File.Exists (MakeReproPath) || Directory.Exists (MakeReproPath)) {
+				configuration.Exceptions.Add (ErrorHelper.CreateError (99, $"Repro location already exists: {MakeReproPath}"));
+				return false;
+			}
+			Directory.CreateDirectory (MakeReproPath);
+			var lines = new List<string> ();
+			lines.Add ($"Platform: {configuration.Platform}");
+			foreach (var assembly in Assemblies) {
+				lines.Add ($"Assembly: {Path.GetFileName (assembly.InputPath)}");
+				File.Copy (assembly.InputPath, Path.Combine (MakeReproPath, Path.GetFileName (assembly.InputPath)));
+			}
+			File.WriteAllLines (Path.Combine (MakeReproPath, "arguments.txt"), lines);
+			log.Log ($"Created repro in {MakeReproPath}");
+		}
+
 		var markHandlers = new IMarkHandler [] {
 			new PreserveBlockCodeHandler (),
 		};
@@ -111,8 +132,6 @@ public class AssemblyPreparer : IDisposable {
 				throw;
 			}
 		}
-
-		exceptions = configuration.Exceptions;
 
 		return true;
 	}

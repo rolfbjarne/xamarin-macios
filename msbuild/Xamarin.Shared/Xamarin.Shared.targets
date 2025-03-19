@@ -3276,6 +3276,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		>
 		<PrepareAssemblies
 			InputAssemblies="@(_AssembliesToPrepare)"
+			MakeReproPath="$(_PrepareAssembliesMakeReproPath)"
 			OutputDirectory="$(PreparedAssembliesDirectory)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 		>

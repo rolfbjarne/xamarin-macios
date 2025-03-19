@@ -2,7 +2,8 @@ using System;
 using System.Linq;
 
 using Mono.Cecil;
-
+using Mono.Cecil.Cil;
+using Mono.Cecil.Rocks;
 using Mono.Linker;
 using Mono.Linker.Steps;
 using Mono.Tuner;
@@ -83,6 +84,9 @@ namespace Xamarin.Linker.Steps {
 			// Preserve the method and field on the static constructor of the type.
 			abr.AddDynamicDependencyAttributeToStaticConstructor (type, method);
 			abr.AddDynamicDependencyAttributeToStaticConstructor (type, field);
+			// Remove the BeforeFieldInit attribute from the type, otherwise the linker may trim away the static constructor, and taking our DynamicDependency attributes with it.
+			type.Attributes &= ~TypeAttributes.BeforeFieldInit;
+
 #if ASSEMBLY_PREPARER
 			abr.SetCurrentAssembly (type.Module.Assembly);
 			abr.SaveCurrentAssembly ();

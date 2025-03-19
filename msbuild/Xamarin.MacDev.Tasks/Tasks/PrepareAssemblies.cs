@@ -21,6 +21,8 @@ namespace Xamarin.MacDev.Tasks {
 		[Required]
 		public ITaskItem [] InputAssemblies { get; set; } = [];
 
+		public string MakeReproPath { get; set; } = "";
+
 		public string OutputDirectory { get; set; } = "";
 		#endregion
 
@@ -33,7 +35,7 @@ namespace Xamarin.MacDev.Tasks {
 
 		AssemblyPreparerInfo GetAssemblyInfo (ITaskItem item)
 		{
-			var inputPath = Path.GetFullPath (item.ItemSpec);
+			var inputPath = item.ItemSpec;
 			var outputPath = Path.Combine (OutputDirectory, Path.GetFileName (inputPath)); // FIXME: wrong for resource assemblies, at the very least.
 			var rv = new AssemblyPreparerInfo (inputPath, outputPath);
 			map [rv] = item;
@@ -45,6 +47,7 @@ namespace Xamarin.MacDev.Tasks {
 			try {
 				var infos = InputAssemblies.Select (GetAssemblyInfo).ToArray ();
 				using var preparer = new AssemblyPreparer (infos, Platform);
+				preparer.MakeReproPath = MakeReproPath;
 				var rv = preparer.Prepare (out var exceptions);
 
 				foreach (var pe in exceptions) {
@@ -63,6 +66,7 @@ namespace Xamarin.MacDev.Tasks {
 				OutputAssemblies = preparer.Assemblies.Select (v => {
 					var item = map [v];
 					item.ItemSpec = v.OutputPath;
+					item.SetMetadata ("BeforePrepareAssembliesPath", v.InputPath);
 					return item;
 				}).ToArray ();
 				return rv && !Log.HasLoggedErrors;

@@ -272,4 +272,3 @@ steps:
 - template: ../common/teardown.yml
   parameters:
     keyringPass: ${{ parameters.keyringPass }}
-    use1ES: false

@@ -249,7 +249,6 @@ stages:
         testsLabels: '--label=skip-all-tests,run-ios-tests,run-ios-simulator-tests,run-tvos-tests,run-mac-tests,run-maccatalyst-tests,run-system-permission-tests'
         statusContext: 'VSTS: simulator tests' 
         uploadArtifacts: true
-        use1ES: false
 
 # always run simulator tests
 - template: ./tests/stage.yml

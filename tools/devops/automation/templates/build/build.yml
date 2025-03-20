@@ -42,6 +42,7 @@ parameters:
 
   - name: use1ES
     type: boolean
+    default: true
 
   - name: disableCodeQL
     type: boolean

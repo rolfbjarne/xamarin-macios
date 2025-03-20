@@ -37,6 +37,7 @@ parameters:
 
   - name: use1ES
     type: boolean
+    default: false
 
 jobs:
   # This job performs the build of the nuget pkgs and the framework pkgs. There are two interesting dependencies in this job:

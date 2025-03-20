@@ -272,6 +272,34 @@ stages:
     condition: ${{ parameters.runTests }}
     postPipeline: true
 
+- template: ./tests/publish-results.yml
+  parameters:
+    displayName: '${{ parameters.stageDisplayNamePrefix }}Publish Test Results'
+    stageName: 'publish_test_results'
+    statusContext: 'VSTS: test results'
+    vsdropsPrefix: ${{ variables.vsdropsPrefix }}
+    condition: ${{ parameters.runTests }}
+    testConfigurations: ${{ parameters.testConfigurations }}
+    supportedPlatforms: ${{ parameters.supportedPlatforms }}
+    isPR: ${{ parameters.isPR }}
+    repositoryAlias: ${{ parameters.repositoryAlias }}
+    commit: ${{ parameters.commit }}
+    postPipeline: true
+
+- ${{ if eq(parameters.runWindowsIntegration, true) }}:
+  - template: ./windows/stage.yml
+    parameters:
+      isPR: ${{ parameters.isPR }}
+      repositoryAlias: ${{ parameters.repositoryAlias }}
+      commit: ${{ parameters.commit }}
+      stageName: windows_integration
+      displayName: '${{ parameters.stageDisplayNamePrefix }}Windows Integration Tests'
+      pool: 'VSEng-Xamarin-Mac-Devices' # currently ignored until the VS team provides a real one
+      statusContext: 'Windows Integration Tests'
+      gitHubToken: $(Github.Token)
+      xqaCertPass: $(xqa--certificates--password)
+      postPipeline: true
+
 - stage: build_macos_tests2
   displayName: '${{ parameters.stageDisplayNamePrefix }}Build macOS tests 2'
   dependsOn: [configure_build]
@@ -303,32 +331,4 @@ stages:
       statusContext: ${{ config.statusContext }}
       keyringPass: $(pass--lab--mac--builder--keychain)
       demands: ${{ config.demands }}
-      postPipeline: true
-
-- template: ./tests/publish-results.yml
-  parameters:
-    displayName: '${{ parameters.stageDisplayNamePrefix }}Publish Test Results'
-    stageName: 'publish_test_results'
-    statusContext: 'VSTS: test results'
-    vsdropsPrefix: ${{ variables.vsdropsPrefix }}
-    condition: ${{ parameters.runTests }}
-    testConfigurations: ${{ parameters.testConfigurations }}
-    supportedPlatforms: ${{ parameters.supportedPlatforms }}
-    isPR: ${{ parameters.isPR }}
-    repositoryAlias: ${{ parameters.repositoryAlias }}
-    commit: ${{ parameters.commit }}
-    postPipeline: true
-
-- ${{ if eq(parameters.runWindowsIntegration, true) }}:
-  - template: ./windows/stage.yml
-    parameters:
-      isPR: ${{ parameters.isPR }}
-      repositoryAlias: ${{ parameters.repositoryAlias }}
-      commit: ${{ parameters.commit }}
-      stageName: windows_integration
-      displayName: '${{ parameters.stageDisplayNamePrefix }}Windows Integration Tests'
-      pool: 'VSEng-Xamarin-Mac-Devices' # currently ignored until the VS team provides a real one
-      statusContext: 'Windows Integration Tests'
-      gitHubToken: $(Github.Token)
-      xqaCertPass: $(xqa--certificates--password)
       postPipeline: true

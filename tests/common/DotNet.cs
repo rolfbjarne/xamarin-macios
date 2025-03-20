@@ -36,7 +36,7 @@ namespace Xamarin.Tests {
 		public static ExecutionResult AssertPackFailure (string project, Dictionary<string, string>? properties = null, bool? msbuildParallelism = null)
 		{
 			var rv = Execute ("pack", project, properties, false, msbuildParallelism: msbuildParallelism);
-			Assert.That (rv.ExitCode, Is.EqualTo (0), "Unexpected success");
+			Assert.That (rv.ExitCode, Is.Not.EqualTo (0), "Unexpected success");
 			return rv;
 		}
 

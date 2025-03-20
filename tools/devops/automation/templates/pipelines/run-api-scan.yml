@@ -104,6 +104,7 @@ stages:
               testsLabels: '--label=skip-all-tests,run-ios-tests,run-ios-simulator-tests,run-tvos-tests,run-mac-tests,run-maccatalyst-tests,run-system-permission-tests'
               statusContext: 'VSTS: simulator tests' 
               uploadArtifacts: true
+              use1ES: false
 
   - template: ../governance/stage.yml
     parameters:
@@ -111,4 +112,4 @@ stages:
       repositoryAlias: self
       commit: HEAD
       dependsOn: configure_build
-      use1ES: false
+      use1ES: true

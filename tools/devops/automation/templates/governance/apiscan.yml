@@ -17,7 +17,6 @@ parameters:
 
 - name: use1ES
   type: boolean
-  default: true
 
 steps:
 
@@ -117,7 +116,7 @@ steps:
   - template: ../common/publish-pipeline-artifact.yml
     parameters:
       use1ES: ${{ parameters.use1ES }}
-    displayName: Publish Artifact for Guardian Supressions
-    path: $(Build.ArtifactStagingDirectory)\GuardianSuppressions
-    artifact: Guardian Suppressions APIScan $(PLATFORM) $(VERSION)
-    condition: failed()
+      displayName: Publish Artifact for Guardian Supressions
+      path: $(Build.ArtifactStagingDirectory)\GuardianSuppressions
+      artifact: Guardian Suppressions APIScan $(PLATFORM) $(VERSION)
+      condition: failed()

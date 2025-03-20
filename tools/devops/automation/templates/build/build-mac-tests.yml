@@ -44,6 +44,7 @@ steps:
     keyringPass: ${{ parameters.keyringPass }}
     gitHubToken: ${{ parameters.gitHubToken }}
     xqaCertPass: ${{ parameters.xqaCertPass }}
+    use1ES: ${{ parameters.use1ES }}
     buildSteps:
 
     - bash: |

@@ -4370,6 +4370,13 @@ public partial class Generator : IMemberGatherer {
 			}
 		}
 
+		var asyncAttribute = AttributeManager.GetCustomAttribute<AsyncAttribute> (mi);
+		if (!string.IsNullOrEmpty (asyncAttribute.XmlDocs)) {
+			var docLines = asyncAttribute.XmlDocs.Split ('\n');
+			foreach (var line in docLines)
+				print ($"/// {line}");
+		}
+
 		PrintMethodAttributes (minfo);
 
 		PrintAsyncHeader (minfo, asyncKind);
@@ -4388,7 +4395,7 @@ public partial class Generator : IMemberGatherer {
 		print ("var tcs = new TaskCompletionSource<{0}> ();", ttype);
 		bool ignoreResult = !is_void &&
 			asyncKind == AsyncMethodKind.Plain &&
-			AttributeManager.GetCustomAttribute<AsyncAttribute> (mi).PostNonResultSnippet is null;
+			asyncAttribute.PostNonResultSnippet is null;
 		print ("{6}{5}{4}{0}{7}({1}{2}({3}) => {{",
 			mi.Name,
 			GetInvokeParamList (minfo.AsyncInitialParams, false),

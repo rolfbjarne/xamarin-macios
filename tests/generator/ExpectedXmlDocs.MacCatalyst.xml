@@ -389,6 +389,12 @@
             Summary for T2.#ctor(String)
             </summary>
         </member>
+        <member name="M:XmlDocumentation.T1.DoSomething(System.Action)">
+            <summary>Summary for T1.DoSomething</summary>
+        </member>
+        <member name="M:XmlDocumentation.T1.DoSomethingAsync">
+            <summary>Summary for async version of T1.DoSomething</summary>
+        </member>
         <member name="M:XmlDocumentation.T1.Method">
             <summary>
             Summary for T1.Method

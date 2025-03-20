@@ -30,6 +30,14 @@ namespace XmlDocumentation {
 		int Property { get; set; }
 
 		// can't apply xml docs to a getter/setter, only the property itself
+
+		/// <summary>Summary for T1.DoSomething</summary>
+		[Async (XmlDocs = """
+	<summary>Summary for async version of T1.DoSomething</summary>
+	"""
+)]
+		[Export ("doSomething:")]
+		void DoSomething (Action completionHandler);
 	}
 
 #if IOS

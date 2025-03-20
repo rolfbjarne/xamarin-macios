@@ -300,8 +300,8 @@ stages:
       xqaCertPass: $(xqa--certificates--password)
       postPipeline: true
 
-- stage: build_macos_tests2
-  displayName: '${{ parameters.stageDisplayNamePrefix }}Build macOS tests 2'
+- stage: build_macos_tests
+  displayName: '${{ parameters.stageDisplayNamePrefix }}Build macOS tests'
   dependsOn: [configure_build]
   jobs:
   - template: ./build/build-mac-tests-stage.yml
@@ -320,7 +320,7 @@ stages:
 - ${{ each config in parameters.macTestsConfigurations }}:
   - template: ./mac/stage.yml
     parameters:
-      dependentStage: build_macos_tests2
+      dependentStage: build_macos_tests
       isPR: ${{ parameters.isPR }}
       repositoryAlias: ${{ parameters.repositoryAlias }}
       commit: ${{ parameters.commit }}

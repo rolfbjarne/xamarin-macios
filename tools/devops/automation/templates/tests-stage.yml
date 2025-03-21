@@ -285,7 +285,7 @@ stages:
     repositoryAlias: ${{ parameters.repositoryAlias }}
     commit: ${{ parameters.commit }}
     postPipeline: true
-    macTestConfigurations: ${{ parameters.macTestsConfigurations }}
+    macTestsConfigurations: ${{ parameters.macTestsConfigurations }}
 
 - ${{ if eq(parameters.runWindowsIntegration, true) }}:
   - template: ./windows/stage.yml

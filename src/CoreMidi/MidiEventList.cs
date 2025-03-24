@@ -40,7 +40,7 @@ namespace CoreMidi {
 #pragma warning restore CS0649
 		}
 
-		byte[] midiData;
+		byte [] midiData;
 		unsafe MidiEventPacket* currentPacket;
 
 		const int MinimumSize = 276; /* 4 + 4 + sizeof (MidiEventPacket) */
@@ -50,7 +50,7 @@ namespace CoreMidi {
 		public unsafe MidiProtocolId Protocol {
 			get {
 				fixed (byte* midiDataPtr = midiData)
-					return ((MIDIEventList *) midiDataPtr)->protocol;
+					return ((MIDIEventList*) midiDataPtr)->protocol;
 			}
 		}
 
@@ -59,11 +59,11 @@ namespace CoreMidi {
 		public unsafe uint PacketCount {
 			get {
 				fixed (byte* midiDataPtr = midiData)
-					return ((MIDIEventList *) midiDataPtr)->numPackets;
+					return ((MIDIEventList*) midiDataPtr)->numPackets;
 			}
 		}
 
-		internal byte[] MidiData { get => midiData; }
+		internal byte [] MidiData { get => midiData; }
 
 		/// <summary>Create a new <see cref="MidiEventList" /> list with the minimum size.</summary>
 		/// <param name="protocol">The protocol for the packets in the created list.</param>
@@ -128,8 +128,8 @@ namespace CoreMidi {
 		{
 			fixed (byte* midiDataPtr = midiData) {
 				fixed (uint* wordsPtr = words) {
-					var rv = MIDIEventListAdd (midiDataPtr, (ulong) midiData.Length, currentPacket, time, (ulong) words.Length, (byte *) wordsPtr);
-					if (rv != null) {
+					var rv = MIDIEventListAdd (midiDataPtr, (ulong) midiData.Length, currentPacket, time, (ulong) words.Length, (byte*) wordsPtr);
+					if (rv is not null) {
 						currentPacket = rv;
 						return true;
 					}
@@ -139,13 +139,13 @@ namespace CoreMidi {
 		}
 
 		[DllImport (Constants.CoreMidiLibrary)]
-		unsafe static extern MidiEventPacket * MIDIEventListInit (byte* /* MIDIEventList * */ evtlist, MidiProtocolId /* MIDIProtocolID */ protocol);
+		unsafe static extern MidiEventPacket* MIDIEventListInit (byte* /* MIDIEventList * */ evtlist, MidiProtocolId /* MIDIProtocolID */ protocol);
 
 		[DllImport (Constants.CoreMidiLibrary)]
-		unsafe static extern MidiEventPacket * MIDIEventListAdd (
+		unsafe static extern MidiEventPacket* MIDIEventListAdd (
 			byte* /* MIDIEventList * */ evtlist,
 			ulong /* ByteCount = unsigned long */ listSize,
-			MidiEventPacket * curPacket,
+			MidiEventPacket* curPacket,
 			ulong /* MIDITimeStamp */ time,
 			ulong /* ByteCount = unsigned long */ wordCount,
 			byte* /* const UInt32 * */ words);
@@ -166,7 +166,7 @@ namespace CoreMidi {
 		unsafe static extern int /* OSStatus */ MIDIReceivedEventList (MidiEndpointRef src, byte* /* const MIDIEventList * */	evtlist);
 #endif // !__TVOS__
 
-		IEnumerator<MidiEventPacket> IEnumerable<MidiEventPacket>.GetEnumerator()
+		IEnumerator<MidiEventPacket> IEnumerable<MidiEventPacket>.GetEnumerator ()
 		{
 			MidiEventPacket packetToYield;
 			IntPtr packetPtr;
@@ -176,7 +176,7 @@ namespace CoreMidi {
 
 			unsafe {
 				fixed (byte* midiDataPtr = midiData) {
-					MIDIEventList* list = (MIDIEventList *) midiDataPtr;
+					MIDIEventList* list = (MIDIEventList*) midiDataPtr;
 					MidiEventPacket* packet = &list->packet;
 					packetToYield = *packet;
 					packetPtr = (IntPtr) packet;
@@ -186,9 +186,9 @@ namespace CoreMidi {
 
 			for (var i = 1; i < PacketCount; i++) {
 				unsafe {
-					MidiEventPacket* packet = (MidiEventPacket *) packetPtr;
+					MidiEventPacket* packet = (MidiEventPacket*) packetPtr;
 					uint* wordPointer = &packet->word_00;
-					packet = (MidiEventPacket *) wordPointer [packet->WordCount];
+					packet = (MidiEventPacket*) wordPointer [packet->WordCount];
 					packetToYield = *packet;
 					packetPtr = (IntPtr) packet;
 				}
@@ -196,7 +196,7 @@ namespace CoreMidi {
 			}
 		}
 
-		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
 		{
 			return ((IEnumerable<MidiEventPacket>) this).GetEnumerator ();
 		}
@@ -209,12 +209,12 @@ namespace CoreMidi {
 				return;
 
 			fixed (byte* midiDataPtr = midiData) {
-				MIDIEventList* list = (MIDIEventList *) midiDataPtr;
+				MIDIEventList* list = (MIDIEventList*) midiDataPtr;
 				MidiEventPacket* packet = &list->packet;
 				callback (ref Unsafe.AsRef<MidiEventPacket> (packet));
 				for (var i = 1; i < PacketCount; i++) {
 					uint* wordPointer = &packet->word_00;
-					packet = (MidiEventPacket *) wordPointer [packet->WordCount];
+					packet = (MidiEventPacket*) wordPointer [packet->WordCount];
 					callback (ref Unsafe.AsRef<MidiEventPacket> (packet));
 				}
 			}

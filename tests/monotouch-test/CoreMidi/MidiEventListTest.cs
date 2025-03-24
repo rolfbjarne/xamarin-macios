@@ -71,7 +71,7 @@ namespace MonoTouchFixtures.CoreMidi {
 				Assert.That (packets.Length, Is.EqualTo (1), "ToArray ().Length");
 				Assert.That (packets [0].Timestamp, Is.EqualTo (123), "Item[0].Timestamp");
 				Assert.That (packets [0].WordCount, Is.EqualTo (3), "Item[0].WordCount");
-				Assert.That (packets [0].Words, Is.EqualTo (new uint [] { 1, 2, 3}), "Item[0].Words");
+				Assert.That (packets [0].Words, Is.EqualTo (new uint [] { 1, 2, 3 }), "Item[0].Words");
 			});
 		}
 
@@ -121,7 +121,7 @@ namespace MonoTouchFixtures.CoreMidi {
 				Assert.That (packets.Length, Is.EqualTo (1), "ToArray ().Length");
 				Assert.That (packets [0].Timestamp, Is.EqualTo (789), "Item[0].Timestamp");
 				Assert.That (packets [0].WordCount, Is.EqualTo (3), "Item[0].WordCount");
-				Assert.That (packets [0].Words, Is.EqualTo (new uint [] { 4, 5, 6}), "Item[0].Words");
+				Assert.That (packets [0].Words, Is.EqualTo (new uint [] { 4, 5, 6 }), "Item[0].Words");
 			});
 		}
 
@@ -139,7 +139,7 @@ namespace MonoTouchFixtures.CoreMidi {
 				Assert.That (packets.Length, Is.EqualTo (1), "ToArray ().Length");
 				Assert.That (packets [0].Timestamp, Is.EqualTo (456), "Item[0].Timestamp");
 				Assert.That (packets [0].WordCount, Is.EqualTo (6), "Item[0].WordCount");
-				Assert.That (packets [0].Words, Is.EqualTo (new uint [] { 1, 2, 3, 4, 5, 6}), "Item[0].Words");
+				Assert.That (packets [0].Words, Is.EqualTo (new uint [] { 1, 2, 3, 4, 5, 6 }), "Item[0].Words");
 
 				var packetList = new List<MidiEventPacket> ();
 				obj.Iterate ((ref MidiEventPacket packet) => {
@@ -148,7 +148,7 @@ namespace MonoTouchFixtures.CoreMidi {
 				Assert.That (packetList.Count, Is.EqualTo (1), "packetList.Length");
 				Assert.That (packetList [0].Timestamp, Is.EqualTo (456), "packetList[0].Timestamp");
 				Assert.That (packetList [0].WordCount, Is.EqualTo (6), "packetList[0].WordCount");
-				Assert.That (packetList [0].Words, Is.EqualTo (new uint [] { 1, 2, 3, 4, 5, 6}), "packetList[0].Words");
+				Assert.That (packetList [0].Words, Is.EqualTo (new uint [] { 1, 2, 3, 4, 5, 6 }), "packetList[0].Words");
 			});
 		}
 	}

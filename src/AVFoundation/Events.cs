@@ -244,6 +244,10 @@ namespace AVFoundation {
 			return del;
 		}
 
+		/// <summary>An event indicating that recording has ended (not paused).</summary>
+		/// <remarks>
+		///           <para>This event is raised when a recording has been stopped programmatically or has ended due to reaching its time limit. This event is not raised when the recording has been paused.</para>
+		///         </remarks>
 		public event EventHandler<AVStatusEventArgs> FinishedRecording {
 			add {
 				EnsureEventDelegate ().cbFinishedRecording += value;
@@ -255,6 +259,8 @@ namespace AVFoundation {
 			}
 		}
 
+		/// <summary>Event indicating an error during encoding.</summary>
+		/// <remarks>To be added.</remarks>
 		public event EventHandler<AVErrorEventArgs> EncoderError {
 			add {
 				EnsureEventDelegate ().cbEncoderError += value;
@@ -266,6 +272,8 @@ namespace AVFoundation {
 			}
 		}
 
+		/// <summary>Event raised when an interruption begins.</summary>
+		/// <remarks>To be added.</remarks>
 		public event EventHandler BeginInterruption {
 			add {
 				EnsureEventDelegate ().cbBeginInterruption += value;
@@ -277,6 +285,8 @@ namespace AVFoundation {
 			}
 		}
 
+		/// <summary>An event indicating an interruption has ended.</summary>
+		/// <remarks>To be added.</remarks>
 		public event EventHandler EndInterruption {
 			add {
 				EnsureEventDelegate ().cbEndInterruption += value;

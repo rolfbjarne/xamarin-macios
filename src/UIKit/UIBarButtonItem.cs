@@ -85,6 +85,8 @@ namespace UIKit {
 		internal EventHandler clicked;
 		internal Callback callback;
 
+		/// <summary>This event is raised when the user clicks/taps on this UIBarButtonItem.</summary>
+		/// <remarks>To be added.</remarks>
 		public event EventHandler Clicked {
 			add {
 				if (clicked is null) {

@@ -1197,7 +1197,7 @@ namespace Registrar {
 				if (!gp.HasConstraints)
 					return false;
 				foreach (var c in gp.Constraints) {
-					if (IsNSObject (c.ConstraintType)) {
+					if (IsINativeObject (c.ConstraintType)) {
 						constrained_type = c.ConstraintType;
 						return true;
 					}

@@ -2776,7 +2776,7 @@ namespace GameController {
 	[DisableDefaultCtor]
 	interface GCPhysicalInputElementCollection<KeyIdentifierType, ElementIdentifierType> : INSFastEnumeration // # no generator support for FastEnumeration - https://bugzilla.xamarin.com/show_bug.cgi?id=4391
 		where KeyIdentifierType : NSString
-		where ElementIdentifierType : class, IGCPhysicalInputElement /* id<GCPhysicalInputElement>> */
+		where ElementIdentifierType : IGCPhysicalInputElement /* id<GCPhysicalInputElement>> */
 	{
 		[Export ("count")]
 		nuint Count { get; }

@@ -23,21 +23,8 @@ namespace GameController {
 		[DllImport (Constants.GameControllerLibrary)]
 		static extern IntPtr /* GCButtonElementName */ GCInputBackLeftButton (nint position);
 
-		/// <summary>Get the name of the back left button on the controller for the specified position.</summary>
-		/// <param name="position">Zero-based position of the button.</param>
-		/// <returns>The name of the back left button on the controller for the specified position.</returns>
-		[SupportedOSPlatform ("ios17.4")]
-		[SupportedOSPlatform ("macos14.4")]
-		[SupportedOSPlatform ("tvos17.4")]
-		[SupportedOSPlatform ("maccatalyst17.4")]
-		public static GCInputButtonName? GetBackLeftButton (nint position)
-		{
-			var constant = GetBackLeftButtonName (position);
-			if (constant is null)
-				return null;
-			return GCInputButtonNameExtensions.GetValue (constant);
-		}
-
+		// A strongly-typed API (the GCInputButtonName enum) is not possible, because it's not an exhaustive enum,
+		// this method may return strings that aren't in the enum.
 		/// <summary>Get the name of the back left button on the controller for the specified position.</summary>
 		/// <param name="position">Zero-based position of the button.</param>
 		/// <returns>The name of the back left button on the controller for the specified position.</returns>
@@ -57,21 +44,8 @@ namespace GameController {
 		[DllImport (Constants.GameControllerLibrary)]
 		static extern IntPtr /* GCButtonElementName */ GCInputBackRightButton (nint position);
 
-		/// <summary>Get the name of the back right button on the controller for the specified position.</summary>
-		/// <param name="position">Zero-based position of the button.</param>
-		/// <returns>The name of the back right button on the controller for the specified position.</returns>
-		[SupportedOSPlatform ("ios17.4")]
-		[SupportedOSPlatform ("macos14.4")]
-		[SupportedOSPlatform ("tvos17.4")]
-		[SupportedOSPlatform ("maccatalyst17.4")]
-		public static GCInputButtonName? GetBackRightButton (nint position)
-		{
-			var constant = GetBackRightButtonName (position);
-			if (constant is null)
-				return null;
-			return GCInputButtonNameExtensions.GetValue (constant);
-		}
-
+		// A strongly-typed API (the GCInputButtonName enum) is not possible, because it's not an exhaustive enum,
+		// this method may return strings that aren't in the enum.
 		/// <summary>Get the name of the back right button on the controller for the specified position.</summary>
 		/// <param name="position">Zero-based position of the button.</param>
 		/// <returns>The name of the back rught button on the controller for the specified position.</returns>
@@ -91,22 +65,8 @@ namespace GameController {
 		[DllImport (Constants.GameControllerLibrary)]
 		static extern IntPtr /* GCButtonElementName */ GCInputArcadeButtonName (nint row, nint column);
 
-		/// <summary>Get the name of the arcade button for the specified position.</summary>
-		/// <param name="row">The row of the arcade button.</param>
-		/// <param name="column">The column of the arcade button.</param>
-		/// <returns>The name of the arcade button on the controller for the specified position.</returns>
-		[SupportedOSPlatform ("ios16.0")]
-		[SupportedOSPlatform ("macos13.0")]
-		[SupportedOSPlatform ("tvos16.0")]
-		[SupportedOSPlatform ("maccatalyst16.0")]
-		public static GCInputButtonName? GetArcadeButton (nint row, nint column)
-		{
-			var constant = GetArcadeButtonName (row, column);
-			if (constant is null)
-				return null;
-			return GCInputButtonNameExtensions.GetValue (constant);
-		}
-
+		// A strongly-typed API (the GCInputButtonName enum) is not possible, because it's not an exhaustive enum,
+		// this method may return strings that aren't in the enum.
 		/// <summary>Get the name of the arcade button for the specified position.</summary>
 		/// <param name="row">The row of the arcade button.</param>
 		/// <param name="column">The column of the arcade button.</param>

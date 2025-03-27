@@ -5727,7 +5727,7 @@ public partial class Generator : IMemberGatherer {
 						genericAttributes &= ~GenericParameterAttributes.DefaultConstructorConstraint;
 					}
 					if (genericAttributes != GenericParameterAttributes.None) {
-						Console.WriteLine ($"Unexpected generic constraint attributes: {genericAttributes}");
+						exceptions.Add (ErrorHelper.CreateError (99, $"Unexpected generic constraint attributes: {genericAttributes}"));
 					}
 
 					var constraints = gargs [i].GetGenericParameterConstraints ();

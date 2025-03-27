@@ -6841,6 +6841,7 @@ public partial class Generator : IMemberGatherer {
 						} else
 							prev_miname = miname;
 
+						PrintBindingDocId (mi);
 						if (mi.ReturnType == TypeCache.System_Void) {
 							PrintObsoleteAttributes (mi);
 

@@ -515,8 +515,7 @@ namespace Bindings.Test {
 	}
 
 	[Protocol]
-	interface VeryGenericElementProtocol
-	{
+	interface VeryGenericElementProtocol {
 		[Export ("when", ArgumentSemantic.Retain)]
 		NSDate When { get; }
 	}
@@ -524,8 +523,7 @@ namespace Bindings.Test {
 	interface IVeryGenericElementProtocol : INativeObject { }
 
 	[Protocol]
-	interface VeryGenericElementProtocol1 : VeryGenericElementProtocol
-	{
+	interface VeryGenericElementProtocol1 : VeryGenericElementProtocol {
 		[Export ("number")]
 		nint Number { get; }
 	}
@@ -533,8 +531,7 @@ namespace Bindings.Test {
 	interface IVeryGenericElementProtocol1 : IVeryGenericElementProtocol { }
 
 	[Protocol]
-	interface VeryGenericElementProtocol2 : VeryGenericElementProtocol
-	{
+	interface VeryGenericElementProtocol2 : VeryGenericElementProtocol {
 		[Export ("animal", ArgumentSemantic.Retain)]
 		string Animal { get; }
 	}
@@ -543,9 +540,8 @@ namespace Bindings.Test {
 
 	[BaseType (typeof (NSObject))]
 	interface VeryGenericCollection<Key, Element>
-		where Key: NSString
-		where Element: IVeryGenericElementProtocol
-	{
+		where Key : NSString
+		where Element : IVeryGenericElementProtocol {
 		[Export ("count")]
 		nuint Count { get; }
 

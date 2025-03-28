@@ -40,8 +40,7 @@ namespace GameController {
 
 	[Flags]
 	[Native]
-	public enum GCPhysicalInputSourceDirection : ulong
-	{
+	public enum GCPhysicalInputSourceDirection : ulong {
 		NotApplicable = 0x0,
 		Up = (1uL << 0),
 		Right = (1uL << 1),
@@ -3252,10 +3251,9 @@ namespace GameController {
 
 	delegate void GCAxis2DInputValueDidChangeCallback (IGCPhysicalInputElement element, IGCAxis2DInput input, GCPoint2 point);
 
-	[TV (17,4), Mac (14,3), iOS (17,4), MacCatalyst (17, 4)]
+	[TV (17, 4), Mac (14, 3), iOS (17, 4), MacCatalyst (17, 4)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	interface GCAxis2DInput
-	{
+	interface GCAxis2DInput {
 		[Abstract]
 		[NullAllowed, Export ("valueDidChangeHandler", ArgumentSemantic.Copy)]
 		GCAxis2DInputValueDidChangeCallback ValueDidChangeHandler { get; set; }
@@ -3285,12 +3283,11 @@ namespace GameController {
 		NSSet<IGCPhysicalInputSource> Sources { get; }
 	}
 
-	interface IGCAxis2DInput {}
+	interface IGCAxis2DInput { }
 
-	[TV (17,0), Mac (14,0), iOS (17,0), MacCatalyst (17, 0)]
+	[TV (17, 0), Mac (14, 0), iOS (17, 0), MacCatalyst (17, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	interface GCPhysicalInputSource
-	{
+	interface GCPhysicalInputSource {
 		[Abstract]
 		[Export ("elementAliases", ArgumentSemantic.Copy)]
 		NSSet WeakElementAliases { get; }
@@ -3311,13 +3308,12 @@ namespace GameController {
 		GCPhysicalInputSourceDirection Direction { get; }
 	}
 
-	interface IGCPhysicalInputSource {}
+	interface IGCPhysicalInputSource { }
 
-	[TV (17,0), Mac (14,0), iOS (17,0), MacCatalyst (17, 0)]
-	[BaseType (typeof(GCControllerInputState))]
+	[TV (17, 0), Mac (14, 0), iOS (17, 0), MacCatalyst (17, 0)]
+	[BaseType (typeof (GCControllerInputState))]
 	[DisableDefaultCtor]
-	interface GCControllerLiveInput : GCDevicePhysicalInput
-	{
+	interface GCControllerLiveInput : GCDevicePhysicalInput {
 		[NullAllowed, Export ("unmappedInput")]
 		GCControllerLiveInput UnmappedInput { get; }
 
@@ -3332,11 +3328,10 @@ namespace GameController {
 		new GCControllerInputState NextInputState { get; }
 	}
 
-	[TV (17,0), Mac (14,0), iOS (17,0), MacCatalyst (17, 0)]
-	[BaseType (typeof(NSObject))]
+	[TV (17, 0), Mac (14, 0), iOS (17, 0), MacCatalyst (17, 0)]
+	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface GCControllerInputState : GCDevicePhysicalInputState
-	{
+	interface GCControllerInputState : GCDevicePhysicalInputState {
 	}
 }
 
@@ -3344,12 +3339,12 @@ namespace Foundation {
 	using GameController;
 
 	partial interface NSValue {
-		[TV (17,4), Mac (14,3), iOS (17,4), MacCatalyst (17, 4)]
+		[TV (17, 4), Mac (14, 3), iOS (17, 4), MacCatalyst (17, 4)]
 		[Static]
 		[Export ("valueWithGCPoint2:")]
 		NSValue FromCGPoint2 (GCPoint2 point);
 
-		[TV (17,4), Mac (14,3), iOS (17,4), MacCatalyst (17, 4)]
+		[TV (17, 4), Mac (14, 3), iOS (17, 4), MacCatalyst (17, 4)]
 		[Export ("GCPoint2Value")]
 		GCPoint2 GCPoint2Value { get; }
 	}

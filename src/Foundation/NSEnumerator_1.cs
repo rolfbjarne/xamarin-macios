@@ -55,7 +55,7 @@ namespace Foundation {
 		{
 			var nextObject = base.NextObject ();
 			if (nextObject is null)
-				return default(TKey)!;
+				return default (TKey)!;
 			if (nextObject is TKey rv)
 				return rv;
 			var rv2 = Runtime.GetINativeObject<TKey> (nextObject.GetHandle (), false)!;

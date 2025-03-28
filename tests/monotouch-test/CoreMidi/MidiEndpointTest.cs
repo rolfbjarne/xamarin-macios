@@ -62,7 +62,7 @@ namespace MonoTouchFixtures.CoreMidi {
 						Assert.AreEqual (ref1, IntPtr.Zero, "GetRefCons A 1");
 						Assert.AreEqual (ref2, IntPtr.Zero, "GetRefCons A 2");
 
-						ref1 = unchecked ((IntPtr) 0xfee1600d);
+						ref1 = unchecked((IntPtr) 0xfee1600d);
 						ref2 = 0x42f00f00;
 						Assert.AreEqual (AudioQueueStatus.GeneralParamError, (AudioQueueStatus) ep.SetRefCons (ref1, ref2), "SetRefCons B");
 						Assert.AreEqual (AudioQueueStatus.GeneralParamError, (AudioQueueStatus) ep.GetRefCons (out ref1, out ref2), "GetRefCons C");

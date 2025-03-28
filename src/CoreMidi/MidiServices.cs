@@ -2969,7 +2969,7 @@ namespace CoreMidi {
 			ref1 = IntPtr.Zero;
 			ref2 = IntPtr.Zero;
 			unsafe {
-				return (MidiError) MIDIEndpointGetRefCons (GetCheckedHandle (), (IntPtr *) Unsafe.AsRef<IntPtr> (ref ref1), (IntPtr *) Unsafe.AsRef<IntPtr> (ref ref2));
+				return (MidiError) MIDIEndpointGetRefCons (GetCheckedHandle (), (IntPtr*) Unsafe.AsRef<IntPtr> (ref ref1), (IntPtr*) Unsafe.AsRef<IntPtr> (ref ref2));
 			}
 		}
 

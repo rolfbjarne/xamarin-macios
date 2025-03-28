@@ -205,4 +205,5 @@ stages:
       statusContext: ${{ config.statusContext }}
       keyringPass: $(pass--lab--mac--builder--keychain)
       demands: ${{ config.demands }}
+      xqaCertPass: $(xqa--certificates--password)
       postPipeline: true

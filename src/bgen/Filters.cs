@@ -96,6 +96,7 @@ public partial class Generator {
 		indent--;
 		print ("}");
 		print ("InitializeHandle (h, \"initWithCoder:\");");
+		print ("GC.KeepAlive (coder);");
 		indent--;
 		print ("}");
 		print ("");
@@ -348,6 +349,7 @@ public partial class Generator {
 		case "CGImage":
 		case "ImageIO.CGImageMetadata":
 			print ($"SetHandle (\"{propertyName}\", value.GetHandle ());");
+			print ($"GC.KeepAlive (value);");
 			break;
 		case "CGPoint":
 		case "CGRect":

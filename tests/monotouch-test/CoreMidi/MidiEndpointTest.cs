@@ -10,6 +10,7 @@
 
 #if !__TVOS__
 using System;
+using System.Collections.Generic;
 
 using AudioToolbox;
 using Foundation;
@@ -50,7 +51,7 @@ namespace MonoTouchFixtures.CoreMidi {
 					var endpoints = new List<MidiEndpoint> ();
 					for (var d = 0; d < entity.Destinations; d++)
 						endpoints.Add (entity.GetDestination (d));
-					for (var d = 0; d < endpoint.Sources; d++)
+					for (var d = 0; d < entity.Sources; d++)
 						endpoints.Add (entity.GetSource (d));
 
 					foreach (var ep in endpoints) {

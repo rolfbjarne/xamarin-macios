@@ -6188,6 +6188,8 @@ public partial class Generator : IMemberGatherer {
 				if (type == mi.DeclaringType || type.IsSubclassOf (mi.DeclaringType)) {
 					// not an injected protocol method.
 					bound_methods.Add (minfo);
+					if (is_category_class)
+						minfo.BindingIdExtraInfo = "CategoryMethod";
 				} else {
 					minfo.BindingIdExtraInfo = "InlinedProtocolMethod";
 					// don't inject a protocol method if the class already
@@ -6256,6 +6258,8 @@ public partial class Generator : IMemberGatherer {
 				if (type == pi.DeclaringType || type.IsSubclassOf (pi.DeclaringType)) {
 					// not an injected protocol property.
 					bound_properties.Add (pi.Name);
+					if (is_category_class)
+						bindingIdExtraInfo = "CategoryProperty";
 				} else {
 					bindingIdExtraInfo = "InlinedProtocolProperty";
 					// don't inject a protocol property if the class already

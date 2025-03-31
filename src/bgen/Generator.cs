@@ -6183,6 +6183,7 @@ public partial class Generator : IMemberGatherer {
 					// not an injected protocol method.
 					bound_methods.Add (minfo);
 				} else {
+					minfo.BindingIdExtraInfo = "InlinedProtocolMethod";
 					// don't inject a protocol method if the class already
 					// implements the same method.
 					if (bound_methods.Contains (minfo))
@@ -6245,10 +6246,12 @@ public partial class Generator : IMemberGatherer {
 					appearance_selectors.Add (pi);
 
 				var hasNullableMismatch = false;
+				var bindingIdExtraInfo = (string?) null;
 				if (type == pi.DeclaringType || type.IsSubclassOf (pi.DeclaringType)) {
 					// not an injected protocol property.
 					bound_properties.Add (pi.Name);
 				} else {
+					bindingIdExtraInfo = "InlinedProtocolProperty";
 					// don't inject a protocol property if the class already
 					// implements the same property.
 					if (bound_properties.Contains (pi.Name))
@@ -6288,7 +6291,7 @@ public partial class Generator : IMemberGatherer {
 				generated_properties.Add (pi.Name);
 				if (hasNullableMismatch)
 					print ("#pragma warning disable CS8766");
-				GenerateProperty (type, pi, instance_fields_to_clear_on_dispose, is_model);
+				GenerateProperty (type, pi, instance_fields_to_clear_on_dispose, is_model, bindingIdExtraInfo: bindingIdExtraInfo);
 				if (hasNullableMismatch)
 					print ("#pragma warning restore CS8766");
 			}

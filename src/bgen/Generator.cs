@@ -2199,22 +2199,22 @@ public partial class Generator : IMemberGatherer {
 		sw.WriteLine (")]");
 	}
 
-	void PrintBindingDocId (Type type)
+	void PrintBindingDocId (Type type, string? extraInfo = null)
 	{
-		PrintBindingDocId (DocumentationManager.GetDocIdOrNull (type));
+		PrintBindingDocId (DocumentationManager.GetDocIdOrNull (type), extraInfo);
 	}
 
-	void PrintBindingDocId (MethodInfo minfo)
+	void PrintBindingDocId (MethodInfo minfo, string? extraInfo = null)
 	{
-		PrintBindingDocId (DocumentationManager.GetDocIdOrNull (minfo));
+		PrintBindingDocId (DocumentationManager.GetDocIdOrNull (minfo), extraInfo);
 	}
 
-	void PrintBindingDocId (PropertyInfo pinfo)
+	void PrintBindingDocId (PropertyInfo pinfo, string? extraInfo = null)
 	{
-		PrintBindingDocId (DocumentationManager.GetDocIdOrNull (pinfo));
+		PrintBindingDocId (DocumentationManager.GetDocIdOrNull (pinfo), extraInfo);
 	}
 
-	void PrintBindingDocId (string? docId = null)
+	void PrintBindingDocId (string? docId = null, string? extraInfo = null)
 	{
 		if (string.IsNullOrEmpty (docId))
 			return;
@@ -2223,7 +2223,13 @@ public partial class Generator : IMemberGatherer {
 			sw.Write ('\t');
 		sw.Write ("[BindingDocId (\"");
 		sw.Write (docId);
-		sw.WriteLine ("\")]");
+		sw.Write ("\"");
+		if (!string.IsNullOrEmpty (extraInfo)) {
+			sw.Write ($", \"");
+			sw.Write (extraInfo);
+			sw.Write ("\"");
+		}
+		sw.WriteLine (")]");
 	}
 
 	static void WriteIsDirectBindingCondition (StreamWriter sw, ref int tabs, bool? is_direct_binding, string is_direct_binding_value, Func<string> trueCode, Func<string> falseCode)
@@ -6674,7 +6680,6 @@ public partial class Generator : IMemberGatherer {
 						} else
 							print ("internal {0}? {1};", Nomenclator.GetDelegateName (mi), miname);
 
-						PrintBindingDocId (mi);
 						print ("[Preserve (Conditional = true)]");
 						if (isProtocolEventBacked)
 							print ("[Export (\"{0}\")]", FindSelector (dtype, mi));
@@ -6841,7 +6846,7 @@ public partial class Generator : IMemberGatherer {
 						} else
 							prev_miname = miname;
 
-						PrintBindingDocId (mi);
+						PrintBindingDocId (mi, "EventFromEventsAttribute");
 						if (mi.ReturnType == TypeCache.System_Void) {
 							PrintObsoleteAttributes (mi);
 

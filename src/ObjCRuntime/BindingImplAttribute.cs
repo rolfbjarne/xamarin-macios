@@ -45,7 +45,13 @@ namespace ObjCRuntime {
 		{
 			this.DocId = docId;
 		}
+		public BindingDocIdAttribute (string docId, string extraInfo)
+		{
+			this.DocId = docId;
+			this.ExtraInfo = extraInfo;
+		}
 
 		public string DocId { get; set; }
+		public string? ExtraInfo { get; set; }
 	}
 }

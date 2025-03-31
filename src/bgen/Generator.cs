@@ -3980,7 +3980,7 @@ public partial class Generator : IMemberGatherer {
 #endif
 	}
 
-	void GenerateProperty (Type type, PropertyInfo pi, List<string> instance_fields_to_clear_on_dispose, bool is_model, bool is_interface_impl = false, bool is_protocol_member = false, bool? is_protocol_member_required = null, bool is_protocol_implementation_method = false)
+	void GenerateProperty (Type type, PropertyInfo pi, List<string> instance_fields_to_clear_on_dispose, bool is_model, bool is_interface_impl = false, bool is_protocol_member = false, bool? is_protocol_member_required = null, bool is_protocol_implementation_method = false, string? bindingIdExtraInfo = null)
 	{
 		string wrap;
 		var export = GetExportAttribute (pi, out wrap);
@@ -4022,7 +4022,7 @@ public partial class Generator : IMemberGatherer {
 
 		if (wrap is not null) {
 			print_generated_code ();
-			PrintBindingDocId (pi);
+			PrintBindingDocId (pi, bindingIdExtraInfo);
 			PrintPropertyAttributes (pi, minfo);
 			PrintAttributes (pi, preserve: true, advice: true);
 			print ("{0} {1}{2}{3} {4} {{",
@@ -4094,7 +4094,7 @@ public partial class Generator : IMemberGatherer {
 			var_name = string.Format ("__mt_{0}_var{1}", pi.Name, minfo.is_static ? "_static" : "");
 
 			print_generated_code ();
-			PrintBindingDocId (pi);
+			PrintBindingDocId (pi, bindingIdExtraInfo);
 
 			if (minfo.is_thread_static)
 				print ("[ThreadStatic]");
@@ -4106,7 +4106,7 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		print_generated_code (optimizable: IsOptimizable (pi));
-		PrintBindingDocId (pi);
+		PrintBindingDocId (pi, bindingIdExtraInfo);
 		PrintPropertyAttributes (pi, minfo);
 
 		PrintAttributes (pi, preserve: true, advice: true, bindAs: true);
@@ -4485,12 +4485,13 @@ public partial class Generator : IMemberGatherer {
 	}
 
 
-	void GenerateMethod (Type type, MethodInfo mi, bool is_model = false, Type category_extension_type = null, bool is_appearance = false, bool is_interface_impl = false, bool is_extension_method = false, string selector = null, bool isBaseWrapperProtocolMethod = false, bool is_protocol_member = false, bool? is_protocol_member_required = null, bool is_protocol_implementation_method = false)
+	void GenerateMethod (Type type, MethodInfo mi, bool is_model = false, Type category_extension_type = null, bool is_appearance = false, bool is_interface_impl = false, bool is_extension_method = false, string selector = null, bool isBaseWrapperProtocolMethod = false, bool is_protocol_member = false, bool? is_protocol_member_required = null, bool is_protocol_implementation_method = false, string? bindingIdExtraInfo = null)
 	{
 		var minfo = new MemberInformation (this, this, mi, type, category_extension_type, is_interface_impl, is_extension_method, is_appearance, is_model, selector, isBaseWrapperProtocolMethod);
 		minfo.is_protocol_member = is_protocol_member;
 		minfo.is_protocol_member_required = is_protocol_member_required;
 		minfo.is_protocol_implementation_method = is_protocol_implementation_method;
+		minfo.BindingIdExtraInfo = bindingIdExtraInfo;
 		GenerateMethod (minfo);
 	}
 
@@ -4618,7 +4619,7 @@ public partial class Generator : IMemberGatherer {
 		var do_not_call_base = minfo.is_model;
 #endif
 		print_generated_code (optimizable: IsOptimizable (minfo.mi));
-		PrintBindingDocId (mi);
+		PrintBindingDocId (mi, minfo.BindingIdExtraInfo);
 		print ("{0} {1}{2}{3}",
 			   mod,
 			   minfo.GetModifiers (),
@@ -6950,9 +6951,10 @@ public partial class Generator : IMemberGatherer {
 							GenerateMethod (type, mi as MethodInfo,
 									is_model: false,
 									category_extension_type: is_category_class ? base_type : null,
+									bindingIdExtraInfo: "UIAppearance",
 									is_appearance: true);
 						else
-							GenerateProperty (type, mi as PropertyInfo, currently_ignored_fields, false);
+							GenerateProperty (type, mi as PropertyInfo, currently_ignored_fields, false, bindingIdExtraInfo: "UIAppearance");
 					}
 				}
 

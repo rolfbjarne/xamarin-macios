@@ -57,6 +57,7 @@ public class MemberInformation {
 	public bool is_forced_owns;
 	public bool is_bindAs => Generator.HasBindAsAttribute (mi);
 	public bool generate_is_async_overload;
+	public string? BindingIdExtraInfo;
 
 	public MethodInfo? Method { get { return mi as MethodInfo; } }
 	public PropertyInfo? Property { get { return mi as PropertyInfo; } }

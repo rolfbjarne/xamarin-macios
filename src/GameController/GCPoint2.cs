@@ -91,9 +91,9 @@ namespace GameController {
 		public override string? ToString ()
 		{
 			if (OperatingSystem.IsMacOSVersionAtLeast (14, 3) ||
-			    OperatingSystem.IsMacCatalystVersionAtLeast (17, 4) ||
-			    OperatingSystem.IsIOSVersionAtLeast (17, 4) ||
-			    OperatingSystem.IsTvOSVersionAtLeast (17, 4))
+				OperatingSystem.IsMacCatalystVersionAtLeast (17, 4) ||
+				OperatingSystem.IsIOSVersionAtLeast (17, 4) ||
+				OperatingSystem.IsTvOSVersionAtLeast (17, 4))
 				return CFString.FromHandle (NSStringFromGCPoint2 (this));
 			return $"{{{x}, {y}}}";
 		}

@@ -5,6 +5,8 @@
 using System;
 using System.Runtime.InteropServices;
 
+#nullable enable
+
 namespace ObjCRuntime {
 
 	/// <summary>This attribute provides information about binding code.</summary>
@@ -39,13 +41,19 @@ namespace ObjCRuntime {
 		Optimizable = 2,
 	}
 
-	[AttributeUsage (AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Constructor | AttributeTargets.Field | AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Delegate | AttributeTargets.Struct | AttributeTargets.Interface, AllowMultiple = false)]
+	[AttributeUsage (AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Constructor | AttributeTargets.Field | AttributeTargets.Class | AttributeTargets.Enum | AttributeTargets.Delegate | AttributeTargets.Struct | AttributeTargets.Interface | AttributeTargets.Event, AllowMultiple = false)]
 	public class BindingDocIdAttribute : Attribute {
 		public BindingDocIdAttribute (string docId)
 		{
 			this.DocId = docId;
 		}
+		public BindingDocIdAttribute (string docId, string extraInfo)
+		{
+			this.DocId = docId;
+			this.ExtraInfo = extraInfo;
+		}
 
 		public string DocId { get; set; }
+		public string? ExtraInfo { get; set; }
 	}
 }

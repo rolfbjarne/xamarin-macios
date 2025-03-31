@@ -2215,22 +2215,22 @@ public partial class Generator : IMemberGatherer {
 		sw.WriteLine (")]");
 	}
 
-	void PrintBindingDocId (Type type)
+	void PrintBindingDocId (Type type, string? extraInfo = null)
 	{
-		PrintBindingDocId (DocumentationManager.GetDocIdOrNull (type));
+		PrintBindingDocId (DocumentationManager.GetDocIdOrNull (type), extraInfo);
 	}
 
-	void PrintBindingDocId (MethodInfo minfo)
+	void PrintBindingDocId (MethodInfo minfo, string? extraInfo = null)
 	{
-		PrintBindingDocId (DocumentationManager.GetDocIdOrNull (minfo));
+		PrintBindingDocId (DocumentationManager.GetDocIdOrNull (minfo), extraInfo);
 	}
 
-	void PrintBindingDocId (PropertyInfo pinfo)
+	void PrintBindingDocId (PropertyInfo pinfo, string? extraInfo = null)
 	{
-		PrintBindingDocId (DocumentationManager.GetDocIdOrNull (pinfo));
+		PrintBindingDocId (DocumentationManager.GetDocIdOrNull (pinfo), extraInfo);
 	}
 
-	void PrintBindingDocId (string? docId = null)
+	void PrintBindingDocId (string? docId = null, string? extraInfo = null)
 	{
 		if (string.IsNullOrEmpty (docId))
 			return;
@@ -2239,7 +2239,13 @@ public partial class Generator : IMemberGatherer {
 			sw.Write ('\t');
 		sw.Write ("[BindingDocId (\"");
 		sw.Write (docId);
-		sw.WriteLine ("\")]");
+		sw.Write ("\"");
+		if (!string.IsNullOrEmpty (extraInfo)) {
+			sw.Write ($", \"");
+			sw.Write (extraInfo);
+			sw.Write ("\"");
+		}
+		sw.WriteLine (")]");
 	}
 
 	static void WriteIsDirectBindingCondition (StreamWriter sw, ref int tabs, bool? is_direct_binding, string is_direct_binding_value, Func<string> trueCode, Func<string> falseCode)
@@ -3990,7 +3996,7 @@ public partial class Generator : IMemberGatherer {
 #endif
 	}
 
-	void GenerateProperty (Type type, PropertyInfo pi, List<string> instance_fields_to_clear_on_dispose, bool is_model, bool is_interface_impl = false, bool is_protocol_member = false, bool? is_protocol_member_required = null, bool is_protocol_implementation_method = false)
+	void GenerateProperty (Type type, PropertyInfo pi, List<string> instance_fields_to_clear_on_dispose, bool is_model, bool is_interface_impl = false, bool is_protocol_member = false, bool? is_protocol_member_required = null, bool is_protocol_implementation_method = false, string? bindingIdExtraInfo = null)
 	{
 		string wrap;
 		var export = GetExportAttribute (pi, out wrap);
@@ -4032,7 +4038,7 @@ public partial class Generator : IMemberGatherer {
 
 		if (wrap is not null) {
 			print_generated_code ();
-			PrintBindingDocId (pi);
+			PrintBindingDocId (pi, bindingIdExtraInfo);
 			PrintPropertyAttributes (pi, minfo);
 			PrintAttributes (pi, preserve: true, advice: true);
 			print ("{0} {1}{2}{3} {4} {{",
@@ -4104,7 +4110,7 @@ public partial class Generator : IMemberGatherer {
 			var_name = string.Format ("__mt_{0}_var{1}", pi.Name, minfo.is_static ? "_static" : "");
 
 			print_generated_code ();
-			PrintBindingDocId (pi);
+			PrintBindingDocId (pi, bindingIdExtraInfo);
 
 			if (minfo.is_thread_static)
 				print ("[ThreadStatic]");
@@ -4116,7 +4122,7 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		print_generated_code (optimizable: IsOptimizable (pi));
-		PrintBindingDocId (pi);
+		PrintBindingDocId (pi, bindingIdExtraInfo);
 		PrintPropertyAttributes (pi, minfo);
 
 		PrintAttributes (pi, preserve: true, advice: true, bindAs: true);
@@ -4345,7 +4351,7 @@ public partial class Generator : IMemberGatherer {
 	void PrintAsyncHeader (AsyncMethodInfo minfo, AsyncMethodKind asyncKind)
 	{
 		print_generated_code ();
-		PrintBindingDocId (minfo.MethodInfo);
+		PrintBindingDocId (minfo.MethodInfo, asyncKind == AsyncMethodKind.WithResultOutParameter ? "AsyncMethodWithOutParameter" : "AsyncMethod");
 		string extra = "";
 
 		if (asyncKind == AsyncMethodKind.WithResultOutParameter) {
@@ -4487,12 +4493,13 @@ public partial class Generator : IMemberGatherer {
 	}
 
 
-	void GenerateMethod (Type type, MethodInfo mi, bool is_model = false, Type category_extension_type = null, bool is_appearance = false, bool is_interface_impl = false, bool is_extension_method = false, string selector = null, bool isBaseWrapperProtocolMethod = false, bool is_protocol_member = false, bool? is_protocol_member_required = null, bool is_protocol_implementation_method = false)
+	void GenerateMethod (Type type, MethodInfo mi, bool is_model = false, Type category_extension_type = null, bool is_appearance = false, bool is_interface_impl = false, bool is_extension_method = false, string selector = null, bool isBaseWrapperProtocolMethod = false, bool is_protocol_member = false, bool? is_protocol_member_required = null, bool is_protocol_implementation_method = false, string? bindingIdExtraInfo = null)
 	{
 		var minfo = new MemberInformation (this, this, mi, type, category_extension_type, is_interface_impl, is_extension_method, is_appearance, is_model, selector, isBaseWrapperProtocolMethod);
 		minfo.is_protocol_member = is_protocol_member;
 		minfo.is_protocol_member_required = is_protocol_member_required;
 		minfo.is_protocol_implementation_method = is_protocol_implementation_method;
+		minfo.BindingIdExtraInfo = bindingIdExtraInfo;
 		GenerateMethod (minfo);
 	}
 
@@ -4620,7 +4627,7 @@ public partial class Generator : IMemberGatherer {
 		var do_not_call_base = minfo.is_model;
 #endif
 		print_generated_code (optimizable: IsOptimizable (minfo.mi));
-		PrintBindingDocId (mi);
+		PrintBindingDocId (mi, minfo.BindingIdExtraInfo);
 		print ("{0} {1}{2}{3}",
 			   mod,
 			   minfo.GetModifiers (),
@@ -5056,6 +5063,7 @@ public partial class Generator : IMemberGatherer {
 			var minfo = new MemberInformation (this, this, ctor, type, null);
 			minfo.is_protocol_member = true;
 			minfo.is_protocol_member_required = IsRequired (ctor);
+			minfo.BindingIdExtraInfo = "ProtocolConstructor";
 			GenerateMethod (minfo);
 			print ("");
 		}
@@ -5066,6 +5074,7 @@ public partial class Generator : IMemberGatherer {
 			minfo.is_protocol_member = true;
 			minfo.is_protocol_member_required = IsRequired (mi);
 			minfo.call_protocol_implementation_method = useSeparateImplementationMethod;
+			minfo.BindingIdExtraInfo = "ProtocolMethod";
 			GenerateMethod (minfo);
 			print ("");
 
@@ -5073,6 +5082,7 @@ public partial class Generator : IMemberGatherer {
 				minfo.call_protocol_implementation_method = false;
 				minfo.is_protocol_implementation_method = true;
 				minfo.generate_is_async_overload = false;
+				minfo.BindingIdExtraInfo = "ProtocolMethodImplementation";
 				GenerateMethod (minfo);
 				print ("");
 			}
@@ -5123,7 +5133,7 @@ public partial class Generator : IMemberGatherer {
 #if NET
 		var instance_fields_to_clear_on_dispose = new List<string> ();
 		foreach (var pi in instanceProperties) {
-			GenerateProperty (type, pi, instance_fields_to_clear_on_dispose, false, is_protocol_member: true, is_protocol_member_required: IsRequired (pi));
+			GenerateProperty (type, pi, instance_fields_to_clear_on_dispose, false, is_protocol_member: true, is_protocol_member_required: IsRequired (pi), bindingIdExtraInfo: "ProtocolProperty");
 
 			GetAccessorInfo (pi, out var getter, out var setter, out var generate_getter, out var generate_setter);
 			var attrib = GetExportAttribute (pi);
@@ -5148,12 +5158,12 @@ public partial class Generator : IMemberGatherer {
 			if (generate_getter) {
 				PrintAttributes (pi, preserve: true, advice: true);
 				var ba = GetBindAttribute (getter);
-				GenerateMethod (type, getter, false, null, false, false, false, ba?.Selector ?? attrib.ToGetter (pi).Selector, is_protocol_member: true, is_protocol_member_required: IsRequired (pi));
+				GenerateMethod (type, getter, false, null, false, false, false, ba?.Selector ?? attrib.ToGetter (pi).Selector, is_protocol_member: true, is_protocol_member_required: IsRequired (pi), bindingIdExtraInfo: "ProtocolPropertyToMethod");
 			}
 			if (generate_setter) {
 				PrintAttributes (pi, preserve: true, advice: true);
 				var ba = GetBindAttribute (setter);
-				GenerateMethod (type, setter, false, null, false, false, false, ba?.Selector ?? attrib.ToSetter (pi).Selector, is_protocol_member: true, is_protocol_member_required: IsRequired (pi));
+				GenerateMethod (type, setter, false, null, false, false, false, ba?.Selector ?? attrib.ToSetter (pi).Selector, is_protocol_member: true, is_protocol_member_required: IsRequired (pi), bindingIdExtraInfo: "ProtocolPropertyToMethod");
 			}
 		}
 #else
@@ -5226,16 +5236,19 @@ public partial class Generator : IMemberGatherer {
 			print ("{1} unsafe static partial class {0}_Extensions {{", TypeName, class_visibility);
 			indent++;
 			foreach (var mi in extensionMethods)
-				GenerateMethod (type, mi, false, null, false, false, true);
+				GenerateMethod (type, mi, false, null, false, false, true, bindingIdExtraInfo: "ProtocolMethodAsExtension");
 
 			// Generate Extension Methods of required [Async] decorated methods (we already do optional) 
 			foreach (var ami in requiredInstanceAsyncMethods) {
 				var minfo = new MemberInformation (this, this, ami, type, null, isExtensionMethod: true);
+				minfo.BindingIdExtraInfo = "ProtocolMethodAsExtensionAsync";
 				GenerateAsyncMethod (minfo, AsyncMethodKind.Plain);
 
 				// Generate the overload with the out parameter
-				if (minfo.Method.ReturnType != TypeCache.System_Void)
+				if (minfo.Method.ReturnType != TypeCache.System_Void) {
+					minfo.BindingIdExtraInfo = "ProtocolMethodAsExtensionAsyncWithOutParameter";
 					GenerateAsyncMethod (minfo, AsyncMethodKind.WithResultOutParameter);
+				}
 			}
 
 			// C# does not support extension properties, so create Get* and Set* accessors instead.
@@ -5245,12 +5258,12 @@ public partial class Generator : IMemberGatherer {
 				if (generate_getter) {
 					PrintAttributes (pi, preserve: true, advice: true);
 					var ba = GetBindAttribute (getter);
-					GenerateMethod (type, getter, false, null, false, false, true, ba?.Selector ?? attrib.ToGetter (pi).Selector);
+					GenerateMethod (type, getter, false, null, false, false, true, ba?.Selector ?? attrib.ToGetter (pi).Selector, bindingIdExtraInfo: "ProtocolPropertyAsMethodExtension");
 				}
 				if (generate_setter) {
 					PrintAttributes (pi, preserve: true, advice: true);
 					var ba = GetBindAttribute (setter);
-					GenerateMethod (type, setter, false, null, false, false, true, ba?.Selector ?? attrib.ToSetter (pi).Selector);
+					GenerateMethod (type, setter, false, null, false, false, true, ba?.Selector ?? attrib.ToSetter (pi).Selector, bindingIdExtraInfo: "ProtocolPropertyAsMethodExtension");
 				}
 			}
 			indent--;
@@ -6183,7 +6196,10 @@ public partial class Generator : IMemberGatherer {
 				if (type == mi.DeclaringType || type.IsSubclassOf (mi.DeclaringType)) {
 					// not an injected protocol method.
 					bound_methods.Add (minfo);
+					if (is_category_class)
+						minfo.BindingIdExtraInfo = "CategoryMethod";
 				} else {
+					minfo.BindingIdExtraInfo = "InlinedProtocolMethod";
 					// don't inject a protocol method if the class already
 					// implements the same method.
 					if (bound_methods.Contains (minfo))
@@ -6246,10 +6262,14 @@ public partial class Generator : IMemberGatherer {
 					appearance_selectors.Add (pi);
 
 				var hasNullableMismatch = false;
+				var bindingIdExtraInfo = (string?) null;
 				if (type == pi.DeclaringType || type.IsSubclassOf (pi.DeclaringType)) {
 					// not an injected protocol property.
 					bound_properties.Add (pi.Name);
+					if (is_category_class)
+						bindingIdExtraInfo = "CategoryProperty";
 				} else {
+					bindingIdExtraInfo = "InlinedProtocolProperty";
 					// don't inject a protocol property if the class already
 					// implements the same property.
 					if (bound_properties.Contains (pi.Name))
@@ -6289,7 +6309,7 @@ public partial class Generator : IMemberGatherer {
 				generated_properties.Add (pi.Name);
 				if (hasNullableMismatch)
 					print ("#pragma warning disable CS8766");
-				GenerateProperty (type, pi, instance_fields_to_clear_on_dispose, is_model);
+				GenerateProperty (type, pi, instance_fields_to_clear_on_dispose, is_model, bindingIdExtraInfo: bindingIdExtraInfo);
 				if (hasNullableMismatch)
 					print ("#pragma warning restore CS8766");
 			}
@@ -6682,7 +6702,6 @@ public partial class Generator : IMemberGatherer {
 						} else
 							print ("internal {0}? {1};", Nomenclator.GetDelegateName (mi), miname);
 
-						PrintBindingDocId (mi);
 						print ("[Preserve (Conditional = true)]");
 						if (isProtocolEventBacked)
 							print ("[Export (\"{0}\")]", FindSelector (dtype, mi));
@@ -6849,6 +6868,7 @@ public partial class Generator : IMemberGatherer {
 						} else
 							prev_miname = miname;
 
+						PrintBindingDocId (mi, "EventFromEventsAttribute");
 						if (mi.ReturnType == TypeCache.System_Void) {
 							PrintObsoleteAttributes (mi);
 
@@ -6952,9 +6972,10 @@ public partial class Generator : IMemberGatherer {
 							GenerateMethod (type, mi as MethodInfo,
 									is_model: false,
 									category_extension_type: is_category_class ? base_type : null,
+									bindingIdExtraInfo: "UIAppearance",
 									is_appearance: true);
 						else
-							GenerateProperty (type, mi as PropertyInfo, currently_ignored_fields, false);
+							GenerateProperty (type, mi as PropertyInfo, currently_ignored_fields, false, bindingIdExtraInfo: "UIAppearance");
 					}
 				}
 

@@ -2693,7 +2693,7 @@ namespace GameController {
 		[Field ("GCProductCategoryHID")]
 		NSString Hid { get; }
 
-		[TV (17, 0), Mac (14, 0), iOS (17, 0), MacCatalyst (16, 0)]
+		[TV (17, 0), Mac (14, 0), iOS (17, 0), MacCatalyst (17, 0)]
 		[Field ("GCProductCategoryArcadeStick")]
 		NSString ArcadeStick { get; }
 	}

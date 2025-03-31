@@ -58,10 +58,11 @@ namespace GameController {
 			return Runtime.GetNSObject<NSString> (GCInputBackRightButton (position));
 		}
 
-		[SupportedOSPlatform ("ios16.0")]
-		[SupportedOSPlatform ("macos13.0")]
-		[SupportedOSPlatform ("tvos16.0")]
-		[SupportedOSPlatform ("maccatalyst16.0")]
+		// headers claim macOS 13.0 / iOS 16.0, but introspection says macOS 14.0 / iOS 17.0, so use that.
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
 		[DllImport (Constants.GameControllerLibrary)]
 		static extern IntPtr /* GCButtonElementName */ GCInputArcadeButtonName (nint row, nint column);
 
@@ -71,10 +72,10 @@ namespace GameController {
 		/// <param name="row">The row of the arcade button.</param>
 		/// <param name="column">The column of the arcade button.</param>
 		/// <returns>The name of the arcade button on the controller for the specified position.</returns>
-		[SupportedOSPlatform ("ios16.0")]
-		[SupportedOSPlatform ("macos13.0")]
-		[SupportedOSPlatform ("tvos16.0")]
-		[SupportedOSPlatform ("maccatalyst16.0")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
 		public static NSString? GetArcadeButtonName (nint row, nint column)
 		{
 			return Runtime.GetNSObject<NSString> (GCInputArcadeButtonName (row, column));

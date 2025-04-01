@@ -2182,6 +2182,10 @@ namespace CoreImage {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface CIFilterConstructor {
+		/// <param name="name">To be added.</param>
+		/// <summary>Creates a new filter from the provided name.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("filterWithName:")]
 		[return: NullAllowed]

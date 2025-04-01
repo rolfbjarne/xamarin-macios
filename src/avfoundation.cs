@@ -5621,6 +5621,10 @@ namespace AVFoundation {
 	interface AVFragmentMinding {
 
 #if !MONOMAC || NET
+		/// <summary>Return <see langword="true" /> if the implementation is associated with a <see cref="T:AVFoundation.AVFragmentedAssetMinder" />.</summary>
+		/// <returns>
+		///           <see langword="true" /> if the implementation is associated with a <see cref="T:AVFoundation.AVFragmentedAssetMinder" />.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract] // not kept in Mac OS because is a breaking change, in other platforms we are ok
 #endif
 		[Export ("isAssociatedWithFragmentMinder")]
@@ -5783,6 +5787,10 @@ namespace AVFoundation {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface AVCaptureDataOutputSynchronizerDelegate {
+		/// <param name="synchronizer">The synchronizer that provided the data.</param>
+		/// <param name="synchronizedDataCollection">The collection of synchronized data.</param>
+		/// <summary>Developers implement this method to respond when collections of synchronized capture data arrive.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dataOutputSynchronizer:didOutputSynchronizedDataCollection:")]
 		void DidOutputSynchronizedDataCollection (AVCaptureDataOutputSynchronizer synchronizer, AVCaptureSynchronizedDataCollection synchronizedDataCollection);
@@ -5869,10 +5877,15 @@ namespace AVFoundation {
 		[Export ("timebase", ArgumentSemantic.Retain)]
 		CMTimebase Timebase { get; }
 
+		/// <param name="sampleBuffer">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("enqueueSampleBuffer:")]
 		void Enqueue (CMSampleBuffer sampleBuffer);
 
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("flush")]
 		void Flush ();
@@ -5881,10 +5894,16 @@ namespace AVFoundation {
 		[Export ("readyForMoreMediaData")]
 		bool ReadyForMoreMediaData { [Bind ("isReadyForMoreMediaData")] get; }
 
+		/// <param name="queue">To be added.</param>
+		/// <param name="handler">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("requestMediaDataWhenReadyOnQueue:usingBlock:")]
 		void RequestMediaData (DispatchQueue queue, Action handler);
 
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("stopRequestingMediaData")]
 		void StopRequestingMediaData ();
@@ -6531,6 +6550,11 @@ namespace AVFoundation {
 #if !NET
 		[Abstract]
 #endif
+		/// <param name="resourceLoader">To be added.</param>
+		/// <param name="loadingRequest">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("resourceLoader:shouldWaitForLoadingOfRequestedResource:")]
 		bool ShouldWaitForLoadingOfRequestedResource (AVAssetResourceLoader resourceLoader, AVAssetResourceLoadingRequest loadingRequest);
@@ -13714,19 +13738,31 @@ namespace AVFoundation {
 	[Model, BaseType (typeof (NSObject))]
 	[Protocol]
 	interface AVVideoCompositing {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[return: NullAllowed]
 		[Export ("sourcePixelBufferAttributes")]
 		NSDictionary SourcePixelBufferAttributes ();
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("requiredPixelBufferAttributesForRenderContext")]
 		NSDictionary RequiredPixelBufferAttributesForRenderContext ();
 
+		/// <param name="newRenderContext">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("renderContextChanged:")]
 		void RenderContextChanged (AVVideoCompositionRenderContext newRenderContext);
 
+		/// <param name="asyncVideoCompositionRequest">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("startVideoCompositionRequest:")]
 		void StartVideoCompositionRequest (AVAsynchronousVideoCompositionRequest asyncVideoCompositionRequest);
@@ -15608,6 +15644,12 @@ namespace AVFoundation {
 		[Export ("captureOutput:didStartRecordingToOutputFileAtURL:startPTS:fromConnections:")]
 		void DidStartRecording (AVCaptureFileOutput captureOutput, NSUrl outputFileUrl, CMTime startPts, NSObject [] connections);
 
+		/// <param name="captureOutput">To be added.</param>
+		/// <param name="outputFileUrl">To be added.</param>
+		/// <param name="connections">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("captureOutput:didFinishRecordingToOutputFileAtURL:fromConnections:error:"), CheckDisposed]
 		void FinishedRecording (AVCaptureFileOutput captureOutput, NSUrl outputFileUrl, NSObject [] connections, [NullAllowed] NSError error);
@@ -20130,6 +20172,12 @@ namespace AVFoundation {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface AVPlayerItemMetadataCollectorPushDelegate {
+		/// <param name="metadataCollector">To be added.</param>
+		/// <param name="metadataGroups">To be added.</param>
+		/// <param name="indexesOfNewGroups">To be added.</param>
+		/// <param name="indexesOfModifiedGroups">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("metadataCollector:didCollectDateRangeMetadataGroups:indexesOfNewGroups:indexesOfModifiedGroups:")]
 		void DidCollectDateRange (AVPlayerItemMetadataCollector metadataCollector, AVDateRangeMetadataGroup [] metadataGroups, NSIndexSet indexesOfNewGroups, NSIndexSet indexesOfModifiedGroups);
@@ -20539,6 +20587,10 @@ namespace AVFoundation {
 #else
 		AVKeyValueStatus StatusOfValueForKeyerror (string key, [NullAllowed] IntPtr outError);
 #endif
+		/// <param name="keys">To be added.</param>
+		/// <param name="handler">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("loadValuesAsynchronouslyForKeys:completionHandler:")]
 		void LoadValuesAsynchronously (string [] keys, [NullAllowed] Action handler);
@@ -22288,6 +22340,10 @@ namespace AVFoundation {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface AVContentKeySessionDelegate {
+		/// <param name="session">To be added.</param>
+		/// <param name="keyRequest">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("contentKeySession:didProvideContentKeyRequest:")]
 		void DidProvideContentKeyRequest (AVContentKeySession session, AVContentKeyRequest keyRequest);

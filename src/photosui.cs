@@ -35,18 +35,31 @@ namespace PhotosUI {
 #endif
 	interface PHContentEditingController {
 
+		/// <param name="adjustmentData">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("canHandleAdjustmentData:")]
 		bool CanHandleAdjustmentData (PHAdjustmentData adjustmentData);
 
+		/// <param name="contentEditingInput">To be added.</param>
+		/// <param name="placeholderImage">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("startContentEditingWithInput:placeholderImage:")]
 		void StartContentEditing (PHContentEditingInput contentEditingInput, UIImage placeholderImage);
 
+		/// <param name="completionHandler">To be added. This parameter can be <see langword="null" />.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("finishContentEditingWithCompletionHandler:")]
 		void FinishContentEditing (Action<PHContentEditingOutput> completionHandler);
 
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("cancelContentEditing")]
 		void CancelContentEditing ();

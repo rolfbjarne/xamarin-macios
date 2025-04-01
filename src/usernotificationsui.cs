@@ -55,6 +55,9 @@ namespace UserNotificationsUI {
 	[Protocol]
 	interface UNNotificationContentExtension {
 
+		/// <param name="notification">The notification that was sent.</param>
+		/// <summary>Method that is called when the application is sent a notification.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("didReceiveNotification:")]
 		void DidReceiveNotification (UNNotification notification);

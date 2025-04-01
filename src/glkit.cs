@@ -1314,6 +1314,10 @@ namespace GLKit {
 		[Export ("glkViewControllerUpdate:")]
 		void Update (GLKViewController controller);
 
+		/// <param name="controller">To be added.</param>
+		/// <param name="pause">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("glkViewController:willPause:")]
 		void WillPause (GLKViewController controller, bool pause);
 	}

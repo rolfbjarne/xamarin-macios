@@ -3368,6 +3368,9 @@ namespace UIKit {
 	[BaseType (typeof (NSObject))]
 	[Protocol]
 	partial interface NSTextStorageDelegate {
+		/// <param name="notification">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoTV]
 		[NoMacCatalyst]
@@ -3375,6 +3378,9 @@ namespace UIKit {
 		[Export ("textStorageWillProcessEditing:")]
 		void TextStorageWillProcessEditing (NSNotification notification);
 
+		/// <param name="notification">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoTV]
 		[NoMacCatalyst]

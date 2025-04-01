@@ -3207,6 +3207,10 @@ namespace ModelIO {
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		void SetLocalTransform (Matrix4 transform);
 
+		/// <param name="atTime">The time for which to retrieve the local transform.</param>
+		/// <summary>Gets the local transform at the specified time.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("localTransformAtTime:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		Matrix4 GetLocalTransform (double atTime);

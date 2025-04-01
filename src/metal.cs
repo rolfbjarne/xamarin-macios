@@ -3604,6 +3604,11 @@ namespace Metal {
 		void ExecuteCommands (IMTLIndirectCommandBuffer indirectCommandbuffer, IMTLBuffer indirectRangeBuffer, nuint indirectBufferOffset);
 
 #if NET
+		/// <param name="scope">To be added.</param>
+		/// <param name="after">To be added.</param>
+		/// <param name="before">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract (GenerateExtensionMethod = true)]
 #endif
 		[iOS (16, 0), TV (16, 0), MacCatalyst (15, 0)]

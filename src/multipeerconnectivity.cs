@@ -212,7 +212,7 @@ namespace MultipeerConnectivity {
 			var peerID = DeserializedPeerID();
 			//Request connection data, with completionHandler lambda as continuation
 			session.NearbyConnectionDataForPeer(peerID, (connectionData, error) => { 
-			    if(error != null){
+			    if(error is not null){
 			        //Note: peerID is serialized version, connectionData is passed in to continuation
 			        session.ConnectPeer(peerID, connectionData);
 			    }else{

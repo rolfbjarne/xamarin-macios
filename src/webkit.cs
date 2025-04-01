@@ -5545,11 +5545,11 @@ namespace WebKit {
 			var wk = new WKWebView(UIScreen.MainScreen.Bounds, config);
 			var js = (NSString) "document.getElementById('foo').innerHTML = 'bar'";
 			WKJavascriptEvaluationResult handler = (NSObject result, NSError err) => { 
-			  if(err != null)
+			  if(err is not null)
 			  {
 			    System.Console.WriteLine(err);
 			  }
-			  if(result != null)
+			  if(result is not null)
 			  {
 			     System.Console.WriteLine(result);
 			  }

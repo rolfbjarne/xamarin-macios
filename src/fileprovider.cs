@@ -642,12 +642,18 @@ namespace FileProvider {
 		[Export ("tagData", ArgumentSemantic.Copy)]
 		NSData GetTagData ();
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[NoMac]
 		[return: NullAllowed]
 		[Export ("favoriteRank", ArgumentSemantic.Copy)]
 		NSNumber GetFavoriteRank ();
 
 #if NET // Not available in mac
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[NoMac]
 #elif MONOMAC
 		[Obsolete ("'IsTrashed' is not available in macOS and will be removed in the future.")]
@@ -725,6 +731,9 @@ namespace FileProvider {
 		[Export ("mostRecentEditorNameComponents")]
 		NSPersonNameComponents GetMostRecentEditorNameComponents ();
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[NoMac]
 		[return: NullAllowed]
 		[Export ("versionIdentifier")]

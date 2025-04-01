@@ -272,22 +272,42 @@ namespace PhotosUI {
 	[Protocol]
 	interface PHProjectExtensionController {
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.MacOSX, 10, 14)]
 		[Export ("supportedProjectTypes", ArgumentSemantic.Copy)]
 		PHProjectTypeDescription [] GetSupportedProjectTypes ();
 
+		/// <param name="extensionContext">To be added.</param>
+		/// <param name="projectInfo">To be added.</param>
+		/// <param name="completion">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("beginProjectWithExtensionContext:projectInfo:completion:")]
 		void BeginProject (PHProjectExtensionContext extensionContext, PHProjectInfo projectInfo, Action<NSError> completion);
 
+		/// <param name="extensionContext">To be added.</param>
+		/// <param name="completion">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("resumeProjectWithExtensionContext:completion:")]
 		void ResumeProject (PHProjectExtensionContext extensionContext, Action<NSError> completion);
 
+		/// <param name="completion">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("finishProjectWithCompletionHandler:")]
 		void FinishProject (Action completion);
 
+		/// <param name="category">To be added.</param>
+		/// <param name="invalidator">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Protected]
 		[NoMacCatalyst]
 		[Export ("typeDescriptionDataSourceForCategory:invalidator:")]
@@ -519,20 +539,34 @@ namespace PhotosUI {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface PHProjectTypeDescriptionDataSource {
+		/// <param name="projectType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("subtypesForProjectType:")]
 		PHProjectTypeDescription [] GetSubtypes (NSString projectType);
 
+		/// <param name="projectType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("typeDescriptionForProjectType:")]
 		[return: NullAllowed]
 		PHProjectTypeDescription GetTypeDescription (NSString projectType);
 
+		/// <param name="projectType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("footerTextForSubtypesOfProjectType:")]
 		[return: NullAllowed]
 		NSAttributedString GetFooterTextForSubtypes (NSString projectType);
 
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("extensionWillDiscardDataSource")]
 		void WillDiscardDataSource ();
 	}
@@ -543,10 +577,16 @@ namespace PhotosUI {
 	[NoMacCatalyst]
 	[Protocol]
 	interface PHProjectTypeDescriptionInvalidator {
+		/// <param name="projectType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("invalidateTypeDescriptionForProjectType:")]
 		void InvalidateTypeDescription (NSString projectType);
 
+		/// <param name="projectType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("invalidateFooterTextForSubtypesOfProjectType:")]
 		void InvalidateFooterTextForSubtypes (NSString projectType);

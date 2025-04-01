@@ -392,6 +392,10 @@ namespace SpriteKit {
 	[Category, BaseType (typeof (NSEvent))]
 	partial interface SKNodeEvent_NSEvent {
 
+		/// <param name="node">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("locationInNode:")]
 		CGPoint LocationInNode (SKNode node);
 	}

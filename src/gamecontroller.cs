@@ -2773,7 +2773,7 @@ namespace GameController {
 	[iOS (16, 0), Mac (13, 0), TV (16, 0), MacCatalyst (16, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface GCPhysicalInputElementCollection<KeyIdentifierType, ElementIdentifierType> : INSFastEnumeration // # no generator support for FastEnumeration - https://bugzilla.xamarin.com/show_bug.cgi?id=4391
+	interface GCPhysicalInputElementCollection<KeyIdentifierType, ElementIdentifierType> : INSFastEnumeration // # no generator support for FastEnumeration - https://github.com/dotnet/macios/issues/22516
 		where KeyIdentifierType : NSString
 		where ElementIdentifierType : IGCPhysicalInputElement /* id<GCPhysicalInputElement>> */
 	{

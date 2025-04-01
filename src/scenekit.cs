@@ -2959,6 +2959,14 @@ namespace SceneKit {
 	[Model, Protocol]
 	interface SCNProgramDelegate {
 
+		/// <param name="program">To be added.</param>
+		/// <param name="symbol">To be added.</param>
+		/// <param name="location">To be added.</param>
+		/// <param name="programID">To be added.</param>
+		/// <param name="renderer">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Unavailable (PlatformName.iOS)]
 		[NoTV]
 		[NoMacCatalyst]
@@ -2966,6 +2974,13 @@ namespace SceneKit {
 		[Export ("program:bindValueForSymbol:atLocation:programID:renderer:")]
 		bool BindValue (SCNProgram program, string symbol, uint /* unsigned int */ location, uint /* unsigned int */ programID, SCNRenderer renderer);
 
+		/// <param name="program">To be added.</param>
+		/// <param name="symbol">To be added.</param>
+		/// <param name="location">To be added.</param>
+		/// <param name="programID">To be added.</param>
+		/// <param name="renderer">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Unavailable (PlatformName.iOS)]
 		[NoTV]
 		[NoMacCatalyst]
@@ -2980,6 +2995,10 @@ namespace SceneKit {
 		[Export ("program:handleError:")]
 		void HandleError (SCNProgram program, NSError error);
 
+		/// <param name="program">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoTV]
 		[Deprecated (PlatformName.MacOSX, 10, 10, message: "Use the SCNProgram's Opaque property instead.")]

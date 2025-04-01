@@ -4504,6 +4504,10 @@ namespace UIKit {
 		// "If you’d like the Magic Tap gesture to perform the same action from anywhere within your app, it is more 
 		// appropriate to implement the accessibilityPerformMagicTap method in your app delegate."
 		// ref: http://developer.apple.com/library/ios/#featuredarticles/ViewControllerPGforiPhoneOS/Accessibility/AccessibilityfromtheViewControllersPerspective.html
+		/// <summary>Performs the most important action of the app. Often, this is toggling the most important state of the app.</summary>
+		/// <returns>
+		///           <see langword="true" /> if the action succeeded.</returns>
+		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[NoMacCatalyst]
 		[Export ("accessibilityPerformMagicTap")]
@@ -22299,15 +22303,45 @@ namespace UIKit {
 	[Model]
 	[Protocol]
 	interface UIWebViewDelegate {
+		/// <param name="webView">
+		///           <para>To be added.</para>
+		///         </param>
+		/// <param name="request">
+		///           <para>To be added.</para>
+		///         </param>
+		/// <param name="navigationType">
+		///           <para>To be added.</para>
+		///         </param>
+		/// <summary>Whether the UIWebView should begin loading data.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("webView:shouldStartLoadWithRequest:navigationType:"), DelegateName ("UIWebLoaderControl"), DefaultValue ("true")]
 		bool ShouldStartLoad (UIWebView webView, NSUrlRequest request, UIWebViewNavigationType navigationType);
 
+		/// <param name="webView">
+		///           <para>To be added.</para>
+		///         </param>
+		/// <summary>Indicates that loading has begun.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("webViewDidStartLoad:"), EventArgs ("UIWebView")]
 		void LoadStarted (UIWebView webView);
 
+		/// <param name="webView">
+		///           <para>To be added.</para>
+		///         </param>
+		/// <summary>Indicates that loading has completed.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("webViewDidFinishLoad:"), EventArgs ("UIWebView"), EventName ("LoadFinished")]
 		void LoadingFinished (UIWebView webView);
 
+		/// <param name="webView">
+		///           <para>To be added.</para>
+		///         </param>
+		/// <param name="error">
+		///           <para>To be added.</para>
+		///         </param>
+		/// <summary>Indicates that the UIWebView's attempt to load data failed.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("webView:didFailLoadWithError:"), EventArgs ("UIWebErrorArgs", false, true), EventName ("LoadError")]
 		void LoadFailed (UIWebView webView, NSError error);
 	}

@@ -398,10 +398,16 @@ namespace CarPlay {
 	[Protocol]
 	interface CPBarButtonProviding {
 
+		/// <summary>Developers must override this with the array of <see cref="T:CarPlay.CPBarButton" /> objects on the leading part of the navigation bar.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("leadingNavigationBarButtons", ArgumentSemantic.Strong)]
 		CPBarButton [] LeadingNavigationBarButtons { get; set; }
 
+		/// <summary>Developers must override this with the array of <see cref="T:CarPlay.CPBarButton" /> objects on the trailing part of the navigation bar..</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("trailingNavigationBarButtons", ArgumentSemantic.Strong)]
 		CPBarButton [] TrailingNavigationBarButtons { get; set; }

@@ -54,6 +54,9 @@ namespace MapKit {
 	[Protocol]
 	[MacCatalyst (13, 1)]
 	interface MKAnnotation {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("coordinate")]
 		[Abstract]
 		CLLocationCoordinate2D Coordinate { get; }
@@ -89,6 +92,9 @@ namespace MapKit {
 		// a readonly 'coordinate' property, so there's no need to re-declare it here
 		// (in fact it causes numerous build problems).
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("boundingMapRect")]
 		MKMapRect BoundingMapRect { get; }

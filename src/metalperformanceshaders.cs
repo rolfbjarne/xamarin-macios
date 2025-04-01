@@ -9596,6 +9596,9 @@ namespace MetalPerformanceShaders {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface MPSHandle : NSCoding {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("label")]
 		string Label { get; }
@@ -9729,6 +9732,9 @@ namespace MetalPerformanceShaders {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface MPSNNPadding : NSSecureCoding {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("paddingMethod")]
 		MPSNNPaddingMethod PaddingMethod { get; }
@@ -9764,10 +9770,16 @@ namespace MetalPerformanceShaders {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface MPSImageSizeEncodingState {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("sourceWidth")]
 		nuint SourceWidth { get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("sourceHeight")]
 		nuint SourceHeight { get; }
@@ -14098,6 +14110,9 @@ namespace MetalPerformanceShaders {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface MPSNNTrainableNode {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("trainingStyle", ArgumentSemantic.Assign)]
 		MPSNNTrainingStyle TrainingStyle { get; set; }

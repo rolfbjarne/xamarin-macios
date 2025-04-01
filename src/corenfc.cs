@@ -216,14 +216,23 @@ namespace CoreNFC {
 	[Protocol (Name = "NFCISO15693Tag")]
 	interface NFCIso15693Tag : NFCTag, NFCNdefTag {
 
+		/// <summary>Gets the identifier of the tag, as <see cref="T:Foundation.NSData" />.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("identifier", ArgumentSemantic.Copy)]
 		NSData Identifier { get; }
 
+		/// <summary>Manufacturer, as defined in ISO-7816-6.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("icManufacturerCode")]
 		nuint IcManufacturerCode { get; }
 
+		/// <summary>Gets the serial number of the tag, as <see cref="T:Foundation.NSData" />.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("icSerialNumber", ArgumentSemantic.Copy)]
 		NSData IcSerialNumber { get; }
@@ -700,10 +709,16 @@ namespace CoreNFC {
 	[Protocol (Name = "NFCReaderSession")]
 	interface NFCReaderSessionContract {
 
+		/// <summary>Gets whether the session is ready to detect and read NFC tags.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("ready")]
 		bool Ready { [Bind ("isReady")] get; }
 
+		/// <summary>Gets or sets a user-meaningful message describing the application's use of NFC.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("alertMessage")]
 		string AlertMessage { get; set; }
@@ -772,14 +787,23 @@ namespace CoreNFC {
 	[Protocol]
 	interface NFCTag : NSSecureCoding, NSCopying {
 
+		/// <summary>Gets the kind of NFC tag.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("type", ArgumentSemantic.Assign)]
 		NFCTagType Type { get; }
 
+		/// <summary>Gets the <see cref="T:CoreNFC.NFCReaderSession" /> that provided the tag.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("session", ArgumentSemantic.Weak)]
 		NFCReaderSession Session { get; }
 
+		/// <summary>Gets whether the tag is available for reading.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("available")]
 		bool Available { [Bind ("isAvailable")] get; }

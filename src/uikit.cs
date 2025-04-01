@@ -1421,10 +1421,16 @@ namespace UIKit {
 		[return: NullAllowed]
 		IUIAccessibilityContainerDataTableCell GetAccessibilityDataTableCellElement (nuint row, nuint column);
 
+		/// <summary>Gets the number of rows in the table.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityRowCount")]
 		nuint AccessibilityRowCount { get; }
 
+		/// <summary>Gets the number of columns in the table.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityColumnCount")]
 		nuint AccessibilityColumnCount { get; }
@@ -1718,6 +1724,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIAccessibilityContentSizeCategoryImageAdjusting {
+		/// <summary>Returns <see langword="true" /> if the image can adjust size in reaction to accessibility requirements.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("adjustsImageSizeForAccessibilityContentSizeCategory")]
 		bool AdjustsImageSizeForAccessibilityContentSizeCategory { get; set; }
@@ -2090,6 +2099,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIInputViewAudioFeedback {
+		/// <summary>Gets a value that tells whether input clicks are enabled.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("enableInputClicksWhenVisible")]
 #if !NET
 		[Abstract]
@@ -2580,18 +2592,30 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIViewAnimating {
+		/// <summary>The current <see cref="T:UIKit.UIViewAnimatingState" /> of the animation.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("state")]
 		UIViewAnimatingState State { get; }
 
+		/// <summary>Whether the animation is currently running.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("running")]
 		bool Running { [Bind ("isRunning")] get; }
 
+		/// <summary>Gets or sets the direction of the animation.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("reversed")]
 		bool Reversed { [Bind ("isReversed")] get; set; }
 
+		/// <summary>Gets or sets the percentage of the property's animation completion.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("fractionComplete")]
 		nfloat FractionComplete { get; set; }
@@ -2712,6 +2736,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	interface UIViewControllerPreviewing {
 
+		/// <summary>Developers override this method to return a <see cref="T:UIKit.UIGestureRecognizer" /> that can prevent the preview press from interfering with the app's other gesture recognizers.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Replaced by 'UIContextMenuInteraction'.")]
 		[Deprecated (PlatformName.TvOS, 13, 0, message: "Replaced by 'UIContextMenuInteraction'.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Replaced by 'UIContextMenuInteraction'.")]
@@ -2719,6 +2746,9 @@ namespace UIKit {
 		[Export ("previewingGestureRecognizerForFailureRelationship")]
 		UIGestureRecognizer PreviewingGestureRecognizerForFailureRelationship { get; }
 
+		/// <summary>A weak reference to an object that responds to the delegate protocol for this type.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Replaced by 'UIContextMenuInteraction'.")]
 		[Deprecated (PlatformName.TvOS, 13, 0, message: "Replaced by 'UIContextMenuInteraction'.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Replaced by 'UIContextMenuInteraction'.")]
@@ -2731,6 +2761,9 @@ namespace UIKit {
 		[Wrap ("WeakDelegate")]
 		IUIViewControllerPreviewingDelegate Delegate { get; }
 
+		/// <summary>Developers override this method to return the <see cref="T:UIKit.UIView" /> that contains the <see cref="P:UIKit.IUIViewControllerPreviewing.SourceRect" /> that stays sharp during the previewing press.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Replaced by 'UIContextMenuInteraction'.")]
 		[Deprecated (PlatformName.TvOS, 13, 0, message: "Replaced by 'UIContextMenuInteraction'.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Replaced by 'UIContextMenuInteraction'.")]
@@ -2738,6 +2771,9 @@ namespace UIKit {
 		[Export ("sourceView")]
 		UIView SourceView { get; }
 
+		/// <summary>Developers override this method to return the section of their view that stays sharp while the surrounding content blurs.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Replaced by 'UIContextMenuInteraction'.")]
 		[Deprecated (PlatformName.TvOS, 13, 0, message: "Replaced by 'UIContextMenuInteraction'.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Replaced by 'UIContextMenuInteraction'.")]
@@ -3897,6 +3933,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIContentSizeCategoryAdjusting {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[MacCatalyst (13, 1)]
 		[Export ("adjustsFontForContentSizeCategory")]
@@ -4258,6 +4297,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[NoMac]
 	interface UICoordinateSpace {
+		/// <summary>Gets the bounding rectangle of the object in its own coordinate space.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("bounds")]
 		CGRect Bounds { get; }
@@ -7813,14 +7855,23 @@ namespace UIKit {
 	[Protocol]
 	[Model]
 	interface UIDynamicItem {
+		/// <summary>The center of the dynamic item.</summary>
+		/// <value>The center point.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("center")]
 		CGPoint Center { get; set; }
 
+		/// <summary>Called in an instance where the dynamic animator requires the bounds of a dynamic item be returned.</summary>
+		/// <value>Dynamic item bounds.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("bounds")]
 		CGRect Bounds { get; }
 
+		/// <summary>The rotation of the dynamic item.</summary>
+		/// <value>Item rotation.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("transform")]
 		CGAffineTransform Transform { get; set; }
@@ -8876,48 +8927,72 @@ namespace UIKit {
 #if !NET
 		[Abstract]
 #endif
+		/// <summary>The <see cref="T:UIKit.UITextAutocapitalizationType" /> used by the <see cref="T:UIKit.IUITextInput" />.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("autocapitalizationType")]
 		UITextAutocapitalizationType AutocapitalizationType { get; set; }
 
 #if !NET
 		[Abstract]
 #endif
+		/// <summary>The <see cref="T:UIKit.UITextAutocorrectionType" /> used by the <see cref="T:UIKit.IUITextInput" />.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("autocorrectionType")]
 		UITextAutocorrectionType AutocorrectionType { get; set; }
 
 #if !NET
 		[Abstract]
 #endif
+		/// <summary>The <see cref="T:UIKit.UIKeyboardType" /> used by the <see cref="T:UIKit.IUITextInput" />.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("keyboardType")]
 		UIKeyboardType KeyboardType { get; set; }
 
 #if !NET
 		[Abstract]
 #endif
+		/// <summary>The <see cref="T:UIKit.UIKeyboardAppearance" /> used by the <see cref="T:UIKit.IUITextInput" /></summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("keyboardAppearance")]
 		UIKeyboardAppearance KeyboardAppearance { get; set; }
 
 #if !NET
 		[Abstract]
 #endif
+		/// <summary>The form of the return key for the <see cref="T:UIKit.IUITextInput" />.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("returnKeyType")]
 		UIReturnKeyType ReturnKeyType { get; set; }
 
 #if !NET
 		[Abstract]
 #endif
+		/// <summary>Whether the return key is automatically enabled.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("enablesReturnKeyAutomatically")]
 		bool EnablesReturnKeyAutomatically { get; set; }
 
 #if !NET
 		[Abstract]
 #endif
+		/// <summary>Whether the entered text should be hidden.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("secureTextEntry")]
 		bool SecureTextEntry { [Bind ("isSecureTextEntry")] get; set; }
 
 #if !NET
 		[Abstract]
 #endif
+		/// <summary>Gets or sets a value that tells whether spell-checking is on, off, or if spell-checking will be enabled only when auto-complete is enabled (default).</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("spellCheckingType")]
 		UITextSpellCheckingType SpellCheckingType { get; set; }
 
@@ -9305,6 +9380,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIKeyInput : UITextInputTraits {
+		/// <summary>Gets a value that tells whether the key input has text in it.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("hasText")]
 		bool HasText { get; }
@@ -9349,6 +9427,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UITextInput : UIKeyInput {
+		/// <summary>The range of a document's selected text.</summary>
+		/// <value>If there is no current specified selection, then it is set to <see langword="null" />.</value>
+		/// <remarks>If the specified range has length, it specifies currently selected text; if zero length, it specifies only the caret at the insertion point.</remarks>
 		[Abstract]
 		[NullAllowed] // by default this property is null
 					  // This is declared as ArgumentSemantic.Copy, but UITextRange doesn't conform to NSCopying.
@@ -9356,19 +9437,31 @@ namespace UIKit {
 		[Export ("selectedTextRange")]
 		UITextRange SelectedTextRange { get; set; }
 
+		/// <summary>Attribute dictionary describing how text should be drawn.</summary>
+		/// <value>Strings indicating style definition.</value>
+		/// <remarks>This is marked to indicate the necessity for unique visual treatment in display.</remarks>
 		[Abstract]
 		[NullAllowed] // by default this property is null
 		[Export ("markedTextStyle", ArgumentSemantic.Copy)]
 		NSDictionary MarkedTextStyle { get; set; }
 
+		/// <summary>The position of text indicating the beginning of a document.</summary>
+		/// <value>Gets the beginning of the document.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("beginningOfDocument")]
 		UITextPosition BeginningOfDocument { get; }
 
+		/// <summary>The position of text indicating the beginning of a document.</summary>
+		/// <value>Gets the end of the document.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("endOfDocument")]
 		UITextPosition EndOfDocument { get; }
 
+		/// <summary>Indicates a weak input delegate.</summary>
+		/// <value>Automatically assigned at runtime.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("inputDelegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakInputDelegate { get; set; }
@@ -9376,6 +9469,9 @@ namespace UIKit {
 		[Wrap ("WeakInputDelegate")]
 		IUITextInputDelegate InputDelegate { get; set; }
 
+		/// <summary>Indicates a weak tokenizer.</summary>
+		/// <value>Standard units of granularity including characters, words, lines, and paragraphs.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("tokenizer")]
 		NSObject WeakTokenizer { get; }
@@ -9405,6 +9501,9 @@ namespace UIKit {
 		[Export ("replaceRange:withText:")]
 		void ReplaceText (UITextRange range, string text);
 
+		/// <summary>The currently marked range of text in a given document.</summary>
+		/// <value>If there is no text marked, the value is <see langword="null" />; all else  is provisionally inserted requiring user confirmation.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("markedTextRange")]
 		UITextRange MarkedTextRange { get; }
@@ -10223,6 +10322,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIItemProviderPresentationSizeProviding {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("preferredPresentationSizeForItemProvider")]
 		CGSize PreferredPresentationSizeForItemProvider { get; }
@@ -11335,6 +11437,9 @@ namespace UIKit {
 	[Model]
 	[Protocol]
 	interface UIBarPositioning {
+		/// <summary>Gets the bar position.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("barPosition")]
 		UIBarPosition BarPosition { get; }
@@ -14259,6 +14364,9 @@ namespace UIKit {
 	[Model]
 	[Protocol]
 	partial interface UIContentContainer {
+		/// <summary>Gets the preferred size for the content of the container.</summary>
+		/// <value>The preferred <see cref="T:System.Drawing.SizeF" /> of the contents of <c>this</c> <see cref="T:UIKit.IUIContentContainer" />.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("preferredContentSize")]
 		CGSize PreferredContentSize { get; }
@@ -14423,6 +14531,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIPreviewActionItem {
+		/// <summary>Gets or sets the title of the preview action.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("title")]
 		string Title { get; }
@@ -19463,14 +19574,23 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UITimingCurveProvider : NSCoding, NSCopying {
+		/// <summary>The kind of timing curve this is (see <see cref="T:UIKit.UITimingCurveType" />).</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("timingCurveType")]
 		UITimingCurveType TimingCurveType { get; }
 
+		/// <summary>For <see cref="T:UIKit.UICubicTimingParameters" /> objects, the timing parameters. Otherwise, <see langword="null" />.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("cubicTimingParameters")]
 		UICubicTimingParameters CubicTimingParameters { get; }
 
+		/// <summary>For <see cref="T:UIKit.UISpringTimingParameters" /> objects, the timing parameters. Otherwise, <see langword="null" />.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("springTimingParameters")]
 		UISpringTimingParameters SpringTimingParameters { get; }
@@ -21520,6 +21640,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol, Model, BaseType (typeof (NSObject))]
 	partial interface UIViewControllerContextTransitioning {
+		/// <summary>The UIView that is the superview of the UIView's involved in the transition.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("containerView")]
 		UIView ContainerView { get; }
@@ -21538,10 +21661,16 @@ namespace UIKit {
 		[Export ("isInteractive")]
 		bool IsInteractive { get; }
 
+		/// <summary>Whether the transition was cancelled.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("transitionWasCancelled")]
 		bool TransitionWasCancelled { get; }
 
+		/// <summary>The presentation style of the transition.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("presentationStyle")]
 		UIModalPresentationStyle PresentationStyle { get; }
@@ -21601,6 +21730,9 @@ namespace UIKit {
 		[Export ("viewForKey:")]
 		UIView GetViewFor (NSString uiTransitionContextToOrFromKey);
 
+		/// <summary>Gets the transform that indicates the angle of the rotation that is applied during the transition.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("targetTransform")]
 		CGAffineTransform TargetTransform { get; }
@@ -21623,6 +21755,9 @@ namespace UIKit {
 	[Protocol]
 	[MacCatalyst (13, 1)]
 	partial interface UITraitEnvironment {
+		/// <summary>Gets the trait collection that describes the environment.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("traitCollection")]
 		UITraitCollection TraitCollection { get; }
@@ -22146,38 +22281,69 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	partial interface UIViewControllerTransitionCoordinatorContext {
+		/// <summary>
+		///           <see langword="true" /> if the transition is explicitly animated or uses <see cref="F:UIKit.UIModalPresentationStyle.Custom" /> presentation.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("isAnimated")]
 		bool IsAnimated { get; }
 
+		/// <summary>The presentation style whose transition is being modified.</summary>
+		/// <value>Use <see cref="F:UIKit.UIModalPresentationStyle.None" /> if the transition is not a modal presentation or dismissal.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("presentationStyle")]
 		UIModalPresentationStyle PresentationStyle { get; }
 
+		/// <summary>
+		///           <see langword="true" /> iff <see cref="P:UIKit.IUIViewControllerTransitionCoordinatorContext.IsAnimated" /> is <see langword="true" /> and the transition was initiated interactively.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("initiallyInteractive")]
 		bool InitiallyInteractive { get; }
 
+		/// <summary>
+		///           <see langword="true" /> if the transition is currently interactive.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("isInteractive")]
 		bool IsInteractive { get; }
 
+		/// <summary>
+		///           <see langword="true" /> if the interactive transition is ending and the user canceled the transition.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("isCancelled")]
 		bool IsCancelled { get; }
 
+		/// <summary>The expected duration, in seconds, of the transition, if it is noninteractive.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("transitionDuration")]
 		double TransitionDuration { get; }
 
+		/// <summary>The percent of completion of a transition when it moves to the noninteractive completion phase.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("percentComplete")]
 		nfloat PercentComplete { get; }
 
+		/// <summary>The completion velocity for the view controller transition.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("completionVelocity")]
 		nfloat CompletionVelocity { get; }
 
+		/// <summary>The UIViewAnimationCurve for the view controller transition.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("completionCurve")]
 		UIViewAnimationCurve CompletionCurve { get; }
@@ -22190,6 +22356,9 @@ namespace UIKit {
 		[Export ("viewControllerForKey:")]
 		UIViewController GetViewControllerForKey (NSString uiTransitionKey);
 
+		/// <summary>The container UIView for the view controller transition animation.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("containerView")]
 		UIView ContainerView { get; }
@@ -24724,6 +24893,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIInteraction {
+		/// <summary>Gets the view that owns the interaction.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("view", ArgumentSemantic.Weak)]
 		UIView View { get; }
@@ -24747,11 +24919,17 @@ namespace UIKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	partial interface UITextDocumentProxy : UIKeyInput {
+		/// <summary>Gets the textual context before the insertion point for <c>this</c> <see cref="T:UIKit.IUITextDocumentProxy" /> object.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("documentContextBeforeInput")]
 		[NullAllowed]
 		string DocumentContextBeforeInput { get; }
 
+		/// <summary>Gets the textual context after the insertion point for <c>this</c> <see cref="T:UIKit.IUITextDocumentProxy" /> object.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("documentContextAfterInput")]
 		[NullAllowed]
@@ -24857,6 +25035,9 @@ namespace UIKit {
 	[Model]
 	[BaseType (typeof (NSObject))]
 	interface UILayoutSupport {
+		/// <summary>Gets the length of the part of a view controller's area that is covered with see-through UIKit bars.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("length")]
 		[Abstract]
 		nfloat Length { get; }
@@ -24894,6 +25075,10 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIAccessibilityIdentification {
+		/// <summary>Uniquely identifies <c>this</c> for the purposes of accessibility.</summary>
+		/// <value>
+		///           <see langword="string" /> uniquely identifying <c>this</c> for the purposes of accessibility.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed] // by default this property is null
 		[Export ("accessibilityIdentifier", ArgumentSemantic.Copy)]
@@ -25378,6 +25563,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIGuidedAccessRestrictionDelegate {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("guidedAccessRestrictionIdentifiers")]
 		string [] GetGuidedAccessRestrictionIdentifiers { get; }
@@ -25449,6 +25637,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIFocusAnimationContext {
+		/// <summary>Gets the time, in seconds, that the animation takes to complete.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("duration")]
 		double Duration { get; }
@@ -25536,6 +25727,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIFocusItem : UIFocusEnvironment {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("canBecomeFocused")]
 		bool CanBecomeFocused { get; }
@@ -25843,6 +26037,9 @@ namespace UIKit {
 #if !NET
 		[Abstract]
 #endif
+		/// <summary>If not <see langword="null" />, indicates the child <see cref="T:UIKit.UIView" /> that should receive focus by default.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[NullAllowed, Export ("preferredFocusedView", ArgumentSemantic.Weak)]
 		[Deprecated (PlatformName.iOS, 10, 0, message: "Use 'PreferredFocusEnvironments' instead.")]
 		[Deprecated (PlatformName.TvOS, 10, 0, message: "Use 'PreferredFocusEnvironments' instead.")]
@@ -26048,6 +26245,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIDragDropSession {
+		/// <summary>Gets the drag items that are in the session.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("items")]
 		UIDragItem [] Items { get; }
@@ -26060,10 +26260,16 @@ namespace UIKit {
 		[Export ("locationInView:")]
 		CGPoint LocationInView ([NullAllowed] UIView view);
 
+		/// <summary>Gets a Boolean value that tells whether the session can move items within a single app.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("allowsMoveOperation")]
 		bool AllowsMoveOperation { get; }
 
+		/// <summary>Gets a Boolean value that tells whether the drag activity is confined to the originating app.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("restrictedToDraggingApplication")]
 		bool RestrictedToDraggingApplication { [Bind ("isRestrictedToDraggingApplication")] get; }
@@ -26177,6 +26383,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIDragSession : UIDragDropSession {
+		/// <summary>Gets or sets the optional object that contains context information visible to the originating activity.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("localContext", ArgumentSemantic.Strong)]
 		NSObject LocalContext { get; set; }
@@ -26478,10 +26687,16 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIDropSession : UIDragDropSession, NSProgressReporting {
+		/// <summary>The local in-app drag session for the drop session.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("localDragSession")]
 		IUIDragSession LocalDragSession { get; }
 
+		/// <summary>Gets or sets the style of the drop indicator.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("progressIndicatorStyle", ArgumentSemantic.Assign)]
 		UIDropSessionProgressIndicatorStyle ProgressIndicatorStyle { get; set; }
@@ -26693,18 +26908,30 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UICollectionViewDropCoordinator {
+		/// <summary>Gets the drag items.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("items")]
 		IUICollectionViewDropItem [] Items { get; }
 
+		/// <summary>Gets the index path for the insertion.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("destinationIndexPath")]
 		NSIndexPath DestinationIndexPath { get; }
 
+		/// <summary>Gets the drop proposal.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("proposal")]
 		UICollectionViewDropProposal Proposal { get; }
 
+		/// <summary>Gets the drop session.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("session")]
 		IUIDropSession Session { get; }
@@ -26778,14 +27005,23 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UICollectionViewDropItem {
+		/// <summary>Gets the drag item.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dragItem")]
 		UIDragItem DragItem { get; }
 
+		/// <summary>Gets the source index path for the item if it is being dragged from another location in the collection view.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("sourceIndexPath")]
 		NSIndexPath SourceIndexPath { get; }
 
+		/// <summary>Gets the preview size for the drag item.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("previewSize")]
 		CGSize PreviewSize { get; }
@@ -26796,6 +27032,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UICollectionViewDropPlaceholderContext : UIDragAnimating {
+		/// <summary>Gets the drag item that is represented by the placeholder.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dragItem")]
 		UIDragItem DragItem { get; }
@@ -26974,18 +27213,30 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UITableViewDropCoordinator {
+		/// <summary>Gets the drag items.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("items")]
 		IUITableViewDropItem [] Items { get; }
 
+		/// <summary>Gets the index path for the insertion.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("destinationIndexPath")]
 		NSIndexPath DestinationIndexPath { get; }
 
+		/// <summary>Gets the drop proposal.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("proposal")]
 		UITableViewDropProposal Proposal { get; }
 
+		/// <summary>Gets the drop session.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("session")]
 		IUIDropSession Session { get; }
@@ -27059,14 +27310,23 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UITableViewDropItem {
+		/// <summary>Gets the drag item.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dragItem")]
 		UIDragItem DragItem { get; }
 
+		/// <summary>Gets the source index path for the item if it is being dragged from another location in the table view.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("sourceIndexPath")]
 		NSIndexPath SourceIndexPath { get; }
 
+		/// <summary>Gets the preview size for the drag item.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("previewSize")]
 		CGSize PreviewSize { get; }
@@ -27077,6 +27337,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UITableViewDropPlaceholderContext : UIDragAnimating {
+		/// <summary>Gets the drag item that is represented by the placeholder.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dragItem")]
 		UIDragItem DragItem { get; }
@@ -27133,18 +27396,30 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UITextDraggable : UITextInput {
+		/// <summary>Gets or sets a delegate for managing drag source behavior.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("textDragDelegate", ArgumentSemantic.Weak)]
 		IUITextDragDelegate TextDragDelegate { get; set; }
 
+		/// <summary>Gets the drag interaction on the text view.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("textDragInteraction")]
 		UIDragInteraction TextDragInteraction { get; }
 
+		/// <summary>Gets a Boolean value that tells whether a drag session is active for the text view.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("textDragActive")]
 		bool TextDragActive { [Bind ("isTextDragActive")] get; }
 
+		/// <summary>Gets a value that controls how formatting is displayed in dragged text.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("textDragOptions", ArgumentSemantic.Assign)]
 		UITextDragOptions TextDragOptions { get; set; }
@@ -27203,22 +27478,37 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UITextDragRequest {
+		/// <summary>Gets the range of the text that is being dragged.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dragRange")]
 		UITextRange DragRange { get; }
 
+		/// <summary>Gets the items that the system would supply if the developer does not provide a custom implementation.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("suggestedItems")]
 		UIDragItem [] SuggestedItems { get; }
 
+		/// <summary>Gets the items that are currently in the drag session.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("existingItems")]
 		UIDragItem [] ExistingItems { get; }
 
+		/// <summary>Gets a Boolean value that tells whether there is a selection that can be dragged.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("selected")]
 		bool Selected { [Bind ("isSelected")] get; }
 
+		/// <summary>Gets the drag session.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dragSession")]
 		IUIDragSession DragSession { get; }
@@ -27252,14 +27542,23 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UITextDroppable : UITextInput, UITextPasteConfigurationSupporting {
+		/// <summary>Gets or sets a delegate for managing text drop behavior.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("textDropDelegate", ArgumentSemantic.Weak)]
 		IUITextDropDelegate TextDropDelegate { get; set; }
 
+		/// <summary>Gets the drop interaction on the text view.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("textDropInteraction")]
 		UIDropInteraction TextDropInteraction { get; }
 
+		/// <summary>Gets a Boolean value that tells whether there is an active text drop session on the view.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("textDropActive")]
 		bool TextDropActive { [Bind ("isTextDropActive")] get; }
@@ -27339,18 +27638,30 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UITextDropRequest {
+		/// <summary>Gets the text position where dropped text will appear.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dropPosition")]
 		UITextPosition DropPosition { get; }
 
+		/// <summary>Gets the drop proposal that the text view is offering.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("suggestedProposal")]
 		UITextDropProposal SuggestedProposal { get; }
 
+		/// <summary>Gets a Boolean value that tells whether the drag for the drop started in the same view.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("sameView")]
 		bool SameView { [Bind ("isSameView")] get; }
 
+		/// <summary>Gets the drop session.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dropSession")]
 		IUIDropSession DropSession { get; }
@@ -27459,14 +27770,23 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UISpringLoadedInteractionContext {
+		/// <summary>Gets the current state of the spring-loaded interaction.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("state")]
 		UISpringLoadedInteractionEffectState State { get; }
 
+		/// <summary>Gets or sets the target view to which the spring-loaded interaction is being applied.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("targetView", ArgumentSemantic.Strong)]
 		UIView TargetView { get; set; }
 
+		/// <summary>Gets or sets the target item of the spring-loaded interaction.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("targetItem", ArgumentSemantic.Strong)]
 		NSObject TargetItem { get; set; }
@@ -27485,6 +27805,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UISpringLoadedInteractionSupporting {
+		/// <summary>Gets or sets a Boolean value that controls whether the object participates in spring-loaded interactions.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("springLoaded")]
 		bool SpringLoaded { [Bind ("isSpringLoaded")] get; set; }
@@ -27552,6 +27875,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UITextPasteConfigurationSupporting : UIPasteConfigurationSupporting {
+		/// <summary>Gets the delegate for handling text pasting and text drops.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("pasteDelegate", ArgumentSemantic.Weak)]
 		IUITextPasteDelegate PasteDelegate { get; set; }
@@ -27613,14 +27939,23 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UITextPasteItem {
+		/// <summary>Gets the provider that provides the text data for the paste item.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("itemProvider")]
 		NSItemProvider ItemProvider { get; }
 
+		/// <summary>Gets the context object, if present, that was attached to the item when it was lifted.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("localObject")]
 		NSObject LocalObject { get; }
 
+		/// <summary>Gets the default attributes for plain text paste items.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("defaultAttributes")]
 		NSDictionary<NSString, NSObject> DefaultAttributes { get; }
@@ -27700,6 +28035,9 @@ namespace UIKit {
 	[MacCatalyst (16, 0)]
 	[Protocol]
 	interface UIPasteConfigurationSupporting {
+		/// <summary>The <see cref="T:UIKit.UIPasteConfiguration" /> supported by <see langword="this" /> object.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("pasteConfiguration", ArgumentSemantic.Copy)]
 		UIPasteConfiguration PasteConfiguration { get; set; }
@@ -27956,6 +28294,9 @@ namespace UIKit {
 	[NoMac]
 	[Protocol]
 	interface UIFocusItemContainer {
+		/// <summary>Gets the coordinate space implemenation.</summary>
+		/// <value>The coordinate space implemenation.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("coordinateSpace")]
 		IUICoordinateSpace CoordinateSpace { get; }
@@ -27972,14 +28313,23 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIFocusItemScrollableContainer : UIFocusItemContainer {
+		/// <summary>Gets or sets the offset into the scrollable content.</summary>
+		/// <value>The offset into the scrollable content.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("contentOffset", ArgumentSemantic.Assign)]
 		CGPoint ContentOffset { get; set; }
 
+		/// <summary>Gets or sets the total size of the scrollable content.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("contentSize")]
 		CGSize ContentSize { get; }
 
+		/// <summary>Gets the visible size of the scrollview container.</summary>
+		/// <value>The visible size of the scrollview container.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("visibleSize")]
 		CGSize VisibleSize { get; }

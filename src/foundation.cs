@@ -12473,6 +12473,9 @@ namespace Foundation {
 	[Protocol (Name = "NSObject")] // exists both as a type and a protocol in ObjC, Swift uses NSObjectProtocol
 	interface NSObjectProtocol {
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("description")]
 		string Description { get; }
@@ -12480,6 +12483,9 @@ namespace Foundation {
 		[Export ("debugDescription")]
 		string DebugDescription { get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("superclass")]
@@ -12504,11 +12510,17 @@ namespace Foundation {
 		[Export ("isEqual:")]
 		bool IsEqual ([NullAllowed] NSObject anObject);
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("class")]
 		Class Class { get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[Export ("self")]
@@ -12542,6 +12554,9 @@ namespace Foundation {
 		[Export ("performSelector:withObject:withObject:")]
 		NSObject PerformSelector (Selector aSelector, [NullAllowed] NSObject object1, [NullAllowed] NSObject object2);
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("isProxy")]
@@ -12602,10 +12617,16 @@ namespace Foundation {
 		[Export ("autorelease")]
 		NSObject DangerousAutorelease ();
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("retainCount")]
 		nuint RetainCount { get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("zone")]
@@ -16676,6 +16697,10 @@ namespace Foundation {
 		[Export ("discardContentIfPossible")]
 		void DiscardContentIfPossible ();
 
+		/// <summary>Gets a Boolean value that tells whether the content has been discarded.</summary>
+		/// <value>
+		///           <see langword="true" /> if the content has been discarded.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("isContentDiscarded")]
 		bool IsContentDiscarded { get; }

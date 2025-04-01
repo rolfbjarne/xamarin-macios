@@ -1240,6 +1240,11 @@ namespace AudioUnit {
 	///     </remarks>
 	[Protocol]
 	interface AUAudioUnitFactory : NSExtensionRequestHandling {
+		/// <param name="desc">A description for the audio unit.</param>
+		/// <param name="error">An <see langword="out" /> parameter into which any errors that are encountered are written.</param>
+		/// <summary>Creates and returns an audio unit.</summary>
+		/// <returns>An audio unit.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("createAudioUnitWithComponentDescription:error:")]
 		[return: NullAllowed]

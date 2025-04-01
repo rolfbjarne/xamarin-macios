@@ -9779,6 +9779,12 @@ namespace MetalPerformanceShaders {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface MPSImageAllocator : NSSecureCoding {
+		/// <param name="cmdBuf">To be added.</param>
+		/// <param name="descriptor">To be added.</param>
+		/// <param name="kernel">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("imageForCommandBuffer:imageDescriptor:kernel:")]
 		MPSImage GetImage (IMTLCommandBuffer cmdBuf, MPSImageDescriptor descriptor, MPSKernel kernel);
@@ -9824,6 +9830,11 @@ namespace MetalPerformanceShaders {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface MPSImageTransformProvider : NSCoding {
+		/// <param name="image">To be added.</param>
+		/// <param name="handle">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("transformForSourceImage:handle:")]
 		MPSScaleTransform GetTransform (MPSImage image, [NullAllowed] IMPSHandle handle);
@@ -9832,6 +9843,9 @@ namespace MetalPerformanceShaders {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface MPSDeviceProvider {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("mpsMTLDevice")]
 		IMTLDevice GetMTLDevice ();

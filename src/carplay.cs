@@ -639,10 +639,20 @@ namespace CarPlay {
 	[BaseType (typeof (NSObject))]
 	interface CPApplicationDelegate : UIApplicationDelegate {
 
+		/// <param name="application">To be added.</param>
+		/// <param name="interfaceController">To be added.</param>
+		/// <param name="window">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("application:didConnectCarInterfaceController:toWindow:")]
 		void DidConnectCarInterfaceController (UIApplication application, CPInterfaceController interfaceController, CPWindow window);
 
+		/// <param name="application">To be added.</param>
+		/// <param name="interfaceController">To be added.</param>
+		/// <param name="window">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("application:didDisconnectCarInterfaceController:fromWindow:")]
 		void DidDisconnectCarInterfaceController (UIApplication application, CPInterfaceController interfaceController, CPWindow window);
@@ -918,6 +928,11 @@ namespace CarPlay {
 	[BaseType (typeof (NSObject))]
 	interface CPListTemplateDelegate {
 
+		/// <param name="listTemplate">To be added.</param>
+		/// <param name="item">To be added.</param>
+		/// <param name="completionHandler">To be added.</param>
+		/// <summary>Developers must override this method to react to the selection of a list item.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("listTemplate:didSelectListItem:completionHandler:")]
 		void DidSelectListItem (CPListTemplate listTemplate, CPListItem item, Action completionHandler);
@@ -1431,10 +1446,20 @@ namespace CarPlay {
 	[BaseType (typeof (NSObject))]
 	interface CPSearchTemplateDelegate {
 
+		/// <param name="searchTemplate">To be added.</param>
+		/// <param name="searchText">To be added.</param>
+		/// <param name="completionHandler">To be added.</param>
+		/// <summary>Developers must override this method to respond to a change in the search text.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("searchTemplate:updatedSearchText:completionHandler:")]
 		void UpdatedSearchText (CPSearchTemplate searchTemplate, string searchText, CPSearchTemplateDelegateUpdateHandler completionHandler);
 
+		/// <param name="searchTemplate">To be added.</param>
+		/// <param name="item">To be added.</param>
+		/// <param name="completionHandler">To be added.</param>
+		/// <summary>Developers must overrride this method to respond to a search selection.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("searchTemplate:selectedResult:completionHandler:")]
 		void SelectedResult (CPSearchTemplate searchTemplate, CPListItem item, Action completionHandler);
@@ -1494,6 +1519,10 @@ namespace CarPlay {
 #if !NET
 		[Abstract]
 #endif
+		/// <param name="sessionConfiguration">To be added.</param>
+		/// <param name="limitedUserInterfaces">To be added.</param>
+		/// <summary>Called when the system changes keyboards or modifies list limits.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("sessionConfiguration:limitedUserInterfacesChanged:")]
 		void LimitedUserInterfacesChanged (CPSessionConfiguration sessionConfiguration, CPLimitableUserInterface limitedUserInterfaces);
 

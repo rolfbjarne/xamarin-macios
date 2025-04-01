@@ -3139,6 +3139,12 @@ namespace Foundation {
 #endif
 	[Protocol]
 	interface NSCopying {
+		/// <param name="zone">Developers should pass <see langword="null" />.  Memory zones are no longer used.</param>
+		/// <summary>Performs a copy of the underlying Objective-C object.</summary>
+		/// <returns>The newly-allocated object.</returns>
+		/// <remarks>
+		///           <para>This method performs a "shallow copy" of <see langword="this" />. If this object contains references to external objects, the new object will contain references to the same object.</para>
+		///         </remarks>
 		[Abstract]
 		[return: Release]
 		[Export ("copyWithZone:")]
@@ -3151,6 +3157,10 @@ namespace Foundation {
 #endif
 	[Protocol]
 	interface NSMutableCopying : NSCopying {
+		/// <param name="zone">Zone to use to allocate this object, or null to use the default zone.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("mutableCopyWithZone:")]
 		[return: Release ()]
@@ -9479,6 +9489,10 @@ namespace Foundation {
 		[Export ("connectionDidResumeDownloading:totalBytesWritten:expectedTotalBytes:")]
 		void ResumedDownloading (NSUrlConnection connection, long totalBytesWritten, long expectedTotalBytes);
 
+		/// <param name="connection">To be added.</param>
+		/// <param name="destinationUrl">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("connectionDidFinishDownloading:destinationURL:")]
 		void FinishedDownloading (NSUrlConnection connection, NSUrl destinationUrl);
@@ -10578,6 +10592,11 @@ namespace Foundation {
 	[Protocol]
 	partial interface NSUrlSessionDownloadDelegate {
 
+		/// <param name="session">To be added.</param>
+		/// <param name="downloadTask">To be added.</param>
+		/// <param name="location">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("URLSession:downloadTask:didFinishDownloadingToURL:")]
 		void DidFinishDownloading (NSUrlSession session, NSUrlSessionDownloadTask downloadTask, NSUrl location);
@@ -12398,11 +12417,18 @@ namespace Foundation {
 
 		// defined multiple times (method, property and even static), one (not static) is required
 		// and that match Apple's documentation
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("hash")]
 		nuint GetNativeHash ();
 
+		/// <param name="anObject">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("isEqual:")]
@@ -12419,14 +12445,29 @@ namespace Foundation {
 		[Transient]
 		NSObject Self { get; }
 
+		/// <param name="aSelector">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("performSelector:")]
 		NSObject PerformSelector (Selector aSelector);
 
+		/// <param name="aSelector">To be added.</param>
+		/// <param name="anObject">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("performSelector:withObject:")]
 		NSObject PerformSelector (Selector aSelector, [NullAllowed] NSObject anObject);
 
+		/// <param name="aSelector">To be added.</param>
+		/// <param name="object1">To be added.</param>
+		/// <param name="object2">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("performSelector:withObject:withObject:")]
 		NSObject PerformSelector (Selector aSelector, [NullAllowed] NSObject object1, [NullAllowed] NSObject object2);
@@ -12436,11 +12477,19 @@ namespace Foundation {
 		[Export ("isProxy")]
 		bool IsProxy { get; }
 
+		/// <param name="aClass">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("isKindOfClass:")]
 		bool IsKindOfClass ([NullAllowed] Class aClass);
 
+		/// <param name="aClass">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("isMemberOfClass:")]
@@ -12451,21 +12500,33 @@ namespace Foundation {
 		[Export ("conformsToProtocol:")]
 		bool ConformsToProtocol ([NullAllowed] NativeHandle /* Protocol */ aProtocol);
 
+		/// <param name="sel">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("respondsToSelector:")]
 		bool RespondsToSelector ([NullAllowed] Selector sel);
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("retain")]
 		NSObject DangerousRetain ();
 
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("release")]
 		void DangerousRelease ();
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("autorelease")]
@@ -14162,6 +14223,13 @@ namespace Foundation {
 		// 'GetItemProviderVisibility' is a nicer name, but there's a static method with that name.
 		NSItemProviderRepresentationVisibility GetItemProviderVisibilityForTypeIdentifier (string typeIdentifier);
 
+		/// <param name="typeIdentifier">A Universal Type Identifier (UTI) indicating the type of data to load.</param>
+		/// <param name="completionHandler">The method called after the data is loaded.</param>
+		/// <summary>Implement this method to customize the loading of data by an <see cref="T:Foundation.NSItemProvider" />.</summary>
+		/// <returns>An <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=T:Monotouch.Foundation.NSProgress&amp;scope=Xamarin" title="T:Monotouch.Foundation.NSProgress">T:Monotouch.Foundation.NSProgress</a></format> object reflecting the data-loading operation.</returns>
+		/// <remarks>
+		///           <para>The <paramref name="typeIdentifier" /> must be in the set of values returned by <see cref="M:Foundation.NSItemProviderWriting_Extensions.GetWritableTypeIdentifiersForItemProvider(Foundation.INSItemProviderWriting)" />.</para>
+		///         </remarks>
 		[Abstract]
 		[Async, Export ("loadDataWithTypeIdentifier:forItemProviderCompletionHandler:")]
 		[return: NullAllowed]
@@ -16509,14 +16577,22 @@ namespace Foundation {
 
 	[Protocol]
 	interface NSDiscardableContent {
+		/// <summary>Requests access to the content, and returns <see langword="true" /> if the contents are available and were successfully accessed. (Otherwise, returns <see langword="false" />.)</summary>
+		/// <returns>
+		///           <see langword="true" /> if the contents can be retrieved.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("beginContentAccess")]
 		bool BeginContentAccess ();
 
+		/// <summary>Indicates that access to the content is no longer needed.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("endContentAccess")]
 		void EndContentAccess ();
 
+		/// <summary>Discards the content if it is not being accessed.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("discardContentIfPossible")]
 		void DiscardContentIfPossible ();
@@ -17822,34 +17898,67 @@ namespace Foundation {
 	// only supposed to consume it. This is why there's no model for this protocol.
 	[Protocol (Name = "NSURLProtocolClient")]
 	interface NSUrlProtocolClient {
+		/// <param name="protocol">To be added.</param>
+		/// <param name="redirectedToEequest">To be added.</param>
+		/// <param name="redirectResponse">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("URLProtocol:wasRedirectedToRequest:redirectResponse:")]
 		void Redirected (NSUrlProtocol protocol, NSUrlRequest redirectedToEequest, NSUrlResponse redirectResponse);
 
+		/// <param name="protocol">To be added.</param>
+		/// <param name="cachedResponse">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("URLProtocol:cachedResponseIsValid:")]
 		void CachedResponseIsValid (NSUrlProtocol protocol, NSCachedUrlResponse cachedResponse);
 
+		/// <param name="protocol">To be added.</param>
+		/// <param name="response">To be added.</param>
+		/// <param name="policy">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("URLProtocol:didReceiveResponse:cacheStoragePolicy:")]
 		void ReceivedResponse (NSUrlProtocol protocol, NSUrlResponse response, NSUrlCacheStoragePolicy policy);
 
+		/// <param name="protocol">To be added.</param>
+		/// <param name="data">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("URLProtocol:didLoadData:")]
 		void DataLoaded (NSUrlProtocol protocol, NSData data);
 
+		/// <param name="protocol">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("URLProtocolDidFinishLoading:")]
 		void FinishedLoading (NSUrlProtocol protocol);
 
+		/// <param name="protocol">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("URLProtocol:didFailWithError:")]
 		void FailedWithError (NSUrlProtocol protocol, NSError error);
 
+		/// <param name="protocol">To be added.</param>
+		/// <param name="challenge">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("URLProtocol:didReceiveAuthenticationChallenge:")]
 		void ReceivedAuthenticationChallenge (NSUrlProtocol protocol, NSUrlAuthenticationChallenge challenge);
 
+		/// <param name="protocol">To be added.</param>
+		/// <param name="challenge">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("URLProtocol:didCancelAuthenticationChallenge:")]
 		void CancelledAuthenticationChallenge (NSUrlProtocol protocol, NSUrlAuthenticationChallenge challenge);
@@ -17964,6 +18073,11 @@ namespace Foundation {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSExtensionRequestHandling {
+		/// <param name="context">The <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=T:Monotouch.Foundation.NSExtensionContext&amp;scope=Xamarin" title="T:Monotouch.Foundation.NSExtensionContext">T:Monotouch.Foundation.NSExtensionContext</a></format> containing extension-relevant data.</param>
+		/// <summary>Developers can implement this method to prepare their extension for the host application request.</summary>
+		/// <remarks>
+		///           <para>Developers who implement this method must call <c>base.BeginRequestWithExtensionContext(context)</c> within their implementation.</para>
+		///         </remarks>
 		[Abstract]
 		// @required - (void)beginRequestWithExtensionContext:(NSExtensionContext *)context;
 		[Export ("beginRequestWithExtensionContext:")]
@@ -17973,10 +18087,14 @@ namespace Foundation {
 	[Protocol]
 	interface NSLocking {
 
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("lock")]
 		void Lock ();
 
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("unlock")]
 		void Unlock ();

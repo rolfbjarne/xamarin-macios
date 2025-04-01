@@ -89,10 +89,18 @@ namespace GameKit {
 	[Model]
 	[Protocol]
 	interface GKVoiceChatClient {
+		/// <param name="voiceChatService">To be added.</param>
+		/// <param name="data">To be added.</param>
+		/// <param name="toParticipant">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("voiceChatService:sendData:toParticipantID:")]
 		void SendData (GKVoiceChatService voiceChatService, NSData data, string toParticipant);
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("participantID")]
 		[Abstract]
 		string ParticipantID ();
@@ -1796,10 +1804,17 @@ namespace GameKit {
 	[Model]
 	[Protocol]
 	interface GKMatchmakerViewControllerDelegate {
+		/// <param name="viewController">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("matchmakerViewControllerWasCancelled:")]
 		void WasCancelled (GKMatchmakerViewController viewController);
 
+		/// <param name="viewController">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("matchmakerViewController:didFailWithError:"), EventArgs ("GKError")]
 		void DidFailWithError (GKMatchmakerViewController viewController, NSError error);
@@ -1807,12 +1822,20 @@ namespace GameKit {
 #if !NET && !XAMCORE_5_0
 		[Abstract]
 #endif
+		/// <param name="viewController">To be added.</param>
+		/// <param name="match">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("matchmakerViewController:didFindMatch:"), EventArgs ("GKMatch")]
 		void DidFindMatch (GKMatchmakerViewController viewController, GKMatch match);
 
 #if !NET && !XAMCORE_5_0
 		[Abstract]
 #endif
+		/// <param name="viewController">To be added.</param>
+		/// <param name="playerIDs">To be added.</param>
+		/// <summary>Developers should not use this deprecated method. Developers should use 'DidFindHostedPlayers' instead.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[Deprecated (PlatformName.iOS, 8, 0, message: "Use 'DidFindHostedPlayers' instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 10, message: "Use 'DidFindHostedPlayers' instead.")]
@@ -1824,6 +1847,10 @@ namespace GameKit {
 #if !NET && !XAMCORE_5_0
 		[Abstract]
 #endif
+		/// <param name="viewController">To be added.</param>
+		/// <param name="playerIDs">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("matchmakerViewController:didFindHostedPlayers:"), EventArgs ("GKMatchmakingPlayers")]
 		void DidFindHostedPlayers (GKMatchmakerViewController viewController, GKPlayer [] playerIDs);
@@ -2360,6 +2387,9 @@ namespace GameKit {
 	[MacCatalyst (13, 1)]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'GKLocalPlayer.RegisterListener' with an object that implements 'IGKTurnBasedEventListener'.")]
 	interface GKTurnBasedEventHandlerDelegate {
+		/// <param name="playersToInvite">To be added.</param>
+		/// <summary>Developers should not use this deprecated method. </summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("handleInviteFromGameCenter:")]
 		[Deprecated (PlatformName.iOS, 7, 0)]
@@ -2386,6 +2416,10 @@ namespace GameKit {
 		void HandleMatchEnded (GKTurnBasedMatch match);
 
 #if !MONOMAC || NET || XAMCORE_5_0
+		/// <param name="match">To be added.</param>
+		/// <param name="activated">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 #endif
 		[Export ("handleTurnEventForMatch:didBecomeActive:")]
@@ -2758,12 +2792,19 @@ namespace GameKit {
 	[Protocol]
 	interface GKTurnBasedMatchmakerViewControllerDelegate {
 #if !XAMCORE_5_0
+		/// <param name="viewController">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 #endif
 		[Export ("turnBasedMatchmakerViewControllerWasCancelled:")]
 		void WasCancelled (GKTurnBasedMatchmakerViewController viewController);
 
 #if !XAMCORE_5_0
+		/// <param name="viewController">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 #endif
 		[Export ("turnBasedMatchmakerViewController:didFailWithError:")]
@@ -2772,6 +2813,10 @@ namespace GameKit {
 #if !NET && !XAMCORE_5_0
 		[Abstract]
 #endif
+		/// <param name="viewController">To be added.</param>
+		/// <param name="match">To be added.</param>
+		/// <summary>Developers should not use this deprecated method. Developers should use 'GKTurnBasedEventListener.ReceivedTurnEvent' instead.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'GKTurnBasedEventListener.ReceivedTurnEvent' instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'GKTurnBasedEventListener.ReceivedTurnEvent' instead.")]
@@ -2783,6 +2828,10 @@ namespace GameKit {
 #if !NET && !XAMCORE_5_0
 		[Abstract]
 #endif
+		/// <param name="viewController">To be added.</param>
+		/// <param name="match">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'GKTurnBasedEventListener.WantsToQuitMatch' instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'GKTurnBasedEventListener.WantsToQuitMatch' instead.")]
@@ -2982,6 +3031,9 @@ namespace GameKit {
 	[BaseType (typeof (NSObject))]
 	[Protocol]
 	interface GKGameCenterControllerDelegate {
+		/// <param name="controller">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("gameCenterViewControllerDidFinish:")]
 		void Finished (GKGameCenterViewController controller);

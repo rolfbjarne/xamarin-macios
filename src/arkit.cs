@@ -1112,7 +1112,7 @@ namespace ARKit {
 	interface ARSessionDelegate : ARSessionObserver {
 
 		/// <include file="../docs/api/ARKit/ARSessionDelegate_Extensions.xml" path="/Documentation/Docs[@DocId='M:ARKit.ARSessionDelegate_Extensions.DidUpdateFrame(ARKit.IARSessionDelegate,ARKit.ARSession,ARKit.ARFrame)']/*" />
-	[Export ("session:didUpdateFrame:")]
+		[Export ("session:didUpdateFrame:")]
 		void DidUpdateFrame (ARSession session, ARFrame frame);
 
 		/// <param name="session">The session that is supplying the information for the event.</param>

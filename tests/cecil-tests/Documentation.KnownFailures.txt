@@ -11665,7 +11665,6 @@ M:Foundation.NSFileHandleConnectionAcceptedEventArgs.#ctor(Foundation.NSNotifica
 M:Foundation.NSFileHandleReadEventArgs.#ctor(Foundation.NSNotification)
 M:Foundation.NSFileManager.GetHomeDirectory(System.String)
 M:Foundation.NSFilePresenter_Extensions.AccommodatePresentedItemEviction(Foundation.INSFilePresenter,System.Action{Foundation.NSError})
-M:Foundation.NSFilePresenter_Extensions.GetPrimaryPresentedItemUrl(Foundation.INSFilePresenter)
 M:Foundation.NSFileProviderService.GetFileProviderConnectionAsync
 M:Foundation.NSFileSystemAttributes.op_Implicit(Foundation.NSFileSystemAttributes)~Foundation.NSDictionary
 M:Foundation.NSHost.op_Explicit(Foundation.NSHost)~System.Net.IPAddress
@@ -17222,8 +17221,6 @@ M:UIKit.UIApplicationDelegate_Extensions.DidDiscardSceneSessions(UIKit.IUIApplic
 M:UIKit.UIApplicationDelegate_Extensions.DidFailToContinueUserActivity(UIKit.IUIApplicationDelegate,UIKit.UIApplication,System.String,Foundation.NSError)
 M:UIKit.UIApplicationDelegate_Extensions.GetConfiguration(UIKit.IUIApplicationDelegate,UIKit.UIApplication,UIKit.UISceneSession,UIKit.UISceneConnectionOptions)
 M:UIKit.UIApplicationDelegate_Extensions.GetHandlerForIntent(UIKit.IUIApplicationDelegate,UIKit.UIApplication,Intents.INIntent)
-M:UIKit.UIApplicationDelegate_Extensions.GetWindow(UIKit.IUIApplicationDelegate)
-M:UIKit.UIApplicationDelegate_Extensions.SetWindow(UIKit.IUIApplicationDelegate,UIKit.UIWindow)
 M:UIKit.UIApplicationDelegate_Extensions.ShouldAutomaticallyLocalizeKeyCommands(UIKit.IUIApplicationDelegate,UIKit.UIApplication)
 M:UIKit.UIApplicationDelegate_Extensions.ShouldRestoreSecureApplicationState(UIKit.IUIApplicationDelegate,UIKit.UIApplication,Foundation.NSCoder)
 M:UIKit.UIApplicationDelegate_Extensions.ShouldSaveSecureApplicationState(UIKit.IUIApplicationDelegate,UIKit.UIApplication,Foundation.NSCoder)
@@ -18758,7 +18755,6 @@ P:AppKit.NSDiffableDataSourceSnapshot`2.ReconfiguredItemIdentifiers
 P:AppKit.NSDiffableDataSourceSnapshot`2.ReloadedItemIdentifiers
 P:AppKit.NSDiffableDataSourceSnapshot`2.ReloadedSectionIdentifiers
 P:AppKit.NSDocument.PresentedItemOperationQueue
-P:AppKit.NSDocument.PrimaryPresentedItemUrl
 P:AppKit.NSDrawer.AnnouncementRequestedNotification
 P:AppKit.NSDrawer.ApplicationActivatedNotification
 P:AppKit.NSDrawer.ApplicationDeactivatedNotification
@@ -20285,7 +20281,6 @@ P:BrowserEngineKit.IBETextInput.TextLastRect
 P:BrowserEngineKit.IBETextInput.UnobscuredContentRect
 P:BrowserEngineKit.IBETextInput.UnscaledView
 P:BrowserEngineKit.IBETextInput.WeakAsyncInputDelegate
-P:CarPlay.CPApplicationDelegate.Window
 P:CarPlay.CPButton.Enabled
 P:CarPlay.CPButton.MaximumImageSize
 P:CarPlay.CPGridTemplate.MaximumItems
@@ -23172,7 +23167,6 @@ P:FileProvider.NSFileProviderRequest.IsSystemRequest
 P:FileProvider.NSFileProviderRequest.RequestingExecutable
 P:Foundation.INSFilePresenter.PresentedItemOperationQueue
 P:Foundation.INSFilePresenter.PresentedItemUrl
-P:Foundation.INSFilePresenter.PrimaryPresentedItemUrl
 P:Foundation.INSObjectProtocol.DebugDescription
 P:Foundation.INSProgressReporting.Progress
 P:Foundation.LoadInPlaceResult.FileUrl
@@ -26186,7 +26180,6 @@ P:UIKit.INSTextStorageObserving.TextStorage
 P:UIKit.IUIAccessibilityContainer.AccessibilityContainerType
 P:UIKit.IUIActivityItemsConfigurationProviding.ActivityItemsConfiguration
 P:UIKit.IUIActivityItemsConfigurationReading.ItemProvidersForActivityItemsConfiguration
-P:UIKit.IUIApplicationDelegate.Window
 P:UIKit.IUIConfigurationState.TraitCollection
 P:UIKit.IUIContentView.Configuration
 P:UIKit.IUIContextMenuInteractionAnimating.PreviewViewController

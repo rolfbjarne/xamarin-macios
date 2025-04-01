@@ -1716,6 +1716,9 @@ namespace ModelIO {
 		[Export ("fillData:offset:")]
 		void FillData (NSData data, nuint offset);
 
+		/// <summary>Gets a mesh buffer map that provides read-only access to the data in the buffer.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("map")]
 		MDLMeshBufferMap Map { get; }
@@ -1874,6 +1877,9 @@ namespace ModelIO {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface MDLNamed {
+		/// <summary>Gets or sets the descriptive name of the named object.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("name")]
 		string Name { get; set; }
@@ -2140,6 +2146,9 @@ namespace ModelIO {
 		[Export ("count")]
 		nuint Count { get; }
 
+		/// <summary>Gets the list of objects that belong to this IMDLObjectContainerComponent.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("objects", ArgumentSemantic.Retain)]
 		MDLObject [] Objects { get; }
@@ -3189,6 +3198,9 @@ namespace ModelIO {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface MDLTransformComponent : MDLComponent {
+		/// <summary>Gets or sets the matrix of the transform at the earliest specified time.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("matrix", ArgumentSemantic.Assign)]
 		Matrix4 Matrix {
@@ -3205,10 +3217,16 @@ namespace ModelIO {
 		[Export ("resetsTransform")]
 		bool ResetsTransform { get; set; }
 
+		/// <summary>Gets the first specified time in the transformation.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("minimumTime")]
 		double MinimumTime { get; }
 
+		/// <summary>Gets the last specified time in the transformation.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("maximumTime")]
 		double MaximumTime { get; }
@@ -4572,6 +4590,9 @@ namespace ModelIO {
 	[Protocol]
 	interface MDLTransformOp {
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("name")]
 		string Name { get; }
@@ -4594,6 +4615,9 @@ namespace ModelIO {
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		NMatrix4d GetNMatrix4d (double atTime);
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("IsInverseOp")]
 		bool IsInverseOp { get; }

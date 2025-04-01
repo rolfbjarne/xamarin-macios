@@ -568,14 +568,23 @@ namespace FileProvider {
 	[Protocol]
 	interface NSFileProviderItem {
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("itemIdentifier")]
 		string Identifier { get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("parentItemIdentifier")]
 		string ParentIdentifier { get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("filename")]
 		string Filename { get; }
@@ -584,6 +593,9 @@ namespace FileProvider {
 		// became optional when deprecated
 		[Abstract]
 #endif
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 14, 0, message: "Use 'GetContentType' instead.")]
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "Use 'GetContentType' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 14, 0, message: "Use 'GetContentType' instead.")]
@@ -1055,6 +1067,9 @@ namespace FileProvider {
 	[Protocol]
 	interface NSFileProviderServiceSource {
 
+		/// <summary>Gets the unique service name.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("serviceName")]
 		string ServiceName { get; }

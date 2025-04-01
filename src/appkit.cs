@@ -24225,6 +24225,9 @@ namespace AppKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface NSTouchBarProvider {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("touchBar", ArgumentSemantic.Strong)]
 		NSTouchBar TouchBar { get; }

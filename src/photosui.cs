@@ -64,6 +64,9 @@ namespace PhotosUI {
 		[Export ("cancelContentEditing")]
 		void CancelContentEditing ();
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("shouldShowCancelConfirmation")]
 		bool ShouldShowCancelConfirmation { get; }

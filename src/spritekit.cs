@@ -3391,10 +3391,16 @@ namespace SpriteKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface SKWarpable {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("warpGeometry", ArgumentSemantic.Assign)]
 		SKWarpGeometry WarpGeometry { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("subdivisionLevels")]
 		nint SubdivisionLevels { get; set; }

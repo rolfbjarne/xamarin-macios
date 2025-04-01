@@ -5339,6 +5339,9 @@ namespace WebKit {
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "WKURLSchemeTask")]
 	interface WKUrlSchemeTask {
+		/// <summary>Gets the request.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("request", ArgumentSemantic.Copy)]
 		NSUrlRequest Request { get; }
@@ -6520,6 +6523,9 @@ namespace WebKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface WKPreviewActionItem : UIPreviewActionItem {
+		/// <summary>Gets the unique identifier of the preview action type.</summary>
+		/// <value>The unique identifier of the preview action type.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("identifier", ArgumentSemantic.Copy)]
 		NSString Identifier { get; }

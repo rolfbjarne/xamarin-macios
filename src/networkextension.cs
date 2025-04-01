@@ -1425,6 +1425,9 @@ namespace NetworkExtension {
 	[Category]
 	[BaseType (typeof (NSMutableUrlRequest))]
 	interface NSMutableURLRequest_NEHotspotHelper {
+		/// <param name="command">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("bindToHotspotHelperCommand:")]
 		void BindTo (NEHotspotHelperCommand command);
 	}

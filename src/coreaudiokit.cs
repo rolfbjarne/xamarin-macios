@@ -88,9 +88,16 @@ namespace CoreAudioKit {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (AUAudioUnit))]
 	interface AUAudioUnitViewControllerExtensions {
+		/// <param name="availableViewConfigurations">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("supportedViewConfigurations:")]
 		NSIndexSet GetSupportedViewConfigurations (AUAudioUnitViewConfiguration [] availableViewConfigurations);
 
+		/// <param name="viewConfiguration">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("selectViewConfiguration:")]
 		void SelectViewConfiguration (AUAudioUnitViewConfiguration viewConfiguration);
 	}

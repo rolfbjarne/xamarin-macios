@@ -5652,19 +5652,39 @@ namespace AVFoundation {
 	[BaseType (typeof (AVFragmentedAsset))]
 	interface AVFragmentedAsset_AVFragmentedAssetTrackInspection {
 
+		/// <param name="trackID">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("trackWithTrackID:")]
 		[return: NullAllowed]
 		AVFragmentedAssetTrack GetTrack (int trackID);
 
+		/// <param name="mediaType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tracksWithMediaType:")]
 		AVFragmentedAssetTrack [] GetTracks (string mediaType);
 
+		/// <param name="mediaType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.GetTracks (mediaType.GetConstant ())")]
 		AVFragmentedAssetTrack [] GetTracks (AVMediaTypes mediaType);
 
+		/// <param name="mediaCharacteristic">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tracksWithMediaCharacteristic:")]
 		AVFragmentedAssetTrack [] GetTracksWithMediaCharacteristic (string mediaCharacteristic);
 
+		/// <param name="mediaCharacteristic">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.GetTracksWithMediaCharacteristic (mediaCharacteristic.GetConstant ())")]
 		AVFragmentedAssetTrack [] GetTracks (AVMediaCharacteristics mediaCharacteristic);
 
@@ -12340,15 +12360,31 @@ namespace AVFoundation {
 	[Category]
 	[BaseType (typeof (AVMovie))]
 	interface AVMovie_AVMovieMovieHeaderSupport {
+		/// <param name="fileType">To be added.</param>
+		/// <param name="outError">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("movieHeaderWithFileType:error:")]
 		[return: NullAllowed]
 		NSData GetMovieHeader (string fileType, [NullAllowed] out NSError outError);
 
+		/// <param name="URL">To be added.</param>
+		/// <param name="fileType">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="outError">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("writeMovieHeaderToURL:fileType:options:error:")]
 		bool WriteMovieHeader (NSUrl URL, string fileType, AVMovieWritingOptions options, [NullAllowed] out NSError outError);
 
+		/// <param name="fileType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("isCompatibleWithFileType:")]
 		bool IsCompatibleWithFileType (string fileType);
@@ -12359,19 +12395,39 @@ namespace AVFoundation {
 	[Category]
 	[BaseType (typeof (AVMovie))]
 	interface AVMovie_AVMovieTrackInspection {
+		/// <param name="trackID">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("trackWithTrackID:")]
 		[return: NullAllowed]
 		AVMovieTrack GetTrack (int trackID);
 
+		/// <param name="mediaType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tracksWithMediaType:")]
 		AVMovieTrack [] GetTracks (string mediaType);
 
+		/// <param name="mediaType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.GetTracks (mediaType.GetConstant ())")]
 		AVMovieTrack [] GetTracks (AVMediaTypes mediaType);
 
+		/// <param name="mediaCharacteristic">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tracksWithMediaCharacteristic:")]
 		AVMovieTrack [] GetTracksWithMediaCharacteristic (string mediaCharacteristic);
 
+		/// <param name="mediaCharacteristic">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.GetTracksWithMediaCharacteristic (mediaCharacteristic.GetConstant ())")]
 		AVMovieTrack [] GetTracks (AVMediaCharacteristics mediaCharacteristic);
 
@@ -12496,15 +12552,33 @@ namespace AVFoundation {
 	[Category]
 	[BaseType (typeof (AVMutableMovie))]
 	interface AVMutableMovie_AVMutableMovieMovieLevelEditing {
+		/// <param name="timeRange">To be added.</param>
+		/// <param name="asset">To be added.</param>
+		/// <param name="startTime">To be added.</param>
+		/// <param name="copySampleData">To be added.</param>
+		/// <param name="outError">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("insertTimeRange:ofAsset:atTime:copySampleData:error:")]
 		bool InsertTimeRange (CMTimeRange timeRange, AVAsset asset, CMTime startTime, bool copySampleData, [NullAllowed] out NSError outError);
 
+		/// <param name="timeRange">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("insertEmptyTimeRange:")]
 		void InsertEmptyTimeRange (CMTimeRange timeRange);
 
+		/// <param name="timeRange">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("removeTimeRange:")]
 		void RemoveTimeRange (CMTimeRange timeRange);
 
+		/// <param name="timeRange">To be added.</param>
+		/// <param name="duration">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("scaleTimeRange:toDuration:")]
 		void ScaleTimeRange (CMTimeRange timeRange, CMTime duration);
 	}
@@ -12514,17 +12588,35 @@ namespace AVFoundation {
 	[Category]
 	[BaseType (typeof (AVMutableMovie))]
 	interface AVMutableMovie_AVMutableMovieTrackLevelEditing {
+		/// <param name="track">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("mutableTrackCompatibleWithTrack:")]
 		[return: NullAllowed]
 		AVMutableMovieTrack GetMutableTrack (AVAssetTrack track);
 
+		/// <param name="mediaType">To be added.</param>
+		/// <param name="track">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("addMutableTrackWithMediaType:copySettingsFromTrack:options:")]
 		[return: NullAllowed]
 		AVMutableMovieTrack AddMutableTrack (string mediaType, [NullAllowed] AVAssetTrack track, [NullAllowed] NSDictionary<NSString, NSObject> options);
 
+		/// <param name="existingTracks">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("addMutableTracksCopyingSettingsFromTracks:options:")]
 		AVMutableMovieTrack [] AddMutableTracks (AVAssetTrack [] existingTracks, [NullAllowed] NSDictionary<NSString, NSObject> options);
 
+		/// <param name="track">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("removeTrack:")]
 		void RemoveTrack (AVMovieTrack track);
 	}
@@ -12534,19 +12626,39 @@ namespace AVFoundation {
 	[Category]
 	[BaseType (typeof (AVMutableMovie))]
 	interface AVMutableMovie_AVMutableMovieTrackInspection {
+		/// <param name="trackID">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("trackWithTrackID:")]
 		[return: NullAllowed]
 		AVMutableMovieTrack GetTrack (int trackID);
 
+		/// <param name="mediaType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tracksWithMediaType:")]
 		AVMutableMovieTrack [] GetTracks (string mediaType);
 
+		/// <param name="mediaType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.GetTracks (mediaType.GetConstant ())")]
 		AVMutableMovieTrack [] GetTracks (AVMediaTypes mediaType);
 
+		/// <param name="mediaCharacteristic">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tracksWithMediaCharacteristic:")]
 		AVMutableMovieTrack [] GetTracksWithMediaCharacteristic (string mediaCharacteristic);
 
+		/// <param name="mediaCharacteristic">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.GetTracksWithMediaCharacteristic (mediaCharacteristic.GetConstant ())")]
 		AVMutableMovieTrack [] GetTracks (AVMediaCharacteristics mediaCharacteristic);
 	}
@@ -12608,19 +12720,39 @@ namespace AVFoundation {
 	[Category]
 	[BaseType (typeof (AVFragmentedMovie))]
 	interface AVFragmentedMovie_AVFragmentedMovieTrackInspection {
+		/// <param name="trackID">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("trackWithTrackID:")]
 		[return: NullAllowed]
 		AVFragmentedMovieTrack GetTrack (int trackID);
 
+		/// <param name="mediaType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tracksWithMediaType:")]
 		AVFragmentedMovieTrack [] GetTracks (string mediaType);
 
+		/// <param name="mediaType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.GetTracks (mediaType.GetConstant ())")]
 		AVFragmentedMovieTrack [] GetTracks (AVMediaTypes mediaType);
 
+		/// <param name="mediaCharacteristic">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tracksWithMediaCharacteristic:")]
 		AVFragmentedMovieTrack [] GetTracksWithMediaCharacteristic (string mediaCharacteristic);
 
+		/// <param name="mediaCharacteristic">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.GetTracksWithMediaCharacteristic (mediaCharacteristic.GetConstant ())")]
 		AVFragmentedMovieTrack [] GetTracks (AVMediaCharacteristics mediaCharacteristic);
 
@@ -12808,15 +12940,33 @@ namespace AVFoundation {
 	[Category]
 	[BaseType (typeof (AVMutableMovieTrack))]
 	interface AVMutableMovieTrack_AVMutableMovieTrack_TrackLevelEditing {
+		/// <param name="timeRange">To be added.</param>
+		/// <param name="track">To be added.</param>
+		/// <param name="startTime">To be added.</param>
+		/// <param name="copySampleData">To be added.</param>
+		/// <param name="outError">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("insertTimeRange:ofTrack:atTime:copySampleData:error:")]
 		bool InsertTimeRange (CMTimeRange timeRange, AVAssetTrack track, CMTime startTime, bool copySampleData, [NullAllowed] out NSError outError);
 
+		/// <param name="timeRange">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("insertEmptyTimeRange:")]
 		void InsertEmptyTimeRange (CMTimeRange timeRange);
 
+		/// <param name="timeRange">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("removeTimeRange:")]
 		void RemoveTimeRange (CMTimeRange timeRange);
 
+		/// <param name="timeRange">To be added.</param>
+		/// <param name="duration">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("scaleTimeRange:toDuration:")]
 		void ScaleTimeRange (CMTimeRange timeRange, CMTime duration);
 	}
@@ -12826,9 +12976,17 @@ namespace AVFoundation {
 	[Category]
 	[BaseType (typeof (AVMutableMovieTrack))]
 	interface AVMutableMovieTrack_AVMutableMovieTrackTrackAssociations {
+		/// <param name="movieTrack">To be added.</param>
+		/// <param name="trackAssociationType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("addTrackAssociationToTrack:type:")]
 		void AddTrackAssociation (AVMovieTrack movieTrack, string trackAssociationType);
 
+		/// <param name="movieTrack">To be added.</param>
+		/// <param name="trackAssociationType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("removeTrackAssociationToTrack:type:")]
 		void RemoveTrackAssociation (AVMovieTrack movieTrack, string trackAssociationType);
 	}
@@ -13165,19 +13323,39 @@ namespace AVFoundation {
 	[BaseType (typeof (AVComposition))]
 	interface AVComposition_AVCompositionTrackInspection {
 
+		/// <param name="trackID">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("trackWithTrackID:")]
 		[return: NullAllowed]
 		AVCompositionTrack GetTrack (int trackID);
 
+		/// <param name="mediaType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tracksWithMediaType:")]
 		AVCompositionTrack [] GetTracks (string mediaType);
 
+		/// <param name="mediaType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.GetTracks (mediaType.GetConstant ())")]
 		AVCompositionTrack [] GetTracks (AVMediaTypes mediaType);
 
+		/// <param name="mediaCharacteristic">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tracksWithMediaCharacteristic:")]
 		AVCompositionTrack [] GetTracksWithMediaCharacteristic (string mediaCharacteristic);
 
+		/// <param name="mediaCharacteristic">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.GetTracksWithMediaCharacteristic (mediaCharacteristic.GetConstant ())")]
 		AVCompositionTrack [] GetTracks (AVMediaCharacteristics mediaCharacteristic);
 
@@ -13259,19 +13437,39 @@ namespace AVFoundation {
 	[BaseType (typeof (AVMutableComposition))]
 	interface AVMutableComposition_AVMutableCompositionTrackInspection {
 
+		/// <param name="trackID">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("trackWithTrackID:")]
 		[return: NullAllowed]
 		AVMutableCompositionTrack GetTrack (int trackID);
 
+		/// <param name="mediaType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tracksWithMediaType:")]
 		AVMutableCompositionTrack [] GetTracks (string mediaType);
 
+		/// <param name="mediaType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.GetTracks (mediaType.GetConstant ())")]
 		AVMutableCompositionTrack [] GetTracks (AVMediaTypes mediaType);
 
+		/// <param name="mediaCharacteristic">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tracksWithMediaCharacteristic:")]
 		AVMutableCompositionTrack [] GetTracksWithMediaCharacteristic (string mediaCharacteristic);
 
+		/// <param name="mediaCharacteristic">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.GetTracksWithMediaCharacteristic (mediaCharacteristic.GetConstant ())")]
 		AVMutableCompositionTrack [] GetTracks (AVMediaCharacteristics mediaCharacteristic);
 
@@ -19418,14 +19616,23 @@ namespace AVFoundation {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (AVPlayerItem))]
 	interface AVPlayerItem_AVPlayerItemProtectedContent {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("isAuthorizationRequiredForPlayback")]
 		bool IsAuthorizationRequiredForPlayback ();
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("isApplicationAuthorizedForPlayback")]
 		bool IsApplicationAuthorizedForPlayback ();
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("isContentAuthorizedForPlayback")]
 		bool IsContentAuthorizedForPlayback ();
@@ -22626,12 +22833,21 @@ namespace AVFoundation {
 	[Category]
 	[BaseType (typeof (AVContentKeySession))]
 	interface AVContentKeySession_AVContentKeyRecipients {
+		/// <param name="recipient">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("addContentKeyRecipient:")]
 		void Add (IAVContentKeyRecipient recipient);
 
+		/// <param name="recipient">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("removeContentKeyRecipient:")]
 		void Remove (IAVContentKeyRecipient recipient);
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("contentKeyRecipients")]
 		IAVContentKeyRecipient [] GetContentKeyRecipients ();
 	}
@@ -22727,6 +22943,9 @@ namespace AVFoundation {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (AVContentKeyRequest))]
 	interface AVContentKeyRequest_AVContentKeyRequestRenewal {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("renewsExpiringResponseData")]
 		bool GetRenewsExpiringResponseData ();
 	}

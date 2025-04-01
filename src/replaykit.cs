@@ -456,9 +456,20 @@ namespace ReplayKit {
 	[Category]
 	[BaseType (typeof (NSExtensionContext))]
 	interface NSExtensionContext_RPBroadcastExtension {
+		/// <param name="handler">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("loadBroadcastingApplicationInfoWithCompletion:")]
 		void LoadBroadcastingApplicationInfo (LoadBroadcastingHandler handler);
 
+		/// <param name="broadcastURL">To be added.</param>
+		/// <param name="broadcastConfiguration">To be added.</param>
+		/// <param name="setupInfo">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>Developers should not use this deprecated method. Developers should use 'CompleteRequest(NSUrl,NSDictionary&lt;NSString,INSCoding&gt;)' instead.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.TvOS, 11, 0, message: "Use 'CompleteRequest(NSUrl,NSDictionary<NSString,INSCoding>)' instead.")]
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'CompleteRequest(NSUrl,NSDictionary<NSString,INSCoding>)' instead.")]
 		[NoMac]
@@ -467,6 +478,13 @@ namespace ReplayKit {
 		[Export ("completeRequestWithBroadcastURL:broadcastConfiguration:setupInfo:")]
 		void CompleteRequest (NSUrl broadcastURL, RPBroadcastConfiguration broadcastConfiguration, [NullAllowed] NSDictionary<NSString, INSCoding> setupInfo);
 
+		/// <param name="broadcastURL">To be added.</param>
+		/// <param name="setupInfo">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("completeRequestWithBroadcastURL:setupInfo:")]
 		void CompleteRequest (NSUrl broadcastURL, [NullAllowed] NSDictionary<NSString, INSCoding> setupInfo);

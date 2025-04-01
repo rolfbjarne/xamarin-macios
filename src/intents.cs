@@ -9250,6 +9250,9 @@ namespace Intents {
 	[BaseType (typeof (NSUserActivity))]
 	interface NSUserActivity_IntentsAdditions {
 
+		/// <summary>Retrieves the <see cref="T:Intents.INInteraction" /> associated with <c>this</c><see cref="T:Foundation.NSUserActivity" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[return: NullAllowed]
 		[Export ("interaction")]

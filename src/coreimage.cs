@@ -637,31 +637,71 @@ namespace CoreImage {
 	[BaseType (typeof (CIContext))]
 	interface CIContext_ImageRepresentation {
 
+		/// <param name="image">The image input to be processed.</param>
+		/// <param name="format">The desired pixel format.</param>
+		/// <param name="colorSpace">The color space to be used.</param>
+		/// <param name="options">Processing arguments.</param>
+		/// <summary>Applies the processing of this context to the <paramref name="image" /> and returns a TIFF image of the result.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("TIFFRepresentationOfImage:format:colorSpace:options:")]
 		[return: NullAllowed]
 		NSData GetTiffRepresentation (CIImage image, CIFormat format, CGColorSpace colorSpace, NSDictionary options);
 
+		/// <param name="image">To be added.</param>
+		/// <param name="format">To be added.</param>
+		/// <param name="colorSpace">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Wrap ("GetTiffRepresentation (This, image, format, colorSpace, options.GetDictionary ()!)")]
 		[return: NullAllowed]
 		NSData GetTiffRepresentation (CIImage image, CIFormat format, CGColorSpace colorSpace, CIImageRepresentationOptions options);
 
+		/// <param name="image">The image input to be processed.</param>
+		/// <param name="colorSpace">The color space to be used.</param>
+		/// <param name="options">Processing arguments.</param>
+		/// <summary>Applies the processing of this context to the <paramref name="image" /> and returns a JPEG image of the result.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("JPEGRepresentationOfImage:colorSpace:options:")]
 		[return: NullAllowed]
 		NSData GetJpegRepresentation (CIImage image, CGColorSpace colorSpace, NSDictionary options);
 
+		/// <param name="image">To be added.</param>
+		/// <param name="colorSpace">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Wrap ("GetJpegRepresentation (This, image, colorSpace, options.GetDictionary ()!)")]
 		[return: NullAllowed]
 		NSData GetJpegRepresentation (CIImage image, CGColorSpace colorSpace, CIImageRepresentationOptions options);
 
+		/// <param name="image">To be added.</param>
+		/// <param name="format">To be added.</param>
+		/// <param name="colorSpace">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("HEIFRepresentationOfImage:format:colorSpace:options:")]
 		[return: NullAllowed]
 		NSData GetHeifRepresentation (CIImage image, CIFormat format, CGColorSpace colorSpace, NSDictionary options);
 
+		/// <param name="image">To be added.</param>
+		/// <param name="format">To be added.</param>
+		/// <param name="colorSpace">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Wrap ("GetHeifRepresentation (This, image, format, colorSpace, options.GetDictionary ()!)")]
 		[return: NullAllowed]
@@ -677,36 +717,108 @@ namespace CoreImage {
 		[return: NullAllowed]
 		NSData GetHeif10Representation (CIImage image, CGColorSpace colorSpace, CIImageRepresentationOptions options, [NullAllowed] out NSError error);
 
+		/// <param name="image">To be added.</param>
+		/// <param name="format">To be added.</param>
+		/// <param name="colorSpace">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("PNGRepresentationOfImage:format:colorSpace:options:")]
 		[return: NullAllowed]
 		NSData GetPngRepresentation (CIImage image, CIFormat format, CGColorSpace colorSpace, NSDictionary options);
 
+		/// <param name="image">To be added.</param>
+		/// <param name="format">To be added.</param>
+		/// <param name="colorSpace">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Wrap ("GetPngRepresentation (This, image, format, colorSpace, options.GetDictionary ()!)")]
 		[return: NullAllowed]
 		NSData GetPngRepresentation (CIImage image, CIFormat format, CGColorSpace colorSpace, CIImageRepresentationOptions options);
 
+		/// <param name="image">The image input to be processed.</param>
+		/// <param name="url">To be added.</param>
+		/// <param name="format">The desired pixel format.</param>
+		/// <param name="colorSpace">The color space to be used.</param>
+		/// <param name="options">Processing arguments.</param>
+		/// <param name="error">If not <see langword="null" />, error that occurred during processing.</param>
+		/// <summary>Applies the processing of this context to the <paramref name="image" /> and writes a TIFF image of the result to <paramref name="url" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("writeTIFFRepresentationOfImage:toURL:format:colorSpace:options:error:")]
 		bool WriteTiffRepresentation (CIImage image, NSUrl url, CIFormat format, CGColorSpace colorSpace, NSDictionary options, out NSError error);
 
+		/// <param name="image">To be added.</param>
+		/// <param name="url">To be added.</param>
+		/// <param name="format">To be added.</param>
+		/// <param name="colorSpace">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Wrap ("WriteTiffRepresentation (This, image, url, format, colorSpace, options.GetDictionary ()!, out error)")]
 		bool WriteTiffRepresentation (CIImage image, NSUrl url, CIFormat format, CGColorSpace colorSpace, CIImageRepresentationOptions options, out NSError error);
 
+		/// <param name="image">The image input to be processed.</param>
+		/// <param name="url">The file URL to which the image should be written.</param>
+		/// <param name="colorSpace">The color space to be used.</param>
+		/// <param name="options">Processing arguments.</param>
+		/// <param name="error">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>Applies the processing of this context to the <paramref name="image" /> and writes a JPEG image of the result to <paramref name="url" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("writeJPEGRepresentationOfImage:toURL:colorSpace:options:error:")]
 		bool WriteJpegRepresentation (CIImage image, NSUrl url, CGColorSpace colorSpace, NSDictionary options, [NullAllowed] out NSError error);
 
+		/// <param name="image">To be added.</param>
+		/// <param name="url">To be added.</param>
+		/// <param name="colorSpace">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Wrap ("WriteJpegRepresentation (This, image, url, colorSpace, options.GetDictionary ()!, out error)")]
 		bool WriteJpegRepresentation (CIImage image, NSUrl url, CGColorSpace colorSpace, CIImageRepresentationOptions options, [NullAllowed] out NSError error);
 
+		/// <param name="image">To be added.</param>
+		/// <param name="url">To be added.</param>
+		/// <param name="format">To be added.</param>
+		/// <param name="colorSpace">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="error">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("writeHEIFRepresentationOfImage:toURL:format:colorSpace:options:error:")]
 		bool WriteHeifRepresentation (CIImage image, NSUrl url, CIFormat format, CGColorSpace colorSpace, NSDictionary options, [NullAllowed] out NSError error);
 
+		/// <param name="image">To be added.</param>
+		/// <param name="url">To be added.</param>
+		/// <param name="format">To be added.</param>
+		/// <param name="colorSpace">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Wrap ("WriteHeifRepresentation (This, image, url, format, colorSpace, options.GetDictionary ()!, out error)")]
 		bool WriteHeifRepresentation (CIImage image, NSUrl url, CIFormat format, CGColorSpace colorSpace, CIImageRepresentationOptions options, [NullAllowed] out NSError error);
@@ -719,10 +831,31 @@ namespace CoreImage {
 		[Wrap ("WriteHeif10Representation (This, image, url, colorSpace, options.GetDictionary ()!, out error)")]
 		bool WriteHeif10Representation (CIImage image, NSUrl url, CGColorSpace colorSpace, CIImageRepresentationOptions options, [NullAllowed] out NSError error);
 
+		/// <param name="image">To be added.</param>
+		/// <param name="url">To be added.</param>
+		/// <param name="format">To be added.</param>
+		/// <param name="colorSpace">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="error">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("writePNGRepresentationOfImage:toURL:format:colorSpace:options:error:")]
 		bool WritePngRepresentation (CIImage image, NSUrl url, CIFormat format, CGColorSpace colorSpace, NSDictionary options, [NullAllowed] out NSError error);
 
+		/// <param name="image">To be added.</param>
+		/// <param name="url">To be added.</param>
+		/// <param name="format">To be added.</param>
+		/// <param name="colorSpace">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Wrap ("WritePngRepresentation (This, image, url, format, colorSpace, options.GetDictionary ()!, out error)")]
 		bool WritePngRepresentation (CIImage image, NSUrl url, CIFormat format, CGColorSpace colorSpace, CIImageRepresentationOptions options, [NullAllowed] out NSError error);
@@ -733,18 +866,36 @@ namespace CoreImage {
 	[BaseType (typeof (CIContext))]
 	interface CIContext_CIDepthBlurEffect {
 		// as per the docs: The 'options' parameter is a key value/pair reserved for future use.
+		/// <param name="url">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("depthBlurEffectFilterForImageURL:options:")]
 		[return: NullAllowed]
 		CIFilter GetDepthBlurEffectFilter (NSUrl url, [NullAllowed] NSDictionary options);
 
 		// as per the docs: The 'options' parameter is a key value/pair reserved for future use.
+		/// <param name="data">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("depthBlurEffectFilterForImageData:options:")]
 		[return: NullAllowed]
 		CIFilter GetDepthBlurEffectFilter (NSData data, [NullAllowed] NSDictionary options);
 
 		// as per the docs: The 'options' parameter is a key value/pair reserved for future use.
+		/// <param name="image">To be added.</param>
+		/// <param name="disparityImage">To be added.</param>
+		/// <param name="portraitEffectsMatte">To be added.</param>
+		/// <param name="orientation">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("depthBlurEffectFilterForImage:disparityImage:portraitEffectsMatte:orientation:options:")]
 		[return: NullAllowed]
@@ -8508,17 +8659,56 @@ namespace CoreImage {
 	[BaseType (typeof (CIContext))]
 	interface CIContext_CIRenderDestination {
 
+		/// <param name="image">To be added.</param>
+		/// <param name="fromRect">To be added.</param>
+		/// <param name="destination">To be added.</param>
+		/// <param name="atPoint">To be added.</param>
+		/// <param name="error">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("prepareRender:fromRect:toDestination:atPoint:error:")]
 		bool PrepareRender (CIImage image, CGRect fromRect, CIRenderDestination destination, CGPoint atPoint, [NullAllowed] out NSError error);
 
+		/// <param name="image">To be added.</param>
+		/// <param name="fromRect">To be added.</param>
+		/// <param name="destination">To be added.</param>
+		/// <param name="atPoint">To be added.</param>
+		/// <param name="error">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("startTaskToRender:fromRect:toDestination:atPoint:error:")]
 		[return: NullAllowed]
 		CIRenderTask StartTaskToRender (CIImage image, CGRect fromRect, CIRenderDestination destination, CGPoint atPoint, [NullAllowed] out NSError error);
 
+		/// <param name="image">To be added.</param>
+		/// <param name="destination">To be added.</param>
+		/// <param name="error">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("startTaskToRender:toDestination:error:")]
 		[return: NullAllowed]
 		CIRenderTask StartTaskToRender (CIImage image, CIRenderDestination destination, [NullAllowed] out NSError error);
 
+		/// <param name="destination">To be added.</param>
+		/// <param name="error">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("startTaskToClear:error:")]
 		[return: NullAllowed]
 		CIRenderTask StartTaskToClear (CIRenderDestination destination, [NullAllowed] out NSError error);

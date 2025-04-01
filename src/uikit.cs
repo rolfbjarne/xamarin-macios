@@ -9466,6 +9466,9 @@ namespace UIKit {
 		[Export ("inputDelegate", ArgumentSemantic.Assign), NullAllowed]
 		NSObject WeakInputDelegate { get; set; }
 
+		/// <summary>The input delegate object for this <see cref="T:UIKit.UITextField" />.</summary>
+		/// <value>The default value is a system-provided <see cref="T:UIKit.UITextInputDelegate" />.</value>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("WeakInputDelegate")]
 		IUITextInputDelegate InputDelegate { get; set; }
 
@@ -9476,6 +9479,10 @@ namespace UIKit {
 		[Export ("tokenizer")]
 		NSObject WeakTokenizer { get; }
 
+		/// <summary>This property provides information on the tokenizer that would be used to break up the text into units such as characters, words, lines, and paragraphs.</summary>
+		/// <value>
+		///         </value>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("WeakTokenizer")]
 		IUITextInputTokenizer Tokenizer { get; }
 
@@ -26080,6 +26087,9 @@ namespace UIKit {
 		// Radar: 26825293
 		//
 #if NET
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 #endif
 		[MacCatalyst (13, 1)]
@@ -26094,6 +26104,9 @@ namespace UIKit {
 
 		// FIXME: declared as a @required, but this breaks compatibility
 		// Radar: 41121293
+		/// <summary>Gets the parent focus environment.</summary>
+		/// <value>The parent focus environment.</value>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 #if NET
 		[Abstract]
@@ -26101,6 +26114,9 @@ namespace UIKit {
 		[NullAllowed, Export ("parentFocusEnvironment", ArgumentSemantic.Weak)]
 		IUIFocusEnvironment ParentFocusEnvironment { get; }
 
+		/// <summary>Gets the container that manages focus information for child focus items.</summary>
+		/// <value>The container that manages focus information for child focus items.</value>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 #if NET
 		[Abstract]

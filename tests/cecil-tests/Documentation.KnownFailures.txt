@@ -11573,9 +11573,7 @@ M:CoreAnimation.ICAMetalDisplayLinkDelegate.NeedsUpdate(CoreAnimation.CAMetalDis
 M:CoreAudioKit.AUAudioUnitViewControllerExtensions.GetSupportedViewConfigurations(AudioUnit.AUAudioUnit,CoreAudioKit.AUAudioUnitViewConfiguration[])
 M:CoreAudioKit.AUAudioUnitViewControllerExtensions.SelectViewConfiguration(AudioUnit.AUAudioUnit,CoreAudioKit.AUAudioUnitViewConfiguration)
 M:CoreAudioKit.AUGenericViewController.#ctor(System.String,Foundation.NSBundle)
-M:CoreAudioKit.CAInterAppAudioSwitcherView.#ctor(CoreGraphics.CGRect)
 M:CoreAudioKit.CAInterAppAudioSwitcherView.CAInterAppAudioSwitcherViewAppearance.#ctor(System.IntPtr)
-M:CoreAudioKit.CAInterAppAudioTransportView.#ctor(CoreGraphics.CGRect)
 M:CoreAudioKit.CAInterAppAudioTransportView.CAInterAppAudioTransportViewAppearance.#ctor(System.IntPtr)
 M:CoreBluetooth.AdvertisementData.#ctor
 M:CoreBluetooth.AdvertisementData.#ctor(Foundation.NSDictionary)
@@ -12403,8 +12401,6 @@ M:CoreImage.CIContext_ImageRepresentation.WriteTiffRepresentation(CoreImage.CICo
 M:CoreImage.CIContext_ImageRepresentation.WriteTiffRepresentation(CoreImage.CIContext,CoreImage.CIImage,Foundation.NSUrl,CoreImage.CIFormat,CoreGraphics.CGColorSpace,Foundation.NSDictionary,Foundation.NSError@)
 M:CoreImage.CIContext.Create(Metal.IMTLCommandQueue,Foundation.NSDictionary{Foundation.NSString,Foundation.NSObject})
 M:CoreImage.CIContext.Create(Metal.IMTLCommandQueue)
-M:CoreImage.CIContext.FromContext(OpenGLES.EAGLContext,Foundation.NSDictionary)
-M:CoreImage.CIContext.FromContext(OpenGLES.EAGLContext)
 M:CoreImage.CIContext.GetOpenEXRRepresentation(CoreImage.CIImage,Foundation.NSDictionary{Foundation.NSString,Foundation.NSObject},Foundation.NSError@)
 M:CoreImage.CIContext.RenderToBitmap(CoreImage.CIImage,System.IntPtr,System.IntPtr,CoreGraphics.CGRect,System.Int32,CoreGraphics.CGColorSpace)
 M:CoreImage.CIContext.WriteOpenExrRepresentation(CoreImage.CIImage,Foundation.NSUrl,Foundation.NSDictionary{Foundation.NSString,Foundation.NSObject},Foundation.NSError@)
@@ -28929,7 +28925,6 @@ P:Foundation.NSStream.Item(Foundation.NSString)
 P:Foundation.NSStreamEventArgs.StreamEvent
 P:Foundation.NSString.IsAbsolutePath
 P:Foundation.NSString.Item(System.IntPtr)
-P:Foundation.NSStringDrawingContext.MinimumTrackingAdjustment
 P:Foundation.NSThread.ThreadWillExitNotification
 P:Foundation.NSThread.WillBecomeMultiThreadedNotification
 P:Foundation.NSTimeZone.SystemTimeZoneDidChangeNotification

@@ -335,6 +335,10 @@ namespace CoreImage {
 		CIContext Create ();
 
 #if HAS_OPENGLES
+		/// <param name="eaglContext">To be added.</param>
+		/// <summary>Creates a new <see cref="T:CoreImage.CIContext" /> from the provided <paramref name="eaglContext" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[NoMac]
 		[NoMacCatalyst]
 		[Deprecated (PlatformName.iOS, 12, 0)]
@@ -343,6 +347,14 @@ namespace CoreImage {
 		[Export ("contextWithEAGLContext:")]
 		CIContext FromContext (EAGLContext eaglContext);
 
+		/// <param name="eaglContext">To be added.</param>
+		/// <param name="dictionary">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>Creates a new <see cref="T:CoreImage.CIContext" /> from the provided <paramref name="eaglContext" /> and by using the options that are named in <paramref name="dictionary" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[NoMac]
 		[NoMacCatalyst]
 		[Deprecated (PlatformName.iOS, 12, 0)]

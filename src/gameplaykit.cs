@@ -476,7 +476,7 @@ namespace GameplayKit {
 	interface GKGameModelUpdate {
 
 		/// <include file="../docs/api/GameplayKit/IGKGameModelUpdate.xml" path="/Documentation/Docs[@DocId='P:GameplayKit.IGKGameModelUpdate.Value']/*" />
-	[Abstract]
+		[Abstract]
 		[Export ("value", ArgumentSemantic.Assign)]
 		nint Value { get; set; }
 	}

@@ -18625,42 +18625,63 @@ namespace AppKit {
 #if !NET
 		[Abstract]
 #endif
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("allowsMultipleSelection")]
 		bool AllowsMultipleSelection { get; }
 
 #if !NET
 		[Abstract]
 #endif
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("editable")]
 		bool Editable { [Bind ("isEditable")] get; }
 
 #if !NET
 		[Abstract]
 #endif
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("string", ArgumentSemantic.Copy)]
 		string String { get; }
 
 #if !NET
 		[Abstract]
 #endif
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("firstSelectedRange")]
 		NSRange FirstSelectedRange { get; }
 
 #if !NET
 		[Abstract]
 #endif
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("selectedRanges", ArgumentSemantic.Copy)]
 		NSArray SelectedRanges { get; set; }
 
 #if !NET
 		[Abstract]
 #endif
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("visibleCharacterRanges", ArgumentSemantic.Copy)]
 		NSArray VisibleCharacterRanges { get; }
 
 #if !NET
 		[Abstract]
 #endif
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("selectable")]
 		bool Selectable { [Bind ("isSelectable")] get; }
 
@@ -18764,6 +18785,9 @@ namespace AppKit {
 		[Abstract, Export ("findBarVisible")]
 		bool FindBarVisible { [Bind ("isFindBarVisible")] get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract, Export ("findBarView", ArgumentSemantic.Retain)]
 		NSView FindBarView { get; set; }
 
@@ -22417,10 +22441,16 @@ namespace AppKit {
 		[Export ("unmarkText")]
 		void UnmarkText ();
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("hasMarkedText")]
 		bool HasMarkedText { get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("conversationIdentifier")]
 		nint ConversationIdentifier { get; }
@@ -22433,10 +22463,16 @@ namespace AppKit {
 		[Export ("attributedSubstringFromRange:")]
 		NSAttributedString GetAttributedSubstring (NSRange range);
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("markedRange")]
 		NSRange MarkedRange { get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("selectedRange")]
 		NSRange SelectedRange { get; }
@@ -22457,6 +22493,9 @@ namespace AppKit {
 		[Export ("characterIndexForPoint:")]
 		nuint GetCharacterIndex (CGPoint point);
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("validAttributesForMarkedText")]
 		NSString [] ValidAttributesForMarkedText { get; }
@@ -31428,10 +31467,16 @@ namespace AppKit {
 	[NoTV]
 	[Protocol (Name = "NSAccessibilityElement")] // exists both as a type and a protocol in ObjC, Swift uses NSAccessibilityElementProtocol
 	interface NSAccessibilityElementProtocol {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityFrame")]
 		CGRect AccessibilityFrame { get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityParent")]
 		NSObject AccessibilityParent { get; }
@@ -31453,6 +31498,9 @@ namespace AppKit {
 	[NoTV]
 	[Protocol]
 	interface NSAccessibilityButton : NSAccessibilityElementProtocol {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityLabel")]
 		string AccessibilityLabel { get; }
@@ -31468,6 +31516,9 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilitySwitch : NSAccessibilityButton {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityValue")]
 		string AccessibilityValue { get; }
@@ -31488,6 +31539,9 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityRadioButton : NSAccessibilityButton {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityValue")]
 		NSNumber AccessibilityValue { get; }
@@ -31504,6 +31558,9 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityStaticText : NSAccessibilityElementProtocol {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityValue")]
 		string AccessibilityValue { get; }
@@ -31552,6 +31609,9 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityProgressIndicator : NSAccessibilityGroup {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityValue")]
 		NSNumber AccessibilityValue { get; }
@@ -31560,6 +31620,9 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityStepper : NSAccessibilityElementProtocol {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityLabel")]
 		string AccessibilityLabel { get; }
@@ -31585,10 +31648,16 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilitySlider : NSAccessibilityElementProtocol {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityLabel")]
 		string AccessibilityLabel { get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityValue")]
 		NSObject AccessibilityValue { get; }
@@ -31611,6 +31680,9 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityImage : NSAccessibilityElementProtocol {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityLabel")]
 		string AccessibilityLabel { get; }
@@ -31633,6 +31705,9 @@ namespace AppKit {
 		[Export ("accessibilityPerformShowDefaultUI")]
 		bool AccessibilityPerformShowDefaultUI ();
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("isAccessibilityAlternateUIVisible")]
 		bool IsAccessibilityAlternateUIVisible { get; }
@@ -31643,10 +31718,16 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityTable : NSAccessibilityGroup {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityLabel")]
 		string AccessibilityLabel { get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityRows")]
 		INSAccessibilityRow [] AccessibilityRows { get; }
@@ -31696,6 +31777,9 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityRow : NSAccessibilityGroup {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityIndex")]
 		nint AccessibilityIndex { get; }
@@ -31707,18 +31791,30 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSAccessibilityLayoutArea : NSAccessibilityGroup {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityLabel")]
 		string AccessibilityLabel { get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("accessibilityChildren")]
 		NSObject [] AccessibilityChildren { get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("accessibilitySelectedChildren")]
 		NSObject [] AccessibilitySelectedChildren { get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityFocusedUIElement")]
 		NSObject AccessibilityFocusedUIElement { get; }
@@ -31888,10 +31984,16 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol]
 	interface NSValidatedUserInterfaceItem {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("action")]
 		Selector Action { get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("tag")]
 		nint Tag { get; }
@@ -32923,6 +33025,9 @@ namespace AppKit {
 		[Export ("minimumSizeWithPrioritizedCompressionOptions:")]
 		CGSize GetMinimumSize (NSUserInterfaceCompressionOptions [] prioritizedOptions);
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("activeCompressionOptions", ArgumentSemantic.Copy)]
 		NSUserInterfaceCompressionOptions ActiveCompressionOptions { get; }

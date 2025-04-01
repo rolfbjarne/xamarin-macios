@@ -1962,14 +1962,23 @@ namespace WebKit {
 		[Export ("finishedLoadingWithDataSource:")]
 		void FinishedLoading (WebDataSource dataSource);
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("canProvideDocumentSource")]
 		bool CanProvideDocumentSource { get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("documentSource")]
 		string DocumentSource { get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("title")]
 		string Title { get; }

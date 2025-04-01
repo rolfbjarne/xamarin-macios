@@ -3810,6 +3810,9 @@ namespace SceneKit {
 		[Export ("jitteringEnabled")]
 		bool JitteringEnabled { [Bind ("isJitteringEnabled")] get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NoMacCatalyst]
 		[Export ("context")]

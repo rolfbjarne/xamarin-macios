@@ -1531,12 +1531,21 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSApplication))]
 	interface NSApplication_NSTouchBarCustomization {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("isAutomaticCustomizeTouchBarMenuItemEnabled")]
 		bool GetAutomaticCustomizeTouchBarMenuItemEnabled ();
 
+		/// <param name="enabled">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setAutomaticCustomizeTouchBarMenuItemEnabled:")]
 		void SetAutomaticCustomizeTouchBarMenuItemEnabled (bool enabled);
 
+		/// <param name="sender">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("toggleTouchBarCustomizationPalette:")]
 		void ToggleTouchBarCustomizationPalette ([NullAllowed] NSObject sender);
 	}
@@ -3425,6 +3434,9 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Category, BaseType (typeof (NSCoder))]
 	partial interface NSCoderAppKitAddons {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.MacOSX, 10, 9)]
 		[Export ("decodeNXColor")]
 		NSColor DecodeNXColor ();
@@ -6007,10 +6019,16 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSObject))]
 	interface NSObject_NSEditorRegistration {
+		/// <param name="editor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("objectDidBeginEditing:")]
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "Use 'NSEditorRegistration' instead.")]
 		void ObjectDidBeginEditing (INSEditor editor);
 
+		/// <param name="editor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("objectDidEndEditing:")]
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "Use 'NSEditorRegistration' instead.")]
 		void ObjectDidEndEditing (INSEditor editor);
@@ -12112,21 +12130,45 @@ namespace AppKit {
 	[ThreadSafe]
 	[Category, BaseType (typeof (NSString))]
 	interface NSStringDrawing_NSString {
+		/// <param name="attributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("sizeWithAttributes:")]
 		CGSize StringSize ([NullAllowed] NSDictionary attributes);
 
+		/// <param name="attributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.StringSize (attributes.GetDictionary ()!)")]
 		CGSize StringSize ([NullAllowed] AppKit.NSStringAttributes attributes);
 
+		/// <param name="point">To be added.</param>
+		/// <param name="attributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("drawAtPoint:withAttributes:")]
 		void DrawAtPoint (CGPoint point, [NullAllowed] NSDictionary attributes);
 
+		/// <param name="point">To be added.</param>
+		/// <param name="attributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.DrawAtPoint (point, attributes.GetDictionary ()!)")]
 		void DrawAtPoint (CGPoint point, [NullAllowed] AppKit.NSStringAttributes attributes);
 
+		/// <param name="rect">To be added.</param>
+		/// <param name="attributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("drawInRect:withAttributes:")]
 		void DrawInRect (CGRect rect, [NullAllowed] NSDictionary attributes);
 
+		/// <param name="rect">To be added.</param>
+		/// <param name="attributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.DrawInRect (rect, attributes.GetDictionary ()!)")]
 		void DrawInRect (CGRect rect, [NullAllowed] AppKit.NSStringAttributes attributes);
 	}
@@ -12159,9 +12201,20 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSAttributedString))]
 	interface NSAttributedString_NSExtendedStringDrawing {
+		/// <param name="rect">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="context">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("drawWithRect:options:context:")]
 		void DrawWithRect (CGRect rect, NSStringDrawingOptions options, [NullAllowed] NSStringDrawingContext context);
 
+		/// <param name="size">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="context">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("boundingRectWithSize:options:context:")]
 		CGRect BoundingRectWithSize (CGSize size, NSStringDrawingOptions options, [NullAllowed] NSStringDrawingContext context);
 	}
@@ -12171,57 +12224,138 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Category, BaseType (typeof (NSMutableAttributedString))]
 	interface NSMutableAttributedStringAppKitAddons {
+		/// <param name="url">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="returnOptions">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("readFromURL:options:documentAttributes:error:")]
 		bool ReadFromURL (NSUrl url, NSDictionary options, out NSDictionary returnOptions, out NSError error);
 
+		/// <param name="url">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="returnOptions">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.ReadFromURL (url, options.GetDictionary ()!, out returnOptions, out error)")]
 		bool ReadFromURL (NSUrl url, NSAttributedStringDocumentAttributes options, out NSDictionary returnOptions, out NSError error);
 
+		/// <param name="url">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="returnOptions">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("readFromURL:options:documentAttributes:")]
 		bool ReadFromURL (NSUrl url, NSDictionary options, out NSDictionary returnOptions);
 
+		/// <param name="url">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="returnOptions">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.ReadFromURL (url, options.GetDictionary ()!, out returnOptions)")]
 		bool ReadFromURL (NSUrl url, NSAttributedStringDocumentAttributes options, out NSDictionary returnOptions);
 
+		/// <param name="data">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="returnOptions">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("readFromData:options:documentAttributes:error:")]
 		bool ReadFromData (NSData data, NSDictionary options, out NSDictionary returnOptions, out NSError error);
 
+		/// <param name="data">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="returnOptions">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.ReadFromData (data, options.GetDictionary ()!, out returnOptions, out error)")]
 		bool ReadFromData (NSData data, NSAttributedStringDocumentAttributes options, out NSDictionary returnOptions, out NSError error);
 
+		/// <param name="data">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="dict">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("readFromData:options:documentAttributes:")]
 		bool ReadFromData (NSData data, NSDictionary options, out NSDictionary dict);
 
+		/// <param name="data">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="returnOptions">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("This.ReadFromData (data, options.GetDictionary ()!, out returnOptions)")]
 		bool ReadFromData (NSData data, NSAttributedStringDocumentAttributes options, out NSDictionary returnOptions);
 
+		/// <param name="range">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("superscriptRange:")]
 		void SuperscriptRange (NSRange range);
 
+		/// <param name="range">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("subscriptRange:")]
 		void SubscriptRange (NSRange range);
 
+		/// <param name="range">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("unscriptRange:")]
 		void UnscriptRange (NSRange range);
 
+		/// <param name="traitMask">To be added.</param>
+		/// <param name="range">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("applyFontTraits:range:")]
 		void ApplyFontTraits (NSFontTraitMask traitMask, NSRange range);
 
+		/// <param name="alignment">To be added.</param>
+		/// <param name="range">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setAlignment:range:")]
 		void SetAlignment (NSTextAlignment alignment, NSRange range);
 
 		[Export ("setBaseWritingDirection:range:")]
 		void SetBaseWritingDirection (NSWritingDirection writingDirection, NSRange range);
 
+		/// <param name="range">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("fixFontAttributeInRange:")]
 		void FixFontAttributeInRange (NSRange range);
 
+		/// <param name="range">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("fixParagraphStyleAttributeInRange:")]
 		void FixParagraphStyleAttributeInRange (NSRange range);
 
+		/// <param name="range">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("fixAttachmentAttributeInRange:")]
 		void FixAttachmentAttributeInRange (NSRange range);
 
+		/// <param name="path">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("updateAttachmentsFromPath:")]
 		void UpdateAttachmentsFromPath (string path);
 	}
@@ -15722,13 +15856,22 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSResponder))]
 	interface NSResponder_NSTouchBarProvider : INSTouchBarProvider {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("touchBar")]
 		[return: NullAllowed]
 		NSTouchBar GetTouchBar ();
 
+		/// <param name="bar">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setTouchBar:")]
 		void SetTouchBar ([NullAllowed] NSTouchBar bar);
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("makeTouchBar")]
 		NSTouchBar MakeTouchBar ();
 	}
@@ -19731,9 +19874,15 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSView))]
 	interface NSView_NSTouchBar {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("allowedTouchTypes")]
 		NSTouchTypeMask GetAllowedTouchTypes ();
 
+		/// <param name="touchTypes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setAllowedTouchTypes:")]
 		void SetAllowedTouchTypes (NSTouchTypeMask touchTypes);
 	}
@@ -21799,15 +21948,27 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSTextField))]
 	interface NSTextField_NSTouchBar {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("isAutomaticTextCompletionEnabled")]
 		bool GetAutomaticTextCompletionEnabled ();
 
+		/// <param name="enabled">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("automaticTextCompletionEnabled:")]
 		void SetAutomaticTextCompletionEnabled (bool enabled);
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("allowsCharacterPickerTouchBarItem")]
 		bool GetAllowsCharacterPickerTouchBarItem ();
 
+		/// <param name="allows">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setAllowsCharacterPickerTouchBarItem:")]
 		void SetAllowsCharacterPickerTouchBarItem (bool allows);
 	}
@@ -23643,6 +23804,10 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSObject))]
 	interface NSObject_NSToolbarItemValidation {
+		/// <param name="item">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("validateToolbarItem:")]
 		bool ValidateToolbarItem (NSToolbarItem item);
 	}
@@ -23880,12 +24045,23 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSTouch))]
 	interface NSTouch_NSTouchBar {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("type")]
 		NSTouchType GetTouchType ();
 
+		/// <param name="view">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("locationInView:")]
 		CGPoint GetLocation ([NullAllowed] NSView view);
 
+		/// <param name="view">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("previousLocationInView:")]
 		CGPoint GetPreviousLocation ([NullAllowed] NSView view);
 	}
@@ -27678,6 +27854,9 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Category, BaseType (typeof (NSResponder))]
 	partial interface NSStandardKeyBindingMethods {
+		/// <param name="sender">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("quickLookPreviewItems:")]
 		void QuickLookPreviewItems (NSObject sender);
 	}
@@ -27685,6 +27864,11 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Category, BaseType (typeof (NSView))]
 	partial interface NSRulerMarkerClientViewDelegation {
+		/// <param name="ruler">To be added.</param>
+		/// <param name="locationForPoint">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("rulerView:locationForPoint:")]
 		nfloat RulerViewLocation (NSRulerView ruler, CGPoint locationForPoint);
 
@@ -27695,6 +27879,9 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Category, BaseType (typeof (NSResponder))]
 	partial interface NSTextFinderSupport {
+		/// <param name="sender">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("performTextFinderAction:")]
 		void PerformTextFinderAction ([NullAllowed] NSObject sender);
 	}
@@ -28251,6 +28438,9 @@ namespace AppKit {
 	[Category, BaseType (typeof (NSTextView))]
 	partial interface NSTextView_SharingService {
 
+		/// <param name="sender">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("orderFrontSharingServicePicker:")]
 		void OrderFrontSharingServicePicker (NSObject sender);
 	}
@@ -31870,6 +32060,9 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSView))]
 	interface NSView_NSCandidateListTouchBarItem {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("candidateListTouchBarItem")]
 		NSCandidateListTouchBarItem GetCandidateListTouchBarItem ();
 	}
@@ -31952,9 +32145,15 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSGestureRecognizer))]
 	interface NSGestureRecognizer_NSTouchBar {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("allowedTouchTypes", ArgumentSemantic.Assign)]
 		NSTouchTypeMask GetAllowedTouchTypes ();
 
+		/// <param name="types">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setAllowedTouchTypes:", ArgumentSemantic.Assign)]
 		void SetAllowedTouchTypes (NSTouchTypeMask types);
 	}
@@ -32642,6 +32841,10 @@ namespace AppKit {
 	[Category]
 	[BaseType (typeof (NSObject))]
 	interface NSObject_NSFontPanelValidationAdditions {
+		/// <param name="fontPanel">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("validModesForFontPanel:")]
 		NSFontPanelModeMask GetValidModes (NSFontPanel fontPanel);
 	}

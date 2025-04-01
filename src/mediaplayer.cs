@@ -1443,18 +1443,26 @@ namespace MediaPlayer {
 #endif
 	[Protocol]
 	interface MPMediaPlayback {
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("play")]
 		void Play ();
 
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("stop")]
 		void Stop ();
 
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("pause")]
 		void Pause ();
 
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("prepareToPlay")]
 		void PrepareToPlay ();
@@ -1471,14 +1479,20 @@ namespace MediaPlayer {
 		[Export ("currentPlaybackRate")]
 		float CurrentPlaybackRate { get; set; } // float, not CGFloat
 
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("beginSeekingForward")]
 		void BeginSeekingForward ();
 
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("beginSeekingBackward")]
 		void BeginSeekingBackward ();
 
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("endSeeking")]
 		void EndSeeking ();
@@ -3832,6 +3846,9 @@ namespace MediaPlayer {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface MPSystemMusicPlayerController {
+		/// <param name="queueDescriptor">The queue descriptor for the media items to play.</param>
+		/// <summary>Opens the Music app and plays the specified items.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Abstract]
 		[Export ("openToPlayQueueDescriptor:")]

@@ -518,6 +518,9 @@ namespace GameplayKit {
 
 		// This was a property but changed it to Get semantic due to
 		// there are no Extension properties
+		/// <summary>The <see cref="T:GameplayKit.IGKGameModelPlayer" /> objects involved in the game.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("players")]
 		[return: NullAllowed]
@@ -525,20 +528,37 @@ namespace GameplayKit {
 
 		// This was a property but changed it to Get semantic due to
 		// there are no Extension properties
+		/// <summary>The current <see cref="T:GameplayKit.IGKGameModelPlayer" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("activePlayer")]
 		[return: NullAllowed]
 		IGKGameModelPlayer GetActivePlayer ();
 
+		/// <param name="gameModel">To be added.</param>
+		/// <summary>Sets the internal state of the game to <paramref name="gameModel" />.</summary>
+		/// <remarks>
+		///           <para>This method is called many times during the evaluation of <see cref="M:GameplayKit.GKMinMaxStrategist.GetBestMove(GameplayKit.IGKGameModelPlayer)" />, as that method attempts to minimize the number of <see cref="T:GameplayKit.IGKGameModel" /> objects allocated and instead uses this method to "reuse" previously-allocated memory.</para>
+		///         </remarks>
 		[Abstract]
 		[Export ("setGameModel:")]
 		void SetGameModel (IGKGameModel gameModel);
 
+		/// <param name="player">To be added.</param>
+		/// <summary>The set of legal moves available to the player who's <see cref="M:GameplayKit.GKGameModelPlayer_Extensions.GetPlayerId(GameplayKit.IGKGameModelPlayer)" /> value is the same as that of <paramref name="player" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>
+		///           <para>The <see cref="T:GameplayKit.GKMinMaxStrategist" /> may allocate many <see cref="T:GameplayKit.IGKGameModelPlayer" /> objects with identical <see cref="M:GameplayKit.GKGameModelPlayer_Extensions.GetPlayerId(GameplayKit.IGKGameModelPlayer)" /> values. When comparing <see cref="T:GameplayKit.IGKGameModelPlayer" /> instances, developers should rely on <see cref="M:GameplayKit.GKGameModelPlayer_Extensions.GetPlayerId(GameplayKit.IGKGameModelPlayer)" /> values, not reference equality.</para>
+		///         </remarks>
 		[Abstract]
 		[Export ("gameModelUpdatesForPlayer:")]
 		[return: NullAllowed]
 		IGKGameModelUpdate [] GetGameModelUpdates (IGKGameModelPlayer player);
 
+		/// <param name="gameModelUpdate">An object that describes a valid move from the current state of <c>this</c>.</param>
+		/// <summary>Modifies the internal state of this <see cref="T:GameplayKit.IGKGameModel" /> according to the move described in <paramref name="gameModelUpdate" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("applyGameModelUpdate:")]
 		void ApplyGameModelUpdate (IGKGameModelUpdate gameModelUpdate);
@@ -1255,6 +1275,9 @@ namespace GameplayKit {
 	[Protocol]
 	interface GKRandom {
 
+		/// <summary>Returns an integer within the bounds of the generator.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("nextInt")]
 		nint GetNextInt ();
@@ -1263,10 +1286,16 @@ namespace GameplayKit {
 		[Export ("nextIntWithUpperBound:")]
 		nuint GetNextInt (nuint upperBound);
 
+		/// <summary>Returns a random floating-point value.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("nextUniform")]
 		float GetNextUniform ();
 
+		/// <summary>Retrieves a <see langword="true" /> or <see langword="false" /> value.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("nextBool")]
 		bool GetNextBool ();
@@ -1541,6 +1570,9 @@ namespace GameplayKit {
 		[NullAllowed, Export ("randomSource", ArgumentSemantic.Retain)]
 		IGKRandom RandomSource { get; set; }
 
+		/// <summary>Returns what the strategist indicates is the best move for the active player.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("bestMoveForActivePlayer")]
 		IGKGameModelUpdate GetBestMoveForActivePlayer ();

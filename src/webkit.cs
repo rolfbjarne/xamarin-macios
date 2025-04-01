@@ -4913,6 +4913,10 @@ namespace WebKit {
 	[BaseType (typeof (NSObject))]
 	interface WKScriptMessageHandler {
 
+		/// <param name="userContentController">To be added.</param>
+		/// <param name="message">To be added.</param>
+		/// <summary>Method that is called after a message is received from a script.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("userContentController:didReceiveScriptMessage:")]
 		[Abstract]
 		void DidReceiveScriptMessage (WKUserContentController userContentController, WKScriptMessage message);
@@ -4958,10 +4962,18 @@ namespace WebKit {
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "WKURLSchemeHandler")]
 	interface WKUrlSchemeHandler {
+		/// <param name="webView">The web view that is making the request.</param>
+		/// <param name="urlSchemeTask">The task for which to load data.</param>
+		/// <summary>Starts a URL scheme task that processes a URL and loads data for the specified <paramref name="webView" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("webView:startURLSchemeTask:")]
 		void StartUrlSchemeTask (WKWebView webView, IWKUrlSchemeTask urlSchemeTask);
 
+		/// <param name="webView">The web view that is making the request.</param>
+		/// <param name="urlSchemeTask">The task for which to stop loading data.</param>
+		/// <summary>Stops a URL scheme task that processes a URL and loads data for the specified <paramref name="webView" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("webView:stopURLSchemeTask:")]
 		void StopUrlSchemeTask (WKWebView webView, IWKUrlSchemeTask urlSchemeTask);
@@ -4977,18 +4989,29 @@ namespace WebKit {
 		[Export ("request", ArgumentSemantic.Copy)]
 		NSUrlRequest Request { get; }
 
+		/// <param name="response">The response that was received.</param>
+		/// <summary>Method that is called to indicate that the task received a response.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("didReceiveResponse:")]
 		void DidReceiveResponse (NSUrlResponse response);
 
+		/// <param name="data">The data that was received.</param>
+		/// <summary>Method that is called to indicate that the task received the data.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("didReceiveData:")]
 		void DidReceiveData (NSData data);
 
+		/// <summary>Method that is called to indicate that the task is finished.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("didFinish")]
 		void DidFinish ();
 
+		/// <param name="error">The error that occurred.</param>
+		/// <summary>Method that is called to indicate failure.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("didFailWithError:")]
 		void DidFailWithError (NSError error);

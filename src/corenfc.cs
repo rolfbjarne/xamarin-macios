@@ -228,10 +228,18 @@ namespace CoreNFC {
 		[Export ("icSerialNumber", ArgumentSemantic.Copy)]
 		NSData IcSerialNumber { get; }
 
+		/// <param name="commandConfiguration">To be added.</param>
+		/// <param name="completionHandler">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("sendCustomCommandWithConfiguration:completionHandler:")]
 		void SendCustomCommand (NFCIso15693CustomCommandConfiguration commandConfiguration, Action<NSData, NSError> completionHandler);
 
+		/// <param name="readConfiguration">To be added.</param>
+		/// <param name="completionHandler">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("readMultipleBlocksWithConfiguration:completionHandler:")]
 		void ReadMultipleBlocks (NFCIso15693ReadMultipleBlocksConfiguration readConfiguration, Action<NSData, NSError> completionHandler);
@@ -700,10 +708,14 @@ namespace CoreNFC {
 		[Export ("alertMessage")]
 		string AlertMessage { get; set; }
 
+		/// <summary>Starts a session for detecting and reading NFC tags.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("beginSession")]
 		void BeginSession ();
 
+		/// <summary>Closes an NFC session. Once invalidated, a session cannot be reused.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("invalidateSession")]
 		void InvalidateSession ();

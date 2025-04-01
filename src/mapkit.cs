@@ -1244,10 +1244,18 @@ namespace MapKit {
 	[Model]
 	[Protocol]
 	interface MKReverseGeocoderDelegate {
+		/// <param name="geocoder">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("reverseGeocoder:didFailWithError:")]
 		void FailedWithError (MKReverseGeocoder geocoder, NSError error);
 
+		/// <param name="geocoder">To be added.</param>
+		/// <param name="placemark">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("reverseGeocoder:didFindPlacemark:")]
 		void FoundWithPlacemark (MKReverseGeocoder geocoder, MKPlacemark placemark);

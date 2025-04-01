@@ -118,6 +118,11 @@ namespace PushKit {
 	[Protocol]
 	[BaseType (typeof (NSObject))]
 	interface PKPushRegistryDelegate {
+		/// <param name="registry">To be added.</param>
+		/// <param name="credentials">To be added.</param>
+		/// <param name="type">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("pushRegistry:didUpdatePushCredentials:forType:"), EventArgs ("PKPushRegistryUpdated"), EventName ("CredentialsUpdated")]
 		void DidUpdatePushCredentials (PKPushRegistry registry, PKPushCredentials credentials, string type);

@@ -628,10 +628,18 @@ namespace UIKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface UICloudSharingControllerDelegate {
+		/// <param name="csc">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("cloudSharingController:failedToSaveShareWithError:")]
 		void FailedToSaveShare (UICloudSharingController csc, NSError error);
 
+		/// <param name="csc">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("itemTitleForCloudSharingController:")]
 		[return: NullAllowed]
@@ -1307,10 +1315,16 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIAccessibilityContainerDataTableCell {
+		/// <summary>Returns the number of rows that the cell spans.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityRowRange")]
 		NSRange GetAccessibilityRowRange ();
 
+		/// <summary>Returns the number of columns that the cell spans.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityColumnRange")]
 		NSRange GetAccessibilityColumnRange ();
@@ -2036,10 +2050,22 @@ namespace UIKit {
 	[Model]
 	[Protocol]
 	interface UIActivityItemSource {
+		/// <param name="activityViewController">To be added.</param>
+		/// <summary>Returns data that can be used as a placeholder for real data.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("activityViewControllerPlaceholderItem:")]
 		NSObject GetPlaceholderData (UIActivityViewController activityViewController);
 
+		/// <param name="activityViewController">To be added.</param>
+		/// <param name="activityType">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>The data to be acted upon by the specified actitivtyType.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("activityViewController:itemForActivityType:")]
 		[return: NullAllowed]
@@ -2479,22 +2505,35 @@ namespace UIKit {
 		[Export ("fractionComplete")]
 		nfloat FractionComplete { get; set; }
 
+		/// <summary>Begins the animation.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("startAnimation")]
 		void StartAnimation ();
 
+		/// <param name="delay">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("startAnimationAfterDelay:")]
 		void StartAnimation (double delay);
 
+		/// <summary>Pauses the animation.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("pauseAnimation")]
 		void PauseAnimation ();
 
+		/// <param name="withoutFinishing">To be added.</param>
+		/// <summary>Stops the animation at the current position.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("stopAnimation:")]
 		void StopAnimation (bool withoutFinishing);
 
+		/// <param name="finalPosition">To be added.</param>
+		/// <summary>Finishes the animation. Must be preceded by call to <see cref="M:UIKit.UIViewPropertyAnimator.CreateRunningPropertyAnimator(System.Double,System.Double,UIKit.UIViewAnimationOptions,System.Action,System.Action{UIKit.UIViewAnimatingPosition})" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("finishAnimationAtPosition:")]
 		void FinishAnimation (UIViewAnimatingPosition finalPosition);
@@ -2623,6 +2662,11 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	interface UIViewControllerPreviewingDelegate {
+		/// <param name="previewingContext">The context in which the 3D Touch is occurring..</param>
+		/// <param name="location">The location where the 3D touch is occurring.</param>
+		/// <summary>Method that is called when the user has pressed a source view, blurring the remainder of the screen, so that a preview view controller can be returned.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Replaced by 'UIContextMenuInteraction'.")]
 		[Deprecated (PlatformName.TvOS, 13, 0, message: "Replaced by 'UIContextMenuInteraction'.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Replaced by 'UIContextMenuInteraction'.")]
@@ -2630,6 +2674,10 @@ namespace UIKit {
 		[Export ("previewingContext:viewControllerForLocation:")]
 		UIViewController GetViewControllerForPreview (IUIViewControllerPreviewing previewingContext, CGPoint location);
 
+		/// <param name="previewingContext">The context in which the 3D Touch is occurring.</param>
+		/// <param name="viewControllerToCommit">The  to which the app should transfer control.</param>
+		/// <summary>Method that is called to allow the developer to prepare the commit view.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Replaced by 'UIContextMenuInteraction'.")]
 		[Deprecated (PlatformName.TvOS, 13, 0, message: "Replaced by 'UIContextMenuInteraction'.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Replaced by 'UIContextMenuInteraction'.")]
@@ -4123,18 +4171,38 @@ namespace UIKit {
 		[Export ("bounds")]
 		CGRect Bounds { get; }
 
+		/// <param name="point">To be added.</param>
+		/// <param name="coordinateSpace">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("convertPoint:toCoordinateSpace:")]
 		CGPoint ConvertPointToCoordinateSpace (CGPoint point, IUICoordinateSpace coordinateSpace);
 
+		/// <param name="point">To be added.</param>
+		/// <param name="coordinateSpace">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("convertPoint:fromCoordinateSpace:")]
 		CGPoint ConvertPointFromCoordinateSpace (CGPoint point, IUICoordinateSpace coordinateSpace);
 
+		/// <param name="rect">To be added.</param>
+		/// <param name="coordinateSpace">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("convertRect:toCoordinateSpace:")]
 		CGRect ConvertRectToCoordinateSpace (CGRect rect, IUICoordinateSpace coordinateSpace);
 
+		/// <param name="rect">To be added.</param>
+		/// <param name="coordinateSpace">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("convertRect:fromCoordinateSpace:")]
 		CGRect ConvertRectFromCoordinateSpace (CGRect rect, IUICoordinateSpace coordinateSpace);
@@ -5432,6 +5500,10 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	interface UICollectionViewDataSourcePrefetching {
 
+		/// <param name="collectionView">To be added.</param>
+		/// <param name="indexPaths">To be added.</param>
+		/// <summary>Developers override this method to prefetch the data at the specified <paramref name="indexPaths" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("collectionView:prefetchItemsAtIndexPaths:")]
 		void PrefetchItems (UICollectionView collectionView, NSIndexPath [] indexPaths);
@@ -5466,6 +5538,11 @@ namespace UIKit {
 		[Export ("collectionView:numberOfItemsInSection:")]
 		nint GetItemsCount (UICollectionView collectionView, nint section);
 
+		/// <param name="collectionView">The collection view that originated the request.</param>
+		/// <param name="indexPath">To be added.</param>
+		/// <summary>Gets a cell.</summary>
+		/// <returns>A collection view cell.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("collectionView:cellForItemAtIndexPath:")]
 		UICollectionViewCell GetCell (UICollectionView collectionView, NSIndexPath indexPath);
@@ -7490,12 +7567,18 @@ namespace UIKit {
 #if !NET
 		[Abstract]
 #endif
+		/// <param name="animator">To be added.</param>
+		/// <summary>The dynamic animator is about to resume animations.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("dynamicAnimatorWillResume:")]
 		void WillResume (UIDynamicAnimator animator);
 
 #if !NET
 		[Abstract]
 #endif
+		/// <param name="animator">To be added.</param>
+		/// <summary>Called when a pause is required in an animation's dynamic behavior.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("dynamicAnimatorDidPause:")]
 		void DidPause (UIDynamicAnimator animator);
 	}
@@ -9131,10 +9214,15 @@ namespace UIKit {
 		[Export ("hasText")]
 		bool HasText { get; }
 
+		/// <param name="text">To be added.</param>
+		/// <summary>Inserts text at the cursor.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("insertText:")]
 		void InsertText (string text);
 
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("deleteBackward")]
 		void DeleteBackward ();
@@ -9206,10 +9294,18 @@ namespace UIKit {
 		[Export ("selectionAffinity")]
 		UITextStorageDirection SelectionAffinity { get; set; }
 
+		/// <param name="range">A UITextRange object indicating the range of a document's text.</param>
+		/// <summary>Gets all the text that is specified within a certain range.</summary>
+		/// <returns>Document substring falling within a certain specified range.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("textInRange:")]
 		string TextInRange (UITextRange range);
 
+		/// <param name="range">The range of text to be replaced.</param>
+		/// <param name="text">A string defining text replacement within a "range".</param>
+		/// <summary>Replaces document text within a specified range.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("replaceRange:withText:")]
 		void ReplaceText (UITextRange range, string text);
@@ -9218,14 +9314,25 @@ namespace UIKit {
 		[Export ("markedTextRange")]
 		UITextRange MarkedTextRange { get; }
 
+		/// <param name="markedText">Text that is to be marked.</param>
+		/// <param name="selectedRange">An NSRange object indicating the range of a document's text.</param>
+		/// <summary>Sets the marked text and marks it as the current selection.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("setMarkedText:selectedRange:")]
 		void SetMarkedText (string markedText, NSRange selectedRange);
 
+		/// <summary>Unmarks all currently marked text within a document</summary>
+		/// <remarks>Subsequent to this method being called, the value of "MarkedTextRange" is set to <see langword="null" />.</remarks>
 		[Abstract]
 		[Export ("unmarkText")]
 		void UnmarkText ();
 
+		/// <param name="fromPosition">Initial text position.</param>
+		/// <param name="toPosition">Ultimate text position.</param>
+		/// <summary>Gets a specified text range.</summary>
+		/// <returns>Defined text range.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("textRangeFromPosition:toPosition:")]
 		UITextRange GetTextRange (UITextPosition fromPosition, UITextPosition toPosition);
@@ -9238,22 +9345,47 @@ namespace UIKit {
 		[Export ("positionFromPosition:inDirection:offset:")]
 		UITextPosition GetPosition (UITextPosition fromPosition, UITextLayoutDirection inDirection, nint offset);
 
+		/// <param name="first">First text position.</param>
+		/// <param name="second">Second text position.</param>
+		/// <summary>Gets a comparison of one position to another.</summary>
+		/// <returns>An indication as to whether two text positions are identical or if one is prior to the other.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("comparePosition:toPosition:")]
 		NSComparisonResult ComparePosition (UITextPosition first, UITextPosition second);
 
+		/// <param name="fromPosition">Initial text position.</param>
+		/// <param name="toPosition">Ultimate text position.</param>
+		/// <summary>Gets the number of visible characters between two defined text positions.</summary>
+		/// <returns>The number of visible characters between the two specified text positions.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("offsetFromPosition:toPosition:")]
 		nint GetOffsetFromPosition (UITextPosition fromPosition, UITextPosition toPosition);
 
+		/// <param name="range">A UITextRange object indicating the range of a document's text.</param>
+		/// <param name="direction">A constant indicating direction for storage.</param>
+		/// <summary>Gets a position within a specified range.</summary>
+		/// <returns>A position within a specified range.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("positionWithinRange:farthestInDirection:")]
 		UITextPosition GetPositionWithinRange (UITextRange range, UITextLayoutDirection direction);
 
+		/// <param name="byExtendingPosition">A text positioning object identifying a location in a document.</param>
+		/// <param name="direction">Constant indicating layout direction.</param>
+		/// <summary>Gets a character range within the limits of a defined direction.</summary>
+		/// <returns>Gets a range from a given text position to the ultimate extent in a defined direction.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("characterRangeByExtendingPosition:inDirection:")]
 		UITextRange GetCharacterRange (UITextPosition byExtendingPosition, UITextLayoutDirection direction);
 
+		/// <param name="forPosition">A positioning object that indicates a specified location.</param>
+		/// <param name="direction">Constant indicating layout direction.</param>
+		/// <summary>Gets the base writing direction for a text position.</summary>
+		/// <returns>A text-range object that represents the distance from position to the farthest extent in a given direction.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("baseWritingDirectionForPosition:inDirection:")]
 		NSWritingDirection GetBaseWritingDirection (UITextPosition forPosition, UITextStorageDirection direction);
@@ -9262,22 +9394,44 @@ namespace UIKit {
 		[Export ("setBaseWritingDirection:forRange:")]
 		void SetBaseWritingDirectionforRange (NSWritingDirection writingDirection, UITextRange range);
 
+		/// <param name="range">	
+		/// A UITextRange object indicating the range of a document's text.</param>
+		/// <summary>Gets the first rectangle enclosing a specified range of document text.</summary>
+		/// <returns>The first rectangle enclosing a specified range.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("firstRectForRange:")]
 		CGRect GetFirstRectForRange (UITextRange range);
 
+		/// <param name="position">A positioning object that indicates a specified location.</param>
+		/// <summary>A rectangle used for drawing a caret at a given insertion point.</summary>
+		/// <returns>A rectangle defining an area for drawing a caret.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("caretRectForPosition:")]
 		CGRect GetCaretRectForPosition ([NullAllowed] UITextPosition position);
 
+		/// <param name="point">Point in a view where document text is being drawn.</param>
+		/// <summary>Gets the closest position in a document that exists to a given point.</summary>
+		/// <returns>The closest position to the point. </returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("closestPositionToPoint:")]
 		UITextPosition GetClosestPositionToPoint (CGPoint point);
 
+		/// <param name="point">To be added.</param>
+		/// <param name="withinRange">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("closestPositionToPoint:withinRange:")]
 		UITextPosition GetClosestPositionToPoint (CGPoint point, UITextRange withinRange);
 
+		/// <param name="point">Point in a view where document text is being drawn.</param>
+		/// <summary>Gets the character or a range of characters in a document that exists at a given point.</summary>
+		/// <returns>Gets the point in a view where the document text is being drawn.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("characterRangeAtPoint:")]
 		UITextRange GetCharacterRangeAtPoint (CGPoint point);
@@ -9342,6 +9496,10 @@ namespace UIKit {
 		[Export ("insertDictationResult:")]
 		void InsertDictationResult (NSArray dictationResult);
 
+		/// <param name="range">A UITextRange object indicating the range of a document's text.</param>
+		/// <summary>Gets an array of selection rects that corresponds to a text range.</summary>
+		/// <returns>An array of selection rects.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("selectionRectsForRange:")]
 		UITextSelectionRect [] GetSelectionRects (UITextRange range);
@@ -9489,18 +9647,42 @@ namespace UIKit {
 	[Model]
 	[Protocol]
 	interface UITextInputTokenizer {
+		/// <param name="position">To be added.</param>
+		/// <param name="granularity">To be added.</param>
+		/// <param name="direction">To be added.</param>
+		/// <summary>The range for the text enclosing a text position in a text unit of the specified granularity in the specified direction.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("rangeEnclosingPosition:withGranularity:inDirection:")]
 		UITextRange GetRangeEnclosingPosition (UITextPosition position, UITextGranularity granularity, UITextDirection direction);
 
+		/// <param name="probePosition">To be added.</param>
+		/// <param name="atBoundary">To be added.</param>
+		/// <param name="inDirection">To be added.</param>
+		/// <summary>Returns whether the <paramref name="probePosition" /> position is at a <paramref name="atBoundary" /> type of boundary taken from the <paramref name="inDirection" /> direction.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("isPosition:atBoundary:inDirection:")]
 		bool ProbeDirection (UITextPosition probePosition, UITextGranularity atBoundary, UITextDirection inDirection);
 
+		/// <param name="fromPosition">To be added.</param>
+		/// <param name="toBoundary">To be added.</param>
+		/// <param name="inDirection">To be added.</param>
+		/// <summary>Returns the next <paramref name="toBoundary" /> type of boundary in the <paramref name="inDirection" /> direction from <paramref name="fromPosition" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("positionFromPosition:toBoundary:inDirection:")]
 		UITextPosition GetPosition (UITextPosition fromPosition, UITextGranularity toBoundary, UITextDirection inDirection);
 
+		/// <param name="probePosition">To be added.</param>
+		/// <param name="withinTextUnit">To be added.</param>
+		/// <param name="inDirection">To be added.</param>
+		/// <summary>Returns whether the <paramref name="probePosition" /> position is within a <paramref name="withinTextUnit" /> type of text unit taken from the <paramref name="inDirection" /> direction.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("isPosition:withinTextUnit:inDirection:")]
 		bool ProbeDirectionWithinTextUnit (UITextPosition probePosition, UITextGranularity withinTextUnit, UITextDirection inDirection);
@@ -9519,18 +9701,30 @@ namespace UIKit {
 	[Model]
 	[Protocol]
 	interface UITextInputDelegate {
+		/// <param name="uiTextInput">To be added.</param>
+		/// <summary>The selection in <paramref name="uiTextInput" /> is about to change.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("selectionWillChange:")]
 		void SelectionWillChange (IUITextInput uiTextInput);
 
+		/// <param name="uiTextInput">To be added.</param>
+		/// <summary>The selection in <paramref name="uiTextInput" /> changed.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("selectionDidChange:")]
 		void SelectionDidChange (IUITextInput uiTextInput);
 
+		/// <param name="textInput">To be added.</param>
+		/// <summary>The text in <paramref name="textInput" /> is about to change.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("textWillChange:")]
 		void TextWillChange (IUITextInput textInput);
 
+		/// <param name="textInput">To be added.</param>
+		/// <summary>The text in <paramref name="textInput" /> changed.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("textDidChange:")]
 		void TextDidChange (IUITextInput textInput);
@@ -13402,10 +13596,20 @@ namespace UIKit {
 	[Model]
 	[Protocol]
 	interface UIPageViewControllerDataSource {
+		/// <param name="pageViewController">To be added.</param>
+		/// <param name="referenceViewController">To be added.</param>
+		/// <summary>Retrieves the previous UIViewController.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("pageViewController:viewControllerBeforeViewController:"), DelegateName ("UIPageViewGetViewController"), DefaultValue (null)]
 		UIViewController GetPreviousViewController (UIPageViewController pageViewController, UIViewController referenceViewController);
 
+		/// <param name="pageViewController">To be added.</param>
+		/// <param name="referenceViewController">To be added.</param>
+		/// <summary>Returns the next UIViewController.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("pageViewController:viewControllerAfterViewController:"), DelegateName ("UIPageViewGetViewController"), DefaultValue (null)]
 		UIViewController GetNextViewController (UIPageViewController pageViewController, UIViewController referenceViewController);
@@ -13928,6 +14132,10 @@ namespace UIKit {
 	[Model]
 	[Protocol]
 	interface UIPickerViewDataSource {
+		/// <param name="pickerView">To be added.</param>
+		/// <summary>Returns the number of components.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("numberOfComponentsInPickerView:")]
 		[Abstract]
 		nint GetComponentCount (UIPickerView pickerView);
@@ -13960,22 +14168,41 @@ namespace UIKit {
 		[Export ("preferredContentSize")]
 		CGSize PreferredContentSize { get; }
 
+		/// <param name="container">The child .</param>
+		/// <summary>Notifies this controller that the preferred size for content for a specified child container has changed.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("preferredContentSizeDidChangeForChildContentContainer:")]
 		void PreferredContentSizeDidChangeForChildContentContainer (IUIContentContainer container);
 
+		/// <param name="container">The child .</param>
+		/// <summary>Notifies this container that auto layout resized a specified child container.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("systemLayoutFittingSizeDidChangeForChildContentContainer:")]
 		void SystemLayoutFittingSizeDidChangeForChildContentContainer (IUIContentContainer container);
 
+		/// <param name="contentContainer">The child container whose size is being request.</param>
+		/// <param name="parentContainerSize">The  of the .</param>
+		/// <summary>Gets the size of the content of the specified child <see cref="T:UIKit.IUIContentContainer" /> by using the size of the parent container.</summary>
+		/// <returns>The <see cref="T:System.Drawing.SizeF" /> of the content of the <paramref name="contentContainer" />.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("sizeForChildContentContainer:withParentContainerSize:")]
 		CGSize GetSizeForChildContentContainer (IUIContentContainer contentContainer, CGSize parentContainerSize);
 
+		/// <param name="toSize">To be added.</param>
+		/// <param name="coordinator">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("viewWillTransitionToSize:withTransitionCoordinator:")]
 		void ViewWillTransitionToSize (CGSize toSize, IUIViewControllerTransitionCoordinator coordinator);
 
+		/// <param name="traitCollection">The new trait collection.</param>
+		/// <param name="coordinator">The  coordinating the transition.This parameter can be .</param>
+		/// <summary>Notifies <c>this</c> that its trait collection will change to <paramref name="traitCollection" />, as coordinated by <paramref name="coordinator" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("willTransitionToTraitCollection:withTransitionCoordinator:")]
 		void WillTransitionToTraitCollection (UITraitCollection traitCollection, [NullAllowed] IUIViewControllerTransitionCoordinator coordinator);
@@ -15775,6 +16002,9 @@ namespace UIKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	partial interface UISearchResultsUpdating {
+		/// <param name="searchController">To be added.</param>
+		/// <summary>Updates the results when the user makes changes or when the search bar becomes the first responder.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("updateSearchResultsForSearchController:")]
 		void UpdateSearchResultsForSearchController (UISearchController searchController);
@@ -17283,6 +17513,10 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UITableViewDataSourcePrefetching {
+		/// <param name="tableView">To be added.</param>
+		/// <param name="indexPaths">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("tableView:prefetchRowsAtIndexPaths:")]
 		void PrefetchRows (UITableView tableView, NSIndexPath [] indexPaths);
@@ -17798,6 +18032,11 @@ namespace UIKit {
 		[Abstract]
 		nint RowsInSection (UITableView tableView, nint section);
 
+		/// <param name="tableView">Table view requesting the cell.</param>
+		/// <param name="indexPath">Location of the row where the cell will be displayed.</param>
+		/// <summary>Returns a cell that can be inserted at <paramref name="indexPath" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tableView:cellForRowAtIndexPath:")]
 		[Abstract]
 		UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath);
@@ -21205,30 +21444,53 @@ namespace UIKit {
 		[Export ("updateInteractiveTransition:")]
 		void UpdateInteractiveTransition (nfloat percentComplete);
 
+		/// <summary>User interactions have signaled the end of the transition.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("finishInteractiveTransition")]
 		void FinishInteractiveTransition ();
 
+		/// <summary>Indicates that a user action canceled the transition.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("cancelInteractiveTransition")]
 		void CancelInteractiveTransition ();
 
+		/// <param name="didComplete">To be added.</param>
+		/// <summary>Indicates the transition animation has completed.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("completeTransition:")]
 		void CompleteTransition (bool didComplete);
 
+		/// <param name="uiTransitionKey">Should be a value from <see cref="T:UIKit.UITransitionContext" />.</param>
+		/// <summary>Retrieves the UIViewController associated with the specified uiTransitionKey.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("viewControllerForKey:")]
 		UIViewController GetViewControllerForKey (NSString uiTransitionKey);
 
+		/// <param name="vc">To be added.</param>
+		/// <summary>The beginning RectangleF for the Frame of the specified UIViewController's UIView.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("initialFrameForViewController:")]
 		CGRect GetInitialFrameForViewController (UIViewController vc);
 
+		/// <param name="vc">To be added.</param>
+		/// <summary>The ending RectangleF for the Frame of the specified UIViewController's UIView.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("finalFrameForViewController:")]
 		CGRect GetFinalFrameForViewController (UIViewController vc);
 
+		/// <param name="uiTransitionContextToOrFromKey">To be added.</param>
+		/// <summary>Returns the to- or from-key for the transition.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("viewForKey:")]
 		UIView GetViewFor (NSString uiTransitionContextToOrFromKey);
@@ -21259,6 +21521,12 @@ namespace UIKit {
 		[Export ("traitCollection")]
 		UITraitCollection TraitCollection { get; }
 
+		/// <param name="previousTraitCollection">To be added.</param>
+		/// <summary>The trait collection that describes the environmnent changed.</summary>
+		/// <remarks>
+		///           <para>
+		///           </para>
+		///         </remarks>
 		[Deprecated (PlatformName.iOS, 17, 0, message: "Use the 'UITraitChangeObservable' protocol instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 17, 0, message: "Use the 'UITraitChangeObservable' protocol instead.")]
 		[Deprecated (PlatformName.TvOS, 17, 0, message: "Use the 'UITraitChangeObservable' protocol instead.")]
@@ -21622,10 +21890,17 @@ namespace UIKit {
 	[Model, BaseType (typeof (NSObject))]
 	[Protocol]
 	partial interface UIViewControllerAnimatedTransitioning {
+		/// <param name="transitionContext">To be added.</param>
+		/// <summary>The duration, in seconds, of the transition.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("transitionDuration:")]
 		double TransitionDuration (IUIViewControllerContextTransitioning transitionContext);
 
+		/// <param name="transitionContext">To be added.</param>
+		/// <summary>Animate the transition with the animator object.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("animateTransition:")]
 		void AnimateTransition (IUIViewControllerContextTransitioning transitionContext);
@@ -21650,6 +21925,9 @@ namespace UIKit {
 	[Model, BaseType (typeof (NSObject))]
 	[Protocol]
 	partial interface UIViewControllerInteractiveTransitioning {
+		/// <param name="transitionContext">To be added.</param>
+		/// <summary>Sets up and begins a view controller interactive transition.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("startInteractiveTransition:")]
 		void StartInteractiveTransition (IUIViewControllerContextTransitioning transitionContext);
@@ -21798,6 +22076,10 @@ namespace UIKit {
 		[Export ("completionCurve")]
 		UIViewAnimationCurve CompletionCurve { get; }
 
+		/// <param name="uiTransitionKey">To be added.</param>
+		/// <summary>The UIViewController for the specified uiTransitionKey.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("viewControllerForKey:")]
 		UIViewController GetViewControllerForKey (NSString uiTransitionKey);
@@ -21806,11 +22088,18 @@ namespace UIKit {
 		[Export ("containerView")]
 		UIView ContainerView { get; }
 
+		/// <summary>Returns the transform that describes the rotation of the transition.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[MacCatalyst (13, 1)]
 		[Export ("targetTransform")]
 		CGAffineTransform TargetTransform ();
 
+		/// <param name="key">To be added.</param>
+		/// <summary>Gets the transition that is specified by <paramref name="key" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[MacCatalyst (13, 1)]
 		[Export ("viewForKey:")]
@@ -21833,15 +22122,29 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	partial interface UIViewControllerTransitionCoordinator : UIViewControllerTransitionCoordinatorContext {
+		/// <param name="animate">To be added.</param>
+		/// <param name="completion">To be added.</param>
+		/// <summary>Runs the <paramref name="animate" /> animation simultaneously with the animated view controller transition, and runs <paramref name="completion" /> when it is finished.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("animateAlongsideTransition:completion:")]
 		bool AnimateAlongsideTransition (Action<IUIViewControllerTransitionCoordinatorContext> animate,
 						 [NullAllowed] Action<IUIViewControllerTransitionCoordinatorContext> completion);
 
+		/// <param name="view">To be added.</param>
+		/// <param name="animation">To be added.</param>
+		/// <param name="completion">To be added.</param>
+		/// <summary>Runs the <paramref name="animation" /> animation inside of <paramref name="view" />, and runs <paramref name="completion" /> when it is finished.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("animateAlongsideTransitionInView:animation:completion:")]
 		bool AnimateAlongsideTransitionInView (UIView view, Action<IUIViewControllerTransitionCoordinatorContext> animation, [NullAllowed] Action<IUIViewControllerTransitionCoordinatorContext> completion);
 
+		/// <param name="handler">To be added.</param>
+		/// <summary>Developers should not use this deprecated method. Developers should use 'NotifyWhenInteractionChanges' instead.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Deprecated (PlatformName.iOS, 10, 0, message: "Use 'NotifyWhenInteractionChanges' instead.")]
 		[Deprecated (PlatformName.TvOS, 10, 0, message: "Use 'NotifyWhenInteractionChanges' instead.")]
@@ -24192,10 +24495,16 @@ namespace UIKit {
 		[Export ("view", ArgumentSemantic.Weak)]
 		UIView View { get; }
 
+		/// <param name="view">The view that will contain the interaction.</param>
+		/// <summary>Method that is called just before the interaction is added to the provided <paramref name="view" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("willMoveToView:")]
 		void WillMoveToView ([NullAllowed] UIView view);
 
+		/// <param name="view">The view that now contains the interaction.</param>
+		/// <summary>Method that is called after the interaction is added to the provided <paramref name="view" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("didMoveToView:")]
 		void DidMoveToView ([NullAllowed] UIView view);
@@ -24586,6 +24895,10 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'UIDocumentPickerViewController' instead.")]
 	partial interface UIDocumentMenuDelegate {
+		/// <param name="documentMenu">To be added.</param>
+		/// <param name="documentPicker">To be added.</param>
+		/// <summary>The user chose a document.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("documentMenu:didPickDocumentPicker:"), EventArgs ("UIDocumentMenuDocumentPicked")]
 		void DidPickDocumentPicker (UIDocumentMenuViewController documentMenu, UIDocumentPickerViewController documentPicker);
@@ -24593,6 +24906,9 @@ namespace UIKit {
 #if !NET
 		[Abstract]
 #endif
+		/// <param name="documentMenu">To be added.</param>
+		/// <summary>The user dismissed the picker.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("documentMenuWasCancelled:")]
 		void WasCancelled (UIDocumentMenuViewController documentMenu);
 	}
@@ -24698,6 +25014,10 @@ namespace UIKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	partial interface UIDocumentPickerDelegate {
+		/// <param name="controller">The controller that made the request.</param>
+		/// <param name="url">The URLS that was picked.</param>
+		/// <summary>Developers should not use this deprecated method. Implement 'DidPickDocument (UIDocumentPickerViewController, NSUrl[])' instead.</summary>
+		/// <remarks>The meaning will differ dependent upon the mode of the document picker.</remarks>
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Implement 'DidPickDocument (UIDocumentPickerViewController, NSUrl[])' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Implement 'DidPickDocument (UIDocumentPickerViewController, NSUrl[])' instead.")]
 #if !NET
@@ -24762,10 +25082,20 @@ namespace UIKit {
 	[Protocol]
 	interface UIDataSourceModelAssociation {
 
+		/// <param name="idx">To be added.</param>
+		/// <param name="view">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("modelIdentifierForElementAtIndexPath:inView:")]
 		string GetModelIdentifier (NSIndexPath idx, UIView view);
 
+		/// <param name="identifier">To be added.</param>
+		/// <param name="view">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("indexPathForElementWithModelIdentifier:inView:")]
 		NSIndexPath GetIndexPath (string identifier, UIView view);
@@ -24775,6 +25105,10 @@ namespace UIKit {
 	[Protocol]
 	interface UIAccessibilityReadingContent {
 
+		/// <param name="point">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityLineNumberForPoint:")]
 		nint GetAccessibilityLineNumber (CGPoint point);
@@ -24787,6 +25121,9 @@ namespace UIKit {
 		[Export ("accessibilityFrameForLineNumber:")]
 		CGRect GetAccessibilityFrame (nint lineNumber);
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityPageContent")]
 		string GetAccessibilityPageContent ();
@@ -24812,11 +25149,19 @@ namespace UIKit {
 		[Export ("guidedAccessRestrictionIdentifiers")]
 		string [] GetGuidedAccessRestrictionIdentifiers { get; }
 
+		/// <param name="restrictionIdentifier">To be added.</param>
+		/// <param name="newRestrictionState">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("guidedAccessRestrictionWithIdentifier:didChangeState:")]
 		[EventArgs ("UIGuidedAccessRestriction")]
 		void GuidedAccessRestrictionChangedState (string restrictionIdentifier, UIGuidedAccessRestrictionState newRestrictionState);
 
+		/// <param name="restrictionIdentifier">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("textForGuidedAccessRestrictionWithIdentifier:")]
 		string GetTextForGuidedAccessRestriction (string restrictionIdentifier);
@@ -25212,6 +25557,9 @@ namespace UIKit {
 		[EventArgs ("NSPreviewInteractionPreviewUpdate")]
 		void DidUpdatePreviewTransition (UIPreviewInteraction previewInteraction, nfloat transitionProgress, bool ended);
 
+		/// <param name="previewInteraction">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("previewInteractionDidCancel:")]
 		void DidCancel (UIPreviewInteraction previewInteraction);
@@ -25269,18 +25617,30 @@ namespace UIKit {
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'PreferredFocusEnvironments' instead.")]
 		UIView PreferredFocusedView { get; }
 
+		/// <summary>When <c>this</c> is the active focus environment, requests a focus update, which can potentially change the <see cref="P:UIKit.UIViewController.PreferredFocusedView" />. (See also <see cref="M:UIKit.UIViewController.UpdateFocusIfNeeded" />.)</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("setNeedsFocusUpdate")]
 		void SetNeedsFocusUpdate ();
 
+		/// <summary>If any focus environment has a pending update, this method forces an immediate focus update. Unlike <see cref="M:UIKit.IUIFocusEnvironment.SetNeedsFocusUpdate" />, this method may be called by any <see cref="T:UIKit.IUIFocusEnvironment" />, whether it currently contains focus or not.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("updateFocusIfNeeded")]
 		void UpdateFocusIfNeeded ();
 
+		/// <param name="context">To be added.</param>
+		/// <summary>Called prior to the current object either losing or receiving focus. If either focus environment returns <see langword="false" />, the focus update is canceled.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("shouldUpdateFocusInContext:")]
 		bool ShouldUpdateFocus (UIFocusUpdateContext context);
 
+		/// <param name="context">Metadata for the focus change.</param>
+		/// <param name="coordinator">The <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=UIKit%20UIFocus%20Animation%20Controller&amp;scope=Xamarin" title="T:UIKit.UIFocusAnimationController">T:UIKit.UIFocusAnimationController</a></format> coordinating the focus-change animations.</param>
+		/// <summary>Delegate method called shortly after focus has changed to a new <see cref="T:UIKit.UIView" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("didUpdateFocusInContext:withAnimationCoordinator:")]
 		void DidUpdateFocus (UIFocusUpdateContext context, UIFocusAnimationCoordinator coordinator);
@@ -25435,10 +25795,16 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIDragAnimating {
+		/// <param name="animations">An action that animates UI elements.</param>
+		/// <summary>Adds the specified animation action.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("addAnimations:")]
 		void AddAnimations (Action animations);
 
+		/// <param name="completion">The completion handler to add.</param>
+		/// <summary>Adds the specified <paramref name="completion" /> block to run when the animation ends.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("addCompletion:")]
 		void AddCompletion (Action<UIViewAnimatingPosition> completion);
@@ -25453,6 +25819,10 @@ namespace UIKit {
 		[Export ("items")]
 		UIDragItem [] Items { get; }
 
+		/// <param name="view">The view to query.</param>
+		/// <summary>Returns the location of the drag-drop activity in the coordinate frame of the specified <paramref name="view" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("locationInView:")]
 		CGPoint LocationInView ([NullAllowed] UIView view);
@@ -25465,10 +25835,18 @@ namespace UIKit {
 		[Export ("restrictedToDraggingApplication")]
 		bool RestrictedToDraggingApplication { [Bind ("isRestrictedToDraggingApplication")] get; }
 
+		/// <param name="typeIdentifiers">The type identifiers to check.</param>
+		/// <summary>TReturns a Boolean value that tells whether the session contains at least one item that is described by any of the specified type identifiers.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("hasItemsConformingToTypeIdentifiers:")]
 		bool HasConformingItems (string [] typeIdentifiers);
 
+		/// <param name="itemProviderReadingClass">The class of objects to check.</param>
+		/// <summary>Returns a Boolean value that tells whether the session can load objects of the specified class.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("canLoadObjectsOfClass:")]
 		bool CanLoadObjects (Class itemProviderReadingClass);
@@ -25609,6 +25987,11 @@ namespace UIKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface UIDragInteractionDelegate {
+		/// <param name="interaction">The interaction that is making the request.</param>
+		/// <param name="session">The drag session to add initial items to.</param>
+		/// <summary>Method that is called to get the items that will begin a drag interaction.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dragInteraction:itemsForBeginningSession:")]
 		UIDragItem [] GetItemsForBeginningSession (UIDragInteraction interaction, IUIDragSession session);
@@ -25870,6 +26253,11 @@ namespace UIKit {
 		[Export ("progressIndicatorStyle", ArgumentSemantic.Assign)]
 		UIDropSessionProgressIndicatorStyle ProgressIndicatorStyle { get; set; }
 
+		/// <param name="itemProviderReadingClass">The class of objects to load.</param>
+		/// <param name="completion">Handler to run after the objecs are loaded.</param>
+		/// <summary>When implemented by the developer, instantiates every object in the drop session that has the type that is specified by the <paramref ame="itemProviderReadingClass" /> parameter.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("loadObjectsOfClass:completion:")]
 		NSProgress LoadObjects (Class itemProviderReadingClass, Action<INSItemProviderReading []> completion);
@@ -25923,6 +26311,12 @@ namespace UIKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface UICollectionViewDragDelegate {
+		/// <param name="collectionView">The originating collection view.</param>
+		/// <param name="session">The drag session to which to add items.</param>
+		/// <param name="indexPath">The index path to the item.</param>
+		/// <summary>Returns the items that were used to begin the drag operation, if present.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("collectionView:itemsForBeginningDragSession:atIndexPath:")]
 		UIDragItem [] GetItemsForBeginningDragSession (UICollectionView collectionView, IUIDragSession session, NSIndexPath indexPath);
@@ -25983,6 +26377,10 @@ namespace UIKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface UICollectionViewDropDelegate {
+		/// <param name="collectionView">The receiving collection view.</param>
+		/// <param name="coordinator">The drop coordinator to use.</param>
+		/// <summary>Method that is called to drop data into a collection view.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("collectionView:performDropWithCoordinator:")]
 		void PerformDrop (UICollectionView collectionView, IUICollectionViewDropCoordinator coordinator);
@@ -26078,18 +26476,39 @@ namespace UIKit {
 		[Export ("session")]
 		IUIDropSession Session { get; }
 
+		/// <param name="dragItem">The item to drop.</param>
+		/// <param name="placeholder">The placeholder into which to drop the item.</param>
+		/// <summary>Drops the drag item to the specified placeholder.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dropItem:toPlaceholder:")]
 		IUICollectionViewDropPlaceholderContext DropItemToPlaceholder (UIDragItem dragItem, UICollectionViewDropPlaceholder placeholder);
 
+		/// <param name="dragItem">The item to drop.</param>
+		/// <param name="itemIndexPath">The index path to which to drop the item.</param>
+		/// <summary>Drops the drag item into the item at the specified item index path.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dropItem:toItemAtIndexPath:")]
 		IUIDragAnimating DropItemToItem (UIDragItem dragItem, NSIndexPath itemIndexPath);
 
+		/// <param name="dragItem">The item to drop.</param>
+		/// <param name="itemIndexPath">The index path to the item into which to drop.</param>
+		/// <param name="rect">The destination drop rectangle.</param>
+		/// <summary>Drops the drag item into the specified rectangle, in the coordinate system of the item at the specified item index path.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dropItem:intoItemAtIndexPath:rect:")]
 		IUIDragAnimating DropItemIntoItem (UIDragItem dragItem, NSIndexPath itemIndexPath, CGRect rect);
 
+		/// <param name="dragItem">The item to drop.</param>
+		/// <param name="target">The target to which to drop the item.</param>
+		/// <summary>Drops the drag item to the specified target.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dropItem:toTarget:")]
 		IUIDragAnimating DropItemToTarget (UIDragItem dragItem, UIDragPreviewTarget target);
@@ -26148,14 +26567,23 @@ namespace UIKit {
 		[Export ("dragItem")]
 		UIDragItem DragItem { get; }
 
+		/// <param name="dataSourceUpdates">Handler to run as the placeholder is replaced. Takes the index path where the content should drop.</param>
+		/// <summary>Replaces the placeholder cell with dropped content.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("commitInsertionWithDataSourceUpdates:")]
 		bool CommitInsertion (Action<NSIndexPath> dataSourceUpdates);
 
+		/// <summary>Removes the placeholder from the view.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("deletePlaceholder")]
 		bool DeletePlaceholder ();
 
+		/// <summary>Marks the placeholder cell as requiring updated content.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("setNeedsCellUpdate")]
 		void SetNeedsCellUpdate ();
@@ -26167,6 +26595,12 @@ namespace UIKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface UITableViewDragDelegate {
+		/// <param name="tableView">The originating table view.</param>
+		/// <param name="session">The session to which to add the items.</param>
+		/// <param name="indexPath">The index path to the dragged row.</param>
+		/// <summary>Returns a list of any items that are present at the beginning of a drag session.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("tableView:itemsForBeginningDragSession:atIndexPath:")]
 		UIDragItem [] GetItemsForBeginningDragSession (UITableView tableView, IUIDragSession session, NSIndexPath indexPath);
@@ -26227,6 +26661,10 @@ namespace UIKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface UITableViewDropDelegate {
+		/// <param name="tableView">The receiving table view.</param>
+		/// <param name="coordinator">The drop coordinator.</param>
+		/// <summary>Method that is called to drop data into a table view.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("tableView:performDropWithCoordinator:")]
 		void PerformDrop (UITableView tableView, IUITableViewDropCoordinator coordinator);
@@ -26319,18 +26757,39 @@ namespace UIKit {
 		[Export ("session")]
 		IUIDropSession Session { get; }
 
+		/// <param name="dragItem">The item to drop.</param>
+		/// <param name="placeholder">The placeholder into which to drop the item.</param>
+		/// <summary>Drops the drag item to the specified placeholder.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dropItem:toPlaceholder:")]
 		IUITableViewDropPlaceholderContext DropItemToPlaceholder (UIDragItem dragItem, UITableViewDropPlaceholder placeholder);
 
+		/// <param name="dragItem">The item to drop.</param>
+		/// <param name="indexPath">The index path at which to insert the item.</param>
+		/// <summary>Drops the drag item to the row at the specified index path.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dropItem:toRowAtIndexPath:")]
 		IUIDragAnimating DropItemToRow (UIDragItem dragItem, NSIndexPath indexPath);
 
+		/// <param name="dragItem">The item to drop.</param>
+		/// <param name="indexPath">The index path of the row into which to drop the item.</param>
+		/// <param name="rect">The rectangle into which to animate the drop.</param>
+		/// <summary>Drops the drag item into the specified rectangle, in the coordinate system of the item at the specified item index path.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dropItem:intoRowAtIndexPath:rect:")]
 		IUIDragAnimating DropItemIntoRow (UIDragItem dragItem, NSIndexPath indexPath, CGRect rect);
 
+		/// <param name="dragItem">The item to drop.</param>
+		/// <param name="target">The drop target.</param>
+		/// <summary>Drops the drag item to the specified target.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dropItem:toTarget:")]
 		IUIDragAnimating DropItemToTarget (UIDragItem dragItem, UIDragPreviewTarget target);
@@ -26389,10 +26848,17 @@ namespace UIKit {
 		[Export ("dragItem")]
 		UIDragItem DragItem { get; }
 
+		/// <param name="dataSourceUpdates">The handler that will update the view's data source.</param>
+		/// <summary>Replaces the placeholder cell with dropped content.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("commitInsertionWithDataSourceUpdates:")]
 		bool CommitInsertion (Action<NSIndexPath> dataSourceUpdates);
 
+		/// <summary>Removes the placeholder from the view.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("deletePlaceholder")]
 		bool DeletePlaceholder ();
@@ -26668,16 +27134,27 @@ namespace UIKit {
 		[Export ("dataSourceSectionIndexForPresentationSectionIndex:")]
 		nint GetDataSourceSectionIndex (nint presentationSectionIndex);
 
+		/// <param name="dataSourceIndexPath">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("presentationIndexPathForDataSourceIndexPath:")]
 		[return: NullAllowed]
 		NSIndexPath GetPresentationIndexPath ([NullAllowed] NSIndexPath dataSourceIndexPath);
 
+		/// <param name="presentationIndexPath">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("dataSourceIndexPathForPresentationIndexPath:")]
 		[return: NullAllowed]
 		NSIndexPath GetDataSourceIndexPath ([NullAllowed] NSIndexPath presentationIndexPath);
 
+		/// <param name="actionsToTranslate">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("performUsingPresentationValues:")]
 		void PerformUsingPresentationValues (Action actionsToTranslate);
@@ -26710,6 +27187,11 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UISpringLoadedInteractionBehavior {
+		/// <param name="interaction">The interaction to check.</param>
+		/// <param name="context">The context to query.</param>
+		/// <summary>Returns a Boolean value that tells whether spring-loading should start or continue for the specified <paramref name="context" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("shouldAllowInteraction:withContext:")]
 		bool ShouldAllowInteraction (UISpringLoadedInteraction interaction, IUISpringLoadedInteractionContext context);
@@ -26728,6 +27210,10 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UISpringLoadedInteractionEffect {
+		/// <param name="interaction">The interaction whose state has changed.</param>
+		/// <param name="context">The interaction context.</param>
+		/// <summary>Method that is called when the interaction state changes.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("interaction:didChangeWithContext:")]
 		void DidChange (UISpringLoadedInteraction interaction, IUISpringLoadedInteractionContext context);
@@ -26752,6 +27238,10 @@ namespace UIKit {
 		[NullAllowed, Export ("targetItem", ArgumentSemantic.Strong)]
 		NSObject TargetItem { get; set; }
 
+		/// <param name="view">The view whose coordinate system to use.</param>
+		/// <summary>Method that is called to get the location of the drag activity in the <paramref name="view" /> coordinate system.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("locationInView:")]
 		CGPoint LocationInView ([NullAllowed] UIView view);
@@ -26902,22 +27392,35 @@ namespace UIKit {
 		[Export ("defaultAttributes")]
 		NSDictionary<NSString, NSObject> DefaultAttributes { get; }
 
+		/// <param name="string">The new attachment value.</param>
+		/// <summary>Sets the text result.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("setStringResult:")]
 		void SetStringResult (string @string);
 
+		/// <param name="string">The new attachment value.</param>
+		/// <summary>Sets the string value of the paste item.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("setAttributedStringResult:")]
 		void SetAttributedStringResult (NSAttributedString @string);
 
+		/// <param name="textAttachment">The new attachment value.</param>
+		/// <summary>Sets the attachement result to the specified attachment.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("setAttachmentResult:")]
 		void SetAttachmentResult (NSTextAttachment textAttachment);
 
+		/// <summary>Causes the text value to not be provided by its provider.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("setNoResult")]
 		void SetNoResult ();
 
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("setDefaultResult")]
 		void SetDefaultResult ();
@@ -27224,6 +27727,10 @@ namespace UIKit {
 		[Export ("coordinateSpace")]
 		IUICoordinateSpace CoordinateSpace { get; }
 
+		/// <param name="rect">The rectangle whose focus items to get.</param>
+		/// <summary>Returns a list of all the child focus items within the specified rectangle.</summary>
+		/// <returns>The list of all the child focus items within the specified rectangle.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("focusItemsInRect:")]
 		IUIFocusItem [] GetFocusItems (CGRect rect);
@@ -27248,6 +27755,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIUserActivityRestoring {
+		/// <param name="activity">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[MacCatalyst (13, 1)]
 		[Export ("restoreUserActivityState:")]

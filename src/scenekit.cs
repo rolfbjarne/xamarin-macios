@@ -152,6 +152,8 @@ namespace SceneKit {
 		[Export ("addAnimationPlayer:forKey:")]
 		void AddAnimation (SCNAnimationPlayer player, [NullAllowed] NSString key);
 
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("removeAllAnimations")]
 		void RemoveAllAnimations ();
@@ -163,10 +165,16 @@ namespace SceneKit {
 		[Export ("removeAllAnimationsWithBlendOutDuration:")]
 		void RemoveAllAnimationsWithBlendOutDuration (nfloat duration);
 
+		/// <param name="key">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("removeAnimationForKey:")]
 		void RemoveAnimation (NSString key);
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("animationKeys")]
 		NSString [] GetAnimationKeys ();
@@ -179,6 +187,10 @@ namespace SceneKit {
 		[Export ("animationPlayerForKey:")]
 		SCNAnimationPlayer GetAnimationPlayer (NSString key);
 
+		/// <param name="key">To be added.</param>
+		/// <summary>Developers should not use this deprecated method. Developers should use 'GetAnimationPlayer' instead.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Deprecated (PlatformName.TvOS, 11, 0, message: "Use 'GetAnimationPlayer' instead.")]
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'GetAnimationPlayer' instead.")]
@@ -189,6 +201,9 @@ namespace SceneKit {
 		[return: NullAllowed]
 		CAAnimation GetAnimation (NSString key);
 
+		/// <param name="key">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Deprecated (PlatformName.TvOS, 11, 0, message: "Use 'SCNAnimationPlayer.Paused' instead.")]
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'SCNAnimationPlayer.Paused' instead.")]
@@ -198,6 +213,9 @@ namespace SceneKit {
 		[Export ("pauseAnimationForKey:")]
 		void PauseAnimation (NSString key);
 
+		/// <param name="key">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Deprecated (PlatformName.TvOS, 11, 0, message: "Use 'SCNAnimationPlayer.Paused' instead.")]
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'SCNAnimationPlayer.Paused' instead.")]
@@ -207,6 +225,10 @@ namespace SceneKit {
 		[Export ("resumeAnimationForKey:")]
 		void ResumeAnimation (NSString key);
 
+		/// <param name="key">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Deprecated (PlatformName.TvOS, 11, 0, message: "Use 'SCNAnimationPlayer.Paused' instead.")]
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'SCNAnimationPlayer.Paused' instead.")]
@@ -335,10 +357,19 @@ namespace SceneKit {
 	[Model, Protocol]
 	[BaseType (typeof (NSObject))]
 	interface SCNBoundingVolume {
+		/// <param name="min">To be added.</param>
+		/// <param name="max">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("getBoundingBoxMin:max:")]
 		bool GetBoundingBox (ref SCNVector3 min, ref SCNVector3 max);
 
+		/// <param name="min">To be added.</param>
+		/// <param name="max">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Abstract]
 		[Export ("setBoundingBoxMin:max:")]
@@ -3745,6 +3776,11 @@ namespace SceneKit {
 		[Export ("currentTime")]
 		double CurrentTime { get; set; }
 
+		/// <param name="thePoint">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("hitTest:options:")]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
@@ -3783,26 +3819,51 @@ namespace SceneKit {
 		[Export ("overlaySKScene", ArgumentSemantic.Retain)]
 		SKScene OverlayScene { get; set; }
 
+		/// <param name="node">To be added.</param>
+		/// <param name="pointOfView">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[MacCatalyst (13, 1)]
 		[Export ("isNodeInsideFrustum:withPointOfView:")]
 		bool IsNodeInsideFrustum (SCNNode node, SCNNode pointOfView);
 
+		/// <param name="point">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[MacCatalyst (13, 1)]
 		[Export ("projectPoint:")]
 		SCNVector3 ProjectPoint (SCNVector3 point);
 
+		/// <param name="point">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[MacCatalyst (13, 1)]
 		[Export ("unprojectPoint:")]
 		SCNVector3 UnprojectPoint (SCNVector3 point);
 
+		/// <param name="obj">To be added.</param>
+		/// <param name="abortHandler">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[MacCatalyst (13, 1)]
 		[Export ("prepareObject:shouldAbortBlock:")]
 		bool Prepare (NSObject obj, [NullAllowed] Func<bool> abortHandler);
 
+		/// <param name="objects">The objects to prepare.</param>
+		/// <param name="completionHandler">A handler that receives <see langword="true" /> if preparation of all scene resources succeeded, or <see langword="false" /> if not.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[MacCatalyst (13, 1)]
 		[Async (XmlDocs = """
@@ -4641,35 +4702,75 @@ namespace SceneKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface SCNActionable {
+		/// <param name="action">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("runAction:")]
 		void RunAction (SCNAction action);
 
+		/// <param name="action">To be added.</param>
+		/// <param name="block">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("runAction:completionHandler:")]
 		void RunAction (SCNAction action, [NullAllowed] Action block);
 
+		/// <param name="action">To be added.</param>
+		/// <param name="key">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("runAction:forKey:")]
 		void RunAction (SCNAction action, [NullAllowed] string key);
 
+		/// <param name="action">To be added.</param>
+		/// <param name="key">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="block">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("runAction:forKey:completionHandler:")]
 		void RunAction (SCNAction action, [NullAllowed] string key, [NullAllowed] Action block);
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("hasActions")]
 		bool HasActions ();
 
+		/// <param name="key">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("actionForKey:")]
 		[return: NullAllowed]
 		SCNAction GetAction (string key);
 
+		/// <param name="key">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("removeActionForKey:")]
 		void RemoveAction (string key);
 
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("removeAllActions")]
 		void RemoveAllActions ();

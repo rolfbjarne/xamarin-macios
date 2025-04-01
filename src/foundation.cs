@@ -438,12 +438,21 @@ namespace Foundation {
 #endif
 #endif // !XAMCORE_5_0
 
+		/// <param name="wordDocFormat">To be added.</param>
+		/// <param name="docAttributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
 		[Export ("initWithDocFormat:documentAttributes:")]
 		NativeHandle Constructor (NSData wordDocFormat, out NSDictionary docAttributes);
 
+		/// <param name="htmlData">To be added.</param>
+		/// <param name="baseUrl">To be added.</param>
+		/// <param name="docAttributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -460,6 +469,10 @@ namespace Foundation {
 		[Export ("drawWithRect:options:")]
 		void DrawString (CGRect rect, NSStringDrawingOptions options);
 
+		/// <param name="path">To be added.</param>
+		/// <param name="resultDocumentAttributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -467,6 +480,10 @@ namespace Foundation {
 		[Export ("initWithPath:documentAttributes:")]
 		NativeHandle Constructor (string path, out NSDictionary resultDocumentAttributes);
 
+		/// <param name="url">To be added.</param>
+		/// <param name="resultDocumentAttributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -492,18 +509,32 @@ namespace Foundation {
 		[Internal, Export ("initWithHTML:documentAttributes:")]
 		IntPtr InitWithHTML (NSData data, out NSDictionary resultDocumentAttributes);
 
+		/// <param name="data">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="resultDocumentAttributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
 		[Export ("initWithHTML:options:documentAttributes:")]
 		NativeHandle Constructor (NSData data, [NullAllowed] NSDictionary options, out NSDictionary resultDocumentAttributes);
 
+		/// <param name="data">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="resultDocumentAttributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
 		[Wrap ("this (data, options.GetDictionary (), out resultDocumentAttributes)")]
 		NativeHandle Constructor (NSData data, NSAttributedStringDocumentAttributes options, out NSDictionary resultDocumentAttributes);
 
+		/// <param name="wrapper">To be added.</param>
+		/// <param name="resultDocumentAttributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]

@@ -143,6 +143,9 @@ namespace CoreAudioKit {
 	[BaseType (typeof (NSWindowController), Name = "CABTLEMIDIWindowController")]
 	interface CABtleMidiWindowController {
 
+		/// <param name="window">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithWindow:")]
 		NativeHandle Constructor ([NullAllowed] NSWindow window);
 	}
@@ -152,6 +155,10 @@ namespace CoreAudioKit {
 	[BaseType (typeof (NSViewController))]
 	interface CAInterDeviceAudioViewController {
 
+		/// <param name="nibNameOrNull">To be added.</param>
+		/// <param name="nibBundleOrNull">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithNibName:bundle:")]
 		NativeHandle Constructor ([NullAllowed] string nibNameOrNull, [NullAllowed] NSBundle nibBundleOrNull);
 	}
@@ -162,6 +169,9 @@ namespace CoreAudioKit {
 	[BaseType (typeof (NSWindowController))]
 	interface CANetworkBrowserWindowController {
 
+		/// <param name="window">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithWindow:")]
 		NativeHandle Constructor ([NullAllowed] NSWindow window);
 

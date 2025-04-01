@@ -7441,6 +7441,9 @@ namespace AppKit {
 		[Export ("draggedImage:movedTo:")]
 		void DraggedImageMovedTo (NSImage image, CGPoint screenPoint);
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("ignoreModifierKeysWhileDragging"), DefaultValue (false)]
 		bool IgnoreModifierKeysWhileDragging { get; }
 
@@ -13861,6 +13864,10 @@ namespace AppKit {
 	[Protocol]
 	interface NSPasteboardWriting {
 #if NET
+		/// <param name="pasteboard">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 #endif
 		[Export ("writableTypesForPasteboard:")]
@@ -13875,6 +13882,10 @@ namespace AppKit {
 		NSPasteboardWritingOptions GetWritingOptionsForType (string type, NSPasteboard pasteboard);
 
 #if NET
+		/// <param name="type">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 #endif
 		[Export ("pasteboardPropertyListForType:")]
@@ -13961,10 +13972,19 @@ namespace AppKit {
 	interface NSPasteboardReading {
 		// This method is required, but we don't generate the correct code for required static methods
 		// [Abstract]
+		/// <param name="pasteboard">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("readableTypesForPasteboard:")]
 		string [] GetReadableTypesForPasteboard (NSPasteboard pasteboard);
 
+		/// <param name="type">To be added.</param>
+		/// <param name="pasteboard">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("readingOptionsForType:pasteboard:")]
 		NSPasteboardReadingOptions GetReadingOptionsForType (string type, NSPasteboard pasteboard);
@@ -28948,6 +28968,9 @@ namespace AppKit {
 		[Export ("accessibilityFocused")]
 		bool AccessibilityFocused { [Bind ("isAccessibilityFocused")] get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityElement")]
 		bool AccessibilityElement { [Bind ("isAccessibilityElement")] get; set; }
@@ -29024,6 +29047,9 @@ namespace AppKit {
 		[NullAllowed, Export ("accessibilitySearchMenu", ArgumentSemantic.Strong)]
 		NSObject AccessibilitySearchMenu { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilitySelected")]
 		bool AccessibilitySelected { [Bind ("isAccessibilitySelected")] get; set; }
@@ -29064,14 +29090,23 @@ namespace AppKit {
 		[NullAllowed, Export ("accessibilityFilename")]
 		string AccessibilityFilename { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityExpanded")]
 		bool AccessibilityExpanded { [Bind ("isAccessibilityExpanded")] get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityEdited")]
 		bool AccessibilityEdited { [Bind ("isAccessibilityEdited")] get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityEnabled")]
 		bool AccessibilityEnabled { [Bind ("isAccessibilityEnabled")] get; set; }
@@ -29088,6 +29123,9 @@ namespace AppKit {
 		[NullAllowed, Export ("accessibilityCancelButton", ArgumentSemantic.Strong)]
 		NSObject AccessibilityCancelButton { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityProtectedContent")]
 		bool AccessibilityProtectedContent { [Bind ("isAccessibilityProtectedContent")] get; set; }
@@ -29116,10 +29154,16 @@ namespace AppKit {
 		[NullAllowed, Export ("accessibilityMainWindow", ArgumentSemantic.Strong)]
 		NSObject AccessibilityMainWindow { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityHidden")]
 		bool AccessibilityHidden { [Bind ("isAccessibilityHidden")] get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityFrontmost")]
 		bool AccessibilityFrontmost { [Bind ("isAccessibilityFrontmost")] get; set; }
@@ -29144,6 +29188,9 @@ namespace AppKit {
 		[NullAllowed, Export ("accessibilityColumnTitles", ArgumentSemantic.Copy)]
 		NSObject [] AccessibilityColumnTitles { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityOrderedByRow")]
 		bool AccessibilityOrderedByRow { [Bind ("isAccessibilityOrderedByRow")] get; set; }
@@ -29192,6 +29239,9 @@ namespace AppKit {
 		[NullAllowed, Export ("accessibilityCriticalValue", ArgumentSemantic.Strong)]
 		NSObject AccessibilityCriticalValue { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityDisclosed")]
 		bool AccessibilityDisclosed { [Bind ("isAccessibilityDisclosed")] get; set; }
@@ -29420,6 +29470,9 @@ namespace AppKit {
 		[NullAllowed, Export ("accessibilityToolbarButton", ArgumentSemantic.Strong)]
 		NSObject AccessibilityToolbarButton { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityModal")]
 		bool AccessibilityModal { [Bind ("isAccessibilityModal")] get; set; }
@@ -29428,6 +29481,9 @@ namespace AppKit {
 		[NullAllowed, Export ("accessibilityProxy", ArgumentSemantic.Strong)]
 		NSObject AccessibilityProxy { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityMain")]
 		bool AccessibilityMain { [Bind ("isAccessibilityMain")] get; set; }
@@ -29460,6 +29516,9 @@ namespace AppKit {
 		[NullAllowed, Export ("accessibilityMinimizeButton", ArgumentSemantic.Strong)]
 		NSObject AccessibilityMinimizeButton { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityMinimized")]
 		bool AccessibilityMinimized { [Bind ("isAccessibilityMinimized")] get; set; }
@@ -29513,6 +29572,9 @@ namespace AppKit {
 		bool IsAccessibilitySelectorAllowed (Selector selector);
 
 #if NET
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 #endif
 		[Export ("accessibilityRequired")]
@@ -31909,9 +31971,15 @@ namespace AppKit {
 		[Export ("accessibilityDisplayShouldReduceMotion")]
 		bool AccessibilityDisplayShouldReduceMotion { get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("voiceOverEnabled")]
 		bool VoiceOverEnabled { [Bind ("isVoiceOverEnabled")] get; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("switchControlEnabled")]
 		bool SwitchControlEnabled { [Bind ("isSwitchControlEnabled")] get; }
 	}

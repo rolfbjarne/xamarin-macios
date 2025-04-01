@@ -1724,18 +1724,27 @@ namespace ModelIO {
 		MDLMeshBufferMap Map { get; }
 
 #if NET
+		/// <summary>Gets the length of the buffer, in bytes.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 #endif
 		[Export ("length")]
 		nuint Length { get; }
 
 #if NET
+		/// <summary>Gets the allocator that is used to allocate memory for the mesh buffer.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 #endif
 		[Export ("allocator", ArgumentSemantic.Retain)]
 		IMDLMeshBufferAllocator Allocator { get; }
 
 #if NET
+		/// <summary>Gets the memory pool that the buffer occupies.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 #endif
 		[Export ("zone", ArgumentSemantic.Retain)]
@@ -1743,6 +1752,9 @@ namespace ModelIO {
 		IMDLMeshBufferZone Zone { get; }
 
 #if NET
+		/// <summary>Gets a value that indicates whether the buffer contains indices or vertices.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 #endif
 		[Export ("type")]
@@ -1861,12 +1873,18 @@ namespace ModelIO {
 	[Protocol]
 	interface MDLMeshBufferZone {
 #if NET
+		/// <summary>Gets the capacity of the zone, in bytes.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 #endif
 		[Export ("capacity")]
 		nuint Capacity { get; }
 
 #if NET
+		/// <summary>Gets the allocator that created the zone.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 #endif
 		[Export ("allocator")]
@@ -2140,6 +2158,9 @@ namespace ModelIO {
 		MDLObject GetObject (nuint index);
 
 #if NET
+		/// <summary>Gets the number of objects in this container.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 #endif
 		[MacCatalyst (13, 1)]
@@ -3210,6 +3231,9 @@ namespace ModelIO {
 			set;
 		}
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 #if NET
 		[Abstract]
@@ -3232,6 +3256,9 @@ namespace ModelIO {
 		double MaximumTime { get; }
 
 		// Added in iOS 10 SDK but it is supposed to be present in iOS 9.
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 #if NET
 		[Abstract]
@@ -3258,6 +3285,11 @@ namespace ModelIO {
 #if !NET
 		[Obsolete ("Use 'CreateGlobalTransform4x4' instead.")]
 #endif
+		/// <param name="obj">To be added.</param>
+		/// <param name="atTime">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("globalTransformWithObject:atTime:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]

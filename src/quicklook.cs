@@ -260,6 +260,9 @@ namespace QuickLook {
 		NSUrl ItemUrl { get; }
 #endif
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("previewItemTitle")]
 		[NullAllowed]
 #if !NET

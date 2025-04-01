@@ -1909,7 +1909,7 @@ namespace CoreMidi {
 		[SupportedOSPlatform ("maccatalyst14.0")]
 		[SupportedOSPlatform ("macos")]
 		[DllImport (Constants.CoreMidiLibrary)]
-		extern static OSStatus MIDIDeviceNewEntity (MidiDeviceRef device, /* CFString */ IntPtr name, /* MIDIProtocolId */ MidiProtocolId protocol, byte embedded, /* ItemCount */ nuint numSourceEndpoints, /* ItemCount */ nuint numDestinationEndpoints, MidiEntityRef* newEntity);
+		unsafe extern static OSStatus MIDIDeviceNewEntity (MidiDeviceRef device, /* CFString */ IntPtr name, /* MIDIProtocolId */ MidiProtocolId protocol, byte embedded, /* ItemCount */ nuint numSourceEndpoints, /* ItemCount */ nuint numDestinationEndpoints, MidiEntityRef* newEntity);
 
 		/// <summary>Create and add a new entity to an external device.</summary>
 		/// <param name="name">The name for the new entity.</param>
@@ -1973,6 +1973,50 @@ namespace CoreMidi {
 		public MidiError Remove (MidiEntity entity)
 		{
 			return (MidiError) MIDIDeviceRemoveEntity (GetCheckedHandle (), entity.GetCheckedHandle ());
+		}
+
+		[DllImport (Constants.CoreMidiLibrary)]
+		unsafe extern static OSStatus MIDIDeviceCreate (IntPtr /* MidiDriverRef _nullable */ owner, IntPtr /* CFStringRef */ name, IntPtr /* CFStringRef */ manufacturer, IntPtr /* CFStringRef */ model, MidiDeviceRef* outDevice);
+
+		/// <summary>Create a new device corresponding to a specific piece of hardware.</summary>
+		/// <param name="owner">The driver that owns the new device. Pass null if the owner isn't a driver.</param>
+		/// <param name="name">The name for the new device.</param>
+		/// <param name="manufacturer">The manufacturer for the new device.</param>
+		/// <param name="model">The model for the new device.</param>
+		/// <param name="status">A status code that describes the result of creating the new device. This will be <see cref="MidiError.Ok" /> in case of success.</param>
+		/// <returns>A newly created <see cref="MidiDevice" /> instance, null otherwise.</returns>
+		public static MidiDevice? Create (MidiDriver? owner, string name, string manufacturer, string model, out MidiError status)
+		{
+			var handle = default (MidiDeviceRef);
+			using var namePtr = new TransientCFString (name);
+			using var manufacturerPtr = new TransientCFString (manufacturer);
+			using var modelPtr = new TransientCFString (model);
+
+			unsafe {
+				var driverInterface = default (MidiDriverInterface);
+				if (owner is not null)
+					driverInterface = owner.DriverInterface;
+				MidiDriverInterface* driverInterfacePtr1 = &driverInterface;
+				var driverInterfacePtr2 = default (IntPtr);
+				if (owner is not null)
+					driverInterfacePtr2 = (IntPtr) (&driverInterfacePtr1);
+				status = (MidiError) MIDIDeviceCreate (driverInterfacePtr2, namePtr, manufacturerPtr, modelPtr, &handle);
+			}
+
+			if (handle == MidiObject.InvalidRef)
+				return null;
+			return new MidiDevice (handle);
+		}
+
+		[DllImport (Constants.CoreMidiLibrary)]
+		unsafe extern static OSStatus MIDIDeviceDispose (MidiDeviceRef device);
+
+		/// <summary>Dispose of devices that haven't yet been added to the system with <see cref="MidiSetup.AddDevice" />.</summary>
+		/// <returns><see cref="MidiError.Ok" /> if successful, an error code otherwise.</returns>
+		/// <remarks>Only drivers can call this method, and only before calling <see cref="MidiSetup.AddDevice" />. Once <see cref="MidiSetup.AddDevice" /> has been called, use <see cref="MidiSetup.RemoveDevice" /> instead to destroy the device.</remarks>
+		public MidiError DisposeDevice ()
+		{
+			return (MidiError) MIDIDeviceDispose (GetCheckedHandle ());
 		}
 
 		/// <summary>Returns the number of MIDI entities in this device.</summary>

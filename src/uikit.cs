@@ -4552,6 +4552,9 @@ namespace UIKit {
 		[Wrap ("OpenUrl(app, url, options.GetDictionary ())")]
 		bool OpenUrl (UIApplication app, NSUrl url, UIApplicationOpenUrlOptions options);
 
+		/// <summary>Gets or sets the <see cref="T:UIKit.UIWindow" /> for the application.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("window", ArgumentSemantic.Retain), NullAllowed]
 		UIWindow Window { get; set; }
 

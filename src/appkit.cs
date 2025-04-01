@@ -18661,6 +18661,9 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	partial interface NSTableColumn : NSUserInterfaceItemIdentification, NSCoding {
+		/// <param name="identifier">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithIdentifier:")]
 		[Sealed]
 		NativeHandle Constructor (string identifier);

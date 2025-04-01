@@ -1636,6 +1636,10 @@ namespace GameKit {
 	: GKViewController
 #endif
 	{
+		/// <param name="nibNameOrNull">To be added.</param>
+		/// <param name="nibBundleOrNull">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[Export ("initWithNibName:bundle:")]
@@ -2120,6 +2124,10 @@ namespace GameKit {
 #if MONOMAC
 	[BaseType (typeof (NSViewController), Events = new Type [] { typeof (GKFriendRequestComposeViewControllerDelegate) }, Delegates = new string [] { "WeakComposeViewDelegate" })]
 	interface GKFriendRequestComposeViewController : GKViewController {
+		/// <param name="nibNameOrNull">To be added.</param>
+		/// <param name="nibBundleOrNull">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithNibName:bundle:")]
 		[NoiOS]
 		NativeHandle Constructor ([NullAllowed] string nibNameOrNull, [NullAllowed] NSBundle nibBundleOrNull);
@@ -2619,6 +2627,10 @@ namespace GameKit {
 	interface GKTurnBasedMatchmakerViewController : UIAppearance
 #endif
 		{
+		/// <param name="nibNameOrNull">To be added.</param>
+		/// <param name="nibBundleOrNull">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[Export ("initWithNibName:bundle:")]
@@ -2787,6 +2799,10 @@ namespace GameKit {
 	: GKViewController
 #endif
 	{
+		/// <param name="nibNameOrNull">To be added.</param>
+		/// <param name="nibBundleOrNull">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[Export ("initWithNibName:bundle:")]
@@ -3377,6 +3393,10 @@ namespace GameKit {
 	[BaseType (typeof (NSViewController))]
 	interface GKChallengesViewController : GKViewController {
 
+		/// <param name="nibName">To be added.</param>
+		/// <param name="bundle">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithNibName:bundle:")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
 

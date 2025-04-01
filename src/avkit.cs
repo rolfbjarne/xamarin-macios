@@ -621,6 +621,9 @@ namespace AVKit {
 	[NoMacCatalyst]
 	[BaseType (typeof (NSView))]
 	interface AVPlayerView {
+		/// <param name="frameRect">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithFrame:")]
 		NativeHandle Constructor (CGRect frameRect);
 
@@ -774,6 +777,9 @@ namespace AVKit {
 	[NoMacCatalyst]
 	[BaseType (typeof (NSView))]
 	interface AVCaptureView {
+		/// <param name="frameRect">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithFrame:")]
 		NativeHandle Constructor (CGRect frameRect);
 

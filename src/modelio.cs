@@ -3435,6 +3435,13 @@ namespace ModelIO {
 	[DisableDefaultCtor]
 	interface MDLVoxelArray {
 
+		/// <param name="asset">To be added.</param>
+		/// <param name="divisions">To be added.</param>
+		/// <param name="interiorShells">To be added.</param>
+		/// <param name="exteriorShells">To be added.</param>
+		/// <param name="patchRadius">To be added.</param>
+		/// <summary>Developers should not use this deprecated constructor. Developers should use 'new MDLVoxelArray (MDLAsset, int, float)'.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.MacOSX, 10, 12, message: "Use 'new MDLVoxelArray (MDLAsset, int, float)'.")]
 #if NET
 		[NoiOS]
@@ -3450,6 +3457,13 @@ namespace ModelIO {
 		[Export ("initWithAsset:divisions:interiorShells:exteriorShells:patchRadius:")]
 		NativeHandle Constructor (MDLAsset asset, int divisions, int interiorShells, int exteriorShells, float patchRadius);
 
+		/// <param name="asset">To be added.</param>
+		/// <param name="divisions">To be added.</param>
+		/// <param name="interiorNBWidth">To be added.</param>
+		/// <param name="exteriorNBWidth">To be added.</param>
+		/// <param name="patchRadius">To be added.</param>
+		/// <summary>Creates a new MDLVoxelArray from the provided asset, with the specified number of divisions and the specified numbers of concentric interior and exterior shells of voxels.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.MacOSX, 10, 12, message: "Use 'new MDLVoxelArray (MDLAsset, int, float)'.")]
 #if NET
 		[NoiOS]

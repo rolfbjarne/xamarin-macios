@@ -4891,6 +4891,10 @@ namespace UIKit {
 		[Wrap ("this (format, NSTextListOptions.None)")]
 		NativeHandle Constructor (string format);
 
+		/// <param name="format">To be added.</param>
+		/// <param name="mask">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("this (format.GetConstant(), mask)")]
 		NativeHandle Constructor (NSTextListMarkerFormats format, NSTextListOptions mask);
 

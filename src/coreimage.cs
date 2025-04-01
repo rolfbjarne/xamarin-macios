@@ -2913,6 +2913,9 @@ namespace CoreImage {
 		[Wrap ("this (source, index, options.GetDictionary ())")]
 		NativeHandle Constructor (CGImageSource source, nuint index, CIImageInitializationOptionsWithMetadata options);
 
+		/// <param name="layer">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -2920,6 +2923,10 @@ namespace CoreImage {
 		[Export ("initWithCGLayer:")]
 		NativeHandle Constructor (CGLayer layer);
 
+		/// <param name="layer">To be added.</param>
+		/// <param name="d">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -2928,6 +2935,10 @@ namespace CoreImage {
 		[Export ("initWithCGLayer:options:")]
 		NativeHandle Constructor (CGLayer layer, [NullAllowed] NSDictionary d);
 
+		/// <param name="layer">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -3115,6 +3126,9 @@ namespace CoreImage {
 		[Export ("initWithMTLTexture:options:")]
 		NativeHandle Constructor (IMTLTexture texture, [NullAllowed] NSDictionary options);
 
+		/// <param name="imageRep">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]

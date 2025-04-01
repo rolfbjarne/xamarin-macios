@@ -733,6 +733,10 @@ namespace SafariServices {
 	[NoMacCatalyst]
 	[BaseType (typeof (NSViewController))]
 	interface SFSafariExtensionViewController {
+		/// <param name="nibNameOrNull">To be added.</param>
+		/// <param name="nibBundleOrNull">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithNibName:bundle:")]
 		NativeHandle Constructor ([NullAllowed] string nibNameOrNull, [NullAllowed] NSBundle nibBundleOrNull);
 

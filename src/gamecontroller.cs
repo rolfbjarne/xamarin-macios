@@ -3342,7 +3342,7 @@ namespace Foundation {
 		[TV (17, 4), Mac (14, 3), iOS (17, 4), MacCatalyst (17, 4)]
 		[Static]
 		[Export ("valueWithGCPoint2:")]
-		NSValue FromCGPoint2 (GCPoint2 point);
+		NSValue FromGCPoint2 (GCPoint2 point);
 
 		[TV (17, 4), Mac (14, 3), iOS (17, 4), MacCatalyst (17, 4)]
 		[Export ("GCPoint2Value")]

@@ -475,7 +475,8 @@ namespace GameplayKit {
 	[Protocol]
 	interface GKGameModelUpdate {
 
-		[Abstract]
+		/// <include file="../docs/api/GameplayKit/IGKGameModelUpdate.xml" path="/Documentation/Docs[@DocId='P:GameplayKit.IGKGameModelUpdate.Value']/*" />
+	[Abstract]
 		[Export ("value", ArgumentSemantic.Assign)]
 		nint Value { get; set; }
 	}
@@ -1562,10 +1563,16 @@ namespace GameplayKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface GKStrategist {
+		/// <summary>Gets or sets the current game state.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("gameModel", ArgumentSemantic.Retain)]
 		IGKGameModel GameModel { get; set; }
 
+		/// <summary>Gets or sets the source of randomness for the strategist.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("randomSource", ArgumentSemantic.Retain)]
 		IGKRandom RandomSource { get; set; }

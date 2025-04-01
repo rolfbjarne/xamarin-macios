@@ -685,26 +685,44 @@ namespace SceneKit {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface SCNCameraControlConfiguration {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("autoSwitchToFreeCamera")]
 		bool AutoSwitchToFreeCamera { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("allowsTranslation")]
 		bool AllowsTranslation { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("flyModeVelocity")]
 		nfloat FlyModeVelocity { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("panSensitivity")]
 		nfloat PanSensitivity { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("truckSensitivity")]
 		nfloat TruckSensitivity { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("rotationSensitivity")]
 		nfloat RotationSensitivity { get; set; }
@@ -3740,6 +3758,9 @@ namespace SceneKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface SCNSceneRenderer {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("delegate", ArgumentSemantic.Weak), NullAllowed]
 		NSObject WeakSceneRendererDelegate { get; set; }
@@ -3760,15 +3781,24 @@ namespace SceneKit {
 		[Export ("playing")]
 		bool Playing { [Bind ("isPlaying")] get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("loops")]
 		bool Loops { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("pointOfView", ArgumentSemantic.Retain)]
 		[NullAllowed]
 		SCNNode PointOfView { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("autoenablesDefaultLighting")]
 		bool AutoenablesDefaultLighting { get; set; }
@@ -3813,22 +3843,34 @@ namespace SceneKit {
 		[Wrap ("HitTest (thePoint, options.GetDictionary ())")]
 		SCNHitTestResult [] HitTest (CGPoint thePoint, SCNHitTestOptions options);
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[MacCatalyst (13, 1)]
 		[Export ("showsStatistics")]
 		bool ShowsStatistics { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[MacCatalyst (13, 1)]
 		[Export ("sceneTime")]
 		double SceneTimeInSeconds { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[MacCatalyst (13, 1)]
 		[NullAllowed]
 		[Export ("scene", ArgumentSemantic.Retain)]
 		SCNScene Scene { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		// It seems swift has this property listed as an optional[0] and an Apple sample[1] sets this to null
 		// [0]: https://developer.apple.com/documentation/scenekit/scnscenerenderer/1524051-overlayskscene
@@ -5055,6 +5097,9 @@ namespace SceneKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface SCNTechniqueSupport {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[MacCatalyst (13, 1)]
 		[Export ("technique", ArgumentSemantic.Copy)]

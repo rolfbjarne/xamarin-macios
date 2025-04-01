@@ -3790,6 +3790,9 @@ namespace UIKit {
 	// no [Model] since it's not exposed in any API
 	// only NSTextContainer conforms to it but it's only queried by iOS itself
 	interface NSTextLayoutOrientationProvider {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("layoutOrientation")]
 		NSTextLayoutOrientation LayoutOrientation {

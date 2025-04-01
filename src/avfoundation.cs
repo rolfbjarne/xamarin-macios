@@ -1828,6 +1828,9 @@ namespace AVFoundation {
 		[Export ("renderingAlgorithm")]
 		AVAudio3DMixingRenderingAlgorithm RenderingAlgorithm { get; set; }
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("rate")]
 		float Rate { get; set; } /* float, not CGFloat */
@@ -1853,6 +1856,9 @@ namespace AVFoundation {
 		[Export ("occlusion")]
 		float Occlusion { get; set; } /* float, not CGFloat */
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("position")]
 		Vector3 Position { get; set; }
@@ -1903,6 +1909,9 @@ namespace AVFoundation {
 		[return: NullAllowed]
 		AVAudioMixingDestination DestinationForMixer (AVAudioNode mixer, nuint bus);
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("volume")]
 		float Volume { get; set; } /* float, not CGFloat */
@@ -5902,6 +5911,9 @@ namespace AVFoundation {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface AVQueuedSampleBufferRendering {
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("timebase", ArgumentSemantic.Retain)]
 		CMTimebase Timebase { get; }
@@ -5919,6 +5931,9 @@ namespace AVFoundation {
 		[Export ("flush")]
 		void Flush ();
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("readyForMoreMediaData")]
 		bool ReadyForMoreMediaData { [Bind ("isReadyForMoreMediaData")] get; }
@@ -22660,6 +22675,9 @@ namespace AVFoundation {
 		[Export ("contentKeySession:didProvideContentKey:")]
 		void DidProvideContentKey (AVContentKeySession contentKeySession, AVContentKey contentKey);
 
+		/// <summary>To be added.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("mayRequireContentKeysForMediaDataProcessing")]
 		bool MayRequireContentKeysForMediaDataProcessing { get; }

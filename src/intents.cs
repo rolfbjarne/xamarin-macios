@@ -8509,10 +8509,16 @@ namespace Intents {
 	[Protocol]
 	interface INSpeakable {
 
+		/// <summary>Siri's interpretation of the utterance.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("spokenPhrase")]
 		string SpokenPhrase { get; }
 
+		/// <summary>Developers can use this to clarify how a name is pronounced.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("pronunciationHint")]
 		string PronunciationHint { get; }
@@ -8527,6 +8533,9 @@ namespace Intents {
 		[NullAllowed, Export ("alternativeSpeakableMatches")]
 		IINSpeakable [] AlternativeSpeakableMatches { get; }
 
+		/// <summary>The unique identifier of this pronunciation hint.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'VocabularyIdentifier' instead.")]
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'VocabularyIdentifier' instead.")]
 		[Deprecated (PlatformName.TvOS, 11, 0, message: "Use 'VocabularyIdentifier' instead.")]

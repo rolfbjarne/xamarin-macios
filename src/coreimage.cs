@@ -4095,26 +4095,44 @@ namespace CoreImage {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface CIImageProcessorInput {
+		/// <summary>The region of interest in the input image.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("region")]
 		CGRect Region { get; }
 
+		/// <summary>The number of bytes in a single row of the input image.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("bytesPerRow")]
 		nuint BytesPerRow { get; }
 
+		/// <summary>The pixel format of the input image.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("format")]
 		CIFormat Format { get; }
 
+		/// <summary>The memory address of the data buffer.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("baseAddress")]
 		IntPtr BaseAddress { get; }
 
+		/// <summary>The input <see cref="T:CoreVideo.CVPixelBuffer" />.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("pixelBuffer")]
 		CVPixelBuffer PixelBuffer { get; }
 
+		/// <summary>The input <see cref="T:Metal.IMTLTexture" />.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("metalTexture")]
 		IMTLTexture MetalTexture { get; }
@@ -4154,30 +4172,51 @@ namespace CoreImage {
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface CIImageProcessorOutput {
+		/// <summary>The <see cref="T:CoreGraphics.CGRect" /> to which the processing was applied.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("region")]
 		CGRect Region { get; }
 
+		/// <summary>The number of bytes in a single row of the output image.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("bytesPerRow")]
 		nuint BytesPerRow { get; }
 
+		/// <summary>The colorspace of the output image.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("format")]
 		CIFormat Format { get; }
 
+		/// <summary>The memory address of the data buffer.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("baseAddress")]
 		IntPtr BaseAddress { get; }
 
+		/// <summary>The output image, as a <see cref="T:CoreVideo.CVPixelBuffer" />.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("pixelBuffer")]
 		CVPixelBuffer PixelBuffer { get; }
 
+		/// <summary>The Metal <see cref="T:Metal.IMTLTexture" /> of the output image.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("metalTexture")]
 		IMTLTexture MetalTexture { get; }
 
+		/// <summary>The Metal command buffer for the output image.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("metalCommandBuffer")]
 		IMTLCommandBuffer MetalCommandBuffer { get; }

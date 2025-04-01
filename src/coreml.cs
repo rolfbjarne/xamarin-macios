@@ -252,6 +252,9 @@ namespace CoreML {
 	[Protocol]
 	interface MLFeatureProvider {
 
+		/// <summary>The names of the feature, as defined by the <see cref="T:CoreML.MLModel" />.</summary>
+		/// <value>The <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=T:Monotouch.Foundation.NSSet&amp;scope=Xamarin" title="T:Monotouch.Foundation.NSSet">T:Monotouch.Foundation.NSSet</a></format> of feature names.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("featureNames")]
 		NSSet<NSString> FeatureNames { get; }
@@ -1097,6 +1100,9 @@ namespace CoreML {
 	[Protocol]
 	interface MLBatchProvider {
 
+		/// <summary>The number of <see cref="T:CoreML.IMLFeatureProvider" /> objects in the current batch.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("count")]
 		nint Count { get; }

@@ -2098,10 +2098,16 @@ namespace GameplayKit {
 		//[Export ("obstaclesFromNodePhysicsBodies:")]
 		//GKPolygonObstacle [] ObstaclesFromNodePhysicsBodies (SKNode [] nodes);
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[return: NullAllowed]
 		[Export ("entity")]
 		GKEntity GetEntity ();
 
+		/// <param name="entity">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setEntity:")]
 		void SetEntity ([NullAllowed] GKEntity entity);
 	}
@@ -2110,10 +2116,16 @@ namespace GameplayKit {
 	[Category]
 	[BaseType (typeof (SCNNode))]
 	interface SCNNode_GameplayKit {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[return: NullAllowed]
 		[Export ("entity")]
 		GKEntity GetEntity ();
 
+		/// <param name="entity">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setEntity:")]
 		void SetEntity ([NullAllowed] GKEntity entity);
 	}

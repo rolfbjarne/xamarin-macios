@@ -12134,12 +12134,21 @@ namespace AppKit {
 	[ThreadSafe]
 	[Category, BaseType (typeof (NSAttributedString))]
 	interface NSStringDrawing_NSAttributedString {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("size")]
 		CGSize GetSize ();
 
+		/// <param name="point">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("drawAtPoint:")]
 		void DrawAtPoint (CGPoint point);
 
+		/// <param name="rect">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("drawInRect:")]
 		void DrawInRect (CGRect rect);
 	}

@@ -3860,10 +3860,16 @@ namespace MediaPlayer {
 	[NoMac]
 	[MacCatalyst (13, 1)]
 	interface NSUserActivity_MediaPlayerAdditions {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[return: NullAllowed]
 		[Export ("externalMediaContentIdentifier")]
 		NSString GetExternalMediaContentIdentifier ();
 
+		/// <param name="identifier">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setExternalMediaContentIdentifier:")]
 		void SetExternalMediaContentIdentifier ([NullAllowed] NSString identifier);
 	}
@@ -3872,6 +3878,9 @@ namespace MediaPlayer {
 	[Category]
 	[BaseType (typeof (AVMediaSelectionOption))]
 	interface AVMediaSelectionOption_MPNowPlayingInfoLanguageOptionAdditions {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("makeNowPlayingInfoLanguageOption")]
 		[return: NullAllowed]
 		MPNowPlayingInfoLanguageOption CreateNowPlayingInfoLanguageOption ();
@@ -3881,6 +3890,9 @@ namespace MediaPlayer {
 	[Category]
 	[BaseType (typeof (AVMediaSelectionGroup))]
 	interface AVMediaSelectionGroup_MPNowPlayingInfoLanguageOptionAdditions {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("makeNowPlayingInfoLanguageOptionGroup")]
 		MPNowPlayingInfoLanguageOptionGroup CreateNowPlayingInfoLanguageOptionGroup ();
 	}

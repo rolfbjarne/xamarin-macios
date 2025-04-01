@@ -636,41 +636,82 @@ namespace AudioUnit {
 		[Export ("setDeviceID:error:")]
 		bool SetDeviceId (uint deviceID, out NSError outError);
 
+		/// <summary>Returns a Boolean value that tells whether the audio unit can perform input operations.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("canPerformInput")]
 		bool GetCanPerformInput ();
 
+		/// <summary>Returns a Boolean value that tells whether the audio unit can perform output operations.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("canPerformOutput")]
 		bool CanPerformOutput ();
 
+		/// <summary>Returns a Boolean value that tells whether input is currently enabled on the audio unit.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("isInputEnabled")]
 		bool IsInputEnabled ();
 
+		/// <param name="enabled">To be added.</param>
+		/// <summary>Sets a Boolean value that controls whether input is enabled on the audio unit.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("setInputEnabled:")]
 		bool SetInputEnabled (bool enabled);
 
+		/// <summary>Returns a Boolean value that tells whether input is currently enabled on the audio unit.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("isOutputEnabled")]
 		bool IsOutputEnabled ();
 
+		/// <param name="enabled">To be added.</param>
+		/// <summary>Sets a Boolean value that controls whether output is enabled on the audio unit..</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("setOutputEnabled:")]
 		bool SetOutputEnabled (bool enabled);
 
+		/// <summary>Gets the input handler for this IO unit</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[return: NullAllowed]
 		[Export ("inputHandler", ArgumentSemantic.Copy)]
 		AUInputHandler GetInputHandler ();
 
+		/// <param name="handler">The handler to set.</param>
+		/// <summary>Sets the input handler to the specified value.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setInputHandler:")]
 		void SetInputHandler ([NullAllowed] AUInputHandler handler);
 
+		/// <param name="outError">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>Starts the audio unit's hardware.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("startHardwareAndReturnError:")]
 		bool StartHardware ([NullAllowed] out NSError outError);
 
+		/// <summary>Stops the audio unit's hardware.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("stopHardware")]
 		void StopHardware ();
 
+		/// <summary>Gets the output provider for this IO unit.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[return: NullAllowed]
 		[Export ("outputProvider", ArgumentSemantic.Copy)]
 		AURenderPullInputBlock GetOutputProvider ();
 
+		/// <param name="provider">The provider to set.</param>
+		/// <summary>Sets the output provider to the specified value.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setOutputProvider:")]
 		void SetOutputProvider ([NullAllowed] AURenderPullInputBlock provider);
 
@@ -685,6 +726,9 @@ namespace AudioUnit {
 		[Export ("deviceOutputLatency")]
 		double GetDeviceOutputLatency ();
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("running")]
 		bool IsRunning ();

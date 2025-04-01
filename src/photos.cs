@@ -379,6 +379,14 @@ namespace Photos {
 	[BaseType (typeof (PHAsset))]
 	interface PHAssetContentEditingInputExtensions {
 
+		/// <param name="options">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="completionHandler">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("requestContentEditingInputWithOptions:completionHandler:")]
 		nuint RequestContentEditingInput ([NullAllowed] PHContentEditingInputRequestOptions options, PHContentEditingHandler completionHandler);
 

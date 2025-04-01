@@ -6863,6 +6863,10 @@ namespace Foundation {
 
 	[Category, BaseType (typeof (NSOrderedSet))]
 	partial interface NSKeyValueSorting_NSOrderedSet {
+		/// <param name="sortDescriptors">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("sortedArrayUsingDescriptors:")]
 		NSObject [] GetSortedArray (NSSortDescriptor [] sortDescriptors);
 	}
@@ -6871,12 +6875,18 @@ namespace Foundation {
 	[Category, BaseType (typeof (NSMutableArray))]
 #pragma warning restore 618
 	partial interface NSSortDescriptorSorting_NSMutableArray {
+		/// <param name="sortDescriptors">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("sortUsingDescriptors:")]
 		void SortUsingDescriptors (NSSortDescriptor [] sortDescriptors);
 	}
 
 	[Category, BaseType (typeof (NSMutableOrderedSet))]
 	partial interface NSKeyValueSorting_NSMutableOrderedSet {
+		/// <param name="sortDescriptors">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("sortUsingDescriptors:")]
 		void SortUsingDescriptors (NSSortDescriptor [] sortDescriptors);
 	}
@@ -8926,14 +8936,29 @@ namespace Foundation {
 	//
 	[Category, BaseType (typeof (NSUrl))]
 	partial interface NSUrl_PromisedItems {
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("checkPromisedItemIsReachableAndReturnError:")]
 		bool CheckPromisedItemIsReachable (out NSError error);
 
+		/// <param name="value">To be added.</param>
+		/// <param name="key">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("getPromisedItemResourceValue:forKey:error:")]
 		bool GetPromisedItemResourceValue (out NSObject value, NSString key, out NSError error);
 
+		/// <param name="keys">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("promisedItemResourceValuesForKeys:error:")]
 		[return: NullAllowed]
@@ -11892,15 +11917,30 @@ namespace Foundation {
 
 	[Category, BaseType (typeof (NSString))]
 	partial interface NSUrlUtilities_NSString {
+		/// <param name="allowedCharacters">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("stringByAddingPercentEncodingWithAllowedCharacters:")]
 		NSString CreateStringByAddingPercentEncoding (NSCharacterSet allowedCharacters);
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("stringByRemovingPercentEncoding")]
 		NSString CreateStringByRemovingPercentEncoding ();
 
+		/// <param name="enc">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("stringByAddingPercentEscapesUsingEncoding:")]
 		NSString CreateStringByAddingPercentEscapes (NSStringEncoding enc);
 
+		/// <param name="enc">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("stringByReplacingPercentEscapesUsingEncoding:")]
 		NSString CreateStringByReplacingPercentEscapes (NSStringEncoding enc);
 	}
@@ -12002,6 +12042,14 @@ namespace Foundation {
 	[BaseType (typeof (NSString))]
 	interface NSLinguisticAnalysis {
 #if NET
+		/// <param name="range">To be added.</param>
+		/// <param name="scheme">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="orthography">To be added.</param>
+		/// <param name="tokenRanges">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[return: BindAs (typeof (NSLinguisticTag []))]
 #else
 		[return: BindAs (typeof (NSLinguisticTagUnit []))]
@@ -12010,6 +12058,14 @@ namespace Foundation {
 		[Export ("linguisticTagsInRange:scheme:options:orthography:tokenRanges:")]
 		NSString [] GetLinguisticTags (NSRange range, NSString scheme, NSLinguisticTaggerOptions options, [NullAllowed] NSOrthography orthography, [NullAllowed] out NSValue [] tokenRanges);
 
+		/// <param name="range">To be added.</param>
+		/// <param name="scheme">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="orthography">To be added.</param>
+		/// <param name="tokenRanges">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("GetLinguisticTags (This, range, scheme.GetConstant ()!, options, orthography, out tokenRanges)")]
 #if NET
 		NSLinguisticTag [] GetLinguisticTags (NSRange range, NSLinguisticTagScheme scheme, NSLinguisticTaggerOptions options, [NullAllowed] NSOrthography orthography, [NullAllowed] out NSValue [] tokenRanges);
@@ -12017,10 +12073,24 @@ namespace Foundation {
 		NSLinguisticTagUnit [] GetLinguisticTags (NSRange range, NSLinguisticTagScheme scheme, NSLinguisticTaggerOptions options, [NullAllowed] NSOrthography orthography, [NullAllowed] out NSValue [] tokenRanges);
 #endif
 
+		/// <param name="range">To be added.</param>
+		/// <param name="scheme">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="orthography">To be added.</param>
+		/// <param name="handler">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("enumerateLinguisticTagsInRange:scheme:options:orthography:usingBlock:")]
 		void EnumerateLinguisticTags (NSRange range, NSString scheme, NSLinguisticTaggerOptions options, [NullAllowed] NSOrthography orthography, NSEnumerateLinguisticTagsEnumerator handler);
 
+		/// <param name="range">To be added.</param>
+		/// <param name="scheme">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="orthography">To be added.</param>
+		/// <param name="handler">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("EnumerateLinguisticTags (This, range, scheme.GetConstant ()!, options, orthography, handler)")]
 		void EnumerateLinguisticTags (NSRange range, NSLinguisticTagScheme scheme, NSLinguisticTaggerOptions options, [NullAllowed] NSOrthography orthography, NSEnumerateLinguisticTagsEnumerator handler);
 	}
@@ -17354,6 +17424,9 @@ namespace Foundation {
 		[Export ("homeDirectoryForCurrentUser")]
 		NSUrl GetHomeDirectoryForCurrentUser ();
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("temporaryDirectory")]
 		NSUrl GetTemporaryDirectory ();
@@ -17782,18 +17855,29 @@ namespace Foundation {
 
 	[Category, BaseType (typeof (NSOrderedSet))]
 	partial interface NSPredicateSupport_NSOrderedSet {
+		/// <param name="p">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("filteredOrderedSetUsingPredicate:")]
 		NSOrderedSet FilterUsingPredicate (NSPredicate p);
 	}
 
 	[Category, BaseType (typeof (NSMutableOrderedSet))]
 	partial interface NSPredicateSupport_NSMutableOrderedSet {
+		/// <param name="p">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("filterUsingPredicate:")]
 		void FilterUsingPredicate (NSPredicate p);
 	}
 
 	[Category, BaseType (typeof (NSArray))]
 	partial interface NSPredicateSupport_NSArray {
+		/// <param name="array">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("filteredArrayUsingPredicate:")]
 		NSArray FilterUsingPredicate (NSArray array);
 	}
@@ -17802,18 +17886,34 @@ namespace Foundation {
 	[Category, BaseType (typeof (NSMutableArray))]
 #pragma warning restore 618
 	partial interface NSPredicateSupport_NSMutableArray {
+		/// <param name="predicate">The predicate used to filter the
+		/// 	elements of the array.</param>
+		/// <summary>Filters the element of the array in place, by keeping
+		/// 	only the elements that match.</summary>
+		/// <remarks>
+		///         </remarks>
 		[Export ("filterUsingPredicate:")]
 		void FilterUsingPredicate (NSPredicate predicate);
 	}
 
 	[Category, BaseType (typeof (NSSet))]
 	partial interface NSPredicateSupport_NSSet {
+		/// <param name="predicate">The predicate used to filter the
+		/// 	elements of the set.</param>
+		/// <summary>Returns a new set that contains the elements that
+		/// 	match the predicate.</summary>
+		/// <returns>A new immutable set.</returns>
+		/// <remarks>
+		///         </remarks>
 		[Export ("filteredSetUsingPredicate:")]
 		NSSet FilterUsingPredicate (NSPredicate predicate);
 	}
 
 	[Category, BaseType (typeof (NSMutableSet))]
 	partial interface NSPredicateSupport_NSMutableSet {
+		/// <param name="predicate">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("filterUsingPredicate:")]
 		void FilterUsingPredicate (NSPredicate predicate);
 	}

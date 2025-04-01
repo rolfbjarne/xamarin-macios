@@ -2403,10 +2403,16 @@ namespace MapKit {
 	[Category]
 	[BaseType (typeof (NSUserActivity))]
 	interface NSUserActivity_MKMapItem {
+		/// <summary>Gets the mapkit item.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("mapItem")]
 		MKMapItem GetMapItem ();
 
+		/// <param name="item">The new mapkit item.</param>
+		/// <summary>Sets the mapkit item to <paramref name="item" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("setMapItem:")]
 		void SetMapItem (MKMapItem item);

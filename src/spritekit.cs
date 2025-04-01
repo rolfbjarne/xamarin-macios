@@ -402,9 +402,17 @@ namespace SpriteKit {
 	[Category, BaseType (typeof (UITouch))]
 	partial interface SKNodeTouches_UITouch {
 
+		/// <param name="node">To be added.</param>
+		/// <summary>The current position of <c>this</c> in the coordinate system of <paramref name="node" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("locationInNode:")]
 		CGPoint LocationInNode (SKNode node);
 
+		/// <param name="node">To be added.</param>
+		/// <summary>The previous location of <c>this</c> in the coordinate system of <paramref name="node" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("previousLocationInNode:")]
 		CGPoint PreviousLocationInNode (SKNode node);
 	}

@@ -719,6 +719,10 @@ namespace UIKit {
 	[Category]
 	[BaseType (typeof (NSAttributedString))]
 	interface NSAttributedString_NSAttributedStringKitAdditions {
+		/// <param name="range">To be added.</param>
+		/// <summary>Returns <see langword="true" /> if the current <see cref="T:Foundation.NSAttributedString" /> contains attachments in the specified <paramref name="range" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("containsAttachmentsInRange:")]
 		bool ContainsAttachments (NSRange range);
@@ -726,6 +730,11 @@ namespace UIKit {
 
 	[Category, BaseType (typeof (NSMutableAttributedString))]
 	interface NSMutableAttributedStringKitAdditions {
+		/// <param name="range">To be added.</param>
+		/// <summary>Cleans up inconsistencies that can accumulate over many edits.</summary>
+		/// <remarks>
+		///           <para>After edits, <see cref="T:Foundation.NSMutableAttributedString" />s may accumulate inconsistencies. For instance, paragraph styles must apply to entire paragraphs, scripts may be assigned to fonts that support them, and deleting attachment characters requires the corresponding attachment objects to be released. This method performs necessary cleanup.</para>
+		///         </remarks>
 		[Export ("fixAttributesInRange:")]
 		void FixAttributesInRange (NSRange range);
 	}
@@ -733,9 +742,18 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Category, BaseType (typeof (NSLayoutConstraint))]
 	interface NSIdentifier {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("identifier")]
 		string GetIdentifier ();
 
+		/// <param name="id">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setIdentifier:")]
 		void SetIdentifier ([NullAllowed] string id);
 	}
@@ -743,55 +761,119 @@ namespace UIKit {
 	[Category]
 	[BaseType (typeof (NSCoder))]
 	interface NSCoder_UIGeometryKeyedCoding {
+		/// <param name="point">To be added.</param>
+		/// <param name="forKey">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("encodeCGPoint:forKey:")]
 		void Encode (CGPoint point, string forKey);
 
+		/// <param name="vector">The specified vector.</param>
+		/// <param name="forKey">Designated key in the receiver archive.</param>
+		/// <summary>Encodes the vector and also associates it with the designated key.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("encodeCGVector:forKey:")]
 		void Encode (CGVector vector, string forKey);
 
+		/// <param name="size">To be added.</param>
+		/// <param name="forKey">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("encodeCGSize:forKey:")]
 		void Encode (CGSize size, string forKey);
 
+		/// <param name="rect">To be added.</param>
+		/// <param name="forKey">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("encodeCGRect:forKey:")]
 		void Encode (CGRect rect, string forKey);
 
+		/// <param name="transform">The specified affine transform.</param>
+		/// <param name="forKey">Designated key in the receiver archive.</param>
+		/// <summary>Encodes the affine transform and also associates it with the designated key.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("encodeCGAffineTransform:forKey:")]
 		void Encode (CGAffineTransform transform, string forKey);
 
+		/// <param name="edgeInsets">The specified edge insets.</param>
+		/// <param name="forKey">Designated key in the receiver archive.</param>
+		/// <summary>Encodes the edge insets and also associates them with the designated key.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("encodeUIEdgeInsets:forKey:")]
 		void Encode (UIEdgeInsets edgeInsets, string forKey);
 
+		/// <param name="directionalEdgeInsets">To be added.</param>
+		/// <param name="forKey">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("encodeDirectionalEdgeInsets:forKey:")]
 		void Encode (NSDirectionalEdgeInsets directionalEdgeInsets, string forKey);
 
+		/// <param name="uiOffset">The specified offset.</param>
+		/// <param name="forKey">Designated key in the receiver archive.</param>
+		/// <summary>Encodes the offset and also associates it with the designated key.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("encodeUIOffset:forKey:")]
 		void Encode (UIOffset uiOffset, string forKey);
 
+		/// <param name="key">Key that is identified with the point.</param>
+		/// <summary>Decodes and then returns the point structure that is associated with the designated key.</summary>
+		/// <returns>The point structure that is associated with the designated key.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("decodeCGPointForKey:")]
 		CGPoint DecodeCGPoint (string key);
 
+		/// <param name="key">Key that is identified with the vector.</param>
+		/// <summary>Decodes and then returns the vector structure that is associated with the designated key.</summary>
+		/// <returns>The vector structure that is associated with the designated key.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("decodeCGVectorForKey:")]
 		CGVector DecodeCGVector (string key);
 
+		/// <param name="key">Key that is identified with the rect.</param>
+		/// <summary>Decodes and then returns the size structure that is associated with the designated key.</summary>
+		/// <returns>The size structure that is associated with the designated key.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("decodeCGSizeForKey:")]
 		CGSize DecodeCGSize (string key);
 
+		/// <param name="key">Key that is identified with the affine transform.</param>
+		/// <summary>Decodes and then returns the rectangle structure that is associated with the designated key.</summary>
+		/// <returns>The rectangle structure that is associated with the designated key.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("decodeCGRectForKey:")]
 		CGRect DecodeCGRect (string key);
 
+		/// <param name="key">Key identified with the affine transform.</param>
+		/// <summary>Decodes and then returns the affine transform structure that is associated with the designated key.</summary>
+		/// <returns>The affine transform structure that is associated with the designated key.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("decodeCGAffineTransformForKey:")]
 		CGAffineTransform DecodeCGAffineTransform (string key);
 
+		/// <param name="key">Key that is identified with the edge insets.</param>
+		/// <summary>Decodes and then returns the edge insets that are associated with the designated key.</summary>
+		/// <returns>The edge insets that are associated with the designated key.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("decodeUIEdgeInsetsForKey:")]
 		UIEdgeInsets DecodeUIEdgeInsets (string key);
 
+		/// <param name="key">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("decodeDirectionalEdgeInsetsForKey:")]
 		NSDirectionalEdgeInsets DecodeDirectionalEdgeInsets (string key);
 
+		/// <param name="key">Key that is identified with the offset.</param>
+		/// <summary>Decodes and then returns the offset that is associated with the designated key.</summary>
+		/// <returns>The offset that is associated with the designated key</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("decodeUIOffsetForKey:")]
 		UIOffset DecodeUIOffsetForKey (string key);
 	}
@@ -1473,10 +1555,19 @@ namespace UIKit {
 	[BaseType (typeof (NSObject))]
 	interface NSObject_UIAccessibilityCustomRotor {
 
+		/// <summary>Gets the array of <see cref="T:UIKit.UIAccessibilityCustomRotor" /> objects appropriate for <see langword="this" /> object.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("accessibilityCustomRotors")]
 		[return: NullAllowed]
 		UIAccessibilityCustomRotor [] GetAccessibilityCustomRotors ();
 
+		/// <param name="customRotors">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>Sets the array of <see cref="T:UIKit.UIAccessibilityCustomRotor" /> objects appropriate for <see langword="this" /> object.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setAccessibilityCustomRotors:")]
 		void SetAccessibilityCustomRotors ([NullAllowed] UIAccessibilityCustomRotor [] customRotors);
 	}
@@ -20490,6 +20581,10 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Category, BaseType (typeof (UIView))]
 	interface UIView_UITextField {
+		/// <param name="force">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("endEditing:")]
 		bool EndEditing (bool force);
 	}
@@ -20499,9 +20594,16 @@ namespace UIKit {
 	[BaseType (typeof (UILayoutGuide))]
 	interface UILayoutGuide_UIConstraintBasedLayoutDebugging {
 
+		/// <param name="axis">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("constraintsAffectingLayoutForAxis:")]
 		NSLayoutConstraint [] GetConstraintsAffectingLayout (UILayoutConstraintAxis axis);
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("hasAmbiguousLayout")]
 		bool GetHasAmbiguousLayout ();
 	}
@@ -22168,6 +22270,9 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Category, BaseType (typeof (UIViewController))]
 	partial interface TransitionCoordinator_UIViewController {
+		/// <summary>The IUIViewControllerTransitionCoordinator coordinating the transition of the specified UIViewController.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("transitionCoordinator")]
 		[return: NullAllowed]
 		IUIViewControllerTransitionCoordinator GetTransitionCoordinator ();
@@ -22992,15 +23097,26 @@ namespace UIKit {
 	[Category]
 	[BaseType (typeof (UIViewController))]
 	partial interface UISplitViewController_UIViewController {
+		/// <summary>Returns te split view controller for the nested view controller.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("splitViewController", ArgumentSemantic.Retain)]
 		[return: NullAllowed]
 		UISplitViewController GetSplitViewController ();
 
+		/// <param name="secondaryViewController">To be added.</param>
+		/// <param name="splitViewController">To be added.</param>
+		/// <summary>Collapses the secondary view controller on <paramref name="splitViewController" /></summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("collapseSecondaryViewController:forSplitViewController:")]
 		void CollapseSecondaryViewController (UIViewController secondaryViewController, UISplitViewController splitViewController);
 
+		/// <param name="splitViewController">To be added.</param>
+		/// <summary>Returns the separate secondary view controller for <paramref name="splitViewController" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("separateSecondaryViewControllerForSplitViewController:")]
 		UIViewController SeparateSecondaryViewControllerForSplitViewController (UISplitViewController splitViewController);
@@ -24348,6 +24464,14 @@ namespace UIKit {
 	[Category, BaseType (typeof (NSString))]
 	interface UIStringDrawing {
 		// note: duplicate from maccore's foundation.cs where it's binded on NSString2 (for Classic)
+		/// <param name="point">To be added.</param>
+		/// <param name="font">To be added.</param>
+		/// <summary>Developers should not use this deprecated method. Developers should use 'NSString.DrawString (CGPoint, UIStringAttributes)' instead.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>
+		///           <para>(More documentation for this node is coming)</para>
+		///           <para tool="threads">This can be used from a background thread.</para>
+		///         </remarks>
 		[ThreadSafe]
 		[Deprecated (PlatformName.iOS, 7, 0, message: "Use 'NSString.DrawString (CGPoint, UIStringAttributes)' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'NSString.DrawString (CGPoint, UIStringAttributes)' instead.")]
@@ -24376,6 +24500,14 @@ namespace UIKit {
 		CGSize DrawString (CGPoint point, nfloat width, UIFont font, nfloat minFontSize, ref nfloat actualFontSize, UILineBreakMode breakMode, UIBaselineAdjustment adjustment);
 
 		// note: duplicate from maccore's foundation.cs where it's binded on NSString2 (for Classic)
+		/// <param name="rect">To be added.</param>
+		/// <param name="font">To be added.</param>
+		/// <summary>Developers should use <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=Foundation%20NSString%20Draw%20String(%20Core%20Graphics%20CGRect%20, %20UIKit%20UIString%20Attributes%20)&amp;scope=Xamarin" title="M:Foundation.NSString.DrawString(CoreGraphics.CGRect, UIKit.UIStringAttributes)">M:Foundation.NSString.DrawString(CoreGraphics.CGRect, UIKit.UIStringAttributes)</a></format> rather than this deprecated method.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>
+		///           <para>(More documentation for this node is coming)</para>
+		///           <para tool="threads">This can be used from a background thread.</para>
+		///         </remarks>
 		[ThreadSafe]
 		[Deprecated (PlatformName.iOS, 7, 0, message: "Use 'NSString.DrawString (CGRect, UIStringAttributes)' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'NSString.DrawString (CGRect, UIStringAttributes)' instead.")]
@@ -24383,6 +24515,15 @@ namespace UIKit {
 		CGSize DrawString (CGRect rect, UIFont font);
 
 		// note: duplicate from maccore's foundation.cs where it's binded on NSString2 (for Classic)
+		/// <param name="rect">To be added.</param>
+		/// <param name="font">To be added.</param>
+		/// <param name="mode">To be added.</param>
+		/// <summary>Developers should use <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=Foundation%20NSString%20Draw%20String(%20Core%20Graphics%20CGRect%20, %20UIKit%20UIString%20Attributes%20)&amp;scope=Xamarin" title="M:Foundation.NSString.DrawString(CoreGraphics.CGRect, UIKit.UIStringAttributes)">M:Foundation.NSString.DrawString(CoreGraphics.CGRect, UIKit.UIStringAttributes)</a></format> rather than this deprecated method.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>
+		///           <para>(More documentation for this node is coming)</para>
+		///           <para tool="threads">This can be used from a background thread.</para>
+		///         </remarks>
 		[ThreadSafe]
 		[Deprecated (PlatformName.iOS, 7, 0, message: "Use 'NSString.DrawString (CGRect, UIStringAttributes)' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'NSString.DrawString (CGRect, UIStringAttributes)' instead.")]
@@ -24390,6 +24531,16 @@ namespace UIKit {
 		CGSize DrawString (CGRect rect, UIFont font, UILineBreakMode mode);
 
 		// note: duplicate from maccore's foundation.cs where it's binded on NSString2 (for Classic)
+		/// <param name="rect">To be added.</param>
+		/// <param name="font">To be added.</param>
+		/// <param name="mode">To be added.</param>
+		/// <param name="alignment">To be added.</param>
+		/// <summary>Developers should use <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=Foundation%20NSString%20Draw%20String(%20Core%20Graphics%20CGRect%20, %20UIKit%20UIString%20Attributes%20)&amp;scope=Xamarin" title="M:Foundation.NSString.DrawString(CoreGraphics.CGRect, UIKit.UIStringAttributes)">M:Foundation.NSString.DrawString(CoreGraphics.CGRect, UIKit.UIStringAttributes)</a></format> rather than this deprecated method.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>
+		///           <para>(More documentation for this node is coming)</para>
+		///           <para tool="threads">This can be used from a background thread.</para>
+		///         </remarks>
 		[ThreadSafe]
 		[Deprecated (PlatformName.iOS, 7, 0, message: "Use 'NSString.DrawString (CGRect, UIStringAttributes)' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'NSString.DrawString (CGRect, UIStringAttributes)' instead.")]
@@ -24397,6 +24548,13 @@ namespace UIKit {
 		CGSize DrawString (CGRect rect, UIFont font, UILineBreakMode mode, UITextAlignment alignment);
 
 		// note: duplicate from maccore's foundation.cs where it's binded on NSString2 (for Classic)
+		/// <param name="font">To be added.</param>
+		/// <summary>Developers should use <see cref="M:UIKit.NSStringDrawing.GetSizeUsingAttributes(Foundation.NSString,UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>
+		///           <para>(More documentation for this node is coming)</para>
+		///           <para tool="threads">This can be used from a background thread.</para>
+		///         </remarks>
 		[ThreadSafe]
 		[Deprecated (PlatformName.iOS, 7, 0, message: "Use 'NSString.GetSizeUsingAttributes (UIStringAttributes)' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'NSString.GetSizeUsingAttributes (UIStringAttributes)' instead.")]
@@ -24411,6 +24569,14 @@ namespace UIKit {
 		CGSize StringSize (UIFont font, nfloat forWidth, UILineBreakMode breakMode);
 
 		// note: duplicate from maccore's foundation.cs where it's binded on NSString2 (for Classic)
+		/// <param name="font">To be added.</param>
+		/// <param name="constrainedToSize">To be added.</param>
+		/// <summary>The calculated size of the string if rendered with the <paramref name="font" /> or <paramref name="constrainedToSize" />, whichever is smaller.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>
+		///           <para>(More documentation for this node is coming)</para>
+		///           <para tool="threads">This can be used from a background thread.</para>
+		///         </remarks>
 		[ThreadSafe]
 		[Deprecated (PlatformName.iOS, 7, 0, message: "Use 'NSString.GetBoundingRect (CGSize, NSStringDrawingOptions, UIStringAttributes, NSStringDrawingContext)' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'NSString.GetBoundingRect (CGSize, NSStringDrawingOptions, UIStringAttributes, NSStringDrawingContext)' instead.")]
@@ -24418,6 +24584,15 @@ namespace UIKit {
 		CGSize StringSize (UIFont font, CGSize constrainedToSize);
 
 		// note: duplicate from maccore's foundation.cs where it's binded on NSString2 (for Classic)
+		/// <param name="font">To be added.</param>
+		/// <param name="constrainedToSize">To be added.</param>
+		/// <param name="lineBreakMode">To be added.</param>
+		/// <summary>Gets the <see cref="T:CoreGraphics.CGSize" /> necessary to display this <see cref="T:Foundation.NSString" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>
+		///           <para>(More documentation for this node is coming)</para>
+		///           <para tool="threads">This can be used from a background thread.</para>
+		///         </remarks>
 		[ThreadSafe]
 		[Deprecated (PlatformName.iOS, 7, 0, message: "Use 'NSString.GetBoundingRect (CGSize, NSStringDrawingOptions, UIStringAttributes, NSStringDrawingContext)' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'NSString.GetBoundingRect (CGSize, NSStringDrawingOptions, UIStringAttributes, NSStringDrawingContext)' instead.")]
@@ -24436,21 +24611,45 @@ namespace UIKit {
 
 	[Category, BaseType (typeof (NSString))]
 	interface NSStringDrawing {
+		/// <param name="attributes">To be added.</param>
+		/// <summary>Returns the size of the rendered string.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("sizeWithAttributes:")]
 		CGSize WeakGetSizeUsingAttributes ([NullAllowed] NSDictionary attributes);
 
+		/// <param name="attributes">To be added.</param>
+		/// <summary>The SizeF of the string, if rendered with the specified <paramref name="attributes" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("WeakGetSizeUsingAttributes (This, attributes.GetDictionary ())")]
 		CGSize GetSizeUsingAttributes (UIStringAttributes attributes);
 
+		/// <param name="point">To be added.</param>
+		/// <param name="attributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("drawAtPoint:withAttributes:")]
 		void WeakDrawString (CGPoint point, [NullAllowed] NSDictionary attributes);
 
+		/// <param name="point">To be added.</param>
+		/// <param name="attributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("WeakDrawString (This, point, attributes.GetDictionary ())")]
 		void DrawString (CGPoint point, UIStringAttributes attributes);
 
+		/// <param name="rect">To be added.</param>
+		/// <param name="attributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("drawInRect:withAttributes:")]
 		void WeakDrawString (CGRect rect, [NullAllowed] NSDictionary attributes);
 
+		/// <param name="rect">To be added.</param>
+		/// <param name="attributes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Wrap ("WeakDrawString (This, rect, attributes.GetDictionary ())")]
 		void DrawString (CGRect rect, UIStringAttributes attributes);
 	}

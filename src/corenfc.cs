@@ -857,6 +857,9 @@ namespace CoreNFC {
 	[BaseType (typeof (NSUserActivity))]
 	interface NSUserActivity_CoreNFC {
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("ndefMessagePayload")]
 		NFCNdefMessage GetNdefMessagePayload ();
 	}

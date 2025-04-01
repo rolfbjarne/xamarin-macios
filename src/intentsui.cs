@@ -106,12 +106,21 @@ namespace IntentsUI {
 	[BaseType (typeof (NSExtensionContext))]
 	interface NSExtensionContext_INUIHostedViewControlling {
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("hostedViewMinimumAllowedSize")]
 		CGSize GetHostedViewMinimumAllowedSize ();
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("hostedViewMaximumAllowedSize")]
 		CGSize GetHostedViewMaximumAllowedSize ();
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("interfaceParametersDescription")]
 		string GetInterfaceParametersDescription ();

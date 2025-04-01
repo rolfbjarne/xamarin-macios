@@ -15953,6 +15953,9 @@ namespace Foundation {
 	[Model, BaseType (typeof (NSObject))]
 	[Protocol]
 	interface NSPortDelegate {
+		/// <param name="message">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoMacCatalyst]
 		[Export ("handlePortMessage:")]
 		void MessageReceived (NSPortMessage message);
@@ -17855,22 +17858,48 @@ namespace Foundation {
 	[Model]
 	[Protocol (Name = "NSURLDownloadDelegate")]
 	interface NSUrlDownloadDelegate {
+		/// <param name="download">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("downloadDidBegin:")]
 		void DownloadBegan (NSUrlDownload download);
 
+		/// <param name="download">To be added.</param>
+		/// <param name="request">To be added.</param>
+		/// <param name="redirectResponse">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("download:willSendRequest:redirectResponse:")]
 		NSUrlRequest WillSendRequest (NSUrlDownload download, NSUrlRequest request, NSUrlResponse redirectResponse);
 
+		/// <param name="download">To be added.</param>
+		/// <param name="challenge">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("download:didReceiveAuthenticationChallenge:")]
 		void ReceivedAuthenticationChallenge (NSUrlDownload download, NSUrlAuthenticationChallenge challenge);
 
+		/// <param name="download">To be added.</param>
+		/// <param name="challenge">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("download:didCancelAuthenticationChallenge:")]
 		void CanceledAuthenticationChallenge (NSUrlDownload download, NSUrlAuthenticationChallenge challenge);
 
+		/// <param name="download">To be added.</param>
+		/// <param name="response">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("download:didReceiveResponse:")]
 		void ReceivedResponse (NSUrlDownload download, NSUrlResponse response);
 
 		//- (void)download:(NSUrlDownload *)download willResumeWithResponse:(NSUrlResponse *)response fromByte:(long long)startingByte;
+		/// <param name="download">To be added.</param>
+		/// <param name="response">To be added.</param>
+		/// <param name="startingByte">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("download:willResumeWithResponse:fromByte:")]
 		void Resume (NSUrlDownload download, NSUrlResponse response, long startingByte);
 
@@ -17878,18 +17907,38 @@ namespace Foundation {
 		[Export ("download:didReceiveDataOfLength:")]
 		void ReceivedData (NSUrlDownload download, nuint length);
 
+		/// <param name="download">To be added.</param>
+		/// <param name="encodingType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("download:shouldDecodeSourceDataOfMIMEType:")]
 		bool DecodeSourceData (NSUrlDownload download, string encodingType);
 
+		/// <param name="download">To be added.</param>
+		/// <param name="suggestedFilename">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("download:decideDestinationWithSuggestedFilename:")]
 		void DecideDestination (NSUrlDownload download, string suggestedFilename);
 
+		/// <param name="download">To be added.</param>
+		/// <param name="path">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("download:didCreateDestination:")]
 		void CreatedDestination (NSUrlDownload download, string path);
 
+		/// <param name="download">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("downloadDidFinish:")]
 		void Finished (NSUrlDownload download);
 
+		/// <param name="download">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("download:didFailWithError:")]
 		void FailedWithError (NSUrlDownload download, NSError error);
 	}
@@ -19044,21 +19093,49 @@ namespace Foundation {
 	[Model]
 	[Protocol]
 	interface NSConnectionDelegate {
+		/// <param name="components">To be added.</param>
+		/// <param name="authenticationData">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("authenticateComponents:withData:")]
 		bool AuthenticateComponents (NSArray components, NSData authenticationData);
 
+		/// <param name="components">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("authenticationDataForComponents:")]
 		NSData GetAuthenticationData (NSArray components);
 
+		/// <param name="parentConnection">To be added.</param>
+		/// <param name="newConnection">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("connection:shouldMakeNewConnection:")]
 		bool ShouldMakeNewConnection (NSConnection parentConnection, NSConnection newConnection);
 
+		/// <param name="connection">To be added.</param>
+		/// <param name="request">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("connection:handleRequest:")]
 		bool HandleRequest (NSConnection connection, NSDistantObjectRequest request);
 
+		/// <param name="connection">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("createConversationForConnection:")]
 		NSObject CreateConversation (NSConnection connection);
 
+		/// <param name="newConnection">To be added.</param>
+		/// <param name="parentConnection">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("makeNewConnection:sender:")]
 		bool AllowNewConnection (NSConnection newConnection, NSConnection parentConnection);
 	}
@@ -19655,12 +19732,25 @@ namespace Foundation {
 	[Protocol]
 	[Deprecated (PlatformName.MacOSX, 11, 0, message: "Use 'UserNotifications.*' API instead.")]
 	interface NSUserNotificationCenterDelegate {
+		/// <param name="center">To be added.</param>
+		/// <param name="notification">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("userNotificationCenter:didDeliverNotification:"), EventArgs ("UNCDidDeliverNotification")]
 		void DidDeliverNotification (NSUserNotificationCenter center, NSUserNotification notification);
 
+		/// <param name="center">To be added.</param>
+		/// <param name="notification">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("userNotificationCenter:didActivateNotification:"), EventArgs ("UNCDidActivateNotification")]
 		void DidActivateNotification (NSUserNotificationCenter center, NSUserNotification notification);
 
+		/// <param name="center">To be added.</param>
+		/// <param name="notification">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("userNotificationCenter:shouldPresentNotification:"), DelegateName ("UNCShouldPresentNotification"), DefaultValue (false)]
 		bool ShouldPresentNotification (NSUserNotificationCenter center, NSUserNotification notification);
 	}

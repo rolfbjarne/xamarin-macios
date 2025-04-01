@@ -857,6 +857,9 @@ namespace GameKit {
 	[Model]
 	[Protocol]
 	interface GKLeaderboardViewControllerDelegate {
+		/// <param name="viewController">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("leaderboardViewControllerDidFinish:")]
 		void DidFinish (GKLeaderboardViewController viewController);
@@ -2164,6 +2167,9 @@ namespace GameKit {
 	[Model]
 	[Protocol]
 	interface GKAchievementViewControllerDelegate {
+		/// <param name="viewController">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("achievementViewControllerDidFinish:")]
 		void DidFinish (GKAchievementViewController viewController);
@@ -2299,6 +2305,9 @@ namespace GameKit {
 	[Model]
 	[Protocol]
 	interface GKFriendRequestComposeViewControllerDelegate {
+		/// <param name="viewController">To be added.</param>
+		/// <summary>Developers should not use this deprecated method. </summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("friendRequestComposeViewControllerDidFinish:")]
 		void DidFinish (GKFriendRequestComposeViewController viewController);
@@ -3644,6 +3653,9 @@ namespace GameKit {
 	[Protocol, Model]
 	interface GKChallengesViewControllerDelegate {
 
+		/// <param name="viewController">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("challengesViewControllerDidFinish:")]
 		void DidFinish (GKChallengesViewController viewController);

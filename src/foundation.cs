@@ -16293,9 +16293,15 @@ namespace Foundation {
 	[Category]
 	[BaseType (typeof (NSProcessInfo))]
 	interface NSProcessInfo_NSUserInformation {
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("userName")]
 		string GetUserName ();
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("fullUserName")]
 		string GetFullUserName ();
 	}
@@ -17418,6 +17424,9 @@ namespace Foundation {
 	[BaseType (typeof (NSFileManager))]
 	interface NSFileManager_NSUserInformation {
 
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[NoiOS]
 		[NoMacCatalyst]
@@ -17431,6 +17440,10 @@ namespace Foundation {
 		[Export ("temporaryDirectory")]
 		NSUrl GetTemporaryDirectory ();
 
+		/// <param name="userName">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[NoiOS]
 		[NoMacCatalyst]

@@ -1399,6 +1399,10 @@ namespace Photos {
 		[Export ("cloudIdentifierMappingsForLocalIdentifiers:")]
 		NSDictionary<NSString, PHCloudIdentifierMapping> GetCloudIdentifierMappings (string [] localIdentifiers);
 
+		/// <param name="cloudIdentifiers">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[NoiOS]
 		[NoMacCatalyst]
@@ -1406,6 +1410,10 @@ namespace Photos {
 		[Export ("localIdentifiersForCloudIdentifiers:")]
 		string [] GetLocalIdentifiers (PHCloudIdentifier [] cloudIdentifiers);
 
+		/// <param name="localIdentifiers">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[NoiOS]
 		[NoMacCatalyst]

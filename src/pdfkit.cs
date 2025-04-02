@@ -3731,7 +3731,12 @@ namespace PdfKit {
 	[Model]
 	interface PdfViewDelegate {
 		//from docs: 'By default, the scale factor is restricted to a range between 0.1 and 10.0 inclusive.'
-		[NoiOS]
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
+			[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
 		[Export ("PDFViewWillChangeScaleFactor:toScale:"), DelegateName ("PdfViewScale"), DefaultValueFromArgument ("scale")]

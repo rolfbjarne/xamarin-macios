@@ -238,7 +238,12 @@ namespace NotificationCenter {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NCWidgetListViewDelegate {
-		[Abstract]
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
+			[Abstract]
 		[Export ("widgetList:viewControllerForRow:"), DelegateName ("NCWidgetListViewGetController"), DefaultValue (null)]
 		NSViewController GetViewControllerForRow (NCWidgetListViewController list, nuint row);
 
@@ -248,16 +253,32 @@ namespace NotificationCenter {
 		[Export ("widgetListPerformAddAction:"), DelegateName ("NCWidgetListViewController")]
 		void PerformAddAction (NCWidgetListViewController list);
 
-		[Export ("widgetList:shouldReorderRow:"), DelegateName ("NCWidgetListViewControllerShouldReorderRow"), DefaultValue (false)]
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
+			[Export ("widgetList:shouldReorderRow:"), DelegateName ("NCWidgetListViewControllerShouldReorderRow"), DefaultValue (false)]
 		bool ShouldReorderRow (NCWidgetListViewController list, nuint row);
 
-		[Export ("widgetList:didReorderRow:toRow:"), EventArgs ("NCWidgetListViewControllerDidReorder"), DefaultValue (false)]
+		[Export ("widgetList:didReorderRow:toRow:"), EventArgs ("NCWidgetListViewControllerDidReorder", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			"""), DefaultValue (false)]
 		void DidReorderRow (NCWidgetListViewController list, nuint row, nuint newIndex);
 
-		[Export ("widgetList:shouldRemoveRow:"), DelegateName ("NCWidgetListViewControllerShouldRemoveRow"), DefaultValue (false)]
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
+			[Export ("widgetList:shouldRemoveRow:"), DelegateName ("NCWidgetListViewControllerShouldRemoveRow"), DefaultValue (false)]
 		bool ShouldRemoveRow (NCWidgetListViewController list, nuint row);
 
-		[Export ("widgetList:didRemoveRow:"), EventArgs ("NCWidgetListViewControllerDidRemoveRow"), DefaultValue (false)]
+		[Export ("widgetList:didRemoveRow:"), EventArgs ("NCWidgetListViewControllerDidRemoveRow", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			"""), DefaultValue (false)]
 		void DidRemoveRow (NCWidgetListViewController list, nuint row);
 	}
 

@@ -3390,12 +3390,18 @@ namespace UIKit {
 
 		[MacCatalyst (13, 1)]
 		[Export ("textStorage:willProcessEditing:range:changeInLength:")]
-		[EventArgs ("NSTextStorage")]
+		[EventArgs ("NSTextStorage", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void WillProcessEditing (NSTextStorage textStorage, NSTextStorageEditActions editedMask, NSRange editedRange, nint delta);
 
 		[MacCatalyst (13, 1)]
 		[Export ("textStorage:didProcessEditing:range:changeInLength:")]
-		[EventArgs ("NSTextStorage")]
+		[EventArgs ("NSTextStorage", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidProcessEditing (NSTextStorage textStorage, NSTextStorageEditActions editedMask, NSRange editedRange, nint delta);
 	}
 

@@ -1207,10 +1207,16 @@ namespace ImageKit {
 		[Export ("imageBrowserSelectionDidChange:"), EventArgs ("IKImageBrowserView")]
 		void SelectionDidChange (IKImageBrowserView browser);
 
-		[Export ("imageBrowser:cellWasDoubleClickedAtIndex:"), EventArgs ("IKImageBrowserViewIndex")]
+		[Export ("imageBrowser:cellWasDoubleClickedAtIndex:"), EventArgs ("IKImageBrowserViewIndex", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void CellWasDoubleClicked (IKImageBrowserView browser, nint index);
 
-		[Export ("imageBrowser:cellWasRightClickedAtIndex:withEvent:"), EventArgs ("IKImageBrowserViewIndexEvent")]
+		[Export ("imageBrowser:cellWasRightClickedAtIndex:withEvent:"), EventArgs ("IKImageBrowserViewIndexEvent", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void CellWasRightClicked (IKImageBrowserView browser, nint index, NSEvent nsevent);
 
 		/// <param name="browser">To be added.</param>

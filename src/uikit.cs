@@ -7584,11 +7584,31 @@ namespace UIKit {
 		NSUrl FileUrl { get; }
 
 		[Export ("openWithCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Asynchronously opens a document.</summary>
+			<returns>
+			          <para>A task that represents the asynchronous Open operation. The value of the TResult parameter is a <see cref="T:UIKit.UIOperationHandler" />.</para>
+			        </returns>
+			<remarks>
+			          <para>
+			          </para>
+			          <para tool="threads">This can be used from a background thread.</para>
+			        </remarks>
+			""")]
 		void Open ([NullAllowed] UIOperationHandler completionHandler);
 
 		[Export ("closeWithCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Asynchronously closes the document after saving any changes.</summary>
+			<returns>
+			          <para>A task that represents the asynchronous Close operation. The value of the TResult parameter is a <see cref="T:UIKit.UIOperationHandler" />.</para>
+			        </returns>
+			<remarks>
+			          <para>
+			          </para>
+			          <para tool="threads">This can be used from a background thread.</para>
+			        </remarks>
+			""")]
 		void Close ([NullAllowed] UIOperationHandler completionHandler);
 
 		[Export ("loadFromContents:ofType:error:")]
@@ -7636,7 +7656,17 @@ namespace UIKit {
 		void Save (NSUrl url, UIDocumentSaveOperation saveOperation, [NullAllowed] UIOperationHandler completionHandler);
 
 		[Export ("autosaveWithCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Called by the system immediately prior to automatic saving of UIDocuments with unsaved changes.</summary>
+			<returns>
+			          <para>A task that represents the asynchronous AutoSave operation. The value of the TResult parameter is a <see cref="T:UIKit.UIOperationHandler" />.</para>
+			        </returns>
+			<remarks>
+			          <para>
+			          </para>
+			          <para tool="threads">This can be used from a background thread.</para>
+			        </remarks>
+			""")]
 		void AutoSave ([NullAllowed] UIOperationHandler completionHandler);
 
 		[Export ("savingFileType")]
@@ -7660,7 +7690,15 @@ namespace UIKit {
 		bool Read (NSUrl fromUrl, out NSError outError);
 
 		[Export ("performAsynchronousFileAccessUsingBlock:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Performs an asynchronous file access action.</summary>
+			<returns>A task that represents the asynchronous PerformAsynchronousFileAccess operation</returns>
+			<remarks>
+			          <para>
+			          </para>
+			          <para tool="threads">This can be used from a background thread.</para>
+			        </remarks>
+			""")]
 		void PerformAsynchronousFileAccess (/* non null*/ Action action);
 
 		[Export ("handleError:userInteractionPermitted:")]
@@ -23895,7 +23933,16 @@ namespace UIKit {
 		UIPrinter FromUrl (NSUrl url);
 
 		[Export ("contactPrinter:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Connects to the printer to get information about printer capabilities.</summary>
+			<returns>
+			          <para>A task that represents the asynchronous ContactPrinter operation.   The value of the TResult parameter is a <see cref="T:UIKit.UIPrinterContactPrinterHandler" />.</para>
+			        </returns>
+			<remarks>
+			          <para copied="true">The ContactPrinterAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		void ContactPrinter (UIPrinterContactPrinterHandler completionHandler);
 	}
 
@@ -24902,7 +24949,16 @@ namespace UIKit {
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("requestSupplementaryLexiconWithCompletion:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Gets a lexicon of pairs of terms for use with a custom keyboard.</summary>
+			<returns>
+			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous RequestSupplementaryLexicon operation.  The value of the TResult parameter is of type System.Action&lt;UIKit.UILexicon&gt;.</para>
+			        </returns>
+			<remarks>
+			          <para copied="true">The RequestSupplementaryLexiconAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		void RequestSupplementaryLexicon (Action<UILexicon> completionHandler);
 
 		[NullAllowed] // by default this property is null

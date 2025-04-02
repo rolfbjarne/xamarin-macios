@@ -4908,7 +4908,16 @@ namespace WebKit {
 		void RemoveContentRuleList (string identifier, Action<NSError> completionHandler);
 
 		[Export ("getAvailableContentRuleListIdentifiers:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Asynchronously retrieves the list of identifiers for available content rule lists.</summary>
+			<returns>
+			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous GetAvailableContentRuleListIdentifiers operation.  The value of the TResult parameter is of type System.Action&lt;System.String[]&gt;.</para>
+			        </returns>
+			<remarks>
+			          <para copied="true">The GetAvailableContentRuleListIdentifiersAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		void GetAvailableContentRuleListIdentifiers (Action<string []> callback);
 	}
 
@@ -4918,7 +4927,13 @@ namespace WebKit {
 	[DisableDefaultCtor]
 	interface WKHttpCookieStore {
 		[Export ("getAllCookies:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Asynchronously fetches all the cookies.</summary>
+			<returns>
+			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous GetAllCookies operation.  The value of the TResult parameter is of type System.Action&lt;Foundation.NSHttpCookie[]&gt;.</para>
+			        </returns>
+			<remarks>To be added.</remarks>
+			""")]
 		void GetAllCookies (Action<NSHttpCookie []> completionHandler);
 
 		[Export ("setCookie:completionHandler:")]

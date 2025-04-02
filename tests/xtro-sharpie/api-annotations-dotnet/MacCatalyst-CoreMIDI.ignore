@@ -7,5 +7,3 @@
 !missing-pinvoke! MIDIInputPortCreateWithProtocol is not bound
 !missing-pinvoke! MIDISourceCreateWithProtocol is not bound
 !missing-pinvoke! MIDIEventPacketSysexBytesForGroup is not bound
-!missing-pinvoke! MIDISendUMPSysex is not bound
-!missing-pinvoke! MIDISendUMPSysex8 is not bound

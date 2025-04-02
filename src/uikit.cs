@@ -1884,7 +1884,10 @@ namespace UIKit {
 	[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 	interface UIActionSheetDelegate {
 
-		[Export ("actionSheet:clickedButtonAtIndex:"), EventArgs ("UIButton")]
+		[Export ("actionSheet:clickedButtonAtIndex:"), EventArgs ("UIButton", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void Clicked (UIActionSheet actionSheet, nint buttonIndex);
 
 		/// <param name="actionSheet">To be added.</param>
@@ -1905,10 +1908,16 @@ namespace UIKit {
 		[Export ("didPresentActionSheet:"), EventArgs ("UIActionSheet")]
 		void Presented (UIActionSheet actionSheet);
 
-		[Export ("actionSheet:willDismissWithButtonIndex:"), EventArgs ("UIButton")]
+		[Export ("actionSheet:willDismissWithButtonIndex:"), EventArgs ("UIButton", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void WillDismiss (UIActionSheet actionSheet, nint buttonIndex);
 
-		[Export ("actionSheet:didDismissWithButtonIndex:"), EventArgs ("UIButton")]
+		[Export ("actionSheet:didDismissWithButtonIndex:"), EventArgs ("UIButton", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void Dismissed (UIActionSheet actionSheet, nint buttonIndex);
 	}
 
@@ -2428,7 +2437,10 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 	interface UIAlertViewDelegate {
-		[Export ("alertView:clickedButtonAtIndex:"), EventArgs ("UIButton")]
+		[Export ("alertView:clickedButtonAtIndex:"), EventArgs ("UIButton", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void Clicked (UIAlertView alertview, nint buttonIndex);
 
 		/// <param name="alertView">To be added.</param>
@@ -2449,10 +2461,16 @@ namespace UIKit {
 		[Export ("didPresentAlertView:"), EventArgs ("UIAlertView")]
 		void Presented (UIAlertView alertView);
 
-		[Export ("alertView:willDismissWithButtonIndex:"), EventArgs ("UIButton")]
+		[Export ("alertView:willDismissWithButtonIndex:"), EventArgs ("UIButton", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void WillDismiss (UIAlertView alertView, nint buttonIndex);
 
-		[Export ("alertView:didDismissWithButtonIndex:"), EventArgs ("UIButton")]
+		[Export ("alertView:didDismissWithButtonIndex:"), EventArgs ("UIButton", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void Dismissed (UIAlertView alertView, nint buttonIndex);
 
 		/// <param name="alertView">To be added.</param>
@@ -15492,7 +15510,13 @@ namespace UIKit {
 		[Export ("scrollViewDidScrollToTop:"), EventArgs ("UIScrollView")]
 		void ScrolledToTop (UIScrollView scrollView);
 
-		[Export ("scrollViewDidEndZooming:withView:atScale:"), EventArgs ("ZoomingEnded")]
+		[Export ("scrollViewDidEndZooming:withView:atScale:"), EventArgs ("ZoomingEnded", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			<altmember cref="E:UIKit.UIScrollView.ZoomingStarted" />
+			<altmember cref="M:CoreAnimation.CALayer.DrawInContext" />
+			<altmember cref="E:UIKit.UIScrollView.DidZoom" />
+			""")]
 		void ZoomingEnded (UIScrollView scrollView, UIView withView, nfloat atScale);
 
 		/// <param name="scrollView">Scroll view being zoomed.</param>
@@ -15824,7 +15848,10 @@ namespace UIKit {
 		[Export ("searchBarCancelButtonClicked:"), EventArgs ("UISearchBar")]
 		void CancelButtonClicked (UISearchBar searchBar);
 
-		[Export ("searchBar:selectedScopeButtonIndexDidChange:"), EventArgs ("UISearchBarButtonIndex")]
+		[Export ("searchBar:selectedScopeButtonIndexDidChange:"), EventArgs ("UISearchBarButtonIndex", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void SelectedScopeButtonIndexChanged (UISearchBar searchBar, nint selectedScope);
 
 		/// <param name="searchBar">To be added.</param>
@@ -25991,7 +26018,10 @@ namespace UIKit {
 
 		[Abstract]
 		[Export ("previewInteraction:didUpdatePreviewTransition:ended:")]
-		[EventArgs ("NSPreviewInteractionPreviewUpdate")]
+		[EventArgs ("NSPreviewInteractionPreviewUpdate", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidUpdatePreviewTransition (UIPreviewInteraction previewInteraction, nfloat transitionProgress, bool ended);
 
 		/// <param name="previewInteraction">To be added.</param>
@@ -26010,7 +26040,10 @@ namespace UIKit {
 		bool ShouldBegin (UIPreviewInteraction previewInteraction);
 
 		[Export ("previewInteraction:didUpdateCommitTransition:ended:")]
-		[EventArgs ("NSPreviewInteractionPreviewUpdate")]
+		[EventArgs ("NSPreviewInteractionPreviewUpdate", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidUpdateCommit (UIPreviewInteraction previewInteraction, nfloat transitionProgress, bool ended);
 	}
 

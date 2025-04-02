@@ -1086,7 +1086,10 @@ namespace MapKit {
 		[Export ("animatesDrop")]
 		bool AnimatesDrop { get; set; }
 
-		[MacCatalyst (13, 1)]
+		/// <summary>To be added.</summary>
+			/// <value>To be added.</value>
+			/// <remarks>To be added.</remarks>
+			[MacCatalyst (13, 1)]
 		[Appearance]
 		[Export ("pinTintColor")]
 		[NullAllowed]
@@ -2508,23 +2511,38 @@ namespace MapKit {
 		[Export ("subtitleVisibility", ArgumentSemantic.Assign)]
 		MKFeatureVisibility SubtitleVisibility { get; set; }
 
-		[Appearance]
+		/// <summary>Gets or sets the background color of the balloon.</summary>
+			/// <value>To be added.</value>
+			/// <remarks>To be added.</remarks>
+			[Appearance]
 		[NullAllowed, Export ("markerTintColor", ArgumentSemantic.Copy)]
 		UIColor MarkerTintColor { get; set; }
 
-		[Appearance]
+		/// <summary>Gets or sets the tint to apply to the image or text of the glyph.</summary>
+			/// <value>To be added.</value>
+			/// <remarks>To be added.</remarks>
+			[Appearance]
 		[NullAllowed, Export ("glyphTintColor", ArgumentSemantic.Copy)]
 		UIColor GlyphTintColor { get; set; }
 
-		[Appearance]
+		/// <summary>Gets or sets the text to display in the marker balloon.</summary>
+			/// <value>To be added.</value>
+			/// <remarks>To be added.</remarks>
+			[Appearance]
 		[NullAllowed, Export ("glyphText")]
 		string GlyphText { get; set; }
 
-		[Appearance]
+		/// <summary>Gets or sets the image to display in the marker balloon.</summary>
+			/// <value>To be added.</value>
+			/// <remarks>To be added.</remarks>
+			[Appearance]
 		[NullAllowed, Export ("glyphImage", ArgumentSemantic.Copy)]
 		UIImage GlyphImage { get; set; }
 
-		[Appearance]
+		/// <summary>Gets or sets the image to display when the marker is selected.</summary>
+			/// <value>To be added.</value>
+			/// <remarks>To be added.</remarks>
+			[Appearance]
 		[NullAllowed, Export ("selectedGlyphImage", ArgumentSemantic.Copy)]
 		UIImage SelectedGlyphImage { get; set; }
 

@@ -11682,6 +11682,10 @@ namespace Foundation {
 		[Export ("length")]
 		nint Length { get; }
 
+		/// <param name="handle">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Sealed]
 		[Export ("isEqualToString:")]
 		bool IsEqualTo (IntPtr handle);
@@ -11713,6 +11717,9 @@ namespace Foundation {
 		[Export ("pathComponents")]
 		string [] PathComponents { get; }
 
+		/// <summary>Whether this is an absolute path.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("isAbsolutePath")]
 		bool IsAbsolutePath { get; }
 
@@ -11773,6 +11780,13 @@ namespace Foundation {
 		[Static, Export ("stringEncodingForData:encodingOptions:convertedString:usedLossyConversion:")]
 		nuint DetectStringEncoding (NSData rawData, NSDictionary options, out string convertedString, out bool usedLossyConversion);
 
+		/// <param name="rawData">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="convertedString">To be added.</param>
+		/// <param name="usedLossyConversion">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static, Wrap ("DetectStringEncoding(rawData,options.GetDictionary ()!, out convertedString, out usedLossyConversion)")]
 		nuint DetectStringEncoding (NSData rawData, EncodingDetectionOptions options, out string convertedString, out bool usedLossyConversion);
@@ -11847,6 +11861,11 @@ namespace Foundation {
 		bool HasSuffix (NSString suffix);
 
 		// UNUserNotificationCenterSupport category
+		/// <param name="key">To be added.</param>
+		/// <param name="arguments">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Static]

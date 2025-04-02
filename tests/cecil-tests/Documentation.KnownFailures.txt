@@ -11815,12 +11815,9 @@ M:Foundation.NSStreamEventArgs.#ctor(Foundation.NSStreamEvent)
 M:Foundation.NSStreamSocksOptions.#ctor
 M:Foundation.NSString.BoundingRectWithSize(CoreGraphics.CGSize,Foundation.NSStringDrawingOptions,Foundation.NSDictionary)
 M:Foundation.NSString.CompareTo(Foundation.NSString)
-M:Foundation.NSString.DetectStringEncoding(Foundation.NSData,Foundation.EncodingDetectionOptions,System.String@,System.Boolean@)
 M:Foundation.NSString.DrawString(CoreGraphics.CGPoint,Foundation.NSDictionary)
 M:Foundation.NSString.DrawString(CoreGraphics.CGRect,Foundation.NSDictionary)
 M:Foundation.NSString.DrawString(CoreGraphics.CGRect,Foundation.NSStringDrawingOptions,Foundation.NSDictionary)
-M:Foundation.NSString.GetLocalizedUserNotificationString(Foundation.NSString,Foundation.NSObject[])
-M:Foundation.NSString.IsEqualTo(System.IntPtr)
 M:Foundation.NSString.LoadDataAsync(System.String,Foundation.NSProgress@)
 M:Foundation.NSString.LoadDataAsync(System.String)
 M:Foundation.NSString.op_Equality(Foundation.NSString,Foundation.NSString)
@@ -23123,7 +23120,6 @@ P:Foundation.NSProgress.FileOperationKindDuplicatingKey
 P:Foundation.NSProgress.FileOperationKindUploading
 P:Foundation.NSStream.Item(Foundation.NSString)
 P:Foundation.NSStreamEventArgs.StreamEvent
-P:Foundation.NSString.IsAbsolutePath
 P:Foundation.NSString.Item(System.IntPtr)
 P:Foundation.NSThread.ThreadWillExitNotification
 P:Foundation.NSThread.WillBecomeMultiThreadedNotification

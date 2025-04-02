@@ -20820,7 +20820,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("tableView:shouldEditTableColumn:row:"), DelegateName ("NSTableViewColumnRowPredicate"), DefaultValue (false)]
+		[Export ("tableView:shouldEditTableColumn:row:"), DelegateName ("NSTableViewColumnRowPredicate"), DefaultValue (false)]
 		bool ShouldEditTableColumn (NSTableView tableView, NSTableColumn tableColumn, nint row);
 
 		/// <param name="tableView">To be added.</param>
@@ -20835,7 +20835,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("tableView:shouldSelectRow:"), DelegateName ("NSTableViewRowPredicate")]
+		[Export ("tableView:shouldSelectRow:"), DelegateName ("NSTableViewRowPredicate")]
 		[DefaultValue (true)]
 		bool ShouldSelectRow (NSTableView tableView, nint row);
 
@@ -20881,7 +20881,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("tableView:heightOfRow:"), DelegateName ("NSTableViewRowHeight"), NoDefaultValue]
+		[Export ("tableView:heightOfRow:"), DelegateName ("NSTableViewRowHeight"), NoDefaultValue]
 		nfloat GetRowHeight (NSTableView tableView, nint row);
 
 		[EventArgs ("", XmlDocs = """
@@ -20889,7 +20889,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("tableView:typeSelectStringForTableColumn:row:"), DelegateName ("NSTableViewColumnRowString"), DefaultValue ("String.Empty")]
+		[Export ("tableView:typeSelectStringForTableColumn:row:"), DelegateName ("NSTableViewColumnRowString"), DefaultValue ("String.Empty")]
 		string GetSelectString (NSTableView tableView, NSTableColumn tableColumn, nint row);
 
 		[EventArgs ("", XmlDocs = """
@@ -20897,7 +20897,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("tableView:nextTypeSelectMatchFromRow:toRow:forString:"), DelegateName ("NSTableViewSearchString"), DefaultValue (-1)]
+		[Export ("tableView:nextTypeSelectMatchFromRow:toRow:forString:"), DelegateName ("NSTableViewSearchString"), DefaultValue (-1)]
 		nint GetNextTypeSelectMatch (NSTableView tableView, nint startRow, nint endRow, string searchString);
 
 		/// <param name="tableView">To be added.</param>
@@ -20914,7 +20914,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("tableView:shouldShowCellExpansionForTableColumn:row:"), DelegateName ("NSTableViewColumnRowPredicate"), DefaultValue (false)]
+		[Export ("tableView:shouldShowCellExpansionForTableColumn:row:"), DelegateName ("NSTableViewColumnRowPredicate"), DefaultValue (false)]
 		bool ShouldShowCellExpansion (NSTableView tableView, NSTableColumn tableColumn, nint row);
 
 		[EventArgs ("", XmlDocs = """
@@ -20922,7 +20922,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("tableView:shouldTrackCell:forTableColumn:row:"), DelegateName ("NSTableViewCell"), DefaultValue (false)]
+		[Export ("tableView:shouldTrackCell:forTableColumn:row:"), DelegateName ("NSTableViewCell"), DefaultValue (false)]
 		bool ShouldTrackCell (NSTableView tableView, NSCell cell, NSTableColumn tableColumn, nint row);
 
 		[EventArgs ("", XmlDocs = """
@@ -20930,7 +20930,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("tableView:dataCellForTableColumn:row:"), DelegateName ("NSTableViewCellGetter"), NoDefaultValue]
+		[Export ("tableView:dataCellForTableColumn:row:"), DelegateName ("NSTableViewCellGetter"), NoDefaultValue]
 		NSCell GetDataCell (NSTableView tableView, NSTableColumn tableColumn, nint row);
 
 		[EventArgs ("", XmlDocs = """
@@ -20938,7 +20938,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("tableView:isGroupRow:"), DelegateName ("NSTableViewRowPredicate"), DefaultValue (false)]
+		[Export ("tableView:isGroupRow:"), DelegateName ("NSTableViewRowPredicate"), DefaultValue (false)]
 		bool IsGroupRow (NSTableView tableView, nint row);
 
 		[EventArgs ("", XmlDocs = """
@@ -20946,7 +20946,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("tableView:sizeToFitWidthOfColumn:"), DelegateName ("NSTableViewColumnWidth"), DefaultValue (80)]
+		[Export ("tableView:sizeToFitWidthOfColumn:"), DelegateName ("NSTableViewColumnWidth"), DefaultValue (80)]
 		nfloat GetSizeToFitColumnWidth (NSTableView tableView, nint column);
 
 		[EventArgs ("", XmlDocs = """
@@ -20954,7 +20954,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("tableView:shouldReorderColumn:toColumn:"), DelegateName ("NSTableReorder"), DefaultValue (false)]
+		[Export ("tableView:shouldReorderColumn:toColumn:"), DelegateName ("NSTableReorder"), DefaultValue (false)]
 		bool ShouldReorder (NSTableView tableView, nint columnIndex, nint newColumnIndex);
 
 		/// <param name="notification">To be added.</param>
@@ -20986,7 +20986,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("tableView:viewForTableColumn:row:"), DelegateName ("NSTableViewViewGetter"), NoDefaultValue]
+		[Export ("tableView:viewForTableColumn:row:"), DelegateName ("NSTableViewViewGetter"), NoDefaultValue]
 		NSView GetViewForItem (NSTableView tableView, NSTableColumn tableColumn, nint row);
 
 		[EventArgs ("", XmlDocs = """
@@ -20994,7 +20994,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("tableView:rowViewForRow:"), DelegateName ("NSTableViewRowGetter"), DefaultValue (null)]
+		[Export ("tableView:rowViewForRow:"), DelegateName ("NSTableViewRowGetter"), DefaultValue (null)]
 		NSTableRowView CoreGetRowView (NSTableView tableView, nint row);
 
 		[Export ("tableView:didAddRowView:forRow:"), EventArgs ("NSTableViewRow", XmlDocs = """
@@ -21014,7 +21014,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("tableView:rowActionsForRow:edge:"), DelegateName ("NSTableViewRowActionsGetter"), NoDefaultValue]
+		[Export ("tableView:rowActionsForRow:edge:"), DelegateName ("NSTableViewRowActionsGetter"), NoDefaultValue]
 		//		[Verify (StronglyTypedNSArray)]
 		NSTableViewRowAction [] RowActions (NSTableView tableView, nint row, NSTableRowActionEdge edge);
 	}
@@ -22168,7 +22168,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("control:textView:completions:forPartialWordRange:indexOfSelectedItem:"), DelegateName ("NSControlTextFilter"), DefaultValue ("new string[0]")]
+		[Export ("control:textView:completions:forPartialWordRange:indexOfSelectedItem:"), DelegateName ("NSControlTextFilter"), DefaultValue ("new string[0]")]
 		string [] GetCompletions (NSControl control, NSTextView textView, string [] words, NSRange charRange, ref nint index);
 
 		/// <param name="notification">To be added.</param>
@@ -22214,7 +22214,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("textField:textView:shouldSelectCandidateAtIndex:"), DelegateName ("NSTextFieldSelectCandidate"), DefaultValue (false)]
+		[Export ("textField:textView:shouldSelectCandidateAtIndex:"), DelegateName ("NSTextFieldSelectCandidate"), DefaultValue (false)]
 		bool ShouldSelectCandidate (NSTextField textField, NSTextView textView, nuint index);
 	}
 
@@ -23397,7 +23397,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("textView:clickedOnLink:atIndex:"), DelegateName ("NSTextViewLink"), DefaultValue (false)]
+		[Export ("textView:clickedOnLink:atIndex:"), DelegateName ("NSTextViewLink"), DefaultValue (false)]
 		bool LinkClicked (NSTextView textView, NSObject link, nuint charIndex);
 
 		[Export ("textView:clickedOnCell:inRect:atIndex:"), EventArgs ("NSTextViewClicked", XmlDocs = """
@@ -23418,7 +23418,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("textView:writablePasteboardTypesForCell:atIndex:"), DelegateName ("NSTextViewCellPosition"), DefaultValue (null)]
+		[Export ("textView:writablePasteboardTypesForCell:atIndex:"), DelegateName ("NSTextViewCellPosition"), DefaultValue (null)]
 		string [] GetWritablePasteboardTypes (NSTextView view, NSTextAttachmentCell forCell, nuint charIndex);
 
 		[EventArgs ("", XmlDocs = """
@@ -23426,7 +23426,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("textView:writeCell:atIndex:toPasteboard:type:"), DelegateName ("NSTextViewCellPasteboard"), DefaultValue (true)]
+		[Export ("textView:writeCell:atIndex:toPasteboard:type:"), DelegateName ("NSTextViewCellPasteboard"), DefaultValue (true)]
 		bool WriteCell (NSTextView view, NSTextAttachmentCell cell, nuint charIndex, NSPasteboard pboard, string type);
 
 		/// <param name="textView">To be added.</param>
@@ -23482,7 +23482,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("textView:willDisplayToolTip:forCharacterAtIndex:"), DelegateName ("NSTextViewTooltip"), DefaultValueFromArgument ("tooltip")]
+		[Export ("textView:willDisplayToolTip:forCharacterAtIndex:"), DelegateName ("NSTextViewTooltip"), DefaultValueFromArgument ("tooltip")]
 		[return: NullAllowed]
 		string WillDisplayToolTip (NSTextView textView, string tooltip, nuint characterIndex);
 
@@ -23491,7 +23491,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("textView:completions:forPartialWordRange:indexOfSelectedItem:"), DelegateName ("NSTextViewCompletion"), DefaultValue (null)]
+		[Export ("textView:completions:forPartialWordRange:indexOfSelectedItem:"), DelegateName ("NSTextViewCompletion"), DefaultValue (null)]
 		string [] GetCompletions (NSTextView textView, string [] words, NSRange charRange, ref nint index);
 
 		/// <param name="textView">To be added.</param>
@@ -23516,7 +23516,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("textView:shouldSetSpellingState:range:"), DelegateName ("NSTextViewSpellingQuery"), DefaultValue (0)]
+		[Export ("textView:shouldSetSpellingState:range:"), DelegateName ("NSTextViewSpellingQuery"), DefaultValue (0)]
 		nint ShouldSetSpellingState (NSTextView textView, nint value, NSRange affectedCharRange);
 
 		[EventArgs ("", XmlDocs = """
@@ -23524,7 +23524,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("textView:menu:forEvent:atIndex:"), DelegateName ("NSTextViewEventMenu"), DefaultValueFromArgument ("menu")]
+		[Export ("textView:menu:forEvent:atIndex:"), DelegateName ("NSTextViewEventMenu"), DefaultValueFromArgument ("menu")]
 		NSMenu MenuForEvent (NSTextView view, NSMenu menu, NSEvent theEvent, nuint charIndex);
 
 		/// <param name="view">To be added.</param>
@@ -23542,7 +23542,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("textView:didCheckTextInRange:types:options:results:orthography:wordCount:"), DelegateName ("NSTextViewTextChecked"), DefaultValueFromArgument ("results")]
+		[Export ("textView:didCheckTextInRange:types:options:results:orthography:wordCount:"), DelegateName ("NSTextViewTextChecked"), DefaultValueFromArgument ("results")]
 		NSTextCheckingResult [] DidCheckText (NSTextView view, NSRange range, NSTextCheckingTypes checkingTypes, NSDictionary options, NSTextCheckingResult [] results, NSOrthography orthography, nint wordCount);
 
 #if !NET
@@ -23594,7 +23594,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("textView:shouldSelectCandidateAtIndex:"), DelegateName ("NSTextViewSelectCandidate"), NoDefaultValue]
+		[Export ("textView:shouldSelectCandidateAtIndex:"), DelegateName ("NSTextViewSelectCandidate"), NoDefaultValue]
 		bool ShouldSelectCandidates (NSTextView textView, nuint index);
 
 #if NET
@@ -27124,7 +27124,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Abstract]
+		[Abstract]
 		[Export ("ruleEditor:child:forCriterion:withRowType:"), DelegateName ("NSRulerEditorChildCriterion"), DefaultValue (null)]
 		NSObject ChildForCriterion (NSRuleEditor editor, nint index, NSObject criterion, NSRuleEditorRowType rowType);
 
@@ -27133,7 +27133,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Abstract]
+		[Abstract]
 		[Export ("ruleEditor:displayValueForCriterion:inRow:"), DelegateName ("NSRulerEditorDisplayValue"), DefaultValue (null)]
 		NSObject DisplayValue (NSRuleEditor editor, NSObject criterion, nint row);
 
@@ -27145,7 +27145,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("ruleEditor:predicatePartsForCriterion:withDisplayValue:inRow:"), DelegateName ("NSRulerEditorPredicateParts"), DefaultValue (null)]
+		[Export ("ruleEditor:predicatePartsForCriterion:withDisplayValue:inRow:"), DelegateName ("NSRulerEditorPredicateParts"), DefaultValue (null)]
 		NSDictionary PredicateParts (NSRuleEditor editor, NSObject criterion, NSObject value, nint row);
 
 #if !NET
@@ -28748,7 +28748,7 @@ namespace AppKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("tableView:toolTipForCell:rect:tableColumn:row:mouseLocation:"), DelegateName ("NSTableViewToolTip"), DefaultValue ("null")]
+		[Export ("tableView:toolTipForCell:rect:tableColumn:row:mouseLocation:"), DelegateName ("NSTableViewToolTip"), DefaultValue ("null")]
 		NSString GetToolTip (NSTableView tableView, NSCell cell, ref CGRect rect, [NullAllowed] NSTableColumn tableColumn, nint row, CGPoint mouseLocation);
 
 		[NoMacCatalyst, Mac (14, 0)]

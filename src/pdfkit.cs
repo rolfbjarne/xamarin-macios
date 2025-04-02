@@ -3736,7 +3736,7 @@ namespace PdfKit {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[NoiOS]
+		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
 		[Export ("PDFViewWillChangeScaleFactor:toScale:"), DelegateName ("PdfViewScale"), DefaultValueFromArgument ("scale")]

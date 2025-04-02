@@ -243,7 +243,7 @@ namespace NotificationCenter {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Abstract]
+		[Abstract]
 		[Export ("widgetList:viewControllerForRow:"), DelegateName ("NCWidgetListViewGetController"), DefaultValue (null)]
 		NSViewController GetViewControllerForRow (NCWidgetListViewController list, nuint row);
 
@@ -258,7 +258,7 @@ namespace NotificationCenter {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("widgetList:shouldReorderRow:"), DelegateName ("NCWidgetListViewControllerShouldReorderRow"), DefaultValue (false)]
+		[Export ("widgetList:shouldReorderRow:"), DelegateName ("NCWidgetListViewControllerShouldReorderRow"), DefaultValue (false)]
 		bool ShouldReorderRow (NCWidgetListViewController list, nuint row);
 
 		[Export ("widgetList:didReorderRow:toRow:"), EventArgs ("NCWidgetListViewControllerDidReorder", XmlDocs = """
@@ -272,7 +272,7 @@ namespace NotificationCenter {
 			<value>To be added.</value>
 			<remarks>To be added.</remarks>
 			""")]
-			[Export ("widgetList:shouldRemoveRow:"), DelegateName ("NCWidgetListViewControllerShouldRemoveRow"), DefaultValue (false)]
+		[Export ("widgetList:shouldRemoveRow:"), DelegateName ("NCWidgetListViewControllerShouldRemoveRow"), DefaultValue (false)]
 		bool ShouldRemoveRow (NCWidgetListViewController list, nuint row);
 
 		[Export ("widgetList:didRemoveRow:"), EventArgs ("NCWidgetListViewControllerDidRemoveRow", XmlDocs = """

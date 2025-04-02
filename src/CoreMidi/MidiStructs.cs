@@ -141,5 +141,59 @@ namespace CoreMidi {
 			}
 		}
 	}
+
+	/// <summary>A struct that represents a request to transmit a single system-exclusive event.</summary>s
+	[NativeName ("MIDISysexSendRequest")]
+	public struct MidiSysexSendRequest
+	{
+		MidiEndpointRef                                                                  destination;
+		IntPtr /* const Byte * */                                                        data;
+		uint                                                                             bytesToSend;
+		byte /* Boolean */                                                               complete;
+		byte                                                                             reserved1;
+		byte                                                                             reserved2;
+		byte                                                                             reserved3;
+		unsafe delegate* unmanaged<MidiSysexSendRequest*, void> /* MIDICompletionProc */ completionProc;
+		IntPtr /* void * __nullable */                                                   completionRefCon;
+
+		/// <summary>The endpoint where the request is sent.</summary>
+		public MidiEndpointRef Destination {
+			get => destination;
+			set => destination = value;
+		}
+
+		/// <summary>A pointer to the data to send.</summary>
+		/// <remarks>The MIDI system will update this value as the request progresses.</remarks>
+		public IntPtr Data {
+			get => data;
+			set => data = value;
+		}
+
+		/// <summary>The number of bytes to send.</summary>
+		/// <remarks>The MIDI system will update this value as the request progresses.</remarks>
+		public uint BytesToSend {
+			get => bytesToSend;
+			set => bytesToSend = value;
+		}
+
+		/// <summary>The client can set true to immediately stop the request. The MIDI system will set it to true when the request is complete.</summary>
+		public bool Complete {
+			get => complete != 0;
+			set => complete = value.AsByte ();
+		}
+
+		/// <summary>The callback that is called when all the data has been sent and the request is complete.</summary>
+		/// <remarks>Also called if the client sets <see cref="Complete" /> to true before the request is complete.</remarks>
+		public unsafe delegate* unmanaged<MidiSysexSendRequest*, void> CompletionProcedure {
+			get => completionProc;
+			set => completionProc = value;
+		}
+
+		/// <summary>A context value that's passed to the <see cref="CompletionProcedure" /> callback.</summary>
+		public IntPtr Context {
+			get => completionRefCon;
+			set => completionRefCon = value;
+		}
+	};
 }
 #endif

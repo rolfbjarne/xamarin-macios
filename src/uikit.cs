@@ -5085,9 +5085,9 @@ namespace UIKit {
 		nint Tag { get; set; }
 
 		/// <summary>The color used for tinting.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("tintColor", ArgumentSemantic.Retain), NullAllowed]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("tintColor", ArgumentSemantic.Retain), NullAllowed]
 		[Appearance]
 		UIColor TintColor { get; set; }
 
@@ -5099,20 +5099,20 @@ namespace UIKit {
 		NativeHandle Constructor ([NullAllowed] UIImage image, [NullAllowed] UIImage landscapeImagePhone, UIBarButtonItemStyle style, [NullAllowed] NSObject target, [NullAllowed] Selector action);
 
 		/// <param name="backgroundImage">To be added.</param>
-			/// <param name="state">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>Specifies the background UIImage to use for the specified UIControlState and UIBarMetrics.</summary>
-			/// <remarks>To be added.</remarks>
-			[Export ("setBackgroundImage:forState:barMetrics:")]
+		/// <param name="state">To be added.</param>
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>Specifies the background UIImage to use for the specified UIControlState and UIBarMetrics.</summary>
+		/// <remarks>To be added.</remarks>
+		[Export ("setBackgroundImage:forState:barMetrics:")]
 		[Appearance]
 		void SetBackgroundImage ([NullAllowed] UIImage backgroundImage, UIControlState state, UIBarMetrics barMetrics);
 
 		/// <param name="state">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>The background image for the specified UIControlState and UIBarMetrics.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("backgroundImageForState:barMetrics:")]
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>The background image for the specified UIControlState and UIBarMetrics.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("backgroundImageForState:barMetrics:")]
 		[Appearance]
 		UIImage GetBackgroundImage (UIControlState state, UIBarMetrics barMetrics);
 
@@ -5121,66 +5121,66 @@ namespace UIKit {
 		void SetBackgroundVerticalPositionAdjustment (nfloat adjustment, UIBarMetrics forBarMetrics);
 
 		/// <param name="forBarMetrics">To be added.</param>
-			/// <summary>The background's vertical position adjustment for the specified UIBarMetrics.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("backgroundVerticalPositionAdjustmentForBarMetrics:")]
+		/// <summary>The background's vertical position adjustment for the specified UIBarMetrics.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("backgroundVerticalPositionAdjustmentForBarMetrics:")]
 		[Appearance]
 		nfloat GetBackgroundVerticalPositionAdjustment (UIBarMetrics forBarMetrics);
 
 		/// <param name="adjustment">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>Specifies the adjustment of the title's position for the specified UIBarMetrics.</summary>
-			/// <remarks>To be added.</remarks>
-			[Export ("setTitlePositionAdjustment:forBarMetrics:")]
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>Specifies the adjustment of the title's position for the specified UIBarMetrics.</summary>
+		/// <remarks>To be added.</remarks>
+		[Export ("setTitlePositionAdjustment:forBarMetrics:")]
 		[Appearance]
 		void SetTitlePositionAdjustment (UIOffset adjustment, UIBarMetrics barMetrics);
 
 		/// <param name="barMetrics">To be added.</param>
-			/// <summary>The title's position adjustment for the specified UIBarMetrics.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("titlePositionAdjustmentForBarMetrics:")]
+		/// <summary>The title's position adjustment for the specified UIBarMetrics.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("titlePositionAdjustmentForBarMetrics:")]
 		[Appearance]
 		UIOffset GetTitlePositionAdjustment (UIBarMetrics barMetrics);
 
 		/// <param name="backgroundImage">To be added.</param>
-			/// <param name="forState">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>Specifies the UIImage to be used as a background for the specified UIControlState and UIBarMetrics.</summary>
-			/// <remarks>To be added.</remarks>
-			[NoTV]
+		/// <param name="forState">To be added.</param>
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>Specifies the UIImage to be used as a background for the specified UIControlState and UIBarMetrics.</summary>
+		/// <remarks>To be added.</remarks>
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("setBackButtonBackgroundImage:forState:barMetrics:")]
 		[Appearance]
 		void SetBackButtonBackgroundImage ([NullAllowed] UIImage backgroundImage, UIControlState forState, UIBarMetrics barMetrics);
 
 		/// <param name="forState">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>The background image used for the back button.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[NoTV]
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>The background image used for the back button.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("backButtonBackgroundImageForState:barMetrics:")]
 		[Appearance]
 		UIImage GetBackButtonBackgroundImage (UIControlState forState, UIBarMetrics barMetrics);
 
 		/// <param name="adjustment">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>Specifies the back button's title's position adjustment for the specified UIBarMetrics.</summary>
-			/// <remarks>To be added.</remarks>
-			[NoTV]
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>Specifies the back button's title's position adjustment for the specified UIBarMetrics.</summary>
+		/// <remarks>To be added.</remarks>
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("setBackButtonTitlePositionAdjustment:forBarMetrics:")]
 		[Appearance]
 		void SetBackButtonTitlePositionAdjustment (UIOffset adjustment, UIBarMetrics barMetrics);
 
 		/// <param name="barMetrics">To be added.</param>
-			/// <summary>The back button's title's position adjustment for the specified UIBarMetrics.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[NoTV]
+		/// <summary>The back button's title's position adjustment for the specified UIBarMetrics.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("backButtonTitlePositionAdjustmentForBarMetrics:")]
 		[Appearance]
@@ -5193,32 +5193,32 @@ namespace UIKit {
 		void SetBackButtonBackgroundVerticalPositionAdjustment (nfloat adjustment, UIBarMetrics barMetrics);
 
 		/// <param name="barMetrics">To be added.</param>
-			/// <summary>The back button's vertical position offset for the specified UIBarMetrics.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[NoTV]
+		/// <summary>The back button's vertical position offset for the specified UIBarMetrics.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("backButtonBackgroundVerticalPositionAdjustmentForBarMetrics:")]
 		[Appearance]
 		nfloat GetBackButtonBackgroundVerticalPositionAdjustment (UIBarMetrics barMetrics);
 
 		/// <param name="backgroundImage">To be added.</param>
-			/// <param name="state">To be added.</param>
-			/// <param name="style">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>Specifies the background image to use for the specified UIControlState, UIBarButtonItemStyle, and UIBarMetrics.</summary>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <param name="state">To be added.</param>
+		/// <param name="style">To be added.</param>
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>Specifies the background image to use for the specified UIControlState, UIBarButtonItemStyle, and UIBarMetrics.</summary>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[Export ("setBackgroundImage:forState:style:barMetrics:")]
 		void SetBackgroundImage ([NullAllowed] UIImage backgroundImage, UIControlState state, UIBarButtonItemStyle style, UIBarMetrics barMetrics);
 
 		/// <param name="state">To be added.</param>
-			/// <param name="style">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>The background image for the specified UIControlState, UIBarButtonItemStyle, and UIBarMetrics.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <param name="style">To be added.</param>
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>The background image for the specified UIControlState, UIBarButtonItemStyle, and UIBarMetrics.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[Export ("backgroundImageForState:style:barMetrics:")]
 		UIImage GetBackgroundImage (UIControlState state, UIBarButtonItemStyle style, UIBarMetrics barMetrics);
 
@@ -10318,11 +10318,11 @@ namespace UIKit {
 		bool Refreshing { [Bind ("isRefreshing")] get; }
 
 		/// <summary>The refresh control text as an attributed string.</summary>
-			/// <value>
-			///         </value>
-			/// <remarks>
-			///         </remarks>
-			[NullAllowed] // by default this property is null
+		/// <value>
+		///         </value>
+		/// <remarks>
+		///         </remarks>
+		[NullAllowed] // by default this property is null
 		[Export ("attributedTitle", ArgumentSemantic.Retain)]
 		[Appearance]
 		NSAttributedString AttributedTitle { get; set; }
@@ -10444,9 +10444,9 @@ namespace UIKit {
 		bool IsAnimating { get; }
 
 		/// <summary>The color of the UIActivityIndicatorView.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("color", ArgumentSemantic.Retain), NullAllowed]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("color", ArgumentSemantic.Retain), NullAllowed]
 		[Appearance]
 		UIColor Color { get; set; }
 	}
@@ -11873,34 +11873,34 @@ namespace UIKit {
 		void SetTitle ([NullAllowed] string title, UIControlState forState);
 
 		/// <param name="color">To be added.</param>
-			/// <param name="forState">To be added.</param>
-			/// <summary>Sets the color for the title in the specified state.</summary>
-			/// <remarks>To be added.</remarks>
-			[Export ("setTitleColor:forState:")]
+		/// <param name="forState">To be added.</param>
+		/// <summary>Sets the color for the title in the specified state.</summary>
+		/// <remarks>To be added.</remarks>
+		[Export ("setTitleColor:forState:")]
 		[Appearance]
 		void SetTitleColor ([NullAllowed] UIColor color, UIControlState forState);
 
 		/// <param name="color">To be added.</param>
-			/// <param name="forState">To be added.</param>
-			/// <summary>Sets the color of the title's shadow for the specified state.</summary>
-			/// <remarks>To be added.</remarks>
-			[Export ("setTitleShadowColor:forState:")]
+		/// <param name="forState">To be added.</param>
+		/// <summary>Sets the color of the title's shadow for the specified state.</summary>
+		/// <remarks>To be added.</remarks>
+		[Export ("setTitleShadowColor:forState:")]
 		[Appearance]
 		void SetTitleShadowColor ([NullAllowed] UIColor color, UIControlState forState);
 
 		/// <param name="image">To be added.</param>
-			/// <param name="forState">To be added.</param>
-			/// <summary>Sets the UIImage for the specified state.</summary>
-			/// <remarks>To be added.</remarks>
-			[Export ("setImage:forState:")]
+		/// <param name="forState">To be added.</param>
+		/// <summary>Sets the UIImage for the specified state.</summary>
+		/// <remarks>To be added.</remarks>
+		[Export ("setImage:forState:")]
 		[Appearance]
 		void SetImage ([NullAllowed] UIImage image, UIControlState forState);
 
 		/// <param name="image">To be added.</param>
-			/// <param name="forState">To be added.</param>
-			/// <summary>Sets the background image for the specified state.</summary>
-			/// <remarks>To be added.</remarks>
-			[Export ("setBackgroundImage:forState:")]
+		/// <param name="forState">To be added.</param>
+		/// <summary>Sets the background image for the specified state.</summary>
+		/// <remarks>To be added.</remarks>
+		[Export ("setBackgroundImage:forState:")]
 		[Appearance]
 		void SetBackgroundImage ([NullAllowed] UIImage image, UIControlState forState);
 
@@ -11909,34 +11909,34 @@ namespace UIKit {
 		string Title (UIControlState state);
 
 		/// <param name="state">To be added.</param>
-			/// <summary>Gets the color for the title in the specified state.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("titleColorForState:")]
+		/// <summary>Gets the color for the title in the specified state.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("titleColorForState:")]
 		[Appearance]
 		UIColor TitleColor (UIControlState state);
 
 		/// <param name="state">To be added.</param>
-			/// <summary>Gets the color for the title's shadow in the specified state.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("titleShadowColorForState:")]
+		/// <summary>Gets the color for the title's shadow in the specified state.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("titleShadowColorForState:")]
 		[Appearance]
 		UIColor TitleShadowColor (UIControlState state);
 
 		/// <param name="state">To be added.</param>
-			/// <summary>The UIImage used for the specified state.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("imageForState:")]
+		/// <summary>The UIImage used for the specified state.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("imageForState:")]
 		[Appearance]
 		UIImage ImageForState (UIControlState state);
 
 		/// <param name="state">To be added.</param>
-			/// <summary>The UIImage displayed in the background for the given UIControlState.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("backgroundImageForState:")]
+		/// <summary>The UIImage displayed in the background for the given UIControlState.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("backgroundImageForState:")]
 		[Appearance]
 		UIImage BackgroundImageForState (UIControlState state);
 
@@ -11945,30 +11945,30 @@ namespace UIKit {
 		string CurrentTitle { get; }
 
 		/// <summary>The current color of the title of the button. Read-only.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("currentTitleColor", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("currentTitleColor", ArgumentSemantic.Retain)]
 		[Appearance]
 		UIColor CurrentTitleColor { get; }
 
 		/// <summary>The current color of the title shadow.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("currentTitleShadowColor", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("currentTitleShadowColor", ArgumentSemantic.Retain)]
 		[Appearance]
 		UIColor CurrentTitleShadowColor { get; }
 
 		/// <summary>The current image displayed on the button. Read-only.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("currentImage", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("currentImage", ArgumentSemantic.Retain)]
 		[Appearance]
 		UIImage CurrentImage { get; }
 
 		/// <summary>The active UIImage displayed in the background of the UIButton.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("currentBackgroundImage", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("currentBackgroundImage", ArgumentSemantic.Retain)]
 		[Appearance]
 		UIImage CurrentBackgroundImage { get; }
 
@@ -12063,32 +12063,32 @@ namespace UIKit {
 		string Text { get; set; }
 
 		/// <summary>The font used by the UILabel.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("font", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("font", ArgumentSemantic.Retain)]
 		[Appearance]
 		UIFont Font { get; set; }
 
 		/// <summary>The color of the text in the UILabel.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("textColor", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("textColor", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIColor TextColor { get; set; }
 
 		/// <summary>The color used for shadowing in the UILabel.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("shadowColor", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("shadowColor", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIColor ShadowColor { get; set; }
 
 		/// <summary>Defines the shadow's offset from the text.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("shadowOffset")]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("shadowOffset")]
 		[Appearance]
 		CGSize ShadowOffset { get; set; }
 
@@ -12099,9 +12099,9 @@ namespace UIKit {
 		UILineBreakMode LineBreakMode { get; set; }
 
 		/// <summary>The color used to highlight text in the UILabel.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("highlightedTextColor", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("highlightedTextColor", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIColor HighlightedTextColor { get; set; }
@@ -13086,9 +13086,9 @@ namespace UIKit {
 		NativeHandle Constructor (CGRect frame);
 
 		/// <summary>The <see cref="T:UIKit.UIBarStyle" /> for the navigation bar.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[NoTV]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		// [Appearance] rdar://22818366
 		[Appearance]
@@ -13156,18 +13156,18 @@ namespace UIKit {
 		UIStringAttributes TitleTextAttributes { get; set; }
 
 		/// <param name="backgroundImage">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>Sets the background image for the specified UIBarMetrics.</summary>
-			/// <remarks>To be added.</remarks>
-			[Export ("setBackgroundImage:forBarMetrics:")]
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>Sets the background image for the specified UIBarMetrics.</summary>
+		/// <remarks>To be added.</remarks>
+		[Export ("setBackgroundImage:forBarMetrics:")]
 		[Appearance]
 		void SetBackgroundImage ([NullAllowed] UIImage backgroundImage, UIBarMetrics barMetrics);
 
 		/// <param name="forBarMetrics">To be added.</param>
-			/// <summary>The background image used for the specified UIBarMetrics.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("backgroundImageForBarMetrics:")]
+		/// <summary>The background image used for the specified UIBarMetrics.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("backgroundImageForBarMetrics:")]
 		[Appearance]
 		UIImage GetBackgroundImage (UIBarMetrics forBarMetrics);
 
@@ -13177,10 +13177,10 @@ namespace UIKit {
 
 
 		/// <param name="barMetrics">To be added.</param>
-			/// <summary>The vertical adjustment of the title for the specified UIBarMetrics.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("titleVerticalPositionAdjustmentForBarMetrics:")]
+		/// <summary>The vertical adjustment of the title for the specified UIBarMetrics.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("titleVerticalPositionAdjustmentForBarMetrics:")]
 		[Appearance]
 		nfloat GetTitleVerticalPositionAdjustment (UIBarMetrics barMetrics);
 
@@ -13188,9 +13188,9 @@ namespace UIKit {
 		// 6.0
 		//
 		/// <summary>The shadow image for the navigation bar.</summary>
-			/// <value>The default is <see langword="null" />, which produces the default shadow image.</value>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <value>The default is <see langword="null" />, which produces the default shadow image.</value>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[NullAllowed]
 		[Export ("shadowImage", ArgumentSemantic.Retain)]
 		UIImage ShadowImage { get; set; }
@@ -13199,17 +13199,17 @@ namespace UIKit {
 		// 7.0
 		//
 		/// <summary>The tint applied to the navigation bar background.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[NullAllowed]
 		[Export ("barTintColor", ArgumentSemantic.Retain)]
 		UIColor BarTintColor { get; set; }
 
 		/// <summary>The UIImage shown beside the back button.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[NoTV]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Appearance]
 		[NullAllowed]
@@ -13217,9 +13217,9 @@ namespace UIKit {
 		UIImage BackIndicatorImage { get; set; }
 
 		/// <summary>The UIImage used as a mask for content during push and pop transitions.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[NoTV]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Appearance]
 		[NullAllowed]
@@ -13250,20 +13250,20 @@ namespace UIKit {
 		UINavigationBarAppearance CompactScrollEdgeAppearance { get; set; }
 
 		/// <param name="backgroundImage">To be added.</param>
-			/// <param name="barPosition">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>Sets the background image to use for the specified UIBarPosition and UIBarMetrics.</summary>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <param name="barPosition">To be added.</param>
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>Sets the background image to use for the specified UIBarPosition and UIBarMetrics.</summary>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[Export ("setBackgroundImage:forBarPosition:barMetrics:")]
 		void SetBackgroundImage ([NullAllowed] UIImage backgroundImage, UIBarPosition barPosition, UIBarMetrics barMetrics);
 
 		/// <param name="barPosition">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>The background image used for the specified UIBarPosition and UIBarMetrics.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>The background image used for the specified UIBarPosition and UIBarMetrics.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[Export ("backgroundImageForBarPosition:barMetrics:")]
 		UIImage GetBackgroundImage (UIBarPosition barPosition, UIBarMetrics barMetrics);
 
@@ -13795,17 +13795,17 @@ namespace UIKit {
 		bool HidesForSinglePage { get; set; }
 
 		/// <summary>The tint color applied to the page indicator as a whole.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[NullAllowed]
 		[Export ("pageIndicatorTintColor", ArgumentSemantic.Retain)]
 		UIColor PageIndicatorTintColor { get; set; }
 
 		/// <summary>The tint color applied to the current page indicator.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[NullAllowed]
 		[Export ("currentPageIndicatorTintColor", ArgumentSemantic.Retain)]
 		UIColor CurrentPageIndicatorTintColor { get; set; }
@@ -14791,33 +14791,33 @@ namespace UIKit {
 		float Progress { get; set; } // This is float, not nfloat.
 
 		/// <summary>The color to be applied as a tint to the background of the UIProgressView.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("progressTintColor", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("progressTintColor", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIColor ProgressTintColor { get; set; }
 
 		/// <summary>The color to be applied as a tint to the track.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("trackTintColor", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("trackTintColor", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIColor TrackTintColor { get; set; }
 
 		/// <summary>The UIImage used to indicate progress.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("progressImage", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("progressImage", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIImage ProgressImage { get; set; }
 
 		/// <summary>The UIImage used to indicate the track.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("trackImage", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("trackImage", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIImage TrackImage { get; set; }
@@ -15888,17 +15888,17 @@ namespace UIKit {
 
 		// 5.0
 		/// <summary>The UIImage used for the search bar's background.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("backgroundImage", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("backgroundImage", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIImage BackgroundImage { get; set; }
 
 		/// <summary>The image used as the background for the scope bar.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("scopeBarBackgroundImage", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("scopeBarBackgroundImage", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIImage ScopeBarBackgroundImage { get; set; }
@@ -15912,70 +15912,70 @@ namespace UIKit {
 		UIOffset SearchTextPositionAdjustment { get; set; }
 
 		/// <param name="backgroundImage">To be added.</param>
-			/// <param name="state">To be added.</param>
-			/// <summary>Sets the background image of the search field for the specified UIControlState.</summary>
-			/// <remarks>To be added.</remarks>
-			[Export ("setSearchFieldBackgroundImage:forState:")]
+		/// <param name="state">To be added.</param>
+		/// <summary>Sets the background image of the search field for the specified UIControlState.</summary>
+		/// <remarks>To be added.</remarks>
+		[Export ("setSearchFieldBackgroundImage:forState:")]
 		[Appearance]
 		void SetSearchFieldBackgroundImage ([NullAllowed] UIImage backgroundImage, UIControlState state);
 
 		/// <param name="state">To be added.</param>
-			/// <summary>The image used as abackground of the search field for the specified state.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("searchFieldBackgroundImageForState:")]
+		/// <summary>The image used as abackground of the search field for the specified state.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("searchFieldBackgroundImageForState:")]
 		[Appearance]
 		UIImage GetSearchFieldBackgroundImage (UIControlState state);
 
 		/// <param name="iconImage">To be added.</param>
-			/// <param name="icon">To be added.</param>
-			/// <param name="state">To be added.</param>
-			/// <summary>Sets the image to be used for the specified UISearchBarIcon type and UIControlState.</summary>
-			/// <remarks>To be added.</remarks>
-			[Export ("setImage:forSearchBarIcon:state:")]
+		/// <param name="icon">To be added.</param>
+		/// <param name="state">To be added.</param>
+		/// <summary>Sets the image to be used for the specified UISearchBarIcon type and UIControlState.</summary>
+		/// <remarks>To be added.</remarks>
+		[Export ("setImage:forSearchBarIcon:state:")]
 		[Appearance]
 		void SetImageforSearchBarIcon ([NullAllowed] UIImage iconImage, UISearchBarIcon icon, UIControlState state);
 
 		/// <param name="icon">To be added.</param>
-			/// <param name="state">To be added.</param>
-			/// <summary>The image for the specified search bar icon type and control state.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("imageForSearchBarIcon:state:")]
+		/// <param name="state">To be added.</param>
+		/// <summary>The image for the specified search bar icon type and control state.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("imageForSearchBarIcon:state:")]
 		[Appearance]
 		UIImage GetImageForSearchBarIcon (UISearchBarIcon icon, UIControlState state);
 
 		/// <param name="backgroundImage">To be added.</param>
-			/// <param name="state">To be added.</param>
-			/// <summary>Sets the image to be used as the scope bar's background for the specified UIControlState.</summary>
-			/// <remarks>To be added.</remarks>
-			[Export ("setScopeBarButtonBackgroundImage:forState:")]
+		/// <param name="state">To be added.</param>
+		/// <summary>Sets the image to be used as the scope bar's background for the specified UIControlState.</summary>
+		/// <remarks>To be added.</remarks>
+		[Export ("setScopeBarButtonBackgroundImage:forState:")]
 		[Appearance]
 		void SetScopeBarButtonBackgroundImage ([NullAllowed] UIImage backgroundImage, UIControlState state);
 
 		/// <param name="state">To be added.</param>
-			/// <summary>The background image for the scope bar button for the specified state.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("scopeBarButtonBackgroundImageForState:")]
+		/// <summary>The background image for the scope bar button for the specified state.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("scopeBarButtonBackgroundImageForState:")]
 		[Appearance]
 		UIImage GetScopeBarButtonBackgroundImage (UIControlState state);
 
 		/// <param name="dividerImage">To be added.</param>
-			/// <param name="leftState">To be added.</param>
-			/// <param name="rightState">To be added.</param>
-			/// <summary>Sets the image to be used as a divider for the specified combination of left and right states.</summary>
-			/// <remarks>To be added.</remarks>
-			[Export ("setScopeBarButtonDividerImage:forLeftSegmentState:rightSegmentState:")]
+		/// <param name="leftState">To be added.</param>
+		/// <param name="rightState">To be added.</param>
+		/// <summary>Sets the image to be used as a divider for the specified combination of left and right states.</summary>
+		/// <remarks>To be added.</remarks>
+		[Export ("setScopeBarButtonDividerImage:forLeftSegmentState:rightSegmentState:")]
 		[Appearance]
 		void SetScopeBarButtonDividerImage ([NullAllowed] UIImage dividerImage, UIControlState leftState, UIControlState rightState);
 
 		/// <param name="leftState">To be added.</param>
-			/// <param name="rightState">To be added.</param>
-			/// <summary>The divider image used for the specified combination of left and righ t segment states.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("scopeBarButtonDividerImageForLeftSegmentState:rightSegmentState:")]
+		/// <param name="rightState">To be added.</param>
+		/// <summary>The divider image used for the specified combination of left and righ t segment states.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("scopeBarButtonDividerImageForLeftSegmentState:rightSegmentState:")]
 		[Appearance]
 		UIImage GetScopeBarButtonDividerImage (UIControlState leftState, UIControlState rightState);
 
@@ -16005,27 +16005,27 @@ namespace UIKit {
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
 		/// <param name="backgroundImage">To be added.</param>
-			/// <param name="barPosition">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>Sets the background image for the specified UIBarPosition and UIBarMetrics.</summary>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <param name="barPosition">To be added.</param>
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>Sets the background image for the specified UIBarPosition and UIBarMetrics.</summary>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[Export ("setBackgroundImage:forBarPosition:barMetrics:")]
 		void SetBackgroundImage ([NullAllowed] UIImage backgroundImage, UIBarPosition barPosition, UIBarMetrics barMetrics);
 
 		/// <param name="barPosition">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>The UIImage used for the search bar's background, given the specified UIBarPosition and UIBarMetrics.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("backgroundImageForBarPosition:barMetrics:")]
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>The UIImage used for the search bar's background, given the specified UIBarPosition and UIBarMetrics.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("backgroundImageForBarPosition:barMetrics:")]
 		[Appearance]
 		UIImage BackgroundImageForBarPosition (UIBarPosition barPosition, UIBarMetrics barMetrics);
 
 		/// <summary>The tint of the search bar background.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("barTintColor", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("barTintColor", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIColor BarTintColor { get; set; }
@@ -16646,30 +16646,30 @@ namespace UIKit {
 		bool ApportionsSegmentWidthsByContent { get; set; }
 
 		/// <param name="backgroundImage">To be added.</param>
-			/// <param name="state">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>Sets the background image used for the specified UIControlState and UIBarMetrics.</summary>
-			/// <remarks>To be added.</remarks>
-			[Export ("setBackgroundImage:forState:barMetrics:")]
+		/// <param name="state">To be added.</param>
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>Sets the background image used for the specified UIControlState and UIBarMetrics.</summary>
+		/// <remarks>To be added.</remarks>
+		[Export ("setBackgroundImage:forState:barMetrics:")]
 		[Appearance]
 		void SetBackgroundImage ([NullAllowed] UIImage backgroundImage, UIControlState state, UIBarMetrics barMetrics);
 
 		/// <param name="state">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>The background image used for the specified UIControlState and UIBarMetrics.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("backgroundImageForState:barMetrics:")]
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>The background image used for the specified UIControlState and UIBarMetrics.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("backgroundImageForState:barMetrics:")]
 		[Appearance]
 		UIImage GetBackgroundImage (UIControlState state, UIBarMetrics barMetrics);
 
 		/// <param name="dividerImage">To be added.</param>
-			/// <param name="leftSegmentState">To be added.</param>
-			/// <param name="rightSegmentState">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>Sets the divider image used for the specified UIControlStates and UIBarMetrics.</summary>
-			/// <remarks>To be added.</remarks>
-			[Export ("setDividerImage:forLeftSegmentState:rightSegmentState:barMetrics:")]
+		/// <param name="leftSegmentState">To be added.</param>
+		/// <param name="rightSegmentState">To be added.</param>
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>Sets the divider image used for the specified UIControlStates and UIBarMetrics.</summary>
+		/// <remarks>To be added.</remarks>
+		[Export ("setDividerImage:forLeftSegmentState:rightSegmentState:barMetrics:")]
 		[Appearance]
 		void SetDividerImage ([NullAllowed] UIImage dividerImage, UIControlState leftSegmentState, UIControlState rightSegmentState, UIBarMetrics barMetrics);
 
@@ -16707,20 +16707,20 @@ namespace UIKit {
 		NSDictionary GetWeakTitleTextAttributes (UIControlState state);
 
 		/// <param name="adjustment">To be added.</param>
-			/// <param name="leftCenterRightOrAlone">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>Sets the position adjustment for the specified UISegmentedControlSegment and UIBarMetrics.</summary>
-			/// <remarks>To be added.</remarks>
-			[Export ("setContentPositionAdjustment:forSegmentType:barMetrics:")]
+		/// <param name="leftCenterRightOrAlone">To be added.</param>
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>Sets the position adjustment for the specified UISegmentedControlSegment and UIBarMetrics.</summary>
+		/// <remarks>To be added.</remarks>
+		[Export ("setContentPositionAdjustment:forSegmentType:barMetrics:")]
 		[Appearance]
 		void SetContentPositionAdjustment (UIOffset adjustment, UISegmentedControlSegment leftCenterRightOrAlone, UIBarMetrics barMetrics);
 
 		/// <param name="leftCenterRightOrAlone">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>The positioning offset for the specified UISegmentedControlSegment and UIBarMetrics.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("contentPositionAdjustmentForSegmentType:barMetrics:")]
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>The positioning offset for the specified UISegmentedControlSegment and UIBarMetrics.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("contentPositionAdjustmentForSegmentType:barMetrics:")]
 		[Appearance]
 		UIOffset ContentPositionAdjustment (UISegmentedControlSegment leftCenterRightOrAlone, UIBarMetrics barMetrics);
 	}
@@ -16745,17 +16745,17 @@ namespace UIKit {
 		float MaxValue { get; set; } // This is float, not nfloat
 
 		/// <summary>The image used for the minimum value.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("minimumValueImage", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("minimumValueImage", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIImage MinValueImage { get; set; }
 
 		/// <summary>The image to be used for the maximum value.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("maximumValueImage", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("maximumValueImage", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIImage MaxValueImage { get; set; }
@@ -16781,53 +16781,53 @@ namespace UIKit {
 		void SetValue (float value /* This is float, not nfloat */, bool animated);
 
 		/// <param name="image">To be added.</param>
-			/// <param name="forState">To be added.</param>
-			/// <summary>Sets the "thumb image" for the given UIControlState.</summary>
-			/// <remarks>To be added.</remarks>
-			[Export ("setThumbImage:forState:")]
+		/// <param name="forState">To be added.</param>
+		/// <summary>Sets the "thumb image" for the given UIControlState.</summary>
+		/// <remarks>To be added.</remarks>
+		[Export ("setThumbImage:forState:")]
 		[PostGet ("CurrentThumbImage")]
 		[Appearance]
 		void SetThumbImage ([NullAllowed] UIImage image, UIControlState forState);
 
 		/// <param name="image">To be added.</param>
-			/// <param name="forState">To be added.</param>
-			/// <summary>Sets the image used for the minimum track image.</summary>
-			/// <remarks>To be added.</remarks>
-			[Export ("setMinimumTrackImage:forState:")]
+		/// <param name="forState">To be added.</param>
+		/// <summary>Sets the image used for the minimum track image.</summary>
+		/// <remarks>To be added.</remarks>
+		[Export ("setMinimumTrackImage:forState:")]
 		[PostGet ("CurrentMinTrackImage")]
 		[Appearance]
 		void SetMinTrackImage ([NullAllowed] UIImage image, UIControlState forState);
 
 		/// <param name="image">To be added.</param>
-			/// <param name="forState">To be added.</param>
-			/// <summary>Sets the image used for the maximum track image.</summary>
-			/// <remarks>To be added.</remarks>
-			[Export ("setMaximumTrackImage:forState:")]
+		/// <param name="forState">To be added.</param>
+		/// <summary>Sets the image used for the maximum track image.</summary>
+		/// <remarks>To be added.</remarks>
+		[Export ("setMaximumTrackImage:forState:")]
 		[PostGet ("CurrentMaxTrackImage")]
 		[Appearance]
 		void SetMaxTrackImage ([NullAllowed] UIImage image, UIControlState forState);
 
 		/// <param name="forState">To be added.</param>
-			/// <summary>The image used to mark the current location.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("thumbImageForState:")]
+		/// <summary>The image used to mark the current location.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("thumbImageForState:")]
 		[Appearance]
 		UIImage ThumbImage (UIControlState forState);
 
 		/// <param name="forState">To be added.</param>
-			/// <summary>The image for the minimum track for the given UIControlState.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("minimumTrackImageForState:")]
+		/// <summary>The image for the minimum track for the given UIControlState.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("minimumTrackImageForState:")]
 		[Appearance]
 		UIImage MinTrackImage (UIControlState forState);
 
 		/// <param name="forState">To be added.</param>
-			/// <summary>The image to be used for the maximum track for the given UIControlState.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("maximumTrackImageForState:")]
+		/// <summary>The image to be used for the maximum track for the given UIControlState.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("maximumTrackImageForState:")]
 		[Appearance]
 		UIImage MaxTrackImage (UIControlState forState);
 
@@ -16844,25 +16844,25 @@ namespace UIKit {
 		CGRect ThumbRectForBounds (CGRect bounds, CGRect trackRect, float value /* This is float, not nfloat */);
 
 		/// <summary>The color to apply as a tint to the standard minimum track images.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("minimumTrackTintColor", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("minimumTrackTintColor", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIColor MinimumTrackTintColor { get; set; }
 
 		/// <summary>The color to apply as a tint to the standard maximum track images.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("maximumTrackTintColor", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("maximumTrackTintColor", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIColor MaximumTrackTintColor { get; set; }
 
 		/// <summary>The color used to tint standard thumb images.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("thumbTintColor", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("thumbTintColor", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIColor ThumbTintColor { get; set; }
@@ -17095,33 +17095,33 @@ namespace UIKit {
 
 
 		/// <summary>The tint applied to the background for the on state.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("onTintColor", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("onTintColor", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIColor OnTintColor { get; set; }
 
 		/// <summary>The tint color applied to the thumb.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[NullAllowed]
 		[Export ("thumbTintColor", ArgumentSemantic.Retain)]
 		UIColor ThumbTintColor { get; set; }
 
 		/// <summary>The UIImage used to indicate the on state.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[Export ("onImage", ArgumentSemantic.Retain)]
 		[NullAllowed]
 		UIImage OnImage { get; set; }
 
 		/// <summary>The UIImage used to indicate the off state.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[NullAllowed]
 		[Export ("offImage", ArgumentSemantic.Retain)]
 		UIImage OffImage { get; set; }
@@ -17199,9 +17199,9 @@ namespace UIKit {
 		bool IsCustomizing { get; }
 
 		/// <summary>Developers should not use this deprecated property. </summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[NoTV]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[NoTV]
 		[Export ("selectedImageTintColor", ArgumentSemantic.Retain)]
 		[Deprecated (PlatformName.iOS, 8, 0)]
 		[MacCatalyst (13, 1)]
@@ -17211,33 +17211,33 @@ namespace UIKit {
 		UIColor SelectedImageTintColor { get; set; }
 
 		/// <summary>The image shown in the background of the UITabBar.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("backgroundImage", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("backgroundImage", ArgumentSemantic.Retain)]
 		[NullAllowed]
 		[Appearance]
 		UIImage BackgroundImage { get; set; }
 
 		/// <summary>The UIImage drawn at the top of the tab bar, behind the bar item icon.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("selectionIndicatorImage", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("selectionIndicatorImage", ArgumentSemantic.Retain)]
 		[NullAllowed]
 		[Appearance]
 		UIImage SelectionIndicatorImage { get; set; }
 
 		/// <summary>The UIImage used to define the shadow of the UITabBar.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("shadowImage", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("shadowImage", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIImage ShadowImage { get; set; }
 
 		/// <summary>The tint color applied to the background of the UITabBar.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("barTintColor", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("barTintColor", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIColor BarTintColor { get; set; }
@@ -17651,9 +17651,9 @@ namespace UIKit {
 		UIImage FinishedUnselectedImage { get; }
 
 		/// <summary>The offset applied to the title of the UITabBarItem.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("titlePositionAdjustment")]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("titlePositionAdjustment")]
 		[Appearance]
 		UIOffset TitlePositionAdjustment { get; set; }
 
@@ -17886,9 +17886,9 @@ namespace UIKit {
 		UITableViewCellSeparatorStyle SeparatorStyle { get; set; }
 
 		/// <summary>Gets or sets the row separator color.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[NoTV]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("separatorColor", ArgumentSemantic.Retain)]
 		[Appearance]
@@ -17960,17 +17960,17 @@ namespace UIKit {
 		// 6.0
 		//
 		/// <summary>Gets or sets the color used for the index text.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[NullAllowed]
 		[Export ("sectionIndexColor", ArgumentSemantic.Retain)]
 		UIColor SectionIndexColor { get; set; }
 
 		/// <summary>Gets or sets the background color of the table view's index.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[NullAllowed]
 		[Export ("sectionIndexTrackingBackgroundColor", ArgumentSemantic.Retain)]
 		UIColor SectionIndexTrackingBackgroundColor { get; set; }
@@ -18012,24 +18012,24 @@ namespace UIKit {
 		nfloat EstimatedSectionFooterHeight { get; set; }
 
 		/// <summary>Gets or sets the background color for section index.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[NullAllowed] // by default this property is null
 		[Export ("sectionIndexBackgroundColor", ArgumentSemantic.Retain)]
 		UIColor SectionIndexBackgroundColor { get; set; }
 
 		/// <summary>Gets or sets the edge inset for row separators.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[Export ("separatorInset")]
 		UIEdgeInsets SeparatorInset { get; set; }
 
 		/// <summary>Gets or sets the visual effect to use for separators.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[NoTV]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[NullAllowed] // by default this property is null
 		[Export ("separatorEffect", ArgumentSemantic.Copy)]
@@ -19937,43 +19937,43 @@ namespace UIKit {
 		//void SetItems (UIBarButtonItem [] items, bool animated);
 
 		/// <param name="backgroundImage">To be added.</param>
-			/// <param name="position">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>Sets the background image for the <paramref name="position" /> and <paramref name="barMetrics" />.</summary>
-			/// <remarks>To be added.</remarks>
-			[Export ("setBackgroundImage:forToolbarPosition:barMetrics:")]
+		/// <param name="position">To be added.</param>
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>Sets the background image for the <paramref name="position" /> and <paramref name="barMetrics" />.</summary>
+		/// <remarks>To be added.</remarks>
+		[Export ("setBackgroundImage:forToolbarPosition:barMetrics:")]
 		[Appearance]
 		void SetBackgroundImage ([NullAllowed] UIImage backgroundImage, UIToolbarPosition position, UIBarMetrics barMetrics);
 
 		/// <param name="position">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>The UIImage used for the background for the given <paramref name="position" /> and <paramref name="barMetrics" />.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("backgroundImageForToolbarPosition:barMetrics:")]
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>The UIImage used for the background for the given <paramref name="position" /> and <paramref name="barMetrics" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("backgroundImageForToolbarPosition:barMetrics:")]
 		[Appearance]
 		UIImage GetBackgroundImage (UIToolbarPosition position, UIBarMetrics barMetrics);
 
 		/// <param name="shadowImage">To be added.</param>
-			/// <param name="topOrBottom">To be added.</param>
-			/// <summary>Specifies the shadow image for the specified <see cref="T:UIKit.UIToolbarPosition" />.</summary>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <param name="topOrBottom">To be added.</param>
+		/// <summary>Specifies the shadow image for the specified <see cref="T:UIKit.UIToolbarPosition" />.</summary>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[Export ("setShadowImage:forToolbarPosition:")]
 		void SetShadowImage ([NullAllowed] UIImage shadowImage, UIToolbarPosition topOrBottom);
 
 		/// <param name="topOrBottom">To be added.</param>
-			/// <summary>The image used for the shadow for the specified <see cref="T:UIKit.UIToolbarPosition" />.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <summary>The image used for the shadow for the specified <see cref="T:UIKit.UIToolbarPosition" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[Export ("shadowImageForToolbarPosition:")]
 		UIImage GetShadowImage (UIToolbarPosition topOrBottom);
 
 		/// <summary>The tint applied to the UIToolbar background.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[NullAllowed]
 		[Export ("barTintColor", ArgumentSemantic.Retain)]
 		UIColor BarTintColor { get; set; }
@@ -20251,9 +20251,9 @@ namespace UIKit {
 		void Draw (CGRect rect);
 
 		/// <summary>The color used for the background.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[Export ("backgroundColor", ArgumentSemantic.Retain)]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[Export ("backgroundColor", ArgumentSemantic.Retain)]
 		[Appearance]
 		[NullAllowed]
 		UIColor BackgroundColor { get; set; }
@@ -20800,9 +20800,9 @@ namespace UIKit {
 		CGSize UILayoutFittingExpandedSize { get; }
 
 		/// <summary>The color used for tinting.</summary>
-			/// <value>To be added.</value>
-			/// <remarks>To be added.</remarks>
-			[NullAllowed]
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
+		[NullAllowed]
 		[Export ("tintColor")]
 		[Appearance]
 		UIColor TintColor { get; set; }
@@ -23781,68 +23781,68 @@ namespace UIKit {
 		//
 
 		/// <param name="image">To be added.</param>
-			/// <param name="state">To be added.</param>
-			/// <summary>Sets the background image used for the specified <paramref name="state" />..</summary>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <param name="state">To be added.</param>
+		/// <summary>Sets the background image used for the specified <paramref name="state" />..</summary>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[Export ("setBackgroundImage:forState:")]
 		void SetBackgroundImage ([NullAllowed] UIImage image, UIControlState state);
 
 		/// <param name="state">To be added.</param>
-			/// <summary>The UIImage used as the backgroundimage for the UIStepper for the specified <paramref name="state" />.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <summary>The UIImage used as the backgroundimage for the UIStepper for the specified <paramref name="state" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[Export ("backgroundImageForState:")]
 		UIImage BackgroundImage (UIControlState state);
 
 		/// <param name="image">To be added.</param>
-			/// <param name="leftState">To be added.</param>
-			/// <param name="rightState">To be added.</param>
-			/// <summary>Sets the divider image used for the specified pair of UIControlStates.</summary>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <param name="leftState">To be added.</param>
+		/// <param name="rightState">To be added.</param>
+		/// <summary>Sets the divider image used for the specified pair of UIControlStates.</summary>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[Export ("setDividerImage:forLeftSegmentState:rightSegmentState:")]
 		void SetDividerImage ([NullAllowed] UIImage image, UIControlState leftState, UIControlState rightState);
 
 		/// <param name="leftState">To be added.</param>
-			/// <param name="rightState">To be added.</param>
-			/// <summary>The UIImage used as the divider image for the specified pair of UIControlStates.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <param name="rightState">To be added.</param>
+		/// <summary>The UIImage used as the divider image for the specified pair of UIControlStates.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[Export ("dividerImageForLeftSegmentState:rightSegmentState:")]
 		UIImage GetDividerImage (UIControlState leftState, UIControlState rightState);
 
 		/// <param name="image">To be added.</param>
-			/// <param name="state">To be added.</param>
-			/// <summary>Sets the increment image for the specified <paramref name="state" />..</summary>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <param name="state">To be added.</param>
+		/// <summary>Sets the increment image for the specified <paramref name="state" />..</summary>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[Export ("setIncrementImage:forState:")]
 		void SetIncrementImage ([NullAllowed] UIImage image, UIControlState state);
 
 		/// <param name="state">To be added.</param>
-			/// <summary>The UIImage used for the incrementer for the specified <paramref name="state" />..</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <summary>The UIImage used for the incrementer for the specified <paramref name="state" />..</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[Export ("incrementImageForState:")]
 		UIImage GetIncrementImage (UIControlState state);
 
 		/// <param name="image">To be added.</param>
-			/// <param name="state">To be added.</param>
-			/// <summary>Sets the decrement image for the specified <paramref name="state" />..</summary>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <param name="state">To be added.</param>
+		/// <summary>Sets the decrement image for the specified <paramref name="state" />..</summary>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[Export ("setDecrementImage:forState:")]
 		void SetDecrementImage ([NullAllowed] UIImage image, UIControlState state);
 
 		/// <param name="state">To be added.</param>
-			/// <summary>The image used for the stepper for the specified <paramref name="state" />..</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Appearance]
+		/// <summary>The image used for the stepper for the specified <paramref name="state" />..</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Appearance]
 		[Export ("decrementImageForState:")]
 		UIImage GetDecrementImage (UIControlState state);
 	}

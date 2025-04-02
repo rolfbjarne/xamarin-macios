@@ -1009,7 +1009,11 @@ namespace ARKit {
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		void SetWorldOrigin (Matrix4 relativeTransform);
 
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Asynchronously returns a task that contains the current world map.</summary>
+			<returns>A task that contains the current world map.</returns>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("getCurrentWorldMapWithCompletionHandler:")]
 		void GetCurrentWorldMap (Action<ARWorldMap, NSError> completionHandler);
 

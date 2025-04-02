@@ -7210,7 +7210,16 @@ namespace Foundation {
 		void Invalidate ();
 
 		[Export ("getContinuationStreamsWithCompletionHandler:")]
-		[Async (ResultTypeName = "NSUserActivityContinuation")]
+		[Async (ResultTypeName = "NSUserActivityContinuation", XmlDocs = """
+			<summary>To be added.</summary>
+			<returns>
+			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous GetContinuationStreams operation.  The value of the TResult parameter is of type System.Action&lt;Foundation.NSInputStream,Foundation.NSOutputStream,Foundation.NSError&gt;.</para>
+			        </returns>
+			<remarks>
+			          <para copied="true">The GetContinuationStreamsAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		void GetContinuationStreams (Action<NSInputStream, NSOutputStream, NSError> completionHandler);
 
 		[MacCatalyst (13, 1)]
@@ -7340,7 +7349,11 @@ namespace Foundation {
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Static]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>To be added.</summary>
+			<returns>To be added.</returns>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("deleteAllSavedUserActivitiesWithCompletionHandler:")]
 		void DeleteAllSavedUserActivities (Action handler);
 
@@ -9374,7 +9387,17 @@ namespace Foundation {
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'NSUrlSession.CreateDataTask' instead.")]
 		[Static]
 		[Export ("sendAsynchronousRequest:queue:completionHandler:")]
-		[Async (ResultTypeName = "NSUrlAsyncResult", MethodName = "SendRequestAsync")]
+		[Async (ResultTypeName = "NSUrlAsyncResult", MethodName = "SendRequestAsync", XmlDocs = """
+			<param name="request">Request to perform</param>
+			<param name="queue">Operation queue to dispatch the completion to.</param>
+			<summary>Loads the data and invokes a method upon completion.</summary>
+			<returns>
+			          <para>A task that represents the asynchronous SendAsynchronousRequest operation. The value of the TResult parameter is of type <c>Action&lt;Foundation.NSUrlAsyncResult&gt;</c>.</para>
+			        </returns>
+			<remarks>
+			          <para copied="true">The SendRequestAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			        </remarks>
+			""")]
 		void SendAsynchronousRequest (NSUrlRequest request, NSOperationQueue queue, NSUrlConnectionDataResponse completionHandler);
 	}
 
@@ -9741,16 +9764,30 @@ namespace Foundation {
 		void InvalidateAndCancel ();
 
 		[Export ("resetWithCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>To be added.</summary>
+			<returns>A task that represents the asynchronous Reset operation</returns>
+			<remarks>To be added.</remarks>
+			""")]
 		void Reset (Action completionHandler);
 
 		[Export ("flushWithCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>To be added.</summary>
+			<returns>A task that represents the asynchronous Flush operation</returns>
+			<remarks>To be added.</remarks>
+			""")]
 		void Flush (Action completionHandler);
 
 		// Fixed version (breaking change) only for NET
 		[Export ("getTasksWithCompletionHandler:")]
-		[Async (ResultTypeName = "NSUrlSessionActiveTasks")]
+		[Async (ResultTypeName = "NSUrlSessionActiveTasks", XmlDocs = """
+			<summary>Requests the groups of pending tasks (data, upload and downloads).</summary>
+			<returns>
+			          <para>A task that represents the asynchronous GetTasks operation.   The value of the TResult parameter is of type <c>Action&lt;Foundation.NSUrlSessionActiveTasks&gt;</c>.</para>
+			        </returns>
+			<remarks>To be added.</remarks>
+			""")]
 		void GetTasks (NSUrlSessionPendingTasks completionHandler);
 
 #if !NET
@@ -9955,7 +9992,16 @@ namespace Foundation {
 
 		[MacCatalyst (13, 1)]
 		[Export ("getAllTasksWithCompletionHandler:")]
-		[Async (ResultTypeName = "NSUrlSessionCombinedTasks")]
+		[Async (ResultTypeName = "NSUrlSessionCombinedTasks", XmlDocs = """
+			<summary>To be added.</summary>
+			<returns>
+			          <para>A task that represents the asynchronous GetAllTasks operation.   The value of the TResult parameter is an array of MonoTouch.Foundation.NSUrlSessionTask.  The base class for data-transfer tasks created by a .</para>
+			        </returns>
+			<remarks>
+			          <para copied="true">The GetAllTasksAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		void GetAllTasks (NSUrlSessionAllPendingTasks completionHandler);
 
 		[MacCatalyst (13, 1)]
@@ -13734,11 +13780,24 @@ namespace Foundation {
 		NSBundle Bundle { get; }
 
 		[Export ("beginAccessingResourcesWithCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>To be added.</summary>
+			<returns>A task that represents the asynchronous BeginAccessingResources operation</returns>
+			<remarks>To be added.</remarks>
+			""")]
 		void BeginAccessingResources (Action<NSError> completionHandler);
 
 		[Export ("conditionallyBeginAccessingResourcesWithCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>To be added.</summary>
+			<returns>
+			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous ConditionallyBeginAccessingResources operation.  The value of the TResult parameter is of type System.Action&lt;System.Boolean&gt;.</para>
+			        </returns>
+			<remarks>
+			          <para copied="true">The ConditionallyBeginAccessingResourcesAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		void ConditionallyBeginAccessingResources (Action<bool> completionHandler);
 
 		[Export ("endAccessingResources")]

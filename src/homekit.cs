@@ -251,7 +251,14 @@ namespace HomeKit {
 		[Export ("updateName:completionHandler:")]
 		void UpdateName (string name, Action<NSError> completion);
 
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Asynchronously identifies the accessory.</summary>
+			<returns>A task that represents the asynchronous Identify operation</returns>
+			<remarks>
+			          <para copied="true">The IdentifyAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		[Export ("identifyWithCompletionHandler:")]
 		void Identify (Action<NSError> completion);
 
@@ -577,7 +584,11 @@ namespace HomeKit {
 		[Export ("writeValue:completionHandler:")]
 		void WriteValue (NSObject value, Action<NSError> completion);
 
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Asynchronously reads the value of the characteristic.</summary>
+			<returns>A task that represents the asynchronous ReadValue operation</returns>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("readValueWithCompletionHandler:")]
 		void ReadValue (Action<NSError> completion);
 
@@ -845,7 +856,11 @@ namespace HomeKit {
 		[NoTV]
 		[NoMacCatalyst]
 		[Deprecated (PlatformName.MacCatalyst, 15, 4, message: "Use 'HMAccessorySetupManager.PerformAccessorySetup' instead.")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Displays a device selection user interface that allows the user to choose which devices to add and set up, and returning a task that represents the asynchronous AddAndSetupAccessories operation.</summary>
+			<returns>A task that represents the asynchronous AddAndSetupAccessories operation.</returns>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("addAndSetupAccessoriesWithCompletionHandler:")]
 		void AddAndSetupAccessories (Action<NSError> completion);
 
@@ -1034,7 +1049,13 @@ namespace HomeKit {
 		[Deprecated (PlatformName.iOS, 9, 0, message: "Use 'ManageUsers' instead.")]
 		[MacCatalyst (13, 1)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'ManageUsers' instead.")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Developers should not use this deprecated method. </summary>
+			<returns>
+			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous AddUser operation.  The value of the TResult parameter is of type System.Action&lt;HomeKit.HMUser,Foundation.NSError&gt;.</para>
+			        </returns>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("addUserWithCompletionHandler:")]
 		void AddUser (Action<HMUser, NSError> completion);
 
@@ -1044,7 +1065,14 @@ namespace HomeKit {
 
 		[NoTV]
 		[MacCatalyst (14, 0)]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Displays a device selection user interface that allows the user manage users and their privileges, and then runs a handler when the user exits the UI.</summary>
+			<returns>A task that represents the asynchronous ManageUsers operation</returns>
+			<remarks>
+			          <para copied="true">The ManageUsersAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		[Export ("manageUsersWithCompletionHandler:")]
 		void ManageUsers (Action<NSError> completion);
 

@@ -5493,7 +5493,15 @@ namespace AVFoundation {
 		AVKeyValueStatus StatusOfValue (string key, out NSError error);
 
 		[Export ("loadValuesAsynchronouslyForKeys:completionHandler:")]
-		[Async ("LoadValuesTaskAsync")]
+		[Async ("LoadValuesTaskAsync", XmlDocs = """
+			<param name="keys">An array of keys to load.</param>
+			<summary>Asks the asset to load the specified keys (unless they're already loaded).</summary>
+			<returns>A task that represents the asynchronous LoadValuesAsynchronously operation</returns>
+			<remarks>
+			          <para copied="true">The LoadValuesTaskAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		void LoadValuesAsynchronously (string [] keys, Action handler);
 
 		[Deprecated (PlatformName.MacOSX, 15, 0, message: "Use 'LoadChapterMetadataGroups' instead.")]
@@ -6901,7 +6909,14 @@ namespace AVFoundation {
 
 		[MacCatalyst (13, 1)]
 		[Export ("finishWritingWithCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Asynchronously marks everything finished.</summary>
+			<returns>A task that represents the asynchronous FinishWriting operation</returns>
+			<remarks>
+			          <para copied="true">The FinishWritingAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		void FinishWriting (Action completionHandler);
 
 		[Export ("movieTimeScale")]
@@ -11939,7 +11954,15 @@ namespace AVFoundation {
 		AVKeyValueStatus StatusOfValueForKeyerror (string key, out NSError error);
 
 		[Export ("loadValuesAsynchronouslyForKeys:completionHandler:")]
-		[Async ("LoadValuesTaskAsync")]
+		[Async ("LoadValuesTaskAsync", XmlDocs = """
+			<param name="keys">To be added.</param>
+			<summary>Asynchronously loads the specific keys if they are not loaded already and runs a handler after the operation completes.</summary>
+			<returns>A task that represents the asynchronous LoadValuesAsynchronously operation</returns>
+			<remarks>
+			          <para copied="true">The LoadValuesTaskAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		void LoadValuesAsynchronously (string [] keys, [NullAllowed] Action handler);
 
 		[Static, Export ("metadataItemsFromArray:filteredAndSortedAccordingToPreferredLanguages:")]
@@ -12302,7 +12325,14 @@ namespace AVFoundation {
 		void PrepareToPlay ();
 
 		[Export ("play:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Starts playing the sequence.</summary>
+			<returns>A task that represents the asynchronous Play operation</returns>
+			<remarks>
+			          <para copied="true">The PlayAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		void Play ([NullAllowed] Action completionHandler);
 
 		/// <summary>Stops playing the sequence.</summary>
@@ -13614,7 +13644,11 @@ namespace AVFoundation {
 		NativeHandle Constructor (AVAsset asset, AVAssetExportSessionPreset preset);
 
 		[Export ("exportAsynchronouslyWithCompletionHandler:")]
-		[Async ("ExportTaskAsync")]
+		[Async ("ExportTaskAsync", XmlDocs = """
+			<summary>Starts the export process.</summary>
+			<returns>A task that represents the asynchronous ExportAsynchronously operation</returns>
+			<remarks>To be added.</remarks>
+			""")]
 		void ExportAsynchronously (Action handler);
 
 		[Export ("cancelExport")]
@@ -13800,7 +13834,15 @@ namespace AVFoundation {
 
 		[MacCatalyst (13, 1)]
 		[Export ("determineCompatibleFileTypesWithCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Produces the list of compatible file types with this export session.</summary>
+			<returns>
+			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous DetermineCompatibleFileTypes operation.  The value of the TResult parameter is of type System.Action&lt;System.String[]&gt;.</para>
+			        </returns>
+			<remarks>
+			          <para copied="true">The DetermineCompatibleFileTypesAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			        </remarks>
+			""")]
 		void DetermineCompatibleFileTypes (Action<string []> compatibleFileTypesHandler);
 
 		[MacCatalyst (13, 1)]
@@ -17053,7 +17095,20 @@ namespace AVFoundation {
 		AVVideoSettingsCompressed CompressedVideoSetting { get; set; }
 
 		[Export ("captureStillImageAsynchronouslyFromConnection:completionHandler:")]
-		[Async ("CaptureStillImageTaskAsync")]
+		[Async ("CaptureStillImageTaskAsync", XmlDocs = """
+			<param name="connection">
+			
+			
+			The connection source for the image.
+			  	   </param>
+			<summary>Captures an image from an input device.</summary>
+			<returns>
+			          <para>A task that represents the asynchronous CaptureStillImageAsynchronously operation.   The value of the TResult parameter is a <see cref="T:AVFoundation.AVCaptureCompletionHandler" />.</para>
+			        </returns>
+			<remarks>
+			          <para copied="true">The CaptureStillImageTaskAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			        </remarks>
+			""")]
 		void CaptureStillImageAsynchronously (AVCaptureConnection connection, AVCaptureCompletionHandler completionHandler);
 
 		[Static, Export ("jpegStillImageNSDataRepresentation:")]

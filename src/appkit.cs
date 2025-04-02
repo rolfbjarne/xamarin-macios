@@ -6973,7 +6973,11 @@ namespace AppKit {
 
 
 		[Export ("stopBrowsingVersionsWithCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>To be added.</summary>
+			<returns>To be added.</returns>
+			<remarks>To be added.</remarks>
+			""")]
 		void StopBrowsingVersions ([NullAllowed] Action completionHandler);
 
 		[Export ("allowsDocumentSharing")]

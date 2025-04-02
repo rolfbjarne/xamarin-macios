@@ -4981,12 +4981,20 @@ namespace Intents {
 		[DesignatedInitializer]
 		NativeHandle Constructor (INIntent intent, [NullAllowed] INIntentResponse response);
 
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Donates this <see cref="T:Intents.INInteraction" /> to the system.</summary>
+			<returns>A task that represents the asynchronous DonateInteraction operation</returns>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("donateInteractionWithCompletion:")]
 		void DonateInteraction ([NullAllowed] Action<NSError> completion);
 
 		[Static]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Deletes all interactions previously donated by the developer.</summary>
+			<returns>A task that represents the asynchronous DeleteAllInteractions operation</returns>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("deleteAllInteractionsWithCompletion:")]
 		void DeleteAllInteractions ([NullAllowed] Action<NSError> completion);
 
@@ -5767,7 +5775,16 @@ namespace Intents {
 
 		[MacCatalyst (13, 1)]
 		[Static]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Requests authorization from the user to use Intents / SiriKit.</summary>
+			<returns>
+			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous RequestSiriAuthorization operation.  The value of the TResult parameter is of type System.Action&lt;Intents.INSiriAuthorizationStatus&gt;.</para>
+			        </returns>
+			<remarks>
+			          <para copied="true">The RequestSiriAuthorizationAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		[Export ("requestSiriAuthorization:")]
 		void RequestSiriAuthorization (Action<INSiriAuthorizationStatus> handler);
 
@@ -13257,7 +13274,11 @@ namespace Intents {
 		[Export ("sharedCenter", ArgumentSemantic.Strong)]
 		INVoiceShortcutCenter SharedCenter { get; }
 
-		[Async]
+		[Async (XmlDocs = """
+			<summary>To be added.</summary>
+			<returns>To be added.</returns>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("getAllVoiceShortcutsWithCompletion:")]
 		void GetAllVoiceShortcuts (INVoiceShortcutCenterGetVoiceShortcutsHandler completionHandler);
 

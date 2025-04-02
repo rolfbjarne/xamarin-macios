@@ -1638,7 +1638,18 @@ namespace MapKit {
 		NativeHandle Constructor (MKLocalPointsOfInterestRequest request);
 
 		[Export ("startWithCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>To be added.</summary>
+			<returns>
+			          <para>A task that represents the asynchronous Start operation.   The value of the TResult parameter is a <see cref="MapKit.MKLocalSearchCompletionHandler" />.</para>
+			        </returns>
+			<remarks>
+			          <para>(More documentation for this node is coming)</para>
+			          <para tool="threads">This can be used from a background thread.</para>
+			          <para copied="true">The StartAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para tool="threads" copied="true">This can be used from a background thread.</para>
+			        </remarks>
+			""")]
 		void Start (MKLocalSearchCompletionHandler completionHandler);
 
 		[Export ("cancel")]
@@ -1746,7 +1757,13 @@ namespace MapKit {
 		NativeHandle Constructor (MKDirectionsRequest request);
 
 		[Export ("calculateDirectionsWithCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Requests a directions calculation from Apple's servers and runs a completion handler when the request is complete.</summary>
+			<returns>
+			          <para>A task that represents the asynchronous CalculateDirections operation.   The value of the TResult parameter is a <see cref="MapKit.MKDirectionsHandler" />.</para>
+			        </returns>
+			<remarks>To be added.</remarks>
+			""")]
 		void CalculateDirections (MKDirectionsHandler completionHandler);
 
 		[Export ("cancel")]
@@ -1759,7 +1776,16 @@ namespace MapKit {
 		bool Calculating { [Bind ("isCalculating")] get; }
 
 		[Export ("calculateETAWithCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Requests an ETA calculation from Apple's servers and runs a completion handler when the request is complete.</summary>
+			<returns>
+			          <para>A task that represents the asynchronous CalculateETA operation.   The value of the TResult parameter is a <see cref="MapKit.MKETAHandler" />.</para>
+			        </returns>
+			<remarks>
+			          <para copied="true">The CalculateETAAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		void CalculateETA (MKETAHandler completionHandler);
 	}
 
@@ -2042,7 +2068,16 @@ namespace MapKit {
 		NativeHandle Constructor (MKMapSnapshotOptions options);
 
 		[Export ("startWithCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>To be added.</summary>
+			<returns>
+			          <para>A task that represents the asynchronous Start operation.   The value of the TResult parameter is a <see cref="MapKit.MKMapSnapshotCompletionHandler" />.</para>
+			        </returns>
+			<remarks>
+			          <para copied="true">The StartAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		void Start (MKMapSnapshotCompletionHandler completionHandler);
 
 		[Export ("startWithQueue:completionHandler:")]

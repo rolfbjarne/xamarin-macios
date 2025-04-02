@@ -1769,7 +1769,14 @@ namespace SpriteKit {
 		void PreloadTextures (SKTexture [] textures, Action completion);
 
 		[Export ("preloadWithCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Asynchronously loads the texture into memory.</summary>
+			<returns>A task that represents the asynchronous Preload operation</returns>
+			<remarks>
+			          <para copied="true">The PreloadAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		// note: unlike SKTextureAtlas completion can't be null (or it crash)
 		void Preload (Action completion);
 
@@ -1875,7 +1882,14 @@ namespace SpriteKit {
 		void PreloadTextureAtlases (string [] atlasNames, SKTextureAtlasLoadCallback completionHandler);
 
 		[Export ("preloadWithCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Asynchronously preloads the texture atlas.</summary>
+			<returns>A task that represents the asynchronous Preload operation</returns>
+			<remarks>
+			          <para copied="true">The PreloadAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		void Preload (Action completion);
 
 		[MacCatalyst (13, 1)]

@@ -1332,7 +1332,15 @@ namespace Photos {
 		[Deprecated (PlatformName.TvOS, 14, 0, message: "Use 'RequestAuthorization(PHAccessLevel, Action<PHAuthorizationStatus>)' overload instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 14, 0, message: "Use 'RequestAuthorization(PHAccessLevel, Action<PHAuthorizationStatus>)' overload instead.")]
 		[Static, Export ("requestAuthorization:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Asynchronously shows, if necessary, a permissions dialog allowing the user to allow or deny the application access to the photo library.</summary>
+			<returns>
+			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous RequestAuthorization operation.  The value of the TResult parameter is of type System.Action&lt;Photos.PHAuthorizationStatus&gt;.</para>
+			        </returns>
+			<remarks>
+			          <para copied="true">The RequestAuthorizationAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			        </remarks>
+			""")]
 		void RequestAuthorization (Action<PHAuthorizationStatus> handler);
 
 		[TV (14, 0), iOS (14, 0)]

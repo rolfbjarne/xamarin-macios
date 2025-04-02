@@ -956,12 +956,24 @@ namespace HealthKit {
 		void DisableBackgroundDelivery (HKObjectType type, Action<bool, NSError> completion);
 
 		[MacCatalyst (13, 1)]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Disables the background delivery of notifications and runs an action after delivery has been disabled.</summary>
+			<returns>
+			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous DisableAllBackgroundDelivery operation.  The value of the TResult parameter is of type System.Action&lt;System.Boolean,Foundation.NSError&gt;.</para>
+			        </returns>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("disableAllBackgroundDeliveryWithCompletion:")]
 		void DisableAllBackgroundDelivery (Action<bool, NSError> completion);
 
 		// FIXME NS_EXTENSION_UNAVAILABLE("Not available to extensions") ;
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Requests authorization for an extension to read and write data, and runs a completion handler that receives a Boolean success value and an error object.</summary>
+			<returns>
+			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous HandleAuthorizationForExtension operation.  The value of the TResult parameter is of type System.Action&lt;System.Boolean,Foundation.NSError&gt;.</para>
+			        </returns>
+			<remarks>To be added.</remarks>
+			""")]
 		[MacCatalyst (13, 1)]
 		[Export ("handleAuthorizationForExtensionWithCompletion:")]
 		void HandleAuthorizationForExtension (Action<bool, NSError> completion);
@@ -5042,7 +5054,11 @@ namespace HealthKit {
 		[Export ("endCollectionWithEndDate:completion:")]
 		void EndCollection (NSDate endDate, HKWorkoutBuilderCompletionHandler completionHandler);
 
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Saves a new workout, created with the collected data, to the Health Store. Returns a handler that contains a success status and any error that occurred.</summary>
+			<returns>A handler that contains a success status and any error that occurred.</returns>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("finishWorkoutWithCompletion:")]
 		void FinishWorkout (HKWorkoutBuilderCompletionHandler completionHandler);
 

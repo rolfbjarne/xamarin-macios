@@ -45,7 +45,9 @@ namespace CoreMidi {
 #pragma warning restore CS0649
 		}
 
-		byte [] midiData;
+		unsafe MIDIEventList* midiDataPointer;
+		bool owns;
+		GCHandle midiDataHandle;
 		unsafe MidiEventPacket* currentPacket;
 
 		const int MinimumSize = 276; /* 4 + 4 + sizeof (MidiEventPacket) */
@@ -54,8 +56,7 @@ namespace CoreMidi {
 		/// <returns>The <see cref="MidiProtocolId" /> protocol for the packets in this list of packets.</returns>
 		public unsafe MidiProtocolId Protocol {
 			get {
-				fixed (byte* midiDataPtr = midiData)
-					return ((MIDIEventList*) midiDataPtr)->protocol;
+				return midiDataPointer->protocol;
 			}
 		}
 
@@ -63,12 +64,11 @@ namespace CoreMidi {
 		/// <returns>The number of packets in this list.</returns>
 		public unsafe uint PacketCount {
 			get {
-				fixed (byte* midiDataPtr = midiData)
-					return ((MIDIEventList*) midiDataPtr)->numPackets;
+				return midiDataPointer->numPackets;
 			}
 		}
 
-		internal byte [] MidiData { get => midiData; }
+		internal void* MidiData { get => midiDataPointer; }
 
 		/// <summary>Create a new <see cref="MidiEventList" /> list with the minimum size.</summary>
 		/// <param name="protocol">The protocol for the packets in the created list.</param>
@@ -87,13 +87,45 @@ namespace CoreMidi {
 			if (size < MinimumSize)
 				throw new ArgumentOutOfRangeException ($"{nameof (size)} must be at least {MinimumSize}.");
 
-			midiData = new byte [size];
 			unsafe {
-				fixed (byte* midiDataPtr = midiData)
-					currentPacket = MIDIEventListInit (midiDataPtr, protocol);
+				midiDataPointer = (MIDIEventList *) Marshal.AllocHGlobal (size);
+				owns = true;
+				currentPacket = MIDIEventListInit (midiDataPointer, protocol);
 				if (currentPacket is null)
 					throw new Exception ($"Failed to create midi event list.");
 			}
+		}
+
+		/// <summary>Create a new <see cref="MidiEventList" /> for a given block of memory.</summary>
+		/// <param name="eventListPointer">A pointer to a block of memory with the event list.</param>
+		/// <returns>A newly created <see cref="MidiEventList" />, or an exception in case of failure.</returns>
+		public MidiEventList (IntPtr eventListPointer)
+		{
+			unsafe {
+				midiDataPointer = (MIDIEventList *) eventListPointer;
+				owns = false;
+			}
+		}
+
+		public void Dispose ()
+		{
+			Dispose (true);
+		}
+
+		protected virtual void Dispose (bool disposing)
+		{
+			if (owns) {
+				unsafe {
+					Marshal.FreeHGlobal ((IntPtr) midiDataPointer);
+					midiDataPointer = null;
+				}
+			}
+			GC.SuppressFinalize (this);
+		}
+
+		~MidiEventList ()
+		{
+			Dispose (false);
 		}
 
 #if !__TVOS__
@@ -107,8 +139,7 @@ namespace CoreMidi {
 		[SupportedOSPlatform ("maccatalyst")]
 		public unsafe int /* OSStatus */ Send (MidiPort port, MidiEndpoint destination)
 		{
-			fixed (byte* midiDataPtr = midiData)
-				return MIDISendEventList (port.Handle, destination.Handle, midiDataPtr);
+			return MIDISendEventList (port.Handle, destination.Handle, midiDataPointer);
 		}
 
 		/// <summary>Distribute the packets from the specified <paramref name="source" />.</summary>
@@ -120,8 +151,7 @@ namespace CoreMidi {
 		[SupportedOSPlatform ("maccatalyst")]
 		public unsafe int /* OSStatus */ Receive (MidiEndpoint source)
 		{
-			fixed (byte* midiDataPtr = midiData)
-				return MIDIReceivedEventList (source.Handle, midiDataPtr);
+			return MIDIReceivedEventList (source.Handle, midiDataPointer);
 		}
 #endif
 
@@ -161,14 +191,14 @@ namespace CoreMidi {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[DllImport (Constants.CoreMidiLibrary)]
-		unsafe static extern int /* OSStatus */ MIDISendEventList (MidiPortRef port, MidiEndpointRef dest, byte* /* const MIDIEventList */ evtList);
+		unsafe static extern int /* OSStatus */ MIDISendEventList (MidiPortRef port, MidiEndpointRef dest, MIDIEventList* evtList);
 
 		[SupportedOSPlatform ("ios14.0")]
 		[UnsupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[DllImport (Constants.CoreMidiLibrary)]
-		unsafe static extern int /* OSStatus */ MIDIReceivedEventList (MidiEndpointRef src, byte* /* const MIDIEventList * */	evtlist);
+		unsafe static extern int /* OSStatus */ MIDIReceivedEventList (MidiEndpointRef src, MIDIEventList* evtlist);
 #endif // !__TVOS__
 
 		IEnumerator<MidiEventPacket> IEnumerable<MidiEventPacket>.GetEnumerator ()
@@ -180,12 +210,9 @@ namespace CoreMidi {
 				yield break;
 
 			unsafe {
-				fixed (byte* midiDataPtr = midiData) {
-					MIDIEventList* list = (MIDIEventList*) midiDataPtr;
-					MidiEventPacket* packet = &list->packet;
-					packetToYield = *packet;
-					packetPtr = (IntPtr) packet;
-				}
+				MidiEventPacket* packet = &midiDataPointer->packet;
+				packetToYield = *packet;
+				packetPtr = (IntPtr) packet;
 			}
 			yield return packetToYield;
 

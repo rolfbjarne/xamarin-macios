@@ -1475,13 +1475,12 @@ namespace Metal {
 		[NoMacCatalyst]
 		macOS_GPUFamily2_v1 = 10005,
 
+		/// <summary>The tvOS GPU Family 1 v1 feature set.</summary>
 #if XAMCORE_5_0
 		[NoMacCatalyst]
 #elif __MACCATALYST__
 		[Obsolete ("Not available on the current platform.")]
 #endif
-
-		/// <summary>The tvOS GPU Family 1 v1 feature set.</summary>
 		[NoiOS, NoMac]
 		tvOS_GPUFamily1_v1 = 30000,
 

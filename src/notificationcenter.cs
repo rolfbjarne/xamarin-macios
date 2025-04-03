@@ -346,7 +346,10 @@ namespace NotificationCenter {
 		void SearchForTearm (NCWidgetSearchViewController controller, string searchTerm, nuint max);
 #else
 		[Abstract]
-		[Export ("widgetSearch:searchForTerm:maxResults:"), EventArgs ("NSWidgetSearchForTerm"), DefaultValue (false)]
+		[Export ("widgetSearch:searchForTerm:maxResults:"), EventArgs ("NSWidgetSearchForTerm", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			"""), DefaultValue (false)]
 		void SearchForTerm (NCWidgetSearchViewController controller, string searchTerm, nuint max);
 #endif
 

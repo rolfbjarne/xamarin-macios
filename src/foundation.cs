@@ -20110,14 +20110,20 @@ namespace Foundation {
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("userNotificationCenter:didDeliverNotification:"), EventArgs ("UNCDidDeliverNotification")]
+		[Export ("userNotificationCenter:didDeliverNotification:"), EventArgs ("UNCDidDeliverNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidDeliverNotification (NSUserNotificationCenter center, NSUserNotification notification);
 
 		/// <param name="center">To be added.</param>
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("userNotificationCenter:didActivateNotification:"), EventArgs ("UNCDidActivateNotification")]
+		[Export ("userNotificationCenter:didActivateNotification:"), EventArgs ("UNCDidActivateNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidActivateNotification (NSUserNotificationCenter center, NSUserNotification notification);
 
 		/// <param name="center">To be added.</param>
@@ -20125,6 +20131,11 @@ namespace Foundation {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("userNotificationCenter:shouldPresentNotification:"), DelegateName ("UNCShouldPresentNotification"), DefaultValue (false)]
 		bool ShouldPresentNotification (NSUserNotificationCenter center, NSUserNotification notification);
 	}

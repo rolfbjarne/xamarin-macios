@@ -23443,6 +23443,11 @@ namespace UIKit {
 		/// <summary>Whether the UIWebView should begin loading data.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("webView:shouldStartLoadWithRequest:navigationType:"), DelegateName ("UIWebLoaderControl"), DefaultValue ("true")]
 		bool ShouldStartLoad (UIWebView webView, NSUrlRequest request, UIWebViewNavigationType navigationType);
 
@@ -23451,7 +23456,10 @@ namespace UIKit {
 		///         </param>
 		/// <summary>Indicates that loading has begun.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webViewDidStartLoad:"), EventArgs ("UIWebView")]
+		[Export ("webViewDidStartLoad:"), EventArgs ("UIWebView", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void LoadStarted (UIWebView webView);
 
 		/// <param name="webView">
@@ -23459,7 +23467,10 @@ namespace UIKit {
 		///         </param>
 		/// <summary>Indicates that loading has completed.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webViewDidFinishLoad:"), EventArgs ("UIWebView"), EventName ("LoadFinished")]
+		[Export ("webViewDidFinishLoad:"), EventArgs ("UIWebView", XmlDocs = """
+			<summary>An event indicating the end of loading.</summary>
+			<remarks>To be added.</remarks>
+			"""), EventName ("LoadFinished")]
 		void LoadingFinished (UIWebView webView);
 
 		/// <param name="webView">
@@ -23470,7 +23481,10 @@ namespace UIKit {
 		///         </param>
 		/// <summary>Indicates that the UIWebView's attempt to load data failed.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:didFailLoadWithError:"), EventArgs ("UIWebErrorArgs", false, true), EventName ("LoadError")]
+		[Export ("webView:didFailLoadWithError:"), EventArgs ("UIWebErrorArgs", false, true, XmlDocs = """
+			<summary>An event indicating an error in loading.</summary>
+			<remarks>To be added.</remarks>
+			"""), EventName ("LoadError")]
 		void LoadFailed (UIWebView webView, NSError error);
 	}
 

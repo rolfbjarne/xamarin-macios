@@ -348,19 +348,30 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("animationShouldStart:"), DelegateName ("NSAnimationPredicate"), DefaultValue (true)]
 		bool AnimationShouldStart (NSAnimation animation);
 
 		/// <param name="animation">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("animationDidStop:"), EventArgs ("NSAnimation")]
+		[Export ("animationDidStop:"), EventArgs ("NSAnimation", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void AnimationDidStop (NSAnimation animation);
 
 		/// <param name="animation">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("animationDidEnd:"), EventArgs ("NSAnimation")]
+		[Export ("animationDidEnd:"), EventArgs ("NSAnimation", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void AnimationDidEnd (NSAnimation animation);
 
 		/// <param name="animation">To be added.</param>
@@ -368,6 +379,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("animation:valueForProgress:"), DelegateName ("NSAnimationProgress"), DefaultValueFromArgumentAttribute ("progress")]
 		float /* float, not CGFloat */ ComputeAnimationCurve (NSAnimation animation, float /* NSAnimationProgress = float */ progress);
 
@@ -375,7 +391,10 @@ namespace AppKit {
 		/// <param name="progress">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("animation:didReachProgressMark:"), EventArgs ("NSAnimation")]
+		[Export ("animation:didReachProgressMark:"), EventArgs ("NSAnimation", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void AnimationDidReachProgressMark (NSAnimation animation, float /* NSAnimationProgress = float */ progress);
 	}
 
@@ -502,6 +521,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("alertShowHelp:"), DelegateName ("NSAlertPredicate"), DefaultValue (false)]
 		bool ShowHelp (NSAlert alert);
 	}
@@ -1195,6 +1219,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("applicationShouldTerminate:"), DelegateName ("NSApplicationTermination"), DefaultValue (NSApplicationTerminateReply.Now)]
 		NSApplicationTerminateReply ApplicationShouldTerminate (NSApplication sender);
 
@@ -1203,6 +1232,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("application:openFile:"), DelegateName ("NSApplicationFile"), DefaultValue (false)]
 		bool OpenFile (NSApplication sender, string filename);
 
@@ -1210,7 +1244,10 @@ namespace AppKit {
 		/// <param name="filenames">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("application:openFiles:"), EventArgs ("NSApplicationFiles")]
+		[Export ("application:openFiles:"), EventArgs ("NSApplicationFiles", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void OpenFiles (NSApplication sender, string [] filenames);
 
 		/// <param name="sender">To be added.</param>
@@ -1218,6 +1255,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("application:openTempFile:"), DelegateName ("NSApplicationFile"), DefaultValue (false)]
 		bool OpenTempFile (NSApplication sender, string filename);
 
@@ -1225,6 +1267,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("applicationShouldOpenUntitledFile:"), DelegateName ("NSApplicationPredicate"), DefaultValue (false)]
 		bool ApplicationShouldOpenUntitledFile (NSApplication sender);
 
@@ -1232,6 +1279,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("applicationOpenUntitledFile:"), DelegateName ("NSApplicationPredicate"), DefaultValue (false)]
 		bool ApplicationOpenUntitledFile (NSApplication sender);
 
@@ -1240,6 +1292,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("application:openFileWithoutUI:"), DelegateName ("NSApplicationFileCommand"), DefaultValue (false)]
 		bool OpenFileWithoutUI (NSObject sender, string filename);
 
@@ -1248,6 +1305,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("application:printFile:"), DelegateName ("NSApplicationFile"), DefaultValue (false)]
 		bool PrintFile (NSApplication sender, string filename);
 
@@ -1258,6 +1320,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("application:printFiles:withSettings:showPrintPanels:"), DelegateName ("NSApplicationPrint"), DefaultValue (NSApplicationPrintReply.Failure)]
 		NSApplicationPrintReply PrintFiles (NSApplication application, string [] fileNames, NSDictionary printSettings, bool showPrintPanels);
 
@@ -1265,6 +1332,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("applicationShouldTerminateAfterLastWindowClosed:"), DelegateName ("NSApplicationPredicate"), DefaultValue (false)]
 		bool ApplicationShouldTerminateAfterLastWindowClosed (NSApplication sender);
 
@@ -1273,6 +1345,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("applicationShouldHandleReopen:hasVisibleWindows:"), DelegateName ("NSApplicationReopen"), DefaultValue (false)]
 		bool ApplicationShouldHandleReopen (NSApplication sender, bool hasVisibleWindows);
 
@@ -1280,6 +1357,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("applicationDockMenu:"), DelegateName ("NSApplicationMenu"), DefaultValue (null)]
 		NSMenu ApplicationDockMenu (NSApplication sender);
 
@@ -1288,91 +1370,138 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("application:willPresentError:"), DelegateName ("NSApplicationError"), DefaultValue (null)]
 		NSError WillPresentError (NSApplication application, NSError error);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("applicationWillFinishLaunching:"), EventArgs ("NSNotification")]
+		[Export ("applicationWillFinishLaunching:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillFinishLaunching (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("applicationDidFinishLaunching:"), EventArgs ("NSNotification")]
+		[Export ("applicationDidFinishLaunching:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidFinishLaunching (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("applicationWillHide:"), EventArgs ("NSNotification")]
+		[Export ("applicationWillHide:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillHide (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("applicationDidHide:"), EventArgs ("NSNotification")]
+		[Export ("applicationDidHide:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidHide (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("applicationWillUnhide:"), EventArgs ("NSNotification")]
+		[Export ("applicationWillUnhide:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillUnhide (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("applicationDidUnhide:"), EventArgs ("NSNotification")]
+		[Export ("applicationDidUnhide:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidUnhide (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("applicationWillBecomeActive:"), EventArgs ("NSNotification")]
+		[Export ("applicationWillBecomeActive:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillBecomeActive (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("applicationDidBecomeActive:"), EventArgs ("NSNotification")]
+		[Export ("applicationDidBecomeActive:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidBecomeActive (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("applicationWillResignActive:"), EventArgs ("NSNotification")]
+		[Export ("applicationWillResignActive:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillResignActive (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("applicationDidResignActive:"), EventArgs ("NSNotification")]
+		[Export ("applicationDidResignActive:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidResignActive (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("applicationWillUpdate:"), EventArgs ("NSNotification")]
+		[Export ("applicationWillUpdate:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillUpdate (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("applicationDidUpdate:"), EventArgs ("NSNotification")]
+		[Export ("applicationDidUpdate:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidUpdate (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("applicationWillTerminate:"), EventArgs ("NSNotification")]
+		[Export ("applicationWillTerminate:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillTerminate (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("applicationDidChangeScreenParameters:"), EventArgs ("NSNotification")]
+		[Export ("applicationDidChangeScreenParameters:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void ScreenParametersChanged (NSNotification notification);
 
 #if !NET // Needs to move from delegate in next API break
@@ -1401,35 +1530,50 @@ namespace AppKit {
 		/// <param name="deviceToken">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("application:didRegisterForRemoteNotificationsWithDeviceToken:"), EventArgs ("NSData")]
+		[Export ("application:didRegisterForRemoteNotificationsWithDeviceToken:"), EventArgs ("NSData", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void RegisteredForRemoteNotifications (NSApplication application, NSData deviceToken);
 
 		/// <param name="application">To be added.</param>
 		/// <param name="error">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("application:didFailToRegisterForRemoteNotificationsWithError:"), EventArgs ("NSError", true)]
+		[Export ("application:didFailToRegisterForRemoteNotificationsWithError:"), EventArgs ("NSError", true, XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void FailedToRegisterForRemoteNotifications (NSApplication application, NSError error);
 
 		/// <param name="application">To be added.</param>
 		/// <param name="userInfo">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("application:didReceiveRemoteNotification:"), EventArgs ("NSDictionary")]
+		[Export ("application:didReceiveRemoteNotification:"), EventArgs ("NSDictionary", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void ReceivedRemoteNotification (NSApplication application, NSDictionary userInfo);
 
 		/// <param name="app">To be added.</param>
 		/// <param name="encoder">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("application:willEncodeRestorableState:"), EventArgs ("NSCoder")]
+		[Export ("application:willEncodeRestorableState:"), EventArgs ("NSCoder", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillEncodeRestorableState (NSApplication app, NSCoder encoder);
 
 		/// <param name="app">To be added.</param>
 		/// <param name="state">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("application:didDecodeRestorableState:"), EventArgs ("NSCoder")]
+		[Export ("application:didDecodeRestorableState:"), EventArgs ("NSCoder", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DecodedRestorableState (NSApplication app, NSCoder state);
 
 		/// <param name="application">To be added.</param>
@@ -1437,6 +1581,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("application:willContinueUserActivityWithType:"), DelegateName ("NSApplicationUserActivityType"), DefaultValue (false)]
 		bool WillContinueUserActivity (NSApplication application, string userActivityType);
 
@@ -1446,6 +1595,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("application:continueUserActivity:restorationHandler:"), DelegateName ("NSApplicationContinueUserActivity"), DefaultValue (false)]
 		bool ContinueUserActivity (NSApplication application, NSUserActivity userActivity, ContinueUserActivityRestorationHandler restorationHandler);
 
@@ -1454,28 +1608,40 @@ namespace AppKit {
 		/// <param name="error">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("application:didFailToContinueUserActivityWithType:error:"), EventArgs ("NSApplicationFailed"), DefaultValue (false)]
+		[Export ("application:didFailToContinueUserActivityWithType:error:"), EventArgs ("NSApplicationFailed", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			"""), DefaultValue (false)]
 		void FailedToContinueUserActivity (NSApplication application, string userActivityType, NSError error);
 
 		/// <param name="application">To be added.</param>
 		/// <param name="userActivity">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("application:didUpdateUserActivity:"), EventArgs ("NSApplicationUpdatedUserActivity"), DefaultValue (false)]
+		[Export ("application:didUpdateUserActivity:"), EventArgs ("NSApplicationUpdatedUserActivity", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			"""), DefaultValue (false)]
 		void UpdatedUserActivity (NSApplication application, NSUserActivity userActivity);
 
 		/// <param name="application">To be added.</param>
 		/// <param name="metadata">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("application:userDidAcceptCloudKitShareWithMetadata:"), EventArgs ("NSApplicationUserAcceptedCloudKitShare")]
+		[Export ("application:userDidAcceptCloudKitShareWithMetadata:"), EventArgs ("NSApplicationUserAcceptedCloudKitShare", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void UserDidAcceptCloudKitShare (NSApplication application, CKShareMetadata metadata);
 
 		/// <param name="application">To be added.</param>
 		/// <param name="urls">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[EventArgs ("NSApplicationOpenUrls")]
+		[EventArgs ("NSApplicationOpenUrls", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("application:openURLs:")]
 		void OpenUrls (NSApplication application, NSUrl [] urls);
 
@@ -1484,6 +1650,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "Now optional on NSApplicationDelegate.")]
 		[Export ("application:delegateHandlesKey:"), DelegateName ("NSApplicationHandlesKey"), NoDefaultValue]
 		bool HandlesKey (NSApplication sender, string key);
@@ -6507,7 +6678,10 @@ namespace AppKit {
 		/// <param name="proposedTimeInterval">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("datePickerCell:validateProposedDateValue:timeInterval:"), EventArgs ("NSDatePickerValidator")]
+		[Export ("datePickerCell:validateProposedDateValue:timeInterval:"), EventArgs ("NSDatePickerValidator", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void ValidateProposedDateValue (NSDatePickerCell aDatePickerCell, ref NSDate proposedDateValue, double proposedTimeInterval);
 	}
 
@@ -7537,19 +7711,30 @@ namespace AppKit {
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("drawerDidClose:"), EventArgs ("NSNotification")]
+		[Export ("drawerDidClose:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DrawerDidClose (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("drawerDidOpen:"), EventArgs ("NSNotification")]
+		[Export ("drawerDidOpen:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DrawerDidOpen (NSNotification notification);
 
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("drawerShouldClose:"), DelegateName ("DrawerShouldCloseDelegate"), DefaultValue (true)]
 		bool DrawerShouldClose (NSDrawer sender);
 
@@ -7557,19 +7742,30 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("drawerShouldOpen:"), DelegateName ("DrawerShouldOpenDelegate"), DefaultValue (true)]
 		bool DrawerShouldOpen (NSDrawer sender);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("drawerWillClose:"), EventArgs ("NSNotification")]
+		[Export ("drawerWillClose:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DrawerWillClose (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("drawerWillOpen:"), EventArgs ("NSNotification")]
+		[Export ("drawerWillOpen:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DrawerWillOpen (NSNotification notification);
 
 		/// <param name="sender">To be added.</param>
@@ -7577,6 +7773,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("drawerWillResizeContents:toSize:"), DelegateName ("DrawerWillResizeContentsDelegate"), DefaultValue (null)]
 		CGSize DrawerWillResizeContents (NSDrawer sender, CGSize toSize);
 
@@ -9562,6 +9763,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("gestureRecognizerShouldBegin:"), DelegateName ("NSGestureProbe"), DefaultValue (true)]
 		bool ShouldBegin (NSGestureRecognizer gestureRecognizer);
 
@@ -9570,6 +9776,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:"), DelegateName ("NSGesturesProbe"), DefaultValue (false)]
 		bool ShouldRecognizeSimultaneously (NSGestureRecognizer gestureRecognizer, NSGestureRecognizer otherGestureRecognizer);
 
@@ -9578,6 +9789,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("gestureRecognizer:shouldRequireFailureOfGestureRecognizer:"), DelegateName ("NSGesturesProbe"), DefaultValue (false)]
 		bool ShouldRequireFailure (NSGestureRecognizer gestureRecognizer, NSGestureRecognizer otherGestureRecognizer);
 
@@ -9586,6 +9802,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("gestureRecognizer:shouldBeRequiredToFailByGestureRecognizer:"), DelegateName ("NSGesturesProbe"), DefaultValue (false)]
 		bool ShouldBeRequiredToFail (NSGestureRecognizer gestureRecognizer, NSGestureRecognizer otherGestureRecognizer);
 
@@ -9600,6 +9821,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("gestureRecognizer:shouldAttemptToRecognizeWithEvent:"), DelegateName ("NSGestureEvent"), DefaultValue (true)]
 		bool ShouldAttemptToRecognize (NSGestureRecognizer gestureRecognizer, NSEvent theEvent);
 
@@ -9608,6 +9834,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("gestureRecognizer:shouldReceiveTouch:"), DelegateName ("NSTouchEvent"), DefaultValue (true)]
 		bool ShouldReceiveTouch (NSGestureRecognizer gestureRecognizer, NSTouch touch);
 	}
@@ -10591,6 +10822,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("panel:shouldEnableURL:"), DelegateName ("NSOpenSavePanelUrl"), DefaultValue (true)]
 		bool ShouldEnableUrl (NSSavePanel panel, NSUrl url);
 
@@ -10600,6 +10836,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("panel:validateURL:error:"), DelegateName ("NSOpenSavePanelValidate"), DefaultValue (true)]
 		bool ValidateUrl (NSSavePanel panel, NSUrl url, [NullAllowed] out NSError outError);
 
@@ -10607,7 +10848,10 @@ namespace AppKit {
 		/// <param name="newDirectoryUrl">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("panel:didChangeToDirectoryURL:"), EventArgs ("NSOpenSavePanelUrl")]
+		[Export ("panel:didChangeToDirectoryURL:"), EventArgs ("NSOpenSavePanelUrl", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidChangeToDirectory (NSSavePanel panel, NSUrl newDirectoryUrl);
 
 		/// <param name="panel">To be added.</param>
@@ -10616,6 +10860,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("panel:userEnteredFilename:confirmed:"), DelegateName ("NSOpenSaveFilenameConfirmation"), DefaultValueFromArgument ("filename")]
 		string UserEnteredFilename (NSSavePanel panel, string filename, bool confirmed);
 
@@ -10623,13 +10872,19 @@ namespace AppKit {
 		/// <param name="expanding">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("panel:willExpand:"), EventArgs ("NSOpenSaveExpanding")]
+		[Export ("panel:willExpand:"), EventArgs ("NSOpenSaveExpanding", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillExpand (NSSavePanel panel, bool expanding);
 
 		/// <param name="panel">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("panelSelectionDidChange:"), EventArgs ("NSOpenSaveSelectionChanged")]
+		[Export ("panelSelectionDidChange:"), EventArgs ("NSOpenSaveSelectionChanged", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void SelectionDidChange (NSSavePanel panel);
 
 		/// <param name="panel">To be added.</param>
@@ -10637,6 +10892,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Deprecated (PlatformName.MacOSX, 10, 6, message: "Use ValidateUrl instead.")]
 		[Export ("panel:isValidFilename:"), DelegateName ("NSOpenSaveFilename"), DefaultValue (true)]
 		bool IsValidFilename (NSSavePanel panel, string fileName);
@@ -10646,7 +10906,10 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.MacOSX, 10, 6, message: "Use DidChangeToDirectory instead.")]
-		[Export ("panel:directoryDidChange:"), EventArgs ("NSOpenSaveFilename")]
+		[Export ("panel:directoryDidChange:"), EventArgs ("NSOpenSaveFilename", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DirectoryDidChange (NSSavePanel panel, string path);
 
 		/// <param name="panel">To be added.</param>
@@ -10656,6 +10919,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Deprecated (PlatformName.MacOSX, 10, 6, message: "This method does not control sorting order.")]
 		[Export ("panel:compareFilename:with:caseSensitive:"), DelegateName ("NSOpenSaveCompare"), DefaultValue (NSComparisonResult.Same)]
 		NSComparisonResult CompareFilenames (NSSavePanel panel, string name1, string name2, bool caseSensitive);
@@ -10665,6 +10933,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Deprecated (PlatformName.MacOSX, 10, 6, message: "Use ShouldEnableUrl instead.")]
 		[Export ("panel:shouldShowFilename:"), DelegateName ("NSOpenSaveFilename"), DefaultValue (true)]
 		bool ShouldShowFilename (NSSavePanel panel, string filename);
@@ -12379,6 +12652,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("imageDidNotDraw:inRect:"), DelegateName ("NSImageRect"), DefaultValue (null)]
 		NSImage ImageDidNotDraw (NSObject sender, CGRect aRect);
 
@@ -12386,14 +12664,20 @@ namespace AppKit {
 		/// <param name="rep">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("image:willLoadRepresentation:"), EventArgs ("NSImageLoad")]
+		[Export ("image:willLoadRepresentation:"), EventArgs ("NSImageLoad", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillLoadRepresentation (NSImage image, NSImageRep rep);
 
 		/// <param name="image">To be added.</param>
 		/// <param name="rep">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("image:didLoadRepresentationHeader:"), EventArgs ("NSImageLoad")]
+		[Export ("image:didLoadRepresentationHeader:"), EventArgs ("NSImageLoad", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidLoadRepresentationHeader (NSImage image, NSImageRep rep);
 
 		[Export ("image:didLoadPartOfRepresentation:withValidRows:"), EventArgs ("NSImagePartial", XmlDocs = """
@@ -12407,7 +12691,10 @@ namespace AppKit {
 		/// <param name="status">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("image:didLoadRepresentation:withStatus:"), EventArgs ("NSImageLoadRepresentation")]
+		[Export ("image:didLoadRepresentation:withStatus:"), EventArgs ("NSImageLoadRepresentation", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidLoadRepresentation (NSImage image, NSImageRep rep, NSImageLoadStatus status);
 	}
 
@@ -14092,14 +14379,20 @@ namespace AppKit {
 		/// <param name="openPanel">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("pathCell:willDisplayOpenPanel:"), EventArgs ("NSPathCellDisplayPanel")]
+		[Export ("pathCell:willDisplayOpenPanel:"), EventArgs ("NSPathCellDisplayPanel", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillDisplayOpenPanel (NSPathCell pathCell, NSOpenPanel openPanel);
 
 		/// <param name="pathCell">To be added.</param>
 		/// <param name="menu">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("pathCell:willPopUpMenu:"), EventArgs ("NSPathCellMenu")]
+		[Export ("pathCell:willPopUpMenu:"), EventArgs ("NSPathCellMenu", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillPopupMenu (NSPathCell pathCell, NSMenu menu);
 	}
 
@@ -16710,12 +17003,20 @@ namespace AppKit {
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("searchFieldDidStartSearching:")]
 		void SearchingStarted (NSSearchField sender);
 
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("searchFieldDidEndSearching:")]
 		void SearchingEnded (NSSearchField sender);
 	}
@@ -17721,7 +18022,10 @@ namespace AppKit {
 		/// <param name="finished">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("sound:didFinishPlaying:"), EventArgs ("NSSoundFinished")]
+		[Export ("sound:didFinishPlaying:"), EventArgs ("NSSoundFinished", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidFinishPlaying (NSSound sound, bool finished);
 	}
 
@@ -20164,6 +20468,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("pageController:identifierForObject:"), DelegateName ("NSPageControllerGetIdentifier"), DefaultValue ("String.Empty")]
 		string GetIdentifier (NSPageController pageController, NSObject targetObject);
 
@@ -20172,6 +20481,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("pageController:viewControllerForIdentifier:"), DelegateName ("NSPageControllerGetViewController"), DefaultValue (null)]
 		NSViewController GetViewController (NSPageController pageController, string identifier);
 
@@ -20180,6 +20494,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("pageController:frameForObject:"), DelegateName ("NSPageControllerGetFrame"), NoDefaultValue]
 		CGRect GetFrame (NSPageController pageController, NSObject targetObject);
 
@@ -20188,25 +20507,39 @@ namespace AppKit {
 		/// <param name="targetObject">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("pageController:prepareViewController:withObject:"), EventArgs ("NSPageControllerPrepareViewController")]
+		[Export ("pageController:prepareViewController:withObject:"), EventArgs ("NSPageControllerPrepareViewController", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void PrepareViewController (NSPageController pageController, NSViewController viewController, NSObject targetObject);
 
 		/// <param name="pageController">To be added.</param>
 		/// <param name="targetObject">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("pageController:didTransitionToObject:"), EventArgs ("NSPageControllerTransition")]
+		[Export ("pageController:didTransitionToObject:"), EventArgs ("NSPageControllerTransition", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidTransition (NSPageController pageController, NSObject targetObject);
 
 		/// <param name="pageController">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("pageControllerWillStartLiveTransition:")]
 		void WillStartLiveTransition (NSPageController pageController);
 
 		/// <param name="pageController">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("pageControllerDidEndLiveTransition:")]
 		void DidEndLiveTransition (NSPageController pageController);
 	}
@@ -20831,6 +21164,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("selectionShouldChangeInTableView:"), DelegateName ("NSTableViewPredicate"), DefaultValue (true)]
 		bool SelectionShouldChange (NSTableView tableView);
 
@@ -20848,6 +21186,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("tableView:selectionIndexesForProposedSelection:"), DelegateName ("NSTableViewIndexFilter"), DefaultValueFromArgument ("proposedSelectionIndexes")]
 		NSIndexSet GetSelectionIndexes (NSTableView tableView, NSIndexSet proposedSelectionIndexes);
 
@@ -20856,6 +21199,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("tableView:shouldSelectTableColumn:"), DelegateName ("NSTableViewColumnPredicate"), DefaultValue (true)]
 		bool ShouldSelectTableColumn (NSTableView tableView, NSTableColumn tableColumn);
 
@@ -20863,21 +21211,30 @@ namespace AppKit {
 		/// <param name="tableColumn">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("tableView:mouseDownInHeaderOfTableColumn:"), EventArgs ("NSTableViewTable")]
+		[Export ("tableView:mouseDownInHeaderOfTableColumn:"), EventArgs ("NSTableViewTable", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void MouseDownInHeaderOfTableColumn (NSTableView tableView, NSTableColumn tableColumn);
 
 		/// <param name="tableView">To be added.</param>
 		/// <param name="tableColumn">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("tableView:didClickTableColumn:"), EventArgs ("NSTableViewTable")]
+		[Export ("tableView:didClickTableColumn:"), EventArgs ("NSTableViewTable", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidClickTableColumn (NSTableView tableView, NSTableColumn tableColumn);
 
 		/// <param name="tableView">To be added.</param>
 		/// <param name="tableColumn">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("tableView:didDragTableColumn:"), EventArgs ("NSTableViewTable")]
+		[Export ("tableView:didDragTableColumn:"), EventArgs ("NSTableViewTable", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidDragTableColumn (NSTableView tableView, NSTableColumn tableColumn);
 
 		[EventArgs ("", XmlDocs = """
@@ -20910,6 +21267,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("tableView:shouldTypeSelectForEvent:withCurrentSearchString:"), DelegateName ("NSTableViewEventString"), DefaultValue (false)]
 		bool ShouldTypeSelect (NSTableView tableView, NSEvent theEvent, string searchString);
 
@@ -20964,25 +21326,37 @@ namespace AppKit {
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("tableViewSelectionDidChange:"), EventArgs ("NSNotification")]
+		[Export ("tableViewSelectionDidChange:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void SelectionDidChange (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("tableViewColumnDidMove:"), EventArgs ("NSNotification")]
+		[Export ("tableViewColumnDidMove:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void ColumnDidMove (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("tableViewColumnDidResize:"), EventArgs ("NSNotification")]
+		[Export ("tableViewColumnDidResize:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void ColumnDidResize (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("tableViewSelectionIsChanging:"), EventArgs ("NSNotification")]
+		[Export ("tableViewSelectionIsChanging:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void SelectionIsChanging (NSNotification notification);
 
 		[EventArgs ("", XmlDocs = """
@@ -21524,6 +21898,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("tabView:shouldSelectTabViewItem:"), DelegateName ("NSTabViewPredicate"), DefaultValue (true)]
 		bool ShouldSelectTabViewItem (NSTabView tabView, NSTabViewItem item);
 
@@ -21531,19 +21910,29 @@ namespace AppKit {
 		/// <param name="item">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("tabView:willSelectTabViewItem:"), EventArgs ("NSTabViewItem")]
+		[Export ("tabView:willSelectTabViewItem:"), EventArgs ("NSTabViewItem", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillSelect (NSTabView tabView, NSTabViewItem item);
 
 		/// <param name="tabView">To be added.</param>
 		/// <param name="item">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("tabView:didSelectTabViewItem:"), EventArgs ("NSTabViewItem")]
+		[Export ("tabView:didSelectTabViewItem:"), EventArgs ("NSTabViewItem", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidSelect (NSTabView tabView, NSTabViewItem item);
 
 		/// <param name="tabView">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("tabViewDidChangeNumberOfTabViewItems:")]
 		void NumberOfItemsChanged (NSTabView tabView);
 	}
@@ -21794,6 +22183,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("textShouldBeginEditing:"), DelegateName ("NSTextPredicate"), DefaultValue (true)]
 		bool TextShouldBeginEditing (NSText textObject);
 
@@ -21801,25 +22195,39 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("textShouldEndEditing:"), DelegateName ("NSTextPredicate"), DefaultValue (true)]
 		bool TextShouldEndEditing (NSText textObject);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("textDidBeginEditing:"), EventArgs ("NSNotification")]
+		[Export ("textDidBeginEditing:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void TextDidBeginEditing (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("textDidEndEditing:"), EventArgs ("NSNotification")]
+		[Export ("textDidEndEditing:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void TextDidEndEditing (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("textDidChange:"), EventArgs ("NSNotification")]
+		[Export ("textDidChange:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void TextDidChange (NSNotification notification);
 	}
 
@@ -22122,6 +22530,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("control:textShouldBeginEditing:"), DelegateName ("NSControlText"), DefaultValue (true)]
 		bool TextShouldBeginEditing (NSControl control, NSText fieldEditor);
 
@@ -22130,6 +22543,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("control:textShouldEndEditing:"), DelegateName ("NSControlText"), DefaultValue (true)]
 		bool TextShouldEndEditing (NSControl control, NSText fieldEditor);
 
@@ -22139,6 +22557,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("control:didFailToFormatString:errorDescription:"), DelegateName ("NSControlTextError"), DefaultValue (true)]
 		bool DidFailToFormatString (NSControl control, string str, string error);
 
@@ -22147,7 +22570,10 @@ namespace AppKit {
 		/// <param name="error">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("control:didFailToValidatePartialString:errorDescription:"), EventArgs ("NSControlTextError")]
+		[Export ("control:didFailToValidatePartialString:errorDescription:"), EventArgs ("NSControlTextError", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidFailToValidatePartialString (NSControl control, string str, string error);
 
 		/// <param name="control">To be added.</param>
@@ -22155,6 +22581,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("control:isValidObject:"), DelegateName ("NSControlTextValidation"), DefaultValue (true)]
 		bool IsValidObject (NSControl control, NSObject objectToValidate);
 
@@ -22164,6 +22595,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("control:textView:doCommandBySelector:"), DelegateName ("NSControlCommand"), DefaultValue (false)]
 		bool DoCommandBySelector (NSControl control, NSTextView textView, Selector commandSelector);
 
@@ -22178,19 +22614,28 @@ namespace AppKit {
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("controlTextDidEndEditing:"), EventArgs ("NSNotification")]
+		[Export ("controlTextDidEndEditing:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void EditingEnded (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("controlTextDidChange:"), EventArgs ("NSNotification")]
+		[Export ("controlTextDidChange:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void Changed (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("controlTextDidBeginEditing:"), EventArgs ("NSNotification")]
+		[Export ("controlTextDidBeginEditing:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void EditingBegan (NSNotification notification);
 
 		/// <param name="textField">To be added.</param>
@@ -22199,6 +22644,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("textField:textView:candidatesForSelectedRange:"), DelegateName ("NSTextFieldGetCandidates"), DefaultValue (null)]
 		[return: NullAllowed]
 		NSObject [] GetCandidates (NSTextField textField, NSTextView textView, NSRange selectedRange);
@@ -22210,6 +22660,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("textField:textView:candidates:forSelectedRange:"), DelegateName ("NSTextFieldTextCheckingResults"), DefaultValue (null)]
 		NSTextCheckingResult [] GetTextCheckingResults (NSTextField textField, NSTextView textView, NSTextCheckingResult [] candidates, NSRange selectedRange);
 
@@ -22232,24 +22687,40 @@ namespace AppKit {
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("comboBoxWillPopUp:")]
 		void WillPopUp (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("comboBoxWillDismiss:")]
 		void WillDismiss (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("comboBoxSelectionDidChange:")]
 		void SelectionChanged (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("comboBoxSelectionIsChanging:")]
 		void SelectionIsChanging (NSNotification notification);
 	}
@@ -23439,6 +23910,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("textView:willChangeSelectionFromCharacterRange:toCharacterRange:"), DelegateName ("NSTextViewSelectionChange"), DefaultValueFromArgument ("newSelectedCharRange")]
 		NSRange WillChangeSelection (NSTextView textView, NSRange oldSelectedCharRange, NSRange newSelectedCharRange);
 
@@ -23448,6 +23924,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("textView:willChangeSelectionFromCharacterRanges:toCharacterRanges:"), DelegateName ("NSTextViewSelectionWillChange"), DefaultValueFromArgument ("newSelectedCharRanges")]
 		NSValue [] WillChangeSelectionFromRanges (NSTextView textView, NSValue [] oldSelectedCharRanges, NSValue [] newSelectedCharRanges);
 
@@ -23457,6 +23938,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("textView:shouldChangeTextInRanges:replacementStrings:"), DelegateName ("NSTextViewSelectionShouldChange"), DefaultValue (true)]
 		bool ShouldChangeTextInRanges (NSTextView textView, NSValue [] affectedRanges, string [] replacementStrings);
 
@@ -23466,19 +23952,30 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("textView:shouldChangeTypingAttributes:toAttributes:"), DelegateName ("NSTextViewTypeAttribute"), DefaultValueFromArgument ("newTypingAttributes")]
 		NSDictionary ShouldChangeTypingAttributes (NSTextView textView, NSDictionary oldTypingAttributes, NSDictionary newTypingAttributes);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("textViewDidChangeSelection:"), EventArgs ("NSTextViewNotification")]
+		[Export ("textViewDidChangeSelection:"), EventArgs ("NSTextViewNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidChangeSelection (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("textViewDidChangeTypingAttributes:"), EventArgs ("NSTextViewNotification")]
+		[Export ("textViewDidChangeTypingAttributes:"), EventArgs ("NSTextViewNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidChangeTypingAttributes (NSNotification notification);
 
 		[EventArgs ("", XmlDocs = """
@@ -23504,6 +24001,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("textView:shouldChangeTextInRange:replacementString:"), DelegateName ("NSTextViewChangeText"), DefaultValue (true)]
 		bool ShouldChangeTextInRange (NSTextView textView, NSRange affectedCharRange, string replacementString);
 
@@ -23512,6 +24014,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("textView:doCommandBySelector:"), DelegateName ("NSTextViewSelectorCommand"), DefaultValue (false)]
 		bool DoCommandBySelector (NSTextView textView, Selector commandSelector);
 
@@ -23538,6 +24045,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("textView:willCheckTextInRange:options:types:"), DelegateName ("NSTextViewOnTextCheck"), DefaultValueFromArgument ("options")]
 		NSDictionary WillCheckText (NSTextView view, NSRange range, NSDictionary options, NSTextCheckingTypes checkingTypes);
 
@@ -23564,6 +24076,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("undoManagerForTextView:"), DelegateName ("NSTextViewGetUndoManager"), DefaultValue (null)]
 		NSUndoManager GetUndoManager (NSTextView view);
 
@@ -23572,6 +24089,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("textView:shouldUpdateTouchBarItemIdentifiers:"), DelegateName ("NSTextViewUpdateTouchBarItemIdentifiers"), NoDefaultValue]
 		string [] ShouldUpdateTouchBarItemIdentifiers (NSTextView textView, string [] identifiers);
 
@@ -23580,6 +24102,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("textView:candidatesForSelectedRange:"), DelegateName ("NSTextViewGetCandidates"), NoDefaultValue]
 		[return: NullAllowed]
 		NSObject [] GetCandidates (NSTextView textView, NSRange selectedRange);
@@ -23590,6 +24117,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("textView:candidates:forSelectedRange:"), DelegateName ("NSTextViewTextCheckingResults"), NoDefaultValue]
 		NSTextCheckingResult [] GetTextCheckingCandidates (NSTextView textView, NSTextCheckingResult [] candidates, NSRange selectedRange);
 
@@ -25956,6 +26488,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("windowShouldClose:"), DelegateName ("NSObjectPredicate"), DefaultValue (true)]
 		bool WindowShouldClose (NSObject sender);
 
@@ -25964,6 +26501,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("windowWillReturnFieldEditor:toObject:"), DelegateName ("NSWindowClient"), DefaultValue (null)]
 		NSObject WillReturnFieldEditor (NSWindow sender, NSObject client);
 
@@ -25972,6 +26514,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("windowWillResize:toSize:"), DelegateName ("NSWindowResize"), DefaultValueFromArgument ("toFrameSize")]
 		CGSize WillResize (NSWindow sender, CGSize toFrameSize);
 
@@ -25980,6 +26527,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("windowWillUseStandardFrame:defaultFrame:"), DelegateName ("NSWindowFrame"), DefaultValueFromArgument ("newFrame")]
 		CGRect WillUseStandardFrame (NSWindow window, CGRect newFrame);
 
@@ -25988,6 +26540,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("windowShouldZoom:toFrame:"), DelegateName ("NSWindowFramePredicate"), DefaultValue (true)]
 		bool ShouldZoom (NSWindow window, CGRect newFrame);
 
@@ -25995,6 +26552,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("windowWillReturnUndoManager:"), DelegateName ("NSWindowUndoManager"), DefaultValue (null)]
 		NSUndoManager WillReturnUndoManager (NSWindow window);
 
@@ -26004,6 +26566,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("window:willPositionSheet:usingRect:"), DelegateName ("NSWindowSheetRect"), DefaultValueFromArgument ("usingRect")]
 		CGRect WillPositionSheet (NSWindow window, NSWindow sheet, CGRect usingRect);
 
@@ -26012,6 +26579,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("window:shouldPopUpDocumentPathMenu:"), DelegateName ("NSWindowMenu"), DefaultValue (true)]
 		bool ShouldPopUpDocumentPathMenu (NSWindow window, NSMenu menu);
 
@@ -26022,157 +26594,237 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("window:shouldDragDocumentWithEvent:from:withPasteboard:"), DelegateName ("NSWindowDocumentDrag"), DefaultValue (true)]
 		bool ShouldDragDocumentWithEvent (NSWindow window, NSEvent theEvent, CGPoint dragImageLocation, NSPasteboard withPasteboard);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidResize:"), EventArgs ("NSNotification")]
+		[Export ("windowDidResize:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidResize (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidExpose:"), EventArgs ("NSNotification")]
+		[Export ("windowDidExpose:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidExpose (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowWillMove:"), EventArgs ("NSNotification")]
+		[Export ("windowWillMove:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillMove (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidMove:"), EventArgs ("NSNotification")]
+		[Export ("windowDidMove:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidMove (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidBecomeKey:"), EventArgs ("NSNotification")]
+		[Export ("windowDidBecomeKey:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidBecomeKey (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidResignKey:"), EventArgs ("NSNotification")]
+		[Export ("windowDidResignKey:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidResignKey (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidBecomeMain:"), EventArgs ("NSNotification")]
+		[Export ("windowDidBecomeMain:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidBecomeMain (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidResignMain:"), EventArgs ("NSNotification")]
+		[Export ("windowDidResignMain:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidResignMain (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowWillClose:"), EventArgs ("NSNotification")]
+		[Export ("windowWillClose:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillClose (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowWillMiniaturize:"), EventArgs ("NSNotification")]
+		[Export ("windowWillMiniaturize:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillMiniaturize (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidMiniaturize:"), EventArgs ("NSNotification")]
+		[Export ("windowDidMiniaturize:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidMiniaturize (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidDeminiaturize:"), EventArgs ("NSNotification")]
+		[Export ("windowDidDeminiaturize:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidDeminiaturize (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidUpdate:"), EventArgs ("NSNotification")]
+		[Export ("windowDidUpdate:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidUpdate (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidChangeScreen:"), EventArgs ("NSNotification")]
+		[Export ("windowDidChangeScreen:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidChangeScreen (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidChangeScreenProfile:"), EventArgs ("NSNotification")]
+		[Export ("windowDidChangeScreenProfile:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidChangeScreenProfile (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowWillBeginSheet:"), EventArgs ("NSNotification")]
+		[Export ("windowWillBeginSheet:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillBeginSheet (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidEndSheet:"), EventArgs ("NSNotification")]
+		[Export ("windowDidEndSheet:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidEndSheet (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowWillStartLiveResize:"), EventArgs ("NSNotification")]
+		[Export ("windowWillStartLiveResize:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillStartLiveResize (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidEndLiveResize:"), EventArgs ("NSNotification")]
+		[Export ("windowDidEndLiveResize:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidEndLiveResize (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowWillEnterFullScreen:"), EventArgs ("NSNotification")]
+		[Export ("windowWillEnterFullScreen:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillEnterFullScreen (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidEnterFullScreen:"), EventArgs ("NSNotification")]
+		[Export ("windowDidEnterFullScreen:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidEnterFullScreen (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowWillExitFullScreen:"), EventArgs ("NSNotification")]
+		[Export ("windowWillExitFullScreen:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillExitFullScreen (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidExitFullScreen:"), EventArgs ("NSNotification")]
+		[Export ("windowDidExitFullScreen:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidExitFullScreen (NSNotification notification);
 
 		/// <param name="window">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidFailToEnterFullScreen:"), EventArgs ("NSWindow")]
+		[Export ("windowDidFailToEnterFullScreen:"), EventArgs ("NSWindow", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidFailToEnterFullScreen (NSWindow window);
 
 		/// <param name="window">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidFailToExitFullScreen:"), EventArgs ("NSWindow")]
+		[Export ("windowDidFailToExitFullScreen:"), EventArgs ("NSWindow", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidFailToExitFullScreen (NSWindow window);
 
 		/// <param name="window">To be added.</param>
@@ -26180,6 +26832,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("window:willUseFullScreenContentSize:"), DelegateName ("NSWindowSize"), DefaultValueFromArgument ("proposedSize")]
 		CGSize WillUseFullScreenContentSize (NSWindow window, CGSize proposedSize);
 
@@ -26188,6 +26845,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("window:willUseFullScreenPresentationOptions:"), DelegateName ("NSWindowApplicationPresentationOptions"), DefaultValueFromArgument ("proposedOptions")]
 		NSApplicationPresentationOptions WillUseFullScreenPresentationOptions (NSWindow window, NSApplicationPresentationOptions proposedOptions);
 
@@ -26195,6 +26857,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("customWindowsToEnterFullScreenForWindow:"), DelegateName ("NSWindowWindows"), DefaultValue (null)]
 		NSWindow [] CustomWindowsToEnterFullScreen (NSWindow window);
 
@@ -26202,6 +26869,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("customWindowsToExitFullScreenForWindow:"), DelegateName ("NSWindowWindows"), DefaultValue (null)]
 		NSWindow [] CustomWindowsToExitFullScreen (NSWindow window);
 
@@ -26209,28 +26881,40 @@ namespace AppKit {
 		/// <param name="duration">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("window:startCustomAnimationToEnterFullScreenWithDuration:"), EventArgs ("NSWindowDuration")]
+		[Export ("window:startCustomAnimationToEnterFullScreenWithDuration:"), EventArgs ("NSWindowDuration", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void StartCustomAnimationToEnterFullScreen (NSWindow window, double duration);
 
 		/// <param name="window">To be added.</param>
 		/// <param name="duration">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("window:startCustomAnimationToExitFullScreenWithDuration:"), EventArgs ("NSWindowDuration")]
+		[Export ("window:startCustomAnimationToExitFullScreenWithDuration:"), EventArgs ("NSWindowDuration", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void StartCustomAnimationToExitFullScreen (NSWindow window, double duration);
 
 		/// <param name="window">To be added.</param>
 		/// <param name="coder">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("window:willEncodeRestorableState:"), EventArgs ("NSWindowCoder")]
+		[Export ("window:willEncodeRestorableState:"), EventArgs ("NSWindowCoder", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillEncodeRestorableState (NSWindow window, NSCoder coder);
 
 		/// <param name="window">To be added.</param>
 		/// <param name="coder">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("window:didDecodeRestorableState:"), EventArgs ("NSWindowCoder")]
+		[Export ("window:didDecodeRestorableState:"), EventArgs ("NSWindowCoder", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidDecodeRestorableState (NSWindow window, NSCoder coder);
 
 		[Mac (13, 2)]
@@ -26245,37 +26929,57 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("window:willResizeForVersionBrowserWithMaxPreferredSize:maxAllowedSize:"), DelegateName ("NSWindowSizeSize"), DefaultValueFromArgument ("maxPreferredSize")]
 		CGSize WillResizeForVersionBrowser (NSWindow window, CGSize maxPreferredSize, CGSize maxAllowedSize);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowWillEnterVersionBrowser:"), EventArgs ("NSNotification")]
+		[Export ("windowWillEnterVersionBrowser:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillEnterVersionBrowser (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidEnterVersionBrowser:"), EventArgs ("NSNotification")]
+		[Export ("windowDidEnterVersionBrowser:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidEnterVersionBrowser (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowWillExitVersionBrowser:"), EventArgs ("NSNotification")]
+		[Export ("windowWillExitVersionBrowser:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillExitVersionBrowser (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidExitVersionBrowser:"), EventArgs ("NSNotification")]
+		[Export ("windowDidExitVersionBrowser:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidExitVersionBrowser (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("windowDidChangeBackingProperties:"), EventArgs ("NSNotification")]
+		[Export ("windowDidChangeBackingProperties:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidChangeBackingProperties (NSNotification notification);
 
 		[Mac (15, 0)]
@@ -27150,6 +27854,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Abstract]
 		[Export ("ruleEditor:numberOfChildrenForCriterion:withRowType:"), DelegateName ("NSRuleEditorNumberOfChildren"), DefaultValue (0)]
 		nint NumberOfChildren (NSRuleEditor editor, NSObject criterion, NSRuleEditorRowType rowType);
@@ -27189,25 +27898,37 @@ namespace AppKit {
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("ruleEditorRowsDidChange:"), EventArgs ("NSNotification")]
+		[Export ("ruleEditorRowsDidChange:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void RowsDidChange (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("controlTextDidEndEditing:"), EventArgs ("NSNotification")]
+		[Export ("controlTextDidEndEditing:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void EditingEnded (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("controlTextDidChange:"), EventArgs ("NSNotification")]
+		[Export ("controlTextDidChange:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void Changed (NSNotification notification);
 
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("controlTextDidBeginEditing:"), EventArgs ("NSNotification")]
+		[Export ("controlTextDidBeginEditing:"), EventArgs ("NSNotification", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void EditingBegan (NSNotification notification);
 
 	}
@@ -27397,7 +28118,10 @@ namespace AppKit {
 		/// <param name="items">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("sharingService:willShareItems:"), EventArgs ("NSSharingServiceItems")]
+		[Export ("sharingService:willShareItems:"), EventArgs ("NSSharingServiceItems", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillShareItems (NSSharingService sharingService, NSObject [] items);
 
 		/// <param name="sharingService">To be added.</param>
@@ -27405,14 +28129,20 @@ namespace AppKit {
 		/// <param name="error">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("sharingService:didFailToShareItems:error:"), EventArgs ("NSSharingServiceDidFailToShareItems")]
+		[Export ("sharingService:didFailToShareItems:error:"), EventArgs ("NSSharingServiceDidFailToShareItems", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidFailToShareItems (NSSharingService sharingService, NSObject [] items, NSError error);
 
 		/// <param name="sharingService">To be added.</param>
 		/// <param name="items">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("sharingService:didShareItems:"), EventArgs ("NSSharingServiceItems")]
+		[Export ("sharingService:didShareItems:"), EventArgs ("NSSharingServiceItems", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidShareItems (NSSharingService sharingService, NSObject [] items);
 
 		/// <param name="sharingService">To be added.</param>
@@ -27420,6 +28150,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("sharingService:sourceFrameOnScreenForShareItem:"), DelegateName ("NSSharingServiceSourceFrameOnScreenForShareItem"), DefaultValue (null)]
 		CGRect SourceFrameOnScreenForShareItem (NSSharingService sharingService, INSPasteboardWriting item);
 
@@ -27429,6 +28164,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("sharingService:transitionImageForShareItem:contentRect:"), DelegateName ("NSSharingServiceTransitionImageForShareItem"), DefaultValue (null)]
 		NSImage TransitionImageForShareItem (NSSharingService sharingService, INSPasteboardWriting item, CGRect contentRect);
 
@@ -27438,6 +28178,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("sharingService:sourceWindowForShareItems:sharingContentScope:"), DelegateName ("NSSharingServiceSourceWindowForShareItems"), DefaultValue (null)]
 		NSWindow SourceWindowForShareItems (NSSharingService sharingService, NSObject [] items, NSSharingContentScope sharingContentScope);
 
@@ -27447,6 +28192,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("anchoringViewForSharingService:showRelativeToRect:preferredEdge:"), DelegateName ("NSSharingServiceAnchoringViewForSharingService"), DefaultValue (null)]
 		[return: NullAllowed]
 		NSView CreateAnchoringView (NSSharingService sharingService, ref CGRect positioningRect, ref NSRectEdge preferredEdge);
@@ -27536,6 +28286,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("sharingServicePicker:sharingServicesForItems:proposedSharingServices:"), DelegateName ("NSSharingServicePickerSharingServicesForItems"), DefaultValueFromArgument ("proposedServices")]
 		NSSharingService [] SharingServicesForItems (NSSharingServicePicker sharingServicePicker, NSObject [] items, NSSharingService [] proposedServices);
 
@@ -27544,6 +28299,11 @@ namespace AppKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("sharingServicePicker:delegateForSharingService:"), DelegateName ("NSSharingServicePickerDelegateForSharingService"), DefaultValue (null)]
 		INSSharingServiceDelegate DelegateForSharingService (NSSharingServicePicker sharingServicePicker, NSSharingService sharingService);
 
@@ -27551,7 +28311,10 @@ namespace AppKit {
 		/// <param name="service">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("sharingServicePicker:didChooseSharingService:"), EventArgs ("NSSharingServicePickerDidChooseSharingService")]
+		[Export ("sharingServicePicker:didChooseSharingService:"), EventArgs ("NSSharingServicePickerDidChooseSharingService", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidChooseSharingService (NSSharingServicePicker sharingServicePicker, NSSharingService service);
 
 		[Mac (15, 0)]

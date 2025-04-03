@@ -2421,6 +2421,10 @@ namespace CoreAnimation {
 		///         </param>
 		///         <summary>The animation has started.</summary>
 		///         <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("animationDidStart:")]
 		void AnimationStarted (CAAnimation anim);
 
@@ -2431,7 +2435,10 @@ namespace CoreAnimation {
 		///         <param name="finished">To be added.</param>
 		///         <summary>The animation has stopped.  Use the bool value to determine if this is a temporary pause, or the end of the animation.</summary>
 		///         <remarks>To be added.</remarks>
-		[Export ("animationDidStop:finished:"), EventArgs ("CAAnimationState")]
+		[Export ("animationDidStop:finished:"), EventArgs ("CAAnimationState", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void AnimationStopped (CAAnimation anim, bool finished);
 
 	}

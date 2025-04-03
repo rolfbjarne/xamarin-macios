@@ -954,7 +954,10 @@ namespace UIKit {
 		/// <param name="acceleration">To be added.</param>
 		/// <summary>Indicates that an acceleration measurement has occurred.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("accelerometer:didAccelerate:"), EventArgs ("UIAccelerometer"), EventName ("Acceleration")]
+		[Export ("accelerometer:didAccelerate:"), EventArgs ("UIAccelerometer", XmlDocs = """
+			<summary>This event is raised when a new acceleration event is ready.</summary>
+			<remarks>Use this event if you want to subscribe to notifications without having to create a UIAccelerometerDelegate class.</remarks>
+			"""), EventName ("Acceleration")]
 		void DidAccelerate (UIAccelerometer accelerometer, UIAcceleration acceleration);
 #pragma warning restore 618
 	}
@@ -1893,19 +1896,28 @@ namespace UIKit {
 		/// <param name="actionSheet">To be added.</param>
 		/// <summary>Indicates that the UIActionSheet was canceled.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("actionSheetCancel:"), EventArgs ("UIActionSheet")]
+		[Export ("actionSheetCancel:"), EventArgs ("UIActionSheet", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void Canceled (UIActionSheet actionSheet);
 
 		/// <param name="actionSheet">To be added.</param>
 		/// <summary>Indicates that the action sheet is about to be presented.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("willPresentActionSheet:"), EventArgs ("UIActionSheet")]
+		[Export ("willPresentActionSheet:"), EventArgs ("UIActionSheet", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void WillPresent (UIActionSheet actionSheet);
 
 		/// <param name="actionSheet">To be added.</param>
 		/// <summary>Indicates that the action sheet was presented to the user.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("didPresentActionSheet:"), EventArgs ("UIActionSheet")]
+		[Export ("didPresentActionSheet:"), EventArgs ("UIActionSheet", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void Presented (UIActionSheet actionSheet);
 
 		[Export ("actionSheet:willDismissWithButtonIndex:"), EventArgs ("UIButton", XmlDocs = """
@@ -2446,19 +2458,28 @@ namespace UIKit {
 		/// <param name="alertView">To be added.</param>
 		/// <summary>Indicates that this UIAlertView is about to be canceled.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("alertViewCancel:"), EventArgs ("UIAlertView")]
+		[Export ("alertViewCancel:"), EventArgs ("UIAlertView", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void Canceled (UIAlertView alertView);
 
 		/// <param name="alertView">To be added.</param>
 		/// <summary>Indicates that this UIAlertView will shortly be presented to the application user.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("willPresentAlertView:"), EventArgs ("UIAlertView")]
+		[Export ("willPresentAlertView:"), EventArgs ("UIAlertView", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void WillPresent (UIAlertView alertView);
 
 		/// <param name="alertView">To be added.</param>
 		/// <summary>Indicates that this UIAlertView has been presented to the application user.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("didPresentAlertView:"), EventArgs ("UIAlertView")]
+		[Export ("didPresentAlertView:"), EventArgs ("UIAlertView", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void Presented (UIAlertView alertView);
 
 		[Export ("alertView:willDismissWithButtonIndex:"), EventArgs ("UIButton", XmlDocs = """
@@ -2477,6 +2498,11 @@ namespace UIKit {
 		/// <summary>Whether the first non-cancel button in this UIAlertView should be enabled.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>If the first other button should be enabled or not.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("alertViewShouldEnableFirstOtherButton:"), DelegateName ("UIAlertViewPredicate"), DefaultValue (true)]
 		bool ShouldEnableFirstOtherButton (UIAlertView alertView);
 	}
@@ -7581,7 +7607,10 @@ namespace UIKit {
 		/// <summary>Indicates that contact between dynamic items has begun.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("collisionBehavior:beganContactForItem:withItem:atPoint:")]
-		[EventArgs ("UICollisionBeganContact")]
+		[EventArgs ("UICollisionBeganContact", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the CollisionDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void BeganContact (UICollisionBehavior behavior, IUIDynamicItem firstItem, IUIDynamicItem secondItem, CGPoint atPoint);
 
 		/// <param name="behavior">To be added.</param>
@@ -7590,7 +7619,10 @@ namespace UIKit {
 		/// <summary>Indicates that the two dynamic items have stopped contacting each other.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("collisionBehavior:endedContactForItem:withItem:")]
-		[EventArgs ("UICollisionEndedContact")]
+		[EventArgs ("UICollisionEndedContact", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the CollisionDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void EndedContact (UICollisionBehavior behavior, IUIDynamicItem firstItem, IUIDynamicItem secondItem);
 
 		/// <param name="behavior">To be added.</param>
@@ -7600,7 +7632,10 @@ namespace UIKit {
 		/// <summary>Indicates that boundary contact has begun between the dynamicItem and the boundaryIdentifier.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("collisionBehavior:beganContactForItem:withBoundaryIdentifier:atPoint:")]
-		[EventArgs ("UICollisionBeganBoundaryContact")]
+		[EventArgs ("UICollisionBeganBoundaryContact", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the CollisionDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void BeganBoundaryContact (UICollisionBehavior behavior, IUIDynamicItem dynamicItem, [NullAllowed] NSObject boundaryIdentifier, CGPoint atPoint);
 
 		/// <param name="behavior">To be added.</param>
@@ -7609,7 +7644,10 @@ namespace UIKit {
 		/// <summary>Indicates that the dynamicItem has stopped contacting the boundary.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("collisionBehavior:endedContactForItem:withBoundaryIdentifier:")]
-		[EventArgs ("UICollisionEndedBoundaryContact")]
+		[EventArgs ("UICollisionEndedBoundaryContact", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the CollisionDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void EndedBoundaryContact (UICollisionBehavior behavior, IUIDynamicItem dynamicItem, [NullAllowed] NSObject boundaryIdentifier);
 	}
 
@@ -8753,6 +8791,12 @@ namespace UIKit {
 		/// <summary>Whether the recognizer should receive the specified touch.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>
+			        </value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("gestureRecognizer:shouldReceiveTouch:"), DefaultValue (true), DelegateName ("UITouchEventArgs")]
 		bool ShouldReceiveTouch (UIGestureRecognizer recognizer, UITouch touch);
 
@@ -8761,6 +8805,12 @@ namespace UIKit {
 		/// <summary>Whether the two gesture recognizers should be allowed to recognize gestures simultaneously.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>
+			        </value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:"), DelegateName ("UIGesturesProbe"), DefaultValue (false)]
 		bool ShouldRecognizeSimultaneously (UIGestureRecognizer gestureRecognizer, UIGestureRecognizer otherGestureRecognizer);
 
@@ -8768,6 +8818,12 @@ namespace UIKit {
 		/// <summary>Whether the gesture recognition should begin.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>
+			        </value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("gestureRecognizerShouldBegin:"), DelegateName ("UIGestureProbe"), DefaultValue (true)]
 		bool ShouldBegin (UIGestureRecognizer recognizer);
 
@@ -8776,6 +8832,11 @@ namespace UIKit {
 		/// <summary>Whether there is a dynamic failure requirement between the specified gesture recognizers.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>If set to <see langword="true" />, sets up the failure requirement. Otherwise set to <see langword="false" />.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("gestureRecognizer:shouldBeRequiredToFailByGestureRecognizer:"), DelegateName ("UIGesturesProbe"), DefaultValue (false)]
 		bool ShouldBeRequiredToFailBy (UIGestureRecognizer gestureRecognizer, UIGestureRecognizer otherGestureRecognizer);
 
@@ -8784,6 +8845,12 @@ namespace UIKit {
 		/// <summary>Whether the specified gestureRecognizer should be required to fail by the otherGestureRecognizer.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>
+			        </value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("gestureRecognizer:shouldRequireFailureOfGestureRecognizer:"), DelegateName ("UIGesturesProbe"), DefaultValue (false)]
 		bool ShouldRequireFailureOf (UIGestureRecognizer gestureRecognizer, UIGestureRecognizer otherGestureRecognizer);
 
@@ -8792,6 +8859,11 @@ namespace UIKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[MacCatalyst (13, 1)]
 		[Export ("gestureRecognizer:shouldReceivePress:"), DelegateName ("UIGesturesPress"), DefaultValue (false)]
 		bool ShouldReceivePress (UIGestureRecognizer gestureRecognizer, UIPress press);
@@ -12643,6 +12715,11 @@ namespace UIKit {
 		/// <summary>Developers should not use this deprecated method, which determines whether the specified controller should support the specified action.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Deprecated (PlatformName.iOS, 6, 0)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 		[Export ("documentInteractionController:canPerformAction:"), DelegateName ("UIDocumentInteractionProbe"), DefaultValue (false)]
@@ -12656,6 +12733,11 @@ namespace UIKit {
 		/// <summary>Developers should not use this deprecated method. </summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Deprecated (PlatformName.iOS, 6, 0)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 		[Export ("documentInteractionController:performAction:"), DelegateName ("UIDocumentInteractionProbe"), DefaultValue (false)]
@@ -12669,7 +12751,10 @@ namespace UIKit {
 		/// <summary>Indicates that the controller's document has been handed off to the specified application.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("documentInteractionController:didEndSendingToApplication:")]
-		[EventArgs ("UIDocumentSendingToApplication")]
+		[EventArgs ("UIDocumentSendingToApplication", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidEndSendingToApplication (UIDocumentInteractionController controller, [NullAllowed] string application);
 
 		/// <param name="controller">To be added.</param>
@@ -12680,24 +12765,39 @@ namespace UIKit {
 		/// <summary>Indicates that the controller's document is about to be handed off to the specified application.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("documentInteractionController:willBeginSendingToApplication:")]
-		[EventArgs ("UIDocumentSendingToApplication")]
+		[EventArgs ("UIDocumentSendingToApplication", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void WillBeginSendingToApplication (UIDocumentInteractionController controller, [NullAllowed] string application);
 
 		/// <param name="controller">To be added.</param>
 		/// <summary>Indicates that the controller has dismissed its "Open In..." menu.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("documentInteractionControllerDidDismissOpenInMenu:")]
 		void DidDismissOpenInMenu (UIDocumentInteractionController controller);
 
 		/// <param name="controller">To be added.</param>
 		/// <summary>Indicates that the controller has dismissed its "Options" menu.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("documentInteractionControllerDidDismissOptionsMenu:")]
 		void DidDismissOptionsMenu (UIDocumentInteractionController controller);
 
 		/// <param name="controller">To be added.</param>
 		/// <summary>Indicates that the controller has ended its document preview.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("documentInteractionControllerDidEndPreview:")]
 		void DidEndPreview (UIDocumentInteractionController controller);
 
@@ -12705,6 +12805,11 @@ namespace UIKit {
 		/// <summary>The RectangleF used as the starting point for animating the display of a document preview.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("documentInteractionControllerRectForPreview:"), DelegateName ("UIDocumentInteractionRectangle"), DefaultValue (null)]
 		CGRect RectangleForPreview (UIDocumentInteractionController controller);
 
@@ -12717,6 +12822,11 @@ namespace UIKit {
 		/// <summary>The UIViewController that provides the document preview.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("documentInteractionControllerViewControllerForPreview:"), DelegateName ("UIDocumentViewController"), DefaultValue (null)]
 #endif
 		UIViewController ViewControllerForPreview (UIDocumentInteractionController controller);
@@ -12725,24 +12835,41 @@ namespace UIKit {
 		/// <summary>The UIView to use as the starting point for the animation preview. If null, the preview fades into place.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("documentInteractionControllerViewForPreview:"), DelegateName ("UIDocumentViewForPreview"), DefaultValue (null)]
 		UIView ViewForPreview (UIDocumentInteractionController controller);
 
 		/// <param name="controller">To be added.</param>
 		/// <summary>Indicates that document preview is about to start.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("documentInteractionControllerWillBeginPreview:")]
 		void WillBeginPreview (UIDocumentInteractionController controller);
 
 		/// <param name="controller">To be added.</param>
 		/// <summary>Indicates that the "Open In..." menu is about to be presented to the app user.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("documentInteractionControllerWillPresentOpenInMenu:")]
 		void WillPresentOpenInMenu (UIDocumentInteractionController controller);
 
 		/// <param name="controller">To be added.</param>
 		/// <summary>Indicates that the "Options" menu is about to be presented to the app user.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("documentInteractionControllerWillPresentOptionsMenu:")]
 		void WillPresentOptionsMenu (UIDocumentInteractionController controller);
 	}
@@ -12919,13 +13046,19 @@ namespace UIKit {
 		/// <param name="info">To be added.</param>
 		/// <summary>Indicates that the user has picked a picture or movie.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("imagePickerController:didFinishPickingMediaWithInfo:"), EventArgs ("UIImagePickerMediaPicked")]
+		[Export ("imagePickerController:didFinishPickingMediaWithInfo:"), EventArgs ("UIImagePickerMediaPicked", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void FinishedPickingMedia (UIImagePickerController picker, NSDictionary info);
 
 		/// <param name="picker">To be added.</param>
 		/// <summary>Indicates that the user cancelled the media-picking operation.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("imagePickerControllerDidCancel:"), EventArgs ("UIImagePickerController")]
+		[Export ("imagePickerControllerDidCancel:"), EventArgs ("UIImagePickerController", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void Canceled (UIImagePickerController picker);
 	}
 
@@ -13980,7 +14113,10 @@ namespace UIKit {
 		/// <param name="completed">To be added.</param>
 		/// <summary>Indicates that animation has completed.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("pageViewController:didFinishAnimating:previousViewControllers:transitionCompleted:"), EventArgs ("UIPageViewFinishedAnimation")]
+		[Export ("pageViewController:didFinishAnimating:previousViewControllers:transitionCompleted:"), EventArgs ("UIPageViewFinishedAnimation", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidFinishAnimating (UIPageViewController pageViewController, bool finished, UIViewController [] previousViewControllers, bool completed);
 
 		/// <param name="pageViewController">To be added.</param>
@@ -13988,6 +14124,11 @@ namespace UIKit {
 		/// <summary>The location of the spine of the UIPageViewController.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("pageViewController:spineLocationForInterfaceOrientation:"), DelegateName ("UIPageViewSpineLocationCallback")]
@@ -13998,13 +14139,21 @@ namespace UIKit {
 		/// <param name="pendingViewControllers">To be added.</param>
 		/// <summary>Indicates that a transition is about to begin.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("pageViewController:willTransitionToViewControllers:"), EventArgs ("UIPageViewControllerTransition")]
+		[Export ("pageViewController:willTransitionToViewControllers:"), EventArgs ("UIPageViewControllerTransition", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void WillTransition (UIPageViewController pageViewController, UIViewController [] pendingViewControllers);
 
 		/// <param name="pageViewController">To be added.</param>
 		/// <summary>The supported interface orientations.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("pageViewControllerSupportedInterfaceOrientations:")]
@@ -14016,6 +14165,11 @@ namespace UIKit {
 		/// <summary>The preferred orientation of the UIPageViewController.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("pageViewControllerPreferredInterfaceOrientationForPresentation:")]
@@ -14036,6 +14190,11 @@ namespace UIKit {
 		/// <summary>Retrieves the previous UIViewController.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDataSource property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Abstract]
 		[Export ("pageViewController:viewControllerBeforeViewController:"), DelegateName ("UIPageViewGetViewController"), DefaultValue (null)]
 		UIViewController GetPreviousViewController (UIPageViewController pageViewController, UIViewController referenceViewController);
@@ -14045,6 +14204,11 @@ namespace UIKit {
 		/// <summary>Returns the next UIViewController.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDataSource property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Abstract]
 		[Export ("pageViewController:viewControllerAfterViewController:"), DelegateName ("UIPageViewGetViewController"), DefaultValue (null)]
 		UIViewController GetNextViewController (UIPageViewController pageViewController, UIViewController referenceViewController);
@@ -14053,6 +14217,11 @@ namespace UIKit {
 		/// <summary>The number of pages to be shown in the page indicator.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDataSource property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("presentationCountForPageViewController:"), DelegateName ("UIPageViewGetNumber"), DefaultValue (1)]
 		nint GetPresentationCount (UIPageViewController pageViewController);
 
@@ -14060,6 +14229,11 @@ namespace UIKit {
 		/// <summary>The index of the page to be highlighted in the page indicator.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDataSource property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("presentationIndexForPageViewController:"), DelegateName ("UIPageViewGetNumber"), DefaultValue (1)]
 		nint GetPresentationIndex (UIPageViewController pageViewController);
 	}
@@ -15674,13 +15848,29 @@ namespace UIKit {
 		/// <param name="scrollView">Scroll view where the scrolling occurred.</param>
 		/// <summary>Indicates that the specified scrollView has scrolled.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("scrollViewDidScroll:"), EventArgs ("UIScrollView")]
+		[Export ("scrollViewDidScroll:"), EventArgs ("UIScrollView", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			<altmember cref="E:UIKit.UIScrollView.DraggingStarted" />
+			<altmember cref="E:UIKit.UIScrollView.DraggingEnded" />
+			<altmember cref="E:UIKit.UIScrollView.WillEndDragging" />
+			<altmember cref="E:UIKit.UIScrollView.DecelerationStarted" />
+			<altmember cref="E:UIKit.UIScrollView.DecelerationEnded" />
+			""")]
 		void Scrolled (UIScrollView scrollView);
 
 		/// <param name="scrollView">Scroll view whose content is about to be scrolled.</param>
 		/// <summary>Indicates that dragging has begun.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("scrollViewWillBeginDragging:"), EventArgs ("UIScrollView")]
+		[Export ("scrollViewWillBeginDragging:"), EventArgs ("UIScrollView", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			<altmember cref="E:UIKit.UIScrollView.DraggingEnded" />
+			<altmember cref="E:UIKit.UIScrollView.WillEndDragging" />
+			<altmember cref="E:UIKit.UIScrollView.Scrolled" />
+			<altmember cref="E:UIKit.UIScrollView.DecelerationStarted" />
+			<altmember cref="E:UIKit.UIScrollView.DecelerationEnded" />
+			""")]
 		void DraggingStarted (UIScrollView scrollView);
 
 		/// <param name="scrollView">Scroll view where the content finished scrolling.</param>
@@ -15688,31 +15878,68 @@ namespace UIKit {
 		///           <see langword="true" /> if the scrolling movement will continue (but decelerate) after the user lifts their finger. If <see langword="false" /> then the scrolling stops immediately upon touch-up.</param>
 		/// <summary>Indicates that dragging has completed.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("scrollViewDidEndDragging:willDecelerate:"), EventArgs ("Dragging")]
+		[Export ("scrollViewDidEndDragging:willDecelerate:"), EventArgs ("Dragging", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			<altmember cref="E:UIKit.UIScrollView.DraggingStarted" />
+			<altmember cref="E:UIKit.UIScrollView.WillEndDragging" />
+			<altmember cref="E:UIKit.UIScrollView.Scrolled" />
+			<altmember cref="E:UIKit.UIScrollView.DecelerationStarted" />
+			<altmember cref="E:UIKit.UIScrollView.DecelerationEnded" />
+			""")]
 		void DraggingEnded (UIScrollView scrollView, [EventName ("decelerate")] bool willDecelerate);
 
 		/// <param name="scrollView">Scroll view object that is decelerating the scrolling content.</param>
 		/// <summary>Indicates that deceleration of a scrolling event has begun.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("scrollViewWillBeginDecelerating:"), EventArgs ("UIScrollView")]
+		[Export ("scrollViewWillBeginDecelerating:"), EventArgs ("UIScrollView", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			<altmember cref="E:UIKit.UIScrollView.DraggingStarted" />
+			<altmember cref="E:UIKit.UIScrollView.DraggingEnded" />
+			<altmember cref="E:UIKit.UIScrollView.WillEndDragging" />
+			<altmember cref="E:UIKit.UIScrollView.Scrolled" />
+			<altmember cref="E:UIKit.UIScrollView.DecelerationEnded" />
+			""")]
 		void DecelerationStarted (UIScrollView scrollView);
 
 		/// <param name="scrollView">Scroll view object that is decelerating the scrolling content.</param>
 		/// <summary>Indicates that deceleration relating to a scroll event has ended.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("scrollViewDidEndDecelerating:"), EventArgs ("UIScrollView")]
+		[Export ("scrollViewDidEndDecelerating:"), EventArgs ("UIScrollView", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			<altmember cref="E:UIKit.UIScrollView.DraggingStarted" />
+			<altmember cref="E:UIKit.UIScrollView.DraggingEnded" />
+			<altmember cref="E:UIKit.UIScrollView.WillEndDragging" />
+			<altmember cref="E:UIKit.UIScrollView.Scrolled" />
+			<altmember cref="E:UIKit.UIScrollView.DecelerationStarted" />
+			""")]
 		void DecelerationEnded (UIScrollView scrollView);
 
 		/// <param name="scrollView">Scroll view that is performing a scrolling animation.</param>
 		/// <summary>Indicates that all animations relating to scrolling have completed.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("scrollViewDidEndScrollingAnimation:"), EventArgs ("UIScrollView")]
+		[Export ("scrollViewDidEndScrollingAnimation:"), EventArgs ("UIScrollView", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			<altmember cref="E:UIKit.UIScrollView.DidZoom" />
+			<altmember cref="E:UIKit.UIScrollView.Scrolled" />
+			""")]
 		void ScrollAnimationEnded (UIScrollView scrollView);
 
 		/// <param name="scrollView">Scroll view displaying the content.</param>
 		/// <summary>The UIView to scale when zooming is requested.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>The default value is <see langword="null" /></value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			<altmember cref="T:UIKit.UIScrollViewGetZoomView" />
+			<related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/FrogScroller">iOS Standard Controls</related>
+			<related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/ZoomingPdfViewer/">Zooming Pdf Viewer</related>
+			""")]
 		[Export ("viewForZoomingInScrollView:"), DelegateName ("UIScrollViewGetZoomView"), DefaultValue ("null")]
 		UIView ViewForZoomingInScrollView (UIScrollView scrollView);
 
@@ -15720,13 +15947,23 @@ namespace UIKit {
 		/// <summary>Whether a scroll to the beginning of the scrollView should be permitted.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("scrollViewShouldScrollToTop:"), DelegateName ("UIScrollViewCondition"), DefaultValue ("true")]
 		bool ShouldScrollToTop (UIScrollView scrollView);
 
 		/// <param name="scrollView">Scroll view that was scrolled.</param>
 		/// <summary>Indicates that the specified scrollView's scrolling has ended at the top.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("scrollViewDidScrollToTop:"), EventArgs ("UIScrollView")]
+		[Export ("scrollViewDidScrollToTop:"), EventArgs ("UIScrollView", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			<altmember cref="E:UIKit.UIScrollView.Scrolled" />
+			<altmember cref="P:UIKit.UIScrollView.ScrollsToTop" />
+			""")]
 		void ScrolledToTop (UIScrollView scrollView);
 
 		[Export ("scrollViewDidEndZooming:withView:atScale:"), EventArgs ("ZoomingEnded", XmlDocs = """
@@ -15741,14 +15978,24 @@ namespace UIKit {
 		/// <param name="scrollView">Scroll view being zoomed.</param>
 		/// <summary>Indicates that the specified scrollView has zoomed.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("scrollViewDidZoom:"), EventArgs ("UIScrollView")]
+		[Export ("scrollViewDidZoom:"), EventArgs ("UIScrollView", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			<altmember cref="E:UIKit.UIScrollView.ZoomingEnded" />
+			<altmember cref="E:UIKit.UIScrollView.ZoomingStarted" />
+			""")]
 		void DidZoom (UIScrollView scrollView);
 
 		/// <param name="scrollView">Scroll view containing the content.</param>
 		/// <param name="view">The content view about to be zoomed.</param>
 		/// <summary>Indicates that zooming has begun.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("scrollViewWillBeginZooming:withView:"), EventArgs ("UIScrollViewZooming")]
+		[Export ("scrollViewWillBeginZooming:withView:"), EventArgs ("UIScrollViewZooming", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			<altmember cref="E:UIKit.UIScrollView.ZoomingEnded" />
+			<altmember cref="E:UIKit.UIScrollView.DidZoom" />
+			""")]
 		void ZoomingStarted (UIScrollView scrollView, UIView view);
 
 		/// <param name="scrollView">Scroll view where user touch ended.</param>
@@ -15756,12 +16003,21 @@ namespace UIKit {
 		/// <param name="targetContentOffset">The expected offset when the scrolling action decelerates to a stop.</param>
 		/// <summary>Indicates that dragging is about to end.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("scrollViewWillEndDragging:withVelocity:targetContentOffset:"), EventArgs ("WillEndDragging")]
+		[Export ("scrollViewWillEndDragging:withVelocity:targetContentOffset:"), EventArgs ("WillEndDragging", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			<altmember cref="T:UIKit.WillEndDraggingEventArgs" />
+			<altmember cref="P:UIKit.UIScrollView.ContentOffset" />
+			""")]
 		void WillEndDragging (UIScrollView scrollView, CGPoint velocity, ref CGPoint targetContentOffset);
 
 		/// <param name="scrollView">The scroll view whose insets changed.</param>
 		/// <summary>Method that is called when the inset values change.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[MacCatalyst (13, 1)]
 		[Export ("scrollViewDidChangeAdjustedContentInset:")]
 		void DidChangeAdjustedContentInset (UIScrollView scrollView);
@@ -16062,33 +16318,52 @@ namespace UIKit {
 		/// <summary>Whether editing of the search text should be allowed.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("searchBarShouldBeginEditing:"), DefaultValue (true), DelegateName ("UISearchBarPredicate")]
 		bool ShouldBeginEditing (UISearchBar searchBar);
 
 		/// <param name="searchBar">To be added.</param>
 		/// <summary>Indicates that the user has begun editing the search text.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("searchBarTextDidBeginEditing:"), EventArgs ("UISearchBar")]
+		[Export ("searchBarTextDidBeginEditing:"), EventArgs ("UISearchBar", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void OnEditingStarted (UISearchBar searchBar);
 
 		/// <param name="searchBar">To be added.</param>
 		/// <summary>Whether the editing of the search text should end.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("searchBarShouldEndEditing:"), DelegateName ("UISearchBarPredicate"), DefaultValue (true)]
 		bool ShouldEndEditing (UISearchBar searchBar);
 
 		/// <param name="searchBar">To be added.</param>
 		/// <summary>Indicates that the user has stopped editing the text field.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("searchBarTextDidEndEditing:"), EventArgs ("UISearchBar")]
+		[Export ("searchBarTextDidEndEditing:"), EventArgs ("UISearchBar", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void OnEditingStopped (UISearchBar searchBar);
 
 		/// <param name="searchBar">To be added.</param>
 		/// <param name="searchText">To be added.</param>
 		/// <summary>Indicates that the search text has changed.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("searchBar:textDidChange:"), EventArgs ("UISearchBarTextChanged")]
+		[Export ("searchBar:textDidChange:"), EventArgs ("UISearchBarTextChanged", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void TextChanged (UISearchBar searchBar, string searchText);
 
 		/// <param name="searchBar">To be added.</param>
@@ -16097,13 +16372,21 @@ namespace UIKit {
 		/// <summary>Whether the text in the specified range should be replaced with the specified text.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("searchBar:shouldChangeTextInRange:replacementText:"), DefaultValue (true), DelegateName ("UISearchBarRangeEventArgs")]
 		bool ShouldChangeTextInRange (UISearchBar searchBar, NSRange range, string text);
 
 		/// <param name="searchBar">To be added.</param>
 		/// <summary>Indicates that the search button was tapped.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("searchBarSearchButtonClicked:"), EventArgs ("UISearchBar")]
+		[Export ("searchBarSearchButtonClicked:"), EventArgs ("UISearchBar", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void SearchButtonClicked (UISearchBar searchBar);
 
 		/// <param name="searchBar">To be added.</param>
@@ -16111,7 +16394,10 @@ namespace UIKit {
 		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
-		[Export ("searchBarBookmarkButtonClicked:"), EventArgs ("UISearchBar")]
+		[Export ("searchBarBookmarkButtonClicked:"), EventArgs ("UISearchBar", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void BookmarkButtonClicked (UISearchBar searchBar);
 
 		/// <param name="searchBar">To be added.</param>
@@ -16119,7 +16405,10 @@ namespace UIKit {
 		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
-		[Export ("searchBarCancelButtonClicked:"), EventArgs ("UISearchBar")]
+		[Export ("searchBarCancelButtonClicked:"), EventArgs ("UISearchBar", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void CancelButtonClicked (UISearchBar searchBar);
 
 		[Export ("searchBar:selectedScopeButtonIndexDidChange:"), EventArgs ("UISearchBarButtonIndex", XmlDocs = """
@@ -16134,7 +16423,10 @@ namespace UIKit {
 		[NoTV]
 		[MacCatalyst (13, 1)]
 
-		[Export ("searchBarResultsListButtonClicked:"), EventArgs ("UISearchBar")]
+		[Export ("searchBarResultsListButtonClicked:"), EventArgs ("UISearchBar", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void ListButtonClicked (UISearchBar searchBar);
 	}
 
@@ -17406,7 +17698,10 @@ namespace UIKit {
 		/// <param name="item">To be added.</param>
 		/// <summary>Indicates that the specified UITabBarItem was selected.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("tabBar:didSelectItem:"), EventArgs ("UITabBarItem")]
+		[Export ("tabBar:didSelectItem:"), EventArgs ("UITabBarItem", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void ItemSelected (UITabBar tabbar, UITabBarItem item);
 
 		/// <param name="tabbar">To be added.</param>
@@ -17415,7 +17710,10 @@ namespace UIKit {
 		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
-		[Export ("tabBar:willBeginCustomizingItems:"), EventArgs ("UITabBarItems")]
+		[Export ("tabBar:willBeginCustomizingItems:"), EventArgs ("UITabBarItems", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void WillBeginCustomizingItems (UITabBar tabbar, UITabBarItem [] items);
 
 		/// <param name="tabbar">To be added.</param>
@@ -17424,7 +17722,10 @@ namespace UIKit {
 		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
-		[Export ("tabBar:didBeginCustomizingItems:"), EventArgs ("UITabBarItems")]
+		[Export ("tabBar:didBeginCustomizingItems:"), EventArgs ("UITabBarItems", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidBeginCustomizingItems (UITabBar tabbar, UITabBarItem [] items);
 
 		/// <param name="tabbar">To be added.</param>
@@ -17434,7 +17735,10 @@ namespace UIKit {
 		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
-		[Export ("tabBar:willEndCustomizingItems:changed:"), EventArgs ("UITabBarFinalItems")]
+		[Export ("tabBar:willEndCustomizingItems:changed:"), EventArgs ("UITabBarFinalItems", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void WillEndCustomizingItems (UITabBar tabbar, UITabBarItem [] items, bool changed);
 
 		/// <param name="tabbar">To be added.</param>
@@ -17444,7 +17748,10 @@ namespace UIKit {
 		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
-		[Export ("tabBar:didEndCustomizingItems:changed:"), EventArgs ("UITabBarFinalItems")]
+		[Export ("tabBar:didEndCustomizingItems:changed:"), EventArgs ("UITabBarFinalItems", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidEndCustomizingItems (UITabBar tabbar, UITabBarItem [] items, bool changed);
 	}
 
@@ -17461,6 +17768,11 @@ namespace UIKit {
 		/// <summary>Whether the specified UIViewController should be made active.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("tabBarController:shouldSelectViewController:"), DefaultValue (true), DelegateName ("UITabBarSelection")]
 		bool ShouldSelectViewController (UITabBarController tabBarController, UIViewController viewController);
 
@@ -17468,7 +17780,10 @@ namespace UIKit {
 		/// <param name="viewController">To be added.</param>
 		/// <summary>Indicates that the app user selected an item from the tab bar.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("tabBarController:didSelectViewController:"), EventArgs ("UITabBarSelection")]
+		[Export ("tabBarController:didSelectViewController:"), EventArgs ("UITabBarSelection", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void ViewControllerSelected (UITabBarController tabBarController, UIViewController viewController);
 
 		/// <param name="tabBarController">To be added.</param>
@@ -17477,7 +17792,10 @@ namespace UIKit {
 		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
-		[Export ("tabBarController:willBeginCustomizingViewControllers:"), EventArgs ("UITabBarCustomize")]
+		[Export ("tabBarController:willBeginCustomizingViewControllers:"), EventArgs ("UITabBarCustomize", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void OnCustomizingViewControllers (UITabBarController tabBarController, UIViewController [] viewControllers);
 
 		/// <param name="tabBarController">To be added.</param>
@@ -17487,7 +17805,10 @@ namespace UIKit {
 		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
-		[Export ("tabBarController:willEndCustomizingViewControllers:changed:"), EventArgs ("UITabBarCustomizeChange")]
+		[Export ("tabBarController:willEndCustomizingViewControllers:changed:"), EventArgs ("UITabBarCustomizeChange", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void OnEndCustomizingViewControllers (UITabBarController tabBarController, UIViewController [] viewControllers, bool changed);
 
 		/// <param name="tabBarController">To be added.</param>
@@ -17497,13 +17818,21 @@ namespace UIKit {
 		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
-		[Export ("tabBarController:didEndCustomizingViewControllers:changed:"), EventArgs ("UITabBarCustomizeChange")]
+		[Export ("tabBarController:didEndCustomizingViewControllers:changed:"), EventArgs ("UITabBarCustomizeChange", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void FinishedCustomizingViewControllers (UITabBarController tabBarController, UIViewController [] viewControllers, bool changed);
 
 		/// <param name="tabBarController">To be added.</param>
 		/// <summary>The supported orientations for presentation of the tab bar controller.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("tabBarControllerSupportedInterfaceOrientations:")]
@@ -17515,6 +17844,11 @@ namespace UIKit {
 		/// <summary>The preferred orientation for presentation of the tab bar controller.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("tabBarControllerPreferredInterfaceOrientationForPresentation:")]
@@ -17527,6 +17861,11 @@ namespace UIKit {
 		/// <summary>Retrieves the UIViewControllerInteractiveTransitioning used during an interactive transition.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("tabBarController:interactionControllerForAnimationController:")]
 		[NoDefaultValue]
 		[DelegateName ("Func<UITabBarController,IUIViewControllerAnimatedTransitioning,IUIViewControllerInteractiveTransitioning>")]
@@ -17539,6 +17878,11 @@ namespace UIKit {
 		/// <summary>Retrieves the UIViewControllerAnimatedTransitioning used during a non-interactive transition.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("tabBarController:animationControllerForTransitionFromViewController:toViewController:")]
 		[NoDefaultValue]
 		[DelegateName ("Func<UITabBarController,UIViewController,UIViewController,IUIViewControllerAnimatedTransitioning>")]
@@ -19739,6 +20083,11 @@ namespace UIKit {
 		/// <summary>Whether editing should begin in the specified UITextView.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>The delegate value, usually an anonymous method, a method or a lambda function.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("textViewShouldBeginEditing:"), DelegateName ("UITextViewCondition"), DefaultValue ("true")]
 		bool ShouldBeginEditing (UITextView textView);
 
@@ -19746,19 +20095,30 @@ namespace UIKit {
 		/// <summary>Whether editing should end in the specified UITextView.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>The delegate value, usually an anonymous method, a method or a lambda function.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("textViewShouldEndEditing:"), DelegateName ("UITextViewCondition"), DefaultValue ("true")]
 		bool ShouldEndEditing (UITextView textView);
 
 		/// <param name="textView">To be added.</param>
 		/// <summary>Indicates editing has begun in the specified UITextView.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("textViewDidBeginEditing:"), EventArgs ("UITextView"), EventName ("Started")]
+		[Export ("textViewDidBeginEditing:"), EventArgs ("UITextView", XmlDocs = """
+			<summary>Raised when editing has started on this UITextView.</summary>
+			<remarks>To be added.</remarks>
+			"""), EventName ("Started")]
 		void EditingStarted (UITextView textView);
 
 		/// <param name="textView">To be added.</param>
 		/// <summary>Indicates that editing has ended in the specified UITextView.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("textViewDidEndEditing:"), EventArgs ("UITextView"), EventName ("Ended")]
+		[Export ("textViewDidEndEditing:"), EventArgs ("UITextView", XmlDocs = """
+			<summary>Raised when editing has finished in this UITextView.</summary>
+			<remarks>To be added.</remarks>
+			"""), EventName ("Ended")]
 		void EditingEnded (UITextView textView);
 
 		/// <param name="textView">To be added.</param>
@@ -19767,19 +20127,30 @@ namespace UIKit {
 		/// <summary>Whether the specified text should be replaced in the UITextView.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>The delegate value, usually an anonymous method, a method or a lambda function.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("textView:shouldChangeTextInRange:replacementText:"), DelegateName ("UITextViewChange"), DefaultValue ("true")]
 		bool ShouldChangeText (UITextView textView, NSRange range, string text);
 
 		/// <param name="textView">To be added.</param>
 		/// <summary>Indicates the text or text attributes in the specified UITextView were changed by the app user.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("textViewDidChange:"), EventArgs ("UITextView")]
+		[Export ("textViewDidChange:"), EventArgs ("UITextView", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void Changed (UITextView textView);
 
 		/// <param name="textView">To be added.</param>
 		/// <summary>Indicates the text selection has changed in the specified UITextView.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("textViewDidChangeSelection:"), EventArgs ("UITextView")]
+		[Export ("textViewDidChangeSelection:"), EventArgs ("UITextView", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void SelectionChanged (UITextView textView);
 
 		/// <param name="textView">To be added.</param>
@@ -19788,6 +20159,12 @@ namespace UIKit {
 		/// <summary>Whether the specified UITextView should allow user interaction with the specified URL in the given range of text.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>
+			        </value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Deprecated (PlatformName.iOS, 10, 0, message: "Use the 'ShouldInteractWithUrl' overload that takes 'UITextItemInteraction' instead.")]
 		[Deprecated (PlatformName.TvOS, 10, 0, message: "Use the 'ShouldInteractWithUrl' overload that takes 'UITextItemInteraction' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use the 'ShouldInteractWithUrl' overload that takes 'UITextItemInteraction' instead.")]
@@ -19804,6 +20181,12 @@ namespace UIKit {
 		/// <summary>Developers should not use this deprecated method. Developers should use the 'ShouldInteractWithTextAttachment' overload that takes 'UITextItemInteraction' instead.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>
+			        </value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Deprecated (PlatformName.iOS, 10, 0, message: "Use the 'ShouldInteractWithTextAttachment' overload that takes 'UITextItemInteraction' instead.")]
 		[Deprecated (PlatformName.TvOS, 10, 0, message: "Use the 'ShouldInteractWithTextAttachment' overload that takes 'UITextItemInteraction' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use the 'ShouldInteractWithTextAttachment' overload that takes 'UITextItemInteraction' instead.")]
@@ -19817,6 +20200,11 @@ namespace UIKit {
 		/// <summary>Whether the specified UITextView should allow user interaction with the specified URL in the given range of text.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Gets or sets the delegate for determining whether the text view should interact with specific URLs.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Deprecated (PlatformName.iOS, 10, 0, message: "Use the 'ShouldInteractWithTextAttachment' overload that takes 'UITextItemInteraction' instead.")]
 		[Deprecated (PlatformName.TvOS, 10, 0, message: "Use the 'ShouldInteractWithTextAttachment' overload that takes 'UITextItemInteraction' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use the 'ShouldInteractWithTextAttachment' overload that takes 'UITextItemInteraction' instead.")]
@@ -19831,6 +20219,11 @@ namespace UIKit {
 		/// <summary>Whether the specified UITextView should allow user interaction with the specified URL in the given range of text.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Gets or sets the delegate for determining whether the text view should interact with specific text attachments.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Deprecated (PlatformName.iOS, 17, 0, message: "Replaced by 'GetPrimaryAction' and 'GetMenuConfiguration'.")]
 		[Deprecated (PlatformName.TvOS, 17, 0, message: "Replaced by 'GetPrimaryAction' and 'GetMenuConfiguration'.")]
 		[Deprecated (PlatformName.MacCatalyst, 17, 0, message: "Replaced by 'GetPrimaryAction' and 'GetMenuConfiguration'.")]
@@ -20214,19 +20607,29 @@ namespace UIKit {
 		/// <param name="editedVideoPath">To be added.</param>
 		/// <summary>Called after the movie was successfully saved.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("videoEditorController:didSaveEditedVideoToPath:"), EventArgs ("UIPath"), EventName ("Saved")]
+		[Export ("videoEditorController:didSaveEditedVideoToPath:"), EventArgs ("UIPath", XmlDocs = """
+			<summary>Event raised when the video is saved.</summary>
+			<remarks>To be added.</remarks>
+			"""), EventName ("Saved")]
 		void VideoSaved (UIVideoEditorController editor, [EventName ("path")] string editedVideoPath);
 
 		/// <param name="editor">To be added.</param>
 		/// <param name="error">To be added.</param>
 		/// <summary>Called when the UIVideoEditorController failed to load or save a movie.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("videoEditorController:didFailWithError:"), EventArgs ("NSError", true)]
+		[Export ("videoEditorController:didFailWithError:"), EventArgs ("NSError", true, XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void Failed (UIVideoEditorController editor, NSError error);
 
 		/// <param name="editor">To be added.</param>
 		/// <summary>Indicates that the app user cancelled the movie editing.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("videoEditorControllerDidCancel:")]
 		void UserCancelled (UIVideoEditorController editor);
 	}
@@ -23537,6 +23940,11 @@ namespace UIKit {
 		/// <summary>Returns the supported interface orientations for <paramref name="splitViewController" />.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("splitViewControllerSupportedInterfaceOrientations:"), DelegateName ("Func<UISplitViewController,UIInterfaceOrientationMask>"), DefaultValue (UIInterfaceOrientationMask.All)]
@@ -23546,6 +23954,11 @@ namespace UIKit {
 		/// <summary>Returns the preferred user interface orientation to use when presenting <paramref name="splitViewController" />.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("splitViewControllerPreferredInterfaceOrientationForPresentation:"), DelegateName ("Func<UISplitViewController,UIInterfaceOrientation>"), DefaultValue (UIInterfaceOrientation.Unknown)]
@@ -23557,7 +23970,10 @@ namespace UIKit {
 		/// <summary>Indicates that the UISplitViewController is about to be presented.</summary>
 		/// <remarks>To be added.</remarks>
 		[NoTV]
-		[Export ("splitViewController:popoverController:willPresentViewController:"), EventArgs ("UISplitViewPresent")]
+		[Export ("splitViewController:popoverController:willPresentViewController:"), EventArgs ("UISplitViewPresent", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Deprecated (PlatformName.iOS, 8, 0, message: "Use 'UISearchController' instead.")]
 		[MacCatalyst (13, 1)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'UISearchController' instead.")]
@@ -23570,7 +23986,10 @@ namespace UIKit {
 		/// <summary>Indicates that the UISplitViewController is about to be hidden.</summary>
 		/// <remarks>To be added.</remarks>
 		[NoTV]
-		[Export ("splitViewController:willHideViewController:withBarButtonItem:forPopoverController:"), EventArgs ("UISplitViewHide")]
+		[Export ("splitViewController:willHideViewController:withBarButtonItem:forPopoverController:"), EventArgs ("UISplitViewHide", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Deprecated (PlatformName.iOS, 8, 0, message: "Use 'UISearchController' instead.")]
 		[MacCatalyst (13, 1)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'UISearchController' instead.")]
@@ -23582,7 +24001,10 @@ namespace UIKit {
 		/// <summary>Indicates that the UISplitViewController is about to be shown.</summary>
 		/// <remarks>To be added.</remarks>
 		[NoTV]
-		[Export ("splitViewController:willShowViewController:invalidatingBarButtonItem:"), EventArgs ("UISplitViewShow")]
+		[Export ("splitViewController:willShowViewController:invalidatingBarButtonItem:"), EventArgs ("UISplitViewShow", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Deprecated (PlatformName.iOS, 8, 0, message: "Use 'UISearchController' instead.")]
 		[MacCatalyst (13, 1)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'UISearchController' instead.")]
@@ -23594,6 +24016,11 @@ namespace UIKit {
 		/// <summary>Developers should not use this deprecated method. Developers should use 'UISearchController' instead.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[NoTV]
 		[Export ("splitViewController:shouldHideViewController:inOrientation:"), DelegateName ("UISplitViewControllerHidePredicate"), DefaultValue (true)]
 		[Deprecated (PlatformName.iOS, 8, 0, message: "Use 'UISearchController' instead.")]
@@ -23606,13 +24033,21 @@ namespace UIKit {
 		/// <summary>The split view controller <paramref name="svc" /> will change its display mode to <paramref name="displayMode" />.</summary>
 		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
-		[Export ("splitViewController:willChangeToDisplayMode:"), EventArgs ("UISplitViewControllerDisplayMode")]
+		[Export ("splitViewController:willChangeToDisplayMode:"), EventArgs ("UISplitViewControllerDisplayMode", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void WillChangeDisplayMode (UISplitViewController svc, UISplitViewControllerDisplayMode displayMode);
 
 		/// <param name="svc">Split view controller whose action might be triggered.</param>
 		/// <summary>Returns the display mode for the <paramref name="svc" /> action.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[MacCatalyst (13, 1)]
 		[Export ("targetDisplayModeForActionInSplitViewController:"), DelegateName ("UISplitViewControllerFetchTargetForActionHandler"), DefaultValue (UISplitViewControllerDisplayMode.Automatic)]
 		UISplitViewControllerDisplayMode GetTargetDisplayModeForAction (UISplitViewController svc);
@@ -23623,6 +24058,11 @@ namespace UIKit {
 		/// <summary>Shows <paramref name="vc" /> in the primary position.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[MacCatalyst (13, 1)]
 		[Export ("splitViewController:showViewController:sender:"), DelegateName ("UISplitViewControllerDisplayEvent"), DefaultValue (false)]
 		bool EventShowViewController (UISplitViewController splitViewController, UIViewController vc, NSObject sender);
@@ -23633,6 +24073,11 @@ namespace UIKit {
 		/// <summary>Returns true if the delegate will display the detail view itself, rather than relying on <paramref name="splitViewController" />.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[MacCatalyst (13, 1)]
 		[Export ("splitViewController:showDetailViewController:sender:"), DelegateName ("UISplitViewControllerDisplayEvent"), DefaultValue (false)]
 		bool EventShowDetailViewController (UISplitViewController splitViewController, UIViewController vc, NSObject sender);
@@ -23641,6 +24086,11 @@ namespace UIKit {
 		/// <summary>Returns the primary view controller for the collapsing view controller <paramref name="splitViewController" />.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[MacCatalyst (13, 1)]
 		[Export ("primaryViewControllerForCollapsingSplitViewController:"), DelegateName ("UISplitViewControllerGetViewController"), DefaultValue (null)]
 		UIViewController GetPrimaryViewControllerForCollapsingSplitViewController (UISplitViewController splitViewController);
@@ -23649,6 +24099,11 @@ namespace UIKit {
 		/// <summary>Returns the primary view controller for the expanding view controller <paramref name="splitViewController" />.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[MacCatalyst (13, 1)]
 		[Export ("primaryViewControllerForExpandingSplitViewController:"), DelegateName ("UISplitViewControllerGetViewController"), DefaultValue (null)]
 		UIViewController GetPrimaryViewControllerForExpandingSplitViewController (UISplitViewController splitViewController);
@@ -23659,6 +24114,11 @@ namespace UIKit {
 		/// <summary>Collapses the secondary view controller on <paramref name="splitViewController" />.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[MacCatalyst (13, 1)]
 		[Export ("splitViewController:collapseSecondaryViewController:ontoPrimaryViewController:"), DelegateName ("UISplitViewControllerCanCollapsePredicate"), DefaultValue (true)]
 		bool CollapseSecondViewController (UISplitViewController splitViewController, UIViewController secondaryViewController, UIViewController primaryViewController);
@@ -23668,6 +24128,11 @@ namespace UIKit {
 		/// <summary>Returns a new secondary view controller to use in split-view mode, or nil to use the default.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[MacCatalyst (13, 1)]
 		[Export ("splitViewController:separateSecondaryViewControllerFromPrimaryViewController:"), DelegateName ("UISplitViewControllerGetSecondaryViewController"), DefaultValue (null)]
 		UIViewController SeparateSecondaryViewController (UISplitViewController splitViewController, UIViewController primaryViewController);
@@ -24059,13 +24524,21 @@ namespace UIKit {
 		/// <param name="popoverController">To be added.</param>
 		/// <summary>Indicates that the UIPopover was dismissed.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("popoverControllerDidDismissPopover:"), EventArgs ("UIPopoverController")]
+		[Export ("popoverControllerDidDismissPopover:"), EventArgs ("UIPopoverController", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidDismiss (UIPopoverController popoverController);
 
 		/// <param name="popoverController">To be added.</param>
 		/// <summary>Whether the popover should be dismissed.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("popoverControllerShouldDismissPopover:"), DelegateName ("UIPopoverControllerCondition"), DefaultValue ("true")]
 		bool ShouldDismiss (UIPopoverController popoverController);
 
@@ -24074,7 +24547,10 @@ namespace UIKit {
 		/// <param name="view">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("popoverController:willRepositionPopoverToRect:inView:"), EventArgs ("UIPopoverControllerReposition")]
+		[Export ("popoverController:willRepositionPopoverToRect:inView:"), EventArgs ("UIPopoverControllerReposition", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void WillReposition (UIPopoverController popoverController, ref CGRect rect, ref UIView view);
 	}
 
@@ -24243,6 +24719,10 @@ namespace UIKit {
 		/// <param name="popoverPresentationController">To be added.</param>
 		/// <summary>The popover that is controlled by <paramref name="popoverPresentationController" /> will be presented soon.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised prior to presentation.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("prepareForPopoverPresentation:"), EventName ("PrepareForPresentation")]
 		void PrepareForPopoverPresentation (UIPopoverPresentationController popoverPresentationController);
 
@@ -24250,6 +24730,11 @@ namespace UIKit {
 		/// <summary>Asks if the popover that is controlled by <paramref name="popoverPresentationController" /> should be dismissed.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Replaced by 'ShouldDismiss'.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Replaced by 'ShouldDismiss'.")]
 		[Export ("popoverPresentationControllerShouldDismissPopover:"), DelegateName ("ShouldDismiss"), DefaultValue (true)]
@@ -24258,6 +24743,10 @@ namespace UIKit {
 		/// <param name="popoverPresentationController">To be added.</param>
 		/// <summary>The popover that is controlled by <paramref name="popoverPresentationController" /> was dismissed.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised after the presented view controller has been dismissed.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Replaced by 'DidDismiss'.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Replaced by 'DidDismiss'.")]
 		[Export ("popoverPresentationControllerDidDismissPopover:"), EventName ("DidDismiss")]
@@ -24269,7 +24758,10 @@ namespace UIKit {
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("popoverPresentationController:willRepositionPopoverToRect:inView:"),
-			EventName ("WillReposition"), EventArgs ("UIPopoverPresentationControllerReposition")]
+			EventName ("WillReposition"), EventArgs ("UIPopoverPresentationControllerReposition", XmlDocs = """
+			<summary>Event raised shortly before repositioning the popover.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillRepositionPopover (UIPopoverPresentationController popoverPresentationController, ref CGRect targetRect, ref UIView inView);
 	}
 
@@ -24608,6 +25100,11 @@ namespace UIKit {
 		/// <summary>Returns the parent UIViewController for managing the printing-options view.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>An instance of the UIPrintInteractionController class or <see langword="null" /> if the object cannot be created.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("printInteractionControllerParentViewController:"), DefaultValue (null), DelegateName ("UIPrintInteraction")]
 		UIViewController GetViewController (UIPrintInteractionController printInteractionController);
 
@@ -24616,43 +25113,66 @@ namespace UIKit {
 		/// <summary>Retrieves an object holding the paper size and printing area to use for a printing job.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("printInteractionController:choosePaper:"), DefaultValue (null), DelegateName ("UIPrintInteractionPaperList")]
 		UIPrintPaper ChoosePaper (UIPrintInteractionController printInteractionController, UIPrintPaper [] paperList);
 
 		/// <param name="printInteractionController">To be added.</param>
 		/// <summary>Indicates that the printing-options interface is about to be displayed.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("printInteractionControllerWillPresentPrinterOptions:"), EventArgs ("UIPrintInteraction")]
+		[Export ("printInteractionControllerWillPresentPrinterOptions:"), EventArgs ("UIPrintInteraction", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void WillPresentPrinterOptions (UIPrintInteractionController printInteractionController);
 
 		/// <param name="printInteractionController">To be added.</param>
 		/// <summary>Indicates that the printing-options user interface has been presented.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("printInteractionControllerDidPresentPrinterOptions:"), EventArgs ("UIPrintInteraction")]
+		[Export ("printInteractionControllerDidPresentPrinterOptions:"), EventArgs ("UIPrintInteraction", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidPresentPrinterOptions (UIPrintInteractionController printInteractionController);
 
 		/// <param name="printInteractionController">To be added.</param>
 		/// <summary>Indicates that the printing-options user interface will be dismissed.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("printInteractionControllerWillDismissPrinterOptions:"), EventArgs ("UIPrintInteraction")]
+		[Export ("printInteractionControllerWillDismissPrinterOptions:"), EventArgs ("UIPrintInteraction", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void WillDismissPrinterOptions (UIPrintInteractionController printInteractionController);
 
 		/// <param name="printInteractionController">To be added.</param>
 		/// <summary>Indicates that the printer user interface has been dismissed.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("printInteractionControllerDidDismissPrinterOptions:"), EventArgs ("UIPrintInteraction")]
+		[Export ("printInteractionControllerDidDismissPrinterOptions:"), EventArgs ("UIPrintInteraction", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidDismissPrinterOptions (UIPrintInteractionController printInteractionController);
 
 		/// <param name="printInteractionController">To be added.</param>
 		/// <summary>Indicates that the print job is about to begin.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("printInteractionControllerWillStartJob:"), EventArgs ("UIPrintInteraction")]
+		[Export ("printInteractionControllerWillStartJob:"), EventArgs ("UIPrintInteraction", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void WillStartJob (UIPrintInteractionController printInteractionController);
 
 		/// <param name="printInteractionController">To be added.</param>
 		/// <summary>Indicates that the print job has ended.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("printInteractionControllerDidFinishJob:"), EventArgs ("UIPrintInteraction")]
+		[Export ("printInteractionControllerDidFinishJob:"), EventArgs ("UIPrintInteraction", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidFinishJob (UIPrintInteractionController printInteractionController);
 
 		/// <param name="printInteractionController">To be added.</param>
@@ -24660,6 +25180,11 @@ namespace UIKit {
 		/// <summary>The length to use when cutting the page.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("printInteractionController:cutLengthForPaper:")]
 		[NoDefaultValue]
 		[DelegateName ("Func<UIPrintInteractionController,UIPrintPaper,nfloat>")]
@@ -24670,6 +25195,11 @@ namespace UIKit {
 		/// <summary>Gets the <see cref="T:UIKit.UIPrinterCutterBehavior" /> for the print job.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[MacCatalyst (13, 1)]
 		[Export ("printInteractionController:chooseCutterBehavior:"), DefaultValue ("UIPrinterCutterBehavior.NoCut"), DelegateName ("UIPrintInteractionCutterBehavior")]
 		UIPrinterCutterBehavior ChooseCutterBehavior (UIPrintInteractionController printInteractionController, NSNumber [] availableBehaviors);
@@ -25821,7 +26351,10 @@ namespace UIKit {
 		/// <summary>The user chose a document.</summary>
 		/// <remarks>To be added.</remarks>
 		[Abstract]
-		[Export ("documentMenu:didPickDocumentPicker:"), EventArgs ("UIDocumentMenuDocumentPicked")]
+		[Export ("documentMenu:didPickDocumentPicker:"), EventArgs ("UIDocumentMenuDocumentPicked", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidPickDocumentPicker (UIDocumentMenuViewController documentMenu, UIDocumentPickerViewController documentPicker);
 
 #if !NET
@@ -25830,6 +26363,10 @@ namespace UIKit {
 		/// <param name="documentMenu">To be added.</param>
 		/// <summary>The user dismissed the picker.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("documentMenuWasCancelled:")]
 		void WasCancelled (UIDocumentMenuViewController documentMenu);
 	}
@@ -25944,7 +26481,10 @@ namespace UIKit {
 #if !NET
 		[Abstract]
 #endif
-		[Export ("documentPicker:didPickDocumentAtURL:"), EventArgs ("UIDocumentPicked")]
+		[Export ("documentPicker:didPickDocumentAtURL:"), EventArgs ("UIDocumentPicked", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidPickDocument (UIDocumentPickerViewController controller, NSUrl url);
 
 		/// <param name="controller">The controller that made the request.</param>
@@ -25952,12 +26492,19 @@ namespace UIKit {
 		/// <summary>Developers may implement this method to respond after the user selects documents.</summary>
 		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
-		[Export ("documentPicker:didPickDocumentsAtURLs:"), EventArgs ("UIDocumentPickedAtUrls"), EventName ("DidPickDocumentAtUrls")]
+		[Export ("documentPicker:didPickDocumentsAtURLs:"), EventArgs ("UIDocumentPickedAtUrls", XmlDocs = """
+			<summary>Event that is raised when the user selects documents at URLs.</summary>
+			<remarks>To be added.</remarks>
+			"""), EventName ("DidPickDocumentAtUrls")]
 		void DidPickDocument (UIDocumentPickerViewController controller, NSUrl [] urls);
 
 		/// <param name="controller">To be added.</param>
 		/// <summary>The user dismissed the picker.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("documentPickerWasCancelled:")]
 		void WasCancelled (UIDocumentPickerViewController controller);
 	}
@@ -26493,6 +27040,10 @@ namespace UIKit {
 		/// <param name="previewInteraction">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Abstract]
 		[Export ("previewInteractionDidCancel:")]
 		void DidCancel (UIPreviewInteraction previewInteraction);
@@ -26501,6 +27052,11 @@ namespace UIKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("previewInteractionShouldBegin:")]
 		[DelegateName ("Func<UIPreviewInteraction,bool>"), DefaultValue (true)]
 		bool ShouldBegin (UIPreviewInteraction previewInteraction);

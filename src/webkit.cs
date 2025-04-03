@@ -2036,6 +2036,11 @@ namespace WebKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("downloadWindowForAuthenticationSheet:"), DelegateName ("WebDownloadRequest"), DefaultValue (null)]
 		NSWindow OnDownloadWindowForSheet (WebDownload download);
 	}
@@ -2125,14 +2130,20 @@ namespace WebKit {
 		/// <param name="forFrame">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:didStartProvisionalLoadForFrame:"), EventArgs ("WebFrame")]
+		[Export ("webView:didStartProvisionalLoadForFrame:"), EventArgs ("WebFrame", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void StartedProvisionalLoad (WebView sender, WebFrame forFrame);
 
 		/// <param name="sender">To be added.</param>
 		/// <param name="forFrame">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:didReceiveServerRedirectForProvisionalLoadForFrame:"), EventArgs ("WebFrame")]
+		[Export ("webView:didReceiveServerRedirectForProvisionalLoadForFrame:"), EventArgs ("WebFrame", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void ReceivedServerRedirectForProvisionalLoad (WebView sender, WebFrame forFrame);
 
 		/// <param name="sender">To be added.</param>
@@ -2140,14 +2151,20 @@ namespace WebKit {
 		/// <param name="forFrame">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:didFailProvisionalLoadWithError:forFrame:"), EventArgs ("WebFrameError")]
+		[Export ("webView:didFailProvisionalLoadWithError:forFrame:"), EventArgs ("WebFrameError", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void FailedProvisionalLoad (WebView sender, NSError error, WebFrame forFrame);
 
 		/// <param name="sender">To be added.</param>
 		/// <param name="forFrame">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:didCommitLoadForFrame:"), EventArgs ("WebFrame")]
+		[Export ("webView:didCommitLoadForFrame:"), EventArgs ("WebFrame", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void CommitedLoad (WebView sender, WebFrame forFrame);
 
 		/// <param name="sender">To be added.</param>
@@ -2155,7 +2172,10 @@ namespace WebKit {
 		/// <param name="forFrame">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:didReceiveTitle:forFrame:"), EventArgs ("WebFrameTitle")]
+		[Export ("webView:didReceiveTitle:forFrame:"), EventArgs ("WebFrameTitle", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void ReceivedTitle (WebView sender, string title, WebFrame forFrame);
 
 		/// <param name="sender">To be added.</param>
@@ -2163,14 +2183,20 @@ namespace WebKit {
 		/// <param name="forFrame">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:didReceiveIcon:forFrame:"), EventArgs ("WebFrameImage")]
+		[Export ("webView:didReceiveIcon:forFrame:"), EventArgs ("WebFrameImage", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void ReceivedIcon (WebView sender, NSImage image, WebFrame forFrame);
 
 		/// <param name="sender">To be added.</param>
 		/// <param name="forFrame">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:didFinishLoadForFrame:"), EventArgs ("WebFrame")]
+		[Export ("webView:didFinishLoadForFrame:"), EventArgs ("WebFrame", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void FinishedLoad (WebView sender, WebFrame forFrame);
 
 		/// <param name="sender">To be added.</param>
@@ -2178,14 +2204,20 @@ namespace WebKit {
 		/// <param name="forFrame">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:didFailLoadWithError:forFrame:"), EventArgs ("WebFrameError")]
+		[Export ("webView:didFailLoadWithError:forFrame:"), EventArgs ("WebFrameError", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void FailedLoadWithError (WebView sender, NSError error, WebFrame forFrame);
 
 		/// <param name="sender">To be added.</param>
 		/// <param name="forFrame">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:didChangeLocationWithinPageForFrame:"), EventArgs ("WebFrame")]
+		[Export ("webView:didChangeLocationWithinPageForFrame:"), EventArgs ("WebFrame", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void ChangedLocationWithinPage (WebView sender, WebFrame forFrame);
 
 		/// <param name="sender">To be added.</param>
@@ -2195,21 +2227,30 @@ namespace WebKit {
 		/// <param name="forFrame">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:willPerformClientRedirectToURL:delay:fireDate:forFrame:"), EventArgs ("WebFrameClientRedirect")]
+		[Export ("webView:willPerformClientRedirectToURL:delay:fireDate:forFrame:"), EventArgs ("WebFrameClientRedirect", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillPerformClientRedirect (WebView sender, NSUrl toUrl, double secondsDelay, NSDate fireDate, WebFrame forFrame);
 
 		/// <param name="sender">To be added.</param>
 		/// <param name="forFrame">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:didCancelClientRedirectForFrame:"), EventArgs ("WebFrame")]
+		[Export ("webView:didCancelClientRedirectForFrame:"), EventArgs ("WebFrame", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void CanceledClientRedirect (WebView sender, WebFrame forFrame);
 
 		/// <param name="sender">To be added.</param>
 		/// <param name="forFrame">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:willCloseFrame:"), EventArgs ("WebFrame")]
+		[Export ("webView:willCloseFrame:"), EventArgs ("WebFrame", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WillCloseFrame (WebView sender, WebFrame forFrame);
 
 		/// <param name="webView">To be added.</param>
@@ -2217,14 +2258,20 @@ namespace WebKit {
 		/// <param name="forFrame">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:didClearWindowObject:forFrame:"), EventArgs ("WebFrameScriptFrame")]
+		[Export ("webView:didClearWindowObject:forFrame:"), EventArgs ("WebFrameScriptFrame", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void ClearedWindowObject (WebView webView, WebScriptObject windowObject, WebFrame forFrame);
 
 		/// <param name="webView">To be added.</param>
 		/// <param name="windowScriptObject">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:windowScriptObjectAvailable:"), EventArgs ("WebFrameScriptObject")]
+		[Export ("webView:windowScriptObjectAvailable:"), EventArgs ("WebFrameScriptObject", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void WindowScriptObjectAvailable (WebView webView, WebScriptObject windowScriptObject);
 
 		/// <param name="webView">To be added.</param>
@@ -2232,7 +2279,10 @@ namespace WebKit {
 		/// <param name="frame">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:didCreateJavaScriptContext:forFrame:"), EventArgs ("WebFrameJavaScriptContext")]
+		[Export ("webView:didCreateJavaScriptContext:forFrame:"), EventArgs ("WebFrameJavaScriptContext", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidCreateJavaScriptContext (WebView webView, JSContext context, WebFrame frame);
 	}
 
@@ -2391,7 +2441,10 @@ namespace WebKit {
 		/// <param name="decisionToken">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:decidePolicyForNavigationAction:request:frame:decisionListener:"), EventArgs ("WebNavigationPolicy")]
+		[Export ("webView:decidePolicyForNavigationAction:request:frame:decisionListener:"), EventArgs ("WebNavigationPolicy", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DecidePolicyForNavigation (WebView webView, NSDictionary actionInformation, NSUrlRequest request, WebFrame frame, NSObject decisionToken);
 
 		/// <param name="webView">To be added.</param>
@@ -2401,7 +2454,10 @@ namespace WebKit {
 		/// <param name="decisionToken">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:decidePolicyForNewWindowAction:request:newFrameName:decisionListener:"), EventArgs ("WebNewWindowPolicy")]
+		[Export ("webView:decidePolicyForNewWindowAction:request:newFrameName:decisionListener:"), EventArgs ("WebNewWindowPolicy", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DecidePolicyForNewWindow (WebView webView, NSDictionary actionInformation, NSUrlRequest request, string newFrameName, NSObject decisionToken);
 
 		/// <param name="webView">To be added.</param>
@@ -2411,7 +2467,10 @@ namespace WebKit {
 		/// <param name="decisionToken">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:decidePolicyForMIMEType:request:frame:decisionListener:"), EventArgs ("WebMimeTypePolicy")]
+		[Export ("webView:decidePolicyForMIMEType:request:frame:decisionListener:"), EventArgs ("WebMimeTypePolicy", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DecidePolicyForMimeType (WebView webView, string mimeType, NSUrlRequest request, WebFrame frame, NSObject decisionToken);
 
 		/// <param name="webView">To be added.</param>
@@ -2419,7 +2478,10 @@ namespace WebKit {
 		/// <param name="frame">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:unableToImplementPolicyWithError:frame:"), EventArgs ("WebFailureToImplementPolicy")]
+		[Export ("webView:unableToImplementPolicyWithError:frame:"), EventArgs ("WebFailureToImplementPolicy", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void UnableToImplementPolicy (WebView webView, NSError error, WebFrame frame);
 
 		/// <summary>To be added.</summary>
@@ -2621,6 +2683,11 @@ namespace WebKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webView:identifierForInitialRequest:fromDataSource:"), DelegateName ("WebResourceIdentifierRequest"), DefaultValue (null)]
 		NSObject OnIdentifierForInitialRequest (WebView sender, NSUrlRequest request, WebDataSource dataSource);
 
@@ -2632,6 +2699,11 @@ namespace WebKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webView:resource:willSendRequest:redirectResponse:fromDataSource:"), DelegateName ("WebResourceOnRequestSend"), DefaultValueFromArgument ("request")]
 		NSUrlRequest OnSendRequest (WebView sender, NSObject identifier, NSUrlRequest request, NSUrlResponse redirectResponse, WebDataSource dataSource);
 
@@ -2641,7 +2713,10 @@ namespace WebKit {
 		/// <param name="dataSource">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:resource:didReceiveAuthenticationChallenge:fromDataSource:"), EventArgs ("WebResourceAuthenticationChallenge")]
+		[Export ("webView:resource:didReceiveAuthenticationChallenge:fromDataSource:"), EventArgs ("WebResourceAuthenticationChallenge", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void OnReceivedAuthenticationChallenge (WebView sender, NSObject identifier, NSUrlAuthenticationChallenge challenge, WebDataSource dataSource);
 
 		/// <param name="sender">To be added.</param>
@@ -2650,7 +2725,10 @@ namespace WebKit {
 		/// <param name="dataSource">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:resource:didCancelAuthenticationChallenge:fromDataSource:"), EventArgs ("WebResourceCancelledChallenge")]
+		[Export ("webView:resource:didCancelAuthenticationChallenge:fromDataSource:"), EventArgs ("WebResourceCancelledChallenge", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void OnCancelledAuthenticationChallenge (WebView sender, NSObject identifier, NSUrlAuthenticationChallenge challenge, WebDataSource dataSource);
 
 		/// <param name="sender">To be added.</param>
@@ -2659,7 +2737,10 @@ namespace WebKit {
 		/// <param name="dataSource">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:resource:didReceiveResponse:fromDataSource:"), EventArgs ("WebResourceReceivedResponse")]
+		[Export ("webView:resource:didReceiveResponse:fromDataSource:"), EventArgs ("WebResourceReceivedResponse", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void OnReceivedResponse (WebView sender, NSObject identifier, NSUrlResponse responseReceived, WebDataSource dataSource);
 
 		[Export ("webView:resource:didReceiveContentLength:fromDataSource:"), EventArgs ("WebResourceReceivedContentLength", XmlDocs = """
@@ -2673,7 +2754,10 @@ namespace WebKit {
 		/// <param name="dataSource">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:resource:didFinishLoadingFromDataSource:"), EventArgs ("WebResourceCompleted")]
+		[Export ("webView:resource:didFinishLoadingFromDataSource:"), EventArgs ("WebResourceCompleted", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void OnFinishedLoading (WebView sender, NSObject identifier, WebDataSource dataSource);
 
 		/// <param name="sender">To be added.</param>
@@ -2682,7 +2766,10 @@ namespace WebKit {
 		/// <param name="dataSource">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:resource:didFailLoadingWithError:fromDataSource:"), EventArgs ("WebResourceError")]
+		[Export ("webView:resource:didFailLoadingWithError:fromDataSource:"), EventArgs ("WebResourceError", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void OnFailedLoading (WebView sender, NSObject identifier, NSError withError, WebDataSource dataSource);
 
 		/// <param name="sender">To be added.</param>
@@ -2690,7 +2777,10 @@ namespace WebKit {
 		/// <param name="dataSource">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:plugInFailedWithError:dataSource:"), EventArgs ("WebResourcePluginError")]
+		[Export ("webView:plugInFailedWithError:dataSource:"), EventArgs ("WebResourcePluginError", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void OnPlugInFailed (WebView sender, NSError error, WebDataSource dataSource);
 	}
 
@@ -2707,12 +2797,21 @@ namespace WebKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webView:createWebViewWithRequest:"), DelegateName ("CreateWebViewFromRequest"), DefaultValue (null)]
 		WebView UICreateWebView (WebView sender, NSUrlRequest request);
 
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webViewShow:")]
 		void UIShow (WebView sender);
 
@@ -2721,30 +2820,51 @@ namespace WebKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webView:createWebViewModalDialogWithRequest:"), DelegateName ("WebViewCreate"), DefaultValue (null)]
 		WebView UICreateModalDialog (WebView sender, NSUrlRequest request);
 
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webViewRunModal:")]
 		void UIRunModal (WebView sender);
 
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webViewClose:")]
 		void UIClose (WebView sender);
 
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webViewFocus:")]
 		void UIFocus (WebView sender);
 
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webViewUnfocus:")]
 		void UIUnfocus (WebView sender);
 
@@ -2752,6 +2872,11 @@ namespace WebKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webViewFirstResponder:"), DelegateName ("WebViewGetResponder"), DefaultValue (null)]
 		NSResponder UIGetFirstResponder (WebView sender);
 
@@ -2759,20 +2884,31 @@ namespace WebKit {
 		/// <param name="newResponder">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:makeFirstResponder:"), EventArgs ("WebViewResponder")]
+		[Export ("webView:makeFirstResponder:"), EventArgs ("WebViewResponder", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void UIMakeFirstResponder (WebView sender, NSResponder newResponder);
 
 		/// <param name="sender">To be added.</param>
 		/// <param name="text">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:setStatusText:"), EventArgs ("WebViewStatusText")]
+		[Export ("webView:setStatusText:"), EventArgs ("WebViewStatusText", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void UISetStatusText (WebView sender, string text);
 
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webViewStatusText:"), DelegateName ("WebViewGetString"), DefaultValue (null)]
 		string UIGetStatusText (WebView sender);
 
@@ -2780,6 +2916,11 @@ namespace WebKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webViewAreToolbarsVisible:"), DelegateName ("WebViewGetBool"), DefaultValue (null)]
 		bool UIAreToolbarsVisible (WebView sender);
 
@@ -2787,13 +2928,21 @@ namespace WebKit {
 		/// <param name="visible">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:setToolbarsVisible:"), EventArgs ("WebViewToolBars")]
+		[Export ("webView:setToolbarsVisible:"), EventArgs ("WebViewToolBars", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void UISetToolbarsVisible (WebView sender, bool visible);
 
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webViewIsStatusBarVisible:"), DelegateName ("WebViewGetBool"), DefaultValue (false)]
 		bool UIIsStatusBarVisible (WebView sender);
 
@@ -2801,13 +2950,21 @@ namespace WebKit {
 		/// <param name="visible">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:setStatusBarVisible:"), EventArgs ("WebViewStatusBar")]
+		[Export ("webView:setStatusBarVisible:"), EventArgs ("WebViewStatusBar", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void UISetStatusBarVisible (WebView sender, bool visible);
 
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webViewIsResizable:"), DelegateName ("WebViewGetBool"), DefaultValue (null)]
 		bool UIIsResizable (WebView sender);
 
@@ -2815,20 +2972,31 @@ namespace WebKit {
 		/// <param name="resizable">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:setResizable:"), EventArgs ("WebViewResizable")]
+		[Export ("webView:setResizable:"), EventArgs ("WebViewResizable", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void UISetResizable (WebView sender, bool resizable);
 
 		/// <param name="sender">To be added.</param>
 		/// <param name="newFrame">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:setFrame:"), EventArgs ("WebViewFrame")]
+		[Export ("webView:setFrame:"), EventArgs ("WebViewFrame", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void UISetFrame (WebView sender, CGRect newFrame);
 
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webViewFrame:"), DelegateName ("WebViewGetRectangle"), DefaultValue (null)]
 		CGRect UIGetFrame (WebView sender);
 
@@ -2837,7 +3005,10 @@ namespace WebKit {
 		/// <param name="initiatedByFrame">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:runJavaScriptAlertPanelWithMessage:initiatedByFrame:"), EventArgs ("WebViewJavaScriptFrame")]
+		[Export ("webView:runJavaScriptAlertPanelWithMessage:initiatedByFrame:"), EventArgs ("WebViewJavaScriptFrame", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void UIRunJavaScriptAlertPanelMessage (WebView sender, string withMessage, WebFrame initiatedByFrame);
 
 		/// <param name="sender">To be added.</param>
@@ -2846,6 +3017,11 @@ namespace WebKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webView:runJavaScriptConfirmPanelWithMessage:initiatedByFrame:"), DelegateName ("WebViewConfirmationPanel"), DefaultValue (null)]
 		bool UIRunJavaScriptConfirmationPanel (WebView sender, string withMessage, WebFrame initiatedByFrame);
 
@@ -2856,6 +3032,11 @@ namespace WebKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webView:runJavaScriptTextInputPanelWithPrompt:defaultText:initiatedByFrame:"), DelegateName ("WebViewPromptPanel"), DefaultValue (null)]
 		string UIRunJavaScriptTextInputPanelWithFrame (WebView sender, string prompt, string defaultText, WebFrame initiatedByFrame);
 
@@ -2865,6 +3046,11 @@ namespace WebKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webView:runBeforeUnloadConfirmPanelWithMessage:initiatedByFrame:"), DelegateName ("WebViewJavaScriptFrame"), DefaultValue (null)]
 		bool UIRunBeforeUnload (WebView sender, string message, WebFrame initiatedByFrame);
 
@@ -2872,7 +3058,10 @@ namespace WebKit {
 		/// <param name="resultListener">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:runOpenPanelForFileButtonWithResultListener:"), EventArgs ("WebViewRunOpenPanel")]
+		[Export ("webView:runOpenPanelForFileButtonWithResultListener:"), EventArgs ("WebViewRunOpenPanel", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void UIRunOpenPanelForFileButton (WebView sender, IWebOpenPanelResultListener resultListener);
 
 		/// <param name="sender">To be added.</param>
@@ -2880,7 +3069,10 @@ namespace WebKit {
 		/// <param name="modifierFlags">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:mouseDidMoveOverElement:modifierFlags:"), EventArgs ("WebViewMouseMoved")]
+		[Export ("webView:mouseDidMoveOverElement:modifierFlags:"), EventArgs ("WebViewMouseMoved", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void UIMouseDidMoveOverElement (WebView sender, NSDictionary elementInformation, NSEventModifierMask modifierFlags);
 
 		/// <param name="sender">To be added.</param>
@@ -2889,6 +3081,11 @@ namespace WebKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webView:contextMenuItemsForElement:defaultMenuItems:"), DelegateName ("WebViewGetContextMenuItems"), DefaultValue (null)]
 		NSMenuItem [] UIGetContextMenuItems (WebView sender, NSDictionary forElement, NSMenuItem [] defaultMenuItems);
 
@@ -2898,6 +3095,11 @@ namespace WebKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webView:validateUserInterfaceItem:defaultValidation:"), DelegateName ("WebViewValidateUserInterface"), DefaultValueFromArgument ("defaultValidation")]
 		bool UIValidateUserInterfaceItem (WebView webView, NSObject validatedUserInterfaceItem, bool defaultValidation);
 
@@ -2936,6 +3138,11 @@ namespace WebKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webView:dragSourceActionMaskForPoint:"), DelegateName ("DragSourceGetActionMask"), DefaultValue (0)]
 #if NET
 		WebDragSourceAction UIDragSourceActionMask (WebView webView, CGPoint point);
@@ -2949,20 +3156,31 @@ namespace WebKit {
 		/// <param name="pasteboard">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:willPerformDragSourceAction:fromPoint:withPasteboard:"), EventArgs ("WebViewPerformDrag")]
+		[Export ("webView:willPerformDragSourceAction:fromPoint:withPasteboard:"), EventArgs ("WebViewPerformDrag", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void UIWillPerformDragSource (WebView webView, WebDragSourceAction action, CGPoint sourcePoint, NSPasteboard pasteboard);
 
 		/// <param name="sender">To be added.</param>
 		/// <param name="frameView">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:printFrameView:"), EventArgs ("WebViewPrint")]
+		[Export ("webView:printFrameView:"), EventArgs ("WebViewPrint", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void UIPrintFrameView (WebView sender, WebFrameView frameView);
 
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webViewHeaderHeight:"), DelegateName ("WebViewGetFloat"), DefaultValue (null)]
 		float UIGetHeaderHeight (WebView sender); /* float, not CGFloat */
 
@@ -2970,6 +3188,11 @@ namespace WebKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webViewFooterHeight:"), DelegateName ("WebViewGetFloat"), DefaultValue (null)]
 		float UIGetFooterHeight (WebView sender); /* float, not CGFloat */
 
@@ -2977,21 +3200,30 @@ namespace WebKit {
 		/// <param name="rect">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:drawHeaderInRect:"), EventArgs ("WebViewHeader")]
+		[Export ("webView:drawHeaderInRect:"), EventArgs ("WebViewHeader", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void UIDrawHeaderInRect (WebView sender, CGRect rect);
 
 		/// <param name="sender">To be added.</param>
 		/// <param name="rect">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:drawFooterInRect:"), EventArgs ("WebViewFooter")]
+		[Export ("webView:drawFooterInRect:"), EventArgs ("WebViewFooter", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void UIDrawFooterInRect (WebView sender, CGRect rect);
 
 		/// <param name="sender">To be added.</param>
 		/// <param name="message">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:runJavaScriptAlertPanelWithMessage:"), EventArgs ("WebViewJavaScript")]
+		[Export ("webView:runJavaScriptAlertPanelWithMessage:"), EventArgs ("WebViewJavaScript", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void UIRunJavaScriptAlertPanel (WebView sender, string message);
 
 		/// <param name="sender">To be added.</param>
@@ -2999,6 +3231,11 @@ namespace WebKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webView:runJavaScriptConfirmPanelWithMessage:"), DelegateName ("WebViewPrompt"), DefaultValue (null)]
 		bool UIRunJavaScriptConfirmPanel (WebView sender, string message);
 
@@ -3008,6 +3245,11 @@ namespace WebKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webView:runJavaScriptTextInputPanelWithPrompt:defaultText:"), DelegateName ("WebViewJavaScriptInput"), DefaultValue (null)]
 		string UIRunJavaScriptTextInputPanel (WebView sender, string prompt, string defaultText);
 
@@ -3015,13 +3257,21 @@ namespace WebKit {
 		/// <param name="frame">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("webView:setContentRect:"), EventArgs ("WebViewContent")]
+		[Export ("webView:setContentRect:"), EventArgs ("WebViewContent", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void UISetContentRect (WebView sender, CGRect frame);
 
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("webViewContentRect:"), DelegateName ("WebViewGetRectangle"), DefaultValue (null)]
 		CGRect UIGetContentRect (WebView sender);
 	}

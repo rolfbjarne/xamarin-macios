@@ -1258,7 +1258,10 @@ namespace Foundation {
 		/// <param name="obj">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("cache:willEvictObject:"), EventArgs ("NSObject")]
+		[Export ("cache:willEvictObject:"), EventArgs ("NSObject", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void WillEvictObject (NSCache cache, NSObject obj);
 	}
 
@@ -3179,12 +3182,19 @@ namespace Foundation {
 		/// <param name="obj">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("archiver:didEncodeObject:"), EventArgs ("NSObject")]
+		[Export ("archiver:didEncodeObject:"), EventArgs ("NSObject", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void EncodedObject (NSKeyedArchiver archiver, NSObject obj);
 
 		/// <param name="archiver">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("archiverDidFinish:")]
 		void Finished (NSKeyedArchiver archiver);
 
@@ -3193,12 +3203,21 @@ namespace Foundation {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("archiver:willEncodeObject:"), DelegateName ("NSEncodeHook"), DefaultValue (null)]
 		NSObject WillEncode (NSKeyedArchiver archiver, NSObject obj);
 
 		/// <param name="archiver">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("archiverWillFinish:")]
 		void Finishing (NSKeyedArchiver archiver);
 
@@ -3207,7 +3226,10 @@ namespace Foundation {
 		/// <param name="newObject">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("archiver:willReplaceObject:withObject:"), EventArgs ("NSArchiveReplace")]
+		[Export ("archiver:willReplaceObject:withObject:"), EventArgs ("NSArchiveReplace", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void ReplacingObject (NSKeyedArchiver archiver, NSObject oldObject, NSObject newObject);
 	}
 
@@ -3222,12 +3244,21 @@ namespace Foundation {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("unarchiver:didDecodeObject:"), DelegateName ("NSDecoderCallback"), DefaultValue (null)]
 		NSObject DecodedObject (NSKeyedUnarchiver unarchiver, NSObject obj);
 
 		/// <param name="unarchiver">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("unarchiverDidFinish:")]
 		void Finished (NSKeyedUnarchiver unarchiver);
 
@@ -3237,12 +3268,21 @@ namespace Foundation {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("unarchiver:cannotDecodeObjectOfClassName:originalClasses:"), DelegateName ("NSDecoderHandler"), DefaultValue (null)]
 		Class CannotDecodeClass (NSKeyedUnarchiver unarchiver, string klass, string [] classes);
 
 		/// <param name="unarchiver">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("unarchiverWillFinish:")]
 		void Finishing (NSKeyedUnarchiver unarchiver);
 
@@ -3251,7 +3291,10 @@ namespace Foundation {
 		/// <param name="newObject">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("unarchiver:willReplaceObject:withObject:"), EventArgs ("NSArchiveReplace")]
+		[Export ("unarchiver:willReplaceObject:withObject:"), EventArgs ("NSArchiveReplace", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void ReplacingObject (NSKeyedUnarchiver unarchiver, NSObject oldObject, NSObject newObject);
 	}
 
@@ -4995,6 +5038,11 @@ namespace Foundation {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("metadataQuery:replacementObjectForResultObject:"), DelegateName ("NSMetadataQueryObject"), DefaultValue (null)]
 		NSObject ReplacementObjectForResultObject (NSMetadataQuery query, NSMetadataItem result);
 
@@ -5004,6 +5052,11 @@ namespace Foundation {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("metadataQuery:replacementValueForAttribute:value:"), DelegateName ("NSMetadataQueryValue"), DefaultValue (null)]
 		NSObject ReplacementValueForAttributevalue (NSMetadataQuery query, string attributeName, NSObject value);
 	}
@@ -11631,7 +11684,10 @@ namespace Foundation {
 		/// <param name="streamEvent">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("stream:handleEvent:"), EventArgs ("NSStream"), EventName ("OnEvent")]
+		[Export ("stream:handleEvent:"), EventArgs ("NSStream", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			"""), EventName ("OnEvent")]
 		void HandleEvent (NSStream theStream, NSStreamEvent streamEvent);
 	}
 
@@ -14693,12 +14749,20 @@ namespace Foundation {
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("netServiceWillPublish:")]
 		void WillPublish (NSNetService sender);
 
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("netServiceDidPublish:")]
 		void Published (NSNetService sender);
 
@@ -14706,18 +14770,29 @@ namespace Foundation {
 		/// <param name="errors">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("netService:didNotPublish:"), EventArgs ("NSNetServiceError")]
+		[Export ("netService:didNotPublish:"), EventArgs ("NSNetServiceError", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void PublishFailure (NSNetService sender, NSDictionary errors);
 
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("netServiceWillResolve:")]
 		void WillResolve (NSNetService sender);
 
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("netServiceDidResolveAddress:")]
 		void AddressResolved (NSNetService sender);
 
@@ -14725,12 +14800,19 @@ namespace Foundation {
 		/// <param name="errors">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("netService:didNotResolve:"), EventArgs ("NSNetServiceError")]
+		[Export ("netService:didNotResolve:"), EventArgs ("NSNetServiceError", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void ResolveFailure (NSNetService sender, NSDictionary errors);
 
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("netServiceDidStop:")]
 		void Stopped (NSNetService sender);
 
@@ -14738,7 +14820,10 @@ namespace Foundation {
 		/// <param name="data">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("netService:didUpdateTXTRecordData:"), EventArgs ("NSNetServiceData")]
+		[Export ("netService:didUpdateTXTRecordData:"), EventArgs ("NSNetServiceData", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void UpdatedTxtRecordData (NSNetService sender, NSData data);
 
 		/// <param name="sender">To be added.</param>
@@ -14746,7 +14831,10 @@ namespace Foundation {
 		/// <param name="outputStream">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("netService:didAcceptConnectionWithInputStream:outputStream:"), EventArgs ("NSNetServiceConnection")]
+		[Export ("netService:didAcceptConnectionWithInputStream:outputStream:"), EventArgs ("NSNetServiceConnection", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidAcceptConnection (NSNetService sender, NSInputStream inputStream, NSOutputStream outputStream);
 	}
 
@@ -14828,12 +14916,20 @@ namespace Foundation {
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("netServiceBrowserWillSearch:")]
 		void SearchStarted (NSNetServiceBrowser sender);
 
 		/// <param name="sender">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("netServiceBrowserDidStopSearch:")]
 		void SearchStopped (NSNetServiceBrowser sender);
 
@@ -14841,7 +14937,10 @@ namespace Foundation {
 		/// <param name="errors">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("netServiceBrowser:didNotSearch:"), EventArgs ("NSNetServiceError")]
+		[Export ("netServiceBrowser:didNotSearch:"), EventArgs ("NSNetServiceError", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void NotSearched (NSNetServiceBrowser sender, NSDictionary errors);
 
 		/// <param name="sender">To be added.</param>
@@ -14849,7 +14948,10 @@ namespace Foundation {
 		/// <param name="moreComing">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("netServiceBrowser:didFindDomain:moreComing:"), EventArgs ("NSNetDomain")]
+		[Export ("netServiceBrowser:didFindDomain:moreComing:"), EventArgs ("NSNetDomain", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void FoundDomain (NSNetServiceBrowser sender, string domain, bool moreComing);
 
 		/// <param name="sender">To be added.</param>
@@ -14857,7 +14959,10 @@ namespace Foundation {
 		/// <param name="moreComing">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("netServiceBrowser:didFindService:moreComing:"), EventArgs ("NSNetService")]
+		[Export ("netServiceBrowser:didFindService:moreComing:"), EventArgs ("NSNetService", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void FoundService (NSNetServiceBrowser sender, NSNetService service, bool moreComing);
 
 		/// <param name="sender">To be added.</param>
@@ -14865,7 +14970,10 @@ namespace Foundation {
 		/// <param name="moreComing">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("netServiceBrowser:didRemoveDomain:moreComing:"), EventArgs ("NSNetDomain")]
+		[Export ("netServiceBrowser:didRemoveDomain:moreComing:"), EventArgs ("NSNetDomain", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DomainRemoved (NSNetServiceBrowser sender, string domain, bool moreComing);
 
 		/// <param name="sender">To be added.</param>
@@ -14873,7 +14981,10 @@ namespace Foundation {
 		/// <param name="moreComing">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("netServiceBrowser:didRemoveService:moreComing:"), EventArgs ("NSNetService")]
+		[Export ("netServiceBrowser:didRemoveService:moreComing:"), EventArgs ("NSNetService", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void ServiceRemoved (NSNetServiceBrowser sender, NSNetService service, bool moreComing);
 	}
 

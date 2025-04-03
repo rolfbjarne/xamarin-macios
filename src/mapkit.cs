@@ -855,25 +855,39 @@ namespace MapKit {
 		/// <param name="animated">To be added.</param>
 		/// <summary>Indicates the region displayed by <paramref name="mapView" /> is about to change.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("mapView:regionWillChangeAnimated:"), EventArgs ("MKMapViewChange")]
+		[Export ("mapView:regionWillChangeAnimated:"), EventArgs ("MKMapViewChange", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void RegionWillChange (MKMapView mapView, bool animated);
 
 		/// <param name="mapView">To be added.</param>
 		/// <param name="animated">To be added.</param>
 		/// <summary>Indicates the region displayed by <paramref name="mapView" /> has changed.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("mapView:regionDidChangeAnimated:"), EventArgs ("MKMapViewChange")]
+		[Export ("mapView:regionDidChangeAnimated:"), EventArgs ("MKMapViewChange", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void RegionChanged (MKMapView mapView, bool animated);
 
 		/// <param name="mapView">To be added.</param>
 		/// <summary>Indicates that loading of map data is about to begin.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("mapViewWillStartLoadingMap:")]
 		void WillStartLoadingMap (MKMapView mapView);
 
 		/// <param name="mapView">To be added.</param>
 		/// <summary>Indicates that loading of map data has completed.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("mapViewDidFinishLoadingMap:")]
 		void MapLoaded (MKMapView mapView);
 
@@ -881,7 +895,10 @@ namespace MapKit {
 		/// <param name="error">To be added.</param>
 		/// <summary>Indicates an <paramref name="error" /> caused loading to fail.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("mapViewDidFailLoadingMap:withError:"), EventArgs ("NSError", true)]
+		[Export ("mapViewDidFailLoadingMap:withError:"), EventArgs ("NSError", true, XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void LoadingMapFailed (MKMapView mapView, NSError error);
 
 		/// <param name="mapView">To be added.</param>
@@ -889,6 +906,11 @@ namespace MapKit {
 		/// <summary>Returns the <see cref="T:MapKit.MKAnnotationView" /> associated with the <paramref name="annotation" />.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("mapView:viewForAnnotation:"), DelegateName ("MKMapViewAnnotation"), DefaultValue (null)]
 		[return: NullAllowed]
 		MKAnnotationView GetViewForAnnotation (MKMapView mapView, IMKAnnotation annotation);
@@ -897,7 +919,10 @@ namespace MapKit {
 		/// <param name="views">To be added.</param>
 		/// <summary>Called when an annotation view (or views) have been added to <paramref name="mapView" />.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("mapView:didAddAnnotationViews:"), EventArgs ("MKMapViewAnnotation")]
+		[Export ("mapView:didAddAnnotationViews:"), EventArgs ("MKMapViewAnnotation", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidAddAnnotationViews (MKMapView mapView, MKAnnotationView [] views);
 
 		/// <param name="mapView">To be added.</param>
@@ -908,7 +933,10 @@ namespace MapKit {
 		[NoMac]
 		[NoTV]
 		[MacCatalyst (13, 1)]
-		[Export ("mapView:annotationView:calloutAccessoryControlTapped:"), EventArgs ("MKMapViewAccessoryTapped")]
+		[Export ("mapView:annotationView:calloutAccessoryControlTapped:"), EventArgs ("MKMapViewAccessoryTapped", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void CalloutAccessoryControlTapped (MKMapView mapView, MKAnnotationView view, UIControl control);
 
 		/// <param name="mapView">To be added.</param>
@@ -919,7 +947,10 @@ namespace MapKit {
 		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
-		[Export ("mapView:annotationView:didChangeDragState:fromOldState:"), EventArgs ("MKMapViewDragState")]
+		[Export ("mapView:annotationView:didChangeDragState:fromOldState:"), EventArgs ("MKMapViewDragState", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void ChangedDragState (MKMapView mapView, MKAnnotationView annotationView, MKAnnotationViewDragState newState, MKAnnotationViewDragState oldState);
 
 		/// <param name="mapView">To be added.</param>
@@ -927,6 +958,11 @@ namespace MapKit {
 		/// <summary>Use MKOverlayRenderer.RendererForOverlay instead</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[NoMac]
 		[NoTV]
 		[Export ("mapView:viewForOverlay:"), DelegateName ("MKMapViewOverlay"), DefaultValue (null)]
@@ -941,7 +977,10 @@ namespace MapKit {
 		/// <remarks>To be added.</remarks>
 		[NoMac]
 		[NoTV]
-		[Export ("mapView:didAddOverlayViews:"), EventArgs ("MKOverlayViews")]
+		[Export ("mapView:didAddOverlayViews:"), EventArgs ("MKOverlayViews", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Deprecated (PlatformName.iOS, 7, 0, message: "Use 'DidAddOverlayRenderers' instead.")]
 		[MacCatalyst (13, 1)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'DidAddOverlayRenderers' instead.")]
@@ -951,21 +990,30 @@ namespace MapKit {
 		/// <param name="view">To be added.</param>
 		/// <summary>Indicates that the specified <see cref="T:MapKit.MKAnnotationView" /> has been selected.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("mapView:didSelectAnnotationView:"), EventArgs ("MKAnnotationView")]
+		[Export ("mapView:didSelectAnnotationView:"), EventArgs ("MKAnnotationView", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidSelectAnnotationView (MKMapView mapView, MKAnnotationView view);
 
 		/// <param name="mapView">To be added.</param>
 		/// <param name="error">To be added.</param>
 		/// <summary>Indicates that the attempt to locate the current user has failed due to <paramref name="error" />.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("mapView:didFailToLocateUserWithError:"), EventArgs ("NSError", true)]
+		[Export ("mapView:didFailToLocateUserWithError:"), EventArgs ("NSError", true, XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidFailToLocateUser (MKMapView mapView, NSError error);
 
 		/// <param name="mapView">To be added.</param>
 		/// <param name="view">To be added.</param>
 		/// <summary>Indicates that <paramref name="view" /> has been deselected.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("mapView:didDeselectAnnotationView:"), EventArgs ("MKAnnotationView")]
+		[Export ("mapView:didDeselectAnnotationView:"), EventArgs ("MKAnnotationView", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidDeselectAnnotationView (MKMapView mapView, MKAnnotationView view);
 
 		[NoMac, iOS (16, 0), MacCatalyst (16, 0), NoTV]
@@ -979,12 +1027,20 @@ namespace MapKit {
 		/// <param name="mapView">To be added.</param>
 		/// <summary>Indicates that the system will start attempting to locate the user.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("mapViewWillStartLocatingUser:")]
 		void WillStartLocatingUser (MKMapView mapView);
 
 		/// <param name="mapView">To be added.</param>
 		/// <summary>Indicates the system has stopped attemptig to locate the user.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("mapViewDidStopLocatingUser:")]
 		void DidStopLocatingUser (MKMapView mapView);
 
@@ -992,7 +1048,10 @@ namespace MapKit {
 		/// <param name="userLocation">To be added.</param>
 		/// <summary>Indicates the system has provided an update to the user's location.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("mapView:didUpdateUserLocation:"), EventArgs ("MKUserLocation")]
+		[Export ("mapView:didUpdateUserLocation:"), EventArgs ("MKUserLocation", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidUpdateUserLocation (MKMapView mapView, MKUserLocation userLocation);
 
 		/// <param name="mapView">To be added.</param>
@@ -1001,7 +1060,10 @@ namespace MapKit {
 		/// <summary>Indicates a change in the active <see cref="T:MapKit.MKUserTrackingMode" />.</summary>
 		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
-		[Export ("mapView:didChangeUserTrackingMode:animated:"), EventArgs ("MMapViewUserTracking")]
+		[Export ("mapView:didChangeUserTrackingMode:animated:"), EventArgs ("MMapViewUserTracking", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidChangeUserTrackingMode (MKMapView mapView, MKUserTrackingMode mode, bool animated);
 
 		/// <param name="mapView">The <see cref="T:MapKit.MKMapView" /> being rendered.</param>
@@ -1009,6 +1071,11 @@ namespace MapKit {
 		/// <summary>Calculates he <see cref="T:MapKit.MKOverlayRenderer" /> appropriate to the <paramref name="overlay" />.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("mapView:rendererForOverlay:"), DelegateName ("MKRendererForOverlayDelegate"), DefaultValue (null)]
 		MKOverlayRenderer OverlayRenderer (MKMapView mapView, IMKOverlay overlay);
 
@@ -1016,12 +1083,19 @@ namespace MapKit {
 		/// <param name="renderers">To be added.</param>
 		/// <summary>Called when an overlay renderer (or renderers) have been added to <paramref name="mapView" />.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("mapView:didAddOverlayRenderers:"), EventArgs ("MKDidAddOverlayRenderers")]
+		[Export ("mapView:didAddOverlayRenderers:"), EventArgs ("MKDidAddOverlayRenderers", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidAddOverlayRenderers (MKMapView mapView, MKOverlayRenderer [] renderers);
 
 		/// <param name="mapView">To be added.</param>
 		/// <summary>Indicates that rendering of <paramref name="mapView" /> is about to begin.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("mapViewWillStartRenderingMap:")]
 		void WillStartRenderingMap (MKMapView mapView);
 
@@ -1029,7 +1103,10 @@ namespace MapKit {
 		/// <param name="fullyRendered">To be added.</param>
 		/// <summary>Indicates that rendering of <paramref name="mapView" /> has completed.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("mapViewDidFinishRenderingMap:fullyRendered:"), EventArgs ("MKDidFinishRenderingMap")]
+		[Export ("mapViewDidFinishRenderingMap:fullyRendered:"), EventArgs ("MKDidFinishRenderingMap", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidFinishRenderingMap (MKMapView mapView, bool fullyRendered);
 
 		/// <param name="mapView">To be added.</param>
@@ -1037,6 +1114,11 @@ namespace MapKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[MacCatalyst (13, 1)]
 		[Export ("mapView:clusterAnnotationForMemberAnnotations:"), DelegateName ("MKCreateClusterAnnotation"), DefaultValue (null)]
 		MKClusterAnnotation CreateClusterAnnotation (MKMapView mapView, IMKAnnotation [] memberAnnotations);
@@ -1044,6 +1126,10 @@ namespace MapKit {
 		/// <param name="mapView">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[MacCatalyst (13, 1)]
 		[Export ("mapViewDidChangeVisibleRegion:")]
 		void DidChangeVisibleRegion (MKMapView mapView);

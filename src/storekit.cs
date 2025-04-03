@@ -610,6 +610,10 @@ namespace StoreKit {
 		/// <param name="request">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("requestDidFinish:")]
 		void RequestFinished (SKRequest request);
 
@@ -617,7 +621,10 @@ namespace StoreKit {
 		/// <param name="error">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("request:didFailWithError:"), EventArgs ("SKRequestError")]
+		[Export ("request:didFailWithError:"), EventArgs ("SKRequestError", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void RequestFailed (SKRequest request, NSError error);
 	}
 
@@ -724,7 +731,10 @@ namespace StoreKit {
 		/// <remarks>To be added.</remarks>
 		[Export ("productsRequest:didReceiveResponse:")]
 		[Abstract]
-		[EventArgs ("SKProductsRequestResponse")]
+		[EventArgs ("SKProductsRequestResponse", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void ReceivedResponse (SKProductsRequest request, SKProductsResponse response);
 	}
 
@@ -808,7 +818,10 @@ namespace StoreKit {
 		/// <param name="controller">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("productViewControllerDidFinish:"), EventArgs ("SKStoreProductViewController")]
+		[Export ("productViewControllerDidFinish:"), EventArgs ("SKStoreProductViewController", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void Finished (SKStoreProductViewController controller);
 	}
 

@@ -273,7 +273,10 @@ namespace ImageKit {
 		/// <param name="cameraDeviceView">To be added.</param>
 		///         <summary>To be added.</summary>
 		///         <remarks>To be added.</remarks>
-		[Export ("cameraDeviceViewSelectionDidChange:"), EventArgs ("IKCameraDeviceView")]
+		[Export ("cameraDeviceViewSelectionDidChange:"), EventArgs ("IKCameraDeviceView", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void SelectionDidChange (IKCameraDeviceView cameraDeviceView);
 
 		[Export ("cameraDeviceView:didDownloadFile:location:fileData:error:"), EventArgs ("IKCameraDeviceViewICCameraFileNSUrlNSDataNSError")]
@@ -283,7 +286,10 @@ namespace ImageKit {
 		///         <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
 		///         <remarks>To be added.</remarks>
-		[Export ("cameraDeviceView:didEncounterError:"), EventArgs ("IKCameraDeviceViewNSError")]
+		[Export ("cameraDeviceView:didEncounterError:"), EventArgs ("IKCameraDeviceViewNSError", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidEncounterError (IKCameraDeviceView cameraDeviceView, NSError error);
 	}
 
@@ -355,7 +361,10 @@ namespace ImageKit {
 		///         <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
 		///         <remarks>To be added.</remarks>
-		[Export ("deviceBrowserView:didEncounterError:"), EventArgs ("IKDeviceBrowserViewNSError")]
+		[Export ("deviceBrowserView:didEncounterError:"), EventArgs ("IKDeviceBrowserViewNSError", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidEncounterError (IKDeviceBrowserView deviceBrowserView, NSError error);
 	}
 
@@ -1204,7 +1213,10 @@ namespace ImageKit {
 		/// <param name="browser">To be added.</param>
 		///         <summary>To be added.</summary>
 		///         <remarks>To be added.</remarks>
-		[Export ("imageBrowserSelectionDidChange:"), EventArgs ("IKImageBrowserView")]
+		[Export ("imageBrowserSelectionDidChange:"), EventArgs ("IKImageBrowserView", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void SelectionDidChange (IKImageBrowserView browser);
 
 		[Export ("imageBrowser:cellWasDoubleClickedAtIndex:"), EventArgs ("IKImageBrowserViewIndex", XmlDocs = """
@@ -1223,7 +1235,10 @@ namespace ImageKit {
 		///         <param name="nsevent">To be added.</param>
 		///         <summary>To be added.</summary>
 		///         <remarks>To be added.</remarks>
-		[Export ("imageBrowser:backgroundWasRightClickedWithEvent:"), EventArgs ("IKImageBrowserViewEvent")]
+		[Export ("imageBrowser:backgroundWasRightClickedWithEvent:"), EventArgs ("IKImageBrowserViewEvent", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void BackgroundWasRightClicked (IKImageBrowserView browser, NSEvent nsevent);
 	}
 
@@ -1760,6 +1775,11 @@ namespace ImageKit {
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("saveOptions:shouldShowUTType:"), DelegateName ("SaveOptionsShouldShowUTType"), DefaultValue (false)]
 		bool ShouldShowType (IKSaveOptions saveOptions, string imageUTType);
 	}
@@ -1866,14 +1886,20 @@ namespace ImageKit {
 		///         <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
 		///         <remarks>To be added.</remarks>
-		[Export ("scannerDeviceView:didScanToURL:fileData:error:"), EventArgs ("IKScannerDeviceViewScan")]
+		[Export ("scannerDeviceView:didScanToURL:fileData:error:"), EventArgs ("IKScannerDeviceViewScan", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidScan (IKScannerDeviceView scannerDeviceView, NSUrl url, NSData data, NSError error);
 
 		/// <param name="scannerDeviceView">To be added.</param>
 		///         <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
 		///         <remarks>To be added.</remarks>
-		[Export ("scannerDeviceView:didEncounterError:"), EventArgs ("IKScannerDeviceViewError")]
+		[Export ("scannerDeviceView:didEncounterError:"), EventArgs ("IKScannerDeviceViewError", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidEncounterError (IKScannerDeviceView scannerDeviceView, NSError error);
 
 		/// <param name="scannerDeviceView">To be added.</param>
@@ -1881,7 +1907,10 @@ namespace ImageKit {
 		///         <param name="error">To be added.</param>
 		///         <summary>To be added.</summary>
 		///         <remarks>To be added.</remarks>
-		[Export ("scannerDeviceView:didScanToURL:error:"), EventArgs ("IKScannerDeviceViewScanUrl")]
+		[Export ("scannerDeviceView:didScanToURL:error:"), EventArgs ("IKScannerDeviceViewScanUrl", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void DidScanToUrl (IKScannerDeviceView scannerDeviceView, NSUrl url, NSError error);
 
 		[Export ("scannerDeviceView:didScanToBandData:scanInfo:error:"), EventArgs ("IKScannerDeviceViewScanBandData")]

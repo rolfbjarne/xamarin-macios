@@ -506,7 +506,10 @@ namespace PassKit {
 		[MacCatalyst (13, 1)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'DidAuthorizePayment2' instead.")]
 		[Export ("paymentAuthorizationViewController:didAuthorizePayment:completion:")]
-		[EventArgs ("PKPaymentAuthorization")]
+		[EventArgs ("PKPaymentAuthorization", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 #if !NET
 		[Abstract]
 #endif
@@ -519,12 +522,19 @@ namespace PassKit {
 		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("paymentAuthorizationViewController:didAuthorizePayment:handler:")]
-		[EventArgs ("PKPaymentAuthorizationResult")]
+		[EventArgs ("PKPaymentAuthorizationResult", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidAuthorizePayment2 (PKPaymentAuthorizationViewController controller, PKPayment payment, Action<PKPaymentAuthorizationResult> completion);
 
 		/// <param name="controller">To be added.</param>
 		///         <summary>Indicates the payment authorization has completed.</summary>
 		///         <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("paymentAuthorizationViewControllerDidFinish:")]
 		[Abstract]
 		void PaymentAuthorizationViewControllerDidFinish (PKPaymentAuthorizationViewController controller);
@@ -539,7 +549,10 @@ namespace PassKit {
 		[MacCatalyst (13, 1)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'DidSelectShippingMethod2' instead.")]
 		[Export ("paymentAuthorizationViewController:didSelectShippingMethod:completion:")]
-		[EventArgs ("PKPaymentShippingMethodSelected")]
+		[EventArgs ("PKPaymentShippingMethodSelected", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidSelectShippingMethod (PKPaymentAuthorizationViewController controller, PKShippingMethod shippingMethod, PKPaymentShippingMethodSelected completion);
 
 		/// <param name="controller">To be added.</param>
@@ -549,7 +562,10 @@ namespace PassKit {
 		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("paymentAuthorizationViewController:didSelectShippingMethod:handler:")]
-		[EventArgs ("PKPaymentRequestShippingMethodUpdate")]
+		[EventArgs ("PKPaymentRequestShippingMethodUpdate", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidSelectShippingMethod2 (PKPaymentAuthorizationViewController controller, PKShippingMethod shippingMethod, Action<PKPaymentRequestShippingMethodUpdate> completion);
 
 		/// <param name="controller">To be added.</param>
@@ -568,6 +584,10 @@ namespace PassKit {
 		/// <param name="controller">To be added.</param>
 		///         <summary>Indicates that payment authorization will shortly begin.</summary>
 		///         <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[MacCatalyst (13, 1)]
 		[Export ("paymentAuthorizationViewControllerWillAuthorizePayment:")]
 #if !NET
@@ -585,7 +605,10 @@ namespace PassKit {
 		[MacCatalyst (13, 1)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'DidSelectShippingContact' instead.")]
 		[Export ("paymentAuthorizationViewController:didSelectShippingContact:completion:")]
-		[EventArgs ("PKPaymentSelectedContact")]
+		[EventArgs ("PKPaymentSelectedContact", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidSelectShippingContact (PKPaymentAuthorizationViewController controller, PKContact contact, PKPaymentShippingAddressSelected completion);
 
 		/// <param name="controller">To be added.</param>
@@ -595,7 +618,10 @@ namespace PassKit {
 		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("paymentAuthorizationViewController:didSelectShippingContact:handler:")]
-		[EventArgs ("PKPaymentRequestShippingContactUpdate")]
+		[EventArgs ("PKPaymentRequestShippingContactUpdate", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidSelectShippingContact2 (PKPaymentAuthorizationViewController controller, PKContact contact, Action<PKPaymentRequestShippingContactUpdate> completion);
 
 		/// <param name="controller">To be added.</param>
@@ -608,7 +634,10 @@ namespace PassKit {
 		[MacCatalyst (13, 1)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'DidSelectPaymentMethod2' instead.")]
 		[Export ("paymentAuthorizationViewController:didSelectPaymentMethod:completion:")]
-		[EventArgs ("PKPaymentMethodSelected")]
+		[EventArgs ("PKPaymentMethodSelected", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidSelectPaymentMethod (PKPaymentAuthorizationViewController controller, PKPaymentMethod paymentMethod, Action<PKPaymentSummaryItem []> completion);
 
 		/// <param name="controller">To be added.</param>
@@ -618,7 +647,10 @@ namespace PassKit {
 		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("paymentAuthorizationViewController:didSelectPaymentMethod:handler:")]
-		[EventArgs ("PKPaymentRequestPaymentMethodUpdate")]
+		[EventArgs ("PKPaymentRequestPaymentMethodUpdate", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidSelectPaymentMethod2 (PKPaymentAuthorizationViewController controller, PKPaymentMethod paymentMethod, Action<PKPaymentRequestPaymentMethodUpdate> completion);
 
 		[iOS (14, 0)]
@@ -1289,6 +1321,10 @@ namespace PassKit {
 		/// <param name="controller">To be added.</param>
 		///         <summary>To be added.</summary>
 		///         <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("addPassesViewControllerDidFinish:")]
 		void Finished (PKAddPassesViewController controller);
 	}

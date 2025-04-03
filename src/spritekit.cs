@@ -2732,12 +2732,20 @@ namespace SpriteKit {
 		/// <param name="contact">To be added.</param>
 		/// <summary>Method that is called when contact is started.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakContactDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("didBeginContact:")]
 		void DidBeginContact (SKPhysicsContact contact);
 
 		/// <param name="contact">To be added.</param>
 		/// <summary>Method that is called after contact ends.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakContactDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("didEndContact:")]
 		void DidEndContact (SKPhysicsContact contact);
 	}

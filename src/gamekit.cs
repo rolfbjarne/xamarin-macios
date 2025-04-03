@@ -1422,7 +1422,10 @@ namespace GameKit {
 		[Deprecated (PlatformName.MacOSX, 10, 10, message: "Use 'DataReceivedFromPlayer (GKMatch,NSData,GKPlayer)' instead.")]
 		[MacCatalyst (13, 1)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'DataReceivedFromPlayer (GKMatch,NSData,GKPlayer)' instead.")]
-		[Export ("match:didReceiveData:fromPlayer:"), EventArgs ("GKData")]
+		[Export ("match:didReceiveData:fromPlayer:"), EventArgs ("GKData", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DataReceived (GKMatch match, NSData data, string playerId);
 
 		/// <param name="match">To be added.</param>
@@ -1435,7 +1438,10 @@ namespace GameKit {
 		[Deprecated (PlatformName.MacOSX, 10, 8, message: "Use 'StateChangedForPlayer (GKMatch,GKPlayer,GKPlayerConnectionState)' instead.")]
 		[MacCatalyst (13, 1)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'StateChangedForPlayer (GKMatch,GKPlayer,GKPlayerConnectionState)' instead.")]
-		[Export ("match:player:didChangeState:"), EventArgs ("GKState")]
+		[Export ("match:player:didChangeState:"), EventArgs ("GKState", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void StateChanged (GKMatch match, string playerId, GKPlayerConnectionState state);
 
 #if MONOMAC
@@ -1454,7 +1460,10 @@ namespace GameKit {
 		///         </param>
 		/// <summary>Method that is called when a match cannot connect to any of the players.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("match:didFailWithError:"), EventArgs ("GKError")]
+		[Export ("match:didFailWithError:"), EventArgs ("GKError", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void Failed (GKMatch match, [NullAllowed] NSError error);
 
 		/// <param name="match">To be added.</param>
@@ -1462,6 +1471,11 @@ namespace GameKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[NoTV]
 		[Deprecated (PlatformName.iOS, 8, 0, message: "Use 'ShouldReinviteDisconnectedPlayer' instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 10, message: "Use 'ShouldReinviteDisconnectedPlayer' instead.")]
@@ -1476,7 +1490,10 @@ namespace GameKit {
 		/// <summary>Method that is called when data is received from a player.</summary>
 		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
-		[Export ("match:didReceiveData:fromRemotePlayer:"), EventArgs ("GKMatchReceivedDataFromRemotePlayer")]
+		[Export ("match:didReceiveData:fromRemotePlayer:"), EventArgs ("GKMatchReceivedDataFromRemotePlayer", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DataReceivedFromPlayer (GKMatch match, NSData data, GKPlayer player);
 
 		/// <param name="match">To be added.</param>
@@ -1484,7 +1501,10 @@ namespace GameKit {
 		/// <param name="state">To be added.</param>
 		/// <summary>Method that is called when a player's connection state changes.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("match:player:didChangeConnectionState:"), EventArgs ("GKMatchConnectionChanged")]
+		[Export ("match:player:didChangeConnectionState:"), EventArgs ("GKMatchConnectionChanged", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void StateChangedForPlayer (GKMatch match, GKPlayer player, GKPlayerConnectionState state);
 
 		/// <param name="match">To be added.</param>
@@ -1492,6 +1512,11 @@ namespace GameKit {
 		/// <summary>Method that is called when a player is disconnected from a two-player match.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[MacCatalyst (13, 1)]
 		[Export ("match:shouldReinviteDisconnectedPlayer:")]
 		[DelegateName ("GKMatchReinvitationForDisconnectedPlayer"), DefaultValue (true)]
@@ -1504,7 +1529,10 @@ namespace GameKit {
 		/// <summary>Method that is called when the <paramref name="recipient" /> recieves data from another <paramref name="player" />.</summary>
 		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
-		[Export ("match:didReceiveData:forRecipient:fromRemotePlayer:"), EventArgs ("GKDataReceivedForRecipient")]
+		[Export ("match:didReceiveData:forRecipient:fromRemotePlayer:"), EventArgs ("GKDataReceivedForRecipient", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DataReceivedForRecipient (GKMatch match, NSData data, GKPlayer recipient, GKPlayer player);
 	}
 
@@ -1941,6 +1969,10 @@ namespace GameKit {
 		/// <param name="viewController">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakMatchmakerDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Abstract]
 		[Export ("matchmakerViewControllerWasCancelled:")]
 		void WasCancelled (GKMatchmakerViewController viewController);
@@ -1950,7 +1982,10 @@ namespace GameKit {
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
 		[Abstract]
-		[Export ("matchmakerViewController:didFailWithError:"), EventArgs ("GKError")]
+		[Export ("matchmakerViewController:didFailWithError:"), EventArgs ("GKError", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakMatchmakerDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidFailWithError (GKMatchmakerViewController viewController, NSError error);
 
 #if !NET && !XAMCORE_5_0
@@ -1960,7 +1995,10 @@ namespace GameKit {
 		/// <param name="match">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("matchmakerViewController:didFindMatch:"), EventArgs ("GKMatch")]
+		[Export ("matchmakerViewController:didFindMatch:"), EventArgs ("GKMatch", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakMatchmakerDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidFindMatch (GKMatchmakerViewController viewController, GKMatch match);
 
 #if !NET && !XAMCORE_5_0
@@ -1975,7 +2013,10 @@ namespace GameKit {
 		[Deprecated (PlatformName.MacOSX, 10, 10, message: "Use 'DidFindHostedPlayers' instead.")]
 		[MacCatalyst (13, 1)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'DidFindHostedPlayers' instead.")]
-		[Export ("matchmakerViewController:didFindPlayers:"), EventArgs ("GKPlayers")]
+		[Export ("matchmakerViewController:didFindPlayers:"), EventArgs ("GKPlayers", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakMatchmakerDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidFindPlayers (GKMatchmakerViewController viewController, string [] playerIDs);
 
 #if !NET && !XAMCORE_5_0
@@ -1986,7 +2027,10 @@ namespace GameKit {
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
-		[Export ("matchmakerViewController:didFindHostedPlayers:"), EventArgs ("GKMatchmakingPlayers")]
+		[Export ("matchmakerViewController:didFindHostedPlayers:"), EventArgs ("GKMatchmakingPlayers", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakMatchmakerDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidFindHostedPlayers (GKMatchmakerViewController viewController, GKPlayer [] playerIDs);
 
 		/// <param name="viewController">To be added.</param>
@@ -1998,7 +2042,10 @@ namespace GameKit {
 		[Deprecated (PlatformName.MacOSX, 10, 10, message: "Use 'HostedPlayerDidAccept' instead.")]
 		[MacCatalyst (13, 1)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'HostedPlayerDidAccept' instead.")]
-		[Export ("matchmakerViewController:didReceiveAcceptFromHostedPlayer:"), EventArgs ("GKPlayer")]
+		[Export ("matchmakerViewController:didReceiveAcceptFromHostedPlayer:"), EventArgs ("GKPlayer", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakMatchmakerDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void ReceivedAcceptFromHostedPlayer (GKMatchmakerViewController viewController, string playerID);
 
 		/// <param name="viewController">To be added.</param>
@@ -2006,7 +2053,10 @@ namespace GameKit {
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
-		[Export ("matchmakerViewController:hostedPlayerDidAccept:"), EventArgs ("GKMatchmakingPlayer")]
+		[Export ("matchmakerViewController:hostedPlayerDidAccept:"), EventArgs ("GKMatchmakingPlayer", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakMatchmakerDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void HostedPlayerDidAccept (GKMatchmakerViewController viewController, GKPlayer playerID);
 
 		[TV (17, 2), Mac (14, 2), iOS (17, 2), MacCatalyst (17, 2)]
@@ -3245,6 +3295,10 @@ namespace GameKit {
 		/// <param name="controller">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Abstract]
 		[Export ("gameCenterViewControllerDidFinish:")]
 		void Finished (GKGameCenterViewController controller);
@@ -3303,6 +3357,10 @@ namespace GameKit {
 		/// <param name="challenge">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("localPlayerDidSelectChallenge:")]
 		void LocalPlayerSelectedChallenge (GKChallenge challenge);
 
@@ -3310,6 +3368,11 @@ namespace GameKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("shouldShowBannerForLocallyReceivedChallenge:")]
 		[DelegateName ("GKChallengePredicate"), DefaultValue (true)]
 		bool ShouldShowBannerForLocallyReceivedChallenge (GKChallenge challenge);
@@ -3317,6 +3380,10 @@ namespace GameKit {
 		/// <param name="challenge">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("localPlayerDidReceiveChallenge:")]
 		void LocalPlayerReceivedChallenge (GKChallenge challenge);
 
@@ -3324,6 +3391,11 @@ namespace GameKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("shouldShowBannerForLocallyCompletedChallenge:")]
 		[DelegateName ("GKChallengePredicate"), DefaultValue (true)]
 		bool ShouldShowBannerForLocallyCompletedChallenge (GKChallenge challenge);
@@ -3331,6 +3403,10 @@ namespace GameKit {
 		/// <param name="challenge">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("localPlayerDidCompleteChallenge:")]
 		void LocalPlayerCompletedChallenge (GKChallenge challenge);
 
@@ -3338,6 +3414,11 @@ namespace GameKit {
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Delegate invoked by the object to get a value.</summary>
+			<value>To be added.</value>
+			<remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("shouldShowBannerForRemotelyCompletedChallenge:")]
 		[DelegateName ("GKChallengePredicate"), DefaultValue (true)]
 		bool ShouldShowBannerForRemotelyCompletedChallenge (GKChallenge challenge);
@@ -3345,6 +3426,10 @@ namespace GameKit {
 		/// <param name="challenge">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Export ("remotePlayerDidCompleteChallenge:")]
 		void RemotePlayerCompletedChallenge (GKChallenge challenge);
 	}

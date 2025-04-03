@@ -1192,7 +1192,10 @@ namespace GLKit {
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
 		[Abstract]
-		[Export ("glkView:drawInRect:"), EventArgs ("GLKViewDraw")]
+		[Export ("glkView:drawInRect:"), EventArgs ("GLKViewDraw", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DrawInRect (GLKView view, CGRect rect);
 	}
 

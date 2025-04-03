@@ -46,8 +46,8 @@ namespace CoreMidi {
 		}
 
 		unsafe MIDIEventList* midiDataPointer;
+		int midiDataSize;
 		bool owns;
-		GCHandle midiDataHandle;
 		unsafe MidiEventPacket* currentPacket;
 
 		const int MinimumSize = 276; /* 4 + 4 + sizeof (MidiEventPacket) */
@@ -68,7 +68,7 @@ namespace CoreMidi {
 			}
 		}
 
-		internal void* MidiData { get => midiDataPointer; }
+		unsafe internal void* MidiData { get => midiDataPointer; }
 
 		/// <summary>Create a new <see cref="MidiEventList" /> list with the minimum size.</summary>
 		/// <param name="protocol">The protocol for the packets in the created list.</param>
@@ -87,9 +87,10 @@ namespace CoreMidi {
 			if (size < MinimumSize)
 				throw new ArgumentOutOfRangeException ($"{nameof (size)} must be at least {MinimumSize}.");
 
+			midiDataSize = size;
+			owns = true;
 			unsafe {
-				midiDataPointer = (MIDIEventList *) Marshal.AllocHGlobal (size);
-				owns = true;
+				midiDataPointer = (MIDIEventList *) Marshal.AllocHGlobal (midiDataSize);
 				currentPacket = MIDIEventListInit (midiDataPointer, protocol);
 				if (currentPacket is null)
 					throw new Exception ($"Failed to create midi event list.");
@@ -104,6 +105,7 @@ namespace CoreMidi {
 			unsafe {
 				midiDataPointer = (MIDIEventList *) eventListPointer;
 				owns = false;
+				midiDataSize = -1;
 			}
 		}
 
@@ -112,7 +114,7 @@ namespace CoreMidi {
 			Dispose (true);
 		}
 
-		protected virtual void Dispose (bool disposing)
+		void Dispose (bool disposing)
 		{
 			if (owns) {
 				unsafe {
@@ -161,24 +163,25 @@ namespace CoreMidi {
 		/// <returns>True if successful, otherwise false (which typically means there's not enough space for the new packet).</returns>
 		public unsafe bool Add (ulong time, uint [] words)
 		{
-			fixed (byte* midiDataPtr = midiData) {
-				fixed (uint* wordsPtr = words) {
-					var rv = MIDIEventListAdd (midiDataPtr, (ulong) midiData.Length, currentPacket, time, (ulong) words.Length, (byte*) wordsPtr);
-					if (rv is not null) {
-						currentPacket = rv;
-						return true;
-					}
-					return false;
+			if (midiDataSize < 0)
+				throw new InvalidOperationException ($"Can't add to a MidiEventList initialized from a raw pointer.");
+
+			fixed (uint* wordsPtr = words) {
+				var rv = MIDIEventListAdd (midiDataPointer, (ulong) midiDataSize, currentPacket, time, (ulong) words.Length, (byte*) wordsPtr);
+				if (rv is not null) {
+					currentPacket = rv;
+					return true;
 				}
+				return false;
 			}
 		}
 
 		[DllImport (Constants.CoreMidiLibrary)]
-		unsafe static extern MidiEventPacket* MIDIEventListInit (byte* /* MIDIEventList * */ evtlist, MidiProtocolId /* MIDIProtocolID */ protocol);
+		unsafe static extern MidiEventPacket* MIDIEventListInit (MIDIEventList* evtlist, MidiProtocolId /* MIDIProtocolID */ protocol);
 
 		[DllImport (Constants.CoreMidiLibrary)]
 		unsafe static extern MidiEventPacket* MIDIEventListAdd (
-			byte* /* MIDIEventList * */ evtlist,
+			MIDIEventList* evtlist,
 			ulong /* ByteCount = unsigned long */ listSize,
 			MidiEventPacket* curPacket,
 			ulong /* MIDITimeStamp */ time,
@@ -240,15 +243,12 @@ namespace CoreMidi {
 			if (PacketCount == 0)
 				return;
 
-			fixed (byte* midiDataPtr = midiData) {
-				MIDIEventList* list = (MIDIEventList*) midiDataPtr;
-				MidiEventPacket* packet = &list->packet;
+			MidiEventPacket* packet = &midiDataPointer->packet;
+			callback (ref Unsafe.AsRef<MidiEventPacket> (packet));
+			for (var i = 1; i < PacketCount; i++) {
+				uint* wordPointer = &packet->word_00;
+				packet = (MidiEventPacket*) wordPointer [packet->WordCount];
 				callback (ref Unsafe.AsRef<MidiEventPacket> (packet));
-				for (var i = 1; i < PacketCount; i++) {
-					uint* wordPointer = &packet->word_00;
-					packet = (MidiEventPacket*) wordPointer [packet->WordCount];
-					callback (ref Unsafe.AsRef<MidiEventPacket> (packet));
-				}
 			}
 		}
 	}

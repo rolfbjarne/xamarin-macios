@@ -150,9 +150,11 @@ namespace CoreMidi {
 		IntPtr /* const Byte * */                                                        data;
 		uint                                                                             bytesToSend;
 		byte /* Boolean */                                                               complete;
+#pragma warning disable CS0169 //  The field '...' is never used
 		byte                                                                             reserved1;
 		byte                                                                             reserved2;
 		byte                                                                             reserved3;
+#pragma warning restore CS0169
 		unsafe delegate* unmanaged<MidiSysexSendRequest*, void> /* MIDICompletionProc */ completionProc;
 		IntPtr /* void * __nullable */                                                   completionRefCon;
 
@@ -229,11 +231,11 @@ namespace CoreMidi {
 	[NativeName ("MIDISysexSendRequestUMP")]
 	struct MidiSysexSendRequestUmp
 	{
-		MIDIEndpointRef destination;
+		MidiEndpointRef destination;
 		IntPtr /* UInt32* */ words;
 		uint /* UInt32 */ wordsToSend;
 		byte /* Boolean */ complete;
-		unsafe delegate unmanaged*<MidiSysexSendRequestUmp*, void> /* MIDICompletionProcUMP */ completionProc;
+		unsafe delegate* unmanaged<MidiSysexSendRequestUmp*, void> /* MIDICompletionProcUMP */ completionProc;
 		IntPtr /* void* __nullable */ completionRefCon;
 
 		/// <summary>The endpoint where the request is sent.</summary>

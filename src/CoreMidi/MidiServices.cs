@@ -43,6 +43,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
+
 using ObjCRuntime;
 using CoreFoundation;
 using Foundation;
@@ -760,12 +763,12 @@ namespace CoreMidi {
 		/// <param name="status">A status code that describes the result of this operation. This will be <see cref="MidiError.Ok" /> in case of success.</param>
 		/// <returns>A newly created <see cref="MidiEndpoint" /> if successful, otherwise null.</returns>
 		/// <remarks> FIXME: ADD BETTER DOCS HERE </remarks>
-		public MidiEndpoint? CreateVirtualDestination (string name, MidiProtocolId protocol, delegate* unmanaged<void*,void*,void> readBlock, out MidiError status)
+		public unsafe MidiEndpoint? CreateVirtualDestination (string name, MidiProtocolId protocol, delegate* unmanaged<void*,void*,void> readBlock, out MidiError status)
 		{
 			using var namePtr = new TransientCFString (name);
 			var handle = default (MidiEndpointRef);
 			unsafe {
-				status = (MidiError) MIDIDestinationCreateWithProtocol (client.GetCheckedHandle (), namePtr, protocol, &handle, readBlock);
+				status = (MidiError) MIDIDestinationCreateWithProtocol (GetCheckedHandle (), namePtr, protocol, &handle, readBlock);
 			}
 			if (handle == MidiObject.InvalidRef)
 				return null;
@@ -777,7 +780,7 @@ namespace CoreMidi {
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("tvos")]
 		[DllImport (Constants.CoreMidiLibrary)]
-		unsafe extern static OSStatus MIDIDestinationCreateWithProtocol (MidiClientRef client, IntPtr /* CFStringRef */ name, MidiProtocolId protocol, MidiEndpointRef* outSrc, delegate* unmanaged<void * /* const MIDIEventList * */, void * /* __nullable */ srcConnRefCon, void> readBlock);
+		unsafe extern static OSStatus MIDIDestinationCreateWithProtocol (MidiClientRef client, IntPtr /* CFStringRef */ name, MidiProtocolId protocol, MidiEndpointRef* outSrc, delegate* unmanaged<void * /* const MIDIEventList * */, void * /* __nullable srcConnRefCon */, void> readBlock);
 
 		/// <param name="name">name for the input port.</param>
 		///         <summary>Creates a new MIDI input port.</summary>
@@ -809,7 +812,7 @@ namespace CoreMidi {
 			IntPtr /* CFStringRef */ name,
 			MidiProtocolId protocol,
 			MidiPortRef* outPort,
-			delegate* unmanaged<void * /* const MIDIEventList * */, void * /* __nullable */ srcConnRefCon, void> receiveBlock);
+			delegate* unmanaged<void * /* const MIDIEventList * */, void * /* __nullable srcConnRefCon */, void> receiveBlock);
 
 		/// <summary>Create a input port for this client.</summary>
 		/// <param name="name">The name for the port.</param>
@@ -827,11 +830,11 @@ namespace CoreMidi {
 			using var namePtr = new TransientCFString (name);
 			var handle = default (MidiEndpointRef);
 			unsafe {
-				status = (MidiError) MIDIInputPortCreateWithProtocol (client.GetCheckedHandle (), namePtr, protocol, &handle, readBlock);
+				status = (MidiError) MIDIInputPortCreateWithProtocol (GetCheckedHandle (), namePtr, protocol, &handle, readBlock);
 			}
 			if (handle == MidiObject.InvalidRef)
 				return null;
-			return new MidiPort (handle, name, true);
+			return new MidiPort (handle, true, this, name);
 		}
 
 		public event EventHandler? SetupChanged;
@@ -1215,6 +1218,13 @@ namespace CoreMidi {
 
 		GCHandle gch;
 		bool input;
+
+		internal MidiPort (MidiPortRef handle, bool owns, MidiClient client, string portName)
+			: base (handle, owns)
+		{
+			Client = client;
+			PortName = portName;
+		}
 
 		internal MidiPort (MidiClient client, string portName, bool input)
 		{
@@ -2182,14 +2192,14 @@ namespace CoreMidi {
 		public bool UsesSerial {
 			get {
 #if __MACOS__
-				return GetInt (MidiDriverProperty.UsesSerial) != 0;
+				return GetInt (MidiDriverPropertyExtensions.kMIDIDriverPropertyUsesSerial) != 0;
 #else
 				return false;
 #endif
 			}
 			set {
 #if __MACOS__
-				SetInt (MidiDriverProperty.UsesSerial, value ? 1 : 0);
+				SetInt (MidiDriverPropertyExtensions.kMIDIDriverPropertyUsesSerial, value ? 1 : 0);
 #endif
 			}
 		}
@@ -2908,6 +2918,8 @@ namespace CoreMidi {
 
 		internal MidiEndpoint (MidiClient client, string name, out MidiError status)
 		{
+			EndpointName = name;
+
 			using var namePtr = new TransientCFString (name);
 			var handle = default (MidiEndpointRef);
 			gch = GCHandle.Alloc (this);
@@ -2918,7 +2930,6 @@ namespace CoreMidi {
 				gch.Free ();
 				return;
 			}
-			EndpointName = name;
 			this.handle = handle;
 		}
 
@@ -3294,7 +3305,7 @@ namespace CoreMidi {
 		/// <param name="data">The data to send.</param>
 		/// <param name="cancellationToken">An optional cancellation token that can be used to cancel the request.</param>
 		/// <returns>A <see cref="MidiError" /> value for the request. This will be <see cref="MidiError.Ok" /> if the request was successful, an error code otherwise.</returns>
-		public Task<MidiError> SendSysexAsync (byte[] data, CancellationToken? cancellationToken = null)
+		public unsafe Task<MidiError> SendSysexAsync (byte[] data, CancellationToken? cancellationToken = null)
 		{
 			if (data is null)
 				ThrowHelper.ThrowArgumentNullException (nameof (data));
@@ -3325,7 +3336,7 @@ namespace CoreMidi {
 		[SupportedOSPlatform ("maccatalyst17.0")]
 		[SupportedOSPlatform ("macos14.0")]
 		[UnsupportedOSPlatform ("tvos")]
-		public Task<MidiError> SendSysexUmpAsync (uint[] data, CancellationToken? cancellationToken = null)
+		public unsafe Task<MidiError> SendSysexUmpAsync (uint[] data, CancellationToken? cancellationToken = null)
 		{
 			if (data is null)
 				ThrowHelper.ThrowArgumentNullException (nameof (data));
@@ -3356,7 +3367,7 @@ namespace CoreMidi {
 		[SupportedOSPlatform ("maccatalyst17.0")]
 		[SupportedOSPlatform ("macos14.0")]
 		[UnsupportedOSPlatform ("tvos")]
-		public Task<MidiError> SendSysexUmp8Async (uint[] data, CancellationToken? cancellationToken = null)
+		public unsafe Task<MidiError> SendSysexUmp8Async (uint[] data, CancellationToken? cancellationToken = null)
 		{
 			if (data is null)
 				ThrowHelper.ThrowArgumentNullException (nameof (data));
@@ -3379,7 +3390,7 @@ namespace CoreMidi {
 			uint[]? uintData;
 			GCHandle dataHandle;
 			GCHandle thisHandle;
-			Task onCompletion;
+			TaskCompletionSource<MidiError> onCompletion;
 			CancellationTokenRegistration? cancellationTokenRegistration;
 
 			public SysexRequest (MidiEndpoint endpoint, byte[] data, TaskCompletionSource<MidiError> onCompletion)
@@ -3388,7 +3399,9 @@ namespace CoreMidi {
 				this.byteData = data;
 				this.onCompletion = onCompletion;
 
-				structPointer = Marshal.AllocHGlobal (sizeof (MidiSysexSendRequest));
+				unsafe {
+					structPointer = Marshal.AllocHGlobal (sizeof (MidiSysexSendRequest));
+				}
 				dataHandle = GCHandle.Alloc (byteData, GCHandleType.Pinned);
 				thisHandle = GCHandle.Alloc (this);
 			}
@@ -3399,16 +3412,21 @@ namespace CoreMidi {
 				this.uintData = data;
 				this.onCompletion = onCompletion;
 
-				structPointer = Marshal.AllocHGlobal (sizeof (MidiSysexSendRequestUmp));
+				unsafe {
+					structPointer = Marshal.AllocHGlobal (sizeof (MidiSysexSendRequestUmp));
+				}
 				dataHandle = GCHandle.Alloc (uintData, GCHandleType.Pinned);
 				thisHandle = GCHandle.Alloc (this);
 			}
 
 			public unsafe MidiSysexSendRequest* GetSysexRequestStruct (CancellationToken? cancellationToken)
 			{
+				if (byteData is null)
+					throw new InvalidOperationException ($"No byte[] data specified.");
+
 				var rv = (MidiSysexSendRequest *) structPointer;
 
-				rv->Destination = endpoint.GetHandle ();
+				rv->Destination = endpoint.GetCheckedHandle ();
 				rv->Data = dataHandle.AddrOfPinnedObject ();
 				rv->BytesToSend = (uint) byteData.Length;
 				rv->CompletionProcedure = &SysexCompletion;
@@ -3421,9 +3439,12 @@ namespace CoreMidi {
 
 			public unsafe MidiSysexSendRequestUmp* GetSysexUmpRequestStruct (CancellationToken? cancellationToken)
 			{
+				if (uintData is null)
+					throw new InvalidOperationException ($"No uint[] data specified.");
+
 				var rv = (MidiSysexSendRequestUmp *) structPointer;
 
-				rv->Destination = endpoint.GetHandle ();
+				rv->Destination = endpoint.GetCheckedHandle ();
 				rv->Words = dataHandle.AddrOfPinnedObject ();
 				rv->WordsToSend = (uint) uintData.Length;
 				rv->CompletionProcedure = &UmpSysexCompletion;
@@ -3443,15 +3464,15 @@ namespace CoreMidi {
 			[UnmanagedCallersOnly]
 			unsafe static void SysexCompletion (MidiSysexSendRequest* request)
 			{
-				var obj = (SysexRequest) GCHandle.FromIntPtr (request->Context).GetTarget ();
-				obj.OnCompleted ();
+				var obj = (SysexRequest?) GCHandle.FromIntPtr (request->Context).Target;
+				obj?.OnCompleted ();
 			}
 
 			[UnmanagedCallersOnly]
 			unsafe static void UmpSysexCompletion (MidiSysexSendRequestUmp * request)
 			{
-				var obj = (SysexRequest) GCHandle.FromIntPtr (request->Context).GetTarget ();
-				obj.OnCompleted ();
+				var obj = (SysexRequest?) GCHandle.FromIntPtr (request->Context).Target;
+				obj?.OnCompleted ();
 			}
 
 			unsafe void SysexCancellationRequest ()

@@ -3371,6 +3371,10 @@ namespace UIKit {
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[NoiOS]
 		[NoTV]
 		[NoMacCatalyst]
@@ -3381,6 +3385,10 @@ namespace UIKit {
 		/// <param name="notification">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[NoiOS]
 		[NoTV]
 		[NoMacCatalyst]

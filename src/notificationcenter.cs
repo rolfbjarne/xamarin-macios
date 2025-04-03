@@ -250,6 +250,10 @@ namespace NotificationCenter {
 		/// <param name="list">To be added.</param>
 		///         <summary>To be added.</summary>
 		///         <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		[Export ("widgetListPerformAddAction:"), DelegateName ("NCWidgetListViewController")]
 		void PerformAddAction (NCWidgetListViewController list);
 
@@ -350,7 +354,10 @@ namespace NotificationCenter {
 		///         <summary>To be added.</summary>
 		///         <remarks>To be added.</remarks>
 		[Abstract]
-		[Export ("widgetSearchTermCleared:"), EventArgs ("NSWidgetSearchViewController"), DefaultValue (false)]
+		[Export ("widgetSearchTermCleared:"), EventArgs ("NSWidgetSearchViewController", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			"""), DefaultValue (false)]
 		void TermCleared (NCWidgetSearchViewController controller);
 
 		/// <param name="controller">To be added.</param>
@@ -358,7 +365,10 @@ namespace NotificationCenter {
 		///         <summary>To be added.</summary>
 		///         <remarks>To be added.</remarks>
 		[Abstract]
-		[Export ("widgetSearch:resultSelected:"), EventArgs ("NSWidgetSearchResultSelected"), DefaultValue (false)]
+		[Export ("widgetSearch:resultSelected:"), EventArgs ("NSWidgetSearchResultSelected", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			"""), DefaultValue (false)]
 		void ResultSelected (NCWidgetSearchViewController controller, NSObject obj);
 	}
 }

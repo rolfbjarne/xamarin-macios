@@ -5638,21 +5638,30 @@ namespace SceneKit {
 		/// <param name="contact">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("physicsWorld:didBeginContact:"), EventArgs ("SCNPhysicsContact")]
+		[Export ("physicsWorld:didBeginContact:"), EventArgs ("SCNPhysicsContact", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakContactDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidBeginContact (SCNPhysicsWorld world, SCNPhysicsContact contact);
 
 		/// <param name="world">To be added.</param>
 		/// <param name="contact">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("physicsWorld:didUpdateContact:"), EventArgs ("SCNPhysicsContact")]
+		[Export ("physicsWorld:didUpdateContact:"), EventArgs ("SCNPhysicsContact", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakContactDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidUpdateContact (SCNPhysicsWorld world, SCNPhysicsContact contact);
 
 		/// <param name="world">To be added.</param>
 		/// <param name="contact">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("physicsWorld:didEndContact:"), EventArgs ("SCNPhysicsContact")]
+		[Export ("physicsWorld:didEndContact:"), EventArgs ("SCNPhysicsContact", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakContactDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidEndContact (SCNPhysicsWorld world, SCNPhysicsContact contact);
 	}
 

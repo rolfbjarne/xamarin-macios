@@ -1481,6 +1481,7 @@ namespace Metal {
 		[Obsolete ("Not available on the current platform.")]
 #endif
 
+		/// <summary>The tvOS GPU Family 1 v1 feature set.</summary>
 		[NoiOS, NoMac]
 		tvOS_GPUFamily1_v1 = 30000,
 

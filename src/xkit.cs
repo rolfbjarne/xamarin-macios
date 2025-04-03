@@ -141,17 +141,17 @@ namespace UIKit {
 	[Flags]
 	[MacCatalyst (13, 1)]
 	public enum NSControlCharacterAction : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Glyphs with this action are filtered from the layout.</summary>
 		ZeroAdvancement = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>Uses <see cref="NSLayoutManager.ShouldUseAction" /> or, if not overridden, <see cref="ZeroAdvancement" />.</summary>
 		Whitespace = (1 << 1),
-		/// <summary>To be added.</summary>
+		/// <summary>Treated as a tab character.</summary>
 		HorizontalTab = (1 << 2),
-		/// <summary>To be added.</summary>
+		/// <summary>Causes a line break.</summary>
 		LineBreak = (1 << 3),
-		/// <summary>To be added.</summary>
+		/// <summary>Causes a paragraph break.</summary>
 		ParagraphBreak = (1 << 4),
-		/// <summary>To be added.</summary>
+		/// <summary>Causes container break.</summary>
 		ContainerBreak = (1 << 5),
 
 #if !NET && !__MACCATALYST__ && !MONOMAC

@@ -1,4 +1,3 @@
-#if !TVOS
 //
 // MidiServices.cs: Implementation of the MidiObject base class and its derivates
 //
@@ -58,6 +57,7 @@ using MidiEntityRef = System.Int32;
 
 namespace CoreMidi {
 
+#if !TVOS
 	// anonymous enum - MIDIServices.h
 	/// <summary>Errors raised by the CoreMIDI stack.</summary>
 	///     <remarks>
@@ -96,9 +96,11 @@ namespace CoreMidi {
 		/// <summary>To be added.</summary>
 		NotPermitted = -10844,
 	}
+#endif // TVOS
 
 	[Flags]
 	// SInt32 - MIDIServices.h
+	[NativeName ("MIDIObjectType")]
 	enum MidiObjectType : int {
 		Other = -1,
 		Device,
@@ -112,6 +114,7 @@ namespace CoreMidi {
 		ExternalDestination = ExternalMask | Destination,
 	}
 
+#if !TVOS
 	public static partial class Midi {
 #if !COREBUILD
 		[DllImport (Constants.CoreMidiLibrary)]
@@ -794,6 +797,41 @@ namespace CoreMidi {
 		public MidiPort CreateOutputPort (string name)
 		{
 			return new MidiPort (this, name, false);
+		}
+
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[UnsupportedOSPlatform ("tvos")]
+		[DllImport (Constants.CoreMidiLibrary)]
+		unsafe extern static OSStatus MIDIInputPortCreateWithProtocol (
+			MidiClientRef client,
+			IntPtr /* CFStringRef */ name,
+			MidiProtocolId protocol,
+			MidiPortRef* outPort,
+			delegate* unmanaged<void * /* const MIDIEventList * */, void * /* __nullable */ srcConnRefCon, void> receiveBlock);
+
+		/// <summary>Create a input port for this client.</summary>
+		/// <param name="name">The name for the port.</param>
+		/// <param name="protocol">The MIDI protocol for the data this port will receive.</param>
+		/// <param name="readBlock">The callback that will be called when the port receives MIDI data.</param>
+		/// <param name="status">A status code that describes the result of this operation. This will be <see cref="MidiError.Ok" /> in case of success.</param>
+		/// <returns>A newly created <see cref="MidiEndpoint" /> if successful, otherwise null.</returns>
+		/// <remarks> FIXME: ADD BETTER DOCS HERE </remarks>
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[UnsupportedOSPlatform ("tvos")]
+		public unsafe MidiPort? CreateInputPort (string name, MidiProtocolId protocol, delegate* unmanaged<void*,void*,void> readBlock, out MidiError status)
+		{
+			using var namePtr = new TransientCFString (name);
+			var handle = default (MidiEndpointRef);
+			unsafe {
+				status = (MidiError) MIDIInputPortCreateWithProtocol (client.GetCheckedHandle (), namePtr, protocol, &handle, readBlock);
+			}
+			if (handle == MidiObject.InvalidRef)
+				return null;
+			return new MidiPort (handle, name, true);
 		}
 
 		public event EventHandler? SetupChanged;
@@ -3456,8 +3494,11 @@ namespace CoreMidi {
 		// MidiEndpoint 
 #endif // !COREBUILD
 	}
+#endif // TVOS
+
 
 	// SInt32 - MIDIServices.h
+	[NativeName ("MIDINotificationMessageID")]
 	enum MidiNotificationMessageId : int {
 		SetupChanged = 1,
 		ObjectAdded,
@@ -3474,6 +3515,7 @@ namespace CoreMidi {
 #endif
 	}
 
+#if !TVOS
 	//
 	// The notification EventArgs
 	//
@@ -3647,5 +3689,5 @@ namespace CoreMidi {
 		}
 #endif // !COREBUILD
 	}
+#endif // TVOS
 }
-#endif

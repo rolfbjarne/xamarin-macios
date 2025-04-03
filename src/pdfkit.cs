@@ -3785,6 +3785,11 @@ namespace PdfKit {
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>To be added.</summary>
+			<value>To be added.</value>
+			<remarks>To be added.</remarks>
+			""")]
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -3815,7 +3820,10 @@ namespace PdfKit {
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
-		[Export ("PDFViewPerformPrint:"), EventArgs ("PdfView")]
+		[Export ("PDFViewPerformPrint:"), EventArgs ("PdfView", XmlDocs = """
+			<summary>To be added.</summary>
+			<remarks>To be added.</remarks>
+			""")]
 		void PerformPrint (PdfView sender);
 
 		/// <param name="sender">To be added.</param>

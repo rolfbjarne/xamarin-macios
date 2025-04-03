@@ -578,7 +578,10 @@ namespace PassKit {
 		[NoMac]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 		[Export ("paymentAuthorizationViewController:didSelectShippingAddress:completion:")]
-		[EventArgs ("PKPaymentShippingAddressSelected")]
+		[EventArgs ("PKPaymentShippingAddressSelected", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the Delegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidSelectShippingAddress (PKPaymentAuthorizationViewController controller, ABRecord address, PKPaymentShippingAddressSelected completion);
 
 		/// <param name="controller">To be added.</param>

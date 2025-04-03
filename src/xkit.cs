@@ -143,7 +143,7 @@ namespace UIKit {
 	public enum NSControlCharacterAction : long {
 		/// <summary>Glyphs with this action are filtered from the layout.</summary>
 		ZeroAdvancement = (1 << 0),
-		/// <summary>Uses <see cref="NSLayoutManager.ShouldUseAction" /> or, if not overridden, <see cref="ZeroAdvancement" />.</summary>
+		/// <summary>Uses <see cref="NSLayoutManagerDelegate.ShouldUseAction" /> or, if not overridden, <see cref="ZeroAdvancement" />.</summary>
 		Whitespace = (1 << 1),
 		/// <summary>Treated as a tab character.</summary>
 		HorizontalTab = (1 << 2),

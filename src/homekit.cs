@@ -446,14 +446,20 @@ namespace HomeKit {
 		/// <param name="accessory">To be added.</param>
 		/// <summary>The <paramref name="browser" /> found <paramref name="accessory" />.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("accessoryBrowser:didFindNewAccessory:"), EventArgs ("HMAccessoryBrowser")]
+		[Export ("accessoryBrowser:didFindNewAccessory:"), EventArgs ("HMAccessoryBrowser", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidFindNewAccessory (HMAccessoryBrowser browser, HMAccessory accessory);
 
 		/// <param name="browser">To be added.</param>
 		/// <param name="accessory">To be added.</param>
 		/// <summary>The <paramref name="browser" /> removed <paramref name="accessory" />.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("accessoryBrowser:didRemoveNewAccessory:"), EventArgs ("HMAccessoryBrowser")]
+		[Export ("accessoryBrowser:didRemoveNewAccessory:"), EventArgs ("HMAccessoryBrowser", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		void DidRemoveNewAccessory (HMAccessoryBrowser browser, HMAccessory accessory);
 	}
 

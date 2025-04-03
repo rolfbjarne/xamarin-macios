@@ -912,6 +912,10 @@ namespace GameKit {
 		/// <param name="viewController">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Abstract]
 		[Export ("leaderboardViewControllerDidFinish:")]
 		void DidFinish (GKLeaderboardViewController viewController);
@@ -2379,6 +2383,10 @@ namespace GameKit {
 		/// <param name="viewController">To be added.</param>
 		/// <summary>To be added.</summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Abstract]
 		[Export ("achievementViewControllerDidFinish:")]
 		void DidFinish (GKAchievementViewController viewController);
@@ -2517,6 +2525,10 @@ namespace GameKit {
 		/// <param name="viewController">To be added.</param>
 		/// <summary>Developers should not use this deprecated method. </summary>
 		/// <remarks>To be added.</remarks>
+		[EventArgs ("", XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakComposeViewDelegate property to an internal handler that maps delegates to events.</remarks>
+			""")]
 		[Abstract]
 		[Export ("friendRequestComposeViewControllerDidFinish:")]
 		void DidFinish (GKFriendRequestComposeViewController viewController);

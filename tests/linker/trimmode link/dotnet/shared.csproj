@@ -10,7 +10,7 @@
     <MtouchExtraArgs>-disable-thread-check "--dlsym:-trimmode link" -gcc_flags="-UhoItsB0rken"</MtouchExtraArgs>
     <MonoBundlingExtraArgs>$(MtouchExtraArgs)</MonoBundlingExtraArgs>
     <RootTestsDirectory>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\..\..\..\..'))</RootTestsDirectory>
-    <ThisTestDirectory>$(RootTestsDirectory)\linker\ios\link sdk</ThisTestDirectory>
+    <ThisTestDirectory>$(RootTestsDirectory)\linker\link sdk</ThisTestDirectory>
     <UseNativeHttpHandler>false</UseNativeHttpHandler>
 
     <!-- warning SYSLIB0014: 'X.Y' is obsolete: 'WebRequest, HttpWebRequest, ServicePoint, and WebClient are obsolete. Use HttpClient instead. -->
@@ -45,7 +45,7 @@
 
   <ItemGroup>
     <None Include="Info.plist" />
-    <LinkDescription Include="$(RootTestsDirectory)\linker\ios\link sdk\dotnet\$(_PlatformName)\extra-linker-defs.xml" />
+    <LinkDescription Include="$(ThisTestDirectory)\dotnet\$(_PlatformName)\extra-linker-defs.xml" />
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.EndsWith('-macos'))">

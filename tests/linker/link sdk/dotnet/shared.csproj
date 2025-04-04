@@ -9,7 +9,6 @@
     <LinkMode>$(MtouchLink)</LinkMode>
     <MtouchExtraArgs>-disable-thread-check "--dlsym:-link sdk" -gcc_flags="-UhoItsB0rken"</MtouchExtraArgs>
     <MonoBundlingExtraArgs>$(MtouchExtraArgs)</MonoBundlingExtraArgs>
-    <RootTestsDirectory>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)\..\..\..\..'))</RootTestsDirectory>
     <ThisTestDirectory>$(RootTestsDirectory)\linker\link sdk</ThisTestDirectory>
     <UseNativeHttpHandler>false</UseNativeHttpHandler>
 
@@ -47,7 +46,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="!$(TargetFramework.EndsWith('-macos'))">
-    <Compile Include="$(ThisTestDirectory)\..\..\AppDelegate.cs" />
+    <Compile Include="$(ThisTestDirectory)\..\AppDelegate.cs" />
     <Compile Include="$(RootTestsDirectory)\common\AppDelegate.cs" />
   </ItemGroup>
 

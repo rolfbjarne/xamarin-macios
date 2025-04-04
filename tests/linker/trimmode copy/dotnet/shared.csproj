@@ -8,7 +8,6 @@
     <ApplicationTitle>TrimMode Copy</ApplicationTitle>
     <TrimMode>copy</TrimMode>
     <_TrimmerDefaultAction>copy</_TrimmerDefaultAction> <!-- https://github.com/dotnet/linker/issues/2981 -->
-    <RootTestsDirectory>$([System.IO.Path]::GetFullPath('$(MSBuildProjectDirectory)\..\..\..\..\..'))</RootTestsDirectory>
     <ThisTestDirectory>$(RootTestsDirectory)\linker\dont link</ThisTestDirectory>
 
     <!-- We're warning-free, so let's make sure we stay that way -->
@@ -31,7 +30,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="!$(TargetFramework.EndsWith('-macos'))">
-    <Compile Include="$(ThisTestDirectory)\..\..\AppDelegate.cs" />
+    <Compile Include="$(ThisTestDirectory)\..\AppDelegate.cs" />
     <Compile Include="$(RootTestsDirectory)\common\AppDelegate.cs" />
   </ItemGroup>
 

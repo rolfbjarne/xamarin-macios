@@ -10,7 +10,6 @@
     <MtouchExtraArgs>--optimize=all,-remove-dynamic-registrar,-force-rejected-types-removal</MtouchExtraArgs>
     <MtouchExtraArgs Condition="$(Configuration.Contains('Debug'))">$(MtouchExtraArgs) --optimize=-remove-uithread-checks</MtouchExtraArgs>
     <MonoBundlingExtraArgs>$(MtouchExtraArgs)</MonoBundlingExtraArgs>
-    <RootTestsDirectory>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)\..\..\..\..'))</RootTestsDirectory>
     <ThisTestDirectory>$(RootTestsDirectory)\linker\ios\link all</ThisTestDirectory>
     <SingleArchReleaseBuild>true</SingleArchReleaseBuild>
 
@@ -51,7 +50,7 @@
   </ItemGroup>
 
   <ItemGroup Condition="!$(TargetFramework.EndsWith('-macos'))">
-    <Compile Include="$(ThisTestDirectory)\..\..\AppDelegate.cs" />
+    <Compile Include="$(ThisTestDirectory)\..\AppDelegate.cs" />
     <Compile Include="$(RootTestsDirectory)\common\AppDelegate.cs" />
   </ItemGroup>
 

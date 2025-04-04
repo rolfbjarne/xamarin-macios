@@ -1,3 +1,4 @@
+#if __MACOS__
 using System;
 using System.IO;
 using System.Runtime.CompilerServices;
@@ -79,3 +80,4 @@ namespace LinkAllTests {
 		}
 	}
 }
+#endif // __MACOS__

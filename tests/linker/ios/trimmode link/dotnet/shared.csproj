@@ -50,7 +50,6 @@
 
   <ItemGroup Condition="$(TargetFramework.EndsWith('-macos'))">
     <Compile Include="$(RootTestsDirectory)\common\mac\MacMain.cs" Condition="$(TargetFramework.EndsWith('-macos'))" Link="MacMain.cs" />
-    <Compile Include="$(ThisTestDirectory)\..\..\mac\link sdk\LinkSdkTest.cs" />
   </ItemGroup>
 
   <ItemGroup Condition="!$(TargetFramework.EndsWith('-macos'))">
@@ -59,24 +58,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="$(ThisTestDirectory)\LinkSdkRegressionTest.cs" />
-    <Compile Include="$(ThisTestDirectory)\Bug1820Test.cs" />
-    <Compile Include="$(ThisTestDirectory)\Bug2096Test.cs" />
+    <Compile Include="$(ThisTestDirectory)\*.cs" />
     <Compile Include="$(ThisTestDirectory)\..\..\BaseOptimizeGeneratedCodeTest.cs" />
-    <Compile Include="$(ThisTestDirectory)\OptimizeGeneratedCodeTest.cs" />
-    <Compile Include="$(ThisTestDirectory)\AotBugs.cs" />
-    <Compile Include="$(ThisTestDirectory)\CryptoTest.cs" />
-    <Compile Include="$(ThisTestDirectory)\TaskTest.cs" />
-    <Compile Include="$(ThisTestDirectory)\LinkExtraDefsTest.cs" />
-    <Compile Include="$(ThisTestDirectory)\PclTest.cs" />
-    <Compile Include="$(ThisTestDirectory)\AsyncTest.cs" />
-    <Compile Include="$(ThisTestDirectory)\DataContractTest.cs" />
-    <Compile Include="$(ThisTestDirectory)\CalendarTest.cs" />
-    <Compile Include="$(ThisTestDirectory)\DllImportTest.cs" />
-    <Compile Include="$(ThisTestDirectory)\LocaleTest.cs" />
-    <Compile Include="$(ThisTestDirectory)\ReflectionTest.cs" />
-    <Compile Include="$(ThisTestDirectory)\HttpClientHandlerTest.cs" />
-    <Compile Include="$(ThisTestDirectory)\CanaryTest.cs" />
     <Compile Include="$(ThisTestDirectory)\..\..\ILReader.cs">
       <Link>ILReader.cs</Link>
     </Compile>
@@ -86,7 +69,6 @@
     <Compile Include="$(ThisTestDirectory)\..\..\CommonLinkAnyTest.cs">
       <Link>CommonLinkAnyTest.cs</Link>
     </Compile>
-    <Compile Include="$(ThisTestDirectory)\BitcodeTest.cs" />
     <Compile Include="$(ThisTestDirectory)\..\..\..\monotouch-test\System.Net.Http\NetworkResources.cs">
       <Link>NetworkResources.cs</Link>
     </Compile>

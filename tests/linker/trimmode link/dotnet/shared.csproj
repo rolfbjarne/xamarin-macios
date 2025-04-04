@@ -58,17 +58,17 @@
 
   <ItemGroup>
     <Compile Include="$(ThisTestDirectory)\*.cs" />
-    <Compile Include="$(ThisTestDirectory)\..\..\BaseOptimizeGeneratedCodeTest.cs" />
-    <Compile Include="$(ThisTestDirectory)\..\..\ILReader.cs">
+    <Compile Include="$(ThisTestDirectory)\..\BaseOptimizeGeneratedCodeTest.cs" />
+    <Compile Include="$(ThisTestDirectory)\..\ILReader.cs">
       <Link>ILReader.cs</Link>
     </Compile>
-    <Compile Include="$(ThisTestDirectory)\..\..\CommonLinkSdkTest.cs">
+    <Compile Include="$(ThisTestDirectory)\..\CommonLinkSdkTest.cs">
       <Link>CommonLinkSdkTest.cs</Link>
     </Compile>
-    <Compile Include="$(ThisTestDirectory)\..\..\CommonLinkAnyTest.cs">
+    <Compile Include="$(ThisTestDirectory)\..\CommonLinkAnyTest.cs">
       <Link>CommonLinkAnyTest.cs</Link>
     </Compile>
-    <Compile Include="$(ThisTestDirectory)\..\..\..\monotouch-test\System.Net.Http\NetworkResources.cs">
+    <Compile Include="$(RootTestsDirectory)\monotouch-test\System.Net.Http\NetworkResources.cs">
       <Link>NetworkResources.cs</Link>
     </Compile>
     <Compile Include="$(RootTestsDirectory)\common\TestRuntime.cs">

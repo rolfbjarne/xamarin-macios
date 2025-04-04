@@ -36,11 +36,7 @@ namespace LinkSdk {
 		[Test]
 		public void System ()
 		{
-#if NET
 			Type t = Type.GetType ("System.Net.Mime.ContentType, System.Net.Mail");
-#else
-			Type t = Type.GetType ("System.Net.Mime.ContentType, System");
-#endif
 			Assert.NotNull (t, "System.Net.Mime.ContentType");
 			// we asked for ParseValue to be preserved
 			Assert.NotNull (t.GetMethod ("ParseValue", BindingFlags.Instance | BindingFlags.NonPublic), "Parse");

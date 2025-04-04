@@ -15,24 +15,6 @@ namespace LinkAllTests {
 	[TestFixture]
 	[Preserve (AllMembers = true)]
 	public class LinkAllTest {
-#if !NET // this test is in a file shared with all platforms for .NET
-		static void Check (string calendarName, bool present)
-		{
-			var type = Type.GetType ("System.Globalization." + calendarName);
-			bool success = present == (type is not null);
-			Assert.AreEqual (present, type is not null, calendarName);
-		}
-
-		[Test]
-		public void Calendars ()
-		{
-			Check ("GregorianCalendar", true);
-			Check ("UmAlQuraCalendar", false);
-			Check ("HijriCalendar", false);
-			Check ("ThaiBuddhistCalendar", false);
-		}
-#endif // !NET
-
 		[Test]
 		public void EnsureUIThreadException ()
 		{

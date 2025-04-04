@@ -66,32 +66,16 @@ namespace LinkAll {
 	public class LinkAllRegressionTest {
 #if __MACCATALYST__
 		public const string NamespacePrefix = "";
-#if NET
 		public const string AssemblyName = "Microsoft.MacCatalyst";
-#else
-		public const string AssemblyName = "Xamarin.MacCatalyst";
-#endif
 #elif __IOS__
 		public const string NamespacePrefix = "";
-#if NET
 		public const string AssemblyName = "Microsoft.iOS";
-#else
-		public const string AssemblyName = "Xamarin.iOS";
-#endif
 #elif __TVOS__
 		public const string NamespacePrefix = "";
-#if NET
 		public const string AssemblyName = "Microsoft.tvOS";
-#else
-		public const string AssemblyName = "Xamarin.TVOS";
-#endif
 #elif __MACOS__
 		public const string NamespacePrefix = "";
-#if NET
 		public const string AssemblyName = "Microsoft.macOS";
-#else
-		public const string AssemblyName = "Xamarin.Mac";
-#endif
 #else
 #error Unknown platform
 #endif
@@ -154,7 +138,6 @@ namespace LinkAll {
 			Assert.True (default_value, "DefaultValue");
 		}
 
-#if NET
 		static void Check (string calendarName, bool present)
 		{
 			var type = Type.GetType ("System.Globalization." + calendarName);
@@ -170,7 +153,6 @@ namespace LinkAll {
 			Check ("HijriCalendar", true);
 			Check ("ThaiBuddhistCalendar", true);
 		}
-#endif // NET
 
 		public enum CertificateProblem : long {
 			CertEXPIRED = 0x800B0101,
@@ -192,61 +174,6 @@ namespace LinkAll {
 			CertTRUSTEFAIL = 0x800B010B,
 		}
 
-#if !NET
-		// ICertificatePolicy has been removed from .NET 5+
-		class TestPolicy : ICertificatePolicy {
-
-			const int RecoverableTrustFailure = 5; // SecTrustResult
-
-			public TestPolicy ()
-			{
-				CheckCount = 0;
-			}
-
-			public int CheckCount { get; private set; }
-
-			public bool CheckValidationResult (ServicePoint srvPoint, X509Certificate certificate, WebRequest request, int certificateProblem)
-			{
-				Assert.That (certificateProblem, Is.EqualTo (0), GetProblemMessage ((CertificateProblem) certificateProblem));
-				CheckCount++;
-				return true;
-			}
-
-			string GetProblemMessage (CertificateProblem problem)
-			{
-				var problemMessage = "";
-				CertificateProblem problemList = new CertificateProblem ();
-				var problemCodeName = Enum.GetName (problemList.GetType (), problem);
-				problemMessage = problemCodeName is not null ? problemMessage + "-Certificateproblem:" + problemCodeName : "Unknown Certificate Problem";
-				return problemMessage;
-			}
-		}
-
-		static TestPolicy test_policy = new TestPolicy ();
-
-		[Test]
-		public void TrustUsingOldPolicy ()
-		{
-			// Three similar tests exists in dontlink, linkall and linksdk to test 3 different cases
-			// untrusted, custom ICertificatePolicy and ServerCertificateValidationCallback without
-			// having caching issues (in S.Net or the SSL handshake cache)
-			ICertificatePolicy old = ServicePointManager.CertificatePolicy;
-			try {
-				ServicePointManager.CertificatePolicy = test_policy;
-				WebClient wc = new WebClient ();
-				Assert.IsNotNull (wc.DownloadString (NetworkResources.XamarinUrl));
-				// caching means it will be called at least for the first run, but it might not
-				// be called again in subsequent requests (unless it expires)
-				Assert.That (test_policy.CheckCount, Is.GreaterThan (0), "policy checked");
-			} catch (WebException we) {
-				TestRuntime.IgnoreInCIIfBadNetwork (we);
-				throw;
-			} finally {
-				ServicePointManager.CertificatePolicy = old;
-			}
-		}
-#endif
-
 #if !__MACOS__
 		[Test]
 		public void DetectPlatform ()
@@ -254,27 +181,15 @@ namespace LinkAll {
 			// for (future) nunit[lite] platform detection - if this test fails then platform detection won't work
 			var typename = NamespacePrefix + "UIKit.UIApplicationDelegate, " + AssemblyName;
 			Assert.NotNull (Helper.GetType (typename), typename);
-#if NET
 			Assert.Null (Helper.GetType ("Mono.Runtime"), "Mono.Runtime");
-#else
-			// and you can trust the old trick with the linker
-			Assert.NotNull (Helper.GetType ("Mono.Runtime"), "Mono.Runtime");
-#endif
 		}
 #endif // !__MACOS__
 
 		[Test]
-#if NET
 #pragma warning disable CA1418 // The platform '*' is not a known platform name
 		[SupportedOSPlatform ("none")]
 		[UnsupportedOSPlatform ("none)")]
 #pragma warning restore CA1418
-#else
-		[Introduced (PlatformName.None)]
-		[Deprecated (PlatformName.None)]
-		[Obsoleted (PlatformName.None)]
-		[Unavailable (PlatformName.None)]
-#endif
 		[ThreadSafe]
 		public void RemovedAttributes ()
 		{
@@ -288,25 +203,15 @@ namespace LinkAll {
 			Assert.Null (Helper.GetType (prefix + "ObjCRuntime.ObsoletedAttribute, " + suffix), "ObsoletedAttribute");
 			Assert.Null (Helper.GetType (prefix + "ObjCRuntime.UnavailableAttribute, " + suffix), "UnavailableAttribute");
 			Assert.Null (Helper.GetType (prefix + "ObjCRuntime.ThreadSafeAttribute, " + suffix), "ThreadSafeAttribute");
-#if NET
 			Assert.Null (Helper.GetType ("System.Runtime.Versioning.SupportedOSPlatformAttribute, " + suffix), "SupportedOSPlatformAttribute");
 			Assert.Null (Helper.GetType ("System.Runtime.Versioning.UnsupportedOSPlatformAttribute, " + suffix), "UnsupportedOSPlatformAttribute");
-#endif
 		}
 
 		[Test]
 		public void Assembly_Load ()
 		{
-#if NET
 			Assembly mscorlib = Assembly.Load ("System.Private.CoreLib.dll");
 			Assert.NotNull (mscorlib, "System.Private.CoreLib.dll");
-#else
-			Assembly mscorlib = Assembly.Load ("mscorlib.dll");
-			Assert.NotNull (mscorlib, "mscorlib");
-
-			Assembly system = Assembly.Load ("System.dll");
-			Assert.NotNull (system, "System");
-#endif
 		}
 
 		string FindAssemblyPath ()
@@ -351,28 +256,11 @@ namespace LinkAll {
 		public void Assembly_ReflectionOnlyLoadFrom ()
 		{
 			string filename = FindAssemblyPath ();
-#if NET
 			// new behavior across all platforms, see https://github.com/dotnet/runtime/issues/50529
 #pragma warning disable SYSLIB0018 // 'Assembly.ReflectionOnlyLoadFrom(string)' is obsolete: 'ReflectionOnly loading is not supported and throws PlatformNotSupportedException.'
 			Assert.Throws<PlatformNotSupportedException> (() => Assembly.ReflectionOnlyLoadFrom (filename));
 #pragma warning restore SYSLIB0018
-#else
-			Assert.NotNull (Assembly.ReflectionOnlyLoadFrom (filename), "1");
-#endif
 		}
-
-#if !NET
-		[Test]
-		public void SystemDataSqlClient ()
-		{
-			// notes:
-			// * this test is mean to fail when building the application using a Community or Indie licenses
-			// * linksdk.app references System.Data (assembly) but not types in SqlClient namespace
-			using (var sc = new System.Data.SqlClient.SqlConnection ()) {
-				Assert.NotNull (sc);
-			}
-		}
-#endif
 
 #if !__TVOS__ && !__MACOS__
 		[Test]
@@ -447,13 +335,8 @@ namespace LinkAll {
 		{
 			TestRuntime.AssertNotDevice ("Known to fail on devices, see bug #15802");
 			var ci = CultureInfo.InvariantCulture;
-#if NET
 			Assert.That (Single.Epsilon.ToString (ci), Is.EqualTo ("1E-45"), "Epsilon.ToString()");
 			Assert.That ((-Single.Epsilon).ToString (ci), Is.EqualTo ("-1E-45"), "-Epsilon.ToString()");
-#else
-			Assert.That (Single.Epsilon.ToString (ci), Is.EqualTo ("1.401298E-45"), "Epsilon.ToString()");
-			Assert.That ((-Single.Epsilon).ToString (ci), Is.EqualTo ("-1.401298E-45"), "-Epsilon.ToString()");
-#endif
 		}
 
 		[Test]
@@ -471,13 +354,8 @@ namespace LinkAll {
 			TestRuntime.AssertNotDevice ("Known to fail on devices, see bug #15802");
 			var ci = CultureInfo.InvariantCulture;
 			// note: unlike Single this works on both my iPhone5S and iPodTouch5
-#if NET
 			Assert.That (Double.Epsilon.ToString (ci), Is.EqualTo ("5E-324"), "Epsilon.ToString()");
 			Assert.That ((-Double.Epsilon).ToString (ci), Is.EqualTo ("-5E-324"), "-Epsilon.ToString()");
-#else
-			Assert.That (Double.Epsilon.ToString (ci), Is.EqualTo ("4.94065645841247E-324"), "Epsilon.ToString()");
-			Assert.That ((-Double.Epsilon).ToString (ci), Is.EqualTo ("-4.94065645841247E-324"), "-Epsilon.ToString()");
-#endif
 		}
 
 		[Test]
@@ -491,29 +369,6 @@ namespace LinkAll {
 					Assert.Fail ("System.Transactions reference should have removed by the linker");
 			}
 		}
-
-#if !__MACCATALYST__
-#if !NET // OpenTK-1.0.dll isn't supported in .NET yet
-		[Test]
-		public void OpenTk10_Preserved ()
-		{
-			// that will bring OpenTK-1.0 into the .app
-			OpenTK.WindowState state = OpenTK.WindowState.Normal;
-			// Compiler optimization (roslyn release) can remove the variable, which removes OpenTK-1.dll from the app and fail the test
-			Assert.That (state, Is.EqualTo (OpenTK.WindowState.Normal), "normal");
-
-			var gl = Helper.GetType ("OpenTK.Graphics.ES11.GL, OpenTK-1.0", false);
-			Assert.NotNull (gl, "ES11/GL");
-			var core = Helper.GetType ("OpenTK.Graphics.ES11.GL/Core, OpenTK-1.0", false);
-			Assert.NotNull (core, "ES11/Core");
-
-			gl = Helper.GetType ("OpenTK.Graphics.ES20.GL, OpenTK-1.0", false);
-			Assert.NotNull (gl, "ES20/GL");
-			core = Helper.GetType ("OpenTK.Graphics.ES20.GL/Core, OpenTK-1.0", false);
-			Assert.NotNull (core, "ES20/Core");
-		}
-#endif // !NET
-#endif // !__MACCATALYST__
 
 		[Test]
 		public void NestedNSObject ()
@@ -653,9 +508,7 @@ namespace LinkAll {
 		}
 
 		[Test]
-#if NET
 		[Ignore ("BUG https://github.com/xamarin/xamarin-macios/issues/11280")]
-#endif
 		public void LinkedAwayGenericTypeAsOptionalMemberInProtocol ()
 		{
 			// https://github.com/xamarin/xamarin-macios/issues/3523
@@ -687,11 +540,7 @@ namespace LinkAll {
 			var bundlePath = Path.Combine (NSBundle.MainBundle.BundlePath, bundleLocation);
 			var isExtension = bundlePath.EndsWith (".appex", StringComparison.Ordinal);
 			var bundleName = isExtension ? "link all.appex" : "link all.app";
-#if NET
 			const string corelib = "System.Private.CoreLib.dll";
-#else
-			const string corelib = "mscorlib.dll";
-#endif
 			var suffix = Path.Combine (bundleName, bundleLocation, corelib);
 			Assert.That (corlib, Does.EndWith (suffix), corlib);
 		}
@@ -710,16 +559,10 @@ namespace LinkAll {
 #endif
 	}
 
-#if NET
 	[SupportedOSPlatform ("macos1.0")]
 	[SupportedOSPlatform ("ios1.0")]
 	[SupportedOSPlatform ("tvos1.0")]
 	[SupportedOSPlatform ("maccatalyst1.0")]
-#else
-	[Introduced (PlatformName.MacOSX, 1, 0, PlatformArchitecture.Arch64)]
-	[Introduced (PlatformName.iOS, 1, 0)]
-	[Introduced (PlatformName.TvOS, 1, 0)]
-#endif
 	[Preserve]
 	public class ClassFromThePast : NSObject {
 		[Export ("foo:")]

@@ -25,19 +25,6 @@ using ObjCRuntime;
 using NUnit.Framework;
 
 namespace DontLink {
-
-#if !NET
-	[FileIOPermission (SecurityAction.LinkDemand, AllLocalFiles = FileIOPermissionAccess.AllAccess)]
-	public class SecurityDeclarationDecoratedUserCode {
-
-		[FileIOPermission (SecurityAction.Assert, AllLocalFiles = FileIOPermissionAccess.NoAccess)]
-		static public bool Check ()
-		{
-			return true;
-		}
-	}
-#endif
-
 	[TestFixture]
 	public class DontLinkRegressionTests {
 
@@ -61,16 +48,6 @@ namespace DontLink {
 			Assert.NotNull (Type.GetType ("ObjCRuntime.ThreadSafeAttribute, " + fullname), "ThreadSafeAttribute");
 		}
 
-		[Test]
-#if NET
-		[Ignore ("MulticastDelegate.BeginInvoke isn't supported in .NET (https://github.com/dotnet/runtime/issues/16312)")]
-#endif
-		public void Bug5354 ()
-		{
-			Action<string> testAction = (string s) => { s.ToString (); };
-			testAction.BeginInvoke ("Teszt", null, null);
-		}
-
 #if !__MACOS__
 		[Test]
 		public void Autorelease ()
@@ -87,19 +64,6 @@ namespace DontLink {
 			}
 		}
 #endif // !__MACOS__
-
-#if !NET
-		[Test]
-		public void SecurityDeclaration ()
-		{
-			// note: security declarations != custom attributes
-			// we ensure that we can create the type / call the code
-			Assert.True (SecurityDeclarationDecoratedUserCode.Check (), "call");
-			// we ensure that both the permission and the flag are part of the final (non-linked) binary
-			Assert.NotNull (Type.GetType ("System.Security.Permissions.FileIOPermissionAttribute, mscorlib"), "FileIOPermissionAttribute");
-			Assert.NotNull (Type.GetType ("System.Security.Permissions.FileIOPermissionAccess, mscorlib"), "FileIOPermissionAccess");
-		}
-#endif
 
 		[Test]
 		public void DefaultEncoding ()
@@ -152,11 +116,7 @@ namespace DontLink {
 			}
 
 			var all_properties = type.GetProperties ();
-			var notsupported_properties = new string [] { "StandardError", "StandardInput", "StandardOutput",
-#if !NET
-				"StartInfo"
-#endif
-			};
+			var notsupported_properties = new string [] { "StandardError", "StandardInput", "StandardOutput", };
 			foreach (var notsupported_property in notsupported_properties) {
 				foreach (var property in all_properties.Where ((v) => v.Name == notsupported_property)) {
 					if (property.GetGetMethod () is not null)

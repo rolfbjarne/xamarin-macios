@@ -72,7 +72,6 @@
     <Compile Include="$(ThisTestDirectory)\LinqExpressionTest.cs" />
     <Compile Include="$(ThisTestDirectory)\CalendarTest.cs" />
     <Compile Include="$(ThisTestDirectory)\PreserveTest.cs" />
-    <Compile Include="$(ThisTestDirectory)\MEFTests.cs" />
     <Compile Include="$(ThisTestDirectory)\SealerTest.cs" />
     <Compile Include="$(ThisTestDirectory)\..\link sdk\ReflectionTest.cs">
       <Link>ReflectionTest.cs</Link>

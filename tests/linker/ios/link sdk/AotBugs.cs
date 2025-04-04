@@ -410,11 +410,6 @@ namespace LinkSdk.Aot {
 		}
 
 		[Test]
-#if __MACOS__ && NET
-#if !NET9_0_OR_GREATER // not sure if this issue is limited to .NET 8, but add this in so that we find out in our .NET 9 branch.
-		[Ignore ("https://github.com/dotnet/runtime/issues/107026")]
-#endif
-#endif
 		public void AsEnumerable_4114 ()
 		{
 			Enumbers<string> e = new Enumbers<string> ();
@@ -465,16 +460,6 @@ namespace LinkSdk.Aot {
 		public void Bug8379_b ()
 		{
 			new Class1 ();
-		}
-
-		[Test]
-#if NET
-		[Ignore ("MulticastDelegate.BeginInvoke isn't supported in .NET (https://github.com/dotnet/runtime/issues/16312)")]
-#endif
-		public void Bug5354 ()
-		{
-			Action<string> testAction = (string s) => { s.ToString (); };
-			testAction.BeginInvoke ("Teszt", null, null);
 		}
 
 		public static IEnumerable<string> GetStringList<T> () where T : struct, IConvertible

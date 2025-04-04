@@ -6,9 +6,6 @@ using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-#if !NET // https://github.com/xamarin/xamarin-macios/issues/11710
-using System.Json;
-#endif
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -16,15 +13,9 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-#if !NET
-using System.Security.Permissions;
-#endif
 using System.Security.Principal;
 using System.Threading;
 using System.Xml;
-#if !NET
-using Mono.Data.Sqlite;
-#endif
 using MonoTouch;
 #if HAS_ADDRESSBOOK
 using AddressBook;
@@ -48,7 +39,7 @@ using UIKit;
 #if !__MACCATALYST__ && !__MACOS__
 using OpenGLES;
 #endif
-#if !(__TVOS__ && NET)
+#if !__TVOS__
 using WebKit;
 #endif
 using NUnit.Framework;
@@ -57,19 +48,6 @@ using Xamarin.Utils;
 
 
 namespace LinkSdk {
-
-#if !NET
-	[FileIOPermission (SecurityAction.LinkDemand, AllLocalFiles = FileIOPermissionAccess.AllAccess)]
-	public class SecurityDeclarationDecoratedUserCode {
-
-		[FileIOPermission (SecurityAction.Assert, AllLocalFiles = FileIOPermissionAccess.NoAccess)]
-		static public bool Check ()
-		{
-			return true;
-		}
-	}
-#endif
-
 	[TestFixture]
 	// we want the test to be availble if we use the linker
 	[Preserve (AllMembers = true)]
@@ -93,19 +71,6 @@ namespace LinkSdk {
 				ds.WriteObject (xw, new int [] { 1, 2, 3 });
 			// the above should not throw System.Runtime.Serialization.SerializationException
 		}
-
-#if !NET // This test requires Mono.Data.SqliteConnection, which .NET 5+ doesn't have
-		[Test]
-		// http://bugzilla.xamarin.com/show_bug.cgi?id=233
-		public void Bug233_MonoPInvokeCallback ()
-		{
-			var c = new SqliteConnection ("Data Source=:memory:");
-			c.Open ();
-			c.Update += (sender, e) => { };
-			// the above should not crash
-			c.Close ();
-		}
-#endif
 
 		[Test]
 		// http://bugzilla.xamarin.com/show_bug.cgi?id=234
@@ -250,68 +215,6 @@ namespace LinkSdk {
 			}
 		}
 
-#if !NET // This test requires System.ServiceModel.dll, which .NET 5+ doesn't have
-		[Test]
-		// http://bugzilla.xamarin.com/show_bug.cgi?id=1415
-		public void Bug1415_Linker_DataMember ()
-		{
-			// the typeof ensure we're can't (totally) link away System.ServiceModel.dll
-			Type ed = typeof (System.ServiceModel.AuditLevel).Assembly.GetType ("System.ServiceModel.ExceptionDetail", false);
-			// which means it's [DataContract] / [DataMember] should not be linked out
-			// even if we're not specifically using them (and without [Preserve] being added)
-			// which is important since System.ServiceModel.dll is an SDK assembly
-			Assert.NotNull (ed, "ExceptionDetail");
-			bool help_link = false;
-			bool inner_exception = false;
-			bool message = false;
-			bool stack_trace = false;
-			bool type = false;
-			foreach (var pi in ed.GetProperties ()) {
-				CheckExceptionDetailProperty (pi);
-				switch (pi.Name) {
-				case "HelpLink":
-					help_link = true;
-					break;
-				case "InnerException":
-					inner_exception = true;
-					break;
-				case "Message":
-					message = true;
-					break;
-				case "StackTrace":
-					stack_trace = true;
-					break;
-				case "Type":
-					type = true;
-					break;
-				}
-			}
-			// ensure all properties are still present
-			Assert.True (help_link, "HelpLink");
-			Assert.True (inner_exception, "InnerException");
-			Assert.True (message, "Message");
-			Assert.True (stack_trace, "StackTrace");
-			Assert.True (type, "Type");
-		}
-#endif // !NET
-
-#if !NET // This test requires System.ServiceModel.dll, which .NET 5+ doesn't have
-		[Test]
-		// http://bugzilla.xamarin.com/show_bug.cgi?id=1415
-		// not really part of the bug - but part of the same fix
-		public void Bug1415_Linker_XmlAttribute ()
-		{
-			// the typeof ensure we're can't (totally) link away System.ServiceModel.dll
-			Type ed = typeof (System.ServiceModel.AuditLevel).Assembly.GetType ("System.ServiceModel.EndpointAddress10", false);
-			// type is decorated with both [XmlSchemaProvider] and [XmlRoot]
-			Assert.NotNull (ed, "EndpointAddress10");
-
-			var q = new OpenTK.Quaternion ();
-			Assert.Null (q.GetType ().GetProperty ("XYZ"), "XmlIgnore");
-			// should be null if application is linked (won't be if "Don't link" is used)
-		}
-#endif // !NET
-
 		[Test]
 		// http://bugzilla.xamarin.com/show_bug.cgi?id=1443
 		public void Bug1443_Linq_Aot ()
@@ -396,11 +299,7 @@ namespace LinkSdk {
 				// from http://bugzilla.xamarin.com/show_bug.cgi?id=2000
 				NSError error;
 				var c = new NSPersistentStoreCoordinator (model);
-#if NET
 				c.AddPersistentStore (NSPersistentStoreCoordinator.SQLiteStoreType, null, url, null, out error);
-#else
-				c.AddPersistentStoreWithType (NSPersistentStoreCoordinator.SQLiteStoreType, null, url, null, out error);
-#endif
 				Assert.IsNull (error, "error");
 			} finally {
 				File.Delete (sqlitePath);
@@ -419,18 +318,6 @@ namespace LinkSdk {
 			}
 		}
 
-#if !NET // This test requires Mono.Data.SqliteConnection, which .NET 5+ doesn't have
-		[Test]
-		// http://stackoverflow.com/questions/8602726/cant-open-sqlite-database-in-read-only-mode
-		public void Sqlite_ReadOnly ()
-		{
-			var c = new SqliteConnection ("Data Source=:memory:;Read Only=true");
-			c.Open ();
-			// the above should not throw a 'misuse' exception
-			c.Close ();
-		}
-#endif
-
 		[Test]
 		public void AsQueryable_3028 ()
 		{
@@ -438,36 +325,6 @@ namespace LinkSdk {
 			string f = foos.AsQueryable ().First ();
 			Assert.That (f, Is.EqualTo ("hi"), "f");
 		}
-
-#if !__MACCATALYST__
-#if !NET // OpenTK-1.0.dll is not supported yet
-		[Test]
-		public void OpenTk_3049 ()
-		{
-			using (var gc1 = OpenTK.Platform.Utilities.CreateGraphicsContext (EAGLRenderingAPI.OpenGLES1)) {
-				Assert.NotNull (gc1);
-			}
-			using (var gc2 = OpenTK.Platform.Utilities.CreateGraphicsContext (EAGLRenderingAPI.OpenGLES2)) {
-				Assert.NotNull (gc2);
-			}
-		}
-
-		[Test]
-		public void OpenTk_Preserved ()
-		{
-			const string OpenTKAssembly = "OpenTK-1.0";
-			var gl = GetTypeHelper ("OpenTK.Graphics.ES11.GL, " + OpenTKAssembly, false);
-			Assert.NotNull (gl, "ES11/GL");
-			var core = GetTypeHelper ("OpenTK.Graphics.ES11.GL/Core, " + OpenTKAssembly, false);
-			Assert.NotNull (core, "ES11/Core");
-
-			gl = GetTypeHelper ("OpenTK.Graphics.ES20.GL, " + OpenTKAssembly, false);
-			Assert.NotNull (gl, "ES20/GL");
-			core = GetTypeHelper ("OpenTK.Graphics.ES20.GL/Core, " + OpenTKAssembly, false);
-			Assert.NotNull (core, "ES20/Core");
-		}
-#endif // !NET
-#endif // !__MACCATALYST__
 
 		[Test]
 		public void XElement_3137 ()
@@ -629,21 +486,6 @@ namespace LinkSdk {
 			Assert.NotNull (getInstance (), "Location");
 		}
 
-#if !NET // https://github.com/xamarin/xamarin-macios/issues/11710
-		[Test]
-		[Culture ("en")]
-		public void Json_Parse_4415 ()
-		{
-			var f = 4.25987E-06f;
-			// note: always use '.' see http://www.json.org/fatfree.html
-			var s = f.ToString ();
-			var v = JsonValue.Parse (s);
-			Assert.AreEqual (f, (float) v, "Parse Negative Exponent");
-			f *= 10;
-			Assert.AreNotEqual (f, (float) v, "non-equal");
-		}
-#endif // !NET
-
 		[Test]
 		[Culture ("en")]
 		public void ConvertToDouble_4620 ()
@@ -683,11 +525,7 @@ namespace LinkSdk {
 		public void WebProxy_Leak ()
 		{
 			// note: needs to be executed under Instrument to verify it does not leak
-#if NET
 			Assert.NotNull (global::CoreFoundation.CFNetwork.GetSystemProxySettings (), "should not leak");
-#else
-			Assert.NotNull (CFNetwork.GetSystemProxySettings (), "should not leak");
-#endif
 		}
 #endif // !__TVOS__ && !__MACOS__
 
@@ -763,14 +601,6 @@ namespace LinkSdk {
 			Assert.IsFalse (Attribute.IsDefined (GetType (), typeof (SerializableAttribute)));
 		}
 
-#if !NET // This test requires System.Runtime.Remoting.dll, which .NET 5+ doesn't have
-		[Test]
-		public void LinkedAway ()
-		{
-			Assert.Throws<NotSupportedException> (() => new System.Runtime.Remoting.RemotingException ());
-		}
-#endif // !NET
-
 		[Test]
 		public void ArrayClear_11184 ()
 		{
@@ -827,7 +657,6 @@ namespace LinkSdk {
 		public void PrivateMemorySize64 ()
 		{
 			// ref: https://bugzilla.xamarin.com/show_bug.cgi?id=21882
-#if NET
 #if __MACOS__ || __MACCATALYST__
 			var mem = System.Diagnostics.Process.GetCurrentProcess ().PrivateMemorySize64;
 			Assert.That (mem, Is.EqualTo (0), "PrivateMemorySize64");
@@ -835,12 +664,6 @@ namespace LinkSdk {
 			// It's not entirely clear, but it appears this is not implemented, and won't be, for mobile platforms: https://github.com/dotnet/runtime/issues/28990
 			Assert.Throws<PlatformNotSupportedException> (() => { var mem = System.Diagnostics.Process.GetCurrentProcess ().PrivateMemorySize64; }, "PrivateMemorySize64");
 #endif // __MACOS__ || __MACCATALYST__
-#else
-			var mem = System.Diagnostics.Process.GetCurrentProcess ().PrivateMemorySize64;
-			// the above used a mach call that iOS samdbox did *not* allow (sandbox) on device
-			// but has been fixed (different call) for the same PID
-			Assert.That (mem, Is.Not.EqualTo (0), "PrivateMemorySize64");
-#endif
 		}
 
 		string TestFolder (Environment.SpecialFolder folder, bool supported = true, bool? exists = true, bool readOnly = false)
@@ -874,7 +697,6 @@ namespace LinkSdk {
 			try {
 				SpecialFolderImpl ();
 			} catch (Exception e) {
-#if NET
 				Console.WriteLine ($"An exception occurred in this test: {e}");
 				Console.WriteLine ($"Dumping info about various directories:");
 				foreach (var value in Enum.GetValues<NSSearchPathDirectory> ().OrderBy (v => v.ToString ())) {
@@ -886,7 +708,6 @@ namespace LinkSdk {
 
 				foreach (var value in Enum.GetValues<Environment.SpecialFolder> ().OrderBy (v => v.ToString ()))
 					Console.WriteLine ($"SpecialFolder '{value}' => {Environment.GetFolderPath (value)}");
-#endif
 
 				// Throw the original exception so that the test actually fails.
 				throw;
@@ -963,11 +784,7 @@ namespace LinkSdk {
 #endif
 			path = TestFolder (Environment.SpecialFolder.MyMusic, exists: myExists);
 
-#if __MACOS__ && !NET8_0_OR_GREATER
-			path = TestFolder (Environment.SpecialFolder.MyVideos, supported: false);
-#else
 			path = TestFolder (Environment.SpecialFolder.MyVideos, exists: myExists);
-#endif
 
 			path = TestFolder (Environment.SpecialFolder.DesktopDirectory, exists: myExists);
 
@@ -1000,7 +817,6 @@ namespace LinkSdk {
 			Assert.That (path, Is.EqualTo ("/usr/share"), "path - CommonApplicationData");
 
 			// and the simulator is more lax
-#if NET
 			path = TestFolder (Environment.SpecialFolder.ProgramFiles, readOnly: device, exists: null /* may or may not exist */);
 #if __MACOS__
 			var applicationsPath = "/Applications";
@@ -1009,11 +825,6 @@ namespace LinkSdk {
 			var applicationsPath = NSSearchPath.GetDirectories (NSSearchPathDirectory.ApplicationDirectory, NSSearchPathDomain.All, true).FirstOrDefault ();
 #endif
 			Assert.That (path, Is.EqualTo (applicationsPath), "path - ProgramFiles");
-#else
-
-			path = TestFolder (Environment.SpecialFolder.ProgramFiles, readOnly: device);
-			Assert.That (path, Is.EqualTo ("/Applications"), "path - ProgramFiles");
-#endif
 
 			path = TestFolder (Environment.SpecialFolder.UserProfile, readOnly: device);
 			var bundlePath = NSBundle.MainBundle.BundlePath;
@@ -1041,7 +852,7 @@ namespace LinkSdk {
 			bool tvos = false;
 #endif
 
-#if __MACOS__ && NET8_0_OR_GREATER
+#if __MACOS__
 			path = Environment.GetFolderPath (Environment.SpecialFolder.MyDocuments);
 			if (string.IsNullOrEmpty (path) && TestRuntime.IsInCI) {
 				// ignore this
@@ -1052,35 +863,19 @@ namespace LinkSdk {
 #else
 			// and some stuff is read/write
 			path = TestFolder (Environment.SpecialFolder.MyDocuments);
-#if __MACOS__ && !NET8_0_OR_GREATER
-			Assert.That (path, Is.EqualTo (home), "path - MyDocuments");
-#else
 			Assert.That (path, Is.EqualTo (docs), "path - MyDocuments");
-#endif
-#endif // __MACOS__ && NET8_0_OR_GREATER
+#endif // __MACOS__
 
-#if NET
 			path = TestFolder (Environment.SpecialFolder.ApplicationData, exists: null /* may or may not exist */);
-#else
-			path = TestFolder (Environment.SpecialFolder.ApplicationData);
-#endif
 #if __MACOS__
-#if NET8_0_OR_GREATER
 			Assert.That (path, Is.EqualTo (Path.Combine (home, "Library", "Application Support")), "path - ApplicationData");
-#else
-			Assert.That (path, Is.EqualTo (Path.Combine (home, ".config")), "path - ApplicationData");
-#endif
 #else
 			Assert.That (path, Is.EqualTo (docs + "/.config"), "path - ApplicationData");
 #endif
 
 			path = TestFolder (Environment.SpecialFolder.LocalApplicationData);
 #if __MACOS__
-#if NET8_0_OR_GREATER
 			Assert.That (path, Is.EqualTo (Path.Combine (home, "Library", "Application Support")), "path - ApplicationData");
-#else
-			Assert.That (path, Is.EqualTo (Path.Combine (home, ".local", "share")), "path - LocalApplicationData");
-#endif
 #else
 			Assert.That (path, Is.EqualTo (docs), "path - LocalApplicationData");
 #endif
@@ -1123,19 +918,6 @@ namespace LinkSdk {
 		}
 #endif // !__MACOS__
 
-#if !NET
-		[Test]
-		public void SecurityDeclaration ()
-		{
-			// note: security declarations != custom attributes
-			// we ensure that we can create the type / call the code
-			Assert.True (SecurityDeclarationDecoratedUserCode.Check (), "call");
-			// we ensure that both the permission and the flag are NOT part of the final/linked binary (link removes security declarations)
-			Assert.Null (GetTypeHelper ("System.Security.Permissions.FileIOPermissionAttribute, mscorlib"), "FileIOPermissionAttribute");
-			Assert.Null (GetTypeHelper ("System.Security.Permissions.FileIOPermissionAccess, mscorlib"), "FileIOPermissionAccess");
-		}
-#endif
-
 #if !__MACOS__
 		[Test]
 		public void UIButtonSubclass ()
@@ -1144,23 +926,11 @@ namespace LinkSdk {
 			using (var b = new UIButton (UIButtonType.Custom)) {
 				// https://trello.com/c/Nf2B8mIM/484-remove-debug-code-in-the-linker
 				var m = b.GetType ().GetMethod ("VerifyIsUIButton", BindingFlags.Instance | BindingFlags.NonPublic);
-#if NET
 				CheckILLinkStubbedMethod (m);
-#else // NET
-#if DEBUG
-				// kept in debug builds
-				Assert.NotNull (m, "VerifyIsUIButton");
-#else
-				// removed from release builds
-				Assert.Null (m, "VerifyIsUIButton");
-#endif
-#endif // NET
 			}
 		}
-
 #endif // !__MACOS__
 
-#if NET
 		static void CheckILLinkStubbedMethod (MethodInfo m)
 		{
 			// ILLink does not remove the method, but it can "stub" (empty) it
@@ -1205,16 +975,11 @@ namespace LinkSdk {
 			var m = ApplicationType.GetMethod ("EnsureDelegateAssignIsNotOverwritingInternalDelegate", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
 			CheckILLinkStubbedMethod (m);
 		}
-#endif
 
 		[Test]
 		public void MonoRuntime34671 ()
 		{
-#if NET
 			Assert.Null (GetTypeHelper ("Mono.Runtime"), "Mono.Runtime");
-#else
-			Assert.NotNull (GetTypeHelper ("Mono.Runtime"), "Mono.Runtime");
-#endif
 		}
 
 		[Test]
@@ -1223,16 +988,6 @@ namespace LinkSdk {
 			Trace.Close (); // here too
 			Assert.NotNull (Trace.Listeners, "C6 had a SecurityPermission call");
 		}
-
-#if !NET // This test requires Mono.Security.dll, which .NET 5+ doesn't have
-		[Test]
-		public void TlsProvider_Apple ()
-		{
-			var provider = Mono.Security.Interface.MonoTlsProviderFactory.GetProvider ();
-			Assert.NotNull (provider, "provider");
-			Assert.That (provider.ID, Is.EqualTo (new Guid ("981af8af-a3a3-419a-9f01-a518e3a17c1c")), "correct provider");
-		}
-#endif
 
 #if !__MACOS__
 		[Test]

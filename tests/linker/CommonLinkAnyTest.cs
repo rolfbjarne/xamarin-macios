@@ -1,9 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-#if NET
 using System.Text.Json;
-#endif
 
 using Foundation;
 using ObjCRuntime;
@@ -46,7 +44,6 @@ namespace LinkAnyTest {
 			Assert.IsNotNull (filePath, "CallerFilePath");
 		}
 
-#if NET
 		[Test]
 		public void AppContextGetData ()
 		{
@@ -54,7 +51,6 @@ namespace LinkAnyTest {
 			Assert.IsNotNull (AppContext.GetData ("APP_PATHS"), "APP_PATHS");
 			Assert.IsNotNull (AppContext.GetData ("PINVOKE_OVERRIDE"), "PINVOKE_OVERRIDE");
 		}
-#endif
 
 		[Test]
 		public void BackingFieldInGenericType ()
@@ -68,7 +64,6 @@ namespace LinkAnyTest {
 			GC.KeepAlive (view.HeightAnchor);
 		}
 
-#if NET
 		[Test]
 		public void JsonSerializer_Serialize ()
 		{
@@ -88,6 +83,5 @@ namespace LinkAnyTest {
 			var b = JsonSerializer.Deserialize<int []> ("[42,3,14,15]");
 			CollectionAssert.AreEqual (new int [] { 42, 3, 14, 15 }, b, "deserialized array");
 		}
-#endif
 	}
 }

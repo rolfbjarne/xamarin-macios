@@ -77,24 +77,9 @@ namespace LinkAll.Attributes {
 		}
 
 		[Test]
-#if NET
-		[Ignore ("This feature is not supported by dotnet's ILLink -> https://github.com/xamarin/xamarin-macios/issues/8900")]
-#endif
-		public void PreserveTypeWithCustomAttribute ()
-		{
-			var t = Type.GetType ("LinkAll.Attributes.MemberWithCustomAttribute" + WorkAroundLinkerHeuristics);
-			// both type and members are preserved - in this case the type is preserved because it's member was
-			Assert.NotNull (t, "type");
-			// and that member was preserved because it's decorated with a preserved attribute
-			Assert.NotNull (t.GetProperty ("Custom"), "members");
-		}
-
-		[Test]
 		public void Runtime_RegisterEntryAssembly ()
 		{
-#if NET
 			TestRuntime.AssertSimulator ("https://github.com/xamarin/xamarin-macios/issues/10457");
-#endif
 
 			var klass = Type.GetType ("ObjCRuntime.Runtime, " + AssemblyName);
 			Assert.NotNull (klass, "Runtime");
@@ -111,13 +96,7 @@ namespace LinkAll.Attributes {
 		[Test]
 		public void MonoTouchException_Unconditional ()
 		{
-#if NET
 			const string klassName = "ObjCRuntime.ObjCException";
-#elif __MACOS__
-			const string klassName = "Foundation.ObjCException";
-#else
-			const string klassName = "Foundation.MonoTouchException";
-#endif
 			var klass = Type.GetType (klassName + ", " + AssemblyName);
 			Assert.NotNull (klass, klassName);
 		}

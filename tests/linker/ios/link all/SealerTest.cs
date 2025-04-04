@@ -36,7 +36,6 @@ namespace Linker.Sealer {
 	[Preserve (AllMembers = true)]
 	public class SealerTest {
 
-#if NET
 		[SetUp]
 		public void SetUp ()
 		{
@@ -45,7 +44,6 @@ namespace Linker.Sealer {
 			// so the optimization is disabled unless AOT is used
 			TestRuntime.AssertDevice ();
 		}
-#endif
 
 		[Test]
 		public void Sealed ()

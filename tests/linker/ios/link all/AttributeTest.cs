@@ -105,29 +105,13 @@ namespace LinkAll.Attributes {
 	public class CustomTypeO {
 	}
 
-#if !NET
-	[FileIOPermission (SecurityAction.LinkDemand, AllLocalFiles = FileIOPermissionAccess.AllAccess)]
-	public class SecurityDeclarationDecoratedUserCode {
-
-		[FileIOPermission (SecurityAction.Assert, AllLocalFiles = FileIOPermissionAccess.NoAccess)]
-		static public bool Check ()
-		{
-			return true;
-		}
-	}
-#endif
-
 	[TestFixture]
 	// we want the tests to be available because we use the linker
 	[Preserve (AllMembers = true)]
 	public class AttributeTest {
 
 		// Good enough to fool linker to abort the tracking
-#if NET
 		static string mscorlib = "System.Private.CoreLib";
-#else
-		static string mscorlib = "mscorlib";
-#endif
 
 		[Test]
 		public void DebugAssemblyAttributes ()
@@ -222,18 +206,5 @@ namespace LinkAll.Attributes {
 			//Assert.That (to.Count (), Is.EqualTo (1), "Object");
 			//Assert.NotNull (Type.GetType ("LinkAll.Attributes.CustomTypeO"), "CustomTypeO");
 		}
-
-#if !NET
-		[Test]
-		public void SecurityDeclaration ()
-		{
-			// note: security declarations != custom attributes
-			// we ensure that we can create the type / call the code
-			Assert.True (SecurityDeclarationDecoratedUserCode.Check (), "call");
-			// we ensure that both the permission and the flag are NOT part of the final/linked binary (link all removes security declarations)
-			Assert.Null (Type.GetType ("System.Security.Permissions.FileIOPermissionAttribute, " + mscorlib), "FileIOPermissionAttribute");
-			Assert.Null (Type.GetType ("System.Security.Permissions.FileIOPermissionAccess, " + mscorlib), "FileIOPermissionAccess");
-		}
-#endif
 	}
 }

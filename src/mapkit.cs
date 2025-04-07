@@ -1416,7 +1416,7 @@ namespace MapKit {
 		MKMapRect MapRectForRect (CGRect rect);
 
 		/// <include file="../docs/api/MapKit/MKOverlayView.xml" path="/Documentation/Docs[@DocId='M:MapKit.MKOverlayView.CanDrawMapRect(MapKit.MKMapRect,System.Runtime.InteropServices.NFloat)']/*" />
-	[Export ("canDrawMapRect:zoomScale:")]
+		[Export ("canDrawMapRect:zoomScale:")]
 		bool CanDrawMapRect (MKMapRect mapRect, /* MKZoomScale */ nfloat zoomScale);
 
 		/// <param name="mapRect">To be added.</param>

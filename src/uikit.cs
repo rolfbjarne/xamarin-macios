@@ -18923,7 +18923,7 @@ namespace UIKit {
 		bool AllowsMultipleSelectionDuringEditing { get; set; }
 
 		/// <include file="../docs/api/UIKit/UITableView.xml" path="/Documentation/Docs[@DocId='M:UIKit.UITableView.MoveSection(System.IntPtr,System.IntPtr)']/*" />
-	[Export ("moveSection:toSection:")]
+		[Export ("moveSection:toSection:")]
 		void MoveSection (nint fromSection, nint toSection);
 
 		[Export ("moveRowAtIndexPath:toIndexPath:")]
@@ -19218,7 +19218,7 @@ namespace UIKit {
 		string [] SectionIndexTitles (UITableView tableView);
 
 		/// <include file="../docs/api/UIKit/UITableViewSource.xml" path="/Documentation/Docs[@DocId='M:UIKit.UITableViewSource.SectionFor(UIKit.UITableView,System.String,System.IntPtr)']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Export ("tableView:sectionForSectionIndexTitle:atIndex:")]
 		nint SectionFor (UITableView tableView, string title, nint atIndex);
 
@@ -19808,7 +19808,7 @@ namespace UIKit {
 		string [] SectionIndexTitles (UITableView tableView);
 
 		/// <include file="../docs/api/UIKit/UITableViewDataSource.xml" path="/Documentation/Docs[@DocId='M:UIKit.UITableViewDataSource.SectionFor(UIKit.UITableView,System.String,System.IntPtr)']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Export ("tableView:sectionForSectionIndexTitle:atIndex:")]
 		nint SectionFor (UITableView tableView, string title, nint atIndex);
 
@@ -22127,7 +22127,7 @@ namespace UIKit {
 		bool DrawViewHierarchy (CGRect rect, bool afterScreenUpdates);
 
 		/// <include file="../docs/api/UIKit/UIView.xml" path="/Documentation/Docs[@DocId='M:UIKit.UIView.AnimateNotify(System.Double,System.Double,System.Runtime.InteropServices.NFloat,System.Runtime.InteropServices.NFloat,UIKit.UIViewAnimationOptions,System.Action,UIKit.UICompletionHandler)']/*" />
-	[Static]
+		[Static]
 		[Export ("animateWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:completion:")]
 		[Async (XmlDocs = """
 			<param name="duration">Duration in seconds for the animation.</param>
@@ -26636,7 +26636,7 @@ namespace UIKit {
 
 		// note: duplicate from maccore's foundation.cs where it's binded on NSString2 (for Classic)
 		/// <include file="../docs/api/UIKit/UIStringDrawing.xml" path="/Documentation/Docs[@DocId='M:UIKit.UIStringDrawing.DrawString(Foundation.NSString,CoreGraphics.CGPoint,System.Runtime.InteropServices.NFloat,UIKit.UIFont,System.Runtime.InteropServices.NFloat,UIKit.UILineBreakMode,UIKit.UIBaselineAdjustment)']/*" />
-	[ThreadSafe]
+		[ThreadSafe]
 		[Deprecated (PlatformName.iOS, 7, 0, message: "Use 'NSString.DrawString (CGRect, UIStringAttributes)' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'NSString.DrawString (CGRect, UIStringAttributes)' instead.")]
 		[Export ("drawAtPoint:forWidth:withFont:fontSize:lineBreakMode:baselineAdjustment:")]
@@ -26644,7 +26644,7 @@ namespace UIKit {
 
 		// note: duplicate from maccore's foundation.cs where it's binded on NSString2 (for Classic)
 		/// <include file="../docs/api/UIKit/UIStringDrawing.xml" path="/Documentation/Docs[@DocId='M:UIKit.UIStringDrawing.DrawString(Foundation.NSString,CoreGraphics.CGPoint,System.Runtime.InteropServices.NFloat,UIKit.UIFont,System.Runtime.InteropServices.NFloat,System.Runtime.InteropServices.NFloat@,UIKit.UILineBreakMode,UIKit.UIBaselineAdjustment)']/*" />
-	[ThreadSafe]
+		[ThreadSafe]
 		[Deprecated (PlatformName.iOS, 7, 0, message: "Use 'NSString.DrawString (CGRect, UIStringAttributes)' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'NSString.DrawString (CGRect, UIStringAttributes)' instead.")]
 		[Export ("drawAtPoint:forWidth:withFont:minFontSize:actualFontSize:lineBreakMode:baselineAdjustment:")]

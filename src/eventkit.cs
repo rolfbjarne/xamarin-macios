@@ -574,9 +574,9 @@ namespace EventKit {
 		NativeHandle Constructor (EKRecurrenceFrequency type, nint interval, [NullAllowed] EKRecurrenceEnd end);
 
 		/// <include file="../docs/api/EventKit/EKRecurrenceRule.xml" path="/Documentation/Docs[@DocId='M:EventKit.EKRecurrenceRule.#ctor(EventKit.EKRecurrenceFrequency,System.IntPtr,EventKit.EKRecurrenceDayOfWeek[],Foundation.NSNumber[],Foundation.NSNumber[],Foundation.NSNumber[],Foundation.NSNumber[],Foundation.NSNumber[],EventKit.EKRecurrenceEnd)']/*" />
-	[Export ("initRecurrenceWithFrequency:interval:daysOfTheWeek:daysOfTheMonth:monthsOfTheYear:weeksOfTheYear:daysOfTheYear:setPositions:end:")]
+		[Export ("initRecurrenceWithFrequency:interval:daysOfTheWeek:daysOfTheMonth:monthsOfTheYear:weeksOfTheYear:daysOfTheYear:setPositions:end:")]
 		NativeHandle Constructor (EKRecurrenceFrequency type, nint interval, [NullAllowed] EKRecurrenceDayOfWeek [] days, [NullAllowed] NSNumber [] monthDays, [NullAllowed] NSNumber [] months,
-					[NullAllowed] NSNumber [] weeksOfTheYear, [NullAllowed] NSNumber [] daysOfTheYear, [NullAllowed] NSNumber [] setPositions, [NullAllowed] EKRecurrenceEnd end);
+						[NullAllowed] NSNumber [] weeksOfTheYear, [NullAllowed] NSNumber [] daysOfTheYear, [NullAllowed] NSNumber [] setPositions, [NullAllowed] EKRecurrenceEnd end);
 
 	}
 

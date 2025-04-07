@@ -271,7 +271,7 @@ namespace Foundation {
 		}
 
 		/// <include file="../../docs/api/Foundation/NSAttributedString.xml" path="/Documentation/Docs[@DocId='M:Foundation.NSAttributedString.LowLevelGetAttributes(System.IntPtr,Foundation.NSRange@)']/*" />
-	public IntPtr LowLevelGetAttributes (nint location, out NSRange effectiveRange)
+		public IntPtr LowLevelGetAttributes (nint location, out NSRange effectiveRange)
 		{
 			unsafe {
 				fixed (NSRange* effectiveRangePtr = &effectiveRange) {

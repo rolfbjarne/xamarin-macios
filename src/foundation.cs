@@ -168,6 +168,10 @@ namespace Foundation {
 		[Export ("count")]
 		nuint Count { get; }
 
+		/// <param name="idx">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("objectAtIndex:")]
 		NativeHandle ValueAt (nuint idx);
 
@@ -313,15 +317,34 @@ namespace Foundation {
 		nint Length { get; }
 
 		// TODO: figure out the type, this deserves to be strongly typed if possble
+		/// <param name="attribute">To be added.</param>
+		/// <param name="location">To be added.</param>
+		/// <param name="effectiveRange">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("attribute:atIndex:effectiveRange:")]
 		NSObject GetAttribute (string attribute, nint location, out NSRange effectiveRange);
 
 		[Export ("attributedSubstringFromRange:"), Internal]
 		NSAttributedString Substring (NSRange range);
 
+		/// <param name="location">To be added.</param>
+		/// <param name="longestEffectiveRange">To be added.</param>
+		/// <param name="rangeLimit">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("attributesAtIndex:longestEffectiveRange:inRange:")]
 		NSDictionary GetAttributes (nint location, out NSRange longestEffectiveRange, NSRange rangeLimit);
 
+		/// <param name="attribute">To be added.</param>
+		/// <param name="location">To be added.</param>
+		/// <param name="longestEffectiveRange">To be added.</param>
+		/// <param name="rangeLimit">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("attribute:atIndex:longestEffectiveRange:inRange:")]
 		NSObject GetAttribute (string attribute, nint location, out NSRange longestEffectiveRange, NSRange rangeLimit);
 
@@ -1211,6 +1234,11 @@ namespace Foundation {
 		[Export ("setObject:forKey:")]
 		void SetObjectForKey (NSObject obj, NSObject key);
 
+		/// <param name="obj">To be added.</param>
+		/// <param name="key">To be added.</param>
+		/// <param name="cost">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setObject:forKey:cost:")]
 		void SetCost (NSObject obj, NSObject key, nuint cost);
 
@@ -1468,22 +1496,66 @@ namespace Foundation {
 		[MacCatalyst (13, 1)]
 		bool Matches (NSDate date, NSDateComponents components);
 
+		/// <param name="unit">To be added.</param>
+		/// <param name="value">To be added.</param>
+		/// <param name="date">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("dateByAddingUnit:value:toDate:options:")]
 		[MacCatalyst (13, 1)]
 		NSDate DateByAddingUnit (NSCalendarUnit unit, nint value, NSDate date, NSCalendarOptions options);
 
+		/// <param name="hour">To be added.</param>
+		/// <param name="minute">To be added.</param>
+		/// <param name="second">To be added.</param>
+		/// <param name="date">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("dateBySettingHour:minute:second:ofDate:options:")]
 		[MacCatalyst (13, 1)]
 		NSDate DateBySettingsHour (nint hour, nint minute, nint second, NSDate date, NSCalendarOptions options);
 
+		/// <param name="unit">To be added.</param>
+		/// <param name="value">To be added.</param>
+		/// <param name="date">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("dateBySettingUnit:value:ofDate:options:")]
 		[MacCatalyst (13, 1)]
 		NSDate DateBySettingUnit (NSCalendarUnit unit, nint value, NSDate date, NSCalendarOptions options);
 
+		/// <param name="era">To be added.</param>
+		/// <param name="year">To be added.</param>
+		/// <param name="month">To be added.</param>
+		/// <param name="date">To be added.</param>
+		/// <param name="hour">To be added.</param>
+		/// <param name="minute">To be added.</param>
+		/// <param name="second">To be added.</param>
+		/// <param name="nanosecond">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("dateWithEra:year:month:day:hour:minute:second:nanosecond:")]
 		[MacCatalyst (13, 1)]
 		NSDate Date (nint era, nint year, nint month, nint date, nint hour, nint minute, nint second, nint nanosecond);
 
+		/// <param name="era">To be added.</param>
+		/// <param name="year">To be added.</param>
+		/// <param name="week">To be added.</param>
+		/// <param name="weekday">To be added.</param>
+		/// <param name="hour">To be added.</param>
+		/// <param name="minute">To be added.</param>
+		/// <param name="second">To be added.</param>
+		/// <param name="nanosecond">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("dateWithEra:yearForWeekOfYear:weekOfYear:weekday:hour:minute:second:nanosecond:")]
 		[MacCatalyst (13, 1)]
 		NSDate DateForWeekOfYear (nint era, nint year, nint week, nint weekday, nint hour, nint minute, nint second, nint nanosecond);
@@ -1492,14 +1564,35 @@ namespace Foundation {
 		[MacCatalyst (13, 1)]
 		void EnumerateDatesStartingAfterDate (NSDate start, NSDateComponents matchingComponents, NSCalendarOptions options, [BlockCallback] EnumerateDatesCallback callback);
 
+		/// <param name="era">To be added.</param>
+		/// <param name="year">To be added.</param>
+		/// <param name="month">To be added.</param>
+		/// <param name="day">To be added.</param>
+		/// <param name="date">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("getEra:year:month:day:fromDate:")]
 		[MacCatalyst (13, 1)]
 		void GetComponentsFromDate (out nint era, out nint year, out nint month, out nint day, NSDate date);
 
+		/// <param name="era">To be added.</param>
+		/// <param name="year">To be added.</param>
+		/// <param name="weekOfYear">To be added.</param>
+		/// <param name="weekday">To be added.</param>
+		/// <param name="date">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("getEra:yearForWeekOfYear:weekOfYear:weekday:fromDate:")]
 		[MacCatalyst (13, 1)]
 		void GetComponentsFromDateForWeekOfYear (out nint era, out nint year, out nint weekOfYear, out nint weekday, NSDate date);
 
+		/// <param name="hour">To be added.</param>
+		/// <param name="minute">To be added.</param>
+		/// <param name="second">To be added.</param>
+		/// <param name="nanosecond">To be added.</param>
+		/// <param name="date">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("getHour:minute:second:nanosecond:fromDate:")]
 		[MacCatalyst (13, 1)]
 		void GetHourComponentsFromDate (out nint hour, out nint minute, out nint second, out nint nanosecond, NSDate date);
@@ -1534,12 +1627,27 @@ namespace Foundation {
 		[return: NullAllowed]
 		NSDate FindNextDateAfterDateMatching (NSDate date, NSDateComponents components, NSCalendarOptions options);
 
+		/// <param name="date">To be added.</param>
+		/// <param name="hour">To be added.</param>
+		/// <param name="minute">To be added.</param>
+		/// <param name="second">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("nextDateAfterDate:matchingHour:minute:second:options:")]
 		[MacCatalyst (13, 1)]
 		[MarshalNativeExceptions]
 		[return: NullAllowed]
 		NSDate FindNextDateAfterDateMatching (NSDate date, nint hour, nint minute, nint second, NSCalendarOptions options);
 
+		/// <param name="date">To be added.</param>
+		/// <param name="unit">To be added.</param>
+		/// <param name="value">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("nextDateAfterDate:matchingUnit:value:options:")]
 		[MacCatalyst (13, 1)]
 		[MarshalNativeExceptions]
@@ -1953,6 +2061,11 @@ namespace Foundation {
 		[Export ("encodeInt64:forKey:")]
 		void Encode (long val, string key);
 
+		/// <param name="val">Native integer value to encode.</param>
+		/// <param name="key">Key to associate with the object being encoded.</param>
+		/// <summary>Encodes the platform-specific native integer (32 or 64 bits) using the specified associated key.</summary>
+		/// <remarks>
+		///         </remarks>
 		[Export ("encodeInteger:forKey:")]
 		void Encode (nint val, string key);
 
@@ -1983,9 +2096,24 @@ namespace Foundation {
 		[Export ("decodeObjectForKey:")]
 		NSObject DecodeObject (string key);
 
+		/// <param name="key">The key identifying the item to decode.</param>
+		/// <param name="length">Number of bytes in the returned block.</param>
+		/// <summary>Low-level: decodes the item with the associated key into a memory block,
+		/// 	and returns a pointer to it.</summary>
+		/// <returns>Pointer to the block of memory that contains at least
+		/// 	the number of bytes set on the lenght parameter.</returns>
+		/// <remarks>
+		///         </remarks>
 		[Export ("decodeBytesForKey:returnedLength:")]
 		IntPtr DecodeBytes (string key, out nuint length);
 
+		/// <param name="length">Number of bytes in the returned block.</param>
+		/// <summary>Low-level: decodes the next item into a memory block,
+		/// 	and returns a pointer to it.</summary>
+		/// <returns>Pointer to the block of memory that contains at least
+		/// 	the number of bytes set on the lenght parameter.</returns>
+		/// <remarks>
+		///         </remarks>
 		[Export ("decodeBytesWithReturnedLength:")]
 		IntPtr DecodeBytes (out nuint length);
 
@@ -2326,6 +2454,10 @@ namespace Foundation {
 		[MacCatalyst (13, 1)]
 		bool IsValidDateInCalendar (NSCalendar calendar);
 
+		/// <param name="value">To be added.</param>
+		/// <param name="unit">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setValue:forComponent:")]
 		[MacCatalyst (13, 1)]
 		void SetValueForComponent (nint value, NSCalendarUnit unit);
@@ -2509,6 +2641,12 @@ namespace Foundation {
 		[Static]
 		string ToLocalizedString (NSDate date, NSDateFormatterStyle dateStyle, NSDateFormatterStyle timeStyle);
 
+		/// <param name="template">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="locale">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("dateFormatFromTemplate:options:locale:")]
 		[Static]
 		string GetDateFormatFromTemplate (string template, nuint options, [NullAllowed] NSLocale locale);
@@ -2690,6 +2828,10 @@ namespace Foundation {
 		[return: NullAllowed]
 		NSData ReadToEnd ([NullAllowed] out NSError error);
 
+		/// <param name="length">To be added.</param>
+		/// <summary>Reads a block of data of the specified length from the file represented by this NSFileHandle.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.MacOSX, 10, 15, message: "Use 'Read (nuint, out NSError)' instead.")]
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'Read (nuint, out NSError)' instead.")]
 		[Deprecated (PlatformName.TvOS, 13, 0, message: "Use 'Read (nuint, out NSError)' instead.")]
@@ -3583,6 +3725,10 @@ namespace Foundation {
 		[Export ("resultCount")]
 		nint ResultCount { get; }
 
+		/// <param name="idx">To be added.</param>
+		/// <summary>The result at the specified index.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("resultAtIndex:")]
 		NSObject ResultAtIndex (nint idx);
 
@@ -3598,6 +3744,11 @@ namespace Foundation {
 		[Export ("groupedResults")]
 		NSObject [] GroupedResults { get; }
 
+		/// <param name="attribyteName">To be added.</param>
+		/// <param name="atIndex">To be added.</param>
+		/// <summary>The value of the specified attributeName in the result at the specified index in the Results array.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("valueOfAttribute:forResultAtIndex:")]
 		NSObject ValueOfAttribute (string attribyteName, nint atIndex);
 
@@ -5114,6 +5265,10 @@ namespace Foundation {
 		[Export ("resultCount")]
 		nint ResultCount { get; }
 
+		/// <param name="idx">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("resultAtIndex:")]
 		NSObject ResultAtIndex (nuint idx);
 
@@ -5128,6 +5283,9 @@ namespace Foundation {
 	[BaseType (typeof (NSArray))]
 	[DesignatedDefaultCtor]
 	interface NSMutableArray {
+		/// <param name="capacity">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		[Export ("initWithCapacity:")]
 		NativeHandle Constructor (nuint capacity);
@@ -5145,12 +5303,19 @@ namespace Foundation {
 		[Export ("insertObject:atIndex:")]
 		void _Insert (IntPtr obj, nint index);
 
+		/// <param name="obj">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("insertObject:atIndex:")]
 		void Insert (NSObject obj, nint index);
 
 		[Export ("removeLastObject")]
 		void RemoveLastObject ();
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("removeObjectAtIndex:")]
 		void RemoveObject (nint index);
 
@@ -5159,6 +5324,10 @@ namespace Foundation {
 		[Export ("replaceObjectAtIndex:withObject:")]
 		void _ReplaceObject (nint index, IntPtr withObject);
 
+		/// <param name="index">To be added.</param>
+		/// <param name="withObject">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("replaceObjectAtIndex:withObject:")]
 		void ReplaceObject (nint index, NSObject withObject);
 
@@ -5238,6 +5407,10 @@ namespace Foundation {
 		[Export ("replaceCharactersInRange:withAttributedString:")]
 		void Replace (NSRange range, NSAttributedString value);
 
+		/// <param name="attrString">Attributed string to insert.</param>
+		/// <param name="location">Location where the string will be inserted.</param>
+		/// <summary>Inserts an attributed string into the current string.</summary>
+		/// <remarks>Any attributes that spanned the insertion point will be expanded, so they will continue to cover both the original text as well as the new text.</remarks>
 		[Export ("insertAttributedString:atIndex:")]
 		void Insert (NSAttributedString attrString, nint location);
 
@@ -5341,11 +5514,19 @@ namespace Foundation {
 
 	[BaseType (typeof (NSData))]
 	interface NSMutableData {
+		/// <param name="capacity">To be added.</param>
+		/// <summary>Factory method that instantiates an NSMutableData instance that can initially hold the specified capacity, in bytes.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static, Export ("dataWithCapacity:")]
 		[Autorelease]
 		[PreSnippet ("if (capacity < 0 || capacity > nint.MaxValue) throw new ArgumentOutOfRangeException ();", Optimizable = true)]
 		NSMutableData FromCapacity (nint capacity);
 
+		/// <param name="length">To be added.</param>
+		/// <summary>Factory method that instantiates itself with the specified length of zeroed-out bytes.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static, Export ("dataWithLength:")]
 		[Autorelease]
 		[PreSnippet ("if (length < 0 || length > nint.MaxValue) throw new ArgumentOutOfRangeException ();", Optimizable = true)]
@@ -5358,6 +5539,9 @@ namespace Foundation {
 		[Export ("mutableBytes")]
 		IntPtr MutableBytes { get; }
 
+		/// <param name="capacity">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithCapacity:")]
 		[PreSnippet ("if (capacity > (ulong) nint.MaxValue) throw new ArgumentOutOfRangeException ();", Optimizable = true)]
 		NativeHandle Constructor (nuint capacity);
@@ -5654,9 +5838,26 @@ namespace Foundation {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface NSError : NSSecureCoding, NSCopying {
+		/// <param name="domain">To be added.</param>
+		/// <param name="code">To be added.</param>
+		/// <param name="userInfo">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static, Export ("errorWithDomain:code:userInfo:")]
 		NSError FromDomain (NSString domain, nint code, [NullAllowed] NSDictionary userInfo);
 
+		/// <param name="domain">To be added.</param>
+		/// <param name="code">To be added.</param>
+		/// <param name="userInfo">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		[Export ("initWithDomain:code:userInfo:")]
 		NativeHandle Constructor (NSString domain, nint code, [NullAllowed] NSDictionary userInfo);
@@ -6255,9 +6456,18 @@ namespace Foundation {
 		[Export ("setOrthography:range:")]
 		void SetOrthographyrange (NSOrthography orthography, NSRange range);
 
+		/// <param name="charIndex">To be added.</param>
+		/// <param name="effectiveRange">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("orthographyAtIndex:effectiveRange:")]
 		NSOrthography GetOrthography (nint charIndex, ref NSRange effectiveRange);
 
+		/// <param name="newRange">To be added.</param>
+		/// <param name="delta">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("stringEditedInRange:changeInLength:")]
 		void StringEditedInRange (NSRange newRange, nint delta);
 
@@ -6267,6 +6477,13 @@ namespace Foundation {
 		[Export ("sentenceRangeForRange:")]
 		NSRange GetSentenceRangeForRange (NSRange range);
 
+		/// <param name="charIndex">To be added.</param>
+		/// <param name="tagScheme">To be added.</param>
+		/// <param name="tokenRange">To be added.</param>
+		/// <param name="sentenceRange">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tagAtIndex:scheme:tokenRange:sentenceRange:")]
 		string GetTag (nint charIndex, NSString tagScheme, ref NSRange tokenRange, ref NSRange sentenceRange);
 
@@ -6289,11 +6506,26 @@ namespace Foundation {
 		[Export ("enumerateTagsInRange:unit:scheme:options:usingBlock:")]
 		void EnumerateTags (NSRange range, NSLinguisticTaggerUnit unit, string scheme, NSLinguisticTaggerOptions options, LinguisticTagEnumerator enumerator);
 
+		/// <param name="charIndex">To be added.</param>
+		/// <param name="unit">To be added.</param>
+		/// <param name="scheme">To be added.</param>
+		/// <param name="tokenRange">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("tagAtIndex:unit:scheme:tokenRange:")]
 		[return: NullAllowed]
 		string GetTag (nuint charIndex, NSLinguisticTaggerUnit unit, string scheme, [NullAllowed] ref NSRange tokenRange);
 
+		/// <param name="charIndex">To be added.</param>
+		/// <param name="unit">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("tokenRangeAtIndex:unit:")]
 		NSRange GetTokenRange (nuint charIndex, NSLinguisticTaggerUnit unit);
@@ -6313,6 +6545,21 @@ namespace Foundation {
 		[return: NullAllowed]
 		string GetDominantLanguage (string str);
 
+		/// <param name="str">To be added.</param>
+		/// <param name="charIndex">To be added.</param>
+		/// <param name="unit">To be added.</param>
+		/// <param name="scheme">To be added.</param>
+		/// <param name="orthography">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="tokenRange">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("tagForString:atIndex:unit:scheme:orthography:tokenRange:")]
@@ -6679,6 +6926,13 @@ namespace Foundation {
 		[Export ("replaceMatchesInString:options:range:withTemplate:")]
 		nuint ReplaceMatches (NSMutableString mutableString, NSMatchingOptions options, NSRange range, NSString template);
 
+		/// <param name="result">To be added.</param>
+		/// <param name="str">To be added.</param>
+		/// <param name="offset">To be added.</param>
+		/// <param name="template">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("replacementStringForResult:inString:offset:template:")]
 		NSString GetReplacementString (NSTextCheckingResult result, NSString str, nint offset, NSString template);
 
@@ -7049,6 +7303,10 @@ namespace Foundation {
 		[Static, Export ("timeZoneWithName:data:")]
 		NSTimeZone FromName (string tzName, NSData data);
 
+		/// <param name="seconds">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("timeZoneForSecondsFromGMT:")]
 		NSTimeZone FromGMT (nint seconds);
@@ -7537,6 +7795,10 @@ namespace Foundation {
 		[Export ("boolForKey:")]
 		bool BoolForKey (string defaultName);
 
+		/// <param name="value">To be added.</param>
+		/// <param name="defaultName">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setInteger:forKey:")]
 		void SetInt (nint value, string defaultName);
 
@@ -9090,6 +9352,11 @@ namespace Foundation {
 		[Export ("sharedURLCache", ArgumentSemantic.Strong), Static]
 		NSUrlCache SharedCache { get; set; }
 
+		/// <param name="memoryCapacity">To be added.</param>
+		/// <param name="diskCapacity">To be added.</param>
+		/// <param name="diskPath">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.MacOSX, 10, 15, message: "Use the overload that accepts an 'NSUrl' parameter instead.")]
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Use the overload that accepts an 'NSUrl' parameter instead.")]
 		[Deprecated (PlatformName.TvOS, 13, 0, message: "Use the overload that accepts an 'NSUrl' parameter instead.")]
@@ -9293,6 +9560,17 @@ namespace Foundation {
 	// 'init' returns NIL
 	[DisableDefaultCtor]
 	interface NSUrlAuthenticationChallenge : NSSecureCoding {
+		/// <param name="space">To be added.</param>
+		/// <param name="credential">To be added.</param>
+		/// <param name="previousFailureCount">To be added.</param>
+		/// <param name="response">To be added.</param>
+		/// <param name="error">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="sender">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithProtectionSpace:proposedCredential:previousFailureCount:failureResponse:error:sender:")]
 		NativeHandle Constructor (NSUrlProtectionSpace space, NSUrlCredential credential, nint previousFailureCount, [NullAllowed] NSUrlResponse response, [NullAllowed] NSError error, NSUrlConnection sender);
 
@@ -9551,6 +9829,12 @@ namespace Foundation {
 		[Export ("connection:needNewBodyStream:")]
 		NSInputStream NeedNewBodyStream (NSUrlConnection connection, NSUrlRequest request);
 
+		/// <param name="connection">To be added.</param>
+		/// <param name="bytesWritten">To be added.</param>
+		/// <param name="totalBytesWritten">To be added.</param>
+		/// <param name="totalBytesExpectedToWrite">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("connection:didSendBodyData:totalBytesWritten:totalBytesExpectedToWrite:")]
 		void SentBodyData (NSUrlConnection connection, nint bytesWritten, nint totalBytesWritten, nint totalBytesExpectedToWrite);
 
@@ -10057,6 +10341,11 @@ namespace Foundation {
 			""")]
 		void GetAllTasks (NSUrlSessionAllPendingTasks completionHandler);
 
+		/// <param name="hostname">To be added.</param>
+		/// <param name="port">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("streamTaskWithHostName:port:")]
 		NSUrlSessionStreamTask CreateBidirectionalStream (string hostname, nint port);
@@ -10141,8 +10430,23 @@ namespace Foundation {
 	[BaseType (typeof (NSUrlSessionTask), Name = "NSURLSessionStreamTask")]
 	[DisableDefaultCtor] // now (xcode11) marked as deprecated
 	interface NSUrlSessionStreamTask {
+		/// <param name="minBytes">To be added.</param>
+		/// <param name="maxBytes">To be added.</param>
+		/// <param name="timeout">To be added.</param>
+		/// <param name="completionHandler">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("readDataOfMinLength:maxLength:timeout:completionHandler:")]
-		[Async (ResultTypeName = "NSUrlSessionStreamDataRead")]
+		[Async (ResultTypeName = "NSUrlSessionStreamDataRead", XmlDocs = """
+			<param name="minBytes">To be added.</param>
+			<param name="maxBytes">To be added.</param>
+			<param name="timeout">To be added.</param>
+			<summary>To be added.</summary>
+			<returns>
+			          <para>A task that represents the asynchronous ReadData operation.   The value of the TResult parameter is of type Foundation.NSUrlSessionStreamDataRead.  To be added.</para>
+			        </returns>
+			<remarks>To be added.</remarks>
+			""")]
 		void ReadData (nuint minBytes, nuint maxBytes, double timeout, NSUrlSessionDataRead completionHandler);
 
 		[Export ("writeData:timeout:completionHandler:")]
@@ -11269,6 +11573,9 @@ namespace Foundation {
 		[Export ("initWithSet:")]
 		NativeHandle Constructor (NSSet other);
 
+		/// <param name="capacity">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		[Export ("initWithCapacity:")]
 		NativeHandle Constructor (nint capacity);
@@ -11403,6 +11710,15 @@ namespace Foundation {
 
 	[BaseType (typeof (NSObject), Name = "NSURLResponse")]
 	interface NSUrlResponse : NSSecureCoding, NSCopying {
+		/// <param name="url">To be added.</param>
+		/// <param name="mimetype">To be added.</param>
+		/// <param name="expectedContentLength">To be added.</param>
+		/// <param name="textEncodingName">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		[Export ("initWithURL:MIMEType:expectedContentLength:textEncodingName:")]
 		NativeHandle Constructor (NSUrl url, string mimetype, nint expectedContentLength, [NullAllowed] string textEncodingName);
@@ -11665,10 +11981,21 @@ namespace Foundation {
 		[Field ("NSStreamNetworkServiceTypeCallSignaling")]
 		NSString NetworkServiceTypeCallSignaling { get; }
 
+		/// <param name="bufferSize">To be added.</param>
+		/// <param name="inputStream">To be added.</param>
+		/// <param name="outputStream">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static, Export ("getBoundStreamsWithBufferSize:inputStream:outputStream:")]
 		void GetBoundStreams (nuint bufferSize, out NSInputStream inputStream, out NSOutputStream outputStream);
 
+		/// <param name="hostname">To be added.</param>
+		/// <param name="port">To be added.</param>
+		/// <param name="inputStream">To be added.</param>
+		/// <param name="outputStream">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static, Export ("getStreamsToHostWithName:port:inputStream:outputStream:")]
 		void GetStreamsToHost (string hostname, nint port, out NSInputStream inputStream, out NSOutputStream outputStream);
@@ -11901,9 +12228,19 @@ namespace Foundation {
 		[Export ("lineRangeForRange:")]
 		NSRange LineRangeForRange (NSRange range);
 
+		/// <param name="startPtr">To be added.</param>
+		/// <param name="lineEndPtr">To be added.</param>
+		/// <param name="contentsEndPtr">To be added.</param>
+		/// <param name="range">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("getLineStart:end:contentsEnd:forRange:")]
 		void GetLineStart (out nuint startPtr, out nuint lineEndPtr, out nuint contentsEndPtr, NSRange range);
 
+		/// <param name="width">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("variantFittingPresentationWidth:")]
 		NSString GetVariantFittingPresentationWidth (nint width);
@@ -11951,6 +12288,12 @@ namespace Foundation {
 		[Export ("localizedUserNotificationStringForKey:arguments:")]
 		NSString GetLocalizedUserNotificationString (NSString key, [Params][NullAllowed] NSObject [] arguments);
 
+		/// <param name="paragraphStartPosition">To be added.</param>
+		/// <param name="paragraphEndPosition">To be added.</param>
+		/// <param name="contentsEndPosition">To be added.</param>
+		/// <param name="range">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("getParagraphStart:end:contentsEnd:forRange:")]
 		void GetParagraphPositions (out nuint paragraphStartPosition, out nuint paragraphEndPosition, out nuint contentsEndPosition, NSRange range);
 
@@ -12018,9 +12361,18 @@ namespace Foundation {
 	[BaseType (typeof (NSString))]
 	// hack: it seems that generator.cs can't track NSCoding correctly ? maybe because the type is named NSString2 at that time
 	interface NSMutableString : NSCoding {
+		/// <param name="capacity">Initial capacity for the mutable string.</param>
+		/// <summary>Creates a new mutable string with the specified initial capacity.</summary>
+		/// <remarks>
+		///         </remarks>
 		[Export ("initWithCapacity:")]
 		NativeHandle Constructor (nint capacity);
 
+		/// <param name="str">String to insert.</param>
+		/// <param name="index">Position in the mutable string where the string will be inserted.</param>
+		/// <summary>Inserts a string into the mutable string.</summary>
+		/// <remarks>
+		///         </remarks>
 		[PreSnippet ("Check (index);", Optimizable = true)]
 		[Export ("insertString:atIndex:")]
 		void Insert (NSString str, nint index);
@@ -13095,6 +13447,9 @@ namespace Foundation {
 		[Export ("initWithOrderedSet:")]
 		NativeHandle Constructor (NSOrderedSet source);
 
+		/// <param name="capacity">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		[Export ("initWithCapacity:")]
 		NativeHandle Constructor (nint capacity);
@@ -13119,9 +13474,16 @@ namespace Foundation {
 		[Export ("insertObject:atIndex:")]
 		void _Insert (IntPtr obj, nint atIndex);
 
+		/// <param name="obj">To be added.</param>
+		/// <param name="atIndex">To be added.</param>
+		/// <summary>Inserts the specified object at the specified index.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("insertObject:atIndex:")]
 		void Insert (NSObject obj, nint atIndex);
 
+		/// <param name="index">To be added.</param>
+		/// <summary>Removes the object at the specified index.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("removeObjectAtIndex:")]
 		void Remove (nint index);
 
@@ -13130,6 +13492,10 @@ namespace Foundation {
 		[Export ("replaceObjectAtIndex:withObject:")]
 		void _Replace (nint objectAtIndex, IntPtr newObject);
 
+		/// <param name="objectAtIndex">To be added.</param>
+		/// <param name="newObject">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("replaceObjectAtIndex:withObject:")]
 		void Replace (nint objectAtIndex, NSObject newObject);
 
@@ -13160,9 +13526,17 @@ namespace Foundation {
 		[Export ("removeObjectsAtIndexes:")]
 		void RemoveObjects (NSIndexSet indexSet);
 
+		/// <param name="first">To be added.</param>
+		/// <param name="second">To be added.</param>
+		/// <summary>Exchanges the objects at the specified indices.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("exchangeObjectAtIndex:withObjectAtIndex:")]
 		void ExchangeObject (nint first, nint second);
 
+		/// <param name="indexSet">To be added.</param>
+		/// <param name="destination">To be added.</param>
+		/// <summary>Moves the objects currently at the specified indices so that they start at the specified destination index.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("moveObjectsAtIndexes:toIndex:")]
 		void MoveObjects (NSIndexSet indexSet, nint destination);
 
@@ -13171,6 +13545,10 @@ namespace Foundation {
 		[Export ("setObject:atIndex:")]
 		void _SetObject (IntPtr obj, nint index);
 
+		/// <param name="obj">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>Appends or replaces the object at the specified index.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setObject:atIndex:")]
 		void SetObject (NSObject obj, nint index);
 
@@ -13540,9 +13918,24 @@ namespace Foundation {
 
 	[BaseType (typeof (NSUrlResponse), Name = "NSHTTPURLResponse")]
 	interface NSHttpUrlResponse {
+		/// <param name="url">To be added.</param>
+		/// <param name="mimetype">To be added.</param>
+		/// <param name="expectedContentLength">To be added.</param>
+		/// <param name="textEncodingName">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithURL:MIMEType:expectedContentLength:textEncodingName:")]
 		NativeHandle Constructor (NSUrl url, string mimetype, nint expectedContentLength, [NullAllowed] string textEncodingName);
 
+		/// <param name="url">To be added.</param>
+		/// <param name="statusCode">To be added.</param>
+		/// <param name="httpVersion">To be added.</param>
+		/// <param name="headerFields">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithURL:statusCode:HTTPVersion:headerFields:")]
 		NativeHandle Constructor (NSUrl url, nint statusCode, [NullAllowed] string httpVersion, [NullAllowed] NSDictionary headerFields);
 
@@ -13552,6 +13945,10 @@ namespace Foundation {
 		[Export ("allHeaderFields")]
 		NSDictionary AllHeaderFields { get; }
 
+		/// <param name="statusCode">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("localizedStringForStatusCode:")]
 		[Static]
 		string LocalizedStringForStatusCode (nint statusCode);
@@ -13915,6 +14312,14 @@ namespace Foundation {
 
 	[BaseType (typeof (NSObject))]
 	interface NSIndexPath : NSCoding, NSSecureCoding, NSCopying {
+		/// <param name="index">
+		/// Object to place in the index-path.
+		///   	   </param>
+		/// <summary>Create a new index-path object with the specified object (not required for use with iOS <see cref="T:UIKit.UITableView" />).</summary>
+		/// <returns>
+		///         </returns>
+		/// <remarks>
+		///         </remarks>
 		[Export ("indexPathWithIndex:")]
 		[Static]
 		NSIndexPath FromIndex (nuint index);
@@ -13924,12 +14329,34 @@ namespace Foundation {
 		[Static]
 		NSIndexPath _FromIndex (IntPtr indexes, nint len);
 
+		/// <param name="index">
+		/// 
+		/// Index to be appended.
+		///   	   
+		///   	   </param>
+		/// <summary>Returns a new index-path containing those in this object plus the new <paramref name="index" /> (not required for use with iOS <see cref="T:UIKit.UITableView" />).</summary>
+		/// <returns>
+		///         </returns>
+		/// <remarks>
+		///         </remarks>
 		[Export ("indexPathByAddingIndex:")]
 		NSIndexPath IndexPathByAddingIndex (nuint index);
 
 		[Export ("indexPathByRemovingLastIndex")]
 		NSIndexPath IndexPathByRemovingLastIndex ();
 
+		/// <param name="position">
+		/// 
+		/// 
+		/// Position of index to return.
+		///   	   
+		///   	   
+		///   	   </param>
+		/// <summary>Return the index at the given <paramref name="position" /> in the index-path (not required for use with iOS <see cref="T:UIKit.UITableView" />).</summary>
+		/// <returns>
+		///         </returns>
+		/// <remarks>
+		///         </remarks>
 		[Export ("indexAtPosition:")]
 		nuint IndexAtPosition (nint position);
 
@@ -13969,6 +14396,16 @@ namespace Foundation {
 		[Export ("section")]
 		nint LongSection { get; }
 
+		/// <param name="row">
+		/// The row index within the corresponding <paramref name="section" /> of a <see cref="T:UIKit.UITableView" />.
+		///   	   </param>
+		/// <param name="section">
+		/// The index of the section in the <see cref="T:UIKit.UITableView" /> that contains the <paramref name="row" />.
+		///   	   </param>
+		/// <summary>Returns an index-path object initialized with the given row and section details.</summary>
+		/// <returns>An <see cref="T:Foundation.NSIndexPath" /> object, or <see langword="null" /> if it could not be created.</returns>
+		/// <remarks>
+		///         </remarks>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Static]
@@ -13981,6 +14418,16 @@ namespace Foundation {
 		[Export ("section")]
 		nint Section { get; }
 
+		/// <param name="item">
+		/// Item value.
+		///   	   </param>
+		/// <param name="section">
+		/// Section value.
+		///   	   </param>
+		/// <summary>Creates an NSIndexPath from the given item and section values.</summary>
+		/// <returns>New instance of the NSIndexPath.</returns>
+		/// <remarks>
+		///         </remarks>
 		[Static]
 		[MacCatalyst (13, 1)]
 		[Export ("indexPathForItem:inSection:")]
@@ -14000,6 +14447,10 @@ namespace Foundation {
 
 	[BaseType (typeof (NSObject))]
 	interface NSIndexSet : NSCoding, NSSecureCoding, NSMutableCopying {
+		/// <param name="idx">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static, Export ("indexSetWithIndex:")]
 		NSIndexSet FromIndex (nint idx);
 
@@ -14025,18 +14476,38 @@ namespace Foundation {
 		[Export ("lastIndex")]
 		nuint LastIndex { get; }
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("indexGreaterThanIndex:")]
 		nuint IndexGreaterThan (nuint index);
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("indexLessThanIndex:")]
 		nuint IndexLessThan (nuint index);
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("indexGreaterThanOrEqualToIndex:")]
 		nuint IndexGreaterThanOrEqual (nuint index);
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("indexLessThanOrEqualToIndex:")]
 		nuint IndexLessThanOrEqual (nuint index);
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("containsIndex:")]
 		bool Contains (nuint index);
 
@@ -14549,6 +15020,10 @@ namespace Foundation {
 		[Export ("isOneway")]
 		bool IsOneway { get; }
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("getArgumentTypeAtIndex:")]
 		IntPtr GetArgumentType (nuint index);
 
@@ -14584,6 +15059,9 @@ namespace Foundation {
 
 	[BaseType (typeof (NSIndexSet))]
 	interface NSMutableIndexSet : NSSecureCoding {
+		/// <param name="index">To be added.</param>
+		/// <summary>Initializes a new index set from an existing unsigned integer.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithIndex:")]
 		NativeHandle Constructor (nuint index);
 
@@ -14599,12 +15077,22 @@ namespace Foundation {
 		[Export ("removeAllIndexes")]
 		void Clear ();
 
+		/// <param name="index">The index to add.</param>
+		/// <summary>Adds a single index to the existing set.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("addIndex:")]
 		void Add (nuint index);
 
+		/// <param name="index">The index to remove.</param>
+		/// <summary>Removes a single index from the collection.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("removeIndex:")]
 		void Remove (nuint index);
 
+		/// <param name="startIndex">To be added.</param>
+		/// <param name="delta">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("shiftIndexesStartingAtIndex:by:")]
 		void ShiftIndexes (nuint startIndex, nint delta);
 
@@ -15737,10 +16225,16 @@ namespace Foundation {
 		[Export ("initWithBool:")]
 		NativeHandle Constructor (bool value);
 
+		/// <param name="value">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		[Export ("initWithInteger:")]
 		NativeHandle Constructor (nint value);
 
+		/// <param name="value">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		[Export ("initWithUnsignedInteger:")]
 		NativeHandle Constructor (nuint value);
@@ -15769,10 +16263,18 @@ namespace Foundation {
 		[Export ("numberWithUnsignedInt:")]
 		NSNumber FromUInt32 (uint /* unsigned int, not NSUInteger */ value);
 
+		/// <param name="value">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("numberWithLong:")]
 		NSNumber FromLong (nint value);
 		//
+		/// <param name="value">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("numberWithUnsignedLong:")]
 		NSNumber FromUnsignedLong (nuint value);
@@ -15797,10 +16299,18 @@ namespace Foundation {
 		[Export ("numberWithBool:")]
 		NSNumber FromBoolean (bool value);
 
+		/// <param name="value">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("numberWithInteger:")]
 		NSNumber FromNInt (nint value);
 
+		/// <param name="value">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("numberWithUnsignedInteger:")]
 		NSNumber FromNUInt (nuint value);
@@ -16084,9 +16594,18 @@ namespace Foundation {
 		[Export ("decimalNumberByDividingBy:withBehavior:")]
 		NSDecimalNumber Divide (NSDecimalNumber d, NSObject Behavior);
 
+		/// <param name="power">To be added.</param>
+		/// <summary>Raises this number to the specified power.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("decimalNumberByRaisingToPower:")]
 		NSDecimalNumber RaiseTo (nuint power);
 
+		/// <param name="power">To be added.</param>
+		/// <param name="Behavior">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("decimalNumberByRaisingToPower:withBehavior:")]
 		NSDecimalNumber RaiseTo (nuint power, [NullAllowed] NSObject Behavior);
 
@@ -16254,9 +16773,36 @@ namespace Foundation {
 
 		// Disable warning for NSMutableArray
 #pragma warning disable 618
+		/// <param name="limitDate">To be added.</param>
+		/// <param name="components">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="receivePort">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="headerSpaceReserved">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("sendBeforeDate:components:from:reserved:")]
 		bool SendBeforeDate (NSDate limitDate, [NullAllowed] NSMutableArray components, [NullAllowed] NSPort receivePort, nuint headerSpaceReserved);
 
+		/// <param name="limitDate">To be added.</param>
+		/// <param name="msgID">To be added.</param>
+		/// <param name="components">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="receivePort">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="headerSpaceReserved">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("sendBeforeDate:msgid:components:from:reserved:")]
 		bool SendBeforeDate (NSDate limitDate, nuint msgID, [NullAllowed] NSMutableArray components, [NullAllowed] NSPort receivePort, nuint headerSpaceReserved);
 #pragma warning restore 618
@@ -18585,9 +19131,17 @@ namespace Foundation {
 		[Export ("numberOfRanges")]
 		nuint NumberOfRanges { get; }
 
+		/// <param name="idx">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("rangeAtIndex:")]
 		NSRange RangeAtIndex (nuint idx);
 
+		/// <param name="offset">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("resultByAdjustingRangesWithOffset:")]
 		NSTextCheckingResult ResultByAdjustingRanges (nint offset);
 
@@ -18828,6 +19382,9 @@ namespace Foundation {
 	[BaseType (typeof (NSObject))]
 	interface NSConditionLock : NSLocking {
 
+		/// <param name="condition">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		[Export ("initWithCondition:")]
 		NativeHandle Constructor (nint condition);
@@ -18835,21 +19392,36 @@ namespace Foundation {
 		[Export ("condition")]
 		nint Condition { get; }
 
+		/// <param name="condition">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("lockWhenCondition:")]
 		void LockWhenCondition (nint condition);
 
 		[Export ("tryLock")]
 		bool TryLock ();
 
+		/// <param name="condition">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tryLockWhenCondition:")]
 		bool TryLockWhenCondition (nint condition);
 
+		/// <param name="condition">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("unlockWithCondition:")]
 		void UnlockWithCondition (nint condition);
 
 		[Export ("lockBeforeDate:")]
 		bool LockBeforeDate (NSDate limit);
 
+		/// <param name="condition">To be added.</param>
+		/// <param name="limit">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("lockWhenCondition:beforeDate:")]
 		bool LockWhenCondition (nint condition, NSDate limit);
 
@@ -19290,18 +19862,35 @@ namespace Foundation {
 		[Export ("initWithTransform:")]
 		NativeHandle Constructor (NSAffineTransform transform);
 
+		/// <param name="deltaX">To be added.</param>
+		/// <param name="deltaY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("translateXBy:yBy:")]
 		void Translate (nfloat deltaX, nfloat deltaY);
 
+		/// <param name="angle">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("rotateByDegrees:")]
 		void RotateByDegrees (nfloat angle);
 
+		/// <param name="angle">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("rotateByRadians:")]
 		void RotateByRadians (nfloat angle);
 
+		/// <param name="scale">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("scaleBy:")]
 		void Scale (nfloat scale);
 
+		/// <param name="scaleX">To be added.</param>
+		/// <param name="scaleY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("scaleXBy:yBy:")]
 		void Scale (nfloat scaleX, nfloat scaleY);
 
@@ -19684,13 +20273,24 @@ namespace Foundation {
 		[Export ("numberOfItems")]
 		nint NumberOfItems { get; }
 
+		/// <param name="descriptor">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("insertDescriptor:atIndex:")]
 		void InsertDescriptoratIndex (NSAppleEventDescriptor descriptor, nint index);
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[return: NullAllowed]
 		[Export ("descriptorAtIndex:")]
 		NSAppleEventDescriptor DescriptorAtIndex (nint index);
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("removeDescriptorAtIndex:")]
 		void RemoveDescriptorAtIndex (nint index);
 
@@ -19704,6 +20304,10 @@ namespace Foundation {
 		[Export ("removeDescriptorWithKeyword:")]
 		void RemoveDescriptorWithKeyword (AEKeyword keyword);
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("keywordForDescriptorAtIndex:")]
 		AEKeyword KeywordForDescriptorAtIndex (nint index);
 

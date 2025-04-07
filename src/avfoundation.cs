@@ -1134,6 +1134,11 @@ namespace AVFoundation {
 	[BaseType (typeof (AVAudioBuffer))]
 	[DisableDefaultCtor] // just like base class (AVAudioBuffer) can't, avoid crash when ToString call `description`
 	interface AVAudioCompressedBuffer {
+		/// <param name="format">To be added.</param>
+		/// <param name="packetCapacity">To be added.</param>
+		/// <param name="maximumPacketSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithFormat:packetCapacity:maximumPacketSize:")]
 		NativeHandle Constructor (AVAudioFormat format, uint packetCapacity, nint maximumPacketSize);
 
@@ -1193,6 +1198,10 @@ namespace AVFoundation {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // fails (nil handle on iOS 10)
 	interface AVAudioConnectionPoint {
+		/// <param name="node">To be added.</param>
+		/// <param name="bus">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithNode:bus:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (AVAudioNode node, nuint bus);
@@ -1272,6 +1281,16 @@ namespace AVFoundation {
 		[Export ("detachNode:")]
 		void DetachNode (AVAudioNode node);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="targetNode">To be added.</param>
+		/// <param name="sourceBus">To be added.</param>
+		/// <param name="targetBus">To be added.</param>
+		/// <param name="format">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("connect:to:fromBus:toBus:format:")]
 		void Connect (AVAudioNode sourceNode, AVAudioNode targetNode, nuint sourceBus, nuint targetBus, [NullAllowed] AVAudioFormat format);
 
@@ -1286,10 +1305,23 @@ namespace AVFoundation {
 		[Export ("connect:to:format:")]
 		void Connect (AVAudioNode sourceNode, AVAudioNode targetNode, [NullAllowed] AVAudioFormat format);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="destNodes">To be added.</param>
+		/// <param name="sourceBus">To be added.</param>
+		/// <param name="format">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("connect:toConnectionPoints:fromBus:format:")]
 		void Connect (AVAudioNode sourceNode, AVAudioConnectionPoint [] destNodes, nuint sourceBus, [NullAllowed] AVAudioFormat format);
 
+		/// <param name="node">To be added.</param>
+		/// <param name="bus">To be added.</param>
+		/// <summary>Disconnects all input connections on <paramref name="bus" /> from <paramref name="node" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("disconnectNodeInput:bus:")]
 		void DisconnectNodeInput (AVAudioNode node, nuint bus);
 
@@ -1299,6 +1331,10 @@ namespace AVFoundation {
 		[Export ("disconnectNodeInput:")]
 		void DisconnectNodeInput (AVAudioNode node);
 
+		/// <param name="node">To be added.</param>
+		/// <param name="bus">To be added.</param>
+		/// <summary>Disconnects all output connections on <paramref name="bus" /> from <paramref name="node" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("disconnectNodeOutput:bus:")]
 		void DisconnectNodeOutput (AVAudioNode node, nuint bus);
 
@@ -1331,11 +1367,21 @@ namespace AVFoundation {
 		[Export ("stop")]
 		void Stop ();
 
+		/// <param name="node">To be added.</param>
+		/// <param name="bus">To be added.</param>
+		/// <summary>Returns the audio connection input point for <paramref name="node" /> on <paramref name="bus" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[return: NullAllowed]
 		[Export ("inputConnectionPointForNode:inputBus:")]
 		AVAudioConnectionPoint InputConnectionPoint (AVAudioNode node, nuint bus);
 
+		/// <param name="node">To be added.</param>
+		/// <param name="bus">To be added.</param>
+		/// <summary>Gets an array that contains the output connection points of <paramref name="node" /> on <paramref name="bus" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("outputConnectionPointsForNode:outputBus:")]
 		AVAudioConnectionPoint [] OutputConnectionPoints (AVAudioNode node, nuint bus);
@@ -1900,6 +1946,11 @@ namespace AVFoundation {
 	interface AVAudioMixing : AVAudioStereoMixing
 		, AVAudio3DMixing {
 
+		/// <param name="mixer">To be added.</param>
+		/// <param name="bus">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 #if NET
 		// Apple added a new required member in iOS 9, but that breaks our binary compat, so we can't do that in our existing code.
@@ -1980,23 +2031,51 @@ namespace AVFoundation {
 		[Export ("reset")]
 		void Reset ();
 
+		/// <param name="bus">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("inputFormatForBus:")]
 		AVAudioFormat GetBusInputFormat (nuint bus);
 
+		/// <param name="bus">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("outputFormatForBus:")]
 		AVAudioFormat GetBusOutputFormat (nuint bus);
 
+		/// <param name="bus">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("nameForInputBus:")]
 		[return: NullAllowed]
 		string GetNameForInputBus (nuint bus);
 
+		/// <param name="bus">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("nameForOutputBus:")]
 		[return: NullAllowed]
 		string GetNameForOutputBus (nuint bus);
 
+		/// <param name="bus">To be added.</param>
+		/// <param name="bufferSize">To be added.</param>
+		/// <param name="format">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="tapBlock">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("installTapOnBus:bufferSize:format:block:")]
 		void InstallTapOnBus (nuint bus, uint /* AVAudioFrameCount = uint32_t */ bufferSize, [NullAllowed] AVAudioFormat format, AVAudioNodeTapBlock tapBlock);
 
+		/// <param name="bus">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("removeTapOnBus:")]
 		void RemoveTapOnBus (nuint bus);
 
@@ -2798,9 +2877,22 @@ namespace AVFoundation {
 		[Export ("updateMeters")]
 		void UpdateMeters ();
 
+		/// <param name="channelNumber">To be added.</param>
+		/// <summary>The peak power, in decibels, of the specified channel.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>
+		///           <para>Application developers must call <see cref="M:AVFoundation.AVAudioPlayer.UpdateMeters" /> prior to reading this value.</para>
+		///         </remarks>
+		/// <altmember cref="M:AVFoundation.AVAudioPlayer.AveragePower" />
 		[Export ("peakPowerForChannel:")]
 		float PeakPower (nuint channelNumber); // defined as 'float'
 
+		/// <param name="channelNumber">To be added.</param>
+		/// <summary>The average power for the <paramref name="channelNumber" /> channel, in decibels, of the sound being recorded.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>
+		///           <para>Application developers must call <see cref="M:AVFoundation.AVAudioRecorder.UpdateMeters" /> prior to reading this value.</para>
+		///         </remarks>
 		[Export ("averagePowerForChannel:")]
 		float AveragePower (nuint channelNumber); // defined as 'float'
 
@@ -4712,6 +4804,9 @@ namespace AVFoundation {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (AVAudioUnitEffect))]
 	interface AVAudioUnitEQ {
+		/// <param name="numberOfBands">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithNumberOfBands:")]
 		NativeHandle Constructor (nuint numberOfBands);
 
@@ -17631,6 +17726,10 @@ namespace AVFoundation {
 		[Export ("videoZoomFactor")]
 		nfloat VideoZoomFactor { get; set; }
 
+		/// <param name="factor">To be added.</param>
+		/// <param name="rate">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("rampToVideoZoomFactor:withRate:")]
@@ -19324,6 +19423,9 @@ namespace AVFoundation {
 		[Export ("initWithAsset:")]
 		NativeHandle Constructor (AVAsset asset);
 
+		/// <param name="stepCount">To be added.</param>
+		/// <summary>Moves the playback head by <paramref name="stepCount" /> steps.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("stepByCount:")]
 		void StepByCount (nint stepCount);
 
@@ -22073,9 +22175,21 @@ namespace AVFoundation {
 		[Export ("loadFromData:options:error:")]
 		bool Load (NSData data, AVMusicSequenceLoadOptions options, out NSError outError);
 
+		/// <param name="fileUrl">To be added.</param>
+		/// <param name="resolution">To be added.</param>
+		/// <param name="replace">To be added.</param>
+		/// <param name="outError">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("writeToURL:SMPTEResolution:replaceExisting:error:")]
 		bool Write (NSUrl fileUrl, nint resolution, bool replace, out NSError outError);
 
+		/// <param name="smpteResolution">To be added.</param>
+		/// <param name="outError">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("dataWithSMPTEResolution:error:")]
 		NSData GetData (nint smpteResolution, out NSError outError);
 
@@ -22478,6 +22592,11 @@ namespace AVFoundation {
 		[Export ("configurationDictionary")]
 		NSDictionary WeakConfigurationDictionary { get; }
 
+		/// <param name="numInputChannels">To be added.</param>
+		/// <param name="numOutputChannels">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (15, 0), NoiOS, NoTV]
 		[Export ("supportsNumberInputChannels:outputChannels:")]
 		bool SupportsNumberInputChannels (nint numInputChannels, nint numOutputChannels);

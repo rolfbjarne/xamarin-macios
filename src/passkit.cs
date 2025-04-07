@@ -302,6 +302,9 @@ namespace PassKit {
 		[Export ("canAddFelicaPass")]
 		bool CanAddFelicaPass { get; }
 
+		/// <param name="requestToken">To be added.</param>
+		/// <summary>Enables automatic display of the Apple Pay UI.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("endAutomaticPassPresentationSuppressionWithRequestToken:")]

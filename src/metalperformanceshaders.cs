@@ -138,6 +138,11 @@ namespace MetalPerformanceShaders {
 		[Export ("kernelWidth")]
 		nuint KernelWidth { get; }
 
+		/// <param name="device">The device on which the filter will run.</param>
+		/// <param name="kernelWidth">The width of the window around the pixel to consider. This must be an odd number.</param>
+		/// <param name="kernelHeight">The height of the window around the pixel to consider. This must be an odd number.</param>
+		/// <summary>Constructs a new <c>MPSImageBox</c> with the specified values.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight);
@@ -155,6 +160,11 @@ namespace MetalPerformanceShaders {
 
 		// inlining .ctor from base class
 
+		/// <param name="device">The device on which the filter will run.</param>
+		/// <param name="kernelWidth">The width of the window around the pixel to consider. This must be an odd number.</param>
+		/// <param name="kernelHeight">The height of the window around the pixel to consider. This must be an odd number.</param>
+		/// <summary>Constructs a new <c>MPSImageTent</c> with the specified values.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight);
@@ -368,6 +378,12 @@ namespace MetalPerformanceShaders {
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		NativeHandle Constructor (IMTLDevice device, ref MPSImageHistogramInfo histogramInfo);
 
+		/// <param name="commandBuffer">To be added.</param>
+		/// <param name="source">To be added.</param>
+		/// <param name="histogram">To be added.</param>
+		/// <param name="histogramOffset">To be added.</param>
+		/// <summary>Encodes the kernel to <paramref name="commandBuffer" />, which will operate on <paramref name="source" /> and write the results <paramref name="histogramOffset" /> bytes into <paramref name="histogram" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("encodeToCommandBuffer:sourceTexture:histogram:histogramOffset:")]
 		void EncodeToCommandBuffer (IMTLCommandBuffer commandBuffer, IMTLTexture source, IMTLBuffer histogram, nuint histogramOffset);
 
@@ -416,6 +432,12 @@ namespace MetalPerformanceShaders {
 			get;
 		}
 
+		/// <param name="commandBuffer">The command buffer in which to encode the transformation.</param>
+		/// <param name="source">The source image.</param>
+		/// <param name="histogram">A buffer that contains the current histogram data.</param>
+		/// <param name="histogramOffset">The offset, into <paramref name="histogram" />, to the start of the current histogram data.</param>
+		/// <summary>Encodes the transform function, which calculates the equalization lookup table, to the specified <paramref name="commandBuffer" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("encodeTransformToCommandBuffer:sourceTexture:histogram:histogramOffset:")]
 		void EncodeTransformToCommandBuffer (IMTLCommandBuffer commandBuffer, IMTLTexture source, IMTLBuffer histogram, nuint histogramOffset);
 
@@ -458,6 +480,14 @@ namespace MetalPerformanceShaders {
 			get;
 		}
 
+		/// <param name="commandBuffer">To be added.</param>
+		/// <param name="source">To be added.</param>
+		/// <param name="sourceHistogram">To be added.</param>
+		/// <param name="sourceHistogramOffset">To be added.</param>
+		/// <param name="desiredHistogram">To be added.</param>
+		/// <param name="desiredHistogramOffset">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("encodeTransformToCommandBuffer:sourceTexture:sourceHistogram:sourceHistogramOffset:desiredHistogram:desiredHistogramOffset:")]
 		void EncodeTransformToCommandBuffer (IMTLCommandBuffer commandBuffer, IMTLTexture source, IMTLBuffer sourceHistogram, nuint sourceHistogramOffset, IMTLBuffer desiredHistogram, nuint desiredHistogramOffset);
 
@@ -768,6 +798,10 @@ namespace MetalPerformanceShaders {
 		[Export ("kernelDiameter")]
 		nuint KernelDiameter { get; }
 
+		/// <param name="device">The device on which the filter will run.</param>
+		/// <param name="kernelDiameter">The length of the sides of the region to consider. Must be an odd number</param>
+		/// <summary>Constructs a new <c>MPSImageMedian</c> with the specified values.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelDiameter:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelDiameter);
@@ -825,6 +859,11 @@ namespace MetalPerformanceShaders {
 		[Export ("kernelWidth")]
 		nuint KernelWidth { get; }
 
+		/// <param name="device">The device on which the filter will run.</param>
+		/// <param name="kernelWidth">The width of the window around the pixel to consider. This must be an odd number.</param>
+		/// <param name="kernelHeight">The height of the window around the pixel to consider. This must be an odd number.</param>
+		/// <summary>Constructs a new <c>MPSImageAreaMax</c> with the specified values.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight);
@@ -857,6 +896,11 @@ namespace MetalPerformanceShaders {
 	interface MPSImageAreaMin {
 		// inlining ctor from base class
 
+		/// <param name="device">The device on which the filter will run.</param>
+		/// <param name="kernelWidth">The width of the window around the pixel to consider. This must be an odd number.</param>
+		/// <param name="kernelHeight">The height of the window around the pixel to consider. This must be an odd number.</param>
+		/// <summary>Constructs a new <c>MPSImageAreaMin</c> with the specified values.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight);
@@ -1880,6 +1924,17 @@ namespace MetalPerformanceShaders {
 		[Deprecated (PlatformName.MacCatalyst, 13, 1)]
 		MPSCnnNeuron Neuron { get; set; }
 
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="inputFeatureChannels">To be added.</param>
+		/// <param name="outputFeatureChannels">To be added.</param>
+		/// <param name="neuronFilter">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Deprecated (PlatformName.TvOS, 11, 0)]
 		[Deprecated (PlatformName.iOS, 11, 0)]
@@ -1895,6 +1950,13 @@ namespace MetalPerformanceShaders {
 		[Export ("supportsSecureCoding")]
 		bool SupportsSecureCoding { get; }
 
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="inputFeatureChannels">To be added.</param>
+		/// <param name="outputFeatureChannels">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("cnnConvolutionDescriptorWithKernelWidth:kernelHeight:inputFeatureChannels:outputFeatureChannels:")]
@@ -2334,9 +2396,21 @@ namespace MetalPerformanceShaders {
 		[Export ("strideInPixelsY")]
 		nuint StrideInPixelsY { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:")]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
@@ -2367,6 +2441,13 @@ namespace MetalPerformanceShaders {
 
 		// inlining .ctor from base class
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
@@ -2395,6 +2476,13 @@ namespace MetalPerformanceShaders {
 
 		// inlining .ctor from base class
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
@@ -2467,6 +2555,11 @@ namespace MetalPerformanceShaders {
 		[Export ("kernelHeight")]
 		nuint KernelHeight { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight);
@@ -2510,6 +2603,11 @@ namespace MetalPerformanceShaders {
 		[Export ("delta")]
 		float Delta { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight);
@@ -2581,6 +2679,11 @@ namespace MetalPerformanceShaders {
 		[Export ("kernelHeight")]
 		nuint KernelHeight { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight);
@@ -2642,6 +2745,11 @@ namespace MetalPerformanceShaders {
 		[Export ("ps")]
 		float Ps { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight);
@@ -2687,6 +2795,10 @@ namespace MetalPerformanceShaders {
 		[Export ("kernelSize")]
 		nuint KernelSize { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelSize:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelSize);
@@ -2736,6 +2848,10 @@ namespace MetalPerformanceShaders {
 		[Export ("kernelSize")]
 		nuint KernelSize { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelSize:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelSize);
@@ -2891,10 +3007,26 @@ namespace MetalPerformanceShaders {
 		[Export ("usage", ArgumentSemantic.Assign)]
 		MTLTextureUsage Usage { get; set; }
 
+		/// <param name="channelFormat">To be added.</param>
+		/// <param name="width">To be added.</param>
+		/// <param name="height">To be added.</param>
+		/// <param name="featureChannels">To be added.</param>
+		/// <summary>Returns a <see cref="T:MetalPerformanceShaders.MPSImageDescriptor" /> object for the specified values.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("imageDescriptorWithChannelFormat:width:height:featureChannels:")]
 		MPSImageDescriptor GetImageDescriptor (MPSImageFeatureChannelFormat channelFormat, nuint width, nuint height, nuint featureChannels);
 
+		/// <param name="channelFormat">To be added.</param>
+		/// <param name="width">To be added.</param>
+		/// <param name="height">To be added.</param>
+		/// <param name="featureChannels">To be added.</param>
+		/// <param name="numberOfImages">To be added.</param>
+		/// <param name="usage">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("imageDescriptorWithChannelFormat:width:height:featureChannels:numberOfImages:usage:")]
 		MPSImageDescriptor GetImageDescriptor (MPSImageFeatureChannelFormat channelFormat, nuint width, nuint height, nuint featureChannels, nuint numberOfImages, MTLTextureUsage usage);
@@ -3027,11 +3159,20 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithDevice:imageDescriptor:")]
 		NativeHandle Constructor (IMTLDevice device, MPSImageDescriptor imageDescriptor);
 
+		/// <param name="parent">To be added.</param>
+		/// <param name="sliceRange">To be added.</param>
+		/// <param name="featureChannels">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		[MacCatalyst (13, 1)]
 		[Export ("initWithParentImage:sliceRange:featureChannels:")]
 		NativeHandle Constructor (MPSImage parent, NSRange sliceRange, nuint featureChannels);
 
+		/// <param name="texture">To be added.</param>
+		/// <param name="featureChannels">To be added.</param>
+		/// <summary>Creates a new <see cref="T:MetalPerformanceShaders.MPSImage" /> from the specified <paramref name="texture" /> with the specified <paramref name="featureChannels" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithTexture:featureChannels:")]
 		NativeHandle Constructor (IMTLTexture texture, nuint featureChannels);
 
@@ -3126,6 +3267,11 @@ namespace MetalPerformanceShaders {
 		[Export ("defaultAllocator")]
 		IMPSImageAllocator DefaultAllocator { get; }
 
+		/// <param name="parent">To be added.</param>
+		/// <param name="sliceRange">To be added.</param>
+		/// <param name="featureChannels">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		[MacCatalyst (13, 1)]
 		[Export ("initWithParentImage:sliceRange:featureChannels:")]
@@ -3149,6 +3295,12 @@ namespace MetalPerformanceShaders {
 		[Export ("temporaryImageWithCommandBuffer:textureDescriptor:")]
 		MPSTemporaryImage GetTemporaryImage (IMTLCommandBuffer commandBuffer, MTLTextureDescriptor textureDescriptor);
 
+		/// <param name="commandBuffer">To be added.</param>
+		/// <param name="textureDescriptor">To be added.</param>
+		/// <param name="featureChannels">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("temporaryImageWithCommandBuffer:textureDescriptor:featureChannels:")]
@@ -3348,16 +3500,37 @@ namespace MetalPerformanceShaders {
 		[Export ("matrixBytes")]
 		nuint MatrixBytes { get; }
 
+		/// <param name="rows">To be added.</param>
+		/// <param name="columns">To be added.</param>
+		/// <param name="rowBytes">To be added.</param>
+		/// <param name="dataType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("matrixDescriptorWithRows:columns:rowBytes:dataType:")]
 		MPSMatrixDescriptor GetMatrixDescriptor (nuint rows, nuint columns, nuint rowBytes, MPSDataType dataType);
 
+		/// <param name="rows">To be added.</param>
+		/// <param name="columns">To be added.</param>
+		/// <param name="matrices">To be added.</param>
+		/// <param name="rowBytes">To be added.</param>
+		/// <param name="matrixBytes">To be added.</param>
+		/// <param name="dataType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("matrixDescriptorWithRows:columns:matrices:rowBytes:matrixBytes:dataType:")]
 		MPSMatrixDescriptor GetMatrixDescriptor (nuint rows, nuint columns, nuint matrices, nuint rowBytes, nuint matrixBytes, MPSDataType dataType);
 
+		/// <param name="columns">To be added.</param>
+		/// <param name="dataType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("rowBytesForColumns:dataType:")]
@@ -3471,6 +3644,12 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSKernel))]
 	[DisableDefaultCtor]
 	interface MPSMatrixMultiplication {
+		/// <param name="device">To be added.</param>
+		/// <param name="resultRows">To be added.</param>
+		/// <param name="resultColumns">To be added.</param>
+		/// <param name="interiorColumns">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:resultRows:resultColumns:interiorColumns:")]
 		NativeHandle Constructor (IMTLDevice device, nuint resultRows, nuint resultColumns, nuint interiorColumns);
@@ -3493,6 +3672,16 @@ namespace MetalPerformanceShaders {
 		[Export ("rightMatrixOrigin", ArgumentSemantic.Assign)]
 		MTLOrigin RightMatrixOrigin { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="transposeLeft">To be added.</param>
+		/// <param name="transposeRight">To be added.</param>
+		/// <param name="resultRows">To be added.</param>
+		/// <param name="resultColumns">To be added.</param>
+		/// <param name="interiorColumns">To be added.</param>
+		/// <param name="alpha">To be added.</param>
+		/// <param name="beta">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:transposeLeft:transposeRight:resultRows:resultColumns:interiorColumns:alpha:beta:")]
 		NativeHandle Constructor (IMTLDevice device, bool transposeLeft, bool transposeRight, nuint resultRows, nuint resultColumns, nuint interiorColumns, double alpha, double beta);
 
@@ -3553,6 +3742,11 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSState {
 
+		/// <param name="commandBuffer">To be added.</param>
+		/// <param name="bufferSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("temporaryStateWithCommandBuffer:bufferSize:")]
@@ -3577,6 +3771,10 @@ namespace MetalPerformanceShaders {
 		[Export ("temporaryStateWithCommandBuffer:")]
 		MPSState CreateTemporaryState (IMTLCommandBuffer commandBuffer);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="bufferSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:bufferSize:")]
 		NativeHandle Constructor (IMTLDevice device, nuint bufferSize);
@@ -3628,6 +3826,11 @@ namespace MetalPerformanceShaders {
 		[Export ("resourceCount")]
 		nuint ResourceCount { get; }
 
+		/// <param name="index">To be added.</param>
+		/// <param name="allocateMemory">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("resourceAtIndex:allocateMemory:")]
 		[return: NullAllowed]
@@ -3654,14 +3857,26 @@ namespace MetalPerformanceShaders {
 		[NullAllowed, Export ("label")]
 		string Label { get; set; }
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("bufferSizeAtIndex:")]
 		nuint GetBufferSize (nuint index);
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("textureInfoAtIndex:")]
 		MPSStateTextureInfo GetTextureInfo (nuint index);
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("resourceTypeAtIndex:")]
 		MPSStateResourceType GetResourceType (nuint index);
@@ -3842,14 +4057,31 @@ namespace MetalPerformanceShaders {
 		[Export ("vectorBytes")]
 		nuint VectorBytes { get; }
 
+		/// <param name="length">To be added.</param>
+		/// <param name="dataType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("vectorDescriptorWithLength:dataType:")]
 		MPSVectorDescriptor Create (nuint length, MPSDataType dataType);
 
+		/// <param name="length">To be added.</param>
+		/// <param name="vectors">To be added.</param>
+		/// <param name="vectorBytes">To be added.</param>
+		/// <param name="dataType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("vectorDescriptorWithLength:vectors:vectorBytes:dataType:")]
 		MPSVectorDescriptor Create (nuint length, nuint vectors, nuint vectorBytes, MPSDataType dataType);
 
+		/// <param name="length">To be added.</param>
+		/// <param name="dataType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("vectorBytesForLength:dataType:")]
 		nuint GetVectorBytes (nuint length, MPSDataType dataType);
@@ -3966,9 +4198,22 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSMatrixBinaryKernel))]
 	[DisableDefaultCtor] // According to docs needs a Metal Device so initWithDevice: makes more sense.
 	interface MPSMatrixVectorMultiplication {
+		/// <param name="device">To be added.</param>
+		/// <param name="transpose">To be added.</param>
+		/// <param name="rows">To be added.</param>
+		/// <param name="columns">To be added.</param>
+		/// <param name="alpha">To be added.</param>
+		/// <param name="beta">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:transpose:rows:columns:alpha:beta:")]
 		NativeHandle Constructor (IMTLDevice device, bool transpose, nuint rows, nuint columns, double alpha, double beta);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="rows">To be added.</param>
+		/// <param name="columns">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:rows:columns:")]
 		NativeHandle Constructor (IMTLDevice device, nuint rows, nuint columns);
 
@@ -4007,6 +4252,16 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSMatrixBinaryKernel))]
 	[DisableDefaultCtor] // According to docs needs a Metal Device so initWithDevice: makes more sense.
 	interface MPSMatrixSolveTriangular {
+		/// <param name="device">To be added.</param>
+		/// <param name="right">To be added.</param>
+		/// <param name="upper">To be added.</param>
+		/// <param name="transpose">To be added.</param>
+		/// <param name="unit">To be added.</param>
+		/// <param name="order">To be added.</param>
+		/// <param name="numberOfRightHandSides">To be added.</param>
+		/// <param name="alpha">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:right:upper:transpose:unit:order:numberOfRightHandSides:alpha:")]
 		NativeHandle Constructor (IMTLDevice device, bool right, bool upper, bool transpose, bool unit, nuint order, nuint numberOfRightHandSides, double alpha);
 
@@ -4044,6 +4299,12 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSMatrixBinaryKernel))]
 	[DisableDefaultCtor] // According to docs needs a Metal Device so initWithDevice: makes more sense.
 	interface MPSMatrixSolveLU {
+		/// <param name="device">To be added.</param>
+		/// <param name="transpose">To be added.</param>
+		/// <param name="order">To be added.</param>
+		/// <param name="numberOfRightHandSides">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:transpose:order:numberOfRightHandSides:")]
 		NativeHandle Constructor (IMTLDevice device, bool transpose, nuint order, nuint numberOfRightHandSides);
 
@@ -4083,6 +4344,12 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSMatrixBinaryKernel))]
 	[DisableDefaultCtor] // According to docs needs a Metal Device so initWithDevice: makes more sense.
 	interface MPSMatrixSolveCholesky {
+		/// <param name="device">To be added.</param>
+		/// <param name="upper">To be added.</param>
+		/// <param name="order">To be added.</param>
+		/// <param name="numberOfRightHandSides">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:upper:order:numberOfRightHandSides:")]
 		NativeHandle Constructor (IMTLDevice device, bool upper, nuint order, nuint numberOfRightHandSides);
 
@@ -4121,6 +4388,11 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSMatrixUnaryKernel))]
 	[DisableDefaultCtor] // According to docs needs a Metal Device so initWithDevice: makes more sense.
 	interface MPSMatrixDecompositionLU {
+		/// <param name="device">To be added.</param>
+		/// <param name="rows">To be added.</param>
+		/// <param name="columns">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:rows:columns:")]
 		NativeHandle Constructor (IMTLDevice device, nuint rows, nuint columns);
 
@@ -4163,6 +4435,11 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSMatrixUnaryKernel))]
 	[DisableDefaultCtor] // According to docs needs a Metal Device so initWithDevice: makes more sense.
 	interface MPSMatrixDecompositionCholesky {
+		/// <param name="device">To be added.</param>
+		/// <param name="lower">To be added.</param>
+		/// <param name="order">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:lower:order:")]
 		NativeHandle Constructor (IMTLDevice device, bool lower, nuint order);
 
@@ -4214,13 +4491,32 @@ namespace MetalPerformanceShaders {
 		[Export ("descriptorWithSourceMatrix:destinationMatrix:offsets:")]
 		MPSMatrixCopyDescriptor Create (MPSMatrix sourceMatrix, MPSMatrix destinationMatrix, MPSMatrixCopyOffsets offsets);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="count">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:count:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint count);
 
+		/// <param name="index">To be added.</param>
+		/// <param name="sourceMatrix">To be added.</param>
+		/// <param name="destinationMatrix">To be added.</param>
+		/// <param name="offsets">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setCopyOperationAtIndex:sourceMatrix:destinationMatrix:offsets:")]
 		void SetCopyOperation (nuint index, MPSMatrix sourceMatrix, MPSMatrix destinationMatrix, MPSMatrixCopyOffsets offsets);
 
+		/// <param name="sourceMatrices">To be added.</param>
+		/// <param name="destinationMatrices">To be added.</param>
+		/// <param name="offsets">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="byteOffset">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceMatrices:destinationMatrices:offsetVector:offset:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (MPSMatrix [] sourceMatrices, MPSMatrix [] destinationMatrices, [NullAllowed] MPSVector offsets, nuint byteOffset);
@@ -4231,6 +4527,13 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSKernel))]
 	[DisableDefaultCtor] // There is a DesignatedInitializer, file a bug if needed.
 	interface MPSMatrixCopy {
+		/// <param name="device">To be added.</param>
+		/// <param name="copyRows">To be added.</param>
+		/// <param name="copyColumns">To be added.</param>
+		/// <param name="areSourcesTransposed">To be added.</param>
+		/// <param name="areDestinationsTransposed">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:copyRows:copyColumns:sourcesAreTransposed:destinationsAreTransposed:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint copyRows, nuint copyColumns, bool areSourcesTransposed, bool areDestinationsTransposed);
@@ -4266,6 +4569,20 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeToCommandBuffer:copyDescriptor:")]
 		void EncodeToCommandBuffer (IMTLCommandBuffer cmdBuf, MPSMatrixCopyDescriptor copyDescriptor);
 
+		/// <param name="commandBuffer">To be added.</param>
+		/// <param name="copyDescriptor">To be added.</param>
+		/// <param name="rowPermuteIndices">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="rowPermuteOffset">To be added.</param>
+		/// <param name="columnPermuteIndices">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="columnPermuteOffset">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("encodeToCommandBuffer:copyDescriptor:rowPermuteIndices:rowPermuteOffset:columnPermuteIndices:columnPermuteOffset:")]
 		void EncodeToCommandBuffer (IMTLCommandBuffer commandBuffer, MPSMatrixCopyDescriptor copyDescriptor, [NullAllowed] MPSVector rowPermuteIndices, nuint rowPermuteOffset, [NullAllowed] MPSVector columnPermuteIndices, nuint columnPermuteOffset);
@@ -4470,6 +4787,16 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
 
+		/// <param name="commandBuffer">To be added.</param>
+		/// <param name="source">To be added.</param>
+		/// <param name="regions">To be added.</param>
+		/// <param name="numberOfRegions">To be added.</param>
+		/// <param name="keypointCountBuffer">To be added.</param>
+		/// <param name="keypointCountBufferOffset">To be added.</param>
+		/// <param name="keypointDataBuffer">To be added.</param>
+		/// <param name="keypointDataBufferOffset">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("encodeToCommandBuffer:sourceTexture:regions:numberOfRegions:keypointCountBuffer:keypointCountBufferOffset:keypointDataBuffer:keypointDataBufferOffset:")]
 		void EncodeToCommandBuffer (IMTLCommandBuffer commandBuffer, IMTLTexture source, MTLRegion regions, nuint numberOfRegions, IMTLBuffer keypointCountBuffer, nuint keypointCountBufferOffset, IMTLBuffer keypointDataBuffer, nuint keypointDataBufferOffset);
 	}
@@ -5620,6 +5947,13 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSCnnPooling), Name = "MPSCNNPoolingL2Norm")]
 	[DisableDefaultCtor] // failed assertion.
 	interface MPSCnnPoolingL2Norm {
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
@@ -5654,6 +5988,15 @@ namespace MetalPerformanceShaders {
 		[Export ("dilationRateY")]
 		nuint DilationRateY { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="dilationRateX">To be added.</param>
+		/// <param name="dilationRateY">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:dilationRateX:dilationRateY:strideInPixelsX:strideInPixelsY:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint dilationRateX, nuint dilationRateY, nuint strideInPixelsX, nuint strideInPixelsY);
@@ -5682,9 +6025,21 @@ namespace MetalPerformanceShaders {
 		[Export ("sourceSize", ArgumentSemantic.Assign)]
 		MTLSize SourceSize { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:")]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
@@ -5715,6 +6070,13 @@ namespace MetalPerformanceShaders {
 		[Export ("zeroPadSizeY")]
 		nuint ZeroPadSizeY { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
@@ -5733,6 +6095,13 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnPoolingMaxGradient {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
@@ -5751,6 +6120,13 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnPoolingL2NormGradient {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
@@ -5769,6 +6145,15 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnDilatedPoolingMaxGradient {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="dilationRateX">To be added.</param>
+		/// <param name="dilationRateY">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelWidth:kernelHeight:dilationRateX:dilationRateY:strideInPixelsX:strideInPixelsY:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, nuint dilationRateX, nuint dilationRateY, nuint strideInPixelsX, nuint strideInPixelsY);
@@ -5825,6 +6210,11 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSCnnUpsampling), Name = "MPSCNNUpsamplingNearest")]
 	[DisableDefaultCtor] // failed assertion.
 	interface MPSCnnUpsamplingNearest {
+		/// <param name="device">To be added.</param>
+		/// <param name="integerScaleFactorX">To be added.</param>
+		/// <param name="integerScaleFactorY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:integerScaleFactorX:integerScaleFactorY:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint integerScaleFactorX, nuint integerScaleFactorY);
@@ -5835,9 +6225,20 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSCnnUpsampling), Name = "MPSCNNUpsamplingBilinear")]
 	[DisableDefaultCtor] // failed assertion.
 	interface MPSCnnUpsamplingBilinear {
+		/// <param name="device">To be added.</param>
+		/// <param name="integerScaleFactorX">To be added.</param>
+		/// <param name="integerScaleFactorY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:integerScaleFactorX:integerScaleFactorY:")]
 		NativeHandle Constructor (IMTLDevice device, nuint integerScaleFactorX, nuint integerScaleFactorY);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="integerScaleFactorX">To be added.</param>
+		/// <param name="integerScaleFactorY">To be added.</param>
+		/// <param name="alignCorners">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithDevice:integerScaleFactorX:integerScaleFactorY:alignCorners:")]
 		[DesignatedInitializer]
@@ -5882,6 +6283,11 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnUpsamplingNearestGradient {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="integerScaleFactorX">To be added.</param>
+		/// <param name="integerScaleFactorY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:integerScaleFactorX:integerScaleFactorY:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint integerScaleFactorX, nuint integerScaleFactorY);
@@ -5892,6 +6298,11 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnUpsamplingBilinearGradient {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="integerScaleFactorX">To be added.</param>
+		/// <param name="integerScaleFactorY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:integerScaleFactorX:integerScaleFactorY:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint integerScaleFactorX, nuint integerScaleFactorY);
@@ -5954,6 +6365,11 @@ namespace MetalPerformanceShaders {
 		[NullAllowed, Export ("recurrentWeights", ArgumentSemantic.Retain)]
 		IMPSCnnConvolutionDataSource RecurrentWeights { get; set; }
 
+		/// <param name="inputFeatureChannels">To be added.</param>
+		/// <param name="outputFeatureChannels">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("createRNNSingleGateDescriptorWithInputFeatureChannels:outputFeatureChannels:")]
 		MPSRnnSingleGateDescriptor Create (nuint inputFeatureChannels, nuint outputFeatureChannels);
@@ -6038,6 +6454,11 @@ namespace MetalPerformanceShaders {
 		[Export ("flipOutputGates")]
 		bool FlipOutputGates { get; set; }
 
+		/// <param name="inputFeatureChannels">To be added.</param>
+		/// <param name="outputFeatureChannels">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("createGRUDescriptorWithInputFeatureChannels:outputFeatureChannels:")]
 		MPSGRUDescriptor Create (nuint inputFeatureChannels, nuint outputFeatureChannels);
@@ -6186,6 +6607,11 @@ namespace MetalPerformanceShaders {
 		[Export ("cellToOutputNeuronParamC")]
 		float CellToOutputNeuronParamC { get; set; }
 
+		/// <param name="inputFeatureChannels">To be added.</param>
+		/// <param name="outputFeatureChannels">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("createLSTMDescriptorWithInputFeatureChannels:outputFeatureChannels:")]
 		MPSLSTMDescriptor Create (nuint inputFeatureChannels, nuint outputFeatureChannels);
@@ -6196,10 +6622,18 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSState), Name = "MPSRNNRecurrentImageState")]
 	[DisableDefaultCtor] // 'init' is unavailable
 	interface MPSRnnRecurrentImageState {
+		/// <param name="layerIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("getRecurrentOutputImageForLayerIndex:")]
 		[return: NullAllowed]
 		MPSImage GetRecurrentOutputImage (nuint layerIndex);
 
+		/// <param name="layerIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("getMemoryCellImageForLayerIndex:")]
 		[return: NullAllowed]
 		MPSImage GetMemoryCellImage (nuint layerIndex);
@@ -6323,10 +6757,18 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSState), Name = "MPSRNNRecurrentMatrixState")]
 	[DisableDefaultCtor] // 'init' is unavailable
 	interface MPSRnnRecurrentMatrixState {
+		/// <param name="layerIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("getRecurrentOutputMatrixForLayerIndex:")]
 		[return: NullAllowed]
 		MPSMatrix GetRecurrentOutputMatrix (nuint layerIndex);
 
+		/// <param name="layerIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("getMemoryCellMatrixForLayerIndex:")]
 		[return: NullAllowed]
 		MPSMatrix GetMemoryCellMatrix (nuint layerIndex);
@@ -7767,20 +8209,47 @@ namespace MetalPerformanceShaders {
 		[Export ("strideInPixelsY")]
 		nuint StrideInPixelsY { get; }
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="size">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("nodeWithSource:filterSize:")]
 		MPSCnnPoolingNode Create (MPSNNImageNode sourceNode, nuint size);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="size">To be added.</param>
+		/// <param name="stride">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("nodeWithSource:filterSize:stride:")]
 		MPSCnnPoolingNode Create (MPSNNImageNode sourceNode, nuint size, nuint stride);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="size">To be added.</param>
+		/// <param name="stride">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:filterSize:stride:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint size, nuint stride);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="size">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:filterSize:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint size);
 	}
@@ -7790,10 +8259,31 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnPoolingGradientNode {
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <param name="paddingPolicy">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:paddingPolicy:")]
 		MPSCnnPoolingGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY, [NullAllowed] IMPSNNPadding paddingPolicy);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <param name="paddingPolicy">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:paddingPolicy:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY, [NullAllowed] IMPSNNPadding paddingPolicy);
 
@@ -7827,11 +8317,32 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnPoolingMaxGradientNode {
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <param name="paddingPolicy">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[New]
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:paddingPolicy:")]
 		MPSCnnPoolingMaxGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY, [NullAllowed] IMPSNNPadding paddingPolicy);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <param name="paddingPolicy">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:paddingPolicy:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY, [NullAllowed] IMPSNNPadding paddingPolicy);
 	}
@@ -7841,11 +8352,32 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnPoolingAverageGradientNode {
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <param name="paddingPolicy">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[New]
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:paddingPolicy:")]
 		MPSCnnPoolingAverageGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY, [NullAllowed] IMPSNNPadding paddingPolicy);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <param name="paddingPolicy">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:paddingPolicy:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY, [NullAllowed] IMPSNNPadding paddingPolicy);
 	}
@@ -7855,11 +8387,32 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnPoolingL2NormGradientNode {
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <param name="paddingPolicy">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[New]
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:paddingPolicy:")]
 		MPSCnnPoolingL2NormGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY, [NullAllowed] IMPSNNPadding paddingPolicy);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <param name="paddingPolicy">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:paddingPolicy:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY, [NullAllowed] IMPSNNPadding paddingPolicy);
 	}
@@ -7869,10 +8422,33 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnDilatedPoolingMaxGradientNode {
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <param name="dilationRateX">To be added.</param>
+		/// <param name="dilationRateY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:dilationRateX:dilationRateY:")]
 		MPSCnnDilatedPoolingMaxGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY, nuint dilationRateX, nuint dilationRateY);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <param name="dilationRateX">To be added.</param>
+		/// <param name="dilationRateY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:dilationRateX:dilationRateY:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY, nuint dilationRateX, nuint dilationRateY);
 
@@ -7906,10 +8482,23 @@ namespace MetalPerformanceShaders {
 		[Export ("kernelHeight")]
 		nuint KernelHeight { get; set; }
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="kernelSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:kernelSize:")]
 		MPSCnnSpatialNormalizationGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, nuint kernelSize);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="kernelSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:kernelSize:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, nuint kernelSize);
 
@@ -7937,10 +8526,25 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnLocalContrastNormalizationGradientNode {
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:")]
 		MPSCnnLocalContrastNormalizationGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, nuint kernelWidth, nuint kernelHeight);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, nuint kernelWidth, nuint kernelHeight);
 
@@ -7998,10 +8602,23 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnCrossChannelNormalizationGradientNode {
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="kernelSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:kernelSize:")]
 		MPSCnnCrossChannelNormalizationGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, nuint kernelSize);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="kernelSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:kernelSize:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, nuint kernelSize);
 
@@ -8127,20 +8744,51 @@ namespace MetalPerformanceShaders {
 		[Export ("dilationRateY")]
 		nuint DilationRateY { get; }
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="size">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("nodeWithSource:filterSize:")]
 		MPSCnnDilatedPoolingMaxNode Create (MPSNNImageNode sourceNode, nuint size);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="size">To be added.</param>
+		/// <param name="stride">To be added.</param>
+		/// <param name="dilationRate">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("nodeWithSource:filterSize:stride:dilationRate:")]
 		MPSCnnDilatedPoolingMaxNode Create (MPSNNImageNode sourceNode, nuint size, nuint stride, nuint dilationRate);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <param name="dilationRateX">To be added.</param>
+		/// <param name="dilationRateY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:dilationRateX:dilationRateY:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY, nuint dilationRateX, nuint dilationRateY);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="size">To be added.</param>
+		/// <param name="stride">To be added.</param>
+		/// <param name="dilationRate">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:filterSize:stride:dilationRate:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint size, nuint stride, nuint dilationRate);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="size">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:filterSize:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint size);
 	}
@@ -8201,10 +8849,19 @@ namespace MetalPerformanceShaders {
 		[Export ("kernelHeight")]
 		nuint KernelHeight { get; set; }
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="kernelSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("nodeWithSource:kernelSize:")]
 		MPSCnnSpatialNormalizationNode Create (MPSNNImageNode sourceNode, nuint kernelSize);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="kernelSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:kernelSize:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint kernelSize);
@@ -8252,10 +8909,19 @@ namespace MetalPerformanceShaders {
 		[Export ("kernelHeight")]
 		nuint KernelHeight { get; set; }
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="kernelSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("nodeWithSource:kernelSize:")]
 		MPSCnnLocalContrastNormalizationNode Create (MPSNNImageNode sourceNode, nuint kernelSize);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="kernelSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:kernelSize:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint kernelSize);
@@ -8279,10 +8945,19 @@ namespace MetalPerformanceShaders {
 		[Export ("kernelSizeInFeatureChannels")]
 		nuint KernelSizeInFeatureChannels { get; set; }
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="kernelSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("nodeWithSource:kernelSize:")]
 		MPSCnnCrossChannelNormalizationNode Create (MPSNNImageNode sourceNode, nuint kernelSize);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="kernelSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:kernelSize:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint kernelSize);
@@ -8698,10 +9373,23 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithSource:keepProbability:")]
 		NativeHandle Constructor (MPSNNImageNode source, float keepProbability);
 
+		/// <param name="source">To be added.</param>
+		/// <param name="keepProbability">To be added.</param>
+		/// <param name="seed">To be added.</param>
+		/// <param name="maskStrideInPixels">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("nodeWithSource:keepProbability:seed:maskStrideInPixels:")]
 		MPSCnnDropoutNode Create (MPSNNImageNode source, float keepProbability, nuint seed, MTLSize maskStrideInPixels);
 
+		/// <param name="source">To be added.</param>
+		/// <param name="keepProbability">To be added.</param>
+		/// <param name="seed">To be added.</param>
+		/// <param name="maskStrideInPixels">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:keepProbability:seed:maskStrideInPixels:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (MPSNNImageNode source, float keepProbability, nuint seed, MTLSize maskStrideInPixels);
@@ -8730,10 +9418,27 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSCnnDropoutGradientNode {
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="keepProbability">To be added.</param>
+		/// <param name="seed">To be added.</param>
+		/// <param name="maskStrideInPixels">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("nodeWithSourceGradient:sourceImage:gradientState:keepProbability:seed:maskStrideInPixels:")]
 		MPSCnnDropoutGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, float keepProbability, nuint seed, MTLSize maskStrideInPixels);
 
+		/// <param name="sourceGradient">To be added.</param>
+		/// <param name="sourceImage">To be added.</param>
+		/// <param name="gradientState">To be added.</param>
+		/// <param name="keepProbability">To be added.</param>
+		/// <param name="seed">To be added.</param>
+		/// <param name="maskStrideInPixels">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSourceGradient:sourceImage:gradientState:keepProbability:seed:maskStrideInPixels:")]
 		NativeHandle Constructor (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, float keepProbability, nuint seed, MTLSize maskStrideInPixels);
 
@@ -8869,10 +9574,23 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNReshapeNode {
 
+		/// <param name="source">To be added.</param>
+		/// <param name="resultWidth">To be added.</param>
+		/// <param name="resultHeight">To be added.</param>
+		/// <param name="resultFeatureChannels">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("nodeWithSource:resultWidth:resultHeight:resultFeatureChannels:")]
 		MPSNNReshapeNode Create (MPSNNImageNode source, nuint resultWidth, nuint resultHeight, nuint resultFeatureChannels);
 
+		/// <param name="source">To be added.</param>
+		/// <param name="resultWidth">To be added.</param>
+		/// <param name="resultHeight">To be added.</param>
+		/// <param name="resultFeatureChannels">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:resultWidth:resultHeight:resultFeatureChannels:")]
 		NativeHandle Constructor (MPSNNImageNode source, nuint resultWidth, nuint resultHeight, nuint resultFeatureChannels);
 	}
@@ -9074,10 +9792,21 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSNNFilterNode), Name = "MPSCNNUpsamplingNearestNode")]
 	[DisableDefaultCtor]
 	interface MPSCnnUpsamplingNearestNode {
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="integerScaleFactorX">To be added.</param>
+		/// <param name="integerScaleFactorY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("nodeWithSource:integerScaleFactorX:integerScaleFactorY:")]
 		MPSCnnUpsamplingNearestNode Create (MPSNNImageNode sourceNode, nuint integerScaleFactorX, nuint integerScaleFactorY);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="integerScaleFactorX">To be added.</param>
+		/// <param name="integerScaleFactorY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:integerScaleFactorX:integerScaleFactorY:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint integerScaleFactorX, nuint integerScaleFactorY);
 
@@ -9099,18 +9828,42 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSNNFilterNode), Name = "MPSCNNUpsamplingBilinearNode")]
 	[DisableDefaultCtor]
 	interface MPSCnnUpsamplingBilinearNode {
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="integerScaleFactorX">To be added.</param>
+		/// <param name="integerScaleFactorY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("nodeWithSource:integerScaleFactorX:integerScaleFactorY:")]
 		MPSCnnUpsamplingBilinearNode Create (MPSNNImageNode sourceNode, nuint integerScaleFactorX, nuint integerScaleFactorY);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="integerScaleFactorX">To be added.</param>
+		/// <param name="integerScaleFactorY">To be added.</param>
+		/// <param name="alignCorners">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("nodeWithSource:integerScaleFactorX:integerScaleFactorY:alignCorners:")]
 		MPSCnnUpsamplingBilinearNode Create (MPSNNImageNode sourceNode, nuint integerScaleFactorX, nuint integerScaleFactorY, bool alignCorners);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="integerScaleFactorX">To be added.</param>
+		/// <param name="integerScaleFactorY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:integerScaleFactorX:integerScaleFactorY:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint integerScaleFactorX, nuint integerScaleFactorY);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="integerScaleFactorX">To be added.</param>
+		/// <param name="integerScaleFactorY">To be added.</param>
+		/// <param name="alignCorners">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithSource:integerScaleFactorX:integerScaleFactorY:alignCorners:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint integerScaleFactorX, nuint integerScaleFactorY, bool alignCorners);
@@ -9581,10 +10334,18 @@ namespace MetalPerformanceShaders {
 			"""), Export ("executeAsyncWithSourceImages:completionHandler:")]
 		MPSImage Execute (MPSImage [] sourceImages, Action<MPSImage, NSError> handler);
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("readCountForSourceImageAtIndex:")]
 		nuint GetReadCountForSourceImage (nuint index);
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("readCountForSourceStateAtIndex:")]
 		nuint GetReadCountForSourceState (nuint index);
@@ -9801,6 +10562,13 @@ namespace MetalPerformanceShaders {
 		[Export ("imageForCommandBuffer:imageDescriptor:kernel:")]
 		MPSImage GetImage (IMTLCommandBuffer cmdBuf, MPSImageDescriptor descriptor, MPSKernel kernel);
 
+		/// <param name="commandBuffer">To be added.</param>
+		/// <param name="descriptor">To be added.</param>
+		/// <param name="kernel">To be added.</param>
+		/// <param name="count">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("imageBatchForCommandBuffer:imageDescriptor:kernel:count:")]
 		NSArray<MPSImage> GetImageBatch (IMTLCommandBuffer commandBuffer, MPSImageDescriptor descriptor, MPSKernel kernel, nuint count);
@@ -9868,12 +10636,28 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSCnnPoolingNode), Name = "MPSCNNPoolingAverageNode")]
 	[DisableDefaultCtor] // 'init' is unavailable
 	interface MPSCnnPoolingAverageNode {
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="size">To be added.</param>
+		/// <param name="stride">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:filterSize:stride:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint size, nuint stride);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="size">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:filterSize:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint size);
 	}
@@ -9883,12 +10667,28 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSCnnPoolingNode), Name = "MPSCNNPoolingL2NormNode")]
 	[DisableDefaultCtor] // 'init' is unavailable
 	interface MPSCnnPoolingL2NormNode {
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="size">To be added.</param>
+		/// <param name="stride">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:filterSize:stride:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint size, nuint stride);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="size">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:filterSize:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint size);
 	}
@@ -9898,12 +10698,28 @@ namespace MetalPerformanceShaders {
 	[BaseType (typeof (MPSCnnPoolingNode), Name = "MPSCNNPoolingMaxNode")]
 	[DisableDefaultCtor] // 'init' is unavailable
 	interface MPSCnnPoolingMaxNode {
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="strideInPixelsX">To be added.</param>
+		/// <param name="strideInPixelsY">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:kernelWidth:kernelHeight:strideInPixelsX:strideInPixelsY:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint kernelWidth, nuint kernelHeight, nuint strideInPixelsX, nuint strideInPixelsY);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="size">To be added.</param>
+		/// <param name="stride">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:filterSize:stride:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint size, nuint stride);
 
+		/// <param name="sourceNode">To be added.</param>
+		/// <param name="size">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithSource:filterSize:")]
 		NativeHandle Constructor (MPSNNImageNode sourceNode, nuint size);
 	}
@@ -10068,6 +10884,13 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSMatrixSum {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="count">To be added.</param>
+		/// <param name="rows">To be added.</param>
+		/// <param name="columns">To be added.</param>
+		/// <param name="transpose">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:count:rows:columns:transpose:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint count, nuint rows, nuint columns, bool transpose);
@@ -10130,6 +10953,24 @@ namespace MetalPerformanceShaders {
 		float NeuronParameterC { get; }
 
 		// Keeping the same name as in the parent class so it ends up in an overload
+		/// <param name="buffer">To be added.</param>
+		/// <param name="sourceMatrices">To be added.</param>
+		/// <param name="resultMatrix">To be added.</param>
+		/// <param name="scaleVector">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="offsetVector">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="biasVector">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="startIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("encodeToCommandBuffer:sourceMatrices:resultMatrix:scaleVector:offsetVector:biasVector:startIndex:")]
 		void EncodeToCommandBuffer (IMTLCommandBuffer buffer, MPSMatrix [] sourceMatrices, MPSMatrix resultMatrix, [NullAllowed] MPSVector scaleVector, [NullAllowed] MPSVector offsetVector, [NullAllowed] MPSVector biasVector, nuint startIndex);
 
@@ -10653,6 +11494,10 @@ namespace MetalPerformanceShaders {
 		[Export ("numberOfTopKValues")]
 		nuint NumberOfTopKValues { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="numberOfTopKValues">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:numberOfTopKValues:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint numberOfTopKValues);
@@ -11177,6 +12022,10 @@ namespace MetalPerformanceShaders {
 		[Export ("reconstructOffset")]
 		float ReconstructOffset { get; set; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelDiameter">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:kernelDiameter:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint kernelDiameter);
@@ -11252,6 +12101,13 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder aDecoder, IMTLDevice device);
 
+		/// <param name="commandBuffer">To be added.</param>
+		/// <param name="source">To be added.</param>
+		/// <param name="minmaxTexture">To be added.</param>
+		/// <param name="histogram">To be added.</param>
+		/// <param name="histogramOffset">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("encodeToCommandBuffer:sourceTexture:minmaxTexture:histogram:histogramOffset:")]
 		void Encode (IMTLCommandBuffer commandBuffer, IMTLTexture source, IMTLTexture minmaxTexture, IMTLBuffer histogram, nuint histogramOffset);
 
@@ -11535,6 +12391,10 @@ namespace MetalPerformanceShaders {
 		[return: Release]
 		MPSRayIntersector Copy ([NullAllowed] NSZone zone, [NullAllowed] IMTLDevice device);
 
+		/// <param name="rayCount">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("recommendedMinimumRayBatchSizeForRayCount:")]
 		nuint GetRecommendedMinimumRayBatchSize (nuint rayCount);
 
@@ -11544,9 +12404,30 @@ namespace MetalPerformanceShaders {
 		[Export ("encodeWithCoder:")]
 		void Encode (NSCoder coder);
 
+		/// <param name="commandBuffer">To be added.</param>
+		/// <param name="intersectionType">To be added.</param>
+		/// <param name="rayBuffer">To be added.</param>
+		/// <param name="rayBufferOffset">To be added.</param>
+		/// <param name="intersectionBuffer">To be added.</param>
+		/// <param name="intersectionBufferOffset">To be added.</param>
+		/// <param name="rayCount">To be added.</param>
+		/// <param name="accelerationStructure">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("encodeIntersectionToCommandBuffer:intersectionType:rayBuffer:rayBufferOffset:intersectionBuffer:intersectionBufferOffset:rayCount:accelerationStructure:")]
 		void EncodeIntersection (IMTLCommandBuffer commandBuffer, MPSIntersectionType intersectionType, IMTLBuffer rayBuffer, nuint rayBufferOffset, IMTLBuffer intersectionBuffer, nuint intersectionBufferOffset, nuint rayCount, MPSAccelerationStructure accelerationStructure);
 
+		/// <param name="commandBuffer">To be added.</param>
+		/// <param name="intersectionType">To be added.</param>
+		/// <param name="rayBuffer">To be added.</param>
+		/// <param name="rayBufferOffset">To be added.</param>
+		/// <param name="intersectionBuffer">To be added.</param>
+		/// <param name="intersectionBufferOffset">To be added.</param>
+		/// <param name="rayCountBuffer">To be added.</param>
+		/// <param name="rayCountBufferOffset">To be added.</param>
+		/// <param name="accelerationStructure">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("encodeIntersectionToCommandBuffer:intersectionType:rayBuffer:rayBufferOffset:intersectionBuffer:intersectionBufferOffset:rayCountBuffer:rayCountBufferOffset:accelerationStructure:")]
 		void EncodeIntersection (IMTLCommandBuffer commandBuffer, MPSIntersectionType intersectionType, IMTLBuffer rayBuffer, nuint rayBufferOffset, IMTLBuffer intersectionBuffer, nuint intersectionBufferOffset, IMTLBuffer rayCountBuffer, nuint rayCountBufferOffset, MPSAccelerationStructure accelerationStructure);
 	}
@@ -11933,6 +12814,11 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithMean:variance:")]
 		NativeHandle Constructor (IMTLBuffer mean, IMTLBuffer variance);
 
+		/// <param name="commandBuffer">To be added.</param>
+		/// <param name="numberOfFeatureChannels">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("temporaryStateWithCommandBuffer:numberOfFeatureChannels:")]
 		MPSCnnNormalizationMeanAndVarianceState GetTemporaryState (IMTLCommandBuffer commandBuffer, nuint numberOfFeatureChannels);
@@ -12527,6 +13413,12 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="keepProbability">To be added.</param>
+		/// <param name="seed">To be added.</param>
+		/// <param name="maskStrideInPixels">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:keepProbability:seed:maskStrideInPixels:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, float keepProbability, nuint seed, MTLSize maskStrideInPixels);
@@ -12563,6 +13455,12 @@ namespace MetalPerformanceShaders {
 		[DesignatedInitializer]
 		NativeHandle Constructor (NSCoder decoder, IMTLDevice device);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="keepProbability">To be added.</param>
+		/// <param name="seed">To be added.</param>
+		/// <param name="maskStrideInPixels">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:keepProbability:seed:maskStrideInPixels:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, float keepProbability, nuint seed, MTLSize maskStrideInPixels);
@@ -13201,6 +14099,16 @@ namespace MetalPerformanceShaders {
 		[Export ("anchorBoxes", ArgumentSemantic.Retain)]
 		NSData AnchorBoxes { get; set; }
 
+		/// <param name="xyLossType">To be added.</param>
+		/// <param name="whLossType">To be added.</param>
+		/// <param name="confidenceLossType">To be added.</param>
+		/// <param name="classesLossType">To be added.</param>
+		/// <param name="reductionType">To be added.</param>
+		/// <param name="anchorBoxes">To be added.</param>
+		/// <param name="numberOfAnchorBoxes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("cnnLossDescriptorWithXYLossType:WHLossType:confidenceLossType:classesLossType:reductionType:anchorBoxes:numberOfAnchorBoxes:")]
 		MPSCnnYoloLossDescriptor Create (MPSCnnLossType xyLossType, MPSCnnLossType whLossType, MPSCnnLossType confidenceLossType, MPSCnnLossType classesLossType, MPSCnnReductionType reductionType, NSData anchorBoxes, nuint numberOfAnchorBoxes);
@@ -13767,6 +14675,11 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithGamma:beta:")]
 		NativeHandle Constructor (IMTLBuffer gamma, IMTLBuffer beta);
 
+		/// <param name="commandBuffer">To be added.</param>
+		/// <param name="numberOfFeatureChannels">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("temporaryStateWithCommandBuffer:numberOfFeatureChannels:")]
 		MPSCnnNormalizationGammaAndBetaState GetTemporaryState (IMTLCommandBuffer commandBuffer, nuint numberOfFeatureChannels);
@@ -13972,6 +14885,11 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNGradientState {
 
+		/// <param name="commandBuffer">To be added.</param>
+		/// <param name="bufferSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[New]
 		[Static]
 		[Export ("temporaryStateWithCommandBuffer:bufferSize:")]
@@ -13996,6 +14914,10 @@ namespace MetalPerformanceShaders {
 		[Export ("temporaryStateWithCommandBuffer:")]
 		MPSNNGradientState CreateTemporaryState (IMTLCommandBuffer commandBuffer);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="bufferSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:bufferSize:")]
 		NativeHandle Constructor (IMTLDevice device, nuint bufferSize);
 
@@ -14041,6 +14963,11 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSNNBinaryGradientState {
 
+		/// <param name="commandBuffer">To be added.</param>
+		/// <param name="bufferSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[New]
 		[Static]
 		[Export ("temporaryStateWithCommandBuffer:bufferSize:")]
@@ -14065,6 +14992,10 @@ namespace MetalPerformanceShaders {
 		[Export ("temporaryStateWithCommandBuffer:")]
 		MPSNNBinaryGradientState CreateTemporaryState (IMTLCommandBuffer commandBuffer);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="bufferSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:bufferSize:")]
 		NativeHandle Constructor (IMTLDevice device, nuint bufferSize);
 
@@ -14448,6 +15379,14 @@ namespace MetalPerformanceShaders {
 		[Export ("initWithDevice:learningRate:")]
 		NativeHandle Constructor (IMTLDevice device, float learningRate);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="beta1">To be added.</param>
+		/// <param name="beta2">To be added.</param>
+		/// <param name="epsilon">To be added.</param>
+		/// <param name="timeStep">To be added.</param>
+		/// <param name="optimizerDescriptor">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:beta1:beta2:epsilon:timeStep:optimizerDescriptor:")]
 		NativeHandle Constructor (IMTLDevice device, double beta1, double beta2, float epsilon, nuint timeStep, MPSNNOptimizerDescriptor optimizerDescriptor);
 
@@ -14894,6 +15833,12 @@ namespace MetalPerformanceShaders {
 		[Export ("alignCorners")]
 		bool AlignCorners { get; }
 
+		/// <param name="device">To be added.</param>
+		/// <param name="resizeWidth">To be added.</param>
+		/// <param name="resizeHeight">To be added.</param>
+		/// <param name="alignCorners">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:resizeWidth:resizeHeight:alignCorners:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor (IMTLDevice device, nuint resizeWidth, nuint resizeHeight, bool alignCorners);
@@ -14975,6 +15920,11 @@ namespace MetalPerformanceShaders {
 	[DisableDefaultCtor]
 	interface MPSRnnMatrixTrainingState {
 
+		/// <param name="commandBuffer">To be added.</param>
+		/// <param name="bufferSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[New]
 		[Export ("temporaryStateWithCommandBuffer:bufferSize:")]
@@ -14999,6 +15949,10 @@ namespace MetalPerformanceShaders {
 		[Export ("temporaryStateWithCommandBuffer:")]
 		MPSRnnMatrixTrainingState CreateTemporaryState (IMTLCommandBuffer commandBuffer);
 
+		/// <param name="device">To be added.</param>
+		/// <param name="bufferSize">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDevice:bufferSize:")]
 		NativeHandle Constructor (IMTLDevice device, nuint bufferSize);
 

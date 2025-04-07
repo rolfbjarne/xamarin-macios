@@ -657,6 +657,10 @@ namespace MapKit {
 		[Export ("overlays")]
 		IMKOverlay [] Overlays { get; }
 
+		/// <param name="overlay">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("insertOverlay:atIndex:")]
 		[PostGet ("Overlays")]
 		void InsertOverlay (IMKOverlay overlay, nint index);
@@ -669,6 +673,10 @@ namespace MapKit {
 		[PostGet ("Overlays")]
 		void InsertOverlayBelow (IMKOverlay overlay, IMKOverlay sibling);
 
+		/// <param name="index1">The index of the first overlay.</param>
+		/// <param name="index2">The index of the second overlay.</param>
+		/// <summary>Swaps the index positions of two overlays.</summary>
+		/// <remarks>Changing the index positions of the overlays will swap their z-order on the map.</remarks>
 		[Export ("exchangeOverlayAtIndex:withOverlayAtIndex:")]
 		void ExchangeOverlays (nint index1, nint index2);
 
@@ -743,6 +751,11 @@ namespace MapKit {
 		[PostGet ("Overlays")]
 		void ExchangeOverlay (IMKOverlay overlay1, IMKOverlay overlay2);
 
+		/// <param name="overlay">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <param name="level">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("insertOverlay:atIndex:level:")]
 		[PostGet ("Overlays")]
 		void InsertOverlay (IMKOverlay overlay, nuint index, MKOverlayLevel level);
@@ -1402,9 +1415,18 @@ namespace MapKit {
 		[ThreadSafe]
 		MKMapRect MapRectForRect (CGRect rect);
 
+		/// <include file="../docs/api/MapKit/MKOverlayView.xml" path="/Documentation/Docs[@DocId='M:MapKit.MKOverlayView.CanDrawMapRect(MapKit.MKMapRect,System.Runtime.InteropServices.NFloat)']/*" />
 		[Export ("canDrawMapRect:zoomScale:")]
 		bool CanDrawMapRect (MKMapRect mapRect, /* MKZoomScale */ nfloat zoomScale);
 
+		/// <param name="mapRect">To be added.</param>
+		/// <param name="zoomScale">To be added.</param>
+		/// <param name="context">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>
+		///           <para>(More documentation for this node is coming)</para>
+		///           <para tool="threads">This can be used from a background thread.</para>
+		///         </remarks>
 		[Export ("drawMapRect:zoomScale:inContext:")]
 		[ThreadSafe]
 		void DrawMapRect (MKMapRect mapRect, /* MKZoomScale */ nfloat zoomScale, CGContext context);
@@ -1412,6 +1434,10 @@ namespace MapKit {
 		[Export ("setNeedsDisplayInMapRect:")]
 		void SetNeedsDisplay (MKMapRect mapRect);
 
+		/// <param name="mapRect">The <see cref="T:MapKit.MKMapRect" /> to invalidate.</param>
+		/// <param name="zoomScale">The zoom scale to invalidate.</param>
+		/// <summary>Invalidates the view in the specified <paramref name="mapRect" /> at the specified <paramref name="zoomScale" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setNeedsDisplayInMapRect:zoomScale:")]
 		void SetNeedsDisplay (MKMapRect mapRect, /* MKZoomScale */ nfloat zoomScale);
 	}
@@ -1475,9 +1501,17 @@ namespace MapKit {
 		[Export ("invalidatePath")]
 		void InvalidatePath ();
 
+		/// <param name="context">To be added.</param>
+		/// <param name="zoomScale">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("applyStrokePropertiesToContext:atZoomScale:")]
 		void ApplyStrokeProperties (CGContext context, /* MKZoomScale */ nfloat zoomScale);
 
+		/// <param name="context">To be added.</param>
+		/// <param name="zoomScale">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("applyFillPropertiesToContext:atZoomScale:")]
 		void ApplyFillProperties (CGContext context, /* MKZoomScale */ nfloat zoomScale);
 
@@ -2040,6 +2074,13 @@ namespace MapKit {
 		[Static, Export ("cameraLookingAtCenterCoordinate:fromEyeCoordinate:eyeAltitude:")]
 		MKMapCamera CameraLookingAtCenterCoordinate (CLLocationCoordinate2D centerCoordinate, CLLocationCoordinate2D eyeCoordinate, double eyeAltitude);
 
+		/// <param name="centerCoordinate">To be added.</param>
+		/// <param name="locationDistance">To be added.</param>
+		/// <param name="pitch">To be added.</param>
+		/// <param name="locationDirectionHeading">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[MacCatalyst (13, 1)]
 		[Export ("cameraLookingAtCenterCoordinate:fromDistance:pitch:heading:")]
@@ -2235,9 +2276,23 @@ namespace MapKit {
 		[Export ("invalidatePath")]
 		void InvalidatePath ();
 
+		/// <param name="context">To be added.</param>
+		/// <param name="zoomScale">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>
+		///           <para>(More documentation for this node is coming)</para>
+		///           <para tool="threads">This can be used from a background thread.</para>
+		///         </remarks>
 		[Export ("applyStrokePropertiesToContext:atZoomScale:")]
 		void ApplyStrokePropertiesToContext (CGContext context, /* MKZoomScale */ nfloat zoomScale);
 
+		/// <param name="context">To be added.</param>
+		/// <param name="zoomScale">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>
+		///           <para>(More documentation for this node is coming)</para>
+		///           <para tool="threads">This can be used from a background thread.</para>
+		///         </remarks>
 		[Export ("applyFillPropertiesToContext:atZoomScale:")]
 		void ApplyFillPropertiesToContext (CGContext context, /* MKZoomScale */ nfloat zoomScale);
 
@@ -2280,9 +2335,22 @@ namespace MapKit {
 		[Export ("mapRectForRect:")]
 		MKMapRect MapRectForRect (CGRect rect);
 
+		/// <param name="mapRect">To be added.</param>
+		/// <param name="zoomScale">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("canDrawMapRect:zoomScale:")]
 		bool CanDrawMapRect (MKMapRect mapRect, /* MKZoomScale */ nfloat zoomScale);
 
+		/// <param name="mapRect">To be added.</param>
+		/// <param name="zoomScale">To be added.</param>
+		/// <param name="context">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>
+		///           <para>(More documentation for this node is coming)</para>
+		///           <para tool="threads">This can be used from a background thread.</para>
+		///         </remarks>
 		[ThreadSafe]
 		[Export ("drawMapRect:zoomScale:inContext:")]
 		void DrawMapRect (MKMapRect mapRect, /* MKZoomScale */ nfloat zoomScale, CGContext context);
@@ -2293,6 +2361,10 @@ namespace MapKit {
 		[Export ("setNeedsDisplayInMapRect:")]
 		void SetNeedsDisplay (MKMapRect mapRect);
 
+		/// <param name="mapRect">To be added.</param>
+		/// <param name="zoomScale">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setNeedsDisplayInMapRect:zoomScale:")]
 		void SetNeedsDisplay (MKMapRect mapRect, /* MKZoomScale */ nfloat zoomScale);
 

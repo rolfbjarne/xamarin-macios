@@ -390,6 +390,9 @@ namespace Photos {
 		[Export ("requestContentEditingInputWithOptions:completionHandler:")]
 		nuint RequestContentEditingInput ([NullAllowed] PHContentEditingInputRequestOptions options, PHContentEditingHandler completionHandler);
 
+		/// <param name="requestID">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("cancelContentEditingInputRequest:")]
 		void CancelContentEditingInputRequest (nuint requestID);
 	}
@@ -442,6 +445,10 @@ namespace Photos {
 		[Export ("replaceAssetsAtIndexes:withAssets:")]
 		void ReplaceAssets (NSIndexSet indexes, PHObject [] assets);
 
+		/// <param name="fromIndexes">To be added.</param>
+		/// <param name="toIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("moveAssetsAtIndexes:toIndex:")]
 		void MoveAssets (NSIndexSet fromIndexes, nuint toIndex);
 	}
@@ -823,6 +830,10 @@ namespace Photos {
 		[Export ("replaceChildCollectionsAtIndexes:withChildCollections:")]
 		void ReplaceChildCollection (NSIndexSet indexes, PHCollection [] collections);
 
+		/// <param name="indexes">To be added.</param>
+		/// <param name="toIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("moveChildCollectionsAtIndexes:toIndex:")]
 		void MoveChildCollections (NSIndexSet indexes, nuint toIndex);
 	}
@@ -975,6 +986,10 @@ namespace Photos {
 		[Export ("count")]
 		nint Count { get; }
 
+		/// <param name="index">To be added.</param>
+		/// <summary>Returns that object at <paramref name="index" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("objectAtIndex:")]
 		NSObject ObjectAt (nint index);
 

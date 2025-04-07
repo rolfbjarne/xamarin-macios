@@ -2655,9 +2655,19 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSBrowserDelegate {
+		/// <param name="sender">To be added.</param>
+		/// <param name="column">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("browser:numberOfRowsInColumn:"), EventArgs ("NSBrowserColumn")]
 		nint RowsInColumn (NSBrowser sender, nint column);
 
+		/// <param name="sender">To be added.</param>
+		/// <param name="column">To be added.</param>
+		/// <param name="matrix">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("browser:createRowsForColumn:inMatrix:")]
 		void CreateRowsForColumn (NSBrowser sender, nint column, NSMatrix matrix);
 
@@ -2669,6 +2679,12 @@ namespace AppKit {
 		[Export ("browser:numberOfChildrenOfItem:")]
 		nint CountChildren (NSBrowser browser, NSObject item);
 
+		/// <param name="browser">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <param name="item">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("browser:child:ofItem:")]
 		NSObject GetChild (NSBrowser browser, nint index, NSObject item);
 
@@ -2688,6 +2704,12 @@ namespace AppKit {
 		[Export ("browser:objectValueForItem:")]
 		NSObject ObjectValueForItem (NSBrowser browser, NSObject item);
 
+		/// <param name="browser">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <param name="columnIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("browser:heightOfRow:inColumn:")]
 		nfloat RowHeight (NSBrowser browser, nint row, nint columnIndex);
 
@@ -2714,18 +2736,46 @@ namespace AppKit {
 		[Export ("browser:shouldEditItem:")]
 		bool ShouldEditItem (NSBrowser browser, NSObject item);
 
+		/// <param name="sender">To be added.</param>
+		/// <param name="cell">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <param name="column">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("browser:willDisplayCell:atRow:column:")]
 		void WillDisplayCell (NSBrowser sender, NSObject cell, nint row, nint column);
 
+		/// <param name="sender">To be added.</param>
+		/// <param name="column">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("browser:titleOfColumn:")]
 		string ColumnTitle (NSBrowser sender, nint column);
 
+		/// <param name="sender">To be added.</param>
+		/// <param name="title">To be added.</param>
+		/// <param name="column">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("browser:selectCellWithString:inColumn:")]
 		bool SelectCellWithString (NSBrowser sender, string title, nint column);
 
+		/// <param name="sender">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <param name="column">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("browser:selectRow:inColumn:")]
 		bool SelectRowInColumn (NSBrowser sender, nint row, nint column);
 
+		/// <param name="sender">To be added.</param>
+		/// <param name="column">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("browser:isColumnValid:")]
 		bool IsColumnValid (NSBrowser sender, nint column);
 
@@ -2741,9 +2791,21 @@ namespace AppKit {
 		[Export ("browserDidScroll:")]
 		void DidScroll (NSBrowser sender);
 
+		/// <param name="browser">To be added.</param>
+		/// <param name="columnIndex">To be added.</param>
+		/// <param name="userResize">To be added.</param>
+		/// <param name="suggestedWidth">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("browser:shouldSizeColumn:forUserResize:toWidth:")]
 		nfloat ShouldSizeColumn (NSBrowser browser, nint columnIndex, bool userResize, nfloat suggestedWidth);
 
+		/// <param name="browser">To be added.</param>
+		/// <param name="columnIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("browser:sizeToFitWidthOfColumn:")]
 		nfloat SizeToFitWidth (NSBrowser browser, nint columnIndex);
 
@@ -2753,16 +2815,43 @@ namespace AppKit {
 		[Export ("browserColumnConfigurationDidChange:")]
 		void ColumnConfigurationDidChange (NSNotification notification);
 
+		/// <param name="browser">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <param name="column">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("browser:shouldShowCellExpansionForRow:column:")]
 		bool ShouldShowCellExpansion (NSBrowser browser, nint row, nint column);
 
+		/// <param name="browser">To be added.</param>
+		/// <param name="rowIndexes">To be added.</param>
+		/// <param name="column">To be added.</param>
+		/// <param name="pasteboard">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("browser:writeRowsWithIndexes:inColumn:toPasteboard:")]
 		bool WriteRowsWithIndexesToPasteboard (NSBrowser browser, NSIndexSet rowIndexes, nint column, NSPasteboard pasteboard);
 
+		/// <param name="browser">To be added.</param>
+		/// <param name="dropDestination">To be added.</param>
+		/// <param name="rowIndexes">To be added.</param>
+		/// <param name="column">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'NSFilePromiseReceiver' objects instead.")]
 		[Export ("browser:namesOfPromisedFilesDroppedAtDestination:forDraggedRowsWithIndexes:inColumn:")]
 		string [] PromisedFilesDroppedAtDestination (NSBrowser browser, NSUrl dropDestination, NSIndexSet rowIndexes, nint column);
 
+		/// <param name="browser">To be added.</param>
+		/// <param name="rowIndexes">To be added.</param>
+		/// <param name="column">To be added.</param>
+		/// <param name="theEvent">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("browser:canDragRowsWithIndexes:inColumn:withEvent:")]
 		bool CanDragRowsWithIndexes (NSBrowser browser, NSIndexSet rowIndexes, nint column, NSEvent theEvent);
 
@@ -2784,6 +2873,12 @@ namespace AppKit {
 		bool AcceptDrop (NSBrowser browser, NSDraggingInfo info, nint row, nint column, NSBrowserDropOperation dropOperation);
 #endif
 
+		/// <param name="browser">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <param name="column">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[return: NullAllowed]
 		[Export ("browser:typeSelectStringForRow:inColumn:")]
 		string TypeSelectString (NSBrowser browser, nint row, nint column);
@@ -2797,6 +2892,14 @@ namespace AppKit {
 		[Export ("browser:shouldTypeSelectForEvent:withCurrentSearchString:")]
 		bool ShouldTypeSelectForEvent (NSBrowser browser, NSEvent theEvent, string currentSearchString);
 
+		/// <param name="browser">To be added.</param>
+		/// <param name="startRow">To be added.</param>
+		/// <param name="endRow">To be added.</param>
+		/// <param name="column">To be added.</param>
+		/// <param name="searchString">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("browser:nextTypeSelectMatchFromRow:toRow:inColumn:forString:")]
 		nint NextTypeSelectMatch (NSBrowser browser, nint startRow, nint endRow, nint column, string searchString);
 
@@ -2816,9 +2919,20 @@ namespace AppKit {
 		[Export ("browser:headerViewControllerForItem:")]
 		NSViewController HeaderViewControllerForItem (NSBrowser browser, NSObject item);
 
+		/// <param name="browser">To be added.</param>
+		/// <param name="oldLastColumn">To be added.</param>
+		/// <param name="toColumn">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("browser:didChangeLastColumn:toColumn:")]
 		void DidChangeLastColumn (NSBrowser browser, nint oldLastColumn, nint toColumn);
 
+		/// <param name="browser">To be added.</param>
+		/// <param name="proposedSelectionIndexes">To be added.</param>
+		/// <param name="inColumn">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("browser:selectionIndexesForProposedSelection:inColumn:")]
 		NSIndexSet SelectionIndexesForProposedSelection (NSBrowser browser, NSIndexSet proposedSelectionIndexes, nint inColumn);
 
@@ -3881,6 +3995,11 @@ namespace AppKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSCollectionViewDataSource {
+		/// <param name="collectionView">To be added.</param>
+		/// <param name="section">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("collectionView:numberOfItemsInSection:")]
 		nint GetNumberofItems (NSCollectionView collectionView, nint section);
@@ -4451,18 +4570,48 @@ namespace AppKit {
 		[Export ("collectionView:layout:sizeForItemAtIndexPath:")]
 		CGSize SizeForItem (NSCollectionView collectionView, NSCollectionViewLayout collectionViewLayout, NSIndexPath indexPath);
 
+		/// <param name="collectionView">To be added.</param>
+		/// <param name="collectionViewLayout">To be added.</param>
+		/// <param name="section">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("collectionView:layout:insetForSectionAtIndex:")]
 		NSEdgeInsets InsetForSection (NSCollectionView collectionView, NSCollectionViewLayout collectionViewLayout, nint section);
 
+		/// <param name="collectionView">To be added.</param>
+		/// <param name="collectionViewLayout">To be added.</param>
+		/// <param name="section">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("collectionView:layout:minimumLineSpacingForSectionAtIndex:")]
 		nfloat MinimumLineSpacing (NSCollectionView collectionView, NSCollectionViewLayout collectionViewLayout, nint section);
 
+		/// <param name="collectionView">To be added.</param>
+		/// <param name="collectionViewLayout">To be added.</param>
+		/// <param name="section">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("collectionView:layout:minimumInteritemSpacingForSectionAtIndex:")]
 		nfloat MinimumInteritemSpacingForSection (NSCollectionView collectionView, NSCollectionViewLayout collectionViewLayout, nint section);
 
+		/// <param name="collectionView">To be added.</param>
+		/// <param name="collectionViewLayout">To be added.</param>
+		/// <param name="section">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("collectionView:layout:referenceSizeForHeaderInSection:")]
 		CGSize ReferenceSizeForHeader (NSCollectionView collectionView, NSCollectionViewLayout collectionViewLayout, nint section);
 
+		/// <param name="collectionView">To be added.</param>
+		/// <param name="collectionViewLayout">To be added.</param>
+		/// <param name="section">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("collectionView:layout:referenceSizeForFooterInSection:")]
 		CGSize ReferenceSizeForFooter (NSCollectionView collectionView, NSCollectionViewLayout collectionViewLayout, nint section);
 	}
@@ -5820,6 +5969,11 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSComboBoxDataSource {
+		/// <param name="comboBox">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("comboBox:objectValueForItemAtIndex:")]
 		NSObject ObjectValueForItem (NSComboBox comboBox, nint index);
 
@@ -5950,6 +6104,11 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	partial interface NSComboBoxCellDataSource {
+		/// <param name="comboBox">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("comboBoxCell:objectValueForItemAtIndex:")]
 		NSObject ObjectValueForItem (NSComboBoxCell comboBox, nint index);
 
@@ -10071,6 +10230,13 @@ namespace AppKit {
 		[Export ("numberOfItemsInMenu:")]
 		nint MenuItemCount (NSMenu menu);
 
+		/// <param name="menu">To be added.</param>
+		/// <param name="item">To be added.</param>
+		/// <param name="atIndex">To be added.</param>
+		/// <param name="shouldCancel">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("menu:updateItem:atIndex:shouldCancel:")]
 		bool UpdateItem (NSMenu menu, NSMenuItem item, nint atIndex, bool shouldCancel);
 
@@ -11257,9 +11423,20 @@ namespace AppKit {
 		[Export ("outlineView:willDisplayOutlineCell:forTableColumn:item:")]
 		void WillDisplayOutlineCell (NSOutlineView outlineView, NSObject cell, [NullAllowed] NSTableColumn tableColumn, NSObject item);
 
+		/// <param name="outlineView">To be added.</param>
+		/// <param name="column">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("outlineView:sizeToFitWidthOfColumn:"), NoDefaultValue]
 		nfloat GetSizeToFitColumnWidth (NSOutlineView outlineView, nint column);
 
+		/// <param name="outlineView">To be added.</param>
+		/// <param name="columnIndex">To be added.</param>
+		/// <param name="newColumnIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("outlineView:shouldReorderColumn:toColumn:")]
 		bool ShouldReorder (NSOutlineView outlineView, nint columnIndex, nint newColumnIndex);
 
@@ -11327,9 +11504,19 @@ namespace AppKit {
 		[Export ("outlineView:rowViewForItem:")]
 		NSTableRowView RowViewForItem (NSOutlineView outlineView, NSObject item);
 
+		/// <param name="outlineView">To be added.</param>
+		/// <param name="rowView">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("outlineView:didAddRowView:forRow:")]
 		void DidAddRowView (NSOutlineView outlineView, NSTableRowView rowView, nint row);
 
+		/// <param name="outlineView">To be added.</param>
+		/// <param name="rowView">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("outlineView:didRemoveRowView:forRow:")]
 		void DidRemoveRowView (NSOutlineView outlineView, NSTableRowView rowView, nint row);
 
@@ -11353,6 +11540,12 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	partial interface NSOutlineViewDataSource {
+		/// <param name="outlineView">To be added.</param>
+		/// <param name="childIndex">To be added.</param>
+		/// <param name="item">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("outlineView:child:ofItem:")]
 		NSObject GetChild (NSOutlineView outlineView, nint childIndex, [NullAllowed] NSObject item);
 
@@ -12688,6 +12881,11 @@ namespace AppKit {
 			""")]
 		void DidLoadRepresentationHeader (NSImage image, NSImageRep rep);
 
+		/// <param name="image">To be added.</param>
+		/// <param name="rep">To be added.</param>
+		/// <param name="rows">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("image:didLoadPartOfRepresentation:withValidRows:"), EventArgs ("NSImagePartial", XmlDocs = """
 			<summary>To be added.</summary>
 			<remarks>To be added.</remarks>
@@ -13370,6 +13568,12 @@ namespace AppKit {
 	[NoMacCatalyst]
 	[Protocol (IsInformal = true)]
 	interface NSLayerDelegateContentsScaleUpdating {
+		/// <param name="layer">To be added.</param>
+		/// <param name="newScale">To be added.</param>
+		/// <param name="fromWindow">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("layer:shouldInheritContentsScale:fromWindow:")]
 		bool ShouldInheritContentsScale (CALayer layer, nfloat newScale, NSWindow fromWindow);
 	}
@@ -13494,6 +13698,14 @@ namespace AppKit {
 		[Export ("control:textView:doCommandBySelector:"), DelegateName ("NSControlCommand"), DefaultValue (false)]
 		bool DoCommandBySelector (NSControl control, NSTextView textView, Selector commandSelector);
 
+		/// <param name="control">To be added.</param>
+		/// <param name="textView">To be added.</param>
+		/// <param name="words">To be added.</param>
+		/// <param name="charRange">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("control:textView:completions:forPartialWordRange:indexOfSelectedItem:"), DelegateName ("NSControlTextCompletion"), DefaultValue (null)]
 		string [] GetCompletions (NSControl control, NSTextView textView, string [] words, NSRange charRange, ref nint index);
 
@@ -17683,6 +17895,12 @@ namespace AppKit {
 		[Export ("speechSynthesizer:willSpeakPhoneme:")]
 		void WillSpeakPhoneme (NSSpeechSynthesizer sender, short phonemeOpcode);
 
+		/// <param name="sender">To be added.</param>
+		/// <param name="characterIndex">To be added.</param>
+		/// <param name="theString">To be added.</param>
+		/// <param name="message">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("speechSynthesizer:didEncounterErrorAtIndex:ofString:message:")]
 		void DidEncounterError (NSSpeechSynthesizer sender, nuint characterIndex, string theString, string message);
 
@@ -18295,17 +18513,41 @@ namespace AppKit {
 		[DefaultValue (true)]
 		bool CanCollapse (NSSplitView splitView, NSView subview);
 
+		/// <param name="splitView">To be added.</param>
+		/// <param name="subview">To be added.</param>
+		/// <param name="doubleClickAtDividerIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("splitView:shouldCollapseSubview:forDoubleClickOnDividerAtIndex:")]
 		[DefaultValue (true)]
 		[Deprecated (PlatformName.MacOSX, 10, 15, message: "This delegate method is never called.")]
 		bool ShouldCollapseForDoubleClick (NSSplitView splitView, NSView subview, nint doubleClickAtDividerIndex);
 
+		/// <param name="splitView">To be added.</param>
+		/// <param name="proposedMinimumPosition">To be added.</param>
+		/// <param name="subviewDividerIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("splitView:constrainMinCoordinate:ofSubviewAt:")]
 		nfloat SetMinCoordinateOfSubview (NSSplitView splitView, nfloat proposedMinimumPosition, nint subviewDividerIndex);
 
+		/// <param name="splitView">To be added.</param>
+		/// <param name="proposedMaximumPosition">To be added.</param>
+		/// <param name="subviewDividerIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("splitView:constrainMaxCoordinate:ofSubviewAt:")]
 		nfloat SetMaxCoordinateOfSubview (NSSplitView splitView, nfloat proposedMaximumPosition, nint subviewDividerIndex);
 
+		/// <param name="splitView">To be added.</param>
+		/// <param name="proposedPosition">To be added.</param>
+		/// <param name="subviewDividerIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("splitView:constrainSplitPosition:ofSubviewAt:")]
 		nfloat ConstrainSplitPosition (NSSplitView splitView, nfloat proposedPosition, nint subviewDividerIndex);
 
@@ -18325,13 +18567,30 @@ namespace AppKit {
 		[DefaultValue (true)]
 		bool ShouldAdjustSize (NSSplitView splitView, NSView view);
 
+		/// <param name="splitView">To be added.</param>
+		/// <param name="dividerIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("splitView:shouldHideDividerAtIndex:")]
 		[DefaultValue (false)]
 		bool ShouldHideDivider (NSSplitView splitView, nint dividerIndex);
 
+		/// <param name="splitView">To be added.</param>
+		/// <param name="proposedEffectiveRect">To be added.</param>
+		/// <param name="drawnRect">To be added.</param>
+		/// <param name="dividerIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("splitView:effectiveRect:forDrawnRect:ofDividerAtIndex:")]
 		CGRect GetEffectiveRect (NSSplitView splitView, CGRect proposedEffectiveRect, CGRect drawnRect, nint dividerIndex);
 
+		/// <param name="splitView">To be added.</param>
+		/// <param name="dividerIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("splitView:additionalEffectiveRectOfDividerAtIndex:")]
 		CGRect GetAdditionalEffectiveRect (NSSplitView splitView, nint dividerIndex);
 
@@ -19047,6 +19306,12 @@ namespace AppKit {
 #if !NET
 		[Abstract]
 #endif
+		/// <param name="index">To be added.</param>
+		/// <param name="effectiveRange">To be added.</param>
+		/// <param name="endsWithSearchBoundary">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("stringAtIndex:effectiveRange:endsWithSearchBoundary:")]
 #if NET
 		string GetString (nuint index, out NSRange effectiveRange, bool endsWithSearchBoundary);
@@ -19057,6 +19322,9 @@ namespace AppKit {
 #if !NET
 		[Abstract]
 #endif
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("stringLength")]
 #if NET
 		nuint StringLength { get; }
@@ -19076,6 +19344,11 @@ namespace AppKit {
 #if !NET
 		[Abstract]
 #endif
+		/// <param name="ranges">To be added.</param>
+		/// <param name="strings">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("shouldReplaceCharactersInRanges:withStrings:")]
 #if NET
 		bool ShouldReplaceCharacters (NSArray ranges, NSArray strings);
@@ -19086,6 +19359,10 @@ namespace AppKit {
 #if !NET
 		[Abstract]
 #endif
+		/// <param name="range">To be added.</param>
+		/// <param name="str">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("replaceCharactersInRange:withString:")]
 #if NET
 		void ReplaceCharacters (NSRange range, string str);
@@ -19104,6 +19381,11 @@ namespace AppKit {
 #if !NET
 		[Abstract]
 #endif
+		/// <param name="index">To be added.</param>
+		/// <param name="outRange">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("contentViewAtIndex:effectiveCharacterRange:")]
 #if NET
 		NSView GetContentView (nuint index, out NSRange outRange);
@@ -19114,6 +19396,10 @@ namespace AppKit {
 #if !NET
 		[Abstract]
 #endif
+		/// <param name="characterRange">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("rectsForCharacterRange:")]
 #if NET
 		NSArray GetRects (NSRange characterRange);
@@ -21174,12 +21460,24 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	partial interface NSTableViewDelegate {
+		/// <param name="tableView">To be added.</param>
+		/// <param name="cell">To be added.</param>
+		/// <param name="tableColumn">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("tableView:willDisplayCell:forTableColumn:row:"), EventArgs ("NSTableViewCell", XmlDocs = """
 			<summary>To be added.</summary>
 			<remarks>To be added.</remarks>
 			""")]
 		void WillDisplayCell (NSTableView tableView, NSObject cell, NSTableColumn tableColumn, nint row);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="tableColumn">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -21200,6 +21498,11 @@ namespace AppKit {
 		[Export ("selectionShouldChangeInTableView:"), DelegateName ("NSTableViewPredicate"), DefaultValue (true)]
 		bool SelectionShouldChange (NSTableView tableView);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -21265,6 +21568,11 @@ namespace AppKit {
 			""")]
 		void DidDragTableColumn (NSTableView tableView, NSTableColumn tableColumn);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -21273,6 +21581,12 @@ namespace AppKit {
 		[Export ("tableView:heightOfRow:"), DelegateName ("NSTableViewRowHeight"), NoDefaultValue]
 		nfloat GetRowHeight (NSTableView tableView, nint row);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="tableColumn">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -21281,6 +21595,13 @@ namespace AppKit {
 		[Export ("tableView:typeSelectStringForTableColumn:row:"), DelegateName ("NSTableViewColumnRowString"), DefaultValue ("String.Empty")]
 		string GetSelectString (NSTableView tableView, NSTableColumn tableColumn, nint row);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="startRow">To be added.</param>
+		/// <param name="endRow">To be added.</param>
+		/// <param name="searchString">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -21303,6 +21624,12 @@ namespace AppKit {
 		[Export ("tableView:shouldTypeSelectForEvent:withCurrentSearchString:"), DelegateName ("NSTableViewEventString"), DefaultValue (false)]
 		bool ShouldTypeSelect (NSTableView tableView, NSEvent theEvent, string searchString);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="tableColumn">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -21311,6 +21638,13 @@ namespace AppKit {
 		[Export ("tableView:shouldShowCellExpansionForTableColumn:row:"), DelegateName ("NSTableViewColumnRowPredicate"), DefaultValue (false)]
 		bool ShouldShowCellExpansion (NSTableView tableView, NSTableColumn tableColumn, nint row);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="cell">To be added.</param>
+		/// <param name="tableColumn">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -21319,6 +21653,12 @@ namespace AppKit {
 		[Export ("tableView:shouldTrackCell:forTableColumn:row:"), DelegateName ("NSTableViewCell"), DefaultValue (false)]
 		bool ShouldTrackCell (NSTableView tableView, NSCell cell, NSTableColumn tableColumn, nint row);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="tableColumn">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -21327,6 +21667,11 @@ namespace AppKit {
 		[Export ("tableView:dataCellForTableColumn:row:"), DelegateName ("NSTableViewCellGetter"), NoDefaultValue]
 		NSCell GetDataCell (NSTableView tableView, NSTableColumn tableColumn, nint row);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -21335,6 +21680,11 @@ namespace AppKit {
 		[Export ("tableView:isGroupRow:"), DelegateName ("NSTableViewRowPredicate"), DefaultValue (false)]
 		bool IsGroupRow (NSTableView tableView, nint row);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="column">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -21343,6 +21693,12 @@ namespace AppKit {
 		[Export ("tableView:sizeToFitWidthOfColumn:"), DelegateName ("NSTableViewColumnWidth"), DefaultValue (80)]
 		nfloat GetSizeToFitColumnWidth (NSTableView tableView, nint column);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="columnIndex">To be added.</param>
+		/// <param name="newColumnIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -21387,6 +21743,12 @@ namespace AppKit {
 			""")]
 		void SelectionIsChanging (NSNotification notification);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="tableColumn">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -21395,6 +21757,11 @@ namespace AppKit {
 		[Export ("tableView:viewForTableColumn:row:"), DelegateName ("NSTableViewViewGetter"), NoDefaultValue]
 		NSView GetViewForItem (NSTableView tableView, NSTableColumn tableColumn, nint row);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -21403,18 +21770,34 @@ namespace AppKit {
 		[Export ("tableView:rowViewForRow:"), DelegateName ("NSTableViewRowGetter"), DefaultValue (null)]
 		NSTableRowView CoreGetRowView (NSTableView tableView, nint row);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="rowView">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("tableView:didAddRowView:forRow:"), EventArgs ("NSTableViewRow", XmlDocs = """
 			<summary>To be added.</summary>
 			<remarks>To be added.</remarks>
 			""")]
 		void DidAddRowView (NSTableView tableView, NSTableRowView rowView, nint row);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="rowView">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("tableView:didRemoveRowView:forRow:"), EventArgs ("NSTableViewRow", XmlDocs = """
 			<summary>To be added.</summary>
 			<remarks>To be added.</remarks>
 			""")]
 		void DidRemoveRowView (NSTableView tableView, NSTableRowView rowView, nint row);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <param name="edge">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -21439,9 +21822,21 @@ namespace AppKit {
 		[Export ("numberOfRowsInTableView:")]
 		nint GetRowCount (NSTableView tableView);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="tableColumn">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tableView:objectValueForTableColumn:row:")]
 		NSObject GetObjectValue (NSTableView tableView, NSTableColumn tableColumn, nint row);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="theObject">To be added.</param>
+		/// <param name="tableColumn">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("tableView:setObjectValue:forTableColumn:row:")]
 		void SetObjectValue (NSTableView tableView, NSObject theObject, NSTableColumn tableColumn, nint row);
 
@@ -21486,6 +21881,11 @@ namespace AppKit {
 		[Export ("tableView:namesOfPromisedFilesDroppedAtDestination:forDraggedRowsWithIndexes:")]
 		string [] FilesDropped (NSTableView tableView, NSUrl dropDestination, NSIndexSet indexSet);
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tableView:pasteboardWriterForRow:")]
 		INSPasteboardWriting GetPasteboardWriterForRow (NSTableView tableView, nint row);
 
@@ -22631,6 +23031,14 @@ namespace AppKit {
 		[Export ("control:textView:doCommandBySelector:"), DelegateName ("NSControlCommand"), DefaultValue (false)]
 		bool DoCommandBySelector (NSControl control, NSTextView textView, Selector commandSelector);
 
+		/// <param name="control">To be added.</param>
+		/// <param name="textView">To be added.</param>
+		/// <param name="words">To be added.</param>
+		/// <param name="charRange">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -22696,6 +23104,12 @@ namespace AppKit {
 		[Export ("textField:textView:candidates:forSelectedRange:"), DelegateName ("NSTextFieldTextCheckingResults"), DefaultValue (null)]
 		NSTextCheckingResult [] GetTextCheckingResults (NSTextField textField, NSTextView textView, NSTextCheckingResult [] candidates, NSRange selectedRange);
 
+		/// <param name="textField">To be added.</param>
+		/// <param name="textView">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -22760,9 +23174,22 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSTokenFieldCellDelegate {
+		/// <param name="tokenFieldCell">To be added.</param>
+		/// <param name="substring">To be added.</param>
+		/// <param name="tokenIndex">To be added.</param>
+		/// <param name="selectedIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tokenFieldCell:completionsForSubstring:indexOfToken:indexOfSelectedItem:")]
 		NSArray GetCompletionStrings (NSTokenFieldCell tokenFieldCell, string substring, nint tokenIndex, ref nint selectedIndex);
 
+		/// <param name="tokenFieldCell">To be added.</param>
+		/// <param name="tokens">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tokenFieldCell:shouldAddObjects:atIndex:")]
 		NSArray ShouldAddObjects (NSTokenFieldCell tokenFieldCell, NSObject [] tokens, nuint index);
 
@@ -23857,12 +24284,20 @@ namespace AppKit {
 		[Export ("fractionOfDistanceThroughGlyphForPoint:")]
 		nfloat GetFractionOfDistanceThroughGlyph (CGPoint point);
 
+		/// <param name="charIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("baselineDeltaForCharacterAtIndex:")]
 		nfloat GetBaselineDelta (nuint charIndex);
 
 		[Export ("windowLevel")]
 		NSWindowLevel WindowLevel { get; }
 
+		/// <param name="charIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("drawsVerticallyForCharacterAtIndex:")]
 		bool DrawsVertically (nuint charIndex);
 
@@ -23895,6 +24330,12 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	partial interface NSTextViewDelegate {
+		/// <param name="textView">To be added.</param>
+		/// <param name="link">To be added.</param>
+		/// <param name="charIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -23903,12 +24344,24 @@ namespace AppKit {
 		[Export ("textView:clickedOnLink:atIndex:"), DelegateName ("NSTextViewLink"), DefaultValue (false)]
 		bool LinkClicked (NSTextView textView, NSObject link, nuint charIndex);
 
+		/// <param name="textView">To be added.</param>
+		/// <param name="cell">To be added.</param>
+		/// <param name="cellFrame">To be added.</param>
+		/// <param name="charIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("textView:clickedOnCell:inRect:atIndex:"), EventArgs ("NSTextViewClicked", XmlDocs = """
 			<summary>To be added.</summary>
 			<remarks>To be added.</remarks>
 			""")]
 		void CellClicked (NSTextView textView, NSTextAttachmentCell cell, CGRect cellFrame, nuint charIndex);
 
+		/// <param name="textView">To be added.</param>
+		/// <param name="cell">To be added.</param>
+		/// <param name="cellFrame">To be added.</param>
+		/// <param name="charIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("textView:doubleClickedOnCell:inRect:atIndex:"), EventArgs ("NSTextViewDoubleClick", XmlDocs = """
 			<summary>To be added.</summary>
 			<remarks>To be added.</remarks>
@@ -23916,6 +24369,12 @@ namespace AppKit {
 		void CellDoubleClicked (NSTextView textView, NSTextAttachmentCell cell, CGRect cellFrame, nuint charIndex);
 
 		// 
+		/// <param name="view">To be added.</param>
+		/// <param name="forCell">To be added.</param>
+		/// <param name="charIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -23924,6 +24383,14 @@ namespace AppKit {
 		[Export ("textView:writablePasteboardTypesForCell:atIndex:"), DelegateName ("NSTextViewCellPosition"), DefaultValue (null)]
 		string [] GetWritablePasteboardTypes (NSTextView view, NSTextAttachmentCell forCell, nuint charIndex);
 
+		/// <param name="view">To be added.</param>
+		/// <param name="cell">To be added.</param>
+		/// <param name="charIndex">To be added.</param>
+		/// <param name="pboard">To be added.</param>
+		/// <param name="type">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -24006,6 +24473,12 @@ namespace AppKit {
 			""")]
 		void DidChangeTypingAttributes (NSNotification notification);
 
+		/// <param name="textView">To be added.</param>
+		/// <param name="tooltip">To be added.</param>
+		/// <param name="characterIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -24015,6 +24488,13 @@ namespace AppKit {
 		[return: NullAllowed]
 		string WillDisplayToolTip (NSTextView textView, string tooltip, nuint characterIndex);
 
+		/// <param name="textView">To be added.</param>
+		/// <param name="words">To be added.</param>
+		/// <param name="charRange">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -24050,6 +24530,12 @@ namespace AppKit {
 		[Export ("textView:doCommandBySelector:"), DelegateName ("NSTextViewSelectorCommand"), DefaultValue (false)]
 		bool DoCommandBySelector (NSTextView textView, Selector commandSelector);
 
+		/// <param name="textView">To be added.</param>
+		/// <param name="value">To be added.</param>
+		/// <param name="affectedCharRange">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -24058,6 +24544,13 @@ namespace AppKit {
 		[Export ("textView:shouldSetSpellingState:range:"), DelegateName ("NSTextViewSpellingQuery"), DefaultValue (0)]
 		nint ShouldSetSpellingState (NSTextView textView, nint value, NSRange affectedCharRange);
 
+		/// <param name="view">To be added.</param>
+		/// <param name="menu">To be added.</param>
+		/// <param name="theEvent">To be added.</param>
+		/// <param name="charIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -24081,6 +24574,16 @@ namespace AppKit {
 		[Export ("textView:willCheckTextInRange:options:types:"), DelegateName ("NSTextViewOnTextCheck"), DefaultValueFromArgument ("options")]
 		NSDictionary WillCheckText (NSTextView view, NSRange range, NSDictionary options, NSTextCheckingTypes checkingTypes);
 
+		/// <param name="view">To be added.</param>
+		/// <param name="range">To be added.</param>
+		/// <param name="checkingTypes">To be added.</param>
+		/// <param name="options">To be added.</param>
+		/// <param name="results">To be added.</param>
+		/// <param name="orthography">To be added.</param>
+		/// <param name="wordCount">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -24153,6 +24656,11 @@ namespace AppKit {
 		[Export ("textView:candidates:forSelectedRange:"), DelegateName ("NSTextViewTextCheckingResults"), NoDefaultValue]
 		NSTextCheckingResult [] GetTextCheckingCandidates (NSTextView textView, NSTextCheckingResult [] candidates, NSRange selectedRange);
 
+		/// <param name="textView">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -24218,9 +24726,22 @@ namespace AppKit {
 	[Model]
 	[Protocol]
 	interface NSTokenFieldDelegate {
+		/// <param name="tokenField">To be added.</param>
+		/// <param name="substring">To be added.</param>
+		/// <param name="tokenIndex">To be added.</param>
+		/// <param name="selectedIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tokenField:completionsForSubstring:indexOfToken:indexOfSelectedItem:")]
 		string [] GetCompletionStrings (NSTokenField tokenField, string substring, nint tokenIndex, nint selectedIndex);
 
+		/// <param name="tokenField">To be added.</param>
+		/// <param name="tokens">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("tokenField:shouldAddObjects:atIndex:")]
 		NSArray ShouldAddObjects (NSTokenField tokenField, NSArray tokens, nuint index);
 
@@ -27898,6 +28419,13 @@ namespace AppKit {
 		[Export ("ruleEditor:numberOfChildrenForCriterion:withRowType:"), DelegateName ("NSRuleEditorNumberOfChildren"), DefaultValue (0)]
 		nint NumberOfChildren (NSRuleEditor editor, NSObject criterion, NSRuleEditorRowType rowType);
 
+		/// <param name="editor">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <param name="criterion">To be added.</param>
+		/// <param name="rowType">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -27907,6 +28435,12 @@ namespace AppKit {
 		[Export ("ruleEditor:child:forCriterion:withRowType:"), DelegateName ("NSRulerEditorChildCriterion"), DefaultValue (null)]
 		NSObject ChildForCriterion (NSRuleEditor editor, nint index, NSObject criterion, NSRuleEditorRowType rowType);
 
+		/// <param name="editor">To be added.</param>
+		/// <param name="criterion">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -27919,6 +28453,13 @@ namespace AppKit {
 #if !NET
 		[Abstract]
 #endif
+		/// <param name="editor">To be added.</param>
+		/// <param name="criterion">To be added.</param>
+		/// <param name="value">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -28556,6 +29097,11 @@ namespace AppKit {
 	}
 
 	partial interface NSCollectionViewDelegate {
+		/// <param name="collectionView">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("collectionView:pasteboardWriterForItemAtIndex:")]
 		INSPasteboardWriting PasteboardWriterForItem (NSCollectionView collectionView, nuint index);
 
@@ -28928,6 +29474,11 @@ namespace AppKit {
 		[Export ("rulerView:locationForPoint:")]
 		nfloat RulerViewLocation (NSRulerView ruler, CGPoint locationForPoint);
 
+		/// <param name="ruler">To be added.</param>
+		/// <param name="pointForLocation">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("rulerView:pointForLocation:")]
 		CGPoint RulerViewPoint (NSRulerView ruler, nfloat pointForLocation);
 	}
@@ -29576,6 +30127,15 @@ namespace AppKit {
 
 	partial interface NSTableViewDelegate {
 
+		/// <param name="tableView">To be added.</param>
+		/// <param name="cell">To be added.</param>
+		/// <param name="rect">To be added.</param>
+		/// <param name="tableColumn">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <param name="mouseLocation">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -32650,10 +33210,18 @@ namespace AppKit {
 		[return: NullAllowed]
 		string GetAccessibilityString (NSRange range);
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityLineForIndex:")]
 		nint GetAccessibilityLine (nint index);
 
+		/// <param name="lineNumber">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("accessibilityRangeForLine:")]
 		NSRange GetAccessibilityRangeForLine (nint lineNumber);
@@ -33211,12 +33779,25 @@ namespace AppKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSCandidateListTouchBarItemDelegate {
+		/// <param name="anItem">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("candidateListTouchBarItem:beginSelectingCandidateAtIndex:")]
 		void BeginSelectingCandidate (NSCandidateListTouchBarItem anItem, nint index);
 
+		/// <param name="anItem">To be added.</param>
+		/// <param name="previousIndex">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("candidateListTouchBarItem:changeSelectionFromCandidateAtIndex:toIndex:")]
 		void ChangeSelectionFromCandidate (NSCandidateListTouchBarItem anItem, nint previousIndex, nint index);
 
+		/// <param name="anItem">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("candidateListTouchBarItem:endSelectingCandidateAtIndex:")]
 		void EndSelectingCandidate (NSCandidateListTouchBarItem anItem, nint index);
 
@@ -33437,6 +34018,11 @@ namespace AppKit {
 		[Export ("numberOfItemsForScrubber:")]
 		nint GetNumberOfItems (NSScrubber scrubber);
 
+		/// <param name="scrubber">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("scrubber:viewForItemAtIndex:")]
 		NSScrubberItemView GetViewForItem (NSScrubber scrubber, nint index);
@@ -33446,9 +34032,17 @@ namespace AppKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSScrubberDelegate {
+		/// <param name="scrubber">To be added.</param>
+		/// <param name="selectedIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("scrubber:didSelectItemAtIndex:")]
 		void DidSelectItem (NSScrubber scrubber, nint selectedIndex);
 
+		/// <param name="scrubber">To be added.</param>
+		/// <param name="highlightedIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("scrubber:didHighlightItemAtIndex:")]
 		void DidHighlightItem (NSScrubber scrubber, nint highlightedIndex);
 
@@ -33707,6 +34301,12 @@ namespace AppKit {
 	[BaseType (typeof (NSObject))]
 	[Protocol, Model]
 	interface NSScrubberFlowLayoutDelegate : NSScrubberDelegate {
+		/// <param name="scrubber">To be added.</param>
+		/// <param name="layout">To be added.</param>
+		/// <param name="itemIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("scrubber:layout:sizeForItemAtIndex:")]
 		CGSize Layout (NSScrubber scrubber, NSScrubberFlowLayout layout, nint itemIndex);
 	}

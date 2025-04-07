@@ -2046,6 +2046,15 @@ namespace UIKit {
 		bool ShouldBreakLineByHyphenatingBeforeCharacter (NSLayoutManager layoutManager, nuint charIndex);
 #endif
 
+		/// <param name="layoutManager">To be added.</param>
+		/// <param name="glyphIndex">To be added.</param>
+		/// <param name="textContainer">To be added.</param>
+		/// <param name="proposedRect">To be added.</param>
+		/// <param name="glyphPosition">To be added.</param>
+		/// <param name="characterIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("layoutManager:boundingBoxForControlGlyphAtIndex:forTextContainer:proposedLineFragment:glyphPosition:characterIndex:")]
 #if NET

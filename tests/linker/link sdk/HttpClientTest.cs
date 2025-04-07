@@ -44,8 +44,8 @@ namespace LinkSdk.Net.Http {
 			using (var client = new HttpClient (handler)) {
 				var get1 = Get (client);
 				var get2 = Get (client);
-				get1.Wait ();
-				get2.Wait ();
+				Assert.That (get1.Wait (TimeSpan.FromSeconds (30)), Is.True, "Wait1");
+				Assert.That (get2.Wait (TimeSpan.FromSeconds (30)), Is.True, "Wait2");
 			}
 		}
 

@@ -2743,6 +2743,12 @@ namespace WebKit {
 			""")]
 		void OnReceivedResponse (WebView sender, NSObject identifier, NSUrlResponse responseReceived, WebDataSource dataSource);
 
+		/// <param name="sender">To be added.</param>
+		/// <param name="identifier">To be added.</param>
+		/// <param name="length">To be added.</param>
+		/// <param name="dataSource">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("webView:resource:didReceiveContentLength:fromDataSource:"), EventArgs ("WebResourceReceivedContentLength", XmlDocs = """
 			<summary>To be added.</summary>
 			<remarks>To be added.</remarks>

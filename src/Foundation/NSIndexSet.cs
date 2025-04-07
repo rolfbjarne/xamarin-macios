@@ -81,6 +81,10 @@ namespace Foundation {
 			return indexes;
 		}
 
+		/// <param name="items">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		public static NSIndexSet FromArray (nuint [] items)
 		{
 			if (items is null)

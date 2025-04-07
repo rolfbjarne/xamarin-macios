@@ -781,6 +781,11 @@ namespace PdfKit {
 	[BaseType (typeof (PdfAction), Name = "PDFActionRemoteGoTo")]
 	interface PdfActionRemoteGoTo {
 
+		/// <param name="pageIndex">To be added.</param>
+		/// <param name="point">To be added.</param>
+		/// <param name="fileUrl">To be added.</param>
+		/// <summary>Creates a new remote go-to PDF action for going to the specified <paramref name="point" /> on the page at <paramref name="pageIndex" /> in the document at the specified <paramref name="fileUrl" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		[Export ("initWithPageIndex:atPoint:fileURL:")]
 		NativeHandle Constructor (nint pageIndex, CGPoint point, NSUrl fileUrl);
@@ -2248,6 +2253,10 @@ namespace PdfKit {
 		[Export ("pageCount")]
 		nint PageCount { get; }
 
+		/// <param name="index">The index of the page to get.</param>
+		/// <summary>Returns the page at the specified zero-based index.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("pageAtIndex:")]
 		[return: NullAllowed]
 		PdfPage GetPage (nint index);
@@ -2259,12 +2268,23 @@ namespace PdfKit {
 		[Export ("indexForPage:")]
 		nint GetPageIndex (PdfPage page);
 
+		/// <param name="page">The page to insert.</param>
+		/// <param name="index">The index at which to insert the page.</param>
+		/// <summary>Inserts the provided <paramref name="page" /> at the specified <paramref name="index" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("insertPage:atIndex:")]
 		void InsertPage (PdfPage page, nint index);
 
+		/// <param name="index">The index of the page to remove.</param>
+		/// <summary>Removes the page at the specified <paramref name="index" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("removePageAtIndex:")]
 		void RemovePage (nint index);
 
+		/// <param name="indexA">The index of the first page to exchange.</param>
+		/// <param name="indexB">The index of the second page to exchange.</param>
+		/// <summary>Swaps the page at <paramref name="indexA" /> with the one at <paramref name="indexB" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("exchangePageAtIndex:withPageAtIndex:")]
 		void ExchangePages (nint indexA, nint indexB);
 
@@ -2370,6 +2390,13 @@ namespace PdfKit {
 		[return: NullAllowed]
 		PdfSelection GetSelection (PdfPage startPage, CGPoint startPoint, PdfPage endPage, CGPoint endPoint);
 
+		/// <param name="startPage">The page at the start of the selection.</param>
+		/// <param name="startCharIndex">The character index on the start page for the start of the selection.</param>
+		/// <param name="endPage">The page at the end of the selection.</param>
+		/// <param name="endCharIndex">The character index on the end page for the end of the selection.</param>
+		/// <summary>Returns a selection for the region that is described by the specified parameters.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("selectionFromPage:atCharacterIndex:toPage:atCharacterIndex:")]
 		[return: NullAllowed]
 		PdfSelection GetSelection (PdfPage startPage, nint startCharIndex, PdfPage endPage, nint endCharIndex);
@@ -2552,10 +2579,18 @@ namespace PdfKit {
 		[Export ("index")]
 		nint Index { get; }
 
+		/// <param name="index">To be added.</param>
+		/// <summary>Returns the child outline object at the specified <paramref name="index" /> in the children of this outline node.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[return: NullAllowed]
 		[Export ("childAtIndex:")]
 		PdfOutline Child (nint index);
 
+		/// <param name="child">The outline to insert.</param>
+		/// <param name="index">The index at which to insert the child outline.</param>
+		/// <summary>Inserts the specified node in the list of children at the specified index.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("insertChild:atIndex:")]
 		void InsertChild (PdfOutline child, nint index);
 
@@ -2782,6 +2817,10 @@ namespace PdfKit {
 		[NullAllowed]
 		NSAttributedString AttributedString { get; }
 
+		/// <param name="index">The index of the character for which to get its bounding box.</param>
+		/// <summary>Returns a rectangle that describes the bounds for the character at the specified index.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("characterBoundsAtIndex:")]
 		CGRect GetCharacterBounds (nint index);
 
@@ -2904,6 +2943,11 @@ namespace PdfKit {
 		[Export ("numberOfTextRangesOnPage:")]
 		nuint GetNumberOfTextRanges (PdfPage page);
 
+		/// <param name="index">To be added.</param>
+		/// <param name="page">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("rangeAtIndex:onPage:")]
 		NSRange GetRange (nuint index, PdfPage page);
 
@@ -2925,9 +2969,15 @@ namespace PdfKit {
 		[Export ("addSelections:")]
 		void AddSelections (PdfSelection [] selections);
 
+		/// <param name="succeed">To be added.</param>
+		/// <summary>Extends the end of the selection to the position that is indicated by <paramref name="succeed" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("extendSelectionAtEnd:")]
 		void ExtendSelectionAtEnd (nint succeed);
 
+		/// <param name="precede">To be added.</param>
+		/// <summary>Extends the beginning of the selection to the position that is indicated by <paramref name="precede" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("extendSelectionAtStart:")]
 		void ExtendSelectionAtStart (nint precede);
 

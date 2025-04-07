@@ -66,6 +66,9 @@ namespace Foundation {
 		{
 		}
 
+		/// <param name="capacity">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		public NSMutableArray (nuint capacity)
 			: base (capacity)
 		{
@@ -120,6 +123,10 @@ namespace Foundation {
 			_Add (obj.Handle);
 		}
 
+		/// <param name="obj">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		public void Insert (TValue obj, nint index)
 		{
 			if (obj is null)
@@ -130,6 +137,10 @@ namespace Foundation {
 			_Insert (obj.Handle, index);
 		}
 
+		/// <param name="index">To be added.</param>
+		/// <param name="withObject">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		public void ReplaceObject (nint index, TValue withObject)
 		{
 			if (withObject is null)

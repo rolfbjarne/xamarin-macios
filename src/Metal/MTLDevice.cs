@@ -246,6 +246,11 @@ namespace Metal {
 		}
 #endif
 
+		/// <param name="This">The instance on which this method operates.</param>
+		/// <param name="positions">Array that will be filled with the default sample postions.</param>
+		/// <param name="count">The number of positions, which determines the set of default positions.</param>
+		/// <summary>Provides the default sample positions for the specified sample <paramref name="count" />.</summary>
+		/// <remarks>To be added.</remarks>
 		public unsafe static void GetDefaultSamplePositions (this IMTLDevice This, MTLSamplePosition [] positions, nuint count)
 		{
 			if (positions is null)

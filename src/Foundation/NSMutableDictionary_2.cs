@@ -281,6 +281,12 @@ namespace Foundation {
 			return Runtime.GetNSObject<NSMutableDictionary<TKey, TValue>> (_FromObjectsAndKeysInternal (objects.Handle, keys.Handle));
 		}
 
+		/// <param name="objects">To be added.</param>
+		/// <param name="keys">To be added.</param>
+		/// <param name="count">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		public static NSMutableDictionary<TKey, TValue> FromObjectsAndKeys (TValue [] objects, TKey [] keys, nint count)
 		{
 			if (objects is null)
@@ -335,6 +341,12 @@ namespace Foundation {
 				return GenericFromObjectsAndKeysInternal (no, nk);
 		}
 
+		/// <param name="objects">To be added.</param>
+		/// <param name="keys">To be added.</param>
+		/// <param name="count">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		public static NSMutableDictionary<TKey, TValue> FromObjectsAndKeys (NSObject [] objects, NSObject [] keys, nint count)
 		{
 			if (objects is null)
@@ -351,6 +363,12 @@ namespace Foundation {
 				return GenericFromObjectsAndKeysInternal (no, nk);
 		}
 
+		/// <param name="objects">To be added.</param>
+		/// <param name="keys">To be added.</param>
+		/// <param name="count">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		public static NSMutableDictionary<TKey, TValue> FromObjectsAndKeys (object [] objects, object [] keys, nint count)
 		{
 			if (objects is null)

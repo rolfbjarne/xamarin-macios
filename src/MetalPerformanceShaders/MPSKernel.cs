@@ -89,6 +89,10 @@ namespace MetalPerformanceShaders {
 		static extern void MPSHintTemporaryMemoryHighWaterMark (IntPtr commandBuffer, nuint bytes);
 
 #if NET
+		/// <param name="commandBuffer">To be added.</param>
+		/// <param name="sizeInBytes">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -146,6 +150,12 @@ namespace MetalPerformanceShaders {
 
 	public partial class MPSImageDilate {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="values">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		public MPSImageDilate (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, float [] values)
 			: base (NSObjectFlag.Empty)
@@ -162,6 +172,12 @@ namespace MetalPerformanceShaders {
 
 	public partial class MPSImageErode : MPSImageDilate {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="values">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		public MPSImageErode (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, float [] values)
 			: base (device, kernelWidth, kernelHeight, values)
 		{
@@ -383,6 +399,13 @@ namespace MetalPerformanceShaders {
 	}
 
 	public partial class MPSImageConversion {
+		/// <param name="device">To be added.</param>
+		/// <param name="srcAlpha">To be added.</param>
+		/// <param name="destAlpha">To be added.</param>
+		/// <param name="backgroundColor">To be added.</param>
+		/// <param name="conversionInfo">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		public MPSImageConversion (IMTLDevice device, MPSAlphaType srcAlpha, MPSAlphaType destAlpha, nfloat [] backgroundColor, CGColorConversionInfo conversionInfo)
 			: base (NSObjectFlag.Empty)
 		{
@@ -395,6 +418,12 @@ namespace MetalPerformanceShaders {
 
 	public partial class MPSImagePyramid {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="kernelWeights">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		public MPSImagePyramid (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, float [] kernelWeights)
 			: base (NSObjectFlag.Empty)
@@ -411,6 +440,12 @@ namespace MetalPerformanceShaders {
 
 	public partial class MPSImageGaussianPyramid {
 
+		/// <param name="device">To be added.</param>
+		/// <param name="kernelWidth">To be added.</param>
+		/// <param name="kernelHeight">To be added.</param>
+		/// <param name="kernelWeights">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		public MPSImageGaussianPyramid (IMTLDevice device, nuint kernelWidth, nuint kernelHeight, float [] kernelWeights)
 			: base (NSObjectFlag.Empty)

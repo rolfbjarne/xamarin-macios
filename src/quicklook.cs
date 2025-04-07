@@ -131,6 +131,11 @@ namespace QuickLook {
 		[Export ("numberOfPreviewItemsInPreviewController:")]
 		nint PreviewItemCount (QLPreviewController controller);
 
+		/// <param name="controller">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("previewController:previewItemAtIndex:")]
 		IQLPreviewItem GetPreviewItem (QLPreviewController controller, nint index);

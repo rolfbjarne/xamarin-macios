@@ -3807,6 +3807,11 @@ namespace PdfKit {
 	[Model]
 	interface PdfViewDelegate {
 		//from docs: 'By default, the scale factor is restricted to a range between 0.1 and 10.0 inclusive.'
+		/// <param name="sender">To be added.</param>
+		/// <param name="scale">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>

@@ -5,6 +5,8 @@
 using System;
 using System.Runtime.InteropServices;
 
+#nullable enable
+
 namespace ObjCRuntime {
 
 	/// <summary>This attribute provides information about binding code.</summary>

@@ -11767,9 +11767,17 @@ namespace AppKit {
 		[Export ("resizingMode")]
 		NSImageResizingMode ResizingMode { get; set; }
 
+		/// <param name="preferredContentsScale">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("recommendedLayerContentsScale:")]
 		nfloat GetRecommendedLayerContentsScale (nfloat preferredContentsScale);
 
+		/// <param name="layerContentsScale">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("layerContentsForContentsScale:")]
 		NSObject GetLayerContentsForContentsScale (nfloat layerContentsScale);
 
@@ -17907,7 +17915,27 @@ namespace AppKit {
 		bool IsAutomaticTextCompletionEnabled { get; }
 
 #if NET
-		[Async (ResultTypeName = "NSSpellCheckerCandidates")]
+		[Async (ResultTypeName = "NSSpellCheckerCandidates", XmlDocs = """
+			<param name="selectedRange">To be added.</param>
+			<param name="stringToCheck">To be added.</param>
+			<param name="checkingTypes">To be added.</param>
+			<param name="options">To be added.</param>
+			<param name="tag">To be added.</param>
+			<summary>To be added.</summary>
+			<returns>To be added.</returns>
+			<remarks>To be added.</remarks>
+			""",
+			XmlDocsWithOutParameter = """
+			<param name="selectedRange">To be added.</param>
+			<param name="stringToCheck">To be added.</param>
+			<param name="checkingTypes">To be added.</param>
+			<param name="options">To be added.</param>
+			<param name="tag">To be added.</param>
+			<param name="result">To be added.</param>
+			<summary>To be added.</summary>
+			<returns>To be added.</returns>
+			<remarks>To be added.</remarks>
+			""")]
 #else
 		[Async (ResultTypeName = "NSSpellCheckerCanidates")]
 #endif
@@ -24276,9 +24304,16 @@ namespace AppKit {
 		[Export ("initWithIdentifier:")]
 		NativeHandle Constructor (string identifier);
 
+		/// <param name="itemIdentifier">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("insertItemWithItemIdentifier:atIndex:")]
 		void InsertItem (string itemIdentifier, nint index);
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("removeItemAtIndex:")]
 		void RemoveItem (nint index);
 

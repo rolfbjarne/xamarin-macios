@@ -778,6 +778,10 @@ namespace ImageKit {
 		[Export ("newCellForRepresentedItem:")]
 		IKImageBrowserCell NewCell (IIKImageBrowserItem representedItem);
 
+		/// <param name="itemIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("cellForItemAtIndex:")]
 		IKImageBrowserCell GetCellAt (nint itemIndex);
 
@@ -794,6 +798,9 @@ namespace ImageKit {
 		[Export ("contentResizingMask")]
 		NSViewResizingMask ContentResizingMask { get; set; }
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("scrollIndexToVisible:")]
 		void ScrollIndexToVisible (nint index);
 
@@ -816,6 +823,10 @@ namespace ImageKit {
 		[Export ("indexOfItemAtPoint:")]
 		nint GetIndexOfItem (CGPoint point);
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("itemFrameAtIndex:")]
 		CGRect GetItemFrame (nint index);
 
@@ -839,9 +850,17 @@ namespace ImageKit {
 		[Export ("columnIndexesInRect:")]
 		NSIndexSet GetColumnIndexes (CGRect rect);
 
+		/// <param name="columnIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("rectOfColumn:")]
 		CGRect GetRectOfColumn (nint columnIndex);
 
+		/// <param name="rowIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("rectOfRow:")]
 		CGRect GetRectOfRow (nint rowIndex);
 
@@ -901,12 +920,22 @@ namespace ImageKit {
 		[Export ("animates")]
 		bool Animates { get; set; }
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("expandGroupAtIndex:")]
 		void ExpandGroup (nint index);
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("collapseGroupAtIndex:")]
 		void CollapseGroup (nint index);
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("isGroupExpandedAtIndex:")]
 		bool IsGroupExpanded (nint index);
 
@@ -935,6 +964,10 @@ namespace ImageKit {
 		[Export ("allowsDroppingOnItems")]
 		bool AllowsDroppingOnItems { get; set; }
 
+		/// <param name="index">To be added.</param>
+		/// <param name="operation">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setDropIndex:dropOperation:")]
 		void SetDropIndex (nint index, IKImageBrowserDropOperation operation);
 
@@ -990,6 +1023,11 @@ namespace ImageKit {
 		[Export ("numberOfItemsInImageBrowser:")]
 		nint ItemCount (IKImageBrowserView aBrowser);
 
+		/// <param name="aBrowser">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("imageBrowser:itemAtIndex:")]
 		IIKImageBrowserItem GetItem (IKImageBrowserView aBrowser, nint index);
@@ -1001,6 +1039,12 @@ namespace ImageKit {
 		[Export ("imageBrowser:removeItemsAtIndexes:")]
 		void RemoveItems (IKImageBrowserView aBrowser, NSIndexSet indexes);
 
+		/// <param name="aBrowser">To be added.</param>
+		/// <param name="indexes">To be added.</param>
+		/// <param name="destinationIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("imageBrowser:moveItemsAtIndexes:toIndex:")]
 		bool MoveItems (IKImageBrowserView aBrowser, NSIndexSet indexes, nint destinationIndex);
 
@@ -1020,6 +1064,11 @@ namespace ImageKit {
 		[Export ("numberOfGroupsInImageBrowser:")]
 		nint GroupCount (IKImageBrowserView aBrowser);
 
+		/// <param name="aBrowser">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("imageBrowser:groupAtIndex:")]
 		NSDictionary GetGroup (IKImageBrowserView aBrowser, nint index);
 
@@ -1219,12 +1268,21 @@ namespace ImageKit {
 			""")]
 		void SelectionDidChange (IKImageBrowserView browser);
 
+		/// <param name="browser">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("imageBrowser:cellWasDoubleClickedAtIndex:"), EventArgs ("IKImageBrowserViewIndex", XmlDocs = """
 			<summary>To be added.</summary>
 			<remarks>To be added.</remarks>
 			""")]
 		void CellWasDoubleClicked (IKImageBrowserView browser, nint index);
 
+		/// <param name="browser">To be added.</param>
+		/// <param name="index">To be added.</param>
+		/// <param name="nsevent">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("imageBrowser:cellWasRightClickedAtIndex:withEvent:"), EventArgs ("IKImageBrowserViewIndexEvent", XmlDocs = """
 			<summary>To be added.</summary>
 			<remarks>To be added.</remarks>
@@ -1448,6 +1506,10 @@ namespace ImageKit {
 		[Export ("imageProperties")]
 		NSDictionary ImageProperties { get; }
 
+		/// <param name="rotationAngle">To be added.</param>
+		/// <param name="centerPoint">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setRotationAngle:centerPoint:")]
 		void SetRotation (nfloat rotationAngle, CGPoint centerPoint);
 
@@ -1463,6 +1525,10 @@ namespace ImageKit {
 		[Export ("rotateImageRight:")]
 		void RotateImageRight (NSObject sender);
 
+		/// <param name="zoomFactor">To be added.</param>
+		/// <param name="centerPoint">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setImageZoomFactor:centerPoint:")]
 		void SetImageZoomFactor (nfloat zoomFactor, CGPoint centerPoint);
 
@@ -1957,6 +2023,9 @@ namespace ImageKit {
 		[Export ("reloadData")]
 		void ReloadData ();
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("reloadSlideshowItemAtIndex:")]
 		void ReloadSlideshowItem (nint index);
 
@@ -2086,13 +2155,26 @@ namespace ImageKit {
 		[Export ("numberOfSlideshowItems")]
 		nint ItemCount { get; }
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("slideshowItemAtIndex:")]
 		NSObject GetItemAt (nint index);
 
+		/// <param name="index">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("nameOfSlideshowItemAtIndex:")]
 		string GetNameOfItemAt (nint index);
 
+		/// <param name="index">To be added.</param>
+		/// <param name="applicationBundleIdentifier">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("canExportSlideshowItemAtIndex:toApplication:")]
 		bool CanExportItemToApplication (nint index, string applicationBundleIdentifier);
 
@@ -2106,6 +2188,9 @@ namespace ImageKit {
 		[Export ("slideshowDidStop")]
 		void DidStop ();
 
+		/// <param name="newIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("slideshowDidChangeCurrentIndex:")]
 		void DidChange (nint newIndex);
 	}

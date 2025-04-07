@@ -142,6 +142,11 @@ namespace GameKit {
 		[Export ("voiceChatService:didStopWithParticipantID:error:")]
 		void Stopped (GKVoiceChatService voiceChatService, string participantID, [NullAllowed] NSError error);
 
+		/// <param name="voiceChatService">To be added.</param>
+		/// <param name="participantID">To be added.</param>
+		/// <param name="callID">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("voiceChatService:didReceiveInvitationFromParticipantID:callID:")]
 		void ReceivedInvitation (GKVoiceChatService voiceChatService, string participantID, nint callID);
 	}
@@ -171,9 +176,17 @@ namespace GameKit {
 		[Export ("stopVoiceChatWithParticipantID:")]
 		void StopVoiceChat (string participantID);
 
+		/// <param name="callID">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("acceptCallID:error:")]
 		bool AcceptCall (nint callID, out NSError error);
 
+		/// <param name="callId">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("denyCallID:")]
 		void DenyCall (nint callId);
 
@@ -1778,8 +1791,22 @@ namespace GameKit {
 		[Export ("cancel")]
 		void Cancel ();
 
+		/// <param name="playerGroup">To be added.</param>
+		/// <param name="completionHandler">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("queryPlayerGroupActivity:withCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<param name="playerGroup">To be added.</param>
+			<summary>To be added.</summary>
+			<returns>
+			          <para>A task that represents the asynchronous QueryPlayerGroupActivity operation.   The value of the TResult parameter is a GameKit.GKQueryHandler.</para>
+			        </returns>
+			<remarks>To be added.</remarks>
+			""")]
 		void QueryPlayerGroupActivity (nint playerGroup, [NullAllowed] GKQueryHandler completionHandler);
 
 		[Export ("queryActivityWithCompletionHandler:")]
@@ -3731,7 +3758,25 @@ namespace GameKit {
 		[Export ("badgedPlayers")]
 		GKCloudPlayer [] BadgedPlayers { get; }
 
-		[Async]
+		/// <param name="containerName">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="title">To be added.</param>
+		/// <param name="maxPlayers">To be added.</param>
+		/// <param name="completionHandler">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
+		[Async (XmlDocs = """
+			<param name="containerName">To be added.</param>
+			<param name="title">To be added.</param>
+			<param name="maxPlayers">To be added.</param>
+			<summary>To be added.</summary>
+			<returns>
+			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous CreateSession operation.  The value of the TResult parameter is of type System.Action&lt;GameKit.GKGameSession,Foundation.NSError&gt;.</para>
+			        </returns>
+			<remarks>To be added.</remarks>
+			""")]
 		[Static]
 		[Export ("createSessionInContainer:withTitle:maxConnectedPlayers:completionHandler:")]
 		void CreateSession ([NullAllowed] string containerName, string title, nint maxPlayers, Action<GKGameSession, NSError> completionHandler);

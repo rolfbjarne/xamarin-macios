@@ -219,6 +219,11 @@ namespace NotificationCenter {
 		[Export ("showsAddButtonWhenEditing")]
 		bool ShowsAddButtonWhenEditing { get; set; }
 
+		/// <param name="row">To be added.</param>
+		/// <param name="makeIfNecesary">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("viewControllerAtRow:makeIfNecessary:")]
 		NSViewController GetViewController (nuint row, bool makeIfNecesary);
 
@@ -238,6 +243,11 @@ namespace NotificationCenter {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NCWidgetListViewDelegate {
+		/// <param name="list">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -257,6 +267,11 @@ namespace NotificationCenter {
 		[Export ("widgetListPerformAddAction:"), DelegateName ("NCWidgetListViewController")]
 		void PerformAddAction (NCWidgetListViewController list);
 
+		/// <param name="list">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -265,12 +280,22 @@ namespace NotificationCenter {
 		[Export ("widgetList:shouldReorderRow:"), DelegateName ("NCWidgetListViewControllerShouldReorderRow"), DefaultValue (false)]
 		bool ShouldReorderRow (NCWidgetListViewController list, nuint row);
 
+		/// <param name="list">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <param name="newIndex">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("widgetList:didReorderRow:toRow:"), EventArgs ("NCWidgetListViewControllerDidReorder", XmlDocs = """
 			<summary>To be added.</summary>
 			<remarks>To be added.</remarks>
 			"""), DefaultValue (false)]
 		void DidReorderRow (NCWidgetListViewController list, nuint row, nuint newIndex);
 
+		/// <param name="list">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
 			<summary>To be added.</summary>
 			<value>To be added.</value>
@@ -279,6 +304,10 @@ namespace NotificationCenter {
 		[Export ("widgetList:shouldRemoveRow:"), DelegateName ("NCWidgetListViewControllerShouldRemoveRow"), DefaultValue (false)]
 		bool ShouldRemoveRow (NCWidgetListViewController list, nuint row);
 
+		/// <param name="list">To be added.</param>
+		/// <param name="row">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("widgetList:didRemoveRow:"), EventArgs ("NCWidgetListViewControllerDidRemoveRow", XmlDocs = """
 			<summary>To be added.</summary>
 			<remarks>To be added.</remarks>
@@ -345,6 +374,11 @@ namespace NotificationCenter {
 		[Export ("widgetSearch:searchForTerm:maxResults:"), EventArgs ("NSWidgetSearchForTerm"), DefaultValue (false)]
 		void SearchForTearm (NCWidgetSearchViewController controller, string searchTerm, nuint max);
 #else
+		/// <param name="controller">To be added.</param>
+		/// <param name="searchTerm">To be added.</param>
+		/// <param name="max">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("widgetSearch:searchForTerm:maxResults:"), EventArgs ("NSWidgetSearchForTerm", XmlDocs = """
 			<summary>To be added.</summary>

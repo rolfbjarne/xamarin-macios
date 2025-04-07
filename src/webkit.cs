@@ -5100,6 +5100,10 @@ namespace WebKit {
 		[Export ("forwardList")]
 		WKBackForwardListItem [] ForwardList { get; }
 
+		/// <param name="index">To be added.</param>
+		/// <summary>Gets the item at the specified index in the list, where the current item has index 0.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("itemAtIndex:")]
 		[return: NullAllowed]
 		WKBackForwardListItem ItemAtIndex (nint index);

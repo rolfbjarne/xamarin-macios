@@ -7663,7 +7663,9 @@ namespace AVFoundation {
 		[Export ("minFrameDuration")]
 		CMTime MinFrameDuration { get; }
 
-		[Deprecated (PlatformName.MacOSX, 15, 0)]
+        /// <summary>Retrieves associated tracks whose relationship is the specified <paramref name="avAssetTrackTrackAssociationType" />.</summary>
+		/// <param name="avAssetTrackTrackAssociationType">Should be one of the constants defined by <see cref="T:AVFoundation.AVAssetTrackTrackAssociation" />.</param>
+        [Deprecated (PlatformName.MacOSX, 15, 0)]
 		[Deprecated (PlatformName.iOS, 18, 0)]
 		[Deprecated (PlatformName.TvOS, 18, 0)]
 		[Deprecated (PlatformName.MacCatalyst, 18, 0)]
@@ -12046,7 +12048,11 @@ namespace AVFoundation {
 		CMTime Duration { get; [NotImplemented] set; }
 
 		[Export ("statusOfValueForKey:error:")]
+#if XAMCORE_5_0
+		AVKeyValueStatus GetStatusOfValue (string key, out NSError error);
+#else
 		AVKeyValueStatus StatusOfValueForKeyerror (string key, out NSError error);
+#endif
 
 		[Export ("loadValuesAsynchronouslyForKeys:completionHandler:")]
 		[Async ("LoadValuesTaskAsync", XmlDocs = """
@@ -17461,16 +17467,16 @@ namespace AVFoundation {
 		[Export ("devicesWithMediaType:")]
 		AVCaptureDevice [] DevicesWithMediaType (string mediaType);
 
+		/// <summary>Returns the default device for the provided media type.</summary>
+		/// <param name="mediaType">The media type for which to get the default device.</param>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("defaultDeviceWithMediaType:")]
 		[return: NullAllowed]
 		AVCaptureDevice GetDefaultDevice (NSString mediaType);
 
+		/// <summary>Returns the default device for the provided media type.</summary>
 		/// <param name="mediaType">The media type for which to get the default device.</param>
-		///         <summary>Returns the default device for the provided media type.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Wrap ("GetDefaultDevice (mediaType.GetConstant ()!)")]

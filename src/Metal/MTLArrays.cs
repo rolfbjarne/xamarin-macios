@@ -82,7 +82,11 @@ namespace Metal {
 	}
 
 	public partial class MTLPipelineBufferDescriptorArray {
-		public MTLPipelineBufferDescriptor this [nuint index] {
+		/// <param name="index">To be added.</param>
+			/// <summary>Gets or sets the mutability of the buffer descriptor at the specified index.</summary>
+			/// <value>To be added.</value>
+			/// <remarks>To be added.</remarks>
+			public MTLPipelineBufferDescriptor this [nuint index] {
 			get {
 				return GetObject (index);
 			}

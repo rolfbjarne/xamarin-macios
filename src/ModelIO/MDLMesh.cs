@@ -141,6 +141,19 @@ namespace ModelIO {
 		}
 
 #if NET
+		/// <param name="extent">The extent of the cylinder.</param>
+		/// <param name="segments">The number of divisions to create in each dimension.</param>
+		/// <param name="inwardNormals">Whether to generate inward-pointing normals.</param>
+		/// <param name="topCap">Whether to put a top cap on the cylinder.</param>
+		/// <param name="bottomCap">Whether to put a bottom cap on the cylinder.</param>
+		/// <param name="geometryType">Whether to create triangles, quadrilaterals, or lines.</param>
+		/// <param name="allocator">
+		///           <para>The allocator to use instead of the default, internal allocator.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>Creates a cylinder from the specified parameters.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -174,6 +187,16 @@ namespace ModelIO {
 		}
 
 #if NET
+		/// <param name="extent">The extent of the plane.</param>
+		/// <param name="segments">The number of divisions to create in each dimension.</param>
+		/// <param name="geometryType">Whether to create triangles, quadrilaterals, or lines.</param>
+		/// <param name="allocator">
+		///           <para>The allocator to use instead of the default, internal allocator.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>Creates a planar region centered at the origin, aligned with the X-Z plane, with the specified dimensions.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -185,6 +208,16 @@ namespace ModelIO {
 		}
 
 #if NET
+		/// <param name="extent">The extents of the icosahedron.</param>
+		/// <param name="inwardNormals">Whether to generate inward-pointing normals.</param>
+		/// <param name="geometryType">Whether to create triangles, quadrilaterals, or lines.</param>
+		/// <param name="allocator">
+		///           <para>The allocator to use instead of the default, internal allocator.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>Creates a regular icosahedron from the specified parameters.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]

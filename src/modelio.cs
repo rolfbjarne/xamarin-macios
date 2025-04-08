@@ -624,7 +624,11 @@ namespace ModelIO {
 
 		[Export ("bokehKernelWithSize:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
+#if XAMCORE_5_0
+		MDLTexture GetBokehKernel (Vector2i size);
+#else
 		MDLTexture BokehKernelWithSize (Vector2i size);
+#endif
 
 		/// <summary>Gets or sets the time, in seconds, for which the simulated shutter is open per frame.</summary>
 		///         <value>To be added.</value>
@@ -1048,6 +1052,11 @@ namespace ModelIO {
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		NativeHandle Constructor (string name, MDLMaterialSemantic semantic, Vector3 value);
 
+		/// <param name="name">To be added.</param>
+		/// <param name="semantic">To be added.</param>
+		/// <param name="value">To be added.</param>
+		/// <summary>Creates a new MDLMaterialProperty with the specified name, semantic, and value.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithName:semantic:float4:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		NativeHandle Constructor (string name, MDLMaterialSemantic semantic, Vector4 value);
@@ -2920,10 +2929,7 @@ namespace ModelIO {
 		MDLTexture FromBundle (string name);
 #endif
 
-		/// <param name="name">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new texture from the specified texture in the default application bundle.</summary>
 		[Static]
 		[Export ("textureNamed:")]
 		[return: NullAllowed]
@@ -2937,11 +2943,7 @@ namespace ModelIO {
 		MDLTexture FromBundle (string name, [NullAllowed] NSBundle bundleOrNil);
 #endif
 
-		/// <param name="name">To be added.</param>
-		///         <param name="bundleOrNil">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new texture from the specified texture in the specified application bundle.</summary>
 		[Static]
 		[Export ("textureNamed:bundle:")]
 		[return: NullAllowed]
@@ -3412,9 +3414,7 @@ namespace ModelIO {
 			set;
 		}
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Inserts the specified transform at the specified time.</summary>
 		[MacCatalyst (13, 1)]
 #if NET
 		[Abstract]
@@ -3447,10 +3447,12 @@ namespace ModelIO {
 		[Export ("keyTimes", ArgumentSemantic.Copy)]
 		NSNumber [] KeyTimes { get; }
 
+		/// <summary>Causes this transform to represent the specified static transform.</summary>
 		[Export ("setLocalTransform:forTime:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		void SetLocalTransform (Matrix4 transform, double time);
 
+		/// <summary>Causes this transform to represent the specified static transform.</summary>
 		[Export ("setLocalTransform:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		void SetLocalTransform (Matrix4 transform);
@@ -3466,11 +3468,9 @@ namespace ModelIO {
 #if !NET
 		[Obsolete ("Use 'CreateGlobalTransform4x4' instead.")]
 #endif
-		/// <param name="obj">To be added.</param>
-		/// <param name="atTime">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Creates and returns a global transform for the specified object at the specified time.</summary>
+		/// <param name="obj">The object that represents the spatial transform.</param>
+		/// <param name="atTime">The time at which to apply the transform.</param>
 		[Static]
 		[Export ("globalTransformWithObject:atTime:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]

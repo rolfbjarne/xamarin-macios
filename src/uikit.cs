@@ -742,9 +742,7 @@ namespace UIKit {
 	[MacCatalyst (13, 1)]
 	[Category, BaseType (typeof (NSLayoutConstraint))]
 	interface NSIdentifier {
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Returns an identifier that can be used to request an item.</summary>
 		[Export ("identifier")]
 		string GetIdentifier ();
 
@@ -1394,6 +1392,7 @@ namespace UIKit {
 		[Export ("setAccessibilityElements:")]
 		void SetAccessibilityElements ([NullAllowed] NSObject elements);
 
+		/// <summary>A value that tells whether the container is a table, or list, or etc.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("accessibilityContainerType", ArgumentSemantic.Assign)]
 		UIAccessibilityContainerType AccessibilityContainerType { get; set; }
@@ -2287,6 +2286,7 @@ namespace UIKit {
 		[Export ("initWithActivityItems:applicationActivities:")]
 		NativeHandle Constructor (NSObject [] activityItems, [NullAllowed] UIActivity [] applicationActivities);
 
+		/// <summary>The handler that runs when the activity view is dismissed.</summary>
 		[NullAllowed] // by default this property is null
 		[Export ("completionHandler", ArgumentSemantic.Copy)]
 		[Deprecated (PlatformName.iOS, 8, 0, message: "Use the 'CompletionWithItemsHandler' property instead.")]
@@ -2661,9 +2661,11 @@ namespace UIKit {
 	[Model]
 	[Protocol]
 	interface UIStateRestoring {
+		/// <summary>Gets the parent of the object to restore.</summary>
 		[Export ("restorationParent")]
 		IUIStateRestoring RestorationParent { get; }
 
+		/// <summary>Gets the class that recreates the restored object.</summary>
 		[Export ("objectRestorationClass")]
 		[NullAllowed]
 		Class ObjectRestorationClass { get; }
@@ -8276,10 +8278,12 @@ namespace UIKit {
 		[Export ("transform")]
 		CGAffineTransform Transform { get; set; }
 
+		/// <summary>Returns a value that tells how collision bounds are specified.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("collisionBoundsType")]
 		UIDynamicItemCollisionBoundsType CollisionBoundsType { get; }
 
+		/// <summary>Returns the closed path that is used for collision detection.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("collisionBoundingPath")]
 		UIBezierPath CollisionBoundingPath { get; }
@@ -9480,22 +9484,27 @@ namespace UIKit {
 		[Export ("spellCheckingType")]
 		UITextSpellCheckingType SpellCheckingType { get; set; }
 
+		/// <summary>The semantic of the expected input, which allows the system to, for example, provide custom keyboards.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("textContentType")]
 		NSString TextContentType { get; set; }
 
+		/// <summary>The smart quotes style.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("smartQuotesType", ArgumentSemantic.Assign)]
 		UITextSmartQuotesType SmartQuotesType { get; set; }
 
+		/// <summary>The smart dashes style.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("smartDashesType", ArgumentSemantic.Assign)]
 		UITextSmartDashesType SmartDashesType { get; set; }
 
+		/// <summary>The smart insert style.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("smartInsertDeleteType", ArgumentSemantic.Assign)]
 		UITextSmartInsertDeleteType SmartInsertDeleteType { get; set; }
 
+		/// <summary>The password entry rules.</summary>
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("passwordRules", ArgumentSemantic.Copy)]
 		UITextInputPasswordRules PasswordRules { get; set; }
@@ -9970,9 +9979,11 @@ namespace UIKit {
 		[Wrap ("WeakTokenizer")]
 		IUITextInputTokenizer Tokenizer { get; }
 
+		/// <summary>Returns the input view that provides the coordinate system for geometric operations within the text input.</summary>
 		[Export ("textInputView")]
 		UIView TextInputView { get; }
 
+		/// <summary>A value that controls whether the cursor is displayed at the start of the last line or end of the second-to-last line of a multiline selection.</summary>
 		[Export ("selectionAffinity")]
 		UITextStorageDirection SelectionAffinity { get; set; }
 
@@ -10086,9 +10097,17 @@ namespace UIKit {
 		[Export ("baseWritingDirectionForPosition:inDirection:")]
 		NSWritingDirection GetBaseWritingDirection (UITextPosition forPosition, UITextStorageDirection direction);
 
+		/// <param name="writingDirection">Constant indicating layout direction.</param>
+		/// <param name="range">A UITextRange object indicating the range of a document's text.</param>
+		/// <summary>Sets a base directon for writing in the specified range of text.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("setBaseWritingDirection:forRange:")]
+#if XAMCORE_5_0
+		void SetBaseWritingDirection (NSWritingDirection writingDirection, UITextRange range);
+#else
 		void SetBaseWritingDirectionforRange (NSWritingDirection writingDirection, UITextRange range);
+#endif
 
 		/// <param name="range">	
 		/// A UITextRange object indicating the range of a document's text.</param>
@@ -17576,7 +17595,13 @@ namespace UIKit {
 		[Appearance]
 		void SetDividerImage ([NullAllowed] UIImage dividerImage, UIControlState leftSegmentState, UIControlState rightSegmentState, UIBarMetrics barMetrics);
 
-		[Export ("dividerImageForLeftSegmentState:rightSegmentState:barMetrics:")]
+		/// <param name="leftState">To be added.</param>
+			/// <param name="rightState">To be added.</param>
+			/// <param name="barMetrics">To be added.</param>
+			/// <summary>The divider image for the specified UIControlStates and UIBarMetrics.</summary>
+			/// <returns>To be added.</returns>
+			/// <remarks>To be added.</remarks>
+			[Export ("dividerImageForLeftSegmentState:rightSegmentState:barMetrics:")]
 		[Appearance]
 		[return: NullAllowed]
 #if NET
@@ -17585,6 +17610,12 @@ namespace UIKit {
 		UIImage DividerImageForLeftSegmentStaterightSegmentStatebarMetrics (UIControlState leftState, UIControlState rightState, UIBarMetrics barMetrics);
 #endif
 
+		/// <param name="attributes">rendering attributes for the text.</param>
+		/// <param name="state">The state to alter</param>
+		/// <summary>Sets the rendering text attributes for a specific state in the control.</summary>
+		/// <remarks>
+		///           <para id="tool-remark">This member participates in the <see cref="T:UIKit.UIAppearance" /> styling system.  See the <see cref="P:UIKit.UISegmentedControl.Appearance" /> property and the <see cref="M:UIKit.UISegmentedControl.AppearanceWhenContainedIn(System.Type[])" /> method.</para>
+		///         </remarks>
 		[Appearance]
 		[Wrap ("SetTitleTextAttributes (attributes?.GetDictionary (), state)")]
 		void SetTitleTextAttributes ([NullAllowed] UIStringAttributes attributes, UIControlState state);
@@ -23464,6 +23495,7 @@ namespace UIKit {
 		CGAffineTransform TargetTransform { get; }
 
 
+		/// <summary>Pauses the animations.</summary>
 #if NET // Can't break the world right now
 		[Abstract]
 #endif
@@ -23904,12 +23936,16 @@ namespace UIKit {
 		[Export ("startInteractiveTransition:")]
 		void StartInteractiveTransition (IUIViewControllerContextTransitioning transitionContext);
 
+		/// <summary>Returns the overall relative speed of an animation. The default value is 1.0.</summary>
 		[Export ("completionSpeed")]
 		nfloat CompletionSpeed { get; }
 
+		/// <summary>Returns the completion curve, which controls the speed of the animation as it progresses.</summary>
 		[Export ("completionCurve")]
 		UIViewAnimationCurve CompletionCurve { get; }
 
+		/// <summary>Gets whether the transition is interactive.</summary>
+		/// <returns>The default value is <see langword="true" />.</returns>
 		[MacCatalyst (13, 1)]
 		[Export ("wantsInteractiveStart")]
 		bool WantsInteractiveStart { get; }
@@ -24161,6 +24197,7 @@ namespace UIKit {
 		[Export ("notifyWhenInteractionEndsUsingBlock:")]
 		void NotifyWhenInteractionEndsUsingBlock (Action<IUIViewControllerTransitionCoordinatorContext> handler);
 
+		/// <summary>Registers <paramref name="handler" /> to be called when the transition changes from interactive to non-interactive or vice versa.</summary>
 #if NET // This is abstract in headers but is a breaking change
 		[Abstract]
 #endif
@@ -26976,6 +27013,7 @@ namespace UIKit {
 
 		// Another abstract that was introduced on this released, breaking ABI
 		// Radar: 26867207
+		/// <summary>Returns the keyboard input mode.</summary>
 #if NET
 		[Abstract]
 #endif
@@ -26985,6 +27023,7 @@ namespace UIKit {
 
 		// New abstract, breaks ABI
 		// Radar: 33685383
+		/// <summary>Returns the selected text.</summary>
 #if NET
 		[Abstract]
 #endif
@@ -26994,6 +27033,7 @@ namespace UIKit {
 
 		// New abstract, breaks ABI
 		// Radar: 33685383
+		/// <summary>Returns the unique ID for the document.</summary>
 #if NET
 		[Abstract]
 #endif
@@ -27061,6 +27101,7 @@ namespace UIKit {
 		[Abstract]
 		nfloat Length { get; }
 
+		/// <summary>Returns the top edge of the guide.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("topAnchor", ArgumentSemantic.Strong)]
 #if NET
@@ -27069,6 +27110,7 @@ namespace UIKit {
 #endif
 		NSLayoutYAxisAnchor TopAnchor { get; }
 
+		/// <summary>Returns the bottom edge of the guide</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("bottomAnchor", ArgumentSemantic.Strong)]
 #if NET
@@ -27077,6 +27119,7 @@ namespace UIKit {
 #endif
 		NSLayoutYAxisAnchor BottomAnchor { get; }
 
+		/// <summary>Returns the height of the guide.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("heightAnchor", ArgumentSemantic.Strong)]
 #if NET
@@ -27784,6 +27827,8 @@ namespace UIKit {
 
 		// FIXME: declared as a @required, but this breaks compatibility
 		// Radar: 41121416
+		/// <summary>Returns the frame in the reference coordinate space of the containing <see cref="IUIFocusItemContainer" />.</summary>
+		/// <returns>The frame in the reference coordinate space of the containing <see cref="IUIFocusItemContainer" />.</returns>
 		[MacCatalyst (13, 1)]
 #if NET
 		[Abstract]
@@ -28003,6 +28048,7 @@ namespace UIKit {
 		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
 		IUIPreviewInteractionDelegate Delegate { get; set; }
 
+		/// <summary>Returns the location of the touch location in the specified coordinate space.</summary>
 		[Export ("locationInCoordinateSpace:")]
 		CGPoint GetLocationInCoordinateSpace ([NullAllowed] IUICoordinateSpace coordinateSpace);
 
@@ -28153,9 +28199,7 @@ namespace UIKit {
 		// Radar: 26825293
 		//
 #if NET
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Gets the list of focus environments, ordered by priority, that the environment prefers when updating the focus.</summary>
 		[Abstract]
 #endif
 		[MacCatalyst (13, 1)]

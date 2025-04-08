@@ -13185,6 +13185,7 @@ namespace Foundation {
 		[Export ("completionBlock", ArgumentSemantic.Copy)]
 		Action CompletionBlock { get; set; }
 
+		/// <summary>Blocks the current thread until this operation finishes.</summary>
 		[Export ("waitUntilFinished")]
 		void WaitUntilFinished ();
 
@@ -14068,6 +14069,11 @@ namespace Foundation {
 		[Export ("pathForResource:ofType:inDirectory:forLocalization:")]
 		string PathForResource (string name, [NullAllowed] string ofType, string subpath, string localizationName);
 
+		/// <summary>Get a localized version of the string for the specified key in the specified table.</summary>
+		/// <param name="key">The key to lookup</param>
+		/// <param name="value">The value to return if the key is null, or the key was not found on the localization table.</param>
+		/// <param name="table">The table to search, if the value is null, this uses the Localizable.strings table.</param>
+		/// <summary>A localized version of the string for the specified key in the specified table.</summary>
 		[Export ("localizedStringForKey:value:table:")]
 		NSString GetLocalizedString ([NullAllowed] NSString key, [NullAllowed] NSString value, [NullAllowed] NSString table);
 
@@ -16330,9 +16336,16 @@ namespace Foundation {
 		[Export ("numberFromString:")]
 		NSNumber NumberFromString (string text);
 
+#if !XAMCORE_5_0
+		[Obsolete ("Use 'GetLocalizedString' instead.")]
 		[Static]
 		[Export ("localizedStringFromNumber:numberStyle:")]
 		string LocalizedStringFromNumbernumberStyle (NSNumber num, NSNumberFormatterStyle nstyle);
+#endif
+
+		[Static]
+		[Export ("localizedStringFromNumber:numberStyle:")]
+		string GetLocalizedString (NSNumber number, NSNumberFormatterStyle numberStyle);
 
 		//Detected properties
 		[Export ("numberStyle")]

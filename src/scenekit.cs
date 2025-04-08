@@ -136,6 +136,23 @@ namespace SceneKit {
 	[Model, Protocol]
 	[BaseType (typeof (NSObject))]
 	interface SCNAnimatable {
+		/// <summary>Adds <paramref name="scnAnimation" />, identified with the specified <paramref name="key" />.</summary>
+		/// <param name="scnAnimation">The animation to add.</param>
+		/// <param name="key">The animation key.</param>
+		/// <remarks>
+		///   <para>The following example shows how a rotation animation can be added to a <see cref="T:SceneKit.SCNGeometry" /> object:</para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// var animation = new CABasicAnimation ();
+		/// animation.KeyPath = "rotation";
+		/// var v = new SCNVector4 (1.0f, 1.0f, 0.0f, (float) (Math.PI * 2.0));
+		/// animation.To = NSValue.FromVector (v);
+		/// animation.Duration = 5.0f;
+		/// animation.RepeatCount = float.MaxValue; //repeat forever
+		/// animatableObject.AddAnimation (animation, (NSString) "rotation");
+		///     ]]></code>
+		///   </example>
+		/// </remarks>
 		[Abstract]
 		[MacCatalyst (13, 1)]
 		[Export ("addAnimation:forKey:")]
@@ -4050,6 +4067,11 @@ namespace SceneKit {
 		[Export ("prepareObjects:withCompletionHandler:")]
 		void Prepare (NSObject [] objects, [NullAllowed] Action<bool> completionHandler);
 
+        /// <summary>Displays the provided scene.</summary>
+        /// <param name="scene">The scene to present.</param>
+        /// <param name="transition">The transistion to use to present the scene.</param>
+        /// <param name="pointOfView">The point of view to which to present the scene.</param>
+        /// <param name="completionHandler">A handler to run after the scene is presented.</param>
 #if NET
 		[Abstract] // this protocol existed before iOS 9 (or OSX 10.11) and we cannot add abstract members to it (breaking changes)
 #endif
@@ -4068,6 +4090,7 @@ namespace SceneKit {
 		[Export ("presentScene:withTransition:incomingPointOfView:completionHandler:")]
 		void PresentScene (SCNScene scene, SKTransition transition, [NullAllowed] SCNNode pointOfView, [NullAllowed] Action completionHandler);
 
+		/// <summary>Returns the nodes that are contained in the frustrum that is defined by the provided node.</summary>
 #if NET
 		[Abstract] // this protocol existed before iOS 9 (or OSX 10.11) and we cannot add abstract members to it (breaking changes)
 #endif
@@ -4075,6 +4098,7 @@ namespace SceneKit {
 		[Export ("nodesInsideFrustumWithPointOfView:")]
 		SCNNode [] GetNodesInsideFrustum (SCNNode pointOfView);
 
+		/// <summary>A value that controls which, if any, debug overlays to show in the rendered output.</summary>
 #if NET
 		[Abstract] // this protocol existed before iOS 9 (or OSX 10.11) and we cannot add abstract members to it (breaking changes)
 #endif
@@ -4082,6 +4106,7 @@ namespace SceneKit {
 		[Export ("debugOptions", ArgumentSemantic.Assign)]
 		SCNDebugOptions DebugOptions { get; set; }
 
+		/// <summary>Returns the rendering API that is used to render the scene.</summary>
 #if NET
 		[Abstract] // this protocol existed before iOS 9 (or OSX 10.11) and we cannot add abstract members to it (breaking changes)
 #endif
@@ -4089,6 +4114,7 @@ namespace SceneKit {
 		[Export ("renderingAPI")]
 		SCNRenderingApi RenderingApi { get; }
 
+		/// <summary>Returns the current command encoder that is used for rendering.</summary>
 #if NET
 		[Abstract] // this protocol existed before iOS 9 (or OSX 10.11) and we cannot add abstract members to it (breaking changes)
 #endif
@@ -4096,6 +4122,7 @@ namespace SceneKit {
 		[NullAllowed, Export ("currentRenderCommandEncoder")]
 		IMTLRenderCommandEncoder CurrentRenderCommandEncoder { get; }
 
+		/// <summary>Returns the metal device that is used for rendering.</summary>
 #if NET
 		[Abstract] // this protocol existed before iOS 9 (or OSX 10.11) and we cannot add abstract members to it (breaking changes)
 #endif
@@ -4103,6 +4130,7 @@ namespace SceneKit {
 		[NullAllowed, Export ("device")]
 		IMTLDevice Device { get; }
 
+		/// <summary>Returns the format for color pixels.</summary>
 #if NET
 		[Abstract] // this protocol existed before iOS 9 (or OSX 10.11) and we cannot add abstract members to it (breaking changes)
 #endif
@@ -4110,6 +4138,7 @@ namespace SceneKit {
 		[Export ("colorPixelFormat")]
 		MTLPixelFormat ColorPixelFormat { get; }
 
+		/// <summary>Returns the format for depth pixels.</summary>
 #if NET
 		[Abstract] // this protocol existed before iOS 9 (or OSX 10.11) and we cannot add abstract members to it (breaking changes)
 #endif
@@ -4117,6 +4146,7 @@ namespace SceneKit {
 		[Export ("depthPixelFormat")]
 		MTLPixelFormat DepthPixelFormat { get; }
 
+		/// <summary>Returns the format for stencil pixels.</summary>
 #if NET
 		[Abstract] // this protocol existed before iOS 9 (or OSX 10.11) and we cannot add abstract members to it (breaking changes)
 #endif
@@ -4124,6 +4154,7 @@ namespace SceneKit {
 		[Export ("stencilPixelFormat")]
 		MTLPixelFormat StencilPixelFormat { get; }
 
+		/// <summary>Returns the command queue.</summary>
 #if NET
 		[Abstract] // this protocol existed before iOS 9 (or OSX 10.11) and we cannot add abstract members to it (breaking changes)
 #endif
@@ -4131,6 +4162,7 @@ namespace SceneKit {
 		[NullAllowed, Export ("commandQueue")]
 		IMTLCommandQueue CommandQueue { get; }
 
+		/// <summary>Returns the audio engine that is used to render sounds in the scene</summary>
 #if NET
 		[Abstract] // this protocol existed before iOS 9 (or OSX 10.11) and we cannot add abstract members to it (breaking changes)
 #endif
@@ -4138,6 +4170,7 @@ namespace SceneKit {
 		[Export ("audioEngine")]
 		AVAudioEngine AudioEngine { get; }
 
+		/// <summary>Returns the audio environment node for the scene.</summary>
 #if NET
 		[Abstract] // this protocol existed before iOS 9 (or OSX 10.11) and we cannot add abstract members to it (breaking changes)
 #endif
@@ -4146,6 +4179,7 @@ namespace SceneKit {
 		[DebuggerBrowsable (DebuggerBrowsableState.Never)]
 		AVAudioEnvironmentNode AudioEnvironmentNode { get; }
 
+		/// <summary>The node that represents the position of the listener in the scene.</summary>
 #if NET
 		[Abstract] // this protocol existed before iOS 9 (or OSX 10.11) and we cannot add abstract members to it (breaking changes)
 #endif
@@ -5035,6 +5069,7 @@ namespace SceneKit {
 		[Export ("timingMode")]
 		SCNActionTimingMode TimingMode { get; set; }
 
+		/// <summary>Sets the function that transforms the times at which actions occur.</summary>
 		[NullAllowed, Export ("timingFunction", ArgumentSemantic.Assign)]
 #if NET
 		Func<float, float> TimingFunction { get; set; }

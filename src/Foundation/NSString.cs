@@ -151,6 +151,9 @@ namespace Foundation {
 			return CreateWithCharacters (handle, value, start, length, autorelease);
 		}
 
+		/// <param name="handle">Handle to the Objective-C native NSString object.</param>
+		/// <summary>Releases a native Objective-C string.</summary>
+		/// <remarks>Use this method to release Objective-C NSString handles that were previously allocated with <see cref="M:Foundation.NSString.CreateNative(System.String)" />.</remarks>
 		public static void ReleaseNative (NativeHandle handle)
 		{
 			NSObject.DangerousRelease (handle);
@@ -196,6 +199,10 @@ namespace Foundation {
 			return FromHandle (Handle);
 		}
 
+		/// <param name="str">The NSString.</param>
+		/// <summary>Converts the NSString to a CIL/C# string.</summary>
+		/// <returns />
+		/// <remarks>To be added.</remarks>
 		public static implicit operator string (NSString str)
 		{
 			if (((object) str) is null)

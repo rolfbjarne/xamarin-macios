@@ -4540,6 +4540,9 @@ namespace AVFoundation {
 		[Export ("inputIsAvailableChanged:")]
 		void InputIsAvailableChanged (bool isInputAvailable);
 
+		/// <param name="flags">To be added.</param>
+		/// <summary>Developers can override this method to react to the end of an interruption of an audio session.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("endInterruptionWithFlags:")]
 #if NET
 		void EndInterruption (AVAudioSessionInterruptionOptions flags);

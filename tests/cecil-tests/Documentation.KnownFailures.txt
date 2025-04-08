@@ -9451,7 +9451,6 @@ M:CoreImage.CIImage.FromCGImageSource(ImageIO.CGImageSource,System.UIntPtr,CoreI
 M:CoreImage.CIImage.FromSemanticSegmentationMatte(AVFoundation.AVSemanticSegmentationMatte,Foundation.NSDictionary)
 M:CoreImage.CIImage.FromSemanticSegmentationMatte(AVFoundation.AVSemanticSegmentationMatte)
 M:CoreImage.CIImage.ImageByApplyingTransform(CoreGraphics.CGAffineTransform,System.Boolean)
-M:CoreImage.CIImage.op_Implicit(CoreGraphics.CGImage)~CoreImage.CIImage
 M:CoreImage.CIImageProcessorInput_Extensions.GetDigest(CoreImage.ICIImageProcessorInput)
 M:CoreImage.CIImageProcessorInput_Extensions.GetRoiTileCount(CoreImage.ICIImageProcessorInput)
 M:CoreImage.CIImageProcessorInput_Extensions.GetRoiTileIndex(CoreImage.ICIImageProcessorInput)
@@ -9721,7 +9720,6 @@ M:CoreML.MLModelStructure.Load(CoreML.MLModelAsset,System.Action{CoreML.MLModelS
 M:CoreML.MLModelStructure.Load(Foundation.NSUrl,System.Action{CoreML.MLModelStructure,Foundation.NSError})
 M:CoreML.MLMultiArray.#ctor(CoreVideo.CVPixelBuffer,Foundation.NSNumber[])
 M:CoreML.MLMultiArray.#ctor(Foundation.NSNumber[],CoreML.MLMultiArrayDataType,Foundation.NSNumber[])
-M:CoreML.MLMultiArray.#ctor(System.IntPtr,System.IntPtr[],CoreML.MLMultiArrayDataType,System.IntPtr[],System.Action{System.IntPtr},Foundation.NSError@)
 M:CoreML.MLMultiArray.Concat(CoreML.MLMultiArray[],System.IntPtr,CoreML.MLMultiArrayDataType)
 M:CoreML.MLMultiArray.GetBytes(System.Action{System.IntPtr,System.IntPtr})
 M:CoreML.MLMultiArray.GetBytesAsync
@@ -10233,9 +10231,6 @@ M:Foundation.INSUrlSessionWebSocketDelegate.DidClose(Foundation.NSUrlSession,Fou
 M:Foundation.INSUrlSessionWebSocketDelegate.DidOpen(Foundation.NSUrlSession,Foundation.NSUrlSessionWebSocketTask,System.String)
 M:Foundation.INSXpcListenerDelegate.ShouldAcceptConnection(Foundation.NSXpcListener,Foundation.NSXpcConnection)
 M:Foundation.NSArray.ArrayFromHandle``1(ObjCRuntime.NativeHandle,System.Converter{ObjCRuntime.NativeHandle,``0},System.Boolean)
-M:Foundation.NSArray.ArrayFromHandle``1(ObjCRuntime.NativeHandle,System.Converter{ObjCRuntime.NativeHandle,``0})
-M:Foundation.NSArray.ArrayFromHandle``1(ObjCRuntime.NativeHandle)
-M:Foundation.NSArray.ArrayFromHandleFunc``1(ObjCRuntime.NativeHandle,System.Func{ObjCRuntime.NativeHandle,``0})
 M:Foundation.NSArray.EnumsFromHandle``1(ObjCRuntime.NativeHandle)
 M:Foundation.NSArray.FromIntPtrs(ObjCRuntime.NativeHandle[])
 M:Foundation.NSArray.FromNSObjects``1(``0[][])
@@ -10273,7 +10268,6 @@ M:Foundation.NSBindingSelectionMarker.SetDefaultPlaceholder(Foundation.NSObject,
 M:Foundation.NSCache.add_WillEvictObject(System.EventHandler{Foundation.NSObjectEventArgs})
 M:Foundation.NSCache.remove_WillEvictObject(System.EventHandler{Foundation.NSObjectEventArgs})
 M:Foundation.NSCache.SetObjectForKey(Foundation.NSObject,Foundation.NSObject)
-M:Foundation.NSData.op_Implicit(System.String)~Foundation.NSData
 M:Foundation.NSDataDetector.#ctor(Foundation.NSTextCheckingType,Foundation.NSError@)
 M:Foundation.NSDataDetector.Create(Foundation.NSTextCheckingType,Foundation.NSError@)
 M:Foundation.NSDate.#ctor(System.Double)
@@ -10464,9 +10458,7 @@ M:Foundation.NSString.CompareTo(Foundation.NSString)
 M:Foundation.NSString.LoadDataAsync(System.String,Foundation.NSProgress@)
 M:Foundation.NSString.op_Equality(Foundation.NSString,Foundation.NSString)
 M:Foundation.NSString.op_Explicit(System.String)~Foundation.NSString
-M:Foundation.NSString.op_Implicit(Foundation.NSString)~System.String
 M:Foundation.NSString.op_Inequality(Foundation.NSString,Foundation.NSString)
-M:Foundation.NSString.ReleaseNative(ObjCRuntime.NativeHandle)
 M:Foundation.NSUrl.LoadDataAsync(System.String,Foundation.NSProgress@)
 M:Foundation.NSUrl.op_Equality(Foundation.NSUrl,Foundation.NSUrl)
 M:Foundation.NSUrl.op_Implicit(Foundation.NSUrl)~System.Uri
@@ -17667,7 +17659,6 @@ P:CloudKit.CKErrorFields.UserDidResetEncryptedDataKey
 P:CloudKit.CKQueryOperation.MaximumResults
 P:CloudKit.CKRecord.CreationDateKey
 P:CloudKit.CKRecord.CreatorUserRecordIdKey
-P:CloudKit.CKRecord.Item(System.String)
 P:CloudKit.CKRecord.LastModifiedUserRecordIdKey
 P:CloudKit.CKRecord.ModificationDateKey
 P:CloudKit.CKRecord.NameZoneWideShare
@@ -18561,7 +18552,6 @@ P:CoreImage.CIFalseColor.InputImage
 P:CoreImage.CIFalseColor.OutputImage
 P:CoreImage.CIFilter.BlurredRectangleGeneratorFilter
 P:CoreImage.CIFilter.CannyEdgeDetectorFilter
-P:CoreImage.CIFilter.Item(Foundation.NSString)
 P:CoreImage.CIFilter.RoundedRectangleStrokeGeneratorFilter
 P:CoreImage.CIFilter.SobelGradientsFilter
 P:CoreImage.CIFlashTransition.Color
@@ -20038,7 +20028,6 @@ P:CoreML.MLComputePlan.ModelStructure
 P:CoreML.MLComputePlanCost.Weight
 P:CoreML.MLComputePlanDeviceUsage.PreferredComputeDevice
 P:CoreML.MLComputePlanDeviceUsage.SupportedComputeDevices
-P:CoreML.MLDictionaryFeatureProvider.Item(System.String)
 P:CoreML.MLFeatureDescription.DictionaryConstraint
 P:CoreML.MLFeatureDescription.ImageConstraint
 P:CoreML.MLFeatureDescription.MultiArrayConstraint
@@ -20095,9 +20084,6 @@ P:CoreML.MLModelStructureProgramOperation.Blocks
 P:CoreML.MLModelStructureProgramOperation.Inputs
 P:CoreML.MLModelStructureProgramOperation.OperatorName
 P:CoreML.MLModelStructureProgramOperation.Outputs
-P:CoreML.MLMultiArray.Item(Foundation.NSNumber[])
-P:CoreML.MLMultiArray.Item(System.IntPtr)
-P:CoreML.MLMultiArray.Item(System.IntPtr[])
 P:CoreML.MLMultiArray.PixelBuffer
 P:CoreML.MLNeuralEngineComputeDevice.TotalCoreCount
 P:CoreML.MLNumericConstraint.EnumeratedNumbers
@@ -20516,12 +20502,8 @@ P:Foundation.NSAttributedStringDocumentAttributes.Title
 P:Foundation.NSAttributedStringDocumentAttributes.TopMargin
 P:Foundation.NSBundle.AllBundles
 P:Foundation.NSBundle.BundleDidLoadNotification
-P:Foundation.NSData.Item(System.IntPtr)
 P:Foundation.NSDate.SrAbsoluteTime
 P:Foundation.NSDate.SystemClockDidChangeNotification
-P:Foundation.NSDictionary.Item(Foundation.NSObject)
-P:Foundation.NSDictionary.Item(Foundation.NSString)
-P:Foundation.NSDictionary.Item(System.String)
 P:Foundation.NSDictionary`2.Item(`0)
 P:Foundation.NSError.CarPlayErrorDomain
 P:Foundation.NSError.MultipleUnderlyingErrorsKey
@@ -20553,7 +20535,6 @@ P:Foundation.NSMutableDictionary.Item(System.String)
 P:Foundation.NSMutableDictionary`2.Item(`0)
 P:Foundation.NSMutableOrderedSet.Item(System.IntPtr)
 P:Foundation.NSMutableOrderedSet`1.Item(System.IntPtr)
-P:Foundation.NSMutableUrlRequest.Item(System.String)
 P:Foundation.NSNetDomainEventArgs.Domain
 P:Foundation.NSNetDomainEventArgs.MoreComing
 P:Foundation.NSNetServiceConnectionEventArgs.InputStream
@@ -20581,7 +20562,6 @@ P:Foundation.NSProcessInfo.IsMacCatalystApplication
 P:Foundation.NSProcessInfo.PerformanceProfileDidChangeNotification
 P:Foundation.NSProgress.FileOperationKindDuplicatingKey
 P:Foundation.NSProgress.FileOperationKindUploading
-P:Foundation.NSStream.Item(Foundation.NSString)
 P:Foundation.NSStreamEventArgs.StreamEvent
 P:Foundation.NSString.Item(System.IntPtr)
 P:Foundation.NSThread.ThreadWillExitNotification
@@ -20607,7 +20587,6 @@ P:Foundation.NSUrl.VolumeMountFromLocationKey
 P:Foundation.NSUrl.VolumeSubtypeKey
 P:Foundation.NSUrl.VolumeSupportsFileProtectionKey
 P:Foundation.NSUrl.VolumeTypeNameKey
-P:Foundation.NSUrlRequest.Item(System.String)
 P:Foundation.NSUrlSessionConfiguration.ProxyConfigurations
 P:Foundation.NSUrlSessionConfiguration.SessionType
 P:Foundation.NSUrlSessionConfiguration.StrongConnectionProxyDictionary
@@ -20630,7 +20609,6 @@ P:Foundation.NSUrlSessionTaskTransactionMetrics.Multipath
 P:Foundation.NSUrlSessionUploadTask.ResumeDataKey
 P:Foundation.NSUserActivity.AppClipActivationPayload
 P:Foundation.NSUserActivity.TargetContentIdentifier
-P:Foundation.NSUserDefaults.Item(System.String)
 P:Foundation.NSValue.CMVideoDimensionsValue
 P:Foundation.NSXpcListener.Delegate
 P:Foundation.ProxyConfigurationDictionary.HttpEnable
@@ -21199,9 +21177,6 @@ P:GameKit.GKPlayerEventArgs.PlayerID
 P:GameKit.GKPlayersEventArgs.PlayerIDs
 P:GameKit.GKStateEventArgs.PlayerId
 P:GameKit.GKStateEventArgs.State
-P:GameplayKit.GKBehavior.Item(GameplayKit.GKGoal)
-P:GameplayKit.GKBehavior.Item(System.UIntPtr)
-P:GameplayKit.GKComponentSystem`1.Item(System.UIntPtr)
 P:GameplayKit.GKCompositeBehavior.Item(GameplayKit.GKBehavior)
 P:GameplayKit.GKCompositeBehavior.Item(System.UIntPtr)
 P:GameplayKit.IGKGameModelPlayer.PlayerId
@@ -21487,8 +21462,6 @@ P:iTunesLibrary.ITLibPlaylist.Primary
 P:iTunesLibrary.ITLibraryNotifications.DidChangeNotification
 P:JavaScriptCore.JSContext.Inspectable
 P:JavaScriptCore.JSContext.Item(Foundation.NSObject)
-P:JavaScriptCore.JSValue.Item(Foundation.NSObject)
-P:JavaScriptCore.JSValue.Item(System.UIntPtr)
 P:LinkPresentation.LPLinkMetadata.IconProvider
 P:LinkPresentation.LPLinkMetadata.ImageProvider
 P:LinkPresentation.LPLinkMetadata.OriginalUrl
@@ -21836,7 +21809,6 @@ P:Metal.MTLIOCompressionContext.DefaultChunkSize
 P:Metal.MTLMeshRenderPipelineDescriptor.AlphaToCoverageEnabled
 P:Metal.MTLMeshRenderPipelineDescriptor.AlphaToOneEnabled
 P:Metal.MTLMeshRenderPipelineDescriptor.RasterizationEnabled
-P:Metal.MTLPipelineBufferDescriptorArray.Item(System.UIntPtr)
 P:Metal.MTLRasterizationRateLayerDescriptor.HorizontalSampleStorage
 P:Metal.MTLRasterizationRateLayerDescriptor.VerticalSampleStorage
 P:Metal.MTLRenderPassColorAttachmentDescriptorArray.Item(System.IntPtr)
@@ -22399,7 +22371,6 @@ P:MLCompute.MLCYoloLossDescriptor.ScaleSpatialSizeLoss
 P:MLCompute.MLCYoloLossDescriptor.ShouldRescore
 P:MLCompute.MLCYoloLossLayer.YoloLossDescriptor
 P:MobileCoreServices.UTType.UniversalSceneDescriptionMobile
-P:ModelIO.MDLAsset.Item(System.UIntPtr)
 P:ModelIO.MDLAsset.Originals
 P:ModelIO.MDLMaterial.Item(System.String)
 P:ModelIO.MDLMaterial.Item(System.UIntPtr)
@@ -23113,7 +23084,6 @@ P:Phase.PhaseStreamNode.GainMetaParameter
 P:Phase.PhaseStreamNode.Mixer
 P:Phase.PhaseStreamNode.RateMetaParameter
 P:Phase.PhaseSwitchNodeDefinition.SwitchMetaParameterDefinition
-P:Photos.PHFetchResult.Item(System.IntPtr)
 P:Photos.PHPhotoLibrary_CloudIdentifiers.LocalIdentifierNotFound
 P:Photos.PHPhotoLibrary.LocalIdentifiersErrorKey
 P:PhotosUI.PHPickerViewController.Delegate

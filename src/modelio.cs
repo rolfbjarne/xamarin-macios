@@ -1035,6 +1035,11 @@ namespace ModelIO {
 		[Export ("initWithName:semantic:float:")]
 		NativeHandle Constructor (string name, MDLMaterialSemantic semantic, float value);
 
+		/// <param name="name">To be added.</param>
+		/// <param name="semantic">To be added.</param>
+		/// <param name="value">To be added.</param>
+		/// <summary>Creates a new MDLMaterialProperty with the specified name, semantic, and value.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithName:semantic:float2:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		NativeHandle Constructor (string name, MDLMaterialSemantic semantic, Vector2 value);
@@ -1047,6 +1052,11 @@ namespace ModelIO {
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		NativeHandle Constructor (string name, MDLMaterialSemantic semantic, Vector4 value);
 
+		/// <param name="name">To be added.</param>
+		/// <param name="semantic">To be added.</param>
+		/// <param name="value">To be added.</param>
+		/// <summary>Creates a new MDLMaterialProperty with the specified name, semantic, and value.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithName:semantic:matrix4x4:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 #if !NET
@@ -3216,6 +3226,9 @@ namespace ModelIO {
 #if !NET
 		[Obsolete ("Use the '(MatrixFloat4x4)' overload instead.")]
 #endif
+		/// <param name="matrix">To be added.</param>
+		/// <summary>Creates a new MDLTransform from the specified matrix.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithMatrix:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		NativeHandle Constructor (Matrix4 matrix);
@@ -3230,6 +3243,10 @@ namespace ModelIO {
 #if !NET
 		[Obsolete ("Use the '(MatrixFloat4x4, bool)' overload instead.")]
 #endif
+		/// <param name="matrix">To be added.</param>
+		/// <param name="resetsTransform">To be added.</param>
+		/// <summary>Creates a new MDLTransform from the specified matrix.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithMatrix:resetsTransform:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]

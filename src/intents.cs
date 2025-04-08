@@ -4828,7 +4828,16 @@ namespace Intents {
 		///         <remarks>To be added.</remarks>
 		[NoMac, NoTV]
 		[NoMacCatalyst]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Asynchronously fetches the image.</summary>
+			<returns>
+			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous FetchImage operation.  The value of the TResult parameter is of type System.Action&lt;UIKit.UIImage&gt;.</para>
+			        </returns>
+			<remarks>
+			          <para copied="true">The FetchImageAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		[Export ("fetchUIImageWithCompletion:")]
 		void FetchImage (Action<UIImage> completion);
 	}

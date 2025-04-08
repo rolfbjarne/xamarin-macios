@@ -4825,6 +4825,11 @@ namespace UIKit {
 		[Export ("application:continueUserActivity:restorationHandler:")]
 		bool ContinueUserActivity (UIApplication application, NSUserActivity userActivity, UIApplicationRestorationHandler completionHandler);
 
+		/// <param name="application">To be added.</param>
+		/// <param name="userActivityType">To be added.</param>
+		/// <param name="error">To be added.</param>
+		/// <summary>Informs the app that the activity of the <paramref name="userActivityType" /> type could not be continued, and specifies a <paramref name="error" /> as the reason for the failure.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("application:didFailToContinueUserActivityWithType:error:")]
 #if NET

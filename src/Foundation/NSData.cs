@@ -358,11 +358,11 @@ namespace Foundation {
 		}
 
 		/// <param name="idx">Index into the NSData.</param>
-			/// <summary>Retrieves the byte at the specified position in the NSData object.</summary>
-			/// <value>The value at that position, or an exception if you try to access data beyond its boundaries.</value>
-			/// <remarks>
-			///         </remarks>
-			public virtual byte this [nint idx] {
+		/// <summary>Retrieves the byte at the specified position in the NSData object.</summary>
+		/// <value>The value at that position, or an exception if you try to access data beyond its boundaries.</value>
+		/// <remarks>
+		///         </remarks>
+		public virtual byte this [nint idx] {
 			get {
 				if (idx < 0 || (ulong) idx > Length)
 					throw new ArgumentException (nameof (idx));

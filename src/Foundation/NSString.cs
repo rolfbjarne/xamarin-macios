@@ -217,6 +217,9 @@ namespace Foundation {
 			return new NSString (str);
 		}
 
+		/// <summary>Utility method that returns a string from a pointer that points to an Objective-C NSString object.</summary>
+		/// <param name="usrhandle">Pointer to an Objective-C NSString object (not the managed NSString object).</param>
+		/// <returns>The Objective-C string in the NSString as a C# string.</returns>
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[Obsolete ("Use of 'CFString.FromHandle' offers better performance.")]
 		public static string FromHandle (NativeHandle usrhandle)
@@ -224,6 +227,10 @@ namespace Foundation {
 			return FromHandle (usrhandle, false);
 		}
 
+		/// <summary>Utility method that returns a string from a pointer that points to an Objective-C NSString object.</summary>
+		/// <param name="handle">Pointer to an Objective-C NSString object (not the managed NSString object).</param>
+		/// <param name="owns">Whether the <paramref name="handle" /> should be released or not.</param>
+		/// <returns>The Objective-C string in the NSString as a C# string.</returns>
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[Obsolete ("Use of 'CFString.FromHandle' offers better performance.")]
 		public static string FromHandle (NativeHandle handle, bool owns)

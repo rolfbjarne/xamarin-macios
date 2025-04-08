@@ -1579,6 +1579,9 @@ namespace AVFoundation {
 		[Export ("reverbParameters")]
 		AVAudioEnvironmentReverbParameters ReverbParameters { get; }
 
+		/// <summary>Returns an array of rendering algorithms that can be meaningfully applied to the node.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("applicableRenderingAlgorithms")]
 #if NET
 		NSNumber [] ApplicableRenderingAlgorithms { get; }

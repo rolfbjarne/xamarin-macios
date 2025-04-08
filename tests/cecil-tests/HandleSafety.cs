@@ -34,7 +34,7 @@ namespace Cecil.Tests {
 					try {
 						state.Process ();
 						if (state.Entries.Any (v => v.StackBeforeInstruction is null)) {
-							failures [methodFullName]  = $"Error while processing {m}: found instructions without stack state information after processing completed";
+							failures [methodFullName] = $"Error while processing {m}: found instructions without stack state information after processing completed";
 							continue;
 						}
 

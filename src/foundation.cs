@@ -13185,6 +13185,7 @@ namespace Foundation {
 		[Export ("completionBlock", ArgumentSemantic.Copy)]
 		Action CompletionBlock { get; set; }
 
+		/// <summary>Blocks the current thread until this operation finishes.</summary>
 		[Export ("waitUntilFinished")]
 		void WaitUntilFinished ();
 

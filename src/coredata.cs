@@ -3645,7 +3645,16 @@ namespace CoreData {
 		///         <summary>Loads the persistent stores in the container and runs a completion handler when finished.</summary>
 		///         <remarks>To be added.</remarks>
 		[Export ("loadPersistentStoresWithCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Loads the persistent stores in the container and runs a completion handler when finished.</summary>
+			<returns>
+			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous LoadPersistentStores operation.  The value of the TResult parameter is of type System.Action&lt;CoreData.NSPersistentStoreDescription,Foundation.NSError&gt;.</para>
+			        </returns>
+			<remarks>
+			          <para copied="true">The LoadPersistentStoresAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		void LoadPersistentStores (Action<NSPersistentStoreDescription, NSError> block);
 
 		/// <summary>Creates and returns a private managed object context.</summary>

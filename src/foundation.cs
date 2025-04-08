@@ -14965,7 +14965,12 @@ namespace Foundation {
 		///           <para>The <paramref name="typeIdentifier" /> must be in the set of values returned by <see cref="M:Foundation.NSItemProviderWriting_Extensions.GetWritableTypeIdentifiersForItemProvider(Foundation.INSItemProviderWriting)" />.</para>
 		///         </remarks>
 		[Abstract]
-		[Async, Export ("loadDataWithTypeIdentifier:forItemProviderCompletionHandler:")]
+		[Async (XmlDocs = """
+			<param name="typeIdentifier">A Universal Type Identifier (UTI) indicating the type of data to load.</param>
+			<summary>Asynchronously loads data for the identified type from an item provider, returning a task that contains the data.</summary>
+			<returns>To be added.</returns>
+			<remarks>To be added.</remarks>
+			"""), Export ("loadDataWithTypeIdentifier:forItemProviderCompletionHandler:")]
 		[return: NullAllowed]
 		NSProgress LoadData (string typeIdentifier, Action<NSData, NSError> completionHandler);
 	}

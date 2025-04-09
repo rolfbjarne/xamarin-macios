@@ -532,14 +532,26 @@ namespace ModelIO {
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		void FrameBoundingBox (MDLAxisAlignedBoundingBox boundingBox, bool setNearAndFar);
 
+		/// <param name="focusPosition">To be added.</param>
+		/// <summary>Points the camera at <paramref name="focusPosition" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("lookAt:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		void LookAt (Vector3 focusPosition);
 
+		/// <param name="focusPosition">To be added.</param>
+		/// <param name="cameraPosition">To be added.</param>
+		/// <summary>Moves the camera to <paramref name="focusPosition" />, and points it at <paramref name="focusPosition" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("lookAt:from:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		void LookAt (Vector3 focusPosition, Vector3 cameraPosition);
 
+		/// <param name="pixel">To be added.</param>
+		/// <param name="size">To be added.</param>
+		/// <summary>Returns a truncated 3D ray that points from the camera toward the 2D point that is specified by taking <paramref name="pixel" /> as coordinates in a viewport with the dimensions in <paramref name="size" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("rayTo:forViewPort:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		Vector3 RayTo (Vector2i pixel, Vector2i size);
@@ -622,6 +634,10 @@ namespace ModelIO {
 		[Export ("maximumCircleOfConfusion")]
 		float MaximumCircleOfConfusion { get; set; }
 
+		/// <param name="size">To be added.</param>
+		/// <summary>Creates and returns a texture, of the specified size, that is used to simulate bokeh effects by using the value of the <see cref="P:ModelIO.MDLCamera.ApertureBladeCount" /> property.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("bokehKernelWithSize:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 #if XAMCORE_5_0
@@ -844,6 +860,10 @@ namespace ModelIO {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (MDLObject))]
 	interface MDLLight {
+		/// <param name="point">To be added.</param>
+		/// <summary>Calculates and returns the effect of the light on the specified point.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("irradianceAtPoint:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		CGColor GetIrradiance (Vector3 point);
@@ -1713,7 +1733,8 @@ namespace ModelIO {
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		MDLMesh CreateCylindroid (float height, Vector2 radii, nuint radialSegments, nuint verticalSegments, MDLGeometryType geometryType, bool inwardNormals, [NullAllowed] IMDLMeshBufferAllocator allocator);
 
-		[Static]
+		/// <include file="../docs/api/ModelIO/MDLMesh.xml" path="/Documentation/Docs[@DocId='M:ModelIO.MDLMesh.CreateCapsule(System.Single,OpenTK.Vector2,System.nuint,System.nuint,System.nuint,ModelIO.MDLGeometryType,System.Boolean,ModelIO.IMDLMeshBufferAllocator)']/*" />
+	[Static]
 		[MacCatalyst (13, 1)]
 		[Export ("newCapsuleWithHeight:radii:radialSegments:verticalSegments:hemisphereSegments:geometryType:inwardNormals:allocator:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
@@ -3135,6 +3156,15 @@ namespace ModelIO {
 		[return: NullAllowed]
 		MDLTexture CreateTextureCube (string [] imageNames, [NullAllowed] NSBundle bundleOrNil);
 
+		/// <param name="texture">To be added.</param>
+		/// <param name="name">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="dimensions">To be added.</param>
+		/// <summary>Creates an cubical irradiance map from an environment map.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("irradianceTextureCubeWithTexture:name:dimensions:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]

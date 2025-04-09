@@ -231,7 +231,8 @@ namespace MonoTouchFixtures.VideoToolbox {
 				// This looks weird, but it seems the video encoder can become overwhelmed otherwise, and it
 				// will start failing (and taking a long time to do so, eventually timing out the test).
 				Thread.Sleep (10);
-			};
+			}
+			;
 			status = session.CompleteFrames (new CMTime (40 * frameCount, 1));
 			Assert.AreEqual (status, VTStatus.Ok, "status finished");
 			Assert.AreEqual (callbackCounter, frameCount, "frame count");

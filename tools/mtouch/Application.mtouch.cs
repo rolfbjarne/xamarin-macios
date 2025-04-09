@@ -1440,7 +1440,8 @@ namespace Xamarin.Bundler {
 				default:
 					return rv;
 				}
-			};
+			}
+			;
 		}
 
 		// return the ids found in a macho file

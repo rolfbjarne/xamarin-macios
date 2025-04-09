@@ -736,6 +736,10 @@ namespace UIKit {
 		CGGlyph GlyphAtIndex (nuint glyphIndex);
 #endif // MONOMAC
 
+		/// <param name="glyphIndex">To be added.</param>
+		/// <summary>Whether the <paramref name="glyphIndex" /> specifies a valid glyph.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("isValidGlyphIndex:")]
 #if NET
 		bool IsValidGlyph (nuint glyphIndex);
@@ -745,6 +749,12 @@ namespace UIKit {
 		bool IsValidGlyphIndex (nuint glyphIndex);
 #endif
 
+		/// <param name="glyphIndex">To be added.</param>
+		/// <summary>The index of the first character associated with the glyph at the specified index.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>
+		///           <para>If <see cref="P:UIKit.NSLayoutManager.AllowsNonContiguousLayout" /> is <see langword="false" />, calling this method will result in generating all glyphs up to and including <paramref name="glyphIndex" />.</para>
+		///         </remarks>
 		[Export ("characterIndexForGlyphAtIndex:")]
 #if NET
 		nuint GetCharacterIndex (nuint glyphIndex);
@@ -786,6 +796,11 @@ namespace UIKit {
 		void SetTextContainerForRange (NSTextContainer container, NSRange glyphRange);
 #endif
 
+		/// <param name="fragmentRect">To be added.</param>
+		/// <param name="glyphRange">To be added.</param>
+		/// <param name="usedRect">To be added.</param>
+		/// <summary>Associated the line fragment with bounds <paramref name="fragmentRect" /> with the glyphs in <paramref name="glyphRange" />.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("setLineFragmentRect:forGlyphRange:usedRect:")]
 #if NET
 		void SetLineFragment (CGRect fragmentRect, NSRange glyphRange, CGRect usedRect);
@@ -793,6 +808,13 @@ namespace UIKit {
 		void SetLineFragmentRect (CGRect fragmentRect, NSRange glyphRange, CGRect usedRect);
 #endif
 
+		/// <param name="fragmentRect">To be added.</param>
+		/// <param name="usedRect">To be added.</param>
+		/// <param name="container">To be added.</param>
+		/// <summary>Sets the details for the extra line fragment required when the text back is either totally empty or ends with a hard line break.</summary>
+		/// <remarks>
+		///           <para>Developers should only call this method when implementing custom typesetting.</para>
+		///         </remarks>
 		[Export ("setExtraLineFragmentRect:usedRect:textContainer:")]
 #if NET
 		void SetExtraLineFragment (CGRect fragmentRect, CGRect usedRect, NSTextContainer container);
@@ -940,6 +962,10 @@ namespace UIKit {
 		[Export ("textContainerForGlyphAtIndex:effectiveRange:withoutAdditionalLayout:")]
 		NSTextContainer GetTextContainer (nuint glyphIndex, /* nullable NSRangePointer */ out NSRange effectiveGlyphRange, bool withoutAdditionalLayout);
 
+		/// <param name="container">To be added.</param>
+		/// <summary>The bounding rectangle in the <see cref="T:UIKit.NSTextContainer" />'s coordinates of the laid out glyphs in the <see cref="T:UIKit.NSTextContainer" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("usedRectForTextContainer:")]
 #if NET
 		CGRect GetUsedRect (NSTextContainer container);
@@ -1073,6 +1099,12 @@ namespace UIKit {
 		[Export ("extraLineFragmentTextContainer")]
 		NSTextContainer ExtraLineFragmentTextContainer { get; }
 
+		/// <param name="glyphIndex">To be added.</param>
+		/// <summary>The location of the glyph at the specified index, relative to the containing line fragment's origin.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>
+		///           <para>This method will layout and generate glyphs for the line fragment containing the glyph at <paramref name="glyphIndex" />.</para>
+		///         </remarks>
 		[Export ("locationForGlyphAtIndex:")]
 #if NET
 		CGPoint GetLocationForGlyph (nuint glyphIndex);
@@ -1082,6 +1114,13 @@ namespace UIKit {
 		CGPoint LocationForGlyphAtIndex (nuint glyphIndex);
 #endif
 
+		/// <param name="glyphIndex">To be added.</param>
+		/// <summary>Whether the glyph at the specified index is shown.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>
+		///           <para>Glyphs such as tabs and newlines are not typically shown, but effect layout. Spaces are considered shown, as they "show" a characteristic displacement.</para>
+		///           <para>This method will cause layout up to the specified index. If <see cref="P:UIKit.NSLayoutManager.AllowsNonContiguousLayout" /> is <see langword="true" />, the layout will be confined to the containing line fragment.</para>
+		///         </remarks>
 		[Export ("notShownAttributeForGlyphAtIndex:")]
 #if NET
 		bool IsNotShownAttributeForGlyph (nuint glyphIndex);
@@ -1091,6 +1130,10 @@ namespace UIKit {
 		bool NotShownAttributeForGlyphAtIndex (nuint glyphIndex);
 #endif
 
+		/// <param name="glyphIndex">To be added.</param>
+		/// <summary>Returns <see langword="true" /> if the specified glyph draws outside of its line fragment rectangle.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("drawsOutsideLineFragmentForGlyphAtIndex:")]
 #if NET
 		bool DrawsOutsideLineFragmentForGlyph (nuint glyphIndex);
@@ -1285,6 +1328,13 @@ namespace UIKit {
 		[Deprecated (PlatformName.MacOSX, 10, 11)]
 		IntPtr GetRectArray (NSRange glyphRange, NSRange selectedGlyphRange, IntPtr textContainerHandle, out nuint rectCount);
 
+		/// <param name="glyphRange">To be added.</param>
+		/// <param name="container">To be added.</param>
+		/// <summary>The bounding rectangle, in container coordinates, for the glyphs in the specified range.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>
+		///           <para>The returned <see cref="T:System.Drawing.RectangleF" /> includes the area needed for all marks associated with the glyphs, including the area needed for glyphs that draw outside of their line fragment rectangle and for marks such as underlining.</para>
+		///         </remarks>
 		[Export ("boundingRectForGlyphRange:inTextContainer:")]
 #if NET
 		CGRect GetBoundingRect (NSRange glyphRange, NSTextContainer container);
@@ -1292,6 +1342,11 @@ namespace UIKit {
 		CGRect BoundingRectForGlyphRange (NSRange glyphRange, NSTextContainer container);
 #endif
 
+		/// <param name="bounds">To be added.</param>
+		/// <param name="container">To be added.</param>
+		/// <summary>Returns the range of glyph indices that are at least partially in the <paramref name="bounds" />.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("glyphRangeForBoundingRect:inTextContainer:")]
 #if NET
 		NSRange GetGlyphRangeForBoundingRect (CGRect bounds, NSTextContainer container);
@@ -1306,6 +1361,12 @@ namespace UIKit {
 		NSRange GlyphRangeForBoundingRectWithoutAdditionalLayout (CGRect bounds, NSTextContainer container);
 #endif
 
+		/// <param name="point">To be added.</param>
+		/// <param name="container">To be added.</param>
+		/// <param name="fractionOfDistanceThroughGlyph">To be added.</param>
+		/// <summary>The glyph index for the glyph at <paramref name="point" />, in the <paramref name="container" /> object's coordinate system.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("glyphIndexForPoint:inTextContainer:fractionOfDistanceThroughGlyph:")]
 #if NET
 		nuint GetGlyphIndex (CGPoint point, NSTextContainer container, /* nullable CGFloat */ out nfloat fractionOfDistanceThroughGlyph);
@@ -1315,6 +1376,13 @@ namespace UIKit {
 		nuint GlyphIndexForPoint (CGPoint point, NSTextContainer container, ref nfloat partialFraction);
 #endif
 
+		/// <param name="point">To be added.</param>
+		/// <param name="container">To be added.</param>
+		/// <summary>Developers should call <see cref="M:UIKit.NSLayoutManager.GetGlyphIndex(CoreGraphics.CGPoint,UIKit.NSTextContainer,System.nfloat@)" /> rather than this primitive method.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>
+		///           <para>This method is public for overriding purposes. Developers should call <see cref="M:UIKit.NSLayoutManager.GetGlyphIndex(CoreGraphics.CGPoint,UIKit.NSTextContainer,System.nfloat@)" />  rather than this primitive method.</para>
+		///         </remarks>
 		[Export ("glyphIndexForPoint:inTextContainer:")]
 #if NET
 		nuint GetGlyphIndex (CGPoint point, NSTextContainer container);
@@ -1662,6 +1730,14 @@ namespace UIKit {
 		[Export ("usesFontLeading")]
 		bool UsesFontLeading { get; set; }
 
+		/// <param name="glyphsToShow">To be added.</param>
+		/// <param name="origin">To be added.</param>
+		/// <summary>Draws background marks for the given glyph range.</summary>
+		/// <remarks>
+		///           <para>Background marks include text background color, highlighting, and table backgrounds and borders. Application developers can override this function in subclasses to fully customize background drawing.</para>
+		///           <para>
+		///             <paramref name="glyphsToShow" /> must specify glyphs within a single <see cref="T:UIKit.NSTextContainer" />.</para>
+		///         </remarks>
 		[Export ("drawBackgroundForGlyphRange:atPoint:")]
 #if NET
 		void DrawBackground (NSRange glyphsToShow, CGPoint origin);

@@ -10097,6 +10097,10 @@ namespace UIKit {
 		[Export ("baseWritingDirectionForPosition:inDirection:")]
 		NSWritingDirection GetBaseWritingDirection (UITextPosition forPosition, UITextStorageDirection direction);
 
+		/// <param name="writingDirection">Constant indicating layout direction.</param>
+		/// <param name="range">A UITextRange object indicating the range of a document's text.</param>
+		/// <summary>Sets a base directon for writing in the specified range of text.</summary>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("setBaseWritingDirection:forRange:")]
 #if XAMCORE_5_0
@@ -17591,7 +17595,13 @@ namespace UIKit {
 		[Appearance]
 		void SetDividerImage ([NullAllowed] UIImage dividerImage, UIControlState leftSegmentState, UIControlState rightSegmentState, UIBarMetrics barMetrics);
 
-		[Export ("dividerImageForLeftSegmentState:rightSegmentState:barMetrics:")]
+		/// <param name="leftState">To be added.</param>
+			/// <param name="rightState">To be added.</param>
+			/// <param name="barMetrics">To be added.</param>
+			/// <summary>The divider image for the specified UIControlStates and UIBarMetrics.</summary>
+			/// <returns>To be added.</returns>
+			/// <remarks>To be added.</remarks>
+			[Export ("dividerImageForLeftSegmentState:rightSegmentState:barMetrics:")]
 		[Appearance]
 		[return: NullAllowed]
 #if NET
@@ -17600,6 +17610,12 @@ namespace UIKit {
 		UIImage DividerImageForLeftSegmentStaterightSegmentStatebarMetrics (UIControlState leftState, UIControlState rightState, UIBarMetrics barMetrics);
 #endif
 
+		/// <param name="attributes">rendering attributes for the text.</param>
+		/// <param name="state">The state to alter</param>
+		/// <summary>Sets the rendering text attributes for a specific state in the control.</summary>
+		/// <remarks>
+		///           <para id="tool-remark">This member participates in the <see cref="T:UIKit.UIAppearance" /> styling system.  See the <see cref="P:UIKit.UISegmentedControl.Appearance" /> property and the <see cref="M:UIKit.UISegmentedControl.AppearanceWhenContainedIn(System.Type[])" /> method.</para>
+		///         </remarks>
 		[Appearance]
 		[Wrap ("SetTitleTextAttributes (attributes?.GetDictionary (), state)")]
 		void SetTitleTextAttributes ([NullAllowed] UIStringAttributes attributes, UIControlState state);

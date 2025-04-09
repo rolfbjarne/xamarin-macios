@@ -84,6 +84,10 @@ namespace SpriteKit {
 		// Apple deprecated initWithName:floatVector4: in macOS10.12/iOS10.0
 		// and made available initWithName:vectorFloat4: so we invoke
 		// the right one at runtime depending on which OS version we are running
+		/// <param name="name">To be added.</param>
+		/// <param name="value">To be added.</param>
+		/// <summary>Creates a new <see cref="T:SpriteKit.SKUniform" /> that holds a reference to a 4x4 matrix.</summary>
+		/// <remarks>To be added.</remarks>
 		public SKUniform (string name, Vector4 value)
 		{
 			if (CheckSystemVersion ())

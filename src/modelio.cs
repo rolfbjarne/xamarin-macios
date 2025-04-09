@@ -1734,7 +1734,7 @@ namespace ModelIO {
 		MDLMesh CreateCylindroid (float height, Vector2 radii, nuint radialSegments, nuint verticalSegments, MDLGeometryType geometryType, bool inwardNormals, [NullAllowed] IMDLMeshBufferAllocator allocator);
 
 		/// <include file="../docs/api/ModelIO/MDLMesh.xml" path="/Documentation/Docs[@DocId='M:ModelIO.MDLMesh.CreateCapsule(System.Single,OpenTK.Vector2,System.nuint,System.nuint,System.nuint,ModelIO.MDLGeometryType,System.Boolean,ModelIO.IMDLMeshBufferAllocator)']/*" />
-	[Static]
+		[Static]
 		[MacCatalyst (13, 1)]
 		[Export ("newCapsuleWithHeight:radii:radialSegments:verticalSegments:hemisphereSegments:geometryType:inwardNormals:allocator:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]

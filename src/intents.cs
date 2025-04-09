@@ -8590,11 +8590,13 @@ namespace Intents {
 		[NullAllowed, Export ("pronunciationHint")]
 		string PronunciationHint { get; }
 
+		/// <summary>Gets an array of alternative matching phrases.</summary>
 		[MacCatalyst (13, 1)]
 		[Abstract]
 		[NullAllowed, Export ("vocabularyIdentifier")]
 		string VocabularyIdentifier { get; }
 
+		/// <summary>Gets the identifier for this string in the app-specific vocabulary file.</summary>
 		[MacCatalyst (13, 1)]
 		[Abstract]
 		[NullAllowed, Export ("alternativeSpeakableMatches")]

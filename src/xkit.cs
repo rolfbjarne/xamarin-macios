@@ -764,6 +764,10 @@ namespace UIKit {
 		nuint CharacterIndexForGlyphAtIndex (nuint glyphIndex);
 #endif
 
+		/// <param name="characterIndex">To be added.</param>
+		/// <summary>The glyph index for the character at the specified index.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("glyphIndexForCharacterAtIndex:")]
 #if NET
 		nuint GetGlyphIndex (nuint characterIndex);

@@ -1405,7 +1405,6 @@ namespace Metal {
 		IMTLBuffer CreateBuffer (IntPtr pointer, nuint length, MTLResourceOptions options);
 
 		/// <summary>Creates and returns a new buffer that is wrapped around the specified data, and runs an optional <paramref name="deallocator" /> when the memory is deallocated.</summary>
-		/// <typeparam name="T">The type for which to create a buffer.</typeparam>
 		/// <param name="pointer">The data to wrap.</param>
 		/// <param name="length">The length of the data to wrap.</param>
 		/// <param name="options">Options for creating the buffer.</param>

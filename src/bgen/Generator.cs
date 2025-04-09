@@ -4036,9 +4036,8 @@ public partial class Generator : IMemberGatherer {
 			}
 		}
 
-		WriteDocumentation (pi);
-
 		if (wrap is not null) {
+			WriteDocumentation (pi);
 			print_generated_code ();
 			PrintBindingDocId (pi, bindingIdExtraInfo);
 			PrintPropertyAttributes (pi, minfo);
@@ -4123,6 +4122,7 @@ public partial class Generator : IMemberGatherer {
 			}
 		}
 
+		WriteDocumentation (pi);
 		print_generated_code (optimizable: IsOptimizable (pi));
 		PrintBindingDocId (pi, bindingIdExtraInfo);
 		PrintPropertyAttributes (pi, minfo);

@@ -624,7 +624,11 @@ namespace ModelIO {
 
 		[Export ("bokehKernelWithSize:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
+#if XAMCORE_5_0
+		MDLTexture GetBokehKernel (Vector2i size);
+#else
 		MDLTexture BokehKernelWithSize (Vector2i size);
+#endif
 
 		/// <summary>Gets or sets the time, in seconds, for which the simulated shutter is open per frame.</summary>
 		///         <value>To be added.</value>

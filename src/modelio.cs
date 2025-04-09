@@ -3096,10 +3096,7 @@ namespace ModelIO {
 		MDLTexture FromBundle (string name);
 #endif
 
-		/// <param name="name">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new texture from the specified texture in the default application bundle.</summary>
 		[Static]
 		[Export ("textureNamed:")]
 		[return: NullAllowed]
@@ -3113,11 +3110,7 @@ namespace ModelIO {
 		MDLTexture FromBundle (string name, [NullAllowed] NSBundle bundleOrNil);
 #endif
 
-		/// <param name="name">To be added.</param>
-		///         <param name="bundleOrNil">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new texture from the specified texture in the specified application bundle.</summary>
 		[Static]
 		[Export ("textureNamed:bundle:")]
 		[return: NullAllowed]
@@ -3613,9 +3606,7 @@ namespace ModelIO {
 			set;
 		}
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Inserts the specified transform at the specified time.</summary>
 		[MacCatalyst (13, 1)]
 #if NET
 		[Abstract]
@@ -3667,11 +3658,9 @@ namespace ModelIO {
 #if !NET
 		[Obsolete ("Use 'CreateGlobalTransform4x4' instead.")]
 #endif
-		/// <param name="obj">To be added.</param>
-		/// <param name="atTime">To be added.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
+		/// <summary>Creates and returns a global transform for the specified object at the specified time.</summary>
+		/// <param name="obj">The object that represents the spatial transform.</param>
+		/// <param name="atTime">The time at which to apply the transform.</param>
 		[Static]
 		[Export ("globalTransformWithObject:atTime:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]

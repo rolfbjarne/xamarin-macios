@@ -2335,6 +2335,7 @@ namespace Metal {
 		[Abstract, Export ("rootResource")]
 		IMTLResource RootResource { get; }
 
+		/// <summary>Returns the parent texture.</summary>
 #if NET
 		[Abstract]
 #endif
@@ -2343,6 +2344,7 @@ namespace Metal {
 		[Export ("parentTexture")]
 		IMTLTexture ParentTexture { get; }
 
+		/// <summary>Returns the base level of the parent texture from which the target texture was created.</summary>
 #if NET
 		[Abstract]
 #endif
@@ -2350,6 +2352,7 @@ namespace Metal {
 		[Export ("parentRelativeLevel")]
 		nuint ParentRelativeLevel { get; }
 
+        /// <summary>Returns the base slice of the parent texture from which the target texture was created.</summary>
 #if NET
 		[Abstract]
 #endif
@@ -2357,6 +2360,7 @@ namespace Metal {
 		[Export ("parentRelativeSlice")]
 		nuint ParentRelativeSlice { get; }
 
+		/// <summary>Returns the buffer for the target texture.</summary>
 #if NET
 		[Abstract]
 #endif
@@ -2365,6 +2369,7 @@ namespace Metal {
 		[Export ("buffer")]
 		IMTLBuffer Buffer { get; }
 
+		/// <summary>Gets the offset into the parent texture where the the target texture data begins.</summary>
 #if NET
 		[Abstract]
 #endif
@@ -2372,6 +2377,7 @@ namespace Metal {
 		[Export ("bufferOffset")]
 		nuint BufferOffset { get; }
 
+		/// <summary>Gets the bytes per row in the buffer for the target texture.</summary>
 #if NET
 		[Abstract]
 #endif
@@ -2460,12 +2466,14 @@ namespace Metal {
 		[return: Release]
 		IMTLTexture CreateTextureView (MTLPixelFormat pixelFormat);
 
+		/// <summary>Gets a description of how the texture can be used. (For example, as a write target for compute shaders.)</summary>
 #if NET
 		[Abstract]
 #endif
 		[Export ("usage")]
 		MTLTextureUsage Usage { get; }
 
+		/// <summary>Creates and returns a Metal texture that shares the same memory as the source object, but that is interpreted with the new pixel format.</summary>
 #if NET
 		[Abstract]
 #endif
@@ -2490,6 +2498,7 @@ namespace Metal {
 		[Export ("replaceRegion:mipmapLevel:withBytes:bytesPerRow:")]
 		void ReplaceRegion (MTLRegion region, nuint level, IntPtr pixelBytes, nuint bytesPerRow);
 
+		/// <summary>Gets the IOSurface that was used to create this texture, if one was used.</summary>
 		[MacCatalyst (13, 1)]
 #if NET
 		[Abstract]
@@ -2497,6 +2506,7 @@ namespace Metal {
 		[NullAllowed, Export ("iosurface")]
 		IOSurface.IOSurface IOSurface { get; }
 
+		/// <summary>Returns the IOSurface plane used by the surface that is returned from <see cref="IOSurface" />.</summary>
 		[MacCatalyst (13, 1)]
 #if NET
 		[Abstract]
@@ -5238,6 +5248,7 @@ namespace Metal {
 		[Abstract, Export ("cpuCacheMode")]
 		MTLCpuCacheMode CpuCacheMode { get; }
 
+		/// <summary>Returns a description of the location and permissions of the resource.</summary>
 #if NET
 		[Abstract] // new required member, but that breaks our binary compat, so we can't do that in our existing code.
 #endif
@@ -5252,6 +5263,7 @@ namespace Metal {
 		[Abstract, Export ("setPurgeableState:")]
 		MTLPurgeableState SetPurgeableState (MTLPurgeableState state);
 
+		/// <summary>Returns the heap that sub-allocated the resource.</summary>
 		[MacCatalyst (13, 1)]
 #if NET
 		[Abstract]
@@ -5259,6 +5271,7 @@ namespace Metal {
 		[NullAllowed, Export ("heap")]
 		IMTLHeap Heap { get; }
 
+		/// <summary>Makes the resource aliasable.</summary>
 		[MacCatalyst (13, 1)]
 #if NET
 		[Abstract]
@@ -5266,6 +5279,7 @@ namespace Metal {
 		[Export ("makeAliasable")]
 		void MakeAliasable ();
 
+		/// <summary>Returns a Boolean value that tells whether future sub-allocations can alias the resource's memory.</summary>
 		[MacCatalyst (13, 1)]
 #if NET
 		[Abstract]
@@ -5280,6 +5294,7 @@ namespace Metal {
 		[Export ("setOwnerWithIdentity:")]
 		int SetOwnerWithIdentity (uint taskIdToken);
 
+		/// <summary>Returns the allocated size of the resource.</summary>
 		[MacCatalyst (13, 1)]
 #if NET
 		[Abstract]

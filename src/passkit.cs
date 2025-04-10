@@ -2758,15 +2758,19 @@ namespace PassKit {
 	[DisableDefaultCtor]
 	interface PKSecureElementPass {
 
+		/// <summary>An obfuscated unique identifier for the account number of the payment card. (Read-only)</summary>
 		[Export ("primaryAccountIdentifier")]
 		string PrimaryAccountIdentifier { get; }
 
+		/// <summary>A version of the <see cref="PrimaryAccountIdentifier" /> to be displayed to the user. (Read-only)</summary>
 		[Export ("primaryAccountNumberSuffix")]
 		string PrimaryAccountNumberSuffix { get; }
 
+		/// <summary>The device-specific account number. (Read-only)</summary>
 		[Export ("deviceAccountIdentifier", ArgumentSemantic.Strong)]
 		string DeviceAccountIdentifier { get; }
 
+		/// <summary>A version of the <see cref="DeviceAccountIdentifier" /> to be displayed to the user. (Read-only)</summary>
 		[Export ("deviceAccountNumberSuffix", ArgumentSemantic.Strong)]
 		string DeviceAccountNumberSuffix { get; }
 

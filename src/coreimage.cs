@@ -5434,6 +5434,7 @@ namespace CoreImage {
 	[BaseType (typeof (CIFilter))]
 	interface CICompositingFilter {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 
@@ -5482,6 +5483,7 @@ namespace CoreImage {
 	[BaseType (typeof (CIAffineFilter))]
 	interface CIAffineTransform {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 
@@ -5517,6 +5519,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIAreaReductionFilter")]
 	interface CIAreaReductionFilterProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -5539,6 +5542,7 @@ namespace CoreImage {
 		[Export ("scale")]
 		float Scale { get; set; }
 
+		/// <summary>Gets or sets the number of buckets in the histogram.</summary>
 		[Abstract]
 		[Export ("count")]
 		nint InputCount { get; set; }
@@ -5584,6 +5588,7 @@ namespace CoreImage {
 	[BaseType (typeof (CIFilter))]
 	interface CIReductionFilter {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 
@@ -5755,6 +5760,7 @@ namespace CoreImage {
 	[BaseType (typeof (CIFilter))]
 	interface CIDistortionFilter {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 
@@ -5777,10 +5783,12 @@ namespace CoreImage {
 	[Protocol (Name = "CIBumpDistortion")]
 	interface CIBumpDistortionProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the center of the effect.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -5809,6 +5817,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIBumpDistortionLinear")]
 	interface CIBumpDistortionLinearProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -5860,6 +5869,7 @@ namespace CoreImage {
 	[Protocol (Name = "CICircleSplashDistortion")]
 	interface CICircleSplashDistortionProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -5897,6 +5907,7 @@ namespace CoreImage {
 		CIVector Center { get; set; }
 #endif
 
+		/// <summary>Gets or sets the center of the halftone pattern.</summary>
 		[CoreImageFilterProperty ("inputCenter")]
 		CGPoint InputCenter { get; set; }
 
@@ -5919,10 +5930,12 @@ namespace CoreImage {
 	[Protocol (Name = "CICircularWrap")]
 	interface CICircularWrapProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the center of the distortion.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -5989,6 +6002,7 @@ namespace CoreImage {
 	[BaseType (typeof (CIFilter))]
 	interface CIBlendFilter {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 
@@ -6142,6 +6156,7 @@ namespace CoreImage {
 	[BaseType (typeof (CIFilter))]
 	interface CIConvolutionCore {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 
@@ -6234,6 +6249,7 @@ namespace CoreImage {
 	[BaseType (typeof (CIFilter))]
 	interface CICrop {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 
@@ -6298,6 +6314,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIDisplacementDistortion")]
 	interface CIDisplacementDistortionProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -6349,14 +6366,17 @@ namespace CoreImage {
 	[Protocol (Name = "CIDroste")]
 	interface CIDrosteProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets a vector that represents the first corner of the rectangular inset region.</summary>
 		[Abstract]
 		[Export ("insetPoint0", ArgumentSemantic.Assign)]
 		CGPoint InputInsetPoint0 { get; set; }
 
+		/// <summary>Gets or sets a vector that represents the second corner of the rectangular inset region.</summary>
 		[Abstract]
 		[Export ("insetPoint1", ArgumentSemantic.Assign)]
 		CGPoint InputInsetPoint1 { get; set; }
@@ -6439,6 +6459,7 @@ namespace CoreImage {
 		CIVector Center { get; set; }
 #endif
 
+		/// <summary>Gets or sets the center of the tile pattern.</summary>
 		[CoreImageFilterProperty ("inputCenter")]
 		CGPoint InputCenter { get; set; }
 
@@ -6547,6 +6568,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIGlassDistortion")]
 	interface CIGlassDistortionProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -6558,6 +6580,8 @@ namespace CoreImage {
 		[NullAllowed, Export ("textureImage", ArgumentSemantic.Retain)]
 		CIImage Texture { get; set; }
 
+		/// <summary>Gets or sets the center of the input texture.</summary>
+		/// <value>The default value is 200.0.</value>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -6589,14 +6613,17 @@ namespace CoreImage {
 	[Protocol (Name = "CIGlassLozenge")]
 	interface CIGlassLozengeProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the first point that defines the long axis of the lozenge.</summary>
 		[Abstract]
 		[Export ("point0", ArgumentSemantic.Assign)]
 		CGPoint InputPoint0 { get; set; }
 
+		/// <summary>Gets or sets the second point that defines the long axis of the lozenge.</summary>
 		[Abstract]
 		[Export ("point1", ArgumentSemantic.Assign)]
 		CGPoint InputPoint1 { get; set; }
@@ -6689,6 +6716,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIHistogramDisplay")]
 	interface CIHistogramDisplayProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -6761,6 +6789,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIHoleDistortion")]
 	interface CIHoleDistortionProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -6840,10 +6869,12 @@ namespace CoreImage {
 	[Protocol (Name = "CILightTunnel")]
 	interface CILightTunnelProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the center of the image portion to rotate.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -7233,6 +7264,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIPinchDistortion")]
 	interface CIPinchDistortionProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -7493,10 +7525,12 @@ namespace CoreImage {
 	[Protocol (Name = "CIStretchCrop")]
 	interface CIStretchCropProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the size of the output image in pixels.</summary>
 		[Abstract]
 		[Export ("size", ArgumentSemantic.Assign)]
 		CGPoint InputSize { get; set; }
@@ -7626,10 +7660,12 @@ namespace CoreImage {
 	[Protocol (Name = "CITorusLensDistortion")]
 	interface CITorusLensDistortionProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the center of the toroidal lens.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -7700,6 +7736,7 @@ namespace CoreImage {
 	[Protocol (Name = "CITwirlDistortion")]
 	interface CITwirlDistortionProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -7767,6 +7804,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIVortexDistortion")]
 	interface CIVortexDistortionProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -7866,6 +7904,7 @@ namespace CoreImage {
 	[BaseType (typeof (CIFilter))]
 	interface CIClamp {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 
@@ -7889,6 +7928,7 @@ namespace CoreImage {
 	[Protocol (Name = "CINinePartStretched")]
 	interface CINinePartStretchedProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -7932,6 +7972,7 @@ namespace CoreImage {
 	[Protocol (Name = "CINinePartTiled")]
 	interface CINinePartTiledProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -8101,6 +8142,7 @@ namespace CoreImage {
 	[BaseType (typeof (CIFilter))]
 	interface CIDepthBlurEffect {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 
@@ -9189,6 +9231,7 @@ namespace CoreImage {
 	[BaseType (typeof (CIFilter))]
 	interface CIGuidedFilter {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 
@@ -9228,6 +9271,7 @@ namespace CoreImage {
 	[BaseType (typeof (CIFilter))]
 	interface CISampleNearest {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 	}
@@ -9237,6 +9281,7 @@ namespace CoreImage {
 	[BaseType (typeof (CIFilter))]
 	interface CICameraCalibrationLensCorrection {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 
@@ -9258,6 +9303,7 @@ namespace CoreImage {
 	[BaseType (typeof (CIFilter))]
 	interface CICoreMLModelFilter {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 
@@ -9529,6 +9575,7 @@ namespace CoreImage {
 	[Protocol (Name = "CITransitionFilter")]
 	interface CITransitionFilterProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -9561,6 +9608,7 @@ namespace CoreImage {
 		[Export ("bottomHeight")]
 		float BottomHeight { get; set; }
 
+		/// <summary>Gets or sets the number of folds to use in the transition.</summary>
 		[Abstract]
 		[Export ("numberOfFolds")]
 		// renamed for compatibility (originally bound as an integer)
@@ -9580,6 +9628,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIAffineClamp")]
 	interface CIAffineClampProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -9595,6 +9644,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIAffineTile")]
 	interface CIAffineTileProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -9643,10 +9693,12 @@ namespace CoreImage {
 		[Export ("correctionLevel")]
 		float CorrectionLevel { get; set; }
 
+		/// <summary>Gets or sets the number of concentric squares to use when encoding data for the code.</summary>
 		[Abstract]
 		[Export ("layers")]
 		float InputLayers { get; set; }
 
+		/// <summary>Gets or sets whether to create compact or full-size code.</summary>
 		[Abstract]
 		[Export ("compactStyle")]
 		float InputCompactStyle { get; set; }
@@ -9688,6 +9740,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIBicubicScaleTransform")]
 	interface CIBicubicScaleTransformProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -9717,6 +9770,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIBlendWithMask")]
 	interface CIBlendWithMaskProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -9725,6 +9779,7 @@ namespace CoreImage {
 		[NullAllowed, Export ("backgroundImage", ArgumentSemantic.Retain)]
 		CIImage BackgroundImage { get; set; }
 
+		/// <summary>Gets or sets the mask to use for blending.</summary>
 		[Abstract]
 		[NullAllowed, Export ("maskImage", ArgumentSemantic.Retain)]
 		CIImage MaskImage { get; set; }
@@ -9736,6 +9791,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIBloom")]
 	interface CIBloomProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -9761,6 +9817,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIBokehBlur")]
 	interface CIBokehBlurProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -9788,6 +9845,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIBoxBlur")]
 	interface CIBoxBlurProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -9806,6 +9864,7 @@ namespace CoreImage {
 	[Protocol (Name = "CICheckerboardGenerator")]
 	interface CICheckerboardGeneratorProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets the center of the checkerboard pattern.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -9845,6 +9904,7 @@ namespace CoreImage {
 	[Protocol (Name = "CICircularScreen")]
 	interface CICircularScreenProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -9868,6 +9928,7 @@ namespace CoreImage {
 	[Protocol (Name = "CICMYKHalftone")]
 	interface CICmykHalftoneProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -9933,14 +9994,17 @@ namespace CoreImage {
 	[Protocol (Name = "CIColorClamp")]
 	interface CIColorClampProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the minimum component values.</summary>
 		[Abstract]
 		[Export ("minComponents", ArgumentSemantic.Retain)]
 		CIVector MinComponents { get; set; }
 
+		/// <summary>Gets or sets the maximum component values.</summary>
 		[Abstract]
 		[Export ("maxComponents", ArgumentSemantic.Retain)]
 		CIVector MaxComponents { get; set; }
@@ -9952,6 +10016,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIColorControls")]
 	interface CIColorControlsProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -9984,6 +10049,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIColorCrossPolynomial")]
 	interface CIColorCrossPolynomialProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10016,6 +10082,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIColorCube")]
 	interface CIColorCubeProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10048,6 +10115,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIColorCubesMixedWithMask")]
 	interface CIColorCubesMixedWithMaskProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10086,6 +10154,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIColorCubeWithColorSpace")]
 	interface CIColorCubeWithColorSpaceProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10119,6 +10188,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIColorCurves")]
 	interface CIColorCurvesProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10142,6 +10212,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIColorInvert")]
 	interface CIColorInvertProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10153,6 +10224,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIColorMap")]
 	interface CIColorMapProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10171,6 +10243,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIColorMatrix")]
 	interface CIColorMatrixProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10217,6 +10290,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIColorMonochrome")]
 	interface CIColorMonochromeProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10242,6 +10316,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIColorPolynomial")]
 	interface CIColorPolynomialProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10272,6 +10347,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIColorPosterize")]
 	interface CIColorPosterizeProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10290,6 +10366,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIComicEffect")]
 	interface CIComicEffectProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10301,6 +10378,7 @@ namespace CoreImage {
 	[Protocol (Name = "CICompositeOperation")]
 	interface CICompositeOperationProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10316,6 +10394,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIConvolution")]
 	interface CIConvolutionProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10362,6 +10441,7 @@ namespace CoreImage {
 	[Protocol (Name = "CICoreMLModel")]
 	interface CICoreMLModelProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10385,6 +10465,7 @@ namespace CoreImage {
 	[Protocol (Name = "CICrystallize")]
 	interface CICrystallizeProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10396,6 +10477,7 @@ namespace CoreImage {
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>Gets or sets the center of the crystallization pattern.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -10407,14 +10489,17 @@ namespace CoreImage {
 	[Protocol (Name = "CIDepthOfField")]
 	interface CIDepthOfFieldProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the first endpoint of the line segment that represents the in-focus region.</summary>
 		[Abstract]
 		[Export ("point0", ArgumentSemantic.Assign)]
 		CGPoint InputPoint0 { get; set; }
 
+		/// <summary>Gets or sets the second endpoint of the line segment that represents the in-focus region.</summary>
 		[Abstract]
 		[Export ("point1", ArgumentSemantic.Assign)]
 		CGPoint InputPoint1 { get; set; }
@@ -10454,6 +10539,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIDepthToDisparity")]
 	interface CIDepthToDisparityProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10465,6 +10551,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIDiscBlur")]
 	interface CIDiscBlurProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10483,6 +10570,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIDisintegrateWithMaskTransition")]
 	interface CIDisintegrateWithMaskTransitionProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets the mask to use for the transition.</summary>
 		[Abstract]
 		[NullAllowed, Export ("maskImage", ArgumentSemantic.Retain)]
 		CIImage MaskImage { get; set; }
@@ -10501,6 +10589,7 @@ namespace CoreImage {
 		[Export ("shadowDensity")]
 		float ShadowDensity { get; set; }
 
+		/// <summary>Gets or sets the offset of the mask shadows.</summary>
 		[Abstract]
 		[Export ("shadowOffset", ArgumentSemantic.Assign)]
 		CGPoint InputShadowOffset { get; set; }
@@ -10512,6 +10601,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIDisparityToDepth")]
 	interface CIDisparityToDepthProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10530,6 +10620,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIDither")]
 	interface CIDitherProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10545,6 +10636,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIDocumentEnhancer")]
 	interface CIDocumentEnhancerProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10560,6 +10652,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIDotScreen")]
 	interface CIDotScreenProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10590,6 +10683,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIEdgePreserveUpsample")]
 	interface CIEdgePreserveUpsampleProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10613,6 +10707,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIEdges")]
 	interface CIEdgesProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10631,6 +10726,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIEdgeWork")]
 	interface CIEdgeWorkProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10649,6 +10745,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIEightfoldReflectedTile")]
 	interface CIEightfoldReflectedTileProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10672,6 +10769,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIExposureAdjust")]
 	interface CIExposureAdjustProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10690,6 +10788,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIFalseColor")]
 	interface CIFalseColorProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10715,10 +10814,12 @@ namespace CoreImage {
 	[Protocol (Name = "CIFlashTransition")]
 	interface CIFlashTransitionProtocol : CITransitionFilterProtocol {
 
+		/// <summary>Gets or set the center of the flash.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets a vector of the form (x,y,w,h) that represents the rectangular extent of the flash.</summary>
 		[Abstract]
 		[Export ("extent", ArgumentSemantic.Assign)]
 		CGRect InputExtent { get; set; }
@@ -10737,10 +10838,12 @@ namespace CoreImage {
 		[Export ("maxStriationRadius")]
 		float MaxStriationRadius { get; set; }
 
+		/// <summary>Gets or sets the strength of the striations in the flash.</summary>
 		[Abstract]
 		[Export ("striationStrength")]
 		float StriationStrength { get; set; }
 
+		/// <summary>Gets or sets the striation contrast.</summary>
 		[Abstract]
 		[Export ("striationContrast")]
 		float StriationContrast { get; set; }
@@ -10759,6 +10862,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIFourCoordinateGeometryFilter")]
 	interface CIFourCoordinateGeometryFilterProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10786,6 +10890,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIFourfoldReflectedTile")]
 	interface CIFourfoldReflectedTileProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10816,6 +10921,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIFourfoldRotatedTile")]
 	interface CIFourfoldRotatedTileProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10839,6 +10945,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIFourfoldTranslatedTile")]
 	interface CIFourfoldTranslatedTileProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10869,6 +10976,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIGaborGradients")]
 	interface CIGaborGradientsProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10880,6 +10988,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIGammaAdjust")]
 	interface CIGammaAdjustProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10898,6 +11007,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIGaussianBlur")]
 	interface CIGaussianBlurProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10916,6 +11026,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIGaussianGradient")]
 	interface CIGaussianGradientProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets the center of the gradient.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -10948,6 +11059,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIGlideReflectedTile")]
 	interface CIGlideReflectedTileProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10971,6 +11083,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIGloom")]
 	interface CIGloomProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -10996,6 +11109,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIHatchedScreen")]
 	interface CIHatchedScreenProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11026,6 +11140,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIHeightFieldFromMask")]
 	interface CIHeightFieldFromMaskProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11044,10 +11159,12 @@ namespace CoreImage {
 	[Protocol (Name = "CIHexagonalPixellate")]
 	interface CIHexagonalPixellateProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the center of the hexagonal pixel pattern.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -11066,6 +11183,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIHighlightShadowAdjust")]
 	interface CIHighlightShadowAdjustProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11098,6 +11216,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIHueAdjust")]
 	interface CIHueAdjustProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11146,14 +11265,17 @@ namespace CoreImage {
 	[Protocol (Name = "CIKaleidoscope")]
 	interface CIKaleidoscopeProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the number of sections in the kaleidoscope.</summary>
 		[Abstract]
 		[Export ("count")]
 		nint InputCount { get; set; }
 
+		/// <summary>Gets or sets the center of the kaleidoscope.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -11205,6 +11327,7 @@ namespace CoreImage {
 	[Protocol (Name = "CILabDeltaE")]
 	interface CILabDeltaEProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11220,6 +11343,7 @@ namespace CoreImage {
 	[Protocol (Name = "CILanczosScaleTransform")]
 	interface CILanczosScaleTransformProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11245,6 +11369,7 @@ namespace CoreImage {
 	[Protocol (Name = "CILenticularHaloGenerator")]
 	interface CILenticularHaloGeneratorProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets the center of the flare effect.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -11305,10 +11430,12 @@ namespace CoreImage {
 	[Protocol (Name = "CILinearGradient")]
 	interface CILinearGradientProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets the first point.</summary>
 		[Abstract]
 		[Export ("point0", ArgumentSemantic.Assign)]
 		CGPoint InputPoint0 { get; set; }
 
+		/// <summary>Gets or sets the second point.</summary>
 		[Abstract]
 		[Export ("point1", ArgumentSemantic.Assign)]
 		CGPoint InputPoint1 { get; set; }
@@ -11334,6 +11461,7 @@ namespace CoreImage {
 	[Protocol (Name = "CILinearToSRGBToneCurve")]
 	interface CILinearToSrgbToneCurveProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11345,6 +11473,7 @@ namespace CoreImage {
 	[Protocol (Name = "CILineOverlay")]
 	interface CILineOverlayProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11391,6 +11520,7 @@ namespace CoreImage {
 	[Protocol (Name = "CILineScreen")]
 	interface CILineScreenProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11421,6 +11551,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIMaskedVariableBlur")]
 	interface CIMaskedVariableBlurProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11443,6 +11574,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIMaskToAlpha")]
 	interface CIMaskToAlphaProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11454,6 +11586,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIMaximumComponent")]
 	interface CIMaximumComponentProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11465,6 +11598,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIMedian")]
 	interface CIMedianProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11495,6 +11629,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIMinimumComponent")]
 	interface CIMinimumComponentProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11506,6 +11641,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIMix")]
 	interface CIMixProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11525,6 +11661,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIModTransition")]
 	interface CIModTransitionProtocol : CITransitionFilterProtocol {
 
+		/// <summary>Gets or sets the center of the mod transition.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -11557,6 +11694,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIMorphologyGradient")]
 	interface CIMorphologyGradientProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11572,6 +11710,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIMorphologyMaximum")]
 	interface CIMorphologyMaximumProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11587,6 +11726,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIMorphologyMinimum")]
 	interface CIMorphologyMinimumProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11602,6 +11742,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIMorphologyRectangleMaximum")]
 	interface CIMorphologyRectangleMaximumProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11621,6 +11762,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIMorphologyRectangleMinimum")]
 	interface CIMorphologyRectangleMinimumProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11640,6 +11782,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIMotionBlur")]
 	interface CIMotionBlurProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11662,6 +11805,7 @@ namespace CoreImage {
 	[Protocol (Name = "CINoiseReduction")]
 	interface CINoiseReductionProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11687,6 +11831,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIOpTile")]
 	interface CIOpTileProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11731,6 +11876,7 @@ namespace CoreImage {
 		[NullAllowed, Export ("shadingImage", ArgumentSemantic.Retain)]
 		CIImage ShadingImage { get; set; }
 
+		/// <summary>Gets or sets the extent of the target image to display.</summary>
 		[Abstract]
 		[Export ("extent", ArgumentSemantic.Assign)]
 		CGRect InputExtent { get; set; }
@@ -11763,6 +11909,7 @@ namespace CoreImage {
 		[NullAllowed, Export ("backsideImage", ArgumentSemantic.Retain)]
 		CIImage BacksideImage { get; set; }
 
+		/// <summary>Gets or sets the extent of the target image to display.</summary>
 		[Abstract]
 		[Export ("extent", ArgumentSemantic.Assign)]
 		CGRect InputExtent { get; set; }
@@ -11795,6 +11942,7 @@ namespace CoreImage {
 		[Export ("shadowAmount")]
 		float ShadowAmount { get; set; }
 
+		/// <summary>Gets or sets the extent of the target image to shade.</summary>
 		[Abstract]
 		[Export ("shadowExtent", ArgumentSemantic.Assign)]
 		CGRect InputShadowExtent { get; set; }
@@ -11806,6 +11954,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIPaletteCentroid")]
 	interface CIPaletteCentroidProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11825,6 +11974,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIPalettize")]
 	interface CIPalettizeProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11844,6 +11994,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIParallelogramTile")]
 	interface CIParallelogramTileProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11906,10 +12057,12 @@ namespace CoreImage {
 		[Export ("maxHeight")]
 		float MaxHeight { get; set; }
 
+		/// <summary>Gets or sets an integer value in the range [0,8] that controls how much error correction data to include in the code.</summary>
 		[Abstract]
 		[Export ("dataColumns")]
 		float InputDataColumns { get; set; }
 
+		/// <summary>Gets or sets the number of rows in the code. <c>0</c> causes the number of rows to be chosen based on the barcode extents.</summary>
 		[Abstract]
 		[Export ("rows")]
 		float InputRows { get; set; }
@@ -11921,18 +12074,26 @@ namespace CoreImage {
 		[Export ("preferredAspectRatio")]
 		float PreferredAspectRatio { get; set; }
 
+
+		/// <summary>Gets or sets a value that controls how the data are compressed in the resulting code.</summary>
+		/// <remarks>
+		///   <c>0</c> indicates that the compression mode should be determined by the data type. <c>1</c> indicates that the data represent ASCII digits. <c>2</c> indicates that the data is ASCII text, numbers, and punctuation. <c>3</c> indicates that the data are in an unspecified format; The least compact compression scheme will be used.
+		/// </remarks>
 		[Abstract]
 		[Export ("compactionMode")]
 		float InputCompactionMode { get; set; }
 
+		/// <summary>Gets or sets an integer with Boolean semantics that controls whether redunant elements should be omitted to save space. <c>1</c> is true. <c>0</c> is false.</summary>
 		[Abstract]
 		[Export ("compactStyle")]
 		float InputCompactStyle { get; set; }
 
+		/// <summary>Gets or sets an integer value in the range [0,8] that controls how much error correction data to include in the code.</summary>
 		[Abstract]
 		[Export ("correctionLevel")]
 		float InputCorrectionLevel { get; set; }
 
+		/// <summary>If <see langword="true" />, the barcode will contain compaction information, even if that information is redundant.</summary>
 		[Abstract]
 		[Export ("alwaysSpecifyCompaction")]
 		float InputAlwaysSpecifyCompaction { get; set; }
@@ -11958,6 +12119,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIPerspectiveRotate")]
 	interface CIPerspectiveRotateProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -11985,22 +12147,27 @@ namespace CoreImage {
 	[Protocol (Name = "CIPerspectiveTile")]
 	interface CIPerspectiveTileProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets location of the top left corner of the source image in the output.</summary>
 		[Abstract]
 		[Export ("topLeft", ArgumentSemantic.Assign)]
 		CGPoint InputTopLeft { get; set; }
 
+		/// <summary>Gets or sets location of the top right corner of the source image in the output.</summary>
 		[Abstract]
 		[Export ("topRight", ArgumentSemantic.Assign)]
 		CGPoint InputTopRight { get; set; }
 
+		/// <summary>Gets or sets location of the bottom right corner of the source image in the output.</summary>
 		[Abstract]
 		[Export ("bottomRight", ArgumentSemantic.Assign)]
 		CGPoint InputBottomRight { get; set; }
 
+		/// <summary>Gets or sets location of the bottom left corner of the source image in the output.</summary>
 		[Abstract]
 		[Export ("bottomLeft", ArgumentSemantic.Assign)]
 		CGPoint InputBottomLeft { get; set; }
@@ -12019,6 +12186,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIPerspectiveTransformWithExtent")]
 	interface CIPerspectiveTransformWithExtentProtocol : CIFourCoordinateGeometryFilterProtocol {
 
+		/// <summary>Gets or sets the region in the source image to transform into the target image.</summary>
 		[Abstract]
 		[Export ("extent", ArgumentSemantic.Assign)]
 		CGRect InputExtent { get; set; }
@@ -12030,6 +12198,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIPhotoEffect")]
 	interface CIPhotoEffectProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -12048,10 +12217,12 @@ namespace CoreImage {
 	[Protocol (Name = "CIPixellate")]
 	interface CIPixellateProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the center of the pixellation.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -12070,6 +12241,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIPointillize")]
 	interface CIPointillizeProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -12081,6 +12253,7 @@ namespace CoreImage {
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>Gets or sets the center of the pointillization.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -12110,6 +12283,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIRadialGradient")]
 	interface CIRadialGradientProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets the center of the gradient.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -12163,10 +12337,12 @@ namespace CoreImage {
 		[NullAllowed, Export ("shadingImage", ArgumentSemantic.Retain)]
 		CIImage ShadingImage { get; set; }
 
+		/// <summary>Gets or sets the center of the transition.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the extent over which to apply the transition.</summary>
 		[Abstract]
 		[Export ("extent", ArgumentSemantic.Assign)]
 		CGRect InputExtent { get; set; }
@@ -12211,6 +12387,7 @@ namespace CoreImage {
 	[Protocol (Name = "CISaliencyMap")]
 	interface CISaliencyMapProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		[CoreImageFilterProperty ("inputImage")]
@@ -12223,6 +12400,7 @@ namespace CoreImage {
 	[Protocol (Name = "CISepiaTone")]
 	interface CISepiaToneProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -12241,6 +12419,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIShadedMaterial")]
 	interface CIShadedMaterialProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -12266,6 +12445,7 @@ namespace CoreImage {
 	[Protocol (Name = "CISharpenLuminance")]
 	interface CISharpenLuminanceProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -12291,6 +12471,7 @@ namespace CoreImage {
 	[Protocol (Name = "CISixfoldReflectedTile")]
 	interface CISixfoldReflectedTileProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -12314,6 +12495,7 @@ namespace CoreImage {
 	[Protocol (Name = "CISixfoldRotatedTile")]
 	interface CISixfoldRotatedTileProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -12336,22 +12518,24 @@ namespace CoreImage {
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CISmoothLinearGradient")]
 	interface CISmoothLinearGradientProtocol : CIFilterProtocol {
+		/// <summary>The point associated with <see cref="Color0" /></summary>
 		[Abstract]
 		[Export ("point0", ArgumentSemantic.Assign)]
 		CGPoint InputPoint0 { get; set; }
 
+		/// <summary>The point associated with <see cref="Color1" /></summary>
 		[Abstract]
 		[Export ("point1", ArgumentSemantic.Assign)]
 		CGPoint InputPoint1 { get; set; }
 
-		/// <summary>The color associated with <see cref="P:CoreImage.CISmoothLinearGradient.Point0" />.</summary>
+		/// <summary>The color associated with <see cref="InputPoint0" />.</summary>
 		/// <value>To be added.</value>
 		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color0", ArgumentSemantic.Retain)]
 		CIColor Color0 { get; set; }
 
-		/// <summary>The color associated with <see cref="P:CoreImage.CISmoothLinearGradient.Point1" /></summary>
+		/// <summary>The color associated with <see cref="InputPoint1" /></summary>
 		/// <value>To be added.</value>
 		/// <remarks>To be added.</remarks>
 		[Abstract]
@@ -12365,6 +12549,7 @@ namespace CoreImage {
 	[Protocol (Name = "CISpotColor")]
 	interface CISpotColorProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -12460,6 +12645,7 @@ namespace CoreImage {
 	[Protocol (Name = "CISpotLight")]
 	interface CISpotLightProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -12506,6 +12692,7 @@ namespace CoreImage {
 	[Protocol (Name = "CISRGBToneCurveToLinear")]
 	interface CISrgbToneCurveToLinearProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -12517,6 +12704,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIStarShineGenerator")]
 	interface CIStarShineGeneratorProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets the center of the star shine effect.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -12577,6 +12765,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIStraighten")]
 	interface CIStraightenProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -12595,6 +12784,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIStripesGenerator")]
 	interface CIStripesGeneratorProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets the center of the stripes.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -12634,6 +12824,7 @@ namespace CoreImage {
 	[Protocol (Name = "CISunbeamsGenerator")]
 	interface CISunbeamsGeneratorProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets the center of the sunbeam effect.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -12714,6 +12905,7 @@ namespace CoreImage {
 	[Protocol (Name = "CITemperatureAndTint")]
 	interface CITemperatureAndTintProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -12769,6 +12961,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIThermal")]
 	interface CIThermalProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -12780,26 +12973,32 @@ namespace CoreImage {
 	[Protocol (Name = "CIToneCurve")]
 	interface CIToneCurveProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets tthe point in the zeroth index position through which to interpolate the tone curve.</summary>
 		[Abstract]
 		[Export ("point0", ArgumentSemantic.Assign)]
 		CGPoint InputPoint0 { get; set; }
 
+		/// <summary>Gets or sets the point in the first index position through which to interpolate the tone curve.</summary>
 		[Abstract]
 		[Export ("point1", ArgumentSemantic.Assign)]
 		CGPoint InputPoint1 { get; set; }
 
+		/// <summary>Gets or sets the point in the second index position through which to interpolate the tone curve.</summary>
 		[Abstract]
 		[Export ("point2", ArgumentSemantic.Assign)]
 		CGPoint InputPoint2 { get; set; }
 
+		/// <summary>Gets or sets the point in the third index position through which to interpolate the tone curve.</summary>
 		[Abstract]
 		[Export ("point3", ArgumentSemantic.Assign)]
 		CGPoint InputPoint3 { get; set; }
 
+		/// <summary>Gets or sets the point in the fourth index position through which to interpolate the tone curve.</summary>
 		[Abstract]
 		[Export ("point4", ArgumentSemantic.Assign)]
 		CGPoint InputPoint4 { get; set; }
@@ -12811,10 +13010,12 @@ namespace CoreImage {
 	[Protocol (Name = "CITriangleKaleidoscope")]
 	interface CITriangleKaleidoscopeProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the point in the source image about which to sample for the kaleidoscopic effect.</summary>
 		[Abstract]
 		[Export ("point", ArgumentSemantic.Assign)]
 		CGPoint InputPoint { get; set; }
@@ -12847,6 +13048,7 @@ namespace CoreImage {
 	[Protocol (Name = "CITriangleTile")]
 	interface CITriangleTileProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -12870,6 +13072,7 @@ namespace CoreImage {
 	[Protocol (Name = "CITwelvefoldReflectedTile")]
 	interface CITwelvefoldReflectedTileProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -12893,6 +13096,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIUnsharpMask")]
 	interface CIUnsharpMaskProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -12918,6 +13122,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIVibrance")]
 	interface CIVibranceProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -12936,6 +13141,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIVignette")]
 	interface CIVignetteProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -12961,10 +13167,12 @@ namespace CoreImage {
 	[Protocol (Name = "CIVignetteEffect")]
 	interface CIVignetteEffectProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the point about which the image will be vignetted.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -12997,6 +13205,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIWhitePointAdjust")]
 	interface CIWhitePointAdjustProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -13015,6 +13224,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIXRay")]
 	interface CIXRayProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -13026,10 +13236,12 @@ namespace CoreImage {
 	[Protocol (Name = "CIZoomBlur")]
 	interface CIZoomBlurProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the center of the effect.</summary>
 		[Abstract]
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
@@ -13048,6 +13260,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIColorAbsoluteDifference")]
 	interface CIColorAbsoluteDifferenceProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -13071,6 +13284,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIColorThreshold")]
 	interface CIColorThresholdProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -13094,6 +13308,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIColorThresholdOtsu")]
 	interface CIColorThresholdOtsuProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -13117,6 +13332,7 @@ namespace CoreImage {
 		[CoreImageFilterProperty ("inputWeights")]
 		CIVector Weights { get; set; }
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 
@@ -13134,6 +13350,7 @@ namespace CoreImage {
 		[CoreImageFilterProperty ("inputWeights")]
 		CIVector Weights { get; set; }
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 
@@ -13151,6 +13368,7 @@ namespace CoreImage {
 		[CoreImageFilterProperty ("inputWeights")]
 		CIVector Weights { get; set; }
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 
@@ -13168,6 +13386,7 @@ namespace CoreImage {
 		[CoreImageFilterProperty ("inputWeights")]
 		CIVector Weights { get; set; }
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 
@@ -13185,6 +13404,7 @@ namespace CoreImage {
 		[CoreImageFilterProperty ("inputWeights")]
 		CIVector Weights { get; set; }
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 
@@ -13202,6 +13422,7 @@ namespace CoreImage {
 		[CoreImageFilterProperty ("inputBackgroundImage")]
 		CIImage BackgroundImage { get; set; }
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 	}
@@ -13218,6 +13439,7 @@ namespace CoreImage {
 	[Protocol (Name = "CIPersonSegmentation")]
 	interface CIPersonSegmentationProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -13237,6 +13459,7 @@ namespace CoreImage {
 		[CoreImageFilterProperty ("inputBackgroundImage")]
 		CIImage BackgroundImage { get; set; }
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 	}
@@ -13270,6 +13493,7 @@ namespace CoreImage {
 	[iOS (16, 0), TV (16, 0), Mac (13, 0), MacCatalyst (16, 0)]
 	[Protocol (Name = "CIConvertLab")]
 	interface CIConvertLabProtocol : CIFilterProtocol {
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -13310,6 +13534,7 @@ namespace CoreImage {
 	[iOS (17, 0), TV (17, 0), Mac (14, 0), MacCatalyst (17, 0)]
 	[Protocol (Name = "CICannyEdgeDetector")]
 	interface CICannyEdgeDetectorProtocol : CIFilterProtocol {
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -13371,6 +13596,7 @@ namespace CoreImage {
 	[Protocol (Name = "CISobelGradients")]
 	interface CISobelGradientsProtocol : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -13406,6 +13632,7 @@ namespace CoreImage {
 	[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 	[Protocol (Name = "CIMaximumScaleTransform", BackwardsCompatibleCodeGeneration = false)]
 	interface CIMaximumScaleTransformProtocol : CIFilterProtocol {
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -13428,6 +13655,7 @@ namespace CoreImage {
 	[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 	[Protocol (Name = "CIToneMapHeadroom", BackwardsCompatibleCodeGeneration = false)]
 	interface CIToneMapHeadroomProtocol : CIFilterProtocol {
+		/// <summary>Gets or sets an image to filter.</summary>
 		[Abstract]
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
@@ -13457,6 +13685,7 @@ namespace CoreImage {
 	[BaseType (typeof (CIFilter))]
 	interface CIDistanceGradientFromRedMask : CIFilterProtocol {
 
+		/// <summary>Gets or sets an image to filter.</summary>
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 

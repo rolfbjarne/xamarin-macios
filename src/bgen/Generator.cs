@@ -6370,7 +6370,7 @@ public partial class Generator : IMemberGatherer {
 					}
 
 					if (!WriteDocumentation (field_pi) && BindingTouch.SupportsXmlDocumentation) {
-						print ($"/// <summary>Represents the value associated with the constant '{fieldAttr.SymbolName}'.</summary>");
+						// WAIT UNTIL ALL DOCS HAVE BEEN MERGED // print ($"/// <summary>Represents the value associated with the constant '{fieldAttr.SymbolName}'.</summary>");
 					}
 					PrintAttributes (field_pi, preserve: true, advice: true);
 					PrintObsoleteAttributes (field_pi);

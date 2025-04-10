@@ -6372,6 +6372,7 @@ public partial class Generator : IMemberGatherer {
 					if (!WriteDocumentation (field_pi) && BindingTouch.SupportsXmlDocumentation) {
 						// WAIT UNTIL ALL DOCS HAVE BEEN MERGED // print ($"/// <summary>Represents the value associated with the constant '{fieldAttr.SymbolName}'.</summary>");
 					}
+					PrintBindingDocId (field_pi, "FieldExport");
 					PrintAttributes (field_pi, preserve: true, advice: true);
 					PrintObsoleteAttributes (field_pi);
 					print ("[Field (\"{0}\",  \"{1}\")]", fieldAttr.SymbolName, library_path ?? library_name);

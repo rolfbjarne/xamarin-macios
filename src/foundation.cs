@@ -18272,6 +18272,14 @@ namespace Foundation {
 	[Model]
 	[Protocol]
 	partial interface NSFilePresenter {
+		/// <summary>Gets URL of presented item.</summary>
+		/// <value>
+		///         </value>
+		/// <remarks>
+		///           <para>
+		///           </para>
+		///           <para tool="threads">This can be used from a background thread.</para>
+		///         </remarks>
 		[Abstract]
 		[Export ("presentedItemURL", ArgumentSemantic.Retain)]
 		[NullAllowed]
@@ -18281,6 +18289,9 @@ namespace Foundation {
 		NSUrl PresentedItemURL { get; }
 #endif
 
+		/// <summary>Gets the <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=T:Monotouch.Foundation.NSOperationQueue&amp;scope=Xamarin" title="T:Monotouch.Foundation.NSOperationQueue">T:Monotouch.Foundation.NSOperationQueue</a></format> on which presenter-related methods are executed.</summary>
+		/// <value>The <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=T:Monotouch.Foundation.NSOperationQueue&amp;scope=Xamarin" title="T:Monotouch.Foundation.NSOperationQueue">T:Monotouch.Foundation.NSOperationQueue</a></format> on which methods are executed.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("presentedItemOperationQueue", ArgumentSemantic.Retain)]
 #if NET

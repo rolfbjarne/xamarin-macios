@@ -2060,6 +2060,9 @@ namespace MediaPlayer {
 		[Export ("keyspace")]
 		string Keyspace { get; }
 
+		/// <summary>The timed metadata.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Export ("value")]
 #if NET
 		NSObject Value { get; }

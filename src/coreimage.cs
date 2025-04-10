@@ -9561,6 +9561,7 @@ namespace CoreImage {
 		[Export ("bottomHeight")]
 		float BottomHeight { get; set; }
 
+		/// <summary>Gets or sets the number of folds to use in the transition.</summary>
 		[Abstract]
 		[Export ("numberOfFolds")]
 		// renamed for compatibility (originally bound as an integer)

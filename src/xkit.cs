@@ -1143,6 +1143,10 @@ namespace UIKit {
 		bool DrawsOutsideLineFragmentForGlyphAtIndex (nuint glyphIndex);
 #endif
 
+		/// <param name="glyphIndex">To be added.</param>
+		/// <summary>The size of the attachment cell associated with the glyph at the specified index</summary>
+		/// <returns>The size of attachment cell at the glyph at <paramref name="glyphIndex" />. Returns {-1.0f, -1.0f} if there is no attachment at the specified glyph.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("attachmentSizeForGlyphAtIndex:")]
 #if NET
 		CGSize GetAttachmentSizeForGlyph (nuint glyphIndex);
@@ -1311,6 +1315,10 @@ namespace UIKit {
 		[Export ("glyphRangeForTextContainer:")]
 		NSRange GetGlyphRange (NSTextContainer container);
 
+		/// <param name="glyphIndex">To be added.</param>
+		/// <summary>The largest range of glyphs surrounding the glyph at the specified index that can be displayed using only advancement, not pairwise kerning or other adjustments.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("rangeOfNominallySpacedGlyphsContainingIndex:")]
 #if NET
 		NSRange GetRangeOfNominallySpacedGlyphsContainingIndex (nuint glyphIndex);
@@ -1354,6 +1362,11 @@ namespace UIKit {
 		NSRange GlyphRangeForBoundingRect (CGRect bounds, NSTextContainer container);
 #endif
 
+		/// <param name="bounds">To be added.</param>
+		/// <param name="container">To be added.</param>
+		/// <summary>Returns the range of glyph indices that are at least partially in the <paramref name="bounds" /> without glyph production or layout.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Export ("glyphRangeForBoundingRectWithoutAdditionalLayout:inTextContainer:")]
 #if NET
 		NSRange GetGlyphRangeForBoundingRectWithoutAdditionalLayout (CGRect bounds, NSTextContainer container);
@@ -1390,6 +1403,13 @@ namespace UIKit {
 		nuint GlyphIndexForPoint (CGPoint point, NSTextContainer container);
 #endif
 
+		/// <param name="point">To be added.</param>
+		/// <param name="container">To be added.</param>
+		/// <summary>Developers should call <see cref="M:UIKit.NSLayoutManager.GetGlyphIndex(CoreGraphics.CGPoint,UIKit.NSTextContainer)" /> rather than this primitive function.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>
+		///           <para>This method is <c>public</c> for overriding purposes but is not intended for developers to call.</para>
+		///         </remarks>
 		[Export ("fractionOfDistanceThroughGlyphForPoint:inTextContainer:")]
 #if NET
 		nfloat GetFractionOfDistanceThroughGlyph (CGPoint point, NSTextContainer container);

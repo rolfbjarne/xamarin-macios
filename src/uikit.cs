@@ -1159,7 +1159,7 @@ namespace UIKit {
 		long TraitTabBar { get; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.AnnouncementDidFinishNotification']/*" />
-	[Field ("UIAccessibilityAnnouncementDidFinishNotification")]
+		[Field ("UIAccessibilityAnnouncementDidFinishNotification")]
 		[Notification (typeof (UIAccessibilityAnnouncementFinishedEventArgs))]
 		NSString AnnouncementDidFinishNotification { get; }
 
@@ -1174,28 +1174,28 @@ namespace UIKit {
 		NSString VoiceOverStatusChanged { get; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.VoiceOverStatusDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Field ("UIAccessibilityVoiceOverStatusDidChangeNotification")]
 		[Notification]
 		NSString VoiceOverStatusDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.MonoAudioStatusDidChangeNotification']/*" />
-	[Field ("UIAccessibilityMonoAudioStatusDidChangeNotification")]
+		[Field ("UIAccessibilityMonoAudioStatusDidChangeNotification")]
 		[Notification]
 		NSString MonoAudioStatusDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.ClosedCaptioningStatusDidChangeNotification']/*" />
-	[Field ("UIAccessibilityClosedCaptioningStatusDidChangeNotification")]
+		[Field ("UIAccessibilityClosedCaptioningStatusDidChangeNotification")]
 		[Notification]
 		NSString ClosedCaptioningStatusDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.InvertColorsStatusDidChangeNotification']/*" />
-	[Field ("UIAccessibilityInvertColorsStatusDidChangeNotification")]
+		[Field ("UIAccessibilityInvertColorsStatusDidChangeNotification")]
 		[Notification]
 		NSString InvertColorsStatusDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.GuidedAccessStatusDidChangeNotification']/*" />
-	[Field ("UIAccessibilityGuidedAccessStatusDidChangeNotification")]
+		[Field ("UIAccessibilityGuidedAccessStatusDidChangeNotification")]
 		[Notification]
 		NSString GuidedAccessStatusDidChangeNotification { get; }
 
@@ -1253,7 +1253,7 @@ namespace UIKit {
 		NSString SpeechAttributeAnnouncementPriority { get; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.BoldTextStatusDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("UIAccessibilityBoldTextStatusDidChangeNotification")]
 		NSString BoldTextStatusDidChangeNotification { get; }
@@ -1265,19 +1265,19 @@ namespace UIKit {
 		NSString ButtonShapesEnabledStatusDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.DarkerSystemColorsStatusDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("UIAccessibilityDarkerSystemColorsStatusDidChangeNotification")]
 		NSString DarkerSystemColorsStatusDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.GrayscaleStatusDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("UIAccessibilityGrayscaleStatusDidChangeNotification")]
 		NSString GrayscaleStatusDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.ReduceMotionStatusDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("UIAccessibilityReduceMotionStatusDidChangeNotification")]
 		NSString ReduceMotionStatusDidChangeNotification { get; }
@@ -1295,19 +1295,19 @@ namespace UIKit {
 		NSString VideoAutoplayStatusDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.ReduceTransparencyStatusDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("UIAccessibilityReduceTransparencyStatusDidChangeNotification")]
 		NSString ReduceTransparencyStatusDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.SwitchControlStatusDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("UIAccessibilitySwitchControlStatusDidChangeNotification")]
 		NSString SwitchControlStatusDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.NotificationSwitchControlIdentifier']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Field ("UIAccessibilityNotificationSwitchControlIdentifier")]
 		NSString NotificationSwitchControlIdentifier { get; }
 
@@ -1333,19 +1333,19 @@ namespace UIKit {
 		int ResumeAssistiveTechnologyNotification { get; } // UIAccessibilityNotifications => uint32_t
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.SpeakScreenStatusDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("UIAccessibilitySpeakScreenStatusDidChangeNotification")]
 		NSString SpeakScreenStatusDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.SpeakSelectionStatusDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("UIAccessibilitySpeakSelectionStatusDidChangeNotification")]
 		NSString SpeakSelectionStatusDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.ShakeToUndoDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("UIAccessibilityShakeToUndoDidChangeNotification")]
 		NSString ShakeToUndoDidChangeNotification { get; }
@@ -1358,7 +1358,7 @@ namespace UIKit {
 		NSObject [] AccessibilityHeaderElements { get; set; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.ElementFocusedNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("UIAccessibilityElementFocusedNotification")]
 		NSString ElementFocusedNotification { get; }
@@ -1388,19 +1388,19 @@ namespace UIKit {
 		NSString AssistiveTechnologyKey { get; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.NotificationVoiceOverIdentifier']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Field ("UIAccessibilityNotificationVoiceOverIdentifier")]
 		NSString NotificationVoiceOverIdentifier { get; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.HearingDevicePairedEarDidChangeNotification']/*" />
-	[NoTV]
+		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("UIAccessibilityHearingDevicePairedEarDidChangeNotification")]
 		NSString HearingDevicePairedEarDidChangeNotification { get; }
 
 		/// <include file="../docs/api/UIKit/UIBarItem.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIBarItem.AssistiveTouchStatusDidChangeNotification']/*" />
-	[MacCatalyst (13, 1)]
+		[MacCatalyst (13, 1)]
 		[Notification]
 		[Field ("UIAccessibilityAssistiveTouchStatusDidChangeNotification")]
 		NSString AssistiveTouchStatusDidChangeNotification { get; }
@@ -10332,7 +10332,7 @@ namespace UIKit {
 		NSString TextFontKey { get; }
 
 		/// <include file="../docs/api/UIKit/UITextField.xml" path="/Documentation/Docs[@DocId='P:UIKit.UITextField.CurrentInputModeDidChangeNotification']/*" />
-	[Field ("UITextInputCurrentInputModeDidChangeNotification")]
+		[Field ("UITextInputCurrentInputModeDidChangeNotification")]
 		[Notification]
 		NSString CurrentInputModeDidChangeNotification { get; }
 

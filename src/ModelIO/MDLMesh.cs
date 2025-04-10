@@ -93,6 +93,13 @@ namespace ModelIO {
 			return CreateBox (dimensions, segments, geometryType, inwardNormals, allocator, MDLMeshVectorType.Dimensions);
 		}
 
+		/// <summary>Creates a right rectangular box from the width, height, and depth that are contained in <paramref name="dimensions" />, with the specified number of segments and geometry kind.</summary>
+		/// <param name="vector">To be added.</param>
+		/// <param name="segments">The number of divisions to create in each dimension.</param>
+		/// <param name="geometryType">Whether to create triangles, quadrilaterals, or lines.</param>
+		/// <param name="inwardNormals">Whether to generate inward-pointing normals.</param>
+		/// <param name="allocator">The allocator to use instead of the default, internal allocator.</param>
+		/// <param name="type">The mesh vector type.</param>
 #if NET
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]

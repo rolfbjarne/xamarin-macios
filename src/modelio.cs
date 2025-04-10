@@ -3644,10 +3644,12 @@ namespace ModelIO {
 		[Export ("keyTimes", ArgumentSemantic.Copy)]
 		NSNumber [] KeyTimes { get; }
 
+		/// <summary>Causes this transform to represent the specified static transform.</summary>
 		[Export ("setLocalTransform:forTime:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		void SetLocalTransform (Matrix4 transform, double time);
 
+		/// <summary>Causes this transform to represent the specified static transform.</summary>
 		[Export ("setLocalTransform:")]
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		void SetLocalTransform (Matrix4 transform);

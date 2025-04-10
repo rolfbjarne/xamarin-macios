@@ -136,6 +136,23 @@ namespace SceneKit {
 	[Model, Protocol]
 	[BaseType (typeof (NSObject))]
 	interface SCNAnimatable {
+		/// <summary>Adds <paramref name="scnAnimation" />, identified with the specified <paramref name="key" />.</summary>
+		/// <param name="scnAnimation">The animation to add.</param>
+		/// <param name="key">The animation key.</param>
+		/// <remarks>
+		///   <para>The following example shows how a rotation animation can be added to a <see cref="T:SceneKit.SCNGeometry" /> object:</para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// var animation = new CABasicAnimation ();
+		/// animation.KeyPath = "rotation";
+		/// var v = new SCNVector4 (1.0f, 1.0f, 0.0f, (float) (Math.PI * 2.0));
+		/// animation.To = NSValue.FromVector (v);
+		/// animation.Duration = 5.0f;
+		/// animation.RepeatCount = float.MaxValue; //repeat forever
+		/// animatableObject.AddAnimation (animation, (NSString) "rotation");
+		///     ]]></code>
+		///   </example>
+		/// </remarks>
 		[Abstract]
 		[MacCatalyst (13, 1)]
 		[Export ("addAnimation:forKey:")]

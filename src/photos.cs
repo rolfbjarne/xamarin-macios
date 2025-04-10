@@ -1207,6 +1207,7 @@ namespace Photos {
 		[Export ("requestExportSessionForVideo:options:exportPreset:resultHandler:")]
 		int /* PHImageRequestID = int32_t */ RequestExportSession (PHAsset asset, [NullAllowed] PHVideoRequestOptions options, string exportPreset, PHImageManagerRequestExportHandler resultHandler);
 
+		/// <summary>Requests the AV Foundation objects that the asset comprises.</summary>
 		[MacCatalyst (13, 1)]
 		[Export ("requestAVAssetForVideo:options:resultHandler:")]
 #if NET

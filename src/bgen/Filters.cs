@@ -197,6 +197,7 @@ public partial class Generator {
 			print ("");
 
 			WriteDocumentation (p);
+			PrintBindingDocId (p, "FilterProperty");
 
 			// an export will be present (only) if it's defined in a protocol
 			var export = AttributeManager.GetCustomAttribute<ExportAttribute> (p);

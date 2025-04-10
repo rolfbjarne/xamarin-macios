@@ -226,4 +226,16 @@ namespace XmlDocumentation {
 		[Export ("staticProperty")]
 		int StaticProperty { get; set; }
 	}
+
+	class TOuter {
+		[Static]
+		interface TInner {
+			/// <summary>TOuter.TInner.Field</summary>
+			[Field ("TOuterInnerField", "__Internal")]
+			NSString TOuterInnerField { get; }
+			// no xml comment, should get a default value
+			[Field ("TOuterInnerField2", "__Internal")]
+			NSString TOuterInnerField2 { get; }
+		}
+	}
 }

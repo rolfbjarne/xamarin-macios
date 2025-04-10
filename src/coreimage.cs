@@ -5532,6 +5532,9 @@ namespace CoreImage {
 	[Protocol (Name = "CIAreaHistogram")]
 	interface CIAreaHistogramProtocol : CIAreaReductionFilterProtocol {
 
+		/// <summary>Gets or sets the scale of the area.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("scale")]
 		float Scale { get; set; }
@@ -5786,6 +5789,9 @@ namespace CoreImage {
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>Gets or sets the level of the bump distortion.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("scale")]
 		float Scale { get; set; }
@@ -5815,10 +5821,16 @@ namespace CoreImage {
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>Gets or sets the angle of the line about which to distort the image.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("angle")]
 		float Angle { get; set; }
 
+		/// <summary>Gets or sets the amount of distortion to create.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("scale")]
 		float Scale { get; set; }
@@ -5915,10 +5927,16 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the radius of the distortion.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>Gets or sets the angle of the image.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("angle")]
 		float Angle { get; set; }
@@ -6284,10 +6302,16 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the image that defines the texture displacement.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("displacementImage", ArgumentSemantic.Retain)]
 		CIImage DisplacementImage { get; set; }
 
+		/// <summary>Gets or sets a value that determines how much distortion to apply. Default is 50.0.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("scale")]
 		float Scale { get; set; }
@@ -6337,18 +6361,30 @@ namespace CoreImage {
 		[Export ("insetPoint1", ArgumentSemantic.Assign)]
 		CGPoint InputInsetPoint1 { get; set; }
 
+		/// <summary>Gets or sets the number of droste strands. Default is 1.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("strands")]
 		float Strands { get; set; }
 
+		/// <summary>Gets or sets the number of times that the image is repeated in each spiral of a stranded Droste image. Default is 1.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("periodicity")]
 		float Periodicity { get; set; }
 
+		/// <summary>Gets or sets the amount by which to rotate the inset image. Default is 0.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("rotation")]
 		float Rotation { get; set; }
 
+		/// <summary>Gets or sets a value that controls by how much to zoom the inset image. Default is 1.0.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("zoom")]
 		float Zoom { get; set; }
@@ -6515,6 +6551,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the texture map to use for the glass distortion effect.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("textureImage", ArgumentSemantic.Retain)]
 		CIImage Texture { get; set; }
@@ -6523,6 +6562,9 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the scale of the input texture.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("scale")]
 		float Scale { get; set; }
@@ -6559,10 +6601,16 @@ namespace CoreImage {
 		[Export ("point1", ArgumentSemantic.Assign)]
 		CGPoint InputPoint1 { get; set; }
 
+		/// <summary>Gets or sets the radius, and therefore the half-width, of the lozenge.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>Gets or sets the amount simulated refraction for the lozenge. Default is 1.7.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("refraction")]
 		float Refraction { get; set; }
@@ -6645,14 +6693,23 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the display height of the histogram.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("height")]
 		float Height { get; set; }
 
+		/// <summary>Gets or sets the height of the tallest histogram bar.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("highLimit")]
 		float HighLimit { get; set; }
 
+		/// <summary>Gets or sets the height of the shortest histogram bar.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("lowLimit")]
 		float LowLimit { get; set; }
@@ -6791,10 +6848,16 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the initial anlge of the image sample.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("rotation")]
 		float Rotation { get; set; }
 
+		/// <summary>Gets or sets the distance about the center to sample.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
@@ -7182,6 +7245,9 @@ namespace CoreImage {
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>Gets or sets a value that controls by how much the image will be pinched.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("scale")]
 		float Scale { get; set; }
@@ -7435,10 +7501,16 @@ namespace CoreImage {
 		[Export ("size", ArgumentSemantic.Assign)]
 		CGPoint InputSize { get; set; }
 
+		/// <summary>Gets or sets a value that controls the ratio of stretching to cropping. 0 causes the image to be stretched so that no cropping is necessary. 1 causes the image to be cropped so that no stretching is necessary. Intermediate values combine these effects.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("cropAmount")]
 		float CropAmount { get; set; }
 
+		/// <summary>Gets or sets a value that controls by how much more to stretch the center of the image, with a value of 0 indicating uniform stretching with no distortion.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("centerStretchAmount")]
 		float CenterStretchAmount { get; set; }
@@ -7562,14 +7634,23 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the radius of the toroidal lens, the distance from the center of the torus to the center of its ring.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>Gets or sets the width of the ring of the torus.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("width")]
 		float Width { get; set; }
 
+		/// <summary>Gets or sets the index of refraction.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("refraction")]
 		float Refraction { get; set; }
@@ -7631,6 +7712,9 @@ namespace CoreImage {
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>Gets or sets the angle of the twirl effect, in radians.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("angle")]
 		float Angle { get; set; }
@@ -7695,6 +7779,9 @@ namespace CoreImage {
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>The angle, in degrees, through which to rotate.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("angle")]
 		float Angle { get; set; }
@@ -9446,10 +9533,16 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>The image that will be displayed at the end of the transition.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("targetImage", ArgumentSemantic.Retain)]
 		CIImage TargetImage { get; set; }
 
+		/// <summary>Gets or sets the current time in the transition.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("time")]
 		float Time { get; set; }
@@ -9461,6 +9554,9 @@ namespace CoreImage {
 	[Protocol (Name = "CIAccordionFoldTransition")]
 	interface CIAccordionFoldTransitionProtocol : CITransitionFilterProtocol {
 
+		/// <summary>Gets or sets the the position from which to start the accordion transition.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("bottomHeight")]
 		float BottomHeight { get; set; }
@@ -9470,6 +9566,9 @@ namespace CoreImage {
 		// renamed for compatibility (originally bound as an integer)
 		float FoldCount { get; set; }
 
+		/// <summary>Gets or sets the fold shadow amount.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("foldShadowAmount")]
 		float FoldShadowAmount { get; set; }
@@ -9537,6 +9636,9 @@ namespace CoreImage {
 		[Export ("message", ArgumentSemantic.Retain)]
 		NSData Message { get; set; }
 
+		/// <summary>Gets or sets the percentage of redundancy of the code.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("correctionLevel")]
 		float CorrectionLevel { get; set; }
@@ -9638,10 +9740,16 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the radius of the center of the bloom.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>Gets or sets the intensity of the bloom.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("intensity")]
 		float Intensity { get; set; }
@@ -9684,6 +9792,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>The circular extent of the filter.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
@@ -9699,18 +9810,30 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets first square color</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color0", ArgumentSemantic.Retain)]
 		CIColor Color0 { get; set; }
 
+		/// <summary>Gets or sets second square color</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color1", ArgumentSemantic.Retain)]
 		CIColor Color1 { get; set; }
 
+		/// <summary>Gets or sets the length of the sides of the squares.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("width")]
 		float Width { get; set; }
 
+		/// <summary>Gets or sets the sharpness of the stripe pattern. 1 is sharp. 0 is maximally blurry.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("sharpness")]
 		float Sharpness { get; set; }
@@ -9786,6 +9909,9 @@ namespace CoreImage {
 		[Export ("message", ArgumentSemantic.Retain)]
 		NSData Message { get; set; }
 
+		/// <summary>Gets or sets the width of the quiet space in the code.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("quietSpace")]
 		float QuietSpace { get; set; }
@@ -9830,14 +9956,23 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the saturation of the resulting image. Values greater than 1 are more saturated than the original image.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("saturation")]
 		float Saturation { get; set; }
 
+		/// <summary>Gets or sets the brightness bias. </summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("brightness")]
 		float Brightness { get; set; }
 
+		/// <summary>Gets or sets the contrast in the resulting image.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("contrast")]
 		float Contrast { get; set; }
@@ -9853,14 +9988,23 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>A ten-element vector where the first nine values are cross product weights, and the final value in a bias.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("redCoefficients", ArgumentSemantic.Retain)]
 		CIVector RedCoefficients { get; set; }
 
+		/// <summary>A ten-element vector where the first nine values are cross product weights, and the final value in a bias.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("greenCoefficients", ArgumentSemantic.Retain)]
 		CIVector GreenCoefficients { get; set; }
 
+		/// <summary>A ten-element vector where the first nine values are cross product weights, and the final value in a bias.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("blueCoefficients", ArgumentSemantic.Retain)]
 		CIVector BlueCoefficients { get; set; }
@@ -9876,10 +10020,16 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the dimension of the cube data.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("cubeDimension")]
 		float CubeDimension { get; set; }
 
+		/// <summary>Gets or sets the cube data.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("cubeData", ArgumentSemantic.Retain)]
 		NSData CubeData { get; set; }
@@ -9948,6 +10098,9 @@ namespace CoreImage {
 		[Export ("cubeData", ArgumentSemantic.Retain)]
 		NSData CubeData { get; set; }
 
+		/// <summary>Gets or sets the color space to use.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("colorSpace", ArgumentSemantic.Assign)]
 		CGColorSpace ColorSpace { get; set; }
@@ -10004,6 +10157,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the gradient mapping image.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("gradientImage", ArgumentSemantic.Retain)]
 		CIImage GradientImage { get; set; }
@@ -10019,22 +10175,37 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Weights to use to calculate the red value.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("RVector", ArgumentSemantic.Retain)]
 		CIVector RVector { get; set; }
 
+		/// <summary>Weights to use to calculate the green value.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("GVector", ArgumentSemantic.Retain)]
 		CIVector GVector { get; set; }
 
+		/// <summary>Weights to use to calculate the blue value.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("BVector", ArgumentSemantic.Retain)]
 		CIVector BVector { get; set; }
 
+		/// <summary>Weights to use to calculate the alpha value.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("AVector", ArgumentSemantic.Retain)]
 		CIVector AVector { get; set; }
 
+		/// <summary>Values to add to each component.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("biasVector", ArgumentSemantic.Retain)]
 		CIVector BiasVector { get; set; }
@@ -10050,10 +10221,16 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the monochrome color.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color", ArgumentSemantic.Retain)]
 		CIColor Color { get; set; }
 
+		/// <summary>Gets or sets the intensity of the effect.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("intensity")]
 		float Intensity { get; set; }
@@ -10081,6 +10258,9 @@ namespace CoreImage {
 		[Export ("blueCoefficients", ArgumentSemantic.Retain)]
 		CIVector BlueCoefficients { get; set; }
 
+		/// <summary>Gets or sets the coefficients for the cubic polynomial that will be used to calculate the new alpha channel value.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("alphaCoefficients", ArgumentSemantic.Retain)]
 		CIVector AlphaCoefficients { get; set; }
@@ -10096,6 +10276,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the single brightness level to which to shift all the color components in the image.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("levels")]
 		float Levels { get; set; }
@@ -10206,6 +10389,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the radius of the crystallization effect.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
@@ -10233,18 +10419,30 @@ namespace CoreImage {
 		[Export ("point1", ArgumentSemantic.Assign)]
 		CGPoint InputPoint1 { get; set; }
 
+		/// <summary>Gets or sets a value that controls by how much to adjust the saturation of the in-focus region.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("saturation")]
 		float Saturation { get; set; }
 
+		/// <summary>Gets or sets the radius of the unsharp mask for the in-focus region.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("unsharpMaskRadius")]
 		float UnsharpMaskRadius { get; set; }
 
+		/// <summary>Gets or sets the intensity of the unsharp mask for the in-focus region.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("unsharpMaskIntensity")]
 		float UnsharpMaskIntensity { get; set; }
 
+		/// <summary>Gets or sets the unsharp mask radius for the out-of-focus region.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
@@ -10271,6 +10469,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>The circular extent of the filter.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
@@ -10286,10 +10487,16 @@ namespace CoreImage {
 		[NullAllowed, Export ("maskImage", ArgumentSemantic.Retain)]
 		CIImage MaskImage { get; set; }
 
+		/// <summary>Gets or set the shadow radius.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("shadowRadius")]
 		float ShadowRadius { get; set; }
 
+		/// <summary>Gets or sets the density of the mask shadows.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("shadowDensity")]
 		float ShadowDensity { get; set; }
@@ -10361,6 +10568,9 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the angle, in degrees, of the dot screen.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("angle")]
 		float Angle { get; set; }
@@ -10407,6 +10617,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>The input intensity. Higher values detect more edges.</summary>
+		/// <value>The default value is 1.0                                                                                                 .</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("intensity")]
 		float Intensity { get; set; }
@@ -10422,6 +10635,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>The circular extent of the filter.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
@@ -10460,6 +10676,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the desired exposure.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("EV")]
 		float EV { get; set; }
@@ -10475,10 +10694,16 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the color that will be used for pixels of low luminance.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color0", ArgumentSemantic.Retain)]
 		CIColor Color0 { get; set; }
 
+		/// <summary>Gets or sets the color that will be used for pixels of high luminance</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color1", ArgumentSemantic.Retain)]
 		CIColor Color1 { get; set; }
@@ -10498,10 +10723,16 @@ namespace CoreImage {
 		[Export ("extent", ArgumentSemantic.Assign)]
 		CGRect InputExtent { get; set; }
 
+		/// <summary>Gets or sets the color of the flash.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color", ArgumentSemantic.Retain)]
 		CIColor Color { get; set; }
 
+		/// <summary>Gets or sets the maximum radius of the flash effect.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("maxStriationRadius")]
 		float MaxStriationRadius { get; set; }
@@ -10514,6 +10745,9 @@ namespace CoreImage {
 		[Export ("striationContrast")]
 		float StriationContrast { get; set; }
 
+		/// <summary>Gets or sets the threshold at which the flash starts or stops appearing.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("fadeThreshold")]
 		float FadeThreshold { get; set; }
@@ -10568,6 +10802,9 @@ namespace CoreImage {
 		[Export ("width")]
 		float Width { get; set; }
 
+		/// <summary>Gets or sets the skew, in degrees, of the tiles in the pattern.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("acuteAngle")]
 		float AcuteAngle { get; set; }
@@ -10618,6 +10855,9 @@ namespace CoreImage {
 		[Export ("width")]
 		float Width { get; set; }
 
+		/// <summary>Gets or sets the skew, in degrees, of the tiles in the pattern.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("acuteAngle")]
 		float AcuteAngle { get; set; }
@@ -10644,6 +10884,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the exponent for the gamma curve.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("power")]
 		float Power { get; set; }
@@ -10659,6 +10902,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the radius of the blurring effect.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
@@ -10674,14 +10920,23 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the color at the center of the gradient.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color0", ArgumentSemantic.Retain)]
 		CIColor Color0 { get; set; }
 
+		/// <summary>Gets or sets the color at the edge and beyond of the gradient.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color1", ArgumentSemantic.Retain)]
 		CIColor Color1 { get; set; }
 
+		/// <summary>Gets or sets the radius of the gradient.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
@@ -10720,10 +10975,16 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the radius of highlights to darken.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>Gets or sets the severity of the gloom.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("intensity")]
 		float Intensity { get; set; }
@@ -10743,6 +11004,9 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the angle of the hatch pattern.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("angle")]
 		float Angle { get; set; }
@@ -10766,6 +11030,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>The circular extent of the filter.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
@@ -10785,6 +11052,9 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the size of the individual pixel cells.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("scale")]
 		float Scale { get; set; }
@@ -10800,14 +11070,23 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>The circular extent of the filter.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>Gets or sets a value in the range [0,1] that contols by how much to brighten shaded areas.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("shadowAmount")]
 		float ShadowAmount { get; set; }
 
+		/// <summary>Gets or sets a value in the range [0,1] that contols by how much to dampen highlights.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("highlightAmount")]
 		float HighlightAmount { get; set; }
@@ -10823,6 +11102,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>The amount, in degrees, by which to rotate the color cube about the neutral axis.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("angle")]
 		float Angle { get; set; }
@@ -10838,6 +11120,9 @@ namespace CoreImage {
 		[Export ("value")]
 		float Value { get; set; }
 
+		/// <summary>The circular extent of the filter.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
@@ -10873,6 +11158,9 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the kaleidoscope angle.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("angle")]
 		float Angle { get; set; }
@@ -10936,10 +11224,16 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the size of the transformed image, relative to the source.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("scale")]
 		float Scale { get; set; }
 
+		/// <summary>Gets or sets the aspect ratio of the transformed image, relative to the source.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("aspectRatio")]
 		float AspectRatio { get; set; }
@@ -10955,30 +11249,51 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the color of the red, green, and blue halos in  the flare effect.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color", ArgumentSemantic.Retain)]
 		CIColor Color { get; set; }
 
+		/// <summary>Gets or sets the radius to the middle of the flare band.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("haloRadius")]
 		float HaloRadius { get; set; }
 
+		/// <summary>Gets or sets the distance between the inner and outer bands of the flare.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("haloWidth")]
 		float HaloWidth { get; set; }
 
+		/// <summary>Gets or sets a value that controls by how much the red, green, and blue halos overlap. 1 overlaps completely. The default is 0.77.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("haloOverlap")]
 		float HaloOverlap { get; set; }
 
+		/// <summary>Gets or sets the brightness of the striations of the flare.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("striationStrength")]
 		float StriationStrength { get; set; }
 
+		/// <summary>Gets or sets the contrast of the striations of the flare.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("striationContrast")]
 		float StriationContrast { get; set; }
 
+		/// <summary>Gets or sets a value that controls the shimmer of the flare over time. Default is 0.0.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("time")]
 		float Time { get; set; }
@@ -10998,10 +11313,16 @@ namespace CoreImage {
 		[Export ("point1", ArgumentSemantic.Assign)]
 		CGPoint InputPoint1 { get; set; }
 
+		/// <summary>Gets or sets the color at <see cref="P:CoreImage.CILinearGradient.Point0" />.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color0", ArgumentSemantic.Retain)]
 		CIColor Color0 { get; set; }
 
+		/// <summary>Gets or sets the color at <see cref="P:CoreImage.CILinearGradient.Point1" />.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color1", ArgumentSemantic.Retain)]
 		CIColor Color1 { get; set; }
@@ -11028,22 +11349,37 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the input noise level to use when reducing noise before applying the line overlay filter.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("NRNoiseLevel")]
 		float NRNoiseLevel { get; set; }
 
+		/// <summary>Gets or sets the input sharpnsee to use when applying the line overlay filter.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("NRSharpness")]
 		float NRSharpness { get; set; }
 
+		/// <summary>Gets or sets the edge intensity to use when drawing the overlay.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("edgeIntensity")]
 		float EdgeIntensity { get; set; }
 
+		/// <summary>Gets or sets the line overlay threshold..</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("threshold")]
 		float Threshold { get; set; }
 
+		/// <summary>Gets or sets the contrast of the line overlay.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("contrast")]
 		float Contrast { get; set; }
@@ -11063,6 +11399,9 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the angle, in degrees, of the line pattern. 0 is vertical.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("angle")]
 		float Angle { get; set; }
@@ -11090,6 +11429,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("mask", ArgumentSemantic.Retain)]
 		CIImage Mask { get; set; }
 
+		/// <summary>The circular extent of the filter.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
@@ -11187,14 +11529,23 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the angle of the mod transition.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("angle")]
 		float Angle { get; set; }
 
+		/// <summary>Gets or sets the radius of the mod transition.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>Gets or sets the compression.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("compression")]
 		float Compression { get; set; }
@@ -11297,6 +11648,9 @@ namespace CoreImage {
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>Gets or sets the angle of the motion blur.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("angle")]
 		float Angle { get; set; }
@@ -11312,10 +11666,16 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the input noise level.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("noiseLevel")]
 		float NoiseLevel { get; set; }
 
+		/// <summary>Gets or sets the input sharpness.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("sharpness")]
 		float Sharpness { get; set; }
@@ -11335,6 +11695,9 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the scale factor for the tile effect.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("scale")]
 		float Scale { get; set; }
@@ -11354,10 +11717,16 @@ namespace CoreImage {
 	[Protocol (Name = "CIPageCurlTransition")]
 	interface CIPageCurlTransitionProtocol : CITransitionFilterProtocol {
 
+		/// <summary>Gets or sets the image that appears on the back side of the peeled page.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("backsideImage", ArgumentSemantic.Retain)]
 		CIImage BacksideImage { get; set; }
 
+		/// <summary>Gets or sets the image to use for shading.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("shadingImage", ArgumentSemantic.Retain)]
 		CIImage ShadingImage { get; set; }
@@ -11366,10 +11735,16 @@ namespace CoreImage {
 		[Export ("extent", ArgumentSemantic.Assign)]
 		CGRect InputExtent { get; set; }
 
+		/// <summary>Gets or sets the angle of the page transition.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("angle")]
 		float Angle { get; set; }
 
+		/// <summary>Gets or sets a value that controls the radius of the curl.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
@@ -11381,6 +11756,9 @@ namespace CoreImage {
 	[Protocol (Name = "CIPageCurlWithShadowTransition")]
 	interface CIPageCurlWithShadowTransitionProtocol : CITransitionFilterProtocol {
 
+		/// <summary>Gets or sets the image that appears on the back side of the peeled page</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("backsideImage", ArgumentSemantic.Retain)]
 		CIImage BacksideImage { get; set; }
@@ -11389,18 +11767,30 @@ namespace CoreImage {
 		[Export ("extent", ArgumentSemantic.Assign)]
 		CGRect InputExtent { get; set; }
 
+		/// <summary>Gets or sets the angle of the page transition.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("angle")]
 		float Angle { get; set; }
 
+		/// <summary>Gets or sets a value that controls the radius of the curl.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>Gets or sets the size of the shadow effect.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("shadowSize")]
 		float ShadowSize { get; set; }
 
+		/// <summary>Gets or sets the darkness of the shadow effect.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("shadowAmount")]
 		float ShadowAmount { get; set; }
@@ -11466,6 +11856,9 @@ namespace CoreImage {
 		[Export ("angle")]
 		float Angle { get; set; }
 
+		/// <summary>Gets or sets the angle of the most acute corners of the parallelograms in the tile pattern.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("acuteAngle")]
 		float AcuteAngle { get; set; }
@@ -11485,18 +11878,30 @@ namespace CoreImage {
 		[Export ("message", ArgumentSemantic.Retain)]
 		NSData Message { get; set; }
 
+		/// <summary>Gets or sets the minimum width of the data area, in pixels.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("minWidth")]
 		float MinWidth { get; set; }
 
+		/// <summary>Gets or sets the maximum width of the data area, in pixels.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("maxWidth")]
 		float MaxWidth { get; set; }
 
+		/// <summary>Gets or sets the minimum height of the data area, in pixels.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("minHeight")]
 		float MinHeight { get; set; }
 
+		/// <summary>Gets or sets the maximum height of the data area, in pixels.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("maxHeight")]
 		float MaxHeight { get; set; }
@@ -11509,6 +11914,9 @@ namespace CoreImage {
 		[Export ("rows")]
 		float InputRows { get; set; }
 
+		/// <summary>Gets or sets the preferred aspect ratio of the generated code.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("preferredAspectRatio")]
 		float PreferredAspectRatio { get; set; }
@@ -11648,6 +12056,9 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the size of the pixels to create.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("scale")]
 		float Scale { get; set; }
@@ -11663,6 +12074,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the radius of the points in the pattern.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
@@ -11682,6 +12096,9 @@ namespace CoreImage {
 		[Export ("message", ArgumentSemantic.Retain)]
 		NSData Message { get; set; }
 
+		/// <summary>Gets or sets the error correction level.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("correctionLevel", ArgumentSemantic.Retain)]
 		string CorrectionLevel { get; set; }
@@ -11697,18 +12114,30 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the first radius of the gradient.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>Application developers can set either of the two radii to be the larger. Swapping radii is equivalent to swapping colors.</remarks>
 		[Abstract]
 		[Export ("radius0")]
 		float Radius0 { get; set; }
 
+		/// <summary>Gets or sets the second radius of the gradient.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>Application developers can set either of the two radii to be the larger. Swapping radii is equivalent to swapping colors.</remarks>
 		[Abstract]
 		[Export ("radius1")]
 		float Radius1 { get; set; }
 
+		/// <summary>Gets or sets the color at the <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=Core%20Image%20CIColor%20Radius%200&amp;scope=Xamarin" title="P:CoreImage.CIColor.Radius0">P:CoreImage.CIColor.Radius0</a></format> location in the gradient.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color0", ArgumentSemantic.Retain)]
 		CIColor Color0 { get; set; }
 
+		/// <summary>Gets or sets the color at the <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=Core%20Image%20CIColor%20Radius%201&amp;scope=Xamarin" title="P:CoreImage.CIColor.Radius1">P:CoreImage.CIColor.Radius1</a></format> location in the gradient.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color1", ArgumentSemantic.Retain)]
 		CIColor Color1 { get; set; }
@@ -11727,6 +12156,9 @@ namespace CoreImage {
 	[Protocol (Name = "CIRippleTransition")]
 	interface CIRippleTransitionProtocol : CITransitionFilterProtocol {
 
+		/// <summary>Gets or sets the shading map to use for shading the transition effect.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("shadingImage", ArgumentSemantic.Retain)]
 		CIImage ShadingImage { get; set; }
@@ -11739,10 +12171,16 @@ namespace CoreImage {
 		[Export ("extent", ArgumentSemantic.Assign)]
 		CGRect InputExtent { get; set; }
 
+		/// <summary>Gets or sets the width of the ripple wave.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("width")]
 		float Width { get; set; }
 
+		/// <summary>Gets or sets the intensity of the ripple effect. Default is 100</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("scale")]
 		float Scale { get; set; }
@@ -11789,6 +12227,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets a value in the range (0,...) that controls the intensity of the sepia filter.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("intensity")]
 		float Intensity { get; set; }
@@ -11804,10 +12245,16 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the height field to use for shading.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed, Export ("shadingImage", ArgumentSemantic.Retain)]
 		CIImage ShadingImage { get; set; }
 
+		/// <summary>Gets or sets a multiplier for the height field.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("scale")]
 		float Scale { get; set; }
@@ -11823,6 +12270,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the amount by which to sharpen.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("sharpness")]
 		float Sharpness { get; set; }
@@ -11894,10 +12344,16 @@ namespace CoreImage {
 		[Export ("point1", ArgumentSemantic.Assign)]
 		CGPoint InputPoint1 { get; set; }
 
+		/// <summary>The color associated with <see cref="P:CoreImage.CISmoothLinearGradient.Point0" />.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color0", ArgumentSemantic.Retain)]
 		CIColor Color0 { get; set; }
 
+		/// <summary>The color associated with <see cref="P:CoreImage.CISmoothLinearGradient.Point1" /></summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color1", ArgumentSemantic.Retain)]
 		CIColor Color1 { get; set; }
@@ -11913,50 +12369,86 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the center of the first color range.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("centerColor1", ArgumentSemantic.Retain)]
 		CIColor CenterColor1 { get; set; }
 
+		/// <summary>Gets or sets the first replacement color.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("replacementColor1", ArgumentSemantic.Retain)]
 		CIColor ReplacementColor1 { get; set; }
 
+		/// <summary>Gets or sets the width about the center of the first color range.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("closeness1")]
 		float Closeness1 { get; set; }
 
+		/// <summary>Gets or sets the contrast of the first color range.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("contrast1")]
 		float Contrast1 { get; set; }
 
+		/// <summary>Gets or sets the center of the second color range.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("centerColor2", ArgumentSemantic.Retain)]
 		CIColor CenterColor2 { get; set; }
 
+		/// <summary>Gets or sets the second replacement color.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("replacementColor2", ArgumentSemantic.Retain)]
 		CIColor ReplacementColor2 { get; set; }
 
+		/// <summary>Gets or sets the width about the center of the second color range.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("closeness2")]
 		float Closeness2 { get; set; }
 
+		/// <summary>Gets or sets the contrast of the second color range.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("contrast2")]
 		float Contrast2 { get; set; }
 
+		/// <summary>Gets or sets the center of the third color range.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("centerColor3", ArgumentSemantic.Retain)]
 		CIColor CenterColor3 { get; set; }
 
+		/// <summary>Gets or sets the third replacement color.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("replacementColor3", ArgumentSemantic.Retain)]
 		CIColor ReplacementColor3 { get; set; }
 
+		/// <summary>Gets or sets the width about the center of the third color range.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("closeness3")]
 		float Closeness3 { get; set; }
 
+		/// <summary>Gets or sets the contrast of the third color range.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("contrast3")]
 		float Contrast3 { get; set; }
@@ -11972,22 +12464,37 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the 3-dimensional point in image coordinates from which the spotlight shines.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("lightPosition", ArgumentSemantic.Retain)]
 		CIVector LightPosition { get; set; }
 
+		/// <summary>Gets or sets the 3-dimensional point in image coordinates at which the spotlight points.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("lightPointsAt", ArgumentSemantic.Retain)]
 		CIVector LightPointsAt { get; set; }
 
+		/// <summary>Gets or sets the brightness of the spotlight.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("brightness")]
 		float Brightness { get; set; }
 
+		/// <summary>Gets or sets a value that controls how tightly the spotlight beam is focused.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("concentration")]
 		float Concentration { get; set; }
 
+		/// <summary>Gets or sets the color of the spotlight.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color", ArgumentSemantic.Retain)]
 		CIColor Color { get; set; }
@@ -12014,30 +12521,51 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the color of the star shine filter.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color", ArgumentSemantic.Retain)]
 		CIColor Color { get; set; }
 
+		/// <summary>Gets or sets the radius of the entire flare.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>Gets or sets the ratio of the cross spike lengths to the radius of the center.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("crossScale")]
 		float CrossScale { get; set; }
 
+		/// <summary>Gets or sets the angle that the cross of the star shine makes with the horizontal, in radians.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("crossAngle")]
 		float CrossAngle { get; set; }
 
+		/// <summary>Gets or sets a value that controls the thickness of the radial spikes of the star shine.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("crossOpacity")]
 		float CrossOpacity { get; set; }
 
+		/// <summary>Gets or sets the thickness of the radial spikes of the star shine.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("crossWidth")]
 		float CrossWidth { get; set; }
 
+		/// <summary>Gets or sets the epsilon value for the star shine generator.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("epsilon")]
 		float Epsilon { get; set; }
@@ -12053,6 +12581,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the angle, in degrees, by which to rotate the image. (The image will be scaled to fit its original size.)</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("angle")]
 		float Angle { get; set; }
@@ -12068,18 +12599,30 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets first stripe color.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color0", ArgumentSemantic.Retain)]
 		CIColor Color0 { get; set; }
 
+		/// <summary>Gets or sets the second stripe color.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color1", ArgumentSemantic.Retain)]
 		CIColor Color1 { get; set; }
 
+		/// <summary>Gets or sets the width of the stripes.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("width")]
 		float Width { get; set; }
 
+		/// <summary>Gets or sets the sharpness of the stripe pattern. 1 is sharp. 0 is maximally blurry.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("sharpness")]
 		float Sharpness { get; set; }
@@ -12095,26 +12638,44 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the color of the sunbeam effect.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color", ArgumentSemantic.Retain)]
 		CIColor Color { get; set; }
 
+		/// <summary>Gets or sets the radius of the solid portion of the effect.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("sunRadius")]
 		float SunRadius { get; set; }
 
+		/// <summary>Gets or sets the maximum length of sunbeam rays.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("maxStriationRadius")]
 		float MaxStriationRadius { get; set; }
 
+		/// <summary>Gets or sets the intensity of the rays.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("striationStrength")]
 		float StriationStrength { get; set; }
 
+		/// <summary>Gets or sets the contrast of the rays.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("striationContrast")]
 		float StriationContrast { get; set; }
 
+		/// <summary>Gets or sets the time for the effect. Application developers can use this property to cause the effect to shimmer</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("time")]
 		float Time { get; set; }
@@ -12157,10 +12718,16 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>A vector that represents tne temperature and tint of the source image.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("neutral", ArgumentSemantic.Retain)]
 		CIVector Neutral { get; set; }
 
+		/// <summary>A vector that represents tne temperature and tint of the target image.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("targetNeutral", ArgumentSemantic.Retain)]
 		CIVector TargetNeutral { get; set; }
@@ -12252,14 +12819,23 @@ namespace CoreImage {
 		[Export ("point", ArgumentSemantic.Assign)]
 		CGPoint InputPoint { get; set; }
 
+		/// <summary>Gets or sets the characteristic size of the region to sample.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("size")]
 		float Size { get; set; }
 
+		/// <summary>Gets or sets the rotation of the kaleidoscopic effect.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("rotation")]
 		float Rotation { get; set; }
 
+		/// <summary>Gets or sets the decay.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("decay")]
 		float Decay { get; set; }
@@ -12321,10 +12897,16 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the radius of the smallest feature to detect.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>Gets or sets the intensity of the enhanced contrast.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("intensity")]
 		float Intensity { get; set; }
@@ -12340,6 +12922,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets a value in the range [-1,1] that controls the vibrance filter.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("amount")]
 		float Amount { get; set; }
@@ -12355,10 +12940,16 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the intensity of the vignette effect.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("intensity")]
 		float Intensity { get; set; }
 
+		/// <summary>Gets or sets the radius of the vignette effect.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
@@ -12378,14 +12969,23 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the radius of the area that will not be obscured.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("radius")]
 		float Radius { get; set; }
 
+		/// <summary>Gets or sets the intensity of the vignette.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("intensity")]
 		float Intensity { get; set; }
 
+		/// <summary>The rate of decay of the effect.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("falloff")]
 		float Falloff { get; set; }
@@ -12401,6 +13001,9 @@ namespace CoreImage {
 		[NullAllowed, Export ("inputImage", ArgumentSemantic.Retain)]
 		CIImage InputImage { get; set; }
 
+		/// <summary>Gets or sets the new white point color.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color", ArgumentSemantic.Retain)]
 		CIColor Color { get; set; }
@@ -12431,6 +13034,9 @@ namespace CoreImage {
 		[Export ("center", ArgumentSemantic.Assign)]
 		CGPoint InputCenter { get; set; }
 
+		/// <summary>Gets or sets the amount of blur.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("amount")]
 		float Amount { get; set; }

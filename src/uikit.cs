@@ -7205,6 +7205,7 @@ namespace UIKit {
 		UIColor DarkTextColor { get; }
 #endif
 
+		/// <summary>The system color for displaying text on a light background.</summary>
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("darkTextColor")]

@@ -539,11 +539,31 @@
             Summary for TG1.TGProperty
             </summary>
         </member>
+        <member name="P:XmlDocumentation.TOuter.TInner.TOuterInnerField">
+            <summary>TOuter.TInner.Field</summary>
+        </member>
+        <member name="P:XmlDocumentation.TOuter.TInner.TOuterInnerField2">
+            <summary>Represents the value associated with the constant 'TOuterInnerField2'.</summary>
+        </member>
         <member name="T:XmlDocumentation.OptionsA">
             <summary>Summary for OptionsA.</summary>
         </member>
+        <member name="M:XmlDocumentation.OptionsA.#ctor">
+            <summary>Creates a new <see cref="T:XmlDocumentation.OptionsA" /> with default (empty) values.</summary>
+        </member>
+        <member name="M:XmlDocumentation.OptionsA.#ctor(Foundation.NSDictionary)">
+            <summary>Creates a new <see cref="T:XmlDocumentation.OptionsA" /> from the values that are specified in <paramref name="dictionary" />.</summary>
+            <param name="dictionary">The dictionary to use to populate the properties of this type.</param>
+        </member>
         <member name="P:XmlDocumentation.OptionsA.Option1">
             <summary>Summary for Option1.</summary>
+        </member>
+        <member name="M:XmlDocumentation.OptionsB.#ctor">
+            <summary>Creates a new <see cref="T:XmlDocumentation.OptionsB" /> with default (empty) values.</summary>
+        </member>
+        <member name="M:XmlDocumentation.OptionsB.#ctor(Foundation.NSDictionary)">
+            <summary>Creates a new <see cref="T:XmlDocumentation.OptionsB" /> from the values that are specified in <paramref name="dictionary" />.</summary>
+            <param name="dictionary">The dictionary to use to populate the properties of this type.</param>
         </member>
         <member name="P:XmlDocumentation.OptionsB.Option1">
             <summary>Summary for Option1.</summary>

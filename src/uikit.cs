@@ -17596,12 +17596,12 @@ namespace UIKit {
 		void SetDividerImage ([NullAllowed] UIImage dividerImage, UIControlState leftSegmentState, UIControlState rightSegmentState, UIBarMetrics barMetrics);
 
 		/// <param name="leftState">To be added.</param>
-			/// <param name="rightState">To be added.</param>
-			/// <param name="barMetrics">To be added.</param>
-			/// <summary>The divider image for the specified UIControlStates and UIBarMetrics.</summary>
-			/// <returns>To be added.</returns>
-			/// <remarks>To be added.</remarks>
-			[Export ("dividerImageForLeftSegmentState:rightSegmentState:barMetrics:")]
+		/// <param name="rightState">To be added.</param>
+		/// <param name="barMetrics">To be added.</param>
+		/// <summary>The divider image for the specified UIControlStates and UIBarMetrics.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[Export ("dividerImageForLeftSegmentState:rightSegmentState:barMetrics:")]
 		[Appearance]
 		[return: NullAllowed]
 #if NET

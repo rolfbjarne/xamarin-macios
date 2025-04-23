@@ -21,7 +21,7 @@ namespace LinkSdk.Net.Http {
 		{
 			using (var client = new HttpClient (handler)) {
 				var get = Get (client);
-				get.Wait ();
+				Assert.IsTrue (get.Wait (TimeSpan.FromSeconds (30)), "Timed out");
 				return get.Result;
 			}
 		}
@@ -76,7 +76,7 @@ namespace LinkSdk.Net.Http {
 		{
 			var result = Get302 (client);
 			try {
-				result.Wait ();
+				Assert.IsTrue (result.Wait (TimeSpan.FromSeconds (30)), "Timed out");
 				if (!allowRedirect)
 					Assert.Fail ("Redirection *dis*allowed - assert should not be reached");
 				Assert.That (result.Result, Contains.Substring ("You have reached the target"), "true");

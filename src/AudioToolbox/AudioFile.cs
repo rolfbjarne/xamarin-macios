@@ -141,7 +141,7 @@ namespace AudioToolbox {
 		FilePosition = -40,
 	}
 
-	/// <summary>An enumeration whose values specify the <c>permissions</c> argument in the <see cref="AudioToolbox.AudioFile.Open*" /> method.</summary>
+	/// <summary>An enumeration whose values specify the <c>permissions</c> argument in the <see cref="AudioToolbox.AudioFile.Open" /> method.</summary>
 	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum AudioFilePermission {
@@ -153,7 +153,7 @@ namespace AudioToolbox {
 		ReadWrite = 0x03,
 	}
 
-	/// <summary>An enumeration whose values are valid flags for the <see cref="AudioToolbox.AudioFile.Create*" /> method.</summary>
+	/// <summary>An enumeration whose values are valid flags for the <see cref="AudioToolbox.AudioFile.Create" /> method.</summary>
 	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum AudioFileFlags { // UInt32 in AudioFileCreateWithURL()

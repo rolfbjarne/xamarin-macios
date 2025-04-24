@@ -41,9 +41,9 @@ namespace AppKit {
 		private NSBitmapImageRep (NSObjectFlag a, NSObjectFlag b) : base (a)
 		{
 			if (IsDirectBinding) {
-				Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, selInitForIncrementalLoad);
+				InitializeHandle (ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, selInitForIncrementalLoad), "initForIncrementalLoad");
 			} else {
-				Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (this.SuperHandle, selInitForIncrementalLoad);
+				InitializeHandle (ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (this.SuperHandle, selInitForIncrementalLoad), "initForIncrementalLoad");
 			}
 		}
 
@@ -56,9 +56,7 @@ namespace AppKit {
 			return RepresentationUsingTypeProperties (storageType, null);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Create a new <see cref="NSBitmapImageRep" /> that for incremental loading.</summary>
 		public static NSBitmapImageRep IncrementalLoader ()
 		{
 			return new NSBitmapImageRep (NSObjectFlag.Empty, NSObjectFlag.Empty);

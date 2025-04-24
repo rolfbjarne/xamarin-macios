@@ -13,7 +13,7 @@
     <remarks>
       <para>
 	Methods of this signature are invoked in response to the
-	<see cref="AudioToolbox.AudioConverter.FillComplexBuffer(System.Int32@,AudioToolbox.AudioBuffers,AudioToolbox.AudioStreamPacketDescription[],AudioToolbox.AudioConverterComplexInputData)" />
+	<see cref="AudioToolbox.AudioConverter.FillComplexBuffer(ref System.Int32,AudioToolbox.AudioBuffers,AudioToolbox.AudioStreamPacketDescription[],AudioToolbox.AudioConverterComplexInputData)" />
 	method requesting audio buffers to be provided.
       </para>
     </remarks>

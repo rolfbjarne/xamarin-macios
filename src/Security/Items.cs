@@ -306,7 +306,7 @@ namespace Security {
 		///         <returns>Returns a stronglty typed SecRecord.</returns>
 		///         <remarks>
 		///           <para>
-		/// 	    Unlike the <see cref="Security.SecKeyChain.QueryAsData(Security.SecRecord,System.Boolean,System.Int32,Security.SecStatusCode@)" />
+		/// 	    Unlike the <see cref="Security.SecKeyChain.QueryAsData(Security.SecRecord,System.Boolean,System.Int32,out Security.SecStatusCode)" />
 		/// 	    methods which return a binary blob inside an NSData, this
 		/// 	    returns a strongly typed SecRecord that you can easily
 		/// 	    inspect.

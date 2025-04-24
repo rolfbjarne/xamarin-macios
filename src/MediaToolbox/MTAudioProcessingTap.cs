@@ -346,7 +346,7 @@ namespace MediaToolbox {
 	}
 
 	// uint32_t -> MTAudioProcessingTap.h
-	/// <summary>An enumeration that specifies flags to be used with the <see cref="MediaToolbox.MTAudioProcessingTap.GetSourceAudio(System.nint,AudioToolbox.AudioBuffers,MediaToolbox.MTAudioProcessingTapFlags@,CoreMedia.CMTimeRange@,System.nint@)" /> method, and the <see cref="MediaToolbox.MTAudioProcessingTapProcessCallback" /> and <see cref="MediaToolbox.MTAudioProcessingTapProcessDelegate" /> constructors.</summary>
+	/// <summary>An enumeration that specifies flags to be used with the <see cref="MediaToolbox.MTAudioProcessingTap.GetSourceAudio(System.nint,AudioToolbox.AudioBuffers,ref MediaToolbox.MTAudioProcessingTapFlags,ref CoreMedia.CMTimeRange,ref System.IntPtr)" /> method, and the <see cref="MediaToolbox.MTAudioProcessingTapProcessCallback" /> and <see cref="MediaToolbox.MTAudioProcessingTapProcessDelegate" /> constructors.</summary>
 	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum MTAudioProcessingTapFlags : uint {
@@ -358,7 +358,7 @@ namespace MediaToolbox {
 
 	// used as OSStatus (4 bytes)
 	// Not documented error codes
-	/// <summary>An enumeration whose values indicate whether there was an argument error when calling the <see cref="MediaToolbox.MTAudioProcessingTap.GetSourceAudio(System.nint,AudioToolbox.AudioBuffers,MediaToolbox.MTAudioProcessingTapFlags@,CoreMedia.CMTimeRange@,System.nint@)" /> method.</summary>
+	/// <summary>An enumeration whose values indicate whether there was an argument error when calling the <see cref="MediaToolbox.MTAudioProcessingTap.GetSourceAudio(System.IntPtr,AudioToolbox.AudioBuffers,ref MediaToolbox.MTAudioProcessingTapFlags,ref CoreMedia.CMTimeRange,ref System.IntPtr)" /> method.</summary>
 	///     <remarks>To be added.</remarks>
 	public enum MTAudioProcessingTapError {
 		/// <summary>To be added.</summary>

@@ -17193,7 +17193,7 @@ namespace AVFoundation {
 
 	/// <summary>Support for accessing the audio and video capture hardware for AVCaptureSession.</summary>
 	///     <remarks>
-	///       <para>Once a capture session has begun, application developers must bracket configuration changes with calls to <see cref="AVFoundation.AVCaptureDevice.LockForConfiguration(Foundation.NSError@)" /> and <see cref="AVFoundation.AVCaptureDevice.UnlockForConfiguration" />.</para>
+	///       <para>Once a capture session has begun, application developers must bracket configuration changes with calls to <see cref="AVFoundation.AVCaptureDevice.LockForConfiguration(out Foundation.NSError)" /> and <see cref="AVFoundation.AVCaptureDevice.UnlockForConfiguration" />.</para>
 	///     </remarks>
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVCaptureDevice_Class/index.html">Apple documentation for <c>AVCaptureDevice</c></related>
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
@@ -17855,7 +17855,7 @@ namespace AVFoundation {
 			        </returns>
 			<remarks>
 			          <para copied="true">The SetWhiteBalanceModeLockedWithDeviceWhiteBalanceGainsAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <see cref="AVFoundation.AVCaptureDevice.LockForConfiguration(Foundation.NSError@)" copied="true" />
+			          <see cref="AVFoundation.AVCaptureDevice.LockForConfiguration(out Foundation.NSError)" copied="true" />
 			        </remarks>
 			""")]
 		void SetWhiteBalanceModeLockedWithDeviceWhiteBalanceGains (AVCaptureWhiteBalanceGains whiteBalanceGains, [NullAllowed] Action<CMTime> completionHandler);

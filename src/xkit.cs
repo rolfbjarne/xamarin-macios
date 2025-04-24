@@ -1391,10 +1391,10 @@ namespace UIKit {
 
 		/// <param name="point">To be added.</param>
 		/// <param name="container">To be added.</param>
-		/// <summary>Developers should call <see cref="UIKit.NSLayoutManager.GetGlyphIndex(CoreGraphics.CGPoint,UIKit.NSTextContainer,System.nfloat@)" /> rather than this primitive method.</summary>
+		/// <summary>Developers should call <see cref="UIKit.NSLayoutManager.GetGlyphIndex(CoreGraphics.CGPoint,UIKit.NSTextContainer,out System.Runtime.InteropServices.NFloat)" /> rather than this primitive method.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>
-		///           <para>This method is public for overriding purposes. Developers should call <see cref="UIKit.NSLayoutManager.GetGlyphIndex(CoreGraphics.CGPoint,UIKit.NSTextContainer,System.nfloat@)" />  rather than this primitive method.</para>
+		///           <para>This method is public for overriding purposes. Developers should call <see cref="UIKit.NSLayoutManager.GetGlyphIndex(CoreGraphics.CGPoint,UIKit.NSTextContainer,ref System.Runtime.InteropServices.NFloat)" />  rather than this primitive method.</para>
 		///         </remarks>
 		[Export ("glyphIndexForPoint:inTextContainer:")]
 #if NET

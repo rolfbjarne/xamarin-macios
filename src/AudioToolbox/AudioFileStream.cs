@@ -55,7 +55,7 @@ namespace AudioToolbox {
 		CacheProperty = 2,
 	}
 
-	/// <summary>An enumeration whose values indicate the status following calls to the <see cref="AudioToolbox.AudioFileStream.Seek(System.Int64,System.Int64@,System.Boolean@)" /> or <see cref="AudioToolbox.AudioFileStream.ParseBytes(System.Byte[],System.Int32,System.Int32,System.Boolean)" /> methods.</summary>
+	/// <summary>An enumeration whose values indicate the status following calls to the <see cref="AudioToolbox.AudioFileStream.Seek(System.Int64,ref System.Int64,ref System.Boolean)" /> or <see cref="AudioToolbox.AudioFileStream.ParseBytes(System.Byte[],System.Int32,System.Int32,System.Boolean)" /> methods.</summary>
 	///     <remarks>To be added.</remarks>
 	public enum AudioFileStreamStatus { // Implictly cast to OSType
 		/// <summary>To be added.</summary>

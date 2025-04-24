@@ -28,7 +28,7 @@ namespace CoreGraphics {
 	/// 	You can save the CGRect into an <see cref="Foundation.NSDictionary" /> by calling the
 	/// 	<see cref="CoreGraphics.CGRect.ToDictionary" />
 	/// 	method.   You can also get an CGRect out a serialized
-	/// 	dictionary by using the <see cref="CoreGraphics.CGRect.TryParse(Foundation.NSDictionary,CoreGraphics.CGRect@)" /> method. 
+	/// 	dictionary by using the <see cref="CoreGraphics.CGRect.TryParse(Foundation.NSDictionary,out CoreGraphics.CGRect)" /> method. 
 	///       </para>
 	///     </remarks>
 	[Serializable]
@@ -584,7 +584,7 @@ namespace CoreGraphics {
 		/// 	  </para>
 		///           <para>
 		/// 	    It is possible to create CGRect from a Dictionary using
-		/// 	    the <see cref="CoreGraphics.CGRect.TryParse(Foundation.NSDictionary,CoreGraphics.CGRect@)" />
+		/// 	    the <see cref="CoreGraphics.CGRect.TryParse(Foundation.NSDictionary,out CoreGraphics.CGRect)" />
 		/// 	    method. 
 		/// 	  </para>
 		///         </remarks>

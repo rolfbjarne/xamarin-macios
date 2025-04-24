@@ -1160,7 +1160,7 @@ namespace HealthKit {
 	/// <summary>Completion handler for <see cref="HealthKit.HKHealthStore.AddSamples(HealthKit.HKSample[],HealthKit.HKWorkout,HealthKit.HKStoreSampleAddedCallback)" />.</summary>
 	delegate void HKStoreSampleAddedCallback (bool success, NSError error);
 
-	/// <summary>Returned by <see cref="HealthKit.HKHealthStore.GetBiologicalSex(Foundation.NSError@)" />.</summary>
+	/// <summary>Returned by <see cref="HealthKit.HKHealthStore.GetBiologicalSex(out Foundation.NSError)" />.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/HealthKit/Reference/HKBiologicalSexObject_Class/index.html">Apple documentation for <c>HKBiologicalSexObject</c></related>
 	[Mac (13, 0)]
@@ -1171,7 +1171,7 @@ namespace HealthKit {
 		HKBiologicalSex BiologicalSex { get; }
 	}
 
-	/// <summary>Returned by <see cref="HealthKit.HKHealthStore.GetBloodType(Foundation.NSError@)" /></summary>
+	/// <summary>Returned by <see cref="HealthKit.HKHealthStore.GetBloodType(out Foundation.NSError)" /></summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/help/HKBloodTypeObject_Class/index.html">Apple documentation for <c>HKBloodTypeObject</c></related>
 	[Mac (13, 0)]

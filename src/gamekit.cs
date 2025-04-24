@@ -111,7 +111,7 @@ namespace GameKit {
 	/// <param name="composeController">To be added.</param>
 	/// <param name="issuedChallenge">To be added.</param>
 	/// <param name="sentPlayerIDs">To be added.</param>
-	/// <summary>Completion handler for for the <see cref="GameKit.GKScore.ChallengeComposeControllerAsync(System.String,GameKit.GKPlayer[],UIKit.UIViewController@)" /> method.</summary>
+	/// <summary>Completion handler for for the <see cref="GameKit.GKScore.ChallengeComposeControllerAsync(System.String,GameKit.GKPlayer[],out UIKit.UIViewController)" /> method.</summary>
 	/// <remarks>To be added.</remarks>
 	delegate void GKChallengeComposeHandler (UIViewController composeController, bool issuedChallenge, string [] sentPlayerIDs);
 	delegate void GKChallengeComposeHandler2 (UIViewController composeController, bool issuedChallenge, [NullAllowed] GKPlayer [] sentPlayers);

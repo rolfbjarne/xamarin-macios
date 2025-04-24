@@ -163,7 +163,7 @@ namespace AudioToolbox {
 		DontPageAlignAudioData = 2,
 	}
 
-	/// <summary>An enumeration whose values represent information about a <see cref="AudioToolbox.AudioFile" />. See the <see cref="AudioToolbox.AudioFileStream.GetProperty(AudioToolbox.AudioFileStreamProperty,System.Int32@,System.IntPtr)" /> and <see cref="AudioToolbox.AudioFile.SetProperty(AudioToolbox.AudioFileProperty,System.Int32,System.IntPtr)" /> methods.</summary>
+	/// <summary>An enumeration whose values represent information about a <see cref="AudioToolbox.AudioFile" />. See the <see cref="AudioToolbox.AudioFileStream.GetProperty(AudioToolbox.AudioFileStreamProperty,ref System.Int32,System.IntPtr)" /> and <see cref="AudioToolbox.AudioFile.SetProperty(AudioToolbox.AudioFileProperty,System.Int32,System.IntPtr)" /> methods.</summary>
 	///     <remarks>To be added.</remarks>
 	public enum AudioFileProperty { // typedef UInt32 AudioFilePropertyID
 		/// <summary>To be added.</summary>

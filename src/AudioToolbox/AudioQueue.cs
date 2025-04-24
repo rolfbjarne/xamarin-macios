@@ -320,7 +320,7 @@ namespace AudioToolbox {
 	///     <remarks>
 	///       <para>
 	/// 	The PostEffects, PreEffects, Siphon values are used both when
-	/// 	creating a audio queue tap (using <see cref="AudioToolbox.AudioQueue.CreateProcessingTap(AudioToolbox.AudioQueueProcessingTapDelegate,AudioToolbox.AudioQueueProcessingTapFlags,AudioToolbox.AudioQueueStatus@)" />)
+	/// 	creating a audio queue tap (using <see cref="AudioToolbox.AudioQueue.CreateProcessingTap(AudioToolbox.AudioQueueProcessingTapDelegate,AudioToolbox.AudioQueueProcessingTapFlags,out AudioToolbox.AudioQueueStatus)" />)
 	/// 	and are provided to the tap callback (of type <see cref="AudioToolbox.AudioQueueProcessingTapDelegate" />).
 	///
 	///       </para>
@@ -728,7 +728,7 @@ namespace AudioToolbox {
 		///         <returns>AudioQueueStatus.Ok on success, otherwise the error. </returns>
 		///         <remarks>
 		///           <para>
-		/// 	    Use the <see cref="AudioToolbox.AudioQueue.AllocateBufferWithPacketDescriptors(System.Int32,System.Int32,System.IntPtr@)" /> to allocate buffers that will be used with variable bit
+		/// 	    Use the <see cref="AudioToolbox.AudioQueue.AllocateBufferWithPacketDescriptors(System.Int32,System.Int32,ref System.IntPtr)" /> to allocate buffers that will be used with variable bit
 		/// 	    rate encodings.
 		/// 	  </para>
 		///           <para>Use <see cref="AudioToolbox.AudioQueue.FreeBuffer(System.IntPtr)" /> to dispose the buffer.</para>
@@ -766,7 +766,7 @@ namespace AudioToolbox {
 		///         <returns>AudioQueueStatus.Ok on success and the audioQueueBuffer pointing to the buffer, otherwise the error.</returns>
 		///         <remarks>
 		///           <para>
-		/// 	    Use the <see cref="AudioToolbox.AudioQueue.AllocateBuffer(System.Int32,AudioToolbox.AudioQueueBuffer*@)" /> to allocate buffers that will be used with fixed bit
+		/// 	    Use the <see cref="AudioToolbox.AudioQueue.AllocateBuffer(System.Int32,ref AudioToolbox.AudioQueueBuffer*)" /> to allocate buffers that will be used with fixed bit
 		/// 	    rate encodings.
 		/// 	  </para>
 		///           <para>Use <see cref="AudioToolbox.AudioQueue.FreeBuffer(System.IntPtr)" /> to dispose the buffer.</para>
@@ -1729,7 +1729,7 @@ namespace AudioToolbox {
 	/// <summary>Holds the state for an AudioQueue processing tap.</summary>
 	///     <remarks>
 	///       <para>
-	/// 	Instances of this class are returned by the <see cref="AudioToolbox.AudioQueue.CreateProcessingTap(AudioToolbox.AudioQueueProcessingTapDelegate,AudioToolbox.AudioQueueProcessingTapFlags,AudioToolbox.AudioQueueStatus@)" />
+	/// 	Instances of this class are returned by the <see cref="AudioToolbox.AudioQueue.CreateProcessingTap(AudioToolbox.AudioQueueProcessingTapDelegate,AudioToolbox.AudioQueueProcessingTapFlags,out AudioToolbox.AudioQueueStatus)" />
 	/// 	from AudioQueue and hold the state to the audio processing tap that was created as well as containing information like MaxFrames and the ProcessingFormat.
 	///       </para>
 	///       <para>
@@ -2134,7 +2134,7 @@ namespace AudioToolbox {
 	///       <para>
 	/// 	You create these objects by calling <see cref="AudioToolbox.AudioQueue.CreateTimeline" />
 	/// 	method and use them to probe audio discontinuities by calling
-	/// 	the <see cref="AudioToolbox.AudioQueue.GetCurrentTime(AudioToolbox.AudioQueueTimeline,AudioToolbox.AudioTimeStamp@,System.Boolean@)" />
+	/// 	the <see cref="AudioToolbox.AudioQueue.GetCurrentTime(AudioToolbox.AudioQueueTimeline,ref AudioToolbox.AudioTimeStamp,ref System.Boolean)" />
 	/// 	method.
 	///       </para>
 	///     </remarks>

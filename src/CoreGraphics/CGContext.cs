@@ -36,7 +36,9 @@ using ObjCRuntime;
 using Foundation;
 
 namespace CoreGraphics {
+#if !COREBUILD
 	/// <include file="../../docs/api/CoreGraphics/CGContext.xml" path="/Documentation/Docs[@DocId='T:CoreGraphics.CGContext']/*" />
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

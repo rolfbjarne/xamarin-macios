@@ -796,8 +796,10 @@ namespace AudioToolbox {
 	}
 #endif
 
+#if !COREBUILD
 	/// <summary>An enumeration whose values specify constants in the <see cref="AudioToolbox.AudioChannelLayout.Bitmap" /> property.</summary>
 	///     <remarks>To be added.</remarks>
+#endif
 	[Flags]
 	[NativeName ("AudioChannelBitmap")]
 	public enum AudioChannelBit : uint // UInt32 mChannelBitmap in AudioChannelLayout
@@ -2065,8 +2067,10 @@ namespace AudioToolbox {
 
 	// CoreAudioClock.h (inside AudioToolbox)
 	// It was a confusion between CA (CoreAudio) and CA (CoreAnimation)
+#if !COREBUILD
 	/// <summary>Struct defining bar beat time, for use with <see cref="AudioToolbox.MusicSequence" /> methods such as <see cref="AudioToolbox.MusicSequence.BarBeatTimeToBeats(AudioToolbox.CABarBeatTime,ref System.Double)" />.</summary>
 	///     <remarks>To be added.</remarks>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

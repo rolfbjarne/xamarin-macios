@@ -524,7 +524,9 @@ namespace CoreMidi {
 
 	delegate void MidiNotifyProc (IntPtr message, IntPtr context);
 
+#if !COREBUILD
 	/// <include file="../../docs/api/CoreMidi/MidiClient.xml" path="/Documentation/Docs[@DocId='T:CoreMidi.MidiClient']/*" />
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -1017,6 +1019,7 @@ namespace CoreMidi {
 
 	delegate void MidiReadProc (IntPtr packetList, IntPtr context, IntPtr srcPtr);
 
+#if !COREBUILD
 	/// <summary>Input and Output ports.</summary>
 	///     <remarks>
 	///
@@ -1025,6 +1028,7 @@ namespace CoreMidi {
 	///
 	///     </remarks>
 	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/CoreMidiSample/">CoreMidiSample</related>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -1786,6 +1790,7 @@ namespace CoreMidi {
 #endif // !COREBUILD
 	} // MidiEntity
 
+#if !COREBUILD
 	/// <summary>Represents a MIDI device (typically they represent a hardware device, but virtual devices also exist).   Devices can contain one or more entities.</summary>
 	///     <remarks>
 	///       <para>
@@ -1798,6 +1803,7 @@ namespace CoreMidi {
 	///
 	///       </para>
 	///     </remarks>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -3008,9 +3014,11 @@ namespace CoreMidi {
 	//
 	// The notification EventArgs
 	//
+#if !COREBUILD
 	/// <summary>Provides data for the <see cref="CoreMidi.MidiClient.ObjectRemoved" /> and <see cref="CoreMidi.ObjectAddedOrRemovedEventArgs.ObjectRemoved" /> events.</summary>
 	///     <remarks>
 	///     </remarks>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -3041,9 +3049,11 @@ namespace CoreMidi {
 		public MidiObject? Child { get; private set; }
 	}
 
+#if !COREBUILD
 	/// <summary>Provides data for the <see cref="CoreMidi.MidiClient.PropertyChanged" /> event.</summary>
 	///     <remarks>
 	///     </remarks>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -3072,9 +3082,11 @@ namespace CoreMidi {
 		public string? PropertyName { get; private set; }
 	}
 
+#if !COREBUILD
 	/// <summary>Provides data for the <see cref="CoreMidi.MidiClient.IOError" /> event.</summary>
 	///     <remarks>
 	///     </remarks>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -3103,10 +3115,12 @@ namespace CoreMidi {
 		public int ErrorCode { get; set; }
 	}
 
+#if !COREBUILD
 	/// <summary>Provides data for the <see cref="CoreMidi.MidiPort.MessageReceived" /> and <see cref="CoreMidi.MidiPacketsEventArgs.MessageReceived" /> events.</summary>
 	///     <remarks>
 	///     </remarks>
 	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/CoreMidiSample/">CoreMidiSample</related>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

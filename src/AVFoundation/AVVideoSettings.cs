@@ -175,8 +175,10 @@ namespace AVFoundation {
 
 #if !MONOMAC
 	// Convenience enum for native strings - AVVideoSettings.h
+#if !COREBUILD
 	/// <summary>An enumeration whose values specify values for <see cref="AVFoundation.AVVideoSettingsCompressed.EntropyEncoding" />.</summary>
 	///     <remarks>To be added.</remarks>
+#endif
 	public enum AVVideoH264EntropyMode {
 		/// <summary>To be added.</summary>
 		AdaptiveVariableLength,

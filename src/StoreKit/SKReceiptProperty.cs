@@ -20,8 +20,10 @@ using UIKit;
 using System;
 
 namespace StoreKit {
+#if !COREBUILD
 	/// <summary>Defines test properties for the <see cref="StoreKit.SKReceiptRefreshRequest(Foundation.NSDictionary)" /> constructor.</summary>
 	///     <remarks>To be added.</remarks>
+#endif
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]

@@ -76,7 +76,9 @@ namespace CoreFoundation {
 		Unspecified = 0x00,
 	}
 
+#if !COREBUILD
 	/// <include file="../../docs/api/CoreFoundation/DispatchObject.xml" path="/Documentation/Docs[@DocId='T:CoreFoundation.DispatchObject']/*" />
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -156,7 +158,9 @@ namespace CoreFoundation {
 #endif // !COREBUILD
 	}
 
+#if !COREBUILD
 	/// <include file="../../docs/api/CoreFoundation/DispatchQueue.xml" path="/Documentation/Docs[@DocId='T:CoreFoundation.DispatchQueue']/*" />
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

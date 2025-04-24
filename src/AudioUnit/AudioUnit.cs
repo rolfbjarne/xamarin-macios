@@ -166,8 +166,10 @@ namespace AudioUnit {
 	}
 
 #if NET
+#if !COREBUILD
 	/// <summary>Describes a sampler instrument. Used with <see cref="AudioUnit.AudioUnit.LoadInstrument(AudioUnit.SamplerInstrumentData,AudioUnit.AudioUnitScopeType,System.UInt32)" />.</summary>
 	///     <remarks>To be added.</remarks>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

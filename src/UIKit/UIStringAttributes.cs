@@ -40,6 +40,7 @@ using CoreText;
 
 namespace UIKit {
 
+#if !COREBUILD
 	/// <summary>Strongly helper to define UIKit attributes for use with <see cref="Foundation.NSAttributedString" />. </summary>
 	///     <remarks>
 	///       <para>
@@ -65,6 +66,7 @@ namespace UIKit {
 	/// 	]]></code>
 	///       </example>
 	///     </remarks>
+#endif
 	public class UIStringAttributes : DictionaryContainer {
 #if !COREBUILD
 		/// <summary>Default constructor</summary>

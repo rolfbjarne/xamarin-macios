@@ -37,6 +37,7 @@ using ObjCRuntime;
 using Foundation;
 
 namespace CoreGraphics {
+#if !COREBUILD
 	/// <summary>A hardware accelerated context.</summary>
 	///     <remarks>
 	///       <para>CGLayers can be hardware accelerated and developers are
@@ -50,6 +51,7 @@ namespace CoreGraphics {
 	///       </para>
 	///     </remarks>
 	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/Drawing/">Example_Drawing</related>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

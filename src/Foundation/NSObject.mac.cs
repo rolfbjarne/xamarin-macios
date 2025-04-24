@@ -30,7 +30,9 @@ using System.Reflection;
 using ObjCRuntime;
 
 namespace Foundation {
+#if !COREBUILD
 	/// <include file="../../docs/api/Foundation/NSObject.xml" path="/Documentation/Docs[@DocId='T:Foundation.NSObject']/*" />
+#endif
 	public partial class NSObject {
 #if !COREBUILD
 

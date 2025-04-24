@@ -16,6 +16,7 @@ using ObjCRuntime;
 
 namespace CoreGraphics {
 
+#if !COREBUILD
 	/// <summary>Structure defining a rectangle in terms of location and size.</summary>
 	///     <remarks>
 	///       <para>
@@ -31,6 +32,7 @@ namespace CoreGraphics {
 	/// 	dictionary by using the <see cref="CoreGraphics.CGRect.TryParse(Foundation.NSDictionary,out CoreGraphics.CGRect)" /> method. 
 	///       </para>
 	///     </remarks>
+#endif
 	[Serializable]
 	public struct CGRect : IEquatable<CGRect> {
 		nfloat x;
@@ -497,13 +499,17 @@ namespace CoreGraphics {
 		}
 #endif // !COREBUILD
 
+#if !COREBUILD
 		/// <include file="../../docs/api/CoreGraphics/CGRect.xml" path="/Documentation/Docs[@DocId='M:CoreGraphics.CGRect.Equals(System.Object)']/*" />
+#endif
 		public override bool Equals (object? obj)
 		{
 			return (obj is CGRect rect) && Equals (rect);
 		}
 
+#if !COREBUILD
 		/// <include file="../../docs/api/CoreGraphics/CGRect.xml" path="/Documentation/Docs[@DocId='M:CoreGraphics.CGRect.Equals(CoreGraphics.CGRect)']/*" />
+#endif
 		public bool Equals (CGRect rect)
 		{
 			return
@@ -513,7 +519,7 @@ namespace CoreGraphics {
 				height == rect.height;
 		}
 
-		/// <summary>Returns the hash code for this <see cref="CoreGraphics.CGRect" /> structure. For information about the use of hash codes, see <see cref="System.Object.GetHashCode*" /> .</summary>
+		/// <summary>Returns the hash code for this <see cref="CoreGraphics.CGRect" /> structure. For information about the use of hash codes, see <see cref="System.Object.GetHashCode" /> .</summary>
 		///         <returns>
 		///           <attribution license="cc4" from="Microsoft" modified="false" />
 		///           <para>An integer that represents the hash code for this rectangle.</para>

@@ -56,7 +56,9 @@ namespace CoreMotion {
 
 	// CMAttitude.h
 #if NET
+#if !COREBUILD
 	/// <include file="../../docs/api/CoreMotion/CMRotationMatrix.xml" path="/Documentation/Docs[@DocId='T:CoreMotion.CMRotationMatrix']/*" />
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

@@ -16,6 +16,7 @@ using Foundation;
 
 namespace UIKit {
 
+#if !COREBUILD
 	/// <summary>Attributes used to describe a font, used by <see cref="UIKit.UIFontDescriptor" /></summary>
 	///     <remarks>
 	///       <para>
@@ -35,6 +36,7 @@ namespace UIKit {
 	/// ]]></code>
 	///       </example>
 	///     </remarks>
+#endif
 	public class UIFontAttributes : DictionaryContainer {
 		/// <summary>Creates an empty UIFontAttributes.</summary>
 		///         <remarks>

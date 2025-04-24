@@ -35,7 +35,9 @@ using System.Runtime.Versioning;
 namespace Foundation {
 
 #if NET
+#if !COREBUILD
 	/// <include file="../../docs/api/Foundation/NSErrorEventArgs.xml" path="/Documentation/Docs[@DocId='T:Foundation.NSErrorEventArgs']/*" />
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

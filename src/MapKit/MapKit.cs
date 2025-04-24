@@ -22,8 +22,10 @@ namespace MapKit {
 
 	// MKTileOverlay.h
 #if NET
+#if !COREBUILD
 	/// <summary>Encapsulates the index values of a particular <see cref="MapKit.MKTileOverlay" />.</summary>
 	///     <remarks>To be added.</remarks>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -31,6 +33,7 @@ namespace MapKit {
 #endif
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MKTileOverlayPath {
+#if !COREBUILD
 		/// <summary>The index of the <see cref="MapKit.MKTileOverlay" /> along the X axis.</summary>
 		///         <remarks>To be added.</remarks>
 		public /* NSInteger */ nint X;
@@ -62,6 +65,7 @@ namespace MapKit {
 		///             </item>
 		///           </list>
 		///         </remarks>
+#endif
 		public /* NSInteger */ nint Z;
 		/// <summary>The screen scaling factor for which the tile is intended. A value of 1.0 indicates standard resolution, a value of 2.0 indicates Retina displays.</summary>
 		///         <remarks>To be added.</remarks>
@@ -171,7 +175,9 @@ namespace MapKit {
 
 	// MKGeometry.h
 #if NET
+#if !COREBUILD
 	/// <include file="../../docs/api/MapKit/MKMapPoint.xml" path="/Documentation/Docs[@DocId='T:MapKit.MKMapPoint']/*" />
+#endif
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -529,10 +535,12 @@ namespace MapKit {
 			return a.Origin != b.Origin || a.Size != b.Size;
 		}
 
+#if !COREBUILD
 		/// <param name="other">To be added.</param>
 		///         <summary>Whether this <see cref="MapKit.MKMapRect" /> has the same <see cref="MapKit.Origin" /> and <see cref="MapKit.MKMapRect.Size" /> values as the <paramref name="other" />.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
+#endif
 		public override bool Equals (object? other)
 		{
 			if (other is MKMapRect) {

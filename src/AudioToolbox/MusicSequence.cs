@@ -524,8 +524,10 @@ namespace AudioToolbox {
 	}
 
 	// typedef UInt32 -> MusicPlayer.h
+#if !COREBUILD
 	/// <summary>An enumeration whose values specify the <see cref="AudioToolbox.MusicSequence.SequenceType" /> property of a <see cref="AudioToolbox.MusicSequence" />.</summary>
 	///     <remarks>To be added.</remarks>
+#endif
 	public enum MusicSequenceType : uint {
 		/// <summary>A normal MIDI music sequence. The tempo track defines beats-per-second.</summary>
 		Beats = 0x62656174,     // 'beat'

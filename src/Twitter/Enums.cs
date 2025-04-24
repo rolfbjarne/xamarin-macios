@@ -16,8 +16,10 @@ namespace Twitter {
 	// untyped enum -> TWTweetComposeViewController.h where the values are equals to those of
 	// SLComposeViewControllerResult, which is a NSInteger -> SLComposeViewController.h, but a 
 	// sizeof(TWTweetComposeViewControllerResultDone) shows it's 4 bytes (on a 64 bits process)
+#if !COREBUILD
 	/// <summary>An enumeration whose values specify the results of composing a tweet in a <see cref="Twitter.TWTweetComposeViewController" />.</summary>
 	///     <remarks>To be added.</remarks>
+#endif
 	public enum TWTweetComposeViewControllerResult {
 		/// <summary>To be added.</summary>
 		Cancelled,

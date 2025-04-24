@@ -52,11 +52,17 @@ namespace CoreFoundation {
 	public enum CFRunLoopExitReason : int {
 		/// <summary>The run loop terminated.</summary>
 		Finished = 1,
+#if !COREBUILD
 		/// <summary>The run loop was stopped by a call to the <see cref="CoreFoundation.CFRunLoop.Stop" /> method.</summary>
+#endif
 		Stopped = 2,
+#if !COREBUILD
 		/// <summary>The number of seconds specified in the call to <see cref="CoreFoundation.CFRunLoop.RunInMode(Foundation.NSString,System.Double,System.Boolean)" /> elapsed.</summary>
+#endif
 		TimedOut = 3,
+#if !COREBUILD
 		/// <summary>An event from a source was handled, and the developer specified that a single source should be processed on the call to <see cref="CoreFoundation.CFRunLoop.RunInMode(Foundation.NSString,System.Double,System.Boolean)" /></summary>
+#endif
 		HandledSource = 4,
 	}
 

@@ -156,8 +156,10 @@ namespace CoreMidi {
 		}
 	}
 
+#if !COREBUILD
 	/// <summary>Source or Destination of a <see cref="CoreMidi.MidiThruConnection" />.</summary>
 	///     <remarks>When <see cref="CoreMidi.MidiThruConnectionEndpoint.EndpointRef" /> is zero it is because the endpoint does not exist so <see cref="CoreMidi.MidiThruConnectionEndpoint.UniqueID" /> will be greater than 0.</remarks>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

@@ -26,7 +26,9 @@ using Xamarin.Bundler;
 #endif
 
 namespace ObjCRuntime {
+#if !COREBUILD
 	/// <include file="../../docs/api/ObjCRuntime/Class.xml" path="/Documentation/Docs[@DocId='T:ObjCRuntime.Class']/*" />
+#endif
 	public partial class Class : INativeObject
 #if !COREBUILD
 	, IEquatable<Class>

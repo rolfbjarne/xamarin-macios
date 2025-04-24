@@ -335,8 +335,10 @@ namespace MediaToolbox {
 	}
 
 	// uint32_t -> MTAudioProcessingTap.h
+#if !COREBUILD
 	/// <summary>An enumeration that specifies the flags to be used with calls to the <see cref="MediaToolbox.MTAudioProcessingTap.ctor(MediaToolbox.MTAudioProcessingTapCallbacks,MediaToolbox.MTAudioProcessingTapCreationFlags)" /> constructor.</summary>
 	///     <remarks>To be added.</remarks>
+#endif
 	[Flags]
 	public enum MTAudioProcessingTapCreationFlags : uint {
 		/// <summary>To be added.</summary>
@@ -346,8 +348,10 @@ namespace MediaToolbox {
 	}
 
 	// uint32_t -> MTAudioProcessingTap.h
+#if !COREBUILD
 	/// <summary>An enumeration that specifies flags to be used with the <see cref="MediaToolbox.MTAudioProcessingTap.GetSourceAudio(System.nint,AudioToolbox.AudioBuffers,ref MediaToolbox.MTAudioProcessingTapFlags,ref CoreMedia.CMTimeRange,ref System.IntPtr)" /> method, and the <see cref="MediaToolbox.MTAudioProcessingTapProcessCallback" /> and <see cref="MediaToolbox.MTAudioProcessingTapProcessDelegate" /> constructors.</summary>
 	///     <remarks>To be added.</remarks>
+#endif
 	[Flags]
 	public enum MTAudioProcessingTapFlags : uint {
 		/// <summary>To be added.</summary>
@@ -358,8 +362,10 @@ namespace MediaToolbox {
 
 	// used as OSStatus (4 bytes)
 	// Not documented error codes
+#if !COREBUILD
 	/// <summary>An enumeration whose values indicate whether there was an argument error when calling the <see cref="MediaToolbox.MTAudioProcessingTap.GetSourceAudio(System.IntPtr,AudioToolbox.AudioBuffers,ref MediaToolbox.MTAudioProcessingTapFlags,ref CoreMedia.CMTimeRange,ref System.IntPtr)" /> method.</summary>
 	///     <remarks>To be added.</remarks>
+#endif
 	public enum MTAudioProcessingTapError {
 		/// <summary>To be added.</summary>
 		None = 0,
@@ -367,8 +373,10 @@ namespace MediaToolbox {
 		InvalidArgument = -12780,
 	}
 
+#if !COREBUILD
 	/// <summary>Holds the set of callbacks passed to the <see cref="MediaToolbox.MTAudioProcessingTap.ctor(MediaToolbox.MTAudioProcessingTapCallbacks,MediaToolbox.MTAudioProcessingTapCreationFlags)" /> constructor.</summary>
 	///     <remarks>To be added.</remarks>
+#endif
 	public class MTAudioProcessingTapCallbacks {
 		/// <param name="process">To be added.</param>
 		///         <summary>To be added.</summary>

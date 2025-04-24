@@ -51,6 +51,7 @@ namespace CoreGraphics {
 		DrawsAfterEndLocation = (1 << 1),
 	}
 
+#if !COREBUILD
 	/// <summary>Gradient definitions.</summary>
 	///     <remarks>
 	///       <para>A <see cref="CoreGraphics.CGGradient" /> defines a smooth transition between colors. </para>
@@ -60,6 +61,7 @@ namespace CoreGraphics {
 	///     <altmember cref="CoreGraphics.CGContext.DrawRadialGradient" />
 	///     <altmember cref="CoreAnimation.CAGradientLayer" />
 	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/QuartzSample/">QuartzSample</related>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

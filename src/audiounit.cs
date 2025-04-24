@@ -1160,7 +1160,7 @@ namespace AudioUnit {
 
 		/// <param name="observer">The block that is called after the parameter changes.</param>
 		///         <summary>Adds a observer for the parameter and returns a token that developers can use to identify it.</summary>
-		///         <returns>A token that can be passed to the <see cref="RemoveParameterObserver*" /> and <see cref="AudioUnit.AUParameter.SetValue(System.Single,AudioUnit.AUParameterObserverToken,System.UInt64,AudioUnit.AUParameterAutomationEventType)" /> methods.</returns>
+		///         <returns>A token that can be passed to the <see cref="RemoveParameterObserver" /> and <see cref="AudioUnit.AUParameter.SetValue(System.Single,AudioUnit.AUParameterObserverToken,System.UInt64,AudioUnit.AUParameterAutomationEventType)" /> methods.</returns>
 		///         <remarks>To be added.</remarks>
 		[Wrap ("new AUParameterObserverToken { ObserverToken = TokenByAddingParameterObserver (observer) }")]
 		AUParameterObserverToken CreateTokenByAddingParameterObserver (AUParameterObserver observer);

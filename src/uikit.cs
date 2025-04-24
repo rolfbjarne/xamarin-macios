@@ -2285,7 +2285,7 @@ namespace UIKit {
 		///         <value>
 		///         </value>
 		///         <remarks>
-		/// 	  The object must hold an individual <see cref="AssetsLibrary:ALAsset" />, <see cref="Foundation.NSAttributedString" />, <see cref="Foundation.NSString" />, <see cref="Foundation.NSUrl" />, <see cref="UIKit.UIImage" />.  Or you can provide a
+		/// 	  The object must hold an individual <see cref="AssetsLibrary.ALAsset" />, <see cref="Foundation.NSAttributedString" />, <see cref="Foundation.NSString" />, <see cref="Foundation.NSUrl" />, <see cref="UIKit.UIImage" />.  Or you can provide a
 		/// 	  collection of those objects by passing an NSDictionary or an
 		/// 	  NSArray with those objects.
 		/// 	</remarks>
@@ -3222,7 +3222,7 @@ namespace UIKit {
 		bool LocationLaunch { get; }
 	}
 
-	/// <summary>A <see cref="Foundation.DictionaryContainer" /> that holds options for use with calls to <see cref="UIApplication.OpenURL*" />.</summary>
+	/// <summary>A <see cref="Foundation.DictionaryContainer" /> that holds options for use with calls to <see cref="UIApplication.OpenURL" />.</summary>
 	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[StrongDictionary ("UIApplicationOpenUrlOptionKeys")]
@@ -4735,7 +4735,7 @@ namespace UIKit {
 
 		/// <param name="application">Reference to the UIApplication that invoked this delegate method.</param>
 		/// <param name="url">To be added.</param>
-		/// <summary>Developers should use <see cref="UIKit.UIApplicationDelegate.OpenUrl*" /> rather than this deprecated method.</summary>
+		/// <summary>Developers should use <see cref="UIKit.UIApplicationDelegate.OpenUrl" /> rather than this deprecated method.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		[NoTV]
@@ -5129,7 +5129,7 @@ namespace UIKit {
 		/// <param name="application">To be added.</param>
 		/// <param name="shortcutItem">To be added.</param>
 		/// <param name="completionHandler">To be added.</param>
-		/// <summary>Called by the system when the user initiates a Home screen quick action, unless the interaction was handled in <see cref="UIKit.UIApplicationDelegate.WillFinishLaunching(UIKit.UIApplication,Foundation.NSDictionary)" /> or <see cref="UIKit.UIApplicationDelegate.DidFinishLaunching*" />.</summary>
+		/// <summary>Called by the system when the user initiates a Home screen quick action, unless the interaction was handled in <see cref="UIKit.UIApplicationDelegate.WillFinishLaunching(UIKit.UIApplication,Foundation.NSDictionary)" /> or <see cref="UIKit.UIApplicationDelegate.DidFinishLaunching" />.</summary>
 		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
@@ -20465,7 +20465,7 @@ namespace UIKit {
 		/// <returns>
 		///         </returns>
 		/// <remarks>
-		///           <para>Note that custom UITableViewCell's do not respect IndentationLevel automatically. Application developers must override <see cref="UIKit.UITableViewController.LayoutSubviews*" />.</para>
+		///           <para>Note that custom UITableViewCell's do not respect IndentationLevel automatically. Application developers must override <see cref="UIKit.UITableViewController.LayoutSubviews" />.</para>
 		///         </remarks>
 		[Export ("tableView:indentationLevelForRowAtIndexPath:")]
 		nint IndentationLevel (UITableView tableView, NSIndexPath indexPath);

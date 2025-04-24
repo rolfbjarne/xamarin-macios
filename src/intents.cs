@@ -4367,7 +4367,7 @@ namespace Intents {
 		INEndWorkoutIntentResponseCode Code { get; }
 	}
 
-	/// <summary>Defines the <see cref="Intents.IINIntentHandlerProvider*" /> interface implemented by <see cref="Intents.INExtension" />.</summary>
+	/// <summary>Defines the <see cref="Intents.IINIntentHandlerProvider" /> interface implemented by <see cref="Intents.INExtension" />.</summary>
 	/// <remarks>
 	///     </remarks>
 	[TV (14, 0)]

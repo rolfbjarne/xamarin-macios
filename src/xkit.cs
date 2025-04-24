@@ -699,7 +699,7 @@ namespace UIKit {
 
 		/// <param name="glyphIndex">To be added.</param>
 		/// <param name="isValidIndex">To be added.</param>
-		/// <summary>Developers should use <see cref="UIKit.NSLayoutManager.GetGlyph*" /> rather than this deprecated method.</summary>
+		/// <summary>Developers should use <see cref="UIKit.NSLayoutManager.GetGlyph" /> rather than this deprecated method.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		[Export ("glyphAtIndex:isValidIndex:")]
@@ -718,7 +718,7 @@ namespace UIKit {
 #endif // MONOMAC
 
 		/// <param name="glyphIndex">To be added.</param>
-		/// <summary>Developers should not use this deprecated method. Developers should use <see cref="UIKit.NSLayoutManager.GetGlyph*" /> instead.</summary>
+		/// <summary>Developers should not use this deprecated method. Developers should use <see cref="UIKit.NSLayoutManager.GetGlyph" /> instead.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		[Export ("glyphAtIndex:")]

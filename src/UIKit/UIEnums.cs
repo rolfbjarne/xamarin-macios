@@ -37,7 +37,7 @@ namespace UIKit {
 	/// <summary>The visual style for a <see cref="UIKit.UIActivityIndicatorView" />.</summary>
 	/// <remarks>To be added.</remarks>
 	/// <altmember cref="UIKit.UIActivityIndicatorView" />
-	/// <altmember cref="UIKit.UIActivityIndicatorView+UIActivityIndicatorViewAppearance" />
+	/// <altmember cref="UIKit.UIActivityIndicatorView.UIActivityIndicatorViewAppearance" />
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum UIActivityIndicatorViewStyle : long {
@@ -1874,7 +1874,7 @@ namespace UIKit {
 
 	// NSInteger -> UIAccessibility.h
 	/// <summary>An enumeration indicating the scrolling direction desired.</summary>
-	/// <remarks>Used as the argument to <see cref="Foundation.NSObject.AccessibilityScroll*" /> to generate a scrolling action.</remarks>
+	/// <remarks>Used as the argument to <see cref="Foundation.NSObject.AccessibilityScroll" /> to generate a scrolling action.</remarks>
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum UIAccessibilityScrollDirection : long {
@@ -2317,7 +2317,7 @@ namespace UIKit {
 
 	// NSInteger -> UINavigationController.h
 	/// <summary>An enumeration whose values specify operations on <see cref="UIKit.UINavigationController" />.</summary>
-	/// <remarks>This enumeration is used in calls to <see cref="UIKit.UINavigationController.GetAnimationController*" />.</remarks>
+	/// <remarks>This enumeration is used in calls to <see cref="UIKit.UINavigationController.GetAnimationController" />.</remarks>
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum UINavigationControllerOperation : long {

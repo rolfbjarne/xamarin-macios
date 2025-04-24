@@ -12,16 +12,16 @@ namespace LinkSdk.Net.Http {
 	[Preserve (AllMembers = true)]
 	public class HttpClientTest {
 
-		async Task<string> Get (HttpClient client)
+		Task<string> Get (HttpClient client)
 		{
-			return await client.GetStringAsync (NetworkResources.XamarinUrl);
+			return client.GetStringAsync (NetworkResources.XamarinUrl);
 		}
 
 		string Get (HttpMessageHandler handler)
 		{
 			using (var client = new HttpClient (handler)) {
 				var get = Get (client);
-				Assert.IsTrue (get.Wait (TimeSpan.FromSeconds (30)), "Timed out");
+				Assert.IsTrue (TestRuntime.RunAsync (TimeSpan.FromSeconds (30), get), "Timed out");
 				return get.Result;
 			}
 		}
@@ -44,8 +44,8 @@ namespace LinkSdk.Net.Http {
 			using (var client = new HttpClient (handler)) {
 				var get1 = Get (client);
 				var get2 = Get (client);
-				Assert.That (get1.Wait (TimeSpan.FromSeconds (30)), Is.True, "Wait1");
-				Assert.That (get2.Wait (TimeSpan.FromSeconds (30)), Is.True, "Wait2");
+				Assert.IsTrue (TestRuntime.RunAsync (TimeSpan.FromSeconds (30), get1), "Wait1");
+				Assert.IsTrue (TestRuntime.RunAsync (TimeSpan.FromSeconds (30), get2), "Wait2");
 			}
 		}
 
@@ -76,7 +76,7 @@ namespace LinkSdk.Net.Http {
 		{
 			var result = Get302 (client);
 			try {
-				Assert.IsTrue (result.Wait (TimeSpan.FromSeconds (30)), "Timed out");
+				Assert.IsTrue (TestRuntime.RunAsync (TimeSpan.FromSeconds (30), result), "Timed out");
 				if (!allowRedirect)
 					Assert.Fail ("Redirection *dis*allowed - assert should not be reached");
 				Assert.That (result.Result, Contains.Substring ("You have reached the target"), "true");

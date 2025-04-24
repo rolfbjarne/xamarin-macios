@@ -149,6 +149,7 @@ partial class TestRuntime {
 		UIViewController? initialRootViewController;
 		UIWindow? window;
 		UINavigationController? navigation;
+		bool createdWindow;
 #else
 		NSWindow? window;
 #endif // HAS_UIKIT
@@ -163,7 +164,11 @@ partial class TestRuntime {
 						.SharedApplication
 						.ConnectedScenes
 						.SelectMany<UIScene, UIWindow> (v => (v as UIWindowScene)?.Windows ?? Array.Empty<UIWindow> ())
-						.Last (v => v.IsKeyWindow);
+						.LastOrDefault (v => v.IsKeyWindow);
+			if (window is null) {
+				window = new UIWindow (UIScreen.MainScreen.Bounds);
+				createdWindow = true;
+			}
 			initialRootViewController = window.RootViewController!;
 			navigation = initialRootViewController as UINavigationController;
 
@@ -176,6 +181,9 @@ partial class TestRuntime {
 			} else {
 				window.RootViewController = vc;
 			}
+
+			if (createdWindow)
+				window.MakeKeyAndVisible ();
 #else
 			var size = new CGRect (0, 0, 300, 300);
 			var loc = new CGPoint ((NSScreen.MainScreen.Frame.Width - size.Width) / 2, (NSScreen.MainScreen.Frame.Height - size.Height) / 2);
@@ -196,6 +204,10 @@ partial class TestRuntime {
 				navigation.PopViewController (false);
 			} else {
 				window.RootViewController = initialRootViewController;
+			}
+			if (createdWindow) {
+				window.Hidden = true;
+				window.Dispose ();
 			}
 #else
 			window.Close ();
@@ -246,7 +258,7 @@ partial class TestRuntime {
 			View!.BackgroundColor = backgroundColor;
 #else
 			View.WantsLayer = true;
-			View.Layer.BackgroundColor = backgroundColor.CGColor;
+			View.Layer!.BackgroundColor = backgroundColor.CGColor;
 #endif // HAS_UIKIT
 
 			if (imageToShow is not null) {

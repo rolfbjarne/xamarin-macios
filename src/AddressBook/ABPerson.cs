@@ -784,9 +784,9 @@ namespace AddressBook {
 	///       <para>
 	///         Labels are used with
 	///         <see cref="AddressBook.ABAddressBook.LocalizedLabel(Foundation.NSString)" />,
-	///         <see cref="AddressBook.ABMultiValueEntry`1.Label" />,
-	///         <see cref="AddressBook.ABMultiValue`1.Add(`0,Foundation.NSString)" />, and
-	///         <see cref="AddressBook.ABMultiValue`1.Insert(System.Int32,`0,Foundation.NSString)" />.
+	///         <see cref="AddressBook.ABMultiValueEntry{T}.Label" />,
+	///         <see cref="AddressBook.ABMultiValue{T}.Add(T,Foundation.NSString)" />, and
+	///         <see cref="AddressBook.ABMultiValue{T}.Insert(System.Int32,T,Foundation.NSString)" />.
 	///       </para>
 	///     </remarks>
 	[SupportedOSPlatform ("ios")]
@@ -1331,12 +1331,12 @@ namespace AddressBook {
 		///           Gets the <see cref="AddressBook.ABPerson" />'s email addresses.
 		///         </summary>
 		///         <returns>
-		///           A <see cref="AddressBook.ABMultiValue`1" />
+		///           A <see cref="AddressBook.ABMultiValue{T}" />
 		///           containing the <see cref="AddressBook.ABPerson" />'s email addresses.
 		///         </returns>
 		///         <remarks>
 		///         </remarks>
-		///         <altmember cref="AddressBook.ABPerson.SetEmails(AddressBook.ABMultiValue`1)" />
+		///         <altmember cref="AddressBook.ABPerson.SetEmails(AddressBook.ABMultiValue{T})" />
 		public ABMultiValue<string>? GetEmails ()
 		{
 			return CreateStringMultiValue (CopyValue (ABPersonPropertyId.Email));
@@ -1350,7 +1350,7 @@ namespace AddressBook {
 		}
 
 		/// <param name="value">
-		///           A <see cref="AddressBook.ABMultiValue`1" />
+		///           A <see cref="AddressBook.ABMultiValue{T}" />
 		///           containing the <see cref="AddressBook.ABPerson" />'s new email addresses
 		///         </param>
 		///         <summary>
@@ -1538,19 +1538,19 @@ namespace AddressBook {
 		///           Gets the <see cref="AddressBook.ABPerson" />'s phone numbers.
 		///         </summary>
 		///         <returns>
-		///           A <see cref="AddressBook.ABMultiValue`1" />
+		///           A <see cref="AddressBook.ABMultiValue{T}" />
 		///           containing the <see cref="AddressBook.ABPerson" />'s phone numbers.
 		///         </returns>
 		///         <remarks>
 		///         </remarks>
-		///         <altmember cref="AddressBook.ABPerson.SetPhones(AddressBook.ABMultiValue`1)" />
+		///         <altmember cref="AddressBook.ABPerson.SetPhones(AddressBook.ABMultiValue{T})" />
 		public ABMultiValue<string>? GetPhones ()
 		{
 			return CreateStringMultiValue (CopyValue (ABPersonPropertyId.Phone));
 		}
 
 		/// <param name="value">
-		///           A <see cref="AddressBook.ABMultiValue`1" />
+		///           A <see cref="AddressBook.ABMultiValue{T}" />
 		///           containing the <see cref="AddressBook.ABPerson" />'s new phone numbers.
 		///         </param>
 		///         <summary>
@@ -1642,19 +1642,19 @@ namespace AddressBook {
 		///           Gets the <see cref="AddressBook.ABPerson" />'s URLs.
 		///         </summary>
 		///         <returns>
-		///           A <see cref="AddressBook.ABMultiValue`1" />
+		///           A <see cref="AddressBook.ABMultiValue{T}" />
 		///           containing the <see cref="AddressBook.ABPerson" />'s URLs.
 		///         </returns>
 		///         <remarks>
 		///         </remarks>
-		///         <altmember cref="AddressBook.ABPerson.SetUrls(AddressBook.ABMultiValue`1)" />
+		///         <altmember cref="AddressBook.ABPerson.SetUrls(AddressBook.ABMultiValue{T})" />
 		public ABMultiValue<string>? GetUrls ()
 		{
 			return CreateStringMultiValue (CopyValue (ABPersonPropertyId.Url));
 		}
 
 		/// <param name="value">
-		///           A <see cref="AddressBook.ABMultiValue`1" />
+		///           A <see cref="AddressBook.ABMultiValue{T}" />
 		///           containing the <see cref="AddressBook.ABPerson" />'s new URLs.
 		///         </param>
 		///         <summary>
@@ -1673,19 +1673,19 @@ namespace AddressBook {
 		///           Gets the <see cref="AddressBook.ABPerson" />'s related names.
 		///         </summary>
 		///         <returns>
-		///           A <see cref="AddressBook.ABMultiValue`1" />
+		///           A <see cref="AddressBook.ABMultiValue{T}" />
 		///           containing the <see cref="AddressBook.ABPerson" />'s related names.
 		///         </returns>
 		///         <remarks>
 		///         </remarks>
-		///         <altmember cref="AddressBook.ABPerson.SetRelatedNames(AddressBook.ABMultiValue`1)" />
+		///         <altmember cref="AddressBook.ABPerson.SetRelatedNames(AddressBook.ABMultiValue{T})" />
 		public ABMultiValue<string>? GetRelatedNames ()
 		{
 			return CreateStringMultiValue (CopyValue (ABPersonPropertyId.RelatedNames));
 		}
 
 		/// <param name="value">
-		///           A <see cref="AddressBook.ABMultiValue`1" />
+		///           A <see cref="AddressBook.ABMultiValue{T}" />
 		///           containing the <see cref="AddressBook.ABPerson" />'s new related names.
 		///         </param>
 		///         <summary>

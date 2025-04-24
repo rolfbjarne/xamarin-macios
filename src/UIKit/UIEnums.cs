@@ -2935,7 +2935,7 @@ namespace UIKit {
 		PrimaryOverlay = OneOverSecondary,
 	}
 
-	/// <summary>Enumerates characteristics of the button displayed in a table row. Used with the <see cref="UIKit.UITableViewRowAction(UIKit.UITableViewRowActionStyle,string ,Action`1,Foundation.NSIndexPath)" /> constructor.</summary>
+	/// <summary>Enumerates characteristics of the button displayed in a table row. Used with the <see cref="UIKit.UITableViewRowAction(UIKit.UITableViewRowActionStyle,string ,Action{T},Foundation.NSIndexPath)" /> constructor.</summary>
 	[Native]
 	[NoTV]
 	[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'UIContextualActionStyle' and corresponding APIs instead.")]

@@ -302,7 +302,7 @@ namespace AddressBook {
 		Dictionary = 0x5,
 		/// <summary>
 		///           The property holds a
-		///           <see cref="AddressBook.ABMultiValue`1" />
+		///           <see cref="AddressBook.ABMultiValue{T}" />
 		///           value.
 		///         </summary>
 		MultiString = MultiMask | String,

@@ -42,7 +42,7 @@ using NativeHandle = System.IntPtr;
 
 namespace GameplayKit {
 
-	/// <summary>Holds options for how nodes should be generated in a <see cref="GameplayKit.GKMeshGraph`1" />.</summary>
+	/// <summary>Holds options for how nodes should be generated in a <see cref="GameplayKit.GKMeshGraph{NodeType}" />.</summary>
 	[Native]
 	[Flags]
 	[MacCatalyst (13, 1)]
@@ -2075,7 +2075,7 @@ namespace GameplayKit {
 		NativeHandle Constructor (double squareSize);
 	}
 
-	/// <summary>A node in a <see cref="GameplayKit.GKOctree`1" />. Automatically managed by the <see cref="GameplayKit.GKOctree`1" /> as objects are added and removed.</summary>
+	/// <summary>A node in a <see cref="GameplayKit.GKOctree{ElementType}" />. Automatically managed by the <see cref="GameplayKit.GKOctree{ElementType}" /> as objects are added and removed.</summary>
 	[MacCatalyst (13, 1)]
 	[DisableDefaultCtor]
 	[BaseType (typeof (NSObject))]

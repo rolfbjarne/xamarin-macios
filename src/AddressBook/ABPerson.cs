@@ -1431,7 +1431,7 @@ namespace AddressBook {
 
 		// Obsolete
 		/// <param name="value">
-		///           A <see cref="AddressBook.ABMultiValue{Foundation.NSDictionary}" />
+		///           A <see cref="AddressBook.ABMultiValue{T}" /> of <see cref="Foundation.NSDictionary" />
 		///           containing the <see cref="AddressBook.ABPerson" />'s new addresses.
 		///         </param>
 		///         <summary>
@@ -1479,7 +1479,7 @@ namespace AddressBook {
 		///           Gets the <see cref="AddressBook.ABPerson" />'s dates.
 		///         </summary>
 		///         <returns>
-		///           A <see cref="AddressBook.ABMultiValue{Foundation.NSDate}" />
+		///           A <see cref="AddressBook.ABMultiValue{T}" /> of <see cref="Foundation.NSDate" />
 		///           containing the <see cref="AddressBook.ABPerson" />'s dates.
 		///         </returns>
 		///         <remarks>
@@ -1499,7 +1499,7 @@ namespace AddressBook {
 		}
 
 		/// <param name="value">
-		///           A <see cref="AddressBook.ABMultiValue{Foundation.NSDate}" />
+		///           A <see cref="AddressBook.ABMultiValue{T}" /> of <see cref="Foundation.NSDate" />
 		///           containing the <see cref="AddressBook.ABPerson" />'s new dates.
 		///         </param>
 		///         <summary>
@@ -1581,7 +1581,7 @@ namespace AddressBook {
 
 		// Obsolete
 		/// <param name="value">
-		///           A <see cref="AddressBook.ABMultiValue{Foundation.NSDictionary}" />
+		///           A <see cref="AddressBook.ABMultiValue{T}" /> of <see cref="Foundation.NSDictionary" />
 		///           containing the <see cref="AddressBook.ABPerson" />'s new instant messaging services.
 		///         </param>
 		///         <summary>

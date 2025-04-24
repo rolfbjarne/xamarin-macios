@@ -1176,7 +1176,7 @@ namespace Foundation {
 
 		/// <summary>The new value being set on the observed property.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>For this property to have a value, the options passed to <see cref="Foundation.NSObject.AddObserver(Foundation.NSObject,System.String,Foundation.NSKeyValueObservingOptions,System.IntPtr)" /> method should contain the value <see cref="Foundation.NSKeyValueObseringOptions." />New.</remarks>
+		///         <remarks>For this property to have a value, the options passed to <see cref="Foundation.NSObject.AddObserver(Foundation.NSObject,System.String,Foundation.NSKeyValueObservingOptions,System.IntPtr)" /> method should contain the value <see cref="Foundation.NSKeyValueObseringOptions" />New.</remarks>
 		public NSObject NewValue {
 			get {
 				return dict [NSObject.ChangeNewKey];

@@ -675,7 +675,7 @@ namespace AddressBook {
 		///         </summary>
 		///         <returns>
 		///           An
-		///           <see cref="System.Collections.Generic.IEnumerator{AddressBook.ABRecord}" />
+		///           <see cref="System.Collections.Generic.IEnumerator{T}" /> of <see cref="AddressBook.ABRecord" />
 		///           which will return all records and groups in the address book.
 		///         </returns>
 		///         <remarks>

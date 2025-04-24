@@ -378,7 +378,7 @@ namespace AddressBook {
 		///         </summary>
 		///         <returns>
 		///           An
-		///           <see cref="System.Collections.Generic.IEnumerator&lt;AddressBook.ABMultiValueEntry&lt;T&gt;&gt;" />
+		///           <see cref="System.Collections.Generic.IEnumerator{T}" /> of <see cref="AddressBook.ABMultiValueEntry{T}" />
 		///           which will return all entries in the
 		///           <see cref="AddressBook.ABMultiValue{T}" />.
 		///         </returns>
@@ -521,7 +521,7 @@ namespace AddressBook {
 	}
 
 	/// <summary>
-	///       A <see cref="AddressBook.ABMultiValue{Foundation.NSDate}" />
+	///       A <see cref="AddressBook.ABMultiValue{T}" /> of <see cref="Foundation.NSDate" />
 	///       which supports changing values.
 	///     </summary>
 	///     <remarks>
@@ -547,7 +547,7 @@ namespace AddressBook {
 	}
 
 	/// <summary>
-	///       A <see cref="AddressBook.ABMultiValue{Foundation.NSDictionary}" />
+	///       A <see cref="AddressBook.ABMultiValue{T}" /> of <see cref="Foundation.NSDictionary" />
 	///       which supports changing values.
 	///     </summary>
 	///     <remarks>
@@ -573,7 +573,7 @@ namespace AddressBook {
 	}
 
 	/// <summary>
-	///       A <see cref="AddressBook.ABMultiValue{Foundation.NSString}" />
+	///       A <see cref="AddressBook.ABMultiValue{T}" /> of <see cref="Foundation.NSString" />
 	///       which supports changing values.
 	///     </summary>
 	///     <remarks>

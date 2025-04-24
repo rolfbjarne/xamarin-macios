@@ -42,7 +42,7 @@ namespace StoreKit {
 	public partial class StoreProductParameters : DictionaryContainer {
 #if !COREBUILD
 		/// <param name="iTunesItemIdentifier">To be added.</param>
-		///         <summary>Creates a new <see cref="StoreKit.StoreProductParameters.StoreProductParameters" /> for the specified ITunes identifier.</summary>
+		///         <summary>Creates a new <see cref="StoreKit.StoreProductParameters" /> for the specified ITunes identifier.</summary>
 		///         <remarks>To be added.</remarks>
 		public StoreProductParameters (int iTunesItemIdentifier)
 			: this ()

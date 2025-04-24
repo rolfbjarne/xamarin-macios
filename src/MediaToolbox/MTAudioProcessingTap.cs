@@ -363,7 +363,7 @@ namespace MediaToolbox {
 	// used as OSStatus (4 bytes)
 	// Not documented error codes
 #if !COREBUILD
-	/// <summary>An enumeration whose values indicate whether there was an argument error when calling the <see cref="MediaToolbox.MTAudioProcessingTap.GetSourceAudio(System.IntPtr,AudioToolbox.AudioBuffers,ref MediaToolbox.MTAudioProcessingTapFlags,ref CoreMedia.CMTimeRange,ref System.IntPtr)" /> method.</summary>
+	/// <summary>An enumeration whose values indicate whether there was an argument error when calling the <see cref="MediaToolbox.MTAudioProcessingTap.GetSourceAudio(System.IntPtr,AudioToolbox.AudioBuffers,out MediaToolbox.MTAudioProcessingTapFlags,out CoreMedia.CMTimeRange,out System.IntPtr)" /> method.</summary>
 	///     <remarks>To be added.</remarks>
 #endif
 	public enum MTAudioProcessingTapError {

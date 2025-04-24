@@ -454,6 +454,7 @@ public class BindingTouch : IDisposable {
 		cargs.Add ("-unsafe");
 		cargs.Add ("-target:library");
 		cargs.Add ("-nowarn:436");
+		cargs.Add ("-nowarn:CS1574"); // "XML comment has cref attribute '...' that could not be resolved" => we want to be able to write xml comments in api definition code for APIs that don't exist until all the code has been generated, so we ignore these warnings.
 		cargs.Add ("-out:" + tmpass);
 		cargs.Add ("-r:" + LibraryManager.GetAttributeLibraryPath (libraryInfo, CurrentPlatform));
 		cargs.AddRange (config.References);

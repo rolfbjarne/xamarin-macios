@@ -383,6 +383,7 @@ $($(2)_DOTNET_BUILD_DIR)/apidefinition-$(3).rsp: Makefile frameworks.sources $($
 		-unsafe \
 		-target:library \
 		-nowarn:436,1591,CA1416,CS8981 \
+		-nowarn:CS0419,CS1574,CS1580 \
 		-warnaserror+ \
 		-out:$($(2)_DOTNET_BUILD_DIR)/apidefinition-$(3).dll \
 		-doc:$($(2)_DOTNET_BUILD_DIR)/apidefinition-$(3).xml \

@@ -2771,7 +2771,7 @@ namespace Vision {
 
 	/// <summary>Abstract base-class for vision-processing request.</summary>
 	///     <remarks>
-	///       <para>Currently, the only descendant of this class is <see cref="CoreVision.VNImageBasedRequest" />.</para>
+	///       <para>Currently, the only descendant of this class is <see cref="VNImageBasedRequest" />.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Abstract]

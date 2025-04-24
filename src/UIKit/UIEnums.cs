@@ -701,7 +701,7 @@ namespace UIKit {
 	// NSInteger -> UIDocument.h
 	/// <summary>An enumeration indicating whether the <see cref="UIKit.UIDocument" /> is being saved for the first time or should overwrite an existing save.</summary>
 	///     <remarks>
-	///       <para>One of these enumerated values is used as a parameter to <see cref="UIKit.UIDocument" />s various save-oriented functions (e.g., <see cref="UIKit.UIDocument.Save(Foundation.NSUrl,UIKit.UIDocumentSaveOperation,UIKit.UIOperationHandler)" />, <see cref="UIKit.UIDocument.GetFileAttributesToWrite(Foundation.NSUrl,UIKit.UIDocumentSaveOperation,Foundation.NSError@)" />, etc.).</para>
+	///       <para>One of these enumerated values is used as a parameter to <see cref="UIKit.UIDocument" />s various save-oriented functions (e.g., <see cref="UIKit.UIDocument.Save(Foundation.NSUrl,UIKit.UIDocumentSaveOperation,UIKit.UIOperationHandler)" />, <see cref="UIKit.UIDocument.GetFileAttributesToWrite(Foundation.NSUrl,UIKit.UIDocumentSaveOperation,out Foundation.NSError)" />, etc.).</para>
 	///     </remarks>
 	[Native]
 	[NoTV]

@@ -2325,7 +2325,7 @@ namespace Security {
 		}
 	}
 
-	/// <summary>Contains parameters for use with <see cref="Security.SecKey.CreateRandomKey(Security.SecKeyType,System.Int32,Foundation.NSDictionary,Foundation.NSError@)" />.</summary>
+	/// <summary>Contains parameters for use with <see cref="Security.SecKey.CreateRandomKey(Security.SecKeyType,System.Int32,Foundation.NSDictionary,out Foundation.NSError)" />.</summary>
 	///     <remarks>To be added.</remarks>
 	public partial class SecKeyParameters : DictionaryContainer {
 		// For caching, as we can't reverse it easily.

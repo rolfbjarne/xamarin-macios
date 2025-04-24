@@ -1028,7 +1028,7 @@ namespace Foundation {
 		ProducesRelativePathUrls = 1 << 4,
 	}
 
-	/// <summary>An enumeration of options for use with <see cref="Foundation.NSFileManager.Replace(Foundation.NSUrl,Foundation.NSUrl,System.String,Foundation.NSFileManagerItemReplacementOptions,Foundation.NSUrl@,Foundation.NSError@)" />.</summary>
+	/// <summary>An enumeration of options for use with <see cref="Foundation.NSFileManager.Replace(Foundation.NSUrl,Foundation.NSUrl,System.String,Foundation.NSFileManagerItemReplacementOptions,Foundation.NSUrl@,out Foundation.NSError)" />.</summary>
 	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]

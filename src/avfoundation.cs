@@ -3022,7 +3022,7 @@ namespace AVFoundation {
 		///         <remarks>
 		///           <para>
 		/// 	    In general, you should set the category before activating
-		/// 	    your audio session with <see cref="AVFoundation.AVAudioSession.SetActive(System.Boolean,AVFoundation.AVAudioSessionSetActiveOptions,Foundation.NSError@)" />.
+		/// 	    your audio session with <see cref="AVFoundation.AVAudioSession.SetActive(System.Boolean,AVFoundation.AVAudioSessionSetActiveOptions,out Foundation.NSError)" />.
 		/// 	    If you change the category at runtime, the route will change. 
 		/// 	  </para>
 		///         </remarks>
@@ -3345,7 +3345,7 @@ namespace AVFoundation {
 		///         <remarks>
 		///           <para>
 		/// 	    In general, you should set the category before activating
-		/// 	    your audio session with <see cref="AVFoundation.AVAudioSession.SetActive(System.Boolean,AVFoundation.AVAudioSessionSetActiveOptions,Foundation.NSError@)" />.
+		/// 	    your audio session with <see cref="AVFoundation.AVAudioSession.SetActive(System.Boolean,AVFoundation.AVAudioSessionSetActiveOptions,out Foundation.NSError)" />.
 		/// 	    If you change the category at runtime, the route will change. 
 		/// 	  </para>
 		///         </remarks>
@@ -4193,7 +4193,7 @@ namespace AVFoundation {
 
 	/// <summary>Enumeration defining the various audio categories supported by AVAudioSession.</summary>
 	/// <remarks>
-	///       These enumeration values are used with the strongly typed version of <see cref="AVFoundation.AVAudioSession.SetCategory(System.String,System.String,AVFoundation.AVAudioSessionRouteSharingPolicy,AVFoundation.AVAudioSessionCategoryOptions,Foundation.NSError@)" /> methods. 
+	///       These enumeration values are used with the strongly typed version of <see cref="AVFoundation.AVAudioSession.SetCategory(System.String,System.String,AVFoundation.AVAudioSessionRouteSharingPolicy,AVFoundation.AVAudioSessionCategoryOptions,out Foundation.NSError)" /> methods. 
 	///     </remarks>
 	[NoMac]
 	[MacCatalyst (13, 1)]

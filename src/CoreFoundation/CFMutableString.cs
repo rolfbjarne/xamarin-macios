@@ -52,7 +52,7 @@ namespace CoreFoundation {
 		static extern /* CFMutableStringRef* */ IntPtr CFStringCreateMutableCopy (/* CFAllocatorRef* */ IntPtr alloc, nint maxLength, /* CFStringRef* */ IntPtr theString);
 
 		/// <summary>Create a new <see cref="CFMutableString" /> with a copy of the specified <see cref="CFString" /> and maximum length.</summary>
-		/// <param name="string">The managed string to initialize the new <see cref="CFMutableString" /> with.</param>
+		/// <param name="theString">The managed string to initialize the new <see cref="CFMutableString" /> with.</param>
 		/// <param name="maxLength">The maximum length of the new <see cref="CFMutableString" /> instance.</param>
 		public CFMutableString (CFString theString, nint maxLength = default (nint))
 		{

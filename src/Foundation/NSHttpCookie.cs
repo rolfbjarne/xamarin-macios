@@ -70,7 +70,9 @@ namespace Foundation {
 				throw new ArgumentNullException (nameof (cookie));
 
 			var commentUrl = cookie.CommentUri?.ToString ();
-			bool? discard = cookie?.Discard;
+			bool? discard = null;
+			if (cookie.Discard)
+				discard = true;
 			CreateCookie (cookie.Name, cookie.Value, cookie.Path, cookie.Domain, cookie.Comment, commentUrl, discard, cookie.Expires, null, cookie.Port, cookie.Secure, cookie.Version);
 		}
 

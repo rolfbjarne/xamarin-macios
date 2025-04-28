@@ -1505,7 +1505,7 @@ namespace SpriteKit {
 		SKVideoNode FromFile (string videoFile);
 
 		/// <summary>Creates a video node from the file at the specified URL.</summary>
-		/// <param name="videoURL">The video url to create the <see cref="SKVideoNode" /> from.</param>
+		/// <param name="videoUrl">The video url to create the <see cref="SKVideoNode" /> from.</param>
 		[Static, Export ("videoNodeWithURL:")]
 		SKVideoNode FromUrl (NSUrl videoUrl);
 
@@ -1519,7 +1519,7 @@ namespace SpriteKit {
 		NativeHandle Constructor (string videoFile);
 
 		/// <summary>Creates a video node from the file at the specified URL.</summary>
-		/// <param name="videoURL">The video url to create the <see cref="SKVideoNode" /> from.</param>
+		/// <param name="url">The video url to create the <see cref="SKVideoNode" /> from.</param>
 		[Export ("initWithURL:"), Internal]
 		NativeHandle Constructor (NSUrl url);
 

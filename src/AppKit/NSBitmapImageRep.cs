@@ -51,9 +51,9 @@ namespace AppKit {
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
-		public NSData RepresentationUsingTypeProperties (NSBitmapImageFileType storageType)
+		public NSData? RepresentationUsingTypeProperties (NSBitmapImageFileType storageType)
 		{
-			return RepresentationUsingTypeProperties (storageType, null);
+			return RepresentationUsingTypeProperties (storageType, new NSDictionary ());
 		}
 
 		/// <summary>Create a new <see cref="NSBitmapImageRep" /> that for incremental loading.</summary>

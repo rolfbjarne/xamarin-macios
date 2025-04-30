@@ -16911,12 +16911,22 @@ namespace UIKit {
 		/// <param name="scrollView">Scroll view that was scrolled.</param>
 		/// <summary>Indicates that the specified scrollView's scrolling has ended at the top.</summary>
 		/// <remarks>To be added.</remarks>
-		[Export ("scrollViewDidScrollToTop:"), EventArgs ("UIScrollView", XmlDocs = """
+		[Export ("scrollViewDidScrollToTop:"), EventArgs ("UIScrollView",
+#if !__TVOS__
+		XmlDocs = """
 			<summary>Event raised by the object.</summary>
 			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
 			<altmember cref="UIKit.UIScrollView.Scrolled" />
 			<altmember cref="UIKit.UIScrollView.ScrollsToTop" />
-			""")]
+			"""
+#else
+		XmlDocs = """
+			<summary>Event raised by the object.</summary>
+			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+			<altmember cref="UIKit.UIScrollView.Scrolled" />
+			"""
+#endif
+		)]
 		void ScrolledToTop (UIScrollView scrollView);
 
 		/// <param name="scrollView">Scroll view containing the content being zoomed.</param>

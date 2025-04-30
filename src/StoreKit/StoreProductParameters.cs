@@ -36,8 +36,11 @@ using ObjCRuntime;
 namespace StoreKit {
 
 #if !COREBUILD
+#if __TVOS__
+	/// <summary>A subclass of <see cref="Foundation.DictionaryContainer" /> that specifies the product to be displayed.</summary>
+#else
 	/// <summary>A subclass of <see cref="Foundation.DictionaryContainer" /> that, when passed to <see cref="StoreKit.SKStoreProductViewController.LoadProduct(StoreKit.StoreProductParameters,System.Action{System.Boolean,Foundation.NSError})" />, specifies the product to be displayed.</summary>
-	///     <remarks>To be added.</remarks>
+#endif
 #endif
 	public partial class StoreProductParameters : DictionaryContainer {
 #if !COREBUILD

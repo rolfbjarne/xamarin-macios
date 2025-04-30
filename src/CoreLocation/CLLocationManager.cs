@@ -40,7 +40,11 @@ using CoreLocation;
 using ObjCRuntime;
 
 namespace CoreLocation {
+#if __TVOS__
+	/// <include file="../../docs/api/CoreLocation/CLLocationManager.xml" path="/Documentation/Docs[@DocId='tvOS|T:CoreLocation.CLLocationManager']/*" />
+#else
 	/// <include file="../../docs/api/CoreLocation/CLLocationManager.xml" path="/Documentation/Docs[@DocId='T:CoreLocation.CLLocationManager']/*" />
+#endif
 	public partial class CLLocationManager : NSObject {
 
 #if IOS

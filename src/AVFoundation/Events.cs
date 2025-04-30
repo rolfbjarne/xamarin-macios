@@ -59,10 +59,14 @@ namespace AVFoundation {
 		public NSError Error { get; private set; }
 	}
 
+#if __TVOS__
+	/// <summary>Provides data for the <see cref="AVAudioPlayer.FinishedPlaying" /> event.</summary>
+#elif __MACOS__
+	/// <summary>Provides data for the <see cref="AVAudioPlayer.FinishedPlaying" /> and <see cref="AVAudioRecorder.FinishedRecording" /> events.</summary>
+#else
 	/// <summary>Provides data for the <see cref="AVAudioPlayer.FinishedPlaying" />, <see cref="AVAudioRecorder.FinishedRecording" /> and <see cref="AVAudioSession.InputAvailabilityChanged" /> events.</summary>
-	///     <remarks>
-	///     </remarks>
-	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVTouchSample/">avTouch</related>
+#endif
+	/// <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVTouchSample/">avTouch</related>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -298,13 +302,19 @@ namespace AVFoundation {
 	}
 #endif // !TVOS
 
+#if !(XAMCORE_5_0 && (__TVOS__ || __MACOS__)
+#if !__TVOS__
 	/// <summary>Provides data for the <see cref="AVFoundation.AVAudioSession.SampleRateChanged" /> event.</summary>
-	///     <remarks>
-	///     </remarks>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+#if XAMCORE_5_0
+	[UnsupportedOSPlatform ("tvos")]
+	[UnsupportedOSPlatform ("macos")
+#else
 	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos")]
+#endif
 	public class AVSampleRateEventArgs : EventArgs {
 		/// <param name="sampleRate">To be added.</param>
 		///         <summary>Initializes a new instance of the AVSampleRateEventArgs class.</summary>
@@ -325,8 +335,13 @@ namespace AVFoundation {
 	///     </remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+#if XAMCORE_5_0
+	[UnsupportedOSPlatform ("tvos")]
+	[UnsupportedOSPlatform ("macos")
+#else
 	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos")]
+#endif
 	public class AVChannelsEventArgs : EventArgs {
 		/// <param name="numberOfChannels">To be added.</param>
 		///         <summary>Initializes a new instance of the AVChannelsEventArgs class.</summary>
@@ -347,8 +362,13 @@ namespace AVFoundation {
 	///     </remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+#if XAMCORE_5_0
+	[UnsupportedOSPlatform ("tvos")]
+	[UnsupportedOSPlatform ("macos")
+#else
 	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos")]
+#endif
 	public class AVCategoryEventArgs : EventArgs {
 		/// <param name="category">To be added.</param>
 		///         <summary>Initializes a new instance of the AVCategoryEventArgs class.</summary>
@@ -364,6 +384,7 @@ namespace AVFoundation {
 		///         <remarks>To be added.</remarks>
 		public string Category { get; private set; }
 	}
+#endif // !(XAMCORE_5_0 && (__TVOS__ || __MACOS__)
 
 #if !MONOMAC && !TVOS
 	internal class InternalAVAudioSessionDelegate : AVAudioSessionDelegate {

@@ -65,7 +65,7 @@ namespace CoreText {
 	}
 
 	// defined as uint32_t - /System/Library/Frameworks/CoreText.framework/Headers/CTFont.h
-	/// <summary>An enumeration whose values specify the intended use of a font. Used with <see cref="CTFont.CTFont(CTFontUIType, nfloag, System.String)" /></summary>
+	/// <summary>An enumeration whose values specify the intended use of a font. Used with <see cref="CTFont.CTFont(CTFontUIFontType, nfloat, System.String)" /></summary>
 	///     <remarks>To be added.</remarks>
 	public enum CTFontUIFontType : uint {
 		/// <summary>To be added.</summary>

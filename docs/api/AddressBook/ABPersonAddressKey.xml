@@ -36,6 +36,7 @@ ABPerson person = GetMeSomePerson();
 person.SetAddresses(addresses);]]></code>
     </remarks>
     <altmember cref="AddressBook.ABPerson.GetAllAddresses" />
-    <altmember cref="AddressBook.ABPerson.SetAddresses" />
+    <altmember cref="AddressBook.ABPerson.SetAddresses(ABMultiValue{NSDictionary})" />
+    <altmember cref="AddressBook.ABPerson.SetAddresses(ABMultiValue{PersonAddress})" />
   </Docs>
 </Documentation>

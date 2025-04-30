@@ -118,7 +118,7 @@ label.Font = UIFont.FromDescriptor (removedSnowmanDescriptor, 0);
             <see cref="UIKit.UIFont.PreferredHeadline" />,
             <see cref="UIKit.UIFont.PreferredSubheadline" /> properties to get this information.
           </para>
-          <para>Using these methods to obtain an initial font during view intiailization is not sufficient to implement dynamic type. After the application user has set the "Text Size Property" in Settings, the application will receive a notification via <see cref="UIKit.UIApplication.Notifications.ObserveContentSizeCategoryChanged(EventHandler{TEventArgs})" />. It is the application developer's responsibility, at that point, to invalidate the layout in all view elements that should be resized. The simplest way to do that is to have a method that re-sets the font in all components that support Dynamic Type:</para>
+          <para>Using these methods to obtain an initial font during view intiailization is not sufficient to implement dynamic type. After the application user has set the "Text Size Property" in Settings, the application will receive a notification via <see cref="UIKit.UIApplication.Notifications.ObserveContentSizeCategoryChanged(EventHandler{UIContentSizeCategoryChangedEventArgs})" />. It is the application developer's responsibility, at that point, to invalidate the layout in all view elements that should be resized. The simplest way to do that is to have a method that re-sets the font in all components that support Dynamic Type:</para>
           <example>
             <code lang="csharp lang-csharp"><![CDATA[
  UIApplication.Notifications.ObserveContentSizeCategoryChanged((s,e) => {

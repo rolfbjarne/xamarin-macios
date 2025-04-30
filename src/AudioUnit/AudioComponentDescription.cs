@@ -46,35 +46,35 @@ namespace AudioUnit {
 	///     </remarks>
 	public enum AudioComponentType : uint { // OSType in AudioComponentDescription
 #if !COREBUILD
-		/// <summary>An effect component, when set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AUAudioUnitSubType.Output" /></summary>
+		/// <summary>An effect component, when set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AUAudioUnitSubType.Output" /></summary>
 #endif
 		Output = 0x61756f75, //'auou',
 #if !COREBUILD
-		/// <summary>A music device component, when set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AudioTypeMusicDevice" /></summary>
+		/// <summary>A music device component, when set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioTypeMusicDevice" /></summary>
 #endif
 		MusicDevice = 0x61756d75, // 'aumu'
 		/// <summary>An effect component that can also work on MIDI control messages.</summary>
 		MusicEffect = 0x61756d66, // 'aumf'
 #if !COREBUILD
-		/// <summary>An format converter component, when set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AUAudioUnitSubType.FormatConverter" /></summary>
+		/// <summary>An format converter component, when set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AUAudioUnitSubType.FormatConverter" /></summary>
 #endif
 		FormatConverter = 0x61756663, // 'aufc'
 #if !COREBUILD
-		/// <summary>An effect component, when set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AUAudioUnitSubType.Effect" /></summary>
+		/// <summary>An effect component, when set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AUAudioUnitSubType.Effect" /></summary>
 #endif
 		Effect = 0x61756678, // 'aufx'
 #if !COREBUILD
-		/// <summary>A mixer component, when set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AUAudioUnitSubType.Mixer" /></summary>
+		/// <summary>A mixer component, when set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AUAudioUnitSubType.Mixer" /></summary>
 #endif
 		Mixer = 0x61756d78, // 'aumx'
 #if !COREBUILD
-		/// <summary>A panner component that will pan a single audio input to a single output. When set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AUAudioUnitSubType.Panner" /></summary>
+		/// <summary>A panner component that will pan a single audio input to a single output. When set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AUAudioUnitSubType.Panner" /></summary>
 #endif
 		Panner = 0x6175706e, // 'aupn'
 		/// <summary>An offline effect component, used to process data from files or to perform offline audio processing (not real time)</summary>
 		OfflineEffect = 0x61756f6c, // 'auol'
 #if !COREBUILD
-		/// <summary>A generator component, when set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AUAudioUnitSubType.Generator" /></summary>
+		/// <summary>A generator component, when set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AUAudioUnitSubType.Generator" /></summary>
 #endif
 		Generator = 0x6175676e, // 'augn'
 #if NET

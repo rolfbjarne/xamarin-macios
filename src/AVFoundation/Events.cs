@@ -59,7 +59,7 @@ namespace AVFoundation {
 		public NSError Error { get; private set; }
 	}
 
-	/// <summary>Provides data for the <see cref="AVAudioSession.FinishedPlaying" /> and <see cref="AVAudioSession.FinishedRecording" /> and <see cref="AVStatusEventArgs.InputAvailabilityChanged" /> events.</summary>
+	/// <summary>Provides data for the <see cref="AVAudioRecorder.FinishedPlaying" /> and <see cref="AVAudioRecorder.FinishedRecording" /> and <see cref="AVAudioSession.InputAvailabilityChanged" /> events.</summary>
 	///     <remarks>
 	///     </remarks>
 	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVTouchSample/">avTouch</related>

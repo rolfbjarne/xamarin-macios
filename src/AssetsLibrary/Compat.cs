@@ -837,7 +837,6 @@ namespace AssetsLibrary {
 		/// <summary>Name of this group.</summary>
 		///         <value>The name of the group.</value>
 		///         <remarks>To be added.</remarks>
-		///         <altmember cref="AssetsLibrary.ALAssetsGroup.PersistentGroup" />
 		public NSString Name {
 			get {
 				throw new InvalidOperationException (Constants.AssetsLibraryRemoved);

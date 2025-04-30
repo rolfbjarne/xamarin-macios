@@ -82,11 +82,11 @@
           <term>
             Getting values, labels, and identifiers:
             <see cref="AddressBook.ABMultiValue{T}.Count" />,
-            <see cref="AddressBook.ABMultiValue{T}.System#Collections#IEnumerable#GetEnumerator" />,
+            <see cref="AddressBook.ABMultiValue{T}.GetEnumerator" />,
             <see cref="AddressBook.ABMultiValue{T}.GetFirstIndexOfValue(Foundation.NSObject)" />,
             <see cref="AddressBook.ABMultiValue{T}.GetIndexForIdentifier(System.Int32)" />,
             <see cref="AddressBook.ABMultiValue{T}.GetValues" />,
-            <see cref="AddressBook.ABMultiValue{T}.Item(System.nint)" />.
+            <see cref="AddressBook.ABMultiValue{T}[System.IntPtr]" />.
           </term>
         </item>
         <item>

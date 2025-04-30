@@ -59,7 +59,7 @@ namespace GameKit {
 	delegate void GKInviteHandler (GKInvite invite, string [] playerIDs);
 	/// <param name="activity">To be added.</param>
 	/// <param name="error">To be added.</param>
-	/// <summary>A delegate used with <see cref="GameKit.GKMatchmaker.QueryActivity(GameKit.GKQueryHandler)" /> and <see cref="GameKit.GKMatchmaker.QueryPlayerGroupActivity(System.nint,GameKit.GKQueryHandler)" /> to specify behavior after the query is completed.</summary>
+	/// <summary>A delegate used with <see cref="GameKit.GKMatchmaker.QueryActivity(GameKit.GKQueryHandler)" /> and <see cref="GameKit.GKMatchmaker.QueryPlayerGroupActivity(System.IntPtr,GameKit.GKQueryHandler)" /> to specify behavior after the query is completed.</summary>
 	/// <remarks>To be added.</remarks>
 	delegate void GKQueryHandler (nint activity, NSError error);
 	/// <param name="achivements">To be added.</param>

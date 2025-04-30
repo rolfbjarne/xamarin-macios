@@ -253,7 +253,7 @@ var myView = new UIView (new RectangleF (0, 0, 100, 100));
         </item>
         <item>
           <term>
-            <see cref="UIKit.UIView.InsertSubview(UIKit.UIView,System.nint)" />
+            <see cref="UIKit.UIView.InsertSubview(UIKit.UIView,System.IntPtr)" />
           </term>
         </item>
         <item>
@@ -938,8 +938,8 @@ public class BlueLayer : CALayer
       </format>
       <para>iOS user interfaces are built from <see cref="UIKit.UIView" /> hierarchies. Parent-child relationships determine not only the visual aspects of the UI, but determine how the application responds to touch events and orientation changes.</para>
       <para>View relationships may be built programmatically or via XIB files. <see cref="UIKit.UIView" />s may have many <see cref="UIKit.UIView.Subviews" /> but only one <see cref="UIKit.UIView.Superview" />.</para>
-      <para>The most common way to add subviews is to use <see cref="UIKit.UIView.AddSubview(UIKit.UIView)" />, which appends the child view to the list of <see cref="UIKit.UIView.Subviews" />. More precise control of ordering during insertion may be done with the <see cref="UIKit.UIView.InsertSubview(UIKit.UIView,System.nint)" />, <see cref="UIKit.UIView.InsertSubviewAbove(UIKit.UIView,UIKit.UIView)" />, and <see cref="UIKit.UIView.InsertSubviewBelow(UIKit.UIView,UIKit.UIView)" /> methods.</para>
-      <para>The ordering of <see cref="UIKit.UIView.Subviews" /> may be manipulated with the <see cref="UIKit.UIView.BringSubviewToFront(UIKit.UIView)" />, <see cref="UIKit.UIView.SendSubviewToBack(UIKit.UIView)" />, and <see cref="UIKit.UIView.ExchangeSubview(System.nint,System.nint)" /> methods.</para>
+      <para>The most common way to add subviews is to use <see cref="UIKit.UIView.AddSubview(UIKit.UIView)" />, which appends the child view to the list of <see cref="UIKit.UIView.Subviews" />. More precise control of ordering during insertion may be done with the <see cref="UIKit.UIView.InsertSubview(UIKit.UIView,System.IntPtr)" />, <see cref="UIKit.UIView.InsertSubviewAbove(UIKit.UIView,UIKit.UIView)" />, and <see cref="UIKit.UIView.InsertSubviewBelow(UIKit.UIView,UIKit.UIView)" /> methods.</para>
+      <para>The ordering of <see cref="UIKit.UIView.Subviews" /> may be manipulated with the <see cref="UIKit.UIView.BringSubviewToFront(UIKit.UIView)" />, <see cref="UIKit.UIView.SendSubviewToBack(UIKit.UIView)" />, and <see cref="UIKit.UIView.ExchangeSubview(System.IntPtr,System.IntPtr)" /> methods.</para>
       <format type="text/html">
         <h2>Focus</h2>
       </format>

@@ -15401,7 +15401,7 @@ namespace UIKit {
 	///       <format type="text/html">
 	///         <h2>Customizing Appearance</h2>
 	///       </format>
-	///       <para>The appearance of the <see cref="UIKit.UIPickerView" /> can be customized by using the <see cref="UIKit.UIPickerView.UIPickerViewAppearance" /> class or by overriding the <see cref="UIKit.UIPickerViewModel.GetView(UIKit.UIPickerView,System.nint,System.nint,UIKit.UIView)" /> and <see cref="UIKit.UIPickerViewModel.GetRowHeight(UIKit.UIPickerView,System.nint)" /> methods in the <see cref="UIKit.UIPickerViewModel" />, as shown in the "Standard Controls" sample ("Picker With Custom Appearance").</para>
+	///       <para>The appearance of the <see cref="UIKit.UIPickerView" /> can be customized by using the <see cref="UIKit.UIPickerView.UIPickerViewAppearance" /> class or by overriding the <see cref="UIKit.UIPickerViewModel.GetView(UIKit.UIPickerView,System.IntPtr,System.IntPtr,UIKit.UIView)" /> and <see cref="UIKit.UIPickerViewModel.GetRowHeight(UIKit.UIPickerView,System.IntPtr)" /> methods in the <see cref="UIKit.UIPickerViewModel" />, as shown in the "Standard Controls" sample ("Picker With Custom Appearance").</para>
 	///     </remarks>
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIPickerView_Class/index.html">Apple documentation for <c>UIPickerView</c></related>
 	[NoTV]
@@ -19374,7 +19374,7 @@ namespace UIKit {
 		/// <summary>Represents the value associated with the constant UITableViewAutomaticDimension</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>Return this value from <see cref="UIKit.UITableViewSource" /> (or <see cref="UIKit.UITableViewDelegate" />) methods that request dimension metrics when you want the UITableView to use a default value. For example, return this constant from <see cref="UIKit.UITableViewSource.GetHeightForHeader(UIKit.UITableView,System.nint)" /> or <see cref="UIKit.UITableViewSource.GetHeightForFooter(UIKit.UITableView,System.nint)" /> and the table view will use automatically use a height that accomodates the value returned from <see cref="UIKit.UITableViewSource.TitleForHeader(UIKit.UITableView,System.nint)" /> or <see cref="UIKit.UITableViewSource.TitleForFooter(UIKit.UITableView,System.nint)" /> respectively.</remarks>
+		///         <remarks>Return this value from <see cref="UIKit.UITableViewSource" /> (or <see cref="UIKit.UITableViewDelegate" />) methods that request dimension metrics when you want the UITableView to use a default value. For example, return this constant from <see cref="UIKit.UITableViewSource.GetHeightForHeader(UIKit.UITableView,System.IntPtr)" /> or <see cref="UIKit.UITableViewSource.GetHeightForFooter(UIKit.UITableView,System.IntPtr)" /> and the table view will use automatically use a height that accomodates the value returned from <see cref="UIKit.UITableViewSource.TitleForHeader(UIKit.UITableView,System.IntPtr)" /> or <see cref="UIKit.UITableViewSource.TitleForFooter(UIKit.UITableView,System.IntPtr)" /> respectively.</remarks>
 		[Field ("UITableViewAutomaticDimension")]
 		nfloat AutomaticDimension { get; }
 
@@ -19652,7 +19652,7 @@ namespace UIKit {
 		/// <summary>Called to populate the header for the specified section.</summary>
 		/// <returns>Text to display in the section header, or <see langword="null" /> if no title is required.</returns>
 		/// <remarks>
-		///           <para>Table views use a fixed style for the section header. To customize the appearance of the header, return a custom view from <see cref="UIKit.UITableViewSource.GetViewForHeader(UIKit.UITableView,System.nint)" /> instead of implementing this method.</para>
+		///           <para>Table views use a fixed style for the section header. To customize the appearance of the header, return a custom view from <see cref="UIKit.UITableViewSource.GetViewForHeader(UIKit.UITableView,System.IntPtr)" /> instead of implementing this method.</para>
 		///           <para>Declared in [UITableViewDataSource]</para>
 		///         </remarks>
 		[Export ("tableView:titleForHeaderInSection:")]
@@ -19664,7 +19664,7 @@ namespace UIKit {
 		/// <summary>Called to populate the footer for the specified section.</summary>
 		/// <returns>Text to display in the section footer, or <see langword="null" /> if no title is required.</returns>
 		/// <remarks>
-		///           <para>Table views use a fixed style for the section footer. To customize the appearance of the footer, return a custom view from <see cref="UIKit.UITableViewSource.GetViewForFooter(UIKit.UITableView,System.nint)" /> instead of implementing this method.</para>
+		///           <para>Table views use a fixed style for the section footer. To customize the appearance of the footer, return a custom view from <see cref="UIKit.UITableViewSource.GetViewForFooter(UIKit.UITableView,System.IntPtr)" /> instead of implementing this method.</para>
 		///           <para>Declared in [UITableViewDataSource]</para>
 		///         </remarks>
 		[Export ("tableView:titleForFooterInSection:")]
@@ -19726,7 +19726,7 @@ namespace UIKit {
 		/// <summary>Returns a view object to display at the start of the given section.</summary>
 		/// <returns>A view to be displayed at the start of the given <paramref name="section" />.</returns>
 		/// <remarks>
-		///           <para>Can either be a <see cref="UIKit.UILabel" />, <see cref="UIKit.UIImageView" /> or a custom view. This method requires <see cref="UIKit.UITableViewSource.GetHeightForHeader(UIKit.UITableView,System.nint)" /> to be implemented as well.</para>
+		///           <para>Can either be a <see cref="UIKit.UILabel" />, <see cref="UIKit.UIImageView" /> or a custom view. This method requires <see cref="UIKit.UITableViewSource.GetHeightForHeader(UIKit.UITableView,System.IntPtr)" /> to be implemented as well.</para>
 		///           <para>Declared in [UITableViewDelegate]</para>
 		///         </remarks>
 		[Export ("tableView:viewForHeaderInSection:")]
@@ -19737,7 +19737,7 @@ namespace UIKit {
 		/// <summary>Returns a view object to display at the end of the given section.</summary>
 		/// <returns>A view to be displayed at the end of the given <paramref name="section" />.</returns>
 		/// <remarks>
-		///           <para>Can either be a <see cref="UIKit.UILabel" />, <see cref="UIKit.UIImageView" /> or a custom view. This method requires <see cref="UIKit.UITableViewSource.GetHeightForFooter(UIKit.UITableView,System.nint)" /> to be implemented as well.</para>
+		///           <para>Can either be a <see cref="UIKit.UILabel" />, <see cref="UIKit.UIImageView" /> or a custom view. This method requires <see cref="UIKit.UITableViewSource.GetHeightForFooter(UIKit.UITableView,System.IntPtr)" /> to be implemented as well.</para>
 		///           <para>Declared in [UITableViewDelegate]</para>
 		///         </remarks>
 		[Export ("tableView:viewForFooterInSection:")]
@@ -20350,7 +20350,7 @@ namespace UIKit {
 		/// <summary>Returns a view object to display at the start of the given section.</summary>
 		/// <returns>A view to be displayed at the start of the given <paramref name="section" />.</returns>
 		/// <remarks>
-		///           <para>Can either be a <see cref="UIKit.UILabel" />, <see cref="UIKit.UIImageView" /> or a custom view. This method requires <see cref="UIKit.UITableViewSource.GetHeightForHeader(UIKit.UITableView,System.nint)" /> to be implemented as well.</para>
+		///           <para>Can either be a <see cref="UIKit.UILabel" />, <see cref="UIKit.UIImageView" /> or a custom view. This method requires <see cref="UIKit.UITableViewSource.GetHeightForHeader(UIKit.UITableView,System.IntPtr)" /> to be implemented as well.</para>
 		///         </remarks>
 		[Export ("tableView:viewForHeaderInSection:")]
 		UIView GetViewForHeader (UITableView tableView, nint section);
@@ -20360,7 +20360,7 @@ namespace UIKit {
 		/// <summary>Returns a view object to display at the end of the given section.</summary>
 		/// <returns>A view to be displayed at the end of the given <paramref name="section" />.</returns>
 		/// <remarks>
-		///           <para>Can either be a <see cref="UIKit.UILabel" />, <see cref="UIKit.UIImageView" /> or a custom view. This method requires <see cref="UIKit.UITableViewSource.GetHeightForFooter(UIKit.UITableView,System.nint)" /> to be implemented as well.</para>
+		///           <para>Can either be a <see cref="UIKit.UILabel" />, <see cref="UIKit.UIImageView" /> or a custom view. This method requires <see cref="UIKit.UITableViewSource.GetHeightForFooter(UIKit.UITableView,System.IntPtr)" /> to be implemented as well.</para>
 		///           <para>[UITableViewDelegate]</para>
 		///         </remarks>
 		[Export ("tableView:viewForFooterInSection:")]

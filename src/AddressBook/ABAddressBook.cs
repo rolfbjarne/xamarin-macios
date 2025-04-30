@@ -257,7 +257,7 @@ namespace AddressBook {
 		///         <remarks>
 		///           <para>This method checks the application's current authorization status, which can change due to the user interacting with the permissions dialog (see <see cref="AddressBook.ABAddressBook" />) or the system's Privacy settings.</para>
 		///         </remarks>
-		///         <altmember cref="AddressBook.ABAddressBok.RequestAccess" />
+		///         <altmember cref="RequestAccess" />
 		public static ABAuthorizationStatus GetAuthorizationStatus ()
 		{
 			return (ABAuthorizationStatus) (long) ABAddressBookGetAuthorizationStatus ();

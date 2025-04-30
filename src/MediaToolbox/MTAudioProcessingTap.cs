@@ -349,7 +349,7 @@ namespace MediaToolbox {
 
 	// uint32_t -> MTAudioProcessingTap.h
 #if !COREBUILD
-	/// <summary>An enumeration that specifies flags to be used with the <see cref="MediaToolbox.MTAudioProcessingTap.GetSourceAudio(System.nint,AudioToolbox.AudioBuffers,ref MediaToolbox.MTAudioProcessingTapFlags,ref CoreMedia.CMTimeRange,ref System.IntPtr)" /> method, and the <see cref="MediaToolbox.MTAudioProcessingTapProcessCallback" /> and <see cref="MediaToolbox.MTAudioProcessingTapProcessDelegate" /> constructors.</summary>
+	/// <summary>An enumeration that specifies flags to be used with the <see cref="MediaToolbox.MTAudioProcessingTap.GetSourceAudio(System.IntPtr,AudioToolbox.AudioBuffers,ref MediaToolbox.MTAudioProcessingTapFlags,ref CoreMedia.CMTimeRange,ref System.IntPtr)" /> method, and the <see cref="MediaToolbox.MTAudioProcessingTapProcessCallback" /> and <see cref="MediaToolbox.MTAudioProcessingTapProcessDelegate" /> constructors.</summary>
 	///     <remarks>To be added.</remarks>
 #endif
 	[Flags]

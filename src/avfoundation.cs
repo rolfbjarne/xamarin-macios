@@ -2225,7 +2225,7 @@ namespace AVFoundation {
 
 		/// <summary>Determines the average and peak power for the channels in the <see cref="AVFoundation.AVAudioPlayer" />.</summary>
 		///         <remarks>
-		///           <para>This method must be called prior to accessing <see cref="AVFoundation.AVAudioPlayer.AveragePower(System.nuint)" /> or <see cref="AVFoundation.AVAudioPlayer.PeakPower(System.nuint)" />.</para>
+		///           <para>This method must be called prior to accessing <see cref="AVFoundation.AVAudioPlayer.AveragePower(System.UIntPtr)" /> or <see cref="AVFoundation.AVAudioPlayer.PeakPower(System.UIntPtr)" />.</para>
 		///         </remarks>
 		[Export ("updateMeters")]
 		void UpdateMeters ();
@@ -2748,7 +2748,7 @@ namespace AVFoundation {
 		[Export ("meteringEnabled")]
 		bool MeteringEnabled { [Bind ("isMeteringEnabled")] get; set; }
 
-		/// <summary>Calculates the <see cref="AVFoundation.AVAudioRecorder.AveragePower(System.nuint)" /> and <see cref="AVFoundation.AVAudioRecorder.PeakPower(System.nuint)" /> properties.</summary>
+		/// <summary>Calculates the <see cref="AVFoundation.AVAudioRecorder.AveragePower(System.UIntPtr)" /> and <see cref="AVFoundation.AVAudioRecorder.PeakPower(System.UIntPtr)" /> properties.</summary>
 		///         <remarks>
 		///           <para>The <see cref="AVFoundation.AVAudioRecorder.MeteringEnabled" /> property must be <see langword="true" /> for this method to operate correctly.</para>
 		///         </remarks>

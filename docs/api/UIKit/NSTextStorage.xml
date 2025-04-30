@@ -13,7 +13,7 @@
 
       </para>
       <para>
-	If you subclass NSTextStorage, you must override four methods.  Two from NSAttributedString (<see cref="Foundation.NSAttributedString.LowLevelValue" /> and <see cref="Foundation.NSAttributedString.LowLevelGetAttributes(System.nint,out Foundation.NSRange)" />) and two from NSMutableAttributedString (<see cref="Foundation.NSMutableAttributedString.LowLevelSetAttributes(System.IntPtr,Foundation.NSRange)" /> and <see cref="Foundation.NSMutableAttributedString.Replace(Foundation.NSRange,System.String)" />). 
+	If you subclass NSTextStorage, you must override four methods.  Two from NSAttributedString (<see cref="Foundation.NSAttributedString.LowLevelValue" /> and <see cref="Foundation.NSAttributedString.LowLevelGetAttributes(System.IntPtr,out Foundation.NSRange)" />) and two from NSMutableAttributedString (<see cref="Foundation.NSMutableAttributedString.LowLevelSetAttributes(System.IntPtr,Foundation.NSRange)" /> and <see cref="Foundation.NSMutableAttributedString.Replace(Foundation.NSRange,System.String)" />). 
       </para>
       <para>
 	The reason why you must override the low-level methods is

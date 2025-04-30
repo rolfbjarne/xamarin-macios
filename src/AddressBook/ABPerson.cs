@@ -785,8 +785,8 @@ namespace AddressBook {
 	///         Labels are used with
 	///         <see cref="AddressBook.ABAddressBook.LocalizedLabel(Foundation.NSString)" />,
 	///         <see cref="AddressBook.ABMultiValueEntry{T}.Label" />,
-	///         <see cref="AddressBook.ABMultiValue{T}.Add" />, and
-	///         <see cref="AddressBook.ABMultiValue{T}.Insert" />.
+	///         <see cref="AddressBook.ABMutableMultiValue{T}.Add" />, and
+	///         <see cref="AddressBook.ABMutableMultiValue{T}.Insert" />.
 	///       </para>
 	///     </remarks>
 	[SupportedOSPlatform ("ios")]

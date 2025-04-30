@@ -86,7 +86,7 @@
             <see cref="AddressBook.ABMultiValue{T}.GetFirstIndexOfValue(Foundation.NSObject)" />,
             <see cref="AddressBook.ABMultiValue{T}.GetIndexForIdentifier(System.Int32)" />,
             <see cref="AddressBook.ABMultiValue{T}.GetValues" />,
-            <see cref="AddressBook.ABMultiValue{T}.Item(nint)" />.
+            <see cref="AddressBook.ABMultiValue{T}.this[nint]" />.
           </term>
         </item>
         <item>

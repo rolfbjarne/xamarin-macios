@@ -46,35 +46,35 @@ namespace AudioUnit {
 	///     </remarks>
 	public enum AudioComponentType : uint { // OSType in AudioComponentDescription
 #if !COREBUILD
-		/// <summary>An effect component, when set, you want to set a component subtype in the <see cref="AudioUnit.AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AUAudioUnitSubType.Output" /></summary>
+		/// <summary>An effect component, when set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AUAudioUnitSubType.Output" /></summary>
 #endif
 		Output = 0x61756f75, //'auou',
 #if !COREBUILD
-		/// <summary>A music device component, when set, you want to set a component subtype in the <see cref="AudioUnit.AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AudioTypeMusicDevice" /></summary>
+		/// <summary>A music device component, when set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AudioTypeMusicDevice" /></summary>
 #endif
 		MusicDevice = 0x61756d75, // 'aumu'
 		/// <summary>An effect component that can also work on MIDI control messages.</summary>
 		MusicEffect = 0x61756d66, // 'aumf'
 #if !COREBUILD
-		/// <summary>An format converter component, when set, you want to set a component subtype in the <see cref="AudioUnit.AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AUAudioUnitSubType.FormatConverter" /></summary>
+		/// <summary>An format converter component, when set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AUAudioUnitSubType.FormatConverter" /></summary>
 #endif
 		FormatConverter = 0x61756663, // 'aufc'
 #if !COREBUILD
-		/// <summary>An effect component, when set, you want to set a component subtype in the <see cref="AudioUnit.AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AUAudioUnitSubType.Effect" /></summary>
+		/// <summary>An effect component, when set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AUAudioUnitSubType.Effect" /></summary>
 #endif
 		Effect = 0x61756678, // 'aufx'
 #if !COREBUILD
-		/// <summary>A mixer component, when set, you want to set a component subtype in the <see cref="AudioUnit.AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AUAudioUnitSubType.Mixer" /></summary>
+		/// <summary>A mixer component, when set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AUAudioUnitSubType.Mixer" /></summary>
 #endif
 		Mixer = 0x61756d78, // 'aumx'
 #if !COREBUILD
-		/// <summary>A panner component that will pan a single audio input to a single output. When set, you want to set a component subtype in the <see cref="AudioUnit.AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AUAudioUnitSubType.Panner" /></summary>
+		/// <summary>A panner component that will pan a single audio input to a single output. When set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AUAudioUnitSubType.Panner" /></summary>
 #endif
 		Panner = 0x6175706e, // 'aupn'
 		/// <summary>An offline effect component, used to process data from files or to perform offline audio processing (not real time)</summary>
 		OfflineEffect = 0x61756f6c, // 'auol'
 #if !COREBUILD
-		/// <summary>A generator component, when set, you want to set a component subtype in the <see cref="AudioUnit.AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AUAudioUnitSubType.Generator" /></summary>
+		/// <summary>A generator component, when set, you want to set a component subtype in the <see cref="AudioComponentDescription.ComponentSubType" /> to one of the values from <see cref="AudioUnit.AUAudioUnitSubType.Generator" /></summary>
 #endif
 		Generator = 0x6175676e, // 'augn'
 #if NET
@@ -378,7 +378,7 @@ namespace AudioUnit {
 	}
 
 #if !COREBUILD
-	/// <summary>A flagging enumeration whose value specifies whether an audio component is searchable. Used with <see cref="AudioUnit.AudioComponentDescription.ComponentFlags" /></summary>
+	/// <summary>A flagging enumeration whose value specifies whether an audio component is searchable. Used with <see cref="AudioComponentDescription.ComponentFlags" /></summary>
 	///     <remarks>To be added.</remarks>
 #endif
 	[Flags]
@@ -408,7 +408,7 @@ namespace AudioUnit {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AudioComponentDescription {
 #if !COREBUILD
-		/// <summary>Describes the component type, some of the component types have subtypes, in those cases, you should also set the <see cref="AudioUnit.AudioComponentDescription.ComponentSubType" /> property.</summary>
+		/// <summary>Describes the component type, some of the component types have subtypes, in those cases, you should also set the <see cref="AudioComponentDescription.ComponentSubType" /> property.</summary>
 		///         <remarks>
 		///           <para />
 		///         </remarks>
@@ -449,7 +449,7 @@ namespace AudioUnit {
 #if !COREBUILD
 		/// <param name="type">To be added.</param>
 		///         <param name="subType">To be added.</param>
-		///         <summary>Initializes an <see cref="AudioUnit.AudioComponentDescription" /> with the given type and given subtype.   This method is here for cases where you might want to create a component description that is not covered by the built-in enumerations for component subtypes.</summary>
+		///         <summary>Initializes an <see cref="AudioComponentDescription" /> with the given type and given subtype.   This method is here for cases where you might want to create a component description that is not covered by the built-in enumerations for component subtypes.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 #endif
@@ -461,7 +461,7 @@ namespace AudioUnit {
 #if !COREBUILD
 		/// <param name="outputType">To be added.</param>
 		///         <summary>Creates an output component description.</summary>
-		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioUnit.AudioComponentDescription.ComponentType" /> set to <see cref="AudioUnit.AudioComponentType.Output" /> and the specified output type.</returns>
+		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioComponentDescription.ComponentType" /> set to <see cref="AudioComponentType.Output" /> and the specified output type.</returns>
 		///         <remarks>To be added.</remarks>
 #endif
 		public static AudioComponentDescription CreateOutput (AudioTypeOutput outputType)
@@ -472,7 +472,7 @@ namespace AudioUnit {
 #if !COREBUILD
 		/// <param name="musicDevice">To be added.</param>
 		///         <summary>Creates a music effect component description.</summary>
-		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioUnit.AudioComponentDescription.ComponentType" /> set to <see cref="AudioUnit.AudioComponentType.MusicDevice" /> and the specified device.</returns>
+		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioComponentDescription.ComponentType" /> set to <see cref="AudioComponentType.MusicDevice" /> and the specified device.</returns>
 		///         <remarks>To be added.</remarks>
 #endif
 		public static AudioComponentDescription CreateMusicDevice (AudioTypeMusicDevice musicDevice)
@@ -492,7 +492,7 @@ namespace AudioUnit {
 #if !COREBUILD
 		/// <param name="effect">To be added.</param>
 		///         <summary>Creates an audio effect component description.</summary>
-		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioUnit.AudioComponentDescription.ComponentType" /> set to <see cref="AudioUnit.AudioComponentType.Effect" /> and the specified effect.</returns>
+		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioComponentDescription.ComponentType" /> set to <see cref="AudioComponentType.Effect" /> and the specified effect.</returns>
 		///         <remarks>To be added.</remarks>
 #endif
 		public static AudioComponentDescription CreateEffect (AudioTypeEffect effect)
@@ -503,7 +503,7 @@ namespace AudioUnit {
 #if !COREBUILD
 		/// <param name="mixer">To be added.</param>
 		///         <summary>Creates an audio mixer component description.</summary>
-		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioUnit.AudioComponentDescription.ComponentType" /> set to <see cref="AudioUnit.AudioComponentType.Mixer" /> and the specified mixer.</returns>
+		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioComponentDescription.ComponentType" /> set to <see cref="AudioComponentType.Mixer" /> and the specified mixer.</returns>
 		///         <remarks>To be added.</remarks>
 #endif
 		public static AudioComponentDescription CreateMixer (AudioTypeMixer mixer)
@@ -514,7 +514,7 @@ namespace AudioUnit {
 #if !COREBUILD
 		/// <param name="panner">To be added.</param>
 		///         <summary>Creates a panner component description.</summary>
-		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioUnit.AudioComponentDescription.ComponentType" /> set to <see cref="AudioUnit.AudioComponentType.Panner" /> and the specified panner.</returns>
+		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioComponentDescription.ComponentType" /> set to <see cref="AudioComponentType.Panner" /> and the specified panner.</returns>
 		///         <remarks>To be added.</remarks>
 #endif
 		public static AudioComponentDescription CreatePanner (AudioTypePanner panner)
@@ -525,7 +525,7 @@ namespace AudioUnit {
 #if !COREBUILD
 		/// <param name="generator">To be added.</param>
 		///         <summary>Creates an audio generator component description.</summary>
-		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioUnit.AudioComponentDescription.ComponentType" /> set to <see cref="AudioUnit.AudioComponentType.Generator" /> and the specified generator.</returns>
+		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioComponentDescription.ComponentType" /> set to <see cref="AudioComponentType.Generator" /> and the specified generator.</returns>
 		///         <remarks>To be added.</remarks>
 #endif
 		public static AudioComponentDescription CreateGenerator (AudioTypeGenerator generator)

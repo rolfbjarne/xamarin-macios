@@ -676,7 +676,7 @@ namespace CoreGraphics {
 		/// <param name="space">The desired <see cref="CoreGraphics.CGColorSpace" />.</param>
 		///         <summary>Specifies the <see cref="CoreGraphics.CGColorSpace" /> to be used in the context.</summary>
 		///         <remarks>
-		///           <para>This method must be called prior to using <see cref="CoreGraphics.CGContext.SetFillColor(float[])" />.</para>
+		///           <para>This method must be called prior to using <see cref="CoreGraphics.CGContext.SetFillColor(nfloat[])" />.</para>
 		///         </remarks>
 		public void SetFillColorSpace (CGColorSpace? space)
 		{
@@ -689,7 +689,7 @@ namespace CoreGraphics {
 			/* CGColorSpaceRef __nullable */ IntPtr space);
 
 		/// <param name="space">The desired <see cref="CoreGraphics.CGColorSpace" />.</param>
-		///         <summary>Sets the <see cref="CoreGraphics.CGColorSpace" /> to be used with <see cref="CoreGraphics.CGContext.SetStrokeColor(float[])" />.</summary>
+		///         <summary>Sets the <see cref="CoreGraphics.CGColorSpace" /> to be used with <see cref="CoreGraphics.CGContext.SetStrokeColor(nfloat[])" />.</summary>
 		///         <remarks>To be added.</remarks>
 		public void SetStrokeColorSpace (CGColorSpace? space)
 		{
@@ -1620,7 +1620,7 @@ namespace CoreGraphics {
 		/// <param name="auxiliaryInfo">A dictionary of auxiliary information. May be <see langword="null" />.</param>
 		///         <summary>With <see cref="CoreGraphics.CGContext.EndTransparencyLayer" />, encloses operations on a fully transparent layer.</summary>
 		///         <remarks>To be added.</remarks>
-		///         <altmember cref="CoreGraphics.CGContext.BeginTransparencyLayer" />
+		///         <altmember cref="CoreGraphics.CGContext.BeginTransparencyLayer(CGRect,NSDictionary)" />
 		public void BeginTransparencyLayer (NSDictionary? auxiliaryInfo = null)
 		{
 			CGContextBeginTransparencyLayer (Handle, auxiliaryInfo.GetHandle ());

@@ -77,7 +77,7 @@ webView.LoadRequest(NSUrlRequest.FromUrl(new NSUrl("MyHtmlFile.html", false)));
       </example>
       <para>The above C# code:
         <list type="bullet"><item><term>Creates a <see cref="UIKit.UIWebView" /> which will be displayed to the end user;</term></item><item><term>Gets the <see cref="JavaScriptCore.JSContext" /> of the <see cref="UIKit.UIWebView" /> object's main frame;</term></item><item><term>Adds an exception handler so that JavaScript trouble will be visible to the Xamarin project;</term></item><item><term>Instantiates a new <c>MyJSExporter</c> object that, as described above, implements the <c>IMyJSVisibleProtocol</c>;</term></item><item><term>Adds that object to the <see cref="JavaScriptCore.JSContext" /> with the name <c>myCSharpObject</c>;</term></item><item><term>Loads an HTML file (see below)</term></item></list></para>
-      <para>Finally, the HTML file that is loaded into the <see cref="UIKIt.UIWebView" /> and into whose <see cref="JavaScriptCore.JSContext" /> the <c>MyJSExporter</c> object has been placed can access the object from within JavaScript:</para>
+      <para>Finally, the HTML file that is loaded into the <see cref="UIKit.UIWebView" /> and into whose <see cref="JavaScriptCore.JSContext" /> the <c>MyJSExporter</c> object has been placed can access the object from within JavaScript:</para>
       <example>
         <code lang="HTML"><![CDATA[
 <html>

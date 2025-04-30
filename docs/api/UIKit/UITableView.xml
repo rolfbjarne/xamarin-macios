@@ -104,7 +104,7 @@
       <para> 
               The type that you register must provide a constructor
               that takes an IntPtr constructor and needs to chain to
-              the <see cref="UIKit.UITableViewCell(IntPtr)" />
+              the <see cref="UIKit.UITableViewCell(NativeHandle)" />
               constructor.
               
             </para>

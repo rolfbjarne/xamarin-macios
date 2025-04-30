@@ -333,7 +333,6 @@ public class AnimalCell : UICollectionViewCell
         <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(Type, NSString, NSString)" />
         <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(Type, UICollectionElementKindSection, string)" />
         <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(Type, UICollectionElementKindSection, NSString)" />
-        <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(nint, NSString)" />
         <altmember cref="UIKit.UICollectionView.RegisterNibForCell(UINib, string)" />
         <altmember cref="UIKit.UICollectionView.RegisterNibForCell(UINib?, NSString)" />
         <altmember cref="UIKit.UICollectionView.RegisterNibForSupplementaryView(UINib, UICollectionElementKindSection, string)" />
@@ -366,7 +365,6 @@ public class AnimalCell : UICollectionViewCell
         <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(Type, NSString, NSString)" />
         <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(Type, UICollectionElementKindSection, string)" />
         <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(Type, UICollectionElementKindSection, NSString)" />
-        <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(nint, NSString)" />
         <altmember cref="UIKit.UICollectionView.RegisterNibForCell(UINib, string)" />
         <altmember cref="UIKit.UICollectionView.RegisterNibForCell(UINib?, NSString)" />
         <altmember cref="UIKit.UICollectionView.RegisterNibForSupplementaryView(UINib, UICollectionElementKindSection, string)" />
@@ -417,7 +415,7 @@ public class AnimalCell : UICollectionViewCell
         <returns>A supplementary <see cref="UIKit.UICollectionReusableView" /> that is either newly allocated or recycled from the reuse queue..</returns>
         <remarks>
           <para>The application developer must have registered a class or nib file using either <see cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(System.Type,UIKit.UICollectionElementKindSection,System.String)" /> or <see cref="UIKit.UICollectionView.RegisterNibForSupplementaryView(UIKit.UINib,UIKit.UICollectionElementKindSection,System.String)" /> prior to calling this method.</para>
-          <para>If the <see cref="UIKIt.UICollectionReusableView" /> is not newly allocated but is being recycled, this method will call that cell's <see cref="UIKit.UICollectionReusableView.PrepareForReuse" /> method.</para>
+          <para>If the <see cref="UIKit.UICollectionReusableView" /> is not newly allocated but is being recycled, this method will call that cell's <see cref="UIKit.UICollectionReusableView.PrepareForReuse" /> method.</para>
         </remarks>
       </Docs>
 </Documentation>

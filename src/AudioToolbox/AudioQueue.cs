@@ -728,7 +728,7 @@ namespace AudioToolbox {
 		///         <returns>AudioQueueStatus.Ok on success, otherwise the error. </returns>
 		///         <remarks>
 		///           <para>
-		/// 	    Use the <see cref="AudioToolbox.AudioQueue.AllocateBufferWithPacketDescriptors(System.Int32,System.Int32,ref System.IntPtr)" /> to allocate buffers that will be used with variable bit
+		/// 	    Use the <see cref="AudioToolbox.AudioQueue.AllocateBufferWithPacketDescriptors(System.Int32,System.Int32,out System.IntPtr)" /> to allocate buffers that will be used with variable bit
 		/// 	    rate encodings.
 		/// 	  </para>
 		///           <para>Use <see cref="AudioToolbox.AudioQueue.FreeBuffer(System.IntPtr)" /> to dispose the buffer.</para>
@@ -766,7 +766,7 @@ namespace AudioToolbox {
 		///         <returns>AudioQueueStatus.Ok on success and the audioQueueBuffer pointing to the buffer, otherwise the error.</returns>
 		///         <remarks>
 		///           <para>
-		/// 	    Use the <see cref="AudioToolbox.AudioQueue.AllocateBuffer(System.Int32,ref AudioToolbox.AudioQueueBuffer*)" /> to allocate buffers that will be used with fixed bit
+		/// 	    Use the <see cref="AudioToolbox.AudioQueue.AllocateBuffer(System.Int32,out AudioToolbox.AudioQueueBuffer*)" /> to allocate buffers that will be used with fixed bit
 		/// 	    rate encodings.
 		/// 	  </para>
 		///           <para>Use <see cref="AudioToolbox.AudioQueue.FreeBuffer(System.IntPtr)" /> to dispose the buffer.</para>

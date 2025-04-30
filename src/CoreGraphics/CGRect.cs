@@ -214,12 +214,10 @@ namespace CoreGraphics {
 		}
 
 		/// <summary>Gets the y-coordinate that is the sum of the <see cref="CoreGraphics.CGRect.Y" /> and <see cref="CoreGraphics.CGRect.Height" /> property values of this <see cref="CoreGraphics.CGRect" /> structure.</summary>
-		///         <value>
-		///         </value>
-		///         <remarks>
-		///           <attribution license="cc4" from="Microsoft" modified="false" />
-		///           <para>The value of the <see cref="CoreGraphics.CGRect.Bottom" /> property represents the y-coordinate of the first point at the bottom edge of the <see cref="CoreGraphics.CGRect.Rectangle" /> that is not contained in the <see cref="CoreGraphics.CGRect" />.</para>
-		///         </remarks>
+		/// <remarks>
+		///   <attribution license="cc4" from="Microsoft" modified="false" />
+		///   <para>The value of the <see cref="CoreGraphics.CGRect.Bottom" /> property represents the y-coordinate of the first point at the bottom edge of the rectangle that is not contained in the <see cref="CoreGraphics.CGRect" />.</para>
+		/// </remarks>
 		public nfloat Bottom {
 			get { return Y + Height; }
 		}

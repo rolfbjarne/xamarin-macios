@@ -40,9 +40,7 @@ namespace CoreBluetooth {
 	// are valid in different contexts
 	//
 #if !COREBUILD
-	/// <summary>Manages access to options used by <see cref="CoreBluetooth.CBPeripheralManager.StartAdvertising" /> methods.</summary>
-	///     <remarks>
-	///     </remarks>
+	/// <summary>Manages access to options used by <see cref="CBPeripheralManager.StartAdvertising(StartAdvertisingOptions)" />.</summary>
 #endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]

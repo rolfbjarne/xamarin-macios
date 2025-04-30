@@ -372,7 +372,7 @@ UIView.CommitAnimations ();
       </example>
       <para>
         Alternatively, developers can create transactions and set configuration
-        options in the <see cref="UIKit.UIView.Animate" /> collection of methods. These methods take, in a single call, the delay, the duration, an animation block, and an action to be invoked when the animation
+        options in <see cref="Animate(double,Action)" />, <see cref="Animate(double,Action,Action)" />, <see cref="Animate(double,double,UIViewAnimationOptions,Action,Action)" /> or <see cref="Animate(double,nfloat,double,UIViewAnimationOptions,Action,Action{T})" />. These methods take, in a single call, the delay, the duration, an animation block, and an action to be invoked when the animation
         completes. However, Apple also discourages the use of these APIs. Their use is shown below:
       </para>
       <example>
@@ -998,7 +998,7 @@ public class BlueLayer : CALayer
     <param name="animation">The animation identifier.</param>
     <summary>Indicates the beginning of an animation block.</summary>
     <remarks>
-      <para>Application developers should prefer to use the more compact syntax of the <see cref="UIKit.UIView.Animate" /> method.</para>
+      <para>Application developers should prefer to use the more compact syntax of <see cref="Animate(double,Action)" />, <see cref="Animate(double,Action,Action)" />, <see cref="Animate(double,double,UIViewAnimationOptions,Action,Action)" /> or <see cref="Animate(double,nfloat,double,UIViewAnimationOptions,Action,Action{bool})" />.</para>
       <para>Older versions of iOS used a matched set of <see cref="UIKit.UIView.BeginAnimations(System.String,System.IntPtr)" /> and <see cref="UIKit.UIView.CommitAnimations" /> to specify an animation block. The following code, taken from the "Animate a UIView using UIKit" recipe, shows the technique:</para>
       <example>
         <code lang="csharp lang-csharp"><![CDATA[

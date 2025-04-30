@@ -1212,8 +1212,8 @@ namespace UIKit {
 	}
 
 	// NSInteger -> UITableViewCell.h
-	/// <summary>An enumeration of standard accessory controls that can be used by a <see cref="UIKIt.UITableViewCell" />.</summary>
-	/// <remarks>Set the type of accessory to display in a <see cref="UIKIt.UITableViewCell" /> using the <see cref="UIKit.UITableViewCell.Accessory" /> property.</remarks>
+	/// <summary>An enumeration of standard accessory controls that can be used by a <see cref="UIKit.UITableViewCell" />.</summary>
+	/// <remarks>Set the type of accessory to display in a <see cref="UIKit.UITableViewCell" /> using the <see cref="UIKit.UITableViewCell.Accessory" /> property.</remarks>
 	[Native ("UITableViewCellAccessoryType")]
 	[MacCatalyst (13, 1)]
 	public enum UITableViewCellAccessory : long {

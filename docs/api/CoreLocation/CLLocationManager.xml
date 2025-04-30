@@ -149,7 +149,7 @@ type MyLocationDelegate () = inherit CLLocationManagerDelegate()
         <h2>iBeacon Ranging</h2>
       </format>
       <para>In iOS 7, Apple introduced iBeacons, which combine region-processing using server and GPS services and nearby promixity ranging using Bluetooth Low-Energy (BLE) signaling.</para>
-      <para>Once within a <see cref="CoreLocation.CLBeaconRegion" /> (see previous section), applications may track "ranging" events relating to fine-grained changes in the distance between the device and nearby iBeacons. iBeacon ranging is primarily a function of radio signal strength, which can vary significantly based on environment, electrical noise, etc. Application developers should not attempt to estimate precise distances from the <see cref="CoreLocation.CLBeacon.Proximity" /> or <see cref="CoreLocation.CLBeacon.RSSI" /> properties.</para>
+      <para>Once within a <see cref="CoreLocation.CLBeaconRegion" /> (see previous section), applications may track "ranging" events relating to fine-grained changes in the distance between the device and nearby iBeacons. iBeacon ranging is primarily a function of radio signal strength, which can vary significantly based on environment, electrical noise, etc. Application developers should not attempt to estimate precise distances from the <see cref="CoreLocation.CLBeacon.Proximity" /> or <see cref="CoreLocation.CLBeacon.Rssi" /> properties.</para>
       <para>Ranging is done with code similar to:</para>
       <para>iBeacons also support "ranging" for determining physical proximity with a higher precision with the <see cref="CoreLocation.CLBeacon.Proximity" /> property. The following example shows how ranging should be used as a qualitative measure:</para>
       <example>

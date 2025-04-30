@@ -156,14 +156,14 @@ namespace AudioUnit {
 		/// <param name="componentDescription">To be added.</param>
 		///         <param name="options">To be added.</param>
 		///         <param name="completionHandler">To be added.</param>
-		///         <summary>Asynchronously creates a <see cref="AudioUnit.AUAudioUnit" />.</summary>
+		///         <summary>Asynchronously creates an <see cref="AUAudioUnit" />.</summary>
 		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("instantiateWithComponentDescription:options:completionHandler:")]
 		[Async (XmlDocs = """
 			<param name="componentDescription">To be added.</param>
 			<param name="options">To be added.</param>
-			<summary>Asynchronously creates a <see cref="AudioUnit.AUAudioUnit" />.</summary>
+			<summary>Asynchronously creates an <see cref="AUAudioUnit" />.</summary>
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous FromComponentDescription operation.  The value of the TResult parameter is of type System.Action&lt;AudioUnit.AUAudioUnit,Foundation.NSError&gt;.</para>
 			        </returns>

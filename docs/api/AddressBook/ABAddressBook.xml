@@ -17,7 +17,7 @@ if (addressBook != null) {
           ]]></code>
       </example>
     </remarks>
-    <altmember cref="AddressBook.ABAddressBok.GetAuthorizationStatus" />
+    <altmember cref="AddressBook.ABAddressBook.GetAuthorizationStatus" />
   </Docs>
   <Docs DocId="M:AddressBook.ABAddressBook.Dispose(System.Boolean)">
     <param name="disposing">

@@ -8,11 +8,11 @@
         Labels are used with
         <see cref="AddressBook.ABAddressBook.LocalizedLabel(Foundation.NSString)" />,
         <see cref="AddressBook.ABMultiValueEntry{T}.Label" />,
-        <see cref="AddressBook.ABMultiValue{T}.Add(T,Foundation.NSString)" />, and
-        <see cref="AddressBook.ABMultiValue{T}.Insert(System.Int32,T,Foundation.NSString)" />.
+        <see cref="AddressBook.ABMultiValue{T}.Add" />, and
+        <see cref="AddressBook.ABMultiValue{T}.Insert" />.
       </para>
     </remarks>
     <altmember cref="AddressBook.ABPerson.GetPhones" />
-    <altmember cref="AddressBook.ABPerson.SetPhones(AddressBook.ABMultiValue{T})" />
+    <altmember cref="AddressBook.ABPerson.SetPhones" />
   </Docs>
 </Documentation>

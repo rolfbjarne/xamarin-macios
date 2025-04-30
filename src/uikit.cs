@@ -435,7 +435,7 @@ namespace UIKit {
 	///       </para>
 	///     </remarks>
 	/// <altmember cref="UIKit.UICollectionView.PerformBatchUpdates" />
-	/// <altmember cref="UIKIt.UIPageViewController.SetViewControllers" />
+	/// <altmember cref="UIKit.UIPageViewController.SetViewControllers" />
 	/// <altmember cref="UIKit.UIView.AnimateNotify" />
 	/// <altmember cref="UIKit.UIView.TransitionNotify" />
 	/// <altmember cref="UIKit.UIViewController.Transition" />
@@ -10221,7 +10221,7 @@ namespace UIKit {
 		[Abstract]
 		[NullAllowed] // by default this property is null
 					  // This is declared as ArgumentSemantic.Copy, but UITextRange doesn't conform to NSCopying.
-					  // Also declaring it as ArgumentSemantic.Copy makes UIKIt crash: https://github.com/xamarin/xamarin-macios/issues/15677
+					  // Also declaring it as ArgumentSemantic.Copy makes UIKit crash: https://github.com/xamarin/xamarin-macios/issues/15677
 		[Export ("selectedTextRange")]
 		UITextRange SelectedTextRange { get; set; }
 

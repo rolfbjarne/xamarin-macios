@@ -537,7 +537,7 @@ namespace MapKit {
 
 #if !COREBUILD
 		/// <param name="other">To be added.</param>
-		///         <summary>Whether this <see cref="MapKit.MKMapRect" /> has the same <see cref="MapKit.Origin" /> and <see cref="MapKit.MKMapRect.Size" /> values as the <paramref name="other" />.</summary>
+		///         <summary>Whether this <see cref="MapKit.MKMapRect" /> has the same <see cref="MapKit.MKMapRect.Origin" /> and <see cref="MapKit.MKMapRect.Size" /> values as the <paramref name="other" />.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 #endif

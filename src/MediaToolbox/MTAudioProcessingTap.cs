@@ -336,7 +336,7 @@ namespace MediaToolbox {
 
 	// uint32_t -> MTAudioProcessingTap.h
 #if !COREBUILD
-	/// <summary>An enumeration that specifies the flags to be used with calls to the <see cref="MediaToolbox.MTAudioProcessingTap.ctor(MediaToolbox.MTAudioProcessingTapCallbacks,MediaToolbox.MTAudioProcessingTapCreationFlags)" /> constructor.</summary>
+	/// <summary>An enumeration that specifies the flags to be used with calls to the <see cref="MediaToolbox.MTAudioProcessingTap.MTAudioProcessingTap(MediaToolbox.MTAudioProcessingTapCallbacks,MediaToolbox.MTAudioProcessingTapCreationFlags)" /> constructor.</summary>
 	///     <remarks>To be added.</remarks>
 #endif
 	[Flags]
@@ -349,7 +349,7 @@ namespace MediaToolbox {
 
 	// uint32_t -> MTAudioProcessingTap.h
 #if !COREBUILD
-	/// <summary>An enumeration that specifies flags to be used with the <see cref="MediaToolbox.MTAudioProcessingTap.GetSourceAudio(System.IntPtr,AudioToolbox.AudioBuffers,ref MediaToolbox.MTAudioProcessingTapFlags,ref CoreMedia.CMTimeRange,ref System.IntPtr)" /> method, and the <see cref="MediaToolbox.MTAudioProcessingTapProcessCallback" /> and <see cref="MediaToolbox.MTAudioProcessingTapProcessDelegate" /> constructors.</summary>
+	/// <summary>An enumeration that specifies flags to be used with the <see cref="MediaToolbox.MTAudioProcessingTap.GetSourceAudio(System.IntPtr,AudioToolbox.AudioBuffers,out MediaToolbox.MTAudioProcessingTapFlags,out CoreMedia.CMTimeRange,out System.IntPtr)" /> method, and the <see cref="MediaToolbox.MTAudioProcessingTapProcessDelegate" /> constructor.</summary>
 	///     <remarks>To be added.</remarks>
 #endif
 	[Flags]
@@ -374,7 +374,7 @@ namespace MediaToolbox {
 	}
 
 #if !COREBUILD
-	/// <summary>Holds the set of callbacks passed to the <see cref="MediaToolbox.MTAudioProcessingTap.ctor(MediaToolbox.MTAudioProcessingTapCallbacks,MediaToolbox.MTAudioProcessingTapCreationFlags)" /> constructor.</summary>
+	/// <summary>Holds the set of callbacks passed to the <see cref="MediaToolbox.MTAudioProcessingTap.MTAudioProcessingTap(MediaToolbox.MTAudioProcessingTapCallbacks,MediaToolbox.MTAudioProcessingTapCreationFlags)" /> constructor.</summary>
 	///     <remarks>To be added.</remarks>
 #endif
 	public class MTAudioProcessingTapCallbacks {

@@ -694,3 +694,10 @@ MinimumVersions.cs: MinimumVersions.cs.in Makefile $(TOP)/Make.config
 # Using .SECONDARY can cause make to go into an infinite loop.
 # See https://github.com/xamarin/maccore/issues/762.
 #.SECONDARY:
+
+
+ttt:
+	wc -l /tmp/errors.log
+	m build/dotnet/ios/ref/Microsoft.iOS.dll 2>&1 | sort > /tmp/errors.log
+	cat /tmp/errors.log
+	wc -l /tmp/errors.log

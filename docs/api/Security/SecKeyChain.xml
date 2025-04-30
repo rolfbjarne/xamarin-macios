@@ -9,7 +9,7 @@
     <remarks>
       <para>
 	    The returned NSData is a binary blob, if you want to get a
-	    high-level representation, use <see cref="Security.SecKeyChain.QueryAsRecord" />
+	    high-level representation, use <see cref="SecKeyChain.QueryAsRecord(SecRecord, out SecStatusCode)" /> or <see cref="SecKeyChain.QueryAsRecord(SecRecord, int, out SecStatusCode)" />
 	    instead.
 	  </para>
       <para>
@@ -33,7 +33,7 @@
     <remarks>
       <para>
 	    The returned NSData is a binary blob, if you want to get a
-	    high-level representation, use <see cref="Security.SecKeyChain.QueryAsRecord" />
+	    high-level representation, use <see cref="SecKeyChain.QueryAsRecord(SecRecord, out SecStatusCode)" /> or <see cref="SecKeyChain.QueryAsRecord(SecRecord, int, out SecStatusCode)" />
 	    instead.
 	  </para>
       <para>
@@ -53,7 +53,7 @@
     <remarks>
       <para>
 	    The returned NSData is a binary blob, if you want to get a
-	    high-level representation, use <see cref="Security.SecKeyChain.QueryAsRecord" />
+	    high-level representation, use <see cref="SecKeyChain.QueryAsRecord(SecRecord, out SecStatusCode)" /> or <see cref="SecKeyChain.QueryAsRecord(SecRecord, int, out SecStatusCode)" />
 	    instead.
 	  </para>
       <para>
@@ -78,7 +78,7 @@
     <remarks>
       <para>
 	    The returned NSData is a binary blob, if you want to get a
-	    high-level representation, use <see cref="Security.SecKeyChain.QueryAsRecord" />
+	    high-level representation, use <see cref="SecKeyChain.QueryAsRecord(SecRecord, out SecStatusCode)" /> or <see cref="SecKeyChain.QueryAsRecord(SecRecord, int, out SecStatusCode)" />
 	    instead.
 	  </para>
       <para>
@@ -159,7 +159,7 @@
 	keychain.
       </para>
       <para>
-	Use <see cref="Security.SecKeyChain.QueryAsRecord" /> to get
+	Use use <see cref="SecKeyChain.QueryAsRecord(SecRecord, out SecStatusCode)" /> or <see cref="SecKeyChain.QueryAsRecord(SecRecord, int, out SecStatusCode)" /> to get
 	a strongly typed SecRecord with the results of your query.
       </para>
       <example>

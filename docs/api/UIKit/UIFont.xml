@@ -13,7 +13,7 @@
         
       </para>
       <para>
-        Use the static <see cref="UIKit.UIFont.FromName(System.String,System.nfloat)" /> method to create new fonts of a particular font.   
+        Use the static <see cref="UIKit.UIFont.FromName(System.String,nfloat)" /> method to create new fonts of a particular font.   
       </para>
       <para>
         You can use the <see cref="UIKit.UIFont.FamilyNames" /> property to get a
@@ -25,8 +25,8 @@
       </format>
       <para>
         To get a normal, italic of bold fonts representing the system
-        font, use the static methods <see cref="UIKit.UIFont.SystemFontOfSize(System.nfloat,UIKit.UIFontWeight)" />, <see cref="UIKit.UIFont.ItalicSystemFontOfSize(System.nfloat)" /> and
-        <see cref="UIKit.UIFont.BoldSystemFontOfSize(System.nfloat)" />.
+        font, use the static methods <see cref="UIKit.UIFont.SystemFontOfSize(nfloat,UIKit.UIFontWeight)" />, <see cref="UIKit.UIFont.ItalicSystemFontOfSize(nfloat)" /> and
+        <see cref="UIKit.UIFont.BoldSystemFontOfSize(nfloat)" />.
       </para>
       <para>
         You can query some common font parameters by using the <see cref="UIKit.UIFont.ButtonFontSize" />, <see cref="UIKit.UIFont.LabelFontSize" />, <see cref="UIKit.UIFont.SmallSystemFontSize" /> and <see cref="UIKit.UIFont.SystemFontSize" />.
@@ -39,7 +39,7 @@
 	an existing font instance by using font descriptors.  To do
 	this, you fetch the immutable <see cref="UIKit.UIFont.FontDescriptor" /> property from
 	your font and use it to create a new font descriptor with your
-	desired changes, which then you use to can pass to the <see cref="UIKit.UIFont.FromDescriptor(UIKit.UIFontDescriptor,System.nfloat)" /> method to
+	desired changes, which then you use to can pass to the <see cref="UIKit.UIFont.FromDescriptor(UIKit.UIFontDescriptor,nfloat)" /> method to
 	create the altered font.  
       </para>
       <para> The following example shows how to alter the existing

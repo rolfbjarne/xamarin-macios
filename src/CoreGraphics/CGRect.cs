@@ -21,7 +21,7 @@ namespace CoreGraphics {
 	///     <remarks>
 	///       <para>
 	/// 	CGRects structures define a rectangle using floating point
-	/// 	values of type <see cref="System.nfloat" /> and are defined
+	/// 	values of type <see cref="nfloat" /> and are defined
 	/// 	using an initial location (X,Y) as well as a size (Width,
 	/// 	Height). 
 	///       </para>

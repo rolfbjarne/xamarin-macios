@@ -3216,7 +3216,7 @@ namespace UIKit {
 	[BaseType (typeof (NSLayoutAnchor<NSLayoutDimension>))]
 	[DisableDefaultCtor] // Handle is nil
 	interface NSLayoutDimension {
-		/// <param name="constant">An <see cref="System.nfloat" /> specifying the desired constant value.</param>
+		/// <param name="constant">An <see cref="nfloat" /> specifying the desired constant value.</param>
 		/// <summary>Creates a <see cref="UIKit.NSLayoutConstraint" /> whose value is equal to that of the constraint of the <paramref name="constant" /> in logical pixels.</summary>
 		/// <returns>
 		///         </returns>

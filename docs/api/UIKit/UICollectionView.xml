@@ -329,10 +329,18 @@ public class AnimalCell : UICollectionViewCell
           </example>
           <para>Developers should not call this method if they have prototyped their <see cref="UIKit.UICollectionViewCell" /> type using a Storyboard. If they do so, they will overwrite the Storyboard-defined definition instantiation of the <see cref="UIKit.UICollectionViewCell" /> object's children.</para>
         </remarks>
-        <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView" />
-        <altmember cref="UIKit.UICollectionView.RegisterNibForCell" />
-        <altmember cref="UIKit.UICollectionView.RegisterNibForSupplementaryView" />
-        <altmember cref="UIKit.UICollectionViewLayout.RegisterClassForDecorationView" />
+        <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(Type, NSString, string)" />
+        <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(Type, NSString, NSString)" />
+        <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(Type, UICollectionElementKindSection, string)" />
+        <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(Type, UICollectionElementKindSection, NSString)" />
+        <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(nint, NSString)" />
+        <altmember cref="UIKit.UICollectionView.RegisterNibForCell(UINib, string)" />
+        <altmember cref="UIKit.UICollectionView.RegisterNibForCell(UINib?, NSString)" />
+        <altmember cref="UIKit.UICollectionView.RegisterNibForSupplementaryView(UINib, UICollectionElementKindSection, string)" />
+        <altmember cref="UIKit.UICollectionView.RegisterNibForSupplementaryView(UINib, UICollectionElementKindSection, NSString)" />
+        <altmember cref="UIKit.UICollectionView.RegisterNibForSupplementaryView(UINib, NSString, NSString)" />
+        <altmember cref="UIKit.UICollectionViewLayout.RegisterClassForDecorationView(Type, NSString)" />
+        <altmember cref="UIKit.UICollectionViewLayout.RegisterClassForDecorationView(nint, NSString)" />
         <altmember cref="UIKit.UICollectionViewLayout.RegisterNibForDecorationView" />
       </Docs>
   <Docs DocId="M:UIKit.UICollectionView.RegisterClassForCell(System.Type,Foundation.NSString)">
@@ -354,10 +362,18 @@ public class AnimalCell : UICollectionViewCell
           </example>
           <para>Developers should not call this method if they have prototyped their <see cref="UIKit.UICollectionViewCell" /> type using a Storyboard. If they do so, they will overwrite the Storyboard-defined definition instantiation of the <see cref="UIKit.UICollectionViewCell" /> object's children.</para>
         </remarks>
-        <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView" />
-        <altmember cref="UIKit.UICollectionView.RegisterNibForCell" />
-        <altmember cref="UIKit.UICollectionView.RegisterNibForSupplementaryView" />
-        <altmember cref="UIKit.UICollectionViewLayout.RegisterClassForDecorationView" />
+        <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(Type, NSString, string)" />
+        <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(Type, NSString, NSString)" />
+        <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(Type, UICollectionElementKindSection, string)" />
+        <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(Type, UICollectionElementKindSection, NSString)" />
+        <altmember cref="UIKit.UICollectionView.RegisterClassForSupplementaryView(nint, NSString)" />
+        <altmember cref="UIKit.UICollectionView.RegisterNibForCell(UINib, string)" />
+        <altmember cref="UIKit.UICollectionView.RegisterNibForCell(UINib?, NSString)" />
+        <altmember cref="UIKit.UICollectionView.RegisterNibForSupplementaryView(UINib, UICollectionElementKindSection, string)" />
+        <altmember cref="UIKit.UICollectionView.RegisterNibForSupplementaryView(UINib, UICollectionElementKindSection, NSString)" />
+        <altmember cref="UIKit.UICollectionView.RegisterNibForSupplementaryView(UINib, NSString, NSString)" />
+        <altmember cref="UIKit.UICollectionViewLayout.RegisterClassForDecorationView(Type, NSString)" />
+        <altmember cref="UIKit.UICollectionViewLayout.RegisterClassForDecorationView(nint, NSString)" />
         <altmember cref="UIKit.UICollectionViewLayout.RegisterNibForDecorationView" />
       </Docs>
   <Docs DocId="M:UIKit.UICollectionView.RegisterClassForSupplementaryView(System.Type,UIKit.UICollectionElementKindSection,Foundation.NSString)">
@@ -372,10 +388,15 @@ public class AnimalCell : UICollectionViewCell
 	It is very important that you provide constructor that takes an IntPtr argument in any subclasses that you register.   This is required because the classes are actually allocated by the Objective-C runtime, and you must initialize them. 
       </para>
         </remarks>
-        <altmember cref="UIKit.UICollectionView.RegisterClassForCell" />
-        <altmember cref="UIKit.UICollectionView.RegisterNibForCell" />
-        <altmember cref="UIKit.UICollectionView.RegisterNibForSupplementaryView" />
-        <altmember cref="UIKit.UICollectionViewLayout.RegisterClassForDecorationView" />
+        <altmember cref="UIKit.UICollectionView.RegisterClassForCell(Type, string)" />
+        <altmember cref="UIKit.UICollectionView.RegisterClassForCell(Type, NSString)" />
+        <altmember cref="UIKit.UICollectionView.RegisterNibForCell(UINib, string)" />
+        <altmember cref="UIKit.UICollectionView.RegisterNibForCell(UINib?, NSString)" />
+        <altmember cref="UIKit.UICollectionView.RegisterNibForSupplementaryView(UINib, UICollectionElementKindSection, string)" />
+        <altmember cref="UIKit.UICollectionView.RegisterNibForSupplementaryView(UINib, UICollectionElementKindSection, NSString)" />
+        <altmember cref="UIKit.UICollectionView.RegisterNibForSupplementaryView(UINib, NSString, NSString)" />
+        <altmember cref="UIKit.UICollectionViewLayout.RegisterClassForDecorationView(Type, NSString)" />
+        <altmember cref="UIKit.UICollectionViewLayout.RegisterClassForDecorationView(nint, NSString)" />
         <altmember cref="UIKit.UICollectionViewLayout.RegisterNibForDecorationView" />
       </Docs>
   <Docs DocId="M:UIKit.UICollectionView.RegisterNibForSupplementaryView(UIKit.UINib,UIKit.UICollectionElementKindSection,Foundation.NSString)">

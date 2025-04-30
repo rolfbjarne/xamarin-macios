@@ -698,6 +698,6 @@ MinimumVersions.cs: MinimumVersions.cs.in Makefile $(TOP)/Make.config
 
 ttt:
 	wc -l /tmp/errors.log
-	m build/dotnet/ios/ref/Microsoft.iOS.dll 2>&1 | sort > /tmp/errors.log
+	make build/dotnet/macos/ref/Microsoft.macOS.dll build/dotnet/tvos/ref/Microsoft.tvOS.dll build/dotnet/ios/ref/Microsoft.iOS.dll build/dotnet/maccatalyst/ref/Microsoft.MacCatalyst.dll 2>&1 | sort > /tmp/errors.log
 	cat /tmp/errors.log
 	wc -l /tmp/errors.log

@@ -112,18 +112,18 @@ using (var ctxt = UIGraphics.GetCurrentContext ()) {
     </remarks>
   </Docs>
   <Docs DocId="M:CoreGraphics.CGContext.AsBitmapContext">
-    <summary>Casts the CGContext into a CGBitmapContext.</summary>
+    <summary>Casts the <see cref="CGContext" /> into a <see cref="CGBitmapContext" />.</summary>
     <returns>
     </returns>
     <remarks>
       <para>
-	    While there are different kinds of CGContext kinds (regular, bitmap and PDF), Apple does not support a way
-	    to tell those apart.   Certain CGContext objects are actually known to be CGBitmapContext objects in a few
+      While there are different kinds of <see cref="CGContext" /> kinds (regular, bitmap and PDF), Apple does not support a way
+      to tell those apart. In some cases <see cref="CGContext" /> objects are actually known to be <see cref="CGBitmapContext" /> objects in a few
 	    situations (calling <see cref="UIKit.UIGraphics.GetImageFromCurrentImageContext" /> after creating a 
 	    context with <see cref="UIKit.UIGraphics.BeginImageContext(CoreGraphics.CGSize)" /> or <see cref="UIKit.UIGraphics.BeginImageContextWithOptions(CoreGraphics.CGSize,System.Boolean,nfloat)" />).
 	  </para>
       <para>
-	    Those are really CGBitmapContext objects and by converting it, application developers can access the various bitmap properties
+      Those are really <see cref="CGBitmapContext" /> objects and by converting it, application developers can access the various bitmap properties
 	    on it.
 	  </para>
       <example>
@@ -145,36 +145,19 @@ var effectInBuffer = new vImageBuffer () {
     </remarks>
   </Docs>
   <Docs DocId="M:CoreGraphics.CGContext.AsBitmapContext" Platforms="macOS">
-    <summary>Casts the CGContext into a CGBitmapContext.</summary>
+    <summary>Casts the <see cref="CGContext" /> into a <see cref="CGBitmapContext" />.</summary>
     <returns>
     </returns>
     <remarks>
       <para>
-      While there are different kinds of CGContext kinds (regular, bitmap and PDF), Apple does not support a way
-      to tell those apart.   Certain CGContext objects are actually known to be CGBitmapContext objects in a few
-      situations (calling <see cref="UIKit.UIGraphics.GetImageFromCurrentImageContext" /> after creating a 
-      context with <see cref="UIKit.UIGraphics.BeginImageContext(CoreGraphics.CGSize)" /> or <see cref="UIKit.UIGraphics.BeginImageContextWithOptions(CoreGraphics.CGSize,System.Boolean,nfloat)" />).
+      While there are different kinds of <see cref="CGContext" /> kinds (regular, bitmap and PDF), Apple does not support a way
+      to tell those apart. In some cases <see cref="CGContext" /> objects are actually known to be <see cref="CGBitmapContext" /> objects in a few
+      situations.
     </para>
       <para>
-      Those are really CGBitmapContext objects and by converting it, application developers can access the various bitmap properties
+      Those are really <see cref="CGBitmapContext" /> objects and by converting it, application developers can access the various bitmap properties
       on it.
     </para>
-      <example>
-        <code lang="csharp lang-csharp"><![CDATA[
-UIGraphics.BeginImageContextWithOptions (image.Size, false, UIScreen.MainScreen.Scale);
-CGBitmapContext effectInContext = UIGraphics.GetCurrentContext ().AsBitmapContext ()
- 
-// Now, you can access some interesting properties like "Data", "Width", 
-// "Height", "BytesPerRow" from the underlying bitmap
- 
-var effectInBuffer = new vImageBuffer () {
-        Data = effectInContext.Data,
-        Width = effectInContext.Width,
-        Height = effectInContext.Height,
-        BytesPerRow = effectInContext.BytesPerRow
-};
-]]></code>
-      </example>
     </remarks>
   </Docs>
   <Docs DocId="T:CoreGraphics.CGContext">
@@ -198,7 +181,7 @@ public override void Draw (CGRect rect)
 }          
           ]]></code>
       </example>
-      <para>The example additionally shows the very common pattern of an overridden <see cref="UIView.Draw(CoreGraphics.CGRect)" /> method in a custom <see cref="UIView" /> and the use of <see cref="UIKit.UIGraphics.GetImageFromCurrentImageContext" /> to retrieve the current <see cref="CoreGraphics.CGContext" /> on which to draw.</para>
+      <para>The example additionally shows the very common pattern of an overridden <see cref="UIKit.UIView.Draw(CoreGraphics.CGRect)" /> method in a custom <see cref="UIKit.UIView" /> and the use of <see cref="UIKit.UIGraphics.GetImageFromCurrentImageContext" /> to retrieve the current <see cref="CoreGraphics.CGContext" /> on which to draw.</para>
     </remarks>
     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVTouchSample/">avTouch</related>
     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/Drawing/">Example_Drawing</related>

@@ -37,7 +37,11 @@ using Foundation;
 
 namespace CoreGraphics {
 #if !COREBUILD
-	/// <include file="../../docs/api/CoreGraphics/CGContext.xml" path="/Documentation/Docs[@DocId='T:CoreGraphics.CGContext']/*" />
+#if __MACOS__
+	/// <include file="../../docs/api/CoreGraphics/CGContext.xml" path="/Documentation/Docs[@DocId='T:CoreGraphics.CGContext' and contains(@Platforms,'macOS')]/*" />
+#else
+	/// <include file="../../docs/api/CoreGraphics/CGContext.xml" path="/Documentation/Docs[@DocId='T:CoreGraphics.CGContext' and not(@Platforms)]/*" />
+#endif
 #endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -1650,7 +1654,11 @@ namespace CoreGraphics {
 			CGContextEndTransparencyLayer (Handle);
 		}
 
-		/// <include file="../../docs/api/CoreGraphics/CGContext.xml" path="/Documentation/Docs[@DocId='M:CoreGraphics.CGContext.AsBitmapContext']/*" />
+#if __MACOS__
+		/// <include file="../../docs/api/CoreGraphics/CGContext.xml" path="/Documentation/Docs[@DocId='M:CoreGraphics.CGContext.AsBitmapContext' and contains(@Platforms,'macOS')]/*" />
+#else
+		/// <include file="../../docs/api/CoreGraphics/CGContext.xml" path="/Documentation/Docs[@DocId='M:CoreGraphics.CGContext.AsBitmapContext' and not(@Platforms)]/*" />
+#endif
 		public CGBitmapContext AsBitmapContext ()
 		{
 			return new CGBitmapContext (Handle, false);

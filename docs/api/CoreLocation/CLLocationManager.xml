@@ -220,7 +220,7 @@ locationManager.StartRangingBeacons(beaconRegion)
     <related type="article" href="https://blog.xamarin.com/play-find-the-monkey-with-ios7-ibeacons">Play 'Find the Monkey' with iOS 7 iBeacons</related>
     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/CoreLocation/Reference/CLLocationManager_Class/index.html">Apple documentation for <c>CLLocationManager</c></related>
   </Docs>
-  <Docs DocId="MacCatalyst:T:CoreLocation.CLLocationManager">
+  <Docs DocId="MacCatalyst|macOS:T:CoreLocation.CLLocationManager">
     <summary>Manages the delivery of location, region, and heading events to your application.</summary>
     <remarks>
       <format type="text/html">

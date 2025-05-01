@@ -176,11 +176,7 @@ namespace MapKit {
 	// MKGeometry.h
 #if NET
 #if !COREBUILD
-#if __TVOS__
-	/// <include file="../../docs/api/MapKit/MKMapPoint.xml" path="/Documentation/Docs[@DocId='tvOS:T:MapKit.MKMapPoint']/*" />
-#else
 	/// <include file="../../docs/api/MapKit/MKMapPoint.xml" path="/Documentation/Docs[@DocId='T:MapKit.MKMapPoint']/*" />
-#endif
 #endif
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]

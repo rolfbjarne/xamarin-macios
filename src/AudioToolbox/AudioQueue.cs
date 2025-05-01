@@ -276,8 +276,16 @@ namespace AudioToolbox {
 		Varispeed = 0x76737064,                 // vspd
 	}
 
+#if !(XAMCORE_5_0 && __MACOS__)
+#if !__MACOS__
 	/// <summary>An enumeration whose values are used for the <see cref="AudioToolbox.AudioQueue.HardwareCodecPolicy" /> property.</summary>
-	///     <remarks>To be added.</remarks>
+#endif
+#if XAMCORE_5_0
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("macos")]
+#endif // XAMCORE_5_0
 	public enum AudioQueueHardwareCodecPolicy { // A AudioQueuePropertyID (UInt32)
 		/// <summary>To be added.</summary>
 		Default = 0,
@@ -290,6 +298,7 @@ namespace AudioToolbox {
 		/// <summary>To be added.</summary>
 		PreferHardware = 4,
 	}
+#endif // !(XAMCORE_5_0 && __MACOS__)
 
 	/// <summary>An enumeration whose values specify various parameters of an audio queue.</summary>
 	///     <remarks>To be added.</remarks>
@@ -452,11 +461,17 @@ namespace AudioToolbox {
 		public float PeakPower;
 	}
 
+#if !(XAMCORE_5_0 && __MACOS__)
+#if !__MACOS__
 	/// <summary>Channel assignments used as a parameter to the <see cref="AudioToolbox.AudioQueue.SetChannelAssignments(AudioToolbox.AudioQueueChannelAssignment[])" /> method.</summary>
-	///     <remarks>To be added.</remarks>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
+#if XAMCORE_5_0
+	[UnsupportedOSPlatform ("macos")]
+#else
 	[SupportedOSPlatform ("macos")]
+#endif
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AudioQueueChannelAssignment {
@@ -474,6 +489,7 @@ namespace AudioToolbox {
 			GC.KeepAlive (deviceUID);
 		}
 	}
+#endif // !(XAMCORE_5_0 && __MACOS__)
 
 	delegate void AudioQueuePropertyListener (IntPtr userData, IntPtr AQ, AudioQueueProperty id);
 

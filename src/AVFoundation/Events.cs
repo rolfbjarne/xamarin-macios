@@ -35,10 +35,13 @@ using ObjCRuntime;
 #nullable enable
 
 namespace AVFoundation {
-	/// <summary>Provides data for the <see cref="AVFoundation.AVAudioRecorder.EncoderError" /> and <see cref="AVFoundation.AVAudioRecorder.EncoderError" /> events.</summary>
-	///     <remarks>
-	///     </remarks>
-	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVTouchSample/">avTouch</related>
+#if __TVOS__
+	/// <summary>Provides data for the <see cref="AVFoundation.AVAudioPlayer.DecoderError" /> event.</summary>
+	/// <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVTouchSample/">avTouch</related>
+#else
+	/// <summary>Provides data for the <see cref="AVFoundation.AVAudioRecorder.EncoderError" /> and <see cref="AVFoundation.AVAudioPlayer.DecoderError" /> events.</summary>
+	/// <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVTouchSample/">avTouch</related>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -61,12 +64,14 @@ namespace AVFoundation {
 
 #if __TVOS__
 	/// <summary>Provides data for the <see cref="AVAudioPlayer.FinishedPlaying" /> event.</summary>
+	/// <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVTouchSample/">avTouch</related>
 #elif __MACOS__
 	/// <summary>Provides data for the <see cref="AVAudioPlayer.FinishedPlaying" /> and <see cref="AVAudioRecorder.FinishedRecording" /> events.</summary>
+	/// <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVTouchSample/">avTouch</related>
 #else
 	/// <summary>Provides data for the <see cref="AVAudioPlayer.FinishedPlaying" />, <see cref="AVAudioRecorder.FinishedRecording" /> and <see cref="AVAudioSession.InputAvailabilityChanged" /> events.</summary>
-#endif
 	/// <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVTouchSample/">avTouch</related>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -302,8 +307,8 @@ namespace AVFoundation {
 	}
 #endif // !TVOS
 
-#if !(XAMCORE_5_0 && (__TVOS__ || __MACOS__)
-#if !__TVOS__
+#if !(XAMCORE_5_0 && (__TVOS__ || __MACOS__))
+#if !__TVOS__ && !__MACOS__
 	/// <summary>Provides data for the <see cref="AVFoundation.AVAudioSession.SampleRateChanged" /> event.</summary>
 #endif
 	[SupportedOSPlatform ("ios")]
@@ -330,9 +335,9 @@ namespace AVFoundation {
 		public double SampleRate { get; private set; }
 	}
 
+#if !__TVOS__ && !__MACOS__
 	/// <summary>Provides data for the <see cref="AVFoundation.AVAudioSession.OutputChannelsChanged" /> and <see cref="AVFoundation.AVAudioSession.OutputChannelsChanged" /> events.</summary>
-	///     <remarks>
-	///     </remarks>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 #if XAMCORE_5_0
@@ -357,9 +362,9 @@ namespace AVFoundation {
 		public int NumberOfChannels { get; private set; }
 	}
 
+#if !__TVOS__ && !__MACOS__
 	/// <summary>Provides data for the <see cref="AVFoundation.AVAudioSession.CategoryChanged" /> event.</summary>
-	///     <remarks>
-	///     </remarks>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 #if XAMCORE_5_0

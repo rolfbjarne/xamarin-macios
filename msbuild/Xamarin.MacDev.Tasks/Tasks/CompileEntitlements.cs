@@ -523,8 +523,6 @@ namespace Xamarin.MacDev.Tasks {
 
 			compiled = GetCompiledEntitlements (profile, template);
 
-			ValidateAppEntitlements (profile, compiled);
-
 			Directory.CreateDirectory (Path.GetDirectoryName (CompiledEntitlements!.ItemSpec));
 
 			if (SdkIsSimulator) {
@@ -545,6 +543,8 @@ namespace Xamarin.MacDev.Tasks {
 			} else {
 				archived = GetArchivedExpandedEntitlements (template, compiled);
 			}
+
+			ValidateAppEntitlements (profile, compiled);
 
 			try {
 				Directory.CreateDirectory (Path.GetDirectoryName (CompiledEntitlements!.ItemSpec));

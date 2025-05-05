@@ -523,11 +523,21 @@ namespace Xamarin.MacDev.Tasks {
 
 			compiled = GetCompiledEntitlements (profile, template);
 
-			Directory.CreateDirectory (Path.GetDirectoryName (CompiledEntitlements!.ItemSpec));
+			/* The path to the entitlements must be resolved to the full path, because we might want to reference it from a containing project that just references this project,
+			  * and in that case it becomes a bit complicated to resolve to a full path on disk when building remotely from Windows. Instead just resolve to a full path here,
+			  * and use that from now on. This has to be done from a task, so that we get the full path on the mac when executed remotely from Windows. */
+			var compiledEntitlementsFullPath = Path.GetFullPath (CompiledEntitlements!.ItemSpec);
+			var compiledEntitlementsFullPathItem = new TaskItem (compiledEntitlementsFullPath);
+
+			Directory.CreateDirectory (Path.GetDirectoryName (compiledEntitlementsFullPath));
 
 			if (SdkIsSimulator) {
+				// Any entitlements the app desires are stored inside the executable for simulator builds,
+				// and then the executable is signed with a placeholder signature ('-') + just a single
+				// entitlement (com.apple.security.get-task-allow). One consequence of storing entitlements
+				// this way is that no provisioning profile will be needed to sign the executable.
 				var simulatedEntitlements = compiled;
-				var simulatedXcent = Path.ChangeExtension (CompiledEntitlements.ItemSpec, "").TrimEnd ('.') + "-Simulated.xcent";
+				var simulatedXcent = Path.ChangeExtension (compiledEntitlementsFullPath, "").TrimEnd ('.') + "-Simulated.xcent";
 				try {
 					WriteXcent (simulatedEntitlements, simulatedXcent);
 				} catch (Exception ex) {
@@ -547,17 +557,16 @@ namespace Xamarin.MacDev.Tasks {
 			ValidateAppEntitlements (profile, compiled);
 
 			try {
-				Directory.CreateDirectory (Path.GetDirectoryName (CompiledEntitlements!.ItemSpec));
-				WriteXcent (compiled, CompiledEntitlements.ItemSpec);
+				WriteXcent (compiled, compiledEntitlementsFullPath);
 			} catch (Exception ex) {
-				Log.LogError (MSBStrings.E0114, CompiledEntitlements, ex.Message);
+				Log.LogError (MSBStrings.E0114, compiledEntitlementsFullPathItem, ex.Message);
 				return false;
 			}
 
 			if (archived is not null)
 				SaveArchivedExpandedEntitlements (archived);
 
-			EntitlementsInSignature = CompiledEntitlements;
+			EntitlementsInSignature = compiledEntitlementsFullPathItem;
 
 			return !Log.HasLoggedErrors;
 		}

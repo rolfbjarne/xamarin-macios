@@ -45,7 +45,7 @@ namespace Xamarin.MacDev.Tasks {
 		public string Keychain { get; set; } = string.Empty;
 
 		[Required]
-		public ITaskItem? [] Resources { get; set; } = Array.Empty<ITaskItem> ();
+		public ITaskItem [] Resources { get; set; } = Array.Empty<ITaskItem> ();
 
 		// Can also be specified per resource using the 'CodesignResourceRules' metadata
 		public string ResourceRules { get; set; } = string.Empty;
@@ -406,7 +406,7 @@ namespace Xamarin.MacDev.Tasks {
 			// All this makes it easier to sort and split the input files into buckets that can be codesigned together,
 			// while also not codesigning directories before files inside them.
 			foreach (var res in resourcesToSign) {
-				var path = res!.ItemSpec;
+				var path = res.ItemSpec;
 				var parent = Path.GetDirectoryName (path);
 
 				// so do not don't sign `A.framework/A`, sign `A.framework` which will always sign the *bundle*
@@ -420,21 +420,21 @@ namespace Xamarin.MacDev.Tasks {
 			}
 
 			// first sort all the items by path length, longest path first.
-			resourcesToSign = resourcesToSign.OrderBy (v => v!.ItemSpec.Length).Reverse ().ToArray ();
+			ITaskItem?[] sortedResources = resourcesToSign.OrderBy (v => v.ItemSpec.Length).Reverse ().ToArray ();
 
 			// remove items that are up-to-date
 			var itemsToSign = new List<SignInfo> ();
-			for (var i = 0; i < resourcesToSign.Length; i++) {
-				var item = resourcesToSign [i];
+			for (var i = 0; i < sortedResources.Length; i++) {
+				var item = sortedResources [i];
 				if (item is null)
 					continue;
 				var info = new SignInfo (item);
 				if (!Validate (info))
 					continue;
-				if (NeedsCodesign (resourcesToSign, i, info.GetStampFileContents (this))) {
+				if (NeedsCodesign (sortedResources, i, info.GetStampFileContents (this))) {
 					itemsToSign.Add (info);
 				} else {
-					resourcesToSign [i] = new TaskItem ("");
+					sortedResources [i] = null;
 				}
 			}
 

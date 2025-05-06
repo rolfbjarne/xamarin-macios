@@ -8,10 +8,12 @@ using Microsoft.Build.Utilities;
 using Xamarin.Localization.MSBuild;
 using Xamarin.Messaging.Build.Client;
 using Xamarin.Utils;
+using System.Linq;
 
 #nullable enable
 
 namespace Xamarin.MacDev.Tasks {
+	// https://developer.apple.com/documentation/technotes/tn3125-inside-code-signing-provisioning-profiles
 	public class CompileEntitlements : XamarinTask, ITaskCallback, ICancelableTask {
 		bool warnedTeamIdentifierPrefix;
 		bool warnedAppIdentifierPrefix;
@@ -72,6 +74,9 @@ namespace Xamarin.MacDev.Tasks {
 
 		[Required]
 		public string SdkVersion { get; set; } = string.Empty;
+
+		// whether the default platform entitlements (inside the <platform>.sdk directory inside Xcode) is injected into the final entitlements
+		public string InjectDefaultPlatformEntitlements { get; set; } = "";
 
 		[Output]
 		public ITaskItem? EntitlementsInExecutable { get; set; }
@@ -356,7 +361,7 @@ namespace Xamarin.MacDev.Tasks {
 			}
 		}
 
-		protected virtual PDictionary GetCompiledEntitlements (MobileProvision? profile, PDictionary template)
+		protected virtual PDictionary GetCompiledEntitlements (MobileProvision? profile, IEnumerable<PDictionary> templates)
 		{
 			var entitlements = new PDictionary ();
 
@@ -364,14 +369,14 @@ namespace Xamarin.MacDev.Tasks {
 				// start off with the settings from the provisioning profile
 				foreach (var item in profile.Entitlements) {
 					var key = item.Key!;
-					if (!AllowedProvisioningKeys.Contains (key))
+					if (!AllowedProvisioningKeys.Contains (key)) {
+						Log.LogMessage ($"The provisioning profile '{profile.Name}' contains the entitlement '{key}', but this entitlement is not in the list of allowed entitlements, and it won't be copied into the app's entitlements.");
 						continue;
+					}
 
 					var value = item.Value;
 
-					if (key == "com.apple.developer.icloud-container-environment")
-						value = new PString ("Development");
-					else if (value is PDictionary)
+					if (value is PDictionary)
 						value = MergeEntitlementDictionary ((PDictionary) value, profile);
 					else if (value is PString)
 						value = MergeEntitlementString ((PString) value, profile, item.Key == ApplicationIdentifierKey, key);
@@ -386,39 +391,37 @@ namespace Xamarin.MacDev.Tasks {
 			}
 
 			// merge in the user's values
-			foreach (var item in template) {
-				var value = item.Value;
-				var key = item.Key!;
+			foreach (var template in templates) {
+				foreach (var item in template) {
+					var value = item.Value;
+					var key = item.Key!;
 
-				if (key == "com.apple.developer.ubiquity-container-identifiers" ||
-					key == "com.apple.developer.icloud-container-identifiers" ||
-					key == "com.apple.developer.icloud-container-environment" ||
-					key == "com.apple.developer.icloud-services") {
-					if (profile is null)
-						Log.LogWarning (null, null, null, Entitlements, 0, 0, 0, 0, MSBStrings.W0110, key);
-					else if (!profile.Entitlements.ContainsKey (key))
-						Log.LogWarning (null, null, null, Entitlements, 0, 0, 0, 0, MSBStrings.W0111, key);
-				} else if (key == ApplicationIdentifierKey) {
-					var str = value as PString;
+					if (key == ApplicationIdentifierKey) {
+						var str = value as PString;
 
-					// Ignore ONLY if it is empty, otherwise take the user's value
-					if (str is null || string.IsNullOrEmpty (str.Value))
-						continue;
+						// Ignore ONLY if it is empty, otherwise take the user's value
+						if (string.IsNullOrEmpty (str?.Value)) {
+							Log.LogMessage ($"The entitlement '{key}' is empty in the provided entitlements file (either user-supplied or the default), and will be ignored.");
+							continue;
+						}
+					}
+
+					if (value is PDictionary)
+						value = MergeEntitlementDictionary ((PDictionary) value, profile);
+					else if (value is PString)
+						value = MergeEntitlementString ((PString) value, profile, key == ApplicationIdentifierKey, key);
+					else if (value is PArray)
+						value = MergeEntitlementArray ((PArray) value, profile, key);
+					else
+						value = value.Clone ();
+
+					if (value is not null)
+						entitlements [key] = value;
 				}
-
-				if (value is PDictionary)
-					value = MergeEntitlementDictionary ((PDictionary) value, profile);
-				else if (value is PString)
-					value = MergeEntitlementString ((PString) value, profile, key == ApplicationIdentifierKey, key);
-				else if (value is PArray)
-					value = MergeEntitlementArray ((PArray) value, profile, key);
-				else
-					value = value.Clone ();
-
-				if (value is not null)
-					entitlements [key] = value;
 			}
 
+			// If we're building for macOS, and we're building for Debug, and the sandbox is enabled,
+			// then also enable the "com.apple.security.network.client" entitlement (it's needed for the debugger to work).
 			switch (Platform) {
 			case ApplePlatform.MacOSX:
 			case ApplePlatform.MacCatalyst:
@@ -432,14 +435,16 @@ namespace Xamarin.MacDev.Tasks {
 			return entitlements;
 		}
 
-		PDictionary GetArchivedExpandedEntitlements (PDictionary template, PDictionary compiled)
+		PDictionary GetArchivedExpandedEntitlements (IEnumerable<PDictionary> templates, PDictionary compiled)
 		{
 			var allowed = new HashSet<string> ();
 
 			// the template (user-supplied Entitlements.plist file) is used to create a approved list of keys
 			allowed.Add ("com.apple.developer.icloud-container-environment");
-			foreach (var item in template)
-				allowed.Add (item.Key!);
+			foreach (var template in templates) {
+				foreach (var item in template)
+					allowed.Add (item.Key!);
+			}
 			// also allow any custom entitlements
 			foreach (var item in CustomEntitlements)
 				allowed.Add (item.ItemSpec);
@@ -456,6 +461,7 @@ namespace Xamarin.MacDev.Tasks {
 			return archived;
 		}
 
+		// this virtual method is required for tests
 		protected virtual MobileProvision GetMobileProvision (MobileProvisionPlatform platform, string name)
 		{
 			return MobileProvisionIndex.GetMobileProvision (platform, name);
@@ -468,10 +474,9 @@ namespace Xamarin.MacDev.Tasks {
 
 			MobileProvisionPlatform platform;
 			MobileProvision? profile;
-			PDictionary template;
+			var templates = new List<PDictionary> ();
 			PDictionary compiled;
 			PDictionary? archived = null;
-			string path;
 
 			switch (SdkPlatform) {
 			case "AppleTVSimulator":
@@ -502,25 +507,37 @@ namespace Xamarin.MacDev.Tasks {
 				profile = null;
 			}
 
-			if (!string.IsNullOrEmpty (Entitlements)) {
-				if (!File.Exists (Entitlements)) {
-					Log.LogError (MSBStrings.E0112, Entitlements);
+			bool injectDefaultEntitlements;
+			if (!string.IsNullOrEmpty (InjectDefaultPlatformEntitlements)) {
+				injectDefaultEntitlements = string.Equals (InjectDefaultPlatformEntitlements, "true", StringComparison.OrdinalIgnoreCase);
+			} else {
+				injectDefaultEntitlements = string.IsNullOrEmpty (Entitlements);
+			}
+			if (injectDefaultEntitlements) {
+				try {
+					var defaultEntitlements = PDictionary.FromFile (DefaultEntitlementsPath)!;
+					templates.Add (defaultEntitlements);
+				} catch (Exception ex) {
+					Log.LogError (MSBStrings.E0113, DefaultEntitlementsPath, ex.Message);
 					return false;
 				}
-
-				path = Entitlements;
-			} else {
-				path = DefaultEntitlementsPath;
 			}
 
-			try {
-				template = PDictionary.FromFile (path)!;
-			} catch (Exception ex) {
-				Log.LogError (MSBStrings.E0113, path, ex.Message);
-				return false;
+			if (!string.IsNullOrEmpty (Entitlements)) {
+				try {
+					if (!File.Exists (Entitlements)) {
+						Log.LogError (MSBStrings.E0112, Entitlements);
+						return false;
+					}
+					var projectEntitlements = PDictionary.FromFile (Entitlements)!;
+					templates.Add (projectEntitlements);
+				} catch (Exception ex) {
+					Log.LogError (MSBStrings.E0113, Entitlements, ex.Message);
+					return false;
+				}
 			}
 
-			compiled = GetCompiledEntitlements (profile, template);
+			compiled = GetCompiledEntitlements (profile, templates);
 
 			/* The path to the entitlements must be resolved to the full path, because we might want to reference it from a containing project that just references this project,
 			  * and in that case it becomes a bit complicated to resolve to a full path on disk when building remotely from Windows. Instead just resolve to a full path here,
@@ -550,7 +567,7 @@ namespace Xamarin.MacDev.Tasks {
 				compiled = new PDictionary ();
 				compiled.Add ("com.apple.security.get-task-allow", new PBoolean (true));
 			} else {
-				archived = GetArchivedExpandedEntitlements (template, compiled);
+				archived = GetArchivedExpandedEntitlements (templates, compiled);
 			}
 
 			ValidateAppEntitlements (profile, compiled);
@@ -598,6 +615,59 @@ namespace Xamarin.MacDev.Tasks {
 			return true;
 		}
 
+		static bool DoesEntitlementRequireProvisioningProfile (ApplePlatform platform, string? entitlement)
+		{
+			switch (platform) {
+			case ApplePlatform.iOS:
+			case ApplePlatform.TVOS:
+				return false; // all entitlements require a provisioning profile on mobile devices
+			case ApplePlatform.MacOSX:
+			case ApplePlatform.MacCatalyst:
+				// some entitlements don't require a provisioning profile on macOS
+				// https://developer.apple.com/documentation/technotes/tn3125-inside-code-signing-provisioning-profiles#Entitlements-on-macOS
+				switch (entitlement) {
+				case "com.apple.security.get-task-allow":
+				case "com.apple.security.application-groups":
+				case "com.apple.security.app-sandbox":
+				case "com.apple.security.network.server":
+				case "com.apple.security.network.client":
+				case "com.apple.security.device.camera":
+				case "com.apple.security.device.microphone":
+				case "com.apple.security.device.usb":
+				case "com.apple.security.print":
+				case "com.apple.security.device.bluetooth":
+				case "com.apple.security.personal-information.addressbook":
+				case "com.apple.security.personal-information.location":
+				case "com.apple.security.personal-information.calendars":
+				case "com.apple.security.files.user-selected.read-only":
+				case "com.apple.security.files.user-selected.read-write":
+				case "com.apple.security.files.downloads.read-only":
+				case "com.apple.security.files.downloads.read-write":
+				case "com.apple.security.assets.pictures.read-only":
+				case "com.apple.security.assets.pictures.read-write":
+				case "com.apple.security.assets.music.read-only":
+				case "com.apple.security.assets.music.read-write":
+				case "com.apple.security.assets.movies.read-only":
+				case "com.apple.security.assets.movies.read-write":
+				case "com.apple.security.files.all":
+				case "com.apple.security.smartcard":
+				case "com.apple.security.cs.allow-jit":
+				case "com.apple.security.cs.allow-unsigned-executable-memory":
+				case "com.apple.security.cs.allow-dyld-environment-variables":
+				case "com.apple.security.cs.disable-library-validation":
+				case "com.apple.security.cs.disable-executable-page-protection":
+				case "com.apple.security.cs.debugger":
+				case "com.apple.security.device.audio-input":
+				case "com.apple.security.personal-information.photos-library":
+				case "com.apple.security.automation.apple-events":
+					return false;
+				}
+				return true;
+			default:
+				throw new InvalidOperationException (string.Format (MSBStrings.InvalidPlatform, platform));
+			}
+		}
+
 		void ValidateAppEntitlements (MobileProvision? profile, PDictionary requestedEntitlements)
 		{
 			var onlyWarn = false;
@@ -626,17 +696,32 @@ namespace Xamarin.MacDev.Tasks {
 			var provisioningProfileName = profile?.Name;
 			foreach (var kvp in requestedEntitlements) {
 				var key = kvp.Key;
+				// https://developer.apple.com/documentation/technotes/tn3125-inside-code-signing-provisioning-profiles#Entitlements-on-macOS
 				switch (key) {
 				case "aps-environment":
-					var requestedApsEnvironment = (kvp.Value as PString)?.Value;
+				case "com.apple.developer.icloud-container-environment":
+					// entitlement is a string, provisioning profile has the entitlement with either a string or an array of strings of valid values for the entitlement
+					var requestedEntitlementString = (kvp.Value as PString)?.Value;
 					if (profile is null) {
 						LogEntitlementValidationFailure (onlyWarn, 7139, MSBStrings.E7139, key); // "The app requests the entitlement '{0}', but no provisioning profile has been specified. Please specify the name of the provisioning profile to use with the 'CodesignProvision' property in the project file.
-					} else if (provisioningEntitlements is null || !provisioningEntitlements.TryGetValue<PString> (key, out var provisioningApsEnvironment)) {
+					} else if (provisioningEntitlements is null || !provisioningEntitlements.TryGetValue<PObject> (key, out var provisioningEntitlement)) {
 						LogEntitlementValidationFailure (onlyWarn, 7140, MSBStrings.E7140, key, provisioningProfileName); // The app requests the entitlement '{0}', but the provisioning profile '{1}' does not contain this entitlement.
-					} else if (requestedApsEnvironment != provisioningApsEnvironment.Value) {
-						LogEntitlementValidationFailure (onlyWarn, 7137, MSBStrings.E7137, key, requestedApsEnvironment, provisioningProfileName, provisioningApsEnvironment.Value); // The app requests the entitlement '{0}' with the value '{1}', but the provisioning profile '{2}' grants it for the value '{3}'."
+					} else if (provisioningEntitlement is PArray provisioningEntitlementArray) {
+						var allowedEntitlementStrings = provisioningEntitlementArray.ToStringArray ();
+						if (allowedEntitlementStrings.Contains (requestedEntitlementString)) {
+							Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}' with the value '{requestedEntitlementString}, which the provisioning profile '{provisioningProfileName}' grants, because it grants these values for this entitlement: {string.Join (", ", allowedEntitlementStrings)}.");
+						} else {
+							LogEntitlementValidationFailure (onlyWarn, 7152, MSBStrings.E7152, key, requestedEntitlementString, provisioningProfileName, string.Join (", ", allowedEntitlementStrings.ToArray ())); // The app requests the entitlement '{0}' with the value '{1}', but the provisioning profile '{2}' grants it for the values '{3}'.
+						}
+					} else if (provisioningEntitlement is PString provisioningEntitlementString) {
+						var allowedEntitlementString = provisioningEntitlementString.Value;
+						if (requestedEntitlementString != allowedEntitlementString) {
+							LogEntitlementValidationFailure (onlyWarn, 7137, MSBStrings.E7137, key, requestedEntitlementString, provisioningProfileName, allowedEntitlementString); // The app requests the entitlement '{0}' with the value '{1}', but the provisioning profile '{2}' grants it for the value '{3}'."
+						} else {
+							Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}' with the value '{requestedEntitlementString}', which the provisioning profile '{provisioningProfileName}' grants.");
+						}
 					} else {
-						Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}' with the value '{requestedApsEnvironment}', which the provisioning profile '{provisioningProfileName}' grants.");
+						Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', which the provisioning profile '{provisioningProfileName}' contains, but with unknown values. Assuming this is OK.");
 					}
 					break;
 				case "com.apple.security.personal-information.calendars":
@@ -654,8 +739,34 @@ namespace Xamarin.MacDev.Tasks {
 						throw new InvalidOperationException (string.Format (MSBStrings.InvalidPlatform, Platform));
 					}
 					break;
+				case "com.apple.developer.ubiquity-container-identifiers":
+				case "com.apple.developer.icloud-container-identifiers":
+				case "com.apple.developer.icloud-services":
+					// Only validate that the provisioning profile contains the entitlement, not any values for the entitlement.
+					if (profile is null) {
+						LogEntitlementValidationFailure (onlyWarn, 7139, MSBStrings.E7139, key); // "The app requests the entitlement '{0}', but no provisioning profile has been specified. Please specify the name of the provisioning profile to use with the 'CodesignProvision' property in the project file.
+					} else if (provisioningEntitlements is null || !provisioningEntitlements.TryGetValue<PObject> (key, out var _)) {
+						LogEntitlementValidationFailure (onlyWarn, 7140, MSBStrings.E7140, key, provisioningProfileName); // The app requests the entitlement '{0}', but the provisioning profile '{1}' does not contain this entitlement.
+					} else {
+						Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', which the provisioning profile '{provisioningProfileName}' grants.");
+					}
+					break;
+				case null:
+				case "":
+					continue;
 				default:
-					Log.LogMessage (MessageImportance.Low, $"The app requests entitlement '{key}', but no validation has been implemented for this entitlement. Assuming everything is OK.");
+					// Do some basic validation, but don't show errors or warnings until this code has had some more testing.
+					if (DoesEntitlementRequireProvisioningProfile (Platform, key)) {
+						if (profile is null) {
+							Log.LogMessage (MessageImportance.Low, $"The app requests the required entitlement '{key}', but no provisioning profile has been specified. This is probably not OK.");
+						} else if (provisioningEntitlements is null || !provisioningEntitlements.TryGetValue<PObject> (key, out var _)) {
+							Log.LogMessage (MessageImportance.Low, $"The app requests the required entitlement '{key}', but provisioning profile {provisioningProfileName} does not grant this entitlement. This is probably not OK.");
+						} else {
+							Log.LogMessage (MessageImportance.Low, $"The app requests the required entitlement '{key}', which the provisioning profile '{provisioningProfileName}' grants. This is probably OK.");
+						}
+					} else {
+						Log.LogMessage (MessageImportance.Low, $"The app requests entitlement '{key}', which does not require a provisioning profile. This is probably OK.");
+					}
 					break;
 				}
 			}

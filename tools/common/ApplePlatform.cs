@@ -5,15 +5,21 @@
 
 #nullable enable
 
+using System;
+using System.Numerics;
+using System.Text;
+using Xamarin.MacDev;
+
 namespace Xamarin.Utils {
+	[Flags]
 	public enum ApplePlatform {
 		None,
-		MacOSX,
-		iOS,
+		MacOSX = 1,
+		iOS = 2,
 		[System.Obsolete ("Do not use")]
-		WatchOS,
-		TVOS,
-		MacCatalyst,
+		WatchOS = 4,
+		TVOS = 8,
+		MacCatalyst = 16,
 	}
 
 	public static class ApplePlatformExtensions {
@@ -31,8 +37,38 @@ namespace Xamarin.Utils {
 			case ApplePlatform.None:
 				return "None";
 			default:
-				return "Unknown";
+				if (PopCount (unchecked ((uint) @this)) == 1)
+					return "Unknown";
+
+				var value = @this;
+				var sb = new StringBuilder ();
+				foreach (var e in Enum.GetValues (typeof (ApplePlatform))) {
+					var element = (ApplePlatform) e;
+					if (element == ApplePlatform.None)
+						continue;
+					if ((value & element) == element) {
+						if (sb.Length > 0)
+							sb.Append (", ");
+						sb.Append (element.AsString ());
+						value &= ~element;
+					}
+				}
+				return sb.ToString ();
 			}
+		}
+
+		static int PopCount (uint value)
+		{
+#if NET
+			return BitOperations.PopCount (value);
+#else
+			int rv = 0;
+			while (value != 0) {
+				rv++;
+				value &= value - 1;
+			}
+			return rv;
+#endif
 		}
 
 		public static string ToFramework (this ApplePlatform @this, string? netVersion = null)

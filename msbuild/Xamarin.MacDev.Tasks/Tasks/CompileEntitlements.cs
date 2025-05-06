@@ -8,10 +8,13 @@ using Microsoft.Build.Utilities;
 using Xamarin.Localization.MSBuild;
 using Xamarin.Messaging.Build.Client;
 using Xamarin.Utils;
+using System.Linq;
+using System.Drawing;
 
 #nullable enable
 
 namespace Xamarin.MacDev.Tasks {
+	// https://developer.apple.com/documentation/technotes/tn3125-inside-code-signing-provisioning-profiles
 	public class CompileEntitlements : XamarinTask, ITaskCallback, ICancelableTask {
 		bool warnedTeamIdentifierPrefix;
 		bool warnedAppIdentifierPrefix;
@@ -72,6 +75,11 @@ namespace Xamarin.MacDev.Tasks {
 
 		[Required]
 		public string SdkVersion { get; set; } = string.Empty;
+
+		// whether the default platform entitlements (inside the <platform>.sdk directory inside Xcode) is injected into the final entitlements
+		// the default behavior is to inject if no Entitlements value has been specified.
+		// Note: the presence or absence of CustomEntitlements does not affect the default behavior.
+		public string InjectDefaultPlatformEntitlements { get; set; } = "";
 
 		[Output]
 		public ITaskItem? EntitlementsInExecutable { get; set; }
@@ -341,7 +349,7 @@ namespace Xamarin.MacDev.Tasks {
 			}
 		}
 
-		protected virtual PDictionary GetCompiledEntitlements (MobileProvision? profile, PDictionary template)
+		protected virtual PDictionary GetCompiledEntitlements (MobileProvision? profile, IEnumerable<PDictionary> templates)
 		{
 			var entitlements = new PDictionary ();
 
@@ -349,14 +357,14 @@ namespace Xamarin.MacDev.Tasks {
 				// start off with the settings from the provisioning profile
 				foreach (var item in profile.Entitlements) {
 					var key = item.Key!;
-					if (!AllowedProvisioningKeys.Contains (key))
+					if (!AllowedProvisioningKeys.Contains (key)) {
+						Log.LogMessage ($"The provisioning profile '{profile.Name}' contains the entitlement '{key}', but this entitlement is not in the list of allowed entitlements, and it won't be copied into the app's entitlements.");
 						continue;
+					}
 
 					var value = item.Value;
 
-					if (key == "com.apple.developer.icloud-container-environment")
-						value = new PString ("Development");
-					else if (value is PDictionary)
+					if (value is PDictionary)
 						value = MergeEntitlementDictionary ((PDictionary) value, profile);
 					else if (value is PString)
 						value = MergeEntitlementString ((PString) value, profile, item.Key == ApplicationIdentifierKey, key);
@@ -371,39 +379,37 @@ namespace Xamarin.MacDev.Tasks {
 			}
 
 			// merge in the user's values
-			foreach (var item in template) {
-				var value = item.Value;
-				var key = item.Key!;
+			foreach (var template in templates) {
+				foreach (var item in template) {
+					var value = item.Value;
+					var key = item.Key!;
 
-				if (key == "com.apple.developer.ubiquity-container-identifiers" ||
-					key == "com.apple.developer.icloud-container-identifiers" ||
-					key == "com.apple.developer.icloud-container-environment" ||
-					key == "com.apple.developer.icloud-services") {
-					if (profile is null)
-						Log.LogWarning (null, null, null, Entitlements, 0, 0, 0, 0, MSBStrings.W0110, key);
-					else if (!profile.Entitlements.ContainsKey (key))
-						Log.LogWarning (null, null, null, Entitlements, 0, 0, 0, 0, MSBStrings.W0111, key);
-				} else if (key == ApplicationIdentifierKey) {
-					var str = value as PString;
+					if (key == ApplicationIdentifierKey) {
+						var str = value as PString;
 
-					// Ignore ONLY if it is empty, otherwise take the user's value
-					if (str is null || string.IsNullOrEmpty (str.Value))
-						continue;
+						// Ignore ONLY if it is empty, otherwise take the user's value
+						if (string.IsNullOrEmpty (str?.Value)) {
+							Log.LogMessage ($"The entitlement '{key}' is empty in the provided entitlements file (either user-supplied or the default), and will be ignored.");
+							continue;
+						}
+					}
+
+					if (value is PDictionary)
+						value = MergeEntitlementDictionary ((PDictionary) value, profile);
+					else if (value is PString)
+						value = MergeEntitlementString ((PString) value, profile, key == ApplicationIdentifierKey, key);
+					else if (value is PArray)
+						value = MergeEntitlementArray ((PArray) value, profile, key);
+					else
+						value = value.Clone ();
+
+					if (value is not null)
+						entitlements [key] = value;
 				}
-
-				if (value is PDictionary)
-					value = MergeEntitlementDictionary ((PDictionary) value, profile);
-				else if (value is PString)
-					value = MergeEntitlementString ((PString) value, profile, key == ApplicationIdentifierKey, key);
-				else if (value is PArray)
-					value = MergeEntitlementArray ((PArray) value, profile, key);
-				else
-					value = value.Clone ();
-
-				if (value is not null)
-					entitlements [key] = value;
 			}
 
+			// If we're building for macOS, and we're building for Debug, and the sandbox is enabled,
+			// then also enable the "com.apple.security.network.client" entitlement (it's needed for the debugger to work).
 			switch (Platform) {
 			case ApplePlatform.MacOSX:
 			case ApplePlatform.MacCatalyst:
@@ -417,14 +423,16 @@ namespace Xamarin.MacDev.Tasks {
 			return entitlements;
 		}
 
-		PDictionary GetArchivedExpandedEntitlements (PDictionary template, PDictionary compiled)
+		PDictionary GetArchivedExpandedEntitlements (IEnumerable<PDictionary> templates, PDictionary compiled)
 		{
 			var allowed = new HashSet<string> ();
 
 			// the template (user-supplied Entitlements.plist file) is used to create a approved list of keys
 			allowed.Add ("com.apple.developer.icloud-container-environment");
-			foreach (var item in template)
-				allowed.Add (item.Key!);
+			foreach (var template in templates) {
+				foreach (var item in template)
+					allowed.Add (item.Key!);
+			}
 			// also allow any custom entitlements
 			foreach (var item in CustomEntitlements)
 				allowed.Add (item.ItemSpec);
@@ -441,6 +449,7 @@ namespace Xamarin.MacDev.Tasks {
 			return archived;
 		}
 
+		// this virtual method is required for tests
 		protected virtual MobileProvision GetMobileProvision (MobileProvisionPlatform platform, string name)
 		{
 			return MobileProvisionIndex.GetMobileProvision (platform, name);
@@ -453,10 +462,9 @@ namespace Xamarin.MacDev.Tasks {
 
 			MobileProvisionPlatform platform;
 			MobileProvision? profile;
-			PDictionary template;
+			var templates = new List<PDictionary> ();
 			PDictionary compiled;
-			PDictionary archived;
-			string path;
+			PDictionary? archived = null;
 
 			switch (SdkPlatform) {
 			case "AppleTVSimulator":
@@ -487,29 +495,41 @@ namespace Xamarin.MacDev.Tasks {
 				profile = null;
 			}
 
-			if (!string.IsNullOrEmpty (Entitlements)) {
-				if (!File.Exists (Entitlements)) {
-					Log.LogError (MSBStrings.E0112, Entitlements);
+			bool injectDefaultEntitlements;
+			if (!string.IsNullOrEmpty (InjectDefaultPlatformEntitlements)) {
+				injectDefaultEntitlements = string.Equals (InjectDefaultPlatformEntitlements, "true", StringComparison.OrdinalIgnoreCase);
+			} else {
+				injectDefaultEntitlements = string.IsNullOrEmpty (Entitlements);
+			}
+			if (injectDefaultEntitlements) {
+				try {
+					var defaultEntitlements = PDictionary.FromFile (DefaultEntitlementsPath)!;
+					templates.Add (defaultEntitlements);
+				} catch (Exception ex) {
+					Log.LogError (MSBStrings.E0113, DefaultEntitlementsPath, ex.Message);
 					return false;
 				}
-
-				path = Entitlements;
-			} else {
-				path = DefaultEntitlementsPath;
 			}
 
-			try {
-				template = PDictionary.FromFile (path)!;
-			} catch (Exception ex) {
-				Log.LogError (MSBStrings.E0113, path, ex.Message);
-				return false;
+			if (!string.IsNullOrEmpty (Entitlements)) {
+				try {
+					if (!File.Exists (Entitlements)) {
+						Log.LogError (MSBStrings.E0112, Entitlements);
+						return false;
+					}
+					var projectEntitlements = PDictionary.FromFile (Entitlements)!;
+					templates.Add (projectEntitlements);
+				} catch (Exception ex) {
+					Log.LogError (MSBStrings.E0113, Entitlements, ex.Message);
+					return false;
+				}
 			}
 
-			compiled = GetCompiledEntitlements (profile, template);
+			compiled = GetCompiledEntitlements (profile, templates);
 
 			ValidateAppEntitlements (profile, compiled);
 
-			archived = GetArchivedExpandedEntitlements (template, compiled);
+			archived = GetArchivedExpandedEntitlements (templates, compiled);
 
 			try {
 				Directory.CreateDirectory (Path.GetDirectoryName (CompiledEntitlements!.ItemSpec));
@@ -567,6 +587,307 @@ namespace Xamarin.MacDev.Tasks {
 			return true;
 		}
 
+		[Flags]
+		enum EntitlementValidationMode {
+			// the entitlement must be present in the provisioning profile, but the value for the entitlement is not verified
+			PresenceInProfile = 1,
+			// the entitlement is a string value, and the profile contains the valid values
+			// for the entitlement, which are either a string or an array of strings
+			StringOrArray = 2,
+			// we're guessing the entitlement must be in the provisioning profile, but we don't really know.
+			// this is used to just log a message, instead of reporting a warning or an error.
+			WeakPresenceInProfile = 4,
+			// the entitlement must be a boolean value, and the profile contains the valid value(s)
+			BooleanOrArray = 8,
+		}
+
+		class EntitlementInfo {
+			public string Identifier { get; set; } = string.Empty;
+			public EntitlementValidationMode ValidationMode { get; set; }
+			public EntitlementContent? Content { get; set; }
+		}
+
+		enum EntitlementType {
+			String,
+			Boolean,
+			ArrayOfStrings,
+			DictionaryOfArrayOfStrings,
+			ArrayOfStringDictionaries,
+		}
+
+		class EntitlementContent {
+			public string Identifier { get; set; }
+			public ApplePlatform ValidPlatforms { get; set; }
+			public EntitlementType Type { get; set; }
+			public string []? AdditionalKeys { get; set; }
+			public bool RequiresProvisioningProfile { get; set; }
+
+			public EntitlementContent (string identifier, ApplePlatform validPlatforms, EntitlementType type, string []? additionalKeys = null, bool requiresProvisioningProfile = true)
+			{
+				Identifier = identifier;
+				ValidPlatforms = validPlatforms;
+				Type = type;
+				AdditionalKeys = additionalKeys;
+				RequiresProvisioningProfile = requiresProvisioningProfile;
+			}
+		}
+
+		static Dictionary<string, EntitlementContent>? all_entitlements;
+		static Dictionary<string, EntitlementContent> GetAllEntitlements ()
+		{
+
+			if (all_entitlements is null) {
+				var iOS = ApplePlatform.iOS;
+				var tvOS = ApplePlatform.TVOS;
+				var mobile = ApplePlatform.iOS | ApplePlatform.TVOS;
+				var desktop = ApplePlatform.MacOSX | ApplePlatform.MacCatalyst;
+				var iOSDesktop = iOS | desktop;
+				var iOSMacCatalyst = ApplePlatform.iOS | ApplePlatform.MacCatalyst;
+				var allPlatforms = mobile | desktop;
+				var visionOS = (ApplePlatform) 0;
+
+				var content = new EntitlementContent [] {
+					new EntitlementContent ("application-identifier", mobile, EntitlementType.String, requiresProvisioningProfile: true ),
+					new EntitlementContent ("aps-environment", mobile, EntitlementType.String ),
+					new EntitlementContent ("beta-reports-active", allPlatforms, EntitlementType.Boolean, requiresProvisioningProfile: true ), // https://developer.apple.com/library/archive/qa/qa1830/_index.html
+					new EntitlementContent ("com.apple.application-identifier", desktop, EntitlementType.String, requiresProvisioningProfile: true ),
+					new EntitlementContent ("com.apple.developer.accessibility.merchant-api-control", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.app-compute-category", visionOS, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.applesignin", allPlatforms, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.aps-environment", desktop, EntitlementType.String ),
+					new EntitlementContent ("com.apple.developer.arkit.barcode-detection.allow", visionOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.arkit.main-camera-access.allow", visionOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.arkit.object-tracking-parameter-adjustment.allow", visionOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.associated-appclip-app-identifiers", iOS, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.associated-domains", allPlatforms, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.associated-domains.applinks.read-write", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.authentication-services.autofill-credential-provider", iOSDesktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.automated-device-enrollment.add-devices", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.automatic-assessment-configuration", iOSDesktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.avfoundation.multitasking-camera-access", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.avfoundation.uvc-device-access", visionOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.browser.app-installation", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.calling-app", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.carplay-audio", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.carplay-charging", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.carplay-communication", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.carplay-maps", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.carplay-messaging", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.carplay-parking", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.carplay-quick-ordering", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.ClassKit-environment", iOSDesktop, EntitlementType.String ),
+					new EntitlementContent ("com.apple.developer.contacts.notes", iOSDesktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.coreml.neural-engine-access", visionOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.coremotion.head-pose", allPlatforms, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.default-data-protection", mobile, EntitlementType.String ),
+					new EntitlementContent ("com.apple.developer.device-information.user-assigned-device-name", allPlatforms, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.devicecheck.appattest-environment", mobile, EntitlementType.String ),
+					new EntitlementContent ("com.apple.developer.driverkit", iOSDesktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.driverkit.allow-any-userclient-access", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.driverkit.allow-third-party-userclients", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.driverkit.communicates-with-drivers", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.driverkit.family.audio", iOSDesktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.driverkit.family.block-storage-device", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.driverkit.family.hid.device", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.driverkit.family.hid.eventservice", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.driverkit.family.midi", iOSDesktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.driverkit.family.networking", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.driverkit.family.scsicontroller", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.driverkit.family.serial", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.driverkit.transport.hid", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.driverkit.transport.pci", desktop, EntitlementType.ArrayOfStringDictionaries, new string [] { "IOPCIMatch", "IOPCIPrimaryMatch", "IOPCISecondaryMatch", "IOPCIClassMatch" } ),
+					new EntitlementContent ("com.apple.developer.driverkit.transport.usb", desktop, EntitlementType.ArrayOfStringDictionaries, new string [] { "bConfigurationValue", "bDeviceClass", "bDeviceProtocol", "bDeviceSubClass", "bInterfaceClass", "bInterfaceNumber", "bInterfaceProtocol", "bInterfaceSubClass", "bcdDevice", "idProduct", "idProductArray", "idProductMask", "idVendor", } ),
+					new EntitlementContent ("com.apple.developer.driverkit.userclient-access", desktop, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.embedded-web-browser-engine", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.endpoint-security.client", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.exposure-notification", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.family-controls", iOSMacCatalyst, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.fileprovider.testing-mode", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.game-center", iOSDesktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.group-session", allPlatforms, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.healthkit", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.healthkit.access", iOS, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.healthkit.background-delivery", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.healthkit.recalibrate-estimates", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.hid.virtual.device", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.homekit", mobile, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.icloud-container-development-container-identifiers", allPlatforms, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.icloud-container-environment", allPlatforms, EntitlementType.String ),
+					new EntitlementContent ("com.apple.developer.icloud-container-identifiers", allPlatforms, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.icloud-services", allPlatforms, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.in-app-identity-presentment", iOS, EntitlementType.DictionaryOfArrayOfStrings, new string [] { "document-types:us-drivers-license", "elements:given-name,family-name,portrait,address,issuing-authority,document-expiration-date,document-number,driving-privileges,age,date-of-birth," } ),
+					new EntitlementContent ("com.apple.developer.in-app-identity-presentment.merchant-identifiers", iOS, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.in-app-payments", iOS, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.journal.allow", iOS, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.kernel.extended-virtual-addressing", mobile, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.kernel.increased-memory-limit", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.location.push", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.mail-client", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.managed-app-distribution.install-ui", iOS, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.maps", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.marketplace.app-installation", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.matter.allow-setup-payload", allPlatforms, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.media-device-discovery-extension", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.memory.transfer_accept", iOS, EntitlementType.String ),
+					new EntitlementContent ("com.apple.developer.memory.transfer_send", iOS, EntitlementType.String ),
+					new EntitlementContent ("com.apple.developer.messages.critical-messaging", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.messaging-app", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.navigation-app", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.networking.HotspotConfiguration", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.networking.manage-thread-network-credentials", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.networking.multicast", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.networking.multipath", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.networking.networkextension", allPlatforms, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.networking.slicing.appcategory", iOS, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.networking.slicing.trafficcategory", iOS, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.networking.vmnet", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.networking.vpn.api", iOSDesktop, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.networking.wifi-info", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.nfc.hce", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.nfc.hce.default-contactless-app", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.nfc.hce.iso7816.select-identifier-prefixes", iOS, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.nfc.readersession.formats", iOS, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.on-demand-install-capable", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.parent-application-identifiers", iOS, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.pass-type-identifiers", iOS, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.persistent-content-capture", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.playable-content", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.proximity-reader.identity.display", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.proximity-reader.identity.read", iOS, EntitlementType.DictionaryOfArrayOfStrings, new string [] { "document-elements:given-name,family-name,portrait,address,issuing-authority,document-issue-date,document-expiration-date,document-number,driving-privileges,age,date-of-birth", "document-types:drivers-license" } ),
+					new EntitlementContent ("com.apple.developer.push-to-talk", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.screen-capture.include-passthrough", visionOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.secure-element-credential", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.secure-element-credential.default-contactless-app", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.sensitivecontentanalysis.client", iOS, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.sensorkit.reader.allow", iOS, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.severe-vehicular-crash-event", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.siri", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.spatial-audio.profile-access", allPlatforms, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.storekit.external-link.account", mobile, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.storekit.external-purchase", allPlatforms, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.storekit.external-purchase-link", allPlatforms, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.sustained-execution", iOSDesktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.system-extension.install", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.system-extension.redistributable", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.team-identifier", allPlatforms, EntitlementType.String, requiresProvisioningProfile: true ),
+					new EntitlementContent ("com.apple.developer.translation-app", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.ubiquity-kvstore-identifier", allPlatforms, EntitlementType.String ),
+					new EntitlementContent ("com.apple.developer.upi-device-validation", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.user-management", tvOS, EntitlementType.ArrayOfStrings ),
+					new EntitlementContent ("com.apple.developer.usernotifications.filtering", iOSDesktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.video-subscriber-single-sign-on", allPlatforms, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.weatherkit", allPlatforms, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.web-browser", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.web-browser-engine.host", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.web-browser-engine.networking", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.web-browser-engine.rendering", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.web-browser-engine.webcontent", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.developer.web-browser.public-key-credential", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.external-accessory.wireless-configuration", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.security.app-sandbox", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.application-groups", desktop, EntitlementType.ArrayOfStrings, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.assets.movies.read-only", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.assets.movies.read-write", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.assets.music.read-only", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.assets.music.read-write", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.assets.pictures.read-only", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.assets.pictures.read-write", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.automation.apple-events", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.cs.allow-dyld-environment-variables", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.cs.allow-jit", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.cs.allow-unsigned-executable-memory", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.cs.debugger", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.cs.disable-executable-page-protection", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.cs.disable-library-validation", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.device.audio-input", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.device.bluetooth", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.device.camera", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.device.microphone", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.device.usb", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.files.all", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.files.downloads.read-only", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.files.downloads.read-write", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.files.user-selected.read-only", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.files.user-selected.read-write", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.get-task-allow", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.hypervisor", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.security.network.client", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.network.server", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.personal-information.addressbook", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.personal-information.calendars", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.personal-information.location", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.personal-information.photos-library", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.print", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.smartcard", desktop, EntitlementType.Boolean, requiresProvisioningProfile: false ),
+					new EntitlementContent ("com.apple.security.virtualization", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.smoot.subscriptionservice", allPlatforms, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.vm.device-access", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.vm.hypervisor", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("com.apple.vm.networking", desktop, EntitlementType.Boolean ),
+					new EntitlementContent ("get-task-allow", mobile, EntitlementType.Boolean ),
+					new EntitlementContent ("inter-app-audio", iOS, EntitlementType.Boolean ),
+					new EntitlementContent ("keychain-access-groups", allPlatforms, EntitlementType.ArrayOfStrings ),
+				};
+				all_entitlements = new Dictionary<string, EntitlementContent> (content.Length);
+				foreach (var item in content) {
+					if (item.Identifier is not null)
+						all_entitlements [item.Identifier] = item;
+				}
+			}
+			return all_entitlements;
+		}
+
+		static EntitlementInfo? GetEntitlementInfo (ApplePlatform platform, string entitlement)
+		{
+			var dict = GetAllEntitlements ();
+			if (dict.TryGetValue (entitlement, out var content)) {
+				var validationMode = EntitlementValidationMode.PresenceInProfile;
+				switch (content.Type) {
+				case EntitlementType.String:
+					validationMode = EntitlementValidationMode.StringOrArray;
+					break;
+				case EntitlementType.Boolean:
+					validationMode = EntitlementValidationMode.BooleanOrArray;
+					break;
+				}
+				return new EntitlementInfo {
+					Identifier = entitlement,
+					Content = content,
+					ValidationMode = validationMode,
+				};
+			}
+
+			// if we don't know the entitlement, assume it must be in the profile, but only log as a message, not as a warning or error.
+			return new EntitlementInfo {
+				Identifier = entitlement,
+				ValidationMode = EntitlementValidationMode.WeakPresenceInProfile,
+			};
+		}
+
+		static string GetPListType (PObject obj)
+		{
+			switch (obj) {
+			case PBoolean _:
+				return "bool";
+			case PString _:
+				return "string";
+			case PArray _:
+				return "array";
+			case PDictionary _:
+				return "dict";
+			case PNumber _:
+				return "integer";
+			case PDate _:
+				return "date";
+			case PData _:
+				return "data";
+			case PReal _:
+				return "real";
+			default:
+				return "unknown";
+			}
+		}
+
 		void ValidateAppEntitlements (MobileProvision? profile, PDictionary requestedEntitlements)
 		{
 			var onlyWarn = false;
@@ -595,38 +916,128 @@ namespace Xamarin.MacDev.Tasks {
 			var provisioningProfileName = profile?.Name;
 			foreach (var kvp in requestedEntitlements) {
 				var key = kvp.Key;
-				switch (key) {
-				case "aps-environment":
-					var requestedApsEnvironment = (kvp.Value as PString)?.Value;
+				// https://developer.apple.com/documentation/technotes/tn3125-inside-code-signing-provisioning-profiles#Entitlements-on-macOS
+				if (key is null || string.IsNullOrEmpty (key)) {
+					Log.LogMessage (MessageImportance.Low, $"The app requested an empty entitlement, with value '{kvp.Value}'");
+					continue;
+				}
+
+				var info = GetEntitlementInfo (Platform, key);
+				if (info is null) {
+					if (profile is null) {
+						Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', but nothing is known about this entitlement to validate it. Assuming this is OK.");
+					} else if (provisioningEntitlements is null || !provisioningEntitlements.TryGetValue<PObject> (key, out var _)) {
+						Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', but provisioning profile {provisioningProfileName} does not grant this entitlement. However, nothing is known about this entitlement to validate it, so assuming this is OK.");
+					} else {
+						Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', which the provisioning profile '{provisioningProfileName}' grants. Nothing is known about this entitlement, so no further validation can be done. Assuming this is OK.");
+					}
+					continue;
+				}
+
+				if (info.Content?.ValidPlatforms is not null && !info.Content.ValidPlatforms.HasFlag (Platform)) {
+					LogEntitlementValidationFailure (onlyWarn, 7151, MSBStrings.E7151, key, Platform.AsString (), info.Content.ValidPlatforms.AsString ()); // The app requests the entitlement '{0}', but this entitlement is not allowed on the current platform ({1}). It's only allowed on: {2}.
+					continue; // no need to report any other errors for this entitlement
+				}
+
+				if (info.ValidationMode.HasFlag (EntitlementValidationMode.StringOrArray)) {
+					// entitlement is a string, provisioning profile has the entitlement with either a string or an array of strings of valid values for the entitlement
+					if (profile is null) {
+						if (info.Content?.RequiresProvisioningProfile == false) {
+							Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', but no provisioning profile has been specified. This is OK, because the entitlement '{key}' doesn't require a provisioning profile.");
+						} else {
+							LogEntitlementValidationFailure (onlyWarn, 7139, MSBStrings.E7139, key); // "The app requests the entitlement '{0}', but no provisioning profile has been specified. Please specify the name of the provisioning profile to use with the 'CodesignProvision' property in the project file.
+						}
+					} else if (!(kvp.Value is PString requestedEntitlementPString)) {
+						LogEntitlementValidationFailure (onlyWarn, 7153, MSBStrings.E7153, key, kvp.Value, GetPListType (kvp.Value), "string"); // The app requests the entitlement '{0}' with the value '{1}' of type '{2}', but this entitlement must be of type '{3}'.
+					} else if (provisioningEntitlements is null || !provisioningEntitlements.TryGetValue<PObject> (key, out var provisioningEntitlement)) {
+						LogEntitlementValidationFailure (onlyWarn, 7140, MSBStrings.E7140, key, provisioningProfileName); // The app requests the entitlement '{0}', but the provisioning profile '{1}' doesn't contain this entitlement.
+					} else if (provisioningEntitlement is PArray provisioningEntitlementArray) {
+						var requestedEntitlementString = requestedEntitlementPString.Value;
+						var allowedEntitlementStrings = provisioningEntitlementArray.ToStringArray ();
+						if (allowedEntitlementStrings.Any (v => IsMatch (requestedEntitlementString, v))) {
+							Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}' with the value '{requestedEntitlementString}, which the provisioning profile '{provisioningProfileName}' grants, because it grants these values for this entitlement: {string.Join (", ", allowedEntitlementStrings)}.");
+						} else {
+							LogEntitlementValidationFailure (onlyWarn, 7150, MSBStrings.E7150, key, requestedEntitlementString, provisioningProfileName, string.Join (", ", allowedEntitlementStrings.ToArray ())); // The app requests the entitlement '{0}' with the value '{1}', but the provisioning profile '{2}' grants it for the values '{3}'.
+						}
+					} else if (provisioningEntitlement is PString provisioningEntitlementString) {
+						var requestedEntitlementString = requestedEntitlementPString.Value;
+						var allowedEntitlementString = provisioningEntitlementString.Value;
+						if (!IsMatch (requestedEntitlementString, allowedEntitlementString)) {
+							LogEntitlementValidationFailure (onlyWarn, 7137, MSBStrings.E7137, key, requestedEntitlementString, provisioningProfileName, allowedEntitlementString); // The app requests the entitlement '{0}' with the value '{1}', but the provisioning profile '{2}' grants it for the value '{3}'."
+						} else {
+							Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}' with the value '{requestedEntitlementString}', which the provisioning profile '{provisioningProfileName}' grants.");
+						}
+					} else {
+						Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', which the provisioning profile '{provisioningProfileName}' contains, but with unknown values. Assuming this is OK.");
+					}
+				}
+
+				if (info.ValidationMode.HasFlag (EntitlementValidationMode.BooleanOrArray)) {
+					// entitlement is a boolean, provisioning profile has the entitlement with either a string or an array of strings of valid values for the entitlement
+					if (profile is null) {
+						if (info.Content?.RequiresProvisioningProfile == false) {
+							Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', but no provisioning profile has been specified. This is OK, because the entitlement '{key}' doesn't require a provisioning profile.");
+						} else {
+							LogEntitlementValidationFailure (onlyWarn, 7139, MSBStrings.E7139, key); // "The app requests the entitlement '{0}', but no provisioning profile has been specified. Please specify the name of the provisioning profile to use with the 'CodesignProvision' property in the project file.
+						}
+					} else if (!(kvp.Value is PBoolean requestedEntitlementBoolean)) {
+						LogEntitlementValidationFailure (onlyWarn, 7153, MSBStrings.E7153, key, kvp.Value, GetPListType (kvp.Value), "bool"); // The app requests the entitlement '{0}' with the value '{1}' of type '{2}', but this entitlement must be of type '{3}'.
+					} else if (provisioningEntitlements is null || !provisioningEntitlements.TryGetValue<PObject> (key, out var provisioningEntitlement)) {
+						if (info.Content?.RequiresProvisioningProfile == false) {
+							Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', but the provisioning profile '{provisioningProfileName}' doesn't contain this entitlement. This is OK, because the entitlement '{key}' doesn't require a provisioning profile.");
+						} else {
+							LogEntitlementValidationFailure (onlyWarn, 7140, MSBStrings.E7140, key, provisioningProfileName); // The app requests the entitlement '{0}', but the provisioning profile '{1}' doesn't contain this entitlement.
+						}
+					} else if (provisioningEntitlement is PArray provisioningEntitlementArray) {
+						var allowedEntitlementBooleans = provisioningEntitlementArray.Cast<PBoolean> ().Select (v => v.Value).ToArray ();
+						if (allowedEntitlementBooleans.Contains (requestedEntitlementBoolean)) {
+							Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}' with the value '{requestedEntitlementBoolean}, which the provisioning profile '{provisioningProfileName}' grants, because it grants these values for this entitlement: {string.Join (", ", allowedEntitlementBooleans)}.");
+						} else {
+							LogEntitlementValidationFailure (onlyWarn, 7152, MSBStrings.E7152, key, requestedEntitlementBoolean, provisioningProfileName, string.Join (", ", allowedEntitlementBooleans.ToArray ())); // The app requests the entitlement '{0}' with the value '{1}', but the provisioning profile '{2}' grants it for the values '{3}'.
+						}
+					} else if (provisioningEntitlement is PBoolean provisioningEntitlementBoolean) {
+						var allowedEntitlementBoolean = provisioningEntitlementBoolean.Value;
+						if (requestedEntitlementBoolean.Value != allowedEntitlementBoolean) {
+							LogEntitlementValidationFailure (onlyWarn, 7137, MSBStrings.E7137, key, requestedEntitlementBoolean.Value, provisioningProfileName, allowedEntitlementBoolean); // The app requests the entitlement '{0}' with the value '{1}', but the provisioning profile '{2}' grants it for the value '{3}'."
+						} else {
+							Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}' with the value '{requestedEntitlementBoolean.Value}', which the provisioning profile '{provisioningProfileName}' grants.");
+						}
+					} else {
+						Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', which the provisioning profile '{provisioningProfileName}' contains, but with unknown values. Assuming this is OK.");
+					}
+				}
+
+				if (info.ValidationMode.HasFlag (EntitlementValidationMode.PresenceInProfile)) {
+					// entitlement is present in the provisioning profile, but the value for the entitlement is not verified
 					if (profile is null) {
 						LogEntitlementValidationFailure (onlyWarn, 7139, MSBStrings.E7139, key); // "The app requests the entitlement '{0}', but no provisioning profile has been specified. Please specify the name of the provisioning profile to use with the 'CodesignProvision' property in the project file.
-					} else if (provisioningEntitlements is null || !provisioningEntitlements.TryGetValue<PString> (key, out var provisioningApsEnvironment)) {
+					} else if (provisioningEntitlements is null || !provisioningEntitlements.TryGetValue<PObject> (key, out var _)) {
 						LogEntitlementValidationFailure (onlyWarn, 7140, MSBStrings.E7140, key, provisioningProfileName); // The app requests the entitlement '{0}', but the provisioning profile '{1}' does not contain this entitlement.
-					} else if (requestedApsEnvironment != provisioningApsEnvironment.Value) {
-						LogEntitlementValidationFailure (onlyWarn, 7137, MSBStrings.E7137, key, requestedApsEnvironment, provisioningProfileName, provisioningApsEnvironment.Value); // The app requests the entitlement '{0}' with the value '{1}', but the provisioning profile '{2}' grants it for the value '{3}'."
 					} else {
-						Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}' with the value '{requestedApsEnvironment}', which the provisioning profile '{provisioningProfileName}' grants.");
+						Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', which the provisioning profile '{provisioningProfileName}' grants.");
 					}
-					break;
-				case "com.apple.security.personal-information.calendars":
-				case "com.apple.security.personal-information.location":
-					// desktop only entitlements
-					switch (Platform) {
-					case ApplePlatform.iOS:
-					case ApplePlatform.TVOS:
-						LogEntitlementValidationFailure (onlyWarn, 7151, MSBStrings.E7151, key, Platform.AsString ()); // The app requests the entitlement '{0}', but this entitlement is not allowed on the current platform ({1}). It's only allowed on macOS and Mac Catalyst.
-						break;
-					case ApplePlatform.MacOSX:
-					case ApplePlatform.MacCatalyst:
-						break;
-					default:
-						throw new InvalidOperationException (string.Format (MSBStrings.InvalidPlatform, Platform));
-					}
-					break;
-				default:
-					Log.LogMessage (MessageImportance.Low, $"The app requests entitlement '{key}', but no validation has been implemented for this entitlement. Assuming everything is OK.");
-					break;
 				}
+
+				if (info.ValidationMode.HasFlag (EntitlementValidationMode.WeakPresenceInProfile)) {
+					// we're only guessing that the entitlement must be in the provisioning profile, so only log this, instead of reporting a warning or an error
+					if (profile is null) {
+						Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', but no provisioning profile has been specified. This is probably not OK.");
+					} else if (provisioningEntitlements is null || !provisioningEntitlements.TryGetValue<PObject> (key, out var _)) {
+						Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', but provisioning profile {provisioningProfileName} does not grant this entitlement. This is probably not OK.");
+					} else {
+						Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', which the provisioning profile '{provisioningProfileName}' grants. This is probably OK.");
+					}
+				}
+			}
+		}
+
+		bool IsMatch (string value, string matchingPattern)
+		{
+			if (matchingPattern.IndexOf ('*') >= 0) {
+				var regexp = matchingPattern.Replace (".", "[.]").Replace ("*", ".*");
+				return System.Text.RegularExpressions.Regex.IsMatch (value, regexp);
+			} else {
+				return string.Equals (value, matchingPattern, StringComparison.OrdinalIgnoreCase);
 			}
 		}
 

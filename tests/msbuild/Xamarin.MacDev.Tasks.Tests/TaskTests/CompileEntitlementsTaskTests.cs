@@ -32,16 +32,26 @@ namespace Xamarin.MacDev.Tasks {
 			return CreateEntitlementsTask (out compiledEntitlements, out var _);
 		}
 
-		CustomCompileEntitlements CreateEntitlementsTask (out string compiledEntitlements, out string archivedEntitlements, string mobileProvision = "profile.mobileprovision")
+		CustomCompileEntitlements CreateEntitlementsTask (string entitlementsFile, out string compiledEntitlements)
+		{
+			return CreateEntitlementsTask (entitlementsFile, out compiledEntitlements, out var _);
+		}
+		
+		CustomCompileEntitlements CreateEntitlementsTask (out string compiledEntitlements, out string archivedEntitlements, string provisioningProfile = "profile.mobileprovision")
+		{
+			return CreateEntitlementsTask ("Entitlements.plist", out compiledEntitlements, out archivedEntitlements, provisioningProfile);
+		}
+
+		CustomCompileEntitlements CreateEntitlementsTask (string entitlementsFile, out string compiledEntitlements, out string archivedEntitlements, string provisioningProfile = "profile.mobileprovision")
 		{
 			var task = CreateTask<CustomCompileEntitlements> ();
 
 			task.AppBundleDir = AppBundlePath;
 			task.BundleIdentifier = "com.xamarin.MySingleView";
 			task.CompiledEntitlements = new TaskItem (Path.Combine (MonoTouchProjectObjPath, "Entitlements.xcent"));
-			task.Entitlements = Path.Combine (Path.GetDirectoryName (GetType ().Assembly.Location)!, "Resources", "Entitlements.plist");
-			if (!string.IsNullOrEmpty (mobileProvision))
-				task.ProvisioningProfile = Path.Combine (Path.GetDirectoryName (GetType ().Assembly.Location)!, "Resources", mobileProvision);
+			task.Entitlements = GetResourcePath (entitlementsFile);
+			if (!string.IsNullOrEmpty (provisioningProfile))
+				task.ProvisioningProfile = GetResourcePath (provisioningProfile);
 			task.SdkPlatform = "iPhoneOS";
 			task.SdkVersion = "6.1";
 			task.TargetFrameworkMoniker = TargetFramework.DotNet_iOS_String;
@@ -55,6 +65,11 @@ namespace Xamarin.MacDev.Tasks {
 			return task;
 		}
 
+		string GetResourcePath (string resource)
+		{
+			return Path.Combine (Path.GetDirectoryName (GetType ().Assembly.Location)!, "Resources", resource);
+		}
+
 		void DeleteDirectory (string directory)
 		{
 			if (!Directory.Exists (directory))
@@ -66,7 +81,11 @@ namespace Xamarin.MacDev.Tasks {
 		public void ValidateEntitlement ()
 		{
 			var task = CreateEntitlementsTask (out var compiledEntitlements, out var archivedEntitlements);
-			ExecuteTask (task);
+			ExecuteTask (task, expectedErrorCount: 3);
+			Assert.AreEqual ("The app requests the entitlement 'com.apple.developer.associated-domains', but the provisioning profile 'iOS Team Provisioning Profile: *' doesn't contain this entitlement.", Engine.Logger.ErrorEvents [0].Message, "Error message #1");
+			Assert.AreEqual ("The app requests the entitlement 'com.apple.developer.pass-type-identifiers', but the provisioning profile 'iOS Team Provisioning Profile: *' doesn't contain this entitlement.", Engine.Logger.ErrorEvents [1].Message, "Error message #2");
+			Assert.AreEqual ("The app requests the entitlement 'com.apple.developer.ubiquity-kvstore-identifier', but the provisioning profile 'iOS Team Provisioning Profile: *' doesn't contain this entitlement.", Engine.Logger.ErrorEvents [2].Message, "Error message #3");
+
 			var compiled = PDictionary.FromFile (compiledEntitlements)!;
 			Assert.IsTrue (compiled.Get<PBoolean> (EntitlementKeys.GetTaskAllow)?.Value, "#1");
 			Assert.AreEqual ("32UV7A8CDE.com.xamarin.MySingleView", compiled.Get<PString> ("application-identifier")?.Value, "#2");
@@ -95,9 +114,10 @@ namespace Xamarin.MacDev.Tasks {
 			var customEntitlements = new TaskItem [] {
 				new TaskItem ("com.xamarin.custom.entitlement", dict)
 			};
-			var task = CreateEntitlementsTask (out var compiledEntitlements);
+			var task = CreateEntitlementsTask ("EmptyEntitlements.plist", out var compiledEntitlements);
 			task.TargetFrameworkMoniker = ".NETCoreApp,Version=v6.0,Profile=maccatalyst";
 			task.CustomEntitlements = customEntitlements;
+			task.ProvisioningProfile = GetResourcePath ("WildCardMacAppDevelopment.provisionprofile");
 			ExecuteTask (task, expectedErrorCount: 1);
 			Assert.AreEqual (errorMessage, Engine.Logger.ErrorEvents [0].Message, "Error message");
 		}
@@ -115,12 +135,14 @@ namespace Xamarin.MacDev.Tasks {
 			var customEntitlements = new TaskItem [] {
 				new TaskItem ("com.xamarin.custom.entitlement", dict)
 			};
-			var task = CreateEntitlementsTask (out var compiledEntitlements);
+			var task = CreateEntitlementsTask ("EmptyEntitlements.plist", out var compiledEntitlements);
 			task.TargetFrameworkMoniker = ".NETCoreApp,Version=v6.0,Profile=maccatalyst";
 			task.CustomEntitlements = customEntitlements;
+			task.ProvisioningProfile = GetResourcePath ("WildCardMacAppDevelopment.provisionprofile");
 			ExecuteTask (task);
 			var compiled = PDictionary.FromFile (compiledEntitlements)!;
 			Assert.AreEqual (value ?? string.Empty, compiled.GetString ("com.xamarin.custom.entitlement")?.Value, "#1");
+			Assert.IsTrue (Engine.Logger.MessageEvents.Any (v => v.Message.Contains ("The app requests the entitlement 'com.xamarin.custom.entitlement', but provisioning profile WildCardMacAppDevelopment does not grant this entitlement. This is probably not OK.")), "custom entitlement");
 		}
 
 		[Test]
@@ -133,14 +155,17 @@ namespace Xamarin.MacDev.Tasks {
 			var customEntitlements = new TaskItem [] {
 				new TaskItem ("com.xamarin.custom.entitlement", dict)
 			};
-			var task = CreateEntitlementsTask (out var compiledEntitlements);
+			var task = CreateEntitlementsTask ("EmptyEntitlements.plist", out var compiledEntitlements);
+			task.InjectDefaultPlatformEntitlements = "false";
 			task.TargetFrameworkMoniker = ".NETCoreApp,Version=v6.0,Profile=maccatalyst";
+			task.ProvisioningProfile = GetResourcePath ("WildCardMacAppDevelopment.provisionprofile");
 			task.CustomEntitlements = customEntitlements;
 			ExecuteTask (task);
 			var compiled = PDictionary.FromFile (compiledEntitlements)!;
 			var array = compiled.GetArray ("com.xamarin.custom.entitlement");
 			Assert.NotNull (array, "array");
 			Assert.AreEqual (new string [] { "A", "B", "C" }, array.ToStringArray (), "array contents");
+			Assert.IsTrue (Engine.Logger.MessageEvents.Any (v => v.Message.Contains ("The app requests the entitlement 'com.xamarin.custom.entitlement', but provisioning profile WildCardMacAppDevelopment does not grant this entitlement. This is probably not OK.")), "custom entitlement");
 		}
 
 		[Test]
@@ -156,9 +181,10 @@ namespace Xamarin.MacDev.Tasks {
 			var customEntitlements = new TaskItem [] {
 				new TaskItem ("com.xamarin.custom.entitlement", dict)
 			};
-			var task = CreateEntitlementsTask (out var compiledEntitlements);
+			var task = CreateEntitlementsTask ("EmptyEntitlements.plist", out var compiledEntitlements);
 			task.TargetFrameworkMoniker = ".NETCoreApp,Version=v6.0,Profile=maccatalyst";
 			task.CustomEntitlements = customEntitlements;
+			task.ProvisioningProfile = GetResourcePath ("WildCardMacAppDevelopment.provisionprofile");
 			ExecuteTask (task);
 			var compiled = PDictionary.FromFile (compiledEntitlements)!;
 			var array = compiled.GetArray ("com.xamarin.custom.entitlement");
@@ -169,8 +195,9 @@ namespace Xamarin.MacDev.Tasks {
 		[Test]
 		public void AllowJit_Default ()
 		{
-			var task = CreateEntitlementsTask (out var compiledEntitlements);
+			var task = CreateEntitlementsTask ("EmptyEntitlements.plist", out var compiledEntitlements);
 			task.TargetFrameworkMoniker = ".NETCoreApp,Version=v6.0,Profile=maccatalyst";
+			task.ProvisioningProfile = GetResourcePath ("WildCardMacAppDevelopment.provisionprofile");
 			ExecuteTask (task);
 			var compiled = PDictionary.FromFile (compiledEntitlements)!;
 			Assert.IsFalse (compiled.ContainsKey (EntitlementKeys.AllowExecutionOfJitCode), "#1");
@@ -182,8 +209,9 @@ namespace Xamarin.MacDev.Tasks {
 			var customEntitlements = new TaskItem [] {
 				new TaskItem ("com.apple.security.cs.allow-jit", new Dictionary<string, string> { {  "Type", "Boolean" }, { "Value", "true" } }),
 			};
-			var task = CreateEntitlementsTask (out var compiledEntitlements);
+			var task = CreateEntitlementsTask ("EmptyEntitlements.plist", out var compiledEntitlements);
 			task.TargetFrameworkMoniker = ".NETCoreApp,Version=v6.0,Profile=maccatalyst";
+			task.ProvisioningProfile = GetResourcePath ("WildCardMacAppDevelopment.provisionprofile");
 			task.CustomEntitlements = customEntitlements;
 			ExecuteTask (task);
 			var compiled = PDictionary.FromFile (compiledEntitlements)!;
@@ -197,8 +225,9 @@ namespace Xamarin.MacDev.Tasks {
 			var customEntitlements = new TaskItem [] {
 				new TaskItem ("com.apple.security.cs.allow-jit", new Dictionary<string, string> { {  "Type", "Boolean" }, { "Value", "false" } }),
 			};
-			var task = CreateEntitlementsTask (out var compiledEntitlements, out var archivedEntitlements);
+			var task = CreateEntitlementsTask ("EmptyEntitlements.plist", out var compiledEntitlements, out var archivedEntitlements);
 			task.TargetFrameworkMoniker = ".NETCoreApp,Version=v6.0,Profile=maccatalyst";
+			task.ProvisioningProfile = GetResourcePath ("WildCardMacAppDevelopment.provisionprofile");
 			task.CustomEntitlements = customEntitlements;
 			ExecuteTask (task);
 			var compiled = PDictionary.FromFile (compiledEntitlements)!;
@@ -214,8 +243,9 @@ namespace Xamarin.MacDev.Tasks {
 			var customEntitlements = new TaskItem [] {
 				new TaskItem ("com.apple.security.cs.allow-jit", new Dictionary<string, string> { {  "Type", "Remove" } }),
 			};
-			var task = CreateEntitlementsTask (out var compiledEntitlements);
+			var task = CreateEntitlementsTask ("EmptyEntitlements.plist", out var compiledEntitlements);
 			task.TargetFrameworkMoniker = ".NETCoreApp,Version=v6.0,Profile=maccatalyst";
+			task.ProvisioningProfile = GetResourcePath ("WildCardMacAppDevelopment.provisionprofile");
 			task.CustomEntitlements = customEntitlements;
 			ExecuteTask (task);
 			var compiled = PDictionary.FromFile (compiledEntitlements)!;
@@ -226,20 +256,20 @@ namespace Xamarin.MacDev.Tasks {
 		public void AppIdentifierPrefix ()
 		{
 			var customEntitlements = new TaskItem [] {
-				new TaskItem ("keychain-access-group", new Dictionary<string, string> { {  "Type", "String" }, { "Value", "$(AppIdentifierPrefix)org.xamarin" } }),
+				new TaskItem ("keychain-access-groups", new Dictionary<string, string> { {  "Type", "String" }, { "Value", "$(AppIdentifierPrefix)org.xamarin" } }),
 			};
-			var task = CreateEntitlementsTask (out var compiledEntitlements, out var archivedEntitlements);
+			var task = CreateEntitlementsTask ("EmptyEntitlements.plist", out var compiledEntitlements, out var archivedEntitlements);
 			task.TargetFrameworkMoniker = ".NETCoreApp,Version=v6.0,Profile=ios";
 			task.CustomEntitlements = customEntitlements;
 			ExecuteTask (task);
 			var compiled = PDictionary.FromFile (compiledEntitlements)!;
 			Assert.IsFalse (compiled.ContainsKey (EntitlementKeys.AllowExecutionOfJitCode), "#1");
-			var kag = ((PString?) compiled ["keychain-access-group"])?.Value;
+			var kag = ((PString?) compiled ["keychain-access-groups"])?.Value;
 			Assert.That (kag, Is.EqualTo ("32UV7A8CDE.org.xamarin"), "value 1");
 
 			var archived = PDictionary.FromFile (archivedEntitlements)!;
-			Assert.IsTrue (archived.ContainsKey ("keychain-access-group"), "archived");
-			var archivedKag = ((PString?) archived ["keychain-access-group"])?.Value;
+			Assert.IsTrue (archived.ContainsKey ("keychain-access-groups"), "archived");
+			var archivedKag = ((PString?) archived ["keychain-access-groups"])?.Value;
 			Assert.That (archivedKag, Is.EqualTo ("32UV7A8CDE.org.xamarin"), "archived value 1");
 		}
 
@@ -247,20 +277,20 @@ namespace Xamarin.MacDev.Tasks {
 		public void TeamIdentifierPrefix ()
 		{
 			var customEntitlements = new TaskItem [] {
-				new TaskItem ("keychain-access-group", new Dictionary<string, string> { {  "Type", "String" }, { "Value", "$(TeamIdentifierPrefix)org.xamarin" } }),
+				new TaskItem ("keychain-access-groups", new Dictionary<string, string> { {  "Type", "String" }, { "Value", "$(TeamIdentifierPrefix)org.xamarin" } }),
 			};
-			var task = CreateEntitlementsTask (out var compiledEntitlements, out var archivedEntitlements);
+			var task = CreateEntitlementsTask ("EmptyEntitlements.plist", out var compiledEntitlements, out var archivedEntitlements);
 			task.TargetFrameworkMoniker = ".NETCoreApp,Version=v6.0,Profile=ios";
 			task.CustomEntitlements = customEntitlements;
 			ExecuteTask (task);
 			var compiled = PDictionary.FromFile (compiledEntitlements)!;
 			Assert.IsFalse (compiled.ContainsKey (EntitlementKeys.AllowExecutionOfJitCode), "#1");
-			var kag = ((PString?) compiled ["keychain-access-group"])?.Value;
+			var kag = ((PString?) compiled ["keychain-access-groups"])?.Value;
 			Assert.That (kag, Is.EqualTo ("Z8CSQKJE7R.org.xamarin"), "value 1");
 
 			var archived = PDictionary.FromFile (archivedEntitlements)!;
-			Assert.IsTrue (archived.ContainsKey ("keychain-access-group"), "archived");
-			var archivedKag = ((PString?) archived ["keychain-access-group"])?.Value;
+			Assert.IsTrue (archived.ContainsKey ("keychain-access-groups"), "archived");
+			var archivedKag = ((PString?) archived ["keychain-access-groups"])?.Value;
 			Assert.That (archivedKag, Is.EqualTo ("Z8CSQKJE7R.org.xamarin"), "archived value 1");
 		}
 
@@ -281,7 +311,7 @@ namespace Xamarin.MacDev.Tasks {
 		public void ValidateEntitlements_NotInProfile_Default (EntitlementsMode mode)
 		{
 			ValidateEntitlementsImpl ("", 1, mode);
-			Assert.AreEqual (Engine.Logger.ErrorEvents [0].Message, "The app requests the entitlement 'aps-environment', but the provisioning profile 'iOS Team Provisioning Profile: *' does not contain this entitlement.", "Error message");
+			Assert.AreEqual (Engine.Logger.ErrorEvents [0].Message, "The app requests the entitlement 'aps-environment', but the provisioning profile 'iOS Team Provisioning Profile: *' doesn't contain this entitlement.", "Error message");
 			Assert.AreEqual (Engine.Logger.ErrorEvents [0].Code, "MT7140", "Error code");
 			Assert.AreEqual (0, Engine.Logger.WarningsEvents.Count, "WarningCount");
 		}
@@ -292,7 +322,7 @@ namespace Xamarin.MacDev.Tasks {
 		public void ValidateEntitlements_NotInProfile_Error (EntitlementsMode mode)
 		{
 			ValidateEntitlementsImpl ("error", 1, mode);
-			Assert.AreEqual (Engine.Logger.ErrorEvents [0].Message, "The app requests the entitlement 'aps-environment', but the provisioning profile 'iOS Team Provisioning Profile: *' does not contain this entitlement.", "Error message");
+			Assert.AreEqual (Engine.Logger.ErrorEvents [0].Message, "The app requests the entitlement 'aps-environment', but the provisioning profile 'iOS Team Provisioning Profile: *' doesn't contain this entitlement.", "Error message");
 			Assert.AreEqual (Engine.Logger.ErrorEvents [0].Code, "MT7140", "Error code");
 			Assert.AreEqual (0, Engine.Logger.WarningsEvents.Count, "WarningCount");
 		}
@@ -304,7 +334,7 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			ValidateEntitlementsImpl ("warn", 0, mode);
 			Assert.AreEqual (1, Engine.Logger.WarningsEvents.Count, "WarningCount");
-			Assert.AreEqual (Engine.Logger.WarningsEvents [0].Message, "The app requests the entitlement 'aps-environment', but the provisioning profile 'iOS Team Provisioning Profile: *' does not contain this entitlement.", "Warning message");
+			Assert.AreEqual (Engine.Logger.WarningsEvents [0].Message, "The app requests the entitlement 'aps-environment', but the provisioning profile 'iOS Team Provisioning Profile: *' doesn't contain this entitlement.", "Warning message");
 			Assert.AreEqual (Engine.Logger.WarningsEvents [0].Code, "MT7140", "Warning code");
 		}
 
@@ -418,7 +448,7 @@ namespace Xamarin.MacDev.Tasks {
 			ValidateEntitlementsImpl (platform, "warn", 0, mode, entitlement: entitlement, "Boolean", "true");
 			Assert.AreEqual (1, Engine.Logger.WarningsEvents.Count, "WarningCount-warn");
 			Console.WriteLine (Engine.Logger.WarningsEvents [0].Message);
-			Assert.AreEqual ($"The app requests the entitlement '{entitlement}', but this entitlement is not allowed on the current platform ({platform.AsString ()}). It's only allowed on macOS and Mac Catalyst.", Engine.Logger.WarningsEvents [0].Message, "Warning message-warn");
+			Assert.AreEqual ($"The app requests the entitlement '{entitlement}', but this entitlement is not allowed on the current platform ({platform.AsString ()}). It's only allowed on: macOS, MacCatalyst.", Engine.Logger.WarningsEvents [0].Message, "Warning message-warn");
 			Assert.AreEqual ("MT7151", Engine.Logger.WarningsEvents [0].Code, "Warning code-warn");
 		}
 
@@ -435,7 +465,7 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			ValidateEntitlementsImpl (platform, "error", 1, mode, entitlement: entitlement, "Boolean", "true");
 			Assert.AreEqual (0, Engine.Logger.WarningsEvents.Count, "WarningCount-error");
-			Assert.AreEqual ($"The app requests the entitlement '{entitlement}', but this entitlement is not allowed on the current platform ({platform.AsString ()}). It's only allowed on macOS and Mac Catalyst.", Engine.Logger.ErrorEvents [0].Message, "Error message");
+			Assert.AreEqual ($"The app requests the entitlement '{entitlement}', but this entitlement is not allowed on the current platform ({platform.AsString ()}). It's only allowed on: macOS, MacCatalyst.", Engine.Logger.ErrorEvents [0].Message, "Error message");
 			Assert.AreEqual ("MT7151", Engine.Logger.ErrorEvents [0].Code, "Error code");
 		}
 
@@ -453,10 +483,10 @@ namespace Xamarin.MacDev.Tasks {
 			ValidateEntitlementsImpl (platform, "disable", 0, mode, entitlement, "Boolean", "true");
 			Assert.AreEqual (0, Engine.Logger.WarningsEvents.Count, "WarningCount-disable");
 
-			ValidateEntitlementsImpl (platform, "warn", 0, mode, entitlement, "Boolean", "true");
+			ValidateEntitlementsImpl (platform, "warn", 0, mode, entitlement, "Boolean", "true", mobileProvision: string.Empty);
 			Assert.AreEqual (0, Engine.Logger.WarningsEvents.Count, "WarningCount-warn");
 
-			ValidateEntitlementsImpl (platform, "error", 0, mode, entitlement, "Boolean", "true");
+			ValidateEntitlementsImpl (platform, "error", 0, mode, entitlement, "Boolean", "true", mobileProvision: string.Empty);
 			Assert.AreEqual (0, Engine.Logger.WarningsEvents.Count, "WarningCount-error");
 		}
 
@@ -500,10 +530,11 @@ namespace Xamarin.MacDev.Tasks {
 				entitlementItem.SetMetadata ("Type", type);
 				entitlementItem.SetMetadata ("Value", value);
 				task.CustomEntitlements = new [] { entitlementItem };
+				task.InjectDefaultPlatformEntitlements = "false";
 				break;
 			}
 			if (!string.IsNullOrEmpty (mobileProvision))
-				task.ProvisioningProfile = Path.Combine (Path.GetDirectoryName (GetType ().Assembly.Location)!, "Resources", mobileProvision);
+				task.ProvisioningProfile = GetResourcePath (mobileProvision);
 			switch (platform) {
 			case ApplePlatform.iOS:
 				task.SdkPlatform = "iPhoneOS";

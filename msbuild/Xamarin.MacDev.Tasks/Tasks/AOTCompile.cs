@@ -272,24 +272,27 @@ namespace Xamarin.MacDev.Tasks {
 			if (dedupAssembly is not null && !assembliesToAOT.Contains (dedupAssembly))
 				assembliesToAOT.Add (dedupAssembly);
 
-			// Sort the assemblies:
-			// We want to start with the assemblies that takes the longest to compile, because
-			// that will make most efficient use of parallel resources.
-			// 1. The dedup assembly is typically quite big, so do that first.
-			// 2. Sort the rest of the assemblies by size, in decreasing order.
-			var sortedAssembliesToAOT = assembliesToAOT
-				// Compute the data we need to sort. We set file length to long.MaxValue if it's a dedup assembly so that it sorts where we want it
-				.Select (item => {
-					var isDedup = Boolean.TryParse (item.GetMetadata ("IsDedupAssembly"), out var isDedupAssembly) && isDedupAssembly;
-					return (Item: item, InputLength: isDedup ? long.MaxValue : new FileInfo (item.GetMetadata ("Input")).Length);
-				})
-				// Sort
-				.OrderByDescending (x => x.InputLength);
-			foreach (var item in sortedAssembliesToAOT) {
-				Log.LogMessage (MessageImportance.Low, $"Ahead-of-time compiling with sort order {item.InputLength}: {item.Item.GetMetadata ("Input")}");
+			if (!string.IsNullOrEmpty (Environment.GetEnvironmentVariable ("SKIP_SORT"))) {
+				// Sort the assemblies:
+				// We want to start with the assemblies that takes the longest to compile, because
+				// that will make most efficient use of parallel resources.
+				// 1. The dedup assembly is typically quite big, so do that first.
+				// 2. Sort the rest of the assemblies by size, in decreasing order.
+				var sortedAssembliesToAOT = assembliesToAOT
+					// Compute the data we need to sort. We set file length to long.MaxValue if it's a dedup assembly so that it sorts where we want it
+					.Select (item => {
+						var isDedup = Boolean.TryParse (item.GetMetadata ("IsDedupAssembly"), out var isDedupAssembly) && isDedupAssembly;
+						return (Item: item, InputLength: isDedup ? long.MaxValue : new FileInfo (item.GetMetadata ("Input")).Length);
+					})
+					// Sort
+					.OrderByDescending (x => x.InputLength);
+				foreach (var item in sortedAssembliesToAOT) {
+					Log.LogMessage (MessageImportance.Low, $"Ahead-of-time compiling with sort order {item.InputLength}: {item.Item.GetMetadata ("Input")}");
+				}
+
+				assembliesToAOT = sortedAssembliesToAOT.Select (v => v.Item).ToList ();
 			}
 
-			assembliesToAOT = sortedAssembliesToAOT.Select (v => v.Item).ToList ();
 
 			Directory.CreateDirectory (OutputDirectory);
 

@@ -420,7 +420,7 @@ namespace Xamarin.MacDev.Tasks {
 			}
 
 			// first sort all the items by path length, longest path first.
-			ITaskItem?[] sortedResources = resourcesToSign.OrderBy (v => v.ItemSpec.Length).Reverse ().ToArray ();
+			ITaskItem? [] sortedResources = resourcesToSign.OrderBy (v => v.ItemSpec.Length).Reverse ().ToArray ();
 
 			// remove items that are up-to-date
 			var itemsToSign = new List<SignInfo> ();

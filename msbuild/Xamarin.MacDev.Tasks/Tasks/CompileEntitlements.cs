@@ -90,6 +90,12 @@ namespace Xamarin.MacDev.Tasks {
 		public string ValidateEntitlements { get; set; } = string.Empty;
 		#endregion
 
+		bool BundleEntitlementsInExecutable {
+			get {
+				return SdkIsSimulator;
+			}
+		}
+
 		protected string ApplicationIdentifierKey {
 			get {
 				switch (Platform) {
@@ -546,9 +552,7 @@ namespace Xamarin.MacDev.Tasks {
 			  * and use that from now on. This has to be done from a task, so that we get the full path on the mac when executed remotely from Windows. */
 			var compiledEntitlementsFullPath = new TaskItem (Path.GetFullPath (CompiledEntitlements!.ItemSpec));
 
-			if (Platform == Utils.ApplePlatform.MacCatalyst) {
-				EntitlementsInSignature = compiledEntitlementsFullPath;
-			} else if (SdkIsSimulator) {
+			if (BundleEntitlementsInExecutable) {
 				if (compiled.Count > 0) {
 					EntitlementsInExecutable = compiledEntitlementsFullPath;
 				}
@@ -941,70 +945,12 @@ namespace Xamarin.MacDev.Tasks {
 
 				if (info.ValidationMode.HasFlag (EntitlementValidationMode.StringOrArray)) {
 					// entitlement is a string, provisioning profile has the entitlement with either a string or an array of strings of valid values for the entitlement
-					if (profile is null) {
-						if (info.Content?.RequiresProvisioningProfile == false) {
-							Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', but no provisioning profile has been specified. This is OK, because the entitlement '{key}' doesn't require a provisioning profile.");
-						} else {
-							LogEntitlementValidationFailure (onlyWarn, 7139, MSBStrings.E7139, key); // "The app requests the entitlement '{0}', but no provisioning profile has been specified. Please specify the name of the provisioning profile to use with the 'CodesignProvision' property in the project file.
-						}
-					} else if (!(kvp.Value is PString requestedEntitlementPString)) {
-						LogEntitlementValidationFailure (onlyWarn, 7153, MSBStrings.E7153, key, kvp.Value, GetPListType (kvp.Value), "string"); // The app requests the entitlement '{0}' with the value '{1}' of type '{2}', but this entitlement must be of type '{3}'.
-					} else if (provisioningEntitlements is null || !provisioningEntitlements.TryGetValue<PObject> (key, out var provisioningEntitlement)) {
-						LogEntitlementValidationFailure (onlyWarn, 7140, MSBStrings.E7140, key, provisioningProfileName); // The app requests the entitlement '{0}', but the provisioning profile '{1}' doesn't contain this entitlement.
-					} else if (provisioningEntitlement is PArray provisioningEntitlementArray) {
-						var requestedEntitlementString = requestedEntitlementPString.Value;
-						var allowedEntitlementStrings = provisioningEntitlementArray.ToStringArray ();
-						if (allowedEntitlementStrings.Any (v => IsMatch (requestedEntitlementString, v))) {
-							Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}' with the value '{requestedEntitlementString}, which the provisioning profile '{provisioningProfileName}' grants, because it grants these values for this entitlement: {string.Join (", ", allowedEntitlementStrings)}.");
-						} else {
-							LogEntitlementValidationFailure (onlyWarn, 7150, MSBStrings.E7150, key, requestedEntitlementString, provisioningProfileName, string.Join (", ", allowedEntitlementStrings.ToArray ())); // The app requests the entitlement '{0}' with the value '{1}', but the provisioning profile '{2}' grants it for the values '{3}'.
-						}
-					} else if (provisioningEntitlement is PString provisioningEntitlementString) {
-						var requestedEntitlementString = requestedEntitlementPString.Value;
-						var allowedEntitlementString = provisioningEntitlementString.Value;
-						if (!IsMatch (requestedEntitlementString, allowedEntitlementString)) {
-							LogEntitlementValidationFailure (onlyWarn, 7137, MSBStrings.E7137, key, requestedEntitlementString, provisioningProfileName, allowedEntitlementString); // The app requests the entitlement '{0}' with the value '{1}', but the provisioning profile '{2}' grants it for the value '{3}'."
-						} else {
-							Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}' with the value '{requestedEntitlementString}', which the provisioning profile '{provisioningProfileName}' grants.");
-						}
-					} else {
-						Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', which the provisioning profile '{provisioningProfileName}' contains, but with unknown values. Assuming this is OK.");
-					}
+					ValidateTypeOrArray<PString, string> (profile, info, onlyWarn, key, kvp, provisioningProfileName, provisioningEntitlements, "string");
 				}
 
 				if (info.ValidationMode.HasFlag (EntitlementValidationMode.BooleanOrArray)) {
-					// entitlement is a boolean, provisioning profile has the entitlement with either a string or an array of strings of valid values for the entitlement
-					if (profile is null) {
-						if (info.Content?.RequiresProvisioningProfile == false) {
-							Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', but no provisioning profile has been specified. This is OK, because the entitlement '{key}' doesn't require a provisioning profile.");
-						} else {
-							LogEntitlementValidationFailure (onlyWarn, 7139, MSBStrings.E7139, key); // "The app requests the entitlement '{0}', but no provisioning profile has been specified. Please specify the name of the provisioning profile to use with the 'CodesignProvision' property in the project file.
-						}
-					} else if (!(kvp.Value is PBoolean requestedEntitlementBoolean)) {
-						LogEntitlementValidationFailure (onlyWarn, 7153, MSBStrings.E7153, key, kvp.Value, GetPListType (kvp.Value), "bool"); // The app requests the entitlement '{0}' with the value '{1}' of type '{2}', but this entitlement must be of type '{3}'.
-					} else if (provisioningEntitlements is null || !provisioningEntitlements.TryGetValue<PObject> (key, out var provisioningEntitlement)) {
-						if (info.Content?.RequiresProvisioningProfile == false) {
-							Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', but the provisioning profile '{provisioningProfileName}' doesn't contain this entitlement. This is OK, because the entitlement '{key}' doesn't require a provisioning profile.");
-						} else {
-							LogEntitlementValidationFailure (onlyWarn, 7140, MSBStrings.E7140, key, provisioningProfileName); // The app requests the entitlement '{0}', but the provisioning profile '{1}' doesn't contain this entitlement.
-						}
-					} else if (provisioningEntitlement is PArray provisioningEntitlementArray) {
-						var allowedEntitlementBooleans = provisioningEntitlementArray.Cast<PBoolean> ().Select (v => v.Value).ToArray ();
-						if (allowedEntitlementBooleans.Contains (requestedEntitlementBoolean)) {
-							Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}' with the value '{requestedEntitlementBoolean}, which the provisioning profile '{provisioningProfileName}' grants, because it grants these values for this entitlement: {string.Join (", ", allowedEntitlementBooleans)}.");
-						} else {
-							LogEntitlementValidationFailure (onlyWarn, 7152, MSBStrings.E7152, key, requestedEntitlementBoolean, provisioningProfileName, string.Join (", ", allowedEntitlementBooleans.ToArray ())); // The app requests the entitlement '{0}' with the value '{1}', but the provisioning profile '{2}' grants it for the values '{3}'.
-						}
-					} else if (provisioningEntitlement is PBoolean provisioningEntitlementBoolean) {
-						var allowedEntitlementBoolean = provisioningEntitlementBoolean.Value;
-						if (requestedEntitlementBoolean.Value != allowedEntitlementBoolean) {
-							LogEntitlementValidationFailure (onlyWarn, 7137, MSBStrings.E7137, key, requestedEntitlementBoolean.Value, provisioningProfileName, allowedEntitlementBoolean); // The app requests the entitlement '{0}' with the value '{1}', but the provisioning profile '{2}' grants it for the value '{3}'."
-						} else {
-							Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}' with the value '{requestedEntitlementBoolean.Value}', which the provisioning profile '{provisioningProfileName}' grants.");
-						}
-					} else {
-						Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', which the provisioning profile '{provisioningProfileName}' contains, but with unknown values. Assuming this is OK.");
-					}
+					// entitlement is a boolean, provisioning profile has the entitlement with either a boolean or an array of booleans of valid values for the entitlement
+					ValidateTypeOrArray<PBoolean, bool> (profile, info, onlyWarn, key, kvp, provisioningProfileName, provisioningEntitlements, "bool");
 				}
 
 				if (info.ValidationMode.HasFlag (EntitlementValidationMode.PresenceInProfile)) {
@@ -1031,6 +977,57 @@ namespace Xamarin.MacDev.Tasks {
 			}
 		}
 
+		void ValidateTypeOrArray<T, M> (MobileProvision? profile, EntitlementInfo info, bool onlyWarn, string key, KeyValuePair<string?, PObject> kvp, string? provisioningProfileName, PDictionary? provisioningEntitlements, string requiredType)
+			where T: PObject
+			where M: IEquatable<M>
+		{
+			// entitlement is a boolean, provisioning profile has the entitlement with either a string or an array of strings of valid values for the entitlement
+			if (profile is null) {
+				if (info.Content?.RequiresProvisioningProfile == false) {
+					Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', but no provisioning profile has been specified. This is OK, because the entitlement '{key}' doesn't require a provisioning profile.");
+				} else {
+					LogEntitlementValidationFailure (onlyWarn, 7139, MSBStrings.E7139, key); // "The app requests the entitlement '{0}', but no provisioning profile has been specified. Please specify the name of the provisioning profile to use with the 'CodesignProvision' property in the project file.
+				}
+			} else if (!(kvp.Value is T requestedPEntitlement)) {
+				LogEntitlementValidationFailure (onlyWarn, 7153, MSBStrings.E7153, key, kvp.Value, GetPListType (kvp.Value), requiredType); // The app requests the entitlement '{0}' with the value '{1}' of type '{2}', but this entitlement must be of type '{3}'.
+			} else if (provisioningEntitlements is null || !provisioningEntitlements.TryGetValue<PObject> (key, out var provisioningEntitlement)) {
+				if (info.Content?.RequiresProvisioningProfile == false) {
+					Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', but the provisioning profile '{provisioningProfileName}' doesn't contain this entitlement. This is OK, because the entitlement '{key}' doesn't require a provisioning profile.");
+				} else {
+					LogEntitlementValidationFailure (onlyWarn, 7140, MSBStrings.E7140, key, provisioningProfileName); // The app requests the entitlement '{0}', but the provisioning profile '{1}' doesn't contain this entitlement.
+				}
+			} else if (provisioningEntitlement is PArray provisioningEntitlementArray) {
+				var allowedEntitlements = provisioningEntitlementArray.Cast<T> ().Select (v => GetValue<T, M> (v)).ToArray ();
+				var requestedEntitlement = GetValue<T, M> (requestedPEntitlement);
+				if (allowedEntitlements.Contains (requestedEntitlement)) {
+					Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}' with the value '{requestedEntitlement}, which the provisioning profile '{provisioningProfileName}' grants, because it grants these values for this entitlement: {string.Join (", ", allowedEntitlements)}.");
+				} else {
+					LogEntitlementValidationFailure (onlyWarn, 7152, MSBStrings.E7152, key, requestedEntitlement, provisioningProfileName, string.Join (", ", allowedEntitlements.ToArray ())); // The app requests the entitlement '{0}' with the value '{1}', but the provisioning profile '{2}' grants it for the values '{3}'.
+				}
+			} else if (provisioningEntitlement is T provisioningPEntitlement) {
+				var allowedEntitlement = GetValue<T, M> (provisioningPEntitlement);
+				var requestedEntitlement = GetValue<T, M> (requestedPEntitlement);
+				if (requestedEntitlement.Equals (allowedEntitlement)) {
+					Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}' with the value '{requestedEntitlement}', which the provisioning profile '{provisioningProfileName}' grants.");
+				} else {
+					LogEntitlementValidationFailure (onlyWarn, 7137, MSBStrings.E7137, key, requestedEntitlement, provisioningProfileName, allowedEntitlement); // The app requests the entitlement '{0}' with the value '{1}', but the provisioning profile '{2}' grants it for the value '{3}'."
+				}
+			} else {
+				Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', which the provisioning profile '{provisioningProfileName}' contains, but with unknown values. Assuming this is OK.");
+			}
+		}
+
+		static M GetValue<T, M> (PObject obj) where T: PObject
+		{
+			if (obj is PBoolean b && b.Value is M b2) {
+				return b2;
+			} else if (obj is PString s && s.Value is M s2) {
+				return s2;
+			} else {
+				throw new InvalidOperationException ($"Invalid type '{GetPListType (obj)}' for entitlement '{obj}'");
+			}
+		}
+
 		bool IsMatch (string value, string matchingPattern)
 		{
 			if (matchingPattern.IndexOf ('*') >= 0) {
@@ -1043,7 +1040,9 @@ namespace Xamarin.MacDev.Tasks {
 
 		void LogEntitlementValidationFailure (bool onlyWarn, int code, string message, params object? [] args)
 		{
-			if (onlyWarn) {
+			if (BundleEntitlementsInExecutable) {
+				Log.LogMessage (MessageImportance.Low, $"Entitlements are not a part of the code signature when building for the simulator, so while this is not an error now, it would be if building for device: {string.Format (message, args)}");
+			} else if (onlyWarn) {
 				Log.LogWarning (code, Entitlements, message, args);
 			} else {
 				Log.LogError (code, Entitlements, message, args);

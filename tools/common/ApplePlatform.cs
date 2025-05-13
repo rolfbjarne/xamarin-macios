@@ -6,9 +6,7 @@
 #nullable enable
 
 using System;
-using System.Numerics;
 using System.Text;
-using Xamarin.MacDev;
 
 namespace Xamarin.Utils {
 	[Flags]
@@ -60,7 +58,7 @@ namespace Xamarin.Utils {
 		static int PopCount (uint value)
 		{
 #if NET
-			return BitOperations.PopCount (value);
+			return System.Numerics.BitOperations.PopCount (value);
 #else
 			int rv = 0;
 			while (value != 0) {

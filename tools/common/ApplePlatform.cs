@@ -37,7 +37,7 @@ namespace Xamarin.Utils {
 			case ApplePlatform.None:
 				return "None";
 			default:
-				if (PopCount (unchecked ((uint) @this)) == 1)
+				if (PopCount (unchecked((uint) @this)) == 1)
 					return "Unknown";
 
 				var value = @this;

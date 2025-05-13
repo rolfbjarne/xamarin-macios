@@ -36,7 +36,7 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			return CreateEntitlementsTask (entitlementsFile, out compiledEntitlements, out var _);
 		}
-		
+
 		CustomCompileEntitlements CreateEntitlementsTask (out string compiledEntitlements, out string archivedEntitlements, string provisioningProfile = "profile.mobileprovision")
 		{
 			return CreateEntitlementsTask ("Entitlements.plist", out compiledEntitlements, out archivedEntitlements, provisioningProfile);

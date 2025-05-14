@@ -40,7 +40,11 @@ namespace Xamarin.Utils {
 
 				var value = @this;
 				var sb = new StringBuilder ();
+#if NET
+				foreach (var e in Enum.GetValues<ApplePlatform> ()) {
+#else
 				foreach (var e in Enum.GetValues (typeof (ApplePlatform))) {
+#endif
 					var element = (ApplePlatform) e;
 					if (element == ApplePlatform.None)
 						continue;

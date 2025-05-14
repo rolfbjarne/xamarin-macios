@@ -979,7 +979,6 @@ namespace Xamarin.MacDev.Tasks {
 
 		void ValidateTypeOrArray<T, M> (MobileProvision? profile, EntitlementInfo info, bool onlyWarn, string key, KeyValuePair<string?, PObject> kvp, string? provisioningProfileName, PDictionary? provisioningEntitlements, string requiredType)
 			where T : PObject
-			where M : IEquatable<M>
 		{
 			// entitlement is a boolean, provisioning profile has the entitlement with either a string or an array of strings of valid values for the entitlement
 			if (profile is null) {
@@ -999,7 +998,7 @@ namespace Xamarin.MacDev.Tasks {
 			} else if (provisioningEntitlement is PArray provisioningEntitlementArray) {
 				var allowedEntitlements = provisioningEntitlementArray.Cast<T> ().Select (v => GetValue<T, M> (v)).ToArray ();
 				var requestedEntitlement = GetValue<T, M> (requestedPEntitlement);
-				if (allowedEntitlements.Contains (requestedEntitlement)) {
+				if (allowedEntitlements.Any (allowed => CompareValues (requestedEntitlement, allowed))) {
 					Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}' with the value '{requestedEntitlement}, which the provisioning profile '{provisioningProfileName}' grants, because it grants these values for this entitlement: {string.Join (", ", allowedEntitlements)}.");
 				} else {
 					LogEntitlementValidationFailure (onlyWarn, 7152, MSBStrings.E7152, key, requestedEntitlement, provisioningProfileName, string.Join (", ", allowedEntitlements.ToArray ())); // The app requests the entitlement '{0}' with the value '{1}', but the provisioning profile '{2}' grants it for the values '{3}'.
@@ -1007,13 +1006,24 @@ namespace Xamarin.MacDev.Tasks {
 			} else if (provisioningEntitlement is T provisioningPEntitlement) {
 				var allowedEntitlement = GetValue<T, M> (provisioningPEntitlement);
 				var requestedEntitlement = GetValue<T, M> (requestedPEntitlement);
-				if (requestedEntitlement.Equals (allowedEntitlement)) {
-					Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}' with the value '{requestedEntitlement}', which the provisioning profile '{provisioningProfileName}' grants.");
+				if (CompareValues (requestedEntitlement, allowedEntitlement)) {
+					Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}' with the value '{requestedEntitlement}', which the provisioning profile '{provisioningProfileName}' grants, because it grants this value for this entitlement: '{allowedEntitlement}.");
 				} else {
 					LogEntitlementValidationFailure (onlyWarn, 7137, MSBStrings.E7137, key, requestedEntitlement, provisioningProfileName, allowedEntitlement); // The app requests the entitlement '{0}' with the value '{1}', but the provisioning profile '{2}' grants it for the value '{3}'."
 				}
 			} else {
 				Log.LogMessage (MessageImportance.Low, $"The app requests the entitlement '{key}', which the provisioning profile '{provisioningProfileName}' contains, but with unknown values. Assuming this is OK.");
+			}
+		}
+
+		static bool CompareValues<M> (M requested, M allowed)
+		{
+			if (requested is string strRequested && allowed is string strAllowed) {
+				return IsMatch (strRequested, strAllowed);
+			} else if (requested is bool bRequested && allowed is bool bAllowed) {
+				return bRequested == bAllowed;
+			} else {
+				throw new InvalidOperationException ($"Invalid type '{typeof (M)}' found while validating entitlements");
 			}
 		}
 
@@ -1028,7 +1038,7 @@ namespace Xamarin.MacDev.Tasks {
 			}
 		}
 
-		bool IsMatch (string value, string matchingPattern)
+		static bool IsMatch (string value, string matchingPattern)
 		{
 			if (matchingPattern.IndexOf ('*') >= 0) {
 				var regexp = matchingPattern.Replace (".", "[.]").Replace ("*", ".*");

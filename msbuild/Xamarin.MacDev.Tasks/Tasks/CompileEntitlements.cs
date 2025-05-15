@@ -511,6 +511,7 @@ namespace Xamarin.MacDev.Tasks {
 				try {
 					var defaultEntitlements = PDictionary.FromFile (DefaultEntitlementsPath)!;
 					templates.Add (defaultEntitlements);
+					Log.LogMessage (MessageImportance.Low, $"Loading default entitlements from: {DefaultEntitlementsPath}");
 				} catch (Exception ex) {
 					Log.LogError (MSBStrings.E0113, DefaultEntitlementsPath, ex.Message);
 					return false;
@@ -525,6 +526,7 @@ namespace Xamarin.MacDev.Tasks {
 					}
 					var projectEntitlements = PDictionary.FromFile (Entitlements)!;
 					templates.Add (projectEntitlements);
+					Log.LogMessage (MessageImportance.Low, $"Loading user requested entitlements from: {Entitlements}");
 				} catch (Exception ex) {
 					Log.LogError (MSBStrings.E0113, Entitlements, ex.Message);
 					return false;

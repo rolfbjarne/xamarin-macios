@@ -504,6 +504,8 @@ namespace Xamarin.MacDev.Tasks {
 			bool injectDefaultEntitlements;
 			if (!string.IsNullOrEmpty (InjectDefaultPlatformEntitlements)) {
 				injectDefaultEntitlements = string.Equals (InjectDefaultPlatformEntitlements, "true", StringComparison.OrdinalIgnoreCase);
+			} else if (Platform == ApplePlatform.MacOSX || Platform == ApplePlatform.MacCatalyst) {
+				injectDefaultEntitlements = false;
 			} else {
 				injectDefaultEntitlements = string.IsNullOrEmpty (Entitlements);
 			}

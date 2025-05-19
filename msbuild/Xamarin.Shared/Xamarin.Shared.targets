@@ -2393,7 +2393,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 				<CodesignSigningKey Condition="'%(_CustomCodesignBundle.CodesignSigningKey)' == ''">$(_CodeSigningKey)</CodesignSigningKey>
 				<CodesignUseHardenedRuntime Condition="'%(_CustomCodesignBundle.CodesignUseHardenedRuntime)' == ''">$(UseHardenedRuntime)</CodesignUseHardenedRuntime>
 				<CodesignUseSecureTimestamp Condition="'%(_CustomCodesignBundle.CodesignUseSecureTimestamp)' == ''">$(UseHardenedRuntime)</CodesignUseSecureTimestamp>
-				<EnableCodeSigning Condition="'%(_CustomCodesignBundle.EnableCodeSigning)' == ' And '%(_CustomCodesignBundle.RequireCodeSigning)' != ''">%(_CustomCodesignBundle.RequireCodeSigning)</EnableCodeSigning>
+				<EnableCodeSigning Condition="'%(_CustomCodesignBundle.EnableCodeSigning)' == '' And '%(_CustomCodesignBundle.RequireCodeSigning)' != ''">%(_CustomCodesignBundle.RequireCodeSigning)</EnableCodeSigning>
 				<EnableCodeSigning Condition="'%(_CustomCodesignBundle.EnableCodeSigning)' == ''">$(EnableCodeSigning)</EnableCodeSigning>
 				<SourceProjectPath>$(MSBuildProjectDirectory)</SourceProjectPath>
 				<BundleRelativePath Condition="'%(_CustomCodesignBundle.BundleRelativePath)' == ''">$(_AppPlugInsRelativePath)</BundleRelativePath>

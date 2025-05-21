@@ -24,7 +24,7 @@ namespace CoreMidi {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	// [NativeName ("MIDIEventList")]
-	public class MidiEventList : IEnumerable<MidiEventPacket> {
+	public sealed class MidiEventList : IEnumerable<MidiEventPacket>, IDisposable {
 		/* This is a variable sized struct, so store all the data in a byte array.
 		 * struct MIDIEventList
 		 * {

@@ -179,13 +179,13 @@ namespace Xamarin.MacDev.Tasks {
 		}
 
 		[return: NotNullIfNotNull (nameof (items))]
-		public static IList<ITaskItem>? ComputeLogicalNameAndDetectDuplicates<U> (U task, IList<ITaskItem>? items, string projectDir, string resourcePrefix, string itemName) where U: Task, IHasProjectDir, IHasResourcePrefix, IHasSessionId
+		public static IList<ITaskItem>? ComputeLogicalNameAndDetectDuplicates<U> (U task, IList<ITaskItem>? items, string projectDir, string resourcePrefix, string itemName) where U : Task, IHasProjectDir, IHasResourcePrefix, IHasSessionId
 		{
 			return ComputeLogicalNameAndDetectDuplicates<ITaskItem, U> (task, items, projectDir, resourcePrefix, itemName, (v) => v);
 		}
 
 		[return: NotNullIfNotNull (nameof (items))]
-		public static IList<T>? ComputeLogicalNameAndDetectDuplicates<T, U> (U task, IList<T>? items, string projectDir, string resourcePrefix, string itemName, Func<T, ITaskItem> getItem) where U: Task, IHasProjectDir, IHasResourcePrefix, IHasSessionId
+		public static IList<T>? ComputeLogicalNameAndDetectDuplicates<T, U> (U task, IList<T>? items, string projectDir, string resourcePrefix, string itemName, Func<T, ITaskItem> getItem) where U : Task, IHasProjectDir, IHasResourcePrefix, IHasSessionId
 		{
 			if (items is null)
 				return null;

@@ -1425,7 +1425,7 @@ namespace Xamarin.Tests {
 						new ExpectedBuildMessage ($"../../SecondLibraryWithResources/scene.dae", $"The Collada item '../../SecondLibraryWithResources/scene.dae' was ignored, because there's another item with the same LogicalName ('scene.dae')"),
 						new ExpectedBuildMessage ($"../../SecondLibraryWithResources/SqueezeNet.mlmodel", $"The CoreMLModel item '../../SecondLibraryWithResources/SqueezeNet.mlmodel' was ignored, because there's another item with the same LogicalName ('SqueezeNet.mlmodel')"),
 					};
- 					break;
+					break;
 				default:
 					throw new NotImplementedException (scenario.ToString ());
 				}

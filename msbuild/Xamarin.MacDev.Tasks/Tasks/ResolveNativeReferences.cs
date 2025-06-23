@@ -438,7 +438,7 @@ namespace Xamarin.MacDev.Tasks {
 
 				return true;
 			} catch (Exception e) {
-				log.LogError ($"The xcframework {xcframeworkPath} has an incorrect or unknown format and cannot be processed: failed to decompress {resourcePath}: {e.Message}");
+				log.LogError ($"The resource '{resourcePath}' (with xcframework '{xcframework}') has an incorrect or unknown format and cannot be processed: failed to decompress {resourcePath}: {e.Message}");
 			}
 
 			return false;

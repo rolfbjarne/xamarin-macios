@@ -437,8 +437,8 @@ namespace Xamarin.MacDev.Tasks {
 				nativeLibraryPath = Path.Combine (intermediateDecompressionDir, xcframework, nativeLibraryRelativePath);
 
 				return true;
-			} catch (Exception) {
-				log.LogError (MSBStrings.E0174, resourcePath);
+			} catch (Exception e) {
+				log.LogError ($"The resource '{resourcePath}' (with xcframework '{xcframework}') has an incorrect or unknown format and cannot be processed: failed to decompress {resourcePath}: {e.Message}");
 			}
 
 			return false;
@@ -485,12 +485,12 @@ namespace Xamarin.MacDev.Tasks {
 			// plist structure https://github.com/spouliot/xcframework#infoplist
 			var bundle_package_type = (PString?) plist ["CFBundlePackageType"];
 			if (bundle_package_type?.Value != "XFWK") {
-				log.LogError (MSBStrings.E0174 /* The xcframework {0} has an incorrect or unknown format and cannot be processed. */, xcframeworkPath);
+				log.LogError ($"The xcframework {xcframeworkPath} has an incorrect or unknown format and cannot be processed: expected CFBundlePackageType to be 'XFWK', but got '{bundle_package_type?.Value}'."); // E0174
 				return false;
 			}
 			var available_libraries = plist.GetArray ("AvailableLibraries");
 			if ((available_libraries is null) || (available_libraries.Count == 0)) {
-				log.LogError (MSBStrings.E0174 /* The xcframework {0} has an incorrect or unknown format and cannot be processed. */, xcframeworkPath);
+				log.LogError ($"The xcframework {xcframeworkPath} has an incorrect or unknown format and cannot be processed: expected some 'AvailableLibraries' entries, but got '{(available_libraries is null ? "null" : available_libraries.Count)}'."); // E0174
 				return false;
 			}
 

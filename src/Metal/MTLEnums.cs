@@ -59,6 +59,8 @@ namespace Metal {
 		Source1Alpha = 17,
 		[MacCatalyst (13, 1)]
 		OneMinusSource1Alpha = 18,
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		Unspecialized = 19,
 	}
 
 	/// <summary>How the source and destination values are combined.</summary>
@@ -74,6 +76,8 @@ namespace Metal {
 		Min = 3,
 		/// <summary>To be added.</summary>
 		Max = 4,
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		Unspecialized = 5,
 	}
 
 	/// <summary>Permits or restricts writing to specific color channels.</summary>
@@ -92,6 +96,8 @@ namespace Metal {
 		Alpha = 0x1 << 0,
 		/// <summary>To be added.</summary>
 		All = 0xf,
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		Unspecialized = 0x10,
 	}
 
 	/// <summary>The state of the command-buffer state-machine. Enqueued-&gt;Committed-&gt;Scheduled-&gt;Completed.</summary>
@@ -799,6 +805,8 @@ namespace Metal {
 		BGR10_XR = 554,
 		[MacCatalyst (13, 1)]
 		BGR10_XR_sRGB = 555,
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		Unspecialized = 263,
 	}
 
 	/// <summary>The type of a Metal function.</summary>
@@ -1274,6 +1282,8 @@ namespace Metal {
 		BFloat3 = 123,
 		[iOS (17, 0), TV (17, 0), Mac (14, 0), MacCatalyst (17, 0)]
 		BFloat4 = 124,
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		Tensor = 140,
 	}
 
 	/// <summary>The resource type of an argument of a function.</summary>
@@ -1526,6 +1536,8 @@ namespace Metal {
 		v3_1 = (3uL << 16) + 1,
 		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		v3_2 = (3ul << 16) + 2,
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		v4_0 = (4uL << 16) + 0,
 	}
 
 	/// <summary>Enumerates values that indicate whether to clip or clamp depth values.</summary>
@@ -2010,6 +2022,8 @@ namespace Metal {
 
 		[iOS (16, 0), TV (16, 0), MacCatalyst (16, 0), Mac (13, 0)]
 		Metal3 = 5001,
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		Metal4 = 5002,
 	}
 
 	[TV (13, 0), iOS (13, 0)]
@@ -2129,6 +2143,10 @@ namespace Metal {
 		PreferFastBuild = (1uL << 1),
 		[iOS (15, 0), MacCatalyst (15, 0)]
 		ExtendedLimits = (1uL << 2),
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		PreferFastIntersection = (1uL << 4),
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		MinimizeMemory = (1uL << 5),
 	}
 
 	[iOS (14, 0), TV (14, 0)]
@@ -2212,6 +2230,8 @@ namespace Metal {
 		StoreFunctionInMetalPipelinesScript = 1 << 1,
 		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		FailOnBinaryArchiveMiss = 1 << 2,
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		PipelineIndependent = 1uL << 3,
 	}
 
 	[Flags, iOS (14, 0), TV (16, 0)]
@@ -2232,6 +2252,10 @@ namespace Metal {
 		MaxLevels = (1uL << 6),
 		[Mac (14, 0), iOS (17, 0), TV (17, 0), MacCatalyst (17, 0)]
 		CurveData = (1uL << 7),
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		IntersectionFunctionBuffer = (1uL << 8),
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		UserData = (1uL << 9),
 	}
 
 	[iOS (14, 0), TV (14, 0)]
@@ -2299,6 +2323,8 @@ namespace Metal {
 		InstanceAccelerationStructure = 26,
 		IntersectionFunctionTable = 27,
 		ObjectPayload = 34,
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		Tensor = 37,
 	}
 
 	[Mac (13, 0), iOS (16, 0), MacCatalyst (16, 0), TV (16, 0)]
@@ -2404,4 +2430,204 @@ namespace Metal {
 		Hidden = 1,
 	}
 
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	public enum MTL4AlphaToCoverageState : long
+	{
+		Disabled = 0,
+		Enabled = 1,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	public enum MTL4AlphaToOneState : long
+	{
+		Disabled = 0,
+		Enabled = 1,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	public enum MTL4BinaryFunctionOptions : ulong
+	{
+		None = 0x0,
+		PipelineIndependent = 1uL << 1,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	public enum MTL4BlendState : long
+	{
+		Disabled = 0,
+		Enabled = 1,
+		Unspecialized = 2,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	[ErrorDomain ("MTL4CommandQueueErrorDomain")]
+	public enum MTL4CommandQueueError : long
+	{
+		None = 0,
+		Timeout = 1,
+		NotPermitted = 2,
+		OutOfMemory = 3,
+		DeviceRemoved = 4,
+		AccessRevoked = 5,
+		Internal = 6,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	public enum MTL4CompilerTaskStatus : long
+	{
+		None = 0,
+		Scheduled = 1,
+		Compiling = 2,
+		Finished = 3,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	public enum MTL4CounterHeapType : ulong
+	{
+		Invalid,
+		Timestamp,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	public enum MTL4IndirectCommandBufferSupportState : long
+	{
+		Disabled = 0,
+		Enabled = 1,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	public enum MTL4LogicalToPhysicalColorAttachmentMappingState : long
+	{
+		Identity = 0,
+		Inherited = 1,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Flags]
+	[Native]
+	public enum MTL4PipelineDataSetSerializerConfiguration : long
+	{
+		Descriptors = 0x0,
+		Binaries = 0x1,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	public enum MTL4RenderEncoderOptions : ulong
+	{
+		None = 0x0,
+		Suspending = (1uL << 0),
+		Resuming = (1uL << 1),
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	public enum MTL4ShaderReflection : ulong
+	{
+		None = 0x0,
+		BindingInfo = 1uL << 0,
+		BufferTypeInfo = 1uL << 1,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	public enum MTL4TimestampGranularity : long
+	{
+		Relaxed = 0,
+		Precise = 1,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	public enum MTL4VisibilityOptions : long
+	{
+		None = 0x0,
+		Device = 1L << 0,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	public enum MTLBufferSparseTier : long
+	{
+		None = 0,
+		MTLBufferSparseTier1 = 1,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	public enum MTLStages : ulong
+	{
+		Vertex = 1uL << 0,
+		Fragment = 1uL << 1,
+		Tile = 1uL << 2,
+		Object = 1uL << 3,
+		Mesh = 1uL << 4,
+		ResourceState = 1uL << 26,
+		Dispatch = 1uL << 27,
+		Blit = 1uL << 28,
+		AccelerationStructure = 1uL << 29,
+		MachineLearning = 1uL << 30,
+		All = 0x7fffffffffffffffL,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	public enum MTLTensorDataType : long
+	{
+		None = MTLDataType.None,
+		Float32 = MTLDataType.Float,
+		Float16 = MTLDataType.Half,
+		BFloat16 = MTLDataType.BFloat,
+		Int8 = MTLDataType.Char,
+		UInt8 = MTLDataType.UChar,
+		Int16 = MTLDataType.Short,
+		UInt16 = MTLDataType.UShort,
+		Int32 = MTLDataType.Int,
+		UInt32 = MTLDataType.UInt,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	[ErrorDomain ("MTLTensorDomain")]
+	public enum MTLTensorError : ulong
+	{
+		None = 0,
+		InternalError = 1,
+		InvalidDescriptor = 2,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	public enum MTLTensorUsage : long
+	{
+		Compute = 1L << 0,
+		Render = 1L << 1,
+		MachineLearning = 1L << 2,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	public enum MTLTextureSparseTier : long
+	{
+		None = 0,
+		Tier1 = 1,
+		Tier2 = 2,
+	}
+
+	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+	[Native]
+	public enum MTLVisibilityResultType : long
+	{
+		Reset = 0,
+		Accumulate = 1,
+	}
 }

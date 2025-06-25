@@ -140,6 +140,10 @@ namespace Metal {
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("elementPointerType")]
 		MTLPointerType ElementPointerType { get; }
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[NullAllowed, Export ("elementTensorReferenceType")]
+		MTLTensorReferenceType ElementTensorReferenceType { get; }
 	}
 
 	/// <summary>System protocol for enqueuing and writing commands into a buffer.</summary>
@@ -179,6 +183,11 @@ namespace Metal {
 		/// <remarks>To be added.</remarks>
 		[Abstract, Export ("popDebugGroup")]
 		void PopDebugGroup ();
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("barrierAfterQueueStages:beforeStages:")]
+		void BarrierAfterQueueStages (MTLStages afterQueueStages, MTLStages beforeStages);
 	}
 
 	interface IMTLBuffer { }
@@ -247,6 +256,17 @@ namespace Metal {
 		[Abstract (GenerateExtensionMethod = true)]
 		[Export ("gpuAddress")]
 		ulong GpuAddress { get; }
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("newTensorWithDescriptor:offset:error:")]
+		[return: NullAllowed]
+		IMTLTensor CreateTensor (MTLTensorDescriptor descriptor, nuint offset, [NullAllowed] out NSError error);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("sparseBufferTier")]
+		MTLBufferSparseTier SparseBufferTier { get; }
 	}
 
 	[MacCatalyst (13, 1)]
@@ -851,7 +871,7 @@ namespace Metal {
 	/// <summary>System protocol that represents a compiled compute program.</summary>
 	[MacCatalyst (13, 1)]
 	[Protocol] // From Apple Docs: Your app does not define classes that implement this protocol. Model is not needed
-	partial interface MTLComputePipelineState {
+	partial interface MTLComputePipelineState : MTLAllocation {
 		/// <summary>To be added.</summary>
 		/// <value>To be added.</value>
 		/// <remarks>To be added.</remarks>
@@ -924,6 +944,34 @@ namespace Metal {
 		[Abstract]
 		[Export ("shaderValidation")]
 		MTLShaderValidation ShaderValidation { get; }
+
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		[Abstract]
+		[NullAllowed, Export ("reflection")]
+		MTLComputePipelineReflection Reflection { get; }
+
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		[Abstract]
+		[Export ("functionHandleWithName:")]
+		[return: NullAllowed]
+		IMTLFunctionHandle CreateFunctionHandle (string name);
+
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		[Abstract]
+		[Export ("functionHandleWithBinaryFunction:")]
+		[return: NullAllowed]
+		IMTLFunctionHandle CreateFunctionHandle (IMTL4BinaryFunction function);
+
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		[Abstract]
+		[Export ("newComputePipelineStateWithBinaryFunctions:error:")]
+		[return: NullAllowed]
+		IMTLComputePipelineState CreateComputePipelineState (IMTL4BinaryFunction[] additionalBinaryFunctions, [NullAllowed] out NSError error);
+
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		[Abstract]
+		[Export ("requiredThreadsPerThreadgroup")]
+		MTLSize RequiredThreadsPerThreadgroup { get; }
 	}
 
 	interface IMTLBlitCommandEncoder { }
@@ -1113,6 +1161,11 @@ namespace Metal {
 		[MacCatalyst (14, 0)]
 		[Export ("resolveCounters:inRange:destinationBuffer:destinationOffset:")]
 		void ResolveCounters (IMTLCounterSampleBuffer sampleBuffer, NSRange range, IMTLBuffer destinationBuffer, nuint destinationOffset);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("copyFromTensor:sourceOrigin:sourceDimensions:toTensor:destinationOrigin:destinationDimensions:")]
+		void CopyFromTensor (IMTLTensor sourceTensor, MTLTensorExtents sourceOrigin, MTLTensorExtents sourceDimensions, IMTLTensor destinationTensor, MTLTensorExtents destinationOrigin, MTLTensorExtents destinationDimensions);
 	}
 
 	interface IMTLFence { }
@@ -1914,6 +1967,109 @@ namespace Metal {
 		[Export ("newResidencySetWithDescriptor:error:")]
 		[return: Release]
 		IMTLResidencySet CreateResidencySet (MTLResidencySetDescriptor descriptor, out NSError error);
+
+		// @required -(MTLSizeAndAlign)tensorSizeAndAlignWithDescriptor:(MTLTensorDescriptor * _Nonnull)descriptor __attribute__((availability(macos, introduced=26.0))) __attribute__((availability(ios, introduced=26.0)));
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("tensorSizeAndAlignWithDescriptor:")]
+		MTLSizeAndAlign CreateTensorSizeAndAlign (MTLTensorDescriptor descriptor);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("newTensorWithDescriptor:error:")]
+		[return: NullAllowed]
+		IMTLTensor CreateTensor (MTLTensorDescriptor descriptor, [NullAllowed] out NSError error);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("functionHandleWithFunction:")]
+		[return: NullAllowed]
+		IMTLFunctionHandle CreateFunctionHandle (IMTLFunction function);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[NullAllowed, Export ("newCommandAllocator")]
+		IMTL4CommandAllocator CreateCommandAllocator ();
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("newCommandAllocatorWithDescriptor:error:")]
+		[return: NullAllowed]
+		IMTL4CommandAllocator CreateCommandAllocator (MTL4CommandAllocatorDescriptor descriptor, [NullAllowed] out NSError error);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[NullAllowed, Export ("newMTL4CommandQueue")]
+		IMTL4CommandQueue CreateMTL4CommandQueue ();
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("newMTL4CommandQueueWithDescriptor:error:")]
+		[return: NullAllowed]
+		IMTL4CommandQueue CreateMTL4CommandQueue (MTL4CommandQueueDescriptor descriptor, [NullAllowed] out NSError error);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[NullAllowed, Export ("newCommandBuffer")]
+		IMTL4CommandBuffer CreateCommandBuffer ();
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("newArgumentTableWithDescriptor:error:")]
+		[return: NullAllowed]
+		IMTL4ArgumentTable CreateArgumentTable (MTL4ArgumentTableDescriptor descriptor, [NullAllowed] out NSError error);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("newTextureViewPoolWithDescriptor:error:")]
+		[return: NullAllowed]
+		IMTLTextureViewPool CreateTextureViewPool (MTLResourceViewPoolDescriptor descriptor, [NullAllowed] out NSError error);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("newCompilerWithDescriptor:error:")]
+		[return: NullAllowed]
+		IMTL4Compiler CreateCompiler (MTL4CompilerDescriptor descriptor, [NullAllowed] out NSError error);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("newArchiveWithURL:error:")]
+		[return: NullAllowed]
+		IMTL4Archive CreateArchive (NSUrl url, [NullAllowed] out NSError error);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("newPipelineDataSetSerializerWithDescriptor:")]
+		IMTL4PipelineDataSetSerializer CreatePipelineDataSetSerializer (MTL4PipelineDataSetSerializerDescriptor descriptor);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("newBufferWithLength:options:placementSparsePageSize:")]
+		[return: NullAllowed]
+		IMTLBuffer CreateBuffer (nuint length, MTLResourceOptions options, MTLSparsePageSize placementSparsePageSize);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("newCounterHeapWithDescriptor:error:")]
+		[return: NullAllowed]
+		IMTL4CounterHeap CreateCounterHeap (MTL4CounterHeapDescriptor descriptor, [NullAllowed] out NSError error);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("sizeOfCounterHeapEntry:")]
+		nuint SizeOfCounterHeapEntry (MTL4CounterHeapType type);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("queryTimestampFrequency")]
+		[Verify (MethodToProperty)]
+		ulong QueryTimestampFrequency { get; }
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("functionHandleWithBinaryFunction:")]
+		[return: NullAllowed]
+		IMTLFunctionHandle CreateFunctionHandle (IMTL4BinaryFunction function);
 	}
 
 	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="Metal.MTLDrawable" />.</summary>
@@ -2216,6 +2372,17 @@ namespace Metal {
 		[Abstract (GenerateExtensionMethod = true)]
 		[Export ("gpuResourceID")]
 		MTLResourceId GpuResourceId { get; }
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("newTextureViewWithDescriptor:")]
+		[return: NullAllowed]
+		IMTLTexture CreateTextureView (MTLTextureViewDescriptor descriptor);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("sparseTextureTier")]
+		MTLTextureSparseTier SparseTextureTier { get; }
 	}
 
 
@@ -2312,6 +2479,10 @@ namespace Metal {
 		[MacCatalyst (13, 1)]
 		[Export ("swizzle", ArgumentSemantic.Assign)]
 		MTLTextureSwizzleChannels Swizzle { get; set; }
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Export ("placementSparsePageSize", ArgumentSemantic.Assign)]
+		MTLSparsePageSize PlacementSparsePageSize { get; set; }
 	}
 
 	/// <summary>Configures a sampler (see <see cref="Metal.IMTLSamplerState" />).</summary>
@@ -2679,6 +2850,49 @@ namespace Metal {
 		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("shaderValidation")]
 		MTLShaderValidation ShaderValidation { get; }
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[NullAllowed, Export ("reflection")]
+		MTLRenderPipelineReflection Reflection { get; }
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("functionHandleWithName:stage:")]
+		[return: NullAllowed]
+		IMTLFunctionHandle CreateFunctionHandle (string name, MTLRenderStages stage);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("functionHandleWithBinaryFunction:stage:")]
+		[return: NullAllowed]
+		IMTLFunctionHandle CreateFunctionHandle (IMTL4BinaryFunction function, MTLRenderStages stage);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("newRenderPipelineStateWithBinaryFunctions:error:")]
+		[return: NullAllowed]
+		IMTLRenderPipelineState CreateRenderPipelineState (MTL4RenderPipelineBinaryFunctionsDescriptor binaryFunctionsDescriptor, [NullAllowed] out NSError error);
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("newRenderPipelineDescriptorForSpecialization")]
+		IMTL4PipelineDescriptor CreateRenderPipelineDescriptorForSpecialization ();
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("requiredThreadsPerTileThreadgroup")]
+		MTLSize RequiredThreadsPerTileThreadgroup { get; }
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("requiredThreadsPerObjectThreadgroup")]
+		MTLSize RequiredThreadsPerObjectThreadgroup { get; }
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("requiredThreadsPerMeshThreadgroup")]
+		MTLSize RequiredThreadsPerMeshThreadgroup { get; }
 	}
 
 	/// <summary>Configures how vertex and attribute data are fetched by a vertex shader function.</summary>
@@ -3053,6 +3267,12 @@ namespace Metal {
 		[Abstract]
 		[NullAllowed, Export ("installName")]
 		string InstallName { get; }
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("reflectionForFunctionWithName:")]
+		[return: NullAllowed]
+		MTLFunctionReflection CreateFunctionReflection (string functionName);
 	}
 
 	/// <summary>Configures the compilation of a Metal shader library.</summary>
@@ -3124,6 +3344,10 @@ namespace Metal {
 		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("enableLogging")]
 		bool EnableLogging { get; set; }
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Export ("requiredThreadsPerThreadgroup", ArgumentSemantic.Assign)]
+		MTLSize RequiredThreadsPerThreadgroup { get; set; }
 	}
 
 	/// <summary>Configures a stencil test operation.</summary>
@@ -3185,6 +3409,10 @@ namespace Metal {
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("pointerType")]
 		MTLPointerType PointerType { get; }
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[NullAllowed, Export ("tensorReferenceType")]
+		MTLTensorReferenceType TensorReferenceType { get; }
 	}
 
 	/// <summary>Defines a type representing a struct, which can be passed as an argument to Metal functions.</summary>
@@ -4390,6 +4618,10 @@ namespace Metal {
 		[MacCatalyst (14, 0)]
 		[Export ("sampleBufferAttachments")]
 		MTLRenderPassSampleBufferAttachmentDescriptorArray SampleBufferAttachments { get; }
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Export ("visibilityResultType", ArgumentSemantic.Assign)]
+		MTLVisibilityResultType VisibilityResultType { get; set; }
 	}
 
 
@@ -4422,6 +4654,9 @@ namespace Metal {
 		[Export ("sparsePageSize", ArgumentSemantic.Assign)]
 		MTLSparsePageSize SparsePageSize { get; set; }
 
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Export ("maxCompatiblePlacementSparsePageSize", ArgumentSemantic.Assign)]
+		MTLSparsePageSize MaxCompatiblePlacementSparsePageSize { get; set; }
 	}
 
 	[MacCatalyst (13, 1)]
@@ -4735,6 +4970,10 @@ namespace Metal {
 		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("shaderValidation")]
 		MTLShaderValidation ShaderValidation { get; set; }
+
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0))]
+		[Export ("requiredThreadsPerThreadgroup", ArgumentSemantic.Assign)]
+		MTLSize RequiredThreadsPerThreadgroup { get; set; }
 	}
 
 	[MacCatalyst (13, 1)]
@@ -4848,6 +5087,11 @@ namespace Metal {
 		[Abstract]
 		[NullAllowed, Export ("commandQueue")]
 		IMTLCommandQueue CommandQueue { get; }
+
+		[iOS (26, 0), TV (26, 0), MacCatalyst (26, 0), Mac (26, 0)]
+		[Abstract]
+		[NullAllowed, Export ("mtl4CommandQueue")]
+		IMTL4CommandQueue Mtl4CommandQueue { get; }
 	}
 
 
@@ -4907,6 +5151,11 @@ namespace Metal {
 		[MacCatalyst (13, 1)]
 		[Export ("startCaptureWithDescriptor:error:")]
 		bool StartCapture (MTLCaptureDescriptor descriptor, [NullAllowed] out NSError error);
+
+		[iOS (26, 0), TV (26, 0), Mac (26, 0), MacCatalyst (26, 0)]
+		[Export ("newCaptureScopeWithMTL4CommandQueue:")]
+		IMTLCaptureScope CreateNewCaptureScope (IMTL4CommandQueue commandQueue);
+
 	}
 
 	/// <summary>Contains a mutability description for a buffer.</summary>
@@ -5257,6 +5506,10 @@ namespace Metal {
 		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("shaderValidation")]
 		MTLShaderValidation ShaderValidation { get; set; }
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Export ("requiredThreadsPerThreadgroup", ArgumentSemantic.Assign)]
+		MTLSize RequiredThreadsPerThreadgroup { get; set; }
 	}
 
 	interface IMTLEvent { }
@@ -5289,6 +5542,11 @@ namespace Metal {
 
 		[Export ("dispatchQueue")]
 		DispatchQueue DispatchQueue { get; }
+
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
+		[Static]
+		[Export ("sharedListener")]
+		MTLSharedEventListener SharedListener { get; }
 	}
 
 	delegate void MTLSharedEventNotificationBlock (IMTLSharedEvent @event, ulong value);
@@ -5527,6 +5785,9 @@ namespace Metal {
 		[Export ("supportRayTracing")]
 		bool SupportRayTracing { get; set; }
 
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Export ("supportColorAttachmentMapping")]
+		bool SupportColorAttachmentMapping { get; set; }
 	}
 
 	interface IMTLIndirectCommandBuffer { }
@@ -6419,6 +6680,11 @@ namespace Metal {
 		[Abstract]
 		[Export ("device")]
 		IMTLDevice Device { get; }
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Abstract]
+		[Export ("gpuResourceID")]
+		MTLResourceId GpuResourceId { get; }
 	}
 
 	interface IMTLAccelerationStructureCommandEncoder { }
@@ -7176,6 +7442,14 @@ namespace Metal {
 		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("shaderValidation")]
 		MTLShaderValidation ShaderValidation { get; set; }
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Export ("requiredThreadsPerObjectThreadgroup", ArgumentSemantic.Assign)]
+		MTLSize RequiredThreadsPerObjectThreadgroup { get; set; }
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Export ("requiredThreadsPerMeshThreadgroup", ArgumentSemantic.Assign)]
+		MTLSize RequiredThreadsPerMeshThreadgroup { get; set; }
 	}
 
 	[Mac (13, 0), iOS (16, 0), TV (16, 0), MacCatalyst (16, 0)]
@@ -7612,7 +7886,6 @@ namespace Metal {
 		void ResolveCounterHeap (IMTL4CounterHeap counterHeap, NSRange range, IMTLBuffer buffer, nuint alignedOffset, [NullAllowed] IMTLFence fenceToWait, [NullAllowed] IMTLFence fenceToUpdate);
 	}
 
-
 	interface IMTL4CommandEncoder {}
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
@@ -7732,7 +8005,7 @@ namespace Metal {
 
 		[Abstract]
 		[Export ("copyBufferMappingsFromBuffer:toBuffer:operations:count:")]
-		void CopyBufferMappingsFromBuffer (IMTLBuffer sourceBuffer, IMTLBuffer destinationBuffer, [CARRAY] MTL4CopySparseBufferMappingOperation[] operations, nuint count);
+		void CopyBufferMappings (IMTLBuffer sourceBuffer, IMTLBuffer destinationBuffer, [CARRAY] MTL4CopySparseBufferMappingOperation[] operations, nuint count);
 	}
 
 	interface IMTL4CommitFeedback {}
@@ -7773,23 +8046,130 @@ namespace Metal {
 		void WaitUntilCompleted ();
 	}
 
-	interface IMTL4CompilerTask {}
+	interface IMTL4Compiler {}
+
+	delegate void MTLCreateLibraryCompletionHandler ([NullAllowed] IMTLLibrary library, [NullAllowed] NSError error);
+
+	delegate void MTLCreateRenderPipelineStateCompletionHandler ([NullAllowed] IMTLRenderPipelineState renderPipelineState, [NullAllowed] NSError error);
+
+	delegate void MTLCreateRenderPipelineStateWithReflectionCompletionHandler ([NullAllowed] IMTLRenderPipelineState renderPipelineState, [NullAllowed] MTLRenderPipelineReflection reflection, [NullAllowed] NSError error);
+
+	delegate void MTLCreateComputePipelineStateCompletionHandler ([NullAllowed] IMTLComputePipelineState computePipelineState, [NullAllowed] NSError error);
+
+	delegate void MTLCreateComputePipelineStateWithReflectionCompletionHandler ([NullAllowed] IMTLComputePipelineState computePipelineState, NullAllowed] MTLComputePipelineReflection reflection, [NullAllowed] NSError error);
+
+	delegate void MTLCreateDynamicLibraryCompletionHandler ([NullAllowed] IMTLDynamicLibrary library, [NullAllowed] NSErrorerror);
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	interface MTL4CompilerTask
+	[BaseType (typeof(NSObject))]
+	interface MTL4Compiler
 	{
 		[Abstract]
-		[Export ("compiler")]
-		IMTL4Compiler Compiler { get; }
+		[Export ("device")]
+		IMTLDevice Device { get; }
 
 		[Abstract]
-		[Export ("status")]
-		MTL4CompilerTaskStatus Status { get; }
+		[NullAllowed, Export ("label")]
+		string Label { get; }
 
 		[Abstract]
-		[Export ("waitUntilCompleted")]
-		void WaitUntilCompleted ();
+		[NullAllowed, Export ("pipelineDataSetSerializer", ArgumentSemantic.Strong)]
+		IMTL4PipelineDataSetSerializer PipelineDataSetSerializer { get; }
+
+		[Abstract]
+		[Export ("newLibraryWithDescriptor:error:")]
+		[return: NullAllowed]
+		IMTLLibrary CreateLibrary (MTL4LibraryDescriptor descriptor, [NullAllowed] out NSError error);
+
+		[Abstract]
+		[Export ("newDynamicLibrary:error:")]
+		[return: NullAllowed]
+		IMTLDynamicLibrary CreateDynamicLibrary (IMTLLibrary library, [NullAllowed] out NSError error);
+
+		[Abstract]
+		[Export ("newDynamicLibraryWithURL:error:")]
+		[return: NullAllowed]
+		IMTLDynamicLibrary CreateDynamicLibrary (NSUrl url, [NullAllowed] out NSError error);
+
+		[Abstract]
+		[Export ("newComputePipelineStateWithDescriptor:compilerTaskOptions:error:")]
+		[return: NullAllowed]
+		IMTLComputePipelineState CreateComputePipelineState (MTL4ComputePipelineDescriptor descriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, [NullAllowed] out NSError error);
+
+		[Abstract]
+		[Export ("newComputePipelineStateWithDescriptor:dynamicLinkingDescriptor:compilerTaskOptions:error:")]
+		[return: NullAllowed]
+		IMTLComputePipelineState CreateComputePipelineState (MTL4ComputePipelineDescriptor descriptor, [NullAllowed] MTL4PipelineStageDynamicLinkingDescriptor dynamicLinkingDescriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, [NullAllowed] out NSError error);
+
+		[Abstract]
+		[Export ("newRenderPipelineStateWithDescriptor:compilerTaskOptions:error:")]
+		[return: NullAllowed]
+		IMTLRenderPipelineState CreateRenderPipelineState (MTL4PipelineDescriptor descriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, [NullAllowed] out NSError error);
+
+		[Abstract]
+		[Export ("newRenderPipelineStateWithDescriptor:dynamicLinkingDescriptor:compilerTaskOptions:error:")]
+		[return: NullAllowed]
+		IMTLRenderPipelineState CreateRenderPipelineState (MTL4PipelineDescriptor descriptor, [NullAllowed] MTL4RenderPipelineDynamicLinkingDescriptor dynamicLinkingDescriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, [NullAllowed] out NSError error);
+
+		[Abstract]
+		[Export ("newRenderPipelineStateBySpecializationWithDescriptor:pipeline:error:")]
+		[return: NullAllowed]
+		IMTLRenderPipelineState CreateRenderPipelineStateBySpecialization (MTL4PipelineDescriptor descriptor, IMTLRenderPipelineState pipeline, [NullAllowed] out NSError error);
+
+		[Abstract]
+		[Export ("newBinaryFunctionWithDescriptor:compilerTaskOptions:error:")]
+		[return: NullAllowed]
+		IMTL4BinaryFunction CreateBinaryFunction (MTL4BinaryFunctionDescriptor descriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, [NullAllowed] out NSError error);
+
+		[Abstract]
+		[Export ("newLibraryWithDescriptor:completionHandler:")]
+		IMTL4CompilerTask CreateLibrary (MTL4LibraryDescriptor descriptor, MTLCreateLibraryCompletionHandler completionHandler);
+
+		[Abstract]
+		[Export ("newDynamicLibrary:completionHandler:")]
+		IMTL4CompilerTask CreateDynamicLibrary (IMTLLibrary library, MTLCreateDynamicLibraryCompletionHandler completionHandler);
+
+		[Abstract]
+		[Export ("newDynamicLibraryWithURL:completionHandler:")]
+		IMTL4CompilerTask CreateDynamicLibrary (NSUrl url, MTLCreateDynamicLibraryCompletionHandler completionHandler);
+
+		[Abstract]
+		[Export ("newComputePipelineStateWithDescriptor:compilerTaskOptions:completionHandler:")]
+		IMTL4CompilerTask CreateComputePipelineState (MTL4ComputePipelineDescriptor descriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, MTLCreateComputePipelineStateCompletionHandler completionHandler);
+
+		[Abstract]
+		[Export ("newComputePipelineStateWithDescriptor:dynamicLinkingDescriptor:compilerTaskOptions:completionHandler:")]
+		IMTL4CompilerTask CreateComputePipelineState (MTL4ComputePipelineDescriptor descriptor, [NullAllowed] MTL4PipelineStageDynamicLinkingDescriptor dynamicLinkingDescriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, MTLCreateComputePipelineStateCompletionHandler completionHandler);
+
+		[Abstract]
+		[Export ("newRenderPipelineStateWithDescriptor:compilerTaskOptions:completionHandler:")]
+		IMTL4CompilerTask CreateRenderPipelineState (MTL4PipelineDescriptor descriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, MTLCreateRenderPipelineStateCompletionHandler completionHandler);
+
+		[Abstract]
+		[Export ("newRenderPipelineStateWithDescriptor:dynamicLinkingDescriptor:compilerTaskOptions:completionHandler:")]
+		IMTL4CompilerTask CreateRenderPipelineState (MTL4PipelineDescriptor descriptor, [NullAllowed] MTL4RenderPipelineDynamicLinkingDescriptor dynamicLinkingDescriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, MTLCreateRenderPipelineStateCompletionHandler completionHandler);
+
+		[Abstract]
+		[Export ("newRenderPipelineStateBySpecializationWithDescriptor:pipeline:completionHandler:")]
+		IMTL4CompilerTask CreateRenderPipelineStateBySpecialization (MTL4PipelineDescriptor descriptor, MTLRenderPipelineState pipeline, MTLCreateRenderPipelineStateCompletionHandler completionHandler);
+
+		[Abstract]
+		[Export ("newBinaryFunctionWithDescriptor:compilerTaskOptions:completionHandler:")]
+		IMTL4CompilerTask CreateBinaryFunction (MTL4BinaryFunctionDescriptor descriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, MTL4CreateBinaryFunctionCompletionHandler completionHandler);
+
+		[Abstract]
+		[Export ("newMachineLearningPipelineStateWithDescriptor:error:")]
+		[return: NullAllowed]
+		IMTL4MachineLearningPipelineState CreateMachineLearningPipelineState (MTL4MachineLearningPipelineDescriptor descriptor, [NullAllowed] out NSError error);
+
+		[Abstract]
+		[Export ("newMachineLearningPipelineStateWithDescriptor:completionHandler:")]
+		IMTL4CompilerTask CreateMachineLearningPipelineState (MTL4MachineLearningPipelineDescriptor descriptor, MTL4CreateMachineLearningPipelineStateCompletionHandler completionHandler);
+
+		[Abstract]
+		[Export ("cancel")]
+		void Cancel ();
 	}
 
 	interface IMTL4ComputeCommandEncoder {}
@@ -8197,1450 +8577,1147 @@ namespace Metal {
 	}
 
 	interface IMTLResourceViewPool {}
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
 	interface MTLResourceViewPool
 	{
-		// @required @property (readonly, nonatomic) MTLResourceId baseResourceID;
 		[Abstract]
 		[Export ("baseResourceID")]
-		MTLResourceId BaseResourceID { get; }
+		MTLResourceId BaseResourceId { get; }
 
-		// @required @property (readonly, nonatomic) NSUInteger resourceViewCount;
 		[Abstract]
 		[Export ("resourceViewCount")]
 		nuint ResourceViewCount { get; }
 
-		// @required @property (readonly) id<MTLDevice> _Nonnull device;
 		[Abstract]
 		[Export ("device")]
-		MTLDevice Device { get; }
+		IMTLDevice Device { get; }
 
-		// @required @property (readonly, nonatomic) NSString * _Nullable label;
 		[Abstract]
 		[NullAllowed, Export ("label")]
 		string Label { get; }
 
-		// @required -(MTLResourceId)copyResourceViewsFromPool:(id<MTLResourceViewPool> _Nonnull)sourcePool sourceRange:(NSRange)sourceRange destinationIndex:(NSUInteger)destinationIndex;
 		[Abstract]
 		[Export ("copyResourceViewsFromPool:sourceRange:destinationIndex:")]
-		MTLResourceId SourceRange (MTLResourceViewPool sourcePool, NSRange sourceRange, nuint destinationIndex);
+		MTLResourceId CopyResourceViews (IMTLResourceViewPool sourcePool, NSRange sourceRange, nuint destinationIndex);
 	}
 
 	interface IMTLTensor {}
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
 	interface MTLTensor : MTLResource
 	{
-		// @required @property (readonly) MTLResourceId gpuResourceID;
 		[Abstract]
 		[Export ("gpuResourceID")]
-		MTLResourceId GpuResourceID { get; }
+		MTLResourceId GpuResourceId { get; }
 
-		// @required @property (readonly) id<MTLBuffer> _Nullable buffer;
 		[Abstract]
 		[NullAllowed, Export ("buffer")]
 		IMTLBuffer Buffer { get; }
 
-		// @required @property (readonly) NSUInteger bufferOffset;
 		[Abstract]
 		[Export ("bufferOffset")]
 		nuint BufferOffset { get; }
 
-		// @required @property (readonly) MTLTensorExtents * _Nonnull strides;
 		[Abstract]
 		[Export ("strides")]
 		MTLTensorExtents Strides { get; }
 
-		// @required @property (readonly) MTLTensorExtents * _Nonnull dimensions;
 		[Abstract]
 		[Export ("dimensions")]
 		MTLTensorExtents Dimensions { get; }
 
-		// @required @property (readonly) MTLTensorDataType dataType;
 		[Abstract]
 		[Export ("dataType")]
 		MTLTensorDataType DataType { get; }
 
-		// @required @property (readonly) MTLTensorUsage usage;
 		[Abstract]
 		[Export ("usage")]
 		MTLTensorUsage Usage { get; }
 
-		// @required -(void)replaceSliceOrigin:(MTLTensorExtents * _Nonnull)sliceOrigin sliceDimensions:(MTLTensorExtents * _Nonnull)sliceDimensions withBytes:(const void * _Nonnull)bytes strides:(MTLTensorExtents * _Nonnull)strides;
 		[Abstract]
 		[Export ("replaceSliceOrigin:sliceDimensions:withBytes:strides:")]
-		unsafe void ReplaceSliceOrigin (MTLTensorExtents sliceOrigin, MTLTensorExtents sliceDimensions, void* bytes, MTLTensorExtents strides);
+		void ReplaceSliceOrigin (MTLTensorExtents sliceOrigin, MTLTensorExtents sliceDimensions, /* const void * _Nonnull */ IntPtr bytes, MTLTensorExtents strides);
 
-		// @required -(void)getBytes:(void * _Nonnull)bytes strides:(MTLTensorExtents * _Nonnull)strides fromSliceOrigin:(MTLTensorExtents * _Nonnull)sliceOrigin sliceDimensions:(MTLTensorExtents * _Nonnull)sliceDimensions;
 		[Abstract]
 		[Export ("getBytes:strides:fromSliceOrigin:sliceDimensions:")]
-		unsafe void GetBytes (void* bytes, MTLTensorExtents strides, MTLTensorExtents sliceOrigin, MTLTensorExtents sliceDimensions);
+		void GetBytes (IntPtr /* void * _Nonnull */ bytes, MTLTensorExtents strides, MTLTensorExtents sliceOrigin, MTLTensorExtents sliceDimensions);
 	}
 
 	interface IMTLTensorBinding {}
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
 	interface MTLTensorBinding : MTLBinding
 	{
-		// @required @property (readonly) MTLTensorDataType tensorDataType;
 		[Abstract]
 		[Export ("tensorDataType")]
 		MTLTensorDataType TensorDataType { get; }
 
-		// @required @property (readonly) MTLDataType indexType;
 		[Abstract]
 		[Export ("indexType")]
 		MTLDataType IndexType { get; }
 
-		// @required @property (readonly) MTLTensorExtents * _Nullable dimensions;
 		[Abstract]
 		[NullAllowed, Export ("dimensions")]
 		MTLTensorExtents Dimensions { get; }
 	}
 
 	interface IMTLTextureViewPool {}
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
 	interface MTLTextureViewPool : MTLResourceViewPool
 	{
-		// @required -(MTLResourceId)setTextureView:(id<IMTLTexture> _Nonnull)texture atIndex:(NSUInteger)index;
 		[Abstract]
 		[Export ("setTextureView:atIndex:")]
 		MTLResourceId SetTextureView (IMTLTexture texture, nuint index);
 
-		// @required -(MTLResourceId)setTextureView:(id<IMTLTexture> _Nonnull)texture descriptor:(IMTLTextureViewDescriptor * _Nonnull)descriptor atIndex:(NSUInteger)index;
 		[Abstract]
 		[Export ("setTextureView:descriptor:atIndex:")]
 		MTLResourceId SetTextureView (IMTLTexture texture, IMTLTextureViewDescriptor descriptor, nuint index);
 
-		// @required -(MTLResourceId)setTextureViewFromBuffer:(id<MTLBuffer> _Nonnull)buffer descriptor:(MTLTextureDescriptor * _Nonnull)descriptor offset:(NSUInteger)offset bytesPerRow:(NSUInteger)bytesPerRow atIndex:(NSUInteger)index;
 		[Abstract]
 		[Export ("setTextureViewFromBuffer:descriptor:offset:bytesPerRow:atIndex:")]
 		MTLResourceId SetTextureViewFromBuffer (IMTLBuffer buffer, MTLTextureDescriptor descriptor, nuint offset, nuint bytesPerRow, nuint index);
 	}
-	// @interface MTL4AccelerationStructureBoundingBoxGeometryDescriptor : MTL4AccelerationStructureGeometryDescriptor
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTL4AccelerationStructureGeometryDescriptor))]
 	interface MTL4AccelerationStructureBoundingBoxGeometryDescriptor
 	{
-		// @property (nonatomic) MTL4BufferRange boundingBoxBuffer;
 		[Export ("boundingBoxBuffer", ArgumentSemantic.Assign)]
 		MTL4BufferRange BoundingBoxBuffer { get; set; }
 
-		// @property (nonatomic) NSUInteger boundingBoxStride;
 		[Export ("boundingBoxStride")]
 		nuint BoundingBoxStride { get; set; }
 
-		// @property (nonatomic) NSUInteger boundingBoxCount;
 		[Export ("boundingBoxCount")]
 		nuint BoundingBoxCount { get; set; }
 	}
 
-
-	// @interface MTL4AccelerationStructureCurveGeometryDescriptor : MTL4AccelerationStructureGeometryDescriptor
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTL4AccelerationStructureGeometryDescriptor))]
 	interface MTL4AccelerationStructureCurveGeometryDescriptor
 	{
-		// @property (nonatomic) MTL4BufferRange controlPointBuffer;
 		[Export ("controlPointBuffer", ArgumentSemantic.Assign)]
 		MTL4BufferRange ControlPointBuffer { get; set; }
 
-		// @property (nonatomic) NSUInteger controlPointCount;
 		[Export ("controlPointCount")]
 		nuint ControlPointCount { get; set; }
 
-		// @property (nonatomic) NSUInteger controlPointStride;
 		[Export ("controlPointStride")]
 		nuint ControlPointStride { get; set; }
 
-		// @property (nonatomic) MTLAttributeFormat controlPointFormat;
 		[Export ("controlPointFormat", ArgumentSemantic.Assign)]
 		MTLAttributeFormat ControlPointFormat { get; set; }
 
-		// @property (nonatomic) MTL4BufferRange radiusBuffer;
 		[Export ("radiusBuffer", ArgumentSemantic.Assign)]
 		MTL4BufferRange RadiusBuffer { get; set; }
 
-		// @property (nonatomic) MTLAttributeFormat radiusFormat;
 		[Export ("radiusFormat", ArgumentSemantic.Assign)]
 		MTLAttributeFormat RadiusFormat { get; set; }
 
-		// @property (nonatomic) NSUInteger radiusStride;
 		[Export ("radiusStride")]
 		nuint RadiusStride { get; set; }
 
-		// @property (nonatomic) MTL4BufferRange indexBuffer;
 		[Export ("indexBuffer", ArgumentSemantic.Assign)]
 		MTL4BufferRange IndexBuffer { get; set; }
 
-		// @property (nonatomic) MTLIndexType indexType;
 		[Export ("indexType", ArgumentSemantic.Assign)]
 		MTLIndexType IndexType { get; set; }
 
-		// @property (nonatomic) NSUInteger segmentCount;
 		[Export ("segmentCount")]
 		nuint SegmentCount { get; set; }
 
-		// @property (nonatomic) NSUInteger segmentControlPointCount;
 		[Export ("segmentControlPointCount")]
 		nuint SegmentControlPointCount { get; set; }
 
-		// @property (nonatomic) MTLCurveType curveType;
 		[Export ("curveType", ArgumentSemantic.Assign)]
 		MTLCurveType CurveType { get; set; }
 
-		// @property (nonatomic) MTLCurveBasis curveBasis;
 		[Export ("curveBasis", ArgumentSemantic.Assign)]
 		MTLCurveBasis CurveBasis { get; set; }
 
-		// @property (nonatomic) MTLCurveEndCaps curveEndCaps;
 		[Export ("curveEndCaps", ArgumentSemantic.Assign)]
 		MTLCurveEndCaps CurveEndCaps { get; set; }
 	}
 
+	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTLAccelerationStructureDescriptor))]
-	interface MTL4AccelerationStructureDescriptor {}
-	// @interface MTL4AccelerationStructureGeometryDescriptor : NSObject <NSCopying>
+	interface MTL4AccelerationStructureDescriptor
+	{
+	}
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4AccelerationStructureGeometryDescriptor : NSCopying
 	{
-		// @property (nonatomic) NSUInteger intersectionFunctionTableOffset;
 		[Export ("intersectionFunctionTableOffset")]
 		nuint IntersectionFunctionTableOffset { get; set; }
 
-		// @property (nonatomic) BOOL opaque;
 		[Export ("opaque")]
 		bool Opaque { get; set; }
 
-		// @property (nonatomic) BOOL allowDuplicateIntersectionFunctionInvocation;
 		[Export ("allowDuplicateIntersectionFunctionInvocation")]
 		bool AllowDuplicateIntersectionFunctionInvocation { get; set; }
 
-		// @property (copy, nonatomic) NSString * _Nullable label;
 		[NullAllowed, Export ("label")]
 		string Label { get; set; }
 
-		// @property (nonatomic) MTL4BufferRange primitiveDataBuffer;
 		[Export ("primitiveDataBuffer", ArgumentSemantic.Assign)]
 		MTL4BufferRange PrimitiveDataBuffer { get; set; }
 
-		// @property (nonatomic) NSUInteger primitiveDataStride;
 		[Export ("primitiveDataStride")]
 		nuint PrimitiveDataStride { get; set; }
 
-		// @property (nonatomic) NSUInteger primitiveDataElementSize;
 		[Export ("primitiveDataElementSize")]
 		nuint PrimitiveDataElementSize { get; set; }
 	}
 
-	// @interface MTL4AccelerationStructureMotionBoundingBoxGeometryDescriptor : MTL4AccelerationStructureGeometryDescriptor
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTL4AccelerationStructureGeometryDescriptor))]
 	interface MTL4AccelerationStructureMotionBoundingBoxGeometryDescriptor
 	{
-		// @property (nonatomic) MTL4BufferRange boundingBoxBuffers;
 		[Export ("boundingBoxBuffers", ArgumentSemantic.Assign)]
 		MTL4BufferRange BoundingBoxBuffers { get; set; }
 
-		// @property (nonatomic) NSUInteger boundingBoxStride;
 		[Export ("boundingBoxStride")]
 		nuint BoundingBoxStride { get; set; }
 
-		// @property (nonatomic) NSUInteger boundingBoxCount;
 		[Export ("boundingBoxCount")]
 		nuint BoundingBoxCount { get; set; }
 	}
-	// @interface MTL4AccelerationStructureMotionCurveGeometryDescriptor : MTL4AccelerationStructureGeometryDescriptor
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTL4AccelerationStructureGeometryDescriptor))]
 	interface MTL4AccelerationStructureMotionCurveGeometryDescriptor
 	{
-		// @property (nonatomic) MTL4BufferRange controlPointBuffers;
 		[Export ("controlPointBuffers", ArgumentSemantic.Assign)]
 		MTL4BufferRange ControlPointBuffers { get; set; }
 
-		// @property (nonatomic) NSUInteger controlPointCount;
 		[Export ("controlPointCount")]
 		nuint ControlPointCount { get; set; }
 
-		// @property (nonatomic) NSUInteger controlPointStride;
 		[Export ("controlPointStride")]
 		nuint ControlPointStride { get; set; }
 
-		// @property (nonatomic) MTLAttributeFormat controlPointFormat;
 		[Export ("controlPointFormat", ArgumentSemantic.Assign)]
 		MTLAttributeFormat ControlPointFormat { get; set; }
 
-		// @property (nonatomic) MTL4BufferRange radiusBuffers;
 		[Export ("radiusBuffers", ArgumentSemantic.Assign)]
 		MTL4BufferRange RadiusBuffers { get; set; }
 
-		// @property (nonatomic) MTLAttributeFormat radiusFormat;
 		[Export ("radiusFormat", ArgumentSemantic.Assign)]
 		MTLAttributeFormat RadiusFormat { get; set; }
 
-		// @property (nonatomic) NSUInteger radiusStride;
 		[Export ("radiusStride")]
 		nuint RadiusStride { get; set; }
 
-		// @property (nonatomic) MTL4BufferRange indexBuffer;
 		[Export ("indexBuffer", ArgumentSemantic.Assign)]
 		MTL4BufferRange IndexBuffer { get; set; }
 
-		// @property (nonatomic) MTLIndexType indexType;
 		[Export ("indexType", ArgumentSemantic.Assign)]
 		MTLIndexType IndexType { get; set; }
 
-		// @property (nonatomic) NSUInteger segmentCount;
 		[Export ("segmentCount")]
 		nuint SegmentCount { get; set; }
 
-		// @property (nonatomic) NSUInteger segmentControlPointCount;
 		[Export ("segmentControlPointCount")]
 		nuint SegmentControlPointCount { get; set; }
 
-		// @property (nonatomic) MTLCurveType curveType;
 		[Export ("curveType", ArgumentSemantic.Assign)]
 		MTLCurveType CurveType { get; set; }
 
-		// @property (nonatomic) MTLCurveBasis curveBasis;
 		[Export ("curveBasis", ArgumentSemantic.Assign)]
 		MTLCurveBasis CurveBasis { get; set; }
 
-		// @property (nonatomic) MTLCurveEndCaps curveEndCaps;
 		[Export ("curveEndCaps", ArgumentSemantic.Assign)]
 		MTLCurveEndCaps CurveEndCaps { get; set; }
 	}
-	// @interface MTL4AccelerationStructureMotionTriangleGeometryDescriptor : MTL4AccelerationStructureGeometryDescriptor
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTL4AccelerationStructureGeometryDescriptor))]
 	interface MTL4AccelerationStructureMotionTriangleGeometryDescriptor
 	{
-		// @property (nonatomic) MTL4BufferRange vertexBuffers;
 		[Export ("vertexBuffers", ArgumentSemantic.Assign)]
 		MTL4BufferRange VertexBuffers { get; set; }
 
-		// @property (nonatomic) MTLAttributeFormat vertexFormat;
 		[Export ("vertexFormat", ArgumentSemantic.Assign)]
 		MTLAttributeFormat VertexFormat { get; set; }
 
-		// @property (nonatomic) NSUInteger vertexStride;
 		[Export ("vertexStride")]
 		nuint VertexStride { get; set; }
 
-		// @property (nonatomic) MTL4BufferRange indexBuffer;
 		[Export ("indexBuffer", ArgumentSemantic.Assign)]
 		MTL4BufferRange IndexBuffer { get; set; }
 
-		// @property (nonatomic) MTLIndexType indexType;
 		[Export ("indexType", ArgumentSemantic.Assign)]
 		MTLIndexType IndexType { get; set; }
 
-		// @property (nonatomic) NSUInteger triangleCount;
 		[Export ("triangleCount")]
 		nuint TriangleCount { get; set; }
 
-		// @property (nonatomic) MTL4BufferRange transformationMatrixBuffer;
 		[Export ("transformationMatrixBuffer", ArgumentSemantic.Assign)]
 		MTL4BufferRange TransformationMatrixBuffer { get; set; }
 
-		// @property (nonatomic) MTLMatrixLayout transformationMatrixLayout;
 		[Export ("transformationMatrixLayout", ArgumentSemantic.Assign)]
 		MTLMatrixLayout TransformationMatrixLayout { get; set; }
 	}
 
-	// @interface MTL4AccelerationStructureTriangleGeometryDescriptor : MTL4AccelerationStructureGeometryDescriptor
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTL4AccelerationStructureGeometryDescriptor))]
 	interface MTL4AccelerationStructureTriangleGeometryDescriptor
 	{
-		// @property (nonatomic) MTL4BufferRange vertexBuffer;
 		[Export ("vertexBuffer", ArgumentSemantic.Assign)]
 		MTL4BufferRange VertexBuffer { get; set; }
 
-		// @property (nonatomic) MTLAttributeFormat vertexFormat;
 		[Export ("vertexFormat", ArgumentSemantic.Assign)]
 		MTLAttributeFormat VertexFormat { get; set; }
 
-		// @property (nonatomic) NSUInteger vertexStride;
 		[Export ("vertexStride")]
 		nuint VertexStride { get; set; }
 
-		// @property (nonatomic) MTL4BufferRange indexBuffer;
 		[Export ("indexBuffer", ArgumentSemantic.Assign)]
 		MTL4BufferRange IndexBuffer { get; set; }
 
-		// @property (nonatomic) MTLIndexType indexType;
 		[Export ("indexType", ArgumentSemantic.Assign)]
 		MTLIndexType IndexType { get; set; }
 
-		// @property (nonatomic) NSUInteger triangleCount;
 		[Export ("triangleCount")]
 		nuint TriangleCount { get; set; }
 
-		// @property (nonatomic) MTL4BufferRange transformationMatrixBuffer;
 		[Export ("transformationMatrixBuffer", ArgumentSemantic.Assign)]
 		MTL4BufferRange TransformationMatrixBuffer { get; set; }
 
-		// @property (nonatomic) MTLMatrixLayout transformationMatrixLayout;
 		[Export ("transformationMatrixLayout", ArgumentSemantic.Assign)]
 		MTLMatrixLayout TransformationMatrixLayout { get; set; }
 	}
-	// @interface MTL4ArgumentTableDescriptor : NSObject <NSCopying>
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4ArgumentTableDescriptor : NSCopying
 	{
-		// @property (readwrite, nonatomic) NSUInteger maxBufferBindCount;
 		[Export ("maxBufferBindCount")]
 		nuint MaxBufferBindCount { get; set; }
 
-		// @property (readwrite, nonatomic) NSUInteger maxTextureBindCount;
 		[Export ("maxTextureBindCount")]
 		nuint MaxTextureBindCount { get; set; }
 
-		// @property (readwrite, nonatomic) NSUInteger maxSamplerStateBindCount;
 		[Export ("maxSamplerStateBindCount")]
 		nuint MaxSamplerStateBindCount { get; set; }
 
-		// @property (readwrite, nonatomic) BOOL initializeBindings;
 		[Export ("initializeBindings")]
 		bool InitializeBindings { get; set; }
 
-		// @property (readwrite, nonatomic) BOOL supportAttributeStrides;
 		[Export ("supportAttributeStrides")]
 		bool SupportAttributeStrides { get; set; }
 
-		// @property (copy, nonatomic) NSString * _Nullable label;
 		[NullAllowed, Export ("label")]
 		string Label { get; set; }
 	}
-	// @interface MTL4BinaryFunctionDescriptor : NSObject <NSCopying>
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4BinaryFunctionDescriptor : NSCopying
 	{
-		// @property (readwrite, copy) NSString * _Nonnull name;
 		[Export ("name")]
 		string Name { get; set; }
 
-		// @property (readwrite, copy, nonatomic) MTL4FunctionDescriptor * _Nonnull functionDescriptor;
 		[Export ("functionDescriptor", ArgumentSemantic.Copy)]
 		MTL4FunctionDescriptor FunctionDescriptor { get; set; }
 
-		// @property (nonatomic) MTL4BinaryFunctionOptions options;
 		[Export ("options", ArgumentSemantic.Assign)]
 		MTL4BinaryFunctionOptions Options { get; set; }
 	}
 
+	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4BinaryFunctionReflection {}
+	interface MTL4BinaryFunctionReflection
+	{
+	}
 
 
-	// @interface MTL4CommandAllocatorDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4CommandAllocatorDescriptor : NSCopying
 	{
-		// @property (copy, nonatomic) NSString * _Nullable label;
 		[NullAllowed, Export ("label")]
 		string Label { get; set; }
 	}
 
-	// @interface MTL4CommandBufferOptions : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4CommandBufferOptions : NSCopying
 	{
-		// @property (readwrite, retain, nonatomic) id<MTLLogState> _Nullable logState;
 		[NullAllowed, Export ("logState", ArgumentSemantic.Retain)]
-		MTLLogState LogState { get; set; }
+		IMTLLogState LogState { get; set; }
 	}
 
-	// @interface MTL4CommandQueueDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4CommandQueueDescriptor : NSCopying
 	{
-		// @property (copy, nonatomic) NSString * _Nullable label;
 		[NullAllowed, Export ("label")]
 		string Label { get; set; }
 
-		// @property (assign, nonatomic) dispatch_queue_t _Nullable feedbackQueue;
 		[NullAllowed, Export ("feedbackQueue", ArgumentSemantic.Assign)]
 		DispatchQueue FeedbackQueue { get; set; }
 	}
 
-	// @interface MTL4CommitOptions : NSObject
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4CommitOptions
 	{
-		// -(void)addFeedbackHandler:(MTL4CommitFeedbackHandler _Nonnull)block;
 		[Export ("addFeedbackHandler:")]
 		void AddFeedbackHandler (MTL4CommitFeedbackHandler block);
 	}
-	// @interface MTL4CompilerDescriptor : NSObject <NSCopying>
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4CompilerDescriptor : NSCopying
 	{
-		// @property (copy, nonatomic) NSString * _Nullable label;
 		[NullAllowed, Export ("label")]
 		string Label { get; set; }
 
-		// @property (strong) id<MTL4PipelineDataSetSerializer> _Nullable pipelineDataSetSerializer;
 		[NullAllowed, Export ("pipelineDataSetSerializer", ArgumentSemantic.Strong)]
 		MTL4PipelineDataSetSerializer PipelineDataSetSerializer { get; set; }
 	}
 
-
-	// @interface MTL4CompilerTaskOptions : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4CompilerTaskOptions : NSCopying
 	{
-		// @property (copy, nonatomic) NSArray<id<MTL4Archive>> * _Nullable lookupArchives;
 		[NullAllowed, Export ("lookupArchives", ArgumentSemantic.Copy)]
-		MTL4Archive[] LookupArchives { get; set; }
+		IMTL4Archive[] LookupArchives { get; set; }
 	}
 
-	// @interface MTL4ComputePipelineDescriptor : MTL4PipelineDescriptor
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTL4PipelineDescriptor))]
 	interface MTL4ComputePipelineDescriptor
 	{
-		// @property (readwrite, copy, nonatomic) MTL4FunctionDescriptor * _Nullable computeFunctionDescriptor;
 		[NullAllowed, Export ("computeFunctionDescriptor", ArgumentSemantic.Copy)]
 		MTL4FunctionDescriptor ComputeFunctionDescriptor { get; set; }
 
-		// @property (readwrite, nonatomic) BOOL threadGroupSizeIsMultipleOfThreadExecutionWidth;
 		[Export ("threadGroupSizeIsMultipleOfThreadExecutionWidth")]
 		bool ThreadGroupSizeIsMultipleOfThreadExecutionWidth { get; set; }
 
-		// @property (readwrite, nonatomic) NSUInteger maxTotalThreadsPerThreadgroup;
 		[Export ("maxTotalThreadsPerThreadgroup")]
 		nuint MaxTotalThreadsPerThreadgroup { get; set; }
 
-		// @property (readwrite, nonatomic) MTLSize requiredThreadsPerThreadgroup;
 		[Export ("requiredThreadsPerThreadgroup", ArgumentSemantic.Assign)]
 		MTLSize RequiredThreadsPerThreadgroup { get; set; }
 
-		// @property (readwrite, nonatomic) BOOL supportBinaryLinking;
 		[Export ("supportBinaryLinking")]
 		bool SupportBinaryLinking { get; set; }
 
-		// @property (copy, nonatomic) MTL4StaticLinkingDescriptor * _Nullable staticLinkingDescriptor;
 		[NullAllowed, Export ("staticLinkingDescriptor", ArgumentSemantic.Copy)]
 		MTL4StaticLinkingDescriptor StaticLinkingDescriptor { get; set; }
 
-		// @property (readwrite, nonatomic) MTL4IndirectCommandBufferSupportState supportIndirectCommandBuffers;
 		[Export ("supportIndirectCommandBuffers", ArgumentSemantic.Assign)]
 		MTL4IndirectCommandBufferSupportState SupportIndirectCommandBuffers { get; set; }
 
-		// -(void)reset;
 		[Export ("reset")]
 		void Reset ();
 	}
 
-
-	// @interface MTL4CounterHeapDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4CounterHeapDescriptor : NSCopying
 	{
-		// @property (nonatomic) MTL4CounterHeapType type;
 		[Export ("type", ArgumentSemantic.Assign)]
 		MTL4CounterHeapType Type { get; set; }
 
-		// @property (nonatomic) NSUInteger entryCount;
 		[Export ("entryCount")]
 		nuint EntryCount { get; set; }
 	}
-	[BaseType (typeof (NSObject))]
-	interface MTL4FunctionDescriptor : NSCopying {}
 
-	// @interface MTL4IndirectInstanceAccelerationStructureDescriptor : MTL4AccelerationStructureDescriptor
+	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+	[BaseType (typeof (NSObject))]
+	interface MTL4FunctionDescriptor : NSCopying
+	{
+	}
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTL4AccelerationStructureDescriptor))]
 	interface MTL4IndirectInstanceAccelerationStructureDescriptor
 	{
-		// @property (nonatomic) MTL4BufferRange instanceDescriptorBuffer;
 		[Export ("instanceDescriptorBuffer", ArgumentSemantic.Assign)]
 		MTL4BufferRange InstanceDescriptorBuffer { get; set; }
 
-		// @property (nonatomic) NSUInteger instanceDescriptorStride;
 		[Export ("instanceDescriptorStride")]
 		nuint InstanceDescriptorStride { get; set; }
 
-		// @property (nonatomic) NSUInteger maxInstanceCount;
 		[Export ("maxInstanceCount")]
 		nuint MaxInstanceCount { get; set; }
 
-		// @property (nonatomic) MTL4BufferRange instanceCountBuffer;
 		[Export ("instanceCountBuffer", ArgumentSemantic.Assign)]
 		MTL4BufferRange InstanceCountBuffer { get; set; }
 
-		// @property (nonatomic) MTLAccelerationStructureInstanceDescriptorType instanceDescriptorType;
 		[Export ("instanceDescriptorType", ArgumentSemantic.Assign)]
 		MTLAccelerationStructureInstanceDescriptorType InstanceDescriptorType { get; set; }
 
-		// @property (nonatomic) MTL4BufferRange motionTransformBuffer;
 		[Export ("motionTransformBuffer", ArgumentSemantic.Assign)]
 		MTL4BufferRange MotionTransformBuffer { get; set; }
 
-		// @property (nonatomic) NSUInteger maxMotionTransformCount;
 		[Export ("maxMotionTransformCount")]
 		nuint MaxMotionTransformCount { get; set; }
 
-		// @property (nonatomic) MTL4BufferRange motionTransformCountBuffer;
 		[Export ("motionTransformCountBuffer", ArgumentSemantic.Assign)]
 		MTL4BufferRange MotionTransformCountBuffer { get; set; }
 
-		// @property (nonatomic) MTLMatrixLayout instanceTransformationMatrixLayout;
 		[Export ("instanceTransformationMatrixLayout", ArgumentSemantic.Assign)]
 		MTLMatrixLayout InstanceTransformationMatrixLayout { get; set; }
 
-		// @property (nonatomic) MTLTransformType motionTransformType;
 		[Export ("motionTransformType", ArgumentSemantic.Assign)]
 		MTLTransformType MotionTransformType { get; set; }
 
-		// @property (nonatomic) NSUInteger motionTransformStride;
 		[Export ("motionTransformStride")]
 		nuint MotionTransformStride { get; set; }
 	}
 
-	// @interface MTL4InstanceAccelerationStructureDescriptor : MTL4AccelerationStructureDescriptor
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTL4AccelerationStructureDescriptor))]
 	interface MTL4InstanceAccelerationStructureDescriptor
 	{
-		// @property (nonatomic) MTL4BufferRange instanceDescriptorBuffer;
 		[Export ("instanceDescriptorBuffer", ArgumentSemantic.Assign)]
 		MTL4BufferRange InstanceDescriptorBuffer { get; set; }
 
-		// @property (nonatomic) NSUInteger instanceDescriptorStride;
 		[Export ("instanceDescriptorStride")]
 		nuint InstanceDescriptorStride { get; set; }
 
-		// @property (nonatomic) NSUInteger instanceCount;
 		[Export ("instanceCount")]
 		nuint InstanceCount { get; set; }
 
-		// @property (nonatomic) MTLAccelerationStructureInstanceDescriptorType instanceDescriptorType;
 		[Export ("instanceDescriptorType", ArgumentSemantic.Assign)]
 		MTLAccelerationStructureInstanceDescriptorType InstanceDescriptorType { get; set; }
 
-		// @property (nonatomic) MTL4BufferRange motionTransformBuffer;
 		[Export ("motionTransformBuffer", ArgumentSemantic.Assign)]
 		MTL4BufferRange MotionTransformBuffer { get; set; }
 
-		// @property (nonatomic) NSUInteger motionTransformCount;
 		[Export ("motionTransformCount")]
 		nuint MotionTransformCount { get; set; }
 
-		// @property (nonatomic) MTLMatrixLayout instanceTransformationMatrixLayout;
 		[Export ("instanceTransformationMatrixLayout", ArgumentSemantic.Assign)]
 		MTLMatrixLayout InstanceTransformationMatrixLayout { get; set; }
 
-		// @property (nonatomic) MTLTransformType motionTransformType;
 		[Export ("motionTransformType", ArgumentSemantic.Assign)]
 		MTLTransformType MotionTransformType { get; set; }
 
-		// @property (nonatomic) NSUInteger motionTransformStride;
 		[Export ("motionTransformStride")]
 		nuint MotionTransformStride { get; set; }
 	}
 
-	// @interface MTL4LibraryDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4LibraryDescriptor : NSCopying
 	{
-		// @property (copy, atomic) NSString * _Nullable source;
 		[NullAllowed, Export ("source")]
 		string Source { get; set; }
 
-		// @property (copy, atomic) MTLCompileOptions * _Nullable options;
 		[NullAllowed, Export ("options", ArgumentSemantic.Copy)]
 		MTLCompileOptions Options { get; set; }
 
-		// @property (copy, atomic) NSString * _Nullable name;
 		[NullAllowed, Export ("name")]
 		string Name { get; set; }
 	}
 
-	// @interface MTL4LibraryFunctionDescriptor : MTL4FunctionDescriptor
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTL4FunctionDescriptor))]
 	interface MTL4LibraryFunctionDescriptor
 	{
-		// @property (copy, atomic) NSString * _Nullable name;
 		[NullAllowed, Export ("name")]
 		string Name { get; set; }
 
-		// @property (readwrite, retain, nonatomic) id<MTLLibrary> _Nullable library;
 		[NullAllowed, Export ("library", ArgumentSemantic.Retain)]
 		MTLLibrary Library { get; set; }
 	}
 
-	// @interface MTL4LinkedFunctions : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4LinkedFunctions : NSCopying
 	{
-		// @property (readwrite, copy, nonatomic) NSArray<MTL4FunctionDescriptor *> * _Nullable functionDescriptors;
 		[NullAllowed, Export ("functionDescriptors", ArgumentSemantic.Copy)]
 		MTL4FunctionDescriptor[] FunctionDescriptors { get; set; }
 
-		// @property (readwrite, copy, nonatomic) NSArray<id<MTL4BinaryFunction>> * _Nullable binaryFunctions;
 		[NullAllowed, Export ("binaryFunctions", ArgumentSemantic.Copy)]
-		MTL4BinaryFunction[] BinaryFunctions { get; set; }
+		IMTL4BinaryFunction[] BinaryFunctions { get; set; }
 
-		// @property (readwrite, copy, nonatomic) NSArray<MTL4FunctionDescriptor *> * _Nullable privateFunctionDescriptors;
 		[NullAllowed, Export ("privateFunctionDescriptors", ArgumentSemantic.Copy)]
 		MTL4FunctionDescriptor[] PrivateFunctionDescriptors { get; set; }
 
-		// @property (readwrite, copy, nonatomic) NSDictionary<NSString *,NSArray<MTL4FunctionDescriptor *> *> * _Nullable groups;
 		[NullAllowed, Export ("groups", ArgumentSemantic.Copy)]
 		NSDictionary<NSString, NSArray<MTL4FunctionDescriptor>> Groups { get; set; }
 	}
-	// @interface MTL4MachineLearningPipelineDescriptor : MTL4PipelineDescriptor
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTL4PipelineDescriptor))]
 	interface MTL4MachineLearningPipelineDescriptor
 	{
-		// @property (copy, nonatomic) NSString * _Nullable label;
 		[NullAllowed, Export ("label")]
 		string Label { get; set; }
 
-		// @property (readwrite, copy, nonatomic) MTL4FunctionDescriptor * _Nullable machineLearningFunctionDescriptor;
 		[NullAllowed, Export ("machineLearningFunctionDescriptor", ArgumentSemantic.Copy)]
 		MTL4FunctionDescriptor MachineLearningFunctionDescriptor { get; set; }
 
-		// -(void)setInputDimensions:(MTLTensorExtents * _Nullable)dimensions atBufferIndex:(NSInteger)bufferIndex;
 		[Export ("setInputDimensions:atBufferIndex:")]
 		void SetInputDimensions ([NullAllowed] MTLTensorExtents dimensions, nint bufferIndex);
 
-		// -(void)setInputDimensions:(NSArray<MTLTensorExtents *> * _Nonnull)dimensions withRange:(NSRange)range;
 		[Export ("setInputDimensions:withRange:")]
 		void SetInputDimensions (MTLTensorExtents[] dimensions, NSRange range);
 
-		// -(MTLTensorExtents * _Nullable)inputDimensionsAtBufferIndex:(NSInteger)bufferIndex;
 		[Export ("inputDimensionsAtBufferIndex:")]
 		[return: NullAllowed]
-		MTLTensorExtents InputDimensionsAtBufferIndex (nint bufferIndex);
+		MTLTensorExtents GetInputDimensions (nint bufferIndex);
 
-		// -(void)reset;
 		[Export ("reset")]
 		void Reset ();
 	}
-	// @interface MTL4MachineLearningPipelineReflection : NSObject
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4MachineLearningPipelineReflection
 	{
-		// @property (readonly) NSArray<id<MTLBinding>> * _Nonnull bindings;
 		[Export ("bindings")]
-		MTLBinding[] Bindings { get; }
+		IMTLBinding[] Bindings { get; }
 	}
 
-	// @interface MTL4MeshRenderPipelineDescriptor : MTL4PipelineDescriptor
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTL4PipelineDescriptor))]
 	interface MTL4MeshRenderPipelineDescriptor
 	{
-		// @property (readwrite, copy, nonatomic) MTL4FunctionDescriptor * _Nullable objectFunctionDescriptor;
 		[NullAllowed, Export ("objectFunctionDescriptor", ArgumentSemantic.Copy)]
 		MTL4FunctionDescriptor ObjectFunctionDescriptor { get; set; }
 
-		// @property (readwrite, copy, nonatomic) MTL4FunctionDescriptor * _Nullable meshFunctionDescriptor;
 		[NullAllowed, Export ("meshFunctionDescriptor", ArgumentSemantic.Copy)]
 		MTL4FunctionDescriptor MeshFunctionDescriptor { get; set; }
 
-		// @property (readwrite, copy, nonatomic) MTL4FunctionDescriptor * _Nullable fragmentFunctionDescriptor;
 		[NullAllowed, Export ("fragmentFunctionDescriptor", ArgumentSemantic.Copy)]
 		MTL4FunctionDescriptor FragmentFunctionDescriptor { get; set; }
 
-		// @property (readwrite, nonatomic) NSUInteger maxTotalThreadsPerObjectThreadgroup;
 		[Export ("maxTotalThreadsPerObjectThreadgroup")]
 		nuint MaxTotalThreadsPerObjectThreadgroup { get; set; }
 
-		// @property (readwrite, nonatomic) NSUInteger maxTotalThreadsPerMeshThreadgroup;
 		[Export ("maxTotalThreadsPerMeshThreadgroup")]
 		nuint MaxTotalThreadsPerMeshThreadgroup { get; set; }
 
-		// @property (readwrite, nonatomic) MTLSize requiredThreadsPerObjectThreadgroup;
 		[Export ("requiredThreadsPerObjectThreadgroup", ArgumentSemantic.Assign)]
 		MTLSize RequiredThreadsPerObjectThreadgroup { get; set; }
 
-		// @property (readwrite, nonatomic) MTLSize requiredThreadsPerMeshThreadgroup;
 		[Export ("requiredThreadsPerMeshThreadgroup", ArgumentSemantic.Assign)]
 		MTLSize RequiredThreadsPerMeshThreadgroup { get; set; }
 
-		// @property (readwrite, nonatomic) BOOL objectThreadgroupSizeIsMultipleOfThreadExecutionWidth;
 		[Export ("objectThreadgroupSizeIsMultipleOfThreadExecutionWidth")]
 		bool ObjectThreadgroupSizeIsMultipleOfThreadExecutionWidth { get; set; }
 
-		// @property (readwrite, nonatomic) BOOL meshThreadgroupSizeIsMultipleOfThreadExecutionWidth;
 		[Export ("meshThreadgroupSizeIsMultipleOfThreadExecutionWidth")]
 		bool MeshThreadgroupSizeIsMultipleOfThreadExecutionWidth { get; set; }
 
-		// @property (readwrite, nonatomic) NSUInteger payloadMemoryLength;
 		[Export ("payloadMemoryLength")]
 		nuint PayloadMemoryLength { get; set; }
 
-		// @property (readwrite, nonatomic) NSUInteger maxTotalThreadgroupsPerMeshGrid;
 		[Export ("maxTotalThreadgroupsPerMeshGrid")]
 		nuint MaxTotalThreadgroupsPerMeshGrid { get; set; }
 
-		// @property (readwrite, nonatomic) NSUInteger rasterSampleCount;
 		[Export ("rasterSampleCount")]
 		nuint RasterSampleCount { get; set; }
 
-		// @property (readwrite, nonatomic) MTL4AlphaToCoverageState alphaToCoverageState;
 		[Export ("alphaToCoverageState", ArgumentSemantic.Assign)]
 		MTL4AlphaToCoverageState AlphaToCoverageState { get; set; }
 
-		// @property (readwrite, nonatomic) MTL4AlphaToOneState alphaToOneState;
 		[Export ("alphaToOneState", ArgumentSemantic.Assign)]
 		MTL4AlphaToOneState AlphaToOneState { get; set; }
 
-		// @property (getter = isRasterizationEnabled, readwrite, nonatomic) BOOL rasterizationEnabled;
 		[Export ("rasterizationEnabled")]
 		bool RasterizationEnabled { [Bind ("isRasterizationEnabled")] get; set; }
 
-		// @property (readwrite, nonatomic) NSUInteger maxVertexAmplificationCount;
 		[Export ("maxVertexAmplificationCount")]
 		nuint MaxVertexAmplificationCount { get; set; }
 
-		// @property (readonly) MTL4RenderPipelineColorAttachmentDescriptorArray * _Nonnull colorAttachments;
 		[Export ("colorAttachments")]
 		MTL4RenderPipelineColorAttachmentDescriptorArray ColorAttachments { get; }
 
-		// @property (copy, nonatomic, null_resettable) MTL4StaticLinkingDescriptor * _Null_unspecified objectStaticLinkingDescriptor;
 		[NullAllowed, Export ("objectStaticLinkingDescriptor", ArgumentSemantic.Copy)]
 		MTL4StaticLinkingDescriptor ObjectStaticLinkingDescriptor { get; set; }
 
-		// @property (copy, nonatomic, null_resettable) MTL4StaticLinkingDescriptor * _Null_unspecified meshStaticLinkingDescriptor;
 		[NullAllowed, Export ("meshStaticLinkingDescriptor", ArgumentSemantic.Copy)]
 		MTL4StaticLinkingDescriptor MeshStaticLinkingDescriptor { get; set; }
 
-		// @property (copy, nonatomic, null_resettable) MTL4StaticLinkingDescriptor * _Null_unspecified fragmentStaticLinkingDescriptor;
 		[NullAllowed, Export ("fragmentStaticLinkingDescriptor", ArgumentSemantic.Copy)]
 		MTL4StaticLinkingDescriptor FragmentStaticLinkingDescriptor { get; set; }
 
-		// @property (readwrite, nonatomic) BOOL supportObjectBinaryLinking;
 		[Export ("supportObjectBinaryLinking")]
 		bool SupportObjectBinaryLinking { get; set; }
 
-		// @property (readwrite, nonatomic) BOOL supportMeshBinaryLinking;
 		[Export ("supportMeshBinaryLinking")]
 		bool SupportMeshBinaryLinking { get; set; }
 
-		// @property (readwrite, nonatomic) BOOL supportFragmentBinaryLinking;
 		[Export ("supportFragmentBinaryLinking")]
 		bool SupportFragmentBinaryLinking { get; set; }
 
-		// @property (readwrite, nonatomic) MTL4LogicalToPhysicalColorAttachmentMappingState colorAttachmentMappingState;
 		[Export ("colorAttachmentMappingState", ArgumentSemantic.Assign)]
 		MTL4LogicalToPhysicalColorAttachmentMappingState ColorAttachmentMappingState { get; set; }
 
-		// @property (readwrite, nonatomic) MTL4IndirectCommandBufferSupportState supportIndirectCommandBuffers;
 		[Export ("supportIndirectCommandBuffers", ArgumentSemantic.Assign)]
 		MTL4IndirectCommandBufferSupportState SupportIndirectCommandBuffers { get; set; }
 
-		// -(void)reset;
 		[Export ("reset")]
 		void Reset ();
 	}
 
-	// @interface MTL4PipelineDataSetSerializerDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4PipelineDataSetSerializerDescriptor : NSCopying
 	{
-		// @property (readwrite, nonatomic) MTL4PipelineDataSetSerializerConfiguration configuration;
 		[Export ("configuration", ArgumentSemantic.Assign)]
 		MTL4PipelineDataSetSerializerConfiguration Configuration { get; set; }
 	}
-	// @interface MTL4PipelineDescriptor : NSObject <NSCopying>
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4PipelineDescriptor : NSCopying
 	{
-		// @property (copy, nonatomic) NSString * _Nullable label;
 		[NullAllowed, Export ("label")]
 		string Label { get; set; }
 
-		// @property (readwrite, retain, nonatomic) MTL4PipelineOptions * _Nonnull options;
 		[Export ("options", ArgumentSemantic.Retain)]
 		MTL4PipelineOptions Options { get; set; }
 	}
-	// @interface MTL4PipelineOptions : NSObject <NSCopying>
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4PipelineOptions : NSCopying
 	{
-		// @property (readwrite, nonatomic) MTLShaderValidation shaderValidation;
 		[Export ("shaderValidation", ArgumentSemantic.Assign)]
 		MTLShaderValidation ShaderValidation { get; set; }
 
-		// @property (readwrite, nonatomic) MTL4ShaderReflection shaderReflection;
 		[Export ("shaderReflection", ArgumentSemantic.Assign)]
 		MTL4ShaderReflection ShaderReflection { get; set; }
 	}
 
-	// @interface MTL4PipelineStageDynamicLinkingDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4PipelineStageDynamicLinkingDescriptor : NSCopying
 	{
-		// @property (readwrite, nonatomic) NSUInteger maxCallStackDepth;
 		[Export ("maxCallStackDepth")]
 		nuint MaxCallStackDepth { get; set; }
 
-		// @property (readwrite, copy, nonatomic) NSArray<id<MTL4BinaryFunction>> * _Nullable binaryLinkedFunctions;
 		[NullAllowed, Export ("binaryLinkedFunctions", ArgumentSemantic.Copy)]
-		MTL4BinaryFunction[] BinaryLinkedFunctions { get; set; }
+		IMTL4BinaryFunction[] BinaryLinkedFunctions { get; set; }
 
-		// @property (readwrite, copy, nonatomic) NSArray<id<MTLDynamicLibrary>> * _Nonnull preloadedLibraries;
 		[Export ("preloadedLibraries", ArgumentSemantic.Copy)]
-		MTLDynamicLibrary[] PreloadedLibraries { get; set; }
+		IMTLDynamicLibrary[] PreloadedLibraries { get; set; }
 	}
 
-	// @interface MTL4PrimitiveAccelerationStructureDescriptor : MTL4AccelerationStructureDescriptor
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTL4AccelerationStructureDescriptor))]
 	interface MTL4PrimitiveAccelerationStructureDescriptor
 	{
-		// @property (retain, nonatomic) NSArray<MTL4AccelerationStructureGeometryDescriptor *> * _Nullable geometryDescriptors;
 		[NullAllowed, Export ("geometryDescriptors", ArgumentSemantic.Retain)]
 		MTL4AccelerationStructureGeometryDescriptor[] GeometryDescriptors { get; set; }
 
-		// @property (nonatomic) MTLMotionBorderMode motionStartBorderMode;
 		[Export ("motionStartBorderMode", ArgumentSemantic.Assign)]
 		MTLMotionBorderMode MotionStartBorderMode { get; set; }
 
-		// @property (nonatomic) MTLMotionBorderMode motionEndBorderMode;
 		[Export ("motionEndBorderMode", ArgumentSemantic.Assign)]
 		MTLMotionBorderMode MotionEndBorderMode { get; set; }
 
-		// @property (nonatomic) float motionStartTime;
 		[Export ("motionStartTime")]
 		float MotionStartTime { get; set; }
 
-		// @property (nonatomic) float motionEndTime;
 		[Export ("motionEndTime")]
 		float MotionEndTime { get; set; }
 
-		// @property (nonatomic) NSUInteger motionKeyframeCount;
 		[Export ("motionKeyframeCount")]
 		nuint MotionKeyframeCount { get; set; }
 	}
 
-	// @interface MTL4RenderPassDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4RenderPassDescriptor : NSCopying
 	{
-		// @property (readonly) MTLRenderPassColorAttachmentDescriptorArray * _Nonnull colorAttachments;
 		[Export ("colorAttachments")]
 		MTLRenderPassColorAttachmentDescriptorArray ColorAttachments { get; }
 
-		// @property (copy, nonatomic, null_resettable) MTLRenderPassDepthAttachmentDescriptor * _Null_unspecified depthAttachment;
 		[NullAllowed, Export ("depthAttachment", ArgumentSemantic.Copy)]
 		MTLRenderPassDepthAttachmentDescriptor DepthAttachment { get; set; }
 
-		// @property (copy, nonatomic, null_resettable) MTLRenderPassStencilAttachmentDescriptor * _Null_unspecified stencilAttachment;
 		[NullAllowed, Export ("stencilAttachment", ArgumentSemantic.Copy)]
 		MTLRenderPassStencilAttachmentDescriptor StencilAttachment { get; set; }
 
-		// @property (nonatomic) NSUInteger renderTargetArrayLength;
 		[Export ("renderTargetArrayLength")]
 		nuint RenderTargetArrayLength { get; set; }
 
-		// @property (nonatomic) NSUInteger imageblockSampleLength;
 		[Export ("imageblockSampleLength")]
 		nuint ImageblockSampleLength { get; set; }
 
-		// @property (nonatomic) NSUInteger threadgroupMemoryLength;
 		[Export ("threadgroupMemoryLength")]
 		nuint ThreadgroupMemoryLength { get; set; }
 
-		// @property (nonatomic) NSUInteger tileWidth;
 		[Export ("tileWidth")]
 		nuint TileWidth { get; set; }
 
-		// @property (nonatomic) NSUInteger tileHeight;
 		[Export ("tileHeight")]
 		nuint TileHeight { get; set; }
 
-		// @property (nonatomic) NSUInteger defaultRasterSampleCount;
 		[Export ("defaultRasterSampleCount")]
 		nuint DefaultRasterSampleCount { get; set; }
 
-		// @property (nonatomic) NSUInteger renderTargetWidth;
 		[Export ("renderTargetWidth")]
 		nuint RenderTargetWidth { get; set; }
 
-		// @property (nonatomic) NSUInteger renderTargetHeight;
 		[Export ("renderTargetHeight")]
 		nuint RenderTargetHeight { get; set; }
 
-		// @property (nonatomic, strong) id<MTLRasterizationRateMap> _Nullable rasterizationRateMap;
 		[NullAllowed, Export ("rasterizationRateMap", ArgumentSemantic.Strong)]
-		MTLRasterizationRateMap RasterizationRateMap { get; set; }
+		IMTLRasterizationRateMap RasterizationRateMap { get; set; }
 
-		// @property (nonatomic, strong) id<MTLBuffer> _Nullable visibilityResultBuffer;
 		[NullAllowed, Export ("visibilityResultBuffer", ArgumentSemantic.Strong)]
 		IMTLBuffer VisibilityResultBuffer { get; set; }
 
-		// @property (nonatomic) MTLVisibilityResultType visibilityResultType;
 		[Export ("visibilityResultType", ArgumentSemantic.Assign)]
 		MTLVisibilityResultType VisibilityResultType { get; set; }
 
-		// -(void)setSamplePositions:(const MTLSamplePosition * _Nullable)positions count:(NSUInteger)count;
 		[Export ("setSamplePositions:count:")]
-		unsafe void SetSamplePositions ([NullAllowed] MTLSamplePosition* positions, nuint count);
+		void SetSamplePositions ([CARRAY] [NullAllowed] MTLSamplePosition positions, nuint count);
 
-		// -(NSUInteger)getSamplePositions:(MTLSamplePosition * _Nullable)positions count:(NSUInteger)count;
 		[Export ("getSamplePositions:count:")]
-		unsafe nuint GetSamplePositions ([NullAllowed] MTLSamplePosition* positions, nuint count);
+		nuint GetSamplePositions ([CARRAY] [NullAllowed] MTLSamplePosition* positions, nuint count);
 
-		// @property (nonatomic) BOOL supportColorAttachmentMapping;
 		[Export ("supportColorAttachmentMapping")]
 		bool SupportColorAttachmentMapping { get; set; }
 	}
-	// @interface MTL4RenderPipelineBinaryFunctionsDescriptor : NSObject <NSCopying>
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4RenderPipelineBinaryFunctionsDescriptor : NSCopying
 	{
-		// @property (copy, nonatomic) NSArray<id<MTL4BinaryFunction>> * _Nullable vertexAdditionalBinaryFunctions;
 		[NullAllowed, Export ("vertexAdditionalBinaryFunctions", ArgumentSemantic.Copy)]
-		MTL4BinaryFunction[] VertexAdditionalBinaryFunctions { get; set; }
+		IMTL4BinaryFunction[] VertexAdditionalBinaryFunctions { get; set; }
 
-		// @property (copy, nonatomic) NSArray<id<MTL4BinaryFunction>> * _Nullable fragmentAdditionalBinaryFunctions;
 		[NullAllowed, Export ("fragmentAdditionalBinaryFunctions", ArgumentSemantic.Copy)]
-		MTL4BinaryFunction[] FragmentAdditionalBinaryFunctions { get; set; }
+		IMTL4BinaryFunction[] FragmentAdditionalBinaryFunctions { get; set; }
 
-		// @property (copy, nonatomic) NSArray<id<MTL4BinaryFunction>> * _Nullable tileAdditionalBinaryFunctions;
 		[NullAllowed, Export ("tileAdditionalBinaryFunctions", ArgumentSemantic.Copy)]
-		MTL4BinaryFunction[] TileAdditionalBinaryFunctions { get; set; }
+		IMTL4BinaryFunction[] TileAdditionalBinaryFunctions { get; set; }
 
-		// @property (copy, nonatomic) NSArray<id<MTL4BinaryFunction>> * _Nullable objectAdditionalBinaryFunctions;
 		[NullAllowed, Export ("objectAdditionalBinaryFunctions", ArgumentSemantic.Copy)]
 		MTL4BinaryFunction[] ObjectAdditionalBinaryFunctions { get; set; }
 
-		// @property (copy, nonatomic) NSArray<id<MTL4BinaryFunction>> * _Nullable meshAdditionalBinaryFunctions;
 		[NullAllowed, Export ("meshAdditionalBinaryFunctions", ArgumentSemantic.Copy)]
 		MTL4BinaryFunction[] MeshAdditionalBinaryFunctions { get; set; }
 
-		// -(void)reset;
 		[Export ("reset")]
 		void Reset ();
 	}
 
-	// @interface MTL4RenderPipelineColorAttachmentDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4RenderPipelineColorAttachmentDescriptor : NSCopying
 	{
-		// @property (nonatomic) MTLPixelFormat pixelFormat;
 		[Export ("pixelFormat", ArgumentSemantic.Assign)]
 		MTLPixelFormat PixelFormat { get; set; }
 
-		// @property (nonatomic) MTL4BlendState blendingState;
 		[Export ("blendingState", ArgumentSemantic.Assign)]
 		MTL4BlendState BlendingState { get; set; }
 
-		// @property (nonatomic) MTLBlendFactor sourceRGBBlendFactor;
 		[Export ("sourceRGBBlendFactor", ArgumentSemantic.Assign)]
-		MTLBlendFactor SourceRGBBlendFactor { get; set; }
+		MTLBlendFactor SourceRgbBlendFactor { get; set; }
 
-		// @property (nonatomic) MTLBlendFactor destinationRGBBlendFactor;
 		[Export ("destinationRGBBlendFactor", ArgumentSemantic.Assign)]
-		MTLBlendFactor DestinationRGBBlendFactor { get; set; }
+		MTLBlendFactor DestinationRgbBlendFactor { get; set; }
 
-		// @property (nonatomic) MTLBlendOperation rgbBlendOperation;
 		[Export ("rgbBlendOperation", ArgumentSemantic.Assign)]
 		MTLBlendOperation RgbBlendOperation { get; set; }
 
-		// @property (nonatomic) MTLBlendFactor sourceAlphaBlendFactor;
 		[Export ("sourceAlphaBlendFactor", ArgumentSemantic.Assign)]
 		MTLBlendFactor SourceAlphaBlendFactor { get; set; }
 
-		// @property (nonatomic) MTLBlendFactor destinationAlphaBlendFactor;
 		[Export ("destinationAlphaBlendFactor", ArgumentSemantic.Assign)]
 		MTLBlendFactor DestinationAlphaBlendFactor { get; set; }
 
-		// @property (nonatomic) MTLBlendOperation alphaBlendOperation;
 		[Export ("alphaBlendOperation", ArgumentSemantic.Assign)]
 		MTLBlendOperation AlphaBlendOperation { get; set; }
 
-		// @property (nonatomic) MTLColorWriteMask writeMask;
 		[Export ("writeMask", ArgumentSemantic.Assign)]
 		MTLColorWriteMask WriteMask { get; set; }
 
-		// -(void)reset;
 		[Export ("reset")]
 		void Reset ();
 	}
-	// @interface MTL4RenderPipelineColorAttachmentDescriptorArray : NSObject <NSCopying>
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4RenderPipelineColorAttachmentDescriptorArray : NSCopying
 	{
-		// -(MTL4RenderPipelineColorAttachmentDescriptor * _Nonnull)objectAtIndexedSubscript:(NSUInteger)attachmentIndex;
 		[Export ("objectAtIndexedSubscript:")]
-		MTL4RenderPipelineColorAttachmentDescriptor ObjectAtIndexedSubscript (nuint attachmentIndex);
+		MTL4RenderPipelineColorAttachmentDescriptor GetObject (nuint attachmentIndex);
 
-		// -(void)setObject:(MTL4RenderPipelineColorAttachmentDescriptor * _Nullable)attachment atIndexedSubscript:(NSUInteger)attachmentIndex;
 		[Export ("setObject:atIndexedSubscript:")]
 		void SetObject ([NullAllowed] MTL4RenderPipelineColorAttachmentDescriptor attachment, nuint attachmentIndex);
 
-		// -(void)reset;
 		[Export ("reset")]
 		void Reset ();
 	}
-	// @interface MTL4RenderPipelineDescriptor : MTL4PipelineDescriptor
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTL4PipelineDescriptor))]
 	interface MTL4RenderPipelineDescriptor
 	{
-		// @property (readwrite, copy, nonatomic) MTL4FunctionDescriptor * _Nullable vertexFunctionDescriptor;
 		[NullAllowed, Export ("vertexFunctionDescriptor", ArgumentSemantic.Copy)]
 		MTL4FunctionDescriptor VertexFunctionDescriptor { get; set; }
 
-		// @property (readwrite, copy, nonatomic) MTL4FunctionDescriptor * _Nullable fragmentFunctionDescriptor;
 		[NullAllowed, Export ("fragmentFunctionDescriptor", ArgumentSemantic.Copy)]
 		MTL4FunctionDescriptor FragmentFunctionDescriptor { get; set; }
 
-		// @property (copy, nonatomic) MTLVertexDescriptor * _Nullable vertexDescriptor;
 		[NullAllowed, Export ("vertexDescriptor", ArgumentSemantic.Copy)]
 		MTLVertexDescriptor VertexDescriptor { get; set; }
 
-		// @property (readwrite, nonatomic) NSUInteger rasterSampleCount;
 		[Export ("rasterSampleCount")]
 		nuint RasterSampleCount { get; set; }
 
-		// @property (readwrite, nonatomic) MTL4AlphaToCoverageState alphaToCoverageState;
 		[Export ("alphaToCoverageState", ArgumentSemantic.Assign)]
 		MTL4AlphaToCoverageState AlphaToCoverageState { get; set; }
 
-		// @property (readwrite, nonatomic) MTL4AlphaToOneState alphaToOneState;
 		[Export ("alphaToOneState", ArgumentSemantic.Assign)]
 		MTL4AlphaToOneState AlphaToOneState { get; set; }
 
-		// @property (getter = isRasterizationEnabled, readwrite, nonatomic) BOOL rasterizationEnabled;
 		[Export ("rasterizationEnabled")]
 		bool RasterizationEnabled { [Bind ("isRasterizationEnabled")] get; set; }
 
-		// @property (readwrite, nonatomic) NSUInteger maxVertexAmplificationCount;
 		[Export ("maxVertexAmplificationCount")]
 		nuint MaxVertexAmplificationCount { get; set; }
 
-		// @property (readonly) MTL4RenderPipelineColorAttachmentDescriptorArray * _Nonnull colorAttachments;
 		[Export ("colorAttachments")]
 		MTL4RenderPipelineColorAttachmentDescriptorArray ColorAttachments { get; }
 
-		// @property (readwrite, nonatomic) MTLPrimitiveTopologyClass inputPrimitiveTopology;
 		[Export ("inputPrimitiveTopology", ArgumentSemantic.Assign)]
 		MTLPrimitiveTopologyClass InputPrimitiveTopology { get; set; }
 
-		// @property (copy, nonatomic, null_resettable) MTL4StaticLinkingDescriptor * _Null_unspecified vertexStaticLinkingDescriptor;
 		[NullAllowed, Export ("vertexStaticLinkingDescriptor", ArgumentSemantic.Copy)]
 		MTL4StaticLinkingDescriptor VertexStaticLinkingDescriptor { get; set; }
 
-		// @property (copy, nonatomic, null_resettable) MTL4StaticLinkingDescriptor * _Null_unspecified fragmentStaticLinkingDescriptor;
 		[NullAllowed, Export ("fragmentStaticLinkingDescriptor", ArgumentSemantic.Copy)]
 		MTL4StaticLinkingDescriptor FragmentStaticLinkingDescriptor { get; set; }
 
-		// @property (readwrite, nonatomic) BOOL supportVertexBinaryLinking;
 		[Export ("supportVertexBinaryLinking")]
 		bool SupportVertexBinaryLinking { get; set; }
 
-		// @property (readwrite, nonatomic) BOOL supportFragmentBinaryLinking;
 		[Export ("supportFragmentBinaryLinking")]
 		bool SupportFragmentBinaryLinking { get; set; }
 
-		// @property (readwrite, nonatomic) MTL4LogicalToPhysicalColorAttachmentMappingState colorAttachmentMappingState;
 		[Export ("colorAttachmentMappingState", ArgumentSemantic.Assign)]
 		MTL4LogicalToPhysicalColorAttachmentMappingState ColorAttachmentMappingState { get; set; }
 
-		// @property (readwrite, nonatomic) MTL4IndirectCommandBufferSupportState supportIndirectCommandBuffers;
 		[Export ("supportIndirectCommandBuffers", ArgumentSemantic.Assign)]
 		MTL4IndirectCommandBufferSupportState SupportIndirectCommandBuffers { get; set; }
 
-		// -(void)reset;
 		[Export ("reset")]
 		void Reset ();
 	}
-	// @interface MTL4RenderPipelineDynamicLinkingDescriptor : NSObject <NSCopying>
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4RenderPipelineDynamicLinkingDescriptor : NSCopying
 	{
-		// @property (readonly, nonatomic) MTL4PipelineStageDynamicLinkingDescriptor * _Nonnull vertexLinkingDescriptor;
 		[Export ("vertexLinkingDescriptor")]
 		MTL4PipelineStageDynamicLinkingDescriptor VertexLinkingDescriptor { get; }
 
-		// @property (readonly, nonatomic) MTL4PipelineStageDynamicLinkingDescriptor * _Nonnull fragmentLinkingDescriptor;
 		[Export ("fragmentLinkingDescriptor")]
 		MTL4PipelineStageDynamicLinkingDescriptor FragmentLinkingDescriptor { get; }
 
-		// @property (readonly, nonatomic) MTL4PipelineStageDynamicLinkingDescriptor * _Nonnull tileLinkingDescriptor;
 		[Export ("tileLinkingDescriptor")]
 		MTL4PipelineStageDynamicLinkingDescriptor TileLinkingDescriptor { get; }
 
-		// @property (readonly, nonatomic) MTL4PipelineStageDynamicLinkingDescriptor * _Nonnull objectLinkingDescriptor;
 		[Export ("objectLinkingDescriptor")]
 		MTL4PipelineStageDynamicLinkingDescriptor ObjectLinkingDescriptor { get; }
 
-		// @property (readonly, nonatomic) MTL4PipelineStageDynamicLinkingDescriptor * _Nonnull meshLinkingDescriptor;
 		[Export ("meshLinkingDescriptor")]
 		MTL4PipelineStageDynamicLinkingDescriptor MeshLinkingDescriptor { get; }
 	}
 
-	// @interface MTL4SpecializedFunctionDescriptor : MTL4FunctionDescriptor
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTL4FunctionDescriptor))]
 	interface MTL4SpecializedFunctionDescriptor
 	{
-		// @property (readwrite, copy, nonatomic) MTL4FunctionDescriptor * _Nullable functionDescriptor;
 		[NullAllowed, Export ("functionDescriptor", ArgumentSemantic.Copy)]
 		MTL4FunctionDescriptor FunctionDescriptor { get; set; }
 
-		// @property (copy, atomic) NSString * _Nullable specializedName;
 		[NullAllowed, Export ("specializedName")]
 		string SpecializedName { get; set; }
 
-		// @property (copy, nonatomic) MTLFunctionConstantValues * _Nullable constantValues;
 		[NullAllowed, Export ("constantValues", ArgumentSemantic.Copy)]
 		MTLFunctionConstantValues ConstantValues { get; set; }
 	}
 
-	// @interface MTL4StaticLinkingDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4StaticLinkingDescriptor : NSCopying
 	{
-		// @property (readwrite, copy, nonatomic) NSArray<MTL4FunctionDescriptor *> * _Nullable functionDescriptors;
 		[NullAllowed, Export ("functionDescriptors", ArgumentSemantic.Copy)]
 		MTL4FunctionDescriptor[] FunctionDescriptors { get; set; }
 
-		// @property (readwrite, copy, nonatomic) NSArray<MTL4FunctionDescriptor *> * _Nullable privateFunctionDescriptors;
 		[NullAllowed, Export ("privateFunctionDescriptors", ArgumentSemantic.Copy)]
 		MTL4FunctionDescriptor[] PrivateFunctionDescriptors { get; set; }
 
-		// @property (readwrite, copy, nonatomic) NSDictionary<NSString *,NSArray<MTL4FunctionDescriptor *> *> * _Nullable groups;
 		[NullAllowed, Export ("groups", ArgumentSemantic.Copy)]
 		NSDictionary<NSString, NSArray<MTL4FunctionDescriptor>> Groups { get; set; }
 	}
 
-	// @interface MTL4StitchedFunctionDescriptor : MTL4FunctionDescriptor
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTL4FunctionDescriptor))]
 	interface MTL4StitchedFunctionDescriptor
 	{
-		// @property (copy, nonatomic) MTLFunctionStitchingGraph * _Nullable functionGraph;
 		[NullAllowed, Export ("functionGraph", ArgumentSemantic.Copy)]
 		MTLFunctionStitchingGraph FunctionGraph { get; set; }
 
-		// @property (copy, nonatomic) NSArray<MTL4FunctionDescriptor *> * _Nullable functionDescriptors;
 		[NullAllowed, Export ("functionDescriptors", ArgumentSemantic.Copy)]
 		MTL4FunctionDescriptor[] FunctionDescriptors { get; set; }
 	}
 
-
-	// @interface MTL4TileRenderPipelineDescriptor : MTL4PipelineDescriptor
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTL4PipelineDescriptor))]
 	interface MTL4TileRenderPipelineDescriptor
 	{
-		// @property (readwrite, copy, nonatomic) MTL4FunctionDescriptor * _Nullable tileFunctionDescriptor;
 		[NullAllowed, Export ("tileFunctionDescriptor", ArgumentSemantic.Copy)]
 		MTL4FunctionDescriptor TileFunctionDescriptor { get; set; }
 
-		// @property (readwrite, nonatomic) NSUInteger rasterSampleCount;
 		[Export ("rasterSampleCount")]
 		nuint RasterSampleCount { get; set; }
 
-		// @property (readonly) MTLTileRenderPipelineColorAttachmentDescriptorArray * _Nonnull colorAttachments;
 		[Export ("colorAttachments")]
 		MTLTileRenderPipelineColorAttachmentDescriptorArray ColorAttachments { get; }
 
-		// @property (readwrite, nonatomic) BOOL threadgroupSizeMatchesTileSize;
 		[Export ("threadgroupSizeMatchesTileSize")]
 		bool ThreadgroupSizeMatchesTileSize { get; set; }
 
-		// @property (readwrite, nonatomic) NSUInteger maxTotalThreadsPerThreadgroup;
 		[Export ("maxTotalThreadsPerThreadgroup")]
 		nuint MaxTotalThreadsPerThreadgroup { get; set; }
 
-		// @property (readwrite, nonatomic) MTLSize requiredThreadsPerThreadgroup;
 		[Export ("requiredThreadsPerThreadgroup", ArgumentSemantic.Assign)]
 		MTLSize RequiredThreadsPerThreadgroup { get; set; }
 
-		// @property (copy, nonatomic, null_resettable) MTL4StaticLinkingDescriptor * _Null_unspecified staticLinkingDescriptor;
 		[NullAllowed, Export ("staticLinkingDescriptor", ArgumentSemantic.Copy)]
 		MTL4StaticLinkingDescriptor StaticLinkingDescriptor { get; set; }
 
-		// @property (readwrite, nonatomic) BOOL supportBinaryLinking;
 		[Export ("supportBinaryLinking")]
 		bool SupportBinaryLinking { get; set; }
 
-		// -(void)reset;
 		[Export ("reset")]
 		void Reset ();
 	}
 
-	// @interface MTLFunctionReflection : NSObject
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTLFunctionReflection
 	{
-		// @property (readonly) NSArray<id<MTLBinding>> * _Nonnull bindings;
 		[Export ("bindings")]
-		MTLBinding[] Bindings { get; }
+		IMTLBinding[] Bindings { get; }
 	}
 
-	// @interface MTLLogicalToPhysicalColorAttachmentMap : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTLLogicalToPhysicalColorAttachmentMap : NSCopying
 	{
-		// -(void)setPhysicalIndex:(NSUInteger)physicalIndex forLogicalIndex:(NSUInteger)logicalIndex;
 		[Export ("setPhysicalIndex:forLogicalIndex:")]
 		void SetPhysicalIndex (nuint physicalIndex, nuint logicalIndex);
 
-		// -(NSUInteger)getPhysicalIndexForLogicalIndex:(NSUInteger)logicalIndex;
 		[Export ("getPhysicalIndexForLogicalIndex:")]
-		nuint GetPhysicalIndexForLogicalIndex (nuint logicalIndex);
+		nuint GetPhysicalIndex (nuint logicalIndex);
 
-		// -(void)reset;
 		[Export ("reset")]
 		void Reset ();
 	}
-	// @interface MTLResourceViewPoolDescriptor : NSObject <NSCopying>
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTLResourceViewPoolDescriptor : NSCopying
 	{
-		// @property (readwrite, nonatomic) NSUInteger resourceViewCount;
 		[Export ("resourceViewCount")]
 		nuint ResourceViewCount { get; set; }
 
-		// @property (copy, nonatomic) NSString * _Nullable label;
 		[NullAllowed, Export ("label")]
 		string Label { get; set; }
 	}
 
-
-	// @interface MTLTensorDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTLTensorDescriptor : NSCopying
 	{
-		// @property (readwrite, copy, nonatomic) MTLTensorExtents * _Nonnull dimensions;
 		[Export ("dimensions", ArgumentSemantic.Copy)]
 		MTLTensorExtents Dimensions { get; set; }
 
-		// @property (readwrite, copy, nonatomic) MTLTensorExtents * _Nonnull strides;
 		[Export ("strides", ArgumentSemantic.Copy)]
 		MTLTensorExtents Strides { get; set; }
 
-		// @property (readwrite, nonatomic) MTLTensorDataType dataType;
 		[Export ("dataType", ArgumentSemantic.Assign)]
 		MTLTensorDataType DataType { get; set; }
 
-		// @property (readwrite, nonatomic) MTLTensorUsage usage;
 		[Export ("usage", ArgumentSemantic.Assign)]
 		MTLTensorUsage Usage { get; set; }
 
-		// @property (readwrite, nonatomic) MTLResourceOptions resourceOptions;
 		[Export ("resourceOptions", ArgumentSemantic.Assign)]
 		MTLResourceOptions ResourceOptions { get; set; }
 
-		// @property (readwrite, nonatomic) MTLCPUCacheMode cpuCacheMode;
 		[Export ("cpuCacheMode", ArgumentSemantic.Assign)]
 		MTLCPUCacheMode CpuCacheMode { get; set; }
 
-		// @property (readwrite, nonatomic) MTLStorageMode storageMode;
 		[Export ("storageMode", ArgumentSemantic.Assign)]
 		MTLStorageMode StorageMode { get; set; }
 
-		// @property (readwrite, nonatomic) MTLHazardTrackingMode hazardTrackingMode;
 		[Export ("hazardTrackingMode", ArgumentSemantic.Assign)]
 		MTLHazardTrackingMode HazardTrackingMode { get; set; }
 	}
-	// @interface MTLTensorExtents : NSObject
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTLTensorExtents
 	{
-		// -(instancetype _Nullable)initWithRank:(NSUInteger)rank values:(const NSInteger * _Nullable)values;
 		[Export ("initWithRank:values:")]
-		unsafe NativeHandle Constructor (nuint rank, [NullAllowed] nint* values);
+		NativeHandle Constructor (nuint rank, [CARRAY] [NullAllowed] nint[] values);
 
-		// @property (readonly) NSUInteger rank;
 		[Export ("rank")]
 		nuint Rank { get; }
 
-		// -(NSInteger)extentAtDimensionIndex:(NSUInteger)dimensionIndex;
 		[Export ("extentAtDimensionIndex:")]
-		nint ExtentAtDimensionIndex (nuint dimensionIndex);
+		nint GetExtent (nuint dimensionIndex);
 	}
 
-	// @interface MTLTensorReferenceType : MTLType
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (MTLType))]
 	interface MTLTensorReferenceType
 	{
-		// @property (readonly) MTLTensorDataType tensorDataType;
 		[Export ("tensorDataType")]
 		MTLTensorDataType TensorDataType { get; }
 
-		// @property (readonly) MTLDataType indexType;
 		[Export ("indexType")]
 		MTLDataType IndexType { get; }
 
-		// @property (readonly) MTLTensorExtents * _Nullable dimensions;
 		[NullAllowed, Export ("dimensions")]
 		MTLTensorExtents Dimensions { get; }
 
-		// @property (readonly) MTLBindingAccess access;
 		[Export ("access")]
 		MTLBindingAccess Access { get; }
 	}
 
-
-	// @interface MTLTextureViewDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTLTextureViewDescriptor : NSCopying
 	{
-		// @property (readwrite, nonatomic) MTLPixelFormat pixelFormat;
 		[Export ("pixelFormat", ArgumentSemantic.Assign)]
 		MTLPixelFormat PixelFormat { get; set; }
 
-		// @property (readwrite, nonatomic) MTLTextureType textureType;
 		[Export ("textureType", ArgumentSemantic.Assign)]
 		MTLTextureType TextureType { get; set; }
 
-		// @property (readwrite, nonatomic) NSRange levelRange;
 		[Export ("levelRange", ArgumentSemantic.Assign)]
 		NSRange LevelRange { get; set; }
 
-		// @property (readwrite, nonatomic) NSRange sliceRange;
 		[Export ("sliceRange", ArgumentSemantic.Assign)]
 		NSRange SliceRange { get; set; }
 
-		// @property (readwrite, nonatomic) MTLTextureSwizzleChannels swizzle;
 		[Export ("swizzle", ArgumentSemantic.Assign)]
 		MTLTextureSwizzleChannels Swizzle { get; set; }
 	}

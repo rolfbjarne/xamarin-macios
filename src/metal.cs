@@ -7470,7 +7470,6 @@ namespace Metal {
 	interface IMTL4ArgumentTable {}
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	[BaseType (typeof (NSObject))]
 	interface MTL4ArgumentTable
 	{
 		[Abstract]
@@ -7506,7 +7505,6 @@ namespace Metal {
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	[BaseType (typeof (NSObject))]
 	interface MTL4BinaryFunction
 	{
 		[Abstract]
@@ -7526,7 +7524,6 @@ namespace Metal {
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	[BaseType (typeof (NSObject))]
 	interface MTL4CommandAllocator
 	{
 		[Abstract]
@@ -7550,7 +7547,6 @@ namespace Metal {
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	[BaseType (typeof (NSObject))]
 	interface MTL4CommandBuffer
 	{
 		[Abstract]
@@ -7621,7 +7617,6 @@ namespace Metal {
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	[BaseType (typeof (NSObject))]
 	interface MTL4CommandEncoder
 	{
 		[Abstract]
@@ -7673,7 +7668,6 @@ namespace Metal {
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	[BaseType (typeof (NSObject))]
 	interface MTL4CommandQueue
 	{
 		[Abstract]
@@ -7745,7 +7739,6 @@ namespace Metal {
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	[BaseType (typeof (NSObject))]
 	interface MTL4CommitFeedback
 	{
 		[Abstract]
@@ -7765,7 +7758,6 @@ namespace Metal {
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	[BaseType (typeof (NSObject))]
 	interface MTL4CompilerTask
 	{
 		[Abstract]
@@ -7785,7 +7777,6 @@ namespace Metal {
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	[BaseType (typeof (NSObject))]
 	interface MTL4CompilerTask
 	{
 		[Abstract]
@@ -7805,7 +7796,7 @@ namespace Metal {
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	interface MTL4ComputeCommandEncoder : IMTL4CommandEncoder
+	interface MTL4ComputeCommandEncoder : MTL4CommandEncoder
 	{
 		[Abstract]
 		[Export ("stages")]
@@ -7949,14 +7940,13 @@ namespace Metal {
 
 		[Abstract]
 		[Export ("writeTimestampWithGranularity:intoHeap:atIndex:")]
-		void WriteTimestamp (MTL4TimestampGranularity granularity, MTL4CounterHeap counterHeap, nuint index);
+		void WriteTimestamp (MTL4TimestampGranularity granularity, IMTL4CounterHeap counterHeap, nuint index);
 	}
 
 	interface IMTL4CounterHeap {}
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	[BaseType (typeof (NSObject))]
 	interface MTL4CounterHeap
 	{
 		[Abstract]
@@ -7985,279 +7975,230 @@ namespace Metal {
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	interface MTL4MachineLearningCommandEncoder : IMTL4CommandEncoder
+	interface MTL4MachineLearningCommandEncoder : MTL4CommandEncoder
 	{
-		// @required -(void)setPipelineState:(id<MTL4MachineLearningPipelineState> _Nonnull)pipelineState;
 		[Abstract]
 		[Export ("setPipelineState:")]
-		void SetPipelineState (MTL4MachineLearningPipelineState pipelineState);
+		void SetPipelineState (IMTL4MachineLearningPipelineState pipelineState);
 
-		// @required -(void)setArgumentTable:(id<MTL4ArgumentTable> _Nonnull)argumentTable;
 		[Abstract]
 		[Export ("setArgumentTable:")]
-		void SetArgumentTable (MTL4ArgumentTable argumentTable);
+		void SetArgumentTable (IMTL4ArgumentTable argumentTable);
 
-		// @required -(void)dispatchNetworkWithIntermediatesHeap:(id<MTLHeap> _Nonnull)heap;
 		[Abstract]
 		[Export ("dispatchNetworkWithIntermediatesHeap:")]
-		void DispatchNetworkWithIntermediatesHeap (MTLHeap heap);
+		void DispatchNetwork (IMTLHeap intermediatesHeap);
 	}
 
 	interface IMTL4MachineLearningPipelineState {}
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	[BaseType (typeof (NSObject))]
-	interface MTL4MachineLearningPipelineState : IMTLAllocation
+	interface MTL4MachineLearningPipelineState : MTLAllocation
 	{
-		// @required @property (readonly) NSString * _Nullable label;
 		[Abstract]
 		[NullAllowed, Export ("label")]
 		string Label { get; }
 
-		// @required @property (readonly) id<MTLDevice> _Nonnull device;
 		[Abstract]
 		[Export ("device")]
-		MTLDevice Device { get; }
+		IMTLDevice Device { get; }
 
-		// @required @property (readonly) MTL4MachineLearningPipelineReflection * _Nullable reflection;
 		[Abstract]
 		[NullAllowed, Export ("reflection")]
 		MTL4MachineLearningPipelineReflection Reflection { get; }
 
-		// @required @property (readonly) NSUInteger intermediatesHeapSize;
 		[Abstract]
 		[Export ("intermediatesHeapSize")]
 		nuint IntermediatesHeapSize { get; }
 	}
 
-
 	interface IMTL4PipelineDataSetSerializer {}
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	[BaseType (typeof (NSObject))]
 	interface MTL4PipelineDataSetSerializer
 	{
-		// @required -(BOOL)serializeAsArchiveAndFlushToURL:(NSURL * _Nonnull)url error:(NSError * _Nullable * _Nullable)error;
 		[Abstract]
 		[Export ("serializeAsArchiveAndFlushToURL:error:")]
-		bool SerializeAsArchiveAndFlushToURL (NSUrl url, [NullAllowed] out NSError error);
+		bool SerializeAsArchiveAndFlush (NSUrl url, [NullAllowed] out NSError error);
 
-		// @required -(NSData * _Nullable)serializeAsPipelinesScriptWithError:(NSError * _Nullable * _Nullable)error;
 		[Abstract]
 		[Export ("serializeAsPipelinesScriptWithError:")]
 		[return: NullAllowed]
-		NSData SerializeAsPipelinesScriptWithError ([NullAllowed] out NSError error);
+		NSData SerializeAsPipelinesScript ([NullAllowed] out NSError error);
 	}
+
 	interface IMTL4RenderCommandEncoder {}
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	interface MTL4RenderCommandEncoder : IMTL4CommandEncoder
+	interface MTL4RenderCommandEncoder : MTL4CommandEncoder
 	{
-		// @required @property (readonly) NSUInteger tileWidth;
 		[Abstract]
 		[Export ("tileWidth")]
 		nuint TileWidth { get; }
 
-		// @required @property (readonly) NSUInteger tileHeight;
 		[Abstract]
 		[Export ("tileHeight")]
 		nuint TileHeight { get; }
 
-		// @required -(void)setColorAttachmentMap:(MTLLogicalToPhysicalColorAttachmentMap * _Nonnull)mapping;
 		[Abstract]
 		[Export ("setColorAttachmentMap:")]
 		void SetColorAttachmentMap (MTLLogicalToPhysicalColorAttachmentMap mapping);
 
-		// @required -(void)setRenderPipelineState:(id<MTLRenderPipelineState> _Nonnull)pipelineState;
 		[Abstract]
 		[Export ("setRenderPipelineState:")]
-		void SetRenderPipelineState (MTLRenderPipelineState pipelineState);
+		void SetRenderPipelineState (IMTLRenderPipelineState pipelineState);
 
-		// @required -(void)setViewport:(MTLViewport)viewport;
 		[Abstract]
 		[Export ("setViewport:")]
 		void SetViewport (MTLViewport viewport);
 
-		// @required -(void)setViewports:(const MTLViewport * _Nonnull)viewports count:(NSUInteger)count;
 		[Abstract]
 		[Export ("setViewports:count:")]
-		void SetViewports (MTLViewport[] viewports, nuint count);
+		void SetViewports ([CARRAY] MTLViewport[] viewports, nuint count);
 
-		// @required -(void)setVertexAmplificationCount:(NSUInteger)count viewMappings:(const MTLVertexAmplificationViewMapping * _Nullable)viewMappings;
 		[Abstract]
 		[Export ("setVertexAmplificationCount:viewMappings:")]
-		unsafe void SetVertexAmplificationCount (nuint count, [NullAllowed] MTLVertexAmplificationViewMapping* viewMappings);
+		unsafe void SetVertexAmplificationCount (nuint count, [CARRAY?] [NullAllowed] MTLVertexAmplificationViewMapping* viewMappings);
 
-		// @required -(void)setCullMode:(MTLCullMode)cullMode;
 		[Abstract]
 		[Export ("setCullMode:")]
 		void SetCullMode (MTLCullMode cullMode);
 
-		// @required -(void)setDepthClipMode:(MTLDepthClipMode)depthClipMode;
 		[Abstract]
 		[Export ("setDepthClipMode:")]
 		void SetDepthClipMode (MTLDepthClipMode depthClipMode);
 
-		// @required -(void)setDepthBias:(float)depthBias slopeScale:(float)slopeScale clamp:(float)clamp;
 		[Abstract]
 		[Export ("setDepthBias:slopeScale:clamp:")]
 		void SetDepthBias (float depthBias, float slopeScale, float clamp);
 
-		// @required -(void)setScissorRect:(MTLScissorRect)rect;
 		[Abstract]
 		[Export ("setScissorRect:")]
 		void SetScissorRect (MTLScissorRect rect);
 
-		// @required -(void)setScissorRects:(const MTLScissorRect * _Nonnull)scissorRects count:(NSUInteger)count;
 		[Abstract]
 		[Export ("setScissorRects:count:")]
-		void SetScissorRects (MTLScissorRect[] scissorRects, nuint count);
+		void SetScissorRects ([CARRAY] MTLScissorRect[] scissorRects, nuint count);
 
-		// @required -(void)setTriangleFillMode:(MTLTriangleFillMode)fillMode;
 		[Abstract]
 		[Export ("setTriangleFillMode:")]
 		void SetTriangleFillMode (MTLTriangleFillMode fillMode);
 
-		// @required -(void)setBlendColorRed:(float)red green:(float)green blue:(float)blue alpha:(float)alpha;
 		[Abstract]
 		[Export ("setBlendColorRed:green:blue:alpha:")]
 		void SetBlendColorRed (float red, float green, float blue, float alpha);
 
-		// @required -(void)setDepthStencilState:(id<MTLDepthStencilState> _Nullable)depthStencilState;
 		[Abstract]
 		[Export ("setDepthStencilState:")]
-		void SetDepthStencilState ([NullAllowed] MTLDepthStencilState depthStencilState);
+		void SetDepthStencilState ([NullAllowed] IMTLDepthStencilState depthStencilState);
 
-		// @required -(void)setStencilReferenceValue:(uint32_t)referenceValue;
 		[Abstract]
 		[Export ("setStencilReferenceValue:")]
 		void SetStencilReferenceValue (uint referenceValue);
 
-		// @required -(void)setStencilFrontReferenceValue:(uint32_t)frontReferenceValue backReferenceValue:(uint32_t)backReferenceValue;
 		[Abstract]
 		[Export ("setStencilFrontReferenceValue:backReferenceValue:")]
 		void SetStencilFrontReferenceValue (uint frontReferenceValue, uint backReferenceValue);
 
-		// @required -(void)setVisibilityResultMode:(MTLVisibilityResultMode)mode offset:(NSUInteger)offset;
 		[Abstract]
 		[Export ("setVisibilityResultMode:offset:")]
 		void SetVisibilityResultMode (MTLVisibilityResultMode mode, nuint offset);
 
-		// @required -(void)setColorStoreAction:(MTLStoreAction)storeAction atIndex:(NSUInteger)colorAttachmentIndex;
 		[Abstract]
 		[Export ("setColorStoreAction:atIndex:")]
 		void SetColorStoreAction (MTLStoreAction storeAction, nuint colorAttachmentIndex);
 
-		// @required -(void)setDepthStoreAction:(MTLStoreAction)storeAction;
 		[Abstract]
 		[Export ("setDepthStoreAction:")]
 		void SetDepthStoreAction (MTLStoreAction storeAction);
 
-		// @required -(void)setStencilStoreAction:(MTLStoreAction)storeAction;
 		[Abstract]
 		[Export ("setStencilStoreAction:")]
 		void SetStencilStoreAction (MTLStoreAction storeAction);
 
-		// @required -(void)drawPrimitives:(MTLPrimitiveType)primitiveType vertexStart:(NSUInteger)vertexStart vertexCount:(NSUInteger)vertexCount;
 		[Abstract]
 		[Export ("drawPrimitives:vertexStart:vertexCount:")]
 		void DrawPrimitives (MTLPrimitiveType primitiveType, nuint vertexStart, nuint vertexCount);
 
-		// @required -(void)drawPrimitives:(MTLPrimitiveType)primitiveType vertexStart:(NSUInteger)vertexStart vertexCount:(NSUInteger)vertexCount instanceCount:(NSUInteger)instanceCount;
 		[Abstract]
 		[Export ("drawPrimitives:vertexStart:vertexCount:instanceCount:")]
 		void DrawPrimitives (MTLPrimitiveType primitiveType, nuint vertexStart, nuint vertexCount, nuint instanceCount);
 
-		// @required -(void)drawPrimitives:(MTLPrimitiveType)primitiveType vertexStart:(NSUInteger)vertexStart vertexCount:(NSUInteger)vertexCount instanceCount:(NSUInteger)instanceCount baseInstance:(NSUInteger)baseInstance;
 		[Abstract]
 		[Export ("drawPrimitives:vertexStart:vertexCount:instanceCount:baseInstance:")]
 		void DrawPrimitives (MTLPrimitiveType primitiveType, nuint vertexStart, nuint vertexCount, nuint instanceCount, nuint baseInstance);
 
-		// @required -(void)drawIndexedPrimitives:(MTLPrimitiveType)primitiveType indexCount:(NSUInteger)indexCount indexType:(MTLIndexType)indexType indexBuffer:(uint64_t)indexBuffer indexBufferLength:(NSUInteger)indexBufferLength;
 		[Abstract]
 		[Export ("drawIndexedPrimitives:indexCount:indexType:indexBuffer:indexBufferLength:")]
 		void DrawIndexedPrimitives (MTLPrimitiveType primitiveType, nuint indexCount, MTLIndexType indexType, ulong indexBuffer, nuint indexBufferLength);
 
-		// @required -(void)drawIndexedPrimitives:(MTLPrimitiveType)primitiveType indexCount:(NSUInteger)indexCount indexType:(MTLIndexType)indexType indexBuffer:(uint64_t)indexBuffer indexBufferLength:(NSUInteger)indexBufferLength instanceCount:(NSUInteger)instanceCount;
 		[Abstract]
 		[Export ("drawIndexedPrimitives:indexCount:indexType:indexBuffer:indexBufferLength:instanceCount:")]
 		void DrawIndexedPrimitives (MTLPrimitiveType primitiveType, nuint indexCount, MTLIndexType indexType, ulong indexBuffer, nuint indexBufferLength, nuint instanceCount);
 
-		// @required -(void)drawIndexedPrimitives:(MTLPrimitiveType)primitiveType indexCount:(NSUInteger)indexCount indexType:(MTLIndexType)indexType indexBuffer:(uint64_t)indexBuffer indexBufferLength:(NSUInteger)indexBufferLength instanceCount:(NSUInteger)instanceCount baseVertex:(NSInteger)baseVertex baseInstance:(NSUInteger)baseInstance;
 		[Abstract]
 		[Export ("drawIndexedPrimitives:indexCount:indexType:indexBuffer:indexBufferLength:instanceCount:baseVertex:baseInstance:")]
 		void DrawIndexedPrimitives (MTLPrimitiveType primitiveType, nuint indexCount, MTLIndexType indexType, ulong indexBuffer, nuint indexBufferLength, nuint instanceCount, nint baseVertex, nuint baseInstance);
 
-		// @required -(void)drawPrimitives:(MTLPrimitiveType)primitiveType indirectBuffer:(uint64_t)indirectBuffer;
 		[Abstract]
 		[Export ("drawPrimitives:indirectBuffer:")]
 		void DrawPrimitives (MTLPrimitiveType primitiveType, ulong indirectBuffer);
 
-		// @required -(void)drawIndexedPrimitives:(MTLPrimitiveType)primitiveType indexType:(MTLIndexType)indexType indexBuffer:(uint64_t)indexBuffer indexBufferLength:(NSUInteger)indexBufferLength indirectBuffer:(uint64_t)indirectBuffer;
 		[Abstract]
 		[Export ("drawIndexedPrimitives:indexType:indexBuffer:indexBufferLength:indirectBuffer:")]
 		void DrawIndexedPrimitives (MTLPrimitiveType primitiveType, MTLIndexType indexType, ulong indexBuffer, nuint indexBufferLength, ulong indirectBuffer);
 
-		// @required -(void)executeCommandsInBuffer:(id<MTLIndirectCommandBuffer> _Nonnull)indirectCommandBuffer withRange:(NSRange)executionRange;
 		[Abstract]
 		[Export ("executeCommandsInBuffer:withRange:")]
 		void ExecuteCommandsInBuffer (IMTLIndirectCommandBuffer indirectCommandBuffer, NSRange executionRange);
 
-		// @required -(void)executeCommandsInBuffer:(id<MTLIndirectCommandBuffer> _Nonnull)indirectCommandBuffer indirectBuffer:(uint64_t)indirectRangeBuffer;
 		[Abstract]
 		[Export ("executeCommandsInBuffer:indirectBuffer:")]
 		void ExecuteCommandsInBuffer (IMTLIndirectCommandBuffer indirectCommandBuffer, ulong indirectRangeBuffer);
 
-		// @required -(void)setObjectThreadgroupMemoryLength:(NSUInteger)length atIndex:(NSUInteger)index;
 		[Abstract]
 		[Export ("setObjectThreadgroupMemoryLength:atIndex:")]
 		void SetObjectThreadgroupMemoryLength (nuint length, nuint index);
 
-		// @required -(void)drawMeshThreadgroups:(MTLSize)threadgroupsPerGrid threadsPerObjectThreadgroup:(MTLSize)threadsPerObjectThreadgroup threadsPerMeshThreadgroup:(MTLSize)threadsPerMeshThreadgroup;
 		[Abstract]
 		[Export ("drawMeshThreadgroups:threadsPerObjectThreadgroup:threadsPerMeshThreadgroup:")]
 		void DrawMeshThreadgroups (MTLSize threadgroupsPerGrid, MTLSize threadsPerObjectThreadgroup, MTLSize threadsPerMeshThreadgroup);
 
-		// @required -(void)drawMeshThreads:(MTLSize)threadsPerGrid threadsPerObjectThreadgroup:(MTLSize)threadsPerObjectThreadgroup threadsPerMeshThreadgroup:(MTLSize)threadsPerMeshThreadgroup;
 		[Abstract]
 		[Export ("drawMeshThreads:threadsPerObjectThreadgroup:threadsPerMeshThreadgroup:")]
 		void DrawMeshThreads (MTLSize threadsPerGrid, MTLSize threadsPerObjectThreadgroup, MTLSize threadsPerMeshThreadgroup);
 
-		// @required -(void)drawMeshThreadgroupsWithIndirectBuffer:(uint64_t)indirectBuffer threadsPerObjectThreadgroup:(MTLSize)threadsPerObjectThreadgroup threadsPerMeshThreadgroup:(MTLSize)threadsPerMeshThreadgroup;
 		[Abstract]
 		[Export ("drawMeshThreadgroupsWithIndirectBuffer:threadsPerObjectThreadgroup:threadsPerMeshThreadgroup:")]
-		void DrawMeshThreadgroupsWithIndirectBuffer (ulong indirectBuffer, MTLSize threadsPerObjectThreadgroup, MTLSize threadsPerMeshThreadgroup);
+		void DrawMeshThreadgroups (ulong indirectBuffer, MTLSize threadsPerObjectThreadgroup, MTLSize threadsPerMeshThreadgroup);
 
-		// @required -(void)dispatchThreadsPerTile:(MTLSize)threadsPerTile;
 		[Abstract]
 		[Export ("dispatchThreadsPerTile:")]
 		void DispatchThreadsPerTile (MTLSize threadsPerTile);
 
-		// @required -(void)setThreadgroupMemoryLength:(NSUInteger)length offset:(NSUInteger)offset atIndex:(NSUInteger)index;
 		[Abstract]
 		[Export ("setThreadgroupMemoryLength:offset:atIndex:")]
 		void SetThreadgroupMemoryLength (nuint length, nuint offset, nuint index);
 
-		// @required -(void)setArgumentTable:(id<MTL4ArgumentTable> _Nonnull)argumentTable atStages:(MTLRenderStages)stages;
 		[Abstract]
 		[Export ("setArgumentTable:atStages:")]
-		void SetArgumentTable (MTL4ArgumentTable argumentTable, MTLRenderStages stages);
+		void SetArgumentTable (IMTL4ArgumentTable argumentTable, MTLRenderStages stages);
 
-		// @required -(void)setFrontFacingWinding:(MTLWinding)frontFacingWinding;
 		[Abstract]
 		[Export ("setFrontFacingWinding:")]
 		void SetFrontFacingWinding (MTLWinding frontFacingWinding);
 
-		// @required -(void)writeTimestampWithGranularity:(MTL4TimestampGranularity)granularity afterStage:(MTLRenderStages)stage intoHeap:(id<MTL4CounterHeap> _Nonnull)counterHeap atIndex:(NSUInteger)index;
 		[Abstract]
 		[Export ("writeTimestampWithGranularity:afterStage:intoHeap:atIndex:")]
-		void WriteTimestampWithGranularity (MTL4TimestampGranularity granularity, MTLRenderStages stage, MTL4CounterHeap counterHeap, nuint index);
+		void WriteTimestamp (MTL4TimestampGranularity granularity, MTLRenderStages stage, IMTL4CounterHeap counterHeap, nuint index);
 	}
 
 	interface IMTLResourceViewPool {}
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	[BaseType (typeof (NSObject))]
 	interface MTLResourceViewPool
 	{
 		// @required @property (readonly, nonatomic) MTLResourceId baseResourceID;
@@ -8289,7 +8230,7 @@ namespace Metal {
 	interface IMTLTensor {}
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	interface MTLTensor : IMTLResource
+	interface MTLTensor : MTLResource
 	{
 		// @required @property (readonly) MTLResourceId gpuResourceID;
 		[Abstract]
@@ -8340,7 +8281,7 @@ namespace Metal {
 	interface IMTLTensorBinding {}
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	interface MTLTensorBinding : IMTLBinding
+	interface MTLTensorBinding : MTLBinding
 	{
 		// @required @property (readonly) MTLTensorDataType tensorDataType;
 		[Abstract]
@@ -8361,7 +8302,7 @@ namespace Metal {
 	interface IMTLTextureViewPool {}
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	interface MTLTextureViewPool : IMTLResourceViewPool
+	interface MTLTextureViewPool : MTLResourceViewPool
 	{
 		// @required -(MTLResourceId)setTextureView:(id<IMTLTexture> _Nonnull)texture atIndex:(NSUInteger)index;
 		[Abstract]
@@ -8464,7 +8405,7 @@ namespace Metal {
 	// @interface MTL4AccelerationStructureGeometryDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4AccelerationStructureGeometryDescriptor : INSCopying
+	interface MTL4AccelerationStructureGeometryDescriptor : NSCopying
 	{
 		// @property (nonatomic) NSUInteger intersectionFunctionTableOffset;
 		[Export ("intersectionFunctionTableOffset")]
@@ -8651,7 +8592,7 @@ namespace Metal {
 	// @interface MTL4ArgumentTableDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4ArgumentTableDescriptor : INSCopying
+	interface MTL4ArgumentTableDescriptor : NSCopying
 	{
 		// @property (readwrite, nonatomic) NSUInteger maxBufferBindCount;
 		[Export ("maxBufferBindCount")]
@@ -8680,7 +8621,7 @@ namespace Metal {
 	// @interface MTL4BinaryFunctionDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4BinaryFunctionDescriptor : INSCopying
+	interface MTL4BinaryFunctionDescriptor : NSCopying
 	{
 		// @property (readwrite, copy) NSString * _Nonnull name;
 		[Export ("name")]
@@ -8702,7 +8643,7 @@ namespace Metal {
 	// @interface MTL4CommandAllocatorDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4CommandAllocatorDescriptor : INSCopying
+	interface MTL4CommandAllocatorDescriptor : NSCopying
 	{
 		// @property (copy, nonatomic) NSString * _Nullable label;
 		[NullAllowed, Export ("label")]
@@ -8712,7 +8653,7 @@ namespace Metal {
 	// @interface MTL4CommandBufferOptions : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4CommandBufferOptions : INSCopying
+	interface MTL4CommandBufferOptions : NSCopying
 	{
 		// @property (readwrite, retain, nonatomic) id<MTLLogState> _Nullable logState;
 		[NullAllowed, Export ("logState", ArgumentSemantic.Retain)]
@@ -8722,7 +8663,7 @@ namespace Metal {
 	// @interface MTL4CommandQueueDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4CommandQueueDescriptor : INSCopying
+	interface MTL4CommandQueueDescriptor : NSCopying
 	{
 		// @property (copy, nonatomic) NSString * _Nullable label;
 		[NullAllowed, Export ("label")]
@@ -8745,7 +8686,7 @@ namespace Metal {
 	// @interface MTL4CompilerDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4CompilerDescriptor : INSCopying
+	interface MTL4CompilerDescriptor : NSCopying
 	{
 		// @property (copy, nonatomic) NSString * _Nullable label;
 		[NullAllowed, Export ("label")]
@@ -8760,7 +8701,7 @@ namespace Metal {
 	// @interface MTL4CompilerTaskOptions : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4CompilerTaskOptions : INSCopying
+	interface MTL4CompilerTaskOptions : NSCopying
 	{
 		// @property (copy, nonatomic) NSArray<id<MTL4Archive>> * _Nullable lookupArchives;
 		[NullAllowed, Export ("lookupArchives", ArgumentSemantic.Copy)]
@@ -8809,7 +8750,7 @@ namespace Metal {
 	// @interface MTL4CounterHeapDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4CounterHeapDescriptor : INSCopying
+	interface MTL4CounterHeapDescriptor : NSCopying
 	{
 		// @property (nonatomic) MTL4CounterHeapType type;
 		[Export ("type", ArgumentSemantic.Assign)]
@@ -8917,7 +8858,7 @@ namespace Metal {
 	// @interface MTL4LibraryDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4LibraryDescriptor : INSCopying
+	interface MTL4LibraryDescriptor : NSCopying
 	{
 		// @property (copy, atomic) NSString * _Nullable source;
 		[NullAllowed, Export ("source")]
@@ -8949,7 +8890,7 @@ namespace Metal {
 	// @interface MTL4LinkedFunctions : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4LinkedFunctions : INSCopying
+	interface MTL4LinkedFunctions : NSCopying
 	{
 		// @property (readwrite, copy, nonatomic) NSArray<MTL4FunctionDescriptor *> * _Nullable functionDescriptors;
 		[NullAllowed, Export ("functionDescriptors", ArgumentSemantic.Copy)]
@@ -9120,7 +9061,7 @@ namespace Metal {
 	// @interface MTL4PipelineDataSetSerializerDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4PipelineDataSetSerializerDescriptor : INSCopying
+	interface MTL4PipelineDataSetSerializerDescriptor : NSCopying
 	{
 		// @property (readwrite, nonatomic) MTL4PipelineDataSetSerializerConfiguration configuration;
 		[Export ("configuration", ArgumentSemantic.Assign)]
@@ -9129,7 +9070,7 @@ namespace Metal {
 	// @interface MTL4PipelineDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4PipelineDescriptor : INSCopying
+	interface MTL4PipelineDescriptor : NSCopying
 	{
 		// @property (copy, nonatomic) NSString * _Nullable label;
 		[NullAllowed, Export ("label")]
@@ -9142,7 +9083,7 @@ namespace Metal {
 	// @interface MTL4PipelineOptions : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4PipelineOptions : INSCopying
+	interface MTL4PipelineOptions : NSCopying
 	{
 		// @property (readwrite, nonatomic) MTLShaderValidation shaderValidation;
 		[Export ("shaderValidation", ArgumentSemantic.Assign)]
@@ -9156,7 +9097,7 @@ namespace Metal {
 	// @interface MTL4PipelineStageDynamicLinkingDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4PipelineStageDynamicLinkingDescriptor : INSCopying
+	interface MTL4PipelineStageDynamicLinkingDescriptor : NSCopying
 	{
 		// @property (readwrite, nonatomic) NSUInteger maxCallStackDepth;
 		[Export ("maxCallStackDepth")]
@@ -9204,7 +9145,7 @@ namespace Metal {
 	// @interface MTL4RenderPassDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4RenderPassDescriptor : INSCopying
+	interface MTL4RenderPassDescriptor : NSCopying
 	{
 		// @property (readonly) MTLRenderPassColorAttachmentDescriptorArray * _Nonnull colorAttachments;
 		[Export ("colorAttachments")]
@@ -9277,7 +9218,7 @@ namespace Metal {
 	// @interface MTL4RenderPipelineBinaryFunctionsDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4RenderPipelineBinaryFunctionsDescriptor : INSCopying
+	interface MTL4RenderPipelineBinaryFunctionsDescriptor : NSCopying
 	{
 		// @property (copy, nonatomic) NSArray<id<MTL4BinaryFunction>> * _Nullable vertexAdditionalBinaryFunctions;
 		[NullAllowed, Export ("vertexAdditionalBinaryFunctions", ArgumentSemantic.Copy)]
@@ -9307,7 +9248,7 @@ namespace Metal {
 	// @interface MTL4RenderPipelineColorAttachmentDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4RenderPipelineColorAttachmentDescriptor : INSCopying
+	interface MTL4RenderPipelineColorAttachmentDescriptor : NSCopying
 	{
 		// @property (nonatomic) MTLPixelFormat pixelFormat;
 		[Export ("pixelFormat", ArgumentSemantic.Assign)]
@@ -9352,7 +9293,7 @@ namespace Metal {
 	// @interface MTL4RenderPipelineColorAttachmentDescriptorArray : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4RenderPipelineColorAttachmentDescriptorArray : INSCopying
+	interface MTL4RenderPipelineColorAttachmentDescriptorArray : NSCopying
 	{
 		// -(MTL4RenderPipelineColorAttachmentDescriptor * _Nonnull)objectAtIndexedSubscript:(NSUInteger)attachmentIndex;
 		[Export ("objectAtIndexedSubscript:")]
@@ -9442,7 +9383,7 @@ namespace Metal {
 	// @interface MTL4RenderPipelineDynamicLinkingDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4RenderPipelineDynamicLinkingDescriptor : INSCopying
+	interface MTL4RenderPipelineDynamicLinkingDescriptor : NSCopying
 	{
 		// @property (readonly, nonatomic) MTL4PipelineStageDynamicLinkingDescriptor * _Nonnull vertexLinkingDescriptor;
 		[Export ("vertexLinkingDescriptor")]
@@ -9486,7 +9427,7 @@ namespace Metal {
 	// @interface MTL4StaticLinkingDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4StaticLinkingDescriptor : INSCopying
+	interface MTL4StaticLinkingDescriptor : NSCopying
 	{
 		// @property (readwrite, copy, nonatomic) NSArray<MTL4FunctionDescriptor *> * _Nullable functionDescriptors;
 		[NullAllowed, Export ("functionDescriptors", ArgumentSemantic.Copy)]
@@ -9571,7 +9512,7 @@ namespace Metal {
 	// @interface MTLLogicalToPhysicalColorAttachmentMap : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTLLogicalToPhysicalColorAttachmentMap : INSCopying
+	interface MTLLogicalToPhysicalColorAttachmentMap : NSCopying
 	{
 		// -(void)setPhysicalIndex:(NSUInteger)physicalIndex forLogicalIndex:(NSUInteger)logicalIndex;
 		[Export ("setPhysicalIndex:forLogicalIndex:")]
@@ -9588,7 +9529,7 @@ namespace Metal {
 	// @interface MTLResourceViewPoolDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTLResourceViewPoolDescriptor : INSCopying
+	interface MTLResourceViewPoolDescriptor : NSCopying
 	{
 		// @property (readwrite, nonatomic) NSUInteger resourceViewCount;
 		[Export ("resourceViewCount")]
@@ -9603,7 +9544,7 @@ namespace Metal {
 	// @interface MTLTensorDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTLTensorDescriptor : INSCopying
+	interface MTLTensorDescriptor : NSCopying
 	{
 		// @property (readwrite, copy, nonatomic) MTLTensorExtents * _Nonnull dimensions;
 		[Export ("dimensions", ArgumentSemantic.Copy)]
@@ -9681,7 +9622,7 @@ namespace Metal {
 	// @interface MTLTextureViewDescriptor : NSObject <NSCopying>
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTLTextureViewDescriptor : INSCopying
+	interface MTLTextureViewDescriptor : NSCopying
 	{
 		// @property (readwrite, nonatomic) MTLPixelFormat pixelFormat;
 		[Export ("pixelFormat", ArgumentSemantic.Assign)]

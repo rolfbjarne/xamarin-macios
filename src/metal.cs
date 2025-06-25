@@ -7867,7 +7867,7 @@ namespace Metal {
 
 		[Abstract]
 		[Export ("useResidencySets:count:")]
-		void UseResidencySets ([CARRAY] IMTLResidencySet[] residencySets, nuint count);
+		void UseResidencySets (/* C Array: IMTLResidencySet[] */ IntPtr residencySets, nuint count);
 
 		[Abstract]
 		[Export ("pushDebugGroup:")]
@@ -7953,11 +7953,11 @@ namespace Metal {
 
 		[Abstract]
 		[Export ("commit:count:")]
-		void Commit ([CARRAY] IMTL4CommandBuffer[] commandBuffers, nuint count);
+		void Commit (/* C Array: IMTL4CommandBuffer[] */ IntPtr commandBuffers, nuint count);
 
 		[Abstract]
 		[Export ("commit:count:options:")]
-		void Commit ([CARRAY] IMTL4CommandBuffer[] commandBuffers, nuint count, MTL4CommitOptions options);
+		void Commit (/* C Array: IMTL4CommandBuffer[] */ IntPtr commandBuffers, nuint count, MTL4CommitOptions options);
 
 		[Abstract]
 		[Export ("signalEvent:value:")]
@@ -7981,7 +7981,7 @@ namespace Metal {
 
 		[Abstract]
 		[Export ("addResidencySets:count:")]
-		void AddResidencySets ([CARRAY] MTLResidencySet[] residencySets, nuint count);
+		void AddResidencySets (/* C Array: MTLResidencySet[] */ IntPtr residencySets, nuint count);
 
 		[Abstract]
 		[Export ("removeResidencySet:")]
@@ -7989,23 +7989,23 @@ namespace Metal {
 
 		[Abstract]
 		[Export ("removeResidencySets:count:")]
-		void RemoveResidencySets ([CARRAY] IMTLResidencySet[] residencySets, nuint count);
+		void RemoveResidencySets (/* C Array: IMTLResidencySet[] */ IntPtr residencySets, nuint count);
 
 		[Abstract]
 		[Export ("updateTextureMappings:heap:operations:count:")]
-		void UpdateTextureMappings (IMTLTexture texture, [NullAllowed] IMTLHeap heap, [CARRAY] MTL4UpdateSparseTextureMappingOperation[] operations, nuint count);
+		void UpdateTextureMappings (IMTLTexture texture, [NullAllowed] IMTLHeap heap, /* C Array: MTL4UpdateSparseTextureMappingOperation[] */ IntPtr operations, nuint count);
 
 		[Abstract]
 		[Export ("copyTextureMappingsFromTexture:toTexture:operations:count:")]
-		void CopyTextureMappingsFromTexture (IMTLTexture sourceTexture, IMTLTexture destinationTexture, [CARRAY] MTL4CopySparseTextureMappingOperation[] operations, nuint count);
+		void CopyTextureMappingsFromTexture (IMTLTexture sourceTexture, IMTLTexture destinationTexture, /* C Array: MTL4CopySparseTextureMappingOperation[] */ IntPtr operations, nuint count);
 
 		[Abstract]
 		[Export ("updateBufferMappings:heap:operations:count:")]
-		void UpdateBufferMappings (IMTLBuffer buffer, [NullAllowed] IMTLHeap heap, [CARRAY] MTL4UpdateSparseBufferMappingOperation[] operations, nuint count);
+		void UpdateBufferMappings (IMTLBuffer buffer, [NullAllowed] IMTLHeap heap, /* C Array: MTL4UpdateSparseBufferMappingOperation[] */ IntPtr operations, nuint count);
 
 		[Abstract]
 		[Export ("copyBufferMappingsFromBuffer:toBuffer:operations:count:")]
-		void CopyBufferMappings (IMTLBuffer sourceBuffer, IMTLBuffer destinationBuffer, [CARRAY] MTL4CopySparseBufferMappingOperation[] operations, nuint count);
+		void CopyBufferMappings (IMTLBuffer sourceBuffer, IMTLBuffer destinationBuffer, /* C Array: MTL4CopySparseBufferMappingOperation[] */ IntPtr operations, nuint count);
 	}
 
 	interface IMTL4CommitFeedback {}
@@ -8437,11 +8437,11 @@ namespace Metal {
 
 		[Abstract]
 		[Export ("setViewports:count:")]
-		void SetViewports ([CARRAY] MTLViewport[] viewports, nuint count);
+		void SetViewports (/* C Array: MTLViewport[] */ IntPtr viewports, nuint count);
 
 		[Abstract]
 		[Export ("setVertexAmplificationCount:viewMappings:")]
-		unsafe void SetVertexAmplificationCount (nuint count, [CARRAY?] [NullAllowed] MTLVertexAmplificationViewMapping* viewMappings);
+		void SetVertexAmplificationCount (nuint count, /* C Array: [NullAllowed] MTLVertexAmplificationViewMapping[] */ IntPtr viewMappings);
 
 		[Abstract]
 		[Export ("setCullMode:")]
@@ -8461,7 +8461,7 @@ namespace Metal {
 
 		[Abstract]
 		[Export ("setScissorRects:count:")]
-		void SetScissorRects ([CARRAY] MTLScissorRect[] scissorRects, nuint count);
+		void SetScissorRects (/* C Array: MTLScissorRect[] */ IntPtr scissorRects, nuint count);
 
 		[Abstract]
 		[Export ("setTriangleFillMode:")]
@@ -9381,10 +9381,10 @@ namespace Metal {
 		MTLVisibilityResultType VisibilityResultType { get; set; }
 
 		[Export ("setSamplePositions:count:")]
-		void SetSamplePositions ([CARRAY] [NullAllowed] MTLSamplePosition positions, nuint count);
+		void SetSamplePositions (/* C Array: [NullAllowed] MTLSamplePosition [] */ IntPtr positions, nuint count);
 
 		[Export ("getSamplePositions:count:")]
-		nuint GetSamplePositions ([CARRAY] [NullAllowed] MTLSamplePosition* positions, nuint count);
+		nuint GetSamplePositions (/* C Array: [NullAllowed] MTLSamplePosition [] */ IntPtr positions, nuint count);
 
 		[Export ("supportColorAttachmentMapping")]
 		bool SupportColorAttachmentMapping { get; set; }
@@ -9676,7 +9676,7 @@ namespace Metal {
 	interface MTLTensorExtents
 	{
 		[Export ("initWithRank:values:")]
-		NativeHandle Constructor (nuint rank, [CARRAY] [NullAllowed] nint[] values);
+		NativeHandle Constructor (nuint rank, /* C Array: [NullAllowed] nint[] */ IntPtr values);
 
 		[Export ("rank")]
 		nuint Rank { get; }

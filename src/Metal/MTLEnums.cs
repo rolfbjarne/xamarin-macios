@@ -709,59 +709,59 @@ namespace Metal {
 		ASTC_12x12_LDR = 218,
 
 		[iOS (13, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_4x4_HDR = 222,
 		[iOS (13, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_5x4_HDR = 223,
 		[iOS (13, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_5x5_HDR = 224,
 		[iOS (13, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_6x5_HDR = 225,
 		[iOS (13, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_6x6_HDR = 226,
 		[iOS (13, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_8x5_HDR = 228,
 		[iOS (13, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_8x6_HDR = 229,
 		[iOS (13, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_8x8_HDR = 230,
 		[iOS (13, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_10x5_HDR = 231,
 		[iOS (13, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_10x6_HDR = 232,
 		[iOS (13, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_10x8_HDR = 233,
 		[iOS (13, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_10x10_HDR = 234,
 		[iOS (13, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_12x10_HDR = 235,
 		[iOS (13, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_12x12_HDR = 236,
 
@@ -823,7 +823,7 @@ namespace Metal {
 		[MacCatalyst (14, 0)]
 		Visible = 5,
 		[iOS (14, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (14, 0)]
 		Intersection = 6,
 		[Mac (13, 0), iOS (16, 0), TV (16, 0), MacCatalyst (16, 0)]
@@ -1266,13 +1266,17 @@ namespace Metal {
 		[iOS (15, 0), TV (15, 0), MacCatalyst (15, 0)] ULong4 = 88,
 		[MacCatalyst (14, 0)]
 
-		[iOS (14, 0), NoTV] VisibleFunctionTable = 115,
+		[iOS (14, 0), TV (16, 0)]
+		VisibleFunctionTable = 115,
 		[MacCatalyst (14, 0)]
-		[iOS (14, 0), NoTV] IntersectionFunctionTable = 116,
+		[iOS (14, 0), TV (16, 0)]
+		IntersectionFunctionTable = 116,
 		[MacCatalyst (14, 0)]
-		[iOS (14, 0), NoTV] PrimitiveAccelerationStructure = 117,
+		[iOS (14, 0), TV (16, 0)]
+		PrimitiveAccelerationStructure = 117,
 		[MacCatalyst (14, 0)]
-		[iOS (14, 0), NoTV] InstanceAccelerationStructure = 118,
+		[iOS (14, 0), TV (16, 0)]
+		InstanceAccelerationStructure = 118,
 
 		[iOS (17, 0), TV (17, 0), Mac (14, 0), MacCatalyst (17, 0)]
 		BFloat = 121,
@@ -1306,19 +1310,19 @@ namespace Metal {
 		[NoMac, TV (14, 5)] Imageblock = 17,
 
 		[iOS (14, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (14, 0)]
 		VisibleFunctionTable = 24,
 		[iOS (14, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (14, 0)]
 		PrimitiveAccelerationStructure = 25,
 		[iOS (14, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (14, 0)]
 		InstanceAccelerationStructure = 26,
 		[iOS (14, 0)]
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (14, 0)]
 		IntersectionFunctionTable = 27,
 	}
@@ -2032,7 +2036,7 @@ namespace Metal {
 	public enum MTLHeapType : long {
 		Automatic = 0,
 		Placement = 1,
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		Sparse = 2,
 	}
@@ -2141,7 +2145,7 @@ namespace Metal {
 		None = 0x0,
 		Refit = (1uL << 0),
 		PreferFastBuild = (1uL << 1),
-		[iOS (15, 0), MacCatalyst (15, 0)]
+		[iOS (15, 0), MacCatalyst (15, 0), TV (16, 0)]
 		ExtendedLimits = (1uL << 2),
 		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
 		PreferFastIntersection = (1uL << 4),
@@ -2217,7 +2221,7 @@ namespace Metal {
 	[Native]
 	public enum MTLFunctionOptions : ulong {
 		None = 0x0,
-		[NoTV]
+		[TV (16, 0)]
 		[MacCatalyst (14, 0)]
 		CompileToBinary = 1uL << 0,
 		[iOS (17, 0), TV (17, 0), MacCatalyst (17, 0), Mac (14, 0)]
@@ -2516,8 +2520,8 @@ namespace Metal {
 	[Native]
 	public enum MTL4PipelineDataSetSerializerConfiguration : long
 	{
-		Descriptors = 0x0,
-		Binaries = 0x1,
+		Descriptors = (1 << 0),
+		Binaries = (1 << 1),
 	}
 
 	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]

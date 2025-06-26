@@ -4340,6 +4340,11 @@ namespace Metal {
 		[Abstract (GenerateExtensionMethod = true)]
 		[Export ("setObjectThreadgroupMemoryLength:atIndex:")]
 		void SetObjectThreadgroupMemoryLength (nuint length, nuint index);
+
+		[Mac (13, 0), iOS (16, 0), TV (16, 0), MacCatalyst (16, 0)]
+		[Abstract]
+		[Export ("setColorAttachmentMap:")]
+		void SetColorAttachmentMap ([NullAllowed] MTLLogicalToPhysicalColorAttachmentMap mapping);
 	}
 
 	/// <summary>Configures a color attachment associated with a rendering pipeline.</summary>
@@ -4624,6 +4629,10 @@ namespace Metal {
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Export ("visibilityResultType", ArgumentSemantic.Assign)]
 		MTLVisibilityResultType VisibilityResultType { get; set; }
+
+		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
+		[Export ("supportColorAttachmentMapping")]
+		bool SupportColorAttachmentMapping { get; set; }
 	}
 
 
@@ -7788,10 +7797,6 @@ namespace Metal {
 		string Name { get; }
 
 		[Abstract]
-		[NullAllowed, Export ("reflection")]
-		MTL4BinaryFunctionReflection Reflection { get; }
-
-		[Abstract]
 		[Export ("functionType")]
 		MTLFunctionType FunctionType { get; }
 	}
@@ -7886,8 +7891,8 @@ namespace Metal {
 		void WriteTimestamp (IMTL4CounterHeap counterHeap, nuint index);
 
 		[Abstract]
-		[Export ("resolveCounterHeap:withRange:intoBuffer:atOffset:waitFence:updateFence:")]
-		void ResolveCounterHeap (IMTL4CounterHeap counterHeap, NSRange range, IMTLBuffer buffer, nuint alignedOffset, [NullAllowed] IMTLFence fenceToWait, [NullAllowed] IMTLFence fenceToUpdate);
+		[Export ("resolveCounterHeap:withRange:intoBuffer:waitFence:updateFence:")]
+		void ResolveCounterHeap (IMTL4CounterHeap counterHeap, NSRange range, MTL4BufferRange bufferRange, [NullAllowed] IMTLFence fenceToWait, [NullAllowed] IMTLFence fenceToUpdate);
 	}
 
 	interface IMTL4CommandEncoder {}
@@ -8020,6 +8025,7 @@ namespace Metal {
 	{
 		[Abstract]
 		[Export ("error")]
+		[NullAllowed]
 		NSError Error { get; }
 
 		[Abstract]
@@ -8167,10 +8173,6 @@ namespace Metal {
 		[Abstract]
 		[Export ("newMachineLearningPipelineStateWithDescriptor:completionHandler:")]
 		IMTL4CompilerTask CreateMachineLearningPipelineState (MTL4MachineLearningPipelineDescriptor descriptor, MTL4CreateMachineLearningPipelineStateCompletionHandler completionHandler);
-
-		[Abstract]
-		[Export ("cancel")]
-		void Cancel ();
 	}
 
 	interface IMTL4ComputeCommandEncoder {}
@@ -8426,7 +8428,7 @@ namespace Metal {
 
 		[Abstract]
 		[Export ("setColorAttachmentMap:")]
-		void SetColorAttachmentMap (MTLLogicalToPhysicalColorAttachmentMap mapping);
+		void SetColorAttachmentMap ([NullAllowed] MTLLogicalToPhysicalColorAttachmentMap mapping);
 
 		[Abstract]
 		[Export ("setRenderPipelineState:")]
@@ -8936,13 +8938,6 @@ namespace Metal {
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface MTL4BinaryFunctionReflection
-	{
-	}
-
-
-	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
-	[BaseType (typeof (NSObject))]
 	interface MTL4CommandAllocatorDescriptor : NSCopying
 	{
 		[NullAllowed, Export ("label")]
@@ -9033,8 +9028,8 @@ namespace Metal {
 		[Export ("type", ArgumentSemantic.Assign)]
 		MTL4CounterHeapType Type { get; set; }
 
-		[Export ("entryCount")]
-		nuint EntryCount { get; set; }
+		[Export ("count")]
+		nuint Count { get; set; }
 	}
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
@@ -9136,23 +9131,6 @@ namespace Metal {
 
 		[NullAllowed, Export ("library", ArgumentSemantic.Retain)]
 		IMTLLibrary Library { get; set; }
-	}
-
-	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
-	[BaseType (typeof (NSObject))]
-	interface MTL4LinkedFunctions : NSCopying
-	{
-		[NullAllowed, Export ("functionDescriptors", ArgumentSemantic.Copy)]
-		MTL4FunctionDescriptor[] FunctionDescriptors { get; set; }
-
-		[NullAllowed, Export ("binaryFunctions", ArgumentSemantic.Copy)]
-		IMTL4BinaryFunction[] BinaryFunctions { get; set; }
-
-		[NullAllowed, Export ("privateFunctionDescriptors", ArgumentSemantic.Copy)]
-		MTL4FunctionDescriptor[] PrivateFunctionDescriptors { get; set; }
-
-		[NullAllowed, Export ("groups", ArgumentSemantic.Copy)]
-		NSDictionary<NSString, NSArray<MTL4FunctionDescriptor>> Groups { get; set; }
 	}
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]

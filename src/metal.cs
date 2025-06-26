@@ -1988,7 +1988,8 @@ namespace Metal {
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Abstract]
-		[NullAllowed, Export ("newCommandAllocator")]
+		[Export ("newCommandAllocator")]
+		[return: NullAllowed]
 		IMTL4CommandAllocator CreateCommandAllocator ();
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
@@ -1999,7 +2000,8 @@ namespace Metal {
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Abstract]
-		[NullAllowed, Export ("newMTL4CommandQueue")]
+		[Export ("newMTL4CommandQueue")]
+		[return: NullAllowed]
 		IMTL4CommandQueue CreateMTL4CommandQueue ();
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
@@ -2010,7 +2012,8 @@ namespace Metal {
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Abstract]
-		[NullAllowed, Export ("newCommandBuffer")]
+		[Export ("newCommandBuffer")]
+		[return: NullAllowed]
 		IMTL4CommandBuffer CreateCommandBuffer ();
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
@@ -2062,7 +2065,6 @@ namespace Metal {
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Abstract]
 		[Export ("queryTimestampFrequency")]
-		[Verify (MethodToProperty)]
 		ulong QueryTimestampFrequency { get; }
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
@@ -2877,7 +2879,7 @@ namespace Metal {
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Abstract]
 		[Export ("newRenderPipelineDescriptorForSpecialization")]
-		IMTL4PipelineDescriptor CreateRenderPipelineDescriptorForSpecialization ();
+		MTL4PipelineDescriptor CreateRenderPipelineDescriptorForSpecialization ();
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Abstract]
@@ -4971,7 +4973,7 @@ namespace Metal {
 		[Export ("shaderValidation")]
 		MTLShaderValidation ShaderValidation { get; set; }
 
-		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0))]
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
 		[Export ("requiredThreadsPerThreadgroup", ArgumentSemantic.Assign)]
 		MTLSize RequiredThreadsPerThreadgroup { get; set; }
 	}
@@ -7854,11 +7856,13 @@ namespace Metal {
 		IMTL4RenderCommandEncoder GetRenderCommandEncoder (MTL4RenderPassDescriptor descriptor, MTL4RenderEncoderOptions options);
 
 		[Abstract]
-		[NullAllowed, Export ("computeCommandEncoder")]
+		[Export ("computeCommandEncoder")]
+		[return: NullAllowed]
 		IMTL4ComputeCommandEncoder GetComputeCommandEncoder ();
 
 		[Abstract]
-		[NullAllowed, Export ("machineLearningCommandEncoder")]
+		[Export ("machineLearningCommandEncoder")]
+		[return: NullAllowed]
 		IMTL4MachineLearningCommandEncoder GetMachineLearningCommandEncoder ();
 
 		[Abstract]
@@ -8046,19 +8050,16 @@ namespace Metal {
 		void WaitUntilCompleted ();
 	}
 
-	interface IMTL4Compiler {}
-
 	delegate void MTLCreateLibraryCompletionHandler ([NullAllowed] IMTLLibrary library, [NullAllowed] NSError error);
-
 	delegate void MTLCreateRenderPipelineStateCompletionHandler ([NullAllowed] IMTLRenderPipelineState renderPipelineState, [NullAllowed] NSError error);
-
 	delegate void MTLCreateRenderPipelineStateWithReflectionCompletionHandler ([NullAllowed] IMTLRenderPipelineState renderPipelineState, [NullAllowed] MTLRenderPipelineReflection reflection, [NullAllowed] NSError error);
-
 	delegate void MTLCreateComputePipelineStateCompletionHandler ([NullAllowed] IMTLComputePipelineState computePipelineState, [NullAllowed] NSError error);
+	delegate void MTLCreateComputePipelineStateWithReflectionCompletionHandler ([NullAllowed] IMTLComputePipelineState computePipelineState, [NullAllowed] MTLComputePipelineReflection reflection, [NullAllowed] NSError error);
+	delegate void MTLCreateDynamicLibraryCompletionHandler ([NullAllowed] IMTLDynamicLibrary library, [NullAllowed] NSError error);
+	delegate void MTL4CreateBinaryFunctionCompletionHandler ([NullAllowed] IMTL4BinaryFunction function, [NullAllowed] NSError error);
+	delegate void MTL4CreateMachineLearningPipelineStateCompletionHandler ([NullAllowed] IMTL4MachineLearningPipelineState mlPipelineState, [NullAllowed] NSError error);
 
-	delegate void MTLCreateComputePipelineStateWithReflectionCompletionHandler ([NullAllowed] IMTLComputePipelineState computePipelineState, NullAllowed] MTLComputePipelineReflection reflection, [NullAllowed] NSError error);
-
-	delegate void MTLCreateDynamicLibraryCompletionHandler ([NullAllowed] IMTLDynamicLibrary library, [NullAllowed] NSErrorerror);
+	interface IMTL4Compiler {}
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
@@ -8152,7 +8153,7 @@ namespace Metal {
 
 		[Abstract]
 		[Export ("newRenderPipelineStateBySpecializationWithDescriptor:pipeline:completionHandler:")]
-		IMTL4CompilerTask CreateRenderPipelineStateBySpecialization (MTL4PipelineDescriptor descriptor, MTLRenderPipelineState pipeline, MTLCreateRenderPipelineStateCompletionHandler completionHandler);
+		IMTL4CompilerTask CreateRenderPipelineStateBySpecialization (MTL4PipelineDescriptor descriptor, IMTLRenderPipelineState pipeline, MTLCreateRenderPipelineStateCompletionHandler completionHandler);
 
 		[Abstract]
 		[Export ("newBinaryFunctionWithDescriptor:compilerTaskOptions:completionHandler:")]
@@ -8677,7 +8678,7 @@ namespace Metal {
 
 		[Abstract]
 		[Export ("setTextureView:descriptor:atIndex:")]
-		MTLResourceId SetTextureView (IMTLTexture texture, IMTLTextureViewDescriptor descriptor, nuint index);
+		MTLResourceId SetTextureView (IMTLTexture texture, MTLTextureViewDescriptor descriptor, nuint index);
 
 		[Abstract]
 		[Export ("setTextureViewFromBuffer:descriptor:offset:bytesPerRow:atIndex:")]
@@ -8967,6 +8968,8 @@ namespace Metal {
 		DispatchQueue FeedbackQueue { get; set; }
 	}
 
+	delegate void MTL4CommitFeedbackHandler (IMTL4CommitFeedback commitFeedback);
+
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
 	interface MTL4CommitOptions
@@ -8983,7 +8986,7 @@ namespace Metal {
 		string Label { get; set; }
 
 		[NullAllowed, Export ("pipelineDataSetSerializer", ArgumentSemantic.Strong)]
-		MTL4PipelineDataSetSerializer PipelineDataSetSerializer { get; set; }
+		IMTL4PipelineDataSetSerializer PipelineDataSetSerializer { get; set; }
 	}
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
@@ -9132,7 +9135,7 @@ namespace Metal {
 		string Name { get; set; }
 
 		[NullAllowed, Export ("library", ArgumentSemantic.Retain)]
-		MTLLibrary Library { get; set; }
+		IMTLLibrary Library { get; set; }
 	}
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
@@ -9404,10 +9407,10 @@ namespace Metal {
 		IMTL4BinaryFunction[] TileAdditionalBinaryFunctions { get; set; }
 
 		[NullAllowed, Export ("objectAdditionalBinaryFunctions", ArgumentSemantic.Copy)]
-		MTL4BinaryFunction[] ObjectAdditionalBinaryFunctions { get; set; }
+		IMTL4BinaryFunction[] ObjectAdditionalBinaryFunctions { get; set; }
 
 		[NullAllowed, Export ("meshAdditionalBinaryFunctions", ArgumentSemantic.Copy)]
-		MTL4BinaryFunction[] MeshAdditionalBinaryFunctions { get; set; }
+		IMTL4BinaryFunction[] MeshAdditionalBinaryFunctions { get; set; }
 
 		[Export ("reset")]
 		void Reset ();
@@ -9662,7 +9665,7 @@ namespace Metal {
 		MTLResourceOptions ResourceOptions { get; set; }
 
 		[Export ("cpuCacheMode", ArgumentSemantic.Assign)]
-		MTLCPUCacheMode CpuCacheMode { get; set; }
+		MTLCpuCacheMode CpuCacheMode { get; set; }
 
 		[Export ("storageMode", ArgumentSemantic.Assign)]
 		MTLStorageMode StorageMode { get; set; }

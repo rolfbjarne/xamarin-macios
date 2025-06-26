@@ -2583,16 +2583,16 @@ namespace Metal {
 	[Native]
 	public enum MTLTensorDataType : long
 	{
-		None = MTLDataType.None,
-		Float32 = MTLDataType.Float,
-		Float16 = MTLDataType.Half,
-		BFloat16 = MTLDataType.BFloat,
-		Int8 = MTLDataType.Char,
-		UInt8 = MTLDataType.UChar,
-		Int16 = MTLDataType.Short,
-		UInt16 = MTLDataType.UShort,
-		Int32 = MTLDataType.Int,
-		UInt32 = MTLDataType.UInt,
+		None = (long) MTLDataType.None,
+		Float32 = (long) MTLDataType.Float,
+		Float16 = (long) MTLDataType.Half,
+		BFloat16 = (long) MTLDataType.BFloat,
+		Int8 = (long) MTLDataType.Char,
+		UInt8 = (long) MTLDataType.UChar,
+		Int16 = (long) MTLDataType.Short,
+		UInt16 = (long) MTLDataType.UShort,
+		Int32 = (long) MTLDataType.Int,
+		UInt32 = (long) MTLDataType.UInt,
 	}
 
 	[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]

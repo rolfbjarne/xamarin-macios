@@ -12840,7 +12840,7 @@ M:Metal.IMTL4CommandBuffer.GetRenderCommandEncoder(Metal.MTL4RenderPassDescripto
 M:Metal.IMTL4CommandBuffer.GetRenderCommandEncoder(Metal.MTL4RenderPassDescriptor)
 M:Metal.IMTL4CommandBuffer.PopDebugGroup
 M:Metal.IMTL4CommandBuffer.PushDebugGroup(System.String)
-M:Metal.IMTL4CommandBuffer.ResolveCounterHeap(Metal.IMTL4CounterHeap,Foundation.NSRange,Metal.IMTLBuffer,System.UIntPtr,Metal.IMTLFence,Metal.IMTLFence)
+M:Metal.IMTL4CommandBuffer.ResolveCounterHeap(Metal.IMTL4CounterHeap,Foundation.NSRange,Metal.MTL4BufferRange,Metal.IMTLFence,Metal.IMTLFence)
 M:Metal.IMTL4CommandBuffer.UseResidencySet(Metal.IMTLResidencySet)
 M:Metal.IMTL4CommandBuffer.UseResidencySets(System.IntPtr,System.UIntPtr)
 M:Metal.IMTL4CommandBuffer.WriteTimestamp(Metal.IMTL4CounterHeap,System.UIntPtr)
@@ -12867,7 +12867,6 @@ M:Metal.IMTL4CommandQueue.UpdateBufferMappings(Metal.IMTLBuffer,Metal.IMTLHeap,S
 M:Metal.IMTL4CommandQueue.UpdateTextureMappings(Metal.IMTLTexture,Metal.IMTLHeap,System.IntPtr,System.UIntPtr)
 M:Metal.IMTL4CommandQueue.WaitForDrawable(Metal.IMTLDrawable)
 M:Metal.IMTL4CommandQueue.WaitForEvent(Metal.IMTLEvent,System.UInt64)
-M:Metal.IMTL4Compiler.Cancel
 M:Metal.IMTL4Compiler.CreateBinaryFunction(Metal.MTL4BinaryFunctionDescriptor,Metal.MTL4CompilerTaskOptions,Foundation.NSError@)
 M:Metal.IMTL4Compiler.CreateBinaryFunction(Metal.MTL4BinaryFunctionDescriptor,Metal.MTL4CompilerTaskOptions,Metal.MTL4CreateBinaryFunctionCompletionHandler)
 M:Metal.IMTL4Compiler.CreateComputePipelineState(Metal.MTL4ComputePipelineDescriptor,Metal.MTL4CompilerTaskOptions,Foundation.NSError@)
@@ -13202,6 +13201,7 @@ M:Metal.IMTLRenderCommandEncoder.DrawPatches(System.UIntPtr,System.UIntPtr,Syste
 M:Metal.IMTLRenderCommandEncoder.ExecuteCommands(Metal.IMTLIndirectCommandBuffer,Foundation.NSRange)
 M:Metal.IMTLRenderCommandEncoder.ExecuteCommands(Metal.IMTLIndirectCommandBuffer,Metal.IMTLBuffer,System.UIntPtr)
 M:Metal.IMTLRenderCommandEncoder.SampleCounters(Metal.IMTLCounterSampleBuffer,System.UIntPtr,System.Boolean)
+M:Metal.IMTLRenderCommandEncoder.SetColorAttachmentMap(Metal.MTLLogicalToPhysicalColorAttachmentMap)
 M:Metal.IMTLRenderCommandEncoder.SetFragmentAccelerationStructure(Metal.IMTLAccelerationStructure,System.UIntPtr)
 M:Metal.IMTLRenderCommandEncoder.SetFragmentBytes(System.IntPtr,System.UIntPtr,System.UIntPtr)
 M:Metal.IMTLRenderCommandEncoder.SetFragmentIntersectionFunctionTable(Metal.IMTLIntersectionFunctionTable,System.UIntPtr)
@@ -21934,7 +21934,6 @@ P:Metal.IMTL4ArgumentTable.Device
 P:Metal.IMTL4ArgumentTable.Label
 P:Metal.IMTL4BinaryFunction.FunctionType
 P:Metal.IMTL4BinaryFunction.Name
-P:Metal.IMTL4BinaryFunction.Reflection
 P:Metal.IMTL4CommandAllocator.AllocatedSize
 P:Metal.IMTL4CommandAllocator.Device
 P:Metal.IMTL4CommandAllocator.Label

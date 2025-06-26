@@ -261,6 +261,7 @@ namespace Metal {
 		[Abstract]
 		[Export ("newTensorWithDescriptor:offset:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLTensor CreateTensor (MTLTensorDescriptor descriptor, nuint offset, [NullAllowed] out NSError error);
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
@@ -966,6 +967,7 @@ namespace Metal {
 		[Abstract]
 		[Export ("newComputePipelineStateWithBinaryFunctions:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLComputePipelineState CreateComputePipelineState (IMTL4BinaryFunction[] additionalBinaryFunctions, [NullAllowed] out NSError error);
 
 		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
@@ -1978,6 +1980,7 @@ namespace Metal {
 		[Abstract]
 		[Export ("newTensorWithDescriptor:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLTensor CreateTensor (MTLTensorDescriptor descriptor, [NullAllowed] out NSError error);
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
@@ -1990,71 +1993,83 @@ namespace Metal {
 		[Abstract]
 		[Export ("newCommandAllocator")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTL4CommandAllocator CreateCommandAllocator ();
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Abstract]
 		[Export ("newCommandAllocatorWithDescriptor:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTL4CommandAllocator CreateCommandAllocator (MTL4CommandAllocatorDescriptor descriptor, [NullAllowed] out NSError error);
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Abstract]
 		[Export ("newMTL4CommandQueue")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTL4CommandQueue CreateMTL4CommandQueue ();
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Abstract]
 		[Export ("newMTL4CommandQueueWithDescriptor:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTL4CommandQueue CreateMTL4CommandQueue (MTL4CommandQueueDescriptor descriptor, [NullAllowed] out NSError error);
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Abstract]
 		[Export ("newCommandBuffer")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTL4CommandBuffer CreateCommandBuffer ();
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Abstract]
 		[Export ("newArgumentTableWithDescriptor:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTL4ArgumentTable CreateArgumentTable (MTL4ArgumentTableDescriptor descriptor, [NullAllowed] out NSError error);
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Abstract]
 		[Export ("newTextureViewPoolWithDescriptor:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLTextureViewPool CreateTextureViewPool (MTLResourceViewPoolDescriptor descriptor, [NullAllowed] out NSError error);
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Abstract]
 		[Export ("newCompilerWithDescriptor:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTL4Compiler CreateCompiler (MTL4CompilerDescriptor descriptor, [NullAllowed] out NSError error);
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Abstract]
 		[Export ("newArchiveWithURL:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTL4Archive CreateArchive (NSUrl url, [NullAllowed] out NSError error);
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Abstract]
 		[Export ("newPipelineDataSetSerializerWithDescriptor:")]
+		[return: Release]
 		IMTL4PipelineDataSetSerializer CreatePipelineDataSetSerializer (MTL4PipelineDataSetSerializerDescriptor descriptor);
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Abstract]
 		[Export ("newBufferWithLength:options:placementSparsePageSize:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLBuffer CreateBuffer (nuint length, MTLResourceOptions options, MTLSparsePageSize placementSparsePageSize);
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Abstract]
 		[Export ("newCounterHeapWithDescriptor:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTL4CounterHeap CreateCounterHeap (MTL4CounterHeapDescriptor descriptor, [NullAllowed] out NSError error);
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
@@ -2071,6 +2086,7 @@ namespace Metal {
 		[Abstract]
 		[Export ("functionHandleWithBinaryFunction:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLFunctionHandle CreateFunctionHandle (IMTL4BinaryFunction function);
 	}
 
@@ -2379,6 +2395,7 @@ namespace Metal {
 		[Abstract]
 		[Export ("newTextureViewWithDescriptor:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLTexture CreateTextureView (MTLTextureViewDescriptor descriptor);
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
@@ -2874,11 +2891,13 @@ namespace Metal {
 		[Abstract]
 		[Export ("newRenderPipelineStateWithBinaryFunctions:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLRenderPipelineState CreateRenderPipelineState (MTL4RenderPipelineBinaryFunctionsDescriptor binaryFunctionsDescriptor, [NullAllowed] out NSError error);
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 		[Abstract]
 		[Export ("newRenderPipelineDescriptorForSpecialization")]
+		[return: Release]
 		MTL4PipelineDescriptor CreateRenderPipelineDescriptorForSpecialization ();
 
 		[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
@@ -5165,6 +5184,7 @@ namespace Metal {
 
 		[iOS (26, 0), TV (26, 0), Mac (26, 0), MacCatalyst (26, 0)]
 		[Export ("newCaptureScopeWithMTL4CommandQueue:")]
+		[return: Release]
 		IMTLCaptureScope CreateNewCaptureScope (IMTL4CommandQueue commandQueue);
 
 	}
@@ -7729,26 +7749,31 @@ namespace Metal {
 		[Abstract]
 		[Export ("newComputePipelineStateWithDescriptor:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLComputePipelineState CreateComputePipelineState (MTL4ComputePipelineDescriptor descriptor, [NullAllowed] out NSError error);
 
 		[Abstract]
 		[Export ("newComputePipelineStateWithDescriptor:dynamicLinkingDescriptor:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLComputePipelineState CreateComputePipelineState (MTL4ComputePipelineDescriptor descriptor, MTL4PipelineStageDynamicLinkingDescriptor dynamicLinkingDescriptor, [NullAllowed] out NSError error);
 
 		[Abstract]
 		[Export ("newRenderPipelineStateWithDescriptor:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLRenderPipelineState CreateRenderPipelineState (MTL4PipelineDescriptor descriptor, [NullAllowed] out NSError error);
 
 		[Abstract]
 		[Export ("newRenderPipelineStateWithDescriptor:dynamicLinkingDescriptor:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLRenderPipelineState CreateRenderPipelineState (MTL4PipelineDescriptor descriptor, MTL4RenderPipelineDynamicLinkingDescriptor dynamicLinkingDescriptor, [NullAllowed] out NSError error);
 
 		[Abstract]
 		[Export ("newBinaryFunctionWithDescriptor:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTL4BinaryFunction CreateBinaryFunction (MTL4BinaryFunctionDescriptor descriptor, [NullAllowed] out NSError error);
 	}
 
@@ -8087,82 +8112,100 @@ namespace Metal {
 		[Abstract]
 		[Export ("newLibraryWithDescriptor:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLLibrary CreateLibrary (MTL4LibraryDescriptor descriptor, [NullAllowed] out NSError error);
 
 		[Abstract]
 		[Export ("newDynamicLibrary:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLDynamicLibrary CreateDynamicLibrary (IMTLLibrary library, [NullAllowed] out NSError error);
 
 		[Abstract]
 		[Export ("newDynamicLibraryWithURL:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLDynamicLibrary CreateDynamicLibrary (NSUrl url, [NullAllowed] out NSError error);
 
 		[Abstract]
 		[Export ("newComputePipelineStateWithDescriptor:compilerTaskOptions:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLComputePipelineState CreateComputePipelineState (MTL4ComputePipelineDescriptor descriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, [NullAllowed] out NSError error);
 
 		[Abstract]
 		[Export ("newComputePipelineStateWithDescriptor:dynamicLinkingDescriptor:compilerTaskOptions:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLComputePipelineState CreateComputePipelineState (MTL4ComputePipelineDescriptor descriptor, [NullAllowed] MTL4PipelineStageDynamicLinkingDescriptor dynamicLinkingDescriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, [NullAllowed] out NSError error);
 
 		[Abstract]
 		[Export ("newRenderPipelineStateWithDescriptor:compilerTaskOptions:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLRenderPipelineState CreateRenderPipelineState (MTL4PipelineDescriptor descriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, [NullAllowed] out NSError error);
 
 		[Abstract]
 		[Export ("newRenderPipelineStateWithDescriptor:dynamicLinkingDescriptor:compilerTaskOptions:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLRenderPipelineState CreateRenderPipelineState (MTL4PipelineDescriptor descriptor, [NullAllowed] MTL4RenderPipelineDynamicLinkingDescriptor dynamicLinkingDescriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, [NullAllowed] out NSError error);
 
 		[Abstract]
 		[Export ("newRenderPipelineStateBySpecializationWithDescriptor:pipeline:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTLRenderPipelineState CreateRenderPipelineStateBySpecialization (MTL4PipelineDescriptor descriptor, IMTLRenderPipelineState pipeline, [NullAllowed] out NSError error);
 
 		[Abstract]
 		[Export ("newBinaryFunctionWithDescriptor:compilerTaskOptions:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTL4BinaryFunction CreateBinaryFunction (MTL4BinaryFunctionDescriptor descriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, [NullAllowed] out NSError error);
 
 		[Abstract]
 		[Export ("newLibraryWithDescriptor:completionHandler:")]
+		[return: Release]
 		IMTL4CompilerTask CreateLibrary (MTL4LibraryDescriptor descriptor, MTLCreateLibraryCompletionHandler completionHandler);
 
 		[Abstract]
 		[Export ("newDynamicLibrary:completionHandler:")]
+		[return: Release]
 		IMTL4CompilerTask CreateDynamicLibrary (IMTLLibrary library, MTLCreateDynamicLibraryCompletionHandler completionHandler);
 
 		[Abstract]
 		[Export ("newDynamicLibraryWithURL:completionHandler:")]
+		[return: Release]
 		IMTL4CompilerTask CreateDynamicLibrary (NSUrl url, MTLCreateDynamicLibraryCompletionHandler completionHandler);
 
 		[Abstract]
 		[Export ("newComputePipelineStateWithDescriptor:compilerTaskOptions:completionHandler:")]
+		[return: Release]
 		IMTL4CompilerTask CreateComputePipelineState (MTL4ComputePipelineDescriptor descriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, MTLCreateComputePipelineStateCompletionHandler completionHandler);
 
 		[Abstract]
 		[Export ("newComputePipelineStateWithDescriptor:dynamicLinkingDescriptor:compilerTaskOptions:completionHandler:")]
+		[return: Release]
 		IMTL4CompilerTask CreateComputePipelineState (MTL4ComputePipelineDescriptor descriptor, [NullAllowed] MTL4PipelineStageDynamicLinkingDescriptor dynamicLinkingDescriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, MTLCreateComputePipelineStateCompletionHandler completionHandler);
 
 		[Abstract]
 		[Export ("newRenderPipelineStateWithDescriptor:compilerTaskOptions:completionHandler:")]
+		[return: Release]
 		IMTL4CompilerTask CreateRenderPipelineState (MTL4PipelineDescriptor descriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, MTLCreateRenderPipelineStateCompletionHandler completionHandler);
 
 		[Abstract]
 		[Export ("newRenderPipelineStateWithDescriptor:dynamicLinkingDescriptor:compilerTaskOptions:completionHandler:")]
+		[return: Release]
 		IMTL4CompilerTask CreateRenderPipelineState (MTL4PipelineDescriptor descriptor, [NullAllowed] MTL4RenderPipelineDynamicLinkingDescriptor dynamicLinkingDescriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, MTLCreateRenderPipelineStateCompletionHandler completionHandler);
 
 		[Abstract]
 		[Export ("newRenderPipelineStateBySpecializationWithDescriptor:pipeline:completionHandler:")]
+		[return: Release]
 		IMTL4CompilerTask CreateRenderPipelineStateBySpecialization (MTL4PipelineDescriptor descriptor, IMTLRenderPipelineState pipeline, MTLCreateRenderPipelineStateCompletionHandler completionHandler);
 
 		[Abstract]
 		[Export ("newBinaryFunctionWithDescriptor:compilerTaskOptions:completionHandler:")]
+		[return: Release]
 		IMTL4CompilerTask CreateBinaryFunction (MTL4BinaryFunctionDescriptor descriptor, [NullAllowed] MTL4CompilerTaskOptions compilerTaskOptions, MTL4CreateBinaryFunctionCompletionHandler completionHandler);
 
 		[Abstract]
@@ -8172,6 +8215,7 @@ namespace Metal {
 
 		[Abstract]
 		[Export ("newMachineLearningPipelineStateWithDescriptor:completionHandler:")]
+		[return: Release]
 		IMTL4CompilerTask CreateMachineLearningPipelineState (MTL4MachineLearningPipelineDescriptor descriptor, MTL4CreateMachineLearningPipelineStateCompletionHandler completionHandler);
 	}
 

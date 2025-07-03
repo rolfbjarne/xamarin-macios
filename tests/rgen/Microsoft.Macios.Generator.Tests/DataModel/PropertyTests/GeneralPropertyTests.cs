@@ -446,4 +446,69 @@ public class GeneralPropertyTests {
 		};
 		Assert.Equal (expectedResult, property.IsNotification);
 	}
+
+	[Theory]
+	[InlineData (ObjCBindings.Property.Default, false)]
+	[InlineData (ObjCBindings.Property.WeakDelegate, true)]
+#pragma warning disable xUnit1025
+	[InlineData (ObjCBindings.Property.WeakDelegate | ObjCBindings.Property.Default, true)]
+#pragma warning restore xUnit1025
+	public void IsWeakDelegate (ObjCBindings.Property flag, bool expectedResult)
+	{
+		var property = new Property (
+			name: "Test",
+			returnType: new TypeInfo ("string"),
+			symbolAvailability: new (),
+			attributes: [],
+			modifiers: [],
+			accessors: []
+		) {
+			ExportPropertyData = new ("name", ArgumentSemantic.None, flag),
+		};
+		Assert.Equal (expectedResult, property.IsWeakDelegate);
+	}
+
+	[Theory]
+	[InlineData (true, true, true, true)] // isProperty, isWeakDelegate, hasStrongDelegateType, shouldChange
+	[InlineData (false, true, true, false)]
+	[InlineData (true, false, true, false)]
+	[InlineData (true, true, false, false)]
+	public void ToStrongDelegate (bool isProperty, bool isWeakDelegate, bool hasStrongDelegateType, bool shouldChange)
+	{
+		TypeInfo? strongDelegateType = hasStrongDelegateType ? ReturnTypeForNSObject ("StrongDelegate") : null;
+		var flags = isWeakDelegate ? ObjCBindings.Property.WeakDelegate : ObjCBindings.Property.Default;
+		var property = new Property (
+			name: "Test",
+			returnType: ReturnTypeForNSObject (),
+			symbolAvailability: new (),
+			attributes: [],
+			modifiers: [],
+			accessors: []
+		);
+
+		if (isProperty) {
+			property = property with {
+				ExportPropertyData = new ExportData<ObjCBindings.Property> (
+					"name",
+					ArgumentSemantic.None,
+					flags
+				) {
+					StrongDelegateType = strongDelegateType
+				},
+			};
+		} else {
+			property = property with {
+				ExportFieldData = new (new FieldData<ObjCBindings.Property> ("name", flags), ""),
+			};
+		}
+
+		var newProperty = property.ToStrongDelegate ();
+
+		if (shouldChange) {
+			Assert.NotEqual (property, newProperty);
+			Assert.Equal (strongDelegateType!.Value.WithNullable (true), newProperty.ReturnType);
+		} else {
+			Assert.Equal (property, newProperty);
+		}
+	}
 }

@@ -1939,7 +1939,7 @@ namespace Metal {
 		[Export ("sparseTileSizeWithTextureType:pixelFormat:sampleCount:sparsePageSize:")]
 		MTLSize GetSparseTileSize (MTLTextureType textureType, MTLPixelFormat pixelFormat, nuint sampleCount, MTLSparsePageSize sparsePageSize);
 
-		[NoiOS, Mac (13, 3), NoTV, NoMacCatalyst]
+		[NoiOS, Mac (13, 3), NoTV, MacCatalyst (26, 0)]
 		[Abstract (GenerateExtensionMethod = true)]
 		[Export ("maximumConcurrentCompilationTaskCount")]
 		nuint MaximumConcurrentCompilationTaskCount { get; }
@@ -8094,7 +8094,6 @@ namespace Metal {
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
-	[BaseType (typeof(NSObject))]
 	interface MTL4Compiler
 	{
 		[Abstract]
@@ -8211,6 +8210,7 @@ namespace Metal {
 		[Abstract]
 		[Export ("newMachineLearningPipelineStateWithDescriptor:error:")]
 		[return: NullAllowed]
+		[return: Release]
 		IMTL4MachineLearningPipelineState CreateMachineLearningPipelineState (MTL4MachineLearningPipelineDescriptor descriptor, [NullAllowed] out NSError error);
 
 		[Abstract]
@@ -9698,10 +9698,12 @@ namespace Metal {
 
 	[Mac (26, 0), iOS (26, 0), TV (26, 0), MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor] // all properties are readonly, and has a non-default ctor
 	interface MTLTensorExtents
 	{
+		[Internal]
 		[Export ("initWithRank:values:")]
-		NativeHandle Constructor (nuint rank, /* C Array: [NullAllowed] nint[] */ IntPtr values);
+		NativeHandle _InitWithRank (nuint rank, /* C Array: [NullAllowed] nint[] */ IntPtr values);
 
 		[Export ("rank")]
 		nuint Rank { get; }

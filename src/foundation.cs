@@ -18994,7 +18994,7 @@ namespace Foundation {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface NSExtensionRequestHandling {
-		/// <param name="context">The <see cref="Monotouch.Foundation.NSExtensionContext" /> containing extension-relevant data.</param>
+		/// <param name="context">The <see cref="NSExtensionContext" /> containing extension-relevant data.</param>
 		/// <summary>Developers can implement this method to prepare their extension for the host application request.</summary>
 		/// <remarks>
 		///           <para>Developers who implement this method must call <c>base.BeginRequestWithExtensionContext(context)</c> within their implementation.</para>

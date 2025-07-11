@@ -56,6 +56,10 @@ public class DocumentationManager {
 		var lines = node.InnerXml.Split ('\n', '\r');
 		for (var i = 0; i < lines.Length; i++) {
 			lines [i] = "/// " + lines [i].TrimStart (' ');
+			// if a member couldn't be resolved, unmark it so the compiler can try again
+			lines [i] = lines [i].Replace ("cref=\"!:", "cref=\"");
+			lines [i] = lines [i].Replace ("&amp;lt;", "{");
+			lines [i] = lines [i].Replace ("&amp;gt;", "}");
 		}
 
 		documentation = lines;

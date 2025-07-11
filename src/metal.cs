@@ -1921,7 +1921,6 @@ namespace Metal {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="Metal.MTLDrawable" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="Metal.MTLDrawable" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="Metal.MTLDrawable_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	/// <summary>Extension methods to the <see cref="Metal.IMTLDrawable" /> interface to support all the methods from the <see cref="Metal.MTLDrawable" /> protocol.</summary>
 	///     <remarks>

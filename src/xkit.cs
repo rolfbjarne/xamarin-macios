@@ -1579,7 +1579,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.NSLayoutManagerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.NSLayoutManagerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.NSLayoutManagerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface INSLayoutManagerDelegate { }
 
@@ -3156,7 +3155,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.NSTextStorageDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.NSTextStorageDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.NSTextStorageDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface INSTextStorageDelegate { }
 

@@ -831,7 +831,6 @@ namespace ARKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="ARKit.ARSCNViewDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="ARKit.ARSCNViewDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="ARKit.ARSCNViewDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IARSCNViewDelegate { }
 
@@ -912,7 +911,6 @@ namespace ARKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="ARKit.ARSKViewDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="ARKit.ARSKViewDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="ARKit.ARSKViewDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IARSKViewDelegate { }
 
@@ -1111,7 +1109,6 @@ namespace ARKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="ARKit.ARSessionDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="ARKit.ARSessionDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="ARKit.ARSessionDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IARSessionDelegate { }
 

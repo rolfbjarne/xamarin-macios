@@ -173,7 +173,6 @@ namespace AVKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="AVKit.AVPictureInPictureControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="AVKit.AVPictureInPictureControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="AVKit.AVPictureInPictureControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IAVPictureInPictureControllerDelegate { }
 
@@ -443,7 +442,6 @@ namespace AVKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="AVKit.AVPlayerViewControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="AVKit.AVPlayerViewControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="AVKit.AVPlayerViewControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IAVPlayerViewControllerDelegate { }
 
@@ -1035,7 +1033,6 @@ namespace AVKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="AVKit.AVRoutePickerViewDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="AVKit.AVRoutePickerViewDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="AVKit.AVRoutePickerViewDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IAVRoutePickerViewDelegate { }
 
@@ -1043,7 +1040,6 @@ namespace AVKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="AVKit.AVRoutePickerViewDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="AVKit.AVRoutePickerViewDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="AVKit.AVRoutePickerViewDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol, Model]

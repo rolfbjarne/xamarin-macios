@@ -461,7 +461,6 @@ namespace CoreBluetooth {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="CoreBluetooth.CBCentralManagerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="CoreBluetooth.CBCentralManagerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="CoreBluetooth.CBCentralManagerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface ICBCentralManagerDelegate { }
 
@@ -939,7 +938,6 @@ namespace CoreBluetooth {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="CoreBluetooth.CBPeripheralDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="CoreBluetooth.CBPeripheralDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="CoreBluetooth.CBPeripheralDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface ICBPeripheralDelegate { }
 
@@ -1578,7 +1576,6 @@ namespace CoreBluetooth {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="CoreBluetooth.CBPeripheralManagerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="CoreBluetooth.CBPeripheralManagerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="CoreBluetooth.CBPeripheralManagerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface ICBPeripheralManagerDelegate { }
 

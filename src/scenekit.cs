@@ -92,7 +92,6 @@ namespace SceneKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="SceneKit.SCNAnimatable" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="SceneKit.SCNAnimatable" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="SceneKit.SCNAnimatable_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	/// <summary>Extension methods to the <see cref="SceneKit.ISCNAnimatable" /> interface to support all the methods from the <see cref="SceneKit.SCNAnimatable" /> protocol.</summary>
 	///     <remarks>
@@ -730,7 +729,6 @@ namespace SceneKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="SceneKit.SCNCameraControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="SceneKit.SCNCameraControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="SceneKit.SCNCameraControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface ISCNCameraControllerDelegate { }
 
@@ -738,7 +736,6 @@ namespace SceneKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="SceneKit.SCNCameraControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="SceneKit.SCNCameraControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="SceneKit.SCNCameraControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol]
@@ -2874,7 +2871,6 @@ namespace SceneKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="SceneKit.SCNNodeRendererDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="SceneKit.SCNNodeRendererDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="SceneKit.SCNNodeRendererDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface ISCNNodeRendererDelegate { }
 
@@ -3021,7 +3017,6 @@ namespace SceneKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="SceneKit.SCNProgramDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="SceneKit.SCNProgramDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="SceneKit.SCNProgramDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface ISCNProgramDelegate { }
 
@@ -3434,7 +3429,6 @@ namespace SceneKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="SceneKit.SCNSceneExportDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="SceneKit.SCNSceneExportDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="SceneKit.SCNSceneExportDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface ISCNSceneExportDelegate { }
 
@@ -3797,7 +3791,6 @@ namespace SceneKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="SceneKit.SCNSceneRenderer" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="SceneKit.SCNSceneRenderer" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="SceneKit.SCNSceneRenderer_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface ISCNSceneRenderer { }
 
@@ -4121,7 +4114,6 @@ namespace SceneKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="SceneKit.SCNSceneRendererDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="SceneKit.SCNSceneRendererDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="SceneKit.SCNSceneRendererDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface ISCNSceneRendererDelegate { }
 
@@ -5138,7 +5130,6 @@ namespace SceneKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="SceneKit.SCNShadable" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="SceneKit.SCNShadable" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="SceneKit.SCNShadable_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface ISCNShadable { }
 
@@ -5771,7 +5762,6 @@ namespace SceneKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="SceneKit.SCNPhysicsContactDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="SceneKit.SCNPhysicsContactDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="SceneKit.SCNPhysicsContactDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface ISCNPhysicsContactDelegate { }
 
@@ -6724,7 +6714,6 @@ namespace SceneKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="SceneKit.SCNAvoidOccluderConstraintDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="SceneKit.SCNAvoidOccluderConstraintDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="SceneKit.SCNAvoidOccluderConstraintDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface ISCNAvoidOccluderConstraintDelegate { }
 
@@ -6732,7 +6721,6 @@ namespace SceneKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="SceneKit.SCNAvoidOccluderConstraintDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="SceneKit.SCNAvoidOccluderConstraintDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="SceneKit.SCNAvoidOccluderConstraintDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol, Model]

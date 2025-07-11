@@ -298,7 +298,6 @@ namespace HomeKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="HomeKit.HMAccessoryDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="HomeKit.HMAccessoryDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="HomeKit.HMAccessoryDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (14, 0)]
 	[Model, Protocol]
@@ -436,7 +435,6 @@ namespace HomeKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="HomeKit.HMAccessoryBrowserDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="HomeKit.HMAccessoryBrowserDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="HomeKit.HMAccessoryBrowserDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IHMAccessoryBrowserDelegate { }
 
@@ -1180,7 +1178,6 @@ namespace HomeKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="HomeKit.HMHomeDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="HomeKit.HMHomeDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="HomeKit.HMHomeDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (14, 0)]
 	[Model, Protocol]
@@ -2342,7 +2339,6 @@ namespace HomeKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="HomeKit.HMCameraStreamControlDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="HomeKit.HMCameraStreamControlDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="HomeKit.HMCameraStreamControlDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (14, 0)]
 	[Protocol, Model]
@@ -2426,7 +2422,6 @@ namespace HomeKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="HomeKit.HMCameraSnapshotControlDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="HomeKit.HMCameraSnapshotControlDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="HomeKit.HMCameraSnapshotControlDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (14, 0)]
 	[Protocol, Model]

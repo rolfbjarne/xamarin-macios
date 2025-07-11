@@ -487,7 +487,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UICloudSharingControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UICloudSharingControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UICloudSharingControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUICloudSharingControllerDelegate { }
 
@@ -809,7 +808,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIAccelerometerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIAccelerometerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIAccelerometerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUIAccelerometerDelegate { }
 
@@ -1404,7 +1402,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIAccessibilityContainerDataTable" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIAccessibilityContainerDataTable" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIAccessibilityContainerDataTable_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol, Model]
@@ -1888,7 +1885,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIActionSheetDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIActionSheetDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIActionSheetDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUIActionSheetDelegate { }
 
@@ -2187,7 +2183,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIActivityItemSource" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIActivityItemSource" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIActivityItemSource_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUIActivityItemSource { }
 
@@ -2378,7 +2373,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIAlertViewDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIAlertViewDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIAlertViewDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUIAlertViewDelegate { }
 
@@ -2572,7 +2566,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIAppearance" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIAppearance" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIAppearance_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -2660,7 +2653,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIStateRestoring" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIStateRestoring" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIStateRestoring_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -2700,7 +2692,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIObjectRestoration" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIObjectRestoration" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIObjectRestoration_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -4495,7 +4486,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIApplicationDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIApplicationDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIApplicationDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -5904,7 +5894,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UICollectionViewSource" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UICollectionViewSource" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UICollectionViewSource_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Model]
@@ -6001,7 +5990,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UICollectionViewDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UICollectionViewDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UICollectionViewDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Model]
@@ -6432,7 +6420,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UICollectionViewDelegateFlowLayout" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UICollectionViewDelegateFlowLayout" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UICollectionViewDelegateFlowLayout_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (UICollectionViewDelegate))]
@@ -7545,7 +7532,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UICollisionBehaviorDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UICollisionBehaviorDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UICollisionBehaviorDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -7960,7 +7946,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIDynamicItem" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIDynamicItem" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIDynamicItem_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -8785,7 +8770,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIGestureRecognizerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIGestureRecognizerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIGestureRecognizerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[NoMac]
 	[MacCatalyst (13, 1)]
@@ -10091,7 +10075,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UITextInputTokenizer" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UITextInputTokenizer" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UITextInputTokenizer_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -11791,7 +11774,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIBarPositioning" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIBarPositioning" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIBarPositioning_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -11812,7 +11794,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIBarPositioningDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIBarPositioningDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIBarPositioningDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -12897,7 +12878,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIDocumentInteractionControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIDocumentInteractionControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIDocumentInteractionControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUIDocumentInteractionControllerDelegate { }
 
@@ -13648,7 +13628,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UINavigationBarDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UINavigationBarDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UINavigationBarDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (UIBarPositioningDelegate))]
@@ -14036,7 +14015,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UINavigationControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UINavigationControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UINavigationControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -14327,7 +14305,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIPageViewControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIPageViewControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIPageViewControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -14411,7 +14388,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIPageViewControllerDataSource" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIPageViewControllerDataSource" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIPageViewControllerDataSource_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -14908,7 +14884,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIPickerViewDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIPickerViewDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIPickerViewDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUIPickerViewDelegate { }
 
@@ -15077,7 +15052,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIContentContainer" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIContentContainer" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIContentContainer_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -15135,7 +15109,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIAppearanceContainer" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIAppearanceContainer" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIAppearanceContainer_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[Protocol, Model]
 	[MacCatalyst (13, 1)]
@@ -15258,7 +15231,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.IUIPreviewActionItem" />.</para>
 	///       <para>If you create objects that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.IUIPreviewActionItem" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIPreviewActionItem_Extensions" /> class as extension methods to the interface, allowing you to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol]
@@ -16158,7 +16130,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIScrollViewDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIScrollViewDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIScrollViewDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[NoMac]
 	[MacCatalyst (13, 1)]
@@ -16364,7 +16335,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIScrollViewAccessibilityDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIScrollViewAccessibilityDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIScrollViewAccessibilityDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol, Model]
@@ -16656,7 +16626,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UISearchBarDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UISearchBarDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UISearchBarDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (UIBarPositioningDelegate))]
@@ -16922,7 +16891,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UISearchControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UISearchControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UISearchControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol, Model]
@@ -17048,7 +17016,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UISearchDisplayDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UISearchDisplayDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UISearchDisplayDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUISearchDisplayDelegate { }
 
@@ -18124,7 +18091,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UITabBarDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UITabBarDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UITabBarDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -18198,7 +18164,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UITabBarControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UITabBarControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UITabBarControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -19570,7 +19535,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UITableViewDataSource" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UITableViewDataSource" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UITableViewDataSource_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -20410,7 +20374,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UITextFieldDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UITextFieldDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UITextFieldDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -21111,7 +21074,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIToolbarDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIToolbarDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIToolbarDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUIToolbarDelegate { }
 
@@ -21262,7 +21224,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIVideoEditorControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIVideoEditorControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIVideoEditorControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUIVideoEditorControllerDelegate { }
 
@@ -23208,7 +23169,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIViewControllerContextTransitioning" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIViewControllerContextTransitioning" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIViewControllerContextTransitioning_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	/// <summary>Extension methods to the <see cref="UIKit.IUIViewControllerContextTransitioning" /> interface to support all the methods from the <see cref="UIKit.UIViewControllerContextTransitioning" /> protocol.</summary>
 	/// <remarks>
@@ -23333,7 +23293,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UITraitEnvironment" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UITraitEnvironment" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UITraitEnvironment_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -23723,7 +23682,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIViewControllerAnimatedTransitioning" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIViewControllerAnimatedTransitioning" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIViewControllerAnimatedTransitioning_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Model, BaseType (typeof (NSObject))]
@@ -23764,7 +23722,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIViewControllerInteractiveTransitioning" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIViewControllerInteractiveTransitioning" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIViewControllerInteractiveTransitioning_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Model, BaseType (typeof (NSObject))]
@@ -23799,7 +23756,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIViewControllerTransitioningDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIViewControllerTransitioningDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIViewControllerTransitioningDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Model, BaseType (typeof (NSObject))]
@@ -24184,7 +24140,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIWebViewDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIWebViewDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIWebViewDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUIWebViewDelegate { }
 
@@ -24728,7 +24683,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UISplitViewControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UISplitViewControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UISplitViewControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -25321,7 +25275,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIPopoverControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIPopoverControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIPopoverControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -25443,7 +25396,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIAdaptivePresentationControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIAdaptivePresentationControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIAdaptivePresentationControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol, Model]
@@ -25520,7 +25472,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIPopoverPresentationControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIPopoverPresentationControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIPopoverPresentationControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUIPopoverPresentationControllerDelegate { }
 
@@ -25761,7 +25712,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIPrinterPickerControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIPrinterPickerControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIPrinterPickerControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUIPrinterPickerControllerDelegate { }
 
@@ -25926,7 +25876,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIPrintInteractionControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIPrintInteractionControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIPrintInteractionControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUIPrintInteractionControllerDelegate { }
 
@@ -26853,7 +26802,6 @@ namespace UIKit {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UITextDocumentProxy" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UITextDocumentProxy" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UITextDocumentProxy_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	/// <summary>Extension methods to the <see cref="UIKit.IUITextDocumentProxy" /> interface to support all the methods from the <see cref="UIKit.UITextDocumentProxy" /> protocol.</summary>
 	/// <remarks>
@@ -27357,7 +27305,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIDocumentPickerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIDocumentPickerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIDocumentPickerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUIDocumentPickerDelegate { }
 
@@ -27933,7 +27880,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIPreviewInteractionDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIPreviewInteractionDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIPreviewInteractionDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUIPreviewInteractionDelegate { }
 
@@ -28142,28 +28088,24 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIDragInteractionDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIDragInteractionDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIDragInteractionDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUIDragInteractionDelegate { }
 	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="UIKit.UIDropInteractionDelegate" />.</summary>
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIDropInteractionDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIDropInteractionDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIDropInteractionDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUIDropInteractionDelegate { }
 	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="UIKit.UICollectionViewDragDelegate" />.</summary>
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UICollectionViewDragDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UICollectionViewDragDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UICollectionViewDragDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUICollectionViewDragDelegate { }
 	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="UIKit.UICollectionViewDropDelegate" />.</summary>
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UICollectionViewDropDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UICollectionViewDropDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UICollectionViewDropDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUICollectionViewDropDelegate { }
 	interface IUICollectionViewDropCoordinator { }
@@ -28173,14 +28115,12 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UITableViewDragDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UITableViewDragDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UITableViewDragDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUITableViewDragDelegate { }
 	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="UIKit.UITableViewDropDelegate" />.</summary>
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UITableViewDropDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UITableViewDropDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UITableViewDropDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUITableViewDropDelegate { }
 	interface IUITableViewDropCoordinator { }
@@ -28190,7 +28130,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UITextDragDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UITextDragDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UITextDragDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUITextDragDelegate { }
 	interface IUITextDraggable { }
@@ -28200,7 +28139,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UITextDropDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UITextDropDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UITextDropDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUITextDropDelegate { }
 	interface IUITextDropRequest { }
@@ -29895,7 +29833,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UITextPasteDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UITextPasteDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UITextPasteDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUITextPasteDelegate { }
 
@@ -30186,7 +30123,6 @@ namespace UIKit {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="UIKit.UIDocumentBrowserViewControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="UIKit.UIDocumentBrowserViewControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="UIKit.UIDocumentBrowserViewControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IUIDocumentBrowserViewControllerDelegate { }
 

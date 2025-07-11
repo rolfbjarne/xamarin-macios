@@ -18,7 +18,6 @@ namespace Contacts {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="Contacts.ICNKeyDescriptor" />.</para>
 	///       <para>If you create objects that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="Contacts.ICNKeyDescriptor" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="Contacts.CNKeyDescriptor_Extensions" /> class as extension methods to the interface, allowing you to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface ICNKeyDescriptor { }
 
@@ -26,7 +25,6 @@ namespace Contacts {
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="Contacts.ICNKeyDescriptor" />.</para>
 	///       <para>If you create objects that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="Contacts.ICNKeyDescriptor" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="Contacts.CNKeyDescriptor_Extensions" /> class as extension methods to the interface, allowing you to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol]

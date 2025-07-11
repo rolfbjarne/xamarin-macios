@@ -756,7 +756,6 @@ namespace MediaPlayer {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="MediaPlayer.MPMediaPickerControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="MediaPlayer.MPMediaPickerControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="MediaPlayer.MPMediaPickerControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IMPMediaPickerControllerDelegate { }
 
@@ -2774,7 +2773,6 @@ namespace MediaPlayer {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="MediaPlayer.MPPlayableContentDataSource" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="MediaPlayer.MPPlayableContentDataSource" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="MediaPlayer.MPPlayableContentDataSource_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IMPPlayableContentDataSource {
 	}
@@ -2783,7 +2781,6 @@ namespace MediaPlayer {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="MediaPlayer.MPPlayableContentDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="MediaPlayer.MPPlayableContentDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="MediaPlayer.MPPlayableContentDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IMPPlayableContentDelegate { }
 

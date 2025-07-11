@@ -136,7 +136,6 @@ namespace VideoSubscriberAccount {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="VideoSubscriberAccount.VSAccountManagerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="VideoSubscriberAccount.VSAccountManagerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="VideoSubscriberAccount.VSAccountManagerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IVSAccountManagerDelegate { }
 

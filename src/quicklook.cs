@@ -151,7 +151,6 @@ namespace QuickLook {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="QuickLook.QLPreviewControllerDelegate" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="QuickLook.QLPreviewControllerDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="QuickLook.QLPreviewControllerDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IQLPreviewControllerDelegate { }
 
@@ -267,7 +266,6 @@ namespace QuickLook {
 	///     <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="QuickLook.QLPreviewItem" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="QuickLook.QLPreviewItem" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="QuickLook.QLPreviewItem_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
 	///     </remarks>
 	interface IQLPreviewItem { }
 

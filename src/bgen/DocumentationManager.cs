@@ -56,6 +56,19 @@ public class DocumentationManager {
 		var lines = node.InnerXml.Split ('\n', '\r');
 		for (var i = 0; i < lines.Length; i++) {
 			lines [i] = "/// " + lines [i].TrimStart (' ');
+			// if a member couldn't be resolved, unmark it so the compiler can try again
+			lines [i] = lines [i].Replace ("cref=\"!:", "cref=\"");
+			// lines [i] = lines [i].Replace ("cref=\"M:", "cref=\"");
+			// lines [i] = lines [i].Replace ("cref=\"P:", "cref=\"");
+			// lines [i] = lines [i].Replace ("cref=\"T:", "cref=\"");
+			// lines [i] = lines [i].Replace ("cref=\"M:", "cref=\"");
+			// lines [i] = lines [i].Replace ("cref=\"N:", "cref=\"");
+			// lines [i] = lines [i].Replace ("cref=\"E:", "cref=\"");
+			lines [i] = lines [i].Replace ("&amp;lt;", "{");
+			lines [i] = lines [i].Replace ("&amp;gt;", "}");
+
+			// for (var x = 1; x < 10; x++)
+			// 	lines [i] = lines [i].Replace ($"`{x}", "{T" + x + "}");
 		}
 
 		documentation = lines;

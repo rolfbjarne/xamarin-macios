@@ -614,7 +614,7 @@ namespace UIKit {
 		void FixAttributesInRange (NSRange range);
 	}
 
-	/// <summary>Defined the <see cref="UIKit.NSIdentifier.Identifier(UIKit.NSLayoutConstraint)" /> extension property on <see cref="UIKit.NSLayoutConstraint" /> objects.</summary>
+	/// <summary>A category that adds identifier support for <see cref="NSLayoutConstraint" /> objects.</summary>
 	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Category, BaseType (typeof (NSLayoutConstraint))]
@@ -2097,13 +2097,12 @@ namespace UIKit {
 		NSString PostToTencentWeibo { get; }
 
 		/// <summary>Makes the provided object available over AirDrop.</summary>
-		///         <value>
-		///         </value>
-		///         <remarks>
-		/// 	  The object must hold an individual <see cref="AssetsLibrary.ALAsset" />, <see cref="Foundation.NSAttributedString" />, <see cref="Foundation.NSString" />, <see cref="Foundation.NSUrl" />, <see cref="UIKit.UIImage" />.  Or you can provide a
-		/// 	  collection of those objects by passing an NSDictionary or an
-		/// 	  NSArray with those objects.
-		/// 	</remarks>
+		/// <remarks>
+		///   The object must hold an individual <see cref="Foundation.NSAttributedString" />, <see cref="Foundation.NSString" />,
+		///   <see cref="Foundation.NSUrl" />, or <see cref="UIKit.UIImage" />.
+		///   Or you can provide a collection of those objects by passing an <see cref="NSDictionary" /> or an <see cref="NSArray" />
+		///   with those objects.
+		/// </remarks>
 		[Field ("UIActivityTypeAirDrop")]
 		NSString AirDrop { get; }
 
@@ -2142,8 +2141,6 @@ namespace UIKit {
 	// You're supposed to implement this protocol in your UIView subclasses, not provide
 	// a implementation for only this protocol, which is why there is no model to subclass.
 	//
-	/// <summary>Interface that, together with the <see cref="UIKit.UIInputViewAudioFeedback_Extensions" /> class, comprise the UIInputViewAudioFeedback protocol.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIInputViewAudioFeedback {
@@ -2606,7 +2603,7 @@ namespace UIKit {
 		[Export ("baselineRelativeArrangement")]
 		bool BaselineRelativeArrangement { [Bind ("isBaselineRelativeArrangement")] get; set; }
 
-		/// <summary>Whether subviews are arranged relative to this <see cref="UIKit.UIStackView" />'s <see cref="UIKit.UIView.LayoutMargin" />.</summary>
+		/// <summary>Whether subviews are arranged relative to this <see cref="UIKit.UIStackView" />'s <see cref="UIKit.UIView.LayoutMargins" />.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Export ("layoutMarginsRelativeArrangement")]
@@ -2955,8 +2952,6 @@ namespace UIKit {
 		void CommitViewController (IUIViewControllerPreviewing previewingContext, UIViewController viewControllerToCommit);
 	}
 
-	/// <summary>Interface that, together with the <see cref="UIKit.UIViewControllerRestoration_Extensions" /> class, comprise the UIViewControllerRestoration protocol.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIViewControllerRestoration {
@@ -4806,7 +4801,7 @@ namespace UIKit {
 		/// <param name="application">To be added.</param>
 		/// <param name="sessionIdentifier">To be added.</param>
 		/// <param name="completionHandler">To be added.</param>
-		/// <summary>Raised when events relating to a background <see cref="UIKit.NSUrlSession" /> are waiting to be processed.</summary>
+		/// <summary>Raised when events relating to a background <see cref="NSUrlSession" /> are waiting to be processed.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("application:handleEventsForBackgroundURLSession:completionHandler:")]
 		void HandleEventsForBackgroundUrl (UIApplication application, string sessionIdentifier, Action completionHandler);
@@ -4912,7 +4907,11 @@ namespace UIKit {
 		/// <param name="application">To be added.</param>
 		/// <param name="shortcutItem">To be added.</param>
 		/// <param name="completionHandler">To be added.</param>
-		/// <summary>Called by the system when the user initiates a Home screen quick action, unless the interaction was handled in <see cref="UIKit.UIApplicationDelegate.WillFinishLaunching(UIKit.UIApplication,Foundation.NSDictionary)" /> or <see cref="UIKit.UIApplicationDelegate.DidFinishLaunching" />.</summary>
+		/// <summary>
+		///   Called by the system when the user initiates a Home screen quick action, unless the interaction was handled
+		///   in <see cref="UIKit.UIApplicationDelegate.WillFinishLaunching(UIKit.UIApplication,Foundation.NSDictionary)" />
+		///   or <see cref="UIKit.UIApplicationDelegate.FinishedLaunching" />.
+		/// </summary>
 		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
@@ -6181,7 +6180,7 @@ namespace UIKit {
 
 		/// <param name="collectionView">The collection view that originated the request.</param>
 		/// <param name="context">Metadata for the focus change.</param>
-		/// <param name="coordinator">The <see cref="UIKit.UIFocusAnimationController" /> coordinating the focus-change animations.</param>
+		/// <param name="coordinator">The <see cref="UIFocusAnimationCoordinator" /> coordinating the focus-change animations.</param>
 		/// <summary>Indicates that the focus changed as detailed in the <paramref name="context" />.</summary>
 		/// <remarks>
 		///           <para>The values of <see cref="UIKit.UICollectionViewFocusUpdateContext.PreviouslyFocusedIndexPath" /> and <see cref="UIKit.UICollectionViewFocusUpdateContext.NextFocusedIndexPath" /> may be <see langword="null" /> if focus was previously not within, or just departed, the <paramref name="collectionView" />.</para>
@@ -9559,8 +9558,6 @@ namespace UIKit {
 
 	interface IUIKeyInput { }
 
-	/// <summary>Interface that, together with the <see cref="UIKit.UIKeyInput_Extensions" /> class, comprise the UIKeyInput protocol.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIKeyInput : UITextInputTraits {
@@ -16060,11 +16057,7 @@ namespace UIKit {
 		[Export ("zooming")]
 		bool Zooming { [Bind ("isZooming")] get; }
 
-		/// <summary>Returns <see langword="true" /> if the scroll view is bouncing back to the zoom scaling limits specified by<see cref="UIKit.UIScrollView.MinimumScrollView" /> and <see cref="UIKit.UIScrollView.MaximumScrollView" />. Read-only.</summary>
-		///         <value>
-		///         </value>
-		///         <remarks>
-		///         </remarks>
+		/// <summary>Returns <see langword="true" /> if the scroll view is bouncing back to the zoom scaling limits specified by<see cref="UIScrollView.MinimumZoomScale" /> and <see cref="UIScrollView.MaximumZoomScale" />. Read-only.</summary>
 		[Export ("zoomBouncing")]
 		bool ZoomBouncing { [Bind ("isZoomBouncing")] get; }
 
@@ -19794,8 +19787,8 @@ namespace UIKit {
 		/// <returns>
 		///         </returns>
 		/// <remarks>
-		///           <para>Note that custom UITableViewCell's do not respect IndentationLevel automatically. Application developers must override <see cref="UIKit.UITableViewController.LayoutSubviews" />.</para>
-		///         </remarks>
+		///   <para>Note that custom <see cref="UITableViewCell" />'s do not respect IndentationLevel automatically. Application developers must override <see cref="UIView.LayoutSubviews" />.</para>
+		/// </remarks>
 		[Export ("tableView:indentationLevelForRowAtIndexPath:")]
 		nint IndentationLevel (UITableView tableView, NSIndexPath indexPath);
 
@@ -20487,19 +20480,14 @@ namespace UIKit {
 		UIColor TextColor { get; set; }
 
 		/// <summary>This property determines if the text view is editable or not.</summary>
-		///         <value>
-		///         </value>
-		///         <remarks>
-		///         </remarks>
-		///         <altmember cref="UIKit.UITextView.AllowsEditingTextAttributes" />
-		///         <altmember cref="UIKit.UITextView.AttributedText" />
-		///         <altmember cref="UIKit.UITextView.DataDetectorTypes" />
-		///         <altmember cref="UIKit.UITextView.Font" />
-		///         <altmember cref="UIKit.UITextView.Text" />
-		///         <altmember cref="UIKit.UITextView.TextAlignment" />
-		///         <altmember cref="UIKit.UITextView.TextContainerInsert" />
-		///         <altmember cref="UIKit.UITextView.TextColor" />
-		///         <altmember cref="UIKit.UITextView.TypingAttributes" />
+		/// <altmember cref="UIKit.UITextView.AllowsEditingTextAttributes" />
+		/// <altmember cref="UIKit.UITextView.AttributedText" />
+		/// <altmember cref="UIKit.UITextView.DataDetectorTypes" />
+		/// <altmember cref="UIKit.UITextView.Font" />
+		/// <altmember cref="UIKit.UITextView.Text" />
+		/// <altmember cref="UIKit.UITextView.TextAlignment" />
+		/// <altmember cref="UIKit.UITextView.TextColor" />
+		/// <altmember cref="UIKit.UITextView.TypingAttributes" />
 		[Export ("editable")]
 		[NoTV]
 		[MacCatalyst (13, 1)]
@@ -23967,10 +23955,6 @@ namespace UIKit {
 	// This protocol is only for consumption (there is no API to set a transition coordinator,
 	// only get an existing one), so we do not provide a model to subclass.
 	//
-	/// <summary>Interface that, together with the <see cref="UIKit.UIViewControllerTransitionCoordinator_Extensions" /> class, comprise the UIViewControllerTransitionCoordinator protocol.</summary>
-	/// <remarks>To be added.</remarks>
-	/// <summary>Extension class that, together with the <see cref="UIKit.IUIViewControllerTransitionCoordinator" /> interface, comprise the UIViewControllerTransitionCoordinator protocol.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	partial interface UIViewControllerTransitionCoordinator : UIViewControllerTransitionCoordinatorContext {
@@ -25152,8 +25136,6 @@ namespace UIKit {
 		NSObject Sender { get; }
 	}
 
-	/// <summary>Interface that, together with the <see cref="UIKit.UIPopoverBackgroundViewMethods_Extensions" /> class, comprise the UIPopoverBackgroundViewMethods protocol.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIPopoverBackgroundViewMethods {
@@ -27387,8 +27369,6 @@ namespace UIKit {
 
 	// note: used (internally, not exposed) by UITableView and UICollectionView for state restoration
 	// user objects must adopt the protocol
-	/// <summary>Interface that, together with the <see cref="UIKit.UIDataSourceModelAssociation_Extensions" /> class, comprise the UIDataSourceModelAssociation protocol.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIDataSourceModelAssociation {
@@ -27412,8 +27392,6 @@ namespace UIKit {
 		NSIndexPath GetIndexPath (string identifier, UIView view);
 	}
 
-	/// <summary>Interface that, together with the <see cref="UIKit.UIAccessibilityReadingContent_Extensions" /> class, comprise the UIAccessibilityReadingContent protocol.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIAccessibilityReadingContent {
@@ -27467,8 +27445,6 @@ namespace UIKit {
 		NSAttributedString GetAccessibilityAttributedPageContent ();
 	}
 
-	/// <summary>Interface that, together with the <see cref="UIKit.UIGuidedAccessRestrictionDelegate_Extensions" /> class, comprise the UIGuidedAccessRestrictionDelegate protocol.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface UIGuidedAccessRestrictionDelegate {
@@ -28005,7 +27981,7 @@ namespace UIKit {
 		bool ShouldUpdateFocus (UIFocusUpdateContext context);
 
 		/// <param name="context">Metadata for the focus change.</param>
-		/// <param name="coordinator">The <see cref="UIKit.UIFocusAnimationController" /> coordinating the focus-change animations.</param>
+		/// <param name="coordinator">The <see cref="UIFocusAnimationCoordinator" /> coordinating the focus-change animations.</param>
 		/// <summary>Delegate method called shortly after focus has changed to a new <see cref="UIKit.UIView" />.</summary>
 		/// <remarks>To be added.</remarks>
 		[Abstract]

@@ -461,7 +461,7 @@ namespace MediaPlayer {
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		NSString DateAddedProperty { get; }
 
-		/// <summary>Backing store for the <see cref="MediaPlayer.MediaItem.PlaybackStoreID" /> property.</summary>
+		/// <summary>Backing store for the <see cref="MPMediaItem.PlaybackStoreID" /> property.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
@@ -1113,7 +1113,7 @@ namespace MediaPlayer {
 	interface MPMediaPredicate : NSSecureCoding {
 	}
 
-	/// <summary>A type of <see cref="MediaPlayer.MPMediaPredicate" /> that evaluates <see cref="MediaPlayer.MPMediaItemProperty" />s.</summary>
+	/// <summary>A type of <see cref="MediaPlayer.MPMediaPredicate" /> that evaluates <see cref="MediaPlayer.MPMediaType" />s.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/MediaPlayer/Reference/MPMediaPropertyPredicate_ClassReference/index.html">Apple documentation for <c>MPMediaPropertyPredicate</c></related>
 	[NoMac]
@@ -1441,8 +1441,6 @@ namespace MediaPlayer {
 		MPTimedMetadata [] TimedMetadata { get; }
 	}
 
-	/// <summary>Interface that, together with the <see cref="MediaPlayer.MPMediaPlayback_Extensions" /> class, comprise the MPMediaPlayback protocol.</summary>
-	/// <remarks>To be added.</remarks>
 	[NoMac]
 	[TV (16, 0)]
 	[MacCatalyst (13, 1)]

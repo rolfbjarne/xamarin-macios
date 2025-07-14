@@ -230,7 +230,7 @@ namespace HealthKit {
 		Right = 1,
 	}
 
-	/// <summary>The completion handler for <see cref="HealthKit.HKAnchoredObjectQuery.HKAnchoredObjectQuery(HealthKit.HKSampleType,Foundation.NSPredicate,System.UIntPtr,System.UIntPtr,HealthKit.HKAnchoredObjectResultHandler2)" />.</summary>
+	/// <summary>The completion handler for <see cref="HealthKit.HKAnchoredObjectQuery.HKAnchoredObjectQuery(HealthKit.HKSampleType,Foundation.NSPredicate,System.UIntPtr,System.UIntPtr,HealthKit.HKAnchoredObjectResultHandler)" />.</summary>
 	/// <summary>Completion handler for anchored object queries.</summary>
 	delegate void HKAnchoredObjectResultHandler (HKAnchoredObjectQuery query, [NullAllowed] HKSample [] results, nuint newAnchor, [NullAllowed] NSError error);
 
@@ -2738,8 +2738,9 @@ namespace HealthKit {
 		NSSet Sources { get; }
 	}
 
-	/// <summary>Results handler for <see cref="HealthKit.HKStatisticsCollectionQuery.SetInitialResultsHandler(HealthKit.HKStatisticsCollectionQueryInitialResultsHandler)" /> and <see cref="HealthKit.HKStatisticsCollectionQuery.SetStatisticsUpdateHandler(HealthKit.HKStatisticsCollectionQueryInitialResultsHandler)" />.</summary>
+	/// <summary>The delegate for <see cref="HealthKit.HKStatisticsCollectionQuery.InitialResultsHandler" />.</summary>
 	delegate void HKStatisticsCollectionQueryInitialResultsHandler (HKStatisticsCollectionQuery query, [NullAllowed] HKStatisticsCollection result, [NullAllowed] NSError error);
+	/// <summary>The delegate for <see cref="HealthKit.HKStatisticsCollectionQuery.StatisticsUpdated" />.</summary>
 	delegate void HKStatisticsCollectionQueryStatisticsUpdateHandler (HKStatisticsCollectionQuery query, [NullAllowed] HKStatistics statistics, [NullAllowed] HKStatisticsCollection collection, [NullAllowed] NSError error);
 
 
@@ -3328,7 +3329,7 @@ namespace HealthKit {
 		StateOfMind,
 	}
 
-	/// <summary>Enumerates the types of <see cref="HealthKit.HKCategory" />; currently there is only the one form (Sleep Analysis).</summary>
+	/// <summary>Enumerates the types of <see cref="HKCategoryType" />s.</summary>
 	[Mac (13, 0)]
 	[MacCatalyst (13, 1)]
 	enum HKCategoryTypeIdentifier {

@@ -158,7 +158,7 @@ public class SimpleCollectionViewController : UICollectionViewController
     cv.CollectionViewLayout.RegisterClassForDecorationView (typeof(DecorationView), DecorationView.ClassId);
   }
 
-  public override UICollectionViewCell GetCell (UICollectionView collectionView, MonoTouch.Foundation.NSIndexPath indexPath)
+  public override UICollectionViewCell GetCell (UICollectionView collectionView, Foundation.NSIndexPath indexPath)
   {
     var animalCell = (AnimalCell)collectionView.DequeueReusableCell (AnimalCell.ClassId, indexPath);
     var animal = animals [indexPath.Section * (animals.Count / SectionCount) + indexPath.Item];

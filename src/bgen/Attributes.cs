@@ -394,12 +394,20 @@ public class ParamsAttribute : Attribute {
 [AttributeUsage (AttributeTargets.Property, AllowMultiple = true)]
 public class NotificationAttribute : Attribute {
 	public NotificationAttribute (Type t) { Type = t; }
+#if !XAMCORE_5_0
+	[Obsolete ("The 'notificationCenter' parameter is deprecated, and this constructor will be removed in a future version.")]
 	public NotificationAttribute (Type t, string notificationCenter) { Type = t; NotificationCenter = notificationCenter; }
+	[Obsolete ("The 'notificationCenter' parameter is deprecated, and this constructor will be removed in a future version.")]
 	public NotificationAttribute (string notificationCenter) { NotificationCenter = notificationCenter; }
+#endif
 	public NotificationAttribute () { }
 
 	public Type Type { get; set; }
+
+#if !XAMCORE_5_0
+	[Obsolete ("This property is deprecated, and will be removed in a future version.")]
 	public string NotificationCenter { get; set; }
+#endif
 }
 
 //

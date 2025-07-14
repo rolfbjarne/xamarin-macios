@@ -7323,8 +7323,16 @@ public partial class Generator : IMemberGatherer {
 
 	string GetNotificationCenter (PropertyInfo pi)
 	{
+#if !XAMCORE_5_0
 		var a = AttributeManager.GetCustomAttributes<NotificationAttribute> (pi);
-		return a [0].NotificationCenter ?? "NSNotificationCenter.DefaultCenter";
+		if (a.Length > 0) {
+// #pragma warning disable 616 // deprecated member
+			return a [0].NotificationCenter;
+// #pragma warning restore
+		}
+#endif
+		return "NSNotificationCenter.DefaultCenter";
+
 	}
 
 	string GetNotificationName (PropertyInfo pi)

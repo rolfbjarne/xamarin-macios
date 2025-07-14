@@ -10257,7 +10257,7 @@ namespace Foundation {
 		[Async (ResultTypeName = "NSUrlSessionCombinedTasks", XmlDocs = """
 			<summary>To be added.</summary>
 			<returns>
-			          <para>A task that represents the asynchronous GetAllTasks operation.   The value of the TResult parameter is an array of MonoTouch.Foundation.NSUrlSessionTask.  The base class for data-transfer tasks created by a .</para>
+			          <para>A task that represents the asynchronous GetAllTasks operation.   The value of the TResult parameter is an array of NSUrlSessionTask.  The base class for data-transfer tasks created by a .</para>
 			        </returns>
 			<remarks>
 			          <para copied="true">The GetAllTasksAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
@@ -14844,7 +14844,7 @@ namespace Foundation {
 		/// <param name="typeIdentifier">A Universal Type Identifier (UTI) indicating the type of data to load.</param>
 		/// <param name="completionHandler">The method called after the data is loaded.</param>
 		/// <summary>Implement this method to customize the loading of data by an <see cref="Foundation.NSItemProvider" />.</summary>
-		/// <returns>An <see cref="Monotouch.Foundation.NSProgress" /> object reflecting the data-loading operation.</returns>
+		/// <returns>An <see cref="NSProgress" /> object reflecting the data-loading operation.</returns>
 		/// <remarks>
 		///           <para>The <paramref name="typeIdentifier" /> must be in the set of values returned by <see cref="Foundation.NSItemProviderWriting_Extensions.GetWritableTypeIdentifiersForItemProvider(Foundation.INSItemProviderWriting)" />.</para>
 		///         </remarks>
@@ -18134,8 +18134,8 @@ namespace Foundation {
 		[NullAllowed]
 		NSUrl PresentedItemUrl { get; }
 
-		/// <summary>Gets the <see cref="Monotouch.Foundation.NSOperationQueue" /> on which presenter-related methods are executed.</summary>
-		/// <value>The <see cref="Monotouch.Foundation.NSOperationQueue" /> on which methods are executed.</value>
+		/// <summary>Gets the <see cref="NSOperationQueue" /> on which presenter-related methods are executed.</summary>
+		/// <value>The <see cref="NSOperationQueue" /> on which methods are executed.</value>
 		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("presentedItemOperationQueue", ArgumentSemantic.Retain)]

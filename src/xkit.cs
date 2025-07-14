@@ -431,7 +431,7 @@ namespace UIKit {
 		/// <summary>Whether the <see cref="UIKit.NSLayoutManager" /> currently contains any areas of noncontiguous layout.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>
-		///           <para>Even if <see cref="UIKit.NSLayoutManager.AllowsNonContinguousLayout" /> is <see langword="true" />, this method may return <see langword="false" />, for instance, if layout is complete.</para>
+		///           <para>Even if <see cref="UIKit.NSLayoutManager.AllowsNonContiguousLayout" /> is <see langword="true" />, this method may return <see langword="false" />, for instance, if layout is complete.</para>
 		///         </remarks>
 		[Export ("hasNonContiguousLayout")]
 		bool HasNonContiguousLayout { get; }
@@ -497,7 +497,7 @@ namespace UIKit {
 		/// <param name="characterRange">To be added.</param>
 		///         <summary>Forces the <see cref="UIKit.NSLayoutManager" /> to generate glyphs for the specified characters, if it has not already done so.</summary>
 		///         <remarks>
-		///           <para>The <see cref="UIKit.NSLayoutManager" /> may calculate glyphs for a range larger than the <paramref name="characterRange" />. If <see cref="UIKit.NSLayoutManager.AllowsNonContinguousLayout" /> is <see langword="false" />, the range will always extend to the beginning of the text.</para>
+		///           <para>The <see cref="UIKit.NSLayoutManager" /> may calculate glyphs for a range larger than the <paramref name="characterRange" />. If <see cref="UIKit.NSLayoutManager.AllowsNonContiguousLayout" /> is <see langword="false" />, the range will always extend to the beginning of the text.</para>
 		///         </remarks>
 		[Export ("ensureGlyphsForCharacterRange:")]
 		void EnsureGlyphsForCharacterRange (NSRange characterRange);
@@ -505,7 +505,7 @@ namespace UIKit {
 		/// <param name="glyphRange">To be added.</param>
 		///         <summary>Forces the <see cref="UIKit.NSLayoutManager" /> to generate glyphs for the specified glyph range, if it has not already done so.</summary>
 		///         <remarks>
-		///           <para>The <see cref="UIKit.NSLayoutManager" /> may calculate glyphs for a range larger than the <paramref name="glyphRange" />. If <see cref="UIKit.NSLayoutManager.AllowsNonContinguousLayout" /> is <see langword="false" />, the range will always extend to the beginning of the text.</para>
+		///           <para>The <see cref="UIKit.NSLayoutManager" /> may calculate glyphs for a range larger than the <paramref name="glyphRange" />. If <see cref="UIKit.NSLayoutManager.AllowsNonContiguousLayout" /> is <see langword="false" />, the range will always extend to the beginning of the text.</para>
 		///         </remarks>
 		[Export ("ensureGlyphsForGlyphRange:")]
 		void EnsureGlyphsForGlyphRange (NSRange glyphRange);
@@ -513,7 +513,7 @@ namespace UIKit {
 		/// <param name="characterRange">To be added.</param>
 		///         <summary>Forces the <see cref="UIKit.NSLayoutManager" /> to layout the specified characters, if it has not already done so.</summary>
 		///         <remarks>
-		///           <para>The <see cref="UIKit.NSLayoutManager" /> may layout an area larger than the <paramref name="characterRange" />. If <see cref="UIKit.NSLayoutManager.AllowsNonContinguousLayout" /> is <see langword="false" />, the range will always extend to the beginning of the text.</para>
+		///           <para>The <see cref="UIKit.NSLayoutManager" /> may layout an area larger than the <paramref name="characterRange" />. If <see cref="UIKit.NSLayoutManager.AllowsNonContiguousLayout" /> is <see langword="false" />, the range will always extend to the beginning of the text.</para>
 		///         </remarks>
 		[Export ("ensureLayoutForCharacterRange:")]
 		void EnsureLayoutForCharacterRange (NSRange characterRange);
@@ -521,7 +521,7 @@ namespace UIKit {
 		/// <param name="glyphRange">To be added.</param>
 		///         <summary>Forces the <see cref="UIKit.NSLayoutManager" /> to layout the specified glyphs, if it has not already done so.</summary>
 		///         <remarks>
-		///           <para>The <see cref="UIKit.NSLayoutManager" /> may layout a larger range than the specified <paramref name="glyphRange" />. If <see cref="UIKit.NSLayoutManager.AllowsNonContinguousLayout" /> is <see langword="false" />, the range will always extend to the beginning of the text.</para>
+		///           <para>The <see cref="UIKit.NSLayoutManager" /> may layout a larger range than the specified <paramref name="glyphRange" />. If <see cref="UIKit.NSLayoutManager.AllowsNonContiguousLayout" /> is <see langword="false" />, the range will always extend to the beginning of the text.</para>
 		///         </remarks>
 		[Export ("ensureLayoutForGlyphRange:")]
 		void EnsureLayoutForGlyphRange (NSRange glyphRange);
@@ -529,7 +529,7 @@ namespace UIKit {
 		/// <param name="container">To be added.</param>
 		///         <summary>Forces the <see cref="UIKit.NSLayoutManager" /> to layout the specified <see cref="UIKit.NSTextContainer" />, if it has not already done so.</summary>
 		///         <remarks>
-		///           <para>The <see cref="UIKit.NSLayoutManager" /> may layout more than the specified <paramref name="container" />. If <see cref="UIKit.NSLayoutManager.AllowsNonContinguousLayout" /> is <see langword="false" />, the range will always extend to the beginning of the text.</para>
+		///           <para>The <see cref="UIKit.NSLayoutManager" /> may layout more than the specified <paramref name="container" />. If <see cref="UIKit.NSLayoutManager.AllowsNonContiguousLayout" /> is <see langword="false" />, the range will always extend to the beginning of the text.</para>
 		///         </remarks>
 		[Export ("ensureLayoutForTextContainer:")]
 		void EnsureLayoutForTextContainer (NSTextContainer container);
@@ -546,7 +546,7 @@ namespace UIKit {
 		/// <summary>The number of glyphs in the <see cref="UIKit.NSLayoutManager" />.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>
-		///           <para>If <see cref="UIKit.NSLayoutManager.AllowsNonContinuousLayout" /> is <see langword="false" />, this method will force glyph generation for all characters.</para>
+		///           <para>If <see cref="NSLayoutManager.AllowsNonContiguousLayout" /> is <see langword="false" />, this method will force glyph generation for all characters.</para>
 		///         </remarks>
 		[Export ("numberOfGlyphs")]
 		nuint NumberOfGlyphs { get; }
@@ -593,7 +593,7 @@ namespace UIKit {
 		/// <summary>The index of the first character associated with the glyph at the specified index.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>
-		///           <para>If <see cref="UIKit.NSLayoutManager.AllowsNonContiguousLayout" /> is <see langword="false" />, calling this method will result in generating all glyphs up to and including <paramref name="glyphIndex" />.</para>
+		///           <para>If <see cref="NSLayoutManager.AllowsNonContiguousLayout" /> is <see langword="false" />, calling this method will result in generating all glyphs up to and including <paramref name="glyphIndex" />.</para>
 		///         </remarks>
 		[Export ("characterIndexForGlyphAtIndex:")]
 		nuint GetCharacterIndex (nuint glyphIndex);
@@ -865,7 +865,7 @@ namespace UIKit {
 		/// <returns>To be added.</returns>
 		/// <remarks>
 		///           <para>Glyphs such as tabs and newlines are not typically shown, but effect layout. Spaces are considered shown, as they "show" a characteristic displacement.</para>
-		///           <para>This method will cause layout up to the specified index. If <see cref="UIKit.NSLayoutManager.AllowsNonContiguousLayout" /> is <see langword="true" />, the layout will be confined to the containing line fragment.</para>
+		///           <para>This method will cause layout up to the specified index. If <see cref="NSLayoutManager.AllowsNonContiguousLayout" /> is <see langword="true" />, the layout will be confined to the containing line fragment.</para>
 		///         </remarks>
 		[Export ("notShownAttributeForGlyphAtIndex:")]
 		bool IsNotShownAttributeForGlyph (nuint glyphIndex);
@@ -1067,7 +1067,7 @@ namespace UIKit {
 		/// <summary>Developers should call <see cref="UIKit.NSLayoutManager.GetGlyphIndex(CoreGraphics.CGPoint,UIKit.NSTextContainer,out System.Runtime.InteropServices.NFloat)" /> rather than this primitive method.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>
-		///           <para>This method is public for overriding purposes. Developers should call <see cref="UIKit.NSLayoutManager.GetGlyphIndex(CoreGraphics.CGPoint,UIKit.NSTextContainer,ref System.Runtime.InteropServices.NFloat)" />  rather than this primitive method.</para>
+		///           <para>This method is public for overriding purposes. Developers should call <see cref="NSLayoutManager.GetGlyphIndex(CGPoint,NSTextContainer,out nfloat)" />  rather than this primitive method.</para>
 		///         </remarks>
 		[Export ("glyphIndexForPoint:inTextContainer:")]
 		nuint GetGlyphIndex (CGPoint point, NSTextContainer container);
@@ -3589,8 +3589,6 @@ namespace UIKit {
 		NSString ColumnTerminatorsAttributeName { get; }
 	}
 
-	/// <summary>Interface that, together with the <see cref="UIKit.NSTextLayoutOrientationProvider_Extensions" /> class, comprise the NSTextLayoutOrientationProvider protocol.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	// no [Model] since it's not exposed in any API

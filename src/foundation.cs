@@ -17300,10 +17300,6 @@ namespace Foundation {
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="Foundation.INSProgressReporting" />.</para>
 	///       <para>If you create objects that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="Foundation.INSProgressReporting" /> protocol.</para>
 	///     </remarks>
-	/// <summary>Extension methods to the <see cref="Foundation.INSProgressReporting" /> interface to support all the methods from the <see cref="Foundation.INSProgressReporting" /> protocol.</summary>
-	/// <remarks>
-	///       <para>The extension methods for <see cref="Foundation.INSProgressReporting" /> allow developers to treat instances of the interface as having all the optional methods of the original <see cref="Foundation.INSProgressReporting" /> protocol.   Since the interface only contains the required members, these extension methods allow developers to call the optional members of the protocol.</para>
-	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	interface NSProgressReporting {

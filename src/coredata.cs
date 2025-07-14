@@ -2180,17 +2180,14 @@ namespace CoreData {
 		[NullAllowed, Export ("parentContext", ArgumentSemantic.Retain)]
 		NSManagedObjectContext ParentContext { get; set; }
 
-		/// <include file="../docs/api/CoreData/NSManagedObjectContext.xml" path="/Documentation/Docs[@DocId='P:CoreData.NSManagedObjectContext.ObjectsDidChangeNotification']/*" />
 		[Field ("NSManagedObjectContextObjectsDidChangeNotification")]
 		[Notification (typeof (NSManagedObjectChangeEventArgs))]
 		NSString ObjectsDidChangeNotification { get; }
 
-		/// <include file="../docs/api/CoreData/NSManagedObjectContext.xml" path="/Documentation/Docs[@DocId='P:CoreData.NSManagedObjectContext.DidSaveNotification']/*" />
 		[Field ("NSManagedObjectContextDidSaveNotification")]
 		[Notification (typeof (NSManagedObjectChangeEventArgs))]
 		NSString DidSaveNotification { get; }
 
-		/// <include file="../docs/api/CoreData/NSManagedObjectContext.xml" path="/Documentation/Docs[@DocId='P:CoreData.NSManagedObjectContext.WillSaveNotification']/*" />
 		[Field ("NSManagedObjectContextWillSaveNotification")]
 		[Notification ()]
 		NSString WillSaveNotification { get; }
@@ -4155,12 +4152,10 @@ namespace CoreData {
 		[Field ("NSStoreTypeKey")]
 		NSString StoreTypeKey { get; }
 
-		/// <include file="../docs/api/CoreData/NSPersistentStoreCoordinator.xml" path="/Documentation/Docs[@DocId='P:CoreData.NSPersistentStoreCoordinator.StoresDidChangeNotification']/*" />
 		[Notification]
 		[Field ("NSPersistentStoreCoordinatorStoresDidChangeNotification")]
 		NSString StoresDidChangeNotification { get; }
 
-		/// <include file="../docs/api/CoreData/NSPersistentStoreCoordinator.xml" path="/Documentation/Docs[@DocId='P:CoreData.NSPersistentStoreCoordinator.WillRemoveStoreNotification']/*" />
 		[Notification]
 		[Field ("NSPersistentStoreCoordinatorWillRemoveStoreNotification")]
 		NSString WillRemoveStoreNotification { get; }
@@ -4170,7 +4165,6 @@ namespace CoreData {
 		[return: NullAllowed]
 		NSObject Execute (NSPersistentStoreRequest request, NSManagedObjectContext context, out NSError error);
 
-		/// <include file="../docs/api/CoreData/NSPersistentStoreCoordinator.xml" path="/Documentation/Docs[@DocId='P:CoreData.NSPersistentStoreCoordinator.DidImportUbiquitousContentChangesNotification']/*" />
 		[NoTV]
 		[Notification]
 		[Deprecated (PlatformName.iOS, 10, 0, message: "Please see the release notes and Core Data documentation.")]
@@ -4232,7 +4226,6 @@ namespace CoreData {
 		[Export ("removeUbiquitousContentAndPersistentStoreAtURL:options:error:")]
 		bool RemoveUbiquitousContentAndPersistentStore (NSUrl storeUrl, [NullAllowed] NSDictionary options, out NSError error);
 
-		/// <include file="../docs/api/CoreData/NSPersistentStoreCoordinator.xml" path="/Documentation/Docs[@DocId='P:CoreData.NSPersistentStoreCoordinator.StoresWillChangeNotification']/*" />
 		[MacCatalyst (13, 1)]
 		[Notification (typeof (NSPersistentStoreCoordinatorStoreChangeEventArgs))]
 		[Field ("NSPersistentStoreCoordinatorStoresWillChangeNotification")]

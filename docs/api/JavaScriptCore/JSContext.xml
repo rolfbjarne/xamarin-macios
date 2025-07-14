@@ -2,7 +2,7 @@
   <Docs DocId="T:JavaScriptCore.JSContext">
     <summary>Encapsulates a JavaScript engine.</summary>
     <remarks>
-      <para>The <see cref="JavaScriptCore.JSContext" /> is the central object of the <c>JavaScriptCore</c> namespace. The <see cref="JavaScriptCore.JSContext" /> maintains a JavaScript environment (manipulated by the <see cref="JavaScriptCore.JSContext.Item(Foundation.NSObject)" /> property) and evaluates scripts with the <see cref="JavaScriptCore.JSContext.EvaluateScript(System.String,Foundation.NSUrl)" /> method.</para>
+      <para>The <see cref="JavaScriptCore.JSContext" /> is the central object of the <c>JavaScriptCore</c> namespace. The <see cref="JavaScriptCore.JSContext" /> maintains a JavaScript environment (manipulated by the <see cref="JavaScriptCore.JSContext.this[Foundation.NSObject]" /> property) and evaluates scripts with the <see cref="JavaScriptCore.JSContext.EvaluateScript(System.String,Foundation.NSUrl)" /> method.</para>
       <para>Application developers will often want to assign a delegate to the <see cref="JavaScriptCore.JSContext.ExceptionHandler" /> property to gain access, in their Xamarin.iOS code, of exceptions raised in the JavaScript realm.</para>
       <para>The following example shows the basic use of <see cref="JavaScriptCore.JSContext" />. The context is instantiated and a simple exception handler is assigned. One of the <see cref="JavaScriptCore.JSValue.From" /> method overloads is used to assign values to the JavaScript variables <c>arg1</c> and <c>arg2</c>. The <see cref="JavaScriptCore.JSContext.EvaluateScript(System.String,Foundation.NSUrl)" /> method evaluates the JavaScript and returns the result, which is converted back into a .NET object with the <see cref="JavaScriptCore.JSValue.ToInt32" /> method. </para>
       <example>
@@ -31,7 +31,7 @@ var four = jsContext[(NSString)"sum"].ToInt32();
       <format type="text/html">
         <h3>Calling C# code from JavaScript</h3>
       </format>
-      <para>Developers can extend the <see cref="JavascriptCore.IJSExport" /> interface to define methods that can be called from JavaScript. Developers must mark that interface with the <see cref="Foundation.ProtocolAttribute" /> attribute and must mark JavaScript-callable methods with the <see cref="Foundation.ExportAttribute" /> attribute. They must also add <c>--registrar:static</c> to the arguments used by <c>mtouch</c> during the build. For example:</para>
+      <para>Developers can extend the <see cref="IJSExport" /> interface to define methods that can be called from JavaScript. Developers must mark that interface with the <see cref="Foundation.ProtocolAttribute" /> attribute and must mark JavaScript-callable methods with the <see cref="Foundation.ExportAttribute" /> attribute. They must also add <c>--registrar:static</c> to the arguments used by <c>mtouch</c> during the build. For example:</para>
       <example>
         <code lang="csharp lang-csharp"><![CDATA[
 [Protocol ()]

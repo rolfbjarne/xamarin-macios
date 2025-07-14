@@ -1819,7 +1819,7 @@ namespace SceneKit {
 		NSString ShadowFarClippingKey { get; }
 	}
 
-	/// <summary>Constants for use with the <see cref="SceneKit.SCNMaterial.LightingModel" /> property, which defines the way lights and materials combine to produce a particular rendered color.</summary>
+	/// <summary>Constants for use with the <see cref="SCNMaterial.LightingModelName" /> property, which defines the way lights and materials combine to produce a particular rendered color.</summary>
 	[MacCatalyst (13, 1)]
 	[Static]
 	interface SCNLightingModel {
@@ -2269,7 +2269,7 @@ namespace SceneKit {
 
 	/// <param name="node">The current <see cref="SceneKit.SCNNode" />.</param>
 	///     <param name="stop">An <c>out</c> parameter that, when set to true, stops the enumeration.</param>
-	///     <summary>Delegate for use with <see cref="SceneKit.SCNNode.EnumerateChildNodes(SceneKit.SCNNodePredicate)" />.</summary>
+	///     <summary>Delegate for use with <see cref="SCNNode.FindNodes(SceneKit.SCNNodePredicate)" />.</summary>
 	[MacCatalyst (13, 1)]
 	delegate bool SCNNodePredicate (SCNNode node, out bool stop);
 

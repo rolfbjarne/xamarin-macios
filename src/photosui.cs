@@ -62,9 +62,13 @@ namespace PhotosUI {
 		bool ShouldShowCancelConfirmation { get; }
 	}
 
+#if MONOMAC
+	/// <summary>An <see cref="NSView" /> that displays a <see cref="PHLivePhoto" />.</summary>
+	/// <related type="externalDocumentation" href="https://developer.apple.com/reference/PhotosUI/PHLivePhotoView">Apple documentation for <c>PHLivePhotoView</c></related>
+#else
 	/// <summary>A <see cref="UIKit.UIView" /> that displays a <see cref="PHLivePhoto" />.</summary>
-	///     
-	///     <related type="externalDocumentation" href="https://developer.apple.com/reference/PhotosUI/PHLivePhotoView">Apple documentation for <c>PHLivePhotoView</c></related>
+	/// <related type="externalDocumentation" href="https://developer.apple.com/reference/PhotosUI/PHLivePhotoView">Apple documentation for <c>PHLivePhotoView</c></related>
+#endif
 	[MacCatalyst (13, 1)]
 #if MONOMAC
 	[BaseType (typeof (NSView))]

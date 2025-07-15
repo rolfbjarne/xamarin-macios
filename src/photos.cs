@@ -1487,7 +1487,7 @@ namespace Photos {
 		PHImageRequestOptionsVersion Version { get; set; }
 	}
 
-	/// <summary>Defines keys for the <c>info</c> dictionary passed to the result handler in <see cref="Photos.PHLivePhoto.RequestLivePhoto(Foundation.NSUrl[],UIKit.UIImage,CoreGraphics.CGSize,Photos.PHImageContentMode,System.Action{Photos.PHLivePhoto,Foundation.NSDictionary})" />.</summary>
+	/// <summary>Defines keys for the <c>info</c> dictionary passed to the result handler in <see cref="Photos.PHLivePhoto.RequestLivePhoto(Foundation.NSUrl[],UIImage,CoreGraphics.CGSize,Photos.PHImageContentMode,System.Action{Photos.PHLivePhoto,Foundation.NSDictionary})" />.</summary>
 	[MacCatalyst (13, 1)]
 	[Static]
 	interface PHLivePhotoInfo {

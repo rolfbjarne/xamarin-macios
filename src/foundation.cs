@@ -14120,14 +14120,8 @@ namespace Foundation {
 
 	[BaseType (typeof (NSObject))]
 	interface NSIndexPath : NSCoding, NSSecureCoding, NSCopying {
-		/// <param name="index">
-		/// Object to place in the index-path.
-		///   	   </param>
-		/// <summary>Create a new index-path object with the specified object (not required for use with iOS <see cref="UIKit.UITableView" />).</summary>
-		/// <returns>
-		///         </returns>
-		/// <remarks>
-		///         </remarks>
+		/// <summary>Create a new index-path object with the specified object.</summary>
+		/// <param name="index">Object to place in the index-path.</param>
 		[Export ("indexPathWithIndex:")]
 		[Static]
 		NSIndexPath FromIndex (nuint index);
@@ -14137,34 +14131,16 @@ namespace Foundation {
 		[Static]
 		NSIndexPath _FromIndex (IntPtr indexes, nint len);
 
-		/// <param name="index">
-		/// 
-		/// Index to be appended.
-		///   	   
-		///   	   </param>
-		/// <summary>Returns a new index-path containing those in this object plus the new <paramref name="index" /> (not required for use with iOS <see cref="UIKit.UITableView" />).</summary>
-		/// <returns>
-		///         </returns>
-		/// <remarks>
-		///         </remarks>
+		/// <summary>Returns a new index-path containing those in this object plus the new <paramref name="index" />.</summary>
+		/// <param name="index">Index to be appended.</param>
 		[Export ("indexPathByAddingIndex:")]
 		NSIndexPath IndexPathByAddingIndex (nuint index);
 
 		[Export ("indexPathByRemovingLastIndex")]
 		NSIndexPath IndexPathByRemovingLastIndex ();
 
-		/// <param name="position">
-		/// 
-		/// 
-		/// Position of index to return.
-		///   	   
-		///   	   
-		///   	   </param>
-		/// <summary>Return the index at the given <paramref name="position" /> in the index-path (not required for use with iOS <see cref="UIKit.UITableView" />).</summary>
-		/// <returns>
-		///         </returns>
-		/// <remarks>
-		///         </remarks>
+		/// <summary>Return the index at the given <paramref name="position" /> in the index-path.</summary>
+		/// <param name="position">Position of index to return.</param>
 		[Export ("indexAtPosition:")]
 		nuint IndexAtPosition (nint position);
 
@@ -14192,28 +14168,16 @@ namespace Foundation {
 		[Export ("row")]
 		nint LongRow { get; }
 
-		/// <summary>The index of a section within a <see cref="UIKit.UITableView" /> (read-only).</summary>
-		///         <value>
-		///           <para />
-		///         </value>
-		///         <remarks>
-		///           <para />
-		///         </remarks>
+		/// <summary>The index of a section within a <see cref="UIKit.UITableView" /> (read-only).</summary>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("section")]
 		nint LongSection { get; }
 
-		/// <param name="row">
-		/// The row index within the corresponding <paramref name="section" /> of a <see cref="UIKit.UITableView" />.
-		///   	   </param>
-		/// <param name="section">
-		/// The index of the section in the <see cref="UIKit.UITableView" /> that contains the <paramref name="row" />.
-		///   	   </param>
 		/// <summary>Returns an index-path object initialized with the given row and section details.</summary>
+		/// <param name="row">The row index within the corresponding <paramref name="section" /> of a <see cref="UIKit.UITableView" />.</param>
+		/// <param name="section">The index of the section in the <see cref="UIKit.UITableView" /> that contains the <paramref name="row" />.</param>
 		/// <returns>An <see cref="Foundation.NSIndexPath" /> object, or <see langword="null" /> if it could not be created.</returns>
-		/// <remarks>
-		///         </remarks>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Static]
@@ -14226,26 +14190,16 @@ namespace Foundation {
 		[Export ("section")]
 		nint Section { get; }
 
-		/// <param name="item">
-		/// Item value.
-		///   	   </param>
-		/// <param name="section">
-		/// Section value.
-		///   	   </param>
-		/// <summary>Creates an NSIndexPath from the given item and section values.</summary>
-		/// <returns>New instance of the NSIndexPath.</returns>
-		/// <remarks>
-		///         </remarks>
+		/// <summary>Creates an <see cref="NSIndexPath" /> from the given item and section values.</summary>
+		/// <param name="item">Item value.</param>
+		/// <param name="section">Section value.</param>
+		/// <returns>New instance of the <see cref="NSIndexPath" />.</returns>
 		[Static]
 		[MacCatalyst (13, 1)]
 		[Export ("indexPathForItem:inSection:")]
 		NSIndexPath FromItemSection (nint item, nint section);
 
-		/// <summary>The item component of this NSIndexPath.</summary>
-		///         <value>
-		///         </value>
-		///         <remarks>
-		///         </remarks>
+		/// <summary>The item component of this <see cref="NSIndexPath" />.</summary>
 		[Export ("item")]
 		[MacCatalyst (13, 1)]
 		nint Item { get; }

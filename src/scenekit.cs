@@ -4369,9 +4369,8 @@ namespace SceneKit {
 		bool LowPowerDevice { get; set; }
 	}
 
-	/// <summary>A <see cref="UIKit.UIView" /> that renders <see cref="SceneKit.SCNScene" />s.</summary>
-	///     
-	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/SceneKit/Reference/SCNView_Class/index.html">Apple documentation for <c>SCNView</c></related>
+	/// <summary>A <see cref="NSView" /> that renders <see cref="SCNScene" />s.</summary>
+	/// <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/SceneKit/Reference/SCNView_Class/index.html">Apple documentation for <c>SCNView</c></related>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSView))]
 	[DisableDefaultCtor]

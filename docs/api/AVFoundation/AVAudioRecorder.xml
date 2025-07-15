@@ -3,7 +3,7 @@
     <summary>Audio recording class.</summary>
     <remarks>
       <para>
-	To create instances of this class use the factory method <see cref="Create(Foundation.NSUrl,AudioSettings,Foundation.NSError)" /></para>
+	To create instances of this class use the factory method <see cref="Create(Foundation.NSUrl,AudioSettings,out Foundation.NSError)" /></para>
       <example>
         <code lang="csharp lang-csharp"><![CDATA[
 var settings = new AudioSettings () {

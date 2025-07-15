@@ -1125,7 +1125,7 @@ namespace CoreLocation {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // will crash, see CoreLocation.cs for compatibility stubs
 	interface CLPlacemark : NSSecureCoding, NSCopying {
-		/// <include file="../docs/api/CoreLocation/CLPlacemark.xml" path="/Documentation/Docs[@DocId='P:CoreLocation.CLPlacemark.AddressDictionary']/*" />
+		/// <summary>Developers should not use this deprecated property. Developers should use 'CLPlacemark' properties to access data.</summary>
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'CLPlacemark' properties to access data.")]
 		[Deprecated (PlatformName.TvOS, 11, 0, message: "Use 'CLPlacemark' properties to access data.")]
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use 'CLPlacemark' properties to access data.")]
@@ -1487,11 +1487,9 @@ namespace CoreLocation {
 		NSDate Timestamp { get; }
 	}
 
+	/// <summary>A delegate that is the <c>completionHandler</c> for various asynchronous methods in <see cref="CLGeocoder" />.</summary>
 	/// <param name="placemarks">Returns null on error, otherwise the list of placemark locations.   Typically one, but could be more than one if the location is known by multiple names.</param>
 	/// <param name="error">Error information.</param>
-	/// <summary>A delegate that is the <c>completionHandler</c> in calls to <see cref="CoreLocation.CLGeocoder.GeocodePostalAddressAsync(Contacts.CNPostalAddress,Foundation.NSLocale)" />.</summary>
-	/// <remarks>
-	///     </remarks>
 	delegate void CLGeocodeCompletionHandler ([NullAllowed] CLPlacemark [] placemarks, [NullAllowed] NSError error);
 
 	/// <include file="../docs/api/CoreLocation/CLGeocoder.xml" path="/Documentation/Docs[@DocId='T:CoreLocation.CLGeocoder']/*" />

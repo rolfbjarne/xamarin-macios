@@ -365,7 +365,11 @@ namespace CoreAnimation {
 	}
 
 
-	/// <include file="../docs/api/CoreAnimation/CALayer.xml" path="/Documentation/Docs[@DocId='T:CoreAnimation.CALayer']/*" />
+#if __MACOS__
+	/// <include file="../docs/api/CoreAnimation/CALayer.xml" path="/Documentation/Docs[@DocId='T:CoreAnimation.CALayer' and contains(@Platforms,'macOS')]/*" />
+#else
+	/// <include file="../docs/api/CoreAnimation/CALayer.xml" path="/Documentation/Docs[@DocId='T:CoreAnimation.CALayer' and not(@Platforms)]/*" />
+#endif
 	[BaseType (typeof (NSObject))]
 	[Dispose ("OnDispose ();", Optimizable = true)]
 	interface CALayer : CAMediaTiming, NSSecureCoding {

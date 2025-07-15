@@ -112,11 +112,6 @@ namespace ExternalAccessory {
 
 	interface IEAAccessoryDelegate { }
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="ExternalAccessory.EAAccessoryDelegate" />.</summary>
-	/// <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="ExternalAccessory.EAAccessoryDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="ExternalAccessory.EAAccessoryDelegate" /> protocol.</para>
-	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	[Model]
@@ -300,8 +295,6 @@ namespace ExternalAccessory {
 		EAWiFiUnconfiguredAccessoryProperties Properties { get; }
 	}
 
-
-	/// <include file="../docs/api/ExternalAccessory/IEAWiFiUnconfiguredAccessoryBrowserDelegate.xml" path="/Documentation/Docs[@DocId='T:ExternalAccessory.IEAWiFiUnconfiguredAccessoryBrowserDelegate']/*" />
 	interface IEAWiFiUnconfiguredAccessoryBrowserDelegate { }
 
 	// This class is exposed for tvOS in the headers, but there's no available initializer (so it can't be constructed)

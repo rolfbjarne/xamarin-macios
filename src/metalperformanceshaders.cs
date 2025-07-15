@@ -10344,11 +10344,6 @@ namespace MetalPerformanceShaders {
 		string Label { get; }
 	}
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="MetalPerformanceShaders.MPSCnnConvolutionDataSource" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="MetalPerformanceShaders.MPSCnnConvolutionDataSource" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="MetalPerformanceShaders.MPSCnnConvolutionDataSource" /> protocol.</para>
-	///     </remarks>
 	interface IMPSCnnConvolutionDataSource { }
 
 	/// <summary>Base class for classes that provide weights and bias terms to convolution filters.</summary>

@@ -13,19 +13,8 @@ using ObjCRuntime;
 using Foundation;
 
 namespace Contacts {
-
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="Contacts.ICNKeyDescriptor" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="Contacts.ICNKeyDescriptor" />.</para>
-	///       <para>If you create objects that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="Contacts.ICNKeyDescriptor" /> protocol.</para>
-	///     </remarks>
 	interface ICNKeyDescriptor { }
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="Contacts.ICNKeyDescriptor" />.</summary>
-	/// <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="Contacts.ICNKeyDescriptor" />.</para>
-	///       <para>If you create objects that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="Contacts.ICNKeyDescriptor" /> protocol.</para>
-	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	// Headers say "This protocol is reserved for Contacts framework usage.", so don't create a model

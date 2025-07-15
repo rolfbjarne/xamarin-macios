@@ -1196,11 +1196,6 @@ namespace GLKit {
 		void DeleteDrawable ();
 	}
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="GLKit.GLKViewDelegate" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="GLKit.GLKViewDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="GLKit.GLKViewDelegate" /> protocol.</para>
-	///     </remarks>
 	interface IGLKViewDelegate { }
 
 	/// <summary>A class that acts like a delegate object for instances of <see cref="GLKit.GLKView" />.</summary>
@@ -1327,11 +1322,6 @@ namespace GLKit {
 		void Update ();
 	}
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="GLKit.GLKViewControllerDelegate" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="GLKit.GLKViewControllerDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="GLKit.GLKViewControllerDelegate" /> protocol.</para>
-	///     </remarks>
 	interface IGLKViewControllerDelegate { }
 
 	/// <summary>A delegate object that gives the application developer fine-grained control over events relating to the life-cycle of a <see cref="GLKit.GLKViewController" /> object.</summary>

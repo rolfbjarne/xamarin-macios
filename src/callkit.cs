@@ -562,11 +562,6 @@ namespace CallKit {
 		CXPlayDtmfCallActionType Type { get; set; }
 	}
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="CallKit.CXProviderDelegate" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="CallKit.CXProviderDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="CallKit.CXProviderDelegate" /> protocol.</para>
-	///     </remarks>
 	interface ICXProviderDelegate { }
 
 	/// <related type="externalDocumentation" href="https://developer.apple.com/reference/CallKit/CXProviderDelegate">Apple documentation for <c>CXProviderDelegate</c></related>

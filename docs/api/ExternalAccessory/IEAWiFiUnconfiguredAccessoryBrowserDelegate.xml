@@ -1,9 +1,0 @@
-<Documentation>
-  <Docs DocId="T:ExternalAccessory.IEAWiFiUnconfiguredAccessoryBrowserDelegate">
-    <summary>Interface representing the required methods (if any) of the protocol <see cref="ExternalAccessory.EAWiFiUnconfiguredAccessoryBrowserDelegate" />.</summary>
-    <remarks>
-      <para>This interface contains the required methods (if any) from the protocol defined by <see cref="ExternalAccessory.EAWiFiUnconfiguredAccessoryBrowserDelegate" />.</para>
-      <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="ExternalAccessory.EAWiFiUnconfiguredAccessoryBrowserDelegate" /> protocol.</para>
-    </remarks>
-  </Docs>
-</Documentation>

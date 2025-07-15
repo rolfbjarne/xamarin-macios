@@ -10,11 +10,6 @@ using ObjCRuntime;
 namespace GameKit {
 #if !XAMCORE_5_0
 #if __IOS__ || __MACCATALYST__
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="GameKit.GKPeerPickerControllerDelegate" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="GameKit.GKPeerPickerControllerDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="GameKit.GKPeerPickerControllerDelegate" /> protocol.</para>
-	///     </remarks>
 	[EditorBrowsable (EditorBrowsableState.Never)]
 	[Obsolete ("Use 'MCBrowserViewController' from the 'MultipeerConnectivity' framework instead.")]
 	[UnsupportedOSPlatform ("macos")]

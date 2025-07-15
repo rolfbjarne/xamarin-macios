@@ -2235,7 +2235,7 @@ namespace UIKit {
 
 	// NSInteger -> UINavigationController.h
 	/// <summary>An enumeration whose values specify operations on <see cref="UIKit.UINavigationController" />.</summary>
-	/// <remarks>This enumeration is used in calls to <see cref="UIKit.UINavigationController.GetAnimationControllerForOperation" />.</remarks>
+	/// <remarks>This enumeration is used in calls to <see cref="UINavigationControllerDelegate.GetAnimationControllerForOperation" />.</remarks>
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum UINavigationControllerOperation : long {

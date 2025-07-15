@@ -367,10 +367,10 @@ namespace CoreLocation {
 		NSObject WeakDelegate { get; set; }
 
 		/// <summary>The minimum horizontal distance, in meters, the device has to move before issuing a location update.</summary>
-		///         <value>The default value is <see cref="CoreLocation.CLLocationDistance.None" />.</value>
-		///         <remarks>
-		///           <para>If this value is set to <see cref="CoreLocation.CLLocationDistance.None" />, the app will receive all location updates.</para>
-		///         </remarks>
+		/// <value>The default value is <see cref="CoreLocation.CLLocationDistance.FilterNone" />.</value>
+		/// <remarks>
+		///   <para>If this value is set to <see cref="CoreLocation.CLLocationDistance.FilterNone" />, the app will receive all location updates.</para>
+		/// </remarks>
 		[Export ("distanceFilter", ArgumentSemantic.Assign)]
 		double DistanceFilter { get; set; }
 
@@ -579,11 +579,11 @@ namespace CoreLocation {
 		CLAuthorizationStatus AuthorizationStatus { get; }
 
 		/// <summary>The authorization status of the app (e.g., if the app is denied access to location services).</summary>
-		///         <value>The value is determined by the user's interaction with the standard permissions dialog.</value>
-		///         <remarks>
-		///           <para>See the "Requesting Authorization" discussion in the class-level remarks: <see cref="CoreLocation.CLLocationManager" />.</para>
-		///         </remarks>
-		///         <altmember cref="CoreLocation.AuthorizationChanged" />
+		/// <value>The value is determined by the user's interaction with the standard permissions dialog.</value>
+		/// <remarks>
+		///   <para>See the "Requesting Authorization" discussion in the class-level remarks: <see cref="CoreLocation.CLLocationManager" />.</para>
+		/// </remarks>
+		/// <altmember cref="CLLocationManager.AuthorizationChanged" />
 		[Deprecated (PlatformName.iOS, 14, 0, message: "Use the instance property 'AuthorizationStatus' instead.")]
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "Use the instance 'AuthorizationStatus' property instead.")]
 		[Deprecated (PlatformName.TvOS, 14, 0, message: "Use the instance property AuthorizationStatus' instead.")]

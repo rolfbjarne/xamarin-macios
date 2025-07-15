@@ -1158,7 +1158,7 @@ namespace Photos {
 	delegate void PHImageManagerRequestPlayerHandler ([NullAllowed] AVPlayerItem playerItem, [NullAllowed] NSDictionary info);
 	/// <summary>Completion handler for the <see cref="Photos.PHImageManager.RequestExportSession(Photos.PHAsset,Photos.PHVideoRequestOptions,System.String,Photos.PHImageManagerRequestExportHandler)" /> method.</summary>
 	delegate void PHImageManagerRequestExportHandler ([NullAllowed] AVAssetExportSession exportSession, [NullAllowed] NSDictionary info);
-	/// <summary>Completion handle for the <see cref="Photos.PHImageManager.RequestAVAsset(Photos.PHAsset,Photos.PHVideoRequestOptions,Photos.PHImageManagerRequestAvAssetHandler)" /> method.</summary>
+	/// <summary>Completion handler for the <see cref="PHImageManager.RequestAVAsset(PHAsset,PHVideoRequestOptions,PHImageManagerRequestAVAssetHandler)" /> method.</summary>
 	delegate void PHImageManagerRequestAVAssetHandler ([NullAllowed] AVAsset asset, [NullAllowed] AVAudioMix audioMix, [NullAllowed] NSDictionary info);
 	/// <summary>The result handler delegate for calls to <see cref="Photos.PHImageManager.RequestLivePhoto(Photos.PHAsset,CoreGraphics.CGSize,Photos.PHImageContentMode,Photos.PHLivePhotoRequestOptions,Photos.PHImageManagerRequestLivePhoto)" />.</summary>
 	delegate void PHImageManagerRequestLivePhoto ([NullAllowed] PHLivePhoto livePhoto, [NullAllowed] NSDictionary info);

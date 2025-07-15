@@ -461,9 +461,9 @@ namespace MediaPlayer {
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		NSString DateAddedProperty { get; }
 
+#if !__MACOS__
 		/// <summary>Backing store for the <see cref="MPMediaItem.PlaybackStoreID" /> property.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+#endif
 		[MacCatalyst (13, 1)]
 		[Field ("MPMediaItemPropertyPlaybackStoreID")]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]

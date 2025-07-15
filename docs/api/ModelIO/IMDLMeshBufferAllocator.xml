@@ -1,9 +1,0 @@
-<Documentation>
-  <Docs DocId="T:ModelIO.IMDLMeshBufferAllocator">
-    <summary>Interface representing the required methods (if any) of the protocol <see cref="ModelIO.MDLMeshBufferAllocator" />.</summary>
-    <remarks>
-      <para>This interface contains the required methods (if any) from the protocol defined by <see cref="ModelIO.MDLMeshBufferAllocator" />.</para>
-      <para>If you create objects that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="ModelIO.MDLMeshBufferAllocator" /> protocol.</para>
-    </remarks>
-  </Docs>
-</Documentation>

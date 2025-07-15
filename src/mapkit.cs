@@ -859,11 +859,6 @@ namespace MapKit {
 
 	interface IMKMapViewDelegate { }
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="MapKit.MKMapViewDelegate" />.</summary>
-	/// <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="MapKit.MKMapViewDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="MapKit.MKMapViewDelegate" /> protocol.</para>
-	///     </remarks>
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]
@@ -1341,7 +1336,6 @@ namespace MapKit {
 		MKPlacemark Placemark { get; }
 	}
 
-	/// <include file="../docs/api/MapKit/IMKReverseGeocoderDelegate.xml" path="/Documentation/Docs[@DocId='T:MapKit.IMKReverseGeocoderDelegate']/*" />
 	interface IMKReverseGeocoderDelegate { }
 
 #pragma warning disable 618
@@ -2589,11 +2583,6 @@ namespace MapKit {
 
 	interface IMKLocalSearchCompleterDelegate { }
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="MapKit.MKLocalSearchCompleterDelegate" />.</summary>
-	/// <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="MapKit.MKLocalSearchCompleterDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="MapKit.MKLocalSearchCompleterDelegate" /> protocol.</para>
-	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol]
 	[Model]

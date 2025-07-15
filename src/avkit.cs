@@ -169,11 +169,6 @@ namespace AVKit {
 		AVPictureInPictureControllerContentSource ContentSource { get; set; }
 	}
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="AVKit.AVPictureInPictureControllerDelegate" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="AVKit.AVPictureInPictureControllerDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="AVKit.AVPictureInPictureControllerDelegate" /> protocol.</para>
-	///     </remarks>
 	interface IAVPictureInPictureControllerDelegate { }
 
 	/// <summary>Delegate object providing methods for the application's <see cref="UIKit.UIViewControllerDelegate" /> at the start and stop of picture-in-picture video playback.</summary>
@@ -438,11 +433,6 @@ namespace AVKit {
 		UIAction ToggleLookupAction { get; }
 	}
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="AVKit.AVPlayerViewControllerDelegate" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="AVKit.AVPlayerViewControllerDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="AVKit.AVPlayerViewControllerDelegate" /> protocol.</para>
-	///     </remarks>
 	interface IAVPlayerViewControllerDelegate { }
 
 	/// <summary>Delegate object for the picture-in-picture controller. When overridden, the methods allow the developer to respond to events relating to p-in-p playback.</summary>
@@ -1029,18 +1019,8 @@ namespace AVKit {
 		Custom,
 	}
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="AVKit.AVRoutePickerViewDelegate" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="AVKit.AVRoutePickerViewDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="AVKit.AVRoutePickerViewDelegate" /> protocol.</para>
-	///     </remarks>
 	interface IAVRoutePickerViewDelegate { }
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="AVKit.AVRoutePickerViewDelegate" />.</summary>
-	/// <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="AVKit.AVRoutePickerViewDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="AVKit.AVRoutePickerViewDelegate" /> protocol.</para>
-	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]

@@ -1132,21 +1132,21 @@ namespace Introspection {
 				switch (selectorName) {
 				case "startAndReturnError:": // incorrect binding
 					return TestRuntime.CheckXcodeVersion (26, 0);
-			case "NSDate":
-				switch (selectorName) {
-				case "dateWithSRAbsoluteTime:": // This is from a category defined in SensorKit, and SensorKit doesn't exist on iPads
-				case "initWithSRAbsoluteTime:": // This is from a category defined in SensorKit, and SensorKit doesn't exist on iPads
-				case "srAbsoluteTime": // This is from a category defined in SensorKit, and SensorKit doesn't exist on iPads
-					if (TestRuntime.IsDevice && TestRuntime.IsiPad)
-						return true;
+				case "NSDate":
+					switch (selectorName) {
+					case "dateWithSRAbsoluteTime:": // This is from a category defined in SensorKit, and SensorKit doesn't exist on iPads
+					case "initWithSRAbsoluteTime:": // This is from a category defined in SensorKit, and SensorKit doesn't exist on iPads
+					case "srAbsoluteTime": // This is from a category defined in SensorKit, and SensorKit doesn't exist on iPads
+						if (TestRuntime.IsDevice && TestRuntime.IsiPad)
+							return true;
+						break;
+					}
 					break;
 				}
-				break;
-			}
 
-			// old binding mistake
-			return (selectorName == "initWithCoder:");
-		}
+				// old binding mistake
+				return (selectorName == "initWithCoder:");
+			}
 
 		protected virtual bool CheckResponse (bool value, Type actualType, MethodBase method, ref string name)
 		{

@@ -3531,7 +3531,9 @@ namespace UIKit {
 		[Export ("setNewsstandIconImage:")]
 		void SetNewsstandIconImage ([NullAllowed] UIImage image);
 
+#if !__MACCATALYST__
 		/// <include file="../docs/api/UIKit/UIApplication.xml" path="/Documentation/Docs[@DocId='P:UIKit.UIApplication.LaunchOptionsNewsstandDownloadsKey']/*" />
+#endif
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Field ("UIApplicationLaunchOptionsNewsstandDownloadsKey")]
@@ -26209,7 +26211,7 @@ namespace UIKit {
 		/// <param name="width">To be added.</param>
 		/// <param name="font">To be added.</param>
 		/// <param name="breakMode">To be added.</param>
-		/// <summary>Developers should use <see cref="Foundation.NSStringDrawing.DrawString(CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method..</summary>
+		/// <summary>Developers should use <see cref="NSStringDrawing.DrawString(CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method..</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>
 		///           <para>(More documentation for this node is coming)</para>
@@ -26240,7 +26242,7 @@ namespace UIKit {
 		// note: duplicate from maccore's foundation.cs where it's binded on NSString2 (for Classic)
 		/// <param name="rect">To be added.</param>
 		/// <param name="font">To be added.</param>
-		/// <summary>Developers should use <see cref="Foundation.NSStringDrawing.DrawString(CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
+		/// <summary>Developers should use <see cref="NSStringDrawing.DrawString(CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>
 		///           <para>(More documentation for this node is coming)</para>
@@ -26256,7 +26258,7 @@ namespace UIKit {
 		/// <param name="rect">To be added.</param>
 		/// <param name="font">To be added.</param>
 		/// <param name="mode">To be added.</param>
-		/// <summary>Developers should use <see cref="Foundation.NSStringDrawing.DrawString(CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
+		/// <summary>Developers should use <see cref="NSStringDrawing.DrawString(CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>
 		///           <para>(More documentation for this node is coming)</para>
@@ -26273,7 +26275,7 @@ namespace UIKit {
 		/// <param name="font">To be added.</param>
 		/// <param name="mode">To be added.</param>
 		/// <param name="alignment">To be added.</param>
-		/// <summary>Developers should use <see cref="Foundation.NSStringDrawing.DrawString(CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
+		/// <summary>Developers should use <see cref="NSStringDrawing.DrawString(CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>
 		///           <para>(More documentation for this node is coming)</para>
@@ -26287,7 +26289,7 @@ namespace UIKit {
 
 		// note: duplicate from maccore's foundation.cs where it's binded on NSString2 (for Classic)
 		/// <param name="font">To be added.</param>
-		/// <summary>Developers should use <see cref="UIKit.NSStringDrawing.GetSizeUsingAttributes(Foundation.NSString,UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
+		/// <summary>Developers should use <see cref="NSStringDrawing.GetSizeUsingAttributes(Foundation.NSString,UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>
 		///           <para>(More documentation for this node is coming)</para>

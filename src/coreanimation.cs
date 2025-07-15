@@ -125,11 +125,6 @@ namespace CoreAnimation {
 		string FillMode { get; set; }
 	}
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="CoreAnimation.CAMediaTiming" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="CoreAnimation.CAMediaTiming" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="CoreAnimation.CAMediaTiming" /> protocol.</para>
-	///     </remarks>
 	interface ICAMediaTiming { }
 
 	[NoiOS]
@@ -1997,11 +1992,6 @@ namespace CoreAnimation {
 		bool AllowsFontSubpixelQuantization { get; set; }
 	}
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="CoreAnimation.CALayerDelegate" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="CoreAnimation.CALayerDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="CoreAnimation.CALayerDelegate" /> protocol.</para>
-	///     </remarks>
 	interface ICALayerDelegate { }
 
 	/// <summary>Delegate class for the CALayer.</summary>

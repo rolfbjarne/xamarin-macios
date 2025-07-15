@@ -832,11 +832,6 @@ namespace CoreLocation {
 
 	interface ICLLocationManagerDelegate { }
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="CoreLocation.CLLocationManagerDelegate" />.</summary>
-	/// <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="CoreLocation.CLLocationManagerDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="CoreLocation.CLLocationManagerDelegate" /> protocol.</para>
-	///     </remarks>
 	[BaseType (typeof (NSObject))]
 	[Model]
 	[Protocol]

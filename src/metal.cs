@@ -1917,16 +1917,8 @@ namespace Metal {
 		IMTLResidencySet CreateResidencySet (MTLResidencySetDescriptor descriptor, out NSError error);
 	}
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="Metal.MTLDrawable" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="Metal.MTLDrawable" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="Metal.MTLDrawable" /> protocol.</para>
-	///     </remarks>
-	/// <summary>Extension methods to the <see cref="Metal.IMTLDrawable" /> interface to support all the methods from the <see cref="Metal.MTLDrawable" /> protocol.</summary>
-	///     <remarks>
-	///       <para>The extension methods for <see cref="Metal.IMTLDrawable" /> allow developers to treat instances of the interface as having all the optional methods of the original <see cref="Metal.MTLDrawable" /> protocol.   Since the interface only contains the required members, these extension methods allow developers to call the optional members of the protocol.</para>
-	///     </remarks>
 	interface IMTLDrawable { }
+
 	/// <summary>Interface definition for objects that can receive rendering commands.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/Metal/Reference/MTLDrawable_Ref/index.html">Apple documentation for <c>MTLDrawable</c></related>

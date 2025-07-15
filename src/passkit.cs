@@ -477,11 +477,6 @@ namespace PassKit {
 	/// <summary>Delegate called when the user has selected a shipping method.</summary>
 	delegate void PKPaymentShippingMethodSelected (PKPaymentAuthorizationStatus status, PKPaymentSummaryItem [] summaryItems);
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="PassKit.PKPaymentAuthorizationViewControllerDelegate" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="PassKit.PKPaymentAuthorizationViewControllerDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="PassKit.PKPaymentAuthorizationViewControllerDelegate" /> protocol.</para>
-	///     </remarks>
 	interface IPKPaymentAuthorizationViewControllerDelegate { }
 
 	/// <summary>Delegate object providing events relating to a payment authorization request made with a <see cref="PassKit.PKPaymentAuthorizationViewController" />.</summary>
@@ -1294,11 +1289,6 @@ namespace PassKit {
 		IPKAddPassesViewControllerDelegate Delegate { get; set; }
 	}
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="PassKit.PKAddPassesViewControllerDelegate" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="PassKit.PKAddPassesViewControllerDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="PassKit.PKAddPassesViewControllerDelegate" /> protocol.</para>
-	///     </remarks>
 	interface IPKAddPassesViewControllerDelegate { }
 
 	/// <summary>A delegate object that gives the application developer fine-grained control over life-cycle events of a <see cref="PassKit.PKAddPassesViewController" /> object.</summary>
@@ -1512,11 +1502,6 @@ namespace PassKit {
 		NSObject WeakDelegate { get; set; }
 	}
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="PassKit.PKAddPaymentPassViewControllerDelegate" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="PassKit.PKAddPaymentPassViewControllerDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="PassKit.PKAddPaymentPassViewControllerDelegate" /> protocol.</para>
-	///     </remarks>
 	interface IPKAddPaymentPassViewControllerDelegate { }
 
 	/// <summary>Delegate object for <see cref="PassKit.PKAddPaymentPassViewController" /> whose members are called when prompting for an add payment request and when an <see cref="PassKit.PKAddPaymentPassRequest" /> has failed.</summary>
@@ -2189,11 +2174,6 @@ namespace PassKit {
 		NativeHandle Constructor (PKDisbursementRequest request);
 	}
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="PassKit.PKPaymentAuthorizationControllerDelegate" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="PassKit.PKPaymentAuthorizationControllerDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="PassKit.PKPaymentAuthorizationControllerDelegate" /> protocol.</para>
-	///     </remarks>
 	interface IPKPaymentAuthorizationControllerDelegate { }
 
 	/// <summary>Delegate object that responds to user interactions on behalf of a <see cref="PassKit.PKPaymentAuthorizationController" />.</summary>

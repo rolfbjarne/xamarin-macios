@@ -107,7 +107,6 @@ namespace QuickLook {
 		void RefreshCurrentPreviewItem ();
 	}
 
-	/// <include file="../docs/api/QuickLook/IQLPreviewControllerDataSource.xml" path="/Documentation/Docs[@DocId='T:QuickLook.IQLPreviewControllerDataSource']/*" />
 	interface IQLPreviewControllerDataSource { }
 
 	/// <summary>A class that allows a <see cref="QuickLook.QLPreviewController" /> to preview multiple items.</summary>
@@ -147,11 +146,6 @@ namespace QuickLook {
 		CreateCopy,
 	}
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="QuickLook.QLPreviewControllerDelegate" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="QuickLook.QLPreviewControllerDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="QuickLook.QLPreviewControllerDelegate" /> protocol.</para>
-	///     </remarks>
 	interface IQLPreviewControllerDelegate { }
 
 	/// <summary>A delegate object that gives the application developer fine-grained control over events in the life-cycle of a <see cref="QuickLook.QLPreviewController" /> object.</summary>
@@ -262,11 +256,6 @@ namespace QuickLook {
 #endif
 	}
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="QuickLook.QLPreviewItem" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="QuickLook.QLPreviewItem" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="QuickLook.QLPreviewItem" /> protocol.</para>
-	///     </remarks>
 	interface IQLPreviewItem { }
 
 	/// <summary>An item that can be previewed with a <see cref="QuickLook.QLPreviewController" />.</summary>

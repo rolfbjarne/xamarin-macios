@@ -161,11 +161,6 @@ namespace MetalKit {
 		MTLStorageMode DepthStencilStorageMode { get; set; }
 	}
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="MetalKit.MTKViewDelegate" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="MetalKit.MTKViewDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="MetalKit.MTKViewDelegate" /> protocol.</para>
-	///     </remarks>
 	interface IMTKViewDelegate { }
 
 	/// <summary>Delegate object for <see cref="MetalKit.MTKView" /> objects. Provides methods called when the view is drawn and laid out.</summary>

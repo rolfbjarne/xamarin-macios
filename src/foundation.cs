@@ -9509,7 +9509,7 @@ namespace Foundation {
 		NSUrlConnection Sender { get; }
 	}
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="Foundation.NSURLAuthenticationChallengeSender" />.</summary>
+	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="Foundation.NSUrlAuthenticationChallengeSender" />.</summary>
 	/// <remarks>
 	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="Foundation.NSURLAuthenticationChallengeSender" />.</para>
 	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="Foundation.NSURLAuthenticationChallengeSender" /> protocol.</para>

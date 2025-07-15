@@ -1741,8 +1741,7 @@ namespace Foundation {
 		RejectProtectionSpace = 3,
 	}
 
-	/// <summary>An enumeration whose values specify the state of a <see cref="Foundation.NSSessionTask" />.</summary>
-	/// <remarks>To be added.</remarks>
+	/// <summary>An enumeration whose values specify the state of a <see cref="NSUrlSessionTask" />.</summary>
 	[Native]
 	public enum NSUrlSessionTaskState : long {
 		/// <summary>To be added.</summary>

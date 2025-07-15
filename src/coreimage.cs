@@ -351,11 +351,10 @@ namespace CoreImage {
 		[Export ("contextWithMTLDevice:options:")]
 		CIContext FromMetalDevice (IMTLDevice device, [NullAllowed] NSDictionary options);
 
+		/// <summary>Creates a new <see cref="CoreImage.CIContext" /> from the provided Metal <paramref name="device" />, applying the specified options.</summary>
 		/// <param name="device">The source <see cref="Metal.IMTLDevice" />.</param>
-		///         <param name="options">The desired options for the new <see cref="CoreImag.CIContext" />.<para tool="nullallowed">This parameter can be <see langword="null" />.</para></param>
-		///         <summary>Creates a new <see cref="CoreImage.CIContext" /> from the provided Metal <paramref name="device" />, applying the specified options.</summary>
-		///         <returns>A new <see cref="CoreImage.CIContext" />.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="options">The desired options for the new <see cref="CIContext" />.</param>
+		/// <returns>A new <see cref="CoreImage.CIContext" />.</returns>
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("contextWithMTLDevice:options:")]
@@ -5701,9 +5700,9 @@ namespace CoreImage {
 	}
 
 	/// <summary>Creates histogram data for a given image and rectangle of interest.</summary>
-	///     <remarks>
-	///       <para>The <see cref="CoreImage.CIFilter.OutputImage" /> of this filter is a single-pixel high image of width <see cref="CoreImage.CIAreaHistogram.Count" />. </para>
-	///     </remarks>
+	/// <remarks>
+	///   <para>The <see cref="CoreImage.CIFilter.OutputImage" /> of this filter is a single-pixel high image of width <see cref="CIAreaHistogram.InputCount" />. </para>
+	/// </remarks>
 	[CoreImageFilter]
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIFilter))]
@@ -6743,27 +6742,27 @@ namespace CoreImage {
 		float LowLimit { get; set; }
 	}
 
-	/// <summary>Renders a one-dimensional <see cref="CoreImage.CIFilter.Image" /> histogram as a typical two-dimensional histogram.</summary>
-	///     <remarks>
-	///       <para>This filter can be used in conjunction with <see cref="CoreImage.CIAreaHistogram" /> to create a user-meaningful histogram, as shown in the following example.</para>
-	///       <example>
-	///         <code lang="csharp lang-csharp"><![CDATA[
+	/// <summary>Renders a one-dimensional <see cref="CoreImage.CIFilter.InputImage" /> histogram as a typical two-dimensional histogram.</summary>
+	/// <remarks>
+	///   <para>This filter can be used in conjunction with <see cref="CoreImage.CIAreaHistogram" /> to create a user-meaningful histogram, as shown in the following example.</para>
+	///   <example>
+	///     <code lang="csharp lang-csharp"><![CDATA[
 	/// var histogram = new CIAreaHistogram () {
-	/// 	Image = heron, 
+	/// 	Image = heron,
 	/// 	Extent = new CIVector(new RectangleF(0, 0, 567, 267)),
-	/// 	Count = 256, 
+	/// 	Count = 256,
 	/// 	Scale = 25.0f
-	/// 
+	///
 	/// };
-	/// 		
+	///
 	/// //Pass 1-D histogram to CIHistogramDisplayFilter for display
 	/// var histogramDisplay = new CIHistogramDisplayFilter () {
 	/// 	Image = histogram.OutputImage,
-	/// };          
+	/// };
 	///           ]]></code>
-	///       </example>
-	///       <para>Which results in the following histogram: <img href="~/CoreImage/_images/CoreImage.CIHistogramDisplayFilter.png" alt="Result of applying the filter." />.</para>
-	///     </remarks>
+	///   </example>
+	///   <para>Which results in the following histogram: <img href="~/CoreImage/_images/CoreImage.CIHistogramDisplayFilter.png" alt="Result of applying the filter." />.</para>
+	/// </remarks>
 	[CoreImageFilter]
 	[MacCatalyst (13, 1)]
 	// incorrect version string for OSX: '10.?' Double-check documentation
@@ -7172,10 +7171,14 @@ namespace CoreImage {
 	}
 
 	/// <summary>Replaces image colors with the bright colors from the background image.</summary>
-	///     <remarks>
-	///       <para>If the <see cref="CoreImage.CIBlendFilter.BackgroundImage" /> pixel is more than half of the maximum brightness, that pixel is substituted for the pixel in the <see cref="CoreImage.CIFilter.Image" />. Also, even if the background pixel is less than 50% brightness, it will be substituted if the image pixel is lighter than the background pixel.</para>
-	///       <para>This filter can be used to make an image look as if it were drawn with powder pastels.</para>
-	///     </remarks>
+	/// <remarks>
+	///   <para>
+	///     If the <see cref="CoreImage.CIBlendFilter.BackgroundImage" /> pixel is more than half of the maximum brightness,
+	///     that pixel is substituted for the pixel in the <see cref="CIFilter.InputImage" />. Also, even if the background
+	///     pixel is less than 50% brightness, it will be substituted if the image pixel is lighter than the background pixel.
+	///   </para>
+	///   <para>This filter can be used to make an image look as if it were drawn with powder pastels.</para>
+	/// </remarks>
 	[CoreImageFilter]
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIBlendFilter))]
@@ -7395,7 +7398,7 @@ namespace CoreImage {
 	interface CIStripesGenerator : CIStripesGeneratorProtocol {
 	}
 
-	/// <summary>Subtracts the background image pixels from those in the <see cref="CoreImage.CIFilter.Image" />.</summary>
+	/// <summary>Subtracts the background image pixels from those in the <see cref="CoreImage.CIFilter.InputImage" />.</summary>
 	[CoreImageFilter]
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIBlendFilter))]
@@ -7668,9 +7671,7 @@ namespace CoreImage {
 		[CoreImageFilterProperty ("inputImage")]
 		CIImage InputImage { get; set; }
 
-		/// <summary>A vector whose values define the clamped rectangle within the <see cref="CoreImage.CIFilter.Image" />.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>A vector whose values define the clamped rectangle within the <see cref="CoreImage.CIFilter.InputImage" />.</summary>
 		[CoreImageFilterProperty ("inputExtent")]
 		CIVector Extent { get; set; }
 	}
@@ -11979,14 +11980,14 @@ namespace CoreImage {
 		[Export ("radius1")]
 		float Radius1 { get; set; }
 
-		/// <summary>Gets or sets the color at the <see cref="CoreImage.CIColor.Radius0" /> location in the gradient.</summary>
+		/// <summary>Gets or sets the color at the <see cref="Radius0" /> location in the gradient.</summary>
 		/// <value>To be added.</value>
 		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color0", ArgumentSemantic.Retain)]
 		CIColor Color0 { get; set; }
 
-		/// <summary>Gets or sets the color at the <see cref="CoreImage.CIColor.Radius1" /> location in the gradient.</summary>
+		/// <summary>Gets or sets the color at the <see cref="Radius1" /> location in the gradient.</summary>
 		/// <value>To be added.</value>
 		/// <remarks>To be added.</remarks>
 		[Abstract]

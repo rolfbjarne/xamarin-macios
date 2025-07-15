@@ -36,7 +36,9 @@ using ObjCRuntime;
 
 namespace AudioToolbox {
 
+#if !__MACOS__
 	/// <summary>An enumeration whose values can be returned by the <see cref="AVAudioSession.SetActive(System.Boolean,AVAudioSessionSetActiveOptions)" /> method.</summary>
+#endif
 	public enum AudioSessionErrors { // Implictly cast to OSType 
 		/// <summary>To be added.</summary>
 		None = 0,

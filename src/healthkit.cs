@@ -4767,9 +4767,23 @@ namespace HealthKit {
 		void DidDisconnect (HKWorkoutSession workoutSession, [NullAllowed] NSError error);
 	}
 
+#if MONOMAC
 	/// <summary>Summarizes user activity for a specific day.</summary>
-	///     <remarks>Developers use a <see cref="HealthKit.HKActivitySummaryQuery" /> object to get a <see cref="HealthKit.HKActivitySummary" /> instance for a specific day. While developers can create <see cref="HealthKit.HKActivitySummary" /> themselves, they cannot save these to the store. Developers can display an active summary on iOS with the <see cref="HealthKitUI.HKActivityRingView" /> class.</remarks>
-	///     <related type="externalDocumentation" href="https://developer.apple.com/reference/HealthKit/HKActivitySummary">Apple documentation for <c>HKActivitySummary</c></related>
+	/// <remarks>
+	///   Developers use a <see cref="HealthKit.HKActivitySummaryQuery" /> object to get a <see cref="HealthKit.HKActivitySummary" />
+	///   instance for a specific day. While developers can create <see cref="HealthKit.HKActivitySummary" /> themselves, they cannot
+	///   save these to the store.
+	/// </remarks>
+	/// <related type="externalDocumentation" href="https://developer.apple.com/reference/HealthKit/HKActivitySummary">Apple documentation for <c>HKActivitySummary</c></related>
+#else
+	/// <summary>Summarizes user activity for a specific day.</summary>
+	/// <remarks>
+	///   Developers use a <see cref="HealthKit.HKActivitySummaryQuery" /> object to get a <see cref="HealthKit.HKActivitySummary" />
+	///   instance for a specific day. While developers can create <see cref="HealthKit.HKActivitySummary" /> themselves, they cannot
+	///   save these to the store. Developers can display an active summary on iOS with the <see cref="HealthKitUI.HKActivityRingView" /> class.
+	/// </remarks>
+	/// <related type="externalDocumentation" href="https://developer.apple.com/reference/HealthKit/HKActivitySummary">Apple documentation for <c>HKActivitySummary</c></related>
+#endif
 	[Mac (13, 0)]
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]

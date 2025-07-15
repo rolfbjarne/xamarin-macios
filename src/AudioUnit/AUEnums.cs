@@ -100,7 +100,9 @@ namespace AudioUnit {
 		MultipleVoiceProcessors = -66635,
 	}
 
+#if !__MACOS__
 	/// <summary>Enumerates status values returned by <see cref="AudioUnit.AudioOutputUnitPublish(AudioComponentDescription,System.String,System.UInt32)" />.</summary>
+#endif
 	public enum AudioComponentStatus { // Implictly cast to OSType
 		/// <summary>To be added.</summary>
 		OK = 0,

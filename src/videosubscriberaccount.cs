@@ -243,7 +243,12 @@ namespace VideoSubscriberAccount {
 		NSString CheckAccessOptionPrompt { get; }
 	}
 
-	/// <summary>A <see cref="Foundation.DictionaryContainer" /> holding keys appropriate to <see cref="VideoSubscriberAccount.VSAccountManager.CheckAccessStatusAsync(VideoSubscriberAccount.VSAccountManagerAccessOptions)" /> and <see cref="VideoSubscriberAccount.VSAccountManager.CheckAccessStatusAsync(VideoSubscriberAccount.VSAccountManagerAccessOptions)" />.</summary>
+#if !__MACOS__
+	/// <summary>
+	///    A <see cref="Foundation.DictionaryContainer" /> holding keys appropriate to <see cref="VSAccountManager.CheckAccessStatus(VSAccountManagerAccessOptions,Action{VSAccountAccessStatus,NSError})" />
+	///    and <see cref="VSAccountManager.CheckAccessStatusAsync(VSAccountManagerAccessOptions)" />.
+	/// </summary>
+#endif
 	[NoMacCatalyst]
 	[StrongDictionary ("VSCheckAccessOptionKeys")]
 	interface VSAccountManagerAccessOptions {

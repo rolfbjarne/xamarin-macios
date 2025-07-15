@@ -56,6 +56,10 @@ namespace Introspection {
 				if (TestRuntime.IsSimulator)
 					return !TestRuntime.CheckXcodeVersion (15, 0); // doesn't seem to be available in the iOS simulator until iOS 17+
 				break;
+			case "SensorKit": // SensorKit doesn't exist on iPads
+				if (TestRuntime.IsDevice && TestRuntime.IsiPad)
+					return true;
+				break;
 			}
 
 			switch (type.FullName) {
@@ -1128,6 +1132,14 @@ namespace Introspection {
 				switch (selectorName) {
 				case "startAndReturnError:": // incorrect binding
 					return TestRuntime.CheckXcodeVersion (26, 0);
+			case "NSDate":
+				switch (selectorName) {
+				case "dateWithSRAbsoluteTime:": // This is from a category defined in SensorKit, and SensorKit doesn't exist on iPads
+				case "initWithSRAbsoluteTime:": // This is from a category defined in SensorKit, and SensorKit doesn't exist on iPads
+				case "srAbsoluteTime": // This is from a category defined in SensorKit, and SensorKit doesn't exist on iPads
+					if (TestRuntime.IsDevice && TestRuntime.IsiPad)
+						return true;
+					break;
 				}
 				break;
 			}
@@ -1257,12 +1269,21 @@ namespace Introspection {
 			}
 		}
 
-		protected virtual IntPtr GetClassForType (Type type)
+		protected virtual bool TryGetClassForType (Type type, out IntPtr cls)
 		{
+			if (type.IsGenericType) {
+				cls = Class.GetHandle (type);
+				return true;
+			}
+
 			var fi = type.GetField ("class_ptr", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
-			if (fi is null)
-				return IntPtr.Zero; // e.g. *Delegate
-			return (NativeHandle) fi.GetValue (null);
+			if (fi is null) {
+				cls = IntPtr.Zero; // e.g. *Delegate
+				return false;
+			}
+
+			cls = (NativeHandle) fi.GetValue (null);
+			return true;
 		}
 
 		[Test]
@@ -1279,7 +1300,8 @@ namespace Introspection {
 				if (Skip (t) || SkipDueToAttribute (t))
 					continue;
 
-				IntPtr class_ptr = GetClassForType (t);
+				if (!TryGetClassForType (t, out var class_ptr))
+					continue;
 
 				if (class_ptr == IntPtr.Zero)
 					continue;
@@ -1377,10 +1399,8 @@ namespace Introspection {
 				if (Skip (t) || SkipDueToAttribute (t))
 					continue;
 
-				FieldInfo fi = t.GetField ("class_ptr", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
-				if (fi is null)
+				if (!TryGetClassForType (t, out var class_ptr))
 					continue; // e.g. *Delegate
-				IntPtr class_ptr = (IntPtr) (NativeHandle) fi.GetValue (null);
 
 				foreach (var m in t.GetMethods (BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static)) {
 					if (SkipDueToAttribute (m))

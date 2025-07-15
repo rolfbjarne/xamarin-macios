@@ -180,9 +180,15 @@ namespace Introspection {
 			case "CIPersonSegmentation": // removed in Xcode 26 beta 1/2?
 			case "CISaliencyMapFilter": // removed in Xcode 26 beta 1/2?
 				return TestRuntime.CheckExactXcodeVersion (26, 0, 1) || TestRuntime.CheckExactXcodeVersion (26, 0, 2) || TestRuntime.CheckExactXcodeVersion (26, 0, 3);
+			case "PhaseConeDirectivityModelParameters":
+				return !TestRuntime.IsSimulator; // fails on device
 			}
 
 			switch (type.Namespace) {
+			case "SensorKit": // SensorKit doesn't exist on iPads
+				if (TestRuntime.IsDevice && TestRuntime.IsiPad)
+					return true;
+				break;
 			case "SafetyKit":
 				return true; // SafetyKit requires a custom entitlement, and will throw exceptions if it's not present.
 			}

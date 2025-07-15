@@ -320,7 +320,7 @@ namespace AuthenticationServices {
 		bool SupportsIncrementalUpdates { get; }
 	}
 
-	/// <summary>Delegate object for completion handlers in methods within <see cref="AuthenticationServices.ASCredentialProviderExtension" />.</summary>
+	/// <summary>Delegate object for completion handlers in methods within <see cref="ASCredentialProviderExtensionContext" />.</summary>
 	delegate void ASCredentialProviderExtensionRequestCompletionHandler (bool expired);
 
 	/// <summary>An <see cref="NSExtensionContext" /> subclass that provides context for a credential provider.</summary>

@@ -142,7 +142,7 @@ namespace VideoSubscriberAccount {
 
 		/// <param name="accountManager">To be added.</param>
 		///         <param name="viewController">To be added.</param>
-		///         <summary>Developers override this to specify the <see cref="UIKit.UIViewController" /> to be shown when the <see cref="VideoSubscriberAccounts.VSAccountManager" /> requires user interaction.</summary>
+		///         <summary>Developers override this to specify the <see cref="UIKit.UIViewController" /> to be shown when the <see cref="VSAccountManager" /> requires user interaction.</summary>
 		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[NoMac]

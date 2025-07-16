@@ -1142,7 +1142,7 @@ namespace CoreBluetooth {
 		/// <value>Array of CBCharacteristic objects.</value>
 		/// <remarks>
 		///   The contents of this property are only updated after you
-		///   have initiated a characteristic discovery using the <see cref="CoreBluetooth.CBPeripheral.DiscoverCharacteristics" />
+		///   have initiated a characteristic discovery using the <see cref="CoreBluetooth.CBPeripheral.DiscoverCharacteristics(CBUUID[],CBService)" />
 		///   method.
 		/// </remarks>
 		[Export ("characteristics", ArgumentSemantic.Retain)]

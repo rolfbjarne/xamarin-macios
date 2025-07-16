@@ -145,7 +145,7 @@ namespace AddressBook {
 		FirstNamePhonetic,
 		/// <summary>
 		///           The
-		///           <see cref="AddressBook.ABPerson.GetInstantMessages" />
+		///           <see cref="AddressBook.ABPerson.GetInstantMessageServices" />
 		///           multi-value property.
 		///         </summary>
 		InstantMessage,

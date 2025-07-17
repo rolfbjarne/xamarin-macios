@@ -9,7 +9,7 @@ using ObjCRuntime;
 
 namespace UIKit {
 	public unsafe static partial class UIStringDrawing {
-		/// <summary>Developers should use <see cref="NSStringDrawing.DrawString(Foundation.NSString,CoreGraphics.CGPoint,UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
+		/// <summary>Developers should use <see cref="NSStringDrawing.DrawString(NSString,CoreGraphics.CGPoint,UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
 		/// <param name="This">To be added.</param>
 		/// <param name="point">To be added.</param>
 		/// <param name="font">To be added.</param>

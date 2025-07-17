@@ -5614,7 +5614,7 @@ namespace SceneKit {
 		NSValue [] Transforms { get; }
 	}
 
-	/// <summary>Defines valid keys for use with the <c>options</c> dictionary passed to <see cref="SceneKit.SCNPhysicsShape.Create" />.</summary>
+	/// <summary>Defines valid keys for use with the <c>options</c> dictionary passed to <see cref="SCNPhysicsShape.Create(SCNGeometry,SCNPhysicsShapeOptions)" /> and <see cref="SCNPhysicsShape.Create(SCNNode,SCNPhysicsShapeOptions)" /> .</summary>
 	[MacCatalyst (13, 1)]
 	[Static]
 	[EditorBrowsable (EditorBrowsableState.Advanced)]

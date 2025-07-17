@@ -6,7 +6,7 @@
       <para>
         A <see cref="NSLayoutManager" /> maintains a list of one or more <see cref="NSTextContainer" />s in its <see cref="NSLayoutManager.TextContainers" /> property.
         The <see cref="NSLayoutManager" /> lays out the text through these <see cref="NSTextContainer" />s sequentially. Typically, each container will be handed
-        to a <see cref="TextView" /> which will be laid out on the display surface sequentially.
+        to a <see cref="XTextView" /> which will be laid out on the display surface sequentially.
       </para>
       <para>The following example shows text laid out in a two-column format. </para>
       <example>

@@ -254,8 +254,6 @@ namespace VideoSubscriberAccount {
 	interface VSAccountManagerAccessOptions {
 
 		/// <summary>If not <see langword="null" />, specifies whether the user should be asked for access permission.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("CheckAccessOptionPrompt")]
 		bool CheckAccessOptionPrompt { get; set; }
 	}

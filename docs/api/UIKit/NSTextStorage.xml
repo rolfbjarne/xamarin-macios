@@ -9,7 +9,7 @@
 	application developers can manipulate text styles using <see cref="Foundation.NSMutableAttributedString.AddAttribute(Foundation.NSString,Foundation.NSObject,Foundation.NSRange)" /> or <see cref="Foundation.NSMutableAttributedString.AddAttributes" />. The key addition to <see cref="NSTextStorage" /> is that it maintains
 	references to one or more <see cref="NSLayoutManager" />s (<see cref="NSTextStorage.LayoutManagers" />) ,
 	which are responsible for converting text characters into
-	glyphs and laying them out in accordance with the <see cref="NSLayoutManager" />s' associated <see cref="TextView" /> and <see cref="NSTextContainer" /> objects.
+	glyphs and laying them out in accordance with the <see cref="NSLayoutManager" />s' associated <see cref="XTextView" /> and <see cref="NSTextContainer" /> objects.
 
       </para>
       <para>

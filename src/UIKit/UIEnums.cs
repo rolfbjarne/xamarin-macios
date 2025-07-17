@@ -1801,7 +1801,7 @@ namespace UIKit {
 
 	// NSInteger -> UIAccessibility.h
 	/// <summary>An enumeration indicating the scrolling direction desired.</summary>
-	/// <remarks>Used as the argument to <see cref="UIAccessibilityAction.AccessibilityScroll" /> to generate a scrolling action.</remarks>
+	/// <remarks>Used as the argument to <see cref="UIResponder.AccessibilityScroll" /> to generate a scrolling action.</remarks>
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum UIAccessibilityScrollDirection : long {

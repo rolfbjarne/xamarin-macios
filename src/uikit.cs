@@ -26211,7 +26211,7 @@ namespace UIKit {
 		/// <param name="width">To be added.</param>
 		/// <param name="font">To be added.</param>
 		/// <param name="breakMode">To be added.</param>
-		/// <summary>Developers should use <see cref="NSStringDrawing.DrawString(CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method..</summary>
+		/// <summary>Developers should use <see cref="NSStringDrawing.DrawString(NSString,CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method..</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>
 		///           <para>(More documentation for this node is coming)</para>
@@ -26242,7 +26242,7 @@ namespace UIKit {
 		// note: duplicate from maccore's foundation.cs where it's binded on NSString2 (for Classic)
 		/// <param name="rect">To be added.</param>
 		/// <param name="font">To be added.</param>
-		/// <summary>Developers should use <see cref="NSStringDrawing.DrawString(CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
+		/// <summary>Developers should use <see cref="NSStringDrawing.DrawString(NSString,CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>
 		///           <para>(More documentation for this node is coming)</para>
@@ -26258,7 +26258,7 @@ namespace UIKit {
 		/// <param name="rect">To be added.</param>
 		/// <param name="font">To be added.</param>
 		/// <param name="mode">To be added.</param>
-		/// <summary>Developers should use <see cref="NSStringDrawing.DrawString(CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
+		/// <summary>Developers should use <see cref="NSStringDrawing.DrawString(NSString,CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>
 		///           <para>(More documentation for this node is coming)</para>
@@ -26275,7 +26275,7 @@ namespace UIKit {
 		/// <param name="font">To be added.</param>
 		/// <param name="mode">To be added.</param>
 		/// <param name="alignment">To be added.</param>
-		/// <summary>Developers should use <see cref="NSStringDrawing.DrawString(CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
+		/// <summary>Developers should use <see cref="NSStringDrawing.DrawString(NSString,CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>
 		///           <para>(More documentation for this node is coming)</para>

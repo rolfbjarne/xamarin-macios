@@ -11118,14 +11118,14 @@ namespace CoreImage {
 		[Export ("point1", ArgumentSemantic.Assign)]
 		CGPoint InputPoint1 { get; set; }
 
-		/// <summary>Gets or sets the color at <see cref="InputPoint0" />.</summary>
+		/// <summary>Gets or sets the color at <see cref="CILinearGradient.InputPoint0" />.</summary>
 		/// <value>To be added.</value>
 		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color0", ArgumentSemantic.Retain)]
 		CIColor Color0 { get; set; }
 
-		/// <summary>Gets or sets the color at <see cref="InputPoint1" />.</summary>
+		/// <summary>Gets or sets the color at <see cref="CILinearGradient.InputPoint1" />.</summary>
 		/// <value>To be added.</value>
 		/// <remarks>To be added.</remarks>
 		[Abstract]
@@ -11980,14 +11980,14 @@ namespace CoreImage {
 		[Export ("radius1")]
 		float Radius1 { get; set; }
 
-		/// <summary>Gets or sets the color at the <see cref="Radius0" /> location in the gradient.</summary>
+		/// <summary>Gets or sets the color at the <see cref="CIRadialGradient.Radius0" /> location in the gradient.</summary>
 		/// <value>To be added.</value>
 		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color0", ArgumentSemantic.Retain)]
 		CIColor Color0 { get; set; }
 
-		/// <summary>Gets or sets the color at the <see cref="Radius1" /> location in the gradient.</summary>
+		/// <summary>Gets or sets the color at the <see cref="CIRadialGradient.Radius1" /> location in the gradient.</summary>
 		/// <value>To be added.</value>
 		/// <remarks>To be added.</remarks>
 		[Abstract]
@@ -12196,24 +12196,24 @@ namespace CoreImage {
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CISmoothLinearGradient")]
 	interface CISmoothLinearGradientProtocol : CIFilterProtocol {
-		/// <summary>The point associated with <see cref="Color0" /></summary>
+		/// <summary>The point associated with <see cref="CISmoothLinearGradient.Color0" /></summary>
 		[Abstract]
 		[Export ("point0", ArgumentSemantic.Assign)]
 		CGPoint InputPoint0 { get; set; }
 
-		/// <summary>The point associated with <see cref="Color1" /></summary>
+		/// <summary>The point associated with <see cref="CISmoothLinearGradient.Color1" /></summary>
 		[Abstract]
 		[Export ("point1", ArgumentSemantic.Assign)]
 		CGPoint InputPoint1 { get; set; }
 
-		/// <summary>The color associated with <see cref="InputPoint0" />.</summary>
+		/// <summary>The color associated with <see cref="CISmoothLinearGradient.InputPoint0" />.</summary>
 		/// <value>To be added.</value>
 		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("color0", ArgumentSemantic.Retain)]
 		CIColor Color0 { get; set; }
 
-		/// <summary>The color associated with <see cref="InputPoint1" /></summary>
+		/// <summary>The color associated with <see cref="CISmoothLinearGradient.InputPoint1" /></summary>
 		/// <value>To be added.</value>
 		/// <remarks>To be added.</remarks>
 		[Abstract]

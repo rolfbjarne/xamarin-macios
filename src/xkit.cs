@@ -60,7 +60,7 @@ using CollectionElementCategory = AppKit.NSCollectionElementCategory;
 using StringAttributes = AppKit.NSStringAttributes;
 using View = AppKit.NSView;
 using UICollectionLayoutSectionOrthogonalScrollingProperties = System.Object;
-using TextView = AppKit.NSTextView;
+using XTextView = AppKit.NSTextView;
 using ScrollView = AppKit.NSScrollView;
 #else
 using BezierPath = UIKit.UIBezierPath;
@@ -71,7 +71,7 @@ using CollectionLayoutSectionOrthogonalScrollingBehavior = UIKit.UICollectionLay
 using CollectionElementCategory = UIKit.UICollectionElementCategory;
 using StringAttributes = UIKit.UIStringAttributes;
 using View = UIKit.UIView;
-using TextView = UIKit.UITextView;
+using XTextView = UIKit.UITextView;
 using ScrollView = UIKit.UIScrollView;
 #endif
 
@@ -3671,11 +3671,11 @@ namespace UIKit {
 		[Export ("lineFragmentRectForProposedRect:atIndex:writingDirection:remainingRect:")]
 		CGRect GetLineFragmentRect (CGRect proposedRect, nuint characterIndex, NSWritingDirection baseWritingDirection, out CGRect remainingRect);
 
-		/// <summary>Whether the <see cref="NSTextContainer" /> changes its <see cref="NSTextContainer.Size" /> as its associated <see cref="TextView" /> is resized.</summary>
+		/// <summary>Whether the <see cref="NSTextContainer" /> changes its <see cref="NSTextContainer.Size" /> as its associated <see cref="XTextView" /> is resized.</summary>
 		[Export ("widthTracksTextView")]
 		bool WidthTracksTextView { get; set; }
 
-		/// <summary>Whether the <see cref="NSTextContainer" /> changes its <see cref="NSTextContainer.Size" /> as its associated <see cref="TextView" /> is resized.</summary>
+		/// <summary>Whether the <see cref="NSTextContainer" /> changes its <see cref="NSTextContainer.Size" /> as its associated <see cref="XTextView" /> is resized.</summary>
 		[Export ("heightTracksTextView")]
 		bool HeightTracksTextView { get; set; }
 

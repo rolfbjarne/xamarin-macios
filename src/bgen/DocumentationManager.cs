@@ -35,6 +35,11 @@ public class DocumentationManager {
 		return true;
 	}
 
+	public bool HasDocumentation (MemberInfo member)
+	{
+		return TryGetDocumentation (member, out var _, null);
+	}
+
 	public bool TryGetDocumentation (MemberInfo member, [NotNullWhen (true)] out string []? documentation, Func<XmlNode, XmlNode>? transformNode = null)
 	{
 		documentation = null;

@@ -94,7 +94,7 @@ namespace DeviceDiscoveryExtension {
 		string Ssid { get; set; }
 
 		[iOS (26, 0), MacCatalyst (26, 0), Mac (26, 0)]
-		[Export ("wifiAwareServiceName")]
+		[Export ("wifiAwareServiceName"), NullAllowed]
 		string WifiAwareServiceName { get; set; }
 
 		[iOS (26, 0), MacCatalyst (26, 0), Mac (26, 0)]
@@ -102,11 +102,11 @@ namespace DeviceDiscoveryExtension {
 		DDDeviceWiFiAwareServiceRole WifiAwareServiceRole { get; set; }
 
 		[iOS (26, 0), MacCatalyst (26, 0), Mac (26, 0)]
-		[Export ("wifiAwareModelName")]
+		[Export ("wifiAwareModelName"), NullAllowed]
 		string WifiAwareModelName { get; set; }
 
 		[iOS (26, 0), MacCatalyst (26, 0), Mac (26, 0)]
-		[Export ("wifiAwareVendorName")]
+		[Export ("wifiAwareVendorName"), NullAllowed]
 		string WifiAwareVendorName { get; set; }
 	}
 

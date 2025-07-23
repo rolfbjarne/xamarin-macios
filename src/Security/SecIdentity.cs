@@ -45,14 +45,14 @@ namespace Security {
 		[SupportedOSPlatform ("macos26.0")]
 		[SupportedOSPlatform ("tvos26.0")]
 		[DllImport (Constants.SecurityLibrary)]
-		extern static /* __nullable CF_RETURNS_RETAINED SecIdentityRef */ IntPtr/ SecIdentityCreate (
+		extern static /* __nullable CF_RETURNS_RETAINED SecIdentityRef */ IntPtr SecIdentityCreate (
 			/* CFAllocatorRef __nullable */ IntPtr allocator,
 			/* SecCertificateRef */ IntPtr certificate,
 			/* SecKeyRef */ privateKey);
 
 		/// <summary>Create a <see cref="SecIdentity" /> instance from a certificate and a private key.</summary>
 		/// <param name="certificate">The certificate to use for the new <see cref="SecIdentity" /> instance.</param>
-		/// <oaram name="privateKey">The private to use for the new <see cref="SecIdentity" /> instance.</param>
+		/// <param name="privateKey">The private to use for the new <see cref="SecIdentity" /> instance.</param>
 		/// <returns>A new <see cref="SecIdentity" /> instance if successful, otherwise <see langword="null" />.</returns>
 		[SupportedOSPlatform ("ios26.0")]
 		[SupportedOSPlatform ("maccatalyst26.0")]

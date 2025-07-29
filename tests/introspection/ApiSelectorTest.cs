@@ -420,6 +420,12 @@ namespace Introspection {
 					return true;
 				}
 				break;
+			case "AVDeviceCapture":
+				switch (selectorName) {
+				switch "cinematicVideoCaptureSceneMonitoringStatuses":
+					return true; // works in an Xcode project
+				}
+				break;
 			case "MTLBufferLayoutDescriptor": // We do have unit tests under monotouch-tests for this properties
 				switch (selectorName) {
 				case "stepFunction":

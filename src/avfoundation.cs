@@ -7366,7 +7366,7 @@ namespace AVFoundation {
 		// From the AVAssetCacheCustomMediaSelectionScheme category
 		[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
 		[Export ("mediaPresentationLanguagesForMediaSelectionGroup:")]
-		string[] GetMediaPresentationLanguages (AVMediaSelectionGroup mediaSelectionGroup);
+		string [] GetMediaPresentationLanguages (AVMediaSelectionGroup mediaSelectionGroup);
 	}
 
 	[MacCatalyst (13, 1)]
@@ -7454,7 +7454,7 @@ namespace AVFoundation {
 		[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
 		[Static]
 		[Export ("audiovisualContentTypes", ArgumentSemantic.Copy)]
-		UTType[] AudiovisualContentTypes { get; }
+		UTType [] AudiovisualContentTypes { get; }
 
 		[Static, Export ("isPlayableExtendedMIMEType:")]
 		bool IsPlayable (string extendedMimeType);
@@ -7957,26 +7957,24 @@ namespace AVFoundation {
 	[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface AVCustomMediaSelectionScheme : NSCopying
-	{
+	interface AVCustomMediaSelectionScheme : NSCopying {
 		[Export ("shouldOfferLanguageSelection")]
 		bool ShouldOfferLanguageSelection { get; }
 
 		[Export ("availableLanguages")]
-		string[] AvailableLanguages { get; }
+		string [] AvailableLanguages { get; }
 
 		[Export ("selectors")]
-		AVMediaPresentationSelector[] Selectors { get; }
+		AVMediaPresentationSelector [] Selectors { get; }
 
 		[Export ("mediaPresentationSettingsForSelector:complementaryToLanguage:settings:")]
-		AVMediaPresentationSetting[] GetMediaPresentationSettings (AVMediaPresentationSelector selector, [NullAllowed] string language, AVMediaPresentationSetting[] settings);
+		AVMediaPresentationSetting [] GetMediaPresentationSettings (AVMediaPresentationSelector selector, [NullAllowed] string language, AVMediaPresentationSetting [] settings);
 	}
 
 	[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface AVMediaPresentationSelector : NSCopying
-	{
+	interface AVMediaPresentationSelector : NSCopying {
 		[Export ("identifier")]
 		string Identifier { get; }
 
@@ -7984,14 +7982,13 @@ namespace AVFoundation {
 		string GetDisplayName (string localeIdentifier);
 
 		[Export ("settings")]
-		AVMediaPresentationSetting[] Settings { get; }
+		AVMediaPresentationSetting [] Settings { get; }
 	}
 
 	[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface AVMediaPresentationSetting : NSCopying
-	{
+	interface AVMediaPresentationSetting : NSCopying {
 		[Export ("mediaCharacteristic")]
 		NSString WeakMediaCharacteristic { get; }
 
@@ -12251,7 +12248,7 @@ namespace AVFoundation {
 	[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 	[BaseType (typeof (AVMetadataObject))]
 	interface AVMetadataDogHeadObject : NSCopying {
-	} 
+	}
 
 	/// <summary>Enumerates barcode descriptions.</summary>
 	/// <remarks>To be added.</remarks>
@@ -14307,11 +14304,11 @@ namespace AVFoundation {
 		[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
 		[Export ("outputBufferDescription", ArgumentSemantic.Copy)]
 		[NullAllowed]
-		NSObject[] OutputBufferDescription { get; }
+		NSObject [] OutputBufferDescription { get; }
 
 		[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
 		[Export ("spatialVideoConfigurations", ArgumentSemantic.Copy)]
-		AVSpatialVideoConfiguration[] SpatialVideoConfigurations { get; }
+		AVSpatialVideoConfiguration [] SpatialVideoConfigurations { get; }
 	}
 
 	delegate void AVVideoCompositionDetermineValidityCallback (bool isValid, [NullAllowed] NSError error);
@@ -14505,7 +14502,7 @@ namespace AVFoundation {
 		[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
 		[Export ("outputBufferDescription", ArgumentSemantic.Copy)]
 		[NullAllowed]
-		NSObject[] OutputBufferDescription { get; set; }
+		NSObject [] OutputBufferDescription { get; set; }
 	}
 
 	delegate void AVMutableVideoCompositionCreateApplier (AVAsynchronousCIImageFilteringRequest request);
@@ -15050,8 +15047,7 @@ namespace AVFoundation {
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
 	[Model]
 	[BaseType (typeof (NSObject))]
-	interface AVCaptureSessionDeferredStartDelegate
-	{
+	interface AVCaptureSessionDeferredStartDelegate {
 		[Abstract]
 		[Export ("sessionWillRunDeferredStart:")]
 		void SessionWillRunDeferredStart (AVCaptureSession session);
@@ -16207,7 +16203,7 @@ namespace AVFoundation {
 
 		[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 		[Export ("requiredMetadataObjectTypesForCinematicVideoCapture")]
-		string[] RequiredMetadataObjectTypesForCinematicVideoCapture { get; }
+		string [] RequiredMetadataObjectTypesForCinematicVideoCapture { get; }
 	}
 
 	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="AVFoundation.AVCaptureMetadataOutputObjectsDelegate" />.</summary>
@@ -18618,7 +18614,7 @@ namespace AVFoundation {
 		[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 		[Export ("nominalFocalLengthIn35mmFilm")]
 		float NominalFocalLengthIn35mmFilm { get; }
-		
+
 		// From the CameraLensSmudgeDetection (AVCaptureDevice) category
 		[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 		[Export ("setCameraLensSmudgeDetectionEnabled:detectionInterval:")]
@@ -18642,8 +18638,7 @@ namespace AVFoundation {
 
 	[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 	[Native]
-	public enum AVCaptureCinematicVideoFocusMode : long
-	{
+	public enum AVCaptureCinematicVideoFocusMode : long {
 		None = 0,
 		Strong = 1,
 		Weak = 2,
@@ -18651,8 +18646,7 @@ namespace AVFoundation {
 
 	[Flags]
 	[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
-	enum AVCaptureSceneMonitoringStatus
-	{
+	enum AVCaptureSceneMonitoringStatus {
 		[Field ("AVCaptureSceneMonitoringStatusNotEnoughLight")]
 		NotEnoughLight = 1,
 
@@ -19038,8 +19032,7 @@ namespace AVFoundation {
 
 	[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 	[Native]
-	public enum AVCaptureCameraLensSmudgeDetectionStatus : long
-	{
+	public enum AVCaptureCameraLensSmudgeDetectionStatus : long {
 		Disabled = 0,
 		SmudgeNotDetected = 1,
 		Smudged = 2,
@@ -20040,7 +20033,7 @@ namespace AVFoundation {
 		// From the AVPlayerItemCustomMediaSelectionScheme (AVPlayerItem) category
 		[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
 		[Export ("preferredCustomMediaSelectionSchemes", ArgumentSemantic.Copy)]
-		AVCustomMediaSelectionScheme[] PreferredCustomMediaSelectionSchemes { get; set; }
+		AVCustomMediaSelectionScheme [] PreferredCustomMediaSelectionSchemes { get; set; }
 
 		// From the AVPlayerItemCustomMediaSelectionScheme (AVPlayerItem) category
 		[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
@@ -26629,8 +26622,7 @@ namespace AVFoundation {
 	[NoTV, NoMacCatalyst, NoMac, iOS (26, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface AVCaptureSpatialAudioMetadataSampleGenerator
-	{
+	interface AVCaptureSpatialAudioMetadataSampleGenerator {
 		[Export ("timedMetadataSampleBufferFormatDescription")]
 		CMFormatDescription TimedMetadataSampleBufferFormatDescription { get; }
 
@@ -26650,8 +26642,7 @@ namespace AVFoundation {
 	[MacCatalyst (18, 0), TV (18, 0), Mac (15, 0), iOS (18, 0)]
 	[BaseType (typeof (AVMetricEvent))]
 	[DisableDefaultCtor]
-	interface AVMetricDownloadSummaryEvent
-	{
+	interface AVMetricDownloadSummaryEvent {
 		[NullAllowed, Export ("errorEvent")]
 		AVMetricErrorEvent ErrorEvent { get; }
 
@@ -26668,28 +26659,26 @@ namespace AVFoundation {
 		double DownloadDuration { get; }
 
 		[Export ("variants")]
-		AVAssetVariant[] Variants { get; }
+		AVAssetVariant [] Variants { get; }
 	}
 
 	[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface AVPlaybackCoordinationMedium
-	{
+	interface AVPlaybackCoordinationMedium {
 		[Export ("connectedPlaybackCoordinators")]
-		AVPlayerPlaybackCoordinator[] ConnectedPlaybackCoordinators { get; }
+		AVPlayerPlaybackCoordinator [] ConnectedPlaybackCoordinators { get; }
 	}
 
 	[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface AVSpatialVideoConfiguration
-	{
+	interface AVSpatialVideoConfiguration {
 		[DesignatedInitializer]
 		[Export ("init")]
 		NativeHandle Constructor ();
 
 		[NullAllowed, Export ("cameraCalibrationDataLensCollection", ArgumentSemantic.Copy)]
-		NSDictionary<NSString, NSObject>[] CameraCalibrationDataLensCollection { get; set; }
+		NSDictionary<NSString, NSObject> [] CameraCalibrationDataLensCollection { get; set; }
 
 		[NullAllowed, Export ("horizontalFieldOfView", ArgumentSemantic.Copy)]
 		[BindAs (typeof (nint?))] // "thousandths of a degree" sounds like an integer value
@@ -26710,8 +26699,7 @@ namespace AVFoundation {
 	[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface AVAudioSessionCapability
-	{
+	interface AVAudioSessionCapability {
 		[Export ("supported")]
 		bool Supported { [Bind ("isSupported")] get; }
 
@@ -26722,8 +26710,7 @@ namespace AVFoundation {
 	[MacCatalyst (26, 0), TV (26, 0), NoMac, iOS (26, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface AVAudioSessionPortExtensionBluetoothMicrophone
-	{
+	interface AVAudioSessionPortExtensionBluetoothMicrophone {
 		[Export ("highQualityRecording", ArgumentSemantic.Strong)]
 		AVAudioSessionCapability HighQualityRecording { get; }
 	}
@@ -26731,8 +26718,7 @@ namespace AVFoundation {
 	[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface AVMetricMediaRendition : NSSecureCoding
-	{
+	interface AVMetricMediaRendition : NSSecureCoding {
 		[NullAllowed, Export ("stableID")]
 		string StableId { get; }
 

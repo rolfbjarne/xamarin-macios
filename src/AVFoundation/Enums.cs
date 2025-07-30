@@ -1378,7 +1378,7 @@ namespace AVFoundation {
 
 		[MacCatalyst (26, 0), NoTV, Mac (26, 0), iOS (26, 0)]
 		[Field ("AVAssetExportPresetMVHEVC4320x4320")]
-		 MvHevc4320x4320,
+		MvHevc4320x4320,
 
 		[MacCatalyst (26, 0), NoTV, Mac (26, 0), iOS (26, 0)]
 		[Field ("AVAssetExportPresetMVHEVC7680x7680")]
@@ -2258,8 +2258,7 @@ namespace AVFoundation {
 
 	[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
 	[Native]
-	public enum AVPlayerNetworkResourcePriority : long
-	{
+	public enum AVPlayerNetworkResourcePriority : long {
 		Default = 0,
 		Low = 1,
 		High = 2,
@@ -2267,8 +2266,7 @@ namespace AVFoundation {
 
 	[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
 	[Native]
-	public enum AVPlayerInterstitialEventSkippableEventState : long
-	{
+	public enum AVPlayerInterstitialEventSkippableEventState : long {
 		NotSkippable = 0,
 		NotYetEligible = 1,
 		Eligible = 2,
@@ -2277,8 +2275,7 @@ namespace AVFoundation {
 
 	[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
 	[Native]
-	public enum AVAudioContentSource : long
-	{
+	public enum AVAudioContentSource : long {
 		Unspecified = -1,
 		Reserved = 0,
 		AppleCaptureTraditional = 1,
@@ -2305,8 +2302,7 @@ namespace AVFoundation {
 
 	[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
 	[Native]
-	public enum AVAudioDynamicRangeControlConfiguration : long
-	{
+	public enum AVAudioDynamicRangeControlConfiguration : long {
 		None = 0,
 		Music = 1,
 		Speech = 2,

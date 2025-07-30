@@ -4116,6 +4116,11 @@ namespace ImageIO {
 		[Internal]
 		[Field ("kCGImageSourceDecodeRequestOptions")]
 		IntPtr DecodeRequestOptions { get; }
+
+		[Internal]
+		[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Field ("kCGComputeHDRStats")]
+		IntPtr ComputeHdrStats { get; }
 	}
 
 	/// <summary>Specifies whether the callback in <see cref="ImageIO.CGImageMetadata.EnumerateTags(Foundation.NSString,ImageIO.CGImageMetadataEnumerateOptions,ImageIO.CGImageMetadataTagBlock)" /> is recursive.</summary>
@@ -4450,36 +4455,89 @@ namespace ImageIO {
 		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		[Field ("kCGImageDestinationEncodeTonemapMode")]
 		NSString EncodeTonemapMode { get; }
+
+		[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Field ("kCGImageDestinationEncodeIsBaseImage")]
+		NSString EncodeIsBaseImage { get; }
+
+		[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Field ("kCGImageDestinationEncodeBaseColorSpace")]
+		NSString EncodeBaseColorSpace { get; }
+
+		[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Field ("kCGImageDestinationEncodeBasePixelFormatRequest")]
+		NSString EncodeBasePixelFormatRequest { get; }
+
+		[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Field ("kCGImageDestinationEncodeGenerateGainMapWithBaseImage")]
+		NSString EncodeGenerateGainMapWithBaseImage { get; }
+
+		[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Field ("kCGImageDestinationEncodeGainMapPixelFormatRequest")]
+		NSString EncodeGainMapPixelFormatRequest { get; }
+
+		[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Field ("kCGImageDestinationEncodeGainMapSubsampleFactor")]
+		NSString EncodeGainMapSubsampleFactor { get; }
+
+		[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Field ("kCGImageDestinationEncodeAlternateColorSpace")]
+		NSString EncodeAlternateColorSpace { get; }
 	}
 
-	/// <summary>Class that contains options for copying image sources.</summary>
-	[Partial]
-	interface CGCopyImageSourceOptions {
+	[MacCatalyst (13, 1)]
+	[Static]
+	[Internal]
+	interface CGCopyImageSourceOptionsKeys {
 
-		[Internal]
 		[Field ("kCGImageDestinationMetadata")]
-		IntPtr kMetadata { get; }
+		NSString MetadataKey { get; }
 
-		[Internal]
 		[Field ("kCGImageDestinationMergeMetadata")]
-		IntPtr kMergeMetadata { get; }
+		NSString MergeMetadataKey { get; }
 
-		[Internal]
 		[Field ("kCGImageMetadataShouldExcludeXMP")]
-		IntPtr kShouldExcludeXMP { get; }
+		NSString ShouldExcludeXMPKey { get; }
 
-		[MacCatalyst (13, 1)]
-		[Internal]
 		[Field ("kCGImageMetadataShouldExcludeGPS")]
-		IntPtr kShouldExcludeGPS { get; }
+		NSString ShouldExcludeGPSKey { get; }
 
-		[Internal]
 		[Field ("kCGImageDestinationDateTime")]
-		IntPtr kDateTime { get; }
+		NSString DateTimeKey { get; }
 
-		[Internal]
 		[Field ("kCGImageDestinationOrientation")]
-		IntPtr kOrientation { get; }
+		NSString OrientationKey { get; }
+
+		[Field ("kCGImagePropertyEncoder")]
+		NSString EncoderKey { get; }
+
+		[Field ("kCGImagePropertyBCFormat")]
+		NSString BCFormatKey { get; }
+
+		[Field ("kCGImagePropertyASTCBlockSize")]
+		NSString AstcBlockSizeKey { get; }
+	}
+
+	[StrongDictionary ("CGCopyImageSourceOptionsKeys")]
+	interface CGCopyImageSourceOptions {
+		CGImageMetadata? Metadata { get; set; }
+
+		bool MergeMetadata { get; set; }
+
+		bool ShouldExcludeXMP { get; set; }
+
+		bool ShouldExcludeGPS { get; set; }
+
+		DateTime? DateTime { get; set; }
+
+		int? Orientation { get; set; }
+
+		CGImagePropertyEncoder? Encoder { get; set; }
+
+		int? BCFormat { get; set; }
+
+		[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
+		CGImagePropertyAstcBlockSize? AstcBlockSize { get; set; }
 	}
 
 	[MacCatalyst (13, 1)]
@@ -4636,6 +4694,16 @@ namespace ImageIO {
 	}
 
 	[Static]
+	[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
+	interface CGImageProviderPreferredTileSize {
+		[Field ("kCGImageProviderPreferredTileWidth")]
+		NSString Width { get; }
+
+		[Field ("kCGImageProviderPreferredTileHeight")]
+		NSString Height { get; }
+	}
+
+	[Static]
 	[iOS (16, 0), Mac (13, 0), TV (16, 0), MacCatalyst (16, 0)]
 	interface IOMetadata {
 		[Field ("kIIOMetadata_CameraExtrinsicsKey")]
@@ -4672,5 +4740,26 @@ namespace ImageIO {
 
 		[Field ("kIIOMonoscopicImageLocation_Center")]
 		NSString Center { get; }
+	}
+
+	enum CGImagePropertyEncoder {
+		// ASTC: Adaptive Scalable Texture Compression
+		[Field ("kCGImagePropertyASTCEncoder")]
+		AstcEncoder,
+
+		[Field ("kCGImagePropertyPVREncoder")]
+		PvrEncoder,
+
+		[Field ("kCGImagePropertyBCEncoder")]
+		BCEncoder,
+	}
+
+	[MacCatalyst (26, 0), TV (26, 0), Mac (26, 0), iOS (26, 0)]
+	enum CGImagePropertyAstcBlockSize {
+		[Field ("kCGImagePropertyASTCBlockSize4x4")]
+		BlockSize4x4,
+
+		[Field ("kCGImagePropertyASTCBlockSize8x8")]
+		BlockSize8x8,
 	}
 }

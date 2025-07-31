@@ -4520,7 +4520,7 @@ namespace ImageIO {
 
 	[StrongDictionary ("CGCopyImageSourceOptionsKeys")]
 	interface CGCopyImageSourceOptions {
-		CGImageMetadata? Metadata { get; set; }
+		CGImageMetadata Metadata { get; set; }
 
 		bool MergeMetadata { get; set; }
 

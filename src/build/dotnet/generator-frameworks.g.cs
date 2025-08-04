@@ -403,6 +403,7 @@ partial class Frameworks {
 		"AVRouting",
 		"BackgroundAssets",
 		"BackgroundTasks",
+		"BrowserEngineKit",
 		"BusinessChat",
 		"CallKit",
 		"CFNetwork",

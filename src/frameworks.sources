@@ -1938,6 +1938,7 @@ COMMON_FRAMEWORKS =         \
 	Accelerate              \
 	AuthenticationServices	\
 	AVFoundation            \
+	BrowserEngineKit        \
 	CoreBluetooth           \
 	CoreData                \
 	CoreFoundation          \
@@ -1976,7 +1977,6 @@ MACOS_FRAMEWORKS =          \
 	AVRouting               \
 	BusinessChat            \
 	BackgroundAssets        \
-	BrowserEngineKit        \
 	CallKit \
 	CFNetwork               \
 	Cinematic              \
@@ -2096,7 +2096,6 @@ IOS_FRAMEWORKS =         \
 	AutomaticAssessmentConfiguration \
 	BackgroundAssets \
 	BackgroundTasks \
-	BrowserEngineKit \
 	BusinessChat \
 	CallKit \
 	CarPlay \
@@ -2205,7 +2204,6 @@ TVOS_FRAMEWORKS =           \
 	AudioUnit               \
 	BackgroundAssets        \
 	BackgroundTasks         \
-	BrowserEngineKit        \
 	CFNetwork               \
 	Cinematic              \
 	CloudKit                \

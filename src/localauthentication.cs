@@ -373,6 +373,7 @@ namespace LocalAuthentication {
 		Watch = 1 << 0,
 		[NoMac, NoTV]
 		Mac = 1 << 1,
+		Vision = 1 << 2,
 	}
 
 	[Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]

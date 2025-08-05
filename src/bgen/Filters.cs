@@ -282,6 +282,9 @@ public partial class Generator {
 		print ("get {");
 		indent++;
 		switch (propertyType) {
+		case "CIDynamicRangeOption":
+			print ($"return CIDynamicRangeOptionExtensions.GetNullableValue (GetHandle (\"{propertyName}\"));");
+			break;
 		case "bool":
 			print ("return GetBool (\"{0}\");", propertyName);
 			break;
@@ -354,6 +357,9 @@ public partial class Generator {
 		print ("set {");
 		indent++;
 		switch (propertyType) {
+		case "CIDynamicRangeOption":
+			print ("SetValue (\"{0}\", value.HasValue ? value.Value.GetConstant () : null);", propertyName);
+			break;
 		case "bool":
 			print ("SetBool (\"{0}\", value);", propertyName);
 			break;

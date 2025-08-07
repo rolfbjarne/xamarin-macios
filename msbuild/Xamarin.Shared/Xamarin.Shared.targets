@@ -2502,8 +2502,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		>
 
 		<WriteItemsToFile
-			Condition="'$(IsMacEnabled)' == 'true'"
-			SessionId="$(BuildSessionId)"
 			Items="@(_CodesignBundle)"
 			ItemName="_CodesignBundle"
 			File="$(DeviceSpecificOutputPath)codesign-bundle.items"
@@ -2512,8 +2510,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		/>
 
 		<WriteItemsToFile
-			Condition="'$(IsMacEnabled)' == 'true'"
-			SessionId="$(BuildSessionId)"
 			Items="@(_CodesignItems)"
 			ItemName="_CodesignItems"
 			File="$(DeviceSpecificOutputPath)codesign.items"
@@ -2973,7 +2969,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		>
 
 		<WriteItemsToFile
-			Condition="'$(IsMacEnabled)' == 'true' And '$(_PostProcessingItemPath)' != ''"
+			Condition="'$(_PostProcessingItemPath)' != ''"
 			Items="@(_PostProcessingItem)"
 			ItemName="_PostProcessingItem"
 			File="$(_PostProcessingItemPath)"

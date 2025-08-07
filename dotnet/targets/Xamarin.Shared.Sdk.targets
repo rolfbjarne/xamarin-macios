@@ -1017,7 +1017,7 @@
 			<_ExistingLinkerItemFiles Include="@(_LinkerItemFiles)" Condition="Exists('%(Identity)')" />
 		</ItemGroup>
 
-		<ReadItemsFromFile File="@(_ExistingLinkerItemFiles)" Condition="'@(_ExistingLinkerItemFiles)' != ''">
+		<ReadItemsFromFile SessionId="$(BuildSessionId)" File="@(_ExistingLinkerItemFiles)" Condition="'@(_ExistingLinkerItemFiles)' != ''">
 			<Output TaskParameter="Items" ItemName="_AllLinkerItems" />
 		</ReadItemsFromFile>
 

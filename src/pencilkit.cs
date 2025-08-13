@@ -454,7 +454,7 @@ namespace PencilKit {
 		[iOS (26, 0), MacCatalyst (26, 0)]
 		[Static]
 		[Export ("defaultToolItems")]
-		PKToolPickerItem[] DefaultToolItems { get; }
+		PKToolPickerItem [] DefaultToolItems { get; }
 
 		[iOS (26, 0), MacCatalyst (26, 0)]
 		[Export ("colorMaximumLinearExposure")]
@@ -810,8 +810,7 @@ namespace PencilKit {
 
 	[iOS (26, 0), NoMac, MacCatalyst (26, 0)]
 	[Native]
-	public enum PKToolPickerVisibility : long
-	{
+	public enum PKToolPickerVisibility : long {
 		Inherited,
 		Inactive,
 		Hidden,
@@ -820,8 +819,7 @@ namespace PencilKit {
 
 	[iOS (26, 0), NoMac, MacCatalyst (26, 0)]
 	[BaseType (typeof (NSObject))]
-	interface PKResponderState
-	{
+	interface PKResponderState {
 		[Export ("toolPickerVisibility", ArgumentSemantic.Assign)]
 		PKToolPickerVisibility ToolPickerVisibility { get; set; }
 
@@ -832,8 +830,7 @@ namespace PencilKit {
 	[iOS (26, 0), NoMac, MacCatalyst (26, 0)]
 	[Category]
 	[BaseType (typeof (UIResponder))]
-	interface UIResponder_PKResponderState
-	{
+	interface UIResponder_PKResponderState {
 		[Export ("pencilKitResponderState")]
 		PKResponderState GetPencilKitResponderState ();
 	}

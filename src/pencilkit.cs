@@ -305,6 +305,7 @@ namespace PencilKit {
 		[Export ("width")]
 		nfloat Width { get; }
 
+		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0)]
 		[Export ("azimuth")]
 		nfloat Azimuth { get; }
 

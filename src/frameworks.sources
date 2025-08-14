@@ -287,6 +287,7 @@ AVKIT_API_SOURCES = \
 	AVKit/Enums.cs \
 
 AVKIT_SOURCES = \
+	AVKit/AVCaptureEventSound.cs \
 	AVKit/AVPlayerViewController.cs \
 
 # AVRouting
@@ -1009,6 +1010,7 @@ IMAGEIO_CORE_SOURCES = \
 	ImageIO/CGImageSource.cs \
 
 IMAGEIO_SOURCES = \
+	ImageIO/CGCopyImageSourceOptions.cs \
 	ImageIO/CGImageAnimation.cs \
 	ImageIO/CGImageDestination.cs \
 	ImageIO/CGImageMetadata.cs \
@@ -2007,6 +2009,7 @@ MACOS_FRAMEWORKS =          \
 	FSKit                   \
 	GameController          \
 	GameplayKit             \
+	GameSave                \
 	GLKit                   \
 	HealthKit               \
 	ImageIO                 \
@@ -2119,6 +2122,7 @@ IOS_FRAMEWORKS =         \
 	CoreTelephony \
 	CoreText \
 	DeviceDiscoveryExtension \
+	DeviceDiscoveryUI \
 	EventKit \
 	EventKitUI \
 	ExternalAccessory \
@@ -2127,6 +2131,7 @@ IOS_FRAMEWORKS =         \
 	GLKit \
 	GameController \
 	GameplayKit \
+	GameSave \
 	HealthKit \
 	HealthKitUI \
 	HomeKit \
@@ -2203,6 +2208,7 @@ TVOS_FRAMEWORKS =           \
 	AppTrackingTransparency \
 	AudioToolbox            \
 	AudioUnit               \
+	AVRouting               \
 	BackgroundAssets        \
 	BackgroundTasks         \
 	BrowserEngineKit        \
@@ -2304,6 +2310,7 @@ MACCATALYST_FRAMEWORKS = \
 	FileProvider \
 	GameController \
 	GameplayKit \
+	GameSave \
 	HealthKit \
 	HealthKitUI \
 	HomeKit \

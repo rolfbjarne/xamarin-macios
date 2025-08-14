@@ -110,5 +110,82 @@ namespace MonoTouchFixtures.CoreGraphics {
 				Assert.Null (c.ToImage (), "ToImage/Disposed");
 			}
 		}
+
+		[Test]
+		public void CreateAdaptive ()
+		{
+			TestRuntime.AssertXcodeVersion (26, 0);
+
+			nint width = 256;
+			nint height = 256;
+
+			{
+				using var context = CGBitmapContext.Create (width, height, null, null, null, null, null));
+				Assert.NotNull (context, "Context#1");
+			}
+
+			{
+				var calledOnResolve = false;
+				var calledOnAllocate = false;
+				var calledOnFree = false;
+				var calledOnError = false;
+				using var context = CGBitmapContext.Create (width, height, null,
+					(ref CGContentInfo info, ref CGBitmapParameters parameters) =>
+					{
+						Console.WriteLine ($"CreateAdaptive () OnResolve#2 info={info} parameters={parameters}");
+						calledOnResolve = true;
+						return true;
+					},
+					(ref CGContentInfo info, ref CGBitmapParameters parameters) => {
+						Console.WriteLine ($"CreateAdaptive () OnAllocate#2 info={info} parameters={parameters}");
+						calledOnAllocate = true;
+						return null;
+					},
+					(CGRenderingBufferProvider renderingBufferProvider, ref CGContentInfo contentInfo, ref CGBitmapParameters bitmapParameters) => {
+						Console.WriteLine ($"CreateAdaptive () OnFree#2 renderingBufferProvider={renderingBufferProvider} info={info} parameters={parameters}");
+						calledOnFree = true;
+					},
+					(NSError error, ref CGContentInfo contentInfo, ref CGBitmapParameters bitmapParameters) => {
+						Console.WriteLine ($"CreateAdaptive () OnError#2 error={error} info={info} parameters={parameters}");
+						calledOnError = true;
+					});
+
+				Assert.NotNull (context, "Context#2");
+			}
+
+			{
+				var calledOnResolve = false;
+				var calledOnAllocate = false;
+				var calledOnFree = false;
+				var calledOnError = false;
+				using var options = new CGAdaptiveOptions () {
+					MaximumBitDepth = CGComponent.Float16Bit,
+				};
+				using var context = CGBitmapContext.Create (width, height, options,
+					(ref CGContentInfo info, ref CGBitmapParameters parameters) =>
+					{
+						Console.WriteLine ($"CreateAdaptive () OnResolve#3 info={info} parameters={parameters}");
+						calledOnResolve = true;
+						return true;
+					},
+					(ref CGContentInfo info, ref CGBitmapParameters parameters) => {
+						Console.WriteLine ($"CreateAdaptive () OnAllocate#3 info={info} parameters={parameters}");
+						calledOnAllocate = true;
+						return null;
+					},
+					(CGRenderingBufferProvider renderingBufferProvider, ref CGContentInfo contentInfo, ref CGBitmapParameters bitmapParameters) => {
+						Console.WriteLine ($"CreateAdaptive () OnFree#3 renderingBufferProvider={renderingBufferProvider} info={info} parameters={parameters}");
+						calledOnFree = true;
+					},
+					(NSError error, ref CGContentInfo contentInfo, ref CGBitmapParameters bitmapParameters) => {
+						Console.WriteLine ($"CreateAdaptive () OnError#3 error={error} info={info} parameters={parameters}");
+						calledOnError = true;
+					});
+
+				Assert.NotNull (context, "Context#3");
+			}
+
+			// FIXME: more tests?
+		}
 	}
 }

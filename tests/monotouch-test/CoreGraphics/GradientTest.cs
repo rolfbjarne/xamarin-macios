@@ -92,5 +92,33 @@ namespace MonoTouchFixtures.CoreGraphics {
 			// this would be "3" without a [Flags] attribute
 			Assert.That (gdo.ToString (), Is.EqualTo ("DrawsBeforeStartLocation, DrawsAfterEndLocation"), "ToString/Flags");
 		}
+
+		[Test]
+		public void CreateWithHeadroom ()
+		{
+			TestRuntime.AssertXcodeVersion (26, 0);
+
+			var colorComponents = new nfloat [] {
+				0.1f, 0.2f, 0.3f,
+				0.4f, 0.5f, 0.6f,
+				0.7f, 0.8f, 0.9f,
+			};
+			var locations = new nfloat [] {
+				0,
+				0.25f,
+				1,
+			};
+
+			using (var hdrCapableColorspace = CGColorSpace.CreateWithName (CGColorSpaceNames.ExtendedRange))
+			using (var gradient = CGGradient.Create (0.5f, nhdrCapableColorspace, array, colorComponents, locations)) {
+				Assert.IsNotNull (gradient, "Gradient #1");
+				Assert.That (gradient.ContentHeadroom, Is.EqualTo (0.5f), "Gradient #1 - ContentHeadroom");
+			}
+
+			using (var gradient = CGGradient.Create (0.5f, null, array, colorComponents, locations)) {
+				Assert.IsNotNull (gradient, "Gradient #2");
+				Assert.That (gradient.ContentHeadroom, Is.EqualTo (0.5f), "Gradient #2 - ContentHeadroom");
+			}
+		}
 	}
 }

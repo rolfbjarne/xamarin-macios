@@ -106,8 +106,17 @@ namespace VideoToolbox {
 			return VTRAWProcessingSessionGetTypeID ();
 		}
 
+		[SupportedOSPlatform ("macos")]
+		[ObsoletedOSPlatform ("macos26.0")]
 		[DllImport (Constants.VideoToolboxLibrary)]
 		unsafe static extern VTStatus VTRAWProcessingSessionSetParameterChangedHander (
+			IntPtr /* VTRAWProcessingSessionRef */ session,
+			BlockLiteral* /* VTRAWProcessingParameterChangeHandler */ parameterChangeHandler
+			);
+
+		[SupportedOSPlatform ("macos26.0")]
+		[DllImport (Constants.VideoToolboxLibrary)]
+		unsafe static extern VTStatus VTRAWProcessingSessionSetParameterChangedHandler (
 			IntPtr /* VTRAWProcessingSessionRef */ session,
 			BlockLiteral* /* VTRAWProcessingParameterChangeHandler */ parameterChangeHandler
 			);
@@ -116,13 +125,11 @@ namespace VideoToolbox {
 		/// <param name="handler">The callback that will be called. Set to null to remove the current handler.</param>
 		public unsafe VTStatus SetParameterChangedHandler (VTRawProcessingParameterChangeHandler? handler)
 		{
-			if (handler is null) {
-				return VTRAWProcessingSessionSetParameterChangedHander (GetCheckedHandle (), null);
-			} else {
-				delegate* unmanaged<IntPtr, IntPtr, void> trampoline = &VTRawProcessingParameterChangeHandlerCallback;
-				using var block = new BlockLiteral (trampoline, handler, typeof (VTRawProcessingSession), nameof (VTRawProcessingParameterChangeHandlerCallback));
-				return VTRAWProcessingSessionSetParameterChangedHander (GetCheckedHandle (), &block);
-			}
+			delegate* unmanaged<IntPtr, IntPtr, void> trampoline = &VTRawProcessingParameterChangeHandlerCallback;
+			using var block = handler is null ? default (BlockLiteral) : new BlockLiteral (trampoline, handler, typeof (VTRawProcessingSession), nameof (VTRawProcessingParameterChangeHandlerCallback));
+			if (!SystemVersion.IsAtLeastXcode26)
+				return VTRAWProcessingSessionSetParameterChangedHander (GetCheckedHandle (), handler is null ? null : &block);
+			return VTRAWProcessingSessionSetParameterChangedHandler (GetCheckedHandle (), handler is null ? null : &block);
 		}
 
 		[UnmanagedCallersOnly]

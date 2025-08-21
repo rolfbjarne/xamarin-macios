@@ -126,6 +126,8 @@ namespace VideoToolbox {
 		/// <summary>To be added.</summary>
 		ImageBufferModifiable = 1 << 2,
 		SkippedLeadingFrameDropped = 1 << 3,
+		[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+		FrameInterrupted = 1 << 4,
 	}
 
 	// UInt32 -> VTErrors.h
@@ -442,6 +444,11 @@ namespace VideoToolbox {
 		None,
 		[Field ("kVTHDRMetadataInsertionMode_Auto")]
 		Auto,
+
+		[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Field ("kVTHDRMetadataInsertionMode_RequestSDRRangePreservation")]
+		RequestSdrRangePreservation,
+
 	}
 
 	[Mac (13, 0), iOS (16, 0), MacCatalyst (16, 0), TV (16, 0)]

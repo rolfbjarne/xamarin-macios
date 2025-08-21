@@ -373,5 +373,38 @@ namespace Foundation {
 				throw new NotImplementedException ("NSData arrays can not be modified, use an NSMutableData instead");
 			}
 		}
+
+		/// <summary>Create an <see cref="NSData" /> instance from the specified value type.</summary>
+		/// <param name="value">The value to create the <see cref="NSData" /> instance from.</param>
+		/// <returns>A new <see cref="NSData" /> instance from the specified value type.</returns>
+		public unsafe static NSData? CreateFromValueType<T> (T? value) where T: unmanaged
+		{
+			if (!value.HasValue)
+				return null;
+
+			var size = (nuint) sizeof (T);
+			var array = new byte [size];
+			var v = value.Value;
+			fixed (byte* arrayPtr = array)
+				NativeMemory.Copy (&v, arrayPtr, size);
+			return NSData.FromArray (array);
+		}
+
+		/// <summary>Create a value type from this <see cref="NSData" /> instance.</summary>
+		/// <typeparam name="T">The type of the returned value type.</typeparam>
+		/// <returns>A value type created from this <see cref="NSData" /> instance.</returns>
+		/// <remarks>An exception will be throw if this <see cref="NSData" /> instance is smaller than the size of the value type <typeparamref name="T" />.</remarks>
+		public unsafe T ToValueType<T> () where T: unmanaged
+		{
+			var size = (nuint) sizeof (T);
+			if (size < Length)
+				throw new ArgumentOutOfRangeException ($"The size of this NSData instance ({Length} bytes) is smaller than the size of the return type '{typeof (T).FullName}' ({size} bytes)");
+
+			var array = ToArray ();
+			var rv = default (T);
+			fixed (byte* arrayPtr = array)
+				NativeMemory.Copy (arrayPtr, &rv, size);
+			return rv;
+		}
 	}
 }

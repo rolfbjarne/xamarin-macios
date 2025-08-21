@@ -243,70 +243,6 @@ namespace VideoToolbox {
 			}
 		}
 
-#if false // Disabling for now until we have some tests on this
-		[DllImport (Constants.VideoToolboxLibrary)]
-		extern static VTStatus VTCompressionSessionEncodeFrameWithOutputHandler (
-			/* VTCompressionSessionRef */ IntPtr session,
-			/* CVImageBufferRef */ IntPtr imageBuffer,
-			/* CMTime */ CMTime presentation,
-			/* CMTime */ CMTime duration, // can ve CMTime.Invalid
-			/* CFDictionaryRef */ IntPtr dict, // can be null, undocumented options
-			/* VTEncodeInfoFlags */ out VTEncodeInfoFlags flags,
-			/* VTCompressionOutputHandler */ ref BlockLiteral outputHandler);
-
-		public delegate void VTCompressionOutputHandler (VTStatus status, VTEncodeInfoFlags infoFlags, CMSampleBuffer sampleBuffer);
-
-		unsafe delegate void VTCompressionOutputHandlerProxy (BlockLiteral *block,
-			VTStatus status, VTEncodeInfoFlags infoFlags, IntPtr sampleBuffer);
-
-		static unsafe readonly VTCompressionOutputHandlerProxy compressionOutputHandlerTrampoline = VTCompressionOutputHandlerTrampoline;
-
-		[MonoPInvokeCallback (typeof (VTCompressionOutputHandlerProxy))]
-		static unsafe void VTCompressionOutputHandlerTrampoline (BlockLiteral *block,
-			VTStatus status, VTEncodeInfoFlags infoFlags, IntPtr sampleBuffer)
-		{
-			var del = (VTCompressionOutputHandler)(block->Target);
-			if (del is not null)
-				del (status, infoFlags, new CMSampleBuffer (sampleBuffer));
-		}
-
-		public VTStatus EncodeFrame (CVImageBuffer imageBuffer, CMTime presentationTimestamp, CMTime duration,
-			NSDictionary frameProperties, CVImageBuffer sourceFrame, out VTEncodeInfoFlags infoFlags,
-			VTCompressionOutputHandler outputHandler)
-		{
-			if (sourceFrame is null)
-				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (sourceFrame));
-
-			VTStatus status = EncodeFrame (imageBuffer, presentationTimestamp, duration, frameProperties, sourceFrame.GetCheckedHandle (), out infoFlags, outputHandler);
-			GC.KeepAlive (sourceFrame);
-			return status;
-		}
-
-		public VTStatus EncodeFrame (CVImageBuffer imageBuffer, CMTime presentationTimestamp, CMTime duration,
-			NSDictionary frameProperties, IntPtr sourceFrame, out VTEncodeInfoFlags infoFlags,
-			VTCompressionOutputHandler outputHandler)
-		{
-			if (imageBuffer is null)
-				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (imageBuffer));
-			if (outputHandler is null)
-				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (outputHandler));
-
-			var block = new BlockLiteral ();
-			block.SetupBlockUnsafe (compressionOutputHandlerTrampoline, outputHandler);
-
-			try {
-				VTStatus status = VTCompressionSessionEncodeFrameWithOutputHandler (GetCheckedHandle (),
-					imageBuffer.Handle, presentationTimestamp, duration,
-					frameProperties.GetHandle (),
-					out infoFlags, ref block);
-				GC.KeepAlive (imageBuffer);
-				GC.KeepAlive (frameProperties);
-				return status;
-			} finally {
-				block.CleanupBlock ();
-			}
-		}
-#endif
 		[DllImport (Constants.VideoToolboxLibrary)]
 		extern static VTStatus VTCompressionSessionCompleteFrames (IntPtr session, CMTime completeUntilPresentationTimeStamp);
 
@@ -444,5 +380,153 @@ namespace VideoToolbox {
 		{
 			return VTIsStereoMVHEVCEncodeSupported () != 0;
 		}
+
+#if !__TVOS__
+/*!
+	@function	VTCompressionSessionEncodeMultiImageFrame
+	@abstract
+		Call this function to present a multi-image frame to the compression session.
+		Encoded frames may or may not be output before the function returns.
+	@discussion
+		The client should not modify the pixel data after making this call.
+		The session and/or encoder will retain the image buffer as long as necessary.
+	@param	session
+		The compression session.
+	@param	taggedBufferGroup
+		A CMTaggedBufferGroup containing the multiple images for a video frame to be compressed.
+	@param	presentationTimeStamp
+		The presentation timestamp for this frame, to be attached to the sample buffer.
+		Each presentation timestamp passed to a session must be greater than the previous one.
+	@param	duration
+		The presentation duration for this frame, to be attached to the sample buffer.
+		If you do not have duration information, pass kCMTimeInvalid.
+	@param	frameProperties
+		Contains key/value pairs specifying additional properties for encoding this frame.
+		Note that some session properties may also be changed between frames.
+		Such changes have effect on subsequently encoded frames.
+	@param	sourceFrameRefcon
+		Your reference value for the frame, which will be passed to the output callback function.
+	@param	infoFlagsOut
+		Points to a VTEncodeInfoFlags to receive information about the encode operation.
+		The kVTEncodeInfo_Asynchronous bit may be set if the encode is (or was) running
+		asynchronously.
+		The kVTEncodeInfo_FrameDropped bit may be set if the frame was dropped (synchronously).
+		Pass NULL if you do not want to receive this information.
+*/
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("ios17.0")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[DllImport (Constants.VideoToolboxLibrary)]
+		unsafe static extern VTStatus VTCompressionSessionEncodeMultiImageFrame (
+			IntPtr /* CM_NONNULL VTCompressionSessionRef */ session,
+			IntPtr /* CM_NONNULL CMTaggedBufferGroupRef */ taggedBufferGroup,
+			CMTime presentationTimeStamp,
+			CMTime duration, // may be kCMTimeInvalid
+			IntPtr /* CM_NULLABLE CFDictionaryRef */ frameProperties,
+			IntPtr /* void * CM_NULLABLE */ sourceFrameRefcon,
+			VTEncodeInfoFlags* /* VTEncodeInfoFlags * CM_NULLABLE */ infoFlagsOut);
+
+		public unsafe VTStatus EncodeMultiImageFrame (CMTaggedBufferGroup taggedBufferGroup, CMTime presentationTimestamp, CMTime duration, NSDictionary? frameProperties, IntPtr sourceFrameReference, out VTEncodeInfoFlags infoFlags)
+		{
+			infoFlags = default;
+
+			var rv = VTCompressionSessionEncodeMultiImageFrame (
+						GetCheckedHandle (),
+						taggedBufferGroup.GetNonNullHandle (nameof (taggedBufferGroup)),
+						presentationTimestamp,
+						duration,
+						frameProperties.GetHandle (),
+						sourceFrameReference,
+						(VTEncodeInfoFlags *) Unsafe.AsPointer<VTEncodeInfoFlags> (ref infoFlags));
+
+			GC.KeepAlive (taggedBufferGroup);
+			GC.KeepAlive (frameProperties);
+
+			return rv;
+		}
+
+/*!
+	@function	VTCompressionSessionEncodeMultiImageFrameWithOutputHandler
+	@abstract
+		Call this function to present a multi-image frame to the compression session.
+		Encoded frames may or may not be output before the function returns.
+	@discussion
+		The client should not modify the pixel data after making this call.
+		The session and/or encoder will retain the image buffer as long as necessary.
+		Cannot be called with a session created with a VTCompressionOutputCallback.
+	@param	session
+		The compression session.
+	@param	taggedBufferGroup
+		A CMTaggedBufferGroup containing the multiple images for a video frame to be compressed.
+	@param	presentationTimeStamp
+		The presentation timestamp for this frame, to be attached to the sample buffer.
+		Each presentation timestamp passed to a session must be greater than the previous one.
+	@param	duration
+		The presentation duration for this frame, to be attached to the sample buffer.
+		If you do not have duration information, pass kCMTimeInvalid.
+	@param	frameProperties
+		Contains key/value pairs specifying additional properties for encoding this frame.
+		Note that some session properties may also be changed between frames.
+		Such changes have effect on subsequently encoded frames.
+	@param	infoFlagsOut
+		Points to a VTEncodeInfoFlags to receive information about the encode operation.
+		The kVTEncodeInfo_Asynchronous bit may be set if the encode is (or was) running
+		asynchronously.
+		The kVTEncodeInfo_FrameDropped bit may be set if the frame was dropped (synchronously).
+		Pass NULL if you do not want to receive this information.
+	@param	outputHandler
+		The block to be called when encoding the frame is completed.
+		This block may be called asynchronously, on a different thread from the one that calls VTCompressionSessionEncodeMultiImageFrameWithOutputHandler.
+ */
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("ios17.0")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[DllImport (Constants.VideoToolboxLibrary)]
+		unsafe static extern VTStatus VTCompressionSessionEncodeMultiImageFrameWithOutputHandler (
+			IntPtr /* CM_NONNULL VTCompressionSessionRef */ session,
+			IntPtr /* CM_NONNULL CMTaggedBufferGroupRef */ taggedBufferGroup,
+			CMTime presentationTimeStamp,
+			CMTime duration, // may be kCMTimeInvalid
+			IntPtr /* CM_NULLABLE CFDictionaryRef */ frameProperties, // may be NULL
+			VTEncodeInfoFlags* /* VTEncodeInfoFlags * CM_NULLABLE */ infoFlagsOut,
+			BlockLiteral* /* CM_NONNULL VTCompressionOutputHandler	*/ outputHandler);
+
+		[BindingImpl (BindingImplFlags.Optimizable)]
+		public unsafe VTStatus EncodeMultiImageFrame (CMTaggedBufferGroup taggedBufferGroup, CMTime presentationTimestamp, CMTime duration, NSDictionary? frameProperties, out VTEncodeInfoFlags infoFlags, VTCompressionOutputHandler outputHandler)
+		{
+			delegate* unmanaged<BlockLiteral*, VTStatus, VTEncodeInfoFlags, IntPtr, void> trampoline = &VTCompressionOutputHandlerCallback;
+			using var trampolineBlock = new BlockLiteral (trampoline, outputHandler, typeof (VTCompressionSession), nameof (VTCompressionOutputHandlerCallback));
+
+			infoFlags = default;
+
+			var rv = VTCompressionSessionEncodeMultiImageFrameWithOutputHandler (
+						GetCheckedHandle (),
+						taggedBufferGroup.GetNonNullHandle (nameof (taggedBufferGroup)),
+						presentationTimestamp,
+						duration,
+						frameProperties.GetHandle (),
+						(VTEncodeInfoFlags *) Unsafe.AsPointer<VTEncodeInfoFlags> (ref infoFlags),
+						&trampolineBlock);
+
+			GC.KeepAlive (taggedBufferGroup);
+			GC.KeepAlive (frameProperties);
+
+			return rv;
+		}
+
+		[UnmanagedCallersOnly]
+		unsafe static void VTCompressionOutputHandlerCallback (BlockLiteral* block, VTStatus status, VTEncodeInfoFlags infoFlags, IntPtr sampleBuffer)
+		{
+			var del = BlockLiteral.GetTarget<VTCompressionOutputHandler> ((IntPtr) block);
+			if (del is not null) {
+				var sampleBufferObj = sampleBuffer == IntPtr.Zero ? null : new CMSampleBuffer (sampleBuffer, owns: false);
+				del (status, infoFlags, sampleBufferObj);
+			}
+		}
+
+		public delegate void VTCompressionOutputHandler (VTStatus status, VTEncodeInfoFlags infoFlags, CMSampleBuffer? sampleBuffer);
+#endif // !__TVOS__
 	}
 }

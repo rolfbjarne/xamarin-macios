@@ -175,9 +175,8 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>Serializes a CGSize into an <see cref="Foundation.NSDictionary" />.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Serializes a <see cref="CGSize" /> into an <see cref="Foundation.NSDictionary" />.</summary>
+		/// <returns>A <see cref="Foundation.NSDictionary" /> with the values from this <see cref="CGSize" />.</returns>
 		public NSDictionary ToDictionary ()
 		{
 			return new NSDictionary (NativeDrawingMethods.CGSizeCreateDictionaryRepresentation (this));

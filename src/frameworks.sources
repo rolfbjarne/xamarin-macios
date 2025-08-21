@@ -1770,6 +1770,7 @@ VIDEOTOOLBOX_SOURCES = \
 	VideoToolbox/VTDecompressionSession.cs \
 	VideoToolbox/VTFrameSilo.cs \
 	VideoToolbox/VTHdrPerFrameMetadataGenerationSession.cs \
+	VideoToolbox/VTLowLatencyFrameInterpolationConfiguration.cs \
 	VideoToolbox/VTMultiPassStorage.cs \
 	VideoToolbox/VTPixelRotationProperties.cs \
 	VideoToolbox/VTPixelRotationSession.cs \
@@ -1782,6 +1783,7 @@ VIDEOTOOLBOX_SOURCES = \
 	VideoToolbox/VTVideoEncoder.cs \
 	VideoToolbox/VTUtilities.cs \
 	VideoToolbox/VTPixelTransferProperties.cs \
+	VideoToolbox/VTMotionEstimationSession.cs \
 
 # Vision
 

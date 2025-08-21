@@ -397,6 +397,7 @@ namespace CoreVideo {
 
 #if !XAMCORE_5_0
 		[Obsolete ("Use 'ComponentRangeValue' instead, the property type is incorrect for this property.")]
+		[EditorBrowsable (EditorBrowsableState.Never)]
 		CVPixelFormatComponentRange? ComponentRange {
 			get => null;
 			set { }

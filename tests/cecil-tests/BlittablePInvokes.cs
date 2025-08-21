@@ -458,14 +458,25 @@ namespace Cecil.Tests {
 							switch (targetMethod.Name) {
 							case "SetupBlock":
 							case "SetupBlockUnsafe":
-								break;
+								var location = method.RenderLocation (instr);
+								var message = $"The call to {targetMethod.Name} in {method.AsFullName ()} must be converted to new Block syntax.";
+								failures [message] = new (message, location);
+								continue;
+							case ".ctor":
+								if (!method.HasBindingImplAttribute (out var bindingImplOptions)) {
+									var loc = method.RenderLocation (body.Instructions.First ());
+									var msg = $"{method.AsFullName ()}: needs [BindingImpl (BindingImplOptions.Optimizable)] because this method creates a BlockLiteral.";
+									failures [msg] = new (msg, loc);
+								} else if ((bindingImplOptions & BindingImplOptions.Optimizable) != BindingImplOptions.Optimizable) {
+									var loc = method.RenderLocation (body.Instructions.First ());
+									var msg = $"{method.AsFullName ()}: has the required [BindingImpl] attribute (because this method creates a BlockLiteral), but the BindingImplOptions.Optimizable flag isn't set.";
+									failures [msg] = new (msg, loc);
+								}
+								continue;
 							default:
 								continue;
 							}
 
-							var location = method.RenderLocation (instr);
-							var message = $"The call to {targetMethod.Name} in {method.AsFullName ()} must be converted to new Block syntax.";
-							failures [message] = new (message, location);
 						}
 					}
 				}
@@ -475,10 +486,20 @@ namespace Cecil.Tests {
 		}
 
 		static HashSet<string> knownFailuresBlockLiterals = new HashSet<string> {
+			"Accessibility.AXSettings.OpenSettingsFeature(Accessibility.AXSettingsFeature, System.Action`1<Foundation.NSError>): needs [BindingImpl (BindingImplOptions.Optimizable)] because this method creates a BlockLiteral.",
+			"ObjCRuntime.BlockLiteral..ctor(System.Void*, System.Object, System.Reflection.MethodInfo): needs [BindingImpl (BindingImplOptions.Optimizable)] because this method creates a BlockLiteral.",
+			"ObjCRuntime.BlockLiteral..ctor(System.Void*, System.Object, System.Type, System.String): needs [BindingImpl (BindingImplOptions.Optimizable)] because this method creates a BlockLiteral.",
+			"Security.SecProtocolOptions.SetChallengeBlock(Security.SecProtocolChallenge, CoreFoundation.DispatchQueue): needs [BindingImpl (BindingImplOptions.Optimizable)] because this method creates a BlockLiteral.",
+			"Security.SecProtocolOptions.SetPreSharedKeySelectionBlock(Security.SecProtocolPreSharedKeySelection, CoreFoundation.DispatchQueue): needs [BindingImpl (BindingImplOptions.Optimizable)] because this method creates a BlockLiteral.",
+			"Security.SecProtocolOptions.SetVerifyBlock(Security.SecProtocolVerify, CoreFoundation.DispatchQueue): needs [BindingImpl (BindingImplOptions.Optimizable)] because this method creates a BlockLiteral.",
 			"The call to SetupBlock in ObjCRuntime.BlockLiteral.CreateBlockForDelegate(System.Delegate, System.Delegate, System.String) must be converted to new Block syntax.",
 			"The call to SetupBlock in ObjCRuntime.BlockLiteral.GetBlockForDelegate(System.Reflection.MethodInfo, System.Object, System.UInt32, System.String) must be converted to new Block syntax.",
 			"The call to SetupBlock in ObjCRuntime.BlockLiteral.SetupBlock(System.Delegate, System.Delegate) must be converted to new Block syntax.",
 			"The call to SetupBlock in ObjCRuntime.BlockLiteral.SetupBlockUnsafe(System.Delegate, System.Delegate) must be converted to new Block syntax.",
+			"VideoToolbox.VTCompressionSession.EncodeMultiImageFrame(CoreMedia.CMTaggedBufferGroup, CoreMedia.CMTime, CoreMedia.CMTime, Foundation.NSDictionary, out VideoToolbox.VTEncodeInfoFlags&, VideoToolbox.VTCompressionSession/VTCompressionOutputHandler): needs [BindingImpl (BindingImplOptions.Optimizable)] because this method creates a BlockLiteral.",
+			"VideoToolbox.VTDecompressionSession.DecodeFrame(CoreMedia.CMSampleBuffer, VideoToolbox.VTDecodeFrameFlags, out VideoToolbox.VTDecodeInfoFlags&, VideoToolbox.VTDecompressionSession/VTDecompressionMultiImageCapableOutputHandler): needs [BindingImpl (BindingImplOptions.Optimizable)] because this method creates a BlockLiteral.",
+			"VideoToolbox.VTDecompressionSession.DecodeFrame(CoreMedia.CMSampleBuffer, VideoToolbox.VTDecodeFrameFlags, out VideoToolbox.VTDecodeInfoFlags&, VideoToolbox.VTDecompressionSession/VTDecompressionOutputHandler): needs [BindingImpl (BindingImplOptions.Optimizable)] because this method creates a BlockLiteral.",
+			"VideoToolbox.VTRawProcessingSession.ProcessFrame(CoreVideo.CVPixelBuffer, Foundation.NSDictionary, VideoToolbox.VTRawProcessingOutputHandler): needs [BindingImpl (BindingImplOptions.Optimizable)] because this method creates a BlockLiteral.",
 		};
 
 		[Test]

@@ -405,77 +405,77 @@ namespace MonoTouchFixtures.Foundation {
 				Assert.IsNull (wrapped.ArrayOfInt16Field, "ArrayOfInt16Field - final");
 
 				Assert.IsNull (wrapped.ArrayOfInt32Field, "ArrayOfInt32Field");
-				var valueArrayOfInt32Field = new int [] { 1, 2, 3 };;
+				var valueArrayOfInt32Field = new int [] { 1, 2, 3 }; ;
 				wrapped.ArrayOfInt32Field = valueArrayOfInt32Field;
 				Assert.AreEqual (valueArrayOfInt32Field, wrapped.ArrayOfInt32Field, "ArrayOfInt32Field - set");
 				wrapped.ArrayOfInt32Field = null;
 				Assert.IsNull (wrapped.ArrayOfInt32Field, "ArrayOfInt32Field - final");
 
 				Assert.IsNull (wrapped.ArrayOfInt64Field, "ArrayOfInt64Field");
-				var valueArrayOfInt64Field = new long [] { 1, 2, 3 };;
+				var valueArrayOfInt64Field = new long [] { 1, 2, 3 }; ;
 				wrapped.ArrayOfInt64Field = valueArrayOfInt64Field;
 				Assert.AreEqual (valueArrayOfInt64Field, wrapped.ArrayOfInt64Field, "ArrayOfInt64Field - set");
 				wrapped.ArrayOfInt64Field = null;
 				Assert.IsNull (wrapped.ArrayOfInt64Field, "ArrayOfInt64Field - final");
 
 				Assert.IsNull (wrapped.ArrayOfByteField, "ArrayOfByteField");
-				var valueArrayOfByteField = new byte [] { 1, 2, 3 };;
+				var valueArrayOfByteField = new byte [] { 1, 2, 3 }; ;
 				wrapped.ArrayOfByteField = valueArrayOfByteField;
 				Assert.AreEqual (valueArrayOfByteField, wrapped.ArrayOfByteField, "ArrayOfByteField - set");
 				wrapped.ArrayOfByteField = null;
 				Assert.IsNull (wrapped.ArrayOfByteField, "ArrayOfByteField - final");
 
 				Assert.IsNull (wrapped.ArrayOfUInt16Field, "ArrayOfUInt16Field");
-				var valueArrayOfUInt16Field = new ushort [] { 1, 2, 3 };;
+				var valueArrayOfUInt16Field = new ushort [] { 1, 2, 3 }; ;
 				wrapped.ArrayOfUInt16Field = valueArrayOfUInt16Field;
 				Assert.AreEqual (valueArrayOfUInt16Field, wrapped.ArrayOfUInt16Field, "ArrayOfUInt16Field - set");
 				wrapped.ArrayOfUInt16Field = null;
 				Assert.IsNull (wrapped.ArrayOfUInt16Field, "ArrayOfUInt16Field - final");
 
 				Assert.IsNull (wrapped.ArrayOfUInt32Field, "ArrayOfUInt32Field");
-				var valueArrayOfUInt32Field = new uint [] { 1, 2, 3 };;
+				var valueArrayOfUInt32Field = new uint [] { 1, 2, 3 }; ;
 				wrapped.ArrayOfUInt32Field = valueArrayOfUInt32Field;
 				Assert.AreEqual (valueArrayOfUInt32Field, wrapped.ArrayOfUInt32Field, "ArrayOfUInt32Field - set");
 				wrapped.ArrayOfUInt32Field = null;
 				Assert.IsNull (wrapped.ArrayOfUInt32Field, "ArrayOfUInt32Field - final");
 
 				Assert.IsNull (wrapped.ArrayOfUInt64Field, "ArrayOfUInt64Field");
-				var valueArrayOfUInt64Field = new ulong [] { 1, 2, 3 };;
+				var valueArrayOfUInt64Field = new ulong [] { 1, 2, 3 }; ;
 				wrapped.ArrayOfUInt64Field = valueArrayOfUInt64Field;
 				Assert.AreEqual (valueArrayOfUInt64Field, wrapped.ArrayOfUInt64Field, "ArrayOfUInt64Field - set");
 				wrapped.ArrayOfUInt64Field = null;
 				Assert.IsNull (wrapped.ArrayOfUInt64Field, "ArrayOfUInt64Field - final");
 
 				Assert.IsNull (wrapped.ArrayOfNIntField, "ArrayOfNIntField");
-				var valueArrayOfNIntField = new nint [] { 1, 2, 3 };;
+				var valueArrayOfNIntField = new nint [] { 1, 2, 3 }; ;
 				wrapped.ArrayOfNIntField = valueArrayOfNIntField;
 				Assert.AreEqual (valueArrayOfNIntField, wrapped.ArrayOfNIntField, "ArrayOfNIntField - set");
 				wrapped.ArrayOfNIntField = null;
 				Assert.IsNull (wrapped.ArrayOfNIntField, "ArrayOfNIntField - final");
 
 				Assert.IsNull (wrapped.ArrayOfNUIntField, "ArrayOfNUIntField");
-				var valueArrayOfNUIntField = new nuint [] { 1, 2, 3 };;
+				var valueArrayOfNUIntField = new nuint [] { 1, 2, 3 }; ;
 				wrapped.ArrayOfNUIntField = valueArrayOfNUIntField;
 				Assert.AreEqual (valueArrayOfNUIntField, wrapped.ArrayOfNUIntField, "ArrayOfNUIntField - set");
 				wrapped.ArrayOfNUIntField = null;
 				Assert.IsNull (wrapped.ArrayOfNUIntField, "ArrayOfNUIntField - final");
 
 				Assert.IsNull (wrapped.ArrayOfSingleField, "ArrayOfSingleField");
-				var valueArrayOfSingleField = new float [] { 1, 2, 3 };;
+				var valueArrayOfSingleField = new float [] { 1, 2, 3 }; ;
 				wrapped.ArrayOfSingleField = valueArrayOfSingleField;
 				Assert.AreEqual (valueArrayOfSingleField, wrapped.ArrayOfSingleField, "ArrayOfSingleField - set");
 				wrapped.ArrayOfSingleField = null;
 				Assert.IsNull (wrapped.ArrayOfSingleField, "ArrayOfSingleField - final");
 
 				Assert.IsNull (wrapped.ArrayOfDoubleField, "ArrayOfDoubleField");
-				var valueArrayOfDoubleField = new double [] { 1, 2, 3 };;
+				var valueArrayOfDoubleField = new double [] { 1, 2, 3 }; ;
 				wrapped.ArrayOfDoubleField = valueArrayOfDoubleField;
 				Assert.AreEqual (valueArrayOfDoubleField, wrapped.ArrayOfDoubleField, "ArrayOfDoubleField - set");
 				wrapped.ArrayOfDoubleField = null;
 				Assert.IsNull (wrapped.ArrayOfDoubleField, "ArrayOfDoubleField - final");
 
 				Assert.IsNull (wrapped.ArrayOfNFloatField, "ArrayOfNFloatField");
-				var valueArrayOfNFloatField = new nfloat [] { 1, 2, 3 };;
+				var valueArrayOfNFloatField = new nfloat [] { 1, 2, 3 }; ;
 				wrapped.ArrayOfNFloatField = valueArrayOfNFloatField;
 				Assert.AreEqual (valueArrayOfNFloatField, wrapped.ArrayOfNFloatField, "ArrayOfNFloatField - set");
 				wrapped.ArrayOfNFloatField = null;
@@ -608,6 +608,44 @@ namespace MonoTouchFixtures.Foundation {
 				wrapped.UIEdgeInsetsField = null;
 				Assert.IsNull (wrapped.UIEdgeInsetsField, "UIEdgeInsetsField - final");
 #endif // HAS_UIKIT
+			});
+		}
+
+		[Test]
+		public void Matrix ()
+		{
+			TestRuntime.AssertXcodeVersion (26, 0);
+
+			Assert.Multiple (() => {
+				var dict = new VTCompressionPropertyCameraCalibration ();
+
+				Assert.IsNull (dict.IntrinsicMatrix, "IntrinsicMatrix");
+
+				var matrix = new NMatrix3 (1, 2, 3, 4, 5, 6, 7, 8, 9);
+				dict.IntrinsicMatrix = matrix;
+				Assert.AreEqual (matrix, dict.IntrinsicMatrix, "IntrinsicMatrix 2");
+
+				dict.IntrinsicMatrix = null;
+				Assert.IsNull (dict.IntrinsicMatrix, "IntrinsicMatrix 3");
+			});
+		}
+
+		[Test]
+		public void FloatArray ()
+		{
+			TestRuntime.AssertXcodeVersion (26, 0);
+
+			Assert.Multiple (() => {
+				var dict = new VTCompressionPropertyCameraCalibration ();
+
+				Assert.IsNull (dict.LensDistortions, "LensDistortions");
+
+				var array = new float [] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+				dict.LensDistortions = array;
+				Assert.AreEqual (array, dict.LensDistortions, "LensDistortions 2");
+
+				dict.LensDistortions = null;
+				Assert.IsNull (dict.LensDistortions, "LensDistortions 3");
 			});
 		}
 	}

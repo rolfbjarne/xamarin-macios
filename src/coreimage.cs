@@ -13684,7 +13684,8 @@ namespace CoreImage {
 
 		[Abstract]
 		[NullAllowed, Export ("preferredDynamicRange", ArgumentSemantic.Retain)]
-		CIDynamicRangeOption PreferredDynamicRange { get; set; }
+		[BindAs (typeof (CIDynamicRangeOption))]
+		NSString PreferredDynamicRange { get; set; }
 	}
 
 	[CoreImageFilter]

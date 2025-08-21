@@ -752,8 +752,7 @@ namespace Bindings.Test {
 	}
 
 	[StrongDictionary ("StrongDictionaryKeys", Suffix = "")]
-	interface WrappedNSDictionary
-	{
+	interface WrappedNSDictionary {
 		// simple types
 		sbyte SByteField { get; set; }
 		short Int16Field { get; set; }
@@ -777,32 +776,32 @@ namespace Bindings.Test {
 		StrongEnum StrongEnumField { get; set; }
 
 		// arrays of the above
-		sbyte[] ArrayOfSByteField { get; set; }
-		short[] ArrayOfInt16Field { get; set; }
-		int[] ArrayOfInt32Field { get; set; }
-		long[] ArrayOfInt64Field { get; set; }
-		byte[] ArrayOfByteField { get; set; }
-		ushort[] ArrayOfUInt16Field { get; set; }
-		uint[] ArrayOfUInt32Field { get; set; }
-		ulong[] ArrayOfUInt64Field { get; set; }
-		nint[] ArrayOfNIntField { get; set; }
-		nuint[] ArrayOfNUIntField { get; set; }
-		float[] ArrayOfSingleField { get; set; }
-		double[] ArrayOfDoubleField { get; set; }
-		nfloat[] ArrayOfNFloatField { get; set; }
-		NSObject[] ArrayOfNSObjectField { get; set; }
-		bool[] ArrayOfBooleanField { get; set; }
-		NSString[] ArrayOfNSStringField { get; set; }
-		NSDate[] ArrayOfNSDateField { get; set; }
-		NSDictionary[] ArrayOfNSDictionaryField { get; set; }
-		WrappedNSDictionary[] ArrayOfStrongDictionaryField { get; set; }
-		StrongEnum[] ArrayOfStrongEnumField { get; set; }
+		sbyte [] ArrayOfSByteField { get; set; }
+		short [] ArrayOfInt16Field { get; set; }
+		int [] ArrayOfInt32Field { get; set; }
+		long [] ArrayOfInt64Field { get; set; }
+		byte [] ArrayOfByteField { get; set; }
+		ushort [] ArrayOfUInt16Field { get; set; }
+		uint [] ArrayOfUInt32Field { get; set; }
+		ulong [] ArrayOfUInt64Field { get; set; }
+		nint [] ArrayOfNIntField { get; set; }
+		nuint [] ArrayOfNUIntField { get; set; }
+		float [] ArrayOfSingleField { get; set; }
+		double [] ArrayOfDoubleField { get; set; }
+		nfloat [] ArrayOfNFloatField { get; set; }
+		NSObject [] ArrayOfNSObjectField { get; set; }
+		bool [] ArrayOfBooleanField { get; set; }
+		NSString [] ArrayOfNSStringField { get; set; }
+		NSDate [] ArrayOfNSDateField { get; set; }
+		NSDictionary [] ArrayOfNSDictionaryField { get; set; }
+		WrappedNSDictionary [] ArrayOfStrongDictionaryField { get; set; }
+		StrongEnum [] ArrayOfStrongEnumField { get; set; }
 
 		// other fields
 		string StringField { get; set; }
 		DateTime DateTimeField { get; set; }
 		NSDictionary<NSString, NSObject> GenericNSDictionaryField { get; set; }
-		string[] ArrayOfStringField { get; set; }
+		string [] ArrayOfStringField { get; set; }
 		NSData NSDataField { get; set; }
 		NMatrix3 NSDataAsMatrix3Field { get; set; }
 		CGRect CGRectField { get; set; }

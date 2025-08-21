@@ -15,7 +15,7 @@ using ObjCRuntime;
 
 namespace CoreText {
 
-	interface CTFontDescriptor : INativeObject {}
+	interface CTFontDescriptor : INativeObject { }
 
 	[Partial]
 	interface CTFontManager {

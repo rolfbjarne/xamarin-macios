@@ -109,7 +109,7 @@ namespace Foundation {
 		/// <value>The wrapped <see cref="NSDictionary" />.</value>
 		public NSDictionary Dictionary { get; private set; }
 
-		static T? Create<T> (NativeHandle handle) where T: DictionaryContainer, new()
+		static T? Create<T> (NativeHandle handle) where T : DictionaryContainer, new()
 		{
 			if (handle == NativeHandle.Zero)
 				return null;
@@ -155,7 +155,7 @@ namespace Foundation {
 			return true;
 		}
 
-		T? GetNSObject<T> (NSString key) where T: NSObject
+		T? GetNSObject<T> (NSString key) where T : NSObject
 		{
 			if (!TryGetNSObject<T> (key, out var value))
 				return null;
@@ -227,7 +227,7 @@ namespace Foundation {
 		/// <summary>Retrieves the <see cref="DictionaryContainer" /> array associeted with <paramref name="key" />.</summary>
 		/// <param name="key">The identifier of the value to get.</param>
 		/// <returns>The <see cref="DictionaryContainer" /> array associeted with <paramref name="key" />.</returns>
-		protected T []? GetArrayOfDictionariesValue<T> (NSString key) where T: DictionaryContainer, new()
+		protected T []? GetArrayOfDictionariesValue<T> (NSString key) where T : DictionaryContainer, new()
 		{
 			if (!TryGetNativeValue (key, out var value))
 				return null;
@@ -464,7 +464,7 @@ namespace Foundation {
 		/// <typeparam name="T">The value type stored in the type <see cref="NSData" />.</typeparam>
 		/// <param name="key">The identifier of the value to get.</param>
 		/// <returns>The value type initialized from the data in the <see cref="NSData" />, or <see langword="null" /> if the specified <paramref name="key" /> is not present in this dictionary.</returns>
-		protected T? GetNSDataAsValueType<T> (NSString key) where T: unmanaged
+		protected T? GetNSDataAsValueType<T> (NSString key) where T : unmanaged
 		{
 			if (!TryGetNSObject<NSData> (key, out var data))
 				return null;
@@ -475,11 +475,11 @@ namespace Foundation {
 		/// <typeparam name="T">The value type stored in the type <see cref="NSData" />.</typeparam>
 		/// <param name="key">The identifier of the value to get.</param>
 		/// <param name="value">The value to store in the <see cref="NSData" />.</param>
-		protected void SetValueTypeAsNSData<T> (NSString key, T? value) where T: unmanaged
+		protected void SetValueTypeAsNSData<T> (NSString key, T? value) where T : unmanaged
 		{
 			if (key is null)
 				throw new ArgumentNullException (nameof (key));
-		
+
 			var data = NSData.CreateFromValueType<T> (value);
 			SetNativeValue (key, data);
 		}
@@ -600,7 +600,7 @@ namespace Foundation {
 		}
 #endif
 
-		bool NullCheckValueTypeAndRemoveKey<T> ([NotNullWhen (true)] NSString key, [NotNullWhen (true)] T? valueType) where T: struct
+		bool NullCheckValueTypeAndRemoveKey<T> ([NotNullWhen (true)] NSString key, [NotNullWhen (true)] T? valueType) where T : struct
 		{
 			if (key is null)
 				throw new ArgumentNullException (nameof (key));

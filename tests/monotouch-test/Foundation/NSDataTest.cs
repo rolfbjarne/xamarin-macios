@@ -362,5 +362,24 @@ namespace MonoTouchFixtures.Foundation {
 				Assert.That (d.ToString (), Is.EqualTo (d.Description), "ToString");
 			}
 		}
+
+		[Test]
+		public void ToFromValueType ()
+		{
+			Assert.Multiple (() => {
+				var matrix = new NMatrix3 (1, 2, 3, 4, 5, 6, 7, 8, 9);
+				using var data = NSData.CreateFromValueType (matrix);
+				Assert.That (data.Length, Is.EqualTo (9 * 4), "Length");
+
+				var matrix2 = data.ToValueType<NMatrix3> ();
+				Assert.That (matrix2, Is.EqualTo (matrix), "RoundTrip");
+
+				// not enough data in the NSData
+				Assert.Throws<ArgumentOutOfRangeException> (() => data.ToValueType<Matrix4x4> (), "Matrix4x4");
+
+				// reading less than the full NSData contents is OK
+				Assert.That (data.ToValueType<float> (), Is.EqualTo ((float) 1), "float");
+			});
+		}
 	}
 }

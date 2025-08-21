@@ -71,6 +71,18 @@ namespace Foundation {
 		///         <remarks>To be added.</remarks>
 		public NSDictionary Dictionary { get; private set; }
 
+		static T? Create<T> (NativeHandle handle) where T: DictionaryContainer, new()
+		{
+			if (handle == NativeHandle.Zero)
+				return null;
+			var dict = Runtime.GetNSObject<NSDictionary> (handle, owns: false);
+			if (dict is null)
+				return null;
+			var rv = new T ();
+			rv.Dictionary = dict;
+			return rv;
+		}
+
 		/// <typeparam name="T">The type of values stored in the array identified by <paramref name="key" />.</typeparam>
 		///         <param name="key">The identifier of the array.</param>
 		///         <summary>Retrieves the array of type <c>T</c> associated with <paramref name="key" />.</summary>
@@ -94,6 +106,20 @@ namespace Foundation {
 			var value = CFDictionary.GetValue (Dictionary.Handle, key.Handle);
 			GC.KeepAlive (key);
 			return NSArray.ArrayFromHandleFunc<T> (value, creator);
+		}
+
+		/// <summary>Retrieves the <see cref="DictionaryContainer" /> array associeted with <paramref name="key" />.</summary>
+		/// <param name="key">The identifier of the array.</param>
+		/// <returns>The <see cref="DictionaryContainer" /> array associeted with <paramref name="key" />.</returns>
+		protected T []? GetArrayOfDictionariesValue<T> (NSString key) where T: DictionaryContainer, new()
+		{
+			if (key is null)
+				throw new ArgumentNullException (nameof (key));
+
+			var value = CFDictionary.GetValue (Dictionary.Handle, key.Handle);
+			GC.KeepAlive (key);
+			var rv = NSArray.ArrayFromHandleFunc<T> (value, (handle) => Create<T> (handle)!);
+			return rv;
 		}
 
 		/// <param name="key">The identifier of the int.</param>
@@ -324,6 +350,31 @@ namespace Foundation {
 			return value as NSDictionary<TKey, TValue>;
 		}
 
+		/// <summary>Returns an <see cref="NSData" /> with the contents of a value type of type <typeparamref name="T" /> associated with <paramref name="key" />.</summary>
+		/// <typeparam name="T">The value type stored in the type <see cref="NSData" />.</typeparam>
+		/// <param name="key">The identifier of the <see cref="Foundation.NSDictionary" />.</param>
+		/// <returns>The value type initialized from the data in the <see cref="NSData" />, or <see langword="null" /> if the specified <paramref name="key" /> is not present in this dictionary.</returns>
+		protected T? GetNSDataAsValueType<T> (NSString key) where T: unmanaged
+		{
+			var data = GetNativeValue<NSData> (key);
+			if (data is null)
+				return null;
+			return data.ToValueType<T> ();
+		}
+
+		/// <summary>Sets an <see cref="NSData" /> with the contents of a value type of type <typeparamref name="T" /> associated with <paramref name="key" />.</summary>
+		/// <typeparam name="T">The value type stored in the type <see cref="NSData" />.</typeparam>
+		/// <param name="key">The identifier of the <see cref="Foundation.NSDictionary" />.</param>
+		/// <param name="value">The value to store in the <see cref="NSData" />.</param>
+		protected void SetValueTypeAsNSData<T> (NSString key, T? value) where T: unmanaged
+		{
+			if (key is null)
+				throw new ArgumentNullException (nameof (key));
+
+			var data = NSData.CreateFromValueType<T> (value);
+			SetNativeValue (key, data);
+		}
+
 		/// <typeparam name="T">The type of <see cref="Foundation.DictionaryContainer" /> associated with <paramref name="key" />.</typeparam>
 		///         <param name="key">The identifier of the <see cref="Foundation.DictionaryContainer" />.</param>
 		///         <summary>Returns the <see cref="Foundation.DictionaryContainer" /> associated with <paramref name="key" />.</summary>
@@ -526,6 +577,22 @@ namespace Foundation {
 		{
 			if (NullCheckAndRemoveKey (key, values is null)) {
 				var array = CFArray.FromNativeObjects (values!);
+				CFMutableDictionary.SetValue (Dictionary.Handle, key.Handle, array.Handle);
+				GC.KeepAlive (key);
+				GC.KeepAlive (array);
+			}
+		}
+
+		/// <summary>Associates the <see cref="DictionaryContainer" /> array <paramref name="values" /> with <paramref name="key" />.</summary>
+		/// <param name="key">The identifier to be associated with the array.</param>
+		/// <param name="values">The <see cref="Dictionary" /> array to be associated with <paramref name="key" />.</param>
+		protected void SetArrayOfDictionariesValue (NSString key, DictionaryContainer []? values)
+		{
+			if (NullCheckAndRemoveKey (key, values is null)) {
+				var handles = new NativeHandle [values!.Length];
+				for (var i = 0; i < handles.Length; i++)
+					handles [i] = values [i].GetHandle ();
+				var array = CFArray.FromIntPtrs (handles!);
 				CFMutableDictionary.SetValue (Dictionary.Handle, key.Handle, array.Handle);
 				GC.KeepAlive (key);
 				GC.KeepAlive (array);

@@ -1908,6 +1908,9 @@ public partial class Generator : IMemberGatherer {
 						} else if (fetchType == TypeCache.UIEdgeInsets) {
 							getter = "{1} GetUIEdgeInsets ({0})";
 							setter = "SetUIEdgeInsets ({0}, {1}value)";
+						} else if (pi.PropertyType.Name == "NMatrix3") {
+							getter = "{1} GetNSDataAsValueType<NMatrix3> ({0})";
+							setter = "SetValueTypeAsNSData ({0}, {1}value)";
 						} else {
 							exceptions.Add (new BindingException (1033, true, pi.PropertyType, dictType, pi.Name));
 							continue;
@@ -1915,7 +1918,11 @@ public partial class Generator : IMemberGatherer {
 					} else {
 						if (pi.PropertyType.IsArray) {
 							var elementType = pi.PropertyType.GetElementType ();
-							if (TypeManager.IsWrappedType (elementType)) {
+							if (TypeManager.IsDictionaryContainerType (elementType)) {
+								var dictElementType = TypeManager.FormatType (dictType, elementType);
+								getter = $"GetArrayOfDictionariesValue<{dictElementType}> ({{0}})";
+								setter = "SetArrayOfDictionariesValue ({0}, value)";
+							} else if (TypeManager.IsWrappedType (elementType)) {
 								getter = "GetArray<" + TypeManager.FormatType (dictType, elementType) + "> ({0})";
 								setter = "SetArrayValue ({0}, value)";
 							} else if (elementType.IsEnum) {
@@ -1931,6 +1938,9 @@ public partial class Generator : IMemberGatherer {
 							} else if (elementType.Name == "CTFontDescriptor") {
 								getter = "GetArray<CTFontDescriptor> ({0}, (ptr) => new CTFontDescriptor (ptr, false))";
 								setter = "SetArrayValue ({0}, value)";
+							} else if (elementType == TypeCache.System_Float) {
+								getter = "GetArray<float> ({0}, (ptr) => new NSNumber (ptr).FloatValue)";
+								setter = "SetArrayValue<float> ({0}, value)";
 							} else {
 								exceptions.Add (new BindingException (1033, true, pi.PropertyType, dictType, pi.Name));
 								continue;

@@ -1,3 +1,6 @@
+# This is a C API which does not seem to have anything in common with the ARKit APIs for iOS.
+# It's also available for visionOS, so it might be something shared with visionOS.
+# For now don't bind this, as the use-case for us seems rather low.
 !missing-field! ar_error_domain not bound
 !missing-pinvoke! ar_anchor_get_identifier is not bound
 !missing-pinvoke! ar_anchor_get_origin_from_anchor_transform is not bound

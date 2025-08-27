@@ -1,4 +1,4 @@
-#if IOS
+#if IOS || __MACOS__
 
 #nullable enable
 

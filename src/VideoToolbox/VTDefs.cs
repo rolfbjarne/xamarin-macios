@@ -136,6 +136,7 @@ namespace VideoToolbox {
 	/// <summary>Encoding status flags.</summary>
 	[Flags]
 	public enum VTEncodeInfoFlags : uint {
+		None = 0,
 		/// <summary>To be added.</summary>
 		Asynchronous = 1 << 0,
 		/// <summary>To be added.</summary>
@@ -146,6 +147,7 @@ namespace VideoToolbox {
 	/// <summary>Flags to control encoder in multi pass compression sessions</summary>
 	[Flags]
 	public enum VTCompressionSessionOptionFlags : uint {
+		None = 0,
 		/// <summary>To be added.</summary>
 		BeginFinalPass = 1 << 0,
 	}

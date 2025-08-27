@@ -1105,7 +1105,7 @@ namespace HealthKit {
 		void GetRequestStatusForAuthorizationToShare (NSSet<HKSampleType> typesToShare, NSSet<HKObjectType> typesToRead, HKHealthStoreGetRequestStatusForAuthorizationToShareHandler completion);
 
 		[Async]
-		[NoiOS]
+		[iOS (26, 0)]
 		[NoMacCatalyst]
 		[Export ("recoverActiveWorkoutSessionWithCompletion:")]
 		void RecoverActiveWorkoutSession (HKHealthStoreRecoverActiveWorkoutSessionHandler completion);
@@ -1932,7 +1932,7 @@ namespace HealthKit {
 		[Static]
 		[Export ("quantityTypeForIdentifier:")]
 		[return: NullAllowed]
-		HKQuantityType GetQuantityType ([NullAllowed] NSString hkTypeIdentifier);
+		HKQuantityType GetQuantityType (NSString hkTypeIdentifier);
 
 		/// <param name="hkCategoryTypeIdentifier">To be added.</param>
 		///         <summary>Returns the category type for <paramref name="hkCategoryTypeIdentifier" />.</summary>
@@ -1942,7 +1942,7 @@ namespace HealthKit {
 		[Static]
 		[Export ("categoryTypeForIdentifier:")]
 		[return: NullAllowed]
-		HKCategoryType GetCategoryType ([NullAllowed] NSString hkCategoryTypeIdentifier);
+		HKCategoryType GetCategoryType (NSString hkCategoryTypeIdentifier);
 
 		/// <param name="hkCharacteristicTypeIdentifier">To be added.</param>
 		///         <summary>Returns the characteristic type of <paramref name="hkCharacteristicTypeIdentifier" />.</summary>
@@ -1952,7 +1952,7 @@ namespace HealthKit {
 		[Static]
 		[Export ("characteristicTypeForIdentifier:")]
 		[return: NullAllowed]
-		HKCharacteristicType GetCharacteristicType ([NullAllowed] NSString hkCharacteristicTypeIdentifier);
+		HKCharacteristicType GetCharacteristicType (NSString hkCharacteristicTypeIdentifier);
 
 		/// <param name="hkCorrelationTypeIdentifier">To be added.</param>
 		///         <summary>Returns the correlation type of <paramref name="hkCorrelationTypeIdentifier" />.</summary>
@@ -1961,7 +1961,7 @@ namespace HealthKit {
 		[Internal]
 		[Static, Export ("correlationTypeForIdentifier:")]
 		[return: NullAllowed]
-		HKCorrelationType GetCorrelationType ([NullAllowed] NSString hkCorrelationTypeIdentifier);
+		HKCorrelationType GetCorrelationType (NSString hkCorrelationTypeIdentifier);
 
 		[MacCatalyst (13, 1)]
 		[Internal]
@@ -2032,6 +2032,17 @@ namespace HealthKit {
 		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		[Export ("stateOfMindType")]
 		HKStateOfMindType StateOfMindType { get; }
+
+		[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Static]
+		[Export ("medicationDoseEventType")]
+		HKMedicationDoseEventType MedicationDoseEventType { get; }
+
+		[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Static]
+		[Export ("userAnnotatedMedicationType")]
+		HKUserAnnotatedMedicationType UserAnnotatedMedicationType { get; }
+
 	}
 
 	[iOS (14, 0), Mac (13, 0)]
@@ -2040,6 +2051,18 @@ namespace HealthKit {
 	[DisableDefaultCtor] // NSInvalidArgumentException Reason: The -init method is not available on HKElectrocardiogram
 	interface HKElectrocardiogramType {
 
+	}
+
+	[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+	[BaseType (typeof (HKSampleType))]
+	[DisableDefaultCtor]
+	interface HKMedicationDoseEventType {
+	}
+
+	[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+	[BaseType (typeof (HKSampleType))]
+	[DisableDefaultCtor]
+	interface HKUserAnnotatedMedicationType {
 	}
 
 	/// <summary>An <see cref="HealthKit.HKObjectType" /> that specifies a permanent aspect of the user.</summary>
@@ -2506,6 +2529,48 @@ namespace HealthKit {
 		[Static]
 		[Export ("predicateForStatesOfMindWithAssociation:")]
 		NSPredicate GetPredicateForStatesOfMind (HKStateOfMindAssociation association);
+
+		// Category HKMedicationDoseEvent (HKQuery)
+		[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Static]
+		[Export ("predicateForMedicationDoseEventWithStatus:")]
+		NSPredicate GetPredicateForMedicationDoseEvent (HKMedicationDoseEventLogStatus status);
+
+		// Category HKMedicationDoseEvent (HKQuery)
+		[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Static]
+		[Export ("predicateForMedicationDoseEventWithStatuses:")]
+		NSPredicate GetPredicateForMedicationDoseEvent (NSSet<NSNumber> statuses);
+
+		// Category HKMedicationDoseEvent (HKQuery)
+		[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Static]
+		[Export ("predicateForMedicationDoseEventWithScheduledDate:")]
+		NSPredicate GetPredicateForMedicationDoseEvent (NSDate scheduledDate);
+
+		// Category HKMedicationDoseEvent (HKQuery)
+		[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Static]
+		[Export ("predicateForMedicationDoseEventWithScheduledDates:")]
+		NSPredicate GetPredicateForMedicationDoseEvent (NSSet<NSDate> scheduledDates);
+
+		// Category HKMedicationDoseEvent (HKQuery)
+		[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Static]
+		[Export ("predicateForMedicationDoseEventWithScheduledStartDate:endDate:")]
+		NSPredicate GetPredicateForMedicationDoseEvent ([NullAllowed] NSDate startDate, [NullAllowed] NSDate endDate);
+
+		// Category HKMedicationDoseEvent (HKQuery)
+		[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Static]
+		[Export ("predicateForMedicationDoseEventWithMedicationConceptIdentifier:")]
+		NSPredicate GetPredicateForMedicationDoseEvent (HKHealthConceptIdentifier medicationConceptIdentifier);
+
+		// Category HKMedicationDoseEvent (HKQuery)
+		[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Static]
+		[Export ("predicateForMedicationDoseEventWithMedicationConceptIdentifiers:")]
+		NSPredicate GetPredicateForMedicationDoseEvent (NSSet<HKHealthConceptIdentifier> medicationConceptIdentifiers);
 	}
 
 	/// <summary>A measurement of health information. Base class for <see cref="HealthKit.HKQuantitySample" /> and <see cref="HealthKit.HKCategorySample" />.</summary>
@@ -3327,6 +3392,9 @@ namespace HealthKit {
 		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		[Field ("HKDataTypeIdentifierStateOfMind")]
 		StateOfMind,
+
+		[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+		UserAnnotatedMedicationConcept,
 	}
 
 	/// <summary>Enumerates the types of <see cref="HKCategoryType" />s.</summary>
@@ -4602,14 +4670,8 @@ namespace HealthKit {
 		[Field ("HKSourceRevisionAnyProductType")]
 		NSString AnyProductType { get; }
 
-		// This key seems broken even in Objc returns a weird value
-		//[Internal]
-		//[Field ("HKSourceRevisionAnyOperatingSystem")]
-		//IntPtr _AnyOperatingSystem { get; }
-
-		//[Static]
-		//[Wrap ("System.Runtime.InteropServices.Marshal.PtrToStructure<NSOperatingSystemVersion> (_AnyOperatingSystem)")]
-		//NSOperatingSystemVersion AnyOperatingSystem { get; }
+		[Field ("HKSourceRevisionAnyOperatingSystem")]
+		NSOperatingSystemVersion AnyOperatingSystem { get; }
 	}
 
 	/// <summary>Represents the most recent sample that was returned by a previous anchored object query.</summary>
@@ -4670,7 +4732,7 @@ namespace HealthKit {
 		[Export ("initWithConfiguration:error:")]
 		NativeHandle Constructor (HKWorkoutConfiguration workoutConfiguration, out NSError error);
 
-		[NoiOS]
+		[iOS (26, 0)]
 		[NoMacCatalyst]
 		[Export ("initWithHealthStore:configuration:error:")]
 		NativeHandle Constructor (HKHealthStore healthStore, HKWorkoutConfiguration workoutConfiguration, [NullAllowed] out NSError error);
@@ -4693,7 +4755,7 @@ namespace HealthKit {
 		[Export ("resume")]
 		void Resume ();
 
-		[NoiOS]
+		[iOS (26, 0)]
 		[NoMacCatalyst]
 		[Export ("associatedWorkoutBuilder")]
 		HKLiveWorkoutBuilder AssociatedWorkoutBuilder { get; }
@@ -5273,7 +5335,7 @@ namespace HealthKit {
 		bool Insert (HKQuantity quantity, NSDateInterval dateInterval, [NullAllowed] out NSError error);
 	}
 
-	[NoiOS, Mac (13, 0)]
+	[iOS (26, 0), Mac (13, 0)]
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
@@ -5361,7 +5423,7 @@ namespace HealthKit {
 	}
 
 	interface IHKLiveWorkoutBuilderDelegate { }
-	[NoiOS]
+	[iOS (26, 0)]
 	[NoMacCatalyst]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
@@ -5374,16 +5436,16 @@ namespace HealthKit {
 		[Export ("workoutBuilderDidCollectEvent:")]
 		void DidCollectEvent (HKLiveWorkoutBuilder workoutBuilder);
 
-		[NoiOS, Mac (13, 0), NoMacCatalyst, NoTV]
+		[Mac (13, 0), NoMacCatalyst, NoTV]
 		[Export ("workoutBuilder:didBeginActivity:")]
 		void DidBeginActivity (HKLiveWorkoutBuilder workoutBuilder, HKWorkoutActivity workoutActivity);
 
-		[NoiOS, Mac (13, 0), NoMacCatalyst, NoTV]
+		[Mac (13, 0), NoMacCatalyst, NoTV]
 		[Export ("workoutBuilder:didEndActivity:")]
 		void DidEndActivity (HKLiveWorkoutBuilder workoutBuilder, HKWorkoutActivity workoutActivity);
 	}
 
-	[NoiOS, Mac (13, 0)]
+	[iOS (26, 0), Mac (13, 0)]
 	[NoMacCatalyst]
 	[DisableDefaultCtor]
 	[BaseType (typeof (HKWorkoutBuilder))]
@@ -6273,4 +6335,229 @@ namespace HealthKit {
 		NativeHandle Constructor (HKQuantity sensitivity, HKAudiogramConductionType type, bool masked, HKAudiogramSensitivityTestSide side, [NullAllowed] HKAudiogramSensitivityPointClampingRange clampingRange, [NullAllowed] out NSError error);
 	}
 
+	[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface HKClinicalCoding : NSCopying, NSSecureCoding
+	{
+		[Export ("system")]
+		string System { get; }
+
+		[NullAllowed, Export ("version")]
+		string Version { get; }
+
+		[Export ("code")]
+		string Code { get; }
+
+		[Export ("initWithSystem:version:code:")]
+		NativeHandle Constructor (string system, [NullAllowed] string version, string code);
+	}
+
+	[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+	enum HKHealthConceptDomain
+	{
+		[Field ("HKHealthConceptDomainMedication")]
+		Medication,
+	}
+
+	[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface HKHealthConceptIdentifier : NSSecureCoding, NSCopying
+	{
+		[Export ("domain")]
+		NSString WeakDomain { get; }
+
+		[Wrap ("WeakDomain")]
+		HKHealthConceptDomain Domain { get; }
+	}
+
+	[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+	enum HKMedicationGeneralForm
+	{
+		[Field ("HKMedicationGeneralFormCapsule")]
+		Capsule,
+
+		[Field ("HKMedicationGeneralFormCream")]
+		Cream,
+
+		[Field ("HKMedicationGeneralFormDevice")]
+		Device,
+
+		[Field ("HKMedicationGeneralFormDrops")]
+		Drops,
+
+		[Field ("HKMedicationGeneralFormFoam")]
+		Foam,
+
+		[Field ("HKMedicationGeneralFormGel")]
+		Gel,
+
+		[Field ("HKMedicationGeneralFormInhaler")]
+		Inhaler,
+
+		[Field ("HKMedicationGeneralFormInjection")]
+		Injection,
+
+		[Field ("HKMedicationGeneralFormLiquid")]
+		Liquid,
+
+		[Field ("HKMedicationGeneralFormLotion")]
+		Lotion,
+
+		[Field ("HKMedicationGeneralFormOintment")]
+		Ointment,
+
+		[Field ("HKMedicationGeneralFormPatch")]
+		Patch,
+
+		[Field ("HKMedicationGeneralFormPowder")]
+		Powder,
+
+		[Field ("HKMedicationGeneralFormSpray")]
+		Spray,
+
+		[Field ("HKMedicationGeneralFormSuppository")]
+		Suppository,
+
+		[Field ("HKMedicationGeneralFormTablet")]
+		Tablet,
+
+		[Field ("HKMedicationGeneralFormTopical")]
+		Topical,
+
+		[Field ("HKMedicationGeneralFormUnknown")]
+		Unknown,
+	}
+
+	[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface HKMedicationConcept : NSSecureCoding, NSCopying
+	{
+		[Export ("identifier", ArgumentSemantic.Copy)]
+		HKHealthConceptIdentifier Identifier { get; }
+
+		[Export ("displayText")]
+		string DisplayText { get; }
+
+		[Export ("generalForm")]
+		NSString WeakGeneralForm { get; }
+
+		[Wrap ("WeakGeneralForm")]
+		HKMedicationGeneralForm GeneralForm { get; }
+
+		[Export ("relatedCodings", ArgumentSemantic.Copy)]
+		NSSet<HKClinicalCoding> RelatedCodings { get; }
+	}
+
+	[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+	[Native]
+	public enum HKMedicationDoseEventLogStatus : long
+	{
+		NotInteracted = 1,
+		NotificationNotSent,
+		Snoozed,
+		Taken,
+		Skipped,
+		NotLogged,
+	}
+
+	[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+	[Native]
+	public enum HKMedicationDoseEventScheduleType : long
+	{
+		AsNeeded = 1,
+		Schedule,
+	}
+
+	[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+	[BaseType (typeof (HKSample))]
+	[DisableDefaultCtor]
+	interface HKMedicationDoseEvent : NSSecureCoding, NSCopying
+	{
+		[Export ("medicationDoseEventType", ArgumentSemantic.Copy)]
+		HKMedicationDoseEventType MedicationDoseEventType { get; }
+
+		[Export ("scheduleType", ArgumentSemantic.Assign)]
+		HKMedicationDoseEventScheduleType ScheduleType { get; }
+
+		[Export ("medicationConceptIdentifier", ArgumentSemantic.Copy)]
+		HKHealthConceptIdentifier MedicationConceptIdentifier { get; }
+
+		[NullAllowed, Export ("scheduledDate", ArgumentSemantic.Copy)]
+		NSDate ScheduledDate { get; }
+
+		// BindAs: the docs don't say the type of the dose quantity, so leaving as NSNumber.
+		[Export ("scheduledDoseQuantity", ArgumentSemantic.Copy)]
+		NSNumber ScheduledDoseQuantity { get; }
+
+		// BindAs: the docs don't say the type of the dose quantity, so leaving as NSNumber.
+		[Export ("doseQuantity", ArgumentSemantic.Copy)]
+		NSNumber DoseQuantity { get; }
+
+		[Export ("logStatus", ArgumentSemantic.Assign)]
+		HKMedicationDoseEventLogStatus LogStatus { get; }
+
+		[Export ("unit", ArgumentSemantic.Copy)]
+		HKUnit Unit { get; }
+
+		[Field ("HKMedicationDoseEventTypeIdentifierMedicationDoseEvent")]
+		NSString TypeIdentifierMedicationDoseEvent { get; }
+	}
+
+	[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+	enum HKPredicateKeyPath
+	{
+		[Field ("HKPredicateKeyPathStatus")]
+		Status,
+
+		[Field ("HKPredicateKeyPathLogOrigin")]
+		LogOrigin,
+
+		[Field ("HKPredicateKeyPathScheduledDate")]
+		ScheduledDate,
+
+		[Field ("HKPredicateKeyPathMedicationConceptIdentifier")]
+		MedicationConceptIdentifier,
+	}
+
+	[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface HKUserAnnotatedMedication : NSSecureCoding, NSCopying
+	{
+		[NullAllowed, Export ("nickname")]
+		string Nickname { get; }
+
+		[Export ("isArchived")]
+		bool IsArchived { get; }
+
+		[Export ("hasSchedule")]
+		bool HasSchedule { get; }
+
+		[Export ("medication", ArgumentSemantic.Copy)]
+		HKMedicationConcept Medication { get; }
+	}
+
+	[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+	enum HKUserAnnotatedMedicationPredicateKeyPath
+	{
+		[Field ("HKUserAnnotatedMedicationPredicateKeyPathIsArchived")]
+		IsArchived,
+
+		[Field ("HKUserAnnotatedMedicationPredicateKeyPathHasSchedule")]
+		HasSchedule,
+	}
+
+	[MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+	[BaseType (typeof (HKQuery))]
+	[DisableDefaultCtor]
+	interface HKUserAnnotatedMedicationQuery
+	{
+		[Export ("initWithPredicate:limit:resultsHandler:")]
+		NativeHandle Constructor ([NullAllowed] NSPredicate predicate, nuint limit, HKUserAnnotatedMedicationQueryCallback resultsHandler);
+	}
+
+	delegate void HKUserAnnotatedMedicationQueryCallback (HKUserAnnotatedMedicationQuery query, [NullAllowed] HKUserAnnotatedMedication userAnnotatedMedication, bool done, [NullAllowed] NSError error);
 }

@@ -69,6 +69,9 @@ COMMON_IGNORED_FRAMEWORKS = \
 	Matter \
 	ParavirtualizedGraphics \
 
+# https://github.com/dotnet/macios/issues/23689
+COMMON_IGNORED_FRAMEWORKS += CoreAudio
+
 IGNORED_IOS_FRAMEWORKS = \
 	$(COMMON_IGNORED_FRAMEWORKS) \
 	ClockKit \

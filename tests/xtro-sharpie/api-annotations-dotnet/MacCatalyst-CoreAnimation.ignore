@@ -1,5 +1,3 @@
-# Deprecated
-
 # Also ignored on macOS
 !missing-selector! CARemoteLayerClient::clientId not bound
 !missing-selector! CARemoteLayerClient::initWithServerPort: not bound

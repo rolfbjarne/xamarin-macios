@@ -169,6 +169,9 @@ namespace CoreAnimation {
 		[Export ("scale")]
 		nfloat Scale { get; }
 
+		[Export ("offset")]
+		nfloat Offset { get; }
+
 		/// <param name="attribute">To be added.</param>
 		/// <param name="relativeToSource">To be added.</param>
 		/// <param name="srcAttr">To be added.</param>
@@ -362,6 +365,9 @@ namespace CoreAnimation {
 		/// <summary>To be added.</summary>
 		[Field ("kCAContentsFormatRGBA16Float")]
 		Rgba16Float,
+		[Field ("kCAContentsFormatAutomatic")]
+		Automatic,
+
 	}
 
 
@@ -1273,6 +1279,9 @@ namespace CoreAnimation {
 		[Export ("cornerCurveExpansionFactor:")]
 		nfloat GetCornerCurveExpansionFactor ([BindAs (typeof (CACornerCurve))] NSString curve);
 
+		[Obsoleted (PlatformName.iOS, 26, 0, "Use 'PreferredDynamicRange' instead.")]
+		[Obsoleted (PlatformName.MacCatalyst, 26, 0, "Use 'PreferredDynamicRange' instead.")]
+		[Obsoleted (PlatformName.MacOSX, 26, 0, "Use 'PreferredDynamicRange' instead.")]
 		[NoTV]
 		[iOS (17, 0)]
 		[MacCatalyst (17, 0)]
@@ -1284,6 +1293,35 @@ namespace CoreAnimation {
 		[Export ("toneMapMode")]
 		[BindAs (typeof (CAToneMapMode))]
 		NSString ToneMapMode { get; set; }
+
+		[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Export ("preferredDynamicRange")]
+		[BindAs (typeof (CADynamicRange))]
+		NSString WeakPreferredDynamicRange { get; set; }
+
+		[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Wrap ("WeakPreferredDynamicRange")]
+		CADynamicRange PreferredDynamicRange { get; set; }
+
+		[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Export ("contentsHeadroom")]
+		nfloat ContentsHeadroom { get; set; }
+
+		// From the CALayer (CAConstraintLayoutManager) category
+		[NoTV, NoiOS, MacCatalyst (13, 1)]
+		[NullAllowed, Export ("constraints", ArgumentSemantic.Copy)]
+		CAConstraint[] Constraints { get; set; }
+
+		// From the CALayer (CAConstraintLayoutManager) category
+		[NoTV, NoiOS, MacCatalyst (13, 1)]
+		[Export ("addConstraint:")]
+		void AddConstraint (CAConstraint constraint);
+
+		// From the CARemoteLayerServer (CALayer) category
+		[NoTV, NoiOS, MacCatalyst (13, 1)]
+		[Static]
+		[Export ("layerWithRemoteClientId:")]
+		CALayer GetLayerWithRemoteClientId (uint client_id);
 	}
 
 	[TV (13, 0)]
@@ -1431,6 +1469,10 @@ namespace CoreAnimation {
 		[NullAllowed]
 		// There's no documentation about which values are valid in this dictionary, so we can't create any strong bindings for it.
 		NSDictionary DeveloperHudProperties { get; set; }
+
+		[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+		[Export ("residencySet")]
+		IMTLResidencySet ResidencySet { get; }
 	}
 
 	/// <summary>Layer whose content can be provided asynchronously, and with multiple levels of detail.</summary>
@@ -3200,6 +3242,7 @@ namespace CoreAnimation {
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[Export ("copyCGLPixelFormatForDisplayMask:")]
+		[return: Release]
 		CGLPixelFormat CopyCGLPixelFormatForDisplayMask (UInt32 mask);
 
 		/// <param name="pixelFormat">To be added.</param>
@@ -3213,6 +3256,7 @@ namespace CoreAnimation {
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[Export ("copyCGLContextForPixelFormat:")]
+		[return: Release]
 		CGLContext CopyContext (CGLPixelFormat pixelFormat);
 
 		/// <param name="glContext">To be added.</param>
@@ -3908,5 +3952,82 @@ namespace CoreAnimation {
 
 		[Export ("paused")]
 		bool Paused { [Bind ("isPaused")] get; set; }
+	}
+
+	[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
+	enum CADynamicRange {
+		[Field ("CADynamicRangeAutomatic")]
+		Automatic,
+
+		[Field ("CADynamicRangeStandard")]
+		Standard,
+
+		[Field ("CADynamicRangeConstrainedHigh")]
+		ConstrainedHigh,
+
+		[Field ("CADynamicRangeHigh")]
+		High,
+	}
+
+	[NoTV, NoiOS, MacCatalyst (13, 1)]
+	[Category]
+	[BaseType (typeof(CALayer))]
+	interface CALayer_CAConstraintLayoutManager
+	{
+	}
+
+	[NoTV, NoiOS, MacCatalyst (13, 1)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface CAConstraintLayoutManager : CALayoutManager
+	{
+		[Static]
+		[Export ("layoutManager")]
+		CAConstraintLayoutManager LayoutManager ();
+	}
+
+	[MacCatalyst (13,1)]
+	[Protocol]
+	interface CALayoutManager
+	{
+		// @optional -(CGSize)preferredSizeOfLayer:(CALayer * _Nonnull)layer;		[Export ("preferredSizeOfLayer:")]
+		CGSize GetPreferredSize (CALayer layer);
+
+		[Export ("invalidateLayoutOfLayer:")]
+		void InvalidateLayout (CALayer layer);
+
+		[Export ("layoutSublayersOfLayer:")]
+		void LayoutSublayers (CALayer layer);
+	}
+
+	[NoTV, NoiOS, MacCatalyst (13, 1)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface CARemoteLayerClient
+	{
+		[Export ("initWithServerPort:")]
+		NativeHandle Constructor (uint port);
+
+		[Export ("invalidate")]
+		void Invalidate ();
+
+		[Export ("clientId")]
+		uint ClientId { get; }
+
+		[NullAllowed, Export ("layer", ArgumentSemantic.Strong)]
+		CALayer Layer { get; set; }
+	}
+
+	[NoTV, NoiOS, MacCatalyst (13, 1)]
+	[BaseType (typeof (NSObject))]
+	[DisableDefaultCtor]
+	interface CARemoteLayerServer
+	{
+		[Static]
+		[Export ("sharedServer")]
+		CARemoteLayerServer SharedServer { get; }
+
+		[Export ("serverPort")]
+		uint ServerPort { get; }
 	}
 }

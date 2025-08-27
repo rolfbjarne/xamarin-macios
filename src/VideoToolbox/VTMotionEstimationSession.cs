@@ -171,7 +171,7 @@ public class VTMotionEstimationSession : VTSession {
 		}
 }
 
-/// <summary>A callback for <see cref="VTMotionEstimationSession.EstimateMotionVectors." />.</summary>
+/// <summary>A callback for <see cref="VTMotionEstimationSession.EstimateMotionVectors" />.</summary>
 /// <param name="status"><see cref="VTStatus.Ok" /> if the operation was successful, an error code otherwise.</param>
 /// <param name="infoFlags">Any information flags about the operation.</param>
 /// <param name="additionalInfo">A dictionary with any additional info for the operation.</param>

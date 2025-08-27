@@ -8,6 +8,7 @@
 // Copyright 2014 Xamarin Inc.
 //
 using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -428,7 +429,6 @@ namespace VideoToolbox {
 		/// <param name="presentationTimestamp">The presentation timestamp for this frame.</param>
 		/// <param name="duration">The duration of this frame.</param>
 		/// <param name="frameProperties">Any frame properties for this frame.</param>
-		/// <param name="sourceFrame">This value will be passed to the <see cref="VTCompressionOutputCallback" /> callback that was specified when the compression session was created.</param>
 		/// <param name="infoFlags">Upon return, any information flags from the encoder for this frame.</param>
 		/// <param name="outputHandler">A callback that will be invoked to process a compressed frame. See the delegate type for more information on the received parameters.</param>
 		/// <returns><see cref="VTStatus.Ok" /> if successful, or an error code otherwise.</returns>
@@ -436,7 +436,7 @@ namespace VideoToolbox {
 		[SupportedOSPlatform ("ios17.0")]
 		[UnsupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst17.0")]
-		[BindingImpl (BindingImplFlags.Optimizable)]
+		[BindingImpl (BindingImplOptions.Optimizable)]
 		public unsafe VTStatus EncodeMultiImageFrame (CMTaggedBufferGroup taggedBufferGroup, CMTime presentationTimestamp, CMTime duration, NSDictionary? frameProperties, out VTEncodeInfoFlags infoFlags, VTCompressionOutputHandler outputHandler)
 		{
 			delegate* unmanaged<BlockLiteral*, VTStatus, VTEncodeInfoFlags, IntPtr, void> trampoline = &VTCompressionOutputHandlerCallback;
@@ -471,7 +471,7 @@ namespace VideoToolbox {
 
 		/// <summary>A delegate that will be called for each compressed frame.</summary>
 		/// <param name="status">Status code indicating if the operation was successful or not.</param>
-		/// <param name="flags">Contains information about the encoding operation.</param>
+		/// <param name="infoFlags">Contains information about the encoding operation.</param>
 		/// <param name="sampleBuffer">Contains a pointer to the encoded buffer if successful and the frame was not dropped. A <see langword="null" /> value indicates either an error, or that the frame was dropped.</param>
 		/// <remarks>The delegate will be called in the order the frames are decoded, which is not necessarily the same as the display order.</remarks>
 		public delegate void VTCompressionOutputHandler (VTStatus status, VTEncodeInfoFlags infoFlags, CMSampleBuffer? sampleBuffer);

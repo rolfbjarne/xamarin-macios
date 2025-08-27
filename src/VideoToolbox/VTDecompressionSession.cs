@@ -149,7 +149,7 @@ namespace VideoToolbox {
 		extern static void VTDecompressionSessionInvalidate (IntPtr sesion);
 
 		[DllImport (Constants.VideoToolboxLibrary)]
-		unsafe extern static VTStatus VTDecompressionSession (
+		unsafe extern static VTStatus VTDecompressionSessionDecodeFrame (
 			/* VTDecompressionSessionRef */ IntPtr session,
 			/* CMSampleBufferRef */ IntPtr sampleBuffer,
 			/* VTDecodeFrameFlags */ VTDecodeFrameFlags decodeFlags,

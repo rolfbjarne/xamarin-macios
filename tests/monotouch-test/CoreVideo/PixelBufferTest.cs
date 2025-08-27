@@ -99,5 +99,25 @@ namespace MonoTouchFixtures.CoreVideo {
 			var invalid = Runtime.GetINativeObject<CVPixelBuffer> (IntPtr.Zero, false);
 			Assert.Null (invalid, "CheckInvalidPtr");
 		}
+
+		[Test]
+		public void IsCompatibleWithAttributeTest ()
+		{
+			nint width = 1280;
+			nint height = 720;
+			nint bytesPerRow = width * 4;
+			var pixelFormat = CVPixelFormatType.CV32BGRA;
+
+			using var attributes = new CVPixelBufferAttributes (CVPixelFormatType.CV24RGB, 100, 50);
+			using var buffer = CVPixelBuffer.Create (width, height, pixelFormat, data, bytesPerRow, null, out var status);
+			Assert.AreEqual (status, CVReturn.Success, "Status");
+			Assert.IsNotNull (buffer, "Buffer");
+			Assert.That (buffer.IsCompatibleWithAttributes (attributes), Is.EqualTo (false), "IsCompatible 1");
+			Assert.That (buffer.IsCompatibleWithAttributes (attributes.Dictionary), Is.EqualTo (false), "IsCompatible 2");
+
+			using var attributes2 = new CVPixelBufferAttributes (pixelFormat, width, height);
+			Assert.That (buffer.IsCompatibleWithAttributes (attributes2), Is.EqualTo (true), "IsCompatible B 1");
+			Assert.That (buffer.IsCompatibleWithAttributes (attributes2.Dictionary), Is.EqualTo (true), "IsCompatible B 2");
+		}
 	}
 }

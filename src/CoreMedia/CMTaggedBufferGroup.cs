@@ -287,7 +287,7 @@ namespace CoreMedia {
 			IntPtr /* CMTaggedBufferGroupRef CM_NONNULL */ taggedBufferGroup,
 			IntPtr* /* CM_RETURNS_RETAINED_PARAMETER CMTaggedBufferGroupFormatDescriptionRef CM_NULLABLE * CM_NONNULL */ formatDescription);
 
-		/// <summary>Craete a <see cref="CMFormatDescription" /> for this tagged buffer group.</summary>
+		/// <summary>Create a <see cref="CMFormatDescription" /> for this tagged buffer group.</summary>
 		/// <param name="status">An error code in case of failure, 0 in case of success.</param>
 		/// <returns>A <see cref="CMFormatDescription" /> for this tagged buffer group, or null in case of failure.</returns>
 		public CMFormatDescription? CreateFormatDescription (out CMTaggedBufferGroupError status)
@@ -351,6 +351,31 @@ namespace CoreMedia {
 			var handle = CMSampleBufferGetTaggedBufferGroup (sampleBuffer.GetNonNullHandle (nameof (sampleBuffer)));
 			GC.KeepAlive (sampleBuffer);
 			return Create (handle, false);
+		}
+
+		[SupportedOSPlatform ("ios26.0")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("tvos26.0")]
+		[DllImport (Constants.CoreMediaLibrary)]
+		static unsafe extern CMTaggedBufferGroupError CMTaggedBufferGroupFormatDescriptionCreateForTaggedBufferGroupWithExtensions (
+			IntPtr /* CFAllocatorRef CM_NULLABLE */ allocator,
+			IntPtr /* CMTaggedBufferGroupRef CM_NONNULL */ taggedBufferGroup,
+			IntPtr /* CFDictionaryRef CM_NULLABLE */ extensions,
+			IntPtr */* CM_RETURNS_RETAINED_PARAMETER CMTaggedBufferGroupFormatDescriptionRef CM_NULLABLE * CM_NONNULL */ formatDescriptionOut);
+
+		/// <summary>Craete a <see cref="CMFormatDescription" /> for this tagged buffer group.</summary>
+		/// <param name="extensions">A dictionary of extension properties.</param>
+		/// <param name="status">An error code in case of failure, 0 in case of success.</param>
+		/// <returns>A <see cref="CMFormatDescription" /> for this tagged buffer group, or null in case of failure.</returns>
+		public CMFormatDescription? CreateFormatDescription (NSDictionary? extensions, out CMTaggedBufferGroupError status)
+		{
+			IntPtr formatDescription;
+			unsafe {
+				status = CMTaggedBufferGroupFormatDescriptionCreateForTaggedBufferGroupWithExtensions (IntPtr.Zero, GetCheckedHandle (), extensions.GetHandle (), &formatDescription);
+				GC.KeepAlive (extensions);
+			}
+			return CMFormatDescription.Create (formatDescription, true);
 		}
 #endif // COREBUILD
 	}

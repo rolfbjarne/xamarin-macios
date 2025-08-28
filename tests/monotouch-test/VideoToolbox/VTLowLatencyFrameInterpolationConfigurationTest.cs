@@ -5,6 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
+using Foundation;
+using VideoToolbox;
+
 using NUnit.Framework;
 
 using Xamarin.Utils;
@@ -20,25 +23,25 @@ public class VTLowLatencyFrameInterpolationConfigurationTest {
 		TestRuntime.AssertXcodeVersion (26, 0);
 
 		Assert.Multiple (() => {
-			using var obj = VTLowLatencyFrameInterpolationConfiguration.CreateWithNumberOfInterpolatedFrames (120, 120, 2);
+			using var obj = VTLowLatencyFrameInterpolationConfiguration.CreateWithNumberOfInterpolatedFrames (120, 240, 2);
 			Assert.That (obj, Is.Not.Null, "obj");
 			Assert.That (obj.FrameWidth, Is.EqualTo ((nint) 120), "FrameWidth");
-			Assert.That (obj.FrameHeight, Is.EqualTo ((nint) 120), "FrameHeight");
-			Assert.That (obj.SpatialScaleFactor, Is.EqualTo ((nint) 0), "SpatialScaleFactor");
+			Assert.That (obj.FrameHeight, Is.EqualTo ((nint) 240), "FrameHeight");
+			Assert.That (obj.SpatialScaleFactor, Is.EqualTo ((nint) 1), "SpatialScaleFactor");
 			Assert.That (obj.NumberOfInterpolatedFrames, Is.EqualTo ((nint) 2), "NumberOfInterpolatedFrames");
 		});
 	}
 
 	[Test]
-	public void CreateStronglyTypedTest ()
+	public void WithSpatialScaleFactorCtor ()
 	{
 		TestRuntime.AssertXcodeVersion (26, 0);
 
 		Assert.Multiple (() => {
-			using var obj = VTLowLatencyFrameInterpolationConfiguration.CreateWithSpatialScaleFactor (120, 120, 2);
+			using var obj = VTLowLatencyFrameInterpolationConfiguration.CreateWithSpatialScaleFactor (120, 240, 2);
 			Assert.That (obj, Is.Not.Null, "obj");
 			Assert.That (obj.FrameWidth, Is.EqualTo ((nint) 120), "FrameWidth");
-			Assert.That (obj.FrameHeight, Is.EqualTo ((nint) 120), "FrameHeight");
+			Assert.That (obj.FrameHeight, Is.EqualTo ((nint) 240), "FrameHeight");
 			Assert.That (obj.SpatialScaleFactor, Is.EqualTo ((nint) 2), "SpatialScaleFactor");
 			Assert.That (obj.NumberOfInterpolatedFrames, Is.EqualTo ((nint) 0), "NumberOfInterpolatedFrames");
 		});

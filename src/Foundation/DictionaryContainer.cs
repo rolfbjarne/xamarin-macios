@@ -122,6 +122,30 @@ namespace Foundation {
 			return rv;
 		}
 
+		/// <summary>Returns the nullable <see cref="NSNumber" /> associated with <paramref name="key" />.</summary>
+		/// <param name="key">The identifier of the <see cref="NSNumber" />.</param>
+		/// <param name="number">The <see cref="NSNumber" /> instance that was found (or <see langword="null" /> if no value was found for the specified key).</param>
+		/// <remarks>This method will throw an exception if the dictionary contains a value for the specified key that is not an <see cref="NSNumber" />.</remarks>
+		bool TryGetNSNumberValue (NSString key, [NotNullWhen (true)] out NSNumber? number)
+		{
+			if (key is null)
+				throw new ArgumentNullException (nameof (key));
+
+			number = null;
+
+			if (!Dictionary.TryGetValue (key, out var value))
+				return false;
+
+			if (value is null || value == NSNull.Value)
+				return false;
+
+			number = value as NSNumber;
+			if (number is null)
+				throw new InvalidOperationException (string.Format ("The stored type for the key '{0}' is not 'NSNumber', it's '{1}' (value: {2}).", value.GetType (), value));
+
+			return true;
+		}
+
 		/// <param name="key">The identifier of the int.</param>
 		///         <summary>Returns the nullable int associated with <paramref name="key" />.</summary>
 		///         <returns>To be added.</returns>
@@ -219,14 +243,10 @@ namespace Foundation {
 		///         <remarks>To be added.</remarks>
 		protected uint? GetUIntValue (NSString key)
 		{
-			if (key is null)
-				throw new ArgumentNullException (nameof (key));
-
-			NSObject value;
-			if (!Dictionary.TryGetValue (key, out value))
+			if (!TryGetNSNumberValue (key, out var number))
 				return null;
 
-			return ((NSNumber) value).UInt32Value;
+			return number.UInt32Value;
 		}
 
 		/// <param name="key">The identifier of the float.</param>
@@ -243,6 +263,18 @@ namespace Foundation {
 				return null;
 
 			return ((NSNumber) value).FloatValue;
+		}
+
+		/// <summary>Returns the nullable nfloat associated with <paramref name="key" />.</summary>
+		/// <param name="key">The identifier of the nfloat.</param>
+		/// <returns>The nfloat associated with <paramref name="key" />, or <see langword="null" /> if no value was found.</returns>
+		protected nfloat? GetNFloatValue (NSString key)
+		{
+			if (!TryGetNSNumberValue (key, out var number))
+				return null;
+
+			// we only support 64-bit architectures at the moment, so this is safe
+			return (nfloat) number.DoubleValue;
 		}
 
 		/// <param name="key">The identifier of the double.</param>
@@ -667,6 +699,15 @@ namespace Foundation {
 		{
 			if (NullCheckAndRemoveKey (key, !value.HasValue))
 				Dictionary [key] = new NSNumber (value!.Value);
+		}
+
+		/// <summary>Stores the nfloat <paramref name="value" /> (or <see langword="null" />) and associates it with the <paramref name="key" />.</summary>
+		/// <param name="key">The identifier associated with the float.</param>
+		/// <param name="value">The nullable nfloat to be associated with <paramref name="key" />.</param>
+		protected void SetNumberValue (NSString key, nfloat? value)
+		{
+			// we only support 64-bit architectures at the moment, so this is safe
+			SetNumberValue (key, (double?) value);
 		}
 
 		/// <param name="key">The identifier associated with the double.</param>

@@ -398,7 +398,7 @@ namespace Foundation {
 		public unsafe T ToValueType<T> () where T: unmanaged
 		{
 			var size = (nuint) sizeof (T);
-			if (size < Length)
+			if (Length < size)
 				throw new ArgumentOutOfRangeException ($"The size of this NSData instance ({Length} bytes) is smaller than the size of the return type '{typeof (T).FullName}' ({size} bytes)");
 
 			var array = ToArray ();

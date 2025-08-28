@@ -2759,6 +2759,16 @@ namespace VideoToolbox {
 	[MacCatalyst (26, 0), TV (26, 0), iOS (26, 0), Mac (15, 4)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false)]
 	interface VTFrameProcessorConfiguration {
+#if !XAMCORE_5_0
+		[Obsoleted (PlatformName.iOS, 26, 0, "Use 'Supported' instead.")]
+		[Obsoleted (PlatformName.TvOS, 26, 0, "Use 'Supported' instead.")]
+		[Obsoleted (PlatformName.MacOSX, 26, 0, "Use 'Supported' instead.")]
+		[Obsoleted (PlatformName.MacCatalyst, 26, 0, "Use 'Supported' instead.")]
+		[Static, Abstract]
+		[Export ("processorSupported")]
+		bool ProcessorSupported { get; }
+#endif
+
 		[Abstract]
 		[Export ("frameSupportedPixelFormats")]
 		NSNumber [] WeakFrameSupportedPixelFormats { get; }

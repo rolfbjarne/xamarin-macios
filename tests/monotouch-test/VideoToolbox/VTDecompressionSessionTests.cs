@@ -9,10 +9,15 @@
 //
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 using Foundation;
 using VideoToolbox;
 using CoreMedia;
+using CoreVideo;
 using AVFoundation;
 using CoreFoundation;
 using ObjCRuntime;
@@ -110,7 +115,7 @@ namespace MonoTouchFixtures.VideoToolbox {
 			return CreateSession (formatDescriptor, (sourceFrame, status, flags, buffer, presentationTimeStamp, presentationDuration) => { });
 		}
 
-		VTDecompressionSession CreateSession (CMVideoFormatDescription formatDescriptor, VTDecompressionOutputCallback callback)
+		VTDecompressionSession CreateSession (CMVideoFormatDescription formatDescriptor, VTDecompressionSession.VTDecompressionOutputCallback callback)
 		{
 			return VTDecompressionSession.Create (callback, formatDescriptor);
 		}
@@ -119,39 +124,37 @@ namespace MonoTouchFixtures.VideoToolbox {
 		class SampleBufferEnumerator {
 			public CMVideoFormatDescription FormatDescription;
 			AVAssetTrack? videoTrack;
+			AVAsset? asset;
 
 			public SampleBufferEnumerator (NSUrl url)
 			{
-				using var asset = AVAsset.FromUrl (url);
+				asset = AVAsset.FromUrl (url);
 				Assert.That (asset, Is.Not.Null, "Asset");
 
-				Exception? ex = null;
 				var loaded = new TaskCompletionSource<CMVideoFormatDescription> ();
 
 				asset.LoadTrackWithMediaCharacteristics (AVMediaCharacteristics.Visual.GetConstant (), (tracks, error) =>
 				{
 					try {
-						Assert.NotNull (error, "Failed to load track");
+						Assert.Null (error, "Failed to load track");
 
 						videoTrack = (AVAssetTrack) tracks.ToArray ().First ();
 
-						loaded.SetResult (videoTrack.FormatDescriptions [0]);
+						loaded.SetResult ((CMVideoFormatDescription) videoTrack.FormatDescriptions [0]);
 					} catch (Exception e) {
-						tcs.TrySetException (e)
-					} finally {
-						tcs.TrySetResult (true);
+						loaded.SetException (e);
 					}
 				});
 
 				Assert.IsTrue (loaded.Task.Wait (TimeSpan.FromSeconds (15)), "Timed out waiting for track to load");
-				FormatDescriptions = loaded.Task.Result;
+				FormatDescription = loaded.Task.Result;
 			}
 
 			public void Enumerate (Action<CMSampleBuffer> iterator)
 			{
-				var cursor = videoTrack.MakeSampleCursorAtFirstSampleInDecodeOrder();
-				var sampleBufferGenerator = new AVSampleBufferGenerator(asset, null);
-				var request = new AVSampleBufferRequest(cursor);
+				var cursor = videoTrack.MakeSampleCursorAtFirstSampleInDecodeOrder ();
+				var sampleBufferGenerator = new AVSampleBufferGenerator (asset, null);
+				var request = new AVSampleBufferRequest (cursor);
 				var sampleCount = 0L;
 
 				do
@@ -194,6 +197,7 @@ namespace MonoTouchFixtures.VideoToolbox {
 			Assert.That (frameCallbackCounter, Is.GreaterThan (0), "Frame callback counter");
 		}
 
+#if !__TVOS__
 		[Test]
 		public void DecodeFrameMultiImageCallbackTest ()
 		{
@@ -261,10 +265,10 @@ namespace MonoTouchFixtures.VideoToolbox {
 			}, 0x0a1efeab);
 
 			bufferEnumerator.Enumerate ((buffer) => {
-				var status = session.DecodeFrame (buffer, VTDecodeFrameFlags.None, (NSDictionary?) null, out var infoFlags, (sourceFrame, status, flags, buffer, presentationTimeStamp, presentationDuration) => {
-					Console.WriteLine ($"4: sourceFrame: 0x{sourceFrame:x} status: {status} flags: {flags} buffer: {buffer} presentationTimeStamp: {presentationTimeStamp} presentationDuration: {presentationDuration}");
+				var status = session.DecodeFrame (buffer, VTDecodeFrameFlags.None, (NSDictionary?) null, out var infoFlags, new VTDecompressionSession.VTDecompressionOutputHandler ((status, flags, buffer, presentationTimeStamp, presentationDuration) => {
+					Console.WriteLine ($"4: status: {status} flags: {flags} buffer: {buffer} presentationTimeStamp: {presentationTimeStamp} presentationDuration: {presentationDuration}");
 					frameCallbackCounter4++;
-				});
+				}));
 				Assert.That (status, Is.EqualTo (VTStatus.Ok), "DecodeFrame");
 			});
 
@@ -274,5 +278,6 @@ namespace MonoTouchFixtures.VideoToolbox {
 			Assert.That (frameCallbackCounter3, Is.EqualTo (0), "Frame callback counter 3");
 			Assert.That (frameCallbackCounter4, Is.GreaterThan (0), "Frame callback counter 4");
 		}
+#endif // !__TVOS__
 	}
 }

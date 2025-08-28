@@ -18,26 +18,26 @@ public class CGRectDictionary : DictionaryContainer {
 	public CGRectDictionary (NSDictionary? dictionary) : base (dictionary) {}
 
 	/// <summary>The X component of the <see cref="CGPoint" />.</summary>
-	public float? X {
-		get => GetFloatValue ((NSString) "X");
+	public nfloat? X {
+		get => GetNFloatValue ((NSString) "X");
 		set => SetNumberValue ((NSString) "X", value);
 	}
 
 	/// <summary>The Y component of the <see cref="CGPoint" />.</summary>
-	public float? Y {
-		get => GetFloatValue ((NSString) "Y");
+	public nfloat? Y {
+		get => GetNFloatValue ((NSString) "Y");
 		set => SetNumberValue ((NSString) "Y", value);
 	}
 
 	/// <summary>The width component of the <see cref="CGSize" />.</summary>
-	public float? Width {
-		get => GetFloatValue ((NSString) "Width");
+	public nfloat? Width {
+		get => GetNFloatValue ((NSString) "Width");
 		set => SetNumberValue ((NSString) "Width", value);
 	}
 
 	/// <summary>The height component of the <see cref="CGSize" />.</summary>
-	public float? Height {
-		get => GetFloatValue ((NSString) "Height");
+	public nfloat? Height {
+		get => GetNFloatValue ((NSString) "Height");
 		set => SetNumberValue ((NSString) "Height", value);
 	}
 

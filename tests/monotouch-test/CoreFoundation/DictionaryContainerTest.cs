@@ -6,6 +6,7 @@ using System;
 using Foundation;
 using CoreGraphics;
 using ObjCRuntime;
+using VideoToolbox;
 
 using NUnit.Framework;
 
@@ -40,7 +41,7 @@ public class DictionaryContainerTest {
 
 			Assert.IsNull (dict.LensDistortions, "LensDistortions");
 
-			var array = new float [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ];
+			var array = new float [] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 			dict.LensDistortions = array;
 			Assert.AreEqual (array, dict.LensDistortions, "LensDistortions 2");
 

@@ -18,14 +18,14 @@ public class CGSizeDictionary : DictionaryContainer {
 	public CGSizeDictionary (NSDictionary? dictionary) : base (dictionary) {}
 
 	/// <summary>The width component of the <see cref="CGSize" />.</summary>
-	public float? Width {
-		get => GetFloatValue ((NSString) "Width");
+	public nfloat? Width {
+		get => GetNFloatValue ((NSString) "Width");
 		set => SetNumberValue ((NSString) "Width", value);
 	}
 
 	/// <summary>The height component of the <see cref="CGSize" />.</summary>
-	public float? Height {
-		get => GetFloatValue ((NSString) "Height");
+	public nfloat? Height {
+		get => GetNFloatValue ((NSString) "Height");
 		set => SetNumberValue ((NSString) "Height", value);
 	}
 

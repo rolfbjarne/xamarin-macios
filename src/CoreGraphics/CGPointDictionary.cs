@@ -18,14 +18,14 @@ public class CGPointDictionary : DictionaryContainer {
 	public CGPointDictionary (NSDictionary? dictionary) : base (dictionary) {}
 
 	/// <summary>The X component of the <see cref="CGPoint" />.</summary>
-	public float? X {
-		get => GetFloatValue ((NSString) "X");
+	public nfloat? X {
+		get => GetNFloatValue ((NSString) "X");
 		set => SetNumberValue ((NSString) "X", value);
 	}
 
 	/// <summary>The Y component of the <see cref="CGPoint" />.</summary>
-	public float? Y {
-		get => GetFloatValue ((NSString) "Y");
+	public nfloat? Y {
+		get => GetNFloatValue ((NSString) "Y");
 		set => SetNumberValue ((NSString) "Y", value);
 	}
 

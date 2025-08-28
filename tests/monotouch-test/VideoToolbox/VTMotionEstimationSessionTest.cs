@@ -4,6 +4,12 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
+
+using CoreVideo;
+using Foundation;
+using VideoToolbox;
 
 using NUnit.Framework;
 
@@ -21,7 +27,7 @@ public class VTMotionEstimationSessionTest {
 
 		var width = 120;
 		var height = 120;
-		using var session = VTMotionEstimationSession.Create ((NSDictionary?) null, width, height, out var status);
+		using var session = VTMotionEstimationSession.Create ((NSDictionary?) null, (uint) width, (uint) height, out var status);
 		Assert.That (status, Is.EqualTo (VTStatus.Ok), "Create status");
 		Assert.That (session, Is.Not.Null, "Create");
 
@@ -38,7 +44,7 @@ public class VTMotionEstimationSessionTest {
 		var options = new VTMotionEstimationSessionCreationOption () {
 			Label = "Test session",
 		};
-		using var session = VTMotionEstimationSession.Create (options, width, height, out var status);
+		using var session = VTMotionEstimationSession.Create (options, (uint) width, (uint) height, out var status);
 		Assert.That (status, Is.EqualTo (VTStatus.Ok), "Create status");
 		Assert.That (session, Is.Not.Null, "Create");
 
@@ -47,22 +53,22 @@ public class VTMotionEstimationSessionTest {
 
 	void DoTest (VTMotionEstimationSession session, int width, int height)
 	{
-		Assert.That (session.TryGetSourcePixelBufferAttributes (out var pixelBufferAttributes, out status), Is.EqualTo (true), "TryGetSourcePixelBufferAttributes");
+		Assert.That (session.TryGetSourcePixelBufferAttributes (out var pixelBufferAttributesDictionary, out var status), Is.EqualTo (true), "TryGetSourcePixelBufferAttributes");
 		Assert.That (status, Is.EqualTo (VTStatus.Ok), "TryGetSourcePixelBufferAttributes: status");
-		Assert.That (pixelBufferAttributes, Is.Not.Null, "TryGetSourcePixelBufferAttributes: pixel buffers");
+		Assert.That (pixelBufferAttributesDictionary, Is.Not.Null, "TryGetSourcePixelBufferAttributes: pixel buffers");
 
-		pixelBufferAttributes = session.SourcePixelBufferAttributes;
+		var pixelBufferAttributes = session.SourcePixelBufferAttributes;
 		Assert.That (pixelBufferAttributes, Is.Not.Null, "SourcePixelBufferAttributes: pixel buffers");
 
 		var tcs = new TaskCompletionSource<bool> ();
 
-		using var referenceImage = new CVPixelBuffer (width, height, pixelBufferAttributes.PixelFormatType);
-		using var currentImage = new CVPixelBuffer (width, height, pixelBufferAttributes.PixelFormatType);
+		using var referenceImage = new CVPixelBuffer (width, height, pixelBufferAttributes.PixelFormatType.Value);
+		using var currentImage = new CVPixelBuffer (width, height, pixelBufferAttributes.PixelFormatType.Value);
 		var estimatedAnything = false;
-		status = session.EstimateMotionVectors (referenceImage, currentImage, VTMotionEstimationFrameFlags.None, null, (VTStatus status, VTMotionEstimationInfoFlags infoFlags, NSDictionary? additionalInfo, CVPixelBuffer? motionVectors) => {
+		status = session.EstimateMotionVectors (referenceImage, currentImage, VTMotionEstimationFrameFlags.None, null, (VTStatus status2, VTMotionEstimationInfoFlags infoFlags, NSDictionary? additionalInfo, CVPixelBuffer? motionVectors) => {
 			try {
 				estimatedAnything = true;
-				Console.WriteLine ($"status: {status} infoFlags: {infoFlags} additionalInfo: {additionalInfo} motionVectors: {motionVectors}");
+				Console.WriteLine ($"status: {status2} infoFlags: {infoFlags} additionalInfo: {additionalInfo} motionVectors: {motionVectors}");
 			} catch (Exception e) {
 				tcs.TrySetException (e);
 			} finally {

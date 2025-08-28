@@ -18,22 +18,24 @@ public class CGPointDictionaryTests {
 	[Test]
 	public void PropertiesTest ()
 	{
-		var point = new CGPoint ((nfloat) 1, (nfloat) 2);
-		using var dict = point.ToDictionary ();
-		var strongDict = new CGPointDictionary (dict);
-		Assert.AreEqual (point.X, strongDict.X, "X");
-		Assert.AreEqual (point.Y, strongDict.Y, "Y");
+		Assert.Multiple (() => {
+			var point = new CGPoint ((nfloat) 1, (nfloat) 2);
+			using var dict = point.ToDictionary ();
+			var strongDict = new CGPointDictionary (dict);
+			Assert.AreEqual (point.X, strongDict.X, "X");
+			Assert.AreEqual (point.Y, strongDict.Y, "Y");
 
-		var point2 = strongDict.ToPoint ();
-		Assert.AreEqual (point, point2, "Point");
+			var point2 = strongDict.ToPoint ();
+			Assert.AreEqual (point, point2, "Point");
 
-		strongDict = new CGPointDictionary ();
-		strongDict.X = 3;
-		Assert.AreEqual (3, strongDict.X, "X 2");
-		strongDict.Y = 4;
-		Assert.AreEqual (4, strongDict.Y, "Y 2");
-		point2 = strongDict.ToPoint ();
-		Assert.AreEqual (new CGPoint (3, 4), point2, "Point 2");
+			strongDict = new CGPointDictionary ();
+			strongDict.X = 3;
+			Assert.AreEqual (3, strongDict.X, "X 2");
+			strongDict.Y = 4;
+			Assert.AreEqual (4, strongDict.Y, "Y 2");
+			point2 = strongDict.ToPoint ();
+			Assert.AreEqual (new CGPoint (3, 4), point2, "Point 2");
+		});
 	}
 
 	[Test]
@@ -50,15 +52,17 @@ public class CGPointDictionaryTests {
 	public void ToStringTest1 ()
 	{
 		var strongDict = new CGPointDictionary ();
-		Assert.AreEqual ("?", strongDict.ToString (), "A")
+		Assert.AreEqual ("CoreGraphics.CGPointDictionary", strongDict.ToString (), "A");
+		Assert.AreEqual ("{\n}", strongDict.Dictionary.ToString (), "B");
 	}
 
 	[Test]
-	public void ToStringTest1 ()
+	public void ToStringTest2 ()
 	{
 		var strongDict = new CGPointDictionary ();
 		strongDict.X = 3;
 		strongDict.Y = 4;
-		Assert.AreEqual ("?", strongDict.ToString (), "B")
+		Assert.AreEqual ("CoreGraphics.CGPointDictionary", strongDict.ToString (), "A");
+		Assert.AreEqual ("{\n    X = 3;\n    Y = 4;\n}", strongDict.Dictionary.ToString (), "B");
 	}
 }

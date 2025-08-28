@@ -6,6 +6,7 @@ using System;
 using Foundation;
 using CoreGraphics;
 using ObjCRuntime;
+using VideoToolbox;
 
 using NUnit.Framework;
 
@@ -33,7 +34,8 @@ public class VTCompressionPropertyCameraCalibrationTest {
 			Assert.IsNull (dict.IntrinsicMatrixReferenceDimensions, "IntrinsicMatrixReferenceDimensions");
 			Assert.IsNull (dict.ExtrinsicOriginSource, "ExtrinsicOriginSource");
 			Assert.IsNull (dict.ExtrinsicOrientationQuaternion, "ExtrinsicOrientationQuaternion");
-			Assert.That (dict.ToString (), Is.EqualTo ("?"), "ToString");
+			Assert.That (dict.ToString (), Is.EqualTo ("VideoToolbox.VTCompressionPropertyCameraCalibration"), "ToString");
+			Assert.That (dict.Dictionary.ToString (), Is.EqualTo ("{\n}"), "ToString");
 		});
 	}
 }

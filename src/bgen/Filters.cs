@@ -199,6 +199,7 @@ public partial class Generator {
 			PrintPropertyAttributes (p, originalType, skipTypeInjection: export is not null);
 			print_generated_code ();
 
+			string? bindAsPropertyType = null;
 			var ptype = p.PropertyType.Name;
 			var nullable = false;
 			// keep C# names as they are reserved keywords (e.g. Boolean also exists in OpenGL for Mac)
@@ -226,10 +227,18 @@ public partial class Generator {
 				if (!fromProtocol)
 					nullable = true;
 				break;
+			case "NSString":
+				var bindAs = GetCoreImageBindAsAttribute (p);
+				if (bindAs is null) {
+					exceptions.Add (ErrorHelper.CreateError (1121, p.DeclaringType?.FullName, p.Name));
+					return;
+				}
+				bindAsPropertyType = bindAs.Type.Name;
+				break;
 			}
 			if (AttributeManager.IsNullable (p))
 				nullable = true;
-			print ("public {0}{1} {2} {{", ptype, nullable ? "?" : "", p.Name);
+			print ("public {0}{1} {2} {{", bindAsPropertyType ?? ptype, nullable ? "?" : "", p.Name);
 			indent++;
 
 			var name = AttributeManager.GetCustomAttribute<CoreImageFilterPropertyAttribute> (p)?.Name;
@@ -250,11 +259,11 @@ public partial class Generator {
 
 			if (p.GetGetMethod () is not null) {
 				PrintFilterExport (p, export, setter: false);
-				GenerateFilterGetter (ptype, name, p);
+				GenerateFilterGetter (ptype, name, p, bindAsPropertyType);
 			}
 			if (p.GetSetMethod () is not null) {
 				PrintFilterExport (p, export, setter: true);
-				GenerateFilterSetter (ptype, name, p);
+				GenerateFilterSetter (ptype, name, p, bindAsPropertyType);
 			}
 
 			indent--;
@@ -277,13 +286,14 @@ public partial class Generator {
 			print ($"[Export (\"{selector}\")]");
 	}
 
-	void GenerateFilterGetter (string propertyType, string propertyName, PropertyInfo pinfo)
+	void GenerateFilterGetter (string propertyType, string propertyName, PropertyInfo pinfo, string? bindAsPropertyType)
 	{
 		print ("get {");
 		indent++;
 		switch (propertyType) {
-		case "CIDynamicRangeOption":
-			print ($"return CIDynamicRangeOptionExtensions.GetNullableValue (GetHandle (\"{propertyName}\"));");
+		case "NSString":
+			// NSString mapped to a strongly typed enum
+			print ($"return {bindAsPropertyType}Extensions.GetNullableValue (GetHandle (\"{propertyName}\"));");
 			break;
 		case "bool":
 			print ("return GetBool (\"{0}\");", propertyName);
@@ -352,12 +362,13 @@ public partial class Generator {
 		print ("}");
 	}
 
-	void GenerateFilterSetter (string propertyType, string propertyName, PropertyInfo pinfo)
+	void GenerateFilterSetter (string propertyType, string propertyName, PropertyInfo pinfo, string? bindAsPropertyType)
 	{
 		print ("set {");
 		indent++;
 		switch (propertyType) {
-		case "CIDynamicRangeOption":
+		case "NSString":
+			// NSString mapped to a strongly typed enum
 			print ("SetValue (\"{0}\", value.HasValue ? value.Value.GetConstant () : null);", propertyName);
 			break;
 		case "bool":

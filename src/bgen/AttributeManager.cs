@@ -46,6 +46,8 @@ public class AttributeManager {
 			return typeof (CategoryAttribute);
 		case "CheckDisposedAttribute":
 			return typeof (CheckDisposedAttribute);
+		case "CoreImageBindAsAttribute":
+			return typeof (CoreImageBindAsAttribute);
 		case "CoreImageFilterAttribute":
 			return typeof (CoreImageFilterAttribute);
 		case "CoreImageFilterPropertyAttribute":
@@ -124,6 +126,8 @@ public class AttributeManager {
 			return typeof (ObjCRuntime.BindingImplAttribute);
 		case "ObjCRuntime.BindingImplOptions":
 			return typeof (ObjCRuntime.BindingImplOptions);
+		case "ObjCRuntime.CoreImageBindAsAttribute":
+			return typeof (CoreImageBindAsAttribute);
 		case "DeprecatedAttribute":
 			return typeof (DeprecatedAttribute);
 		case "IntroducedAttribute":

@@ -625,4 +625,7 @@
 		<value>The type '{0}' is trying to inline the methods binding the selector '{1}' from the protocols '{2}' and '{3}', using methods with different signatures ('{4}' vs '{5}'). These methods will be ignored.</value>
 	</data>
 
+	<data name="BI1121" xml:space="preserve">
+		<value>'NSString' is only supported as a CoreImage property type when the property has a BindAs attribute for a strongly typed Objective-C enum (for the property {0}.{1}).</value>
+	</data>
 </root>

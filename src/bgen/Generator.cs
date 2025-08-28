@@ -334,6 +334,19 @@ public partial class Generator : IMemberGatherer {
 		return null;
 	}
 
+	public CoreImageBindAsAttribute GetCoreImageBindAsAttribute (ICustomAttributeProvider cu)
+	{
+		CoreImageBindAsAttribute rv;
+		if (cu is not null && (rv = AttributeManager.GetCustomAttribute<CoreImageBindAsAttribute> (cu)) is not null)
+			return rv;
+
+		var minfo = cu as MethodInfo;
+		if (minfo?.ReturnParameter is not null && (rv = AttributeManager.GetCustomAttribute<CoreImageBindAsAttribute> (minfo.ReturnParameter)) is not null)
+			return rv;
+
+		return null;
+	}
+
 	public BindAsAttribute GetBindAsAttribute (ICustomAttributeProvider cu)
 	{
 		BindAsAttribute rv;

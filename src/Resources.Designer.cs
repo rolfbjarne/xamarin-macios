@@ -1158,5 +1158,14 @@ namespace bgen {
                 return ResourceManager.GetString("BI1120", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &apos;NSString&apos; is only supported as a CoreImage property type when the property has a BindAs attribute for a strongly typed Objective-C enum (for the property {0}.{1})..
+        /// </summary>
+        internal static string BI1121 {
+            get {
+                return ResourceManager.GetString("BI1121", resourceCulture);
+            }
+        }
     }
 }

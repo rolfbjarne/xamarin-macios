@@ -162,6 +162,17 @@ public class BindAttribute : Attribute {
 	public bool Virtual { get; set; }
 }
 
+[AttributeUsage (AttributeTargets.Property, AllowMultiple = false)]
+public class CoreImageBindAsAttribute : Attribute {
+	public CoreImageBindAsAttribute (Type type)
+	{
+		Type = type;
+	}
+
+	/// <summary>The managed type.</summary>
+	public Type Type;
+}
+
 public class WrapAttribute : Attribute {
 	public WrapAttribute (string methodname, bool isVirtual = false)
 	{

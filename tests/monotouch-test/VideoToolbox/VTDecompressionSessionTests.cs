@@ -115,11 +115,33 @@ namespace MonoTouchFixtures.VideoToolbox {
 			return CreateSession (formatDescriptor, (sourceFrame, status, flags, buffer, presentationTimeStamp, presentationDuration) => { });
 		}
 
-		VTDecompressionSession CreateSession (CMVideoFormatDescription formatDescriptor, VTDecompressionSession.VTDecompressionOutputCallback callback)
+		VTDecompressionSession CreateSession (CMVideoFormatDescription formatDescriptor, VTDecompressionSession.VTDecompressionOutputCallback? callback)
 		{
 			return VTDecompressionSession.Create (callback, formatDescriptor);
 		}
 
+		static string AsString (CMVideoFormatDescription? vd)
+		{
+			if (vd is null)
+				return $"null";
+			return $"MediaType: {vd.MediaType} Dimensions: {vd.Dimensions} VideoCodecType: {vd.VideoCodecType} Extensions: {vd.GetExtensions ()}";
+		}
+
+		static string AsString (CVImageBuffer? buffer)
+		{
+			if (buffer is null)
+				return "null";
+
+			if (buffer is CVPixelBuffer pixelBuffer) {
+				return $"Pixel buffer: {pixelBuffer}\n" +
+					$"    IsPlanar: {pixelBuffer.IsPlanar}\n" +
+					$"    PixelFormatTypex: {pixelBuffer.PixelFormatType}\n" +
+					$"    GetAttributes: {pixelBuffer.GetAttributes (null)}\n" +
+					$"    GetPixelBufferCreationAttributes: {pixelBuffer.GetPixelBufferCreationAttributes ()?.Dictionary}\n";
+			} else {
+				return $"Image buffer: {buffer} ({buffer.GetType ().Name})";
+			}
+		}
 
 		class SampleBufferEnumerator {
 			public CMVideoFormatDescription FormatDescription;
@@ -140,7 +162,19 @@ namespace MonoTouchFixtures.VideoToolbox {
 
 						videoTrack = (AVAssetTrack) tracks.ToArray ().First ();
 
-						loaded.SetResult ((CMVideoFormatDescription) videoTrack.FormatDescriptions [0]);
+						var format = (CMVideoFormatDescription) videoTrack.FormatDescriptions [0];
+						loaded.SetResult (format);
+
+						var tr = tracks.ToArray ();
+						TestRuntime.NSLog ($"Loaded {url} with {tr.Length} visual tracks.");
+						for (var i = 0; i < tr.Length; i++) {
+							TestRuntime.NSLog ($"    Track #{i+1}: {tr [i]}");
+							var fd = tr [i].FormatDescriptions;
+							for (var f = 0; f < fd.Length; f++) {
+								var vd = (CMVideoFormatDescription) fd [f];
+								TestRuntime.NSLog ($"        Format descriptor #{f + 1}/{fd.Length}: {fd [f]} ({AsString (vd)})");
+							}
+						}
 					} catch (Exception e) {
 						loaded.SetException (e);
 					}
@@ -157,13 +191,19 @@ namespace MonoTouchFixtures.VideoToolbox {
 				var request = new AVSampleBufferRequest (cursor);
 				var sampleCount = 0L;
 
-				do
-				{
+				do {
 					using var buffer = sampleBufferGenerator.CreateSampleBuffer (request, out var sampleBufferError);
 					Assert.NotNull (buffer, "Sample Buffer");
 					Assert.Null (sampleBufferError, "Sample Buffer Error");
 
-					Console.WriteLine ($"Got sample buffer: PresentationTimestamp: {buffer.PresentationTimeStamp} Duration:{buffer.Duration} TotalSampleSize:{buffer.TotalSampleSize}");
+					TestRuntime.NSLog ($"Got sample buffer: PresentationTimestamp: {buffer.PresentationTimeStamp} Duration:{buffer.Duration} TotalSampleSize:{buffer.TotalSampleSize} NumSamples: {buffer.NumSamples}");
+					TestRuntime.NSLog ($"    DataIsReady: {buffer.DataIsReady}");
+					TestRuntime.NSLog ($"    Tagged buffer group: {buffer.TaggedBufferGroup}");
+					TestRuntime.NSLog ($"    Video format description: {AsString (buffer.GetVideoFormatDescription ())}");
+					var dataBuffer = buffer.GetDataBuffer ();
+					TestRuntime.NSLog ($"    Data buffer: {dataBuffer} ({dataBuffer?.GetType ()?.Name})");
+					var imageBuffer = buffer.GetImageBuffer ();
+					TestRuntime.NSLog ($"    Image buffer: {AsString (imageBuffer)}");
 
 					iterator (buffer);
 
@@ -183,24 +223,32 @@ namespace MonoTouchFixtures.VideoToolbox {
 			var bufferEnumerator = new SampleBufferEnumerator (url);
 
 			var frameCallbackCounter = 0;
-			using var session = CreateSession (bufferEnumerator.FormatDescription, (sourceFrame, status, flags, buffer, presentationTimeStamp, presentationDuration) => {
-				Console.WriteLine ($"sourceFrame: 0x{sourceFrame:x} status: {status} flags: {flags} buffer: {buffer} presentationTimeStamp: {presentationTimeStamp} presentationDuration: {presentationDuration}");
-				frameCallbackCounter++;
-			});
+			using var session = CreateSession (bufferEnumerator.FormatDescription,
+				(sourceFrame, status, flags, buffer, presentationTimeStamp, presentationDuration) => {
+					frameCallbackCounter++;
+					TestRuntime.NSLog ($"DecodeFrameTest () callback #{frameCallbackCounter}: sourceFrame: 0x{sourceFrame:x} status: {status} flags: {flags} buffer: {buffer} presentationTimeStamp: {presentationTimeStamp} presentationDuration: {presentationDuration}\n{AsString (buffer)}");
+					if (status != VTStatus.Ok)
+						failures.Add ($"DecodeFrameTest #{frameCallbackCounter} failed. Expected status = Ok, got status = {status}");
+				});
 
 			bufferEnumerator.Enumerate ((buffer) => {
-				var status = session.DecodeFrame (buffer, VTDecodeFrameFlags.None, 0x0ee1f00d, out var infoFlags);
+				var status = session.DecodeFrame (buffer, VTDecodeFrameFlags.EnableAsynchronousDecompression, 0x0ee1f00d, out var infoFlags);
+				TestRuntime.NSLog ($"DecodeFrame result: {status}");
 				Assert.That (status, Is.EqualTo (VTStatus.Ok), "DecodeFrame");
 			});
 
 			session.FinishDelayedFrames ();
 			Assert.That (frameCallbackCounter, Is.GreaterThan (0), "Frame callback counter");
+			Assert.That (failures, Is.Empty, "Failures");
 		}
 
 #if !__TVOS__
 		[Test]
 		public void DecodeFrameMultiImageCallbackTest ()
 		{
+			if (!VTDecompressionSession.IsStereoMvHevcDecodeSupported ())
+				Assert.Ignore ("Stereo MV-HEVC decoding is not supported on the current system.");
+
 			TestRuntime.AssertXcodeVersion (16, 0);
 
 			using var url = NSBundle.MainBundle.GetUrlForResource ("hummingbird", "mov");
@@ -211,31 +259,25 @@ namespace MonoTouchFixtures.VideoToolbox {
 			var bufferEnumerator = new SampleBufferEnumerator (url);
 
 			var frameCallbackCounter = 0;
-			var frameCallbackCounter2 = 0;
-			using var session = CreateSession (bufferEnumerator.FormatDescription, (sourceFrame, status, flags, buffer, presentationTimeStamp, presentationDuration) => {
-				Console.WriteLine ($"sourceFrame: 0x{sourceFrame:x} status: {status} flags: {flags} buffer: {buffer} presentationTimeStamp: {presentationTimeStamp} presentationDuration: {presentationDuration}");
-				frameCallbackCounter++;
-			});
+
+			using var session = CreateSession (bufferEnumerator.FormatDescription, null);
 
 			bufferEnumerator.Enumerate ((buffer) => {
-				var status = session.DecodeFrame (buffer, VTDecodeFrameFlags.None, out var infoFlags, (
-								VTStatus status,
-								VTDecodeInfoFlags infoFlags,
-								CVImageBuffer? imageBuffer,
-								CMTaggedBufferGroup? taggedBufferGroup,
-								CMTime presentationTimeStamp,
-								CMTime presentationDuration) => {
-								Console.WriteLine ($"status: {status} infoFlags: {infoFlags} imageBuffer: {imageBuffer} taggedBufferGroup: {taggedBufferGroup} presentationTimeStamp: {presentationTimeStamp} presentationDuration: {presentationDuration} ");
-								frameCallbackCounter2++;
-							});
+				var status = session.DecodeFrame (buffer, VTDecodeFrameFlags.EnableAsynchronousDecompression, out var infoFlags,
+					(status, infoFlags, imageBuffer, taggedBufferGroup, presentationTimeStamp, presentationDuration) => {
+						frameCallbackCounter++;
+						TestRuntime.NSLog ($"DecodeFrameMultiImageCallbackTest decodeframe callback (#{frameCallbackCounter}): status: {status} infoFlags: {infoFlags} imageBuffer: {imageBuffer} taggedBufferGroup: {taggedBufferGroup} presentationTimeStamp: {presentationTimeStamp} presentationDuration: {presentationDuration}\n{AsString (imageBuffer)}");
+						if (status != VTStatus.Ok)
+							failures.Add ($"DecodeFrameMultiImageCallbackTest #{frameCallbackCounter} failed. Expected status = Ok, got status = {status}");
+					});
+				TestRuntime.NSLog ($"DecodeFrame result: {status}");
 				Assert.That (status, Is.EqualTo (VTStatus.Ok), "DecodeFrame");
 			});
 
 			session.FinishDelayedFrames ();
-			Assert.That (frameCallbackCounter, Is.EqualTo (0), "Frame callback counter");
-			Assert.That (frameCallbackCounter2, Is.GreaterThan (0), "Frame callback counter 2");
+			Assert.That (frameCallbackCounter, Is.GreaterThan (0), "Frame callback counter 2");
+			Assert.That (failures, Is.Empty, "Failures");
 		}
-
 
 		[Test]
 		public void DecodeFrameCallbackTest ()
@@ -249,34 +291,32 @@ namespace MonoTouchFixtures.VideoToolbox {
 
 			var bufferEnumerator = new SampleBufferEnumerator (url);
 
-			var frameCallbackCounter = 0;
-			var frameCallbackCounter2 = 0;
 			var frameCallbackCounter3 = 0;
 			var frameCallbackCounter4 = 0;
-			using var session = CreateSession (bufferEnumerator.FormatDescription, (sourceFrame, status, flags, buffer, presentationTimeStamp, presentationDuration) => {
-				Console.WriteLine ($"1: sourceFrame: 0x{sourceFrame:x} status: {status} flags: {flags} buffer: {buffer} presentationTimeStamp: {presentationTimeStamp} presentationDuration: {presentationDuration}");
-				frameCallbackCounter++;
-			});
+			using var session = CreateSession (bufferEnumerator.FormatDescription, null);
 
-			var st = session.SetMultiImageCallback ((IntPtr outputMultiImageReference, IntPtr sourceFrameReference, VTStatus status, VTDecodeInfoFlags infoFlags, CMTaggedBufferGroup? taggedBufferGroup, CMTime presentationTimeStamp, CMTime presentationDuration) =>
+			TestRuntime.NSLog ($"Created session with format descriptor: {bufferEnumerator.FormatDescription}");
+
+			var st = session.SetMultiImageCallback ((outputMultiImageReference, sourceFrameReference, status, infoFlags, taggedBufferGroup, presentationTimeStamp, presentationDuration) =>
 			{
-				Console.WriteLine ($"3: outputMultiImageReference: 0x{outputMultiImageReference:x} sourceFrameReference: 0x{sourceFrameReference:x} status: {status} infoFlags: {infoFlags} taggedBufferGroup: {taggedBufferGroup} presentationTimeStamp: {presentationTimeStamp} presentationDuration: {presentationDuration}");
+				TestRuntime.NSLog ($"DecodeFrameCallbackTest (): outputMultiImageReference: 0x{outputMultiImageReference:x} sourceFrameReference: 0x{sourceFrameReference:x} status: {status} infoFlags: {infoFlags} taggedBufferGroup: {taggedBufferGroup} presentationTimeStamp: {presentationTimeStamp} presentationDuration: {presentationDuration}");
 				frameCallbackCounter3++;
 			}, 0x0a1efeab);
 
 			bufferEnumerator.Enumerate ((buffer) => {
-				var status = session.DecodeFrame (buffer, VTDecodeFrameFlags.None, (NSDictionary?) null, out var infoFlags, new VTDecompressionSession.VTDecompressionOutputHandler ((status, flags, buffer, presentationTimeStamp, presentationDuration) => {
-					Console.WriteLine ($"4: status: {status} flags: {flags} buffer: {buffer} presentationTimeStamp: {presentationTimeStamp} presentationDuration: {presentationDuration}");
-					frameCallbackCounter4++;
-				}));
+				var status = session.DecodeFrame (buffer, VTDecodeFrameFlags.EnableAsynchronousDecompression, (NSDictionary?) null, out var infoFlags,
+					(status, flags, buffer, presentationTimeStamp, presentationDuration) =>
+					{
+						TestRuntime.NSLog ($"DecodeFrameCallbackTest (): status: {status} flags: {flags} buffer: {buffer} presentationTimeStamp: {presentationTimeStamp} presentationDuration: {presentationDuration}\n{AsString (buffer)}");
+						frameCallbackCounter4++;
+					});
 				Assert.That (status, Is.EqualTo (VTStatus.Ok), "DecodeFrame");
 			});
-
 			session.FinishDelayedFrames ();
-			Assert.That (frameCallbackCounter, Is.EqualTo (0), "Frame callback counter");
-			Assert.That (frameCallbackCounter2, Is.EqualTo (0), "Frame callback counter 2");
+
 			Assert.That (frameCallbackCounter3, Is.EqualTo (0), "Frame callback counter 3");
 			Assert.That (frameCallbackCounter4, Is.GreaterThan (0), "Frame callback counter 4");
+			Assert.That (failures, Is.Empty, "Failures");
 		}
 #endif // !__TVOS__
 	}

@@ -60,10 +60,16 @@ public class VTMotionEstimationSessionTest {
 		var pixelBufferAttributes = session.SourcePixelBufferAttributes;
 		Assert.That (pixelBufferAttributes, Is.Not.Null, "SourcePixelBufferAttributes: pixel buffers");
 
+		Console.WriteLine (pixelBufferAttributes.Dictionary);
+
 		var tcs = new TaskCompletionSource<bool> ();
 
-		using var referenceImage = new CVPixelBuffer (width, height, pixelBufferAttributes.PixelFormatType.Value);
-		using var currentImage = new CVPixelBuffer (width, height, pixelBufferAttributes.PixelFormatType.Value);
+		var pixelFormatType = pixelBufferAttributes.PixelFormatTypes [0];
+
+		Console.WriteLine ($"Using pixel format: {pixelFormatType}");
+
+		using var referenceImage = new CVPixelBuffer (width, height, pixelFormatType);
+		using var currentImage = new CVPixelBuffer (width, height, pixelFormatType);
 		var estimatedAnything = false;
 		status = session.EstimateMotionVectors (referenceImage, currentImage, VTMotionEstimationFrameFlags.None, null, (VTStatus status2, VTMotionEstimationInfoFlags infoFlags, NSDictionary? additionalInfo, CVPixelBuffer? motionVectors) => {
 			try {

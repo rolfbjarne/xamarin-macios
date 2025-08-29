@@ -32,13 +32,13 @@ public class CGRectDictionaryTests {
 
 			strongDict = new CGRectDictionary ();
 			strongDict.X = 3;
-			Assert.AreEqual (3, strongDict.X, "X 2");
+			Assert.AreEqual ((nfloat) 3, strongDict.X, "X 2");
 			strongDict.Y = 4;
-			Assert.AreEqual (4, strongDict.Y, "Y 2");
+			Assert.AreEqual ((nfloat) 4, strongDict.Y, "Y 2");
 			strongDict.Width = 5;
-			Assert.AreEqual (5, strongDict.Width, "Width 2");
+			Assert.AreEqual ((nfloat) 5, strongDict.Width, "Width 2");
 			strongDict.Height = 6;
-			Assert.AreEqual (6, strongDict.Height, "Height 2");
+			Assert.AreEqual ((nfloat) 6, strongDict.Height, "Height 2");
 			rect2 = strongDict.ToRect ();
 			Assert.AreEqual (new CGRect (3, 4, 5, 6), rect2, "Rect 2");
 		});
@@ -73,8 +73,8 @@ public class CGRectDictionaryTests {
 		strongDict.X = 3;
 		strongDict.Y = 4;
 		strongDict.Width = 5;
-		strongDict.Height = 6:
+		strongDict.Height = 6;
 		Assert.AreEqual ("CoreGraphics.CGRectDictionary", strongDict.ToString (), "A");
-		Assert.AreEqual ("{\n    X = 3;\n    Y = 4;\n    Width = 5;\n    Height = 6;\n}", strongDict.Dictionary.ToString (), "B");
+		Assert.AreEqual ("{\n    Height = 6;\n    Width = 5;\n    X = 3;\n    Y = 4;\n}", strongDict.Dictionary.ToString (), "B");
 	}
 }

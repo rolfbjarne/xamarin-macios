@@ -30,9 +30,9 @@ public class CGSizeDictionaryTests {
 
 			strongDict = new CGSizeDictionary ();
 			strongDict.Width = 3;
-			Assert.AreEqual (3, strongDict.Width, "Width 2");
+			Assert.AreEqual ((nfloat) 3, strongDict.Width, "Width 2");
 			strongDict.Height = 4;
-			Assert.AreEqual (4, strongDict.Height, "Height 2");
+			Assert.AreEqual ((nfloat) 4, strongDict.Height, "Height 2");
 			size2 = strongDict.ToSize ();
 			Assert.AreEqual (new CGSize (3, 4), size2, "Size 2");
 		});

@@ -136,12 +136,12 @@ namespace Foundation {
 			if (!Dictionary.TryGetValue (key, out var value))
 				return false;
 
-			if (value is null || value == NSNull.Value)
+			if (value is null || value == NSNull.Null)
 				return false;
 
 			number = value as NSNumber;
 			if (number is null)
-				throw new InvalidOperationException (string.Format ("The stored type for the key '{0}' is not 'NSNumber', it's '{1}' (value: {2}).", value.GetType (), value));
+				throw new InvalidOperationException (string.Format ("The stored type for the key '{0}' is not 'NSNumber', it's '{1}' (value: {2}).", key, value.GetType (), value));
 
 			return true;
 		}

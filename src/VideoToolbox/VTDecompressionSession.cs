@@ -26,7 +26,7 @@ namespace VideoToolbox {
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	public class VTDecompressionSession : VTSession {
-		GCHandle callbackHandle;
+		GCHandle? callbackHandle;
 
 		[Preserve (Conditional = true)]
 		internal VTDecompressionSession (NativeHandle handle, bool owns) : base (handle, owns)
@@ -38,8 +38,10 @@ namespace VideoToolbox {
 			if (Handle != IntPtr.Zero)
 				VTDecompressionSessionInvalidate (Handle);
 
-			if (callbackHandle.IsAllocated)
-				callbackHandle.Free ();
+			if (callbackHandle is not null && callbackHandle.Value.IsAllocated) {
+				callbackHandle.Value.Free ();
+				callbackHandle = null;
+			}
 
 			base.Dispose (disposing);
 		}
@@ -85,7 +87,7 @@ namespace VideoToolbox {
 			/* CMVideoFormatDescriptionRef */ IntPtr videoFormatDescription,
 			/* CFDictionaryRef */ IntPtr videoDecoderSpecification, // can be null
 			/* CFDictionaryRef */ IntPtr destinationImageBufferAttributes, // can be null
-			/* const VTDecompressionOutputCallbackRecord* */ VTDecompressionOutputCallbackRecord* outputCallback,
+			/* const VTDecompressionOutputCallbackRecord* CM_NULLABLE */ VTDecompressionOutputCallbackRecord* outputCallback,
 			/* VTDecompressionSessionRef* */ IntPtr* decompressionSessionOut);
 
 
@@ -95,33 +97,24 @@ namespace VideoToolbox {
 		/// <param name="decoderSpecification">Optionally specify which decoder to use</param>
 		/// <param name="destinationImageBufferAttributes">Optionally specify any requirements for the decoded frames.</param>
 		/// <returns>A new <see cref="VTDecompressionSession" /> instance if successful, <see langword="null" /> otherwise.</returns>
-		public static VTDecompressionSession? Create (VTDecompressionOutputCallback outputCallback,
+		public static VTDecompressionSession? Create (VTDecompressionOutputCallback? outputCallback,
 								 CMVideoFormatDescription formatDescription,
 								 VTVideoDecoderSpecification? decoderSpecification = null, // hardware acceleration is default behavior on iOS. no opt-in required.
 								 CVPixelBufferAttributes? destinationImageBufferAttributes = null)
 		{
-			unsafe {
-				return Create (outputCallback, formatDescription, decoderSpecification, destinationImageBufferAttributes?.Dictionary, &DecompressionCallback);
-			}
-		}
-
-		unsafe static VTDecompressionSession? Create (VTDecompressionOutputCallback outputCallback,
-							  CMVideoFormatDescription formatDescription,
-							  VTVideoDecoderSpecification? decoderSpecification, // hardware acceleration is default behavior on iOS. no opt-in required.
-							  NSDictionary? destinationImageBufferAttributes,
-							  delegate* unmanaged</* void* */ IntPtr, /* void* */ IntPtr, /* OSStatus */ VTStatus, VTDecodeInfoFlags, /* CVImageBuffer */ IntPtr, CMTime, CMTime, void> cback)
-		{
-			if (outputCallback is null)
-				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (outputCallback));
-
 			if (formatDescription is null)
 				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (formatDescription));
 
-			var callbackHandle = GCHandle.Alloc (outputCallback);
-			var callbackStruct = new VTDecompressionOutputCallbackRecord () {
-				Proc = cback,
-				DecompressionOutputRefCon = GCHandle.ToIntPtr (callbackHandle),
-			};
+			GCHandle? callbackHandle = null;
+			VTDecompressionOutputCallbackRecord callbackStruct = default;
+
+			if (outputCallback is not null) {
+				callbackHandle = GCHandle.Alloc (outputCallback);
+				unsafe {
+					callbackStruct.Proc = &DecompressionCallback;
+				}
+				callbackStruct.DecompressionOutputRefCon = GCHandle.ToIntPtr (callbackHandle.Value);
+			}
 			IntPtr ret;
 
 			VTStatus result;
@@ -129,7 +122,7 @@ namespace VideoToolbox {
 				result = VTDecompressionSessionCreate (IntPtr.Zero, formatDescription.Handle,
 					decoderSpecification.GetHandle (),
 					destinationImageBufferAttributes.GetHandle (),
-					&callbackStruct,
+					outputCallback is null ? null : &callbackStruct,
 					&ret);
 				GC.KeepAlive (formatDescription);
 				GC.KeepAlive (decoderSpecification);
@@ -141,7 +134,8 @@ namespace VideoToolbox {
 					callbackHandle = callbackHandle,
 				};
 
-			callbackHandle.Free ();
+			if (callbackHandle is not null)
+				callbackHandle.Value.Free ();
 			return null;
 		}
 

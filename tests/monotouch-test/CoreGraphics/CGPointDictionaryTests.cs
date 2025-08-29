@@ -30,9 +30,9 @@ public class CGPointDictionaryTests {
 
 			strongDict = new CGPointDictionary ();
 			strongDict.X = 3;
-			Assert.AreEqual (3, strongDict.X, "X 2");
+			Assert.AreEqual ((nfloat) 3, strongDict.X, "X 2");
 			strongDict.Y = 4;
-			Assert.AreEqual (4, strongDict.Y, "Y 2");
+			Assert.AreEqual ((nfloat) 4, strongDict.Y, "Y 2");
 			point2 = strongDict.ToPoint ();
 			Assert.AreEqual (new CGPoint (3, 4), point2, "Point 2");
 		});

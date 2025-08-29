@@ -372,7 +372,11 @@ namespace MonoTouchFixtures.Foundation {
 			Assert.Multiple (() => {
 				var matrix = new NMatrix3 (1, 2, 3, 4, 5, 6, 7, 8, 9);
 				using var data = NSData.CreateFromValueType<NMatrix3> (matrix);
-				Assert.That (data.Length, Is.EqualTo (sizeof (NMatrix3)), "Length");
+				nint structSize;
+				unsafe {
+					structSize = sizeof (NMatrix3);
+				}
+				Assert.That ((nint) data.Length, Is.EqualTo ((nint) structSize), "Length");
 
 				var matrix2 = data.ToValueType<NMatrix3> ();
 				Assert.That (matrix2, Is.EqualTo (matrix), "RoundTrip");

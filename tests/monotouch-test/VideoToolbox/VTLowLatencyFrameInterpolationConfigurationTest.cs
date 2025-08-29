@@ -28,7 +28,7 @@ public class VTLowLatencyFrameInterpolationConfigurationTest {
 			Assert.That (obj.FrameWidth, Is.EqualTo ((nint) 120), "FrameWidth");
 			Assert.That (obj.FrameHeight, Is.EqualTo ((nint) 240), "FrameHeight");
 			Assert.That (obj.SpatialScaleFactor, Is.EqualTo ((nint) 1), "SpatialScaleFactor");
-			Assert.That (obj.NumberOfInterpolatedFrames, Is.EqualTo ((nint) 2), "NumberOfInterpolatedFrames");
+			Assert.That (obj.NumberOfInterpolatedFrames, Is.EqualTo ((nint) 0 /* this doesn't make sense, should be 2, but I confirmed the same behavior in Xcode */), "NumberOfInterpolatedFrames");
 		});
 	}
 

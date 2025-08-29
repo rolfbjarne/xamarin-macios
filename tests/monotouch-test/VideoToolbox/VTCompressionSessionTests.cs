@@ -148,13 +148,37 @@ namespace MonoTouchFixtures.VideoToolbox {
 			}
 		}
 
-		VTCompressionSession CreateSession ()
+		VTCompressionSession CreateSession (int width = 1024, int height = 768)
 		{
-			var session = VTCompressionSession.Create (1024, 768, CMVideoCodecType.H264,
+			var session = VTCompressionSession.Create (width, height, CMVideoCodecType.H264,
 				(sourceFrame, status, flags, buffer) => { });
 			return session;
 		}
 
+
+		VTCompressionSession CreateSession (bool stronglyTyped, int width = 640, int height = 480, CMVideoCodecType codecType = CMVideoCodecType.H264, VTVideoEncoderSpecification? encoder_specification = null, VTCompressionSession.VTCompressionOutputCallback? callback = null, CVPixelBufferAttributes? source_attributes = null)
+		{
+			encoder_specification ??= new VTVideoEncoderSpecification ();
+			source_attributes ??= new CVPixelBufferAttributes (CVPixelFormatType.CV420YpCbCr8BiPlanarFullRange, width, height);
+
+			if (stronglyTyped) {
+				return VTCompressionSession.Create (
+						width, height,
+						codecType,
+						callback,
+						encoder_specification,
+						source_attributes
+						);
+			} else {
+				return VTCompressionSession.Create (
+						width, height,
+						CMVideoCodecType.H264,
+						callback,
+						encoder_specification,
+						source_attributes.Dictionary
+						);
+			}
+		}
 		[TestCase (true)]
 		[TestCase (false)]
 		public void TestCallback (bool stronglyTyped)
@@ -187,8 +211,9 @@ namespace MonoTouchFixtures.VideoToolbox {
 			var failures = new List<string> ();
 			var callback = new VTCompressionSession.VTCompressionOutputCallback ((IntPtr sourceFrame, VTStatus status, VTEncodeInfoFlags flags, CMSampleBuffer buffer) => {
 				Interlocked.Increment (ref callbackCounter);
+				TestRuntime.NSLog ($"Callback #{callbackCounter}: sourceFrame: 0x{sourceFrame:x} status: {status} flags: {flags} buffer: {buffer}");
 				if (status != VTStatus.Ok)
-					failures.Add ($"Callback #{callbackCounter} failed. Expected status = Ok, got status = {status}");
+					failures.Add ($"Callback #{callbackCounter} failed C. Expected status = Ok, got status = {status}");
 			});
 			using var session = CreateSession (stronglyTyped, callback: callback);
 
@@ -197,39 +222,15 @@ namespace MonoTouchFixtures.VideoToolbox {
 				using var imageBuffer = new CVPixelBuffer (width, height, CVPixelFormatType.CV420YpCbCr8BiPlanarFullRange);
 				var pts = new CMTime (40 * i, 1);
 				status = session.EncodeFrame (imageBuffer, pts, duration, null, imageBuffer, out var infoFlags);
-				Assert.AreEqual (status, VTStatus.Ok, $"status #{i}");
+				Assert.AreEqual (VTStatus.Ok, status, $"status #{i}");
 				// This looks weird, but it seems the video encoder can become overwhelmed otherwise, and it
 				// will start failing (and taking a long time to do so, eventually timing out the test).
 				Thread.Sleep (10);
 			}
 			status = session.CompleteFrames (new CMTime (40 * frameCount, 1));
-			Assert.AreEqual (status, VTStatus.Ok, "status finished");
-			Assert.AreEqual (callbackCounter, frameCount, "frame count");
+			Assert.AreEqual (VTStatus.Ok, status, "status finished");
+			Assert.AreEqual (frameCount, callbackCounter, "frame count");
 			Assert.That (failures, Is.Empty, "no callback failures");
-		}
-
-		VTCompressionSession CreateSession (bool stronglyTyped, int width = 640, int height = 480, CMVideoCodecType codecType = CMVideoCodecType.H264, VTVideoEncoderSpecification? encoder_specification = null, VTCompressionSession.VTCompressionOutputCallback? callback = null, CVPixelBufferAttributes? source_attributes = null)
-		{
-			encoder_specification ??= new VTVideoEncoderSpecification ();
-			source_attributes ??= new CVPixelBufferAttributes (CVPixelFormatType.CV420YpCbCr8BiPlanarFullRange, width, height);
-
-			if (stronglyTyped) {
-				return VTCompressionSession.Create (
-						width, height,
-						codecType,
-						callback,
-						encoder_specification,
-						source_attributes
-						);
-			} else {
-				return VTCompressionSession.Create (
-						width, height,
-						CMVideoCodecType.H264,
-						callback,
-						encoder_specification,
-						source_attributes.Dictionary
-						);
-			}
 		}
 
 #if !__TVOS__
@@ -239,6 +240,9 @@ namespace MonoTouchFixtures.VideoToolbox {
 		[TestCase (false, false)]
 		public void TestMultiImage (bool stronglyTyped, bool customCallback)
 		{
+			if (!VTCompressionSession.IsStereoMvHevcEncodeSupported ())
+				Assert.Ignore ("Stereo MV-HEVC encoding is not supported on the current system.");
+
 			Exception ex = null;
 			var thread = new Thread (() => {
 				try {
@@ -250,7 +254,11 @@ namespace MonoTouchFixtures.VideoToolbox {
 			thread.IsBackground = true;
 			thread.Start ();
 			var completed = thread.Join (TimeSpan.FromSeconds (30));
+
+			if (ex is NUnit.Framework.Internal.NUnitException)
+				throw ex;
 			Assert.IsNull (ex); // We check for this before the completion assert, to show any other assertion failures that may occur in CI.
+
 			if (!completed)
 				TestRuntime.IgnoreInCI ("This test fails occasionally in CI");
 			Assert.IsTrue (completed, "timed out");
@@ -266,30 +274,34 @@ namespace MonoTouchFixtures.VideoToolbox {
 			var failures = new List<string> ();
 			var callback = new VTCompressionSession.VTCompressionOutputCallback ((IntPtr sourceFrame, VTStatus status, VTEncodeInfoFlags flags, CMSampleBuffer buffer) => {
 				Interlocked.Increment (ref callbackCounter);
+				TestRuntime.NSLog ($"Callback #{callbackCounter}: sourceFrame: 0x{sourceFrame:x} status: {status} flags: {flags} buffer: {buffer}");
 				if (status != VTStatus.Ok)
-					failures.Add ($"Callback #{callbackCounter} failed. Expected status = Ok, got status = {status}");
+					failures.Add ($"Callback #{callbackCounter} failed A. Expected status = Ok, got status = {status}");
 			});
 			var callback2 = new VTCompressionSession.VTCompressionOutputHandler ((VTStatus status, VTEncodeInfoFlags flags, CMSampleBuffer buffer) => {
 				Interlocked.Increment (ref callbackCounter2);
+				TestRuntime.NSLog ($"Callback2 #{callbackCounter2}: status: {status} flags: {flags} buffer: {buffer}");
 				if (status != VTStatus.Ok)
-					failures.Add ($"Callback2 #{callbackCounter2} failed. Expected status = Ok, got status = {status}");
+					failures.Add ($"Callback2 #{callbackCounter2} failed B. Expected status = Ok, got status = {status}");
 			});
 
-			using var session = CreateSession (stronglyTyped, callback: callback);
-
-			var frameCount = 20;
-			var chunks = 3;
 			var width = 120;
 			var height = 120;
+			var codecType = CMVideoCodecType.Hevc;
+			var pixelFormat = CVPixelFormatType.CV420YpCbCr8BiPlanarVideoRange;
+			using var session = CreateSession (stronglyTyped, width: width, height: height, codecType: codecType, callback: customCallback ? null : callback);
+
+			var frameCount = 3;
+			var chunks = 2;
 			for (var i = 0; i < frameCount; i++) {
 				var buffers = new List<CVPixelBuffer> ();
 				var tagCollections = new List<CMTagCollection> ();
 
-				for (var c = 0; c < chunks; c++) {
-					var imageBuffer = new CVPixelBuffer (width, height, CVPixelFormatType.CV420YpCbCr8BiPlanarFullRange);
-					buffers.Add (imageBuffer);
-					tagCollections.Add (CMTagCollection.Create (CMTag.MediaTypeVideo));
-				}
+				buffers.Add (new CVPixelBuffer (width, height, pixelFormat));
+				tagCollections.Add (CMTagCollection.Create (CMTag.MediaTypeVideo, CMTag.StereoLeftEye));
+
+				buffers.Add (new CVPixelBuffer (width, height, pixelFormat));
+				tagCollections.Add (CMTagCollection.Create (CMTag.MediaTypeVideo, CMTag.StereoRightEye));
 
 				using var taggedBufferGroup = CMTaggedBufferGroup.Create (tagCollections.ToArray (), buffers.ToArray (), out var taggedBufferGroupStatus);
 				Assert.That (taggedBufferGroup, Is.Not.Null, $"TaggedBuff1erGroup #{i}");
@@ -300,22 +312,22 @@ namespace MonoTouchFixtures.VideoToolbox {
 				if (customCallback) {
 					status = session.EncodeMultiImageFrame (taggedBufferGroup, pts, duration, null, out infoFlags, callback2);
 				} else {
-					status = session.EncodeMultiImageFrame (taggedBufferGroup, pts, duration, null, IntPtr.Zero, out infoFlags);
+					status = session.EncodeMultiImageFrame (taggedBufferGroup, pts, duration, null, 0x0ee1f00d, out infoFlags);
 				}
-				Assert.AreEqual (status, VTStatus.Ok, $"status #{i}");
-				Assert.That (infoFlags, Is.EqualTo ((VTEncodeInfoFlags) 0), $"infoFlags #{i}");
+				Assert.AreEqual (VTStatus.Ok, status, $"status #{i}");
+				Assert.That (infoFlags, Is.EqualTo (VTEncodeInfoFlags.Asynchronous), $"infoFlags #{i}");
 
 				foreach (var img in buffers)
 					img.Dispose ();
 			}
 			status = session.CompleteFrames (new CMTime (40 * frameCount * chunks, 1));
-			Assert.AreEqual (status, VTStatus.Ok, "status finished");
+			Assert.AreEqual (VTStatus.Ok, status, "status finished");
 			if (customCallback) {
-				Assert.AreEqual (callbackCounter, 0, "frame count A");
-				Assert.AreEqual (callbackCounter2, frameCount * chunks, "frame count A2");
+				Assert.AreEqual (0, callbackCounter, "frame count A");
+				Assert.AreEqual (frameCount, callbackCounter2, "frame count A2");
 			} else {
-				Assert.AreEqual (callbackCounter, frameCount * chunks, "frame count B");
-				Assert.AreEqual (callbackCounter2, 0, "frame count B2");
+				Assert.AreEqual (frameCount, callbackCounter, "frame count B");
+				Assert.AreEqual (0, callbackCounter2, "frame count B2");
 			}
 			Assert.That (failures, Is.Empty, "no callback failures");
 		}

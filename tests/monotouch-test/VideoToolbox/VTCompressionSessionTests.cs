@@ -156,10 +156,10 @@ namespace MonoTouchFixtures.VideoToolbox {
 		}
 
 
-		VTCompressionSession CreateSession (bool stronglyTyped, int width = 640, int height = 480, CMVideoCodecType codecType = CMVideoCodecType.H264, VTVideoEncoderSpecification? encoder_specification = null, VTCompressionSession.VTCompressionOutputCallback? callback = null, CVPixelBufferAttributes? source_attributes = null)
+		VTCompressionSession CreateSession (bool stronglyTyped, int width = 640, int height = 480, CVPixelFormatType pixelFormatType = CVPixelFormatType.CV420YpCbCr8BiPlanarFullRange, CMVideoCodecType codecType = CMVideoCodecType.H264, VTVideoEncoderSpecification? encoder_specification = null, VTCompressionSession.VTCompressionOutputCallback? callback = null, CVPixelBufferAttributes? source_attributes = null)
 		{
 			encoder_specification ??= new VTVideoEncoderSpecification ();
-			source_attributes ??= new CVPixelBufferAttributes (CVPixelFormatType.CV420YpCbCr8BiPlanarFullRange, width, height);
+			source_attributes ??= new CVPixelBufferAttributes (pixelFormatType, width, height);
 
 			if (stronglyTyped) {
 				return VTCompressionSession.Create (
@@ -213,7 +213,7 @@ namespace MonoTouchFixtures.VideoToolbox {
 				Interlocked.Increment (ref callbackCounter);
 				TestRuntime.NSLog ($"Callback #{callbackCounter}: sourceFrame: 0x{sourceFrame:x} status: {status} flags: {flags} buffer: {buffer}");
 				if (status != VTStatus.Ok)
-					failures.Add ($"Callback #{callbackCounter} failed C. Expected status = Ok, got status = {status}");
+					failures.Add ($"Callback #{callbackCounter} failed C. Expected status = Ok, got status = {status} = 0x{(int) status:x}");
 			});
 			using var session = CreateSession (stronglyTyped, callback: callback);
 
@@ -276,20 +276,20 @@ namespace MonoTouchFixtures.VideoToolbox {
 				Interlocked.Increment (ref callbackCounter);
 				TestRuntime.NSLog ($"Callback #{callbackCounter}: sourceFrame: 0x{sourceFrame:x} status: {status} flags: {flags} buffer: {buffer}");
 				if (status != VTStatus.Ok)
-					failures.Add ($"Callback #{callbackCounter} failed A. Expected status = Ok, got status = {status}");
+					failures.Add ($"Callback #{callbackCounter} failed A. Expected status = Ok, got status = {status} = 0x{(int) status:x}");
 			});
 			var callback2 = new VTCompressionSession.VTCompressionOutputHandler ((VTStatus status, VTEncodeInfoFlags flags, CMSampleBuffer buffer) => {
 				Interlocked.Increment (ref callbackCounter2);
 				TestRuntime.NSLog ($"Callback2 #{callbackCounter2}: status: {status} flags: {flags} buffer: {buffer}");
 				if (status != VTStatus.Ok)
-					failures.Add ($"Callback2 #{callbackCounter2} failed B. Expected status = Ok, got status = {status}");
+					failures.Add ($"Callback2 #{callbackCounter2} failed B. Expected status = Ok, got status = {status} = 0x{(int) status:x}");
 			});
 
 			var width = 120;
 			var height = 120;
 			var codecType = CMVideoCodecType.Hevc;
 			var pixelFormat = CVPixelFormatType.CV420YpCbCr8BiPlanarVideoRange;
-			using var session = CreateSession (stronglyTyped, width: width, height: height, codecType: codecType, callback: customCallback ? null : callback);
+			using var session = CreateSession (stronglyTyped, width: width, height: height, pixelFormatType: pixelFormat, codecType: codecType, callback: customCallback ? null : callback);
 
 			var frameCount = 3;
 			var chunks = 2;

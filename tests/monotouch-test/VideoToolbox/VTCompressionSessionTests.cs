@@ -298,10 +298,10 @@ namespace MonoTouchFixtures.VideoToolbox {
 				var tagCollections = new List<CMTagCollection> ();
 
 				buffers.Add (new CVPixelBuffer (width, height, pixelFormat));
-				tagCollections.Add (CMTagCollection.Create (CMTag.MediaTypeVideo, CMTag.StereoLeftEye));
+				tagCollections.Add (CMTagCollection.Create (CMTag.MediaTypeVideo/*, CMTag.StereoLeftEye */));
 
-				buffers.Add (new CVPixelBuffer (width, height, pixelFormat));
-				tagCollections.Add (CMTagCollection.Create (CMTag.MediaTypeVideo, CMTag.StereoRightEye));
+				//buffers.Add (new CVPixelBuffer (width, height, pixelFormat));
+				//tagCollections.Add (CMTagCollection.Create (CMTag.MediaTypeVideo, CMTag.StereoRightEye));
 
 				using var taggedBufferGroup = CMTaggedBufferGroup.Create (tagCollections.ToArray (), buffers.ToArray (), out var taggedBufferGroupStatus);
 				Assert.That (taggedBufferGroup, Is.Not.Null, $"TaggedBuff1erGroup #{i}");

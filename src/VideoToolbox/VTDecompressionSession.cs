@@ -76,9 +76,8 @@ namespace VideoToolbox {
 			// step further in the inheritance hierarchy and supply the callback a CVPixelBuffer and the callback supplies 
 			// to the developer a CVImageBuffer, so the developer can choose when to use one or the other and we mimic
 			// what Apple provides on its headers.
-			using (var sampleBuffer = new CVPixelBuffer (imageBufferPtr, owns: false)) {
-				func (sourceFrame, status, infoFlags, sampleBuffer, presentationTimeStamp, presentationDuration);
-			}
+			using var sampleBuffer = imageBufferPtr == IntPtr.Zero ? null : new CVPixelBuffer (imageBufferPtr, owns: false);
+			func (sourceFrame, status, infoFlags, sampleBuffer, presentationTimeStamp, presentationDuration);
 		}
 
 		[DllImport (Constants.VideoToolboxLibrary)]

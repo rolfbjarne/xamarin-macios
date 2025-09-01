@@ -10,7 +10,10 @@
 
 using System;
 using System.IO;
+using System.Numerics;
 using System.Runtime.InteropServices;
+
+using CoreGraphics;
 using Foundation;
 using ObjCRuntime;
 #if MONOMAC
@@ -361,6 +364,29 @@ namespace MonoTouchFixtures.Foundation {
 				// so we go back to showing the result of the `description` selector
 				Assert.That (d.ToString (), Is.EqualTo (d.Description), "ToString");
 			}
+		}
+
+		[Test]
+		public void ToFromValueType ()
+		{
+			Assert.Multiple (() => {
+				var matrix = new NMatrix3 (1, 2, 3, 4, 5, 6, 7, 8, 9);
+				using var data = NSData.CreateFromValueType<NMatrix3> (matrix);
+				nint structSize;
+				unsafe {
+					structSize = sizeof (NMatrix3);
+				}
+				Assert.That ((nint) data.Length, Is.EqualTo ((nint) structSize), "Length");
+
+				var matrix2 = data.ToValueType<NMatrix3> ();
+				Assert.That (matrix2, Is.EqualTo (matrix), "RoundTrip");
+
+				// not enough data in the NSData
+				Assert.Throws<ArgumentOutOfRangeException> (() => data.ToValueType<Matrix4x4> (), "Matrix4x4");
+
+				// reading less than the full NSData contents is OK
+				Assert.That (data.ToValueType<float> (), Is.EqualTo ((float) 1), "float");
+			});
 		}
 	}
 }

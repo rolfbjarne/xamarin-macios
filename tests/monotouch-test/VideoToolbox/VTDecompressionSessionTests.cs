@@ -124,10 +124,17 @@ namespace MonoTouchFixtures.VideoToolbox {
 		{
 			if (vd is null)
 				return $"null";
-			return $"MediaType: {vd.MediaType} Dimensions: {vd.Dimensions} VideoCodecType: {vd.VideoCodecType} Extensions: {vd.GetExtensions ()}";
+			var tagCollections = vd.TagCollections;
+			var rv = $"MediaType: {vd.MediaType} Dimensions: {vd.Dimensions} VideoCodecType: {vd.VideoCodecType} Extensions: {vd.GetExtensions ()} Tag Collections: {tagCollections?.Length ?? 0}";
+			if (tagCollections is not null) {
+				foreach (var tc in tagCollections) {
+					rv += $"\n    {tc}";
+				}
+			}
+			return rv;
 		}
 
-		static string AsString (CVImageBuffer? buffer)
+		public static string AsString (CVImageBuffer? buffer)
 		{
 			if (buffer is null)
 				return "null";
@@ -148,14 +155,14 @@ namespace MonoTouchFixtures.VideoToolbox {
 			AVAssetTrack? videoTrack;
 			AVAsset? asset;
 
-			public SampleBufferEnumerator (NSUrl url)
+			public SampleBufferEnumerator (NSUrl url, AVMediaCharacteristics characteristic = AVMediaCharacteristics.Visual)
 			{
 				asset = AVAsset.FromUrl (url);
 				Assert.That (asset, Is.Not.Null, "Asset");
 
 				var loaded = new TaskCompletionSource<CMVideoFormatDescription> ();
 
-				asset.LoadTrackWithMediaCharacteristics (AVMediaCharacteristics.Visual.GetConstant (), (tracks, error) =>
+				asset.LoadTrackWithMediaCharacteristics (characteristic.GetConstant (), (tracks, error) =>
 				{
 					try {
 						Assert.Null (error, "Failed to load track");
@@ -166,7 +173,7 @@ namespace MonoTouchFixtures.VideoToolbox {
 						loaded.SetResult (format);
 
 						var tr = tracks.ToArray ();
-						TestRuntime.NSLog ($"Loaded {url} with {tr.Length} visual tracks.");
+						TestRuntime.NSLog ($"Loaded {url} with {tr.Length} '{characteristic}' tracks.");
 						for (var i = 0; i < tr.Length; i++) {
 							TestRuntime.NSLog ($"    Track #{i+1}: {tr [i]}");
 							var fd = tr [i].FormatDescriptions;
@@ -256,7 +263,7 @@ namespace MonoTouchFixtures.VideoToolbox {
 
 			var failures = new List<string> ();
 
-			var bufferEnumerator = new SampleBufferEnumerator (url);
+			var bufferEnumerator = new SampleBufferEnumerator (url, characteristic: AVMediaCharacteristics.ContainsStereoMultiviewVideo);
 
 			var frameCallbackCounter = 0;
 

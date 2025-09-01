@@ -19,6 +19,8 @@ public class DictionaryContainerTest {
 	[Test]
 	public void Matrix ()
 	{
+		TestRuntime.AssertXcodeVersion (26, 0);
+
 		Assert.Multiple (() => {
 			var dict = new VTCompressionPropertyCameraCalibration ();
 
@@ -36,6 +38,8 @@ public class DictionaryContainerTest {
 	[Test]
 	public void FloatArray ()
 	{
+		TestRuntime.AssertXcodeVersion (26, 0);
+
 		Assert.Multiple (() => {
 			var dict = new VTCompressionPropertyCameraCalibration ();
 

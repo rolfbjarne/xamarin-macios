@@ -18,6 +18,8 @@ public class VTCompressionPropertyCameraCalibrationTest {
 	[Test]
 	public void DefaultValues ()
 	{
+		TestRuntime.AssertXcodeVersion (26, 0);
+
 		Assert.Multiple (() => {
 			var dict = new VTCompressionPropertyCameraCalibration ();
 

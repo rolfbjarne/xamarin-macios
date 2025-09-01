@@ -840,15 +840,15 @@ namespace VideoToolbox {
 
 		[iOS (17, 0), NoTV, MacCatalyst (17, 0), Mac (14, 0)]
 		[Export ("MvHevcVideoLayerIds")]
-		NSNumber [] MvHevcVideoLayerIds { get; }
+		NSNumber [] MvHevcVideoLayerIds { get; set; }
 
 		[iOS (17, 0), NoTV, MacCatalyst (17, 0), Mac (14, 0)]
 		[Export ("MvHevcViewIds")]
-		NSNumber [] MvHevcViewIds { get; }
+		NSNumber [] MvHevcViewIds { get; set ; }
 
 		[iOS (17, 0), NoTV, MacCatalyst (17, 0), Mac (14, 0)]
 		[Export ("MvHevcLeftAndRightViewIds")]
-		NSNumber [] MvHevcLeftAndRightViewIds { get; }
+		NSNumber [] MvHevcLeftAndRightViewIds { get; set; }
 
 		[iOS (17, 0), NoTV, MacCatalyst (17, 0), Mac (14, 0)]
 		[Export ("HeroEye")]
@@ -878,15 +878,15 @@ namespace VideoToolbox {
 
 		[iOS (17, 0), NoTV, MacCatalyst (17, 0), Mac (14, 0)]
 		[Export ("HasLeftStereoEyeView")]
-		bool HasLeftStereoEyeView { get; }
+		bool HasLeftStereoEyeView { get; set; }
 
 		[iOS (17, 0), NoTV, MacCatalyst (17, 0), Mac (14, 0)]
 		[Export ("HasRightStereoEyeView")]
-		bool HasRightStereoEyeView { get; }
+		bool HasRightStereoEyeView { get; set; }
 
 		[iOS (17, 0), NoTV, MacCatalyst (17, 0), Mac (14, 0)]
 		[Export ("HorizontalFieldOfView")]
-		uint HorizontalFieldOfView { get; }
+		uint HorizontalFieldOfView { get; set; }
 
 		[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 		[Export ("VariableBitRate")]

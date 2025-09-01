@@ -134,7 +134,7 @@ namespace MonoTouchFixtures.VideoToolbox {
 		// see CompressionSessionGetSupportedPropertiesTest.
 		[Test]
 #if MONOMAC || __MACCATALYST__ // https://bugzilla.xamarin.com/show_bug.cgi?id=51258
-		[Ignore ("Crashes with SIGSEGV when trying to dispose session after calling session.GetSerializableProperties ()")]
+		// [Ignore ("Crashes with SIGSEGV when trying to dispose session after calling session.GetSerializableProperties ()")]
 #endif
 		public void CompressionSessionGetSerializablePropertiesTest ()
 		{
@@ -180,24 +180,25 @@ namespace MonoTouchFixtures.VideoToolbox {
 						);
 			}
 
-			TestRuntime.NSLog ($"Created session: {rv}");
-			TestRuntime.NSLog ($"Properties: {rv.GetProperties ()}");
-			TestRuntime.NSLog ($"Properties: {rv.GetProperties ()?.Dictionary}");
-			TestRuntime.NSLog ($"SerializableProperties: {rv.GetSerializableProperties ()}");
-			TestRuntime.NSLog ($"SupportedProperties: {rv.GetSupportedProperties ()}");
+			// TestRuntime.NSLog ($"Created session: {rv}");
+			// TestRuntime.NSLog ($"Properties: {rv.GetProperties ()}");
+			// TestRuntime.NSLog ($"Properties: {rv.GetProperties ()?.Dictionary}");
+			// TestRuntime.NSLog ($"SerializableProperties: {rv.GetSerializableProperties ()}");
+			// TestRuntime.NSLog ($"SupportedProperties: {rv.GetSupportedProperties ()}");
 
-			var supportedProps = rv.GetSupportedProperties ();
-			foreach (var key in supportedProps.Keys) {
-				var value = rv.GetProperty ((NSString) key);
-				TestRuntime.NSLog ($"Property '{key}'{(value is null ? " => null" : "")}");
-				if (value is not null)
-					TestRuntime.NSLog ($"    = {value} ({value?.GetType ()})");
-			}
-			rv.SetProperty (VTCompressionPropertyKey.MvHevcVideoLayerIds, NSArray.FromNSObjects (new NSNumber (0), new NSNumber (1)));
-			rv.SetProperty (VTCompressionPropertyKey.MvHevcViewIds, NSArray.FromNSObjects (new NSNumber (0), new NSNumber (1)));
-			rv.SetProperty (VTCompressionPropertyKey.MvHevcLeftAndRightViewIds, NSArray.FromNSObjects (new NSNumber (0), new NSNumber (1)));
-			rv.SetProperty (VTCompressionPropertyKey.HasLeftStereoEyeView, new NSNumber (1));
-			rv.SetProperty (VTCompressionPropertyKey.HasRightStereoEyeView, new NSNumber (1));
+			// var supportedProps = rv.GetSupportedProperties ();
+			// foreach (var key in supportedProps.Keys) {
+			// 	var value = rv.GetProperty ((NSString) key);
+			// 	TestRuntime.NSLog ($"Property '{key}'{(value is null ? " => null" : "")}");
+			// 	if (value is not null)
+			// 		TestRuntime.NSLog ($"    = {value} ({value?.GetType ()})");
+			// }
+
+			// rv.SetProperty (VTCompressionPropertyKey.MvHevcVideoLayerIds, NSArray.FromNSObjects (new NSNumber (0), new NSNumber (1)));
+			// rv.SetProperty (VTCompressionPropertyKey.MvHevcViewIds, NSArray.FromNSObjects (new NSNumber (0), new NSNumber (1)));
+			// rv.SetProperty (VTCompressionPropertyKey.MvHevcLeftAndRightViewIds, NSArray.FromNSObjects (new NSNumber (0), new NSNumber (1)));
+			// rv.SetProperty (VTCompressionPropertyKey.HasLeftStereoEyeView, new NSNumber (1));
+			// rv.SetProperty (VTCompressionPropertyKey.HasRightStereoEyeView, new NSNumber (1));
 			return rv;
 		}
 		[TestCase (true)]
@@ -312,6 +313,16 @@ namespace MonoTouchFixtures.VideoToolbox {
 			var pixelFormat = CVPixelFormatType.CV420YpCbCr8BiPlanarVideoRange;
 			using var session = CreateSession2 (stronglyTyped, width: width, height: height, pixelFormatType: pixelFormat, codecType: codecType, callback: customCallback ? null : callback);
 
+			var IDs = new [] { new NSNumber (0), new NSNumber (1) };
+			var compressionProperties = new VTCompressionProperties {
+				MvHevcVideoLayerIds = IDs,
+				MvHevcViewIds = IDs,
+				MvHevcLeftAndRightViewIds = IDs,
+				HasLeftStereoEyeView = true,
+				HasRightStereoEyeView = true,
+			};
+			session.SetCompressionProperties (compressionProperties);
+
 			var frameCount = 3;
 			var chunks = 2;
 			for (var i = 0; i < frameCount; i++) {
@@ -348,7 +359,6 @@ namespace MonoTouchFixtures.VideoToolbox {
 
 				foreach (var img in buffers)
 					img.Dispose ();
-				Thread.Sleep (500);
 			}
 			status = session.CompleteFrames (new CMTime (40 * frameCount * chunks, 1));
 			GC.KeepAlive (session);

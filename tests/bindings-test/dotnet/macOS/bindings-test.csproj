@@ -2,6 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net$(BundledNETCoreAppTargetFrameworkVersion)-macos</TargetFramework>
+    <ProcessEnums>true</ProcessEnums>
   </PropertyGroup>
 
   <!-- Imports of the form '../shared.fsproj' will be processed by xharness -->

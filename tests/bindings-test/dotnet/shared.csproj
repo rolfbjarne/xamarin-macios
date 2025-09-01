@@ -20,6 +20,7 @@
     <WarningsAsErrors>Nullable</WarningsAsErrors>
 
     <DefineConstants>$(DefineConstants);BINDINGS_TEST</DefineConstants>
+    <ProcessEnums>true</ProcessEnums>
   </PropertyGroup>
 
   <Import Project="$(RootTestsDirectory)/common/shared-dotnet.csproj" />

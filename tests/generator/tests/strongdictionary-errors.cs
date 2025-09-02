@@ -112,13 +112,13 @@ namespace BackingField {
 		UInt64FieldType UInt64Value { get; }
 		NSStringFieldType NSStringValue { get; }
 
-		NSIntegerFieldType[] ArrayOfNSIntegerValue { get; }
-		NSUIntegerFieldType[] ArrayOfNSUIntegerValue { get; }
-		NSNumberFieldType[] ArrayOfNSNumberValue { get; }
-		Int32FieldType[] ArrayOfInt32Value { get; }
-		Int64FieldType[] ArrayOfInt64Value { get; }
-		UInt32FieldType[] ArrayOfUInt32Value { get; }
-		UInt64FieldType[] ArrayOfUInt64Value { get; }
-		NSStringFieldType[] ArrayOfNSStringValue { get; }
+		NSIntegerFieldType [] ArrayOfNSIntegerValue { get; }
+		NSUIntegerFieldType [] ArrayOfNSUIntegerValue { get; }
+		NSNumberFieldType [] ArrayOfNSNumberValue { get; }
+		Int32FieldType [] ArrayOfInt32Value { get; }
+		Int64FieldType [] ArrayOfInt64Value { get; }
+		UInt32FieldType [] ArrayOfUInt32Value { get; }
+		UInt64FieldType [] ArrayOfUInt64Value { get; }
+		NSStringFieldType [] ArrayOfNSStringValue { get; }
 	}
 }

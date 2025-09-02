@@ -194,7 +194,7 @@ namespace VideoToolbox {
 						GetCheckedHandle (),
 						sampleBuffer.GetNonNullHandle (nameof (sampleBuffer)),
 						decodeFlags,
-						(VTDecodeInfoFlags *) Unsafe.AsPointer<VTDecodeInfoFlags> (ref infoFlags),
+						(VTDecodeInfoFlags*) Unsafe.AsPointer<VTDecodeInfoFlags> (ref infoFlags),
 						&outputHandlerBlock);
 			GC.KeepAlive (sampleBuffer);
 			return rv;
@@ -465,7 +465,7 @@ namespace VideoToolbox {
 				decodeFlags,
 				frameOptions.GetHandle (),
 				sourceFrameReference,
-				(VTDecodeInfoFlags *) Unsafe.AsPointer<VTDecodeInfoFlags> (ref infoFlags));
+				(VTDecodeInfoFlags*) Unsafe.AsPointer<VTDecodeInfoFlags> (ref infoFlags));
 
 			GC.KeepAlive (sampleBuffer);
 			GC.KeepAlive (frameOptions);
@@ -526,7 +526,7 @@ namespace VideoToolbox {
 						sampleBuffer.GetNonNullHandle (nameof (sampleBuffer)),
 						decodeFlags,
 						frameOptions.GetHandle (),
-						(VTDecodeInfoFlags *) Unsafe.AsPointer<VTDecodeInfoFlags> (ref infoFlags),
+						(VTDecodeInfoFlags*) Unsafe.AsPointer<VTDecodeInfoFlags> (ref infoFlags),
 						&outputHandlerBlock);
 			GC.KeepAlive (sampleBuffer);
 			GC.KeepAlive (frameOptions);
@@ -563,7 +563,7 @@ namespace VideoToolbox {
 			CMTime presentationDuration);
 
 		[UnmanagedCallersOnly]
-		static unsafe void VTDecompressionOutputHandlerTrampoline (BlockLiteral *block, VTStatus status, VTDecodeInfoFlags infoFlags, IntPtr imageBuffer, CMTime presentationTimeStamp, CMTime presentationDuration)
+		static unsafe void VTDecompressionOutputHandlerTrampoline (BlockLiteral* block, VTStatus status, VTDecodeInfoFlags infoFlags, IntPtr imageBuffer, CMTime presentationTimeStamp, CMTime presentationDuration)
 		{
 			var del = BlockLiteral.GetTarget<VTDecompressionOutputHandler> ((IntPtr) block);
 			if (del is not null) {

@@ -162,8 +162,7 @@ namespace MonoTouchFixtures.VideoToolbox {
 
 				var loaded = new TaskCompletionSource<CMVideoFormatDescription> ();
 
-				asset.LoadTrackWithMediaCharacteristics (characteristic.GetConstant (), (tracks, error) =>
-				{
+				asset.LoadTrackWithMediaCharacteristics (characteristic.GetConstant (), (tracks, error) => {
 					try {
 						Assert.Null (error, "Failed to load track");
 
@@ -214,7 +213,7 @@ namespace MonoTouchFixtures.VideoToolbox {
 
 					iterator (buffer);
 
-					sampleCount = cursor.StepInDecodeOrder(1);
+					sampleCount = cursor.StepInDecodeOrder (1);
 				} while (sampleCount == 1);
 			}
 		}
@@ -320,8 +319,7 @@ namespace MonoTouchFixtures.VideoToolbox {
 						failures.Add ($"Output callback #{frameCallbackCounter} failed: Expected sourceFrame = 0x{sourceFrameValue:x}, got sourceFrame = 0x{sourceFrame:x}");
 				});
 
-			var st = session.SetMultiImageCallback ((outputMultiImageReference, sourceFrameReference, status, infoFlags, taggedBufferGroup, presentationTimeStamp, presentationDuration) =>
-			{
+			var st = session.SetMultiImageCallback ((outputMultiImageReference, sourceFrameReference, status, infoFlags, taggedBufferGroup, presentationTimeStamp, presentationDuration) => {
 				// TestRuntime.NSLog ($"Multi output callback #{multiFrameCallbackCounter}: outputMultiImageReference: 0x{outputMultiImageReference:x} sourceFrameReference: 0x{sourceFrameReference:x} status: {status} infoFlags: {infoFlags} taggedBufferGroup: {taggedBufferGroup} presentationTimeStamp: {presentationTimeStamp} presentationDuration: {presentationDuration}");
 				if (sourceFrameReference != sourceFrameValue)
 					failures.Add ($"Multi output callback #{multiFrameCallbackCounter} failed: Expected sourceFrame = 0x{sourceFrameValue:x}, got sourceFrame = 0x{sourceFrameReference:x}");
@@ -360,8 +358,7 @@ namespace MonoTouchFixtures.VideoToolbox {
 			// TestRuntime.NSLog ($"Created session with format descriptor: {bufferEnumerator.FormatDescription}");
 
 			const nint sourceFrameValue = 0x0a1efeab;
-			var st = session.SetMultiImageCallback ((outputMultiImageReference, sourceFrameReference, status, infoFlags, taggedBufferGroup, presentationTimeStamp, presentationDuration) =>
-			{
+			var st = session.SetMultiImageCallback ((outputMultiImageReference, sourceFrameReference, status, infoFlags, taggedBufferGroup, presentationTimeStamp, presentationDuration) => {
 				// TestRuntime.NSLog ($"Output callback #{frameCallbackCounter}: outputMultiImageReference: 0x{outputMultiImageReference:x} sourceFrameReference: 0x{sourceFrameReference:x} status: {status} infoFlags: {infoFlags} taggedBufferGroup: {taggedBufferGroup} presentationTimeStamp: {presentationTimeStamp} presentationDuration: {presentationDuration}");
 				if (sourceFrameReference != sourceFrameValue)
 					failures.Add ($"Output callback #{frameCallbackCounter} failed: Expected sourceFrame = 0x{sourceFrameValue:x}, got sourceFrame = 0x{sourceFrameReference:x}");
@@ -370,8 +367,7 @@ namespace MonoTouchFixtures.VideoToolbox {
 
 			bufferEnumerator.Enumerate ((buffer) => {
 				var status = session.DecodeFrame (buffer, VTDecodeFrameFlags.EnableAsynchronousDecompression, (NSDictionary?) null, out var infoFlags,
-					(status, flags, buffer, presentationTimeStamp, presentationDuration) =>
-					{
+					(status, flags, buffer, presentationTimeStamp, presentationDuration) => {
 						// TestRuntime.NSLog ($"Inline callback #{inlineCallback}: status: {status} flags: {flags} buffer: {buffer} presentationTimeStamp: {presentationTimeStamp} presentationDuration: {presentationDuration}\n{AsString (buffer)}");
 						inlineCallback++;
 					});

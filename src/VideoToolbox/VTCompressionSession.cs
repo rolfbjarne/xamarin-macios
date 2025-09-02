@@ -402,7 +402,7 @@ namespace VideoToolbox {
 						duration,
 						frameProperties.GetHandle (),
 						sourceFrame,
-						(VTEncodeInfoFlags *) Unsafe.AsPointer<VTEncodeInfoFlags> (ref infoFlags));
+						(VTEncodeInfoFlags*) Unsafe.AsPointer<VTEncodeInfoFlags> (ref infoFlags));
 
 			GC.KeepAlive (taggedBufferGroup);
 			GC.KeepAlive (frameProperties);
@@ -450,7 +450,7 @@ namespace VideoToolbox {
 						presentationTimestamp,
 						duration,
 						frameProperties.GetHandle (),
-						(VTEncodeInfoFlags *) Unsafe.AsPointer<VTEncodeInfoFlags> (ref infoFlags),
+						(VTEncodeInfoFlags*) Unsafe.AsPointer<VTEncodeInfoFlags> (ref infoFlags),
 						&trampolineBlock);
 
 			GC.KeepAlive (taggedBufferGroup);

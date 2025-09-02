@@ -74,7 +74,7 @@ namespace Foundation {
 			return indexes;
 		}
 
-		internal T [] ToInt64EnumArray<T> () where T: System.Enum
+		internal T [] ToInt64EnumArray<T> () where T : System.Enum
 		{
 			var array = ToArray ();
 			var rv = new T [array.Length];
@@ -83,7 +83,7 @@ namespace Foundation {
 			return rv;
 		}
 
-		internal HashSet<T> ToInt64EnumHashSet<T> () where T: System.Enum
+		internal HashSet<T> ToInt64EnumHashSet<T> () where T : System.Enum
 		{
 			var array = ToArray ();
 			var rv = new HashSet<T> ();

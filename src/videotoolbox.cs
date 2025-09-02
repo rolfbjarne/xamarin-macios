@@ -844,7 +844,7 @@ namespace VideoToolbox {
 
 		[iOS (17, 0), NoTV, MacCatalyst (17, 0), Mac (14, 0)]
 		[Export ("MvHevcViewIds")]
-		NSNumber [] MvHevcViewIds { get; set ; }
+		NSNumber [] MvHevcViewIds { get; set; }
 
 		[iOS (17, 0), NoTV, MacCatalyst (17, 0), Mac (14, 0)]
 		[Export ("MvHevcLeftAndRightViewIds")]
@@ -909,7 +909,7 @@ namespace VideoToolbox {
 
 		[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 		[Export ("CameraCalibrationDataLensCollection")]
-		VTCompressionPropertyCameraCalibration[] CameraCalibrationDataLensCollection { get; set; }
+		VTCompressionPropertyCameraCalibration [] CameraCalibrationDataLensCollection { get; set; }
 
 		[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 		[Export ("SupportedPresetDictionaries")]
@@ -996,15 +996,15 @@ namespace VideoToolbox {
 		VTCameraCalibrationLensDomain LensDomain { get; set; }
 		int LensIdentifier { get; set; }
 		VTCameraCalibrationLensRole LensRole { get; set; }
-		float[] LensDistortions { get; set; } // CFArray[CFNumber(float)]
+		float [] LensDistortions { get; set; } // CFArray[CFNumber(float)]
 		float RadialAngleLimit { get; set; }
-		float[] LensFrameAdjustmentsPolynomialX { get; set; } // CFArray[CFNumber(float)]
-		float[] LensFrameAdjustmentsPolynomialY { get; set; } // CFArray[CFNumber(float)]
+		float [] LensFrameAdjustmentsPolynomialX { get; set; } // CFArray[CFNumber(float)]
+		float [] LensFrameAdjustmentsPolynomialY { get; set; } // CFArray[CFNumber(float)]
 		NMatrix3 IntrinsicMatrix { get; set; }
 		float IntrinsicMatrixProjectionOffset { get; set; }
 		CGSizeDictionary IntrinsicMatrixReferenceDimensions { get; set; }
 		VTCameraCalibrationExtrinsicOriginSource ExtrinsicOriginSource { get; set; }
-		float[] ExtrinsicOrientationQuaternion { get; set; } // CFArray[CFNumber(float)]
+		float [] ExtrinsicOrientationQuaternion { get; set; } // CFArray[CFNumber(float)]
 	}
 
 	[NoTV, MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
@@ -2870,7 +2870,7 @@ namespace VideoToolbox {
 
 		[MacCatalyst (26, 0), TV (26, 0), iOS (26, 0), Mac (26, 0)]
 		[Export ("destinationFrames")]
-		VTFrameProcessorFrame[] DestinationFrames { get; }
+		VTFrameProcessorFrame [] DestinationFrames { get; }
 	}
 
 	interface IVTFrameProcessorParameters { }
@@ -3120,8 +3120,7 @@ namespace VideoToolbox {
 	[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface VTLowLatencyFrameInterpolationConfiguration : VTFrameProcessorConfiguration
-	{
+	interface VTLowLatencyFrameInterpolationConfiguration : VTFrameProcessorConfiguration {
 		[Internal]
 		[Export ("initWithFrameWidth:frameHeight:numberOfInterpolatedFrames:")]
 		NativeHandle _InitWithFrameWidthAndNumberOfInterpolatedFrames (nint frameWidth, nint frameHeight, nint numberOfInterpolatedFrames);
@@ -3150,24 +3149,22 @@ namespace VideoToolbox {
 	[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface VTLowLatencyFrameInterpolationParameters : VTFrameProcessorParameters
-	{
+	interface VTLowLatencyFrameInterpolationParameters : VTFrameProcessorParameters {
 		[Export ("initWithSourceFrame:previousFrame:interpolationPhase:destinationFrames:")]
-		NativeHandle Constructor (VTFrameProcessorFrame sourceFrame, VTFrameProcessorFrame previousFrame, [BindAs (typeof (float[]))] NSNumber [] interpolationPhase, VTFrameProcessorFrame[] destinationFrames);
+		NativeHandle Constructor (VTFrameProcessorFrame sourceFrame, VTFrameProcessorFrame previousFrame, [BindAs (typeof (float []))] NSNumber [] interpolationPhase, VTFrameProcessorFrame [] destinationFrames);
 
 		[Export ("previousFrame")]
 		VTFrameProcessorFrame PreviousFrame { get; }
 
 		[Export ("interpolationPhase")]
-		[BindAs (typeof (float[]))]
-		NSNumber[] InterpolationPhase { get; }
+		[BindAs (typeof (float []))]
+		NSNumber [] InterpolationPhase { get; }
 	}
 
 	[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface VTLowLatencySuperResolutionScalerConfiguration : VTFrameProcessorConfiguration
-	{
+	interface VTLowLatencySuperResolutionScalerConfiguration : VTFrameProcessorConfiguration {
 		[Export ("initWithFrameWidth:frameHeight:scaleFactor:")]
 		NativeHandle Constructor (nint frameWidth, nint frameHeight, float scaleFactor);
 
@@ -3186,15 +3183,14 @@ namespace VideoToolbox {
 
 		[Static]
 		[Export ("supportedScaleFactorsForFrameWidth:frameHeight:")]
-		[return: BindAs (typeof (nint[]))]
-		NSNumber[] GetSupportedScaleFactors (nint frameWidth, nint frameHeight);
+		[return: BindAs (typeof (nint []))]
+		NSNumber [] GetSupportedScaleFactors (nint frameWidth, nint frameHeight);
 	}
 
 	[NoTV, MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface VTSuperResolutionScalerConfiguration : VTFrameProcessorConfiguration
-	{
+	interface VTSuperResolutionScalerConfiguration : VTFrameProcessorConfiguration {
 		[Export ("initWithFrameWidth:frameHeight:scaleFactor:inputType:usePrecomputedFlow:qualityPrioritization:revision:")]
 		NativeHandle Constructor (nint frameWidth, nint frameHeight, nint scaleFactor, VTSuperResolutionScalerConfigurationInputType inputType, bool usePrecomputedFlow, VTSuperResolutionScalerConfigurationQualityPrioritization qualityPrioritization, VTSuperResolutionScalerConfigurationRevision revision);
 
@@ -3243,8 +3239,8 @@ namespace VideoToolbox {
 
 		[Static]
 		[Export ("supportedScaleFactors")]
-		[BindAs (typeof (float[]))]
-		NSNumber[] SupportedScaleFactors { get; }
+		[BindAs (typeof (float []))]
+		NSNumber [] SupportedScaleFactors { get; }
 	}
 
 	delegate void VTSuperResolutionScalerConfigurationDownloadConfigurationModelCallback ([NullAllowed] NSError error);
@@ -3252,8 +3248,7 @@ namespace VideoToolbox {
 	[MacCatalyst (26, 0), NoTV, Mac (26, 0), iOS (26, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface VTSuperResolutionScalerParameters : VTFrameProcessorParameters
-	{
+	interface VTSuperResolutionScalerParameters : VTFrameProcessorParameters {
 		[Export ("initWithSourceFrame:previousFrame:previousOutputFrame:opticalFlow:submissionMode:destinationFrame:")]
 		NativeHandle Constructor (VTFrameProcessorFrame sourceFrame, [NullAllowed] VTFrameProcessorFrame previousFrame, [NullAllowed] VTFrameProcessorFrame previousOutputFrame, [NullAllowed] VTFrameProcessorOpticalFlow opticalFlow, VTSuperResolutionScalerParametersSubmissionMode submissionMode, VTFrameProcessorFrame destinationFrame);
 
@@ -3273,8 +3268,7 @@ namespace VideoToolbox {
 	[MacCatalyst (26, 0), NoTV, Mac (26, 0), iOS (26, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface VTTemporalNoiseFilterConfiguration : VTFrameProcessorConfiguration
-	{
+	interface VTTemporalNoiseFilterConfiguration : VTFrameProcessorConfiguration {
 		[Export ("initWithFrameWidth:frameHeight:sourcePixelFormat:")]
 		NativeHandle Constructor (nint frameWidth, nint frameHeight, CMPixelFormat sourcePixelFormat);
 
@@ -3286,7 +3280,7 @@ namespace VideoToolbox {
 
 		[Static]
 		[Export ("supportedSourcePixelFormats")]
-		[BindAs (typeof (CMPixelFormat[]))]
+		[BindAs (typeof (CMPixelFormat []))]
 		NSNumber [] SupportedSourcePixelFormats { get; }
 
 		[Static]
@@ -3295,18 +3289,17 @@ namespace VideoToolbox {
 	}
 
 	[MacCatalyst (26, 0), NoTV, Mac (26, 0), iOS (26, 0)]
-	[BaseType (typeof(NSObject))]
+	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface VTTemporalNoiseFilterParameters : VTFrameProcessorParameters
-	{
+	interface VTTemporalNoiseFilterParameters : VTFrameProcessorParameters {
 		[Export ("initWithSourceFrame:nextFrames:previousFrames:destinationFrame:filterStrength:hasDiscontinuity:")]
-		NativeHandle Constructor (VTFrameProcessorFrame sourceFrame, VTFrameProcessorFrame[] nextFrames, VTFrameProcessorFrame[] previousFrames, VTFrameProcessorFrame destinationFrame, float filterStrength, byte hasDiscontinuity);
+		NativeHandle Constructor (VTFrameProcessorFrame sourceFrame, VTFrameProcessorFrame [] nextFrames, VTFrameProcessorFrame [] previousFrames, VTFrameProcessorFrame destinationFrame, float filterStrength, byte hasDiscontinuity);
 
 		[Export ("nextFrames")]
-		VTFrameProcessorFrame[] NextFrames { get; }
+		VTFrameProcessorFrame [] NextFrames { get; }
 
 		[Export ("previousFrames")]
-		VTFrameProcessorFrame[] PreviousFrames { get; }
+		VTFrameProcessorFrame [] PreviousFrames { get; }
 
 		[Export ("filterStrength")]
 		float FilterStrength { get; set; }
@@ -3317,24 +3310,21 @@ namespace VideoToolbox {
 
 	[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 	[Flags]
-	public enum VTMotionEstimationFrameFlags : uint
-	{
+	public enum VTMotionEstimationFrameFlags : uint {
 		None = 0,
 		CurrentBufferWillBeNextReferenceBuffer = 1u << 0
 	}
 
 	[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 	[Flags]
-	public enum VTMotionEstimationInfoFlags : uint
-	{
+	public enum VTMotionEstimationInfoFlags : uint {
 		None = 0,
 		Reserved0 = 1u << 0
 	}
 
 	[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 	[Static]
-	interface VTMotionEstimationSessionCreationOptionKey
-	{
+	interface VTMotionEstimationSessionCreationOptionKey {
 		[Field ("kVTMotionEstimationSessionCreationOption_MotionVectorSize")]
 		NSString MotionVectorSize { get; }
 
@@ -3348,8 +3338,7 @@ namespace VideoToolbox {
 	[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
-	interface VTLowLatencySuperResolutionScalerParameters : VTFrameProcessorParameters
-	{
+	interface VTLowLatencySuperResolutionScalerParameters : VTFrameProcessorParameters {
 		[Export ("initWithSourceFrame:destinationFrame:")]
 		NativeHandle Constructor (VTFrameProcessorFrame sourceFrame, VTFrameProcessorFrame destinationFrame);
 	}
@@ -3386,30 +3375,26 @@ namespace VideoToolbox {
 
 	[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 	[Native]
-	public enum VTSuperResolutionScalerConfigurationQualityPrioritization : long
-	{
+	public enum VTSuperResolutionScalerConfigurationQualityPrioritization : long {
 		Normal = 1,
 	}
 
 	[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 	[Native]
-	public enum VTSuperResolutionScalerConfigurationRevision : long
-	{
+	public enum VTSuperResolutionScalerConfigurationRevision : long {
 		Revision1 = 1,
 	}
 
 	[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 	[Native]
-	public enum VTSuperResolutionScalerConfigurationInputType : long
-	{
+	public enum VTSuperResolutionScalerConfigurationInputType : long {
 		Video = 1,
 		Image = 2,
 	}
 
 	[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 	[Native]
-	public enum VTSuperResolutionScalerConfigurationModelStatus : long
-	{
+	public enum VTSuperResolutionScalerConfigurationModelStatus : long {
 		DownloadRequired = 0,
 		Downloading = 1,
 		Ready = 2,
@@ -3417,8 +3402,7 @@ namespace VideoToolbox {
 
 	[TV (26, 0), MacCatalyst (26, 0), Mac (26, 0), iOS (26, 0)]
 	[Native]
-	public enum VTSuperResolutionScalerParametersSubmissionMode : long
-	{
+	public enum VTSuperResolutionScalerParametersSubmissionMode : long {
 		Random = 1,
 		Sequential = 2,
 	}

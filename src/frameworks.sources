@@ -551,7 +551,9 @@ COREIMAGE_SOURCES = \
 	CoreImage/CIFilter.cs \
 	CoreImage/CIImage.cs \
 	CoreImage/CISampler.cs \
+	CoreImage/CISystemToneMap.cs \
 	CoreImage/CIVector.cs \
+	CoreImage/ICISystemToneMapProtocol.cs \
 
 # CoreLocation
 
@@ -2193,6 +2195,7 @@ IOS_FRAMEWORKS =         \
 	Speech \
 	SystemConfiguration \
 	ThreadNetwork \
+	TouchController \
 	Twitter \
 	UIKit XKit \
 	UserNotifications \

@@ -5,7 +5,7 @@ namespace Foundation {
 
 #if !XAMCORE_5_0
 	// Utility enum, ObjC uses NSString
-	/// <summary>An enumeration of known document types. Used with the <see cref="P:Foundation.NSAttributedStringDocumentAttributes.DocumentType" /> property.</summary>
+	/// <summary>An enumeration of known document types. Used with the <see cref="Foundation.NSAttributedStringDocumentAttributes.DocumentType" /> property.</summary>
 	public enum NSDocumentType {
 		/// <summary>To be added.</summary>
 		Unknown = -1,
@@ -39,7 +39,7 @@ namespace Foundation {
 #endif // !XAMCORE_5_0
 
 	// Utility enum, ObjC uses NSString
-	/// <summary>An enumeration that specifies how a document is being viewed. Used with the <see cref="P:Foundation.NSAttributedStringDocumentAttributes.ViewMode" /> property.</summary>
+	/// <summary>An enumeration that specifies how a document is being viewed. Used with the <see cref="Foundation.NSAttributedStringDocumentAttributes.ViewMode" /> property.</summary>
 	public enum NSDocumentViewMode {
 		/// <summary>To be added.</summary>
 		Normal,
@@ -48,31 +48,38 @@ namespace Foundation {
 
 	}
 
-	/// <summary>Run loop modes for <see cref="T:Foundation.NSRunLoop" />.</summary>
+	/// <summary>Run loop modes for <see cref="Foundation.NSRunLoop" />.</summary>
 	public enum NSRunLoopMode {
 
+		/// <summary>The default mode to handle input sources.   The most common run loop mode.</summary>
 		[DefaultEnumValue]
 		[Field ("NSDefaultRunLoopMode")]
 		Default,
 
+		/// <summary>Run loop mode constant used to run handlers in any of the declared “common” modes.</summary>
 		[Field ("NSRunLoopCommonModes")]
 		Common,
 
 #if MONOMAC
+		/// <summary>To be added.</summary>
 		[Field ("NSConnectionReplyMode")]
 		ConnectionReply = 2,
 
+		/// <summary>To be added.</summary>
 		[Field ("NSModalPanelRunLoopMode", "AppKit")]
 		ModalPanel,
 
+		/// <summary>To be added.</summary>
 		[Field ("NSEventTrackingRunLoopMode", "AppKit")]
 		EventTracking,
 #else
 		// iOS-specific Enums start in 100 to avoid conflicting with future extensions to MonoMac
+		/// <summary>The NSRunLoop mode used when tracking controls. Use this to receive timers and events during UI tracking.</summary>
 		[Field ("UITrackingRunLoopMode", "UIKit")]
 		UITracking = 100,
 #endif
 		// If it is not part of these enumerations
+		/// <summary>To be added.</summary>
 		[Field (null)]
 		Other = 1000,
 	}
@@ -168,43 +175,50 @@ namespace Foundation {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NSUrlSessionMultipathServiceType : long {
+		/// <summary>To be added.</summary>
 		None = 0,
+		/// <summary>To be added.</summary>
 		Handover = 1,
+		/// <summary>To be added.</summary>
 		Interactive = 2,
+		/// <summary>To be added.</summary>
 		Aggregate = 3,
 	}
 
 	/// <summary>Enumerates classes of tags that are returned from a text classifier.</summary>
 	public enum NSLinguisticTagScheme {
+		/// <summary>Indicates that tokens will be tagged with information about whether they are words, whitespace, or punctuation.</summary>
 		[Field ("NSLinguisticTagSchemeTokenType")]
 		Token,
 
+		/// <summary>Indicates that tokens will be returned for whether they are part of speech or whitespace, or their punctuation type if they are punctuation.</summary>
 		[Field ("NSLinguisticTagSchemeLexicalClass")]
 		LexicalClass,
 
+		/// <summary>Indicates that tokens will be tagged as names of which they are a part.</summary>
 		[Field ("NSLinguisticTagSchemeNameType")]
 		Name,
 
+		/// <summary>Indicates that tokens will be tagged those tags indicated by <see cref="Foundation.NSLinguisticTagScheme.LexicalClass" /> and <see cref="Foundation.NSLinguisticTagScheme.Name" />.</summary>
 		[Field ("NSLinguisticTagSchemeNameTypeOrLexicalClass")]
 		NameOrLexicalClass,
 
+		/// <summary>Indicates that tokens will be tagged with their stem, if known.</summary>
 		[Field ("NSLinguisticTagSchemeLemma")]
 		Lemma,
 
+		/// <summary>Indicates that tokens will be tagged with their language, if known.</summary>
 		[Field ("NSLinguisticTagSchemeLanguage")]
 		Language,
 
+		/// <summary>Indicates that tokens will be tagged with the script in which they were written.</summary>
 		[Field ("NSLinguisticTagSchemeScript")]
 		Script,
 	}
 
-#if !NET
-	public enum NSLinguisticTagUnit {
-#else
-	/// <summary>Contains read-only static properties corresponding to the parts of speech recognized by a <see cref="T:Foundation.NSLinguisticTagger" />.</summary>
+	/// <summary>Contains read-only static properties corresponding to the parts of speech recognized by a <see cref="Foundation.NSLinguisticTagger" />.</summary>
 	/// <summary>Enumerates tag values for linguistic units.</summary>
 	public enum NSLinguisticTag {
-#endif
 		[Field ("NSLinguisticTagWord")]
 		Word,
 

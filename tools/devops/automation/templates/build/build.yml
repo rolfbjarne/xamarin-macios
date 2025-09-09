@@ -42,7 +42,6 @@ parameters:
 
   - name: use1ES
     type: boolean
-    default: true
 
   - name: disableCodeQL
     type: boolean
@@ -172,6 +171,9 @@ steps:
     timeoutInMinutes: 180
     env:
       MAKE_PARALLELISM: ${{ parameters.makeParallelism }}
+      DOTNET_DbgEnableMiniDump: 1
+      DOTNET_DbgMiniDumpType: 4
+      DOTNET_DbgMiniDumpName: $(Agent.TempDirectory)/dotnet_%t_%p.minidump
 
   - ${{ each step in parameters.buildSteps }}:
       - ${{ each pair in step }}:
@@ -204,6 +206,7 @@ steps:
       $githubComments.NewCommentFromMessage($commentTitle, $commentIcon, $commentMessage.ToString(), "build $(System.JobDisplayName)")
     condition: always()
     displayName: 'Report build result'
+    continueOnError: true
     env:
       ${{ if eq(parameters.repositoryAlias, 'self') }}:
         COMMENT_HASH: $(fix_commit.GIT_HASH)

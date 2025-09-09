@@ -32,11 +32,20 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Compile Include="../Microsoft.Macios.Generator/Configuration.cs" >
+            <Link>Configuration.cs</Link>
+        </Compile>
+        <Compile Include="../Microsoft.Macios.Generator/Nomenclator.cs" >
+            <Link>Nomenclator.cs</Link>
+        </Compile>
         <Compile Include="../Microsoft.Macios.Generator/DictionaryComparer.cs">
             <Link>DictionaryComparer.cs</Link>
         </Compile>
         <Compile Include="../Microsoft.Macios.Generator/CollectionComparer.cs">
             <Link>CollectionComparer.cs</Link>
+        </Compile>
+        <Compile Include="../Microsoft.Macios.Generator/StructState.cs" >
+            <Link>Generator/StructState.cs</Link>
         </Compile>
         <Compile Include="../Microsoft.Macios.Generator/IO/TabbedWriter.cs">
             <Link>IO/TabbedWriter.cs</Link>
@@ -62,6 +71,9 @@
         <Compile Include="../Microsoft.Macios.Generator/Extensions/ApplePlatformExtensions.cs">
             <Link>Extensions/ApplePlatformExtensions.cs</Link>
         </Compile>
+        <Compile Include="../Microsoft.Macios.Generator/Extensions/ArgumentSyntaxExtensions.cs" >
+            <Link>Extensions/ArgumentSyntaxExtensions.cs</Link>
+        </Compile>
         <Compile Include="../Microsoft.Macios.Generator/Extensions/BaseTypeDeclarationSyntaxExtensions.cs">
             <Link>Extensions/BaseTypeDeclarationSyntaxExtensions.cs</Link>
         </Compile>
@@ -73,6 +85,9 @@
         </Compile>
         <Compile Include="../Microsoft.Macios.Generator/Extensions/FieldSymbolExtensions.cs">
             <Link>Extensions/FieldSymbolExtensions.cs</Link>
+        </Compile>
+        <Compile Include="../Microsoft.Macios.Generator/Extensions/ParameterSymbolExtensions.cs">
+            <Link>Extensions/ParameterSymbolExtensions.cs</Link>
         </Compile>
         <Compile Include="../Microsoft.Macios.Generator/Extensions/ParameterSyntaxExtensions.cs">
             <Link>Extensions/ParameterSyntaxExtensions.cs</Link>
@@ -92,8 +107,8 @@
         <Compile Include="../Microsoft.Macios.Generator/Extensions/TypeSymbolExtensions.Core.cs">
             <Link>Extensions/TypeSymbolExtensions.Core.cs</Link>
         </Compile>
-        <Compile Include="..\..\bgen\Extensions\PlatformNameExtensions.cs" >
-            <Link>external\PlatformNameExtensions.cs</Link>
+        <Compile Include="../Microsoft.Macios.Generator/Formatters/TypeInfoFormatter.cs" >
+            <Link>Formatters/TypeInfoFormatter.cs</Link>
         </Compile>
     </ItemGroup>
 

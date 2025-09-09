@@ -4,9 +4,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis;
 using Microsoft.Macios.Generator.Attributes;
 using Microsoft.Macios.Generator.Availability;
+using Microsoft.Macios.Generator.Context;
 
 namespace Microsoft.Macios.Generator.Extensions;
 
@@ -71,8 +73,16 @@ static partial class TypeSymbolExtensions {
 		// a type is a smart enum if its type is a enum one AND it was decorated with the
 		// binding type attribute
 		return symbol.TypeKind == TypeKind.Enum
-			   && symbol.HasAttribute (AttributesNames.BindingSmartEnumAttribute);
+			   && symbol.HasAttribute (AttributesNames.SmartEnumAttribute);
 	}
+
+	/// <summary>
+	/// Returns if a symbol represents a protocol.
+	/// </summary>
+	/// <param name="symbol">The symbol under query.</param>
+	/// <returns>True if the symbol represents a protocol, false otherwise.</returns>
+	public static bool IsProtocol (this ITypeSymbol symbol)
+		=> symbol is INamedTypeSymbol { TypeKind: TypeKind.Interface } && symbol.HasAttribute (AttributesNames.ProtocolAttribute);
 
 	/// <summary>
 	/// Retrieves the binding type data from a symbol that represents a binding type.
@@ -87,12 +97,21 @@ static partial class TypeSymbolExtensions {
 	/// Retrieve the data of an export attribute on a symbol.
 	/// </summary>
 	/// <param name="symbol">The tagged symbol.</param>
+	/// <param name="context"></param>
 	/// <typeparam name="T">Enum type used in the attribute.</typeparam>
 	/// <returns>The data of the export attribute if present or null if it was not found.</returns>
 	/// <remarks>If the passed enum is unknown or not supported as an enum for the export attribute, null will be
 	/// returned.</remarks>
-	public static ExportData<T>? GetExportData<T> (this ISymbol symbol) where T : Enum
-		=> GetAttribute<ExportData<T>> (symbol, AttributesNames.GetExportAttributeName<T>, ExportData<T>.TryParse);
+	public static ExportData<T>? GetExportData<T> (this ISymbol symbol, RootContext context) where T : Enum
+	{
+		return GetAttribute<ExportData<T>> (symbol, AttributesNames.GetExportAttributeName<T>, TryParseWrapped);
+
+		// helper that will trap the context so that we can reuse the GetAttribute method
+		bool TryParseWrapped (AttributeData attributeData, [NotNullWhen (true)] out ExportData<T>? data)
+		{
+			return ExportData<T>.TryParse (attributeData, context, out data);
+		}
+	}
 
 	/// <summary>
 	/// Retrieve the data of a field attribute on a symbol, usually a property.
@@ -113,20 +132,8 @@ static partial class TypeSymbolExtensions {
 	public static BindFromData? GetBindFromData (this ISymbol symbol)
 		=> GetAttribute<BindFromData> (symbol, AttributesNames.BindFromAttribute, BindFromData.TryParse);
 
-	public static bool X86NeedStret (ITypeSymbol returnType)
-	{
-		if (!returnType.IsValueType || returnType.SpecialType == SpecialType.System_Enum ||
-			returnType.TryGetBuiltInTypeSize ())
-			return false;
-
-		var fieldTypes = new List<ITypeSymbol> ();
-		var size = GetValueTypeSize (returnType, fieldTypes, false);
-
-		if (size > 8)
-			return true;
-
-		return fieldTypes.Count == 3;
-	}
+	public static ForcedTypeData? GetForceTypeData (this ISymbol symbol)
+		=> GetAttribute<ForcedTypeData> (symbol, AttributesNames.ForcedTypeAttribute, ForcedTypeData.TryParse);
 
 	public static bool X86_64NeedStret (ITypeSymbol returnType)
 	{
@@ -135,47 +142,7 @@ static partial class TypeSymbolExtensions {
 			return false;
 
 		var fieldTypes = new List<ITypeSymbol> ();
-		return GetValueTypeSize (returnType, fieldTypes, true) > 16;
-	}
-
-	public static bool ArmNeedStret (ITypeSymbol returnType, Compilation compilation)
-	{
-		var currentPlatform = compilation.GetCurrentPlatform ();
-		bool has32bitArm = currentPlatform != PlatformName.TvOS && currentPlatform != PlatformName.MacOSX;
-		if (!has32bitArm)
-			return false;
-
-		ITypeSymbol t = returnType;
-
-		if (!t.IsValueType || t.SpecialType == SpecialType.System_Enum || t.TryGetBuiltInTypeSize ())
-			return false;
-
-		var fieldTypes = new List<ITypeSymbol> ();
-		var size = t.GetValueTypeSize (fieldTypes, false);
-
-		bool isiOS = currentPlatform == PlatformName.iOS;
-
-		if (isiOS && size <= 4 && fieldTypes.Count == 1) {
-			
-#pragma warning disable format
-			return fieldTypes [0] switch {
-				{ Name: "nint" } => false,
-				{ Name: "nuint" } => false,
-				{ SpecialType: SpecialType.System_Char } => false,
-				{ SpecialType: SpecialType.System_Byte } => false,
-				{ SpecialType: SpecialType.System_SByte } => false,
-				{ SpecialType: SpecialType.System_UInt16 } => false,
-				{ SpecialType: SpecialType.System_Int16 } => false,
-				{ SpecialType: SpecialType.System_UInt32 } => false,
-				{ SpecialType: SpecialType.System_Int32 } => false,
-				{ SpecialType: SpecialType.System_IntPtr } => false,
-				{ SpecialType: SpecialType.System_UIntPtr } => false,
-				_ => true
-			};
-#pragma warning restore format
-		}
-
-		return true;
+		return GetValueTypeSize (returnType, fieldTypes) > 16;
 	}
 
 	/// <summary>
@@ -186,13 +153,11 @@ static partial class TypeSymbolExtensions {
 	/// <returns>If the type represented by the symtol needs a stret call variant.</returns>
 	public static bool NeedsStret (this ITypeSymbol returnType, Compilation compilation)
 	{
-		if (X86NeedStret (returnType))
-			return true;
+		// pointers do not need stret
+		if (returnType is IPointerTypeSymbol)
+			return false;
 
-		if (X86_64NeedStret (returnType))
-			return true;
-
-		return ArmNeedStret (returnType, compilation);
+		return X86_64NeedStret (returnType);
 	}
 
 }

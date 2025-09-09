@@ -46,8 +46,6 @@ stages:
 - stage: ${{ parameters.stageName }}
   displayName: ${{ parameters.displayName }}
   dependsOn:
-  - ${{ if eq(parameters.postPipeline, false) }}:
-    - build_macos_tests
   - configure_build
   condition: and(succeeded(), eq(dependencies.configure_build.outputs['configure.decisions.RUN_WINDOWS_TESTS'], 'true'))
 
@@ -64,7 +62,7 @@ stages:
       - agent.os -equals Darwin
       - SSH.Enabled -equals True
       - macOS.Architecture -equals arm64
-      - macOS.Name -equals Sonoma
+      - macOS.Name -equals Sequoia
 
     steps:
     - template: reserve-mac.yml
@@ -118,9 +116,7 @@ stages:
     workspace:
       clean: all
     pool:
-      name: ${{ parameters.windowsPool }}
-      demands:
-      - agent.os -equals Windows_NT
+      vmImage: ubuntu-latest
 
     steps:
     - template: reenable-mac.yml

@@ -3,6 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Macios.Generator.Attributes;
 using Microsoft.Macios.Generator.Context;
@@ -12,21 +13,20 @@ namespace Microsoft.Macios.Generator.DataModel;
 
 readonly partial struct Parameter {
 
-	public enum VariableType {
-		BlockLiteral,
-		Handle,
-		NSArray,
-		NSString,
-		NSStringStruct,
-		PrimitivePointer,
-		StringPointer,
-		BindFrom,
-	}
-
 	/// <summary>
 	/// Returns the bind from data if present in the binding.
 	/// </summary>
 	public BindFromData? BindAs { get; init; }
+
+	/// <summary>
+	/// Returns the forced type data if present in the binding.
+	/// </summary>
+	public ForcedTypeData? ForcedType { get; init; }
+
+	/// <summary>
+	/// The location of the attribute in source code.
+	/// </summary>
+	public Location? Location { get; init; }
 
 	/// <summary>
 	/// Returns if the parameter needs a null check when the code is generated.
@@ -44,44 +44,27 @@ readonly partial struct Parameter {
 	public static bool TryCreate (IParameterSymbol symbol, ParameterSyntax declaration, RootContext context,
 		[NotNullWhen (true)] out Parameter? parameter)
 	{
-		DelegateInfo? delegateInfo = null;
-		if (symbol.Type is INamedTypeSymbol namedTypeSymbol
-			&& namedTypeSymbol.DelegateInvokeMethod is not null) {
-			DelegateInfo.TryCreate (namedTypeSymbol.DelegateInvokeMethod, out delegateInfo);
-		}
-
-		parameter = new (symbol.Ordinal, new (symbol.Type, context.Compilation), symbol.Name) {
+		parameter = new (symbol.Ordinal, new (symbol.Type, context), symbol.GetSafeName ()) {
 			BindAs = symbol.GetBindFromData (),
+			ForcedType = symbol.GetForceTypeData (),
 			IsOptional = symbol.IsOptional,
 			IsParams = symbol.IsParams,
-			IsThis = symbol.IsThis,
+			IsThis = declaration.Modifiers.Any (SyntaxKind.ThisKeyword),
 			DefaultValue = (symbol.HasExplicitDefaultValue) ? symbol.ExplicitDefaultValue?.ToString () : null,
 			ReferenceKind = symbol.RefKind.ToReferenceKind (),
-			Delegate = delegateInfo,
 			Attributes = declaration.GetAttributeCodeChanges (context.SemanticModel),
+			Location = declaration.GetLocation (),
 		};
 		return true;
 	}
 
 	/// <summary>
-	/// Returns the name of the aux variable that would have needed for the given parameter. Use the
-	/// variable type to name it.
+	/// Creates a new <see cref="Parameter"/> instance with an updated position.
 	/// </summary>
-	/// <param name="variableType">The type of aux variable.</param>
-	/// <returns>The name of the aux variable to use.</returns>
-	public string? GetNameForVariableType (VariableType variableType)
+	/// <param name="position">The new position for the parameter.</param>
+	/// <returns>A new <see cref="Parameter"/> instance with the specified position.</returns>
+	public Parameter WithPosition (int position)
 	{
-		var cleanedName = Name.Replace ("@", "");
-		return variableType switch {
-			VariableType.BlockLiteral => $"block_ptr_{cleanedName}",
-			VariableType.Handle => $"{cleanedName}__handle__",
-			VariableType.NSArray => $"nsa_{cleanedName}",
-			VariableType.NSString => $"ns{cleanedName}",
-			VariableType.NSStringStruct => $"_s{cleanedName}",
-			VariableType.PrimitivePointer => $"converted_{cleanedName}",
-			VariableType.StringPointer => $"_p{cleanedName}",
-			VariableType.BindFrom => $"nsb_{cleanedName}",
-			_ => null
-		};
+		return this with { Position = position };
 	}
 }

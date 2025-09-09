@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Macios.Generator.Attributes;
 using Microsoft.Macios.Generator.Extensions;
 
 namespace Microsoft.Macios.Generator.DataModel;
@@ -19,7 +20,7 @@ readonly partial struct Parameter : IEquatable<Parameter> {
 	/// <summary>
 	/// Parameter position in the method.
 	/// </summary>
-	public int Position { get; }
+	public int Position { get; init; }
 
 	/// <summary>
 	/// Type of the parameter.
@@ -57,15 +58,9 @@ readonly partial struct Parameter : IEquatable<Parameter> {
 	public ReferenceKind ReferenceKind { get; init; }
 
 	/// <summary>
-	/// If the parameter is a delegate. The method information of the invoke.
+	/// The parameter is passed by reference. This means any possible reference mode: in, out, ref.
 	/// </summary>
-	public DelegateInfo? Delegate { get; init; } = null;
-
-	/// <summary>
-	/// True if the parameter is a delegate.
-	/// </summary>
-	//[MemberNotNullWhen (true, nameof (DelegateMethod))]
-	public bool IsDelegate => Delegate is not null;
+	public bool IsByRef => ReferenceKind != ReferenceKind.None;
 
 	/// <summary>
 	/// List of attributes attached to the parameter.
@@ -100,7 +95,9 @@ readonly partial struct Parameter : IEquatable<Parameter> {
 			return false;
 		if (BindAs != other.BindAs)
 			return false;
-		if (Delegate != other.Delegate)
+		if (ForcedType != other.ForcedType)
+			return false;
+		if (Type.Delegate != other.Type.Delegate)
 			return false;
 
 		var attributeComparer = new AttributesEqualityComparer ();
@@ -125,7 +122,7 @@ readonly partial struct Parameter : IEquatable<Parameter> {
 		hashCode.Add (IsThis);
 		hashCode.Add (DefaultValue);
 		hashCode.Add ((int) ReferenceKind);
-		hashCode.Add (Delegate);
+		hashCode.Add (Type.Delegate);
 		hashCode.Add (BindAs);
 		return hashCode.ToHashCode ();
 	}
@@ -155,7 +152,8 @@ readonly partial struct Parameter : IEquatable<Parameter> {
 		sb.Append ($"DefaultValue: {DefaultValue}, ");
 		sb.Append ($"ReferenceKind: {ReferenceKind}, ");
 		sb.Append ($"BindAs: {BindAs?.ToString () ?? "null"}, ");
-		sb.Append ($"Delegate: {Delegate?.ToString () ?? "null"} }}");
+		sb.Append ($"ForcedType: {ForcedType?.ToString () ?? "null"}, ");
+		sb.Append ($"Delegate: {Type.Delegate?.ToString () ?? "null"} }}");
 		return sb.ToString ();
 	}
 }

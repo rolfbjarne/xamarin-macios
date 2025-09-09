@@ -2,7 +2,12 @@
 // Licensed under the MIT License.
 
 #pragma warning disable APL0003
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.Macios.Generator.DataModel;
+using Microsoft.Macios.Generator.Formatters;
 using TypeInfo = Microsoft.Macios.Generator.DataModel.TypeInfo;
 
 namespace Microsoft.Macios.Generator.Tests;
@@ -433,13 +438,17 @@ static class TestDataFactory {
 			isNullable: isNullable
 		);
 
-	public static TypeInfo ReturnTypeForInterface (string interfaceName)
+	public static TypeInfo ReturnTypeForInterface (string interfaceName, bool isNullable = false, bool isProtocol = false)
 		=> new (
 			name: interfaceName,
+			isNullable: isNullable,
+			isArray: false,
 			isReferenceType: true
 		) {
-			Parents = [],
 			IsInterface = true,
+			IsProtocol = isProtocol,
+			Parents = [],
+			Interfaces = []
 		};
 
 	public static TypeInfo ReturnTypeForStruct (string structName, bool isBlittable = false)
@@ -505,7 +514,7 @@ static class TestDataFactory {
 			]
 		};
 
-	public static TypeInfo ReturnTypeForAction ()
+	public static TypeInfo ReturnTypeForAction (DelegateInfo? delegateInfo = null)
 		=> new (
 			name: "System.Action",
 			isNullable: false,
@@ -513,6 +522,8 @@ static class TestDataFactory {
 			isArray: false,
 			isReferenceType: true
 		) {
+			IsDelegate = true,
+			Delegate = delegateInfo,
 			Parents = [
 				"System.MulticastDelegate",
 				"System.Delegate",
@@ -524,7 +535,7 @@ static class TestDataFactory {
 			]
 		};
 
-	public static TypeInfo ReturnTypeForAction (params string [] parameters)
+	public static TypeInfo ReturnTypeForAction (DelegateInfo? delegateInfo = null, params string [] parameters)
 		=> new (
 			name: $"System.Action<{string.Join (", ", parameters)}>",
 			isNullable: false,
@@ -532,6 +543,10 @@ static class TestDataFactory {
 			isArray: false,
 			isReferenceType: true
 		) {
+			IsDelegate = true,
+			IsGenericType = parameters.Length > 0,
+			TypeArguments = [.. parameters],
+			Delegate = delegateInfo,
 			Parents = [
 				"System.MulticastDelegate",
 				"System.Delegate",
@@ -540,10 +555,10 @@ static class TestDataFactory {
 			Interfaces = [
 				"System.ICloneable",
 				"System.Runtime.Serialization.ISerializable",
-			]
+			],
 		};
 
-	public static TypeInfo ReturnTypeForFunc (params string [] parameters)
+	public static TypeInfo ReturnTypeForFunc (DelegateInfo? delegateInfo = null, params string [] parameters)
 		=> new (
 			name: $"System.Func<{string.Join (", ", parameters)}>",
 			isNullable: false,
@@ -551,6 +566,8 @@ static class TestDataFactory {
 			isArray: false,
 			isReferenceType: true
 		) {
+			IsDelegate = true,
+			Delegate = delegateInfo,
 			Parents = [
 				"System.MulticastDelegate",
 				"System.Delegate",
@@ -562,7 +579,7 @@ static class TestDataFactory {
 			]
 		};
 
-	public static TypeInfo ReturnTypeForDelegate (string delegateName)
+	public static TypeInfo ReturnTypeForDelegate (string delegateName, DelegateInfo? delegateInfo = null)
 		=> new (
 			name: delegateName,
 			isNullable: false,
@@ -570,6 +587,8 @@ static class TestDataFactory {
 			isArray: false,
 			isReferenceType: true
 		) {
+			IsDelegate = true,
+			Delegate = delegateInfo,
 			Parents = [
 				"System.MulticastDelegate",
 				"System.Delegate",
@@ -599,7 +618,7 @@ static class TestDataFactory {
 				]
 				: [
 					"ObjCRuntime.INativeObject",
-					$"System.IEquatable<{nsObjectName ?? "Foundation.NSObject"}>",
+					$"System.IEquatable<Foundation.NSObject>",
 					"System.IDisposable",
 					"Foundation.INSObjectFactory",
 					"Foundation.INSObjectProtocol"
@@ -636,4 +655,35 @@ static class TestDataFactory {
 				"Foundation.INSObjectFactory"
 			]
 		};
+
+	public static TypeInfo ReturnTypeForNamedTuple (params KeyValuePair<string, TypeInfo> [] fields)
+	{
+		var dataMembers = string.Join (", ", fields.Select (x => $"{x.Value.GetIdentifierSyntax ()} {x.Key}"));
+		var genericMembers = string.Join (", ", fields.Select (x => $"{x.Value.GetIdentifierSyntax ()}"));
+		var tupleFields = ImmutableArray.CreateBuilder<KeyValuePair<string, string>> (fields.Length);
+		foreach (var (name, typeInfo) in fields) {
+			tupleFields.Add (new (name, typeInfo.GetIdentifierSyntax ().ToString ()));
+		}
+		var type = new TypeInfo (
+			name: $"({dataMembers})",
+			isNullable: false,
+			isBlittable: false,
+			isArray: false,
+			isReferenceType: false,
+			isStruct: true
+		) {
+			IsNamedTuple = true,
+			NamedTupleFields = tupleFields.ToImmutable (),
+			Parents = ["System.ValueType", "object"],
+			Interfaces = [
+				"System.Collections.IStructuralComparable",
+				"System.Collections.IStructuralEquatable",
+				"System.IComparable",
+				$"System.IComparable<({genericMembers})>",
+				$"System.IEquatable<({genericMembers})>",
+				"System.Runtime.CompilerServices.ITuple"
+			]
+		};
+		return type;
+	}
 }

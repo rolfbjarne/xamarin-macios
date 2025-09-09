@@ -121,6 +121,7 @@ partial class Frameworks {
 		"SceneKit",
 		"ScreenTime",
 		"Security",
+		"SecurityUI",
 		"SensitiveContentAnalysis",
 		"SensorKit",
 		"SharedWithYou",
@@ -205,6 +206,7 @@ partial class Frameworks {
 		"FileProviderUI",
 		"FinderSync",
 		"Foundation",
+		"FSKit",
 		"GameController",
 		"GameKit",
 		"GameplayKit",
@@ -266,6 +268,7 @@ partial class Frameworks {
 		"ScriptingBridge",
 		"SearchKit",
 		"Security",
+		"SecurityUI",
 		"SensitiveContentAnalysis",
 		"ServiceManagement",
 		"SharedWithYou",
@@ -299,6 +302,7 @@ partial class Frameworks {
 		"AuthenticationServices",
 		"AVFoundation",
 		"AVKit",
+		"BackgroundAssets",
 		"BackgroundTasks",
 		"BrowserEngineKit",
 		"CFNetwork",
@@ -359,6 +363,7 @@ partial class Frameworks {
 		"ReplayKit",
 		"SceneKit",
 		"Security",
+		"SecurityUI",
 		"SharedWithYou",
 		"SharedWithYouCore",
 		"ShazamKit",
@@ -486,6 +491,7 @@ partial class Frameworks {
 		"ScreenCaptureKit",
 		"ScreenTime",
 		"Security",
+		"SecurityUI",
 		"SensitiveContentAnalysis",
 		"SensorKit",
 		"ServiceManagement",
@@ -579,6 +585,7 @@ partial class Frameworks {
 	bool? _FileProviderUI;
 	bool? _FinderSync;
 	bool? _Foundation;
+	bool? _FSKit;
 	bool? _GameController;
 	bool? _GameKit;
 	bool? _GameplayKit;
@@ -650,6 +657,7 @@ partial class Frameworks {
 	bool? _ScriptingBridge;
 	bool? _SearchKit;
 	bool? _Security;
+	bool? _SecurityUI;
 	bool? _SensitiveContentAnalysis;
 	bool? _SensorKit;
 	bool? _ServiceManagement;
@@ -748,6 +756,7 @@ partial class Frameworks {
 	public bool HaveFileProviderUI { get { if (!_FileProviderUI.HasValue) _FileProviderUI = GetValue ("FileProviderUI"); return _FileProviderUI.Value; } }
 	public bool HaveFinderSync { get { if (!_FinderSync.HasValue) _FinderSync = GetValue ("FinderSync"); return _FinderSync.Value; } }
 	public bool HaveFoundation { get { if (!_Foundation.HasValue) _Foundation = GetValue ("Foundation"); return _Foundation.Value; } }
+	public bool HaveFSKit { get { if (!_FSKit.HasValue) _FSKit = GetValue ("FSKit"); return _FSKit.Value; } }
 	public bool HaveGameController { get { if (!_GameController.HasValue) _GameController = GetValue ("GameController"); return _GameController.Value; } }
 	public bool HaveGameKit { get { if (!_GameKit.HasValue) _GameKit = GetValue ("GameKit"); return _GameKit.Value; } }
 	public bool HaveGameplayKit { get { if (!_GameplayKit.HasValue) _GameplayKit = GetValue ("GameplayKit"); return _GameplayKit.Value; } }
@@ -819,6 +828,7 @@ partial class Frameworks {
 	public bool HaveScriptingBridge { get { if (!_ScriptingBridge.HasValue) _ScriptingBridge = GetValue ("ScriptingBridge"); return _ScriptingBridge.Value; } }
 	public bool HaveSearchKit { get { if (!_SearchKit.HasValue) _SearchKit = GetValue ("SearchKit"); return _SearchKit.Value; } }
 	public bool HaveSecurity { get { if (!_Security.HasValue) _Security = GetValue ("Security"); return _Security.Value; } }
+	public bool HaveSecurityUI { get { if (!_SecurityUI.HasValue) _SecurityUI = GetValue ("SecurityUI"); return _SecurityUI.Value; } }
 	public bool HaveSensitiveContentAnalysis { get { if (!_SensitiveContentAnalysis.HasValue) _SensitiveContentAnalysis = GetValue ("SensitiveContentAnalysis"); return _SensitiveContentAnalysis.Value; } }
 	public bool HaveSensorKit { get { if (!_SensorKit.HasValue) _SensorKit = GetValue ("SensorKit"); return _SensorKit.Value; } }
 	public bool HaveServiceManagement { get { if (!_ServiceManagement.HasValue) _ServiceManagement = GetValue ("ServiceManagement"); return _ServiceManagement.Value; } }

@@ -3,7 +3,7 @@
 namespace Xamarin.Tests {
 	[TestFixture]
 	public class BundleStructureTest : TestBaseClass {
-		// Returns true if the assembly name is _any_ of our platform assemblies (Microsoft.iOS/tvOS/macOS/MacCatalyst/watchOS.dll)
+		// Returns true if the assembly name is _any_ of our platform assemblies (Microsoft.iOS/tvOS/macOS/MacCatalyst.dll)
 		static bool IsPlatformAssembly (string assemblyName)
 		{
 			if (assemblyName.EndsWith (".dll", StringComparison.Ordinal) || assemblyName.EndsWith (".pdb", StringComparison.Ordinal))
@@ -247,9 +247,9 @@ namespace Xamarin.Tests {
 				throw new NotImplementedException ($"Unknown platform: {platform}");
 			}
 
-			AddExpectedFrameworkFiles (platform, expectedFiles, "Framework.With.Dots", isSigned); // https://github.com/xamarin/xamarin-macios/issues/15727
+			AddExpectedFrameworkFiles (platform, expectedFiles, "Framework.With.Dots", isSigned); // https://github.com/dotnet/macios/issues/15727
 
-			expectedFiles.Add (Path.Combine (assemblyDirectory, "NoLibPrefix.dylib")); // https://github.com/xamarin/xamarin-macios/issues/15044
+			expectedFiles.Add (Path.Combine (assemblyDirectory, "NoLibPrefix.dylib")); // https://github.com/dotnet/macios/issues/15044
 
 			expectedFiles.Add (Path.Combine (resourcesDirectory, "ContentA.txt"));
 			expectedFiles.Add (Path.Combine (resourcesDirectory, "ContentB.txt"));
@@ -595,16 +595,16 @@ namespace Xamarin.Tests {
 		[Test]
 		// Debug
 		[TestCase (ApplePlatform.iOS, "ios-arm64", CodeSignature.All, "Debug")]
-		[TestCase (ApplePlatform.iOS, "iossimulator-x64", CodeSignature.Frameworks, "Debug")]
+		[TestCase (ApplePlatform.iOS, "iossimulator-x64", CodeSignature.All, "Debug")]
 		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64", CodeSignature.All, "Debug")]
 		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64;maccatalyst-arm64", CodeSignature.All, "Debug")]
-		[TestCase (ApplePlatform.MacOSX, "osx-x64", CodeSignature.Frameworks, "Debug")]
-		[TestCase (ApplePlatform.MacOSX, "osx-x64;osx-arm64", CodeSignature.Frameworks, "Debug")]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64", CodeSignature.All, "Debug")]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64;osx-arm64", CodeSignature.All, "Debug")]
 		[TestCase (ApplePlatform.TVOS, "tvos-arm64", CodeSignature.All, "Debug")]
 		// Release
 		[TestCase (ApplePlatform.iOS, "ios-arm64", CodeSignature.All, "Release")]
 		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-x64;maccatalyst-arm64", CodeSignature.All, "Release")]
-		[TestCase (ApplePlatform.MacOSX, "osx-x64", CodeSignature.Frameworks, "Release")]
+		[TestCase (ApplePlatform.MacOSX, "osx-x64", CodeSignature.All, "Release")]
 		[TestCase (ApplePlatform.TVOS, "tvos-arm64", CodeSignature.All, "Release")]
 		public void Build (ApplePlatform platform, string runtimeIdentifiers, CodeSignature signature, string configuration)
 		{

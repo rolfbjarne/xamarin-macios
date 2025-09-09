@@ -18,7 +18,8 @@ using Foundation;
 namespace GameController {
 	// GCGamepadSnapshot.h
 	// float_t are 4 bytes (at least for ARM64)
-#if NET
+	/// <summary>The state of a <see cref="GameController.GCGamepad" />. Produced by <see cref="GameController.GCGamepadSnapshot.TryGetSnapshotData(Foundation.NSData,out GameController.GCGamepadSnapShotDataV100)" />.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -26,11 +27,6 @@ namespace GameController {
 	[ObsoletedOSPlatform ("macos10.15", "Use 'GCExtendedGamepad' instead.")]
 	[ObsoletedOSPlatform ("tvos13.0", "Use 'GCExtendedGamepad' instead.")]
 	[ObsoletedOSPlatform ("ios13.0", "Use 'GCExtendedGamepad' instead.")]
-#else
-	[Deprecated (PlatformName.MacOSX, 10, 15, message: "Use 'GCExtendedGamepad' instead.")]
-	[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'GCExtendedGamepad' instead.")]
-	[Deprecated (PlatformName.TvOS, 13, 0, message: "Use 'GCExtendedGamepad' instead.")]
-#endif
 	[StructLayout (LayoutKind.Sequential, Pack = 1)]
 	public struct GCGamepadSnapShotDataV100 {
 
@@ -75,6 +71,9 @@ namespace GameController {
 		unsafe static extern /* NSData * __nullable */ IntPtr NSDataFromGCGamepadSnapShotDataV100 (
 			/* GCGamepadSnapShotDataV100 * __nullable */ GCGamepadSnapShotDataV100* snapshotData);
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public NSData? ToNSData ()
 		{
 			unsafe {
@@ -94,11 +93,18 @@ namespace GameController {
 			/* GCGamepadSnapShotDataV100 * __nullable */ GCGamepadSnapShotDataV100* snapshotData,
 			/* NSData * __nullable */ IntPtr data);
 
+		/// <param name="data">To be added.</param>
+		///         <param name="snapshotData">To be added.</param>
+		///         <summary>Attempts to map the data into <paramref name="snapshotData" />.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static bool TryGetSnapshotData (NSData? data, out GCGamepadSnapShotDataV100 snapshotData)
 		{
 			snapshotData = default;
 			unsafe {
-				return GCGamepadSnapShotDataV100FromNSData ((GCGamepadSnapShotDataV100*) Unsafe.AsPointer<GCGamepadSnapShotDataV100> (ref snapshotData), data.GetHandle ()) != 0;
+				bool result = GCGamepadSnapShotDataV100FromNSData ((GCGamepadSnapShotDataV100*) Unsafe.AsPointer<GCGamepadSnapShotDataV100> (ref snapshotData), data.GetHandle ()) != 0;
+				GC.KeepAlive (data);
+				return result;
 			}
 		}
 	}

@@ -36,25 +36,20 @@ using ObjCRuntime;
 using Foundation;
 using CoreGraphics;
 
-#if !NET
-using NativeHandle = System.IntPtr;
-#endif
-
 #nullable enable
 
 namespace CoreAnimation {
 
 	partial class CAAnimation {
+		/// <summary>The current animation time.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[DllImport (Constants.QuartzLibrary, EntryPoint = "CACurrentMediaTime")]
 		public extern static /* CFTimeInterval */ double CurrentMediaTime ();
 	}
 
 	public partial class CAGradientLayer {
-#if NET
 		CGColor CreateColor (NativeHandle p)
-#else
-		public CGColor CreateColor (IntPtr p)
-#endif
 		{
 			return new CGColor (p, false);
 		}
@@ -87,6 +82,10 @@ namespace CoreAnimation {
 	public partial class CAKeyFrameAnimation {
 
 		// For compatibility, as we told users to explicitly use this method before, or get a warning
+		/// <param name="path">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static CAKeyFrameAnimation GetFromKeyPath (string path)
 		{
 			return FromKeyPath (path);

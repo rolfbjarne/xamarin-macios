@@ -13,11 +13,23 @@ using ObjCRuntime;
 using Foundation;
 using UniformTypeIdentifiers;
 
-#if !NET
-using NativeHandle = System.IntPtr;
-#endif
-
 namespace CoreSpotlight {
+
+	[Partial]
+	interface CoreSpotlightConstants {
+		[Field ("CoreSpotlightVersionNumber")]
+		double CoreSpotlightVersionNumber { get; }
+
+		[Field ("CoreSpotlightVersionString")]
+		[Internal]
+		IntPtr _CoreSpotlightVersionString { get; }
+
+		[Static]
+		string CoreSpotlightVersionString {
+			[Wrap ("Marshal.PtrToStringUTF8 (_CoreSpotlightVersionString)!")]
+			get;
+		}
+	}
 
 	/// <summary>Handler for communication between the application and the index on the device. The app does not need to be running for this communication to occur.</summary>
 	///     
@@ -29,7 +41,7 @@ namespace CoreSpotlight {
 
 	}
 
-	/// <summary>An author or a recipient stored in a <see cref="T:CoreSpotlight.CSSearchableItemAttributeSet" />.</summary>
+	/// <summary>An author or a recipient stored in a <see cref="CoreSpotlight.CSSearchableItemAttributeSet" />.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/CoreSpotlight/Reference/CSPerson_Class/index.html">Apple documentation for <c>CSPerson</c></related>
 	[NoTV] // CS_TVOS_UNAVAILABLE
@@ -37,6 +49,14 @@ namespace CoreSpotlight {
 	[BaseType (typeof (NSObject))]
 	interface CSPerson : NSSecureCoding, NSCopying {
 
+		/// <param name="displayName">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="handles">To be added.</param>
+		/// <param name="handleIdentifier">To be added.</param>
+		/// <summary>Creates a new CSPerson with the specified handles and handle identifier.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithDisplayName:handles:handleIdentifier:")]
 		NativeHandle Constructor ([NullAllowed] string displayName, string [] handles, NSString handleIdentifier);
 
@@ -67,7 +87,7 @@ namespace CoreSpotlight {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>Setting this property to the <see cref="P:Contacts.CNContact.Identifier" /> property for the contact enables direct lookup of the contact.</remarks>
+		///         <remarks>Setting this property to the <see cref="Contacts.CNContact.Identifier" /> property for the contact enables direct lookup of the contact.</remarks>
 		[NullAllowed]
 		[Export ("contactIdentifier")]
 		string ContactIdentifier { get; set; }
@@ -75,7 +95,7 @@ namespace CoreSpotlight {
 
 	/// <summary>A search index used by Spotlight.</summary>
 	///     <remarks>
-	///       <para>Typically, developers should use <see cref="P:CoreSpotlight.CSSearchableIndex.DefaultSearchableIndex" /> to index their application data.</para>
+	///       <para>Typically, developers should use <see cref="CoreSpotlight.CSSearchableIndex.DefaultSearchableIndex" /> to index their application data.</para>
 	///     </remarks>
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/CoreSpotlight/Reference/CSSearchableIndex_Class/index.html">Apple documentation for <c>CSSearchableIndex</c></related>
 	[NoTV] // CS_TVOS_UNAVAILABLE
@@ -107,10 +127,19 @@ namespace CoreSpotlight {
 		[Export ("defaultSearchableIndex")]
 		CSSearchableIndex DefaultSearchableIndex { get; }
 
+		/// <param name="name">To be added.</param>
+		/// <summary>Creates a new index on the device with the specified name.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithName:")]
 		NativeHandle Constructor (string name);
 
-		[NoMac]
+		/// <param name="name">To be added.</param>
+		/// <param name="protectionClass">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>Creates a new index on the device with the specified name and protection class.</summary>
+		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("initWithName:protectionClass:")]
 		NativeHandle Constructor (string name, [NullAllowed] NSString protectionClass);
@@ -124,20 +153,67 @@ namespace CoreSpotlight {
 		[iOS (17, 0), Mac (14, 0), MacCatalyst (17, 0), NoTV]
 		NativeHandle Constructor (string name, NSFileProtectionType protectionClass, string bundleIdentifier, nint options);
 
+		/// <param name="items">The items to index.</param>
+		///         <param name="completionHandler">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		///         <summary>Indexes the specified searchable items and runs <paramref name="completionHandler" /> when finished.</summary>
+		///         <remarks>To be added.</remarks>
 		[Export ("indexSearchableItems:completionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<param name="items">The items to index.</param>
+			<summary>Asynchronously indexes the specified searchable items.</summary>
+			<returns>A task that represents the asynchronous Index operation</returns>
+			<remarks>To be added.</remarks>
+			""")]
 		void Index (CSSearchableItem [] items, [NullAllowed] Action<NSError> completionHandler);
 
+		/// <param name="identifiers">To be added.</param>
+		///         <param name="completionHandler">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		///         <summary>Removes the identified items and runs <paramref name="completionHandler" /> when finished.</summary>
+		///         <remarks>To be added.</remarks>
 		[Export ("deleteSearchableItemsWithIdentifiers:completionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<param name="identifiers">To be added.</param>
+			<summary>Asynchronously removes the identified items.</summary>
+			<returns>A task that represents the asynchronous Delete operation</returns>
+			<remarks>To be added.</remarks>
+			""")]
 		void Delete (string [] identifiers, [NullAllowed] Action<NSError> completionHandler);
 
+		/// <param name="domainIdentifiers">The domain identifier for the items to delete.</param>
+		///         <param name="completionHandler">Handler that is called after the index change is journaled. may be <see langword="null" />.
+		///         <para tool="nullallowed">This parameter can be <see langword="null" />.</para></param>
+		///         <summary>Removes all items from the specified domains and runs <paramref name="completionHandler" /> after the index change is journaled.</summary>
+		///         <remarks>To be added.</remarks>
 		[Export ("deleteSearchableItemsWithDomainIdentifiers:completionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<param name="domainIdentifiers">The domain identifier for the items to delete.</param>
+			<summary>Asynchronously removes all items from the specified domains.</summary>
+			<returns>A task that represents the asynchronous DeleteWithDomain operation</returns>
+			<remarks>To be added.</remarks>
+			""")]
 		void DeleteWithDomain (string [] domainIdentifiers, [NullAllowed] Action<NSError> completionHandler);
 
+		/// <param name="completionHandler">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		///         <summary>Removes all items and runs <paramref name="completionHandler" /> when finished.</summary>
+		///         <remarks>To be added.</remarks>
 		[Export ("deleteAllSearchableItemsWithCompletionHandler:")]
-		[Async]
+		[Async (XmlDocs = """
+			<summary>Asynchronously removes all items.</summary>
+			<returns>A task that represents the asynchronous DeleteAll operation</returns>
+			<remarks>
+			          <para copied="true">The DeleteAllAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+			          <para copied="true">To be added.</para>
+			        </remarks>
+			""")]
 		void DeleteAll ([NullAllowed] Action<NSError> completionHandler);
 
 		// from interface CSExternalProvider (CSSearchableIndex)
@@ -153,24 +229,36 @@ namespace CoreSpotlight {
 		void FetchData (string bundleIdentifier, string itemIdentifier, UTType contentType, Action<NSData, NSError> completionHandler);
 	}
 
-	/// <summary>Completion handler used in <see cref="M:CoreSpotlight.CSSearchableIndex_CSOptionalBatchingExtension.FetchLastClientState(CoreSpotlight.CSSearchableIndex,CoreSpotlight.CSSearchableIndexFetchHandler)" />.</summary>
-	delegate void CSSearchableIndexFetchHandler (NSData clientState, NSError error);
+	/// <summary>Completion handler used in <see cref="CoreSpotlight.CSSearchableIndex_CSOptionalBatchingExtension.FetchLastClientState(CoreSpotlight.CSSearchableIndex,CoreSpotlight.CSSearchableIndexFetchHandler)" />.</summary>
+	delegate void CSSearchableIndexFetchHandler (NSData clientState, [NullAllowed] NSError error);
 
 	delegate void CSSearchableIndexEndIndexHandler ([NullAllowed] NSError error);
 
-	/// <summary>Extension methods for <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=T:CoreServices.CSSearchableIndex&amp;scope=Xamarin" title="T:CoreServices.CSSearchableIndex">T:CoreServices.CSSearchableIndex</a></format>.</summary>
+	/// <summary>Extension methods for <see cref="CSSearchableIndex" />.</summary>
 	[NoTV] // CS_TVOS_UNAVAILABLE
 	[MacCatalyst (13, 1)]
 	[Category]
 	[BaseType (typeof (CSSearchableIndex))]
 	interface CSSearchableIndex_CSOptionalBatchingExtension {
 
+		/// <summary>Begins an index update batch.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("beginIndexBatch")]
 		void BeginIndexBatch ();
 
+		/// <param name="clientState">To be added.</param>
+		/// <param name="completionHandler">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>Ends an index update batch, relying on the 250 bytes of information for crash recovery, and calls <paramref name="completionHandler" /> when finished.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("endIndexBatchWithClientState:completionHandler:")]
 		void EndIndexBatch (NSData clientState, [NullAllowed] Action<NSError> completionHandler);
 
+		/// <param name="completionHandler">To be added.</param>
+		/// <summary>Fetches the client state and runs <paramref name="completionHandler" /> when finished..</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("fetchLastClientStateWithCompletionHandler:")]
 		void FetchLastClientState (CSSearchableIndexFetchHandler completionHandler);
 
@@ -179,12 +267,6 @@ namespace CoreSpotlight {
 		void EndIndexBatch ([NullAllowed] NSData expectedClientState, NSData newClientState, [NullAllowed] CSSearchableIndexEndIndexHandler completionHandler);
 	}
 
-	/// <summary>Interface representing the required methods (if any) of the protocol <see cref="T:CoreSpotlight.CSSearchableIndexDelegate" />.</summary>
-	///     <remarks>
-	///       <para>This interface contains the required methods (if any) from the protocol defined by <see cref="T:CoreSpotlight.CSSearchableIndexDelegate" />.</para>
-	///       <para>If developers create classes that implement this interface, the implementation methods will automatically be exported to Objective-C with the matching signature from the method defined in the <see cref="T:CoreSpotlight.CSSearchableIndexDelegate" /> protocol.</para>
-	///       <para>Optional methods (if any) are provided by the <see cref="T:CoreSpotlight.CSSearchableIndexDelegate_Extensions" /> class as extension methods to the interface, allowing developers to invoke any optional methods on the protocol.</para>
-	///     </remarks>
 	interface ICSSearchableIndexDelegate { }
 
 	/// <summary>Delegate object providing members that are called when reindexing the index.</summary>
@@ -196,34 +278,76 @@ namespace CoreSpotlight {
 	[BaseType (typeof (NSObject))]
 	interface CSSearchableIndexDelegate {
 
+		/// <param name="searchableIndex">To be added.</param>
+		///         <param name="acknowledgementHandler">To be added.</param>
+		///         <summary>Reindexes all items in the specified index and runs <paramref name="acknowledgementHandler" /> when finished.</summary>
+		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("searchableIndex:reindexAllSearchableItemsWithAcknowledgementHandler:")]
 		void ReindexAllSearchableItems (CSSearchableIndex searchableIndex, Action acknowledgementHandler);
 
+		/// <param name="searchableIndex">To be added.</param>
+		///         <param name="identifiers">To be added.</param>
+		///         <param name="acknowledgementHandler">To be added.</param>
+		///         <summary>Reindexes the specified items in the specified index and runs <paramref name="acknowledgementHandler" /> when finished.</summary>
+		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("searchableIndex:reindexSearchableItemsWithIdentifiers:acknowledgementHandler:")]
 		void ReindexSearchableItems (CSSearchableIndex searchableIndex, string [] identifiers, Action acknowledgementHandler);
 
+		/// <param name="searchableIndex">To be added.</param>
+		///         <summary>Method that is called after index throttling starts.</summary>
+		///         <remarks>To be added.</remarks>
 		[Export ("searchableIndexDidThrottle:")]
 		void DidThrottle (CSSearchableIndex searchableIndex);
 
+		/// <param name="searchableIndex">To be added.</param>
+		///         <summary>Method that is called after index throttling is stopped..</summary>
+		///         <remarks>To be added.</remarks>
 		[Export ("searchableIndexDidFinishThrottle:")]
 		void DidFinishThrottle (CSSearchableIndex searchableIndex);
 
+		/// <param name="searchableIndex">To be added.</param>
+		///         <param name="itemIdentifier">To be added.</param>
+		///         <param name="typeIdentifier">To be added.</param>
+		///         <param name="outError">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("dataForSearchableIndex:itemIdentifier:typeIdentifier:error:")]
 		[return: NullAllowed]
 		NSData GetData (CSSearchableIndex searchableIndex, string itemIdentifier, string typeIdentifier, out NSError outError);
 
+		/// <param name="searchableIndex">To be added.</param>
+		///         <param name="itemIdentifier">To be added.</param>
+		///         <param name="typeIdentifier">To be added.</param>
+		///         <param name="inPlace">To be added.</param>
+		///         <param name="outError">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("fileURLForSearchableIndex:itemIdentifier:typeIdentifier:inPlace:error:")]
 		[return: NullAllowed]
 		NSUrl GetFileUrl (CSSearchableIndex searchableIndex, string itemIdentifier, string typeIdentifier, bool inPlace, out NSError outError);
+
+		[NoTV]
+		[iOS (18, 4), Mac (15, 4), MacCatalyst (18, 4)]
+		[Export ("searchableItemsForIdentifiers:searchableItemsHandler:")]
+		void GetSearchableItems (string [] identifiers, CSSearchableIndexDelegateGetSearchableItemsHandler searchableItemsHandler);
+
+		[NoTV]
+		[iOS (18, 4), Mac (15, 4), MacCatalyst (18, 4)]
+		[Export ("searchableItemsDidUpdate:")]
+		void DidUpdate (CSSearchableItem [] items);
 	}
 
-	/// <summary>A uniquely identifiable, searchable object in a <see cref="T:CoreSpotlight.CSSearchableIndex" />.</summary>
+	delegate void CSSearchableIndexDelegateGetSearchableItemsHandler (CSSearchableItem [] items);
+
+	/// <summary>A uniquely identifiable, searchable object in a <see cref="CoreSpotlight.CSSearchableIndex" />.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/CoreSpotlight/Reference/CSSearchableItem_Class/index.html">Apple documentation for <c>CSSearchableItem</c></related>
 	[NoTV] // CS_TVOS_UNAVAILABLE
@@ -257,6 +381,17 @@ namespace CoreSpotlight {
 		[Field ("CSSearchQueryString")]
 		NSString QueryString { get; }
 
+		/// <param name="uniqueIdentifier">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="domainIdentifier">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <param name="attributeSet">To be added.</param>
+		/// <summary>Creates a new CSSearchableItem with the specified values.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithUniqueIdentifier:domainIdentifier:attributeSet:")]
 		NativeHandle Constructor ([NullAllowed] string uniqueIdentifier, [NullAllowed] string domainIdentifier, CSSearchableItemAttributeSet attributeSet);
 
@@ -299,6 +434,10 @@ namespace CoreSpotlight {
 		[NoTV]
 		[Export ("isUpdate", ArgumentSemantic.Assign)]
 		bool IsUpdate { get; set; }
+
+		[NoTV, iOS (18, 4), MacCatalyst (18, 4), Mac (15, 4)]
+		[Export ("updateListenerOptions", ArgumentSemantic.Assign)]
+		CSSearchableItemUpdateListenerOptions UpdateListenerOptions { get; set; }
 	}
 
 	/// <summary>Represents a string-like object that returns a locale-specific version of a string.</summary>
@@ -310,9 +449,15 @@ namespace CoreSpotlight {
 	// hack: it seems that generator.cs can't track NSCoding correctly ? maybe because the type is named NSString2 at that time
 	interface CSLocalizedString : NSCoding {
 
+		/// <param name="localizedStrings">To be added.</param>
+		/// <summary>Creates a new CSLocalizedString with the specified dictionary of locale-specific strings.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithLocalizedStrings:")]
 		NativeHandle Constructor (NSDictionary localizedStrings);
 
+		/// <summary>Returns the string for the current locale.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[Export ("localizedString")]
 		string GetLocalizedString ();
 	}
@@ -326,9 +471,19 @@ namespace CoreSpotlight {
 	[DisableDefaultCtor] // NSInvalidArgumentException Reason: You must call -[CSCustomAttributeKey initWithKeyName...]
 	interface CSCustomAttributeKey : NSCopying, NSSecureCoding {
 
+		/// <param name="keyName">To be added.</param>
+		/// <summary>Creates a new CSCustomAttributeKey with the specified name.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithKeyName:")]
 		NativeHandle Constructor (string keyName);
 
+		/// <param name="keyName">The attribute key name.</param>
+		/// <param name="searchable">Whether the attribute can be used as a search word.</param>
+		/// <param name="searchableByDefault">Whether the attribute is searchable by default.</param>
+		/// <param name="unique">Whether the attribute should be treated as unique in order to save storage space.</param>
+		/// <param name="multiValued">Whether the attribute will likely be associated with arrays, hashes, or other compound values.</param>
+		/// <summary>Creates a new CSCustomAttributeKey with the specified values.</summary>
+		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		[Export ("initWithKeyName:searchable:searchableByDefault:unique:multiValued:")]
 		NativeHandle Constructor (string keyName, bool searchable, bool searchableByDefault, bool unique, bool multiValued);
@@ -364,6 +519,8 @@ namespace CoreSpotlight {
 		bool MultiValued { [Bind ("isMultiValued")] get; }
 	}
 
+	/// <summary>Represents keys that identify commonly used mailboxes.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[EditorBrowsable (EditorBrowsableState.Advanced)]
 	[Static]
@@ -414,6 +571,9 @@ namespace CoreSpotlight {
 	[BaseType (typeof (NSObject))]
 	interface CSSearchableItemAttributeSet : NSCopying, NSSecureCoding {
 
+		/// <param name="itemContentType">To be added.</param>
+		/// <summary>Creates a new CSSearchableItemAttributeSet for the specified item content type.</summary>
+		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 14, 0, message: "Use '.ctor(UTType)' instead.")]
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "Use '.ctor(UTType)' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 14, 0, message: "Use '.ctor(UTType)' instead.")]
@@ -1717,7 +1877,7 @@ namespace CoreSpotlight {
 		[Export ("textContent")]
 		string TextContent { get; set; }
 
-		/// <summary>Gets or sets an array of <see cref="T:CoreSpotlight.CSPerson" /> objects that represent the authors of a message.</summary>
+		/// <summary>Gets or sets an array of <see cref="CoreSpotlight.CSPerson" /> objects that represent the authors of a message.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
@@ -1727,7 +1887,7 @@ namespace CoreSpotlight {
 		[Export ("authors", ArgumentSemantic.Copy)]
 		CSPerson [] Authors { get; set; }
 
-		/// <summary>Gets or sets an array of <see cref="T:CoreSpotlight.CSPerson" /> objects that represent the recipients on the To: line of an email.</summary>
+		/// <summary>Gets or sets an array of <see cref="CoreSpotlight.CSPerson" /> objects that represent the recipients on the To: line of an email.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
@@ -1737,7 +1897,7 @@ namespace CoreSpotlight {
 		[Export ("primaryRecipients", ArgumentSemantic.Copy)]
 		CSPerson [] PrimaryRecipients { get; set; }
 
-		/// <summary>Gets or sets an array of <see cref="T:CoreSpotlight.CSPerson" /> objects that comprise the recipients on the Cc: field.</summary>
+		/// <summary>Gets or sets an array of <see cref="CoreSpotlight.CSPerson" /> objects that comprise the recipients on the Cc: field.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
@@ -1747,7 +1907,7 @@ namespace CoreSpotlight {
 		[Export ("additionalRecipients", ArgumentSemantic.Copy)]
 		CSPerson [] AdditionalRecipients { get; set; }
 
-		/// <summary>Gets or sets an array of <see cref="T:CoreSpotlight.CSPerson" /> objects that represent the recipients on the Bcc: line of an email.</summary>
+		/// <summary>Gets or sets an array of <see cref="CoreSpotlight.CSPerson" /> objects that represent the recipients on the Bcc: line of an email.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
@@ -2194,14 +2354,12 @@ namespace CoreSpotlight {
 		[Field ("CSActionIdentifier")]
 		NSString ActionIdentifier { get; }
 
-		[NoTV, NoMac, iOS (15, 0)]
-		[NoMacCatalyst]
+		[NoTV, NoMac, iOS (15, 0), MacCatalyst (18, 0)]
 		[Export ("actionIdentifiers", ArgumentSemantic.Copy)]
 		string [] ActionIdentifiers { get; set; }
 
 		[NullAllowed]
-		[NoTV, NoMac, iOS (15, 0)]
-		[NoMacCatalyst]
+		[NoTV, NoMac, iOS (15, 0), MacCatalyst (18, 0)]
 		[Export ("sharedItemContentType", ArgumentSemantic.Copy)]
 		UTType SharedItemContentType { get; set; }
 
@@ -2323,6 +2481,26 @@ namespace CoreSpotlight {
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("providerInPlaceFileTypeIdentifiers", ArgumentSemantic.Copy)]
 		string [] ProviderInPlaceFileTypeIdentifiers { get; set; }
+
+		[NoTV]
+		[iOS (18, 4), MacCatalyst (18, 4), Mac (15, 4)]
+		[Export ("moveFrom:")]
+		void MoveFrom (CSSearchableItemAttributeSet sourceAttributeSet);
+
+		[NoTV]
+		[iOS (18, 4), MacCatalyst (18, 4), Mac (15, 4)]
+		[Export ("isPriority", ArgumentSemantic.Strong), NullAllowed]
+		NSNumber IsPriority { get; }
+
+		[NoTV]
+		[iOS (18, 4), MacCatalyst (18, 4), Mac (15, 4)]
+		[Export ("textContentSummary", ArgumentSemantic.Copy), NullAllowed]
+		string TextContentSummary { get; }
+
+		[NoTV]
+		[iOS (18, 4), MacCatalyst (18, 4), Mac (15, 4)]
+		[Export ("transcribedTextContent", ArgumentSemantic.Strong), NullAllowed]
+		string TranscribedTextContent { get; set; }
 	}
 
 	/// <include file="../docs/api/CoreSpotlight/CSSearchQuery.xml" path="/Documentation/Docs[@DocId='T:CoreSpotlight.CSSearchQuery']/*" />
@@ -2331,6 +2509,15 @@ namespace CoreSpotlight {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface CSSearchQuery {
+		/// <param name="queryString">To be added.</param>
+		/// <param name="attributes">
+		///           <para>A list of strings from <see cref="CoreSpotlight.CSSearchableItemAttributeSet" /> to match.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		/// <summary>Creates a new search query object for the specified query string and attributes.</summary>
+		/// <remarks>
+		///           <para>For more information on the query string format, see Apple's documentation for the <format type="text/html"><a href="https://developer.apple.com/reference/CoreSpotlight/CSSearchQuery">CSSearchQuery object</a></format>.</para>
+		///         </remarks>
 		[Deprecated (PlatformName.iOS, 16, 0, message: "Use the constructor that takes a 'CSSearchQueryContext' parameter instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use the constructor that takes a 'CSSearchQueryContext' parameter instead.")]
 		[Deprecated (PlatformName.MacOSX, 13, 0, message: "Use the constructor that takes a 'CSSearchQueryContext' parameter instead.")]
@@ -2378,9 +2565,13 @@ namespace CoreSpotlight {
 		[Export ("protectionClasses", ArgumentSemantic.Copy)]
 		string [] ProtectionClasses { get; set; }
 
+		/// <summary>Starts the search.</summary>
+		///         <remarks>To be added.</remarks>
 		[Export ("start")]
 		void Start ();
 
+		/// <summary>Cancels the current search and calls <see cref="CompletionHandler" />, if present, with <see cref="CoreSpotlight.CSSearchQueryErrorCode.Cancelled" />.</summary>
+		///         <remarks>To be added.</remarks>
 		[Export ("cancel")]
 		void Cancel ();
 	}
@@ -2520,7 +2711,7 @@ namespace CoreSpotlight {
 		AllowMail = 1L << 0,
 	}
 
-	[NoTV, iOS (16, 0), MacCatalyst (16, 0)]
+	[TV (16, 0), iOS (16, 0), MacCatalyst (16, 0)]
 	[Native]
 	public enum CSSuggestionKind : long {
 		None,
@@ -2528,4 +2719,11 @@ namespace CoreSpotlight {
 		Default,
 	}
 
+	[Native]
+	[TV (18, 4), iOS (18, 4), MacCatalyst (18, 4), Mac (15, 4)]
+	public enum CSSearchableItemUpdateListenerOptions : ulong {
+		Default = 0,
+		Summarization = 1 << 1,
+		Priority = 1 << 2,
+	}
 }

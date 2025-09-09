@@ -38,6 +38,9 @@ namespace Xamarin.MacDev.Tasks {
 		public string AssemblyName { get; set; } = String.Empty;
 
 		[Required]
+		public string BundleExecutable { get; set; } = "";
+
+		[Required]
 		[Output] // This is required to create an empty file on Windows for the Input/Outputs check.
 		public ITaskItem? CompiledAppManifest { get; set; }
 
@@ -133,7 +136,7 @@ namespace Xamarin.MacDev.Tasks {
 			plist.SetIfNotPresent (ManifestKeys.CFBundleInfoDictionaryVersion, "6.0");
 			plist.SetIfNotPresent (ManifestKeys.CFBundlePackageType, IsAppExtension ? "XPC!" : "APPL");
 			plist.SetIfNotPresent (ManifestKeys.CFBundleSignature, "????");
-			plist.SetIfNotPresent (ManifestKeys.CFBundleExecutable, AssemblyName);
+			plist.SetIfNotPresent (ManifestKeys.CFBundleExecutable, BundleExecutable);
 			plist.SetIfNotPresent (ManifestKeys.CFBundleName, AppBundleName);
 
 			if (GenerateApplicationManifest && !string.IsNullOrEmpty (ApplicationTitle))
@@ -210,9 +213,8 @@ namespace Xamarin.MacDev.Tasks {
 			switch (Platform) {
 			case ApplePlatform.iOS:
 			case ApplePlatform.TVOS:
-			case ApplePlatform.WatchOS:
 			case ApplePlatform.MacCatalyst:
-				// Fonts are listed in the Info.plist in a UIAppFonts entry for iOS, tvOS, watchOS and Mac Catalyst.
+				// Fonts are listed in the Info.plist in a UIAppFonts entry for iOS, tvOS and Mac Catalyst.
 				var uiAppFonts = plist.GetArray ("UIAppFonts");
 				if (uiAppFonts is null) {
 					uiAppFonts = new PArray ();
@@ -339,7 +341,6 @@ namespace Xamarin.MacDev.Tasks {
 			switch (Platform) {
 			case ApplePlatform.iOS:
 			case ApplePlatform.TVOS:
-			case ApplePlatform.WatchOS:
 			case ApplePlatform.MacCatalyst:
 				return CompileMobile (plist);
 			case ApplePlatform.MacOSX:
@@ -624,9 +625,6 @@ namespace Xamarin.MacDev.Tasks {
 
 				uiDeviceFamily = IPhoneDeviceType.IPhone;
 				break;
-			case ApplePlatform.WatchOS:
-				uiDeviceFamily = IPhoneDeviceType.Watch;
-				break;
 			case ApplePlatform.TVOS:
 				uiDeviceFamily = IPhoneDeviceType.TV;
 				break;
@@ -645,8 +643,6 @@ namespace Xamarin.MacDev.Tasks {
 			//   It would also require a hostname for the mac, which it might not have either.
 			// * NSAppTransportSecurity/NSExceptionDomains does not allow exceptions based
 			//   on IP address (only hostname).
-			// * Which means the only way to make sure watchOS allows connections from 
-			//   the app on device to the mac is to disable App Transport Security altogether.
 			// Good news: watchOS 3 will apparently not apply ATS when connecting
 			// directly to IP addresses, which means we won't have to do this at all
 			// (sometime in the future).

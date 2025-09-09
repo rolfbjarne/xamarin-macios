@@ -287,9 +287,10 @@ public class Frameworks : Dictionary<string, Framework> {
 					{ "BrowserEngineKit", "BrowserEngineKit", 14, 3},
 
 					{ "DeviceDiscoveryExtension", "DeviceDiscoveryExtension", 15, 0},
-					// FSKit was removed from Xcode 16 RC, but keeping it commented, because it's likely to return in a later release
-					// { "FSKit", "FSKit", 15, 0 },
 					{ "MediaExtension", "MediaExtension", 15, 0 },
+
+					{ "FSKit", "FSKit", 15, 4 },
+					{ "SecurityUI", "SecurityUI", 15, 4 },
 				};
 			}
 			return mac_frameworks;
@@ -400,7 +401,7 @@ public class Frameworks : Dictionary<string, Framework> {
 				{ "IntentsUI", "IntentsUI", 10 },
 
 				{ "ARKit", "ARKit", 11 },
-				{ "CoreNFC", "CoreNFC", new Version (11, 0), NotAvailableInSimulator, true }, /* not always present, e.g. iPad w/iOS 12, so must be weak linked; doesn't work in the simulator in Xcode 12 (https://stackoverflow.com/q/63915728/183422) */
+				{ "CoreNFC", "CoreNFC", new Version (11, 0), new Version (15, 0), true }, /* not always present, e.g. iPad w/iOS 12, so must be weak linked; doesn't work in the simulator in Xcode 12 (https://stackoverflow.com/q/63915728/183422), but works in at least Xcode 15 (maybe earlier too) */
 				{ "DeviceCheck", "DeviceCheck", new Version (11, 0), new Version (13, 0) },
 				{ "IdentityLookup", "IdentityLookup", 11 },
 				{ "IOSurface", "IOSurface", new Version (11, 0), NotAvailableInSimulator /* Not available in the simulator (the header is there, but broken) */  },
@@ -441,7 +442,7 @@ public class Frameworks : Dictionary<string, Framework> {
 				{ "MLCompute", "MLCompute", new Version (14,0), NotAvailableInSimulator },
 				{ "NearbyInteraction", "NearbyInteraction", 14,0 },
 				{ "ScreenTime", "ScreenTime", 14,0 },
-				{ "SensorKit", "SensorKit", new Version (14, 0), null, true }, /* not always present on device, e.g. any iPad, so must be weak linked; https://github.com/xamarin/xamarin-macios/issues/9938 */
+				{ "SensorKit", "SensorKit", new Version (14, 0), null, true }, /* not always present on device, e.g. any iPad, so must be weak linked; https://github.com/dotnet/macios/issues/9938 */
 				{ "UniformTypeIdentifiers", "UniformTypeIdentifiers", 14,0 },
 
 				{ "AdServices", "AdServices", 14,3 },
@@ -470,6 +471,8 @@ public class Frameworks : Dictionary<string, Framework> {
 				{ "BrowserEngineKit", "BrowserEngineKit", 17, 4},
 
 				{ "AccessorySetupKit", "AccessorySetupKit", 18, 0 },
+
+				{ "SecurityUI", "SecurityUI", 18, 4 },
 
 				// the above MUST be kept in sync with simlauncher
 				// see tools/mtouch/Makefile
@@ -582,6 +585,10 @@ public class Frameworks : Dictionary<string, Framework> {
 					{ "BrowserEngineKit", "BrowserEngineKit", new Version (17, 4), NotAvailableInSimulator },
 
 					{ "PdfKit", "PDFKit", 18, 2 },
+
+					{ "BackgroundAssets", "BackgroundAssets", 18, 4 },
+					{ "MetalFX", "MetalFX", new Version (18, 4), NotAvailableInSimulator },
+					{ "SecurityUI", "SecurityUI", 18, 4 },
 				};
 			}
 			return tvos_frameworks;
@@ -755,7 +762,7 @@ public class Frameworks : Dictionary<string, Framework> {
 		case ApplePlatform.MacOSX:
 			return true;
 		default:
-			throw ErrorHelper.CreateError (71, Errors.MX0071 /* "Unknown platform: {0}. This usually indicates a bug in {1}; please file a bug report at https://github.com/xamarin/xamarin-macios/issues/new with a test case." */, app.Platform, app.GetProductName ());
+			throw ErrorHelper.CreateError (71, Errors.MX0071 /* "Unknown platform: {0}. This usually indicates a bug in {1}; please file a bug report at https://github.com/dotnet/macios/issues/new with a test case." */, app.Platform, app.GetProductName ());
 		}
 		return true;
 	}

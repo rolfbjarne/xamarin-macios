@@ -62,7 +62,7 @@ namespace CoreGraphics {
 
 	// untyped enum -> CGContext.h
 	/// <summary>Text drawing mode used by Quartz.</summary>
-	///     <remarks>These drawing modes are used with the <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=Core%20Graphics%20CGContext%20Set%20Drawing%20Mode&amp;scope=Xamarin" title="M:CoreGraphics.CGContext.SetDrawingMode*">M:CoreGraphics.CGContext.SetDrawingMode*</a></format> method and they specify how the glyphs that make up the text should be drawn.   </remarks>
+	/// <remarks>These drawing modes are used with the <see cref="CGContext.SetTextDrawingMode" /> method and they specify how the glyphs that make up the text should be drawn.</remarks>
 	public enum CGTextDrawingMode : uint {
 		/// <summary>Perform a Fill operation on the text glyphs.</summary>
 		Fill,
@@ -270,19 +270,6 @@ namespace CoreGraphics {
 		/// <summary>To be added.</summary>
 		AllowsFormFieldEntry = (1 << 7),
 	}
-
-#if !NET
-	// uint32_t enum -> CGColorConverter.h
-	// this enum does not exist in the headers anymore
-	[Obsoleted (PlatformName.TvOS, 10, 0, message: "Replaced by 'CGColorConversionInfoTransformType'.")]
-	[Obsoleted (PlatformName.iOS, 10, 0, message: "Replaced by 'CGColorConversionInfoTransformType'.")]
-	[NoMac]
-	public enum CGColorConverterTransformType : uint {
-		FromSpace,
-		ToSpace,
-		ApplySpace,
-	}
-#endif
 
 	// uint32_t enum -> CGColorConversionInfo.h
 	[MacCatalyst (13, 1)]

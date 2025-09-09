@@ -9,6 +9,8 @@ using ObjCRuntime;
 using System;
 
 namespace CoreWlan {
+	/// <summary>To be added.</summary>
+	///     <remarks>To be added.</remarks>
 	public unsafe partial class CWInterface {
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
@@ -42,32 +44,50 @@ namespace CoreWlan {
 			}
 		}
 
+		/// <param name="ssid">To be added.</param>
+		///         <param name="error">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public CWNetwork []? ScanForNetworksWithSsid (NSData ssid, out NSError error)
 		{
 			NSSet? networks = _ScanForNetworksWithSsid (ssid, out error);
 			return networks?.ToArray<CWNetwork> ();
 		}
 
+		/// <param name="networkName">To be added.</param>
+		///         <param name="error">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public CWNetwork []? ScanForNetworksWithName (string networkName, out NSError error)
 		{
 			NSSet? networks = _ScanForNetworksWithName (networkName, out error);
 			return networks?.ToArray<CWNetwork> ();
 		}
 
-#if NET
+		/// <param name="ssid">To be added.</param>
+		///         <param name="includeHidden">To be added.</param>
+		///         <param name="error">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
-#endif
 		public CWNetwork []? ScanForNetworksWithSsid (NSData ssid, bool includeHidden, out NSError? error)
 		{
 			NSSet? networks = _ScanForNetworksWithSsid (ssid, includeHidden, out error);
 			return networks?.ToArray<CWNetwork> ();
 		}
 
-#if NET
+		/// <param name="networkName">To be added.</param>
+		///         <param name="includeHidden">To be added.</param>
+		///         <param name="error">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
-#endif
 		public CWNetwork []? ScanForNetworksWithName (string networkName, bool includeHidden, out NSError? error)
 		{
 			NSSet? networks = _ScanForNetworksWithName (networkName, includeHidden, out error);

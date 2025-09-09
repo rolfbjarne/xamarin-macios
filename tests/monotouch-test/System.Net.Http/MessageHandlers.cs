@@ -9,10 +9,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http;
-#if NET
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
-#endif
 using System.Linq;
 using System.IO;
 
@@ -40,10 +38,8 @@ namespace MonoTests.System.Net.Http {
 				return new HttpClientHandler ();
 			if (handler_type == typeof (CFNetworkHandler))
 				return new CFNetworkHandler ();
-#if NET
 			if (handler_type == typeof (SocketsHttpHandler))
 				return new SocketsHttpHandler ();
-#endif
 			if (handler_type == typeof (NSUrlSessionHandler))
 				return new NSUrlSessionHandler ();
 
@@ -54,9 +50,7 @@ namespace MonoTests.System.Net.Http {
 		[Test]
 		[TestCase (typeof (HttpClientHandler))]
 		[TestCase (typeof (CFNetworkHandler))]
-#if NET
 		[TestCase (typeof (SocketsHttpHandler))]
-#endif
 		[TestCase (typeof (NSUrlSessionHandler))]
 		public void DnsFailure (Type handlerType)
 		{
@@ -144,8 +138,17 @@ namespace MonoTests.System.Net.Http {
 				nativeCookieResult = await nativeResponse.Content.ReadAsStringAsync ();
 			}, out var ex);
 
-			if (!completed || managedCookieResult.Contains ("502 Bad Gateway") || nativeCookieResult.Contains ("502 Bad Gateway") || managedCookieResult.Contains ("504 Gateway Time-out") || nativeCookieResult.Contains ("504 Gateway Time-out"))
+			if (!completed)
 				TestRuntime.IgnoreInCI ("Transient network failure - ignore in CI");
+			var intermittentFailures = new string [] {
+				"500 Internal Server Error",
+				"502 Bad Gateway",
+				"503 Service Temporarily Unavailable",
+				"504 Gateway Time-out",
+			};
+			if (intermittentFailures.Any (v => managedCookieResult.Contains (v) || nativeCookieResult.Contains (v)))
+				TestRuntime.IgnoreInCI ("Intermittent network failure - ignore in CI");
+
 			Assert.IsTrue (completed, "Network request completed");
 			Assert.IsNull (ex, "Exception");
 			Assert.IsNotNull (managedCookieResult, "Managed cookies result");
@@ -430,12 +433,7 @@ namespace MonoTests.System.Net.Http {
 			}
 		}
 
-#if !NET // By default HttpClientHandler redirects to a NSUrlSessionHandler, so no need to test that here.
-		[TestCase (typeof (HttpClientHandler))]
-#endif
-#if NET
 		[TestCase (typeof (SocketsHttpHandler))]
-#endif
 		[TestCase (typeof (NSUrlSessionHandler))]
 		public void RejectSslCertificatesServicePointManager (Type handlerType)
 		{
@@ -468,7 +466,6 @@ namespace MonoTests.System.Net.Http {
 					return false;
 				};
 #pragma warning restore SM02184
-#if NET
 			} else if (handler is SocketsHttpHandler shh) {
 				expectedExceptionType = typeof (AuthenticationException);
 				var sslOptions = new SslClientAuthenticationOptions {
@@ -481,14 +478,9 @@ namespace MonoTests.System.Net.Http {
 					},
 				};
 				shh.SslOptions = sslOptions;
-#endif // NET
 			} else if (handler is NSUrlSessionHandler ns) {
 				expectedExceptionType = typeof (WebException);
-#if NET
 				ns.TrustOverrideForUrl += (a, b, c) => {
-#else
-				ns.TrustOverride += (a, b) => {
-#endif
 					validationCbWasExecuted = true;
 					// return false, since we want to test that the exception is raised
 					return false;
@@ -536,11 +528,7 @@ namespace MonoTests.System.Net.Http {
 
 			var handler = GetHandler (handlerType);
 			if (handler is NSUrlSessionHandler ns) {
-#if NET
 				ns.TrustOverrideForUrl += (a, b, c) => {
-#else
-				ns.TrustOverride += (a, b) => {
-#endif
 					// servicePointManagerCbWasExcuted = true;
 					return true;
 				};
@@ -580,8 +568,7 @@ namespace MonoTests.System.Net.Http {
 			// Assert.IsTrue (servicePointManagerCbWasExcuted, "Executed");
 		}
 
-#if NET
-		[Ignore ("https://github.com/xamarin/xamarin-macios/issues/21912")]
+		[Ignore ("https://github.com/dotnet/macios/issues/21912")]
 		[TestCase ("https://self-signed.badssl.com/")]
 		[TestCase ("https://wrong.host.badssl.com/")]
 		public void AcceptSslCertificatesWithCustomValidationCallbackNSUrlSessionHandler (string url)
@@ -697,8 +684,6 @@ namespace MonoTests.System.Net.Http {
 				Assert.AreEqual (certificate.Thumbprint, certificate2.Thumbprint);
 			}
 		}
-
-#endif
 
 		[Test]
 		public void AssertDefaultValuesNSUrlSessionHandler ()
@@ -867,12 +852,11 @@ namespace MonoTests.System.Net.Http {
 			}
 		}
 
-#if NET
 		[TestCase (typeof (NSUrlSessionHandler))]
 		[TestCase (typeof (SocketsHttpHandler))]
 		public void UpdateRequestUriAfterRedirect (Type handlerType)
 		{
-			// https://github.com/xamarin/xamarin-macios/issues/20629
+			// https://github.com/dotnet/macios/issues/20629
 
 			var done = TestRuntime.TryRunAsync (TimeSpan.FromSeconds (30), async () => {
 				var client = new HttpClient (GetHandler (handlerType));
@@ -897,7 +881,7 @@ namespace MonoTests.System.Net.Http {
 		[TestCase (typeof (SocketsHttpHandler))]
 		public void RequestUriNotUpdatedIfNotRedirect (Type handlerType)
 		{
-			// https://github.com/xamarin/xamarin-macios/issues/20629
+			// https://github.com/dotnet/macios/issues/20629
 
 			var done = TestRuntime.TryRunAsync (TimeSpan.FromSeconds (30), async () => {
 				var client = new HttpClient (GetHandler (handlerType));
@@ -916,6 +900,59 @@ namespace MonoTests.System.Net.Http {
 				Assert.IsNull (ex, "Exception");
 			}
 		}
-#endif // NET
+
+		// https://github.com/dotnet/macios/issues/23764
+		[TestCase ("https://sha256.badssl.com/")]
+		public void SslCertificatesWithoutOCSPEndPointsNSUrlSessionHandler_AllowByDefault (string url)
+		{
+			SslCertificatesWithoutOCSPEndPointsNSUrlSessionHandler (url, null, SslPolicyErrors.None);
+		}
+
+		// https://github.com/dotnet/macios/issues/23764
+		[TestCase ("https://sha256.badssl.com/")]
+		public void SslCertificatesWithoutOCSPEndPointsNSUrlSessionHandler_Disallow (string url)
+		{
+			SslCertificatesWithoutOCSPEndPointsNSUrlSessionHandler (url, (X509VerificationFlags) 0, SslPolicyErrors.RemoteCertificateChainErrors);
+		}
+
+		void SslCertificatesWithoutOCSPEndPointsNSUrlSessionHandler (string url, X509VerificationFlags? verificationFlags, SslPolicyErrors expectedError)
+		{
+			bool callbackWasExecuted = false;
+			HttpResponseMessage result = null;
+			X509Certificate2 serverCertificate = null;
+			SslPolicyErrors sslPolicyErrors = SslPolicyErrors.None;
+
+			var handler = new NSUrlSessionHandler {
+				ServerCertificateCustomValidationCallback = (request, certificate, chain, errors) => {
+					callbackWasExecuted = true;
+					serverCertificate = certificate;
+					sslPolicyErrors = errors;
+					return true;
+				},
+			};
+			if (verificationFlags.HasValue)
+				handler.CertificateChainPolicy.VerificationFlags = verificationFlags.Value;
+
+			Assert.IsTrue (handler.CheckCertificateRevocationList, "CheckCertificateRevocationList");
+
+			var done = TestRuntime.TryRunAsync (TimeSpan.FromSeconds (30), async () => {
+				var client = new HttpClient (handler);
+				// Disable keep-alive and cache to force reconnection for each request
+				client.DefaultRequestHeaders.ConnectionClose = true;
+				client.DefaultRequestHeaders.CacheControl = new CacheControlHeaderValue { NoCache = true, NoStore = true };
+				result = await client.GetAsync (url);
+			}, out var ex);
+
+			if (!done) { // timeouts happen in the bots due to dns issues, connection issues etc., we do not want to fail
+				Assert.Inconclusive ("Request timedout.");
+			} else {
+				Assert.True (callbackWasExecuted, "Validation Callback called");
+				Assert.AreEqual (expectedError, sslPolicyErrors, "Callback was called with unexpected SslPolicyErrors");
+				Assert.IsNotNull (serverCertificate, "Server certificate is null");
+				Assert.IsNull (ex, "Exception wasn't expected.");
+				Assert.IsNotNull (result, "Result was null");
+				Assert.IsTrue (result.IsSuccessStatusCode, $"Status code was not success: {result.StatusCode}");
+			}
+		}
 	}
 }

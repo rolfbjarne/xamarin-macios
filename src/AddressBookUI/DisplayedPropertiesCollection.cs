@@ -20,6 +20,8 @@ namespace AddressBookUI {
 
 	delegate T ABFunc<T> ();
 
+	/// <summary>A collection of <see cref="AddressBook.ABPersonProperty" />s returned by the <see cref="AddressBookUI.ABPeoplePickerNavigationController.DisplayedProperties" /> and <see cref="AddressBookUI.ABPersonViewController.DisplayedProperties" /> properties.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("ios", "Use the 'Contacts' API instead.")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -48,6 +50,9 @@ namespace AddressBookUI {
 			get { return false; }
 		}
 
+		/// <param name="item">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void Add (ABPersonProperty item)
 		{
 			List<NSNumber> values;
@@ -60,11 +65,17 @@ namespace AddressBookUI {
 			s (values.ToArray ());
 		}
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void Clear ()
 		{
 			s (new NSNumber [0]);
 		}
 
+		/// <param name="item">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public bool Contains (ABPersonProperty item)
 		{
 			int id = ABPersonPropertyId.ToId (item);
@@ -78,6 +89,10 @@ namespace AddressBookUI {
 			return false;
 		}
 
+		/// <param name="array">To be added.</param>
+		///         <param name="arrayIndex">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public void CopyTo (ABPersonProperty [] array, int arrayIndex)
 		{
 			if (array is null)
@@ -94,6 +109,10 @@ namespace AddressBookUI {
 				array [arrayIndex++] = e.Current;
 		}
 
+		/// <param name="item">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public bool Remove (ABPersonProperty item)
 		{
 			var dp = g ();
@@ -112,11 +131,17 @@ namespace AddressBookUI {
 			return true;
 		}
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return GetEnumerator ();
 		}
 
+		/// <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public IEnumerator<ABPersonProperty> GetEnumerator ()
 		{
 			var values = g ();

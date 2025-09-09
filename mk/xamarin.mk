@@ -1,5 +1,5 @@
 ifdef ENABLE_XAMARIN
-NEEDED_ADR_VERSION := 10394d73ac2bfafa2fafda4e8080b7dd0ea66488
+NEEDED_ADR_VERSION := e1e779c10d851a86b548be40e55dd74c497aa11f
 NEEDED_ADR_BRANCH := main
 
 ADR_DIRECTORY := macios-adr
@@ -10,7 +10,7 @@ endif
 
 # Available versions can be seen here:
 # https://dev.azure.com/dnceng/public/_artifacts/feed/dotnet-eng/NuGet/Microsoft.Tools.Mlaunch/versions
-MLAUNCH_NUGET_VERSION=1.0.272
+MLAUNCH_NUGET_VERSION=1.1.72
 
 define CheckVersionTemplate
 check-$(1)::
@@ -78,7 +78,7 @@ reset-versions-impl:: reset-$(1)
 check-versions:: check-$(1)
 print-versions:: print-$(1)
 
-DEPENDENCY_DIRECTORIES += $($(2)_PATH)
+DEPENDENCY_DIRECTORIES += $$(abspath $($(2)_PATH))
 
 endef
 

@@ -15,7 +15,7 @@ iphoneos_COMPILER_FLAGS=$(COMMON_ARGS) -miphoneos-version-min=$(DOTNET_MIN_IOS_S
 tvsimulator_COMPILER_FLAGS=$(COMMON_ARGS) -mtvos-simulator-version-min=$(DOTNET_MIN_TVOS_SDK_VERSION) -isysroot $(tvossimulator_SDK)
 tvos_COMPILER_FLAGS=$(COMMON_ARGS) -mtvos-version-min=$(DOTNET_MIN_TVOS_SDK_VERSION) -isysroot $(tvos_SDK)
 maccatalyst_COMPILER_FLAGS=$(COMMON_ARGS) $(maccatalyst_CFLAGS)
-mac_COMPILER_FLAGS=$(COMMON_ARGS) -mmacosx-version-min=$(MIN_OSX_VERSION_FOR_MAC) -isysroot $(XCODE_DEVELOPER_ROOT)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$(OSX_SDK_VERSION).sdk
+mac_COMPILER_FLAGS=$(COMMON_ARGS) -mmacosx-version-min=$(DOTNET_MIN_MACOS_SDK_VERSION) -isysroot $(XCODE_DEVELOPER_ROOT)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX$(OSX_SDK_VERSION).sdk
 
 maccatalyst-x64_COMPILER_FLAGS=$(maccatalyst-x64_CFLAGS)
 maccatalyst-arm64_COMPILER_FLAGS=$(maccatalyst-arm64_CFLAGS)
@@ -50,9 +50,6 @@ endif
 
 .libs/$(3)/$(4)$(1).o: shared.c | .libs/$(3)
 	$$(call Q_2,CC,    [$(3)]) $$(CLANG) -o $$@ $$(foreach arch,$$($(3)_ARCHITECTURES),-arch $$(arch)) $$($(2)_COMPILER_FLAGS) $$($(3)_COMPILER_FLAGS) -DNAME=$(1) -c
-ifneq ($(NO_INSTALL_NAME_TOOL_$(1)),1)
-	$$(Q) $(XCODE_DEVELOPER_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/install_name_tool -id @rpath/$(4)$(1).dylib $$@
-endif
 
 .libs/$(3)/$(4)$(1).a: .libs/$(3)/$(4)$(1).o
 	$$(call Q_2,AR     [$(1)]) $(XCODE_DEVELOPER_ROOT)/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar cru $$@ $$<

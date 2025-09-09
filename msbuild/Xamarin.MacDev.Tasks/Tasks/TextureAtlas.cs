@@ -28,10 +28,10 @@ namespace Xamarin.MacDev.Tasks {
 			get { return "TextureAtlas"; }
 		}
 
-		protected override void AppendCommandLineArguments (IDictionary<string, string> environment, CommandLineBuilder args, ITaskItem input, ITaskItem output)
+		protected override void AppendCommandLineArguments (IDictionary<string, string?> environment, List<string> args, ITaskItem input, ITaskItem output)
 		{
-			args.AppendFileNameIfNotNull (input.GetMetadata ("FullPath"));
-			args.AppendFileNameIfNotNull (Path.GetDirectoryName (output.GetMetadata ("FullPath")));
+			args.Add (input.GetMetadata ("FullPath"));
+			args.Add (Path.GetDirectoryName (output.GetMetadata ("FullPath")));
 		}
 
 		protected override string GetBundleRelativeOutputPath (ITaskItem input)
@@ -87,11 +87,12 @@ namespace Xamarin.MacDev.Tasks {
 			if (AtlasTextures is null)
 				yield break;
 
+			var atlasTextures = CollectBundleResources.ComputeLogicalNameAndDetectDuplicates (this, AtlasTextures, ProjectDir, ResourcePrefix, "AtlasTexture");
+
 			// group the atlas textures by their parent .atlas directories
-			foreach (var item in AtlasTextures) {
-				var vpp = BundleResource.GetVirtualProjectPath (this, item);
-				var atlasName = Path.GetDirectoryName (vpp);
+			foreach (var item in atlasTextures) {
 				var logicalName = item.GetMetadata ("LogicalName");
+				var atlasName = Path.GetDirectoryName (logicalName);
 
 				if (!atlases.TryGetValue (atlasName, out var atlas)) {
 					var atlasItem = new TaskItem (atlasName);

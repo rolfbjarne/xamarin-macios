@@ -21,12 +21,12 @@ readonly partial struct Binding {
 	/// <summary>
 	/// Represents the type of binding that the code changes are for.
 	/// </summary>
-	public BindingType BindingType => BindingInfo.BindingType;
+	public BindingType BindingType => BindingBindingInfo.BindingType;
 
 	/// <summary>
 	/// Returns the binding data of the binding for the given code changes.
 	/// </summary>
-	public BindingInfo BindingInfo { get; init; }
+	public BindingInfo BindingBindingInfo { get; init; }
 
 
 	readonly ImmutableArray<string> protocols = ImmutableArray<string>.Empty;
@@ -43,24 +43,24 @@ readonly partial struct Binding {
 	/// <summary>
 	/// Internal constructor added for testing purposes.
 	/// </summary>
-	/// <param name="symbolName">The name of the named type that created the code change.</param>
+	/// <param name="name">The name of the named type that created the code change.</param>
 	/// <param name="namespace">The namespace that contains the named type.</param>
 	/// <param name="fullyQualifiedSymbol">The fully qualified name of the symbol.</param>
-	/// <param name="info">the binding info struct.</param>
+	/// <param name="bindingInfo">the binding info struct.</param>
 	/// <param name="symbolAvailability">The platform availability of the named symbol.</param>
 	/// <param name="attributes">The dictioanary with the attributes the user used with the binding.</param>
-	internal Binding (string symbolName,
+	internal Binding (string name,
 		ImmutableArray<string> @namespace,
 		string fullyQualifiedSymbol,
-		BindingInfo info,
+		BindingInfo bindingInfo,
 		SymbolAvailability symbolAvailability,
 		Dictionary<string, List<AttributeData>> attributes)
 	{
-		name = symbolName;
+		this.name = name;
 		namespaces = @namespace;
 		availability = symbolAvailability;
 		AttributesDictionary = attributes;
-		BindingInfo = info;
+		BindingBindingInfo = bindingInfo;
 		FullyQualifiedSymbol = fullyQualifiedSymbol;
 	}
 
@@ -71,10 +71,11 @@ readonly partial struct Binding {
 			name: out name,
 			baseClass: out baseClass,
 			interfaces: out interfaces,
+			outerClasses: out outerClasses,
 			namespaces: out namespaces,
 			symbolAvailability: out availability);
-		BindingInfo = new BindingInfo (null, BindingType.SmartEnum);
-		FullyQualifiedSymbol = enumDeclaration.GetFullyQualifiedIdentifier ();
+		BindingBindingInfo = new BindingInfo (null, BindingType.SmartEnum);
+		FullyQualifiedSymbol = enumDeclaration.GetFullyQualifiedIdentifier (context.SemanticModel);
 		UsingDirectives = enumDeclaration.SyntaxTree.CollectUsingStatements ();
 		AttributesDictionary = symbol.GetAttributeData ();
 		// smart enums are expected to be public, we might need to change this in the future
@@ -107,7 +108,7 @@ readonly partial struct Binding {
 			bucket.Add (enumMember);
 		}
 
-		BindingInfo = new (null, bindingType);
+		BindingBindingInfo = new (null, bindingType);
 		EnumMembers = bucket.ToImmutable ();
 	}
 
@@ -236,15 +237,15 @@ readonly partial struct Binding {
 	internal Binding (InterfaceDeclarationSyntax interfaceDeclarationSyntax, INamedTypeSymbol symbol, in RootContext context)
 	{
 		// basic properties of the binding
-		FullyQualifiedSymbol = interfaceDeclarationSyntax.GetFullyQualifiedIdentifier ();
+		FullyQualifiedSymbol = interfaceDeclarationSyntax.GetFullyQualifiedIdentifier (context.SemanticModel);
 		UsingDirectives = interfaceDeclarationSyntax.SyntaxTree.CollectUsingStatements ();
 		AttributesDictionary = symbol.GetAttributeData ();
 		var baseTypeAttribute = symbol.GetBaseTypeData ();
-		BindingInfo = new (baseTypeAttribute, GetBindingType (AttributesDictionary, baseTypeAttribute));
+		BindingBindingInfo = new (baseTypeAttribute, GetBindingType (AttributesDictionary, baseTypeAttribute));
 		name = symbol.Name;
 		availability = symbol.GetAvailabilityForSymbol ();
-		namespaces = symbol.GetNamespaceArray ();
-		baseClass = GetBaseClass (BindingInfo);
+		(namespaces, outerClasses) = symbol.GetNamespaceArrayAndOuterClasses ();
+		baseClass = GetBaseClass (BindingBindingInfo);
 
 		// retrieve the interfaces and protocols, notice that this are two out params
 		GetInterfaceAndProtocols (symbol, out interfaces, out protocols);
@@ -255,24 +256,24 @@ readonly partial struct Binding {
 			hasInternalFlag: HasInternalFlag,
 			hasNewFlag: false,  // makes no sense on a class/interface
 			hasOverrideFlag: false, // makes no sense on a class/interface
-			hasStaticFlag: HasStaticFlag || BindingInfo.BindingType == BindingType.Category // add static for categories
+			hasStaticFlag: HasStaticFlag || BindingBindingInfo.BindingType == BindingType.Category // add static for categories
 		);
 		Modifiers = flags.ToClassModifiersArray ();
 
 		// loop over the different members and add them to the model
-		if (BindingInfo.BindingType == BindingType.StrongDictionary) {
+		if (BindingBindingInfo.BindingType == BindingType.StrongDictionary) {
 			// strong dictionaries are a little different, we will get all the properties with no filter since the
 			// properties from a strong dictionary do not have any attribute
 			GetMembers<PropertyDeclarationSyntax, Property> (interfaceDeclarationSyntax, context, static (_, _) => false, Property.TryCreate,
-				out properties);
+				out properties, true);
 		} else {
 			GetMembers<PropertyDeclarationSyntax, Property> (interfaceDeclarationSyntax, context, Skip, Property.TryCreate,
-				out properties);
+				out properties, true);
 		}
 		// methods are a little diff, in the old SDK style, both methods and constructors are methods, we will get
 		// all exported methods and then filter accordingly
 		GetMembers<MethodDeclarationSyntax, Method> (interfaceDeclarationSyntax, context, Skip, Method.TryCreate,
-			out ImmutableArray<Method> allMethods);
+			out ImmutableArray<Method> allMethods, true);
 		methods = [.. allMethods.Where (m => !m.IsConstructor)];
 		constructors = allMethods.Where (m => m.IsConstructor)
 			.Select (m => m.ToConstructor ())
@@ -302,7 +303,7 @@ readonly partial struct Binding {
 	public override string ToString ()
 	{
 		var sb = new StringBuilder ("Changes: {");
-		sb.Append ($"BindingData: '{BindingInfo}', Name: '{Name}', Namespace: [");
+		sb.Append ($"BindingData: '{BindingBindingInfo}', Name: '{Name}', Namespace: [");
 		sb.AppendJoin (", ", Namespace);
 		sb.Append ($"], FullyQualifiedSymbol: '{FullyQualifiedSymbol}', Base: '{Base ?? "null"}', SymbolAvailability: {SymbolAvailability}, ");
 		sb.Append ("Interfaces: [");

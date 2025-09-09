@@ -1,38 +1,77 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Macios.Generator.Extensions;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using TypeInfo = Microsoft.Macios.Generator.DataModel.TypeInfo;
 
 namespace Microsoft.Macios.Generator.Formatters;
 
 static class TypeInfoFormatter {
-
-	public static TypeSyntax GetIdentifierSyntax (this in TypeInfo typeInfo)
+	/// <summary>
+	/// Converts a TypeInfo to a TypeSyntax, handling arrays, named tuples, generic types, pointers, and nullable types.
+	/// </summary>
+	/// <param name="typeInfo">The TypeInfo to convert to syntax.</param>
+	/// <param name="useGlobalNamespace">True if the global alias has to be used.</param>
+	/// <returns>A TypeSyntax representing the type with proper namespace qualification and nullability.</returns>
+	public static TypeSyntax GetIdentifierSyntax (this in TypeInfo typeInfo, bool useGlobalNamespace = true)
 	{
-		// If we are dealing with a IntPtr or UIntPtr, we want to use the metadata name, otherwise we will
-		// get a nint in the signature. The compiler won't care, this is just done for completeness and to
-		// reduce the surprise factor for a customer debugging the generated code.
-		var name = typeInfo.SpecialType is SpecialType.System_IntPtr or SpecialType.System_UIntPtr
-			? typeInfo.MetadataName! // we know is not null
-			: typeInfo.FullyQualifiedName;
-
+		TypeSyntax classSyntax;
+		// the type info already provides the correct name, but we need to build the actual class for arrays and 
+		// generic types
+		if (typeInfo.IsVoid) {
+			return IdentifierName ("void");
+		}
 		if (typeInfo.IsArray) {
 			// could be a params array or simply an array
-			var arrayType = ArrayType (IdentifierName (name))
+			classSyntax = ArrayType (IdentifierName (typeInfo.Name))
 				.WithRankSpecifiers (SingletonList (
 					ArrayRankSpecifier (
 						SingletonSeparatedList<ExpressionSyntax> (OmittedArraySizeExpression ()))));
-			return typeInfo.IsNullable
-				? NullableType (arrayType)
-				: arrayType;
+		} else if (typeInfo.IsNamedTuple) {
+			// create the tuple elements
+			var tupleElements = ImmutableArray.CreateBuilder<TupleElementSyntax> (typeInfo.NamedTupleFields.Length);
+			foreach (var (name, type) in typeInfo.NamedTupleFields) {
+				var element = TupleElement (IdentifierName (type))
+					.WithIdentifier (Identifier (name).WithLeadingTrivia (Space));
+				tupleElements.Add (element);
+			}
+
+			classSyntax = TupleType (
+				SeparatedList<TupleElementSyntax> (
+				tupleElements.ToSyntaxNodeOrTokenArray ()
+			));
+		} else if (typeInfo.IsGenericType) {
+			// build the argument list
+			var parameterBucket = ImmutableArray.CreateBuilder<TypeSyntax> (typeInfo.TypeArguments.Length);
+			foreach (var currentGenericType in typeInfo.TypeArguments) {
+				// build the parameter
+				parameterBucket.Add (IdentifierName (currentGenericType));
+			}
+
+			// generates the function parameter list:
+			// example:
+			// <IntPtr, int, int, int>
+			// that is, the block ptr, the parameters and the return type
+			var parametersSyntax = TypeArgumentList (
+				SeparatedList<TypeSyntax> (
+					parameterBucket.ToSyntaxNodeOrTokenArray ())).NormalizeWhitespace ();
+			classSyntax = GenericName (Identifier (typeInfo.Name))
+				.WithTypeArgumentList (parametersSyntax);
+		} else if (typeInfo.IsPointer) {
+			classSyntax = PointerType (IdentifierName (typeInfo.Name));
+		} else {
+			// dealing with a non-array or generic type
+			classSyntax = IdentifierName (typeInfo.Name);
 		}
 
-		// dealing with a non-array type
-		return typeInfo.IsNullable
-			? NullableType (IdentifierName (name))
-			: IdentifierName (name);
+		// build the full type name using the namespace and the class name
+		if (!typeInfo.IsNamedTuple)
+			classSyntax = classSyntax.ToString ().GetIdentifierName (typeInfo.Namespace, useGlobalNamespace);
+		// we still need to check if the type is nullable
+		return typeInfo.IsNullable ? NullableType (classSyntax) : classSyntax;
 	}
 }

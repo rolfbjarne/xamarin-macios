@@ -40,10 +40,6 @@ using CoreFoundation;
 using Foundation;
 using ObjCRuntime;
 
-#if !NET
-using NativeHandle = System.IntPtr;
-#endif
-
 namespace AddressBook {
 
 	[SupportedOSPlatform ("ios")]
@@ -101,6 +97,20 @@ namespace AddressBook {
 		public static extern byte RemoveValueAndLabelAtIndex (IntPtr multiValue, nint index);
 	}
 
+	/// <typeparam name="T">
+	///       The type of the value to store.
+	///     </typeparam>
+	///     <summary>
+	///       A <see cref="AddressBook.ABMultiValue{T}" /> entry.
+	///     </summary>
+	///     <remarks>
+	///       <para>
+	///         A "tuple" of
+	///         (<see cref="AddressBook.ABMultiValueEntry{T}.Value" />,
+	///         <see cref="AddressBook.ABMultiValueEntry{T}.Label" />,
+	///         <see cref="AddressBook.ABMultiValueEntry{T}.Identifier" />).
+	///       </para>
+	///     </remarks>
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("ios", "Use the 'Contacts' API instead.")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -125,7 +135,7 @@ namespace AddressBook {
 
 		/// <summary>
 		///           Gets a value indicating whether the
-		///           <see cref="T:AddressBook.ABMultiValueEntry`1" />
+		///           <see cref="AddressBook.ABMultiValueEntry{T}" />
 		///           is read-only.
 		///         </summary>
 		///         <value>
@@ -136,10 +146,10 @@ namespace AddressBook {
 		///           <para>
 		///             If <c>IsReadOnly</c> is <see langword="true" />, attempts to
 		///             change the
-		///             <see cref="P:AddressBook.ABMultiValueEntry`1.Value" /> and
-		///             <see cref="P:AddressBook.ABMultiValueEntry`1.Label" />
+		///             <see cref="AddressBook.ABMultiValueEntry{T}.Value" /> and
+		///             <see cref="AddressBook.ABMultiValueEntry{T}.Label" />
 		///             properties will result in a
-		///             <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=System%20Not%20Supported%20Exception&amp;scope=Xamarin" title="T:System.NotSupportedException">T:System.NotSupportedException</a></format>.
+		///             <see cref="System.NotSupportedException" />.
 		///           </para>
 		///         </remarks>
 		public bool IsReadOnly {
@@ -162,19 +172,19 @@ namespace AddressBook {
 		}
 
 		/// <summary>
-		///           The value of the <see cref="T:AddressBook.ABMultiValueEntry`1" />.
+		///           The value of the <see cref="AddressBook.ABMultiValueEntry{T}" />.
 		///         </summary>
 		///         <value>
 		///           A <typeparamref name="T" /> which is the value of the
-		///           <see cref="T:AddressBook.ABMultiValueEntry`1" />.
+		///           <see cref="AddressBook.ABMultiValueEntry{T}" />.
 		///         </value>
 		///         <remarks>
 		///         </remarks>
-		///         <exception cref="T:System.NotSupportedException">
-		///           <see cref="P:AddressBook.ABMultiValueEntry`1.IsReadOnly" />
+		///         <exception cref="System.NotSupportedException">
+		///           <see cref="AddressBook.ABMultiValueEntry{T}.IsReadOnly" />
 		///           is <see langword="true" /> and the setter was invoked.
 		///         </exception>
-		///         <altmember cref="P:AddressBook.ABMultiValue`1.IsReadOnly" />
+		///         <altmember cref="AddressBook.ABMultiValue{T}.IsReadOnly" />
 		public T Value {
 			get {
 				AssertValid ();
@@ -190,19 +200,19 @@ namespace AddressBook {
 		}
 
 		/// <summary>
-		///           The label of the <see cref="T:AddressBook.ABMultiValueEntry`1" />.
+		///           The label of the <see cref="AddressBook.ABMultiValueEntry{T}" />.
 		///         </summary>
 		///         <value>
-		///           A <see cref="T:Foundation.NSString" /> which is the label
-		///           of the <see cref="T:AddressBook.ABMultiValueEntry`1" />.
+		///           A <see cref="Foundation.NSString" /> which is the label
+		///           of the <see cref="AddressBook.ABMultiValueEntry{T}" />.
 		///         </value>
 		///         <remarks>
 		///         </remarks>
-		///         <exception cref="T:System.NotSupportedException">
-		///           <see cref="P:AddressBook.ABMultiValueEntry`1.IsReadOnly" />
+		///         <exception cref="System.NotSupportedException">
+		///           <see cref="AddressBook.ABMultiValueEntry{T}.IsReadOnly" />
 		///           is <see langword="true" /> and the setter was invoked.
 		///         </exception>
-		///         <altmember cref="P:AddressBook.ABMultiValue`1.IsReadOnly" />
+		///         <altmember cref="AddressBook.ABMultiValue{T}.IsReadOnly" />
 		public NSString? Label {
 			get {
 				AssertValid ();
@@ -213,24 +223,25 @@ namespace AddressBook {
 					throw CreateNotSupportedException ();
 				AssertValid ();
 				ABMultiValue.ReplaceLabelAtIndex (self.Handle, value.GetHandle (), index);
+				GC.KeepAlive (value);
 			}
 		}
 
 		/// <summary>
 		///           The identifier of the
-		///           <see cref="T:AddressBook.ABMultiValueEntry`1" />.
+		///           <see cref="AddressBook.ABMultiValueEntry{T}" />.
 		///         </summary>
 		///         <value>
-		///           A <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=System%20Int%2032&amp;scope=Xamarin" title="T:System.Int32">T:System.Int32</a></format> which is the identifier of the
-		///           <see cref="T:AddressBook.ABMultiValueEntry`1" />.
+		///           A <see cref="System.Int32" /> which is the identifier of the
+		///           <see cref="AddressBook.ABMultiValueEntry{T}" />.
 		///         </value>
 		///         <remarks>
 		///           Since multiple
-		///           <see cref="T:AddressBook.ABMultiValueEntry`1" />s within a
-		///           <see cref="T:AddressBook.ABMultiValue`1" /> can have the
+		///           <see cref="AddressBook.ABMultiValueEntry{T}" />s within a
+		///           <see cref="AddressBook.ABMultiValue{T}" /> can have the
 		///           same
-		///           <see cref="P:AddressBook.ABMultiValueEntry`1.Value" /> and
-		///           <see cref="P:AddressBook.ABMultiValueEntry`1.Label" />,
+		///           <see cref="AddressBook.ABMultiValueEntry{T}.Value" /> and
+		///           <see cref="AddressBook.ABMultiValueEntry{T}.Label" />,
 		///           use <c>Identifier</c> to differentiate between entries.
 		///         </remarks>
 		public int Identifier {
@@ -241,6 +252,7 @@ namespace AddressBook {
 		}
 	}
 
+	/// <include file="../../docs/api/AddressBook/ABMultiValue`1.xml" path="/Documentation/Docs[@DocId='T:AddressBook.ABMultiValue`1']/*" />
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("ios", "Use the 'Contacts' API instead.")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -285,12 +297,12 @@ namespace AddressBook {
 		///           The type of the values in the collection.
 		///         </summary>
 		///         <value>
-		///           A <see cref="T:AddressBook.ABPropertyType" /> specifying
+		///           A <see cref="AddressBook.ABPropertyType" /> specifying
 		///           the type of values in the collection.
 		///         </value>
 		///         <remarks>
 		///           <para>
-		///             <see cref="F:AddressBook.ABPropertyType.Invalid" />
+		///             <see cref="AddressBook.ABPropertyType.Invalid" />
 		///             is returned if the instance contains values of multiple different
 		///             types or if the collection has no values.
 		///           </para>
@@ -299,6 +311,16 @@ namespace AddressBook {
 			get { return ABMultiValue.GetPropertyType (Handle); }
 		}
 
+		/// <summary>
+		///           Gets all values within the collection.
+		///         </summary>
+		///         <returns>
+		///           A <typeparamref name="T" /> array containing all
+		///           <see cref="AddressBook.ABMultiValueEntry{T}.Value" />s
+		///           within the collection.
+		///         </returns>
+		///         <remarks>
+		///         </remarks>
 		public T [] GetValues ()
 		{
 			return NSArray.ArrayFromHandle (ABMultiValue.CopyArrayOfAllValues (Handle), toManaged)
@@ -307,11 +329,11 @@ namespace AddressBook {
 
 		/// <summary>
 		///           The number of entries in the
-		///           <see cref="T:AddressBook.ABMultiValue`1" />.
+		///           <see cref="AddressBook.ABMultiValue{T}" />.
 		///         </summary>
 		///         <value>
-		///           A <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=System%20Int%2032&amp;scope=Xamarin" title="T:System.Int32">T:System.Int32</a></format> containing the number of entries in
-		///           the <see cref="T:AddressBook.ABMultiValue`1" />.
+		///           A <see cref="System.Int32" /> containing the number of entries in
+		///           the <see cref="AddressBook.ABMultiValue{T}" />.
 		///         </value>
 		///         <remarks>
 		///         </remarks>
@@ -329,11 +351,35 @@ namespace AddressBook {
 			}
 		}
 
+		/// <summary>
+		///           Returns an enumerator that iterates through all entries in the
+		///           <see cref="AddressBook.ABMultiValue{T}" />.
+		///         </summary>
+		///         <returns>
+		///           An
+		///           <see cref="System.Collections.IEnumerator" />
+		///           which will return all entries in the
+		///           <see cref="AddressBook.ABMultiValue{T}" />.
+		///         </returns>
+		///         <remarks>
+		///         </remarks>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return GetEnumerator ();
 		}
 
+		/// <summary>
+		///           Returns an enumerator that iterates through all entries in the
+		///           <see cref="AddressBook.ABMultiValue{T}" />.
+		///         </summary>
+		///         <returns>
+		///           An
+		///           <see cref="System.Collections.Generic.IEnumerator{T}" /> of <see cref="AddressBook.ABMultiValueEntry{T}" />
+		///           which will return all entries in the
+		///           <see cref="AddressBook.ABMultiValue{T}" />.
+		///         </returns>
+		///         <remarks>
+		///         </remarks>
 		public IEnumerator<ABMultiValueEntry<T>> GetEnumerator ()
 		{
 			nint c = Count;
@@ -341,22 +387,53 @@ namespace AddressBook {
 				yield return this [i];
 		}
 
+		/// <param name="value">
+		///           A <see cref="Foundation.NSObject" /> containing
+		///           the value to get the first index of.
+		///         </param>
+		///         <summary>
+		///           Gets the first index of <paramref name="value" /> within the collection.
+		///         </summary>
+		///         <returns>
+		///           <para>
+		///           A <see cref="System.Int32" /> containing the first index of
+		///           <paramref name="value" /> within the collection.
+		///           If <paramref name="value" /> isn't present, <c>-1</c> is returned.
+		///           </para>
+		///         </returns>
+		///         <remarks>
+		///         </remarks>
 		public nint GetFirstIndexOfValue (NSObject value)
 		{
-			return ABMultiValue.GetFirstIndexOfValue (Handle, value.Handle);
+			nint index = ABMultiValue.GetFirstIndexOfValue (Handle, value.Handle);
+			GC.KeepAlive (value);
+			return index;
 		}
 
+		/// <include file="../../docs/api/AddressBook/ABMultiValue`1.xml" path="/Documentation/Docs[@DocId='M:AddressBook.ABMultiValue`1.GetIndexForIdentifier(System.Int32)']/*" />
 		public nint GetIndexForIdentifier (int identifier)
 		{
 			return ABMultiValue.GetIndexForIdentifier (Handle, identifier);
 		}
 
+		/// <summary>
+		///           Returns an enumerator that iterates through all entries in the
+		///           <see cref="AddressBook.ABMultiValue{T}" />.
+		///         </summary>
+		///         <returns>
+		///           An <see cref="System.Collections.IEnumerator" />
+		///           which will return all entries in the
+		///           <see cref="AddressBook.ABMultiValue{T}" />.
+		///         </returns>
+		///         <remarks>
+		///         </remarks>
 		public ABMutableMultiValue<T> ToMutableMultiValue ()
 		{
 			return new ABMutableMultiValue<T> (ABMultiValue.CreateMutableCopy (Handle), toManaged, toNative);
 		}
 	}
 
+	/// <include file="../../docs/api/AddressBook/ABMutableMultiValue`1.xml" path="/Documentation/Docs[@DocId='T:AddressBook.ABMutableMultiValue`1']/*" />
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("ios", "Use the 'Contacts' API instead.")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -377,7 +454,7 @@ namespace AddressBook {
 
 		/// <summary>
 		///           Gets a value indicating whether the
-		///           <see cref="T:AddressBook.ABMutableMultiValue`1" />
+		///           <see cref="AddressBook.ABMutableMultiValue{T}" />
 		///           is read-only.
 		///         </summary>
 		///         <value>
@@ -392,23 +469,45 @@ namespace AddressBook {
 			}
 		}
 
+		/// <param name="value">
+		///           A <typeparamref name="T" /> to add to the
+		///           <see cref="AddressBook.ABMutableMultiValue{T}" />.
+		///         </param>
+		///         <param name="label">
+		///           A <see cref="Foundation.NSString" /> to use
+		///           as the label for <paramref name="value" />.
+		///         </param>
+		///         <summary>
+		///           Add <paramref name="value" /> with the label <paramref name="label" />
+		///           to a multivalue property.
+		///         </summary>
+		///         <returns>
+		///           <see langword="true" /> if the value was added;
+		///           otherwise, <see langword="false" />.
+		///         </returns>
+		///         <remarks>
+		///         </remarks>
 		public unsafe bool Add (T value, NSString? label)
 		{
 			int _;
-			return ABMultiValue.AddValueAndLabel (Handle,
+			bool result = ABMultiValue.AddValueAndLabel (Handle,
 						toNative (value),
 						label.GetHandle (),
 						&_) != 0;
+			GC.KeepAlive (label);
+			return result;
 		}
 
 		public unsafe bool Insert (nint index, T value, NSString? label)
 		{
 			int _;
-			return ABMultiValue.InsertValueAndLabelAtIndex (Handle,
+			bool result = ABMultiValue.InsertValueAndLabelAtIndex (Handle,
 					toNative (value),
 					label.GetHandle (),
 					index,
 					&_) != 0;
+			GC.KeepAlive (label);
+			return result;
 		}
 
 		public bool RemoveAt (nint index)
@@ -417,6 +516,12 @@ namespace AddressBook {
 		}
 	}
 
+	/// <summary>
+	///       A <see cref="AddressBook.ABMultiValue{T}" /> of <see cref="Foundation.NSDate" />
+	///       which supports changing values.
+	///     </summary>
+	///     <remarks>
+	///     </remarks>
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("ios", "Use the 'Contacts' API instead.")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -424,12 +529,25 @@ namespace AddressBook {
 	[UnsupportedOSPlatform ("macos")]
 	[UnsupportedOSPlatform ("tvos")]
 	public class ABMutableDateMultiValue : ABMutableMultiValue<NSDate> {
+		/// <summary>
+		///           Constructs and initializes a
+		///           <see cref="AddressBook.ABMutableDateMultiValue" />
+		///           instance.
+		///         </summary>
+		///         <remarks>
+		///         </remarks>
 		public ABMutableDateMultiValue ()
 			: base (ABMultiValue.CreateMutable (ABPropertyType.MultiDateTime), true)
 		{
 		}
 	}
 
+	/// <summary>
+	///       A <see cref="AddressBook.ABMultiValue{T}" /> of <see cref="Foundation.NSDictionary" />
+	///       which supports changing values.
+	///     </summary>
+	///     <remarks>
+	///     </remarks>
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("ios", "Use the 'Contacts' API instead.")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -437,12 +555,25 @@ namespace AddressBook {
 	[UnsupportedOSPlatform ("macos")]
 	[UnsupportedOSPlatform ("tvos")]
 	public class ABMutableDictionaryMultiValue : ABMutableMultiValue<NSDictionary> {
+		/// <summary>
+		///           Constructs and initializes a
+		///           <see cref="AddressBook.ABMutableDictionaryMultiValue" />
+		///           instance.
+		///         </summary>
+		///         <remarks>
+		///         </remarks>
 		public ABMutableDictionaryMultiValue ()
 			: base (ABMultiValue.CreateMutable (ABPropertyType.MultiDictionary), true)
 		{
 		}
 	}
 
+	/// <summary>
+	///       A <see cref="AddressBook.ABMultiValue{T}" /> of <see cref="Foundation.NSString" />
+	///       which supports changing values.
+	///     </summary>
+	///     <remarks>
+	///     </remarks>
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("ios", "Use the 'Contacts' API instead.")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -450,6 +581,13 @@ namespace AddressBook {
 	[UnsupportedOSPlatform ("macos")]
 	[UnsupportedOSPlatform ("tvos")]
 	public class ABMutableStringMultiValue : ABMutableMultiValue<string> {
+		/// <summary>
+		///           Constructs and initializes a
+		///           <see cref="AddressBook.ABMutableStringMultiValue" />
+		///           instance.
+		///         </summary>
+		///         <remarks>
+		///         </remarks>
 		public ABMutableStringMultiValue ()
 			: base (ABMultiValue.CreateMutable (ABPropertyType.MultiString),
 					ABPerson.ToString, CFString.CreateNative)

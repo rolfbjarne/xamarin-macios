@@ -97,7 +97,8 @@ steps:
 
 - task: UseDotNet@2
   inputs:
-    version: 8.x
+    version: $(DotNetSdkVersion).x
+    installationPath: $(Agent.TempDirectory)/dotnet
 
 - pwsh: '& "$(Build.SourcesDirectory)/$Env:BUILD_REPOSITORY_TITLE/tools/devops/automation/scripts/initialize-test-output-variables.ps1"'
   displayName: Set output variables
@@ -152,6 +153,28 @@ steps:
       throw "The mac we're trying to connect to ($($Env:MAC_AGENT_IP)) is reserved for a different build (with build id $($macBuildId)). If you're reran this job, please rerun all jobs instead."
     }
   displayName: "Verify ssh connection"
+
+- pwsh: |
+    $remoteTmpPath = "${Env:LOCALAPPDATA}\Temp\Xamarin\XMA\Remote"
+    Write-Host "Remote tmp path: $remoteTmpPath"
+    # let's see what's there
+    if (Test-Path -Path $remoteTmpPath) {
+      Get-ChildItem -Path $remoteTmpPath
+      Get-ChildItem -Path $remoteTmpPath | Format-Table | Out-String | Write-Host
+      Remove-Item -Recurse -Force $remoteTmpPath
+    } else {
+      Write-Host "Remote tmp path doesn't exist!"
+    }
+  displayName: "Cleanup temporary files"
+
+- pwsh: |
+    Write-Host "Current long paths state:"
+    Get-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem -Name LongPathsEnabled
+    Write-Host "Enabling long paths":
+    Set-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem -Name LongPathsEnabled -Value 1
+    Write-Host "Updated long paths state:"
+    Get-ItemProperty -Path HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem -Name LongPathsEnabled
+  displayName: 'Enable long paths'
 
 # This task fixes errors such as these:
 #     error MSB4242: SDK Resolver Failure: "The SDK resolver "NuGetSdkResolver" failed while attempting to resolve the SDK "Microsoft.Build.NoTargets/3.3.0".
@@ -214,10 +237,13 @@ steps:
   timeoutInMinutes: 10
 
 - pwsh: |
-    & $(Build.SourcesDirectory)\$(BUILD_REPOSITORY_TITLE)\tests\dotnet\Windows\bin\dotnet\dotnet.exe `
-        nuget push `
-        "$(Build.SourcesDirectory)\$(BUILD_REPOSITORY_TITLE)\tests\test-libraries\nugets\FrameworksInRuntimesNativeDirectory\bin\Release\Xamarin.Tests.FrameworksInRuntimesNativeDirectory.1.0.0.nupkg" `
-        --source "$(Build.SourcesDirectory)\$(BUILD_REPOSITORY_TITLE)\tests\.nuget\packages"
+    foreach ($nupkg in Get-ChildItem -Path "$(Build.SourcesDirectory)\$(BUILD_REPOSITORY_TITLE)\tests\test-libraries\nugets" -Recurse -Include *.nupkg -Exclude *.symbols.nupkg) {
+      Write-Host "Installing: $nupkg"
+      & $(Build.SourcesDirectory)\$(BUILD_REPOSITORY_TITLE)\tests\dotnet\Windows\bin\dotnet\dotnet.exe `
+          nuget push `
+          "$nupkg" `
+          --source "$(Build.SourcesDirectory)\$(BUILD_REPOSITORY_TITLE)\tests\.nuget\packages"
+    }
   displayName: 'Build dependencies for .NET tests'
   continueOnError: true
 
@@ -250,14 +276,6 @@ steps:
   env:
     XMA_PASSWORD: $(XMA.Password)
 
-- pwsh: $(Build.SourcesDirectory)\$(BUILD_REPOSITORY_TITLE)\tools\devops\automation\scripts\fetch-remote-binlogs.ps1
-  displayName: 'Fetch remote binlogs'
-  timeoutInMinutes: 5
-  condition: always()
-  continueOnError: true
-  env:
-    XMA_PASSWORD: $(XMA.Password)
-
 - pwsh: |
     Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY\\$Env:BUILD_REPOSITORY_TITLE\\tools\\devops\\automation\\scripts\\MaciosCI.psd1
     $configFile = "$(Build.SourcesDirectory)\\artifacts\\${{ parameters.uploadPrefix }}build-configuration\\configuration.json"
@@ -277,6 +295,14 @@ steps:
   displayName: 'Fail if test failures'
   timeoutInMinutes: 1
   condition: eq(variables['Agent.JobStatus'], 'SucceededWithIssues')
+
+- pwsh: $(Build.SourcesDirectory)\$(BUILD_REPOSITORY_TITLE)\tools\devops\automation\scripts\fetch-remote-binlogs.ps1
+  displayName: 'Fetch remote binlogs'
+  timeoutInMinutes: 5
+  condition: always()
+  continueOnError: true
+  env:
+    XMA_PASSWORD: $(XMA.Password)
 
 # Copy the binlogs to the html report
 - pwsh: |
@@ -389,34 +415,6 @@ steps:
     artifactName: windows-binlogs-test-$(Build.BuildId)-$(System.StageAttempt)-$(System.StageAttempt)-$(System.JobAttempt)
   continueOnError: true
   condition: succeededOrFailed()
-
-# Make sure to report any errors
-- pwsh: |
-    Import-Module $Env:SYSTEM_DEFAULTWORKINGDIRECTORY\$Env:BUILD_REPOSITORY_TITLE\tools\devops\automation\scripts\MaciosCI.psd1
-    $githubComments = New-GitHubCommentsObjectFromUrl -Url "$(Build.Repository.Uri)" -Token $(GitHub.Token) -Hash $Env:COMMENT_HASH
-
-    if (Test-Path -Path "$Env:GITHUB_FAILURE_COMMENT_FILE" -PathType Leaf)  {
-      $githubComments.NewCommentFromFile("${{ parameters.statusContext }} failed", ":x:", "$Env:GITHUB_FAILURE_COMMENT_FILE", "windows tests")
-    } elseif ("$($Env:AGENT_JOBSTATUS)" -ne "Succeeded") {
-      $message = ":x: $($Env:AGENT_JOBSTATUS) :x:"
-      $githubComments.NewCommentFromMessage("${{ parameters.statusContext }} failed", ":x:", $message, "windows tests")
-    } else {
-      $message = ":white_check_mark: **All** ${{ parameters.statusContext }} passed."
-      $githubComments.NewCommentFromMessage("${{ parameters.statusContext }} passed", ":computer:", $message, "windows tests")
-    }
-  displayName: 'Report results to GitHub'
-  timeoutInMinutes: 5
-  condition: always() # in particular we care if something failed, but let's always run just in case
-  continueOnError: true
-  env:
-    CONTEXT: ${{ parameters.statusContext }}
-    GITHUB_TOKEN: $(GitHub.Token)
-    SYSTEM_ACCESSTOKEN: $(System.AccessToken)
-    TEST_BOT: $(Agent.Name)
-    ${{ if eq(parameters.repositoryAlias, 'self') }}:
-      COMMENT_HASH: $(fix_commit.GIT_HASH)
-    ${{ else }}:
-      COMMENT_HASH: $(Build.SourceVersion)
 
 - pwsh: |
     Remove-Item "$(ID_RSA_PATH)"

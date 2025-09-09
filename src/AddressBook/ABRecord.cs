@@ -38,12 +38,27 @@ using CoreFoundation;
 using Foundation;
 using ObjCRuntime;
 
-#if !NET
-using NativeHandle = System.IntPtr;
-#endif
-
 namespace AddressBook {
 
+	/// <summary>
+	///       Base type for
+	///       <see cref="AddressBook.ABGroup" /> and
+	///       <see cref="AddressBook.ABPerson" />.
+	///     </summary>
+	///     <remarks>
+	///       <para>
+	///         Supported operations:
+	///       </para>
+	///       <list type="bullet">
+	///         <item>
+	///           <term>
+	///             Getting record information:
+	///             <see cref="AddressBook.ABRecord.Id" />,
+	///             <see cref="AddressBook.ABRecord.Type" />.
+	///           </term>
+	///         </item>
+	///       </list>
+	///     </remarks>
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("ios", "Use the 'Contacts' API instead.")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -57,7 +72,7 @@ namespace AddressBook {
 		///         </summary>
 		///         <remarks>
 		///           <para>
-		///             <see cref="P:AddressBook.ABRecord.Id" /> returns this
+		///             <see cref="AddressBook.ABRecord.Id" /> returns this
 		///             value when the record hasn't been saved to the database.
 		///           </para>
 		///         </remarks>
@@ -75,6 +90,10 @@ namespace AddressBook {
 		{
 		}
 
+		/// <param name="handle">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static ABRecord? FromHandle (IntPtr handle)
 		{
 			return FromHandle (handle, false);
@@ -114,6 +133,7 @@ namespace AddressBook {
 			return rec;
 		}
 
+		/// <include file="../../docs/api/AddressBook/ABRecord.xml" path="/Documentation/Docs[@DocId='M:AddressBook.ABRecord.Dispose(System.Boolean)']/*" />
 		protected override void Dispose (bool disposing)
 		{
 			AddressBook = null;
@@ -128,15 +148,15 @@ namespace AddressBook {
 		extern static int ABRecordGetRecordID (IntPtr record);
 		/// <summary>Gets the unique ID of the record.</summary>
 		///         <value>
-		///           A <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=System%20Int%2032&amp;scope=Xamarin" title="T:System.Int32">T:System.Int32</a></format> which is the unique ID of the record.
+		///           A <see cref="System.Int32" /> which is the unique ID of the record.
 		///         </value>
 		///         <remarks>
 		///           <para>
 		///             If the record hasn't been saved into the database, this is
-		///             <see cref="F:AddressBook.ABRecord.InvalidRecordId" />.
+		///             <see cref="AddressBook.ABRecord.InvalidRecordId" />.
 		///           </para>
 		///         </remarks>
-		///         <altmember cref="M:AddressBook.ABAddressBook.Save" />
+		///         <altmember cref="AddressBook.ABAddressBook.Save" />
 		public int Id {
 			get { return ABRecordGetRecordID (Handle); }
 		}
@@ -145,7 +165,7 @@ namespace AddressBook {
 		extern static ABRecordType ABRecordGetRecordType (IntPtr record);
 		/// <summary>Gets the type of the record.</summary>
 		///         <value>
-		///           A <see cref="T:AddressBook.ABRecordType" /> containing
+		///           A <see cref="AddressBook.ABRecordType" /> containing
 		///           the type of the record.
 		///         </value>
 		///         <remarks>
@@ -156,6 +176,15 @@ namespace AddressBook {
 
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr ABRecordCopyCompositeName (IntPtr record);
+		/// <summary>
+		///           Returns the composite name of the <see cref="AddressBook.ABRecord" />.
+		///         </summary>
+		///         <returns>
+		///           A <see cref="System.String" /> containing
+		///           the composite name of the <see cref="AddressBook.ABRecord" />.
+		///         </returns>
+		///         <remarks>
+		///         </remarks>
 		public override string? ToString ()
 		{
 			return CFString.FromHandle (ABRecordCopyCompositeName (Handle));
@@ -177,6 +206,7 @@ namespace AddressBook {
 		internal void SetValue (int property, NSObject? value)
 		{
 			SetValue (property, value.GetHandle ());
+			GC.KeepAlive (value);
 		}
 
 		internal void SetValue (int property, string? value)

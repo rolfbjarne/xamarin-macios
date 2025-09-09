@@ -7,8 +7,6 @@ using CoreGraphics;
 using Foundation;
 using ObjCRuntime;
 
-#if NET
-
 namespace Accessibility {
 
 	[SupportedOSPlatform ("ios18.0")]
@@ -60,6 +58,7 @@ namespace Accessibility {
 		[SupportedOSPlatform ("maccatalyst18.0")]
 		[SupportedOSPlatform ("macos15.0")]
 		[SupportedOSPlatform ("tvos18.0")]
+		[BindingImpl (BindingImplOptions.Optimizable)]
 		public unsafe static void OpenSettingsFeature (AXSettingsFeature feature, Action<NSError?> completionHandler)
 		{
 			delegate* unmanaged<IntPtr, IntPtr, void> trampoline = &OpenSettingsFeatureCompletionHandler;
@@ -78,5 +77,3 @@ namespace Accessibility {
 		}
 	}
 }
-
-#endif // NET

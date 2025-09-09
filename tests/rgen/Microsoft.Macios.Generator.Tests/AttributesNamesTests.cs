@@ -14,6 +14,8 @@ public class AttributesNamesTests {
 	[InlineData (EnumValue.Default, null)]
 	[InlineData (Property.Default, AttributesNames.ExportPropertyAttribute)]
 	[InlineData (Method.Default, AttributesNames.ExportMethodAttribute)]
+	[InlineData (Constructor.Default, AttributesNames.ExportConstructorAttribute)]
+	[InlineData (StrongDictionaryProperty.Default, AttributesNames.ExportStrongDictionaryPropertyAttribute)]
 	public void GetExportAttributeName<T> (T @enum, string? expectedName) where T : Enum
 	{
 		Assert.NotNull (@enum);
@@ -34,10 +36,10 @@ public class AttributesNamesTests {
 	[Theory]
 	[InlineData (StringComparison.Ordinal, null)]
 	[InlineData (EnumValue.Default, null)]
-	[InlineData (Category.Default, AttributesNames.BindingCategoryAttribute)]
-	[InlineData (Class.Default, AttributesNames.BindingClassAttribute)]
-	[InlineData (Protocol.Default, AttributesNames.BindingProtocolAttribute)]
-	[InlineData (StrongDictionary.Default, AttributesNames.BindingStrongDictionaryAttribute)]
+	[InlineData (Category.Default, AttributesNames.CategoryAttribute)]
+	[InlineData (Class.Default, AttributesNames.ClassAttribute)]
+	[InlineData (Protocol.Default, AttributesNames.ProtocolAttribute)]
+	[InlineData (StrongDictionary.Default, AttributesNames.StrongDictionaryAttribute)]
 	public void GetBindingTypeAttributeName<T> (T @enum, string? expectedName) where T : Enum
 	{
 		Assert.NotNull (@enum);

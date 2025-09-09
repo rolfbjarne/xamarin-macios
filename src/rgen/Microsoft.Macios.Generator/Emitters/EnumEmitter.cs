@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using Microsoft.Macios.Generator.Attributes;
 using Microsoft.Macios.Generator.Context;
 using Microsoft.Macios.Generator.DataModel;
+using Microsoft.Macios.Generator.Extensions;
 using Microsoft.Macios.Generator.Formatters;
 using Microsoft.Macios.Generator.IO;
 using ObjCBindings;
@@ -36,7 +38,7 @@ class EnumEmitter : ICodeEmitter {
 			using (var getterBlock = propertyBlock.CreateBlock ("get", true)) {
 				getterBlock.WriteLine ($"fixed (IntPtr *storage = &values [{index}])");
 				getterBlock.WriteLine (
-					$"\treturn Dlfcn.CachePointer (Libraries.{libraryName}.Handle, \"{fieldData.SymbolName}\", storage);");
+					$"\treturn Dlfcn.CachePointer ({Libraries}.{libraryName}.Handle, \"{fieldData.SymbolName}\", storage);");
 			}
 		}
 	}
@@ -106,7 +108,7 @@ class EnumEmitter : ICodeEmitter {
 		// get value from a handle, this is a helper method used in the BindAs bindings.
 		classBlock.WriteDocumentation (Documentation.SmartEnum.GetValueHandle (symbolName));
 		using (var getValueFromHandle =
-			   classBlock.CreateBlock ($"public static {binding.Name} GetValue (NativeHandle handle)",
+			   classBlock.CreateBlock ($"public static {binding.Name} GetValue ({NativeHandle} handle)",
 				   true)) {
 			getValueFromHandle.WriteRaw (
 @"using var str = Runtime.GetNSObject<NSString> (handle)!;
@@ -119,7 +121,7 @@ return GetValue (str);
 		// does have methods that return null for enums)
 		classBlock.WriteDocumentation (Documentation.SmartEnum.GetValueHandle (symbolName));
 		using (var getValueFromHandle =
-			   classBlock.CreateBlock ($"public static {binding.Name}? GetNullableValue (NativeHandle handle)",
+			   classBlock.CreateBlock ($"public static {binding.Name}? GetNullableValue ({NativeHandle} handle)",
 				   true)) {
 			getValueFromHandle.WriteRaw (
 @"using var str = Runtime.GetNSObject<NSString> (handle);
@@ -169,47 +171,49 @@ return GetValue (str);
 	/// <param name="bindingContext">The current binding context.</param>
 	/// <param name="diagnostics">Out parameter with the error diagnostics.</param>
 	/// <returns>True if the binding was generated, false otherwise.</returns>
-	bool TryEmitSmartEnum (in BindingTypeData<SmartEnum> _, in BindingContext bindingContext, [NotNullWhen (false)] out ImmutableArray<Diagnostic>? diagnostics)
+	bool TryEmitSmartEnum (in BindingContext bindingContext, [NotNullWhen (false)] out ImmutableArray<Diagnostic>? diagnostics)
 	{
 		diagnostics = null;
 		if (bindingContext.Changes.BindingType != BindingType.SmartEnum) {
 			diagnostics = [Diagnostic.Create (
-					Diagnostics
-						.RBI0000, // An unexpected error occurred while processing '{0}'. Please fill a bug report at https://github.com/xamarin/xamarin-macios/issues/new.
+					RgenDiagnostics
+						.RBI0000, // An unexpected error occurred while processing '{0}'. Please fill a bug report at https://github.com/dotnet/macios/issues/new.
 					null,
 					bindingContext.Changes.FullyQualifiedSymbol)];
 			return false;
 		}
 		// in the old generator we had to copy over the enum, in this new approach, the only code
 		// we need to create is the extension class for the enum that is backed by fields
-		bindingContext.Builder.WriteLine ();
-		bindingContext.Builder.WriteLine ($"namespace {string.Join (".", bindingContext.Changes.Namespace)};");
-		bindingContext.Builder.WriteLine ();
+		this.EmitNamespace (bindingContext);
 
-		var symbolName = GetSymbolName (bindingContext.Changes);
-		var extensionClassDeclaration =
-			bindingContext.Changes.ToSmartEnumExtensionDeclaration (symbolName);
+		using (var _ = this.EmitOuterClasses (bindingContext, out var builder)) {
+			var symbolName = GetSymbolName (bindingContext.Changes);
+			var extensionClassDeclaration =
+				bindingContext.Changes.ToSmartEnumExtensionDeclaration (symbolName);
 
-		bindingContext.Builder.WriteDocumentation (Documentation.SmartEnum.ClassDocumentation (symbolName));
-		bindingContext.Builder.AppendMemberAvailability (bindingContext.Changes.SymbolAvailability);
-		bindingContext.Builder.AppendGeneratedCodeAttribute ();
-		using (var classBlock = bindingContext.Builder.CreateBlock (extensionClassDeclaration.ToString (), true)) {
-			classBlock.WriteLine ();
-			classBlock.WriteLine ($"static IntPtr[] values = new IntPtr [{bindingContext.Changes.EnumMembers.Length}];");
-			// foreach member in the enum we need to create a field that holds the value, the property emitter
-			// will take care of generating the property. Do not order it by name to keep the order of the enum
-			if (!TryEmit (classBlock, bindingContext.Changes)) {
-				diagnostics = []; // empty diagnostics since it was a user error
-				return false;
+			builder.WriteDocumentation (Documentation.SmartEnum.ClassDocumentation (symbolName));
+			builder.AppendMemberAvailability (bindingContext.Changes.SymbolAvailability);
+			builder.AppendGeneratedCodeAttribute ();
+			using (var classBlock = builder.CreateBlock (extensionClassDeclaration.ToString (), true)) {
+				classBlock.WriteLine ();
+				classBlock.WriteLine (
+					$"static IntPtr[] values = new IntPtr [{bindingContext.Changes.EnumMembers.Length}];");
+				// foreach member in the enum we need to create a field that holds the value, the property emitter
+				// will take care of generating the property. Do not order it by name to keep the order of the enum
+				if (!TryEmit (classBlock, bindingContext.Changes)) {
+					diagnostics = []; // empty diagnostics since it was a user error
+					return false;
+				}
+
+				classBlock.WriteLine ();
+
+				// emit the extension methods that will be used to get the values from the enum
+				EmitExtensionMethods (classBlock, symbolName, bindingContext.Changes);
+				classBlock.WriteLine ();
 			}
-			classBlock.WriteLine ();
 
-			// emit the extension methods that will be used to get the values from the enum
-			EmitExtensionMethods (classBlock, symbolName, bindingContext.Changes);
-			classBlock.WriteLine ();
+			return true;
 		}
-
-		return true;
 	}
 
 	bool TryEmitErrorCode (in BindingTypeData<SmartEnum> bindingTypeData, in BindingContext bindingContext, [NotNullWhen (false)] out ImmutableArray<Diagnostic>? diagnostics)
@@ -217,8 +221,8 @@ return GetValue (str);
 		diagnostics = null;
 		if (bindingContext.Changes.BindingType != BindingType.SmartEnum) {
 			diagnostics = [Diagnostic.Create (
-					Diagnostics
-						.RBI0000, // An unexpected error occurred while processing '{0}'. Please fill a bug report at https://github.com/xamarin/xamarin-macios/issues/new.
+					RgenDiagnostics
+						.RBI0000, // An unexpected error occurred while processing '{0}'. Please fill a bug report at https://github.com/dotnet/macios/issues/new.
 					null,
 					bindingContext.Changes.FullyQualifiedSymbol)];
 			return false;
@@ -227,8 +231,8 @@ return GetValue (str);
 		// having ar error domain is a must, else we have a binding error
 		if (bindingTypeData.ErrorDomain is null) {
 			diagnostics = [Diagnostic.Create (
-					Diagnostics
-						.RBI0000, // An unexpected error occurred while processing '{0}'. Please fill a bug report at https://github.com/xamarin/xamarin-macios/issues/new.
+					RgenDiagnostics
+						.RBI0000, // An unexpected error occurred while processing '{0}'. Please fill a bug report at https://github.com/dotnet/macios/issues/new.
 					null,
 					bindingContext.Changes.FullyQualifiedSymbol)];
 			return false;
@@ -236,49 +240,48 @@ return GetValue (str);
 
 		const string backingFieldName = "_domain";
 		// compute the library name via the root context
-		if (!bindingContext.RootContext.TryComputeLibraryName (bindingTypeData.LibraryName,
+		if (!bindingContext.RootContext.TryComputeLibraryName (bindingTypeData.LibraryPath,
 				bindingContext.Changes.Namespace [^1],
 				out string? libraryName, out string? libraryPath)) {
 			// could not calculate the library name, this is a user error
 			diagnostics = [Diagnostic.Create (
-					Diagnostics
-						.RBI0000, // An unexpected error occurred while processing '{0}'. Please fill a bug report at https://github.com/xamarin/xamarin-macios/issues/new.
+					RgenDiagnostics
+						.RBI0000, // An unexpected error occurred while processing '{0}'. Please fill a bug report at https://github.com/dotnet/macios/issues/new.
 					null,
 					bindingContext.Changes.FullyQualifiedSymbol)];
 			return false;
 		}
 
-		var library = libraryPath ?? libraryName;
+		this.EmitNamespace (bindingContext);
 
-		bindingContext.Builder.WriteLine ();
-		bindingContext.Builder.WriteLine ($"namespace {string.Join (".", bindingContext.Changes.Namespace)};");
-		bindingContext.Builder.WriteLine ();
+		using (var _ = this.EmitOuterClasses (bindingContext, out var builder)) {
+			builder.AppendMemberAvailability (bindingContext.Changes.SymbolAvailability);
+			builder.AppendGeneratedCodeAttribute ();
+			var extensionClassDeclaration =
+				bindingContext.Changes.ToSmartEnumExtensionDeclaration (GetSymbolName (bindingContext.Changes));
 
-		bindingContext.Builder.AppendMemberAvailability (bindingContext.Changes.SymbolAvailability);
-		bindingContext.Builder.AppendGeneratedCodeAttribute ();
-		var extensionClassDeclaration =
-			bindingContext.Changes.ToSmartEnumExtensionDeclaration (GetSymbolName (bindingContext.Changes));
+			using (var classBlock = builder.CreateBlock (extensionClassDeclaration.ToString (), true)) {
+				classBlock.WriteLine ();
+				// emit the field that holds the error domain
+				classBlock.WriteLine ($"[Field (\"{bindingTypeData.ErrorDomain}\", \"{libraryPath ?? libraryName}\")]");
+				classBlock.WriteLine (StaticVariable (backingFieldName, NSString, true).ToString ());
+				classBlock.WriteLine ();
 
-		using (var classBlock = bindingContext.Builder.CreateBlock (extensionClassDeclaration.ToString (), true)) {
-			classBlock.WriteLine ();
-			// emit the field that holds the error domain
-			classBlock.WriteLine ($"[Field (\"{bindingTypeData.ErrorDomain}\", \"{library}\")]");
-			classBlock.WriteLine (StaticVariable (backingFieldName, "Foundation.NSString", true).ToString ());
-			classBlock.WriteLine ();
-
-			// emit the extension method to return the error domain
-			classBlock.WriteDocumentation (Documentation.SmartEnum.GetDomain (bindingContext.Changes.FullyQualifiedSymbol));
-			classBlock.WriteRaw (
-$@"public static NSString? GetDomain (this {bindingContext.Changes.Name} self)
+				// emit the extension method to return the error domain
+				classBlock.WriteDocumentation (
+					Documentation.SmartEnum.GetDomain (bindingContext.Changes.FullyQualifiedSymbol));
+				classBlock.WriteRaw (
+					$@"public static {NSString}? GetDomain (this {bindingContext.Changes.Name.GetIdentifierName (bindingContext.Changes.Namespace)} self)
 {{
 	if ({backingFieldName} is null)
-		{backingFieldName} = Dlfcn.GetStringConstant (Libraries.{libraryName}.Handle, ""{bindingTypeData.ErrorDomain}"");
+		{backingFieldName} = {Dlfcn}.GetStringConstant ({Libraries}.{libraryName}.Handle, ""{bindingTypeData.ErrorDomain}"");
 	return {backingFieldName};
 }}
 ");
-		}
+			}
 
-		return true;
+			return true;
+		}
 	}
 
 	public bool TryEmit (in BindingContext bindingContext, [NotNullWhen (false)] out ImmutableArray<Diagnostic>? diagnostics)
@@ -290,6 +293,6 @@ $@"public static NSString? GetDomain (this {bindingContext.Changes.Name} self)
 
 		return bindingData.Flags.HasFlag (SmartEnum.ErrorCode)
 			? TryEmitErrorCode (bindingData, bindingContext, out diagnostics)
-			: TryEmitSmartEnum (bindingData, bindingContext, out diagnostics);
+			: TryEmitSmartEnum (bindingContext, out diagnostics);
 	}
 }

@@ -114,7 +114,8 @@
 		<EnableUnsafeBinaryFormatterSerialization Condition="'$(EnableUnsafeBinaryFormatterSerialization)' == ''">false</EnableUnsafeBinaryFormatterSerialization>
 		<EnableUnsafeUTF7Encoding Condition="'$(EnableUnsafeUTF7Encoding)' == ''">false</EnableUnsafeUTF7Encoding>
 		<EventSourceSupport Condition="'$(EventSourceSupport)' == ''">false</EventSourceSupport>
-		<HttpActivityPropagationSupport Condition="'$(HttpActivityPropagationSupport)' == ''">false</HttpActivityPropagationSupport>
+		<HttpActivityPropagationSupport Condition="'$(HttpActivityPropagationSupport)' == '' and '$(Optimize)' == 'true'">false</HttpActivityPropagationSupport>
+		<Http3Support Condition="'$(Http3Support)' == ''">false</Http3Support>
 		<InvariantGlobalization Condition="'$(InvariantGlobalization)' == ''">false</InvariantGlobalization>
 		<!-- Enable HybridGlobalization by default-->
 		<HybridGlobalization Condition="'$(InvariantGlobalization)' != 'true'">true</HybridGlobalization>
@@ -122,6 +123,7 @@
 		<UseSizeOptimizedLinq Condition="'$(UseSizeOptimizedLinq)' == ''">true</UseSizeOptimizedLinq>
 		<UseSystemResourceKeys Condition="'$(UseSystemResourceKeys)' == '' And '$(_BundlerDebug)' != 'true'">true</UseSystemResourceKeys>
 		<UseSystemResourceKeys Condition="'$(UseSystemResourceKeys)' == '' And '$(_BundlerDebug)' == 'true'">false</UseSystemResourceKeys>
+		<UseNativeHttpHandler Condition="'$(UseNativeHttpHandler)' == '' And '$(MtouchHttpClientHandler)' == 'HttpClientHandler'">false</UseNativeHttpHandler>
 		<UseNativeHttpHandler Condition="'$(_PlatformName)' != 'macOS' And '$(UseNativeHttpHandler)' == ''">true</UseNativeHttpHandler>
 		<!-- AutoreleasePoolSupport needs to be set earlier, so that illink doesn't override it - https://github.com/dotnet/runtime/pull/86753 - so it's set in Xamarin.Shared.Sdk.props -->
 		<EnableCppCLIHostActivation Condition="'$(EnableCppCLIHostActivation)' == ''">false</EnableCppCLIHostActivation>
@@ -453,7 +455,7 @@
 		<ItemGroup>
 			<_MonoComponent Include="hot_reload" Condition="'$(MtouchInterpreter)' != ''" />
 			<_MonoComponent Include="debugger" Condition="'$(_BundlerDebug)' == 'true'" />
-			<_MonoComponent Include="diagnostics_tracing" Condition="'$(_BundlerDebug)' == 'true'" />
+			<_MonoComponent Include="diagnostics_tracing" Condition="'$(EnableDiagnostics)' == 'true'" />
 			<_MonoComponent Include="marshal-ilgen" Condition="'$(_AppleExcludeMarshalIlgenComponent)' != 'true'" />
 		</ItemGroup>
 	</Target>
@@ -462,10 +464,10 @@
 		<!-- We only include any mono components when linking with mono statically. The components are already included in the dynamic versions of Mono (both the dylib and the framework) -->
 		<ItemGroup Condition="'$(_LibMonoLinkMode)' == 'static'">
 			<!-- Remove files mono told us not to link with -->
-			<_MonoLibrary Remove="@(_MonoRuntimeComponentDontLink -> '$(_MonoRuntimePackPath)native/%(Identity)')" />
+			<_MonoLibrary Remove="@(_MonoRuntimeComponentDontLink -> '$(_MonoRuntimePackPathNative)%(Identity)')" />
 
 			<!-- Add files mono told us to link with -->
-			<_MonoLibrary Include="@(_MonoRuntimeComponentLink -> '$(_MonoRuntimePackPath)native/%(Identity)')" />
+			<_MonoLibrary Include="@(_MonoRuntimeComponentLink -> '$(_MonoRuntimePackPathNative)%(Identity)')" />
 		</ItemGroup>
 	</Target>
 
@@ -490,6 +492,9 @@
 			_ReadAppManifest;
 			_WriteAppManifest;
 			SelectRegistrar;
+			_ComputeLinkerInputs;
+			_GenerateLinkerDependencyCache;
+			_ForceLinkerRerun;
 		</_ComputeLinkerArgumentsDependsOn>
 	</PropertyGroup>
 
@@ -517,7 +522,9 @@
 		</PropertyGroup>
 	</Target>
 
-	<Target Name="_ComputeLinkerArguments" DependsOnTargets="$(_ComputeLinkerArgumentsDependsOn)">
+	<Target Name="_ComputeLinkerArguments" DependsOnTargets="$(_ComputeLinkerArgumentsDependsOn)" />
+
+	<Target Name="_ComputeLinkerInputs">
 		<!-- Validate the linker mode -->
 		<Error Text="Invalid link mode: '$(_LinkMode)'. Valid link modes are: 'None', 'SdkOnly' and 'Full'" Condition="'$(_LinkMode)' != 'None' And '$(_LinkMode)' != 'SdkOnly' And '$(_LinkMode)' != 'Full' And '$(_LinkMode)' != 'TrimMode'" />
 
@@ -560,6 +567,12 @@
 			<!-- Set NativeAOT value -->
 			<_IsNativeAOTFeature Condition="'$(_XamarinRuntime)' == 'NativeAOT'">true</_IsNativeAOTFeature>
 			<_IsNativeAOTFeature Condition="'$(_XamarinRuntime)' != 'NativeAOT'">false</_IsNativeAOTFeature>
+
+			<!-- Set CFNetworkHandler and NSUrlSessionHandler values -->
+			<_IsCFNetworkHandlerFeature Condition="'$(UseNativeHttpHandler)' == 'true' And '$(MtouchHttpClientHandler)' == 'CFNetworkHandler'">true</_IsCFNetworkHandlerFeature>
+			<_IsCFNetworkHandlerFeature Condition="'$(_IsCFNetworkHandlerFeature)' == ''">false</_IsCFNetworkHandlerFeature>
+			<_IsNSUrlSessionHandlerFeature Condition="'$(UseNativeHttpHandler)' == 'true' And ('$(MtouchHttpClientHandler)' == 'NSUrlSessionHandler' Or '$(MtouchHttpClientHandler)' == '')">true</_IsNSUrlSessionHandlerFeature>
+			<_IsNSUrlSessionHandlerFeature Condition="'$(_IsNSUrlSessionHandlerFeature)' == ''">false</_IsNSUrlSessionHandlerFeature>
 
 			<!-- Set default ValidateObjectPointers value -->
 			<_ValidateObjectPointers Condition="'$(_ValidateObjectPointers)' == ''">false</_ValidateObjectPointers>
@@ -655,7 +668,7 @@
 			<!-- If a release build and the app is not extensible (no interpreter or JIT/code-loading for macOS) then the sealer optimization can be used -->
 			<_ExtraTrimmerArgs Condition="'$(_BundlerDebug)' != 'true' And '$(MtouchInterpreter)' == '' And '$(_RunAotCompiler)' == 'true' And '$(_PlatformName)' != 'macOS'">$(_ExtraTrimmerArgs) --enable-opt sealer</_ExtraTrimmerArgs>
 
-			<!-- Enable serialization discovery. Ref: https://github.com/xamarin/xamarin-macios/issues/15676 -->
+			<!-- Enable serialization discovery. Ref: https://github.com/dotnet/macios/issues/15676 -->
 			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) --enable-serialization-discovery</_ExtraTrimmerArgs>
 
 			<!-- If we're using NativeAOT, tell ILLink to not remove dependency attributes (DynamicDependencyAttribute), because NativeAOT's trimmer also needs to see them. -->
@@ -672,12 +685,24 @@
 			<_AdditionalTaskAssembly>$(_AdditionalTaskAssemblyDirectory)dotnet-linker.dll</_AdditionalTaskAssembly>
 		</PropertyGroup>
 
+		<!-- Validate that one of our native handlers are selected (if using a native handler), otherwise we end up with crashes (infinite recursion) at runtime. -->
+		<MacDevMessage
+			Error="true"
+			Condition="'$(UseNativeHttpHandler)' == 'true' And '$(_IsNSUrlSessionHandlerFeature)' != 'true' And '$(_IsCFNetworkHandlerFeature)' != 'true'"
+			ResourceName="E7152_InvalidMtouchHttpClientHandler" FormatArguments="$(MtouchHttpClientHandler)">
+			<!-- Invalid value for 'MtouchHttpClientHandler' ('$(MtouchHttpClientHandler)', must be either 'NSUrlSessionHandler' or 'CFNetworkHandler' (or not set at all). -->
+		</MacDevMessage>
+
 		<ItemGroup>
 			<!-- Configure linker features -->
 			<RuntimeHostConfigurationOption Include="ObjCRuntime.Runtime.Arch.IsSimulator" Value="$(_IsSimulatorFeature)" Trim="true" />
 			<RuntimeHostConfigurationOption Include="ObjCRuntime.Runtime.IsManagedStaticRegistrar" Value="$(_IsManagedStaticRegistrarFeature)" Trim="true" />
 			<RuntimeHostConfigurationOption Include="ObjCRuntime.Runtime.IsNativeAOT" Value="$(_IsNativeAOTFeature)" Trim="true" />
 			<RuntimeHostConfigurationOption Include="ObjCRuntime.Class.ValidateObjectPointers" Value="$(_ValidateObjectPointers)" Trim="true" />
+
+			<!-- Configure System.Net.Http Native Handlers -->
+			<RuntimeHostConfigurationOption Include="System.Net.Http.NativeHandler.UseNSUrlSessionHandler" Value="$(_IsNSUrlSessionHandlerFeature)" Trim="true" />
+			<RuntimeHostConfigurationOption Include="System.Net.Http.NativeHandler.UseCFNetworkHandler" Value="$(_IsCFNetworkHandlerFeature)" Trim="true" />
 
 			<!-- Mark all assemblies to be copied if we're not linking any assemblies -->
 			<ResolvedFileToPublish
@@ -758,6 +783,50 @@
 			File="$(_CustomLinkerOptionsFile)"
 			Lines="$(_CustomLinkerOptions)"
 			Overwrite="true" />
+	</Target>
+
+	<!--
+		_GenerateLinkerDependencyCache
+
+		Generate a file used to track dependencies between incremental build
+		executions. This handles cases where properties change that can't be
+		tracked with timestamps. The file contains a hash of linker inputs
+		that are known to contribute to incremental build inconsistencies.
+
+	-->
+	<Target Name="_GenerateLinkerDependencyCache">
+		<PropertyGroup>
+			<_LinkerCachePath>$(DeviceSpecificOutputPath)LinkerInputs.cache</_LinkerCachePath>
+			<_LinkerCachePath2>$(_LinkerCachePath).xml</_LinkerCachePath2>
+		</PropertyGroup>
+		<ItemGroup>
+			<_LinkerCache Include="$(_CustomLinkerOptions)" />
+		</ItemGroup>
+
+		<Hash
+			ItemsToHash="@(_LinkerCache)"
+			IgnoreCase="false">
+			<Output TaskParameter="HashResult" PropertyName="_LinkerCacheHash" />
+		</Hash>
+
+		<WriteLinesToFile Lines="$(_LinkerCacheHash)" File="$(_LinkerCachePath)" Overwrite="true" WriteOnlyWhenDifferent="true" />
+
+		<ItemGroup>
+			<FileWrites Include="$(_LinkerCachePath)" />
+		</ItemGroup>
+	</Target>
+	<!-- Force the linker to re-run by adding an empty xml definition with a new timestamp -->
+	<Target Name="_ForceLinkerRerun"
+			Inputs="$(_LinkerCachePath)"
+			Outputs="$(_LinkerCachePath2)"
+		>
+		<WriteLinesToFile Lines="&lt;linker/&gt;" File="$(_LinkerCachePath2)" Overwrite="true" />
+		<ItemGroup>
+			<TrimmerRootDescriptor Include="$(_LinkerCachePath2)" />
+		</ItemGroup>
+		<ItemGroup>
+			<FileWrites Include="$(_LinkerCachePath2)" />
+		</ItemGroup>
 	</Target>
 
 	<PropertyGroup>
@@ -930,58 +999,45 @@
 
 
 	<Target Name="_LoadLinkerOutput" DependsOnTargets="ComputeFilesToPublish" Condition="'$(IsMacEnabled)' == 'true'">
-		<!-- Load _MainFile -->
-		<ReadItemsFromFile SessionId="$(BuildSessionId)" File="$(_LinkerItemsDirectory)/_MainFile.items" Condition="Exists('$(_LinkerItemsDirectory)/_MainFile.items')">
-			<Output TaskParameter="Items" ItemName="_MainFile" />
+		<ItemGroup>
+			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/_MainFile.items" />
+			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/_MainLinkWith.items" />
+			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/_LinkerFrameworks.items" />
+			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/_BindingLibraryLinkWith.items" />
+			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/_AssemblyLinkerFlags.items" />
+			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/_MainLinkerFlags.items" />
+			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/_BindingLibraryFrameworks.items" />
+			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/_RegistrarFile.items" />
+			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/_ReferencesFile.items" />
+			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/ReferenceNativeSymbol.items" />
+			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/_AssembliesToAOT.items" />
+			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/_FrameworkToPublish.items" />
+			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/_DynamicLibraryToPublish.items" />
+		</ItemGroup>
+
+		<ItemGroup>
+			<_ExistingLinkerItemFiles Include="@(_LinkerItemFiles)" Condition="Exists('%(Identity)')" />
+		</ItemGroup>
+
+		<ReadItemsFromFile SessionId="$(BuildSessionId)" File="@(_ExistingLinkerItemFiles)" Condition="'@(_ExistingLinkerItemFiles)' != ''">
+			<Output TaskParameter="Items" ItemName="_AllLinkerItems" />
 		</ReadItemsFromFile>
-		<!-- Load _MainLinkWith -->
-		<ReadItemsFromFile SessionId="$(BuildSessionId)" File="$(_LinkerItemsDirectory)/_MainLinkWith.items" Condition="Exists('$(_LinkerItemsDirectory)/_MainLinkWith.items')">
-			<Output TaskParameter="Items" ItemName="_MainLinkWith" />
-		</ReadItemsFromFile>
-		<!-- Load _LinkerFrameworks -->
-		<ReadItemsFromFile SessionId="$(BuildSessionId)" File="$(_LinkerItemsDirectory)/_LinkerFrameworks.items" Condition="Exists('$(_LinkerItemsDirectory)/_LinkerFrameworks.items')">
-			<Output TaskParameter="Items" ItemName="_LinkerFrameworks" />
-		</ReadItemsFromFile>
-		<!-- Load _BindingLibraryLinkWith -->
-		<ReadItemsFromFile SessionId="$(BuildSessionId)" File="$(_LinkerItemsDirectory)/_BindingLibraryLinkWith.items" Condition="Exists('$(_LinkerItemsDirectory)/_BindingLibraryLinkWith.items')">
-			<Output TaskParameter="Items" ItemName="_BindingLibraryLinkWith" />
-		</ReadItemsFromFile>
-		<!-- Load _AssemblyLinkerFlags -->
-		<ReadItemsFromFile SessionId="$(BuildSessionId)" File="$(_LinkerItemsDirectory)/_AssemblyLinkerFlags.items" Condition="Exists('$(_LinkerItemsDirectory)/_AssemblyLinkerFlags.items')">
-			<Output TaskParameter="Items" ItemName="_AssemblyLinkerFlags" />
-		</ReadItemsFromFile>
-		<!-- Load _MainLinkerFlags -->
-		<ReadItemsFromFile SessionId="$(BuildSessionId)" File="$(_LinkerItemsDirectory)/_MainLinkerFlags.items" Condition="Exists('$(_LinkerItemsDirectory)/_MainLinkerFlags.items')">
-			<Output TaskParameter="Items" ItemName="_MainLinkerFlags" />
-		</ReadItemsFromFile>
-		<!-- Load _BindingLibraryFrameworks -->
-		<ReadItemsFromFile SessionId="$(BuildSessionId)" File="$(_LinkerItemsDirectory)/_BindingLibraryFrameworks.items" Condition="Exists('$(_LinkerItemsDirectory)/_BindingLibraryFrameworks.items')">
-			<Output TaskParameter="Items" ItemName="_BindingLibraryFrameworks" />
-		</ReadItemsFromFile>
-		<!-- Load _RegistrarFile -->
-		<ReadItemsFromFile SessionId="$(BuildSessionId)" File="$(_LinkerItemsDirectory)/_RegistrarFile.items" Condition="Exists('$(_LinkerItemsDirectory)/_RegistrarFile.items')">
-			<Output TaskParameter="Items" ItemName="_RegistrarFile" />
-		</ReadItemsFromFile>
-		<!-- Load _ReferencesFile -->
-		<ReadItemsFromFile SessionId="$(BuildSessionId)" File="$(_LinkerItemsDirectory)/_ReferencesFile.items" Condition="Exists('$(_LinkerItemsDirectory)/_ReferencesFile.items')">
-			<Output TaskParameter="Items" ItemName="_ReferencesFile" />
-		</ReadItemsFromFile>
-		<!-- Load ReferenceNativeSymbol -->
-		<ReadItemsFromFile SessionId="$(BuildSessionId)" File="$(_LinkerItemsDirectory)/ReferenceNativeSymbol.items" Condition="Exists('$(_LinkerItemsDirectory)/ReferenceNativeSymbol.items')">
-			<Output TaskParameter="Items" ItemName="_ProcessedReferenceNativeSymbol" />
-		</ReadItemsFromFile>
-		<!-- Load _AssembliesToAOT -->
-		<ReadItemsFromFile SessionId="$(BuildSessionId)" File="$(_LinkerItemsDirectory)/_AssembliesToAOT.items" Condition="Exists('$(_LinkerItemsDirectory)/_AssembliesToAOT.items')">
-			<Output TaskParameter="Items" ItemName="_AssembliesToAOT" />
-		</ReadItemsFromFile>
-		<!-- Load _FrameworkToPublish -->
-		<ReadItemsFromFile SessionId="$(BuildSessionId)" File="$(_LinkerItemsDirectory)/_FrameworkToPublish.items" Condition="Exists('$(_LinkerItemsDirectory)/_FrameworkToPublish.items')">
-			<Output TaskParameter="Items" ItemName="_FrameworkToPublish" />
-		</ReadItemsFromFile>
-		<!-- Load _DynamicLibraryToPublish -->
-		<ReadItemsFromFile SessionId="$(BuildSessionId)" File="$(_LinkerItemsDirectory)/_DynamicLibraryToPublish.items" Condition="Exists('$(_LinkerItemsDirectory)/_DynamicLibraryToPublish.items')">
-			<Output TaskParameter="Items" ItemName="_DynamicLibraryToPublish" />
-		</ReadItemsFromFile>
+
+		<ItemGroup>
+			<_MainFile Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_MainFile.items'" />
+			<_MainLinkWith Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_MainLinkWith.items'" />
+			<_LinkerFrameworks Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_LinkerFrameworks.items'" />
+			<_BindingLibraryLinkWith Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_BindingLibraryLinkWith.items'" />
+			<_AssemblyLinkerFlags Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_AssemblyLinkerFlags.items'" />
+			<_MainLinkerFlags Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_MainLinkerFlags.items'" />
+			<_BindingLibraryFrameworks Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_BindingLibraryFrameworks.items'" />
+			<_RegistrarFile Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_RegistrarFile.items'" />
+			<_ReferencesFile Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_ReferencesFile.items'" />
+			<_ProcessedReferenceNativeSymbol Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == 'ReferenceNativeSymbol.items'" />
+			<_AssembliesToAOT Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_AssembliesToAOT.items'" />
+			<_FrameworkToPublish Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_FrameworkToPublish.items'" />
+			<_DynamicLibraryToPublish Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_DynamicLibraryToPublish.items'" />
+		</ItemGroup>
 	</Target>
 
 	<!-- Native code -->
@@ -1006,16 +1062,17 @@
 		<PropertyGroup>
 			<_XamarinSdkRuntimePackDirectory>%(_XamarinFrameworkReference.RuntimePackPath)</_XamarinSdkRuntimePackDirectory>
 			<_XamarinRefPackageDirectory>%(_XamarinFrameworkReference.TargetingPackPath)</_XamarinRefPackageDirectory>
-			<_XamarinNativeLibraryDirectory>$(_XamarinSdkRuntimePackDirectory)/runtimes/$(RuntimeIdentifier)/native</_XamarinNativeLibraryDirectory>
-			<_XamarinIncludeDirectory>$(_XamarinSdkRuntimePackDirectory)/runtimes/$(RuntimeIdentifier)/native</_XamarinIncludeDirectory>
-			<_XamarinRefAssemblyDirectory>$(_XamarinRefPackageDirectory)/ref/$(_XamarinDotNetVersion)/</_XamarinRefAssemblyDirectory>
+			<_XamarinNativeLibraryDirectory>$([MSBuild]::NormalizeDirectory('$(_XamarinSdkRuntimePackDirectory)/runtimes/$(RuntimeIdentifier)/native/'))</_XamarinNativeLibraryDirectory>
+			<_XamarinIncludeDirectory>$([MSBuild]::NormalizeDirectory('$(_XamarinSdkRuntimePackDirectory)/runtimes/$(RuntimeIdentifier)/native/'))</_XamarinIncludeDirectory>
+			<_XamarinRefAssemblyDirectory>$([MSBuild]::NormalizeDirectory('$(_XamarinRefPackageDirectory)/ref/$(_XamarinDotNetVersion)/'))</_XamarinRefAssemblyDirectory>
 			<_XamarinRefAssemblyPath>$(_XamarinRefAssemblyDirectory)$(_PlatformAssemblyName).dll</_XamarinRefAssemblyPath>
 
-			<_LibPartialStaticRegistrar Condition="'$(_XamarinRuntime)' == 'MonoVM'">$(_XamarinNativeLibraryDirectory)/Microsoft.$(_PlatformName).registrar.a</_LibPartialStaticRegistrar>
-			<_LibPartialStaticRegistrar Condition="'$(_XamarinRuntime)' == 'CoreCLR'">$(_XamarinNativeLibraryDirectory)/Microsoft.$(_PlatformName).registrar.coreclr.a</_LibPartialStaticRegistrar>
-			<_LibPartialStaticRegistrar Condition="'$(_XamarinRuntime)' == 'NativeAOT'">$(_XamarinNativeLibraryDirectory)/Microsoft.$(_PlatformName).registrar.nativeaot.a</_LibPartialStaticRegistrar>
+			<_LibPartialStaticRegistrar Condition="'$(_XamarinRuntime)' == 'MonoVM'">$(_XamarinNativeLibraryDirectory)Microsoft.$(_PlatformName).registrar.a</_LibPartialStaticRegistrar>
+			<_LibPartialStaticRegistrar Condition="'$(_XamarinRuntime)' == 'CoreCLR'">$(_XamarinNativeLibraryDirectory)Microsoft.$(_PlatformName).registrar.coreclr.a</_LibPartialStaticRegistrar>
+			<_LibPartialStaticRegistrar Condition="'$(_XamarinRuntime)' == 'NativeAOT'">$(_XamarinNativeLibraryDirectory)Microsoft.$(_PlatformName).registrar.nativeaot.a</_LibPartialStaticRegistrar>
 
-			<_MonoRuntimePackPath>%(_MonoFrameworkReference.RuntimePackPath)/runtimes/$(RuntimeIdentifier)/</_MonoRuntimePackPath>
+			<_MonoRuntimePackPath>$([MSBuild]::NormalizeDirectory('%(_MonoFrameworkReference.RuntimePackPath)/runtimes/$(RuntimeIdentifier)/'))</_MonoRuntimePackPath>
+			<_MonoRuntimePackPathNative>$([MSBuild]::NormalizeDirectory('$(_MonoRuntimePackPath)native/'))</_MonoRuntimePackPathNative>
 		</PropertyGroup>
 	</Target>
 
@@ -1088,7 +1145,6 @@
 			<_IntermediateNativeLibraryDir>$(IntermediateOutputPath)nativelibraries/</_IntermediateNativeLibraryDir>
 			<_IntermediateFrameworksDir>$(DeviceSpecificIntermediateOutputPath)frameworks</_IntermediateFrameworksDir>
 			<_IntermediateDecompressionDir>$([MSBuild]::EnsureTrailingSlash('$(DeviceSpecificIntermediateOutputPath)decompressed'))</_IntermediateDecompressionDir>
-			<_NativeExecutableName>$(_AppBundleName)</_NativeExecutableName>
 			<_NativeExecutablePublishDir Condition="'$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS'">$(_RelativeAppBundlePath)\</_NativeExecutablePublishDir>
 			<_NativeExecutablePublishDir Condition="'$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst'">$(_RelativeAppBundlePath)\Contents\MacOS\</_NativeExecutablePublishDir>
 			<_AppBundleFrameworksDir Condition="'$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS'">$(_RelativeAppBundlePath)\Frameworks\</_AppBundleFrameworksDir>
@@ -1106,14 +1162,14 @@
 			<_IsDedupEnabled Condition="'$(_IsDedupEnabled)' == '' And '$(_RunAotCompiler)' == 'true' And '$(IsMacEnabled)' == 'true' And '$(TargetArchitectures)' == 'ARM64' And '$(MtouchInterpreter)' != 'all'">true</_IsDedupEnabled>
 			<_DedupAssembly Condition="'$(_IsDedupEnabled)' == 'true'">$(IntermediateOutputPath)aot-instances.dll</_DedupAssembly>
 
-			<!-- default to 'static' for Mac Catalyst to work around https://github.com/xamarin/xamarin-macios/issues/14686 -->
+			<!-- default to 'static' for Mac Catalyst to work around https://github.com/dotnet/macios/issues/14686 -->
 			<_LibMonoLinkMode Condition="'$(_LibMonoLinkMode)' == '' And '$(_PlatformName)' == 'MacCatalyst'">static</_LibMonoLinkMode>
 			<_LibMonoLinkMode Condition="'$(_LibMonoLinkMode)' == '' And ('$(ComputedPlatform)' != 'iPhone' Or '$(_PlatformName)' == 'macOS')">dylib</_LibMonoLinkMode>
 			<_LibMonoLinkMode Condition="'$(_LibMonoLinkMode)' == ''">static</_LibMonoLinkMode>
 			<_LibMonoExtension Condition="'$(_LibMonoLinkMode)' == 'dylib'">dylib</_LibMonoExtension>
 			<_LibMonoExtension Condition="'$(_LibMonoLinkMode)' == 'static'">a</_LibMonoExtension>
 
-			<!-- default to 'static' for Mac Catalyst to work around https://github.com/xamarin/xamarin-macios/issues/14686 -->
+			<!-- default to 'static' for Mac Catalyst to work around https://github.com/dotnet/macios/issues/14686 -->
 			<_LibXamarinLinkMode Condition="'$(_LibXamarinLinkMode)' == '' And '$(_PlatformName)' == 'MacCatalyst'">static</_LibXamarinLinkMode>
 			<_LibXamarinLinkMode Condition="'$(_LibXamarinLinkMode)' == '' And '$(ComputedPlatform)' != 'iPhone' And '$(_PlatformName)' != 'macOS'">dylib</_LibXamarinLinkMode>
 			<_LibXamarinLinkMode Condition="'$(_LibXamarinLinkMode)' == ''">static</_LibXamarinLinkMode>
@@ -1218,7 +1274,7 @@
 
 	<Target Name="_PostPrepareForILLinkFixups" AfterTargets="PrepareForILLink">
 		<ItemGroup Condition="'$(IsAppExtension)' == 'true'">
-			<!-- https://github.com/xamarin/xamarin-macios/issues/19037 -->
+			<!-- https://github.com/dotnet/macios/issues/19037 -->
 			<!-- The trimmer will set the RootMode for the current assembly to 'EntryPoint', but that doesn't work for app extension projects, because those are library projects that don't have entry points.
 				 So here we set RootMode=Library for these cases. -->
 			<TrimmerRootAssembly Update="@(TrimmerRootAssembly)" Condition=" '%(TrimmerRootAssembly.RootMode)' == 'EntryPoint' " RootMode="Library" />
@@ -1261,17 +1317,78 @@
 		</ItemGroup>
 	</Target>
 
+	<Target Name="_ComputeDotNetRoot">
+		<PropertyGroup>
+			<_DotNetRoot Condition="'$(IsMacEnabled)' == 'true'">$(_DotNetRootRemoteDirectory)</_DotNetRoot>
+		</PropertyGroup>
+	</Target>
+
 	<PropertyGroup>
 		<_AOTCompileDependsOn>
 			$(_AOTCompileDependsOn);
+			_ComputeDotNetRoot;
 			_ComputeVariables;
 			_FindAotCompiler;
 			_DetectAppManifest;
 			_ReadAppManifest;
 			_WriteAppManifest;
 			_CreateAOTDedupAssembly;
+			_GenerateAOTCompileDependencyCache;
+			_CleanAOTCompileCache;
 		</_AOTCompileDependsOn>
 	</PropertyGroup>
+
+	<!--
+		_GenerateAOTCompileDependencyCache
+
+		Generate a file used to track dependencies between incremental build
+		executions. This handles cases where properties change that can't be
+		tracked with timestamps. The file contains a hash of aot compiler
+		inputs that are known to contribute to incremental build
+		inconsistencies.
+
+	-->
+	<Target Name="_GenerateAOTCompileDependencyCache">
+		<PropertyGroup>
+			<_AOTCompileCachePath>$(DeviceSpecificOutputPath)AOTCompileInputs.cache</_AOTCompileCachePath>
+			<_AOTCompileCachePath2>$(_AOTCompileCachePath).uptodate</_AOTCompileCachePath2>
+		</PropertyGroup>
+		<ItemGroup>
+			<_CustomAdditionalAOTCompileInputs Include="$(_AOTCompileCachePath)" />
+			<_AOTCompileCache Include="$(_XamarinAOTCompiler)" />
+			<_AOTCompileCache Include="$(_MinimumOSVersion)" />
+			<_AOTCompileCache Include="$(_SdkDevPath)" />
+			<_AOTCompileCache Include="$(_ComputedTargetFrameworkMoniker)" />
+			<_AOTCompileCache Include="$(MtouchInterpreter)" />
+			<_AOTCompileCache Include="$(MtouchUseLlvm)" />
+			<_AOTCompileCache Include="$(_BundlerDebug)" />
+			<_AOTCompileCache Include="$(AppBundleExtraOptions)" />
+		</ItemGroup>
+
+		<Hash
+			ItemsToHash="@(_AOTCompileCache)"
+			IgnoreCase="false">
+			<Output TaskParameter="HashResult" PropertyName="_AOTCompileDependencyHash" />
+		</Hash>
+
+		<WriteLinesToFile Lines="$(_AOTCompileDependencyHash)" File="$(_AOTCompileCachePath)" Overwrite="true" WriteOnlyWhenDifferent="true" />
+
+		<ItemGroup>
+			<FileWrites Include="$(_AOTCompileCachePath)" />
+		</ItemGroup>
+	</Target>
+	<!-- Delete any cached aot compiler output if the cache is stale -->
+	<Target Name="_CleanAOTCompileCache"
+			Inputs="$(_AOTCompileCachePath)"
+			Outputs="$(_AOTCompileCachePath2)"
+		>
+		<RemoveDir Directories="$(_AOTOutputDirectory)" />
+		<Copy SourceFiles="$(_AOTCompileCachePath)" DestinationFiles="$(_AOTCompileCachePath2)" />
+		<ItemGroup>
+			<FileWrites Include="$(_AOTCompileCachePath2)" />
+		</ItemGroup>
+	</Target>
+
 	<Target Name="_AOTCompile"
 			Condition="'$(_RunAotCompiler)' == 'true'"
 			DependsOnTargets="$(_AOTCompileDependsOn)"
@@ -1302,6 +1419,7 @@
 			SdkIsSimulator="$(_SdkIsSimulator)"
 			SdkRoot="$(_SdkRoot)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+			DotNetRoot="$(_DotNetRoot)"
 		>
 		</CompileNativeCode>
 
@@ -1443,6 +1561,7 @@
 	<PropertyGroup>
 		<_CompileNativeExecutableDependsOn>
 			$(_CompileNativeExecutableDependsOn);
+			_ComputeDotNetRoot;
 			_DetectSdkLocations;
 			_ComputeTargetArchitectures;
 			_GenerateBundleName;
@@ -1476,6 +1595,7 @@
 			SdkIsSimulator="$(_SdkIsSimulator)"
 			SdkRoot="$(_SdkRoot)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+			DotNetRoot="$(_DotNetRoot)"
 		>
 		</CompileNativeCode>
 
@@ -1495,13 +1615,17 @@
 			_WriteAppManifest;
 			_CompileNativeExecutable;
 			_ReidentifyDynamicLibraries;
-			_ComputeLinkNativeExecutableInputs;
 			_AddSwiftLinkerFlags;
+			_ComputeLinkNativeExecutableInputs;
+			_ForceLinkNativeExecutable;
 		</_LinkNativeExecutableDependsOn>
 	</PropertyGroup>
 
 	<Target Name="_AddSwiftLinkerFlags" DependsOnTargets="_DetectSdkLocations">
 		<PropertyGroup>
+			<!-- Runtime now requires swift https://github.com/dotnet/runtime/commit/2c70e36356e8dfb50e6b32c8b7c9ce1a8e9f1331 -->
+			<LinkWithSwiftSystemLibraries>true</LinkWithSwiftSystemLibraries>
+
 			<_SwiftTargetPlatform Condition="'$(_PlatformName)' == 'iOS' And '$(_SdkIsSimulator)' == 'true'">iphonesimulator</_SwiftTargetPlatform>
 			<_SwiftTargetPlatform Condition="'$(_PlatformName)' == 'iOS' And '$(_SdkIsSimulator)' != 'true'">iphoneos</_SwiftTargetPlatform>
 			<_SwiftTargetPlatform Condition="'$(_PlatformName)' == 'tvOS' And '$(_SdkIsSimulator)' == 'true'">appletvsimulator</_SwiftTargetPlatform>
@@ -1526,11 +1650,12 @@
 		<PropertyGroup>
 			<_ExportedSymbolsFile Condition="'$(_ExportedSymbolsFile)' == '' and '$(_MtouchSymbolsList)' == ''">/dev/null</_ExportedSymbolsFile> <!-- nothing to export -->
 			<_ExportedSymbolsFile Condition="'$(_ExportedSymbolsFile)' == ''">$(_MtouchSymbolsList)</_ExportedSymbolsFile>
-			<!-- Runtime now requires swift https://github.com/dotnet/runtime/commit/2c70e36356e8dfb50e6b32c8b7c9ce1a8e9f1331 -->
-			<LinkWithSwiftSystemLibraries>true</LinkWithSwiftSystemLibraries>
+
+			<_NativeLinkCachePath>$(DeviceSpecificOutputPath)NativeLink.cache</_NativeLinkCachePath>
+			<_NativeLinkCachePath2>$(_NativeLinkCachePath).uptodate</_NativeLinkCachePath2>
 		</PropertyGroup>
 		<ItemGroup>
-			<_XamarinMainLibraries Include="$(_XamarinNativeLibraryDirectory)/$(_LibXamarinName)" />
+			<_XamarinMainLibraries Include="$(_XamarinNativeLibraryDirectory)$(_LibXamarinName)" />
 			<!-- Link with the libraries shipped with the mono runtime pack -->
 			<_XamarinMainLibraries Include="@(_MonoLibrary)" />
 
@@ -1545,7 +1670,7 @@
 
 			<!-- Most apps do not use BrowserEngineKit, and linking with it when an app is not supposed to will prevent it from getting approved in the App Store.
 			     However, we'll automatically detect that we need to link with BrowserEngineKit if an app isn't trimmed, so let's just remove BrowserEngineKit
-			     here, with an escape hatch if an app really needs it (which would be rather rare). Ref: https://github.com/xamarin/xamarin-macios/issues/21324 -->
+			     here, with an escape hatch if an app really needs it (which would be rather rare). Ref: https://github.com/dotnet/macios/issues/21324 -->
 			<_NativeExecutableFrameworks Remove="BrowserEngineKit" Condition="'$(LinkWithBrowserEngineKit)' != 'true'" />
 
 			<!-- Mono requires zlib, iconv, icucore, and the "Compression framework" -->
@@ -1564,10 +1689,84 @@
 			<_LinkNativeExecutableInputs Include="@(_NativeExecutableObjectFiles)" />
 			<_LinkNativeExecutableInputs Include="@(_XamarinMainLibraries)" />
 			<_LinkNativeExecutableInputs Include="@(_FileNativeReference)" />
+
+			<_LinkNativeExecutableOutputs Include="$(_IntermediateNativeLibraryDir)$(_NativeExecutableName)" />
+			<_LinkNativeExecutableOutputs Include="$(_MtouchSymbolsList)" />
+		</ItemGroup>
+
+		<ItemGroup Condition="'$(IsMacEnabled)' == 'true'">
+			<_NativeReferences Include="@(_FrameworkNativeReference)" />
+			<!-- Do not link native references with LinkToExecutable='false' such as PluginLibrary files -->
+			<_NativeReferences Include="@(_FileNativeReference)" Condition="'%(_FileNativeReference.LinkToExecutable)' != 'false'" />
+		</ItemGroup>
+
+		<WriteLinesToFile File="$(_MtouchSymbolsList)" Lines="@(_ProcessedReferenceNativeSymbol)" Overwrite="true" />
+
+		<PropertyGroup>
+			<!-- There are known bugs in the classic linker with Xcode 15, so keep use the classic linker in that case -->
+			<!-- In Xcode 16 we don't know of any problems for now, so enable the new linker by default -->
+			<_UseClassicLinker Condition="'$(_UseClassicLinker)' == '' And $([MSBuild]::VersionGreaterThanOrEquals('$(_XcodeVersion)', '16.0'))">false</_UseClassicLinker>
+			<_UseClassicLinker Condition="'$(_UseClassicLinker)' == '' And $([MSBuild]::VersionGreaterThanOrEquals('$(_XcodeVersion)', '15.0'))">true</_UseClassicLinker>
+		</PropertyGroup>
+
+		<ItemGroup>
+			<_AllLinkerFlags Include="@(_AssemblyLinkerFlags);@(_MainLinkerFlags);@(_CustomLinkFlags)" />
+			<_AllLinkerFlags Condition="'$(_ExportSymbolsExplicitly)' != 'true'" Include="@(_ProcessedReferenceNativeSymbol->'-u%(Identity)')" />
+
+			<_AllLinkerFlags Condition="'$(_UseClassicLinker)' == 'true'" Include="-Xlinker" />
+			<_AllLinkerFlags Condition="'$(_UseClassicLinker)' == 'true'" Include="-ld_classic" />
+
+			<_AllLinkerFlags Include="@(LinkerArgument)" />
+		</ItemGroup>
+
+		<!-- write a hash of all the relevant input so that we can force a re-link if necessary -->
+
+		<ItemGroup>
+			<_LinkNativeExecutableCache Include="$(LinkWithSwiftSystemLibraries)" />
+			<_LinkNativeExecutableCache Include="@(_NativeExecutableFrameworks)" />
+			<_LinkNativeExecutableCache Include="@(_MainLinkerFlags)" />
+			<_LinkNativeExecutableCache Include="@(_LinkNativeExecutableInputs)" />
+			<_LinkNativeExecutableCache Include="@(_NativeReferences)" />
+			<_LinkNativeExecutableCache Include="@(_ProcessedReferenceNativeSymbol)" />
+			<_LinkNativeExecutableCache Include="@(_UseClassicLinker)" />
+			<_LinkNativeExecutableCache Include="@(_AllLinkerFlags)" />
+			<_LinkNativeExecutableCache Include="$(_DylibRPath)" />
+			<_LinkNativeExecutableCache Include="$(_CompiledEntitlements)" />
+			<_LinkNativeExecutableCache Include="$(_EmbeddedFrameworksRPath)" />
+			<_LinkNativeExecutableCache Include="@(_BindingLibraryFrameworks)" />
+			<_LinkNativeExecutableCache Include="@(_BindingLibraryLinkWith)" />
+			<_LinkNativeExecutableCache Include="@(_MainLinkWith)" />
+			<_LinkNativeExecutableCache Include="$(_MinimumOSVersion)" />
+			<_LinkNativeExecutableCache Include="@(_NativeExecutableObjectFiles)" />
+			<_LinkNativeExecutableCache Include="$(_SdkDevPath)" />
+			<_LinkNativeExecutableCache Include="$(_ComputedTargetFrameworkMoniker)" />
+		</ItemGroup>
+
+		<Hash
+			ItemsToHash="@(_LinkNativeExecutableCache)"
+			IgnoreCase="false">
+			<Output TaskParameter="HashResult" PropertyName="_LinkNativeCacheHash" />
+		</Hash>
+
+		<WriteLinesToFile Lines="$(_LinkNativeCacheHash)" File="$(_NativeLinkCachePath)" Overwrite="true" WriteOnlyWhenDifferent="true" />
+
+		<ItemGroup>
+			<FileWrites Include="$(_NativeLinkCachePath)" />
 		</ItemGroup>
 	</Target>
 
-	<!-- Any .dylibs we link with might have an incorrect identity (see https://github.com/xamarin/xamarin-macios/issues/13999),
+	<!-- force the native linker to run by deleting the executable -->
+	<Target Name="_ForceLinkNativeExecutable"
+			Inputs="$(_NativeLinkCachePath)"
+			Outputs="$(_NativeLinkCachePath2)">
+		<Delete Files="$(_IntermediateNativeLibraryDir)$(_NativeExecutableName)" />
+		<Copy SourceFiles="$(_NativeLinkCachePath)" DestinationFiles="$(_NativeLinkCachePath2)" />
+		<ItemGroup>
+			<FileWrites Include="$(_NativeLinkCachePath2)" />
+		</ItemGroup>
+	</Target>
+
+	<!-- Any .dylibs we link with might have an incorrect identity (see https://github.com/dotnet/macios/issues/13999),
 	     so we have to fix the identity so that the correct value is embedded into the main executable (and we have to do it
 	     before linking the main executable).
 
@@ -1637,31 +1836,8 @@
 	<Target Name="_LinkNativeExecutable"
 			DependsOnTargets="$(_LinkNativeExecutableDependsOn)"
 			Inputs="@(_LinkNativeExecutableInputs)"
-			Outputs="$(_IntermediateNativeLibraryDir)$(_NativeExecutableName);$(_MtouchSymbolsList)"
+			Outputs="@(_LinkNativeExecutableOutputs)"
 		>
-
-		<ItemGroup Condition="'$(IsMacEnabled)' == 'true'">
-			<_NativeReferences Include="@(_FrameworkNativeReference)" />
-			<!-- Do not link native references with LinkToExecutable='false' such as PluginLibrary files -->
-			<_NativeReferences Include="@(_FileNativeReference)" Condition="'%(_FileNativeReference.LinkToExecutable)' != 'false'" />
-		</ItemGroup>
-
-		<WriteLinesToFile SessionId="$(BuildSessionId)" File="$(_MtouchSymbolsList)" Lines="@(_ProcessedReferenceNativeSymbol)" Overwrite="true" />
-
-		<PropertyGroup>
-			<!-- There are known bugs in the classic linker with Xcode 15, so keep use the classic linker in that case -->
-			<!-- In Xcode 16 we don't know of any problems for now, so enable the new linker by default -->
-			<_UseClassicLinker Condition="'$(_UseClassicLinker)' == '' And $([MSBuild]::VersionGreaterThanOrEquals('$(_XcodeVersion)', '16.0'))">false</_UseClassicLinker>
-			<_UseClassicLinker Condition="'$(_UseClassicLinker)' == '' And $([MSBuild]::VersionGreaterThanOrEquals('$(_XcodeVersion)', '15.0'))">true</_UseClassicLinker>
-		</PropertyGroup>
-
-		<ItemGroup>
-			<_AllLinkerFlags Include="@(_AssemblyLinkerFlags);@(_MainLinkerFlags);@(_CustomLinkFlags)" />
-			<_AllLinkerFlags Condition="'$(_ExportSymbolsExplicitly)' != 'true'" Include="@(_ProcessedReferenceNativeSymbol->'-u%(Identity)')" />
-
-			<_AllLinkerFlags Condition="'$(_UseClassicLinker)' == 'true'" Include="-Xlinker" />
-			<_AllLinkerFlags Condition="'$(_UseClassicLinker)' == 'true'" Include="-ld_classic" />
-		</ItemGroup>
 
 		<LinkNativeCode
 			SessionId="$(BuildSessionId)"
@@ -1697,7 +1873,6 @@
 			<Output TaskParameter="Lines" ItemName="_AllExecutableSymbols" />
 		</ReadLinesFromFile>
 		<WriteLinesToFile
-			SessionId="$(BuildSessionId)"
 			File="$(_MtouchSymbolsList)"
 			Lines="@(_AllExecutableSymbols->DistinctWithCase())"
 			Overwrite="true" />
@@ -1814,7 +1989,7 @@
 				Update="@(ResolvedFileToPublish)"
 				RelativePath="$(_AssemblyPublishDir)\%(ResolvedFileToPublish.DestinationSubDirectory)\%(ResolvedFileToPublish.TargetPath)"
 				Condition="'$(AppConfig)' != '' And '%(ResolvedFileToPublish.OriginalItemSpec)' == '$(AppConfig)' And '%(ResolvedFileToPublish.Link)' == 'app.config' And '%(ResolvedFileToPublish.TargetPath)' != ''" />
-			<!-- .dylib and .so are never needed (nor allowed) for fully AOT'ed applications FIXME https://github.com/xamarin/xamarin-macios/issues/11145 -->
+			<!-- .dylib and .so are never needed (nor allowed) for fully AOT'ed applications FIXME https://github.com/dotnet/macios/issues/11145 -->
 			<ResolvedFileToPublish
 				Update="@(ResolvedFileToPublish)"
 				RelativePath="$(_DylibPublishDir)\%(Filename)%(Extension)"
@@ -1876,7 +2051,7 @@
 			/>
 
 			<!-- Put the 'createdump' executable in the expected location in the app bundle when using CoreCLR -->
-			<!-- Ref: https://github.com/xamarin/xamarin-macios/issues/11432 -->
+			<!-- Ref: https://github.com/dotnet/macios/issues/11432 -->
 			<_CreateDumpExecutable
 				Include="@(ResolvedFileToPublish)"
 				Condition=" '$(_XamarinRuntime)' == 'CoreCLR' And
@@ -2000,9 +2175,10 @@
 
 		<!-- This task is executed on Windows as well, for hotrestart builds -->
 		<!-- resolve any .xcframeworks and binding resource packages -->
+		<!-- Skip doing this when not building on macOS if we're not a remoteable platform (i.e. iOS), because we want such builds to succeed (even if they produce non-working output), and ResolveNativeReferences will fail if running into symlinks (which happens for macOS and Mac Catalyst builds) -->
 		<ResolveNativeReferences
 			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true' Or '$(IsHotRestartBuild)' == 'true'"
+			Condition="('$(IsMacEnabled)' == 'true' Or '$(IsHotRestartBuild)' == 'true') And '$(_IsNonMacOSBuildForNonRemotablePlatform)' != 'true'"
 			Architectures="$(TargetArchitectures)"
 			FrameworksDirectory="$(_AppFrameworksRelativePath)"
 			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
@@ -2018,9 +2194,9 @@
 	<Target Name="_ComputeCodesignItems"
 		Outputs="$(_CodesignItemsPath)"
 		>
-		<ItemGroup Condition="'$(_RequireCodeSigning)' == 'true' And '$(BundleCreateDump)' == 'true'">
+		<ItemGroup Condition="'$(EnableCodeSigning)' == 'true' And '$(BundleCreateDump)' == 'true'">
 			<!-- The 'createdump' executable must be signed. -->
-			<!-- Ref: https://github.com/xamarin/xamarin-macios/issues/13417 -->
+			<!-- Ref: https://github.com/dotnet/macios/issues/13417 -->
 			<_CreateDumpExecutableToSign Include="@(_CreateDumpExecutable -> '$(_DylibPublishDir)%(RelativePath)')" KeepMetadata="false">
 				<CodesignAllocate>$(_CodesignAllocate)</CodesignAllocate>
 				<CodesignDisableTimestamp Condition="'$(_BundlerDebug)' == 'true'">true</CodesignDisableTimestamp>
@@ -2165,6 +2341,23 @@
 		<Error Text=".NET for $(_PlatformName) does not support server garbage collection. Please don't set the 'ServerGarbageCollection' property." />
 	</Target>
 
+	<Target Name="_ValidateXcodeVersion"
+		AfterTargets="_DetectSdkLocations"
+		Condition="'$(ValidateXcodeVersion)' != 'false' And '$(_CanOutputAppBundle)' == 'true' And '$(IsMacEnabled)' == 'true'">
+		<!-- we only want to validate major.minor, not any revision or build numbers -->
+		<PropertyGroup>
+			<_XcodeVersionMajorMinorOnly>$([System.Version]::Parse('$(_XcodeVersion)').Major).$([System.Version]::Parse('$(_XcodeVersion)').Minor)</_XcodeVersionMajorMinorOnly>
+			<_RecommendedXcodeVersionMajorMinorOnly>$([System.Version]::Parse('$(_RecommendedXcodeVersion)').Major).$([System.Version]::Parse('$(_RecommendedXcodeVersion)').Minor)</_RecommendedXcodeVersionMajorMinorOnly>
+			<_IsMatchingXcode Condition="'$(_RecommendedXcodeVersionMajorMinorOnly)' == '$(_XcodeVersionMajorMinorOnly)'">true</_IsMatchingXcode>
+		</PropertyGroup>
+		<MacDevMessage
+			Error="true"
+			ResourceName="E0191"
+			FormatArguments="$(_PlatformName);$(_ShortPackageVersion);$(_RecommendedXcodeVersion);$(_XcodeVersion)"
+			Condition="'$(_IsMatchingXcode)' != 'true'"
+		/>
+	</Target>
+
 	<!-- This target can be removed in .NET 9 (when we stop supporting the compat logic to make the invalid TPV just a warning instead of an error) -->
 	<Target Name="_XamarinValidateTargetPlatformVersion"
 		BeforeTargets="Build;ResolvedFrameworkReference;ResolveRuntimePackAssets"
@@ -2200,7 +2393,7 @@
 
 	<Target Name="ComputeMlaunchInstallArguments" DependsOnTargets="_DetectSdkLocations;_GenerateBundleName;_DetectAppManifest;_ComputeMlaunchInstallArguments" />
 	<Target Name="_ComputeMlaunchInstallArguments" Condition="'$(_SdkIsSimulator)' == 'false'">
-		<!-- Launching from the command line on windows hasn't been implemented: https://github.com/xamarin/xamarin-macios/issues/16609 -->
+		<!-- Launching from the command line on windows hasn't been implemented: https://github.com/dotnet/macios/issues/16609 -->
 		<Error Condition="$([MSBuild]::IsOSPlatform('windows'))" Text="It's currently not supported to launch an app from the command line on Windows." />
 		<Error Condition="!Exists('$(_AppBundleManifestPath)')" Text="The app must be built before the arguments to launch the app using mlaunch can be computed." />
 
@@ -2229,11 +2422,11 @@
 	</Target>
 
 	<Target Name="_InstallMobile" DependsOnTargets="_DetectSdkLocations;_GenerateBundleName;ComputeMlaunchInstallArguments" Condition="'$(_SdkIsSimulator)' == 'false'">
-		<Exec SessionId="$(BuildSessionId)" Command="$(MlaunchPath) $(MlaunchInstallArguments)" />
+		<Exec SessionId="$(BuildSessionId)" Command="'$(MlaunchPath)' $(MlaunchInstallArguments)" />
 	</Target>
 
 	<Target Name="ComputeMlaunchRunArguments" DependsOnTargets="_DetectSdkLocations;_GenerateBundleName;_DetectAppManifest" Condition="'$(_PlatformName)' != 'macOS' And '$(_PlatformName)' != 'MacCatalyst'">
-		<!-- Launching from the command line on windows hasn't been implemented: https://github.com/xamarin/xamarin-macios/issues/16609 -->
+		<!-- Launching from the command line on windows hasn't been implemented: https://github.com/dotnet/macios/issues/16609 -->
 		<Error Condition="$([MSBuild]::IsOSPlatform('windows'))" Text="It's currently not supported to launch an app from the command line on Windows." />
 		<Error Condition="!Exists('$(_AppBundleManifestPath)')" Text="The app must be built before the arguments to launch the app using mlaunch can be computed." />
 
@@ -2285,7 +2478,7 @@
 	<!-- This is only needed for mobile platforms, RunCommand and RunArguments are defined for macOS in Microsoft.macOS.Sdk.targets. -->
 	<Target Name="_PrepareRunMobile" DependsOnTargets="_InstallMobile;ComputeMlaunchRunArguments" Condition="'$(_PlatformName)' != 'macOS' And '$(_PlatformName)' != 'MacCatalyst'">
 		<PropertyGroup>
-			<RunCommand>$(MlaunchPath)</RunCommand>
+			<RunCommand>'$(MlaunchPath)'</RunCommand>
 			<RunArguments>$(MlaunchRunArguments)</RunArguments>
 		</PropertyGroup>
 	</Target>
@@ -2359,7 +2552,7 @@ global using nfloat = global::System.Runtime.InteropServices.NFloat%3B
 	    any global using that may have been added by the .NET sdk pack. The
 	    .NET 6 sdk pack will one day condition the inclusion on the current
 	    target framework version, and at that point we can remove this
-	    workaround (https://github.com/xamarin/xamarin-macios/pull/15385).
+	    workaround (https://github.com/dotnet/macios/pull/15385).
 	-->
 	<Target Name="RemoveGlobalnfloatUsingItemGroup" BeforeTargets="PrepareForBuild">
 		<ItemGroup>
@@ -2387,7 +2580,7 @@ global using nfloat = global::System.Runtime.InteropServices.NFloat%3B
 			project (and not the binding project), won't see any binding
 			resource packages from the binding project.
 
-			This is not good (https://github.com/xamarin/xamarin-macios/issues/13910).
+			This is not good (https://github.com/dotnet/macios/issues/13910).
 
 			This is a target that runs after the ReferenceCopyLocalPaths item
 			group has been populated by the ResolveAssemblyReferences target,

@@ -11,27 +11,6 @@ namespace Microsoft.Macios.Generator.Tests.DataModel;
 
 public class ParameterTests {
 
-	class TestDataGetVariableName : IEnumerable<object []> {
-		public IEnumerator<object []> GetEnumerator ()
-		{
-			var exampleParameter = new Parameter (0, ReturnTypeForBool (), "firstParameter");
-			yield return [exampleParameter, Parameter.VariableType.Handle, $"{exampleParameter.Name}__handle__"];
-			yield return [exampleParameter, Parameter.VariableType.BlockLiteral, $"block_ptr_{exampleParameter.Name}"];
-			yield return [exampleParameter, Parameter.VariableType.PrimitivePointer, $"converted_{exampleParameter.Name}"];
-			yield return [exampleParameter, Parameter.VariableType.NSArray, $"nsa_{exampleParameter.Name}"];
-			yield return [exampleParameter, Parameter.VariableType.NSString, $"ns{exampleParameter.Name}"];
-			yield return [exampleParameter, Parameter.VariableType.NSStringStruct, $"_s{exampleParameter.Name}"];
-			yield return [exampleParameter, Parameter.VariableType.BindFrom, $"nsb_{exampleParameter.Name}"];
-		}
-
-		IEnumerator IEnumerable.GetEnumerator () => GetEnumerator ();
-	}
-
-	[Theory]
-	[ClassData (typeof (TestDataGetVariableName))]
-	void GetNameForVariableTypeTests (Parameter parameter, Parameter.VariableType variableType, string expectedName)
-		=> Assert.Equal (expectedName, parameter.GetNameForVariableType (variableType));
-
 	class TestDataNeedsNullCheckTests : IEnumerable<object []> {
 		public IEnumerator<object []> GetEnumerator ()
 		{
@@ -85,4 +64,23 @@ public class ParameterTests {
 	[ClassData (typeof (TestDataNeedsNullCheckTests))]
 	void NeedsNullCheckTests (Parameter parameter, bool expectedNeedsNullCheck)
 		=> Assert.Equal (expectedNeedsNullCheck, parameter.NeedsNullCheck);
+
+	[Theory]
+	[InlineData (0, 10)]
+	[InlineData (5, 0)]
+	[InlineData (1, 1)]
+	public void ToPositionTests (int initialPosition, int newPosition)
+	{
+		var initialParameter = new Parameter (initialPosition, ReturnTypeForInt (), "testParam") {
+			IsOptional = true,
+			DefaultValue = "42"
+		};
+		var newParameter = initialParameter.WithPosition (newPosition);
+
+		Assert.Equal (newPosition, newParameter.Position);
+		Assert.Equal (initialParameter.Name, newParameter.Name);
+		Assert.Equal (initialParameter.Type, newParameter.Type);
+		Assert.Equal (initialParameter.IsOptional, newParameter.IsOptional);
+		Assert.Equal (initialParameter.DefaultValue, newParameter.DefaultValue);
+	}
 }

@@ -9,8 +9,6 @@
 
 // #define TRACE
 
-#if NET
-
 #nullable enable
 
 using System;
@@ -230,18 +228,18 @@ namespace ObjCRuntime {
 		}
 
 		internal static T? ConstructNSObject<T> (Type type, NativeHandle nativeHandle)
-			where T : class, INativeObject
+			where T : INativeObject
 		{
 			if (!TryGetMapEntry (type.Assembly.GetName ().Name!, out var entry))
-				return null;
+				return default (T);
 			return (T?) entry.Registrar.ConstructNSObject (type.TypeHandle, nativeHandle);
 		}
 
 		internal static T? ConstructINativeObject<T> (Type type, NativeHandle nativeHandle, bool owns)
-			where T : class, INativeObject
+			where T : INativeObject
 		{
 			if (!TryGetMapEntry (type.Assembly.GetName ().Name!, out var entry))
-				return null;
+				return default (T);
 			return (T?) entry.Registrar.ConstructINativeObject (type.TypeHandle, nativeHandle, owns);
 		}
 
@@ -426,13 +424,15 @@ namespace ObjCRuntime {
 #endif
 				return;
 			}
+			// The handle is captured and returned to caller, so the caller is
+			// responsible for keeping the object alive.
+#pragma warning disable RBI0014
 			IntPtr rv = value.GetHandle ();
 #if TRACE
 			Runtime.NSLog ($"INativeObject_managed_to_native (0x{(*ptr).ToString ("x")}, ? != ?): 0x{rv.ToString ("x")} => {value?.GetType ()}");
 #endif
 			*ptr = rv;
+#pragma warning restore RBI0014
 		}
 	}
 }
-
-#endif // NET

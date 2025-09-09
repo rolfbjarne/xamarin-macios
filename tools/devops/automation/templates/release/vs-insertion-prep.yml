@@ -50,10 +50,9 @@ stages:
 
   jobs:
   # Check - "xamarin-macios (Prepare Release Sign NuGets)"
-  - template: sign-artifacts/jobs/v2.yml@yaml-templates
+  - template: sign-artifacts/jobs/v4.yml@yaml-templates
     parameters:
       timeoutInMinutes: 120
-      use1ESTemplate: true
       uploadBinlogs: true
       uploadPrefix: ${{ parameters.uploadPrefix }}
       enabledCredScan: false
@@ -145,10 +144,11 @@ stages:
         displayName: Create credscan dummy ignore file
 
       - task: UseDotNet@2
-        displayName: Install .NET 9.x
+        displayName: Install .NET $(DotNetSdkVersion)
         inputs:
-          version: 9.x
+          version: $(DotNetSdkVersion).x
           includePreviewVersions: true
+          installationPath: $(Agent.TempDirectory)/dotnet
 
       - task: DownloadPipelineArtifact@2
         inputs:
@@ -218,10 +218,11 @@ stages:
         displayName: Add builds to default darc channel
         condition: and(succeeded(), eq('${{ parameters.pushNugetsToMaestro }}', 'true'))
 
-      - task: 1ES.PublishPipelineArtifact@1
-        displayName: 'Publish Artifact: maestro-binlogs'
-        inputs:
+      - template: ../common/publish-pipeline-artifact.yml
+        parameters:
+          use1ES: true
+          displayName: 'Publish Artifact: maestro-binlogs'
           path: $(Build.StagingDirectory)\maestro-binlogs
           artifact: ${{ parameters.uploadPrefix }}maestro-binlogs-$(System.JobAttempt)
-        condition: and(succeededOrFailed(), eq('${{ parameters.pushNugetsToMaestro }}', 'true'))
-        continueOnError: true
+          condition: and(succeededOrFailed(), eq('${{ parameters.pushNugetsToMaestro }}', 'true'))
+          continueOnError: true

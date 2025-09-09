@@ -43,16 +43,16 @@ namespace NS {
 					parameters: [
 						new (
 							position: 0,
-							type: ReturnTypeForAction (),
+							type: ReturnTypeForAction (
+								delegateInfo: new (
+									name: "Invoke",
+									delegateType: "System.Action",
+									returnType: ReturnTypeForVoid (),
+									parameters: []
+								)
+							),
 							name: "cb"
-						) {
-							Delegate = new (
-								type: "System.Action",
-								name: "Invoke",
-								returnType: "void",
-								parameters: []
-							)
-						}
+						)
 					]
 				)
 			];
@@ -82,22 +82,22 @@ namespace NS {
 					parameters: [
 						new (
 							position: 0,
-							type: ReturnTypeForAction ("string"),
+							type: ReturnTypeForAction (
+								delegateInfo: new (
+									name: "Invoke",
+									delegateType: "System.Action<string>",
+									returnType: ReturnTypeForVoid (),
+									parameters: [
+										new (
+											position: 0,
+											type: ReturnTypeForString (),
+											name: "obj"
+										),
+									]
+								),
+								"string"),
 							name: "cb"
-						) {
-							Delegate = new (
-								type: "System.Action<string>",
-								name: "Invoke",
-								returnType: "void",
-								parameters: [
-									new (
-										position: 0,
-										type: "string",
-										name: "obj",
-										isBlittable: false
-									),
-								])
-						}
+						)
 					]
 				)
 			];
@@ -127,24 +127,22 @@ namespace NS {
 					parameters: [
 						new (
 							position: 0,
-							type: ReturnTypeForAction ("string?"),
+							type: ReturnTypeForAction (
+								delegateInfo: new (
+									name: "Invoke",
+									delegateType: "System.Action<string?>",
+									returnType: ReturnTypeForVoid (),
+									parameters: [
+										new (
+											position: 0,
+											type: ReturnTypeForString (isNullable: true),
+											name: "obj"
+										),
+									]
+								),
+								"string?"),
 							name: "cb"
-						) {
-							Delegate = new (
-								type: "System.Action<string?>",
-								name: "Invoke",
-								returnType: "void",
-								parameters: [
-									new (
-										position: 0,
-										type: "string",
-										name: "obj",
-										isBlittable: false
-									) {
-										IsNullable = true
-									},
-								])
-						}
+						)
 					]
 				)
 			];
@@ -174,28 +172,27 @@ namespace NS {
 					parameters: [
 						new (
 							position: 0,
-							type: ReturnTypeForAction ("string", "string"),
+							type: ReturnTypeForAction (
+								delegateInfo: new (
+									name: "Invoke",
+									delegateType: "System.Action<string, string>",
+									returnType: ReturnTypeForVoid (),
+									parameters: [
+										new (
+											position: 0,
+											type: ReturnTypeForString (),
+											name: "arg1"
+										),
+										new (
+											position: 1,
+											type: ReturnTypeForString (),
+											name: "arg2"
+										),
+									]
+								),
+								"string", "string"),
 							name: "cb"
-						) {
-							Delegate = new (
-								type: "System.Action<string, string>",
-								name: "Invoke",
-								returnType: "void",
-								parameters: [
-									new (
-										position: 0,
-										type: "string",
-										name: "arg1",
-										isBlittable: false
-									),
-									new (
-										position: 1,
-										type: "string",
-										name: "arg2",
-										isBlittable: false
-									),
-								])
-						}
+						)
 					]
 				)
 			];
@@ -225,22 +222,22 @@ namespace NS {
 					parameters: [
 						new (
 							position: 0,
-							type: ReturnTypeForFunc ("string", "string"),
+							type: ReturnTypeForFunc (
+								delegateInfo: new (
+									name: "Invoke",
+									delegateType: "System.Func<string, string>",
+									returnType: ReturnTypeForString (),
+									parameters: [
+										new (
+											position: 0,
+											type: ReturnTypeForString (),
+											name: "arg"
+										),
+									]
+								),
+								"string", "string"),
 							name: "cb"
-						) {
-							Delegate = new (
-								type: "System.Func<string, string>",
-								name: "Invoke",
-								returnType: "string",
-								parameters: [
-									new (
-										position: 0,
-										type: "string",
-										name: "arg",
-										isBlittable: false
-									),
-								])
-						}
+						)
 					]
 				)
 			];
@@ -270,28 +267,27 @@ namespace NS {
 					parameters: [
 						new (
 							position: 0,
-							type: ReturnTypeForFunc ("string", "string", "string"),
+							type: ReturnTypeForFunc (
+								delegateInfo: new (
+									name: "Invoke",
+									delegateType: "System.Func<string, string, string>",
+									returnType: ReturnTypeForString (),
+									parameters: [
+										new (
+											position: 0,
+											type: ReturnTypeForString (),
+											name: "arg1"
+										),
+										new (
+											position: 1,
+											type: ReturnTypeForString (),
+											name: "arg2"
+										),
+									]
+								),
+								"string", "string", "string"),
 							name: "cb"
-						) {
-							Delegate = new (
-								type: "System.Func<string, string, string>",
-								name: "Invoke",
-								returnType: "string",
-								parameters: [
-									new (
-										position: 0,
-										type: "string",
-										name: "arg1",
-										isBlittable: false
-									),
-									new (
-										position: 1,
-										type: "string",
-										name: "arg2",
-										isBlittable: false
-									),
-								])
-						}
+						)
 					]
 				)
 			];
@@ -323,38 +319,339 @@ namespace NS {
 					parameters: [
 						new (
 							position: 0,
-							type: ReturnTypeForDelegate ("NS.MyClass.Callback"),
+							type: ReturnTypeForDelegate (
+								"NS.MyClass.Callback",
+								delegateInfo: new (
+									name: "Invoke",
+									delegateType: "NS.MyClass.Callback",
+									returnType: ReturnTypeForInt (isNullable: true),
+									parameters: [
+										new (
+											position: 0,
+											type: ReturnTypeForString (),
+											name: "name"
+										),
+										new (
+											position: 1,
+											type: ReturnTypeForString (isNullable: true),
+											name: "middleName"
+										),
+										new (
+											position: 2,
+											type: ReturnTypeForArray ("string", isBlittable: false),
+											name: "surname"
+										) {
+											IsParams = true,
+										},
+									]
+								)
+							),
+							name: "cb"
+						)
+					]
+				)
+			];
+
+			const string customDelegateForcedType = @"
+using System;
+using Foundation;
+using ObjCBindings;
+
+namespace NS {
+
+	public class MyNSObject : NSObject {
+	}
+
+	public class MyClass {
+		public delegate int? Callback([ForcedType] MyNSObject name);
+
+		public void MyMethod (Callback cb) {}
+	}
+}
+";
+
+			yield return [
+				customDelegateForcedType,
+				new Method (
+					type: "NS.MyClass",
+					name: "MyMethod",
+					returnType: ReturnTypeForVoid (),
+					symbolAvailability: new (),
+					exportMethodData: new (),
+					attributes: [],
+					modifiers: [
+						SyntaxFactory.Token (SyntaxKind.PublicKeyword),
+					],
+					parameters: [
+						new (
+							position: 0,
+							type: ReturnTypeForDelegate (
+								"NS.MyClass.Callback",
+								delegateInfo: new (
+									name: "Invoke",
+									delegateType: "NS.MyClass.Callback",
+									returnType: ReturnTypeForInt (isNullable: true),
+									parameters: [
+										new (
+											position: 0,
+											type: ReturnTypeForNSObject (nsObjectName: "NS.MyNSObject"),
+											name: "name"
+										) {
+											ForcedType = new (),
+										},
+									]
+								)
+							),
+							name: "cb"
+						)
+					]
+				)
+			];
+
+			const string customDelegateCcallback = @"
+using System;
+using Foundation;
+using ObjCRuntime;
+using ObjCBindings;
+
+namespace NS {
+
+	public class MyNSObject : NSObject {
+	}
+
+	public class MyClass {
+		public delegate int? Callback([ForcedType] MyNSObject name);
+
+		public void MyMethod ([CCallback] Callback cb) {}
+	}
+}
+";
+
+			yield return [
+				customDelegateCcallback,
+				new Method (
+					type: "NS.MyClass",
+					name: "MyMethod",
+					returnType: ReturnTypeForVoid (),
+					symbolAvailability: new (),
+					exportMethodData: new (),
+					attributes: [],
+					modifiers: [
+						SyntaxFactory.Token (SyntaxKind.PublicKeyword),
+					],
+					parameters: [
+						new (
+							position: 0,
+							type: ReturnTypeForDelegate (
+								"NS.MyClass.Callback",
+								delegateInfo: new (
+									name: "Invoke",
+									delegateType: "NS.MyClass.Callback",
+									returnType: ReturnTypeForInt (isNullable: true),
+									parameters: [
+										new (
+											position: 0,
+											type: ReturnTypeForNSObject (nsObjectName: "NS.MyNSObject"),
+											name: "name"
+										) {
+											ForcedType = new (),
+										},
+									]
+								) {
+									IsCCallback = true,
+								}
+							),
 							name: "cb"
 						) {
-							Delegate = new (
-								type: "NS.MyClass.Callback",
-								name: "Invoke",
-								returnType: "int?",
-								parameters: [
-									new (
-										position: 0,
-										type: "string",
-										name: "name",
-										isBlittable: false
-									),
-									new (
-										position: 1,
-										type: "string",
-										name: "middleName",
-										isBlittable: false
-									) {
-										IsNullable = true
-									},
-									new (
-										position: 2,
-										type: "string",
-										name: "surname",
-										isBlittable: false
-									) {
-										IsParams = true,
-										IsArray = true,
-									},
-								])
+							Attributes = [
+								new ("ObjCRuntime.CCallbackAttribute")
+							]
+						}
+					]
+				)
+			];
+
+			const string customDelegateBlockcallback = @"
+using System;
+using Foundation;
+using ObjCRuntime;
+using ObjCBindings;
+
+namespace NS {
+
+	public class MyNSObject : NSObject {
+	}
+
+	public class MyClass {
+		public delegate int? Callback([ForcedType] MyNSObject name);
+
+		public void MyMethod ([BlockCallback] Callback cb) {}
+	}
+}
+";
+
+			yield return [
+				customDelegateBlockcallback,
+				new Method (
+					type: "NS.MyClass",
+					name: "MyMethod",
+					returnType: ReturnTypeForVoid (),
+					symbolAvailability: new (),
+					exportMethodData: new (),
+					attributes: [],
+					modifiers: [
+						SyntaxFactory.Token (SyntaxKind.PublicKeyword),
+					],
+					parameters: [
+						new (
+							position: 0,
+							type: ReturnTypeForDelegate (
+								"NS.MyClass.Callback",
+								delegateInfo: new (
+									name: "Invoke",
+									delegateType: "NS.MyClass.Callback",
+									returnType: ReturnTypeForInt (isNullable: true),
+									parameters: [
+										new (
+											position: 0,
+											type: ReturnTypeForNSObject (nsObjectName: "NS.MyNSObject"),
+											name: "name"
+										) {
+											ForcedType = new (),
+										},
+									]
+								) {
+									IsBlockCallback = true,
+								}
+							),
+							name: "cb"
+						) {
+							Attributes = [
+								new ("ObjCRuntime.BlockCallbackAttribute")
+							]
+						}
+					]
+				)
+			];
+
+			const string customDelegateKeywordParam = @"
+using System;
+
+namespace NS {
+	public class MyClass {
+		public delegate int? Callback(string @event, string? middleName, params string[] surname);
+
+		public void MyMethod (Callback cb) {}
+	}
+}
+";
+
+			yield return [
+				customDelegateKeywordParam,
+				new Method (
+					type: "NS.MyClass",
+					name: "MyMethod",
+					returnType: ReturnTypeForVoid (),
+					symbolAvailability: new (),
+					exportMethodData: new (),
+					attributes: [],
+					modifiers: [
+						SyntaxFactory.Token (SyntaxKind.PublicKeyword),
+					],
+					parameters: [
+						new (
+							position: 0,
+							type: ReturnTypeForDelegate (
+								"NS.MyClass.Callback",
+								delegateInfo: new (
+									name: "Invoke",
+									delegateType: "NS.MyClass.Callback",
+									returnType: ReturnTypeForInt (isNullable: true),
+									parameters: [
+										new (
+											position: 0,
+											type: ReturnTypeForString (),
+											name: "@event"
+										),
+										new (
+											position: 1,
+											type: ReturnTypeForString (isNullable: true),
+											name: "middleName"
+										),
+										new (
+											position: 2,
+											type: ReturnTypeForArray ("string", isBlittable: false),
+											name: "surname"
+										) {
+											IsParams = true,
+										},
+									]
+								)
+							),
+							name: "cb"
+						)
+					]
+				)
+			];
+
+			const string customDelegateBindFrom = @"
+using System;
+using Foundation;
+using ObjCRuntime;
+using ObjCBindings;
+
+namespace NS {
+
+	public class MyNSObject : NSObject {
+	}
+
+	public class MyClass {
+		public delegate int? Callback([BindFrom (typeof(NSNumber))] int value);
+
+		public void MyMethod ([BlockCallback] Callback cb) {}
+	}
+}
+";
+
+			yield return [
+				customDelegateBindFrom,
+				new Method (
+					type: "NS.MyClass",
+					name: "MyMethod",
+					returnType: ReturnTypeForVoid (),
+					symbolAvailability: new (),
+					exportMethodData: new (),
+					attributes: [],
+					modifiers: [
+						SyntaxFactory.Token (SyntaxKind.PublicKeyword),
+					],
+					parameters: [
+						new (
+							position: 0,
+							type: ReturnTypeForDelegate (
+								"NS.MyClass.Callback",
+								delegateInfo: new (
+									name: "Invoke",
+									delegateType: "NS.MyClass.Callback",
+									returnType: ReturnTypeForInt (isNullable: true),
+									parameters: [
+										new (
+											position: 0,
+											type: ReturnTypeForInt (),
+											name: "value"
+										) {
+											BindAs = new (ReturnTypeForNSObject ("Foundation.NSNumber")),
+										},
+									]
+								) {
+									IsBlockCallback = true,
+								}
+							),
+							name: "cb"
+						) {
+							Attributes = [
+								new ("ObjCRuntime.BlockCallbackAttribute")
+							]
 						}
 					]
 				)

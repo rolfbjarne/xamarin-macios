@@ -51,6 +51,17 @@ namespace Introspection {
 					return true;
 			}
 
+			switch (type.Namespace) {
+			case "SafetyKit":
+				if (TestRuntime.IsSimulator)
+					return !TestRuntime.CheckXcodeVersion (15, 0); // doesn't seem to be available in the iOS simulator until iOS 17+
+				break;
+			case "SensorKit": // SensorKit doesn't exist on iPads
+				if (TestRuntime.IsDevice && TestRuntime.IsiPad)
+					return true;
+				break;
+			}
+
 			switch (type.FullName) {
 			case "MetalPerformanceShaders.MPSCommandBuffer":
 				// The reflectable type metadata contains no selectors.
@@ -296,13 +307,6 @@ namespace Introspection {
 					break;
 				}
 				break;
-			case "NSImage":
-				switch (selectorName) {
-				case "initByReferencingFile:":
-					return true;
-				}
-				break;
-
 			case "OSLogMessageComponent":
 				switch (selectorName) {
 				case "encodeWithCoder:":
@@ -663,12 +667,20 @@ namespace Introspection {
 				case "functionCount":
 				case "setFunctionCount:":
 					return true;
+#if __TVOS__
+				case "intersectionFunctionTableDescriptor":
+					return !TestRuntime.CheckXcodeVersion (14, 1);
+#endif
 				}
 				break;
 			case "MTLResourceStatePassDescriptor":
 				switch (selectorName) {
 				case "sampleBufferAttachments":
 					return true;
+#if __TVOS__
+				case "resourceStatePassDescriptor":
+					return !TestRuntime.CheckXcodeVersion (14, 1);
+#endif
 				}
 				break;
 			case "MTLResourceStatePassSampleBufferAttachmentDescriptor":
@@ -687,8 +699,44 @@ namespace Introspection {
 				case "functionCount":
 				case "setFunctionCount:":
 					return true;
+#if __TVOS__
+				case "visibleFunctionTableDescriptor":
+					return !TestRuntime.CheckXcodeVersion (14, 1);
+#endif
 				}
 				break;
+#if __TVOS__
+			case "MTLRenderPipelineReflection":
+				switch (selectorName) {
+				case "meshBindings":
+				case "objectBindings":
+					return !TestRuntime.CheckXcodeVersion (14, 1);
+				}
+				break;
+			case "MTLAccelerationStructureBoundingBoxGeometryDescriptor":
+			case "MTLAccelerationStructureMotionBoundingBoxGeometryDescriptor":
+			case "MTLAccelerationStructureMotionTriangleGeometryDescriptor":
+			case "MTLAccelerationStructureTriangleGeometryDescriptor":
+			case "MTLInstanceAccelerationStructureDescriptor":
+			case "MTLPrimitiveAccelerationStructureDescriptor":
+				switch (selectorName) {
+				case "descriptor":
+					return !TestRuntime.CheckXcodeVersion (14, 1);
+				}
+				break;
+			case "MTLAccelerationStructurePassDescriptor":
+				switch (selectorName) {
+				case "accelerationStructurePassDescriptor":
+					return !TestRuntime.CheckXcodeVersion (14, 1);
+				}
+				break;
+			case "MTLMotionKeyframeData":
+				switch (selectorName) {
+				case "data":
+					return !TestRuntime.CheckXcodeVersion (14, 1);
+				}
+				break;
+#endif
 			case "AVPlayerLooper": // This API got introduced in Xcode 8.0 binding but is not currently present nor in Xcode 8.3 or Xcode 9.0 needs research
 				switch (selectorName) {
 				case "isLoopingEnabled":
@@ -1068,6 +1116,22 @@ namespace Introspection {
 				}
 				break;
 #endif
+			case "CMWaterSubmersionManager":
+				switch (selectorName) {
+				case "maximumDepth":
+					return !TestRuntime.CheckXcodeVersion (15, 0); // it's not in iOS 16, but maybe iOS 17?
+				}
+				break;
+			case "NSDate":
+				switch (selectorName) {
+				case "dateWithSRAbsoluteTime:": // This is from a category defined in SensorKit, and SensorKit doesn't exist on iPads
+				case "initWithSRAbsoluteTime:": // This is from a category defined in SensorKit, and SensorKit doesn't exist on iPads
+				case "srAbsoluteTime": // This is from a category defined in SensorKit, and SensorKit doesn't exist on iPads
+					if (TestRuntime.IsDevice && TestRuntime.IsiPad)
+						return true;
+					break;
+				}
+				break;
 			}
 
 			// old binding mistake
@@ -1079,37 +1143,74 @@ namespace Introspection {
 			if (value)
 				return true;
 
-			var mname = method.Name;
-			// properties getter and setter will be methods in the _Extensions type
-			if (method.IsSpecialName)
-				mname = mname.Replace ("get_", "Get").Replace ("set_", "Set");
+			if (CheckForInlinedProtocolMember (actualType, method))
+				return true;
 
+			name = actualType.FullName + " : " + name;
+			return false;
+		}
+
+		static bool CheckForInlinedProtocolMember (Type actualType, MethodBase method)
+		{
 			// it's possible that the selector was inlined for an OPTIONAL protocol member
 			// we do not want those reported (too many false positives) and we have other tests to find such mistakes
 			foreach (var intf in actualType.GetInterfaces ()) {
 				if (intf.GetCustomAttributes<ProtocolAttribute> () is null)
 					continue;
+
+				// First check the actual interface
+				if (IsMethodImplemented (intf, intf, method, false))
+					return true;
+
+				// Then check any _Extensions class
 				var ext = Type.GetType (intf.Namespace + "." + intf.Name.Remove (0, 1) + "_Extensions, " + intf.Assembly.FullName);
-				if (ext is null)
-					continue;
-				foreach (var m in ext.GetMethods ()) {
-					if (mname != m.Name)
-						continue;
-					var parameters = method.GetParameters ();
-					var ext_params = m.GetParameters ();
-					// first parameters is `this XXX This`
-					if (parameters.Length == ext_params.Length - 1) {
-						bool match = true;
-						for (int i = 1; i < ext_params.Length; i++) {
-							match |= (parameters [i - 1].ParameterType == ext_params [i].ParameterType);
-						}
-						if (match)
-							return true;
-					}
-				}
+				if (IsMethodImplemented (intf, ext, method, true))
+					return true;
 			}
 
-			name = actualType.FullName + " : " + name;
+			return false;
+		}
+
+		static bool IsMethodImplemented (Type iface, Type type, MethodBase method, bool isExtensionMethod)
+		{
+			if (type is null)
+				return false;
+
+			// properties getter and setter will be methods in the _Extensions type
+			var mname = method.Name;
+			if (method.IsSpecialName)
+				mname = mname.Replace ("get_", "Get").Replace ("set_", "Set");
+
+			foreach (var m in type.GetMethods ()) {
+				if (method.Name != m.Name) {
+					if (method.IsSpecialName) {
+						if (mname != m.Name)
+							continue;
+					} else {
+						continue;
+					}
+				}
+				var parametersA = method.GetParameters ();
+				var parametersB = m.GetParameters ();
+				var match = true;
+				if (isExtensionMethod) {
+					// first parameters is `this XXX This`
+					if (parametersA.Length != parametersB.Length - 1)
+						continue;
+					match &= parametersB [0].ParameterType == iface;
+					for (var i = 1; i < parametersB.Length; i++) {
+						match &= parametersA [i - 1].ParameterType == parametersB [i].ParameterType;
+					}
+				} else {
+					if (parametersA.Length != parametersB.Length)
+						continue;
+					for (var i = 0; i < parametersA.Length; i++)
+						match &= parametersA [i].ParameterType == parametersB [i].ParameterType;
+				}
+				if (match)
+					return true;
+			}
+
 			return false;
 		}
 
@@ -1158,12 +1259,21 @@ namespace Introspection {
 			}
 		}
 
-		protected virtual IntPtr GetClassForType (Type type)
+		protected virtual bool TryGetClassForType (Type type, out IntPtr cls)
 		{
+			if (type.IsGenericType) {
+				cls = Class.GetHandle (type);
+				return true;
+			}
+
 			var fi = type.GetField ("class_ptr", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
-			if (fi is null)
-				return IntPtr.Zero; // e.g. *Delegate
-			return (NativeHandle) fi.GetValue (null);
+			if (fi is null) {
+				cls = IntPtr.Zero; // e.g. *Delegate
+				return false;
+			}
+
+			cls = (NativeHandle) fi.GetValue (null);
+			return true;
 		}
 
 		[Test]
@@ -1180,7 +1290,8 @@ namespace Introspection {
 				if (Skip (t) || SkipDueToAttribute (t))
 					continue;
 
-				IntPtr class_ptr = GetClassForType (t);
+				if (!TryGetClassForType (t, out var class_ptr))
+					continue;
 
 				if (class_ptr == IntPtr.Zero)
 					continue;
@@ -1222,9 +1333,6 @@ namespace Introspection {
 
 		void CheckInit (Type t, MethodBase m, string name)
 		{
-			if (SkipInit (name, m))
-				return;
-
 			bool init = IsInitLike (name);
 			if (m is ConstructorInfo) {
 				if (!init)
@@ -1247,103 +1355,18 @@ namespace Introspection {
 			return selector.Length < 5 || Char.IsUpper (selector [4]);
 		}
 
-		protected virtual bool SkipInit (string selector, MethodBase m)
-		{
-			switch (selector) {
-			// MPSGraphExecutable
-			case "initWithMPSGraphPackageAtURL:compilationDescriptor:":
-			case "initWithCoreMLPackageAtURL:compilationDescriptor:":
-			// NSAttributedString
-			case "initWithHTML:documentAttributes:":
-			case "initWithRTF:documentAttributes:":
-			case "initWithRTFD:documentAttributes:":
-			case "initWithURL:options:documentAttributes:error:":
-			case "initWithFileURL:options:documentAttributes:error:":
-			// AVAudioRecorder
-			case "initWithURL:settings:error:":
-			case "initWithURL:format:error:":
-			// NSUrlProtectionSpace
-			case "initWithHost:port:protocol:realm:authenticationMethod:":
-			case "initWithProxyHost:port:type:realm:authenticationMethod:":
-			// NSUserDefaults
-			case "initWithSuiteName:":
-			case "initWithUser:":
-			// GKScore
-			case "initWithCategory:":
-			case "initWithLeaderboardIdentifier:":
-			// MCSession
-			case "initWithPeer:securityIdentity:encryptionPreference:":
-			// INSetProfileInCarIntent and INSaveProfileInCarIntent
-			case "initWithProfileNumber:profileName:defaultProfile:":
-			case "initWithProfileNumber:profileLabel:defaultProfile:":
-			case "initWithProfileNumber:profileName:":
-			case "initWithProfileNumber:profileLabel:":
-			// MPSCnnBinaryConvolutionNode and MPSCnnBinaryFullyConnectedNode
-			case "initWithSource:weights:outputBiasTerms:outputScaleTerms:inputBiasTerms:inputScaleTerms:type:flags:":
-			// UISegmentedControl
-			case "initWithItems:":
-			// CLBeaconRegion
-			case "initWithUUID:identifier:":
-			case "initWithUUID:major:identifier:":
-			case "initWithUUID:major:minor:identifier:":
-			// Intents
-			case "initWithPersonHandle:nameComponents:displayName:image:contactIdentifier:customIdentifier:isMe:suggestionType:":
-			case "initWithPersonHandle:nameComponents:displayName:image:contactIdentifier:customIdentifier:isContactSuggestion:suggestionType:":
-			// NEHotspotConfiguration
-			case "initWithSSID:":
-			case "initWithSSID:passphrase:isWEP:":
-			case "initWithSSIDPrefix:":
-			case "initWithSSIDPrefix:passphrase:isWEP:":
-			// MapKit
-			case "initWithMaxCenterCoordinateDistance:":
-			case "initWithMinCenterCoordinateDistance:":
-			case "initExcludingCategories:":
-			case "initIncludingCategories:":
-			// NSImage
-			case "initWithDataIgnoringOrientation:":
-				var mi = m as MethodInfo;
-				return mi is not null && !mi.IsPublic && (mi.ReturnType.Name == "IntPtr" || mi.ReturnType.Name == "NativeHandle");
-			// NSAppleEventDescriptor
-			case "initListDescriptor":
-			case "initRecordDescriptor":
-			// SharedWithYouCore
-			case "initWithLocalIdentifier:":
-			case "initWithCollaborationIdentifier:":
-				return true;
-			// CloudKit
-			case "initWithExcludedZoneIDs:":
-			case "initWithZoneIDs:":
-			// DDDevicePickerViewController
-			case "initWithBrowseDescriptor:parameters:":
-				return true;
-			// MKAddressFilter
-			case "initExcludingOptions:":
-			case "initIncludingOptions:":
-				return true;
-			// GKGameCenterViewController
-			case "initWithAchievementID:":
-			case "initWithLeaderboardSetID:":
-				return true;
-			case "initWithBytes:length:":
-				switch (m.DeclaringType.Name) {
-				case "FSFileName":
-					return true;
-				}
-				return false;
-			default:
-				return false;
-			}
-		}
-
 		protected virtual void Dispose (NSObject obj, Type type)
 		{
 			obj.Dispose ();
 		}
 
 		// funny, this is how I envisioned the instance version... before hitting run :|
-		protected virtual bool CheckStaticResponse (bool value, Type actualType, Type declaredType, ref string name)
+		protected virtual bool CheckStaticResponse (bool value, Type actualType, Type declaredType, MethodBase method, ref string name)
 		{
 			if (value)
+				return true;
+
+			if (CheckForInlinedProtocolMember (actualType, method))
 				return true;
 
 			name = actualType.FullName + " : " + name;
@@ -1366,10 +1389,8 @@ namespace Introspection {
 				if (Skip (t) || SkipDueToAttribute (t))
 					continue;
 
-				FieldInfo fi = t.GetField ("class_ptr", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static);
-				if (fi is null)
+				if (!TryGetClassForType (t, out var class_ptr))
 					continue; // e.g. *Delegate
-				IntPtr class_ptr = (IntPtr) (NativeHandle) fi.GetValue (null);
 
 				foreach (var m in t.GetMethods (BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static)) {
 					if (SkipDueToAttribute (m))
@@ -1383,7 +1404,7 @@ namespace Introspection {
 								continue;
 
 							bool result = bool_objc_msgSend_IntPtr (class_ptr, responds_handle, Selector.GetHandle (name));
-							bool response = CheckStaticResponse (result, t, m.DeclaringType, ref name);
+							bool response = CheckStaticResponse (result, t, m.DeclaringType, m, ref name);
 							if (!response)
 								ReportError (name);
 							n++;

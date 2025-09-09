@@ -14,14 +14,18 @@ using Foundation;
 
 namespace Contacts {
 	// Strong typed Keys to enum
+	/// <summary>Enumeration of values used by all instant-message services.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum CNInstantMessageAddressOption {
-		/// <summary>Associated with the <see cref="P:Contacts.CNInstantMessageAddress.Username" /> property..</summary>
+		/// <summary>Associated with the <see cref="Contacts.CNInstantMessageAddress.Username" /> property..</summary>
 		Username,
-		/// <summary>Associated with the <see cref="P:Contacts.CNInstantMessageAddress.Service" /> property..</summary>
+		/// <summary>Associated with the <see cref="Contacts.CNInstantMessageAddress.Service" /> property..</summary>
 		Service,
 	}
 
 	// Strong typed Keys to enum
+	/// <summary>Enumerates common providers of instant messaging.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum CNInstantMessageServiceOption {
 		/// <summary>AOL Instant Messenger.</summary>
 		Aim,
@@ -47,6 +51,10 @@ namespace Contacts {
 
 	public partial class CNInstantMessageAddress {
 
+		/// <param name="property">To be added.</param>
+		///         <summary>Returns the localized property name for <paramref name="property" />.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static string LocalizeProperty (CNInstantMessageAddressOption property)
 		{
 			switch (property) {
@@ -59,6 +67,10 @@ namespace Contacts {
 			}
 		}
 
+		/// <param name="serviceOption">To be added.</param>
+		///         <summary>Returns the localized string for the specified <paramref name="serviceOption" />.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		public static string LocalizeService (CNInstantMessageServiceOption serviceOption)
 		{
 			var srvc = ServiceOptionsToNSString (serviceOption);

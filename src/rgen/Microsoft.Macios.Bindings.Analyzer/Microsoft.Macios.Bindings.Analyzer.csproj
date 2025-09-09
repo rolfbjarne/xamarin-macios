@@ -33,6 +33,9 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Compile Include="../Microsoft.Macios.Generator/Configuration.cs" >
+            <Link>Generator/Configuration.cs</Link>
+        </Compile>
         <Compile Include="../Microsoft.Macios.Generator/AttributesNames.cs" >
             <Link>Generator/AttributesNames.cs</Link>
         </Compile>
@@ -41,6 +44,12 @@
         </Compile>
         <Compile Include="../Microsoft.Macios.Generator/DictionaryComparer.cs" >
             <Link>Generator/DictionaryComparer.cs</Link>
+        </Compile>
+        <Compile Include="../Microsoft.Macios.Generator/Nomenclator.cs" >
+            <Link>Generator/Nomenclator.cs</Link>
+        </Compile>
+        <Compile Include="../Microsoft.Macios.Generator/StructState.cs" >
+            <Link>Generator/StructState.cs</Link>
         </Compile>
         <Compile Include="../Microsoft.Macios.Generator/Attributes/BindFromData.cs" >
             <Link>Generator/Attributes/BindFromData.cs</Link>
@@ -57,6 +66,9 @@
         <Compile Include="../Microsoft.Macios.Generator/Attributes/BindingTypeData.cs" >
             <Link>Generator/Attributes/BindingTypeData.cs</Link>
         </Compile>
+        <Compile Include="../Microsoft.Macios.Generator/Attributes/ForcedTypeData.cs" >
+            <Link>Generator/Attributes/ForcedTypeData.cs</Link>
+        </Compile>
         <Compile Include="../Microsoft.Macios.Generator/Attributes/ObsoletedOSPlatformData.cs" >
             <Link>Generator/Attributes/ObsoletedOSPlatformData.cs</Link>
         </Compile>
@@ -66,40 +78,29 @@
         <Compile Include="../Microsoft.Macios.Generator/Attributes/UnsupportedOSPlatformData.cs" >
             <Link>Generator/Attributes/UnsupportedOSPlatformData.cs</Link>
         </Compile>
-        <Compile Include="../Microsoft.Macios.Generator/DataModel/TypeInfo.cs" >
-            <Link>DataModel/TypeInfo.cs</Link>
+        <Compile Include="../Microsoft.Macios.Generator/Context/RootContext.cs" >
+            <Link>Generator/Context/RootContext.cs</Link>
         </Compile>
-        <Compile Include="../Microsoft.Macios.Generator/Extensions/ApplePlatformExtensions.cs" >
-            <Link>Generator/Extensions/ApplePlatformExtensions.cs</Link>
+        <Compile Include="../Microsoft.Macios.Generator/DataModel/*.cs" >
+            <Link>DataModel/*.cs</Link>
         </Compile>
-        <Compile Include="../Microsoft.Macios.Generator/Extensions/CompilationExtensions.cs" >
-            <Link>Generator/Extensions/CompilationExtensions.cs</Link>
+        <Compile Include="../Microsoft.Macios.Generator/Extensions/*.cs" >
+            <Link>Generator/*.cs</Link>
         </Compile>
-        <Compile Include="../Microsoft.Macios.Generator/Extensions/Delegates.cs" >
-            <Link>Generator/Extensions/Delegates.cs</Link>
+        <Compile Include="../Microsoft.Macios.Generator/Formatters/TypeInfoFormatter.cs" >
+            <Link>Generator/Formatters/TypeInfoFormatter.cs</Link>
         </Compile>
-        <Compile Include="../Microsoft.Macios.Generator/Extensions/SpecialTypeExtensions.cs" >
-            <Link>Generator/Extensions/SpecialTypeExtensions.cs</Link>
+        <Compile Include="../Microsoft.Macios.Generator/Formatters/MethodFormatter.cs" >
+            <Link>Generator/Formatters/MethodFormatter.cs</Link>
         </Compile>
-        <Compile Include="../Microsoft.Macios.Generator/Extensions/TypeSymbolExtensions.Core.cs">
-            <Link>Generator/Extensions/TypeSymbolExtensions.Core.cs</Link>
-        </Compile>
-        <Compile Include="../Microsoft.Macios.Generator/Extensions/TypeSymbolExtensions.Generator.cs">
-            <Link>Generator/Extensions/TypeSymbolExtensions.Generator.cs</Link>
-        </Compile>
-        <Compile Include="../Microsoft.Macios.Generator/Extensions/TypedConstantExtensions.cs" >
-            <Link>Generator/Extensions/TypedConstantExtensions.cs</Link>
-        </Compile>
-        <Compile Include="../Microsoft.Macios.Generator/Extensions/StringExtensions.cs" >
-            <Link>Generator/Extensions/StringExtensions.cs</Link>
+        <Compile Include="../Microsoft.Macios.Generator/Formatters/ParameterFormatter.cs" >
+            <Link>Generator/Formatters/ParameterFormatter.cs</Link>
         </Compile>
         <Compile Include="../Microsoft.Macios.Generator/Availability/*.cs" >
             <Link>Generator/Availability/*.cs</Link>
         </Compile>
-        <Compile Update="Resources.Designer.cs">
-          <DesignTime>True</DesignTime>
-          <AutoGen>True</AutoGen>
-          <DependentUpon>Resources.resx</DependentUpon>
+        <Compile Include="../../ObjCRuntime/Registrar.core.cs" >
+            <Link>external\Registrar.core.cs</Link>
         </Compile>
     </ItemGroup>
 
@@ -109,9 +110,17 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Remove="Resources.Designer.cs" />
       <EmbeddedResource Update="Resources.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+        <StronglyTypedFileName>Resources.Designer.cs</StronglyTypedFileName>
+        <StronglyTypedLanguage>CSharp</StronglyTypedLanguage>
+        <StronglyTypedNamespace>$(RootNamespace)</StronglyTypedNamespace>
+        <StronglyTypedClassName>Resources</StronglyTypedClassName>
+        <ManifestResourceName>$(RootNamespace).Resources</ManifestResourceName>
+        <GenerateResource>true</GenerateResource>
+        <PublicClass>false</PublicClass>
       </EmbeddedResource>
     </ItemGroup>
 

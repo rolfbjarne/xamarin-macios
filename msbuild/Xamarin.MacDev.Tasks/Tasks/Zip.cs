@@ -14,21 +14,15 @@ using Xamarin.Utils;
 #nullable enable
 
 namespace Xamarin.MacDev.Tasks {
-	public class Zip : XamarinTask, ICancelableTask {
-		CancellationTokenSource? cancellationTokenSource;
-
+	public class Zip : XamarinTask, ICancelableTask, ITaskCallback {
 		#region Inputs
 
 		[Output]
 		[Required]
 		public ITaskItem? OutputFile { get; set; }
 
-		public bool Recursive { get; set; }
-
 		[Required]
 		public ITaskItem [] Sources { get; set; } = Array.Empty<ITaskItem> ();
-
-		public bool Symlinks { get; set; }
 
 		[Required]
 		public ITaskItem? WorkingDirectory { get; set; }
@@ -37,39 +31,9 @@ namespace Xamarin.MacDev.Tasks {
 
 		#endregion
 
-		static string GetExecutable (List<string> arguments, string toolName, string toolPathOverride)
-		{
-			if (string.IsNullOrEmpty (toolPathOverride)) {
-				arguments.Insert (0, toolName);
-				return "xcrun";
-			}
-			return toolPathOverride;
-		}
-
 		string GetWorkingDirectory ()
 		{
 			return WorkingDirectory!.GetMetadata ("FullPath");
-		}
-
-		List<string> GenerateCommandLineCommands ()
-		{
-			var args = new List<string> ();
-
-			if (Recursive)
-				args.Add ("-r");
-
-			if (Symlinks)
-				args.Add ("-y");
-
-			args.Add (OutputFile!.GetMetadata ("FullPath"));
-
-			var root = GetWorkingDirectory ();
-			for (int i = 0; i < Sources.Length; i++) {
-				var relative = PathUtils.AbsoluteToRelative (root, Sources [i].GetMetadata ("FullPath"));
-				args.Add (relative);
-			}
-
-			return args;
 		}
 
 		public override bool Execute ()
@@ -85,10 +49,15 @@ namespace Xamarin.MacDev.Tasks {
 				return rv;
 			}
 
-			var args = GenerateCommandLineCommands ();
-			var executable = GetExecutable (args, "zip", ZipPath);
-			cancellationTokenSource = new CancellationTokenSource ();
-			ExecuteAsync (Log, executable, args, workingDirectory: GetWorkingDirectory (), cancellationToken: cancellationTokenSource.Token).Wait ();
+			var zip = OutputFile!.GetMetadata ("FullPath");
+			var workingDirectory = GetWorkingDirectory ();
+			var sources = new List<string> ();
+			for (int i = 0; i < Sources.Length; i++)
+				sources.Add (Sources [i].GetMetadata ("FullPath"));
+
+			if (!CompressionHelper.TryCompress (Log, zip, sources, false, workingDirectory, false))
+				return false;
+
 			return !Log.HasLoggedErrors;
 		}
 
@@ -96,14 +65,14 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			if (ShouldExecuteRemotely ()) {
 				BuildConnection.CancelAsync (BuildEngine4).Wait ();
-			} else {
-				cancellationTokenSource?.Cancel ();
 			}
 		}
 
+		//We don't want the inputs to be copied to the Mac since when zipping remotely, we are expecting the files to be already present in the Mac
 		public bool ShouldCopyToBuildServer (ITaskItem item) => false;
 
-		public bool ShouldCreateOutputFile (ITaskItem item) => true;
+		//We don't want empty output files to be created in Windows since we are already copying the real output file as part of the task execution
+		public bool ShouldCreateOutputFile (ITaskItem item) => false;
 
 		public IEnumerable<ITaskItem> GetAdditionalItemsToBeCopied () => Enumerable.Empty<ITaskItem> ();
 	}

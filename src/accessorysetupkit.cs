@@ -1,4 +1,3 @@
-#if NET
 using System;
 
 using CoreBluetooth;
@@ -29,6 +28,8 @@ namespace AccessorySetupKit {
 	public enum ASAccessorySupportOptions : ulong {
 		BluetoothPairingLE = 1U << 1,
 		BluetoothTransportBridging = 1U << 2,
+		[iOS (18, 4)]
+		BluetoothHid = 1U << 3,
 	}
 
 	[Native]
@@ -143,7 +144,6 @@ namespace AccessorySetupKit {
 
 	[BaseType (typeof (NSObject))]
 	[iOS (18, 0)]
-	[DisableDefaultCtor]
 	interface ASAccessorySettings {
 		[Export ("defaultSettings")]
 		[Static]
@@ -158,7 +158,6 @@ namespace AccessorySetupKit {
 
 	[BaseType (typeof (NSObject))]
 	[iOS (18, 0)]
-	[DisableDefaultCtor]
 	interface ASDiscoveryDescriptor {
 		[Export ("supportedOptions", ArgumentSemantic.Assign)]
 		ASAccessorySupportOptions SupportedOptions { get; set; }
@@ -255,5 +254,3 @@ namespace AccessorySetupKit {
 		NativeHandle Constructor (string name, UIImage productImage, ASDiscoveryDescriptor descriptor);
 	}
 }
-
-#endif // !NET

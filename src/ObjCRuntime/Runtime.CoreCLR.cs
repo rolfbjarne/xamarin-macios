@@ -17,7 +17,7 @@
 // Uncomment VERBOSE_LOG to enable verbose logging
 // #define VERBOSE_LOG
 
-#if NET && !COREBUILD
+#if !COREBUILD
 
 #nullable enable
 
@@ -41,6 +41,10 @@ using MonoObjectPtr = System.IntPtr;
 
 namespace ObjCRuntime {
 
+	/// <summary>Provides information about the Xamarin.iOS Runtime.</summary>
+	///     <remarks>
+	///     </remarks>
+	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/SysSound/">SysSound</related>
 	public partial class Runtime {
 		// Keep in sync with XamarinLookupTypes in main.h
 		internal enum TypeLookup {
@@ -113,6 +117,7 @@ namespace ObjCRuntime {
 				} else if (obj is INativeObject inativeobj) {
 					// Don't call ToString on an INativeObject, we may end up with infinite recursion.
 					arg = $"{inativeobj.Handle.ToString ()} ({obj.GetType ()})";
+					GC.KeepAlive (inativeobj);
 				} else {
 					var toString = obj.ToString () ?? string.Empty;
 					// Print one line, and at most 256 characters.
@@ -130,6 +135,7 @@ namespace ObjCRuntime {
 			log_coreclr (string.Format (message, args));
 		}
 
+		[SupportedOSPlatform ("macos")]
 		static unsafe void InitializeCoreCLRBridge (InitializationOptions* options)
 		{
 			if (options->xamarin_objc_msgsend != IntPtr.Zero)
@@ -171,11 +177,9 @@ namespace ObjCRuntime {
 			return path is not null;
 		}
 
-#if NET
 		// Note that this method does not work with NativeAOT, so throw an exception in that case.
 		// IL2026: Using member 'System.Runtime.Loader.AssemblyLoadContext.LoadFromAssemblyPath(String)' which has 'RequiresUnreferencedCodeAttribute' can break functionality when trimming application code. Types and members the loaded assembly depends on might be removed.
 		[UnconditionalSuppressMessage ("", "IL2026", Justification = "The APIs this method tries to access are marked by other means, so this is linker-safe.")]
-#endif
 		static Assembly? ResolvingEventHandler (AssemblyLoadContext sender, AssemblyName assemblyName)
 		{
 			// Note that this method does not work with NativeAOT, so throw an exception in that case.
@@ -201,10 +205,10 @@ namespace ObjCRuntime {
 
 		// Size: 2 pointers
 		internal struct TrackedObjectInfo {
-			public IntPtr Handle;
-			public NSObject.Flags Flags;
+			public unsafe NSObjectData* Data;
 		}
 
+		[SupportedOSPlatform ("macos")]
 		internal static GCHandle CreateTrackingGCHandle (NSObject obj, IntPtr handle)
 		{
 			var gchandle = ObjectiveCMarshal.CreateReferenceTrackingHandle (obj, out var info);
@@ -213,11 +217,9 @@ namespace ObjCRuntime {
 				TrackedObjectInfo* tracked_info;
 				fixed (void* ptr = info)
 					tracked_info = (TrackedObjectInfo*) ptr;
-				tracked_info->Handle = handle;
-				tracked_info->Flags = obj.FlagsInternal;
-				obj.tracked_object_info = tracked_info;
+				tracked_info->Data = obj.GetData ();
 
-				log_coreclr ($"GetOrCreateTrackingGCHandle ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}) => Info=0x{((IntPtr) tracked_info).ToString ("x")} Flags={tracked_info->Flags} Created new");
+				log_coreclr ($"GetOrCreateTrackingGCHandle ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}) => Info=0x{((IntPtr) tracked_info).ToString ("x")} Data=0x{(IntPtr) tracked_info->Data:x} Created new");
 			}
 
 			return gchandle;
@@ -227,10 +229,7 @@ namespace ObjCRuntime {
 		internal static void RegisterToggleReferenceCoreCLR (NSObject obj, IntPtr handle, bool isCustomType)
 		{
 			unsafe {
-				TrackedObjectInfo* tracked_info = obj.tracked_object_info;
-				tracked_info->Flags = obj.FlagsInternal;
-
-				log_coreclr ($"RegisterToggleReferenceCoreCLR ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}, {isCustomType}) => Info=0x{((IntPtr) tracked_info).ToString ("x")} Flags={tracked_info->Flags}");
+				log_coreclr ($"RegisterToggleReferenceCoreCLR ({obj.GetType ().FullName}, 0x{handle.ToString ("x")}, {isCustomType}) => Data=0x{(IntPtr) obj.GetData ():x}");
 			}
 
 			// Make sure the GCHandle we have is a weak one for custom types.
@@ -299,6 +298,7 @@ namespace ObjCRuntime {
 			throw new InvalidOperationException ($"Could not find any assemblies named {name}");
 		}
 
+		[SupportedOSPlatform ("macos")]
 		static unsafe void SetPendingException (MonoObject* exception_obj)
 		{
 			var exc = (Exception?) GetMonoObjectTarget (exception_obj);
@@ -489,7 +489,7 @@ namespace ObjCRuntime {
 				throw CreateNativeAOTNotSupportedException ();
 
 			var structType = obj.GetType ();
-			// Unwrap enums, Marshal.StructureToPtr complains they're not blittable (https://github.com/xamarin/xamarin-macios/issues/15744)
+			// Unwrap enums, Marshal.StructureToPtr complains they're not blittable (https://github.com/dotnet/macios/issues/15744)
 			if (structType.IsEnum) {
 				structType = Enum.GetUnderlyingType (structType);
 				obj = Convert.ChangeType (obj, structType);
@@ -552,16 +552,16 @@ namespace ObjCRuntime {
 			return Marshal.StringToHGlobalAuto (location);
 		}
 
-		static void SetFlagsForNSObject (IntPtr gchandle, byte flags)
+		static void SetFlagsForNSObject (IntPtr gchandle, uint flags)
 		{
 			var obj = (NSObject) GetGCHandleTarget (gchandle)!;
 			obj.FlagsInternal = (NSObject.Flags) flags;
 		}
 
-		static byte GetFlagsForNSObject (IntPtr gchandle)
+		static uint GetFlagsForNSObject (IntPtr gchandle)
 		{
 			var obj = (NSObject) GetGCHandleTarget (gchandle)!;
-			return (byte) obj.FlagsInternal;
+			return (uint) obj.FlagsInternal;
 		}
 
 		static unsafe MonoObject* GetMethodDeclaringType (MonoObject* mobj)
@@ -1105,4 +1105,4 @@ namespace ObjCRuntime {
 	}
 }
 
-#endif // NET && !COREBUILD
+#endif // !COREBUILD

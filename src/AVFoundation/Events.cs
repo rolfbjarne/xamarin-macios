@@ -35,14 +35,22 @@ using ObjCRuntime;
 #nullable enable
 
 namespace AVFoundation {
-
-#if NET
+#if __TVOS__
+	/// <summary>Provides data for the <see cref="AVFoundation.AVAudioPlayer.DecoderError" /> event.</summary>
+	/// <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVTouchSample/">avTouch</related>
+#else
+	/// <summary>Provides data for the <see cref="AVFoundation.AVAudioRecorder.EncoderError" /> and <see cref="AVFoundation.AVAudioPlayer.DecoderError" /> events.</summary>
+	/// <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVTouchSample/">avTouch</related>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
-#endif
 	public class AVErrorEventArgs : EventArgs {
+		/// <param name="error">To be added.</param>
+		///         <summary>Initializes a new instance of the AVErrorEventArgs class.</summary>
+		///         <remarks>
+		///         </remarks>
 		public AVErrorEventArgs (NSError error)
 		{
 			Error = error;
@@ -54,13 +62,25 @@ namespace AVFoundation {
 		public NSError Error { get; private set; }
 	}
 
-#if NET
+#if __TVOS__
+	/// <summary>Provides data for the <see cref="AVAudioPlayer.FinishedPlaying" /> event.</summary>
+	/// <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVTouchSample/">avTouch</related>
+#elif __MACOS__
+	/// <summary>Provides data for the <see cref="AVAudioPlayer.FinishedPlaying" /> and <see cref="AVAudioRecorder.FinishedRecording" /> events.</summary>
+	/// <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVTouchSample/">avTouch</related>
+#else
+	/// <summary>Provides data for the <see cref="AVAudioPlayer.FinishedPlaying" />, <see cref="AVAudioRecorder.FinishedRecording" /> and <see cref="AVAudioSession.InputAvailabilityChanged" /> events.</summary>
+	/// <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVTouchSample/">avTouch</related>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
-#endif
 	public class AVStatusEventArgs : EventArgs {
+		/// <param name="status">To be added.</param>
+		///         <summary>Initializes a new instance of the AVStatusEventArgs class.</summary>
+		///         <remarks>
+		///         </remarks>
 		public AVStatusEventArgs (bool status)
 		{
 			Status = status;
@@ -91,6 +111,7 @@ namespace AVFoundation {
 				cbFinishedPlaying (player, new AVStatusEventArgs (flag));
 			if (player.Handle == IntPtr.Zero)
 				throw new ObjectDisposedException ("player", "the player object was Dispose()d during the callback, this has corrupted the state of the program");
+			GC.KeepAlive (player);
 		}
 
 		[Preserve (Conditional = true)]
@@ -117,6 +138,10 @@ namespace AVFoundation {
 	}
 #pragma warning restore 672
 
+	/// <summary>An audio player that can play audio from memory or the local file system.</summary>
+	///     <remarks>To be added.</remarks>
+	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVTouchSample/">avTouch</related>
+	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/AVFoundation/Reference/AVAudioPlayerClassReference/index.html">Apple documentation for <c>AVAudioPlayer</c></related>
 	public partial class AVAudioPlayer {
 		InternalAVAudioPlayerDelegate EnsureEventDelegate ()
 		{
@@ -226,6 +251,10 @@ namespace AVFoundation {
 			return del;
 		}
 
+		/// <summary>An event indicating that recording has ended (not paused).</summary>
+		/// <remarks>
+		///           <para>This event is raised when a recording has been stopped programmatically or has ended due to reaching its time limit. This event is not raised when the recording has been paused.</para>
+		///         </remarks>
 		public event EventHandler<AVStatusEventArgs> FinishedRecording {
 			add {
 				EnsureEventDelegate ().cbFinishedRecording += value;
@@ -237,6 +266,8 @@ namespace AVFoundation {
 			}
 		}
 
+		/// <summary>Event indicating an error during encoding.</summary>
+		/// <remarks>To be added.</remarks>
 		public event EventHandler<AVErrorEventArgs> EncoderError {
 			add {
 				EnsureEventDelegate ().cbEncoderError += value;
@@ -248,6 +279,8 @@ namespace AVFoundation {
 			}
 		}
 
+		/// <summary>Event raised when an interruption begins.</summary>
+		/// <remarks>To be added.</remarks>
 		public event EventHandler BeginInterruption {
 			add {
 				EnsureEventDelegate ().cbBeginInterruption += value;
@@ -259,6 +292,8 @@ namespace AVFoundation {
 			}
 		}
 
+		/// <summary>An event indicating an interruption has ended.</summary>
+		/// <remarks>To be added.</remarks>
 		public event EventHandler EndInterruption {
 			add {
 				EnsureEventDelegate ().cbEndInterruption += value;
@@ -272,13 +307,24 @@ namespace AVFoundation {
 	}
 #endif // !TVOS
 
-#if NET
+#if !(XAMCORE_5_0 && (__TVOS__ || __MACOS__))
+#if !__TVOS__ && !__MACOS__
+	/// <summary>Provides data for the <see cref="AVFoundation.AVAudioSession.SampleRateChanged" /> event.</summary>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+#if XAMCORE_5_0
+	[UnsupportedOSPlatform ("tvos")]
+	[UnsupportedOSPlatform ("macos")
+#else
 	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos")]
 #endif
 	public class AVSampleRateEventArgs : EventArgs {
+		/// <param name="sampleRate">To be added.</param>
+		///         <summary>Initializes a new instance of the AVSampleRateEventArgs class.</summary>
+		///         <remarks>
+		///         </remarks>
 		public AVSampleRateEventArgs (double sampleRate)
 		{
 			SampleRate = sampleRate;
@@ -289,13 +335,23 @@ namespace AVFoundation {
 		public double SampleRate { get; private set; }
 	}
 
-#if NET
+#if !__TVOS__ && !__MACOS__
+	/// <summary>Provides data for the <see cref="AVFoundation.AVAudioSession.OutputChannelsChanged" /> and <see cref="AVFoundation.AVAudioSession.OutputChannelsChanged" /> events.</summary>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+#if XAMCORE_5_0
+	[UnsupportedOSPlatform ("tvos")]
+	[UnsupportedOSPlatform ("macos")
+#else
 	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos")]
 #endif
 	public class AVChannelsEventArgs : EventArgs {
+		/// <param name="numberOfChannels">To be added.</param>
+		///         <summary>Initializes a new instance of the AVChannelsEventArgs class.</summary>
+		///         <remarks>
+		///         </remarks>
 		public AVChannelsEventArgs (int numberOfChannels)
 		{
 			NumberOfChannels = numberOfChannels;
@@ -306,13 +362,23 @@ namespace AVFoundation {
 		public int NumberOfChannels { get; private set; }
 	}
 
-#if NET
+#if !__TVOS__ && !__MACOS__
+	/// <summary>Provides data for the <see cref="AVFoundation.AVAudioSession.CategoryChanged" /> event.</summary>
+#endif
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
-	[SupportedOSPlatform ("macos")]
+#if XAMCORE_5_0
+	[UnsupportedOSPlatform ("tvos")]
+	[UnsupportedOSPlatform ("macos")
+#else
 	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("macos")]
 #endif
 	public class AVCategoryEventArgs : EventArgs {
+		/// <param name="category">To be added.</param>
+		///         <summary>Initializes a new instance of the AVCategoryEventArgs class.</summary>
+		///         <remarks>
+		///         </remarks>
 		public AVCategoryEventArgs (string category)
 		{
 			Category = category;
@@ -323,6 +389,7 @@ namespace AVFoundation {
 		///         <remarks>To be added.</remarks>
 		public string Category { get; private set; }
 	}
+#endif // !(XAMCORE_5_0 && (__TVOS__ || __MACOS__)
 
 #if !MONOMAC && !TVOS
 	internal class InternalAVAudioSessionDelegate : AVAudioSessionDelegate {
@@ -365,7 +432,14 @@ namespace AVFoundation {
 
 	}
 
+	/// <include file="../../docs/api/AVFoundation/AVAudioSession.xml" path="/Documentation/Docs[@DocId='T:AVFoundation.AVAudioSession']/*" />
 	public partial class AVAudioSession {
+		[UnsupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("tvos")]
+		[ObsoletedOSPlatform ("ios6.0", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
 		InternalAVAudioSessionDelegate EnsureEventDelegate ()
 		{
 			var del = WeakDelegate as InternalAVAudioSessionDelegate;
@@ -376,16 +450,12 @@ namespace AVFoundation {
 			return del;
 		}
 
-#if NET
 		[UnsupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("ios6.0", "Use 'AVAudioSession.Notification.ObserveInterruption' instead.")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'AVAudioSession.Notification.ObserveInterruption' instead.")]
-#else
-		[Deprecated (PlatformName.iOS, 6, 0, message: "Use 'AVAudioSession.Notification.ObserveInterruption' instead.")]
-#endif
 		public event EventHandler BeginInterruption {
 			add {
 				EnsureEventDelegate ().cbBeginInterruption += value;
@@ -396,16 +466,12 @@ namespace AVFoundation {
 			}
 		}
 
-#if NET
 		[UnsupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("ios6.0", "Use 'AVAudioSession.Notification.ObserveInterruption' instead.")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'AVAudioSession.Notification.ObserveInterruption' instead.")]
-#else
-		[Deprecated (PlatformName.iOS, 6, 0, message: "Use 'AVAudioSession.Notification.ObserveInterruption' instead.")]
-#endif
 		public event EventHandler EndInterruption {
 			add {
 				EnsureEventDelegate ().cbEndInterruption += value;
@@ -416,16 +482,12 @@ namespace AVFoundation {
 			}
 		}
 
-#if NET
 		[UnsupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("ios6.0", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
-#else
-		[Deprecated (PlatformName.iOS, 6, 0, message: "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
-#endif
 		public event EventHandler<AVCategoryEventArgs> CategoryChanged {
 			add {
 				EnsureEventDelegate ().cbCategoryChanged += value;
@@ -436,16 +498,12 @@ namespace AVFoundation {
 			}
 		}
 
-#if NET
 		[UnsupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("ios6.0", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
-#else
-		[Deprecated (PlatformName.iOS, 6, 0, message: "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
-#endif
 		public event EventHandler<AVStatusEventArgs> InputAvailabilityChanged {
 			add {
 				EnsureEventDelegate ().cbInputAvailabilityChanged += value;
@@ -456,16 +514,12 @@ namespace AVFoundation {
 			}
 		}
 
-#if NET
 		[UnsupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("ios6.0", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
-#else
-		[Deprecated (PlatformName.iOS, 6, 0, message: "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
-#endif
 		public event EventHandler<AVSampleRateEventArgs> SampleRateChanged {
 			add {
 				EnsureEventDelegate ().cbSampleRateChanged += value;
@@ -477,16 +531,12 @@ namespace AVFoundation {
 			}
 		}
 
-#if NET
 		[UnsupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("ios6.0", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
-#else
-		[Deprecated (PlatformName.iOS, 6, 0, message: "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
-#endif
 		public event EventHandler<AVChannelsEventArgs> InputChannelsChanged {
 			add {
 				EnsureEventDelegate ().cbInputChanged += value;
@@ -498,16 +548,12 @@ namespace AVFoundation {
 			}
 		}
 
-#if NET
 		[UnsupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
 		[ObsoletedOSPlatform ("ios6.0", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
 		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
-#else
-		[Deprecated (PlatformName.iOS, 6, 0, message: "Use 'AVAudioSession.Notification.ObserveAudioRouteChange' instead.")]
-#endif
 		public event EventHandler<AVChannelsEventArgs> OutputChannelsChanged {
 			add {
 				EnsureEventDelegate ().cbOutputChanged += value;

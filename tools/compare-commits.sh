@@ -349,6 +349,13 @@ if test -n "$ENABLE_GENERATOR_DIFF"; then
 	# delete files we don't care are different
 	echo "    ${BLUE}Deleting files from ${WHITE}$OUTPUT_TMP_DIR/generator${BLUE} we don't care about...${CLEAR}"
 	find "$OUTPUT_TMP_DIR/generator" '(' \
+		-name '*.AssemblyInfo.cs' -or \
+		-name '*.sourcelink.json' -or \
+		-name '*.csproj.FileListAbsolute.txt' -or \
+		-name 'SourceLink.json' -or \
+		-name 'ApiDefinition.*.csproj' -or \
+		-name 'Microsoft.*.csproj' -or \
+		-name 'Core.*.csproj' -or \
 		-name 'compiler' -or \
 		-name 'bgen' -or \
 		-name '*.dll' -or \
@@ -479,10 +486,15 @@ if [ -z ${DOTNET_TFM+x} ]; then DOTNET_TFM=$(make -C "$ROOT_DIR"/tools/devops pr
 
 # Create the GH comment
 
+EXITCODE=0
+EXITREASON=
+
 if test -n "$ENABLE_API_DIFF"; then
 	if grep BreakingChangesDetected "$APIDIFF_RESULTS_DIR/api-diff.md" >/dev/null 2>&1; then
 		EMOJII=":heavy_exclamation_mark:"
 		MSG=" (Breaking changes)"
+		EXITCODE=1
+		EXITREASON="Error: failing comparison because there are breaking changes"
 	else
 		EMOJII=":white_check_mark:"
 		MSG=""
@@ -497,6 +509,8 @@ if test -n "$ENABLE_STABLE_API_COMPARISON"; then
 	if grep BreakingChangesDetected "$STABLE_API_COMPARISON_RESULTS_DIR/api-diff.md" >/dev/null 2>&1; then
 		EMOJII=":heavy_exclamation_mark:"
 		MSG=" (Breaking changes)"
+		EXITCODE=1
+		EXITREASON="Error: failing comparison because there are breaking changes"
 	else
 		EMOJII=":white_check_mark:"
 		MSG=""
@@ -519,3 +533,7 @@ if test -n "$ENABLE_GENERATOR_DIFF"; then
 	fi
 fi
 
+if test -n "$EXITREASON"; then
+	echo "$EXITREASON"
+fi
+exit $EXITCODE

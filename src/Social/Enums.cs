@@ -27,14 +27,14 @@ namespace Social {
 	}
 
 	// NSInteger -> SLComposeViewController.h
-#if NET
-	/// <summary>An enumeration whose values specify whether composition in a <see cref="T:Social.SLComposeViewController" /> was completed or cancelled.</summary>
+	/// <summary>An enumeration whose values specify whether composition in a <see cref="Social.SLComposeViewController" /> was completed or cancelled.</summary>
 	[NoMac]
 	[MacCatalyst (13, 1)]
-#endif
 	[Native]
 	public enum SLComposeViewControllerResult : long {
+		/// <summary>To be added.</summary>
 		Cancelled,
+		/// <summary>To be added.</summary>
 		Done,
 	}
 }

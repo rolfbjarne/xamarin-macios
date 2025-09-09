@@ -44,6 +44,7 @@ using System.Diagnostics.CodeAnalysis;
 
 using CoreFoundation;
 using Foundation;
+using ObjCRuntime;
 using Security;
 
 #if !MONOMAC
@@ -111,6 +112,8 @@ namespace Foundation {
 		}
 	}
 
+	/// <summary>To be added.</summary>
+	///     <remarks>To be added.</remarks>
 	public partial class NSUrlSessionHandler : HttpMessageHandler {
 		private const string SetCookie = "Set-Cookie";
 		private const string Cookie = "Cookie";
@@ -124,10 +127,11 @@ namespace Foundation {
 		readonly Dictionary<NSUrlSessionTask, InflightData> inflightRequests;
 		readonly object inflightRequestsLock = new object ();
 		readonly NSUrlSessionConfiguration.SessionConfigurationType sessionType;
-#if !MONOMAC
+#if !MONOMAC && !NET8_0 && !NET10_0_OR_GREATER
 		NSObject? notificationToken;  // needed to make sure we do not hang if not using a background session
 		readonly object notificationTokenLock = new object (); // need to make sure that threads do no step on each other with a dispose and a remove  inflight data
 #endif
+		X509ChainPolicy? policy;
 
 		static NSUrlSessionConfiguration CreateConfig ()
 		{
@@ -140,10 +144,15 @@ namespace Foundation {
 			return config;
 		}
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public NSUrlSessionHandler () : this (CreateConfig ())
 		{
 		}
 
+		/// <param name="configuration">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		[CLSCompliant (false)]
 		public NSUrlSessionHandler (NSUrlSessionConfiguration configuration)
 		{
@@ -155,27 +164,51 @@ namespace Foundation {
 			allowsCellularAccess = configuration.AllowsCellularAccess;
 			AllowAutoRedirect = true;
 
+#if !NET10_0_OR_GREATER
 #pragma warning disable SYSLIB0014
 			// SYSLIB0014: 'ServicePointManager' is obsolete: 'WebRequest, HttpWebRequest, ServicePoint, and WebClient are obsolete. Use HttpClient instead. Settings on ServicePointManager no longer affect SslStream or HttpClient.' (https://aka.ms/dotnet-warnings/SYSLIB0014)
-			// https://github.com/xamarin/xamarin-macios/issues/20764
+			// https://github.com/dotnet/macios/issues/20764
 			var sp = ServicePointManager.SecurityProtocol;
 #pragma warning restore SYSLIB0014
-			if ((sp & SecurityProtocolType.Ssl3) != 0)
-				configuration.TLSMinimumSupportedProtocol = SslProtocol.Ssl_3_0;
-			else if ((sp & SecurityProtocolType.Tls) != 0)
-				configuration.TLSMinimumSupportedProtocol = SslProtocol.Tls_1_0;
-			else if ((sp & SecurityProtocolType.Tls11) != 0)
-				configuration.TLSMinimumSupportedProtocol = SslProtocol.Tls_1_1;
-			else if ((sp & SecurityProtocolType.Tls12) != 0)
-				configuration.TLSMinimumSupportedProtocol = SslProtocol.Tls_1_2;
-			else if ((sp & (SecurityProtocolType) 12288) != 0) // Tls13 value not yet in monno
-				configuration.TLSMinimumSupportedProtocol = SslProtocol.Tls_1_3;
+
+			// The analyzer has a bug where SupportedOSPlatformGuard attributes don't work correctly (https://github.com/dotnet/roslyn-analyzers/issues/7665#issuecomment-2898275765), so ignore CA1416/CA1422 here
+			// warning CA1422: This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'NSUrlSessionConfiguration.[...]' is obsoleted on: 'ios' 13.0 and later (Use '...' instead.), 'maccatalyst' 13.0 and later (Use '...' instead.), 'macOS/OSX' 10.15 and later (Use '...' instead.).
+			// warning CA1416: This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 10.15 and later, 'tvos' 12.2 and later. 'NSUrlSessionConfiguration.[...]' is only supported on: 'ios' 13.0 and later, 'tvos' 13.0 and later
+#pragma warning disable CA1416
+#pragma warning disable CA1422
+			if (SystemVersion.IsAtLeastXcode11) {
+				if ((sp & SecurityProtocolType.Ssl3) != 0) {
+					// no equivalent
+				} else if ((sp & SecurityProtocolType.Tls) != 0) {
+					configuration.TlsMinimumSupportedProtocolVersion = TlsProtocolVersion.Tls10;
+				} else if ((sp & SecurityProtocolType.Tls11) != 0) {
+					configuration.TlsMinimumSupportedProtocolVersion = TlsProtocolVersion.Tls11;
+				} else if ((sp & SecurityProtocolType.Tls12) != 0) {
+					configuration.TlsMinimumSupportedProtocolVersion = TlsProtocolVersion.Tls12;
+				} else if ((sp & SecurityProtocolType.Tls13) != 0) {
+					configuration.TlsMinimumSupportedProtocolVersion = TlsProtocolVersion.Tls13;
+				}
+			} else {
+				if ((sp & SecurityProtocolType.Ssl3) != 0)
+					configuration.TLSMinimumSupportedProtocol = SslProtocol.Ssl_3_0;
+				else if ((sp & SecurityProtocolType.Tls) != 0)
+					configuration.TLSMinimumSupportedProtocol = SslProtocol.Tls_1_0;
+				else if ((sp & SecurityProtocolType.Tls11) != 0)
+					configuration.TLSMinimumSupportedProtocol = SslProtocol.Tls_1_1;
+				else if ((sp & SecurityProtocolType.Tls12) != 0)
+					configuration.TLSMinimumSupportedProtocol = SslProtocol.Tls_1_2;
+				else if ((sp & SecurityProtocolType.Tls13) != 0)
+					configuration.TLSMinimumSupportedProtocol = SslProtocol.Tls_1_3;
+			}
+#pragma warning restore CA1422
+#pragma warning restore CA1416
+#endif // NET10_0_OR_GREATER
 
 			session = NSUrlSession.FromConfiguration (configuration, (INSUrlSessionDelegate) new NSUrlSessionHandlerDelegate (this), null);
 			inflightRequests = new Dictionary<NSUrlSessionTask, InflightData> ();
 		}
 
-#if !MONOMAC && !NET8_0
+#if !MONOMAC && !NET8_0 && !NET10_0_OR_GREATER
 
 		void AddNotification ()
 		{
@@ -214,6 +247,9 @@ namespace Foundation {
 		}
 #endif
 
+		/// <summary>To be added.</summary>
+		///         <value>To be added.</value>
+		///         <remarks>To be added.</remarks>
 		public long MaxInputInMemory { get; set; } = long.MaxValue;
 
 		void RemoveInflightData (NSUrlSessionTask task, bool cancel = true)
@@ -224,7 +260,7 @@ namespace Foundation {
 						data.CancellationTokenSource.Cancel ();
 					inflightRequests.Remove (task);
 				}
-#if !MONOMAC && !NET8_0
+#if !MONOMAC && !NET8_0 && !NET10_0_OR_GREATER
 				// do we need to be notified? If we have not inflightData, we do not
 				if (inflightRequests.Count == 0)
 					RemoveNotification ();
@@ -237,10 +273,13 @@ namespace Foundation {
 			task?.Dispose ();
 		}
 
+		/// <param name="disposing">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		protected override void Dispose (bool disposing)
 		{
 			lock (inflightRequestsLock) {
-#if !MONOMAC && !NET8_0
+#if !MONOMAC && !NET8_0 && !NET10_0_OR_GREATER
 				// remove the notification if present, method checks against null
 				RemoveNotification ();
 #endif
@@ -256,6 +295,9 @@ namespace Foundation {
 
 		bool disableCaching;
 
+		/// <summary>To be added.</summary>
+		///         <value>To be added.</value>
+		///         <remarks>To be added.</remarks>
 		public bool DisableCaching {
 			get {
 				return disableCaching;
@@ -268,6 +310,9 @@ namespace Foundation {
 
 		bool allowAutoRedirect;
 
+		/// <summary>To be added.</summary>
+		///         <value>To be added.</value>
+		///         <remarks>To be added.</remarks>
 		public bool AllowAutoRedirect {
 			get {
 				return allowAutoRedirect;
@@ -292,6 +337,9 @@ namespace Foundation {
 
 		ICredentials? credentials;
 
+		/// <summary>To be added.</summary>
+		///         <value>To be added.</value>
+		///         <remarks>To be added.</remarks>
 		public ICredentials? Credentials {
 			get {
 				return credentials;
@@ -313,7 +361,7 @@ namespace Foundation {
 				trustOverrideForUrl = value;
 			}
 		}
-#if !NET8_0
+#if !NET8_0 && !NET10_0_OR_GREATER
 		// we do check if a user does a request and the application goes to the background, but
 		// in certain cases the user does that on purpose (BeingBackgroundTask) and wants to be able
 		// to use the network. In those cases, which are few, we want the developer to explicitly 
@@ -323,21 +371,21 @@ namespace Foundation {
 
 #if !XAMCORE_5_0
 		[EditorBrowsable (EditorBrowsableState.Never)]
-#if NET8_0
+#if NET8_0 || NET10_0_OR_GREATER
 		[Obsolete ("This property is ignored.")]
 #else
-		[Obsolete ("This property will be ignored in .NET 8.")]
+		[Obsolete ("This property will be ignored in .NET 10+.")]
 #endif
 		public bool BypassBackgroundSessionCheck {
 			get {
-#if NET8_0
+#if NET8_0 || NET10_0_OR_GREATER
 				return true;
 #else
 				return bypassBackgroundCheck;
 #endif
 			}
 			set {
-#if !NET8_0
+#if !NET8_0 && !NET10_0_OR_GREATER
 				EnsureModifiability ();
 				bypassBackgroundCheck = value;
 #endif
@@ -484,6 +532,11 @@ namespace Foundation {
 			return nsrequest;
 		}
 
+		/// <param name="request">To be added.</param>
+		///         <param name="cancellationToken">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		protected override async Task<HttpResponseMessage> SendAsync (HttpRequestMessage request, CancellationToken cancellationToken)
 		{
 			Volatile.Write (ref sentRequest, true);
@@ -494,7 +547,7 @@ namespace Foundation {
 			var inflightData = new InflightData (request.RequestUri?.AbsoluteUri!, cancellationToken, request);
 
 			lock (inflightRequestsLock) {
-#if !MONOMAC && !NET8_0
+#if !MONOMAC && !NET8_0 && !NET10_0_OR_GREATER
 				// Add the notification whenever needed
 				AddNotification ();
 #endif
@@ -534,15 +587,47 @@ namespace Foundation {
 			set { }
 		}
 
-		// We're ignoring this property, just like Xamarin.Android does:
-		// https://github.com/xamarin/xamarin-android/blob/09e8cb5c07ea6c39383185a3f90e53186749b802/src/Mono.Android/Xamarin.Android.Net/AndroidMessageHandler.cs#L158
-		[UnsupportedOSPlatform ("ios")]
-		[UnsupportedOSPlatform ("maccatalyst")]
-		[UnsupportedOSPlatform ("tvos")]
-		[UnsupportedOSPlatform ("macos")]
+		/// <summary>Gets or sets a value that indicates whether the certificate is checked against the certificate authority revocation list.</summary>
+		/// <remarks>
+		///   <para>This is the same as setting CertificateChainPolicy.RevocationMode = X509RevocationMode.Online (if enabling the check) or X509RevocationMode.NoCheck (if disabling the check).</para>
+		///   <para>This only has an effect if a custom server certificate validation callback is being used ('ServerCertificateCustomValidationCallback' is set).</para>
+		/// </remarks>
 		[EditorBrowsable (EditorBrowsableState.Never)]
-		public bool CheckCertificateRevocationList { get; set; } = false;
+		public bool CheckCertificateRevocationList {
+			// This implementation was mostly copied from https://github.com/dotnet/runtime/blob/0e3562e97c6db531f26a2ffe3e8084cf67ba8a93/src/libraries/System.Net.Http/src/System/Net/Http/HttpClientHandler.cs#L326-L335
+			get => CertificateChainPolicy!.RevocationMode == X509RevocationMode.Online;
+			set {
+				EnsureModifiability ();
 
+				CertificateChainPolicy!.RevocationMode = value ? X509RevocationMode.Online : X509RevocationMode.NoCheck;
+			}
+		}
+
+		/// <summary>Gets or sets the custom chain policy to use when validating certificate chains.</summary>
+		/// <remarks>
+		///   <para>The getter will never return a <see langword="null" /> policy, it will return a policy configured with the default behavior.</para>
+		///   <para>To select the default policy, call the setter with <see langword="null" /> value.</para>
+		///   <para>This only has an effect if a custom server certificate validation callback is being used ('ServerCertificateCustomValidationCallback' is set).</para>
+		/// </remarks>
+		public X509ChainPolicy? CertificateChainPolicy {
+			get {
+				if (policy is null) {
+					policy = new X509ChainPolicy () {
+						RevocationMode = X509RevocationMode.Online,
+						RevocationFlag = X509RevocationFlag.ExcludeRoot,
+						// Ignore unknown revocation status, because Apple has a bug where revocation checks fail if the certificate(s)
+						// in question don't support revocation checking via OCSP.
+						// References:
+						// * https://learn.microsoft.com/en-us/dotnet/core/compatibility/networking/10.0/ssl-certificate-revocation-check-default
+						// * https://github.com/dotnet/macios/issues/23764#issuecomment-3264999234
+						// * https://github.com/dotnet/runtime/issues/117195
+						VerificationFlags = X509VerificationFlags.IgnoreEndRevocationUnknown,
+					};
+				}
+				return policy;
+			}
+			set => policy = value;
+		}
 
 		X509CertificateCollection? _clientCertificates;
 
@@ -558,13 +643,6 @@ namespace Foundation {
 			}
 		}
 
-		// We're ignoring this property, just like Xamarin.Android does:
-		// https://github.com/xamarin/xamarin-android/blob/09e8cb5c07ea6c39383185a3f90e53186749b802/src/Mono.Android/Xamarin.Android.Net/AndroidMessageHandler.cs#L148
-		[UnsupportedOSPlatform ("ios")]
-		[UnsupportedOSPlatform ("maccatalyst")]
-		[UnsupportedOSPlatform ("tvos")]
-		[UnsupportedOSPlatform ("macos")]
-		[EditorBrowsable (EditorBrowsableState.Never)]
 		public ClientCertificateOption ClientCertificateOptions { get; set; }
 
 		// We're ignoring this property, just like Xamarin.Android does:
@@ -658,7 +736,7 @@ namespace Foundation {
 				if (value is null) {
 					_serverCertificateCustomValidationCallbackHelper = null;
 				} else {
-					_serverCertificateCustomValidationCallbackHelper = new ServerCertificateCustomValidationCallbackHelper (value);
+					_serverCertificateCustomValidationCallbackHelper = new ServerCertificateCustomValidationCallbackHelper (value, CertificateChainPolicy!);
 				}
 			}
 		}
@@ -675,11 +753,13 @@ namespace Foundation {
 		}
 
 		sealed class ServerCertificateCustomValidationCallbackHelper {
+			X509ChainPolicy policy;
 			public Func<HttpRequestMessage, X509Certificate2?, X509Chain?, SslPolicyErrors, bool> Callback { get; private set; }
 
-			public ServerCertificateCustomValidationCallbackHelper (Func<HttpRequestMessage, X509Certificate2?, X509Chain?, SslPolicyErrors, bool> callback)
+			public ServerCertificateCustomValidationCallbackHelper (Func<HttpRequestMessage, X509Certificate2?, X509Chain?, SslPolicyErrors, bool> callback, X509ChainPolicy policy)
 			{
 				Callback = callback;
+				this.policy = policy;
 			}
 
 			public bool Invoke (HttpRequestMessage request, SecTrust secTrust)
@@ -696,41 +776,27 @@ namespace Foundation {
 			{
 				var certificates = new X509Certificate2 [secTrust.Count];
 
-				if (IsSecTrustGetCertificateChainSupported) {
+				if (SystemVersion.IsAtLeastXcode13) {
 					var originalChain = secTrust.GetCertificateChain ();
 					for (int i = 0; i < originalChain.Length; i++)
 						certificates [i] = originalChain [i].ToX509Certificate2 ();
 				} else {
-					for (int i = 0; i < secTrust.Count; i++)
+					for (int i = 0; i < secTrust.Count; i++) {
+						// The analyzer has a bug where SupportedOSPlatformGuard attributes don't work correctly (https://github.com/dotnet/roslyn-analyzers/issues/7665#issuecomment-2898275765), so ignore CA1422 here
+#pragma warning disable CA1422 // This call site is reachable on: 'ios' 12.2 and later, 'maccatalyst' 12.2 and later, 'macOS/OSX' 12.0 and later, 'tvos' 12.2 and later. 'SecTrust.this[nint]' is obsoleted on: 'ios' 15.0 and later
 						certificates [i] = secTrust [i].ToX509Certificate2 ();
+#pragma warning restore CA1422
+					}
 				}
 
 				return certificates;
 			}
 
-			static bool? isSecTrustGetCertificateChainSupported = null;
-			static bool IsSecTrustGetCertificateChainSupported {
-				get {
-					if (!isSecTrustGetCertificateChainSupported.HasValue) {
-#if MONOMAC
-						isSecTrustGetCertificateChainSupported = ObjCRuntime.SystemVersion.CheckmacOS (12, 0);
-#elif IOS || TVOS || MACCATALYST
-						isSecTrustGetCertificateChainSupported = ObjCRuntime.SystemVersion.CheckiOS (15, 0);
-#else
-#error Unknown platform
-#endif
-					}
-
-					return isSecTrustGetCertificateChainSupported.Value;
-				}
-			}
-
 			X509Chain CreateChain (X509Certificate2 [] certificates)
 			{
-				// inspired by https://github.com/dotnet/runtime/blob/99d21b9276ebe8f7bea7fb3ba74dca9fca625fe2/src/libraries/System.Security.Cryptography.Pkcs/src/System/Security/Cryptography/Pkcs/SignerInfo.cs#L691-L696
+				// See https://github.com/dotnet/macios/issues/23764 for more information.
 				var chain = new X509Chain ();
-				chain.ChainPolicy.RevocationMode = X509RevocationMode.Online;
-				chain.ChainPolicy.RevocationFlag = X509RevocationFlag.ExcludeRoot;
+				chain.ChainPolicy = policy.Clone ();
 				chain.ChainPolicy.ExtraStore.AddRange (certificates);
 				return chain;
 			}

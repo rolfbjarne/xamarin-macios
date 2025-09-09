@@ -5,7 +5,8 @@
 using Microsoft.Macios.Transformer.Attributes;
 using Microsoft.Macios.Transformer.Generator;
 
-namespace Microsoft.Macios.Transformer;
+// Use the same namemspace as the generator, that way we can share the code but use different attribute names
+namespace Microsoft.Macios.Generator;
 
 static class AttributesNames {
 
@@ -45,6 +46,9 @@ static class AttributesNames {
 
 	[BindingAttribute(typeof(BindAsData), AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Parameter)]
 	public const string BindAsAttribute = "ObjCRuntime.BindAsAttribute";
+	
+	[BindingAttribute(typeof(BindAsData), AttributeTargets.Parameter)]
+	public const string BlockCallbackAttribute = "ObjCRuntime.BlockCallbackAttribute";
 
 	/// <summary>
 	/// Use this attribute on a type definition to bind Objective-C categories and to expose those as C# extension
@@ -52,6 +56,9 @@ static class AttributesNames {
 	/// </summary>
 	[BindingFlag (AttributeTargets.Interface)]
 	public const string CategoryAttribute = "CategoryAttribute";
+	
+	[BindingAttribute(typeof(BindAsData), AttributeTargets.Parameter)]
+	public const string CCallbackAttribute = "ObjCRuntime.CCallbackAttribute";
 
 	[BindingFlag] 
 	public const string CheckDisposedAttribute = "CheckDisposedAttribute";
@@ -114,6 +121,9 @@ static class AttributesNames {
 	
 	[BindingFlag (AttributeTargets.Enum)]
 	public const string FlagsAttribute = "System.FlagsAttribute";
+	
+	[BindingAttribute(typeof(ForcedTypeData), AttributeTargets.Method | AttributeTargets.Property | AttributeTargets.Parameter)]
+	public const string ForcedTypeAttribute = "ForcedTypeAttribute";
 
 	/// <summary>
 	/// Sometimes it makes sense not to expose an event or delegate property from a Model class into the host class so

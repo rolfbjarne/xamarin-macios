@@ -30,6 +30,9 @@ using System.Runtime.InteropServices;
 
 namespace AVFoundation {
 
+	/// <summary>Represents sample rate conversion quality used by audio encoder.</summary>
+	/// <remarks>
+	///     </remarks>
 	[Native]
 	// NSInteger - AVAudioSettings.h
 	public enum AVAudioQuality : long {
@@ -45,40 +48,64 @@ namespace AVFoundation {
 		Max = 0x7F,
 	}
 
+	/// <summary>Status flag of the export operation.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	// NSInteger - AVAssetExportSession.h
 	public enum AVAssetExportSessionStatus : long {
+		/// <summary>Unknown error or state.</summary>
 		Unknown,
+		/// <summary>The session is waiting to export more data.</summary>
 		Waiting,
+		/// <summary>Asset export in progress.</summary>
 		Exporting,
+		/// <summary>The export operation was completed.</summary>
 		Completed,
+		/// <summary>Asset export failed.</summary>
 		Failed,
+		/// <summary>The operation was cancelled.</summary>
 		Cancelled,
 	}
 
+	/// <summary>An enumeration whose values specify the <see cref="AVFoundation.AVAssetReader" />'s status.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	// NSInteger - AVAssetReader.h
 	public enum AVAssetReaderStatus : long {
+		/// <summary>Indicates that reading has not yet begun.</summary>
 		Unknown = 0,
+		/// <summary>More sample buffers are ready for output.</summary>
 		Reading,
+		/// <summary>Reading completed successfully.</summary>
 		Completed,
+		/// <summary>Reading failed.</summary>
 		Failed,
+		/// <summary>Reading was cancelled.</summary>
 		Cancelled,
 	}
 
+	/// <summary>An enumeration whose values represent the status of an <see cref="AVFoundation.AVAssetWriter" /> object.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	// NSInteger - AVAssetWriter.h
 	public enum AVAssetWriterStatus : long {
+		/// <summary>The state of the <see cref="AVFoundation.AVAssetWriter" /> cannot be determined.</summary>
 		Unknown = 0,
+		/// <summary>Assets are currently being written.</summary>
 		Writing,
+		/// <summary>The asset writing completed successfully.</summary>
 		Completed,
+		/// <summary>The asset writing failed while writing.</summary>
 		Failed,
+		/// <summary>The asset writing has been cancelled.</summary>
 		Cancelled,
 	}
 
+	/// <summary>Video capture orientation.</summary>
+	/// <remarks>To be added.</remarks>
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[NoTV]
 	[Native]
@@ -94,16 +121,23 @@ namespace AVFoundation {
 		LandscapeLeft,
 	}
 
+	/// <summary>Flash mode.</summary>
+	/// <remarks>To be added.</remarks>
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[TV (17, 0)]
 	[Native]
 	// NSInteger - AVCaptureDevice.h
 	public enum AVCaptureFlashMode : long {
+		/// <summary>Never use the flash.</summary>
 		Off,
+		/// <summary>Always use the flash.</summary>
 		On,
+		/// <summary>Automatic.</summary>
 		Auto,
 	}
 
+	/// <summary>The capture device torch mode.</summary>
+	/// <remarks>To be added.</remarks>
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[TV (17, 0)]
 	[Native]
@@ -117,38 +151,58 @@ namespace AVFoundation {
 		Auto,
 	}
 
+	/// <summary>Auto focus states.</summary>
+	/// <remarks>To be added.</remarks>
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[TV (17, 0)]
 	[Native]
 	// NSInteger - AVCaptureDevice.h
 	public enum AVCaptureFocusMode : long {
+		/// <summary>Focus that will not change automatically.</summary>
 		Locked,
+		/// <summary>Normal autofocus.</summary>
 		AutoFocus,
+		/// <summary>Autofocus that attempts to track the subject.</summary>
 		ContinuousAutoFocus,
 	}
 
+	/// <summary>An enumeration whose values specify the position of a <see cref="AVFoundation.AVCaptureDevice" />.</summary>
+	/// <remarks>To be added.</remarks>
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[TV (17, 0)]
 	[Native]
 	// NSInteger - AVCaptureDevice.h
 	public enum AVCaptureDevicePosition : long {
+		/// <summary>The capturing hardware's location is unknown.</summary>
 		Unspecified = 0,
+		/// <summary>The capturing hardware is on the back of the device.</summary>
 		Back = 1,
+		/// <summary>The capturing hardware is on the front of the device.</summary>
 		Front = 2,
 	}
 
+	/// <summary>An enumeration whose values specify options for varying exposure modes during capture.</summary>
+	/// <remarks>
+	///       <para />
+	///     </remarks>
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[TV (17, 0)]
 	[Native]
 	// NSInteger - AVCaptureDevice.h
 	public enum AVCaptureExposureMode : long {
+		/// <summary>Exposure setting is locked.</summary>
 		Locked,
+		/// <summary>The camera performs auto expose.</summary>
 		AutoExpose,
+		/// <summary>Performs auto-expose and adjusts the setting continously. </summary>
 		ContinuousAutoExposure,
+		/// <summary>Exposure is limited by the <see cref="AVFoundation.AVCaptureDevice.ISO" /> and <see cref="AVFoundation.AVCaptureDevice.ExposureDuration" /> properties.</summary>
 		[MacCatalyst (14, 0)]
 		Custom,
 	}
 
+	/// <summary>Capture white balance mode.</summary>
+	/// <remarks>To be added.</remarks>
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[TV (17, 0)]
 	[Native]
@@ -162,18 +216,10 @@ namespace AVFoundation {
 		ContinuousAutoWhiteBalance,
 	}
 
-#if !NET
-	[Deprecated (PlatformName.iOS, 6, 0)]
-	[Flags]
-	[Native]
-	// NSUInteger - AVAudioSession.h
-	public enum AVAudioSessionInterruptionFlags : ulong {
-		ShouldResume = 1,
-	}
-#endif
-
 	// Populated in NSError.Code, an NSInteger
 	// anonymous enum - AVError.h
+	/// <summary>An enumeration whose values define various audiovisual errors.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVError : long {
@@ -334,6 +380,8 @@ namespace AVFoundation {
 		MediaExtensionConflict = -11887,
 	}
 
+	/// <summary>An enumeration whose values specify the behavior of the player when it finishes playing.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	// NSInteger - AVPlayer.h
@@ -346,26 +394,22 @@ namespace AVFoundation {
 		None,
 	}
 
+	/// <summary>An enumeration whose values specify the status of a <see cref="AVFoundation.AVPlayerItem" />.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	// NSInteger - AVPlayerItem.h
 	public enum AVPlayerItemStatus : long {
+		/// <summary>The status of the item is not known.</summary>
 		Unknown,
+		/// <summary>The item is ready to play.</summary>
 		ReadyToPlay,
+		/// <summary>The item could not be played.</summary>
 		Failed,
 	}
 
-#if !NET
-	[NoTV]
-	[Deprecated (PlatformName.iOS, 6, 0)]
-	[Flags]
-	[Native]
-	// declared as AVAudioSessionSetActiveOptions (NSUInteger) - AVAudioSession.h
-	public enum AVAudioSessionFlags : ulong {
-		NotifyOthersOnDeactivation = 1,
-	}
-#endif
-
+	/// <summary>An enumeration whose values specify the load status of a given property.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	// NSInteger - AVAsynchronousKeyValueLoading.h
@@ -382,18 +426,22 @@ namespace AVFoundation {
 		Cancelled,
 	}
 
+	/// <summary>An enumeration whose values indicate the status of an <see cref="AVFoundation.AVPlayer" />.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	// NSInteger - AVPlayer.h
 	public enum AVPlayerStatus : long {
 		/// <summary>The status of the player is unknown, generally because media has not been loaded.</summary>
 		Unknown,
-		/// <summary>The player is ready to play the <see cref="T:AVFoundation.AVPlayerItem" />.</summary>
+		/// <summary>The player is ready to play the <see cref="AVFoundation.AVPlayerItem" />.</summary>
 		ReadyToPlay,
-		/// <summary>The player can no longer play the <see cref="T:AVFoundation.AVPlayerItem" />.</summary>
+		/// <summary>The player can no longer play the <see cref="AVFoundation.AVPlayerItem" />.</summary>
 		Failed,
 	}
 
+	/// <summary>An enumeration whose values define restrictions relating to a <see cref="AVFoundation.AVAsset" />.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Flags]
 	[Native]
@@ -413,23 +461,30 @@ namespace AVFoundation {
 		ForbidAll = 0xFFFF,
 	}
 
+	/// <summary>An enumeration whose values indicate the result of image generation.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	// NSInteger - AVAssetImageGenerator.h
 	public enum AVAssetImageGeneratorResult : long {
+		/// <summary>Image generation succeeded.</summary>
 		Succeeded,
+		/// <summary>Image generation failed.</summary>
 		Failed,
+		/// <summary>Image generation was cancelled.</summary>
 		Cancelled,
 	}
 
-	/// <summary>An enumeration whose values specify whether a <see cref="T:AVFoundation.AVCaptureDevice" /> is playing or not.</summary>
+	/// <summary>An enumeration whose values specify whether a <see cref="AVFoundation.AVCaptureDevice" /> is playing or not.</summary>
 	[NoiOS]
 	[Unavailable (PlatformName.MacCatalyst)]
 	[NoTV]
 	[Native]
 	// NSInteger - AVCaptureDevice.h
 	public enum AVCaptureDeviceTransportControlsPlaybackMode : long {
+		/// <summary>To be added.</summary>
 		NotPlaying,
+		/// <summary>To be added.</summary>
 		Playing,
 	}
 
@@ -442,74 +497,107 @@ namespace AVFoundation {
 	[Native]
 	// NSInteger - AVCaptureSession.h
 	public enum AVVideoFieldMode : long {
+		/// <summary>Both top and bottom interlaced video fields should be passed through.</summary>
 		Both,
+		/// <summary>Only the top interlaced video field should be passed through.</summary>
 		TopOnly,
+		/// <summary>Only the bottom interlaced video field should be passed through.</summary>
 		BottomOnly,
+		/// <summary>The top and bottom fields should be de-interlaced.</summary>
 		Deinterlace,
 	}
 
+	/// <summary>An enumeration whose values specify optional audio behaviors.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Flags]
 	[Native]
 	// NSUInteger - AVAudioSession.h
 	public enum AVAudioSessionInterruptionOptions : ulong {
+		/// <summary>Interupption has ended and the app can resumes its audio session.</summary>
 		ShouldResume = 1,
 	}
 
+	/// <summary>An enumeration whose values define whether, after an audio session deactivates, previously interrupted audio sessions should or should not re-activate.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Flags]
 	[Native]
 	// NSUInteger - AVAudioSession.h
 	public enum AVAudioSessionSetActiveOptions : ulong {
+		/// <summary>To be added.</summary>
 		NotifyOthersOnDeactivation = 1,
 	}
 
+	/// <summary>An enumeration whose values define whether an audio session should override the audio port and output via the built-in speaker.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	// NSUInteger - AVAudioSession.h
 	public enum AVAudioSessionPortOverride : ulong {
+		/// <summary>To be added.</summary>
 		None = 0,
+		/// <summary>To be added.</summary>
 		[NoTV]
 		[NoMac] // Removed in Xcode 12 GM
 		[MacCatalyst (13, 1)]
 		Speaker = 0x73706b72, // 'spkr'
 	}
 
+	/// <summary>An enumeration whose values specify why an audio route changed.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	// NSUInteger - AVAudioSession.h
 	public enum AVAudioSessionRouteChangeReason : ulong {
+		/// <summary>To be added.</summary>
 		Unknown,
+		/// <summary>To be added.</summary>
 		NewDeviceAvailable,
+		/// <summary>To be added.</summary>
 		OldDeviceUnavailable,
+		/// <summary>To be added.</summary>
 		CategoryChange,
+		/// <summary>To be added.</summary>
 		Override,
+		/// <summary>To be added.</summary>
 		WakeFromSleep = 6,
+		/// <summary>To be added.</summary>
 		NoSuitableRouteForCategory = 7,
+		/// <summary>To be added.</summary>
 		RouteConfigurationChange = 8,
 	}
 
+	/// <summary>An enumeration whose values specify optional audio behaviors.</summary>
+	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	// NSUInteger - AVAudioSession.h
 	public enum AVAudioSessionCategoryOptions : ulong {
+		/// <summary>Indicates that this session's output should mix in with output from other sessions.</summary>
 		MixWithOthers = 1,
+		/// <summary>Indicates that output volume from other audio sessions will be reduced when this one is playing.</summary>
 		DuckOthers = 2,
+		/// <summary>Indicates that Bluetooth is allowed.</summary>
 		[NoMac] // Removed in Xcode 12 GM
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		AllowBluetooth = 4,
+		/// <summary>Indicates that the system output should be used by default.</summary>
 		[NoMac] // Removed in Xcode 12 GM
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		DefaultToSpeaker = 8,
 
+		/// <summary>Indicates that the output is typically spoken word output that should pause output from other sessions.</summary>
 		[NoMac] // Removed in Xcode 12 GM
 		[MacCatalyst (13, 1)]
 		InterruptSpokenAudioAndMixWithOthers = 17,
+		/// <summary>Indicates that Bluetooth A2DP is allowed.</summary>
 		[NoMac] // Removed in Xcode 12 GM
 		[MacCatalyst (13, 1)]
 		AllowBluetoothA2DP = 32,
+		/// <summary>Indicates that AirPlay is allowed.</summary>
 		[NoMac] // Removed in Xcode 12 GM
 		[MacCatalyst (13, 1)]
 		AllowAirPlay = 64,
@@ -520,59 +608,87 @@ namespace AVFoundation {
 		OverrideMutedMicrophoneInterruption = 128,
 	}
 
+	/// <summary>An enumeration whose values specify the beginning and ending of an audio interruption.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	// NSUInteger - AVAudioSession.h
 	public enum AVAudioSessionInterruptionType : ulong {
+		/// <summary>To be added.</summary>
 		Ended,
+		/// <summary>To be added.</summary>
 		Began,
 	}
 
+	/// <summary>An enumeration whose values specify various errors relating to <see cref="AVFoundation.AVAudioSession" />s.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	// NSInteger - AVAudioSession.h
 	// typedef CF_ENUM(NSInteger, AVAudioSessionErrorCode) -> CoreAudioTypes.framework/Headers/AudioSessionTypes.h
 	public enum AVAudioSessionErrorCode : long {
+		/// <summary>Indicates that no error occurred. Success.</summary>
 		None = 0,
+		/// <summary>Indicates that Media Services has failed.</summary>
 		MediaServicesFailed = 0x6D737276, // 'msrv'
+		/// <summary>Indicates that an attempt was made to inactivate a busy session.</summary>
 		IsBusy = 0x21616374, // '!act'
+		/// <summary>Indicates that an operation that is incompatible with the current category was attempted.</summary>
 		IncompatibleCategory = 0x21636174, // 'cat'
+		/// <summary>Indicates that a session with nonmixable audio tried to activate while the app was in the background.</summary>
 		CannotInterruptOthers = 0x21696e74, // 'int'
+		/// <summary>Indicates that a required entitlement was not present.</summary>
 		MissingEntitlement = 0x656e743f, // 'ent?'
+		/// <summary>Indicates that Siri was recording when the operation was attempted.</summary>
 		SiriIsRecording = 0x73697269, // 'siri'
+		/// <summary>Indicates that audio playback was attempted when playback was not allowed.</summary>
 		CannotStartPlaying = 0x21706c61, // '!pla'
+		/// <summary>Indicates that audio recording was attempted and failed.</summary>
 		CannotStartRecording = 0x21726563, // '!rec'
+		/// <summary>Indicates that the app tried to set a parameter to a disallowed value.</summary>
 		BadParam = -50,
+		/// <summary>Indicates that another app with higher priority preempted the operation.</summary>
 		InsufficientPriority = 0x21707269, // '!pri'
-#if !NET
-		[Obsolete ("Use 'ResourceNotAvailable' instead.")]
-		CodeResourceNotAvailable = 0x21726573,
-#endif
+		/// <summary>Indicates that a required resource, such as an audio input, is not available on the device.</summary>
 		ResourceNotAvailable = 0x21726573, // '!res'
+		/// <summary>Indicates that an unspecified error occurred.</summary>
 		Unspecified = 0x77686174, // 'what'
 		ExpiredSession = 0x21736573, // '!ses'
 		SessionNotActive = 0x696e6163, // 'inac'
 	}
 
+	/// <summary>An enumeration whose values specify hints to autofocus. Used with <see cref="AVCaptureDevice.AutoFocusRangeRestriction" />.</summary>
+	/// <remarks>To be added.</remarks>
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[TV (17, 0)]
 	[Native]
 	// NSInteger - AVCaptureDevice.h
 	public enum AVCaptureAutoFocusRangeRestriction : long {
+		/// <summary>Autofocus should try to focus on objects at any distance.</summary>
 		None = 0,
+		/// <summary>Autofocus should try to focus on closer objects.</summary>
 		Near = 1,
+		/// <summary>Autofocus should try to focus on distant objects.</summary>
 		Far = 2,
 	}
 
 	// Convenience enum for native strings (defined in AVAudioSettings.h)
+	/// <summary>An enumeration whose values specify the type of audio bit-rate. Used with <see cref="AVFoundation.AudioSettings.BitRateStrategy" /></summary>
+	/// <remarks>To be added.</remarks>
 	public enum AVAudioBitRateStrategy : int {
+		/// <summary>To be added.</summary>
 		Constant,
+		/// <summary>To be added.</summary>
 		LongTermAverage,
+		/// <summary>To be added.</summary>
 		VariableConstrained,
+		/// <summary>To be added.</summary>
 		Variable,
 	}
 
 	// Convenience enum for native strings (defined in AVAudioSettings.h)
+	/// <summary>An enumeration whose values specify valid rate-converstion algorithms. Used with <see cref="AudioSettings.SampleRateConverterAlgorithm" />.</summary>
+	/// <remarks>To be added.</remarks>
 	public enum AVSampleRateConverterAlgorithm : int {
 		/// <summary>To be added.</summary>
 		Normal,
@@ -580,6 +696,8 @@ namespace AVFoundation {
 		Mastering,
 	}
 
+	/// <summary>An enumeration whose values specify whether a <see cref="AVFoundation.AVCaptureDevice" /> has been authorized by the user for use. Used with <see cref="AVFoundation.AVCaptureDevice.GetAuthorizationStatus(Foundation.NSString)" />.</summary>
+	/// <remarks>To be added.</remarks>
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[TV (17, 0)]
 	[Native]
@@ -595,30 +713,48 @@ namespace AVFoundation {
 		Authorized,
 	}
 
+	/// <summary>An enumeration whose values specify whether the <see cref="AVFoundation.AVSpeechSynthesizer" /> should pause or stop immediately or complete an entire word.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	// NSInteger - AVSpeechSynthesis.h
 	public enum AVSpeechBoundary : long {
+		/// <summary>The speech should stop or pause immediately.</summary>
 		Immediate,
+		/// <summary>The speech should stop or pause after the current word.</summary>
 		Word,
 	}
 
+	/// <summary>Enumerates formats for audio data (see <see cref="AVFoundation.AVAudioFormat.CommonFormat" />).</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVAudioCommonFormat : ulong {
+		/// <summary>To be added.</summary>
 		Other = 0,
+		/// <summary>To be added.</summary>
 		PCMFloat32 = 1,
+		/// <summary>To be added.</summary>
 		PCMFloat64 = 2,
+		/// <summary>To be added.</summary>
 		PCMInt16 = 3,
+		/// <summary>To be added.</summary>
 		PCMInt32 = 4,
 	}
 
+	/// <summary>Enumerates valid 3D audio-rendering algorithms.</summary>
+	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum AVAudio3DMixingRenderingAlgorithm : long {
+		/// <summary>Pans the mixer bus into a stereo field.</summary>
 		EqualPowerPanning = 0,
+		/// <summary>An algorithm best used for headphones; lower quality but lower processor-intensity than <see cref="AVFoundation.AVAudio3DMixingRenderingAlgorithm.HRTF" />.</summary>
 		SphericalHead = 1,
+		/// <summary>A processor-intensive Head-Related Transfer Function algorithm best used for emulating 3D space with headphones. (See also <see cref="AVFoundation.AVAudio3DMixingRenderingAlgorithm.SphericalHead" />)</summary>
 		HRTF = 2,
+		/// <summary>Renders on all output channels, but weights towards an origin. Best used for ambient sounds. </summary>
 		SoundField = 3,
+		/// <summary>No localization is performed on the input data.</summary>
 		StereoPassThrough = 5,
 		[MacCatalyst (13, 1)]
 		HrtfHQ = 6,
@@ -631,6 +767,8 @@ namespace AVFoundation {
 #if XAMCORE_5_0
 	[NoTV, NoMac]
 #endif
+	/// <summary>Enumerates valid permissions for <see cref="AVFoundation.AVAudioSession" />.</summary>
+	/// <remarks>To be added.</remarks>
 	[Deprecated (PlatformName.iOS, 17, 0, message: "Use 'AVAudioApplicationRecordPermission' instead.")]
 	[Deprecated (PlatformName.TvOS, 17, 0, message: "Use 'AVAudioApplicationRecordPermission' instead.")]
 	[Deprecated (PlatformName.MacCatalyst, 17, 0, message: "Use 'AVAudioApplicationRecordPermission' instead.")]
@@ -638,18 +776,27 @@ namespace AVFoundation {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVAudioSessionRecordPermission : ulong {
+		/// <summary>The user has neither nor denied permission, generally because they have not yet interacted with the permissions dialog.</summary>
 		Undetermined = 1970168948 /*'undt'*/,
+		/// <summary>The user denied permission.</summary>
 		Denied = 1684369017 /*'deny'*/,
+		/// <summary>The user granted permission.</summary>
 		Granted = 1735552628 /*'grnt'*/,
 	}
 
+	/// <summary>Enumerates the valid values for <see cref="AVFoundation.AVAudioSessionSecondaryAudioHintEventArgs.Hint" />.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVAudioSessionSilenceSecondaryAudioHintType : ulong {
+		/// <summary>Another app's primary audio has started.</summary>
 		Begin = 1,
+		/// <summary>Another app's primary audio has ended.</summary>
 		End = 0,
 	}
 
+	/// <summary>Flagging enumeration whose values are valid options in calls to <see cref="AVFoundation.AVAudioPlayerNode.ScheduleBufferAsync(AVFoundation.AVAudioPcmBuffer,AVFoundation.AVAudioTime,AVFoundation.AVAudioPlayerNodeBufferOptions,AVFoundation.AVAudioPlayerNodeCompletionCallbackType)" /></summary>
+	/// <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum AVAudioPlayerNodeBufferOptions : ulong {
@@ -661,6 +808,8 @@ namespace AVFoundation {
 		InterruptsAtLoop = 0x04,
 	}
 
+	/// <summary>Filter types. Used with the <see cref="AVFoundation.AVAudioUnitEQFilterParameters.FilterType" /> property.</summary>
+	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum AVAudioUnitEQFilterType : long {
 		/// <summary>Parametric filter based on Butterworth analog prototype. Must have <c>frequency</c> for center, <c>bandwidth</c>, and <c>gain</c></summary>
@@ -687,6 +836,8 @@ namespace AVFoundation {
 		ResonantHighShelf = 10,
 	}
 
+	/// <summary>Enumerates constants describing the reverb presets.</summary>
+	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum AVAudioUnitReverbPreset : long {
 		/// <summary>To be added.</summary>
@@ -717,6 +868,8 @@ namespace AVFoundation {
 		LargeHall2 = 12,
 	}
 
+	/// <summary>Enumerates valid values that can be passed to <see cref="AVFoundation.AVAudioUnitDistortion.LoadFactoryPreset(AVFoundation.AVAudioUnitDistortionPreset)" />.</summary>
+	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum AVAudioUnitDistortionPreset : long {
 		/// <summary>To be added.</summary>
@@ -765,6 +918,7 @@ namespace AVFoundation {
 		SpeechWaves = 21,
 	}
 
+	/// <include file="../../docs/api/AVFoundation/AVAudioEnvironmentDistanceAttenuationModel.xml" path="/Documentation/Docs[@DocId='T:AVFoundation.AVAudioEnvironmentDistanceAttenuationModel']/*" />
 	[Native]
 	public enum AVAudioEnvironmentDistanceAttenuationModel : long {
 		/// <summary>Gain = (Distance / ReferenceDistance)^(-RolloffFactor)</summary>
@@ -775,6 +929,8 @@ namespace AVFoundation {
 		Linear = 3,
 	}
 
+	/// <summary>Enumerates possible values of the <see cref="AVSampleBufferAudioRenderer.Status" />, <see cref="AVSampleBufferDisplayLayer.Status" /> and <see cref="AVSampleBufferVideoRenderer.Status" /> fields.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVQueuedSampleBufferRenderingStatus : long {
@@ -786,6 +942,8 @@ namespace AVFoundation {
 		Failed,
 	}
 
+	/// <summary>Enumerates types of video stabilization supported by the device's format.</summary>
+	/// <remarks>To be added.</remarks>
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[TV (17, 0)]
 	[Native]
@@ -807,15 +965,22 @@ namespace AVFoundation {
 		Auto = -1,
 	}
 
+	/// <summary>Enumerates constants relating to the device's autofocus system.</summary>
+	/// <remarks>To be added.</remarks>
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[TV (17, 0)]
 	[Native]
 	public enum AVCaptureAutoFocusSystem : long {
+		/// <summary>Autofocus is not available.</summary>
 		None,
+		/// <summary>Autofocus by way of contrast detection, which requires a focus scan.</summary>
 		ContrastDetection,
+		/// <summary>Autofocus by way of phase detection, which often can be done without a focus scan.</summary>
 		PhaseDetection,
 	}
 
+	/// <summary>Enumerates ways that a capture session can be interrupted.</summary>
+	/// <remarks>To be added.</remarks>
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[TV (17, 0)]
 	[Native]
@@ -834,37 +999,57 @@ namespace AVFoundation {
 		VideoDeviceNotAvailableDueToSystemPressure = 5,
 	}
 
+	/// <summary>Enumerates the quality of speech synthesis.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVSpeechSynthesisVoiceQuality : long {
+		/// <summary>To be added.</summary>
 		Default = 1,
+		/// <summary>To be added.</summary>
 		Enhanced = 2,
 		[iOS (16, 0), MacCatalyst (16, 0), TV (16, 0), Mac (13, 0)]
 		Premium = 3,
 	}
 
+	/// <summary>Enumerates the priming strategy for <see cref="AVFoundation.AVAudioConverterPrimeInfo" />.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVAudioConverterPrimeMethod : long {
+		/// <summary>To be added.</summary>
 		Pre = 0,
+		/// <summary>To be added.</summary>
 		Normal = 1,
+		/// <summary>To be added.</summary>
 		None = 2,
 	}
 
+	/// <summary>Enumerates the state of the input stream.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVAudioConverterInputStatus : long {
+		/// <summary>To be added.</summary>
 		HaveData = 0,
+		/// <summary>To be added.</summary>
 		NoDataNow = 1,
+		/// <summary>To be added.</summary>
 		EndOfStream = 2,
 	}
 
+	/// <summary>Enumerates the state of the output stream during audio conversion.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVAudioConverterOutputStatus : long {
+		/// <summary>To be added.</summary>
 		HaveData = 0,
+		/// <summary>To be added.</summary>
 		InputRanDry = 1,
+		/// <summary>To be added.</summary>
 		EndOfStream = 2,
+		/// <summary>To be added.</summary>
 		Error = 3,
 	}
 
@@ -895,12 +1080,19 @@ namespace AVFoundation {
 	[NoMacCatalyst]
 	[Native]
 	public enum AVContentAuthorizationStatus : long {
+		/// <summary>To be added.</summary>
 		Unknown,
+		/// <summary>To be added.</summary>
 		Completed,
+		/// <summary>To be added.</summary>
 		Cancelled,
+		/// <summary>To be added.</summary>
 		TimedOut,
+		/// <summary>To be added.</summary>
 		Busy,
+		/// <summary>To be added.</summary>
 		NotAvailable,
+		/// <summary>To be added.</summary>
 		NotPossible,
 	}
 
@@ -930,6 +1122,8 @@ namespace AVFoundation {
 		Opportunistic = 2,
 	}
 
+	/// <summary>Enumerates video capture color spaces.</summary>
+	/// <remarks>To be added.</remarks>
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[TV (17, 0)]
 	[Native]
@@ -946,6 +1140,8 @@ namespace AVFoundation {
 		AppleLog = 3,
 	}
 
+	/// <summary>Enumerates loop count limits.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVMusicTrackLoopCount : long {
@@ -953,6 +1149,8 @@ namespace AVFoundation {
 		Forever = -1,
 	}
 
+	/// <summary>Enumerates allowable time <see cref="AVFoundation.AVPlayer.TimeControlStatus" /> values.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVPlayerTimeControlStatus : long {
@@ -968,16 +1166,24 @@ namespace AVFoundation {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVAudioSessionIOType : long {
+		/// <summary>To be added.</summary>
 		NotSpecified = 0,
+		/// <summary>To be added.</summary>
 		Aggregated = 1,
 	}
 
+	/// <summary>Enumerates the states of an <see cref="AVFoundation.AVPlayerLooper" /> object.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVPlayerLooperStatus : long {
+		/// <summary>The status of the looper is not currently available.</summary>
 		Unknown,
+		/// <summary>The looper is ready to play.</summary>
 		Ready,
+		/// <summary>Looping failed (see <see cref="AVFoundation.AVPlayerLooper.Error" />).</summary>
 		Failed,
+		/// <summary>Looping has been cancelled.</summary>
 		Cancelled,
 	}
 
@@ -1003,26 +1209,38 @@ namespace AVFoundation {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVContentKeyRequestStatus : long {
+		/// <summary>To be added.</summary>
 		Requesting,
+		/// <summary>To be added.</summary>
 		Received,
+		/// <summary>To be added.</summary>
 		Renewed,
+		/// <summary>To be added.</summary>
 		Retried,
+		/// <summary>To be added.</summary>
 		Cancelled,
+		/// <summary>To be added.</summary>
 		Failed,
 	}
 
 	[MacCatalyst (13, 1)]
 	public enum AVContentKeyRequestRetryReason {
+		/// <summary>To be added.</summary>
 		[Field ("AVContentKeyRequestRetryReasonTimedOut")]
 		TimedOut,
+		/// <summary>To be added.</summary>
 		[Field ("AVContentKeyRequestRetryReasonReceivedResponseWithExpiredLease")]
 		ReceivedResponseWithExpiredLease,
+		/// <summary>To be added.</summary>
 		[Field ("AVContentKeyRequestRetryReasonReceivedObsoleteContentKey")]
 		ReceivedObsoleteContentKey,
 	}
 
+	/// <summary>Enumerates delivery methods for content keys.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	public enum AVContentKeySystem {
+		/// <summary>Indicates FairPlay.</summary>
 		[Field ("AVContentKeySystemFairPlayStreaming")]
 		FairPlayStreaming = 0,
 
@@ -1030,6 +1248,7 @@ namespace AVFoundation {
 		[Field ("AVContentKeySystemClearKey")]
 		ClearKey = 1,
 
+		/// <summary>Indicates a clear system.</summary>
 		[MacCatalyst (13, 1)]
 		[Obsolete ("Use 'AVContentKeySystem.SystemClearKey' instead.")]
 		AVContentKeySystemClearKey = ClearKey,
@@ -1042,44 +1261,108 @@ namespace AVFoundation {
 	}
 
 	// Convience enum for native string values 
+	/// <summary>Enumerates presets for asset export sessions.</summary>
 	[MacCatalyst (13, 1)]
 	public enum AVAssetExportSessionPreset {
+		/// <summary>Indicates a low quality QuickTime file.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("AVAssetExportPresetLowQuality")]
 		LowQuality = 0, // AVAssetExportPresetLowQuality
+
+		/// <summary>Indicates a medium quality QuickTime file.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("AVAssetExportPresetMediumQuality")]
 		MediumQuality = 1, // AVAssetExportPresetMediumQuality
+
+		/// <summary>Indicates the highest quality QuickTime file.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("AVAssetExportPresetHighestQuality")]
 		HighestQuality = 2, // AVAssetExportPresetHighestQuality
+
+		/// <summary>Indicates 640x480 output.</summary>
 		[Field ("AVAssetExportPreset640x480")]
 		Preset640x480 = 3, // AVAssetExportPreset640x480
+
+		/// <summary>Indicates 960x540 output.</summary>
 		[Field ("AVAssetExportPreset960x540")]
 		Preset960x540 = 4, // AVAssetExportPreset960x540
+
+		/// <summary>Indicates 1280x720 output.</summary>
 		[Field ("AVAssetExportPreset1280x720")]
 		Preset1280x720 = 5, // AVAssetExportPreset1280x720
+
+		/// <summary>Indicates 1920x1080 output.</summary>
 		[Field ("AVAssetExportPreset1920x1080")]
 		Preset1920x1080 = 6, // AVAssetExportPreset1920x1080
 
+		/// <summary>Indicates 3840x2160 output.</summary>
 		[MacCatalyst (13, 1)]
 		[Field ("AVAssetExportPreset3840x2160")]
 		Preset3840x2160 = 7, // AVAssetExportPreset3840x2160
 
+		/// <summary>Indicates an audio-only m4a file with gapless playback data.</summary>
 		[Field ("AVAssetExportPresetAppleM4A")]
 		AppleM4A = 8, // AVAssetExportPresetAppleM4A
+
+		/// <summary>Indicates a pass-through export, where possible.</summary>
 		[Field ("AVAssetExportPresetPassthrough")]
 		Passthrough = 9, // AVAssetExportPresetPassthrough
 
+#if !XAMCORE_5_0
 		[MacCatalyst (13, 1)]
-		[Obsolete ("Use 'AVOutputSettingsPreset.PresetHevc1920x1080' instead.")]
+		[Obsolete ("Use 'AVOutputSettingsPreset.PresetHevc1920x1080' instead if you're looking for the 'AVOutputSettingsPresetHEVC1920x1080' constant, or 'Hevc1920x1080' if you're looking for the 'AVAssetExportPresetHEVC1920x1080 constant.")]
 		[Field ("AVOutputSettingsPresetHEVC1920x1080")]
 		PresetHevc1920x1080 = 11,
 
 		[MacCatalyst (13, 1)]
-		[Obsolete ("Use 'AVOutputSettingsPreset.PresetHevc3840x2160' instead.")]
+		[Obsolete ("Use 'AVOutputSettingsPreset.PresetHevc3840x2160' instead if you're looking for the 'AVOutputSettingsPresetHEVC3840x2160' constant, or 'Hevc3840x2160' if you're looking for the 'AVAssetExportPresetHEVC3840x2160' constant.")]
 		[Field ("AVOutputSettingsPresetHEVC3840x2160")]
 		PresetHevc3840x2160 = 12,
+#endif // !XAMCORE_5_0
+
+		[MacCatalyst (13, 1)]
+		[Field ("AVAssetExportPresetHEVCHighestQuality")]
+		HevcHighestQuality,
+
+		[MacCatalyst (13, 1)]
+		[Field ("AVAssetExportPresetHEVC3840x2160")]
+		Hevc3840x2160,
+
+		[MacCatalyst (13, 1)]
+		[Field ("AVAssetExportPresetHEVC1920x1080")]
+		Hevc1920x1080,
+
+		[NoTV, MacCatalyst (15, 0), iOS (15, 0)]
+		[Field ("AVAssetExportPresetAppleProRes4444LPCM")]
+		AppleProRes4444Lpcm,
+
+		[TV (13, 0), iOS (13, 0)]
+		[MacCatalyst (13, 1)]
+		[Field ("AVAssetExportPresetHEVC1920x1080WithAlpha")]
+		Hevc1920x1080WithAlpha,
+
+		[TV (13, 0), iOS (13, 0)]
+		[MacCatalyst (13, 1)]
+		[Field ("AVAssetExportPresetHEVC3840x2160WithAlpha")]
+		Hevc3840x2160WithAlpha,
+
+		[NoTV, NoiOS, Mac (12, 1)]
+		[NoMacCatalyst]
+		[Field ("AVAssetExportPresetHEVC7680x4320")]
+		Hevc7680x4320,
+
+		[TV (13, 0), iOS (13, 0)]
+		[MacCatalyst (13, 1)]
+		[Field ("AVAssetExportPresetHEVCHighestQualityWithAlpha")]
+		HevcHighestQualityWithAlpha,
+
+		[NoTV, Mac (14, 0), iOS (17, 0), MacCatalyst (17, 0)]
+		[Field ("AVAssetExportPresetMVHEVC960x960")]
+		MvHevc960x960,
+
+		[NoTV, Mac (14, 0), iOS (17, 0), MacCatalyst (17, 0)]
+		[Field ("AVAssetExportPresetMVHEVC1440x1440")]
+		MvHevc1440x1440,
 	}
 
 	[MacCatalyst (13, 1)]
@@ -1136,6 +1419,8 @@ namespace AVFoundation {
 		PresetMvHevc1440x1440 = 17,
 	}
 
+	/// <summary>Enumerates depth data accuracy types.</summary>
+	/// <remarks>To be added.</remarks>
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[Native]
 	public enum AVDepthDataAccuracy : long {
@@ -1145,27 +1430,39 @@ namespace AVFoundation {
 		Absolute = 1,
 	}
 
+	/// <summary>Enumerates whether manual rendering is done offline or under real-time constraints.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVAudioEngineManualRenderingMode : long {
+		/// <summary>To be added.</summary>
 		Offline = 0,
+		/// <summary>To be added.</summary>
 		Realtime = 1,
 	}
 
+	/// <summary>Enumerates status of manual rendering.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVAudioEngineManualRenderingStatus : long {
+		/// <summary>To be added.</summary>
 		Error = -1,
+		/// <summary>To be added.</summary>
 		Success = 0,
+		/// <summary>To be added.</summary>
 		InsufficientDataFromInputNode = 1,
+		/// <summary>To be added.</summary>
 		CannotDoInCurrentContext = 2,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVAudioSessionRouteSharingPolicy : ulong {
+		/// <summary>To be added.</summary>
 		Default = 0,
 #if !XAMCORE_5_0
+		/// <summary>To be added.</summary>
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'LongFormAudio' instead.")]
 		[Deprecated (PlatformName.TvOS, 13, 0, message: "Use 'LongFormAudio' instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 15, message: "Use 'LongFormAudio' instead.")]
@@ -1173,6 +1470,7 @@ namespace AVFoundation {
 		LongForm = 1,
 #endif
 		LongFormAudio = 1,
+		/// <summary>To be added.</summary>
 		Independent = 2,
 		[iOS (13, 0)]
 		[NoTV]
@@ -1192,42 +1490,63 @@ namespace AVFoundation {
 		PlayedBack = 2,
 	}
 
+	/// <summary>Error codes for manual rendering errors.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	public enum AVAudioEngineManualRenderingError {
+		/// <summary>To be added.</summary>
 		InvalidMode = -80800,
+		/// <summary>To be added.</summary>
 		Initialized = -80801,
+		/// <summary>To be added.</summary>
 		NotRunning = -80802,
 	}
 
+	/// <summary>Enumerates states for physical image stabilization hardware.</summary>
+	/// <remarks>To be added.</remarks>
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[TV (17, 0)]
 	[Native]
 	public enum AVCaptureLensStabilizationStatus : long {
+		/// <summary>Indicates that stabilization hardware is not present.</summary>
 		Unsupported = 0,
+		/// <summary>Indicates that the stabilization hardware is off.</summary>
 		Off = 1,
+		/// <summary>Indicates that the stabilization hardware is active.</summary>
 		Active = 2,
+		/// <summary>Indicates that the stabilization hardware reached or exceeded the range that it can stabilize.</summary>
 		OutOfRange = 3,
+		/// <summary>Indicates that stabilization hardware is present but unavailable.</summary>
 		Unavailable = 4,
 	}
 
+	/// <summary>Enumerates reasons for dropped capture data.</summary>
+	/// <remarks>To be added.</remarks>
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[TV (17, 0)]
 	[Native]
 	public enum AVCaptureOutputDataDroppedReason : long {
+		/// <summary>Indicates that no data was dropped.</summary>
 		None = 0,
+		/// <summary>Indicates that data was dropped because it were too late.</summary>
 		LateData = 1,
+		/// <summary>Indicates that buffer memory is full.</summary>
 		OutOfBuffers = 2,
+		/// <summary>Indicates that the device was too busy to capture data.</summary>
 		Discontinuity = 3,
 	}
 
 	[MacCatalyst (13, 1)]
 	public enum AVVideoApertureMode {
+		/// <summary>To be added.</summary>
 		[Field ("AVVideoApertureModeCleanAperture")]
 		CleanAperture = 0,
 
+		/// <summary>To be added.</summary>
 		[Field ("AVVideoApertureModeProductionAperture")]
 		ProductionAperture = 1,
 
+		/// <summary>To be added.</summary>
 		[Field ("AVVideoApertureModeEncodedPixels")]
 		EncodedPixels = 2,
 	}
@@ -1245,27 +1564,36 @@ namespace AVFoundation {
 
 	[MacCatalyst (13, 1)]
 	public enum AVAssetWriterInputMediaDataLocation {
+		/// <summary>To be added.</summary>
 		[Field ("AVAssetWriterInputMediaDataLocationInterleavedWithMainMediaData")]
 		InterleavedWithMainMediaData = 0,
 
+		/// <summary>To be added.</summary>
 		[Field ("AVAssetWriterInputMediaDataLocationBeforeMainMediaDataNotInterleaved")]
 		BeforeMainMediaDataNotInterleaved = 1,
 	}
 
+	/// <summary>Constants for known video codecs.</summary>
+	/// <remarks>To be added.</remarks>
 	[MacCatalyst (15, 0)]
 	public enum AVVideoCodecType {
+		/// <summary>To be added.</summary>
 		[Field ("AVVideoCodecTypeH264")]
 		H264 = 0,
 
+		/// <summary>To be added.</summary>
 		[Field ("AVVideoCodecTypeJPEG")]
 		Jpeg = 1,
 
+		/// <summary>To be added.</summary>
 		[Field ("AVVideoCodecTypeAppleProRes422")]
 		AppleProRes422 = 3,
 
+		/// <summary>To be added.</summary>
 		[Field ("AVVideoCodecTypeAppleProRes4444")]
 		AppleProRes4444 = 4,
 
+		/// <summary>To be added.</summary>
 		[Field ("AVVideoCodecTypeHEVC")]
 		Hevc = 5,
 
@@ -1346,13 +1674,17 @@ namespace AVFoundation {
 	[Flags]
 	[Native]
 	public enum AVAudioSessionActivationOptions : ulong {
+		/// <summary>To be added.</summary>
 		None = 0x0,
 	}
 
 	[Native]
 	public enum AVAudioSessionPromptStyle : ulong {
+		/// <summary>To be added.</summary>
 		None = 0x6e6f6e65, // 1852796517 - 'none'
+		/// <summary>To be added.</summary>
 		Short = 0x73687274, // 1936224884 - 'shrt'
+		/// <summary>To be added.</summary>
 		Normal = 0x6e726d6c, //1852992876 - 'nrml'
 	}
 

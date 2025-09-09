@@ -174,7 +174,7 @@ namespace HomeKit {
 		CannotUnblockNonBridgeAccessory = 81,
 		/// <summary>The device is locked.</summary>
 		DeviceLocked = 82,
-		/// <summary>The user attempted to remove a non-deletable <see cref="T:HomeKit.HMActionSet" />.</summary>
+		/// <summary>The user attempted to remove a non-deletable <see cref="HomeKit.HMActionSet" />.</summary>
 		CannotRemoveBuiltinActionSet = 83,
 		/// <summary>The user has not made their home's location available.</summary>
 		LocationForHomeDisabled = 84,
@@ -213,11 +213,13 @@ namespace HomeKit {
 		AccessoryIsSuspended = 103,
 		// iOS 17.4
 		PartialCommunicationFailure = 104,
+		// iOS 18.4
+		HomeUpgradeRequired = 105,
 	}
 
 
 	// conveniance enum (ObjC uses NSString)
-	/// <summary>Enumerates known types of <see cref="T:HomeKit.HMCharacteristic" />.</summary>
+	/// <summary>Enumerates known types of <see cref="HomeKit.HMCharacteristic" />.</summary>
 	[MacCatalyst (14, 0)]
 	public enum HMCharacteristicType {
 		/// <summary>No type is specified.</summary>
@@ -239,7 +241,7 @@ namespace HomeKit {
 		[Field ("HMCharacteristicTypeBrightness")]
 		Brightness,
 
-		/// <summary>A <see cref="T:HomeKit.HMCharacteristicValueTemperatureUnit" /> value that indicates the units in which the accessory reports temperature.</summary>
+		/// <summary>A <see cref="HomeKit.HMCharacteristicValueTemperatureUnit" /> value that indicates the units in which the accessory reports temperature.</summary>
 		[Field ("HMCharacteristicTypeTemperatureUnits")]
 		TemperatureUnits,
 
@@ -251,11 +253,11 @@ namespace HomeKit {
 		[Field ("HMCharacteristicTypeTargetTemperature")]
 		TargetTemperature,
 
-		/// <summary>A <see cref="T:HomeKit.HMCharacteristicValueHeatingCooling" /> value that indicates the heating or cooling state.</summary>
+		/// <summary>A <see cref="HomeKit.HMCharacteristicValueHeatingCooling" /> value that indicates the heating or cooling state.</summary>
 		[Field ("HMCharacteristicTypeCurrentHeatingCooling")]
 		CurrentHeatingCooling,
 
-		/// <summary>A <see cref="T:HomeKit.HMCharacteristicValueHeatingCooling" /> that represents the desired heating or cooling state.</summary>
+		/// <summary>A <see cref="HomeKit.HMCharacteristicValueHeatingCooling" /> that represents the desired heating or cooling state.</summary>
 		[Field ("HMCharacteristicTypeTargetHeatingCooling")]
 		TargetHeatingCooling,
 
@@ -267,11 +269,6 @@ namespace HomeKit {
 		[Field ("HMCharacteristicTypeHeatingThreshold")]
 		HeatingThreshold,
 
-#if !NET
-		[Obsolete ("This value does not exist anymore and will always return null.")]
-		HeatingCoolingStatus,
-#endif
-
 		/// <summary>A float that indicates the current relative humidity percentage.</summary>
 		[Field ("HMCharacteristicTypeCurrentRelativeHumidity")]
 		CurrentRelativeHumidity,
@@ -280,11 +277,11 @@ namespace HomeKit {
 		[Field ("HMCharacteristicTypeTargetRelativeHumidity")]
 		TargetRelativeHumidity,
 
-		/// <summary>A <see cref="T:HomeKit.HMCharacteristicValueDoorState" /> value that indicates the door state.</summary>
+		/// <summary>A <see cref="HomeKit.HMCharacteristicValueDoorState" /> value that indicates the door state.</summary>
 		[Field ("HMCharacteristicTypeCurrentDoorState")]
 		CurrentDoorState,
 
-		/// <summary>A <see cref="T:HomeKit.HMCharacteristicValueDoorState" /> that represents the desired door state.</summary>
+		/// <summary>A <see cref="HomeKit.HMCharacteristicValueDoorState" /> that represents the desired door state.</summary>
 		[Field ("HMCharacteristicTypeTargetDoorState")]
 		TargetDoorState,
 
@@ -321,7 +318,7 @@ namespace HomeKit {
 		[Field ("HMCharacteristicTypeIdentify")]
 		Identify,
 
-		/// <summary>A <see cref="T:HomeKit.HMCharacteristicValueRotationDirection" /> value that indicates the accessory's rotatoin.</summary>
+		/// <summary>A <see cref="HomeKit.HMCharacteristicValueRotationDirection" /> value that indicates the accessory's rotatoin.</summary>
 		[Field ("HMCharacteristicTypeRotationDirection")]
 		RotationDirection,
 
@@ -353,15 +350,15 @@ namespace HomeKit {
 		[Field ("HMCharacteristicTypeMotionDetected")]
 		MotionDetected,
 
-		/// <summary>A <see cref="T:HomeKit.HMCharacteristicValueLockMechanismState" /> value that indicates the lock mechanism state.</summary>
+		/// <summary>A <see cref="HomeKit.HMCharacteristicValueLockMechanismState" /> value that indicates the lock mechanism state.</summary>
 		[Field ("HMCharacteristicTypeCurrentLockMechanismState")]
 		CurrentLockMechanismState,
 
-		/// <summary>A <see cref="T:HomeKit.HMCharacteristicValueLockMechanismState" /> that represents the desired lock mechanism state.</summary>
+		/// <summary>A <see cref="HomeKit.HMCharacteristicValueLockMechanismState" /> that represents the desired lock mechanism state.</summary>
 		[Field ("HMCharacteristicTypeTargetLockMechanismState")]
 		TargetLockMechanismState,
 
-		/// <summary>A <see cref="T:HomeKit.HMCharacteristicValueLockMechanism" /> value that specifies the last known action taken on the lock.</summary>
+		/// <summary>A <see cref="HomeKit.HMCharacteristicValueLockMechanism" /> value that specifies the last known action taken on the lock.</summary>
 		[Field ("HMCharacteristicTypeLockMechanismLastKnownAction")]
 		LockMechanismLastKnownAction,
 
@@ -378,71 +375,87 @@ namespace HomeKit {
 		[Field ("HMCharacteristicTypeAirParticulateDensity")]
 		AirParticulateDensity,
 
-		/// <summary>The size of the particles measured for air quality purposes. The value is an element in the <see cref="T:HomeKit.HMCharacteristicValueAirParticulate" /> enum.</summary>
+		/// <summary>The size of the particles measured for air quality purposes. The value is an element in the <see cref="HomeKit.HMCharacteristicValueAirParticulate" /> enum.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeAirParticulateSize")]
 		AirParticulateSize,
 
+		/// <summary>Measure of air quality. The value is an element in the <see cref="HomeKit.HMCharacteristicValueAirQuality" /> enum.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeAirQuality")]
 		AirQuality,
 
+		/// <summary>A power level. The result is a <see langword="byte" /> representing the percentage of charge in the range [0..100]</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeBatteryLevel")]
 		BatteryLevel,
 
+		/// <summary>Indicates the presence of CO2. The result is a <see langword="byte" /> where 0 indicates normal CO2 levels.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeCarbonDioxideDetected")]
 		CarbonDioxideDetected,
 
+		/// <summary>The measured level of CO2. The result is a <see langword="float" /> indicating CO2 parts-per-million.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeCarbonDioxideLevel")]
 		CarbonDioxideLevel,
 
+		/// <summary>The highest recorded CO2 level. The resultis a <see langword="float" /> indicating CO2 parts-per-million.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeCarbonDioxidePeakLevel")]
 		CarbonDioxidePeakLevel,
 
+		/// <summary>Indicates the presence of CO. The result is a <see langword="byte" /> where 0 indicates normal CO levels.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeCarbonMonoxideDetected")]
 		CarbonMonoxideDetected,
 
+		/// <summary>The measured level of CO. The result is a <see langword="float" /> indicating CO parts-per-million.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeCarbonMonoxideLevel")]
 		CarbonMonoxideLevel,
 
+		/// <summary>The highest measured level of CO. The result is a <see langword="float" /> indicating CO parts-per-million.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeCarbonMonoxidePeakLevel")]
 		CarbonMonoxidePeakLevel,
 
+		/// <summary>A value in <see cref="HomeKit.HMCharacteristicValueChargingState" />.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeChargingState")]
 		ChargingState,
 
+		/// <summary>A value in <see cref="HomeKit.HMCharacteristicValueContactState" />.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeContactState")]
 		ContactState,
 
+		/// <summary>The security system state. Will be a value in <see cref="HomeKit.HMCharacteristicValueCurrentSecuritySystemState" />.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeCurrentSecuritySystemState")]
 		CurrentSecuritySystemState,
 
+		/// <summary>A float measuring the tilt from horizontal in degrees.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeCurrentHorizontalTilt")]
 		CurrentHorizontalTilt,
 
+		/// <summary>The luminance, in lux.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeCurrentLightLevel")]
 		CurrentLightLevel,
 
+		/// <summary>A <see langword="byte" /> between 0 and 100, representing the percent a door or window is open.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeCurrentPosition")]
 		CurrentPosition,
 
+		/// <summary>The current tilt, in degrees.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeCurrentVerticalTilt")]
 		CurrentVerticalTilt,
 
+		/// <summary>Developers should not use this deprecated field. Developers should use 'HMAccessory.FirmwareVersion' instead.</summary>
 		[Deprecated (PlatformName.TvOS, 11, 0, message: "Use 'HMAccessory.FirmwareVersion' instead.")]
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'HMAccessory.FirmwareVersion' instead.")]
 		[MacCatalyst (14, 0)]
@@ -450,274 +463,342 @@ namespace HomeKit {
 		[Field ("HMCharacteristicTypeFirmwareVersion")]
 		FirmwareVersion,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeHardwareVersion")]
 		HardwareVersion,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeHoldPosition")]
 		HoldPosition,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeInputEvent")]
 		InputEvent,
 
+		/// <summary>A <see langword="byte" /> whose value will be either 0 (no leak detected) or 1 (leak detected).</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeLeakDetected")]
 		LeakDetected,
 
+		/// <summary>A <see langword="byte" /> whose value will either be 0 (no occupancy detected) or 1 (occupancy detected).</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeOccupancyDetected")]
 		OccupancyDetected,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeOutputState")]
 		OutputState,
 
+		/// <summary>The result will be an element in the <see cref="HomeKit.HMCharacteristicValuePositionState" /> enum.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypePositionState")]
 		PositionState,
 
+		/// <summary>A <see langword="byte" /> that will either be 0 (no smoke detected) or 1 (smoke detected).</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSmokeDetected")]
 		SmokeDetected,
 
+		/// <summary>Returns the accessory's software version in a <see langword="string" />.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSoftwareVersion")]
 		SoftwareVersion,
 
+		/// <summary>A Boolean indicating whether a service is active.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeStatusActive")]
 		StatusActive,
 
+		/// <summary>A <see langword="byte" /> whose value will either be 0 (no fault) or 1 (the system is in a fault state).</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeStatusFault")]
 		StatusFault,
 
+		/// <summary>A <see langword="byte" /> whose value will either be 0 (not jammed) or 1 (jammed).</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeStatusJammed")]
 		StatusJammed,
 
+		/// <summary>A <see langword="byte" /> whose value will either be 0 (battery level is not low) or 1 (battery is low).</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeStatusLowBattery")]
 		StatusLowBattery,
 
+		/// <summary>A <see langword="byte" /> whose value will either be 0 (no tampering detected) or 1 (tampering detected).</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeStatusTampered")]
 		StatusTampered,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeTargetSecuritySystemState")]
 		TargetSecuritySystemState,
 
+		/// <summary>The desired horizontal tilt, in arc degrees.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeTargetHorizontalTilt")]
 		TargetHorizontalTilt,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeTargetPosition")]
 		TargetPosition,
 
+		/// <summary>The desired vertical tilt, in arc degrees.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeTargetVerticalTilt")]
 		TargetVerticalTilt,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeStreamingStatus")]
 		StreamingStatus,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSetupStreamEndpoint")]
 		SetupStreamEndpoint,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSupportedVideoStreamConfiguration")]
 		SupportedVideoStreamConfiguration,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSupportedAudioStreamConfiguration")]
 		SupportedAudioStreamConfiguration,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSupportedRTPConfiguration")]
 		SupportedRtpConfiguration,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSelectedStreamConfiguration")]
 		SelectedStreamConfiguration,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeVolume")]
 		Volume,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeMute")]
 		Mute,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeNightVision")]
 		NightVision,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeOpticalZoom")]
 		OpticalZoom,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeDigitalZoom")]
 		DigitalZoom,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeImageRotation")]
 		ImageRotation,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeImageMirroring")]
 		ImageMirroring,
 
+		/// <summary>A Boolean that tells whether a service is active.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeActive")]
 		Active,
 
+		/// <summary>A <see cref="HomeKit.HMCharacteristicValueCurrentAirPurifierState" /> value that indicates the fan state state.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeCurrentAirPurifierState")]
 		CurrentAirPurifierState,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeTargetAirPurifierState")]
 		TargetAirPurifierState,
 
+		/// <summary>A <see cref="HomeKit.HMCharacteristicValueCurrentFanState" /> value that indicates the fan state state.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeCurrentFanState")]
 		CurrentFanState,
 
+		/// <summary>A <see cref="HomeKit.HMCharacteristicValueCurrentHeaterCoolerState" /> value that indicates the fan state state.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeCurrentHeaterCoolerState")]
 		CurrentHeaterCoolerState,
 
+		/// <summary>A <see cref="HomeKit.HMCharacteristicValueCurrentHumidifierDehumidifierState" /> value that indicates the fan state state.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeCurrentHumidifierDehumidifierState")]
 		CurrentHumidifierDehumidifierState,
 
+		/// <summary>A <see cref="HomeKit.HMCharacteristicValueCurrentSlatState" /> value that indicates the lock mechanism state.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeCurrentSlatState")]
 		CurrentSlatState,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeWaterLevel")]
 		WaterLevel,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeFilterChangeIndication")]
 		FilterChangeIndication,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeFilterLifeLevel")]
 		FilterLifeLevel,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeFilterResetChangeIndication")]
 		FilterResetChangeIndication,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeLockPhysicalControls")]
 		LockPhysicalControls,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSwingMode")]
 		SwingMode,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeTargetHeaterCoolerState")]
 		TargetHeaterCoolerState,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeTargetHumidifierDehumidifierState")]
 		TargetHumidifierDehumidifierState,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeTargetFanState")]
 		TargetFanState,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSlatType")]
 		SlatType,
 
+		/// <summary>The current tilt, in degrees.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeCurrentTilt")]
 		CurrentTilt,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeTargetTilt")]
 		TargetTilt,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeOzoneDensity")]
 		OzoneDensity,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeNitrogenDioxideDensity")]
 		NitrogenDioxideDensity,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSulphurDioxideDensity")]
 		SulphurDioxideDensity,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypePM2_5Density")]
 		PM2_5Density,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypePM10Density")]
 		PM10Density,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeVolatileOrganicCompoundDensity")]
 		VolatileOrganicCompoundDensity,
 
+		/// <summary>The threshold relative humidity at which the dehumidifier starts.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeDehumidifierThreshold")]
 		DehumidifierThreshold,
 
+		/// <summary>The relative humidity threshold when the humidifier starts.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeHumidifierThreshold")]
 		HumidifierThreshold,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSecuritySystemAlarmType")]
 		SecuritySystemAlarmType,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeLabelNamespace")]
 		LabelNamespace,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeLabelIndex")]
 		LabelIndex,
 
+		/// <summary>The color temperature of a light.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeColorTemperature")]
 		ColorTemperature,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeProgramMode")]
 		ProgramMode,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeInUse")]
 		InUse,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeSetDuration")]
 		SetDuration,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeRemainingDuration")]
 		RemainingDuration,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeValveType")]
 		ValveType,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMCharacteristicTypeIsConfigured")]
 		IsConfigured,
@@ -796,7 +877,7 @@ namespace HomeKit {
 	}
 
 	// conveniance enum (ObjC uses NSString)
-	/// <summary>Enumerates units of measure that might be associated with a <see cref="T:HomeKit.HMCharacteristic" />.</summary>
+	/// <summary>Enumerates units of measure that might be associated with a <see cref="HomeKit.HMCharacteristic" />.</summary>
 	[MacCatalyst (13, 1)]
 	public enum HMCharacteristicMetadataUnits {
 		/// <summary>Indicates no unit, or a dimensionless unit.</summary>
@@ -824,167 +905,210 @@ namespace HomeKit {
 	}
 
 	// conveniance enum (ObjC uses NSString)
-	/// <summary>Enumerates known types of <see cref="T:HomeKit.HMService" />.</summary>
+	/// <summary>Enumerates known types of <see cref="HomeKit.HMService" />.</summary>
 	[MacCatalyst (14, 0)]
 	[Flags]
 	public enum HMServiceType {
+		/// <summary>Indicates the absence of a service.</summary>
 		None,
 
+		/// <summary>The service represents a light bulb.</summary>
 		[Field ("HMServiceTypeLightbulb")]
 		LightBulb,
 
+		/// <summary>The service represents a switch.</summary>
 		[Field ("HMServiceTypeSwitch")]
 		Switch,
 
+		/// <summary>The service represents a thermostat.</summary>
 		[Field ("HMServiceTypeThermostat")]
 		Thermostat,
 
+		/// <summary>The service represents a garage door opener.</summary>
 		[Field ("HMServiceTypeGarageDoorOpener")]
 		GarageDoorOpener,
 
+		/// <summary>Indicates accessory information.</summary>
 		[Field ("HMServiceTypeAccessoryInformation")]
 		AccessoryInformation,
 
+		/// <summary>The service represents a fan.</summary>
 		[Field ("HMServiceTypeFan")]
 		Fan,
 
+		/// <summary>The service represents an outlet.</summary>
 		[Field ("HMServiceTypeOutlet")]
 		Outlet,
 
+		/// <summary>The service represents a lock mechanism.</summary>
 		[Field ("HMServiceTypeLockMechanism")]
 		LockMechanism,
 
+		/// <summary>The service manages locks.</summary>
 		[Field ("HMServiceTypeLockManagement")]
 		LockManagement,
 
+		/// <summary>A sensor that monitors air quality.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeAirQualitySensor")]
 		AirQualitySensor,
 
+		/// <summary>An energy storage device.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeBattery")]
 		Battery,
 
+		/// <summary>A sensor that detects CO2.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeCarbonDioxideSensor")]
 		CarbonDioxideSensor,
 
+		/// <summary>A sensor that detects CO.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeCarbonMonoxideSensor")]
 		CarbonMonoxideSensor,
 
+		/// <summary>A sensor that detects physical contact.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeContactSensor")]
 		ContactSensor,
 
+		/// <summary>A door.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeDoor")]
 		Door,
 
+		/// <summary>A sensor that monitors the water content of the air.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeHumiditySensor")]
 		HumiditySensor,
 
+		/// <summary>A sensor for detecting seepage.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeLeakSensor")]
 		LeakSensor,
 
+		/// <summary>A sensor that monitors luminance.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeLightSensor")]
 		LightSensor,
 
+		/// <summary>A device that senses movement.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeMotionSensor")]
 		MotionSensor,
 
+		/// <summary>A device that detects occupancy using an unspecified technology.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeOccupancySensor")]
 		OccupancySensor,
 
+		/// <summary>A system that can be armed and will trigger alerts.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeSecuritySystem")]
 		SecuritySystem,
 
+		/// <summary>A switch that maintains internal state and rules.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeStatefulProgrammableSwitch")]
 		StatefulProgrammableSwitch,
 
+		/// <summary>A switch that does not maintain internal state.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeStatelessProgrammableSwitch")]
 		StatelessProgrammableSwitch,
 
+		/// <summary>A detector used to monitor smoke or fire.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeSmokeSensor")]
 		SmokeSensor,
 
+		/// <summary>A thermometer.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeTemperatureSensor")]
 		TemperatureSensor,
 
+		/// <summary>A pane of glass.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeWindow")]
 		Window,
 
+		/// <summary>Drapes or shades.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeWindowCovering")]
 		WindowCovering,
 
+		/// <summary>A camera management interface.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeCameraRTPStreamManagement")]
 		CameraRtpStreamManagement,
 
+		/// <summary>A video camera.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeCameraControl")]
 		CameraControl,
 
+		/// <summary>An audio sensor.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeMicrophone")]
 		Microphone,
 
+		/// <summary>A speaker.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeSpeaker")]
 		Speaker,
 
+		/// <summary>A doorbell.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeDoorbell")]
 		Doorbell,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeAirPurifier")]
 		AirPurifier,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeVentilationFan")]
 		VentilationFan,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeFilterMaintenance")]
 		FilterMaintenance,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeHeaterCooler")]
 		HeaterCooler,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeHumidifierDehumidifier")]
 		HumidifierDehumidifier,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeSlats")]
 		Slats,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeLabel")]
 		Label,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeIrrigationSystem")]
 		IrrigationSystem,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeValve")]
 		Valve,
 
+		/// <summary>To be added.</summary>
 		[MacCatalyst (14, 0)]
 		[Field ("HMServiceTypeFaucet")]
 		Faucet,
@@ -1187,7 +1311,7 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueBatteryStatus : long {
-		/// <summary>The charge level is higher than <see cref="F:HomeKit.HMCharacteristicValueBatteryStatus.Low" />.</summary>
+		/// <summary>The charge level is higher than <see cref="HomeKit.HMCharacteristicValueBatteryStatus.Low" />.</summary>
 		Normal = 0,
 		/// <summary>The charge level is low.</summary>
 		Low,
@@ -1307,22 +1431,22 @@ namespace HomeKit {
 	}
 
 	// conveniance enum (ObjC uses NSString)
-	/// <summary>Enumerates the different kinds of <see cref="T:HomeKit.HMActionSet" />.</summary>
+	/// <summary>Enumerates the different kinds of <see cref="HomeKit.HMActionSet" />.</summary>
 	[MacCatalyst (13, 1)]
 	public enum HMActionSetType {
-		/// <summary>The <see cref="T:HomeKit.HMActionSet" /> is not associated with a known kind.</summary>
+		/// <summary>The <see cref="HomeKit.HMActionSet" /> is not associated with a known kind.</summary>
 		Unknown = -1,
-		/// <summary>The <see cref="T:HomeKit.HMActionSet" /> relates to the user waking.</summary>
+		/// <summary>The <see cref="HomeKit.HMActionSet" /> relates to the user waking.</summary>
 		WakeUp,
-		/// <summary>The <see cref="T:HomeKit.HMActionSet" /> relates to the user indicating they are going to sleep.</summary>
+		/// <summary>The <see cref="HomeKit.HMActionSet" /> relates to the user indicating they are going to sleep.</summary>
 		Sleep,
-		/// <summary>The <see cref="T:HomeKit.HMActionSet" /> relates to the user leaving the home location.</summary>
+		/// <summary>The <see cref="HomeKit.HMActionSet" /> relates to the user leaving the home location.</summary>
 		HomeDeparture,
-		/// <summary>The <see cref="T:HomeKit.HMActionSet" /> relates to the user arriving at the home location.</summary>
+		/// <summary>The <see cref="HomeKit.HMActionSet" /> relates to the user arriving at the home location.</summary>
 		HomeArrival,
-		/// <summary>The <see cref="T:HomeKit.HMActionSet" /> was manually created by the user.</summary>
+		/// <summary>The <see cref="HomeKit.HMActionSet" /> was manually created by the user.</summary>
 		UserDefined,
-		/// <summary>The <see cref="T:HomeKit.HMActionSet" /> relates to a user-defined trigger.</summary>
+		/// <summary>The <see cref="HomeKit.HMActionSet" /> relates to a user-defined trigger.</summary>
 		[MacCatalyst (13, 1)]
 		TriggerOwned,
 	}
@@ -1331,7 +1455,7 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	// conveniance enum (ObjC uses NSString)
 	public enum HMAccessoryCategoryType {
-		/// <summary>An accessory that does not fit into any of the enumerated <see cref="T:HomeKit.HMAccessoryCategoryType" /> categories.</summary>
+		/// <summary>An accessory that does not fit into any of the enumerated <see cref="HomeKit.HMAccessoryCategoryType" /> categories.</summary>
 		[Field ("HMAccessoryCategoryTypeOther")]
 		Other = 0,
 
@@ -1355,7 +1479,7 @@ namespace HomeKit {
 		[Field ("HMAccessoryCategoryTypeFan")]
 		Fan,
 
-		/// <summary>An accessory that controls a <see cref="F:HomeKit.HMAccessoryCategoryType.DoorOpener" />.</summary>
+		/// <summary>An accessory that controls a garage door.</summary>
 		[Field ("HMAccessoryCategoryTypeGarageDoorOpener")]
 		GarageDoorOpener,
 
@@ -1375,7 +1499,7 @@ namespace HomeKit {
 		[Field ("HMAccessoryCategoryTypeOutlet")]
 		Outlet,
 
-		/// <summary>A switch accessory that may maintain a locally-stored set of rules. (See also <see cref="F:HomeKit.HMAccessoryCategoryType.Switch" />.)</summary>
+		/// <summary>A switch accessory that may maintain a locally-stored set of rules. (See also <see cref="HomeKit.HMAccessoryCategoryType.Switch" />.)</summary>
 		[Field ("HMAccessoryCategoryTypeProgrammableSwitch")]
 		ProgrammableSwitch,
 
@@ -1383,7 +1507,7 @@ namespace HomeKit {
 		[Field ("HMAccessoryCategoryTypeSensor")]
 		Sensor,
 
-		/// <summary>A switch. (See also <see cref="F:HomeKit.HMAccessoryCategoryType.ProgrammableSwitch" />.)</summary>
+		/// <summary>A switch. (See also <see cref="HomeKit.HMAccessoryCategoryType.ProgrammableSwitch" />.)</summary>
 		[Field ("HMAccessoryCategoryTypeSwitch")]
 		Switch,
 
@@ -1487,9 +1611,11 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	public enum HMSignificantEvent {
 
+		/// <summary>A rough estimate of the time of appearance above the horizon of the upper limb of the nearest star.</summary>
 		[Field ("HMSignificantEventSunrise")]
 		Sunrise,
 
+		/// <summary>A rough estimate of the time of disappearance below the horizon of the upper limb of the nearest star.</summary>
 		[Field ("HMSignificantEventSunset")]
 		Sunset,
 	}
@@ -1511,17 +1637,17 @@ namespace HomeKit {
 		Unknown = 0,
 		/// <summary>The best air quality.</summary>
 		Excellent,
-		/// <summary>Better than <see cref="F:HomeKit.HMCharacteristicValueAirQuality.Fair" />, but poorer than <see cref="F:HomeKit.HMCharacteristicValueAirQuality.Excellent" />.</summary>
+		/// <summary>Better than <see cref="HomeKit.HMCharacteristicValueAirQuality.Fair" />, but poorer than <see cref="HomeKit.HMCharacteristicValueAirQuality.Excellent" />.</summary>
 		Good,
 		/// <summary>The middle value of air quality.</summary>
 		Fair,
-		/// <summary>Better than <see cref="F:HomeKit.HMCharacteristicValueAirQuality.Poor" />, but poorer than <see cref="F:HomeKit.HMCharacteristicValueAirQuality.Fair" />.</summary>
+		/// <summary>Better than <see cref="HomeKit.HMCharacteristicValueAirQuality.Poor" />, but poorer than <see cref="HomeKit.HMCharacteristicValueAirQuality.Fair" />.</summary>
 		Inferior,
 		/// <summary>The worst air quality.</summary>
 		Poor,
 	}
 
-	/// <summary>Enumerates the states of an <see cref="T:HomeKit.HMCameraStream" />.</summary>
+	/// <summary>Enumerates the states of an <see cref="HomeKit.HMCameraStream" />.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCameraStreamState : ulong {
@@ -1535,19 +1661,19 @@ namespace HomeKit {
 		NotStreaming = 4,
 	}
 
-	/// <summary>Settings for camera's with audio devices. Used with <see cref="P:HomeKit.HMCameraStream.AudioStreamSetting" />.</summary>
+	/// <summary>Settings for camera's with audio devices. Used with <see cref="HomeKit.HMCameraStream.AudioStreamSetting" />.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCameraAudioStreamSetting : ulong {
-		/// <summary>The <see cref="T:HomeKit.HMCameraAudioStreamSetting" /> describing whether the audio capabilities are muted.</summary>
+		/// <summary>The <see cref="HomeKit.HMCameraAudioStreamSetting" /> describing whether the audio capabilities are muted.</summary>
 		Muted = 1,
-		/// <summary>The <see cref="T:HomeKit.HMCameraAudioStreamSetting" /> describing whether camera microphone one-way audio is enabled.</summary>
+		/// <summary>The <see cref="HomeKit.HMCameraAudioStreamSetting" /> describing whether camera microphone one-way audio is enabled.</summary>
 		IncomingAudioAllowed = 2,
-		/// <summary>The <see cref="T:HomeKit.HMCameraAudioStreamSetting" /> describing whether two-way audio is enabled.</summary>
+		/// <summary>The <see cref="HomeKit.HMCameraAudioStreamSetting" /> describing whether two-way audio is enabled.</summary>
 		BidirectionalAudioAllowed = 3,
 	}
 
-	/// <summary>Enumerates the possible values of a <see cref="T:HomeKit.HMCharacteristic" /> that may either be locked or unlocked.</summary>
+	/// <summary>Enumerates the possible values of a <see cref="HomeKit.HMCharacteristic" /> that may either be locked or unlocked.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueLockPhysicalControlsState : long {
@@ -1557,7 +1683,7 @@ namespace HomeKit {
 		Locked,
 	}
 
-	/// <summary>Enumerates the possible values of a <see cref="T:HomeKit.HMCharacteristic" /> that describes the states of an air purifier.</summary>
+	/// <summary>Enumerates the possible values of a <see cref="HomeKit.HMCharacteristic" /> that describes the states of an air purifier.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueCurrentAirPurifierState : long {
@@ -1569,7 +1695,7 @@ namespace HomeKit {
 		Active,
 	}
 
-	/// <summary>Enumerates the possible values of a <see cref="T:HomeKit.HMCharacteristic" /> of an air purifier.</summary>
+	/// <summary>Enumerates the possible values of a <see cref="HomeKit.HMCharacteristic" /> of an air purifier.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueTargetAirPurifierState : long {
@@ -1579,7 +1705,7 @@ namespace HomeKit {
 		Automatic,
 	}
 
-	/// <summary>Enumerates the possible values of a <see cref="T:HomeKit.HMCharacteristic" /> that describes the states of an oscillating slat.</summary>
+	/// <summary>Enumerates the possible values of a <see cref="HomeKit.HMCharacteristic" /> that describes the states of an oscillating slat.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueCurrentSlatState : long {
@@ -1591,7 +1717,7 @@ namespace HomeKit {
 		Oscillating,
 	}
 
-	/// <summary>Enumerates the possible values of a <see cref="T:HomeKit.HMCharacteristic" /> that describe a vertical or horizontal slat.</summary>
+	/// <summary>Enumerates the possible values of a <see cref="HomeKit.HMCharacteristic" /> that describe a vertical or horizontal slat.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueSlatType : long {
@@ -1601,7 +1727,7 @@ namespace HomeKit {
 		Vertical,
 	}
 
-	/// <summary>Enumerates the possible values of a <see cref="T:HomeKit.HMCharacteristic" /> that describes the states of a filter that must be periodically changed.</summary>
+	/// <summary>Enumerates the possible values of a <see cref="HomeKit.HMCharacteristic" /> that describes the states of a filter that must be periodically changed.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueFilterChange : long {
@@ -1611,7 +1737,7 @@ namespace HomeKit {
 		Needed,
 	}
 
-	/// <summary>Enumerates the possible values of a <see cref="T:HomeKit.HMCharacteristic" /> that describes the states of a fan.</summary>
+	/// <summary>Enumerates the possible values of a <see cref="HomeKit.HMCharacteristic" /> that describes the states of a fan.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueCurrentFanState : long {
@@ -1623,7 +1749,7 @@ namespace HomeKit {
 		Active,
 	}
 
-	/// <summary>Enumerates the possible states of a <see cref="T:HomeKit.HMCharacteristic" /> of a fan.</summary>
+	/// <summary>Enumerates the possible states of a <see cref="HomeKit.HMCharacteristic" /> of a fan.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueTargetFanState : long {
@@ -1633,7 +1759,7 @@ namespace HomeKit {
 		Automatic,
 	}
 
-	/// <summary>Enumerates the possible values of a <see cref="T:HomeKit.HMCharacteristic" /> that describes the states of a heat exchanger.</summary>
+	/// <summary>Enumerates the possible values of a <see cref="HomeKit.HMCharacteristic" /> that describes the states of a heat exchanger.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueCurrentHeaterCoolerState : long {
@@ -1647,7 +1773,7 @@ namespace HomeKit {
 		Cooling,
 	}
 
-	/// <summary>Enumerates the possible states of a <see cref="T:HomeKit.HMCharacteristic" /> of a heater / cooler.</summary>
+	/// <summary>Enumerates the possible states of a <see cref="HomeKit.HMCharacteristic" /> of a heater / cooler.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueTargetHeaterCoolerState : long {
@@ -1659,7 +1785,7 @@ namespace HomeKit {
 		Cool,
 	}
 
-	/// <summary>Enumerates the possible values of a <see cref="T:HomeKit.HMCharacteristic" /> that describes the states of a humidifier or dehumidifier.</summary>
+	/// <summary>Enumerates the possible values of a <see cref="HomeKit.HMCharacteristic" /> that describes the states of a humidifier or dehumidifier.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueCurrentHumidifierDehumidifierState : long {
@@ -1673,7 +1799,7 @@ namespace HomeKit {
 		Dehumidifying,
 	}
 
-	/// <summary>Enumerates the possible states of a <see cref="T:HomeKit.HMCharacteristic" /> of a humidifier or dehumidifier.</summary>
+	/// <summary>Enumerates the possible states of a <see cref="HomeKit.HMCharacteristic" /> of a humidifier or dehumidifier.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueTargetHumidifierDehumidifierState : long {
@@ -1685,7 +1811,7 @@ namespace HomeKit {
 		Dehumidify,
 	}
 
-	/// <summary>Enumerates the possible values of a <see cref="T:HomeKit.HMCharacteristic" /> that describe a swing that can be enabled or disabled.</summary>
+	/// <summary>Enumerates the possible values of a <see cref="HomeKit.HMCharacteristic" /> that describe a swing that can be enabled or disabled.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueSwingMode : long {
@@ -1695,15 +1821,17 @@ namespace HomeKit {
 		Enabled,
 	}
 
-	/// <summary>Enumerates the possible values of a <see cref="T:HomeKit.HMCharacteristic" /> that can be active or inactive.</summary>
+	/// <summary>Enumerates the possible values of a <see cref="HomeKit.HMCharacteristic" /> that can be active or inactive.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueActivationState : long {
+		/// <summary>To be added.</summary>
 		Inactive = 0,
+		/// <summary>To be added.</summary>
 		Active,
 	}
 
-	/// <summary>Enumerates the possible values of a <see cref="T:HomeKit.HMCharacteristic" /> that describes the forms of a button press.</summary>
+	/// <summary>Enumerates the possible values of a <see cref="HomeKit.HMCharacteristic" /> that describes the forms of a button press.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueInputEvent : long {
@@ -1715,7 +1843,7 @@ namespace HomeKit {
 		LongPress,
 	}
 
-	/// <summary>Enumerates the possible values of a <see cref="T:HomeKit.HMCharacteristic" /> that may either be a dot or a numeral.</summary>
+	/// <summary>Enumerates the possible values of a <see cref="HomeKit.HMCharacteristic" /> that may either be a dot or a numeral.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueLabelNamespace : long {
@@ -1725,7 +1853,7 @@ namespace HomeKit {
 		Numeral,
 	}
 
-	/// <summary>Enumerates the possible states of a <see cref="T:HomeKit.HMEventTrigger" /> including reasons why it might not be enabled.</summary>
+	/// <summary>Enumerates the possible states of a <see cref="HomeKit.HMEventTrigger" /> including reasons why it might not be enabled.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMEventTriggerActivationState : ulong {
@@ -1745,33 +1873,45 @@ namespace HomeKit {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMHomeHubState : ulong {
+		/// <summary>To be added.</summary>
 		NotAvailable = 0,
+		/// <summary>To be added.</summary>
 		Connected,
+		/// <summary>To be added.</summary>
 		Disconnected,
 	}
 
-	/// <summary>Enumerates the type of change in presence that the <see cref="T:HomeKit.HMPresenceEvent" /> represents.</summary>
+	/// <summary>Enumerates the type of change in presence that the <see cref="HomeKit.HMPresenceEvent" /> represents.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMPresenceEventType : ulong {
+		/// <summary>To be added.</summary>
 		EveryEntry = 1,
+		/// <summary>To be added.</summary>
 		EveryExit = 2,
+		/// <summary>To be added.</summary>
 		FirstEntry = 3,
+		/// <summary>To be added.</summary>
 		LastExit = 4,
+		/// <summary>To be added.</summary>
 		AtHome = FirstEntry,
+		/// <summary>To be added.</summary>
 		NotAtHome = LastExit,
 	}
 
-	/// <summary>Enumerates the types of users whose presence or absence is associated with a <see cref="T:HomeKit.HMPresenceEvent" />.</summary>
+	/// <summary>Enumerates the types of users whose presence or absence is associated with a <see cref="HomeKit.HMPresenceEvent" />.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMPresenceEventUserType : ulong {
+		/// <summary>To be added.</summary>
 		CurrentUser = 1,
+		/// <summary>To be added.</summary>
 		HomeUsers = 2,
+		/// <summary>To be added.</summary>
 		CustomUsers = 3,
 	}
 
-	/// <summary>Enumerates the possible values of a <see cref="T:HomeKit.HMCharacteristic" /> that can be scheduled or manually overriden.</summary>
+	/// <summary>Enumerates the possible values of a <see cref="HomeKit.HMCharacteristic" /> that can be scheduled or manually overriden.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueProgramMode : long {
@@ -1783,7 +1923,7 @@ namespace HomeKit {
 		ScheduleOverriddenToManual,
 	}
 
-	/// <summary>Enumerates the possible states of a <see cref="T:HomeKit.HMCharacteristic" /> of a device that can be in use or out of use.</summary>
+	/// <summary>Enumerates the possible states of a <see cref="HomeKit.HMCharacteristic" /> of a device that can be in use or out of use.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueUsageState : long {
@@ -1807,7 +1947,7 @@ namespace HomeKit {
 		WaterFaucet,
 	}
 
-	/// <summary>Enumerates the possible values of a <see cref="T:HomeKit.HMCharacteristic" /> that can be configured or not.</summary>
+	/// <summary>Enumerates the possible values of a <see cref="HomeKit.HMCharacteristic" /> that can be configured or not.</summary>
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum HMCharacteristicValueConfigurationState : long {

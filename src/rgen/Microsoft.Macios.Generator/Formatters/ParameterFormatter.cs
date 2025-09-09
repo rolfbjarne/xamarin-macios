@@ -7,6 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Macios.Generator.DataModel;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using ParameterDataModel = Microsoft.Macios.Generator.DataModel.Parameter;
+using TypeInfo = Microsoft.Macios.Generator.DataModel.TypeInfo;
 
 namespace Microsoft.Macios.Generator.Formatters;
 
@@ -35,33 +36,20 @@ static class ParameterFormatter {
 
 		return ParameterList (SeparatedList<ParameterSyntax> (nodes)).NormalizeWhitespace ();
 	}
-	static TypeSyntax GetIdentifierSyntax (this in ParameterDataModel parameter)
-	{
-		if (parameter.Type.IsArray) {
-			// could be a params array or simply an array
-			var arrayType = ArrayType (IdentifierName (parameter.Type.FullyQualifiedName))
-				.WithRankSpecifiers (SingletonList (
-					ArrayRankSpecifier (
-						SingletonSeparatedList<ExpressionSyntax> (OmittedArraySizeExpression ()))));
-			return parameter.Type.IsNullable
-				? NullableType (arrayType)
-				: arrayType;
-		}
-
-		// dealing with a non-array type
-		return parameter.Type.IsNullable
-			? NullableType (IdentifierName (parameter.Type.FullyQualifiedName))
-			: IdentifierName (parameter.Type.FullyQualifiedName);
-	}
 
 	public static ParameterSyntax ToDeclaration (this in ParameterDataModel parameter)
 	{
-		// modifiers come from two situations, we have the params keyword or not. We cannot have params + a ref modifier
-		// so we build them based on that. If you call WithModifiers twice, you will me stepping on the previous collection
-		// it won't be a merge
-		var modifiers = parameter.IsParams
-			? TokenList (Token (SyntaxKind.ParamsKeyword))
-			: parameter.ReferenceKind.ToTokens ();
+		SyntaxTokenList modifiers;
+		if (parameter.IsThis) {
+			modifiers = TokenList (Token (SyntaxKind.ThisKeyword));
+		} else {
+			// modifiers come from two situations, we have the params keyword or not. We cannot have params + a ref modifier
+			// so we build them based on that. If you call WithModifiers twice, you will be stepping on the previous collection
+			// it won't be a merge
+			modifiers = parameter.IsParams
+				? TokenList (Token (SyntaxKind.ParamsKeyword))
+				: parameter.ReferenceKind.ToTokens ();
+		}
 
 		// we are going to be ignoring the default value, the reason for it is that the partial method implementation
 		// can ignore it. The following c# code is valid:
@@ -89,7 +77,7 @@ static class ParameterFormatter {
 		// }
 		var syntax = Parameter (Identifier (parameter.Name))
 			.WithModifiers (modifiers)
-			.WithType (parameter.GetIdentifierSyntax ());
+			.WithType (parameter.Type.GetIdentifierSyntax ());
 
 		return syntax.NormalizeWhitespace ();
 	}

@@ -1192,7 +1192,7 @@ namespace Introspection {
 			return base.CheckResponse (value, actualType, method, ref name);
 		}
 
-		protected override bool CheckStaticResponse (bool value, Type actualType, Type declaredType, ref string name)
+		protected override bool CheckStaticResponse (bool value, Type actualType, Type declaredType, MethodBase method, ref string name)
 		{
 			switch (name) {
 			// 10.7 exceptions
@@ -1214,19 +1214,7 @@ namespace Introspection {
 			case "metadataItemsFromArray:filteredAndSortedAccordingToPreferredLanguages:":
 				return true;
 			}
-			return base.CheckStaticResponse (value, actualType, declaredType, ref name);
-		}
-
-		protected override bool SkipInit (string selector, MethodBase m)
-		{
-			switch (selector) {
-			// Cinematic.CNDecision
-			case "initWithTime:detectionGroupID:strong:":
-			case "initWithTime:detectionID:strong:":
-				return true;
-			default:
-				return base.SkipInit (selector, m);
-			}
+			return base.CheckStaticResponse (value, actualType, declaredType, method, ref name);
 		}
 	}
 }

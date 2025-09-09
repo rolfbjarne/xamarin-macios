@@ -10,20 +10,15 @@ using ObjCRuntime;
 
 #nullable enable
 
-#if !NET
-using NativeHandle = System.IntPtr;
-#endif
-
 namespace CloudKit {
+	/// <summary>A <see cref="CloudKit.CKOperation" /> that ret../../summary_set.sh CKFetchNotificationChangesOperation A</summary>
+	///     <remarks>To be added.</remarks>
+	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/CloudKit/Reference/CKFetchNotificationChangesOperation_class/index.html">Apple documentation for <c>CKFetchNotificationChangesOperation</c></related>
 	[Register ("CKFetchNotificationChangesOperation", SkipRegistration = true)]
-#if NET
 	[UnsupportedOSPlatform ("ios", "Use 'CKDatabaseSubscription', 'CKFetchDatabaseChangesOperation' and 'CKFetchRecordZoneChangesOperation' instead.")]
 	[UnsupportedOSPlatform ("macos", "Use 'CKDatabaseSubscription', 'CKFetchDatabaseChangesOperation' and 'CKFetchRecordZoneChangesOperation' instead.")]
 	[UnsupportedOSPlatform ("tvos", "Use 'CKDatabaseSubscription', 'CKFetchDatabaseChangesOperation' and 'CKFetchRecordZoneChangesOperation' instead.")]
 	[UnsupportedOSPlatform ("maccatalyst", "Use 'CKDatabaseSubscription', 'CKFetchDatabaseChangesOperation' and 'CKFetchRecordZoneChangesOperation' instead.")]
-#else
-	[Obsolete ("Use 'CKDatabaseSubscription', 'CKFetchDatabaseChangesOperation' and 'CKFetchRecordZoneChangesOperation' instead.")]
-#endif
 	[EditorBrowsable (EditorBrowsableState.Never)]
 	public unsafe partial class CKFetchNotificationChangesOperation : CKOperation {
 		/// <summary>The handle for this class.</summary>
@@ -31,6 +26,7 @@ namespace CloudKit {
 		///         <remarks>Each Xamarin.iOS class mirrors an unmanaged Objective-C class.   This value contains the pointer to the Objective-C class, it is similar to calling objc_getClass with the object name.</remarks>
 		public override NativeHandle ClassHandle { get => throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms); }
 
+		/// <include file="../../docs/api/CloudKit/CKFetchNotificationChangesOperation.xml" path="/Documentation/Docs[@DocId='M:CloudKit.CKFetchNotificationChangesOperation.#ctor(Foundation.NSObjectFlag)']/*" />
 		protected CKFetchNotificationChangesOperation (NSObjectFlag t) : base (t)
 		{
 			throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
@@ -41,12 +37,20 @@ namespace CloudKit {
 			throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		}
 
+		/// <summary>Default constructor, initializes a new instance of this class.</summary>
+		///         <remarks />
 		public CKFetchNotificationChangesOperation ()
 			: base (NSObjectFlag.Empty)
 		{
 			throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		}
 
+		/// <param name="previousServerChangeToken">
+		///           <para>To be added.</para>
+		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		///         </param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CKFetchNotificationChangesOperation (CKServerChangeToken? previousServerChangeToken)
 			: base (NSObjectFlag.Empty)
 		{
@@ -92,7 +96,7 @@ namespace CloudKit {
 			}
 		}
 
-		/// <summary>The <see cref="T:CloudKit.CKServerChangeToken" /> from a previous fetch operation.</summary>
+		/// <summary>The <see cref="CloudKit.CKServerChangeToken" /> from a previous fetch operation.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>

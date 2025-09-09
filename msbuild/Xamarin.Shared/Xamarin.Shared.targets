@@ -95,7 +95,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.ReadAppManifest" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.ReadItemsFromFile" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.ResolveNativeReferences" AssemblyFile="$(_TaskAssemblyName)" />
-	<UsingTask TaskName="Xamarin.MacDev.Tasks.ResolveNativeWatchApp" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.ResolveUniversalTypeIdentifiers" AssemblyFile="Xamarin.MacDev.Tasks.dll" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.ScnTool" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.SmartCopy" AssemblyFile="$(_TaskAssemblyName)" />
@@ -124,13 +123,14 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<PropertyGroup>
 			<IsHotRestartBuild Condition="'$(IsHotRestartBuild)' == 'True' And '$(_PlatformName)' != 'iOS'">False</IsHotRestartBuild>
 			<IsRemoteBuild Condition="'$(IsHotRestartBuild)' == 'True'">False</IsRemoteBuild>
-			<IsRemoteBuild Condition="'$(BundleOriginalResources)' == 'true' And '$(OutputType)' != 'Exe'">False</IsRemoteBuild>
+			<IsRemoteBuild Condition="'$(BundleOriginalResources)' == 'true' And '$(OutputType)' != 'Exe' And '$(BuildBindingProjectLocally)' != 'false'">False</IsRemoteBuild>
+			<_IsNonMacOSBuildForNonRemotablePlatform Condition="'$(_IsNonMacOSBuildForNonRemotablePlatform)' == '' And !$([System.OperatingSystem]::IsMacOS()) And '$(_PlatformName)' != 'iOS'">true</_IsNonMacOSBuildForNonRemotablePlatform>
 		</PropertyGroup>
 	</Target>
 
 	<Target Name="_SanitizeNativeReferences">
 		<!-- Remove trailing slashes from native references, so that we treat '.framework' the same as '.framework/'.
-			Ref: https://github.com/xamarin/xamarin-macios/issues/15430
+			Ref: https://github.com/dotnet/macios/issues/15430
 		-->
 		<ItemGroup>
 			<NativeReference>
@@ -146,15 +146,18 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		@(NativeReference) are not safe to use as an Input to a task, as frameworks are a directory and will appears unbuilt every time.
 		So we split it into two camps as a prebuild step
 	-->
-	<Target Name="_ExpandNativeReferences" Condition="'$(DesignTimeBuild)' != 'true'" DependsOnTargets="_DetectSdkLocations;_ComputeTargetArchitectures;_GenerateBundleName;_SanitizeNativeReferences">
+	<Target
+		Name="_ExpandNativeReferences"
+		Condition="'$(_DisableBindingProjectBuild)' != 'true' And '$(_IsNonMacOSBuildForNonRemotablePlatform)' != 'true'"
+		DependsOnTargets="_DetectSdkLocations;_ComputeTargetArchitectures;_GenerateBundleName;_SanitizeNativeReferences"
+		>
 		<ItemGroup>
 			<_XCFrameworkNativeReference Include="@(NativeReference -> '%(Identity)/.')" Condition="'%(Extension)' == '.xcframework' Or $([MSBuild]::ValueOrDefault('%(FileName)%(Extension)', '').EndsWith('.xcframework.zip'))" />
 			<_FrameworkNativeReference Include="@(NativeReference -> '%(Identity)/%(Filename)')" Condition="'%(Extension)' == '.framework'" />
 			<_FileNativeReference Include="@(NativeReference)" Condition="'%(Extension)' != '.framework' And '%(Extension)' != '.xcframework' And '%(Extension)' != '.zip'" />
 		</ItemGroup>
 		<ResolveNativeReferences
-			SessionId="$(BuildSessionId)"
-			Condition="('$(IsMacEnabled)' == 'true' Or '$(IsHotRestartBuild)' == 'true') And '$(IsBindingProject)' != 'true'"
+			Condition="'$(IsBindingProject)' != 'true'"
 			Architectures="$(TargetArchitectures)"
 			FrameworksDirectory="$(_AppFrameworksRelativePath)"
 			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
@@ -177,7 +180,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	</PropertyGroup>
 
 	<Target Name="_CreateBindingResourcePackage"
-		Condition="'$(DesignTimeBuild)' != 'true' And '$(NoBindingEmbedding)' == 'true'"
+		Condition="'$(_DisableBindingProjectBuild)' != 'true' And '$(NoBindingEmbedding)' == 'true'"
 		DependsOnTargets="_ExpandNativeReferences"
 		Inputs="$(MSBuildAllProjects);$(MSBuildProjectFullPath);@(ObjcBindingApiDefinition);@(ObjcBindingCoreSource);@(ReferencePath);@(ObjcBindingNativeLibrary);@(_FrameworkNativeReference);@(_FileNativeReference)"
 		Outputs="$(BindingResourcePath).stamp">
@@ -192,8 +195,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			<CompressBindingResourcePackage>auto</CompressBindingResourcePackage>
 		</PropertyGroup>
 
-		<CreateBindingResourcePackage Condition="'$(IsMacEnabled)' == 'true'"
-			SessionId="$(BuildSessionId)"
+		<CreateBindingResourcePackage
 			NativeReferences="@(NativeReference)"
 			BindingResourcePath="$(BindingResourcePath)"
 			Compress="$(CompressBindingResourcePackage)"
@@ -202,14 +204,10 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</CreateBindingResourcePackage>
 
 		<MakeDir
-			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true'"
 			Directories="$([System.IO.Path]::GetDirectoryName($(BindingResourcePath)))"
 		/>
 
 		<Touch
-			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true'"
 			AlwaysCreate="true"
 			Files="$(BindingResourcePath).stamp"
 			>
@@ -303,7 +301,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<Target Name="_CleanAppBundleRootDirectory" Condition="'$(_PlatformName)' == 'MacCatalyst' Or '$(_PlatformName)' == 'macOS'" DependsOnTargets="_GenerateBundleName">
 		<!-- There shouldn't be any files in the root directory of the app bundle for macOS or Mac Catalyst (signing will fail) -->
 
-		<!-- Delete any crash dumps in the app bundle that might exist. Ref: https://github.com/xamarin/xamarin-macios/issues/12320 -->
+		<!-- Delete any crash dumps in the app bundle that might exist. Ref: https://github.com/dotnet/macios/issues/12320 -->
 		<!-- Use a task to collect the files, so that we get the correct behavior on Windows -->
 		<!-- This is enabled by default, but can be disabled by setting EnableAutomaticAppBundleRootDirectoryCleanup=false -->
 		<GetFileSystemEntries
@@ -624,6 +622,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			AppBundleName="$(_AppBundleName)"
 			AppManifest="$(AppBundleManifest)"
 			AssemblyName="$(AssemblyName)"
+			BundleExecutable="$(_NativeExecutableName)"
 			CompiledAppManifest="$(_TemporaryAppManifest)"
 			Debug="$(_BundlerDebug)"
 			DefaultSdkVersion="$(_SdkVersion)"
@@ -735,7 +734,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	</PropertyGroup>
 
 	<Target Name="_CompileEntitlements"
-		Condition="'$(_RequireCodeSigning)' == 'true' Or '$(CodesignEntitlements)' != ''"
+		Condition="'$(EnableCodeSigning)' == 'true' Or '$(CodesignEntitlements)' != ''"
 		DependsOnTargets="$(_CompileEntitlementsDependsOn)"
 		Outputs="$(_CompiledEntitlementsPath)">
 		<!-- Automatically add the 'allow-jit' entitlement for desktop release builds in .NET -->
@@ -1240,8 +1239,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			will apply to Xamarin.Mac as well.
 		-->
 		<ParseDeviceSpecificBuildInformation
-			SessionId="$(BuildSessionId)"
-			Condition="'$(DeviceSpecificBuild)' == 'true' And '$(TargetiOSDevice)' != '' And '$(_CanDeployToDeviceOrSimulator)' == 'true' And '$(_PlatformName)' != 'macOS'"
+			Condition="'$(DeviceSpecificBuild)' == 'true' And '$(TargetiOSDevice)' != '' And '$(_CanDeployToDeviceOrSimulator)' == 'true' And '$(_PlatformName)' != 'macOS' And '$(_PlatformName)' != 'MacCatalyst'"
 			Architectures="$(TargetArchitectures)"
 			IntermediateOutputPath="$(IntermediateOutputPath)"
 			OutputPath="$(OutputPath)"
@@ -1304,7 +1302,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ItemGroup>
 	</Target>
 
-	<!-- TODO: check for duplicate items -->
 	<Target Name="_ComputeBundleResourceOutputPaths"
 		Condition="'$(_CanOutputAppBundle)' == 'true'"
 		DependsOnTargets="_CollectBundleResources;_GenerateBundleName;_DetectSigningIdentity;_ReadAppManifest">
@@ -1343,7 +1340,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</PropertyGroup>
 	</Target>
 
-	<Target Name="_CreatePkgInfo" Condition="'$(IsAppExtension)' == 'false'" DependsOnTargets="_ComputePkgInfoPath" Outputs="$(_PkgInfoPath)">
+	<Target Name="_CreatePkgInfo" Condition="'$(IsAppExtension)' == 'false'" DependsOnTargets="_ComputePkgInfoPath" Inputs="$(_PkgInfoPath)" Outputs="$(_PkgInfoPath)">
 		<CreatePkgInfo SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" OutputPath="$(_PkgInfoPath)" />
 	</Target>
 
@@ -1787,6 +1784,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</_GenerateBindingsDependsOn>
 
 		<_GenerateBindingsDependsOn>
+			_ComputeGenerationLocation;
 			_CompileApiDefinitions;
 			$(_GenerateBindingsDependsOn);
 		</_GenerateBindingsDependsOn>
@@ -1866,7 +1864,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			@(_CompiledApiDefinitionsCompile);"
 		Outputs="$(_CompiledApiDefinitionAssembly);$(_CompiledApiDefinitionDocumentationFile)"
 		DependsOnTargets="_ComputeCompileApiDefinitionsInputs"
-		Condition="'$(IsBindingProject)' == 'true' And '$(DesignTimeBuild)' != 'true'"
+		Condition="'$(IsBindingProject)' == 'true' And '$(_DisableBindingProjectBuild)' != 'true'"
 		>
 
 		<!-- This is a mirror of the method GetCompiledApiBindingsAssembly in BindingTouch.cs where the compilation is done inside bgen -->
@@ -1893,13 +1891,20 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</Csc>
 	</Target>
 
+	<Target Name="_ComputeGenerationLocation">
+		<PropertyGroup>
+			<BuildBindingProjectLocally Condition="'$(BuildBindingProjectLocally)' == ''">true</BuildBindingProjectLocally>
+			<BindingProjectBuildSessionId Condition="'$(BuildBindingProjectLocally)' != 'true'">$(BuildSessionId)</BindingProjectBuildSessionId>
+		</PropertyGroup>
+	</Target>
+
 	<Target Name="_GenerateBindings"
 		Inputs="$(MSBuildAllProjects);@(ObjcBindingApiDefinition);@(ObjcBindingCoreSource);@(ReferencePath);@(ObjcBindingNativeLibrary)"
 		Outputs="$(_GeneratedSourcesFileList)"
 		DependsOnTargets="$(_GenerateBindingsDependsOn)"
-		Condition="'$(IsBindingProject)' == 'true' And '$(DesignTimeBuild)' != 'true'">
+		Condition="'$(IsBindingProject)' == 'true' And '$(_DisableBindingProjectBuild)' != 'true'">
 
-		<Warning Condition="'$(IsMacEnabled)' != 'true'" Text="It's currently not supported to build a binding project from Windows unless a connection to a Mac is available." />
+		<Error Condition="'$(IsMacEnabled)' != 'true' And '$(BuildBindingProjectLocally)' != 'true'" Text="The property 'BuildBindingProjectLocally' build is disabled, but there's no connection to a remote Mac." />
 
 		<PropertyGroup>
 			<BGenEmitDebugInformation Condition="'$(BGenEmitDebugInformation)' == ''">$(BTouchEmitDebugInformation)</BGenEmitDebugInformation>
@@ -1913,12 +1918,12 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			<BGenReferencePath Include="@(BTouchReferencePath)" />
 		</ItemGroup>
 
-		<MakeDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Directories="$(GeneratedSourcesDir)" />
+		<MakeDir SessionId="$(BindingProjectBuildSessionId)" Directories="$(GeneratedSourcesDir)" />
 
 		<!-- Compute some variables on the mac: this task is only executed when building on Windows -->
 		<ComputeRemoteGeneratorProperties
-			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true' And '$(BuildSessionId)' != ''"
+			SessionId="$(BindingProjectBuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true' And '$(BindingProjectBuildSessionId)' != ''"
 			IntermediateOutputPath="$(IntermediateOutputPath)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 		>
@@ -1930,8 +1935,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		</ComputeRemoteGeneratorProperties>
 
 		<BGen
-			Condition="'$(IsMacEnabled)' == 'true'"
-			SessionId="$(BuildSessionId)"
+			SessionId="$(BindingProjectBuildSessionId)"
 			OutputPath="$(OutputPath)"
 			ObjectiveCLibraries="@(ObjcBindingNativeLibrary)"
 			AdditionalLibPaths="$(AdditionalLibPaths)"
@@ -1963,7 +1967,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<Target Name="_GetCompileToNativeInputs"
 		DependsOnTargets="ResolveReferences">
 		<ItemGroup>
-			<!-- Skip the reference assemblies. Execution may fail at runtime if they're copied to the .app (instead of the implementation assembly), or AOT will fail in both 'mtouch' and 'mmp'. Similar to: https://github.com/xamarin/xamarin-macios/issues/3199 -->
+			<!-- Skip the reference assemblies. Execution may fail at runtime if they're copied to the .app (instead of the implementation assembly), or AOT will fail in both 'mtouch' and 'mmp'. Similar to: https://github.com/dotnet/macios/issues/3199 -->
 			<!-- Remove exact references, such as if a package had a framework reference to 'System' that we already have -->
 			<!-- This is exactly what "Microsoft.NuGet.Build.Tasks"'s 'ResolveNuGetPackageAssets' target is doing -->
 			<!-- Effectively 'ResolveNuGetPackageAssets' computes the NuGet packages using their json asset file, adds the full assemblies to 'ReferenceCopyLocalPaths' and outputs the resolved references via '_ReferencesFromNuGetPackages' -->
@@ -1983,10 +1987,11 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			_ComputeTargetFrameworkMoniker;
 			_GenerateBundleName;
 			_ReadAppManifest;
+			$(CodesignConfigureDependsOn);
 		</_DetectSigningIdentityDependsOn>
 	</PropertyGroup>
 
-	<Target Name="_DetectSigningIdentity" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="$(_DetectSigningIdentityDependsOn)">
+	<Target Name="_DetectSigningIdentity" Condition="'$(_CanOutputAppBundle)' == 'true' And '$(EnableCodeSigning)' == 'true'" DependsOnTargets="$(_DetectSigningIdentityDependsOn)">
 		<DetectSigningIdentity
 			SessionId="$(BuildSessionId)"
 			CodesignEntitlements="$(CodesignEntitlements)"
@@ -1996,7 +2001,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			BundleIdentifier="$(_BundleIdentifier)"
 			CustomEntitlements="@(CustomEntitlements)"
 			Keychain="$(CodesignKeychain)"
-			RequireCodeSigning="$(_RequireCodeSigning)"
 			SdkIsSimulator="$(_SdkIsSimulator)"
 			SdkPlatform="$(_SdkPlatform)"
 			ProvisioningProfile="$(CodesignProvision)"
@@ -2115,10 +2119,15 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		>
 
 		<!-- If any assemblies is newer than the stamp file, we delete the stamp file and items so that _UnpackLibraryResources runs again -->
+		<ItemGroup>
+			<_UnpackLibraryResourceToDelete Include="@(_UnpackLibraryResourceItems->'%(StampFile)')" />
+			<_UnpackLibraryResourceToDelete Include="@(_UnpackLibraryResourceItems->'%(ItemsFile)')" />
+		</ItemGroup>
+
 		<Delete
 			Condition="'$(IsMacEnabled)' == 'true' Or '$(IsHotRestartBuild)' == 'true'"
 			SessionId="$(BuildSessionId)"
-			Files="%(_UnpackLibraryResourceItems.StampFile);%(_UnpackLibraryResourceItems.ItemsFile)"
+			Files="@(_UnpackLibraryResourceToDelete)"
 			/>
 	</Target>
 
@@ -2395,7 +2404,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 				<CodesignSigningKey Condition="'%(_CustomCodesignBundle.CodesignSigningKey)' == ''">$(_CodeSigningKey)</CodesignSigningKey>
 				<CodesignUseHardenedRuntime Condition="'%(_CustomCodesignBundle.CodesignUseHardenedRuntime)' == ''">$(UseHardenedRuntime)</CodesignUseHardenedRuntime>
 				<CodesignUseSecureTimestamp Condition="'%(_CustomCodesignBundle.CodesignUseSecureTimestamp)' == ''">$(UseHardenedRuntime)</CodesignUseSecureTimestamp>
-				<RequireCodeSigning Condition="'%(_CustomCodesignBundle.RequireCodeSigning)' == ''">$(_RequireCodeSigning)</RequireCodeSigning>
+				<EnableCodeSigning Condition="'%(_CustomCodesignBundle.EnableCodeSigning)' == '' And '%(_CustomCodesignBundle.RequireCodeSigning)' != ''">%(_CustomCodesignBundle.RequireCodeSigning)</EnableCodeSigning>
+				<EnableCodeSigning Condition="'%(_CustomCodesignBundle.EnableCodeSigning)' == ''">$(EnableCodeSigning)</EnableCodeSigning>
 				<SourceProjectPath>$(MSBuildProjectDirectory)</SourceProjectPath>
 				<BundleRelativePath Condition="'%(_CustomCodesignBundle.BundleRelativePath)' == ''">$(_AppPlugInsRelativePath)</BundleRelativePath>
 			</_CustomCodesignBundle>
@@ -2415,7 +2425,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 				<CodesignSigningKey>$(_CodeSigningKey)</CodesignSigningKey>
 				<CodesignUseHardenedRuntime>$(UseHardenedRuntime)</CodesignUseHardenedRuntime>
 				<CodesignUseSecureTimestamp>$(UseHardenedRuntime)</CodesignUseSecureTimestamp>
-				<RequireCodeSigning>$(_RequireCodeSigning)</RequireCodeSigning>
+				<EnableCodeSigning>$(EnableCodeSigning)</EnableCodeSigning>
 				<SourceProjectPath>$(MSBuildProjectDirectory)</SourceProjectPath>
 				<BundleRelativePath Condition="'$(IsAppExtension)' == 'true' and '$(IsXPCService)' != 'true'">$(_AppPlugInsRelativePath)</BundleRelativePath>
 				<BundleRelativePath Condition="'$(IsAppExtension)' == 'true' and '$(IsXPCService)' == 'true'">$(_AppXpcServicesRelativePath)</BundleRelativePath>
@@ -2546,6 +2556,9 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	</Target>
 
 	<Target Name="_ExtendAppExtensionReferences" DependsOnTargets="_ResolveAppExtensionReferences;_DetectSigningIdentity" Condition=" '@(AdditionalAppExtensions)' != ''">
+		<PropertyGroup>
+			<CodesignWarnIfNoEntitlements Condition="'$(CodesignWarnIfNoEntitlements)' == ''">true</CodesignWarnIfNoEntitlements>
+		</PropertyGroup>
 	<!-- The idea here is that after _ResolveAppExtensionReferences we inject the 3rd party extensions into the list being processed later for embedding and code signing.
 		- _ResolvedAppExtensionReferences is an item group of the path, so that's easy.
 		- _AppExtensionCodesignProperties less so. It is generated by reading codesign.items generated by the c# tasks during build, which we don't have. 
@@ -2557,13 +2570,15 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 				<CodesignAllocate>$(_CodesignAllocate)</CodesignAllocate>
 				<CodesignDisableTimestamp>false</CodesignDisableTimestamp>
 				<CodesignDisableTimestamp Condition="'$(_SdkIsSimulator)' == 'true' Or '$(_BundlerDebug)' == 'true'">true</CodesignDisableTimestamp>
-				<CodesignEntitlements Condition="Exists('%(AdditionalAppExtensions.Identity)/%(AdditionalAppExtensions.Name).entitlements')">%(AdditionalAppExtensions.Identity)/%(AdditionalAppExtensions.Name).entitlements</CodesignEntitlements>
+				<CodesignEntitlements Condition="'%(AdditionalAppExtensions.CodesignEntitlements)' != ''">%(AdditionalAppExtensions.CodesignEntitlements)</CodesignEntitlements>
+				<CodesignEntitlements Condition="'%(AdditionalAppExtensions.CodesignEntitlements)' == '' And Exists('%(AdditionalAppExtensions.Identity)/%(AdditionalAppExtensions.Name).entitlements')">%(AdditionalAppExtensions.Identity)/%(AdditionalAppExtensions.Name).entitlements</CodesignEntitlements>
+				<CodesignWarnIfNoEntitlements Condition="'%(AdditionalAppExtensions.CodesignWarnIfNoEntitlements)' == ''">$(CodesignWarnIfNoEntitlements)</CodesignWarnIfNoEntitlements>
 				<CodesignKeychain>$(CodesignKeychain)</CodesignKeychain>
 				<CodesignResourceRules>$(_PreparedResourceRules)</CodesignResourceRules>
 				<CodesignSigningKey>$(_CodeSigningKey)</CodesignSigningKey>
 				<CodesignUseHardenedRuntime>$(UseHardenedRuntime)</CodesignUseHardenedRuntime>
 				<CodesignUseSecureTimestamp>$(UseHardenedRuntime)</CodesignUseSecureTimestamp>
-				<RequireCodeSigning>$(_RequireCodeSigning)</RequireCodeSigning>
+				<EnableCodeSigning>$(EnableCodeSigning)</EnableCodeSigning>
 			</_CodesignBundle>
 		</ItemGroup>
 	</Target>
@@ -2662,11 +2677,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 				<ContainerName>XPCServices</ContainerName>
 			</_ResolvedAppExtensionReferences>
 		</ItemGroup>
-
-		<PropertyGroup>
-			<_AppExtensionRoot Condition="'$(_PlatformName)' == 'macOS'">$(_AppBundlePath)Contents\</_AppExtensionRoot>
-			<_AppExtensionRoot Condition="'$(_PlatformName)' != 'macOS'">$(_AppBundlePath)</_AppExtensionRoot>
-		</PropertyGroup>
 	</Target>
 
 	<Target Name="_CopyAppExtensionsToBundle"
@@ -2847,7 +2857,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			This means that we need the path to the symbols list in the main app's project, and it needs to be a full path when executing remotely from Windows,
 			because the projects are not in the same position relative to eachother when building remotely (so a relative path doesn't work).
 			This needs to be executed in a task (and not here inside the target) so the execution always occur on the mac, even when the build is done from Windows.
-			Ref: https://github.com/xamarin/xamarin-macios/issues/15046
+			Ref: https://github.com/dotnet/macios/issues/15046
 		-->
 		<GetFullPath SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" RelativePath="$(_MtouchSymbolsList)">
 			<Output TaskParameter="FullPath" PropertyName="_SymbolsListFullPath" />
@@ -3145,8 +3155,11 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			<_AppCodeSignatureRelativePath Condition="'$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS' Or '$(_PlatformName)' == 'watchOS'"></_AppCodeSignatureRelativePath>
 			<_AppCodeSignaturePath>$(_AppBundlePath)$(_AppCodeSignatureRelativePath)</_AppCodeSignaturePath>
 
-			<_AppPlugInsRelativePath Condition="'$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst'">Contents\PlugIns\</_AppPlugInsRelativePath>
-			<_AppPlugInsRelativePath Condition="'$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS' Or '$(_PlatformName)' == 'watchOS'">PlugIns\</_AppPlugInsRelativePath>
+			<_AppPlugInsRelativeLocation Condition="'$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst'">Contents\</_AppPlugInsRelativeLocation>
+			<_AppPlugInsRelativeLocation Condition="'$(_PlatformName)' == 'iOS' Or '$(_PlatformName)' == 'tvOS'"></_AppPlugInsRelativeLocation>
+
+			<_AppPlugInsRelativePath>$(_AppPlugInsRelativeLocation)PlugIns\</_AppPlugInsRelativePath>
+			<_AppExtensionRoot>$(_AppBundlePath)$(_AppPlugInsRelativeLocation)</_AppExtensionRoot>
 			<_AppPlugInsPath>$(_AppBundlePath)$(_AppPlugInsRelativePath)</_AppPlugInsPath>
 
 			<_AppXpcServicesRelativePath Condition="'$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst'">Contents\XPCServices\</_AppXpcServicesRelativePath>

@@ -26,9 +26,19 @@ readonly partial struct Method {
 	}
 
 	/// <summary>
+	/// Return the native selector that references the enum value.
+	/// </summary>
+	public string? Selector => ExportMethodData?.Selector;
+
+	/// <summary>
 	/// Returns the bind from data if present in the binding.
 	/// </summary>
 	public BindAsData? BindAs => BindAsAttribute;
+
+	/// <summary>
+	/// Returns the forced type data if present in the binding.
+	/// </summary>
+	public ForcedTypeData? ForcedType => ForcedTypeAttribute;
 
 	/// <summary>
 	/// True if the method was exported with the MarshalNativeExceptions flag allowing it to support native exceptions.
@@ -40,6 +50,16 @@ readonly partial struct Method {
 	/// True if the method is considered to be a constructor in the old bindings.
 	/// </summary>
 	public bool IsConstructor => Name == constructorName;
+
+	/// <summary>
+	/// True if the method is variadic.
+	/// </summary>
+	public bool IsVariadic => ExportMethodData?.IsVariadic ?? false;
+
+	/// <summary>
+	/// States if a method is optional in a protocol definition.
+	/// </summary>
+	public bool IsOptional => false;
 
 	public Method (string type,
 		string name,

@@ -17,6 +17,14 @@ The full path to the `altool` tool.
 
 The default behavior is to use `xcrun altool`.
 
+## AppBundleResourcePrefix
+
+The directory where resources are stored (this prefix will be removed when copying resources to the app bundle).
+
+If not explicitly set, this property will inherit its value from the platform-specific resource prefix properties ([IPhoneResourcePrefix](#iphoneresourceprefix), [MonoMacResourcePrefix](#monomacresourceprefix), or [XamMacResourcePrefix](#xammacresourceprefix) depending on the platform).
+
+Default: "Resources"
+
 ## AppBundleDir
 
 The location of the built app bundle.
@@ -130,7 +138,7 @@ See [CreatePackage](#createpackage) for macOS and Mac Catalyst projects.
 This property determines whether resources are compiled before being embedded
 into library projects, or if the original (uncompiled) version is embedded.
 
-Historically resources have been compiled before being embedded into library
+Historically, resources have been compiled before being embedded into library
 projects, but this requires having Xcode available, which has a few drawbacks:
 
 * It slows down remote builds on Windows.
@@ -145,16 +153,35 @@ projects, but this requires having Xcode available, which has a few drawbacks:
 As such, we've added supported for embedding the original resources into
 libraries. This will be opt-in in .NET 9, but opt-out starting in .NET 10.
 
-Default value: `false` in .NET 9, `true` in .NET 10+.
+The default value of this property `false` in .NET 9, and `true` in .NET 10+.
 
-Note: please file an issue if you find that you need to disable this feature,
-as it's possible we'll remove the option to disable it at some point.
+> [!NOTE]
+> File an issue if you find that you need to disable this feature, as it's possible that the option to disable it will be removed in future.
 
 ## CodesignAllocate
 
 The path to the `codesign_allocate` tool.
 
 By default this value is auto-detected.
+
+## CodesignConfigureDependsOn
+
+This is an extension point for the build: a developer can add any targets to
+this property to execute those targets before the build looks at any of the
+codesigning properties.
+
+This can for instance be used to disable code signing for simulator builds:
+
+```xml
+<PropertyGroup>
+  <CodesignConfigureDependsOn>$(CodesignConfigureDependsOn);DisableCodesignInSimulator</CodesignConfigureDependsOn>
+</PropertyGroup>
+<Target Name="DisableCodesignInSimulator" Condition="'$(SdkIsSimulator)' == 'true'">
+  <PropertyGroup>
+    <EnableCodeSigning>false</EnableCodeSigning>
+  </PropertyGroup>
+</Target>
+```
 
 ## CodesignDependsOn
 
@@ -215,9 +242,30 @@ Specifies whether a provisioning profile is required when signing the app bundle
 By default we require a provisioning profile if:
 
 * macOS, Mac Catalyst: a provisioning profile has been specified (with the [CodesignProvision](#codesignprovision) property).
-* iOS, tvOS, watchOS: building for device or an entitlements file has been specified (with the [CodesignEntitlements](#codesignentitlements) property).
+* iOS, tvOS: building for device or an entitlements file has been specified (with the [CodesignEntitlements](#codesignentitlements) property).
 
 Setting this property to `true` or `false` will override the default logic.
+
+## CompressBindingResourcePackage
+
+The native references in a binding projects are copied to the output directory during the build process, next to the binding assembly (into something we call a "binding resource package").
+
+These native references can either be stored compressed inside a zip file (named `$(AssemblyName).resources.zip`, or as-is, inside a directory named `$(AssemblyName).resources`.
+
+The `CompressBindingResourcePackage` property specifies whether to create a zip file or a directory.
+
+The possible values are:
+
+* `auto`: create a zip file if a native reference contains symlinks (which is typical on macOS and Mac Catalyst, but rare on iOS and tvOS).
+* `true`: create a zipe file
+* `false`: create a directory
+
+The default is `auto`.
+
+This also applies to how native references are stored inside NuGets.
+
+> [!NOTE]
+> In some cases it can be beneficial to force a zip file on iOS as well, especially when there's a framework with files that have long names, because the zip file can sometimes work around MAX_PATH issues on Windows.
 
 ## CreateAppBundleDependsOn
 
@@ -279,6 +327,80 @@ The output path to use when device-specific builds are enabled.
 
 Applicable to all platforms that support device-specific builds (currently iOS and tvOS).
 
+## DiagnosticAddress
+
+The IP address where `dotnet-dsrouter` is executing. This is typcially
+`127.0.0.1` when profiling on the simulator, and the IP address of the machine
+where `dotnet-dsrouter` when profiling on a device.
+
+This is the IP address component of [DiagnosticConfiguration](#diagnosticconfiguration)`.
+
+Implicitly sets [EnableDiagnostics](#enablediagnostics) to `true`.
+
+Defaults to `127.0.0.1`.
+
+## DiagnosticConfiguration
+
+A value provided by `dotnet-dsrouter` for `DOTNET_DiagnosticPorts` such as:
+
+* `127.0.0.1:9000,suspend,connect`
+* `127.0.0.1:9000,nosuspend,connect`
+
+Note that the `,` character will need to be escaped with `%2c` if
+passed in command-line to `dotnet build`:
+
+```dotnetcli
+dotnet build -c Release -p:DiagnosticConfiguration=127.0.0.1:9000%2csuspend%2cconnect
+```
+
+This will automatically set the `DOTNET_DiagnosticPorts` environment variable
+packaged inside the application, so that the environment variable is set when
+the app launches.
+
+Implicitly sets [EnableDiagnostics](#enablediagnostics) to `true`.
+
+The default behavior is to compute this value from the other diagnostics
+properties ([DiagnosticAddress](#diagnosticaddress),
+[DiagnosticPort](#diagnosticport),
+[DiagnosticListenMode](#diagnosticlistenmode), and
+[DiagnosticSuspend](#diagnosticsuspend)).
+
+If set, any of the other diagnostic properties will be ignored.
+
+## DiagnosticListenMode
+
+A value provided by `dotnet-dsrouter` such as `connect` or `listen`, the
+listening mode component of
+[DiagnosticConfiguration](#diagnosticconfiguration)`.
+
+Implicitly sets [EnableDiagnostics](#enablediagnostics) to `true`.
+
+Defaults to `listen`.
+
+## DiagnosticPort
+
+A value provided by `dotnet-dsrouter` such as `9000`, the port
+component of [DiagnosticConfiguration](#diagnosticconfiguration)`.
+
+Implicitly sets [EnableDiagnostics](#enablediagnostics) to `true`.
+
+Defaults to `9000`.
+
+## DiagnosticSuspend
+
+A value that specifies the startup behavior when profiling an application.
+
+Set to `true` to suspend the app at startup (waiting for the diagnostics
+server to connect to the app) or `false` to launch the app as usual (and
+connect the diagnostics server to the app later).
+
+This corresponds with the `suspend/nosuspend` value in
+[DiagnosticConfiguration](#diagnosticconfiguration)`.
+
+Implicitly sets [EnableDiagnostics](#enablediagnostics) to `true`.
+
+Defaults to `false`.
+
 ## DittoPath
 
 The full path to the `ditto` executable.
@@ -295,8 +417,7 @@ Default: true
 
 If code signing is enabled.
 
-Typically the build will automatically determine whether code signing is
-required; this automatic detection can be overridden with this property.
+Code signing is enabled by default for all platforms; this can be overridden with this property.
 
 ## EnableDefaultCodesignEntitlements
 
@@ -313,6 +434,25 @@ Default: false for macOS, true for all other platforms.
 If the .pkg that was created (if `CreatePackage` was enabled) should be signed.
 
 Only applicable to macOS and Mac Catalyst.
+
+## EnableDiagnostics
+
+Enable components that are required for diagnostics (such as profiling) to work.
+
+It's enabled by default for debug builds (when [MtouchDebug](#mtouchdebug) or
+[MmpDebug](#mmpdebug) is enabled), but needs to be enabled manually before
+profiling release builds:
+
+```xml
+<PropertyGroup>
+  <EnableDiagnostics>true</EnableDiagnostics>
+</PropertyGroup>
+```
+
+This will increase the app size slightly.
+
+Only applicable when using the Mono runtime (CoreCLR always supports
+diagnostics, while NativeAOT never does).
 
 ## EnableSGenConc
 
@@ -359,6 +499,8 @@ Applicable to iOS; setting this value will set [SupportedOSPlatformVersion](#sup
 The directory where resources are stored (this prefix will be removed when copying resources to the app bundle).
 
 Applicable to iOS, tvOS and Mac Catalyst projects.
+
+Consider using the unified [AppBundleResourcePrefix](#appbundleresourceprefix) property instead.
 
 See also [MonoMacResourcePrefix](#monomacresourceprefix) and [XamMacResourcePrefix](#xammacresourceprefix).
 
@@ -480,9 +622,7 @@ Valid values:
 * `abort`: Abort the process.
 * `disable`: Disable intercepting any managed exceptions. For MonoVM this is equivalent to `unwindnativecode`, for CoreCLR this is equivalent to `abort`.
 
-For more information see the article about [Exception marshaling](todo)
-
-See also [MarshalObjectiveCExceptionMode](#marshalobjectivecexceptionmode)
+For more information, see [Exception marshaling](/dotnet/ios/advanced-concepts/exception-marshaling) and [MarshalObjectiveCExceptionMode](#marshalobjectivecexceptionmode).
 
 ## MarshalObjectiveCExceptionMode
 
@@ -497,9 +637,7 @@ Valid values:
 * `abort`: Abort the process.
 * `disable`: Disable intercepting any Objective-C exceptions.
 
-For more information see the article about [Exception marshaling](todo)
-
-See also [MarshalManagedExceptionMode](#marshalmanagedexceptionmode)
+For more information, see [Exception marshaling](/dotnet/ios/advanced-concepts/exception-marshaling) and [MarshalManagedExceptionMode](#marshalmanagedexceptionmode).
 
 ## MdimportPath
 
@@ -540,6 +678,8 @@ This property is deprecated, use [AppBundleExtraOptions](#appbundleextraoptions)
 The directory where resources are stored (this prefix will be removed when copying resources to the app bundle).
 
 Only applicable to macOS projects.
+
+Consider using the unified [AppBundleResourcePrefix](#appbundleresourceprefix) property instead.
 
 See also [IPhoneResourcePrefix](#iphoneresourceprefix) and [XamMacResourcePrefix](#xammacresourceprefix).
 
@@ -653,6 +793,23 @@ This means the .dSYM archive will be generated in the following cases (by defaul
 
 * On iOS and tvOS when building for device.
 * On macOS and Mac Catalyst when creating an archive (`ArchiveOnBuild=true`).
+
+## NoSymbolStrip
+
+A boolean property that specifies whether debug symbols are removed from the app at build time.
+
+The default behavior is to keep debug symbols for:
+
+* `Debug` builds for desktop platforms.
+* Simulator builds for mobile platforms.
+
+Example to keep debug symbols:
+
+```xml
+<PropertyGroup>
+  <NoSymbolStrip>true</NoSymbolStrip>
+</PropertyGroup>
+```
 
 ## OnDemandResourcesInitialInstallTags
 
@@ -813,6 +970,40 @@ only scan libraries with the `[LinkWith]` attribute for Objective-C classes:
 </PropertyGroup>
 ```
 
+## SdkIsSimulator
+
+This property is a read-only property (setting it will have no effect) that
+specifies whether we're building for a simulator or not.
+
+It is only set after [imports and
+properties](https://learn.microsoft.com/visualstudio/msbuild/build-process-overview#evaluate-imports-and-properties)
+have been evaluated. This means the property is not set while evaluating the
+properties in the project file, so this will _not_ work:
+
+```xml
+<PropertyGroup>
+  <EnableCodeSigning Condition="'$(SdkIsSimulator)' == 'true'">false</EnableCodeSigning>
+</PropertyGroup>
+```
+
+However, the either of the following works:
+
+```xml
+<ItemGroup>
+  <!-- item groups (and their conditions) are evaluated after properties have been evaluated -->
+  <CustomEntitlements Condition="'$(SdkIsSimulator)' == 'true'" Include="com.apple.simulator-entitlement" Type="Boolean" Value="true" />
+  <CodesignConfigureDependsOn>$(CodesignConfigureDependsOn);ConfigureSimulatorSigning</CodesignConfigureDependsOn>
+</ItemGroup>
+<!-- targets are executed after properties have been evaluated -->
+<Target Name="ConfigureSimulatorSigning">
+  <PropertyGroup>
+    <EnableCodeSigning Condition="'$(SdkIsSimulator) == 'true'">false</EnableCodeSigning>
+  </PropertyGroup>
+</Target>
+```
+
+Note: this property will always be `false` on macOS and Mac Catalyst.
+
 ## SkipStaticLibraryValidation
 
 Hot Restart doesn't support linking with static libraries, so by default we'll
@@ -953,11 +1144,22 @@ The validation process may not validate every entitlement, nor is it guaranteed 
 
 If the validation fails for entitlements that actually work, please file a new issue.
 
+## ValidateXcodeVersion
+
+Choose whether the current Xcode version should be validated.
+
+The default value is to validate; set to `false` to disable.
+
+> [!NOTE]
+> Using a different than the recommended version is likely to produce problems later on in the build process.
+
 ## XamMacResourcePrefix
 
 The directory where resources are stored (this prefix will be removed when copying resources to the app bundle).
 
 Applicable to macOS projects.
+
+Consider using the unified [AppBundleResourcePrefix](#appbundleresourceprefix) property instead.
 
 See also [IPhoneResourcePrefix](#iphoneresourceprefix) and [MonoMacResourcePrefix](#monomacresourceprefix).
 

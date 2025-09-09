@@ -71,14 +71,11 @@ namespace CoreLocation {
 		// ios6
 		/// <summary>The attempt to switch to deferred mode failed. Application developers may try again on devices that have a GPS device.</summary>
 		DeferredFailed,
-		/// <summary>The <see cref="T:CoreLocation.CLLocationManager" /> did not enter deferred mode because location updates were already paused or disabled.</summary>
+		/// <summary>The <see cref="CoreLocation.CLLocationManager" /> did not enter deferred mode because location updates were already paused or disabled.</summary>
 		DeferredNotUpdatingLocation,
-		/// <summary>Deferred mode is not available for the requested accuracy.</summary>
-		///         <remarks>
-		///           <para>For deferred mode, the accuracy must be <see cref="P:CoreLocation.CLLocation.AccuracyBest" /> or <see cref="P:CoreLocation.CLLocation.AccurracyBestForNavigation" />.</para>
-		///         </remarks>
+		/// <summary>Deferred mode is not available for the requested accuracy. For deferred mode, the accuracy must be <see cref="CoreLocation.CLLocation.AccuracyBest" /> or <see cref="CoreLocation.CLLocation.AccurracyBestForNavigation" />.</summary>
 		DeferredAccuracyTooLow,
-		/// <summary>Deferred mode does not allow distance filters. The <see cref="P:CoreLocation.CLLocationManager.DistanceFilter" /> must be set to <see cref="P:CoreLocation.CLLocationDistance.FilterNone" />.</summary>
+		/// <summary>Deferred mode does not allow distance filters. The <see cref="CoreLocation.CLLocationManager.DistanceFilter" /> must be set to <see cref="CoreLocation.CLLocationDistance.FilterNone" />.</summary>
 		DeferredDistanceFiltered,
 		/// <summary>The application's request for deferred location notices has been canceled.</summary>
 		DeferredCanceled,
@@ -139,20 +136,17 @@ namespace CoreLocation {
 	// NSInteger -> CLLocationManager.h
 	/// <summary>An enumeration whose values specify different types of activity.</summary>
 	///     <remarks>
-	///       <para>By assigning <see cref="P:CoreLocation.CLLocationManager.ActivityType" />, the system can make intelligent choices regarding location update frequency vs. power consumption. </para>
+	///       <para>By assigning <see cref="CoreLocation.CLLocationManager.ActivityType" />, the system can make intelligent choices regarding location update frequency vs. power consumption. </para>
 	///     </remarks>
 	[Native]
 	public enum CLActivityType : long {
 		/// <summary>Indicates that the activity type is unknown.</summary>
 		Other = 1,
-		/// <summary>Indicates that the app is engaged in navigating an automobile. (Use <see cref="F:CoreLocation.CLActivityType.OtherNavigation" /> for other vehicle types.)</summary>
+		/// <summary>Indicates that the app is engaged in navigating an automobile. (Use <see cref="CoreLocation.CLActivityType.OtherNavigation" /> for other vehicle types.)</summary>
 		AutomotiveNavigation,
 		/// <summary>Indicates fitness and all walking activities.</summary>
 		Fitness,
-		/// <summary>Indicates that the app is involved in navigation, but not in a car.</summary>
-		///         <remarks>
-		///           <para>This value should be used for tracking motion in, e.g., trains, planes, and boats.</para>
-		///         </remarks>
+		/// <summary>Indicates that the app is involved in navigation, but not in a car. This value should be used for tracking motion in, e.g., trains, planes, and boats.</summary>
 		OtherNavigation,
 		/// <summary>To be added.</summary>
 		[MacCatalyst (13, 1)]

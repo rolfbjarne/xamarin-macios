@@ -20,7 +20,7 @@ namespace CoreGraphics {
 		None,
 	}
 
-	/// <summary>Specifies various boxes for the <see cref="M:CoreGraphics.CGContextPDF.BeginPage(CoreGraphics.CGPDFPageInfo)" /> method.</summary>
+	/// <summary>Specifies various boxes for the <see cref="CoreGraphics.CGContextPDF.BeginPage(CoreGraphics.CGPDFPageInfo)" /> method.</summary>
 	[Partial]
 	interface CGPDFPageInfo {
 
@@ -45,7 +45,7 @@ namespace CoreGraphics {
 		IntPtr kCGPDFContextArtBox { get; }
 	}
 
-	/// <summary>Auxiliary parameters for constructing a <see cref="T:CoreGraphics.CGContextPDF" />.</summary>
+	/// <summary>Auxiliary parameters for constructing a <see cref="CoreGraphics.CGContextPDF" />.</summary>
 	[Partial]
 	interface CGPDFInfo {
 
@@ -589,7 +589,6 @@ namespace CoreGraphics {
 		NSString Smpte_240M_1995 { get; }
 	}
 
-#if NET
 	[NoiOS, NoTV, MacCatalyst (13, 1)]
 	[StrongDictionary ("CGSessionKeys")]
 	interface CGSessionProperties {
@@ -599,7 +598,6 @@ namespace CoreGraphics {
 		bool OnConsole { get; }
 		bool LoginDone { get; }
 	}
-#endif
 
 	[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 	[Partial]

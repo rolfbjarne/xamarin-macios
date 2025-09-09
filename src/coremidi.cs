@@ -37,10 +37,6 @@ using MidiUmpFunctionBlockId = System.Byte;
 using MidiUmpGroupNumber = System.Byte;
 using MidiChannelNumber = System.Byte;
 
-#if !NET
-using NativeHandle = System.IntPtr;
-#endif
-
 #if TVOS
 using MidiEndpoint = System.Object;
 using MidiCIDeviceIdentification = System.Object;
@@ -53,6 +49,8 @@ using Midi2DeviceRevisionLevel = System.Object;
 namespace CoreMidi {
 
 
+	/// <summary>An enumeration whose values specify which hosts are eligible to connect to a MIDI network session.</summary>
+	/// <remarks>To be added.</remarks>
 	[TV (15, 0)]
 	[MacCatalyst (13, 1)]
 	// NSUInteger -> MIDINetworkSession.h
@@ -372,18 +370,39 @@ namespace CoreMidi {
 		[Export ("netServiceDomain", ArgumentSemantic.Retain)]
 		string NetServiceDomain { get; }
 
+		/// <param name="hostName">To be added.</param>
+		///         <param name="netService">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("hostWithName:netService:")]
 		MidiNetworkHost Create (string hostName, NSNetService netService);
 
+		/// <param name="hostName">To be added.</param>
+		///         <param name="netServiceName">To be added.</param>
+		///         <param name="netServiceDomain">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("hostWithName:netServiceName:netServiceDomain:")]
 		MidiNetworkHost Create (string hostName, string netServiceName, string netServiceDomain);
 
+		/// <param name="hostName">To be added.</param>
+		/// <param name="address">To be added.</param>
+		/// <param name="port">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("hostWithName:address:port:")]
 		MidiNetworkHost Create (string hostName, string address, nint port);
 
+		/// <param name="other">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[Export ("hasSameAddressAs:")]
 		bool HasSameAddressAs (MidiNetworkHost other);
 	}
@@ -393,12 +412,10 @@ namespace CoreMidi {
 	[MacCatalyst (13, 1)]
 	[Static]
 	interface Midi {
-		/// <include file="../docs/api/CoreMidi/Midi.xml" path="/Documentation/Docs[@DocId='P:CoreMidi.Midi.NetworkNotificationContactsDidChange']/*" />
 		[Field ("MIDINetworkNotificationContactsDidChange")]
 		[Notification]
 		NSString NetworkNotificationContactsDidChange { get; }
 
-		/// <include file="../docs/api/CoreMidi/Midi.xml" path="/Documentation/Docs[@DocId='P:CoreMidi.Midi.NetworkNotificationSessionDidChange']/*" />
 		[Field ("MIDINetworkNotificationSessionDidChange")]
 		[Notification]
 		NSString NetworkNotificationSessionDidChange { get; }
@@ -406,13 +423,13 @@ namespace CoreMidi {
 		/// <summary>Represents the value associated with the constant MIDINetworkBonjourServiceType</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>You can pass this type to <format type="text/html"><a href="https://docs.microsoft.com/en-us/search/index?search=M:Foundation.NSNetServiceBrowser.SearchForServices(System.String type, System.String domain)&amp;scope=Xamarin" title="M:Foundation.NSNetServiceBrowser.SearchForServices(System.String type, System.String domain)">M:Foundation.NSNetServiceBrowser.SearchForServices(System.String type, System.String domain)</a></format> to find MIDI devices available
+		///         <remarks>You can pass this type to <see cref="Foundation.NSNetServiceBrowser.SearchForServices(System.String,System.String)" /> to find MIDI devices available
 		///         over bonjour.</remarks>
 		[Field ("MIDINetworkBonjourServiceType")]
 		NSString NetworkBonjourServiceType { get; }
 	}
 
-	/// <summary>A connection to a MIDI network host, using a <see cref="T:CoreMidi.MidiNetworkSession" />.</summary>
+	/// <summary>A connection to a MIDI network host, using a <see cref="CoreMidi.MidiNetworkSession" />.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/CoreMidi/Reference/MIDINetworkConnection_ClassReference/index.html">Apple documentation for <c>MIDINetworkConnection</c></related>
 	[NoTV]
@@ -426,11 +443,15 @@ namespace CoreMidi {
 		[Export ("host", ArgumentSemantic.Retain)]
 		MidiNetworkHost Host { get; }
 
+		/// <param name="host">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[Static, Export ("connectionWithHost:")]
 		MidiNetworkConnection FromHost (MidiNetworkHost host);
 	}
 
-	/// <summary>A singleton class that maintains the <see cref="T:CoreMidi.MidiNetworkConnection" />s between various MIDI entities.</summary>
+	/// <summary>A singleton class that maintains the <see cref="CoreMidi.MidiNetworkConnection" />s between various MIDI entities.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/CoreMidi/Reference/MIDINetworkSession_ClassReference/index.html">Apple documentation for <c>MIDINetworkSession</c></related>
 	[NoTV]
@@ -482,9 +503,17 @@ namespace CoreMidi {
 		[Export ("contacts")]
 		NSSet Contacts { get; }
 
+		/// <param name="contact">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[Export ("addContact:")]
 		bool AddContact (MidiNetworkHost contact);
 
+		/// <param name="contact">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[Export ("removeContact:")]
 		bool RemoveContact (MidiNetworkHost contact);
 
@@ -494,9 +523,17 @@ namespace CoreMidi {
 		[Export ("connections")]
 		NSSet Connections { get; }
 
+		/// <param name="connection">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[Export ("addConnection:")]
 		bool AddConnection (MidiNetworkConnection connection);
 
+		/// <param name="connection">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[Export ("removeConnection:")]
 		bool RemoveConnection (MidiNetworkConnection connection);
 
@@ -504,26 +541,15 @@ namespace CoreMidi {
 		[Internal]
 		int /* MIDIObjectRef = UInt32 */ _SourceEndpoint { get; }
 
-#if NET
 		[Wrap ("new MidiEndpoint (_SourceEndpoint)")]
 		MidiEndpoint GetSourceEndpoint ();
-#else
-		[Wrap ("new MidiEndpoint (_SourceEndpoint)")]
-		MidiEndpoint SourceEndpoint { get; }
-#endif
 
 		[Export ("destinationEndpoint")]
 		[Internal]
 		int /* MIDIObjectRef = UInt32 */ _DestinationEndpoint { get; }
 
-#if NET
 		[Wrap ("new MidiEndpoint (_DestinationEndpoint)")]
 		MidiEndpoint GetDestinationEndPoint ();
-#else
-		[Wrap ("new MidiEndpoint (_DestinationEndpoint)")]
-		MidiEndpoint DestinationEndPoint { get; }
-#endif
-
 	}
 
 	[NoTV]
@@ -543,6 +569,10 @@ namespace CoreMidi {
 		[Export ("profileID")]
 		NSData ProfileId { get; }
 
+		/// <param name="data">To be added.</param>
+		/// <param name="inName">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithData:name:")]
 		NativeHandle Constructor (NSData data, string inName);
 
@@ -580,6 +610,10 @@ namespace CoreMidi {
 		[Export ("disabledProfiles")]
 		MidiCIProfile [] DisabledProfiles { get; }
 
+		/// <param name="enabled">To be added.</param>
+		/// <param name="disabled">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <remarks>To be added.</remarks>
 		[Export ("initWithEnabledProfiles:disabledProfiles:")]
 		NativeHandle Constructor (MidiCIProfile [] enabled, MidiCIProfile [] disabled);
 
@@ -599,7 +633,7 @@ namespace CoreMidi {
 
 	delegate void MidiCIProfileChangedHandler (MidiCISession session, byte channel, MidiCIProfile profile, bool enabled);
 	delegate void MidiCIProfileSpecificDataHandler (MidiCISession session, byte channel, MidiCIProfile profile, NSData data);
-	delegate void MidiCISessionDisconnectHandler (MidiCISession session, NSError error);
+	delegate void MidiCISessionDisconnectHandler ([NullAllowed] MidiCISession session, [NullAllowed] NSError error);
 
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -642,12 +676,28 @@ namespace CoreMidi {
 		MidiCIDeviceIdentification DeviceIdentification { get; }
 #endif
 
+		/// <param name="channel">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[Export ("profileStateForChannel:")]
 		MidiCIProfileState GetProfileState (byte channel);
 
+		/// <param name="profile">To be added.</param>
+		///         <param name="channel">To be added.</param>
+		///         <param name="outError">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[Export ("enableProfile:onChannel:error:")]
 		bool EnableProfile (MidiCIProfile profile, byte channel, [NullAllowed] out NSError outError);
 
+		/// <param name="profile">To be added.</param>
+		///         <param name="channel">To be added.</param>
+		///         <param name="outError">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <returns>To be added.</returns>
+		///         <remarks>To be added.</remarks>
 		[Export ("disableProfile:onChannel:error:")]
 		bool DisableProfile (MidiCIProfile profile, byte channel, [NullAllowed] out NSError outError);
 
@@ -782,11 +832,7 @@ namespace CoreMidi {
 
 	[iOS (14, 0), NoTV]
 	[MacCatalyst (14, 0)]
-#if NET
 	[Protocol, Model]
-#else
-	[Protocol, Model (AutoGeneratedName = true)]
-#endif
 	[BaseType (typeof (NSObject), Name = "MIDICIProfileResponderDelegate")]
 	interface MidiCIProfileResponderDelegate {
 		[Abstract]

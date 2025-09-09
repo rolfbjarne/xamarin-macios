@@ -33,7 +33,7 @@ namespace CoreBluetooth {
 	}
 
 	// NSInteger -> CBCentralManager.h
-	/// <summary>Enumerates possible states of a <see cref="T:CoreBluetooth.CBCentralManager" />.</summary>
+	/// <summary>Enumerates possible states of a <see cref="CoreBluetooth.CBCentralManager" />.</summary>
 	[Deprecated (PlatformName.iOS, 10, 0, message: "Use 'CBManagerState' instead.")]
 	[MacCatalyst (13, 1)]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'CBManagerState' instead.")]
@@ -54,7 +54,7 @@ namespace CoreBluetooth {
 	}
 
 	// NSInteger -> CBPeripheralManager.h
-	/// <summary>Enumerates the possible states of the <see cref="T:CoreBluetooth.CBPeripheralManager" />.</summary>
+	/// <summary>Enumerates the possible states of the <see cref="CoreBluetooth.CBPeripheralManager" />.</summary>
 	[Deprecated (PlatformName.iOS, 10, 0, message: "Use 'CBManagerState' instead.")]
 	[MacCatalyst (13, 1)]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'CBManagerState' instead.")]
@@ -75,7 +75,7 @@ namespace CoreBluetooth {
 	}
 
 	// NSInteger -> CBPeripheralManager.h
-	/// <summary>Enumerates the possible connection states of a <see cref="T:CoreBluetooth.CBPeripheral" />.</summary>
+	/// <summary>Enumerates the possible connection states of a <see cref="CoreBluetooth.CBPeripheral" />.</summary>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CBPeripheralState : long {
@@ -89,17 +89,6 @@ namespace CoreBluetooth {
 		[MacCatalyst (13, 1)]
 		Disconnecting,
 	}
-
-#if !NET
-	// NSInteger -> CBPeripheralManager.h
-	[Native]
-	public enum CBPeripheralManagerAuthorizationStatus : long {
-		NotDetermined,
-		Restricted,
-		Denied,
-		Authorized,
-	}
-#endif // !NET
 
 	// NSUInteger -> CBCharacteristic.h
 	/// <summary>The possible properties of a characteristic. A characteristic may have multiple properties.</summary>
@@ -244,7 +233,7 @@ namespace CoreBluetooth {
 	}
 
 	// NSInteger -> CBPeripheralManager.h
-	/// <summary>The connection latency of the <see cref="T:CoreBluetooth.CBPeripheralManager" />.</summary>
+	/// <summary>The connection latency of the <see cref="CoreBluetooth.CBPeripheralManager" />.</summary>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum CBPeripheralManagerConnectionLatency : long {

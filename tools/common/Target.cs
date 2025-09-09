@@ -361,7 +361,7 @@ namespace Xamarin.Bundler {
 				}
 
 #if MONOTOUCH
-				if (App.EnableProfiling && App.LibProfilerLinkMode == AssemblyBuildTarget.StaticObject)
+				if (App.EnableDiagnostics && App.LibProfilerLinkMode == AssemblyBuildTarget.StaticObject)
 					dynamic_symbols.AddFunction ("mono_profiler_init_log");
 #endif
 
@@ -679,7 +679,7 @@ namespace Xamarin.Bundler {
 			// On iOS we can pass -u to the native linker, but that doesn't work on tvOS, where
 			// we're building with bitcode (even when bitcode is disabled, we still build with the
 			// bitcode marker, which makes the linker reject -u).
-			if (app.EnableProfiling) {
+			if (app.EnableDiagnostics) {
 				sw.WriteLine ("extern \"C\" { void mono_profiler_init_log (); }");
 				sw.WriteLine ("typedef void (*xamarin_profiler_symbol_def)();");
 				sw.WriteLine ("extern xamarin_profiler_symbol_def xamarin_profiler_symbol;");
@@ -707,7 +707,7 @@ namespace Xamarin.Bundler {
 			sw.WriteLine ("void xamarin_setup_impl ()");
 			sw.WriteLine ("{");
 
-			if (app.EnableProfiling)
+			if (app.EnableDiagnostics)
 				sw.WriteLine ("\txamarin_profiler_symbol = mono_profiler_init_log;");
 
 			if (app.UseInterpreter) {

@@ -41,6 +41,8 @@ using Keys = ImageIO.CGImageProperties;
 namespace CoreGraphics {
 
 	// convenience enum mapped to kCGImagePropertyColorModelXXX fields (see imageio.cs)
+	/// <summary>An enumeration of valid color models.</summary>
+	///     <remarks>To be added.</remarks>
 	public enum CGImageColorModel {
 		/// <summary>To be added.</summary>
 		RGB,
@@ -52,20 +54,25 @@ namespace CoreGraphics {
 		Lab,
 	}
 
-#if NET
+	/// <summary>Properties of bitmap images.</summary>
+	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
-#endif
 	public class CGImageProperties : DictionaryContainer {
 #if !COREBUILD
 
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImageProperties ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImageProperties (NSDictionary? dictionary)
 			: base (dictionary)
 		{
@@ -83,7 +90,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>Gets or sets the color model for an image, as a <see cref="T:CoreGraphics.CGImageColorModel" /> object.</summary>
+		/// <summary>Gets or sets the color model for an image, as a <see cref="CoreGraphics.CGImageColorModel" /> object.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGImageColorModel? ColorModel {
@@ -194,7 +201,7 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <summary>Gets or sets the orientation of an image, as a <see cref="T:CoreImage.CIImageOrientation" /> object.</summary>
+		/// <summary>Gets or sets the orientation of an image, as a <see cref="CoreImage.CIImageOrientation" /> object.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CIImageOrientation? Orientation {
@@ -306,18 +313,25 @@ namespace CoreGraphics {
 	}
 
 #if !COREBUILD
-#if NET
+	/// <summary>Standard Exif metadata of an image. </summary>
+	///     <remarks>To be added.</remarks>
+	///     <altmember cref="CoreGraphics.CGImageProperties" />
+	///     <altmember cref="CoreGraphics.CGImagePropertiesIptc" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
-#endif
 	public class CGImagePropertiesExif : DictionaryContainer {
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesExif ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesExif (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -551,18 +565,24 @@ namespace CoreGraphics {
 		// TODO: Many more available but underlying types need to be investigated
 	}
 
-#if NET
+	/// <summary>Properties associated with TIFF images.</summary>
+	///     <remarks>To be added.</remarks>
+	///     <altmember cref="CoreGraphics.CGImageProperties" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
-#endif
 	public class CGImagePropertiesTiff : DictionaryContainer {
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesTiff ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesTiff (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -619,18 +639,24 @@ namespace CoreGraphics {
 		// TODO: Many more available but underlying types need to be investigated
 	}
 
-#if NET
+	/// <summary>Properties associated with JFIF bitmap images.</summary>
+	///     <remarks>To be added.</remarks>
+	///     <altmember cref="CoreGraphics.CGImageProperties" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
-#endif
 	public class CGImagePropertiesJfif : DictionaryContainer {
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesJfif ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesJfif (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -663,18 +689,24 @@ namespace CoreGraphics {
 		// TODO: Many more available but underlying types need to be investigated
 	}
 
-#if NET
+	/// <summary>Properties associated with PNG bitmap images.</summary>
+	///     <remarks>To be added.</remarks>
+	///     <altmember cref="CoreGraphics.CGImageProperties" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
-#endif
 	public class CGImagePropertiesPng : DictionaryContainer {
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesPng ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesPng (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -767,18 +799,24 @@ namespace CoreGraphics {
 		// TODO: Many more available but underlying types need to be investigated
 	}
 
-#if NET
+	/// <summary>Location properties associated with an image.</summary>
+	///     <remarks>To be added.</remarks>
+	///     <altmember cref="CoreGraphics.CGImageProperties" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
-#endif
 	public class CGImagePropertiesGps : DictionaryContainer {
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesGps ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesGps (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -841,19 +879,25 @@ namespace CoreGraphics {
 		// TODO: Many more available but underlying types need to be investigated
 	}
 
-
-#if NET
+	/// <summary>Properties with IPTC metadata in an image.</summary>
+	///     <remarks>To be added.</remarks>
+	///     <altmember cref="CoreGraphics.CGImageProperties" />
+	///     <altmember cref="CoreGraphics.CGImagePropertiesExif" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
-#endif
 	public class CGImagePropertiesIptc : DictionaryContainer {
+		/// <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesIptc ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
+		/// <param name="dictionary">To be added.</param>
+		///         <summary>To be added.</summary>
+		///         <remarks>To be added.</remarks>
 		public CGImagePropertiesIptc (NSDictionary dictionary)
 			: base (dictionary)
 		{

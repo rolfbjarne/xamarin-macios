@@ -43,7 +43,7 @@ using Foundation;
 #nullable enable
 
 namespace AudioUnit {
-	/// <summary>An enumeration whose values specify the status of an <see cref="T:AudioUnit.AudioUnit" />.</summary>
+	/// <summary>An enumeration whose values specify the status of an <see cref="AudioUnit" />.</summary>
 	public enum AudioUnitStatus { // Implictly cast to OSType
 		/// <summary>To be added.</summary>
 		NoError = 0,
@@ -100,7 +100,9 @@ namespace AudioUnit {
 		MultipleVoiceProcessors = -66635,
 	}
 
-	/// <summary>Enumerates status values returned by <see cref="M:AudioUnit.AudioUnit.AudioOutputUnitPublish(AudioUnit.AudioComponentDescription,System.String,System.UInt32)" />.</summary>
+#if !__MACOS__
+	/// <summary>Enumerates status values returned by <see cref="AudioUnit.AudioOutputUnitPublish(AudioComponentDescription,System.String,System.UInt32)" />.</summary>
+#endif
 	public enum AudioComponentStatus { // Implictly cast to OSType
 		/// <summary>To be added.</summary>
 		OK = 0,
@@ -209,7 +211,7 @@ namespace AudioUnit {
 		MIDI2Controller = 27,
 	}
 
-	/// <summary>Flagging enumeration used with <see cref="P:AudioUnit.AudioUnitParameterInfo.Flags" />.</summary>
+	/// <summary>Flagging enumeration used with <see cref="AudioUnitParameterInfo.Flags" />.</summary>
 	[Flags]
 	public enum AudioUnitParameterFlag : uint // UInt32 in AudioUnitParameterInfo
 	{
@@ -266,7 +268,7 @@ namespace AudioUnit {
 		IsWritable = ((uint) 1 << 31),
 	}
 
-	/// <summary>Enumerates values used by <see cref="T:AudioUnit.AudioUnitParameterInfo" />. Currenty reserved for system use.</summary>
+	/// <summary>Enumerates values used by <see cref="AudioUnitParameterInfo" />. Currenty reserved for system use.</summary>
 	public enum AudioUnitClumpID // UInt32 in AudioUnitParameterInfo
 	{
 		/// <summary>To be added.</summary>
@@ -275,9 +277,7 @@ namespace AudioUnit {
 
 	[MacCatalyst (13, 1)]
 	[NoTV]
-#if NET
 	[NoiOS]
-#endif
 	public enum AudioObjectPropertySelector : uint {
 		/// <summary>To be added.</summary>
 		PropertyDevices = 1684370979, // 'dev#'
@@ -350,9 +350,7 @@ namespace AudioUnit {
 
 	[MacCatalyst (13, 1)]
 	[NoTV]
-#if NET
 	[NoiOS]
-#endif
 	public enum AudioObjectPropertyScope : uint {
 		/// <summary>To be added.</summary>
 		Global = 1735159650, // 'glob'
@@ -366,18 +364,13 @@ namespace AudioUnit {
 
 	[MacCatalyst (13, 1)]
 	[NoTV]
-#if NET
 	[NoiOS]
-#endif
 	public enum AudioObjectPropertyElement : uint {
-#if !NET
-		[Obsolete ("Use the 'Main' element instead.")]
-		Master = 0, // 0
-#endif
+		/// <summary>To be added.</summary>
 		Main = 0, // 0
 	}
 
-	/// <summary>An enumeration whose values specify a kind of <see cref="T:AudioUnit.AudioUnit" />.</summary>
+	/// <summary>An enumeration whose values specify a kind of <see cref="AudioUnit" />.</summary>
 	[Internal]
 	enum AudioUnitPropertyIDType { // UInt32 AudioUnitPropertyID
 								   // Audio Unit Properties
@@ -480,13 +473,21 @@ namespace AudioUnit {
 		HostMIDIProtocol = 65,
 
 #if MONOMAC
+		/// <summary>To be added.</summary>
 		FastDispatch = 5,
+		/// <summary>To be added.</summary>
 		SetExternalBuffer = 15,
+		/// <summary>To be added.</summary>
 		GetUIComponentList = 18,
+		/// <summary>To be added.</summary>
 		CocoaUI = 31,
+		/// <summary>To be added.</summary>
 		IconLocation = 39,
+		/// <summary>To be added.</summary>
 		AUHostIdentifier = 46,
+		/// <summary>To be added.</summary>
 		MIDIOutputCallbackInfo = 47,
+		/// <summary>To be added.</summary>
 		MIDIOutputCallback = 48,
 #else
 		/// <summary>To be added.</summary>
@@ -505,26 +506,41 @@ namespace AudioUnit {
 #if MONOMAC
 
 		// Music Effects and Instruments
+		/// <summary>To be added.</summary>
 		AllParameterMIDIMappings = 41,
+		/// <summary>To be added.</summary>
 		AddParameterMIDIMapping = 42,
+		/// <summary>To be added.</summary>
 		RemoveParameterMIDIMapping = 43,
+		/// <summary>To be added.</summary>
 		HotMapParameterMIDIMapping = 44,
 
 		// Music Device
+		/// <summary>To be added.</summary>
 		MIDIXMLNames = 1006,
+		/// <summary>To be added.</summary>
 		PartGroup = 1010,
+		/// <summary>To be added.</summary>
 		DualSchedulingMode = 1013,
+		/// <summary>To be added.</summary>
 		SupportsStartStopNote = 1014,
 
 		// Offline Unit
+		/// <summary>To be added.</summary>
 		InputSize = 3020,
+		/// <summary>To be added.</summary>
 		OutputSize = 3021,
+		/// <summary>To be added.</summary>
 		StartOffset = 3022,
+		/// <summary>To be added.</summary>
 		PreflightRequirements = 3023,
+		/// <summary>To be added.</summary>
 		PreflightName = 3024,
 
 		// Translation Service
+		/// <summary>To be added.</summary>
 		FromPlugin = 4000,
+		/// <summary>To be added.</summary>
 		OldAutomation = 4001,
 
 #endif // MONOMAC
@@ -653,8 +669,11 @@ namespace AudioUnit {
 
 #if MONOMAC
 		// OS X-specific Music Device Properties
+		/// <summary>To be added.</summary>
 		SoundBankData = 1008,
+		/// <summary>To be added.</summary>
 		StreamFromDisk = 1011,
+		/// <summary>To be added.</summary>
 		SoundBankFSRef = 1012,
 
 #endif // !MONOMAC
@@ -693,15 +712,23 @@ namespace AudioUnit {
 
 #if MONOMAC
 		// AUNetReceive
+		/// <summary>To be added.</summary>
 		Hostname = 3511,
+		/// <summary>To be added.</summary>
 		NetReceivePassword = 3512,
 
 		// AUNetSend
+		/// <summary>To be added.</summary>
 		PortNum = 3513,
+		/// <summary>To be added.</summary>
 		TransmissionFormat = 3514,
+		/// <summary>To be added.</summary>
 		TransmissionFormatIndex = 3515,
+		/// <summary>To be added.</summary>
 		ServiceName = 3516,
+		/// <summary>To be added.</summary>
 		Disconnect = 3517,
+		/// <summary>To be added.</summary>
 		NetSendPassword = 3518,
 #endif // MONOMAC
 	}
@@ -727,9 +754,13 @@ namespace AudioUnit {
 		Mixer3DObstructionAttenuation = 8,
 		Mixer3DMinGain = 9,
 		Mixer3DMaxGain = 10,
+		/// <summary>To be added.</summary>
 		Mixer3DPreAveragePower = 1000,
+		/// <summary>To be added.</summary>
 		Mixer3DPrePeakHoldLevel = 2000,
+		/// <summary>To be added.</summary>
 		Mixer3DPostAveragePower = 3000,
+		/// <summary>To be added.</summary>
 		Mixer3DPostPeakHoldLevel = 4000,
 #else
 		/// <summary>To be added.</summary>
@@ -810,7 +841,9 @@ namespace AudioUnit {
 		/// <summary>To be added.</summary>
 		TimePitchRate = 0,
 #if MONOMAC
+		/// <summary>To be added.</summary>
 		TimePitchPitch = 1,
+		/// <summary>To be added.</summary>
 		TimePitchEffectBlend = 2,
 #endif
 
@@ -1166,7 +1199,7 @@ namespace AudioUnit {
 		Immediate = unchecked((long) 0xffffffff00000000),
 	}
 
-	/// <summary>Enumerates options that can be used while instantiating a <see cref="T:AudioUnit.AUAudioUnit" />.</summary>
+	/// <summary>Enumerates options that can be used while instantiating a <see cref="AUAudioUnit" />.</summary>
 	[MacCatalyst (13, 1)]
 	public enum AudioComponentInstantiationOptions : uint {
 		/// <summary>To be added.</summary>
@@ -1450,23 +1483,41 @@ namespace AudioUnit {
 		AudioFilePlayer = 0x6166706C, // 'afpl'
 
 #if MONOMAC
+		/// <summary>To be added.</summary>
 		HALOutput = 0x6168616C, // 'ahal'
+		/// <summary>To be added.</summary>
 		DefaultOutput = 0x64656620, // 'def '
+		/// <summary>To be added.</summary>
 		SystemOutput = 0x73797320, // 'sys '
+		/// <summary>To be added.</summary>
 		DLSSynth = 0x646C7320, // 'dls '
+		/// <summary>To be added.</summary>
 		TimePitch = 0x746D7074, // 'tmpt'
+		/// <summary>To be added.</summary>
 		GraphicEQ = 0x67726571, // 'greq'
+		/// <summary>To be added.</summary>
 		MultiBandCompressor = 0x6D636D70, // 'mcmp'
+		/// <summary>To be added.</summary>
 		MatrixReverb = 0x6D726576, // 'mrev'
+		/// <summary>To be added.</summary>
 		Pitch = 0x746D7074, // 'tmpt'
+		/// <summary>To be added.</summary>
 		AUFilter = 0x66696C74, // 'filt
+		/// <summary>To be added.</summary>
 		NetSend = 0x6E736E64, // 'nsnd'
+		/// <summary>To be added.</summary>
 		RogerBeep = 0x726F6772, // 'rogr'
+		/// <summary>To be added.</summary>
 		StereoMixer = 0x736D7872, // 'smxr'
+		/// <summary>To be added.</summary>
 		SphericalHeadPanner = 0x73706872, // 'sphr'
+		/// <summary>To be added.</summary>
 		VectorPanner = 0x76626173, // 'vbas'
+		/// <summary>To be added.</summary>
 		SoundFieldPanner = 0x616D6269, // 'ambi'
+		/// <summary>To be added.</summary>
 		HRTFPanner = 0x68727466, // 'hrtf'
+		/// <summary>To be added.</summary>
 		NetReceive = 0x6E726376, // 'nrcv'
 #endif
 	}

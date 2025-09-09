@@ -118,6 +118,7 @@ public partial class UIKitPropertyTests
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst13.1")]
+		[Export ("count")]
 		get
 		{
 			UIKit.UIApplication.EnsureUIThread ();
@@ -132,4 +133,5 @@ public partial class UIKitPropertyTests
 			return ret;
 		}
 	}
+
 }

@@ -25,6 +25,16 @@ readonly partial struct Constructor {
 	/// </summary>
 	public string? Selector => ExportMethodData.Selector;
 
+	/// <summary>
+	/// The location of the attribute in source code.
+	/// </summary>
+	public Location? Location { get; init; }
+
+	/// <summary>
+	/// True if the cosntructor was marked to skip its registration.
+	/// </summary>
+	public bool SkipRegistration => ExportMethodData.Flags.HasFlag (ObjCBindings.Constructor.SkipRegistration);
+
 	public Constructor (string type,
 		SymbolAvailability symbolAvailability,
 		ExportData<ObjCBindings.Constructor> exportData,
@@ -58,7 +68,7 @@ readonly partial struct Constructor {
 			parametersBucket.Add (parameterChange.Value);
 		}
 
-		var exportData = constructor.GetExportData<ObjCBindings.Constructor> ()
+		var exportData = constructor.GetExportData<ObjCBindings.Constructor> (context)
 						 ?? new (null, ArgumentSemantic.None, ObjCBindings.Constructor.Default);
 
 		change = new (
@@ -67,7 +77,9 @@ readonly partial struct Constructor {
 			exportData: exportData,
 			attributes: attributes,
 			modifiers: [.. declaration.Modifiers],
-			parameters: parametersBucket.ToImmutable ());
+			parameters: parametersBucket.ToImmutable ()) {
+			Location = declaration.GetLocation (),
+		};
 		return true;
 	}
 }

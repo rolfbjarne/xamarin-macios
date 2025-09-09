@@ -22,7 +22,7 @@ namespace Microsoft.Macios.Generator.Tests.Protocols.Data;
 [ProtocolMember (IsRequired = true, IsProperty = true, IsStatic = false, Name = "RenderingAlgorithm", Selector = "renderingAlgorithm", PropertyType = typeof (global::AVFoundation.AVAudio3DMixingRenderingAlgorithm), GetterSelector = "renderingAlgorithm", SetterSelector = "setRenderingAlgorithm:", ArgumentSemantic = ArgumentSemantic.None)]
 [ProtocolMember (IsRequired = true, IsProperty = true, IsStatic = false, Name = "ReverbBlend", Selector = "reverbBlend", PropertyType = typeof (float), GetterSelector = "reverbBlend", SetterSelector = "setReverbBlend:", ArgumentSemantic = ArgumentSemantic.None)]
 [ProtocolMember (IsRequired = true, IsProperty = true, IsStatic = false, Name = "SourceMode", Selector = "sourceMode", PropertyType = typeof (global::AVFoundation.AVAudio3DMixingSourceMode), GetterSelector = "sourceMode", SetterSelector = "setSourceMode:", ArgumentSemantic = ArgumentSemantic.Assign)]
-public interface IAVAudio3DMixing : INativeObject, IDisposable
+public partial interface IAVAudio3DMixing : INativeObject, IDisposable
 {
 
 	[DynamicDependency ("Obstruction")]
@@ -43,6 +43,7 @@ public interface IAVAudio3DMixing : INativeObject, IDisposable
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("maccatalyst13.1")]
 	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export ("obstruction")]
 	internal static float _GetObstruction (this IAVAudio3DMixing self)
 	{
 		float ret;
@@ -56,6 +57,7 @@ public interface IAVAudio3DMixing : INativeObject, IDisposable
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("maccatalyst13.1")]
 	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export ("setObstruction:")]
 	internal static void _SetObstruction (this IAVAudio3DMixing self, float value)
 	{
 		global::ObjCRuntime.Messaging.void_objc_msgSend_float (self.Handle, global::ObjCRuntime.Selector.GetHandle ("setObstruction:"), value);
@@ -87,6 +89,7 @@ public interface IAVAudio3DMixing : INativeObject, IDisposable
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("maccatalyst13.1")]
 	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export ("occlusion")]
 	internal static float _GetOcclusion (this IAVAudio3DMixing self)
 	{
 		float ret;
@@ -100,6 +103,7 @@ public interface IAVAudio3DMixing : INativeObject, IDisposable
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("maccatalyst13.1")]
 	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export ("setOcclusion:")]
 	internal static void _SetOcclusion (this IAVAudio3DMixing self, float value)
 	{
 		global::ObjCRuntime.Messaging.void_objc_msgSend_float (self.Handle, global::ObjCRuntime.Selector.GetHandle ("setOcclusion:"), value);
@@ -131,6 +135,7 @@ public interface IAVAudio3DMixing : INativeObject, IDisposable
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("maccatalyst13.1")]
 	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export ("pointSourceInHeadMode")]
 	internal static global::AVFoundation.AVAudio3DMixingPointSourceInHeadMode _GetPointSourceInHeadMode (this IAVAudio3DMixing self)
 	{
 		global::AVFoundation.AVAudio3DMixingPointSourceInHeadMode ret;
@@ -144,6 +149,7 @@ public interface IAVAudio3DMixing : INativeObject, IDisposable
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("maccatalyst13.1")]
 	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export ("setPointSourceInHeadMode:")]
 	internal static void _SetPointSourceInHeadMode (this IAVAudio3DMixing self, global::AVFoundation.AVAudio3DMixingPointSourceInHeadMode value)
 	{
 		global::ObjCRuntime.Messaging.void_objc_msgSend_IntPtr (self.Handle, global::ObjCRuntime.Selector.GetHandle ("setPointSourceInHeadMode:"), (global::AVFoundation.AVAudio3DMixingPointSourceInHeadMode) (long) value);
@@ -175,6 +181,7 @@ public interface IAVAudio3DMixing : INativeObject, IDisposable
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("maccatalyst13.1")]
 	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export ("rate")]
 	internal static float _GetRate (this IAVAudio3DMixing self)
 	{
 		float ret;
@@ -188,6 +195,7 @@ public interface IAVAudio3DMixing : INativeObject, IDisposable
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("maccatalyst13.1")]
 	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export ("setRate:")]
 	internal static void _SetRate (this IAVAudio3DMixing self, float value)
 	{
 		global::ObjCRuntime.Messaging.void_objc_msgSend_float (self.Handle, global::ObjCRuntime.Selector.GetHandle ("setRate:"), value);
@@ -219,6 +227,7 @@ public interface IAVAudio3DMixing : INativeObject, IDisposable
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("maccatalyst13.1")]
 	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export ("renderingAlgorithm")]
 	internal static global::AVFoundation.AVAudio3DMixingRenderingAlgorithm _GetRenderingAlgorithm (this IAVAudio3DMixing self)
 	{
 		global::AVFoundation.AVAudio3DMixingRenderingAlgorithm ret;
@@ -232,6 +241,7 @@ public interface IAVAudio3DMixing : INativeObject, IDisposable
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("maccatalyst13.1")]
 	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export ("setRenderingAlgorithm:")]
 	internal static void _SetRenderingAlgorithm (this IAVAudio3DMixing self, global::AVFoundation.AVAudio3DMixingRenderingAlgorithm value)
 	{
 		global::ObjCRuntime.Messaging.void_objc_msgSend_IntPtr (self.Handle, global::ObjCRuntime.Selector.GetHandle ("setRenderingAlgorithm:"), (global::AVFoundation.AVAudio3DMixingRenderingAlgorithm) (long) value);
@@ -263,6 +273,7 @@ public interface IAVAudio3DMixing : INativeObject, IDisposable
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("maccatalyst13.1")]
 	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export ("reverbBlend")]
 	internal static float _GetReverbBlend (this IAVAudio3DMixing self)
 	{
 		float ret;
@@ -276,6 +287,7 @@ public interface IAVAudio3DMixing : INativeObject, IDisposable
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("maccatalyst13.1")]
 	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export ("setReverbBlend:")]
 	internal static void _SetReverbBlend (this IAVAudio3DMixing self, float value)
 	{
 		global::ObjCRuntime.Messaging.void_objc_msgSend_float (self.Handle, global::ObjCRuntime.Selector.GetHandle ("setReverbBlend:"), value);
@@ -307,6 +319,7 @@ public interface IAVAudio3DMixing : INativeObject, IDisposable
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("maccatalyst13.1")]
 	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export ("sourceMode")]
 	internal static global::AVFoundation.AVAudio3DMixingSourceMode _GetSourceMode (this IAVAudio3DMixing self)
 	{
 		global::AVFoundation.AVAudio3DMixingSourceMode ret;
@@ -320,6 +333,7 @@ public interface IAVAudio3DMixing : INativeObject, IDisposable
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("maccatalyst13.1")]
 	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export ("setSourceMode:")]
 	internal static void _SetSourceMode (this IAVAudio3DMixing self, global::AVFoundation.AVAudio3DMixingSourceMode value)
 	{
 		global::ObjCRuntime.Messaging.void_objc_msgSend_IntPtr (self.Handle, global::ObjCRuntime.Selector.GetHandle ("setSourceMode:"), (global::AVFoundation.AVAudio3DMixingSourceMode) (long) value);
@@ -345,24 +359,526 @@ public interface IAVAudio3DMixing : INativeObject, IDisposable
 		[SupportedOSPlatform ("maccatalyst13.1")]
 		set => _SetSourceMode (this, value);
 	}
+
 }
 
 internal unsafe sealed class AVAudio3DMixingWrapper : BaseWrapper, IAVAudio3DMixing
 {
-	// Implement default constructor
 
-	// Implement property: Obstruction
+	[Preserve (Conditional = true)]
+	public AVAudio3DMixingWrapper (NativeHandle handle, bool owns)
+		: base (handle, owns)
+	{
+	}
 
-	// Implement property: Occlusion
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst13.1")]
+	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export<Property> ("obstruction")]
+	public float Obstruction
+	{
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[Export ("obstruction")]
+		get
+		{
+			float ret;
+			ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.GetHandle ("obstruction"));
+			global::System.GC.KeepAlive (this);
+			return ret;
+		}
 
-	// Implement property: PointSourceInHeadMode
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[Export ("setObstruction:")]
+		set
+		{
+			global::ObjCRuntime.Messaging.void_objc_msgSend_float (this.Handle, global::ObjCRuntime.Selector.GetHandle ("setObstruction:"), value);
+			global::System.GC.KeepAlive (this);
+		}
+	}
 
-	// Implement property: Rate
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst13.1")]
+	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export<Property> ("occlusion")]
+	public float Occlusion
+	{
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[Export ("occlusion")]
+		get
+		{
+			float ret;
+			ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.GetHandle ("occlusion"));
+			global::System.GC.KeepAlive (this);
+			return ret;
+		}
 
-	// Implement property: RenderingAlgorithm
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[Export ("setOcclusion:")]
+		set
+		{
+			global::ObjCRuntime.Messaging.void_objc_msgSend_float (this.Handle, global::ObjCRuntime.Selector.GetHandle ("setOcclusion:"), value);
+			global::System.GC.KeepAlive (this);
+		}
+	}
 
-	// Implement property: ReverbBlend
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst13.1")]
+	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export<Property> ("pointSourceInHeadMode")]
+	public global::AVFoundation.AVAudio3DMixingPointSourceInHeadMode PointSourceInHeadMode
+	{
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[Export ("pointSourceInHeadMode")]
+		get
+		{
+			global::AVFoundation.AVAudio3DMixingPointSourceInHeadMode ret;
+			ret = (global::AVFoundation.AVAudio3DMixingPointSourceInHeadMode) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.GetHandle ("pointSourceInHeadMode"));
+			global::System.GC.KeepAlive (this);
+			return ret;
+		}
 
-	// Implement property: SourceMode
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[Export ("setPointSourceInHeadMode:")]
+		set
+		{
+			global::ObjCRuntime.Messaging.void_objc_msgSend_IntPtr (this.Handle, global::ObjCRuntime.Selector.GetHandle ("setPointSourceInHeadMode:"), (global::AVFoundation.AVAudio3DMixingPointSourceInHeadMode) (long) value);
+			global::System.GC.KeepAlive (this);
+		}
+	}
+
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst13.1")]
+	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export<Property> ("rate")]
+	public float Rate
+	{
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[Export ("rate")]
+		get
+		{
+			float ret;
+			ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.GetHandle ("rate"));
+			global::System.GC.KeepAlive (this);
+			return ret;
+		}
+
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[Export ("setRate:")]
+		set
+		{
+			global::ObjCRuntime.Messaging.void_objc_msgSend_float (this.Handle, global::ObjCRuntime.Selector.GetHandle ("setRate:"), value);
+			global::System.GC.KeepAlive (this);
+		}
+	}
+
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst13.1")]
+	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export<Property> ("renderingAlgorithm")]
+	public global::AVFoundation.AVAudio3DMixingRenderingAlgorithm RenderingAlgorithm
+	{
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[Export ("renderingAlgorithm")]
+		get
+		{
+			global::AVFoundation.AVAudio3DMixingRenderingAlgorithm ret;
+			ret = (global::AVFoundation.AVAudio3DMixingRenderingAlgorithm) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.GetHandle ("renderingAlgorithm"));
+			global::System.GC.KeepAlive (this);
+			return ret;
+		}
+
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[Export ("setRenderingAlgorithm:")]
+		set
+		{
+			global::ObjCRuntime.Messaging.void_objc_msgSend_IntPtr (this.Handle, global::ObjCRuntime.Selector.GetHandle ("setRenderingAlgorithm:"), (global::AVFoundation.AVAudio3DMixingRenderingAlgorithm) (long) value);
+			global::System.GC.KeepAlive (this);
+		}
+	}
+
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst13.1")]
+	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export<Property> ("reverbBlend")]
+	public float ReverbBlend
+	{
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[Export ("reverbBlend")]
+		get
+		{
+			float ret;
+			ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.GetHandle ("reverbBlend"));
+			global::System.GC.KeepAlive (this);
+			return ret;
+		}
+
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[Export ("setReverbBlend:")]
+		set
+		{
+			global::ObjCRuntime.Messaging.void_objc_msgSend_float (this.Handle, global::ObjCRuntime.Selector.GetHandle ("setReverbBlend:"), value);
+			global::System.GC.KeepAlive (this);
+		}
+	}
+
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst13.1")]
+	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export<Property> ("sourceMode")]
+	public global::AVFoundation.AVAudio3DMixingSourceMode SourceMode
+	{
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[Export ("sourceMode")]
+		get
+		{
+			global::AVFoundation.AVAudio3DMixingSourceMode ret;
+			ret = (global::AVFoundation.AVAudio3DMixingSourceMode) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.GetHandle ("sourceMode"));
+			global::System.GC.KeepAlive (this);
+			return ret;
+		}
+
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[Export ("setSourceMode:")]
+		set
+		{
+			global::ObjCRuntime.Messaging.void_objc_msgSend_IntPtr (this.Handle, global::ObjCRuntime.Selector.GetHandle ("setSourceMode:"), (global::AVFoundation.AVAudio3DMixingSourceMode) (long) value);
+			global::System.GC.KeepAlive (this);
+		}
+	}
+
+}
+
+[Register ("Microsoft_Macios_Generator_Tests_Protocols_Data_AVAudio3DMixing", false)]
+[Model]
+[SupportedOSPlatform ("macos")]
+[SupportedOSPlatform ("ios")]
+[SupportedOSPlatform ("tvos")]
+[SupportedOSPlatform ("maccatalyst13.1")]
+public unsafe abstract partial class AVAudio3DMixing : NSObject, IAVAudio3DMixing
+{
+	/// <summary>Creates a new <see cref="AVAudio3DMixing" /> with default values.</summary>
+	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[DesignatedInitializer]
+	[Export ("init")]
+	public AVAudio3DMixing () : base (global::Foundation.NSObjectFlag.Empty)
+	{
+		if (IsDirectBinding)
+			InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.GetHandle ("init")), "init");
+		else
+			InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (this.SuperHandle, global::ObjCRuntime.Selector.GetHandle ("init")), "init");
+	}
+
+	/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+	/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+	/// <remarks>
+	///     <para>
+	///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+	///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+	///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+	///         The actual initialization of the object is up to the developer.
+	///     </para>
+	///     <para>
+	///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+	///         Once the allocation has taken place, the constructor has to initialize the object.
+	///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+	///     </para>
+	///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+	///     <para>
+	///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+	///         If this is not the case, developers should instead chain to the proper constructor in their class.
+	///     </para>
+	///     <para>
+	///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+	///         Typically the chaining would look like this:
+	///     </para>
+	///     <example>
+	///             <code lang="csharp lang-csharp"><![CDATA[
+	/// //
+	/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+	/// // No actual initXxx method is invoked, that is done later in the constructor
+	/// //
+	/// // This is taken from the iOS SDK's source code for the UIView class:
+	/// //
+	/// [Export ("initWithFrame:")]
+	/// public UIView (System.Drawing.RectangleF frame) : base (NSObjectFlag.Empty)
+	/// {
+	///     // Invoke the init method now.
+	///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+	///     if (IsDirectBinding) {
+	///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+	///     } else {
+	///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (this.SuperHandle, initWithFrame, frame);
+	///     }
+	/// }
+	/// ]]></code>
+	///     </example>
+	/// </remarks>
+	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[EditorBrowsable (EditorBrowsableState.Advanced)]
+	protected AVAudio3DMixing (global::Foundation.NSObjectFlag t) : base (t) {}
+
+	/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+	/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+	/// <remarks>
+	///     <para>
+	///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+	///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+	///     </para>
+	/// </remarks>
+	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[EditorBrowsable (EditorBrowsableState.Advanced)]
+	protected internal AVAudio3DMixing (global::ObjCRuntime.NativeHandle handle) : base (handle) {}
+
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst13.1")]
+	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export<Property> ("obstruction")]
+	public virtual partial float Obstruction
+	{
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		get
+		{
+			throw new global::Foundation.ModelNotImplementedException ();
+		}
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		set
+		{
+			throw new global::Foundation.ModelNotImplementedException ();
+		}
+	}
+
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst13.1")]
+	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export<Property> ("occlusion")]
+	public virtual partial float Occlusion
+	{
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		get
+		{
+			throw new global::Foundation.ModelNotImplementedException ();
+		}
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		set
+		{
+			throw new global::Foundation.ModelNotImplementedException ();
+		}
+	}
+
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst13.1")]
+	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export<Property> ("pointSourceInHeadMode")]
+	public virtual partial global::AVFoundation.AVAudio3DMixingPointSourceInHeadMode PointSourceInHeadMode
+	{
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		get
+		{
+			throw new global::Foundation.ModelNotImplementedException ();
+		}
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		set
+		{
+			throw new global::Foundation.ModelNotImplementedException ();
+		}
+	}
+
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst13.1")]
+	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export<Property> ("rate")]
+	public virtual partial float Rate
+	{
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		get
+		{
+			throw new global::Foundation.ModelNotImplementedException ();
+		}
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		set
+		{
+			throw new global::Foundation.ModelNotImplementedException ();
+		}
+	}
+
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst13.1")]
+	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export<Property> ("renderingAlgorithm")]
+	public virtual partial global::AVFoundation.AVAudio3DMixingRenderingAlgorithm RenderingAlgorithm
+	{
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		get
+		{
+			throw new global::Foundation.ModelNotImplementedException ();
+		}
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		set
+		{
+			throw new global::Foundation.ModelNotImplementedException ();
+		}
+	}
+
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst13.1")]
+	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export<Property> ("reverbBlend")]
+	public virtual partial float ReverbBlend
+	{
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		get
+		{
+			throw new global::Foundation.ModelNotImplementedException ();
+		}
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		set
+		{
+			throw new global::Foundation.ModelNotImplementedException ();
+		}
+	}
+
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst13.1")]
+	[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+	[Export<Property> ("sourceMode")]
+	public virtual partial global::AVFoundation.AVAudio3DMixingSourceMode SourceMode
+	{
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		get
+		{
+			throw new global::Foundation.ModelNotImplementedException ();
+		}
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst13.1")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		set
+		{
+			throw new global::Foundation.ModelNotImplementedException ();
+		}
+	}
 
 }

@@ -18,7 +18,7 @@ namespace Microsoft.Macios.Generator.Emitters;
 /// <summary>
 /// Emits the wrapper class for a protocol.
 /// </summary>
-class ProtocolWrapperEmitter : ICodeEmitter {
+class ProtocolWrapperEmitter : IClassEmitter {
 	/// <inheritdoc />
 	public string GetSymbolName (in Binding binding) => Nomenclator.GetProtocolWrapperName (binding.Name);
 
@@ -29,11 +29,19 @@ class ProtocolWrapperEmitter : ICodeEmitter {
 	/// Emits the default constructors for the protocol wrapper class.
 	/// </summary>
 	/// <param name="bindingContext">The binding context.</param>
+	/// <param name="wrapperClassName">The protocol wrapper class name.</param>
 	/// <param name="classBlock">The writer for the class block.</param>
-	void EmitDefaultConstructors (in BindingContext bindingContext, TabbedWriter<StringWriter> classBlock)
+	void EmitDefaultConstructors (in BindingContext bindingContext, string wrapperClassName, TabbedWriter<StringWriter> classBlock)
 	{
-		classBlock.WriteLine ("// Implement default constructor");
 		classBlock.WriteLine ();
+		classBlock.AppendPreserveAttribute ();
+		classBlock.WriteRaw (
+$@"public {wrapperClassName} (NativeHandle handle, bool owns)
+	: base (handle, owns)
+{{
+}}
+"
+);
 	}
 
 	/// <summary>
@@ -48,7 +56,7 @@ class ProtocolWrapperEmitter : ICodeEmitter {
 			.OrderBy (p => p.Name);
 
 		foreach (var property in allProperties) {
-			classBlock.WriteLine ($"// Implement property: {property.Name}");
+			this.EmitProperty (context, property.ToProtocolWrapperProperty (), classBlock);
 			classBlock.WriteLine ();
 		}
 	}
@@ -65,7 +73,7 @@ class ProtocolWrapperEmitter : ICodeEmitter {
 			.OrderBy (m => m.Name);
 
 		foreach (var method in allMethods) {
-			classBlock.WriteLine ($"// Implement method: {method.Name}");
+			this.EmitMethod (context, method.ToProtocolWrapperMethod (), classBlock);
 			classBlock.WriteLine ();
 		}
 	}
@@ -74,15 +82,14 @@ class ProtocolWrapperEmitter : ICodeEmitter {
 	public bool TryEmit (in BindingContext bindingContext, [NotNullWhen (false)] out ImmutableArray<Diagnostic>? diagnostics)
 	{
 		diagnostics = null;
-		var bindingData = (BindingTypeData<Protocol>) bindingContext.Changes.BindingInfo;
-		var protocolName = bindingData.Name ?? bindingContext.Changes.Name [1..];
-		var wrapperName = Nomenclator.GetProtocolWrapperName (protocolName);
 
+		var wrapperName = bindingContext.GetProtocolWrapperName ();
 		// we do not emit outer classes for protocol wrappers
 		using (var classBlock = bindingContext.Builder.CreateBlock (
 				   $"internal unsafe sealed class {wrapperName} : BaseWrapper, {bindingContext.Changes.Name}",
 				   true)) {
-			EmitDefaultConstructors (bindingContext, classBlock);
+			EmitDefaultConstructors (bindingContext, wrapperName, classBlock);
+			classBlock.WriteLine ();
 			EmitProperties (bindingContext, classBlock);
 			EmitMethods (bindingContext, classBlock);
 		}

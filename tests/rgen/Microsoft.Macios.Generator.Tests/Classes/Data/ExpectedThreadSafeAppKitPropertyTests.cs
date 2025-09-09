@@ -122,6 +122,7 @@ public partial class ThreadSafeAppKitPropertyTests
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst13.1")]
+		[Export ("count")]
 		get
 		{
 			global::System.UIntPtr ret;
@@ -134,4 +135,5 @@ public partial class ThreadSafeAppKitPropertyTests
 			return ret;
 		}
 	}
+
 }

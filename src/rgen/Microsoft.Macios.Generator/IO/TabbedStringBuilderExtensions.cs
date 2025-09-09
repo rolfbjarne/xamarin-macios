@@ -19,7 +19,8 @@ static class TabbedStringBuilderExtensions {
 	/// <param name="self">A tabbed string builder.</param>
 	/// <param name="optimizable">If the binding is Optimizable or not.</param>
 	/// <returns>The current builder.</returns>
-	public static TabbedWriter<StringWriter> AppendGeneratedCodeAttribute (this TabbedWriter<StringWriter> self, bool optimizable = true)
+	public static TabbedWriter<StringWriter> AppendGeneratedCodeAttribute (this TabbedWriter<StringWriter> self,
+		bool optimizable = true)
 	{
 		if (optimizable) {
 			const string attr = "[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]";
@@ -39,7 +40,8 @@ static class TabbedStringBuilderExtensions {
 	/// <param name="className">The class that contains the notification.</param>
 	/// <param name="notification">The name of the notification.</param>
 	/// <returns></returns>
-	public static TabbedWriter<StringWriter> AppendNotificationAdvice (this TabbedWriter<StringWriter> self, in string className, in string notification)
+	public static TabbedWriter<StringWriter> AppendNotificationAdvice (this TabbedWriter<StringWriter> self,
+		in string className, in string notification)
 	{
 		string attr =
 			$"[Advice (\"Use '{className}.Notifications.{notification}' helper method instead.\")]";
@@ -52,7 +54,8 @@ static class TabbedStringBuilderExtensions {
 	/// </summary>
 	/// <param name="self">A tabbed string builder.</param>
 	/// <returns>The current builder.</returns>
-	public static TabbedWriter<StringWriter> AppendEditorBrowsableAttribute (this TabbedWriter<StringWriter> self, EditorBrowsableState state)
+	public static TabbedWriter<StringWriter> AppendEditorBrowsableAttribute (this TabbedWriter<StringWriter> self,
+		EditorBrowsableState state)
 	{
 		string attr = $"[EditorBrowsable (EditorBrowsableState.{state})]";
 		self.WriteLine (attr);
@@ -206,13 +209,15 @@ static class TabbedStringBuilderExtensions {
 
 		// the following are optional since we might not have a proxy for a callback but are used in both cases (methods and properties)
 		if (protocolMemberData.ReturnTypeDelegateProxy is not null) {
-			sb.Append ($", ReturnTypeDelegateProxy = typeof ({protocolMemberData.ReturnTypeDelegateProxy.Value.GetIdentifierSyntax ()})");
+			sb.Append (
+				$", ReturnTypeDelegateProxy = typeof ({protocolMemberData.ReturnTypeDelegateProxy.Value.GetIdentifierSyntax ()})");
 		}
 
 		if (protocolMemberData.ParameterBlockProxy.Length > 0) {
 			// build the parameter block proxy string array
 			var blockProxies = string.Join (", ",
-				protocolMemberData.ParameterBlockProxy.Select (x => x is null ? "null" : $"typeof ({x.Value.GetIdentifierSyntax ()})"));
+				protocolMemberData.ParameterBlockProxy.Select (x =>
+					x is null ? "null" : $"typeof ({x.Value.GetIdentifierSyntax ()})"));
 			sb.Append ($", ParameterBlockProxy = new Type? [] {{ {blockProxies} }}");
 		}
 
@@ -250,6 +255,114 @@ static class TabbedStringBuilderExtensions {
 	public static TabbedWriter<StringWriter> AppendRequiredMemberAttribute (this TabbedWriter<StringWriter> self)
 	{
 		self.WriteLine ($"[{RequiredMember}]");
+		return self;
+	}
+
+	/// <summary>
+	/// Appends an `[Export<Method>]` attribute to the current writer.
+	/// This is a simplified version that only includes the selector, as required by the registrar.
+	/// </summary>
+	/// <param name="self">A tabbed string writer.</param>
+	/// <param name="exportData">The export data for the method, from which the selector is extracted.</param>
+	/// <returns>The current writer.</returns>
+	public static TabbedWriter<StringWriter> AppendExportAttribute (this TabbedWriter<StringWriter> self,
+		ExportData<ObjCBindings.Method> exportData)
+	{
+		// the resitrar does not care about other flags but the selector, so we can just use the selector
+		self.WriteLine ($"[Export<Method> (\"{exportData.Selector}\")]");
+		return self;
+	}
+
+	/// <summary>
+	/// Appends an `[Export<Property>]` attribute to the current writer.
+	/// This is a simplified version that only includes the selector, as required by the registrar.
+	/// </summary>
+	/// <param name="self">A tabbed string writer.</param>
+	/// <param name="exportData">The export data for the property, from which the selector is extracted.</param>
+	/// <returns>The current writer.</returns>
+	public static TabbedWriter<StringWriter> AppendExportAttribute (this TabbedWriter<StringWriter> self,
+		ExportData<ObjCBindings.Property> exportData)
+	{
+		// the registrar does not care about other flags but the selector, so we can just use the selector
+		self.WriteLine ($"[Export<Property> (\"{exportData.Selector}\")]");
+		return self;
+	}
+
+	/// <summary>
+	/// Appends an `[Export]` attribute to the current writer for bgen compatibility.
+	/// This is a simplified version that only includes the selector.
+	/// </summary>
+	/// <param name="self">A tabbed string writer.</param>
+	/// <param name="exportData">The export data for the method, from which the selector is extracted.</param>
+	/// <returns>The current writer.</returns>
+	public static TabbedWriter<StringWriter> AppendBgenExportAttribute (this TabbedWriter<StringWriter> self,
+		ExportData<ObjCBindings.Method> exportData)
+	{
+		// append the old export attribute for bgen compatibility so that we do not need to update the registrar right
+		// away
+		self.WriteLine ($"[Export (\"{exportData.Selector}\")]");
+		return self;
+	}
+
+	/// <summary>
+	/// Appends an `[Export]` attribute to the current writer for bgen compatibility.
+	/// This is a simplified version that only includes the selector.
+	/// </summary>
+	/// <param name="self">A tabbed string writer.</param>
+	/// <param name="selector">The selector for the export attribute.</param>
+	/// <returns>The current writer.</returns>
+	public static TabbedWriter<StringWriter> AppendBgenExportAttribute (this TabbedWriter<StringWriter> self,
+		string? selector)
+	{
+		if (string.IsNullOrEmpty (selector))
+			return self;
+
+		// append the old export attribute for bgen compatibility so that we do not need to update the registrar right
+		// away
+		self.WriteLine ($"[Export (\"{selector}\")]");
+		return self;
+	}
+
+	/// <summary>
+	/// Appends an `[Export]` attribute to the current writer for bgen compatibility.
+	/// This is a simplified version that only includes the selector.
+	/// </summary>
+	/// <param name="self">A tabbed string writer.</param>
+	/// <param name="exportData">The export data for the property, from which the selector is extracted.</param>
+	/// <returns>The current writer.</returns>
+	public static TabbedWriter<StringWriter> AppendBgenExportAttribute (this TabbedWriter<StringWriter> self,
+		ExportData<ObjCBindings.Property> exportData)
+	{
+		// append the old export attribute for bgen compatibility so that we do not need to update the registrar right
+		// away
+		self.WriteLine ($"[Export (\"{exportData.Selector}\")]");
+		return self;
+	}
+
+	/// <summary>
+	/// Appends a `[Register]` attribute to the current writer.
+	/// This attribute is used to register a type with the Objective-C runtime.
+	/// </summary>
+	/// <param name="self">A tabbed string writer.</param>
+	/// <param name="registrationName">The name to register the type with.</param>
+	/// <param name="isWrapper">A value indicating whether the type is a wrapper around a native type.</param>
+	/// <returns>The current writer.</returns>
+	public static TabbedWriter<StringWriter> AppendRegisterAttribute (this TabbedWriter<StringWriter> self,
+		string registrationName, bool isWrapper)
+	{
+		self.WriteLine ($"[Register (\"{registrationName}\", {isWrapper.ToString ().ToLower ()})]");
+		return self;
+	}
+
+	/// <summary>
+	/// Appends a `[Register]` attribute to the current writer.
+	/// This attribute is used to register a type with the Objective-C runtime using its C# name.
+	/// </summary>
+	/// <param name="self">A tabbed string writer.</param>
+	/// <returns>The current writer.</returns>
+	public static TabbedWriter<StringWriter> AppendRegisterAttribute (this TabbedWriter<StringWriter> self)
+	{
+		self.WriteLine ("[Register]");
 		return self;
 	}
 }

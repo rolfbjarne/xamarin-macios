@@ -1389,12 +1389,6 @@ F:AVFoundation.AVCaptureSessionInterruptionReason.SensitiveContentMitigationActi
 F:AVFoundation.AVCaptureSystemPressureFactors.CameraTemperature
 F:AVFoundation.AVCaptureSystemUserInterface.MicrophoneModes
 F:AVFoundation.AVCaptureSystemUserInterface.VideoEffects
-F:AVFoundation.AVCaptureTimecode.FrameDuration
-F:AVFoundation.AVCaptureTimecode.Frames
-F:AVFoundation.AVCaptureTimecode.Hours
-F:AVFoundation.AVCaptureTimecode.Minutes
-F:AVFoundation.AVCaptureTimecode.Seconds
-F:AVFoundation.AVCaptureTimecode.UserBits
 F:AVFoundation.AVCaptureTimecodeGeneratorSynchronizationStatus.NotRequired
 F:AVFoundation.AVCaptureTimecodeGeneratorSynchronizationStatus.SourceSelected
 F:AVFoundation.AVCaptureTimecodeGeneratorSynchronizationStatus.SourceUnavailable
@@ -9448,7 +9442,7 @@ M:AVFoundation.AVCaptureDeskViewApplication.PresentAsync
 M:AVFoundation.AVCaptureDeskViewApplication.PresentAsync(AVFoundation.AVCaptureDeskViewApplicationLaunchConfiguration)
 M:AVFoundation.AVCaptureDevice.Dispose(System.Boolean)
 M:AVFoundation.AVCaptureDevice.SetDynamicAspectRatioAsync(System.String)
-M:AVFoundation.AVCaptureDevice.SetWhiteBalanceModeLockedWithDeviceAsync(AVFoundation.AVCaptureWhiteBalanceTemperatureAndTintValue)
+M:AVFoundation.AVCaptureDevice.SetWhiteBalanceModeLockedAsync(AVFoundation.AVCaptureWhiteBalanceTemperatureAndTintValue)
 M:AVFoundation.AVCaptureDeviceRotationCoordinator.Dispose(System.Boolean)
 M:AVFoundation.AVCaptureExternalDisplayConfigurator.Dispose(System.Boolean)
 M:AVFoundation.AVCaptureFileOutput.Dispose(System.Boolean)
@@ -9460,7 +9454,7 @@ M:AVFoundation.AVCapturePhotoOutput.Dispose(System.Boolean)
 M:AVFoundation.AVCapturePhotoOutputReadinessCoordinator.Dispose(System.Boolean)
 M:AVFoundation.AVCapturePhotoSettings.Dispose(System.Boolean)
 M:AVFoundation.AVCaptureSceneMonitoringStatusExtensions.ToFlags(System.Collections.Generic.IEnumerable{Foundation.NSString})
-M:AVFoundation.AVCaptureTimecode.#ctor(System.Byte,System.Byte,System.Byte,System.Byte,System.Int32,CoreMedia.CMTime,AVFoundation.AVCaptureTimecodeSourceType)
+M:AVFoundation.AVCaptureTimecode.#ctor(System.Byte,System.Byte,System.Byte,System.Byte,System.UInt32,CoreMedia.CMTime,AVFoundation.AVCaptureTimecodeSourceType)
 M:AVFoundation.AVCaptureTimecode.AddFrames(System.Int64)
 M:AVFoundation.AVCaptureTimecode.CreateMetadataSampleBufferAssociatedWithPresentationTimeStamp(CoreMedia.CMTime)
 M:AVFoundation.AVCaptureTimecode.CreateMetadataSampleBufferForDuration(CoreMedia.CMTime)
@@ -18844,7 +18838,13 @@ P:AVFoundation.AVCaptureSession.MultitaskingCameraAccessSupported
 P:AVFoundation.AVCaptureSessionRuntimeErrorEventArgs.Error
 P:AVFoundation.AVCaptureSmartFramingMonitor.Monitoring
 P:AVFoundation.AVCaptureSynchronizedDataCollection.Item(AVFoundation.AVCaptureOutput)
+P:AVFoundation.AVCaptureTimecode.FrameDuration
+P:AVFoundation.AVCaptureTimecode.Frames
+P:AVFoundation.AVCaptureTimecode.Hours
+P:AVFoundation.AVCaptureTimecode.Minutes
+P:AVFoundation.AVCaptureTimecode.Seconds
 P:AVFoundation.AVCaptureTimecode.SourceType
+P:AVFoundation.AVCaptureTimecode.UserBits
 P:AVFoundation.AVCaptureTimecodeGenerator.Delegate
 P:AVFoundation.AVCaptureVideoPreviewLayer.DeferredStartEnabled
 P:AVFoundation.AVCaptureVideoPreviewLayer.DeferredStartSupported
@@ -25298,6 +25298,7 @@ T:AVFoundation.AVCaptureCameraLensSmudgeDetectionStatus
 T:AVFoundation.AVCaptureCenterStageControlMode
 T:AVFoundation.AVCaptureCinematicVideoFocusMode
 T:AVFoundation.AVCaptureDeskViewApplicationPresentHandler
+T:AVFoundation.AVCaptureDeviceSetDynamicAspectRatioCallback
 T:AVFoundation.AVCaptureIndexPickerCallback
 T:AVFoundation.AVCaptureIndexPickerTitleTransform
 T:AVFoundation.AVCaptureMicrophoneMode

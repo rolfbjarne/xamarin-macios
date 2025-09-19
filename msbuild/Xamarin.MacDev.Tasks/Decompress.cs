@@ -48,6 +48,9 @@ namespace Xamarin.MacDev {
 				var contentEntry = zip.GetEntry (relativeFilePath.Replace ('\\', '/')); // directory separator character is '/' on all platforms in zip files.
 				if (contentEntry is null) {
 					log.LogWarning (MSBStrings.W7106 /* Expected a file named '{1}' in the zip file {0}. */, resources, relativeFilePath);
+					log.LogWarning ($"Found {zip.Entries.Count ()} files in the zip archive:");
+					foreach (var e in zip.Entries)
+						log.LogWarning ($"    {e.FullName}: Name={e.Name}");
 					return null;
 				}
 

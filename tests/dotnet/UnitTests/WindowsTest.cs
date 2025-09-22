@@ -55,20 +55,24 @@ namespace Xamarin.Tests {
 			DotNet.AssertBuild (project_path, properties);
 		}
 
+		class FileData {
+			public required string FullPath;
+			public required string RelativePath;
+		}
+
 		void AssertMaxFileLengthInBinAndObjDirectories (ApplePlatform platform, string project_path, string runtimeIdentifiers, string configuration)
 		{
 			var binDir = GetBinDir (project_path, platform, runtimeIdentifiers, configuration);
 			var objDir = GetObjDir (project_path, platform, runtimeIdentifiers, configuration);
 
-			var allFiles = new List<string> ();
+			var allFiles = new List<FileData> ();
 			foreach (var dir in new string[] { binDir, objDir}) {
 				var parentDir = Path.GetDirectoryName (dir)!;
-				allFiles.AddRange (Directory.GetFileSystemEntries (dir, "*", SearchOption.AllDirectories).Select (v => v.Substring (parentDir.Length)));
+				allFiles.AddRange (Directory.GetFileSystemEntries (dir, "*", SearchOption.AllDirectories).Select (v => new FileData { FullPath = v, RelativePath = v.Substring (parentDir.Length) }));
 			}
-			var allFilesWithInfo = allFiles.Select (v => new { FullPath = v, Info = new FileInfo (v) }).ToList ();
-			Console.WriteLine ($"Found {allFilesWithInfo.Count} files in bin and obj:");
-			foreach (var f in allFilesWithInfo.OrderBy (v => v.Info.Length)) {
-				Console.WriteLine ($"    Length={f.Info.Length} {f.FullPath}");
+			Console.WriteLine ($"Found {allFiles.Count} files in bin and obj:");
+			foreach (var f in allFiles.OrderBy (v => v.RelativePath.Length)) {
+				Console.WriteLine ($"    Length={f.RelativePath.Length} {f.RelativePath}");
 			}
 		}
 

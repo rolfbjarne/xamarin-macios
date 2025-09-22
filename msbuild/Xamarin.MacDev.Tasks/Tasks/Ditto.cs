@@ -99,8 +99,11 @@ namespace Xamarin.MacDev.Tasks {
 			}
 			CopiedFiles = copiedFiles.ToArray ();
 
-			if (!string.IsNullOrEmpty (StampFile?.ItemSpec))
-				File.WriteAllText (StampFile!.ItemSpec, "");
+			var stampPath = StampFile?.ItemSpec;
+			if (!string.IsNullOrEmpty (stampPath)) {
+				Directory.CreateDirectory (Path.GetDirectoryName (stampPath));
+				File.WriteAllText (stampPath, "");
+			}
 
 			return !Log.HasLoggedErrors;
 		}

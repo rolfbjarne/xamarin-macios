@@ -918,7 +918,7 @@
 		<ItemGroup>
 			<_DirectoriesToPublish />
 			<_DirectoriesToPublish Include="@(_DirectoriesToPublishWithStampHash)">
-				<StampLocation>$(DeviceSpecificIntermediateOutputPath)copieddirectories\%(StampHash)</StampLocation>
+				<StampLocation>$(DeviceSpecificIntermediateOutputPath)copieddirectories\%(_DirectoriesToPublishWithStampHash.StampHash)</StampLocation>
 			</_DirectoriesToPublish>
 		</ItemGroup>
 	</Target>

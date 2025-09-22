@@ -907,10 +907,26 @@
 		</ItemGroup>
 	</Target>
 
+	<Target Name="_CreateStampLocationForCopyDirectoriesToBundle">
+		<CreateStampLocation
+			Input="@(_DirectoriesToPublish)"
+			InputMetadata="Identity;TargetDirectory"
+			OutputMetadata="StampHash"
+		>
+			<Output TaskParameter="Output" ItemName="_DirectoriesToPublishWithStampHash" />
+		</CreateStampLocation>
+		<ItemGroup>
+			<_DirectoriesToPublish />
+			<_DirectoriesToPublish Include="@(_DirectoriesToPublishWithStampHash)">
+				<StampLocation>$(DeviceSpecificIntermediateOutputPath)copieddirectories\%(StampHash)</StampLocation>
+			</_DirectoriesToPublish>
+		</ItemGroup>
+	</Target>
+
 	<Target Name="_CopyDirectoriesToBundle"
-		DependsOnTargets="_CollectDecompressedPlugins;_ComputeFrameworkFilesToPublish;_CollectDecompressedXpcServices"
+		DependsOnTargets="_CollectDecompressedPlugins;_ComputeFrameworkFilesToPublish;_CollectDecompressedXpcServices;_CreateStampLocationForCopyDirectoriesToBundle"
 		Inputs="@(_DirectoriesToPublish)"
-		Outputs="@(_DirectoriesToPublish -> '%(TargetDirectory)/%(Filename)')"
+		Outputs="@(_DirectoriesToPublish -> '%(StampLocation)')"
 		>
 
 		<!-- Ask ditto to not copy architectures we don't care about. This can be overridden by passing 'SkipLibraryThinning=true' -->
@@ -931,6 +947,7 @@
 			Source="%(_DirectoriesToPublish.SourceDirectory)"
 			Destination="%(_DirectoriesToPublish.TargetDirectory)"
 			TouchDestinationFiles="true"
+			StampFile="%(_DirectoriesToPublish.StampLocation)"
 		/>
 	</Target>
 

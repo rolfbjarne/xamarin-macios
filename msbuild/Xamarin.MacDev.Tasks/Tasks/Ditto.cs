@@ -39,6 +39,8 @@ namespace Xamarin.MacDev.Tasks {
 		[Required]
 		public ITaskItem? Destination { get; set; }
 
+		public ITaskItem? StampFile { get; set; }
+
 		public bool TouchDestinationFiles { get; set; }
 
 		// This property is required for XVS to work properly, even though it's not used for anything in the targets.
@@ -97,6 +99,9 @@ namespace Xamarin.MacDev.Tasks {
 			}
 			CopiedFiles = copiedFiles.ToArray ();
 
+			if (!string.IsNullOrEmpty (StampFile?.ItemSpec))
+				File.WriteAllText (StampFile!.ItemSpec, "");
+
 			return !Log.HasLoggedErrors;
 		}
 
@@ -125,6 +130,12 @@ namespace Xamarin.MacDev.Tasks {
 
 		public bool ShouldCopyToBuildServer (ITaskItem item) => true;
 
-		public bool ShouldCreateOutputFile (ITaskItem item) => true;
+		public bool ShouldCreateOutputFile (ITaskItem item)
+		{
+			if (string.IsNullOrEmpty (StampFile?.ItemSpec))
+				return true;
+
+			return item == StampFile;
+		}
 	}
 }

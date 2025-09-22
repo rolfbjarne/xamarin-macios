@@ -55,6 +55,23 @@ namespace Xamarin.Tests {
 			DotNet.AssertBuild (project_path, properties);
 		}
 
+		void AssertMaxFileLengthInBinAndObjDirectories (ApplePlatform platform, string project_path, string runtimeIdentifiers, string configuration)
+		{
+			var binDir = GetBinDir (project_path, platform, runtimeIdentifiers, configuration);
+			var objDir = GetObjDir (project_path, platform, runtimeIdentifiers, configuration);
+
+			var allFiles = new List<string> ();
+			foreach (var dir in new string[] { binDir, objDir}) {
+				var parentDir = Path.GetDirectoryName (dir)!;
+				allFiles.AddRange (Directory.GetFileSystemEntries (dir, "*", SearchOption.AllDirectories).Select (v => v.Substring (parentDir.Length)));
+			}
+			var allFilesWithInfo = allFiles.Select (v => new { FullPath = v, Info = new FileInfo (v) }).ToList ();
+			Console.WriteLine ($"Found {allFilesWithInfo.Count} files in bin and obj:");
+			foreach (var f in allFilesWithInfo.OrderBy (v => v.Info.Length)) {
+				Console.WriteLine ($"    Length={f.Info.Length} {f.FullPath}");
+			}
+		}
+
 		[Category ("RemoteWindows")]
 		[TestCase (ApplePlatform.iOS, "ios-arm64", BundleStructureTest.CodeSignature.All, "Debug")]
 		public void BundleStructureWithRemoteMac (ApplePlatform platform, string runtimeIdentifiers, BundleStructureTest.CodeSignature signature, string configuration)
@@ -123,6 +140,9 @@ namespace Xamarin.Tests {
 			AssertWarningsEqual (expectedWarnings, warningMessages, "Warnings");
 			ExecuteWithMagicWordAndAssert (platform, runtimeIdentifiers, appExecutable);
 
+			// Verify that we don't create files with long paths inside bin/obj
+			AssertMaxFileLengthInBinAndObjDirectories (platform, project_path, runtimeIdentifiers, configuration);
+
 			// touch AppDelegate.cs, and rebuild should succeed and do the right thing
 			var appDelegatePath = Path.Combine (project_dir, "AppDelegate.cs");
 			Configuration.Touch (appDelegatePath);
@@ -136,6 +156,9 @@ namespace Xamarin.Tests {
 			AssertWarningsEqual (expectedWarnings, warningMessages, "Warnings Rebuild 1");
 			AssertTargetNotExecuted (allTargets, "_CompileAppManifest", "_CompileAppManifest Rebuild 1");
 			ExecuteWithMagicWordAndAssert (platform, runtimeIdentifiers, appExecutable);
+
+			// Verify that we don't create files with long paths inside bin/obj
+			AssertMaxFileLengthInBinAndObjDirectories (platform, project_path, runtimeIdentifiers, configuration);
 
 			// remove the bin directory, and rebuild should succeed and do the right thing
 			var binDirectory = Path.Combine (Path.GetDirectoryName (project_path)!, "bin");
@@ -151,6 +174,9 @@ namespace Xamarin.Tests {
 			AssertTargetNotExecuted (allTargets, "_CompileAppManifest", "_CompileAppManifest Rebuild 2");
 			ExecuteWithMagicWordAndAssert (platform, runtimeIdentifiers, appExecutable);
 
+			// Verify that we don't create files with long paths inside bin/obj
+			AssertMaxFileLengthInBinAndObjDirectories (platform, project_path, runtimeIdentifiers, configuration);
+
 			// a simple rebuild should succeed
 			rv = DotNet.AssertBuild (project_path, properties);
 			allTargets = BinLog.GetAllTargets (rv.BinLogPath);
@@ -161,6 +187,9 @@ namespace Xamarin.Tests {
 			AssertWarningsEqual (expectedWarnings, warningMessages, "Warnings Rebuild 3");
 			AssertTargetNotExecuted (allTargets, "_CompileAppManifest", "_CompileAppManifest Rebuild 3");
 			ExecuteWithMagicWordAndAssert (platform, runtimeIdentifiers, appExecutable);
+
+			// Verify that we don't create files with long paths inside bin/obj
+			AssertMaxFileLengthInBinAndObjDirectories (platform, project_path, runtimeIdentifiers, configuration);
 		}
 
 		[Category ("RemoteWindows")]

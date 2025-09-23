@@ -68,7 +68,7 @@ namespace Xamarin.Tests {
 			var allFiles = new List<FileData> ();
 			foreach (var dir in new string[] { binDir, objDir}) {
 				var distinguisher = Path.GetFileName (dir);
-				allFiles.AddRange (Directory.GetFileSystemEntries (dir, "*", SearchOption.AllDirectories).Select (v => new FileData { FullPath = v, RelativePath = $"{Path.Combine (distinguisher, v.Substring (dir.Length))}" }));
+				allFiles.AddRange (Directory.GetFileSystemEntries (dir, "*", SearchOption.AllDirectories).Select (v => new FileData { FullPath = v, RelativePath = $"{Path.Combine (distinguisher, v.Substring (dir.Length + 1))}" }));
 			}
 			Console.WriteLine ($"Found {allFiles.Count} files in bin and obj:");
 			foreach (var f in allFiles.OrderBy (v => v.RelativePath.Length)) {

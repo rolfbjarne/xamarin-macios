@@ -948,6 +948,7 @@
 			Destination="%(_DirectoriesToPublish.TargetDirectory)"
 			TouchDestinationFiles="true"
 			StampFile="%(_DirectoriesToPublish.StampLocation)"
+			CreateOutputFiles="false"
 		/>
 	</Target>
 

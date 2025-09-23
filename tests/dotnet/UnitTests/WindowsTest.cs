@@ -76,7 +76,7 @@ namespace Xamarin.Tests {
 				Console.WriteLine ($"    Length={f.RelativePath.Length} {f.RelativePath} ({f.FullPath})");
 			}
 
-			var longerThanMax = allFiles.Where (v => f.RelativePath.Length > maxLength).Select (v => $"{v.RelativePath} (length: {v.RelativePath.Length})").ToArray ();
+			var longerThanMax = allFiles.Where (v => v.RelativePath.Length > maxLength).Select (v => $"{v.RelativePath} (length: {v.RelativePath.Length})").ToArray ();
 			Assert.That (longerThanMax, Is.Empty, $"Relative paths longer than max ({maxLength})");
 		}
 

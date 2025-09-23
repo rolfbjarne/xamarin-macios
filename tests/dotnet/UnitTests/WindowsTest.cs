@@ -60,7 +60,7 @@ namespace Xamarin.Tests {
 			public required string RelativePath;
 		}
 
-		void AssertMaxFileLengthInBinAndObjDirectories (ApplePlatform platform, string project_path, string runtimeIdentifiers, string configuration)
+		void AssertMaxFileLengthInBinAndObjDirectories (ApplePlatform platform, string project_path, string runtimeIdentifiers, string configuration, int maxLength = 120)
 		{
 			var binDir = GetBinDir (project_path, platform, runtimeIdentifiers, configuration);
 			var objDir = GetObjDir (project_path, platform, runtimeIdentifiers, configuration);
@@ -68,12 +68,16 @@ namespace Xamarin.Tests {
 			var allFiles = new List<FileData> ();
 			foreach (var dir in new string[] { binDir, objDir}) {
 				var parentDir = Path.GetDirectoryName (dir)!;
+				Console.WriteLine ($"dir: {dir} parentDir: {parentDir}");
 				allFiles.AddRange (Directory.GetFileSystemEntries (dir, "*", SearchOption.AllDirectories).Select (v => new FileData { FullPath = v, RelativePath = v.Substring (parentDir.Length) }));
 			}
 			Console.WriteLine ($"Found {allFiles.Count} files in bin and obj:");
 			foreach (var f in allFiles.OrderBy (v => v.RelativePath.Length)) {
-				Console.WriteLine ($"    Length={f.RelativePath.Length} {f.RelativePath}");
+				Console.WriteLine ($"    Length={f.RelativePath.Length} {f.RelativePath} ({f.FullPath})");
 			}
+
+			var longerThanMax = allFiles.Where (v => f.RelativePath.Length > maxLength).Select (v => $"{v.RelativePath} (length: {v.RelativePath.Length})").ToArray ();
+			Assert.That (longerThanMax, Is.Empty, $"Relative paths longer than max ({maxLength})");
 		}
 
 		[Category ("RemoteWindows")]

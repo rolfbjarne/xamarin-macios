@@ -60,7 +60,7 @@ namespace Xamarin.Tests {
 			public required string RelativePath;
 		}
 
-		void AssertMaxFileLengthInBinAndObjDirectories (ApplePlatform platform, string project_path, string runtimeIdentifiers, string configuration, int maxLength = 120)
+		void AssertMaxFileLengthInBinAndObjDirectories (ApplePlatform platform, string project_path, string runtimeIdentifiers, string configuration, int maxLength = 110)
 		{
 			var binDir = GetBinDir (project_path, platform, runtimeIdentifiers, configuration);
 			var objDir = GetObjDir (project_path, platform, runtimeIdentifiers, configuration);

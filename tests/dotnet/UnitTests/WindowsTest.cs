@@ -78,6 +78,18 @@ namespace Xamarin.Tests {
 
 			var longerThanMax = allFiles.Where (v => v.RelativePath.Length > maxLength).Select (v => $"{v.RelativePath} (length: {v.RelativePath.Length})").ToArray ();
 			Assert.That (longerThanMax, Is.Empty, $"Relative paths longer than max ({maxLength})");
+
+			var invalidPaths = new string []
+			{
+				// 'full-paths-exceeding-two-hundred-and-sixty-characters' is a subdirectory inside the FrameworkWithLongFileNames framework
+				"full-paths-exceeding-two-hundred-and-sixty-characters",
+				// 'especially-when-contained-in-other-directories.h' is a file inside the FrameworkWithLongFileNames framework
+				"especially-when-contained-in-other-directories.h",
+			};
+			foreach (var ip in invalidPaths) {
+				var withLongFilenames = allFiles.Where (v => v.RelativePath.Contains (ip)).ToArray ();
+				Assert.That (longerThanMax, Is.Empty, $"No paths with '{ip}'");
+			}
 		}
 
 		[Category ("RemoteWindows")]

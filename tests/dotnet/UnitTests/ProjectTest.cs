@@ -870,7 +870,8 @@ namespace Xamarin.Tests {
 			Assert.That (asm, Does.Exist, "Assembly existence");
 
 			using var ad = AssemblyDefinition.ReadAssembly (asm, new ReaderParameters { ReadingMode = ReadingMode.Deferred });
-			var actualResources = ad.MainModule.Resources.Select (v => v.Name).OrderBy (v => v).ToArray ();
+			var actualAssemblyResources = ad.MainModule.Resources;
+			var actualResources = actualAssemblyResources.Select (v => v.Name).OrderBy (v => v).ToArray ();
 
 			List<string> expectedResources;
 
@@ -957,6 +958,9 @@ namespace Xamarin.Tests {
 				expectedResources = new List<string> ();
 			}
 			CollectionAssert.AreEquivalent (expectedResources, actualResources, "Resources");
+
+			var emptyResources = actualAssemblyResources.Where (v => v.ResourceType == ResourceType.Embedded && ((EmbeddedResource) v).GetResourceData ().Length == 0).ToArray ();
+			Assert.That (emptyResources, Is.Empty, $"Found empty resources: {string.Join (", ", emptyResources.Select (v => v.Name))}");
 		}
 
 		[TestCase (ApplePlatform.iOS, "ios-arm64", false)]

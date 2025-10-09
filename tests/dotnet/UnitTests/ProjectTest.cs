@@ -959,8 +959,8 @@ namespace Xamarin.Tests {
 			}
 			CollectionAssert.AreEquivalent (expectedResources, actualResources, "Resources");
 
-			var emptyResources = actualAssemblyResources.Where (v => v.ResourceType == ResourceType.Embedded && ((EmbeddedResource) v).GetResourceData ().Length == 0).ToArray ();
-			Assert.That (emptyResources, Is.Empty, $"Found empty resources: {string.Join (", ", emptyResources.Select (v => v.Name))}");
+			var zeroLengthResources = actualAssemblyResources.Where (v => v.ResourceType == ResourceType.Embedded && ((EmbeddedResource) v).GetResourceData ().Length == 0).Select (v => v.Name).ToArray ();
+			Assert.That (zeroLengthResources, Is.Empty, $"0-length resources");
 		}
 
 		[TestCase (ApplePlatform.iOS, "ios-arm64", false)]

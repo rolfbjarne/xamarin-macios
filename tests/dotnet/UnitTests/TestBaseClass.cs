@@ -529,7 +529,7 @@ namespace Xamarin.Tests {
 			if (actualMessages.Count != expectedCount) {
 				Assert.Fail ($"Expected {expectedCount} {type}(s), got {actualMessages.Count} {type}(s)\n" +
 					$"\tExpected:\n" +
-					$"\t\t{string.Join ("\n\t\t", rendersExpectedMessage.Select (v => makeSingleLine (v ())))}" +
+					$"\t\t{string.Join ("\n\t\t", rendersExpectedMessage.Select (v => makeSingleLine (v ())))}\n" +
 					$"\tActual:\n" +
 					$"\t\t{string.Join ("\n\t\t", actualMessages.Select (v => makeSingleLine (v.Message)))}");
 				return;
@@ -619,6 +619,22 @@ namespace Xamarin.Tests {
 			}
 			if (nowarn.Count > 0)
 				properties ["NoWarn"] = string.Join (";", nowarn);
+		}
+
+		public static bool UsesCompressedBindingResourcePackage (ApplePlatform platform, string mode = "auto")
+		{
+			if (string.Equals (mode, "true", StringComparison.OrdinalIgnoreCase)) {
+				return true;
+			} else if (string.Equals (mode, "false", StringComparison.OrdinalIgnoreCase)) {
+				return false;
+			} else if (string.Equals (mode, "auto", StringComparison.OrdinalIgnoreCase)) {
+				// we used to compress only if there were symlinks (would happen on macOS and Mac Catalyst),
+				// but now we always compress to avoid MAX_PATH issues with iOS on Windows.
+				return true;
+			} else {
+				throw new ArgumentOutOfRangeException (nameof (mode), "Must be 'true', 'false' or 'auto'");
+			}
+
 		}
 	}
 }

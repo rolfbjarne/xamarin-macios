@@ -290,8 +290,12 @@ namespace Xamarin.Tests {
 			AddExpectedFrameworkFiles (platform, expectedFiles, "FrameworkTest4", isSigned);
 			AddExpectedFrameworkFiles (platform, expectedFiles, "FrameworkTest5", isSigned);
 
-			AddMultiRidAssembly (platform, expectedFiles, assemblyDirectory, "bindings-framework-test", runtimeIdentifiers, forceSingleRid: !(platform == ApplePlatform.MacCatalyst && isReleaseBuild), includeDebugFiles: includeDebugFiles);
+			expectedFiles.Add (Path.Combine (assemblyDirectory, "bindings-framework-test.dll"));
+			if (includeDebugFiles)
+				expectedFiles.Add (Path.Combine (assemblyDirectory, "bindings-framework-test.pdb"));
 			AddExpectedFrameworkFiles (platform, expectedFiles, "XTest", isSigned);
+
+			AddExpectedFrameworkFiles (platform, expectedFiles, "FrameworkWithLongFileNames", isSigned, longHeader: true);
 
 			// various directories
 			expectedFiles.Add (frameworksDirectory);
@@ -309,10 +313,10 @@ namespace Xamarin.Tests {
 			expectedFiles.Add (Path.Combine (assemblyDirectory, "nunit.framework.dll"));
 			expectedFiles.Add (Path.Combine (assemblyDirectory, "nunitlite.dll"));
 			expectedFiles.Add (Path.Combine (assemblyDirectory, "Mono.Options.dll"));
-			bool forceSingleRidTouchClient = (platform == ApplePlatform.MacCatalyst && !isReleaseBuild) || platform == ApplePlatform.MacOSX;
-			AddMultiRidAssembly (platform, expectedFiles, assemblyDirectory, "Touch.Client", runtimeIdentifiers, forceSingleRidTouchClient, includeDebugFiles: includeDebugFiles);
-			bool forceSinglePlatformAssembly = platform == ApplePlatform.MacOSX;
-			AddMultiRidAssembly (platform, expectedFiles, assemblyDirectory, Path.GetFileNameWithoutExtension (Configuration.GetBaseLibraryName (platform)), runtimeIdentifiers, forceSinglePlatformAssembly, includeDebugFiles: includeDebugFiles);
+			expectedFiles.Add (Path.Combine (assemblyDirectory, "Touch.Client.dll"));
+			if (includeDebugFiles)
+				expectedFiles.Add (Path.Combine (assemblyDirectory, "Touch.Client.pdb"));
+			AddMultiRidAssembly (platform, expectedFiles, assemblyDirectory, Path.GetFileNameWithoutExtension (Configuration.GetBaseLibraryName (platform)), runtimeIdentifiers, platform == ApplePlatform.MacOSX, includeDebugFiles: includeDebugFiles);
 			expectedFiles.Add (Path.Combine (assemblyDirectory, "runtimeconfig.bin"));
 
 			switch (platform) {
@@ -532,10 +536,11 @@ namespace Xamarin.Tests {
 			}
 		}
 
-		static void AddExpectedFrameworkFiles (ApplePlatform platform, List<string> expectedFiles, string frameworkName, CodeSignature signature, string subdirectory = "")
+		static void AddExpectedFrameworkFiles (ApplePlatform platform, List<string> expectedFiles, string frameworkName, CodeSignature signature, string subdirectory = "", bool longHeader = false)
 		{
 			var isSigned = signature != CodeSignature.None;
 			var frameworksDirectory = "Frameworks";
+			var headersDirectoryInFramework = "Headers";
 			switch (platform) {
 			case ApplePlatform.iOS:
 			case ApplePlatform.TVOS:
@@ -543,10 +548,15 @@ namespace Xamarin.Tests {
 			case ApplePlatform.MacCatalyst:
 			case ApplePlatform.MacOSX:
 				frameworksDirectory = Path.Combine ("Contents", "Frameworks");
+				headersDirectoryInFramework = Path.Combine ("Versions", "A", "Headers");
 				break;
 			default:
 				throw new NotImplementedException ($"Unknown platform: {platform}");
 			}
+
+			var headers = new List<string> ();
+			if (longHeader)
+				headers.Add (Path.Combine (headersDirectoryInFramework, "full-paths-exceeding-two-hundred-and-sixty-characters", "often-cause-trouble-on-windows", "where-the-maximum-is-by-default-two-hundred-and-sixty-characters", "because-frameworks-and-by-extension-xcframeworks", "very-often-have-paths-longer-than-this-limit", "especially-when-contained-in-other-directories.h"));
 
 			expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework"));
 			expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework", frameworkName));
@@ -564,9 +574,21 @@ namespace Xamarin.Tests {
 				expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework", "Versions", "A", "Resources", "Info.plist"));
 				expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework", "Versions", "A", frameworkName));
 				expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework", "Versions", "Current"));
+
+				if (headers.Any ())
+					expectedFiles.Add (Path.Combine (frameworksDirectory, $"{frameworkName}.framework", "Headers"));
 				break;
 			default:
 				throw new NotImplementedException ($"Unknown platform: {platform}");
+			}
+
+			foreach (var header in headers) {
+				var path = Path.Combine (frameworksDirectory, $"{frameworkName}.framework");
+				var headerComponents = header.Split ('\\', '/');
+				for (var i = 0; i < headerComponents.Length; i++) {
+					path = Path.Combine (path, headerComponents [i]);
+					expectedFiles.Add (path);
+				}
 			}
 
 			if (isSigned) {

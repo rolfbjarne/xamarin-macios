@@ -640,6 +640,17 @@
 			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) -b</_ExtraTrimmerArgs>
 
 			<!--
+				Always preserve symbol paths, which will preserve the original path to the pdb in the trimmed assembly.
+				This ensures that building for different architectures don't end up with different trimmed assemblies
+				only because the path to the pdb in the trimmed assembly is different between those builds.
+				References:
+				* https://github.com/dotnet/runtime/pull/103295
+				* https://github.com/jbevain/cecil/pull/554
+				* https://github.com/rolfbjarne/macios/commit/53874c863996656eaba43a5582731b93eb6f53b7
+			-->
+			<_ExtraTrimmerArgs>$(_ExtraTrimmerArgs) --preserve-symbol-paths</_ExtraTrimmerArgs>
+
+			<!--
 
 				The linker will treat type checks as a constant value (false),
 				if the type in question is not instantiated, but we're
@@ -907,10 +918,44 @@
 		</ItemGroup>
 	</Target>
 
+	<!-- When copying files into the app bundle, the final paths can be *long*. This is not a problem on macOS, but Windows still lives in a world where MAX_PATH is unreasonable,
+	     so we have to come up with some hopefully not too unreasonable workarounds.
+
+	     We want the _CopyDirectoriesToBundle task to have correct Inputs and Outputs (to support incremental builds properly), but to avoid ending up
+	     with Outputs paths that cause problems on Windows, we use a stamp file as the Output, and the stamp file is a hashed version of the actual Output location
+
+	     This target will compute that stamp file location.
+	-->
+	<Target Name="_CreateStampLocationForCopyDirectoriesToBundle">
+		<ComputeHashForItems
+			Input="@(_DirectoriesToPublish)"
+			InputMetadata="Identity;TargetDirectory"
+			OutputMetadata="StampHash"
+		>
+			<Output TaskParameter="Output" ItemName="_DirectoriesToPublishWithStampHash" />
+		</ComputeHashForItems>
+		<ItemGroup>
+			<_DirectoriesToPublish />
+			<_DirectoriesToPublish Include="@(_DirectoriesToPublishWithStampHash)">
+				<StampLocation>$(DeviceSpecificIntermediateOutputPath)copieddirectories\%(_DirectoriesToPublishWithStampHash.StampHash)</StampLocation>
+			</_DirectoriesToPublish>
+
+			<_StampFilesToDelete Include="@(_DirectoriesToPublish -> '%(StampLocation)')" Condition="!Exists('%(_DirectoriesToPublish.TargetDirectory)')">
+				<SourceDirectory>%(_DirectoriesToPublish.SourceDirectory)</SourceDirectory>
+				<TargetDirectory>%(_DirectoriesToPublish.TargetDirectory)</TargetDirectory>
+			</_StampFilesToDelete>
+		</ItemGroup>
+
+		<Delete
+			SessionId="$(BuildSessionId)"
+			Files="@(_StampFilesToDelete)"
+		/>
+	</Target>
+
 	<Target Name="_CopyDirectoriesToBundle"
-		DependsOnTargets="_CollectDecompressedPlugins;_ComputeFrameworkFilesToPublish;_CollectDecompressedXpcServices"
+		DependsOnTargets="_CollectDecompressedPlugins;_ComputeFrameworkFilesToPublish;_CollectDecompressedXpcServices;_CreateStampLocationForCopyDirectoriesToBundle"
 		Inputs="@(_DirectoriesToPublish)"
-		Outputs="@(_DirectoriesToPublish -> '%(TargetDirectory)/%(Filename)')"
+		Outputs="@(_DirectoriesToPublish -> '%(StampLocation)')"
 		>
 
 		<!-- Ask ditto to not copy architectures we don't care about. This can be overridden by passing 'SkipLibraryThinning=true' -->
@@ -931,6 +976,8 @@
 			Source="%(_DirectoriesToPublish.SourceDirectory)"
 			Destination="%(_DirectoriesToPublish.TargetDirectory)"
 			TouchDestinationFiles="true"
+			StampFile="%(_DirectoriesToPublish.StampLocation)"
+			CreateOutputFiles="false"
 		/>
 	</Target>
 
@@ -1380,10 +1427,15 @@
 			DependsOnTargets="$(_AOTCompileDependsOn)"
 		>
 
+		<ItemGroup>
+			<_AotEnvironment Condition="'$(MonoUseCompressedInterfaceBitmap)' == 'true'" Include="MONO_COMPRESSED_INTERFACE_BITMAP" Value="1" />
+		</ItemGroup>
+
 		<AOTCompile
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
 			Assemblies="@(_AssembliesToAOT)"
+			AotEnvironment="@(_AotEnvironment)"
 			AOTCompilerPath="$(_XamarinAOTCompiler)"
 			InputDirectory="$(_AOTInputDirectory)"
 			MaxDegreeOfParallelism="$(AotCompileMaxDegreeOfParallelism)"
@@ -1649,6 +1701,8 @@
 			     However, we'll automatically detect that we need to link with BrowserEngineKit if an app isn't trimmed, so let's just remove BrowserEngineKit
 			     here, with an escape hatch if an app really needs it (which would be rather rare). Ref: https://github.com/dotnet/macios/issues/21324 -->
 			<_NativeExecutableFrameworks Remove="BrowserEngineKit" Condition="'$(LinkWithBrowserEngineKit)' != 'true'" />
+			<!-- Treat BrowserEngineCore like BrowserEngineKit -->
+			<_NativeExecutableFrameworks Remove="BrowserEngineCore" Condition="'$(LinkWithBrowserEngineCore)' != 'true'" />
 
 			<!-- Mono requires zlib, iconv, icucore, and the "Compression framework" -->
 			<_MainLinkerFlags Include="-lz" />
@@ -2148,14 +2202,16 @@
 		</ItemGroup>
 
 		<!-- resolve any .xcframeworks and binding resource packages -->
-		<!-- Skip doing this when not building on macOS if we're not a remoteable platform (i.e. iOS), because we want such builds to succeed (even if they produce non-working output), and ResolveNativeReferences will fail if running into symlinks (which happens for macOS and Mac Catalyst builds) -->
+		<ItemGroup>
+			<_NativeReferencesToResolve Include="@(_UnresolvedXCFrameworks);@(_AppleBindingResourcePackage);@(_CompressedAppleFrameworks);@(_CompressedAppleBindingResourcePackage)" />
+		</ItemGroup>
 		<ResolveNativeReferences
 			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true' And '$(_IsNonMacOSBuildForNonRemotablePlatform)' != 'true'"
+			Condition="'$(IsMacEnabled)' == 'true' And @(_NativeReferencesToResolve->Count()) &gt; 0"
 			Architectures="$(TargetArchitectures)"
 			FrameworksDirectory="$(_AppFrameworksRelativePath)"
 			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
-			NativeReferences="@(_UnresolvedXCFrameworks);@(_AppleBindingResourcePackage);@(_CompressedAppleFrameworks);@(_CompressedAppleBindingResourcePackage)"
+			NativeReferences="@(_NativeReferencesToResolve)"
 			SdkIsSimulator="$(_SdkIsSimulator)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			>

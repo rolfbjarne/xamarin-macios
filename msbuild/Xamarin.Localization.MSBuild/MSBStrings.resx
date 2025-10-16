@@ -1624,6 +1624,22 @@
         <value>The task '{0}' is trying to call an external process, but a path to Xcode has not been provided. Please file an issue at https://github.com/dotnet/macios/issues/new/choose.</value>
     </data>
 
+    <data name="W7165" xml:space="preserve">
+        <value>The environment variable '{0}' is deprecated, and will be ignored in .NET 11+. Please set use the 'DEVELOPER_DIR' environment variable or the 'XcodeLocation' MSBuild property to choose which Xcode to use.</value>
+    </data>
+
+    <data name="W7166" xml:space="preserve">
+        <value>The environment variable '{0}' is deprecated, and will be ignored. Please set use the 'DEVELOPER_DIR' environment variable or the 'XcodeLocation' MSBuild property to choose which Xcode to use.</value>
+    </data>
+
+    <data name="W7167" xml:space="preserve">
+        <value>The settings file '{0}' is deprecated, and will be ignored in .NET 11+. Please set use the 'DEVELOPER_DIR' environment variable or the 'XcodeLocation' MSBuild property to choose which Xcode to use.</value>
+    </data>
+
+    <data name="W7168" xml:space="preserve">
+        <value>The settings file '{0}' is deprecated, and will be ignored. Please set use the 'DEVELOPER_DIR' environment variable or the 'XcodeLocation' MSBuild property to choose which Xcode to use.</value>
+    </data>
+
     <data name="E7169" xml:space="preserve">
         <value>The task '{0}' requires the property '{1}' to be set. Please file an issue at https://github.com/dotnet/macios/issues/new/choose.</value>
     </data>

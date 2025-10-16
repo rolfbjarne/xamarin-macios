@@ -9,53 +9,24 @@ using Xamarin.MacDev.Tasks;
 
 namespace Xamarin.MacDev {
 	public static class Sdks {
-		public static AppleIPhoneSdk IOS { get; private set; }
-		public static MacOSXSdk MacOS { get; private set; }
-		public static AppleTVOSSdk TVOS { get; private set; }
-
-		static Sdks ()
-		{
-			IOS = new AppleIPhoneSdk (AppleSdkSettings.DeveloperRoot, AppleSdkSettings.DeveloperRootVersionPlist);
-			TVOS = new AppleTVOSSdk (AppleSdkSettings.DeveloperRoot, AppleSdkSettings.DeveloperRootVersionPlist);
-			MacOS = new MacOSXSdk (AppleSdkSettings.DeveloperRoot, AppleSdkSettings.DeveloperRootVersionPlist);
-		}
-
-		public static AppleSdk GetSdk (ApplePlatform framework)
+		public static IAppleSdk GetAppleSdk (ApplePlatform framework, XcodeLocator appleSdk)
 		{
 			switch (framework) {
 			case ApplePlatform.iOS:
-				return IOS;
+				return new AppleIPhoneSdk (appleSdk.DeveloperRoot, appleSdk.DeveloperRootVersionPlist);
 			case ApplePlatform.TVOS:
-				return TVOS;
-			default:
-				throw new InvalidOperationException (string.Format (MSBStrings.InvalidFramework, framework));
-			}
-		}
-
-		public static AppleSdk GetSdk (string targetFrameworkMoniker)
-		{
-			return GetSdk (PlatformFrameworkHelper.GetFramework (targetFrameworkMoniker));
-		}
-
-		public static IAppleSdk GetAppleSdk (ApplePlatform framework)
-		{
-			switch (framework) {
-			case ApplePlatform.iOS:
-				return IOS;
-			case ApplePlatform.TVOS:
-				return TVOS;
+				return new AppleTVOSSdk (appleSdk.DeveloperRoot, appleSdk.DeveloperRootVersionPlist);
 			case ApplePlatform.MacCatalyst:
 			case ApplePlatform.MacOSX:
-				return MacOS;
+				return new MacOSXSdk (appleSdk.DeveloperRoot, appleSdk.DeveloperRootVersionPlist);
 			default:
 				throw new InvalidOperationException (string.Format (MSBStrings.InvalidFramework, framework));
 			}
 		}
 
-		public static IAppleSdk GetAppleSdk (string targetFrameworkMoniker)
+		public static IAppleSdk GetAppleSdk (string targetFrameworkMoniker, XcodeLocator appleSdk)
 		{
-			return GetAppleSdk (PlatformFrameworkHelper.GetFramework (targetFrameworkMoniker));
+			return GetAppleSdk (PlatformFrameworkHelper.GetFramework (targetFrameworkMoniker), appleSdk);
 		}
-
 	}
 }

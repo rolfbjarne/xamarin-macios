@@ -29,9 +29,9 @@ namespace Xamarin.MacDev.Tasks {
 		static readonly string [] macDirectDistributionPrefixes = { "Developer ID Application" };
 		static readonly string [] macDevelopmentPrefixes = { "Mac Developer", "Apple Development" };
 
-		protected string DeveloperRoot {
+		string DeveloperRoot {
 			get {
-				return Sdks.GetAppleSdk (TargetFrameworkMoniker).DeveloperRoot;
+				return Sdks.GetAppleSdk (TargetFrameworkMoniker, GetXcodeLocator ()).DeveloperRoot;
 			}
 		}
 

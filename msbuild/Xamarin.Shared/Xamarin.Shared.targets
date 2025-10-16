@@ -2064,6 +2064,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<DetectSdkLocations
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
+			SdkDevPath="$(XcodeLocation)"
 			SdkVersion="$(_SdkVersion)"
 			SdkIsSimulator="$(SdkIsSimulator)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"

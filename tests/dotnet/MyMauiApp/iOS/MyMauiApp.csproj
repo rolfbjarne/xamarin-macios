@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net$(BundledNETCoreAppTargetFrameworkVersion)-ios</TargetFrameworks>
+		<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
 	</PropertyGroup>
 
 	<Import Project="../shared.csproj" />

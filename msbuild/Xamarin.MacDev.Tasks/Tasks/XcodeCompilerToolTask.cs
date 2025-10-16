@@ -43,16 +43,6 @@ namespace Xamarin.MacDev.Tasks {
 		[Required]
 		public string SdkPlatform { get; set; } = string.Empty;
 
-		string? sdkDevPath;
-		public string SdkDevPath {
-#if NET
-			get { return string.IsNullOrEmpty (sdkDevPath) ? "/" : sdkDevPath; }
-#else
-			get { return (sdkDevPath is null || string.IsNullOrEmpty (sdkDevPath)) ? "/" : sdkDevPath; }
-#endif
-			set { sdkDevPath = value; }
-		}
-
 		public string SdkUsrPath { get; set; } = string.Empty;
 
 		[Required]
@@ -190,9 +180,6 @@ namespace Xamarin.MacDev.Tasks {
 			if (!string.IsNullOrEmpty (SdkUsrPath))
 				environment.Add ("XCODE_DEVELOPER_USR_PATH", SdkUsrPath);
 
-			if (!string.IsNullOrEmpty (SdkDevPath))
-				environment.Add ("DEVELOPER_DIR", SdkDevPath);
-
 			// workaround for ibtool[d] bug / asserts if Intel version is loaded
 			string tool;
 			if (IsTranslated ()) {
@@ -229,7 +216,7 @@ namespace Xamarin.MacDev.Tasks {
 			if (Log.HasLoggedErrors)
 				return 1;
 
-			var rv = ExecuteAsync (tool, args, sdkDevPath, environment: environment, mergeOutput: false).Result;
+			var rv = ExecuteAsync (tool, args, environment: environment, mergeOutput: false).Result;
 			var exitCode = rv.ExitCode;
 			var messages = rv.StandardOutput!.ToString ();
 			File.WriteAllText (manifest.ItemSpec, messages);

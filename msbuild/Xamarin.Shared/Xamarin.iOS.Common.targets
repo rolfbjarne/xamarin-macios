@@ -463,6 +463,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			Source="%(_AssetPack.Identity)"
 			OutputFile="$(IpaPackageDir)OnDemandResources\%(_AssetPack.DirectoryName)"
 			ZipPath="$(ZipPath)"
+			SdkDevPath="$(_SdkDevPath)"
 			/>
 
 		<Copy

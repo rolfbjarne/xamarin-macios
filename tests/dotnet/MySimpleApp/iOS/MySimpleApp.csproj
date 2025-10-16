@@ -2,6 +2,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net$(BundledNETCoreAppTargetFrameworkVersion)-ios</TargetFramework>
+		<UseMonoRuntime>false</UseMonoRuntime>
+		<ExcludeTouchUnitReference>true</ExcludeTouchUnitReference>
+		<ExcludeNUnitLiteReference>true</ExcludeNUnitLiteReference>
+		<_LibMonoLinkMode>dylib</_LibMonoLinkMode>
+		<RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+		<NoSymbolStrip>true</NoSymbolStrip>
+		<MtouchLink>None</MtouchLink>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<FrameworkReference Update="Microsoft.NETCore.App" RuntimeFrameworkVersion="10.0.0-dev" />
+		<KnownFrameworkReference Update="Microsoft.NETCore.App" TargetingPackVersion="10.0.0-dev" RuntimePackRuntimeIdentifiers="linux-arm;linux-arm64;linux-musl-arm64;linux-musl-x64;linux-x64;osx-x64;tizen.4.0.0-armel;tizen.5.0.0-armel;win-arm64;win-x64;win-x86;linux-musl-arm;osx-arm64;linux-s390x;linux-loongarch64;linux-bionic-arm;linux-bionic-arm64;linux-bionic-x64;linux-bionic-x86;linux-ppc64le;freebsd-x64;freebsd-arm64;linux-riscv64;linux-musl-riscv64;linux-musl-loongarch64;android-arm64;android-x64;ios-arm64" />
+		<KnownFrameworkReference Update="Microsoft.NETCore.App" RuntimeFrameworkVersion="10.0.0-dev" />
+
+		<_BundlerEnvironmentVariables Include="DOTNET_Interpreter" Value="%2A%21%2A" />
+		<_BundlerEnvironmentVariables Include="DOTNET_ReadyToRun" Value="0" />
+	</ItemGroup>
+
+
 	<Import Project="..\shared.csproj" />
 </Project>

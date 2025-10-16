@@ -38,7 +38,7 @@ namespace Xamarin.MacDev.Tasks {
 		} = "";
 
 		[Output]
-		public string SdkDevPath {
+		public new string SdkDevPath {
 			get; set;
 		} = "";
 

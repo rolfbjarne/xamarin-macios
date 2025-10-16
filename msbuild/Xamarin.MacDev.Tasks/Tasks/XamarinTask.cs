@@ -23,6 +23,18 @@ namespace Xamarin.MacDev.Tasks {
 
 		public string TargetFrameworkMoniker { get; set; } = string.Empty;
 
+		string sdkDevPath = string.Empty;
+		public string SdkDevPath {
+			get {
+				if (string.IsNullOrEmpty (sdkDevPath))
+					Log.LogError ($"The task {GetType ().Name} requires 'SdkDevPath' to be set.");
+				return sdkDevPath;
+			}
+			set {
+				sdkDevPath = value;
+			}
+		}
+
 		void VerifyTargetFrameworkMoniker ()
 		{
 			if (!string.IsNullOrEmpty (TargetFrameworkMoniker))
@@ -97,9 +109,9 @@ namespace Xamarin.MacDev.Tasks {
 			return PlatformFrameworkHelper.GetSdkPlatform (Platform, isSimulator);
 		}
 
-		protected System.Threading.Tasks.Task<Execution> ExecuteAsync (string fileName, IList<string> arguments, string? sdkDevPath = null, Dictionary<string, string?>? environment = null, bool mergeOutput = true, bool showErrorIfFailure = true, string? workingDirectory = null)
+		protected System.Threading.Tasks.Task<Execution> ExecuteAsync (string fileName, IList<string> arguments, Dictionary<string, string?>? environment = null, bool mergeOutput = true, bool showErrorIfFailure = true, string? workingDirectory = null)
 		{
-			return ExecuteAsync (Log, fileName, arguments, sdkDevPath, environment, mergeOutput, showErrorIfFailure, workingDirectory);
+			return ExecuteAsync (Log, fileName, arguments, SdkDevPath, environment, mergeOutput, showErrorIfFailure, workingDirectory);
 		}
 
 		static int executionCounter;
@@ -109,6 +121,9 @@ namespace Xamarin.MacDev.Tasks {
 			var launchEnvironment = environment is null ? new Dictionary<string, string?> () : new Dictionary<string, string?> (environment);
 			if (!string.IsNullOrEmpty (sdkDevPath))
 				launchEnvironment ["DEVELOPER_DIR"] = sdkDevPath;
+
+			if (fileName == "xcrun" && string.IsNullOrEmpty (sdkDevPath))
+				log.LogError ($"Calling xcrun without specifying the Xcode path! StackTrace: {Environment.StackTrace}");
 
 			var currentId = Interlocked.Increment (ref executionCounter);
 			log.LogMessage (MessageImportance.Normal, MSBStrings.M0001, currentId, fileName, StringUtils.FormatArguments (arguments)); // Started external tool execution #{0}: {1} {2}

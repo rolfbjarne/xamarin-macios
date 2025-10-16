@@ -38,9 +38,6 @@ namespace Xamarin.MacDev.Tasks {
 		public ITaskItem [] SceneKitAssets { get; set; } = Array.Empty<ITaskItem> ();
 
 		[Required]
-		public string SdkDevPath { get; set; } = "";
-
-		[Required]
 		public string SdkPlatform { get; set; } = "";
 
 		[Required]
@@ -114,7 +111,7 @@ namespace Xamarin.MacDev.Tasks {
 			args.Add ($"--target-build-dir={Path.GetFullPath (intermediate)}");
 			args.Add ($"--resources-folder-path={AppBundleName}");
 
-			return ExecuteAsync (GetFullPathToTool (), args, sdkDevPath: SdkDevPath, environment: environment, showErrorIfFailure: true);
+			return ExecuteAsync (GetFullPathToTool (), args, environment: environment, showErrorIfFailure: true);
 		}
 
 		static bool TryGetScnAssetsPath (string file, out string scnassets)

@@ -29,9 +29,6 @@ namespace Xamarin.MacDev.Tasks {
 
 		public string PngCrushPath { get; set; } = string.Empty;
 
-		[Required]
-		public string SdkDevPath { get; set; } = string.Empty;
-
 		#endregion
 
 		static string GetExecutable (List<string> arguments, string toolName, string toolPathOverride)

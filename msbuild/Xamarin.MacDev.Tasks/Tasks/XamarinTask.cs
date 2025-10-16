@@ -35,6 +35,23 @@ namespace Xamarin.MacDev.Tasks {
 			return SdkDevPath;
 		}
 
+		XcodeLocator? xcodeLocator = null;
+		public XcodeLocator GetXcodeLocator (bool initialDiscovery = false, Action<XcodeLocator>? preprocess = null)
+		{
+			if (xcodeLocator is null) {
+				if (!initialDiscovery && string.IsNullOrEmpty (SdkDevPath)) {
+					Log.LogError (MSBStrings.E7169, /* The task '{0}' requires the property '{1}' to be set. Please file an issue at https://github.com/dotnet/macios/issues/new/choose. */ GetType ().Name, "SdkDevPath");
+				}
+
+				var xcodeLocator = new XcodeLocator (this);
+				preprocess?.Invoke (xcodeLocator);
+				if (!xcodeLocator.TryLocatingXcode (SdkDevPath))
+					Log.LogError (MSBStrings.E0086 /* Could not find a valid Xcode developer path */);
+				this.xcodeLocator = xcodeLocator;
+			}
+			return xcodeLocator;
+		}
+
 		void VerifyTargetFrameworkMoniker ()
 		{
 			if (!string.IsNullOrEmpty (TargetFrameworkMoniker))
@@ -347,24 +364,24 @@ namespace Xamarin.MacDev.Tasks {
 		}
 
 		#region Xamarin.MacDev.ICustomLogger
-		void ICustomLogger.LogError (string message, Exception ex)
+		void ICustomLogger.LogError (string message, Exception? ex)
 		{
 			Log.LogError (message);
 			if (ex is not null)
 				Log.LogErrorFromException (ex);
 		}
 
-		void ICustomLogger.LogWarning (string messageFormat, params object [] args)
+		void ICustomLogger.LogWarning (string messageFormat, params object? [] args)
 		{
 			Log.LogWarning (messageFormat, args);
 		}
 
-		void ICustomLogger.LogInfo (string messageFormat, object [] args)
+		void ICustomLogger.LogInfo (string messageFormat, params object? [] args)
 		{
 			Log.LogMessage (MessageImportance.Normal, messageFormat, args);
 		}
 
-		void ICustomLogger.LogDebug (string messageFormat, params object [] args)
+		void ICustomLogger.LogDebug (string messageFormat, params object? [] args)
 		{
 			Log.LogMessage (MessageImportance.Low, messageFormat, args);
 		}

@@ -31,9 +31,6 @@ namespace Xamarin.MacDev.Tasks {
 		public string SdkBinPath { get; set; } = string.Empty;
 
 		[Required]
-		public string SdkDevPath { get; set; } = string.Empty;
-
-		[Required]
 		public string SdkUsrPath { get; set; } = string.Empty;
 
 		public string ToolExe {

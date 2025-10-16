@@ -9,6 +9,7 @@ using Microsoft.Build.Utilities;
 
 using NUnit.Framework;
 
+using Xamarin.Tests;
 using Xamarin.Utils;
 
 namespace Xamarin.MacDev.Tasks {
@@ -22,11 +23,12 @@ namespace Xamarin.MacDev.Tasks {
 			task.BindingResourcePath = Path.Combine (tmpdir, "CreateBindingResourceTaskTest");
 			task.IntermediateOutputPath = Path.Combine (tmpdir, "IntermediateOutputPath");
 			task.NativeReferences = CreateNativeReferences (tmpdir, symlinks);
+			task.SdkDevPath = Configuration.xcode_root;
 
 			var currentDir = Environment.CurrentDirectory;
 			try {
 				Environment.CurrentDirectory = tmpdir;
-				Assert.IsTrue (task.Execute (), "Execute");
+				ExecuteTask (task);
 			} finally {
 				Environment.CurrentDirectory = currentDir;
 			}

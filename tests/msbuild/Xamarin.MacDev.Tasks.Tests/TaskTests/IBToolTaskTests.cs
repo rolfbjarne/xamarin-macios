@@ -18,9 +18,11 @@ namespace Xamarin.MacDev.Tasks {
 	public class IBToolTaskTests : TestBase {
 		IBTool CreateIBToolTask (ApplePlatform framework, string projectDir, string intermediateOutputPath)
 		{
+			var task = CreateTask<IBTool> ();
+
 			var interfaceDefinitions = new List<ITaskItem> ();
-			var sdk = Sdks.GetSdk (framework);
-			var version = AppleSdkVersion.GetDefault (sdk, false);
+			var sdk = Sdks.GetAppleSdk (framework, task.GetXcodeLocator (initialDiscovery: true));
+			var version = AppleSdkVersion.UseDefault.ToString ();
 			var root = sdk.GetSdkPath (version, false);
 			string platform;
 
@@ -39,7 +41,6 @@ namespace Xamarin.MacDev.Tasks {
 			foreach (var item in Directory.EnumerateFiles (projectDir, "*.xib", SearchOption.AllDirectories))
 				interfaceDefinitions.Add (new TaskItem (item));
 
-			var task = CreateTask<IBTool> ();
 			task.InterfaceDefinitions = interfaceDefinitions.ToArray ();
 			task.IntermediateOutputPath = intermediateOutputPath;
 			task.MinimumOSVersion = PDictionary.FromFile (Path.Combine (projectDir, "Info.plist")).GetMinimumOSVersion ();

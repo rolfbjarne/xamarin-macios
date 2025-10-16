@@ -58,10 +58,6 @@ namespace Xamarin.MacDev.Tasks {
 		HashSet<string> brandAssetsInAssets = new (); // tvOS
 		HashSet<string> imageStacksInAssets = new (); // tvOS
 
-		protected override string DefaultBinDir {
-			get { return DeveloperRootBinDir; }
-		}
-
 		protected override string ToolName {
 			get { return "actool"; }
 		}

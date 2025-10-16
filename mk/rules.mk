@@ -36,6 +36,18 @@ CFLAGS=\
 	-Werror=format-security \
 	-fdiagnostics-absolute-paths \
 	-Wno-objc-protocol-property-synthesis \
+	-ftrivial-auto-var-init=zero \
+	-Wshadow \
+	-Wempty-body \
+	-Wbuiltin-memcpy-chk-size \
+	-Wformat-nonliteral \
+	-Warray-bounds \
+	-Warray-bounds-pointer-arithmetic \
+	-Wsuspicious-memaccess \
+	-Wsizeof-array-div \
+	-Wsizeof-pointer-div \
+	-Wreturn-stack-address \
+	-fbounds-safety \
 	-g \
 	-I.
 SWIFTFLAGS=-g -emit-library

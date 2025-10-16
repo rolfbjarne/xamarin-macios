@@ -46,9 +46,6 @@ namespace Xamarin.MacDev.Tasks {
 		[Required]
 		public string OutputAppBundle { get; set; } = "";
 
-		[Required]
-		public string SdkDevPath { get; set; } = "";
-
 		#endregion
 
 		enum FileType {
@@ -441,7 +438,7 @@ namespace Xamarin.MacDev.Tasks {
 			arguments.Add ("-output");
 			arguments.Add (output);
 			arguments.AddRange (sourceFiles);
-			ExecuteAsync ("lipo", arguments, sdkDevPath: SdkDevPath).Wait ();
+			ExecuteAsync ("lipo", arguments).Wait ();
 		}
 
 		FileType GetFileType (string path)

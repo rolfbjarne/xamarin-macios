@@ -22,7 +22,9 @@ namespace Xamarin.MacDev.Tasks {
 
 			intermediateOutputPath = Cache.CreateTemporaryDirectory ();
 
-			var sdk = Sdks.GetAppleSdk (platform);
+			var task = CreateTask<ACTool> ();
+
+			var sdk = Sdks.GetAppleSdk (platform, task.GetXcodeLocator (initialDiscovery: true));
 			var version = AppleSdkVersion.UseDefault.ToString ();
 			var root = sdk.GetSdkPath (version, false);
 			string sdkPlatform;
@@ -47,7 +49,6 @@ namespace Xamarin.MacDev.Tasks {
 				throw new NotImplementedException (platform.ToString ());
 			}
 
-			var task = CreateTask<ACTool> ();
 			task.ImageAssets = imageAssets
 				.Select (v => {
 					var spl = v.Split ('|');

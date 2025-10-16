@@ -23,11 +23,30 @@ namespace Xamarin.MacDev.Tasks {
 
 		public string TargetFrameworkMoniker { get; set; } = string.Empty;
 
+		public string SdkDevPath { get; set; } = string.Empty;
+
+		XcodeLocator? xcodeLocator = null;
+		public XcodeLocator GetXcodeLocator (bool initialDiscovery = false, Action<XcodeLocator>? preprocess = null)
+		{
+			if (xcodeLocator is null) {
+				if (!initialDiscovery && string.IsNullOrEmpty (SdkDevPath)) {
+					Log.LogError (MSBStrings.E7169, /* The task '{0}' requires the property '{1}' to be set. Please file an issue at https://github.com/dotnet/macios/issues/new/choose. */ GetType ().Name, "SdkDevPath");
+				}
+
+				var xcodeLocator = new XcodeLocator (this);
+				preprocess?.Invoke (xcodeLocator);
+				if (!xcodeLocator.TryLocatingXcode (SdkDevPath))
+					Log.LogError (MSBStrings.E0086 /* Could not find a valid Xcode developer path */);
+				this.xcodeLocator = xcodeLocator;
+			}
+			return xcodeLocator;
+		}
+
 		void VerifyTargetFrameworkMoniker ()
 		{
 			if (!string.IsNullOrEmpty (TargetFrameworkMoniker))
 				return;
-			Log.LogError ($"The task {GetType ().Name} requires TargetFrameworkMoniker to be set.");
+			Log.LogError (MSBStrings.E7169, /* The task '{0}' requires the property '{1}' to be set. Please file an issue at https://github.com/dotnet/macios/issues/new/choose. */ GetType ().Name, "TargetFrameworkMoniker");
 		}
 
 		public string Product {
@@ -97,18 +116,24 @@ namespace Xamarin.MacDev.Tasks {
 			return PlatformFrameworkHelper.GetSdkPlatform (Platform, isSimulator);
 		}
 
-		internal protected System.Threading.Tasks.Task<Execution> ExecuteAsync (string fileName, IList<string> arguments, string? sdkDevPath = null, Dictionary<string, string?>? environment = null, bool mergeOutput = true, bool showErrorIfFailure = true, string? workingDirectory = null, CancellationToken? cancellationToken = null)
+		internal protected System.Threading.Tasks.Task<Execution> ExecuteAsync (string fileName, IList<string> arguments, Dictionary<string, string?>? environment = null, bool mergeOutput = true, bool showErrorIfFailure = true, string? workingDirectory = null, CancellationToken? cancellationToken = null)
 		{
-			return ExecuteAsync (Log, fileName, arguments, sdkDevPath, environment, mergeOutput, showErrorIfFailure, workingDirectory, cancellationToken);
+			return ExecuteAsync (this, fileName, arguments, SdkDevPath, environment, mergeOutput, showErrorIfFailure, workingDirectory, cancellationToken);
 		}
 
 		static int executionCounter;
-		internal protected static async System.Threading.Tasks.Task<Execution> ExecuteAsync (TaskLoggingHelper log, string fileName, IList<string> arguments, string? sdkDevPath = null, Dictionary<string, string?>? environment = null, bool mergeOutput = true, bool showErrorIfFailure = true, string? workingDirectory = null, CancellationToken? cancellationToken = null)
+		static async System.Threading.Tasks.Task<Execution> ExecuteAsync (Task task, string fileName, IList<string> arguments, string? sdkDevPath = null, Dictionary<string, string?>? environment = null, bool mergeOutput = true, bool showErrorIfFailure = true, string? workingDirectory = null, CancellationToken? cancellationToken = null)
 		{
+			var log = task.Log;
 			// Create a new dictionary if we're given one, to make sure we don't change the caller's dictionary.
 			var launchEnvironment = environment is null ? new Dictionary<string, string?> () : new Dictionary<string, string?> (environment);
 			if (!string.IsNullOrEmpty (sdkDevPath))
 				launchEnvironment ["DEVELOPER_DIR"] = sdkDevPath;
+
+			if (Environment.OSVersion.Platform == PlatformID.MacOSX && string.IsNullOrEmpty (sdkDevPath)) {
+				log.LogError (MSBStrings.E7164 /* The task '{0}' is trying to call an external process, but a path to Xcode has not been provided. Please file an issue at https://github.com/dotnet/macios/issues/new/choose. */, task.GetType ().Name);
+				log.LogMessage (MessageImportance.Low, Environment.StackTrace);
+			}
 
 			var currentId = Interlocked.Increment (ref executionCounter);
 			log.LogMessage (MessageImportance.Normal, MSBStrings.M0001, currentId, fileName, StringUtils.FormatArguments (arguments)); // Started external tool execution #{0}: {1} {2}

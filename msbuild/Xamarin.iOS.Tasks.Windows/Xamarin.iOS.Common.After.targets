@@ -177,11 +177,11 @@ Copyright (C) 2011-2013 Xamarin. All rights reserved.
 		</CopyLongPaths>
 	</Target>
 	
-	<Target Name="CopyDSYMFromMac" DependsOnTargets="_SayHello" Condition="'$(IsMacEnabled)' == 'true' And '$(IsAppExtension)' == 'false' And '$(ComputedPlatform)' == 'iPhone' And '$(CopyDSYM)' == 'true' And ('$(BuildIpa)' == 'true' Or '$(CopyAppBundle)' == 'true')" BeforeTargets="BeforeDisconnect">
+	<Target Name="CopyDSYMFromMac" DependsOnTargets="_SayHello;_DetectSdkLocations" Condition="'$(IsMacEnabled)' == 'true' And '$(IsAppExtension)' == 'false' And '$(ComputedPlatform)' == 'iPhone' And '$(CopyDSYM)' == 'true' And ('$(BuildIpa)' == 'true' Or '$(CopyAppBundle)' == 'true')" BeforeTargets="BeforeDisconnect">
 		<!--Copy watchOS Dsym folders from Mac-->
 		<MSBuild Projects="@(_WatchAppReferenceWithConfigurationExistent)" Targets="CopyDSYMFromMac" Properties="%(_WatchAppReferenceWithConfigurationExistent.SetConfiguration);      %(_WatchAppReferenceWithConfigurationExistent.SetPlatform);      BuildIpa=true" Condition="'$(IsWatchApp)' == 'false' And '@(_WatchAppReferenceWithConfigurationExistent)' != '' And '$(_BuildReferencedExtensionProjects)' != 'true'"></MSBuild>
 		<!--Look for all *.dsym folders int the output path of the main app -->
-		<GetDirectories SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Path="$(DeviceSpecificOutputPath)" Pattern="*.dSYM">
+		<GetDirectories SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Path="$(DeviceSpecificOutputPath)" Pattern="*.dSYM" SdkDevPath="$(_SdkDevPath)">
 			<Output TaskParameter="Directories" ItemName="_DSYMDir" />
 		</GetDirectories>
 		<ItemGroup>

@@ -14,8 +14,6 @@ using Xamarin.MacDev;
 
 namespace Xamarin.MacDev.Tasks {
 	public abstract class XcodeToolTaskBase : XamarinTask, IHasProjectDir, IHasResourcePrefix {
-		string? toolExe;
-
 		#region Inputs
 
 		[Required]
@@ -27,13 +25,7 @@ namespace Xamarin.MacDev.Tasks {
 		[Required]
 		public string ResourcePrefix { get; set; } = string.Empty;
 
-		[Required]
-		public string SdkDevPath { get; set; } = string.Empty;
-
-		public string ToolExe {
-			get { return toolExe ?? ToolName; }
-			set { toolExe = value; }
-		}
+		public string ToolExe { get; set; } = string.Empty;
 
 		public string ToolPath { get; set; } = string.Empty;
 
@@ -45,22 +37,6 @@ namespace Xamarin.MacDev.Tasks {
 		public ITaskItem [] BundleResources { get; set; } = Array.Empty<ITaskItem> ();
 
 		#endregion
-
-		protected abstract string DefaultBinDir {
-			get;
-		}
-
-		protected string DeveloperRootBinDir {
-			get { return Path.Combine (SdkDevPath, "usr", "bin"); }
-		}
-
-		protected string DevicePlatformBinDir {
-			get { return Path.Combine (SdkDevPath, "Platforms", "iPhoneOS.platform", "Developer", "usr", "bin"); }
-		}
-
-		protected string SimulatorPlatformBinDir {
-			get { return Path.Combine (SdkDevPath, "Platforms", "iPhoneSimulator.platform", "Developer", "usr", "bin"); }
-		}
 
 		protected abstract string ToolName { get; }
 
@@ -91,9 +67,7 @@ namespace Xamarin.MacDev.Tasks {
 			if (!string.IsNullOrEmpty (ToolPath))
 				return Path.Combine (ToolPath, ToolExe);
 
-			var path = Path.Combine (DefaultBinDir, ToolExe);
-
-			return File.Exists (path) ? path : ToolExe;
+			return ToolExe ?? "";
 		}
 
 		int ExecuteTool (ITaskItem input, ITaskItem output)
@@ -103,7 +77,8 @@ namespace Xamarin.MacDev.Tasks {
 
 			AppendCommandLineArguments (environment, args, input, output);
 
-			var rv = ExecuteAsync (GetFullPathToTool (), args, environment: environment).Result;
+			var executable = GetExecutable (args, ToolName, GetFullPathToTool ());
+			var rv = ExecuteAsync (executable, args, environment: environment).Result;
 			return rv.ExitCode;
 		}
 

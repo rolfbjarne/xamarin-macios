@@ -22,9 +22,6 @@ namespace Xamarin.MacDev.Tasks {
 		public string EntitlementsInExecutable { get; set; } = string.Empty;
 
 		[Required]
-		public string SdkDevPath { get; set; } = string.Empty;
-
-		[Required]
 		public bool SdkIsSimulator { get; set; }
 
 		[Required]
@@ -213,7 +210,7 @@ namespace Xamarin.MacDev.Tasks {
 					arguments.Add (flag.ItemSpec);
 			}
 
-			var rv = ExecuteAsync ("xcrun", arguments, sdkDevPath: SdkDevPath, showErrorIfFailure: false).Result;
+			var rv = ExecuteAsync ("xcrun", arguments, showErrorIfFailure: false).Result;
 			if (rv.ExitCode != 0) {
 				var stderr = rv.StandardError?.ToString ()?.Trim ();
 #if NET
@@ -284,7 +281,7 @@ namespace Xamarin.MacDev.Tasks {
 				"-o", derEntitlements,
 				"--raw",
 			};
-			ExecuteAsync ("xcrun", arguments, sdkDevPath: SdkDevPath).Wait ();
+			ExecuteAsync ("xcrun", arguments).Wait ();
 			return derEntitlements;
 		}
 

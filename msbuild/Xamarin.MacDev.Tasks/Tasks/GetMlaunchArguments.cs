@@ -27,9 +27,6 @@ namespace Xamarin.MacDev.Tasks {
 
 		public string AppManifestPath { get; set; } = string.Empty;
 
-		[Required]
-		public string SdkDevPath { get; set; } = string.Empty;
-
 		public ITaskItem [] AdditionalArguments { get; set; } = Array.Empty<ITaskItem> ();
 		public string DeviceName { get; set; } = string.Empty;
 		public ITaskItem [] EnvironmentVariables { get; set; } = Array.Empty<ITaskItem> ();
@@ -112,7 +109,7 @@ namespace Xamarin.MacDev.Tasks {
 				var tmpfile = Path.GetTempFileName ();
 				try {
 					var output = new StringBuilder ();
-					var result = ExecuteAsync (MlaunchPath, new string [] { "--listsim", tmpfile }, SdkDevPath).Result;
+					var result = ExecuteAsync (MlaunchPath, new string [] { "--listsim", tmpfile }).Result;
 					if (result.ExitCode != 0)
 						return string.Empty;
 					simulator_list = File.ReadAllText (tmpfile);
@@ -130,7 +127,7 @@ namespace Xamarin.MacDev.Tasks {
 				var tmpfile = Path.GetTempFileName ();
 				try {
 					var output = new StringBuilder ();
-					var result = ExecuteAsync (MlaunchPath, new string [] { $"--listdev:{tmpfile}", "--output-format:xml", "--use-amdevice:false" }, SdkDevPath).Result;
+					var result = ExecuteAsync (MlaunchPath, new string [] { $"--listdev:{tmpfile}", "--output-format:xml", "--use-amdevice:false" }).Result;
 					if (result.ExitCode != 0)
 						return string.Empty;
 					device_list = File.ReadAllText (tmpfile);

@@ -164,6 +164,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
 			NativeReferences="@(_NativeReferencesToExpand)"
 			References="@(_ReferencesWithNativeReferencesToExpand)"
+			SdkDevPath="$(_SdkDevPath)"
 			SdkIsSimulator="$(_SdkIsSimulator)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			>
@@ -182,7 +183,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 	<Target Name="_CreateBindingResourcePackage"
 		Condition="'$(_DisableBindingProjectBuild)' != 'true' And '$(NoBindingEmbedding)' == 'true'"
-		DependsOnTargets="_ExpandNativeReferences"
+		DependsOnTargets="_ExpandNativeReferences;_DetectSdkLocations"
 		Inputs="$(MSBuildAllProjects);$(MSBuildProjectFullPath);@(ObjcBindingApiDefinition);@(ObjcBindingCoreSource);@(ReferencePath);@(ObjcBindingNativeLibrary);@(_FrameworkNativeReference);@(_FileNativeReference)"
 		Outputs="$(BindingResourcePath).stamp">
 
@@ -201,6 +202,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			BindingResourcePath="$(BindingResourcePath)"
 			Compress="$(CompressBindingResourcePackage)"
 			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
+			SdkDevPath="$(_SdkDevPath)"
 			>
 		</CreateBindingResourcePackage>
 
@@ -365,8 +367,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<RemoveDir Directories="$(BindingResourcePath);" />  
 	</Target>
 
-	<Target Name="_CleanDebugSymbols" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_GenerateBundleName">
-		<GetDirectories SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Path="$(DeviceSpecificOutputPath)" Pattern="*.dSYM">
+	<Target Name="_CleanDebugSymbols" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_GenerateBundleName;_DetectSdkLocations">
+		<GetDirectories SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Path="$(DeviceSpecificOutputPath)" Pattern="*.dSYM" SdkDevPath="$(_SdkDevPath)">
 			<Output TaskParameter="Directories" ItemName="_DebugSymbolDir" />
 		</GetDirectories>
 
@@ -465,6 +467,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			BundleResources="@(Content);@(BundleResource)"
 			ProjectDir="$(MSBuildProjectDirectory)"
 			ResourcePrefix="$(_ResourcePrefix)"
+			SdkDevPath="$(_SdkDevPath)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			UnpackedResources="@(_UnpackedBundleResourceWithLogicalName)"
 			>
@@ -682,6 +685,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			ProjectDir="$(MSBuildProjectDirectory)"
 			ResourcePrefix="$(_ResourcePrefix)"
 			ResourceRules="$(_PreparedResourceRules)"
+			SdkDevPath="$(_SdkDevPath)"
 			SdkIsSimulator="$(_SdkIsSimulator)"
 			SdkVersion="$(_SdkVersion)"
 			SupportedOSPlatformVersion="$(SupportedOSPlatformVersion)"
@@ -708,6 +712,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			Condition="'$(IsMacEnabled)' == 'true' And '$(_BundleOriginalResources)' != 'true'"
 			SessionId="$(BuildSessionId)"
 			AppManifest="$(_TemporaryAppManifest)"
+			SdkDevPath="$(_SdkDevPath)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			>
 			<Output TaskParameter="CFBundleExecutable" PropertyName="_ExecutableName" />
@@ -795,6 +800,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			Entitlements="$(CodesignEntitlements)"
 			CompiledEntitlements="$(_CompiledEntitlementsPath)"
 			ProvisioningProfile="$(_ProvisioningProfile)"
+			SdkDevPath="$(_SdkDevPath)"
 			SdkIsSimulator="$(_SdkIsSimulator)"
 			SdkPlatform="$(_SdkPlatform)"
 			SdkVersion="$(_SdkVersion)"
@@ -1131,7 +1137,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	<Target Name="_CoreCompileSceneKitAssets"
 		Inputs="@(SceneKitAsset)"
 		Outputs="$(_SceneKitCache)"
-		DependsOnTargets="_BeforeCoreCompileSceneKitAssets;_GenerateBundleName;_ComputeTargetFrameworkMoniker;_SetResourceMetadata">
+		DependsOnTargets="_BeforeCoreCompileSceneKitAssets;_GenerateBundleName;_ComputeTargetFrameworkMoniker;_SetResourceMetadata;_DetectSdkLocations">
 
 		<CompileSceneKitAssets
 			SessionId="$(BuildSessionId)"
@@ -1819,6 +1825,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 	<PropertyGroup>
 		<_GenerateBindingsDependsOn>
+			_DetectSdkLocations;
 			_ComputeTargetFrameworkMoniker;
 			$(_GenerateBindingsDependsOn);
 		</_GenerateBindingsDependsOn>
@@ -1966,6 +1973,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			Condition="'$(IsMacEnabled)' == 'true' And '$(BindingProjectBuildSessionId)' != ''"
 			IntermediateOutputPath="$(IntermediateOutputPath)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+			SdkDevPath="$(_SdkDevPath)"
 			UseFloatingTargetPlatformVersion="$(UseFloatingTargetPlatformVersion)"
 		>
 			<Output TaskParameter="BaseLibDllPath" PropertyName="BaseLibDllPath" />
@@ -1998,6 +2006,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			ProjectDir="$(MSBuildProjectDirectory)"
 			References="@(ReferencePath);@(BGenReferencePath)"
 			ResponseFilePath="$(DeviceSpecificIntermediateOutputPath)response-file.rsp"
+			SdkDevPath="$(_SdkDevPath)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			BGenToolPath="$(BGenToolPath)"
 			BGenToolExe="$(BGenToolExe)"
@@ -2046,6 +2055,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			SdkPlatform="$(_SdkPlatform)"
 			ProvisioningProfile="$(CodesignProvision)"
 			SigningKey="$(_SpecifiedCodesignKey)"
+			SdkDevPath="$(_SdkDevPath)"
 			DetectedCodeSigningKey="$(_CodeSigningKey)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			>
@@ -2067,10 +2077,10 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<DetectSdkLocations
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
-			IsDotNetSimulatorBuild="$(_IsDotNetSimulatorBuild)"
+			SdkDevPath="$(XcodeLocation)"
+			SdkIsSimulator="$(SdkIsSimulator)"
 			SdkVersion="$(_SdkVersion)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
-			TargetArchitectures="$(TargetArchitectures)"
 			XamarinSdkRoot="$(_XamarinSdkRootOnMac)"
 			>
 
@@ -2078,7 +2088,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			<Output TaskParameter="SdkRoot" PropertyName="_SdkRoot" />
 			<Output TaskParameter="SdkDevPath" PropertyName="_SdkDevPath" />
 			<Output TaskParameter="SdkPlatform" PropertyName="_SdkPlatform" />
-			<Output TaskParameter="SdkIsSimulator" PropertyName="_SdkIsSimulator" />
 			<Output TaskParameter="XamarinSdkRoot" PropertyName="_XamarinSdkRoot" />
 			<Output TaskParameter="XcodeVersion" PropertyName="_XcodeVersion" />
 		</DetectSdkLocations>
@@ -2577,6 +2586,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			DisallowResourcesSubdirectoryInAppBundle="$(CodesignDisallowResourcesSubdirectoryInAppBundle)"
 			MaxDegreeOfParallelism="$(CodesignMaxDegreeOfParallelism)"
 			Resources="@(_ComputedCodesignItems)"
+			SdkDevPath="$(_SdkDevPath)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			ToolExe="$(CodesignExe)"
 			ToolPath="$(CodesignPath)"
@@ -2730,7 +2740,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	</Target>
 
 	<Target Name="_CopyAppExtensionsToBundle"
-			DependsOnTargets="_ExtendAppExtensionReferences;_ResolveAppExtensionReferences;_PlaceAppExtensions"
+			DependsOnTargets="_ExtendAppExtensionReferences;_ResolveAppExtensionReferences;_PlaceAppExtensions;_DetectSdkLocations"
 			Inputs="@(_ResolvedAppExtensionReferences)"
 			Outputs="$(_AppExtensionRoot)%(_ResolvedAppExtensionReferences.ContainerName)\%(_ResolvedAppExtensionReferences.FileName)%(_ResolvedAppExtensionReferences.Extension)"
 			>
@@ -2747,6 +2757,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			Source="@(_ResolvedAppExtensionReferences)"
 			Destination="$(_AppExtensionRoot)%(_ResolvedAppExtensionReferences.ContainerName)\%(_ResolvedAppExtensionReferences.FileName)%(_ResolvedAppExtensionReferences.Extension)"
 			TouchDestinationFiles="true"
+			SdkDevPath="$(_SdkDevPath)"
 		/>
 
 		<!-- Delete any code signatures and dSYM dirs since they are now invalid -->
@@ -3094,6 +3105,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			Executable="$(_AppContainerDir)%(_NativeStripItems.Identity)"
 			Kind="%(_NativeStripItems.Kind)"
 			MaxDegreeOfParallelism="$(SymbolStripMaxDegreeOfParallelism)"
+			SdkDevPath="$(_SdkDevPath)"
 			StripPath="$(StripPath)"
 			SymbolFile="%(_NativeStripItems.SymbolFile)"
 		/>
@@ -3131,6 +3143,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			Condition="'$(IsMacEnabled)' == 'true'"
 			Input="$(_AppContainerDir)"
 			MdimportPath="$(MdimportPath)"
+			SdkDevPath="$(_SdkDevPath)"
 		/>
 	</Target>
 
@@ -3165,6 +3178,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			ProjectGuid="$(ProjectGuid)"
 			ProjectName="$(MSBuildProjectName)"
 			ProjectTypeGuids="$(ProjectTypeGuids)"
+			SdkDevPath="$(_SdkDevPath)"
 			SigningKey="$(_CodeSigningKey)"
 			SolutionPath="$(SolutionPath)"
 			RuntimeIdentifiers="$(RuntimeIdentifiers);$(RuntimeIdentifier)"
@@ -3248,7 +3262,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			_GetAppBundleEntitlements;
 			Codesign;
 			_CompileProductDefinition;
-			_WriteAppManifest
+			_WriteAppManifest;
+			_DetectSdkLocations;
 		</_CreateInstallerDependsOn>
 	</PropertyGroup>
 
@@ -3271,6 +3286,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			ProductBuildPath="$(ProductBuildPath)"
 			ProductDefinition="$(_CompiledProductDefinition)"
 			ProjectPath="$(MSBuildProjectFullPath)"
+			SdkDevPath="$(_SdkDevPath)"
 		>
 			<Output TaskParameter="PkgPackagePath" PropertyName="PkgPackagePath" />
 		</CreateInstallerPackage>

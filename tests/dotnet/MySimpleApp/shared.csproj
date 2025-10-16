@@ -6,7 +6,19 @@
 		<ApplicationTitle>MySimpleApp</ApplicationTitle>
 		<ApplicationId>com.xamarin.mysimpleapp</ApplicationId>
 		<ApplicationVersion>3.14</ApplicationVersion>
+
+		<UseMonoRuntime>false</UseMonoRuntime>
+		<ExcludeTouchUnitReference>true</ExcludeTouchUnitReference>
+		<ExcludeNUnitLiteReference>true</ExcludeNUnitLiteReference>
+		<_LibMonoLinkMode>dylib</_LibMonoLinkMode>
+		<NoSymbolStrip>true</NoSymbolStrip>
+		<MtouchLink>None</MtouchLink>
 	</PropertyGroup>
+
+	<ItemGroup>
+		<_BundlerEnvironmentVariables Include="DOTNET_Interpreter" Value="%2A%21%2A" />
+		<_BundlerEnvironmentVariables Include="DOTNET_ReadyToRun" Value="0" />
+	</ItemGroup>
 
 	<Import Project="../../common/shared-dotnet.csproj" />
 

@@ -26,9 +26,6 @@ namespace Xamarin.MacDev.Tasks {
 		public string OutputLibrary { get; set; } = string.Empty;
 
 		[Required]
-		public string SdkDevPath { get; set; } = string.Empty;
-
-		[Required]
 		public string SdkRoot { get; set; } = string.Empty;
 
 		#endregion
@@ -63,7 +60,7 @@ namespace Xamarin.MacDev.Tasks {
 			var executable = GetExecutable (args, "metallib", MetalLibPath);
 
 			cancellationTokenSource = new CancellationTokenSource ();
-			ExecuteAsync (Log, executable, args, environment: env, cancellationToken: cancellationTokenSource.Token).Wait ();
+			ExecuteAsync (Log, executable, args, environment: env, sdkDevPath: SdkDevPath, cancellationToken: cancellationTokenSource.Token).Wait ();
 
 			return !Log.HasLoggedErrors;
 		}

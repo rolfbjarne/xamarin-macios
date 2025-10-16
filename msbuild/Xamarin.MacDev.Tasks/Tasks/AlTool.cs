@@ -36,9 +36,6 @@ namespace Xamarin.MacDev.Tasks {
 			return toolPathOverride;
 		}
 
-		[Required]
-		public string SdkDevPath { get; set; } = string.Empty;
-
 		protected abstract string ALToolAction { get; }
 
 		public override bool Execute ()

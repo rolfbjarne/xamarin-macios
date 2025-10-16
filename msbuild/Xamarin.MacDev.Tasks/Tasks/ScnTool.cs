@@ -39,9 +39,6 @@ namespace Xamarin.MacDev.Tasks {
 		[Required]
 		public string SdkVersion { get; set; } = string.Empty;
 
-		[Required]
-		public string SdkDevPath { get; set; } = string.Empty;
-
 		#endregion
 
 		#region Outputs
@@ -96,7 +93,7 @@ namespace Xamarin.MacDev.Tasks {
 			}
 
 			ForEach (listOfArguments, (arg) => {
-				ExecuteAsync ("xcrun", arg.Arguments, sdkDevPath: SdkDevPath).Wait ();
+				ExecuteAsync ("xcrun", arg.Arguments).Wait ();
 			});
 
 			BundleResources = bundleResources.ToArray ();

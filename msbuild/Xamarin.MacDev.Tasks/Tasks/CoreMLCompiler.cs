@@ -32,12 +32,6 @@ namespace Xamarin.MacDev.Tasks {
 		[Required]
 		public string ResourcePrefix { get; set; } = "";
 
-		string sdkDevPath = "";
-		public string SdkDevPath {
-			get { return string.IsNullOrEmpty (sdkDevPath) ? "/" : sdkDevPath; }
-			set { sdkDevPath = value; }
-		}
-
 		public string ToolExe {
 			get { return toolExe ?? ToolName; }
 			set { toolExe = value; }
@@ -83,7 +77,7 @@ namespace Xamarin.MacDev.Tasks {
 
 			var fileName = GetFullPathToTool ();
 
-			var rv = ExecuteAsync (fileName, args, sdkDevPath, mergeOutput: false).Result;
+			var rv = ExecuteAsync (fileName, args, mergeOutput: false).Result;
 			var exitCode = rv.ExitCode;
 			var output = rv.StandardOutput!.ToString ();
 			File.WriteAllText (log, output);

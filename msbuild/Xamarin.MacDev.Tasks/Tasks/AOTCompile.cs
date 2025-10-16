@@ -36,9 +36,6 @@ namespace Xamarin.MacDev.Tasks {
 		[Required]
 		public string OutputDirectory { get; set; } = string.Empty;
 
-		[Required]
-		public string SdkDevPath { get; set; } = string.Empty;
-
 		#region Output
 		[Output]
 		public ITaskItem []? AssemblyFiles { get; set; }
@@ -341,7 +338,7 @@ namespace Xamarin.MacDev.Tasks {
 				environment [item.ItemSpec] = item.GetMetadata ("Value");
 
 			ForEach (listOfArguments, (arg) => {
-				ExecuteAsync (AOTCompilerPath, arg.Arguments, environment: environment, sdkDevPath: SdkDevPath, showErrorIfFailure: false /* we show our own error below */)
+				ExecuteAsync (AOTCompilerPath, arg.Arguments, environment: environment, showErrorIfFailure: false /* we show our own error below */)
 					.ContinueWith ((v) => {
 						if (v.Result.ExitCode != 0)
 							Log.LogError (MSBStrings.E7118 /* Failed to AOT compile {0}, the AOT compiler exited with code {1} */, Path.GetFileName (arg.Input), v.Result.ExitCode);

@@ -366,7 +366,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 	</Target>
 
 	<Target Name="_CleanDebugSymbols" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_GenerateBundleName">
-		<GetDirectories SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Path="$(DeviceSpecificOutputPath)" Pattern="*.dSYM">
+		<GetDirectories SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Path="$(DeviceSpecificOutputPath)" Pattern="*.dSYM" SdkDevPath="$(_SdkDevPath)">
 			<Output TaskParameter="Directories" ItemName="_DebugSymbolDir" />
 		</GetDirectories>
 
@@ -3188,6 +3188,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			ProjectGuid="$(ProjectGuid)"
 			ProjectName="$(MSBuildProjectName)"
 			ProjectTypeGuids="$(ProjectTypeGuids)"
+			SdkDevPath="$(_SdkDevPath)"
 			SigningKey="$(_CodeSigningKey)"
 			SolutionPath="$(SolutionPath)"
 			RuntimeIdentifiers="$(RuntimeIdentifiers);$(RuntimeIdentifier)"
@@ -3271,7 +3272,8 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			_GetAppBundleEntitlements;
 			Codesign;
 			_CompileProductDefinition;
-			_WriteAppManifest
+			_WriteAppManifest;
+			_DetectSdkLocations;
 		</_CreateInstallerDependsOn>
 	</PropertyGroup>
 

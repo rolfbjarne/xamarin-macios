@@ -181,7 +181,7 @@ Copyright (C) 2011-2013 Xamarin. All rights reserved.
 		<!--Copy watchOS Dsym folders from Mac-->
 		<MSBuild Projects="@(_WatchAppReferenceWithConfigurationExistent)" Targets="CopyDSYMFromMac" Properties="%(_WatchAppReferenceWithConfigurationExistent.SetConfiguration);      %(_WatchAppReferenceWithConfigurationExistent.SetPlatform);      BuildIpa=true" Condition="'$(IsWatchApp)' == 'false' And '@(_WatchAppReferenceWithConfigurationExistent)' != '' And '$(_BuildReferencedExtensionProjects)' != 'true'"></MSBuild>
 		<!--Look for all *.dsym folders int the output path of the main app -->
-		<GetDirectories SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Path="$(DeviceSpecificOutputPath)" Pattern="*.dSYM">
+		<GetDirectories SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Path="$(DeviceSpecificOutputPath)" Pattern="*.dSYM" SdkDevPath="$(_SdkDevPath)">
 			<Output TaskParameter="Directories" ItemName="_DSYMDir" />
 		</GetDirectories>
 		<ItemGroup>

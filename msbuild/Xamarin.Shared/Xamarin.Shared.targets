@@ -365,7 +365,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<RemoveDir Directories="$(BindingResourcePath);" />  
 	</Target>
 
-	<Target Name="_CleanDebugSymbols" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_GenerateBundleName">
+	<Target Name="_CleanDebugSymbols" Condition="'$(_CanOutputAppBundle)' == 'true'" DependsOnTargets="_GenerateBundleName;_DetectSdkLocations">
 		<GetDirectories SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Path="$(DeviceSpecificOutputPath)" Pattern="*.dSYM" SdkDevPath="$(_SdkDevPath)">
 			<Output TaskParameter="Directories" ItemName="_DebugSymbolDir" />
 		</GetDirectories>
@@ -439,6 +439,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			_CompileTextureAtlases;
 			_CompileCoreMLModels;
 			_SetResourceMetadata;
+			_DetectSdkLocations;
 		</CollectBundleResourcesDependsOn>
 	</PropertyGroup>
 
@@ -465,6 +466,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			BundleResources="@(Content);@(BundleResource)"
 			ProjectDir="$(MSBuildProjectDirectory)"
 			ResourcePrefix="$(_ResourcePrefix)"
+			SdkDevPath="$(_SdkDevPath)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			UnpackedResources="@(_UnpackedBundleResourceWithLogicalName)"
 			>

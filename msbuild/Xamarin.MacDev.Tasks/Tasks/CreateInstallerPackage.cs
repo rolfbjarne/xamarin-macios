@@ -90,7 +90,7 @@ namespace Xamarin.MacDev.Tasks {
 			var args = GenerateCommandLineCommands ();
 			var executable = GetExecutable (args, "productbuild", ProductBuildPath);
 			cancellationTokenSource = new CancellationTokenSource ();
-			ExecuteAsync (Log, executable, args, workingDirectory: OutputDirectory, cancellationToken: cancellationTokenSource.Token).Wait ();
+			ExecuteAsync (executable, args, workingDirectory: OutputDirectory, cancellationToken: cancellationTokenSource.Token).Wait ();
 			return !Log.HasLoggedErrors;
 		}
 

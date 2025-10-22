@@ -27,7 +27,7 @@ namespace Xamarin.MacDev.Tasks {
 		public string SdkDevPath {
 			get {
 				if (string.IsNullOrEmpty (sdkDevPath))
-					Log.LogError ($"The task {GetType ().Name} requires 'SdkDevPath' to be set.");
+					Log.LogError ($"The task {GetType ().Name} requires 'SdkDevPath' to be set.\n{Environment.StackTrace}");
 				return sdkDevPath;
 			}
 			set {

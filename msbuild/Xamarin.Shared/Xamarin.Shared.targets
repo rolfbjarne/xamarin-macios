@@ -439,7 +439,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			_CompileTextureAtlases;
 			_CompileCoreMLModels;
 			_SetResourceMetadata;
-			_DetectSdkLocations;
 		</CollectBundleResourcesDependsOn>
 	</PropertyGroup>
 

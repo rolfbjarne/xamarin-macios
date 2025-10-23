@@ -40,7 +40,6 @@ CFLAGS=\
 	-Wmissing-field-initializers \
 	-Wcast-function-type-mismatch \
 	-Wsemicolon-before-method-body \
-	-Wsign-compare \
 	-g \
 	-I.
 SWIFTFLAGS=-g -emit-library

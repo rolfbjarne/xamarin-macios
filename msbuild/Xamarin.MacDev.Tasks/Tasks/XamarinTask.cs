@@ -101,11 +101,16 @@ namespace Xamarin.MacDev.Tasks {
 
 		protected System.Threading.Tasks.Task<Execution> ExecuteAsync (string fileName, IList<string> arguments, Dictionary<string, string?>? environment = null, bool mergeOutput = true, bool showErrorIfFailure = true, string? workingDirectory = null, CancellationToken? cancellationToken = null)
 		{
-			return ExecuteAsync (Log, fileName, arguments, SdkDevPath, environment, mergeOutput, showErrorIfFailure, workingDirectory, cancellationToken);
+			return ExecuteAsync (this, Log, fileName, arguments, SdkDevPath, environment, mergeOutput, showErrorIfFailure, workingDirectory, cancellationToken);
 		}
 
 		static int executionCounter;
 		internal protected static async System.Threading.Tasks.Task<Execution> ExecuteAsync (TaskLoggingHelper log, string fileName, IList<string> arguments, string? sdkDevPath = null, Dictionary<string, string?>? environment = null, bool mergeOutput = true, bool showErrorIfFailure = true, string? workingDirectory = null, CancellationToken? cancellationToken = null)
+		{
+			return ExecuteAsync (null, log, fileName, arguments, SdkDevPath, environment, mergeOutput, showErrorIfFailure, workingDirectory, cancellationToken);
+		}
+
+		internal protected static async System.Threading.Tasks.Task<Execution> ExecuteAsync (Task? task, TaskLoggingHelper log, string fileName, IList<string> arguments, string? sdkDevPath = null, Dictionary<string, string?>? environment = null, bool mergeOutput = true, bool showErrorIfFailure = true, string? workingDirectory = null, CancellationToken? cancellationToken = null)
 		{
 			// Create a new dictionary if we're given one, to make sure we don't change the caller's dictionary.
 			var launchEnvironment = environment is null ? new Dictionary<string, string?> () : new Dictionary<string, string?> (environment);
@@ -113,7 +118,7 @@ namespace Xamarin.MacDev.Tasks {
 				launchEnvironment ["DEVELOPER_DIR"] = sdkDevPath;
 
 			if (string.IsNullOrEmpty (sdkDevPath))
-				log.LogError ($"Calling external processes without specifying the Xcode path! StackTrace: {Environment.StackTrace}");
+				log.LogError ($"Calling external processes without specifying the Xcode path in the task {(task?.GetType ()?.Name ?? "?")}! StackTrace: {Environment.StackTrace}");
 
 			var currentId = Interlocked.Increment (ref executionCounter);
 			log.LogMessage (MessageImportance.Normal, MSBStrings.M0001, currentId, fileName, StringUtils.FormatArguments (arguments)); // Started external tool execution #{0}: {1} {2}

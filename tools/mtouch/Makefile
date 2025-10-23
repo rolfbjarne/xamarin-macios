@@ -40,6 +40,13 @@ define RunRegistrar
 
 .libs/Microsoft.$(9).registrar.$(10).a: .libs/Microsoft.$(9).registrar.$(10).m .libs/Microsoft.$(9).registrar.$(10).h | .libs
 	$$(Q_CC) $$(CLANG) -DDEBUG -g -gdwarf-2 $(6) -stdlib=libc++ -std=c++14 -x objective-c++ -o $$@ -c $$< -Wall -Wno-unguarded-availability-new -I$(TOP)/runtime
+
+.libs/Microsoft.$(9).registrar.coreclr.$(10)%m .libs/Microsoft.$(9).registrar.coreclr.$(10)%h: $(TOP)/src/build/dotnet/$(1)/$(3)/Microsoft.$(9).dll $(LOCAL_MTOUCH) | .libs
+	$$(Q_GEN) $$(LOCAL_MTOUCH_COMMAND) $$(MTOUCH_VERBOSITY) --runregistrar:$$(abspath $$(basename $$@).m) --sdkroot $$(XCODE_DEVELOPER_ROOT) --sdk $(4) $$< --registrar:static --target-framework .NETCoreApp,Version=$(subst net,,$(DOTNET_TFM)),Profile=$(1) --abi $(2) --reference:$(DOTNET_BCL_DIR)/System.Runtime.dll --reference:$(DOTNET_BCL_DIR)/System.Runtime.InteropServices.dll --rid $(10) --xamarin-runtime CoreCLR
+	$$(Q) touch $$(basename $$@).m $$(basename $$@).h
+
+.libs/Microsoft.$(9).registrar.coreclr.$(10).a: .libs/Microsoft.$(9).registrar.coreclr.$(10).m .libs/Microsoft.$(9).registrar.$(10).h | .libs
+	$$(Q_CC) $$(CLANG) -DDEBUG -g -gdwarf-2 $(6) -stdlib=libc++ -std=c++14 -x objective-c++ -o $$@ -c $$< -Wall -Wno-unguarded-availability-new -I$(TOP)/runtime
 endef
 $(eval $(call RunRegistrar,ios,x86_64,64,$(IOS_SDK_VERSION),iOS,$(iossimulator-x64_CFLAGS),,,iOS,iossimulator-x64))
 $(eval $(call RunRegistrar,ios,arm64,64,$(IOS_SDK_VERSION),iOS,$(iossimulator-arm64_CFLAGS),,,iOS,iossimulator-arm64))
@@ -52,6 +59,7 @@ $(eval $(call RunRegistrar,maccatalyst,arm64,64,$(MACCATALYST_SDK_VERSION),MacCa
 
 TARGETS_DOTNET = \
 	$(foreach platform,$(DOTNET_PLATFORMS_MTOUCH),$(foreach rid,$(DOTNET_$(platform)_RUNTIME_IDENTIFIERS),$(DOTNET_DESTDIR)/$($(rid)_NUGET_RUNTIME_NAME)/runtimes/$(rid)/native/Microsoft.$(platform).registrar.a)) \
+	$(foreach platform,$(DOTNET_PLATFORMS_MTOUCH),$(foreach rid,$(DOTNET_$(platform)_RUNTIME_IDENTIFIERS),$(DOTNET_DESTDIR)/$($(rid)_NUGET_RUNTIME_NAME)/runtimes/$(rid)/native/Microsoft.$(platform).registrar.coreclr.a)) \
 
 TARGET_DIRS_DOTNET = \
 	$(foreach platform,$(DOTNET_PLATFORMS_MTOUCH),$(foreach rid,$(DOTNET_$(platform)_RUNTIME_IDENTIFIERS),$(DOTNET_DESTDIR)/$($(rid)_NUGET_RUNTIME_NAME)/runtimes/$(rid)/native)) \
@@ -66,6 +74,9 @@ $(TARGET_DIRS):
 
 define InstallRegistrar
 $(DOTNET_DESTDIR)/$$($(2)_NUGET_RUNTIME_NAME)/runtimes/$(2)/native/Microsoft.$(1).registrar.a: .libs/Microsoft.$(1).registrar.$(rid).a | $(DOTNET_DESTDIR)/$($(2)_NUGET_RUNTIME_NAME)/runtimes/$(2)/native
+	$(Q) $(CP) $$< $$@
+
+$(DOTNET_DESTDIR)/$$($(2)_NUGET_RUNTIME_NAME)/runtimes/$(2)/native/Microsoft.$(1).registrar.coreclr.a: .libs/Microsoft.$(1).registrar.coreclr.$(rid).a | $(DOTNET_DESTDIR)/$($(2)_NUGET_RUNTIME_NAME)/runtimes/$(2)/native
 	$(Q) $(CP) $$< $$@
 endef
 

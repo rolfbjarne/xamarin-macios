@@ -23,17 +23,7 @@ namespace Xamarin.MacDev.Tasks {
 
 		public string TargetFrameworkMoniker { get; set; } = string.Empty;
 
-		string sdkDevPath = string.Empty;
-		public string SdkDevPath {
-			get {
-				if (string.IsNullOrEmpty (sdkDevPath))
-					Log.LogError ($"The task {GetType ().Name} requires 'SdkDevPath' to be set.\n{Environment.StackTrace}");
-				return sdkDevPath;
-			}
-			set {
-				sdkDevPath = value;
-			}
-		}
+		public string SdkDevPath { get; set; } = string.Empty;
 
 		void VerifyTargetFrameworkMoniker ()
 		{
@@ -122,8 +112,8 @@ namespace Xamarin.MacDev.Tasks {
 			if (!string.IsNullOrEmpty (sdkDevPath))
 				launchEnvironment ["DEVELOPER_DIR"] = sdkDevPath;
 
-			if (fileName == "xcrun" && string.IsNullOrEmpty (sdkDevPath))
-				log.LogError ($"Calling xcrun without specifying the Xcode path! StackTrace: {Environment.StackTrace}");
+			if (string.IsNullOrEmpty (sdkDevPath))
+				log.LogError ($"Calling external processes without specifying the Xcode path! StackTrace: {Environment.StackTrace}");
 
 			var currentId = Interlocked.Increment (ref executionCounter);
 			log.LogMessage (MessageImportance.Normal, MSBStrings.M0001, currentId, fileName, StringUtils.FormatArguments (arguments)); // Started external tool execution #{0}: {1} {2}

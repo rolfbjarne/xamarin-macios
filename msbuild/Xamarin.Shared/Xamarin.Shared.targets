@@ -2015,6 +2015,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			ProjectDir="$(MSBuildProjectDirectory)"
 			References="@(ReferencePath);@(BGenReferencePath)"
 			ResponseFilePath="$(DeviceSpecificIntermediateOutputPath)response-file.rsp"
+			SdkDevPath="$(_SdkDevPath)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			BGenToolPath="$(BGenToolPath)"
 			BGenToolExe="$(BGenToolExe)"

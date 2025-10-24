@@ -60,7 +60,7 @@ namespace Xamarin.MacDev.Tasks {
 			var executable = GetExecutable (args, "metallib", MetalLibPath);
 
 			cancellationTokenSource = new CancellationTokenSource ();
-			ExecuteAsync (Log, executable, args, environment: env, sdkDevPath: SdkDevPath, cancellationToken: cancellationTokenSource.Token).Wait ();
+			ExecuteAsync (executable, args, environment: env, cancellationToken: cancellationTokenSource.Token).Wait ();
 
 			return !Log.HasLoggedErrors;
 		}

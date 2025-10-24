@@ -50,7 +50,7 @@ namespace Xamarin.MacDev.Tasks {
 				return false;
 
 			cancellationTokenSource = new CancellationTokenSource ();
-			var rv = ExecuteAsync (Log, executable, args, sdkDevPath: SdkDevPath, cancellationToken: cancellationTokenSource.Token).Result;
+			var rv = ExecuteAsync (executable, args, cancellationToken: cancellationTokenSource.Token).Result;
 			LogErrorsFromOutput (rv.StandardOutput?.ToString ());
 			return !Log.HasLoggedErrors;
 		}

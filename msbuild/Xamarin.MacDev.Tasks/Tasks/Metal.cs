@@ -102,7 +102,7 @@ namespace Xamarin.MacDev.Tasks {
 			args.Add (SourceFile!.ItemSpec);
 
 			cancellationTokenSource = new CancellationTokenSource ();
-			ExecuteAsync (Log, executable, args, environment: env, sdkDevPath: SdkDevPath, cancellationToken: cancellationTokenSource.Token).Wait ();
+			ExecuteAsync (executable, args, environment: env, cancellationToken: cancellationTokenSource.Token).Wait ();
 
 			return !Log.HasLoggedErrors;
 		}

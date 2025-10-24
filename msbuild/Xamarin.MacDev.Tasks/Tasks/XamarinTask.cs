@@ -99,19 +99,15 @@ namespace Xamarin.MacDev.Tasks {
 			return PlatformFrameworkHelper.GetSdkPlatform (Platform, isSimulator);
 		}
 
-		protected System.Threading.Tasks.Task<Execution> ExecuteAsync (string fileName, IList<string> arguments, Dictionary<string, string?>? environment = null, bool mergeOutput = true, bool showErrorIfFailure = true, string? workingDirectory = null, CancellationToken? cancellationToken = null)
+		internal protected System.Threading.Tasks.Task<Execution> ExecuteAsync (string fileName, IList<string> arguments, Dictionary<string, string?>? environment = null, bool mergeOutput = true, bool showErrorIfFailure = true, string? workingDirectory = null, CancellationToken? cancellationToken = null)
 		{
-			return ExecuteAsync (this, Log, fileName, arguments, SdkDevPath, environment, mergeOutput, showErrorIfFailure, workingDirectory, cancellationToken);
+			return ExecuteAsync (this, fileName, arguments, SdkDevPath, environment, mergeOutput, showErrorIfFailure, workingDirectory, cancellationToken);
 		}
 
 		static int executionCounter;
-		internal protected static async System.Threading.Tasks.Task<Execution> ExecuteAsync (TaskLoggingHelper log, string fileName, IList<string> arguments, string? sdkDevPath = null, Dictionary<string, string?>? environment = null, bool mergeOutput = true, bool showErrorIfFailure = true, string? workingDirectory = null, CancellationToken? cancellationToken = null)
+		static async System.Threading.Tasks.Task<Execution> ExecuteAsync (Task task, string fileName, IList<string> arguments, string? sdkDevPath = null, Dictionary<string, string?>? environment = null, bool mergeOutput = true, bool showErrorIfFailure = true, string? workingDirectory = null, CancellationToken? cancellationToken = null)
 		{
-			return ExecuteAsync (null, log, fileName, arguments, SdkDevPath, environment, mergeOutput, showErrorIfFailure, workingDirectory, cancellationToken);
-		}
-
-		internal protected static async System.Threading.Tasks.Task<Execution> ExecuteAsync (Task? task, TaskLoggingHelper log, string fileName, IList<string> arguments, string? sdkDevPath = null, Dictionary<string, string?>? environment = null, bool mergeOutput = true, bool showErrorIfFailure = true, string? workingDirectory = null, CancellationToken? cancellationToken = null)
-		{
+			var log = task.Log;
 			// Create a new dictionary if we're given one, to make sure we don't change the caller's dictionary.
 			var launchEnvironment = environment is null ? new Dictionary<string, string?> () : new Dictionary<string, string?> (environment);
 			if (!string.IsNullOrEmpty (sdkDevPath))

@@ -76,9 +76,9 @@ namespace Foundation {
 		public NSObject.Flags flags;
 	}
 
-	class NSObjectDataHandle : CriticalHandle {
+	class NSObjectDataHandle : SafeHandle {
 		public NSObjectDataHandle ()
-			: base (IntPtr.Zero)
+			: base (IntPtr.Zero, true)
 		{
 			unsafe {
 				this.handle = (IntPtr) NativeMemory.AllocZeroed ((nuint) sizeof (NSObjectData));
@@ -90,7 +90,7 @@ namespace Foundation {
 		}
 
 		public override bool IsInvalid {
-			get => handle != IntPtr.Zero;
+			get => handle == IntPtr.Zero;
 		}
 
 		protected override bool ReleaseHandle ()
@@ -1000,6 +1000,8 @@ namespace Foundation {
 				} else {
 					NSObject_Disposer.Add (this);
 				}
+				// DO NOT dispose data_handle here, we rely on it being disposed by the GC in a later garbage collection
+				// data_handle.Dispose ();
 			}
 		}
 
@@ -1025,6 +1027,11 @@ namespace Foundation {
 			static internal void Add (NSObject handle)
 			{
 				bool call_drain;
+
+				var success = false;
+				handle.data_handle.DangerousAddRef (ref success);
+				// 'success' will never be false here, because DangerousAddRef will throw an exception in case of failure.
+
 				lock (lock_obj) {
 					handles.Add (handle);
 					call_drain = handles.Count == 1;
@@ -1064,8 +1071,10 @@ namespace Foundation {
 						handles = drainList1;
 				}
 
-				foreach (NSObject x in drainList)
+				foreach (NSObject x in drainList) {
 					x.ReleaseManagedRef ();
+					x.DangerousRelease ();
+				}
 				drainList.Clear ();
 
 				lock (lock_obj) {

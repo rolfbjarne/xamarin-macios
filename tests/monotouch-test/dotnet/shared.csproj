@@ -46,6 +46,18 @@
     <WarningsAsErrors>Nullable</WarningsAsErrors>
   </PropertyGroup>
 
+  <!-- CoreCLR -->
+  <PropertyGroup>
+    <UseMonoRuntime>false</UseMonoRuntime>
+    <_LibMonoLinkMode>dylib</_LibMonoLinkMode>
+    <NoSymbolStrip>true</NoSymbolStrip>
+    <MtouchLink>None</MtouchLink>
+  </PropertyGroup>
+  <ItemGroup>
+    <_BundlerEnvironmentVariables Include="DOTNET_Interpreter" Value="%2A%21%2A" />
+    <_BundlerEnvironmentVariables Include="DOTNET_ReadyToRun" Value="0" />
+  </ItemGroup>
+
   <ItemGroup>
     <CustomEntitlements Include="com.apple.security.network.client" Condition="'$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst'" Type="boolean" Value="true" />
     <CustomEntitlements Include="com.apple.security.network.server" Condition="'$(_PlatformName)' == 'macOS' Or '$(_PlatformName)' == 'MacCatalyst'" Type="boolean" Value="true" />

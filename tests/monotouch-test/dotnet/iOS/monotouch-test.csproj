@@ -2,7 +2,18 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net$(BundledNETCoreAppTargetFrameworkVersion)-ios</TargetFramework>
+    <RuntimeIdentifier>ios-arm64</RuntimeIdentifier>
+
+    <UseMonoRuntime>false</UseMonoRuntime>
+    <_LibMonoLinkMode>dylib</_LibMonoLinkMode>
+    <NoSymbolStrip>true</NoSymbolStrip>
+    <MtouchLink>None</MtouchLink>
   </PropertyGroup>
+
+  <ItemGroup>
+    <_BundlerEnvironmentVariables Include="DOTNET_Interpreter" Value="%2A%21%2A" />
+    <_BundlerEnvironmentVariables Include="DOTNET_ReadyToRun" Value="0" />
+  </ItemGroup>
 
   <!-- Imports of the form '../shared.csproj' will be inlined by xharness -->
   <Import Project="../shared.csproj" />

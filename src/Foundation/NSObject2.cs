@@ -1073,7 +1073,7 @@ namespace Foundation {
 
 				foreach (NSObject x in drainList) {
 					x.ReleaseManagedRef ();
-					x.DangerousRelease ();
+					x.data_handle.DangerousRelease ();
 				}
 				drainList.Clear ();
 

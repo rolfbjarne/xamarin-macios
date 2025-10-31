@@ -2270,6 +2270,7 @@
 			Condition="'$(IsMacEnabled)' == 'true'"
 			ZipFilePath="%(_CompressedPlugIns.Identity)"
 			ExtractionPath="%(_CompressedPlugIns.ExtractionPath)"
+			SdkDevPath="$(_SdkDevPath)"
 			>
 			<Output TaskParameter="TouchedFiles" ItemName="FileWrites" />
 		</Unzip>
@@ -2313,6 +2314,7 @@
 			CopyToWindows="true"
 			ZipFilePath="%(_CompressedXpcServices.Identity)"
 			ExtractionPath="%(_CompressedXpcServices.ExtractionPath)"
+			SdkDevPath="$(_SdkDevPath)"
 			>
 			<Output TaskParameter="TouchedFiles" ItemName="FileWrites" />
 		</Unzip>

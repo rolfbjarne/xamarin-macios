@@ -1273,7 +1273,7 @@
 		<Warning Condition="'$(GenerateRuntimeConfigurationFiles)' != 'true'" Text="Some features may not work correctly, because the generation of the runtime configure file (*.runtimeconfig.json) has been disabled." />
 	</Target>
 
-	<Target Name="_FindAotCompiler" DependsOnTargets="_ComputeVariables">
+	<Target Name="_FindAotCompiler" DependsOnTargets="_ComputeVariables;_DetectSdkLocations">
 		<PropertyGroup>
 			<_XamarinAOTCompilerCachePath>$(DeviceSpecificIntermediateOutputPath)aot-compiler-path-$(NETCoreSdkVersion).txt</_XamarinAOTCompilerCachePath>
 		</PropertyGroup>
@@ -1292,6 +1292,7 @@
 			KeepTemporaryOutput="$(FindAotCompilerKeepKeepTemporaryOutput)"
 			MonoAotCrossCompiler="@(MonoAotCrossCompiler)"
 			RuntimeIdentifier="$(RuntimeIdentifier)"
+			SdkDevPath="$(_SdkDevPath)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 		>
 			<Output TaskParameter="AotCompiler" PropertyName="_XamarinAOTCompiler" />

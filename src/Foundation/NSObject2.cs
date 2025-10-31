@@ -452,6 +452,11 @@ namespace Foundation {
 				Runtime.NativeObjectHasDied (handle, this);
 			}
 			xamarin_release_managed_ref (handle, user_type.AsByte ());
+
+			unsafe {
+				if (!Runtime.IsCoreCLR)
+					__data_for_mono = null;
+			}
 		}
 
 		static bool IsProtocol (Type type, IntPtr protocol)

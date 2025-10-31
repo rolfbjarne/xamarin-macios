@@ -113,7 +113,7 @@ namespace Xamarin.MacDev.Tasks {
 			if (!string.IsNullOrEmpty (sdkDevPath))
 				launchEnvironment ["DEVELOPER_DIR"] = sdkDevPath;
 
-			if (string.IsNullOrEmpty (sdkDevPath)) {
+			if (Environment.OSVersion.Platform == PlatformID.MacOSX && string.IsNullOrEmpty (sdkDevPath)) {
 				log.LogError (MSBStrings.E7164 /* The task '{0}' is trying to call an external process, but a path to Xcode has not been provided. Please file an issue at https://github.com/dotnet/macios/issues/new/choose. */, task.GetType ().Name);
 				log.LogMessage (MessageImportance.Low, Environment.StackTrace);
 			}

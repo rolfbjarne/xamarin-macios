@@ -113,8 +113,10 @@ namespace Xamarin.MacDev.Tasks {
 			if (!string.IsNullOrEmpty (sdkDevPath))
 				launchEnvironment ["DEVELOPER_DIR"] = sdkDevPath;
 
-			if (string.IsNullOrEmpty (sdkDevPath))
-				log.LogError ($"Calling external processes without specifying the Xcode path in the task {(task?.GetType ()?.Name ?? "?")}! StackTrace: {Environment.StackTrace}");
+			if (string.IsNullOrEmpty (sdkDevPath)) {
+				log.LogError (MSBStrings.E7164 /* The task '{0}' is trying to call an external process, but a path to Xcode has not been provided. Please file an issue at https://github.com/dotnet/macios/issues/new/choose. */, task.GetType ().Name);
+				log.LogMessage (MessageImportance.Low, Environment.StackTrace);
+			}
 
 			var currentId = Interlocked.Increment (ref executionCounter);
 			log.LogMessage (MessageImportance.Normal, MSBStrings.M0001, currentId, fileName, StringUtils.FormatArguments (arguments)); // Started external tool execution #{0}: {1} {2}

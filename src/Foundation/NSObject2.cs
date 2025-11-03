@@ -85,18 +85,33 @@ namespace Foundation {
 			}
 		}
 
+		public NSObjectDataHandle (IntPtr handle)
+			: base (handle)
+		{
+			//Runtime.NSLog ($"NSObjectDataHandle (0x{handle:x}): wrapped existing pointer");
+		}
+
+		public void Invalidate ()
+		{
+			handle = IntPtr.Zero;
+			//Runtime.NSLog ($"NSObjectDataHandle.Disown (): disowned 0x{handle:x}");
+		}
+
 		public unsafe NSObjectData* Data {
 			get => (NSObjectData*) handle;
 		}
 
 		public override bool IsInvalid {
-			get => handle != IntPtr.Zero;
+			get => handle == IntPtr.Zero;
 		}
 
 		protected override bool ReleaseHandle ()
 		{
-			unsafe {
-				NativeMemory.Free ((void*) handle);
+			if (handle != IntPtr.Zero) {
+				unsafe {
+					NativeMemory.Free ((void*) handle);
+				}
+				//Runtime.NSLog ($"NSObjectDataHandle.ReleaseHandle (): released 0x{handle:x}");
 			}
 			handle = IntPtr.Zero;
 			return true;
@@ -150,9 +165,19 @@ namespace Foundation {
 
 		internal unsafe NSObjectData* GetData ()
 		{
-			return AllocateData ().Data;
+			var rv = AllocateData ().Data;
+
+			//Runtime.NSLog ($"{GetType ().Name}.GetData () id={objectId} data: 0x{(IntPtr) rv}");
+			if (rv is null) {
+				//Runtime.NSLog ($"{GetType ().Name}.GetData (): no handle\n{Environment.StackTrace}");
+				throw new ObjectDisposedException ("No data???");
+			}
+
+			return rv;
 		}
 
+		static int objectIdCounter;
+		int objectId;
 		unsafe NSObjectDataHandle AllocateData ()
 		{
 			if (data_handle is not null)
@@ -165,6 +190,9 @@ namespace Foundation {
 				data.Dispose ();
 				return previousValue;
 			}
+
+			objectId = Interlocked.Increment (ref objectIdCounter);
+			//Runtime.NSLog ($"{GetType ().Name}.AllocateData () id={objectId} allocated 0x{((IntPtr) data.Data):x}");
 
 			if (!Runtime.IsCoreCLR) // This condition (and the assignment to __handle_for_mono if applicable) is trimmed away by the linker.
 				__data_for_mono = data.Data;
@@ -999,9 +1027,53 @@ namespace Foundation {
 					ReleaseManagedRef ();
 				} else {
 					NSObject_Disposer.Add (this);
+					RecreateDataHandle ();
 				}
 			}
 		}
+
+#nullable enable
+		void RecreateDataHandle ()
+		{
+			// OK, this code is _weird_.
+			// We need to delay the deletion of the native memory pointed to by data_handle until
+			// after this instance has been collected. A CriticalHandle seems to fit this purpose like glove, until
+			// you realize that a CriticalHandle is only kept alive until the parent object _becomes finalizable_,
+			// not _is collected_, which is very different - in other words, resurrected objects don't keep CriticalHandles
+			// they contain alive. This is a problem because every single managed NSObject instance is resurrected, and we
+			// need the native memory to stay alive after resurrection.
+			//
+			// So this solution depends on a few bits:
+			// * At this point, this instance may have become finalizable, but the native memory shouldn't have been freed yet.
+			// * The original NSObjectDataHandle (aka CriticalHandle) will be collected in this/upcoming GC cycle, and can't
+			//   be trusted to keep the native memory alive anymore.
+			// * So we just create a new one, pointing to the same native memory, and replace the original NSObjectDataHandle (aka
+			//   CriticalHandle) with it
+			// * This works, because since this instance has become / will become resurrected, it's not finalizable anymore,
+			//   and it will keep the new NSObjectDataHandle instance (and the native memory it points to) alive.
+			// * Now if this instance is deemed finalizable, and then resurrected *again*, bad things will likely happen. This
+			//   is a bit more unlikely though, because we don't re-register the finalizer for execution, so unless somebody
+			//   else does that, it's quite unlikely this instance will become resurrected a second time.
+			var previous_data = data_handle;
+			if (previous_data is null) {
+				throw new InvalidOperationException ($"Huh? (1)");
+				// return;
+			}
+
+			unsafe {
+				data_handle = new NSObjectDataHandle ((IntPtr) previous_data.Data);
+			}
+
+			if (previous_data.IsInvalid) {
+				throw new InvalidOperationException ($"Huh? (2)");
+				// return;
+			}
+
+			//Runtime.NSLog ($"{GetType ().Name}: id={objectId} previous value invalidated and disposed. Current flags: {flags}");
+			previous_data.Invalidate ();
+			previous_data.Dispose ();
+		}
+#nullable disable
 
 		[Register ("__NSObject_Disposer")]
 		[Preserve (AllMembers = true)]

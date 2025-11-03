@@ -76,9 +76,9 @@ namespace Foundation {
 		public NSObject.Flags flags;
 	}
 
-	class NSObjectDataHandle : SafeHandle {
+	class NSObjectDataHandle : CriticalHandle {
 		public NSObjectDataHandle ()
-			: base (IntPtr.Zero, true)
+			: base (IntPtr.Zero)
 		{
 			unsafe {
 				this.handle = (IntPtr) NativeMemory.AllocZeroed ((nuint) sizeof (NSObjectData));
@@ -90,7 +90,7 @@ namespace Foundation {
 		}
 
 		public override bool IsInvalid {
-			get => handle == IntPtr.Zero;
+			get => handle != IntPtr.Zero;
 		}
 
 		protected override bool ReleaseHandle ()
@@ -452,11 +452,6 @@ namespace Foundation {
 				Runtime.NativeObjectHasDied (handle, this);
 			}
 			xamarin_release_managed_ref (handle, user_type.AsByte ());
-
-			unsafe {
-				if (!Runtime.IsCoreCLR)
-					__data_for_mono = null;
-			}
 		}
 
 		static bool IsProtocol (Type type, IntPtr protocol)
@@ -1005,8 +1000,6 @@ namespace Foundation {
 				} else {
 					NSObject_Disposer.Add (this);
 				}
-				// DO NOT dispose data_handle here, we rely on it being disposed by the GC in a later garbage collection
-				// data_handle.Dispose ();
 			}
 		}
 
@@ -1032,11 +1025,6 @@ namespace Foundation {
 			static internal void Add (NSObject handle)
 			{
 				bool call_drain;
-
-				var success = false;
-				handle.data_handle.DangerousAddRef (ref success);
-				// 'success' will never be false here, because DangerousAddRef will throw an exception in case of failure.
-
 				lock (lock_obj) {
 					handles.Add (handle);
 					call_drain = handles.Count == 1;
@@ -1076,10 +1064,8 @@ namespace Foundation {
 						handles = drainList1;
 				}
 
-				foreach (NSObject x in drainList) {
+				foreach (NSObject x in drainList)
 					x.ReleaseManagedRef ();
-					x.data_handle.DangerousRelease ();
-				}
 				drainList.Clear ();
 
 				lock (lock_obj) {

@@ -20,10 +20,6 @@ namespace Xamarin.MacDev.Tasks {
 
 		#endregion
 
-		protected override string DefaultBinDir {
-			get { return DeveloperRootBinDir; }
-		}
-
 		protected override string ToolName {
 			get { return "TextureAtlas"; }
 		}

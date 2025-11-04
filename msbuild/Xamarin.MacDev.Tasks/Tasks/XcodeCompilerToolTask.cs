@@ -38,12 +38,8 @@ namespace Xamarin.MacDev.Tasks {
 		[Required]
 		public string ResourcePrefix { get; set; } = string.Empty;
 
-		public string SdkBinPath { get; set; } = string.Empty;
-
 		[Required]
 		public string SdkPlatform { get; set; } = string.Empty;
-
-		public string SdkUsrPath { get; set; } = string.Empty;
 
 		[Required]
 		public string SdkVersion { get; set; } = string.Empty;
@@ -89,14 +85,6 @@ namespace Xamarin.MacDev.Tasks {
 					return (IPhoneDeviceType) Enum.Parse (typeof (IPhoneDeviceType), UIDeviceFamily);
 				return IPhoneDeviceType.NotSet;
 			}
-		}
-
-		protected abstract string DefaultBinDir {
-			get;
-		}
-
-		protected string DeveloperRootBinDir {
-			get { return Path.Combine (SdkDevPath, "usr", "bin"); }
 		}
 
 		protected abstract string ToolName { get; }
@@ -173,12 +161,6 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			var environment = new Dictionary<string, string?> ();
 			var args = new List<string> ();
-
-			if (!string.IsNullOrEmpty (SdkBinPath))
-				environment.Add ("PATH", SdkBinPath);
-
-			if (!string.IsNullOrEmpty (SdkUsrPath))
-				environment.Add ("XCODE_DEVELOPER_USR_PATH", SdkUsrPath);
 
 			// workaround for ibtool[d] bug / asserts if Intel version is loaded
 			string tool;

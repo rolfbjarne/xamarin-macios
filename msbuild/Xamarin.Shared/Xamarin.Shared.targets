@@ -697,6 +697,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			ProjectDir="$(MSBuildProjectDirectory)"
 			ResourcePrefix="$(_ResourcePrefix)"
 			ResourceRules="$(_PreparedResourceRules)"
+			SdkDevPath="$(_SdkDevPath)"
 			SdkIsSimulator="$(_SdkIsSimulator)"
 			SdkVersion="$(_SdkVersion)"
 			SupportedOSPlatformVersion="$(SupportedOSPlatformVersion)"
@@ -2062,6 +2063,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			SdkPlatform="$(_SdkPlatform)"
 			ProvisioningProfile="$(CodesignProvision)"
 			SigningKey="$(_SpecifiedCodesignKey)"
+			SdkDevPath="$(_SdkDevPath)"
 			DetectedCodeSigningKey="$(_CodeSigningKey)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			>

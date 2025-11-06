@@ -25,6 +25,23 @@ namespace Xamarin.MacDev.Tasks {
 
 		public string SdkDevPath { get; set; } = string.Empty;
 
+		XcodeLocator? xcodeLocator = null;
+		public XcodeLocator GetXcodeLocator (bool initialDiscovery = false)
+		{
+			if (xcodeLocator is null) {
+				if (!initialDiscovery && string.IsNullOrEmpty (SdkDevPath)) {
+					// Log.LogError (MSBStrings.E7164 /* The task '{0}' is trying to call an external process, but a path to Xcode has not been provided. Please file an issue at https://github.com/dotnet/macios/issues/new/choose. */, task.GetType ().Name);
+					Log.LogError ("The task '{0}' requires SdkDevPath to be set.\n{1}", GetType ().Name, Environment.StackTrace);
+				}
+
+				var xcodeLocator = new XcodeLocator (this);
+				if (!xcodeLocator.TryLocatingXcode (SdkDevPath))
+					Log.LogError (MSBStrings.E0086 /* Could not find a valid Xcode developer path */);
+				this.xcodeLocator = xcodeLocator;
+			}
+			return xcodeLocator;
+		}
+
 		void VerifyTargetFrameworkMoniker ()
 		{
 			if (!string.IsNullOrEmpty (TargetFrameworkMoniker))

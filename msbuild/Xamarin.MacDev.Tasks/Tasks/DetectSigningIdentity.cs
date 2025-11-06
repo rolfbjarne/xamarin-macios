@@ -31,7 +31,7 @@ namespace Xamarin.MacDev.Tasks {
 
 		protected string DeveloperRoot {
 			get {
-				return Sdks.GetAppleSdk (TargetFrameworkMoniker).DeveloperRoot;
+				return Sdks.GetAppleSdk (TargetFrameworkMoniker, GetXcodeLocator ()).DeveloperRoot;
 			}
 		}
 

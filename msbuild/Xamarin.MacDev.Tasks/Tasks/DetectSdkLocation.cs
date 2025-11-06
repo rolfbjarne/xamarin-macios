@@ -28,17 +28,19 @@ namespace Xamarin.MacDev.Tasks {
 			get; set;
 		} = "";
 
+		// this is input too
 		[Output]
 		public new string SdkDevPath {
-			get; set;
-		} = "";
-
+			get => base.SdkDevPath;
+			set => base.SdkDevPath = value;
+		}
 
 		[Output]
 		public bool SdkIsSimulator {
 			get; set;
 		}
 
+		[Output]
 		public string SdkPlatform {
 			get; set;
 		} = "";
@@ -64,9 +66,11 @@ namespace Xamarin.MacDev.Tasks {
 
 		protected IAppleSdk CurrentSdk {
 			get {
-				return Sdks.GetAppleSdk (Platform);
+				return Sdks.GetAppleSdk (Platform, GetXcodeLocator ());
 			}
 		}
+
+		XcodeLocator? appleSdkSettings;
 
 		IAppleSdkVersion GetDefaultSdkVersion ()
 		{
@@ -148,13 +152,15 @@ namespace Xamarin.MacDev.Tasks {
 				return ExecuteRemotely ();
 			}
 
-			AppleSdkSettings.Init ();
+			appleSdkSettings = GetXcodeLocator (initialDiscovery: true);
+			SdkDevPath = appleSdkSettings.DeveloperRoot;
+			XcodeVersion = appleSdkSettings.XcodeVersion.ToString ();
+			if (Log.HasLoggedErrors)
+				return false;
 
 			if (EnsureAppleSdkRoot ())
 				EnsureSdkPath ();
 			EnsureXamarinSdkRoot ();
-
-			XcodeVersion = AppleSdkSettings.XcodeVersion.ToString ();
 
 			return !Log.HasLoggedErrors;
 		}
@@ -163,7 +169,7 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			var currentSdk = CurrentSdk;
 			if (!currentSdk.IsInstalled) {
-				Log.LogError (MSBStrings.E0044v2 /* Could not find a valid Xcode app bundle at '{0}'. Please verify that 'xcode-select -p' points to your Xcode installation. For more information see https://aka.ms/macios-missing-xcode. */, AppleSdkSettings.InvalidDeveloperRoot);
+				Log.LogError (MSBStrings.E0044v2 /* Could not find a valid Xcode app bundle at '{0}'. Please verify that 'xcode-select -p' points to your Xcode installation. For more information see https://aka.ms/macios-missing-xcode. */, appleSdkSettings?.XcodeLocation);
 				return false;
 			}
 			Log.LogMessage (MessageImportance.Low, "DeveloperRoot: {0}", currentSdk.DeveloperRoot);

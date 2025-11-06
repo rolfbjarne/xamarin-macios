@@ -55,7 +55,7 @@ namespace Xamarin.MacDev.Tasks {
 			args.Add (partialPlist);
 
 			var executable = GetExecutable (args, ToolName, CoreMlcPath);
-			var rv = ExecuteAsync (executable, args, sdkDevPath, mergeOutput: false).Result;
+			var rv = ExecuteAsync (executable, args, mergeOutput: false).Result;
 			var exitCode = rv.ExitCode;
 			var output = rv.StandardOutput!.ToString ();
 			File.WriteAllText (log, output);

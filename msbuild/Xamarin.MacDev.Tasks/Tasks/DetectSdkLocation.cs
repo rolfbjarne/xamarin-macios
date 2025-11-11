@@ -162,14 +162,14 @@ namespace Xamarin.MacDev.Tasks {
 
 			if (appleSdkSettings.SystemHasEnvironmentVariable) {
 				if (isNet11OrNewer) {
-					Log.LogError (MSBStrings.W7166 /* The environment variable '{0}' is deprecated, and will be ignored. Please set use the 'DEVELOPER_DIR' environment variable or the 'XcodeLocation' MSBuild property to choose which Xcode to use. */, XcodeLocator.EnvironmentVariableName);
+					Log.LogWarning (MSBStrings.W7166 /* The environment variable '{0}' is deprecated, and will be ignored. Please set use the 'DEVELOPER_DIR' environment variable or the 'XcodeLocation' MSBuild property to choose which Xcode to use. */, XcodeLocator.EnvironmentVariableName);
 				} else {
-					Log.LogError (MSBStrings.W7165 /* The environment variable '{0}' is deprecated, and will be ignored in .NET 11+. Please set use the 'DEVELOPER_DIR' environment variable or the 'XcodeLocation' MSBuild property to choose which Xcode to use. */, XcodeLocator.EnvironmentVariableName);
+					Log.LogWarning (MSBStrings.W7165 /* The environment variable '{0}' is deprecated, and will be ignored in .NET 11+. Please set use the 'DEVELOPER_DIR' environment variable or the 'XcodeLocation' MSBuild property to choose which Xcode to use. */, XcodeLocator.EnvironmentVariableName);
 				}
 			}
 			foreach (var file in appleSdkSettings.SystemExistingSettingsFiles) {
 				if (isNet11OrNewer) {
-					Log.LogError (MSBStrings.W7168 /* The settings file '{0}' is deprecated, and will be ignored. Please set use the 'DEVELOPER_DIR' environment variable or the 'XcodeLocation' MSBuild property to choose which Xcode to use. */, file);
+					Log.LogWarning (MSBStrings.W7168 /* The settings file '{0}' is deprecated, and will be ignored. Please set use the 'DEVELOPER_DIR' environment variable or the 'XcodeLocation' MSBuild property to choose which Xcode to use. */, file);
 				} else {
 					Log.LogWarning (MSBStrings.W7167 /* The settings file '{0}' is deprecated, and will be ignored in .NET 11+. Please set use the 'DEVELOPER_DIR' environment variable or the 'XcodeLocation' MSBuild property to choose which Xcode to use. */, file);
 				}

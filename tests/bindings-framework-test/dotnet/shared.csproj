@@ -10,6 +10,7 @@
     <AssemblyOriginatorKeyFile>..\..\..\..\product.snk</AssemblyOriginatorKeyFile>
     <AssemblyName>bindings-framework-test</AssemblyName>
     <NoBindingEmbedding>true</NoBindingEmbedding>
+    <UseFloatingTargetPlatformVersion>true</UseFloatingTargetPlatformVersion>
 
     <RootTestsDirectory>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)\..\..'))</RootTestsDirectory>
     <TestLibrariesDirectory>$(RootTestsDirectory)\test-libraries</TestLibrariesDirectory>

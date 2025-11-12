@@ -2407,7 +2407,8 @@
 		<RelativeMlaunchPath Condition="'$(RelativeMlaunchPath)' == ''">$(XamarinRelativeSdkRootDirectory)tools\bin\mlaunch</RelativeMlaunchPath>
 		<_RelativeMlaunchPath Condition="'$(_RelativeMlaunchPath)' == ''">$(RelativeMlaunchPath)</_RelativeMlaunchPath>
 
-		<DeviceName Condition="'$(DeviceName)' == ''">$(_DeviceName)</DeviceName>
+		<!-- Try to keep _DeviceName working for a while yet -->
+		<Device Condition="'$(Device)' == ''">$(_DeviceName)</Device>
 	</PropertyGroup>
 
 	<Target
@@ -2445,7 +2446,7 @@
 		<GetMlaunchArguments
 			SessionId="$(BuildSessionId)"
 			AppManifestPath="$(_AppBundleManifestPath)"
-			DeviceName="$(DeviceName)"
+			DeviceName="$(Device)"
 			InstallApp="$(_AppBundlePath)"
 			MlaunchPath="$(MlaunchPath)"
 			SdkDevPath="$(_SdkDevPath)"
@@ -2556,6 +2557,33 @@
 			<RunCommand>$(TargetDir)/$(AssemblyName).app/Contents/MacOS/$(AssemblyName)</RunCommand>
 			<RunArguments />
 		</PropertyGroup>
+	</Target>
+
+	<!--
+	***********************************************************************************************
+	ComputeAvailableDevices
+
+	Target that queries available devices and simulators.
+	This target is called by 'dotnet run' to support device selection.
+	Returns @(Devices) items with metadata: ???????
+
+	See: https://github.com/dotnet/sdk/blob/2b9fc02a265c735f2132e4e3626e94962e48bdf5/documentation/specs/dotnet-run-for-maui.md
+	***********************************************************************************************
+	-->
+	<Target Name="ComputeAvailableDevices"
+		DependsOnTargets="_DetectSdkLocations;_GenerateBundleName;"
+		Returns="@(Devices)">
+		<GetAvailableDevices
+			Condition="'$(IsMacEnabled)' == 'true'"
+			SessionId="$(BuildSessionId)"
+			AppBundleManifestPath="$(_AppBundleManifestPath)"
+			RuntimeIdentifier="$(RuntimeIdentifier)"
+			SdkDevPath="$(_SdkDevPath)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+		>
+			<Output TaskParameter="Devices" ItemName="Devices" />
+			<Output TaskParameter="DiscardedDevices" ItemName="DiscardedDevices" />
+		</GetAvailableDevices>
 	</Target>
 
 	<!--

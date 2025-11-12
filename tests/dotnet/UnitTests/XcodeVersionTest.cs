@@ -36,14 +36,14 @@ namespace Xamarin.Tests {
 			var properties = GetDefaultProperties (runtimeIdentifiers);
 			properties ["BundleOriginalResources"] = "true"; // this prevents a different and unrelated error message from failing to build library projects
 
-			var existingDeveloperDir = Environment.GetEnvironmentVariable ("MD_APPLE_SDK_ROOT");
+			var existingDeveloperDir = Environment.GetEnvironmentVariable ("DEVELOPER_DIR");
 			try {
-				Environment.SetEnvironmentVariable ("MD_APPLE_SDK_ROOT", Path.GetDirectoryName (Path.GetDirectoryName (xcodePath)));
+				Environment.SetEnvironmentVariable ("DEVELOPER_DIR", Path.GetDirectoryName (Path.GetDirectoryName (xcodePath)));
 				var rv = DotNet.AssertBuildFailure (project_path, properties);
 				var errors = BinLog.GetBuildLogErrors (rv.BinLogPath).ToArray ();
 				AssertErrorMessages (errors, $"This version of .NET for {platform.AsString ()} ({Configuration.GetNuGetVersionNoMetadata (platform)}) requires Xcode {Configuration.XcodeVersion}. The current version of Xcode is {xcodeVersion}. Either install Xcode {Configuration.XcodeVersion}, or use a different version of .NET for {platform.AsString ()}. See https://aka.ms/xcode-requirement for more information.");
 			} finally {
-				Environment.SetEnvironmentVariable ("MD_APPLE_SDK_ROOT", existingDeveloperDir);
+				Environment.SetEnvironmentVariable ("DEVELOPER_DIR", existingDeveloperDir);
 			}
 		}
 	}

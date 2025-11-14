@@ -13,14 +13,6 @@ using Xamarin.Utils;
 namespace Xamarin.MacDev.Tasks {
 	public class DetectSdkLocations : XamarinTask, ICancelableTask {
 		const string SdkVersionDefaultValue = "default";
-		#region Inputs
-
-		public string XcodeLocation {
-			get; set;
-		} = "";
-
-		#endregion Inputs
-
 		#region Outputs
 
 		[Output]
@@ -28,7 +20,7 @@ namespace Xamarin.MacDev.Tasks {
 			get; set;
 		} = "";
 
-		// this is input too
+		// this is input too (the variable 'XcodeLocation')
 		[Output]
 		public new string SdkDevPath {
 			get => base.SdkDevPath;

@@ -2087,11 +2087,11 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		<DetectSdkLocations
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
+			SdkDevPath="$(XcodeLocation)"
 			SdkIsSimulator="$(SdkIsSimulator)"
 			SdkVersion="$(_SdkVersion)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			XamarinSdkRoot="$(_XamarinSdkRootOnMac)"
-			XcodeLocation="$(XcodeLocation)"
 			>
 
 			<Output TaskParameter="SdkVersion" PropertyName="_SdkVersion" />

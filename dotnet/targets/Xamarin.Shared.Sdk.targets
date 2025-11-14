@@ -1208,10 +1208,9 @@
 			<_LibMonoExtension Condition="'$(_LibMonoLinkMode)' == 'dylib'">dylib</_LibMonoExtension>
 			<_LibMonoExtension Condition="'$(_LibMonoLinkMode)' == 'static'">a</_LibMonoExtension>
 
-			<_LibXamarinLinkMode Condition="'$(_LibXamarinLinkMode)' == '' And '$(UseMonoRuntime)' == 'false'">dylib</_LibXamarinLinkMode>
 			<!-- default to 'static' for Mac Catalyst to work around https://github.com/dotnet/macios/issues/14686 -->
 			<_LibXamarinLinkMode Condition="'$(_LibXamarinLinkMode)' == '' And '$(_PlatformName)' == 'MacCatalyst'">static</_LibXamarinLinkMode>
-			<_LibXamarinLinkMode Condition="'$(_LibXamarinLinkMode)' == '' And '$(ComputedPlatform)' != 'iPhone'">dylib</_LibXamarinLinkMode>
+			<_LibXamarinLinkMode Condition="'$(_LibXamarinLinkMode)' == '' And '$(ComputedPlatform)' != 'iPhone' And '$(_PlatformName)' != 'macOS'">dylib</_LibXamarinLinkMode>
 			<_LibXamarinLinkMode Condition="'$(_LibXamarinLinkMode)' == ''">static</_LibXamarinLinkMode>
 			<_LibXamarinExtension Condition="'$(_LibXamarinLinkMode)' == 'dylib'">dylib</_LibXamarinExtension>
 			<_LibXamarinExtension Condition="'$(_LibXamarinLinkMode)' == 'static'">a</_LibXamarinExtension>

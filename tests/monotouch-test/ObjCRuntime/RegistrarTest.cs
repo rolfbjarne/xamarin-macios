@@ -58,8 +58,7 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		{
 			var earthDestroyed = false;
 			using var vogons = new Hitchhiker ();
-			vogons.BuildIntergalacticHighway += (object sender, EventArgs ea) =>
-			{
+			vogons.BuildIntergalacticHighway += (object sender, EventArgs ea) => {
 				earthDestroyed = true;
 			};
 			vogons.DestroyEarth ();

@@ -845,7 +845,7 @@ namespace Bindings.Test {
 	[DisableDefaultCtor]
 	interface ClassWithNoDefaultCtor { }
 
-	interface IHitchhikerDelegate {}
+	interface IHitchhikerDelegate { }
 
 	[BaseType (typeof (NSObject)), Model]
 	[Protocol]

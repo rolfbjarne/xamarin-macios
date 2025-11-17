@@ -4,6 +4,8 @@ using Xamarin.Linker;
 using Mono.Cecil;
 using Mono.Tuner;
 
+using Xamarin.Bundler;
+
 #nullable enable
 
 namespace Xamarin.Linker.Steps {
@@ -53,8 +55,19 @@ namespace Xamarin.Linker.Steps {
 
 			if (!type.IsBeforeFieldInit && type.IsInterface && type.HasMethods) {
 				var cctor = type.GetTypeConstructor ();
-				if (cctor is not null && cctor.IsBindingImplOptimizableCode (LinkContext))
+				if (cctor is not null && cctor.IsBindingImplOptimizableCode (LinkContext)) {
 					type.IsBeforeFieldInit = true;
+
+					var assembly = type.Assembly;
+					var action = Context.Annotations.GetAction (assembly);
+					if (action == AssemblyAction.Copy)
+						Context.Annotations.SetAction (assembly, AssemblyAction.Save);
+					Driver.Log (4, $"Marking the static ctor for {type.FullName} as IsBeforeFieldInit=true.");
+				} else {
+					Driver.Log (4, $"Not marking the static ctor for {type.FullName} as IsBeforeFieldInit=true: has cctor={cctor is not null} IsBindingImplOptimizableCode: {cctor?.IsBindingImplOptimizableCode (LinkContext)}");
+				}
+			} else {
+				Driver.Log (4, $"Not marking the static ctor for {type.FullName} as IsBeforeFieldInit=true: has IsBeforeFieldInit={type.IsBeforeFieldInit} type.IsInterface={type.IsInterface} type.HasMethods={type.HasMethods}");
 			}
 		}
 	}

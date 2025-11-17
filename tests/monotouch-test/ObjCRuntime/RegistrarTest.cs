@@ -54,6 +54,19 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		}
 
 		[Test]
+		public void EventTest ()
+		{
+			var earthDestroyed = false;
+			using var vogons = new Hitchhiker ();
+			vogons.BuildIntergalacticHighway += (object sender, EventArgs ea) =>
+			{
+				earthDestroyed = true;
+			};
+			vogons.DestroyEarth ();
+			Assert.That (earthDestroyed, Is.True, "Event called");
+		}
+
+		[Test]
 		public void NSRangeOutParameter ()
 		{
 			using var obj = new NSRangeOutParameterClass ();

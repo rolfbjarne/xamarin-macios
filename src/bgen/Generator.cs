@@ -6725,7 +6725,6 @@ public partial class Generator : IMemberGatherer {
 
 					string previous_miname = null;
 					int miname_count = 0;
-					var dynamicDependencies = new List<string> ();
 					foreach (var mi in dtype.GatherMethods (this).OrderBy (m => m.Name, StringComparer.Ordinal)) {
 						if (ShouldSkipEventGeneration (mi))
 							continue;
@@ -6756,9 +6755,6 @@ public partial class Generator : IMemberGatherer {
 								print ("internal EventHandler<{0}>? {1};", Nomenclator.GetEventArgName (mi), miname);
 						} else
 							print ("internal {0}? {1};", Nomenclator.GetDelegateName (mi), miname);
-
-						// Tell the trimmer to not remove the delegate's method if the delegate implementation itself isn't trimmed away
-						dynamicDependencies.Add ($"[DynamicDependency (nameof ({mi.Name}))]");
 
 						if (isProtocolEventBacked)
 							print ("[Export (\"{0}\")]", FindSelector (dtype, mi));
@@ -6896,16 +6892,6 @@ public partial class Generator : IMemberGatherer {
 							print (m, "public extern static byte bool_objc_msgSendSuper_IntPtr (IntPtr receiever, IntPtr selector, IntPtr arg1);");
 							RegisterMethodName ("bool_objc_msgSendSuper_IntPtr");
 						}
-					}
-
-					if (dynamicDependencies.Any ()) {
-						foreach (var dd in dynamicDependencies.OrderBy (v => v)) {
-							print (dd);
-						}
-						print ($"static _{dtype.Name} ()");
-						print ("{");
-						print ("\tGC.KeepAlive (null);"); // need to do _something_ (doesn't seem to matter what), otherwise the static cctor (and the DynamicDependency attributes) are trimmed away.
-						print ("}");
 					}
 
 					indent--;

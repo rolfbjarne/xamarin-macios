@@ -148,7 +148,7 @@ public class GetAvailableDevices : XamarinTask, ICancelableTask {
 	}
 
 	async System.Threading.Tasks.Task<JsonDocument> ExecuteCtlToJsonAsync (params string [] args)
-    {
+	{
 		var json = await ExecuteCtlAsync (args);
 		var options = new JsonDocumentOptions {
 			AllowTrailingCommas = true,
@@ -286,7 +286,7 @@ public class GetAvailableDevices : XamarinTask, ICancelableTask {
 				var hasRuntime = runtimes.TryGetValue (runtimeName, out var runtimeElement);
 				var runtimePlatform = hasRuntime ? runtimeElement.GetStringProperty ("platform") ?? string.Empty : string.Empty;
 				var runtimeVersion = hasRuntime ? runtimeElement.GetStringProperty ("version") ?? string.Empty : string.Empty;
-				var supportedArchitectures = hasRuntime ? runtimeElement.GetProperty ("supportedArchitectures").EnumerateIfArray ().Select (v => v.GetString ()) : Enumerable.Empty<string>();
+				var supportedArchitectures = hasRuntime ? runtimeElement.GetProperty ("supportedArchitectures").EnumerateIfArray ().Select (v => v.GetString ()) : Enumerable.Empty<string> ();
 				foreach (var element in runtime.Value.EnumerateIfArray ()) {
 					var udid = element.GetStringProperty ("udid") ?? string.Empty;
 					var isAvailable = element.GetBooleanProperty ("isAvailable") ?? false;
@@ -309,7 +309,7 @@ public class GetAvailableDevices : XamarinTask, ICancelableTask {
 					item.SetMetadata ("Type", "Simulator");
 					item.SetMetadata ("OSVersion", runtimeVersion);
 					item.SetMetadata ("UDID", udid);
-					
+
 					var discardedReason = "";
 					var runtimeIdentifier = "";
 					if (isAvailable) {
@@ -387,9 +387,9 @@ public class GetAvailableDevices : XamarinTask, ICancelableTask {
 							}
 							Version.TryParse (deviceTypeElement.GetStringProperty ("minRuntimeVersionString"), out minimumOSVersion);
 							Version.TryParse (deviceTypeElement.GetStringProperty ("maxRuntimeVersionString"), out maximumOSVersion);
-	                    } else {
-                            discardedReason = $"Unknown device type identifier '{deviceTypeIdentifier}'";
-                        }
+						} else {
+							discardedReason = $"Unknown device type identifier '{deviceTypeIdentifier}'";
+						}
 					}
 
 					rv.Add (new DeviceInfo (item, runtimeIdentifier, platform, deviceType, minimumOSVersion, maximumOSVersion, discardedReason));

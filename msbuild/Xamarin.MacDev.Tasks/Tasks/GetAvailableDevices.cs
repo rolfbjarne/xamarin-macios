@@ -11,8 +11,6 @@ using Microsoft.Build.Utilities;
 using Xamarin.Localization.MSBuild;
 using Xamarin.Messaging.Build.Client;
 using Xamarin.Utils;
-using System.Net;
-
 namespace Xamarin.MacDev.Tasks;
 
 public class GetAvailableDevices : XamarinTask, ICancelableTask {

@@ -26,7 +26,7 @@ item group where each device has the following metadata:
 
 - **Description**: The name of the device (e.g., "iPhone 16 - iOS 26.0" for simulators, "My iPhone 16" for physical devices)
 - **Type**: Either "Device" or "Simulator"
-- **OSVersion**: The OS version if the device
+- **OSVersion**: The OS version of the device
 - **UDID**: The UDID of the device
 
 For example, to list all available devices:

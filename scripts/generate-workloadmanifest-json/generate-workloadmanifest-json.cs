@@ -80,8 +80,11 @@ using (TextWriter writer = new StreamWriter (outputPath)) {
 			writer.WriteLine ($"				\"microsoft-net-runtime-mono-tooling-net{i}\",");
 	} else {
 		writer.WriteLine ($"				\"microsoft-net-runtime-{platformLowerCase}\",");
-		for (var i = earliestDotNetVersion; i < latestDotNetVersion; i++)
+		for (var i = earliestDotNetVersion; i < latestDotNetVersion; i++) {
+			if (i == 10)
+				continue; // 'microsoft-net-runtime-maccatalyst-net10' doesn't seem to exist yet, we'll probably have to remove this special case at some point.
 			writer.WriteLine ($"				\"microsoft-net-runtime-{platformLowerCase}-net{i}\",");
+		}
 	}
 	writer.WriteLine ($"			]");
 	writer.WriteLine ($"		}},");

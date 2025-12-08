@@ -2758,8 +2758,8 @@ global using nfloat = global::System.Runtime.InteropServices.NFloat%3B
 	<Target Name="ResolveReadyToRunCompilers" Condition="'$(PublishReadyToRun)' == 'true' And '$(UseMonoRuntime)' != 'true'">
 		<PropertyGroup>
 			<_Crossgen2Path Condition="'$(Crossgen2Path)' != ''">$(Crossgen2Path)</_Crossgen2Path>
-			<_Crossgen2Path Condition="'$(Crossgen2Path)' == ''">$([MSBuild]::NormalizePath('$(MSBuildThisFileDirectory)', '..', '..', 'packs', 'Microsoft.NETCore.App.Runtime.$(_PlatformName.ToLowerInvariant())-$(RuntimeIdentifier.Split('-')[1])', '$(BundledNETCoreAppPackageVersion)', 'tools', 'crossgen2'))</_Crossgen2Path>
-			
+			<_Crossgen2Path Condition="'$(Crossgen2Path)' == ''">$([MSBuild]::NormalizePath('@(Crossgen2Packs -> '%(Identity)')', 'tools', 'crossgen2'))</_Crossgen2Path>
+
 			<_TargetArch>$(RuntimeIdentifier.Split('-')[1])</_TargetArch>
 			<_TargetOS>$(RuntimeIdentifier.Split('-')[0])</_TargetOS>
 		</PropertyGroup>
@@ -2775,6 +2775,8 @@ global using nfloat = global::System.Runtime.InteropServices.NFloat%3B
 		<Message Text="  RuntimeIdentifier: $(RuntimeIdentifier)" Importance="high" />
 		<Message Text="  TargetArch: $(_TargetArch)" Importance="high" />
 		<Message Text="  TargetOS: $(_TargetOS)" Importance="high" />
+
+		<Error Condition="!Exists('$(_Crossgen2Path)')" Text="The crossgen2 executable '$(_Crossgen2Path)' does not exist." />
 	</Target>
 
 </Project>

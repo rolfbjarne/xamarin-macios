@@ -83,6 +83,7 @@ const char *xamarin_runtime_configuration_name = NULL;
 
 enum XamarinNativeLinkMode xamarin_libmono_native_link_mode = XamarinNativeLinkModeStaticObject;
 const char **xamarin_runtime_libraries = NULL;
+void *xamarin_rtr_header = NULL;
 
 /* Callbacks */
 
@@ -2477,53 +2478,27 @@ bool get_native_code_data(const struct host_runtime_contract_native_code_context
     // fprintf (stderr, "R2R: get_native_code_data called for assembly: %s, composite: %s\n", 
     //          context ? context->assembly_path : "(null)", 
     //          context ? context->owner_composite_name : "(null)");
-    
+
     if (!context || !data || !context->assembly_path || !context->owner_composite_name)
         return false;
 
-    // Look for the owner composite R2R image in the same directory as the assembly
-    char r2r_path[PATH_MAX];
-    const char *last_slash = strrchr(context->assembly_path, '/');
-    size_t dir_len = last_slash ? (size_t)(last_slash - context->assembly_path) : 0;
-    if (dir_len >= sizeof(r2r_path) - 1)
-        return false;
-
-    strncpy(r2r_path, context->assembly_path, dir_len);
-    int written = snprintf(r2r_path + dir_len, sizeof(r2r_path) - dir_len, "/%s", context->owner_composite_name);
-    if (written <= 0 || (size_t)written >= sizeof(r2r_path) - dir_len)
-        return false;
-
-    // fprintf (stderr, "R2R: Attempting to load R2R image from: %s\n", r2r_path);
-    
-    void* handle = dlopen(r2r_path, RTLD_LAZY | RTLD_LOCAL);
-    if (handle == NULL) {
-        // fprintf (stderr, "R2R: Failed to dlopen R2R image: %s\n", dlerror ());
-        return false;
-    }
-
-    // fprintf (stderr, "R2R: Successfully loaded R2R image, looking for RTR_HEADER symbol\n");
-    
-    void* r2r_header = dlsym(handle, "RTR_HEADER");
-    if (r2r_header == NULL)
-    {
-        // fprintf (stderr, "R2R: Failed to find RTR_HEADER symbol: %s\n", dlerror ());
-        dlclose(handle);
+    void* r2r_header = xamarin_rtr_header;
+    if (r2r_header == NULL) {
+        // fprintf (stderr, "R2R: The RTR_HEADER symbol was not loaded.\n");
         return false;
     }
 
     // fprintf (stderr, "R2R: Found RTR_HEADER at %p\n", r2r_header);
-    
+
     Dl_info info;
-    if (dladdr(r2r_header, &info) == 0)
-    {
+    if (dladdr (r2r_header, &info) == 0) {
         // fprintf (stderr, "R2R: Failed to get dladdr info for RTR_HEADER\n");
-        dlclose(handle);
         return false;
     }
 
-    data->size = sizeof(struct host_runtime_contract_native_code_data);
+    data->size = sizeof (struct host_runtime_contract_native_code_data);
     data->r2r_header_ptr = r2r_header;
-    data->image_size = get_image_size(info.dli_fbase);
+    data->image_size = get_image_size (info.dli_fbase);
     data->image_base = info.dli_fbase;
     
     // fprintf (stderr, "R2R: Successfully loaded R2R data - header: %p, base: %p, size: %lu\n",

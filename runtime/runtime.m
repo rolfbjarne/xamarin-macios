@@ -2475,24 +2475,24 @@ size_t get_image_size(void* base_address)
 bool get_native_code_data(const struct host_runtime_contract_native_code_context* context, struct host_runtime_contract_native_code_data* data)
 {
 	// TODO: Remove fprintf logs
-    // fprintf (stderr, "R2R: get_native_code_data called for assembly: %s, composite: %s\n", 
-    //          context ? context->assembly_path : "(null)", 
-    //          context ? context->owner_composite_name : "(null)");
+    fprintf (stderr, "R2R: get_native_code_data called for assembly: %s, composite: %s\n",
+             context ? context->assembly_path : "(null)",
+             context ? context->owner_composite_name : "(null)");
 
     if (!context || !data || !context->assembly_path || !context->owner_composite_name)
         return false;
 
     void* r2r_header = xamarin_rtr_header;
     if (r2r_header == NULL) {
-        // fprintf (stderr, "R2R: The RTR_HEADER symbol was not loaded.\n");
+        fprintf (stderr, "R2R: The RTR_HEADER symbol was not loaded.\n");
         return false;
     }
 
-    // fprintf (stderr, "R2R: Found RTR_HEADER at %p\n", r2r_header);
+    fprintf (stderr, "R2R: Found RTR_HEADER at %p\n", r2r_header);
 
     Dl_info info;
     if (dladdr (r2r_header, &info) == 0) {
-        // fprintf (stderr, "R2R: Failed to get dladdr info for RTR_HEADER\n");
+        fprintf (stderr, "R2R: Failed to get dladdr info for RTR_HEADER\n");
         return false;
     }
 
@@ -2500,10 +2500,10 @@ bool get_native_code_data(const struct host_runtime_contract_native_code_context
     data->r2r_header_ptr = r2r_header;
     data->image_size = get_image_size (info.dli_fbase);
     data->image_base = info.dli_fbase;
-    
-    // fprintf (stderr, "R2R: Successfully loaded R2R data - header: %p, base: %p, size: %lu\n",
-    //          data->r2r_header_ptr, data->image_base, (unsigned long)data->image_size);
-    
+
+    fprintf (stderr, "R2R: Successfully loaded R2R data - header: %p, base: %p, size: %lu\n",
+             data->r2r_header_ptr, data->image_base, (unsigned long) data->image_size);
+
     return true;
 }
 #endif // defined (CORECLR_RUNTIME)

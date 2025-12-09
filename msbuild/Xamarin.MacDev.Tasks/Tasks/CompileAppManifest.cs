@@ -59,6 +59,8 @@ namespace Xamarin.MacDev.Tasks {
 		[Required]
 		public bool IsAppExtension { get; set; }
 
+		public bool IsFramework { get; set; }
+
 		public bool IsXPCService { get; set; }
 
 		public bool IsWatchApp { get; set; }
@@ -134,7 +136,7 @@ namespace Xamarin.MacDev.Tasks {
 			if (GenerateApplicationManifest && !string.IsNullOrEmpty (ApplicationId))
 				plist.SetIfNotPresent (ManifestKeys.CFBundleIdentifier, ApplicationId);
 			plist.SetIfNotPresent (ManifestKeys.CFBundleInfoDictionaryVersion, "6.0");
-			plist.SetIfNotPresent (ManifestKeys.CFBundlePackageType, IsAppExtension ? "XPC!" : "APPL");
+			plist.SetIfNotPresent (ManifestKeys.CFBundlePackageType, IsFramework ? "FMWK" : (IsAppExtension ? "XPC!" : "APPL"));
 			plist.SetIfNotPresent (ManifestKeys.CFBundleSignature, "????");
 			plist.SetIfNotPresent (ManifestKeys.CFBundleExecutable, BundleExecutable);
 			plist.SetIfNotPresent (ManifestKeys.CFBundleName, AppBundleName);

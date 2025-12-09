@@ -2,6 +2,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net$(BundledNETCoreAppTargetFrameworkVersion)-ios</TargetFramework>
+
+    <TrimMode>partial</TrimMode>
+    <PublishReadyToRunCrossgen2ExtraArgs Condition="'$(PublishReadyToRun)' == 'true'">--obj-format:macho</PublishReadyToRunCrossgen2ExtraArgs>
   </PropertyGroup>
 
   <!-- Imports of the form '../shared.csproj' will be inlined by xharness -->
@@ -10,4 +13,32 @@
   <ItemGroup>
     <!-- this empty item group is here for xharness -->
   </ItemGroup>
+
+
+
+  <Target Name="FixR2RFilePaths" AfterTargets="CreateReadyToRunImages" Condition="'$(PublishReadyToRun)' == 'true'">
+    <ItemGroup>
+     <_R2RFilesWithWrongPath Include="@(ResolvedFileToPublish)" Condition="$([System.String]::Copy('%(ResolvedFileToPublish.Identity)').Contains('R2R/../'))" />
+    </ItemGroup>
+    <ItemGroup>
+     <_R2RFilesFixed Include="$(IntermediateOutputPath)R2R\%(_R2RFilesWithWrongPath.Filename)%(_R2RFilesWithWrongPath.Extension)">
+      <DestinationSubPath>%(_R2RFilesWithWrongPath.DestinationSubPath)</DestinationSubPath>
+      <RelativePath>%(_R2RFilesWithWrongPath.RelativePath)</RelativePath>
+      <CopyToPublishDirectory>%(_R2RFilesWithWrongPath.CopyToPublishDirectory)</CopyToPublishDirectory>
+     </_R2RFilesFixed>
+    </ItemGroup>
+    <ItemGroup>
+     <ResolvedFileToPublish Remove="@(_R2RFilesWithWrongPath)" />
+     <ResolvedFileToPublish Include="@(_R2RFilesFixed)" />
+    </ItemGroup>
+   </Target>
+
+   <Target Name="R2RPostProcess" AfterTargets="_CreateR2RImages">
+      <Copy SourceFiles="@(_ReadyToRunCompileList->'%(OutputR2RImage)')" DestinationFiles="@(_ReadyToRunCompileList->'%(OutputR2RImage).o')" />
+      <Exec Command="clang -dynamiclib --target=arm64-apple-ios$(SupportedOSPlatformVersion) @(_ReadyToRunCompileList->'%(OutputR2RImage).o') -o @(_ReadyToRunCompileList->'%(OutputR2RImage).dylib') -Wl,-dead_strip -Wl,-install_name,@rpath/$(AssemblyName).r2r.dylib -isysroot $(_SdkRoot)" />
+      <ItemGroup>
+        <LinkerArgument Include="@(_ReadyToRunCompileList->'%(OutputR2RImage).dylib')" />
+        <ResolvedFileToPublish Include="@(_ReadyToRunCompileList->'%(OutputR2RImage).dylib')" RelativePath="$(_AssemblyPublishDir)$(AssemblyName).r2r.dylib" />
+      </ItemGroup>
+   </Target>
 </Project>

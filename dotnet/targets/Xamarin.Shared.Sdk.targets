@@ -614,6 +614,7 @@
 				PartialStaticRegistrarLibrary=$(_LibPartialStaticRegistrar)
 				Platform=$(_PlatformName)
 				PlatformAssembly=$(_PlatformAssemblyName).dll
+				PublishReadyToRun=$(PublishReadyToRun)
 				RelativeAppBundlePath=$(_RelativeAppBundlePath)
 				Registrar=$(Registrar)
 				@(ReferenceNativeSymbol -> 'ReferenceNativeSymbol=%(SymbolType):%(SymbolMode):%(Identity)')

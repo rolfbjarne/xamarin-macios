@@ -2730,6 +2730,15 @@ global using nfloat = global::System.Runtime.InteropServices.NFloat%3B
 		</ItemGroup>
 	</Target>
 
+	<!-- Workaround for https://github.com/dotnet/runtime/issues/79902 -->
+	<Target Name="_FixR2ROutputPaths" AfterTargets="_PrepareForReadyToRunCompilation">
+		<ItemGroup>
+			<_ReadyToRunFilesToPublishFixed Include="@(_ReadyToRunFilesToPublish->'$(_ReadyToRunOutputPath)/%(Filename)%(Extension)')" />
+			<_ReadyToRunFilesToPublish Remove="@(_ReadyToRunFilesToPublish)" />
+			<_ReadyToRunFilesToPublish Include="@(_ReadyToRunFilesToPublishFixed)" />
+		</ItemGroup>
+	</Target>
+
 	<!-- Import existing targets -->
 
 	<PropertyGroup>

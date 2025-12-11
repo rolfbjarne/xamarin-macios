@@ -134,7 +134,7 @@ namespace QuickLook {
 	}
 
 	[NoMac]
-	[iOS (13, 0)]
+	
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum QLPreviewItemEditingMode : long {
@@ -235,17 +235,17 @@ namespace QuickLook {
 		[return: NullAllowed]
 		UIView TransitionViewForPreviewItem (QLPreviewController controller, IQLPreviewItem item);
 
-		[iOS (13, 0)]
+		
 		[MacCatalyst (13, 1)]
 		[Export ("previewController:editingModeForPreviewItem:"), DelegateName ("QLEditingMode"), DefaultValue ("QLPreviewItemEditingMode.Disabled")]
 		QLPreviewItemEditingMode GetEditingMode (QLPreviewController controller, IQLPreviewItem previewItem);
 
-		[iOS (13, 0)]
+		
 		[MacCatalyst (13, 1)]
 		[Export ("previewController:didUpdateContentsOfPreviewItem:"), EventArgs ("QLPreviewControllerDelegateDidUpdate")]
 		void DidUpdateContents (QLPreviewController controller, IQLPreviewItem previewItem);
 
-		[iOS (13, 0)]
+		
 		[MacCatalyst (13, 1)]
 		[Export ("previewController:didSaveEditedCopyOfPreviewItem:atURL:"), EventArgs ("QLPreviewControllerDelegateDidSave")]
 		void DidSaveEditedCopy (QLPreviewController controller, IQLPreviewItem previewItem, NSUrl modifiedContentsUrl);
@@ -411,7 +411,7 @@ namespace QuickLook {
 namespace ARKit {
 	using QuickLook;
 #endif
-	[iOS (13, 0), MacCatalyst (26, 0), NoTV, NoMac]
+	[MacCatalyst (26, 0), NoTV, NoMac]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface ARQuickLookPreviewItem : QLPreviewItem {

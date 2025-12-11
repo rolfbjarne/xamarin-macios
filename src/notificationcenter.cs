@@ -149,7 +149,7 @@ namespace NotificationCenter {
 		[Export ("widgetSecondaryVibrancyEffect")]
 		UIVibrancyEffect GetWidgetSecondaryVibrancyEffect ();
 
-		[iOS (13, 0)]
+		
 		[Static]
 		[Export ("widgetEffectForVibrancyStyle:")]
 		UIVibrancyEffect GetWidgetEffect (UIVibrancyEffectStyle vibrancyStyle);

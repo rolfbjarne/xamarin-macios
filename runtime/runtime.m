@@ -2441,70 +2441,59 @@ xamarin_compute_native_dll_search_directories ()
 }
 
 #if defined (CORECLR_RUNTIME)
-size_t get_image_size(void* base_address)
+size_t
+xamarin_get_dyld_image_size (void* base_address)
 {
-    uint32_t image_count = _dyld_image_count();
-    for (uint32_t i = 0; i < image_count; ++i)
-    {
-        const struct mach_header_64* header = (const struct mach_header_64*)_dyld_get_image_header(i);
-        if ((const void*)header != base_address)
-            continue;
+	if (base_address == NULL)
+		return 0;
 
-        const struct load_command* cmd = (const struct load_command*)((const char*)header + sizeof(struct mach_header_64));
+	const struct mach_header_64* header = (const struct mach_header_64 *) base_address;
+	const struct load_command* cmd = (const struct load_command*) ((const char *) header + sizeof (struct mach_header_64));
 
-        size_t image_size = 0;
-        for (uint32_t j = 0; j < header->ncmds; ++j)
-        {
-            if (cmd->cmd == LC_SEGMENT_64)
-            {
-                const struct segment_command_64* seg = (const struct segment_command_64*)cmd;
-                size_t end_addr = (size_t)(seg->vmaddr + seg->vmsize);
-                if (end_addr > image_size)
-                    image_size = end_addr;
-            }
+	size_t image_size = 0;
+	for (uint32_t j = 0; j < header->ncmds; ++j) {
+		if (cmd->cmd == LC_SEGMENT_64) {
+			const struct segment_command_64* seg = (const struct segment_command_64 *) cmd;
+			size_t end_addr = (size_t) (seg->vmaddr + seg->vmsize);
+			if (end_addr > image_size)
+				image_size = end_addr;
+		}
 
-            cmd = (const struct load_command*)((const char*)cmd + cmd->cmdsize);
-        }
+		cmd = (const struct load_command *) ((const char *) cmd + cmd->cmdsize);
+	}
 
-        return image_size;
-    }
-
-    return 0;
+	return image_size;
 }
 
-bool get_native_code_data(const struct host_runtime_contract_native_code_context* context, struct host_runtime_contract_native_code_data* data)
+bool
+xamarin_get_native_code_data (const struct host_runtime_contract_native_code_context* context, struct host_runtime_contract_native_code_data* data)
 {
-	// TODO: Remove fprintf logs
-    fprintf (stderr, "R2R: get_native_code_data called for assembly: %s, composite: %s\n",
-             context ? context->assembly_path : "(null)",
-             context ? context->owner_composite_name : "(null)");
+	LOG_CORECLR (stderr, "R2R: get_native_code_data called for assembly: %s, composite: %s\n",
+		context ? context->assembly_path : "(null)",
+		context ? context->owner_composite_name : "(null)");
 
-    if (!context || !data || !context->assembly_path || !context->owner_composite_name)
-        return false;
+	if (!context || !data || !context->assembly_path || !context->owner_composite_name)
+		return false;
 
-    void* r2r_header = xamarin_rtr_header;
-    if (r2r_header == NULL) {
-        fprintf (stderr, "R2R: The RTR_HEADER symbol was not loaded.\n");
-        return false;
-    }
+	void* r2r_header = xamarin_rtr_header;
+	if (r2r_header == NULL)
+		xamarin_assertion_message ("Failed to find the RTR_HEADER symbol.");
 
-    fprintf (stderr, "R2R: Found RTR_HEADER at %p\n", r2r_header);
+	LOG_CORECLR (stderr, "R2R: Found RTR_HEADER at %p\n", r2r_header);
 
-    Dl_info info;
-    if (dladdr (r2r_header, &info) == 0) {
-        fprintf (stderr, "R2R: Failed to get dladdr info for RTR_HEADER\n");
-        return false;
-    }
+	Dl_info info;
+	if (dladdr (r2r_header, &info) == 0)
+		xamarin_assertion_message ("Failed to get dladdr info for the RTR_HEADER symbol.");
 
-    data->size = sizeof (struct host_runtime_contract_native_code_data);
-    data->r2r_header_ptr = r2r_header;
-    data->image_size = get_image_size (info.dli_fbase);
-    data->image_base = info.dli_fbase;
+	data->size = sizeof (struct host_runtime_contract_native_code_data);
+	data->r2r_header_ptr = r2r_header;
+	data->image_size = xamarin_get_dyld_image_size (info.dli_fbase);
+	data->image_base = info.dli_fbase;
 
-    fprintf (stderr, "R2R: Successfully loaded R2R data - header: %p, base: %p, size: %lu\n",
-             data->r2r_header_ptr, data->image_base, (unsigned long) data->image_size);
+	LOG_CORECLR (stderr, "R2R: Successfully loaded R2R data - header: %p, base: %p, size: %lu\n",
+		data->r2r_header_ptr, data->image_base, (unsigned long) data->image_size);
 
-    return true;
+	return true;
 }
 #endif // defined (CORECLR_RUNTIME)
 
@@ -2512,14 +2501,14 @@ void
 xamarin_vm_initialize ()
 {
 #if defined (CORECLR_RUNTIME)
-    struct host_runtime_contract host_contract = {
-        .size = sizeof(struct host_runtime_contract),
-        .pinvoke_override = &xamarin_pinvoke_override,
-        .get_native_code_data = &get_native_code_data
-    };
+	struct host_runtime_contract host_contract = {
+		.size = sizeof(struct host_runtime_contract),
+		.pinvoke_override = &xamarin_pinvoke_override,
+		.get_native_code_data = &xamarin_get_native_code_data
+	};
 
-    char contract_str[19]; // 0x + 16 hex digits + '\0'
-    snprintf(contract_str, 19, "0x%zx", (size_t)(&host_contract));
+	char contract_str[19]; // 0x + 16 hex digits + '\0'
+	snprintf(contract_str, 19, "0x%zx", (size_t)(&host_contract));
 #else
 	char *pinvokeOverride = xamarin_strdup_printf ("%p", &xamarin_pinvoke_override);
 #endif

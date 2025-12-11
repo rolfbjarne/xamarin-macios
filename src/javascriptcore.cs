@@ -90,7 +90,7 @@ namespace JavaScriptCore {
 		IntPtr JSGlobalContextRefPtr { get; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	delegate void JSPromiseCreationExecutor ([NullAllowed] JSValue resolve, [NullAllowed] JSValue rejected);
 
@@ -134,25 +134,25 @@ namespace JavaScriptCore {
 		[Static, Export ("valueWithUndefinedInContext:")]
 		JSValue Undefined (JSContext context);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("valueWithNewPromiseInContext:fromExecutor:")]
 		JSValue CreatePromise (JSContext context, JSPromiseCreationExecutor callback);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("valueWithNewPromiseResolvedWithResult:inContext:")]
 		JSValue CreateResolvedPromise (NSObject result, JSContext context);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("valueWithNewPromiseRejectedWithReason:inContext:")]
 		JSValue CreateRejectedPromise (NSObject reason, JSContext context);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("valueWithNewSymbolFromDescription:inContext:")]
@@ -329,7 +329,7 @@ namespace JavaScriptCore {
 		[Export ("JSValueRef")]
 		IntPtr JSValueRefPtr { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("isSymbol")]
 		bool IsSymbol { get; }

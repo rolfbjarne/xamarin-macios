@@ -57,7 +57,7 @@ namespace CoreBluetooth {
 		CBManagerState State { get; }
 
 		[Internal]
-		
+
 		[NoTV]
 		[NoMac]
 		[MacCatalyst (13, 1)]

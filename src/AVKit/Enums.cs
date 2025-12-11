@@ -44,7 +44,7 @@ namespace AVKit {
 
 	[NoTV]
 	[NoMac]
-	
+
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVAudioSessionRouteSelection : long {

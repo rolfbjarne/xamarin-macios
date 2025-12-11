@@ -52,10 +52,10 @@ namespace IntentsUI {
 		Black,
 		/// <summary>To be added.</summary>
 		BlackOutline,
-		
+
 		[MacCatalyst (13, 1)]
 		Automatic,
-		
+
 		[MacCatalyst (13, 1)]
 		AutomaticOutLine,
 	}
@@ -278,7 +278,7 @@ namespace IntentsUI {
 		[Export ("cornerRadius", ArgumentSemantic.Assign)]
 		nfloat CornerRadius { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("setStyle:")]
 		void SetStyle (INUIAddVoiceShortcutButtonStyle style);

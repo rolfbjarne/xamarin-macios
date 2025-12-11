@@ -128,22 +128,22 @@ namespace MetalKit {
 		[NullAllowed, Export ("colorspace", ArgumentSemantic.Assign)]
 		CGColorSpace ColorSpace { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("preferredDevice")]
 		IMTLDevice PreferredDevice { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("preferredDrawableSize")]
 		CGSize PreferredDrawableSize { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("depthStencilAttachmentTextureUsage", ArgumentSemantic.Assign)]
 		MTLTextureUsage DepthStencilAttachmentTextureUsage { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("multisampleColorAttachmentTextureUsage", ArgumentSemantic.Assign)]
 		MTLTextureUsage MultisampleColorAttachmentTextureUsage { get; set; }

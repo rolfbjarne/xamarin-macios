@@ -620,13 +620,13 @@ namespace CoreImage {
 		[Export ("workingFormat")]
 		CIFormat WorkingFormat { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("contextWithMTLCommandQueue:")]
 		CIContext Create (IMTLCommandQueue commandQueue);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("contextWithMTLCommandQueue:options:")]
@@ -700,7 +700,7 @@ namespace CoreImage {
 		[Field ("kCIContextPriorityRequestLow", "+CoreImage")]
 		NSString PriorityRequestLow { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCIContextAllowLowPower")]
 		NSString AllowLowPower { get; }
@@ -1050,7 +1050,7 @@ namespace CoreImage {
 		[return: NullAllowed]
 		CIFilter GetDepthBlurEffectFilter (CIImage image, CIImage disparityImage, [NullAllowed] CIImage portraitEffectsMatte, CGImagePropertyOrientation orientation, [NullAllowed] NSDictionary options);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("depthBlurEffectFilterForImage:disparityImage:portraitEffectsMatte:hairSemanticSegmentation:orientation:options:")]
 		[return: NullAllowed]
@@ -1667,7 +1667,7 @@ namespace CoreImage {
 		[Field ("kCIInputLinearSpaceFilter")]
 		NSString LinearSpaceFilterKey { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCIInputEnableEDRModeKey")]
 		NSString EnableEdrModeKey { get; }
@@ -2874,15 +2874,15 @@ namespace CoreImage {
 		[MacCatalyst (13, 1)]
 		bool AuxiliaryPortraitEffectsMatte { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		bool AuxiliarySemanticSegmentationSkinMatte { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		bool AuxiliarySemanticSegmentationHairMatte { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		bool AuxiliarySemanticSegmentationTeethMatte { get; set; }
 
@@ -2944,17 +2944,17 @@ namespace CoreImage {
 		[Field ("kCIImageAuxiliaryPortraitEffectsMatte")]
 		NSString AuxiliaryPortraitEffectsMatteKey { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCIImageAuxiliarySemanticSegmentationSkinMatte")]
 		NSString AuxiliarySemanticSegmentationSkinMatteKey { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCIImageAuxiliarySemanticSegmentationHairMatte")]
 		NSString AuxiliarySemanticSegmentationHairMatteKey { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCIImageAuxiliarySemanticSegmentationTeethMatte")]
 		NSString AuxiliarySemanticSegmentationTeethMatteKey { get; }
@@ -3035,14 +3035,14 @@ namespace CoreImage {
 		[Wrap ("FromCGImage (image, options.GetDictionary ())")]
 		CIImage FromCGImage (CGImage image, [NullAllowed] CIImageInitializationOptionsWithMetadata options);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Static]
 		[Export ("imageWithCGImageSource:index:options:")]
 		CIImage FromCGImageSource (CGImageSource source, nuint index, [NullAllowed] NSDictionary options);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Wrap ("FromCGImageSource (source, index, options.GetDictionary ())")]
@@ -3317,13 +3317,13 @@ namespace CoreImage {
 		[Wrap ("this (image, options.GetDictionary ())")]
 		NativeHandle Constructor (CGImage image, [NullAllowed] CIImageInitializationOptionsWithMetadata options);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[EditorBrowsable (EditorBrowsableState.Advanced)]
 		[Export ("initWithCGImageSource:index:options:")]
 		NativeHandle Constructor (CGImageSource source, nuint index, [NullAllowed] NSDictionary options);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Wrap ("this (source, index, options.GetDictionary ())")]
 		NativeHandle Constructor (CGImageSource source, nuint index, CIImageInitializationOptionsWithMetadata options);
@@ -3574,7 +3574,7 @@ namespace CoreImage {
 		[Export ("imageByApplyingTransform:")]
 		CIImage ImageByApplyingTransform (CGAffineTransform matrix);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("imageByApplyingTransform:highQualityDownsample:")]
 		CIImage ImageByApplyingTransform (CGAffineTransform matrix, bool highQualityDownsample);
@@ -4282,61 +4282,61 @@ namespace CoreImage {
 
 		// colors
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("blackImage", ArgumentSemantic.Strong)]
 		CIImage BlackImage { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("whiteImage", ArgumentSemantic.Strong)]
 		CIImage WhiteImage { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("grayImage", ArgumentSemantic.Strong)]
 		CIImage GrayImage { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("redImage", ArgumentSemantic.Strong)]
 		CIImage RedImage { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("greenImage", ArgumentSemantic.Strong)]
 		CIImage GreenImage { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("blueImage", ArgumentSemantic.Strong)]
 		CIImage BlueImage { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("cyanImage", ArgumentSemantic.Strong)]
 		CIImage CyanImage { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("magentaImage", ArgumentSemantic.Strong)]
 		CIImage MagentaImage { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("yellowImage", ArgumentSemantic.Strong)]
 		CIImage YellowImage { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("clearImage", ArgumentSemantic.Strong)]
@@ -8529,7 +8529,7 @@ namespace CoreImage {
 		[return: NullAllowed]
 		CIImage Apply (CIImage foreground, CIImage background);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("applyWithForeground:background:colorSpace:")]
 		[return: NullAllowed]
@@ -9073,22 +9073,22 @@ namespace CoreImage {
 		[Field ("kCIImageRepresentationPortraitEffectsMatteImage")]
 		NSString PortraitEffectsMatteImageKey { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCIImageRepresentationAVSemanticSegmentationMattes")]
 		NSString SemanticSegmentationMattesKey { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCIImageRepresentationSemanticSegmentationSkinMatteImage")]
 		NSString SemanticSegmentationSkinMatteImageKey { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCIImageRepresentationSemanticSegmentationHairMatteImage")]
 		NSString SemanticSegmentationHairMatteImageKey { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCIImageRepresentationSemanticSegmentationTeethMatteImage")]
 		NSString SemanticSegmentationTeethMatteImageKey { get; }
@@ -9141,19 +9141,19 @@ namespace CoreImage {
 		[MacCatalyst (13, 1)]
 		AVPortraitEffectsMatte AVPortraitEffectsMatte { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		AVSemanticSegmentationMatte [] SemanticSegmentationMattes { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		CIImage SemanticSegmentationSkinMatteImage { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		CIImage SemanticSegmentationHairMatteImage { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		CIImage SemanticSegmentationTeethMatteImage { get; set; }
 
@@ -9305,7 +9305,7 @@ namespace CoreImage {
 	}
 
 	[CoreImageFilter]
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIFilter))]
 	interface CIDocumentEnhancer : CIDocumentEnhancerProtocol {
@@ -9335,14 +9335,14 @@ namespace CoreImage {
 	}
 
 	[CoreImageFilter]
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIReductionFilter))]
 	interface CIKMeans : CIKMeansProtocol {
 	}
 
 	[CoreImageFilter]
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIFilter))]
 	[Abstract]
@@ -9355,35 +9355,35 @@ namespace CoreImage {
 	}
 
 	[CoreImageFilter]
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIMorphologyRectangle))]
 	interface CIMorphologyRectangleMaximum : CIMorphologyRectangleMaximumProtocol {
 	}
 
 	[CoreImageFilter]
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIMorphologyRectangle))]
 	interface CIMorphologyRectangleMinimum : CIMorphologyRectangleMinimumProtocol {
 	}
 
 	[CoreImageFilter]
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIFilter))]
 	interface CIPaletteCentroid : CIPaletteCentroidProtocol {
 	}
 
 	[CoreImageFilter]
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIFilter))]
 	interface CIPalettize : CIPalettizeProtocol {
 	}
 
 	[CoreImageFilter]
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIFilter))]
 	[Abstract]
@@ -9406,7 +9406,7 @@ namespace CoreImage {
 	}
 
 	[CoreImageFilter]
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIKeystoneCorrection))]
 	interface CIKeystoneCorrectionCombined : CIKeystoneCorrectionCombinedProtocol {
@@ -9417,7 +9417,7 @@ namespace CoreImage {
 	}
 
 	[CoreImageFilter]
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIKeystoneCorrection))]
 	interface CIKeystoneCorrectionHorizontal : CIKeystoneCorrectionHorizontalProtocol {
@@ -9428,7 +9428,7 @@ namespace CoreImage {
 	}
 
 	[CoreImageFilter]
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIKeystoneCorrection))]
 	interface CIKeystoneCorrectionVertical : CIKeystoneCorrectionVerticalProtocol {
@@ -9439,7 +9439,7 @@ namespace CoreImage {
 	}
 
 	[CoreImageFilter]
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIFilter))]
 	interface CIPerspectiveRotate : CIPerspectiveRotateProtocol {
@@ -9450,14 +9450,14 @@ namespace CoreImage {
 	}
 
 	[CoreImageFilter]
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIFilter))]
 	interface CIGaborGradients : CIGaborGradientsProtocol {
 	}
 
 	[CoreImageFilter]
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (CIFilter))]
 	interface CIRoundedRectangleGenerator : CIRoundedRectangleGeneratorProtocol {
@@ -9465,7 +9465,7 @@ namespace CoreImage {
 
 	#region Protocols
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIFilter")]
 	// CIFilter already exists so we're using the Swift name
@@ -9481,7 +9481,7 @@ namespace CoreImage {
 		NSDictionary<NSString, NSObject> CustomAttributes { get; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CITransitionFilter")]
 	interface CITransitionFilterProtocol : CIFilterProtocol {
@@ -9506,7 +9506,7 @@ namespace CoreImage {
 		float Time { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIAccordionFoldTransition")]
 	interface CIAccordionFoldTransitionProtocol : CITransitionFilterProtocol {
@@ -9532,7 +9532,7 @@ namespace CoreImage {
 		float FoldShadowAmount { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIAffineClamp")]
 	interface CIAffineClampProtocol : CIFilterProtocol {
@@ -9547,7 +9547,7 @@ namespace CoreImage {
 		CGAffineTransform Transform { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIAffineTile")]
 	interface CIAffineTileProtocol : CIFilterProtocol {
@@ -9562,7 +9562,7 @@ namespace CoreImage {
 		CGAffineTransform Transform { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIAttributedTextImageGenerator")]
 	interface CIAttributedTextImageGeneratorProtocol : CIFilterProtocol {
@@ -9583,7 +9583,7 @@ namespace CoreImage {
 		float Padding { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIAztecCodeGenerator")]
 	interface CIAztecCodeGeneratorProtocol : CIFilterProtocol {
@@ -9610,7 +9610,7 @@ namespace CoreImage {
 		float InputCompactStyle { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIBarcodeGenerator")]
 	interface CIBarcodeGeneratorProtocol : CIFilterProtocol {
@@ -9620,7 +9620,7 @@ namespace CoreImage {
 		CIBarcodeDescriptor BarcodeDescriptor { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIBarsSwipeTransition")]
 	interface CIBarsSwipeTransitionProtocol : CITransitionFilterProtocol {
@@ -9638,7 +9638,7 @@ namespace CoreImage {
 		float BarOffset { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIBicubicScaleTransform")]
 	interface CIBicubicScaleTransformProtocol : CIFilterProtocol {
@@ -9667,7 +9667,7 @@ namespace CoreImage {
 		float ParameterC { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIBlendWithMask")]
 	interface CIBlendWithMaskProtocol : CIFilterProtocol {
@@ -9687,7 +9687,7 @@ namespace CoreImage {
 		CIImage MaskImage { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIBloom")]
 	interface CIBloomProtocol : CIFilterProtocol {
@@ -9712,7 +9712,7 @@ namespace CoreImage {
 		float Intensity { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIBokehBlur")]
 	interface CIBokehBlurProtocol : CIFilterProtocol {
@@ -9739,7 +9739,7 @@ namespace CoreImage {
 		float Softness { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIBoxBlur")]
 	interface CIBoxBlurProtocol : CIFilterProtocol {
@@ -9757,7 +9757,7 @@ namespace CoreImage {
 		float Radius { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CICheckerboardGenerator")]
 	interface CICheckerboardGeneratorProtocol : CIFilterProtocol {
@@ -9796,7 +9796,7 @@ namespace CoreImage {
 		float Sharpness { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CICircularScreen")]
 	interface CICircularScreenProtocol : CIFilterProtocol {
@@ -9819,7 +9819,7 @@ namespace CoreImage {
 		float Sharpness { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CICMYKHalftone")]
 	interface CICmykHalftoneProtocol : CIFilterProtocol {
@@ -9856,7 +9856,7 @@ namespace CoreImage {
 		float UnderColorRemoval { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CICode128BarcodeGenerator")]
 	interface CICode128BarcodeGeneratorProtocol : CIFilterProtocol {
@@ -9875,14 +9875,14 @@ namespace CoreImage {
 		// The availability attributes here look redundant because they're already on the type,
 		// but it makes a difference when this member is inlined into another type, in which case
 		// these attributes are copied as well (while the type's attributes aren't).
-		
+
 		[MacCatalyst (13, 1)]
 		[Abstract]
 		[Export ("barcodeHeight")]
 		float BarcodeHeight { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIColorClamp")]
 	interface CIColorClampProtocol : CIFilterProtocol {
@@ -9903,7 +9903,7 @@ namespace CoreImage {
 		CIVector MaxComponents { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIColorControls")]
 	interface CIColorControlsProtocol : CIFilterProtocol {
@@ -9935,7 +9935,7 @@ namespace CoreImage {
 		float Contrast { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIColorCrossPolynomial")]
 	interface CIColorCrossPolynomialProtocol : CIFilterProtocol {
@@ -9967,7 +9967,7 @@ namespace CoreImage {
 		CIVector BlueCoefficients { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIColorCube")]
 	interface CIColorCubeProtocol : CIFilterProtocol {
@@ -9999,7 +9999,7 @@ namespace CoreImage {
 		bool Extrapolate { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIColorCubesMixedWithMask")]
 	interface CIColorCubesMixedWithMaskProtocol : CIFilterProtocol {
@@ -10037,7 +10037,7 @@ namespace CoreImage {
 		bool Extrapolate { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIColorCubeWithColorSpace")]
 	interface CIColorCubeWithColorSpaceProtocol : CIFilterProtocol {
@@ -10070,7 +10070,7 @@ namespace CoreImage {
 		bool Extrapolate { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIColorCurves")]
 	interface CIColorCurvesProtocol : CIFilterProtocol {
@@ -10093,7 +10093,7 @@ namespace CoreImage {
 		CGColorSpace ColorSpace { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIColorInvert")]
 	interface CIColorInvertProtocol : CIFilterProtocol {
@@ -10104,7 +10104,7 @@ namespace CoreImage {
 		CIImage InputImage { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIColorMap")]
 	interface CIColorMapProtocol : CIFilterProtocol {
@@ -10122,7 +10122,7 @@ namespace CoreImage {
 		CIImage GradientImage { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIColorMatrix")]
 	interface CIColorMatrixProtocol : CIFilterProtocol {
@@ -10168,7 +10168,7 @@ namespace CoreImage {
 		CIVector BiasVector { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIColorMonochrome")]
 	interface CIColorMonochromeProtocol : CIFilterProtocol {
@@ -10193,7 +10193,7 @@ namespace CoreImage {
 		float Intensity { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIColorPolynomial")]
 	interface CIColorPolynomialProtocol : CIFilterProtocol {
@@ -10223,7 +10223,7 @@ namespace CoreImage {
 		CIVector AlphaCoefficients { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIColorPosterize")]
 	interface CIColorPosterizeProtocol : CIFilterProtocol {
@@ -10241,7 +10241,7 @@ namespace CoreImage {
 		float Levels { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIComicEffect")]
 	interface CIComicEffectProtocol : CIFilterProtocol {
@@ -10252,7 +10252,7 @@ namespace CoreImage {
 		CIImage InputImage { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CICompositeOperation")]
 	interface CICompositeOperationProtocol : CIFilterProtocol {
@@ -10267,7 +10267,7 @@ namespace CoreImage {
 		CIImage BackgroundImage { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIConvolution")]
 	interface CIConvolutionProtocol : CIFilterProtocol {
@@ -10286,7 +10286,7 @@ namespace CoreImage {
 		float Bias { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CICopyMachineTransition")]
 	interface CICopyMachineTransitionProtocol : CIFilterProtocol {
@@ -10312,7 +10312,7 @@ namespace CoreImage {
 		float Opacity { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CICoreMLModel")]
 	interface CICoreMLModelProtocol : CIFilterProtocol {
@@ -10335,7 +10335,7 @@ namespace CoreImage {
 		bool SoftmaxNormalization { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CICrystallize")]
 	interface CICrystallizeProtocol : CIFilterProtocol {
@@ -10358,7 +10358,7 @@ namespace CoreImage {
 		CGPoint InputCenter { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIDepthOfField")]
 	interface CIDepthOfFieldProtocol : CIFilterProtocol {
@@ -10407,7 +10407,7 @@ namespace CoreImage {
 		float Radius { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIDepthToDisparity")]
 	interface CIDepthToDisparityProtocol : CIFilterProtocol {
@@ -10418,7 +10418,7 @@ namespace CoreImage {
 		CIImage InputImage { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIDiscBlur")]
 	interface CIDiscBlurProtocol : CIFilterProtocol {
@@ -10436,7 +10436,7 @@ namespace CoreImage {
 		float Radius { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIDisintegrateWithMaskTransition")]
 	interface CIDisintegrateWithMaskTransitionProtocol : CIFilterProtocol {
@@ -10466,7 +10466,7 @@ namespace CoreImage {
 		CGPoint InputShadowOffset { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIDisparityToDepth")]
 	interface CIDisparityToDepthProtocol : CIFilterProtocol {
@@ -10477,13 +10477,13 @@ namespace CoreImage {
 		CIImage InputImage { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIDissolveTransition")]
 	interface CIDissolveTransitionProtocol : CIFilterProtocol {
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIDither")]
 	interface CIDitherProtocol : CIFilterProtocol {
@@ -10498,7 +10498,7 @@ namespace CoreImage {
 		float Intensity { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIDocumentEnhancer")]
 	interface CIDocumentEnhancerProtocol : CIFilterProtocol {
@@ -10513,7 +10513,7 @@ namespace CoreImage {
 		float Amount { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIDotScreen")]
 	interface CIDotScreenProtocol : CIFilterProtocol {
@@ -10543,7 +10543,7 @@ namespace CoreImage {
 		float Sharpness { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIEdgePreserveUpsample")]
 	interface CIEdgePreserveUpsampleProtocol : CIFilterProtocol {
@@ -10566,7 +10566,7 @@ namespace CoreImage {
 		float LumaSigma { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIEdges")]
 	interface CIEdgesProtocol : CIFilterProtocol {
@@ -10584,7 +10584,7 @@ namespace CoreImage {
 		float Intensity { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIEdgeWork")]
 	interface CIEdgeWorkProtocol : CIFilterProtocol {
@@ -10602,7 +10602,7 @@ namespace CoreImage {
 		float Radius { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIEightfoldReflectedTile")]
 	interface CIEightfoldReflectedTileProtocol : CIFilterProtocol {
@@ -10625,7 +10625,7 @@ namespace CoreImage {
 		float Width { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIExposureAdjust")]
 	interface CIExposureAdjustProtocol : CIFilterProtocol {
@@ -10643,7 +10643,7 @@ namespace CoreImage {
 		float EV { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIFalseColor")]
 	interface CIFalseColorProtocol : CIFilterProtocol {
@@ -10668,7 +10668,7 @@ namespace CoreImage {
 		CIColor Color1 { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIFlashTransition")]
 	interface CIFlashTransitionProtocol : CITransitionFilterProtocol {
@@ -10715,7 +10715,7 @@ namespace CoreImage {
 		float FadeThreshold { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIFourCoordinateGeometryFilter")]
 	interface CIFourCoordinateGeometryFilterProtocol : CIFilterProtocol {
@@ -10742,7 +10742,7 @@ namespace CoreImage {
 		CGPoint InputBottomLeft { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIFourfoldReflectedTile")]
 	interface CIFourfoldReflectedTileProtocol : CIFilterProtocol {
@@ -10772,7 +10772,7 @@ namespace CoreImage {
 		float AcuteAngle { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIFourfoldRotatedTile")]
 	interface CIFourfoldRotatedTileProtocol : CIFilterProtocol {
@@ -10795,7 +10795,7 @@ namespace CoreImage {
 		float Width { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIFourfoldTranslatedTile")]
 	interface CIFourfoldTranslatedTileProtocol : CIFilterProtocol {
@@ -10825,7 +10825,7 @@ namespace CoreImage {
 		float AcuteAngle { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIGaborGradients")]
 	interface CIGaborGradientsProtocol : CIFilterProtocol {
@@ -10836,7 +10836,7 @@ namespace CoreImage {
 		CIImage InputImage { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIGammaAdjust")]
 	interface CIGammaAdjustProtocol : CIFilterProtocol {
@@ -10854,7 +10854,7 @@ namespace CoreImage {
 		float Power { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIGaussianBlur")]
 	interface CIGaussianBlurProtocol : CIFilterProtocol {
@@ -10872,7 +10872,7 @@ namespace CoreImage {
 		float Radius { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIGaussianGradient")]
 	interface CIGaussianGradientProtocol : CIFilterProtocol {
@@ -10904,7 +10904,7 @@ namespace CoreImage {
 		float Radius { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIGlideReflectedTile")]
 	interface CIGlideReflectedTileProtocol : CIFilterProtocol {
@@ -10927,7 +10927,7 @@ namespace CoreImage {
 		float Width { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIGloom")]
 	interface CIGloomProtocol : CIFilterProtocol {
@@ -10952,7 +10952,7 @@ namespace CoreImage {
 		float Intensity { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIHatchedScreen")]
 	interface CIHatchedScreenProtocol : CIFilterProtocol {
@@ -10982,7 +10982,7 @@ namespace CoreImage {
 		float Sharpness { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIHeightFieldFromMask")]
 	interface CIHeightFieldFromMaskProtocol : CIFilterProtocol {
@@ -11000,7 +11000,7 @@ namespace CoreImage {
 		float Radius { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIHexagonalPixellate")]
 	interface CIHexagonalPixellateProtocol : CIFilterProtocol {
@@ -11023,7 +11023,7 @@ namespace CoreImage {
 		float Scale { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIHighlightShadowAdjust")]
 	interface CIHighlightShadowAdjustProtocol : CIFilterProtocol {
@@ -11055,7 +11055,7 @@ namespace CoreImage {
 		float HighlightAmount { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIHueAdjust")]
 	interface CIHueAdjustProtocol : CIFilterProtocol {
@@ -11073,7 +11073,7 @@ namespace CoreImage {
 		float Angle { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIHueSaturationValueGradient")]
 	interface CIHueSaturationValueGradientProtocol : CIFilterProtocol {
@@ -11102,7 +11102,7 @@ namespace CoreImage {
 		CGColorSpace ColorSpace { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIKaleidoscope")]
 	interface CIKaleidoscopeProtocol : CIFilterProtocol {
@@ -11130,7 +11130,7 @@ namespace CoreImage {
 		float Angle { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIKeystoneCorrectionCombined")]
 	interface CIKeystoneCorrectionCombinedProtocol : CIFourCoordinateGeometryFilterProtocol {
@@ -11140,7 +11140,7 @@ namespace CoreImage {
 		float FocalLength { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIKeystoneCorrectionHorizontal")]
 	interface CIKeystoneCorrectionHorizontalProtocol : CIFourCoordinateGeometryFilterProtocol {
@@ -11150,7 +11150,7 @@ namespace CoreImage {
 		float FocalLength { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIKeystoneCorrectionVertical")]
 	interface CIKeystoneCorrectionVerticalProtocol : CIFourCoordinateGeometryFilterProtocol {
@@ -11160,7 +11160,7 @@ namespace CoreImage {
 		float FocalLength { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CILabDeltaE")]
 	interface CILabDeltaEProtocol : CIFilterProtocol {
@@ -11175,7 +11175,7 @@ namespace CoreImage {
 		CIImage Image2 { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CILanczosScaleTransform")]
 	interface CILanczosScaleTransformProtocol : CIFilterProtocol {
@@ -11200,7 +11200,7 @@ namespace CoreImage {
 		float AspectRatio { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CILenticularHaloGenerator")]
 	interface CILenticularHaloGeneratorProtocol : CIFilterProtocol {
@@ -11260,7 +11260,7 @@ namespace CoreImage {
 		float Time { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CILinearGradient")]
 	interface CILinearGradientProtocol : CIFilterProtocol {
@@ -11290,7 +11290,7 @@ namespace CoreImage {
 		CIColor Color1 { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CILinearToSRGBToneCurve")]
 	interface CILinearToSrgbToneCurveProtocol : CIFilterProtocol {
@@ -11301,7 +11301,7 @@ namespace CoreImage {
 		CIImage InputImage { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CILineOverlay")]
 	interface CILineOverlayProtocol : CIFilterProtocol {
@@ -11347,7 +11347,7 @@ namespace CoreImage {
 		float Contrast { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CILineScreen")]
 	interface CILineScreenProtocol : CIFilterProtocol {
@@ -11377,7 +11377,7 @@ namespace CoreImage {
 		float Sharpness { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIMaskedVariableBlur")]
 	interface CIMaskedVariableBlurProtocol : CIFilterProtocol {
@@ -11399,7 +11399,7 @@ namespace CoreImage {
 		float Radius { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIMaskToAlpha")]
 	interface CIMaskToAlphaProtocol : CIFilterProtocol {
@@ -11410,7 +11410,7 @@ namespace CoreImage {
 		CIImage InputImage { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIMaximumComponent")]
 	interface CIMaximumComponentProtocol : CIFilterProtocol {
@@ -11421,7 +11421,7 @@ namespace CoreImage {
 		CIImage InputImage { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIMedian")]
 	interface CIMedianProtocol : CIFilterProtocol {
@@ -11432,7 +11432,7 @@ namespace CoreImage {
 		CIImage InputImage { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIMeshGenerator")]
 	interface CIMeshGeneratorProtocol : CIFilterProtocol {
@@ -11450,7 +11450,7 @@ namespace CoreImage {
 		CIVector [] Mesh { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIMinimumComponent")]
 	interface CIMinimumComponentProtocol : CIFilterProtocol {
@@ -11461,7 +11461,7 @@ namespace CoreImage {
 		CIImage InputImage { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIMix")]
 	interface CIMixProtocol : CIFilterProtocol {
@@ -11480,7 +11480,7 @@ namespace CoreImage {
 		float Amount { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIModTransition")]
 	interface CIModTransitionProtocol : CITransitionFilterProtocol {
@@ -11512,7 +11512,7 @@ namespace CoreImage {
 		float Compression { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIMorphologyGradient")]
 	interface CIMorphologyGradientProtocol : CIFilterProtocol {
@@ -11527,7 +11527,7 @@ namespace CoreImage {
 		float Radius { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIMorphologyMaximum")]
 	interface CIMorphologyMaximumProtocol : CIFilterProtocol {
@@ -11542,7 +11542,7 @@ namespace CoreImage {
 		float Radius { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIMorphologyMinimum")]
 	interface CIMorphologyMinimumProtocol : CIFilterProtocol {
@@ -11557,7 +11557,7 @@ namespace CoreImage {
 		float Radius { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIMorphologyRectangleMaximum")]
 	interface CIMorphologyRectangleMaximumProtocol : CIFilterProtocol {
@@ -11576,7 +11576,7 @@ namespace CoreImage {
 		float InputHeight { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIMorphologyRectangleMinimum")]
 	interface CIMorphologyRectangleMinimumProtocol : CIFilterProtocol {
@@ -11595,7 +11595,7 @@ namespace CoreImage {
 		float InputHeight { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIMotionBlur")]
 	interface CIMotionBlurProtocol : CIFilterProtocol {
@@ -11617,7 +11617,7 @@ namespace CoreImage {
 		float Angle { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CINoiseReduction")]
 	interface CINoiseReductionProtocol : CIFilterProtocol {
@@ -11642,7 +11642,7 @@ namespace CoreImage {
 		float Sharpness { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIOpTile")]
 	interface CIOpTileProtocol : CIFilterProtocol {
@@ -11672,7 +11672,7 @@ namespace CoreImage {
 		float Width { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIPageCurlTransition")]
 	interface CIPageCurlTransitionProtocol : CITransitionFilterProtocol {
@@ -11711,7 +11711,7 @@ namespace CoreImage {
 		float Radius { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIPageCurlWithShadowTransition")]
 	interface CIPageCurlWithShadowTransitionProtocol : CITransitionFilterProtocol {
@@ -11762,7 +11762,7 @@ namespace CoreImage {
 		CGRect InputShadowExtent { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIPaletteCentroid")]
 	interface CIPaletteCentroidProtocol : CIFilterProtocol {
@@ -11781,7 +11781,7 @@ namespace CoreImage {
 		bool Perceptual { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIPalettize")]
 	interface CIPalettizeProtocol : CIFilterProtocol {
@@ -11800,7 +11800,7 @@ namespace CoreImage {
 		bool Perceptual { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIParallelogramTile")]
 	interface CIParallelogramTileProtocol : CIFilterProtocol {
@@ -11830,7 +11830,7 @@ namespace CoreImage {
 		float Width { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIPDF417BarcodeGenerator")]
 	interface CIPdf417BarcodeGeneratorProtocol : CIFilterProtocol {
@@ -11909,19 +11909,19 @@ namespace CoreImage {
 		float InputAlwaysSpecifyCompaction { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIPerspectiveCorrection")]
 	interface CIPerspectiveCorrectionProtocol : CIFourCoordinateGeometryFilterProtocol {
 
 		[Abstract]
 		[Export ("crop")]
-		
+
 		[MacCatalyst (13, 1)]
 		bool Crop { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIPerspectiveRotate")]
 	interface CIPerspectiveRotateProtocol : CIFilterProtocol {
@@ -11948,7 +11948,7 @@ namespace CoreImage {
 		float Roll { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIPerspectiveTile")]
 	interface CIPerspectiveTileProtocol : CIFilterProtocol {
@@ -11979,13 +11979,13 @@ namespace CoreImage {
 		CGPoint InputBottomLeft { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIPerspectiveTransform")]
 	interface CIPerspectiveTransformProtocol : CIFourCoordinateGeometryFilterProtocol {
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIPerspectiveTransformWithExtent")]
 	interface CIPerspectiveTransformWithExtentProtocol : CIFourCoordinateGeometryFilterProtocol {
@@ -11996,7 +11996,7 @@ namespace CoreImage {
 		CGRect InputExtent { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIPhotoEffect")]
 	interface CIPhotoEffectProtocol : CIFilterProtocol {
@@ -12014,7 +12014,7 @@ namespace CoreImage {
 		bool Extrapolate { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIPixellate")]
 	interface CIPixellateProtocol : CIFilterProtocol {
@@ -12037,7 +12037,7 @@ namespace CoreImage {
 		float Scale { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIPointillize")]
 	interface CIPointillizeProtocol : CIFilterProtocol {
@@ -12060,7 +12060,7 @@ namespace CoreImage {
 		CGPoint InputCenter { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIQRCodeGenerator")]
 	interface CIQRCodeGeneratorProtocol : CIFilterProtocol {
@@ -12077,7 +12077,7 @@ namespace CoreImage {
 		string CorrectionLevel { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIRadialGradient")]
 	interface CIRadialGradientProtocol : CIFilterProtocol {
@@ -12116,13 +12116,13 @@ namespace CoreImage {
 		CIColor Color1 { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIRandomGenerator")]
 	interface CIRandomGeneratorProtocol : CIFilterProtocol {
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIRippleTransition")]
 	interface CIRippleTransitionProtocol : CITransitionFilterProtocol {
@@ -12159,7 +12159,7 @@ namespace CoreImage {
 		float Scale { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIRoundedRectangleGenerator")]
 	interface CIRoundedRectangleGeneratorProtocol : CIFilterProtocol {
@@ -12182,7 +12182,7 @@ namespace CoreImage {
 		float Smoothness { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CISaliencyMap")]
 	interface CISaliencyMapProtocol : CIFilterProtocol {
@@ -12194,7 +12194,7 @@ namespace CoreImage {
 		CIImage InputImage { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CISepiaTone")]
 	interface CISepiaToneProtocol : CIFilterProtocol {
@@ -12212,7 +12212,7 @@ namespace CoreImage {
 		float Intensity { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIShadedMaterial")]
 	interface CIShadedMaterialProtocol : CIFilterProtocol {
@@ -12237,7 +12237,7 @@ namespace CoreImage {
 		float Scale { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CISharpenLuminance")]
 	interface CISharpenLuminanceProtocol : CIFilterProtocol {
@@ -12256,12 +12256,12 @@ namespace CoreImage {
 
 		[Abstract]
 		[Export ("radius")]
-		
+
 		[MacCatalyst (13, 1)]
 		float Radius { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CISixfoldReflectedTile")]
 	interface CISixfoldReflectedTileProtocol : CIFilterProtocol {
@@ -12284,7 +12284,7 @@ namespace CoreImage {
 		float Width { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CISixfoldRotatedTile")]
 	interface CISixfoldRotatedTileProtocol : CIFilterProtocol {
@@ -12307,7 +12307,7 @@ namespace CoreImage {
 		float Width { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CISmoothLinearGradient")]
 	interface CISmoothLinearGradientProtocol : CIFilterProtocol {
@@ -12336,7 +12336,7 @@ namespace CoreImage {
 		CIColor Color1 { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CISpotColor")]
 	interface CISpotColorProtocol : CIFilterProtocol {
@@ -12431,7 +12431,7 @@ namespace CoreImage {
 		float Contrast3 { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CISpotLight")]
 	interface CISpotLightProtocol : CIFilterProtocol {
@@ -12477,7 +12477,7 @@ namespace CoreImage {
 		CIColor Color { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CISRGBToneCurveToLinear")]
 	interface CISrgbToneCurveToLinearProtocol : CIFilterProtocol {
@@ -12488,7 +12488,7 @@ namespace CoreImage {
 		CIImage InputImage { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIStarShineGenerator")]
 	interface CIStarShineGeneratorProtocol : CIFilterProtocol {
@@ -12548,7 +12548,7 @@ namespace CoreImage {
 		float Epsilon { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIStraighten")]
 	interface CIStraightenProtocol : CIFilterProtocol {
@@ -12566,7 +12566,7 @@ namespace CoreImage {
 		float Angle { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIStripesGenerator")]
 	interface CIStripesGeneratorProtocol : CIFilterProtocol {
@@ -12605,7 +12605,7 @@ namespace CoreImage {
 		float Sharpness { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CISunbeamsGenerator")]
 	interface CISunbeamsGeneratorProtocol : CIFilterProtocol {
@@ -12658,7 +12658,7 @@ namespace CoreImage {
 		float Time { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CISwipeTransition")]
 	interface CISwipeTransitionProtocol : CITransitionFilterProtocol {
@@ -12684,7 +12684,7 @@ namespace CoreImage {
 		float Opacity { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CITemperatureAndTint")]
 	interface CITemperatureAndTintProtocol : CIFilterProtocol {
@@ -12709,7 +12709,7 @@ namespace CoreImage {
 		CIVector TargetNeutral { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CITextImageGenerator")]
 	interface CITextImageGeneratorProtocol : CIFilterProtocol {
@@ -12738,7 +12738,7 @@ namespace CoreImage {
 		float Padding { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIThermal")]
 	interface CIThermalProtocol : CIFilterProtocol {
@@ -12749,7 +12749,7 @@ namespace CoreImage {
 		CIImage InputImage { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIToneCurve")]
 	interface CIToneCurveProtocol : CIFilterProtocol {
@@ -12790,7 +12790,7 @@ namespace CoreImage {
 		bool Extrapolate { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CITriangleKaleidoscope")]
 	interface CITriangleKaleidoscopeProtocol : CIFilterProtocol {
@@ -12827,7 +12827,7 @@ namespace CoreImage {
 		float Decay { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CITriangleTile")]
 	interface CITriangleTileProtocol : CIFilterProtocol {
@@ -12850,7 +12850,7 @@ namespace CoreImage {
 		float Width { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CITwelvefoldReflectedTile")]
 	interface CITwelvefoldReflectedTileProtocol : CIFilterProtocol {
@@ -12873,7 +12873,7 @@ namespace CoreImage {
 		float Width { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIUnsharpMask")]
 	interface CIUnsharpMaskProtocol : CIFilterProtocol {
@@ -12898,7 +12898,7 @@ namespace CoreImage {
 		float Intensity { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIVibrance")]
 	interface CIVibranceProtocol : CIFilterProtocol {
@@ -12916,7 +12916,7 @@ namespace CoreImage {
 		float Amount { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIVignette")]
 	interface CIVignetteProtocol : CIFilterProtocol {
@@ -12941,7 +12941,7 @@ namespace CoreImage {
 		float Radius { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIVignetteEffect")]
 	interface CIVignetteEffectProtocol : CIFilterProtocol {
@@ -12978,7 +12978,7 @@ namespace CoreImage {
 		float Falloff { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIWhitePointAdjust")]
 	interface CIWhitePointAdjustProtocol : CIFilterProtocol {
@@ -12996,7 +12996,7 @@ namespace CoreImage {
 		CIColor Color { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIXRay")]
 	interface CIXRayProtocol : CIFilterProtocol {
@@ -13007,7 +13007,7 @@ namespace CoreImage {
 		CIImage InputImage { get; set; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol (Name = "CIZoomBlur")]
 	interface CIZoomBlurProtocol : CIFilterProtocol {

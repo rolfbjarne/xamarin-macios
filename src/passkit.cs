@@ -1735,7 +1735,7 @@ namespace PassKit {
 		[NullAllowed, Export ("secureElementPass", ArgumentSemantic.Copy)]
 		PKSecureElementPass SecureElementPass { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("billingAddress", ArgumentSemantic.Copy)]
 		CNContact BillingAddress { get; }
@@ -2602,13 +2602,13 @@ namespace PassKit {
 	[DisableDefaultCtor]
 	interface PKPaymentRequestPaymentMethodUpdate {
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("initWithErrors:paymentSummaryItems:")]
 		[DesignatedInitializer]
 		NativeHandle Constructor ([NullAllowed] NSError [] errors, PKPaymentSummaryItem [] paymentSummaryItems);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("errors", ArgumentSemantic.Copy)]
 		NSError [] Errors { get; set; }

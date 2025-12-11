@@ -97,7 +97,7 @@ namespace ImageIO {
 		[Field ("kCGImagePropertyExifAuxDictionary")]
 		NSString ExifAuxDictionary { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImagePropertyHEICSDictionary")]
 		NSString HeicsDictionary { get; }
@@ -672,17 +672,17 @@ namespace ImageIO {
 		[Field ("kCGImagePropertyGIFUnclampedDelayTime")]
 		NSString GIFUnclampedDelayTime { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImagePropertyGIFCanvasPixelWidth")]
 		NSString GifCanvasPixelWidth { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImagePropertyGIFCanvasPixelHeight")]
 		NSString GifCanvasPixelHeight { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImagePropertyGIFFrameInfoArray")]
 		NSString GifFrameInfoArray { get; }
@@ -1275,17 +1275,17 @@ namespace ImageIO {
 		[Field ("kCGImagePropertyAPNGUnclampedDelayTime")]
 		NSString PNGUnclampedDelayTime { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImagePropertyAPNGFrameInfoArray")]
 		NSString ApngFrameInfoArray { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImagePropertyAPNGCanvasPixelWidth")]
 		NSString ApngCanvasPixelWidth { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImagePropertyAPNGCanvasPixelHeight")]
 		NSString ApngCanvasPixelHeight { get; }
@@ -2183,32 +2183,32 @@ namespace ImageIO {
 
 		// HEICS
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImagePropertyHEICSLoopCount")]
 		NSString HeicsLoopCount { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImagePropertyHEICSDelayTime")]
 		NSString HeicsDelayTime { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImagePropertyHEICSUnclampedDelayTime")]
 		NSString HeicsSUnclampedDelayTime { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImagePropertyHEICSCanvasPixelWidth")]
 		NSString HeicsCanvasPixelWidth { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImagePropertyHEICSCanvasPixelHeight")]
 		NSString HeicsCanvasPixelHeight { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImagePropertyHEICSFrameInfoArray")]
 		NSString HeicsFrameInfoArray { get; }
@@ -2386,17 +2386,17 @@ namespace ImageIO {
 		[Field ("kCGImagePropertyExifStandardOutputSensitivity")]
 		NSString ExifStandardOutputSensitivity { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImagePropertyExifOffsetTime")]
 		NSString ExifOffsetTime { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImagePropertyExifOffsetTimeOriginal")]
 		NSString ExifOffsetTimeOriginal { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImagePropertyExifOffsetTimeDigitized")]
 		NSString ExifOffsetTimeDigitized { get; }
@@ -4558,17 +4558,17 @@ namespace ImageIO {
 		[Field ("kCGImageAuxiliaryDataTypePortraitEffectsMatte")]
 		PortraitEffectsMatte,
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImageAuxiliaryDataTypeSemanticSegmentationHairMatte")]
 		SemanticSegmentationHairMatte,
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImageAuxiliaryDataTypeSemanticSegmentationSkinMatte")]
 		SemanticSegmentationSkinMatte,
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kCGImageAuxiliaryDataTypeSemanticSegmentationTeethMatte")]
 		SemanticSegmentationTeethMatte,

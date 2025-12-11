@@ -80,7 +80,7 @@ namespace NetworkExtension {
 		/// <summary>To be added.</summary>
 		[MacCatalyst (13, 1)]
 		AES256GCM = 6,
-		
+
 		[MacCatalyst (13, 1)]
 		ChaCha20Poly1305 = 7,
 	}
@@ -168,7 +168,7 @@ namespace NetworkExtension {
 		Group20 = 20,
 		/// <summary>To be added.</summary>
 		Group21 = 21,
-		
+
 		[MacCatalyst (13, 1)]
 		Group31 = 31,
 		[TV (17, 0), iOS (17, 0), MacCatalyst (17, 0)]
@@ -233,7 +233,7 @@ namespace NetworkExtension {
 		/// <summary>To be added.</summary>
 		ECDSA521 = 4,
 		[NoTV]
-		
+
 		[MacCatalyst (13, 1)]
 		Ed25519 = 5,
 		[TV (17, 0), iOS (17, 0), MacCatalyst (17, 0)]
@@ -343,10 +343,10 @@ namespace NetworkExtension {
 		UserSwitch = 13,
 		/// <summary>The network connection failed.</summary>
 		ConnectionFailed = 14,
-		
+
 		[MacCatalyst (13, 1)]
 		Sleep = 15,
-		
+
 		[MacCatalyst (13, 1)]
 		AppUpdate = 16,
 		[iOS (18, 1), MacCatalyst (18, 1), TV (18, 1), Mac (15, 1)]

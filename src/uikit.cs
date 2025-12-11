@@ -188,10 +188,10 @@ namespace UIKit {
 		Medium,
 		/// <summary>A strong impact.</summary>
 		Heavy,
-		
+
 		[MacCatalyst (13, 1)]
 		Soft,
-		
+
 		[MacCatalyst (13, 1)]
 		Rigid,
 	}
@@ -356,7 +356,7 @@ namespace UIKit {
 		[Export ("impactOccurredAtLocation:")]
 		void ImpactOccurred (CGPoint atLocation);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("impactOccurredWithIntensity:")]
 		void ImpactOccurred (nfloat intensity);
@@ -2210,7 +2210,7 @@ namespace UIKit {
 		[Export ("activityViewController:thumbnailImageForActivityType:suggestedSize:")]
 		UIImage GetThumbnailImageForActivity (UIActivityViewController activityViewController, [NullAllowed] NSString activityType, CGSize suggestedSize);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("activityViewControllerLinkMetadata:")]
 		[return: NullAllowed]
@@ -3832,7 +3832,7 @@ namespace UIKit {
 		[Export ("iconWithTemplateImageName:")]
 		UIApplicationShortcutIcon FromTemplateImageName (string templateImageName);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("iconWithSystemImageName:")]
@@ -3880,7 +3880,7 @@ namespace UIKit {
 		[NullAllowed, Export ("userInfo", ArgumentSemantic.Copy)]
 		NSDictionary<NSString, NSObject> UserInfo { get; [NotImplemented] set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("targetContentIdentifier", ArgumentSemantic.Copy)]
 		NSObject TargetContentIdentifier { get; [NotImplemented] set; }
@@ -3922,7 +3922,7 @@ namespace UIKit {
 		[Override]
 		NSDictionary<NSString, NSObject> UserInfo { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("targetContentIdentifier", ArgumentSemantic.Copy)]
 		NSObject TargetContentIdentifier { get; set; }
@@ -10002,22 +10002,22 @@ namespace UIKit {
 		[Export ("caretTransformForPosition:")]
 		CGAffineTransform GetCaretTransform (UITextPosition forPosition);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("insertText:alternatives:style:")]
 		void InsertText (string text, string [] alternatives, UITextAlternativeStyle style);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("setAttributedMarkedText:selectedRange:")]
 		void SetAttributedMarkedText ([NullAllowed] NSAttributedString markedText, NSRange selectedRange);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("insertTextPlaceholderWithSize:")]
 		UITextPlaceholder InsertTextPlaceholder (CGSize size);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("removeTextPlaceholder:")]
 		void RemoveTextPlaceholder (UITextPlaceholder textPlaceholder);
@@ -13349,17 +13349,17 @@ namespace UIKit {
 		[Export ("setTargetRect:inView:")]
 		void SetTargetRect (CGRect rect, UIView inView);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("showMenuFromView:rect:")]
 		void ShowMenu (UIView targetView, CGRect targetRect);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("hideMenuFromView:")]
 		void HideMenu (UIView targetView);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("hideMenu")]
 		void HideMenu ();
@@ -16708,7 +16708,7 @@ namespace UIKit {
 		// UISearchBar (UITokenSearch)
 
 		[NoTV]
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("searchTextField")]
 		UISearchTextField SearchTextField { get; }
@@ -21161,13 +21161,13 @@ namespace UIKit {
 		[Export ("delegate", ArgumentSemantic.Weak), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Appearance]
 		[Export ("standardAppearance", ArgumentSemantic.Copy)]
 		UIToolbarAppearance StandardAppearance { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Appearance]
 		[NullAllowed, Export ("compactAppearance", ArgumentSemantic.Copy)]
@@ -25639,7 +25639,7 @@ namespace UIKit {
 			EventName ("WillPresentController"), EventArgs ("UIWillPresentAdaptiveStyle")]
 		void WillPresent (UIPresentationController presentationController, UIModalPresentationStyle style, [NullAllowed] IUIViewControllerTransitionCoordinator transitionCoordinator);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("presentationControllerShouldDismiss:"),
 			DelegateName ("UIAdaptivePresentationShouldDismiss"), DefaultValue (true)]
@@ -27028,13 +27028,13 @@ namespace UIKit {
 		[Export ("adjustTextPositionByCharacterOffset:")]
 		void AdjustTextPositionByCharacterOffset (nint offset);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Abstract]
 		[Export ("setMarkedText:selectedRange:")]
 		void SetMarkedText (string markedText, NSRange selectedRange);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Abstract]
 		[Export ("unmarkText")]
@@ -27483,12 +27483,12 @@ namespace UIKit {
 		[Export ("allowsMultipleSelection")]
 		bool AllowsMultipleSelection { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("shouldShowFileExtensions")]
 		bool ShouldShowFileExtensions { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("directoryURL", ArgumentSemantic.Copy)]
 		NSUrl DirectoryUrl { get; set; }
@@ -30165,7 +30165,7 @@ namespace UIKit {
 		string [] AllowedContentTypes { get; }
 
 		[Deprecated (PlatformName.iOS, 14, 0)]
-		
+
 		[MacCatalyst (13, 1)]
 		[Deprecated (PlatformName.MacCatalyst, 14, 0)]
 		[Export ("recentDocumentsContentTypes", ArgumentSemantic.Copy)]
@@ -30176,7 +30176,7 @@ namespace UIKit {
 		[Export ("contentTypesForRecentDocuments", ArgumentSemantic.Copy)]
 		UTType [] ContentTypesForRecentDocuments { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("shouldShowFileExtensions")]
 		bool ShouldShowFileExtensions { get; set; }
@@ -30225,12 +30225,12 @@ namespace UIKit {
 		[Export ("browserUserInterfaceStyle", ArgumentSemantic.Assign)]
 		UIDocumentBrowserUserInterfaceStyle BrowserUserInterfaceStyle { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("localizedCreateDocumentActionTitle")]
 		string LocalizedCreateDocumentActionTitle { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("defaultDocumentAspectRatio")]
 		nfloat DefaultDocumentAspectRatio { get; set; }

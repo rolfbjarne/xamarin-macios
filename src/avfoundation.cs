@@ -12327,25 +12327,25 @@ namespace AVFoundation {
 		[Field ("AVMetadataObjectTypeDataMatrixCode")]
 		DataMatrixCode = 1 << 13,
 
-		
+
 		[TV (17, 0)]
 		[MacCatalyst (14, 0)]
 		[Field ("AVMetadataObjectTypeCatBody")]
 		CatBody = 1 << 14,
 
-		
+
 		[TV (17, 0)]
 		[MacCatalyst (14, 0)]
 		[Field ("AVMetadataObjectTypeDogBody")]
 		DogBody = 1 << 15,
 
-		
+
 		[TV (17, 0)]
 		[MacCatalyst (14, 0)]
 		[Field ("AVMetadataObjectTypeHumanBody")]
 		HumanBody = 1 << 16,
 
-		
+
 		[TV (17, 0)]
 		[MacCatalyst (14, 0)]
 		[Field ("AVMetadataObjectTypeSalientObject")]
@@ -14911,7 +14911,7 @@ namespace AVFoundation {
 		[Export ("removeConnection:")]
 		void RemoveConnection (AVCaptureConnection connection);
 
-		
+
 		[MacCatalyst (14, 0)]
 		[Export ("connections")]
 		AVCaptureConnection [] Connections { get; }
@@ -19915,7 +19915,7 @@ namespace AVFoundation {
 		AVNavigationMarkersGroup [] NavigationMarkerGroups { get; set; }
 
 		[NoMac]
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("externalMetadata", ArgumentSemantic.Copy)]
 		AVMetadataItem [] ExternalMetadata { get; set; }
@@ -23675,7 +23675,7 @@ namespace AVFoundation {
 		[return: NullAllowed]
 		AVPortraitEffectsMatte GetReplacementPortraitEffectsMatte (AVCapturePhoto photo);
 
-		
+
 		[MacCatalyst (14, 0)]
 		[Export ("replacementSemanticSegmentationMatteOfType:forPhoto:")]
 		[return: NullAllowed]

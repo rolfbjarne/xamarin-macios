@@ -84,7 +84,7 @@ namespace UserNotifications {
 		HiddenPreviewsShowTitle = (1 << 2),
 		/// <summary>Display subtitles for notification previews, even when hidden.</summary>
 		HiddenPreviewsShowSubtitle = (1 << 3),
-		
+
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		AllowAnnouncement = (1 << 4),
@@ -161,7 +161,7 @@ namespace UserNotifications {
 		/// <summary>Indicates authorization to make provisional noncritical notifications.</summary>
 		[MacCatalyst (13, 1)]
 		Provisional = (1 << 6),
-		
+
 		[Deprecated (PlatformName.iOS, 15, 0, message: "Announcement is always included.")]
 		[Deprecated (PlatformName.TvOS, 15, 0, message: "Announcement is always included.")]
 		[Deprecated (PlatformName.MacOSX, 15, 0, message: "Announcement is always included.")]
@@ -645,7 +645,7 @@ namespace UserNotifications {
 		[Export ("summaryArgumentCount")]
 		nuint SummaryArgumentCount { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("targetContentIdentifier")]
 		string TargetContentIdentifier { get; [NotImplemented] set; }
@@ -770,7 +770,7 @@ namespace UserNotifications {
 		[Export ("summaryArgumentCount")]
 		nuint SummaryArgumentCount { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("targetContentIdentifier")]
 		string TargetContentIdentifier { get; set; }

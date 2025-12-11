@@ -314,18 +314,18 @@ namespace StoreKit {
 		[Export ("cancelDownloads:")]
 		void CancelDownloads (SKDownload [] downloads);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Wrap ("WeakDelegate")]
 		[NullAllowed]
 		ISKPaymentQueueDelegate Delegate { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
 		NSObject WeakDelegate { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("storefront")]
 		SKStorefront Storefront { get; }
@@ -392,7 +392,7 @@ namespace StoreKit {
 		[Export ("downloadContentLengths")]
 		NSNumber [] DownloadContentLengths { get; }
 
-		
+
 		[Deprecated (PlatformName.MacOSX, 10, 14, message: "Use 'DownloadContentVersion' instead.")]
 		[MacCatalyst (13, 1)]
 		[Export ("contentVersion")]
@@ -485,7 +485,7 @@ namespace StoreKit {
 		[Export ("paymentQueue:shouldAddStorePayment:forProduct:")]
 		bool ShouldAddStorePayment (SKPaymentQueue queue, SKPayment payment, SKProduct product);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("paymentQueueDidChangeStorefront:")]
 		void DidChangeStorefront (SKPaymentQueue queue);
@@ -1444,7 +1444,7 @@ namespace StoreKit {
 	[Deprecated (PlatformName.MacCatalyst, 18, 0 /* Apple's replacement requires Swift */ )]
 	[Deprecated (PlatformName.MacOSX, 15, 0 /* Apple's replacement requires Swift */ )]
 	[Deprecated (PlatformName.TvOS, 18, 0 /* Apple's replacement requires Swift */ )]
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // no `init` but non-null properties
@@ -1463,7 +1463,7 @@ namespace StoreKit {
 	[Deprecated (PlatformName.MacCatalyst, 18, 0 /* Apple's replacement requires Swift */ )]
 	[Deprecated (PlatformName.MacOSX, 15, 0 /* Apple's replacement requires Swift */ )]
 	[Deprecated (PlatformName.TvOS, 18, 0 /* Apple's replacement requires Swift */ )]
-	
+
 	[MacCatalyst (13, 1)]
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
@@ -1491,7 +1491,7 @@ namespace StoreKit {
 	[NoMacCatalyst]
 	delegate void SKArcadeServiceSubscriptionHandler ([NullAllowed] NSData subscriptionStatus, uint /* uint32_t */ subscriptionStatusLength, [NullAllowed] NSData cmacOfNonce, uint /* uint32_t */ cmacOfNonceLength, [NullAllowed] NSError error);
 
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // all static members so far

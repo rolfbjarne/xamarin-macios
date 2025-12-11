@@ -230,7 +230,7 @@ namespace VideoSubscriberAccount {
 		VSAccountManagerResult Enqueue (VSAccountMetadataRequest accountMetadataRequest, Action<VSAccountMetadata, NSError> completionHandler);
 
 		[NoMac]
-		
+
 		[Field ("VSOpenTVProviderSettingsURLString")]
 		NSString OpenTVProviderSettingsUrl { get; }
 	}
@@ -408,7 +408,7 @@ namespace VideoSubscriberAccount {
 		[Export ("supportedAuthenticationSchemes", ArgumentSemantic.Copy)]
 		NSString [] SupportedAuthenticationSchemesString { get; set; }
 
-		
+
 		[NullAllowed, Export ("accountProviderAuthenticationToken")]
 		string AccountProviderAuthenticationToken { get; set; }
 
@@ -459,7 +459,7 @@ namespace VideoSubscriberAccount {
 		[Field ("VSAccountProviderAuthenticationSchemeSAML")]
 		Saml,
 
-		
+
 		[Field ("VSAccountProviderAuthenticationSchemeAPI")]
 		Api,
 	}

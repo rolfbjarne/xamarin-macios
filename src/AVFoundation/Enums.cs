@@ -761,7 +761,7 @@ namespace AVFoundation {
 		StereoPassThrough = 5,
 		[MacCatalyst (13, 1)]
 		HrtfHQ = 6,
-		
+
 		[MacCatalyst (13, 1)]
 		Auto = 7,
 	}
@@ -956,7 +956,7 @@ namespace AVFoundation {
 		Standard = 1,
 		/// <summary>The "cinematic stabilization" algorithm should be used.</summary>
 		Cinematic = 2,
-		
+
 		[MacCatalyst (14, 0)]
 		CinematicExtended = 3,
 		[iOS (17, 0), MacCatalyst (17, 0), TV (17, 0), NoMac]
@@ -1070,7 +1070,7 @@ namespace AVFoundation {
 	}
 
 	[NoTV]
-	
+
 	[MacCatalyst (13, 1)]
 	[Flags]
 	[Native]
@@ -1261,7 +1261,7 @@ namespace AVFoundation {
 		[Obsolete ("Use 'AVContentKeySystem.SystemClearKey' instead.")]
 		AVContentKeySystemClearKey = ClearKey,
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("AVContentKeySystemAuthorizationToken")]
 		AuthorizationToken = 2,
@@ -1408,12 +1408,12 @@ namespace AVFoundation {
 		[Field ("AVOutputSettingsPresetHEVC3840x2160")]
 		PresetHevc3840x2160 = 12, // we added the wrong value in the export enum, we use the same so that they can be swap
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("AVOutputSettingsPresetHEVC1920x1080WithAlpha")]
 		PresetHevc1920x1080WithAlpha = 13,
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("AVOutputSettingsPresetHEVC3840x2160WithAlpha")]
 		PresetHevc3840x2160WithAlpha = 14,
@@ -1498,7 +1498,7 @@ namespace AVFoundation {
 		LongFormAudio = 1,
 		/// <summary>To be added.</summary>
 		Independent = 2,
-		
+
 		[NoTV]
 		[NoMac]
 		[MacCatalyst (14, 0)]
@@ -1627,22 +1627,22 @@ namespace AVFoundation {
 		[Field ("AVVideoCodecTypeHEVC")]
 		Hevc = 5,
 
-		
+
 		[MacCatalyst (15, 0)]
 		[Field ("AVVideoCodecTypeAppleProRes422HQ")]
 		AppleProRes422HQ = 6,
 
-		
+
 		[MacCatalyst (15, 0)]
 		[Field ("AVVideoCodecTypeAppleProRes422LT")]
 		AppleProRes422LT = 7,
 
-		
+
 		[MacCatalyst (15, 0)]
 		[Field ("AVVideoCodecTypeAppleProRes422Proxy")]
 		AppleProRes422Proxy = 8,
 
-		
+
 		[MacCatalyst (15, 0)]
 		[Field ("AVVideoCodecTypeHEVCWithAlpha")]
 		HevcWithAlpha = 9,
@@ -1725,7 +1725,7 @@ namespace AVFoundation {
 		Normal = 0x6e726d6c, //1852992876 - 'nrml'
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVSpeechSynthesisVoiceGender : long {
@@ -1735,7 +1735,7 @@ namespace AVFoundation {
 	}
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[TV (17, 0)]
-	
+
 	[Native]
 	public enum AVCapturePhotoQualityPrioritization : long {
 		Speed = 1,
@@ -1743,7 +1743,7 @@ namespace AVFoundation {
 		Quality = 3,
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVAudioEnvironmentOutputType : long {
@@ -1753,7 +1753,7 @@ namespace AVFoundation {
 		ExternalSpeakers = 3,
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVAudio3DMixingSourceMode : long {
@@ -1763,7 +1763,7 @@ namespace AVFoundation {
 		AmbienceBed = 3,
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum AVAudio3DMixingPointSourceInHeadMode : long {
@@ -1829,7 +1829,7 @@ namespace AVFoundation {
 	[MacCatalyst (13, 1)]
 	public enum AVContentKeyResponseDataType {
 		FairPlayStreamingKeyResponseData,
-		
+
 		[MacCatalyst (13, 1)]
 		AuthorizationTokenData,
 	}

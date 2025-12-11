@@ -222,13 +222,13 @@ namespace ARKit {
 		Table,
 		/// <summary>To be added.</summary>
 		Seat,
-		
+
 		Window,
-		
+
 		Door,
 	}
 
-	
+
 	[Native]
 	public enum ARCoachingGoal : long {
 		Tracking,
@@ -239,7 +239,7 @@ namespace ARKit {
 		GeoTracking,
 	}
 
-	
+
 	[Flags]
 	[Native]
 	public enum ARFrameSemantics : long {
@@ -253,14 +253,14 @@ namespace ARKit {
 		SmoothedSceneDepth = (1 << 4),
 	}
 
-	
+
 	[Native]
 	public enum ARMatteResolution : long {
 		Full = 0,
 		Half = 1,
 	}
 
-	
+
 	[Native]
 	public enum ARRaycastTarget : long {
 		ExistingPlaneGeometry,
@@ -268,7 +268,7 @@ namespace ARKit {
 		EstimatedPlane,
 	}
 
-	
+
 	[Native]
 	public enum ARRaycastTargetAlignment : long {
 		Horizontal,
@@ -276,13 +276,13 @@ namespace ARKit {
 		Any,
 	}
 
-	
+
 	public enum ARSegmentationClass : byte {
 		None = 0,
 		Person = 255,
 	}
 
-	
+
 	[Native]
 	public enum ARCollaborationDataPriority : long {
 		Critical,
@@ -367,7 +367,7 @@ namespace ARKit {
 		[NullAllowed, Export ("name")]
 		string Name { get; }
 
-		
+
 		[NullAllowed, Export ("sessionIdentifier")]
 		NSUuid SessionIdentifier { get; }
 
@@ -423,11 +423,11 @@ namespace ARKit {
 		[Export ("imageResolution")]
 		CGSize ImageResolution { get; }
 
-		
+
 		[Export ("exposureDuration")]
 		double ExposureDuration { get; }
 
-		
+
 		[Export ("exposureOffset")]
 		float ExposureOffset { get; }
 
@@ -476,11 +476,11 @@ namespace ARKit {
 		[Export ("capturedImage")]
 		CVPixelBuffer CapturedImage { get; }
 
-		
+
 		[NullAllowed, Export ("cameraGrainTexture")]
 		IMTLTexture CameraGrainTexture { get; }
 
-		
+
 		[Export ("cameraGrainIntensity")]
 		float CameraGrainIntensity { get; }
 
@@ -505,15 +505,15 @@ namespace ARKit {
 		[Export ("worldMappingStatus")]
 		ARWorldMappingStatus WorldMappingStatus { get; }
 
-		
+
 		[NullAllowed, Export ("segmentationBuffer")]
 		CVPixelBuffer SegmentationBuffer { get; }
 
-		
+
 		[NullAllowed, Export ("estimatedDepthData")]
 		CVPixelBuffer EstimatedDepthData { get; }
 
-		
+
 		[NullAllowed, Export ("detectedBody")]
 		ARBody2D DetectedBody { get; }
 
@@ -521,7 +521,7 @@ namespace ARKit {
 		[Export ("hitTest:types:")]
 		ARHitTestResult [] HitTest (CGPoint point, ARHitTestResultType types);
 
-		
+
 		[Export ("raycastQueryFromPoint:allowingTarget:alignment:")]
 		ARRaycastQuery CreateRaycastQuery (CGPoint point, ARRaycastTarget target, ARRaycastTargetAlignment alignment);
 
@@ -716,11 +716,11 @@ namespace ARKit {
 		[Export ("physicalSize")]
 		CGSize PhysicalSize { get; }
 
-		
+
 		[NullAllowed, Export ("resourceGroupName", ArgumentSemantic.Strong)]
 		string ResourceGroupName { get; }
 
-		
+
 		[Async]
 		[Export ("validateWithCompletionHandler:")]
 		void Validate (Action<NSError?> completionHandler);
@@ -752,7 +752,7 @@ namespace ARKit {
 	[DisableDefaultCtor]
 	interface ARVideoFormat : NSCopying {
 
-		
+
 		[Export ("captureDevicePosition")]
 		AVCaptureDevicePosition CaptureDevicePosition { get; }
 
@@ -802,11 +802,11 @@ namespace ARKit {
 		[Export ("automaticallyUpdatesLighting")]
 		bool AutomaticallyUpdatesLighting { get; set; }
 
-		
+
 		[Export ("rendersCameraGrain")]
 		bool RendersCameraGrain { get; set; }
 
-		
+
 		[Export ("rendersMotionBlur")]
 		bool RendersMotionBlur { get; set; }
 
@@ -826,7 +826,7 @@ namespace ARKit {
 		[MarshalDirective (NativePrefix = "xamarin_simd__", Library = "__Internal")]
 		Vector3 Unproject (CGPoint point, Matrix4 planeTransform);
 
-		
+
 		[Export ("raycastQueryFromPoint:allowingTarget:alignment:")]
 		[return: NullAllowed]
 		ARRaycastQuery CreateRaycastQuery (CGPoint point, ARRaycastTarget target, ARRaycastTargetAlignment alignment);
@@ -964,7 +964,7 @@ namespace ARKit {
 	[BaseType (typeof (NSObject))]
 	interface ARSession {
 
-		
+
 		[Export ("identifier", ArgumentSemantic.Strong)]
 		NSUuid Identifier { get; }
 
@@ -1019,17 +1019,17 @@ namespace ARKit {
 		[Export ("createReferenceObjectWithTransform:center:extent:completionHandler:")]
 		void CreateReferenceObject (Matrix4 transform, Vector3 center, Vector3 extent, Action<ARReferenceObject?, NSError?> completionHandler);
 
-		
+
 		[Export ("raycast:")]
 		ARRaycastResult [] Raycast (ARRaycastQuery query);
 
-		
+
 		[Async]
 		[Export ("trackedRaycast:updateHandler:")]
 		[return: NullAllowed]
 		ARTrackedRaycast TrackedRaycast (ARRaycastQuery query, Action<ARRaycastResult []> updateHandler);
 
-		
+
 		[Export ("updateWithCollaborationData:")]
 		void Update (ARCollaborationData collaborationData);
 
@@ -1098,7 +1098,7 @@ namespace ARKit {
 		[Export ("session:didOutputAudioSampleBuffer:")]
 		void DidOutputAudioSampleBuffer (ARSession session, CMSampleBuffer audioSampleBuffer);
 
-		
+
 		[Export ("session:didOutputCollaborationData:")]
 		void DidOutputCollaborationData (ARSession session, ARCollaborationData data);
 
@@ -1171,11 +1171,11 @@ namespace ARKit {
 		[Export ("providesAudioData")]
 		bool ProvidesAudioData { get; set; }
 
-		
+
 		[Export ("frameSemantics", ArgumentSemantic.Assign)]
 		ARFrameSemantics FrameSemantics { get; set; }
 
-		
+
 		[Static]
 		[Export ("supportsFrameSemantics:")]
 		bool SupportsFrameSemantics (ARFrameSemantics frameSemantics);
@@ -1218,7 +1218,7 @@ namespace ARKit {
 		[Export ("environmentTexturing", ArgumentSemantic.Assign)]
 		AREnvironmentTexturing EnvironmentTexturing { get; set; }
 
-		
+
 		[Export ("wantsHDREnvironmentTextures")]
 		bool WantsHdrEnvironmentTextures { get; set; }
 
@@ -1232,7 +1232,7 @@ namespace ARKit {
 		[Export ("detectionImages", ArgumentSemantic.Copy)]
 		NSSet<ARReferenceImage> DetectionImages { get; set; }
 
-		
+
 		[Export ("automaticImageScaleEstimationEnabled")]
 		bool AutomaticImageScaleEstimationEnabled { get; set; }
 
@@ -1242,16 +1242,16 @@ namespace ARKit {
 		[Export ("detectionObjects", ArgumentSemantic.Copy)]
 		NSSet<ARReferenceObject> DetectionObjects { get; set; }
 
-		
+
 		[Export ("collaborationEnabled")]
 		bool CollaborationEnabled { [Bind ("isCollaborationEnabled")] get; set; }
 
-		
+
 		[Static]
 		[Export ("supportsUserFaceTracking")]
 		bool SupportsUserFaceTracking { get; }
 
-		
+
 		[Export ("userFaceTrackingEnabled")]
 		bool UserFaceTrackingEnabled { [Bind ("userFaceTrackingEnabled")] get; set; }
 
@@ -1273,7 +1273,7 @@ namespace ARKit {
 		[Export ("sceneReconstruction", ArgumentSemantic.Assign)]
 		ARSceneReconstruction SceneReconstruction { get; set; }
 
-		
+
 		[Static]
 		[Export ("supportsFrameSemantics:")]
 		bool SupportsFrameSemantics (ARFrameSemantics frameSemantics);
@@ -1294,7 +1294,7 @@ namespace ARKit {
 		[Export ("autoFocusEnabled")]
 		bool AutoFocusEnabled { [Bind ("isAutoFocusEnabled")] get; set; }
 
-		
+
 		[Static]
 		[Export ("supportsFrameSemantics:")]
 		bool SupportsFrameSemantics (ARFrameSemantics frameSemantics);
@@ -1339,25 +1339,25 @@ namespace ARKit {
 		[Export ("supportedVideoFormats")]
 		ARVideoFormat [] GetSupportedVideoFormats ();
 
-		
+
 		[Static]
 		[Export ("supportedNumberOfTrackedFaces")]
 		nint SupportedNumberOfTrackedFaces { get; }
 
-		
+
 		[Export ("maximumNumberOfTrackedFaces")]
 		nint MaximumNumberOfTrackedFaces { get; set; }
 
-		
+
 		[Static]
 		[Export ("supportsWorldTracking")]
 		bool SupportsWorldTracking { get; }
 
-		
+
 		[Export ("worldTrackingEnabled")]
 		bool WorldTrackingEnabled { [Bind ("isWorldTrackingEnabled")] get; set; }
 
-		
+
 		[Static]
 		[Export ("supportsFrameSemantics:")]
 		bool SupportsFrameSemantics (ARFrameSemantics frameSemantics);
@@ -1905,7 +1905,7 @@ namespace ARKit {
 		[Export ("referenceImage", ArgumentSemantic.Strong)]
 		ARReferenceImage ReferenceImage { get; }
 
-		
+
 		[Export ("estimatedScaleFactor")]
 		nfloat EstimatedScaleFactor { get; }
 	}
@@ -1952,7 +1952,7 @@ namespace ARKit {
 		[Export ("maximumNumberOfTrackedImages")]
 		nint MaximumNumberOfTrackedImages { get; set; }
 
-		
+
 		[Static]
 		[Export ("supportsFrameSemantics:")]
 		bool SupportsFrameSemantics (ARFrameSemantics frameSemantics);
@@ -1978,7 +1978,7 @@ namespace ARKit {
 		[Export ("planeDetection", ArgumentSemantic.Assign)]
 		ARPlaneDetection PlaneDetection { get; set; }
 
-		
+
 		[Static]
 		[Export ("supportsFrameSemantics:")]
 		bool SupportsFrameSemantics (ARFrameSemantics frameSemantics);
@@ -2040,7 +2040,7 @@ namespace ARKit {
 			get;
 		}
 
-		
+
 		[NullAllowed, Export ("resourceGroupName", ArgumentSemantic.Strong)]
 		string ResourceGroupName { get; }
 
@@ -2111,7 +2111,7 @@ namespace ARKit {
 		ARPointCloud RawFeaturePoints { get; }
 	}
 
-	
+
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface ARBody2D {
@@ -2120,7 +2120,7 @@ namespace ARKit {
 		ARSkeleton2D Skeleton { get; }
 	}
 
-	
+
 	[BaseType (typeof (ARAnchor))]
 	[DisableDefaultCtor]
 	interface ARBodyAnchor : ARTrackable {
@@ -2138,7 +2138,7 @@ namespace ARKit {
 		nfloat EstimatedScaleFactor { get; }
 	}
 
-	
+
 	[BaseType (typeof (UIView))]
 	interface ARCoachingOverlayView {
 
@@ -2175,7 +2175,7 @@ namespace ARKit {
 
 	interface IARCoachingOverlayViewDelegate { }
 
-	
+
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface ARCoachingOverlayViewDelegate {
@@ -2190,7 +2190,7 @@ namespace ARKit {
 		void DidDeactivate (ARCoachingOverlayView coachingOverlayView);
 	}
 
-	
+
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface ARCollaborationData : NSSecureCoding {
@@ -2199,7 +2199,7 @@ namespace ARKit {
 		ARCollaborationDataPriority Priority { get; }
 	}
 
-	
+
 	[BaseType (typeof (ARConfiguration))]
 	interface ARBodyTrackingConfiguration {
 
@@ -2249,7 +2249,7 @@ namespace ARKit {
 		bool SupportsAppClipCodeTracking { get; }
 	}
 
-	
+
 	[BaseType (typeof (ARConfiguration))]
 	interface ARPositionalTrackingConfiguration {
 
@@ -2269,7 +2269,7 @@ namespace ARKit {
 		bool SupportsFrameSemantics (ARFrameSemantics frameSemantics);
 	}
 
-	
+
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface ARMatteGenerator {
@@ -2285,7 +2285,7 @@ namespace ARKit {
 		IMTLTexture GenerateDilatedDepth (ARFrame frame, IMTLCommandBuffer commandBuffer);
 	}
 
-	
+
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface ARRaycastQuery {
@@ -2313,7 +2313,7 @@ namespace ARKit {
 		ARRaycastTargetAlignment TargetAlignment { get; }
 	}
 
-	
+
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface ARRaycastResult {
@@ -2336,7 +2336,7 @@ namespace ARKit {
 
 	interface IARSessionProviding { }
 
-	
+
 	[Protocol]
 	interface ARSessionProviding {
 
@@ -2345,7 +2345,7 @@ namespace ARKit {
 		ARSession Session { get; }
 	}
 
-	
+
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface ARSkeleton {
@@ -2360,7 +2360,7 @@ namespace ARKit {
 		bool IsJointTracked (nint jointIndex);
 	}
 
-	
+
 	[BaseType (typeof (ARSkeleton))]
 	[DisableDefaultCtor]
 	interface ARSkeleton3D {
@@ -2390,7 +2390,7 @@ namespace ARKit {
 		Matrix4 GetLocalTransform (ARSkeletonJointName jointName);
 	}
 
-	
+
 	[BaseType (typeof (ARSkeleton))]
 	[DisableDefaultCtor]
 	interface ARSkeleton2D {
@@ -2408,7 +2408,7 @@ namespace ARKit {
 		Vector2 GetLandmarkPoint (ARSkeletonJointName jointName);
 	}
 
-	
+
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface ARSkeletonDefinition {
@@ -2441,7 +2441,7 @@ namespace ARKit {
 		nuint GetJointIndex (ARSkeletonJointName jointName);
 	}
 
-	
+
 	enum ARSkeletonJointName {
 
 		[Field ("ARSkeletonJointNameRoot")]
@@ -2469,7 +2469,7 @@ namespace ARKit {
 		RightShoulder,
 	}
 
-	
+
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface ARTrackedRaycast {
@@ -2478,7 +2478,7 @@ namespace ARKit {
 		void StopTracking ();
 	}
 
-	
+
 	[BaseType (typeof (ARAnchor))]
 	[DisableDefaultCtor]
 	interface ARParticipantAnchor {

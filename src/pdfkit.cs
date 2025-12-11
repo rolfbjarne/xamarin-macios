@@ -3792,7 +3792,7 @@ namespace PdfKit {
 			""")]
 		void OpenPdf (PdfView sender, PdfActionRemoteGoTo action);
 
-		
+
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("PDFViewParentViewController")]

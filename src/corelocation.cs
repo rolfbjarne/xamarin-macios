@@ -1315,7 +1315,7 @@ namespace CoreLocation {
 		[Export ("initWithProximityUUID:identifier:")]
 		NativeHandle _InitWithProximityUuid (NSUuid proximityUuid, string identifier);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Internal] // signature conflict with deprecated API
 		[Export ("initWithUUID:identifier:")]
@@ -1332,7 +1332,7 @@ namespace CoreLocation {
 		[Export ("initWithProximityUUID:major:identifier:")]
 		NativeHandle _InitWithProximityUuid (NSUuid proximityUuid, ushort major, string identifier);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Internal] // signature conflict with deprecated API
 		[Export ("initWithUUID:major:identifier:")]
@@ -1350,13 +1350,13 @@ namespace CoreLocation {
 		[Export ("initWithProximityUUID:major:minor:identifier:")]
 		NativeHandle _InitWithProximityUuid (NSUuid proximityUuid, ushort major, ushort minor, string identifier);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Internal] // signature conflict with deprecated API
 		[Export ("initWithUUID:major:minor:identifier:")]
 		IntPtr _InitWithUuid (NSUuid uuid, ushort major, ushort minor, string identifier);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("initWithBeaconIdentityConstraint:identifier:")]
 		NativeHandle Constructor (CLBeaconIdentityConstraint beaconIdentityConstraint, string identifier);
@@ -1385,7 +1385,7 @@ namespace CoreLocation {
 		[Export ("proximityUUID", ArgumentSemantic.Copy)]
 		NSUuid ProximityUuid { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("UUID", ArgumentSemantic.Copy)]
 		NSUuid Uuid { get; }
@@ -1410,7 +1410,7 @@ namespace CoreLocation {
 		[Export ("notifyEntryStateOnDisplay", ArgumentSemantic.Assign)]
 		bool NotifyEntryStateOnDisplay { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("beaconIdentityConstraint", ArgumentSemantic.Copy)]
 		CLBeaconIdentityConstraint BeaconIdentityConstraint { get; }
@@ -1432,7 +1432,7 @@ namespace CoreLocation {
 		[Export ("proximityUUID", ArgumentSemantic.Copy)]
 		NSUuid ProximityUuid { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("UUID", ArgumentSemantic.Copy)]
 		NSUuid Uuid { get; }
@@ -1476,7 +1476,7 @@ namespace CoreLocation {
 		[Export ("rssi")]
 		nint Rssi { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("timestamp", ArgumentSemantic.Copy)]
 		NSDate Timestamp { get; }

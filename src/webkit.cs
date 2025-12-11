@@ -5243,7 +5243,7 @@ namespace WebKit {
 	[BaseType (typeof (NSObject))]
 	interface WKNavigation {
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("effectiveContentMode")]
 		WKContentMode EffectiveContentMode { get; }
@@ -5319,7 +5319,7 @@ namespace WebKit {
 		[Export ("webView:decidePolicyForNavigationResponse:decisionHandler:")]
 		void DecidePolicy (WKWebView webView, WKNavigationResponse navigationResponse, Action<WKNavigationResponsePolicy> decisionHandler);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("webView:decidePolicyForNavigationAction:preferences:decisionHandler:")]
 		void DecidePolicy (WKWebView webView, WKNavigationAction navigationAction, WKWebpagePreferences preferences, Action<WKNavigationActionPolicy, WKWebpagePreferences> decisionHandler);
@@ -5464,7 +5464,7 @@ namespace WebKit {
 		[Export ("tabFocusesLinks")]
 		bool TabFocusesLinks { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("fraudulentWebsiteWarningEnabled")]
 		bool FraudulentWebsiteWarningEnabled { [Bind ("isFraudulentWebsiteWarningEnabled")] get; set; }
@@ -5574,7 +5574,7 @@ namespace WebKit {
 		[NullAllowed]
 		NSNumber SnapshotWidth { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("afterScreenUpdates")]
 		bool AfterScreenUpdates { get; set; }
@@ -6001,24 +6001,24 @@ namespace WebKit {
 		void CommitPreviewingViewController (WKWebView webView, UIViewController previewingViewController);
 
 		[MacCatalyst (13, 1)]
-		
+
 		[NoMac]
 		[Export ("webView:contextMenuConfigurationForElement:completionHandler:")]
 		void SetContextMenuConfiguration (WKWebView webView, WKContextMenuElementInfo elementInfo, Action<UIContextMenuConfiguration> completionHandler);
 
 		[MacCatalyst (13, 1)]
-		
+
 		[NoMac]
 		[Export ("webView:contextMenuForElement:willCommitWithAnimator:")]
 		void WillCommitContextMenu (WKWebView webView, WKContextMenuElementInfo elementInfo, IUIContextMenuInteractionCommitAnimating animator);
 
-		
+
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("webView:contextMenuWillPresentForElement:")]
 		void ContextMenuWillPresent (WKWebView webView, WKContextMenuElementInfo elementInfo);
 
-		
+
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("webView:contextMenuDidEndForElement:")]
@@ -6748,7 +6748,7 @@ namespace WebKit {
 		[return: NullAllowed]
 		IWKUrlSchemeHandler GetUrlSchemeHandler (string urlScheme);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("defaultWebpagePreferences", ArgumentSemantic.Copy)]
 		[NullAllowed]
@@ -6912,7 +6912,7 @@ namespace WebKit {
 		NSUrl LinkUrl { get; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum WKContentMode : long {
@@ -6921,7 +6921,7 @@ namespace WebKit {
 		Desktop,
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	interface WKWebpagePreferences {
@@ -6944,7 +6944,7 @@ namespace WebKit {
 	}
 
 	[NoMac]
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]

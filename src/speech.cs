@@ -102,7 +102,7 @@ namespace Speech {
 		[NullAllowed, Export ("interactionIdentifier")]
 		string InteractionIdentifier { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("requiresOnDeviceRecognition")]
 		bool RequiresOnDeviceRecognition { get; set; }
@@ -318,7 +318,7 @@ namespace Speech {
 		[Export ("locale", ArgumentSemantic.Copy)]
 		NSLocale Locale { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("supportsOnDeviceRecognition")]
 		bool SupportsOnDeviceRecognition { get; set; }
@@ -375,7 +375,7 @@ namespace Speech {
 		[Export ("segments", ArgumentSemantic.Copy)]
 		SFTranscriptionSegment [] Segments { get; }
 
-		
+
 		[Export ("speakingRate")]
 		[Deprecated (PlatformName.iOS, 14, 5)]
 		[MacCatalyst (13, 1)]
@@ -384,7 +384,7 @@ namespace Speech {
 		[Advice ("Use 'SpeakingRate' from 'SFSpeechRecognitionMetadata' instead.")]
 		double SpeakingRate { get; }
 
-		
+
 		[Export ("averagePauseDuration")]
 		[Deprecated (PlatformName.iOS, 14, 5)]
 		[MacCatalyst (13, 1)]
@@ -417,7 +417,7 @@ namespace Speech {
 		[Export ("alternativeSubstrings")]
 		string [] AlternativeSubstrings { get; }
 
-		
+
 		[NullAllowed, Export ("voiceAnalytics")]
 		[Deprecated (PlatformName.iOS, 14, 5)]
 		[MacCatalyst (13, 1)]
@@ -427,7 +427,7 @@ namespace Speech {
 		SFVoiceAnalytics VoiceAnalytics { get; }
 	}
 
-	
+
 	[MacCatalyst (13, 1), TV (18, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
@@ -440,7 +440,7 @@ namespace Speech {
 		double FrameDuration { get; }
 	}
 
-	
+
 	[MacCatalyst (13, 1), TV (18, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]

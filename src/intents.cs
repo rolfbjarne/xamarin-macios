@@ -91,13 +91,13 @@ namespace Intents {
 		/// <summary>A voicemail.</summary>
 		[MacCatalyst (13, 1)]
 		Voicemail,
-		
+
 		[MacCatalyst (13, 1)]
 		Ringing,
-		
+
 		[MacCatalyst (13, 1)]
 		InProgress,
-		
+
 		[MacCatalyst (13, 1)]
 		OnHold,
 	}
@@ -835,7 +835,7 @@ namespace Intents {
 		FailureRequiringAppLaunchServiceTemporarilyUnavailable,
 		/// <summary>Developers should use this code to indicate a failure because the previous ride has not been completed.</summary>
 		FailureRequiringAppLaunchPreviousRideNeedsCompletion,
-		
+
 		[MacCatalyst (13, 1)]
 		FailureRequiringAppLaunchRideScheduledTooFar,
 	}
@@ -1392,19 +1392,19 @@ namespace Intents {
 		/// <summary>Identifies a notebook item group name.</summary>
 		[MacCatalyst (13, 1)]
 		NotebookItemGroupName,
-		
+
 		[MacCatalyst (13, 1)]
 		MediaPlaylistTitle = 700,
-		
+
 		[MacCatalyst (13, 1)]
 		MediaMusicArtistName,
-		
+
 		[MacCatalyst (13, 1)]
 		MediaAudiobookTitle,
-		
+
 		[MacCatalyst (13, 1)]
 		MediaAudiobookAuthorName,
-		
+
 		[MacCatalyst (13, 1)]
 		MediaShowTitle,
 	}
@@ -1801,7 +1801,7 @@ namespace Intents {
 		Voicemail,
 		/// <summary>Indicates that the call destination is a redial of an earlier call.</summary>
 		Redial,
-		
+
 		[MacCatalyst (13, 1)]
 		CallBack,
 	}
@@ -1822,13 +1822,13 @@ namespace Intents {
 		Latest = (1 << 3),
 		/// <summary>Indicates that voicemails should be searched.</summary>
 		Voicemail = (1 << 4),
-		
+
 		[MacCatalyst (13, 1)]
 		Ringing = (1 << 5),
-		
+
 		[MacCatalyst (13, 1)]
 		InProgress = (1 << 6),
-		
+
 		[MacCatalyst (13, 1)]
 		OnHold = (1 << 7),
 	}
@@ -2375,19 +2375,19 @@ namespace Intents {
 		TVShowEpisode,
 		/// <summary>To be added.</summary>
 		MusicVideo,
-		
+
 		[MacCatalyst (13, 1)]
 		PodcastStation,
-		
+
 		[MacCatalyst (13, 1)]
 		RadioStation,
-		
+
 		[MacCatalyst (13, 1)]
 		Station,
-		
+
 		[MacCatalyst (13, 1)]
 		Music,
-		
+
 		[MacCatalyst (13, 1)]
 		AlgorithmicRadioStation,
 		[iOS (13, 4, 1)]
@@ -2454,16 +2454,16 @@ namespace Intents {
 		School,
 		/// <summary>To be added.</summary>
 		Gym,
-		
+
 		[MacCatalyst (13, 1)]
 		Commute,
-		
+
 		[MacCatalyst (13, 1)]
 		HeadphonesConnected,
-		
+
 		[MacCatalyst (13, 1)]
 		ActiveWorkout,
-		
+
 		[MacCatalyst (13, 1)]
 		PhysicalActivityIncomplete,
 	}
@@ -4948,14 +4948,14 @@ namespace Intents {
 		INIntegerResolutionResult Unsupported { get; }
 
 		[New]
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("unsupportedWithReason:")]
 		INIntegerResolutionResult GetUnsupported (nint reason);
 
 		[New]
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("confirmationRequiredWithItemToConfirm:forReason:")]
@@ -10711,7 +10711,7 @@ namespace Intents {
 	[BaseType (typeof (INIntent))]
 	interface INAddTasksIntent {
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("initWithTargetTaskList:taskTitles:spatialEventTrigger:temporalEventTrigger:priority:")]
 		[DesignatedInitializer]
@@ -10734,7 +10734,7 @@ namespace Intents {
 		[NullAllowed, Export ("temporalEventTrigger", ArgumentSemantic.Copy)]
 		INTemporalEventTrigger TemporalEventTrigger { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("priority", ArgumentSemantic.Assign)]
 		INTaskPriority Priority { get; }
@@ -10771,7 +10771,7 @@ namespace Intents {
 		[Export ("resolveTargetTaskListForAddTasks:withCompletion:")]
 		void ResolveTargetTaskList (INAddTasksIntent intent, Action<INTaskListResolutionResult> completion);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("resolveTargetTaskListForAddTasks:completion:")]
 		void ResolveTargetTaskList (INAddTasksIntent intent, Action<INAddTasksTargetTaskListResolutionResult> completionHandler);
@@ -10799,12 +10799,12 @@ namespace Intents {
 		[Export ("resolveTemporalEventTriggerForAddTasks:withCompletion:")]
 		void ResolveTemporalEventTrigger (INAddTasksIntent intent, Action<INTemporalEventTriggerResolutionResult> completion);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("resolveTemporalEventTriggerForAddTasks:completion:")]
 		void ResolveTemporalEventTrigger (INAddTasksIntent intent, Action<INAddTasksTemporalEventTriggerResolutionResult> completionHandler);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("resolvePriorityForAddTasks:withCompletion:")]
 		void ResolvePriority (INAddTasksIntent intent, Action<INTaskPriorityResolutionResult> completion);
@@ -11050,7 +11050,7 @@ namespace Intents {
 		[Deprecated (PlatformName.iOS, 14, 5, message: "Use '.ctor (string, NSDate, INCallRecordType, INCallCapability, double?, bool?, int?)' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 14, 5, message: "Use '.ctor (string, NSDate, INCallRecordType, INCallCapability, double?, bool?, int?)' instead.")]
 		[Deprecated (PlatformName.MacOSX, 11, 3, message: "Use '.ctor (string, NSDate, INCallRecordType, INCallCapability, double?, bool?, int?)' instead.")]
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("initWithIdentifier:dateCreated:caller:callRecordType:callCapability:callDuration:unseen:numberOfCalls:")]
 		NativeHandle Constructor (string identifier, [NullAllowed] NSDate dateCreated, [NullAllowed] INPerson caller, INCallRecordType callRecordType, INCallCapability callCapability, [NullAllowed][BindAs (typeof (double?))] NSNumber callDuration, [NullAllowed][BindAs (typeof (bool?))] NSNumber unseen, [NullAllowed][BindAs (typeof (int?))] NSNumber numberOfCalls);
@@ -11098,7 +11098,7 @@ namespace Intents {
 		NSNumber WeakUnseen { get; }
 
 		[BindAs (typeof (int?))]
-		
+
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("numberOfCalls", ArgumentSemantic.Copy)]
 		NSNumber NumberOfCalls { get; }
@@ -12123,7 +12123,7 @@ namespace Intents {
 		[Export ("initWithTitle:content:itemType:status:location:locationSearchType:dateTime:dateSearchType:notebookItemIdentifier:")]
 		NativeHandle Constructor ([NullAllowed] INSpeakableString title, [NullAllowed] string content, INNotebookItemType itemType, INTaskStatus status, [NullAllowed] CLPlacemark location, INLocationSearchType locationSearchType, [NullAllowed] INDateComponentsRange dateTime, INDateSearchType dateSearchType, [NullAllowed] string notebookItemIdentifier);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("initWithTitle:content:itemType:status:location:locationSearchType:dateTime:dateSearchType:temporalEventTriggerTypes:taskPriority:notebookItemIdentifier:")]
 		[DesignatedInitializer]
@@ -12153,12 +12153,12 @@ namespace Intents {
 		[Export ("dateSearchType", ArgumentSemantic.Assign)]
 		INDateSearchType DateSearchType { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("temporalEventTriggerTypes", ArgumentSemantic.Assign)]
 		INTemporalEventTriggerTypeOptions TemporalEventTriggerTypes { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("taskPriority", ArgumentSemantic.Assign)]
 		INTaskPriority TaskPriority { get; }
@@ -12246,12 +12246,12 @@ namespace Intents {
 		[Export ("resolveDateSearchTypeForSearchForNotebookItems:withCompletion:")]
 		void ResolveDateSearchType (INSearchForNotebookItemsIntent intent, Action<INDateSearchTypeResolutionResult> completion);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("resolveTemporalEventTriggerTypesForSearchForNotebookItems:withCompletion:")]
 		void ResolveTemporalEventTriggerTypes (INSearchForNotebookItemsIntent intent, Action<INTemporalEventTriggerTypeOptionsResolutionResult> completion);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("resolveTaskPriorityForSearchForNotebookItems:withCompletion:")]
 		void ResolveTaskPriority (INSearchForNotebookItemsIntent intent, Action<INTaskPriorityResolutionResult> completion);
@@ -12527,7 +12527,7 @@ namespace Intents {
 	[BaseType (typeof (INIntent))]
 	interface INSetTaskAttributeIntent {
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("initWithTargetTask:taskTitle:status:priority:spatialEventTrigger:temporalEventTrigger:")]
 		[DesignatedInitializer]
@@ -12541,7 +12541,7 @@ namespace Intents {
 		[NullAllowed, Export ("targetTask", ArgumentSemantic.Copy)]
 		INTask TargetTask { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("taskTitle", ArgumentSemantic.Copy)]
 		INSpeakableString TaskTitle { get; }
@@ -12549,7 +12549,7 @@ namespace Intents {
 		[Export ("status", ArgumentSemantic.Assign)]
 		INTaskStatus Status { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("priority", ArgumentSemantic.Assign)]
 		INTaskPriority Priority { get; }
@@ -12590,7 +12590,7 @@ namespace Intents {
 		[Export ("resolveTargetTaskForSetTaskAttribute:withCompletion:")]
 		void ResolveTargetTask (INSetTaskAttributeIntent intent, Action<INTaskResolutionResult> completion);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("resolveTaskTitleForSetTaskAttribute:withCompletion:")]
 		void ResolveTaskTitle (INSetTaskAttributeIntent intent, Action<INSpeakableStringResolutionResult> completion);
@@ -12602,7 +12602,7 @@ namespace Intents {
 		[Export ("resolveStatusForSetTaskAttribute:withCompletion:")]
 		void ResolveStatus (INSetTaskAttributeIntent intent, Action<INTaskStatusResolutionResult> completion);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("resolvePriorityForSetTaskAttribute:withCompletion:")]
 		void ResolvePriority (INSetTaskAttributeIntent intent, Action<INTaskPriorityResolutionResult> completion);
@@ -12623,7 +12623,7 @@ namespace Intents {
 		[Export ("resolveTemporalEventTriggerForSetTaskAttribute:withCompletion:")]
 		void ResolveTemporalEventTrigger (INSetTaskAttributeIntent intent, Action<INTemporalEventTriggerResolutionResult> completion);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("resolveTemporalEventTriggerForSetTaskAttribute:completion:")]
 		void ResolveTemporalEventTrigger (INSetTaskAttributeIntent intent, Action<INSetTaskAttributeTemporalEventTriggerResolutionResult> completionHandler);
@@ -12725,7 +12725,7 @@ namespace Intents {
 	[DisableDefaultCtor]
 	interface INTask : NSCopying, NSSecureCoding {
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("initWithTitle:status:taskType:spatialEventTrigger:temporalEventTrigger:createdDateComponents:modifiedDateComponents:identifier:priority:")]
 		[DesignatedInitializer]
@@ -12758,7 +12758,7 @@ namespace Intents {
 		[NullAllowed, Export ("identifier")]
 		string Identifier { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("priority", ArgumentSemantic.Assign)]
 		INTaskPriority Priority { get; }
@@ -13233,7 +13233,7 @@ namespace Intents {
 	[DisableDefaultCtor]
 	interface INMediaItem : NSCopying, NSSecureCoding {
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("initWithIdentifier:title:type:artwork:artist:")]
 		[DesignatedInitializer]
@@ -13254,7 +13254,7 @@ namespace Intents {
 		[NullAllowed, Export ("artwork", ArgumentSemantic.Copy)]
 		INImage Artwork { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("artist")]
 		string Artist { get; }
@@ -13295,7 +13295,7 @@ namespace Intents {
 		//string PronunciationHint { get; }
 
 		[Sealed]
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("alternativeSpeakableMatches")]
 		[return: NullAllowed]
@@ -13312,7 +13312,7 @@ namespace Intents {
 		INImage DisplayImage { get; set; }
 
 		// Not [Sealed] since the 'AlternativeSpeakableMatches' inlined property is read-only
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("setAlternativeSpeakableMatches:")]
 		void SetAlternativeSpeakableMatches ([NullAllowed] INSpeakableString [] alternativeSpeakableMatches);
@@ -13324,7 +13324,7 @@ namespace Intents {
 	[DisableDefaultCtor]
 	interface INPlayMediaIntent {
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("initWithMediaItems:mediaContainer:playShuffled:playbackRepeatMode:resumePlayback:playbackQueueLocation:playbackSpeed:mediaSearch:")]
 		[DesignatedInitializer]
@@ -13353,18 +13353,18 @@ namespace Intents {
 		[NullAllowed, Export ("resumePlayback", ArgumentSemantic.Copy)]
 		NSNumber ResumePlayback { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("playbackQueueLocation", ArgumentSemantic.Assign)]
 		INPlaybackQueueLocation PlaybackQueueLocation { get; }
 
 		[BindAs (typeof (double?))]
-		
+
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("playbackSpeed", ArgumentSemantic.Copy)]
 		NSNumber PlaybackSpeed { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("mediaSearch", ArgumentSemantic.Copy)]
 		INMediaSearch MediaSearch { get; }
@@ -13390,32 +13390,32 @@ namespace Intents {
 		[Export ("confirmPlayMedia:completion:")]
 		void Confirm (INPlayMediaIntent intent, Action<INPlayMediaIntentResponse> completion);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("resolveMediaItemsForPlayMedia:withCompletion:")]
 		void ResolveMediaItems (INPlayMediaIntent intent, Action<NSArray<INPlayMediaMediaItemResolutionResult>> completion);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("resolvePlayShuffledForPlayMedia:withCompletion:")]
 		void ResolvePlayShuffled (INPlayMediaIntent intent, Action<INBooleanResolutionResult> completion);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("resolvePlaybackRepeatModeForPlayMedia:withCompletion:")]
 		void ResolvePlaybackRepeatMode (INPlayMediaIntent intent, Action<INPlaybackRepeatModeResolutionResult> completion);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("resolveResumePlaybackForPlayMedia:withCompletion:")]
 		void ResolveResumePlayback (INPlayMediaIntent intent, Action<INBooleanResolutionResult> completion);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("resolvePlaybackQueueLocationForPlayMedia:withCompletion:")]
 		void ResolvePlaybackQueueLocation (INPlayMediaIntent intent, Action<INPlaybackQueueLocationResolutionResult> completion);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("resolvePlaybackSpeedForPlayMedia:withCompletion:")]
 		void ResolvePlaybackSpeed (INPlayMediaIntent intent, Action<INPlayMediaPlaybackSpeedResolutionResult> completion);

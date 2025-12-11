@@ -1258,12 +1258,12 @@ namespace CoreAnimation {
 		CACornerMask MaskedCorners { get; set; }
 
 		[BindAs (typeof (CACornerCurve))]
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("cornerCurve")]
 		NSString CornerCurve { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("cornerCurveExpansionFactor:")]
@@ -1306,7 +1306,7 @@ namespace CoreAnimation {
 		CALayer GetLayerWithRemoteClientId (uint client_id);
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	enum CACornerCurve {
 		[DefaultEnumValue]
@@ -1418,12 +1418,12 @@ namespace CoreAnimation {
 		[Export ("maximumDrawableCount")]
 		nuint MaximumDrawableCount { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("colorspace", ArgumentSemantic.Assign)]
 		CGColorSpace ColorSpace { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("preferredDevice")]
 		IMTLDevice PreferredDevice { get; }

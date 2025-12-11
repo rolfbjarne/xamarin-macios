@@ -13,7 +13,7 @@ using NSImage = Foundation.NSObject;
 
 namespace QuickLookThumbnailing {
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Native]
 	[ErrorDomain ("QLThumbnailErrorDomain")]
@@ -26,7 +26,7 @@ namespace QuickLookThumbnailing {
 		RequestCancelled,
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Flags]
 	[Native]
@@ -38,7 +38,7 @@ namespace QuickLookThumbnailing {
 		All = UInt64.MaxValue,
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum QLThumbnailRepresentationType : long {
@@ -47,7 +47,7 @@ namespace QuickLookThumbnailing {
 		Thumbnail = 2,
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
@@ -81,7 +81,7 @@ namespace QuickLookThumbnailing {
 		void SaveBestRepresentationAsContent (QLThumbnailGenerationRequest request, NSUrl fileUrl, string contentType, Action<NSError> completionHandler);
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]

@@ -142,7 +142,7 @@ namespace CoreHaptics {
 
 	interface ICHHapticDeviceCapability { }
 
-	
+
 	[TV (14, 0)]
 	[MacCatalyst (13, 1)]
 	[Protocol]

@@ -5001,10 +5001,10 @@ namespace UIKit {
 		[NoiOS, NoTV, NoMacCatalyst]
 		float Timeout { get; set; }
 
-		
+
 		NSTextScalingType TargetTextScaling { get; set; }
 
-		
+
 		NSTextScalingType SourceTextScaling { get; set; }
 
 		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]

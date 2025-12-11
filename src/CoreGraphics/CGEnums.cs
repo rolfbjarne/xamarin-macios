@@ -168,7 +168,7 @@ namespace CoreGraphics {
 		PlusLighter,
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	public enum CGPdfTagType /* int32_t */ {
 		Document = 100,

@@ -976,7 +976,7 @@ namespace Foundation {
 		// inlined from NSAttributedStringWebKitAdditions category (since they are all static members)
 
 		[NoTV] // really inside WebKit
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("loadFromHTMLWithRequest:options:completionHandler:")]
@@ -986,7 +986,7 @@ namespace Foundation {
 		void LoadFromHtml (NSUrlRequest request, NSDictionary options, NSAttributedStringCompletionHandler completionHandler);
 
 		[NoTV] // really inside WebKit
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Async (ResultTypeName = "NSLoadFromHtmlResult")]
@@ -994,7 +994,7 @@ namespace Foundation {
 		void LoadFromHtml (NSUrlRequest request, NSAttributedStringDocumentAttributes options, NSAttributedStringCompletionHandler completionHandler);
 
 		[NoTV] // really inside WebKit
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("loadFromHTMLWithFileURL:options:completionHandler:")]
@@ -1004,7 +1004,7 @@ namespace Foundation {
 		void LoadFromHtml (NSUrl fileUrl, NSDictionary options, NSAttributedStringCompletionHandler completionHandler);
 
 		[NoTV] // really inside WebKit
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Async (ResultTypeName = "NSLoadFromHtmlResult")]
@@ -1012,7 +1012,7 @@ namespace Foundation {
 		void LoadFromHtml (NSUrl fileUrl, NSAttributedStringDocumentAttributes options, NSAttributedStringCompletionHandler completionHandler);
 
 		[NoTV] // really inside WebKit
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("loadFromHTMLWithString:options:completionHandler:")]
@@ -1022,7 +1022,7 @@ namespace Foundation {
 		void LoadFromHtml (string @string, NSDictionary options, NSAttributedStringCompletionHandler completionHandler);
 
 		[NoTV] // really inside WebKit
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Async (ResultTypeName = "NSLoadFromHtmlResult")]
@@ -1030,7 +1030,7 @@ namespace Foundation {
 		void LoadFromHtml (string @string, NSAttributedStringDocumentAttributes options, NSAttributedStringCompletionHandler completionHandler);
 
 		[NoTV] // really inside WebKit
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("loadFromHTMLWithData:options:completionHandler:")]
@@ -1040,7 +1040,7 @@ namespace Foundation {
 		void LoadFromHtml (NSData data, NSDictionary options, NSAttributedStringCompletionHandler completionHandler);
 
 		[NoTV] // really inside WebKit
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Async (ResultTypeName = "NSLoadFromHtmlResult")]
@@ -1291,7 +1291,7 @@ namespace Foundation {
 	}
 
 	[NoTV] // really inside WebKit
-	
+
 	[MacCatalyst (13, 1)]
 	delegate void NSAttributedStringCompletionHandler ([NullAllowed] NSAttributedString attributedString, [NullAllowed] NSDictionary<NSString, NSObject> attributes, [NullAllowed] NSError error);
 
@@ -22117,7 +22117,7 @@ namespace Foundation {
 		NSXpcConnection CurrentConnection { [return: NullAllowed] get; }
 
 		[Export ("scheduleSendBarrierBlock:")]
-		
+
 		[MacCatalyst (13, 1)]
 		void ScheduleSendBarrier (Action block);
 
@@ -23129,13 +23129,13 @@ namespace Foundation {
 		// [Export ("TextLayoutSectionsAttribute")]
 		// NSTextLayoutSection[] TextLayout { get; set; }
 
-		
+
 		NSTextScalingType TextScaling { get; set; }
 
-		
+
 		NSTextScalingType SourceTextScaling { get; set; }
 
-		
+
 		float CocoaVersion { get; set; }
 
 		[NoiOS, NoTV, NoMacCatalyst]

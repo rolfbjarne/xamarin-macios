@@ -33,7 +33,7 @@ using CoreGraphics;
 
 namespace PencilKit {
 
-	
+
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[Native]
 	enum PKEraserType : long {
@@ -43,7 +43,7 @@ namespace PencilKit {
 		FixedWidthBitmap,
 	}
 
-	
+
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	enum PKInkType {
 		[Field ("PKInkTypePen")]
@@ -171,7 +171,7 @@ namespace PencilKit {
 		}
 	}
 
-	
+
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[BaseType (typeof (NSObject))]
 	[DesignatedDefaultCtor]
@@ -219,7 +219,7 @@ namespace PencilKit {
 		PKContentVersion RequiredContentVersion { get; }
 	}
 
-	
+
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[BaseType (typeof (PKTool))]
 	[DisableDefaultCtor]
@@ -257,7 +257,7 @@ namespace PencilKit {
 		nfloat GetMaximumWidth (PKEraserType eraserType);
 	}
 
-	
+
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[BaseType (typeof (PKTool))]
 	[DisableDefaultCtor]
@@ -327,13 +327,13 @@ namespace PencilKit {
 		CGColor InvertColor (CGColor color);
 	}
 
-	
+
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[BaseType (typeof (PKTool))]
 	[DesignatedDefaultCtor]
 	interface PKLassoTool { }
 
-	
+
 	[Introduced (PlatformName.MacCatalyst, 14, 0)]
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]

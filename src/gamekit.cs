@@ -793,7 +793,7 @@ namespace GameKit {
 		[Export ("teamPlayerID", ArgumentSemantic.Retain)]
 		string TeamPlayerId { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("scopedIDsArePersistent")]
 		bool ScopedIdsArePersistent { get; }
@@ -1254,18 +1254,18 @@ namespace GameKit {
 		[Export ("resolveConflictingSavedGames:withData:completionHandler:")]
 		void ResolveConflictingSavedGames (GKSavedGame [] conflictingSavedGames, NSData data, [NullAllowed] Action<GKSavedGame [], NSError> handler);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("multiplayerGamingRestricted")]
 		bool MultiplayerGamingRestricted { [Bind ("isMultiplayerGamingRestricted")] get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("loadChallengableFriendsWithCompletionHandler:")]
 		[Async]
 		void LoadChallengeableFriends ([NullAllowed] Action<GKPlayer [], NSError> completionHandler);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("local")]
@@ -1719,7 +1719,7 @@ namespace GameKit {
 		[Deprecated (PlatformName.iOS, 14, 0, message: "Use 'GKMatchmakerViewController.MatchmakingMode' instead.")]
 		[Deprecated (PlatformName.TvOS, 14, 0, message: "Use 'GKMatchmakerViewController.MatchmakingMode' instead.")]
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "Use 'GKMatchmakerViewController.MatchmakingMode' instead.")]
-		
+
 		[MacCatalyst (13, 1)]
 		[Deprecated (PlatformName.MacCatalyst, 14, 0, message: "Use 'GKMatchmakerViewController.MatchmakingMode' instead.")]
 		[Export ("restrictToAutomatch")]

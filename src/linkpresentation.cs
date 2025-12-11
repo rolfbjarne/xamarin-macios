@@ -19,7 +19,7 @@ using CoreGraphics;
 namespace LinkPresentation {
 
 	[ErrorDomain ("LPErrorDomain")]
-	
+
 	[TV (14, 0)]
 	[MacCatalyst (13, 1)]
 	[Native]
@@ -31,7 +31,7 @@ namespace LinkPresentation {
 		MetadataFetchNotAllowed,
 	}
 
-	
+
 	[TV (14, 0)]
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -59,7 +59,7 @@ namespace LinkPresentation {
 		NSUrl RemoteVideoUrl { get; set; }
 	}
 
-	
+
 	[TV (14, 0)]
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (UIView))]
@@ -79,7 +79,7 @@ namespace LinkPresentation {
 		LPLinkMetadata Metadata { get; set; }
 	}
 
-	
+
 	[TV (18, 0)]
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]

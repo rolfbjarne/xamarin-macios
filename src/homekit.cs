@@ -2712,7 +2712,7 @@ namespace HomeKit {
 		[Export ("initWithURL:")]
 		NativeHandle Constructor ([NullAllowed] NSUrl setupPayloadUrl);
 
-		
+
 		[Export ("initWithURL:ownershipToken:")]
 		NativeHandle Constructor (NSUrl setupPayloadUrl, [NullAllowed] HMAccessoryOwnershipToken ownershipToken);
 	}

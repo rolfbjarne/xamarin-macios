@@ -119,7 +119,7 @@ namespace CoreData {
 		Fetch = 1,
 		/// <summary>Indicates that the fetch request was to save managed objects.</summary>
 		Save,
-		
+
 		[MacCatalyst (13, 1)]
 		BatchInsert = 5,
 		/// <summary>Indicates that the fetch request was for a batch update.</summary>

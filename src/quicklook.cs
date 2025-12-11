@@ -134,7 +134,7 @@ namespace QuickLook {
 	}
 
 	[NoMac]
-	
+
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum QLPreviewItemEditingMode : long {
@@ -235,17 +235,17 @@ namespace QuickLook {
 		[return: NullAllowed]
 		UIView TransitionViewForPreviewItem (QLPreviewController controller, IQLPreviewItem item);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("previewController:editingModeForPreviewItem:"), DelegateName ("QLEditingMode"), DefaultValue ("QLPreviewItemEditingMode.Disabled")]
 		QLPreviewItemEditingMode GetEditingMode (QLPreviewController controller, IQLPreviewItem previewItem);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("previewController:didUpdateContentsOfPreviewItem:"), EventArgs ("QLPreviewControllerDelegateDidUpdate")]
 		void DidUpdateContents (QLPreviewController controller, IQLPreviewItem previewItem);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("previewController:didSaveEditedCopyOfPreviewItem:atURL:"), EventArgs ("QLPreviewControllerDelegateDidSave")]
 		void DidSaveEditedCopy (QLPreviewController controller, IQLPreviewItem previewItem, NSUrl modifiedContentsUrl);

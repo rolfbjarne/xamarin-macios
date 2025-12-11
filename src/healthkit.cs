@@ -475,42 +475,42 @@ namespace HealthKit {
 		[Field ("HKPredicateKeyPathClinicalRecordFHIRResourceType")]
 		NSString ClinicalRecordFhirResourceType { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("HKPredicateKeyPathMin")]
 		NSString Min { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("HKPredicateKeyPathAverage")]
 		NSString Average { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("HKPredicateKeyPathMax")]
 		NSString Max { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("HKPredicateKeyPathMostRecent")]
 		NSString MostRecent { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("HKPredicateKeyPathMostRecentStartDate")]
 		NSString MostRecentStartDate { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("HKPredicateKeyPathMostRecentEndDate")]
 		NSString MostRecentEndDate { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("HKPredicateKeyPathMostRecentDuration")]
 		NSString MostRecentDuration { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("HKPredicateKeyPathCount")]
 		NSString PathCount { get; }
@@ -1154,7 +1154,7 @@ namespace HealthKit {
 		HKBloodType BloodType { get; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (HKSampleType))]
 	[DisableDefaultCtor]
@@ -1741,12 +1741,12 @@ namespace HealthKit {
 		[Field ("HKMetadataKeyHeartRateEventThreshold")]
 		NSString HeartRateEventThreshold { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyAverageMETs")]
 		NSString AverageMets { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("HKMetadataKeyAudioExposureLevel")]
 		NSString AudioExposureLevel { get; }
@@ -1991,7 +1991,7 @@ namespace HealthKit {
 		[return: NullAllowed]
 		HKClinicalType GetClinicalType (HKClinicalTypeIdentifier identifier);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("audiogramSampleType")]
@@ -2073,22 +2073,22 @@ namespace HealthKit {
 	[BaseType (typeof (HKObjectType))]
 	[Abstract] // The HKSampleType class is an abstract subclass of the HKObjectType class, used to represent data samples. Never instantiate an HKSampleType object directly. Instead, you should always work with one of its concrete subclasses [...]
 	interface HKSampleType {
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("isMaximumDurationRestricted")]
 		bool IsMaximumDurationRestricted { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("maximumAllowedDuration")]
 		double MaximumAllowedDuration { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("isMinimumDurationRestricted")]
 		bool IsMinimumDurationRestricted { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("minimumAllowedDuration")]
 		double MinimumAllowedDuration { get; }
@@ -2752,12 +2752,12 @@ namespace HealthKit {
 		[NullAllowed, Export ("mostRecentQuantityDateInterval")]
 		NSDateInterval MostRecentQuantityDateInterval { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("duration")]
 		HKQuantity Duration { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("durationForSource:")]
 		[return: NullAllowed]
@@ -3179,17 +3179,17 @@ namespace HealthKit {
 		[Field ("HKQuantityTypeIdentifierHeartRateVariabilitySDNN")]
 		HeartRateVariabilitySdnn,
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("HKQuantityTypeIdentifierAppleStandTime")]
 		AppleStandTime,
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("HKQuantityTypeIdentifierEnvironmentalAudioExposure")]
 		EnvironmentalAudioExposure,
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("HKQuantityTypeIdentifierHeadphoneAudioExposure")]
 		HeadphoneAudioExposure,
@@ -3436,12 +3436,12 @@ namespace HealthKit {
 		[Field ("HKCategoryTypeIdentifierIrregularHeartRhythmEvent")]
 		IrregularHeartRhythmEvent,
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("HKCategoryTypeIdentifierAudioExposureEvent")]
 		AudioExposureEvent,
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("HKCategoryTypeIdentifierToothbrushingEvent")]
 		ToothbrushingEvent,
@@ -4020,14 +4020,14 @@ namespace HealthKit {
 		HKUnit InternationalUnit { get; }
 
 		// HKUnit (DecibelAWeightedSoundPressureLevel) Category
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("decibelAWeightedSoundPressureLevelUnit")]
 		HKUnit DecibelAWeightedSoundPressureLevelUnit { get; }
 
 		// HKUnit (HearingSensitivity) Category
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("decibelHearingLevelUnit")]
@@ -4035,13 +4035,13 @@ namespace HealthKit {
 
 		// HKUnit (Frequency) Category
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("hertzUnitWithMetricPrefix:")]
 		HKUnit GetHertzUnit (HKMetricPrefix prefix);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("hertzUnit")]
@@ -4920,7 +4920,7 @@ namespace HealthKit {
 		[Export ("workoutRouteType")]
 		HKSeriesType WorkoutRouteType { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("heartbeatSeriesType")]
@@ -5196,17 +5196,17 @@ namespace HealthKit {
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (HKQuery))]
 	interface HKQuantitySeriesSampleQuery {
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("includeSample")]
 		bool IncludeSample { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("orderByQuantitySampleStartDate")]
 		bool OrderByQuantitySampleStartDate { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("initWithQuantityType:predicate:quantityHandler:")]
 		NativeHandle Constructor (HKQuantityType quantityType, [NullAllowed] NSPredicate predicate, HKQuantitySeriesSampleQueryQuantityHandler quantityHandler);
@@ -5264,13 +5264,13 @@ namespace HealthKit {
 		[Wrap ("FinishSeries (metadata.GetDictionary (), completionHandler)")]
 		void FinishSeries ([NullAllowed] HKMetadata metadata, HKQuantitySeriesSampleBuilderFinishSeriesDelegate completionHandler);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Async]
 		[Export ("finishSeriesWithMetadata:endDate:completion:")]
 		void FinishSeries ([NullAllowed] NSDictionary metadata, [NullAllowed] NSDate endDate, HKQuantitySeriesSampleBuilderFinishSeriesDelegate completionHandler);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Async]
 		[Wrap ("FinishSeries (metadata.GetDictionary (), endDate, completionHandler)")]
@@ -5280,7 +5280,7 @@ namespace HealthKit {
 		[Export ("discard")]
 		void Discard ();
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("insertQuantity:dateInterval:error:")]
 		bool Insert (HKQuantity quantity, NSDateInterval dateInterval, [NullAllowed] out NSError error);
@@ -5498,7 +5498,7 @@ namespace HealthKit {
 		NSDateInterval MostRecentDateInterval { get; }
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (HKSeriesSample))]
 	[DisableDefaultCtor]

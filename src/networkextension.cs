@@ -166,7 +166,7 @@ namespace NetworkExtension {
 	}
 
 	[NoTV]
-	
+
 	[MacCatalyst (13, 1)]
 	[Native]
 	enum NETrafficDirection : long {
@@ -196,7 +196,7 @@ namespace NetworkExtension {
 	}
 
 	[NoTV]
-	
+
 	[MacCatalyst (13, 1)]
 	[Native]
 	enum NEFilterReportEvent : long {
@@ -408,7 +408,7 @@ namespace NetworkExtension {
 		[Export ("handleNewFlow:")]
 		bool HandleNewFlow (NEAppProxyFlow flow);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("handleNewUDPFlow:initialRemoteEndpoint:")]
 		[Deprecated (PlatformName.iOS, 18, 0, message: "Call 'HandleNewUdpFlowWithInitialFlowEndPoint' instead.")]
@@ -992,7 +992,7 @@ namespace NetworkExtension {
 		[NullAllowed, Export ("sourceAppVersion")]
 		string SourceAppVersion { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("direction")]
 		NETrafficDirection Direction { get; }
@@ -2763,7 +2763,7 @@ namespace NetworkExtension {
 		NEVpnIkev2TlsVersion MaximumTlsVersion { get; set; }
 
 		[NoMac]
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("enableFallback")]
 		bool EnableFallback { get; set; }
@@ -3731,17 +3731,17 @@ namespace NetworkExtension {
 		[Export ("action")]
 		NEFilterAction Action { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("event")]
 		NEFilterReportEvent Event { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("bytesInboundCount")]
 		nuint BytesInboundCount { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("bytesOutboundCount")]
 		nuint BytesOutboundCount { get; }
@@ -4198,7 +4198,7 @@ namespace NetworkExtension {
 		[NullAllowed, Export ("systemDNSSettings")]
 		NEDnsSettings [] SystemDnsSettings { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("handleNewUDPFlow:initialRemoteEndpoint:")]
 		[Deprecated (PlatformName.iOS, 18, 0, message: "Use 'HandleNewUdpFlowWithInitialFlowEndPoint' instead.")]
@@ -4396,23 +4396,23 @@ namespace NetworkExtension {
 		NativeHandle Constructor (NEHotspotHS20Settings hs20Settings, NEHotspotEapSettings eapSettings);
 
 		[Internal]
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("initWithSSIDPrefix:")]
 		IntPtr _InitWithSsidPrefix (string ssidPrefix);
 
 		[Internal]
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("initWithSSIDPrefix:passphrase:isWEP:")]
 		IntPtr _InitWithSsidPrefixAndPassphrase (string ssidPrefix, string passphrase, bool isWep);
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("hidden")]
 		bool Hidden { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("SSIDPrefix")]
 		string SsidPrefix { get; }

@@ -124,7 +124,7 @@ namespace GameController {
 		[Export ("value")]
 		float Value {  /* float, not CGFloat */
 			get;
-			
+
 			[MacCatalyst (13, 1)]
 			set;
 		}
@@ -157,7 +157,7 @@ namespace GameController {
 		[Export ("value")]
 		float Value {  /* float, not CGFloat */
 			get;
-			
+
 			[MacCatalyst (13, 1)]
 			set;
 		}
@@ -244,7 +244,7 @@ namespace GameController {
 		[Export ("right")]
 		GCControllerButtonInput Right { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("setValueForXAxis:yAxis:")]
 		void SetValue (float xAxis, float yAxis);

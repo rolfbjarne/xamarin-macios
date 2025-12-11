@@ -129,17 +129,17 @@ namespace HealthKit {
 	public enum HKQuantityAggregationStyle : long {
 		/// <summary>The data are cumulative.</summary>
 		Cumulative = 0,
-		
+
 		[MacCatalyst (13, 1)]
 		DiscreteArithmetic,
 		/// <summary>The data is a single value.</summary>
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'HKQuantityAggregationStyle.DiscreteArithmetic'.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'HKQuantityAggregationStyle.DiscreteArithmetic'.")]
 		Discrete = DiscreteArithmetic,
-		
+
 		[MacCatalyst (13, 1)]
 		DiscreteTemporallyWeighted,
-		
+
 		[MacCatalyst (13, 1)]
 		DiscreteEquivalentContinuousLevel,
 	}
@@ -196,10 +196,10 @@ namespace HealthKit {
 		DiscreteMax = 1 << 3,
 		/// <summary>Calculate a sum of all the matching data.</summary>
 		CumulativeSum = 1 << 4,
-		
+
 		[MacCatalyst (13, 1)]
 		MostRecent = 1 << 5,
-		
+
 		[MacCatalyst (13, 1)]
 		Duration = 1 << 6,
 	}
@@ -235,7 +235,7 @@ namespace HealthKit {
 		Giga,
 		/// <summary>The "tera-" prefix.</summary>
 		Tera,
-		
+
 		[MacCatalyst (13, 1)]
 		Femto,
 	}
@@ -413,10 +413,10 @@ namespace HealthKit {
 		/// <summary>To be added.</summary>
 		[MacCatalyst (13, 1)]
 		HandCycling,
-		
+
 		[MacCatalyst (13, 1)]
 		DiscSports,
-		
+
 		[MacCatalyst (13, 1)]
 		FitnessGaming,
 		[iOS (14, 0)]
@@ -536,7 +536,7 @@ namespace HealthKit {
 		NotApplicable = 0,
 		/// <summary>The test was negative.</summary>
 		Negative = 1,
-		
+
 		[MacCatalyst (13, 1)]
 		LuteinizingHormoneSurge = 2,
 		/// <summary>The test was positive.</summary>
@@ -545,7 +545,7 @@ namespace HealthKit {
 		Positive = LuteinizingHormoneSurge,
 		/// <summary>The test was indeterminate.</summary>
 		Indeterminate = 3,
-		
+
 		[MacCatalyst (13, 1)]
 		EstrogenSurge = 4,
 	}
@@ -560,7 +560,7 @@ namespace HealthKit {
 		Idle,
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum HKCategoryValueAudioExposureEvent : long {

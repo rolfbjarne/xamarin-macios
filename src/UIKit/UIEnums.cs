@@ -1383,7 +1383,7 @@ namespace UIKit {
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'LightContent' instead.")]
 		BlackOpaque = 2,
 
-		
+
 		[MacCatalyst (13, 1)]
 		DarkContent = 3,
 	}
@@ -1513,7 +1513,7 @@ namespace UIKit {
 	public enum UIModalPresentationStyle : long {
 		/// <summary>A non-modal presentation or dismissal.</summary>
 		None = -1,
-		
+
 		[MacCatalyst (13, 1)]
 		Automatic = -2,
 		/// <summary>A UIModalPresentationStyle that encompasses the whole screen.</summary>
@@ -2033,13 +2033,13 @@ namespace UIKit {
 		DefaultLow = 250,
 		/// <summary>Generally not used; the priority at which a view wants to conform to the value of UIView.SystemLayoutSizeFitting.</summary>
 		FittingSizeLevel = 50,
-		
+
 		[MacCatalyst (13, 1)]
 		DragThatCanResizeScene = 510,
-		
+
 		[MacCatalyst (13, 1)]
 		SceneSizeStayPut = 500,
-		
+
 		[MacCatalyst (13, 1)]
 		DragThatCannotResizeScene = 490,
 	}

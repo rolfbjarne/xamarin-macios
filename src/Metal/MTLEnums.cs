@@ -704,59 +704,59 @@ namespace Metal {
 		/// <summary>Indicates the 12x12 ASTC, low dynamic range format.</summary>
 		ASTC_12x12_LDR = 218,
 
-		
+
 		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_4x4_HDR = 222,
-		
+
 		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_5x4_HDR = 223,
-		
+
 		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_5x5_HDR = 224,
-		
+
 		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_6x5_HDR = 225,
-		
+
 		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_6x6_HDR = 226,
-		
+
 		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_8x5_HDR = 228,
-		
+
 		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_8x6_HDR = 229,
-		
+
 		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_8x8_HDR = 230,
-		
+
 		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_10x5_HDR = 231,
-		
+
 		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_10x6_HDR = 232,
-		
+
 		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_10x8_HDR = 233,
-		
+
 		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_10x10_HDR = 234,
-		
+
 		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_12x10_HDR = 235,
-		
+
 		[TV (16, 0)]
 		[MacCatalyst (13, 1)]
 		ASTC_12x12_HDR = 236,
@@ -1972,7 +1972,7 @@ namespace Metal {
 		Unmap = 0x1,
 	}
 
-	
+
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MTLHazardTrackingMode : ulong {

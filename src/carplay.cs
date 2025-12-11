@@ -507,7 +507,7 @@ namespace CarPlay {
 		[NullAllowed, Export ("delegate", ArgumentSemantic.Weak)]
 		NSObject WeakDelegate { get; set; }
 
-		
+
 		[Export ("prefersDarkUserInterfaceStyle")]
 		bool PrefersDarkUserInterfaceStyle { get; set; }
 
@@ -986,7 +986,7 @@ namespace CarPlay {
 		[Export ("cardBackgroundColor", ArgumentSemantic.Strong)]
 		UIColor CardBackgroundColor { get; set; }
 
-		
+
 		[NullAllowed, Export ("symbolImage", ArgumentSemantic.Strong)]
 		UIImage SymbolImage { get; set; }
 
@@ -1430,7 +1430,7 @@ namespace CarPlay {
 		[Export ("initWithTitleVariants:subtitleVariants:imageSet:primaryAction:secondaryAction:duration:")]
 		NativeHandle Constructor (string [] titleVariants, [NullAllowed] string [] subtitleVariants, [NullAllowed] CPImageSet imageSet, CPAlertAction primaryAction, [NullAllowed] CPAlertAction secondaryAction, double duration);
 
-		
+
 		[Export ("initWithTitleVariants:subtitleVariants:image:primaryAction:secondaryAction:duration:")]
 		NativeHandle Constructor (string [] titleVariants, [NullAllowed] string [] subtitleVariants, [NullAllowed] UIImage image, CPAlertAction primaryAction, [NullAllowed] CPAlertAction secondaryAction, double duration);
 
@@ -1446,7 +1446,7 @@ namespace CarPlay {
 		[NullAllowed, Export ("imageSet", ArgumentSemantic.Copy)]
 		CPImageSet ImageSet { get; }
 
-		
+
 		[NullAllowed, Export ("image", ArgumentSemantic.Copy)]
 		UIImage Image { get; }
 
@@ -1582,7 +1582,7 @@ namespace CarPlay {
 		[Export ("limitedUserInterfaces")]
 		CPLimitableUserInterface LimitedUserInterfaces { get; }
 
-		
+
 		[Export ("contentStyle")]
 		CPContentStyle ContentStyle { get; }
 
@@ -1616,7 +1616,7 @@ namespace CarPlay {
 		[Export ("sessionConfiguration:limitedUserInterfacesChanged:")]
 		void LimitedUserInterfacesChanged (CPSessionConfiguration sessionConfiguration, CPLimitableUserInterface limitedUserInterfaces);
 
-		
+
 		[Export ("sessionConfiguration:contentStyleChanged:")]
 		void ContentStyleChanged (CPSessionConfiguration sessionConfiguration, CPContentStyle contentStyle);
 	}
@@ -1827,7 +1827,7 @@ namespace CarPlay {
 		[Export ("mapButtonSafeAreaLayoutGuide")]
 		UILayoutGuide MapButtonSafeAreaLayoutGuide { get; }
 
-		
+
 		[NullAllowed, Export ("templateApplicationScene", ArgumentSemantic.Weak)]
 		CPTemplateApplicationScene TemplateApplicationScene { get; set; }
 	}

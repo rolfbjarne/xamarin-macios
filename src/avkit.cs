@@ -118,13 +118,13 @@ namespace AVKit {
 		[Export ("pictureInPictureSuspended")]
 		bool PictureInPictureSuspended { [Bind ("isPictureInPictureSuspended")] get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("pictureInPictureButtonStartImage")]
 		UIImage PictureInPictureButtonStartImage { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Static]
 		[Export ("pictureInPictureButtonStopImage")]

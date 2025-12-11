@@ -604,7 +604,7 @@ namespace AuthenticationServices {
 		[NullAllowed, Export ("presentationContextProvider", ArgumentSemantic.Weak)]
 		IASWebAuthenticationPresentationContextProviding PresentationContextProvider { get; set; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Export ("prefersEphemeralWebBrowserSession")]
 		bool PrefersEphemeralWebBrowserSession { get; set; }

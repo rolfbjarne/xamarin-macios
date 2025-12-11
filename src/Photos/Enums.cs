@@ -223,7 +223,7 @@ namespace Photos {
 		/// <summary>To be added.</summary>
 		[MacCatalyst (13, 1)]
 		SmartAlbumLongExposures = 215,
-		
+
 		[MacCatalyst (13, 1)]
 		SmartAlbumUnableToUpload = 216,
 		[iOS (15, 0), TV (15, 0), MacCatalyst (15, 0)]
@@ -359,10 +359,10 @@ namespace Photos {
 		/// <summary>Original video data for a Live Photo.</summary>
 		[MacCatalyst (13, 1)]
 		PairedVideo = 9,
-		
+
 		[MacCatalyst (13, 1)]
 		FullSizePairedVideo = 10,
-		
+
 		[MacCatalyst (13, 1)]
 		AdjustmentBasePairedVideo = 11,
 		[MacCatalyst (13, 1)]

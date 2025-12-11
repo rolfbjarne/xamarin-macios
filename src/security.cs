@@ -1046,7 +1046,7 @@ namespace Security {
 		[Field ("kSecUseItemList")]
 		IntPtr UseItemList { get; }
 
-		
+
 		[MacCatalyst (13, 1)]
 		[Field ("kSecUseDataProtectionKeychain")]
 		IntPtr UseDataProtectionKeychain { get; }

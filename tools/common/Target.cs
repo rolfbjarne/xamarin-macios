@@ -663,9 +663,10 @@ namespace Xamarin.Bundler {
 			sw.WriteLine ();
 			sw.WriteLine (assembly_externs);
 
-			if (app.PublishReadyToRun == true)
+			if (app.PublishReadyToRun == true) {
 				sw.WriteLine ("extern void* RTR_HEADER;");
 				sw.WriteLine ();
+			}
 
 			sw.WriteLine ("void xamarin_register_modules_impl ()");
 			sw.WriteLine ("{");

@@ -2448,6 +2448,12 @@ xamarin_get_dyld_image_size (void* base_address)
 		return 0;
 
 	const struct mach_header_64* header = (const struct mach_header_64 *) base_address;
+
+	// Only support 64-bit Mach-O images.
+	if (header->magic != MH_MAGIC_64 && header->magic != MH_CIGAM_64) {
+		// Not a 64-bit Mach-O image. Return 0 or handle as appropriate.
+		return 0;
+	}
 	const struct load_command* cmd = (const struct load_command*) ((const char *) header + sizeof (struct mach_header_64));
 
 	size_t image_size = 0;

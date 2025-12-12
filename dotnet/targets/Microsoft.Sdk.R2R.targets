@@ -298,7 +298,7 @@
 			Inputs="$(_R2RDylibCachePath)"
 			Outputs="$(_R2RDylibCachePath2)"
 			>
-		<Delete Files="$(_R2RFrameworkOutput)" />
+		<Delete Files="$(_R2RDylibOutput)" />
 		<Copy SourceFiles="$(_R2RDylibCachePath)" DestinationFiles="$(_R2RDylibCachePath2)" />
 		<ItemGroup>
 			<FileWrites Include="$(_R2RDylibCachePath2)" />

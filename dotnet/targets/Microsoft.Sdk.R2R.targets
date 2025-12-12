@@ -62,8 +62,8 @@
 							'%(_ResolvedAssembliesToPublish.NuGetPackageId)' == '$(_XamarinNugetPackageId)' Or
 							'%(_ResolvedAssembliesToPublish.NuGetPackageId)' == '$(_XamarinNugetManagedPackageId)'
 						)" />
-			<_UserAsemblies Include="@(_ResolvedAssembliesToPublish)" Exclude="@(_NonUserAssemblies)" />
-			<PublishReadyToRunExcludeTest Include="@(_UserAsemblies -> '%(Filename)')" />
+			<_UserAssemblies Include="@(_ResolvedAssembliesToPublish)" Exclude="@(_NonUserAssemblies)" />
+			<PublishReadyToRunExcludeTest Include="@(_UserAssemblies -> '%(Filename)')" />
 		</ItemGroup>
 	</Target>
 

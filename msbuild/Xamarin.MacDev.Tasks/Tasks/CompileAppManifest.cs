@@ -527,6 +527,16 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			PObject? capabilities;
 
+			if (IsFramework) {
+				// When building universal apps, we might get called here once for each architecture.
+				// This will lead to different app manifests in each architecture-specific app bundle,
+				// and then merging them into a universal bundle will fail.
+				// Typically this is not a problem for normal apps, because we compile the app manifest
+				// once for the universal app bundle, but for frameworks we do it once for each architecture,
+				// so just skip setting UIRequiredDeviceCapabilities in that case.
+				return;
+			}
+
 			if (plist.TryGetValue (ManifestKeys.UIRequiredDeviceCapabilities, out capabilities)) {
 				if (capabilities is PArray) {
 					var architectureValues = new HashSet<string> (new [] { "armv6", "armv7", "arm64" });

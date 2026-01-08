@@ -47,7 +47,8 @@ namespace Xamarin.MacDev.Tasks {
 
 				arguments.Add ("install_name_tool");
 				arguments.Add ("-id");
-				arguments.Add (input.GetMetadata ("DynamicLibraryId"));
+				arguments.Add (input.GetMetadata ("UpdatedId"));
+
 				arguments.Add (temporaryTarget);
 
 				processes [i] = ExecuteAsync ("xcrun", arguments, sdkDevPath: SdkDevPath).ContinueWith ((v) => {

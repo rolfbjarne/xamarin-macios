@@ -273,9 +273,9 @@ namespace Xamarin.Linker {
 					break;
 				case "PublishReadyToRun":
 					if (!string.IsNullOrEmpty (value)) {
-						if (!TryParseOptionalBoolean (value, out var publish_ready_to_run))
+						if (!TryParseOptionalBoolean (value, out var publishReadyToRun))
 							throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
-						Application.PublishReadyToRun = publish_ready_to_run;
+						Application.PublishReadyToRun = publishReadyToRun;
 					}
 					break;
 				case "ReferenceNativeSymbol": {

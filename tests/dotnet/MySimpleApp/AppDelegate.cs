@@ -10,8 +10,20 @@ namespace MySimpleApp {
 			GC.KeepAlive (typeof (NSObject)); // prevent linking away the platform assembly
 
 			Console.WriteLine (Environment.GetEnvironmentVariable ("MAGIC_WORD"));
+			Console.WriteLine ($"Startup: {StartupHook.Initialized}");
 
 			return args.Length;
 		}
+	}
+}
+
+class StartupHook
+{
+	public static bool Initialized { get; private set; }
+	public static void Initialize()
+	{
+		Console.WriteLine ("STARTUP");
+
+		Initialized = true;
 	}
 }

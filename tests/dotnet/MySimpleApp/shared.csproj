@@ -14,5 +14,6 @@
 
 	<ItemGroup>
 		<Compile Include="../*.cs" />
+		<RuntimeHostConfigurationOption Include="STARTUP_HOOKS" Value="MySimpleApp" />
 	</ItemGroup>
 </Project>

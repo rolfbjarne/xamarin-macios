@@ -2585,6 +2585,7 @@ xamarin_is_native_library (const char *libraryName)
 const void*
 xamarin_pinvoke_override (const char *libraryName, const char *entrypointName)
 {
+	// LOG (stderr, "xamarin_pinvoke_override (%s, %s)\n", libraryName, entrypointName);
 
 	void* symbol = NULL;
 
@@ -2620,11 +2621,12 @@ xamarin_pinvoke_override (const char *libraryName, const char *entrypointName)
 			break;
 		case XamarinNativeLinkModeDynamicLibrary:
 			// if we're not linking statically, then don't do anything at all, let mono handle whatever needs to be done
+			// fprintf (stderr, PRODUCT ": Unhandled libmono link mode: %i when looking up %s in %s\n", xamarin_libmono_native_link_mode, entrypointName, libraryName);
 			return NULL;
 		case XamarinNativeLinkModeFramework:
 		default:
 			// handle this as "DynamicLibrary" for now - do nothing.
-			LOG (PRODUCT ": Unhandled libmono link mode: %i when looking up %s in %s", xamarin_libmono_native_link_mode, entrypointName, libraryName);
+			// fprintf (stderr, PRODUCT ": Unhandled libmono link mode: %i when looking up %s in %s\n", xamarin_libmono_native_link_mode, entrypointName, libraryName);
 			return NULL;
 		}
 	} else {
@@ -2632,8 +2634,19 @@ xamarin_pinvoke_override (const char *libraryName, const char *entrypointName)
 	}
 
 	if (symbol == NULL) {
-		LOG (PRODUCT ": Unable to resolve P/Invoke '%s' in the library '%s'", entrypointName, libraryName);
+		LOG (PRODUCT ": Unable to resolve P/Invoke '%s' in the library '%s'\n", entrypointName, libraryName);
 	}
+
+	// fprintf (stderr, "xamarin_pinvoke_override (%s, %s): %p is_native_library: %i\n", libraryName, entrypointName, symbol, xamarin_is_native_library (libraryName));
+
+	// static bool shown = false;
+	// if (!shown) {
+	// 	fprintf (stderr, "xamarin_runtime_libraries!!!\n");
+	// 	for (int i = 0; xamarin_runtime_libraries [i] != NULL; i++) {
+	// 		fprintf (stderr, "    #%i: %s\n", i, xamarin_runtime_libraries [i]);
+	// 	}
+	// 	shown = true;
+	// }
 
 	return symbol;
 }

@@ -260,7 +260,6 @@ namespace Xamarin.Tests {
 		public void RemoteTest (ApplePlatform platform, string runtimeIdentifiers, string configuration, bool useMonoRuntime)
 		{
 			var project = "MySimpleApp";
-			var configuration = "Debug";
 
 			Configuration.IgnoreIfIgnoredPlatform (platform);
 			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);

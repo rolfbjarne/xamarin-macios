@@ -15,7 +15,7 @@ public class ProcessRuntimeLibraries : XamarinTask, ICancelableTask {
 	public string DotNetRuntime { get; set; } = string.Empty;
 
 	[Required]
-	public ITaskItem[] ResolvedFileToPublish { get; set; } = [];
+	public ITaskItem [] ResolvedFileToPublish { get; set; } = [];
 
 	[Required]
 	public string RuntimeIdentifier { get; set; } = string.Empty;
@@ -27,10 +27,10 @@ public class ProcessRuntimeLibraries : XamarinTask, ICancelableTask {
 	public string RuntimeNuGetPackageId { get; set; } = string.Empty;
 
 	[Output]
-	public ITaskItem[] OutputResolvedFileToPublish { get; set; } = [];
+	public ITaskItem [] OutputResolvedFileToPublish { get; set; } = [];
 
 	[Output]
-	public ITaskItem[] DylibsToConvertToFrameworks { get; set; } = [];
+	public ITaskItem [] DylibsToConvertToFrameworks { get; set; } = [];
 
 	public override bool Execute ()
 	{

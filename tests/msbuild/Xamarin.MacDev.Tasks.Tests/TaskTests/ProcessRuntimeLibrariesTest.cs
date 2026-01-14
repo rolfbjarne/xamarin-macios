@@ -38,8 +38,8 @@ namespace Xamarin.MacDev.Tasks {
 
 			Assert.IsTrue (task.Execute (), "Task execution");
 			Assert.That (task.OutputResolvedFileToPublish.Length, Is.EqualTo (2), "Output count");
-			Assert.That (task.OutputResolvedFileToPublish[0].ItemSpec, Is.EqualTo ("/a/b/c/System.Private.CoreLib.dll"), "System.Private.CoreLib.dll");
-			Assert.That (task.OutputResolvedFileToPublish[1].ItemSpec, Is.EqualTo ("/a/b/c/libmonosgen-2.0.dylib"), "libmonosgen-2.0.dylib");
+			Assert.That (task.OutputResolvedFileToPublish [0].ItemSpec, Is.EqualTo ("/a/b/c/System.Private.CoreLib.dll"), "System.Private.CoreLib.dll");
+			Assert.That (task.OutputResolvedFileToPublish [1].ItemSpec, Is.EqualTo ("/a/b/c/libmonosgen-2.0.dylib"), "libmonosgen-2.0.dylib");
 		}
 
 		[Test]
@@ -71,9 +71,9 @@ namespace Xamarin.MacDev.Tasks {
 
 			Assert.IsTrue (task.Execute (), "Task execution");
 			Assert.That (task.OutputResolvedFileToPublish.Length, Is.EqualTo (3), "Output count");
-			Assert.That (task.OutputResolvedFileToPublish[0].ItemSpec, Is.EqualTo ("/a/b/c/System.Private.CoreLib.dll"), "System.Private.CoreLib.dll");
-			Assert.That (task.OutputResolvedFileToPublish[1].ItemSpec, Is.EqualTo ("/a/b/c/libclrjit.dylib"), "libclrjit.dylib");
-			Assert.That (task.OutputResolvedFileToPublish[2].ItemSpec, Is.EqualTo ("/a/b/c/libgc.dylib"), "libgc.dylib");
+			Assert.That (task.OutputResolvedFileToPublish [0].ItemSpec, Is.EqualTo ("/a/b/c/System.Private.CoreLib.dll"), "System.Private.CoreLib.dll");
+			Assert.That (task.OutputResolvedFileToPublish [1].ItemSpec, Is.EqualTo ("/a/b/c/libclrjit.dylib"), "libclrjit.dylib");
+			Assert.That (task.OutputResolvedFileToPublish [2].ItemSpec, Is.EqualTo ("/a/b/c/libgc.dylib"), "libgc.dylib");
 		}
 
 		[Test]
@@ -105,8 +105,8 @@ namespace Xamarin.MacDev.Tasks {
 
 			Assert.IsTrue (task.Execute (), "Task execution");
 			Assert.That (task.OutputResolvedFileToPublish.Length, Is.EqualTo (2), "Output count");
-			Assert.That (task.OutputResolvedFileToPublish[0].ItemSpec, Is.EqualTo ("/a/b/c/System.Private.CoreLib.dll"), "System.Private.CoreLib.dll");
-			Assert.That (task.OutputResolvedFileToPublish[1].ItemSpec, Is.EqualTo ("/a/b/c/libgc.dylib"), "libgc.dylib");
+			Assert.That (task.OutputResolvedFileToPublish [0].ItemSpec, Is.EqualTo ("/a/b/c/System.Private.CoreLib.dll"), "System.Private.CoreLib.dll");
+			Assert.That (task.OutputResolvedFileToPublish [1].ItemSpec, Is.EqualTo ("/a/b/c/libgc.dylib"), "libgc.dylib");
 		}
 
 		[Test]
@@ -132,7 +132,7 @@ namespace Xamarin.MacDev.Tasks {
 
 			Assert.IsTrue (task.Execute (), "Task execution");
 			Assert.That (task.OutputResolvedFileToPublish.Length, Is.EqualTo (1), "Output count");
-			Assert.That (task.OutputResolvedFileToPublish[0].ItemSpec, Is.EqualTo ("/a/b/c/System.Private.CoreLib.dll"), "System.Private.CoreLib.dll");
+			Assert.That (task.OutputResolvedFileToPublish [0].ItemSpec, Is.EqualTo ("/a/b/c/System.Private.CoreLib.dll"), "System.Private.CoreLib.dll");
 		}
 
 		static ITaskItem CreateTaskItem (string path, Dictionary<string, string> metadata)

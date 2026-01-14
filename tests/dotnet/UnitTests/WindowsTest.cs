@@ -274,11 +274,12 @@ namespace Xamarin.Tests {
 		}
 
 		[Category ("RemoteWindows")]
-		[TestCase (ApplePlatform.iOS, "ios-arm64")]
-		public void RemoteTest (ApplePlatform platform, string runtimeIdentifiers)
+		[TestCase (ApplePlatform.iOS, "ios-arm64", "Debug", true)]
+		[TestCase (ApplePlatform.iOS, "ios-arm64", "Debug", false)]
+		[TestCase (ApplePlatform.iOS, "ios-arm64", "Release", false)]
+		public void RemoteTest (ApplePlatform platform, string runtimeIdentifiers, string configuration, bool useMonoRuntime)
 		{
 			var project = "MySimpleApp";
-			var configuration = "Debug";
 
 			Configuration.IgnoreIfIgnoredPlatform (platform);
 			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
@@ -289,6 +290,9 @@ namespace Xamarin.Tests {
 			Clean (project_path);
 
 			var properties = GetDefaultProperties (runtimeIdentifiers);
+
+			properties ["UseMonoRuntime"] = useMonoRuntime.ToString();
+			properties ["Configuration"] = configuration;
 
 			// Copy the app bundle to Windows so that we can inspect the results.
 			properties ["CopyAppBundleToWindows"] = "true";

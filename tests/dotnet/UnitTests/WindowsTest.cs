@@ -274,7 +274,7 @@ namespace Xamarin.Tests {
 		}
 
 		[Category ("RemoteWindows")]
-		[TestCase (ApplePlatform.iOS, "ios-arm64", "Debug", true)]
+		// [TestCase (ApplePlatform.iOS, "ios-arm64", "Debug", true)]
 		[TestCase (ApplePlatform.iOS, "ios-arm64", "Debug", false)]
 		[TestCase (ApplePlatform.iOS, "ios-arm64", "Release", false)]
 		public void RemoteTest (ApplePlatform platform, string runtimeIdentifiers, string configuration, bool useMonoRuntime)

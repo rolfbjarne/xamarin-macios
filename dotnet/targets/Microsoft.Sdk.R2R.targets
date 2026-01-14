@@ -14,7 +14,8 @@
 		<PropertyGroup>
 			<_Crossgen2Path Condition="'$(Crossgen2Path)' != ''">$(Crossgen2Path)</_Crossgen2Path>
 			<_FlattenedCrossgen2Packs>@(ResolvedCrossgen2Pack->'%(PackageDirectory)')</_FlattenedCrossgen2Packs>
-			<_Crossgen2Path Condition="'$(Crossgen2Path)' == ''">$(_FlattenedCrossgen2Packs)/tools/crossgen2</_Crossgen2Path>
+			<_Crossgen2Path Condition="'$(Crossgen2Path)' == '' And !$([MSBuild]::IsOSPlatform('windows'))">$(_FlattenedCrossgen2Packs)/tools/crossgen2</_Crossgen2Path>
+			<_Crossgen2Path Condition="'$(Crossgen2Path)' == '' And  $([MSBuild]::IsOSPlatform('windows'))">$(_FlattenedCrossgen2Packs)\tools\crossgen2.exe</_Crossgen2Path>
 
 			<_TargetArch>$(RuntimeIdentifier.Split('-')[1])</_TargetArch>
 			<_TargetOS>$(RuntimeIdentifier.Split('-')[0])</_TargetOS>

@@ -115,9 +115,10 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			var itemInfo = new FileInfo (item.ItemSpec);
 			if (itemInfo.Exists && itemInfo.Length == 0) {
-				Log.LogMessage (MessageImportance.Low, "Not copying '{0}' to the build server, because its size is 0.", item.ItemSpec);
+				Log.LogWarning ("Not copying '{0}' to the build server, because its size is 0.", item.ItemSpec);
 				return false;
 			}
+			Log.LogWarning ("Copying '{0}' to the build server!");
 			return true;
 		}
 

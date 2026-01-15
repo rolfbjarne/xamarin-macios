@@ -135,6 +135,11 @@ namespace Xamarin.MacDev.Tasks {
 					if (!Directory.Exists (fw))
 						continue;
 					foreach (var file in Directory.EnumerateFiles (fw, "*.*", SearchOption.AllDirectories)) {
+						var finfo = new FileInfo (file);
+						if (finfo.Length == 0) {
+							Log.LogWarning ("Not copying '{0}' to the build server, because its empty.", item.ItemSpec);
+							continue;
+						}
 						yield return new TaskItem (file);
 					}
 				}

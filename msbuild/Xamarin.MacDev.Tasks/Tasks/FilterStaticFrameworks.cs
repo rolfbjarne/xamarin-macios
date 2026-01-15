@@ -111,7 +111,15 @@ namespace Xamarin.MacDev.Tasks {
 			return !Log.HasLoggedErrors;
 		}
 
-		public bool ShouldCopyToBuildServer (ITaskItem item) => true;
+		public bool ShouldCopyToBuildServer (ITaskItem item)
+		{
+			var itemInfo = new FileInfo (item.ItemSpec);
+			if (itemInfo.Exists && itemInfo.Length == 0) {
+				Log.LogMessage (MessageImportance.Low, "Not copying '{0}' to the build server, because its size is 0.", item.ItemSpec);
+				return false;
+			}
+			return true;
+		}
 
 		public bool ShouldCreateOutputFile (ITaskItem item) => false;
 

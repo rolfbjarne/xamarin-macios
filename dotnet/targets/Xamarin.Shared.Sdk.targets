@@ -1219,6 +1219,8 @@
 			<_IsDedupEnabled Condition="'$(_IsDedupEnabled)' == '' And '$(_RunAotCompiler)' == 'true' And '$(IsMacEnabled)' == 'true' And '$(TargetArchitectures)' == 'ARM64' And '$(MtouchInterpreter)' != 'all'">true</_IsDedupEnabled>
 			<_DedupAssembly Condition="'$(_IsDedupEnabled)' == 'true'">$(IntermediateOutputPath)aot-instances.dll</_DedupAssembly>
 
+			<!-- Always link statically when using NativeAOT -->
+			<_LibMonoLinkMode Condition="'$(_LibMonoLinkMode)' == '' And '$(_UseNativeAot)' == 'true'">static</_LibMonoLinkMode>
 			<!-- default to 'static' for Mac Catalyst to work around https://github.com/dotnet/macios/issues/14686 -->
 			<_LibMonoLinkMode Condition="'$(_LibMonoLinkMode)' == '' And '$(_PlatformName)' == 'MacCatalyst' And '$(UseMonoRuntime)' == 'true'">static</_LibMonoLinkMode>
 			<!-- we can't use dylibs for mobile apps when building for device, because the App Store won't allow it -->

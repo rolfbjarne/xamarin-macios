@@ -291,7 +291,7 @@ namespace Xamarin.Tests {
 
 			var properties = GetDefaultProperties (runtimeIdentifiers);
 
-			properties ["UseMonoRuntime"] = useMonoRuntime.ToString();
+			properties ["UseMonoRuntime"] = useMonoRuntime.ToString ();
 			properties ["Configuration"] = configuration;
 
 			// Copy the app bundle to Windows so that we can inspect the results.

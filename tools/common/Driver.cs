@@ -75,7 +75,7 @@ namespace Xamarin.Bundler {
 				throw ErrorHelper.CreateError (10, e, Errors.MX0010, e);
 			}
 		}
-#endif // !NET
+#endif // !LEGACY_TOOLS
 
 		public static int Verbosity {
 			get { return ErrorHelper.Verbosity; }

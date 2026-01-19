@@ -24,7 +24,7 @@ namespace Xamarin.Bundler {
 
 		void Initialize ()
 		{
-			var FrameworkDirectory = Driver.GetPlatformFrameworkDirectory (this);
+			var FrameworkDirectory = "?";
 
 			var appContentDirectory = ContentDirectory;
 

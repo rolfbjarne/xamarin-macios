@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-#if MTOUCH || MMP || BUNDLER
+#if LEGACY_TOOLS || BUNDLER
 using Mono.Cecil;
 
 using Xamarin.Bundler;
@@ -32,7 +32,7 @@ public class Framework {
 		}
 	}
 
-#if MTOUCH || MMP || BUNDLER
+#if LEGACY_TOOLS || BUNDLER
 	public bool IsFrameworkAvailableInSimulator (Application app)
 	{
 		if (VersionAvailableInSimulator is null)
@@ -701,7 +701,7 @@ public class Frameworks : Dictionary<string, Framework> {
 		}
 	}
 
-#if MTOUCH || MMP || BUNDLER
+#if LEGACY_TOOLS || BUNDLER
 	static void Gather (Application app, AssemblyDefinition product_assembly, HashSet<string> frameworks, HashSet<string> weak_frameworks, Func<Framework, bool> include_framework)
 	{
 		var namespaces = new HashSet<string> ();
@@ -784,5 +784,5 @@ public class Frameworks : Dictionary<string, Framework> {
 	{
 		Gather (app, product_assembly, frameworks, weak_frameworks, (framework) => FilterFrameworks (app, framework));
 	}
-#endif // MTOUCH || MMP || BUNDLER
+#endif // LEGACY_TOOLS || BUNDLER
 }

@@ -9,7 +9,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
     <EnableDefaultEmbeddedResourceItems>false</EnableDefaultEmbeddedResourceItems>
-    <DefineConstants>MONOTOUCH;MTOUCH;LEGACY_TOOLS</DefineConstants>
+    <DefineConstants>LEGACY_TOOLS</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
@@ -192,6 +192,7 @@
       <GenerateResource>true</GenerateResource>
       <PublicClass>true</PublicClass>
     </EmbeddedResource>
+    <Compile Include="Errors.designer.cs" Condition="'$(DesignTimeBuild)' == 'true'" />
     <EmbeddedResource Include="TranslatedAssemblies\Errors.cs.resx">
       <Link>Errors.cs.resx</Link>
       <ManifestResourceName>Xamarin.Bundler.Errors.cs</ManifestResourceName>

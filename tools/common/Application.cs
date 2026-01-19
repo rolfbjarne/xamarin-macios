@@ -22,11 +22,9 @@ using ObjCRuntime;
 using ClassRedirector;
 #endif
 
-#if MTOUCH
+#if LEGACY_TOOLS
 using PlatformResolver = MonoTouch.Tuner.MonoTouchResolver;
-#elif MMP
-using PlatformResolver = Xamarin.Bundler.MonoMacResolver;
-#elif NET && !LEGACY_TOOLS
+#elif NET
 using PlatformResolver = Xamarin.Linker.DotNetResolver;
 #else
 #error Invalid defines
@@ -83,7 +81,11 @@ namespace Xamarin.Bundler {
 		public bool UseInterpreter; // Only applicable to mobile platforms.
 		public List<string> DebugAssemblies = new List<string> ();
 		public Optimizations Optimizations = new Optimizations ();
+#if LEGACY_TOOLS
+		public readonly RegistrarMode Registrar = RegistrarMode.Static;
+#else
 		public RegistrarMode Registrar = RegistrarMode.Default;
+#endif
 		public RegistrarOptions RegistrarOptions = RegistrarOptions.Default;
 		public SymbolMode SymbolMode;
 		public HashSet<string> IgnoredSymbols = new HashSet<string> ();
@@ -93,10 +95,10 @@ namespace Xamarin.Bundler {
 		public List<string> AotOtherArguments = null;
 		public bool? AotFloat32 = null;
 
-#if !MMP && !MTOUCH
+#if !LEGACY_TOOLS
 		public DlsymOptions DlsymOptions;
 		public List<Tuple<string, bool>> DlsymAssemblies;
-#endif // !MMP && !MTOUCH
+#endif // !LEGACY_TOOLS
 		public List<string> CustomLinkFlags;
 
 		public string CompilerPath;
@@ -121,7 +123,7 @@ namespace Xamarin.Bundler {
 		}
 
 		// Linker config
-#if !NET || LEGACY_TOOLS
+#if LEGACY_TOOLS
 		public LinkMode LinkMode = LinkMode.Full;
 #endif
 		bool? are_any_assemblies_trimmed;
@@ -129,7 +131,7 @@ namespace Xamarin.Bundler {
 			get {
 				if (are_any_assemblies_trimmed.HasValue)
 					return are_any_assemblies_trimmed.Value;
-#if NET && !LEGACY_TOOLS
+#if !LEGACY_TOOLS
 				// This shouldn't happen, we should always set AreAnyAssembliesTrimmed to some value for .NET.
 				throw ErrorHelper.CreateError (99, "A custom LinkMode value is not supported for .NET");
 #else
@@ -142,9 +144,6 @@ namespace Xamarin.Bundler {
 		}
 		public List<string> LinkSkipped = new List<string> ();
 		public List<string> Definitions = new List<string> ();
-#if !NET && !LEGACY_TOOLS
-		public I18nAssemblies I18n;
-#endif
 		public List<string> WarnOnTypeRef = new List<string> ();
 
 		public bool EnableSGenConc;
@@ -415,9 +414,6 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-#if !NET && !LEGACY_TOOLS
-		public static int Concurrency => Driver.Concurrency;
-#endif
 		public Version DeploymentTarget;
 		public Version SdkVersion; // for Mac Catalyst this is the iOS version
 		public Version NativeSdkVersion; // this is the same as SdkVersion, except that for Mac Catalyst it's the macOS SDK version.
@@ -519,27 +515,6 @@ namespace Xamarin.Bundler {
 			InterpretedAssemblies.Clear ();
 		}
 
-#if !NET && !LEGACY_TOOLS
-		public void ParseI18nAssemblies (string i18n)
-		{
-			var assemblies = I18nAssemblies.None;
-
-			foreach (var part in i18n.Split (',')) {
-				var assembly = part.Trim ();
-				if (string.IsNullOrEmpty (assembly))
-					continue;
-
-				try {
-					assemblies |= (I18nAssemblies) Enum.Parse (typeof (I18nAssemblies), assembly, true);
-				} catch {
-					throw new FormatException ("Unknown value for i18n: " + assembly);
-				}
-			}
-
-			I18n = assemblies;
-		}
-#endif
-
 		public bool IsTodayExtension {
 			get {
 				return ExtensionIdentifier == "com.apple.widget-extension";
@@ -598,27 +573,14 @@ namespace Xamarin.Bundler {
 				if (requires_pinvoke_wrappers.HasValue)
 					return requires_pinvoke_wrappers.Value;
 
-				// By default this is disabled for .NET
-				if (Driver.IsDotNet)
-					return false;
-
-				if (Platform == ApplePlatform.MacOSX)
-					return false;
-
-				if (IsSimulatorBuild)
-					return false;
-
-				if (Platform == ApplePlatform.MacCatalyst)
-					return false;
-
-				return MarshalObjectiveCExceptions == MarshalObjectiveCExceptionMode.ThrowManagedException || MarshalObjectiveCExceptions == MarshalObjectiveCExceptionMode.Abort;
+				return false;
 			}
 			set {
 				requires_pinvoke_wrappers = value;
 			}
 		}
 
-#if NET && !LEGACY_TOOLS
+#if !LEGACY_TOOLS
 		public bool RequireLinkWithAttributeForObjectiveCClassSearch;
 #else
 		public bool RequireLinkWithAttributeForObjectiveCClassSearch = true;
@@ -659,7 +621,7 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-#if !MMP && !MTOUCH
+#if !LEGACY_TOOLS
 		public static void SaveAssembly (AssemblyDefinition assembly, string destination)
 		{
 			var main = assembly.MainModule;
@@ -687,7 +649,7 @@ namespace Xamarin.Bundler {
 					File.Delete (dest_pdb);
 			}
 		}
-#endif // !MMP && !MTOUCH
+#endif // !LEGACY_TOOLS
 
 		public static bool ExtractResource (ModuleDefinition module, string name, string path, bool remove)
 		{
@@ -902,9 +864,6 @@ namespace Xamarin.Bundler {
 			var resolvedAssemblies = new Dictionary<string, AssemblyDefinition> ();
 			var resolver = new PlatformResolver () {
 				RootDirectory = Path.GetDirectoryName (RootAssembly),
-#if MMP
-				CommandLineAssemblies = RootAssemblies,
-#endif
 			};
 			resolver.Configure ();
 
@@ -1016,13 +975,6 @@ namespace Xamarin.Bundler {
 				throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
 			}
 
-#if MMP
-			// This is technically not needed, because we'll fail the validation just below, but this handles
-			// a common case (existing 32-bit projects) and shows a better error message.
-			if (abis.Count == 1 && abis [0] == Abi.i386)
-				throw ErrorHelper.CreateError (144, Errors.MM0144);
-#endif
-
 			foreach (var abi in abis) {
 				if (!validAbis.Contains (abi))
 					throw ErrorHelper.CreateError (75, Errors.MT0075, abi, Platform, string.Join (", ", validAbis.Select ((v) => v.AsString ()).ToArray ()));
@@ -1105,6 +1057,7 @@ namespace Xamarin.Bundler {
 			abis = res;
 		}
 
+#if !LEGACY_TOOLS
 		public void ParseRegistrar (string v)
 		{
 			var split = v.Split ('=');
@@ -1120,23 +1073,11 @@ namespace Xamarin.Bundler {
 			case "default":
 				Registrar = RegistrarMode.Default;
 				break;
-#if !MTOUCH
-			case "partial":
-			case "partial-static":
-				Registrar = RegistrarMode.PartialStatic;
-				break;
-#endif
-#if NET && !LEGACY_TOOLS
 			case "managed-static":
 				Registrar = RegistrarMode.ManagedStatic;
 				break;
-#endif
 			default:
-#if NET && !LEGACY_TOOLS
 				throw ErrorHelper.CreateError (20, Errors.MX0020, "--registrar", "managed-static, static, dynamic or default");
-#else
-				throw ErrorHelper.CreateError (20, Errors.MX0020, "--registrar", "static, dynamic or default");
-#endif
 			}
 
 			switch (value) {
@@ -1151,6 +1092,7 @@ namespace Xamarin.Bundler {
 				throw ErrorHelper.CreateError (20, Errors.MX0020, "--registrar", "static, dynamic or default");
 			}
 		}
+#endif // !LEGACY_TOOLS
 
 		public static string GetArchitectures (IEnumerable<Abi> abis)
 		{
@@ -1265,22 +1207,7 @@ namespace Xamarin.Bundler {
 		{
 			switch (MarshalManagedExceptions) {
 			case MarshalManagedExceptionMode.Default:
-				if (Driver.IsDotNet) {
-					MarshalManagedExceptions = MarshalManagedExceptionMode.ThrowObjectiveCException;
-				} else {
-					switch (Platform) {
-					case ApplePlatform.iOS:
-					case ApplePlatform.TVOS:
-						MarshalManagedExceptions = EnableDebug && IsSimulatorBuild ? MarshalManagedExceptionMode.UnwindNativeCode : MarshalManagedExceptionMode.Disable;
-						break;
-					case ApplePlatform.MacOSX:
-					case ApplePlatform.MacCatalyst:
-						MarshalManagedExceptions = EnableDebug ? MarshalManagedExceptionMode.UnwindNativeCode : MarshalManagedExceptionMode.Disable;
-						break;
-					default:
-						throw ErrorHelper.CreateError (71, Errors.MX0071 /* Unknown platform: {0}. This usually indicates a bug in {1}; please file a bug report at https://github.com/dotnet/macios/issues/new with a test case. */, Platform, ProductName);
-					}
-				}
+				MarshalManagedExceptions = MarshalManagedExceptionMode.ThrowObjectiveCException;
 				IsDefaultMarshalManagedExceptionMode = true;
 				break;
 			case MarshalManagedExceptionMode.UnwindNativeCode:
@@ -1295,22 +1222,7 @@ namespace Xamarin.Bundler {
 		{
 			switch (MarshalObjectiveCExceptions) {
 			case MarshalObjectiveCExceptionMode.Default:
-				if (Driver.IsDotNet) {
-					MarshalObjectiveCExceptions = MarshalObjectiveCExceptionMode.ThrowManagedException;
-				} else {
-					switch (Platform) {
-					case ApplePlatform.iOS:
-					case ApplePlatform.TVOS:
-						MarshalObjectiveCExceptions = EnableDebug && IsSimulatorBuild ? MarshalObjectiveCExceptionMode.UnwindManagedCode : MarshalObjectiveCExceptionMode.Disable;
-						break;
-					case ApplePlatform.MacOSX:
-					case ApplePlatform.MacCatalyst:
-						MarshalObjectiveCExceptions = EnableDebug ? MarshalObjectiveCExceptionMode.ThrowManagedException : MarshalObjectiveCExceptionMode.Disable;
-						break;
-					default:
-						throw ErrorHelper.CreateError (71, Errors.MX0071 /* Unknown platform: {0}. This usually indicates a bug in {1}; please file a bug report at https://github.com/dotnet/macios/issues/new with a test case. */, Platform, ProductName);
-					}
-				}
+				MarshalObjectiveCExceptions = MarshalObjectiveCExceptionMode.ThrowManagedException;
 				break;
 			case MarshalObjectiveCExceptionMode.UnwindManagedCode:
 			case MarshalObjectiveCExceptionMode.Disable:
@@ -1327,7 +1239,7 @@ namespace Xamarin.Bundler {
 			if (Platform == ApplePlatform.MacOSX)
 				throw ErrorHelper.CreateError (99, Errors.MX0099, "IsInterpreted isn't a valid operation for macOS apps.");
 
-#if !NET || LEGACY_TOOLS
+#if LEGACY_TOOLS
 			if (IsSimulatorBuild)
 				return false;
 #endif
@@ -1380,7 +1292,7 @@ namespace Xamarin.Bundler {
 			return !IsInterpreted (assembly);
 		}
 
-#if !MMP && !MTOUCH
+#if !LEGACY_TOOLS
 		public IList<string> GetAotArguments (string filename, Abi abi, string outputDir, string outputFile, string llvmOutputFile, string dataFile)
 		{
 			GetAotArguments (filename, abi, outputDir, outputFile, llvmOutputFile, dataFile, null, out var processArguments, out var aotArguments);
@@ -1435,7 +1347,7 @@ namespace Xamarin.Bundler {
 					aotArguments.Add ($"dedup-skip");
 				}
 			}
-			if (app.LibMonoLinkMode == AssemblyBuildTarget.StaticObject || !Driver.IsDotNet)
+			if (app.LibMonoLinkMode == AssemblyBuildTarget.StaticObject)
 				aotArguments.Add ("direct-icalls");
 			aotArguments.AddRange (app.AotArguments);
 			if (interp) {
@@ -1490,7 +1402,6 @@ namespace Xamarin.Bundler {
 			if (enable_llvm)
 				aotArguments.Add ($"llvm-outfile={llvmOutputFile}");
 
-#if NET && !LEGACY_TOOLS
 			// If the interpreter is enabled, and we're building for x86_64, we're AOT-compiling but we
 			// don't have access to infinite trampolines. So we're bumping the trampoline count (unless
 			// the developer has already set a value) to something higher than the default.
@@ -1517,9 +1428,8 @@ namespace Xamarin.Bundler {
 						aotArguments.Add (nameWithEq + (tramp.Default * 4).ToString (CultureInfo.InvariantCulture));
 				}
 			}
-#endif
 		}
-#endif // !MMP && !MTOUCH
+#endif // !LEGACY_TOOLS
 
 		public string AssemblyName {
 			get {
@@ -1544,7 +1454,7 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-#if !MMP && !MTOUCH
+#if !LEGACY_TOOLS
 		public void SetDlsymOption (string asm, bool dlsym)
 		{
 			if (DlsymAssemblies is null)
@@ -1629,7 +1539,7 @@ namespace Xamarin.Bundler {
 				throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
 			}
 		}
-#endif // !MMP && !MTOUCH
+#endif // !LEGACY_TOOLS
 
 		public bool VerifyDynamicFramework (string framework_path)
 		{

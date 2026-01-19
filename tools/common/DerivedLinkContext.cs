@@ -9,13 +9,13 @@ using Registrar;
 using Mono.Tuner;
 using Xamarin.Bundler;
 
-#if NET && !LEGACY_TOOLS
+#if !LEGACY_TOOLS
 using LinkContext = Xamarin.Bundler.DotNetLinkContext;
 #endif
 
 namespace Xamarin.Tuner {
 	public class DerivedLinkContext : LinkContext {
-#if !MMP && !MTOUCH
+#if !LEGACY_TOOLS
 		internal StaticRegistrar StaticRegistrar => Target.StaticRegistrar;
 		internal Target Target;
 #endif
@@ -45,7 +45,7 @@ namespace Xamarin.Tuner {
 		// so we need a second dictionary
 		Dictionary<TypeDefinition, LinkedAwayTypeReference> LinkedAwayTypeMap = new Dictionary<TypeDefinition, LinkedAwayTypeReference> ();
 
-#if NET && !LEGACY_TOOLS
+#if !LEGACY_TOOLS
 		public DerivedLinkContext (Xamarin.Linker.LinkerConfiguration configuration, Target target)
 			: base (configuration)
 		{
@@ -53,13 +53,13 @@ namespace Xamarin.Tuner {
 		}
 #endif
 
-#if !MMP && !MTOUCH
+#if !LEGACY_TOOLS
 		public Application App {
 			get {
 				return Target.App;
 			}
 		}
-#endif // !MMP && !MTOUCH
+#endif // !LEGACY_TOOLS
 
 		AssemblyDefinition corlib;
 		public AssemblyDefinition Corlib {

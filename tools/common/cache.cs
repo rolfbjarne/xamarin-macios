@@ -9,9 +9,7 @@ using Xamarin.Utils;
 using Xamarin.Bundler;
 
 public class Cache {
-#if MMP
-	const string NAME = "mmp";
-#elif MTOUCH
+#if LEGACY_TOOLS
 	const string NAME = "mtouch";
 #elif BUNDLER
 	const string NAME = "dotnet-linker";

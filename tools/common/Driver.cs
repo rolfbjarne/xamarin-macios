@@ -49,8 +49,7 @@ namespace Xamarin.Bundler {
 					throw ErrorHelper.CreateError (26, ex, Errors.MX0026, $"sdk:{v}", ex.Message);
 				}
 			});
-			options.Add ("target-framework=", "Specify target framework to use. Currently supported: '" + string.Join ("', '", TargetFramework.ValidFrameworks.Select ((v) => v.ToString ())) + "'.", v =>
-			{
+			options.Add ("target-framework=", "Specify target framework to use. Currently supported: '" + string.Join ("', '", TargetFramework.ValidFrameworks.Select ((v) => v.ToString ())) + "'.", v => {
 				targetFramework = TargetFramework.Parse (v);
 			});
 			options.Add ("abi=", "Comma-separated list of ABIs to target.", v => app.ParseAbi (v));

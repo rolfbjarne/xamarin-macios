@@ -506,7 +506,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(_UseNativeAot)' == 'true'">
-		<IlcCompileDependsOn>Compile;_ComputeLinkerArguments;_ComputeManagedAssemblyToLink;SetupOSSpecificProps;PrepareForILLink;_XamarinComputeIlcCompileInputs</IlcCompileDependsOn>
+		<IlcCompileDependsOn>Compile;_ComputeLinkerArguments;_ComputeManagedAssemblyToLink;$(IlcDynamicBuildPropertyDependencies);SetupOSSpecificProps;PrepareForILLink;_XamarinComputeIlcCompileInputs</IlcCompileDependsOn>
 	</PropertyGroup>
 
 	<Target Name="SetupOSSpecificProps">

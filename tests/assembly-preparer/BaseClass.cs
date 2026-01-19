@@ -1,7 +1,6 @@
 namespace AssemblyPreparerTests;
 
-public abstract class BaseClass
-{
+public abstract class BaseClass {
 	public void AssertPrepare (AssemblyPreparer preparer)
 	{
 		if (!preparer.Prepare (out var exceptions))

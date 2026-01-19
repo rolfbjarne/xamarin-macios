@@ -636,7 +636,7 @@ namespace Xamarin.Tests {
 		public static List<string> GetReferenceAssemblies (ApplePlatform platform)
 		{
 			var assemblies = new List<string> ();
-			
+
 			assemblies.AddRange (GetBCLAssemblies (platform));
 			assemblies.AddRange (GetRefLibrary (platform));
 

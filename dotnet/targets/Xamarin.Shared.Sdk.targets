@@ -506,8 +506,15 @@
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(_UseNativeAot)' == 'true'">
-		<IlcCompileDependsOn>Compile;_ComputeLinkerArguments;_ComputeManagedAssemblyToLink;SetupOSSpecificProps;PrepareForILLink;_XamarinComputeIlcCompileInputs</IlcCompileDependsOn>
+		<IlcCompileDependsOn>Compile;_ComputeLinkerArguments;_ComputeManagedAssemblyToLink;_XamarinComputeIlcProps;SetupOSSpecificProps;PrepareForILLink;_XamarinComputeIlcCompileInputs</IlcCompileDependsOn>
 	</PropertyGroup>
+
+	<Target Name="_XamarinComputeIlcProps" DependsOnTargets="_DetectSdkLocations">
+		<!-- Set a few properties needed by SetupOSSpecificProps -->
+		<PropertyGroup>
+			<SysRoot>$(_SdkRoot)</SysRoot>
+		</PropertyGroup>
+	</Target>
 
 	<Target Name="SelectRegistrar" DependsOnTargets="_ComputeLinkMode">
 		<PropertyGroup>

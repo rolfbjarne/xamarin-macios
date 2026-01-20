@@ -30,7 +30,7 @@ namespace Cecil.Tests {
 		{
 			var assembly = info.Assembly;
 			var pinvokes = AllPInvokes (assembly).Where (IsPInvokeOK);
-			Assert.That (pinvokes.Count, Is.GreaterThan (0), Is.True);
+			Assert.That (pinvokes.Count (), Is.GreaterThan (0));
 
 			var failures = pinvokes.Where (ContainsGenerics).ToList ();
 			var failingMethods = ListOfFailingMethods (failures);

@@ -512,7 +512,13 @@
 	<Target Name="_XamarinComputeIlcProps" DependsOnTargets="_DetectSdkLocations">
 		<!-- Set a few properties needed by SetupOSSpecificProps -->
 		<PropertyGroup>
-			<SysRoot>$(_SdkRoot)</SysRoot>
+			<SysRoot Condition="'$(SysRoot)' == ''">$(_SdkRoot)</SysRoot>
+			<_SkipiOSLikePlatformValidation Condition="'$(_SkipiOSLikePlatformValidation)' == ''">true</_SkipiOSLikePlatformValidation>
+			<UseLdClassicXCodeLinker Condition="'$(UseLdClassicXCodeLinker)' == ''">false</UseLdClassicXCodeLinker>
+			<!-- Ask ILC to produce a static library -->
+			<NativeLib>static</NativeLib>
+			<!-- We will handle stripping ourselves, because NativeAOT's logic doesn't work when executing remotely from Windows -->
+			<StripSymbols>false</StripSymbols>
 		</PropertyGroup>
 	</Target>
 
@@ -1502,9 +1508,6 @@
 
 	<Target Name="_XamarinComputeIlcCompileInputs">
 		<PropertyGroup>
-			<!-- Ask ILC to produce a static library -->
-			<NativeLib>static</NativeLib>
-
 			<!-- Always enable trim warnings by default with NativeAOT -->
 			<SuppressTrimAnalysisWarnings Condition="'$(_OriginalSuppressTrimAnalysisWarnings)' != 'true'">false</SuppressTrimAnalysisWarnings>
 		</PropertyGroup>

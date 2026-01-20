@@ -1073,6 +1073,10 @@ namespace Xamarin.Bundler {
 			case "default":
 				Registrar = RegistrarMode.Default;
 				break;
+			case "partial":
+			case "partial-static":
+				Registrar = RegistrarMode.PartialStatic;
+				break;
 			case "managed-static":
 				Registrar = RegistrarMode.ManagedStatic;
 				break;

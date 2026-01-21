@@ -1,11 +1,7 @@
 // This is copied from https://github.com/mono/linker/blob/fa9ccbdaf6907c69ef1bb117906f8f012218d57f/src/tuner/Mono.Tuner/ApplyPreserveAttributeBase.cs
 // and modified to work without a Profile class.
-using System;
-using System.Collections;
-using System.Collections.Generic;
+
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
 
 using Mono.Linker;
 using Mono.Linker.Steps;
@@ -202,7 +198,7 @@ namespace Mono.Tuner {
 
 		List<CustomAttribute> GetPreserveAttributes (ICustomAttributeProvider provider)
 		{
-			List<CustomAttribute> attrs = new List<CustomAttribute> ();
+			var attrs = new List<CustomAttribute> ();
 
 			if (!provider.HasCustomAttributes)
 				return attrs;

@@ -469,6 +469,17 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public MethodReference DynamicDependencyAttribute_ctor__String {
+			get {
+				return GetMethodReference (CorlibAssembly,
+						System_Diagnostics_CodeAnalysis_DynamicDependencyAttribute,
+						".ctor",
+						".ctor(String)",
+						isStatic: false,
+						System_String);
+			}
+		}
+
 		public MethodReference DynamicDependencyAttribute_ctor__String_Type {
 			get {
 				return GetMethodReference (CorlibAssembly,
@@ -1250,18 +1261,94 @@ namespace Xamarin.Linker {
 			field_map.Clear ();
 		}
 
+		void AddAttributeOnceMatchingAllArguments (ICustomAttributeProvider provider, CustomAttribute attribute)
+		{
+			if (provider.HasCustomAttributes) {
+				foreach (var ca in provider.CustomAttributes) {
+					if (ca.Constructor == attribute.Constructor) {
+						// ok so far
+					} else if (ca.Constructor.DeclaringType.FullName != attribute.Constructor.DeclaringType.FullName) {
+						continue;
+					} else if (ca.Constructor.FullName != attribute.Constructor.FullName) {
+						continue;
+					}
+
+					if (ca.ConstructorArguments.Count != attribute.ConstructorArguments.Count)
+						continue;
+
+					if (ca.Properties.Count != attribute.Properties.Count) 
+						continue;
+
+					var all_match = true;
+					for (int i = 0; i < ca.ConstructorArguments.Count; i++) {
+						var ca_arg = ca.ConstructorArguments [i];
+						var attr_arg = attribute.ConstructorArguments [i];
+						if (!object.Equals (ca_arg.Value, attr_arg.Value)) {
+							all_match = false;
+							break;
+						}
+					}
+					if (!all_match)
+						continue;
+					
+					for (int i = 0; i < ca.Properties.Count; i++) {
+						var ca_prop = ca.Properties [i];
+						var attr_prop = attribute.Properties [i];
+
+						if (ca_prop.Name != attr_prop.Name) {
+							all_match = false;
+							break;
+						}
+
+						if (!object.Equals (ca_prop.Argument.Value, attr_prop.Argument.Value)) {
+							all_match = false;
+							break;
+						}
+					}
+					if (!all_match)
+						continue;
+					
+					// attribute already present
+					return;
+				}
+			}
+			provider.CustomAttributes.Add (attribute);
+		}
+
+		public void AddDynamicDependencyAttribute (MethodDefinition addToMethod, MethodDefinition dependsOn)
+		{
+			if (addToMethod.DeclaringType == dependsOn.DeclaringType) {
+				var attribute = new CustomAttribute (DynamicDependencyAttribute_ctor__String);
+				attribute.ConstructorArguments.Add (new CustomAttributeArgument (System_String, DocumentationComments.GetSignature (dependsOn)));
+				AddAttributeOnceMatchingAllArguments (addToMethod, attribute);
+			} else if (addToMethod.DeclaringType.Module == dependsOn.DeclaringType.Module) {
+				var attribute = CreateDynamicDependencyAttribute (DocumentationComments.GetSignature (dependsOn), dependsOn.DeclaringType);
+				AddAttributeOnceMatchingAllArguments (addToMethod, attribute);
+			} else {
+				var attribute = CreateDynamicDependencyAttribute (DocumentationComments.GetSignature (dependsOn), dependsOn.DeclaringType, dependsOn.DeclaringType.Module.Assembly);
+				AddAttributeOnceMatchingAllArguments (addToMethod, attribute);
+			}
+		}
+
 		public CustomAttribute CreateDynamicDependencyAttribute (string memberSignature, TypeDefinition type)
 		{
-			if (type.HasGenericParameters) {
-				var typeName = Xamarin.Utils.DocumentationComments.GetSignature (type);
-				var assemblyName = type.Module.Assembly.Name.Name;
-				return CreateDynamicDependencyAttribute (memberSignature, typeName, assemblyName);
-			}
+			if (type.HasGenericParameters)
+				return CreateDynamicDependencyAttribute (memberSignature, type, type.Module.Assembly);
 
 			var attribute = new CustomAttribute (DynamicDependencyAttribute_ctor__String_Type);
 			attribute.ConstructorArguments.Add (new CustomAttributeArgument (System_String, memberSignature));
 			attribute.ConstructorArguments.Add (new CustomAttributeArgument (System_Type, type));
 			return attribute;
+		}
+
+		public CustomAttribute CreateDynamicDependencyAttribute (string memberSignature, TypeDefinition type, AssemblyDefinition assembly)
+		{
+			return CreateDynamicDependencyAttribute (memberSignature, DocumentationComments.GetSignature (type), assembly.Name.Name);
+		}
+
+		public CustomAttribute CreateDynamicDependencyAttribute (string memberSignature, string typeName, AssemblyDefinition assembly)
+		{
+			return CreateDynamicDependencyAttribute (memberSignature, typeName, assembly.Name.Name);
 		}
 
 		public CustomAttribute CreateDynamicDependencyAttribute (string memberSignature, string typeName, string assemblyName)

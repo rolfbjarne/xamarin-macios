@@ -1,15 +1,12 @@
 // Copyright 2017 Xamarin Inc.
 
-using System;
-using System.Collections.Generic;
-
 using Mono.Cecil;
-using Mono.Cecil.Cil;
 using Mono.Linker;
 using Mono.Linker.Steps;
 using Mono.Tuner;
 
 using Xamarin.Bundler;
+using Xamarin.Tuner;
 
 #nullable enable
 
@@ -25,27 +22,23 @@ namespace Xamarin.Linker.Steps {
 			markContext.RegisterMarkMethodAction (ProcessMethod);
 		}
 
-		bool IsActiveFor (AssemblyDefinition assembly)
+		void Preserve (Tuple<MethodDefinition, MethodDefinition> pair, params MethodDefinition?[] conditions)
 		{
-			if (Profile.IsProductAssembly (assembly))
-				return true;
+			var conds = conditions.Where (v => v is not null).Cast<MethodDefinition>().ToArray ();
+			if (conds.Length == 0)
+				return;
 
-			// We don't need to process assemblies that don't reference ObjCRuntime.BindAsAttribute.
-			foreach (var tr in assembly.MainModule.GetTypeReferences ()) {
-				if (tr.Is ("ObjCRuntime", "BindAsAttribute"))
-					return true;
+			abr.SetCurrentAssembly (conds [0].DeclaringType.Module.Assembly);
+
+			foreach (var condition in conds) {
+				abr.AddDynamicDependencyAttribute (condition, pair.Item1);
+				abr.AddDynamicDependencyAttribute (condition, pair.Item2);
 			}
 
-			return false;
+			abr.SaveCurrentAssembly ();
 		}
 
-		void Mark (Tuple<MethodDefinition, MethodDefinition> pair)
-		{
-			Context.Annotations.Mark (pair.Item1);
-			Context.Annotations.Mark (pair.Item2);
-		}
-
-		void ProcessAttributeProvider (ICustomAttributeProvider provider)
+		void ProcessAttributeProvider (ICustomAttributeProvider provider, params MethodDefinition[] conditions)
 		{
 			if (provider?.HasCustomAttributes != true)
 				return;
@@ -62,7 +55,7 @@ namespace Xamarin.Linker.Steps {
 				}
 
 				var managedType = ca.ConstructorArguments [0].Value as TypeReference;
-				var managedEnumType = managedType?.GetElementType ().Resolve ();
+				var managedEnumType = managedType?.GetElementType ()?.Resolve ();
 				if (managedEnumType is null) {
 					ErrorHelper.Show (ErrorHelper.CreateWarning (LinkContext.App, 4124, provider, Errors.MT4124_H, provider.AsString (), managedType?.FullName));
 					continue;
@@ -72,8 +65,8 @@ namespace Xamarin.Linker.Steps {
 				if (!managedEnumType.IsEnum)
 					continue;
 
-				if (cache is not null && cache.TryGetValue (managedEnumType, out var pair)) {
-					// The pair was already marked if it was cached.
+				if (cache.TryGetValue (managedEnumType, out var pair)) {
+					Preserve (pair, conditions);
 					continue;
 				}
 
@@ -89,7 +82,7 @@ namespace Xamarin.Linker.Steps {
 					break;
 				}
 				if (extensionType is null) {
-					Driver.Log (1, $"Could not find a smart extension type for the enum {managedEnumType.FullName} (due to BindAs attribute on {provider.AsString ()}): most likely this is because the enum isn't a smart enum.");
+					Configuration.Log (1, $"Could not find a smart extension type for the enum {managedEnumType.FullName} (due to BindAs attribute on {provider.AsString ()}): most likely this is because the enum isn't a smart enum.");
 					continue;
 				}
 
@@ -118,18 +111,18 @@ namespace Xamarin.Linker.Steps {
 				}
 
 				if (getConstant is null) {
-					Driver.Log (1, $"Could not find the GetConstant method on the supposedly smart extension type {extensionType.FullName} for the enum {managedEnumType.FullName} (due to BindAs attribute on {provider.AsString ()}): most likely this is because the enum isn't a smart enum.");
+					Configuration.Log (1, $"Could not find the GetConstant method on the supposedly smart extension type {extensionType.FullName} for the enum {managedEnumType.FullName} (due to BindAs attribute on {provider.AsString ()}): most likely this is because the enum isn't a smart enum.");
 					continue;
 				}
 
 				if (getValue is null) {
-					Driver.Log (1, $"Could not find the GetValue method on the supposedly smart extension type {extensionType.FullName} for the enum {managedEnumType.FullName} (due to BindAs attribute on {provider.AsString ()}): most likely this is because the enum isn't a smart enum.");
+					Configuration.Log (1, $"Could not find the GetValue method on the supposedly smart extension type {extensionType.FullName} for the enum {managedEnumType.FullName} (due to BindAs attribute on {provider.AsString ()}): most likely this is because the enum isn't a smart enum.");
 					continue;
 				}
 
 				pair = new Tuple<MethodDefinition, MethodDefinition> (getConstant, getValue);
 				cache.Add (managedEnumType, pair);
-				Mark (pair);
+				Preserve (pair, conditions);
 			}
 		}
 
@@ -140,17 +133,18 @@ namespace Xamarin.Linker.Steps {
 				return method.IsGetter || method.IsSetter;
 			}
 
-			ProcessAttributeProvider (method);
-			ProcessAttributeProvider (method.MethodReturnType);
+			ProcessAttributeProvider (method, method);
+			ProcessAttributeProvider (method.MethodReturnType, method);
 
 			if (method.HasParameters) {
 				foreach (var p in method.Parameters)
-					ProcessAttributeProvider (p);
+					ProcessAttributeProvider (p, method);
 			}
+
 			if (IsPropertyMethod (method)) {
 				foreach (PropertyDefinition property in method.DeclaringType.Properties)
 					if (property.GetMethod == method || property.SetMethod == method) {
-						ProcessAttributeProvider (property);
+						ProcessAttributeProvider (property, property.GetMethod, property.SetMethod);
 						break;
 					}
 			}

@@ -16,11 +16,15 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.DotNet.Cecil" Version="$(MicrosoftDotNetCecilPackageVersion)" />
+		<PackageReference Include="Microsoft.Win32.Registry" Version="5.0.0" Condition="'$(TargetFramework)' == 'netstandard2.0'" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Compile Include="../common/ApplePlatform.cs">
 			<Link>external/tools/common/ApplePlatform.cs</Link>
+		</Compile>
+		<Compile Include="../common/CoreResolver.cs">
+			<Link>external/tools/common/CoreResolver.cs</Link>
 		</Compile>
 		<Compile Include="../common/error.cs">
 			<Link>external/tools/common/error.cs</Link>
@@ -28,14 +32,23 @@
 		<Compile Include="../common/ErrorHelper.tools.cs">
 			<Link>external/tools/common/ErrorHelper.tools.cs</Link>
 		</Compile>
+		<Compile Include="../common/NormalizedStringComparer.cs">
+			<Link>external/tools/common/NormalizedStringComparer.cs</Link>
+		</Compile>
 		<Compile Include="../common/NullableAttributes.cs">
 			<Link>external/tools/common/NullableAttributes.cs</Link>
 		</Compile>
 		<Compile Include="../common/RegistrarMode.cs">
 			<Link>external/tools/common/RegistrarMode.cs</Link>
 		</Compile>
+		<Compile Include="../common/PathUtils.cs">
+			<Link>external/tools/common/PathUtils.cs</Link>
+		</Compile>
 		<Compile Include="../dotnet-linker/AppBundleRewriter.cs">
 			<Link>external/tools/dotnet-linker/AppBundleRewriter.cs</Link>
+		</Compile>
+		<Compile Include="../dotnet-linker/DotNetResolver.cs">
+			<Link>external/tools/dotnet-linker/DotNetResolver.cs</Link>
 		</Compile>
 		<Compile Include="../dotnet-linker/Extensions.cs">
 			<Link>external/tools/dotnet-linker/Extensions.cs</Link>
@@ -57,6 +70,9 @@
 		</Compile>
 		<Compile Include="../linker/MobileExtensions.cs">
 			<Link>external/tools/linker/MobileExtensions.cs</Link>
+		</Compile>
+		<Compile Include="../linker/MonoTouch.Tuner/PreserveSmartEnumConversions.cs">
+			<Link>external/tools/linker/MonoTouch.Tuner/PreserveSmartEnumConversions.cs</Link>
 		</Compile>
 		<Compile Include="../linker/ObjCExtensions.cs">
 			<Link>external/tools/linker/ObjCExtensions.cs</Link>

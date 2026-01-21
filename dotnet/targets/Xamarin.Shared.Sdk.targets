@@ -737,7 +737,7 @@
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true' And '$(PrepareAssemblies)' != 'true'" Type="Xamarin.Linker.MarkIProtocolHandler" />
 			<!-- MarkDispatcher substeps will run for all marked assemblies. -->
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true'" Type="Xamarin.Linker.Steps.MarkDispatcher" />
-			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true'" Type="Xamarin.Linker.Steps.PreserveSmartEnumConversionsHandler" />
+			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true' And '$(PrepareAssemblies)' != 'true'" Type="Xamarin.Linker.Steps.PreserveSmartEnumConversionsHandler" />
 
 			<!--
 				pre-sweep custom steps

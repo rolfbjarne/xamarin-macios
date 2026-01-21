@@ -9,6 +9,8 @@ using Xamarin.Bundler;
 public class DerivedLinkContext : LinkContext {
 	public RegistrarMode Registrar { get => Configuration.Registrar; }
 
+	public Target Target { get => throw new NotImplementedException (); }
+
 	public DerivedLinkContext (LinkerConfiguration configuration) : base (configuration)
 	{
 	}
@@ -41,6 +43,6 @@ public class DerivedLinkContext : LinkContext {
 		if (typeReference is GenericParameter || (typeReference is TypeSpecification && typeReference is not GenericInstanceType))
 			throw new NotSupportedException($"TypeDefinition cannot be resolved from '{typeReference.GetType()}' type");
 
-		return typeReference.Resolve ();
+		return Configuration.MetadataResolver.Resolve (typeReference);
 	}
 }

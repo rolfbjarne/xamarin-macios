@@ -25,7 +25,7 @@ public class LinkerConfiguration {
 		}
 	}
 
-	public IAssemblyResolver AssemblyResolver { get; private set; }
+	public DotNetResolver AssemblyResolver { get; private set; }
 	public IMetadataResolver MetadataResolver { get; private set; }
 
 	DerivedLinkContext? derivedLinkContext;
@@ -54,7 +54,7 @@ public class LinkerConfiguration {
 
 	public LinkerConfiguration ()
 	{
-		AssemblyResolver = new DefaultAssemblyResolver ();
+		AssemblyResolver = new DotNetResolver ();
 		MetadataResolver = new MetadataResolver (AssemblyResolver);
 	}
 
@@ -88,4 +88,10 @@ public class LinkerConfiguration {
 		return assembly.Name.Name == PlatformAssembly;
 	}
 
+	public void Log (int level, string message)
+	{
+		if (level > 0)
+			return; // FIXME: check actual verbosity
+		Console.WriteLine (message);
+	}
 }

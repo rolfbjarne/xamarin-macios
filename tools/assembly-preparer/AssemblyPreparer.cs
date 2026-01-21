@@ -118,6 +118,7 @@ public class AssemblyPreparer : IDisposable {
 		var markHandlers = new IMarkHandler [] {
 			new PreserveBlockCodeHandler (),
 			new MarkIProtocolHandler (),
+			new PreserveSmartEnumConversionsHandler (),
 		};
 
 		var linkContext = new DerivedLinkContext (configuration);
@@ -141,6 +142,7 @@ public class AssemblyPreparer : IDisposable {
 			linkContext.Assemblies.Add (assemblyDefinition);
 			assembly.Assembly = assemblyDefinition;
 			configuration.Context.Annotations.SetAction (assemblyDefinition, AssemblyAction.Copy);
+			configuration.AssemblyResolver.ResolverCache.Add (assemblyDefinition.Name.Name, assemblyDefinition);
 		}
 
 		foreach (var assembly in linkContext.GetAssemblies ()) {

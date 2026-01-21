@@ -83,9 +83,6 @@
     <Compile Include="..\..\tools\common\Execution.cs">
       <Link>Execution.cs</Link>
     </Compile>
-    <Compile Include="..\..\tools\common\PathUtils.cs">
-      <Link>PathUtils.cs</Link>
-    </Compile>
     <Compile Include="..\..\tools\common\PListExtensions.cs">
       <Link>PListExtensions.cs</Link>
     </Compile>

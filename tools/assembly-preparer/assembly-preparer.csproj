@@ -147,6 +147,9 @@
 		<Compile Include="../dotnet-linker/Steps/PreserveBlockCodeHandler.cs">
 			<Link>external/tools/dotnet-linker/Steps/PreserveBlockCodeHandler.cs</Link>
 		</Compile>
+		<Compile Include="../linker/CoreOptimizeGeneratedCode.cs">
+		  <Link>external/tools/linker/CoreOptimizeGeneratedCode.cs</Link>
+		</Compile>
 		<Compile Include="../linker/CoreTypeMapStep.cs">
 			<Link>external/tools/linker/CoreTypeMapStep.cs</Link>
 		</Compile>
@@ -155,6 +158,9 @@
 		</Compile>
 		<Compile Include="../linker/MobileExtensions.cs">
 			<Link>external/tools/linker/MobileExtensions.cs</Link>
+		</Compile>
+		<Compile Include="../linker/MonoTouch.Tuner/Extensions.cs">
+		  <Link>external/tools/linker/MonoTouch.Tuner/Extensions.cs</Link>
 		</Compile>
 		<Compile Include="../linker/MonoTouch.Tuner/PreserveSmartEnumConversions.cs">
 			<Link>external/tools/linker/MonoTouch.Tuner/PreserveSmartEnumConversions.cs</Link>

@@ -26,6 +26,7 @@ namespace Xamarin.Bundler {
 		public static int Main (string [] args)
 		{
 			try {
+				ErrorHelper.Platform = ApplePlatform.iOS;
 				Console.OutputEncoding = new UTF8Encoding (false, false);
 				SetCurrentLanguage ();
 				return Main2 (args);

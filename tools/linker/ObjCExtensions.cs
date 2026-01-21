@@ -5,6 +5,8 @@ using Mono.Tuner;
 
 using Xamarin.Tuner;
 
+#nullable enable
+
 namespace Xamarin.Linker {
 
 	static class Namespaces {
@@ -96,11 +98,11 @@ namespace Xamarin.Linker {
 #else
 				type.Resolve ()
 #endif
-				.IsNSObject (link_context);
+				?.IsNSObject (link_context) == true;
 		}
 
 		// warning: *Is* means does 'type' inherits from Foundation.NSObject ?
-		public static bool IsNSObject (this TypeDefinition type, DerivedLinkContext link_context)
+		public static bool IsNSObject (this TypeDefinition type, DerivedLinkContext? link_context)
 		{
 			if (link_context?.CachedIsNSObject is not null)
 				return link_context.CachedIsNSObject.Contains (type);

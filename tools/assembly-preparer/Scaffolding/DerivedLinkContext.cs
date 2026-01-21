@@ -39,7 +39,7 @@ public class DerivedLinkContext : LinkContext {
 		// Types which never have TypeDefinition or can have ambiguous definition should not be passed in
 		//
 		if (typeReference is GenericParameter || (typeReference is TypeSpecification && typeReference is not GenericInstanceType))
-			throw new NotSupportedException($"TypeDefinition cannot be resolved from '{typeReference.GetType()}' type");
+			throw new NotSupportedException ($"TypeDefinition cannot be resolved from '{typeReference.GetType ()}' type");
 
 		return typeReference.Resolve ();
 	}

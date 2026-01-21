@@ -46,7 +46,7 @@ public abstract class BaseClass {
 		if (configure is not null)
 			configure (preparer);
 		AssertPrepare (preparer);
-		
+
 		outputPath = Path.Combine (assemblyDir, "Test.dll");
 	}
 }

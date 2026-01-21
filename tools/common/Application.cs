@@ -60,14 +60,6 @@ namespace Xamarin.Bundler {
 		Trace = 1,
 	}
 
-	public enum RegistrarMode {
-		Default,
-		Dynamic,
-		PartialStatic,
-		Static,
-		ManagedStatic,
-	}
-
 	public partial class Application {
 		public Cache Cache;
 		public string AppDirectory = ".";

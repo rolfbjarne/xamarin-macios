@@ -30,6 +30,9 @@
     <Compile Include="..\common\ProductConstants.cs">
       <Link>tools\common\ProductConstants.cs</Link>
     </Compile>
+    <Compile Include="..\common\RegistrarMode.cs">
+      <Link>tools\common\RegistrarMode.cs</Link>
+    </Compile>
     <Compile Include="..\..\builds\mono-ios-sdk-destdir\ios-sources\external\linker\src\tuner\Mono.Tuner\CecilRocks.cs">
       <Link>mono-archive\Mono.Tuner\CecilRocks.cs</Link>
     </Compile>

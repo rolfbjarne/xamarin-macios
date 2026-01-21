@@ -50,9 +50,13 @@ public class ProcessRuntimeLibraries : XamarinTask, ICancelableTask {
 				if (!string.Equals (item.GetMetadata ("NuGetPackageId"), RuntimeNuGetPackageId, StringComparison.OrdinalIgnoreCase))
 					return false;
 				var extension = item.GetMetadata ("Extension");
-				if (!(string.Equals (extension, ".a", StringComparison.OrdinalIgnoreCase) || string.Equals (extension, ".dylib", StringComparison.OrdinalIgnoreCase)))
-					return false;
-				return true;
+				if (string.Equals (extension, ".a", StringComparison.OrdinalIgnoreCase))
+					return true;
+				if (string.Equals (extension, ".dylib", StringComparison.OrdinalIgnoreCase))
+					return true;
+				if (string.Equals (extension, ".o", StringComparison.OrdinalIgnoreCase))
+					return true;
+				return false;
 			})
 			.ToDictionary (g => g.Key, g => g.ToList ());
 

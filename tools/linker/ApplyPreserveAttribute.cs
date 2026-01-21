@@ -1,13 +1,10 @@
 // Copyright 2011-2013 Xamarin Inc. All rights reserved.
 
-using System;
-using System.Collections.Generic;
-
 using Mono.Cecil;
 using Mono.Linker;
 using Mono.Tuner;
 
-using Xamarin.Tuner;
+#nullable enable
 
 namespace Xamarin.Linker.Steps {
 
@@ -38,7 +35,7 @@ namespace Xamarin.Linker.Steps {
 
 				if (!attribute.HasConstructorArguments)
 					continue;
-				var tr = (attribute.ConstructorArguments [0].Value as TypeReference);
+				var tr = attribute.ConstructorArguments [0].Value as TypeReference;
 				if (tr is null)
 					continue;
 
@@ -61,6 +58,7 @@ namespace Xamarin.Linker.Steps {
 				removeAttribute = true;
 				return true;
 			}
+
 			return false;
 		}
 	}

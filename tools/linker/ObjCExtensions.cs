@@ -104,12 +104,16 @@ namespace Xamarin.Linker {
 		// warning: *Is* means does 'type' inherits from Foundation.NSObject ?
 		public static bool IsNSObject (this TypeDefinition type, DerivedLinkContext? link_context)
 		{
+#if !ASSEMBLY_PREPARER
 			if (link_context?.CachedIsNSObject is not null)
 				return link_context.CachedIsNSObject.Contains (type);
+#endif
 
 			return type.Inherits (Namespaces.Foundation, "NSObject"
-#if !LEGACY_TOOLS
-				, link_context.LinkerConfiguration.Context
+#if ASSEMBLY_PREPARER
+				, link_context!.Configuration.MetadataResolver
+#elif !LEGACY_TOOLS
+				, link_context!.LinkerConfiguration.Context
 #endif
 			);
 		}

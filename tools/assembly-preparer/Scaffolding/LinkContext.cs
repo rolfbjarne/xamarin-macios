@@ -14,6 +14,8 @@ public class LinkContext {
 
 	public LinkerConfiguration Configuration { get; private set; }
 
+	public LinkerConfiguration LinkerConfiguration { get => Configuration; }
+
 	public LinkContext (LinkerConfiguration configuration)
 	{
 		Configuration = configuration;

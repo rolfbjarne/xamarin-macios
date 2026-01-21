@@ -10,12 +10,13 @@ public abstract class BaseClass {
 
 	public bool AssertPrepare (ApplePlatform platform, string code, out AssemblyDefinition assemblyDefinition)
 	{
-		AssertPrepare (platform, code, out assemblyDefinition);
+		return AssertPrepare (platform, RegistrarMode.Dynamic, code, out assemblyDefinition);
 	}
 
-	public void AssertPrepare (ApplePlatform platform, string code, out AssemblyDefinition assemblyDefinition)
+	// returns true if the test assembly was modified
+	public bool AssertPrepare (ApplePlatform platform, RegistrarMode registrar, string code, out AssemblyDefinition assemblyDefinition)
 	{
-		AssertPrepareCode (platform, null, code, out string outputPath);
+		var rv = AssertPrepareCode (platform, preparer => preparer.Registrar = registrar, code, out string outputPath);
 		assemblyDefinition = AssemblyDefinition.ReadAssembly (outputPath);
 		return rv;
 	}

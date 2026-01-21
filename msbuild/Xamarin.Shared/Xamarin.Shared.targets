@@ -3330,12 +3330,13 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 		Condition="'$(PrepareAssemblies)' == 'true'"
 		Inputs="@(_AssembliesToPrepare)"
 		Outputs="@(_AssembliesToPrepare->'$(PreparedAssembliesDirectory)%(Filename)%(Extension)')"
-		DependsOnTargets="_PrepareAssembliesForPreparation;_ComputeAssembliesToPostprocessOnPublish"
+		DependsOnTargets="_PrepareAssembliesForPreparation;_ComputeAssembliesToPostprocessOnPublish;SelectRegistrar"
 		>
 		<PrepareAssemblies
 			InputAssemblies="@(_AssembliesToPrepare)"
 			MakeReproPath="$(_PrepareAssembliesMakeReproPath)"
 			OutputDirectory="$(PreparedAssembliesDirectory)"
+			Registrar="$(Registrar)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 		>
 			<Output TaskParameter="OutputAssemblies" ItemName="_PreparedAssemblies" />

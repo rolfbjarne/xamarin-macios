@@ -28,23 +28,16 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 using Mono.Cecil;
 using Mono.Linker;
-using Mono.Tuner;
-#if NET
 using Mono.Linker.Steps;
-#endif
+using Mono.Tuner;
 
 #nullable enable
 
 namespace Xamarin.Linker.Steps {
 
 	public class MarkNSObjects : ExceptionalSubStep {
-
-		static string? ProductAssembly;
-
 		protected override string Name { get; } = "MarkNSObjects";
 		protected override int ErrorCode { get; } = 2080;
 
@@ -54,9 +47,6 @@ namespace Xamarin.Linker.Steps {
 
 		protected override void Process (TypeDefinition type)
 		{
-			if (ProductAssembly is null)
-				ProductAssembly = (Profile.Current as BaseProfile)?.ProductAssembly;
-
 			bool nsobject = type.IsNSObject (LinkContext);
 			if (!nsobject && !type.IsNativeObject ())
 				return;
@@ -74,7 +64,7 @@ namespace Xamarin.Linker.Steps {
 				Annotations.Mark (type);
 				Annotations.SetPreserve (type, TypePreserve.All);
 			} else if (type.HasMethods) {
-				PreserveIntPtrConstructor (type);
+				PreserveNativeHandleConstructor (type);
 				if (nsobject)
 					PreserveExportedMethods (type);
 			}
@@ -122,17 +112,13 @@ namespace Xamarin.Linker.Steps {
 			return false;
 		}
 
-		void PreserveIntPtrConstructor (TypeDefinition type)
+		void PreserveNativeHandleConstructor (TypeDefinition type)
 		{
 			foreach (MethodDefinition constructor in type.GetConstructors ()) {
 				if (!constructor.HasParameters)
 					continue;
 
-#if NET
 				if (constructor.Parameters.Count != 1 || !constructor.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle"))
-#else
-				if (constructor.Parameters.Count != 1 || !constructor.Parameters [0].ParameterType.Is ("System", "IntPtr"))
-#endif
 					continue;
 
 				Annotations.AddPreservedMethod (type, constructor);
@@ -140,9 +126,9 @@ namespace Xamarin.Linker.Steps {
 			}
 		}
 
-		static bool IsProductMethod (MethodDefinition method)
+		bool IsProductMethod (MethodDefinition method)
 		{
-			return (method.DeclaringType.Module.Assembly.Name.Name == ProductAssembly);
+			return IsProductType (method.DeclaringType);
 		}
 
 		bool IsProductType (TypeDefinition type)
@@ -151,15 +137,7 @@ namespace Xamarin.Linker.Steps {
 				return true;
 
 			var name = type.Module.Assembly.Name.Name;
-			switch (name) {
-			case "Xamarin.Forms.Platform.iOS":
-				return true;
-			case "Xamarin.iOS":
-				// for Catalyst this has extra stubs and must be considered has _product_ to remove extra binding code
-				return true;
-			default:
-				return name == ProductAssembly;
-			}
+			return name == Configuration.PlatformAssembly;
 		}
 	}
 }

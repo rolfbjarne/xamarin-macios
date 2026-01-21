@@ -101,7 +101,7 @@ namespace Xamarin.Linker {
 #else
 				type.Resolve ()
 #endif
-				.IsNSObject (link_context) == true;
+				?.IsNSObject (link_context) == true;
 		}
 
 		// warning: *Is* means does 'type' inherits from Foundation.NSObject ?

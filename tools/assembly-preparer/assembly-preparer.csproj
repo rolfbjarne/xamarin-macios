@@ -28,8 +28,20 @@
 		<Compile Include="../common/ErrorHelper.tools.cs">
 			<Link>external/tools/common/ErrorHelper.tools.cs</Link>
 		</Compile>
+		<Compile Include="../common/NullableAttributes.cs">
+			<Link>external/tools/common/NullableAttributes.cs</Link>
+		</Compile>
+		<Compile Include="../common/RegistrarMode.cs">
+			<Link>external/tools/common/RegistrarMode.cs</Link>
+		</Compile>
 		<Compile Include="../dotnet-linker/AppBundleRewriter.cs">
 			<Link>external/tools/dotnet-linker/AppBundleRewriter.cs</Link>
+		</Compile>
+		<Compile Include="../dotnet-linker/Extensions.cs">
+			<Link>external/tools/dotnet-linker/Extensions.cs</Link>
+		</Compile>
+		<Compile Include="../dotnet-linker/MarkIProtocolHandler.cs">
+			<Link>external/tools/dotnet-linker/MarkIProtocolHandler.cs</Link>
 		</Compile>
 		<Compile Include="../dotnet-linker/Steps/ConfigurationAwareMarkHandler.cs">
 			<Link>external/tools/dotnet-linker/Steps/ConfigurationAwareMarkHandler.cs</Link>
@@ -42,6 +54,15 @@
 		</Compile>
 		<Compile Include="../linker/CustomSymbolWriter.cs">
 			<Link>external/tools/linker/CustomSymbolWriter.cs</Link>
+		</Compile>
+		<Compile Include="../linker/MobileExtensions.cs">
+			<Link>external/tools/linker/MobileExtensions.cs</Link>
+		</Compile>
+		<Compile Include="../linker/ObjCExtensions.cs">
+			<Link>external/tools/linker/ObjCExtensions.cs</Link>
+		</Compile>
+		<Compile Include="../../src/ObjCRuntime/BindingImplAttribute.cs">
+			<Link>external/src/ObjCRuntime/BindingImplAttribute.cs</Link>
 		</Compile>
 		<Compile Include="../../src/ObjCRuntime/ErrorHelper.cs">
 			<Link>external/src/ObjCRuntime/ErrorHelper.cs</Link>

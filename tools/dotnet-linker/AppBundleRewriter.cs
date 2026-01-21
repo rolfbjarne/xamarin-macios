@@ -1296,6 +1296,11 @@ namespace Xamarin.Linker {
 			AddDynamicDependencyAttributeToStaticConstructor (onType, DocumentationComments.GetSignature (forField));
 		}
 
+		public void AddDynamicDependencyAttributeToStaticConstructor (TypeDefinition onType, TypeDefinition forType)
+		{
+			AddDynamicDependencyAttributeToStaticConstructor (onType, DocumentationComments.GetSignature (forType));
+		}
+
 		void AddDynamicDependencyAttributeToStaticConstructor (TypeDefinition onType, string signature)
 		{
 			ClearCurrentAssembly ();

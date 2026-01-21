@@ -55,7 +55,12 @@ namespace Xamarin.Tuner {
 		}
 #endif
 
-		AssemblyDefinition? corlib;
+		AssemblyDefinition corlib;
+
+#if !LEGACY_TOOLS
+		public RegistrarMode Registrar => App.Registrar;
+#endif // !LEGACY_TOOLS
+
 		public AssemblyDefinition Corlib {
 			get {
 				if (corlib is null) {

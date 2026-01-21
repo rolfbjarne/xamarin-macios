@@ -11,9 +11,11 @@ using Mono.Tuner;
 
 using Xamarin.Bundler;
 
+#nullable enable
+
 namespace Xamarin.Linker.Steps {
 	public class PreserveSmartEnumConversionsHandler : ExceptionalMarkHandler {
-		Dictionary<TypeDefinition, Tuple<MethodDefinition, MethodDefinition>> cache;
+		Dictionary<TypeDefinition, Tuple<MethodDefinition, MethodDefinition>> cache = new ();
 		protected override string Name { get; } = "Smart Enum Conversion Preserver";
 		protected override int ErrorCode { get; } = 2200;
 
@@ -70,14 +72,13 @@ namespace Xamarin.Linker.Steps {
 				if (!managedEnumType.IsEnum)
 					continue;
 
-				Tuple<MethodDefinition, MethodDefinition> pair;
-				if (cache is not null && cache.TryGetValue (managedEnumType, out pair)) {
+				if (cache is not null && cache.TryGetValue (managedEnumType, out var pair)) {
 					// The pair was already marked if it was cached.
 					continue;
 				}
 
 				// Find the Extension type
-				TypeDefinition extensionType = null;
+				TypeDefinition? extensionType = null;
 				var extensionName = managedEnumType.Name + "Extensions";
 				foreach (var type in managedEnumType.Module.Types) {
 					if (type.Namespace != managedEnumType.Namespace)
@@ -93,8 +94,8 @@ namespace Xamarin.Linker.Steps {
 				}
 
 				// Find the GetConstant/GetValue methods
-				MethodDefinition getConstant = null;
-				MethodDefinition getValue = null;
+				MethodDefinition? getConstant = null;
+				MethodDefinition? getValue = null;
 
 				foreach (var method in extensionType.Methods) {
 					if (!method.IsStatic)
@@ -127,8 +128,6 @@ namespace Xamarin.Linker.Steps {
 				}
 
 				pair = new Tuple<MethodDefinition, MethodDefinition> (getConstant, getValue);
-				if (cache is null)
-					cache = new Dictionary<TypeDefinition, Tuple<MethodDefinition, MethodDefinition>> ();
 				cache.Add (managedEnumType, pair);
 				Mark (pair);
 			}

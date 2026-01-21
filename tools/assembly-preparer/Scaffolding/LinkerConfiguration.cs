@@ -25,6 +25,9 @@ public class LinkerConfiguration {
 		}
 	}
 
+	public IAssemblyResolver AssemblyResolver { get; private set; }
+	public IMetadataResolver MetadataResolver { get; private set; }
+
 	DerivedLinkContext? derivedLinkContext;
 	public DerivedLinkContext DerivedLinkContext {
 		get {
@@ -45,6 +48,14 @@ public class LinkerConfiguration {
 		get {
 			return $"Microsoft.{Platform.AsString ()}";
 		}
+	}
+
+	public RegistrarMode Registrar { get; set; } = RegistrarMode.Default;
+
+	public LinkerConfiguration ()
+	{
+		AssemblyResolver = new DefaultAssemblyResolver ();
+		MetadataResolver = new MetadataResolver (AssemblyResolver);
 	}
 
 	public static LinkerConfiguration GetInstance (LinkContext context)

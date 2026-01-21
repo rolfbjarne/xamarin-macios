@@ -21,6 +21,7 @@ public class ReproTest : BaseClass {
 			Directory.Delete (reproPath); // the repro path can't exist prior to Prepare
 			AssertPrepareCode (platform, (preparer) => {
 				preparer.MakeReproPath = reproPath;
+				preparer.Registrar = RegistrarMode.Dynamic;
 			}, code, out string _);
 		}
 

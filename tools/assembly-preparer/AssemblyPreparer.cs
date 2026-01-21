@@ -17,6 +17,11 @@ public class AssemblyPreparer : IDisposable {
 
 	public string MakeReproPath { get; set; } = string.Empty;
 
+	public RegistrarMode Registrar {
+		get => configuration.Registrar;
+		set => configuration.Registrar = value;
+	}
+
 	public AssemblyPreparerInfo [] Assemblies { get; set; }
 
 	public AssemblyPreparer (AssemblyPreparerInfo [] assemblies, ApplePlatform platform)
@@ -42,6 +47,7 @@ public class AssemblyPreparer : IDisposable {
 		Directory.CreateDirectory (MakeReproPath);
 		var lines = new List<string> ();
 		lines.Add ($"Platform: {configuration.Platform}");
+		lines.Add ($"Registrar: {configuration.Registrar}");
 		foreach (var assembly in Assemblies) {
 			lines.Add ($"Assembly: {Path.GetFileName (assembly.InputPath)}");
 			File.Copy (assembly.InputPath, Path.Combine (MakeReproPath, Path.GetFileName (assembly.InputPath)));
@@ -70,6 +76,13 @@ public class AssemblyPreparer : IDisposable {
 #else
 				platform = (ApplePlatform) Enum.Parse (typeof (ApplePlatform), platformStr);
 #endif
+			} else if (line.StartsWith ("Registrar: ")) {
+				var registrarStr = line.Substring ("Registrar: ".Length);
+#if NET
+				registrar = Enum.Parse<RegistrarMode> (registrarStr);
+#else
+				registrar = (RegistrarMode) Enum.Parse (typeof (RegistrarMode), registrarStr);
+#endif
 			} else if (line.StartsWith ("Assembly: ")) {
 				var assembly = line.Substring ("Assembly: ".Length);
 				assemblies.Add (new AssemblyPreparerInfo (Path.Combine (reproPath, assembly), Path.Combine (reproPath, "out", assembly)));
@@ -90,6 +103,9 @@ public class AssemblyPreparer : IDisposable {
 	{
 		exceptions = configuration.Exceptions;
 
+		if (Registrar == RegistrarMode.Default) {
+			exceptions.Add (ErrorHelper.CreateError (99, "RegistrarMode must be explicitly set."));
+			return false;
 		}
 
 		if (!string.IsNullOrEmpty (MakeReproPath) && !SaveToReproPath (exceptions))
@@ -97,6 +113,7 @@ public class AssemblyPreparer : IDisposable {
 
 		var markHandlers = new IMarkHandler [] {
 			new PreserveBlockCodeHandler (),
+			new MarkIProtocolHandler (),
 		};
 
 		var linkContext = new DerivedLinkContext (configuration);
@@ -109,12 +126,9 @@ public class AssemblyPreparer : IDisposable {
 
 		// load assemblies
 
-		var assemblyResolver = new DefaultAssemblyResolver ();
-		// var metadataResolver = new DefaultMetadataResolver ();
-
 		var parameters = new ReaderParameters {
-			AssemblyResolver = assemblyResolver,
-			// MetadataResolver = metadataResolver,
+			AssemblyResolver = configuration.AssemblyResolver,
+			MetadataResolver = configuration.MetadataResolver,
 			ReadSymbols = true,
 			SymbolReaderProvider = new DefaultSymbolReaderProvider (throwIfNoSymbol: false),
 		};

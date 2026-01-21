@@ -10,12 +10,12 @@ public abstract class BaseClass {
 
 	public void AssertPrepare (ApplePlatform platform, string code, out AssemblyDefinition assemblyDefinition)
 	{
-		AssertPrepare (platform, code, out assemblyDefinition);
+		AssertPrepare (platform, RegistrarMode.Dynamic, code, out assemblyDefinition);
 	}
 
-	public void AssertPrepare (ApplePlatform platform, string code, out AssemblyDefinition assemblyDefinition)
+	public void AssertPrepare (ApplePlatform platform, RegistrarMode registrar, string code, out AssemblyDefinition assemblyDefinition)
 	{
-		AssertPrepareCode (platform, null, code, out string outputPath);
+		AssertPrepareCode (platform, preparer => preparer.Registrar = registrar, code, out string outputPath);
 		assemblyDefinition = AssemblyDefinition.ReadAssembly (outputPath);
 	}
 

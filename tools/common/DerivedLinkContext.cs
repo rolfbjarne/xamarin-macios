@@ -59,6 +59,8 @@ namespace Xamarin.Tuner {
 				return Target.App;
 			}
 		}
+
+		public RegistrarMode Registrar => App.Registrar;
 #endif // !MMP && !MTOUCH
 
 		AssemblyDefinition corlib;

@@ -24,6 +24,9 @@ namespace Xamarin.MacDev.Tasks {
 		public string MakeReproPath { get; set; } = "";
 
 		public string OutputDirectory { get; set; } = "";
+
+		[Required]
+		public string Registrar { get; set; } = "";
 		#endregion
 
 		#region Outputs
@@ -48,6 +51,7 @@ namespace Xamarin.MacDev.Tasks {
 				var infos = InputAssemblies.Select (GetAssemblyInfo).ToArray ();
 				using var preparer = new AssemblyPreparer (infos, Platform);
 				preparer.MakeReproPath = MakeReproPath;
+				preparer.Registrar = Registrar;
 				var rv = preparer.Prepare (out var exceptions);
 
 				foreach (var pe in exceptions) {

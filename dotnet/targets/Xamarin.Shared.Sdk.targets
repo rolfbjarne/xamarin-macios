@@ -515,9 +515,6 @@
 			<!-- Set the 'SysRoot' variable, so that NativeAOT's build logic doesn't try to compute it, which doesn't work when building remotely from Windows. -->
 			<SysRoot Condition="'$(SysRoot)' == ''">$(_SdkRoot)</SysRoot>
 
-			<!-- Skip any validation NativeAOT's build logic does, because it doesn't work when building remotely from Windows. -->
-			<_SkipiOSLikePlatformValidation Condition="'$(_SkipiOSLikePlatformValidation)' == ''">true</_SkipiOSLikePlatformValidation>
-
 			<!-- default 'UseLdClassicXCodeLinker' to our value for '_UseClassicLinker', and in case it's still not set, default to 'false', since typically the new linker will work.-->
 			<UseLdClassicXCodeLinker Condition="'$(UseLdClassicXCodeLinker)' == ''">$(_UseClassicLinker)</UseLdClassicXCodeLinker>
 			<UseLdClassicXCodeLinker Condition="'$(UseLdClassicXCodeLinker)' == ''">false</UseLdClassicXCodeLinker>

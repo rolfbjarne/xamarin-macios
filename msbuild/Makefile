@@ -67,7 +67,7 @@ MSBUILD_TASK_ASSEMBLIES += $(TASK_ASSEMBLIES)
 ## .NET targets ##
 ##
 
-DOTNET_SHARED_FILES = \
+DOTNET_SHARED_ASSEMBLIES = \
 	$(foreach dll,$(MSBUILD_TASK_ASSEMBLIES),$(dll).dll $(dll).pdb)
 
 define InstallFiles

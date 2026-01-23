@@ -67,7 +67,7 @@ public class LinkerConfiguration {
 	{
 		var pe = exception as ProductException;
 		if (pe is null)
-			pe = ErrorHelper.CreateError (99, exception, "Unexpected error: {0}}", exception.Message);
+			pe = ErrorHelper.CreateError (99, exception, "Unexpected error: {0}", exception.Message);
 		GetInstance (context).exceptions.Add (pe);
 	}
 

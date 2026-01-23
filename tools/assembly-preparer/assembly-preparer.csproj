@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<AssemblyName>assembly-preparer</AssemblyName>
 		<TargetFrameworks>net$(BundledNETCoreAppTargetFrameworkVersion);netstandard2.0</TargetFrameworks>
-		<DefineConstants>$(DefineConstants);PRETRIM;ASSEMBLY_PREPARER</DefineConstants>
+		<DefineConstants>$(DefineConstants);BUNDLER;ASSEMBLY_PREPARER</DefineConstants>
 		<OutputType>Library</OutputType>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<LangVersion>latest</LangVersion>

@@ -949,7 +949,7 @@ namespace Xamarin.Linker {
 					return 0;
 				}
 
-				var userDelegateType = LinkContext.Target.StaticRegistrar.GetUserDelegateType (trampolineMethod);
+				var userDelegateType = LinkContext.App.StaticRegistrar.GetUserDelegateType (trampolineMethod);
 				MethodReference? userMethod = null;
 				var blockSignature = true;
 				if (userDelegateType is not null) {

@@ -9,7 +9,7 @@ using Xamarin.Bundler;
 public class DerivedLinkContext : LinkContext {
 	public RegistrarMode Registrar { get => Configuration.Registrar; }
 
-	public Target Target { get => throw new NotImplementedException (); }
+	public Application App => Configuration.App;
 
 	public DerivedLinkContext (LinkerConfiguration configuration) : base (configuration)
 	{

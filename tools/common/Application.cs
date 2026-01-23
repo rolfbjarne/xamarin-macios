@@ -26,11 +26,8 @@ using ClassRedirector;
 
 #if LEGACY_TOOLS
 using PlatformResolver = MonoTouch.Tuner.MonoTouchResolver;
-#elif NET
-using PlatformResolver = Xamarin.Linker.DotNetResolver;
-#elif PRETRIM
 #else
-#error Invalid defines
+using PlatformResolver = Xamarin.Linker.DotNetResolver;
 #endif
 
 // Disable until we get around to enable + fix any issues.

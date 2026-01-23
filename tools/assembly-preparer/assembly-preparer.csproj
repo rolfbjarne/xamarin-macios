@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<AssemblyName>assembly-preparer</AssemblyName>
 		<TargetFrameworks>net$(BundledNETCoreAppTargetFrameworkVersion);netstandard2.0</TargetFrameworks>
-		<DefineConstants>$(DefineConstants);BUNDLER;ASSEMBLY_PREPARER</DefineConstants>
+		<DefineConstants>$(DefineConstants);PRETRIM;ASSEMBLY_PREPARER</DefineConstants>
 		<OutputType>Library</OutputType>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<LangVersion>latest</LangVersion>
@@ -37,9 +37,6 @@
 		</Compile>
 		<Compile Include="../common/NullableAttributes.cs">
 			<Link>external/tools/common/NullableAttributes.cs</Link>
-		</Compile>
-		<Compile Include="../common/Optimizations.cs">
-		  <Link>external/tools/common/Optimizations.cs</Link>
 		</Compile>
 		<Compile Include="../common/RegistrarMode.cs">
 			<Link>external/tools/common/RegistrarMode.cs</Link>
@@ -79,12 +76,6 @@
 		</Compile>
 		<Compile Include="../linker/ObjCExtensions.cs">
 			<Link>external/tools/linker/ObjCExtensions.cs</Link>
-		</Compile>
-		<Compile Include="../linker/CoreOptimizeGeneratedCode.cs">
-		  <Link>external/tools/linker/CoreOptimizeGeneratedCode.cs</Link>
-		</Compile>
-		<Compile Include="../linker/MonoTouch.Tuner/Extensions.cs">
-		  <Link>external/tools/linker/MonoTouch.Tuner/Extensions.cs</Link>
 		</Compile>
 		<Compile Include="../../src/ObjCRuntime/BindingImplAttribute.cs">
 			<Link>external/src/ObjCRuntime/BindingImplAttribute.cs</Link>

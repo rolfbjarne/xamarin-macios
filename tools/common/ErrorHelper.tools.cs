@@ -308,7 +308,7 @@ namespace Xamarin.Bundler {
 
 		static bool ShowInternal (Exception e)
 		{
-			var mte = (e as ProductException);
+			ProductException mte = (e as ProductException);
 			bool error = true;
 
 			if (mte is not null) {

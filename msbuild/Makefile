@@ -94,7 +94,7 @@ $(DOTNET_DESTDIR)/$($(2)_NUGET_SDK_NAME)/tools/msbuild/$(TARGETFRAMEWORK)/%: Xam
 $(DOTNET_DESTDIR)/$($(2)_NUGET_SDK_NAME)/tools/msbuild/$(TARGETFRAMEWORK)/%: Xamarin.Localization.MSBuild/bin/$(CONFIG)/$(TARGETFRAMEWORK)/% | $$(DOTNET_DIRECTORIES_$(1))
 	$$(Q) install -m 644 $$< $$@
 
-.copy-stamp-$(1): $$(wildcard Xamarin.MacDev.Tasks/bin/$(CONFIG)/$(NETTARGETFRAMEWORK)/*) $$(wildcard Xamarin.MacDev.Tasks/bin/$(CONFIG)/$(NETTARGETFRAMEWORK)/*/*)
+.copy-stamp-$(1): $$(wildcard Xamarin.MacDev.Tasks/bin/$(CONFIG)/$(NETTARGETFRAMEWORK)/*) $$(wildcard Xamarin.MacDev.Tasks/bin/$(CONFIG)/$(NETTARGETFRAMEWORK)/*/*) .build-stamp | $(DOTNET_DESTDIR)/$($(2)_NUGET_SDK_NAME)/tools/msbuild
 	$$(Q) rm -rf $(DOTNET_DESTDIR)/$($(2)_NUGET_SDK_NAME)/tools/msbuild/$(NETTARGETFRAMEWORK)/
 	$$(Q) cp -cr Xamarin.MacDev.Tasks/bin/$(CONFIG)/$(NETTARGETFRAMEWORK) $(DOTNET_DESTDIR)/$($(2)_NUGET_SDK_NAME)/tools/msbuild/$(NETTARGETFRAMEWORK)
 	$$(Q) touch $$@

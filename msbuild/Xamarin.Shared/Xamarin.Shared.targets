@@ -18,15 +18,6 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-	<PropertyGroup Condition="'$(_TaskAssemblyName)' == ''">
-		<_TaskAssemblyFileName>Xamarin.MacDev.Tasks.dll</_TaskAssemblyFileName>
-		<_TaskAssemblyFileNameWindows>Xamarin.iOS.Tasks.Windows.dll</_TaskAssemblyFileNameWindows>
-		<_TaskAssemblyName Condition="'$(_UseDesktopTaskAssemblies)' != 'true'">$(MSBuildThisFileDirectory)\net$(BundledNETCoreAppTargetFrameworkVersion)\$(_TaskAssemblyFileName)</_TaskAssemblyName>
-		<_TaskAssemblyName Condition="'$(_UseDesktopTaskAssemblies)' == 'true'">$(MSBuildThisFileDirectory)\netstandard2.0\$(_TaskAssemblyFileName)</_TaskAssemblyName>
-		<_TaskRuntime Condition="'$(_UseDesktopTaskAssemblies)' != 'true'">NET</_TaskRuntime>
-		<_TaskRuntime Condition="'$(_UseDesktopTaskAssemblies)' == 'true'">CurrentRuntime</_TaskRuntime>
-	</PropertyGroup>
-
 	<!-- Tasks that override built-in tasks to support remoting from VS/Windows -->
 	<UsingTask Runtime="$(_TaskRuntime)" TaskName="Microsoft.Build.Tasks.Copy" AssemblyFile="$(_TaskAssemblyName)" />
 	<UsingTask Runtime="$(_TaskRuntime)" TaskName="Microsoft.Build.Tasks.Delete" AssemblyFile="$(_TaskAssemblyName)" />

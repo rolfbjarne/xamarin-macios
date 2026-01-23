@@ -9,6 +9,8 @@ using Xamarin.Utils;
 namespace Xamarin.Bundler;
 
 public class LinkerConfiguration {
+	public Application App { get; private set; } = new Application ();
+
 	List<ProductException> exceptions = new List<ProductException> ();
 	public List<ProductException> Exceptions {
 		get {

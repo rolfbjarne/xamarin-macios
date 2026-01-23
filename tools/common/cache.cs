@@ -15,7 +15,7 @@ public class Cache {
 	const string NAME = "mtouch";
 #elif BUNDLER
 	const string NAME = "dotnet-linker";
-#elif PRETRIM
+#elif ASSEMBLY_PREPARER
 	const string NAME = "assembly-preparer";
 #else
 #error Wrong defines

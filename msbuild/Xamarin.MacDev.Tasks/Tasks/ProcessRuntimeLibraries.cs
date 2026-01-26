@@ -151,7 +151,7 @@ public class ProcessRuntimeLibraries : XamarinTask, ICancelableTask {
 	{
 		// Don't create an output file if the file already exists with a non-zero length
 		var finfo = new FileInfo (item.ItemSpec);
-		if (finfo.Exists && finfo.Length == 0)
+		if (finfo.Exists && finfo.Length != 0)
 			return false;
 
 		return true;

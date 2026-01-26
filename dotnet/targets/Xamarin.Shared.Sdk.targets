@@ -2246,8 +2246,6 @@
 		</ItemGroup>
 
 		<ProcessRuntimeLibraries
-			SessionId="$(BuildSessionId)"
-			Condition="'$(IsMacEnabled)' == 'true'"
 			DotNetRuntime="$(_XamarinRuntime)"
 			ResolvedFileToPublish="@(ResolvedFileToPublish)"
 			RuntimeIdentifier="$(RuntimeIdentifier)"

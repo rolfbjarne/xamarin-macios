@@ -34,9 +34,6 @@ public class ProcessRuntimeLibraries : XamarinTask, ICancelableTask {
 
 	public override bool Execute ()
 	{
-		if (ShouldExecuteRemotely ())
-			return ExecuteRemotely ();
-
 		var output = new List<ITaskItem> ();
 		var dylibsToFrameworks = new List<ITaskItem> ();
 
@@ -145,16 +142,6 @@ public class ProcessRuntimeLibraries : XamarinTask, ICancelableTask {
 		DylibsToConvertToFrameworks = dylibsToFrameworks.ToArray ();
 
 		return !Log.HasLoggedErrors;
-	}
-
-	public bool ShouldCreateOutputFile (ITaskItem item)
-	{
-		// Don't create an output file if the file already exists with a non-zero length
-		var finfo = new FileInfo (item.ItemSpec);
-		if (finfo.Exists && finfo.Length != 0)
-			return false;
-
-		return true;
 	}
 
 	public void Cancel ()

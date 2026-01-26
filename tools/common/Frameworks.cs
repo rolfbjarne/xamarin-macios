@@ -5,7 +5,9 @@ using System.Collections.Generic;
 using Mono.Cecil;
 
 using Xamarin.Bundler;
+#if !ASSEMBLY_PREPARER
 using Registrar;
+#endif
 #endif
 
 using Xamarin.Utils;

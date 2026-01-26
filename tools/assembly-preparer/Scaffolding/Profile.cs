@@ -1,5 +1,5 @@
-namespace Mono.Linker;
+// namespace Mono.Linker;
 
-public class Profile {
+// public class Profile {
 
-}
+// }

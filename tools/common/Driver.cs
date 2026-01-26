@@ -317,7 +317,7 @@ namespace Xamarin.Bundler {
 		{
 			if (!File.Exists (name))
 				throw ErrorHelper.CreateError (24, Errors.MT0024, name);
-			return PDictionary.FromFile (name);
+			return PDictionary.FromFile (name)!;
 		}
 
 		const string XcodeDefault = "/Applications/Xcode.app";
@@ -525,12 +525,12 @@ namespace Xamarin.Bundler {
 					return null;
 
 				// either /Developer (Xcode 4.2 and earlier), /Applications/Xcode.app/Contents/Developer (Xcode 4.3) or user override
-				path = Path.Combine (DeveloperDirectory, "usr", "bin", tool);
+				path = Path.Combine (DeveloperDirectory!, "usr", "bin", tool);
 				if (File.Exists (path))
 					return path;
 
 				// Xcode 4.3 (without command-line tools) also has a copy of 'strip'
-				path = Path.Combine (DeveloperDirectory, "Toolchains", "XcodeDefault.xctoolchain", "usr", "bin", tool);
+				path = Path.Combine (DeveloperDirectory!, "Toolchains", "XcodeDefault.xctoolchain", "usr", "bin", tool);
 				if (File.Exists (path))
 					return path;
 
@@ -541,6 +541,9 @@ namespace Xamarin.Bundler {
 
 				return null;
 			}
+
+			if (path is null)
+				throw ErrorHelper.CreateError (5307, Errors.MX5307 /* Missing '{0}' tool. Please install Xcode 'Command-Line Tools' component */, tool);
 
 			// We can end up finding the same tool multiple times.
 			// That's not a problem.

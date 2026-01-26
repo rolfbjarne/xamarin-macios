@@ -18,9 +18,11 @@ using Xamarin.Utils;
 
 using ObjCRuntime;
 
+#if !ASSEMBLY_PREPARER
 using Registrar;
+#endif
 
-#if !LEGACY_TOOLS
+#if !LEGACY_TOOLS && !ASSEMBLY_PREPARER
 using ClassRedirector;
 #endif
 
@@ -253,7 +255,9 @@ namespace Xamarin.Bundler {
 
 		public Application ()
 		{
+#if !ASSEMBLY_PREPARER
 			this.StaticRegistrar = new StaticRegistrar (this);
+#endif
 		}
 
 		public void CreateCache (string [] arguments)
@@ -521,6 +525,7 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+#if !ASSEMBLY_PREPARER
 		public void RunRegistrar ()
 		{
 			// The static registrar.
@@ -587,6 +592,7 @@ namespace Xamarin.Bundler {
 				registrar.Generate (resolver, resolvedAssemblies.Values, Path.ChangeExtension (registrar_m, "h"), registrar_m, out var _);
 			}
 		}
+#endif // !ASSEMBLY_PREPARER
 
 		public Abi Abi {
 			get { return abi; }

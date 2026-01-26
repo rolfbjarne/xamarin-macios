@@ -1,13 +1,10 @@
-using Xamarin.Utils;
+// using Xamarin.Utils;
 
-namespace Xamarin.Bundler;
+// namespace Xamarin.Bundler;
 
-public class Application {
-	public Application () {}
-	public ApplePlatform Platform { get => throw new NotImplementedException (); }
-	public string ProductName => throw new NotImplementedException ();
-	public void LoadSymbols ()
-	{
-		throw new NotImplementedException ();
-	}
-}
+// public partial class Application {
+// 	public void LoadSymbols ()
+// 	{
+// 		throw new NotImplementedException ();
+// 	}
+// }

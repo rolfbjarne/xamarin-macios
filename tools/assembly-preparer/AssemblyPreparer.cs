@@ -99,7 +99,7 @@ public class AssemblyPreparer : IDisposable {
 		if (registrar is null)
 			throw new Exception ("RegistrarMode not specified in repro arguments");
 		var ap = new AssemblyPreparer (assemblies.ToArray (), platform.Value);
-		ap.SetRegistrar (registrar);
+		ap.configuration.App.ParseRegistrar (registrar);
 		return ap;
 	}
 

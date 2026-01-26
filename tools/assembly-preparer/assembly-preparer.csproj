@@ -2,7 +2,8 @@
 
 	<PropertyGroup>
 		<AssemblyName>assembly-preparer</AssemblyName>
-		<TargetFrameworks>net$(BundledNETCoreAppTargetFrameworkVersion);netstandard2.0</TargetFrameworks>
+		<TargetFrameworks Condition="'$(DesignTimeBuild)' != 'true'">net$(BundledNETCoreAppTargetFrameworkVersion);netstandard2.0</TargetFrameworks>
+		<TargetFramework Condition="'$(DesignTimeBuild)' == 'true'">net$(BundledNETCoreAppTargetFrameworkVersion)</TargetFramework>
 		<DefineConstants>$(DefineConstants);BUNDLER;ASSEMBLY_PREPARER</DefineConstants>
 		<OutputType>Library</OutputType>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -23,8 +24,29 @@
 		<Compile Include="../common/ApplePlatform.cs">
 			<Link>external/tools/common/ApplePlatform.cs</Link>
 		</Compile>
+		<Compile Include="../common/Application.cs">
+			<Link>external/tools/common/Application.cs</Link>
+		</Compile>
+		<Compile Include="../common/Assembly.cs">
+			<Link>external/tools/common/Assembly.cs</Link>
+		</Compile>
+		<Compile Include="../common/AssemblyBuildTarget.cs">
+			<Link>external/tools/common/AssemblyBuildTarget.cs</Link>
+		</Compile>
+		<Compile Include="../common/cache.cs">
+			<Link>external/tools/common/cache.cs</Link>
+		</Compile>
 		<Compile Include="../common/CoreResolver.cs">
 			<Link>external/tools/common/CoreResolver.cs</Link>
+		</Compile>
+		<Compile Include="../common/DlsymOptions.cs">
+			<Link>external/tools/common/DlsymOptions.cs</Link>
+		</Compile>
+		<Compile Include="../common/Driver.cs">
+			<Link>external/tools/common/Driver.cs</Link>
+		</Compile>
+		<Compile Include="../common/Driver.execution.cs">
+			<Link>external/tools/common/Driver.execution.cs</Link>
 		</Compile>
 		<Compile Include="../common/error.cs">
 			<Link>external/tools/common/error.cs</Link>
@@ -32,11 +54,29 @@
 		<Compile Include="../common/ErrorHelper.tools.cs">
 			<Link>external/tools/common/ErrorHelper.tools.cs</Link>
 		</Compile>
+		<Compile Include="../common/Execution.cs">
+			<Link>external/tools/common/Execution.cs</Link>
+		</Compile>
+		<Compile Include="../common/FileCopier.cs">
+			<Link>external/tools/common/FileCopier.cs</Link>
+		</Compile>
+		<Compile Include="../common/FileUtils.cs">
+			<Link>external/tools/common/FileUtils.cs</Link>
+		</Compile>
+		<Compile Include="../common/Frameworks.cs">
+			<Link>external/tools/common/Frameworks.cs</Link>
+		</Compile>
+		<Compile Include="../common/MachO.cs">
+			<Link>external/tools/common/MachO.cs</Link>
+		</Compile>
 		<Compile Include="../common/NormalizedStringComparer.cs">
 			<Link>external/tools/common/NormalizedStringComparer.cs</Link>
 		</Compile>
 		<Compile Include="../common/NullableAttributes.cs">
 			<Link>external/tools/common/NullableAttributes.cs</Link>
+		</Compile>
+		<Compile Include="../common/Optimizations.cs">
+			<Link>external/tools/common/Optimizations.cs</Link>
 		</Compile>
 		<Compile Include="../common/RegistrarMode.cs">
 			<Link>external/tools/common/RegistrarMode.cs</Link>
@@ -44,8 +84,32 @@
 		<Compile Include="../common/PathUtils.cs">
 			<Link>external/tools/common/PathUtils.cs</Link>
 		</Compile>
+		<Compile Include="../common/PListExtensions.cs">
+			<Link>external/tools/common/PListExtensions.cs</Link>
+		</Compile>
+		<Compile Include="../common/ProductConstants.cs">
+			<Link>external/tools/common/ProductConstants.cs</Link>
+		</Compile>
+		<Compile Include="../common/StringUtils.cs">
+			<Link>external/tools/common/StringUtils.cs</Link>
+		</Compile>
+		<Compile Include="../common/Symbols.cs">
+			<Link>external/tools/common/Symbols.cs</Link>
+		</Compile>
+		<Compile Include="../common/Target.cs">
+			<Link>external/tools/common/Target.cs</Link>
+		</Compile>
+		<Compile Include="../common/TargetFramework.cs">
+			<Link>external/tools/common/TargetFramework.cs</Link>
+		</Compile>
+		<Compile Include="../common/XamarinRuntime.cs">
+			<Link>external/tools/common/XamarinRuntime.cs</Link>
+		</Compile>
 		<Compile Include="../dotnet-linker/AppBundleRewriter.cs">
 			<Link>external/tools/dotnet-linker/AppBundleRewriter.cs</Link>
+		</Compile>
+		<Compile Include="../dotnet-linker/Compat.cs">
+			<Link>external/tools/dotnet-linker/Compat.cs</Link>
 		</Compile>
 		<Compile Include="../dotnet-linker/DotNetResolver.cs">
 			<Link>external/tools/dotnet-linker/DotNetResolver.cs</Link>
@@ -80,8 +144,17 @@
 		<Compile Include="../../src/ObjCRuntime/BindingImplAttribute.cs">
 			<Link>external/src/ObjCRuntime/BindingImplAttribute.cs</Link>
 		</Compile>
+		<Compile Include="../../src/ObjCRuntime/Constants.cs">
+			<Link>external/src/ObjCRuntime/Constants.cs</Link>
+		</Compile>
 		<Compile Include="../../src/ObjCRuntime/ErrorHelper.cs">
 			<Link>external/src/ObjCRuntime/ErrorHelper.cs</Link>
+		</Compile>
+		<Compile Include="../../src/ObjCRuntime/ExceptionMode.cs">
+			<Link>external/src/ObjCRuntime/ExceptionMode.cs</Link>
+		</Compile>
+		<Compile Include="../../src/ObjCRuntime/LinkWithAttribute.cs">
+			<Link>external/src/ObjCRuntime/LinkWithAttribute.cs</Link>
 		</Compile>
 		<Compile Include="../../builds/mono-ios-sdk-destdir/ios-sources/external/linker/src/tuner/Mono.Tuner/Extensions.cs">
 			<Link>external/builds/mono-ios-sdk-destdir/ios-sources/external/linker/src/tuner/Mono.Tuner/Extensions.cs</Link>
@@ -100,6 +173,12 @@
 		</Compile>
 		<Compile Include="../common/SdkVersions.cs">
 			<Link>external/tools/common/SdkVersions.cs</Link>
+		</Compile>
+		<Compile Include="../../external/Xamarin.MacDev/Xamarin.MacDev/MacCatalystSupport.cs">
+			<Link>external/Xamarin.MacDev/Xamarin.MacDev/MacCatalystSupport.cs</Link>
+		</Compile>
+		<Compile Include="../../external/Xamarin.MacDev/Xamarin.MacDev/PListObject.cs">
+			<Link>external/Xamarin.MacDev/Xamarin.MacDev/PListObject.cs</Link>
 		</Compile>
 	</ItemGroup>
 

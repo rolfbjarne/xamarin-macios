@@ -147,6 +147,16 @@ public class ProcessRuntimeLibraries : XamarinTask, ICancelableTask {
 		return !Log.HasLoggedErrors;
 	}
 
+	public bool ShouldCreateOutputFile (ITaskItem item)
+	{
+		// Don't create an output file if the file already exists with a non-zero length
+		var finfo = new FileInfo (item.ItemSpec);
+		if (finfo.Exists && finfo.Length == 0)
+			return false;
+
+		return true;
+	}
+
 	public void Cancel ()
 	{
 		if (ShouldExecuteRemotely ())

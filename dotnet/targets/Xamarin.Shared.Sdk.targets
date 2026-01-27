@@ -1726,7 +1726,10 @@
 			<_NativeReferences Include="@(_FileNativeReference)" Condition="'%(_FileNativeReference.LinkToExecutable)' != 'false'" />
 		</ItemGroup>
 
-		<WriteLinesToFile File="$(_MtouchSymbolsList)" Lines="@(_ProcessedReferenceNativeSymbol)" Overwrite="true" />
+		<!-- The symbols list must be written on the Mac, because it's a full (mac) path, not a relative path, which it must be because
+			 the symbol file of extension projects are consumed by their containing project, and in this case it's not possible to
+			 construct a relative cross-project path that works on both Windows and Mac -->
+		<WriteLinesToFile SessionId="$(BuildSessionId)" File="$(_MtouchSymbolsList)" Lines="@(_ProcessedReferenceNativeSymbol)" Overwrite="true" />
 
 		<PropertyGroup>
 			<!-- There are known bugs in the classic linker with Xcode 15, so keep use the classic linker in that case -->
@@ -1899,6 +1902,7 @@
 			<Output TaskParameter="Lines" ItemName="_AllExecutableSymbols" />
 		</ReadLinesFromFile>
 		<WriteLinesToFile
+			SessionId="$(BuildSessionId)"
 			File="$(_MtouchSymbolsList)"
 			Lines="@(_AllExecutableSymbols->DistinctWithCase())"
 			Overwrite="true" />

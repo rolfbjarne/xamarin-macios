@@ -259,18 +259,17 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		</PropertyGroup>
 	</Target>
 
-	<Target Name="_CopyWatchOS2AppsToBundle" Condition="'$(OutputType)' == 'Exe'" DependsOnTargets="_ResolveWatchAppReferences;_DetectSdkLocations">
+	<Target Name="_CopyWatchOS2AppsToBundle" Condition="'$(OutputType)' == 'Exe'" DependsOnTargets="_ResolveWatchAppReferences">
 		<Ditto
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true' And '@(_ResolvedWatchAppReferences)' != '' And '%(_ResolvedWatchAppReferences.Identity)' != ''"
 			DittoPath="$(DittoPath)"
-			SdkDevPath="$(_SdkDevPath)"
 			Source="@(_ResolvedWatchAppReferences)"
 			Destination="$(_AppBundlePath)Watch\%(_ResolvedWatchAppReferences.FileName)%(_ResolvedWatchAppReferences.Extension)"
 		/>
 	</Target>
 
-	<Target Name="_CoreCreateIpa" Condition="'$(BuildIpa)' == 'true'" DependsOnTargets="Codesign;_DetectSdkLocations">
+	<Target Name="_CoreCreateIpa" Condition="'$(BuildIpa)' == 'true'" DependsOnTargets="Codesign">
 		<RemoveDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Directories="$(DeviceSpecificIntermediateOutputPath)ipa" />
 
 		<MakeDir SessionId="$(BuildSessionId)" Condition="'$(IsMacEnabled)' == 'true'" Directories="$(DeviceSpecificIntermediateOutputPath)ipa\Payload" />
@@ -284,7 +283,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true'"
 			DittoPath="$(DittoPath)"
-			SdkDevPath="$(_SdkDevPath)"
 			Source="$(AppBundleDir)"
 			Destination="$(_IpaAppBundleDir)"
 		/>
@@ -348,7 +346,7 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 		</PropertyGroup>
 	</Target>
 	
-	<Target Name="_PackageOnDemandResources" Condition="'$(BuildIpa)' == 'true' And '$(EnableOnDemandResources)' == 'true' And ('$(_DistributionType)' == 'AppStore' Or '$(_DistributionType)' == 'AdHoc')" DependsOnTargets="_DetectSdkLocations" >
+	<Target Name="_PackageOnDemandResources" Condition="'$(BuildIpa)' == 'true' And '$(EnableOnDemandResources)' == 'true' And ('$(_DistributionType)' == 'AppStore' Or '$(_DistributionType)' == 'AdHoc')" >
 		<PropertyGroup>
 			<_PayloadDir>$(DeviceSpecificIntermediateOutputPath)ipa\Payload\</_PayloadDir>
 			<_IpaAppBundleDir>$(_PayloadDir)$(_AppBundleName).app\</_IpaAppBundleDir>
@@ -374,7 +372,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			SessionId="$(BuildSessionId)"
 			Condition="'$(IsMacEnabled)' == 'true' And Exists('$(DeviceSpecificOutputPath)OnDemandResources\')"
 			DittoPath="$(DittoPath)"
-			SdkDevPath="$(_SdkDevPath)"
 			Source="$(DeviceSpecificOutputPath)OnDemandResources\"
 			Destination="$(_IntermediateODRDir)"
 			/>
@@ -419,7 +416,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			Keychain="$(CodesignKeychain)"
 			Entitlements="$(_CompiledCodesignEntitlements)"
 			Resources="@(_AssetPack)"
-			SdkDevPath="$(_SdkDevPath)"
 			SigningKey="$(_CodeSigningKey)"
 			ExtraArgs="$(CodesignExtraArgs)"
 			>
@@ -453,7 +449,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			Entitlements="$(_CompiledCodesignEntitlements)"
 			ResourceRules="$(_PreparedResourceRules)"
 			Resources="@(_IpaAppBundleToSign)"
-			SdkDevPath="$(_SdkDevPath)"
 			SigningKey="$(_CodeSigningKey)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			ExtraArgs="$(CodesignExtraArgs)"
@@ -468,7 +463,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			Source="%(_AssetPack.Identity)"
 			OutputFile="$(IpaPackageDir)OnDemandResources\%(_AssetPack.DirectoryName)"
 			ZipPath="$(ZipPath)"
-			SdkDevPath="$(_SdkDevPath)"
 			/>
 
 		<Copy
@@ -489,7 +483,6 @@ Copyright (C) 2013-2016 Xamarin. All rights reserved.
 			Sources="@(_IpaPackageSource)"
 			OutputFile="$(IpaPackagePath)"
 			WorkingDirectory="$(DeviceSpecificIntermediateOutputPath)ipa"
-			SdkDevPath="$(_SdkDevPath)"
 			>
 			<Output TaskParameter="OutputFile" ItemName="FileWrites" />
 		</Zip>

@@ -948,7 +948,7 @@
 	</Target>
 
 	<Target Name="_CopyDirectoriesToBundle"
-		DependsOnTargets="_CollectDecompressedPlugins;_ComputeFrameworkFilesToPublish;_CollectDecompressedXpcServices;_CreateStampLocationForCopyDirectoriesToBundle;_DetectSdkLocations"
+		DependsOnTargets="_CollectDecompressedPlugins;_ComputeFrameworkFilesToPublish;_CollectDecompressedXpcServices;_CreateStampLocationForCopyDirectoriesToBundle"
 		Inputs="@(_DirectoriesToPublish)"
 		Outputs="@(_DirectoriesToPublish -> '%(StampLocation)')"
 		>
@@ -971,7 +971,6 @@
 			Source="%(_DirectoriesToPublish.SourceDirectory)"
 			Destination="%(_DirectoriesToPublish.TargetDirectory)"
 			TouchDestinationFiles="true"
-			SdkDevPath="$(_SdkDevPath)"
 			StampFile="%(_DirectoriesToPublish.StampLocation)"
 			CreateOutputFiles="false"
 		/>
@@ -1279,7 +1278,7 @@
 		<Warning Condition="'$(GenerateRuntimeConfigurationFiles)' != 'true'" Text="Some features may not work correctly, because the generation of the runtime configure file (*.runtimeconfig.json) has been disabled." />
 	</Target>
 
-	<Target Name="_FindAotCompiler" DependsOnTargets="_ComputeVariables;_DetectSdkLocations">
+	<Target Name="_FindAotCompiler" DependsOnTargets="_ComputeVariables">
 		<PropertyGroup>
 			<_XamarinAOTCompilerCachePath>$(DeviceSpecificIntermediateOutputPath)aot-compiler-path-$(NETCoreSdkVersion).txt</_XamarinAOTCompilerCachePath>
 		</PropertyGroup>
@@ -1298,7 +1297,6 @@
 			KeepTemporaryOutput="$(FindAotCompilerKeepKeepTemporaryOutput)"
 			MonoAotCrossCompiler="@(MonoAotCrossCompiler)"
 			RuntimeIdentifier="$(RuntimeIdentifier)"
-			SdkDevPath="$(_SdkDevPath)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 		>
 			<Output TaskParameter="AotCompiler" PropertyName="_XamarinAOTCompiler" />
@@ -1978,7 +1976,6 @@
 			_DetectSigningIdentity;
 			_PrepareResourceRules;
 			_AddDebugSymbolsToBundle;
-			_DetectSdkLocations;
 		</_ComputePublishLocationDependsOn>
 	</PropertyGroup>
 
@@ -2210,7 +2207,6 @@
 			FrameworksDirectory="$(_AppFrameworksRelativePath)"
 			IntermediateOutputPath="$(DeviceSpecificIntermediateOutputPath)"
 			NativeReferences="@(_NativeReferencesToResolve)"
-			SdkDevPath="$(_SdkDevPath)"
 			SdkIsSimulator="$(_SdkIsSimulator)"
 			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
 			>
@@ -2272,7 +2268,6 @@
 			Condition="'$(IsMacEnabled)' == 'true'"
 			ZipFilePath="%(_CompressedPlugIns.Identity)"
 			ExtractionPath="%(_CompressedPlugIns.ExtractionPath)"
-			SdkDevPath="$(_SdkDevPath)"
 			>
 			<Output TaskParameter="TouchedFiles" ItemName="FileWrites" />
 		</Unzip>
@@ -2316,7 +2311,6 @@
 			CopyToWindows="true"
 			ZipFilePath="%(_CompressedXpcServices.Identity)"
 			ExtractionPath="%(_CompressedXpcServices.ExtractionPath)"
-			SdkDevPath="$(_SdkDevPath)"
 			>
 			<Output TaskParameter="TouchedFiles" ItemName="FileWrites" />
 		</Unzip>

@@ -273,6 +273,25 @@ namespace Xamarin.Tests {
 		}
 
 		[Category ("RemoteWindows")]
+		[TestCase (ApplePlatform.iOS, "ios-arm64", "Release")]
+		public void StripTest (ApplePlatform platform, string runtimeIdentifiers, string configuration)
+		{
+			var project = "MySimpleApp";
+
+			Configuration.IgnoreIfIgnoredPlatform (platform);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
+			Configuration.IgnoreIfNotOnWindows ();
+
+			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath);
+			var project_dir = Path.GetDirectoryName (project_path)!;
+			Clean (project_path);
+
+			var properties = GetDefaultProperties (runtimeIdentifiers);
+
+			DotNet.AssertBuild (project_path, properties, timeout: TimeSpan.FromMinutes (15));
+		}
+
+		[Category ("RemoteWindows")]
 		[TestCase (ApplePlatform.iOS, "ios-arm64")]
 		public void RemoteTest (ApplePlatform platform, string runtimeIdentifiers)
 		{

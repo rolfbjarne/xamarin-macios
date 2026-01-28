@@ -542,7 +542,7 @@ namespace Xamarin.Bundler {
 				return null;
 			}
 
-			if (path is null)
+			if (foundPath is null)
 				throw ErrorHelper.CreateError (5307, Errors.MX5307 /* Missing '{0}' tool. Please install Xcode 'Command-Line Tools' component */, tool);
 
 			// We can end up finding the same tool multiple times.

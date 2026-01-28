@@ -287,6 +287,7 @@ namespace Xamarin.Tests {
 			Clean (project_path);
 
 			var properties = GetDefaultProperties (runtimeIdentifiers);
+			properties ["Configuration"] = configuration;
 
 			DotNet.AssertBuild (project_path, properties, timeout: TimeSpan.FromMinutes (15));
 		}

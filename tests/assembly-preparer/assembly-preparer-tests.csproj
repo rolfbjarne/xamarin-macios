@@ -34,9 +34,6 @@
 		<Compile Include="../common/DotNet.cs">
 			<Link>external/tests/common/DotNet.cs</Link>
 		</Compile>
-		<Compile Include="../../tools/common/Execution.cs">
-			<Link>external/tools/common/Execution.cs</Link>
-		</Compile>
 		<Compile Include="../common/ExecutionHelper.cs">
 			<Link>external/tests/common/ExecutionHelper.cs</Link>
 		</Compile>
@@ -45,9 +42,6 @@
 		</Compile>
 		<Compile Include="../../tools/common/StringUtils.cs">
 			<Link>external/tools/common/StringUtils.cs</Link>
-		</Compile>
-		<Compile Include="../../tools/common/TargetFramework.cs">
-			<Link>external/tools/common/TargetFramework.cs</Link>
 		</Compile>
 	</ItemGroup>
 </Project>

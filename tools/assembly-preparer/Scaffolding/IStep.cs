@@ -29,11 +29,11 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-namespace Mono.Linker.Steps
-{
+using Xamarin.Tuner;
 
-    public interface IStep
-    {
-        void Process(LinkContext context);
-    }
+namespace Mono.Linker.Steps;
+
+public interface IStep
+{
+	void Process (DerivedLinkContext context);
 }

@@ -20,4 +20,14 @@ public class LinkContext {
 	{
 		Configuration = configuration;
 	}
+
+	public TypeDefinition Resolve (TypeReference type)
+	{
+		return Configuration.MetadataResolver.Resolve (type);
+	}
+
+	public AssemblyDefinition? GetLoadedAssembly (string name)
+	{
+		return Assemblies.SingleOrDefault (v => v.Name.Name == name);
+	}
 }

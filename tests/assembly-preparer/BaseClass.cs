@@ -36,7 +36,7 @@ public abstract class BaseClass {
 </Project>
     ";
 
-		var tmpdir = Cache.CreateTemporaryDirectory ();
+		var tmpdir = Xamarin.Cache.CreateTemporaryDirectory ();
 		File.WriteAllText (Path.Combine (tmpdir, "Test.cs"), code);
 		var csprojPath = Path.Combine (tmpdir, "Test.csproj");
 		File.WriteAllText (csprojPath, csproj);

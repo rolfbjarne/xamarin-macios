@@ -52,7 +52,7 @@ public class LinkerConfiguration {
 		}
 	}
 
-	public RegistrarMode Registrar { get; set; } = RegistrarMode.Default;
+	public RegistrarMode Registrar { get => App.Registrar; }
 
 	public LinkerConfiguration ()
 	{

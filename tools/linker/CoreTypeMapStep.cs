@@ -161,8 +161,12 @@ namespace MonoTouch.Tuner {
 
 		bool IsWrapperType (TypeDefinition type)
 		{
+#if ASSEMBLY_PREPARER
+			throw new NotImplementedException ();
+#else
 			var registerAttribute = LinkContext.StaticRegistrar.GetRegisterAttribute (type);
 			return registerAttribute?.IsWrapper == true || registerAttribute?.SkipRegistration == true;
+#endif
 		}
 
 		// Cache the results of the IsCIFilter check in a dictionary. It makes this method slightly faster
@@ -198,7 +202,7 @@ namespace MonoTouch.Tuner {
 				var base_type = Context.Resolve (type.BaseType);
 				while (base_type is not null && IsNSObject (base_type)) {
 					isdirectbinding_value [base_type] = null;
-					base_type = Context.Resolve (base_type.BaseType);
+					base_type = LinkContext.Resolve (base_type.BaseType);
 				}
 				return;
 			}

@@ -212,7 +212,11 @@ namespace Xamarin.Bundler {
 
 		public bool IsSimulatorBuild {
 			get {
+#if NET
 				if (!string.IsNullOrEmpty (RuntimeIdentifier))
+#else
+				if (!string.IsNullOrEmpty (RuntimeIdentifier) && RuntimeIdentifier is not null)
+#endif
 					return RuntimeIdentifier.IndexOf ("simulator", StringComparison.OrdinalIgnoreCase) >= 0;
 
 				switch (Platform) {
@@ -668,7 +672,7 @@ namespace Xamarin.Bundler {
 			var split = v.Split ('=');
 			var name = split [0];
 			var value = split.Length > 1 ? split [1] : string.Empty;
-			switch (name) {
+			switch (name.ToLowerInvariant ()) {
 			case "static":
 				Registrar = RegistrarMode.Static;
 				break;

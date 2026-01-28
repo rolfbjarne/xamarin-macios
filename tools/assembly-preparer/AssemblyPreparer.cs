@@ -2,7 +2,10 @@ using System.IO;
 using System.Runtime.Serialization;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
+using Mono.CompilerServices.SymbolWriter;
 using Mono.Linker;
+using Mono.Linker.Steps;
+using MonoTouch.Tuner;
 using Xamarin.Bundler;
 using Xamarin.Linker.Steps;
 using Xamarin.Tuner;
@@ -18,17 +21,8 @@ public class AssemblyPreparer : IDisposable {
 	public string MakeReproPath { get; set; } = string.Empty;
 
 	public RegistrarMode Registrar {
-		get => configuration.Registrar;
-		set => configuration.Registrar = value;
-	}
-
-	public void SetRegistrar (string value)
-	{
-#if NET
-		Registrar = Enum.Parse<RegistrarMode> (value);
-#else
-		Registrar = (RegistrarMode) Enum.Parse (typeof (RegistrarMode), value);
-#endif
+		get => configuration.App.Registrar;
+		set => configuration.App.Registrar = value;
 	}
 
 	public AssemblyPreparerInfo [] Assemblies { get; set; }
@@ -99,7 +93,8 @@ public class AssemblyPreparer : IDisposable {
 		if (registrar is null)
 			throw new Exception ("RegistrarMode not specified in repro arguments");
 		var ap = new AssemblyPreparer (assemblies.ToArray (), platform.Value);
-		ap.configuration.App.ParseRegistrar (registrar);
+		if (!string.IsNullOrEmpty (registrar))
+			ap.configuration.App.ParseRegistrar (registrar);
 		return ap;
 	}
 
@@ -115,13 +110,17 @@ public class AssemblyPreparer : IDisposable {
 		if (!string.IsNullOrEmpty (MakeReproPath) && !SaveToReproPath (exceptions))
 			return false;
 
+		var steps = new IStep[] {
+			new CoreTypeMapStep (),
+		};
+
 		var markHandlers = new IMarkHandler [] {
 			new PreserveBlockCodeHandler (),
 			new MarkIProtocolHandler (),
 			new PreserveSmartEnumConversionsHandler (),
 		};
 
-		var linkContext = new DerivedLinkContext (configuration);
+		var linkContext = new DerivedLinkContext (configuration, configuration.App);
 		configuration.DerivedLinkContext = linkContext;
 
 		var markContext = new MarkContext ();
@@ -144,6 +143,10 @@ public class AssemblyPreparer : IDisposable {
 			configuration.Context.Annotations.SetAction (assemblyDefinition, AssemblyAction.Copy);
 			configuration.AssemblyResolver.ResolverCache.Add (assemblyDefinition.Name.Name, assemblyDefinition);
 		}
+
+		foreach (var step in steps) {
+			step.Process (linkContext);
+		}	
 
 		foreach (var assembly in linkContext.GetAssemblies ()) {
 			// Skip SDK asemblies, they have nothing we need to process at the moment.

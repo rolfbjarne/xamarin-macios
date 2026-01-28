@@ -17,7 +17,7 @@ public class ReproTest : BaseClass {
 		if (string.IsNullOrEmpty (reproPath)) {
 			var code = @"public class SomeLibrary {}";
 
-			reproPath = Cache.CreateTemporaryDirectory ();
+			reproPath = Xamarin.Cache.CreateTemporaryDirectory ();
 			Directory.Delete (reproPath); // the repro path can't exist prior to Prepare
 			AssertPrepareCode (platform, (preparer) => {
 				preparer.MakeReproPath = reproPath;
@@ -28,7 +28,7 @@ public class ReproTest : BaseClass {
 		var lines = File.ReadAllLines (Path.Combine (reproPath, "arguments.txt"));
 
 		var ap = AssemblyPreparer.LoadFromReproPath (reproPath);
-		ap.MakeReproPath = Cache.CreateTemporaryDirectory ();
+		ap.MakeReproPath = Xamarin.Cache.CreateTemporaryDirectory ();
 		Directory.Delete (ap.MakeReproPath); // the repro path can't exist prior to Prepare
 		AssertPrepare (ap);
 

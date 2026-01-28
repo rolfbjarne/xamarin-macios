@@ -44,7 +44,7 @@ public abstract class BaseStep : IStep  {
 		get
 		{
 			Debug.Assert(context != null);
-			return context;
+			return context!;
 		}
 	}
 

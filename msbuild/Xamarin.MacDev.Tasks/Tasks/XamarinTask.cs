@@ -29,6 +29,7 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			if (string.IsNullOrEmpty (SdkDevPath)) {
 				Log.LogError (MSBStrings.E7169, /* The task '{0}' requires the property '{1}' to be set. Please file an issue at https://github.com/dotnet/macios/issues/new/choose. */ GetType ().Name, "SdkDevPath");
+				Log.LogMessage (MessageImportance.Low, Environment.StackTrace);
 				return "";
 			}
 
@@ -41,6 +42,7 @@ namespace Xamarin.MacDev.Tasks {
 			if (xcodeLocator is null) {
 				if (!initialDiscovery && string.IsNullOrEmpty (SdkDevPath)) {
 					Log.LogError (MSBStrings.E7169, /* The task '{0}' requires the property '{1}' to be set. Please file an issue at https://github.com/dotnet/macios/issues/new/choose. */ GetType ().Name, "SdkDevPath");
+					Log.LogMessage (MessageImportance.Low, Environment.StackTrace);
 				}
 
 				var xcodeLocator = new XcodeLocator (this);

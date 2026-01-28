@@ -73,7 +73,7 @@ public class LinkerConfiguration {
 		GetInstance (context).exceptions.Add (pe);
 	}
 
-	public static void Report (LinkContext context, List<Exception> exceptions)
+	public static void Report (LinkContext context, IList<Exception> exceptions)
 	{
 		foreach (var exception in exceptions) {
 			Report (context, exception);

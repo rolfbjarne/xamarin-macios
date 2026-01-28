@@ -39,6 +39,9 @@
 		<Compile Include="../common/CoreResolver.cs">
 			<Link>external/tools/common/CoreResolver.cs</Link>
 		</Compile>
+		<Compile Include="../common/DerivedLinkContext.cs">
+			<Link>external/tools/common/DerivedLinkContext.cs</Link>
+		</Compile>
 		<Compile Include="../common/DlsymOptions.cs">
 			<Link>external/tools/common/DlsymOptions.cs</Link>
 		</Compile>
@@ -123,11 +126,17 @@
 		<Compile Include="../dotnet-linker/Steps/ConfigurationAwareMarkHandler.cs">
 			<Link>external/tools/dotnet-linker/Steps/ConfigurationAwareMarkHandler.cs</Link>
 		</Compile>
+		<Compile Include="../dotnet-linker/Steps/ConfigurationAwareStep.cs">
+			<Link>external/tools/dotnet-linker/Steps/ConfigurationAwareStep.cs</Link>
+		</Compile>
 		<Compile Include="../dotnet-linker/Steps/ExceptionalMarkHandler.cs">
 			<Link>external/tools/dotnet-linker/Steps/ExceptionalMarkHandler.cs</Link>
 		</Compile>
 		<Compile Include="../dotnet-linker/Steps/PreserveBlockCodeHandler.cs">
 			<Link>external/tools/dotnet-linker/Steps/PreserveBlockCodeHandler.cs</Link>
+		</Compile>
+		<Compile Include="../linker/CoreTypeMapStep.cs">
+			<Link>external/tools/linker/CoreTypeMapStep.cs</Link>
 		</Compile>
 		<Compile Include="../linker/CustomSymbolWriter.cs">
 			<Link>external/tools/linker/CustomSymbolWriter.cs</Link>

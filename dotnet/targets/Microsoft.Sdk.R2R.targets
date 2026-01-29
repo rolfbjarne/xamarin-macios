@@ -225,6 +225,7 @@
 				OutputFile="$(_R2RFrameworkOutput)"
 				LinkerFlags="@(_R2RFrameworkLinkerFlags)"
 
+				IntermediateOutputPath="$(IntermediateOutputPath)"
 				MinimumOSVersion="$(_MinimumOSVersion)"
 				SdkDevPath="$(_SdkDevPath)"
 				SdkIsSimulator="$(_SdkIsSimulator)"
@@ -317,6 +318,7 @@
 				OutputFile="$(_R2RDylibOutput)"
 				LinkerFlags="@(_R2RDylibLinkerFlags)"
 
+				IntermediateOutputPath="$(IntermediateOutputPath)"
 				MinimumOSVersion="$(_MinimumOSVersion)"
 				SdkDevPath="$(_SdkDevPath)"
 				SdkIsSimulator="$(_SdkIsSimulator)"

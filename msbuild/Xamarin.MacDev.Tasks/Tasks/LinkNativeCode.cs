@@ -11,8 +11,6 @@ using Xamarin.Utils;
 
 namespace Xamarin.MacDev.Tasks {
 	public class LinkNativeCode : XamarinTask, ITaskCallback {
-		string outputPath = string.Empty;
-
 		#region Inputs
 		public ITaskItem [] LinkerFlags { get; set; } = Array.Empty<ITaskItem> ();
 
@@ -20,6 +18,9 @@ namespace Xamarin.MacDev.Tasks {
 
 		// A path to entitlements to be embedded into the executable
 		public string EntitlementsInExecutable { get; set; } = string.Empty;
+
+		[Required]
+		public string IntermediateOutputPath { get; set; } = "";
 
 		[Required]
 		public string SdkDevPath { get; set; } = string.Empty;
@@ -56,11 +57,8 @@ namespace Xamarin.MacDev.Tasks {
 
 		public override bool Execute ()
 		{
-			if (ShouldExecuteRemotely ()) {
-				outputPath = PathUtils.ConvertToMacPath (Path.GetDirectoryName (OutputFile.ItemSpec));
-
+			if (ShouldExecuteRemotely ())
 				return ExecuteRemotely ();
-			}
 
 			try {
 				return ExecuteUnsafe ();
@@ -303,9 +301,13 @@ namespace Xamarin.MacDev.Tasks {
 			}
 		}
 
-		// We should avoid copying files from the output path because those already exist on the Mac
-		// and the ones on Windows are empty, so we will break the build
-		public bool ShouldCopyToBuildServer (ITaskItem item) => !PathUtils.ConvertToMacPath (item.ItemSpec).StartsWith (outputPath);
+		public bool ShouldCopyToBuildServer (ITaskItem item)
+		{
+			// We should avoid copying files from the output path because those already exist on the Mac
+			// and the ones on Windows are empty, so we will break the build
+			var intermediateOutputPath = PathUtils.ConvertToMacPath (IntermediateOutputPath);
+			return !PathUtils.ConvertToMacPath (item.ItemSpec).StartsWith (intermediateOutputPath);
+		}
 
 		public bool ShouldCreateOutputFile (ITaskItem item) => true;
 

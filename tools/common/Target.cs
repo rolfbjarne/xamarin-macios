@@ -10,9 +10,8 @@ using Mono.Tuner;
 using Xamarin.Linker;
 
 using Xamarin.Utils;
-#if !ASSEMBLY_PREPARER
+
 using Registrar;
-#endif
 
 #if LEGACY_TOOLS
 using MonoTouch.Tuner;
@@ -33,9 +32,7 @@ namespace Xamarin.Bundler {
 		public PlatformLinkContext? LinkContext;
 		public PlatformResolver Resolver = new PlatformResolver ();
 
-#if !ASSEMBLY_PREPARER
 		internal StaticRegistrar StaticRegistrar { get; set; }
-#endif
 
 		public Assembly AddAssembly (AssemblyDefinition assembly)
 		{

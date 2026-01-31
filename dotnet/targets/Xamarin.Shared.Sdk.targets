@@ -724,6 +724,7 @@
 			<!-- Load the list of assemblies loaded by the linker. -->
 			<!-- This would not be needed if LinkContext.GetAssemblies () was exposed to us. -->
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" BeforeStep="MarkStep" Type="Xamarin.Linker.CollectAssembliesStep" />
+			<!-- CoreTypeMapStep is used by other steps, so it can't be disabled (if PrepareAssemblies=true) until support for those other steps has been added to assembly-preparer -->
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" BeforeStep="MarkStep" Type="MonoTouch.Tuner.CoreTypeMapStep" />
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" BeforeStep="MarkStep" Type="MonoTouch.Tuner.ProcessExportedFields" />
 			<!-- The final decision to remove/keep the dynamic registrar must be done before the linking step -->

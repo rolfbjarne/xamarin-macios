@@ -3,8 +3,14 @@ namespace AssemblyPreparerTests;
 public abstract class BaseClass {
 	public void AssertPrepare (AssemblyPreparer preparer)
 	{
-		if (!preparer.Prepare (out var exceptions))
+		if (!preparer.Prepare (out var exceptions)) {
+			foreach (var ex in exceptions) {
+				Console.WriteLine (ex.ToString ());
+				if (ex.InnerException is not null)
+					Console.WriteLine ($"  Inner: {ex.InnerException}");
+			}
 			Assert.Fail ($"Prepare failed, exceptions:\n\t{string.Join ("\n\t", exceptions.Select (v => v.ToString ()))}");
+		}
 		Assert.That (exceptions, Is.Empty, "Exceptions");
 	}
 

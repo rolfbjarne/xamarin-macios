@@ -18,9 +18,7 @@ using Xamarin.Utils;
 
 using ObjCRuntime;
 
-#if !ASSEMBLY_PREPARER
 using Registrar;
-#endif
 
 #if !LEGACY_TOOLS && !ASSEMBLY_PREPARER
 using ClassRedirector;
@@ -259,9 +257,7 @@ namespace Xamarin.Bundler {
 
 		public Application ()
 		{
-#if !ASSEMBLY_PREPARER
 			this.StaticRegistrar = new StaticRegistrar (this);
-#endif
 		}
 
 		public void CreateCache (string [] arguments)

@@ -5,9 +5,8 @@ using Mono.Cecil;
 using Mono.Linker;
 using Mono.Collections.Generic;
 
-#if !ASSEMBLY_PREPARER
 using Registrar;
-#endif
+
 using Mono.Tuner;
 using Xamarin.Bundler;
 
@@ -20,9 +19,7 @@ using LinkContext = Xamarin.Bundler.DotNetLinkContext;
 namespace Xamarin.Tuner {
 	public class DerivedLinkContext : LinkContext {
 #if !LEGACY_TOOLS
-#if !ASSEMBLY_PREPARER
 		internal StaticRegistrar StaticRegistrar => App.StaticRegistrar;
-#endif
 		internal Application App;
 #endif
 		Symbols? required_symbols;

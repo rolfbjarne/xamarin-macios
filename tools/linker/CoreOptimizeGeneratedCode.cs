@@ -74,7 +74,7 @@ namespace Xamarin.Linker {
 				return optimizable is not null;
 			}
 			// we're sure "pure" SDK assemblies don't use XamMac.dll (i.e. they are the Product assemblies)
-			if (Profile.IsSdkAssembly (assembly)) {
+			if (Configuration.Profile.IsSdkAssembly (assembly)) {
 #if DEBUG
 				Console.WriteLine ("Assembly {0} : skipped (SDK)", assembly);
 #endif
@@ -1131,7 +1131,7 @@ namespace Xamarin.Linker {
 		MethodReference GetBlockSetupImpl (MethodDefinition caller, Instruction ins)
 		{
 			if (setupblock_def is null) {
-				var type = LinkContext.GetAssembly (Driver.GetProductAssembly (LinkContext.App)).MainModule.GetType (Namespaces.ObjCRuntime, "BlockLiteral");
+				var type = LinkContext.GetAssembly (Driver.GetProductAssembly (LinkContext.App))!.MainModule.GetType (Namespaces.ObjCRuntime, "BlockLiteral");
 				foreach (var method in type.Methods) {
 					if (method.Name != "SetupBlockImpl")
 						continue;
@@ -1149,7 +1149,7 @@ namespace Xamarin.Linker {
 		MethodReference GetBlockLiteralConstructor (MethodDefinition caller, Instruction ins)
 		{
 			if (block_ctor_def is null) {
-				var type = LinkContext.GetAssembly (Driver.GetProductAssembly (LinkContext.App)).MainModule.GetType (Namespaces.ObjCRuntime, "BlockLiteral");
+				var type = LinkContext.GetAssembly (Driver.GetProductAssembly (LinkContext.App))!.MainModule.GetType (Namespaces.ObjCRuntime, "BlockLiteral");
 				foreach (var method in type.Methods) {
 					if (!method.IsConstructor)
 						continue;

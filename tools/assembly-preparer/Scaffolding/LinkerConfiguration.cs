@@ -41,6 +41,7 @@ public class LinkerConfiguration {
 	}
 
 	public DerivedLinkContext Context { get => DerivedLinkContext; }
+	public Profile Profile { get; private set; }
 
 	public AssemblyDefinition [] Assemblies { get => Context.GetAssemblies (); }
 
@@ -58,6 +59,7 @@ public class LinkerConfiguration {
 	{
 		AssemblyResolver = new DotNetResolver ();
 		MetadataResolver = new MetadataResolver (AssemblyResolver);
+		Profile = new Profile (this);
 	}
 
 	public static LinkerConfiguration GetInstance (LinkContext context)

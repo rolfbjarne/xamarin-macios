@@ -207,6 +207,9 @@
 		<Compile Include="../../builds/mono-ios-sdk-destdir/ios-sources/external/linker/src/linker/Linker/MethodDefinitionExtensions.cs">
 			<Link>external/builds/mono-ios-sdk-destdir/ios-sources/external/linker/src/linker/Linker/MethodDefinitionExtensions.cs</Link>
 		</Compile>
+		<Compile Include="../../builds/mono-ios-sdk-destdir/ios-sources/external/linker/src/linker/Linker/TypeReferenceExtensions.cs">
+			<Link>mono-archive/Linker/Linker/TypeReferenceExtensions.cs</Link>
+		</Compile>
 		<Compile Include="../../builds/mono-ios-sdk-destdir/ios-sources/external/linker/src/tuner/Mono.Tuner/CecilRocks.cs">
 			<Link>external/builds/mono-ios-sdk-destdir/ios-sources/external/linker/src/tuner/Mono.Tuner/CecilRocks.cs</Link>
 		</Compile>

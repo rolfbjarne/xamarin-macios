@@ -5580,7 +5580,7 @@ namespace Registrar {
 			return null;
 		}
 
-#if !LEGACY_TOOLS && !ASSEMBLY_PREPARER
+#if !LEGACY_TOOLS
 		public MethodReference GetDelegateInvoke (TypeReference delegateType)
 		{
 			var td = delegateType.Resolve ();

@@ -2,7 +2,8 @@ using Mono.Cecil.Rocks;
 
 namespace AssemblyPreparerTests;
 
-public class PreserveSmartEnumConversionsTests : BaseClass {
+// TODO
+public class OptimizeGeneratedCodeHandlerTests : BaseClass {
 	[Test]
 	[TestCase (ApplePlatform.MacCatalyst)]
 	[TestCase (ApplePlatform.iOS)]

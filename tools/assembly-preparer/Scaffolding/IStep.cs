@@ -33,7 +33,6 @@ using Xamarin.Tuner;
 
 namespace Mono.Linker.Steps;
 
-public interface IStep
-{
+public interface IStep {
 	void Process (DerivedLinkContext context);
 }

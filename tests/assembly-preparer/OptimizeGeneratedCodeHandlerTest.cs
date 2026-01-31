@@ -43,7 +43,7 @@ public class OptimizeGeneratedCodeHandlerTests : BaseClass {
 		var type = assemblyDefinition.MainModule.Types.Single (v => v.Name == "MyClass");
 		var cctor = type.GetStaticConstructor ();
 		Assert.That (cctor, Is.Null, "No static constructor should be needed.");
-		
+
 		void AssertHasDynamicDependency (ICustomAttributeProvider provider, string memberSignature, string typeName, string assemblyName)
 		{
 			var ddaAttributes = provider.CustomAttributes.Where (v => v.AttributeType.FullName == "System.Diagnostics.CodeAnalysis.DynamicDependencyAttribute").ToArray ();
@@ -68,7 +68,7 @@ public class OptimizeGeneratedCodeHandlerTests : BaseClass {
 				return;
 
 			var attributesAsString = ddaAttributes
-				.Select (v =>  {
+				.Select (v => {
 					switch (v.ConstructorArguments.Count) {
 					case 3:
 						return $"[DynamicDependency (\"{v.ConstructorArguments [0].Value}\", \"{v.ConstructorArguments [1].Value}\", \"{v.ConstructorArguments [2].Value}\")]";
@@ -96,13 +96,13 @@ public class OptimizeGeneratedCodeHandlerTests : BaseClass {
 			Console.WriteLine (msg);
 			Assert.Fail (msg);
 		}
-		
+
 		void AssertHasDynamicDependencies (ICustomAttributeProvider provider)
 		{
-			AssertHasDynamicDependency (provider, "GetConstant(CoreAnimation.CAToneMapMode)", "CoreAnimation.CAToneMapModeExtensions", $"Microsoft.{platform.AsString()}");
-			AssertHasDynamicDependency (provider, "GetValue(Foundation.NSString)", "CoreAnimation.CAToneMapModeExtensions", $"Microsoft.{platform.AsString()}");
+			AssertHasDynamicDependency (provider, "GetConstant(CoreAnimation.CAToneMapMode)", "CoreAnimation.CAToneMapModeExtensions", $"Microsoft.{platform.AsString ()}");
+			AssertHasDynamicDependency (provider, "GetValue(Foundation.NSString)", "CoreAnimation.CAToneMapModeExtensions", $"Microsoft.{platform.AsString ()}");
 		}
-		
+
 		Assert.Multiple (() => {
 			AssertHasDynamicDependencies (type.Methods.Single (v => v.Name == "get_RWProperty"));
 			AssertHasDynamicDependencies (type.Methods.Single (v => v.Name == "set_RWProperty"));

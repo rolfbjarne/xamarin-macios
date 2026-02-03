@@ -38,13 +38,13 @@ namespace Xamarin.MacDev.Tasks {
 		public override bool Execute ()
 		{
 			if (this.ShouldExecuteRemotely (SessionId)) {
-				var rv = XamarinTask.ExecuteRemotely (this, out var taskRunner);
-
-				if (rv && CopyToWindows) {
-					XamarinTask.CopyFilesToWindowsAsync (this, taskRunner, LinkedItems).Wait ();
+				if (XamarinTask.ExecuteRemotely (this, out var taskRunner)) {
+					if (CopyToWindows)
+						XamarinTask.CopyFilesToWindowsAsync (this, taskRunner, LinkedItems).Wait ();
+					return true;
 				}
 
-				return rv;
+				return false;
 			}
 
 			// Capture execution start time for Mac-side detection

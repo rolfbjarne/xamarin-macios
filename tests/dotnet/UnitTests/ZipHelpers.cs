@@ -1,4 +1,4 @@
-// #define TRACE_ZIP
+#define TRACE_ZIP
 
 using System.IO;
 using System.IO.Compression;

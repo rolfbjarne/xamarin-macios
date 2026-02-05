@@ -311,7 +311,7 @@ namespace Xamarin.Tests {
 			// Open the zipped app bundle and get the Info.plist
 			using var zip = ZipFile.OpenRead (zippedAppBundlePath);
 			ZipHelpers.DumpZipFile (zip, zippedAppBundlePath);
-			var infoPlistEntry = zip.Entries.SingleOrDefault (v => v.Name == "Info.plist")!;
+			var infoPlistEntry = zip.Entries.Where (v => v.Name == "Info.plist").OrderBy (v => v.FullPath.Length).First ();
 			Assert.NotNull (infoPlistEntry, "Info.plist");
 
 			// Parse the Info.plist

@@ -14,6 +14,15 @@
 		</ItemGroup>
 	</Target>
 
+	<!-- Pluck R2R's object files from @(ResolvedFileToPublish) so that we can link them into a .dylib or .framework -->
+	<Target Name="_CollectR2RObjectFilesForLinking">
+		<ItemGroup>
+			<_ReadyToRunObjectFilesToLink Include="@(ResolvedFileToPublish)" Condition="$([MSBuild]::ValueOrDefault('%(FileName)%(Extension)', '').EndsWith('.r2r.dylib')) And '%(ResolvedFileToPublish.RequiresNativeLink)' == 'true' And '%(ResolvedFileToPublish.NativeLinkerInputPath)' != ''" />
+			<_R2RObjectFilesForLinking Include="@(_ReadyToRunObjectFilesToLink->'%(NativeLinkerInputPath)')" />
+			<ResolvedFileToPublish Remove="@(_ReadyToRunObjectFilesToLink)" />
+		</ItemGroup>
+	</Target>
+
 	<!-- Workaround for https://github.com/dotnet/runtime/issues/122985 -->
 	<Target Name="ResolveReadyToRunCompilers" Condition="'$(PublishReadyToRun)' == 'true' And '$(UseMonoRuntime)' != 'true'">
 		<PropertyGroup>
@@ -77,6 +86,7 @@
 	<!-- Create a framework from the composite R2R output -->
 	<PropertyGroup>
 		<_CreateR2RFrameworkDependsOn>
+			_CollectR2RObjectFilesForLinking;
 			_PrepareR2RFrameworkCreation;
 			_CreateR2RFrameworkStructure;
 			_ForceLinkR2RFramework;
@@ -108,7 +118,7 @@
 		<ItemGroup>
 			<_R2RFrameworkDirectories Include="$(_R2RFrameworkPath)" />
 
-			<_R2RFrameworkInputs Include="@(_ReadyToRunCompileList->'%(OutputR2RImage)')" />
+			<_R2RFrameworkInputs Include="@(_R2RObjectFilesForLinking)" />
 			<_R2RFrameworkLinkerFlags Include="-dynamiclib" />
 			<_R2RFrameworkLinkerFlags Include="-Wl,-dead_strip" />
 			<_R2RFrameworkLinkerFlags Include="-Wl,-install_name,@rpath/$(_R2RFrameworkName).framework/$(_R2RFrameworkName)" />
@@ -243,6 +253,7 @@
 	<!-- Create a dylib from the composite R2R output -->
 	<PropertyGroup>
 		<_CreateR2RDylibDependsOn>
+			_CollectR2RObjectFilesForLinking;
 			_PrepareR2RDylibCreation;
 			_ForceLinkR2RDylib;
 			_LinkR2RDylib;
@@ -260,7 +271,7 @@
 		</PropertyGroup>
 
 		<ItemGroup>
-			<_R2RDylibInputs Include="@(_ReadyToRunCompileList->'%(OutputR2RImage)')" />
+			<_R2RDylibInputs Include="@(_R2RObjectFilesForLinking)" />
 			<_R2RDylibLinkerFlags Include="-dynamiclib" />
 			<_R2RDylibLinkerFlags Include="-Wl,-dead_strip" />
 			<_R2RDylibLinkerFlags Include="-Wl,-install_name,@rpath/$(_R2RDylibName).r2r.dylib" />

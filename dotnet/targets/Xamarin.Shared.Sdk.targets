@@ -1735,7 +1735,10 @@
 		</ItemGroup>
 	</Target>
 
-	<Target Name="_ComputeLinkerProperties" DependsOnTargets="_DetectSdkLocations">
+	<Target Name="_ComputeLinkerProperties"
+			DependsOnTargets="_DetectSdkLocations"
+			Condition="'$(IsMacEnabled)' == 'true'"
+			>
 		<PropertyGroup>
 			<!-- There are known bugs in the classic linker with Xcode 15, so keep use the classic linker in that case -->
 			<!-- In Xcode 16 we don't know of any problems for now, so enable the new linker by default -->

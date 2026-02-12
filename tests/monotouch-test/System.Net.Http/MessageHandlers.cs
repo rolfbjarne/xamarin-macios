@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http;
 using System.Net.Security;
+using System.Net.Sockets;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Linq;
 using System.IO;
@@ -716,40 +718,113 @@ namespace MonoTests.System.Net.Http {
 		[Test]
 		public void TestNSUrlSessionHandlerOptionalClientCertificate ()
 		{
-			string content = "";
-			var done = TestRuntime.TryRunAsync (TimeSpan.FromSeconds (30), async () => {
-				using var handler = new NSUrlSessionHandler ();
-				using var client = new HttpClient (handler);
-				// This service doesn't require a certificate and should succeed even if one isn't provided
-				var response = await client.GetAsync (NetworkResources.EchoClientCertificateUrl);
-				content = await response.EnsureSuccessStatusCode ().Content.ReadAsStringAsync ();
-			}, out var ex);
-			if (!done) { // timeouts happen in the bots due to dns issues, connection issues etc.. we do not want to fail
-				Assert.Inconclusive ("Request timedout.");
-			} else {
-				Assert.IsNull (ex, "Exception wasn't expected.");
+			using var serverCert = CreateSelfSignedServerCertificate ();
+			var listener = new TcpListener (IPAddress.Loopback, 0);
+			listener.Start ();
+			var port = ((IPEndPoint) listener.LocalEndpoint).Port;
+
+			// Start a TLS server that requests but does not require a client certificate
+			_ = Task.Run (async () => {
+				try {
+					while (true) {
+						var client = await listener.AcceptTcpClientAsync ();
+						_ = HandleTlsClient (client, serverCert, requireClientCert: false);
+					}
+				} catch (ObjectDisposedException) {
+					// Listener was stopped
+				}
+			});
+
+			try {
+				var done = TestRuntime.TryRunAsync (TimeSpan.FromSeconds (30), async () => {
+					using var handler = new NSUrlSessionHandler ();
+					handler.TrustOverrideForUrl = (sender, url, trust) => true;
+					using var client = new HttpClient (handler);
+					var response = await client.GetAsync ($"https://localhost:{port}/");
+					response.EnsureSuccessStatusCode ();
+				}, out var ex);
+				Assert.IsTrue (done, "Request to localhost timed out.");
+				Assert.IsNull (ex, $"Exception wasn't expected, but got: {ex}");
+			} finally {
+				listener.Stop ();
 			}
 		}
 
 		[Test]
 		public void TestNSUrlSessionHandlerDetectMissingClientCertificate ()
 		{
-			string content = "";
-			var done = TestRuntime.TryRunAsync (TimeSpan.FromSeconds (30), async () => {
-				using var handler = new NSUrlSessionHandler ();
-				using var client = new HttpClient (handler);
-				// TODO: Replace with a service that actually requires a certificate and uses TLS1.2
-				var response = await client.GetAsync (NetworkResources.EchoClientCertificateUrl);
-				content = await response.EnsureSuccessStatusCode ().Content.ReadAsStringAsync ();
-			}, out var ex);
-			if (!done) { // timeouts happen in the bots due to dns issues, connection issues etc.. we do not want to fail
-				Assert.Inconclusive ("Request timedout.");
-			} else {
+			using var serverCert = CreateSelfSignedServerCertificate ();
+			var listener = new TcpListener (IPAddress.Loopback, 0);
+			listener.Start ();
+			var port = ((IPEndPoint) listener.LocalEndpoint).Port;
+
+			// Start a TLS server that requires a client certificate
+			_ = Task.Run (async () => {
+				try {
+					while (true) {
+						var client = await listener.AcceptTcpClientAsync ();
+						_ = HandleTlsClient (client, serverCert, requireClientCert: true);
+					}
+				} catch (ObjectDisposedException) {
+					// Listener was stopped
+				}
+			});
+
+			try {
+				var done = TestRuntime.TryRunAsync (TimeSpan.FromSeconds (30), async () => {
+					using var handler = new NSUrlSessionHandler ();
+					handler.TrustOverrideForUrl = (sender, url, trust) => true;
+					using var client = new HttpClient (handler);
+					await client.GetAsync ($"https://localhost:{port}/");
+				}, out var ex);
+				Assert.IsTrue (done, "Request to localhost timed out.");
 				Assert.IsNotNull (ex, "Exception was expected.");
 				Assert.IsInstanceOf (typeof (HttpRequestException), ex, "Exception");
 				Assert.IsInstanceOf (typeof (WebException), ex.InnerException, "InnerException Type");
 				Assert.AreEqual (WebExceptionStatus.SecureChannelFailure, ((WebException) ex.InnerException).Status, "InnerException Status");
 				Assert.IsInstanceOf (typeof (AuthenticationException), ex.InnerException.InnerException, "InnerException.InnerException Type");
+			} finally {
+				listener.Stop ();
+			}
+		}
+
+		static X509Certificate2 CreateSelfSignedServerCertificate ()
+		{
+			using var rsa = RSA.Create (2048);
+			var certRequest = new global::System.Security.Cryptography.X509Certificates.CertificateRequest (
+				"CN=localhost", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+			var sanBuilder = new SubjectAlternativeNameBuilder ();
+			sanBuilder.AddIpAddress (IPAddress.Loopback);
+			sanBuilder.AddDnsName ("localhost");
+			certRequest.CertificateExtensions.Add (sanBuilder.Build ());
+			// The cert must be exportable so SslStream can use it
+			var cert = certRequest.CreateSelfSigned (DateTimeOffset.UtcNow.AddDays (-1), DateTimeOffset.UtcNow.AddYears (1));
+			return X509CertificateLoader.LoadPkcs12 (cert.Export (X509ContentType.Pfx), null);
+		}
+
+		static async Task HandleTlsClient (TcpClient client, X509Certificate2 serverCert, bool requireClientCert)
+		{
+			try {
+				using var sslStream = new SslStream (client.GetStream (), false, (sender, certificate, chain, errors) => {
+					if (requireClientCert)
+						return certificate is not null;
+					return true;
+				});
+				await sslStream.AuthenticateAsServerAsync (serverCert, clientCertificateRequired: true, checkCertificateRevocation: false);
+
+				// Read the HTTP request (just consume it)
+				var buffer = new byte [4096];
+				_ = await sslStream.ReadAsync (buffer.AsMemory ());
+
+				// Send a minimal HTTP response
+				var response = "HTTP/1.1 200 OK\r\nContent-Length: 2\r\nConnection: close\r\n\r\nOK";
+				var responseBytes = Encoding.UTF8.GetBytes (response);
+				await sslStream.WriteAsync (responseBytes, 0, responseBytes.Length);
+				await sslStream.FlushAsync ();
+			} catch {
+				// Expected when client cert is required but not provided
+			} finally {
+				client.Close ();
 			}
 		}
 

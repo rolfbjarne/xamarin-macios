@@ -1091,6 +1091,13 @@ namespace CoreMidi {
 		AssociatedEndpoint,
 	}
 
+	[Internal]
+	[NoiOS, NoMacCatalyst, NoTV]
+	enum MidiDriverProperty {
+		[Field ("kMIDIDriverPropertyUsesSerial")]
+		UsesSerial,
+	}
+
 	[NoTV, Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 	[BaseType (typeof (NSObject), Name = "MIDICIDevice")]
 	[DisableDefaultCtor]

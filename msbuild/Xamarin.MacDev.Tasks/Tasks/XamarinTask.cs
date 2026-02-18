@@ -13,7 +13,6 @@ using Xamarin.Bundler;
 using Xamarin.Localization.MSBuild;
 using Xamarin.Messaging.Build.Client;
 using Xamarin.Utils;
-using static Xamarin.Bundler.FileCopier;
 
 #nullable enable
 
@@ -404,12 +403,24 @@ namespace Xamarin.MacDev.Tasks {
 
 		void IToolLog.LogException (Exception exception)
 		{
-			((ICustomLogger) this).LogError ("", exception);
+			((ICustomLogger) this).LogError ($"Unexpected exception '{GetType ().Name}': {exception.Message}", exception);
 		}
 
-		void IToolLog.LogError (Exception exception)
+		void IToolLog.LogError (ProductException exception)
 		{
-			((ICustomLogger) this).LogError ("", exception);
+			Log.LogError (exception.Code, exception.FileName, exception.LineNumber, exception.Message);
+		}
+
+		void IToolLog.LogWarning (ProductException exception)
+		{
+			switch (exception.GetWarningLevel (this)) {
+			case ErrorHelper.WarningLevel.Warning:
+				Log.LogWarning (exception.Code, exception.FileName, exception.LineNumber, exception.Message);
+				break;
+			case ErrorHelper.WarningLevel.Error:
+				Log.LogError (exception.Code, exception.FileName, exception.LineNumber, exception.Message);
+				break;
+			}
 		}
 		#endregion
 	}

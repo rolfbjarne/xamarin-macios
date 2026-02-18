@@ -6,6 +6,7 @@ public interface IToolLog {
 	void LogError (string message);
 	// Log an error we raise ourselves (through an exception)
 	void LogError (Exception exception);
+	void LogWarning (Exception exception);
 	// Log an unexpected exception
 	void LogException (Exception exception);
 }
@@ -39,8 +40,10 @@ public class ConsoleLog : IToolLog {
 
 #if TESTS
 	int verbosity = 0;
-#else
+#elif BGENERATOR
 	int verbosity = Driver.GetDefaultVerbosity ();
+#else
+	int verbosity = Driver.GetDefaultVerbosity (Driver.NAME);
 #endif
 
 	public int Verbosity { get => verbosity; }
@@ -58,6 +61,11 @@ public class ConsoleLog : IToolLog {
 	public void LogError (Exception exception)
 	{
 		Console.Error.WriteLine (exception);
+	}
+
+	public void LogWarning (Exception exception)
+	{
+		Console.WriteLine (exception);
 	}
 
 	public void LogException (Exception exception)

@@ -16,10 +16,11 @@ using Xamarin.Utils;
 #nullable enable
 
 public class Framework {
-	public required string Namespace { get; set; }
-	public required string Name { get; set; } // this is the name to pass to the linker when linking. This can be an umbrella framework.
+	public string Namespace { get; set; } = "";
+	public string Name { get; set; } = ""; // this is the name to pass to the linker when linking. This can be an umbrella framework.
 	public string? SubFramework { get; set; } // if Name is an umbrella framework, this is the name of the actual sub framework.
-	public required Version Version { get; set; }
+	Version? version;
+	public Version Version { get => version!; set => version = value; }
 	public Version? VersionAvailableInSimulator { get; set; }
 	public bool AlwaysWeakLinked { get; set; }
 	public bool Unavailable { private get; set; } // Call IsFrameworkUnavailable () to determine if a framework is available or not

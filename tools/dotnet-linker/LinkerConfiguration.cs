@@ -13,6 +13,7 @@ using Mono.Linker.Steps;
 using Xamarin.Bundler;
 using Xamarin.Utils;
 using Xamarin.Tuner;
+using Microsoft.VisualBasic;
 
 #nullable enable
 
@@ -23,6 +24,7 @@ namespace Xamarin.Linker {
 		public Abi Abi = Abi.None;
 		public string AOTCompiler = string.Empty;
 		public string AOTOutputDirectory = string.Empty;
+		public string AssemblyPublishDir = string.Empty;
 		public string DedupAssembly = string.Empty;
 		public string CacheDirectory { get; private set; } = string.Empty;
 		public Version? DeploymentTarget { get; private set; }
@@ -43,10 +45,12 @@ namespace Xamarin.Linker {
 		public string PartialStaticRegistrarLibrary { get; set; } = string.Empty;
 		public ApplePlatform Platform { get; private set; }
 		public string PlatformAssembly { get; private set; } = string.Empty;
+		public bool PublishTrimmed { get; private set; }
 		public string RelativeAppBundlePath { get; private set; } = string.Empty;
 		public Version? SdkVersion { get; private set; }
 		public string SdkRootDirectory { get; private set; } = string.Empty;
 		public string TypeMapFilePath { get; set; } = string.Empty;
+		public string TrimMode { get; private set; } = string.Empty;
 		public int Verbosity => Application.Verbosity;
 		public string XamarinNativeLibraryDirectory { get; private set; } = string.Empty;
 
@@ -54,17 +58,41 @@ namespace Xamarin.Linker {
 
 		public Application Application { get; private set; }
 
+		public IToolLog Logger { get; private set; }
+
 		public IList<string> RegistrationMethods { get; set; } = new List<string> ();
 		public List<string> NativeCodeToCompileAndLink { get; private set; } = new List<string> ();
+#if !ASSEMBLY_PREPARER
 		public CompilerFlags CompilerFlags;
+#endif
 
+#if ASSEMBLY_PREPARER
+		List<ProductException> exceptions = new List<ProductException> ();
+		public List<ProductException> Exceptions {
+			get {
+				return exceptions;
+			}
+		}
+		public DotNetResolver AssemblyResolver { get; private set; }
+	 	public IMetadataResolver MetadataResolver { get; private set; }
+#endif
+
+#if ASSEMBLY_PREPARER
+		public LinkContext Context { get =>  DerivedLinkContext; }
+#else
 		LinkContext? context;
 		public LinkContext Context { get => context!; private set { context = value; } }
+#endif
 		public DerivedLinkContext DerivedLinkContext { get => Application.LinkContext; }
 		public Profile Profile { get; private set; }
 
+#if ASSEMBLY_PREPARER
+		public List<AssemblyDefinition> Assemblies => Application.LinkContext.Assemblies;
+		public List<(string Path, AssemblyDefinition Assembly, string? OriginatingAssembly)> AddedAssemblies = new ();
+#else
 		// The list of assemblies is populated in CollectAssembliesStep.
 		public List<AssemblyDefinition> Assemblies = new List<AssemblyDefinition> ();
+#endif
 
 		string? user_optimize_flags;
 
@@ -93,50 +121,544 @@ namespace Xamarin.Linker {
 		// This dictionary contains information about the trampolines created for each assembly.
 		public AssemblyTrampolineInfos AssemblyTrampolineInfos = new ();
 
+		// ASSEMBLY_PREPARER TODO move pinvoke wrapper generation out of ListExportedFields step (and remove the #pragma warning)
+#pragma warning disable CS0649 // Field is never assigned to, and will always have its default value null
 		internal PInvokeWrapperGenerator? PInvokeWrapperGenerationState;
+#pragma warning restore CS0649
 
 		public static bool TryGetInstance (LinkContext context, [NotNullWhen (true)] out LinkerConfiguration? configuration)
 		{
 			return configurations.TryGetValue (context, out configuration);
 		}
-
 		public static LinkerConfiguration GetInstance (LinkContext context)
 		{
 			if (!TryGetInstance (context, out var instance)) {
+#if ASSEMBLY_PREPARER
+				throw new InvalidOperationException ($"No LinkerConfiguration instance found for the given LinkContext.");
+#else
 				if (!context.TryGetCustomData ("LinkerOptionsFile", out var linker_options_file))
 					throw new Exception ($"No custom linker options file was passed to the linker (using --custom-data LinkerOptionsFile=...");
-				instance = new LinkerConfiguration (linker_options_file) {
+				instance = new LinkerConfiguration (ConsoleLog.Instance, linker_options_file) {
 					Context = context,
 				};
 
 				configurations.Add (context, instance);
+#endif
 			}
 
 			return instance;
 		}
 
-		LinkerConfiguration (string linker_file)
+		public delegate void LoadValue (string key, string value);
+		public delegate void SaveValue (string key, List<string> storage);
+
+		delegate void LoadBool (string key, string value, out bool result);
+		delegate void LoadNullableBool (string key, string value, out bool? result);
+
+		public class Configurator : Dictionary<string, (LoadValue Load, SaveValue Save)> { }
+
+		Configurator GetConfigurator (string linker_file)
 		{
-			if (!File.Exists (linker_file))
-				throw new FileNotFoundException ($"The custom linker file {linker_file} does not exist.");
+			var saveNonEmpty = new Action<string, string?, List<string>> ((key, value, storage) => {
+				if (string.IsNullOrEmpty (value))
+					return;
+				storage.Add ($"{key}={value}");
+			});
+			var saveNullableBool = new Action<string, bool?, List<string>> ((key, value, storage) => {
+				if (!value.HasValue)
+					return;
+				storage.Add ($"{key}={(value.Value ? "true" : "false")}");
+			});
+			var saveOptionalDefaultFalseBool = new Action<string, bool, List<string>> ((key, value, storage) => {
+				if (!value)
+					return;
+				storage.Add ($"{key}=true");
+			});
+			var loadBool = new LoadBool ((string key, string value, out bool result) => {
+				result = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase);
+			});
+			var loadNullableBool = new LoadNullableBool ((key, value, out result) => {
+				if (!TryParseOptionalBoolean (value, out result))
+					throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
+			});
+
+			var loadWarningLevel = new Action<string, string, ErrorHelper.WarningLevel> ((key, value, level) => {
+				try {
+					ErrorHelper.ParseWarningLevel (level, value);
+				} catch (Exception ex) {
+					throw new InvalidOperationException ($"Invalid {key} '{value}' in {linker_file}", ex);
+				}
+			});
+			var saveWarningLevel = new Action<string, List<string>, ErrorHelper.WarningLevel> ((key, storage, level) => {
+				if (ErrorHelper.WarningLevels is null)
+					return;
+				foreach (var kvp in ErrorHelper.WarningLevels.Where (v => v.Value == level).OrderBy (v => v)) {
+					if (kvp.Key == -1) {
+						storage.Add (key);
+					} else {
+						storage.Add ($"{key}={kvp.Key}");
+					}
+				}
+			});
+
+			var dict = new Configurator () {
+				{ "AreAnyAssembliesTrimmed", (
+					new LoadValue ((key, value) => Application.AreAnyAssembliesTrimmed = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase)),
+					new SaveValue ((key, storage) => storage.Add ($"{key}={(Application.AreAnyAssembliesTrimmed ? "true" : "false")}"))
+				)},
+				{ "AssemblyName", (
+					// This is the _AssemblyName MSBuild property for the main project (which is also the root/entry assembly)
+					new LoadValue ((key, value) => Application.RootAssemblies.Add (value)),
+					new SaveValue ((key, storage) => storage.AddRange (Application.RootAssemblies.Select (v => $"{key}={v}")))
+				)},
+				{ "AssemblyPublishDir", (
+					// This is the AssemblyPublishDir MSBuild property for the main project
+					new LoadValue ((key, value) => AssemblyPublishDir = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, AssemblyPublishDir, storage))
+				)},
+				{ "AOTArgument",  (
+					new LoadValue ((key, value) =>
+					{
+						if (!string.IsNullOrEmpty (value))
+							Application.AotArguments.Add (value);
+					}),
+					new SaveValue ((key, storage) =>
+						storage.AddRange (Application.AotArguments.Where (v => !string.IsNullOrEmpty (v)).Select (v => $"{key}={v}")))
+				)},
+				{ "AOTCompiler", (
+					new LoadValue ((key, value) => AOTCompiler = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, AOTCompiler, storage))
+				)},
+				{ "AOTOutputDirectory", (
+					new LoadValue ((key, value) => AOTOutputDirectory = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, AOTOutputDirectory, storage))
+				)},
+				{ "AppBundleManifestPath", (
+					new LoadValue ((key, value) => Application.InfoPListPath = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, Application.InfoPListPath, storage))
+				)},
+				{ "CacheDirectory", (
+					new LoadValue ((key, value) => CacheDirectory = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, CacheDirectory, storage))
+				)},
+				{ "CustomLinkFlags", (
+					new LoadValue ((key, value) => Application.ParseCustomLinkFlags (value, "gcc_flags")),
+					new SaveValue ((key, storage) => storage.AddRange (Application.CustomLinkFlags?.Select (v => $"{key}={v}") ?? []))
+				)},
+				{ "Debug", (
+					new LoadValue ((key, value) => Application.EnableDebug = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase)),
+					new SaveValue ((key, storage) => storage.Add ($"{key}={(Application.EnableDebug ? "true" : "false")}"))
+				)},
+				{ "DedupAssembly", (
+					new LoadValue ((key, value) => DedupAssembly = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, DedupAssembly, storage))
+				)},
+				{ "DeploymentTarget", (
+					new LoadValue ((key, value) => {
+						if (!Version.TryParse (value, out var deployment_target))
+							throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
+						DeploymentTarget = deployment_target;
+					}),
+					new SaveValue ((key, storage) => saveNonEmpty (key, DeploymentTarget?.ToString (), storage))
+				)},
+				{ "Dlsym", (
+					new LoadValue ((key, value) => Application.ParseDlsymOptions (value)),
+					new SaveValue ((key, storage) => {
+						switch (Application.DlsymOptions) {
+						case DlsymOptions.None:
+							storage.Add ($"Dlsym=false");
+							break;
+						case DlsymOptions.All:
+							storage.Add ($"Dlsym=false");
+							break;
+						case DlsymOptions.Custom:
+							if (Application.DlsymAssemblies is not null)
+								storage.Add ($"Dlsym={string.Join (",", Application.DlsymAssemblies.Select (v => (v.Item2 ? "+" : "-") + v.Item1 + ".dll"))}");
+							break;
+						case DlsymOptions.Default:
+							// don't store default
+							break;
+						default:
+							throw new InvalidOperationException ($"Unknown DlsymOptions value: {Application.DlsymOptions}");
+						}
+					})
+				)},
+				{ "EnableSGenConc", (
+					new LoadValue ((key, value) => Application.EnableSGenConc = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase)),
+					new SaveValue ((key, storage) => storage.Add ($"{key}={(Application.EnableSGenConc ? "true" : "false")}"))
+				)},
+				{ "EnvironmentVariable", (
+					// Format is either of:
+					//     NAME=VALUE
+					//     Overwrite=BOOL|NAME=VALUE
+					new LoadValue ((key, value) => {
+						var overwrite = true;
+						var needle = "Overwrite=";
+						if (value.StartsWith (needle, StringComparison.Ordinal)) {
+							var pipe = value.IndexOf ('|', needle.Length);
+							if (pipe > 0) {
+								var overwriteString = value [needle.Length..pipe];
+								if (!TryParseOptionalBoolean (overwriteString, out var parsedOverwrite))
+									throw new InvalidOperationException ($"Unable to parse the 'Overwrite' value '{overwriteString}' for the environment variable entry '{value}' in {linker_file}");
+								overwrite = parsedOverwrite.Value;
+								value = value [(pipe + 1)..];
+							}
+						}
+						var separators = new char [] { ':', '=' };
+						var equals = value.IndexOfAny (separators);
+						var name = value.Substring (0, equals);
+						var val = value.Substring (equals + 1);
+						Application.EnvironmentVariables.Add (name, new (val, overwrite));
+					}),
+					new SaveValue ((key, storage) => storage.AddRange (Application.EnvironmentVariables.Select (v => $"{key}=Overwrite={v.Value.Overwrite}|{v.Key}={v.Value.Value}").OrderBy (v => v)))
+				)},
+				{ "FrameworkAssembly", (
+					new LoadValue ((key, value) => FrameworkAssemblies.Add (value)),
+					new SaveValue ((key, storage) => storage.AddRange (FrameworkAssemblies.OrderBy (v => v).Select (v => $"{key}={v}")))
+				)},
+				{ "InlineDlfcnMethods", (
+					new LoadValue ((key, value) => {
+						if (Enum.TryParse<InlineDlfcnMethodsMode> (value, true, out var inlineDlfcnMode))
+							InlineDlfcnMethods = inlineDlfcnMode;
+						else if (string.IsNullOrEmpty (value))
+							InlineDlfcnMethods = InlineDlfcnMethodsMode.Disabled;
+						else
+							throw new InvalidOperationException ($"Unknown InlineDlfcnMethods value: {value}");
+					}),
+					new SaveValue ((key, storage) => storage.Add ($"{key}={InlineDlfcnMethods}"))
+				)},
+				{ "InlineClassGetHandle", (
+					new LoadValue ((key, value) => {
+						if (Enum.TryParse<InlineClassGetHandleMode> (value, true, out var inlineClassGetHandleMode))
+							InlineClassGetHandle = inlineClassGetHandleMode;
+						else if (string.IsNullOrEmpty (value))
+							InlineClassGetHandle = InlineClassGetHandleMode.Disabled;
+						else
+							throw new InvalidOperationException ($"Unknown InlineClassGetHandle value: {value}");
+					}),
+					new SaveValue ((key, storage) => storage.Add ($"{key}={InlineClassGetHandle}"))
+				)},
+				{ "Interpreter", (
+					new LoadValue ((key, value) => {
+						if (!string.IsNullOrEmpty (value))
+							Application.ParseInterpreter (value);
+					}),
+					new SaveValue ((key, storage) => {
+						if (!Application.UseInterpreter)
+							return;
+						storage.Add ($"{key}={string.Join (",", Application.InterpretedAssemblies)}");
+					})
+				)},
+				{ "IntermediateLinkDir", (
+					new LoadValue ((key, value) => IntermediateLinkDir = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, IntermediateLinkDir, storage))
+				)},
+				{ "IntermediateOutputPath", (
+					new LoadValue ((key, value) => IntermediateOutputPath = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, IntermediateOutputPath, storage))
+				)},
+				{ "IsAppExtension", (
+					new LoadValue ((key, value) => Application.IsExtension = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase)),
+					new SaveValue ((key, storage) => storage.Add ($"{key}={(Application.IsExtension ? "true" : "false")}"))
+				)},
+				{ "ItemsDirectory", (
+					new LoadValue ((key, value) => ItemsDirectory = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, ItemsDirectory, storage))
+				)},
+				{ "IsSimulatorBuild", (
+					new LoadValue ((key, value) => IsSimulatorBuild = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase)),
+					new SaveValue ((key, storage) => storage.Add ($"{key}={(IsSimulatorBuild ? "true" : "false")}"))
+				)},
+				{ "LibMonoLinkMode", (
+					new LoadValue ((key, value) => Application.LibMonoLinkMode = ParseLinkMode (value, key)),
+					new SaveValue ((key, storage) => storage.Add ($"{key}={Application.LibMonoLinkMode}"))
+				)},
+				{ "LibXamarinLinkMode", (
+					new LoadValue ((key, value) => Application.LibXamarinLinkMode = ParseLinkMode (value, key)),
+					new SaveValue ((key, storage) => storage.Add ($"{key}={Application.LibXamarinLinkMode}"))
+				)},
+				{ "MarshalManagedExceptionMode", (
+					new LoadValue ((key, value) => {
+						if (!string.IsNullOrEmpty (value)) {
+							if (!Application.TryParseManagedExceptionMode (value, out var mode))
+								throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
+							Application.MarshalManagedExceptions = mode;
+						}
+					}),
+					new SaveValue ((key, storage) => storage.Add ($"{key}={Application.MarshalManagedExceptions}"))
+				)},
+				{ "MarshalObjectiveCExceptionMode", (
+					new LoadValue ((key, value) => {
+						if (!string.IsNullOrEmpty (value)) {
+							if (!Application.TryParseObjectiveCExceptionMode (value, out var mode))
+								throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
+							Application.MarshalObjectiveCExceptions = mode;
+						}
+					}),
+					new SaveValue ((key, storage) => storage.Add ($"{key}={Application.MarshalObjectiveCExceptions}"))
+				)},
+				{ "MonoLibrary", (
+					new LoadValue ((key, value) => Application.MonoLibraries.Add (value)),
+					new SaveValue ((key, storage) => storage.AddRange (Application.MonoLibraries.OrderBy (v => v).Select (v => $"{key}={v}")))
+				)},
+				{ "MtouchFloat32", (
+					new LoadValue ((key, value) => loadNullableBool (key, value, out Application.AotFloat32)),
+					new SaveValue ((key, storage) => saveNullableBool (key, Application.AotFloat32, storage))
+				)},
+				{ "NoWarn", (
+					new LoadValue ((key, value) => loadWarningLevel (key, value, ErrorHelper.WarningLevel.Disable)),
+					new SaveValue ((key, storage) => saveWarningLevel (key, storage, ErrorHelper.WarningLevel.Disable))
+				)},
+				{ "Optimize", (
+					new LoadValue ((key, value) => user_optimize_flags = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, user_optimize_flags, storage))
+				)},
+				{ "PartialStaticRegistrarLibrary", (
+					new LoadValue ((key, value) => PartialStaticRegistrarLibrary = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, PartialStaticRegistrarLibrary, storage))
+				)},
+				{ "Platform", (
+					new LoadValue ((key, value) => Platform = ApplePlatformExtensions.Parse (value)),
+					new SaveValue ((key, storage) => storage.Add ($"{key}={Platform.AsString ()})"))
+				)},
+				{ "PlatformAssembly", (
+					new LoadValue ((key, value) => PlatformAssembly = Path.GetFileNameWithoutExtension (value)),
+					new SaveValue ((key, storage) => saveNonEmpty (key, string.IsNullOrEmpty (PlatformAssembly) ? PlatformAssembly : PlatformAssembly + ".dll", storage))
+				)},
+				{ "PrepareAssemblies", (
+					new LoadValue ((key, value) => loadBool (key, value, out Application.PrepareAssemblies)),
+					new SaveValue ((key, storage) => saveOptionalDefaultFalseBool (key, Application.PrepareAssemblies, storage))
+				)},
+				{ "PublishTrimmed", (
+					new LoadValue ((key, value) => PublishTrimmed = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase)),
+					new SaveValue ((key, storage) => storage.Add ($"{key}={(PublishTrimmed ? "true" : "false")}"))
+				 )},
+				{ "ReferenceNativeSymbol", (
+					new LoadValue ((key, value) => {
+						(string symbolType, string symbolMode, string symbol) = SplitString3 (value, ':');
+						var mode = SymbolMode.Default;
+						switch (symbolMode) {
+						case "Ignore":
+							mode = SymbolMode.Ignore;
+							break;
+						case "":
+							break;
+						default:
+							throw new InvalidOperationException ($"Unknown symbol mode '{symbolMode}' for symbol '{symbol}'. Expected 'Ignore' or nothing at all.");
+						}
+						switch (symbolType) {
+						case "Function":
+							DerivedLinkContext.RequiredSymbols.AddFunction (symbol, mode);
+							break;
+						case "ObjectiveCClass":
+							DerivedLinkContext.RequiredSymbols.AddObjectiveCClass (symbol, mode);
+							break;
+						case "Field":
+							DerivedLinkContext.RequiredSymbols.AddField (symbol, mode);
+							break;
+						default:
+							throw new InvalidOperationException ($"Unknown symbol type '{symbolType}' for symbol '{symbol}'. Expected 'Function', 'ObjectiveCClass', or 'Field'.");
+						}
+					}),
+					new SaveValue ((key, storage) => {
+						foreach (var symbol in DerivedLinkContext.RequiredSymbols) {
+							var mode = symbol.Mode == SymbolMode.Ignore ? "Ignore" : "";
+							switch (symbol.Type) {
+							case SymbolType.Function:
+							case SymbolType.ObjectiveCClass:
+							case SymbolType.Field:
+								storage.Add ($"{key}={symbol.Type}:{mode}:{symbol.Name}");
+								break;
+							default:
+								throw new InvalidOperationException ($"Unknown symbol type '{symbol.Type}' for symbol '{symbol.Name}'. Expected 'Function', 'ObjectiveCClass', or 'Field'.");
+							}
+						}
+					})
+				)},
+				{ "RelativeAppBundlePath", (
+					new LoadValue ((key, value) => RelativeAppBundlePath = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, RelativeAppBundlePath, storage))
+				)},
+				{ "Registrar", (
+					new LoadValue ((key, value) => Application.ParseRegistrar (value)),
+					new SaveValue ((key, storage) => {
+						if (Application.Registrar == RegistrarMode.Default)
+							return;
+						storage.Add ($"{key}={Application.Registrar}");
+					})
+				)},
+				{ "RequireLinkWithAttributeForObjectiveCClassSearch", (
+					new LoadValue ((key, value) => {
+						if (!TryParseOptionalBoolean (value, out var require_link_with_attribute_for_objectivec_class_search, defaultValue: false))
+							throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
+						Application.RequireLinkWithAttributeForObjectiveCClassSearch = require_link_with_attribute_for_objectivec_class_search.Value;
+					}),
+					new SaveValue ((key, storage) => storage.Add ($"{key}={(Application.RequireLinkWithAttributeForObjectiveCClassSearch ? "true" : "false")}"))
+				)},
+				{ "RequirePInvokeWrappers", (
+					new LoadValue ((key, value) => {
+						if (!TryParseOptionalBoolean (value, out var require_pinvoke_wrappers, defaultValue: false))
+							throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
+						Application.RequiresPInvokeWrappers = require_pinvoke_wrappers.Value;
+					}),
+					new SaveValue ((key, storage) => saveOptionalDefaultFalseBool (key, Application.RequiresPInvokeWrappers, storage))
+				)},
+				{ "RuntimeConfigurationFile", (
+					new LoadValue ((key, value) => Application.RuntimeConfigurationFile = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, Application.RuntimeConfigurationFile, storage))
+				)},
+				{ "SdkDevPath", (
+					new LoadValue ((key, value) => Driver.SdkRoot = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, Driver.SdkRoot, storage))
+				)},
+				{ "SdkRootDirectory", (
+					new LoadValue ((key, value) => {
+						SdkRootDirectory = value;
+						Driver.SetFrameworkCurrentDirectory (value);
+					}),
+					new SaveValue ((key, storage) => saveNonEmpty (key, SdkRootDirectory, storage))
+				)},
+				{ "SdkVersion", (
+					new LoadValue ((key, value) => {
+						if (!Version.TryParse (value, out var sdk_version))
+							throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
+						SdkVersion = sdk_version;
+					}),
+					new SaveValue ((key, storage) => saveNonEmpty (key, SdkVersion?.ToString (), storage))
+				)},
+				{ "SkipMarkingNSObjectsInUserAssemblies", (
+					new LoadValue ((key, value) => {
+						if (!TryParseOptionalBoolean (value, out var skip_marking_nsobjects_in_user_assemblies))
+							throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
+						Application.SkipMarkingNSObjectsInUserAssemblies = skip_marking_nsobjects_in_user_assemblies.Value;
+					}),
+					new SaveValue ((key, storage) => saveOptionalDefaultFalseBool (key, Application.SkipMarkingNSObjectsInUserAssemblies, storage))
+				)},
+				{ "TargetArchitectures", (
+					new LoadValue ((key, value) => {
+						if (!Enum.TryParse<Abi> (value, out var abi))
+							throw new InvalidOperationException ($"Unknown target architectures: {value} in {linker_file}");
+						Abi = abi | (Abi & Abi.LLVM); // Preserve the LLVM flag if it was set, since TargetArchitectures is orthogonal to LLVM
+					}),
+					new SaveValue ((key, storage) => saveNonEmpty (key, (Abi & ~Abi.LLVM).ToString (), storage))
+				)},
+				{ "TargetFramework", (
+					new LoadValue ((key, value) => {
+						if (!TargetFramework.TryParse (value, out var tf))
+							throw new InvalidOperationException ($"Invalid TargetFramework '{value}' in {linker_file}");
+						Driver.TargetFramework = TargetFramework.Parse (value);
+					}),
+					new SaveValue ((key, storage) => saveNonEmpty (key, Driver.TargetFramework.ToString (), storage))
+				)},
+				{ "TrimMode", (
+					new LoadValue ((key, value) => TrimMode = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, TrimMode, storage))
+				)},
+				{ "TypeMapAssemblyName", (
+					new LoadValue ((key, value) => Application.TypeMapAssemblyName = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, Application.TypeMapAssemblyName, storage))
+				)},
+				{ "TypeMapFilePath", (
+					new LoadValue ((key, value) => TypeMapFilePath = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, TypeMapFilePath, storage))
+				)},
+				{ "TypeMapOutputDirectory", (
+					new LoadValue ((key, value) => Application.TypeMapOutputDirectory = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, Application.TypeMapOutputDirectory, storage))
+				)},
+				{ "UseLlvm", (
+					new LoadValue ((key, value) => {
+						var use_llvm = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase);
+						if (use_llvm) {
+							Abi |= Abi.LLVM;
+						} else {
+							Abi &= ~Abi.LLVM;
+						}
+					}),
+					new SaveValue ((key, storage) => saveOptionalDefaultFalseBool (key, Abi.HasFlag (Abi.LLVM), storage))
+				)},
+				{ "Verbosity", (
+					new LoadValue ((key, value) => {
+						if (!int.TryParse (value, out var verbosity))
+							throw new InvalidOperationException ($"Invalid Verbosity '{value}' in {linker_file}");
+						Application.Verbosity += verbosity;
+					}),
+					new SaveValue ((key, storage) => {
+						if (Application.Verbosity != 0)
+							storage.Add ($"{key}={Application.Verbosity}");
+					})
+				)},
+				{ "Warn", (
+					new LoadValue ((key, value) => loadWarningLevel (key, value, ErrorHelper.WarningLevel.Warning)),
+					new SaveValue ((key, storage) => saveWarningLevel (key, storage, ErrorHelper.WarningLevel.Warning))
+				)},
+				{ "WarnAsError", (
+					new LoadValue ((key, value) => loadWarningLevel (key, value, ErrorHelper.WarningLevel.Error)),
+					new SaveValue ((key, storage) => saveWarningLevel (key, storage, ErrorHelper.WarningLevel.Error))
+				)},
+				{ "XamarinRuntime", (
+					new LoadValue ((key, value) => {
+						if (!Enum.TryParse<XamarinRuntime> (value, out var rv))
+							throw new InvalidOperationException ($"Invalid XamarinRuntime '{value}' in {linker_file}");
+						Application.XamarinRuntime = rv;
+					}),
+					new SaveValue ((key, storage) => {
+						storage.Add ($"{key}={Application.XamarinRuntime}");
+					})
+				)},
+				{ "InvariantGlobalization", (
+					new LoadValue ((key, value) => InvariantGlobalization = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase)),
+					new SaveValue ((key, storage) => saveOptionalDefaultFalseBool (key, InvariantGlobalization, storage))
+				)},
+				{ "HybridGlobalization", (
+					new LoadValue ((key, value) => HybridGlobalization = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase)),
+					new SaveValue ((key, storage) => saveOptionalDefaultFalseBool (key, HybridGlobalization, storage))
+				)},
+				{ "XamarinNativeLibraryDirectory", (
+					new LoadValue ((key, value) => XamarinNativeLibraryDirectory = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, XamarinNativeLibraryDirectory, storage))
+				)},
+			};
+
+			return dict;
+		}
+
+		public LinkerConfiguration (IToolLog log, string linker_file, Configurator? customConfigurator = null)
+			 : this (log, File.ReadAllLines (linker_file).ToList (), linker_file, customConfigurator)
+		{
+		}
+
+		public LinkerConfiguration (IToolLog log, List<string> lines, string linker_file, Configurator? customConfigurator = null)
+		{
+			this.Logger = log;
 
 			LinkerFile = linker_file;
 
 			Profile = new BaseProfile (this);
 			Application = new Application (this);
-			CompilerFlags = new CompilerFlags (Application);
 
-			var use_llvm = false;
-			var lines = File.ReadAllLines (linker_file);
+#if ASSEMBLY_PREPARER
+			AssemblyResolver = new DotNetResolver (Application);
+			MetadataResolver = new MetadataResolver (AssemblyResolver);
+
+			configurations.Add (this.Context, this);
+#endif
+
+#if !ASSEMBLY_PREPARER
+			CompilerFlags = new CompilerFlags (Application);
+#endif
+
+			var configurator = GetConfigurator (linker_file);
+
 			var significantLines = new List<string> (); // This is the input the cache uses to verify if the cache is still valid
-			for (var i = 0; i < lines.Length; i++) {
+			for (var i = 0; i < lines.Count; i++) {
 				var line = lines [i].TrimStart ();
 				if (line.Length == 0 || line [0] == '#')
 					continue; // Allow comments
 
 				var eq = line.IndexOf ('=');
 				if (eq == -1)
-					throw new InvalidOperationException ($"Invalid syntax for line {i + 1} in {linker_file}: No equals sign.");
+					throw new InvalidOperationException ($"Invalid syntax for line {i + 1} ('{line}') in {linker_file}:{i + 1} : No equals sign.");
 
 				significantLines.Add (line);
 
@@ -146,289 +668,12 @@ namespace Xamarin.Linker {
 				if (string.IsNullOrEmpty (value))
 					continue;
 
-				switch (key) {
-				case "AreAnyAssembliesTrimmed":
-					Application.AreAnyAssembliesTrimmed = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase);
-					break;
-				case "AssemblyName":
-					// This is the AssemblyName MSBuild property for the main project (which is also the root/entry assembly)
-					Application.RootAssemblies.Add (value);
-					break;
-				case "AOTArgument":
-					if (!string.IsNullOrEmpty (value))
-						Application.AotArguments.Add (value);
-					break;
-				case "AOTCompiler":
-					AOTCompiler = value;
-					break;
-				case "AOTOutputDirectory":
-					AOTOutputDirectory = value;
-					break;
-				case "DedupAssembly":
-					DedupAssembly = value;
-					break;
-				case "CacheDirectory":
-					CacheDirectory = value;
-					break;
-				case "AppBundleManifestPath":
-					Application.InfoPListPath = value;
-					break;
-				case "CustomLinkFlags":
-					Application.ParseCustomLinkFlags (value, "gcc_flags");
-					break;
-				case "Debug":
-					Application.EnableDebug = string.Equals (value, "true", StringComparison.OrdinalIgnoreCase);
-					break;
-				case "DeploymentTarget":
-					if (!Version.TryParse (value, out var deployment_target))
-						throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
-					DeploymentTarget = deployment_target;
-					break;
-				case "Dlsym":
-					Application.ParseDlsymOptions (value);
-					break;
-				case "EnableSGenConc":
-					Application.EnableSGenConc = string.Equals (value, "true", StringComparison.OrdinalIgnoreCase);
-					break;
-				case "EnvironmentVariable":
-					var overwrite = true;
-					var needle = "Overwrite=";
-					if (value.StartsWith (needle, StringComparison.Ordinal)) {
-						var pipe = value.IndexOf ('|', needle.Length);
-						if (pipe > 0) {
-							var overwriteString = value [needle.Length..pipe];
-							if (!TryParseOptionalBoolean (overwriteString, out var parsedOverwrite))
-								throw new InvalidOperationException ($"Unable to parse the 'Overwrite' value '{overwriteString}' for the environment variable entry '{value}' in {linker_file}");
-							overwrite = parsedOverwrite.Value;
-							value = value [(pipe + 1)..];
-						}
-					}
-					var separators = new char [] { ':', '=' };
-					var equals = value.IndexOfAny (separators);
-					var name = value.Substring (0, equals);
-					var val = value.Substring (equals + 1);
-					Application.EnvironmentVariables.Add (name, new (val, overwrite));
-					break;
-				case "FrameworkAssembly":
-					FrameworkAssemblies.Add (value);
-					break;
-				case "InlineClassGetHandle":
-					if (Enum.TryParse<InlineClassGetHandleMode> (value, true, out var inlineClassGetHandleMode))
-						InlineClassGetHandle = inlineClassGetHandleMode;
-					else if (string.IsNullOrEmpty (value))
-						InlineClassGetHandle = InlineClassGetHandleMode.Disabled;
-					else
-						throw new InvalidOperationException ($"Unknown InlineClassGetHandle value: {value}");
-					break;
-				case "InlineDlfcnMethods":
-					if (Enum.TryParse<InlineDlfcnMethodsMode> (value, true, out var inlineDlfcnMode))
-						InlineDlfcnMethods = inlineDlfcnMode;
-					else if (string.IsNullOrEmpty (value))
-						InlineDlfcnMethods = InlineDlfcnMethodsMode.Disabled;
-					else
-						throw new InvalidOperationException ($"Unknown InlineDlfcnMethods value: {value}");
-					break;
-				case "IntermediateLinkDir":
-					IntermediateLinkDir = value;
-					break;
-				case "IntermediateOutputPath":
-					IntermediateOutputPath = value;
-					break;
-				case "Interpreter":
-					if (!string.IsNullOrEmpty (value))
-						Application.ParseInterpreter (value);
-					break;
-				case "IsAppExtension":
-					Application.IsExtension = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase);
-					break;
-				case "ItemsDirectory":
-					ItemsDirectory = value;
-					break;
-				case "IsSimulatorBuild":
-					IsSimulatorBuild = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase);
-					break;
-				case "LibMonoLinkMode":
-					Application.LibMonoLinkMode = ParseLinkMode (value, key);
-					break;
-				case "LibXamarinLinkMode":
-					Application.LibXamarinLinkMode = ParseLinkMode (value, key);
-					break;
-				case "MarshalManagedExceptionMode":
-					if (!string.IsNullOrEmpty (value)) {
-						if (!Application.TryParseManagedExceptionMode (value, out var mode))
-							throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
-						Application.MarshalManagedExceptions = mode;
-					}
-					break;
-				case "MarshalObjectiveCExceptionMode":
-					if (!string.IsNullOrEmpty (value)) {
-						if (!Application.TryParseObjectiveCExceptionMode (value, out var mode))
-							throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
-						Application.MarshalObjectiveCExceptions = mode;
-					}
-					break;
-				case "MonoLibrary":
-					Application.MonoLibraries.Add (value);
-					break;
-				case "MtouchFloat32":
-					if (!TryParseOptionalBoolean (value, out Application.AotFloat32))
-						throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
-					break;
-				case "NoWarn":
-					try {
-						ErrorHelper.ParseWarningLevel (ErrorHelper.WarningLevel.Disable, value);
-					} catch (Exception ex) {
-						throw new InvalidOperationException ($"Invalid WarnAsError '{value}' in {linker_file}", ex);
-					}
-					break;
-				case "Optimize":
-					user_optimize_flags = value;
-					break;
-				case "PartialStaticRegistrarLibrary":
-					PartialStaticRegistrarLibrary = value;
-					break;
-				case "Platform":
-					switch (value) {
-					case "iOS":
-						Platform = ApplePlatform.iOS;
-						break;
-					case "tvOS":
-						Platform = ApplePlatform.TVOS;
-						break;
-					case "macOS":
-						Platform = ApplePlatform.MacOSX;
-						break;
-					case "MacCatalyst":
-						Platform = ApplePlatform.MacCatalyst;
-						break;
-					default:
-						throw new InvalidOperationException ($"Unknown platform: {value} for the entry {line} in {linker_file}");
-					}
-					break;
-				case "PlatformAssembly":
-					PlatformAssembly = Path.GetFileNameWithoutExtension (value);
-					break;
-				case "ReferenceNativeSymbol": {
-					(string symbolType, string symbolMode, string symbol) = SplitString3 (value, ':');
-					var mode = SymbolMode.Default;
-					switch (symbolMode) {
-					case "Ignore":
-						mode = SymbolMode.Ignore;
-						break;
-					case "":
-						break;
-					default:
-						throw new InvalidOperationException ($"Unknown symbol mode '{symbolMode}' for symbol '{symbol}'. Expected 'Ignore' or nothing at all.");
-					}
-					switch (symbolType) {
-					case "Function":
-						DerivedLinkContext.RequiredSymbols.AddFunction (symbol, mode);
-						break;
-					case "ObjectiveCClass":
-						DerivedLinkContext.RequiredSymbols.AddObjectiveCClass (symbol, mode);
-						break;
-					case "Field":
-						DerivedLinkContext.RequiredSymbols.AddField (symbol, mode);
-						break;
-					default:
-						throw new InvalidOperationException ($"Unknown symbol type '{symbolType}' for symbol '{symbol}'. Expected 'Function', 'ObjectiveCClass', or 'Field'.");
-					}
-					break;
-				}
-				case "RelativeAppBundlePath":
-					RelativeAppBundlePath = value;
-					break;
-				case "Registrar":
-					Application.ParseRegistrar (value);
-					break;
-				case "RequireLinkWithAttributeForObjectiveCClassSearch":
-					if (!string.IsNullOrEmpty (value)) { // The default is 'false'
-						if (!TryParseOptionalBoolean (value, out var require_link_with_attribute_for_objectivec_class_search))
-							throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
-						Application.RequireLinkWithAttributeForObjectiveCClassSearch = require_link_with_attribute_for_objectivec_class_search.Value;
-					}
-					break;
-				case "RequirePInvokeWrappers":
-					if (!TryParseOptionalBoolean (value, out var require_pinvoke_wrappers))
-						throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
-					Application.RequiresPInvokeWrappers = require_pinvoke_wrappers.Value;
-					break;
-				case "RuntimeConfigurationFile":
-					Application.RuntimeConfigurationFile = value;
-					break;
-				case "SdkDevPath":
-					Driver.SdkRoot = value;
-					break;
-				case "SdkRootDirectory":
-					SdkRootDirectory = value;
-					Driver.SetFrameworkCurrentDirectory (value);
-					break;
-				case "SdkVersion":
-					if (!Version.TryParse (value, out var sdk_version))
-						throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
-					SdkVersion = sdk_version;
-					break;
-				case "SkipMarkingNSObjectsInUserAssemblies":
-					if (!TryParseOptionalBoolean (value, out var skip_marking_nsobjects_in_user_assemblies))
-						throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
-					Application.SkipMarkingNSObjectsInUserAssemblies = skip_marking_nsobjects_in_user_assemblies.Value;
-					break;
-				case "TargetArchitectures":
-					if (!Enum.TryParse<Abi> (value, out Abi))
-						throw new InvalidOperationException ($"Unknown target architectures: {value} in {linker_file}");
-					break;
-				case "TargetFramework":
-					if (!TargetFramework.TryParse (value, out var tf))
-						throw new InvalidOperationException ($"Invalid TargetFramework '{value}' in {linker_file}");
-					Driver.TargetFramework = TargetFramework.Parse (value);
-					break;
-				case "TypeMapAssemblyName":
-					Application.TypeMapAssemblyName = value;
-					break;
-				case "TypeMapFilePath":
-					TypeMapFilePath = value;
-					break;
-				case "TypeMapOutputDirectory":
-					Application.TypeMapOutputDirectory = value;
-					break;
-				case "UseLlvm":
-					use_llvm = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase);
-					break;
-				case "Verbosity":
-					if (!int.TryParse (value, out var verbosity))
-						throw new InvalidOperationException ($"Invalid Verbosity '{value}' in {linker_file}");
-					Application.Verbosity += verbosity;
-					break;
-				case "Warn":
-					try {
-						ErrorHelper.ParseWarningLevel (ErrorHelper.WarningLevel.Warning, value);
-					} catch (Exception ex) {
-						throw new InvalidOperationException ($"Invalid Warn '{value}' in {linker_file}", ex);
-					}
-					break;
-				case "WarnAsError":
-					try {
-						ErrorHelper.ParseWarningLevel (ErrorHelper.WarningLevel.Error, value);
-					} catch (Exception ex) {
-						throw new InvalidOperationException ($"Invalid WarnAsError '{value}' in {linker_file}", ex);
-					}
-					break;
-				case "XamarinRuntime":
-					if (!Enum.TryParse<XamarinRuntime> (value, out var rv))
-						throw new InvalidOperationException ($"Invalid XamarinRuntime '{value}' in {linker_file}");
-					Application.XamarinRuntime = rv;
-					break;
-				case "InvariantGlobalization":
-					InvariantGlobalization = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase);
-					break;
-				case "HybridGlobalization":
-					HybridGlobalization = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase);
-					break;
-				case "XamarinNativeLibraryDirectory":
-					XamarinNativeLibraryDirectory = value;
-					break;
-				default:
-					throw new InvalidOperationException ($"Unknown key '{key}' in {linker_file}");
+				if (configurator.TryGetValue (key, out var actions)) {
+					actions.Load (key, value);
+				} else if (customConfigurator?.TryGetValue (key, out var customActions) == true) {
+					customActions.Load (key, value);
+				} else {
+					throw new InvalidOperationException ($"Unknown configuration key '{key}' in {linker_file} at line {i + 1}.");
 				}
 			}
 
@@ -439,10 +684,6 @@ namespace Xamarin.Linker {
 				var messages = new List<ProductException> ();
 				Application.Optimizations.Parse (Application.Platform, user_optimize_flags, messages);
 				ErrorHelper.Show (Application, messages);
-			}
-
-			if (use_llvm) {
-				Abi |= Abi.LLVM;
 			}
 
 			Application.CreateCache (significantLines.ToArray ());
@@ -464,22 +705,38 @@ namespace Xamarin.Linker {
 				Application.BuildTarget = IsSimulatorBuild ? BuildTarget.Simulator : BuildTarget.Device;
 				break;
 			case ApplePlatform.MacOSX:
-			default:
+			case ApplePlatform.MacCatalyst:
 				break;
+
+			default:
+				throw new System.InvalidOperationException ($"Unknown platform: {Platform}");
 			}
 
 			if (Driver.TargetFramework.Platform != Platform)
 				throw ErrorHelper.CreateError (99, "Inconsistent platforms. TargetFramework={0}, Platform={1}", Driver.TargetFramework.Platform, Platform);
 
 			if (Application.XamarinRuntime != XamarinRuntime.MonoVM && Application.UseInterpreter) {
-				Application.Log (4, "The interpreter is enabled, but the current runtime isn't MonoVM. The interpreter settings will be ignored.");
+				Log (4, "The interpreter is enabled, but the current runtime isn't MonoVM. The interpreter settings will be ignored.");
 				Application.UnsetInterpreter ();
 			}
 
-			Driver.ValidateXcode (Application, false, false);
+			Driver.ValidateXcode (this.Logger, false, false);
 
 			Application.InitializeCommon ();
 			Application.Initialize ();
+		}
+
+		public void Save (List<string> storage, Configurator? customConfigurator = null)
+		{
+			var configurator = GetConfigurator (LinkerFile);
+			foreach (var kvp in configurator.OrderBy (v => v.Key)) {
+				kvp.Value.Save (kvp.Key, storage);
+			}
+			if (customConfigurator is not null) {
+				foreach (var kvp in customConfigurator.OrderBy (v => v.Key)) {
+					kvp.Value.Save (kvp.Key, storage);
+				}
+			}
 		}
 
 		// Splits a string in three based on the split character.
@@ -503,12 +760,12 @@ namespace Xamarin.Linker {
 		}
 
 
-		bool TryParseOptionalBoolean (string input, [NotNullWhen (true)] out bool? value)
+		bool TryParseOptionalBoolean (string input, [NotNullWhen (true)] out bool? value, bool defaultValue = true)
 		{
 			value = null;
 
 			if (string.IsNullOrEmpty (input)) {
-				value = true;
+				value = defaultValue;
 				return true;
 			}
 
@@ -539,59 +796,61 @@ namespace Xamarin.Linker {
 		public void Write ()
 		{
 			if (Verbosity > 0) {
-				Application.Log ($"LinkerConfiguration:");
-				Application.Log ($"    ABI: {Abi.AsArchString ()}");
-				Application.Log ($"    AOTArguments: {string.Join (", ", Application.AotArguments)}");
-				Application.Log ($"    AOTOutputDirectory: {AOTOutputDirectory}");
-				Application.Log ($"    DedupAssembly: {DedupAssembly}");
-				Application.Log ($"    AppBundleManifestPath: {Application.InfoPListPath}");
-				Application.Log ($"    AreAnyAssembliesTrimmed: {Application.AreAnyAssembliesTrimmed}");
-				Application.Log ($"    AssemblyName: {Application.AssemblyName}");
-				Application.Log ($"    CacheDirectory: {CacheDirectory}");
-				Application.Log ($"    Debug: {Application.EnableDebug}");
-				Application.Log ($"    Dlsym: {Application.DlsymOptions} {(Application.DlsymAssemblies is not null ? string.Join (" ", Application.DlsymAssemblies.Select (v => (v.Item2 ? "+" : "-") + v.Item1)) : string.Empty)}");
-				Application.Log ($"    DeploymentTarget: {DeploymentTarget}");
-				Application.Log ($"    EnableSGenConc {Application.EnableSGenConc}");
-				Application.Log ($"    InlineDlfcnMethods: {InlineDlfcnMethods}");
-				Application.Log ($"    IntermediateLinkDir: {IntermediateLinkDir}");
-				Application.Log ($"    IntermediateOutputPath: {IntermediateOutputPath}");
-				Application.Log ($"    InterpretedAssemblies: {string.Join (", ", Application.InterpretedAssemblies)}");
-				Application.Log ($"    ItemsDirectory: {ItemsDirectory}");
-				Application.Log ($"    {FrameworkAssemblies.Count} framework assemblies:");
+				Log ($"LinkerConfiguration:");
+				Log ($"    ABI: {Abi.AsArchString ()}");
+				Log ($"    AOTArguments: {string.Join (", ", Application.AotArguments)}");
+				Log ($"    AOTOutputDirectory: {AOTOutputDirectory}");
+				Log ($"    DedupAssembly: {DedupAssembly}");
+				Log ($"    AppBundleManifestPath: {Application.InfoPListPath}");
+				Log ($"    AreAnyAssembliesTrimmed: {Application.AreAnyAssembliesTrimmed}");
+				Log ($"    AssemblyName: {Application.AssemblyName}");
+				Log ($"    CacheDirectory: {CacheDirectory}");
+				Log ($"    Debug: {Application.EnableDebug}");
+				Log ($"    Dlsym: {Application.DlsymOptions} {(Application.DlsymAssemblies is not null ? string.Join (" ", Application.DlsymAssemblies.Select (v => (v.Item2 ? "+" : "-") + v.Item1)) : string.Empty)}");
+				Log ($"    DeploymentTarget: {DeploymentTarget}");
+				Log ($"    EnableSGenConc {Application.EnableSGenConc}");
+				Log ($"    InlineDlfcnMethods: {InlineDlfcnMethods}");
+				Log ($"    IntermediateLinkDir: {IntermediateLinkDir}");
+				Log ($"    IntermediateOutputPath: {IntermediateOutputPath}");
+				Log ($"    InterpretedAssemblies: {string.Join (", ", Application.InterpretedAssemblies)}");
+				Log ($"    ItemsDirectory: {ItemsDirectory}");
+				Log ($"    {FrameworkAssemblies.Count} framework assemblies:");
 				foreach (var fw in FrameworkAssemblies.OrderBy (v => v))
-					Application.Log ($"        {fw}");
-				Application.Log ($"    IsSimulatorBuild: {IsSimulatorBuild}");
-				Application.Log ($"    MarshalManagedExceptions: {Application.MarshalManagedExceptions} (IsDefault: {Application.IsDefaultMarshalManagedExceptionMode})");
-				Application.Log ($"    MarshalObjectiveCExceptions: {Application.MarshalObjectiveCExceptions}");
-				Application.Log ($"    {Application.MonoLibraries.Count} mono libraries:");
+					Log ($"        {fw}");
+				Log ($"    IsSimulatorBuild: {IsSimulatorBuild}");
+				Log ($"    MarshalManagedExceptions: {Application.MarshalManagedExceptions} (IsDefault: {Application.IsDefaultMarshalManagedExceptionMode})");
+				Log ($"    MarshalObjectiveCExceptions: {Application.MarshalObjectiveCExceptions}");
+				Log ($"    {Application.MonoLibraries.Count} mono libraries:");
 				foreach (var lib in Application.MonoLibraries.OrderBy (v => v))
 					Application.Log ($"        {lib}");
-				Application.Log ($"    Optimize: {user_optimize_flags} => {Application.Optimizations}");
-				Application.Log ($"    PartialStaticRegistrarLibrary: {PartialStaticRegistrarLibrary}");
-				Application.Log ($"    Platform: {Platform}");
-				Application.Log ($"    PlatformAssembly: {PlatformAssembly}.dll");
-				Application.Log ($"    RelativeAppBundlePath: {RelativeAppBundlePath}");
-				Application.Log ($"    Registrar: {Application.Registrar} (Options: {Application.RegistrarOptions})");
-				Application.Log ($"    RuntimeConfigurationFile: {Application.RuntimeConfigurationFile}");
-				Application.Log ($"    RequirePInvokeWrappers: {Application.RequiresPInvokeWrappers}");
-				Application.Log ($"    SdkDevPath: {Driver.SdkRoot}");
-				Application.Log ($"    SdkRootDirectory: {SdkRootDirectory}");
-				Application.Log ($"    SdkVersion: {SdkVersion}");
-				Application.Log ($"    TypeMapAssemblyName: {Application.TypeMapAssemblyName}");
-				Application.Log ($"    TypeMapFilePath: {TypeMapFilePath}");
-				Application.Log ($"    TypeMapOutputDirectory: {Application.TypeMapOutputDirectory}");
-				Application.Log ($"    UseInterpreter: {Application.UseInterpreter}");
-				Application.Log ($"    UseLlvm: {Application.IsLLVM}");
-				Application.Log ($"    Verbosity: {Verbosity}");
-				Application.Log ($"    XamarinNativeLibraryDirectory: {XamarinNativeLibraryDirectory}");
-				Application.Log ($"    XamarinRuntime: {Application.XamarinRuntime}");
+				Log ($"    Optimize: {user_optimize_flags} => {Application.Optimizations}");
+				Log ($"    PartialStaticRegistrarLibrary: {PartialStaticRegistrarLibrary}");
+				Log ($"    Platform: {Platform}");
+				Log ($"    PlatformAssembly: {PlatformAssembly}.dll");
+				Log ($"    RelativeAppBundlePath: {RelativeAppBundlePath}");
+				Log ($"    Registrar: {Application.Registrar} (Options: {Application.RegistrarOptions})");
+				Log ($"    RuntimeConfigurationFile: {Application.RuntimeConfigurationFile}");
+				Log ($"    RequirePInvokeWrappers: {Application.RequiresPInvokeWrappers}");
+				Log ($"    SdkDevPath: {Driver.SdkRoot}");
+				Log ($"    SdkRootDirectory: {SdkRootDirectory}");
+				Log ($"    SdkVersion: {SdkVersion}");
+				Log ($"    TypeMapAssemblyName: {Application.TypeMapAssemblyName}");
+				Log ($"    TypeMapFilePath: {TypeMapFilePath}");
+				Log ($"    TypeMapOutputDirectory: {Application.TypeMapOutputDirectory}");
+				Log ($"    UseInterpreter: {Application.UseInterpreter}");
+				Log ($"    UseLlvm: {Application.IsLLVM}");
+				Log ($"    Verbosity: {Verbosity}");
+				Log ($"    XamarinNativeLibraryDirectory: {XamarinNativeLibraryDirectory}");
+				Log ($"    XamarinRuntime: {Application.XamarinRuntime}");
 			}
 		}
 
+#if !ASSEMBLY_PREPARER
 		public string GetAssemblyFileName (AssemblyDefinition assembly)
 		{
 			return Context.GetAssemblyLocation (assembly);
 		}
+#endif
 
 		public void WriteOutputForMSBuild (string itemName, List<MSBuildItem> items)
 		{
@@ -630,12 +889,27 @@ namespace Xamarin.Linker {
 
 		public static void Report (LinkContext context, IList<Exception> exceptions)
 		{
+			// Unwrap aggregate exceptions, and collect all exceptions into a single list.
+			var list = ErrorHelper.CollectExceptions (exceptions);
+#if ASSEMBLY_PREPARER
+			var log = context.Configuration.Logger;
+			foreach (var ex in list) {
+				if (ex is ProductException pe) {
+					if (pe.Error) {
+						log.LogError (pe);
+					} else {
+						log.LogWarning (pe);
+					}
+				} else {
+					log.LogException (ex);
+				}
+			}
+#else
 			// We can't really use the linker's reporting facilities and keep our own error codes, because we'll
 			// end up re-using the same error codes the linker already uses for its own purposes. So instead show
 			// a generic error using the linker's Context.LogMessage API, and then print our own errors to stderr.
 			// Since we print using a standard message format, msbuild will parse those error messages and show
 			// them as msbuild errors.
-			var list = ErrorHelper.CollectExceptions (exceptions);
 			var allWarnings = list.All (v => v is ProductException pe && !pe.Error);
 			if (!allWarnings) {
 				TryGetInstance (context, out var instance);
@@ -645,6 +919,7 @@ namespace Xamarin.Linker {
 			}
 			// ErrorHelper.Show will print our errors and warnings to stderr.
 			ErrorHelper.Show (ConsoleLog.Instance, list);
+#endif
 		}
 
 		public IEnumerable<AssemblyDefinition> GetNonDeletedAssemblies (BaseStep step)
@@ -654,6 +929,38 @@ namespace Xamarin.Linker {
 					continue;
 				yield return assembly;
 			}
+		}
+
+		public void Log (string value)
+		{
+			Log (0, value);
+		}
+
+		public void Log (string format, params object? [] args)
+		{
+			Log (0, format, args);
+		}
+
+		public void Log (int min_verbosity, string value)
+		{
+			if (min_verbosity > Verbosity)
+				return;
+
+			if (Logger is not null) {
+				Logger.Log (value);
+				return;
+			}
+
+			Console.WriteLine (value);
+		}
+
+		public void Log (int min_verbosity, string format, params object? [] args)
+		{
+			if (min_verbosity > Verbosity)
+				return;
+
+			var value = string.Format (format, args);
+			Log (min_verbosity, value);
 		}
 	}
 }

@@ -131,6 +131,9 @@
     <Compile Include="..\common\TargetFramework.cs">
       <Link>external/tools/common/TargetFramework.cs</Link>
     </Compile>
+    <Compile Include="..\common\ToolLog.cs">
+      <Link>external/tools/common/ToolLog.cs</Link>
+    </Compile>
     <Compile Include="..\linker\CustomSymbolWriter.cs">
       <Link>external/tools/linker/CustomSymbolWriter.cs</Link>
     </Compile>
@@ -139,6 +142,9 @@
     </Compile>
     <Compile Include="..\linker\CoreTypeMapStep.cs">
       <Link>external/tools/linker/CoreTypeMapStep.cs</Link>
+    </Compile>
+    <Compile Include="..\linker\OptimizeGeneratedCode.cs">
+      <Link>external/tools/linker/OptimizeGeneratedCode.cs</Link>
     </Compile>
     <Compile Include="..\..\src\ObjCRuntime\Registrar.cs">
       <Link>external/src/ObjCRuntime/Registrar.cs</Link>

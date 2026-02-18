@@ -20,16 +20,14 @@ using ObjCRuntime;
 
 using Registrar;
 
-#if !LEGACY_TOOLS
+#if !LEGACY_TOOLS && !ASSEMBLY_PREPARER
 using ClassRedirector;
 #endif
 
 #if LEGACY_TOOLS
 using PlatformResolver = MonoTouch.Tuner.MonoTouchResolver;
-#elif NET
-using PlatformResolver = Xamarin.Linker.DotNetResolver;
 #else
-#error Invalid defines
+using PlatformResolver = Xamarin.Linker.DotNetResolver;
 #endif
 
 #nullable enable
@@ -262,7 +260,11 @@ namespace Xamarin.Bundler {
 			return value;
 		}
 
+#if !LEGACY_TOOLS
 		public Application (LinkerConfiguration configuration)
+#else
+		public Application ()
+#endif
 		{
 #if !LEGACY_TOOLS
 			this.configuration = configuration;
@@ -544,6 +546,7 @@ namespace Xamarin.Bundler {
 			}
 		}
 
+#if !ASSEMBLY_PREPARER
 		public void RunRegistrar ()
 		{
 			// The static registrar.
@@ -610,6 +613,7 @@ namespace Xamarin.Bundler {
 				registrar.Generate (resolver, resolvedAssemblies.Values, Path.ChangeExtension (registrar_m, "h"), registrar_m, out var _);
 			}
 		}
+#endif // !ASSEMBLY_PREPARER
 
 		public Abi Abi {
 			get { return abi; }
@@ -687,7 +691,7 @@ namespace Xamarin.Bundler {
 		}
 
 #if !LEGACY_TOOLS
-		public void ParseRegistrar (string v)
+		public void ParseRegistrar (string? v)
 		{
 			if (StringUtils.IsNullOrEmpty (v))
 				return;
@@ -695,7 +699,7 @@ namespace Xamarin.Bundler {
 			var split = v.Split ('=');
 			var name = split [0];
 			var value = split.Length > 1 ? split [1] : string.Empty;
-			switch (name) {
+			switch (name.ToLowerInvariant ()) {
 			case "static":
 				Registrar = RegistrarMode.Static;
 				break;
@@ -707,12 +711,15 @@ namespace Xamarin.Bundler {
 				break;
 			case "partial":
 			case "partial-static":
+			case "partialstatic":
 				Registrar = RegistrarMode.PartialStatic;
 				break;
 			case "managed-static":
+			case "managedstatic":
 				Registrar = RegistrarMode.ManagedStatic;
 				break;
 			case "trimmable-static":
+			case "trimmablestatic":
 				Registrar = RegistrarMode.TrimmableStatic;
 				break;
 			default:

@@ -65,6 +65,15 @@ namespace Xharness.Jenkins {
 				break;
 			}
 
+			switch (test.TestName) {
+			case "monotouch-test":
+			case "link all":
+			case "dont link":
+			case "link sdk":
+				yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies)", TestVariation = "prepare-assemblies", Ignored = ignore };
+				break;
+			}
+
 			switch (test.ProjectPlatform) {
 			case "iPhone":
 				if (test.ProjectConfiguration?.Contains ("Debug") == true)

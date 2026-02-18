@@ -50,6 +50,10 @@ class Program {
 
 		Console.WriteLine ($"Processing {path} with root directory {rootDirectory}...");
 
+		// Copy the binlog to "/tmp/assembly-preparer.binlog", to easily debug the PrepareAssemblies task.
+		var unitTestLocation = "/tmp/assembly-preparer.binlog";
+		File.Copy (path, unitTestLocation, true);
+		Console.WriteLine ($"Copied {path} to {unitTestLocation}");
 
 		var reader = new BinLogReader ();
 		var records = reader.ReadRecords (path).ToArray ();

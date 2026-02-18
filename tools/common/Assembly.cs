@@ -8,7 +8,7 @@ using System.Linq;
 using System.Xml;
 using Mono.Cecil;
 using Mono.Tuner;
-using MonoTouch.Tuner;
+// REMOVE? // using MonoTouch.Tuner;
 using ObjCRuntime;
 using Xamarin;
 using Xamarin.Utils;
@@ -58,6 +58,7 @@ namespace Xamarin.Bundler {
 
 		public AssemblyDefinition AssemblyDefinition;
 		public bool? IsFrameworkAssembly { get { return is_framework_assembly; } }
+
 		public string FullPath {
 			get {
 				return full_path;
@@ -66,7 +67,10 @@ namespace Xamarin.Bundler {
 			set {
 				full_path = value;
 				if (!is_framework_assembly.HasValue && !string.IsNullOrEmpty (full_path)) {
-#if !LEGACY_TOOLS
+#if ASSEMBLY_PREPARER
+					is_framework_assembly = false; // silence compiler warning
+					throw new NotImplementedException ();
+#elif !LEGACY_TOOLS
 					is_framework_assembly = App.Configuration.FrameworkAssemblies.Contains (GetIdentity (full_path));
 #else
 					var real_full_path = Application.GetRealPath (full_path);

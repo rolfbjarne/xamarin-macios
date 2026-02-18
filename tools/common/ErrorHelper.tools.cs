@@ -12,7 +12,7 @@ using Xamarin.Utils;
 #nullable enable
 
 namespace Xamarin.Bundler {
-	public static partial class ErrorHelper {
+	static partial class ErrorHelper {
 		public static ApplePlatform Platform;
 
 		internal static string Prefix {
@@ -44,6 +44,8 @@ namespace Xamarin.Bundler {
 		public static Func<Exception, bool>? IsExpectedException;
 		public static Action<int>? ExitCallback;
 #pragma warning restore 649
+
+		public static Dictionary<int, WarningLevel>? WarningLevels => warning_levels;
 
 		public static WarningLevel GetWarningLevel (int code)
 		{

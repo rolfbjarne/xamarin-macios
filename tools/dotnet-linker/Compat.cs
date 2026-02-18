@@ -102,7 +102,11 @@ namespace Xamarin.Bundler {
 
 		public AssemblyDefinition GetAssembly (string name)
 		{
+#if ASSEMBLY_PREPARER
+			throw new NotImplementedException ();
+#else
 			return LinkerConfiguration.Context.GetLoadedAssembly (name);
+#endif
 		}
 	}
 

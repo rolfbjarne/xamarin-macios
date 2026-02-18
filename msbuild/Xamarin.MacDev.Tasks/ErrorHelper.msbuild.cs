@@ -7,8 +7,8 @@ using Xamarin.Utils;
 #nullable enable
 
 namespace Xamarin.Bundler {
-	public static partial class ErrorHelper {
-		public static ApplePlatform Platform;
+	static partial class ErrorHelper {
+		public static ApplePlatform Platform = ApplePlatform.None;
 
 		internal static string Prefix {
 			get {

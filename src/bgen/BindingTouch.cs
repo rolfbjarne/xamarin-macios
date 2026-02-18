@@ -592,6 +592,11 @@ public class BindingTouch : IDisposable, IToolLog {
 		ErrorHelper.Show (exception);
 	}
 
+	public void LogWarning (Exception exception)
+	{
+		ErrorHelper.Show (exception);
+	}
+
 	public void LogException (Exception exception)
 	{
 		ErrorHelper.Show (exception);

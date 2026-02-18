@@ -7,9 +7,7 @@ using Xamarin.Utils;
 #nullable enable
 
 namespace Xamarin.Bundler {
-	public static partial class ErrorHelper {
-		public static ApplePlatform Platform;
-
+	static partial class ErrorHelper {
 		internal static string GetPrefix (IToolLog? log)
 		{
 			return Xamarin.MacDev.Tasks.LoggingExtensions.ErrorPrefix;

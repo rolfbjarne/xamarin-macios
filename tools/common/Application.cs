@@ -212,7 +212,11 @@ namespace Xamarin.Bundler {
 
 		public bool IsSimulatorBuild {
 			get {
+#if NET
 				if (!string.IsNullOrEmpty (RuntimeIdentifier))
+#else
+				if (!string.IsNullOrEmpty (RuntimeIdentifier) && RuntimeIdentifier is not null)
+#endif
 					return RuntimeIdentifier.IndexOf ("simulator", StringComparison.OrdinalIgnoreCase) >= 0;
 
 				switch (Platform) {

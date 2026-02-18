@@ -242,12 +242,20 @@ namespace Xamarin.Bundler {
 					continue;
 
 				// Remove the resource from the assembly at a later stage.
+#if NET
 				if (!string.IsNullOrEmpty (metadata.LibraryName))
+#else
+				if (!string.IsNullOrEmpty (metadata.LibraryName) && metadata.LibraryName is not null)
+#endif
 					AddResourceToBeRemoved (metadata.LibraryName);
 
 				ProcessNativeReferenceOptions (metadata);
 
+#if NET
 				if (!string.IsNullOrEmpty (linkWith.LibraryName)) {
+#else
+				if (!string.IsNullOrEmpty (linkWith.LibraryName) && linkWith.LibraryName is not null) {
+#endif
 					switch (Path.GetExtension (linkWith.LibraryName).ToLowerInvariant ()) {
 					case ".framework": {
 						// TryExtractFramework prints a error/warning if something goes wrong, so no need for us to have an error handling path.
@@ -282,7 +290,11 @@ namespace Xamarin.Bundler {
 			if (metadata.ForceLoad && !(metadata.SmartLink && (App.Registrar == RegistrarMode.Static || App.Registrar == RegistrarMode.ManagedStatic)))
 				ForceLoad = true;
 
+#if NET
 			if (!string.IsNullOrEmpty (metadata.LinkerFlags)) {
+#else
+			if (!string.IsNullOrEmpty (metadata.LinkerFlags) && metadata.LinkerFlags is not null) {
+#endif
 				if (LinkerFlags is null)
 					LinkerFlags = new List<string> ();
 				if (!StringUtils.TryParseArguments (metadata.LinkerFlags, out var args, out var ex))
@@ -290,7 +302,11 @@ namespace Xamarin.Bundler {
 				LinkerFlags.AddRange (args);
 			}
 
+#if NET
 			if (!string.IsNullOrEmpty (metadata.Frameworks)) {
+#else
+			if (!string.IsNullOrEmpty (metadata.Frameworks) && metadata.Frameworks is not null) {
+#endif
 				foreach (var f in metadata.Frameworks.Split (new char [] { ' ' })) {
 					if (Frameworks is null)
 						Frameworks = new HashSet<string> ();
@@ -298,7 +314,11 @@ namespace Xamarin.Bundler {
 				}
 			}
 
+#if NET
 			if (!string.IsNullOrEmpty (metadata.WeakFrameworks)) {
+#else
+			if (!string.IsNullOrEmpty (metadata.WeakFrameworks) && metadata.WeakFrameworks is not null) {
+#endif
 				foreach (var f in metadata.WeakFrameworks.Split (new char [] { ' ' })) {
 					if (WeakFrameworks is null)
 						WeakFrameworks = new HashSet<string> ();

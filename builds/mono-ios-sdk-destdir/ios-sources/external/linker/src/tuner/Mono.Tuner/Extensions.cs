@@ -22,13 +22,13 @@ namespace Mono.Tuner {
 		}
 #endif
 
-		public static AssemblyDefinition? GetAssembly (this LinkContext context, string assembly_name)
+		public static AssemblyDefinition GetAssembly (this LinkContext context, string assembly_name)
 		{
 			foreach (var assembly in context.GetAssemblies ())
 				if (assembly.Name.Name == assembly_name)
 					return assembly;
 
-			return null;
+			throw new Exception ($"Assembly '{assembly_name}' not found in the linker context.");
 		}
 
 		// note: direct check, no inheritance

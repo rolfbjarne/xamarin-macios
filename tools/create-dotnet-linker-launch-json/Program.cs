@@ -50,6 +50,10 @@ class Program {
 
 		Console.WriteLine ($"Processing {path} with root directory {rootDirectory}...");
 
+		// Copy the binlog to "/tmp/assembly-preparer.binlog", to easily debug the PrepareAssemblies task.
+		var unitTestLocation = "/tmp/assembly-preparer.binlog";
+		File.Copy (path, unitTestLocation, true);
+		Console.WriteLine ($"Copied {path} to {unitTestLocation}");
 
 		var reader = new BinLogReader ();
 		var records = reader.ReadRecords (path).ToArray ();
@@ -68,7 +72,7 @@ class Program {
 				}
 
 
-				var relevantRecords = records.Where (v => v?.Args?.BuildEventContext?.TaskId == tsea.BuildEventContext.TaskId).Select (v => v.Args).ToArray ();
+				var relevantRecords = records.Where (v => v?.Args?.BuildEventContext?.TaskId == tsea.BuildEventContext?.TaskId).Select (v => v.Args).ToArray ();
 				var cla = relevantRecords.Where (v => v is BuildMessageEventArgs).Cast<BuildMessageEventArgs> ().Where (v => v?.ToString ()?.Contains ("CommandLineArguments") == true).ToArray ();
 				foreach (var rr in relevantRecords) {
 					if (rr is TaskCommandLineEventArgs tclea) {

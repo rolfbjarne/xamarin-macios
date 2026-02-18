@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+using Xamarin.Bundler;
 using Xamarin.MacDev;
 using Xamarin.Utils;
 
@@ -26,6 +27,7 @@ namespace Xamarin.Bundler {
 		public static int Main (string [] args)
 		{
 			try {
+				ErrorHelper.Platform = ApplePlatform.iOS;
 				Console.OutputEncoding = new UTF8Encoding (false, false);
 				SetCurrentLanguage (ConsoleLog.Instance);
 				return Main2 (args);
@@ -85,16 +87,49 @@ namespace Xamarin.Bundler {
 		}
 #endif // !LEGACY_TOOLS
 
-		public static int GetDefaultVerbosity ()
+		public static int GetDefaultVerbosity (string toolName)
 		{
 			var v = 0;
-			var fn = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.UserProfile), $".{NAME}-verbosity");
+			var fn = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.UserProfile), $".{toolName}-verbosity");
 			if (File.Exists (fn)) {
 				v = (int) new FileInfo (fn).Length;
 				if (v == 0)
-					v = 4; // this is the magic verbosity level we give everybody.
+					v = 4; // this is the magic verbosity level we give everybody if the file exists, but has no size.
 			}
 			return v;
+		}
+
+		// [Obsolete ("Don't use static methods")]
+		public static void Log (string value)
+		{
+			Log (0, value);
+		}
+
+		// [Obsolete ("Don't use static methods")]
+		public static void Log (string format, params object? [] args)
+		{
+			Log (0, format, args);
+		}
+
+		// [Obsolete ("Don't use static methods")]
+		public static void Log (int min_verbosity, string value)
+		{
+			if (min_verbosity > Verbosity)
+				return;
+
+			Console.WriteLine (value);
+		}
+
+		// [Obsolete ("Don't use static methods")]
+		public static void Log (int min_verbosity, string format, params object? [] args)
+		{
+			if (min_verbosity > Verbosity)
+				return;
+
+			if (args.Length > 0)
+				Console.WriteLine (format, args);
+			else
+				Console.WriteLine (format);
 		}
 
 		static TargetFramework targetFramework;
@@ -383,7 +418,7 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		public static void ValidateXcode (Application app, bool accept_any_xcode_version, bool warn_if_not_found)
+		public static void ValidateXcode (IToolLog logger, bool accept_any_xcode_version, bool warn_if_not_found)
 		{
 			if (sdk_root is null) {
 				sdk_root = FindSystemXcode (app);
@@ -440,7 +475,7 @@ namespace Xamarin.Bundler {
 				throw ErrorHelper.CreateError (58, Errors.MT0058, Path.GetDirectoryName (Path.GetDirectoryName (DeveloperDirectory)), plist_path);
 			}
 
-			app.Log (1, "Using Xcode {0} ({2}) found in {1}", XcodeVersion, sdk_root, XcodeProductVersion);
+			logger.Log (1, "Using Xcode {0} ({2}) found in {1}", XcodeVersion, sdk_root, XcodeProductVersion);
 		}
 
 		internal static bool TryParseBool (string value, out bool result)
@@ -495,12 +530,12 @@ namespace Xamarin.Bundler {
 					return null;
 
 				// either /Developer (Xcode 4.2 and earlier), /Applications/Xcode.app/Contents/Developer (Xcode 4.3) or user override
-				path = Path.Combine (DeveloperDirectory, "usr", "bin", tool);
+				path = Path.Combine (DeveloperDirectory!, "usr", "bin", tool);
 				if (File.Exists (path))
 					return path;
 
 				// Xcode 4.3 (without command-line tools) also has a copy of 'strip'
-				path = Path.Combine (DeveloperDirectory, "Toolchains", "XcodeDefault.xctoolchain", "usr", "bin", tool);
+				path = Path.Combine (DeveloperDirectory!, "Toolchains", "XcodeDefault.xctoolchain", "usr", "bin", tool);
 				if (File.Exists (path))
 					return path;
 
@@ -511,6 +546,9 @@ namespace Xamarin.Bundler {
 
 				return null;
 			}
+
+			if (foundPath is null)
+				throw ErrorHelper.CreateError (5307, Errors.MX5307 /* Missing '{0}' tool. Please install Xcode 'Command-Line Tools' component */, tool);
 
 			// We can end up finding the same tool multiple times.
 			// That's not a problem.
@@ -692,6 +730,33 @@ namespace Xamarin.Bundler {
 			if (rv is null)
 				throw ErrorHelper.CreateError (71, Errors.MX0071, app.Platform, app.ProductName);
 			return rv;
+		}
+	}
+
+	// [Obsolete ("Don't use this class, use an instance of ILogger instead")]
+	public class StaticLogger : IToolLog {
+		public readonly static StaticLogger Instance = new StaticLogger ();
+
+		public int Verbosity => Driver.Verbosity;
+
+		public void Log (string value)
+		{
+			Driver.Log (value);
+		}
+
+		public void Log (string format, params object? [] args)
+		{
+			Driver.Log (format, args);
+		}
+
+		public void Log (int min_verbosity, string value)
+		{
+			Driver.Log (min_verbosity, value);
+		}
+
+		public void Log (int min_verbosity, string format, params object? [] args)
+		{
+			Driver.Log (min_verbosity, format, args);
 		}
 	}
 }

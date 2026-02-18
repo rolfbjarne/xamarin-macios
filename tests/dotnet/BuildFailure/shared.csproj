@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+
+		<ApplicationTitle>BuildFailure</ApplicationTitle>
+		<ApplicationId>com.xamarin.buildfailure</ApplicationId>
+
+		<UseInterpreter>true</UseInterpreter> <!-- to speed up the build -->
+	</PropertyGroup>
+
+	<Import Project="../../common/shared-dotnet.csproj" />
+
+	<ItemGroup>
+		<Compile Include="../*.cs" />
+		<ReferenceNativeSymbol Include="_Inexistent" SymbolType="Function" />
+	</ItemGroup>
+</Project>

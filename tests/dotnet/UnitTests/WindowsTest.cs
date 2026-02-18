@@ -240,6 +240,27 @@ namespace Xamarin.Tests {
 			DotNet.AssertBuild (project_path, properties, timeout: TimeSpan.FromMinutes (15));
 		}
 
+		[Category ("RemoteWindows")]
+		[TestCase (ApplePlatform.iOS, "iossimulator-arm64")]
+		public void BuildFailureDoesNotHang (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			var project = "BuildFailure";
+			var configuration = "Debug";
+			Configuration.IgnoreIfIgnoredPlatform (platform);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
+			Configuration.IgnoreIfNotOnWindows ();
+
+			var project_path = GetProjectPath (project, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath, configuration: configuration);
+			var project_dir = Path.GetDirectoryName (Path.GetDirectoryName (project_path))!;
+			Clean (project_path);
+
+			var properties = GetDefaultProperties (runtimeIdentifiers);
+
+			var rv = DotNet.AssertBuildFailure (project_path, properties);
+			Assert.That (rv.TimedOut, Is.Not.True, "Not timed out");
+			Assert.That (rv.ExitCode, Is.EqualTo (1), "Exit code");
+		}
+
 		static void AssertWarningsEqual (IList<string> expected, IList<string> actual, string message)
 		{
 			if (expected.Count == actual.Count) {

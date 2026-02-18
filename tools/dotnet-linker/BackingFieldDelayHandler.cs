@@ -79,9 +79,9 @@ namespace Xamarin.Linker {
 							var store_field = ins;
 							var load_null = ins.Previous;
 							var load_this = ins.Previous.Previous;
-							if (OptimizeGeneratedCodeHandler.ValidateInstruction (method, store_field, operation, Code.Stfld) &&
-								OptimizeGeneratedCodeHandler.ValidateInstruction (method, load_null, operation, Code.Ldnull) &&
-								OptimizeGeneratedCodeHandler.ValidateInstruction (method, load_this, operation, Code.Ldarg_0)) {
+							if (OptimizeGeneratedCode.ValidateInstruction (method, store_field, operation, Code.Stfld) &&
+								OptimizeGeneratedCode.ValidateInstruction (method, load_null, operation, Code.Ldnull) &&
+								OptimizeGeneratedCode.ValidateInstruction (method, load_this, operation, Code.Ldarg_0)) {
 								store_field.OpCode = OpCodes.Nop;
 								load_null.OpCode = OpCodes.Nop;
 								load_this.OpCode = OpCodes.Nop;

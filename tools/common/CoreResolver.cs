@@ -4,6 +4,8 @@ using System.IO;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 
+using Xamarin.Utils;
+
 #nullable enable
 
 namespace Xamarin.Bundler {
@@ -70,7 +72,7 @@ namespace Xamarin.Bundler {
 				return assembly;
 
 			try {
-				fileName = Application.GetRealPath (fileName);
+				fileName = PathUtils.ResolveSymbolicLinks (fileName);
 
 				// Check the architecture-specific directory
 				if (Path.GetDirectoryName (fileName) == FrameworkDirectory && !string.IsNullOrEmpty (ArchDirectory)) {

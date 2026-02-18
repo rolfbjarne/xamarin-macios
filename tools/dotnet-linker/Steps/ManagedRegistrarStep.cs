@@ -113,10 +113,12 @@ namespace Xamarin.Linker {
 			// Report back any exceptions that occurred during the processing.
 			exceptions = this.exceptions;
 
+#if !ASSEMBLY_PREPARER
 			// Mark some stuff we use later on.
 			abr.SetCurrentAssembly (abr.PlatformAssembly);
 			Annotations.Mark (abr.RegistrarHelper_Register.Resolve ());
 			abr.ClearCurrentAssembly ();
+#endif
 		}
 
 		protected override void TryProcessAssembly (AssemblyDefinition assembly)
@@ -181,24 +183,24 @@ namespace Xamarin.Linker {
 			var process = false;
 			var isNSObject = IsNSObject (type);
 
-			if (App.Registrar == RegistrarMode.TrimmableStatic && !type.IsAbstract && !type.IsInterface) {
+			if (App.Registrar == RegistrarMode.TrimmableStatic && !type.IsAbstract && !type.IsInterface && App.PrepareAssemblies == false) {
 				if (isNSObject) {
-					var ctorRef = ManagedRegistrarLookupTablesStep.FindNSObjectConstructor (type);
+					var ctorRef = AppBundleRewriter.FindNSObjectConstructor (type);
 					if (ctorRef is not null) {
 						var ctor = abr.CurrentAssembly.MainModule.ImportReference (ctorRef);
 
 						// Implement INSObjectFactory._Xamarin_ConstructNSObject
-						ManagedRegistrarLookupTablesStep.ImplementConstructNSObjectFactoryMethod (abr, DerivedLinkContext, type, ctor);
+						abr.ImplementConstructNSObjectFactoryMethod (DerivedLinkContext, type, ctor);
 						// Implement INativeObject._Xamarin_ConstructINativeObject
-						ManagedRegistrarLookupTablesStep.ImplementConstructINativeObjectFactoryMethod (abr, DerivedLinkContext, type, ctor);
+						abr.ImplementConstructINativeObjectFactoryMethod (DerivedLinkContext, type, ctor);
 					}
 				} else if (type.IsNativeObject ()) {
-					var ctorRef = ManagedRegistrarLookupTablesStep.FindINativeObjectConstructor (type);
+					var ctorRef = AppBundleRewriter.FindINativeObjectConstructor (type);
 					if (ctorRef is not null) {
 						var ctor = abr.CurrentAssembly.MainModule.ImportReference (ctorRef);
 
 						// Implement INativeObject._Xamarin_ConstructINativeObject
-						ManagedRegistrarLookupTablesStep.ImplementConstructINativeObjectFactoryMethod (abr, DerivedLinkContext, type, ctor);
+						abr.ImplementConstructINativeObjectFactoryMethod (DerivedLinkContext, type, ctor);
 					}
 				}
 			}
@@ -229,7 +231,12 @@ namespace Xamarin.Linker {
 			// Create an UnmanagedCallersOnly method for each method we need to wrap
 			foreach (var method in methods_to_wrap) {
 				try {
-					CreateUnmanagedCallersMethod (method, infos, proxyInterfaces);
+					if (App.IsPostProcessingAssemblies) {
+						// We need to load what the PrepareAssemblies task did/produced
+						CollectUnmanagedCallersMethod (method, infos, proxyInterfaces);
+					} else {
+						CreateUnmanagedCallersMethod (method, infos, proxyInterfaces);
+					}
 				} catch (Exception e) {
 					AddException (ErrorHelper.CreateError (99, e, "Failed to create an UnmanagedCallersOnly trampoline for {0}: {1}", method.FullName, e.Message));
 				}
@@ -297,6 +304,31 @@ namespace Xamarin.Linker {
 				il.Emit (OpCodes.Ldstr, message);
 				il.Emit (OpCodes.Call, abr.Runtime_TraceCaller);
 			}
+		}
+
+		void CollectUnmanagedCallersMethod (MethodDefinition method, AssemblyTrampolineInfo infos, List<TypeDefinition> proxyInterfaces)
+		{
+			var ddos = method.CustomAttributes
+				.Where (v => v.AttributeType.Is ("System.Diagnostics.CodeAnalysis", "DynamicDependencyAttribute"))
+				.Where (v => v.ConstructorArguments.Count == 2 && v.ConstructorArguments [0].Type.Is ("System", "String") && v.ConstructorArguments [1].Type.Is ("System", "Type"))
+				.Select (v => (MemberSignature: (string) v.ConstructorArguments [0].Value, Type: (TypeReference) v.ConstructorArguments [1].Value))
+				.Where (v => v.MemberSignature?.StartsWith ("callback_", StringComparison.Ordinal) == true && v.Type?.Name == "__Registrar_Callbacks__")
+				.ToArray ();
+			if (ddos.Length != 1) {
+				AddException (ErrorHelper.CreateWarning (App, 99, method, $"Didn't find exactly one matching DynamicDependencyAttribute for method {method.FullName}, found {ddos.Length}"));
+				return;
+			}
+			var ddo = ddos [0];
+			var name = ddo.MemberSignature;
+			var callback = ddo.Type.Resolve ().Methods.Single (v => v.Name == name);
+
+			var info = new TrampolineInfo (callback, method, name);
+			if (int.TryParse (name.Split ('_') [1], NumberStyles.None, CultureInfo.InvariantCulture, out var id)) {
+				info.Id = id;
+			} else {
+				Console.WriteLine ("TODO: failed to parse the ID from the DynamicDependencyAttribute for method {0}, the trampoline won't be registered correctly. The member signature was: {1}", method.FullName, name);
+			}
+			infos.Add (info);
 		}
 
 		int counter;

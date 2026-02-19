@@ -91,7 +91,7 @@ namespace CoreMidi {
 				midiDataPointer = (MIDIEventList*) Marshal.AllocHGlobal (midiDataSize);
 				currentPacket = MIDIEventListInit (midiDataPointer, protocol);
 				if (currentPacket is null) {
-					Marshal.FreeHGlobal (midiDataPointer);
+					Marshal.FreeHGlobal ((IntPtr) midiDataPointer);
 					midiDataPointer = null;
 					throw new Exception ($"Failed to create midi event list.");
 				}

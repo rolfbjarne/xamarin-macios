@@ -34,8 +34,14 @@ namespace Xamarin.MacDev.Tasks {
 
 		public override bool Execute ()
 		{
-			if (this.ShouldExecuteRemotely (SessionId))
-				return XamarinTask.ExecuteRemotely (this);
+			if (this.ShouldExecuteRemotely (SessionId)) {
+				if (!XamarinTask.ExecuteRemotely (this, out var taskRunner))
+					return false;
+				// After remote execution, explicitly copy the output files from the Mac to Windows
+				// so they have actual content (not just 0-byte placeholders).
+				CopyFilesToWindowsAsync (taskRunner).Wait ();
+				return true;
+			}
 
 			// Capture execution start time for Mac-side detection
 			var executionStartTime = DateTime.UtcNow;
@@ -81,27 +87,22 @@ namespace Xamarin.MacDev.Tasks {
 				.ToArray ();
 		}
 
+		async System.Threading.Tasks.Task CopyFilesToWindowsAsync (TaskRunner taskRunner)
+		{
+			var allItems = LinkerOutputItems.Concat (LinkedItems).Concat (LinkerCacheItems);
+			foreach (var item in allItems) {
+				Log.LogMessage (MessageImportance.Low, $"Copying {item.ItemSpec} from the remote Mac to Windows");
+				await taskRunner.GetFileAsync (this, item.ItemSpec).ConfigureAwait (false);
+			}
+		}
+
 		// ITaskCallback implementation
 		public bool ShouldCopyToBuildServer (ITaskItem item) => true;
 
 		public bool ShouldCreateOutputFile (ITaskItem item)
 		{
-			var modifiedMetadata = item.GetMetadata ("Modified");
-			var wasModified = bool.TryParse (modifiedMetadata, out var modified) && modified;
-
-			// Create output file if it was modified during this execution
-			if (wasModified) {
-				Log.LogMessage (MessageImportance.Low, "Output file '{0}' was modified during execution", item.ItemSpec);
-				return true;
-			}
-
-			// Create output file if it doesn't exist on Windows. We assume if it exists on the Mac we also need it on Windows.
-			if (!File.Exists (item.ItemSpec)) {
-				Log.LogMessage (MessageImportance.Low, "Output file '{0}' does not exist", item.ItemSpec);
-				return true;
-			}
-
-			Log.LogMessage (MessageImportance.Low, "Output file '{0}' exists and was not modified", item.ItemSpec);
+			// Don't create output files here - we explicitly copy them in CopyFilesToWindowsAsync
+			// to ensure they have actual content instead of being 0-byte placeholders.
 			return false;
 		}
 

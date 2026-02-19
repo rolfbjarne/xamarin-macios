@@ -242,7 +242,87 @@ namespace Xamarin.Tests {
 
 		[Category ("RemoteWindows")]
 		[TestCase (ApplePlatform.iOS, "iossimulator-arm64")]
-		public void BuildFailureDoesNotHang (ApplePlatform platform, string runtimeIdentifiers)
+		public void BuildAppWithBindingNuGetReference (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			Configuration.IgnoreIfIgnoredPlatform (platform);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
+			Configuration.IgnoreIfNotOnWindows ();
+
+			// Step 1: Pack the binding project into a NuGet
+			var bindingProject = "BindingWithEmbeddedFramework";
+			var bindingProject_path = GetProjectPath (bindingProject, platform: platform);
+			Clean (bindingProject_path);
+
+			var tmpdir = Cache.CreateTemporaryDirectory ();
+			var outputPath = Path.Combine (tmpdir, "OutputPath");
+			var intermediateOutputPath = Path.Combine (tmpdir, "IntermediateOutputPath");
+			var bindingProperties = GetDefaultProperties ();
+			bindingProperties ["OutputPath"] = outputPath + Path.DirectorySeparatorChar;
+			bindingProperties ["IntermediateOutputPath"] = intermediateOutputPath + Path.DirectorySeparatorChar;
+			bindingProperties ["NoBindingEmbedding"] = "true";
+			bindingProperties ["ExcludeTouchUnitReference"] = "true";
+			bindingProperties ["ExcludeNUnitLiteReference"] = "true";
+
+			DotNet.AssertPack (bindingProject_path, bindingProperties, msbuildParallelism: false);
+
+			var nupkg = Path.Combine (outputPath, bindingProject + ".1.0.0.nupkg");
+			Assert.That (nupkg, Does.Exist, "nupkg existence");
+
+			// Step 2: Create a local NuGet source with the binding NuGet
+			var nugetFeed = Path.Combine (tmpdir, "nuget-feed");
+			if (Directory.Exists (nugetFeed))
+				Directory.Delete (nugetFeed, true);
+			Directory.CreateDirectory (nugetFeed);
+			DotNet.ExecuteCommand ("nuget", "add", nupkg, "-Source", nugetFeed);
+
+			// Step 3: Build the app that references the binding NuGet
+			var appProject = "AppWithBindingNuGetReference";
+			var configuration = "Debug";
+			var app_project_path = GetProjectPath (appProject, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath, configuration: configuration);
+			Clean (app_project_path);
+
+			var appProperties = GetDefaultProperties (runtimeIdentifiers);
+			appProperties ["RestoreAdditionalProjectSources"] = nugetFeed;
+			// Use a local packages path to avoid the global NuGet cache (which may have a stale version of the package)
+			appProperties ["RestorePackagesPath"] = Path.Combine (tmpdir, "packages");
+
+			DotNet.AssertBuild (app_project_path, appProperties, timeout: TimeSpan.FromMinutes (15));
+
+			// Step 4: Verify that linker output files on Windows have actual content (not 0-byte placeholders).
+			// This is the actual bug in https://github.com/dotnet/macios/issues/24711:
+			// when building remotely, the ILLink task was creating 0-byte placeholder files
+			// instead of transferring the actual content from the Mac.
+			var platformName = platform switch {
+				ApplePlatform.iOS => "ios",
+				ApplePlatform.TVOS => "tvos",
+				ApplePlatform.MacCatalyst => "maccatalyst",
+				ApplePlatform.MacOSX => "macos",
+				_ => throw new NotImplementedException ($"Unknown platform: {platform}"),
+			};
+			var objDir = Path.Combine (Path.GetDirectoryName (app_project_path)!, "obj", configuration, $"net10.0-{platformName}", runtimeIdentifiers);
+
+			var linkedDir = Path.Combine (objDir, "linked");
+			Assert.That (linkedDir, Does.Exist, "linked directory existence");
+			var linkedFiles = Directory.GetFiles (linkedDir, "*.dll");
+			Assert.That (linkedFiles, Is.Not.Empty, "linked directory should contain dll files");
+			foreach (var file in linkedFiles) {
+				var fileInfo = new FileInfo (file);
+				Assert.That (fileInfo.Length, Is.GreaterThan (0), $"linked file '{Path.GetFileName (file)}' should not be 0 bytes");
+			}
+
+			var linkerCacheDir = Path.Combine (objDir, "linker-cache");
+			Assert.That (linkerCacheDir, Does.Exist, "linker-cache directory existence");
+			var cacheFiles = Directory.GetFiles (linkerCacheDir);
+			Assert.That (cacheFiles, Is.Not.Empty, "linker-cache directory should contain files");
+			foreach (var file in cacheFiles) {
+				var fileInfo = new FileInfo (file);
+				Assert.That (fileInfo.Length, Is.GreaterThan (0), $"linker-cache file '{Path.GetFileName (file)}' should not be 0 bytes");
+			}
+		}
+
+		[Category ("RemoteWindows")]
+		[TestCase (ApplePlatform.iOS, "iossimulator-arm64")]
+		public void BuildFailureDoesNotHang(ApplePlatform platform, string runtimeIdentifiers)
 		{
 			var project = "BuildFailure";
 			var configuration = "Debug";

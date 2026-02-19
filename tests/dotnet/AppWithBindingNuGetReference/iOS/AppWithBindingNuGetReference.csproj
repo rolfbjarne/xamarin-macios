@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net$(BundledNETCoreAppTargetFrameworkVersion)-ios</TargetFramework>
+		<OutputType>Exe</OutputType>
+		<ApplicationTitle>AppWithBindingNuGetReference</ApplicationTitle>
+		<ApplicationId>com.xamarin.appwithbindingnugetreference</ApplicationId>
+		<ApplicationVersion>1.0</ApplicationVersion>
+		<UseFloatingTargetPlatformVersion Condition="'$(UseFloatingTargetPlatformVersion)' == ''">true</UseFloatingTargetPlatformVersion>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="BindingWithEmbeddedFramework" Version="1.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Compile Include="../AppDelegate.cs" />
+	</ItemGroup>
+</Project>

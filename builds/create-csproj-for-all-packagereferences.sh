@@ -61,6 +61,7 @@ sed "${SED_INPLACE_FLAGS[@]}" '/Xamarin.Tests.FrameworksInRuntimesNativeDirector
 sed "${SED_INPLACE_FLAGS[@]}" '/Xamarin.Tests.DynamicLibrariesInRuntimesNativeDirectory/d' "$TMPPATH"
 sed "${SED_INPLACE_FLAGS[@]}" '/Xamarin.Tests.XCFrameworkWithStaticLibraryInRuntimesNativeDirectory/d' "$TMPPATH"
 sed "${SED_INPLACE_FLAGS[@]}" '/Xamarin.Tests.XCFrameworkWithSymlinks/d' "$TMPPATH"
+sed "${SED_INPLACE_FLAGS[@]}" '/BindingWithEmbeddedFramework/d' "$TMPPATH"
 
 # Get only the name and version of each package, and write that back in a PackageDownload item
 sed "${SED_INPLACE_FLAGS[@]}" 's@.*<PackageReference.*Include="\([a-zA-Z0-9._-]*\)".*Version="\(['\$'()a-zA-Z0-9._-]*\)".*>.*@\t\t<PackageDownload Include="\1" Version="[\2]" />@g' "$TMPPATH"

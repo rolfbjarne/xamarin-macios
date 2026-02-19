@@ -240,6 +240,55 @@ namespace Xamarin.Tests {
 			DotNet.AssertBuild (project_path, properties, timeout: TimeSpan.FromMinutes (15));
 		}
 
+		[Category ("RemoteWindows")]
+		[TestCase (ApplePlatform.iOS, "iossimulator-arm64")]
+		public void BuildAppWithBindingNuGetReference (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			Configuration.IgnoreIfIgnoredPlatform (platform);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
+			Configuration.IgnoreIfNotOnWindows ();
+
+			// Step 1: Pack the binding project into a NuGet
+			var bindingProject = "BindingWithEmbeddedFramework";
+			var bindingProject_path = GetProjectPath (bindingProject, platform: platform);
+			Clean (bindingProject_path);
+
+			var tmpdir = Cache.CreateTemporaryDirectory ();
+			var outputPath = Path.Combine (tmpdir, "OutputPath");
+			var intermediateOutputPath = Path.Combine (tmpdir, "IntermediateOutputPath");
+			var bindingProperties = GetDefaultProperties ();
+			bindingProperties ["OutputPath"] = outputPath + Path.DirectorySeparatorChar;
+			bindingProperties ["IntermediateOutputPath"] = intermediateOutputPath + Path.DirectorySeparatorChar;
+			bindingProperties ["NoBindingEmbedding"] = "true";
+			bindingProperties ["ExcludeTouchUnitReference"] = "true";
+			bindingProperties ["ExcludeNUnitLiteReference"] = "true";
+
+			DotNet.AssertPack (bindingProject_path, bindingProperties, msbuildParallelism: false);
+
+			var nupkg = Path.Combine (outputPath, bindingProject + ".1.0.0.nupkg");
+			Assert.That (nupkg, Does.Exist, "nupkg existence");
+
+			// Step 2: Create a local NuGet source with the binding NuGet
+			var nugetFeed = Path.Combine (tmpdir, "nuget-feed");
+			if (Directory.Exists (nugetFeed))
+				Directory.Delete (nugetFeed, true);
+			Directory.CreateDirectory (nugetFeed);
+			DotNet.ExecuteCommand ("nuget", "add", nupkg, "-Source", nugetFeed);
+
+			// Step 3: Build the app that references the binding NuGet
+			var appProject = "AppWithBindingNuGetReference";
+			var configuration = "Debug";
+			var app_project_path = GetProjectPath (appProject, runtimeIdentifiers: runtimeIdentifiers, platform: platform, out var appPath, configuration: configuration);
+			Clean (app_project_path);
+
+			var appProperties = GetDefaultProperties (runtimeIdentifiers);
+			appProperties ["RestoreAdditionalProjectSources"] = nugetFeed;
+			// Use a local packages path to avoid the global NuGet cache (which may have a stale version of the package)
+			appProperties ["RestorePackagesPath"] = Path.Combine (tmpdir, "packages");
+
+			DotNet.AssertBuild (app_project_path, appProperties, timeout: TimeSpan.FromMinutes (15));
+		}
+
 		static void AssertWarningsEqual (IList<string> expected, IList<string> actual, string message)
 		{
 			if (expected.Count == actual.Count) {

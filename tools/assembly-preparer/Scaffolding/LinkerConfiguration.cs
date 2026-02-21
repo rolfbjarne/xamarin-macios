@@ -30,6 +30,9 @@ public class LinkerConfiguration {
 	public DotNetResolver AssemblyResolver { get; private set; }
 	public IMetadataResolver MetadataResolver { get; private set; }
 
+	public string IntermediateOutputPath { get; set; } = string.Empty;
+	public List<string> NativeCodeToCompileAndLink { get; private set; } = new List<string> ();
+
 	DerivedLinkContext? derivedLinkContext;
 	public DerivedLinkContext DerivedLinkContext {
 		get {

@@ -26,6 +26,11 @@ public class AssemblyPreparer : IDisposable {
 		set => configuration.App.Registrar = value;
 	}
 
+	public string IntermediateOutputPath {
+		get => configuration.IntermediateOutputPath;
+		set => configuration.IntermediateOutputPath = value;
+	}
+
 	public Optimizations Optimizations => configuration.App.Optimizations;
 
 	public AssemblyPreparerInfo [] Assemblies { get; set; }
@@ -52,6 +57,7 @@ public class AssemblyPreparer : IDisposable {
 		}
 		Directory.CreateDirectory (MakeReproPath);
 		var lines = new List<string> ();
+		lines.Add ($"IntermediateOutputPath: {IntermediateOutputPath}");
 		lines.Add ($"Platform: {configuration.Platform}");
 		lines.Add ($"Registrar: {configuration.Registrar}");
 		foreach (var assembly in Assemblies) {
@@ -73,6 +79,7 @@ public class AssemblyPreparer : IDisposable {
 		var lines = File.ReadAllLines (file);
 		ApplePlatform? platform = null;
 		string? registrar = null;
+		string? intermediateOutputPath = null;
 		var assemblies = new List<AssemblyPreparerInfo> ();
 		foreach (var line in lines) {
 			if (line.StartsWith ("Platform: ")) {
@@ -87,6 +94,8 @@ public class AssemblyPreparer : IDisposable {
 			} else if (line.StartsWith ("Assembly: ")) {
 				var assembly = line.Substring ("Assembly: ".Length);
 				assemblies.Add (new AssemblyPreparerInfo (Path.Combine (reproPath, assembly), Path.Combine (reproPath, "out", assembly)));
+			} else if (line.StartsWith ("IntermediateOutputPath: ")) {
+				intermediateOutputPath = line.Substring ("IntermediateOutputPath: ".Length);
 			} else {
 				throw new Exception ($"Unknown line: {line}");
 			}
@@ -95,8 +104,11 @@ public class AssemblyPreparer : IDisposable {
 			throw new Exception ("Platform not specified in repro arguments");
 		if (registrar is null)
 			throw new Exception ("RegistrarMode not specified in repro arguments");
+		if (intermediateOutputPath is null)
+			throw new Exception ("IntermediateOutputPath not specified in repro arguments");
 		var ap = new AssemblyPreparer (assemblies.ToArray (), platform.Value);
 		ap.SetRegistrar (registrar);
+		ap.IntermediateOutputPath = intermediateOutputPath;
 		return ap;
 	}
 
@@ -126,6 +138,7 @@ public class AssemblyPreparer : IDisposable {
 			new MarkIProtocolHandler (),
 			new PreserveSmartEnumConversionsHandler (),
 			new OptimizeGeneratedCodeHandler (),
+			new InlineDlfcnMethodsStep (),
 		};
 
 		var linkContext = new DerivedLinkContext (configuration, configuration.App);
@@ -163,9 +176,12 @@ public class AssemblyPreparer : IDisposable {
 			if (!configuration.IsProductAssembly (assembly) && !assembly.MainModule.AssemblyReferences.Any (v => configuration.IsProductAssembly (v.Name)))
 				continue;
 
-			foreach (var type in assembly.MainModule.Types) {
+			markContext.MarkAssembly (assembly);
+			var currentTypes = assembly.MainModule.Types.ToArray (); // avoid modifying the collection while iterating
+			foreach (var type in currentTypes) {
 				markContext.MarkType (type);
 			}
+			markContext.MarkAssemblyEnd (assembly);
 		}
 
 		// save assemblies

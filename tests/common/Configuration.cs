@@ -642,6 +642,16 @@ namespace Xamarin.Tests {
 
 			return assemblies;
 		}
+
+		public static List<string> GetImplementationAssemblies (ApplePlatform platform)
+		{
+			var assemblies = new List<string> ();
+
+			assemblies.AddRange (GetBCLAssemblies (platform));
+			assemblies.AddRange (GetBaseLibraryImplementations (platform).First ());
+
+			return assemblies;
+		}
 #endif // !XAMMAC_TESTS
 
 		public static IEnumerable<ApplePlatform> GetIncludedPlatforms ()

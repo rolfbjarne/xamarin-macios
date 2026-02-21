@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Mono.Cecil;
 
 public class MarkContext {
+	List<Action<AssemblyDefinition>> markAssemblyActions = new ();
+	List<Action<AssemblyDefinition>> markAssemblyEndActions = new ();
 	List<Action<TypeDefinition>> markTypeActions = new ();
 	List<Action<MethodDefinition>> markMethodActions = new ();
 
@@ -29,6 +31,20 @@ public class MarkContext {
 		}
 	}
 
+	public void MarkAssembly (AssemblyDefinition assembly)
+	{
+		foreach (var action in markAssemblyActions) {
+			action (assembly);
+		}
+	}
+
+	public void MarkAssemblyEnd (AssemblyDefinition assembly)
+	{
+		foreach (var action in markAssemblyEndActions) {
+			action (assembly);
+		}
+	}
+
 	public void RegisterMarkTypeAction (Action<TypeDefinition> action)
 	{
 		markTypeActions.Add (action);
@@ -37,5 +53,15 @@ public class MarkContext {
 	public void RegisterMarkMethodAction (Action<MethodDefinition> action)
 	{
 		markMethodActions.Add (action);
+	}
+
+	public void RegisterMarkAssemblyAction (Action<AssemblyDefinition> action)
+	{
+		markAssemblyActions.Add (action);
+	}
+
+	public void RegisterMarkAssemblyEndAction (Action<AssemblyDefinition> action)
+	{
+		markAssemblyEndActions.Add (action);
 	}
 }

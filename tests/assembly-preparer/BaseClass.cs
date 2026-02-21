@@ -23,7 +23,13 @@ public abstract class BaseClass {
 	public bool AssertPrepare (ApplePlatform platform, RegistrarMode registrar, string code, out AssemblyDefinition assemblyDefinition)
 	{
 		var rv = AssertPrepareCode (platform, preparer => preparer.Registrar = registrar, code, out string outputPath);
-		assemblyDefinition = AssemblyDefinition.ReadAssembly (outputPath);
+		var resolver = new DefaultAssemblyResolver ();
+		resolver.AddSearchDirectory (Path.GetDirectoryName (outputPath)!);
+		var readerParameters = new ReaderParameters {
+			ReadSymbols = true,
+			AssemblyResolver = resolver,
+		};	
+		assemblyDefinition = AssemblyDefinition.ReadAssembly (outputPath, readerParameters);
 		return rv;
 	}
 
@@ -49,10 +55,11 @@ public abstract class BaseClass {
 		DotNet.AssertBuild (csprojPath);
 		var assemblyDir = Path.Combine (tmpdir, "bin", "Debug");
 
-		var assemblies = Configuration.GetReferenceAssemblies (platform);
+		var assemblies = Configuration.GetImplementationAssemblies (platform);
 		assemblies.Add (Path.Combine (assemblyDir, "Test.dll"));
 		var infos = assemblies.Select (v => new AssemblyPreparerInfo (v, Path.Combine (assemblyDir, "out", Path.GetFileName (v)))).ToArray ();
 		var preparer = new AssemblyPreparer (infos, platform);
+		preparer.IntermediateOutputPath = Path.Combine (tmpdir, "intermediate");
 		if (configure is not null)
 			configure (preparer);
 		AssertPrepare (preparer);

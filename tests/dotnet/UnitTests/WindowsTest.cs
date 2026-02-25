@@ -250,13 +250,20 @@ namespace Xamarin.Tests {
 			// up as 0-byte placeholders on Windows during remote builds. For the customer
 			// this caused a build failure (MT7091) because FilterStaticFrameworks tried to
 			// read the 0-byte framework binary on Windows.
+			//
+			// The build itself succeeds because FilterStaticFrameworks runs remotely (reading
+			// real files on the Mac), so this test validates the underlying bug: the
+			// framework extracted by the linker to linker-cache/ must not be 0-byte on Windows.
 			Configuration.IgnoreIfIgnoredPlatform (platform);
 			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
 			Configuration.IgnoreIfNotOnWindows ();
 
 			var tmpDir = Cache.CreateTemporaryDirectory ();
 
-			// Step 1: Pack BindingWithEmbeddedFramework into a NuGet package
+			// Step 1: Pack BindingWithEmbeddedFramework into a NuGet package.
+			// Use NoBindingEmbedding=false so the framework is embedded in the assembly.
+			// This causes the linker's ExtractBindingLibrariesStep to extract the framework
+			// to linker-cache/ (matching the customer's scenario with CameraFramework).
 			var bindingProject = "BindingWithEmbeddedFramework";
 			var bindingProjectPath = GetProjectPath (bindingProject, platform: platform);
 			Clean (bindingProjectPath);
@@ -264,7 +271,7 @@ namespace Xamarin.Tests {
 			var packOutputDir = Path.Combine (tmpDir, "OutputPath") + Path.DirectorySeparatorChar;
 			var packIntermediateDir = Path.Combine (tmpDir, "IntermediateOutputPath") + Path.DirectorySeparatorChar;
 			var packProperties = GetDefaultProperties ();
-			packProperties ["NoBindingEmbedding"] = "true";
+			packProperties ["NoBindingEmbedding"] = "false";
 			packProperties ["ExcludeTouchUnitReference"] = "true";
 			packProperties ["ExcludeNUnitLiteReference"] = "true";
 			packProperties ["OutputPath"] = packOutputDir;
@@ -290,6 +297,26 @@ namespace Xamarin.Tests {
 			appProperties ["RestorePackagesPath"] = Path.Combine (tmpDir, "packages");
 
 			DotNet.AssertBuild (appProjectPath, appProperties, timeout: TimeSpan.FromMinutes (15));
+
+			// Step 4: Verify the linker-cache framework file is not 0 bytes on Windows.
+			// The linker's ExtractBindingLibrariesStep extracts the framework to linker-cache/
+			// on the Mac, but the corresponding file on Windows is a 0-byte placeholder.
+			// This is the root cause of the customer's MT7091 error: if FilterStaticFrameworks
+			// runs locally (instead of remotely), it reads the 0-byte file and fails.
+			var appProjectDir = Path.GetDirectoryName (appProjectPath)!;
+			var linkerCacheDir = Path.Combine (appProjectDir, "obj", "Debug", $"{Configuration.DotNetTfm}-ios", runtimeIdentifiers, "linker-cache");
+			Assert.That (Directory.Exists (linkerCacheDir), $"Expected linker-cache directory to exist at {linkerCacheDir}");
+
+			var frameworkFiles = Directory.GetFiles (linkerCacheDir, "*", SearchOption.AllDirectories)
+				.Where (f => !f.EndsWith (".zip", StringComparison.OrdinalIgnoreCase) && !f.EndsWith (".mm", StringComparison.OrdinalIgnoreCase))
+				.ToList ();
+			Assert.That (frameworkFiles.Count > 0, $"Expected framework files in linker-cache, found none");
+
+			foreach (var file in frameworkFiles) {
+				var fileInfo = new FileInfo (file);
+				var relativePath = Path.GetRelativePath (linkerCacheDir, file);
+				Assert.AreNotEqual (0, fileInfo.Length, $"linker-cache file '{relativePath}' should not be 0 bytes");
+			}
 		}
 
 		static void AssertWarningsEqual (IList<string> expected, IList<string> actual, string message)

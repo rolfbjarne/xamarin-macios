@@ -45,6 +45,16 @@ namespace Xamarin.MacDev.Tasks {
 
 			if (!string.IsNullOrEmpty (customHome)) {
 				environment ["HOME"] = customHome;
+				environment ["DOTNET_CLI_HOME"] = customHome;
+			} else if (Environment.OSVersion.Platform == PlatformID.Unix || Environment.OSVersion.Platform == PlatformID.MacOSX) {
+				// Make sure HOME and DOTNET_CLI_HOME are set on macOS, they may not be set when running inside the Xamarin.Messaging broker.
+				var home = Environment.GetEnvironmentVariable ("HOME");
+				if (string.IsNullOrEmpty (home))
+					home = Environment.GetFolderPath (Environment.SpecialFolder.UserProfile);
+				if (string.IsNullOrEmpty (home))
+					home = "/tmp";
+				environment ["HOME"] = home;
+				environment ["DOTNET_CLI_HOME"] = home;
 			}
 			// Disable a few things that we don't care about
 			environment ["DOTNET_NOLOGO"] = "1";

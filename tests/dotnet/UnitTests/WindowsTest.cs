@@ -240,6 +240,58 @@ namespace Xamarin.Tests {
 			DotNet.AssertBuild (project_path, properties, timeout: TimeSpan.FromMinutes (15));
 		}
 
+		[Category ("RemoteWindows")]
+		[TestCase (ApplePlatform.iOS, "iossimulator-arm64")]
+		public void TestForIssue24711 (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			// https://github.com/dotnet/macios/issues/24711
+			// When an app references a binding project's NuGet package (instead of a direct
+			// project reference), the ILLink output files (linked/*.dll, linker-cache/*) end
+			// up as 0-byte placeholders on Windows during remote builds. For the customer
+			// this caused a build failure (MT7091) because FilterStaticFrameworks tried to
+			// read the 0-byte framework binary on Windows.
+			Configuration.IgnoreIfIgnoredPlatform (platform);
+			Configuration.AssertRuntimeIdentifiersAvailable (platform, runtimeIdentifiers);
+			Configuration.IgnoreIfNotOnWindows ();
+
+			var tmpDir = Cache.CreateTemporaryDirectory ();
+
+			// Step 1: Pack BindingWithEmbeddedFramework into a NuGet package
+			var bindingProject = "BindingWithEmbeddedFramework";
+			var bindingProjectPath = GetProjectPath (bindingProject, platform: platform);
+			Clean (bindingProjectPath);
+
+			var packOutputDir = Path.Combine (tmpDir, "OutputPath") + Path.DirectorySeparatorChar;
+			var packIntermediateDir = Path.Combine (tmpDir, "IntermediateOutputPath") + Path.DirectorySeparatorChar;
+			var packProperties = GetDefaultProperties ();
+			packProperties ["NoBindingEmbedding"] = "true";
+			packProperties ["ExcludeTouchUnitReference"] = "true";
+			packProperties ["ExcludeNUnitLiteReference"] = "true";
+			packProperties ["OutputPath"] = packOutputDir;
+			packProperties ["IntermediateOutputPath"] = packIntermediateDir;
+			DotNet.AssertPack (bindingProjectPath, packProperties);
+
+			var nupkg = Directory.GetFiles (packOutputDir, "*.nupkg").SingleOrDefault ();
+			Assert.IsNotNull (nupkg, "Expected a .nupkg file in the output directory");
+
+			// Step 2: Create a local NuGet feed and add the package
+			var nugetFeed = Path.Combine (tmpDir, "nuget-feed");
+			Directory.CreateDirectory (nugetFeed);
+			var nugetAddResult = Execution.RunAsync ("nuget", new [] { "add", nupkg!, "-Source", nugetFeed }).Result;
+			Assert.AreEqual (0, nugetAddResult.ExitCode, "nuget add failed");
+
+			// Step 3: Build the app that references the NuGet
+			var appProject = "AppWithBindingNuGetReference";
+			var appProjectPath = GetProjectPath (appProject, platform: platform);
+			Clean (appProjectPath);
+
+			var appProperties = GetDefaultProperties (runtimeIdentifiers);
+			appProperties ["RestoreAdditionalProjectSources"] = nugetFeed;
+			appProperties ["RestorePackagesPath"] = Path.Combine (tmpDir, "packages");
+
+			DotNet.AssertBuild (appProjectPath, appProperties, timeout: TimeSpan.FromMinutes (15));
+		}
+
 		static void AssertWarningsEqual (IList<string> expected, IList<string> actual, string message)
 		{
 			if (expected.Count == actual.Count) {

@@ -671,11 +671,11 @@ namespace AudioUnit {
 			get {
 				using var nameHandle = new TransientCFString (Name);
 				var cHandle = AudioUnitExtensionCopyComponentList (nameHandle);
-				return NSArray.ArrayFromHandle<AudioComponentInfo> (cHandle, h => new AudioComponentInfo (Runtime.GetNSObject<NSDictionary> (h)!), releaseHandle: true);
+				return NSArray.DictionaryArrayFromHandleDropNullElements<AudioComponentInfo> (cHandle, h => new AudioComponentInfo (h), releaseHandle: true);
 			}
 			set {
 				using var nameHandle = new TransientCFString (Name);
-				using var array = NSArray.FromNSObjects (h => h.Dictionary, value);
+				using var array = NSArray.FromNSObjects (h => h?.Dictionary, value);
 				var result = (AudioConverterError) AudioUnitExtensionSetComponentList (nameHandle, array.GetHandle ());
 				switch (result) {
 				case AudioConverterError.None:

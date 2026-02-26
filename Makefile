@@ -1,9 +1,18 @@
 TOP=.
-SUBDIRS=builds runtime src msbuild tools
+SUBDIRS=builds
 include $(TOP)/Make.config
 include $(TOP)/mk/versions.mk
 
+# On Linux, skip directories that require native compilation or macOS platform
+ifndef IS_LINUX
+SUBDIRS += runtime
+endif
+
+SUBDIRS += src msbuild tools
+
+ifndef IS_LINUX
 SUBDIRS += dotnet
+endif
 
 #
 # Common
@@ -54,19 +63,6 @@ install-hook::
 
 all-hook install-hook::
 	$(Q) $(MAKE) -C dotnet shutdown-build-server
-
-.PHONY: package release
-package release:
-	$(Q) $(MAKE) -C $(TOP)/release release
-	# copy .pkg, .zip and *updateinfo to the packages directory to be uploaded to storage
-	$(Q) mkdir -p ../package
-	$(Q) echo "Output from 'make release':"
-	$(Q) ls -la $(TOP)/release | sed 's/^/    /'
-	$(Q) if test -n "$$(shopt -s nullglob; echo $(TOP)/release/*.pkg)"; then $(CP) $(TOP)/release/*.pkg ../package; fi
-	$(Q) if test -n "$$(shopt -s nullglob; echo $(TOP)/release/*.zip)"; then $(CP) $(TOP)/release/*.zip ../package; fi
-	$(Q) if test -n "$$(shopt -s nullglob; echo $(TOP)/release/*updateinfo)"; then $(CP) $(TOP)/release/*updateinfo ../package; fi
-	$(Q) echo "Packages:"
-	$(Q) ls -la ../package | sed 's/^/    /'
 
 dotnet-install-system:
 	$(Q) $(MAKE) -C dotnet install-system

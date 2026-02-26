@@ -1726,7 +1726,6 @@ namespace UIKit {
 		bool AdjustsImageSizeForAccessibilityContentSizeCategory { get; set; }
 	}
 
-	/// <include file="../docs/api/UIKit/UIActionSheet.xml" path="/Documentation/Docs[@DocId='T:UIKit.UIActionSheet']/*" />
 	[NoTV]
 	[BaseType (typeof (UIView), KeepRefUntil = "Dismissed", Delegates = new string [] { "WeakDelegate" }, Events = new Type [] { typeof (UIActionSheetDelegate) })]
 	[Deprecated (PlatformName.iOS, 8, 3, message: "Use 'UIAlertController' with 'UIAlertControllerStyle.ActionSheet' instead.")]
@@ -21218,9 +21217,8 @@ namespace UIKit {
 		[Export ("translucent", ArgumentSemantic.Assign)]
 		bool Translucent { [Bind ("isTranslucent")] get; set; }
 
-		// done manually so we can keep this "in sync" with 'Items' property
-		//[Export ("setItems:animated:")][PostGet ("Items")]
-		//void SetItems (UIBarButtonItem [] items, bool animated);
+		[Export ("setItems:animated:")]
+		void SetItems ([NullAllowed] UIBarButtonItem [] items, bool animated);
 
 		/// <param name="backgroundImage">To be added.</param>
 		/// <param name="position">To be added.</param>

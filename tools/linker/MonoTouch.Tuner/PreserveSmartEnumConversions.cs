@@ -22,9 +22,9 @@ namespace Xamarin.Linker.Steps {
 			markContext.RegisterMarkMethodAction (ProcessMethod);
 		}
 
-		void Preserve (Tuple<MethodDefinition, MethodDefinition> pair, params MethodDefinition?[] conditions)
+		void Preserve (Tuple<MethodDefinition, MethodDefinition> pair, params MethodDefinition? [] conditions)
 		{
-			var conds = conditions.Where (v => v is not null).Cast<MethodDefinition>().ToArray ();
+			var conds = conditions.Where (v => v is not null).Cast<MethodDefinition> ().ToArray ();
 			if (conds.Length == 0)
 				return;
 
@@ -38,7 +38,7 @@ namespace Xamarin.Linker.Steps {
 			abr.SaveCurrentAssembly ();
 		}
 
-		void ProcessAttributeProvider (ICustomAttributeProvider provider, params MethodDefinition[] conditions)
+		void ProcessAttributeProvider (ICustomAttributeProvider provider, params MethodDefinition [] conditions)
 		{
 			if (provider?.HasCustomAttributes != true)
 				return;

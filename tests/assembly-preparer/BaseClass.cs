@@ -28,7 +28,7 @@ public abstract class BaseClass {
 		var readerParameters = new ReaderParameters {
 			ReadSymbols = true,
 			AssemblyResolver = resolver,
-		};	
+		};
 		assemblyDefinition = AssemblyDefinition.ReadAssembly (outputPath, readerParameters);
 		return rv;
 	}
@@ -63,7 +63,7 @@ public abstract class BaseClass {
 		if (configure is not null)
 			configure (preparer);
 		AssertPrepare (preparer);
-		
+
 		var testInfo = infos.Single (v => Path.GetFileNameWithoutExtension (v.InputPath) == "Test");
 		outputPath = testInfo.OutputPath;
 		Console.WriteLine ("Output assembly: " + outputPath);

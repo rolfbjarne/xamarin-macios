@@ -588,7 +588,7 @@ public class InlineDlfcnMethodsStep : ConfigurationAwareMarkHandler {
 			}
 
 			// Handle Dlfcn functions of the form void (libraryHandle|libraryName, symbolName, value)
-			if (mr.Parameters.Count == 3 && 
+			if (mr.Parameters.Count == 3 &&
 				(mr.Parameters [0].ParameterType.FullName == "System.String" || mr.Parameters [0].ParameterType.FullName == "System.IntPtr") &&
 				mr.Parameters [1].ParameterType.FullName == "System.String") {
 				var ldstr = instr.Previous.Previous;
@@ -629,14 +629,14 @@ public class InlineDlfcnMethodsStep : ConfigurationAwareMarkHandler {
 					// Copilot TODO: validate the last param type is *IntPtr
 					// Copilot TODO: validate expected IL for:
 
-/*
+					/*
 
-			get {
-				fixed (IntPtr *storage = &values [8])
-					return Dlfcn.CachePointer (Libraries.XYZ.Handle, "...", storage);
-			}
+								get {
+									fixed (IntPtr *storage = &values [8])
+										return Dlfcn.CachePointer (Libraries.XYZ.Handle, "...", storage);
+								}
 
-*/
+					*/
 
 					// we're going to replace the entire method body with something like:
 					// 

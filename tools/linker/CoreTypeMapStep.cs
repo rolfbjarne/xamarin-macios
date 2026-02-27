@@ -160,7 +160,7 @@ namespace MonoTouch.Tuner {
 		}
 
 		bool IsWrapperType (TypeDefinition type)
-	 	{
+		{
 			var registerAttribute = LinkContext.StaticRegistrar.GetRegisterAttribute (type);
 			return registerAttribute?.IsWrapper == true || registerAttribute?.SkipRegistration == true;
 		}

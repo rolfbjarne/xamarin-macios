@@ -1,7 +1,8 @@
 #if !NET
 
 public static class QueueExtensions {
-	public static bool TryDequeue<T> (this Queue<T> queue, [MaybeNullWhen(false)] out T item) {
+	public static bool TryDequeue<T> (this Queue<T> queue, [MaybeNullWhen (false)] out T item)
+	{
 		if (queue.Count == 0) {
 			item = default;
 			return false;
@@ -10,7 +11,8 @@ public static class QueueExtensions {
 		return true;
 	}
 
-	public static bool TryAdd<T, V> (this Dictionary<T, V> dictionary, T key, V value) {
+	public static bool TryAdd<T, V> (this Dictionary<T, V> dictionary, T key, V value)
+	{
 		if (dictionary.ContainsKey (key))
 			return false;
 		dictionary.Add (key, value);

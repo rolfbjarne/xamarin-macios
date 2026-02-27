@@ -36,20 +36,17 @@ using Xamarin.Tuner;
 
 namespace Mono.Linker.Steps;
 
-public abstract class BaseStep : IStep  {
+public abstract class BaseStep : IStep {
 	DerivedLinkContext? context;
 
-	public DerivedLinkContext Context
-	{
-		get
-		{
-			Debug.Assert(context != null);
+	public DerivedLinkContext Context {
+		get {
+			Debug.Assert (context is not null);
 			return context!;
 		}
 	}
 
-	public AnnotationStore Annotations
-	{
+	public AnnotationStore Annotations {
 		get { return Context.Annotations; }
 	}
 
@@ -60,37 +57,36 @@ public abstract class BaseStep : IStep  {
 
 	// public MarkingHelpers MarkingHelpers => Context.MarkingHelpers;
 
-	public void Process(DerivedLinkContext context)
+	public void Process (DerivedLinkContext context)
 	{
 		this.context = context;
 
-		if (!ConditionToProcess())
+		if (!ConditionToProcess ())
 			return;
 
-		Process();
+		Process ();
 
-		foreach (var assembly in context.GetAssemblies())
-		{
-			ProcessAssembly(assembly);
+		foreach (var assembly in context.GetAssemblies ()) {
+			ProcessAssembly (assembly);
 		}
 
-		EndProcess();
+		EndProcess ();
 	}
 
-	protected virtual bool ConditionToProcess()
+	protected virtual bool ConditionToProcess ()
 	{
 		return true;
 	}
 
-	protected virtual void Process()
+	protected virtual void Process ()
 	{
 	}
 
-	protected virtual void EndProcess()
+	protected virtual void EndProcess ()
 	{
 	}
 
-	protected virtual void ProcessAssembly(AssemblyDefinition assembly)
+	protected virtual void ProcessAssembly (AssemblyDefinition assembly)
 	{
 	}
 }

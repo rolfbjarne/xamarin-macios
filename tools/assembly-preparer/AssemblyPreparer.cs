@@ -129,7 +129,7 @@ public class AssemblyPreparer : IDisposable {
 		if (!string.IsNullOrEmpty (MakeReproPath) && !SaveToReproPath (exceptions))
 			return false;
 
-		var steps = new IStep[] {
+		var steps = new IStep [] {
 			new CoreTypeMapStep (),
 		};
 
@@ -167,7 +167,7 @@ public class AssemblyPreparer : IDisposable {
 
 		foreach (var step in steps) {
 			step.Process (linkContext);
-		}	
+		}
 
 		foreach (var assembly in linkContext.GetAssemblies ()) {
 			// Skip SDK asemblies, they have nothing we need to process at the moment.

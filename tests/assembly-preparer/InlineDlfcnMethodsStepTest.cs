@@ -27,13 +27,13 @@ public class InlineDlfcnMethodsStepTests : BaseClass {
 		AssertPrepare (platform, code, out var assemblyDefinition);
 
 		var type = assemblyDefinition.MainModule.Types.Single (v => v.Name == "MyClass");
-		var platformReference = assemblyDefinition.MainModule.AssemblyReferences.Single (v => v.Name == $"Microsoft.{platform.AsString()}");
+		var platformReference = assemblyDefinition.MainModule.AssemblyReferences.Single (v => v.Name == $"Microsoft.{platform.AsString ()}");
 		var platformAssembly = assemblyDefinition.MainModule.AssemblyResolver.Resolve (platformReference);
 		var dlfcn = platformAssembly.MainModule.Types.Single (v => v.Name == "Dlfcn");
 
 		var cctor = type.GetStaticConstructor ();
 		Assert.That (cctor, Is.Null, "No static constructor should be needed.");
-		
+
 		void AssertHasDlfcnPInvokeCall (MethodDefinition method)
 		{
 			var instructions = method.Body.Instructions;
@@ -44,7 +44,7 @@ public class InlineDlfcnMethodsStepTests : BaseClass {
 			Assert.That (resolvedMethod, Is.Not.Null, $"Expected the call to resolve to a method in Dlfcn for {method}");
 			Assert.That (resolvedMethod.PInvokeInfo, Is.Null, $"Expected the method to not be a PInvoke method for {method}");
 		}
-		
+
 		Assert.Multiple (() => {
 			AssertHasDlfcnPInvokeCall (type.Methods.Single (v => v.Name == "GetIntPtr"));
 		});

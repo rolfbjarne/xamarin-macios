@@ -1288,7 +1288,7 @@ namespace Xamarin.Linker {
 					if (ca.ConstructorArguments.Count != attribute.ConstructorArguments.Count)
 						continue;
 
-					if (ca.Properties.Count != attribute.Properties.Count) 
+					if (ca.Properties.Count != attribute.Properties.Count)
 						continue;
 
 					var all_match = true;
@@ -1302,7 +1302,7 @@ namespace Xamarin.Linker {
 					}
 					if (!all_match)
 						continue;
-					
+
 					for (int i = 0; i < ca.Properties.Count; i++) {
 						var ca_prop = ca.Properties [i];
 						var attr_prop = attribute.Properties [i];
@@ -1319,7 +1319,7 @@ namespace Xamarin.Linker {
 					}
 					if (!all_match)
 						continue;
-					
+
 					// attribute already present
 					return;
 				}

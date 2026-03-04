@@ -383,6 +383,12 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public TypeReference ObjCRuntime_Dlfcn {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.Dlfcn", out var _);
+			}
+		}
+
 		public TypeReference ObjCRuntime_IManagedRegistrar {
 			get {
 				return GetTypeReference (PlatformAssembly, "ObjCRuntime.IManagedRegistrar", out var _);
@@ -410,6 +416,12 @@ namespace Xamarin.Linker {
 		public TypeReference ObjCRuntime_NativeObjectExtensions {
 			get {
 				return GetTypeReference (PlatformAssembly, "ObjCRuntime.NativeObjectExtensions", out var _);
+			}
+		}
+
+		public TypeReference ObjCRuntime_ObjectiveCFrameworkAttribute {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.ObjectiveCFrameworkAttribute", out var _);
 			}
 		}
 
@@ -448,6 +460,12 @@ namespace Xamarin.Linker {
 		public MethodReference Nullable_Value {
 			get {
 				return GetMethodReference (CorlibAssembly, System_Nullable_1, "get_Value", isStatic: false);
+			}
+		}
+
+		public MethodReference Nullable_ctor {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Nullable_1, ".ctor", isStatic: false, System_Nullable_1.GenericParameters [0]);
 			}
 		}
 
@@ -618,6 +636,17 @@ namespace Xamarin.Linker {
 						&& v.Parameters [2].ParameterType is FunctionPointerType fpt2
 						&& v.HasGenericParameters
 						&& v.GenericParameters.Count == 2);
+			}
+		}
+
+		public MethodReference ObjectiveCFrameworkAttribute_ctor_String {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_ObjectiveCFrameworkAttribute, ".ctor", (v) =>
+						v.IsConstructor
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "String")
+						&& !v.HasGenericParameters);
 			}
 		}
 

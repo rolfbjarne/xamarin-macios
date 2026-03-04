@@ -48,6 +48,12 @@ The build system supports multiple platforms simultaneously:
 
 The `configure` script is used to select which platforms to build. This script must be run before `make`.
 
+## MSBuild code
+
+Non-standard patterns in .targets files:
+
+- Always use `$(DeviceSpecificIntermediateOutputPath)` instead of `$(IntermediateOutputPath)`.
+
 ## Binding System
 
 ### bgen (Binding Generator)

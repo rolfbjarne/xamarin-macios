@@ -113,6 +113,9 @@ namespace Xharness.Jenkins {
 						yield return new TestData { Variation = "Debug (interpreter)", TestVariation = "interpreter", Debug = true, Ignored = ignore };
 						yield return new TestData { Variation = "Release (interpreter)", TestVariation = "interpreter", Debug = false, Ignored = ignore, UseLlvm = false };
 					}
+					yield return new TestData { Variation = $"Release (compat inline dlfcn)", TestVariation = "inline-dlfcn-methods-compat|release", Debug = false, Ignored = ignore };
+					yield return new TestData { Variation = $"Release (strict inline dlfcn)", TestVariation = "inline-dlfcn-methods-strict|release", Debug = false, Ignored = ignore };
+					yield return new TestData { Variation = $"Release (NativeAOT, .NET 11 defaults)", TestVariation = "inline-dlfcn-methods-strict|nativeaot|release", PublishAot = true, Debug = false, Ignored = ignore, LinkMode = "Full" };
 					break;
 				case "introspection":
 					if (mac_supports_arm64)

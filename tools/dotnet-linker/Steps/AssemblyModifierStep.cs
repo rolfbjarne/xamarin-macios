@@ -50,7 +50,7 @@ public abstract class AssemblyModifierStep : ConfigurationAwareStep {
 	{
 		var modified = ProcessType (type);
 		if (type.HasNestedTypes) {
-			foreach (var nested in type.NestedTypes)
+			foreach (var nested in type.NestedTypes.ToArray ())
 				modified |= ProcessTypeImpl (nested);
 		}
 		return modified;

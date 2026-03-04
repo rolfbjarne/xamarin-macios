@@ -31,7 +31,7 @@ public abstract class AssemblyModifierStep : ConfigurationAwareStep {
 	protected virtual bool ModifyAssembly (AssemblyDefinition assembly)
 	{
 		var modified = false;
-		foreach (var type in assembly.MainModule.Types)
+		foreach (var type in assembly.MainModule.Types.ToArray ())
 			modified |= ProcessTypeImpl (type);
 		return modified;
 	}
@@ -50,7 +50,7 @@ public abstract class AssemblyModifierStep : ConfigurationAwareStep {
 	{
 		var modified = ProcessType (type);
 		if (type.HasNestedTypes) {
-			foreach (var nested in type.NestedTypes)
+			foreach (var nested in type.NestedTypes.ToArray ())
 				modified |= ProcessTypeImpl (nested);
 		}
 		return modified;

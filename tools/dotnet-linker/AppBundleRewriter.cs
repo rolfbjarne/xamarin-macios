@@ -383,6 +383,12 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public TypeReference ObjCRuntime_Dlfcn {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.Dlfcn", out var _);
+			}
+		}
+
 		public TypeReference ObjCRuntime_IManagedRegistrar {
 			get {
 				return GetTypeReference (PlatformAssembly, "ObjCRuntime.IManagedRegistrar", out var _);
@@ -448,6 +454,12 @@ namespace Xamarin.Linker {
 		public MethodReference Nullable_Value {
 			get {
 				return GetMethodReference (CorlibAssembly, System_Nullable_1, "get_Value", isStatic: false);
+			}
+		}
+
+		public MethodReference Nullable_ctor {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Nullable_1, ".ctor", isStatic: false, System_Nullable_1.GenericParameters [0]);
 			}
 		}
 

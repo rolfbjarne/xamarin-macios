@@ -18,6 +18,8 @@
 		<TestVariations Include="static-registrar-all-optimizations-linkall" Description="Static registrar + all optimizations + Link all" />
 		<TestVariations Include="static-registrar-optimizations-except-uithread-checks-linkall" Description="Static registrar + all optimizations + Link all" />
 		<TestVariations Include="managed-static-registrar-all-optimizations-linkall" Description="Managed static registrar + all optimizations" />
+		<TestVariations Include="inline-dlfcn-methods-compat" Description="Enables 'InlineDlfcnMethods' in compatibility mode." />
+		<TestVariations Include="inline-dlfcn-methods-strict" Description="Enables 'InlineDlfcnMethods' in strict mode." />
 	</ItemGroup>
 
 	<PropertyGroup>
@@ -108,6 +110,17 @@
 		<Registrar>managed-static</Registrar>
 		<TrimMode>full</TrimMode>
 		<DefineConstants>$(DefineConstants);OPTIMIZEALL</DefineConstants>
+		<_TestVariationApplied>true</_TestVariationApplied>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$(_TestVariationForComparison.Contains('|inline-dlfcn-methods-compat|'))">
+		<InlineDlfcnMethods>compatibility</InlineDlfcnMethods>
+		<_TestVariationApplied>true</_TestVariationApplied>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$(_TestVariationForComparison.Contains('|inline-dlfcn-methods-strict|'))">
+		<InlineDlfcnMethods>strict</InlineDlfcnMethods>
+		<DefineConstants>$(DefineConstants);STATIC_NATIVE_SYMBOL_LOOKUP</DefineConstants>
 		<_TestVariationApplied>true</_TestVariationApplied>
 	</PropertyGroup>
 

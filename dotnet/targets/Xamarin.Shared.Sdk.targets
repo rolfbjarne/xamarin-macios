@@ -8,6 +8,9 @@
 	</PropertyGroup>
 
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.CompileNativeCode" AssemblyFile="$(_XamarinTaskAssembly)" />
+	<UsingTask TaskName="Xamarin.MacDev.Tasks.CollectPostILTrimInformation" AssemblyFile="$(_XamarinTaskAssembly)" />
+	<UsingTask TaskName="Xamarin.MacDev.Tasks.CollectUnresolvedNativeSymbols" AssemblyFile="$(_XamarinTaskAssembly)" />
+	<UsingTask TaskName="Xamarin.MacDev.Tasks.ComputeNativeAOTSurvivingNativeSymbols" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.FindAotCompiler" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.GetFullPaths" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.InstallNameTool" AssemblyFile="$(_XamarinTaskAssembly)" />
@@ -15,6 +18,13 @@
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.MergeAppBundles" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.MobileILStrip" AssemblyFile="$(_XamarinTaskAssembly)" />
 	<UsingTask TaskName="Xamarin.MacDev.Tasks.MacDevMessage" AssemblyFile="$(_XamarinTaskAssembly)" />
+	<UsingTask TaskName="Xamarin.MacDev.Tasks.PostTrimmingProcessing" AssemblyFile="$(_XamarinTaskAssembly)" />
+
+	<!-- Set default value for InlineDlfcnMethods based on .NET version and NativeAOT -->
+	<PropertyGroup Condition="'$(InlineDlfcnMethods)' == '' And $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '11.0'))">
+		<InlineDlfcnMethods Condition="'$(_UseNativeAot)' == 'true'">strict</InlineDlfcnMethods>
+		<InlineDlfcnMethods Condition="'$(InlineDlfcnMethods)' == ''">compatibility</InlineDlfcnMethods>
+	</PropertyGroup>
 
 	<!-- Project types and how do we distinguish between them
 
@@ -595,7 +605,9 @@
 				@(_BundlerEnvironmentVariables -> 'EnvironmentVariable=Overwrite=%(Overwrite)|%(Identity)=%(Value)')
 				@(_XamarinFrameworkAssemblies -> 'FrameworkAssembly=%(Filename)')
 				Interpreter=$(MtouchInterpreter)
+				InlineDlfcnMethods=$(InlineDlfcnMethods)
 				IntermediateLinkDir=$(IntermediateLinkDir)
+				IntermediateOutputPath=$(DeviceSpecificIntermediateOutputPath)
 				InvariantGlobalization=$(InvariantGlobalization)
 				HybridGlobalization=$(HybridGlobalization)
 				ItemsDirectory=$(_LinkerItemsDirectory)
@@ -748,6 +760,7 @@
 			<!-- MarkDispatcher substeps will run for all marked assemblies. -->
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true'" Type="Xamarin.Linker.Steps.MarkDispatcher" />
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true'" Type="Xamarin.Linker.Steps.PreserveSmartEnumConversionsHandler" />
+			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(InlineDlfcnMethods)' != ''" Type="Xamarin.Linker.Steps.InlineDlfcnMethodsStep" />
 
 			<!--
 				pre-sweep custom steps
@@ -778,6 +791,7 @@
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Type="Xamarin.GatherFrameworksStep" />
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Type="Xamarin.Linker.ComputeNativeBuildFlagsStep" />
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Type="Xamarin.Linker.ComputeAOTArguments" />
+			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Condition="'$(InlineDlfcnMethods)' != ''" Type="Xamarin.Linker.Steps.GenerateInlinedDlfcnNativeCodeStep" />
 			<!-- Must be the last step. -->
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" Type="Xamarin.Linker.DoneStep" />
 
@@ -1590,6 +1604,80 @@
 		</ItemGroup>
 	</Target>
 
+	<Target Name="_ComputeTrimmedAssemblies"
+		DependsOnTargets="_LoadLinkerOutput"
+		>
+		<ItemGroup>
+			<_TrimmedAssembly Include="$(IntermediateLinkDir)*.dll" />
+		</ItemGroup>
+	</Target>
+
+	<Target Name="_ComputePostTrimmingPaths">
+		<PropertyGroup>
+			<_ILTrimSurvivingNativeSymbolsFile>$(DeviceSpecificIntermediateOutputPath)inlined-dlfcn\iltrim-surviving-native-symbols.txt</_ILTrimSurvivingNativeSymbolsFile>
+			<_NativeAOTUnresolvedSymbolsFile>$(DeviceSpecificIntermediateOutputPath)nativeaot-unresolved-symbols.txt</_NativeAOTUnresolvedSymbolsFile>
+			<_NativeAOTSurvivingNativeSymbolsFile>$(DeviceSpecificIntermediateOutputPath)nativeaot-surviving-native-symbols.txt</_NativeAOTSurvivingNativeSymbolsFile>
+		</PropertyGroup>
+	</Target>
+
+	<!-- See docs/code/native-symbols.md for an overview of native symbol handling. -->
+	<Target Name="_CollectPostILTrimInformation"
+		Condition="'$(InlineDlfcnMethods)' != ''"
+		DependsOnTargets="_ComputeTrimmedAssemblies;_ComputePostTrimmingPaths"
+		Inputs="@(_TrimmedAssembly)"
+		Outputs="$(_ILTrimSurvivingNativeSymbolsFile)"
+		>
+		<CollectPostILTrimInformation
+			SessionId="$(BuildSessionId)"
+			TrimmedAssemblies="@(_TrimmedAssembly)"
+			SurvivingNativeSymbolsFile="$(_ILTrimSurvivingNativeSymbolsFile)"
+			CacheDirectory="$(DeviceSpecificIntermediateOutputPath)posttrim-info\cache"
+		/>
+	</Target>
+
+	<!-- See docs/code/native-symbols.md for an overview of native symbol handling. -->
+	<Target Name="_PostTrimmingProcessing"
+		DependsOnTargets="_CollectPostILTrimInformation;_CollectPostNativeAOTTrimInformation;_ComputeTargetArchitectures;_ComputePostTrimmingPaths"
+		>
+		<ItemGroup>
+			<_SurvivingNativeSymbolsFile Include="$(_ILTrimSurvivingNativeSymbolsFile)" Condition="Exists('$(_ILTrimSurvivingNativeSymbolsFile)')" />
+			<_SurvivingNativeSymbolsFile Include="$(_NativeAOTSurvivingNativeSymbolsFile)" Condition="Exists('$(_NativeAOTSurvivingNativeSymbolsFile)')" />
+		</ItemGroup>
+		<PostTrimmingProcessing
+			SurvivingNativeSymbolsFiles="@(_SurvivingNativeSymbolsFile)"
+			OutputDirectory="$(DeviceSpecificIntermediateOutputPath)inlined-dlfcn"
+			Architecture="$(TargetArchitectures)"
+		>
+			<Output TaskParameter="NativeSourceFiles" ItemName="_PostTrimmingSourceFiles" />
+		</PostTrimmingProcessing>
+
+		<ItemGroup>
+			<FileWrites Include="@(_PostTrimmingSourceFiles)" />
+			<_PostTrimmingSourceFiles>
+				<OutputFile>$(DeviceSpecificIntermediateOutputPath)posttrim-info-compiled/%(Filename).o</OutputFile>
+			</_PostTrimmingSourceFiles>
+		</ItemGroup>
+
+		<CompileNativeCode
+			SessionId="$(BuildSessionId)"
+			CompileInfo="@(_PostTrimmingSourceFiles)"
+			MinimumOSVersion="$(_MinimumOSVersion)"
+			IncludeDirectories="@(_XamarinMainIncludeDirectory)"
+			SdkDevPath="$(_SdkDevPath)"
+			SdkIsSimulator="$(_SdkIsSimulator)"
+			SdkRoot="$(_SdkRoot)"
+			TargetFrameworkMoniker="$(_ComputedTargetFrameworkMoniker)"
+			DotNetRoot="$(_DotNetRoot)"
+		>
+		</CompileNativeCode>
+
+		<ItemGroup>
+			<_CompiledPostTrimmingFiles Include="@(_PostTrimmingSourceFiles -> '%(OutputFile)')" />
+			<_NativeExecutableObjectFiles Include="@(_CompiledPostTrimmingFiles)" />
+			<FileWrites Include="@(_CompiledPostTrimmingFiles)" />
+		</ItemGroup>
+	</Target>
+
 	<PropertyGroup>
 		<_CompileNativeExecutableDependsOn>
 			$(_CompileNativeExecutableDependsOn);
@@ -1646,12 +1734,33 @@
 			_ReadAppManifest;
 			_WriteAppManifest;
 			_CompileNativeExecutable;
+			_PostTrimmingProcessing;
 			_ReidentifyDynamicLibraries;
 			_AddSwiftLinkerFlags;
 			_ComputeLinkNativeExecutableInputs;
 			_ForceLinkNativeExecutable;
 		</_LinkNativeExecutableDependsOn>
 	</PropertyGroup>
+
+	<!-- See docs/code/native-symbols.md for an overview of native symbol handling. -->
+	<Target Name="_CollectPostNativeAOTTrimInformation"
+		Condition="'$(_UseNativeAot)' == 'true'"
+		DependsOnTargets="_ComputePostTrimmingPaths;_CompileNativeExecutable"
+		Inputs="$(NativeObject)"
+		Outputs="$(_NativeAOTSurvivingNativeSymbolsFile)"
+		>
+		<CollectUnresolvedNativeSymbols
+			SessionId="$(BuildSessionId)"
+			StaticLibrary="$(NativeObject)"
+			OutputFile="$(_NativeAOTUnresolvedSymbolsFile)"
+		/>
+		<ComputeNativeAOTSurvivingNativeSymbols
+			SessionId="$(BuildSessionId)"
+			UnresolvedSymbolsFile="$(_NativeAOTUnresolvedSymbolsFile)"
+			InlinedDlfcnSymbolsFile="$(DeviceSpecificIntermediateOutputPath)inlined-dlfcn\inlined-dlfcn-symbols.txt"
+			SurvivingNativeSymbolsFile="$(_NativeAOTSurvivingNativeSymbolsFile)"
+		/>
+	</Target>
 
 	<Target Name="_AddSwiftLinkerFlags" DependsOnTargets="_DetectSdkLocations">
 		<PropertyGroup>

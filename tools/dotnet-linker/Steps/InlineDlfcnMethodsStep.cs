@@ -626,7 +626,7 @@ public class InlineDlfcnMethodsStep : ConfigurationAwareMarkHandler {
 				while (ins.Previous.OpCode == OpCodes.Call && ins.Previous.Operand is MethodReference prevMr && !prevMr.ReturnType.Is ("System", "Void") && prevMr.HasParameters && prevMr.Parameters.Count == 1) {
 					ins = ins.Previous;
 				}
-				
+
 				switch (ins.Previous.OpCode.StackBehaviourPop) {
 				case StackBehaviour.Pop0:
 					switch (ins.Previous.OpCode.StackBehaviourPush) {
@@ -809,9 +809,9 @@ public class InlineDlfcnMethodsStep : ConfigurationAwareMarkHandler {
 		// 	IL_0014: ldstr "FIELDNAME"
 		// 	IL_0019: ldloc.0
 		// 	IL_001a: call System.IntPtr ObjCRuntime.Dlfcn::CachePointer(System.IntPtr,System.String,System.IntPtr*)
-        //    IL_0020: stloc.2
-        //    IL_0021: br.s IL_0023
-        //    IL_0023: ldloc.2
+		//    IL_0020: stloc.2
+		//    IL_0021: br.s IL_0023
+		//    IL_0023: ldloc.2
 		// 	IL_001f: ret
 		//
 		// (the indented code can happen for debug builds)
@@ -829,7 +829,7 @@ public class InlineDlfcnMethodsStep : ConfigurationAwareMarkHandler {
 		var instr = body.Instructions.First ();
 		var isLast = false;
 
-		bool AssertOpCode ([NotNullWhen (false)] out string? failureMessage, params OpCode[] expected)
+		bool AssertOpCode ([NotNullWhen (false)] out string? failureMessage, params OpCode [] expected)
 		{
 			failureMessage = null;
 

@@ -30,7 +30,7 @@ namespace Xamarin.Linker {
 		public string IntermediateLinkDir { get; private set; } = string.Empty;
 		public bool InvariantGlobalization { get; private set; }
 		public bool HybridGlobalization { get; private set; }
-		public string InlineDlfcnMethods { get; private set; } = "";
+		public string InlineDlfcnMethods { get; set; } = ""; // Copilot: change this to an enum, with "strict", "compat", and "disabled" modes.
 		public bool InlineDlfcnMethodsEnabled => !string.IsNullOrEmpty (InlineDlfcnMethods);
 		// Per-assembly field symbols collected by InlineDlfcnMethodsStep, keyed by assembly name.
 		public Dictionary<string, HashSet<string>> InlinedDlfcnFields { get; } = new Dictionary<string, HashSet<string>> ();

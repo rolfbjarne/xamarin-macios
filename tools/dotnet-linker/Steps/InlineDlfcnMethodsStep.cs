@@ -770,8 +770,9 @@ public class InlineDlfcnMethodsStep : ConfigurationAwareMarkHandler {
 			}
 
 			switch (mr.Name) {
-			case "_dlopen":
-			case "dlopen":
+			case "_dlopen": // nothing to inline here
+			case "dlopen": // nothing to inline here
+			case "dlerror": // nothing to inline here
 				continue;
 			case "dlclose":
 				// It might be possible to just remove these calls, because

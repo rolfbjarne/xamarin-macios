@@ -30,8 +30,8 @@ namespace Xamarin.Linker {
 		public string IntermediateLinkDir { get; private set; } = string.Empty;
 		public bool InvariantGlobalization { get; private set; }
 		public bool HybridGlobalization { get; private set; }
-		public string InlineDlfcnMethods { get; set; } = ""; // Copilot: change this to an enum, with "strict", "compat", and "disabled" modes.
-		public bool InlineDlfcnMethodsEnabled => !string.IsNullOrEmpty (InlineDlfcnMethods);
+		public InlineDlfcnMethodsMode InlineDlfcnMethods { get; set; }
+		public bool InlineDlfcnMethodsEnabled => InlineDlfcnMethods != InlineDlfcnMethodsMode.Disabled;
 		// Per-assembly field symbols collected by InlineDlfcnMethodsStep, keyed by assembly name.
 		public Dictionary<string, HashSet<string>> InlinedDlfcnFields { get; } = new Dictionary<string, HashSet<string>> ();
 		// All [Field] symbol names collected by ProcessExportedFields, used in compatibility mode.
@@ -200,7 +200,14 @@ namespace Xamarin.Linker {
 					FrameworkAssemblies.Add (value);
 					break;
 				case "InlineDlfcnMethods":
-					InlineDlfcnMethods = value ?? "";
+					if (Enum.TryParse<InlineDlfcnMethodsMode> (value, true, out var inlineDlfcnMode))
+						InlineDlfcnMethods = inlineDlfcnMode;
+					else if (string.Equals (value, "compatibility", StringComparison.OrdinalIgnoreCase))
+						InlineDlfcnMethods = InlineDlfcnMethodsMode.Compat;
+					else if (string.IsNullOrEmpty (value))
+						InlineDlfcnMethods = InlineDlfcnMethodsMode.Disabled;
+					else
+						throw new InvalidOperationException ($"Unknown InlineDlfcnMethods value: {value}");
 					break;
 				case "IntermediateLinkDir":
 					IntermediateLinkDir = value;
@@ -633,4 +640,10 @@ public class MSBuildItem {
 		Include = include;
 		Metadata = metadata;
 	}
+}
+
+public enum InlineDlfcnMethodsMode {
+	Disabled,
+	Strict,
+	Compat,
 }

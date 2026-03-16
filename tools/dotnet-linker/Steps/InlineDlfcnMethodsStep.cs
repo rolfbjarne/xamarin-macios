@@ -31,7 +31,7 @@ public class InlineDlfcnMethodsStep : ConfigurationAwareMarkHandler {
 	public override void Initialize (LinkContext context, MarkContext markContext)
 	{
 		base.Initialize (context);
-		strictMode = string.Equals (Configuration.InlineDlfcnMethods, "strict", StringComparison.OrdinalIgnoreCase);
+		strictMode = Configuration.InlineDlfcnMethods == InlineDlfcnMethodsMode.Strict;
 		markContext.RegisterMarkMethodAction (Process);
 	}
 

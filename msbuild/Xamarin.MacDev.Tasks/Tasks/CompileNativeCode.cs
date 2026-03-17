@@ -136,7 +136,9 @@ namespace Xamarin.MacDev.Tasks {
 				arguments.Add ("-o");
 				arguments.Add (outputFile);
 
-				Directory.CreateDirectory (Path.GetDirectoryName (outputFile)!);
+				var outputDirectory = Path.GetDirectoryName (outputFile);
+				if (!string.IsNullOrEmpty (outputDirectory))
+					Directory.CreateDirectory (outputDirectory);
 
 				arguments.Add ("-c");
 				arguments.Add (src);

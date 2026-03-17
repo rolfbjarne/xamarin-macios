@@ -1660,6 +1660,7 @@
 
 		<CompileNativeCode
 			SessionId="$(BuildSessionId)"
+			Condition="'$(IsMacEnabled)' == 'true'"
 			CompileInfo="@(_PostTrimmingSourceFiles)"
 			MinimumOSVersion="$(_MinimumOSVersion)"
 			IncludeDirectories="@(_XamarinMainIncludeDirectory)"

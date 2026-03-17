@@ -41,6 +41,9 @@ namespace Xamarin.Tuner {
 		//   true/false = corresponding constant value
 		Dictionary<TypeDefinition, bool?>? isdirectbinding_value;
 
+		// A map from Objective-C class name to C# type
+		Dictionary<string, (TypeDefinition type, string Framework, string Version)>? objectiveCTypeInfo;
+
 		// Store interfaces the linker has linked away so that the static registrar can access them.
 		public Dictionary<TypeDefinition, List<TypeDefinition>> ProtocolImplementations { get; private set; } = new Dictionary<TypeDefinition, List<TypeDefinition>> ();
 		// Store types the linker has linked away so that the static registrar can access them.
@@ -73,6 +76,7 @@ namespace Xamarin.Tuner {
 				return corlib;
 			}
 		}
+
 		public HashSet<TypeDefinition>? CachedIsNSObject {
 			get { return cached_isnsobject; }
 			set { cached_isnsobject = value; }
@@ -81,6 +85,11 @@ namespace Xamarin.Tuner {
 		public Dictionary<TypeDefinition, bool?>? IsDirectBindingValue {
 			get { return isdirectbinding_value; }
 			set { isdirectbinding_value = value; }
+		}
+
+		public Dictionary<string, (TypeDefinition type, string Framework, string Version)>? ObjectiveCTypeInfo {
+			get { return objectiveCTypeInfo; }
+			set { objectiveCTypeInfo = value; }
 		}
 
 		public IList<ICustomAttributeProvider> DataContract {
@@ -236,13 +245,17 @@ namespace Xamarin.Tuner {
 			return null;
 		}
 
-		public bool HasAvailabilityAttributesShowingUnavailableInSimulator (ICustomAttributeProvider type, MethodDefinition? methodForErrorReporting = null)
+#if !LEGACY_TOOLS
+		public bool HasAvailabilityAttributesShowingUnavailableInSimulator (ICustomAttributeProvider? type, MethodDefinition? methodForErrorReporting = null)
 		{
+			if (type is null)
+				return false;
+
 			if (!App.IsSimulatorBuild)
 				throw ErrorHelper.CreateError (99, "HasAvailabilityAttributesShowingUnavailableInSimulator should not be called when not building for the simulator. Please file an issue at https://github.com/dotnet/macios/issues.");
 
 			if (!type.HasCustomAttributes)
-				return true; // no attributes so say otherwise, so available
+				return false; // no attributes so say otherwise, so available
 
 			foreach (var attrib in type.CustomAttributes) {
 				if (attrib.AttributeType.Is ("ObjCRuntime", "UnsupportedSimulatorAttribute")) {
@@ -305,6 +318,7 @@ namespace Xamarin.Tuner {
 
 			return false;
 		}
+#endif
 
 #if !LEGACY_TOOLS
 		class AttributeStorage : ICustomAttribute {

@@ -150,12 +150,6 @@ namespace Xamarin.Bundler {
 								continue;
 							}
 							break;
-						case "AssetsLibrary":
-							if (Driver.XcodeVersion.Major >= 16 || (Driver.XcodeVersion.Major == 15 && Driver.XcodeVersion.Minor >= 3)) {
-								Driver.Log (3, "Not linking with the framework {0} because it's not available when using Xcode 15.3+.", framework.Name);
-								continue;
-							}
-							break;
 						default:
 							if (App.IsSimulatorBuild && !App.IsFrameworkAvailableInSimulator (framework.Name)) {
 								if (App.AreAnyAssembliesTrimmed) {
@@ -169,8 +163,15 @@ namespace Xamarin.Bundler {
 						}
 
 						if (framework.Unavailable) {
-							ErrorHelper.Warning (181, Errors.MX0181 /* Not linking with the framework {0} (used by the type {1}) because it's not available on the current platform ({2}). */, framework.Name, td.FullName, App.PlatformName);
-							continue;
+							if (framework.VersionUnavailable is null) {
+								ErrorHelper.Warning (181, Errors.MX0181 /* Not linking with the framework {0} (used by the type {1}) because it's not available on the current platform ({2}). */, framework.Name, td.FullName, App.PlatformName);
+								continue;
+							}
+
+							if (framework.VersionUnavailable >= App.DeploymentTarget) {
+								ErrorHelper.Warning (181, Errors.MX0181 /* Not linking with the framework {0} (used by the type {1}) because it's not available on the current platform ({2}). */, framework.Name, td.FullName, App.PlatformName);
+								continue;
+							}
 						}
 
 						if (App.SdkVersion >= framework.Version) {

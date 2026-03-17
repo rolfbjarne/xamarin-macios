@@ -484,13 +484,16 @@ public class InlineDlfcnMethodsStep : ConfigurationAwareMarkHandler {
 			// Handle Dlfcn functions of the form (libraryHandle, symbolName)
 			if (mr.Parameters.Count == 2 && mr.Parameters [0].ParameterType.FullName == "System.IntPtr" && mr.Parameters [1].ParameterType.FullName == "System.String") {
 				if (instr.Previous.OpCode != OpCodes.Ldstr) {
-					Driver.Log ("Unknown Dlfcn code sequence for: {0} called in {1}", FormatMethod (mr), FormatMethod (method));
+					Report (ErrorHelper.CreateWarning (Configuration.Application, 2255 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
 					continue;
 				}
 
 				// In compatibility mode, only inline symbols from [Field] attributes.
 				var ldstr = instr.Previous;
-				var symbolName = (string) ldstr.Operand!;
+				if (ldstr.Operand is not string symbolName) {
+					Report (ErrorHelper.CreateWarning (Configuration.Application, 2255 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
+					continue;
+				}
 				if (!strictMode && !Configuration.FieldSymbols.Contains (symbolName))
 					continue;
 
@@ -525,12 +528,12 @@ public class InlineDlfcnMethodsStep : ConfigurationAwareMarkHandler {
 					continue;
 				case "GetStruct":
 					if (mr is not GenericInstanceMethod gim || gim.GenericArguments.Count != 1) {
-						Report (ErrorHelper.CreateWarning (Configuration.Application, 9003 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
+						Report (ErrorHelper.CreateWarning (Configuration.Application, 2255 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
 						continue;
 					}
 					var returnType = gim.GenericArguments [0];
 					if (returnType.IsGenericInstance) {
-						Report (ErrorHelper.CreateWarning (Configuration.Application, 9004 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
+						Report (ErrorHelper.CreateWarning (Configuration.Application, 2255 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
 						continue;
 					}
 
@@ -558,11 +561,14 @@ public class InlineDlfcnMethodsStep : ConfigurationAwareMarkHandler {
 			// Handle Dlfcn functions of the form (RTLD, symbolName)
 			if (mr.Parameters.Count == 2 && mr.Parameters [0].ParameterType.FullName == "ObjCRuntime.Dlfcn/RTLD" && mr.Parameters [1].ParameterType.FullName == "System.String") {
 				if (instr.Previous.OpCode != OpCodes.Ldstr) {
-					Report (ErrorHelper.CreateWarning (Configuration.Application, 9005 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
+					Report (ErrorHelper.CreateWarning (Configuration.Application, 2255 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
 					continue;
 				}
 				var ldstr = instr.Previous;
-				var symbolName = (string) ldstr.Operand!;
+				if (ldstr.Operand is not string symbolName) {
+					Report (ErrorHelper.CreateWarning (Configuration.Application, 2255 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
+					continue;
+				}
 
 				// In compatibility mode, only inline symbols from [Field] attributes.
 				if (!strictMode && !Configuration.FieldSymbols.Contains (symbolName))
@@ -585,11 +591,14 @@ public class InlineDlfcnMethodsStep : ConfigurationAwareMarkHandler {
 			// Handle Dlfcn functions of the form (libraryName, symbolName)
 			if (mr.Parameters.Count == 2 && mr.Parameters [0].ParameterType.FullName == "System.String" && mr.Parameters [1].ParameterType.FullName == "System.String") {
 				if (instr.Previous.OpCode != OpCodes.Ldstr) {
-					Report (ErrorHelper.CreateWarning (Configuration.Application, 9006 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
+					Report (ErrorHelper.CreateWarning (Configuration.Application, 2255 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
 					continue;
 				}
 				var ldstr = instr.Previous;
-				var symbolName = (string) ldstr.Operand!;
+				if (ldstr.Operand is not string symbolName) {
+					Report (ErrorHelper.CreateWarning (Configuration.Application, 2255 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
+					continue;
+				}
 
 				// In compatibility mode, only inline symbols from [Field] attributes.
 				if (!strictMode && !Configuration.FieldSymbols.Contains (symbolName))
@@ -664,7 +673,10 @@ public class InlineDlfcnMethodsStep : ConfigurationAwareMarkHandler {
 					Report (ErrorHelper.CreateWarning (Configuration.Application, 2255, method, "Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. Expected 'ldstr' opcode, got '{2}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new.", FormatMethod (mr), FormatMethod (method), ldstr));
 					continue;
 				}
-				var symbolName = (string) ldstr.Operand!;
+				if (ldstr.Operand is not string symbolName) {
+					Report (ErrorHelper.CreateWarning (Configuration.Application, 2255 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
+					continue;
+				}
 
 				switch (mr.Name) {
 				// primitive types
@@ -714,11 +726,11 @@ public class InlineDlfcnMethodsStep : ConfigurationAwareMarkHandler {
 						continue;
 					}
 
-					Report (ErrorHelper.CreateWarning (Configuration.Application, 9002 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
+					Report (ErrorHelper.CreateWarning (Configuration.Application, 2255 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
 					continue;
 				case "CachePointer":
 					if (!(mr.Parameters [2].ParameterType is PointerType pt && pt.ElementType.FullName == "System.IntPtr")) {
-						Report (ErrorHelper.CreateWarning (Configuration.Application, 9001 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
+						Report (ErrorHelper.CreateWarning (Configuration.Application, 2255 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
 						continue;
 					}
 
@@ -779,7 +791,7 @@ public class InlineDlfcnMethodsStep : ConfigurationAwareMarkHandler {
 				// (PENDING CONFIRMATION) I believe dlclose is a no-op on at least some Apple platforms.
 				continue;
 			default:
-				Report (ErrorHelper.CreateWarning (Configuration.Application, 9000 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
+				Report (ErrorHelper.CreateWarning (Configuration.Application, 2255 /* Unknown or unsupported Dlfcn pattern: '{0}' in method '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (mr), FormatMethod (method)));
 				continue;
 			}
 		}

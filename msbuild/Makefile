@@ -95,7 +95,7 @@ $(DOTNET_DESTDIR)/$($(2)_NUGET_SDK_NAME)/tools/msbuild/$(TARGETFRAMEWORK)/%: Xam
 
 .copy-stamp-$(1): $$(wildcard Xamarin.MacDev.Tasks/bin/$(CONFIG)/$(NETTARGETFRAMEWORK)/*) $$(wildcard Xamarin.MacDev.Tasks/bin/$(CONFIG)/$(NETTARGETFRAMEWORK)/*/*) .build-stamp | $(DOTNET_DESTDIR)/$($(2)_NUGET_SDK_NAME)/tools/msbuild
 	$$(Q) rm -rf $(DOTNET_DESTDIR)/$($(2)_NUGET_SDK_NAME)/tools/msbuild/$(NETTARGETFRAMEWORK)/
-	$$(Q) cp -cr Xamarin.MacDev.Tasks/bin/$(CONFIG)/$(NETTARGETFRAMEWORK) $(DOTNET_DESTDIR)/$($(2)_NUGET_SDK_NAME)/tools/msbuild/$(NETTARGETFRAMEWORK)
+	$$(Q) $(CP) -r Xamarin.MacDev.Tasks/bin/$(CONFIG)/$(NETTARGETFRAMEWORK) $(DOTNET_DESTDIR)/$($(2)_NUGET_SDK_NAME)/tools/msbuild/$(NETTARGETFRAMEWORK)
 	$$(Q) touch $$@
 endef
 

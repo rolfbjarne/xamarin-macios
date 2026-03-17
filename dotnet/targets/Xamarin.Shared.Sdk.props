@@ -107,6 +107,11 @@
 		<InlineDlfcnMethods Condition="'$(InlineDlfcnMethods)' == ''">compatibility</InlineDlfcnMethods>
 	</PropertyGroup>
 
+	<!-- Set default value for InlineClassGetHandle based on .NET version -->
+	<PropertyGroup Condition="'$(InlineClassGetHandle)' == '' And $([MSBuild]::VersionGreaterThanOrEquals($(TargetFrameworkVersion), '11.0'))">
+		<InlineClassGetHandle>true</InlineClassGetHandle>
+	</PropertyGroup>
+
 	<!-- Set the default RuntimeIdentifier if not already specified. -->
 	<PropertyGroup Condition="'$(_RuntimeIdentifierIsRequired)' == 'true' And '$(RuntimeIdentifier)' == '' And '$(RuntimeIdentifiers)' == '' ">
 		<!-- The _<platform>RuntimeIdentifier values are set from the IDE -->

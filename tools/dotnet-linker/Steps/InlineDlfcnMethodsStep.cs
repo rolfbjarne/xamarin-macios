@@ -58,19 +58,15 @@ public class InlineDlfcnMethodsStep : AssemblyModifierStep {
 	// we correctly compute which frameworks to link with.
 	TypeDefinition GetDlfcnType (ModuleDefinition module, string @namespace)
 	{
-		var ns = string.IsNullOrEmpty (current_framework) ? @namespace : current_framework;
-		var dlfcn = module.Types.FirstOrDefault (t => t.Namespace == ns && t.Name == "Dlfcn");
-		if (dlfcn is null) {
-			dlfcn = new TypeDefinition (ns, "Dlfcn", TypeAttributes.NotPublic | TypeAttributes.Sealed, module.TypeSystem.Object);
-			module.Types.Add (dlfcn);
-
+		var rv = abr.GetOrCreateType (module, ns, "Dlfcn", out var created);
+		if (created) {
 			if (!string.IsNullOrEmpty (current_framework)) {
 				var attrib = new CustomAttribute (abr.ObjectiveCFrameworkAttribute_ctor_String);
 				attrib.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, current_framework));
-				dlfcn.CustomAttributes.Add (attrib);
+				rv.CustomAttributes.Add (attrib);
 			}
 		}
-		return dlfcn;
+		return rv;
 	}
 
 	void AddField (string assemblyName, string symbolName)
@@ -84,31 +80,13 @@ public class InlineDlfcnMethodsStep : AssemblyModifierStep {
 
 	MethodDefinition GetOrCreatePInvokeMethod (MethodDefinition callingMethod, string symbolName)
 	{
-		var dlfcn = GetDlfcnType (callingMethod.Module, callingMethod.DeclaringType.Namespace);
-		var methodName = $"xamarin_Dlfcn_{symbolName}_Native";
-		var nativeMethod = methodName;
-		var rv = dlfcn.Methods.FirstOrDefault (m => m.Name == methodName);
-		if (rv is not null)
-			return rv; // already exists, no need to create it again
-
 		// [DllImport ("__Internal")]
 		// static extern IntPtr xamarin_Dlfcn_{symbolName}_Native ();
 
-		rv = new MethodDefinition (methodName, MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.PInvokeImpl, abr.System_IntPtr);
-		rv.IsPreserveSig = true;
-
-		var mod = callingMethod.Module.ModuleReferences.FirstOrDefault (mr => mr.Name == "__Internal");
-		if (mod is null) {
-			mod = new ModuleReference ("__Internal");
-			callingMethod.Module.ModuleReferences.Add (mod);
-		}
-		rv.PInvokeInfo = new PInvokeInfo (PInvokeAttributes.CharSetNotSpec | PInvokeAttributes.CallConvCdecl, nativeMethod, mod);
-
-		dlfcn.Methods.Add (rv);
-		Context.Annotations.Mark (rv);
-
-		AddField (callingMethod.Module.Assembly.Name.Name, symbolName);
-
+		var methodName = $"xamarin_Dlfcn_{symbolName}_Native";
+		var rv = abr.CreateInternalPInvoke (callingMethod.Module, callingMethod.DeclaringType.Namespace, "Dlfcn", methodName, out var created);
+		if (created)
+			AddField (callingMethod.Module.Assembly.Name.Name, symbolName);
 		return rv;
 	}
 

@@ -1687,7 +1687,7 @@ namespace Registrar {
 			return false;
 		}
 
-		protected override Version? GetSdkIntroducedVersion (TypeReference obj, out string? message)
+		public override Version? GetSdkIntroducedVersion (TypeReference obj, out string? message)
 		{
 			TypeDefinition td = obj.Resolve ();
 

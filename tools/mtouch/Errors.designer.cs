@@ -3597,6 +3597,51 @@ namespace Xamarin.Bundler {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &apos;InlineClassGetHandle&apos; option is set to &apos;Strict&apos;, but we&apos;re using the dynamic registrar. ...
+        /// </summary>
+        public static string MX2262 {
+            get {
+                return ResourceManager.GetString("MX2262", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown or unsupported pattern in call to Class.GetHandle in &apos;{0}&apos;: {1}. ...
+        /// </summary>
+        public static string MX2263 {
+            get {
+                return ResourceManager.GetString("MX2263", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The call to Class.GetHandle in &apos;{0}&apos; is trying to get the handle for the Objective-C class &apos;{1}&apos;, but the declaring type&apos;s exported name is &apos;{2}&apos;, not &apos;{1}&apos;. ...
+        /// </summary>
+        public static string MX2264 {
+            get {
+                return ResourceManager.GetString("MX2264", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The call to Class.GetHandle in &apos;{0}&apos; is trying to get the handle for the Objective-C class &apos;{1}&apos;, but we couldn&apos;t determine whether this class should be statically preserved or not. ...
+        /// </summary>
+        public static string MX2265 {
+            get {
+                return ResourceManager.GetString("MX2265", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not find a managed type for the Objective-C type &apos;{1}&apos; in the call to Class.GetHandle in &apos;{0}&apos;, assuming the Objective-C type is available in the simulator..
+        /// </summary>
+        public static string MX2266 {
+            get {
+                return ResourceManager.GetString("MX2266", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not {0} the assembly &apos;{1}&apos;.
         /// </summary>
         public static string MX3001 {

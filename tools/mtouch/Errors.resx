@@ -1131,6 +1131,26 @@
 		<value>'{0}' has multiple SupportedSimulator attributes for the '{1}' platform. Please file an issue at https://github.com/dotnet/macios/issues/new</value>
 	</data>
 
+	<data name="MX2262" xml:space="preserve">
+		<value>The 'InlineClassGetHandle' option is set to 'Strict', but we're using the dynamic registrar. This is not a supported configuration, because 'Strict' mode requires exported Objective-C classes to be available at compile time, but the dynamic registrar will create them at runtime. Please either change the 'InlineClassGetHandle' option to 'Disabled' or 'Compat', or switch to using the static registrar.</value>
+	</data>
+
+	<data name="MX2263" xml:space="preserve">
+		<value>Unknown or unsupported pattern in call to Class.GetHandle in '{0}': {1}. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new</value>
+	</data>
+
+	<data name="MX2264" xml:space="preserve">
+		<value>The call to Class.GetHandle in '{0}' is trying to get the handle for the Objective-C class '{1}', but the declaring type's exported name is '{2}', not '{1}'. Since we're in compat mode, we're assuming the class should not be preserved.</value>
+	</data>
+
+	<data name="MX2265" xml:space="preserve">
+		<value>The call to Class.GetHandle in '{0}' is trying to get the handle for the Objective-C class '{1}', but we couldn't determine whether this class should be statically preserved or not. Since we're in compat mode, we're assuming the class should not be preserved.</value>
+	</data>
+
+	<data name="MX2266" xml:space="preserve">
+		<value>Could not find a managed type for the Objective-C type '{1}' in the call to Class.GetHandle in '{0}', assuming the Objective-C type is available in the simulator.</value>
+	</data>
+
 	<!-- 2300 -> 2399 is used by/reserved for ConfigurationAwareStep subclasses in the linker -->
 
 	<data name="MX_ConfigurationAwareStep" xml:space="preserve">

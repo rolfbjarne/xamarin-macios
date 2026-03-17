@@ -10,12 +10,14 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-
+using System.Linq;
+using System.Text;
 using Mono.Cecil;
 using Mono.Linker.Steps;
 using Mono.Tuner;
-
+using Xamarin.Bundler;
 using Xamarin.Linker;
+using Xamarin.Linker.Steps;
 using Xamarin.Tuner;
 
 #nullable enable
@@ -26,6 +28,8 @@ namespace MonoTouch.Tuner {
 	public class CoreTypeMapStep : ConfigurationAwareStep {
 		protected override string Name { get; } = "CoreTypeMap";
 		protected override int ErrorCode { get; } = 2390;
+
+		List<(string ObjectiveCClassName, string Framework, string Version)> objectiveCTypeInfo = new ();
 
 		Profile Profile => new Profile (Configuration);
 
@@ -136,6 +140,14 @@ namespace MonoTouch.Tuner {
 		{
 			LinkContext.CachedIsNSObject = cached_isnsobject;
 			LinkContext.IsDirectBindingValue = isdirectbinding_value;
+
+			if (!string.IsNullOrEmpty (Configuration.TypeMapFilePath)) {
+				var sb = new StringBuilder ();
+				foreach (var info in objectiveCTypeInfo.OrderBy (v => v.ObjectiveCClassName)) {
+					sb.AppendLine ($"Class={info.ObjectiveCClassName}|Framework={info.Framework}|Introduced={info.Version}");
+				}
+				Driver.WriteIfDifferent (Configuration.TypeMapFilePath, sb.ToString ());
+			}
 		}
 
 		protected void MapType (TypeDefinition type)
@@ -144,6 +156,12 @@ namespace MonoTouch.Tuner {
 			// bonus: we cache, for every type, whether or not it inherits from NSObject (very useful later)
 			if (!IsNSObject (type))
 				return;
+
+			if (DerivedLinkContext.StaticRegistrar.TryGetExportedTypeName (type, out var exportedName)) {
+				var introduced = DerivedLinkContext.StaticRegistrar.GetSdkIntroducedVersion (type, out _);
+				if (Frameworks.TryGetFramework (App, type, out string? framework))
+					objectiveCTypeInfo.Add ((exportedName, framework, introduced?.ToString () ?? ""));
+			}
 
 			// if not, it's a user type, the IsDirectBinding check is required by all ancestors
 			SetIsDirectBindingValue (type);

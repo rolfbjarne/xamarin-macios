@@ -707,9 +707,12 @@ public class Frameworks : Dictionary<string, Framework> {
 	}
 
 #if BUNDLER
-	public static bool TryGetFramework (Application app, TypeDefinition td, [NotNullWhen (true)] out string? framework)
+	public static bool TryGetFramework (Application app, TypeDefinition? td, [NotNullWhen (true)] out string? framework)
 	{
 		framework = null;
+
+		if (td is null)
+			return false;
 
 		if (td.HasCustomAttributes) {
 			foreach (var attrib in td.CustomAttributes) {

@@ -1679,7 +1679,7 @@ namespace Registrar {
 			return false;
 		}
 
-		protected override Version? GetSdkIntroducedVersion (TypeReference obj, out string? message)
+		public override Version? GetSdkIntroducedVersion (TypeReference obj, out string? message)
 		{
 			TypeDefinition td = obj.Resolve ();
 
@@ -2025,7 +2025,7 @@ namespace Registrar {
 			return false;
 		}
 
-		bool IsPlatformType (TypeReference type)
+		public bool IsPlatformType (TypeReference type)
 		{
 			if (type.IsNested)
 				return false;

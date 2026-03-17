@@ -3597,6 +3597,24 @@ namespace Xamarin.Bundler {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The &apos;InlineClassGetHandle&apos; option is set to &apos;Strict&apos;, but we&apos;re using the dynamic registrar. This is not a supported configuration, because &apos;Strict&apos; mode requires exported Objective-C classes to be available at compile time, but the dynamic registrar will create them at runtime. Please either change the &apos;InlineClassGetHandle&apos; option to &apos;Disabled&apos; or &apos;Compat&apos;, or switch to using the static registrar..
+        /// </summary>
+        public static string MX2262 {
+            get {
+                return ResourceManager.GetString("MX2262", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown or unsupported pattern in call to Class.GetHandle in &apos;{0}&apos;: {1}. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new.
+        /// </summary>
+        public static string MX2263 {
+            get {
+                return ResourceManager.GetString("MX2263", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not {0} the assembly &apos;{1}&apos;.
         /// </summary>
         public static string MX3001 {

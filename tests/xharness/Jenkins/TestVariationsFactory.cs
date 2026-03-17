@@ -71,11 +71,6 @@ namespace Xharness.Jenkins {
 				break;
 			}
 
-			switch (test.TestName) {
-			case "monotouch-test":
-				break;
-			}
-
 			switch (test.ProjectPlatform) {
 			case "iPhone":
 				if (test.ProjectConfiguration.Contains ("Debug"))

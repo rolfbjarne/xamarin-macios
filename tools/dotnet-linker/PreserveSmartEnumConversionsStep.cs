@@ -13,8 +13,9 @@ using Xamarin.Tuner;
 #nullable enable
 
 namespace Xamarin.Linker.Steps {
-	public class PreserveSmartEnumConversionsStep : BaseStep {
-		AppBundleRewriter abr => Configuration.AppBundleRewriter;
+	public class PreserveSmartEnumConversionsStep : AssemblyModifierStep {
+		protected override string Name { get; } = "Smart Enum Conversion Preserver";
+		protected override int ErrorCode { get; } = 2200;
 
 		PreserveSmartEnumConversion? preserver;
 		PreserveSmartEnumConversion Preserver {
@@ -25,33 +26,7 @@ namespace Xamarin.Linker.Steps {
 			}
 		}
 	
-		public LinkerConfiguration Configuration {
-			get {
-				return LinkerConfiguration.GetInstance (Context);
-			}
-		}
-
-		public DerivedLinkContext DerivedLinkContext {
-			get {
-				return Configuration.DerivedLinkContext;
-			}
-		}
-
-		protected override void ProcessAssembly(AssemblyDefinition assembly)
-		{
-			if (!IsActiveFor (assembly))
-				return;
-
-			abr.SetCurrentAssembly (assembly);
-			var modified = false;
-			foreach (var type in assembly.MainModule.Types)
-				modified |= ProcessType (type);
-			if (modified)
-				abr.SaveCurrentAssembly ();
-			abr.ClearCurrentAssembly ();
-		}	
-
-		bool IsActiveFor (AssemblyDefinition assembly)
+		protected override bool IsActiveFor (AssemblyDefinition assembly)
 		{
 			// We only care about assemblies that are being linked.
 			if (Annotations.GetAction (assembly) != AssemblyAction.Link)
@@ -85,7 +60,7 @@ namespace Xamarin.Linker.Steps {
 			return modified;
 		}
 
-		bool ProcessType (TypeDefinition type)
+		protected override bool ProcessType (TypeDefinition type)
 		{
 			var modified = false;
 

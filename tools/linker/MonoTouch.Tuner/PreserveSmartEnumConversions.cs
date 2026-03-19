@@ -26,7 +26,7 @@ namespace Xamarin.Linker.Steps {
 			markContext.RegisterMarkMethodAction (ProcessMethod);
 		}
 
-		bool Mark (Tuple<MethodDefinition, MethodDefinition> pair, bool alreadyProcessed, params MethodDefinition?[] conditions)
+		bool Mark (Tuple<MethodDefinition, MethodDefinition> pair, bool alreadyProcessed, params MethodDefinition? [] conditions)
 		{
 			if (alreadyProcessed)
 				return false;

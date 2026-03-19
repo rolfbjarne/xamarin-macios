@@ -24,7 +24,7 @@ namespace Xamarin.Linker.Steps {
 				return preserver;
 			}
 		}
-	
+
 		public LinkerConfiguration Configuration {
 			get {
 				return LinkerConfiguration.GetInstance (Context);
@@ -37,7 +37,7 @@ namespace Xamarin.Linker.Steps {
 			}
 		}
 
-		protected override void ProcessAssembly(AssemblyDefinition assembly)
+		protected override void ProcessAssembly (AssemblyDefinition assembly)
 		{
 			if (!IsActiveFor (assembly))
 				return;
@@ -49,7 +49,7 @@ namespace Xamarin.Linker.Steps {
 			if (modified)
 				abr.SaveCurrentAssembly ();
 			abr.ClearCurrentAssembly ();
-		}	
+		}
 
 		bool IsActiveFor (AssemblyDefinition assembly)
 		{
@@ -70,9 +70,9 @@ namespace Xamarin.Linker.Steps {
 			return false;
 		}
 
-		bool Preserve (Tuple<MethodDefinition, MethodDefinition> pair, bool alreadyProcessed, params MethodDefinition?[] conditions)
+		bool Preserve (Tuple<MethodDefinition, MethodDefinition> pair, bool alreadyProcessed, params MethodDefinition? [] conditions)
 		{
-			var conds = conditions.Where (v => v is not null).Cast<MethodDefinition>().ToArray ();
+			var conds = conditions.Where (v => v is not null).Cast<MethodDefinition> ().ToArray ();
 			if (conds.Length == 0)
 				return false;
 
@@ -81,7 +81,7 @@ namespace Xamarin.Linker.Steps {
 				modified |= abr.AddDynamicDependencyAttribute (condition, pair.Item1);
 				modified |= abr.AddDynamicDependencyAttribute (condition, pair.Item2);
 			}
-			
+
 			return modified;
 		}
 
@@ -129,26 +129,25 @@ namespace Xamarin.Linker.Steps {
 		}
 	}
 
-	class PreserveSmartEnumConversion
-	{
+	class PreserveSmartEnumConversion {
 		Dictionary<TypeDefinition, Tuple<MethodDefinition, MethodDefinition>> cache = new ();
 
 		public DerivedLinkContext LinkContext { get; private set; }
 
-		public Func<Tuple<MethodDefinition, MethodDefinition>, bool, MethodDefinition?[], bool> preserve { get; set; }
+		public Func<Tuple<MethodDefinition, MethodDefinition>, bool, MethodDefinition? [], bool> preserve { get; set; }
 
-		public PreserveSmartEnumConversion (DerivedLinkContext linkContext, Func<Tuple<MethodDefinition, MethodDefinition>, bool, MethodDefinition?[], bool> preserve)
+		public PreserveSmartEnumConversion (DerivedLinkContext linkContext, Func<Tuple<MethodDefinition, MethodDefinition>, bool, MethodDefinition? [], bool> preserve)
 		{
 			LinkContext = linkContext;
 			this.preserve = preserve;
 		}
 
-		bool Preserve (Tuple<MethodDefinition, MethodDefinition> pair, bool alreadyProcessed, params MethodDefinition?[] conditions)
+		bool Preserve (Tuple<MethodDefinition, MethodDefinition> pair, bool alreadyProcessed, params MethodDefinition? [] conditions)
 		{
 			return preserve (pair, alreadyProcessed, conditions);
 		}
 
-		public bool ProcessAttributeProvider (ICustomAttributeProvider provider, params MethodDefinition[] conditions)
+		public bool ProcessAttributeProvider (ICustomAttributeProvider provider, params MethodDefinition [] conditions)
 		{
 			var modified = false;
 
@@ -235,10 +234,10 @@ namespace Xamarin.Linker.Steps {
 
 				pair = new Tuple<MethodDefinition, MethodDefinition> (getConstant, getValue);
 				cache.Add (managedEnumType, pair);
-				modified |= Preserve (pair, false, conditions);				
+				modified |= Preserve (pair, false, conditions);
 			}
 
 			return modified;
-		}	
+		}
 	}
 }

@@ -78,7 +78,7 @@ namespace Xamarin.Linker.Steps {
 			return modified;
 		}
 
-		bool ProcessMethod (MethodDefinition method)
+		protected override bool ProcessMethod (MethodDefinition method)
 		{
 			static bool IsPropertyMethod (MethodDefinition method)
 			{

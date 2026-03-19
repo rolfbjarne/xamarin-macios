@@ -467,6 +467,17 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public MethodReference DynamicDependencyAttribute_ctor__String {
+			get {
+				return GetMethodReference (CorlibAssembly,
+						System_Diagnostics_CodeAnalysis_DynamicDependencyAttribute,
+						".ctor",
+						".ctor(String)",
+						isStatic: false,
+						System_String);
+			}
+		}
+
 		public MethodReference DynamicDependencyAttribute_ctor__String_Type {
 			get {
 				return GetMethodReference (CorlibAssembly,
@@ -1244,6 +1255,21 @@ namespace Xamarin.Linker {
 			type_map.Clear ();
 			method_map.Clear ();
 			field_map.Clear ();
+		}
+
+		public bool AddDynamicDependencyAttribute (MethodDefinition addToMethod, MethodDefinition dependsOn)
+		{
+			if (addToMethod.DeclaringType == dependsOn.DeclaringType) {
+				var attribute = new CustomAttribute (DynamicDependencyAttribute_ctor__String);
+				attribute.ConstructorArguments.Add (new CustomAttributeArgument (System_String, DocumentationComments.GetSignature (dependsOn)));
+				return AddAttributeOnlyOnce (addToMethod, attribute);
+			} else if (addToMethod.DeclaringType.Module == dependsOn.DeclaringType.Module) {
+				var attribute = CreateDynamicDependencyAttribute (DocumentationComments.GetSignature (dependsOn), dependsOn.DeclaringType);
+				return AddAttributeOnlyOnce (addToMethod, attribute);
+			} else {
+				var attribute = CreateDynamicDependencyAttribute (DocumentationComments.GetSignature (dependsOn), dependsOn.DeclaringType, dependsOn.DeclaringType.Module.Assembly);
+				return AddAttributeOnlyOnce (addToMethod, attribute);
+			}
 		}
 
 		public CustomAttribute CreateDynamicDependencyAttribute (string memberSignature, TypeDefinition type)

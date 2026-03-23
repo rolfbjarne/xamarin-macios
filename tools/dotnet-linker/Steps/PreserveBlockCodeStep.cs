@@ -35,7 +35,7 @@ namespace Xamarin.Linker.Steps {
 		{
 			if (!GetMembersToPreserve (type, out var field, out var method))
 				return false;
-			
+
 			var modified = false;
 			modified |= abr.AddDynamicDependencyAttributeToStaticConstructor (type, field);
 			modified |= abr.AddDynamicDependencyAttributeToStaticConstructor (type, method);

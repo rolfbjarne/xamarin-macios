@@ -161,5 +161,49 @@ namespace Xamarin.Linker {
 			return moduleType;
 		}
 
+		public static string RenderAttribute (this CustomAttribute ca)
+		{
+			var render = new Func<object, string> (v => {
+				if (v is string s)
+					return $"\"{s}\"";
+				else if (v is TypeReference tr)
+					return $"typeof ({tr.FullName})";
+				else
+					return v?.ToString () ?? "null";
+			});
+
+			var sb = new StringBuilder ();
+			sb.Append ("[");
+			sb.Append (ca.AttributeType.Name.EndsWith ("Attribute") ? ca.AttributeType.Name.Substring (0, ca.AttributeType.Name.Length - "Attribute".Length) : ca.AttributeType.Name);
+			if (ca.HasFields || ca.HasConstructorArguments || ca.HasProperties) {
+				sb.Append ("(");
+				var first = true;
+				foreach (var arg in ca.ConstructorArguments) {
+					if (!first)
+						sb.Append (", ");
+					first = false;
+					sb.Append (render (arg.Value));
+				}
+				foreach (var prop in ca.Properties) {
+					if (!first)
+						sb.Append (", ");
+					first = false;
+					sb.Append (prop.Name);
+					sb.Append (" = ");
+					sb.Append (render (prop.Argument.Value));
+				}
+				foreach (var field in ca.Fields) {
+					if (!first)
+						sb.Append (", ");
+					first = false;
+					sb.Append (field.Name);
+					sb.Append (" = ");
+					sb.Append (render (field.Argument.Value));
+				}
+				sb.Append (")");
+			}
+			sb.Append ("]");
+			return sb.ToString ();
+		}
 	}
 }

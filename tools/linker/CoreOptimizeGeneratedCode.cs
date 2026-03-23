@@ -1218,8 +1218,7 @@ namespace Xamarin.Linker {
 		}
 	}
 
-	public class OptimizeGeneratedCodeData
-	{
+	public class OptimizeGeneratedCodeData {
 		public required Xamarin.Tuner.DerivedLinkContext LinkContext;
 		public required Optimizations Optimizations;
 		public required bool Device;

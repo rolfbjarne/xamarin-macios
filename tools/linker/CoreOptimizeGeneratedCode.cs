@@ -538,7 +538,8 @@ namespace Xamarin.Linker {
 					Optimizations = LinkContext.App.Optimizations,
 					Device = LinkContext.App.IsDeviceBuild,
 				};
-			};
+			}
+			;
 			OptimizeMethod (data, method);
 		}
 

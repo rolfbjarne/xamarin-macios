@@ -95,7 +95,7 @@ namespace Xamarin.Linker.Steps {
 
 		public DerivedLinkContext LinkContext { get; private set; }
 
-		public Func<Tuple<MethodDefinition, MethodDefinition>, bool, MethodDefinition? [], bool> preserve { get; set; }
+		Func<Tuple<MethodDefinition, MethodDefinition>, bool, MethodDefinition? [], bool> preserve { get; set; }
 
 		public PreserveSmartEnumConversion (DerivedLinkContext linkContext, Func<Tuple<MethodDefinition, MethodDefinition>, bool, MethodDefinition? [], bool> preserve)
 		{
@@ -139,7 +139,7 @@ namespace Xamarin.Linker.Steps {
 
 				if (cache.TryGetValue (managedEnumType, out var pair)) {
 					// The pair was already marked if it was cached.
-					Preserve (pair, true, conditions);
+					modified |= Preserve (pair, true, conditions);
 					continue;
 				}
 

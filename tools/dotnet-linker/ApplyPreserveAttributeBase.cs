@@ -246,7 +246,7 @@ namespace Xamarin.Linker.Steps {
 		bool PreserveUnconditional (IMetadataTokenProvider provider)
 		{
 			var modified = false;
-			
+
 			modified |= applyPreserveAttribute.PreserveUnconditional (provider);
 
 			var member = provider as IMemberDefinition;

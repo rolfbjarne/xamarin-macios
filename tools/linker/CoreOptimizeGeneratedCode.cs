@@ -21,6 +21,8 @@ namespace Xamarin.Linker {
 		protected override string Name { get; } = "Binding Optimizer";
 		protected override int ErrorCode { get; } = 2020;
 
+		OptimizeGeneratedCodeData? data;
+
 		public override void Initialize (LinkContext context, MarkContext markContext)
 		{
 			base.Initialize (context);
@@ -529,16 +531,18 @@ namespace Xamarin.Linker {
 			if (!IsActiveFor (method.DeclaringType.Module.Assembly))
 				return;
 
-			var data = new OptimizeGeneratedCodeData {
-				LinkContext = LinkContext,
-				InlineIsArm64CallingConvention = LinkContext.App.InlineIsArm64CallingConventionForCurrentAbi,
-				Optimizations = LinkContext.App.Optimizations,
-				Device = LinkContext.App.IsDeviceBuild,
+			if (data is null) {
+				data = new OptimizeGeneratedCodeData {
+					LinkContext = LinkContext,
+					InlineIsArm64CallingConvention = LinkContext.App.InlineIsArm64CallingConventionForCurrentAbi,
+					Optimizations = LinkContext.App.Optimizations,
+					Device = LinkContext.App.IsDeviceBuild,
+				};
 			};
-			ProcessMethod (data, method);
+			OptimizeMethod (data, method);
 		}
 
-		public static bool ProcessMethod (OptimizeGeneratedCodeData data, MethodDefinition method)
+		public static bool OptimizeMethod (OptimizeGeneratedCodeData data, MethodDefinition method)
 		{
 			var modified = false;
 
@@ -1094,24 +1098,24 @@ namespace Xamarin.Linker {
 
 		static MethodReference GetBlockSetupImpl (OptimizeGeneratedCodeData data, MethodDefinition caller, Instruction ins)
 		{
-			if (data.setupblock_def is null) {
+			if (data.SetupBlockImplDefinition is null) {
 				var type = data.LinkContext.GetAssembly (Driver.GetProductAssembly (data.LinkContext.App)).MainModule.GetType (Namespaces.ObjCRuntime, "BlockLiteral");
 				foreach (var method in type.Methods) {
 					if (method.Name != "SetupBlockImpl")
 						continue;
-					data.setupblock_def = method;
-					data.setupblock_def.IsPublic = true; // Make sure the method is callable from the optimized code.
+					data.SetupBlockImplDefinition = method;
+					data.SetupBlockImplDefinition.IsPublic = true; // Make sure the method is callable from the optimized code.
 					break;
 				}
-				if (data.setupblock_def is null)
+				if (data.SetupBlockImplDefinition is null)
 					throw ErrorHelper.CreateError (data.LinkContext.App, 99, caller, ins, Errors.MX0099, $"could not find the method {Namespaces.ObjCRuntime}.BlockLiteral.SetupBlockImpl");
 			}
-			return caller.Module.ImportReference (data.setupblock_def);
+			return caller.Module.ImportReference (data.SetupBlockImplDefinition);
 		}
 
 		static MethodReference GetBlockLiteralConstructor (OptimizeGeneratedCodeData data, MethodDefinition caller, Instruction ins)
 		{
-			if (data.block_ctor_def is null) {
+			if (data.BlockCtorDefinition is null) {
 				var type = data.LinkContext.GetAssembly (Driver.GetProductAssembly (data.LinkContext.App)).MainModule.GetType (Namespaces.ObjCRuntime, "BlockLiteral");
 				foreach (var method in type.Methods) {
 					if (!method.IsConstructor)
@@ -1126,13 +1130,13 @@ namespace Xamarin.Linker {
 						continue;
 					if (!method.Parameters [2].ParameterType.Is ("System", "String"))
 						continue;
-					data.block_ctor_def = method;
+					data.BlockCtorDefinition = method;
 					break;
 				}
-				if (data.block_ctor_def is null)
+				if (data.BlockCtorDefinition is null)
 					throw ErrorHelper.CreateError (data.LinkContext.App, 99, caller, ins, Errors.MX0099, $"could not find the constructor ObjCRuntime.BlockLiteral (void*, object, string)");
 			}
-			return caller.Module.ImportReference (data.block_ctor_def);
+			return caller.Module.ImportReference (data.BlockCtorDefinition);
 		}
 
 		static bool ProcessProtocolInterfaceStaticConstructor (OptimizeGeneratedCodeData data, MethodDefinition method)
@@ -1141,7 +1145,7 @@ namespace Xamarin.Linker {
 			// If we're registering protocols, then we don't need to preserve protocol members, because the registrar
 			// already knows everything about it => we can remove the static cctor.
 
-			if (!(method.DeclaringType.IsInterface && method.DeclaringType.IsInterface && method.IsStatic && method.IsConstructor && method.HasBody))
+			if (!(method.DeclaringType.IsInterface && method.IsStatic && method.IsConstructor && method.HasBody))
 				return false;
 
 			if (data.Optimizations.RegisterProtocols != true) {
@@ -1223,8 +1227,8 @@ namespace Xamarin.Linker {
 		public required Optimizations Optimizations;
 		public required bool Device;
 
-		public MethodDefinition? setupblock_def;
-		public MethodDefinition? block_ctor_def;
+		public MethodDefinition? SetupBlockImplDefinition;
+		public MethodDefinition? BlockCtorDefinition;
 		public bool? InlineIsArm64CallingConvention;
 	}
 

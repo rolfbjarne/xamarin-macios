@@ -10,6 +10,8 @@ namespace Xamarin.Linker.Steps {
 		protected override string Name { get; } = "Binding Optimizer";
 		protected override int ErrorCode { get; } = 2020;
 
+		OptimizeGeneratedCodeData? data;
+
 		protected override bool IsActiveFor (AssemblyDefinition assembly)
 		{
 			return OptimizeGeneratedCodeHandler.IsActiveFor (assembly, Configuration.Profile, DerivedLinkContext.Annotations);
@@ -22,13 +24,15 @@ namespace Xamarin.Linker.Steps {
 
 		protected override bool ProcessMethod (MethodDefinition method)
 		{
-			var data = new OptimizeGeneratedCodeData {
-				LinkContext = DerivedLinkContext,
-				InlineIsArm64CallingConvention = App.InlineIsArm64CallingConventionForCurrentAbi,
-				Optimizations = App.Optimizations,
-				Device = App.IsDeviceBuild,
-			};
-			return OptimizeGeneratedCodeHandler.ProcessMethod (data, method);
+			if (data is null) {
+				data = new OptimizeGeneratedCodeData {
+					LinkContext = DerivedLinkContext,
+					InlineIsArm64CallingConvention = App.InlineIsArm64CallingConventionForCurrentAbi,
+					Optimizations = App.Optimizations,
+					Device = App.IsDeviceBuild,
+				};
+			}
+			return OptimizeGeneratedCodeHandler.OptimizeMethod (data, method);
 		}
 	}
 }

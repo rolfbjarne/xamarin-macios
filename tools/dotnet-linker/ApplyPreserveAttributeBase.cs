@@ -127,26 +127,26 @@ namespace Xamarin.Linker.Steps {
 		bool BrowseTypes (IEnumerable<TypeDefinition> types)
 		{
 			var modified = false;
-			foreach (TypeDefinition type in types) {
+			foreach (var type in (new List<TypeDefinition> (types))) {
 				modified |= ProcessType (type);
 
 				if (type.HasFields) {
-					foreach (FieldDefinition field in type.Fields)
+					foreach (var field in type.Fields.ToArray ())
 						modified |= ProcessField (field);
 				}
 
 				if (type.HasMethods) {
-					foreach (MethodDefinition method in type.Methods)
+					foreach (var method in type.Methods.ToArray ())
 						modified |= ProcessMethod (method);
 				}
 
 				if (type.HasProperties) {
-					foreach (PropertyDefinition property in type.Properties)
+					foreach (var property in type.Properties.ToArray ())
 						modified |= ProcessProperty (property);
 				}
 
 				if (type.HasEvents) {
-					foreach (EventDefinition @event in type.Events)
+					foreach (var @event in type.Events.ToArray ())
 						modified |= ProcessEvent (@event);
 				}
 

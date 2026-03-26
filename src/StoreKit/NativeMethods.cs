@@ -1,3 +1,5 @@
+using System.ComponentModel;
+
 #nullable enable
 
 namespace StoreKit {
@@ -9,7 +11,7 @@ namespace StoreKit {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
-		[EditorBrowsable (EditorBrowsableState.Never))]
+		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static void TerminateForInvalidReceipt ()
 		{
 			throw new PlatformNotSupportedException ();

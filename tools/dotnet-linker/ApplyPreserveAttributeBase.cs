@@ -1,6 +1,8 @@
 // This is copied from https://github.com/mono/linker/blob/fa9ccbdaf6907c69ef1bb117906f8f012218d57f/src/tuner/Mono.Tuner/ApplyPreserveAttributeBase.cs
 // and modified to work without a Profile class.
 
+using System.Linq;
+
 using Mono.Linker;
 using Mono.Linker.Steps;
 
@@ -263,7 +265,7 @@ namespace Xamarin.Linker.Steps {
 		List<CustomAttribute> GetPreserveAttributes (ICustomAttributeProvider provider)
 		{
 			if (!provider.HasCustomAttributes)
-				return attrs;
+				return new List<CustomAttribute> ();
 
 			return provider.CustomAttributes.Where (a => IsPreservedAttribute (provider, a)).ToList ();
 		}

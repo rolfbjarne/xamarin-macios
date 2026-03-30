@@ -54,10 +54,10 @@ namespace Xamarin.Linker.Steps {
 			return AddDynamicDependencyAttribute (type, allMembers);
 		}
 
-		MethodDefinition GetOrCreateModuleConstructor (ModuleDefinition @module)
+		MethodDefinition GetOrCreateModuleConstructor (ModuleDefinition @module, out bool modified)
 		{
 			var moduleType = @module.GetModuleType ();
-			return abr.GetOrCreateStaticConstructor (moduleType, out var modified);
+			return abr.GetOrCreateStaticConstructor (moduleType, out modified);
 		}
 
 		bool IApplyPreserveAttribute.PreserveConditional (TypeDefinition onType, MethodDefinition forMethod)
@@ -78,7 +78,7 @@ namespace Xamarin.Linker.Steps {
 
 		bool AddDynamicDependencyAttribute (TypeDefinition type, bool allMembers)
 		{
-			var moduleConstructor = GetOrCreateModuleConstructor (type.GetModule ());
+			var moduleConstructor = GetOrCreateModuleConstructor (type.GetModule (), out var modified);
 			var members = allMembers
 				? allMemberTypes
 				: DynamicallyAccessedMemberTypes.PublicConstructors | DynamicallyAccessedMemberTypes.NonPublicConstructors;
@@ -89,7 +89,8 @@ namespace Xamarin.Linker.Steps {
 			}
 
 			var attrib = abr.CreateDynamicDependencyAttribute (members, type);
-			return abr.AddAttributeOnlyOnce (moduleConstructor, attrib);
+			modified |= abr.AddAttributeOnlyOnce (moduleConstructor, attrib);
+			return modified;
 		}
 
 		bool AddConditionalDynamicDependencyAttribute (TypeDefinition onType, MethodDefinition forMethod)
@@ -103,10 +104,11 @@ namespace Xamarin.Linker.Steps {
 			if (member is null)
 				throw ErrorHelper.CreateError (99, $"Unable to add dynamic dependency attribute to {provider.GetType ().FullName}");
 
-			var moduleConstructor = GetOrCreateModuleConstructor (member.GetModule ());
+			var moduleConstructor = GetOrCreateModuleConstructor (member.GetModule (), out var modified);
 			var signature = DocumentationComments.GetSignature (member);
 			var attrib = abr.CreateDynamicDependencyAttribute (signature, member.DeclaringType);
-			return abr.AddAttributeOnlyOnce (moduleConstructor, attrib);
+			modified |= abr.AddAttributeOnlyOnce (moduleConstructor, attrib);
+			return modified;
 		}
 	}
 }

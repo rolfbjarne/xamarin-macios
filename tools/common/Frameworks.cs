@@ -1,14 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Xamarin.Linker;
-
 
 #if LEGACY_TOOLS || BUNDLER
 using Mono.Cecil;
 using Mono.Tuner;
 
 using Xamarin.Bundler;
+using Xamarin.Linker;
 using Registrar;
 #endif
 

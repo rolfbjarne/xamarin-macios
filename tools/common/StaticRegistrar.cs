@@ -3339,7 +3339,7 @@ namespace Registrar {
 			case Trampoline.CopyWithZone2:
 #if !LEGACY_TOOLS
 				// Managed Static Registrar handles CopyWithZone2 in GenerateCallToUnmanagedCallersOnlyMethod
-				if (LinkContext.App.Registrar == RegistrarMode.ManagedStatic) {
+				if (LinkContext.App.Registrar == RegistrarMode.ManagedStatic || LinkContext.App.Registrar == RegistrarMode.TrimmableStatic) {
 					return false;
 				}
 #endif
@@ -3987,7 +3987,7 @@ namespace Registrar {
 
 #if !LEGACY_TOOLS
 			// Generate the native trampoline to call the generated UnmanagedCallersOnly method if we're using the managed static registrar.
-			if (LinkContext.App.Registrar == RegistrarMode.ManagedStatic) {
+			if (LinkContext.App.Registrar == RegistrarMode.ManagedStatic || LinkContext.App.Registrar == RegistrarMode.ManagedStatic) {
 				GenerateCallToUnmanagedCallersOnlyMethod (sb, method, isCtor, isVoid, num_arg, descriptiveMethodName, exceptions);
 				return;
 			}
@@ -5192,6 +5192,9 @@ namespace Registrar {
 			var token = member.MetadataToken;
 
 #if !LEGACY_TOOLS
+			if (App.Registrar == RegistrarMode.TrimmableStatic)
+				throw new InvalidOperationException ($"We should not try to create a token reference when using the trimmable static registrar."); // FIXME: proper error
+
 			if (App.Registrar == RegistrarMode.ManagedStatic) {
 				if (implied_type == TokenType.TypeDef && member is TypeDefinition td) {
 					if (App.Configuration.AssemblyTrampolineInfos.TryGetValue (td.Module.Assembly, out var infos) && infos.TryGetRegisteredTypeIndex (td, out var id)) {

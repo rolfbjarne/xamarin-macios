@@ -132,7 +132,7 @@ struct Trampolines {
 enum InitializationFlags : int {
 	InitializationFlagsIsPartialStaticRegistrar = 0x01,
 	InitializationFlagsIsManagedStaticRegistrar = 0x02,
-	/* unused									= 0x04,*/
+	InitializationFlagsIsTrimmableStaticRegistrar = 0x04,
 	/* unused									= 0x08,*/
 	InitializationFlagsIsSimulator				= 0x10,
 	InitializationFlagsIsCoreCLR                = 0x20,
@@ -3050,6 +3050,16 @@ xamarin_set_is_managed_static_registrar (bool value)
 		options.flags = (InitializationFlags) (options.flags | InitializationFlagsIsManagedStaticRegistrar);
 	} else {
 		options.flags = (InitializationFlags) (options.flags & ~InitializationFlagsIsManagedStaticRegistrar);
+	}
+}
+
+void
+xamarin_set_is_trimmable_static_registrar (bool value)
+{
+	if (value) {
+		options.flags = (InitializationFlags) (options.flags | InitializationFlagsIsTrimmableStaticRegistrar);
+	} else {
+		options.flags = (InitializationFlags) (options.flags & ~InitializationFlagsIsTrimmableStaticRegistrar);
 	}
 }
 

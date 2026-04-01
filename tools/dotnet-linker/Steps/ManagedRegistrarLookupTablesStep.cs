@@ -48,7 +48,7 @@ namespace Xamarin.Linker {
 		{
 			base.TryProcessAssembly (assembly);
 
-			if (App.Registrar != RegistrarMode.ManagedStatic && App.Registrar != RegistrarMode.TrimmableStatic)
+			if (App.Registrar != RegistrarMode.ManagedStatic)
 				return;
 
 			var annotation = DerivedLinkContext.Annotations.GetCustomAnnotation ("ManagedRegistrarStep", assembly);

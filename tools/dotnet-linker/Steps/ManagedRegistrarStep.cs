@@ -98,7 +98,7 @@ namespace Xamarin.Linker {
 		{
 			base.TryProcess ();
 
-			if (App.Registrar != RegistrarMode.ManagedStatic)
+			if (App.Registrar != RegistrarMode.ManagedStatic && App.Registrar != RegistrarMode.TrimmableStatic)
 				return;
 
 			Configuration.Application.StaticRegistrar.Register (Configuration.GetNonDeletedAssemblies (this));
@@ -108,7 +108,7 @@ namespace Xamarin.Linker {
 		{
 			base.TryEndProcess ();
 
-			if (App.Registrar != RegistrarMode.ManagedStatic) {
+			if (App.Registrar != RegistrarMode.ManagedStatic && App.Registrar != RegistrarMode.TrimmableStatic) {
 				exceptions = null;
 				return;
 			}
@@ -126,7 +126,7 @@ namespace Xamarin.Linker {
 		{
 			base.TryProcessAssembly (assembly);
 
-			if (App.Registrar != RegistrarMode.ManagedStatic)
+			if (App.Registrar != RegistrarMode.ManagedStatic && App.Registrar != RegistrarMode.TrimmableStatic)
 				return;
 
 			if (Annotations.GetAction (assembly) == AssemblyAction.Delete)

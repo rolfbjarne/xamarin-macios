@@ -541,7 +541,10 @@
 		<!-- Validate the linker mode -->
 		<Error Text="Invalid link mode: '$(_LinkMode)'. Valid link modes are: 'None', 'SdkOnly' and 'Full'" Condition="'$(_LinkMode)' != 'None' And '$(_LinkMode)' != 'SdkOnly' And '$(_LinkMode)' != 'Full' And '$(_LinkMode)' != 'TrimMode'" />
 
-		<Error Text="The only valid registrar when using NativeAOT is 'managed-static' (current value: '$(Registrar)'). Please either delete the 'Registrar' property, or change it to be 'managed-static'." Condition="'$(_UseNativeAot)' == 'true' And '$(Registrar)' != '' And '$(Registrar)' != 'managed-static'" />
+		<Error
+			Text="The only valid registrars when using NativeAOT are 'managed-static' or 'trimmable-static' (current value: '$(Registrar)'). Please either delete the 'Registrar' property, or change it to be 'managed-static' or 'trimmable-static'."
+			Condition="'$(_UseNativeAot)' == 'true' And '$(Registrar)' != '' And '$(Registrar)' != 'managed-static' And '$(Registrar)' != 'trimmable-static'"
+			/>
 
 		<Warning Text="All assemblies must be processed by the linker when using NativeAOT. Please don't set neither the '$(_LinkModeProperty)' nor the 'TrimMode' property, so that the build can default to linking all assemblies." Condition="'$(_UseNativeAot)' == 'true' And '$(_LinkMode)' != 'Full'" />
 
@@ -583,6 +586,10 @@
 			<!-- Set managed static registrar value -->
 			<_IsManagedStaticRegistrarFeature Condition="'$(Registrar)' == 'managed-static'">true</_IsManagedStaticRegistrarFeature>
 			<_IsManagedStaticRegistrarFeature Condition="'$(Registrar)' != 'managed-static'">false</_IsManagedStaticRegistrarFeature>
+
+			<!-- Set managed static registrar value -->
+			<_IsTrimmableStaticRegistrarFeature Condition="'$(Registrar)' == 'trimmable-static'">true</_IsTrimmableStaticRegistrarFeature>
+			<_IsTrimmableStaticRegistrarFeature Condition="'$(Registrar)' != 'trimmable-static'">false</_IsTrimmableStaticRegistrarFeature>
 
 			<!-- Set NativeAOT value -->
 			<_IsNativeAOTFeature Condition="'$(_XamarinRuntime)' == 'NativeAOT'">true</_IsNativeAOTFeature>
@@ -643,6 +650,8 @@
 				SkipMarkingNSObjectsInUserAssemblies=$(_SkipMarkingNSObjectsInUserAssemblies)
 				TargetArchitectures=$(TargetArchitectures)
 				TargetFramework=$(_ComputedTargetFrameworkMoniker)
+				TypeMapAssemblyName=$(_TypeMapAssemblyName)
+				TypeMapOutputDirectory=$(_TypeMapOutputDirectory)
 				UseLlvm=$(MtouchUseLlvm)
 				Verbosity=$(_BundlerVerbosity)
 				Warn=$(_BundlerWarn)
@@ -725,6 +734,7 @@
 			<RuntimeHostConfigurationOption Include="ObjCRUntime.AggressiveAttributeTrimmingOnlyWithStaticRegistrar" value="true" Trim="true" Condition="'$(MobileAggressiveAttributeTrimming)' == 'true' And ('$(Registrar)' == 'static' Or '$(Registrar)' == 'managed-static')" />
 			<RuntimeHostConfigurationOption Include="ObjCRuntime.Runtime.Arch.IsSimulator" Value="$(_IsSimulatorFeature)" Trim="true" />
 			<RuntimeHostConfigurationOption Include="ObjCRuntime.Runtime.IsManagedStaticRegistrar" Value="$(_IsManagedStaticRegistrarFeature)" Trim="true" />
+			<RuntimeHostConfigurationOption Include="ObjCRuntime.Runtime.IsTrimmableStaticRegistrar" Value="$(_IsTrimmableStaticRegistrarFeature)" Trim="true" />
 			<RuntimeHostConfigurationOption Include="ObjCRuntime.Runtime.IsNativeAOT" Value="$(_IsNativeAOTFeature)" Trim="true" />
 			<RuntimeHostConfigurationOption Include="ObjCRuntime.Runtime.IsCoreCLR" Value="true" Trim="true" Condition="'$(UseMonoRuntime)' != 'true'" />
 			<RuntimeHostConfigurationOption Include="ObjCRuntime.Runtime.IsCoreCLR" Value="false" Trim="true" Condition="'$(UseMonoRuntime)' == 'true'" />
@@ -758,7 +768,8 @@
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" BeforeStep="MarkStep" Type="MonoTouch.Tuner.RegistrarRemovalTrackingStep" />
 			<!-- TODO: these steps should probably run after mark. -->
 			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" BeforeStep="MarkStep" Condition="'$(_AreAnyAssembliesTrimmed)' == 'true'" Type="Xamarin.Linker.Steps.PreMarkDispatcher" />
-			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" BeforeStep="MarkStep" Type="Xamarin.Linker.ManagedRegistrarStep" Condition="'$(Registrar)' == 'managed-static'" />
+			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" BeforeStep="MarkStep" Type="Xamarin.Linker.ManagedRegistrarStep" Condition="'$(Registrar)' == 'managed-static' Or '$(Registrar)' == 'trimmable-static'" />
+			<_TrimmerCustomSteps Include="$(_AdditionalTaskAssembly)" BeforeStep="MarkStep" Type="Xamarin.Linker.TrimmableRegistrarStep" Condition="'$(Registrar)' == 'trimmable-static'" />
 
 			<!--
 				IMarkHandlers which run during Mark
@@ -1107,6 +1118,17 @@
 			<_FrameworkToPublish Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_FrameworkToPublish.items'" />
 			<_DynamicLibraryToPublish Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_DynamicLibraryToPublish.items'" />
 		</ItemGroup>
+
+		<ItemGroup Condition="'$(Registrar)' == 'trimmable-static'">
+			<_TypeMapAssemblies Include="$(_TypeMapOutputDirectory)/*.dll" />
+			<ResolvedFileToPublish Include="@(_TypeMapAssemblies)">
+				<PublishFolderType>Assembly</PublishFolderType>
+				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+				<RelativePath>$(_AssemblyPublishDir)%(Filename)%(Extension)</RelativePath>
+				<OriginalRelativePath>%(Filename)%(Extension)</OriginalRelativePath>
+			</ResolvedFileToPublish>
+			<FileWrites Include="@(_TypeMapAssemblies)" />
+		</ItemGroup>
 	</Target>
 
 	<!-- Native code -->
@@ -1259,6 +1281,14 @@
 
 			<_RuntimeConfigurationFile>runtimeconfig.bin</_RuntimeConfigurationFile>
 		</PropertyGroup>
+
+		<PropertyGroup Condition="'$(Registrar)' == 'trimmable-static'">
+			<_TypeMapAssemblyName Condition="'$(_TypeMapAssemblyName)' == ''">_Microsoft.$(_PlatformName).TypeMaps</_TypeMapAssemblyName>
+			<_TypeMapOutputDirectory Condition="'$(_TypeMapOutputDirectory)' == ''">$(DeviceSpecificIntermediateOutputPath)typemap\</_TypeMapOutputDirectory>
+		</PropertyGroup>
+		<ItemGroup Condition="'$(Registrar)' == 'trimmable-static'">
+			<RuntimeHostConfigurationOption Include="System.Runtime.InteropServices.TypeMappingEntryAssembly" Value="$(_TypeMapAssemblyName)" Link="true" />
+		</ItemGroup>
 
 		<!-- Not sure about how to handle nested app extensions here, but if it ever becomes a problem we can look into it (I believe only watch extensions can have embedded extensions at this point, and we don't support watchOS on .NET anyways) -->
 		<ItemGroup Condition="'$(IsAppExtension)' == 'true'">

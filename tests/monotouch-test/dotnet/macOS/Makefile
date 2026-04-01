@@ -59,3 +59,9 @@ exec:
 	fi
 	$(Q) echo "✅ Test run succeeded"
 	$(Q) grep "Tests run:" "$(LOGFILENAME)"
+
+simple:
+	mair
+	git clean -xfd
+	make build
+	bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest --test apitest.KernelNotificationTest

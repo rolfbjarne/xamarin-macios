@@ -51,6 +51,15 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		AssemblyDefinition? system_console_assembly;
+		public AssemblyDefinition SystemConsoleAssembly {
+			get {
+				if (system_console_assembly is null)
+					system_console_assembly = configuration.Assemblies.SingleOrDefault (v => v.Name.Name == "System.Console")!;
+				return system_console_assembly;
+			}
+		}
+
 		Dictionary<AssemblyDefinition, Dictionary<string, (TypeDefinition, TypeReference)>> type_map = new ();
 		Dictionary<string, (MethodDefinition, MethodReference)> method_map = new ();
 		Dictionary<string, (FieldDefinition, FieldReference)> field_map = new ();
@@ -124,7 +133,8 @@ namespace Xamarin.Linker {
 				method_map.Add (key, tuple);
 
 				// Make the method public so that we can call it.
-				if (!md.IsPublic) {
+				if (!md.IsPublic && md.DeclaringType.Module.Assembly.FullName != CorlibAssembly.FullName) {
+					Console.WriteLine ($"Making public the method '{md.FullName}' in assembly '{md.DeclaringType.Module.Assembly.FullName}' so (corlib: {CorlibAssembly.FullName})");
 					md.IsPublic = true;
 					SaveAssembly (md.Module.Assembly);
 				}
@@ -198,6 +208,12 @@ namespace Xamarin.Linker {
 
 		/* Types */
 
+		public TypeReference System_Attribute {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Attribute", out var _);
+			}
+		}
+
 		public TypeReference System_Boolean {
 			get {
 				return CurrentAssembly.MainModule.ImportReference (CorlibAssembly.MainModule.TypeSystem.Boolean);
@@ -210,6 +226,11 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public TypeReference System_Console {
+			get {
+				return GetTypeReference (SystemConsoleAssembly, "System.Console", out var _);
+			}
+		}
 		public TypeReference System_Delegate {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.Delegate", out var _);
@@ -371,6 +392,12 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public TypeReference Foundation_ProtocolAttribute {
+			get {
+				return GetTypeReference (PlatformAssembly, "Foundation.ProtocolAttribute", out var _);
+			}
+		}
+		
 		public TypeReference ObjCRuntime_BindAs {
 			get {
 				return GetTypeReference (PlatformAssembly, "ObjCRuntime.BindAs", out var _);
@@ -380,6 +407,12 @@ namespace Xamarin.Linker {
 		public TypeReference ObjCRuntime_BlockLiteral {
 			get {
 				return GetTypeReference (PlatformAssembly, "ObjCRuntime.BlockLiteral", out var _);
+			}
+		}
+
+		public TypeReference ObjCRuntime_Class {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.Class", out var _);
 			}
 		}
 
@@ -412,6 +445,18 @@ namespace Xamarin.Linker {
 				return GetTypeReference (PlatformAssembly, "ObjCRuntime.NativeObjectExtensions", out var _);
 			}
 		}
+		
+		public TypeReference ObjCRuntime_NSObjectProxyAttribute {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.NSObjectProxyAttribute", out var _);
+			}
+		}
+
+		public TypeReference ObjCRuntime_ProtocolProxyAttribute {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.ProtocolProxyAttribute", out var _);
+			}
+		}
 
 		public TypeReference ObjCRuntime_RegistrarHelper {
 			get {
@@ -431,11 +476,48 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public TypeReference ObjCRuntime_SkippedObjectiveCTypeUniverse {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.SkippedObjectiveCTypeUniverse", out var _);
+			}
+		}
+
 		/* Methods */
+
+		public MethodReference System_Attribute__ctor {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Attribute, ".ctor", (v) => v.IsDefaultConstructor ());
+			}
+		}
+
+		public MethodReference System_Console__WriteLine_String_Object {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Console, "WriteLine", (v) => 
+					v.IsStatic
+					&& v.HasParameters
+					&& v.Parameters.Count == 2
+					&& v.Parameters[0].ParameterType.Is("System", "String")
+					&& v.Parameters[1].ParameterType.Is("System", "Object")
+					&& !v.HasGenericParameters);
+			}
+		}
 
 		public MethodReference System_Object__ctor {
 			get {
 				return GetMethodReference (CorlibAssembly, System_Object, ".ctor", (v) => v.IsDefaultConstructor ());
+			}
+		}
+
+		public MethodReference System_String__op_Equality_String_String {
+			get {
+				return GetMethodReference (CorlibAssembly, System_String, "op_Equality", (v) => 
+					v.IsStatic
+					&& v.HasParameters
+					&& v.Parameters.Count == 2
+					&& v.Parameters[0].ParameterType.Is("System", "String")
+					&& v.Parameters[1].ParameterType.Is("System", "String")
+					&& v.ReturnType.Is ("System", "Boolean")
+					&& !v.HasGenericParameters);
 			}
 		}
 
@@ -618,6 +700,30 @@ namespace Xamarin.Linker {
 						&& v.Parameters [2].ParameterType is FunctionPointerType fpt2
 						&& v.HasGenericParameters
 						&& v.GenericParameters.Count == 2);
+			}
+		}
+
+
+		public MethodReference Class_GetHandle__System_String {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_Class, "GetHandle", (v) =>
+						v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "String")
+						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference ObjCRuntime_NSObjectProxy__ctor {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_NSObjectProxyAttribute, ".ctor", (v) => v.IsDefaultConstructor ());
+			}
+		}
+
+		public MethodReference ObjCRuntime_ProtocolProxy__ctor {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_ProtocolProxyAttribute, ".ctor", (v) => v.IsDefaultConstructor ());
 			}
 		}
 
@@ -1192,6 +1298,49 @@ namespace Xamarin.Linker {
 		public MethodReference UnmanagedCallersOnlyAttribute_Constructor {
 			get {
 				return GetMethodReference (CorlibAssembly, "System.Runtime.InteropServices.UnmanagedCallersOnlyAttribute", ".ctor", (v) => v.IsDefaultConstructor ());
+			}
+		}
+
+		public MethodReference TypeMapAttribute_1_Constructor_String_Type {
+			get {
+				return GetMethodReference (CorlibAssembly, "System.Runtime.InteropServices.TypeMapAttribute`1", ".ctor", (v) =>
+						!v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("System", "String")
+						&& v.Parameters [1].ParameterType.Is ("System", "Type"));
+			}
+		}
+
+		public MethodReference TypeMapAttribute_1_Constructor_String_Type_Type {
+			get {
+				return GetMethodReference (CorlibAssembly, "System.Runtime.InteropServices.TypeMapAttribute`1", ".ctor", (v) =>
+						!v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 3
+						&& v.Parameters [0].ParameterType.Is ("System", "String")
+						&& v.Parameters [1].ParameterType.Is ("System", "Type")
+						&& v.Parameters [2].ParameterType.Is ("System", "Type"));
+			}
+		}
+
+		public MethodReference TypeMapAssemblyTargetAttribute_1_Constructor_String_Type_Type {
+			get {
+				return GetMethodReference (CorlibAssembly, "System.Runtime.InteropServices.TypeMapAssemblyTargetAttribute`1", ".ctor", (v) =>
+						!v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "String"));
+			}
+		}
+		public MethodReference TypeMapAssociationAttribute_1_Constructor_Type_Type {
+			get {
+				return GetMethodReference (CorlibAssembly, "System.Runtime.InteropServices.TypeMapAssociationAttribute`1", ".ctor", (v) =>
+						!v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 2
+						&& v.Parameters [0].ParameterType.Is ("System", "Type")
+						&& v.Parameters [1].ParameterType.Is ("System", "Type"));
 			}
 		}
 

@@ -6,7 +6,7 @@
 //
 // Copyright 2023 Microsoft Corp
 
-// #define TRACE
+#define TRACE
 
 #nullable enable
 
@@ -143,6 +143,12 @@ namespace ObjCRuntime {
 			}
 		}
 
+		internal static bool TryFindTrimmableProtocolWrapperType (Type type, out Type? protocolWrapperType)
+		{
+			var protocolProxyMap = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolAttribute> ();
+			return protocolProxyMap.TryGetValue (type, out protocolWrapperType);
+		}
+
 		internal static Type? FindProtocolWrapperType (Type type)
 		{
 			var typeHandle = type.TypeHandle;
@@ -173,7 +179,7 @@ namespace ObjCRuntime {
 		static Stopwatch? lookupWatch;
 #endif
 
-		internal static IntPtr LookupUnmanagedFunction (IntPtr assembly, string? symbol, int id)
+		internal static IntPtr LookupUnmanagedFunction (IntPtr assembly, string? symbol, int id, string? objcClassName)
 		{
 			IntPtr rv;
 
@@ -200,7 +206,39 @@ namespace ObjCRuntime {
 			if (rv != IntPtr.Zero)
 				return rv;
 
-			throw ErrorHelper.CreateError (8001, "Unable to find the managed function with id {0} ({1})", id, symbol);
+			if (!string.IsNullOrEmpty (objcClassName)) {
+				rv = LookupUnmanagedFunctionInType (objcClassName, symbol);
+			}
+
+#if TRACE
+			lookupWatch.Stop ();
+
+			Console.WriteLine ("LookupUnmanagedFunction (0x{0} = {1}, {2}, {3}) => 0x{4} ElapsedMilliseconds: {5}", assembly.ToString ("x"), Marshal.PtrToStringAuto (assembly), symbol, id, rv.ToString ("x"), lookupWatch.ElapsedMilliseconds);
+#endif
+
+			if (rv != IntPtr.Zero)
+				return rv;
+
+			throw ErrorHelper.CreateError (8001, "Unable to find the managed function with id {0} ({1}, {2})", id, symbol, objcClassName);
+		}
+
+		static IntPtr LookupUnmanagedFunctionInType (string objcTypeName, string? symbol)
+		{
+			if (!Class.TryGetTrimmableProxyTypeAttribute (objcTypeName, out var attrib, out var _)) {
+#if TRACE
+				Console.WriteLine ($"LookupUnmanagedFunctionInType ({objcTypeName}, {symbol}) could not find proxy type");
+#endif
+				return IntPtr.Zero;
+			}
+
+
+			var rv = attrib.LookupUnmanagedFunction (symbol);
+
+#if TRACE
+			Console.WriteLine ($"LookupUnmanagedFunctionInType ({objcTypeName}, {symbol}) called {attrib.GetType ().FullName}::LookupUnmanagedFunction, got 0x{rv:x} back");
+#endif
+
+			return rv;
 		}
 
 		static IntPtr LookupUnmanagedFunctionInAssembly (IntPtr assembly_name, string? symbol, int id)

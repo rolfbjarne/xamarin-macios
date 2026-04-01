@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net$(BundledNETCoreAppTargetFrameworkVersion)-macos</TargetFramework>
     <DefineConstants>$(DefineConstants);XAMMAC_TESTS</DefineConstants>
+    <_KeepLaunchProfiles>true</_KeepLaunchProfiles>
   </PropertyGroup>
 
   <!-- Imports of the form '../shared.csproj' will be inlined by xharness -->
@@ -42,5 +43,9 @@
     <Compile Include="..\..\..\..\tools\common\StringUtils.cs">
       <Link>StringUtils.cs</Link>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.Runtime.InteropServices.TypeMappingEntryAssembly" Value="_Microsoft.$(_PlatformName).TypeMaps" />
   </ItemGroup>
 </Project>

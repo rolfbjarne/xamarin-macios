@@ -59,3 +59,27 @@ exec:
 	fi
 	$(Q) echo "✅ Test run succeeded"
 	$(Q) grep "Tests run:" "$(LOGFILENAME)"
+
+simple: export RID=
+simple: export RUNTIMEIDENTIFIER=
+simple: export RUNTIMEIDENTIFIERS=
+simple:
+	mair
+	git clean -xfd
+	make build
+	bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest --test apitest.KernelNotificationTest
+
+s: export RID=
+s: export RUNTIMEIDENTIFIER=
+s: export RUNTIMEIDENTIFIERS=
+s:
+	madl
+	git clean -xfd
+	make build
+	bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest --test MonoTouchFixtures.ObjCRuntime.GCHandleSwitchRaceTest
+
+lldb:
+	lldb -- bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest --test apitest.KernelNotificationTest
+
+evt:
+	DOTNET_EnableEventPipe=1 bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest --test apitest.KernelNotificationTest

@@ -1,0 +1,15 @@
+{
+    "configurations": [
+        {
+            "name": ".NET Core Launch (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "make",
+            "program": "${workspaceFolder}/bin/Debug/net10.0-macos/osx-arm64/monotouchtest.app/Contents/MacOS/monotouchtest",
+            "args": ["--test", "apitest.KernelNotificationTest"],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        },
+    ]
+}

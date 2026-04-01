@@ -164,7 +164,7 @@ namespace ObjCRuntime {
 		internal enum InitializationFlags : int {
 			IsPartialStaticRegistrar = 0x01,
 			IsManagedStaticRegistrar = 0x02,
-			/* unused				= 0x04,*/
+			IsTrimmableStaticRegistrar = 0x04,
 			/* unused				= 0x08,*/
 			IsSimulator = 0x10,
 			IsCoreCLR = 0x20,
@@ -251,6 +251,14 @@ namespace ObjCRuntime {
 			}
 		}
 
+		[BindingImpl (BindingImplOptions.Optimizable)]
+		internal unsafe static bool IsTrimmableStaticRegistrar {
+			get {
+				// The linker may turn calls to this property into a constant
+				return options->Flags.HasFlag (InitializationFlags.IsTrimmableStaticRegistrar);
+			}
+		}
+
 		/// <summary>If dynamic registration is supported.</summary>
 		/// <value>If dynamic registration is supported.</value>
 		/// <remarks>
@@ -298,6 +306,11 @@ namespace ObjCRuntime {
 				Initialize (options);
 			} catch (Exception e) {
 				*exception_gchandle = AllocGCHandle (e);
+				try {
+					Runtime.NSLog ($"Failed to initialize the runtime: {e}");
+				} catch {
+					// ignore any exceptions here
+				}
 			}
 		}
 
@@ -336,6 +349,11 @@ namespace ObjCRuntime {
 			intptr_bool_ctor_cache = new Dictionary<Type, ConstructorInfo> (TypeEqualityComparer);
 			block_lifetime_table = new ConditionalWeakTable<Delegate, BlockCollector> ();
 			lock_obj = new object ();
+
+#if NET11_0_OR_GREATER
+			if (IsTrimmableStaticRegistrar)
+				TypeMaps.Initialize ();
+#endif
 
 			NSObjectClass = NSObject.Initialize ();
 
@@ -1334,6 +1352,21 @@ namespace ObjCRuntime {
 			if (type is null)
 				throw new ArgumentNullException (nameof (type));
 
+			if (Runtime.IsTrimmableStaticRegistrar) {
+				if (TypeMaps.NSObjectProxyTypes.TryGetValue (type, out var proxyType)) {
+					// Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type}) found in proxy map with type {proxyType.FullName}");
+					var attrib = proxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
+					if (attrib is null)
+						throw new InvalidOperationException ($"Type '{proxyType.FullName}' is expected to have an NSObjectProxyAttribute."); // TODO: better exception
+					var instance = (T?) attrib.CreateObject (ptr);
+					if (instance is not null)
+						return instance;
+					MissingCtor (ptr, IntPtr.Zero, type, missingCtorResolution, sel, method_handle);
+					return null;
+				}
+				// Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}) did not find type in proxy map");
+			}
+
 			if (Runtime.IsManagedStaticRegistrar) {
 				T? instance = default;
 				var nativeHandle = new NativeHandle (ptr);
@@ -1411,6 +1444,27 @@ namespace ObjCRuntime {
 
 			if (type.IsByRef)
 				type = type.GetElementType ()!;
+
+			if (Runtime.IsTrimmableStaticRegistrar) {
+				if (TypeMaps.NSObjectProxyTypes.TryGetValue (type, out var proxyType)) {
+					// Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type.FullName}) found in proxy map");
+					var attrib = proxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
+					if (attrib is null)
+						throw new InvalidOperationException ($"Type '{proxyType.FullName}' is expected to have an NSObjectProxyAttribute."); // TODO: better exception
+					var rv = (T?) (object?) attrib.CreateObject (ptr);
+					if (owns)
+						Runtime.TryReleaseINativeObject (rv);
+					return rv;
+				}
+				if (TypeMaps.ProtocolProxyTypes.TryGetValue (type, out var protocolProxyType)) {
+					// Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type.FullName}) found in protocol proxy map");
+					var attrib = protocolProxyType.GetCustomAttribute<ProtocolProxyAttribute> ();
+					if (attrib is null)
+						throw new InvalidOperationException ($"Type '{protocolProxyType.FullName}' is expected to have an ProtocolProxyAttribute."); // TODO: better exception
+					return (T?) (object?) attrib.CreateObject (ptr, owns);
+				}
+				// Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}) did not find type in proxy map");
+			}
 
 			if (Runtime.IsManagedStaticRegistrar) {
 				var nativeHandle = new NativeHandle (ptr);
@@ -2065,6 +2119,9 @@ namespace ObjCRuntime {
 				var rv = RegistrarHelper.FindProtocolWrapperType (type);
 				if (rv is not null)
 					return rv;
+			} else if (IsTrimmableStaticRegistrar) {
+				if (TypeMaps.ProtocolWrapperTypes.TryGetValue (type, out var protocolWrapperType))
+					return protocolWrapperType;
 			} else {
 				unsafe {
 					var map = options->RegistrationMap;
@@ -2684,9 +2741,9 @@ namespace ObjCRuntime {
 			return rv ? 1 : 0;
 		}
 
-		static IntPtr LookupUnmanagedFunction (IntPtr assembly, IntPtr symbol, int id)
+		static IntPtr LookupUnmanagedFunction (IntPtr assembly, IntPtr symbol, int id, IntPtr objcClassName)
 		{
-			return RegistrarHelper.LookupUnmanagedFunction (assembly, Marshal.PtrToStringAuto (symbol), id);
+			return RegistrarHelper.LookupUnmanagedFunction (assembly, Marshal.PtrToStringAuto (symbol), id, Marshal.PtrToStringAuto (objcClassName));
 		}
 	}
 

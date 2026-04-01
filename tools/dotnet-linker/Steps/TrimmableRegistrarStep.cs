@@ -53,6 +53,10 @@ namespace Xamarin.Linker {
 			abr.SetCurrentAssembly (rootTypeMapAssembly);
 
 			foreach (var assembly in assemblies) {
+				/*
+				 * [assembly: TypeMapAssemblyTarget<?> ("...")]
+				 */
+				// TODO: fix generic signature in the attribute constructor (currently we just use TypeMapAssemblyTargetAttribute, but it should be TypeMapAssemblyTargetAttribute<T> or something like that).
 				var attribute = new CustomAttribute (abr.TypeMapAssemblyTargetAttribute_1_Constructor_String_Type_Type);
 				attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, assembly.Name.Name));
 				rootTypeMapAssembly.CustomAttributes.Add (attribute);
@@ -93,11 +97,14 @@ namespace Xamarin.Linker {
 				var assembly = typesInAssembly.Key;
 				var types = typesInAssembly.ToList ();
 
-				var typeMapAssemblyName = new AssemblyNameDefinition ("_" + assembly.Name + ".TypeMap", new Version (1, 0, 0, 0));
+				var typeMapAssemblyName = new AssemblyNameDefinition ("_" + assembly.Name.Name + ".TypeMap", new Version (1, 0, 0, 0));
 				var typeMapAssembly = AssemblyDefinition.CreateAssembly (typeMapAssemblyName, typeMapAssemblyName.Name, assemblyParameters);
 
 				abr.SetCurrentAssembly (typeMapAssembly);
 
+				/*
+				 * [assembly: IgnoresAccessChecksTo ("...")]
+				 */
 				var ignoredAccessChecks = new TypeDefinition ("System.Runtime.CompilerServices", "IgnoresAccessChecksToAttribute", TypeAttributes.NotPublic  | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.System_Attribute);
 				var ignoredAccessChecksCtor = new MethodDefinition (".ctor", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, abr.System_Void);
 				ignoredAccessChecksCtor.AddParameter ("assemblyName", abr.System_String);
@@ -113,6 +120,10 @@ namespace Xamarin.Linker {
 					var objcType = kvp.Value;
 					var objcClassName = objcType.Name;
 					var isCustomType = App.StaticRegistrar.IsCustomType (objcType);
+
+					/*
+					* [assembly: TypeMap<?> ("Objective-C class name", typeof (...), typeof (...))]
+					*/
 					var attribute = new CustomAttribute (abr.TypeMapAttribute_1_Constructor_String_Type_Type); // TODO: resolve generics
 					attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, objcClassName));
 					attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, tr));
@@ -121,7 +132,7 @@ namespace Xamarin.Linker {
 
 					/*
 					* [..._Proxy]
-					* sealedclass ..._Proxy : NSObjectProxy {
+					* sealed class ..._Proxy : NSObjectProxy {
 					* }
 					*/
 					var proxyType = new TypeDefinition (tr.Namespace, tr.Name + "_Proxy", TypeAttributes.NotPublic | TypeAttributes.Sealed, abr.ObjCRuntime_NSObjectProxyAttribute);
@@ -172,11 +183,29 @@ namespace Xamarin.Linker {
 					attribute = new CustomAttribute (ctor);
 					proxyType.CustomAttributes.Add (attribute);
 
-					// add the [assembly: TypeMapAssociation] attribute for this type and its proxy
+					/*
+					 * Add the [TypeMapAssociation] attribute for this type and its proxy
+					 *
+					 * [assembly: TypeMapAssociation<?> (typeof (...), typeof (...))]
+					 */
 					attribute = new CustomAttribute (abr.TypeMapAssociationAttribute_1_Constructor_Type_Type); // TODO: resolve generics
 					attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, tr));
 					attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, proxyType));
 					typeMapAssembly.CustomAttributes.Add (attribute);
+
+					if (objcType.IsProtocol && objcType.ProtocolWrapperType is not null) {
+						var wrapperType = objcType.ProtocolWrapperType;
+
+						/*
+						 * Add the [TypeMapAssociation] attribute for the protocol wrapper type as well
+						 *
+						 * [assembly: TypeMapAssociation<?> (typeof (...), typeof (...))]
+						 */
+						attribute = new CustomAttribute (abr.TypeMapAssociationAttribute_1_Constructor_Type_Type); // TODO: resolve generics, should be different from the one used for the proxy type
+						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, tr));
+						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, wrapperType));
+						typeMapAssembly.CustomAttributes.Add (attribute);
+					}
 				}
 
 				abr.ClearCurrentAssembly ();

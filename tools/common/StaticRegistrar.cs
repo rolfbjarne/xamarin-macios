@@ -2894,7 +2894,7 @@ namespace Registrar {
 				}
 
 
-				if (@class.IsProtocol && @class.ProtocolWrapperType is not null) {
+				if (App.Registrar != RegistrarMode.TrimmableStatic && @class.IsProtocol && @class.ProtocolWrapperType is not null) {
 					if (token_ref == INVALID_TOKEN_REF && !TryCreateTokenReference (@class.Type, TokenType.TypeDef, out token_ref, exceptions))
 						continue;
 					if (!TryCreateTokenReference (@class.ProtocolWrapperType, TokenType.TypeDef, out var protocol_wrapper_type_ref, exceptions))

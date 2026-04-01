@@ -18,6 +18,8 @@
 		<TestVariations Include="static-registrar-all-optimizations-linkall" Description="Static registrar + all optimizations + Link all" />
 		<TestVariations Include="static-registrar-optimizations-except-uithread-checks-linkall" Description="Static registrar + all optimizations + Link all" />
 		<TestVariations Include="managed-static-registrar-all-optimizations-linkall" Description="Managed static registrar + all optimizations" />
+		<TestVariations Include="trimmable-static-registrar" Description="Trimmable static registrar" />
+		<TestVariations Include="trimmable-static-registrar-all-optimizations-linkall" Description="Trimmable static registrar + all optimizations" />
 	</ItemGroup>
 
 	<PropertyGroup>
@@ -80,6 +82,13 @@
 		<_TestVariationApplied>true</_TestVariationApplied>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="$(_TestVariationForComparison.Contains('|trimmable-static-registrar|'))">
+		<Registrar>trimmable-static</Registrar>
+		<UseMonoRuntime>false</UseMonoRuntime> <!-- doesn't work with Mono -->
+		<_TestVariationApplied>true</_TestVariationApplied>
+	</PropertyGroup>
+
+
 	<PropertyGroup Condition="$(_TestVariationForComparison.Contains('|static-registrar-all-optimizations|'))">
 		<AppBundleExtraOptions>$(AppBundleExtraOptions) --optimize:all</AppBundleExtraOptions>
 		<Registrar>static</Registrar>
@@ -108,6 +117,15 @@
 		<Registrar>managed-static</Registrar>
 		<TrimMode>full</TrimMode>
 		<DefineConstants>$(DefineConstants);OPTIMIZEALL</DefineConstants>
+		<_TestVariationApplied>true</_TestVariationApplied>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$(_TestVariationForComparison.Contains('|trimmable-static-registrar-all-optimizations-linkall|'))">
+		<AppBundleExtraOptions>$(AppBundleExtraOptions) --optimize:all</AppBundleExtraOptions>
+		<Registrar>trimmable-static</Registrar>
+		<TrimMode>full</TrimMode>
+		<DefineConstants>$(DefineConstants);OPTIMIZEALL</DefineConstants>
+		<UseMonoRuntime>false</UseMonoRuntime> <!-- doesn't work with Mono -->
 		<_TestVariationApplied>true</_TestVariationApplied>
 	</PropertyGroup>
 

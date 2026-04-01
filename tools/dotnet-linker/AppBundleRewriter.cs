@@ -124,7 +124,8 @@ namespace Xamarin.Linker {
 				method_map.Add (key, tuple);
 
 				// Make the method public so that we can call it.
-				if (!md.IsPublic) {
+				if (!md.IsPublic && md.DeclaringType.Module.Assembly.FullName != CorlibAssembly.FullName) {
+					Console.WriteLine ($"Making public the method '{md.FullName}' in assembly '{md.DeclaringType.Module.Assembly.FullName}' so (corlib: {CorlibAssembly.FullName})");
 					md.IsPublic = true;
 					SaveAssembly (md.Module.Assembly);
 				}
@@ -197,6 +198,12 @@ namespace Xamarin.Linker {
 		}
 
 		/* Types */
+
+		public TypeReference System_Attribute {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Attribute", out var _);
+			}
+		}
 
 		public TypeReference System_Boolean {
 			get {
@@ -444,6 +451,12 @@ namespace Xamarin.Linker {
 		}
 
 		/* Methods */
+
+		public MethodReference System_Attribute__ctor {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Attribute, ".ctor", (v) => v.IsDefaultConstructor ());
+			}
+		}
 
 		public MethodReference System_Object__ctor {
 			get {
@@ -1225,16 +1238,6 @@ namespace Xamarin.Linker {
 			}
 		}
 
-		public MethodReference IgnoresAccessChecksToAttribute_Constructor_String {
-			get {
-				return GetMethodReference (CorlibAssembly, "System.Runtime.InteropServices.IgnoresAccessChecksToAttribute", ".ctor", (v) =>
-						!v.IsStatic
-						&& v.HasParameters
-						&& v.Parameters.Count == 1
-						&& v.Parameters [0].ParameterType.Is ("System", "String"));
-			}
-		}
-
 		public MethodReference TypeMapAttribute_1_Constructor_String_Type {
 			get {
 				return GetMethodReference (CorlibAssembly, "System.Runtime.InteropServices.TypeMapAttribute`1", ".ctor", (v) =>
@@ -1258,6 +1261,15 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public MethodReference TypeMapAssemblyTargetAttribute_1_Constructor_String_Type_Type {
+			get {
+				return GetMethodReference (CorlibAssembly, "System.Runtime.InteropServices.TypeMapAssemblyTargetAttribute`1", ".ctor", (v) =>
+						!v.IsStatic
+						&& v.HasParameters
+						&& v.Parameters.Count == 1
+						&& v.Parameters [0].ParameterType.Is ("System", "String"));
+			}
+		}
 		public MethodReference TypeMapAssociationAttribute_1_Constructor_Type_Type {
 			get {
 				return GetMethodReference (CorlibAssembly, "System.Runtime.InteropServices.TypeMapAssociationAttribute`1", ".ctor", (v) =>

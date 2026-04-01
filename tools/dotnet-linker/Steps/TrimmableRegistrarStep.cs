@@ -45,8 +45,28 @@ namespace Xamarin.Linker {
 			Configuration.Application.StaticRegistrar.Register (Configuration.GetNonDeletedAssemblies (this));
 		}
 
+		void CreateTypeMapRootAssembly (ModuleParameters moduleParameters, IEnumerable<AssemblyDefinition> assemblies)
+		{
+			var rootTypeMapAssemblyName = new AssemblyNameDefinition (App.TypeMapAssemblyName, new Version (1, 0, 0, 0));
+			var rootTypeMapAssembly = AssemblyDefinition.CreateAssembly (rootTypeMapAssemblyName, rootTypeMapAssemblyName.Name, moduleParameters);
+
+			abr.SetCurrentAssembly (rootTypeMapAssembly);
+
+			foreach (var assembly in assemblies) {
+				var attribute = new CustomAttribute (abr.TypeMapAssemblyTargetAttribute_1_Constructor_String_Type_Type);
+				attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, assembly.Name.Name));
+				rootTypeMapAssembly.CustomAttributes.Add (attribute);
+			}
+
+			abr.ClearCurrentAssembly ();
+			// TODO: check if modified before writing (or write to temporary file and move if modified, to avoid unnecessary writes)
+			rootTypeMapAssembly.Write (Path.Combine (App.TypeMapOutputDirectory, rootTypeMapAssembly.Name.Name + ".dll"));
+		}
+
 		protected override void TryEndProcess (out List<Exception>? exceptions)
 		{
+			ILProcessor il;
+
 			base.TryEndProcess ();
 
 			if (App.Registrar != RegistrarMode.TrimmableStatic) {
@@ -54,91 +74,115 @@ namespace Xamarin.Linker {
 				return;
 			}
 
-			var and = new AssemblyNameDefinition ("TrimmableRegistrar", new Version (1, 0, 0, 0));
-			var trimmableRegistrarAssembly = AssemblyDefinition.CreateAssembly (and, and.Name, ModuleKind.Dll);
+			Directory.CreateDirectory (App.TypeMapOutputDirectory);
 
-			abr.SetCurrentAssembly (trimmableRegistrarAssembly);
-			
-			var assembliesWithRegisteredTypes = new List<AssemblyDefinition> ();
-			assembliesWithRegisteredTypes.AddRange (ManagedRegistrarStep.AssembliesWithRegisteredTypes); // TODO: fix this to find assemblies elsewhere
-			foreach (var asm in assembliesWithRegisteredTypes) {
-				var attribute = new CustomAttribute (abr.IgnoresAccessChecksToAttribute_Constructor_String);
-				attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, asm.Name.Name));
-				trimmableRegistrarAssembly.CustomAttributes.Add (attribute);
-			}	
+			var typesByAssembly = this.App.StaticRegistrar.Types.GroupBy (v => v.Key.Module.Assembly);
 
-			var registeredTypes = new List<TypeDefinition> ();
-			registeredTypes.AddRange (ManagedRegistrarStep.RegisteredTypes); // TODO: fix this to find it types elsewhere
-			foreach (var td in registeredTypes) {
-				var objcClassName = td.Name;
-				var isCustomType = false;
-				var attribute = new CustomAttribute (abr.TypeMapAttribute_1_Constructor_String_Type_Type); // TODO: resolve generics
-				attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, objcClassName));
-				attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, td));
-				attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, td));
-				trimmableRegistrarAssembly.CustomAttributes.Add (attribute);
+			var copyAssemblyParametersFrom = abr.PlatformAssembly.MainModule;
+			var assemblyParameters = new ModuleParameters {
+				Kind = copyAssemblyParametersFrom.Kind,
+				Runtime = copyAssemblyParametersFrom.Runtime,
+				Architecture = copyAssemblyParametersFrom.Architecture,
+				AssemblyResolver = copyAssemblyParametersFrom.AssemblyResolver,
+				MetadataResolver = copyAssemblyParametersFrom.MetadataResolver,
+			};
 
-				/*
-				 * [..._Proxy]
-				 * sealedclass ..._Proxy : NSObjectProxy {
-				 * }
-				 */
-				var proxyType = new TypeDefinition (td.Namespace, td.Name + "_Proxy", TypeAttributes.NotPublic | TypeAttributes.Sealed, abr.ObjCRuntime_NSObjectProxyAttribute);
-				trimmableRegistrarAssembly.MainModule.Types.Add (proxyType);
+			CreateTypeMapRootAssembly (assemblyParameters, typesByAssembly.Select (v => v.Key));
 
-				/* default ctor */
-				var ctor = new MethodDefinition (".ctor", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, abr.System_Void);
-				var il = ctor.Body.GetILProcessor ();
+			foreach (var typesInAssembly in typesByAssembly) {
+				var assembly = typesInAssembly.Key;
+				var types = typesInAssembly.ToList ();
+
+				var typeMapAssemblyName = new AssemblyNameDefinition ("_" + assembly.Name + ".TypeMap", new Version (1, 0, 0, 0));
+				var typeMapAssembly = AssemblyDefinition.CreateAssembly (typeMapAssemblyName, typeMapAssemblyName.Name, assemblyParameters);
+
+				abr.SetCurrentAssembly (typeMapAssembly);
+
+				var ignoredAccessChecks = new TypeDefinition ("System.Runtime.CompilerServices", "IgnoresAccessChecksToAttribute", TypeAttributes.NotPublic  | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.System_Attribute);
+				var ignoredAccessChecksCtor = new MethodDefinition (".ctor", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, abr.System_Void);
+				ignoredAccessChecksCtor.AddParameter ("assemblyName", abr.System_String);
+				il = ignoredAccessChecksCtor.Body.GetILProcessor ();
 				il.Append (il.Create (OpCodes.Ldarg_0));
-				il.Append (il.Create (OpCodes.Call, abr.ObjCRuntime_NSObjectProxy__ctor));
+				il.Append (il.Create (OpCodes.Call, abr.System_Attribute__ctor));
 				il.Append (il.Create (OpCodes.Ret));
-				proxyType.Methods.Add (ctor);
+				ignoredAccessChecks.Methods.Add (ignoredAccessChecksCtor);
+				typeMapAssembly.MainModule.Types.Add (ignoredAccessChecks);
 
-				/*
-				 * public virtual NSObject? CreateObject (IntPtr handle)
-				 * {
-				 *     return Runtime.GetNSObject (handle, false);
-				 * }	
-				 */
-				var createObjectMethod = new MethodDefinition ("CreateObject", MethodAttributes.Public | MethodAttributes.Virtual, abr.Foundation_NSObject);
-				createObjectMethod.AddParameter ("handle", abr.System_IntPtr);
-				il = createObjectMethod.Body.GetILProcessor ();
-				il.Append (il.Create (OpCodes.Ldarg_1));
-				// TODO: Fix to call the actual ctor, not Runtime.GetNSObject, because that will become recursive.
-				//il.Append (il.Create (OpCodes.Ldc_I4_0));
-				il.Append (il.Create (OpCodes.Call, abr.Runtime_GetNSObject__System_IntPtr));
-				il.Append (il.Create (OpCodes.Ret));
-				proxyType.Methods.Add (createObjectMethod);
-				/*
-				 * public virtual IntPtr GetClassHandle (out bool is_custom_type)
-				 * {
-				 * 	   is_custom_type = ...;
-				 * 	   return Class.GetHandle ("...");
-				 * }
-				 */
-				var getClassHandleMethod = new MethodDefinition ("GetClassHandle", MethodAttributes.Public | MethodAttributes.Virtual, abr.System_IntPtr);
-				getClassHandleMethod.AddParameter ("is_custom_type", abr.System_Boolean.MakeByReferenceType ());
-				il = getClassHandleMethod.Body.GetILProcessor ();
-				il.Append (il.Create (OpCodes.Ldarg_1));
-				il.Append (il.Create (isCustomType ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0));
-				il.Append (il.Create (OpCodes.Stind_I1));
-				il.Append (il.Create (OpCodes.Ldstr, objcClassName));
-				il.Append (il.Create (OpCodes.Call, abr.Class_GetHandle__System_String));
-				il.Append (il.Create (OpCodes.Ret));
-				proxyType.Methods.Add (getClassHandleMethod);
+				foreach (var kvp in typesInAssembly) {
+					var tr = kvp.Key;
+					var objcType = kvp.Value;
+					var objcClassName = objcType.Name;
+					var isCustomType = App.StaticRegistrar.IsCustomType (objcType);
+					var attribute = new CustomAttribute (abr.TypeMapAttribute_1_Constructor_String_Type_Type); // TODO: resolve generics
+					attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, objcClassName));
+					attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, tr));
+					attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, tr));
+					typeMapAssembly.CustomAttributes.Add (attribute);
 
-				// We add the proxy type as an attribute to itself
-				attribute = new CustomAttribute (ctor);
-				proxyType.CustomAttributes.Add (attribute);
+					/*
+					* [..._Proxy]
+					* sealedclass ..._Proxy : NSObjectProxy {
+					* }
+					*/
+					var proxyType = new TypeDefinition (tr.Namespace, tr.Name + "_Proxy", TypeAttributes.NotPublic | TypeAttributes.Sealed, abr.ObjCRuntime_NSObjectProxyAttribute);
+					typeMapAssembly.MainModule.Types.Add (proxyType);
 
-				// add the [assembly: TypeMapAssociation] attribute for this type and its proxy
-				attribute = new CustomAttribute (abr.TypeMapAssociationAttribute_1_Constructor_Type_Type); // TODO: resolve generics
-				attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, td));
-				attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, proxyType));
-				trimmableRegistrarAssembly.CustomAttributes.Add (attribute);
+					/* default ctor */
+					var ctor = new MethodDefinition (".ctor", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, abr.System_Void);
+					il = ctor.Body.GetILProcessor ();
+					il.Append (il.Create (OpCodes.Ldarg_0));
+					il.Append (il.Create (OpCodes.Call, abr.ObjCRuntime_NSObjectProxy__ctor));
+					il.Append (il.Create (OpCodes.Ret));
+					proxyType.Methods.Add (ctor);
+
+					/*
+					* public virtual NSObject? CreateObject (IntPtr handle)
+					* {
+					*     return Runtime.GetNSObject (handle, false);
+					* }	
+					*/
+					var createObjectMethod = new MethodDefinition ("CreateObject", MethodAttributes.Public | MethodAttributes.Virtual, abr.Foundation_NSObject);
+					createObjectMethod.AddParameter ("handle", abr.System_IntPtr);
+					il = createObjectMethod.Body.GetILProcessor ();
+					il.Append (il.Create (OpCodes.Ldarg_1));
+					// TODO: Fix to call the actual ctor, not Runtime.GetNSObject, because that will become recursive.
+					//il.Append (il.Create (OpCodes.Ldc_I4_0));
+					il.Append (il.Create (OpCodes.Call, abr.Runtime_GetNSObject__System_IntPtr));
+					il.Append (il.Create (OpCodes.Ret));
+					proxyType.Methods.Add (createObjectMethod);
+					/*
+					* public virtual IntPtr GetClassHandle (out bool is_custom_type)
+					* {
+					* 	   is_custom_type = ...;
+					* 	   return Class.GetHandle ("...");
+					* }
+					*/
+					var getClassHandleMethod = new MethodDefinition ("GetClassHandle", MethodAttributes.Public | MethodAttributes.Virtual, abr.System_IntPtr);
+					getClassHandleMethod.AddParameter ("is_custom_type", abr.System_Boolean.MakeByReferenceType ());
+					il = getClassHandleMethod.Body.GetILProcessor ();
+					il.Append (il.Create (OpCodes.Ldarg_1));
+					il.Append (il.Create (isCustomType ? OpCodes.Ldc_I4_1 : OpCodes.Ldc_I4_0));
+					il.Append (il.Create (OpCodes.Stind_I1));
+					il.Append (il.Create (OpCodes.Ldstr, objcClassName));
+					il.Append (il.Create (OpCodes.Call, abr.Class_GetHandle__System_String));
+					il.Append (il.Create (OpCodes.Ret));
+					proxyType.Methods.Add (getClassHandleMethod);
+
+					// We add the proxy type as an attribute to itself
+					attribute = new CustomAttribute (ctor);
+					proxyType.CustomAttributes.Add (attribute);
+
+					// add the [assembly: TypeMapAssociation] attribute for this type and its proxy
+					attribute = new CustomAttribute (abr.TypeMapAssociationAttribute_1_Constructor_Type_Type); // TODO: resolve generics
+					attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, tr));
+					attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, proxyType));
+					typeMapAssembly.CustomAttributes.Add (attribute);
+				}
+
+				abr.ClearCurrentAssembly ();
+				// TODO: check if modified before writing (or write to temporary file and move if modified, to avoid unnecessary writes)
+				typeMapAssembly.Write (Path.Combine (App.TypeMapOutputDirectory, typeMapAssembly.Name.Name + ".dll"));
 			}
-
-			abr.ClearCurrentAssembly ();
 
 			// Report back any exceptions that occurred during the processing.
 			exceptions = this.exceptions;

@@ -2022,6 +2022,17 @@ namespace Registrar {
 		uint full_token_reference_count;
 		List<(AssemblyDefinition Assembly, string Name)> registered_assemblies = new List<(AssemblyDefinition Assembly, string Name)> ();
 
+		public bool IsCustomType (ObjCType type)
+		{
+			if (IsPlatformType (type.Type))
+				return false;
+
+			if (!type.IsProtocol && !type.IsCategory)
+				return true;
+			
+			return false;
+		}
+
 		bool IsPlatformType (TypeReference type)
 		{
 			if (type.IsNested)
@@ -2824,13 +2835,13 @@ namespace Registrar {
 				var isPlatformType = IsPlatformType (@class.Type);
 				var flags = MTTypeFlags.None;
 
+				if (IsCustomType (@class))
+					flags |= MTTypeFlags.CustomType;
+
 				skip.Clear ();
 
 				uint token_ref = uint.MaxValue;
 				if (!@class.IsProtocol && !@class.IsCategory) {
-					if (!isPlatformType)
-						flags |= MTTypeFlags.CustomType;
-
 					if (!@class.IsWrapper && !@class.IsModel)
 						flags |= MTTypeFlags.UserType;
 

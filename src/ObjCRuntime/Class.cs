@@ -1042,6 +1042,7 @@ namespace ObjCRuntime {
 	// TODO: make this class internal
 	public class NSObjectProxyAttribute : Attribute
 	{
+#if !COREBUILD
 		public virtual NSObject? CreateObject (IntPtr handle)
 		{
 			return Runtime.GetNSObject (handle, false);
@@ -1052,8 +1053,10 @@ namespace ObjCRuntime {
 			is_custom_type = false;
 			return Class.GetHandle ("NSObject");
 		}
+#endif
 	}
 
 	// TODO: make this class internal
+	// TODO: do we even need this?
 	public class ObjectiveCUniverse {}
 }

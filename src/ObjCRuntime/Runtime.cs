@@ -164,7 +164,7 @@ namespace ObjCRuntime {
 		internal enum InitializationFlags : int {
 			IsPartialStaticRegistrar = 0x01,
 			IsManagedStaticRegistrar = 0x02,
-			/* unused				= 0x04,*/
+			IsTrimmableStaticRegistrar = 0x04,
 			/* unused				= 0x08,*/
 			IsSimulator = 0x10,
 			IsCoreCLR = 0x20,
@@ -248,6 +248,14 @@ namespace ObjCRuntime {
 			get {
 				// The linker may turn calls to this property into a constant
 				return (options->Flags.HasFlag (InitializationFlags.IsManagedStaticRegistrar));
+			}
+		}
+
+		[BindingImpl (BindingImplOptions.Optimizable)]
+		internal unsafe static bool IsTrimmableStaticRegistrar {
+			get {
+				// The linker may turn calls to this property into a constant
+				return (options->Flags.HasFlag (InitializationFlags.IsTrimmableStaticRegistrar));
 			}
 		}
 

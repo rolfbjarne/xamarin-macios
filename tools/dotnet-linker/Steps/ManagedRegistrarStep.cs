@@ -84,6 +84,9 @@ namespace Xamarin.Linker {
 		AppBundleRewriter abr { get { return Configuration.AppBundleRewriter; } }
 		List<Exception> exceptions = new List<Exception> ();
 
+		public static List<AssemblyDefinition> AssembliesWithRegisteredTypes { get; } = new List<AssemblyDefinition> ();
+		public static List<TypeDefinition> RegisteredTypes { get; } = new List<TypeDefinition> ();
+
 		void AddException (Exception exception)
 		{
 			if (exceptions is null)
@@ -158,8 +161,10 @@ namespace Xamarin.Linker {
 
 			// Make sure the linker saves any changes in the assembly.
 			DerivedLinkContext.Annotations.SetCustomAnnotation ("ManagedRegistrarStep", assembly, current_trampoline_lists);
-			if (modified)
+			if (modified) {
+				AssembliesWithRegisteredTypes.Add (assembly);
 				abr.SaveCurrentAssembly ();
+			}
 
 			// TODO: Move this to a separate "MakeEverythingWorkWithNativeAOTStep" linker step
 			if (App.XamarinRuntime == XamarinRuntime.NativeAOT && Configuration.Profile.IsProductAssembly (assembly)) {
@@ -211,6 +216,8 @@ namespace Xamarin.Linker {
 					AddException (ErrorHelper.CreateError (99, e, "Failed to create an UnmanagedCallersOnly trampoline for {0}: {1}", method.FullName, e.Message));
 				}
 			}
+
+			RegisteredTypes.Add (type);
 
 			return true;
 		}

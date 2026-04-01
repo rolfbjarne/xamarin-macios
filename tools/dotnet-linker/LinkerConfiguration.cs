@@ -342,6 +342,12 @@ namespace Xamarin.Linker {
 						throw new InvalidOperationException ($"Invalid TargetFramework '{value}' in {linker_file}");
 					Driver.TargetFramework = TargetFramework.Parse (value);
 					break;
+				case "TypeMapAssemblyName":
+					Application.TypeMapAssemblyName = value;
+					break;
+				case "TypeMapOutputDirectory":
+					Application.TypeMapOutputDirectory = value;
+					break;
 				case "UseLlvm":
 					use_llvm = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase);
 					break;
@@ -526,6 +532,8 @@ namespace Xamarin.Linker {
 				Console.WriteLine ($"    SdkDevPath: {Driver.SdkRoot}");
 				Console.WriteLine ($"    SdkRootDirectory: {SdkRootDirectory}");
 				Console.WriteLine ($"    SdkVersion: {SdkVersion}");
+				Console.WriteLine ($"    TypeMapAssemblyName: {Application.TypeMapAssemblyName}");
+				Console.WriteLine ($"    TypeMapOutputDirectory: {Application.TypeMapOutputDirectory}");
 				Console.WriteLine ($"    UseInterpreter: {Application.UseInterpreter}");
 				Console.WriteLine ($"    UseLlvm: {Application.IsLLVM}");
 				Console.WriteLine ($"    Verbosity: {Verbosity}");

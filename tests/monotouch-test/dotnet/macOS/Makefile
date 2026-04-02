@@ -78,6 +78,15 @@ s:
 	make build
 	bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest --test MonoTouchFixtures.ObjCRuntime.GCHandleSwitchRaceTest
 
+a: export RID=
+a: export RUNTIMEIDENTIFIER=
+a: export RUNTIMEIDENTIFIERS=
+a:
+	mair
+	git clean -xfd
+	make build
+	bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest
+
 lldb:
 	lldb -- bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest --test apitest.KernelNotificationTest
 

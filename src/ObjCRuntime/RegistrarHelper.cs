@@ -6,7 +6,7 @@
 //
 // Copyright 2023 Microsoft Corp
 
-#define TRACE
+// #define TRACE
 
 #nullable enable
 

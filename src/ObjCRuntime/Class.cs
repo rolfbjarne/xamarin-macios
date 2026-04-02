@@ -318,6 +318,12 @@ namespace ObjCRuntime {
 				var attrib = type.GetCustomAttribute<NSObjectProxyAttribute> ();
 				if (attrib is not null)
 					return attrib.GetClassHandle (out is_custom_type);
+
+				// The type we're looking for might be a type the registrar skipped, in which case we must
+				// find it in the mapping of skipped types.
+				if (TypeMapping.GetOrCreateProxyTypeMapping<SkippedObjectiveCTypeUniverse> ().TryGetValue (type, out var actualType))
+					return FindClass (actualType, out is_custom_type);
+
 				is_custom_type = false;
 				return IntPtr.Zero;
 			}
@@ -444,28 +450,35 @@ namespace ObjCRuntime {
 		static Type? FindTypeInTrimmableMap (NativeHandle @class, out bool is_custom_type)
 		{
 			var className = GetClassName (@class);
+
+#if LOG_TRIMMABLE_TYPEMAP
+			Runtime.NSLog ($"FindType (0x{@class:X} = {className}) looking for managed type...");
+#endif
+
 			if (string.IsNullOrEmpty (className)) {
 				is_custom_type = false;
 
 #if LOG_TRIMMABLE_TYPEMAP
-				Runtime.NSLog ($"FindType (0x{@class:X} = no class name found");
+				Runtime.NSLog ($"FindType (0x{@class:X} = {className}) = no class name found");
 #endif
 				return null;
 			}
 
-			if (!TypeMapping.GetOrCreateExternalTypeMapping<NSObjectProxyAttribute> ().TryGetValue (className, out var managedType)) {
+			var map = TypeMapping.GetOrCreateExternalTypeMapping<NSObject> ();
+			if (!map.TryGetValue (className, out var managedType)) {
 				is_custom_type = false;
 
 #if LOG_TRIMMABLE_TYPEMAP
-				Runtime.NSLog ($"FindType (0x{@class:X} = class '{className}' not found in type map");
+				Runtime.NSLog ($"FindType (0x{@class:X} = {className}) not found in type map");
 #endif
 				return null;
 			}
 
-			if (!TypeMapping.GetOrCreateProxyTypeMapping<NSObjectProxyAttribute> ().TryGetValue (managedType, out var proxyType)) {
+			var proxyMap = TypeMapping.GetOrCreateProxyTypeMapping<NSObject> ();
+			if (!proxyMap.TryGetValue (managedType, out var proxyType)) {
 				is_custom_type = false;
 #if LOG_TRIMMABLE_TYPEMAP
-				Runtime.NSLog ($"FindType (0x{@class:X} = class '{className}' found in type map, but proxy type not found");
+				Runtime.NSLog ($"FindType (0x{@class:X} = {className}) found in type map, but proxy type not found");
 #endif
 				return null;
 			}
@@ -475,7 +488,7 @@ namespace ObjCRuntime {
 			if (attrib is null) {
 				is_custom_type = false;
 #if LOG_TRIMMABLE_TYPEMAP
-				Runtime.NSLog ($"FindType (0x{@class:X} = class '{className}' found in proxy type map, but could not create proxy attribute for it");
+				Runtime.NSLog ($"FindType (0x{@class:X} = {className}) found in proxy type map, but could not create proxy attribute for it");
 #endif
 				return null;
 			}
@@ -483,12 +496,12 @@ namespace ObjCRuntime {
 			var ch = attrib.GetClassHandle (out is_custom_type);
 			if (ch != @class)  {
 #if LOG_TRIMMABLE_TYPEMAP
-				Runtime.NSLog ($"FindType (0x{@class:X} = class '{className}' found in proxy type map, and attribute, but attribute's class handle doesn't match (0x{ch:X} != 0x{@class:X})");
+				Runtime.NSLog ($"FindType (0x{@class:X} = {className}) found in proxy type map, and attribute, but attribute's class handle doesn't match (0x{ch:X} != 0x{@class:X})");
 #endif
 			}
 
 #if LOG_TRIMMABLE_TYPEMAP
-			Runtime.NSLog ($"FindType (0x{@class:X} = class '{className}') found {managedType}");
+			Runtime.NSLog ($"FindType (0x{@class:X} = {className}) found {managedType}");
 #endif
 			return managedType;
 		}
@@ -1058,6 +1071,23 @@ namespace ObjCRuntime {
 			return Class.GetHandle ("NSObject");
 		}
 #endif
+	}
+
+	// TODO: make this class internal
+	public class ProtocolProxyAttribute : Attribute
+	{
+#if !COREBUILD
+		public virtual INativeObject? CreateObject (IntPtr handle, bool owns)
+		{
+			throw new NotImplementedException ("Must subclass");
+		}
+#endif
+	}
+
+
+	// TODO: make this class internal
+	public static class SkippedObjectiveCTypeUniverse
+	{
 	}
 
 	// TODO: make this class internal

@@ -31,7 +31,6 @@ namespace Xamarin.Linker {
 				Configuration.Application.StaticRegistrar.Register (Configuration.GetNonDeletedAssemblies (this));
 				goto case RegistrarMode.ManagedStatic;
 			case RegistrarMode.TrimmableStatic:
-				break;
 			case RegistrarMode.ManagedStatic:
 				var dir = Configuration.CacheDirectory;
 				var header = Path.Combine (dir, "registrar.h");

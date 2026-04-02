@@ -69,6 +69,17 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public AssemblyDefinition EntryAssembly {
+			get {
+				var entryAssemblyName = Path.GetFileNameWithoutExtension (Application.AssemblyName);
+				var entryAssembly = Assemblies.FirstOrDefault (a => a.Name.Name == entryAssemblyName);
+				if (entryAssembly is null)
+					throw new InvalidOperationException ($"The entry assembly '{entryAssemblyName}' was not found among the loaded assemblies.");
+
+				return entryAssembly;
+			}
+		}
+
 		// This dictionary contains information about the trampolines created for each assembly.
 		public AssemblyTrampolineInfos AssemblyTrampolineInfos = new ();
 

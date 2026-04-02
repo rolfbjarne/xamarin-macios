@@ -43,4 +43,8 @@
       <Link>StringUtils.cs</Link>
     </Compile>
   </ItemGroup>
+
+  <ItemGroup>
+    <RuntimeHostConfigurationOption Include="System.Runtime.InteropServices.TypeMappingEntryAssembly" Value="_Microsoft.$(_PlatformName).TypeMaps" />
+  </ItemGroup>
 </Project>

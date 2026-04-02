@@ -255,7 +255,7 @@ namespace ObjCRuntime {
 		internal unsafe static bool IsTrimmableStaticRegistrar {
 			get {
 				// The linker may turn calls to this property into a constant
-				return (options->Flags.HasFlag (InitializationFlags.IsTrimmableStaticRegistrar));
+				return options->Flags.HasFlag (InitializationFlags.IsTrimmableStaticRegistrar);
 			}
 		}
 
@@ -1342,6 +1342,18 @@ namespace ObjCRuntime {
 			if (type is null)
 				throw new ArgumentNullException (nameof (type));
 
+			if (Runtime.IsTrimmableStaticRegistrar) {
+				var proxyMap = TypeMapping.GetOrCreateProxyTypeMapping<NSObject> ();
+				if (proxyMap.TryGetValue (typeof (T), out var proxyType)) {
+					Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}) found in proxy map");
+					var attrib = proxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
+					if (attrib is null)
+						throw new InvalidOperationException ($"Type '{proxyType.FullName}' is expected to have an NSObjectProxyAttribute.");
+					return (T?) attrib.CreateObject (ptr);
+				}
+				Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}) did not find type in proxy map");
+			}
+
 			if (Runtime.IsManagedStaticRegistrar) {
 				T? instance = default;
 				var nativeHandle = new NativeHandle (ptr);
@@ -1419,6 +1431,26 @@ namespace ObjCRuntime {
 
 			if (type.IsByRef)
 				type = type.GetElementType ()!;
+
+			if (Runtime.IsTrimmableStaticRegistrar) {
+				var nsObjectProxyMap = TypeMapping.GetOrCreateProxyTypeMapping<NSObject> ();
+				if (nsObjectProxyMap.TryGetValue (typeof (T), out var proxyType)) {
+					Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}) found in proxy map");
+					var attrib = proxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
+					if (attrib is null)
+						throw new InvalidOperationException ($"Type '{proxyType.FullName}' is expected to have an NSObjectProxyAttribute.");
+					return (T?) (object?) attrib.CreateObject (ptr);
+				}
+				var protocolProxyMap = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolAttribute> ();
+				if (protocolProxyMap.TryGetValue (typeof (T), out var protocolProxyType)) {
+					Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}) found in protocol proxy map");
+					var attrib = protocolProxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
+					if (attrib is null)
+						throw new InvalidOperationException ($"Type '{protocolProxyType.FullName}' is expected to have an NSObjectProxyAttribute.");
+					return (T?) (object?) attrib.CreateObject (ptr);
+				}
+				Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}) did not find type in proxy map");
+			}
 
 			if (Runtime.IsManagedStaticRegistrar) {
 				var nativeHandle = new NativeHandle (ptr);

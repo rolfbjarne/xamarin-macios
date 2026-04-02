@@ -378,6 +378,12 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public TypeReference Foundation_ProtocolAttribute {
+			get {
+				return GetTypeReference (PlatformAssembly, "Foundation.ProtocolAttribute", out var _);
+			}
+		}
+		
 		public TypeReference ObjCRuntime_BindAs {
 			get {
 				return GetTypeReference (PlatformAssembly, "ObjCRuntime.BindAs", out var _);
@@ -447,6 +453,12 @@ namespace Xamarin.Linker {
 		public TypeReference ObjCRuntime_RuntimeException {
 			get {
 				return GetTypeReference (PlatformAssembly, "ObjCRuntime.RuntimeException", out var _);
+			}
+		}
+
+		public TypeReference ObjCRuntime_SkippedObjectiveCTypeUniverse {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.SkippedObjectiveCTypeUniverse", out var _);
 			}
 		}
 

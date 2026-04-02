@@ -2841,7 +2841,7 @@ namespace Registrar {
 				skip.Clear ();
 
 				uint token_ref = uint.MaxValue;
-				if (!@class.IsProtocol && !@class.IsCategory) {
+				if (App.Registrar != RegistrarMode.TrimmableStatic && !@class.IsProtocol && !@class.IsCategory) {
 					if (!@class.IsWrapper && !@class.IsModel)
 						flags |= MTTypeFlags.UserType;
 
@@ -3125,7 +3125,7 @@ namespace Registrar {
 
 			if (App.Optimizations.RedirectClassHandles == true)
 				map.AppendLine ("static void *__xamarin_class_handles [{0}];", i);
-			if (skipped_types.Count > 0) {
+			if (App.Registrar != RegistrarMode.TrimmableStatic && skipped_types.Count > 0) {
 				map.AppendLine ("static const MTManagedClassMap __xamarin_skipped_map [] = {");
 				foreach (var skipped in skipped_types) {
 					if (!TryCreateTokenReference (skipped.Skipped, TokenType.TypeDef, out var skipped_ref, exceptions))
@@ -3998,7 +3998,7 @@ namespace Registrar {
 
 #if !LEGACY_TOOLS
 			// Generate the native trampoline to call the generated UnmanagedCallersOnly method if we're using the managed static registrar.
-			if (LinkContext.App.Registrar == RegistrarMode.ManagedStatic || LinkContext.App.Registrar == RegistrarMode.ManagedStatic) {
+			if (LinkContext.App.Registrar == RegistrarMode.ManagedStatic || LinkContext.App.Registrar == RegistrarMode.TrimmableStatic) {
 				GenerateCallToUnmanagedCallersOnlyMethod (sb, method, isCtor, isVoid, num_arg, descriptiveMethodName, exceptions);
 				return;
 			}

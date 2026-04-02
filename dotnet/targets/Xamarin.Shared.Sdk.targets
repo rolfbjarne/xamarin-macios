@@ -1279,7 +1279,7 @@
 			<_TypeMapOutputDirectory Condition="'$(_TypeMapOutputDirectory)' == ''">$(DeviceSpecificIntermediateOutputPath)typemap\</_TypeMapOutputDirectory>
 		</PropertyGroup>
 		<ItemGroup Condition="'$(Registrar)' == 'trimmable-static'">
-			<RuntimeHostConfigurationOption Include="System.Runtime.InteropServices.TypeMappingEntryAssembly" Value="$(_TypeMapAssemblyName)" />
+			<RuntimeHostConfigurationOption Include="System.Runtime.InteropServices.TypeMappingEntryAssembly" Value="$(_TypeMapAssemblyName)" Link="true" />
 		</ItemGroup>
 
 		<!-- Not sure about how to handle nested app extensions here, but if it ever becomes a problem we can look into it (I believe only watch extensions can have embedded extensions at this point, and we don't support watchOS on .NET anyways) -->

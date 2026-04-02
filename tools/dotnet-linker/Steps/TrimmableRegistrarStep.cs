@@ -166,7 +166,7 @@ namespace Xamarin.Linker {
 					var trImported = typeMapAssembly.MainModule.ImportReference (tr);
 					var td = tr.Resolve ();
 					var objcType = kvp.Value;
-					var objcClassName = objcType.Name;
+					var objcClassName = objcType.ExportedName;
 					var isCustomType = App.StaticRegistrar.IsCustomType (objcType);
 
 					/*

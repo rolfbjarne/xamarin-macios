@@ -134,9 +134,22 @@ namespace Xamarin.Linker {
 
 			var categoryMethodsByType = App.StaticRegistrar.Types
 				.Where (v => v.Value.IsCategory)
-				.SelectMany (v => v.Value.Methods!.Select (m => (Type: v.Key, Method: m)))
+				.SelectMany (v => v.Value.Methods!.Select (m => (Type: v.Value.BaseType!.Type, Method: m)))
 				.GroupBy (v => v.Type)
 				.ToDictionary (v => v.Key, v => v.Select (m => m.Method).ToList ());
+
+			var trampolinesByMethod = Configuration.AssemblyTrampolineInfos
+				.SelectMany (v => v.Value.Select (t => (Assembly: v.Key, TrampolineInfo: t)))
+				.ToDictionary (v => v.TrampolineInfo.Target, v => v.TrampolineInfo);
+
+			var trampolinesByType = Configuration.AssemblyTrampolineInfos
+				.SelectMany (v => v.Value.Select (t => (Assembly: v.Key, TrampolineInfo: t)))
+				.GroupBy (v => v.TrampolineInfo.Target.DeclaringType)
+				.ToDictionary (v => v.Key, v => v.Select (t => t.TrampolineInfo).ToList ());
+
+			// Dictionary<TypeDefinition, List<TrampolineInfo>>? trampolinesByType = null;
+			// if (Configuration.AssemblyTrampolineInfos.TryGetValue (assembly, out var trampolineInfos))
+			// 	trampolinesByType = trampolineInfos.GroupBy (v => v.Target.DeclaringType).ToDictionary (v => v.Key, v => v.ToList ());
 
 			foreach (var typesInAssembly in typesByAssembly.OrderBy (v => v.Key.FullName)) {
 				var assembly = typesInAssembly.Key;
@@ -145,6 +158,9 @@ namespace Xamarin.Linker {
 				var typeMapAssemblyName = new AssemblyNameDefinition ("_" + assembly.Name.Name + ".TypeMap", new Version (1, 0, 0, 0));
 				var typeMapAssembly = AssemblyDefinition.CreateAssembly (typeMapAssemblyName, typeMapAssemblyName.Name, assemblyParameters);
 				createdAssemblies.Add (typeMapAssembly);
+
+				var accessesAssemblies = new HashSet<AssemblyDefinition> ();
+				accessesAssemblies.Add (assembly);
 
 				abr.SetCurrentAssembly (typeMapAssembly);
 
@@ -160,13 +176,6 @@ namespace Xamarin.Linker {
 				il.Append (il.Create (OpCodes.Ret));
 				ignoredAccessChecks.Methods.Add (ignoredAccessChecksCtor);
 				typeMapAssembly.MainModule.Types.Add (ignoredAccessChecks);
-				var attrib = new CustomAttribute (ignoredAccessChecksCtor);
-				attrib.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, assembly.Name.Name));
-				typeMapAssembly.CustomAttributes.Add (attrib);
-
-				Dictionary<TypeDefinition, List<TrampolineInfo>>? trampolinesByType = null;
-				if (Configuration.AssemblyTrampolineInfos.TryGetValue (assembly, out var trampolineInfos))
-					trampolinesByType = trampolineInfos.GroupBy (v => v.Target.DeclaringType).ToDictionary (v => v.Key, v => v.ToList ());
 
 				foreach (var kvp in typesInAssembly.OrderBy (v => v.Key.FullName)) {
 					var tr = kvp.Key;
@@ -259,8 +268,30 @@ namespace Xamarin.Linker {
 						var lookupUnmanagedFunctionMethod = new MethodDefinition ("LookupUnmanagedFunction", MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig, abr.System_IntPtr);
 						lookupUnmanagedFunctionMethod.AddParameter ("name", abr.System_String);
 						il = lookupUnmanagedFunctionMethod.Body.GetILProcessor ();
+						if (categoryMethodsByType.Remove (td, out var categoryMethods)) {
+							foreach (var m in categoryMethods.OrderBy (v => v.FullName)) {
+								if (!trampolinesByMethod.Remove (m.Method!.Resolve (), out var info)) {
+									Console.WriteLine ("// TODO: show error/warning A");
+									continue;
+								}
+								trampolinesByType?.Remove (m.CategoryType!.Type.Resolve ());
+								// if (name == "...")
+								var falseTarget = il.Create (OpCodes.Nop);
+								il.Append (il.Create (OpCodes.Ldarg_1));
+								il.Append (il.Create (OpCodes.Ldstr, info.UnmanagedCallersOnlyEntryPoint));
+								il.Append (il.Create (OpCodes.Call, abr.System_String__op_Equality_String_String));
+								il.Append (il.Create (OpCodes.Brfalse_S, falseTarget));
+								//     return &Method;
+								il.Append (il.Create (OpCodes.Ldftn, abr.CurrentAssembly.MainModule.ImportReference (info.Trampoline)));
+								il.Append (il.Create (OpCodes.Ret));
+								il.Append (falseTarget);
+
+								accessesAssemblies.Add (info.Trampoline.Module.Assembly);
+							}
+						}
 						if (trampolinesByType?.Remove (td, out var trampolines) == true) {
 							foreach (var m in trampolines.OrderBy (v => v.UnmanagedCallersOnlyEntryPoint)) {
+								trampolinesByMethod.Remove (m.Target.Resolve ());
 								// if (name == "...")
 								var falseTarget = il.Create (OpCodes.Nop);
 								il.Append (il.Create (OpCodes.Ldarg_1));
@@ -274,20 +305,10 @@ namespace Xamarin.Linker {
 								// TODO: avoid the nop instruction by branching to the next comparison or the return of IntPtr.Zero
 							}
 						}
-						if (categoryMethodsByType.Remove (td, out var categoryMethods)) {
-							foreach (var m in categoryMethods.OrderBy (v => v.Name)) {
-								// if (name == "...")
-								var falseTarget = il.Create (OpCodes.Nop);
-								il.Append (il.Create (OpCodes.Ldarg_1));
-								il.Append (il.Create (OpCodes.Ldstr, m.Name));
-								il.Append (il.Create (OpCodes.Call, abr.System_String__op_Equality_String_String));
-								il.Append (il.Create (OpCodes.Brfalse_S, falseTarget));
-								//     return &Method;
-								il.Append (il.Create (OpCodes.Ldftn, abr.CurrentAssembly.MainModule.ImportReference (m)));
-								il.Append (il.Create (OpCodes.Ret));
-								il.Append (falseTarget);
-							}
-						}
+						// CWL
+						il.Append (il.Create (OpCodes.Ldstr, $"{proxyType.FullName}.LookupUnmanagedFunction ({{0}}): did not find this UCO method."));
+						il.Append (il.Create (OpCodes.Ldarg_1));
+						il.Append (il.Create (OpCodes.Call, abr.System_Console__WriteLine_String_Object));
 						// return IntPtr.Zero
 						il.Append (il.Create (OpCodes.Ldc_I4_0));
 						il.Append (il.Create (OpCodes.Conv_I));
@@ -379,7 +400,13 @@ namespace Xamarin.Linker {
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, trImported));
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, abr.CurrentAssembly.MainModule.ImportReference (objcType.ProtocolWrapperType)));
 						typeMapAssembly.CustomAttributes.Add (attribute);
-					}
+					}					
+				}
+
+				foreach (var accessesAssembly in accessesAssemblies.OrderBy (v => v.FullName)) {
+					var attrib = new CustomAttribute (ignoredAccessChecksCtor);
+					attrib.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, accessesAssembly.Name.Name));
+					typeMapAssembly.CustomAttributes.Add (attrib);
 				}
 
 				if (skippedTypesByAssembly.Remove (assembly, out var skippedTypes)) {
@@ -401,14 +428,18 @@ namespace Xamarin.Linker {
 				// it again during the next incremental build.
 				typeMapAssembly.Write (Path.Combine (App.TypeMapOutputDirectory, typeMapAssembly.Name.Name + ".dll"));
 
+			}
 
-				if (trampolinesByType?.Any () == true) {
-					Console.WriteLine ("TRAMPOLINE METHODS LEFT");
-				}
+			if (trampolinesByType?.Any () == true) {
+				Console.WriteLine ("TRAMPOLINE METHODS LEFT");
 			}
 
 			if (categoryMethodsByType.Any ()) {
 				Console.WriteLine ("CATEGORY METHODS LEFT");
+			}
+
+			if (trampolinesByMethod.Any ()) {
+				Console.WriteLine ("TRAMPOLINE METHODS LEFT (METHODS)");
 			}
 
 			if (skippedTypesByAssembly.Any ()) {

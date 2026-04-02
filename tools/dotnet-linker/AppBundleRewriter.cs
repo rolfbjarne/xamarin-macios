@@ -217,6 +217,11 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public TypeReference System_Console {
+			get {
+				return GetTypeReference (CorlibAssembly, "System.Console", out var _);
+			}
+		}
 		public TypeReference System_Delegate {
 			get {
 				return GetTypeReference (CorlibAssembly, "System.Delegate", out var _);
@@ -473,6 +478,18 @@ namespace Xamarin.Linker {
 		public MethodReference System_Attribute__ctor {
 			get {
 				return GetMethodReference (CorlibAssembly, System_Attribute, ".ctor", (v) => v.IsDefaultConstructor ());
+			}
+		}
+
+		public MethodReference System_Console__WriteLine_String_Object {
+			get {
+				return GetMethodReference (CorlibAssembly, System_Console, "WriteLine", (v) => 
+					v.IsStatic
+					&& v.HasParameters
+					&& v.Parameters.Count == 2
+					&& v.Parameters[0].ParameterType.Is("System", "String")
+					&& v.Parameters[1].ParameterType.Is("System", "Object")
+					&& !v.HasGenericParameters);
 			}
 		}
 

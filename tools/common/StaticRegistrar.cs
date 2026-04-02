@@ -2855,7 +2855,7 @@ namespace Registrar {
 									(int) flags, flags);
 
 					bool? use_dynamic = null;
-					if (@class.RegisterAttribute?.IsStubClass == true)
+					if (@class.IsStubClass)
 						use_dynamic = false;
 
 					if (!use_dynamic.HasValue) {
@@ -2891,8 +2891,9 @@ namespace Registrar {
 					if (App.Optimizations.RedirectClassHandles == true)
 						map_init.AppendLine ("__xamarin_class_handles [{0}] = __xamarin_class_map [{0}].handle;", @class.ClassMapIndex);
 					i++;
+				} else if (App.Registrar == RegistrarMode.TrimmableStatic && @class.IsStubClass) {
+					map_init.AppendLine ("[{0} class];", EncodeNonAsciiCharacters (@class.ExportedName));
 				}
-
 
 				if (App.Registrar != RegistrarMode.TrimmableStatic && @class.IsProtocol && @class.ProtocolWrapperType is not null) {
 					if (token_ref == INVALID_TOKEN_REF && !TryCreateTokenReference (@class.Type, TokenType.TypeDef, out token_ref, exceptions))
@@ -2936,8 +2937,7 @@ namespace Registrar {
 					iface.Write ("@protocol ").Write (exportedName);
 					declarations.AppendFormat ("@protocol {0};\n", exportedName);
 				} else {
-					var is_stub_class = @class.RegisterAttribute?.IsStubClass;
-					if (is_stub_class == true)
+					if (@class.IsStubClass)
 						iface.WriteLine ("__attribute__((objc_class_stub)) __attribute__((objc_subclassing_restricted))");
 					iface.Write ("@interface {0} : {1}", class_name, EncodeNonAsciiCharacters (@class.SuperType!.ExportedName));
 					declarations.AppendFormat ("@class {0};\n", class_name);

@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net$(BundledNETCoreAppTargetFrameworkVersion)-macos</TargetFramework>
     <DefineConstants>$(DefineConstants);XAMMAC_TESTS</DefineConstants>
+    <_KeepLaunchProfiles>true</_KeepLaunchProfiles>
   </PropertyGroup>
 
   <!-- Imports of the form '../shared.csproj' will be inlined by xharness -->

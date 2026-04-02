@@ -1344,8 +1344,8 @@ namespace ObjCRuntime {
 
 			if (Runtime.IsTrimmableStaticRegistrar) {
 				var proxyMap = TypeMapping.GetOrCreateProxyTypeMapping<NSObject> ();
-				if (proxyMap.TryGetValue (typeof (T), out var proxyType)) {
-					Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}) found in proxy map");
+				if (proxyMap.TryGetValue (type, out var proxyType)) {
+					Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type}) found in proxy map with type {proxyType.FullName}");
 					var attrib = proxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
 					if (attrib is null)
 						throw new InvalidOperationException ($"Type '{proxyType.FullName}' is expected to have an NSObjectProxyAttribute.");

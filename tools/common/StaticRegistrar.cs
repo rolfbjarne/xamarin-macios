@@ -4308,7 +4308,7 @@ namespace Registrar {
 
 			if (!staticCall) {
 				sb.WriteLine ($"static {ucoEntryPoint}_function {ucoEntryPoint};");
-				sb.WriteLine ($"xamarin_registrar_dlsym ((void **) &{ucoEntryPoint}, \"{method.Method!.Module.Assembly.Name.Name}\", \"{ucoEntryPoint}\", {pinvokeMethodInfo.Id});");
+				sb.WriteLine ($"xamarin_registrar_dlsym ((void **) &{ucoEntryPoint}, \"{method.Method!.Module.Assembly.Name.Name}\", \"{ucoEntryPoint}\", {pinvokeMethodInfo.Id}, \"{method.DeclaringType.ExportedName}\");");
 			}
 			if (hasReturnType)
 				sb.Write ("rv = ");

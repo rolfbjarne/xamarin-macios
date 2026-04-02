@@ -447,43 +447,44 @@ namespace ObjCRuntime {
 			return -1;
 		}
 
-		internal static NSObjectProxyAttribute? GetTrimmableProxyTypeAttribute (string className)
+		internal static bool TryGetTrimmableProxyTypeAttribute (string? className, [NotNullWhen (true)] out NSObjectProxyAttribute? proxyAttribute, [NotNullWhen (true)] out Type? managedType)
 		{
+			proxyAttribute = null;
+			managedType = null;
+
 			if (string.IsNullOrEmpty (className)) {
 #if LOG_TRIMMABLE_TYPEMAP
 				Runtime.NSLog ($"GetTrimmableProxyTypeAttribute ({className}) = no class name provided");
 #endif
-				return null;
+				return false;
 			}
 
 			var map = TypeMapping.GetOrCreateExternalTypeMapping<NSObject> ();
-			if (!map.TryGetValue (className, out var managedType)) {
+			if (!map.TryGetValue (className, out managedType)) {
 #if LOG_TRIMMABLE_TYPEMAP
 				Runtime.NSLog ($"GetTrimmableProxyTypeAttribute ({className}) not found in type map");
 #endif
-				return null;
+				return false;
 			}
 
 			var proxyMap = TypeMapping.GetOrCreateProxyTypeMapping<NSObject> ();
 			if (!proxyMap.TryGetValue (managedType, out var proxyType)) {
-				is_custom_type = false;
 #if LOG_TRIMMABLE_TYPEMAP
 				Runtime.NSLog ($"GetTrimmableProxyTypeAttribute ({className}) found in type map, but proxy type not found");
 #endif
-				return null;
+				return false;
 			}
 
 
-			var attrib = proxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
-			if (attrib is null) {
-				is_custom_type = false;
+			proxyAttribute = proxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
+			if (proxyAttribute is null) {
 #if LOG_TRIMMABLE_TYPEMAP
 				Runtime.NSLog ($"GetTrimmableProxyTypeAttribute ({className}) found in proxy type map, but could not create proxy attribute for it");
 #endif
-				return null;
+				return false;
 			}
 
-			return attrib;
+			return proxyAttribute is not null;
 		}
 
 		static Type? FindTypeInTrimmableMap (NativeHandle @class, out bool is_custom_type)
@@ -491,10 +492,9 @@ namespace ObjCRuntime {
 			is_custom_type = false;
 
 			var className = GetClassName (@class);
-			var attrib = GetTrimmableProxyTypeAttribute (className);
-			if (attrib is null) {
+			if (!TryGetTrimmableProxyTypeAttribute (className, out var attrib, out var managedType)) {
 #if LOG_TRIMMABLE_TYPEMAP
-				Runtime.NSLog ($"FindType (0x{@class:X} = {className}) found in proxy type map, but could not create proxy attribute for it");
+				Runtime.NSLog ($"FindType (0x{@class:X} = {className}) could not get proxy attribute");
 #endif
 				return null;
 			}

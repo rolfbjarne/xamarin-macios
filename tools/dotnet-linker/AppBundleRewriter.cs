@@ -438,6 +438,12 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public TypeReference ObjCRuntime_ProtocolProxyAttribute {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.ProtocolProxyAttribute", out var _);
+			}
+		}
+
 		public TypeReference ObjCRuntime_RegistrarHelper {
 			get {
 				return GetTypeReference (PlatformAssembly, "ObjCRuntime.RegistrarHelper", out var _);
@@ -686,6 +692,12 @@ namespace Xamarin.Linker {
 		public MethodReference ObjCRuntime_NSObjectProxy__ctor {
 			get {
 				return GetMethodReference (PlatformAssembly, ObjCRuntime_NSObjectProxyAttribute, ".ctor", (v) => v.IsDefaultConstructor ());
+			}
+		}
+
+		public MethodReference ObjCRuntime_ProtocolProxy__ctor {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_ProtocolProxyAttribute, ".ctor", (v) => v.IsDefaultConstructor ());
 			}
 		}
 

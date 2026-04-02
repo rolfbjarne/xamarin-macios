@@ -1349,7 +1349,11 @@ namespace ObjCRuntime {
 					var attrib = proxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
 					if (attrib is null)
 						throw new InvalidOperationException ($"Type '{proxyType.FullName}' is expected to have an NSObjectProxyAttribute.");
-					return (T?) attrib.CreateObject (ptr);
+					var instance = (T?) attrib.CreateObject (ptr);
+					if (instance is not null)
+						return instance;
+					MissingCtor (ptr, IntPtr.Zero, type, missingCtorResolution, sel, method_handle);
+					return null;
 				}
 				Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}) did not find type in proxy map");
 			}
@@ -1434,20 +1438,23 @@ namespace ObjCRuntime {
 
 			if (Runtime.IsTrimmableStaticRegistrar) {
 				var nsObjectProxyMap = TypeMapping.GetOrCreateProxyTypeMapping<NSObject> ();
-				if (nsObjectProxyMap.TryGetValue (typeof (T), out var proxyType)) {
-					Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}) found in proxy map");
+				if (nsObjectProxyMap.TryGetValue (type, out var proxyType)) {
+					Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type.FullName}) found in proxy map");
 					var attrib = proxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
 					if (attrib is null)
 						throw new InvalidOperationException ($"Type '{proxyType.FullName}' is expected to have an NSObjectProxyAttribute.");
-					return (T?) (object?) attrib.CreateObject (ptr);
+					var rv = (T?) (object?) attrib.CreateObject (ptr);
+					if (owns)
+						Runtime.TryReleaseINativeObject (rv);
+					return rv;
 				}
-				var protocolProxyMap = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolAttribute> ();
-				if (protocolProxyMap.TryGetValue (typeof (T), out var protocolProxyType)) {
-					Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}) found in protocol proxy map");
-					var attrib = protocolProxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
+				var protocolProxyMap = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolProxyAttribute> ();
+				if (protocolProxyMap.TryGetValue (type, out var protocolProxyType)) {
+					Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type.FullName}) found in protocol proxy map");
+					var attrib = protocolProxyType.GetCustomAttribute<ProtocolProxyAttribute> ();
 					if (attrib is null)
-						throw new InvalidOperationException ($"Type '{protocolProxyType.FullName}' is expected to have an NSObjectProxyAttribute.");
-					return (T?) (object?) attrib.CreateObject (ptr);
+						throw new InvalidOperationException ($"Type '{protocolProxyType.FullName}' is expected to have an ProtocolProxyAttribute.");
+					return (T?) (object?) attrib.CreateObject (ptr, owns);
 				}
 				Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}) did not find type in proxy map");
 			}
@@ -2105,6 +2112,10 @@ namespace ObjCRuntime {
 				var rv = RegistrarHelper.FindProtocolWrapperType (type);
 				if (rv is not null)
 					return rv;
+			} else if (IsTrimmableStaticRegistrar) {
+				var protocolProxyMap = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolAttribute> ();
+				if (protocolProxyMap.TryGetValue (type, out var protocolWrapperType))
+					return protocolWrapperType;
 			} else {
 				unsafe {
 					var map = options->RegistrationMap;

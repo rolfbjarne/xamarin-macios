@@ -1076,13 +1076,10 @@ namespace ObjCRuntime {
 	}
 
 	// TODO: make this class internal
-	public class ProtocolProxyAttribute : Attribute
+	public abstract class ProtocolProxyAttribute : Attribute
 	{
 #if !COREBUILD
-		public virtual INativeObject? CreateObject (IntPtr handle, bool owns)
-		{
-			throw new NotImplementedException ("Must subclass");
-		}
+		public abstract INativeObject? CreateObject (IntPtr handle, bool owns);
 #endif
 	}
 

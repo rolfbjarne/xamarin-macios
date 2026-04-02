@@ -309,7 +309,7 @@ bool			xamarin_is_user_type (Class cls);
  *     symbol: the symbol to look up. Can be NULL to save space (this value isn't used except in error messages).
  *     id: a numerical id for faster lookup (than doing string comparisons on the symbol name).
  */
-void			xamarin_registrar_dlsym (void **function_pointer, const char *assembly, const char *symbol, int32_t id);
+void			xamarin_registrar_dlsym (void **function_pointer, const char *assembly, const char *symbol, int32_t id, const char* objcClassName);
 
 /*
  * Wrapper GCHandle functions that takes pointer sized handles instead of ints,

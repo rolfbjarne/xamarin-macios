@@ -3125,7 +3125,9 @@ namespace Registrar {
 
 			if (App.Optimizations.RedirectClassHandles == true)
 				map.AppendLine ("static void *__xamarin_class_handles [{0}];", i);
-			if (App.Registrar != RegistrarMode.TrimmableStatic && skipped_types.Count > 0) {
+			
+			var has_skipped_map = App.Registrar != RegistrarMode.TrimmableStatic && skipped_types.Count > 0;
+			if (has_skipped_map) {
 				map.AppendLine ("static const MTManagedClassMap __xamarin_skipped_map [] = {");
 				foreach (var skipped in skipped_types) {
 					if (!TryCreateTokenReference (skipped.Skipped, TokenType.TypeDef, out var skipped_ref, exceptions))
@@ -3208,7 +3210,7 @@ namespace Registrar {
 			map.AppendLine ("__xamarin_registration_assemblies,");
 			map.AppendLine ("__xamarin_class_map,");
 			map.AppendLine (full_token_reference_count == 0 ? "NULL," : "__xamarin_token_references,");
-			map.AppendLine (skipped_types.Count == 0 ? "NULL," : "__xamarin_skipped_map,");
+			map.AppendLine (!has_skipped_map ? "NULL," : "__xamarin_skipped_map,");
 			map.AppendLine (protocol_wrapper_map.Count == 0 ? "NULL," : "__xamarin_protocol_wrapper_map,");
 			if (needs_protocol_map && protocols.Count > 0) {
 				map.AppendLine ("{ __xamarin_protocol_tokens, __xamarin_protocols },");
@@ -3218,7 +3220,7 @@ namespace Registrar {
 			map.AppendLine ("{0},", count);
 			map.AppendLine ("{0},", i);
 			map.AppendLine ("{0},", full_token_reference_count);
-			map.AppendLine ("{0},", skipped_types.Count);
+			map.AppendLine ("{0},", has_skipped_map ? skipped_types.Count : 0);
 			map.AppendLine ("{0},", protocol_wrapper_map.Count);
 			map.AppendLine ("{0},", needs_protocol_map ? protocols.Count : 0);
 			if (App.Optimizations.RedirectClassHandles == true)

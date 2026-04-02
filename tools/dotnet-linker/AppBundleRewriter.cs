@@ -476,6 +476,19 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public MethodReference System_String__op_Equality_String_String {
+			get {
+				return GetMethodReference (CorlibAssembly, System_String, "op_Equality", (v) => 
+					v.IsStatic
+					&& v.HasParameters
+					&& v.Parameters.Count == 2
+					&& v.Parameters[0].ParameterType.Is("System", "String")
+					&& v.Parameters[1].ParameterType.Is("System", "String")
+					&& v.ReturnType.Is ("System", "Boolean")
+					&& !v.HasGenericParameters);
+			}
+		}
+
 		public MethodReference Nullable_HasValue {
 			get {
 				return GetMethodReference (CorlibAssembly, System_Nullable_1, "get_HasValue", isStatic: false);

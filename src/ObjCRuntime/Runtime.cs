@@ -2724,9 +2724,9 @@ namespace ObjCRuntime {
 			return rv ? 1 : 0;
 		}
 
-		static IntPtr LookupUnmanagedFunction (IntPtr assembly, IntPtr symbol, int id)
+		static IntPtr LookupUnmanagedFunction (IntPtr assembly, IntPtr symbol, int id, IntPtr objcClassName)
 		{
-			return RegistrarHelper.LookupUnmanagedFunction (assembly, Marshal.PtrToStringAuto (symbol), id);
+			return RegistrarHelper.LookupUnmanagedFunction (assembly, Marshal.PtrToStringAuto (symbol), id, Marshal.PtrToStringAuto (objcClassName));
 		}
 	}
 

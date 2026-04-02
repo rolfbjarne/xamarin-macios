@@ -53,7 +53,7 @@ namespace Xamarin.Linker {
 
 			abr.SetCurrentAssembly (rootTypeMapAssembly);
 
-			foreach (var assembly in assemblies) {
+			foreach (var assembly in assemblies.OrderBy (v => v.FullName)) {
 				/*
 				 * [assembly: TypeMapAssemblyTarget<NSObject> ("...")]
 				 */
@@ -131,7 +131,7 @@ namespace Xamarin.Linker {
 			var rootTypeMapAssembly = CreateTypeMapRootAssembly (assemblyParameters, typesByAssembly.Select (v => v.Key));
 			createdAssemblies.Add (rootTypeMapAssembly);
 
-			foreach (var typesInAssembly in typesByAssembly) {
+			foreach (var typesInAssembly in typesByAssembly.OrderBy (v => v.Key.FullName)) {
 				var assembly = typesInAssembly.Key;
 				var types = typesInAssembly.ToList ();
 
@@ -153,8 +153,15 @@ namespace Xamarin.Linker {
 				il.Append (il.Create (OpCodes.Ret));
 				ignoredAccessChecks.Methods.Add (ignoredAccessChecksCtor);
 				typeMapAssembly.MainModule.Types.Add (ignoredAccessChecks);
+				var attrib = new CustomAttribute (ignoredAccessChecksCtor);
+				attrib.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, assembly.Name.Name));
+				typeMapAssembly.CustomAttributes.Add (attrib);
 
-				foreach (var kvp in typesInAssembly) {
+				Dictionary<TypeDefinition, List<TrampolineInfo>>? trampolinesByType = null;
+				if (Configuration.AssemblyTrampolineInfos.TryGetValue (assembly, out var trampolineInfos))
+					trampolinesByType = trampolineInfos.GroupBy (v => v.Target.DeclaringType).ToDictionary (v => v.Key, v => v.ToList ());
+
+				foreach (var kvp in typesInAssembly.OrderBy (v => v.Key.FullName)) {
 					var tr = kvp.Key;
 					var trImported = typeMapAssembly.MainModule.ImportReference (tr);
 					var td = tr.Resolve ();
@@ -176,7 +183,7 @@ namespace Xamarin.Linker {
 					 * sealed class ..._Proxy : NSObjectProxy {
 					 * }
 					 */
-					var proxyType = new TypeDefinition (tr.Namespace, tr.Name + "_Proxy", TypeAttributes.NotPublic | TypeAttributes.Sealed, abr.ObjCRuntime_NSObjectProxyAttribute);
+					var proxyType = new TypeDefinition (tr.Namespace, tr.Name + "_Proxy", TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.ObjCRuntime_NSObjectProxyAttribute);
 					typeMapAssembly.MainModule.Types.Add (proxyType);
 
 					/* default ctor */
@@ -188,35 +195,38 @@ namespace Xamarin.Linker {
 					proxyType.Methods.Add (ctor);
 
 					/*
-					 * public virtual NSObject? CreateObject (IntPtr handle)
+					 * public override NSObject? CreateObject (IntPtr handle)
 					 * {
 					 *     return new ... (handle);
 					 * }	
 					 */
-					var createObjectMethod = new MethodDefinition ("CreateObject", MethodAttributes.Public | MethodAttributes.Virtual, abr.Foundation_NSObject);
+					var createObjectMethod = new MethodDefinition ("CreateObject", MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig, abr.Foundation_NSObject);
 					createObjectMethod.AddParameter ("handle", abr.System_IntPtr);
 					il = createObjectMethod.Body.GetILProcessor ();
-					var createObjectCtor = td.Methods.SingleOrDefault (v => v.IsInstanceConstructor () && v.HasParameters && v.Parameters.Count == 1 && v.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle"));
-					if (createObjectCtor is null) {
+					if (td.Methods.TryFindSingle (v => v.IsInstanceConstructor () && v.HasParameters && v.Parameters.Count == 1 && v.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle"), out var nativeHandleCtor)) {
+						il.Append (il.Create (OpCodes.Ldarg_1));
+						il.Append (il.Create (OpCodes.Call, abr.NativeObject_op_Implicit_NativeHandle));
+						il.Append (il.Create (OpCodes.Newobj, abr.CurrentAssembly.MainModule.ImportReference (nativeHandleCtor)));
+						il.Append (il.Create (OpCodes.Ret));
+					} else if (td.Methods.TryFindSingle (v => v.IsInstanceConstructor () && v.HasParameters && v.Parameters.Count == 1 && v.Parameters [0].ParameterType.Is ("System", "IntPtr"), out var intPtrCtor)) {
+						il.Append (il.Create (OpCodes.Ldarg_1));
+						il.Append (il.Create (OpCodes.Newobj, abr.CurrentAssembly.MainModule.ImportReference (intPtrCtor)));
+						il.Append (il.Create (OpCodes.Ret));
+					} else {
 						// TODO: AddException (new ProductException (Errors.MX_TypeMapTypeMissingIntPtrCtor, tr.FullName));
-						Console.WriteLine ($"Warning: Type '{tr.FullName}' does not have a constructor that takes a single IntPtr parameter. The generated CreateObject method will throw a NotSupportedException if called.");
+						Console.WriteLine ($"Warning: Type '{tr.FullName}' does not have a constructor that takes a single NativeHandle parameter. The generated CreateObject method will throw a NotSupportedException if called.");
 						il.Append (il.Create (OpCodes.Ldnull)); // TODO: create proper exception
 						il.Append (il.Create (OpCodes.Throw));
-						// TODO: find intptr ctor too
-					} else {
-						il.Append (il.Create (OpCodes.Ldarg_1));
-						il.Append (il.Create (OpCodes.Newobj, abr.CurrentAssembly.MainModule.ImportReference (createObjectCtor)));
-						il.Append (il.Create (OpCodes.Ret));
-						proxyType.Methods.Add (createObjectMethod);
 					}
+					proxyType.Methods.Add (createObjectMethod);
 					/*
-					 * public virtual IntPtr GetClassHandle (out bool is_custom_type)
+					 * public override IntPtr GetClassHandle (out bool is_custom_type)
 					 * {
 					 * 	   is_custom_type = ...;
 					 * 	   return Class.GetHandle ("...");
 					 * * }
 					 */
-					var getClassHandleMethod = new MethodDefinition ("GetClassHandle", MethodAttributes.Public | MethodAttributes.Virtual, abr.System_IntPtr);
+					var getClassHandleMethod = new MethodDefinition ("GetClassHandle", MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig, abr.System_IntPtr);
 					getClassHandleMethod.AddParameter ("is_custom_type", abr.System_Boolean.MakeByReferenceType ());
 					il = getClassHandleMethod.Body.GetILProcessor ();
 					il.Append (il.Create (OpCodes.Ldarg_1));
@@ -226,6 +236,40 @@ namespace Xamarin.Linker {
 					il.Append (il.Create (OpCodes.Call, abr.Class_GetHandle__System_String));
 					il.Append (il.Create (OpCodes.Ret));
 					proxyType.Methods.Add (getClassHandleMethod);
+
+					/*
+					 * public override IntPtr LookupUnmanagedFunction (string name)
+					 * {
+					 *     if (name == "funcA")
+					 *         return &funcA;
+					 *     if (name == "funcB")
+					 *         return &funcB;
+					 *     return IntPtr.Zero;
+					 * }
+					 */
+					var lookupUnmanagedFunctionMethod = new MethodDefinition ("LookupUnmanagedFunction", MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig, abr.System_IntPtr);
+					lookupUnmanagedFunctionMethod.AddParameter ("name", abr.System_String);
+					il = lookupUnmanagedFunctionMethod.Body.GetILProcessor ();
+					if (trampolinesByType?.TryGetValue (td, out var trampolines) == true) {
+						foreach (var m in trampolines.OrderBy (v => v.UnmanagedCallersOnlyEntryPoint)) {
+							// if (name == "...")
+							var falseTarget = il.Create (OpCodes.Nop);
+							il.Append (il.Create (OpCodes.Ldarg_1));
+							il.Append (il.Create (OpCodes.Ldstr, m.UnmanagedCallersOnlyEntryPoint));
+							il.Append (il.Create (OpCodes.Call, abr.System_String__op_Equality_String_String));
+							il.Append (il.Create (OpCodes.Brfalse_S, falseTarget));
+							//     return &Method;
+							il.Append (il.Create (OpCodes.Ldftn, abr.CurrentAssembly.MainModule.ImportReference (m.Trampoline)));
+							il.Append (il.Create (OpCodes.Ret));
+							il.Append (falseTarget);
+							// TODO: avoid the nop instruction by branching to the next comparison or the return of IntPtr.Zero
+						}
+					}
+					// return IntPtr.Zero
+					il.Append (il.Create (OpCodes.Ldc_I4_0));
+					il.Append (il.Create (OpCodes.Conv_I));
+					il.Append (il.Create (OpCodes.Ret));
+					proxyType.Methods.Add (lookupUnmanagedFunctionMethod);
 
 					// We add the proxy type as an attribute to itself
 					attribute = new CustomAttribute (ctor);
@@ -258,7 +302,7 @@ namespace Xamarin.Linker {
 				}
 
 				if (skippedTypesByAssembly.Remove (assembly, out var skippedTypes)) {
-					foreach (var skipped in skippedTypes) {
+					foreach (var skipped in skippedTypes.OrderBy (v => v.Skipped.FullName)) {
 						/*
 						 * [assembly: TypeMapAssociation<SkippedObjectiveCTypeUniverse> (typeof (...), typeof (...))]
 						 */

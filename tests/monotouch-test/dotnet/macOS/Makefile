@@ -76,7 +76,7 @@ s:
 	madl
 	git clean -xfd
 	make build
-	bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest --test apitest.KernelNotificationTest
+	bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest --test MonoTouchFixtures.ObjCRuntime.GCHandleSwitchRaceTest
 
 lldb:
 	lldb -- bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest --test apitest.KernelNotificationTest

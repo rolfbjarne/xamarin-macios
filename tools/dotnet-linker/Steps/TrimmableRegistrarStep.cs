@@ -179,6 +179,7 @@ namespace Xamarin.Linker {
 
 				foreach (var kvp in typesInAssembly.OrderBy (v => v.Key.FullName)) {
 					var tr = kvp.Key;
+					var trNamespace = tr.FullName.Length == tr.Name.Length ? "" : tr.FullName.Substring (0, tr.FullName.Length - tr.Name.Length - 1).Replace (".", "__");
 					var trImported = typeMapAssembly.MainModule.ImportReference (tr);
 					var td = tr.Resolve ();
 					var objcType = kvp.Value;
@@ -200,7 +201,7 @@ namespace Xamarin.Linker {
 						* sealed class ..._Proxy : NSObjectProxy {
 						* }
 						*/
-						var proxyType = new TypeDefinition (tr.Namespace, tr.Name + "_Proxy", TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.ObjCRuntime_NSObjectProxyAttribute);
+						var proxyType = new TypeDefinition (trNamespace, tr.Name + "_Proxy", TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.ObjCRuntime_NSObjectProxyAttribute);
 						typeMapAssembly.MainModule.Types.Add (proxyType);
 
 						/* default ctor */
@@ -230,10 +231,7 @@ namespace Xamarin.Linker {
 							il.Append (il.Create (OpCodes.Newobj, abr.CurrentAssembly.MainModule.ImportReference (intPtrCtor)));
 							il.Append (il.Create (OpCodes.Ret));
 						} else {
-							// TODO: AddException (new ProductException (Errors.MX_TypeMapTypeMissingIntPtrCtor, tr.FullName));
-							Console.WriteLine ($"Warning: Type '{tr.FullName}' does not have a constructor that takes a single NativeHandle parameter. The generated CreateObject method will throw a NotSupportedException if called.");
-							il.Append (il.Create (OpCodes.Ldnull)); // TODO: create proper exception
-							// il.Append (il.Create (OpCodes.Throw));
+							il.Append (il.Create (OpCodes.Ldnull));
 							il.Append (il.Create (OpCodes.Ret));
 						}
 						proxyType.Methods.Add (createObjectMethod);
@@ -268,45 +266,43 @@ namespace Xamarin.Linker {
 						var lookupUnmanagedFunctionMethod = new MethodDefinition ("LookupUnmanagedFunction", MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig, abr.System_IntPtr);
 						lookupUnmanagedFunctionMethod.AddParameter ("name", abr.System_String);
 						il = lookupUnmanagedFunctionMethod.Body.GetILProcessor ();
+
+						// Get all the UnmanagedCallersOnly methods we need to be able to find for the current type, which includes:
+						// - methods from the type itself
+						// - methods from categories on the type
+						var uco = new List<TrampolineInfo> ();
 						if (categoryMethodsByType.Remove (td, out var categoryMethods)) {
 							foreach (var m in categoryMethods.OrderBy (v => v.FullName)) {
-								if (!trampolinesByMethod.Remove (m.Method!.Resolve (), out var info)) {
+								if (!trampolinesByMethod.Remove (m.Method!, out var info)) {
 									Console.WriteLine ("// TODO: show error/warning A");
 									continue;
 								}
-								trampolinesByType?.Remove (m.CategoryType!.Type.Resolve ());
-								// if (name == "...")
-								var falseTarget = il.Create (OpCodes.Nop);
-								il.Append (il.Create (OpCodes.Ldarg_1));
-								il.Append (il.Create (OpCodes.Ldstr, info.UnmanagedCallersOnlyEntryPoint));
-								il.Append (il.Create (OpCodes.Call, abr.System_String__op_Equality_String_String));
-								il.Append (il.Create (OpCodes.Brfalse_S, falseTarget));
-								//     return &Method;
-								il.Append (il.Create (OpCodes.Ldftn, abr.CurrentAssembly.MainModule.ImportReference (info.Trampoline)));
-								il.Append (il.Create (OpCodes.Ret));
-								il.Append (falseTarget);
-
+								trampolinesByType.Remove (m.CategoryType!.Type.Resolve ());
+								uco.Add (info);
 								accessesAssemblies.Add (info.Trampoline.Module.Assembly);
 							}
 						}
-						if (trampolinesByType?.Remove (td, out var trampolines) == true) {
-							foreach (var m in trampolines.OrderBy (v => v.UnmanagedCallersOnlyEntryPoint)) {
-								trampolinesByMethod.Remove (m.Target.Resolve ());
-								// if (name == "...")
-								var falseTarget = il.Create (OpCodes.Nop);
-								il.Append (il.Create (OpCodes.Ldarg_1));
-								il.Append (il.Create (OpCodes.Ldstr, m.UnmanagedCallersOnlyEntryPoint));
-								il.Append (il.Create (OpCodes.Call, abr.System_String__op_Equality_String_String));
-								il.Append (il.Create (OpCodes.Brfalse_S, falseTarget));
-								//     return &Method;
-								il.Append (il.Create (OpCodes.Ldftn, abr.CurrentAssembly.MainModule.ImportReference (m.Trampoline)));
-								il.Append (il.Create (OpCodes.Ret));
-								il.Append (falseTarget);
-								// TODO: avoid the nop instruction by branching to the next comparison or the return of IntPtr.Zero
+						if (trampolinesByType.Remove (td, out var trampolines)) {
+							uco.AddRange (trampolines);
+							foreach (var info in trampolines) {
+								trampolinesByMethod.Remove (info.Target);
 							}
 						}
+
+						foreach (var info in uco.OrderBy (v => v.UnmanagedCallersOnlyEntryPoint)) {
+							var falseTarget = il.Create (OpCodes.Nop);
+							il.Append (il.Create (OpCodes.Ldarg_1));
+							il.Append (il.Create (OpCodes.Ldstr, info.UnmanagedCallersOnlyEntryPoint));
+							il.Append (il.Create (OpCodes.Call, abr.System_String__op_Equality_String_String));
+							il.Append (il.Create (OpCodes.Brfalse_S, falseTarget));
+							//     return &Method;
+							il.Append (il.Create (OpCodes.Ldftn, abr.CurrentAssembly.MainModule.ImportReference (info.Trampoline)));
+							il.Append (il.Create (OpCodes.Ret));
+							il.Append (falseTarget);
+							// TODO: avoid the nop instruction by branching to the next comparison or the return of IntPtr.Zero
+						}
 						// CWL
-						il.Append (il.Create (OpCodes.Ldstr, $"{proxyType.FullName}.LookupUnmanagedFunction ({{0}}): did not find this UCO method."));
+						il.Append (il.Create (OpCodes.Ldstr, $"{proxyType.FullName}.LookupUnmanagedFunction ({{0}}): did not find this UCO method, among: {string.Join (", ", uco.Select (v => v.UnmanagedCallersOnlyEntryPoint))}"));
 						il.Append (il.Create (OpCodes.Ldarg_1));
 						il.Append (il.Create (OpCodes.Call, abr.System_Console__WriteLine_String_Object));
 						// return IntPtr.Zero
@@ -336,7 +332,7 @@ namespace Xamarin.Linker {
 						* sealed class ..._Proxy : NSObjectProxy {
 						* }
 						*/
-						var proxyType = new TypeDefinition (tr.Namespace, tr.Name + "_Proxy", TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.ObjCRuntime_ProtocolProxyAttribute);
+						var proxyType = new TypeDefinition (trNamespace, tr.Name + "_Proxy", TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.ObjCRuntime_ProtocolProxyAttribute);
 						typeMapAssembly.MainModule.Types.Add (proxyType);
 
 						/* default ctor */
@@ -369,10 +365,7 @@ namespace Xamarin.Linker {
 							il.Append (il.Create (OpCodes.Newobj, abr.CurrentAssembly.MainModule.ImportReference (intPtrCtor)));
 							il.Append (il.Create (OpCodes.Ret));
 						} else {
-							// TODO: AddException (new ProductException (Errors.MX_TypeMapTypeMissingIntPtrCtor, tr.FullName));
-							Console.WriteLine ($"Warning: Type '{tr.FullName}' does not have a constructor that takes (NativeHandle, bool) parameters. The generated CreateObject method will throw a NotSupportedException if called.");
-							il.Append (il.Create (OpCodes.Ldnull)); // TODO: create proper exception
-							// il.Append (il.Create (OpCodes.Throw));
+							il.Append (il.Create (OpCodes.Ldnull));
 							il.Append (il.Create (OpCodes.Ret));
 						}
 						proxyType.Methods.Add (createObjectMethod);

@@ -2893,7 +2893,7 @@ namespace Registrar {
 					i++;
 				} else if (App.Registrar == RegistrarMode.TrimmableStatic && @class.IsStubClass) {
 					map_init.AppendLine ("[{0} class];", EncodeNonAsciiCharacters (@class.ExportedName));
-				}
+				}	
 
 				if (App.Registrar != RegistrarMode.TrimmableStatic && @class.IsProtocol && @class.ProtocolWrapperType is not null) {
 					if (token_ref == INVALID_TOKEN_REF && !TryCreateTokenReference (@class.Type, TokenType.TypeDef, out token_ref, exceptions))

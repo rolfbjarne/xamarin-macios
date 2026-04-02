@@ -51,6 +51,15 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		AssemblyDefinition? system_console_assembly;
+		public AssemblyDefinition SystemConsoleAssembly {
+			get {
+				if (system_console_assembly is null)
+					system_console_assembly = configuration.Assemblies.SingleOrDefault (v => v.Name.Name == "System.Console")!;
+				return system_console_assembly;
+			}
+		}
+
 		Dictionary<AssemblyDefinition, Dictionary<string, (TypeDefinition, TypeReference)>> type_map = new ();
 		Dictionary<string, (MethodDefinition, MethodReference)> method_map = new ();
 		Dictionary<string, (FieldDefinition, FieldReference)> field_map = new ();
@@ -219,7 +228,7 @@ namespace Xamarin.Linker {
 
 		public TypeReference System_Console {
 			get {
-				return GetTypeReference (CorlibAssembly, "System.Console", out var _);
+				return GetTypeReference (SystemConsoleAssembly, "System.Console", out var _);
 			}
 		}
 		public TypeReference System_Delegate {

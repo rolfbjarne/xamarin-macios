@@ -11,5 +11,15 @@
             "stopAtEntry": false,
             "console": "internalConsole"
         },
+        {
+            "name": ".NET Core Launch (console) - No build",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/Debug/net10.0-macos/osx-arm64/monotouchtest.app/Contents/MacOS/monotouchtest",
+            "args": ["--test", "MonoTests.System.Net.Http.MessageHandlerTest.GHIssue16339"],
+            "cwd": "${workspaceFolder}",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        }
     ]
 }

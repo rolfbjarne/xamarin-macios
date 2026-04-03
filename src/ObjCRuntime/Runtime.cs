@@ -306,6 +306,11 @@ namespace ObjCRuntime {
 				Initialize (options);
 			} catch (Exception e) {
 				*exception_gchandle = AllocGCHandle (e);
+				try {
+					Runtime.NSLog ($"Failed to initialize the runtime: {e}");
+				} catch {
+					// ignore any exceptions here
+				}
 			}
 		}
 
@@ -350,9 +355,6 @@ namespace ObjCRuntime {
 			if (DynamicRegistrationSupported) {
 				Registrar = new DynamicRegistrar ();
 				protocol_cache = new Dictionary<IntPtr, Dictionary<IntPtr, bool>> (IntPtrEqualityComparer);
-			}
-			if (IsTrimmableStaticRegistrar) {
-				TypeMaps.Initialize ();
 			}
 			RegisterDelegates (options);
 			Class.Initialize (options);

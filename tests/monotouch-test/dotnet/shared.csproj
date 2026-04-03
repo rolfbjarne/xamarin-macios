@@ -45,7 +45,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningsAsErrors>Nullable</WarningsAsErrors>
 
-    <Registrar>trimmable-static</Registrar>
+    <!-- <Registrar>trimmable-static</Registrar> -->
   </PropertyGroup>
 
   <ItemGroup>

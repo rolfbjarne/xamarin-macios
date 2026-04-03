@@ -63,6 +63,8 @@ exec:
 simple: export RID=
 simple: export RUNTIMEIDENTIFIER=
 simple: export RUNTIMEIDENTIFIERS=
+simple: export TEST_VARIATION=trimmable-static-registrar
+simple: export TestVariation=trimmable-static-registrar
 simple:
 	mair
 	git clean -xfd
@@ -72,6 +74,8 @@ simple:
 s: export RID=
 s: export RUNTIMEIDENTIFIER=
 s: export RUNTIMEIDENTIFIERS=
+s: export TEST_VARIATION=trimmable-static-registrar
+s: export TestVariation=trimmable-static-registrar
 s:
 	madl
 	git clean -xfd
@@ -81,6 +85,8 @@ s:
 a: export RID=
 a: export RUNTIMEIDENTIFIER=
 a: export RUNTIMEIDENTIFIERS=
+a: export TEST_VARIATION=trimmable-static-registrar
+a: export TestVariation=trimmable-static-registrar
 a:
 	mair
 	git clean -xfd

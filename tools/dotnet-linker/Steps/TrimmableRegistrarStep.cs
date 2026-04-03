@@ -84,7 +84,7 @@ namespace Xamarin.Linker {
 			var methodDeclaringType = methodReference.DeclaringType;
 			if (methodDeclaringType.HasGenericParameters) {
 				if (declaringTypeGenericArguments.Length != methodDeclaringType.GenericParameters.Count)
-					throw new ArgumentException ($"The number of generic arguments provided ({declaringTypeGenericArguments.Length}) does not match the number of generic parameters of the method's declaring type ({methodDeclaringType.GenericParameters.Count}).", nameof(declaringTypeGenericArguments));
+					throw new ArgumentException ($"The number of generic arguments provided ({declaringTypeGenericArguments.Length}) does not match the number of generic parameters of the method's declaring type ({methodDeclaringType.GenericParameters.Count}).", nameof (declaringTypeGenericArguments));
 
 				methodDeclaringType = methodDeclaringType.MakeGenericInstanceType (declaringTypeGenericArguments);
 			}
@@ -167,7 +167,7 @@ namespace Xamarin.Linker {
 				/*
 				 * [assembly: IgnoresAccessChecksTo ("...")]
 				 */
-				var ignoredAccessChecks = new TypeDefinition ("System.Runtime.CompilerServices", "IgnoresAccessChecksToAttribute", TypeAttributes.NotPublic  | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.System_Attribute);
+				var ignoredAccessChecks = new TypeDefinition ("System.Runtime.CompilerServices", "IgnoresAccessChecksToAttribute", TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.System_Attribute);
 				var ignoredAccessChecksCtor = new MethodDefinition (".ctor", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, abr.System_Void);
 				ignoredAccessChecksCtor.AddParameter ("assemblyName", abr.System_String);
 				il = ignoredAccessChecksCtor.Body.GetILProcessor ();
@@ -393,7 +393,7 @@ namespace Xamarin.Linker {
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, trImported));
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, abr.CurrentAssembly.MainModule.ImportReference (objcType.ProtocolWrapperType)));
 						typeMapAssembly.CustomAttributes.Add (attribute);
-					}					
+					}
 				}
 
 				foreach (var accessesAssembly in accessesAssemblies.OrderBy (v => v.FullName)) {

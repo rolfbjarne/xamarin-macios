@@ -143,12 +143,6 @@ namespace ObjCRuntime {
 			}
 		}
 
-		internal static bool TryFindTrimmableProtocolWrapperType (Type type, out Type? protocolWrapperType)
-		{
-			var protocolProxyMap = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolAttribute> ();
-			return protocolProxyMap.TryGetValue (type, out protocolWrapperType);
-		}
-
 		internal static Type? FindProtocolWrapperType (Type type)
 		{
 			var typeHandle = type.TypeHandle;

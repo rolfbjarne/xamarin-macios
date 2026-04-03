@@ -321,7 +321,7 @@ namespace ObjCRuntime {
 
 				// The type we're looking for might be a type the registrar skipped, in which case we must
 				// find it in the mapping of skipped types.
-				if (TypeMapping.GetOrCreateProxyTypeMapping<SkippedObjectiveCTypeUniverse> ().TryGetValue (type, out var actualType))
+				if (TypeMaps.SkippedProxyTypes.TryGetValue (type, out var actualType))
 					return FindClass (actualType, out is_custom_type);
 
 				is_custom_type = false;
@@ -459,22 +459,19 @@ namespace ObjCRuntime {
 				return false;
 			}
 
-			var map = TypeMapping.GetOrCreateExternalTypeMapping<NSObject> ();
-			if (!map.TryGetValue (className, out managedType)) {
+			if (!TypeMaps.NSObjectTypes.TryGetValue (className, out managedType)) {
 #if LOG_TRIMMABLE_TYPEMAP
 				Runtime.NSLog ($"GetTrimmableProxyTypeAttribute ({className}) not found in type map");
 #endif
 				return false;
 			}
 
-			var proxyMap = TypeMapping.GetOrCreateProxyTypeMapping<NSObject> ();
-			if (!proxyMap.TryGetValue (managedType, out var proxyType)) {
+			if (!TypeMaps.NSObjectProxyTypes.TryGetValue (managedType, out var proxyType)) {
 #if LOG_TRIMMABLE_TYPEMAP
 				Runtime.NSLog ($"GetTrimmableProxyTypeAttribute ({className}) found in type map, but proxy type not found");
 #endif
 				return false;
 			}
-
 
 			proxyAttribute = proxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
 			if (proxyAttribute is null) {

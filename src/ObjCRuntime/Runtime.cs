@@ -351,6 +351,9 @@ namespace ObjCRuntime {
 				Registrar = new DynamicRegistrar ();
 				protocol_cache = new Dictionary<IntPtr, Dictionary<IntPtr, bool>> (IntPtrEqualityComparer);
 			}
+			if (IsTrimmableStaticRegistrar) {
+				TypeMaps.Initialize ();
+			}
 			RegisterDelegates (options);
 			Class.Initialize (options);
 			InitializePlatform (options);
@@ -1343,8 +1346,7 @@ namespace ObjCRuntime {
 				throw new ArgumentNullException (nameof (type));
 
 			if (Runtime.IsTrimmableStaticRegistrar) {
-				var proxyMap = TypeMapping.GetOrCreateProxyTypeMapping<NSObject> ();
-				if (proxyMap.TryGetValue (type, out var proxyType)) {
+				if (TypeMaps.NSObjectProxyTypes.TryGetValue (type, out var proxyType)) {
 					// Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type}) found in proxy map with type {proxyType.FullName}");
 					var attrib = proxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
 					if (attrib is null)
@@ -1437,8 +1439,7 @@ namespace ObjCRuntime {
 				type = type.GetElementType ()!;
 
 			if (Runtime.IsTrimmableStaticRegistrar) {
-				var nsObjectProxyMap = TypeMapping.GetOrCreateProxyTypeMapping<NSObject> ();
-				if (nsObjectProxyMap.TryGetValue (type, out var proxyType)) {
+				if (TypeMaps.NSObjectProxyTypes.TryGetValue (type, out var proxyType)) {
 					// Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type.FullName}) found in proxy map");
 					var attrib = proxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
 					if (attrib is null)
@@ -1448,8 +1449,7 @@ namespace ObjCRuntime {
 						Runtime.TryReleaseINativeObject (rv);
 					return rv;
 				}
-				var protocolProxyMap = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolProxyAttribute> ();
-				if (protocolProxyMap.TryGetValue (type, out var protocolProxyType)) {
+				if (TypeMaps.ProtocolProxyTypes.TryGetValue (type, out var protocolProxyType)) {
 					// Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type.FullName}) found in protocol proxy map");
 					var attrib = protocolProxyType.GetCustomAttribute<ProtocolProxyAttribute> ();
 					if (attrib is null)
@@ -2113,8 +2113,7 @@ namespace ObjCRuntime {
 				if (rv is not null)
 					return rv;
 			} else if (IsTrimmableStaticRegistrar) {
-				var protocolProxyMap = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolAttribute> ();
-				if (protocolProxyMap.TryGetValue (type, out var protocolWrapperType))
+				if (TypeMaps.ProtocolWrapperTypes.TryGetValue (type, out var protocolWrapperType))
 					return protocolWrapperType;
 			} else {
 				unsafe {

@@ -9,6 +9,7 @@ using Mono.Linker;
 using Mono.Tuner;
 
 using Mono.Cecil.Rocks;
+using Registrar;
 
 #nullable enable
 
@@ -49,6 +50,7 @@ namespace Xamarin.Linker {
 			} else {
 				var rootTypeMapAssemblyName = new AssemblyNameDefinition (App.TypeMapAssemblyName, new Version (1, 0, 0, 0));
 				rootTypeMapAssembly = AssemblyDefinition.CreateAssembly (rootTypeMapAssemblyName, rootTypeMapAssemblyName.Name, moduleParameters);
+				Annotations.SetAction (rootTypeMapAssembly, AssemblyAction.Link);
 			}
 
 			abr.SetCurrentAssembly (rootTypeMapAssembly);
@@ -65,6 +67,13 @@ namespace Xamarin.Linker {
 				 * [assembly: TypeMapAssemblyTarget<ProtocolAttribute> ("...")]
 				 */
 				attribute = new CustomAttribute (CreateMethodReference (abr.TypeMapAssemblyTargetAttribute_1_Constructor_String_Type_Type, abr.Foundation_ProtocolAttribute));
+				attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, "_" + assembly.Name.Name + ".TypeMap"));
+				rootTypeMapAssembly.CustomAttributes.Add (attribute);
+
+				/*
+				 * [assembly: TypeMapAssemblyTarget<INativeObject> ("...")]
+				 */
+				attribute = new CustomAttribute (CreateMethodReference (abr.TypeMapAssemblyTargetAttribute_1_Constructor_String_Type_Type, abr.ObjCRuntime_INativeObject));
 				attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, "_" + assembly.Name.Name + ".TypeMap"));
 				rootTypeMapAssembly.CustomAttributes.Add (attribute);
 			}
@@ -99,6 +108,11 @@ namespace Xamarin.Linker {
 				method.Parameters.Add (new ParameterDefinition (parameter.ParameterType));
 
 			return abr.CurrentAssembly.MainModule.ImportReference (method);
+		}
+
+		static string GetNamespace (TypeReference tr)
+		{
+			return tr.FullName.Length == tr.Name.Length ? "" : tr.FullName.Substring (0, tr.FullName.Length - tr.Name.Length - 1).Replace (".", "__");
 		}
 
 		protected override void TryEndProcess (out List<Exception>? exceptions)
@@ -174,9 +188,68 @@ namespace Xamarin.Linker {
 				ignoredAccessChecks.Methods.Add (ignoredAccessChecksCtor);
 				typeMapAssembly.MainModule.Types.Add (ignoredAccessChecks);
 
+				// INativeObject instances
+				var inativeObjectTypes = StaticRegistrar.GetAllTypes (assembly).Where (t => !t.IsInterface && !t.IsAbstract && t.IsNativeObject ());
+				foreach (var tr in inativeObjectTypes.OrderBy (v => v.FullName)) {
+					var inativeObjCtor = ManagedRegistrarLookupTablesStep.FindINativeObjectConstructor (tr);
+					if (inativeObjCtor is null)
+						continue;
+					
+					var trImported = typeMapAssembly.MainModule.ImportReference (tr);
+					var trNamespace = GetNamespace (tr);
+
+					/*
+					* [..._Proxy]
+					* sealed class ..._Proxy : INativeObjectProxyAttribute {
+					* }
+					*/
+					var proxyType = new TypeDefinition (trNamespace, tr.Name + "_Proxy", TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.ObjCRuntime_INativeObjectProxyAttribute);
+					typeMapAssembly.MainModule.Types.Add (proxyType);
+
+					/* default ctor */
+					var ctor = new MethodDefinition (".ctor", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName, abr.System_Void);
+					il = ctor.Body.GetILProcessor ();
+					il.Append (il.Create (OpCodes.Ldarg_0));
+					il.Append (il.Create (OpCodes.Call, abr.ObjCRuntime_INativeObjectProxyAttribute__ctor));
+					il.Append (il.Create (OpCodes.Ret));
+					proxyType.Methods.Add (ctor);
+
+					/*
+					* public override INativeObject? CreateObject (IntPtr handle, bool owns)
+					* {
+					*     return new ... (handle, owns);
+					* }	
+					*/
+					var createObjectMethod = new MethodDefinition ("CreateObject", MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig, abr.ObjCRuntime_INativeObject);
+					createObjectMethod.AddParameter ("handle", abr.System_IntPtr);
+					createObjectMethod.AddParameter ("owns", abr.System_Boolean);
+					il = createObjectMethod.Body.GetILProcessor ();
+					il.Append (il.Create (OpCodes.Ldarg_1));
+					if (inativeObjCtor.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle"))
+						il.Append (il.Create (OpCodes.Call, abr.NativeObject_op_Implicit_NativeHandle));
+					il.Append (il.Create (OpCodes.Ldarg_2));
+					il.Append (il.Create (OpCodes.Newobj, abr.CurrentAssembly.MainModule.ImportReference (inativeObjCtor)));
+					il.Append (il.Create (OpCodes.Ret));
+					proxyType.Methods.Add (createObjectMethod);
+
+					// We add the proxy type as an attribute to itself
+					attribute = new CustomAttribute (ctor);
+					proxyType.CustomAttributes.Add (attribute);
+
+					/*
+					 * Add the [TypeMapAssociation] attribute for the protocol wrapper type as well
+					 *
+					 * [assembly: TypeMapAssociation<INativeObject> (typeof (...), typeof (...))]
+					 */
+					attribute = new CustomAttribute (CreateMethodReference (abr.TypeMapAssociationAttribute_1_Constructor_Type_Type, abr.ObjCRuntime_INativeObject));
+					attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, trImported));
+					attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, proxyType));
+					typeMapAssembly.CustomAttributes.Add (attribute);
+				}
+
 				foreach (var kvp in typesInAssembly.OrderBy (v => v.Key.FullName)) {
 					var tr = kvp.Key;
-					var trNamespace = tr.FullName.Length == tr.Name.Length ? "" : tr.FullName.Substring (0, tr.FullName.Length - tr.Name.Length - 1).Replace (".", "__");
+					var trNamespace = GetNamespace (tr);
 					var trImported = typeMapAssembly.MainModule.ImportReference (tr);
 					var td = tr.Resolve ();
 					var objcType = kvp.Value;
@@ -185,8 +258,8 @@ namespace Xamarin.Linker {
 
 					if (!objcType.IsProtocol && !objcType.IsCategory) {
 						/*
-						* [assembly: TypeMap<NSObject> ("Objective-C class name", typeof (...), typeof (...))]
-						*/
+						 * [assembly: TypeMap<NSObject> ("Objective-C class name", typeof (...), typeof (...))]
+						 */
 						attribute = new CustomAttribute (CreateMethodReference (abr.TypeMapAttribute_1_Constructor_String_Type_Type, abr.Foundation_NSObject));
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, objcClassName));
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, trImported));
@@ -194,10 +267,10 @@ namespace Xamarin.Linker {
 						typeMapAssembly.CustomAttributes.Add (attribute);
 
 						/*
-						* [..._Proxy]
-						* sealed class ..._Proxy : NSObjectProxy {
-						* }
-						*/
+						 * [..._Proxy]
+						 * sealed class ..._Proxy : NSObjectProxy {
+						 * }
+						 */
 						var proxyType = new TypeDefinition (trNamespace, tr.Name + "_Proxy", TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.ObjCRuntime_NSObjectProxyAttribute);
 						typeMapAssembly.MainModule.Types.Add (proxyType);
 
@@ -210,22 +283,20 @@ namespace Xamarin.Linker {
 						proxyType.Methods.Add (ctor);
 
 						/*
-						* public override NSObject? CreateObject (IntPtr handle)
-						* {
-						*     return new ... (handle);
-						* }	
-						*/
+						 * public override NSObject? CreateObject (IntPtr handle)
+						 * {
+						 *     return new ... (handle);
+						 * }	
+						 */
 						var createObjectMethod = new MethodDefinition ("CreateObject", MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig, abr.Foundation_NSObject);
 						createObjectMethod.AddParameter ("handle", abr.System_IntPtr);
 						il = createObjectMethod.Body.GetILProcessor ();
-						if (td.Methods.TryFindSingle (v => v.IsInstanceConstructor () && v.HasParameters && v.Parameters.Count == 1 && v.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle"), out var nativeHandleCtor)) {
+						var nativeHandleCtor = ManagedRegistrarLookupTablesStep.FindNSObjectConstructor (td);
+						if (nativeHandleCtor is not null) {
 							il.Append (il.Create (OpCodes.Ldarg_1));
-							il.Append (il.Create (OpCodes.Call, abr.NativeObject_op_Implicit_NativeHandle));
+							if (nativeHandleCtor.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle"))
+								il.Append (il.Create (OpCodes.Call, abr.NativeObject_op_Implicit_NativeHandle));
 							il.Append (il.Create (OpCodes.Newobj, abr.CurrentAssembly.MainModule.ImportReference (nativeHandleCtor)));
-							il.Append (il.Create (OpCodes.Ret));
-						} else if (td.Methods.TryFindSingle (v => v.IsInstanceConstructor () && v.HasParameters && v.Parameters.Count == 1 && v.Parameters [0].ParameterType.Is ("System", "IntPtr"), out var intPtrCtor)) {
-							il.Append (il.Create (OpCodes.Ldarg_1));
-							il.Append (il.Create (OpCodes.Newobj, abr.CurrentAssembly.MainModule.ImportReference (intPtrCtor)));
 							il.Append (il.Create (OpCodes.Ret));
 						} else {
 							il.Append (il.Create (OpCodes.Ldnull));
@@ -233,12 +304,12 @@ namespace Xamarin.Linker {
 						}
 						proxyType.Methods.Add (createObjectMethod);
 						/*
-						* public override IntPtr GetClassHandle (out bool is_custom_type)
-						* {
-						* 	   is_custom_type = ...;
-						* 	   return Class.GetHandle ("...");
-						* * }
-						*/
+						 * public override IntPtr GetClassHandle (out bool is_custom_type)
+						 * {
+						 * 	   is_custom_type = ...;
+						 * 	   return Class.GetHandle ("...");
+						 * }
+						 */
 						var getClassHandleMethod = new MethodDefinition ("GetClassHandle", MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig, abr.System_IntPtr);
 						getClassHandleMethod.AddParameter ("is_custom_type", abr.System_Boolean.MakeByReferenceType ());
 						il = getClassHandleMethod.Body.GetILProcessor ();
@@ -251,15 +322,15 @@ namespace Xamarin.Linker {
 						proxyType.Methods.Add (getClassHandleMethod);
 
 						/*
-						* public override IntPtr LookupUnmanagedFunction (string name)
-						* {
-						*     if (name == "funcA")
-						*         return &funcA;
-						*     if (name == "funcB")
-						*         return &funcB;
-						*     return IntPtr.Zero;
-						* }
-						*/
+						 * public override IntPtr LookupUnmanagedFunction (string name)
+						 * {
+						 *     if (name == "funcA")
+						 *         return &funcA;
+						 *     if (name == "funcB")
+						 *         return &funcB;
+						 *     return IntPtr.Zero;
+						 * }
+						 */
 						var lookupUnmanagedFunctionMethod = new MethodDefinition ("LookupUnmanagedFunction", MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig, abr.System_IntPtr);
 						lookupUnmanagedFunctionMethod.AddParameter ("name", abr.System_String);
 						il = lookupUnmanagedFunctionMethod.Body.GetILProcessor ();
@@ -313,10 +384,10 @@ namespace Xamarin.Linker {
 						proxyType.CustomAttributes.Add (attribute);
 
 						/*
-						* Add the [TypeMapAssociation] attribute for this type and its proxy
-						*
-						* [assembly: TypeMapAssociation<NSObject> (typeof (...), typeof (...))]
-						*/
+						 * Add the [TypeMapAssociation] attribute for this type and its proxy
+						 *
+						 * [assembly: TypeMapAssociation<NSObject> (typeof (...), typeof (...))]
+						 */
 						attribute = new CustomAttribute (CreateMethodReference (abr.TypeMapAssociationAttribute_1_Constructor_Type_Type, abr.Foundation_NSObject));
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, trImported));
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, proxyType));
@@ -325,10 +396,10 @@ namespace Xamarin.Linker {
 
 					if (objcType.IsProtocol && objcType.ProtocolWrapperType is not null) {
 						/*
-						* [..._Proxy]
-						* sealed class ..._Proxy : NSObjectProxy {
-						* }
-						*/
+						 * [..._Proxy]
+						 * sealed class ..._Proxy : NSObjectProxy {
+						 * }
+						 */
 						var proxyType = new TypeDefinition (trNamespace, tr.Name + "_Proxy", TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.ObjCRuntime_ProtocolProxyAttribute);
 						typeMapAssembly.MainModule.Types.Add (proxyType);
 
@@ -341,25 +412,22 @@ namespace Xamarin.Linker {
 						proxyType.Methods.Add (ctor);
 
 						/*
-						* public override INativeObject? CreateObject (IntPtr handle, bool owns)
-						* {
-						*     return new ... (handle, owns);
-						* }	
-						*/
+						 * public override INativeObject? CreateObject (IntPtr handle, bool owns)
+						 * {
+						 *     return new ... (handle, owns);
+						 * }	
+						 */
 						var createObjectMethod = new MethodDefinition ("CreateObject", MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig, abr.ObjCRuntime_INativeObject);
 						createObjectMethod.AddParameter ("handle", abr.System_IntPtr);
 						createObjectMethod.AddParameter ("owns", abr.System_Boolean);
 						il = createObjectMethod.Body.GetILProcessor ();
-						if (td.Methods.TryFindSingle (v => v.IsInstanceConstructor () && v.HasParameters && v.Parameters.Count == 2 && v.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle") && v.Parameters [1].ParameterType.Is ("System", "Boolean"), out var nativeHandleCtor)) {
+						var nativeHandleCtor = ManagedRegistrarLookupTablesStep.FindINativeObjectConstructor (td);
+						if (nativeHandleCtor is not null) {
 							il.Append (il.Create (OpCodes.Ldarg_1));
-							il.Append (il.Create (OpCodes.Call, abr.NativeObject_op_Implicit_NativeHandle));
+							if (nativeHandleCtor.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle"))
+								il.Append (il.Create (OpCodes.Call, abr.NativeObject_op_Implicit_NativeHandle));
 							il.Append (il.Create (OpCodes.Ldarg_2));
 							il.Append (il.Create (OpCodes.Newobj, abr.CurrentAssembly.MainModule.ImportReference (nativeHandleCtor)));
-							il.Append (il.Create (OpCodes.Ret));
-						} else if (td.Methods.TryFindSingle (v => v.IsInstanceConstructor () && v.HasParameters && v.Parameters.Count == 2 && v.Parameters [0].ParameterType.Is ("System", "IntPtr") && v.Parameters [1].ParameterType.Is ("System", "Boolean"), out var intPtrCtor)) {
-							il.Append (il.Create (OpCodes.Ldarg_1));
-							il.Append (il.Create (OpCodes.Ldarg_2));
-							il.Append (il.Create (OpCodes.Newobj, abr.CurrentAssembly.MainModule.ImportReference (intPtrCtor)));
 							il.Append (il.Create (OpCodes.Ret));
 						} else {
 							il.Append (il.Create (OpCodes.Ldnull));

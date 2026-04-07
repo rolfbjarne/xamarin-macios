@@ -12,6 +12,7 @@ static class TypeMaps {
 	internal static IReadOnlyDictionary<string, Type> NSObjectTypes;
 	internal static IReadOnlyDictionary<Type, Type> SkippedProxyTypes;
 	internal static IReadOnlyDictionary<Type, Type> NSObjectProxyTypes;
+	internal static IReadOnlyDictionary<Type, Type> INativeObjectProxyTypes;
 	internal static IReadOnlyDictionary<Type, Type> ProtocolProxyTypes;
 	internal static IReadOnlyDictionary<Type, Type> ProtocolWrapperTypes;
 #pragma warning restore 8618
@@ -21,6 +22,7 @@ static class TypeMaps {
 		NSObjectTypes = TypeMapping.GetOrCreateExternalTypeMapping<NSObject> ();
 		SkippedProxyTypes = TypeMapping.GetOrCreateProxyTypeMapping<SkippedObjectiveCTypeUniverse> ();
 		NSObjectProxyTypes = TypeMapping.GetOrCreateProxyTypeMapping<NSObject> ();
+		INativeObjectProxyTypes = TypeMapping.GetOrCreateProxyTypeMapping<INativeObject> ();
 		ProtocolProxyTypes = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolProxyAttribute> ();
 		ProtocolWrapperTypes = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolAttribute> ();
 	}
@@ -52,6 +54,15 @@ static class TypeMaps {
 		}
 	}
 
+	static IReadOnlyDictionary<Type, Type>? inativeobject_proxy_types;
+	internal static IReadOnlyDictionary<Type, Type> INativeObjectProxyTypes {
+		get {
+			if (inativeobject_proxy_types is null)
+				Initialize ();
+			return inativeobject_proxy_types;
+		}
+	}
+
 	static IReadOnlyDictionary<Type, Type>? protocol_proxy_types;
 	internal static IReadOnlyDictionary<Type, Type> ProtocolProxyTypes {
 		get {
@@ -75,6 +86,7 @@ static class TypeMaps {
 	[MemberNotNull (nameof (nsobject_types))]
 	[MemberNotNull (nameof (skipped_proxy_types))]
 	[MemberNotNull (nameof (nsobject_proxy_types))]
+	[MemberNotNull (nameof (inativeobject_proxy_types))]
 	[MemberNotNull (nameof (protocol_proxy_types))]
 	[MemberNotNull (nameof (protocol_wrapper_types))]
 	internal static void Initialize ()
@@ -94,6 +106,9 @@ static class TypeMaps {
 
 			if (nsobject_proxy_types is null)
 				nsobject_proxy_types = TypeMapping.GetOrCreateProxyTypeMapping<NSObject> ();
+
+			if (inativeobject_proxy_types is null)
+				inativeobject_proxy_types = TypeMapping.GetOrCreateProxyTypeMapping<INativeObject> ();
 
 			if (protocol_proxy_types is null)
 				protocol_proxy_types = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolProxyAttribute> ();

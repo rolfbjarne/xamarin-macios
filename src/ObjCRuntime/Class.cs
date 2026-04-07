@@ -1069,6 +1069,7 @@ namespace ObjCRuntime {
 	}
 
 	// TODO: make this class internal
+	// TODO: move to a separate file
 	public abstract class NSObjectProxyAttribute : Attribute {
 		protected NSObjectProxyAttribute () { }
 
@@ -1080,19 +1081,29 @@ namespace ObjCRuntime {
 	}
 
 	// TODO: make this class internal
+	// TODO: move to a separate file
 	public abstract class ProtocolProxyAttribute : Attribute {
 #if !COREBUILD
 		public abstract INativeObject? CreateObject (IntPtr handle, bool owns);
 #endif
 	}
 
+	// TODO: make this class internal
+	// TODO: move to a separate file
+	public abstract class INativeObjectProxyAttribute : Attribute {
+#if !COREBUILD
+		public abstract INativeObject? CreateObject (IntPtr handle, bool owns);
+#endif
+	}
 
 	// TODO: make this class internal
+	// TODO: move to a separate file
 	public sealed class SkippedObjectiveCTypeUniverse {
 		SkippedObjectiveCTypeUniverse () { }
 	}
 
 	// TODO: make this class internal
 	// TODO: do we even need this?
+	// TODO: move to a separate file
 	public class ObjectiveCUniverse { }
 }

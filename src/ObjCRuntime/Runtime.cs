@@ -1353,16 +1353,28 @@ namespace ObjCRuntime {
 				throw new ArgumentNullException (nameof (type));
 
 			if (Runtime.IsTrimmableStaticRegistrar) {
-				if (TypeMaps.NSObjectProxyTypes.TryGetValue (type, out var proxyType)) {
-					// Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type}) found in proxy map with type {proxyType.FullName}");
+				var lookupType = type;
+				if (typeof (T) == type && type.IsGenericType) {
+					var inst = ConstructNSObjectViaFactoryMethod (ptr);
+					if (inst is not null) {
+						Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type}) created '{inst.GetType ().FullName}' instance using static interface factory method.");
+						return inst;
+					}
+					Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type}) failed to create instance using static interface factory method.");
+					CannotCreateManagedInstanceOfGenericType (ptr, IntPtr.Zero, type, missingCtorResolution, sel, method_handle);
+					return null;
+				}
+
+				if (TypeMaps.NSObjectProxyTypes.TryGetValue (lookupType, out var proxyType)) {
+					Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type}) found in proxy map with type '{proxyType.FullName}' for lookup type '{lookupType.FullName}'");
 					var attrib = proxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
 					if (attrib is null)
 						throw new InvalidOperationException ($"Type '{proxyType.FullName}' is expected to have an NSObjectProxyAttribute."); // TODO: better exception
-					var instance = (T?) attrib.CreateObject (ptr);
+					var instance = (T?) (object?) attrib.CreateObject (ptr);
 					if (instance is not null)
 						return instance;
 				}
-				Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}) did not find type in proxy map");
+				Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type}) did not find type '{lookupType.FullName}' in proxy map");
 				MissingCtor (ptr, IntPtr.Zero, type, missingCtorResolution, sel, method_handle);
 				return null;
 			}
@@ -1446,8 +1458,18 @@ namespace ObjCRuntime {
 				type = type.GetElementType ()!;
 
 			if (Runtime.IsTrimmableStaticRegistrar) {
+				if (typeof (T) == type && type.IsGenericType) {
+					var inst = ConstructINativeObjectViaFactoryMethod (ptr, owns);
+					if (inst is not null) {
+						Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}, {type}) created '{inst.GetType ().FullName}' instance using static interface factory method.");
+						return inst;
+					}
+					Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}, {type}) failed to create instance using static interface factory method.");
+					CannotCreateManagedInstanceOfGenericType (ptr, IntPtr.Zero, type, missingCtorResolution, sel, method_handle);
+					return default (T);
+				}
 				if (TypeMaps.NSObjectProxyTypes.TryGetValue (type, out var proxyType)) {
-					// Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type.FullName}) found in proxy map");
+					Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}, {type.FullName}) found in proxy map");
 					var attrib = proxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
 					if (attrib is null)
 						throw new InvalidOperationException ($"Type '{proxyType.FullName}' is expected to have an NSObjectProxyAttribute."); // TODO: better exception
@@ -1457,13 +1479,20 @@ namespace ObjCRuntime {
 					return rv;
 				}
 				if (TypeMaps.ProtocolProxyTypes.TryGetValue (type, out var protocolProxyType)) {
-					// Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type.FullName}) found in protocol proxy map");
+					Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}, {type.FullName}) found in protocol proxy map");
 					var attrib = protocolProxyType.GetCustomAttribute<ProtocolProxyAttribute> ();
 					if (attrib is null)
 						throw new InvalidOperationException ($"Type '{protocolProxyType.FullName}' is expected to have an ProtocolProxyAttribute."); // TODO: better exception
 					return (T?) (object?) attrib.CreateObject (ptr, owns);
 				}
-				Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}) did not find type in proxy map");
+				if (TypeMaps.INativeObjectProxyTypes.TryGetValue (type, out var inativeObjectProxyType)) {
+					Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}, {type.FullName}) found in INativeObject proxy map");
+					var attrib = inativeObjectProxyType.GetCustomAttribute<INativeObjectProxyAttribute> ();
+					if (attrib is null)
+						throw new InvalidOperationException ($"Type '{inativeObjectProxyType.FullName}' is expected to have an INativeObjectProxyAttribute."); // TODO: better exception
+					return (T?) (object?) attrib.CreateObject (ptr, owns);
+				}
+				Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}) did not find type '{type.FullName}' in any map");
 				MissingCtor (ptr, IntPtr.Zero, type, missingCtorResolution, sel, method_handle);
 				return default (T);
 			}
@@ -2072,7 +2101,7 @@ namespace ObjCRuntime {
 					// native objects and NSObject instances.
 					throw ErrorHelper.CreateError (8004, $"Cannot create an instance of {implementation.FullName} for the native object 0x{ptr:x} (of type '{Class.class_getName (Class.GetClassForObject (ptr))}'), because another instance already exists for this native object (of type {o.GetType ().FullName}).");
 				}
-				if (!Runtime.IsManagedStaticRegistrar) {
+				if (!Runtime.IsManagedStaticRegistrar && !Runtime.IsTrimmableStaticRegistrar) {
 					// For other registrars other than managed-static the generic parameter of ConstructNSObject is used
 					// only to cast the return value so we can safely pass NSObject here to satisfy the constraints of the
 					// generic parameter.

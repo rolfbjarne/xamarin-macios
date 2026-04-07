@@ -440,6 +440,12 @@ namespace Xamarin.Linker {
 			}
 		}
 
+		public TypeReference ObjCRuntime_INativeObjectProxyAttribute {
+			get {
+				return GetTypeReference (PlatformAssembly, "ObjCRuntime.INativeObjectProxyAttribute", out var _);
+			}
+		}
+
 		public TypeReference ObjCRuntime_NativeHandle {
 			get {
 				return GetTypeReference (PlatformAssembly, "ObjCRuntime.NativeHandle", out var _);
@@ -717,6 +723,12 @@ namespace Xamarin.Linker {
 						&& v.Parameters.Count == 1
 						&& v.Parameters [0].ParameterType.Is ("System", "String")
 						&& !v.HasGenericParameters);
+			}
+		}
+
+		public MethodReference ObjCRuntime_INativeObjectProxyAttribute__ctor {
+			get {
+				return GetMethodReference (PlatformAssembly, ObjCRuntime_INativeObjectProxyAttribute, ".ctor", (v) => v.IsDefaultConstructor ());
 			}
 		}
 

@@ -60,6 +60,9 @@ exec:
 	$(Q) echo "✅ Test run succeeded"
 	$(Q) grep "Tests run:" "$(LOGFILENAME)"
 
+
+TEST?=--test MonoTests.System.Net.Http.MessageHandlerTest
+
 simple: export RID=
 simple: export RUNTIMEIDENTIFIER=
 simple: export RUNTIMEIDENTIFIERS=
@@ -69,7 +72,7 @@ simple:
 	mair
 	git clean -xfd
 	make build
-	bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest --test apitest.KernelNotificationTest
+	bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest $(TEST)
 
 s: export RID=
 s: export RUNTIMEIDENTIFIER=
@@ -80,7 +83,7 @@ s:
 	madl
 	git clean -xfd
 	make build
-	bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest --test MonoTouchFixtures.ObjCRuntime.GCHandleSwitchRaceTest
+	bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest $(TEST)
 
 a: export RID=
 a: export RUNTIMEIDENTIFIER=
@@ -94,7 +97,17 @@ a:
 	bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest
 
 lldb:
-	lldb -- bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest --test apitest.KernelNotificationTest
+	lldb -- bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest $(TEST)
 
 evt:
-	DOTNET_EnableEventPipe=1 bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest --test apitest.KernelNotificationTest
+	DOTNET_EnableEventPipe=1 bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest $(TEST)
+
+all: export RID=
+all: export RUNTIMEIDENTIFIER=
+all: export RUNTIMEIDENTIFIERS=
+all: export TEST_VARIATION=trimmable-static-registrar
+all: export TestVariation=trimmable-static-registrar
+all:
+	git clean -xfd
+	make build
+	bin/Debug/*/*/monotouchtest.app/Contents/MacOS/monotouchtest

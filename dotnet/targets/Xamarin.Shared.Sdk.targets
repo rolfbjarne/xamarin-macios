@@ -554,7 +554,7 @@
 		</PropertyGroup>
 	</Target>
 
-	<Target Name="SelectRegistrar" DependsOnTargets="_ComputeLinkMode">
+	<Target Name="SelectRegistrar" DependsOnTargets="_ComputeLinkMode" BeforeTargets="GenerateBuildRuntimeConfigurationFiles">
 		<PropertyGroup>
 			<!--
 			Registrar configuration:
@@ -572,6 +572,12 @@
 			<Registrar Condition="'$(Registrar)' == '' And '$(_AreAnyAssembliesTrimmed)' != 'true' And ('$(MarshalManagedExceptionMode)' == '' Or '$(MarshalManagedExceptionMode)' == 'default')">partial-static</Registrar>
 			<Registrar Condition="'$(Registrar)' == ''">dynamic</Registrar>
 		</PropertyGroup>
+	</Target>
+
+	<Target Name="_SetRuntimeHostConfigurationOptions" BeforeTargets="GenerateBuildRuntimeConfigurationFiles" DependsOnTargets="SelectRegistrar">
+		<ItemGroup Condition="'$(Registrar)' == 'trimmable-static'">
+			<RuntimeHostConfigurationOption Include="System.Runtime.InteropServices.TypeMappingEntryAssembly" Value="$(_TypeMapAssemblyName)" Link="true" />
+		</ItemGroup>
 	</Target>
 
 	<Target Name="_ComputeLinkerArguments" DependsOnTargets="$(_ComputeLinkerArgumentsDependsOn)" />
@@ -1330,14 +1336,6 @@
 
 			<_RuntimeConfigurationFile>runtimeconfig.bin</_RuntimeConfigurationFile>
 		</PropertyGroup>
-
-		<PropertyGroup Condition="'$(Registrar)' == 'trimmable-static'">
-			<_TypeMapAssemblyName Condition="'$(_TypeMapAssemblyName)' == ''">_Microsoft.$(_PlatformName).TypeMaps</_TypeMapAssemblyName>
-			<_TypeMapOutputDirectory Condition="'$(_TypeMapOutputDirectory)' == ''">$(DeviceSpecificIntermediateOutputPath)typemap\</_TypeMapOutputDirectory>
-		</PropertyGroup>
-		<ItemGroup Condition="'$(Registrar)' == 'trimmable-static'">
-			<RuntimeHostConfigurationOption Include="System.Runtime.InteropServices.TypeMappingEntryAssembly" Value="$(_TypeMapAssemblyName)" Link="true" />
-		</ItemGroup>
 
 		<!-- Not sure about how to handle nested app extensions here, but if it ever becomes a problem we can look into it (I believe only watch extensions can have embedded extensions at this point, and we don't support watchOS on .NET anyways) -->
 		<ItemGroup Condition="'$(IsAppExtension)' == 'true'">

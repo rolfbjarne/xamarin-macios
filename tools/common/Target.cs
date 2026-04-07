@@ -344,6 +344,11 @@ namespace Xamarin.Bundler {
 			sw.WriteLine ();
 			sw.WriteLine (assembly_externs);
 
+			if (app.PublishReadyToRun == true) {
+				sw.WriteLine ("extern void* RTR_HEADER;");
+				sw.WriteLine ();
+			}
+
 			sw.WriteLine ("void xamarin_register_modules_impl ()");
 			sw.WriteLine ("{");
 			sw.WriteLine (assembly_aot_modules);
@@ -367,6 +372,8 @@ namespace Xamarin.Bundler {
 			sw.WriteLine ("static const char *xamarin_runtime_libraries_array[] = {");
 			foreach (var lib in app.MonoLibraries)
 				sw.WriteLine ($"\t\"{Path.GetFileNameWithoutExtension (lib)}\",");
+			foreach (var lib in app.DylibsToConvertToFrameworks.Except (app.MonoLibraries))
+				sw.WriteLine ($"\t\"{Path.GetFileNameWithoutExtension (lib)}\", // dylib converted to framework");
 			sw.WriteLine ($"\tNULL");
 			sw.WriteLine ("};");
 
@@ -435,6 +442,8 @@ namespace Xamarin.Bundler {
 				sw.WriteLine ("\txamarin_set_is_trimmable_static_registrar (true);");
 			if (app.Registrar == RegistrarMode.ManagedStatic)
 				sw.WriteLine ("\txamarin_set_is_managed_static_registrar (true);");
+			if (app.PublishReadyToRun == true)
+				sw.WriteLine ("\txamarin_rtr_header = &RTR_HEADER;");
 			sw.WriteLine ("}");
 			sw.WriteLine ();
 			sw.Write ("int main");
@@ -509,6 +518,33 @@ namespace Xamarin.Bundler {
 
 			return false;
 		}
+
+		bool _set_arm64_calling_convention;
+		bool? _is_arm64_calling_convention;
+		public bool? InlineIsArm64CallingConventionForCurrentAbi {
+			get {
+				if (!_set_arm64_calling_convention) {
+					if (Optimizations.InlineIsARM64CallingConvention == true) {
+						// We can usually inline Runtime.InlineIsARM64CallingConvention if the generated code will execute on a single architecture
+						switch (Abi & Abi.ArchMask) {
+						case Abi.x86_64:
+							_is_arm64_calling_convention = false;
+							break;
+						case Abi.ARM64:
+						case Abi.ARM64e:
+							_is_arm64_calling_convention = true;
+							break;
+						default:
+							LinkContext.Exceptions.Add (Xamarin.Bundler.ErrorHelper.CreateWarning (99, Xamarin.Bundler.Errors.MX0099, $"unknown abi: {Abi}"));
+							break;
+						}
+					}
+					_set_arm64_calling_convention = true;
+				}
+				return _is_arm64_calling_convention;
+			}
+		}
+
 #endif // !LEGACY_TOOLS
 	}
 }

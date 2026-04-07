@@ -18,11 +18,11 @@ static class TypeMaps {
 
 	internal static void Initialize ()
 	{
-		nsobject_types = TypeMapping.GetOrCreateExternalTypeMapping<NSObject> ();
-		skipped_proxy_types = TypeMapping.GetOrCreateProxyTypeMapping<SkippedObjectiveCTypeUniverse> ();
-		nsobject_proxy_types = TypeMapping.GetOrCreateProxyTypeMapping<NSObject> ();
-		protocol_proxy_types = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolProxyAttribute> ();
-		protocol_wrapper_types = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolAttribute> ();
+		NSObjectTypes = TypeMapping.GetOrCreateExternalTypeMapping<NSObject> ();
+		SkippedProxyTypes = TypeMapping.GetOrCreateProxyTypeMapping<SkippedObjectiveCTypeUniverse> ();
+		NSObjectProxyTypes = TypeMapping.GetOrCreateProxyTypeMapping<NSObject> ();
+		ProtocolProxyTypes = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolProxyAttribute> ();
+		ProtocolWrapperTypes = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolAttribute> ();
 	}
 #else
 	static IReadOnlyDictionary<string, Type>? nsobject_types;

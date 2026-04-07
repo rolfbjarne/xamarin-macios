@@ -2029,7 +2029,7 @@ namespace Registrar {
 
 			if (!type.IsProtocol && !type.IsCategory)
 				return true;
-			
+
 			return false;
 		}
 
@@ -2836,7 +2836,7 @@ namespace Registrar {
 				var flags = MTTypeFlags.None;
 
 				if (IsCustomType (@class))
-					flags |= MTTypeFlags.CustomType;
+					flags |= MTTypeFlags.CustomType;
 
 				skip.Clear ();
 
@@ -2893,7 +2893,7 @@ namespace Registrar {
 					i++;
 				} else if (App.Registrar == RegistrarMode.TrimmableStatic && @class.IsStubClass) {
 					map_init.AppendLine ("[{0} class];", EncodeNonAsciiCharacters (@class.ExportedName));
-				}	
+				}
 
 				if (App.Registrar != RegistrarMode.TrimmableStatic && @class.IsProtocol && @class.ProtocolWrapperType is not null) {
 					if (token_ref == INVALID_TOKEN_REF && !TryCreateTokenReference (@class.Type, TokenType.TypeDef, out token_ref, exceptions))
@@ -3125,7 +3125,7 @@ namespace Registrar {
 
 			if (App.Optimizations.RedirectClassHandles == true)
 				map.AppendLine ("static void *__xamarin_class_handles [{0}];", i);
-			
+
 			var has_skipped_map = App.Registrar != RegistrarMode.TrimmableStatic && skipped_types.Count > 0;
 			if (has_skipped_map) {
 				map.AppendLine ("static const MTManagedClassMap __xamarin_skipped_map [] = {");

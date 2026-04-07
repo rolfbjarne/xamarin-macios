@@ -497,7 +497,7 @@ namespace ObjCRuntime {
 			}
 
 			var ch = attrib.GetClassHandle (out is_custom_type);
-			if (ch != @class)  {
+			if (ch != @class) {
 #if LOG_TRIMMABLE_TYPEMAP
 				Runtime.NSLog ($"FindType (0x{@class:X} = {className}) found in proxy type map, and attribute, but attribute's class handle doesn't match (0x{ch:X} != 0x{@class:X})");
 #endif
@@ -1069,9 +1069,8 @@ namespace ObjCRuntime {
 	}
 
 	// TODO: make this class internal
-	public abstract class NSObjectProxyAttribute : Attribute
-	{
-		protected NSObjectProxyAttribute () {}
+	public abstract class NSObjectProxyAttribute : Attribute {
+		protected NSObjectProxyAttribute () { }
 
 #if !COREBUILD
 		public abstract NSObject? CreateObject (IntPtr handle);
@@ -1081,8 +1080,7 @@ namespace ObjCRuntime {
 	}
 
 	// TODO: make this class internal
-	public abstract class ProtocolProxyAttribute : Attribute
-	{
+	public abstract class ProtocolProxyAttribute : Attribute {
 #if !COREBUILD
 		public abstract INativeObject? CreateObject (IntPtr handle, bool owns);
 #endif
@@ -1090,12 +1088,11 @@ namespace ObjCRuntime {
 
 
 	// TODO: make this class internal
-	public sealed class SkippedObjectiveCTypeUniverse
-	{
-		SkippedObjectiveCTypeUniverse () {}
+	public sealed class SkippedObjectiveCTypeUniverse {
+		SkippedObjectiveCTypeUniverse () { }
 	}
 
 	// TODO: make this class internal
 	// TODO: do we even need this?
-	public class ObjectiveCUniverse {}
+	public class ObjectiveCUniverse { }
 }

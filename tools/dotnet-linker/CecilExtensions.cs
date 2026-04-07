@@ -41,7 +41,7 @@ namespace Xamarin.Linker {
 			return rv;
 		}
 
-		public static bool TryFindSingle<T> (this Mono.Collections.Generic.Collection<T> self, Func<T, bool> predicate, out T? result) where T: class
+		public static bool TryFindSingle<T> (this Mono.Collections.Generic.Collection<T> self, Func<T, bool> predicate, out T? result) where T : class
 		{
 			result = null;
 			foreach (var item in self) {

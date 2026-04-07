@@ -154,7 +154,7 @@ namespace Xamarin.Tests {
 			}
 			preservedAPIs.Sort ();
 			var expectedFile = Path.Combine (expectedDirectory, $"{name}-preservedapis.txt");
-			var expectedAPIs = File.ReadAllLines (expectedFile);
+			var expectedAPIs = File.Exists (expectedFile) ? File.ReadAllLines (expectedFile) : [];
 			var addedAPIs = preservedAPIs.Except (expectedAPIs).ToList ();
 			var removedAPIs = expectedAPIs.Except (preservedAPIs).ToList ();
 
@@ -182,6 +182,26 @@ namespace Xamarin.Tests {
 		static string FormatBytes (long bytes, bool alwaysShowSign = false)
 		{
 			return $"{(alwaysShowSign && bytes > 0 ? "+" : "")}{bytes:N0} bytes ({bytes / 1024.0:N1} KB = {bytes / (1024.0 * 1024.0):N1} MB)";
+		}
+
+		// TODO: move these tests up with the other tests for the final merge.
+
+		[TestCase (ApplePlatform.iOS, "ios-arm64")]
+		public void MonoVM_TrimmableStatic (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			Run (platform, runtimeIdentifiers, "Release", $"{platform}-MonoVM-TrimmableStatic", true, new Dictionary<string, string> () { { "UseMonoRuntime", "true" }, { "Registrar", "trimmable-static" } });
+		}
+
+		[TestCase (ApplePlatform.iOS, "ios-arm64")]
+		public void MonoVM_Interpreter_TrimmableStatic (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			Run (platform, runtimeIdentifiers, "Release", $"{platform}-MonoVM-interpreter-TrimmableStatic", true, new Dictionary<string, string> () { { "UseInterpreter", "true" }, { "UseMonoRuntime", "true" }, { "Registrar", "trimmable-static" } });
+		}
+
+		[TestCase (ApplePlatform.iOS, "ios-arm64")]
+		public void NativeAOT_TrimmableStatic (ApplePlatform platform, string runtimeIdentifiers)
+		{
+			Run (platform, runtimeIdentifiers, "Release", $"{platform}-NativeAOT-TrimmableStatic", false, new Dictionary<string, string> () { { "PublishAot", "true" }, { "_IsPublishing", "true" }, { "Registrar", "trimmable-static" } });
 		}
 	}
 

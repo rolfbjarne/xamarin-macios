@@ -175,7 +175,7 @@ namespace Xamarin.Linker {
 			var sb = new StringBuilder ();
 			sb.Append ("[");
 			sb.Append (ca.AttributeType.Name.EndsWith ("Attribute") ? ca.AttributeType.Name.Substring (0, ca.AttributeType.Name.Length - "Attribute".Length) : ca.AttributeType.Name);
-			if (ca.HasFields || ca.HasConstructorArguments || ca.HasProperties) {
+			if (ca.HasFields || ca.HasConstructorArguments || ca.HasProperties) {
 				sb.Append ("(");
 				var first = true;
 				foreach (var arg in ca.ConstructorArguments) {

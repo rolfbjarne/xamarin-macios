@@ -38,7 +38,7 @@ namespace Xamarin.Linker.Steps {
 			get {
 				if (create_xml_description_file.HasValue)
 					return create_xml_description_file.Value;
-				return Configuration.Application.XamarinRuntime == XamarinRuntime.NativeAOT;		
+				return Configuration.Application.XamarinRuntime == XamarinRuntime.NativeAOT;
 			}
 			set {
 				create_xml_description_file = value;
@@ -217,7 +217,7 @@ namespace Xamarin.Linker.Steps {
 			var description = GetOrCreateXmlDescription (onType);
 			if (!conditional)
 				description.PreserveType = true;
-			description.Methods[GetXmlSignature (forMethod)] = conditional;
+			description.Methods [GetXmlSignature (forMethod)] = conditional;
 		}
 
 		void AddUnconditionalXmlDescription (IMetadataTokenProvider provider)
@@ -250,7 +250,7 @@ namespace Xamarin.Linker.Steps {
 
 			if (!description.PreserveType)
 				type.SetAttributeValue ("required", "false");
-			
+
 			type.SetAttributeValue ("preserve", "nothing");
 
 			foreach (var field in description.Fields.OrderBy (v => v.Key, System.StringComparer.Ordinal))
@@ -291,7 +291,7 @@ namespace Xamarin.Linker.Steps {
 				var applyXmlStepType = Context.GetType ().Assembly.GetType ("Mono.Linker.Steps.ResolveFromXmlStep");
 				if (applyXmlStepType is not null) {
 					var documentStream = File.OpenRead (xmlPath);
-					var applyXmlStep = (BaseStep) Activator.CreateInstance (applyXmlStepType, new object[] { documentStream, xmlPath })!;
+					var applyXmlStep = (BaseStep) Activator.CreateInstance (applyXmlStepType, new object [] { documentStream, xmlPath })!;
 					applyXmlStep.Process (Context);
 				} else {
 					throw ErrorHelper.CreateError (99, $"Unable to find Mono.Linker.Steps.ResolveFromXmlStep to apply the generated XML description file {xmlPath}");

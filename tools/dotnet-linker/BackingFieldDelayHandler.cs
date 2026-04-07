@@ -35,8 +35,14 @@ namespace Xamarin.Linker {
 		{
 			base.Initialize (context);
 			markContext.RegisterMarkMethodAction (ProcessMethod);
+			markContext.RegisterMarkTypeAction (DebugType);
 		}
 
+		void DebugType (TypeDefinition type)
+		{
+			if (type.Module.Name.Contains ("TypeMap"))
+				Console.WriteLine ("STOP");
+		}
 		// cache `Dispose` body of optimization NSObject subclasses
 		static Dictionary<MethodDefinition, MethodBody> dispose = new ();
 

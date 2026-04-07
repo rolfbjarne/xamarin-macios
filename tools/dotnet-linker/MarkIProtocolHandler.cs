@@ -19,6 +19,13 @@ namespace Xamarin.Linker {
 			if (LinkContext.App.Registrar == Bundler.RegistrarMode.Dynamic) {
 				markContext.RegisterMarkTypeAction (ProcessType);
 			}
+			markContext.RegisterMarkTypeAction (DebugType);
+		}
+
+		void DebugType (TypeDefinition type)
+		{
+			if (type.Module.Name.Contains ("TypeMap"))
+				Console.WriteLine ("STOP");
 		}
 
 		protected override void Process (TypeDefinition type)

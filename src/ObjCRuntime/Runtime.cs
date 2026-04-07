@@ -1362,7 +1362,7 @@ namespace ObjCRuntime {
 					if (instance is not null)
 						return instance;
 				}
-				// Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}) did not find type in proxy map");
+				Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}) did not find type in proxy map");
 				MissingCtor (ptr, IntPtr.Zero, type, missingCtorResolution, sel, method_handle);
 				return null;
 			}
@@ -1463,7 +1463,7 @@ namespace ObjCRuntime {
 						throw new InvalidOperationException ($"Type '{protocolProxyType.FullName}' is expected to have an ProtocolProxyAttribute."); // TODO: better exception
 					return (T?) (object?) attrib.CreateObject (ptr, owns);
 				}
-				// Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}) did not find type in proxy map");
+				Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}) did not find type in proxy map");
 				MissingCtor (ptr, IntPtr.Zero, type, missingCtorResolution, sel, method_handle);
 				return default (T);
 			}

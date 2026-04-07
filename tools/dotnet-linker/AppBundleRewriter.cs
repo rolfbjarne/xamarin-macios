@@ -403,7 +403,7 @@ namespace Xamarin.Linker {
 				return GetTypeReference (PlatformAssembly, "Foundation.ProtocolAttribute", out var _);
 			}
 		}
-		
+
 		public TypeReference ObjCRuntime_BindAs {
 			get {
 				return GetTypeReference (PlatformAssembly, "ObjCRuntime.BindAs", out var _);
@@ -451,7 +451,7 @@ namespace Xamarin.Linker {
 				return GetTypeReference (PlatformAssembly, "ObjCRuntime.NativeObjectExtensions", out var _);
 			}
 		}
-		
+
 		public TypeReference ObjCRuntime_NSObjectProxyAttribute {
 			get {
 				return GetTypeReference (PlatformAssembly, "ObjCRuntime.NSObjectProxyAttribute", out var _);
@@ -498,12 +498,12 @@ namespace Xamarin.Linker {
 
 		public MethodReference System_Console__WriteLine_String_Object {
 			get {
-				return GetMethodReference (CorlibAssembly, System_Console, "WriteLine", (v) => 
+				return GetMethodReference (CorlibAssembly, System_Console, "WriteLine", (v) =>
 					v.IsStatic
 					&& v.HasParameters
 					&& v.Parameters.Count == 2
-					&& v.Parameters[0].ParameterType.Is("System", "String")
-					&& v.Parameters[1].ParameterType.Is("System", "Object")
+					&& v.Parameters [0].ParameterType.Is ("System", "String")
+					&& v.Parameters [1].ParameterType.Is ("System", "Object")
 					&& !v.HasGenericParameters);
 			}
 		}
@@ -516,12 +516,12 @@ namespace Xamarin.Linker {
 
 		public MethodReference System_String__op_Equality_String_String {
 			get {
-				return GetMethodReference (CorlibAssembly, System_String, "op_Equality", (v) => 
+				return GetMethodReference (CorlibAssembly, System_String, "op_Equality", (v) =>
 					v.IsStatic
 					&& v.HasParameters
 					&& v.Parameters.Count == 2
-					&& v.Parameters[0].ParameterType.Is("System", "String")
-					&& v.Parameters[1].ParameterType.Is("System", "String")
+					&& v.Parameters [0].ParameterType.Is ("System", "String")
+					&& v.Parameters [1].ParameterType.Is ("System", "String")
 					&& v.ReturnType.Is ("System", "Boolean")
 					&& !v.HasGenericParameters);
 			}

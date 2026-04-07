@@ -199,7 +199,7 @@ namespace Xamarin.Bundler {
 				case ApplePlatform.MacCatalyst:
 					return !AreAnyAssembliesTrimmed;
 				case ApplePlatform.MacOSX:
-					return (Registrar == RegistrarMode.Static || Registrar == RegistrarMode.ManagedStatic || Registrar == RegistrarMode.TrimmableStatic) && !AreAnyAssembliesTrimmed;
+					return (Registrar == RegistrarMode.Static || Registrar == RegistrarMode.ManagedStatic || Registrar == RegistrarMode.TrimmableStatic) && !AreAnyAssembliesTrimmed;
 				default:
 					throw ErrorHelper.CreateError (71, Errors.MX0071, Platform, ProductName);
 				}

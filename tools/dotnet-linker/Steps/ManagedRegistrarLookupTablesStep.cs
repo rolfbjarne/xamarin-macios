@@ -355,9 +355,6 @@ namespace Xamarin.Linker {
 
 					il.Append (falseTarget);
 				}
-
-				// In addition to the big lookup method, implement the static factory method on the type:
-				ImplementConstructNSObjectFactoryMethod (type, ctor);
 			}
 
 			// return default (NSObject);
@@ -413,9 +410,6 @@ namespace Xamarin.Linker {
 						il.Append (falseTarget);
 					}
 				}
-
-				// In addition to the big lookup method, implement the static factory method on the type:
-				ImplementConstructINativeObjectFactoryMethod (type, ctorRef);
 			}
 
 			// return default (NSObject)
@@ -444,19 +438,16 @@ namespace Xamarin.Linker {
 			}
 		}
 
-		void AddTypeInterfaceImplementation (TypeDefinition type, TypeReference iface)
+		static void AddTypeInterfaceImplementation (TypeDefinition type, TypeReference iface)
 		{
 			if (type.HasInterfaces && type.Interfaces.Any (v => v.InterfaceType == iface))
 				return;
 
 			var ifaceImplementation = new InterfaceImplementation (iface);
 			type.Interfaces.Add (ifaceImplementation);
-			Annotations.Mark (ifaceImplementation);
-			Annotations.Mark (ifaceImplementation.InterfaceType);
-			Annotations.Mark (ifaceImplementation.InterfaceType.Resolve ());
 		}
 
-		void ImplementConstructNSObjectFactoryMethod (TypeDefinition type, MethodReference ctor)
+		internal static void ImplementConstructNSObjectFactoryMethod (AppBundleRewriter abr, Tuner.DerivedLinkContext context, TypeDefinition type, MethodReference ctor)
 		{
 			// skip creating the factory for NSObject itself
 			if (type.Is ("Foundation", "NSObject"))
@@ -484,18 +475,16 @@ namespace Xamarin.Linker {
 			il.Emit (OpCodes.Ret);
 
 			body.GenerateILOffsets ();
-
-			Annotations.Mark (createInstanceMethod);
 		}
 
-		void ImplementConstructINativeObjectFactoryMethod (TypeDefinition type, MethodReference? ctor)
+		internal static void ImplementConstructINativeObjectFactoryMethod (AppBundleRewriter abr, Tuner.DerivedLinkContext context, TypeDefinition type, MethodReference? ctor)
 		{
 			// skip creating the factory for NSObject itself
 			if (type.Is ("Foundation", "NSObject"))
 				return;
 
 			// If the type is a subclass of NSObject, we prefer the NSObject "IntPtr" constructor
-			var nsobjectConstructor = type.IsNSObject (DerivedLinkContext) ? FindNSObjectConstructor (type) : null;
+			MethodReference? nsobjectConstructor = type.IsNSObject (context) ? FindNSObjectConstructor (type) : null;
 			if (nsobjectConstructor is null && ctor is null)
 				return;
 
@@ -558,16 +547,14 @@ namespace Xamarin.Linker {
 			}
 
 			body.GenerateILOffsets ();
-
-			Annotations.Mark (createInstanceMethod);
 		}
 
-		static MethodReference? FindNSObjectConstructor (TypeDefinition type)
+		internal static MethodDefinition? FindNSObjectConstructor (TypeDefinition type)
 		{
 			return FindConstructorWithOneParameter ("ObjCRuntime", "NativeHandle")
 				?? FindConstructorWithOneParameter ("System", "IntPtr");
 
-			MethodReference? FindConstructorWithOneParameter (string ns, string cls)
+			MethodDefinition? FindConstructorWithOneParameter (string ns, string cls)
 				=> type.Methods.SingleOrDefault (method =>
 					method.IsConstructor
 						&& !method.IsStatic
@@ -576,13 +563,12 @@ namespace Xamarin.Linker {
 						&& method.Parameters [0].ParameterType.Is (ns, cls));
 		}
 
-
-		static MethodReference? FindINativeObjectConstructor (TypeDefinition type)
+		internal static MethodDefinition? FindINativeObjectConstructor (TypeDefinition type)
 		{
 			return FindConstructorWithTwoParameters ("ObjCRuntime", "NativeHandle", "System", "Boolean")
 				?? FindConstructorWithTwoParameters ("System", "IntPtr", "System", "Boolean");
 
-			MethodReference? FindConstructorWithTwoParameters (string ns1, string cls1, string ns2, string cls2)
+			MethodDefinition? FindConstructorWithTwoParameters (string ns1, string cls1, string ns2, string cls2)
 				=> type.Methods.SingleOrDefault (method =>
 					method.IsConstructor
 						&& !method.IsStatic

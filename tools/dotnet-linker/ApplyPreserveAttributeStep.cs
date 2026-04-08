@@ -178,7 +178,12 @@ namespace Xamarin.Linker.Steps {
 
 		static string GetXmlSignature (MethodDefinition method)
 		{
-			return method.FullName.Replace (method.DeclaringType.FullName + "::", "");
+			var marker = method.DeclaringType.FullName + "::";
+			var index = method.FullName.IndexOf (marker, System.StringComparison.Ordinal);
+			if (index < 0)
+				return method.FullName;
+
+			return method.FullName.Substring (0, index) + method.FullName.Substring (index + marker.Length);
 		}
 
 		XmlTypeDescription GetOrCreateXmlDescription (TypeDefinition type)

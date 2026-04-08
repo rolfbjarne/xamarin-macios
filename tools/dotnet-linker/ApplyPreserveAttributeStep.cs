@@ -295,7 +295,7 @@ namespace Xamarin.Linker.Steps {
 				// by running the ResolveFromXmlStep directly on the xml we just created.
 				var applyXmlStepType = Context.GetType ().Assembly.GetType ("Mono.Linker.Steps.ResolveFromXmlStep");
 				if (applyXmlStepType is not null) {
-					var documentStream = File.OpenRead (xmlPath);
+					var documentStream = File.OpenRead (xmlPath); // ResolveFromXmlStep will dispose the stream.
 					var applyXmlStep = (BaseStep) Activator.CreateInstance (applyXmlStepType, new object [] { documentStream, xmlPath })!;
 					applyXmlStep.Process (Context);
 				} else {

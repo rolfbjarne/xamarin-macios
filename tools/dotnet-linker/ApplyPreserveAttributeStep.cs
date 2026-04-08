@@ -290,17 +290,17 @@ namespace Xamarin.Linker.Steps {
 				var item = new MSBuildItem (xmlPath);
 				items.Add (item);
 				Configuration.WriteOutputForMSBuild ("LinkDescription", items);
+			}
+
+			// The current linker run still needs these roots immediately. Writing the LinkDescription item only
+			// makes the descriptor available to MSBuild after this step has already finished running.
+			var applyXmlStepType = Context.GetType ().Assembly.GetType ("Mono.Linker.Steps.ResolveFromXmlStep");
+			if (applyXmlStepType is not null) {
+				var documentStream = File.OpenRead (xmlPath); // ResolveFromXmlStep will dispose the stream.
+				var applyXmlStep = (BaseStep) Activator.CreateInstance (applyXmlStepType, new object [] { documentStream, xmlPath })!;
+				applyXmlStep.Process (Context);
 			} else {
-				// If we're running from inside the linker, we can't give the xml to the linker, so hack around this
-				// by running the ResolveFromXmlStep directly on the xml we just created.
-				var applyXmlStepType = Context.GetType ().Assembly.GetType ("Mono.Linker.Steps.ResolveFromXmlStep");
-				if (applyXmlStepType is not null) {
-					var documentStream = File.OpenRead (xmlPath); // ResolveFromXmlStep will dispose the stream.
-					var applyXmlStep = (BaseStep) Activator.CreateInstance (applyXmlStepType, new object [] { documentStream, xmlPath })!;
-					applyXmlStep.Process (Context);
-				} else {
-					throw ErrorHelper.CreateError (99, $"Unable to find Mono.Linker.Steps.ResolveFromXmlStep to apply the generated XML description file {xmlPath}");
-				}
+				throw ErrorHelper.CreateError (99, $"Unable to find Mono.Linker.Steps.ResolveFromXmlStep to apply the generated XML description file {xmlPath}");
 			}
 		}
 	}

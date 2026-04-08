@@ -201,7 +201,7 @@ namespace Xamarin.Linker {
 					var inativeObjCtor = ManagedRegistrarLookupTablesStep.FindINativeObjectConstructor (tr);
 					if (inativeObjCtor is null)
 						continue;
-					
+
 					var trImported = typeMapAssembly.MainModule.ImportReference (tr);
 					var trNamespace = GetNamespace (tr);
 

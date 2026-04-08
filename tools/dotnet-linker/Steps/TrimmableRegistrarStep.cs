@@ -127,6 +127,13 @@ namespace Xamarin.Linker {
 				return;
 			}
 
+			abr.SetCurrentAssembly (abr.PlatformAssembly);
+			abr.ObjCRuntime_NSObjectProxyAttribute.Resolve ().IsPublic = true;
+			abr.ObjCRuntime_ProtocolProxyAttribute.Resolve ().IsPublic = true;
+			abr.ObjCRuntime_INativeObjectProxyAttribute.Resolve ().IsPublic = true;
+			abr.ObjCRuntime_SkippedObjectiveCTypeUniverse.Resolve ().IsPublic = true;
+			abr.SaveCurrentAssembly ();
+
 			Directory.CreateDirectory (App.TypeMapOutputDirectory);
 
 			var createdAssemblies = new List<AssemblyDefinition> ();

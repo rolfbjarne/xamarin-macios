@@ -427,7 +427,6 @@ Microsoft.iOS.dll:ObjCRuntime.ObjCException.get_Name()
 Microsoft.iOS.dll:ObjCRuntime.ObjCException.get_NSException()
 Microsoft.iOS.dll:ObjCRuntime.ObjCException.get_Reason()
 Microsoft.iOS.dll:ObjCRuntime.ObjCException.ToString()
-Microsoft.iOS.dll:ObjCRuntime.ProtocolProxyAttribute
 Microsoft.iOS.dll:ObjCRuntime.RegistrarHelper
 Microsoft.iOS.dll:ObjCRuntime.RegistrarHelper.ConstructINativeObject`1(System.Type, ObjCRuntime.NativeHandle, System.Boolean)
 Microsoft.iOS.dll:ObjCRuntime.RegistrarHelper.ConstructNSObject`1(System.Type, ObjCRuntime.NativeHandle)
@@ -622,7 +621,6 @@ Microsoft.iOS.dll:ObjCRuntime.Selector.GetName(System.IntPtr)
 Microsoft.iOS.dll:ObjCRuntime.Selector.sel_getName(System.IntPtr)
 Microsoft.iOS.dll:ObjCRuntime.Selector.sel_isMapped(System.IntPtr)
 Microsoft.iOS.dll:ObjCRuntime.Selector.sel_registerName(System.IntPtr)
-Microsoft.iOS.dll:ObjCRuntime.SkippedObjectiveCTypeUniverse
 Microsoft.iOS.dll:ObjCRuntime.StringEqualityComparer
 Microsoft.iOS.dll:ObjCRuntime.StringEqualityComparer ObjCRuntime.RegistrarHelper::StringEqualityComparer
 Microsoft.iOS.dll:ObjCRuntime.StringEqualityComparer..ctor()
@@ -653,10 +651,6 @@ Microsoft.iOS.dll:ObjCRuntime.TypeEqualityComparer..ctor()
 Microsoft.iOS.dll:ObjCRuntime.TypeEqualityComparer.Equals(System.Type, System.Type)
 Microsoft.iOS.dll:ObjCRuntime.TypeEqualityComparer.GetHashCode(System.Type)
 Microsoft.iOS.dll:ObjCRuntime.TypeMaps
-Microsoft.iOS.dll:ObjCRuntime.TypeMaps..cctor()
-Microsoft.iOS.dll:ObjCRuntime.TypeMaps.get_NSObjectProxyTypes()
-Microsoft.iOS.dll:ObjCRuntime.TypeMaps.get_NSObjectTypes()
-Microsoft.iOS.dll:ObjCRuntime.TypeMaps.Initialize()
 Microsoft.iOS.dll:ObjCRuntime.UInt64EqualityComparer
 Microsoft.iOS.dll:ObjCRuntime.UInt64EqualityComparer ObjCRuntime.Runtime::UInt64EqualityComparer
 Microsoft.iOS.dll:ObjCRuntime.UInt64EqualityComparer..ctor()
@@ -690,14 +684,8 @@ Microsoft.iOS.dll:System.Collections.Generic.Dictionary`2<System.Type,System.Int
 Microsoft.iOS.dll:System.Collections.Generic.Dictionary`2<System.Type,System.Reflection.ConstructorInfo> ObjCRuntime.Runtime::intptr_bool_ctor_cache
 Microsoft.iOS.dll:System.Collections.Generic.Dictionary`2<System.Type,System.Reflection.ConstructorInfo> ObjCRuntime.Runtime::intptr_ctor_cache
 Microsoft.iOS.dll:System.Collections.Generic.Dictionary`2<System.UInt64,System.Reflection.MemberInfo> ObjCRuntime.Class::token_to_member
-Microsoft.iOS.dll:System.Collections.Generic.IReadOnlyDictionary`2<System.String,System.Type> ObjCRuntime.TypeMaps::nsobject_types
-Microsoft.iOS.dll:System.Collections.Generic.IReadOnlyDictionary`2<System.String,System.Type> ObjCRuntime.TypeMaps::NSObjectTypes()
-Microsoft.iOS.dll:System.Collections.Generic.IReadOnlyDictionary`2<System.Type,System.Type> ObjCRuntime.TypeMaps::inativeobject_proxy_types
-Microsoft.iOS.dll:System.Collections.Generic.IReadOnlyDictionary`2<System.Type,System.Type> ObjCRuntime.TypeMaps::nsobject_proxy_types
-Microsoft.iOS.dll:System.Collections.Generic.IReadOnlyDictionary`2<System.Type,System.Type> ObjCRuntime.TypeMaps::NSObjectProxyTypes()
-Microsoft.iOS.dll:System.Collections.Generic.IReadOnlyDictionary`2<System.Type,System.Type> ObjCRuntime.TypeMaps::protocol_proxy_types
-Microsoft.iOS.dll:System.Collections.Generic.IReadOnlyDictionary`2<System.Type,System.Type> ObjCRuntime.TypeMaps::protocol_wrapper_types
-Microsoft.iOS.dll:System.Collections.Generic.IReadOnlyDictionary`2<System.Type,System.Type> ObjCRuntime.TypeMaps::skipped_proxy_types
+Microsoft.iOS.dll:System.Collections.Generic.IReadOnlyDictionary`2<System.String,System.Type> ObjCRuntime.TypeMaps::NSObjectTypes
+Microsoft.iOS.dll:System.Collections.Generic.IReadOnlyDictionary`2<System.Type,System.Type> ObjCRuntime.TypeMaps::NSObjectProxyTypes
 Microsoft.iOS.dll:System.Collections.Generic.KeyValuePair`2<Foundation.NSObject,Foundation.NSObject> Foundation.NSDictionary/<GetEnumerator>d__66::<>2__current
 Microsoft.iOS.dll:System.Collections.Generic.KeyValuePair`2<Foundation.NSObject,Foundation.NSObject> Foundation.NSDictionary/<GetEnumerator>d__66::System.Collections.Generic.IEnumerator<System.Collections.Generic.KeyValuePair<Foundation.NSObject,Foundation.NSObject>>.Current()
 Microsoft.iOS.dll:System.Collections.Generic.List`1<Foundation.NSObject> Foundation.NSObject/NSObject_Disposer::drainList1
@@ -861,7 +849,6 @@ Microsoft.iOS.dll:System.IntPtr* ObjCRuntime.Runtime/MTProtocolMap::protocols
 Microsoft.iOS.dll:System.IntPtr* ObjCRuntime.Runtime/MTRegistrationMap::classHandles
 Microsoft.iOS.dll:System.Object Foundation.NSObject/NSObject_Disposer::lock_obj
 Microsoft.iOS.dll:System.Object ObjCRuntime.Runtime::lock_obj
-Microsoft.iOS.dll:System.Object ObjCRuntime.TypeMaps::lock_obj
 Microsoft.iOS.dll:System.Reflection.Assembly Foundation.NSObject::PlatformAssembly
 Microsoft.iOS.dll:System.Runtime.CompilerServices.ConditionalWeakTable`2<System.Delegate,ObjCRuntime.BlockCollector> ObjCRuntime.Runtime::block_lifetime_table
 Microsoft.iOS.dll:System.Runtime.CompilerServices.ConditionalWeakTable`2<System.Reflection.Assembly,System.String> ObjCRuntime.Class::assembly_to_name
@@ -8731,9 +8718,6 @@ System.Private.CoreLib.dll:System.Runtime.InteropServices.SafeHandle.ReleaseHand
 System.Private.CoreLib.dll:System.Runtime.InteropServices.SafeHandle.SetHandle(System.IntPtr)
 System.Private.CoreLib.dll:System.Runtime.InteropServices.SuppressGCTransitionAttribute
 System.Private.CoreLib.dll:System.Runtime.InteropServices.SuppressGCTransitionAttribute..ctor()
-System.Private.CoreLib.dll:System.Runtime.InteropServices.TypeMapping
-System.Private.CoreLib.dll:System.Runtime.InteropServices.TypeMapping.GetOrCreateExternalTypeMapping`1()
-System.Private.CoreLib.dll:System.Runtime.InteropServices.TypeMapping.GetOrCreateProxyTypeMapping`1()
 System.Private.CoreLib.dll:System.Runtime.InteropServices.UnmanagedCallersOnlyAttribute
 System.Private.CoreLib.dll:System.Runtime.InteropServices.UnmanagedCallersOnlyAttribute..ctor()
 System.Private.CoreLib.dll:System.Runtime.InteropServices.UnmanagedType

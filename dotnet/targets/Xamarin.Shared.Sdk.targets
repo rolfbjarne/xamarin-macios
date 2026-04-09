@@ -1087,7 +1087,7 @@
 			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/_AssembliesToAOT.items" />
 			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/_FrameworkToPublish.items" />
 			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/_DynamicLibraryToPublish.items" />
-			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/LinkDescription.items" />
+			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/TrimmerRootDescriptor.items" />
 		</ItemGroup>
 
 		<ItemGroup>
@@ -1112,7 +1112,7 @@
 			<_AssembliesToAOT Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_AssembliesToAOT.items'" />
 			<_FrameworkToPublish Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_FrameworkToPublish.items'" />
 			<_DynamicLibraryToPublish Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_DynamicLibraryToPublish.items'" />
-			<LinkDescription Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == 'LinkDescription.items'" />
+			<TrimmerRootDescriptor Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == 'TrimmerRootDescriptor.items'" />
 		</ItemGroup>
 	</Target>
 

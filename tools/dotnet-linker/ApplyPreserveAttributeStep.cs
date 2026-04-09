@@ -289,10 +289,10 @@ namespace Xamarin.Linker.Steps {
 				var items = new List<MSBuildItem> ();
 				var item = new MSBuildItem (xmlPath);
 				items.Add (item);
-				Configuration.WriteOutputForMSBuild ("LinkDescription", items);
+				Configuration.WriteOutputForMSBuild ("TrimmerRootDescriptor", items);
 			}
 
-			// The current linker run still needs these roots immediately. Writing the LinkDescription item only
+			// The current linker run still needs these roots immediately. Writing the TrimmerRootDescriptor item only
 			// makes the descriptor available to MSBuild after this step has already finished running.
 			var applyXmlStepType = Context.GetType ().Assembly.GetType ("Mono.Linker.Steps.ResolveFromXmlStep");
 			if (applyXmlStepType is not null) {

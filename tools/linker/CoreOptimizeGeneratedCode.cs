@@ -1152,7 +1152,7 @@ namespace Xamarin.Linker {
 			if (!(method.DeclaringType.IsInterface && method.IsStatic && method.IsConstructor && method.HasBody))
 				return false;
 
-			if (data.Optimizations.RegisterProtocols != true) {
+			if (data.Optimizations.RegisterProtocols != true && data.LinkContext.App.XamarinRuntime != XamarinRuntime.NativeAOT) {
 				Driver.Log (4, "Did not optimize static constructor in the protocol interface {0}: the 'register-protocols' optimization is disabled.", method.DeclaringType.FullName);
 				return false;
 			}
@@ -1202,21 +1202,13 @@ namespace Xamarin.Linker {
 			method.Body.Instructions.Clear ();
 			method.Body.Instructions.Add (Instruction.Create (OpCodes.Ret));
 
-			// Only remove DynamicDependency attributes that takes a single string argument.
-			// The generator generates other DynamicDependency attributes, and we don't want to remove those.
+			// Remove all DynamicDependency attributes.
+			// The interface cctor only exists to carry these attributes, and when the registrar already
+			// registers protocols there is no need to keep any of them (including wrapper type dependencies).
 			for (var i = method.CustomAttributes.Count - 1; i >= 0; i--) {
 				var ca = method.CustomAttributes [i];
 
 				if (!ca.AttributeType.Is ("System.Diagnostics.CodeAnalysis", "DynamicDependencyAttribute"))
-					continue;
-
-				if (!ca.HasConstructorArguments)
-					continue;
-
-				if (ca.ConstructorArguments.Count != 1)
-					continue;
-
-				if (!ca.ConstructorArguments [0].Type.Is ("System", "String"))
 					continue;
 
 				method.CustomAttributes.RemoveAt (i);

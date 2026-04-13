@@ -510,7 +510,7 @@ namespace Xamarin.Linker {
 					{ "TrimMode", "link" },
 				}));
 			}
-			
+
 			Configuration.WriteOutputForMSBuild ("ManagedAssemblyToLink", managedAssemblyToLinkItems);
 
 			// Report back any exceptions that occurred during the processing.

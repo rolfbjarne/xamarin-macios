@@ -2625,7 +2625,7 @@ Copyright (C) 2018 Microsoft. All rights reserved.
 			<_AreAnyAssembliesTrimmed Condition="'$(_AreAnyAssembliesTrimmed)' == '' And '$(TrimMode)' == 'full'">true</_AreAnyAssembliesTrimmed>
 			<_AreAnyAssembliesTrimmed Condition="'$(_AreAnyAssembliesTrimmed)' == '' And '$(TrimMode)' == 'partial'">true</_AreAnyAssembliesTrimmed>
 			<_AreAnyAssembliesTrimmed Condition="'$(_AreAnyAssembliesTrimmed)' == '' And '$(TrimMode)' == 'copy'">false</_AreAnyAssembliesTrimmed>
-			<_AreAnyAssembliesTrimmed Condition="'$(_AreAnyAssembliesTrimmed)' == '' And '$(TrimMode)' == 'link'">false</_AreAnyAssembliesTrimmed>
+			<_AreAnyAssembliesTrimmed Condition="'$(_AreAnyAssembliesTrimmed)' == '' And '$(TrimMode)' == 'link'">true</_AreAnyAssembliesTrimmed>
 		</PropertyGroup>
 		<PropertyGroup>
 			<_AreAnyAssembliesTrimmed Condition="'$(_AreAnyAssembliesTrimmed)' == ''">false</_AreAnyAssembliesTrimmed>

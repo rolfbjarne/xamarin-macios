@@ -84,6 +84,7 @@
 
 	<PropertyGroup Condition="$(_TestVariationForComparison.Contains('|trimmable-static-registrar|'))">
 		<Registrar>trimmable-static</Registrar>
+		<UseMonoRuntime>false</UseMonoRuntime> <!-- doesn't work with Mono -->
 		<_TestVariationApplied>true</_TestVariationApplied>
 	</PropertyGroup>
 
@@ -124,6 +125,7 @@
 		<Registrar>trimmable-static</Registrar>
 		<TrimMode>full</TrimMode>
 		<DefineConstants>$(DefineConstants);OPTIMIZEALL</DefineConstants>
+		<UseMonoRuntime>false</UseMonoRuntime> <!-- doesn't work with Mono -->
 		<_TestVariationApplied>true</_TestVariationApplied>
 	</PropertyGroup>
 

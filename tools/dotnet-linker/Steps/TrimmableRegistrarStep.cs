@@ -22,6 +22,7 @@ namespace Xamarin.Linker {
 		protected override int ErrorCode { get; } = 2470;
 
 		AppBundleRewriter abr { get { return Configuration.AppBundleRewriter; } }
+		List<AssemblyDefinition> addedAssemblies = new List<AssemblyDefinition> ();
 		List<Exception> exceptions = new List<Exception> ();
 
 		void AddException (Exception exception)
@@ -54,6 +55,7 @@ namespace Xamarin.Linker {
 				var rootTypeMapAssemblyName = new AssemblyNameDefinition (App.TypeMapAssemblyName, new Version (1, 0, 0, 0));
 				rootTypeMapAssembly = AssemblyDefinition.CreateAssembly (rootTypeMapAssemblyName, rootTypeMapAssemblyName.Name, moduleParameters);
 				Annotations.SetAction (rootTypeMapAssembly, AssemblyAction.Link);
+				addedAssemblies.Add (rootTypeMapAssembly);
 			}
 
 			abr.SetCurrentAssembly (rootTypeMapAssembly);
@@ -139,8 +141,6 @@ namespace Xamarin.Linker {
 
 			Directory.CreateDirectory (App.TypeMapOutputDirectory);
 
-			var createdAssemblies = new List<AssemblyDefinition> ();
-
 			var typesByAssembly = App.StaticRegistrar.Types.GroupBy (v => v.Key.Module.Assembly);
 			var skippedTypesByAssembly = App.StaticRegistrar.SkippedTypes.GroupBy (v => v.Skipped.Module.Assembly).ToDictionary (v => v.Key, v => v.ToList ());
 
@@ -154,7 +154,6 @@ namespace Xamarin.Linker {
 			};
 
 			var rootTypeMapAssembly = CreateTypeMapRootAssembly (assemblyParameters, typesByAssembly.Select (v => v.Key));
-			createdAssemblies.Add (rootTypeMapAssembly);
 
 			var categoryMethodsByType = App.StaticRegistrar.Types
 				.Where (v => v.Value.IsCategory)
@@ -178,7 +177,7 @@ namespace Xamarin.Linker {
 				var typeMapAssemblyName = new AssemblyNameDefinition ("_" + assembly.Name.Name + ".TypeMap", new Version (1, 0, 0, 0));
 				var typeMapAssembly = AssemblyDefinition.CreateAssembly (typeMapAssemblyName, typeMapAssemblyName.Name, assemblyParameters);
 				Annotations.SetAction (typeMapAssembly, AssemblyAction.Link);
-				createdAssemblies.Add (typeMapAssembly);
+				addedAssemblies.Add (rootTypeMapAssembly);
 
 				var accessesAssemblies = new HashSet<AssemblyDefinition> ();
 				accessesAssemblies.Add (assembly);
@@ -497,17 +496,22 @@ namespace Xamarin.Linker {
 				typeMapAssembly.Write (Path.Combine (App.TypeMapOutputDirectory, typeMapAssembly.Name.Name + ".dll"));
 			}
 
+			var managedAssemblyToLinkItems = new List<MSBuildItem> ();
 			var resolver = abr.PlatformAssembly.MainModule.AssemblyResolver;
 			var getAssembly = resolver.GetType ().GetMethod ("GetAssembly", new Type [] { typeof (string) })!;
 			var cacheAssembly = resolver.GetType ().GetMethod ("CacheAssembly", new Type [] { typeof (AssemblyDefinition) })!;
-			foreach (var asm in createdAssemblies) {
+			foreach (var asm in addedAssemblies) {
 				var fn = Path.Combine (App.TypeMapOutputDirectory, asm.Name.Name + ".dll");
-				if (!File.Exists (fn))
-					continue;
 				var asmDef = (AssemblyDefinition) getAssembly.Invoke (resolver, [fn])!;
 				cacheAssembly.Invoke (resolver, [asmDef]);
 				Annotations.SetAction (asmDef, AssemblyAction.Link);
+
+				managedAssemblyToLinkItems.Add (new MSBuildItem (fn, new Dictionary<string, string> {
+					{ "TrimMode", "link" },
+				}));
 			}
+			
+			Configuration.WriteOutputForMSBuild ("ManagedAssemblyToLink", managedAssemblyToLinkItems);
 
 			// Report back any exceptions that occurred during the processing.
 			exceptions = this.exceptions;

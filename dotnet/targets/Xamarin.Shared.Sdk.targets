@@ -1148,6 +1148,7 @@
 			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/_AssembliesToAOT.items" />
 			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/_FrameworkToPublish.items" />
 			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/_DynamicLibraryToPublish.items" />
+			<_LinkerItemFiles Include="$(_LinkerItemsDirectory)/ManagedAssemblyToLink.items" />
 		</ItemGroup>
 
 		<ItemGroup>
@@ -1172,6 +1173,7 @@
 			<_AssembliesToAOT Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_AssembliesToAOT.items'" />
 			<_FrameworkToPublish Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_FrameworkToPublish.items'" />
 			<_DynamicLibraryToPublish Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_DynamicLibraryToPublish.items'" />
+			<ManagedAssemblyToLink Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == 'ManagedAssemblyToLink.items'" />
 		</ItemGroup>
 
 		<ItemGroup Condition="'$(Registrar)' == 'trimmable-static'">

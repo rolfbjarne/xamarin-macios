@@ -1112,8 +1112,17 @@
 			<_AssembliesToAOT Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_AssembliesToAOT.items'" />
 			<_FrameworkToPublish Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_FrameworkToPublish.items'" />
 			<_DynamicLibraryToPublish Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == '_DynamicLibraryToPublish.items'" />
-			<TrimmerRootDescriptor Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == 'TrimmerRootDescriptor.items'" />
+			<_TrimmerRootDescriptorFromCustomLinkerSteps Include="@(_AllLinkerItems)" Condition="'%(_AllLinkerItems.SourceFile)' == 'TrimmerRootDescriptor.items'" />
+
+			<TrimmerRootDescriptor Include="@(_TrimmerRootDescriptorFromCustomLinkerSteps)" />
 		</ItemGroup>
+		<PropertyGroup Condition="'$(RunILLink)' == 'true' And '$(_UseNativeAot)' == 'true' And @(_TrimmerRootDescriptorFromCustomLinkerSteps->Count()) &gt; 0">
+			<!-- When the custom linker steps produce xml root descriptors, those xml root descriptors may refer to types and members that are removed
+			     during linking (for members that are conditionally preserved). If we then pass those xml root descriptors to ilc, ilc will show
+			     a IL2008 warning about those members that have been trimmed away. So ignore any IL2008 warnings when we add trimmer root descriptors
+			     from a custom linker step. This will become unnecessary when we stop using custom linker steps. -->
+			<NoWarn>$(NoWarn);IL2008</NoWarn> <!-- Could not resolve type '...' -->
+		</PropertyGroup>
 	</Target>
 
 	<!-- Native code -->

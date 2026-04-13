@@ -177,7 +177,7 @@ namespace Xamarin.Linker {
 				var typeMapAssemblyName = new AssemblyNameDefinition ("_" + assembly.Name.Name + ".TypeMap", new Version (1, 0, 0, 0));
 				var typeMapAssembly = AssemblyDefinition.CreateAssembly (typeMapAssemblyName, typeMapAssemblyName.Name, assemblyParameters);
 				Annotations.SetAction (typeMapAssembly, AssemblyAction.Link);
-				addedAssemblies.Add (rootTypeMapAssembly);
+				addedAssemblies.Add (typeMapAssembly);
 
 				var accessesAssemblies = new HashSet<AssemblyDefinition> ();
 				accessesAssemblies.Add (assembly);

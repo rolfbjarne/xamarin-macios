@@ -186,22 +186,14 @@ namespace MonoTouchFixtures.Foundation {
 		[Test]
 		public void ReleaseEmptyString ()
 		{
-			Console.WriteLine ($"ReleaseEmptyString () NSString.Empty: {NSString.Empty.Handle} ({NSString.Empty.RetainCount})");
 			NSString.Empty.DangerousRelease ();
-			Console.WriteLine ($"ReleaseEmptyString () NSString.Empty: {NSString.Empty.Handle} ({NSString.Empty.RetainCount})");
 			NSString.Empty.DangerousRelease ();
-			Console.WriteLine ($"ReleaseEmptyString () NSString.Empty: {NSString.Empty.Handle} ({NSString.Empty.RetainCount})");
 			NSString.Empty.DangerousRelease ();
-			Console.WriteLine ($"ReleaseEmptyString () NSString.Empty: {NSString.Empty.Handle} ({NSString.Empty.RetainCount})");
 			NSString.Empty.DangerousRelease ();
-			Console.WriteLine ($"ReleaseEmptyString () NSString.Empty: {NSString.Empty.Handle} ({NSString.Empty.RetainCount})");
 			NSString.Empty.DangerousRelease ();
-			Console.WriteLine ($"ReleaseEmptyString () NSString.Empty: {NSString.Empty.Handle} ({NSString.Empty.RetainCount})");
 
 			Assert.That (NSString.Empty.RetainCount, Is.EqualTo (nuint.MaxValue), "RetainCount");
-			Console.WriteLine ($"ReleaseEmptyString () NSString.Empty: {NSString.Empty.Handle} ({NSString.Empty.RetainCount})");
 			Assert.That (NSString.Empty.Compare (new NSString (string.Empty)), Is.EqualTo (NSComparisonResult.Same), "Same");
-			Console.WriteLine ($"ReleaseEmptyString () NSString.Empty: {NSString.Empty.Handle} ({NSString.Empty.RetainCount})");
 		}
 
 		[Test]

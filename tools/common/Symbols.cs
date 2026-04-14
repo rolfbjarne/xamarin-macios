@@ -52,7 +52,7 @@ namespace Xamarin.Bundler {
 		}
 		public string? ObjectiveCName;
 
-		public const string Prefix  = "_";
+		public const string Prefix = "_";
 
 		List<MemberReference> members = new List<MemberReference> ();
 		public IEnumerable<MemberReference> Members { get { return members; } }

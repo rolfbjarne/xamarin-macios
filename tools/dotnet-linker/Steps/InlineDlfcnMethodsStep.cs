@@ -484,7 +484,7 @@ public class InlineDlfcnMethodsStep : AssemblyModifierStep {
 		if (requiredSymbol?.Mode == SymbolMode.Ignore)
 			return false; // don't inline if the symbol is to be ignored
 
-		Console.WriteLine ($"Inlining Dlfcn symbol: {symbolName} (requred symbol mode: {requiredSymbol?.Mode.ToString() ?? "null"})");
+		Console.WriteLine ($"Inlining Dlfcn symbol: {symbolName} (requred symbol mode: {requiredSymbol?.Mode.ToString () ?? "null"})");
 
 		return true;
 	}

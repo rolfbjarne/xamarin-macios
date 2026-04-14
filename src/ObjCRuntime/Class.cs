@@ -461,14 +461,14 @@ namespace ObjCRuntime {
 
 			if (!TypeMaps.NSObjectTypes.TryGetValue (className, out managedType)) {
 #if LOG_TRIMMABLE_TYPEMAP
-				Runtime.NSLog ($"GetTrimmableProxyTypeAttribute ({className}) not found in type map");
+				Runtime.NSLog ($"GetTrimmableProxyTypeAttribute ({className}) Objective-C class \"{className}\" not found in NSObjectTypes type map");
 #endif
 				return false;
 			}
 
 			if (!TypeMaps.NSObjectProxyTypes.TryGetValue (managedType, out var proxyType)) {
 #if LOG_TRIMMABLE_TYPEMAP
-				Runtime.NSLog ($"GetTrimmableProxyTypeAttribute ({className}) found in type map, but proxy type not found");
+				Runtime.NSLog ($"GetTrimmableProxyTypeAttribute ({className}) found in NSObjectTypes type map, but proxy type in NSObjectProxyTypes not found");
 #endif
 				return false;
 			}

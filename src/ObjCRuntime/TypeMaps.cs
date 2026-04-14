@@ -1,8 +1,12 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
+// #define LOG_TRIMMABLE_TYPEMAP
+
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace ObjCRuntime;
 
@@ -18,6 +22,7 @@ abstract class NSObjectProxyAttribute : Attribute {
 // The trimmable static registrar makes this type public when needed.
 abstract class ProtocolProxyAttribute : Attribute {
 	public abstract INativeObject? CreateObject (IntPtr handle, bool owns);
+	public abstract string? GetProtocolName ();
 }
 
 // The trimmable static registrar makes this type public when needed.
@@ -31,6 +36,77 @@ sealed class SkippedObjectiveCTypeUniverse {
 }
 
 static class TypeMaps {
+#if LOG_TRIMMABLE_TYPEMAP
+	static void PreDump ()
+	{
+		Console.WriteLine ($"TypeMaps.Initialize ()");
+		AppDomain.CurrentDomain.AssemblyLoad += (sender, args) => {
+			Console.WriteLine ($"AssemblyLoad (): {args.LoadedAssembly} => {args.LoadedAssembly.Location}");
+		};
+		AppDomain.CurrentDomain.AssemblyResolve += (sender, args) => {
+			Console.WriteLine ($"AssemblyResolve (): {args.Name} failed to load (by {args.RequestingAssembly})");
+			return null;
+		};
+		AppDomain.CurrentDomain. FirstChanceException += (sender, args) => {
+			Console.WriteLine ($"FirstChanceException ({args.Exception}):\n{args.Exception.StackTrace})");
+		};
+	}
+
+	static void PostDump ()
+	{
+		Console.WriteLine ($"System.Runtime.InteropServices.TypeMappingEntryAssembly: {AppContext.GetData ("System.Runtime.InteropServices.TypeMappingEntryAssembly")}");
+		Dump ("NSObjectTypes", NSObjectTypes);
+		Dump ("SkippedProxyTypes", SkippedProxyTypes);
+		Dump ("NSObjectProxyTypes", NSObjectProxyTypes);
+		Dump ("INativeObjectProxyTypes", INativeObjectProxyTypes);
+		Dump ("ProtocolProxyTypes", ProtocolProxyTypes);
+		Dump ("ProtocolWrapperTypes", ProtocolWrapperTypes);
+		foreach (var asm in AppDomain.CurrentDomain.GetAssemblies ()) {
+			Console.WriteLine ($"Loaded assembly: {asm}");
+		}
+		Console.WriteLine ($"TypeMaps.Initialize () DONE");
+	}
+
+	static void Dump (string name, IReadOnlyDictionary<string, Type> dict)
+	{
+		var precachedModules = (System.Collections.IList?) dict.GetType ().GetField ("_preCachedModules", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue (dict)!;
+		var lazyData = (System.Collections.IDictionary) dict.GetType ().GetField ("_lazyData", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue (dict)!;
+		Console.WriteLine ($"Dictionary '{name}':");
+		if (precachedModules is not null) {
+			if (precachedModules.Count > 0) {
+				Console.WriteLine ($"    {precachedModules.Count} precached modules:");
+				foreach (Module mod in precachedModules)
+					Console.WriteLine ($"    {mod.Name}");
+			} else {
+				Console.WriteLine ($"    No precached modules.");
+			}
+		}
+		Console.WriteLine ($"    {lazyData.Keys.Count} lazy data entries");
+		// foreach (string key in lazyData.Keys) {
+		// 	Console.WriteLine ($"    {key}");
+		// }
+	}
+	static void Dump (string name, IReadOnlyDictionary<Type, Type> dict)
+	{
+		var precachedModules = (System.Collections.IList?) dict.GetType ().GetField ("_preCachedModules", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue (dict)!;
+		var lazyData = (System.Collections.IDictionary) dict.GetType ().GetField ("_lazyData", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue (dict)!;
+		Console.WriteLine ($"Dictionary '{name}':");
+		if (precachedModules is not null) {
+			if (precachedModules.Count > 0) {
+				Console.WriteLine ($"    {precachedModules.Count} precached modules:");
+				foreach (Module mod in precachedModules)
+					Console.WriteLine ($"    {mod.Name}");
+			} else {
+				Console.WriteLine ($"    No precached modules.");
+			}
+		}
+		Console.WriteLine ($"    {lazyData.Keys.Count} lazy data entries");
+		// foreach (string key in lazyData.Keys) {
+		// 	Console.WriteLine ($"    {key}");
+		// }
+	}
+#endif // LOG_TRIMMABLE_TYPEMAP
+
 #if NET11_0_OR_GREATER
 #pragma warning disable 8618 // "Non-nullable field '...' must contain a non-null value when exiting constructor. Consider declaring the field as nullable.": we make sure through other means that these will never be null
 	internal static IReadOnlyDictionary<string, Type> NSObjectTypes;
@@ -43,12 +119,20 @@ static class TypeMaps {
 
 	internal static void Initialize ()
 	{
+#if LOG_TRIMMABLE_TYPEMAP
+		PreDump ();
+#endif
+
 		NSObjectTypes = TypeMapping.GetOrCreateExternalTypeMapping<NSObject> ();
 		SkippedProxyTypes = TypeMapping.GetOrCreateProxyTypeMapping<SkippedObjectiveCTypeUniverse> ();
 		NSObjectProxyTypes = TypeMapping.GetOrCreateProxyTypeMapping<NSObject> ();
 		INativeObjectProxyTypes = TypeMapping.GetOrCreateProxyTypeMapping<INativeObject> ();
 		ProtocolProxyTypes = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolProxyAttribute> ();
 		ProtocolWrapperTypes = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolAttribute> ();
+
+#if LOG_TRIMMABLE_TYPEMAP
+		PostDump ();
+#endif
 	}
 #else
 	static IReadOnlyDictionary<string, Type>? nsobject_types;
@@ -122,8 +206,12 @@ static class TypeMaps {
 		//         at System.Runtime.InteropServices.TypeMapLazyDictionary.CreateMaps(RuntimeType groupType,  newExternalTypeEntry,  newProxyTypeEntry)
 		//         at System.Runtime.InteropServices.TypeMapLazyDictionary.CreateExternalTypeMap(RuntimeType groupType)
 		lock (lock_obj) {
-			if (nsobject_types is null)
+			if (nsobject_types is null) {
+#if LOG_TRIMMABLE_TYPEMAP
+				PreDump ();
+#endif
 				nsobject_types = TypeMapping.GetOrCreateExternalTypeMapping<NSObject> ();
+			}
 
 			if (skipped_proxy_types is null)
 				skipped_proxy_types = TypeMapping.GetOrCreateProxyTypeMapping<SkippedObjectiveCTypeUniverse> ();
@@ -137,8 +225,12 @@ static class TypeMaps {
 			if (protocol_proxy_types is null)
 				protocol_proxy_types = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolProxyAttribute> ();
 
-			if (protocol_wrapper_types is null)
+			if (protocol_wrapper_types is null) {
 				protocol_wrapper_types = TypeMapping.GetOrCreateProxyTypeMapping<ProtocolAttribute> ();
+#if LOG_TRIMMABLE_TYPEMAP
+				PostDump ();
+#endif
+			}
 		}
 	}
 #endif // NET11_0_OR_GREATER

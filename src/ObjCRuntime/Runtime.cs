@@ -6,6 +6,8 @@
 //
 // Copyright 2013 Xamarin Inc.
 
+// #define LOG_TRIMMABLE_TYPEMAP
+
 #nullable enable
 
 using System.Collections.Generic;
@@ -2213,6 +2215,26 @@ namespace ObjCRuntime {
 
 		internal static IntPtr GetProtocolForType (Type type)
 		{
+			// Check if the trimmable static registrar knows about this protocol
+			if (IsTrimmableStaticRegistrar) {
+				if (TypeMaps.ProtocolProxyTypes.TryGetValue (type, out var protocolProxyType)) {
+#if LOG_TRIMMABLE_TYPEMAP
+					NSLog ($"GetProtocolForType ({type.FullName}) found in protocol proxy map");
+#endif
+					var attrib = protocolProxyType.GetCustomAttribute<ProtocolProxyAttribute> ();
+					if (attrib is null)
+						throw new InvalidOperationException ($"Type '{protocolProxyType.FullName}' is expected to have an ProtocolProxyAttribute."); // TODO: better exception
+					var protocolName = attrib.GetProtocolName ();
+					return Protocol.objc_getProtocol (protocolName);
+				}
+
+#if LOG_TRIMMABLE_TYPEMAP
+				NSLog ($"GetProtocolForType ({type.FullName}) NOT found in protocol proxy map");
+#endif
+
+				return IntPtr.Zero;
+			}
+
 			// Check if the static registrar knows about this protocol
 			unsafe {
 				var map = options->RegistrationMap;

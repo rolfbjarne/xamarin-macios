@@ -64,21 +64,35 @@ namespace Xamarin.Linker {
 				/*
 				 * [assembly: TypeMapAssemblyTarget<NSObject> ("...")]
 				 */
-				var attribute = new CustomAttribute (CreateMethodReference (abr.TypeMapAssemblyTargetAttribute_1_Constructor_String_Type_Type, abr.Foundation_NSObject));
+				var attribute = abr.CreateAttribute (CreateMethodReference (abr.TypeMapAssemblyTargetAttribute_1_Constructor_String_Type_Type, abr.Foundation_NSObject));
 				attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, "_" + assembly.Name.Name + ".TypeMap"));
 				rootTypeMapAssembly.CustomAttributes.Add (attribute);
 
 				/*
-				 * [assembly: TypeMapAssemblyTarget<ProtocolAttribute> ("...")]
+				 * [assembly: TypeMapAssemblyTarget<SkippedObjectiveCTypeUniverse> ("...")]
 				 */
-				attribute = new CustomAttribute (CreateMethodReference (abr.TypeMapAssemblyTargetAttribute_1_Constructor_String_Type_Type, abr.Foundation_ProtocolAttribute));
+				attribute = abr.CreateAttribute (CreateMethodReference (abr.TypeMapAssemblyTargetAttribute_1_Constructor_String_Type_Type, abr.ObjCRuntime_SkippedObjectiveCTypeUniverse));
 				attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, "_" + assembly.Name.Name + ".TypeMap"));
 				rootTypeMapAssembly.CustomAttributes.Add (attribute);
 
 				/*
 				 * [assembly: TypeMapAssemblyTarget<INativeObject> ("...")]
 				 */
-				attribute = new CustomAttribute (CreateMethodReference (abr.TypeMapAssemblyTargetAttribute_1_Constructor_String_Type_Type, abr.ObjCRuntime_INativeObject));
+				attribute = abr.CreateAttribute (CreateMethodReference (abr.TypeMapAssemblyTargetAttribute_1_Constructor_String_Type_Type, abr.ObjCRuntime_INativeObject));
+				attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, "_" + assembly.Name.Name + ".TypeMap"));
+				rootTypeMapAssembly.CustomAttributes.Add (attribute);
+
+				/*
+				 * [assembly: TypeMapAssemblyTarget<ProtocolProxyAttribute> ("...")]
+				 */
+				attribute = abr.CreateAttribute (CreateMethodReference (abr.TypeMapAssemblyTargetAttribute_1_Constructor_String_Type_Type, abr.ObjCRuntime_ProtocolProxyAttribute));
+				attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, "_" + assembly.Name.Name + ".TypeMap"));
+				rootTypeMapAssembly.CustomAttributes.Add (attribute);
+
+				/*
+				 * [assembly: TypeMapAssemblyTarget<ProtocolAttribute> ("...")]
+				 */
+				attribute = abr.CreateAttribute (CreateMethodReference (abr.TypeMapAssemblyTargetAttribute_1_Constructor_String_Type_Type, abr.Foundation_ProtocolAttribute));
 				attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, "_" + assembly.Name.Name + ".TypeMap"));
 				rootTypeMapAssembly.CustomAttributes.Add (attribute);
 			}
@@ -138,6 +152,7 @@ namespace Xamarin.Linker {
 			abr.ObjCRuntime_INativeObjectProxyAttribute.Resolve ().IsPublic = true;
 			abr.ObjCRuntime_SkippedObjectiveCTypeUniverse.Resolve ().IsPublic = true;
 			abr.SaveCurrentAssembly ();
+			abr.ClearCurrentAssembly ();
 
 			Directory.CreateDirectory (App.TypeMapOutputDirectory);
 
@@ -242,7 +257,7 @@ namespace Xamarin.Linker {
 					proxyType.Methods.Add (createObjectMethod);
 
 					// We add the proxy type as an attribute to itself
-					attribute = new CustomAttribute (ctor);
+					attribute = abr.CreateAttribute (ctor);
 					proxyType.CustomAttributes.Add (attribute);
 
 					/*
@@ -250,7 +265,7 @@ namespace Xamarin.Linker {
 					 *
 					 * [assembly: TypeMapAssociation<INativeObject> (typeof (...), typeof (...))]
 					 */
-					attribute = new CustomAttribute (CreateMethodReference (abr.TypeMapAssociationAttribute_1_Constructor_Type_Type, abr.ObjCRuntime_INativeObject));
+					attribute = abr.CreateAttribute (CreateMethodReference (abr.TypeMapAssociationAttribute_1_Constructor_Type_Type, abr.ObjCRuntime_INativeObject));
 					attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, trImported));
 					attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, proxyType));
 					typeMapAssembly.CustomAttributes.Add (attribute);
@@ -269,7 +284,7 @@ namespace Xamarin.Linker {
 						/*
 						 * [assembly: TypeMap<NSObject> ("Objective-C class name", typeof (...), typeof (...))]
 						 */
-						attribute = new CustomAttribute (CreateMethodReference (abr.TypeMapAttribute_1_Constructor_String_Type_Type, abr.Foundation_NSObject));
+						attribute = abr.CreateAttribute (CreateMethodReference (abr.TypeMapAttribute_1_Constructor_String_Type_Type, abr.Foundation_NSObject));
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, objcClassName));
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, trImported));
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, trImported));
@@ -312,6 +327,7 @@ namespace Xamarin.Linker {
 							il.Append (il.Create (OpCodes.Ret));
 						}
 						proxyType.Methods.Add (createObjectMethod);
+
 						/*
 						 * public override IntPtr GetClassHandle (out bool is_custom_type)
 						 * {
@@ -327,6 +343,7 @@ namespace Xamarin.Linker {
 						il.Append (il.Create (OpCodes.Stind_I1));
 						il.Append (il.Create (OpCodes.Ldstr, objcClassName));
 						il.Append (il.Create (OpCodes.Call, abr.Class_GetHandle__System_String));
+						il.Append (il.Create (OpCodes.Call, abr.NativeObject_op_Implicit_IntPtr));
 						il.Append (il.Create (OpCodes.Ret));
 						proxyType.Methods.Add (getClassHandleMethod);
 
@@ -389,7 +406,7 @@ namespace Xamarin.Linker {
 						proxyType.Methods.Add (lookupUnmanagedFunctionMethod);
 
 						// We add the proxy type as an attribute to itself
-						attribute = new CustomAttribute (ctor);
+						attribute = abr.CreateAttribute (ctor);
 						proxyType.CustomAttributes.Add (attribute);
 
 						/*
@@ -397,7 +414,7 @@ namespace Xamarin.Linker {
 						 *
 						 * [assembly: TypeMapAssociation<NSObject> (typeof (...), typeof (...))]
 						 */
-						attribute = new CustomAttribute (CreateMethodReference (abr.TypeMapAssociationAttribute_1_Constructor_Type_Type, abr.Foundation_NSObject));
+						attribute = abr.CreateAttribute (CreateMethodReference (abr.TypeMapAssociationAttribute_1_Constructor_Type_Type, abr.Foundation_NSObject));
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, trImported));
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, proxyType));
 						typeMapAssembly.CustomAttributes.Add (attribute);
@@ -444,8 +461,20 @@ namespace Xamarin.Linker {
 						}
 						proxyType.Methods.Add (createObjectMethod);
 
+						/*
+						 * public override string GetName ()
+						 * {
+						 * 	   return "";
+						 * }
+						 */
+						var getProtocolNameMethod = new MethodDefinition ("GetProtocolName", MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig, abr.System_String);
+						il = getProtocolNameMethod.Body.GetILProcessor ();
+						il.Append (il.Create (OpCodes.Ldstr, objcType.ProtocolName));
+						il.Append (il.Create (OpCodes.Ret));
+						proxyType.Methods.Add (getProtocolNameMethod);
+
 						// We add the proxy type as an attribute to itself
-						attribute = new CustomAttribute (ctor);
+						attribute = abr.CreateAttribute (ctor);
 						proxyType.CustomAttributes.Add (attribute);
 
 						/*
@@ -453,7 +482,7 @@ namespace Xamarin.Linker {
 						 *
 						 * [assembly: TypeMapAssociation<ProtocolProxyAttribute> (typeof (...), typeof (...))]
 						 */
-						attribute = new CustomAttribute (CreateMethodReference (abr.TypeMapAssociationAttribute_1_Constructor_Type_Type, abr.ObjCRuntime_ProtocolProxyAttribute));
+						attribute = abr.CreateAttribute (CreateMethodReference (abr.TypeMapAssociationAttribute_1_Constructor_Type_Type, abr.ObjCRuntime_ProtocolProxyAttribute));
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, trImported));
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, proxyType));
 						typeMapAssembly.CustomAttributes.Add (attribute);
@@ -463,7 +492,7 @@ namespace Xamarin.Linker {
 						 *
 						 * [assembly: TypeMapAssociation<ProtocolAttribute> (typeof (...), typeof (...))]
 						 */
-						attribute = new CustomAttribute (CreateMethodReference (abr.TypeMapAssociationAttribute_1_Constructor_Type_Type, abr.Foundation_ProtocolAttribute));
+						attribute = abr.CreateAttribute (CreateMethodReference (abr.TypeMapAssociationAttribute_1_Constructor_Type_Type, abr.Foundation_ProtocolAttribute));
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, trImported));
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, abr.CurrentAssembly.MainModule.ImportReference (objcType.ProtocolWrapperType)));
 						typeMapAssembly.CustomAttributes.Add (attribute);
@@ -471,7 +500,7 @@ namespace Xamarin.Linker {
 				}
 
 				foreach (var accessesAssembly in accessesAssemblies.OrderBy (v => v.FullName)) {
-					var attrib = new CustomAttribute (ignoredAccessChecksCtor);
+					var attrib = abr.CreateAttribute (ignoredAccessChecksCtor);
 					attrib.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_String, accessesAssembly.Name.Name));
 					typeMapAssembly.CustomAttributes.Add (attrib);
 				}
@@ -481,7 +510,7 @@ namespace Xamarin.Linker {
 						/*
 						 * [assembly: TypeMapAssociation<SkippedObjectiveCTypeUniverse> (typeof (...), typeof (...))]
 						 */
-						attribute = new CustomAttribute (CreateMethodReference (abr.TypeMapAssociationAttribute_1_Constructor_Type_Type, abr.ObjCRuntime_SkippedObjectiveCTypeUniverse));
+						attribute = abr.CreateAttribute (CreateMethodReference (abr.TypeMapAssociationAttribute_1_Constructor_Type_Type, abr.ObjCRuntime_SkippedObjectiveCTypeUniverse));
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, typeMapAssembly.MainModule.ImportReference (skipped.Skipped)));
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, typeMapAssembly.MainModule.ImportReference (skipped.Actual.Type)));
 						typeMapAssembly.CustomAttributes.Add (attribute);

@@ -117,7 +117,7 @@ namespace Xamarin.Linker {
 
 		static string GetNamespace (TypeReference tr)
 		{
-			return tr.FullName.Length == tr.Name.Length ? "" : tr.FullName.Substring (0, tr.FullName.Length - tr.Name.Length - 1).Replace (".", "__");
+			return tr.FullName.Length == tr.Name.Length ? "" : tr.FullName.Substring (0, tr.FullName.Length - tr.Name.Length - 1).Replace (".", "__").Replace ("/", "__");
 		}
 
 		protected override void TryEndProcess (out List<Exception>? exceptions)

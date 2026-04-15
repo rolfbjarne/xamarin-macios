@@ -47,7 +47,7 @@ static class TypeMaps {
 			Console.WriteLine ($"AssemblyResolve (): {args.Name} failed to load (by {args.RequestingAssembly})");
 			return null;
 		};
-		AppDomain.CurrentDomain. FirstChanceException += (sender, args) => {
+		AppDomain.CurrentDomain.FirstChanceException += (sender, args) => {
 			Console.WriteLine ($"FirstChanceException ({args.Exception}):\n{args.Exception.StackTrace})");
 		};
 	}
@@ -85,11 +85,18 @@ static class TypeMaps {
 			Console.WriteLine ($"    {lazyData.Keys.Count} lazy data entries");
 		} else {
 			Console.WriteLine ($"    No lazy data entries.");
+			var fields = dict.GetType ().GetFields (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+			Console.WriteLine ($"    Got dictionary of type '{dict.GetType ()}' with {fields.Length} fields: {dict}");
+			foreach (var field in fields) {
+				var value = field.GetValue (dict);
+				Console.WriteLine ($"        Field '{field.Name}': {field}");
+			}
 		}
 		// foreach (string key in lazyData.Keys) {
 		// 	Console.WriteLine ($"    {key}");
 		// }
 	}
+
 	static void Dump (string name, IReadOnlyDictionary<Type, Type> dict)
 	{
 		var precachedModules = (System.Collections.IList?) dict.GetType ().GetField ("_preCachedModules", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue (dict);
@@ -108,6 +115,12 @@ static class TypeMaps {
 			Console.WriteLine ($"    {lazyData.Keys.Count} lazy data entries");
 		} else {
 			Console.WriteLine ($"    No lazy data entries.");
+			var fields = dict.GetType ().GetFields (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+			Console.WriteLine ($"    Got dictionary of type '{dict.GetType ()}' with {fields.Length} fields: {dict}");
+			foreach (var field in fields) {
+				var value = field.GetValue (dict);
+				Console.WriteLine ($"        Field '{field.Name}': {field}");
+			}
 		}
 		// foreach (string key in lazyData.Keys) {
 		// 	Console.WriteLine ($"    {key}");

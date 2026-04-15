@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-// #define LOG_TRIMMABLE_TYPEMAP
+#define LOG_TRIMMABLE_TYPEMAP
 
 using System.Collections;
 using System.Collections.Generic;
@@ -89,7 +89,9 @@ static class TypeMaps {
 			Console.WriteLine ($"    Got dictionary of type '{dict.GetType ()}' with {fields.Length} fields: {dict}");
 			foreach (var field in fields) {
 				var value = field.GetValue (dict);
-				Console.WriteLine ($"        Field '{field.Name}': {field}");
+				Console.WriteLine ($"        Field '{field.Name}' = {value}");
+				if (value is not null && field.FieldType.FullName?.Contains ("NativeHashtable") == true)
+					DumpNativeHashtable (value);
 			}
 		}
 		// foreach (string key in lazyData.Keys) {
@@ -119,13 +121,95 @@ static class TypeMaps {
 			Console.WriteLine ($"    Got dictionary of type '{dict.GetType ()}' with {fields.Length} fields: {dict}");
 			foreach (var field in fields) {
 				var value = field.GetValue (dict);
-				Console.WriteLine ($"        Field '{field.Name}': {field}");
+				Console.WriteLine ($"        Field '{field.Name}' = {value}");
 			}
 		}
 		// foreach (string key in lazyData.Keys) {
 		// 	Console.WriteLine ($"    {key}");
 		// }
 	}
+
+	static void DumpNativeHashtable (object nativeHashtable)
+	{
+		var type = nativeHashtable.GetType ();
+		if (type.Name != "NativeHashtable") {
+			Console.WriteLine ($"Not a NativeHashtable!");
+			return;
+		}
+		var enumerateAllEntriesMethod = type.GetMethod ("EnumerateAllEntries");
+		if (enumerateAllEntriesMethod is null) {
+			Console.WriteLine ($"No EnumerateAllEntries in {type}!");
+			return;
+		}
+		var allEntriesEnumerator = enumerateAllEntriesMethod.Invoke (nativeHashtable, Array.Empty<object> ());
+		if (allEntriesEnumerator is null) {
+			Console.WriteLine ($"No enumerator found!");
+			return;
+		}
+		var allEntriesEnumeratorType = allEntriesEnumerator.GetType ();
+		var getNextMethod = allEntriesEnumeratorType.GetMethod ("GetNext");
+		if (getNextMethod is null) {
+			Console.WriteLine ($"No GetNext in {allEntriesEnumeratorType}!");
+			return;
+		}
+		object? next;
+		next = getNextMethod.Invoke (allEntriesEnumerator, Array.Empty<object> ());
+		if (next is null) {
+			Console.WriteLine ($"First next is null?");
+			return;
+		}
+		var readerField = next.GetType ().GetField ("_reader", BindingFlags.Instance | BindingFlags.NonPublic);
+		if (readerField is null) {
+			Console.WriteLine ($"No '_reader' field in {next.GetType ()}!");
+			return;
+		}
+
+		// var isNullProperty = next.GetType ().GetProperty ("IsNull");
+		// if (isNullProperty is null) {
+		// 	Console.WriteLine ($"No IsNull in {next.GetType ()}!");
+		// 	return;
+		// }
+		var getStringMethod = next.GetType ().GetMethod ("GetString");
+		if (getStringMethod is null) {
+			Console.WriteLine ($"No GetString in {next.GetType ()}!");
+			return;
+		}
+		var keys = new List<string?> ();
+
+		while (true) {
+			var reader = readerField.GetValue (next);
+			if (reader is null) {
+				Console.WriteLine ($"No reader, done iterating?");
+				break;
+			}
+			// var isNull = isNullProperty.GetValue (next);
+			// if (isNull is null) {
+			// 	Console.WriteLine ($"No IsNull result?");
+			// 	break;
+			// }
+			// if (isNull is not bool isNullBool) {
+			// 	Console.WriteLine ($"IsNull is not bool? {isNull}");
+			// 	break;
+			// }
+			// if (isNullBool) {
+			// 	Console.WriteLine ($"Reached end of enumerator!");
+			// 	break;
+			// }
+
+			var str = (string?) getStringMethod.Invoke (next, Array.Empty<object> ());
+			keys.Add (str);
+
+			next = getNextMethod.Invoke (allEntriesEnumerator, Array.Empty<object> ());
+			if (next is null) {
+				Console.WriteLine ($"Iterated next is null?");
+				break;
+			}
+		}
+		Console.WriteLine ($"Got {keys.Count} entries in NativeHashtable:");
+		foreach (var key in keys)
+			Console.WriteLine ($"    {key}");
+	}
+
 #endif // LOG_TRIMMABLE_TYPEMAP
 
 #if NET11_0_OR_GREATER
@@ -255,5 +339,86 @@ static class TypeMaps {
 		}
 	}
 #endif // NET11_0_OR_GREATER
+
+
+	internal static bool TryGetProtocolProxyAttribute (Type protocol, [NotNullWhen (true)] out ProtocolProxyAttribute? proxyAttribute)
+	{
+		proxyAttribute = null;
+
+		if (ProtocolProxyTypes.TryGetValue (protocol, out var protocolProxyType)) {
+#if LOG_TRIMMABLE_TYPEMAP
+			Runtime.NSLog ($"TryGetProtocolProxyAttribute ({protocol}) found proxy type {protocolProxyType} in protocol proxy map");
+#endif
+			proxyAttribute = protocolProxyType.GetCustomAttribute<ProtocolProxyAttribute> ();
+			if (proxyAttribute is null)
+				throw new InvalidOperationException ($"Type '{protocolProxyType.FullName}' is expected to have an ProtocolProxyAttribute."); // TODO: better exception
+			return proxyAttribute is not null;
+		}
+
+		// workaround for https://github.com/dotnet/runtime/issues/127004
+		proxyAttribute = protocol.GetCustomAttribute<ProtocolProxyAttribute> (false);
+		if (proxyAttribute is not null) {
+#if LOG_TRIMMABLE_TYPEMAP
+			Runtime.NSLog ($"TryGetProtocolProxyAttribute ({protocol}) found proxy attribute on the protocol type itself");
+#endif
+			return true;
+		}
+
+#if LOG_TRIMMABLE_TYPEMAP
+		Runtime.NSLog ($"TryGetProtocolProxyAttribute ({protocol}) did not find proxy attribute anywhere");
+#endif
+		// end workaround for https://github.com/dotnet/runtime/issues/127004
+
+		return false;
+	}
+
+	internal static bool IsSkippedType (Type type, [NotNullWhen (true)] out Type? actualType)
+	{
+		var potentiallySkippedType = type;
+		if (potentiallySkippedType.IsGenericType)
+			potentiallySkippedType = potentiallySkippedType.GetGenericTypeDefinition ();
+
+		var rv = SkippedProxyTypes.TryGetValue (potentiallySkippedType, out actualType);
+
+#if LOG_TRIMMABLE_TYPEMAP
+		Runtime.NSLog ($"IsSkippedType ({type}, {actualType}) looked for '{potentiallySkippedType}' => {rv}");
+#endif
+
+		return rv;
+	}
+
+	internal static bool TryCreateInstanceUsingProxyTypeAttribute<T> (Type type, IntPtr ptr, bool owns, [NotNullWhen (true)] out T? instance) where T: INativeObject
+	{
+		instance = default;
+
+		if (!Class.TryGetTrimmableProxyTypeAttribute (type, out var proxyAttribute)) {
+#if LOG_TRIMMABLE_TYPEMAP
+			Runtime.NSLog ($"TryCreateInstanceUsingProxyTypeAttribute<{typeof (T).FullName}> ({type}, 0x{@ptr:X}, {owns}) did not find proxy attribute type '{type.FullName}'");
+#endif
+			return false;
+		}
+
+		var obj = proxyAttribute.CreateObject (ptr);
+		if (obj is null) {
+#if LOG_TRIMMABLE_TYPEMAP
+			Runtime.NSLog ($"TryCreateInstanceUsingProxyTypeAttribute<{typeof (T).FullName}> ({type}, 0x{@ptr:X}, {owns}) found proxy attribute of type {proxyAttribute.GetType ()}, but its CreateObject method returned null.");
+#endif
+			return false;
+		}
+
+		if (owns)
+			Runtime.TryReleaseINativeObject (obj);
+
+		if (obj is not T objT) {
+#if LOG_TRIMMABLE_TYPEMAP
+			Runtime.NSLog ($"TryCreateInstanceUsingProxyTypeAttribute<{typeof (T).FullName}> ({type}, 0x{@ptr:X}, {owns}) found proxy attribute of type {proxyAttribute.GetType ()}, and an object was created of type {obj.GetType ()}, but that's not compatible with the target type {typeof (T)}.");
+#endif
+			return false;
+		}
+
+		instance = objT;
+
+		return true;
+	}
 }
 

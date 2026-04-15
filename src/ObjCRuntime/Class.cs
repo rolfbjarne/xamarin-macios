@@ -6,13 +6,14 @@
 //
 
 // #define LOG_TYPELOAD
-// #define LOG_TRIMMABLE_TYPEMAP
+#define LOG_TRIMMABLE_TYPEMAP
 
 #nullable enable
 
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 #if !COREBUILD
@@ -315,14 +316,30 @@ namespace ObjCRuntime {
 		unsafe static IntPtr FindClass (Type type, out bool is_custom_type)
 		{
 			if (Runtime.IsTrimmableStaticRegistrar) {
-				var attrib = type.GetCustomAttribute<NSObjectProxyAttribute> ();
-				if (attrib is not null)
-					return attrib.GetClassHandle (out is_custom_type);
+				if (Class.TryGetTrimmableProxyTypeAttribute (type, out var proxyAttribute)) {
+					var rv = proxyAttribute.GetClassHandle (out is_custom_type);
+#if LOG_TRIMMABLE_TYPEMAP
+					Runtime.NSLog ($"FindClass ({type}): found type: {rv} (is_custom_type: {is_custom_type})");
+#endif
+					return rv;
+				}
 
+#if LOG_TRIMMABLE_TYPEMAP
+				Runtime.NSLog ($"FindClass ({type}): did not find type in NSObjectProxyTypes");
+#endif
 				// The type we're looking for might be a type the registrar skipped, in which case we must
 				// find it in the mapping of skipped types.
-				if (TypeMaps.SkippedProxyTypes.TryGetValue (type, out var actualType))
-					return FindClass (actualType, out is_custom_type);
+				if (TypeMaps.IsSkippedType (type, out var actualType)) {
+					var rv = FindClass (actualType, out is_custom_type);
+#if LOG_TRIMMABLE_TYPEMAP
+					Runtime.NSLog ($"FindClass ({type}): skipped type, actual type: {actualType} with handle {rv} (is_custom_type: {is_custom_type})");
+#endif
+					return rv;
+				}
+
+#if LOG_TRIMMABLE_TYPEMAP
+				Runtime.NSLog ($"FindClass ({type}): did not find type");
+#endif
 
 				is_custom_type = false;
 				return IntPtr.Zero;
@@ -447,6 +464,41 @@ namespace ObjCRuntime {
 			return -1;
 		}
 
+		internal static bool TryGetTrimmableProxyTypeAttribute (Type managedType, [NotNullWhen (true)] out NSObjectProxyAttribute? proxyAttribute)
+		{
+			proxyAttribute = null;
+
+			// workaround for https://github.com/dotnet/runtime/issues/127004
+			proxyAttribute = managedType.GetCustomAttribute<NSObjectProxyAttribute> (false);
+			if (proxyAttribute is not null) {
+#if LOG_TRIMMABLE_TYPEMAP
+				Runtime.NSLog ($"TryGetTrimmableProxyTypeAttribute ({managedType}): found proxy attribute on the type itself");
+#endif
+				return true;
+			}
+#if LOG_TRIMMABLE_TYPEMAP
+			Runtime.NSLog ($"TryGetTrimmableProxyTypeAttribute ({managedType}): did not find proxy attribute on the type itself");
+#endif
+			// end workaround for https://github.com/dotnet/runtime/issues/127004
+
+			if (!TypeMaps.NSObjectProxyTypes.TryGetValue (managedType, out var proxyType)) {
+#if LOG_TRIMMABLE_TYPEMAP
+				Runtime.NSLog ($"TryGetTrimmableProxyTypeAttribute ({managedType}) found in NSObjectTypes type map, but proxy type in NSObjectProxyTypes not found");
+#endif
+				return false;
+			}
+
+			proxyAttribute = proxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
+			if (proxyAttribute is null) {
+#if LOG_TRIMMABLE_TYPEMAP
+				Runtime.NSLog ($"GetTrimmableProxyTypeAttribute ({managedType}) found in proxy type map, but could not create proxy attribute for it");
+#endif
+				return false;
+			}
+
+			return proxyAttribute is not null;
+		}
+
 		internal static bool TryGetTrimmableProxyTypeAttribute (string? className, [NotNullWhen (true)] out NSObjectProxyAttribute? proxyAttribute, [NotNullWhen (true)] out Type? managedType)
 		{
 			proxyAttribute = null;
@@ -466,22 +518,7 @@ namespace ObjCRuntime {
 				return false;
 			}
 
-			if (!TypeMaps.NSObjectProxyTypes.TryGetValue (managedType, out var proxyType)) {
-#if LOG_TRIMMABLE_TYPEMAP
-				Runtime.NSLog ($"GetTrimmableProxyTypeAttribute ({className}) found in NSObjectTypes type map, but proxy type in NSObjectProxyTypes not found");
-#endif
-				return false;
-			}
-
-			proxyAttribute = proxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
-			if (proxyAttribute is null) {
-#if LOG_TRIMMABLE_TYPEMAP
-				Runtime.NSLog ($"GetTrimmableProxyTypeAttribute ({className}) found in proxy type map, but could not create proxy attribute for it");
-#endif
-				return false;
-			}
-
-			return proxyAttribute is not null;
+			return TryGetTrimmableProxyTypeAttribute (managedType, out proxyAttribute);
 		}
 
 		static Type? FindTypeInTrimmableMap (NativeHandle @class, out bool is_custom_type)
@@ -491,20 +528,18 @@ namespace ObjCRuntime {
 			var className = GetClassName (@class);
 			if (!TryGetTrimmableProxyTypeAttribute (className, out var attrib, out var managedType)) {
 #if LOG_TRIMMABLE_TYPEMAP
-				Runtime.NSLog ($"FindType (0x{@class:X} = {className}) could not get proxy attribute");
+				Runtime.NSLog ($"FindTypeInTrimmableMap (0x{@class:X} = {className}) could not get proxy attribute");
 #endif
 				return null;
 			}
 
+#if LOG_TRIMMABLE_TYPEMAP
 			var ch = attrib.GetClassHandle (out is_custom_type);
 			if (ch != @class) {
-#if LOG_TRIMMABLE_TYPEMAP
-				Runtime.NSLog ($"FindType (0x{@class:X} = {className}) found in proxy type map, and attribute, but attribute's class handle doesn't match (0x{ch:X} != 0x{@class:X})");
-#endif
+				Runtime.NSLog ($"FindTypeInTrimmableMap (0x{@class:X} = {className}) found in proxy type map, and attribute, but attribute's class handle doesn't match (0x{ch:X} != 0x{@class:X})");
 			}
 
-#if LOG_TRIMMABLE_TYPEMAP
-			Runtime.NSLog ($"FindType (0x{@class:X} = {className}) found {managedType}");
+			Runtime.NSLog ($"FindTypeInTrimmableMap (0x{@class:X} = {className}) found {managedType}");
 #endif
 
 			return managedType;
@@ -512,8 +547,13 @@ namespace ObjCRuntime {
 
 		internal unsafe static Type? FindType (NativeHandle @class, out bool is_custom_type)
 		{
-			if (Runtime.IsTrimmableStaticRegistrar)
-				return FindTypeInTrimmableMap (@class, out is_custom_type);
+			if (Runtime.IsTrimmableStaticRegistrar) {
+				var rv = FindTypeInTrimmableMap (@class, out is_custom_type);
+#if LOG_TRIMMABLE_TYPEMAP
+				Runtime.NSLog ($"FindType (0x{@class:X}, {is_custom_type}) found {rv}");
+#endif
+				return rv;
+			}
 
 			var map = Runtime.options->RegistrationMap;
 

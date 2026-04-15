@@ -414,6 +414,15 @@ namespace Xamarin.Linker {
 						attribute = abr.CreateAttribute (ctor);
 						proxyType.CustomAttributes.Add (attribute);
 
+						// We also add the proxy type as an attribute to the type, as a workaround for https://github.com/dotnet/runtime/issues/127004
+						abr.ClearCurrentAssembly ();
+						abr.SetCurrentAssembly (td.Module.Assembly);
+						attribute = new CustomAttribute (td.Module.ImportReference (ctor)); // don't use abr.CreateAttribute here, because the ctor has already been marked
+						td.CustomAttributes.Add (attribute);
+						abr.SaveCurrentAssembly ();
+						abr.ClearCurrentAssembly ();
+						abr.SetCurrentAssembly (typeMapAssembly);
+
 						/*
 						 * Add the [TypeMapAssociation] attribute for this type and its proxy
 						 *
@@ -428,7 +437,7 @@ namespace Xamarin.Linker {
 					if (objcType.IsProtocol && objcType.ProtocolWrapperType is not null) {
 						/*
 						 * [..._Proxy]
-						 * sealed class ..._Proxy : NSObjectProxy {
+						 * sealed class ..._Proxy : ProtocolProxyAttribute {
 						 * }
 						 */
 						var proxyType = new TypeDefinition (trNamespace, tr.Name + "_Proxy", TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.ObjCRuntime_ProtocolProxyAttribute);
@@ -448,11 +457,11 @@ namespace Xamarin.Linker {
 						 *     return new ... (handle, owns);
 						 * }	
 						 */
-						var createObjectMethod = new MethodDefinition ("CreateObject", MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig, abr.ObjCRuntime_INativeObject);
+						var createObjectMethod = proxyType.AddMethod ("CreateObject", MethodAttributes.Public | MethodAttributes.Virtual | MethodAttributes.HideBySig, abr.ObjCRuntime_INativeObject);
 						createObjectMethod.AddParameter ("handle", abr.System_IntPtr);
 						createObjectMethod.AddParameter ("owns", abr.System_Boolean);
-						il = createObjectMethod.Body.GetILProcessor ();
-						var nativeHandleCtor = ManagedRegistrarLookupTablesStep.FindINativeObjectConstructor (td);
+						createObjectMethod.CreateBody (out il);
+						var nativeHandleCtor = ManagedRegistrarLookupTablesStep.FindINativeObjectConstructor (objcType.ProtocolWrapperType.Resolve ());
 						if (nativeHandleCtor is not null) {
 							il.Append (il.Create (OpCodes.Ldarg_1));
 							if (nativeHandleCtor.Parameters [0].ParameterType.Is ("ObjCRuntime", "NativeHandle"))
@@ -464,7 +473,6 @@ namespace Xamarin.Linker {
 							il.Append (il.Create (OpCodes.Ldnull));
 							il.Append (il.Create (OpCodes.Ret));
 						}
-						proxyType.Methods.Add (createObjectMethod);
 
 						/*
 						 * public override string GetName ()
@@ -501,6 +509,15 @@ namespace Xamarin.Linker {
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, trImported));
 						attribute.ConstructorArguments.Add (new CustomAttributeArgument (abr.System_Type, abr.CurrentAssembly.MainModule.ImportReference (objcType.ProtocolWrapperType)));
 						typeMapAssembly.CustomAttributes.Add (attribute);
+
+						// We also add the proxy type as an attribute to the type, as a workaround for https://github.com/dotnet/runtime/issues/127004
+						abr.ClearCurrentAssembly ();
+						abr.SetCurrentAssembly (td.Module.Assembly);
+						attribute = new CustomAttribute (td.Module.ImportReference (ctor)); // don't use abr.CreateAttribute here, because the ctor has already been marked
+						td.CustomAttributes.Add (attribute);
+						abr.SaveCurrentAssembly ();
+						abr.ClearCurrentAssembly ();
+						abr.SetCurrentAssembly (typeMapAssembly);
 					}
 				}
 

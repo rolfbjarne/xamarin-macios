@@ -1,0 +1,15 @@
+<linker>
+    <!-- see LinkExtraDefsTest unit tests -->
+	<assembly fullname="System.Private.CoreLib">
+		<type fullname="System.Runtime.InteropServices.TypeMapLazyDictionary/ExternalTypeMapDictionary" preserve="all">
+      		<field name="&lt;table&gt;P" />
+      		<field name="&lt;externalReferences&gt;P" />
+		</type>
+		<type fullname="System.Runtime.InteropServices.TypeMapLazyDictionary/AssociatedTypeMapDictionary" preserve="all">
+      		<field name="&lt;table&gt;P" />
+      		<field name="&lt;externalReferences&gt;P" />
+		</type>
+		<type fullname="Internal.NativeFormat.NativeHashtable" preserve="all" />
+		<type fullname="Internal.NativeFormat.NativeParser" preserve="all" />
+    </assembly>
+</linker>

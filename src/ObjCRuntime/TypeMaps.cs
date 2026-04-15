@@ -69,8 +69,8 @@ static class TypeMaps {
 
 	static void Dump (string name, IReadOnlyDictionary<string, Type> dict)
 	{
-		var precachedModules = (System.Collections.IList?) dict.GetType ().GetField ("_preCachedModules", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue (dict)!;
-		var lazyData = (System.Collections.IDictionary) dict.GetType ().GetField ("_lazyData", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue (dict)!;
+		var precachedModules = (System.Collections.IList?) dict.GetType ().GetField ("_preCachedModules", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue (dict);
+		var lazyData = (System.Collections.IDictionary?) dict.GetType ().GetField ("_lazyData", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue (dict);
 		Console.WriteLine ($"Dictionary '{name}':");
 		if (precachedModules is not null) {
 			if (precachedModules.Count > 0) {
@@ -81,15 +81,19 @@ static class TypeMaps {
 				Console.WriteLine ($"    No precached modules.");
 			}
 		}
-		Console.WriteLine ($"    {lazyData.Keys.Count} lazy data entries");
+		if (lazyData is not null) {
+			Console.WriteLine ($"    {lazyData.Keys.Count} lazy data entries");
+		} else {
+			Console.WriteLine ($"    No lazy data entries.");
+		}
 		// foreach (string key in lazyData.Keys) {
 		// 	Console.WriteLine ($"    {key}");
 		// }
 	}
 	static void Dump (string name, IReadOnlyDictionary<Type, Type> dict)
 	{
-		var precachedModules = (System.Collections.IList?) dict.GetType ().GetField ("_preCachedModules", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue (dict)!;
-		var lazyData = (System.Collections.IDictionary) dict.GetType ().GetField ("_lazyData", BindingFlags.Instance | BindingFlags.NonPublic)!.GetValue (dict)!;
+		var precachedModules = (System.Collections.IList?) dict.GetType ().GetField ("_preCachedModules", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue (dict);
+		var lazyData = (System.Collections.IDictionary?) dict.GetType ().GetField ("_lazyData", BindingFlags.Instance | BindingFlags.NonPublic)?.GetValue (dict);
 		Console.WriteLine ($"Dictionary '{name}':");
 		if (precachedModules is not null) {
 			if (precachedModules.Count > 0) {
@@ -100,7 +104,11 @@ static class TypeMaps {
 				Console.WriteLine ($"    No precached modules.");
 			}
 		}
-		Console.WriteLine ($"    {lazyData.Keys.Count} lazy data entries");
+		if (lazyData is not null) {
+			Console.WriteLine ($"    {lazyData.Keys.Count} lazy data entries");
+		} else {
+			Console.WriteLine ($"    No lazy data entries.");
+		}
 		// foreach (string key in lazyData.Keys) {
 		// 	Console.WriteLine ($"    {key}");
 		// }

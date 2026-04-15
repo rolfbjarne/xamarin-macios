@@ -6,7 +6,7 @@
 //
 
 // #define LOG_TYPELOAD
-// #define LOG_TRIMMABLE_TYPEMAP
+#define LOG_TRIMMABLE_TYPEMAP
 
 #nullable enable
 

@@ -56,6 +56,11 @@ namespace Xamarin.Linker {
 				rootTypeMapAssembly = AssemblyDefinition.CreateAssembly (rootTypeMapAssemblyName, rootTypeMapAssemblyName.Name, moduleParameters);
 				Annotations.SetAction (rootTypeMapAssembly, AssemblyAction.Link);
 				addedAssemblies.Add (rootTypeMapAssembly);
+
+				var typeMapEntryAssemblyProperty = this.Context.GetType ().GetProperty ("TypeMapEntryAssembly");
+				if (typeMapEntryAssemblyProperty is null)
+					throw ErrorHelper.CreateError (99, "Could not find the 'TypeMapEntryAssembly' property on the linker context.");
+				typeMapEntryAssemblyProperty.SetValue (this.Context, App.TypeMapAssemblyName);
 			}
 
 			abr.SetCurrentAssembly (rootTypeMapAssembly);

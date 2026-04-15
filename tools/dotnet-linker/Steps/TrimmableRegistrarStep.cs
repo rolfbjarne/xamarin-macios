@@ -540,7 +540,8 @@ namespace Xamarin.Linker {
 				cacheAssembly.Invoke (resolver, [asmDef]);
 				Annotations.SetAction (asmDef, AssemblyAction.Link);
 
-				managedAssemblyToLinkItems.Add (new MSBuildItem (fn, new Dictionary<string, string> {
+				var linkedPath = Path.Combine (Configuration.IntermediateLinkDir, asm.Name.Name + ".dll");
+				managedAssemblyToLinkItems.Add (new MSBuildItem (linkedPath, new Dictionary<string, string> {
 					{ "TrimMode", "link" },
 				}));
 			}

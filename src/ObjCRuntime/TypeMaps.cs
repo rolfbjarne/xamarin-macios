@@ -89,7 +89,7 @@ static class TypeMaps {
 			Console.WriteLine ($"    Got dictionary of type '{dict.GetType ()}' with {fields.Length} fields: {dict}");
 			foreach (var field in fields) {
 				var value = field.GetValue (dict);
-				Console.WriteLine ($"        Field '{field.Name}': {field}");
+				Console.WriteLine ($"        Field '{field.Name}': {value}");
 			}
 		}
 		// foreach (string key in lazyData.Keys) {
@@ -119,7 +119,7 @@ static class TypeMaps {
 			Console.WriteLine ($"    Got dictionary of type '{dict.GetType ()}' with {fields.Length} fields: {dict}");
 			foreach (var field in fields) {
 				var value = field.GetValue (dict);
-				Console.WriteLine ($"        Field '{field.Name}': {field}");
+				Console.WriteLine ($"        Field '{field.Name}': {value}");
 			}
 		}
 		// foreach (string key in lazyData.Keys) {

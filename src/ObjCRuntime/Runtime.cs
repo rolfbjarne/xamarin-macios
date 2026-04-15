@@ -6,7 +6,7 @@
 //
 // Copyright 2013 Xamarin Inc.
 
-// #define LOG_TRIMMABLE_TYPEMAP
+#define LOG_TRIMMABLE_TYPEMAP
 
 #nullable enable
 

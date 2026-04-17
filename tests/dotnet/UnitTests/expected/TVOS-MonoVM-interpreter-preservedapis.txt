@@ -340,6 +340,7 @@ Microsoft.tvOS.dll:ObjCRuntime.Class.ResolveTokenReference(System.UInt32, System
 Microsoft.tvOS.dll:ObjCRuntime.Class.ResolveTypeTokenReference(System.UInt32)
 Microsoft.tvOS.dll:ObjCRuntime.Class.TryGetClass(System.IntPtr, out System.IntPtr&, out System.String&)
 Microsoft.tvOS.dll:ObjCRuntime.Class.TryGetTrimmableProxyTypeAttribute(System.String, out ObjCRuntime.NSObjectProxyAttribute&, out System.Type&)
+Microsoft.tvOS.dll:ObjCRuntime.Class.TryGetTrimmableProxyTypeAttribute(System.Type, out ObjCRuntime.NSObjectProxyAttribute&)
 Microsoft.tvOS.dll:ObjCRuntime.Class.TryResolveAssembly(System.IntPtr, out System.Reflection.Assembly&)
 Microsoft.tvOS.dll:ObjCRuntime.Class/objc_attribute_prop
 Microsoft.tvOS.dll:ObjCRuntime.DisposableObject
@@ -594,7 +595,7 @@ Microsoft.tvOS.dll:ObjCRuntime.Runtime.attempt_retain_nsobject(System.IntPtr, Sy
 Microsoft.tvOS.dll:ObjCRuntime.Runtime.AttemptRetainNSObject(System.IntPtr)
 Microsoft.tvOS.dll:ObjCRuntime.Runtime.CannotCreateManagedInstanceOfGenericType(System.IntPtr, System.IntPtr, System.Type, ObjCRuntime.Runtime/MissingCtorResolution, System.IntPtr, System.RuntimeMethodHandle)
 Microsoft.tvOS.dll:ObjCRuntime.Runtime.CollectReferencedAssemblies(System.Collections.Generic.List`1<System.Reflection.Assembly>, System.Reflection.Assembly)
-Microsoft.tvOS.dll:ObjCRuntime.Runtime.ConstructINativeObject`1(System.IntPtr, System.Boolean, System.Type, ObjCRuntime.Runtime/MissingCtorResolution, System.IntPtr, System.RuntimeMethodHandle)
+Microsoft.tvOS.dll:ObjCRuntime.Runtime.ConstructINativeObject`1(System.IntPtr, System.Boolean, System.Type, System.Type, ObjCRuntime.Runtime/MissingCtorResolution, System.IntPtr, System.RuntimeMethodHandle)
 Microsoft.tvOS.dll:ObjCRuntime.Runtime.ConstructNSObject(System.IntPtr, System.IntPtr, ObjCRuntime.Runtime/MissingCtorResolution)
 Microsoft.tvOS.dll:ObjCRuntime.Runtime.ConstructNSObject`1(System.IntPtr, System.Type, ObjCRuntime.Runtime/MissingCtorResolution, System.IntPtr, System.RuntimeMethodHandle)
 Microsoft.tvOS.dll:ObjCRuntime.Runtime.ConstructNSObject`1(System.IntPtr, System.Type, ObjCRuntime.Runtime/MissingCtorResolution)

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Mono.Cecil;
+using Mono.Linker.Steps;
 
 #nullable enable
 
@@ -8,9 +9,20 @@ namespace Xamarin.Linker {
 		protected override string Name { get; } = "Collect Assemblies";
 		protected override int ErrorCode { get; } = 2330;
 
+		public static IStep? MarkStep;
+
 		protected override void TryProcess ()
 		{
 			base.TryProcess ();
+
+			var pipeline = this.Context.GetType ().GetField ("_pipeline", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!.GetValue (Context)!;
+			var steps = (IEnumerable<IStep>) pipeline.GetType ().GetField ("_steps", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!.GetValue (pipeline)!;
+			foreach (var step in steps) {
+				if (step.GetType ().Name == "MarkStep") {
+					MarkStep = step;
+					break;
+				}
+			}
 
 			// This is a temporary workaround, we need to mark members and types, and we have to do it before
 			// the MarkStep. However, MarkStep is the first step, and if we add another step before it,

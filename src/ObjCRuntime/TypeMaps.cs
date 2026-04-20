@@ -89,7 +89,7 @@ static class TypeMaps {
 			Console.WriteLine ($"    Got dictionary of type '{dict.GetType ()}' with {fields.Length} fields: {dict}");
 			foreach (var field in fields) {
 				var value = field.GetValue (dict);
-				Console.WriteLine ($"        Field '{field.Name}' = {value}");
+				Console.WriteLine ($"        Field '{field.Name}': {field}");
 			}
 		}
 		// foreach (string key in lazyData.Keys) {
@@ -119,7 +119,7 @@ static class TypeMaps {
 			Console.WriteLine ($"    Got dictionary of type '{dict.GetType ()}' with {fields.Length} fields: {dict}");
 			foreach (var field in fields) {
 				var value = field.GetValue (dict);
-				Console.WriteLine ($"        Field '{field.Name}' = {value}");
+				Console.WriteLine ($"        Field '{field.Name}': {field}");
 			}
 		}
 		// foreach (string key in lazyData.Keys) {
@@ -255,5 +255,85 @@ static class TypeMaps {
 		}
 	}
 #endif // NET11_0_OR_GREATER
+
+	internal static bool TryGetProtocolProxyAttribute (Type protocol, [NotNullWhen (true)] out ProtocolProxyAttribute? proxyAttribute)
+	{
+		proxyAttribute = null;
+
+		if (ProtocolProxyTypes.TryGetValue (protocol, out var protocolProxyType)) {
+#if LOG_TRIMMABLE_TYPEMAP
+			Runtime.NSLog ($"TryGetProtocolProxyAttribute ({protocol}) found proxy type {protocolProxyType} in protocol proxy map");
+#endif
+			proxyAttribute = protocolProxyType.GetCustomAttribute<ProtocolProxyAttribute> ();
+			if (proxyAttribute is null)
+				throw new InvalidOperationException ($"Type '{protocolProxyType.FullName}' is expected to have an ProtocolProxyAttribute."); // TODO: better exception
+			return proxyAttribute is not null;
+		}
+
+		// workaround for https://github.com/dotnet/runtime/issues/127004
+		proxyAttribute = protocol.GetCustomAttribute<ProtocolProxyAttribute> (false);
+		if (proxyAttribute is not null) {
+#if LOG_TRIMMABLE_TYPEMAP
+			Runtime.NSLog ($"TryGetProtocolProxyAttribute ({protocol}) found proxy attribute on the protocol type itself");
+#endif
+			return true;
+		}
+
+#if LOG_TRIMMABLE_TYPEMAP
+		Runtime.NSLog ($"TryGetProtocolProxyAttribute ({protocol}) did not find proxy attribute anywhere");
+#endif
+		// end workaround for https://github.com/dotnet/runtime/issues/127004
+
+		return false;
+	}
+
+	internal static bool IsSkippedType (Type type, [NotNullWhen (true)] out Type? actualType)
+	{
+		var potentiallySkippedType = type;
+		if (potentiallySkippedType.IsGenericType)
+			potentiallySkippedType = potentiallySkippedType.GetGenericTypeDefinition ();
+
+		var rv = SkippedProxyTypes.TryGetValue (potentiallySkippedType, out actualType);
+
+#if LOG_TRIMMABLE_TYPEMAP
+		Runtime.NSLog ($"IsSkippedType ({type}, {actualType}) looked for '{potentiallySkippedType}' => {rv}");
+#endif
+
+		return rv;
+	}
+
+	internal static bool TryCreateInstanceUsingProxyTypeAttribute<T> (Type type, IntPtr ptr, bool owns, [NotNullWhen (true)] out T? instance) where T: INativeObject
+	{
+		instance = default;
+
+		if (!Class.TryGetTrimmableProxyTypeAttribute (type, out var proxyAttribute)) {
+#if LOG_TRIMMABLE_TYPEMAP
+			Runtime.NSLog ($"TryCreateInstanceUsingProxyTypeAttribute<{typeof (T).FullName}> ({type}, 0x{@ptr:X}, {owns}) did not find proxy attribute type '{type.FullName}'");
+#endif
+			return false;
+		}
+
+		var obj = proxyAttribute.CreateObject (ptr);
+		if (obj is null) {
+#if LOG_TRIMMABLE_TYPEMAP
+			Runtime.NSLog ($"TryCreateInstanceUsingProxyTypeAttribute<{typeof (T).FullName}> ({type}, 0x{@ptr:X}, {owns}) found proxy attribute of type {proxyAttribute.GetType ()}, but its CreateObject method returned null.");
+#endif
+			return false;
+		}
+
+		if (owns)
+			Runtime.TryReleaseINativeObject (obj);
+
+		if (obj is not T objT) {
+#if LOG_TRIMMABLE_TYPEMAP
+			Runtime.NSLog ($"TryCreateInstanceUsingProxyTypeAttribute<{typeof (T).FullName}> ({type}, 0x{@ptr:X}, {owns}) found proxy attribute of type {proxyAttribute.GetType ()}, and an object was created of type {obj.GetType ()}, but that's not compatible with the target type {typeof (T)}.");
+#endif
+			return false;
+		}
+
+		instance = objT;
+
+		return true;
+	}
 }
 

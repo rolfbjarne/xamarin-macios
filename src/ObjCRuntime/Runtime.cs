@@ -1371,17 +1371,18 @@ namespace ObjCRuntime {
 					return null;
 				}
 
-				if (TypeMaps.NSObjectProxyTypes.TryGetValue (lookupType, out var proxyType)) {
+				if (Class.TryGetTrimmableProxyTypeAttribute (lookupType, out var proxyAttribute)) {
 #if LOG_TRIMMABLE_TYPEMAP
-					Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type}) found in proxy map with type '{proxyType.FullName}' for lookup type '{lookupType.FullName}'");
+					Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type}) found proxy attribute for lookup type '{lookupType.FullName}'");
 #endif
-					var attrib = proxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
-					if (attrib is null)
-						throw new InvalidOperationException ($"Type '{proxyType.FullName}' is expected to have an NSObjectProxyAttribute."); // TODO: better exception
-					var instance = (T?) (object?) attrib.CreateObject (ptr);
+					var instance = (T?) (object?) proxyAttribute.CreateObject (ptr);
 					if (instance is not null)
 						return instance;
+#if LOG_TRIMMABLE_TYPEMAP
+					Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type}) proxy attribute didn't create instance?");
+#endif
 				}
+
 #if LOG_TRIMMABLE_TYPEMAP
 				Runtime.NSLog ($"ConstructNSObject<{typeof (T).FullName}> (0x{@ptr:X}, {type}) did not find type '{lookupType.FullName}' in proxy map");
 #endif
@@ -1459,7 +1460,7 @@ namespace ObjCRuntime {
 		}
 
 		// The generic argument T is only used to cast the return value.
-		static T? ConstructINativeObject<T> (IntPtr ptr, bool owns, Type type, MissingCtorResolution missingCtorResolution, IntPtr sel, RuntimeMethodHandle method_handle) where T : INativeObject
+		static T? ConstructINativeObject<T> (IntPtr ptr, bool owns, Type type, Type target_type, MissingCtorResolution missingCtorResolution, IntPtr sel, RuntimeMethodHandle method_handle) where T : INativeObject
 		{
 			if (type is null)
 				throw new ArgumentNullException (nameof (type));
@@ -1472,49 +1473,55 @@ namespace ObjCRuntime {
 					var inst = ConstructINativeObjectViaFactoryMethod (ptr, owns);
 					if (inst is not null) {
 #if LOG_TRIMMABLE_TYPEMAP
-						Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}, {type}) created '{inst.GetType ().FullName}' instance using static interface factory method.");
+						Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}, {owns}, {type}, {target_type}) created '{inst.GetType ().FullName}' instance using static interface factory method.");
 #endif
 						return inst;
 					}
 #if LOG_TRIMMABLE_TYPEMAP
-					Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}, {type}) failed to create instance using static interface factory method.");
+					Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}, {owns}, {type}, {target_type}) failed to create instance using static interface factory method.");
 #endif
 					CannotCreateManagedInstanceOfGenericType (ptr, IntPtr.Zero, type, missingCtorResolution, sel, method_handle);
 					return default (T);
 				}
-				if (TypeMaps.NSObjectProxyTypes.TryGetValue (type, out var proxyType)) {
+
+				if (TypeMaps.TryCreateInstanceUsingProxyTypeAttribute<T> (type, ptr, owns, out var proxyInstanceA)) {
 #if LOG_TRIMMABLE_TYPEMAP
-					Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}, {type.FullName}) found in proxy map");
+					Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}, {owns}, {type}, {target_type}) created instance of type '{proxyInstanceA.GetType ()}' using proxy type attribute for '{type.FullName}'");
 #endif
-					var attrib = proxyType.GetCustomAttribute<NSObjectProxyAttribute> ();
-					if (attrib is null)
-						throw new InvalidOperationException ($"Type '{proxyType.FullName}' is expected to have an NSObjectProxyAttribute."); // TODO: better exception
-					var rv = (T?) (object?) attrib.CreateObject (ptr);
-					if (owns)
-						Runtime.TryReleaseINativeObject (rv);
-					return rv;
+					return proxyInstanceA;
 				}
-				if (TypeMaps.ProtocolProxyTypes.TryGetValue (type, out var protocolProxyType)) {
+
+				if (type != target_type) {
+					if (TypeMaps.TryCreateInstanceUsingProxyTypeAttribute<T> (target_type, ptr, owns, out var proxyInstanceB)) {
 #if LOG_TRIMMABLE_TYPEMAP
-					Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}, {type.FullName}) found in protocol proxy map");
+						Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}, {owns}, {type}, {target_type}) created instance '{proxyInstanceB.GetType ()}' using proxy type attribute for '{target_type.FullName}' [2]");
 #endif
-					var attrib = protocolProxyType.GetCustomAttribute<ProtocolProxyAttribute> ();
-					if (attrib is null)
-						throw new InvalidOperationException ($"Type '{protocolProxyType.FullName}' is expected to have an ProtocolProxyAttribute."); // TODO: better exception
-					return (T?) (object?) attrib.CreateObject (ptr, owns);
+						return proxyInstanceB;
+					}
 				}
-				if (TypeMaps.INativeObjectProxyTypes.TryGetValue (type, out var inativeObjectProxyType)) {
+
+				if (TypeMaps.TryGetProtocolProxyAttribute (target_type, out var protocolProxyAttribute)) {
+					var rv = protocolProxyAttribute.CreateObject (ptr, owns);
 #if LOG_TRIMMABLE_TYPEMAP
-					Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}, {type.FullName}) found in INativeObject proxy map");
+					Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}, {owns}, {type}, {target_type}) found proxy attribute of type '{protocolProxyAttribute.GetType ()}', and created object of type '{(rv?.GetType ()?.FullName ?? "null")}'");
+#endif
+					return (T?) (object?) rv;
+				}
+
+				if (TypeMaps.INativeObjectProxyTypes.TryGetValue (target_type, out var inativeObjectProxyType)) {
+#if LOG_TRIMMABLE_TYPEMAP
+					Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}, {owns}, {type}, {target_type}) found in INativeObject proxy map");
 #endif
 					var attrib = inativeObjectProxyType.GetCustomAttribute<INativeObjectProxyAttribute> ();
 					if (attrib is null)
 						throw new InvalidOperationException ($"Type '{inativeObjectProxyType.FullName}' is expected to have an INativeObjectProxyAttribute."); // TODO: better exception
 					return (T?) (object?) attrib.CreateObject (ptr, owns);
 				}
+
 #if LOG_TRIMMABLE_TYPEMAP
-				Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}) did not find type '{type.FullName}' in any map");
+				Runtime.NSLog ($"ConstructINativeObject<{typeof (T).FullName}> (0x{@ptr:X}, {owns}, {type}, {target_type}) did not find type '{target_type.FullName}' in any map");
 #endif
+
 				MissingCtor (ptr, IntPtr.Zero, type, missingCtorResolution, sel, method_handle);
 				return default (T);
 			}
@@ -2062,7 +2069,7 @@ namespace ObjCRuntime {
 				return ConstructNSObject<NSObject> (ptr, implementation!, MissingCtorResolution.ThrowConstructor1NotFound, sel, method_handle);
 			}
 
-			return ConstructINativeObject<INativeObject> (ptr, owns, implementation, MissingCtorResolution.ThrowConstructor2NotFound, sel, method_handle);
+			return ConstructINativeObject<INativeObject> (ptr, owns, implementation, target_type, MissingCtorResolution.ThrowConstructor2NotFound, sel, method_handle);
 		}
 
 		// this method is identical in behavior to the non-generic one.
@@ -2134,10 +2141,10 @@ namespace ObjCRuntime {
 				}
 			}
 
-			return ConstructINativeObject<T> (ptr, owns, implementation, MissingCtorResolution.ThrowConstructor2NotFound, sel, method_handle);
+			return ConstructINativeObject<T> (ptr, owns, implementation, typeof (T), MissingCtorResolution.ThrowConstructor2NotFound, sel, method_handle);
 		}
 
-		static void TryReleaseINativeObject (INativeObject? obj)
+		internal static void TryReleaseINativeObject (INativeObject? obj)
 		{
 			if (obj is null)
 				return;
@@ -2217,13 +2224,10 @@ namespace ObjCRuntime {
 		{
 			// Check if the trimmable static registrar knows about this protocol
 			if (IsTrimmableStaticRegistrar) {
-				if (TypeMaps.ProtocolProxyTypes.TryGetValue (type, out var protocolProxyType)) {
+				if (TypeMaps.TryGetProtocolProxyAttribute (type, out var attrib)) {
 #if LOG_TRIMMABLE_TYPEMAP
-					NSLog ($"GetProtocolForType ({type.FullName}) found in protocol proxy map");
+					NSLog ($"GetProtocolForType ({type.FullName}) found protocol proxy attribute");
 #endif
-					var attrib = protocolProxyType.GetCustomAttribute<ProtocolProxyAttribute> ();
-					if (attrib is null)
-						throw new InvalidOperationException ($"Type '{protocolProxyType.FullName}' is expected to have an ProtocolProxyAttribute."); // TODO: better exception
 					var protocolName = attrib.GetProtocolName ();
 					return Protocol.objc_getProtocol (protocolName);
 				}

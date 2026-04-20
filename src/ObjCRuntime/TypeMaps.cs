@@ -1,7 +1,7 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
 
-#define LOG_TRIMMABLE_TYPEMAP
+// #define LOG_TRIMMABLE_TYPEMAP
 
 using System.Collections;
 using System.Collections.Generic;

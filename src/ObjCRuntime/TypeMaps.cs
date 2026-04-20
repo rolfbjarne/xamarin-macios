@@ -302,7 +302,7 @@ static class TypeMaps {
 		return rv;
 	}
 
-	internal static bool TryCreateInstanceUsingProxyTypeAttribute<T> (Type type, IntPtr ptr, bool owns, [NotNullWhen (true)] out T? instance) where T: INativeObject
+	internal static bool TryCreateInstanceUsingProxyTypeAttribute<T> (Type type, IntPtr ptr, bool owns, [NotNullWhen (true)] out T? instance) where T : INativeObject
 	{
 		instance = default;
 

@@ -344,6 +344,7 @@ Microsoft.MacCatalyst.dll:ObjCRuntime.Class.ResolveTokenReference(System.UInt32,
 Microsoft.MacCatalyst.dll:ObjCRuntime.Class.ResolveTypeTokenReference(System.UInt32)
 Microsoft.MacCatalyst.dll:ObjCRuntime.Class.TryGetClass(System.IntPtr, out System.IntPtr&, out System.String&)
 Microsoft.MacCatalyst.dll:ObjCRuntime.Class.TryGetTrimmableProxyTypeAttribute(System.String, out ObjCRuntime.NSObjectProxyAttribute&, out System.Type&)
+Microsoft.MacCatalyst.dll:ObjCRuntime.Class.TryGetTrimmableProxyTypeAttribute(System.Type, out ObjCRuntime.NSObjectProxyAttribute&)
 Microsoft.MacCatalyst.dll:ObjCRuntime.Class.TryResolveAssembly(System.IntPtr, out System.Reflection.Assembly&)
 Microsoft.MacCatalyst.dll:ObjCRuntime.Class.VerifyStaticRegistrarCode(System.IntPtr, System.Reflection.Assembly)
 Microsoft.MacCatalyst.dll:ObjCRuntime.Class/objc_attribute_prop
@@ -599,7 +600,7 @@ Microsoft.MacCatalyst.dll:ObjCRuntime.Runtime.attempt_retain_nsobject(System.Int
 Microsoft.MacCatalyst.dll:ObjCRuntime.Runtime.AttemptRetainNSObject(System.IntPtr)
 Microsoft.MacCatalyst.dll:ObjCRuntime.Runtime.CannotCreateManagedInstanceOfGenericType(System.IntPtr, System.IntPtr, System.Type, ObjCRuntime.Runtime/MissingCtorResolution, System.IntPtr, System.RuntimeMethodHandle)
 Microsoft.MacCatalyst.dll:ObjCRuntime.Runtime.CollectReferencedAssemblies(System.Collections.Generic.List`1<System.Reflection.Assembly>, System.Reflection.Assembly)
-Microsoft.MacCatalyst.dll:ObjCRuntime.Runtime.ConstructINativeObject`1(System.IntPtr, System.Boolean, System.Type, ObjCRuntime.Runtime/MissingCtorResolution, System.IntPtr, System.RuntimeMethodHandle)
+Microsoft.MacCatalyst.dll:ObjCRuntime.Runtime.ConstructINativeObject`1(System.IntPtr, System.Boolean, System.Type, System.Type, ObjCRuntime.Runtime/MissingCtorResolution, System.IntPtr, System.RuntimeMethodHandle)
 Microsoft.MacCatalyst.dll:ObjCRuntime.Runtime.ConstructNSObject(System.IntPtr, System.IntPtr, ObjCRuntime.Runtime/MissingCtorResolution)
 Microsoft.MacCatalyst.dll:ObjCRuntime.Runtime.ConstructNSObject`1(System.IntPtr, System.Type, ObjCRuntime.Runtime/MissingCtorResolution, System.IntPtr, System.RuntimeMethodHandle)
 Microsoft.MacCatalyst.dll:ObjCRuntime.Runtime.ConstructNSObject`1(System.IntPtr, System.Type, ObjCRuntime.Runtime/MissingCtorResolution)

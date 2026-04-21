@@ -23,6 +23,16 @@ namespace Xamarin.BindingTests {
 			}
 		}
 
+		bool IsNativeAOT {
+			get {
+#if NATIVEAOT
+				return true;
+#else
+				return false;
+#endif
+			}
+		}
+
 		bool IsTrimmableStaticRegistrar {
 			get {
 				return global::XamarinTests.ObjCRuntime.Registrar.IsTrimmableStaticRegistrar;
@@ -107,7 +117,7 @@ namespace Xamarin.BindingTests {
 
 			// the interface must be created
 			var IP1 = bindingAssembly.GetType ("Bindings.Test.Protocol.IP1");
-			if (IsTrimmableStaticRegistrar) {
+			if (IsTrimmableStaticRegistrar && IsNativeAOT) {
 				Assert.That (IP1, Is.Null, "IP1 - IsTrimmableStaticRegistrar");
 				return;
 			}
@@ -143,7 +153,7 @@ namespace Xamarin.BindingTests {
 
 			// the interface must be created
 			var IP2 = bindingAssembly.GetType ("Bindings.Test.Protocol.IP2");
-			if (IsTrimmableStaticRegistrar) {
+			if (IsTrimmableStaticRegistrar && IsNativeAOT) {
 				Assert.That (IP2, Is.Null, "IP2 - IsTrimmableStaticRegistrar");
 				return;
 			}
@@ -184,7 +194,7 @@ namespace Xamarin.BindingTests {
 
 			// the interface must be created
 			var IP3 = bindingAssembly.GetType ("Bindings.Test.Protocol.IP3");
-			if (IsTrimmableStaticRegistrar) {
+			if (IsTrimmableStaticRegistrar && IsNativeAOT) {
 				Assert.That (IP3, Is.Null, "IP3 - IsTrimmableStaticRegistrar");
 				return;
 			}

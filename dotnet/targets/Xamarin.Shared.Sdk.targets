@@ -1136,13 +1136,14 @@
 
 		<ItemGroup Condition="'$(Registrar)' == 'trimmable-static'">
 			<_TypeMapAssemblies Include="$(_TypeMapOutputDirectory)/*.dll" />
-			<ResolvedFileToPublish Include="@(_TypeMapAssemblies)">
+			<ResolvedFileToPublish Include="@(_ManagedAssemblyToLinkFromLinker)">
 				<PublishFolderType>Assembly</PublishFolderType>
 				<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 				<RelativePath>$(_AssemblyPublishDir)%(Filename)%(Extension)</RelativePath>
 				<OriginalRelativePath>%(Filename)%(Extension)</OriginalRelativePath>
 			</ResolvedFileToPublish>
 			<FileWrites Include="@(_TypeMapAssemblies)" />
+			<FileWrites Include="@(_ManagedAssemblyToLinkFromLinker)" />
 		</ItemGroup>
 	</Target>
 

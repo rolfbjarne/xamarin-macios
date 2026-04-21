@@ -235,7 +235,7 @@ namespace Xamarin.Linker {
 					* sealed class ..._Proxy : INativeObjectProxyAttribute {
 					* }
 					*/
-					var proxyType = new TypeDefinition (trNamespace, tr.Name + "_Proxy", TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.ObjCRuntime_INativeObjectProxyAttribute);
+					var proxyType = new TypeDefinition (trNamespace, tr.Name + "_Proxy", TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.ObjCRuntime_INativeObjectProxyAttribute);
 					typeMapAssembly.MainModule.Types.Add (proxyType);
 
 					/* default ctor */
@@ -303,7 +303,7 @@ namespace Xamarin.Linker {
 						 * sealed class ..._Proxy : NSObjectProxy {
 						 * }
 						 */
-						var proxyType = new TypeDefinition (trNamespace, tr.Name + "_Proxy", TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.ObjCRuntime_NSObjectProxyAttribute);
+						var proxyType = new TypeDefinition (trNamespace, tr.Name + "_Proxy", TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.ObjCRuntime_NSObjectProxyAttribute);
 						typeMapAssembly.MainModule.Types.Add (proxyType);
 
 						/* default ctor */
@@ -443,7 +443,7 @@ namespace Xamarin.Linker {
 						 * sealed class ..._Proxy : ProtocolProxyAttribute {
 						 * }
 						 */
-						var proxyType = new TypeDefinition (trNamespace, tr.Name + "_Proxy", TypeAttributes.NotPublic | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.ObjCRuntime_ProtocolProxyAttribute);
+						var proxyType = new TypeDefinition (trNamespace, tr.Name + "_Proxy", TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.BeforeFieldInit, abr.ObjCRuntime_ProtocolProxyAttribute);
 						typeMapAssembly.MainModule.Types.Add (proxyType);
 
 						/* default ctor */

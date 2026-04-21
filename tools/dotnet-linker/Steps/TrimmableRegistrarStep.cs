@@ -193,7 +193,7 @@ namespace Xamarin.Linker {
 				.GroupBy (v => v.TrampolineInfo.Target.DeclaringType)
 				.ToDictionary (v => v.Key, v => v.Select (t => t.TrampolineInfo).ToList ());
 
-			
+
 			// If we need to modify an assembly that's not the typemap assembly, do it after we've finished writing the typemap assembly,
 			// to avoid having to switch between assemblies (we cache a lot of stuff, and those caches will have to be re-created for every switch).
 			var postActionsByAssembly = new Dictionary<AssemblyDefinition, List<Action<AssemblyDefinition>>> ();
@@ -559,7 +559,7 @@ namespace Xamarin.Linker {
 					action (assembly);
 				}
 				abr.ClearCurrentAssembly ();
-			}	
+			}
 
 			// Since we're running inside the trimmer, we need to make sure the trimmer knows about the assemblies we've created.
 			// This will go away once we're running outside of the trimmer.
@@ -578,7 +578,7 @@ namespace Xamarin.Linker {
 					{ "TrimMode", "link" },
 				}));
 			}
-			
+
 			Configuration.WriteOutputForMSBuild ("ManagedAssemblyToLink", managedAssemblyToLinkItems);
 
 			// Report back any exceptions that occurred during the processing.

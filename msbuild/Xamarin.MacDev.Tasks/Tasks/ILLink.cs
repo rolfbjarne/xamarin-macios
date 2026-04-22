@@ -38,18 +38,23 @@ namespace Xamarin.MacDev.Tasks {
 		ITaskItem []? linkerCacheItemsToCopyToWindows;
 		ITaskItem [] LinkerCacheItemsToCopyToWindows {
 			get {
-				if (!CopyToWindows)
+				if (!CopyToWindows) {
+					Log.LogMessage (MessageImportance.Low, "LinkerCacheItemsToCopyToWindows: not copying");
 					return [];
+				}
 
 				if (linkerCacheItemsToCopyToWindows is null) {
+					Log.LogMessage (MessageImportance.Low, $"LinkerCacheItemsToCopyToWindows: checking {LinkerCacheItems.Length} items");
 					linkerCacheItemsToCopyToWindows = LinkerCacheItems.Where (item => {
 						var extension = item.GetMetadata ("Extension");
 						switch (extension.ToLowerInvariant ()) {
 						case ".h":
 						case ".m":
 						case ".mm":
+						Log.LogMessage (MessageImportance.Low, $"LinkerCacheItemsToCopyToWindows: not copying: {item.ItemSpec}");
 							return false; // we don't need any native code on Windows.
 						default:
+						Log.LogMessage (MessageImportance.Low, $"LinkerCacheItemsToCopyToWindows: copying: {item.ItemSpec}");
 							return true;
 						}
 					}).ToArray ();

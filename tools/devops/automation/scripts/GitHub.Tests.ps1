@@ -259,6 +259,9 @@ Describe 'IsCurrentCommitLatestInPR' {
                     }
                 }
             } -ModuleName 'GitHub'
+            Mock Get-GitCommitParents {
+                return @("basebranch123")
+            } -ModuleName 'GitHub'
 
             $result = Get-IsCurrentCommitLatestInPR -Org "testorg" -Repo "testrepo" -Token "test-token" -Hash "abc123def456" -PrIDs @("123")
             $result | Should -Be $false
@@ -276,5 +279,33 @@ Describe 'IsCurrentCommitLatestInPR' {
             $result = Get-IsCurrentCommitLatestInPR -Org "testorg" -Repo "testrepo" -Token "test-token" -Hash "abc123def456" -PrIDs @() # Empty array means not in PR
             $result | Should -Be $true
         }
+
+        It 'returns true when the current commit is a synthetic merge commit for the latest PR head' {
+            Mock Invoke-Request {
+                return @{
+                    "head" = @{
+                        "sha" = "abc123def456"
+                    }
+                }
+            } -ModuleName 'GitHub'
+            Mock Get-GitCommitParents {
+                return @("basebranch123", "abc123def456")
+            } -ModuleName 'GitHub'
+
+            $result = Get-IsCurrentCommitLatestInPR -Org "testorg" -Repo "testrepo" -Token "test-token" -Hash "merge123456" -PrIDs @("123")
+            $result | Should -Be $true
+        }
+    }
+}
+
+Describe 'IsPR' {
+    It 'returns true for manual builds that use a PR merge ref' {
+        Set-Item -Path "Env:BUILD_REASON" -Value "Manual"
+        Set-Item -Path "Env:BUILD_SOURCEBRANCH" -Value "refs/pull/123/merge"
+
+        $githubComments = New-GitHubCommentsObject -Org "testorg" -Repo "testrepo" -Token "test-token"
+
+        $githubComments.IsPR() | Should -Be $true
+        $githubComments.PRIds | Should -Contain "123"
     }
 }

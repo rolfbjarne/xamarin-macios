@@ -35,12 +35,37 @@ namespace Xamarin.MacDev.Tasks {
 		// if the linked output should be copied to windows (as opposed to only creating empty output files)
 		public bool CopyToWindows { get; set; }
 
+		ITaskItem []? linkerCacheItemsToCopyToWindows;
+		ITaskItem [] LinkerCacheItemsToCopyToWindows {
+			get {
+				if (!CopyToWindows)
+					return [];
+
+				if (linkerCacheItemsToCopyToWindows is null) {
+					linkerCacheItemsToCopyToWindows = LinkerCacheItems.Where (item => {
+						var extension = item.GetMetadata ("Extension");
+						switch (extension.ToLowerInvariant ()) {
+						case ".h":
+						case ".m":
+						case ".mm":
+							return false; // we don't need any native code on Windows.
+						default:
+							return true;
+						}
+					}).ToArray ();
+				}
+				return linkerCacheItemsToCopyToWindows;
+			}
+		}
+
 		public override bool Execute ()
 		{
 			if (this.ShouldExecuteRemotely (SessionId)) {
 				if (XamarinTask.ExecuteRemotely (this, out var taskRunner)) {
-					if (CopyToWindows)
+					if (CopyToWindows) {
 						XamarinTask.CopyFilesToWindowsAsync (this, taskRunner, LinkedItems).Wait ();
+						XamarinTask.CopyFilesToWindowsAsync (this, taskRunner, LinkerCacheItemsToCopyToWindows).Wait ();
+					}
 					return true;
 				}
 
@@ -101,17 +126,9 @@ namespace Xamarin.MacDev.Tasks {
 					Log.LogMessage (MessageImportance.Low, "Not creating output file '{0}' because the entire file will be copied to Windows", item.ItemSpec);
 					return false;
 				}
-				if (Array.IndexOf (LinkerCacheItems, item) >= 0) {
-					var extension = item.GetMetadata ("Extension");
-					switch (extension.ToLowerInvariant ()) {
-					case ".h":
-					case ".m":
-					case ".mm":
-						break; // we don't need any native code on Windows.
-					default:
-						Log.LogMessage (MessageImportance.Low, "Not creating output file '{0}' because the entire file will be copied to Windows (because it's not native code)", item.ItemSpec);
-						return false;
-					}
+				if (Array.IndexOf (LinkerCacheItemsToCopyToWindows, item) >= 0) {
+					Log.LogMessage (MessageImportance.Low, "Not creating output file '{0}' because the entire file will be copied to Windows (because it's not native code)", item.ItemSpec);
+					return false;
 				}
 			}
 

@@ -96,9 +96,23 @@ namespace Xamarin.MacDev.Tasks {
 
 		public bool ShouldCreateOutputFile (ITaskItem item)
 		{
-			if (CopyToWindows && Array.IndexOf (LinkedItems, item) >= 0) {
-				Log.LogMessage (MessageImportance.Low, "Not creating output file '{0}' because the entire file will be copied to Windows", item.ItemSpec);
-				return false;
+			if (CopyToWindows) {
+				if (Array.IndexOf (LinkedItems, item) >= 0) {
+					Log.LogMessage (MessageImportance.Low, "Not creating output file '{0}' because the entire file will be copied to Windows", item.ItemSpec);
+					return false;
+				}
+				if (Array.IndexOf (LinkerCacheItems, item) >= 0) {
+					var extension = item.GetMetadata ("Extension");
+					switch (extension.ToLowerInvariant ()) {
+					case ".h":
+					case ".m":
+					case ".mm":
+						break; // we don't need any native code on Windows.
+					default:
+						Log.LogMessage (MessageImportance.Low, "Not creating output file '{0}' because the entire file will be copied to Windows (because it's not native code)", item.ItemSpec);
+						return false;
+					}
+				}
 			}
 
 			var modifiedMetadata = item.GetMetadata ("Modified");

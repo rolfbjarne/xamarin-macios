@@ -45,7 +45,7 @@ public class InlineDlfcnMethodsStep : AssemblyModifierStep {
 				return modified;
 			}
 
-			current_framework = framework?.Name;
+			current_framework = framework?.Namespace;
 
 			foreach (var method in type.Methods)
 				modified |= ProcessMethod (method);

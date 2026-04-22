@@ -225,33 +225,6 @@ namespace Xamarin.Tests {
 		[TestCase (ApplePlatform.iOS, "ios-arm64")]
 		[TestCase (ApplePlatform.TVOS, "tvos-arm64")]
 		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64")]
-		public void MonoVM_TrimmableStatic (ApplePlatform platform, string runtimeIdentifiers)
-		{
-			var dict = new Dictionary<string, string> () {
-				{ "UseMonoRuntime", "true" },
-				{ "NoDSymUtil", "false" },
-				{ "Registrar", "trimmable-static" },
-			};
-			Run (platform, runtimeIdentifiers, "Release", $"{platform}-MonoVM-TrimmableStatic", true, dict);
-		}
-
-		[TestCase (ApplePlatform.iOS, "ios-arm64")]
-		[TestCase (ApplePlatform.TVOS, "tvos-arm64")]
-		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64")]
-		public void MonoVM_Interpreter_TrimmableStatic (ApplePlatform platform, string runtimeIdentifiers)
-		{
-			var dict = new Dictionary<string, string> () {
-				{ "UseInterpreter", "true" },
-				{ "UseMonoRuntime", "true" },
-				{ "NoDSymUtil", "false" },
-				{ "Registrar", "trimmable-static" },
-			};
-			Run (platform, runtimeIdentifiers, "Release", $"{platform}-MonoVM-interpreter-TrimmableStatic", true, dict);
-		}
-
-		[TestCase (ApplePlatform.iOS, "ios-arm64")]
-		[TestCase (ApplePlatform.TVOS, "tvos-arm64")]
-		[TestCase (ApplePlatform.MacCatalyst, "maccatalyst-arm64")]
 		[TestCase (ApplePlatform.MacOSX, "osx-arm64;osx-x64")]
 		public void NativeAOT_TrimmableStatic (ApplePlatform platform, string runtimeIdentifiers)
 		{

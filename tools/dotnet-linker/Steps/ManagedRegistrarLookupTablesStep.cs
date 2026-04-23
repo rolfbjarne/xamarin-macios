@@ -438,13 +438,14 @@ namespace Xamarin.Linker {
 			}
 		}
 
-		static void AddTypeInterfaceImplementation (TypeDefinition type, TypeReference iface)
+		static void AddTypeInterfaceImplementation (AppBundleRewriter abr, TypeDefinition type, TypeReference iface)
 		{
 			if (type.HasInterfaces && type.Interfaces.Any (v => v.InterfaceType == iface))
 				return;
 
 			var ifaceImplementation = new InterfaceImplementation (iface);
 			type.Interfaces.Add (ifaceImplementation);
+			abr.AddAttributeToStaticConstructor (type, abr.CreateDynamicDependencyAttribute (DynamicallyAccessedMemberTypes.Interfaces, type));
 		}
 
 		internal static void ImplementConstructNSObjectFactoryMethod (AppBundleRewriter abr, Tuner.DerivedLinkContext context, TypeDefinition type, MethodReference ctor)
@@ -454,7 +455,7 @@ namespace Xamarin.Linker {
 				return;
 
 			// Make sure the type implements INSObjectFactory, otherwise we can't override the _Xamarin_ConstructNSObject method from it.
-			AddTypeInterfaceImplementation (type, abr.Foundation_INSObjectFactory);
+			AddTypeInterfaceImplementation (abr, type, abr.Foundation_INSObjectFactory);
 
 			var createInstanceMethod = type.AddMethod ("_Xamarin_ConstructNSObject", MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.NewSlot | MethodAttributes.HideBySig, abr.Foundation_NSObject);
 			var nativeHandleParameter = createInstanceMethod.AddParameter ("nativeHandle", abr.ObjCRuntime_NativeHandle);
@@ -475,6 +476,9 @@ namespace Xamarin.Linker {
 			il.Emit (OpCodes.Ret);
 
 			body.GenerateILOffsets ();
+
+			// make sure the trimmer doesn't trim it away if the type is kept
+			abr.AddDynamicDependencyAttributeToStaticConstructor (type, createInstanceMethod);
 		}
 
 		internal static void ImplementConstructINativeObjectFactoryMethod (AppBundleRewriter abr, Tuner.DerivedLinkContext context, TypeDefinition type, MethodReference? ctor)
@@ -489,7 +493,7 @@ namespace Xamarin.Linker {
 				return;
 
 			// Make sure the type implements INativeObject, otherwise we can't override the _Xamarin_ConstructINativeObject method from it.
-			AddTypeInterfaceImplementation (type, abr.ObjCRuntime_INativeObject);
+			AddTypeInterfaceImplementation (abr, type, abr.ObjCRuntime_INativeObject);
 
 			var createInstanceMethod = type.AddMethod ("_Xamarin_ConstructINativeObject", MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.NewSlot | MethodAttributes.HideBySig, abr.ObjCRuntime_INativeObject);
 			var nativeHandleParameter = createInstanceMethod.AddParameter ("nativeHandle", abr.ObjCRuntime_NativeHandle);
@@ -547,6 +551,9 @@ namespace Xamarin.Linker {
 			}
 
 			body.GenerateILOffsets ();
+
+			// make sure the trimmer doesn't trim it away if the type is kept
+			abr.AddDynamicDependencyAttributeToStaticConstructor (type, createInstanceMethod);
 		}
 
 		internal static MethodDefinition? FindNSObjectConstructor (TypeDefinition type)

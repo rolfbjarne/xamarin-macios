@@ -68,7 +68,9 @@ namespace Xamarin.MacDev.Tasks {
 			if (this.ShouldExecuteRemotely (SessionId)) {
 				if (XamarinTask.ExecuteRemotely (this, out var taskRunner)) {
 					if (CopyToWindows) {
+						Log.LogMessage (MessageImportance.Low, $"Copying {LinkedItems.Length} LinkedItems");
 						XamarinTask.CopyFilesToWindowsAsync (this, taskRunner, LinkedItems).Wait ();
+						Log.LogMessage (MessageImportance.Low, $"Copying {LinkerCacheItemsToCopyToWindows.Length} LinkedItems");
 						XamarinTask.CopyFilesToWindowsAsync (this, taskRunner, LinkerCacheItemsToCopyToWindows).Wait ();
 					}
 					return true;
@@ -101,8 +103,11 @@ namespace Xamarin.MacDev.Tasks {
 
 		ITaskItem [] GetAllFilesWithMetadata (string directory, DateTime executionStartTime)
 		{
-			if (string.IsNullOrEmpty (directory) || !Directory.Exists (directory))
+			Log.LogMessage (MessageImportance.Low, $"GetAllFilesWithMetadata ({directory})");
+			if (string.IsNullOrEmpty (directory) || !Directory.Exists (directory)) {
+				Log.LogMessage (MessageImportance.Low, $"GetAllFilesWithMetadata ({directory}): none");
 				return Array.Empty<ITaskItem> ();
+			}
 
 			return Directory.EnumerateFiles (directory, "*", SearchOption.AllDirectories)
 				.Select (file => {
@@ -115,6 +120,7 @@ namespace Xamarin.MacDev.Tasks {
 
 					// Tag files that were modified during this execution
 					item.SetMetadata ("Modified", wasModified.ToString ());
+					Log.LogMessage (MessageImportance.Low, $"GetAllFilesWithMetadata ({directory}): found {file}");
 
 					return item;
 				})

@@ -43,7 +43,12 @@ namespace Xamarin.MacDev.Tasks {
 					return [];
 				}
 
-				if (linkerCacheItemsToCopyToWindows is null && LinkerCacheItems.Length > 0) {
+				if (LinkerCacheItems.Length == 0) {
+					Log.LogMessage (MessageImportance.Low, "LinkerCacheItemsToCopyToWindows: not copying because no input (yet?)");
+					return [];
+				}
+
+				if (linkerCacheItemsToCopyToWindows is null) {
 					Log.LogMessage (MessageImportance.Low, $"LinkerCacheItemsToCopyToWindows: checking {LinkerCacheItems.Length} items");
 					linkerCacheItemsToCopyToWindows = LinkerCacheItems.Where (item => {
 						var extension = item.GetMetadata ("Extension");

@@ -43,7 +43,7 @@ namespace Xamarin.MacDev.Tasks {
 					return [];
 				}
 
-				if (linkerCacheItemsToCopyToWindows is null) {
+				if (linkerCacheItemsToCopyToWindows is null && LinkerCacheItems.Length > 0) {
 					Log.LogMessage (MessageImportance.Low, $"LinkerCacheItemsToCopyToWindows: checking {LinkerCacheItems.Length} items");
 					linkerCacheItemsToCopyToWindows = LinkerCacheItems.Where (item => {
 						var extension = item.GetMetadata ("Extension");
@@ -51,10 +51,10 @@ namespace Xamarin.MacDev.Tasks {
 						case ".h":
 						case ".m":
 						case ".mm":
-						Log.LogMessage (MessageImportance.Low, $"LinkerCacheItemsToCopyToWindows: not copying: {item.ItemSpec}");
+							Log.LogMessage (MessageImportance.Low, $"LinkerCacheItemsToCopyToWindows: not copying: {item.ItemSpec}");
 							return false; // we don't need any native code on Windows.
 						default:
-						Log.LogMessage (MessageImportance.Low, $"LinkerCacheItemsToCopyToWindows: copying: {item.ItemSpec}");
+							Log.LogMessage (MessageImportance.Low, $"LinkerCacheItemsToCopyToWindows: copying: {item.ItemSpec}");
 							return true;
 						}
 					}).ToArray ();
@@ -137,6 +137,7 @@ namespace Xamarin.MacDev.Tasks {
 					Log.LogMessage (MessageImportance.Low, "Not creating output file '{0}' because the entire file will be copied to Windows", item.ItemSpec);
 					return false;
 				}
+				Log.LogMessage (MessageImportance.Low, $"Checking LinkerCacheItemsToCopyToWindows with {LinkerCacheItemsToCopyToWindows.Length} items for {item.ItemSpec}");
 				if (Array.IndexOf (LinkerCacheItemsToCopyToWindows, item) >= 0) {
 					Log.LogMessage (MessageImportance.Low, "Not creating output file '{0}' because the entire file will be copied to Windows (because it's not native code)", item.ItemSpec);
 					return false;

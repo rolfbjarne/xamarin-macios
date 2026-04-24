@@ -28202,17 +28202,7 @@ namespace AppKit {
 	}
 
 	partial interface NSViewColumnMoveEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("NSOldColumn")]
-		nint OldColumn { get; }
-
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("NSNewColumn")]
-		nint NewColumn { get; }
+		// The 'OldColumn' and 'NewColumn' properties have manual bindings.
 	}
 
 	partial interface NSViewColumnResizeEventArgs {
@@ -28230,11 +28220,7 @@ namespace AppKit {
 	}
 
 	partial interface NSOutlineViewItemEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("NSObject")]
-		NSObject Item { get; }
+		// The 'Item' property has manual bindings.
 	}
 
 	partial interface NSOutlineView : NSAccessibilityOutline {
@@ -28627,26 +28613,11 @@ namespace AppKit {
 	}
 
 	partial interface NSTextViewDidChangeSelectionEventArgs {
-		// FIXME: verify property type "NSValue object containing an NSRange structure"
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("NSOldSelectedCharacterRange")]
-		NSValue OldSelectedCharacterRange { get; }
+		// The 'OldSelectedCharacterRange' property has manual bindings.
 	}
 
 	partial interface NSTextViewWillChangeNotifyingTextViewEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("NSOldNotifyingTextView")]
-		NSTextView OldView { get; }
-
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("NSNewNotifyingTextView")]
-		NSTextView NewView { get; }
+		// The 'OldView' and 'NewView' properties have manual bindings.
 	}
 
 	partial interface NSTextView : NSTextLayoutOrientationProvider {
@@ -28708,11 +28679,7 @@ namespace AppKit {
 	}
 
 	partial interface NSControlTextEditingEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("NSFieldEditor")]
-		NSTextView FieldEditor { get; }
+		// The 'FieldEditor' property has manual bindings.
 	}
 
 	partial interface NSControl {
@@ -29006,11 +28973,7 @@ namespace AppKit {
 	}*/
 
 	interface NSTextAlternativesSelectedAlternativeStringEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("NSAlternativeString")]
-		string AlternativeString { get; }
+		// The 'AlternativeString' property has manual bindings.
 	}
 
 	[NoMacCatalyst]
@@ -29141,19 +29104,11 @@ namespace AppKit {
 	}
 
 	partial interface NSMenuItemIndexEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("NSMenuItemIndex")]
-		nint MenuItemIndex { get; }
+		// The 'MenuItemIndex' property has manual bindings.
 	}
 
 	partial interface NSMenuItemEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("MenuItem")]
-		NSMenu MenuItem { get; }
+		// The 'MenuItem' property has manual bindings.
 	}
 
 	partial interface NSMenu {

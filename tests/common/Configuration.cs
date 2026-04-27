@@ -218,9 +218,10 @@ namespace Xamarin.Tests {
 		internal static string GetVariable (string variable, string @default)
 		{
 			var result = Environment.GetEnvironmentVariable (variable);
-			if (string.IsNullOrEmpty (result))
-				make_config.TryGetValue (variable, out result);
-			if (string.IsNullOrEmpty (result))
+			if (!string.IsNullOrEmpty (result))
+				return result;
+
+			if (!make_config.TryGetValue (variable, out result) || string.IsNullOrEmpty (result))
 				result = @default;
 			return result;
 		}

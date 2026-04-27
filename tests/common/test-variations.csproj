@@ -150,8 +150,6 @@
 		<ReferenceNativeSymbol Condition="'$(SdkIsSimulator)' == 'true'" SymbolMode="Ignore" SymbolType="Field" Include="MTL4CommandQueueErrorDomain" />
 		<ReferenceNativeSymbol Condition="'$(SdkIsSimulator)' == 'true'" SymbolMode="Ignore" SymbolType="Field" Include="MTLIOErrorDomain" />
 		<ReferenceNativeSymbol Condition="'$(SdkIsSimulator)' == 'true'" SymbolMode="Ignore" SymbolType="Field" Include="MTLTensorDomain"/>
-		<!-- MLModelCollectionDidChangeNotification is still in headers, but it's not available to link with (it's also deprecated) -->
-		<ReferenceNativeSymbol SymbolMode="Ignore" SymbolType="Field" Include="MLModelCollectionDidChangeNotification" />
 	</ItemGroup>
 
 	<Target Name="ValidateTestVariation" Condition="'$(TestVariation)' != '' And '$(OutputType)' == 'exe'" BeforeTargets="Build">

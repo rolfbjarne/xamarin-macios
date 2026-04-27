@@ -119,8 +119,10 @@ namespace Xamarin.Linker.Steps {
 				marker.PreserveType (type, allMembers: true);
 			} else if (type.HasMethods) {
 				modified |= PreserveIntPtrConstructor (marker, type);
-				if (nsobject)
+				if (nsobject) {
 					modified |= PreserveExportedMethods (marker, type);
+					modified |= PreserveClassHandle (marker, type);
+				}
 			}
 
 			return modified;
@@ -184,6 +186,20 @@ namespace Xamarin.Linker.Steps {
 				break; // only one .ctor can match this
 			}
 			return modified;
+		}
+
+		static bool PreserveClassHandle (IMarkNSObjects marker, TypeDefinition type)
+		{
+			// Preserve the ClassHandle property getter override, so that it's not
+			// trimmed by the linker when TrimMode=full. If it's trimmed, then the
+			// base NSObject.ClassHandle getter is called instead, which returns the
+			// NSObject class handle instead of the correct class handle.
+			foreach (var method in type.Methods) {
+				if (method.Name != "get_ClassHandle")
+					continue;
+				return marker.PreserveMethod (type, method);
+			}
+			return false;
 		}
 
 		static bool IsProductMethod (IMarkNSObjects marker, MethodDefinition method)

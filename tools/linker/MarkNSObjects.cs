@@ -28,6 +28,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+using System.Collections.Generic;
+
 using Mono.Cecil;
 using Mono.Linker;
 using Mono.Tuner;
@@ -121,7 +123,7 @@ namespace Xamarin.Linker.Steps {
 				modified |= PreserveIntPtrConstructor (marker, type);
 				if (nsobject) {
 					modified |= PreserveExportedMethods (marker, type);
-					modified |= PreserveClassHandle (marker, type);
+					modified |= PreserveVirtualOverrides (marker, type);
 				}
 			}
 
@@ -188,18 +190,27 @@ namespace Xamarin.Linker.Steps {
 			return modified;
 		}
 
-		static bool PreserveClassHandle (IMarkNSObjects marker, TypeDefinition type)
+		static bool PreserveVirtualOverrides (IMarkNSObjects marker, TypeDefinition type)
 		{
-			// Preserve the ClassHandle property getter override, so that it's not
-			// trimmed by the linker when TrimMode=full. If it's trimmed, then the
-			// base NSObject.ClassHandle getter is called instead, which returns the
-			// NSObject class handle instead of the correct class handle.
+			// Preserve all virtual method overrides for product NSObject types.
+			// When TrimMode=full, the trimmer may remove virtual overrides from
+			// product types (like ClassHandle, ToString, Dispose, etc.), causing
+			// incorrect base class behavior at runtime. These overrides are called
+			// through virtual dispatch and must be preserved.
+			// Collect first to avoid modifying the collection while iterating.
+			List<MethodDefinition>? overrides = null;
 			foreach (var method in type.Methods) {
-				if (method.Name != "get_ClassHandle")
+				if (!method.IsVirtual || method.IsNewSlot || method.IsAbstract)
 					continue;
-				return marker.PreserveMethod (type, method);
+				overrides ??= new List<MethodDefinition> ();
+				overrides.Add (method);
 			}
-			return false;
+			if (overrides is null)
+				return false;
+			var modified = false;
+			foreach (var method in overrides)
+				modified |= marker.PreserveMethod (type, method);
+			return modified;
 		}
 
 		static bool IsProductMethod (IMarkNSObjects marker, MethodDefinition method)

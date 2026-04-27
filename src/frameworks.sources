@@ -159,7 +159,10 @@ APPKIT_SOURCES = \
 	AppKit/NSTextAlternativesSelectedAlternativeStringEventArgs.cs \
 	AppKit/NSTextViewDidChangeSelectionEventArgs.cs \
 	AppKit/NSTextViewWillChangeNotifyingTextViewEventArgs.cs \
+	AppKit/NSTextDidEndEditingEventArgs.cs \
 	AppKit/NSViewColumnMoveEventArgs.cs \
+	AppKit/NSViewColumnResizeEventArgs.cs \
+	AppKit/NSWorkspaceFileOperationEventArgs.cs \
 	AppKit/NSSliderTouchBarItem.cs \
 	AppKit/NSView.cs \
 	AppKit/NSCollectionLayoutAnchor.cs \

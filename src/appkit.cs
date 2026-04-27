@@ -26730,11 +26730,7 @@ namespace AppKit {
 
 	[NoMacCatalyst]
 	interface NSWorkspaceFileOperationEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("NSOperationNumber")]
-		nint FileType { get; }
+		// The 'FileType' property has manual bindings.
 	}
 
 	delegate void NSWorkspaceUrlHandler (NSDictionary newUrls, NSError error);
@@ -28206,17 +28202,7 @@ namespace AppKit {
 	}
 
 	partial interface NSViewColumnResizeEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("NSTableColumn")]
-		NSTableColumn Column { get; }
-
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("NSOldWidth")]
-		nint OldWidth { get; }
+		// The 'Column' and 'OldWidth' properties have manual bindings.
 	}
 
 	partial interface NSOutlineViewItemEventArgs {
@@ -29177,14 +29163,7 @@ namespace AppKit {
 
 	[NoMacCatalyst]
 	partial interface NSTextDidEndEditingEventArgs {
-		// FIXME: I think this is essentially a flags value
-		// of movements and characters. The docs are a bit
-		// confusing.
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
-		[Export ("NSTextMovement")]
-		nint Movement { get; }
+		// The 'Movement' property has manual bindings.
 	}
 
 	partial interface NSText {

@@ -58,20 +58,40 @@ public class InlineDlfcnMethodsStep : AssemblyModifierStep {
 	TypeDefinition GetDlfcnType (MethodDefinition callingMethod)
 	{
 		// Check if there's a [Field] attribute with a second string argument (the library/namespace).
-		if (callingMethod.HasCustomAttributes) {
-			foreach (var attrib in callingMethod.CustomAttributes) {
-				if (attrib.AttributeType.Name != "FieldAttribute")
-					continue;
-				if (attrib.ConstructorArguments.Count == 2 &&
-					attrib.ConstructorArguments [1].Type.Name == "String" &&
-					attrib.ConstructorArguments [1].Value is string libraryName &&
-					!string.IsNullOrEmpty (libraryName)) {
-					return GetDlfcnType (callingMethod.Module, callingMethod.DeclaringType.Namespace, libraryName);
+		// The [Field] attribute can be on the method itself, or on the property the method is a getter/setter for.
+		var libraryName = callingMethod.HasCustomAttributes ? GetFieldAttributeLibraryName (callingMethod.CustomAttributes) : null;
+		if (libraryName is null && callingMethod.DeclaringType.HasProperties) {
+			foreach (var property in callingMethod.DeclaringType.Properties) {
+				if (property.GetMethod == callingMethod || property.SetMethod == callingMethod) {
+					libraryName = GetFieldAttributeLibraryName (property.CustomAttributes);
+					break;
 				}
 			}
 		}
 
+		if (libraryName is not null)
+			return GetDlfcnType (callingMethod.Module, callingMethod.DeclaringType.Namespace, libraryName);
+
 		return GetDlfcnType (callingMethod.Module, callingMethod.DeclaringType.Namespace);
+	}
+
+	static string? GetFieldAttributeLibraryName (IList<CustomAttribute>? attributes)
+	{
+		if (attributes is null || attributes.Count == 0)
+			return null;
+
+		foreach (var attrib in attributes) {
+			if (attrib.AttributeType.Name != "FieldAttribute")
+				continue;
+			if (attrib.ConstructorArguments.Count == 2 &&
+				attrib.ConstructorArguments [1].Type.Name == "String" &&
+				attrib.ConstructorArguments [1].Value is string libraryName &&
+				!string.IsNullOrEmpty (libraryName)) {
+				return libraryName;
+			}
+		}
+
+		return null;
 	}
 
 	// It's important to use a type in the same namespace as the calling code, so that

@@ -202,6 +202,19 @@ namespace Xamarin.Tests {
 			}
 		}
 
+		internal static bool TryGetVariable (string variable, string @default, out string result)
+		{
+			result = Environment.GetEnvironmentVariable (variable);
+			if (!string.IsNullOrEmpty (result))
+				return true;
+
+			if (make_config.TryGetValue (variable, out result))
+				return true;
+
+			result = @default;
+			return false;
+		}
+
 		internal static string GetVariable (string variable, string @default)
 		{
 			var result = Environment.GetEnvironmentVariable (variable);
@@ -291,10 +304,10 @@ namespace Xamarin.Tests {
 			xcode_root = GetVariable ("XCODE_DEVELOPER_ROOT", "/Applications/Xcode.app/Contents/Developer");
 			xcode83_root = GetVariable ("XCODE83_DEVELOPER_ROOT", "/Applications/Xcode83.app/Contents/Developer");
 			xcode94_root = GetVariable ("XCODE94_DEVELOPER_ROOT", "/Applications/Xcode94.app/Contents/Developer");
-			include_ios = !string.IsNullOrEmpty (GetVariable ("INCLUDE_IOS", ""));
-			include_mac = !string.IsNullOrEmpty (GetVariable ("INCLUDE_MAC", ""));
-			include_tvos = !string.IsNullOrEmpty (GetVariable ("INCLUDE_TVOS", ""));
-			include_maccatalyst = !string.IsNullOrEmpty (GetVariable ("INCLUDE_MACCATALYST", ""));
+			include_ios = TryGetVariable ("INCLUDE_IOS", "", out var inc_ios) && !string.IsNullOrEmpty (inc_ios) && !string.Equals (inc_ios, "false", StringComparison.OrdinalIgnoreCase);
+			include_mac = TryGetVariable ("INCLUDE_MAC", "", out var inc_macos) && !string.IsNullOrEmpty (inc_macos) && !string.Equals (inc_macos, "false", StringComparison.OrdinalIgnoreCase);
+			include_tvos = TryGetVariable ("INCLUDE_TVOS", "", out var inc_tvos) && !string.IsNullOrEmpty (inc_tvos) && !string.Equals (inc_tvos, "false", StringComparison.OrdinalIgnoreCase);
+			include_maccatalyst = TryGetVariable ("INCLUDE_MACCATALYST", "", out var inc_maccatalyst) && !string.IsNullOrEmpty (inc_maccatalyst) && !string.Equals (inc_maccatalyst, "false", StringComparison.OrdinalIgnoreCase);
 			DotNetBclDir = GetVariable ("DOTNET_BCL_DIR", null);
 			DotNetCscCommand = GetVariable ("DOTNET_CSC_COMMAND", null)?.Trim ('\'');
 			DotNetExecutable = GetVariable ("DOTNET", null);

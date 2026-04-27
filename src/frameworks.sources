@@ -1490,6 +1490,11 @@ PRINTCORE_SOURCES = \
 PUSHTOTALK_SOURCES = \
 	PushToTalk/Compat.cs \
 
+# QuartzComposer
+
+QUARTZCOMPOSER_SOURCES = \
+	QuartzComposer/QCComposition.cs \
+
 # QuickLook
 
 QUICKLOOK_SOURCES = \

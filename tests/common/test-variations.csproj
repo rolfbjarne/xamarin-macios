@@ -141,11 +141,14 @@
 		<InlineDlfcnMethods>strict</InlineDlfcnMethods>
 		<DefineConstants>$(DefineConstants);STATIC_NATIVE_SYMBOL_LOOKUP</DefineConstants>
 		<_TestVariationApplied>true</_TestVariationApplied>
+	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(InlineDlfcnMethods)' == 'strict'">
 		<!-- We don't link with BrowserEngineKit by default, but strict mode requires it -->
     	<LinkWithBrowserEngineKit>true</LinkWithBrowserEngineKit>
 	</PropertyGroup>
-	<ItemGroup Condition="$(_TestVariationForComparison.Contains('|inline-dlfcn-methods-strict|'))">
+
+	<ItemGroup Condition="'$(InlineDlfcnMethods)' == 'strict'">
 		<!-- fields that aren't available in the simulator -->
 		<ReferenceNativeSymbol Condition="'$(SdkIsSimulator)' == 'true'" SymbolMode="Ignore" SymbolType="Field" Include="MTL4CommandQueueErrorDomain" />
 		<ReferenceNativeSymbol Condition="'$(SdkIsSimulator)' == 'true'" SymbolMode="Ignore" SymbolType="Field" Include="MTLIOErrorDomain" />

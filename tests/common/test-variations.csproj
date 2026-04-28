@@ -139,13 +139,13 @@
 
 	<PropertyGroup Condition="$(_TestVariationForComparison.Contains('|inline-dlfcn-methods-strict|'))">
 		<InlineDlfcnMethods>strict</InlineDlfcnMethods>
-		<DefineConstants>$(DefineConstants);STATIC_NATIVE_SYMBOL_LOOKUP</DefineConstants>
 		<_TestVariationApplied>true</_TestVariationApplied>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(InlineDlfcnMethods)' == 'strict'">
 		<!-- We don't link with BrowserEngineKit by default, but strict mode requires it -->
-    	<LinkWithBrowserEngineKit>true</LinkWithBrowserEngineKit>
+		<LinkWithBrowserEngineKit>true</LinkWithBrowserEngineKit>
+		<DefineConstants>$(DefineConstants);STATIC_NATIVE_SYMBOL_LOOKUP</DefineConstants>
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(InlineDlfcnMethods)' == 'strict'">

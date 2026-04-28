@@ -39,6 +39,13 @@ namespace Xamarin.MacDev.Tasks {
 		[Output]
 		public ITaskItem []? NativeSourceFiles { get; set; }
 
+		/// <summary>
+		/// Output list of ReferenceNativeSymbol items that were trimmed away and should be removed
+		/// from the linker's -u flags to avoid linking symbols that are no longer needed.
+		/// </summary>
+		[Output]
+		public ITaskItem []? TrimmedReferenceNativeSymbols { get; set; }
+
 		HashSet<string>? ignoredSymbols;
 
 		HashSet<string> IgnoredSymbols {
@@ -73,13 +80,33 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			var items = new List<ITaskItem> ();
 
-			GenerateInlinedDlfcnNativeCode (items);
+			var survivingSymbols = GenerateInlinedDlfcnNativeCode (items);
 
 			NativeSourceFiles = items.ToArray ();
+
+			// Compute which ReferenceNativeSymbol items are inlined dlfcn symbols that were trimmed away.
+			if (survivingSymbols is not null) {
+				const string prefix = "_xamarin_Dlfcn_";
+				const string suffix = "_Native";
+				var trimmedItems = new List<ITaskItem> ();
+				foreach (var rns in ReferenceNativeSymbol) {
+					var symbol = rns.ItemSpec;
+					if (!symbol.StartsWith (prefix) || !symbol.EndsWith (suffix))
+						continue;
+					var fieldName = symbol.Substring (prefix.Length, symbol.Length - prefix.Length - suffix.Length);
+					if (!survivingSymbols.Contains (fieldName)) {
+						trimmedItems.Add (rns);
+					}
+				}
+				TrimmedReferenceNativeSymbols = trimmedItems.ToArray ();
+				if (TrimmedReferenceNativeSymbols.Length > 0)
+					Log.LogMessage (MessageImportance.Low, "Removed {0} trimmed dlfcn symbols from ReferenceNativeSymbol", TrimmedReferenceNativeSymbols.Length);
+			}
+
 			return !Log.HasLoggedErrors;
 		}
 
-		void GenerateInlinedDlfcnNativeCode (List<ITaskItem> items)
+		HashSet<string>? GenerateInlinedDlfcnNativeCode (List<ITaskItem> items)
 		{
 			// Collect all surviving symbols from all input files.
 			var survivingSymbols = new HashSet<string> ();
@@ -100,7 +127,7 @@ namespace Xamarin.MacDev.Tasks {
 
 			if (survivingSymbols.Count == 0) {
 				Log.LogMessage (MessageImportance.Low, "There were no surviving symbols that require inlined dlfcn native code.");
-				return;
+				return survivingSymbols;
 			}
 
 			Directory.CreateDirectory (OutputDirectory);
@@ -125,6 +152,7 @@ namespace Xamarin.MacDev.Tasks {
 			var item = new Microsoft.Build.Utilities.TaskItem (outputPath);
 			item.SetMetadata ("Arch", Architecture.ToLowerInvariant ());
 			items.Add (item);
+			return survivingSymbols;
 		}
 	}
 }

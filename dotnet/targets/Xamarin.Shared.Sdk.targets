@@ -1721,11 +1721,17 @@
 		<PostTrimmingProcessing
 			Architecture="$(TargetArchitectures)"
 			OutputDirectory="$(DeviceSpecificIntermediateOutputPath)inlined-dlfcn"
-			ReferenceNativeSymbol="@(ReferenceNativeSymbol)"
+			ReferenceNativeSymbol="@(_ProcessedReferenceNativeSymbol)"
 			SurvivingNativeSymbolsFiles="@(_SurvivingNativeSymbolsFile)"
 		>
 			<Output TaskParameter="NativeSourceFiles" ItemName="_PostTrimmingSourceFiles" />
+			<Output TaskParameter="TrimmedReferenceNativeSymbols" ItemName="_TrimmedReferenceNativeSymbol" />
 		</PostTrimmingProcessing>
+
+		<ItemGroup>
+			<!-- Remove dlfcn symbols that were trimmed away (e.g., by NativeAOT) from the linker -u flags. -->
+			<_ProcessedReferenceNativeSymbol Remove="@(_TrimmedReferenceNativeSymbol)" />
+		</ItemGroup>
 
 		<ItemGroup>
 			<FileWrites Include="@(_PostTrimmingSourceFiles)" />

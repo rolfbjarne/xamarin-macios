@@ -38,6 +38,11 @@ public class InlineDlfcnMethodsStep : AssemblyModifierStep {
 	protected override bool ProcessType (TypeDefinition type)
 	{
 		var modified = false;
+		// In strict mode, only inline Dlfcn calls in the product assembly.
+		// Test assemblies and user code may use Dlfcn with non-existent symbols (e.g. for testing),
+		// which would cause link-time failures if inlined.
+		if (strictMode && !Configuration.Profile.IsProductAssembly (type.Module.Assembly))
+			return modified;
 		if (type.HasMethods) {
 			if (Frameworks.TryGetFramework (App, type, out Framework? framework) && App.IsSimulatorBuild && !framework.IsFrameworkAvailableInSimulator (App)) {
 				// Report (ErrorHelper.CreateWarning (Configuration.Application, 2257 /* The type '{0}' appears to be part of the '{1}' framework, which is available in the simulator. Inlining Dlfcn calls for this type may cause runtime failures when running on a device. */, type, Errors.MX2257, type.FullName, framework.Name));

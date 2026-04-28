@@ -1,4 +1,4 @@
-AppBundleSize: 12,677,669 bytes (12,380.5 KB = 12.1 MB)
+AppBundleSize: 12,678,181 bytes (12,381.0 KB = 12.1 MB)
 # The following list of files and their sizes is just informational / for review, and isn't used in the test:
 _CodeSignature/CodeResources: 11,701 bytes (11.4 KB = 0.0 MB)
 archived-expanded-entitlements.xcent: 384 bytes (0.4 KB = 0.0 MB)
@@ -24,7 +24,7 @@ Frameworks/SizeTestApp.framework/_CodeSignature/CodeResources: 1,798 bytes (1.8 
 Frameworks/SizeTestApp.framework/Info.plist: 830 bytes (0.8 KB = 0.0 MB)
 Frameworks/SizeTestApp.framework/SizeTestApp: 3,404,880 bytes (3,325.1 KB = 3.2 MB)
 Info.plist: 1,155 bytes (1.1 KB = 0.0 MB)
-Microsoft.iOS.dll: 99,328 bytes (97.0 KB = 0.1 MB)
+Microsoft.iOS.dll: 99,840 bytes (97.5 KB = 0.1 MB)
 PkgInfo: 8 bytes (0.0 KB = 0.0 MB)
 runtimeconfig.bin: 1,481 bytes (1.4 KB = 0.0 MB)
 SizeTestApp: 196,048 bytes (191.5 KB = 0.2 MB)

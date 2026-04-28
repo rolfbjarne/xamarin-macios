@@ -55,12 +55,14 @@ Microsoft.tvOS.dll:Foundation.INSObjectFactory._Xamarin_ConstructNSObject(ObjCRu
 Microsoft.tvOS.dll:Foundation.ModelAttribute
 Microsoft.tvOS.dll:Foundation.ModelAttribute..ctor()
 Microsoft.tvOS.dll:Foundation.NSAsyncDispatcher
+Microsoft.tvOS.dll:Foundation.NSAsyncDispatcher..cctor()
 Microsoft.tvOS.dll:Foundation.NSAsyncDispatcher..ctor()
 Microsoft.tvOS.dll:Foundation.NSAsyncDispatcher.Apply()
 Microsoft.tvOS.dll:Foundation.NSAsyncDispatcher/__Registrar_Callbacks__
 Microsoft.tvOS.dll:Foundation.NSAsyncDispatcher/__Registrar_Callbacks__.callback_2642_Foundation_NSAsyncDispatcher__ctor(System.IntPtr, System.IntPtr, System.Byte*, System.IntPtr*)
 Microsoft.tvOS.dll:Foundation.NSAsyncDispatcher/__Registrar_Callbacks__.callback_2643_Foundation_NSAsyncDispatcher_Apply(System.IntPtr, System.IntPtr, System.IntPtr*)
 Microsoft.tvOS.dll:Foundation.NSAsyncSynchronizationContextDispatcher
+Microsoft.tvOS.dll:Foundation.NSAsyncSynchronizationContextDispatcher..cctor()
 Microsoft.tvOS.dll:Foundation.NSAsyncSynchronizationContextDispatcher..ctor(System.Threading.SendOrPostCallback, System.Object)
 Microsoft.tvOS.dll:Foundation.NSAsyncSynchronizationContextDispatcher.Apply()
 Microsoft.tvOS.dll:Foundation.NSAsyncSynchronizationContextDispatcher/__Registrar_Callbacks__
@@ -266,6 +268,7 @@ Microsoft.tvOS.dll:Foundation.NSString.GetHashCode()
 Microsoft.tvOS.dll:Foundation.NSString.IsEqualTo(System.IntPtr)
 Microsoft.tvOS.dll:Foundation.NSString.ToString()
 Microsoft.tvOS.dll:Foundation.NSSynchronizationContextDispatcher
+Microsoft.tvOS.dll:Foundation.NSSynchronizationContextDispatcher..cctor()
 Microsoft.tvOS.dll:Foundation.NSSynchronizationContextDispatcher..ctor(System.Threading.SendOrPostCallback, System.Object)
 Microsoft.tvOS.dll:Foundation.NSSynchronizationContextDispatcher.Apply()
 Microsoft.tvOS.dll:Foundation.NSSynchronizationContextDispatcher/__Registrar_Callbacks__

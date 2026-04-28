@@ -1,4 +1,4 @@
-AppBundleSize: 12,629,232 bytes (12,333.2 KB = 12.0 MB)
+AppBundleSize: 12,629,744 bytes (12,333.7 KB = 12.0 MB)
 # The following list of files and their sizes is just informational / for review, and isn't used in the test:
 _CodeSignature/CodeResources: 10,705 bytes (10.5 KB = 0.0 MB)
 archived-expanded-entitlements.xcent: 384 bytes (0.4 KB = 0.0 MB)
@@ -21,7 +21,7 @@ Frameworks/SizeTestApp.framework/_CodeSignature/CodeResources: 1,798 bytes (1.8 
 Frameworks/SizeTestApp.framework/Info.plist: 806 bytes (0.8 KB = 0.0 MB)
 Frameworks/SizeTestApp.framework/SizeTestApp: 3,424,688 bytes (3,344.4 KB = 3.3 MB)
 Info.plist: 1,131 bytes (1.1 KB = 0.0 MB)
-Microsoft.tvOS.dll: 99,328 bytes (97.0 KB = 0.1 MB)
+Microsoft.tvOS.dll: 99,840 bytes (97.5 KB = 0.1 MB)
 PkgInfo: 8 bytes (0.0 KB = 0.0 MB)
 runtimeconfig.bin: 1,481 bytes (1.4 KB = 0.0 MB)
 SizeTestApp: 197,104 bytes (192.5 KB = 0.2 MB)

@@ -63,12 +63,14 @@ Microsoft.MacCatalyst.dll:Foundation.INSObjectFactory._Xamarin_ConstructNSObject
 Microsoft.MacCatalyst.dll:Foundation.ModelAttribute
 Microsoft.MacCatalyst.dll:Foundation.ModelAttribute..ctor()
 Microsoft.MacCatalyst.dll:Foundation.NSAsyncDispatcher
+Microsoft.MacCatalyst.dll:Foundation.NSAsyncDispatcher..cctor()
 Microsoft.MacCatalyst.dll:Foundation.NSAsyncDispatcher..ctor()
 Microsoft.MacCatalyst.dll:Foundation.NSAsyncDispatcher.Apply()
 Microsoft.MacCatalyst.dll:Foundation.NSAsyncDispatcher/__Registrar_Callbacks__
 Microsoft.MacCatalyst.dll:Foundation.NSAsyncDispatcher/__Registrar_Callbacks__.callback_3025_Foundation_NSAsyncDispatcher__ctor(System.IntPtr, System.IntPtr, System.Byte*, System.IntPtr*)
 Microsoft.MacCatalyst.dll:Foundation.NSAsyncDispatcher/__Registrar_Callbacks__.callback_3026_Foundation_NSAsyncDispatcher_Apply(System.IntPtr, System.IntPtr, System.IntPtr*)
 Microsoft.MacCatalyst.dll:Foundation.NSAsyncSynchronizationContextDispatcher
+Microsoft.MacCatalyst.dll:Foundation.NSAsyncSynchronizationContextDispatcher..cctor()
 Microsoft.MacCatalyst.dll:Foundation.NSAsyncSynchronizationContextDispatcher..ctor(System.Threading.SendOrPostCallback, System.Object)
 Microsoft.MacCatalyst.dll:Foundation.NSAsyncSynchronizationContextDispatcher.Apply()
 Microsoft.MacCatalyst.dll:Foundation.NSAsyncSynchronizationContextDispatcher/__Registrar_Callbacks__
@@ -274,6 +276,7 @@ Microsoft.MacCatalyst.dll:Foundation.NSString.GetHashCode()
 Microsoft.MacCatalyst.dll:Foundation.NSString.IsEqualTo(System.IntPtr)
 Microsoft.MacCatalyst.dll:Foundation.NSString.ToString()
 Microsoft.MacCatalyst.dll:Foundation.NSSynchronizationContextDispatcher
+Microsoft.MacCatalyst.dll:Foundation.NSSynchronizationContextDispatcher..cctor()
 Microsoft.MacCatalyst.dll:Foundation.NSSynchronizationContextDispatcher..ctor(System.Threading.SendOrPostCallback, System.Object)
 Microsoft.MacCatalyst.dll:Foundation.NSSynchronizationContextDispatcher.Apply()
 Microsoft.MacCatalyst.dll:Foundation.NSSynchronizationContextDispatcher/__Registrar_Callbacks__

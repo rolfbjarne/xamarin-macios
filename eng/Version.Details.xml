@@ -103,9 +103,9 @@
       <Uri>https://github.com/dotnet/dotnet</Uri>
       <Sha>40451fd17068c5428329f3807cd854e3a9a5a3c4</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.TemplateEngine.Authoring.Tasks" Version="10.0.301">
+    <Dependency Name="Microsoft.TemplateEngine.Authoring.Tasks" Version="10.0.300-preview.26216.121">
       <Uri>https://github.com/dotnet/dotnet</Uri>
-      <Sha>40451fd17068c5428329f3807cd854e3a9a5a3c4</Sha>
+      <Sha>e43cbe04901ea4cf359ed0883b0533abab224ba2</Sha>
     </Dependency>
     <Dependency Name="Microsoft.DotNet.XHarness.iOS.Shared" Version="11.0.0-prerelease.26217.1">
       <Uri>https://github.com/dotnet/xharness</Uri>

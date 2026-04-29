@@ -15,7 +15,7 @@ This file should be imported by eng/Versions.props
     <MicrosoftNETRuntimeMonoTargetsSdkPackageVersion>10.0.3</MicrosoftNETRuntimeMonoTargetsSdkPackageVersion>
     <MicrosoftNETSdkPackageVersion>10.0.301-servicing.26227.122</MicrosoftNETSdkPackageVersion>
     <MicrosoftNETCoreAppRefPackageVersion>10.0.3</MicrosoftNETCoreAppRefPackageVersion>
-    <MicrosoftTemplateEngineAuthoringTasksPackageVersion>10.0.301</MicrosoftTemplateEngineAuthoringTasksPackageVersion>
+    <MicrosoftTemplateEngineAuthoringTasksPackageVersion>10.0.300-preview.26216.121</MicrosoftTemplateEngineAuthoringTasksPackageVersion>
     <!-- dotnet-macios dependencies -->
     <MicrosoftiOSSdknet100_260PackageVersion>26.0.11017</MicrosoftiOSSdknet100_260PackageVersion>
     <MicrosoftiOSSdknet90_185PackageVersion>18.5.9227</MicrosoftiOSSdknet90_185PackageVersion>

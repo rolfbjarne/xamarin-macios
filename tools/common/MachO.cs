@@ -609,7 +609,7 @@ namespace Xamarin {
 					object_files.Add (file);
 				}
 				// byte position is always even after each file.
-				if (nextPosition % 1 == 1)
+				if (nextPosition % 2 == 1)
 					nextPosition++;
 				reader.BaseStream.Position = nextPosition;
 			}

@@ -473,10 +473,25 @@ public class InlineDlfcnMethodsStep : AssemblyModifierStep {
 		return rv;
 	}
 
+	static bool IsValidCIdentifier (string name)
+	{
+		for (var i = 0; i < name.Length; i++) {
+			var c = name [i];
+			if (c == '_' || char.IsLetterOrDigit (c))
+				continue;
+			return false;
+		}
+		return name.Length > 0;
+	}
+
 	bool InlineSymbol (string symbolName)
 	{
 		// In compatibility mode, only inline symbols from [Field] attributes.
 		if (!strictMode && !Configuration.FieldSymbols.Contains (symbolName))
+			return false;
+
+		// Symbol names that aren't valid C identifiers can't be used in generated code.
+		if (!IsValidCIdentifier (symbolName))
 			return false;
 
 		var requiredSymbol = DerivedLinkContext.RequiredSymbols.Find (symbolName);
@@ -670,14 +685,14 @@ public class InlineDlfcnMethodsStep : AssemblyModifierStep {
 					break;
 				case StackBehaviour.Pop1:
 				case StackBehaviour.Popref:
-					switch (instr.Previous.OpCode.StackBehaviourPush) {
+					switch (ins.Previous.OpCode.StackBehaviourPush) {
 					case StackBehaviour.Push1:
 					case StackBehaviour.Pushi:
 					case StackBehaviour.Pushi8:
 					case StackBehaviour.Pushr4:
 					case StackBehaviour.Pushr8:
 					case StackBehaviour.Pushref:
-						ldstr = instr.Previous.Previous.Previous;
+						ldstr = ins.Previous.Previous.Previous;
 						break;
 					}
 					break;

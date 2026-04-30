@@ -51,7 +51,7 @@ namespace Xamarin.MacDev.Tasks {
 						if (!string.Equals (symbolMode, "Ignore", StringComparison.OrdinalIgnoreCase))
 							continue;
 						var symbolType = rns.GetMetadata ("SymbolType").ToLowerInvariant ();
-						switch (symbolMode) {
+						switch (symbolType) {
 						case "objectivecclass":
 							nativeSymbol = Symbol.ObjectiveCPrefix + nativeSymbol;
 							break;
@@ -107,7 +107,10 @@ namespace Xamarin.MacDev.Tasks {
 			var outputPath = Path.Combine (OutputDirectory, "inlined-dlfcn.c");
 
 			var sb = new StringBuilder ();
-			foreach (var field in survivingSymbols.Where (s => s.Length > 0).OrderBy (s => s)) {
+			// The generated C code uses 'extern void*' declarations and returns the address of the symbol.
+			// This is intentional: it allows the native linker to resolve the symbol at link time, which
+			// is the whole point of this optimization (avoiding dlsym at runtime).
+			foreach (var field in survivingSymbols.OrderBy (s => s)) {
 				sb.AppendLine ($"extern void* {field};");
 				sb.AppendLine ($"void* xamarin_Dlfcn_{field}_Native ();");
 				sb.AppendLine ($"void* xamarin_Dlfcn_{field}_Native () {{ return &{field}; }}");

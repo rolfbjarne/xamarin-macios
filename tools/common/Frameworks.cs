@@ -454,7 +454,7 @@ public class Frameworks : Dictionary<string, Framework> {
 				{ "CoreLocationUI", "CoreLocationUI", 15,0 },
 
 				{ "DataDetection", "DataDetection", 15, 0 },
-				{ "Phase", "PHASE", new Version (15, 0), new Version (26, 0) /* not certain about the exact version when this framework qas added to the simulator, but this should be a safe default */ },
+				{ "Phase", "PHASE", new Version (15, 0), new Version (26, 0) /* not certain about the exact version when this framework was added to the simulator, but this should be a safe default */ },
 				{ "OSLog", "OSLog", 15,0 },
 				{ "ShazamKit", "ShazamKit", new Version (15,0), new Version (16, 0)},
 				{ "ThreadNetwork", "ThreadNetwork", new Version (15,0), NotAvailableInSimulator},
@@ -835,5 +835,5 @@ public class Frameworks : Dictionary<string, Framework> {
 	{
 		Gather (app, assemblies, frameworks, weak_frameworks, (framework) => FilterFrameworks (app, framework));
 	}
-#endif // LEGACY_TOOLS || BUNDLER
+#endif // BUNDLER
 }

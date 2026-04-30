@@ -41,7 +41,10 @@ namespace Xamarin.MacDev.Tasks {
 			foreach (var sym in File.ReadAllLines (UnresolvedSymbolsFile)) {
 				if (!sym.StartsWith (prefix) || !sym.EndsWith (suffix))
 					continue;
-				var symbolName = sym.Substring (prefix.Length, sym.Length - prefix.Length - suffix.Length);
+				var symbolLength = sym.Length - prefix.Length - suffix.Length;
+				if (symbolLength <= 0)
+					continue;
+				var symbolName = sym.Substring (prefix.Length, symbolLength);
 				survivingSymbols.Add (symbolName);
 			}
 

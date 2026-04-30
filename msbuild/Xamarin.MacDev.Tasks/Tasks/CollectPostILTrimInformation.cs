@@ -105,7 +105,10 @@ namespace Xamarin.MacDev.Tasks {
 						var name = method.Name;
 						if (!name.StartsWith (prefix) || !name.EndsWith (suffix))
 							continue;
-						var symbolName = name.Substring (prefix.Length, name.Length - prefix.Length - suffix.Length);
+						var symbolLength = name.Length - prefix.Length - suffix.Length;
+						if (symbolLength <= 0)
+							continue;
+						var symbolName = name.Substring (prefix.Length, symbolLength);
 						survivingSymbols.Add (symbolName);
 					}
 				}

@@ -12,14 +12,18 @@ using Microsoft.Build.Framework;
 namespace Xamarin.MacDev.Tasks {
 	// See docs/code/native-symbols.md for an overview of native symbol handling.
 	public class CollectUnresolvedNativeSymbols : XamarinTask {
-		[Required]
-		public ITaskItem StaticLibrary { get; set; } = null!;
+		public ITaskItem? StaticLibrary { get; set; }
 
 		[Required]
 		public string OutputFile { get; set; } = "";
 
 		public override bool Execute ()
 		{
+			if (StaticLibrary is null) {
+				Log.LogError ("StaticLibrary is required.");
+				return false;
+			}
+
 			var path = StaticLibrary.ItemSpec;
 			if (!File.Exists (path)) {
 				Log.LogError ("Static library not found: {0}", path);

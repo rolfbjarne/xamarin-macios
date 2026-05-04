@@ -159,7 +159,8 @@ namespace MonoTouch.Tuner {
 
 			if (DerivedLinkContext.StaticRegistrar.TryGetExportedTypeName (type, out var exportedName)) {
 				var introduced = DerivedLinkContext.StaticRegistrar.GetSdkIntroducedVersion (type, out _);
-				objectiveCTypeInfo.Add ((exportedName, string.Join (",", Frameworks.GetFrameworks (type)), introduced?.ToString () ?? ""));
+				if (Frameworks.TryGetFramework (App, type, out string? framework))
+					objectiveCTypeInfo.Add ((exportedName, framework, introduced?.ToString () ?? ""));
 			}
 
 			// if not, it's a user type, the IsDirectBinding check is required by all ancestors

@@ -1679,14 +1679,17 @@ namespace Xamarin.Linker {
 			}
 		}
 
-		public TypeDefinition GetOrCreateType (ModuleDefinition module, string @namespace, string @typename)
+		public TypeDefinition GetOrCreateType (ModuleDefinition module, string @namespace, string @typename, out bool created)
 		{
+			created = false;
+			
 			var fullName = @namespace + "." + typename;
 			if (!created_types.TryGetValue (fullName, out var cachedTypeDefinition)) {
 				cachedTypeDefinition = module.Types.FirstOrDefault (t => t.Namespace == @namespace && t.Name == typename);
 				if (cachedTypeDefinition is null) {
 					cachedTypeDefinition = new TypeDefinition (@namespace, typename, TypeAttributes.Public | TypeAttributes.Sealed, module.TypeSystem.Object);
 					module.Types.Add (cachedTypeDefinition);
+					created = true;
 				}
 				created_types [fullName] = cachedTypeDefinition;
 			}
@@ -1696,7 +1699,7 @@ namespace Xamarin.Linker {
 
 		public MethodDefinition CreateInternalPInvoke (ModuleDefinition module, string @namespace, string @typename, string methodName, out bool created)
 		{
-			var cachedTypeDefinition = GetOrCreateType (module, @namespace, @typename);
+			var cachedTypeDefinition = GetOrCreateType (module, @namespace, @typename, out _);
 			var nativeMethod = methodName;
 			var rv = cachedTypeDefinition.Methods.FirstOrDefault (m => m.Name == methodName);
 			if (rv is not null) {

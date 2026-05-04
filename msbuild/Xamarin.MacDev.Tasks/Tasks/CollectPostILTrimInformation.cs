@@ -131,14 +131,7 @@ namespace Xamarin.MacDev.Tasks {
 							continue;
 						if (method.PInvokeInfo?.Module?.Name != "__Internal")
 							continue;
-						var name = method.PInvokeInfo.EntryPoint ?? method.Name;
-						if (!name.StartsWith (prefix) || !name.EndsWith (suffix))
-							continue;
-						var symbolLength = name.Length - prefix.Length - suffix.Length;
-						if (symbolLength <= 0)
-							continue;
-						var symbolName = name.Substring (prefix.Length, symbolLength);
-						survivingSymbols.Add (symbolName);
+						survivingSymbols.Add (method.PInvokeInfo.EntryPoint ?? method.Name);
 					}
 				}
 			}

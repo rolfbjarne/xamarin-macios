@@ -58,7 +58,7 @@ public class InlineDlfcnMethodsStep : AssemblyModifierStep {
 	// we correctly compute which frameworks to link with.
 	TypeDefinition GetDlfcnType (ModuleDefinition module, string @namespace)
 	{
-		var rv = abr.GetOrCreateType (module, ns, "Dlfcn", out var created);
+		var rv = abr.GetOrCreateType (module, @namespace, "Dlfcn", out var created);
 		if (created) {
 			if (!string.IsNullOrEmpty (current_framework)) {
 				var attrib = new CustomAttribute (abr.ObjectiveCFrameworkAttribute_ctor_String);

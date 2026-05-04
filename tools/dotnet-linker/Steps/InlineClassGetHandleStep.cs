@@ -54,11 +54,12 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 		return true;
 	}
 
-	protected override void TryProcessAssembly (AssemblyDefinition assembly)
+	protected override bool ModifyAssembly (AssemblyDefinition assembly)
 	{
 		inlining_enabled = Annotations.GetAction (assembly) == AssemblyAction.Link;
-		base.TryProcessAssembly (assembly);
+		var modified = base.ModifyAssembly (assembly);
 		inlining_enabled = null;
+		return modified;
 	}
 
 	protected override bool ProcessType (TypeDefinition type)
@@ -66,10 +67,7 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 		var modified = false;
 
 		if (inlining_enabled == true) {	
-			if (type.HasMethods) {
-				foreach (var method in type.Methods)
-					modified |= ProcessMethod (method);
-			}
+			modified |= ProcessMethods (type);
 		} else {
 			if (ListExportedSymbols.TryGetRequiredObjectiveCType (DerivedLinkContext, type, out var exportedName)) {
 				DerivedLinkContext.RequiredSymbols.AddObjectiveCClass (exportedName).AddMember (type);
@@ -86,7 +84,7 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 		return abr.CreateInternalPInvoke (callingMethod.Module, "ObjCRuntime", "Class", $"xamarin_Class_GetHandle_{objectiveCClassName}_Native", out _);
 	}
 
-	bool ProcessMethod (MethodDefinition method)
+	protected override bool ProcessMethod (MethodDefinition method)
 	{
 		var modified = false;
 		

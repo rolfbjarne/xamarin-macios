@@ -1696,7 +1696,7 @@
 		<ItemGroup>
 			<FileWrites Include="@(_PostTrimmingSourceFiles)" />
 			<_PostTrimmingSourceFiles>
-				<OutputFile>$(DeviceSpecificIntermediateOutputPath)posttrim-info-compiled/%(Filename).o</OutputFile>
+				<OutputFile>$(DeviceSpecificIntermediateOutputPath)posttrim-info-compiled/%(Arch)/%(Filename).o</OutputFile>
 			</_PostTrimmingSourceFiles>
 		</ItemGroup>
 

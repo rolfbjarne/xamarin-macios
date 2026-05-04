@@ -565,7 +565,7 @@ Controls whether the build system replaces runtime calls to `ObjCRuntime.Dlfcn` 
 
 The valid options are:
 
-* `compatibility`: Inlines dlfcn method calls but only creates native references for symbols used in `[Field]` attributes. This is more conservative and avoids link errors for symbols that don't exist at build time.
+* `compatibility`: Only inlines symbol usages backed by `[Field]` attributes. This is more conservative and avoids link errors for symbols that don't exist at build time.
 * `strict`: Inlines dlfcn method calls and creates native references for all symbols. This is more aggressive and may cause link errors if referenced native symbols don't exist.
 * (empty): Disables inlining of dlfcn method calls.
 

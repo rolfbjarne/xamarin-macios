@@ -124,7 +124,7 @@ namespace Xamarin.Linker.Steps {
 			if (derivedLinkContext.LinkerConfiguration.Profile.IsProductAssembly (type.Module.Assembly)) {
 				switch (type.Name) {
 				case "XamarinSwiftFunctions":
-					break; 
+					break;
 				default:
 					return false;
 				}

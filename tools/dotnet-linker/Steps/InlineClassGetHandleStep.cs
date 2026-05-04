@@ -66,7 +66,7 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 	{
 		var modified = false;
 
-		if (inlining_enabled == true) {	
+		if (inlining_enabled == true) {
 			modified |= ProcessMethods (type);
 		} else {
 			if (ListExportedSymbols.TryGetRequiredObjectiveCType (DerivedLinkContext, type, out var exportedName)) {
@@ -87,7 +87,7 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 	protected override bool ProcessMethod (MethodDefinition method)
 	{
 		var modified = false;
-		
+
 		if (!method.HasBody)
 			return modified;
 
@@ -120,7 +120,7 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 				continue;
 			}
 
-			if (!strictMode)  {
+			if (!strictMode) {
 				if (ListExportedSymbols.TryGetRequiredObjectiveCType (DerivedLinkContext, method.DeclaringType, out var exportedName)) {
 					if (exportedName != objectiveCClassName) {
 						// Copilot: create new error code + update resx

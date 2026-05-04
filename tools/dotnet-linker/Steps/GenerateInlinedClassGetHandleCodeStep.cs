@@ -8,7 +8,7 @@ using Xamarin.Linker;
 
 namespace Xamarin.Linker.Steps;
 
-	/// See docs/code/native-symbols.md and docs/code/class-handles.md for an overview of native symbol handling.
+/// See docs/code/native-symbols.md and docs/code/class-handles.md for an overview of native symbol handling.
 public class GenerateInlinedClassGetHandleCodeStep : ConfigurationAwareStep {
 	protected override string Name { get; } = "Generate Inlined Class.GetHandle Code";
 	protected override int ErrorCode { get; } = 2470;

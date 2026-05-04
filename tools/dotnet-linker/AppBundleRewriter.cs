@@ -1682,7 +1682,7 @@ namespace Xamarin.Linker {
 		public TypeDefinition GetOrCreateType (ModuleDefinition module, string @namespace, string @typename, out bool created)
 		{
 			created = false;
-			
+
 			var fullName = @namespace + "." + typename;
 			if (!created_types.TryGetValue (fullName, out var cachedTypeDefinition)) {
 				cachedTypeDefinition = module.Types.FirstOrDefault (t => t.Namespace == @namespace && t.Name == typename);

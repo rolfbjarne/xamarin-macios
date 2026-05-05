@@ -82,11 +82,11 @@ namespace Xamarin.Utils {
 				log ($"File '{path}' contents are not up-to-date, because the file doesn't exist.");
 				File.WriteAllText (path, contents);
 			} else if (string.Equals (contents, File.ReadAllText (path), StringComparison.Ordinal)) {
-				log ($"File '{path}' contents are not up-to-date.");
-				File.WriteAllText (path, contents);
-			} else {
 				log ($"File '{path}' contents are up-to-date.");
 				return;
+			} else {
+				log ($"File '{path}' contents are not up-to-date.");
+				File.WriteAllText (path, contents);
 			}
 		}
 	}

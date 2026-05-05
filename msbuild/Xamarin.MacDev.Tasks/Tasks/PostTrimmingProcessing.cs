@@ -120,7 +120,7 @@ namespace Xamarin.MacDev.Tasks {
 					continue;
 
 				var symbolType = rns.GetMetadata ("SymbolType").ToLowerInvariant ();
-				switch (symbolMode) {
+				switch (symbolType) {
 				case "objectivecclass":
 					if (filterObjetiveCClasses && rv.Remove (nativeSymbol)) {
 						Log.LogMessage (MessageImportance.Low, "Ignoring Objective-C class '{0}'", nativeSymbol);

@@ -37,8 +37,7 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 		strictMode = Configuration.InlineClassGetHandle == InlineClassGetHandleMode.Strict;
 
 		if (strictMode && Configuration.Application.Registrar == Bundler.RegistrarMode.Dynamic) {
-			// Copilot: create new error code + update resx
-			Report (ErrorHelper.CreateError (Configuration.Application, 9999 /* The 'InlineClassGetHandle' option is set to 'Strict', but we're using the dynamic registrar. This is not a supported configuration, because 'Strict' mode requires exported Objective-C classes to be available at compile time, but the dynamic registrar will create them at runtime. Please either change the 'InlineClassGetHandle' option to 'Disabled' or 'Compat', or switch to using the static registrar. */, null, Errors.MX2256));
+			Report (ErrorHelper.CreateError (Configuration.Application, 2258, null, Errors.MX2258));
 		}
 
 		base.TryProcess ();
@@ -110,26 +109,22 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 
 			var ldstr = instr.Previous;
 			if (ldstr.OpCode != OpCodes.Ldstr) {
-				// Copilot: create new error code + update resx
-				Report (ErrorHelper.CreateWarning (Configuration.Application, 9999 /* Unknown or unsupported pattern in call to Class.GetHandle in '{0}': the previous instructions before the call to Class.GetHandle isn't a 'ldstr', it's: '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (method), ldstr));
+				Report (ErrorHelper.CreateWarning (Configuration.Application, 2259, method, Errors.MX2259, FormatMethod (method), ldstr));
 				continue;
 			}
 			if (ldstr.Operand is not string objectiveCClassName) {
-				// Copilot: create new error code + update resx
-				Report (ErrorHelper.CreateWarning (Configuration.Application, 9999 /* Unknown or unsupported pattern in call to Class.GetHandle in '{0}': the operand of the 'ldstr' instruction before the call to Class.GetHandle isn't a string, it's: '{1}'. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new. */, method, Errors.MX2255, FormatMethod (method), ldstr.Operand));
+				Report (ErrorHelper.CreateWarning (Configuration.Application, 2259, method, Errors.MX2259, FormatMethod (method), ldstr.Operand));
 				continue;
 			}
 
 			if (!strictMode) {
 				if (ListExportedSymbols.TryGetRequiredObjectiveCType (DerivedLinkContext, method.DeclaringType, out var exportedName)) {
 					if (exportedName != objectiveCClassName) {
-						// Copilot: create new error code + update resx
-						Report (ErrorHelper.CreateWarning (Configuration.Application, 9999 /* The call to Class.GetHandle in '{0}' is trying to get the handle for the Objective-C class '{1}', but we were unable to determine whether this class should be statically preserved or not. Since we're in compat mode, we're assuming the class should not be preserved. */, method, Errors.MX2255, FormatMethod (method), objectiveCClassName, exportedName));
+						Report (ErrorHelper.CreateWarning (Configuration.Application, 2263, method, Errors.MX2263, FormatMethod (method), objectiveCClassName, exportedName));
 						continue;
 					}
 				} else {
-					// Copilot: create new error code + update resx
-					Report (ErrorHelper.CreateWarning (Configuration.Application, 9999 /* The call to Class.GetHandle in '{0}' is trying to get the handle for the Objective-C class '{1}', but we couldn't determine whether this class should be statically preserved or not. Since we're in compat mode, we're assuming the class should not be preserved. */, method, Errors.MX2255, FormatMethod (method), objectiveCClassName));
+					Report (ErrorHelper.CreateWarning (Configuration.Application, 2264, method, Errors.MX2264, FormatMethod (method), objectiveCClassName));
 					continue;
 				}
 			}

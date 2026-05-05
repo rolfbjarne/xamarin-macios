@@ -121,8 +121,11 @@ namespace Xamarin.MacDev.Tasks {
 		static void CollectInternalSymbolsFromAssembly (string assemblyPath, HashSet<string> survivingSymbols)
 		{
 			using var assembly = AssemblyDefinition.ReadAssembly (assemblyPath, new ReaderParameters { ReadSymbols = false });
-			// Copilot: check a module reference for '__Internal', and bail early if there's none.
 			foreach (var module in assembly.Modules) {
+				if (!module.HasModuleReferences)
+					continue;
+				if (!module.ModuleReferences.Any (mr => mr.Name == "__Internal"))
+					continue;
 				foreach (var type in module.Types) {
 					if (!type.HasMethods)
 						continue;

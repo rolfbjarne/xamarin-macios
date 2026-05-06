@@ -9,6 +9,7 @@ using Registrar;
 using Mono.Tuner;
 using Xamarin.Bundler;
 using Xamarin.Linker;
+using Xamarin.Utils;
 
 #if !LEGACY_TOOLS
 using LinkContext = Xamarin.Bundler.DotNetLinkContext;
@@ -233,6 +234,76 @@ namespace Xamarin.Tuner {
 			}
 
 			return null;
+		}
+
+		public bool HasAvailabilityAttributesShowingUnavailableInSimulator (ICustomAttributeProvider type, MethodDefinition? methodForErrorReporting = null)
+		{
+			if (!App.IsSimulatorBuild)
+				throw ErrorHelper.CreateError (99, "HasAvailabilityAttributesShowingUnavailableInSimulator should not be called when not building for the simulator. Please file an issue at https://github.com/dotnet/macios/issues.");
+
+			if (!type.HasCustomAttributes)
+				return true; // no attributes so say otherwise, so available
+
+			foreach (var attrib in type.CustomAttributes) {
+				if (attrib.AttributeType.Is ("ObjCRuntime", "UnsupportedSimulatorAttribute")) {
+					if (attrib.ConstructorArguments.Count == 1 && attrib.ConstructorArguments [0].Value is string reason) {
+						switch (App.Platform) {
+						case ApplePlatform.iOS:
+							if (string.Equals (reason, "ios", StringComparison.OrdinalIgnoreCase))
+								return true;
+							continue;
+						case ApplePlatform.TVOS:
+							if (string.Equals (reason, "tvos", StringComparison.OrdinalIgnoreCase))
+								return true;
+							continue;
+						default:
+							LinkerConfiguration.Report (LinkerConfiguration.Context, ErrorHelper.CreateWarning (App, 99, methodForErrorReporting, "Unexpected platform '{0}'. Please file an issue at https://github.com/dotnet/macios/issues.", App.Platform));
+							continue;
+						};
+					}
+					LinkerConfiguration.Report (LinkerConfiguration.Context,ErrorHelper.CreateWarning (App, 9999, methodForErrorReporting, "'{0}' is marked with a malformed attribute: {1}. Please file an issue at https://github.com/dotnet/macios/issues.", type.AsString (), attrib.RenderAttribute ()));
+					continue;
+				}
+
+				if (attrib.AttributeType.Is ("ObjCRuntime", "SupportedSimulatorAttribute")) {
+					if (attrib.ConstructorArguments.Count == 1 && attrib.ConstructorArguments [0].Value is string reason) {
+						string os = "";
+						switch (App.Platform) {
+						case ApplePlatform.iOS:
+							if (!reason.StartsWith ("ios", StringComparison.OrdinalIgnoreCase))
+								continue;
+							os = reason.Substring (3);
+							break;
+						case ApplePlatform.TVOS:
+							if (!reason.StartsWith ("tvos", StringComparison.OrdinalIgnoreCase))
+								continue;
+							os = reason.Substring (4);
+							break;
+						default:
+							LinkerConfiguration.Report (LinkerConfiguration.Context, ErrorHelper.CreateWarning (App, 99, methodForErrorReporting, "Unexpected platform '{0}'. Please file an issue at https://github.com/dotnet/macios/issues.", App.Platform));
+							continue;
+						}
+
+						if (string.IsNullOrEmpty (os)) {
+							// empty version: always available in the simulator
+						} else if (Version.TryParse (os, out var version)) {
+							var simulatorVersion = App.DeploymentTarget;
+							if (simulatorVersion is null) {
+								LinkerConfiguration.Report (LinkerConfiguration.Context, ErrorHelper.CreateWarning (App, 99, methodForErrorReporting, "No deployment target available. Please file an issue at https://github.com/dotnet/macios/issues."));
+							} else if (version > simulatorVersion) {
+								return true;
+							}
+						} else {
+							LinkerConfiguration.Report (LinkerConfiguration.Context,ErrorHelper.CreateWarning (App, 9999, methodForErrorReporting, "'{0}' is marked with a malformed attribute (invalid version): {1}. Please file an issue at https://github.com/dotnet/macios/issues.", type.AsString (), attrib.RenderAttribute ()));
+						}
+						continue;
+					}
+					LinkerConfiguration.Report (LinkerConfiguration.Context,ErrorHelper.CreateWarning (App, 9999, methodForErrorReporting, "'{0}' is marked with a malformed attribute: {1}. Please file an issue at https://github.com/dotnet/macios/issues.", type.AsString (), attrib.RenderAttribute ()));
+					continue;
+				}
+			}
+
+			return false;
 		}
 
 #if !LEGACY_TOOLS

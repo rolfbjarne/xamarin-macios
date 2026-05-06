@@ -1,3 +1,4 @@
+using System.Linq;
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using Mono.Linker;
@@ -126,6 +127,21 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 				} else {
 					Report (ErrorHelper.CreateWarning (Configuration.Application, 2264, method, Errors.MX2264, FormatMethod (method), objectiveCClassName));
 					continue;
+				}
+			}
+
+			if (DerivedLinkContext.App.IsSimulatorBuild) {
+				// Check if the Objective-C type is available in the simulator, and if not, don't inline the call to Class.GetHandle (because the app would fail to link)
+				if (DerivedLinkContext.ObjectiveCTypeInfo is null) {
+					// shouldn't really happen?
+					Report (ErrorHelper.CreateWarning (Configuration.Application, 99, method, "No Objective-C type map available. Please file an issue at https://github.com/dotnet/macios/issues. Assuming the managed type for the Objective-C type '{0}' is available in the simulator.", FormatMethod (method), objectiveCClassName));
+				} else if (DerivedLinkContext.ObjectiveCTypeInfo.TryGetValue (objectiveCClassName, out var info)) {
+					if (DerivedLinkContext.HasAvailabilityAttributesShowingUnavailableInSimulator (info.type, method)) {
+						Driver.Log (3, "Not inlining the call to Class.GetHandle (\"{0}\") in method {1} because the type is marked with an attribute indicating it's not available in the simulator.", objectiveCClassName, FormatMethod (method));
+						continue;
+					}
+				} else {
+					Report (ErrorHelper.CreateWarning (Configuration.Application, 9999, method, "Could not find a managed type for the Objective-C type '{0}', assuming the Objective-C type is available in the simulator.", FormatMethod (method), objectiveCClassName));
 				}
 			}
 

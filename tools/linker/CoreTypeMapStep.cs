@@ -29,7 +29,7 @@ namespace MonoTouch.Tuner {
 		protected override string Name { get; } = "CoreTypeMap";
 		protected override int ErrorCode { get; } = 2390;
 
-		List<(string ObjectiveCClassName, string Framework, string Version)> objectiveCTypeInfo = new ();
+		List<(TypeDefinition type, string ObjectiveCClassName, string Framework, string Version)> objectiveCTypeInfo = new ();
 
 		Profile Profile => new Profile (Configuration);
 
@@ -140,6 +140,7 @@ namespace MonoTouch.Tuner {
 		{
 			LinkContext.CachedIsNSObject = cached_isnsobject;
 			LinkContext.IsDirectBindingValue = isdirectbinding_value;
+			LinkContext.ObjectiveCTypeInfo = objectiveCTypeInfo.ToDictionary (v => v.ObjectiveCClassName, v => (v.type, v.Framework, v.Version));
 
 			if (!string.IsNullOrEmpty (Configuration.TypeMapFilePath)) {
 				var sb = new StringBuilder ();
@@ -160,7 +161,7 @@ namespace MonoTouch.Tuner {
 			if (DerivedLinkContext.StaticRegistrar.TryGetExportedTypeName (type, out var exportedName)) {
 				var introduced = DerivedLinkContext.StaticRegistrar.GetSdkIntroducedVersion (type, out _);
 				if (Frameworks.TryGetFramework (App, type, out string? framework))
-					objectiveCTypeInfo.Add ((exportedName, framework, introduced?.ToString () ?? ""));
+					objectiveCTypeInfo.Add ((type, exportedName, framework, introduced?.ToString () ?? ""));
 			}
 
 			// if not, it's a user type, the IsDirectBinding check is required by all ancestors

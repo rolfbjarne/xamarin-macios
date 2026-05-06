@@ -1131,6 +1131,10 @@
 		<value>The call to Class.GetHandle in '{0}' is trying to get the handle for the Objective-C class '{1}', but we couldn't determine whether this class should be statically preserved or not. Since we're in compat mode, we're assuming the class should not be preserved.</value>
 	</data>
 
+	<data name="MX2265" xml:space="preserve">
+		<value>Could not find a managed type for the Objective-C type '{1}' in the call to Class.GetHandle in '{0}', assuming the Objective-C type is available in the simulator.</value>
+	</data>
+
 	<!-- 2300 -> 2399 is used by/reserved for ConfigurationAwareStep subclasses in the linker -->
 
 	<data name="MX_ConfigurationAwareStep" xml:space="preserve">

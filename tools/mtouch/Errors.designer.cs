@@ -3597,6 +3597,15 @@ namespace Xamarin.Bundler {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not find a managed type for the Objective-C type &apos;{1}&apos; in the call to Class.GetHandle in &apos;{0}&apos;, assuming the Objective-C type is available in the simulator..
+        /// </summary>
+        public static string MX2265 {
+            get {
+                return ResourceManager.GetString("MX2265", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Could not {0} the assembly &apos;{1}&apos;.
         /// </summary>
         public static string MX3001 {

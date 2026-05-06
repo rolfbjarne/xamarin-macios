@@ -141,7 +141,7 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 						continue;
 					}
 				} else {
-					Report (ErrorHelper.CreateWarning (Configuration.Application, 9999, method, "Could not find a managed type for the Objective-C type '{0}', assuming the Objective-C type is available in the simulator.", FormatMethod (method), objectiveCClassName));
+					Report (ErrorHelper.CreateWarning (Configuration.Application, 2265, method, Errors.MX2265, FormatMethod (method), objectiveCClassName));
 				}
 			}
 

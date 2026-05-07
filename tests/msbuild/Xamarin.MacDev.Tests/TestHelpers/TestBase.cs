@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
 using Xamarin.MacDev;
 
 using Xamarin.Utils;
@@ -119,13 +120,13 @@ namespace Xamarin.Tests {
 		public void TestFilesDoNotExist (string baseDir, IEnumerable<string> files)
 		{
 			foreach (var v in files.Select (s => Path.Combine (baseDir, s)))
-				Assert.IsFalse (File.Exists (v) || Directory.Exists (v), $"Unexpected file: {v} exists");
+				ClassicAssert.IsFalse (File.Exists (v) || Directory.Exists (v), $"Unexpected file: {v} exists");
 		}
 
 		public void TestFilesExists (string baseDir, string [] files)
 		{
 			foreach (var v in files.Select (s => Path.Combine (baseDir, s)))
-				Assert.IsTrue (File.Exists (v) || Directory.Exists (v), $"Expected file: {v} does not exist");
+				ClassicAssert.IsTrue (File.Exists (v) || Directory.Exists (v), $"Expected file: {v} does not exist");
 		}
 
 		public void TestFilesExists (string [] baseDirs, string [] files)
@@ -134,14 +135,14 @@ namespace Xamarin.Tests {
 				TestFilesExists (baseDirs [0], files);
 			} else {
 				foreach (var file in files)
-					Assert.IsTrue (baseDirs.Select (s => File.Exists (Path.Combine (s, file))).Any (v => v), $"Expected file: {file} does not exist in any of the directories: {string.Join (", ", baseDirs)}");
+					ClassicAssert.IsTrue (baseDirs.Select (s => File.Exists (Path.Combine (s, file))).Any (v => v), $"Expected file: {file} does not exist in any of the directories: {string.Join (", ", baseDirs)}");
 			}
 		}
 
 		public void TestStoryboardC (string path)
 		{
-			Assert.IsTrue (Directory.Exists (path), $"Storyboard {path} does not exist");
-			Assert.IsTrue (File.Exists (Path.Combine (path, "Info.plist")));
+			ClassicAssert.IsTrue (Directory.Exists (path), $"Storyboard {path} does not exist");
+			ClassicAssert.IsTrue (File.Exists (Path.Combine (path, "Info.plist")));
 			TestPList (path, new string [] { "CFBundleVersion", "CFBundleExecutable" });
 		}
 
@@ -153,9 +154,9 @@ namespace Xamarin.Tests {
 				return;
 			}
 			foreach (var x in keys) {
-				Assert.IsTrue (plist.ContainsKey (x), $"Key {x} is not present in {path} Info.plist");
+				ClassicAssert.IsTrue (plist.ContainsKey (x), $"Key {x} is not present in {path} Info.plist");
 				if (plist [x] is PString pstring)
-					Assert.IsNotEmpty (pstring.Value, $"Key {x} is empty in {path} Info.plist");
+					ClassicAssert.IsNotEmpty (pstring.Value, $"Key {x} is empty in {path} Info.plist");
 				else
 					Assert.Fail ($"Key {x} is not a PString in {path} Info.plist");
 			}
@@ -217,12 +218,12 @@ namespace Xamarin.Tests {
 			if (expectedErrorCount != Engine.ErrorEvents.Count) {
 				foreach (var e in Engine.ErrorEvents)
 					Console.WriteLine (e.ToString ());
-				Assert.AreEqual (expectedErrorCount, Engine.ErrorEvents.Count, $"Unexpected number of errors when executing target '{target}'");
+				ClassicAssert.AreEqual (expectedErrorCount, Engine.ErrorEvents.Count, $"Unexpected number of errors when executing target '{target}'");
 			}
 			if (expectedErrorCount > 0) {
-				Assert.AreEqual (1, rv.ExitCode, "ExitCode (failure)");
+				ClassicAssert.AreEqual (1, rv.ExitCode, "ExitCode (failure)");
 			} else {
-				Assert.AreEqual (0, rv.ExitCode, "ExitCode (success)");
+				ClassicAssert.AreEqual (0, rv.ExitCode, "ExitCode (success)");
 			}
 		}
 

@@ -73,9 +73,9 @@ namespace Xamarin.MacDev.Tasks {
 				messages = "\n\t" + string.Join ("\n\t", allEvents.Select ((v) => v.AsString ()).ToArray ());
 			}
 			if (expectedErrorCount != Engine.Logger.ErrorEvents.Count) {
-				Assert.AreEqual (expectedErrorCount, Engine.Logger.ErrorEvents.Count, $"#RunTask-ErrorCount{(string.IsNullOrEmpty (message) ? "" : $" ({message})")}" + messages);
+				ClassicAssert.AreEqual (expectedErrorCount, Engine.Logger.ErrorEvents.Count, $"#RunTask-ErrorCount{(string.IsNullOrEmpty (message) ? "" : $" ({message})")}" + messages);
 			}
-			Assert.AreEqual (expectedErrorCount == 0, rv, $"Failure{(string.IsNullOrEmpty (message) ? "" : $" ({message})")}" + messages);
+			ClassicAssert.AreEqual (expectedErrorCount == 0, rv, $"Failure{(string.IsNullOrEmpty (message) ? "" : $" ({message})")}" + messages);
 		}
 
 		protected string CreateTempFile (string path)

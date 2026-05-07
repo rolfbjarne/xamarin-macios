@@ -119,13 +119,13 @@ namespace Xamarin.Tests {
 		public void TestFilesDoNotExist (string baseDir, IEnumerable<string> files)
 		{
 			foreach (var v in files.Select (s => Path.Combine (baseDir, s)))
-				Assert.IsFalse (File.Exists (v) || Directory.Exists (v), "Unexpected file: {0} exists", v);
+				Assert.IsFalse (File.Exists (v) || Directory.Exists (v), $"Unexpected file: {v} exists");
 		}
 
 		public void TestFilesExists (string baseDir, string [] files)
 		{
 			foreach (var v in files.Select (s => Path.Combine (baseDir, s)))
-				Assert.IsTrue (File.Exists (v) || Directory.Exists (v), "Expected file: {0} does not exist", v);
+				Assert.IsTrue (File.Exists (v) || Directory.Exists (v), $"Expected file: {v} does not exist");
 		}
 
 		public void TestFilesExists (string [] baseDirs, string [] files)
@@ -140,7 +140,7 @@ namespace Xamarin.Tests {
 
 		public void TestStoryboardC (string path)
 		{
-			Assert.IsTrue (Directory.Exists (path), "Storyboard {0} does not exist", path);
+			Assert.IsTrue (Directory.Exists (path), $"Storyboard {path} does not exist");
 			Assert.IsTrue (File.Exists (Path.Combine (path, "Info.plist")));
 			TestPList (path, new string [] { "CFBundleVersion", "CFBundleExecutable" });
 		}
@@ -149,15 +149,15 @@ namespace Xamarin.Tests {
 		{
 			var plist = PDictionary.FromFile (Path.Combine (path, "Info.plist"));
 			if (plist is null) {
-				Assert.Fail ("Could not load Info.plist from {0}", path);
+				Assert.Fail ($"Could not load Info.plist from {path}");
 				return;
 			}
 			foreach (var x in keys) {
-				Assert.IsTrue (plist.ContainsKey (x), "Key {0} is not present in {1} Info.plist", x, path);
+				Assert.IsTrue (plist.ContainsKey (x), $"Key {x} is not present in {path} Info.plist");
 				if (plist [x] is PString pstring)
-					Assert.IsNotEmpty (pstring.Value, "Key {0} is empty in {1} Info.plist", x, path);
+					Assert.IsNotEmpty (pstring.Value, $"Key {x} is empty in {path} Info.plist");
 				else
-					Assert.Fail ("Key {0} is not a PString in {1} Info.plist", x, path);
+					Assert.Fail ($"Key {x} is not a PString in {path} Info.plist");
 			}
 		}
 
@@ -175,7 +175,7 @@ namespace Xamarin.Tests {
 				file = Path.Combine (file, "runtime.nib");
 
 			if (!File.Exists (file))
-				Assert.Fail ("Expected file '{0}' did not exist", file);
+				Assert.Fail ($"Expected file '{file}' did not exist");
 
 			return File.GetLastWriteTimeUtc (file);
 		}
@@ -183,7 +183,7 @@ namespace Xamarin.Tests {
 		protected void Touch (string file)
 		{
 			if (!File.Exists (file))
-				Assert.Fail ("Expected file '{0}' did not exist", file);
+				Assert.Fail ($"Expected file '{file}' did not exist");
 			EnsureFilestampChange ();
 			File.SetLastWriteTimeUtc (file, DateTime.UtcNow);
 			EnsureFilestampChange ();

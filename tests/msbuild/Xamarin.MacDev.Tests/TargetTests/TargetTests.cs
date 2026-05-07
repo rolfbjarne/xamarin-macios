@@ -89,9 +89,9 @@ namespace Xamarin.MacDev.Tasks {
 
 			Assert.IsTrue (File.Exists (optimisedFile), "#1");
 			if (shouldBeDifferent)
-				CollectionAssert.AreNotEqual (File.ReadAllBytes (originalFile), File.ReadAllBytes (optimisedFile), "#2a");
+				Assert.That (File.ReadAllBytes (optimisedFile), Is.Not.EqualTo (File.ReadAllBytes (originalFile)), "#2a");
 			else
-				CollectionAssert.AreEqual (File.ReadAllBytes (originalFile), File.ReadAllBytes (optimisedFile), "#2b");
+				Assert.That (File.ReadAllBytes (optimisedFile), Is.EqualTo (File.ReadAllBytes (originalFile)), "#2b");
 		}
 	}
 }

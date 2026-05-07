@@ -65,7 +65,7 @@ namespace Xamarin.MacDev.Tasks {
 			Assert.IsTrue (ibtool.Execute (), "Execution of IBTool task failed.");
 
 			foreach (var bundleResource in ibtool.BundleResources) {
-				Assert.IsTrue (File.Exists (bundleResource.ItemSpec), "File does not exist: {0}", bundleResource.ItemSpec);
+				Assert.IsTrue (File.Exists (bundleResource.ItemSpec), $"File does not exist: {bundleResource.ItemSpec}");
 				Assert.That (bundleResource.GetMetadata ("LogicalName"), Is.Not.Null.Or.Empty, "The 'LogicalName' metadata must be set.");
 				Assert.That (bundleResource.GetMetadata ("Optimize"), Is.Not.Null.Or.Empty, "The 'Optimize' metadata must be set.");
 
@@ -110,12 +110,12 @@ namespace Xamarin.MacDev.Tasks {
 				var bundleName = bundleResource.GetMetadata ("LogicalName");
 				var tag = bundleResource.GetMetadata ("ResourceTags");
 
-				Assert.IsTrue (File.Exists (bundleResource.ItemSpec), "File does not exist: {0}", bundleResource.ItemSpec);
+				Assert.IsTrue (File.Exists (bundleResource.ItemSpec), $"File does not exist: {bundleResource.ItemSpec}");
 				Assert.That (bundleResource.GetMetadata ("LogicalName"), Is.Not.Null.Or.Empty, "The 'LogicalName' metadata must be set.");
 				Assert.That (bundleResource.GetMetadata ("Optimize"), Is.Not.Null.Or.Empty, "The 'Optimize' metadata must be set.");
 
 				Assert.That (tag, Is.Not.Null.Or.Empty, "The 'ResourceTags' metadata should be set.");
-				Assert.IsTrue (bundleName.Contains (".lproj/" + tag + ".storyboardc/"), "BundleResource does not have the proper ResourceTags set: {0}", bundleName);
+				Assert.IsTrue (bundleName.Contains (".lproj/" + tag + ".storyboardc/"), $"BundleResource does not have the proper ResourceTags set: {bundleName}");
 
 				bundleResources.Add (bundleName);
 			}
@@ -185,7 +185,7 @@ namespace Xamarin.MacDev.Tasks {
 				var bundleName = bundleResource.GetMetadata ("LogicalName");
 				var tag = bundleResource.GetMetadata ("ResourceTags");
 
-				Assert.IsTrue (File.Exists (bundleResource.ItemSpec), "File does not exist: {0}", bundleResource.ItemSpec);
+				Assert.IsTrue (File.Exists (bundleResource.ItemSpec), $"File does not exist: {bundleResource.ItemSpec}");
 				Assert.That (bundleResource.GetMetadata ("LogicalName"), Is.Not.Null.Or.Empty, "The 'LogicalName' metadata must be set.");
 				Assert.That (bundleResource.GetMetadata ("Optimize"), Is.Not.Null.Or.Empty, "The 'Optimize' metadata must be set.");
 

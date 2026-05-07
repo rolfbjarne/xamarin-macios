@@ -272,9 +272,10 @@ namespace Xamarin.Tuner {
 						default:
 							LinkerConfiguration.Report (LinkerConfiguration.Context, ErrorHelper.CreateWarning (App, 99, methodForErrorReporting, "Unexpected platform '{0}'. Please file an issue at https://github.com/dotnet/macios/issues.", App.Platform));
 							continue;
-						};
+						}
+						;
 					}
-					LinkerConfiguration.Report (LinkerConfiguration.Context,ErrorHelper.CreateWarning (App, 9999, methodForErrorReporting, "'{0}' is marked with a malformed attribute: {1}. Please file an issue at https://github.com/dotnet/macios/issues.", type.AsString (), attrib.RenderAttribute ()));
+					LinkerConfiguration.Report (LinkerConfiguration.Context, ErrorHelper.CreateWarning (App, 9999, methodForErrorReporting, "'{0}' is marked with a malformed attribute: {1}. Please file an issue at https://github.com/dotnet/macios/issues.", type.AsString (), attrib.RenderAttribute ()));
 					continue;
 				}
 
@@ -307,11 +308,11 @@ namespace Xamarin.Tuner {
 								return true;
 							}
 						} else {
-							LinkerConfiguration.Report (LinkerConfiguration.Context,ErrorHelper.CreateWarning (App, 9999, methodForErrorReporting, "'{0}' is marked with a malformed attribute (invalid version): {1}. Please file an issue at https://github.com/dotnet/macios/issues.", type.AsString (), attrib.RenderAttribute ()));
+							LinkerConfiguration.Report (LinkerConfiguration.Context, ErrorHelper.CreateWarning (App, 9999, methodForErrorReporting, "'{0}' is marked with a malformed attribute (invalid version): {1}. Please file an issue at https://github.com/dotnet/macios/issues.", type.AsString (), attrib.RenderAttribute ()));
 						}
 						continue;
 					}
-					LinkerConfiguration.Report (LinkerConfiguration.Context,ErrorHelper.CreateWarning (App, 9999, methodForErrorReporting, "'{0}' is marked with a malformed attribute: {1}. Please file an issue at https://github.com/dotnet/macios/issues.", type.AsString (), attrib.RenderAttribute ()));
+					LinkerConfiguration.Report (LinkerConfiguration.Context, ErrorHelper.CreateWarning (App, 9999, methodForErrorReporting, "'{0}' is marked with a malformed attribute: {1}. Please file an issue at https://github.com/dotnet/macios/issues.", type.AsString (), attrib.RenderAttribute ()));
 					continue;
 				}
 			}

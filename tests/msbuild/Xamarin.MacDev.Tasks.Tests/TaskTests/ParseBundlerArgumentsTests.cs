@@ -236,7 +236,7 @@ namespace Xamarin.MacDev.Tasks {
 			var task = CreateTask<CustomParseBundlerArguments> ();
 			task.ExtraArgs = input;
 			ExecuteTask (task, message: input);
-			CollectionAssert.AreEquivalent (output, task.CustomLinkFlags.Select (v => v.ItemSpec).ToArray (), string.Join (" ", output));
+			Assert.That (task.CustomLinkFlags.Select (v => v.ItemSpec).ToArray (), Is.EquivalentTo (output), string.Join (" ", output));
 		}
 
 		[TestCase ("-v", "1")]

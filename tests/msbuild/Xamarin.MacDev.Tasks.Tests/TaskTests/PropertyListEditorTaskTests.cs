@@ -14,7 +14,7 @@ namespace Xamarin.MacDev.Tasks {
 			Assert.AreEqual (expected.Count, array.Count, "Unexpected number of array elements");
 
 			for (int i = 0; i < expected.Count; i++) {
-				Assert.AreEqual (expected [i].Type, array [i].Type, "Type-mismatch for array element {0}", i);
+				Assert.AreEqual (expected [i].Type, array [i].Type, $"Type-mismatch for array element {i}");
 				CheckValue (array [i], expected [i]);
 			}
 		}
@@ -22,10 +22,10 @@ namespace Xamarin.MacDev.Tasks {
 		static void CheckDictionary (PDictionary dict, PDictionary expected)
 		{
 			foreach (var kvp in expected) {
-				Assert.IsTrue (dict.TryGetValue (kvp.Key, out PObject? value), "Expected key '{0}'", kvp.Key);
+				Assert.IsTrue (dict.TryGetValue (kvp.Key, out PObject? value), $"Expected key '{kvp.Key}'");
 				if (value is null)
 					continue;
-				Assert.AreEqual (kvp.Value.Type, value.Type, "Type-mismatch for '{0}'", kvp.Key);
+				Assert.AreEqual (kvp.Value.Type, value.Type, $"Type-mismatch for '{kvp.Key}'");
 
 				CheckValue (value, kvp.Value);
 			}

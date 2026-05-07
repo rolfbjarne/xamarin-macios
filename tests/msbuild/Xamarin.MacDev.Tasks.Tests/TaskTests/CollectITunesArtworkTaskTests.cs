@@ -69,10 +69,10 @@ namespace Xamarin.MacDev.Tasks {
 			};
 
 			ExecuteTask (task);
-			Assert.AreEqual (2, task.ITunesArtworkWithLogicalNames.Length, "ITunesArtworkWithLogicalNames.Count");
+			ClassicAssert.AreEqual (2, task.ITunesArtworkWithLogicalNames.Length, "ITunesArtworkWithLogicalNames.Count");
 			for (var i = 0; i < task.ITunesArtworkWithLogicalNames.Length; i++) {
-				Assert.AreEqual (Path.GetFileNameWithoutExtension (task.ITunesArtwork [i].GetMetadata ("FullPath")), task.ITunesArtworkWithLogicalNames [i].GetMetadata ("LogicalName"), $"LogicalName #{i}");
-				Assert.AreEqual ("false", task.ITunesArtworkWithLogicalNames [i].GetMetadata ("Optimize"), $"Optimize #{i}");
+				ClassicAssert.AreEqual (Path.GetFileNameWithoutExtension (task.ITunesArtwork [i].GetMetadata ("FullPath")), task.ITunesArtworkWithLogicalNames [i].GetMetadata ("LogicalName"), $"LogicalName #{i}");
+				ClassicAssert.AreEqual ("false", task.ITunesArtworkWithLogicalNames [i].GetMetadata ("Optimize"), $"Optimize #{i}");
 			}
 
 		}

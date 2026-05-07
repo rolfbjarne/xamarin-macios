@@ -95,7 +95,7 @@ namespace Xamarin.MacDev.Tasks {
 			unzipArguments.Add (targetDirectory);
 			unzipArguments.Add (zipArchive);
 			var rv = Execution.RunAsync ("unzip", unzipArguments).Result;
-			Assert.AreEqual (0, rv.ExitCode, "ExitCode\n" + rv.Output.MergedOutput);
+			ClassicAssert.AreEqual (0, rv.ExitCode, "ExitCode\n" + rv.Output.MergedOutput);
 		}
 
 		void AssertResourceDirectory (string directory, bool symlinks)
@@ -104,22 +104,22 @@ namespace Xamarin.MacDev.Tasks {
 			foreach (var file in allFiles)
 				Console.WriteLine (file);
 			if (symlinks) {
-				Assert.AreEqual (7, allFiles.Length, "Length");
+				ClassicAssert.AreEqual (7, allFiles.Length, "Length");
 			} else {
-				Assert.AreEqual (5, allFiles.Length, "Length");
+				ClassicAssert.AreEqual (5, allFiles.Length, "Length");
 			}
-			Assert.AreEqual ("ABCDEFGHIJKLMAAA", File.ReadAllText (Path.Combine (directory, "A.txt")), "A.txt");
-			Assert.AreEqual ("ABCDEFGHIJKLMBBB", File.ReadAllText (Path.Combine (directory, "B.txt")), "B.txt");
-			Assert.AreEqual ("ABCDEFGHIJKLMCCC", File.ReadAllText (Path.Combine (directory, "C.framework/C.txt")), "C.txt");
+			ClassicAssert.AreEqual ("ABCDEFGHIJKLMAAA", File.ReadAllText (Path.Combine (directory, "A.txt")), "A.txt");
+			ClassicAssert.AreEqual ("ABCDEFGHIJKLMBBB", File.ReadAllText (Path.Combine (directory, "B.txt")), "B.txt");
+			ClassicAssert.AreEqual ("ABCDEFGHIJKLMCCC", File.ReadAllText (Path.Combine (directory, "C.framework/C.txt")), "C.txt");
 			if (symlinks) {
 				var linkToCPath = Path.Combine (directory, "C.framework/LinkToC.txt");
-				Assert.AreEqual ("ABCDEFGHIJKLMCCC", File.ReadAllText (linkToCPath), "LinkToC.txt");
-				Assert.IsTrue (PathUtils.IsSymlink (linkToCPath), "LinkToC.txt - IsSymlink");
-				Assert.AreEqual ("C.txt", PathUtils.GetSymlinkTarget (linkToCPath), "LinkToC.txt - IsSymlink target");
+				ClassicAssert.AreEqual ("ABCDEFGHIJKLMCCC", File.ReadAllText (linkToCPath), "LinkToC.txt");
+				ClassicAssert.IsTrue (PathUtils.IsSymlink (linkToCPath), "LinkToC.txt - IsSymlink");
+				ClassicAssert.AreEqual ("C.txt", PathUtils.GetSymlinkTarget (linkToCPath), "LinkToC.txt - IsSymlink target");
 
 				var linkToNowherePath = Path.Combine (directory, "C.framework/LinkToNowhere.txt");
 				Assert.Throws<FileNotFoundException> (() => File.ReadAllText (linkToNowherePath), "LinkToNowhere.txt");
-				Assert.AreEqual ("Nowhere.txt", PathUtils.GetSymlinkTarget (linkToNowherePath), "LinkToNowhere.txt - IsSymlink target");
+				ClassicAssert.AreEqual ("Nowhere.txt", PathUtils.GetSymlinkTarget (linkToNowherePath), "LinkToNowhere.txt - IsSymlink target");
 			}
 
 			var manifest = @"<BindingAssembly>
@@ -157,7 +157,7 @@ namespace Xamarin.MacDev.Tasks {
 		<WeakFrameworks></WeakFrameworks>
 	</NativeReference>
 </BindingAssembly>";
-			Assert.AreEqual (manifest, File.ReadAllText (Path.Combine (directory, "manifest")), "Manifest");
+			ClassicAssert.AreEqual (manifest, File.ReadAllText (Path.Combine (directory, "manifest")), "Manifest");
 		}
 
 		ITaskItem [] CreateNativeReferences (string tmpdir, bool symlinks)

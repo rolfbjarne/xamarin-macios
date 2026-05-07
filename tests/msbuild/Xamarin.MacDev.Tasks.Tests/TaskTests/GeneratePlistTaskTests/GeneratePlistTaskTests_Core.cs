@@ -68,16 +68,16 @@ namespace Xamarin.MacDev.Tasks {
 		public void PlistMissing ()
 		{
 			File.Delete (Task.AppManifest!.ItemSpec);
-			Assert.IsTrue (Task.Execute (), "#1");
+			ClassicAssert.IsTrue (Task.Execute (), "#1");
 			Assert.That (Task.CompiledAppManifest!.ItemSpec, Does.Exist, "#2");
 		}
 
 		[Test]
 		public void NormalPlist ()
 		{
-			Assert.IsTrue (Task.Execute (), "#1");
-			Assert.IsNotNull (Task.CompiledAppManifest?.ItemSpec, "#2");
-			Assert.IsTrue (File.Exists (Task.CompiledAppManifest!.ItemSpec), "#3");
+			ClassicAssert.IsTrue (Task.Execute (), "#1");
+			ClassicAssert.IsNotNull (Task.CompiledAppManifest?.ItemSpec, "#2");
+			ClassicAssert.IsTrue (File.Exists (Task.CompiledAppManifest!.ItemSpec), "#3");
 		}
 
 		[Test]
@@ -85,7 +85,7 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			Plist.Remove ("CFBundleIdentifier");
 			Plist.Save (Task.AppManifest!.ItemSpec);
-			Assert.IsTrue (Task.Execute (), "#1");
+			ClassicAssert.IsTrue (Task.Execute (), "#1");
 		}
 
 		[Test]
@@ -93,7 +93,7 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			Plist.Remove ("CFBundleDisplayName");
 			Plist.Save (Task.AppManifest!.ItemSpec);
-			Assert.IsTrue (Task.Execute (), "#1");
+			ClassicAssert.IsTrue (Task.Execute (), "#1");
 		}
 
 		[Test]
@@ -116,28 +116,28 @@ namespace Xamarin.MacDev.Tasks {
 		[Test]
 		public void BundleDevelopmentRegion ()
 		{
-			Assert.IsFalse (CompiledPlist.ContainsKey (ManifestKeys.CFBundleDevelopmentRegion), "#1");
+			ClassicAssert.IsFalse (CompiledPlist.ContainsKey (ManifestKeys.CFBundleDevelopmentRegion), "#1");
 		}
 
 		[Test]
 		public virtual void BundleExecutable ()
 		{
 			Assert.That (CompiledPlist.ContainsKey (ManifestKeys.CFBundleExecutable), "#1");
-			Assert.AreEqual (CompiledPlist.Get<PString> (ManifestKeys.CFBundleExecutable)?.Value, assemblyName, "#2");
+			ClassicAssert.AreEqual (CompiledPlist.Get<PString> (ManifestKeys.CFBundleExecutable)?.Value, assemblyName, "#2");
 		}
 
 		[Test]
 		public virtual void BundleName ()
 		{
 			Assert.That (CompiledPlist.ContainsKey (ManifestKeys.CFBundleName), "#1");
-			Assert.AreEqual (CompiledPlist.Get<PString> (ManifestKeys.CFBundleName)?.Value, appBundleName, "#2");
+			ClassicAssert.AreEqual (CompiledPlist.Get<PString> (ManifestKeys.CFBundleName)?.Value, appBundleName, "#2");
 		}
 
 		[Test]
 		public virtual void BundleIdentifier ()
 		{
 			Assert.That (CompiledPlist.ContainsKey (ManifestKeys.CFBundleIdentifier), "#1");
-			Assert.AreEqual (CompiledPlist.Get<PString> (ManifestKeys.CFBundleIdentifier)?.Value, bundleIdentifier, "#2");
+			ClassicAssert.AreEqual (CompiledPlist.Get<PString> (ManifestKeys.CFBundleIdentifier)?.Value, bundleIdentifier, "#2");
 		}
 
 		[Test]
@@ -151,14 +151,14 @@ namespace Xamarin.MacDev.Tasks {
 		public virtual void BundlePackageType ()
 		{
 			Assert.That (CompiledPlist.ContainsKey (ManifestKeys.CFBundlePackageType), "#1");
-			Assert.AreEqual (CompiledPlist.Get<PString> (ManifestKeys.CFBundlePackageType)?.Value, "APPL", "#2");
+			ClassicAssert.AreEqual (CompiledPlist.Get<PString> (ManifestKeys.CFBundlePackageType)?.Value, "APPL", "#2");
 		}
 
 		[Test]
 		public virtual void BundleSignature ()
 		{
 			Assert.That (CompiledPlist.ContainsKey (ManifestKeys.CFBundleSignature), "#1");
-			Assert.AreEqual (CompiledPlist.Get<PString> (ManifestKeys.CFBundleSignature)?.Value, "????", "#2");
+			ClassicAssert.AreEqual (CompiledPlist.Get<PString> (ManifestKeys.CFBundleSignature)?.Value, "????", "#2");
 		}
 
 		[Test]

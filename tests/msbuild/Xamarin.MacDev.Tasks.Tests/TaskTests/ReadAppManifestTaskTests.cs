@@ -35,7 +35,7 @@ namespace Xamarin.MacDev.Tasks {
 				plist.SetMinimumSystemVersion ("10.15.2");
 			});
 			ExecuteTask (task);
-			Assert.AreEqual ("13.3", task.MinimumOSVersion, "MinimumOSVersion");
+			ClassicAssert.AreEqual ("13.3", task.MinimumOSVersion, "MinimumOSVersion");
 		}
 
 		[Test]

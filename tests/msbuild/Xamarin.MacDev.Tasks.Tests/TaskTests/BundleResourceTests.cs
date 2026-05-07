@@ -38,7 +38,7 @@ namespace Xamarin.MacDev.Tasks {
 		public void GetVirtualProjectPathTest ()
 		{
 			Assert.Multiple (() => {
-				Assert.AreEqual ("Archer_Attack.atlas/archer_attack_0001.png",
+				ClassicAssert.AreEqual ("Archer_Attack.atlas/archer_attack_0001.png",
 					BundleResource.GetVirtualProjectPath (
 						new ResourceTask {
 							BuildEngine = new TestEngine (),
@@ -51,7 +51,7 @@ namespace Xamarin.MacDev.Tasks {
 						)),
 					"A");
 
-				Assert.AreEqual ("Archer_Attack.atlas/archer_attack_0001.png",
+				ClassicAssert.AreEqual ("Archer_Attack.atlas/archer_attack_0001.png",
 					BundleResource.GetVirtualProjectPath (
 						new ResourceTask {
 							BuildEngine = new TestEngine (),

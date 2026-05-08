@@ -1,6 +1,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 
+using Xamarin.Utils;
+
 #nullable enable
 
 namespace Registrar {
@@ -8,7 +10,7 @@ namespace Registrar {
 		[return: NotNullIfNotNull (nameof (getterSelector))]
 		internal static string? CreateSetterSelector (string? getterSelector)
 		{
-			if (string.IsNullOrEmpty (getterSelector))
+			if (StringUtils.IsNullOrEmpty (getterSelector))
 				return getterSelector;
 
 			var first = (int) getterSelector [0];
@@ -21,7 +23,7 @@ namespace Registrar {
 		[return: NotNullIfNotNull (nameof (name))]
 		public static string? SanitizeObjectiveCName (string? name)
 		{
-			if (string.IsNullOrEmpty (name))
+			if (StringUtils.IsNullOrEmpty (name))
 				return name;
 
 			StringBuilder? sb = null;

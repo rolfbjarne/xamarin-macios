@@ -117,7 +117,7 @@ namespace Xamarin.MacDev.Tasks {
 			task.MarshalManagedExceptionMode = existingValue;
 			task.ExtraArgs = input;
 			ExecuteTask (task, message: input);
-			Assert.That (task.MarshalManagedExceptionMode, Is.EqualTo (output).Within (output));
+			Assert.That (task.MarshalManagedExceptionMode, Is.EqualTo (output), output);
 		}
 
 		[Test]
@@ -138,7 +138,7 @@ namespace Xamarin.MacDev.Tasks {
 			task.MarshalObjectiveCExceptionMode = existingValue;
 			task.ExtraArgs = input;
 			ExecuteTask (task, message: input);
-			Assert.That (task.MarshalObjectiveCExceptionMode, Is.EqualTo (output).Within (output));
+			Assert.That (task.MarshalObjectiveCExceptionMode, Is.EqualTo (output), output);
 		}
 
 		[Test]
@@ -156,7 +156,7 @@ namespace Xamarin.MacDev.Tasks {
 			var task = CreateTask<CustomParseBundlerArguments> ();
 			task.ExtraArgs = input;
 			ExecuteTask (task, message: input);
-			Assert.That (task.Optimize, Is.EqualTo (output).Within (output));
+			Assert.That (task.Optimize, Is.EqualTo (output), output);
 		}
 
 		[TestCase ("--registrar", "")]
@@ -172,7 +172,7 @@ namespace Xamarin.MacDev.Tasks {
 			var task = CreateTask<CustomParseBundlerArguments> ();
 			task.ExtraArgs = input;
 			ExecuteTask (task, message: input);
-			Assert.That (task.Registrar, Is.EqualTo (output).Within (output));
+			Assert.That (task.Registrar, Is.EqualTo (output), output);
 		}
 
 		[TestCase ("--xml", null, "")]
@@ -219,7 +219,7 @@ namespace Xamarin.MacDev.Tasks {
 			var task = CreateTask<CustomParseBundlerArguments> ();
 			task.ExtraArgs = input;
 			ExecuteTask (task, message: input);
-			Assert.That (task.CustomBundleName, Is.EqualTo (output).Within (output));
+			Assert.That (task.CustomBundleName, Is.EqualTo (output), output);
 		}
 
 		[TestCase ("--gcc_flags -dead_strip", new string [] { "-dead_strip" })]
@@ -264,7 +264,7 @@ namespace Xamarin.MacDev.Tasks {
 			var task = CreateTask<CustomParseBundlerArguments> ();
 			task.ExtraArgs = input;
 			ExecuteTask (task, message: input);
-			Assert.That (task.NoWarn, Is.EqualTo (output).Within (output));
+			Assert.That (task.NoWarn, Is.EqualTo (output), output);
 		}
 
 		[TestCase ("--warnaserror", "-1")]
@@ -278,7 +278,7 @@ namespace Xamarin.MacDev.Tasks {
 			var task = CreateTask<CustomParseBundlerArguments> ();
 			task.ExtraArgs = input;
 			ExecuteTask (task, message: input);
-			Assert.That (task.WarnAsError, Is.EqualTo (output).Within (output));
+			Assert.That (task.WarnAsError, Is.EqualTo (output), output);
 		}
 	}
 }

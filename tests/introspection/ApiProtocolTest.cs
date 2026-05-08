@@ -940,7 +940,7 @@ namespace Introspection {
 		void CheckProtocol (string protocolName, Action<Type, IntPtr, bool> action)
 		{
 			IntPtr protocol = Runtime.GetProtocol (protocolName);
-			Assert.AreNotEqual (protocol, IntPtr.Zero, protocolName);
+			ClassicAssert.AreNotEqual (protocol, IntPtr.Zero, protocolName);
 
 			int n = 0;
 			foreach (Type t in Assembly.GetTypes ()) {
@@ -975,7 +975,7 @@ namespace Introspection {
 					// FIXME: and implement the .ctor(NSCoder)
 				}
 			});
-			Assert.AreEqual (Errors, 0, "{0} types conforms to NSCoding but does not implement INSCoding: {1}", Errors, String.Join ('\n', list));
+			ClassicAssert.AreEqual (Errors, 0, "{0} types conforms to NSCoding but does not implement INSCoding: {1}", Errors, String.Join ('\n', list));
 		}
 
 		// [Test] -> iOS 6.0+ and Mountain Lion (10.8) +
@@ -992,7 +992,7 @@ namespace Introspection {
 					}
 				}
 			});
-			Assert.AreEqual (Errors, 0, "{0} types conforms to NSSecureCoding but does not implement INSSecureCoding: {1}", Errors, String.Join ('\n', list));
+			ClassicAssert.AreEqual (Errors, 0, "{0} types conforms to NSSecureCoding but does not implement INSSecureCoding: {1}", Errors, String.Join ('\n', list));
 		}
 
 		bool SupportsSecureCoding (Type type)
@@ -1036,11 +1036,11 @@ namespace Introspection {
 				} else if (type.IsPublic && supports) {
 					// there are internal types, e.g. DataWrapper : NSData, that subclass NSSecureCoding-types without
 					// [re-]declaring their allegiance - but we can live with those small betrayals
-					Assert.IsFalse (NSSecureCoding.SupportsSecureCoding (type), "{0} !SupportsSecureCoding", type.Name);
+					ClassicAssert.IsFalse (NSSecureCoding.SupportsSecureCoding (type), "{0} !SupportsSecureCoding", type.Name);
 					ReportError ("SupportsSecureCoding returns true but {0} does not conforms to NSSecureCoding", type.Name);
 				}
 			});
-			Assert.AreEqual (Errors, 0, "{0} types conforms to NSCoding but does not implement INSSecureCoding", Errors);
+			ClassicAssert.AreEqual (Errors, 0, "{0} types conforms to NSCoding but does not implement INSSecureCoding", Errors);
 		}
 
 		[Test]
@@ -1059,7 +1059,7 @@ namespace Introspection {
 					}
 				}
 			});
-			Assert.AreEqual (Errors, 0, "{0} types conforms to NSCopying but does not implement INSCopying: {1}", Errors, String.Join ('\n', list));
+			ClassicAssert.AreEqual (Errors, 0, "{0} types conforms to NSCopying but does not implement INSCopying: {1}", Errors, String.Join ('\n', list));
 		}
 
 		[Test]
@@ -1078,7 +1078,7 @@ namespace Introspection {
 					}
 				}
 			});
-			Assert.AreEqual (Errors, 0, "{0} types conforms to NSMutableCopying but does not implement INSMutableCopying: {1}", Errors, String.Join ('\n', list));
+			ClassicAssert.AreEqual (Errors, 0, "{0} types conforms to NSMutableCopying but does not implement INSMutableCopying: {1}", Errors, String.Join ('\n', list));
 		}
 
 		[Test]

@@ -758,7 +758,7 @@ namespace Introspection {
 			foreach (Type t in types)
 				AttributeTypo (t, ref totalErrors);
 
-			Assert.AreEqual (0, totalErrors, "Attributes have typos!");
+			ClassicAssert.AreEqual (0, totalErrors, "Attributes have typos!");
 		}
 
 		void AttributeTypo (Type t, ref int totalErrors)
@@ -855,7 +855,7 @@ namespace Introspection {
 			foreach (var typo in unused)
 				Console.WriteLine ("Unused entry \"{0}\"", typo);
 #endif
-			Assert.AreEqual (0, totalErrors, "Typos!");
+			ClassicAssert.AreEqual (0, totalErrors, "Typos!");
 		}
 
 		string? GetMessage (object attribute)
@@ -1029,7 +1029,7 @@ namespace Introspection {
 				switch (fi.Name) {
 				case "Version":
 				case "SdkVersion":
-					Assert.True (Version.TryParse (s, out _), fi.Name);
+					ClassicAssert.True (Version.TryParse (s, out _), fi.Name);
 					break;
 #if !XAMCORE_5_0
 				case "AssetsLibraryLibrary":
@@ -1043,7 +1043,7 @@ namespace Introspection {
 				case "MLComputeLibrary":
 					// Xcode 12 beta 2 does not ship these framework/headers for the simulators
 					if (TestRuntime.IsDevice)
-						Assert.True (CheckLibrary (s), fi.Name);
+						ClassicAssert.True (CheckLibrary (s), fi.Name);
 					break;
 #endif
 #if __TVOS__
@@ -1092,7 +1092,7 @@ namespace Introspection {
 						if (fi.Name == "AutomaticAssessmentConfigurationLibrary" && !TestRuntime.CheckXcodeVersion (11, 4))
 							continue;
 #endif
-						Assert.True (CheckLibrary (s), fi.Name);
+						ClassicAssert.True (CheckLibrary (s), fi.Name);
 					} else {
 						Assert.Fail ($"Unknown '{fi.Name}' field cannot be verified - please fix me!");
 					}

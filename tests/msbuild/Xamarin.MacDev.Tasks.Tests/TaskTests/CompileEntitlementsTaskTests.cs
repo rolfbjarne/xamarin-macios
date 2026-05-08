@@ -195,7 +195,7 @@ namespace Xamarin.MacDev.Tasks {
 			ExecuteTask (task);
 			var compiled = PDictionary.FromFile (compiledEntitlements)!;
 			Assert.That (compiled.GetString ("com.xamarin.custom.entitlement")?.Value, Is.EqualTo (value ?? string.Empty), "#1");
-			Assert.That (Engine.Logger.MessageEvents.Any (v => v.Message?.Contains ("The app requests the entitlement 'com.xamarin.custom.entitlement', but provisioning profile WildCardMacAppDevelopment does not grant this entitlement. This is probably not OK.") == true, Is.True), "custom entitlement");
+			Assert.That (Engine.Logger.MessageEvents.Any (v => v.Message?.Contains ("The app requests the entitlement 'com.xamarin.custom.entitlement', but provisioning profile WildCardMacAppDevelopment does not grant this entitlement. This is probably not OK.") == true), Is.True, "custom entitlement");
 		}
 
 		[Test]
@@ -218,7 +218,7 @@ namespace Xamarin.MacDev.Tasks {
 			var array = compiled.GetArray ("com.xamarin.custom.entitlement");
 			Assert.That (array, Is.Not.Null, "array");
 			Assert.That (array.ToStringArray (), Is.EqualTo (new string [] { "A", "B", "C" }), "array contents");
-			Assert.That (Engine.Logger.MessageEvents.Any (v => v.Message?.Contains ("The app requests the entitlement 'com.xamarin.custom.entitlement', but provisioning profile WildCardMacAppDevelopment does not grant this entitlement. This is probably not OK.") == true, Is.True), "custom entitlement");
+			Assert.That (Engine.Logger.MessageEvents.Any (v => v.Message?.Contains ("The app requests the entitlement 'com.xamarin.custom.entitlement', but provisioning profile WildCardMacAppDevelopment does not grant this entitlement. This is probably not OK.") == true), Is.True, "custom entitlement");
 		}
 
 		[Test]

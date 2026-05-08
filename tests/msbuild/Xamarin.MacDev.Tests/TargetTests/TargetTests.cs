@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Mono.Cecil;
 using NUnit.Framework;
-using NUnit.Framework.Legacy;
 using Xamarin.MacDev;
 
 using Xamarin.Tests;
@@ -26,14 +25,14 @@ namespace Xamarin.MacDev.Tasks {
 			// .NET: we don't have a test that verifies that the Clean target works as expected, this needs to be added before we can remove this test.
 
 			RunTarget (MonoTouchProject, TargetName.Clean);
-			ClassicAssert.IsFalse (Directory.Exists (MonoTouchProjectBinPath), "#1a");
-			ClassicAssert.IsFalse (Directory.Exists (MonoTouchProjectObjPath), "#1b");
+			Assert.That (Directory.Exists (MonoTouchProjectBinPath), Is.False, "#1a");
+			Assert.That (Directory.Exists (MonoTouchProjectObjPath), Is.False, "#1b");
 
 			RunTarget (MonoTouchProject, TargetName.Build);
 			RunTarget (MonoTouchProject, TargetName.Clean);
-			ClassicAssert.IsEmpty (Directory.GetDirectories (MonoTouchProjectBinPath, "*.dSYM", SearchOption.AllDirectories), "#2a");
-			ClassicAssert.IsEmpty (Directory.GetFiles (MonoTouchProjectBinPath, "*.*", SearchOption.AllDirectories), "#2b");
-			ClassicAssert.IsFalse (Directory.Exists (MonoTouchProjectObjPath), "#2c");
+			Assert.That (Directory.GetDirectories (MonoTouchProjectBinPath, "*.dSYM", SearchOption.AllDirectories), Is.Empty, "#2a");
+			Assert.That (Directory.GetFiles (MonoTouchProjectBinPath, "*.*", SearchOption.AllDirectories), Is.Empty, "#2b");
+			Assert.That (Directory.Exists (MonoTouchProjectObjPath), Is.False, "#2c");
 		}
 
 		[Test]
@@ -44,13 +43,13 @@ namespace Xamarin.MacDev.Tasks {
 			// .NET: we don't have a test that verifies that the Clean target works as expected, this needs to be added before we can remove this test.
 
 			RunTarget (LibraryProject, TargetName.Clean);
-			ClassicAssert.IsFalse (Directory.Exists (LibraryProjectBinPath), "#1a");
-			ClassicAssert.IsFalse (Directory.Exists (LibraryProjectObjPath), "#1b");
+			Assert.That (Directory.Exists (LibraryProjectBinPath), Is.False, "#1a");
+			Assert.That (Directory.Exists (LibraryProjectObjPath), Is.False, "#1b");
 
 			RunTarget (LibraryProject, TargetName.Build);
 			RunTarget (LibraryProject, TargetName.Clean);
-			ClassicAssert.IsEmpty (Directory.GetFiles (LibraryProjectBinPath, "*.*", SearchOption.AllDirectories), "#2a");
-			ClassicAssert.IsFalse (Directory.Exists (LibraryProjectObjPath), "#2b");
+			Assert.That (Directory.GetFiles (LibraryProjectBinPath, "*.*", SearchOption.AllDirectories), Is.Empty, "#2a");
+			Assert.That (Directory.Exists (LibraryProjectObjPath), Is.False, "#2b");
 		}
 
 		[Test]
@@ -88,7 +87,7 @@ namespace Xamarin.MacDev.Tasks {
 
 			RunTarget (MonoTouchProject, TargetName.Build);
 
-			ClassicAssert.IsTrue (File.Exists (optimisedFile), "#1");
+			Assert.That (File.Exists (optimisedFile), Is.True, "#1");
 			if (shouldBeDifferent)
 				Assert.That (File.ReadAllBytes (optimisedFile), Is.Not.EqualTo (File.ReadAllBytes (originalFile)), "#2a");
 			else

@@ -26,14 +26,14 @@ namespace Xamarin.MacDev.Tasks {
 			base.BundleExecutable ();
 			// Adding ".app" to the assembly name isn't allowed because iOS may fail to launch the app.
 			Task.BundleExecutable = "AssemblyName.app";
-			ClassicAssert.IsFalse (Task.Execute (), "#1");
+			Assert.That (Task.Execute (), Is.False, "#1");
 		}
 
 		[Test]
 		public override void BundleName ()
 		{
 			Assert.That (CompiledPlist.ContainsKey (ManifestKeys.CFBundleName), "#1");
-			ClassicAssert.AreEqual (CompiledPlist.Get<PString> (ManifestKeys.CFBundleName)?.Value, appBundleName, "#2");
+			Assert.That (appBundleName, Is.EqualTo (CompiledPlist.Get<PString> (ManifestKeys.CFBundleName)?.Value), "#2");
 		}
 
 		[Test]
@@ -41,10 +41,10 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			PArray? array;
 
-			ClassicAssert.IsTrue (CompiledPlist.TryGetValue (ManifestKeys.UIRequiredDeviceCapabilities, out array), "#1");
-			ClassicAssert.IsTrue (array?.OfType<PString> ().Any (x => x.Value == "arm64") == true, "#2");
-			ClassicAssert.IsFalse (array?.OfType<PString> ().Any (x => x.Value == "armv6") == true, "#3");
-			ClassicAssert.IsFalse (array?.OfType<PString> ().Any (x => x.Value == "armv7") == true, "#4");
+			Assert.That (CompiledPlist.TryGetValue (ManifestKeys.UIRequiredDeviceCapabilities, out array), Is.True, "#1");
+			Assert.That (array?.OfType<PString> ().Any (x => x.Value == "arm64", Is.True) == true, "#2");
+			Assert.That (array?.OfType<PString> ().Any (x => x.Value == "armv6", Is.False) == true, "#3");
+			Assert.That (array?.OfType<PString> ().Any (x => x.Value == "armv7", Is.False) == true, "#4");
 		}
 	}
 }

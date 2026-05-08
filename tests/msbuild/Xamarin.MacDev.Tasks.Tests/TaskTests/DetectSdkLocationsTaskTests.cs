@@ -18,7 +18,7 @@ namespace Xamarin.MacDev.Tasks {
 			task.TargetFrameworkMoniker = TargetFramework.DotNet_iOS_String;
 			ExecuteTask (task, 1);
 
-			ClassicAssert.AreEqual ("XYZ", task.XamarinSdkRoot, "#1");
+			Assert.That (task.XamarinSdkRoot, Is.EqualTo ("XYZ"), "#1");
 		}
 	}
 }

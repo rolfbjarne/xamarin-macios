@@ -198,7 +198,7 @@ namespace Xamarin.MacDev.Tasks {
 				task.XmlDefinitions = existing.Split (new char [] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select (v => new TaskItem (v)).ToArray ();
 			task.ExtraArgs = input;
 			ExecuteTask (task, message: input);
-			Assert.That (string.Join (";", task.XmlDefinitions.Select (v => v.ItemSpec).ToArray (), Is.EqualTo (output)), output);
+			Assert.That (string.Join (";", task.XmlDefinitions.Select (v => v.ItemSpec).ToArray ()), Is.EqualTo (output), output);
 		}
 
 		[TestCase ("/xml:\\path\\a /xml:/path/b", null, "/path/a;/path/b")]

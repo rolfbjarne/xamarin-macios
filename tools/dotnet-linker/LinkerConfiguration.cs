@@ -105,7 +105,7 @@ namespace Xamarin.Linker {
 		// This dictionary contains information about the trampolines created for each assembly.
 		public AssemblyTrampolineInfos AssemblyTrampolineInfos = new ();
 
-// ASSEMBLY_PREPARER TODO move pinvoke wrapper generation out of ListExportedFields step (and remove the #pragma warning)
+		// ASSEMBLY_PREPARER TODO move pinvoke wrapper generation out of ListExportedFields step (and remove the #pragma warning)
 #pragma warning disable CS0649 // Field is never assigned to, and will always have its default value null
 		internal PInvokeWrapperGenerator? PInvokeWrapperGenerationState;
 #pragma warning restore CS0649
@@ -163,16 +163,14 @@ namespace Xamarin.Linker {
 					throw new InvalidOperationException ($"Unable to parse the {key} value: {value} in {linker_file}");
 			});
 
-			var loadWarningLevel = new Action<string, string, ErrorHelper.WarningLevel> ((key, value, level) =>
-			{
+			var loadWarningLevel = new Action<string, string, ErrorHelper.WarningLevel> ((key, value, level) => {
 				try {
 					ErrorHelper.ParseWarningLevel (level, value);
 				} catch (Exception ex) {
 					throw new InvalidOperationException ($"Invalid {key} '{value}' in {linker_file}", ex);
 				}
 			});
-			var saveWarningLevel = new Action<string, List<string>, ErrorHelper.WarningLevel> ((key, storage, level) =>
-			{
+			var saveWarningLevel = new Action<string, List<string>, ErrorHelper.WarningLevel> ((key, storage, level) => {
 				if (ErrorHelper.WarningLevels is null)
 					return;
 				foreach (var kvp in ErrorHelper.WarningLevels.Where (v => v.Value == level).OrderBy (v => v)) {
@@ -194,13 +192,13 @@ namespace Xamarin.Linker {
 					new LoadValue ((key, value) => Application.RootAssemblies.Add (value)),
 					new SaveValue ((key, storage) => storage.AddRange (Application.RootAssemblies.Select (v => $"{key}={v}")))
 				)},
-				{ "AOTArgument",  (
+				{ "AOTArgument",  (
 					new LoadValue ((key, value) =>
 					{
 						if (!string.IsNullOrEmpty (value))
 							Application.AotArguments.Add (value);
 					}),
-					new SaveValue ((key, storage) => 
+					new SaveValue ((key, storage) =>
 						storage.AddRange (Application.AotArguments.Where (v => !string.IsNullOrEmpty (v)).Select (v => $"{key}={v}")))
 				)},
 				{ "AOTCompiler", (
@@ -417,7 +415,7 @@ namespace Xamarin.Linker {
 							break;
 						default:
 							throw new InvalidOperationException ($"Unknown symbol type '{symbolType}' for symbol '{symbol}'. Expected 'Function', 'ObjectiveCClass', or 'Field'.");
-						}	
+						}
 					}),
 					new SaveValue ((key, storage) => {
 						foreach (var symbol in DerivedLinkContext.RequiredSymbols) {
@@ -578,7 +576,7 @@ namespace Xamarin.Linker {
 			 : this (File.ReadAllLines (linker_file).ToList (), linker_file, customConfigurator)
 		{
 		}
-		
+
 		public LinkerConfiguration (List<string> lines, string linker_file, Configurator? customConfigurator = null)
 		{
 

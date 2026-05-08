@@ -64,7 +64,7 @@ namespace Xamarin.Linker.Steps {
 			return true;
 		}
 	}
-#endif 
+#endif
 
 	public interface IApplyPreserveAttribute {
 		bool PreserveType (TypeDefinition type, bool allMembers);

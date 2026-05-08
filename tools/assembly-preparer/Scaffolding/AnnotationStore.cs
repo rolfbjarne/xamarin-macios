@@ -16,12 +16,12 @@ public class AnnotationStore {
 	{
 		assemblyActions [assembly] = action;
 	}
-	public IEnumerable<OverrideInformation>? GetOverrides(MethodDefinition method)
+	public IEnumerable<OverrideInformation>? GetOverrides (MethodDefinition method)
 	{
 		throw new NotImplementedException ();
 	}
 
-	public void SetCustomAnnotation(object key, IMetadataTokenProvider item, object value)
+	public void SetCustomAnnotation (object key, IMetadataTokenProvider item, object value)
 	{
 		throw new NotImplementedException ();
 	}
@@ -33,16 +33,15 @@ public class AnnotationStore {
 	}
 }
 
-[DebuggerDisplay("{Override}")]
-public class OverrideInformation
-{
+[DebuggerDisplay ("{Override}")]
+public class OverrideInformation {
 	// public MethodDefinition Base { get; }
 
 	public MethodDefinition Override { get; }
 
 	// internal InterfaceImplementor? InterfaceImplementor { get; }
 
-	OverrideInformation(MethodDefinition @override)
+	OverrideInformation (MethodDefinition @override)
 	{
 		Override = @override;
 	}
@@ -53,8 +52,8 @@ public class OverrideInformation
 	// 	Override = @override;
 	// 	InterfaceImplementor = interfaceImplementor;
 	// 	// Ensure we have an interface implementation if the base method is from an interface and the override method is on a class
-	// 	Debug.Assert(@base.DeclaringType.IsInterface && interfaceImplementor != null
-	// 				|| !@base.DeclaringType.IsInterface && interfaceImplementor == null);
+	// 	Debug.Assert(@base.DeclaringType.IsInterface && interfaceImplementor is not null
+	// 				|| !@base.DeclaringType.IsInterface && interfaceImplementor is null);
 	// 	// Ensure the interfaceImplementor is for the interface we expect
 	// 	Debug.Assert(@base.DeclaringType.IsInterface ? interfaceImplementor!.InterfaceType == @base.DeclaringType : true);
 	// }
@@ -67,5 +66,5 @@ public class OverrideInformation
 
 	// [MemberNotNullWhen(true, nameof(InterfaceImplementor), nameof(MatchingInterfaceImplementation))]
 	// public bool IsOverrideOfInterfaceMember
-	// 	=> InterfaceImplementor != null;
+	// 	=> InterfaceImplementor is not null;
 }

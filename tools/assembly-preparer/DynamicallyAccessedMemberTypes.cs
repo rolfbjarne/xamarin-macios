@@ -4,8 +4,7 @@
 
 global using DynamicallyAccessedMemberTypes = System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes2;
 
-namespace System.Diagnostics.CodeAnalysis
-{
+namespace System.Diagnostics.CodeAnalysis {
 	using System.ComponentModel;
 
 	/// <summary>
@@ -15,8 +14,7 @@ namespace System.Diagnostics.CodeAnalysis
 	/// bitwise combination of its member values.
 	/// </summary>
 	[Flags]
-	enum DynamicallyAccessedMemberTypes2
-	{
+	enum DynamicallyAccessedMemberTypes2 {
 		/// <summary>
 		/// Specifies no members.
 		/// </summary>
@@ -165,7 +163,7 @@ namespace System.Diagnostics.CodeAnalysis
 		/// <summary>
 		/// Specifies all members.
 		/// </summary>
-		[EditorBrowsable(EditorBrowsableState.Never)]
+		[EditorBrowsable (EditorBrowsableState.Never)]
 		All = ~None
 	}
 }

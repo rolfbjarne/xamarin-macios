@@ -42,7 +42,7 @@ public class AssemblyPreparer : IDisposable {
 					var split = value.Split ('|');
 					var input = split[0];
 					var output = split[1];
-					Assemblies.Add (new AssemblyPreparerInfo (input, output));	
+					Assemblies.Add (new AssemblyPreparerInfo (input, output));
 				}),
 				new LinkerConfiguration.SaveValue ((key, storage) => SaveAssemblies (key, storage, reproPath, Assemblies))
 			)},

@@ -45,5 +45,5 @@ public class LinkContext {
 	public bool TryGetCustomData (string key, [NotNullWhen (true)] out string? value)
 	{
 		return custom_data.TryGetValue (key, out value);
-	}		
+	}
 }

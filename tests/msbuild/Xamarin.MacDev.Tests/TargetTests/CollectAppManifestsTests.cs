@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using Mono.Cecil;
 using NUnit.Framework;
-using NUnit.Framework.Legacy;
 using Xamarin.MacDev;
 
 using Xamarin.Tests;
@@ -66,14 +65,14 @@ namespace Xamarin.MacDev.Tasks {
 				{ "_CreateAppManifest", "true" },
 			};
 			var rv = engine.RunTarget (ApplePlatform.MacOSX, csprojPath, target: "_WriteAppManifest", properties: properties);
-			ClassicAssert.AreEqual (0, rv.ExitCode, "Exit code");
+			Assert.That (rv.ExitCode, Is.EqualTo (0), "Exit code");
 
 			var appManifestPath = Path.Combine (tmpdir, "bin", "Debug", Configuration.DotNetTfm + "-macos", "osx-x64", "PartialAppManifest.app", "Contents", "Info.plist");
 			Assert.That (appManifestPath, Does.Exist, "App manifest existence");
 
 			var plist = PDictionary.FromFile (appManifestPath);
-			ClassicAssert.AreEqual ("PartialAppManifestDisplayName", plist.GetCFBundleDisplayName (), "Bundle display name");
-			ClassicAssert.AreEqual ("com.xamarin.partialappmanifest", plist.GetCFBundleIdentifier (), "Bundle identifier");
+			Assert.That (plist.GetCFBundleDisplayName (), Is.EqualTo ("PartialAppManifestDisplayName"), "Bundle display name");
+			Assert.That (plist.GetCFBundleIdentifier (), Is.EqualTo ("com.xamarin.partialappmanifest"), "Bundle identifier");
 		}
 	}
 }

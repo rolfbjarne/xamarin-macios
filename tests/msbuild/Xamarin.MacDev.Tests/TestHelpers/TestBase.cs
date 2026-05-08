@@ -134,7 +134,7 @@ namespace Xamarin.Tests {
 				TestFilesExists (baseDirs [0], files);
 			} else {
 				foreach (var file in files)
-					Assert.That (baseDirs.Select (s => File.Exists (Path.Combine (s, file)), Is.True).Any (v => v), $"Expected file: {file} does not exist in any of the directories: {string.Join (", ", baseDirs)}");
+					Assert.That (baseDirs.Select (s => File.Exists (Path.Combine (s, file))).Any (v => v), Is.True, $"Expected file: {file} does not exist in any of the directories: {string.Join (", ", baseDirs)}");
 			}
 		}
 

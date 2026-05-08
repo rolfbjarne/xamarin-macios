@@ -42,9 +42,9 @@ namespace Xamarin.MacDev.Tasks {
 			PArray? array;
 
 			Assert.That (CompiledPlist.TryGetValue (ManifestKeys.UIRequiredDeviceCapabilities, out array), Is.True, "#1");
-			Assert.That (array?.OfType<PString> ().Any (x => x.Value == "arm64", Is.True) == true, "#2");
-			Assert.That (array?.OfType<PString> ().Any (x => x.Value == "armv6", Is.False) == true, "#3");
-			Assert.That (array?.OfType<PString> ().Any (x => x.Value == "armv7", Is.False) == true, "#4");
+			Assert.That (array?.OfType<PString> ().Any (x => x.Value == "arm64") == true, Is.True, "#2");
+			Assert.That (array?.OfType<PString> ().Any (x => x.Value == "armv6") == true, Is.False, "#3");
+			Assert.That (array?.OfType<PString> ().Any (x => x.Value == "armv7") == true, Is.False, "#4");
 		}
 	}
 }

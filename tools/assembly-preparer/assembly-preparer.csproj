@@ -332,6 +332,6 @@
 			Inputs="../common/../SdkVersions.in.cs;../../common/ProductConstants.in.cs" Outputs="../../common/SdkVersions.cs;../../common/ProductConstants.cs"
 			BeforeTargets="CoreCompile"
 	>
-		<Exec Command="make generated-files" />
+		<Exec Command="make generated-files -C $(MSBuildProjectDirectory)" IgnoreStandardErrorWarningFormat="true" />
 	</Target>
 </Project>

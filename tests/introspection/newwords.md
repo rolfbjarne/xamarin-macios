@@ -1,61 +1,82 @@
-New words in the TypoTest allowed list compared to main (219 words)
-====================================================================================================
+# New words in the TypoTest allowed list compared to main (219 words)
 
-ACTUAL TYPOS in Apple APIs (12 words)
-These are genuine misspellings/errors in Apple's API names.
-----------------------------------------------------------------------------------------------------
-  Accurracy                 → accuracy (double r)
-    src/corelocation.cs:271
-    double AccurracyBestForNavigation { get; }
+## ACTUAL TYPOS in Apple APIs (12 words)
+*These are genuine misspellings/errors in Apple's API names.*
+### `Accurracy` → accuracy (double r)
+[`src/corelocation.cs:271`](https://github.com/dotnet/macios/blob/6a356bdf007f4b59b1e996ccc55836cdbb5de431/src/corelocation.cs#L271)
+```csharp
+double AccurracyBestForNavigation { get; }
+```
 
-  Aswas                     → AsWas (missing camelCase split)
-    src/authenticationservices.cs:1348
-    void RegisterDefaultsForAswasInSetupAssistantIfNeeded ();
+### `Aswas` → AsWas (missing camelCase split)
+[`src/authenticationservices.cs:1348`](https://github.com/dotnet/macios/blob/6a356bdf007f4b59b1e996ccc55836cdbb5de431/src/authenticationservices.cs#L1348)
+```csharp
+void RegisterDefaultsForAswasInSetupAssistantIfNeeded ();
+```
 
-  Denimonator               → denominator (transposed letters)
-    src/accessibility.cs:616
-    AXMathExpression DenimonatorExpression { get; }
+### `Denimonator` → denominator (transposed letters)
+[`src/accessibility.cs:616`](https://github.com/dotnet/macios/blob/6a356bdf007f4b59b1e996ccc55836cdbb5de431/src/accessibility.cs#L616)
+```csharp
+AXMathExpression DenimonatorExpression { get; }
+```
 
-  Diconnection              → disconnection (missing s)
-    src/corebluetooth.cs:546
-    [iOS (17, 0), TV (17, 0), Mac (14, 0), MacCatalyst (17, 0), EventArgs ("CBPeripheralDiconnectionEvent")]
+### `Diconnection` → disconnection (missing s)
+[`src/corebluetooth.cs:546`](https://github.com/dotnet/macios/blob/6a356bdf007f4b59b1e996ccc55836cdbb5de431/src/corebluetooth.cs#L546)
+```csharp
+[iOS (17, 0), TV (17, 0), Mac (14, 0), MacCatalyst (17, 0), EventArgs ("CBPeripheralDiconnectionEvent")]
+```
 
-  Dirbursement              → disbursement (transposed letters)
-    src/passkit.cs:3902
-    interface PKDirbursementError {
+### `Dirbursement` → disbursement (transposed letters)
+[`src/passkit.cs:3902`](https://github.com/dotnet/macios/blob/6a356bdf007f4b59b1e996ccc55836cdbb5de431/src/passkit.cs#L3902)
+```csharp
+interface PKDirbursementError {
+```
 
-  Dismissable               → dismissible (-able vs -ible)
-    src/mailkit.cs:510
-    bool Dismissable { [Bind ("isDismissable")] get; }
+### `Dismissable` → dismissible (-able vs -ible)
+[`src/mailkit.cs:510`](https://github.com/dotnet/macios/blob/6a356bdf007f4b59b1e996ccc55836cdbb5de431/src/mailkit.cs#L510)
+```csharp
+bool Dismissable { [Bind ("isDismissable")] get; }
+```
 
-  Emebedding                → embedding (transposed letters)
-    src/NaturalLanguage/Enums.cs:372
-    public enum NLContextualEmebeddingKey {
+### `Emebedding` → embedding (transposed letters)
+[`src/NaturalLanguage/Enums.cs:372`](https://github.com/dotnet/macios/blob/6a356bdf007f4b59b1e996ccc55836cdbb5de431/src/NaturalLanguage/Enums.cs#L372)
+```csharp
+public enum NLContextualEmebeddingKey {
+```
 
-  Hermitean                 → Hermitian (wrong vowels)
-    src/metalperformanceshadersgraph.cs:2479
-    [Export ("roundToOddHermitean")]
+### `Hermitean` → Hermitian (wrong vowels)
+[`src/metalperformanceshadersgraph.cs:2479`](https://github.com/dotnet/macios/blob/6a356bdf007f4b59b1e996ccc55836cdbb5de431/src/metalperformanceshadersgraph.cs#L2479)
+```csharp
+[Export ("roundToOddHermitean")]
+```
 
-  Inot                      → into (transposed) or not (extra i)
-    src/mlcompute.cs:111
-    Inot32 = 7,
+### `Inot` → into (transposed) or not (extra i)
+[`src/mlcompute.cs:111`](https://github.com/dotnet/macios/blob/6a356bdf007f4b59b1e996ccc55836cdbb5de431/src/mlcompute.cs#L111)
+```csharp
+Inot32 = 7,
+```
 
-  Remmote                   → remote (double m)
-    src/Network/NWConnectionGroup.cs:119
-    public NWEndpoint? GetRemmoteEndpoint (NWContentContext context)
+### `Remmote` → remote (double m)
+[`src/Network/NWConnectionGroup.cs:119`](https://github.com/dotnet/macios/blob/6a356bdf007f4b59b1e996ccc55836cdbb5de431/src/Network/NWConnectionGroup.cs#L119)
+```csharp
+public NWEndpoint? GetRemmoteEndpoint (NWContentContext context)
+```
 
-  Securit                   → security (missing y)
-    src/CoreWlan/Enums.cs:118
-    public enum CWSecurity : ulong {
+### `Securit` → security (missing y)
+[`src/CoreWlan/Enums.cs:118`](https://github.com/dotnet/macios/blob/6a356bdf007f4b59b1e996ccc55836cdbb5de431/src/CoreWlan/Enums.cs#L118)
+```csharp
+public enum CWSecurity : ulong {
+```
 
-  Willl                     → will (triple l)
-    src/avfoundation.cs:22540
-    void WilllDownloadToUrl (NSUrlSession session, AVAssetDownloadTask assetDownloadTask, NSUrl location);
+### `Willl` → will (triple l)
+[`src/avfoundation.cs:22540`](https://github.com/dotnet/macios/blob/6a356bdf007f4b59b1e996ccc55836cdbb5de431/src/avfoundation.cs#L22540)
+```csharp
+void WilllDownloadToUrl (NSUrlSession session, AVAssetDownloadTask assetDownloadTask, NSUrl location);
+```
 
 
-ACCEPTABLE WORDS unknown to the spell checker (207 words)
-Valid abbreviations, acronyms, brand names, or domain-specific terms.
-----------------------------------------------------------------------------------------------------
+## ACCEPTABLE WORDS unknown to the spell checker (207 words)
+*Valid abbreviations, acronyms, brand names, or domain-specific terms.*
   Abgr                      (pixel format: Alpha-Blue-Green-Red)
     src/coreimage.cs:3689
     [Obsolete ("Use 'CIFormat.Abgr8.GetConstant ()' instead.")]

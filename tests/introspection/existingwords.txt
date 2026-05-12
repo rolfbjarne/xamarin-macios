@@ -1,0 +1,2459 @@
+Existing words in the TypoTest allowed list (also present in main) (705 words)
+====================================================================================================
+
+ACTUAL TYPOS in Apple APIs (62 words)
+These are genuine misspellings/errors in Apple's API names.
+----------------------------------------------------------------------------------------------------
+  Achivements               → achievements (missing e)
+    src/gamekit.cs:2187
+    <returns>A task that represents the asynchronous ResetAchivements operation</returns>
+
+  Adjustmentfor             → AdjustmentFor (missing camelCase split)
+    src/uikit.cs:16758
+    void SetPositionAdjustmentforSearchBarIcon (UIOffset adjustment, UISearchBarIcon icon);
+
+  Amete                     → amette or a meter (unclear truncation)
+    src/foundation.cs:1781
+    /// <summary>Ethiopic (Amete Alem) calendar.</summary>
+
+  Appactive                 → AppActive (missing camelCase split)
+    src/Darwin/KernelNotification.cs:186
+    ProcAppactive = 0x00800000,
+
+  Arae                      → area (transposed letters)
+    src/AppKit/Enums.cs:491
+    TrackableArae = 4,
+
+  Arraycollation            → ArrayCollation (missing camelCase split)
+    src/uikit.cs:10315
+    NSObject [] SortedArrayFromArraycollationStringSelector (NSObject [] array, Selector collationStringSelector);
+
+  Attributesfor             → AttributesFor (missing camelCase split)
+    src/coreimage.cs:2715
+    void SetAttributesforExportedKey (NSDictionary attributes, NSString exportedKey);
+
+  Avaiable                  → available (missing l, wrong vowel)
+
+  Callpout                  → callout (extra p)
+    src/mapkit.cs:219
+    CGPoint RightCallpoutOffset { get; set; }
+
+  Calulate                  → calculate (missing c)
+
+  Cancellable               → cancelable (double l, British variant)
+
+  Catagory                  → category (wrong vowel)
+
+  Characterteristic         → characteristic (extra ter)
+    src/corebluetooth.cs:1009
+    void UpdatedCharacterteristicValue (CBPeripheral peripheral, CBCharacteristic characteristic, [NullAllowed] NSError error);
+
+  Charactor                 → character (wrong vowel)
+
+  Commited                  → committed (missing t)
+    src/webkit.cs:2161
+    void CommitedLoad (WebView sender, WebFrame forFrame);
+
+  Connction                 → connection (missing e)
+
+  Constrainted              → constrained (extra ted)
+    src/appkit.cs:8600
+    nfloat TitleWidthConstraintedToSize (CGSize aSize);
+
+  Descendents               → descendants (wrong vowel)
+    src/foundation.cs:18745
+    [Export ("skipDescendents")]
+
+  Descriptorat              → DescriptorAt (missing camelCase split)
+    src/foundation.cs:20491
+    void InsertDescriptoratIndex (NSAppleEventDescriptor descriptor, nint index);
+
+  Descriptorfor             → DescriptorFor (missing camelCase split)
+    src/foundation.cs:20467
+    void SetParamDescriptorforKeyword (NSAppleEventDescriptor descriptor, AEKeyword keyword);
+
+  Differental               → differential (missing i)
+    src/imageio.cs:841
+    /// <summary>Represents the value associated with the constant kCGImagePropertyGPSDifferental</summary>
+
+  Directionfor              → DirectionFor (missing camelCase split)
+    src/uikit.cs:9867
+    void SetBaseWritingDirectionforRange (NSWritingDirection writingDirection, UITextRange range);
+
+  Discontiguous             → non-standard: discontiguous (unusual prefix)
+
+  Dissapearing              → disappearing (wrong vowel, extra p)
+    src/AppKit/Enums.cs:1721
+    DissapearingItemDefault = 0,
+
+  Distinguised              → distinguished (missing h)
+    src/iTunesLibrary/Enums.cs:419
+    [Field ("ITLibPlaylistPropertyDistinguisedKind")]
+
+  Dont                      → don't (missing apostrophe)
+    src/ScriptingBridge/Enums.cs:38
+    DontReconnect = 0x00000080,
+
+  Emaili                    → email (extra i)
+    src/contacts.cs:2275
+    [Field ("CNLabelEmailiCloud")]
+
+  Exhange                   → exchange (missing c)
+    src/gamekit.cs:3038
+    nuint ExhangeDataMaximumSize { get; }
+
+  Formati                   → format (extra i)
+    src/appkit.cs:7238
+    [Export ("draggingFormation")]
+
+  Fourty                    → forty (extra u)
+    src/CoreWlan/Enums.cs:172
+    FourtyMHz = 2,
+
+  Grammarl                  → grammar (extra l)
+    src/appkit.cs:17474
+    void UpdateSpellingPanelWithGrammarl (string theString, NSDictionary detail);
+
+  Iconfor                   → IconFor (missing camelCase split)
+    src/appkit.cs:26889
+    bool SetIconforFile (NSImage image, string fullPath, NSWorkspaceIconCreationOptions options);
+
+  Imagefor                  → ImageFor (missing camelCase split)
+    src/uikit.cs:16702
+    void SetImageforSearchBarIcon ([NullAllowed] UIImage iconImage, UISearchBarIcon icon, UIControlState state);
+
+  Inser                     → insert (missing t)
+    src/appkit.cs:1652
+    void Insert (NSObject sender);
+
+  Intoi                     → into (extra i)
+    src/HomeKit/HMEnums.cs:159
+    NotSignedIntoiCloud = 75,
+
+  Itemto                    → ItemTo (missing camelCase split)
+    src/imagekit.cs:2031
+    void ExportSlideshowItemtoApplication (NSObject item, string applicationBundleIdentifier);
+
+  Langauges                 → languages (transposed letters)
+    src/uikit.cs:24558
+    string AvailableLangauges { get; }
+
+  Languange                 → language (transposed letters)
+
+  Lingustic                 → linguistic (missing i)
+    src/foundation.cs:6726
+    /// <summary>A delegate that enumerates values for <see cref="Foundation.NSLinguisticTagger.EnumerateTagsInRange(Foundation.NSRange,Foundation.NSString,Foundation.NSLinguisticTaggerOptions,Foundation.NSLingusticEnumerator)" />.</summary>
+
+  Matchingcoalesce          → MatchingCoalesce (missing camelCase split)
+    src/foundation.cs:15758
+    void DequeueNotificationsMatchingcoalesceMask (NSNotification notification, NSNotificationCoalescing coalesceMask);
+
+  Nestrov                   → Nesterov (transposed letters)
+    src/MetalPerformanceShaders/MPSNNOptimizerStochasticGradientDescent.cs:18
+    /// <param name="useNestrovMomentum">The Nesterov-style momentum update.</param>
+
+  Numberof                  → NumberOf (missing camelCase split)
+    src/appkit.cs:3891
+    nint GetNumberofItems (NSCollectionView collectionView, nint section);
+
+  Occlussion                → occlusion (extra s)
+    src/AudioUnit/AUEnums.cs:1067
+    OcclussionAttenuation = 10,
+
+  Occulsion                 → occlusion (missing c)
+
+  Ocurrences                → occurrences (missing c)
+    src/foundation.cs:12590
+    nuint ReplaceOcurrences (NSString target, NSString replacement, NSStringCompareOptions options, NSRange range);
+
+  Overriden                 → overridden (missing d)
+
+  Paramater                 → parameter (transposed vowels)
+
+  Performwith               → PerformWith (missing camelCase split)
+    src/appkit.cs:15655
+    bool TryToPerformwith (Selector anAction, [NullAllowed] NSObject anObject);
+
+  Persistance               → persistence (wrong vowel)
+    src/Foundation/NSUrlCredential.cs:33
+    public static NSUrlCredential FromIdentityCertificatesPersistance (SecIdentity identity, SecCertificate [] certificates, NSUrlCredentialPersistence persistence)
+
+  Preseti                   → preset (extra i)
+    src/avfoundation.cs:14808
+    /// <summary>Represents the value associated with the constant AVCaptureSessionPresetiFrame960x540</summary>
+
+  Propogate                 → propagate (wrong vowel)
+    src/CoreVideo/CVBuffer.cs:234
+    public void PropogateAttachments (CVBuffer destinationBuffer)
+
+  Rectfrom                  → RectFrom (missing camelCase split)
+    src/appkit.cs:16242
+    CGRect ConvertRectfromBacking (CGRect aRect);
+
+  Referer                   → referrer — but note: RFC 2616 uses this historic misspelling
+
+  Registeration             → registration (extra e)
+    src/PrintCore/Defs.cs:218
+    PluginRegisterationFailed = -9702,
+
+  Spacei                    → space (extra i)
+    src/avfoundation.cs:8910
+    /// <summary>Represents the value associated with the constant AVMetadataKeySpaceiTunes</summary>
+
+  Standarize                → standardize (missing d)
+    src/foundation.cs:12353
+    NSString StandarizePath ();
+
+  Supression                → suppression (missing p)
+    src/CoreGraphics/CGEventSource.cs:160
+    public void SetLocalEventsFilterDuringSupressionState (CGEventFilterMask filter, CGEventSuppressionState state)
+
+  Targetand                 → TargetAnd (missing camelCase split)
+    src/appkit.cs:14586
+    nint IndexOfItemWithTargetandAction (NSObject target, Selector actionSelector);
+
+  Toci                      → TOC (extra i)
+    src/CoreGraphics/CGEnums.cs:182
+    Toci,
+
+  Uknown                    → unknown (transposed letters)
+
+  Uterance                  → utterance (missing t)
+    src/avfoundation.cs:22202
+    [EventArgs ("AVSpeechSynthesizerUterance")]
+
+  Wifes                     → wives (wrong plural)
+    src/contacts.cs:818
+    [Field ("CNLabelContactRelationMotherInLawWifesMother")]
+
+ACCEPTABLE words (643 words)
+These are valid abbreviations, acronyms, proper names, or technical terms.
+----------------------------------------------------------------------------------------------------
+  Aac                       — codec: Advanced Audio Coding
+    src/AudioToolbox/AudioType.cs:1818
+    AacMain = 1,
+
+  Accurracy                 — Apple API spelling preserved
+
+  Acos                      — math: arc cosine function
+    src/SceneKit/SCNMatrix4_dotnet.cs:1289
+    angle = 2.0f * (float) System.Math.Acos (q.W); // angle
+
+  Acosh                     — math: inverse hyperbolic cosine
+    src/metalperformanceshadersgraph.cs:261
+    MPSGraphTensor Acosh (MPSGraphTensor tensor, [NullAllowed] string name);
+
+  Adaptively                — valid English: in an adaptive manner
+
+  Addin                     — compound: add-in plugin
+    src/appkit.cs:6824
+    // Adding protocol gave warning 0108 which is unfixable without API break
+
+  Addl                      — abbreviation: additional
+    src/imageio.cs:2551
+    /// <summary>Represents the value associated with the constant kCGImagePropertyIPTCExtAddlModelInfo</summary>
+
+  Addons                    — compound: add-ons
+    src/appkit.cs:3619
+    partial interface NSCoderAppKitAddons {
+
+  Addr                      — abbreviation: address
+    src/messageui.cs:103
+    /// <param name="emailAddress">To be added.</param>
+
+  Aes                       — crypto: Advanced Encryption Standard
+
+  Agc                       — audio: Automatic Gain Control
+    src/avfoundation.cs:2088
+    bool VoiceProcessingAgcEnabled { [Bind ("isVoiceProcessingAGCEnabled")] get; set; }
+
+  Aifc                      — format: Audio Interchange File (compressed)
+    src/avfoundation.cs:466
+    Aifc = 8,
+
+  Aiff                      — format: Audio Interchange File Format
+    src/avfoundation.cs:462
+    Aiff = 7,
+
+  Aio                       — abbreviation: asynchronous I/O
+    src/Darwin/KernelNotification.cs:104
+    Aio = -3,
+
+  Alg                       — abbreviation: algorithm
+    src/appkit.cs:22823
+    [Export ("layoutAlgorithm")]
+
+  Aliasable                 — valid English: capable of aliasing
+    src/metal.cs:4893
+    [Export ("makeAliasable")]
+
+  Ambisonics                — audio: full-sphere surround sound format
+
+  Amr                       — codec: Adaptive Multi-Rate audio
+    src/avfoundation.cs:470
+    Amr = 9,
+
+  Anglet                    — geometry: small angle
+    src/scenekit.cs:4671
+    void SetMaxAllowedRotationAnglet (nfloat angle, SCNNode node);
+
+  Aov                       — abbreviation: Angle Of View
+
+  Apng                      — format: Animated PNG
+    src/imageio.cs:1286
+    NSString ApngFrameInfoArray { get; }
+
+  Aps                       — abbreviation: Apple Push Service
+    src/ImageCaptureCore/Defs.cs:255
+    ApsH = 73,
+
+  Arcball                   — graphics: arcball rotation control
+    src/SceneKit/Defs.cs:564
+    OrbitCenteredArcball,
+
+  Argb                      — color: Alpha Red Green Blue
+    src/coreimage.cs:3645
+    [Obsolete ("Use 'CIFormat.Argb8.GetConstant ()' instead.")]
+
+  Argmax                    — math: argument of the maximum
+
+  Argmin                    — math: argument of the minimum
+
+  Arkit                     — Apple: ARKit framework
+
+  Asbd                      — Apple: AudioStreamBasicDescription
+
+  Asin                      — math: arc sine function
+    src/NativeTypes/NMath.cs:195
+    public static nfloat Asin (nfloat d)
+
+  Asinh                     — math: inverse hyperbolic sine
+    src/mlcompute.cs:65
+    Asinh = 18,
+
+  Atan                      — math: arc tangent function
+    src/NativeTypes/NMath.cs:200
+    public static nfloat Atan (nfloat d)
+
+  Atanh                     — math: inverse hyperbolic tangent
+    src/metalperformanceshadersgraph.cs:265
+    MPSGraphTensor Atanh (MPSGraphTensor tensor, [NullAllowed] string name);
+
+  Atm                       — unit: atmosphere (pressure)
+    src/healthkit.cs:3955
+    HKUnit Atmosphere { get; }
+
+  Atmos                     — audio: Dolby Atmos immersive audio
+    src/AudioToolbox/AudioType.cs:1291
+    Atmos_7_1_4 = (192 << 16) | 12,
+
+  Ats                       — Apple: App Transport Security
+    src/security.cs:1494
+    Ats1,
+
+  Attr                      — abbreviation: attribute
+    src/appkit.cs:372
+    [Export ("animation:valueForProgress:"), DelegateName ("NSAnimationProgress"), DefaultValueFromArgumentAttribute ("progress")]
+
+  Attrib                    — abbreviation: attribute
+    src/appkit.cs:372
+    [Export ("animation:valueForProgress:"), DelegateName ("NSAnimationProgress"), DefaultValueFromArgumentAttribute ("progress")]
+
+  Attributevalue            — compound: attribute value
+    src/foundation.cs:5474
+    NSObject ReplacementValueForAttributevalue (NSMetadataQuery query, string attributeName, NSObject value);
+
+  Attrs                     — abbreviation: attributes
+    src/security.cs:516
+    interface SecPublicPrivateKeyAttrs {
+
+  Audiofile                 — compound: audio file
+    src/AudioUnit/AUEnums.cs:144
+    Audiofile = 3,
+
+  Automapping               — compound: auto-mapping
+    src/spritekit.cs:3551
+    [Export ("enableAutomapping")]
+
+  Automatch                 — compound: auto-match
+    src/gamekit.cs:1742
+    [Export ("restrictToAutomatch")]
+
+  Automounted               — compound: auto-mounted
+    src/foundation.cs:8845
+    /// <summary>Represents the value associated with the constant NSURLVolumeIsAutomountedKey</summary>
+
+  Autoredirect              — compound: auto-redirect
+    src/System.Net.Http/CFNetworkHandler.cs:241
+    stream.ShouldAutoredirect = allowAutoRedirect;
+
+  Autospace                 — compound: auto-space
+    src/appkit.cs:17597
+    [Export ("deletesAutospaceBetweenString:andString:language:")]
+
+  Autostarts                — compound: auto-starts
+    src/quicklookui.cs:205
+    bool Autostarts { get; set; }
+
+  Avb                       — protocol: Audio Video Bridging
+    src/avfoundation.cs:3765
+    NSString PortAvb { get; }
+
+  Avci                      — format: AVC Intra
+    src/avfoundation.cs:515
+    Avci = 18,
+
+  Avg                       — abbreviation: average
+    src/CoreGraphics/CGEvent.cs:780
+    public float /* float */ AvgUsecLatency;
+
+  Backprojection            — imaging: back projection (tomography)
+
+  Bandpass                  — audio: band-pass filter
+
+  Bary                      — math: barycentric coordinates
+    src/SceneKit/SCNVector3.cs:678
+    #region Barycentric
+
+  Bfloat                    — data type: brain floating point (bfloat16)
+
+  Bggr                      — Bayer: Blue-Green-Green-Red pattern
+    src/corevideo.cs:864
+    Bggr = 3,
+
+  Bgra                      — color: Blue Green Red Alpha
+    src/coregraphics.cs:707
+    Bgra,
+
+  Bgrg                      — Bayer: Blue-Green-Red-Green pattern
+
+  Bim                       — abbreviation: building information model
+    src/imageio.cs:4237
+    NSDictionary EightBimDictionary { get; set; }
+
+  Binaural                  — audio: two-ear spatial audio
+
+  Biquad                    — audio: biquad filter (2nd order IIR)
+
+  Bitangent                 — geometry: bitangent vector
+    src/modelio.cs:3919
+    [Field ("MDLVertexAttributeBitangent")]
+
+  Bitangents                — geometry: plural of bitangent
+
+  Bitfield                  — programming: bit field data type
+
+  Bitrate                   — media: bits per second
+
+  Blinn                     — proper name: Blinn-Phong shading model
+    src/scenekit.cs:1811
+    /// <summary>Represents the value associated with the constant SCNLightingModelBlinn</summary>
+
+  Blit                      — graphics: block image transfer
+    src/rgen/Microsoft.Macios.Transformer/DataModel/TypeInfo.Transformer.cs:20
+    IsBlittable = symbol.IsBlittable () && !IsNullable;
+
+  Bokeh                     — photography: bokeh (blur aesthetic)
+
+  Bsln                      — Apple: baseline table (AAT typography)
+    src/CoreText/CTFont.cs:198
+    BaselineBsln = 0x62736c6e,  // 'Bsln'
+
+  Bssid                     — networking: Basic Service Set Identifier
+    src/CoreWlan/Enums.cs:227
+    BssidDidChange = 3,
+
+  Btle                      — abbreviation: Bluetooth Low Energy
+    src/coreaudiokit.cs:150
+    interface CABtleMidiWindowController {
+
+  Buf                       — abbreviation: buffer
+
+  Cabac                     — codec: Context-Adaptive Binary Arithmetic Coding
+    src/VideoToolbox/VTDefs.cs:267
+    Cabac,
+
+  Caf                       — format: Core Audio Format
+    src/AudioToolbox/AudioType.cs:217
+    CafIsFloat = (1 << 0),
+
+  Cartes                    — French: maps (Apple Maps)
+    src/passkit.cs:1795
+    /// <summary>Developers should not use this deprecated property. Developers should use 'CartesBancaires' instead.</summary>
+
+  Catmull                   — proper name: Catmull-Rom spline
+
+  Cavlc                     — codec: Context-Adaptive Variable-Length Coding
+    src/VideoToolbox/VTDefs.cs:265
+    Cavlc,
+
+  Cbc                       — crypto: Cipher Block Chaining
+
+  Cbr                       — media: Constant Bit Rate
+
+  Ccitt                     — acronym: former name of ITU-T
+    src/AppKit/Enums.cs:2195
+    CcittFax3 = 3,
+
+  Ccm                       — crypto: Counter with CBC-MAC
+
+  Cda                       — format: CD Audio track
+    src/healthkit.cs:33
+    Cda,
+
+  Cdrom                     — hardware: Compact Disc Read-Only Memory
+    src/AppKit/Enums.cs:3361
+    GenericCdromIcon = 0x63646472,   //'cddr'
+
+  Celp                      — codec: Code-Excited Linear Prediction
+    src/AudioToolbox/AudioType.cs:1832
+    Celp = 8,
+
+  Celu                      — ML: Continuously Differentiable ELU
+    src/mlcompute.cs:26
+    Celu = 13,
+
+  Cfa                       — imaging: Color Filter Array
+    src/imageio.cs:1702
+    NSString DNGCfaLayout { get; }
+
+  Chacha                    — crypto: ChaCha stream cipher
+    src/Security/SecureTransport.cs:92
+    EcdheRsaWithChacha20Poly1305Sha256 = 52392,
+
+  Chapv                     — format: chapter version
+    src/networkextension.cs:99
+    MSChapv2 = 3,
+
+  Cholesky                  — proper name: Cholesky decomposition (linear algebra)
+    src/metalperformanceshaders.cs:4340
+    /// <summary>A <see cref="MetalPerformanceShaders.MPSMatrixBinaryKernel" /> that solves a linear system of equations via Cholesky factorization.</summary>
+
+  Chromaticities            — color: chromaticity coordinates
+    src/imageio.cs:1210
+    /// <summary>Represents the value associated with the constant kCGImagePropertyPNGChromaticities</summary>
+
+  Ciexyz                    — color: CIE XYZ color space
+    src/ImageCaptureCore/Defs.cs:184
+    Ciexyz = 8,
+
+  Ciff                      — format: Camera Image File Format
+    src/imageio.cs:4231
+    NSDictionary CiffDictionary { get; set; }
+
+  Cinepak                   — codec: Cinepak video codec
+    src/CoreMedia/CMEnums.cs:146
+    /// <summary>Indicates Cinepak content.</summary>
+
+  Clearcoat                 — rendering: clear coat material layer
+    src/modelio.cs:2479
+    MDLMaterialProperty Clearcoat { get; }
+
+  Cmaf                      — format: Common Media Application Format
+    src/AVFoundation/Enums.cs:1835
+    Mpeg4CmafCompliant,
+
+  Cmy                       — color: Cyan Magenta Yellow
+    src/appkit.cs:4959
+    void GetCmyka (out nfloat cyan, out nfloat magenta, out nfloat yellow, out nfloat black, out nfloat alpha);
+
+  Cmyk                      — color: Cyan Magenta Yellow Key
+    src/coregraphics.cs:135
+    /// <summary>Gets a string constant that identifies the GenericCmyk color space.</summary>
+
+  Cmyka                     — color: CMYK + Alpha
+    src/appkit.cs:4959
+    void GetCmyka (out nfloat cyan, out nfloat magenta, out nfloat yellow, out nfloat black, out nfloat alpha);
+
+  Cnn                       — ML: Convolutional Neural Network
+    src/MetalPerformanceShaders/MPSEnums.cs:214
+    public enum MPSCnnNeuronType {
+
+  Cns                       — abbreviation: Chinese National Standard
+    src/AppKit/XEnums.cs:70
+    AdobeCns1 = 1,
+
+  Comps                     — abbreviation: components
+
+  Copyback                  — cache: copy-back write policy
+    src/IOSurface/IODefs.cs:47
+    CopybackCache = 3 << 8,
+
+  Crosstraining             — fitness: cross-training
+    src/intents.cs:3271
+    [Field ("INWorkoutNameIdentifierCrosstraining")]
+
+  Ctm                       — graphics: Current Transformation Matrix
+    src/appkit.cs:12354
+    NSString Ctm { get; }
+
+  Cubemap                   — graphics: cube map texture
+    src/modelio.cs:914
+    /// <param name="reflectiveCubemap">
+
+  Cymk                      — color: CYMK variant ordering
+    src/appkit.cs:4613
+    NSColor FromDeviceCymka (nfloat cyan, nfloat magenta, nfloat yellow, nfloat black, nfloat alpha);
+
+  Cymka                     — color: CYMK + Alpha
+    src/appkit.cs:4613
+    NSColor FromDeviceCymka (nfloat cyan, nfloat magenta, nfloat yellow, nfloat black, nfloat alpha);
+
+  Daap                      — protocol: Digital Audio Access Protocol
+    src/Security/Items.cs:153
+    Daap,
+
+  Dav                       — protocol: WebDAV
+    src/EventKit/EKEnums.cs:18
+    CalDav,
+
+  Dcip                      — color: DCI-P3 color space
+    src/coregraphics.cs:221
+    /// <summary>Gets a string constant that identifies the Dcip3 color space.</summary>
+
+  Deca                      — prefix: ten (10^1)
+    src/foundation.cs:21719
+    NSUnitLength Decameters { get; }
+
+  Decomposables             — valid English: things that can be decomposed
+    src/foundation.cs:1960
+    NSCharacterSet Decomposables { get; }
+
+  Deconvolution             — ML: deconvolution/transposed convolution
+
+  Deinterlace               — video: de-interlace conversion
+    src/videotoolbox.cs:1685
+    [Field ("kVTDecompressionProperty_FieldMode_DeinterlaceFields")]
+
+  Depthwise                 — ML: depth-wise convolution
+    src/metalperformanceshadersgraph.cs:642
+    // @interface MPSGraphDepthwiseConvolution2DOpDescriptor : NSObject <NSCopying>
+
+  Desaturate                — valid English: remove color saturation
+
+  Dhe                       — crypto: Diffie-Hellman Ephemeral
+    src/security.cs:1530
+    LegacyDhe,
+
+  Diffable                  — valid English: capable of diffing
+    src/appkit.cs:34073
+    delegate NSCollectionViewItem NSCollectionViewDiffableDataSourceItemProvider (NSCollectionView collectionView, NSIndexPath indexPath, NSObject itemIdentifierType);
+
+  Diffie                    — proper name: Diffie (Diffie-Hellman key exchange)
+    src/NetworkExtension/NEEnums.cs:128
+    /// <summary>Enumeration of Diffie Hellman groups, which determine encryption strength.</summary>
+
+  Dirs                      — abbreviation: directories
+    src/CoreServices/FSEvents.cs:53
+    MustScanSubDirs = 0x00000001,
+
+  Dist                      — abbreviation: distance/distribution
+    src/appkit.cs:16838
+    [Export ("segmentDistribution", ArgumentSemantic.Assign)]
+
+  dlclose                   — C function: dlclose (dynamic linker)
+    src/ObjCRuntime/Dlfcn.cs:97
+    public static extern int dlclose (IntPtr handle);
+
+  dlerror                   — C function: dlerror (dynamic linker)
+    src/ObjCRuntime/Dlfcn.cs:165
+    /// 	  Returns <see langword="null" /> if the symbol was not found.   The error condition can be probed using the <see cref="ObjCRuntime.Dlfcn.dlerror" />.
+
+  Dlfcn                     — C header: dlfcn.h (dynamic linker functions)
+    src/MetalPerformanceShaders/MPSKernel.cs:60
+    var p = Dlfcn.dlsym (Libraries.MetalPerformanceShaders.Handle, "MPSRectNoClip");
+
+  Dls                       — audio: Downloadable Sounds
+    src/AudioUnit/AudioComponentDescription.cs:126
+    DlsSynth = 0x646c7320, // 'dls '
+
+  Dng                       — format: Digital Negative (Adobe raw image)
+    src/imageio.cs:4243
+    NSDictionary DngDictionary { get; set; }
+
+  Dop                       — abbreviation: dilution of precision (GPS)
+    src/AudioUnit/AUEnums.cs:1297
+    DopplerShift = (1 << 1),
+
+  Dopesheet                 — animation: dope sheet timeline view
+    src/imageio.cs:2887
+    /// <summary>Represents the value associated with the constant kCGImagePropertyIPTCExtDopesheet</summary>
+
+  Downmix                   — audio: down-mix channels
+    src/AudioToolbox/AudioConverter.cs:403
+    public bool PerformDownmix {
+
+  Dpa                       — acronym: Data Protection Act / differential power analysis
+    src/Security/Items.cs:185
+    Dpa = 1633775716,
+
+  Dpad                      — gaming: directional pad
+    src/touchcontroller.cs:42
+    public enum TCControlContentsDpadDirection : long {
+
+  Dpads                     — gaming: plural of dpad
+    src/gamecontroller.cs:1282
+    NSDictionary<NSString, GCControllerDirectionPad> Dpads { get; }
+
+  Drm                       — acronym: Digital Rights Management
+    src/iTunesLibrary/Enums.cs:336
+    IsDrmProtected,
+
+  Droste                    — graphics: Droste effect (recursive image)
+    src/CoreImage/CIFilter.cs:644
+    case "CIDroste":
+
+  Dtls                      — protocol: Datagram Transport Layer Security
+    src/Security/SecProtocolOptions.cs:182
+    static public TlsProtocolVersion DefaultMinDtlsProtocolVersion => sec_protocol_options_get_default_min_dtls_protocol_version ();
+
+  Dtmf                      — telecom: Dual-Tone Multi-Frequency
+    src/callkit.cs:126
+    public enum CXPlayDtmfCallActionType : long {
+
+  dy                        — math: differential y component
+    src/appkit.cs:1009
+    // Also can't call it 'RestoreWindow', because that's already in use.
+
+  Eap                       — protocol: Extensible Authentication Protocol
+    src/NetworkExtension/NEHotspotEapSettings.cs:2
+    // NEHotspotEapSettings.cs
+
+  Ebu                       — acronym: European Broadcasting Union
+    src/corevideo.cs:418
+    [Wrap ("CVImageBufferColorPrimaries.Ebu3213.GetConstant ()")]
+
+  Ecc                       — crypto: Elliptic Curve Cryptography
+    src/CoreImage/Enums.cs:70
+    public enum CIDataMatrixCodeEccVersion : long {
+
+  Ecdh                      — crypto: Elliptic Curve Diffie-Hellman
+    src/Security/SecureTransport.cs:74
+    EcdheEcdsaWith3desEdeCbcSha = 49160,
+
+  Ecdhe                     — crypto: Elliptic Curve Diffie-Hellman Ephemeral
+    src/Security/SecureTransport.cs:74
+    EcdheEcdsaWith3desEdeCbcSha = 49160,
+
+  Ecdsa                     — crypto: Elliptic Curve Digital Signature Algorithm
+    src/security.cs:1165
+    EcdsaSignatureRfc4754,
+
+  Ecies                     — crypto: Elliptic Curve Integrated Encryption
+    src/security.cs:1261
+    EciesEncryptionStandardX963Sha1AesGcm,
+
+  Ecn                       — networking: Explicit Congestion Notification
+    src/Network/NWProtocolTcpOptions.cs:66
+    public void SetDisableEcn (bool disableEcn) => nw_tcp_options_set_disable_ecn (GetCheckedHandle (), disableEcn.AsByte ());
+
+  Ect                       — networking: ECN-Capable Transport
+    src/Network/NWEnums.cs:225
+    NonEct = 0,
+
+  Editability               — valid English: quality of being editable
+    src/uikit.cs:29780
+    UITextDropEditability WillBecomeEditable (IUITextDroppable textDroppableView, IUITextDropRequest drop);
+
+  Edr                       — display: Extended Dynamic Range
+    src/uikit.cs:15992
+    nfloat CurrentEdrHeadroom { get; }
+
+  Eftpos                    — payment: Electronic Funds Transfer at Point of Sale
+    src/passkit.cs:1921
+    [Field ("PKPaymentNetworkEftpos")]
+
+  Eisu                      — Japanese: alphanumeric input mode
+    src/AppKit/Enums.cs:994
+    JISEisu = 0x66,
+
+  Elu                       — ML: Exponential Linear Unit activation
+    src/MetalPerformanceShaders/MPSEnums.cs:234
+    Elu,
+
+  Emagic                    — proper name: Emagic (music software company)
+    src/AudioToolbox/AudioType.cs:1076
+    Emagic_Default_7_1 = (129 << 16) | 8,
+
+  Embd                      — abbreviation: embedded
+    src/imageio.cs:2915
+    /// <summary>Represents the value associated with the constant kCGImagePropertyIPTCExtEmbdEncRightsExpr</summary>
+
+  Emsg                      — format: Event Message Box (ISOBMFF)
+    src/CoreMedia/CMEnums.cs:97
+    Emsg = 0x656d7367, // 'emsg'
+
+  Enc                       — abbreviation: encryption/encoded
+    src/coremotion.cs:360
+    /// <summary>Encapsulates Attitude, Rotation Rate and Acceleration of the device.</summary>
+
+  Eof                       — abbreviation: End Of File
+    src/foundation.cs:10615
+    delegate void NSUrlSessionDataRead ([NullAllowed] NSData data, bool atEof, [NullAllowed] NSError error);
+
+  Eppc                      — protocol: Apple Remote Apple Events
+    src/Security/Items.cs:155
+    Eppc,
+
+  Epub                      — format: Electronic Publication
+    src/uniformtypeidentifiers.cs:558
+    UTType Epub { get; }
+
+  Exabibits                 — unit: exabibits (2^60 bits)
+
+  Exabits                   — unit: exabits (10^18 bits)
+    src/foundation.cs:22573
+    NSUnitInformationStorage Exabits { get; }
+
+  Exabytes                  — unit: exabytes (10^18 bytes)
+
+  Exbibits                  — unit: exbibits (2^60 bits)
+    src/foundation.cs:22637
+    NSUnitInformationStorage Exbibits { get; }
+
+  Exbibytes                 — unit: exbibytes (2^60 bytes)
+
+  Expr                      — abbreviation: expression
+    src/sensorkit.cs:1155
+    interface SRFaceMetricsExpression : NSCopying, NSSecureCoding {
+
+  Exr                       — format: OpenEXR image format
+    src/coregraphics.cs:15
+    ExrGamma,
+
+  Felica                    — NFC: FeliCa contactless smart card (Sony)
+    src/passkit.cs:294
+    /// <summary>Gets a Boolean value that tells whether Felica passes can be added to the library.</summary>
+
+  Femtowatts                — unit: femtowatts (10^-15 watts)
+    src/foundation.cs:21944
+    NSUnitPower Femtowatts { get; }
+
+  Fhir                      — health: Fast Healthcare Interoperability Resources
+    src/HealthKit/Enums.cs:758
+    public enum HKFhirResourceType {
+
+  Flipped                   — valid English: mirrored/inverted
+
+  Flipside                  — compound: flip side
+    src/uikit.cs:7152
+    [Export ("viewFlipsideBackgroundColor")]
+
+  Fmin                      — math: minimum of floating-point values
+
+  Fmod                      — math: floating-point modulo operation
+
+  Fov                       — abbreviation: Field Of View
+    src/scenekit.cs:416
+    [Export ("xFov")]
+
+  Framebuffer               — graphics: frame buffer (GPU memory)
+    src/metalkit.cs:69
+    bool FramebufferOnly { get; set; }
+
+  Framesetter               — Core Text: CTFramesetter (text layout)
+    src/CoreText/CTFramesetter.cs:2
+    // CTFramesetter.cs: Implements the managed CTFramesetter
+
+  Frenet                    — proper name: Frenet-Serret frame (differential geometry)
+
+  Freq                      — abbreviation: frequency
+    src/EventKit/EKEnums.cs:211
+    public enum EKRecurrenceFrequency : long {
+
+  Froms                     — valid English: plural of from (source list)
+    src/foundation.cs:4369
+    [Field ("NSMetadataItemWhereFromsKey")]
+
+  Ftps                      — protocol: FTP over SSL/TLS
+    src/Security/Items.cs:137
+    Ftps,
+
+  Fullrange                 — video: full range (vs limited/narrow range)
+
+  Gadu                      — protocol: Gadu-Gadu (Polish messaging)
+    src/contacts.cs:2154
+    /// <summary>Gadu-Gadu (Polish).</summary>
+
+  Gbrg                      — Bayer: Green-Blue-Red-Green pattern
+    src/corevideo.cs:863
+    Gbrg = 2,
+
+  Gelu                      — ML: Gaussian Error Linear Unit activation
+    src/mlcompute.cs:31
+    Gelu = 18,
+
+  Geocoder                  — location: geocoding service
+
+  Geohash                   — location: geospatial hash encoding
+
+  Gibibits                  — unit: gibibits (2^30 bits)
+    src/foundation.cs:22649
+    NSUnitInformationStorage Gibibits { get; }
+
+  Gibibytes                 — unit: gibibytes (2^30 bytes)
+
+  Gigabits                  — unit: gigabits (10^9 bits)
+
+  Gigaflops                 — unit: billion floating-point operations/sec
+
+  Gigapascals               — unit: gigapascals (pressure)
+    src/foundation.cs:21971
+    NSUnitPressure Gigapascals { get; }
+
+  Girocard                  — payment: German debit card system
+    src/passkit.cs:1945
+    [Field ("PKPaymentNetworkGirocard")]
+
+  Glorot                    — proper name: Glorot initialization (Xavier)
+    src/mlcompute.cs:216
+    GlorotUniform = 2,
+
+  Gop                       — video: Group Of Pictures
+    src/videotoolbox.cs:77
+    NSString AllowOpenGop { get; }
+
+  Gpp                       — abbreviation: general purpose processor
+    src/avfoundation.cs:446
+    ThreeGpp = 3,
+
+  Gps                       — acronym: Global Positioning System
+    src/corespotlight.cs:1191
+    string ExifGpsVersion { get; set; }
+
+  Grbg                      — Bayer: Green-Red-Blue-Green pattern
+    src/corevideo.cs:862
+    Grbg = 1,
+
+  Greeking                  — typography: placeholder text display
+    src/pdfkit.cs:3240
+    nfloat GreekingThreshold { get; set; }
+
+  Greyscale                 — British spelling: grayscale
+
+  Grib                      — format: GRIdded Binary (weather data)
+
+  Growable                  — valid English: capable of growing
+
+  Gru                       — ML: Gated Recurrent Unit
+    src/MetalPerformanceShaders/MPSEnums.cs:623
+    GruInputGateInputWeights,
+
+  Gtin                      — acronym: Global Trade Item Number
+    src/imageio.cs:3333
+    NSString IPTCExtProductInImageGtin { get; }
+
+  Gui                       — acronym: Graphical User Interface
+    src/appkit.cs:13002
+    interface NSLayoutGuide : NSCoding, NSUserInterfaceItemIdentification {
+
+  Hardlink                  — filesystem: hard link
+    src/CoreServices/FSEvents.cs:93
+    ItemIsHardlink = 0x00100000,
+
+  Hardmax                   — ML: hard maximum function
+
+  Hdmi                      — hardware: High-Definition Multimedia Interface
+    src/HomeKit/HMEnums.cs:1992
+    Hdmi = 3,
+
+  Hdr                       — imaging: High Dynamic Range
+    src/coregraphics.cs:611
+    NSString SkipBoostToHdrKey { get; }
+
+  Heic                      — format: High Efficiency Image Container
+    src/imageio.cs:104
+    NSString HeicsDictionary { get; }
+
+  Heics                     — format: HEIC image sequence
+    src/imageio.cs:104
+    NSString HeicsDictionary { get; }
+
+  Heif                      — format: High Efficiency Image File
+    src/imageio.cs:3887
+    NSString HeifDictionary { get; }
+
+  Hellman                   — proper name: Hellman (Diffie-Hellman key exchange)
+
+  Hermite                   — proper name: Hermite interpolation (mathematics)
+
+  Hevc                      — codec: High Efficiency Video Coding (H.265)
+    src/videotoolbox.cs:428
+    NSString MvHevcVideoLayerIds { get; }
+
+  Hfp                       — Bluetooth: Hands-Free Profile
+    src/avfoundation.cs:3733
+    NSString PortBluetoothHfp { get; }
+
+  Himyan                    — proper name: Himyaritic script
+
+  Hipass                    — audio: high-pass filter
+    src/AudioUnit/AUEnums.cs:872
+    // AUHipass
+
+  Hlg                       — video: Hybrid Log-Gamma (HDR)
+    src/coregraphics.cs:200
+    NSString ItuR_709_Hlg { get; }
+
+  Hls                       — protocol: HTTP Live Streaming
+    src/avfoundation.cs:402
+    FormatHlsMetadata = 0,
+
+  Hoa                       — audio: Higher Order Ambisonics
+    src/AudioToolbox/AudioType.cs:796
+    HoaAcn = 500,
+
+  Hrtf                      — audio: Head-Related Transfer Function
+    src/AudioToolbox/Enums.cs:45
+    public enum AUSpatialMixerPersonalizedHrtfMode : uint {
+
+  Hsb                       — color: Hue Saturation Brightness
+    src/appkit.cs:4593
+    NSColor FromCalibratedHsba (nfloat hue, nfloat saturation, nfloat brightness, nfloat alpha);
+
+  Hsba                      — color: HSB + Alpha
+    src/appkit.cs:4593
+    NSColor FromCalibratedHsba (nfloat hue, nfloat saturation, nfloat brightness, nfloat alpha);
+
+  Hvxc                      — codec: Harmonic Vector eXcitation Coding
+    src/AudioToolbox/AudioType.cs:1834
+    Hvxc = 9,
+
+  IARAnchorCopying          — Apple API: AR anchor copying protocol
+    ./tests/introspection/ApiCtorInitTest.cs:665
+    /// Ensures that all subclasses of a base class that conforms to IARAnchorCopying re-expose its constructor.
+
+  Ibss                      — networking: Independent Basic Service Set (ad-hoc WiFi)
+    src/CoreWlan/Enums.cs:111
+    Ibss = 2,
+
+  Icao                      — acronym: International Civil Aviation Organization
+
+  Icns                      — format: macOS icon file format
+    src/uniformtypeidentifiers.cs:335
+    UTType Icns { get; }
+
+  Ico                       — format: Windows icon file format
+    src/appkit.cs:440
+    NSImage Icon { get; set; }
+
+  Icq                       — protocol: ICQ messaging
+    src/Contacts/CNInstantMessageAddress.cs:36
+    Icq,
+
+  Identd                    — protocol: Identification Protocol daemon
+    src/CoreFoundation/CFNetwork.cs:24
+    Socks4IdentdFailed = 111,
+
+  Ies                       — format: Illuminating Engineering Society
+    src/scenekit.cs:1525
+    NSUrl IesProfileUrl { get; set; }
+
+  Imageblock                — Metal: image block (GPU tile memory)
+    src/Metal/MTLEnums.cs:1305
+    [NoMac, TV (14, 5)] ImageblockData = 16,
+
+  Imap                      — protocol: Internet Message Access Protocol
+    src/Security/Items.cs:125
+    Imap,
+
+  Imaps                     — protocol: IMAP over SSL/TLS
+    src/Security/Items.cs:165
+    Imaps,
+
+  Img                       — abbreviation: image
+    src/imageio.cs:776
+    /// <summary>Represents the value associated with the constant kCGImagePropertyGPSImgDirectionRef</summary>
+
+  Immersive                 — valid English: fully immersive experience
+
+  Impl                      — abbreviation: implementation
+    src/appkit.cs:419
+    [Export ("allowsImplicitAnimation")]
+
+  Incrementor               — valid English: one that increments
+    src/appkit.cs:31472
+    [Field ("NSAccessibilityIncrementorRole")]
+
+  Indoorcycle               — fitness: indoor cycling
+    src/intents.cs:3299
+    [Field ("INWorkoutNameIdentifierIndoorcycle")]
+
+  Indoorrun                 — fitness: indoor running
+    src/intents.cs:3295
+    [Field ("INWorkoutNameIdentifierIndoorrun")]
+
+  Indoorwalk                — fitness: indoor walking
+    src/intents.cs:3303
+    [Field ("INWorkoutNameIdentifierIndoorwalk")]
+
+  Inet                      — abbreviation: internet (AF_INET socket family)
+
+  Inferencing               — ML: running inference on a model
+
+  Inklist                   — PDF: ink list annotation
+    src/pdfkit.cs:135
+    [Field ("PDFAnnotationKeyInklist", "+PDFKit")]
+
+  Inode                     — filesystem: index node
+    src/CoreServices/FSEvents.cs:73
+    ItemInodeMetaMod = 0x00000400,
+
+  Instamatic                — proper name: Kodak Instamatic camera
+    src/ImageCaptureCore/Defs.cs:254
+    Instamatic110 = 72,
+
+  Interac                   — payment: Interac (Canadian payment network)
+    src/appkit.cs:6873
+    [Export ("unblockUserInteraction")]
+
+  Interframe                — video: inter-frame prediction
+    src/videotoolbox.cs:1617
+    [Field ("kVTDecompressionPropertyKey_ContentHasInterframeDependencies")]
+
+  Interitem                 — UI: inter-item spacing
+    src/appkit.cs:4466
+    [Export ("collectionView:layout:minimumInteritemSpacingForSectionAtIndex:")]
+
+  Interleave                — valid English: alternate/intersperse
+
+  Interleaved               — valid English: alternated
+
+  Interleavings             — valid English: plural of interleaving
+
+  Intermenstrual            — health: between menstrual periods
+    src/healthkit.cs:3456
+    [Field ("HKCategoryTypeIdentifierIntermenstrualBleeding")]
+
+  Inv                       — abbreviation: inverse
+    src/appkit.cs:4241
+    interface NSCollectionViewLayoutInvalidationContext {
+
+  Invitable                 — valid English: capable of being invited
+    src/gamekit.cs:813
+    [Export ("isInvitable")]
+
+  Ioctl                     — C function: I/O control system call
+
+  iOSAttribute              — compound: iOS + Attribute
+    src/rgen/Microsoft.Macios.Transformer/AttributesNames.cs:208
+    public const string NoiOSAttribute = "NoiOSAttribute";
+
+  Iosurface                 — Apple: IOSurface framework
+
+  Iou                       — ML: Intersection Over Union (object detection)
+    src/metalperformanceshaders.cs:14149
+    float MinIouForObjectPresence { get; set; }
+
+  Ipa                       — format: iOS App package
+    src/uikit.cs:1275
+    NSString SpeechAttributeIpaNotation { get; }
+
+  Ipp                       — protocol: Internet Printing Protocol
+    src/Security/Items.cs:157
+    Ipp,
+
+  Iptc                      — format: Intl Press Telecommunications Council
+    src/appkit.cs:2185
+    NSString IptcData { get; }
+
+  Ircs                      — protocol: IRC over SSL/TLS
+    src/Security/Items.cs:167
+    Ircs,
+
+  Irdaobex                  — protocol: IrDA Object Exchange
+
+  Iso                       — acronym: International Organization for Standardization
+
+  Itf                       — barcode: Interleaved Two of Five
+    src/vision.cs:163
+    Itf14,
+
+  Itu                       — acronym: International Telecommunication Union
+    src/avfoundation.cs:20339
+    NSString Itu_R_709_2 { get; }
+
+  Itur                      — acronym: ITU Radiocommunication sector
+    src/CoreGraphics/CGColorSpace.cs:754
+    public bool UsesItur2100TF => CGColorSpaceUsesITUR_2100TF (Handle) != 0;
+
+  Jcb                       — payment: JCB credit card
+    src/passkit.cs:1873
+    NSString Jcb { get; }
+
+  Jfif                      — format: JPEG File Interchange Format
+    src/imageio.cs:4134
+    interface CGImagePropertiesJfif { }
+
+  Jis                       — standard: Japanese Industrial Standards
+    src/ImageCaptureCore/Defs.cs:222
+    JisB0 = 34,
+
+  Kdl                       — format: KDL document language
+
+  Keyerror                  — compound: key error
+    src/avfoundation.cs:12144
+    AVKeyValueStatus StatusOfValueForKeyerror (string key, out NSError error);
+
+  Keyi                      — compound: key identifier
+    src/avfoundation.cs:8733
+    /// <summary>Represents the value associated with the constant AVMetadataQuickTimeMetadataKeyiXML</summary>
+
+  Keypoint                  — vision: feature keypoint
+    src/MetalPerformanceShaders/MPSDefs.cs:219
+    public struct MPSImageKeypointRangeInfo {
+
+  Keypoints                 — vision: plural of keypoint
+    src/MetalPerformanceShaders/MPSDefs.cs:222
+    public nuint MaximumKeypoints;
+
+  Kibibits                  — unit: kibibits (2^10 bits)
+    src/foundation.cs:22657
+    NSUnitInformationStorage Kibibits { get; }
+
+  Kibibytes                 — unit: kibibytes (1024 bytes)
+
+  Kiloampere                — unit: kiloampere
+    src/foundation.cs:21456
+    NSUnitElectricCharge KiloampereHours { get; }
+
+  Kiloamperes               — unit: kiloamperes
+    src/foundation.cs:21491
+    NSUnitElectricCurrent Kiloamperes { get; }
+
+  Kilobits                  — unit: kilobits (1000 bits)
+
+  Kiloohms                  — unit: kiloohms
+    src/foundation.cs:21561
+    NSUnitElectricResistance Kiloohms { get; }
+
+  Kilopascals               — unit: kilopascals (pressure)
+    src/foundation.cs:21979
+    NSUnitPressure Kilopascals { get; }
+
+  Klv                       — format: Key-Length-Value encoding
+
+  ks                        — abbreviation: keys/constants
+    src/adsupport.cs:13
+    ///     <remarks>
+
+  Kullback                  — proper name: Kullback-Leibler divergence
+    src/MetalPerformanceShaders/MPSEnums.cs:515
+    KullbackLeiblerDivergence,
+
+  Lacunarity                — math: measure of gap distribution
+    src/gameplaykit.cs:1819
+    double Lacunarity { get; set; }
+
+  Latm                      — format: Low-overhead Audio Transport Multiplex
+    src/AudioToolbox/AudioType.cs:140
+    LatmInLoas = 0x6c6f6173, // 'loas'
+
+  Ldaps                     — protocol: LDAP over SSL/TLS
+    src/Security/Items.cs:161
+    Ldaps,
+
+  Lerp                      — math: linear interpolation
+    src/SceneKit/SCNVector3.cs:645
+    #region Lerp
+
+  libcompression            — Apple: libcompression library
+    src/Compression/CompressionStreamStruct.cs:19
+    [DllImport (Constants.libcompressionLibrary)]
+
+  libdispatch               — Apple: Grand Central Dispatch library
+    src/corefoundation.cs:77
+    [Field ("_dispatch_data_destructor_free", "/usr/lib/system/libdispatch.dylib")]
+
+  Lidar                     — acronym: Light Detection And Ranging
+
+  Llvm                      — acronym: Low Level Virtual Machine (compiler)
+
+  Lod                       — graphics: Level Of Detail
+    src/intents.cs:14548
+    interface INLodgingReservation : NSCopying, NSSecureCoding {
+
+  Log10                     — math: base-10 logarithm
+
+  Log2                      — math: base-2 logarithm
+
+  Lopass                    — audio: low-pass filter
+    src/AudioUnit/AUEnums.cs:995
+    DelayLopassCutoff = 3,
+
+  Losslessly                — valid English: without loss
+
+  Lowlevel                  — compound: low level
+    src/CoreImage/CISampler.cs:101
+    ret.LowlevelSetObject (ColorSpace.Handle, CISampler.ColorSpace.Handle);
+
+  Lpc                       — codec: Linear Predictive Coding (audio)
+
+  Lpcm                      — audio: Linear Pulse Code Modulation
+    src/avfoundation.cs:13894
+    [Obsolete ("Use 'AVAssetExportSessionPreset.AppleProRes4444Lpcm.GetConstant ()' instead.")]
+
+  Lstm                      — ML: Long Short-Term Memory
+    src/MetalPerformanceShaders/MPSEnums.cs:591
+    LstmInputGateInputWeights,
+
+  Lun                       — storage: Logical Unit Number
+    src/MetalPerformanceShaders/MPSEnums.cs:238
+    ReLun,
+
+  Lzfse                     — compression: Lempel-Ziv Finite State Entropy
+    src/Metal/MTLEnums.cs:2345
+    Lzfse = 1,
+
+  Lzma                      — compression: Lempel-Ziv-Markov chain
+    src/foundation.cs:5850
+    Lzma,
+
+  Lzw                       — compression: Lempel-Ziv-Welch
+    src/AppKit/Enums.cs:2199
+    Lzw = 5,
+
+  MacAttribute              — compound: Mac + Attribute
+    src/rgen/Microsoft.Macios.Transformer/AttributesNames.cs:151
+    public const string MacAttribute = "ObjCRuntime.MacAttribute";
+
+  Mada                      — payment: mada (Saudi payment network)
+    src/passkit.cs:1935
+    [Field ("PKPaymentNetworkMada")]
+
+  Mcp                       — protocol: Media Control Protocol
+    src/vision.cs:751
+    IndexMcp,
+
+  Mebibits                  — unit: mebibits (2^20 bits)
+    src/foundation.cs:22653
+    NSUnitInformationStorage Mebibits { get; }
+
+  Megaampere                — unit: megaampere
+    src/foundation.cs:21452
+    NSUnitElectricCharge MegaampereHours { get; }
+
+  Megaamperes               — unit: megaamperes
+    src/foundation.cs:21487
+    NSUnitElectricCurrent Megaamperes { get; }
+
+  Megabits                  — unit: megabits (10^6 bits)
+
+  Megaliters                — unit: megaliters
+    src/foundation.cs:22053
+    NSUnitVolume Megaliters { get; }
+
+  Megameters                — unit: megameters
+    src/foundation.cs:21279
+    [Export ("squareMegameters", ArgumentSemantic.Copy)]
+
+  Megaohms                  — unit: megaohms
+    src/foundation.cs:21557
+    NSUnitElectricResistance Megaohms { get; }
+
+  Megapascals               — unit: megapascals (pressure)
+    src/foundation.cs:21975
+    NSUnitPressure Megapascals { get; }
+
+  Mels                      — audio: mel scale units (psychoacoustics)
+
+  Metacharacters            — programming: regex meta-characters
+    src/Foundation/Enum.cs:2092
+    IgnoreMetacharacters = 1 << 2,
+
+  Metadatas                 — valid English: plural of metadata
+    src/coredata.cs:5156
+    delegate void NSPersistentCloudKitContainerAcceptShareInvitationsHandler ([NullAllowed] NSArray<CKShareMetadata> acceptedShareMetadatas, [NullAllowed] NSError error);
+
+  Metalness                 — rendering: metalness (PBR material property)
+    src/scenekit.cs:1937
+    SCNMaterialProperty Metalness { get; }
+
+  Mgmt                      — abbreviation: management
+    src/ObjCBindings/ForcedTypeAttribute.cs:39
+    /// [1]: https://developer.apple.com/library/content/documentation/CoreFoundation/Conceptual/CFMemoryMgmt/Concepts/Ownership.html
+
+  Microamp                  — unit: microampere
+
+  Microampere               — unit: microampere
+    src/foundation.cs:21468
+    NSUnitElectricCharge MicroampereHours { get; }
+
+  Microamperes              — unit: microamperes
+    src/foundation.cs:21503
+    NSUnitElectricCurrent Microamperes { get; }
+
+  Microamps                 — unit: microamperes
+
+  Microbenchmark            — valid English: micro-benchmark
+
+  Micromoles                — unit: micromoles (chemistry)
+
+  Microohms                 — unit: microohms
+    src/foundation.cs:21573
+    NSUnitElectricResistance Microohms { get; }
+
+  Micropascals              — unit: micropascals (pressure)
+
+  Microteslas               — unit: microteslas (magnetic field)
+
+  Microvolts                — unit: microvolts (electric potential)
+
+  Microwatts                — unit: microwatts (power)
+    src/foundation.cs:21932
+    NSUnitPower Microwatts { get; }
+
+  Midroll                   — advertising: mid-roll ad placement
+
+  Millimoles                — unit: millimoles (chemistry)
+    src/foundation.cs:21359
+    NSUnitConcentrationMass GetMillimolesPerLiter (double gramsPerMole);
+
+  Milliohms                 — unit: milliohms
+    src/foundation.cs:21569
+    NSUnitElectricResistance Milliohms { get; }
+
+  Minibatch                 — ML: mini-batch training
+
+  Minification              — valid English: making smaller (also: JS minification)
+    src/coreanimation.cs:703
+    string MinificationFilter { get; set; }
+
+  Mixup                     — compound: mix up
+
+  Mncs                      — telecom: Mobile Network Codes
+    src/networkextension.cs:4275
+    string [] MccAndMncs { get; set; }
+
+  Mobike                    — protocol: IKEv2 Mobility and Multihoming
+    src/networkextension.cs:2723
+    bool DisableMobike { get; set; }
+
+  Morpher                   — audio: audio unit morpher effect
+    src/scenekit.cs:2393
+    SCNMorpher Morpher { get; set; }
+
+  Mosek                     — proper name: MOSEK optimization solver
+
+  Mpe                       — abbreviation: MPEG-related
+    src/AudioToolbox/AudioType.cs:111
+    MpegD_Usac = 0x75736163, // 'usac' (Unified Speech and Audio Coding)
+
+  Mps                       — Apple: Metal Performance Shaders
+    src/coreimage.cs:5936
+    CIImage OutputImageNonMps { get; }
+
+  Mpso                      — acronym: multi-particle swarm optimization
+
+  Msaa                      — graphics: Multi-Sample Anti-Aliasing
+    src/metal.cs:1779
+    bool Supports32BitMsaa { get; }
+
+  Mtc                       — MIDI: MIDI Time Code
+    src/CoreMidi/MidiThruConnectionParams.cs:338
+    public byte FilterOutMtc;
+
+  Mtgp                      — PRNG: Mersenne Twister for GPU
+    src/metalperformanceshaders.cs:4667
+    interface MPSMatrixRandomMtgp32 {
+
+  Mtu                       — networking: Maximum Transmission Unit
+    src/networkextension.cs:2776
+    nuint Mtu { get; set; }
+
+  Mul                       — abbreviation: multiply
+    src/appkit.cs:1716
+    [Export ("alwaysUsesMultipleValuesMarker")]
+
+  Mult                      — abbreviation: multiply/multiple
+    src/appkit.cs:1716
+    [Export ("alwaysUsesMultipleValuesMarker")]
+
+  Multipath                 — networking: multipath TCP
+    src/foundation.cs:11018
+    NSUrlSessionMultipathServiceType MultipathServiceType { get; set; }
+
+  Multipeer                 — Apple: MultipeerConnectivity framework
+    src/gamekit.cs:275
+    [Deprecated (PlatformName.iOS, 7, 0, message: "Use 'MultipeerConnectivity.MCSession' instead.")]
+
+  Muxed                     — valid English: multiplexed
+    src/avfoundation.cs:174
+    [Field ("AVMediaTypeMuxed")]
+
+  Nai                       — acronym: Network Access Identifier
+    src/networkextension.cs:4269
+    string [] NaiRealmNames { get; set; }
+
+  Nanograms                 — unit: nanograms
+    src/foundation.cs:21853
+    NSUnitMass Nanograms { get; }
+
+  Nanoteslas                — unit: nanoteslas (magnetic field)
+
+  Nanowatts                 — unit: nanowatts
+    src/foundation.cs:21936
+    NSUnitPower Nanowatts { get; }
+
+  Nbs                       — abbreviation: narrowband signal
+
+  Ndarray                   — ML: n-dimensional array
+
+  Ndef                      — NFC: NFC Data Exchange Format
+    src/corenfc.cs:54
+    NdefReaderSessionErrorTagNotWritable = 400,
+
+  Neginf                    — math: negative infinity
+
+  Nesterov                  — proper name: Nesterov momentum (optimization)
+    src/MetalPerformanceShaders/MPSNNOptimizerStochasticGradientDescent.cs:18
+    /// <param name="useNestrovMomentum">The Nesterov-style momentum update.</param>
+
+  Nfnt                      — format: bitmap font resource type
+    src/CoreText/CTFont.cs:212
+    FondAndNfntData = 0x666f6e64,  // 'fond'
+
+  Nntps                     — protocol: NNTP over SSL/TLS
+    src/Security/Items.cs:159
+    Nntps,
+
+  Nonenumerated             — valid English: not enumerated
+    src/AppKit/Enums.cs:3834
+    ClearNonenumeratedImages = 1 << 16,
+
+  Nop                       — instruction: no operation
+    src/Security/Certificate.cs:570
+    * 3. Nope, because there's no way to create a `SecIdentity` from `SecKey`+`SecCertificate`. You have to put
+
+  Nsevent                   — Apple: NSEvent (event object)
+
+  Nsl                       — Apple: Network Services Locator
+    src/AppKit/Enums.cs:3405
+    InternetLocationNslNeighborhoodIcon = 0x696C6E73,   //'ilns'
+
+  Ntfs                      — filesystem: NT File System
+
+  Ntlm                      — auth: NT LAN Manager authentication
+    src/Security/Items.cs:181
+    Ntlm = 1835824238,
+
+  Ntsc                      — video: National Television Standards Committee
+    src/CoreMedia/CMEnums.cs:171
+    DvcNtsc = 0x64766320,
+
+  Nyquist                   — proper name: Nyquist frequency/theorem
+    src/AudioUnit/AUEnums.cs:1032
+    Reverb2DecayTimeAtNyquist = 5,
+
+  Obex                      — protocol: Object Exchange
+
+  Objc                      — abbreviation: Objective-C
+
+  Objectness                — ML: objectness score (object detection)
+    src/vision.cs:489
+    enum VNGenerateObjectnessBasedSaliencyImageRequestRevision : ulong {
+
+  Ocsp                      — protocol: Online Certificate Status Protocol
+    src/Security/SecProtocolMetadata.cs:199
+    static void TrampolineOcspReposeForPeer (IntPtr block, IntPtr data)
+
+  Octree                    — data structure: octree (3D spatial partitioning)
+    src/gameplaykit.cs:2021
+    /// <summary>A node in a <see cref="GameplayKit.GKOctree{ElementType}" />. Automatically managed by the <see cref="GameplayKit.GKOctree{ElementType}" /> as objects are added and removed.</summary>
+
+  Oid                       — acronym: Object Identifier
+    src/coretelephony.cs:409
+    string Oid { get; set; }
+
+  Oneof                     — compound: one of (protobuf)
+
+  Operand                   — valid English: value being operated on
+
+  Operands                  — valid English: plural of operand
+
+  Organisation              — British spelling: organization
+    src/imageio.cs:3209
+    /// <summary>Represents the value associated with the constant kCGImagePropertyIPTCExtOrganisationInImageCode</summary>
+
+  Orth                      — abbreviation: orthographic
+    src/appkit.cs:17359
+    NSOrthography Orthography { get; set; }
+
+  Osa                       — Apple: Open Scripting Architecture
+    src/uniformtypeidentifiers.cs:268
+    UTType OsaScript { get; }
+
+  Otp                       — acronym: One-Time Password
+
+  Otsu                      — proper name: Otsu's thresholding method
+    src/coreimage.cs:13285
+    [Protocol (Name = "CIColorThresholdOtsu")]
+
+  Outpoint                  — video: edit out-point
+
+  ove                       — abbreviation: over/overlay
+    src/appkit.cs:2
+    // Copyright 2010, 2011, Novell, Inc.
+
+  Paeth                     — proper name: Paeth PNG filter
+    src/ImageIO/Enums.cs:88
+    Paeth = 0x80,
+
+  Pager                     — UI: paging control
+
+  Palettize                 — graphics: convert to indexed color palette
+    src/coreimage.cs:9429
+    interface CIPalettize : CIPalettizeProtocol {
+
+  Parms                     — abbreviation: parameters
+    src/Security/Enums.cs:501
+    InvalidAlgorithmParms = -67770, /* An algorithm parameters attribute was not valid. */
+
+  Pausable                  — valid English: capable of pausing
+    src/foundation.cs:17267
+    bool Pausable { [Bind ("isPausable")] get; set; }
+
+  Pbm                       — format: Portable Bitmap
+    src/PrintCore/Defs.cs:109
+    InvalidPbmRef = -9540,
+
+  Pcba                      — acronym: Printed Circuit Board Assembly
+
+  Pcl                       — format: Point Cloud Library
+    src/CoreText/CTFont.cs:172
+    Pcl5Data = 0x50434c54,  // 'PCLT'
+
+  Pcm                       — audio: Pulse Code Modulation
+    src/phase.cs:757
+    void ScheduleBuffer (AVAudioPcmBuffer buffer);
+
+  Pde                       — abbreviation: Partial Differential Equation
+    src/PrintCore/Defs.cs:100
+    InvalidPdeContext = -9530,
+
+  Pdu                       — networking: Protocol Data Unit
+    src/CoreBluetooth/Enums.cs:176
+    InvalidPdu,
+
+  Peap                      — auth: Protected EAP
+    src/networkextension.cs:82
+    Peap = 25,
+
+  Pebibit                   — unit: pebibit (2^50 bits)
+
+  Pebibits                  — unit: pebibits (2^50 bits)
+    src/foundation.cs:22641
+    NSUnitInformationStorage Pebibits { get; }
+
+  Pebibytes                 — unit: pebibytes (2^50 bytes)
+
+  Perlin                    — proper name: Perlin noise (procedural texture)
+    src/gameplaykit.cs:1825
+    /// <summary>A <see cref="GameplayKit.GKCoherentNoiseSource" /> that generates improved Perlin noise.</summary>
+
+  Persistable               — valid English: capable of persisting
+    src/avfoundation.cs:23299
+    [Export ("contentKeySession:didProvidePersistableContentKeyRequest:")]
+
+  Petabits                  — unit: petabits (10^15 bits)
+    src/foundation.cs:22577
+    NSUnitInformationStorage Petabits { get; }
+
+  Petaflops                 — unit: quadrillion floating-point ops/sec
+
+  Pfs                       — crypto: Perfect Forward Secrecy
+    src/security.cs:1498
+    Ats1NoPfs,
+
+  Philox                    — PRNG: Philox counter-based RNG
+    src/metalperformanceshaders.cs:4690
+    interface MPSMatrixRandomPhilox {
+
+  Photometric               — valid English: relating to light measurement
+
+  Phy                       — abbreviation: physical layer
+    src/imageio.cs:2642
+    /// <summary>Represents the value associated with the constant kCGImagePropertyIPTCExtArtworkPhysicalDescription</summary>
+
+  Picoamps                  — unit: picoamperes
+
+  Picometers                — unit: picometers
+    src/foundation.cs:21747
+    NSUnitLength Picometers { get; }
+
+  Picowatts                 — unit: picowatts
+    src/foundation.cs:21940
+    NSUnitPower Picowatts { get; }
+
+  Pip                       — UI: Picture-in-Picture
+
+  Pkcs                      — crypto: Public-Key Cryptography Standards
+    src/security.cs:1121
+    RsaSignatureDigestPkcs1v15Raw,
+
+  Placemark                 — location: map placemark/pin
+    src/mapkit.cs:360
+    MKPlacemark Placemark { get; }
+
+  Pnc                       — acronym: positive-negative-confirmation
+    src/coremidi.cs:76
+    RegisteredPnc = 0,
+
+  Pnorm                     — math: p-norm
+    src/metalperformanceshaders.cs:6494
+    [Export ("gatePnormValue")]
+
+  Pointee                   — programming: object being pointed to
+
+  Polyline                  — geometry: connected line segments
+    src/mapkit.cs:106
+    // optional, not implemented by MKPolygon, MKPolyline and MKCircle
+
+  Polylines                 — geometry: plural of polyline
+    src/mapkit.cs:2936
+    [Export ("initWithPolylines:")]
+
+  Popularimeter             — ID3: POPM tag (play counter/rating)
+    src/avfoundation.cs:9399
+    /// <summary>Represents the value associated with the constant AVMetadataID3MetadataKeyPopularimeter</summary>
+
+  Powerlog                  — compound: power log (diagnostics)
+
+  Precheck                  — valid English: pre-check verification
+
+  Preds                     — abbreviation: predictions
+    src/Security/Enums.cs:717
+    UnsupportedNumSelectionPreds = -67873,  /* The number of selection predicates is not supported. */
+
+  Premul                    — abbreviation: premultiplied (alpha)
+
+  Prerolls                  — media: pre-roll segments
+    src/avfoundation.cs:19387
+    [Export ("cancelPendingPrerolls")]
+
+  Presentable               — valid English: capable of presentation
+
+  Presized                  — valid English: pre-sized allocation
+
+  Previewable               — valid English: capable of previewing
+    src/appkit.cs:28702
+    [Export ("quickLookPreviewableItemsInRanges:")]
+
+  Profilable                — valid English: capable of profiling
+
+  Psec                      — unit: picosecond
+    src/security.cs:50
+    /// <summary>Represents the value associated with the constant kSecPolicyAppleIPsec</summary>
+
+  Psk                       — crypto: Pre-Shared Key
+    src/threadnetwork.cs:69
+    NSData Pskc { get; }
+
+  Psm                       — Bluetooth: Protocol/Service Multiplexer
+    src/corebluetooth.cs:1303
+    NSString L2CapPsmCharacteristicString { get; }
+
+  Ptp                       — protocol: Precision Time Protocol
+    src/ImageCaptureCore/ICCameraDevice.cs:56
+    public delegate void DidSendPtpDelegate (NSData? command, NSData? data, NSData? response, NSError? error);
+
+  Publishable               — valid English: capable of publication
+
+  Pulldown                  — video: pulldown (3:2 pulldown telecine)
+
+  Pvrtc                     — codec: PowerVR Texture Compression
+    src/Metal/MTLEnums.cs:1569
+    RowLinearPvrtc = 1 << 2,
+
+  Pwm                       — acronym: Pulse-Width Modulation
+
+  Qos                       — acronym: Quality of Service
+    src/CoreFoundation/DispatchBlock.cs:283
+    NoQosClass = 8,
+
+  Quadding                  — PDF: text alignment/quadding
+    src/pdfkit.cs:167
+    [Field ("PDFAnnotationKeyQuadding", "+PDFKit")]
+
+  Quaterniond               — math: quaternion with double precision
+    src/modelio.cs:33
+    using Quaterniond = global::CoreGraphics.NQuaterniond;
+
+  Quic                      — protocol: QUIC (Quick UDP Internet Connections)
+    src/appkit.cs:11442
+    [Field ("NSImageNameQuickLookTemplate")]
+
+  Qura                      — proper name: Quran variant spelling
+    src/foundation.cs:1794
+    /// <summary>Islamic Umm al-Qura calendar.</summary>
+
+  Radians                   — unit: radians (angle measure)
+
+  Rds                       — radio: Radio Data System
+
+  Reachability              — networking: network reachability check
+
+  Reacquirer                — valid English: one who reacquires
+    src/foundation.cs:133
+    delegate void NSFilePresenterReacquirer ([BlockCallback] Action reacquirer);
+
+  Realtime                  — compound: real time
+
+  Reassociation             — networking: WiFi reassociation
+    src/CoreWlan/Enums.cs:33
+    ReassociationDenied = -3908,
+
+  Recv                      — abbreviation: receive (socket API)
+
+  Reinvitation              — valid English: repeated invitation
+    src/gamekit.cs:1551
+    [Export ("match:shouldReinvitePlayer:"), DelegateName ("GKMatchReinvitation"), DefaultValue (true)]
+
+  Reinvite                  — SIP: re-INVITE request
+    src/gamekit.cs:1547
+    [Deprecated (PlatformName.iOS, 8, 0, message: "Use 'ShouldReinviteDisconnectedPlayer' instead.")]
+
+  Rel                       — abbreviation: relative/relation
+    src/appkit.cs:902
+    [Export ("disableRelaunchOnLogin"), ThreadSafe]
+
+  Relocalization            — AR: re-localization (position recovery)
+    src/arkit.cs:1091
+    [Export ("sessionShouldAttemptRelocalization:")]
+
+  Relu                      — ML: Rectified Linear Unit
+    src/metalperformanceshadersgraph.cs:2386
+    Relu,
+
+  Remappable                — valid English: capable of remapping
+
+  Replayable                — valid English: capable of replay
+    src/gamekit.cs:2427
+    bool Replayable { [Bind ("isReplayable")] get; }
+
+  Reprojection              — valid English: re-projection (coordinate transform)
+
+  Rgb                       — acronym: Red Green Blue
+    src/appkit.cs:4597
+    NSColor FromCalibratedRgba (nfloat red, nfloat green, nfloat blue, nfloat alpha);
+
+  Rgba                      — acronym: Red Green Blue Alpha
+    src/appkit.cs:4597
+    NSColor FromCalibratedRgba (nfloat red, nfloat green, nfloat blue, nfloat alpha);
+
+  Rggb                      — Bayer: Red-Green-Green-Blue pattern
+    src/corevideo.cs:861
+    Rggb = 0,
+
+  Rnn                       — ML: Recurrent Neural Network
+    src/metalperformanceshaders.cs:6360
+    interface MPSRnnDescriptor {
+
+  Roi                       — imaging: Region Of Interest
+    src/Accelerate/vImageTypes.cs:166
+    RoiLargerThanInputBuffer = -21766,
+
+  Rollback                  — valid English: revert changes
+
+  Romm                      — color: Reference Output Medium Metric (ProPhoto)
+    src/coregraphics.cs:214
+    /// <summary>Gets a string constant that identifies the RommRgb color space.</summary>
+
+  Rpa                       — acronym: Resolvable Private Address (BLE)
+    src/Security/Items.cs:187
+    Rpa = 1633775730,
+
+  Rpn                       — ML: Region Proposal Network
+    src/AVFoundation/Enums.cs:2107
+    RpnLsb = 100,
+
+  Rsa                       — crypto: Rivest-Shamir-Adleman algorithm
+    src/security.cs:1117
+    RsaSignatureRaw,
+
+  Rsqrt                     — math: reciprocal square root
+    src/mlcompute.cs:55
+    Rsqrt = 8,
+
+  Rssi                      — radio: Received Signal Strength Indicator
+    src/corewlan.cs:201
+    nint RssiValue { get; }
+
+  Rtl                       — text: Right-To-Left
+    src/pdfkit.cs:3220
+    bool DisplaysRtl { get; set; }
+
+  Rtp                       — protocol: Real-time Transport Protocol
+    src/HomeKit/HMEnums.cs:580
+    SupportedRtpConfiguration,
+
+  Rtsp                      — protocol: Real Time Streaming Protocol
+    src/Security/Items.cs:149
+    Rtsp,
+
+  Saml                      — auth: Security Assertion Markup Language
+    src/authenticationservices.cs:1583
+    Saml11 = 1L << 2,
+
+  Scaler                    — valid English: scaling device/function
+
+  Scn                       — Apple: SceneKit scene file
+    src/spritekit.cs:69
+    SCNScene ScnScene { get; set; }
+
+  Scrollview                — UI: scroll view control
+
+  Sdk                       — acronym: Software Development Kit
+    src/ObjCRuntime/Registrar.cs:355
+    Registrar.VerifyInSdk (ref exceptions, method);
+
+  Sdnn                      — health: Standard Deviation of NN intervals
+    src/healthkit.cs:3222
+    HeartRateVariabilitySdnn,
+
+  Sdof                      — photography: Shallow Depth Of Field
+    src/Photos/Enums.cs:508
+    SdofImage = 7,
+
+  Sdtv                      — acronym: Standard Definition Television
+    src/TVServices/TVEnums.cs:14
+    Sdtv,
+
+  Seekable                  — valid English: capable of seeking
+    src/avfoundation.cs:19156
+    [Field ("AVPlayerRateDidChangeReasonReversePlaybackReachedStartOfSeekableRange")]
+
+  Seekbar                   — UI: seek bar (media scrubber)
+
+  Selu                      — ML: Scaled Exponential Linear Unit
+    src/mlcompute.cs:25
+    Selu = 12,
+
+  Semitransient             — compound: semi-transient
+    src/AppKit/Enums.cs:3771
+    Semitransient,
+
+  Shadable                  — graphics: capable of shader application
+    src/scenekit.cs:951
+    interface SCNGeometry : SCNAnimatable, SCNBoundingVolume, SCNShadable, NSCopying, NSSecureCoding {
+
+  Siemen                    — unit: siemen (electrical conductance)
+    src/healthkit.cs:4033
+    HKUnit CreateSiemenUnit (HKMetricPrefix prefix);
+
+  Signpost                  — debugging: os_signpost (Apple tracing API)
+
+  Simd                      — acronym: Single Instruction Multiple Data
+
+  Sint                      — graphics: signed integer format
+    src/Metal/MTLEnums.cs:403
+    R8Sint = 14,
+
+  Sixtyfour                 — compound: sixty-four (64)
+    src/AppKit/Enums.cs:1648
+    SixtyfourBitRgb = 0x210,
+
+  Slerp                     — math: Spherical Linear intERPolation
+    src/SceneKit/SCNQuaternion.cs:472
+    #region Slerp
+
+  Slomo                     — abbreviation: slow motion
+    src/Photos/Enums.cs:205
+    SmartAlbumSlomoVideos = 208,
+
+  Smpte                     — acronym: Society of Motion Picture & TV Engineers
+    src/AudioToolbox/MusicSequence.cs:190
+    public void GetSmpteResolution (short resolution, out sbyte fps, out byte ticks)
+
+  Snapshotter               — Apple: map snapshotter (MKMapSnapshotter)
+    src/mapkit.cs:2245
+    partial interface MKMapSnapshotter {
+
+  Snorm                     — graphics: signed normalized format
+    src/Metal/MTLEnums.cs:399
+    R8Snorm = 12,
+
+  Sobel                     — proper name: Sobel operator (edge detection)
+    src/MetalPerformanceShaders/MPSKernel.cs:295
+    public partial class MPSImageSobel {
+
+  Socketopt                 — compound: socket option
+
+  Softmax                   — ML: softmax activation function
+    src/coreimage.cs:9337
+    [CoreImageFilterProperty ("inputSoftmaxNormalization")]
+
+  Softplus                  — ML: softplus activation function
+
+  Softshrink                — ML: soft shrinkage activation function
+
+  Softsign                  — ML: softsign activation function
+
+  Sqrt                      — math: square root
+    src/Simd/VectorDouble3.cs:91
+    System.Math.Sqrt (X * X + Y * Y + Z * Z);
+
+  Srgb                      — color: standard RGB color space
+    src/appkit.cs:28261
+    NSColor FromSrgb (nfloat red, nfloat green, nfloat blue, nfloat alpha);
+
+  Ssid                      — networking: Service Set Identifier (WiFi)
+    src/corewlan.cs:181
+    string Ssid { get; }
+
+  Ssids                     — networking: plural of SSID
+    src/networkextension.cs:4473
+    <para class="improve-task-t-return-type-description">A task that represents the asynchronous GetConfiguredSsids operation.  The value of the TResult parameter is of type System.Action&lt;System.String[]&gt;.</para>
+
+  Ssrc                      — protocol: Synchronization Source (RTP)
+
+  Stft                      — signal processing: Short-Time Fourier Transform
+
+  Stopwatch                 — valid English: timing device
+
+  Stringified               — valid English: converted to string
+
+  Subbeat                   — music: subdivision of a beat
+    src/AudioToolbox/MusicSequence.cs:399
+    unsafe extern static /* OSStatus */ MusicPlayerStatus MusicSequenceBeatsToBarBeatTime (/* MusicSequence */ IntPtr inSequence, /* MusicTimeStamp */ double inBeats, /* UInt32 */ int inSubbeatDivisor, CABarBeatTime* outBarBeatTime);
+
+  Subcaption                — compound: sub-caption
+    src/messages.cs:346
+    string Subcaption { get; set; }
+
+  Subcardioid               — audio: sub-cardioid polar pattern
+    src/avfoundation.cs:3994
+    [Internal, Field ("AVAudioSessionPolarPatternSubcardioid")]
+
+  Subentities               — Core Data: sub-entities
+    src/coredata.cs:539
+    NSDictionary<NSString, NSEntityDescription> SubentitiesByName { get; }
+
+  Subheadline               — compound: sub-headline
+    src/appkit.cs:34138
+    [Field ("NSFontTextStyleSubheadline")]
+
+  Sublayertransform         — Core Animation: sublayer transform property
+
+  Sublocality               — location: sub-locality (address component)
+    src/appkit.cs:34440
+    [Field ("NSTextContentTypeSublocality")]
+
+  Sublocation               — location: sub-location
+    src/imageio.cs:3167
+    /// <summary>Represents the value associated with the constant kCGImagePropertyIPTCExtLocationSublocation</summary>
+
+  Submesh                   — graphics: sub-mesh (3D rendering)
+    src/scenekit.cs:1256
+    [Export ("geometryElementWithMDLSubmesh:")]
+
+  Submeshes                 — graphics: sub-meshes (3D rendering)
+    src/modelio.cs:1460
+    NSMutableArray<MDLSubmesh> Submeshes {
+
+  Subpixel                  — display: sub-pixel
+    src/CoreGraphics/CGContext.cs:1549
+    extern static void CGContextSetAllowsFontSmoothing (/* CGContextRef */ IntPtr context, byte shouldSubpixelPositionFonts);
+
+  Subresources              — graphics: sub-resources
+    src/linkpresentation.cs:100
+    [Export ("shouldFetchSubresources")]
+
+  Subsec                    — abbreviation: subsecond
+    src/imageio.cs:369
+    /// <summary>Represents the value associated with the constant kCGImagePropertyExifSubsecTime</summary>
+
+  Suica                     — payment: Suica (Japanese transit card)
+    src/passkit.cs:1879
+    [Field ("PKPaymentNetworkSuica")]
+
+  Superentity               — Core Data: parent entity
+    src/coredata.cs:557
+    NSEntityDescription Superentity { get; }
+
+  Superresolution           — imaging: super-resolution upscaling
+
+  Supertype                 — programming: parent type
+    src/uniformtypeidentifiers.cs:111
+    [Export ("isSupertypeOfType:")]
+
+  Supertypes                — programming: plural of supertype
+    src/uniformtypeidentifiers.cs:118
+    NSSet<UTType> Supertypes { get; }
+
+  Svg                       — format: Scalable Vector Graphics
+    src/uniformtypeidentifiers.cs:347
+    UTType Svg { get; }
+
+  Swappable                 — valid English: capable of swapping
+
+  Swizzle                   — graphics/ObjC: swizzle operation
+
+  Swizzled                  — graphics/ObjC: swizzled (method replaced)
+
+  Systemwide                — compound: system-wide
+
+  Tebibit                   — unit: tebibit (2^40 bits)
+
+  Tebibits                  — unit: tebibits (2^40 bits)
+    src/foundation.cs:22645
+    NSUnitInformationStorage Tebibits { get; }
+
+  Tebibytes                 — unit: tebibytes (2^40 bytes)
+
+  Tensorflow                — proper name: TensorFlow ML framework
+    src/metalperformanceshaders.cs:5101
+    [Export ("paddingForTensorflowAveragePooling")]
+
+  Terabits                  — unit: terabits (10^12 bits)
+
+  Teraflops                 — unit: trillion floating-point ops/sec
+
+  Tesselation               — Apple spelling: tessellation (Apple API uses single l)
+
+  Tessellator               — graphics: tessellation unit
+    src/scenekit.cs:1051
+    SCNGeometryTessellator Tessellator { get; set; }
+
+  Tetrahedra                — geometry: plural of tetrahedron
+
+  Texcoord                  — graphics: texture coordinate
+    src/scenekit.cs:1154
+    /// <summary>Represents the value associated with the constant SCNGeometrySourceSemanticTexcoord</summary>
+
+  Texel                     — graphics: texture element/pixel
+    src/MetalPerformanceShaders/MPSEnums.cs:667
+    TexelFormatMask = 56,
+
+  th                        — ordinal suffix: 4th, 5th, etc.
+    src/appkit.cs:3
+    // Copyright 2010, Kenneth Pouncey
+
+  Threadgroup               — Metal: thread group (GPU compute)
+    src/Metal/MTLEnums.cs:1297
+    ThreadgroupMemory = 1,
+
+  Threadgroups              — Metal: plural of thread group (GPU)
+    src/Metal/MTLEnums.cs:1948
+    DrawMeshThreadgroups = (1uL << 7),
+
+  Thumbnailable             — valid English: capable of thumbnailing
+
+  Thumbnailing              — valid English: creating thumbnails
+    src/QuickLook/Thumbnail.cs:47
+    [ObsoletedOSPlatform ("macos15.0", "Use the QuickLookThumbnailing framework instead for creating thumbnails for files.")]
+
+  Thumbstick                — gaming: analog thumbstick
+    src/touchcontroller.cs:240
+    [Export ("leftThumbstick", ArgumentSemantic.Strong)]
+
+  Thumbsticks               — gaming: plural of thumbstick
+    src/GameController/GCExtendedGamepadSnapshot.cs:203
+    byte supportsClickableThumbsticks;
+
+  Timecodes                 — media: plural of timecode
+    src/avkit.cs:381
+    [Export ("showsTimecodes")]
+
+  Tls                       — protocol: Transport Layer Security
+    src/network.cs:18
+    Tls = 3,
+
+  Tlv                       — format: Tag-Length-Value encoding
+    src/HomeKit/HMCharacteristicMetadata.cs:63
+    if (f == HMCharacteristicMetadataFormatKeys._Tlv8)
+
+  Toc                       — abbreviation: Table Of Contents
+    src/CoreGraphics/CGEnums.cs:181
+    Toc,
+
+  Toeplitz                  — proper name: Toeplitz matrix (linear algebra)
+
+  Trackpad                  — Apple: trackpad input device
+
+  Trampoline                — programming: trampoline function (indirect call)
+
+  Transceive                — NFC: transmit and receive
+    src/corenfc.cs:31
+    ReaderTransceiveErrorTagConnectionLost = 100,
+
+  Trc                       — color: Transfer Characteristics
+    src/coregraphics.cs:436
+    NSString TrcSizeKey { get; }
+
+  Trilinear                 — graphics: trilinear filtering/interpolation
+
+  Ttls                      — auth: Tunneled TLS
+    src/networkextension.cs:80
+    Ttls = 21,
+
+  Tweening                  — animation: in-between frames
+    src/avfoundation.cs:14538
+    [Export ("containsTweening")]
+
+  Twentyfour                — compound: twenty-four (24)
+    src/AppKit/Enums.cs:1646
+    TwentyfourBitRgb = 0x208,
+
+  Twips                     — unit: twentieth of a point (typography)
+    src/ImageCaptureCore/Defs.cs:157
+    Twips = 4,
+
+  Twists                    — valid English: plural of twist
+
+  tx                        — abbreviation: transmit
+    src/CoreImage/CIContext.cs:87
+    /// <param name="ctx">To be added.</param>
+
+  ty                        — abbreviation: type/transform-y
+    src/appkit.cs:30
+    // TODO: turn NSAnimatablePropertyCOntainer into a system similar to UIAppearance
+
+  Typename                  — programming: type name identifier
+
+  Unbuffered                — valid English: without buffering
+
+  Unclamped                 — valid English: not clamped to range
+
+  Uncompressed              — valid English: not compressed
+
+  Unconfigured              — valid English: not configured
+    src/HomeKit/HMEnums.cs:51
+    UnconfiguredParameter = 21,
+
+  Undecimated               — signal processing: without decimation
+
+  Undecodable               — valid English: cannot be decoded
+    src/AVFoundation/Enums.cs:328
+    UndecodableMediaData = -11855,
+
+  Underrun                  — audio: buffer underrun
+    src/AudioToolbox/AudioQueue.cs:91
+    RecordUnderrun = -66668,
+
+  Unemphasized              — valid English: not emphasized
+    src/appkit.cs:5110
+    NSColor UnemphasizedSelectedContentBackground { get; }
+
+  Unentitled                — Apple: without entitlement
+    src/callkit.cs:35
+    Unentitled = 1,
+
+  Unfocused                 — valid English: not focused
+
+  Unmap                     — valid English: remove mapping
+    src/Metal/MTLEnums.cs:1977
+    Unmap = 0x1,
+
+  Unorm                     — graphics: unsigned normalized format
+    src/MetalPerformanceShaders/MPSEnums.cs:124
+    Unorm1 = NormalizedBit | 1,
+
+  Unpadded                  — valid English: without padding
+
+  Unpooling                 — ML: reverse pooling operation
+
+  Unpremultiplied           — graphics: alpha not premultiplied
+    src/CoreImage/Enums.cs:93
+    Unpremultiplied = 2,
+
+  Unpremultiplying          — graphics: reversing premultiplication
+    src/coreimage.cs:4084
+    [Export ("imageByUnpremultiplyingAlpha")]
+
+  Unprepare                 — valid English: undo preparation
+    src/MediaToolbox/MTAudioProcessingTap.cs:60
+    public /* MTAudioProcessingTapUnprepareCallback */ delegate* unmanaged<IntPtr, void> unprepare;
+
+  Unproject                 — graphics: reverse projection
+    src/arkit.cs:446
+    Vector3 Unproject (CGPoint point, Matrix4 planeTransform, UIInterfaceOrientation orientation, CGSize viewportSize);
+
+  Unpublish                 — valid English: remove publication
+    src/foundation.cs:17339
+    void Unpublish ();
+
+  Unsharp                   — graphics: unsharp mask filter
+
+  Unsorted                  — valid English: not sorted
+
+  Untitled                  — valid English: without a title
+
+  Untrash                   — valid English: restore from trash
+    src/fileprovider.cs:102
+    void UntrashItem (string itemIdentifier, [NullAllowed] string parentItemIdentifier, Action<INSFileProviderItem, NSError> completionHandler);
+
+  Upce                      — barcode: UPC-E (Universal Product Code)
+    src/vision.cs:175
+    Upce,
+
+  Upsampled                 — valid English: sample rate increased
+
+  Upsampler                 — valid English: upsampling processor
+
+  Upscale                   — valid English: increase resolution
+
+  Uri                       — acronym: Uniform Resource Identifier
+    src/imageio.cs:4742
+    NSString SubTypeUri { get; }
+
+  Usac                      — codec: Unified Speech and Audio Coding
+    src/AudioToolbox/AudioType.cs:111
+    MpegD_Usac = 0x75736163, // 'usac' (Unified Speech and Audio Coding)
+
+  Usd                       — format: Universal Scene Description (Pixar)
+    src/uniformtypeidentifiers.cs:377
+    UTType Usd { get; }
+
+  Usdz                      — format: USD zipped archive
+    src/uniformtypeidentifiers.cs:380
+    UTType Usdz { get; }
+
+  Usec                      — unit: microsecond (µsec)
+    src/CoreGraphics/CGEvent.cs:777
+    public float /* float */ MinUsecLatency;
+
+  Utf                       — encoding: Unicode Transformation Format
+    src/foundation.cs:8260
+    IntPtr GetFileSystemRepresentationAsUtf8Ptr { get; }
+
+  Uti                       — Apple: Uniform Type Identifier
+    src/SystemConfiguration/StatusCodeError.cs:14
+    // https://developer.apple.com/library/mac/#documentation/SystemConfiguration/Reference/SystemConfiguration_Utilities/Reference/reference.html
+
+  Varispeed                 — audio: variable speed effect
+    src/AudioToolbox/AudioQueue.cs:273
+    Varispeed = 0x76737064,                 // vspd
+
+  Vergence                  — vision: eye vergence angle
+    src/modelio.cs:2713
+    [Export ("leftVergence")]
+
+  Viterbi                   — proper name: Viterbi algorithm (decoding)
+
+  Vnode                     — filesystem: virtual node
+    src/CoreFoundation/DispatchSource.cs:47
+    /// <summary>Type of Vnode monitoring operation to perform on a file.</summary>
+
+  Volumetric                — valid English: relating to volume/3D space
+
+  Voronoi                   — proper name: Voronoi diagram (geometry)
+    src/gameplaykit.cs:1923
+    interface GKVoronoiNoiseSource {
+
+  Vpn                       — acronym: Virtual Private Network
+    src/NetworkExtension/NEVpnConnectionStartOptions.cs:10
+    public class NEVpnConnectionStartOptions : DictionaryContainer {
+
+  Warichu                   — typography: warichu annotation (Japanese)
+    src/CoreGraphics/CGEnums.cs:217
+    Warichu,
+
+  Warpable                  — valid English: capable of warping
+    src/spritekit.cs:441
+    partial interface SKEffectNode : SKWarpable {
+
+  Webm                      — format: WebM video container
+
+  Wep                       — crypto: Wired Equivalent Privacy (WiFi)
+    src/NetworkExtension/NEHotspotConfiguration.cs:22
+    /// <param name="isWep">Whether the network is a WEP network (otherwise a WPA or WPA2 network).</param>
+
+  Wlan                      — networking: Wireless LAN
+    src/corewlan.cs:28
+    namespace CoreWlan {
+
+  Wordlist                  — compound: word list
+
+  Worley                    — proper name: Worley noise (cellular texture)
+
+  Wpa                       — crypto: Wi-Fi Protected Access
+    src/networkextension.cs:129
+    InvalidWpaPassphrase = 2,
+
+  Writeability              — valid English: quality of being writable
+    src/foundation.cs:3329
+    [Export ("setWriteabilityHandler:")]
+
+  Xattr                     — filesystem: extended attribute
+    src/CoreServices/FSEvents.cs:83
+    ItemXattrMod = 0x00008000,
+
+  Xnor                      — logic: exclusive NOR gate
+    src/MetalPerformanceShaders/MPSEnums.cs:271
+    Xnor,
+
+  xy                        — math: x-y coordinate pair
+    src/appkit.cs:212
+    NSObject Animator { [return: Proxy] get; }
+
+  Xyz                       — math: x-y-z coordinate triple
+    src/SceneKit/SCNQuaternion.cs:116
+    public SCNVector3 Xyz { get { return xyz; } set { xyz = value; } }
+
+  Xzy                       — math: x-z-y coordinate order (swizzle)
+    src/modelio.cs:60
+    Xzy,
+
+  Yobibits                  — unit: yobibits (2^80 bits)
+    src/foundation.cs:22629
+    NSUnitInformationStorage Yobibits { get; }
+
+  Yottabits                 — unit: yottabits (10^24 bits)
+    src/foundation.cs:22565
+    NSUnitInformationStorage Yottabits { get; }
+
+  Yuv                       — color: YUV color space
+    src/ImageCaptureCore/Defs.cs:182
+    Yuv = 6,
+
+  Yuvk                      — color: YUV + Key channel
+    src/ImageCaptureCore/Defs.cs:183
+    Yuvk = 7,
+
+  yuvs                      — color: YUV color space variant (FourCC)
+    src/CoreVideo/CVPixelFormatType.cs:83
+    CV422YpCbCr8_yuvs = ('y' << 24) + ('u' << 16) + ('v' << 8) + 's', // 'yuvs'
+
+  yx                        — math: y-x coordinate order (swizzle)
+    src/CoreGraphics/CGAffineTransform.cs:65
+    public nfloat yx { get => B; set => B = value; }
+
+  Yxz                       — math: y-x-z coordinate order (swizzle)
+    src/modelio.cs:62
+    Yxz,
+
+  yy                        — math: y-y component (swizzle)
+    src/Foundation/Enum.cs:2215
+    /// <summary>The standard ISO-8601 format (<c>yyyy-MM-ddTHH:mm:ssZ</c>).</summary>
+
+  Yyy                       — date: year format (3-digit)
+    src/imageio.cs:2376
+    NSString ExifISOSpeedLatitudeYyy { get; }
+
+  Yzx                       — math: y-z-x coordinate order (swizzle)
+    src/modelio.cs:64
+    Yzx,
+
+  Zebibits                  — unit: zebibits (2^70 bits)
+    src/foundation.cs:22633
+    NSUnitInformationStorage Zebibits { get; }
+
+  Zeropadding               — compound: zero padding
+
+  Zettabits                 — unit: zettabits (10^21 bits)
+    src/foundation.cs:22569
+    NSUnitInformationStorage Zettabits { get; }
+
+  Zlib                      — compression: zlib library
+    src/foundation.cs:5851
+    Zlib,
+
+  Zxy                       — math: z-x-y coordinate order (swizzle)
+    src/modelio.cs:66
+    Zxy,
+
+  Zyx                       — math: z-y-x coordinate order (swizzle)
+    src/modelio.cs:68
+    Zyx,
+

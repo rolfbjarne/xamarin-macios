@@ -159,6 +159,8 @@ namespace Xamarin.MacDev.Tasks {
 					string className = "";
 					string framework = "";
 					string introduced = "";
+					bool iswrapper = false;
+					bool isstubclass = false;
 					foreach (var part in parts) {
 						var kvp = part.Split (new char [] { '=' }, 2);
 						if (kvp.Length != 2)
@@ -175,9 +177,15 @@ namespace Xamarin.MacDev.Tasks {
 						case "Introduced":
 							introduced = value;
 							break;
+						case "IsWrapper":
+							iswrapper = string.Equals (value, "true", StringComparison.OrdinalIgnoreCase);
+							break;
+						case "IsStubClass":
+							isstubclass = string.Equals (value, "true", StringComparison.OrdinalIgnoreCase);
+							break;
 						}
 					}
-					return (Class: className, Framework: framework, Introduced: introduced);
+					return (Class: className, Framework: framework, Introduced: introduced, IsWrapper: iswrapper, IsStubClass: isstubclass);
 				})
 				.ToDictionary (v => v.Class);
 
@@ -185,9 +193,18 @@ namespace Xamarin.MacDev.Tasks {
 			sb.AppendLine ($"#include <objc/runtime.h>");
 			sb.AppendLine ($"#include <Foundation/Foundation.h>");
 			foreach (var objectiveCClassName in classes) {
-				typeMap.TryGetValue (objectiveCClassName, out var info);
-				if (info.Framework != "Foundation") {
-					sb.AppendLine ($"__attribute__((weak_import)) @interface {objectiveCClassName} : NSObject @end");
+				// We don't want to import every header under the sun to find the @interface definitions for each class, so we generate
+				// a forward declaration for each class. To avoid potential issues with missing classes at runtime, we mark each declaration with __attribute__((weak_import)).
+				// The only exception is that we need to #include Foundation, which means we can't create declaration for Foundation classes.
+				if (!typeMap.TryGetValue (objectiveCClassName, out var info)) {
+					sb.AppendLine ($"__attribute__((weak_import)) @interface {objectiveCClassName} : NSObject @end // no objc type found");
+				} else if (info.IsWrapper && info.Framework == "Foundation") {
+					// This is a special case for wrapper classes in the Foundation framework. Since we need to #include Foundation, we can't create a forward declaration for these classes. However, since they are wrappers, we know they won't be missing at runtime, so we don't need to mark them with __attribute__((weak_import)).
+					sb.AppendLine ($"// The class '{objectiveCClassName}' comes from the Foundation framework, so no generated @interface declaration.");
+				} else {
+					if (info.IsStubClass)
+						sb.AppendLine ("__attribute__((objc_class_stub)) __attribute__((objc_subclassing_restricted))");
+					sb.AppendLine ($"__attribute__((weak_import)) @interface {objectiveCClassName} : NSObject @end // is stub: {info.IsStubClass}");
 				}
 				sb.AppendLine ($"Class xamarin_Class_GetHandle_{objectiveCClassName}_Native ();");
 				sb.AppendLine ($"Class xamarin_Class_GetHandle_{objectiveCClassName}_Native () {{ return [{objectiveCClassName} class]; }}");

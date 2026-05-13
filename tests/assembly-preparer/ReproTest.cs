@@ -54,7 +54,7 @@ public class ReproTest : BaseClass {
 		var records = reader.ReadRecords (binlogPath).ToArray ();
 		var originalBinlogPath = records
 			.Select (r => r.Args)
-			.OfType<BuildMessageEventArgs>()
+			.OfType<BuildMessageEventArgs> ()
 			.Where (r => r.SenderName == "BinaryLogger" && r.Message?.StartsWith ("BinLogFilePath=") == true)
 			.Select (v => v.Message?.Substring ("BinLogFilePath=".Length) ?? "")
 			.SingleOrDefault ();
@@ -92,14 +92,14 @@ public class ReproTest : BaseClass {
 						return null;
 					return ((ITaskItem) item).ItemSpec;
 				}
-				ITaskItem[]? getItems (string name)
+				ITaskItem []? getItems (string name)
 				{
 					var param = taskParameters.SingleOrDefault (v => v.ItemType == name);
 					if (param is null)
 						return null;
 					if (param.Items is null)
 						return null;
-					return param.Items.Cast<ITaskItem>().ToArray();
+					return param.Items.Cast<ITaskItem> ().ToArray ();
 				}
 				var outputDirectory = getProperty ("OutputDirectory");
 				var optionsFile = getProperty ("OptionsFile");
@@ -110,7 +110,7 @@ public class ReproTest : BaseClass {
 				if (string.IsNullOrEmpty (outputDirectory))
 					throw new InvalidOperationException ("OutputDirectory is required");
 				outputDirectory = Path.GetFullPath (outputDirectory, originalBinlogDirectory);
-				
+
 				if (string.IsNullOrEmpty (optionsFile))
 					throw new InvalidOperationException ("OptionsFile is required");
 				optionsFile = Path.GetFullPath (optionsFile, originalBinlogDirectory);

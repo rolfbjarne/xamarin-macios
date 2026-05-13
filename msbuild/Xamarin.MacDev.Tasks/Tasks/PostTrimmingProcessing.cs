@@ -185,10 +185,8 @@ namespace Xamarin.MacDev.Tasks {
 			sb.AppendLine ($"#include <objc/runtime.h>");
 			sb.AppendLine ($"#include <Foundation/Foundation.h>");
 			foreach (var objectiveCClassName in classes) {
-				typeMap.TryGetValue (objectiveCClassName, out var info);
-				if (info.Framework != "Foundation") {
+				if (typeMap.TryGetValue (objectiveCClassName, out var info) && info.Framework != "Foundation")
 					sb.AppendLine ($"__attribute__((weak_import)) @interface {objectiveCClassName} : NSObject @end");
-				}
 				sb.AppendLine ($"Class xamarin_Class_GetHandle_{objectiveCClassName}_Native ();");
 				sb.AppendLine ($"Class xamarin_Class_GetHandle_{objectiveCClassName}_Native () {{ return [{objectiveCClassName} class]; }}");
 				sb.AppendLine ();

@@ -133,7 +133,7 @@ namespace Xamarin.Linker {
 				instance = new LinkerConfiguration (linker_options_file) {
 					Context = context,
 				};
-	
+
 				configurations.Add (context, instance);
 #endif
 			}

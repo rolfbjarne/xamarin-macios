@@ -55,7 +55,7 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 					continue;
 				var introduced = DerivedLinkContext.StaticRegistrar.GetSdkIntroducedVersion (td, out _);
 				if (Frameworks.TryGetFramework (App, td, out string? framework))
-					sb.AppendLine ($"Class={info.ExportedName}|Framework={framework}|Introduced={introduced}");
+					sb.AppendLine ($"Class={info.ExportedName}|Framework={framework}|Introduced={introduced}|IsWrapper={info.IsWrapper}");
 			}
 			Driver.WriteIfDifferent (Configuration.TypeMapFilePath, sb.ToString ());
 		}
@@ -113,6 +113,25 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 		if (method.DeclaringType.Name == "Class" && method.DeclaringType.Namespace == "ObjCRuntime")
 			return modified; // don't process the Class methods themselves
 
+		bool isOurOwnCode ()
+		{
+			// Don't show warnings for a few places in our own code where we call Class.GetHandle in un-inlinable ways.
+			switch (method.DeclaringType.Namespace) {
+			case "Registrar":
+				switch (method.DeclaringType.Name) {
+				case "DynamicRegistrar":
+					switch (method.Name) {
+					case "OnReloadType":
+					case "OnRegisterType":
+						return true;
+					}
+					break;
+				}
+				break;
+			}
+			return false;
+		}
+
 		foreach (var instr in method.Body.Instructions) {
 			if (instr.Operand is not MethodReference mr)
 				continue;
@@ -129,11 +148,13 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 
 			var ldstr = instr.Previous;
 			if (ldstr.OpCode != OpCodes.Ldstr) {
-				Report (ErrorHelper.CreateWarning (Configuration.Application, 2263, method, Errors.MX2263, FormatMethod (method), ldstr));
+				if (!isOurOwnCode ())
+					Report (ErrorHelper.CreateWarning (Configuration.Application, 2263, method, Errors.MX2263, FormatMethod (method), ldstr));
 				continue;
 			}
 			if (ldstr.Operand is not string objectiveCClassName) {
-				Report (ErrorHelper.CreateWarning (Configuration.Application, 2263, method, Errors.MX2263, FormatMethod (method), ldstr.Operand));
+				if (!isOurOwnCode ())
+					Report (ErrorHelper.CreateWarning (Configuration.Application, 2263, method, Errors.MX2263, FormatMethod (method), ldstr.Operand));
 				continue;
 			}
 

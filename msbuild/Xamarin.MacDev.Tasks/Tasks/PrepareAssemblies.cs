@@ -33,7 +33,7 @@ namespace Xamarin.Utils {
 				return;
 			errorShown = true;
 			// TODO: change to LogError
-			helper.LogWarning ($"Console.Standard[Output|Error] accessed!", 
+			helper.LogWarning ($"Console.Standard[Output|Error] accessed!",
 				$"Console.Standard[Output|Error] should not be used in tasks, as it can cause deadlocks and other issues. Please use the TaskLoggingHelper to log messages instead.");
 			helper.LogWarning ($"Stack trace: {Environment.StackTrace}");
 		}
@@ -68,8 +68,7 @@ namespace Xamarin.Utils {
 		}
 	}
 
-	static class MSBuildUtils
-	{		
+	static class MSBuildUtils {
 		public static void EnsureNoCWL (TaskLoggingHelper log)
 		{
 			Console.SetOut (new NoWriter (log));

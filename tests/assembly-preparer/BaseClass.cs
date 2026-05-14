@@ -65,7 +65,7 @@ public abstract class BaseClass {
 
 		var assemblies = Configuration.GetImplementationAssemblies (platform);
 		assemblies.Add (Path.Combine (assemblyDir, "Test.dll"));
-		var infos = assemblies.Select (v => new AssemblyPreparerInfo (v, Path.Combine (assemblyDir, "out", Path.GetFileName (v)))).ToArray ();
+		var infos = assemblies.Select (v => new AssemblyPreparerInfo (v, Path.Combine (assemblyDir, "out", Path.GetFileName (v)), true, "full")).ToArray ();
 		var preparer = new AssemblyPreparer (infos, configpath);
 		if (configure is not null)
 			configure (preparer);

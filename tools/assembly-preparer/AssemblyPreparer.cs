@@ -5,6 +5,7 @@ using Mono.Cecil.Cil;
 using Mono.CompilerServices.SymbolWriter;
 using Mono.Linker;
 using Mono.Linker.Steps;
+using Mono.Tuner;
 using MonoTouch.Tuner;
 using Xamarin.Bundler;
 using Xamarin.Linker;
@@ -42,7 +43,10 @@ public class AssemblyPreparer : IDisposable {
 					var split = value.Split ('|');
 					var input = split[0];
 					var output = split[1];
-					var apinfo = assemblyPreparerInfoFactory is not null ? assemblyPreparerInfoFactory (input, output) : new AssemblyPreparerInfo (input, output);
+					var isTrimmableString = split[2];
+					var isTrimmable = string.IsNullOrEmpty (isTrimmableString) ? (bool?) null : string.Equals (isTrimmableString, "true", StringComparison.OrdinalIgnoreCase);
+					var trimMode = split[3];
+					var apinfo = assemblyPreparerInfoFactory is not null ? assemblyPreparerInfoFactory (input, output) : new AssemblyPreparerInfo (input, output, isTrimmable, trimMode);
 					Assemblies.Add (apinfo);
 				}),
 				new LinkerConfiguration.SaveValue ((key, storage) => SaveAssemblies (key, storage, reproPath, Assemblies))
@@ -60,7 +64,7 @@ public class AssemblyPreparer : IDisposable {
 				output = Path.Combine (reproPath, Path.GetFileName (output));
 				File.Copy (input, output);
 			}
-			storage.Add ($"{key}={input}|{output}");
+			storage.Add ($"{key}={input}|{output}|{(assembly.IsTrimmable.HasValue ? (assembly.IsTrimmable.Value ? "true" : "false") : "")}|{assembly.TrimMode}");
 		}
 	}
 
@@ -146,7 +150,7 @@ public class AssemblyPreparer : IDisposable {
 			var assemblyDefinition = AssemblyDefinition.ReadAssembly (assembly.InputPath, parameters); // FIXME: symbols
 			linkContext.Assemblies.Add (assemblyDefinition);
 			assembly.Assembly = assemblyDefinition;
-			configuration.Context.Annotations.SetAction (assemblyDefinition, AssemblyAction.Copy);
+			configuration.Context.Annotations.SetAction (assemblyDefinition, ComputeAssemblyAction (assemblyDefinition, assembly));
 			configuration.AssemblyResolver.ResolverCache.Add (assemblyDefinition.Name.Name, assemblyDefinition);
 		}
 
@@ -198,6 +202,77 @@ public class AssemblyPreparer : IDisposable {
 		return exceptions.Count == 0;
 	}
 
+	// Figure out if an assembly is trimmed or not.
+	// This must be identical to how it's done for ILLink/ILC.
+	AssemblyAction ComputeAssemblyAction (AssemblyDefinition assembly, AssemblyPreparerInfo info)
+	{
+		// Unless 'PublishTrimmed=true', nothing is trimmed, because we won't run the trimmer.
+		if (!configuration.PublishTrimmed)
+			return AssemblyAction.Copy;
+
+		// Then if 'TrimMode' is set on the assembly, then that takes precedence
+		switch (info.TrimMode?.ToLowerInvariant () ?? "") {
+		case "link":
+			return AssemblyAction.Link;
+		case "copy":
+			return AssemblyAction.Copy;
+		case "":
+			break;
+		default:
+			throw new ArgumentException ($"Unknown trim mode: {info.TrimMode} for assembly {assembly.Name}");
+		}
+
+		// Then if 'IsTrimmable' is set on the assembly, that takes precedence over the default for the platform.
+		if (info.IsTrimmable == false)
+			return AssemblyAction.CopyUsed;
+		else if (info.IsTrimmable == true)
+			return AssemblyAction.Link;
+		
+		// Check the global 'TrimMode' property, if it's not 'link', 'partial' or 'full', then we're not trimming anything
+		var globalTrimMode = configuration.TrimMode.ToLowerInvariant ();
+		switch (globalTrimMode) {
+		case "copy":
+		case "":
+			return AssemblyAction.Copy;
+		case "partial":
+		case "full":
+		case "link":
+			break;
+		default:
+			throw new ArgumentException ($"Unknown global trim mode: {configuration.TrimMode}");
+		}
+
+		// Check the [AssemblyMetadata] attribute
+		var isTrimmableAttribute = assembly.CustomAttributes
+			.Where (v => v.AttributeType.FullName == "System.Reflection.AssemblyMetadataAttribute")
+			.Where (v => v.HasConstructorArguments && v.ConstructorArguments.Count == 2 && v.ConstructorArguments [0].Type.Is ("System", "String") && v.ConstructorArguments [1].Type.Is ("System", "String"))
+			.Where (v => (v.ConstructorArguments[0].Value as string) == "IsTrimmable" && string.Equals (v.ConstructorArguments[1].Value as string, "true", StringComparison.OrdinalIgnoreCase))
+			.SingleOrDefault ();
+
+		if (isTrimmableAttribute is null) {
+			// If the attribute is not present, then we trim if the global 'TrimMode' is 'full'
+			return globalTrimMode switch {
+				"link" => AssemblyAction.Copy,
+				"partial" => AssemblyAction.Copy,
+				"full" => AssemblyAction.Link,
+				_ => throw new ArgumentException ($"Unknown global trim mode: {configuration.TrimMode}"),
+			};
+		}
+
+		// if the attribute is present, then we trim if the global 'TrimMode' is 'partial', 'full' or 'link', which are the only values it should have at this point
+		switch (globalTrimMode) {
+		case "partial":
+		case "full":
+		case "link":
+			break;
+		default:
+			// we shouldn't get here for any other trim mode value
+			throw new ArgumentException ($"Unexpected global trim mode: {configuration.TrimMode}");
+		}
+
+		return AssemblyAction.Link;
+	}
+
 	public void Dispose ()
 	{
 		foreach (var assembly in Assemblies)
@@ -209,11 +284,15 @@ public class AssemblyPreparerInfo {
 	internal AssemblyDefinition? Assembly { get; set; }
 
 	public string InputPath { get; private set; }
+	public bool? IsTrimmable { get; set; }
+	public string TrimMode { get; set; }
 	public string OutputPath { get; set; }
 
-	public AssemblyPreparerInfo (string inputPath, string outputPath)
+	public AssemblyPreparerInfo (string inputPath, string outputPath, bool? isTrimmable, string trimMode)
 	{
 		InputPath = inputPath;
 		OutputPath = outputPath;
+		IsTrimmable = isTrimmable;
+		TrimMode = trimMode;
 	}
 }

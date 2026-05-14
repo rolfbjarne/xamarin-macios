@@ -43,9 +43,11 @@ namespace Xamarin.Linker {
 		public string PartialStaticRegistrarLibrary { get; set; } = string.Empty;
 		public ApplePlatform Platform { get; private set; }
 		public string PlatformAssembly { get; private set; } = string.Empty;
+		public bool PublishTrimmed { get; private set; }
 		public string RelativeAppBundlePath { get; private set; } = string.Empty;
 		public Version? SdkVersion { get; private set; }
 		public string SdkRootDirectory { get; private set; } = string.Empty;
+		public string TrimMode { get; private set; } = string.Empty;
 		public int Verbosity => Driver.Verbosity;
 		public string XamarinNativeLibraryDirectory { get; private set; } = string.Empty;
 
@@ -403,6 +405,10 @@ namespace Xamarin.Linker {
 					new LoadValue ((key, value) => PlatformAssembly = Path.GetFileNameWithoutExtension (value)),
 					new SaveValue ((key, storage) => saveNonEmpty (key, string.IsNullOrEmpty (PlatformAssembly) ? PlatformAssembly : PlatformAssembly + ".dll", storage))
 				)},
+				{ "PublishTrimmed", (
+					new LoadValue ((key, value) => PublishTrimmed = string.Equals ("true", value, StringComparison.OrdinalIgnoreCase)),
+					new SaveValue ((key, storage) => storage.Add ($"{key}={(PublishTrimmed ? "true" : "false")}"))
+				 )},
 				{ "ReferenceNativeSymbol", (
 					new LoadValue ((key, value) => {
 						(string symbolType, string symbolMode, string symbol) = SplitString3 (value, ':');
@@ -519,6 +525,10 @@ namespace Xamarin.Linker {
 						Driver.TargetFramework = TargetFramework.Parse (value);
 					}),
 					new SaveValue ((key, storage) => saveNonEmpty (key, Driver.TargetFramework.ToString (), storage))
+				)},
+				{ "TrimMode", (
+					new LoadValue ((key, value) => TrimMode = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, TrimMode, storage))
 				)},
 				{ "TypeMapAssemblyName", (
 					new LoadValue ((key, value) => Application.TypeMapAssemblyName = value),

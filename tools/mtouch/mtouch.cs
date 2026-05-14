@@ -25,7 +25,7 @@ namespace Xamarin.Bundler {
 			var os = new OptionSet ();
 			ParseOptions (app, os, args);
 
-			ValidateXcode (app, false, false);
+			ValidateXcode (null, false, false);
 
 			app.InitializeCommon ();
 			app.RunRegistrar ();

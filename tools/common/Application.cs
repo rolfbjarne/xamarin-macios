@@ -529,8 +529,11 @@ namespace Xamarin.Bundler {
 
 			Optimizations.Initialize (this, out var messages);
 			ErrorHelper.Show (messages);
-			if (Driver.Verbosity > 3)
-				Driver.Log (4, $"Enabled optimizations: {Optimizations}");
+#if ASSEMBLY_PREPARER
+			Configuration.Log (4, $"Enabled optimizations: {Optimizations}");
+#else
+			Driver.Log (4, $"Enabled optimizations: {Optimizations}");
+#endif
 		}
 
 		void InitializeDeploymentTarget ()
@@ -1179,8 +1182,13 @@ namespace Xamarin.Bundler {
 				throw ErrorHelper.CreateError (140, e, Errors.MT0140, framework_filename);
 			}
 
-			if (!dynamic)
+			if (!dynamic) {
+#if ASSEMBLY_PREPARER
+				Configuration.Log (1, "The framework {0} is a framework of static libraries, and will not be copied to the app.", framework_path);
+#else
 				Driver.Log (1, "The framework {0} is a framework of static libraries, and will not be copied to the app.", framework_path);
+#endif
+			}
 
 			return dynamic;
 		}

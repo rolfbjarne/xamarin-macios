@@ -662,6 +662,7 @@
 				PartialStaticRegistrarLibrary=$(_LibPartialStaticRegistrar)
 				Platform=$(_PlatformName)
 				PlatformAssembly=$(_PlatformAssemblyName).dll
+				PublishTrimmed=$(PublishTrimmed)
 				RelativeAppBundlePath=$(_RelativeAppBundlePath)
 				Registrar=$(Registrar)
 				@(ReferenceNativeSymbol -> 'ReferenceNativeSymbol=%(SymbolType):%(SymbolMode):%(Identity)')
@@ -674,6 +675,7 @@
 				SkipMarkingNSObjectsInUserAssemblies=$(_SkipMarkingNSObjectsInUserAssemblies)
 				TargetArchitectures=$(TargetArchitectures)
 				TargetFramework=$(_ComputedTargetFrameworkMoniker)
+				TrimMode=$(TrimMode)
 				TypeMapAssemblyName=$(_TypeMapAssemblyName)
 				TypeMapOutputDirectory=$(_TypeMapOutputDirectory)
 				UseLlvm=$(MtouchUseLlvm)

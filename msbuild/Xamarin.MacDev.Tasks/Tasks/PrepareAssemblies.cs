@@ -13,6 +13,71 @@ using Xamarin.Utils;
 
 #nullable enable
 
+namespace Xamarin.Utils {
+	using System.Text;
+
+	class NoWriter : TextWriter {
+		TaskLoggingHelper helper;
+		public override Encoding Encoding => Encoding.UTF8;
+
+		public NoWriter (TaskLoggingHelper helper)
+		{
+			this.helper = helper;
+		}
+
+		bool errorShown;
+
+		void ShowError ()
+		{
+			if (errorShown)
+				return;
+			errorShown = true;
+			// TODO: change to LogError
+			helper.LogWarning ($"Console.Standard[Output|Error] accessed!", 
+				$"Console.Standard[Output|Error] should not be used in tasks, as it can cause deadlocks and other issues. Please use the TaskLoggingHelper to log messages instead.");
+			helper.LogWarning ($"Stack trace: {Environment.StackTrace}");
+		}
+
+		public override void Write (char value)
+		{
+			ShowError ();
+			helper.LogMessage (MessageImportance.Low, value.ToString ());
+		}
+
+		public override void Write (char [] buffer, int index, int count)
+		{
+			ShowError ();
+			helper.LogMessage (MessageImportance.Low, new string (buffer, index, count));
+		}
+
+		public override void Write (string? value)
+		{
+			ShowError ();
+			helper.LogMessage (MessageImportance.Low, value ?? string.Empty);
+		}
+
+		public override void WriteLine ()
+		{
+			ShowError ();
+		}
+
+		public override void WriteLine (string? value)
+		{
+			ShowError ();
+			helper.LogMessage (MessageImportance.Low, value ?? string.Empty);
+		}
+	}
+
+	static class MSBuildUtils
+	{		
+		public static void EnsureNoCWL (TaskLoggingHelper log)
+		{
+			Console.SetOut (new NoWriter (log));
+			Console.SetError (new NoWriter (log));
+		}
+	}
+}
+
 namespace Xamarin.MacDev.Tasks {
 	public class PrepareAssemblies : XamarinTask {
 		const string ErrorPrefix = "AP";
@@ -47,6 +112,8 @@ namespace Xamarin.MacDev.Tasks {
 
 		public override bool Execute ()
 		{
+			MSBuildUtils.EnsureNoCWL (Log);
+
 			try {
 				var infos = InputAssemblies.Select (GetAssemblyInfo).ToArray ();
 				using var preparer = new AssemblyPreparer (infos, OptionsFile?.ItemSpec ?? "");

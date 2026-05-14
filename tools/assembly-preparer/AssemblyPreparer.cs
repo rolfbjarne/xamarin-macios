@@ -154,6 +154,8 @@ public class AssemblyPreparer : IDisposable {
 			configuration.AssemblyResolver.ResolverCache.Add (assemblyDefinition.Name.Name, assemblyDefinition);
 		}
 
+		configuration.Context.Annotations.CollectOverrides (linkContext.Assemblies, linkContext);
+
 		foreach (var step in steps) {
 			step.Process (linkContext);
 		}

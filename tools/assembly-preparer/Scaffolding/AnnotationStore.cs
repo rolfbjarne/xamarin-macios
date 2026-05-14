@@ -120,11 +120,11 @@ public class AnnotationStore {
 
 	static MethodDefinition? TryResolve (MethodReference methodRef)
 	{
-		try {
+		// try {
 			return methodRef.Resolve ();
-		} catch {
-			return null;
-		}
+		// } catch {
+		// 	return null;
+		// }
 	}
 
 	public void SetCustomAnnotation (object key, IMetadataTokenProvider item, object value)

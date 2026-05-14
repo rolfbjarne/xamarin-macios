@@ -289,7 +289,7 @@ namespace Xamarin.Tests {
 
 				// Work around https://github.com/dotnet/msbuild/issues/8845
 				args.Add ("/v:diag");
-				args.Add ("/consoleloggerparameters:Verbosity=Quiet");
+				args.Add ("/consoleloggerparameters:Verbosity=Detailed");
 				// vb does not have preview lang, so we force it to latest
 				if (project.EndsWith (".vbproj", StringComparison.OrdinalIgnoreCase))
 					args.Add ("/p:LangVersion=latest");

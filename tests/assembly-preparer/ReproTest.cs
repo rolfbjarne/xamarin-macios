@@ -125,7 +125,12 @@ public class ReproTest : BaseClass {
 				{
 					var inputPath = Path.GetFullPath (item.ItemSpec, originalBinlogDirectory);
 					var outputPath = Path.Combine (outputDirectory, Path.GetFileName (inputPath));
-					var rv = new AssemblyPreparerInfo (inputPath, outputPath);
+					var metadataNames = item.MetadataNames.Cast<string> ().Select (v => v.ToLowerInvariant ()).ToHashSet ();
+					var isTrimmableString = item.GetMetadata ("IsTrimmable");
+					var isTrimmable = string.IsNullOrEmpty (isTrimmableString) ? (bool?) null : string.Equals (isTrimmableString, "true", StringComparison.OrdinalIgnoreCase);
+					var trimMode = item.GetMetadata ("TrimMode");
+
+					var rv = new AssemblyPreparerInfo (inputPath, outputPath, isTrimmable, trimMode);
 					return rv;
 				}
 

@@ -104,7 +104,10 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			var inputPath = item.ItemSpec;
 			var outputPath = Path.Combine (OutputDirectory, Path.GetFileName (inputPath));
-			var rv = new AssemblyPreparerInfo (inputPath, outputPath);
+			var isTrimmableString = item.GetMetadata ("IsTrimmable");
+			var isTrimmable = string.IsNullOrEmpty (isTrimmableString) ? (bool?) null : string.Equals (isTrimmableString, "true", StringComparison.OrdinalIgnoreCase);
+			var trimMode = item.GetMetadata ("TrimMode");
+			var rv = new AssemblyPreparerInfo (inputPath, outputPath, isTrimmable, trimMode);
 			map [rv] = item;
 			return rv;
 		}

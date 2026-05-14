@@ -16,6 +16,7 @@ public class AnnotationStore {
 	{
 		assemblyActions [assembly] = action;
 	}
+	
 	public IEnumerable<OverrideInformation>? GetOverrides (MethodDefinition method)
 	{
 		throw new NotImplementedException ();

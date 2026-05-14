@@ -5,6 +5,7 @@ namespace Mono.Linker;
 
 public class AnnotationStore {
 	Dictionary<AssemblyDefinition, AssemblyAction> assemblyActions = new Dictionary<AssemblyDefinition, AssemblyAction> ();
+	Dictionary<MethodDefinition, List<OverrideInformation>> overrides = new Dictionary<MethodDefinition, List<OverrideInformation>> ();
 	public AssemblyAction GetAction (AssemblyDefinition assembly)
 	{
 		if (assemblyActions.TryGetValue (assembly, out var action))
@@ -19,7 +20,9 @@ public class AnnotationStore {
 	
 	public IEnumerable<OverrideInformation>? GetOverrides (MethodDefinition method)
 	{
-		throw new NotImplementedException ();
+		if (overrides.TryGetValue (method, out var list))
+			return list;
+		return null;
 	}
 
 	public void SetCustomAnnotation (object key, IMetadataTokenProvider item, object value)

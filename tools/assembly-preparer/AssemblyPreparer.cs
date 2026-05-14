@@ -192,8 +192,12 @@ public class AssemblyPreparer : IDisposable {
 					log.Log ($"Failed to create symbol writer for {assembly.OutputPath}, not writing symbols: {e.Message}");
 				}
 			}
+
+			RemoveCrossGen (assemblyDefinition);
+
 			try {
 				assemblyDefinition.Write (assembly.OutputPath, writerParameters);
+				ModuleAttributes m = assemblyDefinition.MainModule.Attributes;
 			} catch (Exception e) {
 				exceptions.Add (ErrorHelper.CreateError (99, e, $"Failed to write {assembly.OutputPath}: {e.Message}"));
 				log.Log ($"Failed to write {assembly.OutputPath}: {e}");
@@ -202,6 +206,23 @@ public class AssemblyPreparer : IDisposable {
 		}
 
 		return exceptions.Count == 0;
+	}
+
+	void RemoveCrossGen (AssemblyDefinition assemblyDefinition)
+	{
+		// Drop crossgened code from the assembly
+		// Ref: https://github.com/dotnet/runtime/blob/b86458593223f866effa63122b05bec37f83015e/src/tools/illink/src/linker/Linker.Steps/OutputStep.cs#L95-L105
+		foreach (var module in assemblyDefinition.Modules) {
+			var moduleAttributes = module.Attributes;
+			var isCrossGened = (moduleAttributes & ModuleAttributes.ILOnly) == 0 && (moduleAttributes & ModuleAttributes.ILLibrary) == ModuleAttributes.ILLibrary;
+			if (isCrossGened) {
+				moduleAttributes |= ModuleAttributes.ILOnly;
+				moduleAttributes &= ~ModuleAttributes.ILLibrary;
+				module.Attributes = moduleAttributes;
+				module.Architecture = TargetArchitecture.I386;
+				module.Characteristics |= ModuleCharacteristics.NoSEH;
+			}
+		}
 	}
 
 	// Figure out if an assembly is trimmed or not.

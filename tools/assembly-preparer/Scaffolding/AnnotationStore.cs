@@ -17,7 +17,7 @@ public class AnnotationStore {
 	{
 		assemblyActions [assembly] = action;
 	}
-	
+
 	public IEnumerable<OverrideInformation>? GetOverrides (MethodDefinition method)
 	{
 		if (overrides.TryGetValue (method, out var list))

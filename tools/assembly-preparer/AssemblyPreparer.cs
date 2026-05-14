@@ -250,7 +250,7 @@ public class AssemblyPreparer : IDisposable {
 			return AssemblyAction.CopyUsed;
 		else if (info.IsTrimmable == true)
 			return AssemblyAction.Link;
-		
+
 		// Check the global 'TrimMode' property, if it's not 'link', 'partial' or 'full', then we're not trimming anything
 		var globalTrimMode = configuration.TrimMode.ToLowerInvariant ();
 		switch (globalTrimMode) {
@@ -269,7 +269,7 @@ public class AssemblyPreparer : IDisposable {
 		var isTrimmableAttribute = assembly.CustomAttributes
 			.Where (v => v.AttributeType.FullName == "System.Reflection.AssemblyMetadataAttribute")
 			.Where (v => v.HasConstructorArguments && v.ConstructorArguments.Count == 2 && v.ConstructorArguments [0].Type.Is ("System", "String") && v.ConstructorArguments [1].Type.Is ("System", "String"))
-			.Where (v => (v.ConstructorArguments[0].Value as string) == "IsTrimmable" && string.Equals (v.ConstructorArguments[1].Value as string, "true", StringComparison.OrdinalIgnoreCase))
+			.Where (v => (v.ConstructorArguments [0].Value as string) == "IsTrimmable" && string.Equals (v.ConstructorArguments [1].Value as string, "true", StringComparison.OrdinalIgnoreCase))
 			.SingleOrDefault ();
 
 		if (isTrimmableAttribute is null) {

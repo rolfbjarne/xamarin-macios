@@ -2481,6 +2481,9 @@ namespace MonoTouchFixtures.ObjCRuntime {
 		[Test]
 		public void BlockReturnTest ()
 		{
+			if (TestRuntime.IsLinkAll)
+				Assert.Ignore ("The trimmer removes the block proxy's Invoke method in linkall mode, which is looked up via reflection.");
+
 			using (var obj = new BlockReturnTestClass ()) {
 				Assert.IsTrue (obj.TestBlocks (), "TestBlocks");
 			}

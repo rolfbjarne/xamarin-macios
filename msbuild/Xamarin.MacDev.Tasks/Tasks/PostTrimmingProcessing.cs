@@ -187,7 +187,8 @@ namespace Xamarin.MacDev.Tasks {
 					}
 					return (Class: className, Framework: framework, Introduced: introduced, IsWrapper: iswrapper, IsStubClass: isstubclass);
 				})
-				.ToDictionary (v => v.Class);
+				.GroupBy (v => v.Class)
+				.ToDictionary (g => g.Key, g => g.First ());
 
 			var sb = new StringBuilder ();
 			sb.AppendLine ($"#include <objc/runtime.h>");

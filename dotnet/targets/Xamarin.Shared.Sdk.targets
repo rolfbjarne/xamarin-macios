@@ -1705,7 +1705,7 @@
 		Condition="('$(InlineDlfcnMethods)' != '' Or '$(InlineClassGetHandle)' != '') And '$(_UseNativeAot)' != 'true'"
 		DependsOnTargets="_ComputeTrimmedAssemblies;_ComputePostTrimmingPaths"
 		Inputs="@(_TrimmedAssembly)"
-		Outputs="$(_ILTrimSurvivingNativeSymbolsFile)"
+		Outputs="$(_ILTrimSurvivingNativeSymbolsFile);$(_ILTrimSurvivingClassesFile)"
 		>
 		<CollectPostILTrimInformation
 			TrimmedAssemblies="@(_TrimmedAssembly)"
@@ -1718,6 +1718,7 @@
 		</ReadLinesFromFile>
 		<ItemGroup>
 			<FileWrites Include="$(_ILTrimSurvivingNativeSymbolsFile)" />
+			<FileWrites Include="$(_ILTrimSurvivingClassesFile)" />
 		</ItemGroup>
 	</Target>
 
@@ -1840,7 +1841,7 @@
 		Condition="'$(_UseNativeAot)' == 'true'"
 		DependsOnTargets="_ComputePostTrimmingPaths;_CompileNativeExecutable"
 		Inputs="$(NativeObject)"
-		Outputs="$(_NativeAOTSurvivingNativeSymbolsFile)"
+		Outputs="$(_NativeAOTSurvivingNativeSymbolsFile);$(_NativeAOTSurvivingClassesFile)"
 		>
 		<PropertyGroup>
 			<_NativeAOTUnresolvedSymbolsFile>$(DeviceSpecificIntermediateOutputPath)nativeaot-unresolved-symbols.txt</_NativeAOTUnresolvedSymbolsFile>
@@ -1856,6 +1857,10 @@
 			SurvivingNativeSymbolsFile="$(_NativeAOTSurvivingNativeSymbolsFile)"
 			UnresolvedSymbolsFile="$(_NativeAOTUnresolvedSymbolsFile)"
 		/>
+		<ItemGroup>
+			<FileWrites Include="$(_NativeAOTSurvivingNativeSymbolsFile)" />
+			<FileWrites Include="$(_NativeAOTSurvivingClassesFile)" />
+		</ItemGroup>
 	</Target>
 
 	<Target Name="_AddSwiftLinkerFlags" DependsOnTargets="_DetectSdkLocations">

@@ -115,7 +115,7 @@ namespace Xamarin.Linker.Steps {
 				DerivedLinkContext.RequiredSymbols.AddObjectiveCClass (exportedName).AddMember (type);
 		}
 
-		// Returns true if the specified type represents an Objective-C class that should referenced as a required symbol, so that the native linker doesn't link it away.
+		// Returns true if the specified type represents an Objective-C class that should be referenced as a required symbol, so that the native linker doesn't link it away.
 		public static bool TryGetRequiredObjectiveCType (DerivedLinkContext derivedLinkContext, TypeDefinition type, [NotNullWhen (true)] out string? exportedName)
 		{
 			exportedName = null;

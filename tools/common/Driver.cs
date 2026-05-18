@@ -736,8 +736,7 @@ namespace Xamarin.Bundler {
 		}
 	}
 
-	public interface ILogger
-	{
+	public interface ILogger {
 		void Log (string value);
 		void Log (string format, params object? [] args);
 		void Log (int min_verbosity, string value);
@@ -745,8 +744,7 @@ namespace Xamarin.Bundler {
 	}
 
 	// [Obsolete ("Don't use this class, use an instance of ILogger instead")]
-	public class StaticLogger : ILogger
-	{
+	public class StaticLogger : ILogger {
 		public readonly static StaticLogger Instance = new StaticLogger ();
 
 		public void Log (string value)

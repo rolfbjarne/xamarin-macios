@@ -17,7 +17,7 @@ public class AnnotationStore {
 	{
 		assemblyActions [assembly] = action;
 	}
-	
+
 	public IEnumerable<OverrideInformation>? GetOverrides (MethodDefinition method)
 	{
 		if (overrides.TryGetValue (method, out var list))
@@ -128,7 +128,7 @@ public class AnnotationStore {
 		}
 	}
 
-	Dictionary<object, Dictionary<IMetadataTokenProvider, object>> custom_annotations = new	 ();
+	Dictionary<object, Dictionary<IMetadataTokenProvider, object>> custom_annotations = new ();
 
 	public void SetCustomAnnotation (object key, IMetadataTokenProvider item, object value)
 	{

@@ -128,9 +128,13 @@ public class AnnotationStore {
 		}
 	}
 
+	Dictionary<object, Dictionary<IMetadataTokenProvider, object>> custom_annotations = new	 ();
+
 	public void SetCustomAnnotation (object key, IMetadataTokenProvider item, object value)
 	{
-		throw new NotImplementedException ();
+		if (!custom_annotations.TryGetValue (key, out var annotations))
+			custom_annotations [key] = annotations = new Dictionary<IMetadataTokenProvider, object> ();
+		annotations [item] = value;
 	}
 
 	// This should not be called; once closer to done, just remove this method.

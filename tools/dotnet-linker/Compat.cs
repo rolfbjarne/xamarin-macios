@@ -168,20 +168,12 @@ namespace Xamarin.Linker {
 
 		public bool IsSdkAssembly (AssemblyDefinition assembly)
 		{
-#if ASSEMBLY_PREPARER
-			throw new NotImplementedException ();
-#else
 			return Configuration.FrameworkAssemblies.Contains (Assembly.GetIdentity (assembly));
-#endif
 		}
 
 		public bool IsSdkAssembly (string assemblyName)
 		{
-#if ASSEMBLY_PREPARER
-			throw new NotImplementedException ();
-#else
 			return Configuration.FrameworkAssemblies.Contains (assemblyName);
-#endif
 		}
 	}
 }

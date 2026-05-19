@@ -45,7 +45,11 @@ namespace Xamarin.Linker.Steps {
 			}
 		}
 
+#if ASSEMBLY_PREPARER
+		public bool UseXmlDescriptionFile { get; set; }
+#else
 		public bool UseXmlDescriptionFile { get; set; } = true;
+#endif
 		public string XmlDescriptionPath { get; set; } = string.Empty;
 
 		public ApplyPreserveAttributeStep ()

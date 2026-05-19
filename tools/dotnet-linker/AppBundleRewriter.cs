@@ -1486,8 +1486,7 @@ namespace Xamarin.Linker {
 				return false;
 
 			if (addToMethod.DeclaringType == dependsOn.DeclaringType) {
-				var attribute = CreateAttribute (DynamicDependencyAttribute_ctor__String);
-				attribute.ConstructorArguments.Add (new CustomAttributeArgument (System_String, DocumentationComments.GetSignature (dependsOn)));
+				var attribute = CreateDynamicDependencyAttribute (DocumentationComments.GetSignature (dependsOn));
 				return AddAttributeOnlyOnce (addToMethod, attribute);
 			} else if (addToMethod.DeclaringType.Module == dependsOn.DeclaringType.Module) {
 				var attribute = CreateDynamicDependencyAttribute (DocumentationComments.GetSignature (dependsOn), dependsOn.DeclaringType);
@@ -1498,60 +1497,6 @@ namespace Xamarin.Linker {
 			}
 		}
 
-		void AddAttributeOnceMatchingAllArguments (ICustomAttributeProvider provider, CustomAttribute attribute)
-		{
-			if (provider.HasCustomAttributes) {
-				foreach (var ca in provider.CustomAttributes) {
-					if (ca.Constructor == attribute.Constructor) {
-						// ok so far
-					} else if (ca.Constructor.DeclaringType.FullName != attribute.Constructor.DeclaringType.FullName) {
-						continue;
-					} else if (ca.Constructor.FullName != attribute.Constructor.FullName) {
-						continue;
-					}
-
-					if (ca.ConstructorArguments.Count != attribute.ConstructorArguments.Count)
-						continue;
-
-					if (ca.Properties.Count != attribute.Properties.Count)
-						continue;
-
-					var all_match = true;
-					for (int i = 0; i < ca.ConstructorArguments.Count; i++) {
-						var ca_arg = ca.ConstructorArguments [i];
-						var attr_arg = attribute.ConstructorArguments [i];
-						if (!object.Equals (ca_arg.Value, attr_arg.Value)) {
-							all_match = false;
-							break;
-						}
-					}
-					if (!all_match)
-						continue;
-
-					for (int i = 0; i < ca.Properties.Count; i++) {
-						var ca_prop = ca.Properties [i];
-						var attr_prop = attribute.Properties [i];
-
-						if (ca_prop.Name != attr_prop.Name) {
-							all_match = false;
-							break;
-						}
-
-						if (!object.Equals (ca_prop.Argument.Value, attr_prop.Argument.Value)) {
-							all_match = false;
-							break;
-						}
-					}
-					if (!all_match)
-						continue;
-
-					// attribute already present
-					return;
-				}
-			}
-			provider.CustomAttributes.Add (attribute);
-		}
-
 		public CustomAttribute CreateDynamicDependencyAttribute (string memberSignature, TypeDefinition type)
 		{
 			if (type.HasGenericParameters)
@@ -1560,6 +1505,13 @@ namespace Xamarin.Linker {
 			var attribute = CreateAttribute (DynamicDependencyAttribute_ctor__String_Type);
 			attribute.ConstructorArguments.Add (new CustomAttributeArgument (System_String, memberSignature));
 			attribute.ConstructorArguments.Add (new CustomAttributeArgument (System_Type, type));
+			return attribute;
+		}
+
+		public CustomAttribute CreateDynamicDependencyAttribute (string memberSignature)
+		{
+			var attribute = CreateAttribute (DynamicDependencyAttribute_ctor__String);
+			attribute.ConstructorArguments.Add (new CustomAttributeArgument (System_String, memberSignature));
 			return attribute;
 		}
 
@@ -1598,7 +1550,16 @@ namespace Xamarin.Linker {
 		/// <param name="forMethod">The method that is the target of the dynamic dependency.</param>
 		public bool AddDynamicDependencyAttributeToStaticConstructor (TypeDefinition onType, MethodDefinition forMethod)
 		{
-			var attrib = CreateDynamicDependencyAttribute (DocumentationComments.GetSignature (forMethod), forMethod.DeclaringType, forMethod.Module.Assembly);
+			CustomAttribute attrib;
+
+			if (onType == forMethod.DeclaringType) {
+				attrib = CreateDynamicDependencyAttribute (DocumentationComments.GetSignature (forMethod));
+			} else if (onType.Module == forMethod.DeclaringType.Module) {
+				attrib = CreateDynamicDependencyAttribute (DocumentationComments.GetSignature (forMethod), forMethod.DeclaringType);
+			} else {
+				attrib = CreateDynamicDependencyAttribute (DocumentationComments.GetSignature (forMethod), forMethod.DeclaringType, forMethod.Module.Assembly);
+			}
+
 			return AddAttributeToStaticConstructor (onType, attrib);
 		}
 
@@ -1647,30 +1608,8 @@ namespace Xamarin.Linker {
 		{
 			var cctor = GetOrCreateStaticConstructor (onType, out var modified);
 			modified |= AddAttributeOnlyOnce (cctor, attribute);
-
-			// Remove the BeforeFieldInit attribute from the type, otherwise the linker may trim away the static constructor, and taking our attributes with it.
-			if (onType.Attributes.HasFlag (TypeAttributes.BeforeFieldInit)) {
-				onType.Attributes &= ~TypeAttributes.BeforeFieldInit;
-				modified = true;
-			}
-
 			return modified;
 		}
-
-		// void AddDynamicDependencyAttributeToStaticConstructor (TypeDefinition onType, string signature)
-		// {
-		// 	ClearCurrentAssembly ();
-		// 	SetCurrentAssembly (onType.Module.Assembly);
-
-		// 	var cctor = GetOrCreateStaticConstructor (onType);
-		// 	var attrib = CreateDynamicDependencyAttribute (signature, onType);
-		// 	cctor.CustomAttributes.Add (attrib);
-
-		// 	// Remove the BeforeFieldInit attribute from the type, otherwise the linker may trim away the static constructor, and taking our DynamicDependency attributes with it.
-		// 	onType.Attributes &= ~TypeAttributes.BeforeFieldInit;
-
-		// 	ClearCurrentAssembly ();
-		// }
 
 		public MethodDefinition GetOrCreateStaticConstructor (TypeDefinition type, out bool modified)
 		{
@@ -1681,6 +1620,12 @@ namespace Xamarin.Linker {
 				staticCtor = type.AddMethod (".cctor", MethodAttributes.Private | MethodAttributes.HideBySig | MethodAttributes.RTSpecialName | MethodAttributes.SpecialName | MethodAttributes.Static, System_Void);
 				staticCtor.CreateBody (out var il);
 				il.Emit (OpCodes.Ret);
+				modified = true;
+			}
+
+			// Remove the BeforeFieldInit attribute from the type, otherwise the linker may trim away the static constructor, and taking our attributes with it.
+			if (type.Attributes.HasFlag (TypeAttributes.BeforeFieldInit)) {
+				type.Attributes &= ~TypeAttributes.BeforeFieldInit;
 				modified = true;
 			}
 

@@ -1629,6 +1629,14 @@ namespace Xamarin.Linker {
 				modified = true;
 			}
 
+			if (!staticCtor.Body.Instructions.Any (v => v.OpCode != OpCodes.Ret && v.OpCode != OpCodes.Nop)) {
+				// FIXME: improve workaround.
+				var body = staticCtor.Body;
+				body.Instructions.Insert (0, Instruction.Create (OpCodes.Call, this.System_Console__WriteLine_String_Object));
+				body.Instructions.Insert (0, Instruction.Create (OpCodes.Ldstr, "World"));
+				body.Instructions.Insert (0, Instruction.Create (OpCodes.Ldstr, "Hello"));
+			}
+
 			return staticCtor;
 		}
 

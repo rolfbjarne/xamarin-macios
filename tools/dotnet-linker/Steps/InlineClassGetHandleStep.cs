@@ -37,6 +37,9 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 
 	Dictionary<string, Registrar.Registrar.ObjCType> objectiveCTypeMap = new ();
 
+	public const string PInvokePrefix = "xamarin_Class_GetHandle_";
+	public const string PInvokeSuffix = "_Native";
+
 	protected override void TryProcess ()
 	{
 		strictMode = Configuration.InlineClassGetHandle == InlineClassGetHandleMode.Strict;
@@ -100,7 +103,7 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 		// [DllImport ("__Internal")]
 		// static extern IntPtr xamarin_Class_GetClassHandle_{objectiveCClassName}_Native ();
 
-		return abr.CreateInternalPInvoke (callingMethod.Module, "ObjCRuntime", "Class", $"xamarin_Class_GetHandle_{objectiveCClassName}_Native", out _);
+		return abr.CreateInternalPInvoke (callingMethod.Module, "ObjCRuntime", "Class", $"{PInvokePrefix}{objectiveCClassName}{PInvokeSuffix}", out _);
 	}
 
 	protected override bool ProcessMethod (MethodDefinition method)

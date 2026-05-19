@@ -28,6 +28,9 @@ public class InlineDlfcnMethodsStep : AssemblyModifierStep {
 
 	bool strictMode;
 
+	public const string PInvokePrefix = "xamarin_Dlfcn_";
+	public const string PInvokeSuffix = "_Native";
+
 	protected override void TryProcess ()
 	{
 		strictMode = Configuration.InlineDlfcnMethods == InlineDlfcnMethodsMode.Strict;
@@ -124,7 +127,7 @@ public class InlineDlfcnMethodsStep : AssemblyModifierStep {
 		// [DllImport ("__Internal")]
 		// static extern IntPtr xamarin_Dlfcn_{symbolName}_Native ();
 
-		var methodName = $"xamarin_Dlfcn_{symbolName}_Native";
+		var methodName = $"{PInvokePrefix}{symbolName}{PInvokeSuffix}";
 		var rv = abr.CreateInternalPInvoke (callingMethod.Module, callingMethod.DeclaringType.Namespace, "Dlfcn", methodName, out var created);
 		if (created)
 			AddField (callingMethod.Module.Assembly.Name.Name, symbolName);

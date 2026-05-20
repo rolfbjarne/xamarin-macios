@@ -162,14 +162,21 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 				continue;
 			}
 
+			if (!objectiveCTypeMap.TryGetValue (objectiveCClassName, out var objCType)) {
+				Driver.Log (3, "Could not find a managed type for the Objective-C type '{1}' in the call to Class.GetHandle in '{0}', assuming the Objective-C type is available in the simulator.", FormatMethod (method), objectiveCClassName);
+			}
+
 			if (!strictMode) {
-				if (ListExportedSymbols.TryGetRequiredObjectiveCType (DerivedLinkContext, method.DeclaringType, out var exportedName)) {
+				if (objCType is not null && objCType.Type == method.DeclaringType) {
+					// This is a call to Class.GetHandle for the same class that it's being called from, this is OK.
+				} else if (ListExportedSymbols.TryGetRequiredObjectiveCType (DerivedLinkContext, method.DeclaringType, out var exportedName)) {
 					if (exportedName != objectiveCClassName) {
-						Report (ErrorHelper.CreateWarning (Configuration.Application, 2264, method, Errors.MX2264, FormatMethod (method), objectiveCClassName, exportedName));
+						Driver.Log (3, "The call to Class.GetHandle in '{0}' is trying to get the handle for the Objective-C class '{1}', but the declaring type's exported name is '{2}', not '{1}'. Since we're in compat mode, we're assuming the class should not be preserved.", FormatMethod (method), objectiveCClassName, exportedName);
 						continue;
 					}
 				} else {
-					Report (ErrorHelper.CreateWarning (Configuration.Application, 2265, method, Errors.MX2265, FormatMethod (method), objectiveCClassName));
+					if (App.StaticRegistrar.GetCategoryAttribute (method.DeclaringType) is not null)
+						Driver.Log (3, "The call to Class.GetHandle in '{0}' is trying to get the handle for the Objective-C class '{1}', but we couldn't determine whether this class should be statically preserved or not. Since we're in compat mode, we're assuming the class should not be statically preserved.", FormatMethod (method), objectiveCClassName);
 					continue;
 				}
 			}
@@ -181,13 +188,14 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 				continue;
 			}
 
-			if (objectiveCTypeMap.TryGetValue (objectiveCClassName, out var objCType)) {
+			if (objCType is not null) {
 				if (DerivedLinkContext.App.IsSimulatorBuild) {
 					if (DerivedLinkContext.HasAvailabilityAttributesShowingUnavailableInSimulator (objCType.Type.Resolve (), method)) {
 						Driver.Log (3, "Not inlining the call to Class.GetHandle (\"{0}\") in method {1} because the type is marked with an attribute indicating it's not available in the simulator.", objectiveCClassName, FormatMethod (method));
 						continue;
 					}
 				}
+
 				if (objCType.Methods is null && DerivedLinkContext.StaticRegistrar.IsPlatformType (objCType.Type) && !objCType.IsProtocol && !objCType.IsCategory && objCType.IsModel) {
 					// The static registrar skips generating code for this type, so we shouldn't inline calls to Class.GetHandle for it, because the P/Invoke we generate won't be able to find the native symbol for it.
 					continue;
@@ -203,10 +211,6 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 							continue;
 						}
 					}
-				}
-			} else {
-				if (DerivedLinkContext.App.IsSimulatorBuild) {
-					Report (ErrorHelper.CreateWarning (Configuration.Application, 2266, method, Errors.MX2266, FormatMethod (method), objectiveCClassName));
 				}
 			}
 

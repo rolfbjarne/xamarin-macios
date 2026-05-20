@@ -1554,9 +1554,9 @@ namespace Xamarin.Linker {
 
 			if (onType == forMethod.DeclaringType) {
 				attrib = CreateDynamicDependencyAttribute (DocumentationComments.GetSignature (forMethod));
-			} else if (onType.Module == forMethod.DeclaringType.Module) {
+			} else if (onType.Module == forMethod.DeclaringType.Module) {
 				attrib = CreateDynamicDependencyAttribute (DocumentationComments.GetSignature (forMethod), forMethod.DeclaringType);
-			} else {
+			} else {
 				attrib = CreateDynamicDependencyAttribute (DocumentationComments.GetSignature (forMethod), forMethod.DeclaringType, forMethod.Module.Assembly);
 			}
 

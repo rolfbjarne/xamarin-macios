@@ -135,6 +135,7 @@ public class AssemblyPreparer : IDisposable {
 			// TODO new SetBeforeFieldInitStep (), // part of PreMarkDispatcher
 			new ManagedRegistrarStep (),
 			new TrimmableRegistrarStep (),
+			new ManagedRegistrarLookupTablesStep (),
 		};
 
 		var linkContext = configuration.DerivedLinkContext;

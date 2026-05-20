@@ -228,7 +228,11 @@ namespace Xamarin.Linker {
 
 		bool IsTrimmed (MemberReference type)
 		{
+#if ASSEMBLY_PREPARER
+			return false;
+#else
 			return StaticRegistrar.IsTrimmed (type, Annotations);
+#endif
 		}
 
 		void GenerateLookupTypeId (AssemblyTrampolineInfo infos, TypeDefinition registrarType, List<TypeData> types)

@@ -137,10 +137,18 @@ public class AnnotationStore {
 		annotations [item] = value;
 	}
 
+	public object? GetCustomAnnotation (object key, IMetadataTokenProvider item)
+	{
+		if (custom_annotations.TryGetValue (key, out var annotations) && annotations.TryGetValue (item, out var value))
+			return value;
+
+		return null;
+	}
+
 	// This should not be called; once closer to done, just remove this method.
 	public void Mark (object obj)
 	{
-		throw new UnreachableException ();
+		// Console.WriteLine ($"Annotations.Mark () called from {new StackTrace (1).GetFrame (0)?.GetMethod ()}");
 	}
 }
 

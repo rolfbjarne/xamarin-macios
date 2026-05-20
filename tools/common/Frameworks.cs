@@ -23,6 +23,7 @@ public class Framework {
 	public Version? VersionAvailableInSimulator { get; set; }
 	public bool AlwaysWeakLinked { get; set; }
 	public bool Unavailable { get; set; }
+	public Version? VersionUnavailable { get; set; }
 
 	public string LibraryPath {
 		get {
@@ -89,7 +90,7 @@ public class Frameworks : Dictionary<string, Framework> {
 		Add (@namespace, framework, new Version (major_version, minor_version, build_version));
 	}
 
-	public void Add (string @namespace, string framework, Version version, Version? version_available_in_simulator = null, bool alwaysWeakLink = false, string? subFramework = null)
+	public void Add (string @namespace, string framework, Version version, Version? version_available_in_simulator = null, bool alwaysWeakLink = false, string? subFramework = null, Version? version_unavailable = null)
 	{
 		var fr = new Framework () {
 			Namespace = @namespace,
@@ -98,6 +99,8 @@ public class Frameworks : Dictionary<string, Framework> {
 			VersionAvailableInSimulator = version_available_in_simulator ?? version,
 			AlwaysWeakLinked = alwaysWeakLink,
 			SubFramework = subFramework,
+			Unavailable = version_unavailable is not null,
+			VersionUnavailable = version_unavailable,
 		};
 		base.Add (fr.Namespace, fr);
 	}
@@ -338,6 +341,7 @@ public class Frameworks : Dictionary<string, Framework> {
 				{ "UIKit", "UIKit", 3 },
 
 				{ "Accelerate", "Accelerate", 4 },
+				{ "AssetsLibrary", "AssetsLibrary", new Version (4, 0), null, false, null, /* version_unavailable = */ new Version (17, 4) },
 				{ "EventKit", "EventKit", 4 },
 				{ "EventKitUI", "EventKitUI", 4 },
 				{ "CoreMotion", "CoreMotion", 4 },
@@ -664,7 +668,6 @@ public class Frameworks : Dictionary<string, Framework> {
 				// headers-based xtro reporting those are *all* unknown API for Catalyst
 				case "AddressBookUI":
 				case "ARKit":
-				case "AssetsLibrary":
 				case "BrowserEngineCore":
 				case "CarPlay":
 				case "WatchConnectivity":
@@ -707,9 +710,12 @@ public class Frameworks : Dictionary<string, Framework> {
 	}
 
 #if BUNDLER
-	public static bool TryGetFramework (Application app, TypeDefinition td, [NotNullWhen (true)] out string? framework)
+	public static bool TryGetFramework (Application app, TypeDefinition? td, [NotNullWhen (true)] out string? framework)
 	{
 		framework = null;
+
+		if (td is null)
+			return false;
 
 		if (td.HasCustomAttributes) {
 			foreach (var attrib in td.CustomAttributes) {

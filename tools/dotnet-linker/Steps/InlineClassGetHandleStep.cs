@@ -7,6 +7,7 @@ using Mono.Linker;
 using Mono.Tuner;
 
 using Xamarin.Bundler;
+using Xamarin.Utils;
 
 #nullable enable
 
@@ -190,6 +191,18 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 				if (objCType.Methods is null && DerivedLinkContext.StaticRegistrar.IsPlatformType (objCType.Type) && !objCType.IsProtocol && !objCType.IsCategory && objCType.IsModel) {
 					// The static registrar skips generating code for this type, so we shouldn't inline calls to Class.GetHandle for it, because the P/Invoke we generate won't be able to find the native symbol for it.
 					continue;
+				}
+
+				if (Frameworks.TryGetFramework (App, objCType.Type.Resolve (), out Framework? framework)) {
+					if (framework.Unavailable) {
+						if (framework.VersionUnavailable is null) {
+							Driver.Log (3, "Not inlining the call to Class.GetHandle (\"{0}\") in method {1} because the framework {2} is unavailable.", objectiveCClassName, FormatMethod (method), framework.Name);
+							continue;
+						} else if (framework.VersionUnavailable >= App.DeploymentTarget) {
+							Driver.Log (3, "Not inlining the call to Class.GetHandle (\"{0}\") in method {1} because the framework {2} is unavailable since {3} {4}.", objectiveCClassName, FormatMethod (method), framework.Name, App.Platform.AsString (), framework.VersionUnavailable);
+							continue;
+						}
+					}
 				}
 			} else {
 				if (DerivedLinkContext.App.IsSimulatorBuild) {

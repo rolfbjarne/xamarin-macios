@@ -54,7 +54,31 @@ namespace Xharness.Jenkins {
 			}
 
 			switch (test.TestName) {
+			case "dont link":
+				yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, MonoVM)", TestVariation = "monovm|prepare-assemblies", Ignored = ignore };
+				if (supports_coreclr) {
+					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, CoreCLR)", TestVariation = "coreclr|prepare-assemblies", Ignored = ignore };
+				}
+				break;
+			case "link sdk":
+				if (supports_coreclr) {
+					// if prepare-assemblies is enabled, then linking only works in any meaningful way when using the trimmable static registrar, which only works on CoreCLR in .NET 10
+					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, CoreCLR)", TestVariation = "coreclr|prepare-assemblies", Ignored = ignore };
+				}
+				if (jenkins.Harness.DotNetVersion.Major >= 11) {
+					// if prepare-assemblies is enabled, then linking only works in any meaningful way when using the trimmable static registrar, which only works on Mono .NET 11
+					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, MonoVM)", TestVariation = "monovm|prepare-assemblies", Ignored = ignore };
+				}
+				break;
 			case "link all":
+				if (supports_coreclr) {
+					// if prepare-assemblies is enabled, then linking only works in any meaningful way when using the trimmable static registrar, which only works on CoreCLR in .NET 10
+					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, CoreCLR)", TestVariation = "coreclr|prepare-assemblies", Ignored = ignore };
+				}
+				if (jenkins.Harness.DotNetVersion.Major >= 11) {
+					// if prepare-assemblies is enabled, then linking only works in any meaningful way when using the trimmable static registrar, which only works on Mono .NET 11
+					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, MonoVM)", TestVariation = "monovm|prepare-assemblies", Ignored = ignore };
+				}
 				if (test.ProjectConfiguration == "Debug") {
 					yield return new TestData { Variation = "Debug (don't bundle original resources)", TestVariation = "do-not-bundle-original-resources" };
 				}
@@ -62,14 +86,6 @@ namespace Xharness.Jenkins {
 			case "monotouch-test":
 				yield return new TestData { Variation = "Release (link sdk)", TestVariation = "release|linksdk", Ignored = ignore };
 				yield return new TestData { Variation = "Release (link all)", TestVariation = "release|linkall", Ignored = ignore };
-				break;
-			}
-
-			switch (test.TestName) {
-			case "monotouch-test":
-			case "link all":
-			case "dont link":
-			case "link sdk":
 				yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies)", TestVariation = "prepare-assemblies", Ignored = ignore };
 				break;
 			}

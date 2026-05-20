@@ -180,14 +180,19 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 				continue;
 			}
 
-			if (DerivedLinkContext.App.IsSimulatorBuild) {
-				// Check if the Objective-C type is available in the simulator, and if not, don't inline the call to Class.GetHandle (because the app would fail to link)
-				if (objectiveCTypeMap.TryGetValue (objectiveCClassName, out var objCType)) {
+			if (objectiveCTypeMap.TryGetValue (objectiveCClassName, out var objCType)) {
+				if (DerivedLinkContext.App.IsSimulatorBuild) {
 					if (DerivedLinkContext.HasAvailabilityAttributesShowingUnavailableInSimulator (objCType.Type.Resolve (), method)) {
 						Driver.Log (3, "Not inlining the call to Class.GetHandle (\"{0}\") in method {1} because the type is marked with an attribute indicating it's not available in the simulator.", objectiveCClassName, FormatMethod (method));
 						continue;
 					}
-				} else {
+				}
+				if (objCType.Methods is null && DerivedLinkContext.StaticRegistrar.IsPlatformType (objCType.Type) && !objCType.IsProtocol && !objCType.IsCategory && objCType.IsModel) {
+					// The static registrar skips generating code for this type, so we shouldn't inline calls to Class.GetHandle for it, because the P/Invoke we generate won't be able to find the native symbol for it.
+					continue;
+				}
+			} else {
+				if (DerivedLinkContext.App.IsSimulatorBuild) {
 					Report (ErrorHelper.CreateWarning (Configuration.Application, 2266, method, Errors.MX2266, FormatMethod (method), objectiveCClassName));
 				}
 			}

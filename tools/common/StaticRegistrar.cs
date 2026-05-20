@@ -2025,7 +2025,7 @@ namespace Registrar {
 			return false;
 		}
 
-		bool IsPlatformType (TypeReference type)
+		public bool IsPlatformType (TypeReference type)
 		{
 			if (type.IsNested)
 				return false;

@@ -150,7 +150,7 @@ class Program {
 					launcherArgs.Add ("--make-repro=" + makeReproPath);
 				if (!string.IsNullOrEmpty (optionsFile))
 					launcherArgs.Add ("--options-file=" + optionsFile);
-				
+
 				foreach (var ia in inputAssemblies) {
 					launcherArgs.Add ("--input-assembly=" + GetAssemblyInfo (ia));
 				}

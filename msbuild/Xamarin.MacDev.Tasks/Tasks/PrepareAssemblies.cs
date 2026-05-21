@@ -77,8 +77,7 @@ namespace Xamarin.Utils {
 		}
 	}
 
-	class MSBuildLogger : Xamarin.Bundler.IToolLog
-	{
+	class MSBuildLogger : Xamarin.Bundler.IToolLog {
 		Xamarin.MacDev.Tasks.XamarinTask task;
 		int verbosity;
 
@@ -107,7 +106,7 @@ namespace Xamarin.Utils {
 		{
 			task.Log.LogErrorFromException (ex, true, true, null);
 		}
-		
+
 		public void LogError (Xamarin.Bundler.ProductException ex)
 		{
 			task.Log.LogError (null, $"MX{ex.Code:0000}", null, null, ex.FileName, ex.LineNumber, 0, 0, 0, ex.Message);

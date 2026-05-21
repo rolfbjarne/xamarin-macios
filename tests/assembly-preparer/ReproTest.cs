@@ -148,8 +148,7 @@ public class ReproTest : BaseClass {
 }
 
 
-class TestLogger : IToolLog
-{
+class TestLogger : IToolLog {
 	public int Verbosity => 0;
 
 	public void Log (string value)
@@ -164,16 +163,16 @@ class TestLogger : IToolLog
 
 	public void LogException (Exception ex)
 	{
-		Console.WriteLine (ex.ToString());
+		Console.WriteLine (ex.ToString ());
 	}
-	
+
 	public void LogError (ProductException ex)
 	{
-		Console.WriteLine (ex.ToString());
+		Console.WriteLine (ex.ToString ());
 	}
 
 	public void LogWarning (ProductException ex)
 	{
-		Console.WriteLine (ex.ToString());
+		Console.WriteLine (ex.ToString ());
 	}
 }

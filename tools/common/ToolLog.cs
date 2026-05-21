@@ -26,7 +26,7 @@ public interface IToolLog {
 	{
 		Log ($"Unexpected exception: {ex}");
 	}
-	
+
 	void LogError (ProductException ex)
 	{
 		Log ($"Error: {ex}");
@@ -61,7 +61,7 @@ public static class ILoggerExtensions {
 	{
 		Log (log, 0, $"Unexpected exception: {ex}");
 	}
-	
+
 	public static void LogError (this IToolLog log, ProductException ex)
 	{
 		Log (log, 0, $"Error: {ex}");

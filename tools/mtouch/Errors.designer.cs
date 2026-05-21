@@ -3606,15 +3606,6 @@ namespace Xamarin.Bundler {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unknown or unsupported pattern in call to Class.GetHandle in &apos;{0}&apos;: {1}. The call will not be inlined. Please file an issue at https://github.com/dotnet/macios/issues/new.
-        /// </summary>
-        public static string MX2263 {
-            get {
-                return ResourceManager.GetString("MX2263", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Could not {0} the assembly &apos;{1}&apos;.
         /// </summary>
         public static string MX3001 {

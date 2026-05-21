@@ -187,6 +187,7 @@ namespace Xamarin.MacDev.Tasks {
 
 				outputAssemblies.AddRange (preparer.AddedAssemblies.Select (v => {
 					var rv = new TaskItem (v.Path);
+					rv.SetMetadata ("PostprocessAssembly", "true");
 					rv.SetMetadata ("RelativePath", preparer.Configuration.AssemblyPublishDir + Path.GetFileName (v.Path));
 					return rv;
 				}));

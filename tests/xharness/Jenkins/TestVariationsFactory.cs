@@ -33,6 +33,7 @@ namespace Xharness.Jenkins {
 			var arm64_sim_runtime_identifier = string.Empty;
 			var x64_sim_runtime_identifier = string.Empty;
 			var supports_coreclr = test.Platform == TestPlatform.Mac || jenkins.Harness.DotNetVersion.Major >= 11;
+			var supports_monovm = test.Platform != TestPlatform.Mac;
 
 			switch (test.Platform) {
 			case TestPlatform.Mac:
@@ -55,7 +56,9 @@ namespace Xharness.Jenkins {
 
 			switch (test.TestName) {
 			case "dont link":
-				yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, MonoVM)", TestVariation = "monovm|prepare-assemblies", Ignored = ignore };
+				if (supports_monovm) {
+					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, MonoVM)", TestVariation = "monovm|prepare-assemblies", Ignored = ignore };
+				}
 				if (supports_coreclr) {
 					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, CoreCLR)", TestVariation = "coreclr|prepare-assemblies", Ignored = ignore };
 				}
@@ -65,7 +68,7 @@ namespace Xharness.Jenkins {
 					// if prepare-assemblies is enabled, then linking only works in any meaningful way when using the trimmable static registrar, which only works on CoreCLR in .NET 10
 					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, CoreCLR)", TestVariation = "coreclr|prepare-assemblies", Ignored = ignore };
 				}
-				if (jenkins.Harness.DotNetVersion.Major >= 11) {
+				if (supports_monovm && jenkins.Harness.DotNetVersion.Major >= 11) {
 					// if prepare-assemblies is enabled, then linking only works in any meaningful way when using the trimmable static registrar, which only works on Mono .NET 11
 					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, MonoVM)", TestVariation = "monovm|prepare-assemblies", Ignored = ignore };
 				}
@@ -75,7 +78,7 @@ namespace Xharness.Jenkins {
 					// if prepare-assemblies is enabled, then linking only works in any meaningful way when using the trimmable static registrar, which only works on CoreCLR in .NET 10
 					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, CoreCLR)", TestVariation = "coreclr|prepare-assemblies", Ignored = ignore };
 				}
-				if (jenkins.Harness.DotNetVersion.Major >= 11) {
+				if (supports_monovm && jenkins.Harness.DotNetVersion.Major >= 11) {
 					// if prepare-assemblies is enabled, then linking only works in any meaningful way when using the trimmable static registrar, which only works on Mono .NET 11
 					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, MonoVM)", TestVariation = "monovm|prepare-assemblies", Ignored = ignore };
 				}

@@ -153,12 +153,12 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 			var ldstr = instr.Previous;
 			if (ldstr.OpCode != OpCodes.Ldstr) {
 				if (!isOurOwnCode ())
-					Report (ErrorHelper.CreateWarning (Configuration.Application, 2263, method, Errors.MX2263, FormatMethod (method), ldstr));
+					Driver.Log (3, "Unknown or unsupported pattern in call to Class.GetHandle in '{0}': {1}. The call will not be inlined.", FormatMethod (method), ldstr);
 				continue;
 			}
 			if (ldstr.Operand is not string objectiveCClassName) {
 				if (!isOurOwnCode ())
-					Report (ErrorHelper.CreateWarning (Configuration.Application, 2263, method, Errors.MX2263, FormatMethod (method), ldstr.Operand));
+					Driver.Log (3, "Unknown or unsupported pattern in call to Class.GetHandle in '{0}': {1}. The call will not be inlined.", FormatMethod (method), ldstr.Operand);
 				continue;
 			}
 

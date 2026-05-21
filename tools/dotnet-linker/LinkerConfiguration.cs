@@ -134,7 +134,7 @@ namespace Xamarin.Linker {
 #else
 				if (!context.TryGetCustomData ("LinkerOptionsFile", out var linker_options_file))
 					throw new Exception ($"No custom linker options file was passed to the linker (using --custom-data LinkerOptionsFile=...");
-				instance = new LinkerConfiguration (linker_options_file) {
+				instance = new LinkerConfiguration (StaticLogger.Instance, linker_options_file) {
 					Context = context,
 				};
 
@@ -602,7 +602,7 @@ namespace Xamarin.Linker {
 
 		public LinkerConfiguration (IToolLog log, List<string> lines, string linker_file, Configurator? customConfigurator = null)
 		{
-			this.Log = log;
+			this.Logger = log;
 
 #if ASSEMBLY_PREPARER
 			AssemblyResolver = new DotNetResolver ();
@@ -690,11 +690,11 @@ namespace Xamarin.Linker {
 				throw ErrorHelper.CreateError (99, "Inconsistent platforms. TargetFramework={0}, Platform={1}", Driver.TargetFramework.Platform, Platform);
 
 			if (Application.XamarinRuntime != XamarinRuntime.MonoVM && Application.UseInterpreter) {
-				Log.Log (4, "The interpreter is enabled, but the current runtime isn't MonoVM. The interpreter settings will be ignored.");
+				Log (4, "The interpreter is enabled, but the current runtime isn't MonoVM. The interpreter settings will be ignored.");
 				Application.UnsetInterpreter ();
 			}
 
-			Driver.ValidateXcode (this, false, false);
+			Driver.ValidateXcode (this.Logger, false, false);
 
 			Application.InitializeCommon ();
 			Application.Initialize ();
@@ -864,25 +864,19 @@ namespace Xamarin.Linker {
 		{
 			// Unwrap aggregate exceptions, and collect all exceptions into a single list.
 			var list = ErrorHelper.CollectExceptions (exceptions);
-			var log = context.Configuration.LogCallback;
-			if (log is not null) {
-				foreach (var ex in list) {
-					if (ex is ProductException pe) {
-						if (pe.Error) {
-							log.LogError (pe);
-						} else {
-							log.LogWarning (pe);
-						}
-					} else {
-						log.LogException (ex);
-					}
-				}
-
-				return;
-			}
-
 #if ASSEMBLY_PREPARER
-			throw new AggregateException (list.Prepend (new InvalidOperationException ($"No callback was set to report errors properly.")));
+			var log = context.Configuration.Logger;
+			foreach (var ex in list) {
+				if (ex is ProductException pe) {
+					if (pe.Error) {
+						log.LogError (pe);
+					} else {
+						log.LogWarning (pe);
+					}
+				} else {
+					log.LogException (ex);
+				}
+			}
 #else
 			// We can't really use the linker's reporting facilities and keep our own error codes, because we'll
 			// end up re-using the same error codes the linker already uses for its own purposes. So instead show
@@ -925,8 +919,8 @@ namespace Xamarin.Linker {
 			if (min_verbosity > Verbosity)
 				return;
 
-			if (LogCallback is not null) {
-				LogCallback (value);
+			if (Logger is not null) {
+				Logger.Log (value);
 				return;
 			}
 

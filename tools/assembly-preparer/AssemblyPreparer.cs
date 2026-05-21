@@ -31,11 +31,6 @@ public class AssemblyPreparer : IDisposable {
 		get => configuration.IntermediateOutputPath;
 	}
 
-	public ILogger? LogCallback {
-		get => configuration.LogCallback;
-		set => configuration.LogCallback = value;
-	}
-
 	public Optimizations Optimizations => configuration.Application.Optimizations;
 
 	public List<AssemblyPreparerInfo> Assemblies { get; set; } = new List<AssemblyPreparerInfo> ();
@@ -73,11 +68,11 @@ public class AssemblyPreparer : IDisposable {
 		}
 	}
 
-	public AssemblyPreparer (AssemblyPreparerInfo [] assemblies, string linker_file)
+	public AssemblyPreparer (IToolLog log, AssemblyPreparerInfo [] assemblies, string linker_file)
 	{
 		var lines = File.ReadAllLines (linker_file).ToList ();
 		SaveAssemblies ("AssemblyPreparer", lines, null, assemblies);
-		configuration = new LinkerConfiguration (lines, linker_file, GetConfigurator (null, (input, output) => assemblies.Single (a => a.InputPath == input && a.OutputPath == output)));
+		configuration = new LinkerConfiguration (log, lines, linker_file, GetConfigurator (null, (input, output) => assemblies.Single (a => a.InputPath == input && a.OutputPath == output)));
 	}
 
 	public void AddLog (IAssemblyPreparerLog log)
@@ -107,7 +102,7 @@ public class AssemblyPreparer : IDisposable {
 		var file = Path.Combine (reproPath, "arguments.txt");
 		if (!File.Exists (file))
 			throw new FileNotFoundException ($"Repro arguments file not found: {file}");
-		return new AssemblyPreparer (Array.Empty<AssemblyPreparerInfo> (), file);
+		return new AssemblyPreparer (StaticLogger.Instance, Array.Empty<AssemblyPreparerInfo> (), file);
 	}
 
 	public bool Prepare (out List<ProductException> exceptions)

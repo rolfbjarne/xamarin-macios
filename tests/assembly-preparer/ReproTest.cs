@@ -135,7 +135,8 @@ public class ReproTest : BaseClass {
 				}
 
 				var infos = inputAssemblies.Select (GetAssemblyInfo).ToArray ();
-				using var preparer = new AssemblyPreparer (infos, optionsFile);
+				var logger = new TestLogger ();
+				using var preparer = new AssemblyPreparer (logger, infos, optionsFile);
 				preparer.MakeReproPath = makeReproPath ?? "";
 				var rv = preparer.Prepare (out var exceptions);
 				return;
@@ -143,5 +144,36 @@ public class ReproTest : BaseClass {
 		}
 
 		Assert.Fail ("The task 'PrepareAssemblies' was not found in the provided binlog.");
+	}
+}
+
+
+class TestLogger : IToolLog
+{
+	public int Verbosity => 0;
+
+	public void Log (string value)
+	{
+		Console.WriteLine (value);
+	}
+
+	public void Log (string format, params object? [] args)
+	{
+		Console.WriteLine (format, args);
+	}
+
+	public void LogException (Exception ex)
+	{
+		Console.WriteLine (ex.ToString());
+	}
+	
+	public void LogError (ProductException ex)
+	{
+		Console.WriteLine (ex.ToString());
+	}
+
+	public void LogWarning (ProductException ex)
+	{
+		Console.WriteLine (ex.ToString());
 	}
 }

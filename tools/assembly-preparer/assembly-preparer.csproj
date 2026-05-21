@@ -122,6 +122,9 @@
 		<Compile Include="../common/TargetFramework.cs">
 			<Link>external/tools/common/TargetFramework.cs</Link>
 		</Compile>
+		<Compile Include="../common/ToolLog.cs">
+			<Link>external/tools/common/ToolLog.cs</Link>
+		</Compile>
 		<Compile Include="../common/XamarinRuntime.cs">
 			<Link>external/tools/common/XamarinRuntime.cs</Link>
 		</Compile>

@@ -75,6 +75,48 @@ namespace Xamarin.Utils {
 			Console.SetError (new NoWriter (log));
 		}
 	}
+
+	class MSBuildLogger : Xamarin.Bundler.IToolLog
+	{
+		Xamarin.MacDev.Tasks.XamarinTask task;
+		int verbosity;
+
+		public int Verbosity {
+			get => verbosity;
+			set => verbosity = value;
+		}
+
+		public MSBuildLogger (Xamarin.MacDev.Tasks.XamarinTask task)
+		{
+			this.task = task;
+			this.verbosity = Xamarin.Bundler.Driver.GetDefaultVerbosity (Xamarin.Bundler.Driver.NAME);
+		}
+
+		public void Log (string value)
+		{
+			task.Log.LogMessage (MessageImportance.Low, value);
+		}
+
+		public void Log (string format, params object? [] args)
+		{
+			task.Log.LogMessage (MessageImportance.Low, format, args);
+		}
+
+		public void LogException (Exception ex)
+		{
+			task.Log.LogErrorFromException (ex, true, true, null);
+		}
+		
+		public void LogError (Xamarin.Bundler.ProductException ex)
+		{
+			task.Log.LogError (null, $"MX{ex.Code:0000}", null, null, ex.FileName, ex.LineNumber, 0, 0, 0, ex.Message);
+		}
+
+		public void LogWarning (Xamarin.Bundler.ProductException ex)
+		{
+			task.Log.LogWarning (null, $"MX{ex.Code:0000}", null, null, ex.FileName, ex.LineNumber, 0, 0, 0, ex.Message);
+		}
+	}
 }
 
 namespace Xamarin.MacDev.Tasks {
@@ -118,7 +160,8 @@ namespace Xamarin.MacDev.Tasks {
 
 			try {
 				var infos = InputAssemblies.Select (GetAssemblyInfo).ToArray ();
-				using var preparer = new AssemblyPreparer (infos, OptionsFile?.ItemSpec ?? "");
+				var log = new MSBuildLogger (this);
+				using var preparer = new AssemblyPreparer (log, infos, OptionsFile?.ItemSpec ?? "");
 				preparer.MakeReproPath = MakeReproPath;
 				var rv = preparer.Prepare (out var exceptions);
 

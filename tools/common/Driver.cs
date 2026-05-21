@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
+using Xamarin.Bundler;
 using Xamarin.MacDev;
 using Xamarin.Utils;
 
@@ -88,17 +89,17 @@ namespace Xamarin.Bundler {
 
 		static Driver ()
 		{
-			Verbosity = GetDefaultVerbosity ();
+			Verbosity = GetDefaultVerbosity (NAME);
 		}
 
-		static int GetDefaultVerbosity ()
+		public static int GetDefaultVerbosity (string toolName)
 		{
 			var v = 0;
-			var fn = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.UserProfile), $".{NAME}-verbosity");
+			var fn = Path.Combine (Environment.GetFolderPath (Environment.SpecialFolder.UserProfile), $".{toolName}-verbosity");
 			if (File.Exists (fn)) {
 				v = (int) new FileInfo (fn).Length;
 				if (v == 0)
-					v = 4; // this is the magic verbosity level we give everybody.
+					v = 4; // this is the magic verbosity level we give everybody if the file exists, but has no size.
 			}
 			return v;
 		}
@@ -419,10 +420,8 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		public static void ValidateXcode (ILogger? logger, bool accept_any_xcode_version, bool warn_if_not_found)
+		public static void ValidateXcode (IToolLog logger, bool accept_any_xcode_version, bool warn_if_not_found)
 		{
-			logger ??= StaticLogger.Instance;
-
 			if (sdk_root is null) {
 				sdk_root = FindSystemXcode ();
 				if (sdk_root is null) {
@@ -736,16 +735,11 @@ namespace Xamarin.Bundler {
 		}
 	}
 
-	public interface ILogger {
-		void Log (string value);
-		void Log (string format, params object? [] args);
-		void Log (int min_verbosity, string value);
-		void Log (int min_verbosity, string format, params object? [] args);
-	}
-
 	// [Obsolete ("Don't use this class, use an instance of ILogger instead")]
-	public class StaticLogger : ILogger {
+	public class StaticLogger : IToolLog {
 		public readonly static StaticLogger Instance = new StaticLogger ();
+
+		public int Verbosity => Driver.Verbosity;
 
 		public void Log (string value)
 		{

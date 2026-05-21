@@ -18,7 +18,7 @@ using Microsoft.VisualBasic;
 #nullable enable
 
 namespace Xamarin.Linker {
-	public class LinkerConfiguration : ILogger {
+	public class LinkerConfiguration {
 		string LinkerFile;
 
 		public Abi Abi = Abi.None;
@@ -55,7 +55,7 @@ namespace Xamarin.Linker {
 
 		public Application Application { get; private set; }
 
-		public Action<string>? LogCallback { get; set; }
+		public IToolLog Logger { get; private set; }
 
 		public IList<string> RegistrationMethods { get; set; } = new List<string> ();
 		public List<string> NativeCodeToCompileAndLink { get; private set; } = new List<string> ();
@@ -595,13 +595,14 @@ namespace Xamarin.Linker {
 			return dict;
 		}
 
-		public LinkerConfiguration (string linker_file, Configurator? customConfigurator = null)
-			 : this (File.ReadAllLines (linker_file).ToList (), linker_file, customConfigurator)
+		public LinkerConfiguration (IToolLog log, string linker_file, Configurator? customConfigurator = null)
+			 : this (log, File.ReadAllLines (linker_file).ToList (), linker_file, customConfigurator)
 		{
 		}
 
-		public LinkerConfiguration (List<string> lines, string linker_file, Configurator? customConfigurator = null)
+		public LinkerConfiguration (IToolLog log, List<string> lines, string linker_file, Configurator? customConfigurator = null)
 		{
+			this.Log = log;
 
 #if ASSEMBLY_PREPARER
 			AssemblyResolver = new DotNetResolver ();
@@ -680,6 +681,7 @@ namespace Xamarin.Linker {
 			case ApplePlatform.MacOSX:
 			case ApplePlatform.MacCatalyst:
 				break;
+
 			default:
 				throw new System.InvalidOperationException ($"Unknown platform: {Platform}");
 			}
@@ -688,7 +690,7 @@ namespace Xamarin.Linker {
 				throw ErrorHelper.CreateError (99, "Inconsistent platforms. TargetFramework={0}, Platform={1}", Driver.TargetFramework.Platform, Platform);
 
 			if (Application.XamarinRuntime != XamarinRuntime.MonoVM && Application.UseInterpreter) {
-				Log (4, "The interpreter is enabled, but the current runtime isn't MonoVM. The interpreter settings will be ignored.");
+				Log.Log (4, "The interpreter is enabled, but the current runtime isn't MonoVM. The interpreter settings will be ignored.");
 				Application.UnsetInterpreter ();
 			}
 
@@ -860,25 +862,43 @@ namespace Xamarin.Linker {
 
 		public static void Report (LinkContext context, IList<Exception> exceptions)
 		{
+			// Unwrap aggregate exceptions, and collect all exceptions into a single list.
+			var list = ErrorHelper.CollectExceptions (exceptions);
+			var log = context.Configuration.LogCallback;
+			if (log is not null) {
+				foreach (var ex in list) {
+					if (ex is ProductException pe) {
+						if (pe.Error) {
+							log.LogError (pe);
+						} else {
+							log.LogWarning (pe);
+						}
+					} else {
+						log.LogException (ex);
+					}
+				}
+
+				return;
+			}
+
+#if ASSEMBLY_PREPARER
+			throw new AggregateException (list.Prepend (new InvalidOperationException ($"No callback was set to report errors properly.")));
+#else
 			// We can't really use the linker's reporting facilities and keep our own error codes, because we'll
 			// end up re-using the same error codes the linker already uses for its own purposes. So instead show
 			// a generic error using the linker's Context.LogMessage API, and then print our own errors to stderr.
 			// Since we print using a standard message format, msbuild will parse those error messages and show
 			// them as msbuild errors.
-			var list = ErrorHelper.CollectExceptions (exceptions);
 			var allWarnings = list.All (v => v is ProductException pe && !pe.Error);
 			if (!allWarnings) {
 				TryGetInstance (context, out var instance);
 				var platform = (instance?.Platform)?.ToString () ?? "unknown";
-#if ASSEMBLY_PREPARER
-				Console.WriteLine ("Something went wrong."); // TODO: improve this a bit...
-#else
 				var msg = MessageContainer.CreateCustomErrorMessage (Errors.MX7000 /* An error occurred while executing the custom linker steps. Please review the build log for more information. */, 7000, platform);
 				context.LogMessage (msg);
-#endif
 			}
 			// ErrorHelper.Show will print our errors and warnings to stderr.
 			ErrorHelper.Show (list);
+#endif
 		}
 
 		public IEnumerable<AssemblyDefinition> GetNonDeletedAssemblies (BaseStep step)

@@ -31,6 +31,11 @@ public class AssemblyPreparer : IDisposable {
 		get => configuration.IntermediateOutputPath;
 	}
 
+	public ILogger? LogCallback {
+		get => configuration.LogCallback;
+		set => configuration.LogCallback = value;
+	}
+
 	public Optimizations Optimizations => configuration.Application.Optimizations;
 
 	public List<AssemblyPreparerInfo> Assemblies { get; set; } = new List<AssemblyPreparerInfo> ();

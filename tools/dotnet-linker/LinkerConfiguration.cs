@@ -24,6 +24,7 @@ namespace Xamarin.Linker {
 		public Abi Abi = Abi.None;
 		public string AOTCompiler = string.Empty;
 		public string AOTOutputDirectory = string.Empty;
+		public string AssemblyPublishDir = string.Empty;
 		public string DedupAssembly = string.Empty;
 		public string CacheDirectory { get; private set; } = string.Empty;
 		public Version? DeploymentTarget { get; private set; }
@@ -85,6 +86,7 @@ namespace Xamarin.Linker {
 
 #if ASSEMBLY_PREPARER
 		public List<AssemblyDefinition> Assemblies => Application.LinkContext.Assemblies;
+		public List<(string Path, AssemblyDefinition Assembly)> AddedAssemblies = new List<(string Path, AssemblyDefinition Assembly)> ();
 #else
 		// The list of assemblies is populated in CollectAssembliesStep.
 		public List<AssemblyDefinition> Assemblies = new List<AssemblyDefinition> ();
@@ -203,9 +205,14 @@ namespace Xamarin.Linker {
 					new SaveValue ((key, storage) => storage.Add ($"{key}={(Application.AreAnyAssembliesTrimmed ? "true" : "false")}"))
 				)},
 				{ "AssemblyName", (
-					// This is the AssemblyName MSBuild property for the main project (which is also the root/entry assembly)
+					// This is the _AssemblyName MSBuild property for the main project (which is also the root/entry assembly)
 					new LoadValue ((key, value) => Application.RootAssemblies.Add (value)),
 					new SaveValue ((key, storage) => storage.AddRange (Application.RootAssemblies.Select (v => $"{key}={v}")))
+				)},
+				{ "AssemblyPublishDir", (
+					// This is the AssemblyPublishDir MSBuild property for the main project
+					new LoadValue ((key, value) => AssemblyPublishDir = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, AssemblyPublishDir, storage))
 				)},
 				{ "AOTArgument",  (
 					new LoadValue ((key, value) =>

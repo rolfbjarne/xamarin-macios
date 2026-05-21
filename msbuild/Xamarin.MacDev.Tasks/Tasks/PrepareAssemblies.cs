@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading;
@@ -178,12 +179,20 @@ namespace Xamarin.MacDev.Tasks {
 					}
 				}
 
-				OutputAssemblies = preparer.Assemblies.Select (v => {
+				var outputAssemblies = preparer.Assemblies.Select (v => {
 					var item = map [v];
 					item.ItemSpec = v.OutputPath;
 					item.SetMetadata ("BeforePrepareAssembliesPath", v.InputPath);
 					return item;
-				}).ToArray ();
+				}).ToList ();
+
+				outputAssemblies.AddRange (preparer.AddedAssemblies.Select (v => {
+					var rv = new TaskItem (v.Path);
+					rv.SetMetadata ("RelativePath", preparer.Configuration.AssemblyPublishDir + Path.GetFileName (v.Path));
+					return rv;
+				}));
+
+				OutputAssemblies = outputAssemblies.ToArray ();
 				return rv && !Log.HasLoggedErrors;
 			} catch (Exception e) {
 				Log.LogError ("Unexpected error while preparing assemblies: {0}", e);

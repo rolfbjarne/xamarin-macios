@@ -20,6 +20,8 @@ public class AssemblyPreparer : IDisposable {
 
 	LinkerConfiguration configuration;
 
+	public LinkerConfiguration Configuration => configuration;
+
 	public string MakeReproPath { get; set; } = string.Empty;
 
 	public RegistrarMode Registrar {
@@ -34,6 +36,8 @@ public class AssemblyPreparer : IDisposable {
 	public Optimizations Optimizations => configuration.Application.Optimizations;
 
 	public List<AssemblyPreparerInfo> Assemblies { get; set; } = new List<AssemblyPreparerInfo> ();
+
+	public IList<(string Path, AssemblyDefinition Assembly)> AddedAssemblies => configuration.AddedAssemblies;
 
 	LinkerConfiguration.Configurator GetConfigurator (string? reproPath = null, Func<string, string, AssemblyPreparerInfo>? assemblyPreparerInfoFactory = null)
 	{

@@ -634,6 +634,7 @@
 				AOTOutputDirectory=$(_AOTOutputDirectory)
 				DedupAssembly=$(_DedupAssembly)
 				AppBundleManifestPath=$(_AppBundleManifestPath)
+				AssemblyPublishDir=$(_AssemblyPublishDir)
 				CacheDirectory=$(_LinkerCacheDirectory)
 				@(_BundlerDlsym -> 'Dlsym=%(Identity)')
 				Debug=$(_BundlerDebug)

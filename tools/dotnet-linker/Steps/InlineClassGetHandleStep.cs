@@ -196,6 +196,11 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 					}
 				}
 
+				if (IsUnsupported (objCType.Type.Resolve ())) {
+					Driver.Log (3, "Not inlining the call to Class.GetHandle (\"{0}\") in method {1} because the type is marked with an [UnsupportedOSPlatform] attribute.", objectiveCClassName, FormatMethod (method));
+					continue;
+				}
+
 				if (objCType.Methods is null && DerivedLinkContext.StaticRegistrar.IsPlatformType (objCType.Type) && !objCType.IsProtocol && !objCType.IsCategory && objCType.IsModel) {
 					// The static registrar skips generating code for this type, so we shouldn't inline calls to Class.GetHandle for it, because the P/Invoke we generate won't be able to find the native symbol for it.
 					continue;
@@ -203,6 +208,11 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 
 				if (Frameworks.TryGetFramework (App, objCType.Type.Resolve (), out Framework? framework) && framework.IsFrameworkUnavailable (App)) {
 					Driver.Log (3, "Not inlining the call to Class.GetHandle (\"{0}\") in method {1} because the framework {2} is unavailable.", objectiveCClassName, FormatMethod (method), framework.Name);
+					continue;
+				}
+
+				if (objCType.Type.Is ("UIKit", "UITitlebar")) {
+					// UITitlebar is a weird special case, the class exists in the headers, and it's documented online, but it's not possible to link with it (not even in an Xcode project, it's not in any .tbd files).
 					continue;
 				}
 			}
@@ -217,6 +227,30 @@ public class InlineClassGetHandleStep : AssemblyModifierStep {
 		}
 
 		return modified;
+	}
+
+	bool IsUnsupported (TypeDefinition? type)
+	{
+		if (type is null)
+			return false;
+
+		if (!type.HasCustomAttributes)
+			return false;
+		
+		foreach (var ca in type.CustomAttributes) {
+			if (!ca.AttributeType.Is ("System.Runtime.Versioning", "UnsupportedOSPlatformAttribute"))
+				continue;
+
+			if (!DerivedLinkContext.StaticRegistrar.GetDotNetAvailabilityAttribute (ca, App.Platform, out var sdkVersion, out _))
+				continue;
+			
+			if (sdkVersion is null)
+				return true; // if there's no version, then it's always unavailable
+
+			return sdkVersion <= App.SdkVersion;
+		}
+
+		return false;
 	}
 
 	static string FormatMethod (MethodReference method)

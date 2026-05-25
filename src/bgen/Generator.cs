@@ -86,6 +86,8 @@ public partial class Generator : IMemberGatherer {
 	Dictionary<string, string> selector_gethandle_cache = new Dictionary<string, string> ();
 	string? messagingPrefix;
 	Dictionary<string, string> send_methods = new Dictionary<string, string> ();
+	Dictionary<(MethodInfo, bool, bool, string), string> makeSigCache = new ();
+	Dictionary<string, string> prefixedSigCache = new ();
 	readonly MarshalTypeList marshalTypes = new ();
 	Dictionary<Type, TrampolineInfo> trampolines = new Dictionary<Type, TrampolineInfo> ();
 	Dictionary<Type, Type> notification_event_arg_types = new Dictionary<Type, Type> ();
@@ -1009,6 +1011,10 @@ public partial class Generator : IMemberGatherer {
 	//
 	string MakeSig (string send, bool stret, MethodInfo mi, bool aligned)
 	{
+		var cacheKey = (mi, stret, aligned, send);
+		if (makeSigCache.TryGetValue (cacheKey, out var cached))
+			return cached;
+
 		var sb = reusable_makesig;
 		sb.Clear ();
 		var shouldMarshalNativeExceptions = ShouldMarshalNativeExceptions (mi);
@@ -1051,7 +1057,9 @@ public partial class Generator : IMemberGatherer {
 		if (!string.IsNullOrEmpty (marshalDirective?.NativeSuffix))
 			sb.Append (marshalDirective.NativeSuffix);
 
-		return sb.ToString ();
+		var result = sb.ToString ();
+		makeSigCache [cacheKey] = result;
+		return result;
 	}
 
 	void RegisterMethod (bool need_stret, MethodInfo mi, string method_name, bool aligned)
@@ -3335,7 +3343,11 @@ public partial class Generator : IMemberGatherer {
 		string sig = supercall ? MakeSuperSig (mi, stret, aligned) : MakeSig (mi, stret, aligned);
 
 		messagingPrefix ??= "global::" + NamespaceCache.Messaging + ".";
-		sig = messagingPrefix + sig;
+		if (!prefixedSigCache.TryGetValue (sig, out var prefixedSig)) {
+			prefixedSig = messagingPrefix + sig;
+			prefixedSigCache [sig] = prefixedSig;
+		}
+		sig = prefixedSig;
 
 		string selector_field;
 		if (minfo.is_interface_impl || minfo.is_extension_method) {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Text;
@@ -894,6 +895,29 @@ public enum AvailabilityKind {
 	AllowMultiple = true
 )]
 public abstract class AvailabilityBaseAttribute : Attribute {
+
+	static readonly Dictionary<(int, int, int), Version> versionCache = new ();
+
+	internal static Version GetCachedVersion (int major, int minor)
+	{
+		var key = (major, minor, -1);
+		if (!versionCache.TryGetValue (key, out var version)) {
+			version = new Version (major, minor);
+			versionCache [key] = version;
+		}
+		return version;
+	}
+
+	internal static Version GetCachedVersion (int major, int minor, int build)
+	{
+		var key = (major, minor, build);
+		if (!versionCache.TryGetValue (key, out var version)) {
+			version = new Version (major, minor, build);
+			versionCache [key] = version;
+		}
+		return version;
+	}
+
 	/// <summary>The type of availability information this attribute contains.</summary>
 	/// <value>The type of availability information this attribute contains.</value>
 	/// <remarks>
@@ -1037,7 +1061,7 @@ public class IntroducedAttribute : AvailabilityBaseAttribute {
 	/// <param name="minorVersion">The minor version.</param>
 	/// <param name="message">Additional information related to the availability information.</param>
 	public IntroducedAttribute (PlatformName platform, int majorVersion, int minorVersion, string? message = null)
-		: base (AvailabilityKind.Introduced, platform, new Version (majorVersion, minorVersion), message)
+		: base (AvailabilityKind.Introduced, platform, GetCachedVersion (majorVersion, minorVersion), message)
 	{
 	}
 
@@ -1048,7 +1072,7 @@ public class IntroducedAttribute : AvailabilityBaseAttribute {
 	/// <param name="subminorVersion">The subminor version.</param>
 	/// <param name="message">Additional information related to the availability information.</param>
 	public IntroducedAttribute (PlatformName platform, int majorVersion, int minorVersion, int subminorVersion, string? message = null)
-		: base (AvailabilityKind.Introduced, platform, new Version (majorVersion, minorVersion, subminorVersion), message)
+		: base (AvailabilityKind.Introduced, platform, GetCachedVersion (majorVersion, minorVersion, subminorVersion), message)
 	{
 	}
 }
@@ -1069,7 +1093,7 @@ public sealed class DeprecatedAttribute : AvailabilityBaseAttribute {
 	/// <param name="minorVersion">The minor version.</param>
 	/// <param name="message">Additional information related to the availability information.</param>
 	public DeprecatedAttribute (PlatformName platform, int majorVersion, int minorVersion, string? message = null)
-		: base (AvailabilityKind.Deprecated, platform, new Version (majorVersion, minorVersion), message)
+		: base (AvailabilityKind.Deprecated, platform, GetCachedVersion (majorVersion, minorVersion), message)
 	{
 	}
 
@@ -1080,7 +1104,7 @@ public sealed class DeprecatedAttribute : AvailabilityBaseAttribute {
 	/// <param name="subminorVersion">The subminor version.</param>
 	/// <param name="message">Additional information related to the availability information.</param>
 	public DeprecatedAttribute (PlatformName platform, int majorVersion, int minorVersion, int subminorVersion, string? message = null)
-		: base (AvailabilityKind.Deprecated, platform, new Version (majorVersion, minorVersion, subminorVersion), message)
+		: base (AvailabilityKind.Deprecated, platform, GetCachedVersion (majorVersion, minorVersion, subminorVersion), message)
 	{
 	}
 }
@@ -1101,7 +1125,7 @@ public sealed class ObsoletedAttribute : AvailabilityBaseAttribute {
 	/// <param name="minorVersion">The minor version.</param>
 	/// <param name="message">Additional information related to the availability information.</param>
 	public ObsoletedAttribute (PlatformName platform, int majorVersion, int minorVersion, string? message = null)
-		: base (AvailabilityKind.Obsoleted, platform, new Version (majorVersion, minorVersion), message)
+		: base (AvailabilityKind.Obsoleted, platform, GetCachedVersion (majorVersion, minorVersion), message)
 	{
 	}
 
@@ -1112,7 +1136,7 @@ public sealed class ObsoletedAttribute : AvailabilityBaseAttribute {
 	/// <param name="subminorVersion">The subminor version.</param>
 	/// <param name="message">Additional information related to the availability information.</param>
 	public ObsoletedAttribute (PlatformName platform, int majorVersion, int minorVersion, int subminorVersion, string? message = null)
-		: base (AvailabilityKind.Obsoleted, platform, new Version (majorVersion, minorVersion, subminorVersion), message)
+		: base (AvailabilityKind.Obsoleted, platform, GetCachedVersion (majorVersion, minorVersion, subminorVersion), message)
 	{
 	}
 }

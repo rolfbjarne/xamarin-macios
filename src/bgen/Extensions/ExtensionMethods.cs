@@ -133,13 +133,21 @@ public static class ReflectionExtensions {
 
 	public static bool IsUnavailable (AvailabilityBaseAttribute [] attributes, PlatformName platform)
 	{
-		if (attributes.Any (attr => attr.AvailabilityKind == AvailabilityKind.Unavailable && attr.Platform == platform))
-			return true;
+		for (int i = 0; i < attributes.Length; i++) {
+			if (attributes [i].AvailabilityKind == AvailabilityKind.Unavailable && attributes [i].Platform == platform)
+				return true;
+		}
 
 		if (platform == PlatformName.MacCatalyst) {
 			// If we're targetting Mac Catalyst, and we don't have any availability information for Mac Catalyst,
 			// then use the availability for iOS
-			var anyCatalyst = attributes.Any (v => v.Platform == PlatformName.MacCatalyst);
+			bool anyCatalyst = false;
+			for (int i = 0; i < attributes.Length; i++) {
+				if (attributes [i].Platform == PlatformName.MacCatalyst) {
+					anyCatalyst = true;
+					break;
+				}
+			}
 			if (!anyCatalyst)
 				return IsUnavailable (attributes, PlatformName.iOS);
 		}

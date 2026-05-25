@@ -77,7 +77,7 @@ public partial class Generator : IMemberGatherer {
 	public GeneratedTypes GeneratedTypes;
 	List<Exception> exceptions = new List<Exception> ();
 
-	Dictionary<Type, IEnumerable<string>> selectors = new Dictionary<Type, IEnumerable<string>> ();
+	Dictionary<Type, string []> selectors = new Dictionary<Type, string []> ();
 	Dictionary<Type, bool> need_abstract = new Dictionary<Type, bool> ();
 	Dictionary<string, int> selector_use = new Dictionary<string, int> ();
 	Dictionary<string, string> selector_names = new Dictionary<string, string> ();
@@ -1002,7 +1002,11 @@ public partial class Generator : IMemberGatherer {
 				continue;
 			sb.Append ("_");
 			try {
-				sb.Append (ParameterGetMarshalType (new MarshalInfo (this, mi, pi)).Replace (' ', '_').Replace ('*', '_'));
+				var marshalType = ParameterGetMarshalType (new MarshalInfo (this, mi, pi));
+				if (marshalType.IndexOfAny (marshalTypeSigCharsToReplace) >= 0)
+					sb.Append (marshalType.Replace (' ', '_').Replace ('*', '_'));
+				else
+					sb.Append (marshalType);
 			} catch (BindingException ex) {
 				throw new BindingException (1079, ex.Error, ex, ex.Message, pi.Name.GetSafeParamName (), mi.DeclaringType, mi.Name);
 			}
@@ -1215,6 +1219,7 @@ public partial class Generator : IMemberGatherer {
 		}
 	}
 	static char [] invalid_selector_chars = new char [] { '*', '^', '(', ')' };
+	static char [] marshalTypeSigCharsToReplace = new char [] { ' ', '*' };
 
 	public ExportAttribute? GetExportAttribute (MemberInfo mo)
 	{
@@ -1309,6 +1314,9 @@ public partial class Generator : IMemberGatherer {
 
 	public void Go ()
 	{
+		var reportAlloc = Environment.GetEnvironmentVariable ("BGEN_REPORT_ALLOCATIONS") == "1";
+		long allocBefore = reportAlloc ? GC.GetTotalAllocatedBytes (precise: true) : 0;
+
 		marshalTypes.Load (TypeCache, Frameworks);
 
 		m = GetOutputStream ("ObjCRuntime", "Messaging");
@@ -1499,7 +1507,13 @@ public partial class Generator : IMemberGatherer {
 					need_abstract [t] = true;
 			}
 
-			selectors [t] = tselectors.Distinct ();
+			selectors [t] = tselectors.Distinct ().ToArray ();
+		}
+
+		if (reportAlloc) {
+			long afterPhase1 = GC.GetTotalAllocatedBytes (precise: true);
+			Console.Error.WriteLine ($"BGEN_PHASE1_ALLOC: {(afterPhase1 - allocBefore) / (1024 * 1024)} MB (type walking + selector gathering)");
+			allocBefore = afterPhase1;
 		}
 
 		foreach (Type t in api.Types) {
@@ -1507,6 +1521,12 @@ public partial class Generator : IMemberGatherer {
 				continue;
 
 			Generate (t);
+		}
+
+		if (reportAlloc) {
+			long afterPhase2 = GC.GetTotalAllocatedBytes (precise: true);
+			Console.Error.WriteLine ($"BGEN_PHASE2_ALLOC: {(afterPhase2 - allocBefore) / (1024 * 1024)} MB (Generate per-type)");
+			allocBefore = afterPhase2;
 		}
 
 		print (m, "\t}\n}");
@@ -1527,6 +1547,11 @@ public partial class Generator : IMemberGatherer {
 
 		if (libraries.Count > 0)
 			GenerateLibraryHandles ();
+
+		if (reportAlloc) {
+			long afterPhase3 = GC.GetTotalAllocatedBytes (precise: true);
+			Console.Error.WriteLine ($"BGEN_PHASE3_ALLOC: {(afterPhase3 - allocBefore) / (1024 * 1024)} MB (support files)");
+		}
 
 		ThrowIfExceptions ();
 	}
@@ -2373,6 +2398,21 @@ public partial class Generator : IMemberGatherer {
 		print (sw, format, args);
 	}
 
+	public void print (string format, object? arg0)
+	{
+		print (sw, string.Format (format, arg0));
+	}
+
+	public void print (string format, object? arg0, object? arg1)
+	{
+		print (sw, string.Format (format, arg0, arg1));
+	}
+
+	public void print (string format, object? arg0, object? arg1, object? arg2)
+	{
+		print (sw, string.Format (format, arg0, arg1, arg2));
+	}
+
 	static char [] newlineCharacters = new char [] { '\n' };
 
 	public void print (StreamWriter? w, string format)
@@ -2413,6 +2453,21 @@ public partial class Generator : IMemberGatherer {
 	public void print (StreamWriter? w, string format, params object? [] args)
 	{
 		print (w, string.Format (format, args));
+	}
+
+	public void print (StreamWriter? w, string format, object? arg0)
+	{
+		print (w, string.Format (format, arg0));
+	}
+
+	public void print (StreamWriter? w, string format, object? arg0, object? arg1)
+	{
+		print (w, string.Format (format, arg0, arg1));
+	}
+
+	public void print (StreamWriter? w, string format, object? arg0, object? arg1, object? arg2)
+	{
+		print (w, string.Format (format, arg0, arg1, arg2));
 	}
 
 	public void print (StreamWriter? w, IEnumerable e)
@@ -2512,7 +2567,11 @@ public partial class Generator : IMemberGatherer {
 
 	static bool PlatformMarkedUnavailable (PlatformName platform, List<AvailabilityBaseAttribute> memberAvailability)
 	{
-		return memberAvailability.Any (v => (v.Platform == platform && v is UnavailableAttribute));
+		for (int i = 0; i < memberAvailability.Count; i++) {
+			if (memberAvailability [i].Platform == platform && memberAvailability [i] is UnavailableAttribute)
+				return true;
+		}
+		return false;
 	}
 
 	// Especially for TV and Catalyst some entire namespaces are removed via framework_sources.
@@ -2523,22 +2582,36 @@ public partial class Generator : IMemberGatherer {
 			var droppedPlatforms = new HashSet<PlatformName> ();
 
 			// Walk all members and look for introduced that are nonsense for our containing class's platform
-			foreach (var introduced in memberAvailability.Where (a => a.AvailabilityKind == AvailabilityKind.Introduced || a.AvailabilityKind == AvailabilityKind.Deprecated).ToList ()) {
+			// Take a snapshot count since we only need to check existing items (not ones we add)
+			int count = memberAvailability.Count;
+			for (int i = 0; i < count; i++) {
+				var attr = memberAvailability [i];
+				if (attr.AvailabilityKind != AvailabilityKind.Introduced && attr.AvailabilityKind != AvailabilityKind.Deprecated)
+					continue;
 				// Hack - WebKit namespace has two distinct implementations with different types
 				// It can not be hacked in IsInSupportedFramework as AddUnlistedAvailability 
 				// will add iOS implied to the mac version and so on. So hard code it here...
-				if (FindNamespace (containingClass) == "WebKit" && introduced.Platform != PlatformName.TvOS) {
+				if (FindNamespace (containingClass) == "WebKit" && attr.Platform != PlatformName.TvOS) {
 					continue;
 				}
-				if (!IsInSupportedFramework (containingClass, introduced.Platform)) {
-					memberAvailability.Remove (introduced);
-					droppedPlatforms.Add (introduced.Platform);
+				if (!IsInSupportedFramework (containingClass, attr.Platform)) {
+					memberAvailability.RemoveAt (i);
+					i--;
+					count--;
+					droppedPlatforms.Add (attr.Platform);
 				}
 			}
 
 			// For each attribute we dropped, if we don't have an existing non-introduced, create one
 			foreach (var platform in droppedPlatforms) {
-				if (!memberAvailability.Any (a => platform == a.Platform && a.AvailabilityKind != AvailabilityKind.Introduced)) {
+				bool hasNonIntroduced = false;
+				for (int i = 0; i < memberAvailability.Count; i++) {
+					if (platform == memberAvailability [i].Platform && memberAvailability [i].AvailabilityKind != AvailabilityKind.Introduced) {
+						hasNonIntroduced = true;
+						break;
+					}
+				}
+				if (!hasNonIntroduced) {
 					memberAvailability.Add (AttributeFactory.CreateUnsupportedAttribute (platform));
 				}
 			}
@@ -5611,7 +5684,7 @@ public partial class Generator : IMemberGatherer {
 	void PrintSupportedSimulatorAttribute (ICustomAttributeProvider? provider, string platformName)
 	{
 		var attribs = AttributeManager.GetCustomAttributes<SupportedSimulatorAttribute> (provider);
-		if (attribs?.Any () != true)
+		if (attribs is null || attribs.Length == 0)
 			return;
 
 		// Only print the attribute for the current platform, we don't care about other platforms.
@@ -5625,7 +5698,7 @@ public partial class Generator : IMemberGatherer {
 	void PrintUnsupportedSimulatorAttribute (ICustomAttributeProvider? provider, string platformName)
 	{
 		var attribs = AttributeManager.GetCustomAttributes<UnsupportedSimulatorAttribute> (provider);
-		if (attribs?.Any () != true)
+		if (attribs is null || attribs.Length == 0)
 			return;
 
 		// Only print the attribute for the current platform, we don't care about other platforms.

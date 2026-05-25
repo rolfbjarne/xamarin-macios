@@ -123,25 +123,42 @@ public static partial class AttributeFactory {
 	// Find the introduced attribute with the highest version between the target list and the additions.
 	// If the destination list has an introduced attribute, replace it if it's not the one with the highest version
 	// If the destination list does not have an introduced attribute, then add one if there's one in the additions and there's not already an unavailable attribute.
-	public static void FindHighestIntroducedAttributes (List<AvailabilityBaseAttribute> dest, IEnumerable<AvailabilityBaseAttribute> additions)
+	public static void FindHighestIntroducedAttributes (List<AvailabilityBaseAttribute> dest, List<AvailabilityBaseAttribute> additions)
 	{
-		if (!additions.Any ())
+		if (additions.Count == 0)
 			return;
 
 		foreach (var platform in BindingTouch.AllPlatformNames) {
 			// find the availability attribute with the highest version we're trying to add
-			var latestAddition = additions
-				.Where (v => v.AvailabilityKind == AvailabilityKind.Introduced && v.Platform == platform)
-				.OrderBy (v => v.Version)
-				.LastOrDefault ();
+			AvailabilityBaseAttribute? latestAddition = null;
+			for (int j = 0; j < additions.Count; j++) {
+				var v = additions [j];
+				if (v.AvailabilityKind == AvailabilityKind.Introduced && v.Platform == platform) {
+					if (latestAddition is null || (v.Version is not null && (latestAddition.Version is null || v.Version > latestAddition.Version)))
+						latestAddition = v;
+				}
+			}
 			if (latestAddition is null)
 				continue;
 
 			var added = CloneFromOtherPlatform (latestAddition, latestAddition.Platform);
-			var idx = dest.FindIndex (v => v.Platform == platform && v.AvailabilityKind == AvailabilityKind.Introduced);
+			int idx = -1;
+			for (int i = 0; i < dest.Count; i++) {
+				if (dest [i].Platform == platform && dest [i].AvailabilityKind == AvailabilityKind.Introduced) {
+					idx = i;
+					break;
+				}
+			}
 			if (idx == -1) {
 				// no existing introduced attribute: add it unless there's already an unavailable attribute
-				if (!dest.Any (v => v.Platform == platform && v.AvailabilityKind == AvailabilityKind.Unavailable))
+				bool hasUnavailable = false;
+				for (int i = 0; i < dest.Count; i++) {
+					if (dest [i].Platform == platform && dest [i].AvailabilityKind == AvailabilityKind.Unavailable) {
+						hasUnavailable = true;
+						break;
+					}
+				}
+				if (!hasUnavailable)
 					dest.Add (added);
 			} else if (added.Version > dest [idx].Version) {
 				// replace any existing introduced attribute if the existing version is lower than the added one
@@ -153,18 +170,30 @@ public static partial class AttributeFactory {
 	static bool IsValidToCopyTo (List<AvailabilityBaseAttribute> dest, AvailabilityBaseAttribute addition, bool allowIntroducedOnUnavailable = false)
 	{
 		// If we are duplicating an existing attribute
-		if (dest.Any (d => d.Platform == addition.Platform && d.AvailabilityKind == addition.AvailabilityKind))
-			return false;
-		// If we are introduced and there is already an Unavailable 
-		return allowIntroducedOnUnavailable
-			   || (addition is not IntroducedAttribute
-				   || !dest.Any (d => d.Platform == addition.Platform && d.AvailabilityKind == AvailabilityKind.Unavailable));
+		for (int i = 0; i < dest.Count; i++) {
+			if (dest [i].Platform == addition.Platform && dest [i].AvailabilityKind == addition.AvailabilityKind)
+				return false;
+		}
+		// If we are introduced and there is already an Unavailable
+		if (allowIntroducedOnUnavailable)
+			return true;
+		if (addition is not IntroducedAttribute)
+			return true;
+		for (int i = 0; i < dest.Count; i++) {
+			if (dest [i].Platform == addition.Platform && dest [i].AvailabilityKind == AvailabilityKind.Unavailable)
+				return false;
+		}
+		return true;
 	}
 
-	public static void CopyValidAttributes (List<AvailabilityBaseAttribute> dest, IEnumerable<AvailabilityBaseAttribute> additions)
+	public static void CopyValidAttributes (List<AvailabilityBaseAttribute> dest, List<AvailabilityBaseAttribute> additions, AvailabilityKind? excludeKind = null)
 	{
-		foreach (var addition in additions.Where (a => IsValidToCopyTo (dest, a))) {
-			dest.Add (CloneFromOtherPlatform (addition, addition.Platform));
+		for (int i = 0; i < additions.Count; i++) {
+			var addition = additions [i];
+			if (excludeKind is not null && addition.AvailabilityKind == excludeKind.Value)
+				continue;
+			if (IsValidToCopyTo (dest, addition))
+				dest.Add (CloneFromOtherPlatform (addition, addition.Platform));
 		}
 	}
 }

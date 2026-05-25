@@ -916,6 +916,8 @@ public abstract class AvailabilityBaseAttribute : Attribute {
 	/// </remarks>
 	public string? Message { get; private set; }
 
+	string? cachedToString;
+
 	internal AvailabilityBaseAttribute ()
 	{
 	}
@@ -997,6 +999,8 @@ public abstract class AvailabilityBaseAttribute : Attribute {
 	/// <returns>A human readable version of the availability attribute.</returns>
 	public override string ToString ()
 	{
+		if (cachedToString is not null)
+			return cachedToString;
 		var builder = new StringBuilder ();
 		switch (AvailabilityKind) {
 		case AvailabilityKind.Introduced:
@@ -1012,7 +1016,8 @@ public abstract class AvailabilityBaseAttribute : Attribute {
 			GenerateUnsupported (builder);
 			break;
 		}
-		return builder.ToString ();
+		cachedToString = builder.ToString ();
+		return cachedToString;
 	}
 }
 

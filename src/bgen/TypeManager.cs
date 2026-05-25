@@ -14,6 +14,7 @@ public class TypeManager {
 	Dictionary<Type, string>? nsnumberReturnMap;
 	Dictionary<Type, string>? nsnumberToValueMap;
 	HashSet<string> typesThatMustAlwaysBeGloballyNamed = new ();
+	readonly Dictionary<(string?, Type), string> formatTypeCache = new ();
 
 	public void SetTypesThatMustAlwaysBeGloballyNamed (Type [] types)
 	{
@@ -272,6 +273,18 @@ public class TypeManager {
 	{
 		if (type is null)
 			throw new BindingException (1065, true);
+
+		var cacheKey = (usedInNamespace, type);
+		if (formatTypeCache.TryGetValue (cacheKey, out var cachedResult))
+			return cachedResult;
+
+		var result = FormatTypeUsedInCore (usedInNamespace, type);
+		formatTypeCache [cacheKey] = result;
+		return result;
+	}
+
+	string FormatTypeUsedInCore (string? usedInNamespace, Type type)
+	{
 		if (type == TypeCache.System_Void)
 			return "void";
 		if (type == TypeCache.System_SByte)

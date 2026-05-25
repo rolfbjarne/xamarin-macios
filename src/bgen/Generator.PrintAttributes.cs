@@ -9,7 +9,8 @@ public partial class Generator {
 	AvailabilityBaseAttribute [] GetPlatformAttributesToPrint (MemberInfo mi, MemberInfo? context, MemberInfo? inlinedType)
 	{
 		// Attributes are directly on the member
-		List<AvailabilityBaseAttribute> memberAvailability = AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (mi).ToList ();
+		var attrs = AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (mi);
+		List<AvailabilityBaseAttribute> memberAvailability = new List<AvailabilityBaseAttribute> (attrs);
 
 		// Due to differences between Xamarin and NET6 availability attributes, we have to synthesize many duplicates for NET6
 		// See https://github.com/dotnet/macios/issues/10170 for details
@@ -22,7 +23,7 @@ public partial class Generator {
 
 		// We must consider attributes if we have any on our type, or if we're inlining and that inlined type has attributes
 		// If neither are true, we have zero attributes that are relevant
-		bool shouldConsiderAttributes = memberAvailability.Any () || inlinedTypeAvailability is not null && inlinedTypeAvailability.Any ();
+		bool shouldConsiderAttributes = memberAvailability.Count > 0 || inlinedTypeAvailability is not null && inlinedTypeAvailability.Count > 0;
 		if (shouldConsiderAttributes) {
 			// We will consider any inlinedType attributes first, if any, before any from our parent context
 			List<AvailabilityBaseAttribute> availabilityToConsider = new List<AvailabilityBaseAttribute> ();
@@ -37,14 +38,14 @@ public partial class Generator {
 			}
 
 			// We do not support Watch, so strip from both our input sources before any processing
-			memberAvailability = memberAvailability.Where (x => x.Platform != PlatformName.WatchOS).ToList ();
-			availabilityToConsider = availabilityToConsider.Where (x => x.Platform != PlatformName.WatchOS).ToList ();
+			memberAvailability.RemoveAll (x => x.Platform == PlatformName.WatchOS);
+			availabilityToConsider.RemoveAll (x => x.Platform == PlatformName.WatchOS);
 
 			// Add any implied non-catalyst introduced (Catalyst will come later)
 			AddUnlistedAvailability (context, availabilityToConsider);
 
 			// Copy down any unavailable from the parent before expanding, since a [NoMacCatalyst] on the type trumps [iOS] on a member
-			AttributeFactory.CopyValidAttributes (memberAvailability, availabilityToConsider.Where (attr => attr.AvailabilityKind != AvailabilityKind.Introduced));
+			AttributeFactory.CopyValidAttributes (memberAvailability, availabilityToConsider, excludeKind: AvailabilityKind.Introduced);
 
 			if (inlinedType is not null && inlinedType != mi.DeclaringType && memberAvailability.Count > 1) {
 				// We might have gotten conflicting availability attributes for inlined members, where the inlined member
@@ -64,7 +65,7 @@ public partial class Generator {
 			}
 
 			// Now copy it down introduced from the parent
-			AttributeFactory.FindHighestIntroducedAttributes (memberAvailability, availabilityToConsider.Where (attr => attr.AvailabilityKind == AvailabilityKind.Introduced));
+			AttributeFactory.FindHighestIntroducedAttributes (memberAvailability, availabilityToConsider);
 
 			if (!BindThirdPartyLibrary) {
 				// If all of this implication gives us something silly, like being introduced
@@ -76,7 +77,7 @@ public partial class Generator {
 			}
 
 			// Remove any duplicates attributes as well
-			memberAvailability = memberAvailability.Distinct ().ToList ();
+			return memberAvailability.Distinct ().ToArray ();
 		}
 		return memberAvailability.ToArray ();
 	}

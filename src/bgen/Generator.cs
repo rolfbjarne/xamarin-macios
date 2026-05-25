@@ -59,6 +59,8 @@ using Xamarin.Utils;
 public partial class Generator : IMemberGatherer {
 	internal bool IsPublicMode;
 	internal const string NativeHandleType = "NativeHandle";
+	const string NativeHandleTypePtr = NativeHandleType + "*";
+	const string NativeHandleTypeRef = "ref " + NativeHandleType;
 	BindingTouch BindingTouch;
 	Frameworks Frameworks { get { return BindingTouch.Frameworks!; } }
 	public TypeManager TypeManager { get { return BindingTouch.TypeManager; } }
@@ -81,6 +83,8 @@ public partial class Generator : IMemberGatherer {
 	Dictionary<Type, bool> need_abstract = new Dictionary<Type, bool> ();
 	Dictionary<string, int> selector_use = new Dictionary<string, int> ();
 	Dictionary<string, string> selector_names = new Dictionary<string, string> ();
+	Dictionary<string, string> selector_gethandle_cache = new Dictionary<string, string> ();
+	string? messagingPrefix;
 	Dictionary<string, string> send_methods = new Dictionary<string, string> ();
 	readonly MarshalTypeList marshalTypes = new ();
 	Dictionary<Type, TrampolineInfo> trampolines = new Dictionary<Type, TrampolineInfo> ();
@@ -228,8 +232,8 @@ public partial class Generator : IMemberGatherer {
 			if (!mai.Type.IsByRef)
 				return NativeHandleType;
 			if (formatted)
-				return NativeHandleType + "*";
-			return "ref " + NativeHandleType;
+				return NativeHandleTypePtr;
+			return NativeHandleTypeRef;
 		}
 
 		if (mai.Type.Namespace == "System") {
@@ -298,8 +302,8 @@ public partial class Generator : IMemberGatherer {
 
 		if (mai.Type.IsByRef && mai.Type.GetElementType ()?.IsValueType == false) {
 			if (formatted)
-				return NativeHandleType + "*";
-			return "ref " + NativeHandleType;
+				return NativeHandleTypePtr;
+			return NativeHandleTypeRef;
 		}
 
 		if (mai.Type.IsGenericParameter)
@@ -2854,9 +2858,13 @@ public partial class Generator : IMemberGatherer {
 		if (InlineSelectors && !ignore_inline_directive)
 			force_gethandle = true;
 
-		if (force_gethandle)
-			return "Selector.GetHandle (\"" + s + "\")";
-
+		if (force_gethandle) {
+			if (!selector_gethandle_cache.TryGetValue (s, out var cached)) {
+				cached = "Selector.GetHandle (\"" + s + "\")";
+				selector_gethandle_cache [s] = cached;
+			}
+			return cached;
+		}
 		if (selector_names.TryGetValue (s, out var name))
 			return name;
 
@@ -3302,7 +3310,8 @@ public partial class Generator : IMemberGatherer {
 
 		string sig = supercall ? MakeSuperSig (mi, stret, aligned) : MakeSig (mi, stret, aligned);
 
-		sig = "global::" + NamespaceCache.Messaging + "." + sig;
+		messagingPrefix ??= "global::" + NamespaceCache.Messaging + ".";
+		sig = messagingPrefix + sig;
 
 		string selector_field;
 		if (minfo.is_interface_impl || minfo.is_extension_method) {

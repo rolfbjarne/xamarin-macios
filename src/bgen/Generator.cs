@@ -103,6 +103,8 @@ public partial class Generator : IMemberGatherer {
 	readonly StringBuilder reusable_register = new ();
 	// Reusable StringBuilder for postproc in GenerateMethodBody
 	readonly StringBuilder reusable_postproc = new ();
+	// Reusable list for PrintPlatformAttributesNoDuplicates
+	readonly List<AvailabilityBaseAttribute> reusable_inlined_ca = new ();
 
 	//
 	// This contains delegates that are referenced in the source and need to be generated.
@@ -2794,7 +2796,8 @@ public partial class Generator : IMemberGatherer {
 		if ((generatedType is null) || (inlinedMethod is null))
 			return;
 
-		var inlined_ca = new List<AvailabilityBaseAttribute> ();
+		var inlined_ca = reusable_inlined_ca;
+		inlined_ca.Clear ();
 		inlined_ca.AddRange (GetPlatformAttributesToPrint (inlinedMethod, generatedType.DeclaringType, generatedType));
 		if (inlinedMethod.DeclaringType is not null) {
 			// if not conflictual add the custom attributes from the type
@@ -2810,16 +2813,12 @@ public partial class Generator : IMemberGatherer {
 			}
 		}
 
-		var generated_type_ca = new HashSet<string> ();
-
 		// the type, in which we are inlining the current method, might already have the same availability attribute
 		// which we would duplicate if generated
 		foreach (var availability in inlined_ca) {
 			if (!FilterMinimumVersion (availability))
 				continue;
-			var s = availability.ToString ();
-			if (!generated_type_ca.Contains (s))
-				print (s);
+			print (availability.ToString ());
 		}
 	}
 
@@ -3991,7 +3990,7 @@ public partial class Generator : IMemberGatherer {
 
 	readonly Dictionary<Type, MethodInfo []> typeContractMethodsCache = new ();
 
-	public IEnumerable<MethodInfo> GetTypeContractMethods (Type source)
+	public MethodInfo [] GetTypeContractMethods (Type source)
 	{
 		if (typeContractMethodsCache.TryGetValue (source, out var cached))
 			return cached;
@@ -4030,7 +4029,7 @@ public partial class Generator : IMemberGatherer {
 
 	readonly Dictionary<Type, PropertyInfo []> typeContractPropertiesCache = new ();
 
-	public IEnumerable<PropertyInfo> GetTypeContractProperties (Type source)
+	public PropertyInfo [] GetTypeContractProperties (Type source)
 	{
 		if (typeContractPropertiesCache.TryGetValue (source, out var cached))
 			return cached;
@@ -6414,7 +6413,7 @@ public partial class Generator : IMemberGatherer {
 
 			var bound_methods = new HashSet<MemberInformation> (); // List of methods bound on the class itself (not via protocols)
 			var generated_methods = new List<MemberInformation> (); // All method that have been generated
-			var typeContractMethods = GetTypeContractMethods (type).ToArray ();
+			var typeContractMethods = GetTypeContractMethods (type);
 			foreach (var mi in typeContractMethods.OrderByDescending (m => m.Name == "Constructor").ThenBy (m => m.Name, StringComparer.Ordinal)) {
 				if (mi.IsSpecialName || (mi.Name == "Constructor" && type != mi.DeclaringType))
 					continue;
@@ -6496,7 +6495,7 @@ public partial class Generator : IMemberGatherer {
 			var notifications = new List<PropertyInfo> ();
 			var bound_properties = new List<string> (); // List of properties bound on the class itself (not via protocols)
 			var generated_properties = new List<string> (); // All properties that have been generated
-			var typeContractProperties = GetTypeContractProperties (type).ToArray ();
+			var typeContractProperties = GetTypeContractProperties (type);
 
 			foreach (var pi in typeContractProperties.OrderBy (p => p.Name, StringComparer.Ordinal)) {
 

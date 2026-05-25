@@ -10,6 +10,7 @@ using System.Xml;
 
 public class DocumentationManager {
 	Dictionary<string, XmlNode>? memberLookup;
+	readonly Dictionary<string, string []> documentationCache = new ();
 
 	public DocumentationManager (string assembly)
 	{
@@ -53,6 +54,10 @@ public class DocumentationManager {
 
 		if (!TryGetId (member, out var id))
 			return false;
+
+		// Cache the common case (no transform)
+		if (transformNode is null && documentationCache.TryGetValue (id, out documentation))
+			return true;
 
 		if (!memberLookup.TryGetValue (id, out var node))
 			return false;
@@ -102,6 +107,10 @@ public class DocumentationManager {
 		}
 
 		documentation = lines;
+
+		// Cache for future lookups (only if no transform was applied)
+		if (transformNode is null)
+			documentationCache [id] = documentation;
 
 		return true;
 	}

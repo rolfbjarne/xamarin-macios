@@ -91,6 +91,8 @@ public static partial class AttributeFactory {
 		}
 	}
 
+	static readonly Dictionary<(AvailabilityKind, PlatformName, Version?, string?), AvailabilityBaseAttribute> cloneCache = new ();
+
 	public static AvailabilityBaseAttribute CloneFromOtherPlatform (AvailabilityBaseAttribute attr, PlatformName platform)
 	{
 		if (attr.Version is null && string.IsNullOrEmpty (attr.Message)) {
@@ -103,56 +105,48 @@ public static partial class AttributeFactory {
 			}
 		}
 
-		if (attr.Version is null) {
-			switch (attr.AvailabilityKind) {
-			case AvailabilityKind.Introduced:
-				return new IntroducedAttribute (platform, message: attr.Message);
-			case AvailabilityKind.Deprecated:
-				return new DeprecatedAttribute (platform, message: attr.Message);
-			case AvailabilityKind.Obsoleted:
-				return new ObsoletedAttribute (platform, message: attr.Message);
-			case AvailabilityKind.Unavailable:
-				return new UnavailableAttribute (platform, message: attr.Message);
-			default:
-				throw new NotImplementedException ();
-			}
+		// Compute the effective version (may be clamped to platform minimum)
+		Version? effectiveVersion = attr.Version;
+		if (effectiveVersion is not null) {
+			var minimum = Xamarin.SdkVersions.GetMinVersion (platform.AsApplePlatform ());
+			if (effectiveVersion < minimum)
+				effectiveVersion = minimum;
 		}
 
-		// Due to the absurd API of Version, you can not pass a -1 to the build constructor
-		// nor can you coerse to 0, as that will fail with "16.0.0 <= 16.0" => false in the registrar
-		// So determine if the build is -1, and use the 2 or 3 param ctor...
-		var version = attr.Version;
-		var minimum = Xamarin.SdkVersions.GetMinVersion (platform.AsApplePlatform ());
-		if (version < minimum)
-			version = minimum;
+		var key = (attr.AvailabilityKind, platform, effectiveVersion, attr.Message);
+		if (cloneCache.TryGetValue (key, out var cached))
+			return cached;
 
-		if (version.Build == -1) {
-			switch (attr.AvailabilityKind) {
-			case AvailabilityKind.Introduced:
-				return new IntroducedAttribute (platform, version.Major, version.Minor, message: attr.Message);
-			case AvailabilityKind.Deprecated:
-				return new DeprecatedAttribute (platform, version.Major, version.Minor, message: attr.Message);
-			case AvailabilityKind.Obsoleted:
-				return new ObsoletedAttribute (platform, version.Major, version.Minor, message: attr.Message);
-			case AvailabilityKind.Unavailable:
-				return new UnavailableAttribute (platform, message: attr.Message);
-			default:
-				throw new NotImplementedException ();
-			}
+		AvailabilityBaseAttribute result;
+
+		if (effectiveVersion is null) {
+			result = attr.AvailabilityKind switch {
+				AvailabilityKind.Introduced => new IntroducedAttribute (platform, message: attr.Message),
+				AvailabilityKind.Deprecated => new DeprecatedAttribute (platform, message: attr.Message),
+				AvailabilityKind.Obsoleted => new ObsoletedAttribute (platform, message: attr.Message),
+				AvailabilityKind.Unavailable => new UnavailableAttribute (platform, message: attr.Message),
+				_ => throw new NotImplementedException (),
+			};
+		} else if (effectiveVersion.Build == -1) {
+			result = attr.AvailabilityKind switch {
+				AvailabilityKind.Introduced => new IntroducedAttribute (platform, effectiveVersion.Major, effectiveVersion.Minor, message: attr.Message),
+				AvailabilityKind.Deprecated => new DeprecatedAttribute (platform, effectiveVersion.Major, effectiveVersion.Minor, message: attr.Message),
+				AvailabilityKind.Obsoleted => new ObsoletedAttribute (platform, effectiveVersion.Major, effectiveVersion.Minor, message: attr.Message),
+				AvailabilityKind.Unavailable => new UnavailableAttribute (platform, message: attr.Message),
+				_ => throw new NotImplementedException (),
+			};
+		} else {
+			result = attr.AvailabilityKind switch {
+				AvailabilityKind.Introduced => new IntroducedAttribute (platform, effectiveVersion.Major, effectiveVersion.Minor, effectiveVersion.Build, message: attr.Message),
+				AvailabilityKind.Deprecated => new DeprecatedAttribute (platform, effectiveVersion.Major, effectiveVersion.Minor, effectiveVersion.Build, message: attr.Message),
+				AvailabilityKind.Obsoleted => new ObsoletedAttribute (platform, effectiveVersion.Major, effectiveVersion.Minor, effectiveVersion.Build, message: attr.Message),
+				AvailabilityKind.Unavailable => new UnavailableAttribute (platform, message: attr.Message),
+				_ => throw new NotImplementedException (),
+			};
 		}
 
-		switch (attr.AvailabilityKind) {
-		case AvailabilityKind.Introduced:
-			return new IntroducedAttribute (platform, version.Major, version.Minor, version.Build, message: attr.Message);
-		case AvailabilityKind.Deprecated:
-			return new DeprecatedAttribute (platform, version.Major, version.Minor, version.Build, message: attr.Message);
-		case AvailabilityKind.Obsoleted:
-			return new ObsoletedAttribute (platform, version.Major, version.Minor, version.Build, message: attr.Message);
-		case AvailabilityKind.Unavailable:
-			return new UnavailableAttribute (platform, message: attr.Message);
-		default:
-			throw new NotImplementedException ();
-		}
+		cloneCache [key] = result;
+		return result;
 	}
 
 	// Find the introduced attribute with the highest version between the target list and the additions.

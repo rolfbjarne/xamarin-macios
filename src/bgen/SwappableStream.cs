@@ -17,7 +17,7 @@ sealed class SwappableStream : Stream {
 
 	public void Open (string path)
 	{
-		current = new FileStream (path, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096);
+		current = new FileStream (path, FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 1, useAsync: false);
 	}
 
 	public void CloseFile ()

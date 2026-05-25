@@ -55,6 +55,9 @@ public static class GeneratorExtensions {
 }
 
 public static class ReflectionExtensions {
+	static readonly Dictionary<(Type, BindingFlags), List<MethodInfo>> gatherMethodsCache = new ();
+	static readonly Dictionary<(Type, BindingFlags), List<PropertyInfo>> gatherPropertiesCache = new ();
+
 	public static bool TryCanRead (this PropertyInfo property, [NotNullWhen (true)] out MethodInfo? getMethod)
 	{
 		getMethod = null;
@@ -178,10 +181,16 @@ public static class ReflectionExtensions {
 
 	public static List<PropertyInfo> GatherProperties (this Type type, BindingFlags flags, Generator generator)
 	{
+		var key = (type, flags);
+		if (gatherPropertiesCache.TryGetValue (key, out var cached))
+			return cached;
+
 		var properties = new List<PropertyInfo> (type.GetProperties (flags));
 
-		if (generator.IsPublicMode)
+		if (generator.IsPublicMode) {
+			gatherPropertiesCache [key] = properties;
 			return properties;
+		}
 
 		Type parentType = GetBaseType (type, generator);
 		if (parentType != generator.TypeCache.NSObject) {
@@ -205,6 +214,7 @@ public static class ReflectionExtensions {
 			}
 		}
 
+		gatherPropertiesCache [key] = properties;
 		return properties;
 	}
 
@@ -230,10 +240,16 @@ public static class ReflectionExtensions {
 
 	public static List<MethodInfo> GatherMethods (this Type type, BindingFlags flags, Generator generator)
 	{
+		var key = (type, flags);
+		if (gatherMethodsCache.TryGetValue (key, out var cached))
+			return cached;
+
 		var methods = new List<MethodInfo> (type.GetMethods (flags));
 
-		if (generator.IsPublicMode)
+		if (generator.IsPublicMode) {
+			gatherMethodsCache [key] = methods;
 			return methods;
+		}
 
 		Type parentType = GetBaseType (type, generator);
 
@@ -244,6 +260,7 @@ public static class ReflectionExtensions {
 						methods.Add (minfo);
 		}
 
+		gatherMethodsCache [key] = methods;
 		return methods;
 	}
 }

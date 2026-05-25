@@ -24,6 +24,9 @@ public class AttributeManager {
 	// Cache HasAttribute<T> results to avoid repeated GetCustomAttributesData() calls.
 	readonly Dictionary<(ICustomAttributeProvider, System.Type), bool> hasAttributeCache = new ();
 
+	// Cache raw GetCustomAttributesData() results per provider to avoid repeated reflection allocations.
+	readonly Dictionary<ICustomAttributeProvider, IList<CustomAttributeData>> rawAttributeCache = new ();
+
 	TypeCache TypeCache { get; }
 
 	public AttributeManager (TypeCache typeCache)
@@ -516,9 +519,15 @@ public class AttributeManager {
 	}
 
 	[return: NotNullIfNotNull (nameof (provider))]
-	static IList<CustomAttributeData>? GetAttributes (ICustomAttributeProvider? provider)
-		=> provider switch {
-			null => null,
+	IList<CustomAttributeData>? GetAttributes (ICustomAttributeProvider? provider)
+	{
+		if (provider is null)
+			return null;
+
+		if (rawAttributeCache.TryGetValue (provider, out var cached))
+			return cached;
+
+		IList<CustomAttributeData> result = provider switch {
 			MemberInfo member => member.GetCustomAttributesData (),
 			Assembly assembly => assembly.GetCustomAttributesData (),
 			ParameterInfo pinfo => pinfo.GetCustomAttributesData (),
@@ -526,7 +535,11 @@ public class AttributeManager {
 			_ => throw new BindingException (1051, true, provider.GetType ().FullName)
 		};
 
-	public static bool HasAttribute (ICustomAttributeProvider provider, string type_name)
+		rawAttributeCache [provider] = result;
+		return result;
+	}
+
+	public bool HasAttribute (ICustomAttributeProvider provider, string type_name)
 	{
 		var attribs = GetAttributes (provider);
 		for (int i = 0; i < attribs.Count; i++)

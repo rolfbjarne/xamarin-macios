@@ -113,6 +113,9 @@ public partial class Generator : IMemberGatherer {
 	readonly HashSet<PlatformName> reusable_droppedPlatforms = new ();
 	// Reusable StringBuilder for print(format, args) to avoid intermediate string allocations
 	internal readonly StringBuilder reusable_print = new ();
+	// Reusable stream/writer pair to avoid reallocating StreamWriter buffers per file
+	readonly SwappableStream reusable_stream = new ();
+	ReusableFileWriter? reusable_writer;
 
 	//
 	// This contains delegates that are referenced in the source and need to be generated.
@@ -5681,7 +5684,30 @@ public partial class Generator : IMemberGatherer {
 		if (created_directories.Add (dir))
 			Directory.CreateDirectory (dir);
 
-		return new StreamWriter (filename, append: false, encoding: Utf8NoBom, bufferSize: 16 * 1024);
+		return new StreamWriter (filename, append: false, encoding: Utf8NoBom, bufferSize: 1024);
+	}
+
+	StreamWriter GetReusableOutputStream (string? @namespace, string name)
+	{
+		var dir = basedir;
+
+		if (!string.IsNullOrEmpty (@namespace))
+			dir = Path.Combine (dir, @namespace);
+
+		var filename = Path.Combine (dir, name + ".g.cs");
+		var counter = 2;
+		while (generated_files.Contains (filename)) {
+			filename = Path.Combine (dir, name + counter.ToString () + ".g.cs");
+			counter++;
+		}
+		generated_files.Add (filename);
+		if (created_directories.Add (dir))
+			Directory.CreateDirectory (dir);
+
+		if (reusable_writer is null)
+			reusable_writer = new ReusableFileWriter (reusable_stream, Utf8NoBom, 16 * 1024);
+		reusable_writer.OpenFile (filename);
+		return reusable_writer;
 	}
 
 
@@ -5693,7 +5719,7 @@ public partial class Generator : IMemberGatherer {
 		var tn = Nomenclator.GetGeneratedTypeName (type);
 		if (type.IsGenericType)
 			tn = tn + "_" + type.GetGenericArguments ().Length.ToString ();
-		return GetOutputStream (type.Namespace, tn);
+		return GetReusableOutputStream (type.Namespace, tn);
 	}
 
 	void WriteMarkDirtyIfDerived (StreamWriter? sw, Type type)

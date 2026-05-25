@@ -7,6 +7,8 @@ using System.Text;
 /// <summary>
 /// Custom interpolated string handler that writes directly to a reusable StringBuilder,
 /// avoiding the intermediate string allocation that would otherwise occur with $"..." in print() calls.
+/// Supports re-entrancy: if a nested print() call occurs during hole evaluation
+/// (e.g. MakeSignature → PrintAttributes → print), the nested call uses a separate buffer.
 /// </summary>
 [InterpolatedStringHandler]
 public ref struct PrintInterpolatedStringHandler {
@@ -14,7 +16,7 @@ public ref struct PrintInterpolatedStringHandler {
 
 	public PrintInterpolatedStringHandler (int literalLength, int formattedCount, Generator generator)
 	{
-		sb = generator.reusable_print;
+		sb = generator.AcquirePrintBuilder ();
 		sb.Clear ();
 		sb.EnsureCapacity (literalLength + formattedCount * 8);
 	}

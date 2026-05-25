@@ -113,8 +113,14 @@ public partial class Generator : IMemberGatherer {
 	readonly List<AvailabilityBaseAttribute> reusable_inlined_ca = new ();
 	// Reusable set for StripIntroducedOnNamespaceNotIncluded
 	readonly HashSet<PlatformName> reusable_droppedPlatforms = new ();
-	// Reusable StringBuilder for print(format, args) to avoid intermediate string allocations
-	internal readonly StringBuilder reusable_print = new ();
+	// Stack of reusable StringBuilders for print() to support re-entrant calls.
+	// When a print($"...") handler's hole evaluation triggers another print(),
+	// the nested print uses the next builder in the stack instead of clobbering
+	// the outer handler's in-progress content.
+	readonly StringBuilder [] printBuilderPool = new StringBuilder [] {
+		new StringBuilder (), new StringBuilder (), new StringBuilder (), new StringBuilder ()
+	};
+	int printBuilderDepth;
 	// Reusable StringBuilder for RenderParameterDecl/RenderArgs
 	readonly StringBuilder reusable_render = new ();
 	// Reusable stream/writer pair to avoid reallocating StreamWriter buffers per file
@@ -2019,10 +2025,7 @@ public partial class Generator : IMemberGatherer {
 					PrintPlatformAttributes (pi);
 					string modifier = pi.IsInternal (this) ? "internal" : "public";
 
-					print ("{0} {1}? {2} {{",
-						modifier,
-						TypeManager.FormatType (dictType, pi.PropertyType),
-						pi.Name);
+					print ($"{modifier} {TypeManager.FormatType (dictType, pi.PropertyType)}? {pi.Name} {{");
 
 					string getter, setter;
 					Type fetchType = pi.PropertyType;
@@ -2188,7 +2191,7 @@ public partial class Generator : IMemberGatherer {
 						indent++;
 						print ("set {"); indent++;
 						Inject<PreSnippetAttribute> (setMethod);
-						print ("{0};", setter);
+						print ($"{setter};");
 						indent--; print ("}");
 						indent--;
 					}
@@ -2248,13 +2251,9 @@ public partial class Generator : IMemberGatherer {
 
 				string kn = "k" + (i++);
 				if (use_export_as_string_constant) {
-					print ("{0} {1}{2} {3} {{\n\tget {{\n",
-						   is_internal ? "internal" : "public",
-						   propertyType,
-						   nullable_type ? "?" : "",
-						   prop.Name);
+					print ($"{(is_internal ? "internal" : "public")} {propertyType}{(nullable_type ? "?" : "")} {prop.Name} {{\n\tget {{\n");
 					indent += 2;
-					print ("{0} value;", NativeHandleType);
+					print ($"{NativeHandleType} value;");
 					print ("using (var str = new NSString (\"{0}\")){{", export.Selector);
 					kn = "str.Handle";
 					indent++;
@@ -2265,19 +2264,15 @@ public partial class Generator : IMemberGatherer {
 					print ("");
 					// linker will remove the attributes (but it's useful for testing)
 					print_generated_code ();
-					print ("{0} {1}{2} {3} {{",
-						   is_internal ? "internal" : "public",
-						   propertyType,
-						   nullable_type ? "?" : "",
-						   prop.Name);
+					print ($"{(is_internal ? "internal" : "public")} {propertyType}{(nullable_type ? "?" : "")} {prop.Name} {{");
 					indent++;
 					print ("get {");
 					indent++;
-					print ("{0} value;", NativeHandleType);
-					print ("if ({0} == IntPtr.Zero)", kn);
+					print ($"{NativeHandleType} value;");
+					print ($"if ({kn} == IntPtr.Zero)");
 					indent++;
 					var libname = BindThirdPartyLibrary ? "__Internal" : lib;
-					print ("{0} = ObjCRuntime.Dlfcn.GetIntPtr (Libraries.{1}.Handle, \"{2}\");", kn, libname, export.Selector);
+					print ($"{kn} = ObjCRuntime.Dlfcn.GetIntPtr (Libraries.{libname}.Handle, \"{export.Selector}\");");
 					indent--;
 				}
 				// [NullAllowed] on `UserInfo` requires a check for every case
@@ -2443,6 +2438,23 @@ public partial class Generator : IMemberGatherer {
 		GeneratedCode (sw, indent, optimizable);
 	}
 
+	/// <summary>
+	/// Acquires the next available StringBuilder from the pool.
+	/// Supports re-entrant print calls during interpolated string hole evaluation.
+	/// </summary>
+	internal StringBuilder AcquirePrintBuilder ()
+	{
+		return printBuilderPool [printBuilderDepth++];
+	}
+
+	/// <summary>
+	/// Releases the most recently acquired StringBuilder back to the pool.
+	/// </summary>
+	internal void ReleasePrintBuilder ()
+	{
+		printBuilderDepth--;
+	}
+
 	public void print (string format)
 	{
 		print (sw, format);
@@ -2451,6 +2463,7 @@ public partial class Generator : IMemberGatherer {
 	public void print ([System.Runtime.CompilerServices.InterpolatedStringHandlerArgument ("")] PrintInterpolatedStringHandler handler)
 	{
 		print (sw, handler.GetStringBuilder ());
+		ReleasePrintBuilder ();
 	}
 
 	public void print (StringBuilder sb)
@@ -2517,34 +2530,38 @@ public partial class Generator : IMemberGatherer {
 
 	public void print (StreamWriter? w, string format, params object? [] args)
 	{
-		var sb = reusable_print;
+		var sb = AcquirePrintBuilder ();
 		sb.Clear ();
 		sb.AppendFormat (format, args);
 		print (w, sb);
+		ReleasePrintBuilder ();
 	}
 
 	public void print (StreamWriter? w, string format, object? arg0)
 	{
-		var sb = reusable_print;
+		var sb = AcquirePrintBuilder ();
 		sb.Clear ();
 		sb.AppendFormat (format, arg0);
 		print (w, sb);
+		ReleasePrintBuilder ();
 	}
 
 	public void print (StreamWriter? w, string format, object? arg0, object? arg1)
 	{
-		var sb = reusable_print;
+		var sb = AcquirePrintBuilder ();
 		sb.Clear ();
 		sb.AppendFormat (format, arg0, arg1);
 		print (w, sb);
+		ReleasePrintBuilder ();
 	}
 
 	public void print (StreamWriter? w, string format, object? arg0, object? arg1, object? arg2)
 	{
-		var sb = reusable_print;
+		var sb = AcquirePrintBuilder ();
 		sb.Clear ();
 		sb.AppendFormat (format, arg0, arg1, arg2);
 		print (w, sb);
+		ReleasePrintBuilder ();
 	}
 
 	public void print (StreamWriter? w, StringBuilder sb)
@@ -2607,6 +2624,7 @@ public partial class Generator : IMemberGatherer {
 	public void print (StreamWriter? w, [System.Runtime.CompilerServices.InterpolatedStringHandlerArgument ("")] PrintInterpolatedStringHandler handler)
 	{
 		print (w, handler.GetStringBuilder ());
+		ReleasePrintBuilder ();
 	}
 
 	bool Duplicated (AvailabilityBaseAttribute candidate, AvailabilityBaseAttribute [] attributes)
@@ -3886,7 +3904,7 @@ public partial class Generator : IMemberGatherer {
 		if (use_temp_return) {
 			// for properties we (most often) put the attribute on the property itself, not the getter/setter methods
 			if (mi.ReturnType.IsSubclassOf (TypeCache.System_Delegate)) {
-				print ("{0} ret;", NativeHandleType);
+				print ($"{NativeHandleType} ret;");
 				trampoline_info = MakeTrampoline (mi.ReturnType);
 			} else if (align is not null) {
 				var retType = TypeManager.FormatType (mi.DeclaringType, mi.ReturnType);
@@ -4621,11 +4639,7 @@ public partial class Generator : IMemberGatherer {
 		// async wrapper don't have to be abstract (it's counter productive)
 		var modifier = minfo.GetModifiers ().Replace ("abstract ", String.Empty);
 
-		print ("{0} {1}{2} {3}",
-			   minfo.GetVisibility (),
-			   modifier,
-			   GetReturnType (minfo),
-			   MakeSignature (minfo, true, minfo.AsyncInitialParams, extra));
+		print ($"{minfo.GetVisibility ()} {modifier}{GetReturnType (minfo)} {MakeSignature (minfo, true, minfo.AsyncInitialParams, extra)}");
 	}
 
 	void GenerateAsyncMethod (MemberInformation original_minfo, AsyncMethodKind asyncKind)
@@ -4675,16 +4689,14 @@ public partial class Generator : IMemberGatherer {
 		bool ignoreResult = !is_void &&
 			asyncKind == AsyncMethodKind.Plain &&
 			asyncAttribute.PostNonResultSnippet is null;
-		print ("{6}{5}{4}{0}{7}({1}{2}({3}) => {{",
-			mi.Name,
-			GetInvokeParamList (minfo.AsyncInitialParams, false),
-			minfo.AsyncInitialParams.Length > 0 ? ", " : "",
-			GetInvokeParamList (minfo.AsyncCompletionParams),
-			minfo.is_extension_method || minfo.is_category_extension ? "This." : string.Empty,
-			is_void || ignoreResult ? string.Empty : minfo.GetUniqueParamName ("result") + " = ",
-			is_void || ignoreResult ? string.Empty : (asyncKind == AsyncMethodKind.WithResultOutParameter ? string.Empty : "var "),
-			minfo.is_protocol_member && minfo.is_static ? "<T>" : string.Empty
-		);
+		var thisPrefix = minfo.is_extension_method || minfo.is_category_extension ? "This." : string.Empty;
+		var resultAssign = is_void || ignoreResult ? string.Empty : minfo.GetUniqueParamName ("result") + " = ";
+		var varKeyword = is_void || ignoreResult ? string.Empty : (asyncKind == AsyncMethodKind.WithResultOutParameter ? string.Empty : "var ");
+		var genericSuffix = minfo.is_protocol_member && minfo.is_static ? "<T>" : string.Empty;
+		var invokeInitial = GetInvokeParamList (minfo.AsyncInitialParams, false);
+		var commaSep = minfo.AsyncInitialParams.Length > 0 ? ", " : "";
+		var invokeCompletion = GetInvokeParamList (minfo.AsyncCompletionParams);
+		print ($"{varKeyword}{resultAssign}{thisPrefix}{mi.Name}{genericSuffix}({invokeInitial}{commaSep}({invokeCompletion}) => {{");
 
 		indent++;
 
@@ -4831,7 +4843,7 @@ public partial class Generator : IMemberGatherer {
 		foreach (var pi in miParameters)
 			if (AttributeManager.HasAttribute<RetainAttribute> (pi)) {
 				print ("#pragma warning disable 168");
-				print ("{0}? __mt_{1}_{2};", pi.ParameterType, mi.Name, pi.Name);
+				print ($"{pi.ParameterType}? __mt_{mi.Name}_{pi.Name};");
 				print ("#pragma warning restore 168");
 			}
 
@@ -4913,11 +4925,7 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		print_generated_code (optimizable: IsOptimizable (minfo.mi));
-		print ("{0} {1}{2}{3}",
-			   mod,
-			   minfo.GetModifiers (),
-			   MakeSignature (minfo),
-			   is_abstract ? ";" : "");
+		print ($"{mod} {minfo.GetModifiers ()}{MakeSignature (minfo)}{(is_abstract ? ";" : "")}");
 
 
 		if (!is_abstract) {
@@ -5044,12 +5052,7 @@ public partial class Generator : IMemberGatherer {
 						}
 					}
 				}
-				print ("{3}{4} delegate {0} {1} ({2});",
-					   TypeManager.RenderType (mi.ReturnType, mi.ReturnTypeCustomAttributes),
-					   shortName,
-					   RenderParameterDecl (miParams),
-					   accessibility,
-					   isUnsafe ? " unsafe" : string.Empty);
+				print ($"{accessibility}{(isUnsafe ? " unsafe" : "")} delegate {TypeManager.RenderType (mi.ReturnType, mi.ReturnTypeCustomAttributes)} {shortName} ({RenderParameterDecl (miParams)});");
 			}
 
 			if (group.Namespace is not null) {
@@ -5181,7 +5184,7 @@ public partial class Generator : IMemberGatherer {
 		var allProtocolMethods = new List<MethodInfo> ();
 		var allProtocolProperties = new List<PropertyInfo> ();
 		var allProtocolConstructors = new List<MethodInfo> ();
-		var ifaces = (IEnumerable<Type>) type.GetInterfaces ().Concat (new Type [] { ReflectionExtensions.GetBaseType (type, this) }).OrderBy (v => v.FullName, StringComparer.Ordinal);
+		var ifacesFiltered = type.GetInterfaces ().Concat (new Type [] { ReflectionExtensions.GetBaseType (type, this) }).OrderBy (v => v.FullName, StringComparer.Ordinal).Where ((v) => IsProtocolInterface (v, false)).ToList ();
 
 		if (AttributeManager.HasAttribute<BaseTypeAttribute> (type) && !AttributeManager.HasAttribute<ModelAttribute> (type))
 			exceptions.Add (ErrorHelper.CreateWarning (1123 /* "The type {0} has a [Protocol] and a [BaseType] attribute, but no [Model] attribute. This is likely incorrect; either remove the [BaseType] attribute, or add a [Model] attribute." */, type.FullName));
@@ -5191,23 +5194,46 @@ public partial class Generator : IMemberGatherer {
 			indent++;
 		}
 
-		ifaces = ifaces.Where ((v) => IsProtocolInterface (v, false));
 
 		allProtocolMethods.AddRange (SelectProtocolMethods (type));
 		allProtocolProperties.AddRange (SelectProtocolProperties (type));
 		allProtocolConstructors.AddRange (SelectProtocolMethods (type, selectConstructors: true));
 
-		var requiredMethods = allProtocolMethods.Where ((v) => IsRequired (v));
-		var optionalMethods = allProtocolMethods.Where ((v) => !IsRequired (v));
-		var requiredInstanceMethods = allProtocolMethods.Where ((v) => IsRequired (v) && !AttributeManager.HasAttribute<StaticAttribute> (v)).ToList ();
-		var optionalInstanceMethods = allProtocolMethods.Where ((v) => !IsRequired (v) && !AttributeManager.HasAttribute<StaticAttribute> (v));
-		var staticMethods = allProtocolMethods.Where ((v) => AttributeManager.HasAttribute<StaticAttribute> (v)).ToList ();
-		var instanceMethods = allProtocolMethods.Where ((v) => !AttributeManager.HasAttribute<StaticAttribute> (v)).ToList ();
-		var requiredInstanceProperties = allProtocolProperties.Where ((v) => IsRequired (v) && !AttributeManager.HasAttribute<StaticAttribute> (v)).ToList ();
-		var optionalInstanceProperties = allProtocolProperties.Where ((v) => !IsRequired (v) && !AttributeManager.HasAttribute<StaticAttribute> (v));
-		var requiredInstanceAsyncMethods = requiredInstanceMethods.Where (m => AttributeManager.HasAttribute<AsyncAttribute> (m)).ToList ();
-		var instanceProperties = allProtocolProperties.Where (v => !AttributeManager.HasAttribute<StaticAttribute> (v));
-		var staticProperties = allProtocolProperties.Where (v => AttributeManager.HasAttribute<StaticAttribute> (v));
+		// Categorize methods in a single pass instead of multiple LINQ chains
+		var requiredInstanceMethods = new List<MethodInfo> ();
+		var optionalInstanceMethods = new List<MethodInfo> ();
+		var instanceMethods = new List<MethodInfo> ();
+		var requiredInstanceAsyncMethods = new List<MethodInfo> ();
+		foreach (var m in allProtocolMethods) {
+			if (AttributeManager.HasAttribute<StaticAttribute> (m))
+				continue;
+			instanceMethods.Add (m);
+			if (IsRequired (m)) {
+				requiredInstanceMethods.Add (m);
+				if (AttributeManager.HasAttribute<AsyncAttribute> (m))
+					requiredInstanceAsyncMethods.Add (m);
+			} else {
+				optionalInstanceMethods.Add (m);
+			}
+		}
+
+		// Categorize properties in a single pass
+		var requiredInstanceProperties = new List<PropertyInfo> ();
+		var optionalInstanceProperties = new List<PropertyInfo> ();
+		var instanceProperties = new List<PropertyInfo> ();
+		var staticProperties = new List<PropertyInfo> ();
+		foreach (var p in allProtocolProperties) {
+			if (AttributeManager.HasAttribute<StaticAttribute> (p)) {
+				staticProperties.Add (p);
+			} else {
+				instanceProperties.Add (p);
+				if (IsRequired (p))
+					requiredInstanceProperties.Add (p);
+				else
+					optionalInstanceProperties.Add (p);
+			}
+		}
+
 		var extensionMethods = optionalInstanceMethods.Concat (requiredInstanceMethods.Where (v => IsRequired (v, out var generateExtensionMethod) && generateExtensionMethod));
 		var extensionProperties = optionalInstanceProperties.Concat (requiredInstanceProperties.Where (v => IsRequired (v, out var generateExtensionMethod) && generateExtensionMethod));
 
@@ -5333,10 +5359,10 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		PrintXpcInterfaceAttribute (type);
-		print ("{0} partial interface I{1} : INativeObject, IDisposable{2}", class_visibility, TypeName, ifaces.Count () > 0 ? ", " : string.Empty);
+		print ($"{class_visibility} partial interface I{TypeName} : INativeObject, IDisposable{(ifacesFiltered.Count > 0 ? ", " : "")}");
 		indent++;
 		sb.Clear ();
-		foreach (var iface in ifaces) {
+		foreach (var iface in ifacesFiltered) {
 			string iname = iface.Name;
 			// if the [Protocol] interface is defined in the binding itself it won't start with an 'I'
 			// but if it's a reference to something inside an already built assembly, 
@@ -5466,7 +5492,7 @@ public partial class Generator : IMemberGatherer {
 				print ($"/// </remarks>");
 			}
 			PrintAttributes (type, preserve: true, advice: true);
-			print ("{1} unsafe static partial class {0}_Extensions {{", TypeName, class_visibility);
+			print ($"{class_visibility} unsafe static partial class {TypeName}_Extensions {{");
 			indent++;
 			foreach (var mi in extensionMethods)
 				GenerateMethod (type, mi, false, null, false, false, true);
@@ -5503,7 +5529,7 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		// Add API from base interfaces we also need to implement.
-		foreach (var iface in ifaces) {
+		foreach (var iface in ifacesFiltered) {
 			requiredInstanceMethods.AddRange (SelectProtocolMethods (iface, @static: false, required: true));
 			requiredInstanceProperties.AddRange (SelectProtocolProperties (iface, @static: false, required: true));
 		}
@@ -6266,12 +6292,7 @@ public partial class Generator : IMemberGatherer {
 					where_list += " ";
 			}
 
-			print ("{0} unsafe {1}partial class {2} {3} {4}{{",
-				   class_visibility,
-				   class_mod,
-				   class_name,
-				   implements_list.Count == 0 ? string.Empty : ": " + string.Join (", ", implements_list),
-				   where_list);
+			print ($"{class_visibility} unsafe {class_mod}partial class {class_name} {(implements_list.Count == 0 ? string.Empty : ": " + string.Join (", ", implements_list))} {where_list}{{");
 
 			indent++;
 
@@ -6816,10 +6837,7 @@ public partial class Generator : IMemberGatherer {
 					if (AttributeManager.HasAttribute<NotificationAttribute> (field_pi))
 						print ($"[Advice (\"Use {type.Name}.Notifications.Observe{GetNotificationName (field_pi)} helper method instead.\")]");
 
-					print ("{0} static {1}{2} {3} {{", field_pi.IsInternal (this) ? "internal" : "public",
-						smartEnumTypeName ?? fieldTypeName,
-						nullable ? "?" : "",
-						field_pi.Name);
+					print ($"{(field_pi.IsInternal (this) ? "internal" : "public")} static {smartEnumTypeName ?? fieldTypeName}{(nullable ? "?" : "")} {field_pi.Name} {{");
 					indent++;
 
 					PrintAttributes (field_pi, platform: true);
@@ -7072,10 +7090,10 @@ public partial class Generator : IMemberGatherer {
 					}
 
 					if (!hasKeepRefUntil)
-						print ("{0}_{1} Ensure{1} ()", isProtocolEventBacked ? "internal " : "", dtype.Name);
+						print ($"{(isProtocolEventBacked ? "internal " : "")}_{dtype.Name} Ensure{dtype.Name} ()");
 					else {
 						print ("static System.Collections.ArrayList? instances;");
-						print ("{0}_{1} Ensure{1} (object oref)", isProtocolEventBacked ? "internal " : "", dtype.Name);
+						print ($"{(isProtocolEventBacked ? "internal " : "")}_{dtype.Name} Ensure{dtype.Name} (object oref)");
 					}
 
 					print ("{"); indent++;
@@ -7101,7 +7119,7 @@ public partial class Generator : IMemberGatherer {
 							print ("if (instances is null) instances = new System.Collections.ArrayList ();");
 							print ("if (!instances.Contains (this)) instances.Add (this);");
 						}
-						print ("{0} = (I{1})del;", delName, dtype.Name);
+						print ($"{delName} = (I{dtype.Name})del;");
 						indent--;
 						print ("}");
 						print ("return del;");
@@ -7219,7 +7237,7 @@ public partial class Generator : IMemberGatherer {
 									if (!par.ParameterType.IsByRef)
 										continue;
 
-									print ("{0} = args.{1};", par.Name, GetPublicParameterName (par));
+									print ($"{par.Name} = args.{GetPublicParameterName (par)};");
 								}
 							}
 							if (AttributeManager.HasAttribute<CheckDisposedAttribute> (mi)) {
@@ -7254,7 +7272,7 @@ public partial class Generator : IMemberGatherer {
 								else {
 									foreach (var j in pars) {
 										if (j.ParameterType.IsByRef && j.IsOut) {
-											print ("{0} = null;", j.Name.GetSafeParamName ());
+											print ($"{j.Name.GetSafeParamName ()} = null;");
 										}
 									}
 
@@ -7292,7 +7310,7 @@ public partial class Generator : IMemberGatherer {
 						++indent;
 						print ("return false;");
 						--indent;
-						print ("{0} selHandle = sel.Handle;", NativeHandleType);
+						print ($"{NativeHandleType} selHandle = sel.Handle;");
 						foreach (var mi in noDefaultValue.OrderBy (m => m.Name, StringComparer.Ordinal)) {
 							if (InlineSelectors) {
 								var export = AttributeManager.GetOneCustomAttribute<ExportAttribute> (mi);
@@ -7401,7 +7419,7 @@ public partial class Generator : IMemberGatherer {
 						print ("if (Handle == IntPtr.Zero) {");
 						indent++;
 						foreach (var field in instance_fields_to_clear_on_dispose.OrderBy (f => f, StringComparer.Ordinal))
-							print ("{0} = null;", field);
+							print ($"{field} = null;");
 						indent--;
 						print ("}");
 					}

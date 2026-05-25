@@ -3501,7 +3501,7 @@ public partial class Generator : IMemberGatherer {
 	void GenerateNewStyleInvoke (bool supercall, MethodInfo mi, MemberInformation minfo, string? selector, string args, bool assign_to_temp, Type? category_type)
 	{
 		var returnType = mi.ReturnType;
-		bool x64_stret = Stret.X86_64NeedStret (returnType, this);
+		bool x64_stret = CheckNeedStret (mi);
 		bool aligned = AttributeManager.HasAttribute<AlignAttribute> (mi);
 
 		if (x64_stret) {
@@ -3866,12 +3866,18 @@ public partial class Generator : IMemberGatherer {
 
 	// Stret.NeedStret is shared between generator and X.I dll so in order to wrap the exception
 	// into a BindingException we need to set the try/catch here so we can provide a better message. Bugzilla ref 51212.
+	readonly Dictionary<Type, bool> needStretCache = new ();
 	bool CheckNeedStret (MethodInfo mi)
 	{
+		var returnType = mi.ReturnType;
+		if (needStretCache.TryGetValue (returnType, out var cached))
+			return cached;
 		try {
-			return Stret.NeedStret (mi.ReturnType, this);
+			var result = Stret.NeedStret (returnType, this);
+			needStretCache [returnType] = result;
+			return result;
 		} catch (TypeLoadException ex) {
-			throw new BindingException (0001, true, mi.ReturnType.Name, ex.Message);
+			throw new BindingException (0001, true, returnType.Name, ex.Message);
 		}
 	}
 

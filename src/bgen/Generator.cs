@@ -3048,12 +3048,22 @@ public partial class Generator : IMemberGatherer {
 		}
 	}
 
+	string []? cachedHeaderUsingLines;
+
 	void Header (StreamWriter w)
 	{
 		print (w, "//\n// Auto-generated from generator.cs, do not edit\n//");
 		print (w, "// We keep references to objects, so warning 414 is expected\n");
 		print (w, "#pragma warning disable 414\n");
-		print (w, NamespaceCache.ImplicitNamespaces.OrderByDescending (n => n.StartsWith ("System", StringComparison.Ordinal)).ThenBy (n => n.Length).Select (n => "using " + n + ";"));
+		if (cachedHeaderUsingLines is null) {
+			cachedHeaderUsingLines = NamespaceCache.ImplicitNamespaces
+				.OrderByDescending (n => n.StartsWith ("System", StringComparison.Ordinal))
+				.ThenBy (n => n.Length)
+				.Select (n => "using " + n + ";")
+				.ToArray ();
+		}
+		foreach (var line in cachedHeaderUsingLines)
+			w.WriteLine (line);
 		print (w, "");
 		print (w, "#nullable enable");
 		print (w, "");

@@ -681,7 +681,22 @@ public class AttributeManager {
 		return false;
 	}
 
+	readonly Dictionary<ICustomAttributeProvider, bool> isNullableCache = new ();
+
 	public bool IsNullable (ICustomAttributeProvider? provider)
+	{
+		if (provider is null)
+			return false;
+
+		if (isNullableCache.TryGetValue (provider, out var cached))
+			return cached;
+
+		var result = IsNullableCore (provider);
+		isNullableCache [provider] = result;
+		return result;
+	}
+
+	bool IsNullableCore (ICustomAttributeProvider provider)
 	{
 		var attributes = GetAttributes (provider);
 		if (attributes is null)

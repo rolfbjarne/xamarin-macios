@@ -1838,7 +1838,7 @@ public partial class Generator : IMemberGatherer {
 			var string_pars = new StringBuilder ();
 			MakeSignatureFromParameterInfo (false, string_pars, mi, declaringType: null, parameters: parameters);
 			print_generated_code ();
-			print ($"unsafe {TypeManager.FormatType (null, mi.ReturnType)} Invoke ({string_pars.ToString ()})");
+			print ($"unsafe {TypeManager.FormatType (null, mi.ReturnType)} Invoke ({string_pars})");
 			print ("{"); indent++;
 			string? cast_a = "", cast_b = "";
 			bool use_temp_return;
@@ -1865,7 +1865,7 @@ public partial class Generator : IMemberGatherer {
 
 			if (convs.Length > 0)
 				print (convs);
-			print ($"{(use_temp_return ? "var ret = " : "")}{cast_a}invoker (BlockPointer{args.ToString ()}){cast_b};");
+			print ($"{(use_temp_return ? "var ret = " : "")}{cast_a}invoker (BlockPointer{args}){cast_b};");
 			if (needsGCKeepAlives)
 				GenerateArgumentGCKeepAlives (mi, null);
 			if (disposes.Length > 0)
@@ -3389,7 +3389,7 @@ public partial class Generator : IMemberGatherer {
 		}
 	}
 
-	void GenerateInvoke (bool stret, bool supercall, MethodInfo mi, MemberInformation minfo, string? selector, string args, Type? category_type, bool aligned)
+	void GenerateInvoke (bool stret, bool supercall, MethodInfo mi, MemberInformation minfo, string? selector, StringBuilder args, Type? category_type, bool aligned)
 	{
 		var isInstanceMethod = category_type is null && !minfo.is_extension_method &&
 								  !minfo.is_protocol_implementation_method;
@@ -3446,7 +3446,7 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		if (ShouldMarshalNativeExceptions (mi))
-			args += ", &exception_gchandle";
+			args.Append (", &exception_gchandle");
 
 		if (stret && aligned) {
 			var ret_val = "(IntPtr*) aligned_ret";
@@ -3498,11 +3498,13 @@ public partial class Generator : IMemberGatherer {
 		}
 	}
 
-	void GenerateNewStyleInvoke (bool supercall, MethodInfo mi, MemberInformation minfo, string? selector, string args, bool assign_to_temp, Type? category_type)
+	void GenerateNewStyleInvoke (bool supercall, MethodInfo mi, MemberInformation minfo, string? selector, StringBuilder args, bool assign_to_temp, Type? category_type)
 	{
 		var returnType = mi.ReturnType;
 		bool x64_stret = CheckNeedStret (mi);
 		bool aligned = AttributeManager.HasAttribute<AlignAttribute> (mi);
+		// Save args length — GenerateInvoke may append to it
+		var argsLen = args.Length;
 
 		if (x64_stret) {
 			// First check for arm64
@@ -3510,6 +3512,8 @@ public partial class Generator : IMemberGatherer {
 			indent++;
 			GenerateInvoke (false, supercall, mi, minfo, selector, args, category_type, false);
 			indent--;
+			// Reset args to original length for the second call
+			args.Length = argsLen;
 			// If we're not arm64, then we're x86_64
 			print ("} else {");
 			indent++;
@@ -3519,6 +3523,8 @@ public partial class Generator : IMemberGatherer {
 		} else {
 			GenerateInvoke (false, supercall, mi, minfo, selector, args, category_type, false);
 		}
+		// Restore args to original length so callers see unmodified state
+		args.Length = argsLen;
 	}
 
 	static char [] newlineTab = new char [] { '\n', '\t' };
@@ -3915,8 +3921,6 @@ public partial class Generator : IMemberGatherer {
 			print ("var class_ptr = Class.GetHandle (typeof (T));");
 		}
 
-		var argsArray = args.ToString ();
-
 		if (by_ref_init.Length > 0)
 			print (by_ref_init);
 
@@ -4003,7 +4007,7 @@ public partial class Generator : IMemberGatherer {
 		if (minfo.is_virtual_method || mi.Name == "Constructor") {
 			//print ("if (this.GetType () == TypeManager.{0}) {{", type.Name);
 			if (external || minfo.is_interface_impl || minfo.is_extension_method || minfo.is_protocol_member) {
-				GenerateNewStyleInvoke (false, mi, minfo, sel, argsArray, needs_temp, category_type);
+				GenerateNewStyleInvoke (false, mi, minfo, sel, args, needs_temp, category_type);
 			} else {
 				var may_throw = shouldMarshalNativeExceptions;
 				var null_handle = may_throw && mi.Name == "Constructor";
@@ -4014,8 +4018,8 @@ public partial class Generator : IMemberGatherer {
 
 				WriteIsDirectBindingCondition (sw, ref indent, is_direct_binding,
 								   mi.Name == "Constructor" ? is_direct_binding_value : null, // We only need to print the is_direct_binding value in constructors
-											   () => { GenerateNewStyleInvoke (false, mi, minfo, sel, argsArray, needs_temp, category_type); return null; },
-											   () => { GenerateNewStyleInvoke (true, mi, minfo, sel, argsArray, needs_temp, category_type); return null; }
+											   () => { GenerateNewStyleInvoke (false, mi, minfo, sel, args, needs_temp, category_type); return null; },
+											   () => { GenerateNewStyleInvoke (true, mi, minfo, sel, args, needs_temp, category_type); return null; }
 								  );
 
 				if (null_handle) {
@@ -4029,7 +4033,7 @@ public partial class Generator : IMemberGatherer {
 				}
 			}
 		} else {
-			GenerateNewStyleInvoke (false, mi, minfo, sel, argsArray, needs_temp, category_type);
+			GenerateNewStyleInvoke (false, mi, minfo, sel, args, needs_temp, category_type);
 		}
 
 		if (shouldMarshalNativeExceptions)

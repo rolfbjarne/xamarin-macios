@@ -31,5 +31,13 @@ public ref struct PrintInterpolatedStringHandler {
 
 	public void AppendFormatted (ReadOnlySpan<char> value) => sb.Append (value);
 
+	public void AppendFormatted (StringBuilder? value)
+	{
+		if (value is not null) {
+			foreach (var chunk in value.GetChunks ())
+				sb.Append (chunk.Span);
+		}
+	}
+
 	internal StringBuilder GetStringBuilder () => sb;
 }

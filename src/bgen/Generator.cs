@@ -1403,6 +1403,7 @@ public partial class Generator : IMemberGatherer {
 
 		TypeManager.SetTypesThatMustAlwaysBeGloballyNamed (api.Types);
 
+		var tselectorSet = new HashSet<string> ();
 		foreach (Type t in api.Types) {
 			if (t.IsUnavailable (this))
 				continue;
@@ -1410,7 +1411,7 @@ public partial class Generator : IMemberGatherer {
 			// We call lookup to build the hierarchy graph
 			GeneratedTypes.Lookup (t);
 
-			var tselectorSet = new HashSet<string> ();
+			tselectorSet.Clear ();
 
 			foreach (var pi in GetTypeContractProperties (t)) {
 				if (pi.IsUnavailable (this))

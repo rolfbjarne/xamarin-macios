@@ -114,6 +114,7 @@ public partial class Generator : IMemberGatherer {
 	public string BaseDir { get { return basedir; } set { basedir = value; } }
 	string basedir;
 	HashSet<string> generated_files = new HashSet<string> ();
+	HashSet<string> created_directories = new HashSet<string> ();
 
 	//
 	// We inject thread checks to MonoTouch.UIKit types, unless there is a [ThreadSafe] attribuet on the type.
@@ -5402,7 +5403,7 @@ public partial class Generator : IMemberGatherer {
 			counter++;
 		}
 		generated_files.Add (filename);
-		if (!Directory.Exists (dir))
+		if (created_directories.Add (dir))
 			Directory.CreateDirectory (dir);
 
 		return new StreamWriter (filename);

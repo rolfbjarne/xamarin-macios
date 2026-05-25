@@ -9,12 +9,11 @@ using System.Xml;
 #nullable enable
 
 public class DocumentationManager {
-	string xml;
 	Dictionary<string, XmlNode>? memberLookup;
 
 	public DocumentationManager (string assembly)
 	{
-		this.xml = Path.ChangeExtension (assembly, ".xml");
+		var xml = Path.ChangeExtension (assembly, ".xml");
 		if (File.Exists (xml)) {
 			var doc = new XmlDocument ();
 			doc.LoadWithoutNetworkAccess (xml);

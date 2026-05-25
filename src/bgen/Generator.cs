@@ -200,7 +200,7 @@ public partial class Generator : IMemberGatherer {
 
 		// If any of the interfaces this type implements is an NSObject,
 		// then this type is also an NSObject
-		var ifaces = type.GetInterfaces ();
+		var ifaces = type.GetCachedInterfaces ();
 		foreach (var iface in ifaces)
 			if (IsNSObject (iface))
 				return true;
@@ -4116,7 +4116,7 @@ public partial class Generator : IMemberGatherer {
 		var methods = new List<MethodInfo> ();
 		foreach (var method in source.GatherMethods (BindingFlags.Public | BindingFlags.Instance, this))
 			methods.Add (method);
-		foreach (var parent in source.GetInterfaces ()) {
+		foreach (var parent in source.GetCachedInterfaces ()) {
 			// skip interfaces that aren't available on the current platform
 			if (parent.IsUnavailable (this))
 				continue;
@@ -4153,7 +4153,7 @@ public partial class Generator : IMemberGatherer {
 		var props = new List<PropertyInfo> ();
 		foreach (var prop in source.GatherProperties (this))
 			props.Add (prop);
-		foreach (var parent in source.GetInterfaces ()) {
+		foreach (var parent in source.GetCachedInterfaces ()) {
 			// skip interfaces that aren't available on the current platform
 			if (parent.IsUnavailable (this))
 				continue;
@@ -4186,7 +4186,7 @@ public partial class Generator : IMemberGatherer {
 	{
 		if (memberType == intf)
 			return true;
-		foreach (var p in intf.GetInterfaces ()) {
+		foreach (var p in intf.GetCachedInterfaces ()) {
 			if (memberType == p)
 				return true;
 			if (MemberBelongToInterface (memberType, ReflectionExtensions.GetBaseType (p, this)))
@@ -5196,7 +5196,7 @@ public partial class Generator : IMemberGatherer {
 		var allProtocolProperties = new List<PropertyInfo> ();
 		var allProtocolConstructors = new List<MethodInfo> ();
 		var ifacesFiltered = new List<Type> ();
-		foreach (var iface in type.GetInterfaces ()) {
+		foreach (var iface in type.GetCachedInterfaces ()) {
 			if (IsProtocolInterface (iface, false))
 				ifacesFiltered.Add (iface);
 		}
@@ -5726,7 +5726,7 @@ public partial class Generator : IMemberGatherer {
 
 	bool ConformToNSCoding (Type type)
 	{
-		foreach (var intf in type.GetInterfaces ()) {
+		foreach (var intf in type.GetCachedInterfaces ()) {
 			if (intf.Name == "NSCoding" || intf.Name == "INSCoding")
 				return true;
 		}
@@ -6214,7 +6214,7 @@ public partial class Generator : IMemberGatherer {
 			// interfaces in ascending order
 			var implements_list = new List<string> ();
 
-			foreach (var protocolType in type.GetInterfaces ()) {
+			foreach (var protocolType in type.GetCachedInterfaces ()) {
 				if (!AttributeManager.HasAttribute<ProtocolAttribute> (protocolType)) {
 					if (protocolType.Name [0] != 'I')
 						continue;

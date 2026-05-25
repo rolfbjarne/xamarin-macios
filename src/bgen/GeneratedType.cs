@@ -14,7 +14,7 @@ public class GeneratedType {
 		Root = root;
 		Type = t;
 		var generator = root.Generator;
-		foreach (var iface in Type.GetInterfaces ()) {
+		foreach (var iface in Type.GetCachedInterfaces ()) {
 			if (iface.Name == "UIAppearance" || iface.Name == "IUIAppearance")
 				ImplementsAppearance = true;
 		}

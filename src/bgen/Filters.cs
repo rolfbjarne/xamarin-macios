@@ -37,7 +37,7 @@ public partial class Generator {
 
 		// filters are now exposed as protocols so we need to conform to them
 		var interfaces = String.Empty;
-		foreach (var i in type.GetInterfaces ()) {
+		foreach (var i in type.GetCachedInterfaces ()) {
 			interfaces += $", I{i.Name}";
 		}
 
@@ -167,7 +167,7 @@ public partial class Generator {
 
 	void GenerateProtocolProperties (Type type, Type originalType, HashSet<string> processed)
 	{
-		foreach (var i in type.GetInterfaces ()) {
+		foreach (var i in type.GetCachedInterfaces ()) {
 			if (!IsProtocolInterface (i, false, out var protocol))
 				continue;
 

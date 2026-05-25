@@ -57,6 +57,16 @@ public static class GeneratorExtensions {
 public static class ReflectionExtensions {
 	static readonly Dictionary<(Type, BindingFlags), List<MethodInfo>> gatherMethodsCache = new ();
 	static readonly Dictionary<(Type, BindingFlags), List<PropertyInfo>> gatherPropertiesCache = new ();
+	static readonly Dictionary<Type, Type []> getInterfacesCache = new ();
+
+	public static Type [] GetCachedInterfaces (this Type type)
+	{
+		if (!getInterfacesCache.TryGetValue (type, out var result)) {
+			result = type.GetInterfaces ();
+			getInterfacesCache [type] = result;
+		}
+		return result;
+	}
 
 	public static bool TryCanRead (this PropertyInfo property, [NotNullWhen (true)] out MethodInfo? getMethod)
 	{

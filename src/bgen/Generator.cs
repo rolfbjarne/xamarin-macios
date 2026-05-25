@@ -4542,7 +4542,7 @@ public partial class Generator : IMemberGatherer {
 		string extra = "";
 
 		if (asyncKind == AsyncMethodKind.WithResultOutParameter) {
-			if (minfo.Method!.GetParameters ().Count () > 1)
+			if (minfo.Method!.GetParameters ().Length > 1)
 				extra = ", ";
 			extra += "out " + TypeManager.FormatType (minfo.MethodInfo.DeclaringType, minfo.MethodInfo.ReturnType) + " " + minfo.GetUniqueParamName ("result");
 		}

@@ -941,6 +941,7 @@ public abstract class AvailabilityBaseAttribute : Attribute {
 	public string? Message { get; private set; }
 
 	string? cachedToString;
+	static readonly Dictionary<(AvailabilityKind, PlatformName, Version?, string?), string> toStringCache = new ();
 
 	internal AvailabilityBaseAttribute ()
 	{
@@ -1025,6 +1026,14 @@ public abstract class AvailabilityBaseAttribute : Attribute {
 	{
 		if (cachedToString is not null)
 			return cachedToString;
+
+		// Try the shared static cache first (most attributes share the same key)
+		var key = (AvailabilityKind, Platform, Version, Message);
+		if (toStringCache.TryGetValue (key, out var shared)) {
+			cachedToString = shared;
+			return shared;
+		}
+
 		var builder = new StringBuilder ();
 		switch (AvailabilityKind) {
 		case AvailabilityKind.Introduced:
@@ -1041,6 +1050,7 @@ public abstract class AvailabilityBaseAttribute : Attribute {
 			break;
 		}
 		cachedToString = builder.ToString ();
+		toStringCache [key] = cachedToString;
 		return cachedToString;
 	}
 }

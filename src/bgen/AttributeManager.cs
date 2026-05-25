@@ -513,7 +513,7 @@ public class AttributeManager {
 			if (arg.IsField) {
 				attribType.GetField (arg.MemberName)!.SetValue (instance, value);
 			} else {
-				attribType.GetProperty (arg.MemberName)!.SetValue (instance, value, new object [0]);
+				attribType.GetProperty (arg.MemberName)!.SetValue (instance, value, Array.Empty<object> ());
 			}
 		}
 

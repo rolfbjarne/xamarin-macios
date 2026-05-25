@@ -3224,7 +3224,9 @@ public partial class Generator : IMemberGatherer {
 			if (parType.IsSubclassOf (TypeCache.System_Delegate)) {
 				if (!AttributeManager.HasAttribute<WrapAttribute> (mi)) {
 					var ti = MakeTrampoline (parType);
-					sb.AppendFormat ("[BlockProxy (typeof (ObjCRuntime.Trampolines.{0}))]", ti.NativeInvokerName);
+					sb.Append ("[BlockProxy (typeof (ObjCRuntime.Trampolines.");
+					sb.Append (ti.NativeInvokerName);
+					sb.Append ("))]");
 				} else {
 					EnsureDelegateCreation (parType);
 				}
@@ -6819,7 +6821,7 @@ public partial class Generator : IMemberGatherer {
 					if (!field_pi.PropertyType.IsValueType || smartEnumTypeName is not null) {
 						print_generated_code ();
 						PrintPreserveAttribute (field_pi);
-						print ("static {0}? _{1};", fieldTypeName, field_pi.Name);
+						print ($"static {fieldTypeName}? _{field_pi.Name};");
 					}
 
 					if (BindingTouch.SupportsXmlDocumentation) {
@@ -6915,7 +6917,7 @@ public partial class Generator : IMemberGatherer {
 					}
 					PrintAttributes (field_pi, preserve: true, advice: true);
 					PrintObsoleteAttributes (field_pi);
-					print ("[Field (\"{0}\",  \"{1}\")]", fieldAttr!.SymbolName, library_path ?? library_name);
+					print ($"[Field (\"{fieldAttr!.SymbolName}\",  \"{library_path ?? library_name}\")]");
 					PrintPlatformAttributes (field_pi);
 					if (AttributeManager.HasAttribute<AdvancedAttribute> (field_pi)) {
 						print ("[EditorBrowsable (EditorBrowsableState.Advanced)]");
@@ -6932,79 +6934,78 @@ public partial class Generator : IMemberGatherer {
 					print ("get {");
 					indent++;
 					if (field_pi.PropertyType == TypeCache.NSString) {
-						print ("if (_{0} is null)", field_pi.Name);
+						print ($"if (_{field_pi.Name} is null)");
 						indent++;
-						print ("_{0} = Dlfcn.GetStringConstant (Libraries.{2}.Handle, \"{1}\")!;", field_pi.Name, fieldAttr.SymbolName, library_name);
+						print ($"_{field_pi.Name} = Dlfcn.GetStringConstant (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\")!;");
 						indent--;
-						print ("return _{0};", field_pi.Name);
+						print ($"return _{field_pi.Name};");
 					} else if (field_pi.PropertyType.Name == "NSArray") {
-						print ("if (_{0} is null)", field_pi.Name);
+						print ($"if (_{field_pi.Name} is null)");
 						indent++;
-						print ("_{0} = Runtime.GetNSObject<NSArray> (Dlfcn.GetIndirect (Libraries.{2}.Handle, \"{1}\"))!;", field_pi.Name, fieldAttr.SymbolName, library_name);
+						print ($"_{field_pi.Name} = Runtime.GetNSObject<NSArray> (Dlfcn.GetIndirect (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\"))!;");
 						indent--;
-						print ("return _{0};", field_pi.Name);
+						print ($"return _{field_pi.Name};");
 					} else if (field_pi.PropertyType.Name == "NSNumber") {
-						print ("if (_{0} is null)", field_pi.Name);
+						print ($"if (_{field_pi.Name} is null)");
 						indent++;
-						print ("_{0} = Runtime.GetNSObject<NSNumber> (Dlfcn.GetIndirect (Libraries.{2}.Handle, \"{1}\"))!;", field_pi.Name, fieldAttr.SymbolName, library_name);
+						print ($"_{field_pi.Name} = Runtime.GetNSObject<NSNumber> (Dlfcn.GetIndirect (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\"))!;");
 						indent--;
-						print ("return _{0};", field_pi.Name);
+						print ($"return _{field_pi.Name};");
 					} else if (field_pi.PropertyType.Name == "UTType") {
-						print ("if (_{0} is null)", field_pi.Name);
+						print ($"if (_{field_pi.Name} is null)");
 						indent++;
-						print ("_{0} = Runtime.GetNSObject<UTType> (Dlfcn.GetIntPtr (Libraries.{2}.Handle, \"{1}\"))!;", field_pi.Name, fieldAttr.SymbolName, library_name);
+						print ($"_{field_pi.Name} = Runtime.GetNSObject<UTType> (Dlfcn.GetIntPtr (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\"))!;");
 						indent--;
-						print ("return _{0};", field_pi.Name);
+						print ($"return _{field_pi.Name};");
 					} else if (field_pi.PropertyType == TypeCache.System_Byte) {
-						print ("return Dlfcn.GetByte (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+						print ($"return Dlfcn.GetByte (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\");");
 					} else if (field_pi.PropertyType == TypeCache.System_SByte) {
-						print ("return Dlfcn.GetSByte (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+						print ($"return Dlfcn.GetSByte (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\");");
 					} else if (field_pi.PropertyType == TypeCache.System_Int16) {
-						print ("return Dlfcn.GetInt16 (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+						print ($"return Dlfcn.GetInt16 (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\");");
 					} else if (field_pi.PropertyType == TypeCache.System_UInt16) {
-						print ("return Dlfcn.GetUInt16 (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+						print ($"return Dlfcn.GetUInt16 (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\");");
 					} else if (field_pi.PropertyType == TypeCache.System_Int32) {
-						print ("return Dlfcn.GetInt32 (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+						print ($"return Dlfcn.GetInt32 (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\");");
 					} else if (field_pi.PropertyType == TypeCache.System_UInt32) {
-						print ("return Dlfcn.GetUInt32 (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+						print ($"return Dlfcn.GetUInt32 (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\");");
 					} else if (field_pi.PropertyType == TypeCache.System_Double) {
-						print ("return Dlfcn.GetDouble (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+						print ($"return Dlfcn.GetDouble (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\");");
 					} else if (field_pi.PropertyType == TypeCache.System_Float) {
-						print ("return Dlfcn.GetFloat (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+						print ($"return Dlfcn.GetFloat (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\");");
 					} else if (field_pi.PropertyType == TypeCache.System_IntPtr) {
-						print ("return Dlfcn.GetIntPtr (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+						print ($"return Dlfcn.GetIntPtr (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\");");
 					} else if (field_pi.PropertyType == TypeCache.System_UIntPtr) {
-						print ("return Dlfcn.GetUIntPtr (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+						print ($"return Dlfcn.GetUIntPtr (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\");");
 					} else if (field_pi.PropertyType == TypeCache.System_Int64) {
-						print ("return Dlfcn.GetInt64 (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+						print ($"return Dlfcn.GetInt64 (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\");");
 					} else if (field_pi.PropertyType == TypeCache.System_UInt64) {
-						print ("return Dlfcn.GetUInt64 (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+						print ($"return Dlfcn.GetUInt64 (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\");");
 					} else
 						//
 						// Handle various blittable value types here
 						//
 						if (Frameworks.HaveCoreMedia && Frameworks.HaveAVFoundation && (field_pi.PropertyType == TypeCache.CMTime ||
 						   field_pi.PropertyType == TypeCache.AVCaptureWhiteBalanceGains)) {
-							print ("return *(({3} *) Dlfcn.dlsym (Libraries.{2}.Handle, \"{1}\"));", field_pi.Name, fieldAttr.SymbolName, library_name,
-								TypeManager.FormatType (type, field_pi.PropertyType.Namespace, field_pi.PropertyType.Name));
+							print ($"return *(({TypeManager.FormatType (type, field_pi.PropertyType.Namespace, field_pi.PropertyType.Name)} *) Dlfcn.dlsym (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\"));");
 						} else if (field_pi.PropertyType == TypeCache.System_nint) {
-							print ("return Dlfcn.GetNInt (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"return Dlfcn.GetNInt (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\");");
 						} else if (field_pi.PropertyType == TypeCache.System_nuint) {
-							print ("return Dlfcn.GetNUInt (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"return Dlfcn.GetNUInt (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\");");
 						} else if (field_pi.PropertyType == TypeCache.System_nfloat) {
-							print ("return Dlfcn.GetNFloat (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"return Dlfcn.GetNFloat (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\");");
 						} else if (field_pi.PropertyType == TypeCache.CoreGraphics_CGSize) {
-							print ("return Dlfcn.GetCGSize (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"return Dlfcn.GetCGSize (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\");");
 						} else if (field_pi.PropertyType == TypeCache.CMTag) {
-							print ("return Dlfcn.GetStruct<CoreMedia.CMTag> (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"return Dlfcn.GetStruct<CoreMedia.CMTag> (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\");");
 						} else if (field_pi.PropertyType.Namespace == "Foundation" && field_pi.PropertyType.Name == "NSOperatingSystemVersion") {
-							print ("return Dlfcn.GetStruct<Foundation.NSOperatingSystemVersion> (Libraries.{2}.Handle, \"{1}\");", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"return Dlfcn.GetStruct<Foundation.NSOperatingSystemVersion> (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\");");
 						} else if (field_pi.PropertyType.IsEnum) {
 							var btype = field_pi.PropertyType.GetEnumUnderlyingType ();
 							if (smartEnumTypeName is not null) {
-								print ("if (_{0} is null)", field_pi.Name);
+								print ($"if (_{field_pi.Name} is null)");
 								indent++;
-								print ("_{0} = Dlfcn.GetStringConstant (Libraries.{2}.Handle, \"{1}\")!;", field_pi.Name, fieldAttr.SymbolName, library_name);
+								print ($"_{field_pi.Name} = Dlfcn.GetStringConstant (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\")!;");
 								indent--;
 								print ($"return {smartEnumTypeName}Extensions.GetValue (_{field_pi.Name});");
 							} else if (GetNativeEnumToManagedExpression (field_pi.PropertyType, out var preExpression, out var postExpression, out var _)) {
@@ -7042,43 +7043,43 @@ public partial class Generator : IMemberGatherer {
 						print ("set {");
 						indent++;
 						if (field_pi.PropertyType == TypeCache.System_Int32) {
-							print ("Dlfcn.SetInt32 (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetInt32 (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType == TypeCache.System_UInt32) {
-							print ("Dlfcn.SetUInt32 (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetUInt32 (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType == TypeCache.System_Double) {
-							print ("Dlfcn.SetDouble (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetDouble (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType == TypeCache.System_Byte) {
-							print ("Dlfcn.SetByte (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetByte (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType == TypeCache.System_SByte) {
-							print ("Dlfcn.SetSByte (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetSByte (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType == TypeCache.System_Int16) {
-							print ("Dlfcn.SetInt16 (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetInt16 (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType == TypeCache.System_UInt16) {
-							print ("Dlfcn.SetUInt16 (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetUInt16 (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType == TypeCache.System_Float) {
-							print ("Dlfcn.SetFloat (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetFloat (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType == TypeCache.System_IntPtr) {
-							print ("Dlfcn.SetIntPtr (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetIntPtr (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType == TypeCache.System_UIntPtr) {
-							print ("Dlfcn.SetUIntPtr (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetUIntPtr (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType == TypeCache.System_Int64) {
-							print ("Dlfcn.SetInt64 (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetInt64 (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType == TypeCache.System_UInt64) {
-							print ("Dlfcn.SetUInt64 (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetUInt64 (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType == TypeCache.NSString) {
-							print ("Dlfcn.SetString (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetString (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType.Name == "NSArray") {
-							print ("Dlfcn.SetArray (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetArray (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType.Name == "NSNumber") {
-							print ("Dlfcn.SetObject (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetObject (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType == TypeCache.System_nint) {
-							print ("Dlfcn.SetNInt (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetNInt (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType == TypeCache.System_nuint) {
-							print ("Dlfcn.SetNUInt (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetNUInt (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType == TypeCache.System_nfloat) {
-							print ("Dlfcn.SetNFloat (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetNFloat (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType == TypeCache.CoreGraphics_CGSize) {
-							print ("Dlfcn.SetCGSize (Libraries.{2}.Handle, \"{1}\", value);", field_pi.Name, fieldAttr.SymbolName, library_name);
+							print ($"Dlfcn.SetCGSize (Libraries.{library_name}.Handle, \"{fieldAttr.SymbolName}\", value);");
 						} else if (field_pi.PropertyType.IsEnum) {
 							var btype = field_pi.PropertyType.GetEnumUnderlyingType ();
 							if (smartEnumTypeName is not null)

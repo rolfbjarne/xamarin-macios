@@ -17,6 +17,10 @@ public class AttributeManager {
 		"System.Runtime.CompilerServices.NativeIntegerAttribute",
 	};
 
+	// Cache attribute query results per (provider, attribute type) to avoid
+	// repeated reflection and attribute conversion work.
+	readonly Dictionary<(ICustomAttributeProvider, System.Type), object> attributeCache = new ();
+
 	TypeCache TypeCache { get; }
 
 	public AttributeManager (TypeCache typeCache)
@@ -496,7 +500,16 @@ public class AttributeManager {
 
 	public virtual T [] GetCustomAttributes<T> (ICustomAttributeProvider? provider) where T : System.Attribute
 	{
-		return FilterAttributes<T> (GetAttributes (provider), provider);
+		if (provider is null)
+			return Array.Empty<T> ();
+
+		var key = (provider, typeof (T));
+		if (attributeCache.TryGetValue (key, out var cached))
+			return (T []) cached;
+
+		var result = FilterAttributes<T> (GetAttributes (provider), provider);
+		attributeCache [key] = result;
+		return result;
 	}
 
 	[return: NotNullIfNotNull (nameof (provider))]

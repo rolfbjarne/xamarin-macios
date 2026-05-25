@@ -234,25 +234,35 @@ public class MemberInformation {
 
 	public string GetModifiers ()
 	{
-		string mods = "";
+		string? unsafeMod = is_unsafe ? "unsafe " : null;
+		string? newMod = is_new ? "new " : null;
 
-		mods += is_unsafe ? "unsafe " : null;
-		mods += is_new ? "new " : "";
-
+		string? mainMod;
 		if (is_sealed) {
-			mods += "";
+			mainMod = null;
 		} else if (is_ctor && is_protocol_member) {
-			mods += "static ";
+			mainMod = "static ";
 		} else if (is_static || is_category_extension || is_extension_method || is_protocol_implementation_method) {
-			mods += "static ";
+			mainMod = "static ";
 		} else if (is_protocol_member) {
-			mods += "virtual ";
+			mainMod = "virtual ";
 		} else if (is_abstract) {
-			mods += "virtual ";
+			mainMod = "virtual ";
 		} else if (is_virtual_method && !is_type_sealed) {
-			mods += is_override ? "override " : "virtual ";
+			mainMod = is_override ? "override " : "virtual ";
+		} else {
+			mainMod = null;
 		}
 
-		return mods;
+		if (unsafeMod is null && newMod is null && mainMod is null)
+			return "";
+		if (unsafeMod is null && newMod is null)
+			return mainMod ?? "";
+		if (unsafeMod is null && mainMod is null)
+			return newMod ?? "";
+		if (newMod is null && mainMod is null)
+			return unsafeMod ?? "";
+
+		return (unsafeMod ?? "") + (newMod ?? "") + (mainMod ?? "");
 	}
 }

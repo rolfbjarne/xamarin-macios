@@ -6298,7 +6298,8 @@ public partial class Generator : IMemberGatherer {
 
 			var bound_methods = new HashSet<MemberInformation> (); // List of methods bound on the class itself (not via protocols)
 			var generated_methods = new List<MemberInformation> (); // All method that have been generated
-			foreach (var mi in GetTypeContractMethods (type).OrderByDescending (m => m.Name == "Constructor").ThenBy (m => m.Name, StringComparer.Ordinal)) {
+			var typeContractMethods = GetTypeContractMethods (type).ToArray ();
+			foreach (var mi in typeContractMethods.OrderByDescending (m => m.Name == "Constructor").ThenBy (m => m.Name, StringComparer.Ordinal)) {
 				if (mi.IsSpecialName || (mi.Name == "Constructor" && type != mi.DeclaringType))
 					continue;
 
@@ -6321,7 +6322,7 @@ public partial class Generator : IMemberGatherer {
 					if (bound_methods.Contains (minfo))
 						continue;
 
-					var protocolsThatHaveThisMethod = GetTypeContractMethods (type).Where (x => { var sel = GetSelector (x); return sel is not null && sel == minfo.selector; });
+					var protocolsThatHaveThisMethod = typeContractMethods.Where (x => { var sel = GetSelector (x); return sel is not null && sel == minfo.selector; });
 					if (protocolsThatHaveThisMethod.Count () > 1) {
 						// If multiple protocols have this method and we haven't generated a copy yet
 						if (generated_methods.Any (x => x.selector == minfo.selector))
@@ -6360,8 +6361,9 @@ public partial class Generator : IMemberGatherer {
 			var notifications = new List<PropertyInfo> ();
 			var bound_properties = new List<string> (); // List of properties bound on the class itself (not via protocols)
 			var generated_properties = new List<string> (); // All properties that have been generated
+			var typeContractProperties = GetTypeContractProperties (type).ToArray ();
 
-			foreach (var pi in GetTypeContractProperties (type).OrderBy (p => p.Name, StringComparer.Ordinal)) {
+			foreach (var pi in typeContractProperties.OrderBy (p => p.Name, StringComparer.Ordinal)) {
 
 				if (pi.IsUnavailable (this))
 					continue;
@@ -6387,7 +6389,7 @@ public partial class Generator : IMemberGatherer {
 					if (bound_properties.Contains (pi.Name))
 						continue;
 
-					var protocolsThatHaveThisProp = GetTypeContractProperties (type).Where (x => x.Name == pi.Name);
+					var protocolsThatHaveThisProp = typeContractProperties.Where (x => x.Name == pi.Name);
 					if (protocolsThatHaveThisProp.Count () > 1) {
 						// If multiple protocols have this property and we haven't generated a copy yet
 						if (generated_properties.Contains (pi.Name))

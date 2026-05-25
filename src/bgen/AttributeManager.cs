@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Reflection;
 
 #nullable enable
@@ -281,7 +280,9 @@ public class AttributeManager {
 		return rv;
 	}
 
-	static IEnumerable<System.Attribute> ConvertOldAttributes (CustomAttributeData attribute)
+	// Converts old-style platform attributes to new-style attributes.
+	// Returns the number of attributes added to the output list.
+	static int ConvertOldAttributes (CustomAttributeData attribute, List<System.Attribute> output)
 	{
 		switch (attribute.GetAttributeType ().Namespace) {
 		case null: // Root namespace such as PlatformAvailabilityShadow.cs
@@ -290,71 +291,88 @@ public class AttributeManager {
 		case "System.Runtime.Versioning":
 			break;
 		default:
-			return Enumerable.Empty<System.Attribute> ();
+			return 0;
 		}
 
 		switch (attribute.GetAttributeType ().Name) {
 		case "SinceAttribute":
 		case "iOSAttribute":
-			return AttributeConversionManager.ConvertPlatformAttribute (attribute, PlatformName.iOS).Yield ();
+			output.Add (AttributeConversionManager.ConvertPlatformAttribute (attribute, PlatformName.iOS));
+			return 1;
 		case "MacAttribute":
-			return AttributeConversionManager.ConvertPlatformAttribute (attribute, PlatformName.MacOSX).Yield ();
+			output.Add (AttributeConversionManager.ConvertPlatformAttribute (attribute, PlatformName.MacOSX));
+			return 1;
 		case "WatchAttribute":
-			return AttributeConversionManager.ConvertPlatformAttribute (attribute, PlatformName.WatchOS).Yield ();
+			output.Add (AttributeConversionManager.ConvertPlatformAttribute (attribute, PlatformName.WatchOS));
+			return 1;
 		case "TVAttribute":
-			return AttributeConversionManager.ConvertPlatformAttribute (attribute, PlatformName.TvOS).Yield ();
+			output.Add (AttributeConversionManager.ConvertPlatformAttribute (attribute, PlatformName.TvOS));
+			return 1;
 		case "MacCatalystAttribute":
-			return AttributeConversionManager.ConvertPlatformAttribute (attribute, PlatformName.MacCatalyst).Yield ();
+			output.Add (AttributeConversionManager.ConvertPlatformAttribute (attribute, PlatformName.MacCatalyst));
+			return 1;
 		case "LionAttribute":
-			return AttributeFactory.CreateNewAttribute<IntroducedAttribute> (PlatformName.MacOSX, 10, 7).Yield ();
+			output.Add (AttributeFactory.CreateNewAttribute<IntroducedAttribute> (PlatformName.MacOSX, 10, 7));
+			return 1;
 		case "MountainLionAttribute":
-			return AttributeFactory.CreateNewAttribute<IntroducedAttribute> (PlatformName.MacOSX, 10, 8).Yield ();
+			output.Add (AttributeFactory.CreateNewAttribute<IntroducedAttribute> (PlatformName.MacOSX, 10, 8));
+			return 1;
 		case "MavericksAttribute":
-			return AttributeFactory.CreateNewAttribute<IntroducedAttribute> (PlatformName.MacOSX, 10, 9).Yield ();
+			output.Add (AttributeFactory.CreateNewAttribute<IntroducedAttribute> (PlatformName.MacOSX, 10, 9));
+			return 1;
 		case "NoMacAttribute":
-			return AttributeFactory.CreateNewAttribute<UnavailableAttribute> (PlatformName.MacOSX).Yield ();
+			output.Add (AttributeFactory.CreateNewAttribute<UnavailableAttribute> (PlatformName.MacOSX));
+			return 1;
 		case "NoiOSAttribute":
-			return AttributeFactory.CreateNewAttribute<UnavailableAttribute> (PlatformName.iOS).Yield ();
+			output.Add (AttributeFactory.CreateNewAttribute<UnavailableAttribute> (PlatformName.iOS));
+			return 1;
 		case "NoWatchAttribute":
-			return AttributeFactory.CreateNewAttribute<UnavailableAttribute> (PlatformName.WatchOS).Yield ();
+			output.Add (AttributeFactory.CreateNewAttribute<UnavailableAttribute> (PlatformName.WatchOS));
+			return 1;
 		case "NoTVAttribute":
-			return AttributeFactory.CreateNewAttribute<UnavailableAttribute> (PlatformName.TvOS).Yield ();
+			output.Add (AttributeFactory.CreateNewAttribute<UnavailableAttribute> (PlatformName.TvOS));
+			return 1;
 		case "NoMacCatalystAttribute":
-			return AttributeFactory.CreateNewAttribute<UnavailableAttribute> (PlatformName.MacCatalyst).Yield ();
+			output.Add (AttributeFactory.CreateNewAttribute<UnavailableAttribute> (PlatformName.MacCatalyst));
+			return 1;
 		case "AvailabilityAttribute":
-			return AttributeConversionManager.ConvertAvailability (attribute);
+			return AttributeConversionManager.ConvertAvailability (attribute, output);
 		case "ExperimentalAttribute":
 			var earg = attribute.ConstructorArguments [0].Value as string ?? "";
-			return new System.Diagnostics.CodeAnalysis.ExperimentalAttribute (earg).Yield ();
+			output.Add (new System.Diagnostics.CodeAnalysis.ExperimentalAttribute (earg));
+			return 1;
 		case "SupportedOSPlatformAttribute":
 			var sarg = attribute.ConstructorArguments [0].Value as string ?? "";
-			(var sp, var sv) = ParseOSPlatformAttribute (sarg);
-			if (sv is null)
-				return AttributeFactory.CreateNewAttribute<IntroducedAttribute> (sp).Yield ();
+			(var sp, var smajor, var sminor) = ParseOSPlatformAttribute (sarg);
+			if (smajor < 0)
+				output.Add (AttributeFactory.CreateNewAttribute<IntroducedAttribute> (sp));
 			else
-				return AttributeFactory.CreateNewAttribute<IntroducedAttribute> (sp, sv.Major, sv.Minor).Yield ();
+				output.Add (AttributeFactory.CreateNewAttribute<IntroducedAttribute> (sp, smajor, sminor));
+			return 1;
 		case "UnsupportedOSPlatformAttribute":
 			var uarg = attribute.ConstructorArguments [0].Value as string ?? "";
-			(var up, var uv) = ParseOSPlatformAttribute (uarg);
+			(var up, var umajor, var _) = ParseOSPlatformAttribute (uarg);
 			// might have been available for a while...
-			if (uv is null)
-				return AttributeFactory.CreateNewAttribute<UnavailableAttribute> (up).Yield ();
-			else
-				return Enumerable.Empty<System.Attribute> ();
+			if (umajor < 0) {
+				output.Add (AttributeFactory.CreateNewAttribute<UnavailableAttribute> (up));
+				return 1;
+			}
+			return 0;
 		case "ObsoletedOSPlatformAttribute":
 			var oarg = attribute.ConstructorArguments [0].Value as string;
-			(var op, var ov) = ParseOSPlatformAttribute (oarg);
+			(var op, var omajor, var ominor) = ParseOSPlatformAttribute (oarg);
 			// might have been available for a while...
-			if (ov is null)
-				return AttributeFactory.CreateNewAttribute<ObsoletedAttribute> (op).Yield ();
+			if (omajor < 0)
+				output.Add (AttributeFactory.CreateNewAttribute<ObsoletedAttribute> (op));
 			else
-				return AttributeFactory.CreateNewAttribute<ObsoletedAttribute> (op, ov.Major, ov.Minor).Yield ();
+				output.Add (AttributeFactory.CreateNewAttribute<ObsoletedAttribute> (op, omajor, ominor));
+			return 1;
 		default:
-			return Enumerable.Empty<System.Attribute> ();
+			return 0;
 		}
 	}
 
-	static (PlatformName, Version?) ParseOSPlatformAttribute (string? arg)
+	static (PlatformName, int major, int minor) ParseOSPlatformAttribute (string? arg)
 	{
 		PlatformName name;
 		int len;
@@ -383,25 +401,48 @@ public class AttributeManager {
 			throw new BindingException (1047, arg);
 		}
 
-		Version? version = null;
+		int major = -1;
+		int minor = -1;
 		if (arg.Length > len) {
-			if (!Version.TryParse (arg [len..], out version))
-				throw new BindingException (1047, arg);
+			// Parse "major.minor" without allocating a substring or Version object
+			int dotIdx = arg.IndexOf ('.', len);
+			if (dotIdx < 0) {
+				if (!int.TryParse (arg.AsSpan (len), out major))
+					throw new BindingException (1047, arg);
+				minor = 0;
+			} else {
+				if (!int.TryParse (arg.AsSpan (len, dotIdx - len), out major))
+					throw new BindingException (1047, arg);
+				// Find end of minor (could be "major.minor.patch")
+				int nextDot = arg.IndexOf ('.', dotIdx + 1);
+				int minorEnd = nextDot >= 0 ? nextDot : arg.Length;
+				if (!int.TryParse (arg.AsSpan (dotIdx + 1, minorEnd - dotIdx - 1), out minor))
+					throw new BindingException (1047, arg);
+			}
 		}
-		return (name, version);
+		return (name, major, minor);
 	}
 
-	IEnumerable<T> CreateAttributeInstance<T> (CustomAttributeData attribute, ICustomAttributeProvider? provider) where T : System.Attribute
+	readonly List<System.Attribute> convertedAttributeBuffer = new ();
+
+	void CreateAttributeInstance<T> (CustomAttributeData attribute, ICustomAttributeProvider? provider, List<T> output) where T : System.Attribute
 	{
-		var convertedAttributes = ConvertOldAttributes (attribute);
-		if (convertedAttributes.Any ())
-			return convertedAttributes.OfType<T> ();
+		int startCount = convertedAttributeBuffer.Count;
+		int converted = ConvertOldAttributes (attribute, convertedAttributeBuffer);
+		if (converted > 0) {
+			for (int i = startCount; i < convertedAttributeBuffer.Count; i++) {
+				if (convertedAttributeBuffer [i] is T typed)
+					output.Add (typed);
+			}
+			convertedAttributeBuffer.RemoveRange (startCount, converted);
+			return;
+		}
 
 		var expectedType = ConvertTypeToMeta (typeof (T));
 		var attributeType = ConvertTypeToMeta (attribute.GetAttributeType ());
 		// == when comparing types uses reference equality, which is what we want here.
 		if (attributeType != expectedType && !attributeType.IsSubclassOf (expectedType))
-			return Enumerable.Empty<T> ();
+			return;
 
 		System.Type attribType = ConvertTypeFromMeta (attributeType, provider);
 
@@ -455,14 +496,14 @@ public class AttributeManager {
 			var arg = attribute.NamedArguments [i];
 			var value = arg.TypedValue.Value;
 			if (arg.TypedValue.ArgumentType == TypeCache.System_String_Array) {
-				var typed_values = ((IEnumerable<CustomAttributeTypedArgument>) arg.TypedValue.Value!).ToArray ();
-				var arr = new string? [typed_values.Length];
+				var typed_values = (IList<CustomAttributeTypedArgument>) arg.TypedValue.Value!;
+				var arr = new string? [typed_values.Count];
 				for (int a = 0; a < arr.Length; a++)
 					arr [a] = (string?) typed_values [a].Value;
 				value = arr;
 			} else if (arg.TypedValue.ArgumentType.FullName == "System.Type[]") {
-				var typed_values = ((IEnumerable<CustomAttributeTypedArgument>) arg.TypedValue.Value!).ToArray ();
-				var arr = new Type? [typed_values.Length];
+				var typed_values = (IList<CustomAttributeTypedArgument>) arg.TypedValue.Value!;
+				var arr = new Type? [typed_values.Count];
 				for (int a = 0; a < arr.Length; a++)
 					arr [a] = (Type?) typed_values [a].Value;
 				value = arr;
@@ -476,7 +517,7 @@ public class AttributeManager {
 			}
 		}
 
-		return ((T) instance).Yield ();
+		output.Add ((T) instance);
 	}
 
 	T [] FilterAttributes<T> (IList<CustomAttributeData>? attributes, ICustomAttributeProvider? provider) where T : System.Attribute
@@ -491,14 +532,12 @@ public class AttributeManager {
 			if (ignoredAttributes.Contains (attributes [i].GetAttributeType ().FullName))
 				continue;
 
-			foreach (var attrib in CreateAttributeInstance<T> (attributes [i], provider)) {
-				if (list is null)
-					list = new List<T> ();
-				list.Add (attrib);
-			}
+			if (list is null)
+				list = new List<T> ();
+			CreateAttributeInstance<T> (attributes [i], provider, list);
 		}
 
-		if (list is not null)
+		if (list is not null && list.Count > 0)
 			return list.ToArray ();
 
 		return Array.Empty<T> ();

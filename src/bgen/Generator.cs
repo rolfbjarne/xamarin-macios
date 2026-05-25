@@ -120,6 +120,8 @@ public partial class Generator : IMemberGatherer {
 	// Reusable stream/writer pair to avoid reallocating StreamWriter buffers per file
 	readonly SwappableStream reusable_stream = new ();
 	ReusableFileWriter? reusable_writer;
+	// Cache for "name__handle__" strings used in MarshalParameter
+	static readonly Dictionary<string, string> handleSuffixCache = new ();
 
 	//
 	// This contains delegates that are referenced in the source and need to be generated.
@@ -830,6 +832,17 @@ public partial class Generator : IMemberGatherer {
 	//
 	// Returns the actual way in which the type t must be marshalled
 	// for example "UIView foo" is generated as  "foo.Handle"
+	static string GetHandleSuffix (string? safeName)
+	{
+		if (safeName is null)
+			return "__handle__";
+		if (!handleSuffixCache.TryGetValue (safeName, out var result)) {
+			result = safeName + "__handle__";
+			handleSuffixCache [safeName] = result;
+		}
+		return result;
+	}
+
 	//
 	public string? MarshalParameter (MethodInfo mi, ParameterInfo pi, bool null_allowed_override, PropertyInfo? propInfo, bool castEnum, StringBuilder convs, StringBuilder by_ref_init, StringBuilder post_return)
 	{
@@ -837,14 +850,14 @@ public partial class Generator : IMemberGatherer {
 			return "&" + pi.Name + "Value";
 
 		if (HasBindAsAttribute (pi))
-			return string.Format ("nsb_{0}.GetHandle ()", pi.Name);
+			return $"nsb_{pi.Name}.GetHandle ()";
 		if (propInfo is not null && HasBindAsAttribute (propInfo))
-			return string.Format ("nsb_{0}.GetHandle ()", propInfo.Name);
+			return $"nsb_{propInfo.Name}.GetHandle ()";
 
 		var safe_name = pi.Name.GetSafeParamName ();
 
 		if (TypeManager.IsWrappedType (pi.ParameterType))
-			return safe_name + "__handle__";
+			return GetHandleSuffix (safe_name);
 
 		if (GetNativeEnumToNativeExpression (pi.ParameterType, out var preExpression, out var postExpression, out var nativeType))
 			return preExpression + safe_name + postExpression;
@@ -879,7 +892,7 @@ public partial class Generator : IMemberGatherer {
 
 		if (marshalTypes.TryGetMarshalType (pi.ParameterType, out var mt)) {
 			if (null_allowed_override || AttributeManager.IsNullable (pi))
-				return safe_name + "__handle__";
+				return GetHandleSuffix (safe_name);
 			return String.Format (mt.ParameterMarshal, safe_name);
 		}
 
@@ -3733,8 +3746,8 @@ public partial class Generator : IMemberGatherer {
 				}
 				needsGCKeepAlives = true;
 			} else if (needs_null_check) {
-				print ("if ({0} is null)", safe_name);
-				print ("\tObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof ({0}));", safe_name);
+				print ($"if ({safe_name} is null)");
+				print ($"\tObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof ({safe_name}));");
 			}
 		}
 	}

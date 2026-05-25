@@ -4997,7 +4997,7 @@ public partial class Generator : IMemberGatherer {
 			print ("{");
 
 			if (debug)
-				print ("\tConsole.WriteLine (\"In {0}\");", mi);
+				print ($"\tConsole.WriteLine (\"In {mi}\");");
 
 			if (do_not_call_base)
 				print ("\tthrow new You_Should_Not_Call_base_In_This_Method ();");
@@ -5090,7 +5090,7 @@ public partial class Generator : IMemberGatherer {
 
 		foreach (var group in groupedTypes.OrderBy (v => v.Namespace, StringComparer.Ordinal)) {
 			if (group.Namespace is not null) {
-				print ("namespace {0} {{", group.Namespace);
+				print ($"namespace {group.Namespace} {{");
 				indent++;
 			}
 			print ("#nullable enable");
@@ -5270,7 +5270,7 @@ public partial class Generator : IMemberGatherer {
 			exceptions.Add (ErrorHelper.CreateWarning (1123 /* "The type {0} has a [Protocol] and a [BaseType] attribute, but no [Model] attribute. This is likely incorrect; either remove the [BaseType] attribute, or add a [Model] attribute." */, type.FullName));
 
 		if (type.Namespace is not null) {
-			print ("namespace {0} {{", type.Namespace);
+			print ($"namespace {type.Namespace} {{");
 			indent++;
 		}
 
@@ -5337,13 +5337,7 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		PrintAttributes (type, platform: true, preserve: true, advice: true);
-		print ("[Protocol (Name = \"{1}\", WrapperType = typeof ({0}Wrapper){2}{3}{4})]",
-			   TypeName,
-			   protocol_name,
-			   protocolAttribute.IsInformal ? ", IsInformal = true" : string.Empty,
-			   protocolAttribute.FormalSince is not null ? $", FormalSince = \"{protocolAttribute.FormalSince}\"" : string.Empty,
-			   backwardsCompatibleCodeGeneration ? string.Empty : ", BackwardsCompatibleCodeGeneration = false"
-			   );
+		print ($"[Protocol (Name = \"{protocol_name}\", WrapperType = typeof ({TypeName}Wrapper){(protocolAttribute.IsInformal ? ", IsInformal = true" : string.Empty)}{(protocolAttribute.FormalSince is not null ? $", FormalSince = \"{protocolAttribute.FormalSince}\"" : string.Empty)}{(backwardsCompatibleCodeGeneration ? string.Empty : ", BackwardsCompatibleCodeGeneration = false")})]");
 
 		var sb = reusable_protocol;
 		sb.Clear ();
@@ -5625,11 +5619,11 @@ public partial class Generator : IMemberGatherer {
 
 		PrintPreserveAttribute (type);
 		PrintExperimentalAttribute (type);
-		print ("internal unsafe sealed class {0}Wrapper : BaseWrapper, I{0} {{", TypeName);
+		print ($"internal unsafe sealed class {TypeName}Wrapper : BaseWrapper, I{TypeName} {{");
 		indent++;
 		// ctor (IntPtr, bool)
 		PrintExperimentalAttribute (type);
-		print ("public {0}Wrapper ({1} handle, bool owns)", TypeName, NativeHandleType);
+		print ($"public {TypeName}Wrapper ({NativeHandleType} handle, bool owns)");
 		print ("\t: base (handle, owns)");
 		print ("{");
 		print ("}");
@@ -6199,7 +6193,7 @@ public partial class Generator : IMemberGatherer {
 				return;
 
 			if (type.Namespace is not null) {
-				print ("namespace {0} {{", type.Namespace);
+				print ($"namespace {type.Namespace} {{");
 				indent++;
 			}
 
@@ -6227,7 +6221,7 @@ public partial class Generator : IMemberGatherer {
 			} else {
 				if (is_protocol) {
 					var pName = !string.IsNullOrEmpty (protocol!.Name) ? $"Name = \"{protocol.Name}\"" : string.Empty;
-					print ("[Protocol({0}{1}{2})]", pName, (!string.IsNullOrEmpty (pName) && protocol.IsInformal) ? ", " : string.Empty, protocol.IsInformal ? "IsInformal = true" : string.Empty);
+					print ($"[Protocol({pName}{((!string.IsNullOrEmpty (pName) && protocol.IsInformal) ? ", " : string.Empty)}{(protocol.IsInformal ? "IsInformal = true" : string.Empty)})]");
 				}
 				core_image_filter = AttributeManager.HasAttribute<CoreImageFilterAttribute> (type);
 				if (!type.IsEnum && !core_image_filter) {
@@ -6332,7 +6326,7 @@ public partial class Generator : IMemberGatherer {
 				var nestedName = type.FullName?.Substring (type.Namespace?.Length + 1 ?? 0);
 				var container = nestedName?.Substring (0, nestedName.IndexOf ('+'));
 
-				print ("partial class {0} {{", container);
+				print ($"partial class {container} {{");
 				indent++;
 			}
 
@@ -6391,8 +6385,8 @@ public partial class Generator : IMemberGatherer {
 					if (!InlineSelectors) {
 						selectorField = selectorField.Substring (0, selectorField.Length - 6 /* Handle */);
 						print_generated_code ();
-						print ("const string {0} = \"{1}\";", selectorField, ea);
-						print ("static readonly {2} {0} = Selector.GetHandle (\"{1}\");", SelectorField (ea), ea, NativeHandleType);
+						print ($"const string {selectorField} = \"{ea}\";");
+						print ($"static readonly {NativeHandleType} {SelectorField (ea)} = Selector.GetHandle (\"{ea}\");");
 					}
 				}
 			}
@@ -6405,7 +6399,7 @@ public partial class Generator : IMemberGatherer {
 
 				if (!is_model) {
 					print_generated_code ();
-					print ("static readonly {1} class_ptr = Class.GetHandle (\"{0}\");", objc_type_name, NativeHandleType);
+					print ($"static readonly {NativeHandleType} class_ptr = Class.GetHandle (\"{objc_type_name}\");");
 					print ("");
 				}
 			}
@@ -6421,7 +6415,7 @@ public partial class Generator : IMemberGatherer {
 						print ("///     It is similar to calling the managed <see cref=\"ObjCRuntime.Class.GetHandle(string)\" /> or the native <see href=\"https://developer.apple.com/documentation/objectivec/1418952-objc_getclass\">objc_getClass</see> method with the type name.");
 						print ("/// </remarks>");
 					}
-					print ("public {1} {2} ClassHandle {{ get {{ return class_ptr; }} }}\n", objc_type_name, TypeName == "NSObject" ? "virtual" : "override", NativeHandleType);
+					print ($"public {(TypeName == "NSObject" ? "virtual" : "override")} {NativeHandleType} ClassHandle {{ get {{ return class_ptr; }} }}\n");
 				}
 
 				var ctor_visibility = is_abstract ? "protected" : "public";

@@ -1,0 +1,349 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace NetworkExtension {
+	/// <summary>Base class for Network Extension Providers.</summary><remarks>To be added.</remarks><related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/NetworkExtension/Reference/NEProviderClassRef/index.html">Apple documentation for <c>NEProvider</c></related>
+	[Register("NEProvider", true)]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
+	public unsafe partial class NEProvider : NSObject {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCreateTCPConnectionToEndpoint_EnableTLS_TLSParameters_Delegate_X = "createTCPConnectionToEndpoint:enableTLS:TLSParameters:delegate:";
+		static readonly NativeHandle selCreateTCPConnectionToEndpoint_EnableTLS_TLSParameters_Delegate_XHandle = Selector.GetHandle ("createTCPConnectionToEndpoint:enableTLS:TLSParameters:delegate:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCreateUDPSessionToEndpoint_FromEndpoint_X = "createUDPSessionToEndpoint:fromEndpoint:";
+		static readonly NativeHandle selCreateUDPSessionToEndpoint_FromEndpoint_XHandle = Selector.GetHandle ("createUDPSessionToEndpoint:fromEndpoint:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDefaultPathX = "defaultPath";
+		static readonly NativeHandle selDefaultPathXHandle = Selector.GetHandle ("defaultPath");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDisplayMessage_CompletionHandler_X = "displayMessage:completionHandler:";
+		static readonly NativeHandle selDisplayMessage_CompletionHandler_XHandle = Selector.GetHandle ("displayMessage:completionHandler:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSleepWithCompletionHandler_X = "sleepWithCompletionHandler:";
+		static readonly NativeHandle selSleepWithCompletionHandler_XHandle = Selector.GetHandle ("sleepWithCompletionHandler:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selStartSystemExtensionModeX = "startSystemExtensionMode";
+		static readonly NativeHandle selStartSystemExtensionModeXHandle = Selector.GetHandle ("startSystemExtensionMode");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selWakeX = "wake";
+		static readonly NativeHandle selWakeXHandle = Selector.GetHandle ("wake");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("NEProvider");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected NEProvider (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal NEProvider (NativeHandle handle) : base (handle)
+		{
+		}
+
+		/// <param name="remoteEndpoint">To be added.</param><param name="enableTLS">To be added.</param><param name="TLSParameters"><para>To be added.</para><para tool="nullallowed">This parameter can be <see langword="null" />.</para></param><param name="connectionDelegate"><para>To be added.</para><para tool="nullallowed">This parameter can be <see langword="null" />.</para></param><summary>Creates a TCP connection with the specified values.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("createTCPConnectionToEndpoint:enableTLS:TLSParameters:delegate:")]
+		[ObsoletedOSPlatform ("ios18.0", "Use 'Network.NWConnection' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst18.0", "Use 'Network.NWConnection' instead.")]
+		[ObsoletedOSPlatform ("macos15.0", "Use 'Network.NWConnection' instead.")]
+		[ObsoletedOSPlatform ("tvos18.0", "Use 'Network.NWConnection' instead.")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NWTcpConnection CreateTcpConnectionToEndpoint (NWEndpoint remoteEndpoint, bool enableTLS, NWTlsParameters? TLSParameters, NSObject? connectionDelegate)
+		{
+			var remoteEndpoint__handle__ = remoteEndpoint!.GetNonNullHandle (nameof (remoteEndpoint));
+			var TLSParameters__handle__ = TLSParameters.GetHandle ();
+			var connectionDelegate__handle__ = connectionDelegate.GetHandle ();
+			NWTcpConnection? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<NWTcpConnection> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_bool_NativeHandle_NativeHandle (this.Handle, selCreateTCPConnectionToEndpoint_EnableTLS_TLSParameters_Delegate_XHandle, remoteEndpoint__handle__, enableTLS ? (byte) 1 : (byte) 0, TLSParameters__handle__, connectionDelegate__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<NWTcpConnection> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_bool_NativeHandle_NativeHandle (&__objc_super__, selCreateTCPConnectionToEndpoint_EnableTLS_TLSParameters_Delegate_XHandle, remoteEndpoint__handle__, enableTLS ? (byte) 1 : (byte) 0, TLSParameters__handle__, connectionDelegate__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (remoteEndpoint);
+			GC.KeepAlive (TLSParameters);
+			GC.KeepAlive (connectionDelegate);
+			return ret!;
+		}
+		/// <param name="remoteEndpoint">To be added.</param><param name="localEndpoint"><para>To be added.</para><para tool="nullallowed">This parameter can be <see langword="null" />.</para></param><summary>Creates a UDP connection with the specified values.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("createUDPSessionToEndpoint:fromEndpoint:")]
+		[ObsoletedOSPlatform ("ios18.0", "Use 'Network.NWConnection' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst18.0", "Use 'Network.NWConnection' instead.")]
+		[ObsoletedOSPlatform ("macos15.0", "Use 'Network.NWConnection' instead.")]
+		[ObsoletedOSPlatform ("tvos18.0", "Use 'Network.NWConnection' instead.")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NWUdpSession CreateUdpSessionToEndpoint (NWEndpoint remoteEndpoint, NWHostEndpoint? localEndpoint)
+		{
+			var remoteEndpoint__handle__ = remoteEndpoint!.GetNonNullHandle (nameof (remoteEndpoint));
+			var localEndpoint__handle__ = localEndpoint.GetHandle ();
+			NWUdpSession? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<NWUdpSession> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selCreateUDPSessionToEndpoint_FromEndpoint_XHandle, remoteEndpoint__handle__, localEndpoint__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<NWUdpSession> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selCreateUDPSessionToEndpoint_FromEndpoint_XHandle, remoteEndpoint__handle__, localEndpoint__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (remoteEndpoint);
+			GC.KeepAlive (localEndpoint);
+			return ret!;
+		}
+		/// <param name="message">To be added.</param><param name="completionHandler">To be added.</param><summary>Displays a message to the user and passes a Boolean result to a completion handler when it is finished.</summary><remarks>To be added.</remarks>
+		[Export ("displayMessage:completionHandler:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[ObsoletedOSPlatform ("ios12.0")]
+		[ObsoletedOSPlatform ("macos10.14")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[ObsoletedOSPlatform ("maccatalyst13.1")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void DisplayMessage (string message, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity1V2))]global::System.Action<bool> completionHandler)
+		{
+			if (message is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (message));
+			if (completionHandler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (completionHandler));
+			var nsmessage = CFString.CreateNative (message);
+			using var block_completionHandler = Trampolines.SDActionArity1V2.CreateBlock (completionHandler);
+			BlockLiteral *block_ptr_completionHandler = &block_completionHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selDisplayMessage_CompletionHandler_XHandle, nsmessage, (IntPtr) block_ptr_completionHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selDisplayMessage_CompletionHandler_XHandle, nsmessage, (IntPtr) block_ptr_completionHandler);
+					GC.KeepAlive (this);
+				}
+			}
+			CFString.ReleaseNative (nsmessage);
+		}
+		/// <param name="message">To be added.</param>
+		/// <summary>Displays a message to the user and passes a Boolean result to a completion handler when it is finished.</summary>
+		/// <returns>
+		///           <para class="improve-task-t-return-type-description">A task that represents the asynchronous DisplayMessage operation.  The value of the TResult parameter is of type System.Action&lt;System.Boolean&gt;.</para>
+		///         </returns>
+		/// <remarks>
+		///           <para copied="true">The DisplayMessageAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+		///           <para copied="true">To be added.</para>
+		///         </remarks>
+		[UnsupportedOSPlatform ("tvos")]
+		[ObsoletedOSPlatform ("ios12.0")]
+		[ObsoletedOSPlatform ("macos10.14")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[ObsoletedOSPlatform ("maccatalyst13.1")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<bool> DisplayMessageAsync (string message)
+		{
+			var tcs = new TaskCompletionSource<bool> ();
+			DisplayMessage(message, (obj_) => {
+				tcs.SetResult (obj_!);
+			});
+			return tcs.Task;
+		}
+		/// <param name="completionHandler">To be added.</param><summary>Method that is called when the device is about to sleep.</summary><remarks>To be added.</remarks>
+		[Export ("sleepWithCompletionHandler:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void Sleep ([BlockProxy (typeof (ObjCRuntime.Trampolines.NIDAction))]global::System.Action completionHandler)
+		{
+			if (completionHandler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (completionHandler));
+			using var block_completionHandler = Trampolines.SDAction.CreateBlock (completionHandler);
+			BlockLiteral *block_ptr_completionHandler = &block_completionHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSleepWithCompletionHandler_XHandle, (IntPtr) block_ptr_completionHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSleepWithCompletionHandler_XHandle, (IntPtr) block_ptr_completionHandler);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <summary>Method that is called when the device is about to sleep.</summary>
+		/// <returns>A task that represents the asynchronous Sleep operation</returns>
+		/// <remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task SleepAsync ()
+		{
+			var tcs = new TaskCompletionSource<bool> ();
+			Sleep(() => {
+				tcs.SetResult (true);
+			});
+			return tcs.Task;
+		}
+		[Export ("startSystemExtensionMode")]
+		[UnsupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static void StartSystemExtensionMode ()
+		{
+			global::ObjCRuntime.Messaging.void_objc_msgSend (class_ptr, selStartSystemExtensionModeXHandle);
+		}
+		/// <summary>Method that is called when the device wakes.</summary><remarks>To be added.</remarks>
+		[Export ("wake")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void Wake ()
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend (this.Handle, selWakeXHandle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper (&__objc_super__, selWakeXHandle);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <summary>Gets the default connection path for new connections.</summary><value><para>(More documentation for this node is coming)</para><para tool="nullallowed">This value can be <see langword="null" />.</para></value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[ObsoletedOSPlatform ("ios18.0", "Use 'Network.NWPathMonitor' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst18.0", "Use 'Network.NWPathMonitor' instead.")]
+		[ObsoletedOSPlatform ("macos15.0", "Use 'Network.NWPathMonitor' instead.")]
+		[ObsoletedOSPlatform ("tvos18.0", "Use 'Network.NWPathMonitor' instead.")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual NWPath? DefaultPath {
+			[Export ("defaultPath")]
+			get {
+				NWPath? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NWPath> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selDefaultPathXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NWPath> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selDefaultPathXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+	} /* class NEProvider */
+}

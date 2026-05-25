@@ -1,0 +1,348 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using GLKit;
+using Metal;
+using CoreML;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Security;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace Vision {
+	[Register("VNHumanBodyPose3DObservation", true)]
+	[SupportedOSPlatform ("tvos17.0")]
+	[SupportedOSPlatform ("macos14.0")]
+	[SupportedOSPlatform ("ios17.0")]
+	[SupportedOSPlatform ("maccatalyst17.0")]
+	public unsafe partial class VNHumanBodyPose3DObservation : VNRecognizedPoints3DObservation {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("VNHumanBodyPose3DObservation");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <param name="coder">The unarchiver object.</param>
+		/// <remarks>
+		///   <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization). This is part of the <see cref="Foundation.NSCoding" /> protocol.</para>
+		///   <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="Foundation.NSCoder" /> and decorate it with the <c>[Export("initWithCoder:"]</c> attribute.</para>
+		///   <para>The state of this object can also be serialized by using the <see cref="Foundation.INSCoding.EncodeTo" /> companion method.</para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[DesignatedInitializer]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("initWithCoder:")]
+		public VNHumanBodyPose3DObservation (NSCoder coder) : base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, Selector.GetHandle ("initWithCoder:"), coder.Handle), "initWithCoder:");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (&__objc_super__, Selector.GetHandle ("initWithCoder:"), coder.Handle), "initWithCoder:");
+				GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (coder);
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected VNHumanBodyPose3DObservation (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal VNHumanBodyPose3DObservation (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("getCameraRelativePosition:forJointName:error:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual bool GetCameraRelativePosition (out NMatrix4 modelPositionOut, [BindAs (typeof (VNHumanBodyPose3DObservationJointName), OriginalType = typeof (NSString))] global::Vision.VNHumanBodyPose3DObservationJointName jointName, out NSError? error)
+		{
+			fixed (NMatrix4* modelPositionOut__pointer = &modelPositionOut) {
+			NativeHandle errorValue = IntPtr.Zero;
+			modelPositionOut = default;
+			using var nsb_jointName = global::Vision.VNHumanBodyPose3DObservationJointNameExtensions.GetConstant (jointName);
+			byte ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.bool_objc_msgSend_out_NMatrix4_NativeHandle_ref_NativeHandle (this.Handle, Selector.GetHandle ("getCameraRelativePosition:forJointName:error:"), modelPositionOut__pointer, nsb_jointName.GetHandle (), &errorValue);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper_out_NMatrix4_NativeHandle_ref_NativeHandle (&__objc_super__, Selector.GetHandle ("getCameraRelativePosition:forJointName:error:"), modelPositionOut__pointer, nsb_jointName.GetHandle (), &errorValue);
+					GC.KeepAlive (this);
+				}
+			}
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret != 0;
+			}
+		}
+		[Export ("parentJointNameForJointName:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[return: BindAs (typeof (VNHumanBodyPose3DObservationJointName), OriginalType = typeof (NSString))]
+		public virtual global::Vision.VNHumanBodyPose3DObservationJointName GetParentJointName ([BindAs (typeof (VNHumanBodyPose3DObservationJointName), OriginalType = typeof (NSString))] global::Vision.VNHumanBodyPose3DObservationJointName jointName)
+		{
+			using var nsb_jointName = global::Vision.VNHumanBodyPose3DObservationJointNameExtensions.GetConstant (jointName);
+			global::Vision.VNHumanBodyPose3DObservationJointName ret;
+			if (IsDirectBinding) {
+				ret = global::Vision.VNHumanBodyPose3DObservationJointNameExtensions.GetValue (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("parentJointNameForJointName:"), nsb_jointName.GetHandle ()));
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::Vision.VNHumanBodyPose3DObservationJointNameExtensions.GetValue (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("parentJointNameForJointName:"), nsb_jointName.GetHandle ()));
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("pointInImageForJointName:error:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual VNPoint? GetPointInImage ([BindAs (typeof (VNHumanBodyPose3DObservationJointName), OriginalType = typeof (NSString))] global::Vision.VNHumanBodyPose3DObservationJointName jointName, out NSError? error)
+		{
+			NativeHandle errorValue = IntPtr.Zero;
+			using var nsb_jointName = global::Vision.VNHumanBodyPose3DObservationJointNameExtensions.GetConstant (jointName);
+			VNPoint? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<VNPoint> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_ref_NativeHandle (this.Handle, Selector.GetHandle ("pointInImageForJointName:error:"), nsb_jointName.GetHandle (), &errorValue), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<VNPoint> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_ref_NativeHandle (&__objc_super__, Selector.GetHandle ("pointInImageForJointName:error:"), nsb_jointName.GetHandle (), &errorValue), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret!;
+		}
+		[Export ("recognizedPointForJointName:error:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual VNHumanBodyRecognizedPoint3D? GetRecognizedPoint ([BindAs (typeof (VNHumanBodyPose3DObservationJointName), OriginalType = typeof (NSString))] global::Vision.VNHumanBodyPose3DObservationJointName jointName, out NSError? error)
+		{
+			NativeHandle errorValue = IntPtr.Zero;
+			using var nsb_jointName = global::Vision.VNHumanBodyPose3DObservationJointNameExtensions.GetConstant (jointName);
+			VNHumanBodyRecognizedPoint3D? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<VNHumanBodyRecognizedPoint3D> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_ref_NativeHandle (this.Handle, Selector.GetHandle ("recognizedPointForJointName:error:"), nsb_jointName.GetHandle (), &errorValue), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<VNHumanBodyRecognizedPoint3D> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_ref_NativeHandle (&__objc_super__, Selector.GetHandle ("recognizedPointForJointName:error:"), nsb_jointName.GetHandle (), &errorValue), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret!;
+		}
+		[Export ("recognizedPointsForJointsGroupName:error:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual NSDictionary<NSString, VNHumanBodyRecognizedPoint3D>? GetRecognizedPoints ([BindAs (typeof (VNHumanBodyPose3DObservationJointsGroupName), OriginalType = typeof (NSString))] global::Vision.VNHumanBodyPose3DObservationJointsGroupName jointName, out NSError? error)
+		{
+			NativeHandle errorValue = IntPtr.Zero;
+			using var nsb_jointName = global::Vision.VNHumanBodyPose3DObservationJointsGroupNameExtensions.GetConstant (jointName);
+			NSDictionary<NSString, VNHumanBodyRecognizedPoint3D>? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<NSDictionary<NSString, VNHumanBodyRecognizedPoint3D>> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_ref_NativeHandle (this.Handle, Selector.GetHandle ("recognizedPointsForJointsGroupName:error:"), nsb_jointName.GetHandle (), &errorValue), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<NSDictionary<NSString, VNHumanBodyRecognizedPoint3D>> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_ref_NativeHandle (&__objc_super__, Selector.GetHandle ("recognizedPointsForJointsGroupName:error:"), nsb_jointName.GetHandle (), &errorValue), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret!;
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[BindAs (typeof (VNHumanBodyPose3DObservationJointName[]), OriginalType = typeof (NSString[]))]
+		public virtual global::Vision.VNHumanBodyPose3DObservationJointName[] AvailableJointNames {
+			[Export ("availableJointNames", ArgumentSemantic.Copy)]
+			get {
+				global::Vision.VNHumanBodyPose3DObservationJointName[] ret;
+				if (IsDirectBinding) {
+					ret = NSArray.ArrayFromHandleFunc <global::Vision.VNHumanBodyPose3DObservationJointName> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("availableJointNames")), global::Vision.VNHumanBodyPose3DObservationJointNameExtensions.GetValue , false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = NSArray.ArrayFromHandleFunc <global::Vision.VNHumanBodyPose3DObservationJointName> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("availableJointNames")), global::Vision.VNHumanBodyPose3DObservationJointNameExtensions.GetValue , false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[BindAs (typeof (VNHumanBodyPose3DObservationJointsGroupName[]), OriginalType = typeof (NSString[]))]
+		public virtual global::Vision.VNHumanBodyPose3DObservationJointsGroupName[] AvailableJointsGroupNames {
+			[Export ("availableJointsGroupNames", ArgumentSemantic.Copy)]
+			get {
+				global::Vision.VNHumanBodyPose3DObservationJointsGroupName[] ret;
+				if (IsDirectBinding) {
+					ret = NSArray.ArrayFromHandleFunc <global::Vision.VNHumanBodyPose3DObservationJointsGroupName> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("availableJointsGroupNames")), global::Vision.VNHumanBodyPose3DObservationJointsGroupNameExtensions.GetValue , false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = NSArray.ArrayFromHandleFunc <global::Vision.VNHumanBodyPose3DObservationJointsGroupName> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("availableJointsGroupNames")), global::Vision.VNHumanBodyPose3DObservationJointsGroupNameExtensions.GetValue , false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual float BodyHeight {
+			[Export ("bodyHeight")]
+			get {
+				float ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, Selector.GetHandle ("bodyHeight"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.float_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("bodyHeight"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NMatrix4 CameraOriginMatrix {
+			[Export ("cameraOriginMatrix")]
+			get {
+				NMatrix4 ret;
+				if (IsDirectBinding) {
+					if (global::ObjCRuntime.Runtime.IsARM64CallingConvention) {
+						ret = global::ObjCRuntime.Messaging.xamarin_simd__NMatrix4_objc_msgSend (this.Handle, Selector.GetHandle ("cameraOriginMatrix"));
+					} else {
+						ret = global::ObjCRuntime.Messaging.xamarin_simd__NMatrix4_objc_msgSend_stret (this.Handle, Selector.GetHandle ("cameraOriginMatrix"));
+					}
+				} else {
+					if (global::ObjCRuntime.Runtime.IsARM64CallingConvention) {
+						unsafe {
+							var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+							ret = global::ObjCRuntime.Messaging.xamarin_simd__NMatrix4_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("cameraOriginMatrix"));
+							GC.KeepAlive (this);
+						}
+					} else {
+						unsafe {
+							var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+							ret = global::ObjCRuntime.Messaging.xamarin_simd__NMatrix4_objc_msgSendSuper_stret (&__objc_super__, Selector.GetHandle ("cameraOriginMatrix"));
+							GC.KeepAlive (this);
+						}
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual VNHumanBodyPose3DObservationHeightEstimation HeightEstimation {
+			[Export ("heightEstimation")]
+			get {
+				VNHumanBodyPose3DObservationHeightEstimation ret;
+				if (IsDirectBinding) {
+					ret = (Vision.VNHumanBodyPose3DObservationHeightEstimation) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, Selector.GetHandle ("heightEstimation"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = (Vision.VNHumanBodyPose3DObservationHeightEstimation) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("heightEstimation"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+	} /* class VNHumanBodyPose3DObservation */
+}

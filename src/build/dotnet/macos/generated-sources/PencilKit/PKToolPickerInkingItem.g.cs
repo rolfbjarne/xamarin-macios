@@ -1,0 +1,352 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace PencilKit {
+	[Register("PKToolPickerInkingItem", true)]
+	[SupportedOSPlatform ("ios18.0")]
+	[SupportedOSPlatform ("maccatalyst18.0")]
+	[SupportedOSPlatform ("macos26.0")]
+	public unsafe partial class PKToolPickerInkingItem : PKToolPickerItem {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAllowsColorSelectionX = "allowsColorSelection";
+		static readonly NativeHandle selAllowsColorSelectionXHandle = Selector.GetHandle ("allowsColorSelection");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithInkType_X = "initWithInkType:";
+		static readonly NativeHandle selInitWithInkType_XHandle = Selector.GetHandle ("initWithInkType:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithInkType_Color_X = "initWithInkType:color:";
+		static readonly NativeHandle selInitWithInkType_Color_XHandle = Selector.GetHandle ("initWithInkType:color:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithInkType_Color_Width_X = "initWithInkType:color:width:";
+		static readonly NativeHandle selInitWithInkType_Color_Width_XHandle = Selector.GetHandle ("initWithInkType:color:width:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithInkType_Color_Width_Azimuth_Identifier_X = "initWithInkType:color:width:azimuth:identifier:";
+		static readonly NativeHandle selInitWithInkType_Color_Width_Azimuth_Identifier_XHandle = Selector.GetHandle ("initWithInkType:color:width:azimuth:identifier:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithInkType_Color_Width_Identifier_X = "initWithInkType:color:width:identifier:";
+		static readonly NativeHandle selInitWithInkType_Color_Width_Identifier_XHandle = Selector.GetHandle ("initWithInkType:color:width:identifier:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithInkType_Width_X = "initWithInkType:width:";
+		static readonly NativeHandle selInitWithInkType_Width_XHandle = Selector.GetHandle ("initWithInkType:width:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInkingToolX = "inkingTool";
+		static readonly NativeHandle selInkingToolXHandle = Selector.GetHandle ("inkingTool");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetAllowsColorSelection_X = "setAllowsColorSelection:";
+		static readonly NativeHandle selSetAllowsColorSelection_XHandle = Selector.GetHandle ("setAllowsColorSelection:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("PKToolPickerInkingItem");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected PKToolPickerInkingItem (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal PKToolPickerInkingItem (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("initWithInkType:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PKToolPickerInkingItem (NSString inkType)
+			: base (NSObjectFlag.Empty)
+		{
+			var inkType__handle__ = inkType!.GetNonNullHandle (nameof (inkType));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selInitWithInkType_XHandle, inkType__handle__), "initWithInkType:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selInitWithInkType_XHandle, inkType__handle__), "initWithInkType:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (inkType);
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PKToolPickerInkingItem (PKInkType inkType)
+			: this (inkType.GetConstant ()!)
+		{
+		}
+		[Export ("initWithInkType:color:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PKToolPickerInkingItem (NSString inkType, global::AppKit.NSColor color)
+			: base (NSObjectFlag.Empty)
+		{
+			var inkType__handle__ = inkType!.GetNonNullHandle (nameof (inkType));
+			var color__handle__ = color!.GetNonNullHandle (nameof (color));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selInitWithInkType_Color_XHandle, inkType__handle__, color__handle__), "initWithInkType:color:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selInitWithInkType_Color_XHandle, inkType__handle__, color__handle__), "initWithInkType:color:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (inkType);
+			GC.KeepAlive (color);
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PKToolPickerInkingItem (PKInkType inkType, global::AppKit.NSColor color)
+			: this (inkType.GetConstant ()!, color)
+		{
+		}
+		[Export ("initWithInkType:width:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PKToolPickerInkingItem (NSString inkType, nfloat width)
+			: base (NSObjectFlag.Empty)
+		{
+			var inkType__handle__ = inkType!.GetNonNullHandle (nameof (inkType));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_nfloat (this.Handle, selInitWithInkType_Width_XHandle, inkType__handle__, width), "initWithInkType:width:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_nfloat (&__objc_super__, selInitWithInkType_Width_XHandle, inkType__handle__, width), "initWithInkType:width:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (inkType);
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PKToolPickerInkingItem (PKInkType inkType, nfloat width)
+			: this (inkType.GetConstant ()!, width)
+		{
+		}
+		[Export ("initWithInkType:color:width:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PKToolPickerInkingItem (NSString inkType, global::AppKit.NSColor color, nfloat width)
+			: base (NSObjectFlag.Empty)
+		{
+			var inkType__handle__ = inkType!.GetNonNullHandle (nameof (inkType));
+			var color__handle__ = color!.GetNonNullHandle (nameof (color));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_nfloat (this.Handle, selInitWithInkType_Color_Width_XHandle, inkType__handle__, color__handle__, width), "initWithInkType:color:width:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_nfloat (&__objc_super__, selInitWithInkType_Color_Width_XHandle, inkType__handle__, color__handle__, width), "initWithInkType:color:width:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (inkType);
+			GC.KeepAlive (color);
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PKToolPickerInkingItem (PKInkType inkType, global::AppKit.NSColor color, nfloat width)
+			: this (inkType.GetConstant ()!, color, width)
+		{
+		}
+		[Export ("initWithInkType:color:width:identifier:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PKToolPickerInkingItem (NSString inkType, global::AppKit.NSColor color, nfloat width, string? identifier)
+			: base (NSObjectFlag.Empty)
+		{
+			var inkType__handle__ = inkType!.GetNonNullHandle (nameof (inkType));
+			var color__handle__ = color!.GetNonNullHandle (nameof (color));
+			var nsidentifier = CFString.CreateNative (identifier);
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_nfloat_NativeHandle (this.Handle, selInitWithInkType_Color_Width_Identifier_XHandle, inkType__handle__, color__handle__, width, nsidentifier), "initWithInkType:color:width:identifier:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_nfloat_NativeHandle (&__objc_super__, selInitWithInkType_Color_Width_Identifier_XHandle, inkType__handle__, color__handle__, width, nsidentifier), "initWithInkType:color:width:identifier:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (inkType);
+			GC.KeepAlive (color);
+			CFString.ReleaseNative (nsidentifier);
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PKToolPickerInkingItem (PKInkType inkType, global::AppKit.NSColor color, nfloat width, string? identifier)
+			: this (inkType.GetConstant ()!, color, width, identifier)
+		{
+		}
+		[Export ("initWithInkType:color:width:azimuth:identifier:")]
+		[SupportedOSPlatform ("ios26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PKToolPickerInkingItem (NSString inkType, global::AppKit.NSColor color, nfloat width, nfloat azimuth, string? identifier)
+			: base (NSObjectFlag.Empty)
+		{
+			var inkType__handle__ = inkType!.GetNonNullHandle (nameof (inkType));
+			var color__handle__ = color!.GetNonNullHandle (nameof (color));
+			var nsidentifier = CFString.CreateNative (identifier);
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_nfloat_nfloat_NativeHandle (this.Handle, selInitWithInkType_Color_Width_Azimuth_Identifier_XHandle, inkType__handle__, color__handle__, width, azimuth, nsidentifier), "initWithInkType:color:width:azimuth:identifier:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_nfloat_nfloat_NativeHandle (&__objc_super__, selInitWithInkType_Color_Width_Azimuth_Identifier_XHandle, inkType__handle__, color__handle__, width, azimuth, nsidentifier), "initWithInkType:color:width:azimuth:identifier:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (inkType);
+			GC.KeepAlive (color);
+			CFString.ReleaseNative (nsidentifier);
+		}
+		[SupportedOSPlatform ("ios26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PKToolPickerInkingItem (PKInkType inkType, global::AppKit.NSColor color, nfloat width, nfloat azimuth, string? identifier)
+			: this (inkType.GetConstant ()!, color, width, azimuth, identifier)
+		{
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool AllowsColorSelection {
+			[Export ("allowsColorSelection")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selAllowsColorSelectionXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selAllowsColorSelectionXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAllowsColorSelection:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetAllowsColorSelection_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetAllowsColorSelection_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual PKInkingTool InkingTool {
+			[Export ("inkingTool")]
+			get {
+				PKInkingTool? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<PKInkingTool> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selInkingToolXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<PKInkingTool> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selInkingToolXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+	} /* class PKToolPickerInkingItem */
+}

@@ -1,0 +1,972 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using GLKit;
+using Metal;
+using CoreML;
+using MapKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using Messages;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using QuickLook;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using CoreMotion;
+using ObjCRuntime;
+using AddressBook;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using NewsstandKit;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace MetalPerformanceShaders {
+	[Register("MPSCNNMultiaryKernel", true)]
+	[SupportedOSPlatform ("tvos13.0")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios13.0")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class MPSCnnMultiaryKernel : MPSKernel {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("MPSCNNMultiaryKernel");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <param name="coder">The unarchiver object.</param>
+		/// <remarks>
+		///   <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization). This is part of the <see cref="Foundation.NSCoding" /> protocol.</para>
+		///   <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="Foundation.NSCoder" /> and decorate it with the <c>[Export("initWithCoder:"]</c> attribute.</para>
+		///   <para>The state of this object can also be serialized by using the <see cref="Foundation.INSCoding.EncodeTo" /> companion method.</para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[DesignatedInitializer]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("initWithCoder:")]
+		public MPSCnnMultiaryKernel (NSCoder coder) : base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, Selector.GetHandle ("initWithCoder:"), coder.Handle), "initWithCoder:");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (&__objc_super__, Selector.GetHandle ("initWithCoder:"), coder.Handle), "initWithCoder:");
+				GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (coder);
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected MPSCnnMultiaryKernel (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal MPSCnnMultiaryKernel (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("initWithDevice:sourceCount:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public MPSCnnMultiaryKernel (global::Metal.IMTLDevice device, nuint sourceCount)
+			: base (NSObjectFlag.Empty)
+		{
+			var device__handle__ = device!.GetNonNullHandle (nameof (device));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_UIntPtr (this.Handle, Selector.GetHandle ("initWithDevice:sourceCount:"), device__handle__, sourceCount), "initWithDevice:sourceCount:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_UIntPtr (&__objc_super__, Selector.GetHandle ("initWithDevice:sourceCount:"), device__handle__, sourceCount), "initWithDevice:sourceCount:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (device);
+		}
+		[Export ("initWithCoder:device:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public MPSCnnMultiaryKernel (NSCoder aDecoder, global::Metal.IMTLDevice device)
+			: base (NSObjectFlag.Empty)
+		{
+			var aDecoder__handle__ = aDecoder!.GetNonNullHandle (nameof (aDecoder));
+			var device__handle__ = device!.GetNonNullHandle (nameof (device));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("initWithCoder:device:"), aDecoder__handle__, device__handle__), "initWithCoder:device:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("initWithCoder:device:"), aDecoder__handle__, device__handle__), "initWithCoder:device:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (aDecoder);
+			GC.KeepAlive (device);
+		}
+		[Export ("encodeToCommandBuffer:sourceImages:destinationImage:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void Encode (global::Metal.IMTLCommandBuffer commandBuffer, MPSImage[] sourceImages, MPSImage destinationImage)
+		{
+			var commandBuffer__handle__ = commandBuffer!.GetNonNullHandle (nameof (commandBuffer));
+			if (sourceImages is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (sourceImages));
+			var destinationImage__handle__ = destinationImage!.GetNonNullHandle (nameof (destinationImage));
+			using var nsa_sourceImages = NSArray.FromNSObjects (sourceImages);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("encodeToCommandBuffer:sourceImages:destinationImage:"), commandBuffer__handle__, nsa_sourceImages.Handle, destinationImage__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("encodeToCommandBuffer:sourceImages:destinationImage:"), commandBuffer__handle__, nsa_sourceImages.Handle, destinationImage__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (commandBuffer);
+			GC.KeepAlive (destinationImage);
+		}
+		[Export ("encodeToCommandBuffer:sourceImages:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MPSImage Encode (global::Metal.IMTLCommandBuffer commandBuffer, MPSImage[] sourceImages)
+		{
+			var commandBuffer__handle__ = commandBuffer!.GetNonNullHandle (nameof (commandBuffer));
+			if (sourceImages is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (sourceImages));
+			using var nsa_sourceImages = NSArray.FromNSObjects (sourceImages);
+			MPSImage? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<MPSImage> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("encodeToCommandBuffer:sourceImages:"), commandBuffer__handle__, nsa_sourceImages.Handle), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<MPSImage> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("encodeToCommandBuffer:sourceImages:"), commandBuffer__handle__, nsa_sourceImages.Handle), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (commandBuffer);
+			return ret!;
+		}
+		[Export ("encodeToCommandBuffer:sourceImages:destinationState:destinationStateIsTemporary:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual MPSImage Encode (global::Metal.IMTLCommandBuffer commandBuffer, MPSImage[] sourceImages, out MPSState? outState, bool isTemporary)
+		{
+			var commandBuffer__handle__ = commandBuffer!.GetNonNullHandle (nameof (commandBuffer));
+			if (sourceImages is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (sourceImages));
+			NativeHandle outStateValue = IntPtr.Zero;
+			using var nsa_sourceImages = NSArray.FromNSObjects (sourceImages);
+			MPSImage? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<MPSImage> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_ref_NativeHandle_bool (this.Handle, Selector.GetHandle ("encodeToCommandBuffer:sourceImages:destinationState:destinationStateIsTemporary:"), commandBuffer__handle__, nsa_sourceImages.Handle, &outStateValue, isTemporary ? (byte) 1 : (byte) 0), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<MPSImage> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_ref_NativeHandle_bool (&__objc_super__, Selector.GetHandle ("encodeToCommandBuffer:sourceImages:destinationState:destinationStateIsTemporary:"), commandBuffer__handle__, nsa_sourceImages.Handle, &outStateValue, isTemporary ? (byte) 1 : (byte) 0), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (commandBuffer);
+			outState = Runtime.GetNSObject<MetalPerformanceShaders.MPSState> (outStateValue)!;
+			return ret!;
+		}
+		[Export ("encodeBatchToCommandBuffer:sourceImages:destinationImages:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void EncodeBatch (global::Metal.IMTLCommandBuffer commandBuffer, NSArray<MPSImage>[] sourceImages, MPSImage[] destinationImages)
+		{
+			var commandBuffer__handle__ = commandBuffer!.GetNonNullHandle (nameof (commandBuffer));
+			if (sourceImages is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (sourceImages));
+			if (destinationImages is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (destinationImages));
+			using var nsa_sourceImages = NSArray.FromNSObjects (sourceImages);
+			using var nsa_destinationImages = NSArray.FromNSObjects (destinationImages);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("encodeBatchToCommandBuffer:sourceImages:destinationImages:"), commandBuffer__handle__, nsa_sourceImages.Handle, nsa_destinationImages.Handle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("encodeBatchToCommandBuffer:sourceImages:destinationImages:"), commandBuffer__handle__, nsa_sourceImages.Handle, nsa_destinationImages.Handle);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (commandBuffer);
+		}
+		[Export ("encodeBatchToCommandBuffer:sourceImages:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MPSImage[] EncodeBatch (global::Metal.IMTLCommandBuffer commandBuffer, NSArray<MPSImage>[] sourceImageBatches)
+		{
+			var commandBuffer__handle__ = commandBuffer!.GetNonNullHandle (nameof (commandBuffer));
+			if (sourceImageBatches is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (sourceImageBatches));
+			using var nsa_sourceImageBatches = NSArray.FromNSObjects (sourceImageBatches);
+			MPSImage[]? ret;
+			if (IsDirectBinding) {
+				ret = CFArray.ArrayFromHandle<MPSImage>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("encodeBatchToCommandBuffer:sourceImages:"), commandBuffer__handle__, nsa_sourceImageBatches.Handle), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = CFArray.ArrayFromHandle<MPSImage>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("encodeBatchToCommandBuffer:sourceImages:"), commandBuffer__handle__, nsa_sourceImageBatches.Handle), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (commandBuffer);
+			return ret!;
+		}
+		[Export ("encodeBatchToCommandBuffer:sourceImages:destinationStates:destinationStateIsTemporary:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual MPSImage[] EncodeBatch (global::Metal.IMTLCommandBuffer commandBuffer, NSArray<MPSImage>[] sourceImageBatches, out MPSState[]? outState, bool isTemporary)
+		{
+			var commandBuffer__handle__ = commandBuffer!.GetNonNullHandle (nameof (commandBuffer));
+			if (sourceImageBatches is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (sourceImageBatches));
+			NativeHandle outStateValue = IntPtr.Zero;
+			using var nsa_sourceImageBatches = NSArray.FromNSObjects (sourceImageBatches);
+			MPSImage[]? ret;
+			if (IsDirectBinding) {
+				ret = CFArray.ArrayFromHandle<MPSImage>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_ref_NativeHandle_bool (this.Handle, Selector.GetHandle ("encodeBatchToCommandBuffer:sourceImages:destinationStates:destinationStateIsTemporary:"), commandBuffer__handle__, nsa_sourceImageBatches.Handle, &outStateValue, isTemporary ? (byte) 1 : (byte) 0), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = CFArray.ArrayFromHandle<MPSImage>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_ref_NativeHandle_bool (&__objc_super__, Selector.GetHandle ("encodeBatchToCommandBuffer:sourceImages:destinationStates:destinationStateIsTemporary:"), commandBuffer__handle__, nsa_sourceImageBatches.Handle, &outStateValue, isTemporary ? (byte) 1 : (byte) 0), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (commandBuffer);
+			outState = CFArray.ArrayFromHandle<MetalPerformanceShaders.MPSState> (outStateValue)!;
+			return ret!;
+		}
+		[Export ("destinationImageDescriptorForSourceImages:sourceStates:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MPSImageDescriptor GetDestinationImageDescriptor (MPSImage[] sourceImages, MPSState[]? sourceStates)
+		{
+			if (sourceImages is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (sourceImages));
+			using var nsa_sourceImages = NSArray.FromNSObjects (sourceImages);
+			using var nsa_sourceStates = sourceStates is null ? null : NSArray.FromNSObjects (sourceStates);
+			MPSImageDescriptor ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<MPSImageDescriptor> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("destinationImageDescriptorForSourceImages:sourceStates:"), nsa_sourceImages.Handle, nsa_sourceStates.GetHandle ()), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<MPSImageDescriptor> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("destinationImageDescriptorForSourceImages:sourceStates:"), nsa_sourceImages.Handle, nsa_sourceStates.GetHandle ()), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("dilationRateXatIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint GetDilationRateX (nuint index)
+		{
+			nuint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend_UIntPtr (this.Handle, Selector.GetHandle ("dilationRateXatIndex:"), index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper_UIntPtr (&__objc_super__, Selector.GetHandle ("dilationRateXatIndex:"), index);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("dilationRateYatIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint GetDilationRateY (nuint index)
+		{
+			nuint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend_UIntPtr (this.Handle, Selector.GetHandle ("dilationRateYatIndex:"), index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper_UIntPtr (&__objc_super__, Selector.GetHandle ("dilationRateYatIndex:"), index);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("edgeModeAtIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MPSImageEdgeMode GetEdgeMode (nuint index)
+		{
+			MPSImageEdgeMode ret;
+			if (IsDirectBinding) {
+				ret = (MetalPerformanceShaders.MPSImageEdgeMode) (ulong) global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend_UIntPtr (this.Handle, Selector.GetHandle ("edgeModeAtIndex:"), index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = (MetalPerformanceShaders.MPSImageEdgeMode) (ulong) global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper_UIntPtr (&__objc_super__, Selector.GetHandle ("edgeModeAtIndex:"), index);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret!;
+		}
+		[Export ("kernelHeightAtIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint GetKernelHeight (nuint index)
+		{
+			nuint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend_UIntPtr (this.Handle, Selector.GetHandle ("kernelHeightAtIndex:"), index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper_UIntPtr (&__objc_super__, Selector.GetHandle ("kernelHeightAtIndex:"), index);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("kernelWidthAtIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint GetKernelWidth (nuint index)
+		{
+			nuint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend_UIntPtr (this.Handle, Selector.GetHandle ("kernelWidthAtIndex:"), index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper_UIntPtr (&__objc_super__, Selector.GetHandle ("kernelWidthAtIndex:"), index);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("offsetAtIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MPSOffset GetOffset (nuint index)
+		{
+			MPSOffset ret;
+			if (IsDirectBinding) {
+				if (global::ObjCRuntime.Runtime.IsARM64CallingConvention) {
+					ret = global::ObjCRuntime.Messaging.MPSOffset_objc_msgSend_UIntPtr (this.Handle, Selector.GetHandle ("offsetAtIndex:"), index);
+				} else {
+					ret = global::ObjCRuntime.Messaging.MPSOffset_objc_msgSend_stret_UIntPtr (this.Handle, Selector.GetHandle ("offsetAtIndex:"), index);
+				}
+			} else {
+				if (global::ObjCRuntime.Runtime.IsARM64CallingConvention) {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.MPSOffset_objc_msgSendSuper_UIntPtr (&__objc_super__, Selector.GetHandle ("offsetAtIndex:"), index);
+						GC.KeepAlive (this);
+					}
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.MPSOffset_objc_msgSendSuper_stret_UIntPtr (&__objc_super__, Selector.GetHandle ("offsetAtIndex:"), index);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+			return ret!;
+		}
+		[Export ("resultStateForSourceImages:sourceStates:destinationImage:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MPSState? GetResultState (MPSImage[] sourceImages, MPSState[]? sourceStates, MPSImage destinationImage)
+		{
+			if (sourceImages is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (sourceImages));
+			var destinationImage__handle__ = destinationImage!.GetNonNullHandle (nameof (destinationImage));
+			using var nsa_sourceImages = NSArray.FromNSObjects (sourceImages);
+			using var nsa_sourceStates = sourceStates is null ? null : NSArray.FromNSObjects (sourceStates);
+			MPSState? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<MPSState> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("resultStateForSourceImages:sourceStates:destinationImage:"), nsa_sourceImages.Handle, nsa_sourceStates.GetHandle (), destinationImage__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<MPSState> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("resultStateForSourceImages:sourceStates:destinationImage:"), nsa_sourceImages.Handle, nsa_sourceStates.GetHandle (), destinationImage__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (destinationImage);
+			return ret!;
+		}
+		[Export ("resultStateBatchForSourceImages:sourceStates:destinationImage:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MPSState[]? GetResultStateBatch (NSArray<MPSImage>[] sourceImages, NSArray<MPSState>[]? sourceStates, MPSImage[] destinationImage)
+		{
+			if (sourceImages is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (sourceImages));
+			if (destinationImage is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (destinationImage));
+			using var nsa_sourceImages = NSArray.FromNSObjects (sourceImages);
+			using var nsa_sourceStates = sourceStates is null ? null : NSArray.FromNSObjects (sourceStates);
+			using var nsa_destinationImage = NSArray.FromNSObjects (destinationImage);
+			MPSState[] ret;
+			if (IsDirectBinding) {
+				ret = CFArray.ArrayFromHandle<MPSState>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("resultStateBatchForSourceImages:sourceStates:destinationImage:"), nsa_sourceImages.Handle, nsa_sourceStates.GetHandle (), nsa_destinationImage.Handle), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = CFArray.ArrayFromHandle<MPSState>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("resultStateBatchForSourceImages:sourceStates:destinationImage:"), nsa_sourceImages.Handle, nsa_sourceStates.GetHandle (), nsa_destinationImage.Handle), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("sourceFeatureChannelMaxCountAtIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint GetSourceFeatureChannelMaxCount (nuint index)
+		{
+			nuint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend_UIntPtr (this.Handle, Selector.GetHandle ("sourceFeatureChannelMaxCountAtIndex:"), index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper_UIntPtr (&__objc_super__, Selector.GetHandle ("sourceFeatureChannelMaxCountAtIndex:"), index);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("sourceFeatureChannelOffsetAtIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint GetSourceFeatureChannelOffset (nuint index)
+		{
+			nuint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend_UIntPtr (this.Handle, Selector.GetHandle ("sourceFeatureChannelOffsetAtIndex:"), index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper_UIntPtr (&__objc_super__, Selector.GetHandle ("sourceFeatureChannelOffsetAtIndex:"), index);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("strideInPixelsXatIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint GetStrideInPixelsX (nuint index)
+		{
+			nuint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend_UIntPtr (this.Handle, Selector.GetHandle ("strideInPixelsXatIndex:"), index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper_UIntPtr (&__objc_super__, Selector.GetHandle ("strideInPixelsXatIndex:"), index);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("strideInPixelsYatIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint GetStrideInPixelsY (nuint index)
+		{
+			nuint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend_UIntPtr (this.Handle, Selector.GetHandle ("strideInPixelsYatIndex:"), index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper_UIntPtr (&__objc_super__, Selector.GetHandle ("strideInPixelsYatIndex:"), index);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("temporaryResultStateForCommandBuffer:sourceImages:sourceStates:destinationImage:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MPSState? GetTemporaryResultState (global::Metal.IMTLCommandBuffer commandBuffer, MPSImage[] sourceImage, MPSState[]? sourceStates, MPSImage destinationImage)
+		{
+			var commandBuffer__handle__ = commandBuffer!.GetNonNullHandle (nameof (commandBuffer));
+			if (sourceImage is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (sourceImage));
+			var destinationImage__handle__ = destinationImage!.GetNonNullHandle (nameof (destinationImage));
+			using var nsa_sourceImage = NSArray.FromNSObjects (sourceImage);
+			using var nsa_sourceStates = sourceStates is null ? null : NSArray.FromNSObjects (sourceStates);
+			MPSState? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<MPSState> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("temporaryResultStateForCommandBuffer:sourceImages:sourceStates:destinationImage:"), commandBuffer__handle__, nsa_sourceImage.Handle, nsa_sourceStates.GetHandle (), destinationImage__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<MPSState> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("temporaryResultStateForCommandBuffer:sourceImages:sourceStates:destinationImage:"), commandBuffer__handle__, nsa_sourceImage.Handle, nsa_sourceStates.GetHandle (), destinationImage__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (commandBuffer);
+			GC.KeepAlive (destinationImage);
+			return ret!;
+		}
+		[Export ("temporaryResultStateBatchForCommandBuffer:sourceImages:sourceStates:destinationImage:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MPSState[]? GetTemporaryResultStateBatch (global::Metal.IMTLCommandBuffer commandBuffer, NSArray<MPSImage>[] sourceImage, NSArray<MPSState>[]? sourceStates, MPSImage[] destinationImage)
+		{
+			var commandBuffer__handle__ = commandBuffer!.GetNonNullHandle (nameof (commandBuffer));
+			if (sourceImage is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (sourceImage));
+			if (destinationImage is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (destinationImage));
+			using var nsa_sourceImage = NSArray.FromNSObjects (sourceImage);
+			using var nsa_sourceStates = sourceStates is null ? null : NSArray.FromNSObjects (sourceStates);
+			using var nsa_destinationImage = NSArray.FromNSObjects (destinationImage);
+			MPSState[]? ret;
+			if (IsDirectBinding) {
+				ret = CFArray.ArrayFromHandle<MPSState>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("temporaryResultStateBatchForCommandBuffer:sourceImages:sourceStates:destinationImage:"), commandBuffer__handle__, nsa_sourceImage.Handle, nsa_sourceStates.GetHandle (), nsa_destinationImage.Handle), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = CFArray.ArrayFromHandle<MPSState>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("temporaryResultStateBatchForCommandBuffer:sourceImages:sourceStates:destinationImage:"), commandBuffer__handle__, nsa_sourceImage.Handle, nsa_sourceStates.GetHandle (), nsa_destinationImage.Handle), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (commandBuffer);
+			return ret!;
+		}
+		[Export ("setDilationRateX:atIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetDilationRateX (nuint dilationRate, nuint index)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr_UIntPtr (this.Handle, Selector.GetHandle ("setDilationRateX:atIndex:"), dilationRate, index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr_UIntPtr (&__objc_super__, Selector.GetHandle ("setDilationRateX:atIndex:"), dilationRate, index);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("setDilationRateY:atIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetDilationRateY (nuint dilationRate, nuint index)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr_UIntPtr (this.Handle, Selector.GetHandle ("setDilationRateY:atIndex:"), dilationRate, index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr_UIntPtr (&__objc_super__, Selector.GetHandle ("setDilationRateY:atIndex:"), dilationRate, index);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("setEdgeMode:atIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetEdgeMode (MPSImageEdgeMode edgeMode, nuint index)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr_UIntPtr (this.Handle, Selector.GetHandle ("setEdgeMode:atIndex:"), (UIntPtr) (ulong) edgeMode, index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr_UIntPtr (&__objc_super__, Selector.GetHandle ("setEdgeMode:atIndex:"), (UIntPtr) (ulong) edgeMode, index);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("setKernelHeight:atIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetKernelHeight (nuint height, nuint index)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr_UIntPtr (this.Handle, Selector.GetHandle ("setKernelHeight:atIndex:"), height, index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr_UIntPtr (&__objc_super__, Selector.GetHandle ("setKernelHeight:atIndex:"), height, index);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("setKernelWidth:atIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetKernelWidth (nuint width, nuint index)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr_UIntPtr (this.Handle, Selector.GetHandle ("setKernelWidth:atIndex:"), width, index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr_UIntPtr (&__objc_super__, Selector.GetHandle ("setKernelWidth:atIndex:"), width, index);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("setOffset:atIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetOffset (MPSOffset offset, nuint index)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_MPSOffset_UIntPtr (this.Handle, Selector.GetHandle ("setOffset:atIndex:"), offset, index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_MPSOffset_UIntPtr (&__objc_super__, Selector.GetHandle ("setOffset:atIndex:"), offset, index);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("setSourceFeatureChannelMaxCount:atIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetSourceFeatureChannelMaxCount (nuint count, nuint index)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr_UIntPtr (this.Handle, Selector.GetHandle ("setSourceFeatureChannelMaxCount:atIndex:"), count, index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr_UIntPtr (&__objc_super__, Selector.GetHandle ("setSourceFeatureChannelMaxCount:atIndex:"), count, index);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("setSourceFeatureChannelOffset:atIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetSourceFeatureChannelOffset (nuint offset, nuint index)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr_UIntPtr (this.Handle, Selector.GetHandle ("setSourceFeatureChannelOffset:atIndex:"), offset, index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr_UIntPtr (&__objc_super__, Selector.GetHandle ("setSourceFeatureChannelOffset:atIndex:"), offset, index);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("setStrideInPixelsX:atIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetStrideInPixelsX (nuint stride, nuint index)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr_UIntPtr (this.Handle, Selector.GetHandle ("setStrideInPixelsX:atIndex:"), stride, index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr_UIntPtr (&__objc_super__, Selector.GetHandle ("setStrideInPixelsX:atIndex:"), stride, index);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("setStrideInPixelsY:atIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetStrideInPixelsY (nuint stride, nuint index)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr_UIntPtr (this.Handle, Selector.GetHandle ("setStrideInPixelsY:atIndex:"), stride, index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr_UIntPtr (&__objc_super__, Selector.GetHandle ("setStrideInPixelsY:atIndex:"), stride, index);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool AppendBatchBarrier {
+			[Export ("appendBatchBarrier")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("appendBatchBarrier"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("appendBatchBarrier"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual global::Metal.MTLRegion ClipRect {
+			[Export ("clipRect", ArgumentSemantic.Assign)]
+			get {
+				global::Metal.MTLRegion ret;
+				if (IsDirectBinding) {
+					if (global::ObjCRuntime.Runtime.IsARM64CallingConvention) {
+						ret = global::ObjCRuntime.Messaging.MTLRegion_objc_msgSend (this.Handle, Selector.GetHandle ("clipRect"));
+					} else {
+						ret = global::ObjCRuntime.Messaging.MTLRegion_objc_msgSend_stret (this.Handle, Selector.GetHandle ("clipRect"));
+					}
+				} else {
+					if (global::ObjCRuntime.Runtime.IsARM64CallingConvention) {
+						unsafe {
+							var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+							ret = global::ObjCRuntime.Messaging.MTLRegion_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("clipRect"));
+							GC.KeepAlive (this);
+						}
+					} else {
+						unsafe {
+							var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+							ret = global::ObjCRuntime.Messaging.MTLRegion_objc_msgSendSuper_stret (&__objc_super__, Selector.GetHandle ("clipRect"));
+							GC.KeepAlive (this);
+						}
+					}
+				}
+				return ret!;
+			}
+			[Export ("setClipRect:", ArgumentSemantic.Assign)]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_MTLRegion (this.Handle, Selector.GetHandle ("setClipRect:"), value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_MTLRegion (&__objc_super__, Selector.GetHandle ("setClipRect:"), value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint DestinationFeatureChannelOffset {
+			[Export ("destinationFeatureChannelOffset")]
+			get {
+				nuint ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend (this.Handle, Selector.GetHandle ("destinationFeatureChannelOffset"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("destinationFeatureChannelOffset"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setDestinationFeatureChannelOffset:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr (this.Handle, Selector.GetHandle ("setDestinationFeatureChannelOffset:"), value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr (&__objc_super__, Selector.GetHandle ("setDestinationFeatureChannelOffset:"), value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual IMPSImageAllocator DestinationImageAllocator {
+			[Export ("destinationImageAllocator", ArgumentSemantic.Retain)]
+			get {
+				IMPSImageAllocator? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetINativeObject<IMPSImageAllocator> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("destinationImageAllocator")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetINativeObject<IMPSImageAllocator> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("destinationImageAllocator")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setDestinationImageAllocator:", ArgumentSemantic.Retain)]
+			set {
+				var value__handle__ = value!.GetNonNullHandle (nameof (value));
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("setDestinationImageAllocator:"), value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("setDestinationImageAllocator:"), value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool IsBackwards {
+			[Export ("isBackwards")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("isBackwards"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("isBackwards"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool IsResultStateReusedAcrossBatch {
+			[Export ("isResultStateReusedAcrossBatch")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("isResultStateReusedAcrossBatch"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("isResultStateReusedAcrossBatch"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool IsStateModified {
+			[Export ("isStateModified")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("isStateModified"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("isStateModified"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual IMPSNNPadding Padding {
+			[Export ("padding", ArgumentSemantic.Retain)]
+			get {
+				IMPSNNPadding? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetINativeObject<IMPSNNPadding> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("padding")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetINativeObject<IMPSNNPadding> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("padding")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setPadding:", ArgumentSemantic.Retain)]
+			set {
+				var value__handle__ = value!.GetNonNullHandle (nameof (value));
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("setPadding:"), value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("setPadding:"), value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint SourceCount {
+			[Export ("sourceCount")]
+			get {
+				nuint ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend (this.Handle, Selector.GetHandle ("sourceCount"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("sourceCount"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+	} /* class MPSCnnMultiaryKernel */
+}

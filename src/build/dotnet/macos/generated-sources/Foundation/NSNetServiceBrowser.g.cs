@@ -1,0 +1,561 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace Foundation {
+	[Register("NSNetServiceBrowser", true)]
+	[ObsoletedOSPlatform ("macos12.0", "Use the Network.framework instead.")]
+	[ObsoletedOSPlatform ("ios15.0", "Use the Network.framework instead.")]
+	[ObsoletedOSPlatform ("tvos15.0", "Use the Network.framework instead.")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[ObsoletedOSPlatform ("maccatalyst15.0", "Use the Network.framework instead.")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
+	public unsafe partial class NSNetServiceBrowser : NSObject {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDelegateX = "delegate";
+		static readonly NativeHandle selDelegateXHandle = Selector.GetHandle ("delegate");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selIncludesPeerToPeerX = "includesPeerToPeer";
+		static readonly NativeHandle selIncludesPeerToPeerXHandle = Selector.GetHandle ("includesPeerToPeer");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRemoveFromRunLoop_ForMode_X = "removeFromRunLoop:forMode:";
+		static readonly NativeHandle selRemoveFromRunLoop_ForMode_XHandle = Selector.GetHandle ("removeFromRunLoop:forMode:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selScheduleInRunLoop_ForMode_X = "scheduleInRunLoop:forMode:";
+		static readonly NativeHandle selScheduleInRunLoop_ForMode_XHandle = Selector.GetHandle ("scheduleInRunLoop:forMode:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSearchForBrowsableDomainsX = "searchForBrowsableDomains";
+		static readonly NativeHandle selSearchForBrowsableDomainsXHandle = Selector.GetHandle ("searchForBrowsableDomains");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSearchForRegistrationDomainsX = "searchForRegistrationDomains";
+		static readonly NativeHandle selSearchForRegistrationDomainsXHandle = Selector.GetHandle ("searchForRegistrationDomains");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSearchForServicesOfType_InDomain_X = "searchForServicesOfType:inDomain:";
+		static readonly NativeHandle selSearchForServicesOfType_InDomain_XHandle = Selector.GetHandle ("searchForServicesOfType:inDomain:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetDelegate_X = "setDelegate:";
+		static readonly NativeHandle selSetDelegate_XHandle = Selector.GetHandle ("setDelegate:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetIncludesPeerToPeer_X = "setIncludesPeerToPeer:";
+		static readonly NativeHandle selSetIncludesPeerToPeer_XHandle = Selector.GetHandle ("setIncludesPeerToPeer:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selStopX = "stop";
+		static readonly NativeHandle selStopXHandle = Selector.GetHandle ("stop");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("NSNetServiceBrowser");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Creates a new <see cref="NSNetServiceBrowser" /> with default values.</summary>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("init")]
+		public NSNetServiceBrowser () : base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.Init), "init");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, global::ObjCRuntime.Selector.Init), "init");
+				GC.KeepAlive (this);
+				}
+			}
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected NSNetServiceBrowser (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal NSNetServiceBrowser (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("scheduleInRunLoop:forMode:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void Schedule (NSRunLoop aRunLoop, NSString forMode)
+		{
+			var aRunLoop__handle__ = aRunLoop!.GetNonNullHandle (nameof (aRunLoop));
+			var forMode__handle__ = forMode!.GetNonNullHandle (nameof (forMode));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selScheduleInRunLoop_ForMode_XHandle, aRunLoop__handle__, forMode__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selScheduleInRunLoop_ForMode_XHandle, aRunLoop__handle__, forMode__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (aRunLoop);
+			GC.KeepAlive (forMode);
+		}
+		/// <param name="aRunLoop">To be added.</param><param name="forMode">To be added.</param><summary>To be added.</summary><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public void Schedule (NSRunLoop aRunLoop, NSRunLoopMode forMode)
+		{
+			Schedule (aRunLoop, forMode.GetConstant ()!);
+		}
+		[Export ("searchForBrowsableDomains")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SearchForBrowsableDomains ()
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend (this.Handle, selSearchForBrowsableDomainsXHandle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper (&__objc_super__, selSearchForBrowsableDomainsXHandle);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("searchForRegistrationDomains")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SearchForRegistrationDomains ()
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend (this.Handle, selSearchForRegistrationDomainsXHandle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper (&__objc_super__, selSearchForRegistrationDomainsXHandle);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("searchForServicesOfType:inDomain:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SearchForServices (string type, string domain)
+		{
+			if (type is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (type));
+			if (domain is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (domain));
+			var nstype = CFString.CreateNative (type);
+			var nsdomain = CFString.CreateNative (domain);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selSearchForServicesOfType_InDomain_XHandle, nstype, nsdomain);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selSearchForServicesOfType_InDomain_XHandle, nstype, nsdomain);
+					GC.KeepAlive (this);
+				}
+			}
+			CFString.ReleaseNative (nstype);
+			CFString.ReleaseNative (nsdomain);
+		}
+		[Export ("stop")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void Stop ()
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend (this.Handle, selStopXHandle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper (&__objc_super__, selStopXHandle);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("removeFromRunLoop:forMode:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void Unschedule (NSRunLoop aRunLoop, NSString forMode)
+		{
+			var aRunLoop__handle__ = aRunLoop!.GetNonNullHandle (nameof (aRunLoop));
+			var forMode__handle__ = forMode!.GetNonNullHandle (nameof (forMode));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selRemoveFromRunLoop_ForMode_XHandle, aRunLoop__handle__, forMode__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selRemoveFromRunLoop_ForMode_XHandle, aRunLoop__handle__, forMode__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (aRunLoop);
+			GC.KeepAlive (forMode);
+		}
+		/// <param name="aRunLoop">To be added.</param><param name="forMode">To be added.</param><summary>To be added.</summary><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public void Unschedule (NSRunLoop aRunLoop, NSRunLoopMode forMode)
+		{
+			Unschedule (aRunLoop, forMode.GetConstant ()!);
+		}
+		/// <summary>An instance of the Foundation.INSNetServiceBrowserDelegate model class which acts as the class delegate.</summary><value>The instance of the Foundation.INSNetServiceBrowserDelegate model class</value><remarks><para>The delegate instance assigned to this object will be used to handle events or provide data on demand to this class.</para><para>When setting the Delegate or WeakDelegate values events will be delivered to the specified instance instead of being delivered to the C#-style events</para><para>This is the strongly typed version of the object, developers should use the WeakDelegate property instead if they want to merely assign a class derived from NSObject that has been decorated with [Export] attributes.</para></remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public INSNetServiceBrowserDelegate Delegate {
+			get {
+				return (WeakDelegate as INSNetServiceBrowserDelegate)!;
+			}
+			set {
+				var rvalue = value as NSObject;
+				if (!(value is null) && rvalue is null)
+					throw new ArgumentException ("The object passed of type " + value.GetType () + " does not derive from NSObject");
+				WeakDelegate = rvalue;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("maccatalyst")]
+		[ObsoletedOSPlatform ("macos12.0", "Use the Network.framework instead.")]
+		[ObsoletedOSPlatform ("ios15.0", "Use the Network.framework instead.")]
+		[ObsoletedOSPlatform ("tvos15.0", "Use the Network.framework instead.")]
+		[ObsoletedOSPlatform ("maccatalyst15.0", "Use the Network.framework instead.")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public virtual bool IncludesPeerToPeer {
+			[Export ("includesPeerToPeer")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selIncludesPeerToPeerXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selIncludesPeerToPeerXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setIncludesPeerToPeer:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetIncludesPeerToPeer_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetIncludesPeerToPeer_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		object? __mt_WeakDelegate_var;
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSObject? WeakDelegate {
+			[Export ("delegate", ArgumentSemantic.Assign)]
+			get {
+				NSObject? ret;
+				if (IsDirectBinding) {
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selDelegateXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selDelegateXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				MarkDirty ();
+				__mt_WeakDelegate_var = ret;
+				return ret!;
+			}
+			[Export ("setDelegate:", ArgumentSemantic.Assign)]
+			set {
+				NSApplication.EnsureDelegateAssignIsNotOverwritingInternalDelegate (__mt_WeakDelegate_var, value, GetInternalEventDelegateType);
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetDelegate_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetDelegate_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+				MarkDirty ();
+				__mt_WeakDelegate_var = value;
+			}
+		}
+		//
+		// Events and properties from the delegate
+		//
+		internal virtual Type GetInternalEventDelegateType
+		{
+			get { return typeof (_NSNetServiceBrowserDelegate); }
+		}
+		internal virtual _NSNetServiceBrowserDelegate CreateInternalEventDelegateType ()
+		{
+			return (_NSNetServiceBrowserDelegate)(new _NSNetServiceBrowserDelegate());
+		}
+		internal _NSNetServiceBrowserDelegate EnsureNSNetServiceBrowserDelegate ()
+		{
+			if (WeakDelegate is not null)
+				NSApplication.EnsureEventAndDelegateAreNotMismatched (WeakDelegate, GetInternalEventDelegateType);
+			var del = Delegate as _NSNetServiceBrowserDelegate;
+			if (del is null){
+				del = (_NSNetServiceBrowserDelegate)CreateInternalEventDelegateType ();
+				Delegate = (INSNetServiceBrowserDelegate)del;
+			}
+			return del;
+		}
+		#pragma warning disable 672
+		[Register]
+		internal class _NSNetServiceBrowserDelegate : NSObject, INSNetServiceBrowserDelegate { 
+			public _NSNetServiceBrowserDelegate () { IsDirectBinding = false; }
+			[DynamicDependency (DynamicallyAccessedMemberTypes.PublicMethods, typeof (_NSNetServiceBrowserDelegate))]
+			static _NSNetServiceBrowserDelegate ()
+			{
+				GC.KeepAlive (null);
+			}
+			internal EventHandler<NSNetDomainEventArgs>? domainRemoved;
+			[Export ("netServiceBrowser:didRemoveDomain:moreComing:")]
+			public void DomainRemoved (NSNetServiceBrowser sender, string domain, bool moreComing)
+			{
+				var handler = domainRemoved;
+				if (handler is not null){
+					var args = new NSNetDomainEventArgs (domain, moreComing);
+					handler (sender, args);
+				}
+			}
+			internal EventHandler<NSNetDomainEventArgs>? foundDomain;
+			[Export ("netServiceBrowser:didFindDomain:moreComing:")]
+			public void FoundDomain (NSNetServiceBrowser sender, string domain, bool moreComing)
+			{
+				var handler = foundDomain;
+				if (handler is not null){
+					var args = new NSNetDomainEventArgs (domain, moreComing);
+					handler (sender, args);
+				}
+			}
+			internal EventHandler<NSNetServiceEventArgs>? foundService;
+			[Export ("netServiceBrowser:didFindService:moreComing:")]
+			public void FoundService (NSNetServiceBrowser sender, NSNetService service, bool moreComing)
+			{
+				var handler = foundService;
+				if (handler is not null){
+					var args = new NSNetServiceEventArgs (service, moreComing);
+					handler (sender, args);
+				}
+			}
+			internal EventHandler<NSNetServiceErrorEventArgs>? notSearched;
+			[Export ("netServiceBrowser:didNotSearch:")]
+			public void NotSearched (NSNetServiceBrowser sender, NSDictionary errors)
+			{
+				var handler = notSearched;
+				if (handler is not null){
+					var args = new NSNetServiceErrorEventArgs (errors);
+					handler (sender, args);
+				}
+			}
+			internal EventHandler? searchStarted;
+			[Export ("netServiceBrowserWillSearch:")]
+			public void SearchStarted (NSNetServiceBrowser sender)
+			{
+				var handler = searchStarted;
+				if (handler is not null){
+					handler (sender, EventArgs.Empty);
+				}
+			}
+			internal EventHandler? searchStopped;
+			[Export ("netServiceBrowserDidStopSearch:")]
+			public void SearchStopped (NSNetServiceBrowser sender)
+			{
+				var handler = searchStopped;
+				if (handler is not null){
+					handler (sender, EventArgs.Empty);
+				}
+			}
+			internal EventHandler<NSNetServiceEventArgs>? serviceRemoved;
+			[Export ("netServiceBrowser:didRemoveService:moreComing:")]
+			public void ServiceRemoved (NSNetServiceBrowser sender, NSNetService service, bool moreComing)
+			{
+				var handler = serviceRemoved;
+				if (handler is not null){
+					var args = new NSNetServiceEventArgs (service, moreComing);
+					handler (sender, args);
+				}
+			}
+		}
+		#pragma warning restore 672
+		/// <summary>Event raised by the object.</summary>
+		/// <remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+		public event EventHandler<NSNetDomainEventArgs> DomainRemoved {
+			add { EnsureNSNetServiceBrowserDelegate ()!.domainRemoved += value; }
+			remove { EnsureNSNetServiceBrowserDelegate ()!.domainRemoved -= value; }
+		}
+		/// <summary>Event raised by the object.</summary>
+		/// <remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+		public event EventHandler<NSNetDomainEventArgs> FoundDomain {
+			add { EnsureNSNetServiceBrowserDelegate ()!.foundDomain += value; }
+			remove { EnsureNSNetServiceBrowserDelegate ()!.foundDomain -= value; }
+		}
+		/// <summary>Event raised by the object.</summary>
+		/// <remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+		public event EventHandler<NSNetServiceEventArgs> FoundService {
+			add { EnsureNSNetServiceBrowserDelegate ()!.foundService += value; }
+			remove { EnsureNSNetServiceBrowserDelegate ()!.foundService -= value; }
+		}
+		/// <summary>Event raised by the object.</summary>
+		/// <remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+		public event EventHandler<NSNetServiceErrorEventArgs> NotSearched {
+			add { EnsureNSNetServiceBrowserDelegate ()!.notSearched += value; }
+			remove { EnsureNSNetServiceBrowserDelegate ()!.notSearched -= value; }
+		}
+		/// <summary>Event raised by the object.</summary>
+		/// <remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+		public event EventHandler SearchStarted {
+			add { EnsureNSNetServiceBrowserDelegate ()!.searchStarted += value; }
+			remove { EnsureNSNetServiceBrowserDelegate ()!.searchStarted -= value; }
+		}
+		/// <summary>Event raised by the object.</summary>
+		/// <remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+		public event EventHandler SearchStopped {
+			add { EnsureNSNetServiceBrowserDelegate ()!.searchStopped += value; }
+			remove { EnsureNSNetServiceBrowserDelegate ()!.searchStopped -= value; }
+		}
+		/// <summary>Event raised by the object.</summary>
+		/// <remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+		public event EventHandler<NSNetServiceEventArgs> ServiceRemoved {
+			add { EnsureNSNetServiceBrowserDelegate ()!.serviceRemoved += value; }
+			remove { EnsureNSNetServiceBrowserDelegate ()!.serviceRemoved -= value; }
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		protected override void Dispose (bool disposing)
+		{
+			base.Dispose (disposing);
+			if (Handle == IntPtr.Zero) {
+				__mt_WeakDelegate_var = null;
+			}
+		}
+	} /* class NSNetServiceBrowser */
+	//
+	// EventArgs classes
+	//
+	/// <summary>Provides data for an event based on an Objective-C protocol method.</summary>
+	public partial class NSNetDomainEventArgs : EventArgs {
+		/// <summary>Create a new instance of the <see cref="NSNetDomainEventArgs" /> with the specified event data.</summary>
+		/// <param name="domain">The value for the <see cref="Domain" /> property.</param>
+		/// <param name="moreComing">The value for the <see cref="MoreComing" /> property.</param>
+		public NSNetDomainEventArgs (string domain, bool moreComing)
+		{
+			this.Domain = domain;
+			this.MoreComing = moreComing;
+		}
+		public string Domain { get; set; }
+		public bool MoreComing { get; set; }
+	}
+	/// <summary>Provides data for an event based on an Objective-C protocol method.</summary>
+	public partial class NSNetServiceEventArgs : EventArgs {
+		/// <summary>Create a new instance of the <see cref="NSNetServiceEventArgs" /> with the specified event data.</summary>
+		/// <param name="service">The value for the <see cref="Service" /> property.</param>
+		/// <param name="moreComing">The value for the <see cref="MoreComing" /> property.</param>
+		public NSNetServiceEventArgs (NSNetService service, bool moreComing)
+		{
+			this.MoreComing = moreComing;
+			this.Service = service;
+		}
+		public bool MoreComing { get; set; }
+		public NSNetService Service { get; set; }
+	}
+}

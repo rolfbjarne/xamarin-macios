@@ -1,0 +1,98 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using Metal;
+using CoreML;
+using AppKit;
+using MapKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using Messages;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using QuickLook;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using CoreMotion;
+using ObjCRuntime;
+using AddressBook;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace CoreText {
+	public partial class CTFontDescriptorMatchingProgress : DictionaryContainer {
+#if !COREBUILD
+		/// <summary>Creates a new <see cref="CTFontDescriptorMatchingProgress" /> with default (empty) values.</summary>
+		public CTFontDescriptorMatchingProgress () : base (new NSMutableDictionary ()) {}
+		/// <summary>Creates a new <see cref="CTFontDescriptorMatchingProgress" /> from the values that are specified in <paramref name="dictionary" />.</summary>
+		/// <param name="dictionary">The dictionary to use to populate the properties of this type.</param>
+		public CTFontDescriptorMatchingProgress (NSDictionary? dictionary) : base (dictionary) {}
+		public CTFontDescriptor? SourceDescriptor {
+			get {
+				return GetNativeValue<CoreText.CTFontDescriptor> (CTFontDescriptorMatchingKeys.SourceDescriptorKey!);
+			}
+		}
+		public CTFontDescriptor[]? Descriptors {
+			get {
+				return GetArray<CTFontDescriptor> (CTFontDescriptorMatchingKeys.DescriptorsKey!, (ptr) => Runtime.GetINativeObject<CTFontDescriptor> (ptr, false)!);
+			}
+		}
+		public CTFontDescriptor[]? Result {
+			get {
+				return GetArray<CTFontDescriptor> (CTFontDescriptorMatchingKeys.ResultKey!, (ptr) => Runtime.GetINativeObject<CTFontDescriptor> (ptr, false)!);
+			}
+		}
+		public double? Percentage {
+			get {
+				return  GetDoubleValue (CTFontDescriptorMatchingKeys.PercentageKey!);
+			}
+		}
+		public long? CurrentAssetSize {
+			get {
+				return  GetLongValue (CTFontDescriptorMatchingKeys.CurrentAssetSizeKey!);
+			}
+		}
+		public long? TotalDownloadedSize {
+			get {
+				return  GetLongValue (CTFontDescriptorMatchingKeys.TotalDownloadedSizeKey!);
+			}
+		}
+		public long? TotalAssetSize {
+			get {
+				return  GetLongValue (CTFontDescriptorMatchingKeys.TotalAssetSizeKey!);
+			}
+		}
+		public NSError? Error {
+			get {
+				return Dictionary [CTFontDescriptorMatchingKeys.ErrorKey!] as Foundation.NSError;
+			}
+		}
+#endif
+	}
+}

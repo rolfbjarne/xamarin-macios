@@ -1,0 +1,569 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace AutomaticAssessmentConfiguration {
+	[Register("AEAssessmentConfiguration", true)]
+	[SupportedOSPlatform ("ios13.4")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class AEAssessmentConfiguration : NSObject, INSCopying {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAllowsAccessibilityKeyboardX = "allowsAccessibilityKeyboard";
+		static readonly NativeHandle selAllowsAccessibilityKeyboardXHandle = Selector.GetHandle ("allowsAccessibilityKeyboard");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAllowsAccessibilityLiveCaptionsX = "allowsAccessibilityLiveCaptions";
+		static readonly NativeHandle selAllowsAccessibilityLiveCaptionsXHandle = Selector.GetHandle ("allowsAccessibilityLiveCaptions");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAllowsAccessibilityReaderX = "allowsAccessibilityReader";
+		static readonly NativeHandle selAllowsAccessibilityReaderXHandle = Selector.GetHandle ("allowsAccessibilityReader");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAllowsKeyboardShortcutsX = "allowsKeyboardShortcuts";
+		static readonly NativeHandle selAllowsKeyboardShortcutsXHandle = Selector.GetHandle ("allowsKeyboardShortcuts");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAllowsPredictiveKeyboardX = "allowsPredictiveKeyboard";
+		static readonly NativeHandle selAllowsPredictiveKeyboardXHandle = Selector.GetHandle ("allowsPredictiveKeyboard");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAllowsScreenshotsX = "allowsScreenshots";
+		static readonly NativeHandle selAllowsScreenshotsXHandle = Selector.GetHandle ("allowsScreenshots");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAllowsSpellCheckX = "allowsSpellCheck";
+		static readonly NativeHandle selAllowsSpellCheckXHandle = Selector.GetHandle ("allowsSpellCheck");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAutocorrectModeX = "autocorrectMode";
+		static readonly NativeHandle selAutocorrectModeXHandle = Selector.GetHandle ("autocorrectMode");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selConfigurationsByApplicationX = "configurationsByApplication";
+		static readonly NativeHandle selConfigurationsByApplicationXHandle = Selector.GetHandle ("configurationsByApplication");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCopyWithZone_X = "copyWithZone:";
+		static readonly NativeHandle selCopyWithZone_XHandle = Selector.GetHandle ("copyWithZone:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selMainParticipantConfigurationX = "mainParticipantConfiguration";
+		static readonly NativeHandle selMainParticipantConfigurationXHandle = Selector.GetHandle ("mainParticipantConfiguration");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRemoveApplication_X = "removeApplication:";
+		static readonly NativeHandle selRemoveApplication_XHandle = Selector.GetHandle ("removeApplication:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetAllowsAccessibilityKeyboard_X = "setAllowsAccessibilityKeyboard:";
+		static readonly NativeHandle selSetAllowsAccessibilityKeyboard_XHandle = Selector.GetHandle ("setAllowsAccessibilityKeyboard:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetAllowsAccessibilityLiveCaptions_X = "setAllowsAccessibilityLiveCaptions:";
+		static readonly NativeHandle selSetAllowsAccessibilityLiveCaptions_XHandle = Selector.GetHandle ("setAllowsAccessibilityLiveCaptions:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetAllowsAccessibilityReader_X = "setAllowsAccessibilityReader:";
+		static readonly NativeHandle selSetAllowsAccessibilityReader_XHandle = Selector.GetHandle ("setAllowsAccessibilityReader:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetAllowsKeyboardShortcuts_X = "setAllowsKeyboardShortcuts:";
+		static readonly NativeHandle selSetAllowsKeyboardShortcuts_XHandle = Selector.GetHandle ("setAllowsKeyboardShortcuts:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetAllowsPredictiveKeyboard_X = "setAllowsPredictiveKeyboard:";
+		static readonly NativeHandle selSetAllowsPredictiveKeyboard_XHandle = Selector.GetHandle ("setAllowsPredictiveKeyboard:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetAllowsScreenshots_X = "setAllowsScreenshots:";
+		static readonly NativeHandle selSetAllowsScreenshots_XHandle = Selector.GetHandle ("setAllowsScreenshots:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetAllowsSpellCheck_X = "setAllowsSpellCheck:";
+		static readonly NativeHandle selSetAllowsSpellCheck_XHandle = Selector.GetHandle ("setAllowsSpellCheck:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetAutocorrectMode_X = "setAutocorrectMode:";
+		static readonly NativeHandle selSetAutocorrectMode_XHandle = Selector.GetHandle ("setAutocorrectMode:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetConfiguration_ForApplication_X = "setConfiguration:forApplication:";
+		static readonly NativeHandle selSetConfiguration_ForApplication_XHandle = Selector.GetHandle ("setConfiguration:forApplication:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("AEAssessmentConfiguration");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Creates a new <see cref="AEAssessmentConfiguration" /> with default values.</summary>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("init")]
+		public AEAssessmentConfiguration () : base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.Init), "init");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, global::ObjCRuntime.Selector.Init), "init");
+				GC.KeepAlive (this);
+				}
+			}
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected AEAssessmentConfiguration (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal AEAssessmentConfiguration (NativeHandle handle) : base (handle)
+		{
+		}
+
+		/// <param name="zone">Developers should pass <see langword="null" />.  Memory zones are no longer used.</param><summary>Performs a copy of the underlying Objective-C object.</summary><returns>The newly-allocated object.</returns><remarks><para>This method performs a "shallow copy" of <see langword="this" />. If this object contains references to external objects, the new object will contain references to the same object.</para></remarks>
+		[Export ("copyWithZone:")]
+		[return: ReleaseAttribute ()]
+		[SupportedOSPlatform ("ios13.4")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSObject Copy (NSZone? zone)
+		{
+			var zone__handle__ = zone.GetHandle ();
+			NSObject? ret;
+			if (IsDirectBinding) {
+				ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selCopyWithZone_XHandle, zone__handle__), true)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selCopyWithZone_XHandle, zone__handle__), true)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (zone);
+			return ret!;
+		}
+		[Export ("removeApplication:")]
+		[SupportedOSPlatform ("ios17.5")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void Remove (AEAssessmentApplication application)
+		{
+			var application__handle__ = application!.GetNonNullHandle (nameof (application));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selRemoveApplication_XHandle, application__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selRemoveApplication_XHandle, application__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (application);
+		}
+		[Export ("setConfiguration:forApplication:")]
+		[SupportedOSPlatform ("ios17.5")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetConfiguration (AEAssessmentParticipantConfiguration configuration, AEAssessmentApplication application)
+		{
+			var configuration__handle__ = configuration!.GetNonNullHandle (nameof (configuration));
+			var application__handle__ = application!.GetNonNullHandle (nameof (application));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selSetConfiguration_ForApplication_XHandle, configuration__handle__, application__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selSetConfiguration_ForApplication_XHandle, configuration__handle__, application__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (configuration);
+			GC.KeepAlive (application);
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("maccatalyst26.1")]
+		[SupportedOSPlatform ("macos26.1")]
+		public virtual bool AllowsAccessibilityKeyboard {
+			[Export ("allowsAccessibilityKeyboard")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selAllowsAccessibilityKeyboardXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selAllowsAccessibilityKeyboardXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAllowsAccessibilityKeyboard:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetAllowsAccessibilityKeyboard_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetAllowsAccessibilityKeyboard_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("maccatalyst26.1")]
+		[SupportedOSPlatform ("macos26.1")]
+		[SupportedOSPlatform ("ios26.1")]
+		public virtual bool AllowsAccessibilityLiveCaptions {
+			[Export ("allowsAccessibilityLiveCaptions")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selAllowsAccessibilityLiveCaptionsXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selAllowsAccessibilityLiveCaptionsXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAllowsAccessibilityLiveCaptions:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetAllowsAccessibilityLiveCaptions_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetAllowsAccessibilityLiveCaptions_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("maccatalyst26.1")]
+		[SupportedOSPlatform ("macos26.1")]
+		[SupportedOSPlatform ("ios26.1")]
+		public virtual bool AllowsAccessibilityReader {
+			[Export ("allowsAccessibilityReader")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selAllowsAccessibilityReaderXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selAllowsAccessibilityReaderXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAllowsAccessibilityReader:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetAllowsAccessibilityReader_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetAllowsAccessibilityReader_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		public virtual bool AllowsKeyboardShortcuts {
+			[Export ("allowsKeyboardShortcuts")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selAllowsKeyboardShortcutsXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selAllowsKeyboardShortcutsXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAllowsKeyboardShortcuts:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetAllowsKeyboardShortcuts_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetAllowsKeyboardShortcuts_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		public virtual bool AllowsPredictiveKeyboard {
+			[Export ("allowsPredictiveKeyboard")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selAllowsPredictiveKeyboardXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selAllowsPredictiveKeyboardXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAllowsPredictiveKeyboard:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetAllowsPredictiveKeyboard_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetAllowsPredictiveKeyboard_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("maccatalyst26.1")]
+		[SupportedOSPlatform ("macos26.1")]
+		public virtual bool AllowsScreenshots {
+			[Export ("allowsScreenshots")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selAllowsScreenshotsXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selAllowsScreenshotsXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAllowsScreenshots:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetAllowsScreenshots_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetAllowsScreenshots_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		public virtual bool AllowsSpellCheck {
+			[Export ("allowsSpellCheck")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selAllowsSpellCheckXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selAllowsSpellCheckXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAllowsSpellCheck:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetAllowsSpellCheck_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetAllowsSpellCheck_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		public virtual AEAutocorrectMode AutocorrectMode {
+			[Export ("autocorrectMode")]
+			get {
+				AEAutocorrectMode ret;
+				if (IsDirectBinding) {
+					ret = (AutomaticAssessmentConfiguration.AEAutocorrectMode) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, selAutocorrectModeXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = (AutomaticAssessmentConfiguration.AEAutocorrectMode) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, selAutocorrectModeXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setAutocorrectMode:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_IntPtr (this.Handle, selSetAutocorrectMode_XHandle, (IntPtr) (long) value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr (&__objc_super__, selSetAutocorrectMode_XHandle, (IntPtr) (long) value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("ios17.5")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual NSDictionary<AEAssessmentApplication, AEAssessmentParticipantConfiguration> ConfigurationsByApplication {
+			[Export ("configurationsByApplication", ArgumentSemantic.Copy)]
+			get {
+				NSDictionary<AEAssessmentApplication, AEAssessmentParticipantConfiguration>? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSDictionary<AEAssessmentApplication, AEAssessmentParticipantConfiguration>> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selConfigurationsByApplicationXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSDictionary<AEAssessmentApplication, AEAssessmentParticipantConfiguration>> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selConfigurationsByApplicationXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("ios17.5")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual AEAssessmentParticipantConfiguration MainParticipantConfiguration {
+			[Export ("mainParticipantConfiguration", ArgumentSemantic.Retain)]
+			get {
+				AEAssessmentParticipantConfiguration? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<AEAssessmentParticipantConfiguration> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selMainParticipantConfigurationXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<AEAssessmentParticipantConfiguration> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selMainParticipantConfigurationXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+	} /* class AEAssessmentConfiguration */
+}

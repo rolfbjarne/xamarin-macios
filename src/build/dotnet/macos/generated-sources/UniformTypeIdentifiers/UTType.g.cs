@@ -1,0 +1,720 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace UniformTypeIdentifiers {
+	[Register("UTType", true)]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("tvos14.0")]
+	[SupportedOSPlatform ("ios14.0")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class UTType : NSObject, INSCoding, INSCopying, INSSecureCoding {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSHCustomCatalogContentTypeX = "SHCustomCatalogContentType";
+		static readonly NativeHandle selSHCustomCatalogContentTypeXHandle = Selector.GetHandle ("SHCustomCatalogContentType");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSHSignatureContentTypeX = "SHSignatureContentType";
+		static readonly NativeHandle selSHSignatureContentTypeXHandle = Selector.GetHandle ("SHSignatureContentType");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selConformsToType_X = "conformsToType:";
+		static readonly NativeHandle selConformsToType_XHandle = Selector.GetHandle ("conformsToType:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCopyWithZone_X = "copyWithZone:";
+		static readonly NativeHandle selCopyWithZone_XHandle = Selector.GetHandle ("copyWithZone:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selEncodeWithCoder_X = "encodeWithCoder:";
+		static readonly NativeHandle selEncodeWithCoder_XHandle = Selector.GetHandle ("encodeWithCoder:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selExportedTypeWithIdentifier_X = "exportedTypeWithIdentifier:";
+		static readonly NativeHandle selExportedTypeWithIdentifier_XHandle = Selector.GetHandle ("exportedTypeWithIdentifier:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selExportedTypeWithIdentifier_ConformingToType_X = "exportedTypeWithIdentifier:conformingToType:";
+		static readonly NativeHandle selExportedTypeWithIdentifier_ConformingToType_XHandle = Selector.GetHandle ("exportedTypeWithIdentifier:conformingToType:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selIdentifierX = "identifier";
+		static readonly NativeHandle selIdentifierXHandle = Selector.GetHandle ("identifier");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selImportedTypeWithIdentifier_X = "importedTypeWithIdentifier:";
+		static readonly NativeHandle selImportedTypeWithIdentifier_XHandle = Selector.GetHandle ("importedTypeWithIdentifier:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selImportedTypeWithIdentifier_ConformingToType_X = "importedTypeWithIdentifier:conformingToType:";
+		static readonly NativeHandle selImportedTypeWithIdentifier_ConformingToType_XHandle = Selector.GetHandle ("importedTypeWithIdentifier:conformingToType:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithCoder_X = "initWithCoder:";
+		static readonly NativeHandle selInitWithCoder_XHandle = Selector.GetHandle ("initWithCoder:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selIsDeclaredX = "isDeclared";
+		static readonly NativeHandle selIsDeclaredXHandle = Selector.GetHandle ("isDeclared");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selIsDynamicX = "isDynamic";
+		static readonly NativeHandle selIsDynamicXHandle = Selector.GetHandle ("isDynamic");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selIsPublicTypeX = "isPublicType";
+		static readonly NativeHandle selIsPublicTypeXHandle = Selector.GetHandle ("isPublicType");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selIsSubtypeOfType_X = "isSubtypeOfType:";
+		static readonly NativeHandle selIsSubtypeOfType_XHandle = Selector.GetHandle ("isSubtypeOfType:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selIsSupertypeOfType_X = "isSupertypeOfType:";
+		static readonly NativeHandle selIsSupertypeOfType_XHandle = Selector.GetHandle ("isSupertypeOfType:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selLocalizedDescriptionX = "localizedDescription";
+		static readonly NativeHandle selLocalizedDescriptionXHandle = Selector.GetHandle ("localizedDescription");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPreferredFilenameExtensionX = "preferredFilenameExtension";
+		static readonly NativeHandle selPreferredFilenameExtensionXHandle = Selector.GetHandle ("preferredFilenameExtension");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPreferredMIMETypeX = "preferredMIMEType";
+		static readonly NativeHandle selPreferredMIMETypeXHandle = Selector.GetHandle ("preferredMIMEType");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selReferenceURLX = "referenceURL";
+		static readonly NativeHandle selReferenceURLXHandle = Selector.GetHandle ("referenceURL");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSupertypesX = "supertypes";
+		static readonly NativeHandle selSupertypesXHandle = Selector.GetHandle ("supertypes");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTagsX = "tags";
+		static readonly NativeHandle selTagsXHandle = Selector.GetHandle ("tags");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTypeWithFilenameExtension_X = "typeWithFilenameExtension:";
+		static readonly NativeHandle selTypeWithFilenameExtension_XHandle = Selector.GetHandle ("typeWithFilenameExtension:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTypeWithFilenameExtension_ConformingToType_X = "typeWithFilenameExtension:conformingToType:";
+		static readonly NativeHandle selTypeWithFilenameExtension_ConformingToType_XHandle = Selector.GetHandle ("typeWithFilenameExtension:conformingToType:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTypeWithIdentifier_X = "typeWithIdentifier:";
+		static readonly NativeHandle selTypeWithIdentifier_XHandle = Selector.GetHandle ("typeWithIdentifier:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTypeWithMIMEType_X = "typeWithMIMEType:";
+		static readonly NativeHandle selTypeWithMIMEType_XHandle = Selector.GetHandle ("typeWithMIMEType:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTypeWithMIMEType_ConformingToType_X = "typeWithMIMEType:conformingToType:";
+		static readonly NativeHandle selTypeWithMIMEType_ConformingToType_XHandle = Selector.GetHandle ("typeWithMIMEType:conformingToType:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTypeWithTag_TagClass_ConformingToType_X = "typeWithTag:tagClass:conformingToType:";
+		static readonly NativeHandle selTypeWithTag_TagClass_ConformingToType_XHandle = Selector.GetHandle ("typeWithTag:tagClass:conformingToType:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTypesWithTag_TagClass_ConformingToType_X = "typesWithTag:tagClass:conformingToType:";
+		static readonly NativeHandle selTypesWithTag_TagClass_ConformingToType_XHandle = Selector.GetHandle ("typesWithTag:tagClass:conformingToType:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selVersionX = "version";
+		static readonly NativeHandle selVersionXHandle = Selector.GetHandle ("version");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("UTType");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <param name="coder">The unarchiver object.</param>
+		/// <remarks>
+		///   <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization). This is part of the <see cref="Foundation.NSCoding" /> protocol.</para>
+		///   <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="Foundation.NSCoder" /> and decorate it with the <c>[Export("initWithCoder:"]</c> attribute.</para>
+		///   <para>The state of this object can also be serialized by using the <see cref="Foundation.INSCoding.EncodeTo" /> companion method.</para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[DesignatedInitializer]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("initWithCoder:")]
+		public UTType (NSCoder coder) : base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, Selector.InitWithCoder, coder.Handle), "initWithCoder:");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (&__objc_super__, Selector.InitWithCoder, coder.Handle), "initWithCoder:");
+				GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (coder);
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected UTType (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal UTType (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("conformsToType:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool ConformsTo (UTType type)
+		{
+			var type__handle__ = type!.GetNonNullHandle (nameof (type));
+			byte ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.bool_objc_msgSend_NativeHandle (this.Handle, selConformsToType_XHandle, type__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper_NativeHandle (&__objc_super__, selConformsToType_XHandle, type__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (type);
+			return ret != 0;
+		}
+		/// <param name="zone">Developers should pass <see langword="null" />.  Memory zones are no longer used.</param><summary>Performs a copy of the underlying Objective-C object.</summary><returns>The newly-allocated object.</returns><remarks><para>This method performs a "shallow copy" of <see langword="this" />. If this object contains references to external objects, the new object will contain references to the same object.</para></remarks>
+		[Export ("copyWithZone:")]
+		[return: ReleaseAttribute ()]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSObject Copy (NSZone? zone)
+		{
+			var zone__handle__ = zone.GetHandle ();
+			NSObject? ret;
+			if (IsDirectBinding) {
+				ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selCopyWithZone_XHandle, zone__handle__), true)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selCopyWithZone_XHandle, zone__handle__), true)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (zone);
+			return ret!;
+		}
+		[Export ("exportedTypeWithIdentifier:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static UTType CreateExportedType (string identifier)
+		{
+			if (identifier is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (identifier));
+			var nsidentifier = CFString.CreateNative (identifier);
+			UTType? ret;
+			ret =  Runtime.GetNSObject<UTType> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (class_ptr, selExportedTypeWithIdentifier_XHandle, nsidentifier), false)!;
+			CFString.ReleaseNative (nsidentifier);
+			return ret!;
+		}
+		[Export ("exportedTypeWithIdentifier:conformingToType:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static UTType CreateExportedType (string identifier, UTType parentType)
+		{
+			if (identifier is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (identifier));
+			var parentType__handle__ = parentType!.GetNonNullHandle (nameof (parentType));
+			var nsidentifier = CFString.CreateNative (identifier);
+			UTType? ret;
+			ret =  Runtime.GetNSObject<UTType> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (class_ptr, selExportedTypeWithIdentifier_ConformingToType_XHandle, nsidentifier, parentType__handle__), false)!;
+			GC.KeepAlive (parentType);
+			CFString.ReleaseNative (nsidentifier);
+			return ret!;
+		}
+		[Export ("typeWithFilenameExtension:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static UTType? CreateFromExtension (string filenameExtension)
+		{
+			if (filenameExtension is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (filenameExtension));
+			var nsfilenameExtension = CFString.CreateNative (filenameExtension);
+			UTType? ret;
+			ret =  Runtime.GetNSObject<UTType> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (class_ptr, selTypeWithFilenameExtension_XHandle, nsfilenameExtension), false)!;
+			CFString.ReleaseNative (nsfilenameExtension);
+			return ret!;
+		}
+		[Export ("typeWithFilenameExtension:conformingToType:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static UTType? CreateFromExtension (string filenameExtension, UTType supertype)
+		{
+			if (filenameExtension is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (filenameExtension));
+			var supertype__handle__ = supertype!.GetNonNullHandle (nameof (supertype));
+			var nsfilenameExtension = CFString.CreateNative (filenameExtension);
+			UTType? ret;
+			ret =  Runtime.GetNSObject<UTType> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (class_ptr, selTypeWithFilenameExtension_ConformingToType_XHandle, nsfilenameExtension, supertype__handle__), false)!;
+			GC.KeepAlive (supertype);
+			CFString.ReleaseNative (nsfilenameExtension);
+			return ret!;
+		}
+		[Export ("typeWithIdentifier:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static UTType? CreateFromIdentifier (string identifier)
+		{
+			if (identifier is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (identifier));
+			var nsidentifier = CFString.CreateNative (identifier);
+			UTType? ret;
+			ret =  Runtime.GetNSObject<UTType> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (class_ptr, selTypeWithIdentifier_XHandle, nsidentifier), false)!;
+			CFString.ReleaseNative (nsidentifier);
+			return ret!;
+		}
+		[Export ("typeWithMIMEType:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static UTType? CreateFromMimeType (string mimeType)
+		{
+			if (mimeType is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (mimeType));
+			var nsmimeType = CFString.CreateNative (mimeType);
+			UTType? ret;
+			ret =  Runtime.GetNSObject<UTType> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (class_ptr, selTypeWithMIMEType_XHandle, nsmimeType), false)!;
+			CFString.ReleaseNative (nsmimeType);
+			return ret!;
+		}
+		[Export ("typeWithMIMEType:conformingToType:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static UTType? CreateFromMimeType (string mimeType, UTType supertype)
+		{
+			if (mimeType is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (mimeType));
+			var supertype__handle__ = supertype!.GetNonNullHandle (nameof (supertype));
+			var nsmimeType = CFString.CreateNative (mimeType);
+			UTType? ret;
+			ret =  Runtime.GetNSObject<UTType> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (class_ptr, selTypeWithMIMEType_ConformingToType_XHandle, nsmimeType, supertype__handle__), false)!;
+			GC.KeepAlive (supertype);
+			CFString.ReleaseNative (nsmimeType);
+			return ret!;
+		}
+		[Export ("importedTypeWithIdentifier:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static UTType CreateImportedType (string identifier)
+		{
+			if (identifier is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (identifier));
+			var nsidentifier = CFString.CreateNative (identifier);
+			UTType? ret;
+			ret =  Runtime.GetNSObject<UTType> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (class_ptr, selImportedTypeWithIdentifier_XHandle, nsidentifier), false)!;
+			CFString.ReleaseNative (nsidentifier);
+			return ret!;
+		}
+		[Export ("importedTypeWithIdentifier:conformingToType:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static UTType CreateImportedType (string identifier, UTType parentType)
+		{
+			if (identifier is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (identifier));
+			var parentType__handle__ = parentType!.GetNonNullHandle (nameof (parentType));
+			var nsidentifier = CFString.CreateNative (identifier);
+			UTType? ret;
+			ret =  Runtime.GetNSObject<UTType> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (class_ptr, selImportedTypeWithIdentifier_ConformingToType_XHandle, nsidentifier, parentType__handle__), false)!;
+			GC.KeepAlive (parentType);
+			CFString.ReleaseNative (nsidentifier);
+			return ret!;
+		}
+		/// <summary>Encodes the state of the object using the provided encoder.</summary><param name="encoder">The encoder object where the state of the object will be stored</param><remarks><para>This method is part of the <see cref="T:Foundation.INSCoding" /> protocol and is used by applications to preserve the state of the object into an archive.</para><para>Developers will typically create an <see cref="T:Foundation.NSKeyedArchiver" /> and then invoke the <see cref="M:Foundation.NSKeyedArchiver.ArchiveRootObjectToFile(Foundation.NSObject,System.String)" /> method which will call into this method.</para><para>If developers want to allow their object to be archived, they should override this method and store their state in using the provided <paramref name="encoder" /> parameter. In addition, developers should also implement a constructor that takes an NSCoder argument and is exported with <c>[Export ("initWithCoder:")]</c>.</para><example><code lang="csharp lang-csharp"><![CDATA[public void override EncodeTo (NSCoder coder) {
+		/// coder.Encode (1, key: "version");
+		/// coder.Encode (userName, key: "userName");
+		/// coder.Encode (hostName, key: "hostName");]]></code></example></remarks>
+		[Export ("encodeWithCoder:")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void EncodeTo (NSCoder encoder)
+		{
+			var encoder__handle__ = encoder!.GetNonNullHandle (nameof (encoder));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selEncodeWithCoder_XHandle, encoder__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selEncodeWithCoder_XHandle, encoder__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (encoder);
+		}
+		[Export ("typeWithTag:tagClass:conformingToType:")]
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static UTType? GetType (string tag, NSString tagClass, UTType? supertype)
+		{
+			if (tag is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (tag));
+			var tagClass__handle__ = tagClass!.GetNonNullHandle (nameof (tagClass));
+			var supertype__handle__ = supertype.GetHandle ();
+			var nstag = CFString.CreateNative (tag);
+			UTType? ret;
+			ret =  Runtime.GetNSObject<UTType> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (class_ptr, selTypeWithTag_TagClass_ConformingToType_XHandle, nstag, tagClass__handle__, supertype__handle__), false)!;
+			GC.KeepAlive (tagClass);
+			GC.KeepAlive (supertype);
+			CFString.ReleaseNative (nstag);
+			return ret!;
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static UTType? GetType (string tag, UTTagClass tagClass, UTType? supertype)
+		{
+			return GetType (tag, tagClass.GetConstant ()!, supertype);
+		}
+		[Export ("typesWithTag:tagClass:conformingToType:")]
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static UTType[] GetTypes (string tag, NSString tagClass, UTType? supertype)
+		{
+			if (tag is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (tag));
+			var tagClass__handle__ = tagClass!.GetNonNullHandle (nameof (tagClass));
+			var supertype__handle__ = supertype.GetHandle ();
+			var nstag = CFString.CreateNative (tag);
+			UTType[]? ret;
+			ret = CFArray.ArrayFromHandle<UTType>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (class_ptr, selTypesWithTag_TagClass_ConformingToType_XHandle, nstag, tagClass__handle__, supertype__handle__), false)!;
+			GC.KeepAlive (tagClass);
+			GC.KeepAlive (supertype);
+			CFString.ReleaseNative (nstag);
+			return ret!;
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static UTType[] GetTypes (string tag, UTTagClass tagClass, UTType? supertype)
+		{
+			return GetTypes (tag, tagClass.GetConstant ()!, supertype);
+		}
+		[Export ("isSubtypeOfType:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool IsSubtypeOf (UTType type)
+		{
+			var type__handle__ = type!.GetNonNullHandle (nameof (type));
+			byte ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.bool_objc_msgSend_NativeHandle (this.Handle, selIsSubtypeOfType_XHandle, type__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper_NativeHandle (&__objc_super__, selIsSubtypeOfType_XHandle, type__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (type);
+			return ret != 0;
+		}
+		[Export ("isSupertypeOfType:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool IsSupertypeOf (UTType type)
+		{
+			var type__handle__ = type!.GetNonNullHandle (nameof (type));
+			byte ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.bool_objc_msgSend_NativeHandle (this.Handle, selIsSupertypeOfType_XHandle, type__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper_NativeHandle (&__objc_super__, selIsSupertypeOfType_XHandle, type__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (type);
+			return ret != 0;
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool Declared {
+			[Export ("isDeclared")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selIsDeclaredXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selIsDeclaredXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool Dynamic {
+			[Export ("isDynamic")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selIsDynamicXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selIsDynamicXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual string Identifier {
+			[Export ("identifier")]
+			get {
+				string ret;
+				if (IsDirectBinding) {
+					ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selIdentifierXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selIdentifierXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual string? LocalizedDescription {
+			[Export ("localizedDescription")]
+			get {
+				string ret;
+				if (IsDirectBinding) {
+					ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selLocalizedDescriptionXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selLocalizedDescriptionXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual string? PreferredFilenameExtension {
+			[Export ("preferredFilenameExtension")]
+			get {
+				string ret;
+				if (IsDirectBinding) {
+					ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selPreferredFilenameExtensionXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selPreferredFilenameExtensionXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual string? PreferredMimeType {
+			[Export ("preferredMIMEType")]
+			get {
+				string ret;
+				if (IsDirectBinding) {
+					ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selPreferredMIMETypeXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selPreferredMIMETypeXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool PublicType {
+			[Export ("isPublicType")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selIsPublicTypeXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selIsPublicTypeXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSUrl? ReferenceUrl {
+			[Export ("referenceURL")]
+			get {
+				NSUrl? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSUrl> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selReferenceURLXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSUrl> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selReferenceURLXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("tvos16.0")]
+		[SupportedOSPlatform ("macos13.0")]
+		[SupportedOSPlatform ("ios16.0")]
+		[SupportedOSPlatform ("maccatalyst16.0")]
+		public static UTType SHCustomCatalogContentType {
+			[Export ("SHCustomCatalogContentType", ArgumentSemantic.Retain)]
+			get {
+				UTType? ret;
+				ret =  Runtime.GetNSObject<UTType> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (class_ptr, selSHCustomCatalogContentTypeXHandle), false)!;
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("tvos16.0")]
+		[SupportedOSPlatform ("macos13.0")]
+		[SupportedOSPlatform ("ios16.0")]
+		[SupportedOSPlatform ("maccatalyst16.0")]
+		public static UTType SHSignatureContentType {
+			[Export ("SHSignatureContentType", ArgumentSemantic.Retain)]
+			get {
+				UTType? ret;
+				ret =  Runtime.GetNSObject<UTType> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (class_ptr, selSHSignatureContentTypeXHandle), false)!;
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSSet<UTType> Supertypes {
+			[Export ("supertypes")]
+			get {
+				NSSet<UTType>? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSSet<UTType>> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selSupertypesXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSSet<UTType>> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selSupertypesXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSDictionary<NSString, NSArray<NSString>> Tags {
+			[Export ("tags")]
+			get {
+				NSDictionary<NSString, NSArray<NSString>>? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSDictionary<NSString, NSArray<NSString>>> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selTagsXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSDictionary<NSString, NSArray<NSString>>> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selTagsXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSNumber? Version {
+			[Export ("version")]
+			get {
+				NSNumber? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSNumber> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selVersionXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSNumber> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selVersionXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+	} /* class UTType */
+}

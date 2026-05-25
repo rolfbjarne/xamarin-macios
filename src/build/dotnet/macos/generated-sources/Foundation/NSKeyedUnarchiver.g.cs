@@ -1,0 +1,682 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace Foundation {
+	[Register("NSKeyedUnarchiver", true)]
+	public unsafe partial class NSKeyedUnarchiver : NSCoder {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selClassForClassName_X = "classForClassName:";
+		static readonly NativeHandle selClassForClassName_XHandle = Selector.GetHandle ("classForClassName:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDelegateX = "delegate";
+		static readonly NativeHandle selDelegateXHandle = Selector.GetHandle ("delegate");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selFinishDecodingX = "finishDecoding";
+		static readonly NativeHandle selFinishDecodingXHandle = Selector.GetHandle ("finishDecoding");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitForReadingFromData_Error_X = "initForReadingFromData:error:";
+		static readonly NativeHandle selInitForReadingFromData_Error_XHandle = Selector.GetHandle ("initForReadingFromData:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitForReadingWithData_X = "initForReadingWithData:";
+		static readonly NativeHandle selInitForReadingWithData_XHandle = Selector.GetHandle ("initForReadingWithData:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRequiresSecureCodingX = "requiresSecureCoding";
+		static readonly NativeHandle selRequiresSecureCodingXHandle = Selector.GetHandle ("requiresSecureCoding");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetClass_ForClassName_X = "setClass:forClassName:";
+		static readonly NativeHandle selSetClass_ForClassName_XHandle = Selector.GetHandle ("setClass:forClassName:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetDelegate_X = "setDelegate:";
+		static readonly NativeHandle selSetDelegate_XHandle = Selector.GetHandle ("setDelegate:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetRequiresSecureCoding_X = "setRequiresSecureCoding:";
+		static readonly NativeHandle selSetRequiresSecureCoding_XHandle = Selector.GetHandle ("setRequiresSecureCoding:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selUnarchiveObjectWithData_X = "unarchiveObjectWithData:";
+		static readonly NativeHandle selUnarchiveObjectWithData_XHandle = Selector.GetHandle ("unarchiveObjectWithData:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selUnarchiveObjectWithFile_X = "unarchiveObjectWithFile:";
+		static readonly NativeHandle selUnarchiveObjectWithFile_XHandle = Selector.GetHandle ("unarchiveObjectWithFile:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selUnarchiveTopLevelObjectWithData_Error_X = "unarchiveTopLevelObjectWithData:error:";
+		static readonly NativeHandle selUnarchiveTopLevelObjectWithData_Error_XHandle = Selector.GetHandle ("unarchiveTopLevelObjectWithData:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selUnarchivedArrayOfObjectsOfClass_FromData_Error_X = "unarchivedArrayOfObjectsOfClass:fromData:error:";
+		static readonly NativeHandle selUnarchivedArrayOfObjectsOfClass_FromData_Error_XHandle = Selector.GetHandle ("unarchivedArrayOfObjectsOfClass:fromData:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selUnarchivedArrayOfObjectsOfClasses_FromData_Error_X = "unarchivedArrayOfObjectsOfClasses:fromData:error:";
+		static readonly NativeHandle selUnarchivedArrayOfObjectsOfClasses_FromData_Error_XHandle = Selector.GetHandle ("unarchivedArrayOfObjectsOfClasses:fromData:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selUnarchivedDictionaryWithKeysOfClass_ObjectsOfClass_FromData_Error_X = "unarchivedDictionaryWithKeysOfClass:objectsOfClass:fromData:error:";
+		static readonly NativeHandle selUnarchivedDictionaryWithKeysOfClass_ObjectsOfClass_FromData_Error_XHandle = Selector.GetHandle ("unarchivedDictionaryWithKeysOfClass:objectsOfClass:fromData:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selUnarchivedDictionaryWithKeysOfClasses_ObjectsOfClasses_FromData_Error_X = "unarchivedDictionaryWithKeysOfClasses:objectsOfClasses:fromData:error:";
+		static readonly NativeHandle selUnarchivedDictionaryWithKeysOfClasses_ObjectsOfClasses_FromData_Error_XHandle = Selector.GetHandle ("unarchivedDictionaryWithKeysOfClasses:objectsOfClasses:fromData:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selUnarchivedObjectOfClass_FromData_Error_X = "unarchivedObjectOfClass:fromData:error:";
+		static readonly NativeHandle selUnarchivedObjectOfClass_FromData_Error_XHandle = Selector.GetHandle ("unarchivedObjectOfClass:fromData:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selUnarchivedObjectOfClasses_FromData_Error_X = "unarchivedObjectOfClasses:fromData:error:";
+		static readonly NativeHandle selUnarchivedObjectOfClasses_FromData_Error_XHandle = Selector.GetHandle ("unarchivedObjectOfClasses:fromData:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("NSKeyedUnarchiver");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected NSKeyedUnarchiver (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal NSKeyedUnarchiver (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("initForReadingFromData:error:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe NSKeyedUnarchiver (NSData data, out NSError? error)
+			: base (NSObjectFlag.Empty)
+		{
+			var data__handle__ = data!.GetNonNullHandle (nameof (data));
+			NativeHandle errorValue = IntPtr.Zero;
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_ref_NativeHandle (this.Handle, selInitForReadingFromData_Error_XHandle, data__handle__, &errorValue), "initForReadingFromData:error:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_ref_NativeHandle (&__objc_super__, selInitForReadingFromData_Error_XHandle, data__handle__, &errorValue), "initForReadingFromData:error:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (data);
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+		}
+		[Export ("initForReadingWithData:")]
+		[ObsoletedOSPlatform ("tvos12.0", "Use 'NSKeyedUnarchiver (NSData, out NSError)' instead.")]
+		[ObsoletedOSPlatform ("ios12.0", "Use 'NSKeyedUnarchiver (NSData, out NSError)' instead.")]
+		[ObsoletedOSPlatform ("macos10.14", "Use 'NSKeyedUnarchiver (NSData, out NSError)' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'NSKeyedUnarchiver (NSData, out NSError)' instead.")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public NSKeyedUnarchiver (NSData data)
+			: base (NSObjectFlag.Empty)
+		{
+			var data__handle__ = data!.GetNonNullHandle (nameof (data));
+			IntPtr exception_gchandle = IntPtr.Zero;
+			try {
+				if (IsDirectBinding) {
+					InitializeHandle (global::ObjCRuntime.Messaging.xamarin_NativeHandle_objc_msgSend_NativeHandle_exception (this.Handle, selInitForReadingWithData_XHandle, data__handle__, &exception_gchandle), "initForReadingWithData:");
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						InitializeHandle (global::ObjCRuntime.Messaging.xamarin_NativeHandle_objc_msgSendSuper_NativeHandle_exception (&__objc_super__, selInitForReadingWithData_XHandle, data__handle__, &exception_gchandle), "initForReadingWithData:");
+						GC.KeepAlive (this);
+					}
+				}
+			} catch {
+				Handle = IntPtr.Zero;
+				throw;
+			}
+			Runtime.ThrowException (exception_gchandle);
+			GC.KeepAlive (data);
+		}
+		[Export ("finishDecoding")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void FinishDecoding ()
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend (this.Handle, selFinishDecodingXHandle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper (&__objc_super__, selFinishDecodingXHandle);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("classForClassName:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual Class? GetClass (string codedName)
+		{
+			if (codedName is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (codedName));
+			var nscodedName = CFString.CreateNative (codedName);
+			Class? ret;
+			if (IsDirectBinding) {
+				ret = Runtime.GetINativeObject<global::ObjCRuntime.Class> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selClassForClassName_XHandle, nscodedName), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = Runtime.GetINativeObject<global::ObjCRuntime.Class> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selClassForClassName_XHandle, nscodedName), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			CFString.ReleaseNative (nscodedName);
+			return ret!;
+		}
+		[Export ("unarchivedArrayOfObjectsOfClass:fromData:error:")]
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static NSObject[]? GetUnarchivedArray (Class @class, NSData data, out NSError? error)
+		{
+			var @class__handle__ = @class!.GetNonNullHandle (nameof (@class));
+			var data__handle__ = data!.GetNonNullHandle (nameof (data));
+			NativeHandle errorValue = IntPtr.Zero;
+			NSObject[]? ret;
+			ret = CFArray.ArrayFromHandle<NSObject>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_ref_NativeHandle (class_ptr, selUnarchivedArrayOfObjectsOfClass_FromData_Error_XHandle, @class.Handle, data__handle__, &errorValue), false)!;
+			GC.KeepAlive (@class);
+			GC.KeepAlive (data);
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret!;
+		}
+		[Export ("unarchivedArrayOfObjectsOfClasses:fromData:error:")]
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static NSObject[]? GetUnarchivedArray (NSSet<Class> classes, NSData data, out NSError? error)
+		{
+			var classes__handle__ = classes!.GetNonNullHandle (nameof (classes));
+			var data__handle__ = data!.GetNonNullHandle (nameof (data));
+			NativeHandle errorValue = IntPtr.Zero;
+			NSObject[]? ret;
+			ret = CFArray.ArrayFromHandle<NSObject>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_ref_NativeHandle (class_ptr, selUnarchivedArrayOfObjectsOfClasses_FromData_Error_XHandle, classes__handle__, data__handle__, &errorValue), false)!;
+			GC.KeepAlive (classes);
+			GC.KeepAlive (data);
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret!;
+		}
+		[Export ("unarchivedDictionaryWithKeysOfClass:objectsOfClass:fromData:error:")]
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static NSDictionary? GetUnarchivedDictionary (Class keyClass, Class valueClass, NSData data, out NSError? error)
+		{
+			var keyClass__handle__ = keyClass!.GetNonNullHandle (nameof (keyClass));
+			var valueClass__handle__ = valueClass!.GetNonNullHandle (nameof (valueClass));
+			var data__handle__ = data!.GetNonNullHandle (nameof (data));
+			NativeHandle errorValue = IntPtr.Zero;
+			NSDictionary? ret;
+			ret =  Runtime.GetNSObject<NSDictionary> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_ref_NativeHandle (class_ptr, selUnarchivedDictionaryWithKeysOfClass_ObjectsOfClass_FromData_Error_XHandle, keyClass.Handle, valueClass.Handle, data__handle__, &errorValue), false)!;
+			GC.KeepAlive (keyClass);
+			GC.KeepAlive (valueClass);
+			GC.KeepAlive (data);
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret!;
+		}
+		[Export ("unarchivedDictionaryWithKeysOfClasses:objectsOfClasses:fromData:error:")]
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static NSDictionary? GetUnarchivedDictionary (NSSet<Class> keyClasses, NSSet<Class> valueClasses, NSData data, out NSError? error)
+		{
+			var keyClasses__handle__ = keyClasses!.GetNonNullHandle (nameof (keyClasses));
+			var valueClasses__handle__ = valueClasses!.GetNonNullHandle (nameof (valueClasses));
+			var data__handle__ = data!.GetNonNullHandle (nameof (data));
+			NativeHandle errorValue = IntPtr.Zero;
+			NSDictionary? ret;
+			ret =  Runtime.GetNSObject<NSDictionary> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_ref_NativeHandle (class_ptr, selUnarchivedDictionaryWithKeysOfClasses_ObjectsOfClasses_FromData_Error_XHandle, keyClasses__handle__, valueClasses__handle__, data__handle__, &errorValue), false)!;
+			GC.KeepAlive (keyClasses);
+			GC.KeepAlive (valueClasses);
+			GC.KeepAlive (data);
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret!;
+		}
+		[Export ("unarchivedObjectOfClass:fromData:error:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static NSObject? GetUnarchivedObject (Class cls, NSData data, out NSError? error)
+		{
+			var cls__handle__ = cls!.GetNonNullHandle (nameof (cls));
+			var data__handle__ = data!.GetNonNullHandle (nameof (data));
+			NativeHandle errorValue = IntPtr.Zero;
+			NSObject? ret;
+			ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_ref_NativeHandle (class_ptr, selUnarchivedObjectOfClass_FromData_Error_XHandle, cls.Handle, data__handle__, &errorValue), false)!;
+			GC.KeepAlive (cls);
+			GC.KeepAlive (data);
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret!;
+		}
+		/// <param name="type">To be added.</param><param name="data">To be added.</param><param name="error">To be added.</param><summary>To be added.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static NSObject? GetUnarchivedObject (global::System.Type type, NSData data, out NSError? error)
+		{
+			return GetUnarchivedObject (new Class (type), data, out error);
+		}
+		[Export ("unarchivedObjectOfClasses:fromData:error:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static NSObject? GetUnarchivedObject (NSSet<Class> classes, NSData data, out NSError? error)
+		{
+			var classes__handle__ = classes!.GetNonNullHandle (nameof (classes));
+			var data__handle__ = data!.GetNonNullHandle (nameof (data));
+			NativeHandle errorValue = IntPtr.Zero;
+			NSObject? ret;
+			ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_ref_NativeHandle (class_ptr, selUnarchivedObjectOfClasses_FromData_Error_XHandle, classes__handle__, data__handle__, &errorValue), false)!;
+			GC.KeepAlive (classes);
+			GC.KeepAlive (data);
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret!;
+		}
+		/// <param name="types">To be added.</param><param name="data">To be added.</param><param name="error">To be added.</param><summary>To be added.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static NSObject? GetUnarchivedObject (global::System.Type[] types, NSData data, out NSError? error)
+		{
+			return GetUnarchivedObject (new NSSet<Class> (Array.ConvertAll (types, t => new Class (t))), data, out error);
+		}
+		[Export ("setClass:forClassName:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetClass (Class kls, string codedName)
+		{
+			var kls__handle__ = kls!.GetNonNullHandle (nameof (kls));
+			if (codedName is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (codedName));
+			var nscodedName = CFString.CreateNative (codedName);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selSetClass_ForClassName_XHandle, kls.Handle, nscodedName);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selSetClass_ForClassName_XHandle, kls.Handle, nscodedName);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (kls);
+			CFString.ReleaseNative (nscodedName);
+		}
+		[Export ("unarchiveObjectWithFile:")]
+		[ObsoletedOSPlatform ("tvos12.0", "Use 'GetUnarchivedObject ()' instead.")]
+		[ObsoletedOSPlatform ("ios12.0", "Use 'GetUnarchivedObject ()' instead.")]
+		[ObsoletedOSPlatform ("macos10.14", "Use 'GetUnarchivedObject ()' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'GetUnarchivedObject ()' instead.")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static NSObject UnarchiveFile (string file)
+		{
+			if (file is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (file));
+			var nsfile = CFString.CreateNative (file);
+			IntPtr exception_gchandle = IntPtr.Zero;
+			NSObject? ret;
+			ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.xamarin_NativeHandle_objc_msgSend_NativeHandle_exception (class_ptr, selUnarchiveObjectWithFile_XHandle, nsfile, &exception_gchandle), false)!;
+			Runtime.ThrowException (exception_gchandle);
+			CFString.ReleaseNative (nsfile);
+			return ret!;
+		}
+		[Export ("unarchiveObjectWithData:")]
+		[ObsoletedOSPlatform ("tvos12.0", "Use 'GetUnarchivedObject ()' instead.")]
+		[ObsoletedOSPlatform ("ios12.0", "Use 'GetUnarchivedObject ()' instead.")]
+		[ObsoletedOSPlatform ("macos10.14", "Use 'GetUnarchivedObject ()' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'GetUnarchivedObject ()' instead.")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static NSObject UnarchiveObject (NSData data)
+		{
+			var data__handle__ = data!.GetNonNullHandle (nameof (data));
+			IntPtr exception_gchandle = IntPtr.Zero;
+			NSObject? ret;
+			ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.xamarin_NativeHandle_objc_msgSend_NativeHandle_exception (class_ptr, selUnarchiveObjectWithData_XHandle, data__handle__, &exception_gchandle), false)!;
+			Runtime.ThrowException (exception_gchandle);
+			GC.KeepAlive (data);
+			return ret!;
+		}
+		[Export ("unarchiveTopLevelObjectWithData:error:")]
+		[ObsoletedOSPlatform ("tvos12.0", "Use 'GetUnarchivedObject ()' instead.")]
+		[ObsoletedOSPlatform ("ios12.0", "Use 'GetUnarchivedObject ()' instead.")]
+		[ObsoletedOSPlatform ("macos10.14", "Use 'GetUnarchivedObject ()' instead.")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'GetUnarchivedObject ()' instead.")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static NSObject UnarchiveTopLevelObject (NSData data, out NSError error)
+		{
+			var data__handle__ = data!.GetNonNullHandle (nameof (data));
+			NativeHandle errorValue = IntPtr.Zero;
+			NSObject? ret;
+			ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_ref_NativeHandle (class_ptr, selUnarchiveTopLevelObjectWithData_Error_XHandle, data__handle__, &errorValue), false)!;
+			GC.KeepAlive (data);
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret!;
+		}
+		/// <summary>An instance of the Foundation.INSKeyedUnarchiverDelegate model class which acts as the class delegate.</summary><value>The instance of the Foundation.INSKeyedUnarchiverDelegate model class</value><remarks><para>The delegate instance assigned to this object will be used to handle events or provide data on demand to this class.</para><para>When setting the Delegate or WeakDelegate values events will be delivered to the specified instance instead of being delivered to the C#-style events</para><para>This is the strongly typed version of the object, developers should use the WeakDelegate property instead if they want to merely assign a class derived from NSObject that has been decorated with [Export] attributes.</para></remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public INSKeyedUnarchiverDelegate Delegate {
+			get {
+				return (WeakDelegate as INSKeyedUnarchiverDelegate)!;
+			}
+			set {
+				var rvalue = value as NSObject;
+				if (!(value is null) && rvalue is null)
+					throw new ArgumentException ("The object passed of type " + value.GetType () + " does not derive from NSObject");
+				WeakDelegate = rvalue;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool RequiresSecureCoding {
+			[Export ("requiresSecureCoding")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selRequiresSecureCodingXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selRequiresSecureCodingXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setRequiresSecureCoding:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetRequiresSecureCoding_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetRequiresSecureCoding_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		object? __mt_WeakDelegate_var;
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSObject? WeakDelegate {
+			[Export ("delegate", ArgumentSemantic.Assign)]
+			get {
+				NSObject? ret;
+				if (IsDirectBinding) {
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selDelegateXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selDelegateXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				MarkDirty ();
+				__mt_WeakDelegate_var = ret;
+				return ret!;
+			}
+			[Export ("setDelegate:", ArgumentSemantic.Assign)]
+			set {
+				NSApplication.EnsureDelegateAssignIsNotOverwritingInternalDelegate (__mt_WeakDelegate_var, value, GetInternalEventDelegateType);
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetDelegate_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetDelegate_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+				MarkDirty ();
+				__mt_WeakDelegate_var = value;
+			}
+		}
+		//
+		// Events and properties from the delegate
+		//
+		internal virtual Type GetInternalEventDelegateType
+		{
+			get { return typeof (_NSKeyedUnarchiverDelegate); }
+		}
+		internal virtual _NSKeyedUnarchiverDelegate CreateInternalEventDelegateType ()
+		{
+			return (_NSKeyedUnarchiverDelegate)(new _NSKeyedUnarchiverDelegate());
+		}
+		internal _NSKeyedUnarchiverDelegate EnsureNSKeyedUnarchiverDelegate ()
+		{
+			if (WeakDelegate is not null)
+				NSApplication.EnsureEventAndDelegateAreNotMismatched (WeakDelegate, GetInternalEventDelegateType);
+			var del = Delegate as _NSKeyedUnarchiverDelegate;
+			if (del is null){
+				del = (_NSKeyedUnarchiverDelegate)CreateInternalEventDelegateType ();
+				Delegate = (INSKeyedUnarchiverDelegate)del;
+			}
+			return del;
+		}
+		#pragma warning disable 672
+		[Register]
+		internal class _NSKeyedUnarchiverDelegate : NSObject, INSKeyedUnarchiverDelegate { 
+			public _NSKeyedUnarchiverDelegate () { IsDirectBinding = false; }
+			[DynamicDependency (DynamicallyAccessedMemberTypes.PublicMethods, typeof (_NSKeyedUnarchiverDelegate))]
+			static _NSKeyedUnarchiverDelegate ()
+			{
+				GC.KeepAlive (null);
+			}
+			internal NSDecoderHandler? cannotDecodeClass;
+			[Export ("unarchiver:cannotDecodeObjectOfClassName:originalClasses:")]
+			public Class CannotDecodeClass (NSKeyedUnarchiver unarchiver, string klass, String[] classes)
+			{
+				var handler = cannotDecodeClass;
+				if (handler is not null)
+					return handler (unarchiver, klass, classes);
+				return null!;
+			}
+			internal NSDecoderCallback? decodedObject;
+			[Export ("unarchiver:didDecodeObject:")]
+			public NSObject DecodedObject (NSKeyedUnarchiver unarchiver, NSObject obj)
+			{
+				var handler = decodedObject;
+				if (handler is not null)
+					return handler (unarchiver, obj);
+				return null!;
+			}
+			internal EventHandler? finished;
+			[Export ("unarchiverDidFinish:")]
+			public void Finished (NSKeyedUnarchiver unarchiver)
+			{
+				var handler = finished;
+				if (handler is not null){
+					handler (unarchiver, EventArgs.Empty);
+				}
+			}
+			internal EventHandler? finishing;
+			[Export ("unarchiverWillFinish:")]
+			public void Finishing (NSKeyedUnarchiver unarchiver)
+			{
+				var handler = finishing;
+				if (handler is not null){
+					handler (unarchiver, EventArgs.Empty);
+				}
+			}
+			internal EventHandler<NSArchiveReplaceEventArgs>? replacingObject;
+			[Export ("unarchiver:willReplaceObject:withObject:")]
+			public void ReplacingObject (NSKeyedUnarchiver unarchiver, NSObject oldObject, NSObject newObject)
+			{
+				var handler = replacingObject;
+				if (handler is not null){
+					var args = new NSArchiveReplaceEventArgs (oldObject, newObject);
+					handler (unarchiver, args);
+				}
+			}
+		}
+		#pragma warning restore 672
+		/// <summary>Delegate invoked by the object to get a value.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+		public NSDecoderHandler? CannotDecodeClass {
+			get { return EnsureNSKeyedUnarchiverDelegate ()!.cannotDecodeClass; }
+			set { EnsureNSKeyedUnarchiverDelegate ()!.cannotDecodeClass = value; }
+		}
+		/// <summary>Delegate invoked by the object to get a value.</summary>
+		/// <value>To be added.</value>
+		/// <remarks>Developers assign a function, delegate or anonymous method to this property to return a value to the object.   If developers assign a value to this property, it this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+		public NSDecoderCallback? DecodedObject {
+			get { return EnsureNSKeyedUnarchiverDelegate ()!.decodedObject; }
+			set { EnsureNSKeyedUnarchiverDelegate ()!.decodedObject = value; }
+		}
+		/// <summary>Event raised by the object.</summary>
+		/// <remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+		public event EventHandler Finished {
+			add { EnsureNSKeyedUnarchiverDelegate ()!.finished += value; }
+			remove { EnsureNSKeyedUnarchiverDelegate ()!.finished -= value; }
+		}
+		/// <summary>Event raised by the object.</summary>
+		/// <remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+		public event EventHandler Finishing {
+			add { EnsureNSKeyedUnarchiverDelegate ()!.finishing += value; }
+			remove { EnsureNSKeyedUnarchiverDelegate ()!.finishing -= value; }
+		}
+		/// <summary>Event raised by the object.</summary>
+		/// <remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+		public event EventHandler<NSArchiveReplaceEventArgs> ReplacingObject {
+			add { EnsureNSKeyedUnarchiverDelegate ()!.replacingObject += value; }
+			remove { EnsureNSKeyedUnarchiverDelegate ()!.replacingObject -= value; }
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		protected override void Dispose (bool disposing)
+		{
+			base.Dispose (disposing);
+			if (Handle == IntPtr.Zero) {
+				__mt_WeakDelegate_var = null;
+			}
+		}
+	} /* class NSKeyedUnarchiver */
+}

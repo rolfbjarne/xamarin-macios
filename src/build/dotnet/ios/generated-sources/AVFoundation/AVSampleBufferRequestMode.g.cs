@@ -1,0 +1,65 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using GLKit;
+using Metal;
+using CoreML;
+using MapKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using Messages;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using QuickLook;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using CoreMotion;
+using ObjCRuntime;
+using AddressBook;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using NewsstandKit;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace AVFoundation {
+	[SupportedOSPlatform ("ios15.0")]
+	[SupportedOSPlatform ("tvos15.0")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos")]
+	[Native]
+	public enum AVSampleBufferRequestMode : long {
+		/// <summary>To be added.</summary>
+		Immediate = 0,
+		/// <summary>To be added.</summary>
+		Scheduled = 1,
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos15.0")]
+		Opportunistic = 2,
+	}
+}

@@ -1,0 +1,341 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace WebKit {
+	[Register("WKDownload", true)]
+	[SupportedOSPlatform ("ios14.5")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class WKDownload : NSObject, INSProgressReporting {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCancel_X = "cancel:";
+		static readonly NativeHandle selCancel_XHandle = Selector.GetHandle ("cancel:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDelegateX = "delegate";
+		static readonly NativeHandle selDelegateXHandle = Selector.GetHandle ("delegate");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selIsUserInitiatedX = "isUserInitiated";
+		static readonly NativeHandle selIsUserInitiatedXHandle = Selector.GetHandle ("isUserInitiated");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selOriginalRequestX = "originalRequest";
+		static readonly NativeHandle selOriginalRequestXHandle = Selector.GetHandle ("originalRequest");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selOriginatingFrameX = "originatingFrame";
+		static readonly NativeHandle selOriginatingFrameXHandle = Selector.GetHandle ("originatingFrame");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selProgressX = "progress";
+		static readonly NativeHandle selProgressXHandle = Selector.GetHandle ("progress");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetDelegate_X = "setDelegate:";
+		static readonly NativeHandle selSetDelegate_XHandle = Selector.GetHandle ("setDelegate:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selWebViewX = "webView";
+		static readonly NativeHandle selWebViewXHandle = Selector.GetHandle ("webView");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("WKDownload");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected WKDownload (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal WKDownload (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("cancel:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void Cancel ([BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity1V48))]global::System.Action<NSData>? completionHandler)
+		{
+			using var block_completionHandler = Trampolines.SDActionArity1V48.CreateNullableBlock (completionHandler);
+			BlockLiteral *block_ptr_completionHandler = null;
+			if (completionHandler is not null)
+				block_ptr_completionHandler = &block_completionHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selCancel_XHandle, (IntPtr) block_ptr_completionHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selCancel_XHandle, (IntPtr) block_ptr_completionHandler);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<NSData> CancelAsync ()
+		{
+			var tcs = new TaskCompletionSource<NSData> ();
+			Cancel((obj_) => {
+				tcs.SetResult (obj_!);
+			});
+			return tcs.Task;
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public IWKDownloadDelegate? Delegate {
+			get {
+				return (WeakDelegate as IWKDownloadDelegate)!;
+			}
+			set {
+				var rvalue = value as NSObject;
+				if (!(value is null) && rvalue is null)
+					throw new ArgumentException ("The object passed of type " + value.GetType () + " does not derive from NSObject");
+				WeakDelegate = rvalue;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSUrlRequest? OriginalRequest {
+			[Export ("originalRequest")]
+			get {
+				NSUrlRequest? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSUrlRequest> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selOriginalRequestXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSUrlRequest> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selOriginalRequestXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("macos15.2")]
+		[SupportedOSPlatform ("ios18.2")]
+		[SupportedOSPlatform ("maccatalyst18.2")]
+		public virtual WKFrameInfo OriginatingFrame {
+			[Export ("originatingFrame")]
+			get {
+				WKFrameInfo? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<WKFrameInfo> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selOriginatingFrameXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<WKFrameInfo> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selOriginatingFrameXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("ios14.5")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("tvos")]
+		public virtual NSProgress Progress {
+			[Export ("progress")]
+			[SupportedOSPlatform ("ios14.5")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("maccatalyst")]
+			[UnsupportedOSPlatform ("tvos")]
+			get {
+				NSProgress? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSProgress> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selProgressXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSProgress> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selProgressXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("macos15.2")]
+		[SupportedOSPlatform ("ios18.2")]
+		[SupportedOSPlatform ("maccatalyst18.2")]
+		public virtual bool UserInitiated {
+			[Export ("isUserInitiated")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selIsUserInitiatedXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selIsUserInitiatedXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		object? __mt_WeakDelegate_var;
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSObject? WeakDelegate {
+			[Export ("delegate", ArgumentSemantic.Weak)]
+			get {
+				NSObject? ret;
+				if (IsDirectBinding) {
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selDelegateXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selDelegateXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				MarkDirty ();
+				__mt_WeakDelegate_var = ret;
+				return ret!;
+			}
+			[Export ("setDelegate:", ArgumentSemantic.Weak)]
+			set {
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetDelegate_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetDelegate_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+				MarkDirty ();
+				__mt_WeakDelegate_var = value;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		object? __mt_WebView_var;
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual WKWebView? WebView {
+			[Export ("webView", ArgumentSemantic.Weak)]
+			get {
+				WKWebView? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<WKWebView> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selWebViewXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<WKWebView> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selWebViewXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				MarkDirty ();
+				__mt_WebView_var = ret;
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		protected override void Dispose (bool disposing)
+		{
+			base.Dispose (disposing);
+			if (Handle == IntPtr.Zero) {
+				__mt_WeakDelegate_var = null;
+				__mt_WebView_var = null;
+			}
+		}
+	} /* class WKDownload */
+}

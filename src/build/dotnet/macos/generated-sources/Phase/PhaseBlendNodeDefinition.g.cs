@@ -1,0 +1,338 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace Phase {
+	[Register("PHASEBlendNodeDefinition", true)]
+	[SupportedOSPlatform ("tvos17.0")]
+	[SupportedOSPlatform ("ios15.0")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class PhaseBlendNodeDefinition : PhaseSoundEventNodeDefinition {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAddRangeForInputValuesAbove_FullGainAtValue_FadeCurveType_Subtree_X = "addRangeForInputValuesAbove:fullGainAtValue:fadeCurveType:subtree:";
+		static readonly NativeHandle selAddRangeForInputValuesAbove_FullGainAtValue_FadeCurveType_Subtree_XHandle = Selector.GetHandle ("addRangeForInputValuesAbove:fullGainAtValue:fadeCurveType:subtree:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAddRangeForInputValuesBelow_FullGainAtValue_FadeCurveType_Subtree_X = "addRangeForInputValuesBelow:fullGainAtValue:fadeCurveType:subtree:";
+		static readonly NativeHandle selAddRangeForInputValuesBelow_FullGainAtValue_FadeCurveType_Subtree_XHandle = Selector.GetHandle ("addRangeForInputValuesBelow:fullGainAtValue:fadeCurveType:subtree:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAddRangeForInputValuesBetween_HighValue_FullGainAtLowValue_FullGainAtHighValue_LowFadeCurveType_HighFadeCurveType_Subtree_X = "addRangeForInputValuesBetween:highValue:fullGainAtLowValue:fullGainAtHighValue:lowFadeCurveType:highFadeCurveType:subtree:";
+		static readonly NativeHandle selAddRangeForInputValuesBetween_HighValue_FullGainAtLowValue_FullGainAtHighValue_LowFadeCurveType_HighFadeCurveType_Subtree_XHandle = Selector.GetHandle ("addRangeForInputValuesBetween:highValue:fullGainAtLowValue:fullGainAtHighValue:lowFadeCurveType:highFadeCurveType:subtree:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAddRangeWithEnvelope_Subtree_X = "addRangeWithEnvelope:subtree:";
+		static readonly NativeHandle selAddRangeWithEnvelope_Subtree_XHandle = Selector.GetHandle ("addRangeWithEnvelope:subtree:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selBlendParameterDefinitionX = "blendParameterDefinition";
+		static readonly NativeHandle selBlendParameterDefinitionXHandle = Selector.GetHandle ("blendParameterDefinition");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitDistanceBlendWithSpatialMixerDefinition_X = "initDistanceBlendWithSpatialMixerDefinition:";
+		static readonly NativeHandle selInitDistanceBlendWithSpatialMixerDefinition_XHandle = Selector.GetHandle ("initDistanceBlendWithSpatialMixerDefinition:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitDistanceBlendWithSpatialMixerDefinition_Identifier_X = "initDistanceBlendWithSpatialMixerDefinition:identifier:";
+		static readonly NativeHandle selInitDistanceBlendWithSpatialMixerDefinition_Identifier_XHandle = Selector.GetHandle ("initDistanceBlendWithSpatialMixerDefinition:identifier:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithBlendMetaParameterDefinition_X = "initWithBlendMetaParameterDefinition:";
+		static readonly NativeHandle selInitWithBlendMetaParameterDefinition_XHandle = Selector.GetHandle ("initWithBlendMetaParameterDefinition:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithBlendMetaParameterDefinition_Identifier_X = "initWithBlendMetaParameterDefinition:identifier:";
+		static readonly NativeHandle selInitWithBlendMetaParameterDefinition_Identifier_XHandle = Selector.GetHandle ("initWithBlendMetaParameterDefinition:identifier:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSpatialMixerDefinitionForDistanceX = "spatialMixerDefinitionForDistance";
+		static readonly NativeHandle selSpatialMixerDefinitionForDistanceXHandle = Selector.GetHandle ("spatialMixerDefinitionForDistance");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("PHASEBlendNodeDefinition");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected PhaseBlendNodeDefinition (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal PhaseBlendNodeDefinition (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("initWithBlendMetaParameterDefinition:identifier:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PhaseBlendNodeDefinition (PhaseNumberMetaParameterDefinition blendMetaParameterDefinition, string identifier)
+			: base (NSObjectFlag.Empty)
+		{
+			var blendMetaParameterDefinition__handle__ = blendMetaParameterDefinition!.GetNonNullHandle (nameof (blendMetaParameterDefinition));
+			if (identifier is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (identifier));
+			var nsidentifier = CFString.CreateNative (identifier);
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selInitWithBlendMetaParameterDefinition_Identifier_XHandle, blendMetaParameterDefinition__handle__, nsidentifier), "initWithBlendMetaParameterDefinition:identifier:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selInitWithBlendMetaParameterDefinition_Identifier_XHandle, blendMetaParameterDefinition__handle__, nsidentifier), "initWithBlendMetaParameterDefinition:identifier:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (blendMetaParameterDefinition);
+			CFString.ReleaseNative (nsidentifier);
+		}
+		[Export ("initWithBlendMetaParameterDefinition:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PhaseBlendNodeDefinition (PhaseNumberMetaParameterDefinition blendMetaParameterDefinition)
+			: base (NSObjectFlag.Empty)
+		{
+			var blendMetaParameterDefinition__handle__ = blendMetaParameterDefinition!.GetNonNullHandle (nameof (blendMetaParameterDefinition));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selInitWithBlendMetaParameterDefinition_XHandle, blendMetaParameterDefinition__handle__), "initWithBlendMetaParameterDefinition:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selInitWithBlendMetaParameterDefinition_XHandle, blendMetaParameterDefinition__handle__), "initWithBlendMetaParameterDefinition:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (blendMetaParameterDefinition);
+		}
+		[Export ("initDistanceBlendWithSpatialMixerDefinition:identifier:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PhaseBlendNodeDefinition (PhaseSpatialMixerDefinition spatialMixerDefinition, string identifier)
+			: base (NSObjectFlag.Empty)
+		{
+			var spatialMixerDefinition__handle__ = spatialMixerDefinition!.GetNonNullHandle (nameof (spatialMixerDefinition));
+			if (identifier is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (identifier));
+			var nsidentifier = CFString.CreateNative (identifier);
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selInitDistanceBlendWithSpatialMixerDefinition_Identifier_XHandle, spatialMixerDefinition__handle__, nsidentifier), "initDistanceBlendWithSpatialMixerDefinition:identifier:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selInitDistanceBlendWithSpatialMixerDefinition_Identifier_XHandle, spatialMixerDefinition__handle__, nsidentifier), "initDistanceBlendWithSpatialMixerDefinition:identifier:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (spatialMixerDefinition);
+			CFString.ReleaseNative (nsidentifier);
+		}
+		[Export ("initDistanceBlendWithSpatialMixerDefinition:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PhaseBlendNodeDefinition (PhaseSpatialMixerDefinition spatialMixerDefinition)
+			: base (NSObjectFlag.Empty)
+		{
+			var spatialMixerDefinition__handle__ = spatialMixerDefinition!.GetNonNullHandle (nameof (spatialMixerDefinition));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selInitDistanceBlendWithSpatialMixerDefinition_XHandle, spatialMixerDefinition__handle__), "initDistanceBlendWithSpatialMixerDefinition:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selInitDistanceBlendWithSpatialMixerDefinition_XHandle, spatialMixerDefinition__handle__), "initDistanceBlendWithSpatialMixerDefinition:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (spatialMixerDefinition);
+		}
+		[Export ("addRangeWithEnvelope:subtree:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void AddRange (PhaseEnvelope envelope, PhaseSoundEventNodeDefinition subtree)
+		{
+			var envelope__handle__ = envelope!.GetNonNullHandle (nameof (envelope));
+			var subtree__handle__ = subtree!.GetNonNullHandle (nameof (subtree));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selAddRangeWithEnvelope_Subtree_XHandle, envelope__handle__, subtree__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selAddRangeWithEnvelope_Subtree_XHandle, envelope__handle__, subtree__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (envelope);
+			GC.KeepAlive (subtree);
+		}
+		[Export ("addRangeForInputValuesAbove:fullGainAtValue:fadeCurveType:subtree:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void AddRangeForInputValuesAbove (double value, double fullGainAtValue, PhaseCurveType fadeCurveType, PhaseSoundEventNodeDefinition subtree)
+		{
+			var subtree__handle__ = subtree!.GetNonNullHandle (nameof (subtree));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_Double_Double_IntPtr_NativeHandle (this.Handle, selAddRangeForInputValuesAbove_FullGainAtValue_FadeCurveType_Subtree_XHandle, value, fullGainAtValue, (IntPtr) (long) fadeCurveType, subtree__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_Double_Double_IntPtr_NativeHandle (&__objc_super__, selAddRangeForInputValuesAbove_FullGainAtValue_FadeCurveType_Subtree_XHandle, value, fullGainAtValue, (IntPtr) (long) fadeCurveType, subtree__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (subtree);
+		}
+		[Export ("addRangeForInputValuesBelow:fullGainAtValue:fadeCurveType:subtree:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void AddRangeForInputValuesBelow (double value, double fullGainAtValue, PhaseCurveType fadeCurveType, PhaseSoundEventNodeDefinition subtree)
+		{
+			var subtree__handle__ = subtree!.GetNonNullHandle (nameof (subtree));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_Double_Double_IntPtr_NativeHandle (this.Handle, selAddRangeForInputValuesBelow_FullGainAtValue_FadeCurveType_Subtree_XHandle, value, fullGainAtValue, (IntPtr) (long) fadeCurveType, subtree__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_Double_Double_IntPtr_NativeHandle (&__objc_super__, selAddRangeForInputValuesBelow_FullGainAtValue_FadeCurveType_Subtree_XHandle, value, fullGainAtValue, (IntPtr) (long) fadeCurveType, subtree__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (subtree);
+		}
+		[Export ("addRangeForInputValuesBetween:highValue:fullGainAtLowValue:fullGainAtHighValue:lowFadeCurveType:highFadeCurveType:subtree:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void AddRangeForInputValuesBetween (double lowValue, double highValue, double fullGainAtLowValue, double fullGainAtHighValue, PhaseCurveType lowFadeCurveType, PhaseCurveType highFadeCurveType, PhaseSoundEventNodeDefinition subtree)
+		{
+			var subtree__handle__ = subtree!.GetNonNullHandle (nameof (subtree));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_Double_Double_Double_Double_IntPtr_IntPtr_NativeHandle (this.Handle, selAddRangeForInputValuesBetween_HighValue_FullGainAtLowValue_FullGainAtHighValue_LowFadeCurveType_HighFadeCurveType_Subtree_XHandle, lowValue, highValue, fullGainAtLowValue, fullGainAtHighValue, (IntPtr) (long) lowFadeCurveType, (IntPtr) (long) highFadeCurveType, subtree__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_Double_Double_Double_Double_IntPtr_IntPtr_NativeHandle (&__objc_super__, selAddRangeForInputValuesBetween_HighValue_FullGainAtLowValue_FullGainAtHighValue_LowFadeCurveType_HighFadeCurveType_Subtree_XHandle, lowValue, highValue, fullGainAtLowValue, fullGainAtHighValue, (IntPtr) (long) lowFadeCurveType, (IntPtr) (long) highFadeCurveType, subtree__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (subtree);
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual PhaseNumberMetaParameterDefinition? BlendParameterDefinition {
+			[Export ("blendParameterDefinition", ArgumentSemantic.Retain)]
+			get {
+				PhaseNumberMetaParameterDefinition? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<PhaseNumberMetaParameterDefinition> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selBlendParameterDefinitionXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<PhaseNumberMetaParameterDefinition> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selBlendParameterDefinitionXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual PhaseSpatialMixerDefinition? SpatialMixerDefinitionForDistance {
+			[Export ("spatialMixerDefinitionForDistance", ArgumentSemantic.Retain)]
+			get {
+				PhaseSpatialMixerDefinition? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<PhaseSpatialMixerDefinition> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selSpatialMixerDefinitionForDistanceXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<PhaseSpatialMixerDefinition> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selSpatialMixerDefinitionForDistanceXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+	} /* class PhaseBlendNodeDefinition */
+}

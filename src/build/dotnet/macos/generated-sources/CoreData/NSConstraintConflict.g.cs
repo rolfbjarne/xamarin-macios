@@ -1,0 +1,307 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace CoreData {
+	/// <summary>To be added.</summary><remarks>To be added.</remarks><related type="externalDocumentation" href="https://developer.apple.com/reference/CoreData/NSConstraintConflict">Apple documentation for <c>NSConstraintConflict</c></related>
+	[Register("NSConstraintConflict", true)]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
+	public unsafe partial class NSConstraintConflict : NSObject {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selConflictingObjectsX = "conflictingObjects";
+		static readonly NativeHandle selConflictingObjectsXHandle = Selector.GetHandle ("conflictingObjects");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selConflictingSnapshotsX = "conflictingSnapshots";
+		static readonly NativeHandle selConflictingSnapshotsXHandle = Selector.GetHandle ("conflictingSnapshots");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selConstraintX = "constraint";
+		static readonly NativeHandle selConstraintXHandle = Selector.GetHandle ("constraint");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selConstraintValuesX = "constraintValues";
+		static readonly NativeHandle selConstraintValuesXHandle = Selector.GetHandle ("constraintValues");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDatabaseObjectX = "databaseObject";
+		static readonly NativeHandle selDatabaseObjectXHandle = Selector.GetHandle ("databaseObject");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDatabaseSnapshotX = "databaseSnapshot";
+		static readonly NativeHandle selDatabaseSnapshotXHandle = Selector.GetHandle ("databaseSnapshot");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithConstraint_DatabaseObject_DatabaseSnapshot_ConflictingObjects_ConflictingSnapshots_X = "initWithConstraint:databaseObject:databaseSnapshot:conflictingObjects:conflictingSnapshots:";
+		static readonly NativeHandle selInitWithConstraint_DatabaseObject_DatabaseSnapshot_ConflictingObjects_ConflictingSnapshots_XHandle = Selector.GetHandle ("initWithConstraint:databaseObject:databaseSnapshot:conflictingObjects:conflictingSnapshots:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("NSConstraintConflict");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Creates a new <see cref="NSConstraintConflict" /> with default values.</summary>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("init")]
+		public NSConstraintConflict () : base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.Init), "init");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, global::ObjCRuntime.Selector.Init), "init");
+				GC.KeepAlive (this);
+				}
+			}
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected NSConstraintConflict (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal NSConstraintConflict (NativeHandle handle) : base (handle)
+		{
+		}
+
+		/// <param name="contraint">To be added.</param><param name="databaseObject"><para>To be added.</para><para tool="nullallowed">This parameter can be <see langword="null" />.</para></param><param name="databaseSnapshot"><para>To be added.</para><para tool="nullallowed">This parameter can be <see langword="null" />.</para></param><param name="conflictingObjects">To be added.</param><param name="conflictingSnapshots">To be added.</param><summary>To be added.</summary><remarks>To be added.</remarks>
+		[Export ("initWithConstraint:databaseObject:databaseSnapshot:conflictingObjects:conflictingSnapshots:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public NSConstraintConflict (string[] contraint, NSManagedObject? databaseObject, NSDictionary? databaseSnapshot, NSManagedObject[] conflictingObjects, NSObject[] conflictingSnapshots)
+			: base (NSObjectFlag.Empty)
+		{
+			if (contraint is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (contraint));
+			var databaseObject__handle__ = databaseObject.GetHandle ();
+			var databaseSnapshot__handle__ = databaseSnapshot.GetHandle ();
+			if (conflictingObjects is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (conflictingObjects));
+			if (conflictingSnapshots is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (conflictingSnapshots));
+			using var nsa_contraint = NSArray.FromStrings (contraint);
+			using var nsa_conflictingObjects = NSArray.FromNSObjects (conflictingObjects);
+			using var nsa_conflictingSnapshots = NSArray.FromNSObjects (conflictingSnapshots);
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle (this.Handle, selInitWithConstraint_DatabaseObject_DatabaseSnapshot_ConflictingObjects_ConflictingSnapshots_XHandle, nsa_contraint.Handle, databaseObject__handle__, databaseSnapshot__handle__, nsa_conflictingObjects.Handle, nsa_conflictingSnapshots.Handle), "initWithConstraint:databaseObject:databaseSnapshot:conflictingObjects:conflictingSnapshots:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, selInitWithConstraint_DatabaseObject_DatabaseSnapshot_ConflictingObjects_ConflictingSnapshots_XHandle, nsa_contraint.Handle, databaseObject__handle__, databaseSnapshot__handle__, nsa_conflictingObjects.Handle, nsa_conflictingSnapshots.Handle), "initWithConstraint:databaseObject:databaseSnapshot:conflictingObjects:conflictingSnapshots:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (databaseObject);
+			GC.KeepAlive (databaseSnapshot);
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSManagedObject[] ConflictingObjects {
+			[Export ("conflictingObjects", ArgumentSemantic.Copy)]
+			get {
+				NSManagedObject[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<NSManagedObject>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selConflictingObjectsXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<NSManagedObject>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selConflictingObjectsXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSDictionary[] ConflictingSnapshots {
+			[Export ("conflictingSnapshots", ArgumentSemantic.Copy)]
+			get {
+				NSDictionary[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<NSDictionary>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selConflictingSnapshotsXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<NSDictionary>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selConflictingSnapshotsXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual string[] Constraint {
+			[Export ("constraint", ArgumentSemantic.Copy)]
+			get {
+				string[] ret;
+				if (IsDirectBinding) {
+					ret = CFArray.StringArrayFromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selConstraintXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.StringArrayFromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selConstraintXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSDictionary<NSString, NSObject> ConstraintValues {
+			[Export ("constraintValues", ArgumentSemantic.Copy)]
+			get {
+				NSDictionary<NSString, NSObject>? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSDictionary<NSString, NSObject>> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selConstraintValuesXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSDictionary<NSString, NSObject>> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selConstraintValuesXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		/// <summary>To be added.</summary><value><para>(More documentation for this node is coming)</para><para tool="nullallowed">This value can be <see langword="null" />.</para></value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSManagedObject? DatabaseObject {
+			[Export ("databaseObject", ArgumentSemantic.Retain)]
+			get {
+				NSManagedObject? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSManagedObject> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selDatabaseObjectXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSManagedObject> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selDatabaseObjectXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		/// <summary>To be added.</summary><value><para>(More documentation for this node is coming)</para><para tool="nullallowed">This value can be <see langword="null" />.</para></value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSDictionary<NSString, NSObject>? DatabaseSnapshot {
+			[Export ("databaseSnapshot", ArgumentSemantic.Retain)]
+			get {
+				NSDictionary<NSString, NSObject>? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSDictionary<NSString, NSObject>> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selDatabaseSnapshotXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSDictionary<NSString, NSObject>> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selDatabaseSnapshotXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+	} /* class NSConstraintConflict */
+}

@@ -1,0 +1,622 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace CloudKit {
+	[Register("CKFetchRecordZoneChangesOperation", true)]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
+	public unsafe partial class CKFetchRecordZoneChangesOperation : CKDatabaseOperation {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selConfigurationsByRecordZoneIDX = "configurationsByRecordZoneID";
+		static readonly NativeHandle selConfigurationsByRecordZoneIDXHandle = Selector.GetHandle ("configurationsByRecordZoneID");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selFetchAllChangesX = "fetchAllChanges";
+		static readonly NativeHandle selFetchAllChangesXHandle = Selector.GetHandle ("fetchAllChanges");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selFetchRecordZoneChangesCompletionBlockX = "fetchRecordZoneChangesCompletionBlock";
+		static readonly NativeHandle selFetchRecordZoneChangesCompletionBlockXHandle = Selector.GetHandle ("fetchRecordZoneChangesCompletionBlock");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitX = "init";
+		static readonly NativeHandle selInitXHandle = Selector.GetHandle ("init");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithRecordZoneIDs_ConfigurationsByRecordZoneID_X = "initWithRecordZoneIDs:configurationsByRecordZoneID:";
+		static readonly NativeHandle selInitWithRecordZoneIDs_ConfigurationsByRecordZoneID_XHandle = Selector.GetHandle ("initWithRecordZoneIDs:configurationsByRecordZoneID:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithRecordZoneIDs_OptionsByRecordZoneID_X = "initWithRecordZoneIDs:optionsByRecordZoneID:";
+		static readonly NativeHandle selInitWithRecordZoneIDs_OptionsByRecordZoneID_XHandle = Selector.GetHandle ("initWithRecordZoneIDs:optionsByRecordZoneID:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selOptionsByRecordZoneIDX = "optionsByRecordZoneID";
+		static readonly NativeHandle selOptionsByRecordZoneIDXHandle = Selector.GetHandle ("optionsByRecordZoneID");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRecordChangedBlockX = "recordChangedBlock";
+		static readonly NativeHandle selRecordChangedBlockXHandle = Selector.GetHandle ("recordChangedBlock");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRecordWasChangedBlockX = "recordWasChangedBlock";
+		static readonly NativeHandle selRecordWasChangedBlockXHandle = Selector.GetHandle ("recordWasChangedBlock");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRecordWithIDWasDeletedBlockX = "recordWithIDWasDeletedBlock";
+		static readonly NativeHandle selRecordWithIDWasDeletedBlockXHandle = Selector.GetHandle ("recordWithIDWasDeletedBlock");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRecordZoneChangeTokensUpdatedBlockX = "recordZoneChangeTokensUpdatedBlock";
+		static readonly NativeHandle selRecordZoneChangeTokensUpdatedBlockXHandle = Selector.GetHandle ("recordZoneChangeTokensUpdatedBlock");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRecordZoneFetchCompletionBlockX = "recordZoneFetchCompletionBlock";
+		static readonly NativeHandle selRecordZoneFetchCompletionBlockXHandle = Selector.GetHandle ("recordZoneFetchCompletionBlock");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRecordZoneIDsX = "recordZoneIDs";
+		static readonly NativeHandle selRecordZoneIDsXHandle = Selector.GetHandle ("recordZoneIDs");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetConfigurationsByRecordZoneID_X = "setConfigurationsByRecordZoneID:";
+		static readonly NativeHandle selSetConfigurationsByRecordZoneID_XHandle = Selector.GetHandle ("setConfigurationsByRecordZoneID:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetFetchAllChanges_X = "setFetchAllChanges:";
+		static readonly NativeHandle selSetFetchAllChanges_XHandle = Selector.GetHandle ("setFetchAllChanges:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetFetchRecordZoneChangesCompletionBlock_X = "setFetchRecordZoneChangesCompletionBlock:";
+		static readonly NativeHandle selSetFetchRecordZoneChangesCompletionBlock_XHandle = Selector.GetHandle ("setFetchRecordZoneChangesCompletionBlock:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetOptionsByRecordZoneID_X = "setOptionsByRecordZoneID:";
+		static readonly NativeHandle selSetOptionsByRecordZoneID_XHandle = Selector.GetHandle ("setOptionsByRecordZoneID:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetRecordChangedBlock_X = "setRecordChangedBlock:";
+		static readonly NativeHandle selSetRecordChangedBlock_XHandle = Selector.GetHandle ("setRecordChangedBlock:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetRecordWasChangedBlock_X = "setRecordWasChangedBlock:";
+		static readonly NativeHandle selSetRecordWasChangedBlock_XHandle = Selector.GetHandle ("setRecordWasChangedBlock:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetRecordWithIDWasDeletedBlock_X = "setRecordWithIDWasDeletedBlock:";
+		static readonly NativeHandle selSetRecordWithIDWasDeletedBlock_XHandle = Selector.GetHandle ("setRecordWithIDWasDeletedBlock:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetRecordZoneChangeTokensUpdatedBlock_X = "setRecordZoneChangeTokensUpdatedBlock:";
+		static readonly NativeHandle selSetRecordZoneChangeTokensUpdatedBlock_XHandle = Selector.GetHandle ("setRecordZoneChangeTokensUpdatedBlock:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetRecordZoneFetchCompletionBlock_X = "setRecordZoneFetchCompletionBlock:";
+		static readonly NativeHandle selSetRecordZoneFetchCompletionBlock_XHandle = Selector.GetHandle ("setRecordZoneFetchCompletionBlock:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetRecordZoneIDs_X = "setRecordZoneIDs:";
+		static readonly NativeHandle selSetRecordZoneIDs_XHandle = Selector.GetHandle ("setRecordZoneIDs:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("CKFetchRecordZoneChangesOperation");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected CKFetchRecordZoneChangesOperation (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal CKFetchRecordZoneChangesOperation (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("init")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public CKFetchRecordZoneChangesOperation ()
+			: base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selInitXHandle), "init");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selInitXHandle), "init");
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("initWithRecordZoneIDs:optionsByRecordZoneID:")]
+		[ObsoletedOSPlatform ("tvos12.0", "Use the overload with the 'NSDictionary<CKRecordZoneID, CKFetchRecordZoneChangesConfiguration>' parameter instead.")]
+		[ObsoletedOSPlatform ("ios12.0", "Use the overload with the 'NSDictionary<CKRecordZoneID, CKFetchRecordZoneChangesConfiguration>' parameter instead.")]
+		[ObsoletedOSPlatform ("macos10.14", "Use the overload with the 'NSDictionary<CKRecordZoneID, CKFetchRecordZoneChangesConfiguration>' parameter instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use the overload with the 'NSDictionary<CKRecordZoneID, CKFetchRecordZoneChangesConfiguration>' parameter instead.")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public CKFetchRecordZoneChangesOperation (CKRecordZoneID[] recordZoneIDs, NSDictionary<CKRecordZoneID, CKFetchRecordZoneChangesOptions>? optionsByRecordZoneID)
+			: base (NSObjectFlag.Empty)
+		{
+			if (recordZoneIDs is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (recordZoneIDs));
+			var optionsByRecordZoneID__handle__ = optionsByRecordZoneID.GetHandle ();
+			using var nsa_recordZoneIDs = NSArray.FromNSObjects (recordZoneIDs);
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selInitWithRecordZoneIDs_OptionsByRecordZoneID_XHandle, nsa_recordZoneIDs.Handle, optionsByRecordZoneID__handle__), "initWithRecordZoneIDs:optionsByRecordZoneID:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selInitWithRecordZoneIDs_OptionsByRecordZoneID_XHandle, nsa_recordZoneIDs.Handle, optionsByRecordZoneID__handle__), "initWithRecordZoneIDs:optionsByRecordZoneID:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (optionsByRecordZoneID);
+		}
+		[Export ("initWithRecordZoneIDs:configurationsByRecordZoneID:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public CKFetchRecordZoneChangesOperation (CKRecordZoneID[] recordZoneIDs, NSDictionary<CKRecordZoneID, CKFetchRecordZoneChangesConfiguration>? configurationsByRecordZoneID)
+			: base (NSObjectFlag.Empty)
+		{
+			if (recordZoneIDs is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (recordZoneIDs));
+			var configurationsByRecordZoneID__handle__ = configurationsByRecordZoneID.GetHandle ();
+			using var nsa_recordZoneIDs = NSArray.FromNSObjects (recordZoneIDs);
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selInitWithRecordZoneIDs_ConfigurationsByRecordZoneID_XHandle, nsa_recordZoneIDs.Handle, configurationsByRecordZoneID__handle__), "initWithRecordZoneIDs:configurationsByRecordZoneID:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selInitWithRecordZoneIDs_ConfigurationsByRecordZoneID_XHandle, nsa_recordZoneIDs.Handle, configurationsByRecordZoneID__handle__), "initWithRecordZoneIDs:configurationsByRecordZoneID:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (configurationsByRecordZoneID);
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual global::System.Action<NSError>? ChangesCompleted {
+			[return: DelegateProxy (typeof (ObjCRuntime.Trampolines.SDActionArity1V16))]
+			[Export ("fetchRecordZoneChangesCompletionBlock", ArgumentSemantic.Copy)]
+			get {
+				NativeHandle ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selFetchRecordZoneChangesCompletionBlockXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selFetchRecordZoneChangesCompletionBlockXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return global::ObjCRuntime.Trampolines.NIDActionArity1V16.Create (ret)!;
+			}
+			[param: BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity1V16))]
+			[Export ("setFetchRecordZoneChangesCompletionBlock:", ArgumentSemantic.Copy)]
+			set {
+				using var block_value = Trampolines.SDActionArity1V16.CreateNullableBlock (value);
+				BlockLiteral *block_ptr_value = null;
+				if (value is not null)
+					block_ptr_value = &block_value;
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetFetchRecordZoneChangesCompletionBlock_XHandle, (IntPtr) block_ptr_value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetFetchRecordZoneChangesCompletionBlock_XHandle, (IntPtr) block_ptr_value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public virtual NSDictionary<CKRecordZoneID, CKFetchRecordZoneChangesConfiguration>? ConfigurationsByRecordZoneID {
+			[Export ("configurationsByRecordZoneID", ArgumentSemantic.Copy)]
+			get {
+				NSDictionary<CKRecordZoneID, CKFetchRecordZoneChangesConfiguration>? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSDictionary<CKRecordZoneID, CKFetchRecordZoneChangesConfiguration>> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selConfigurationsByRecordZoneIDXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSDictionary<CKRecordZoneID, CKFetchRecordZoneChangesConfiguration>> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selConfigurationsByRecordZoneIDXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setConfigurationsByRecordZoneID:", ArgumentSemantic.Copy)]
+			set {
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetConfigurationsByRecordZoneID_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetConfigurationsByRecordZoneID_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool FetchAllChanges {
+			[Export ("fetchAllChanges")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selFetchAllChangesXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selFetchAllChangesXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setFetchAllChanges:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetFetchAllChanges_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetFetchAllChanges_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual CKFetchRecordZoneChangesFetchCompletedHandler? FetchCompleted {
+			[return: DelegateProxy (typeof (ObjCRuntime.Trampolines.SDCKFetchRecordZoneChangesFetchCompletedHandler))]
+			[Export ("recordZoneFetchCompletionBlock", ArgumentSemantic.Copy)]
+			get {
+				NativeHandle ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selRecordZoneFetchCompletionBlockXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selRecordZoneFetchCompletionBlockXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return global::ObjCRuntime.Trampolines.NIDCKFetchRecordZoneChangesFetchCompletedHandler.Create (ret)!;
+			}
+			[param: BlockProxy (typeof (ObjCRuntime.Trampolines.NIDCKFetchRecordZoneChangesFetchCompletedHandler))]
+			[Export ("setRecordZoneFetchCompletionBlock:", ArgumentSemantic.Copy)]
+			set {
+				using var block_value = Trampolines.SDCKFetchRecordZoneChangesFetchCompletedHandler.CreateNullableBlock (value);
+				BlockLiteral *block_ptr_value = null;
+				if (value is not null)
+					block_ptr_value = &block_value;
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetRecordZoneFetchCompletionBlock_XHandle, (IntPtr) block_ptr_value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetRecordZoneFetchCompletionBlock_XHandle, (IntPtr) block_ptr_value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[ObsoletedOSPlatform ("tvos12.0", "Use 'ConfigurationsByRecordZoneID' instead.")]
+		[ObsoletedOSPlatform ("ios12.0", "Use 'ConfigurationsByRecordZoneID' instead.")]
+		[ObsoletedOSPlatform ("macos10.14", "Use 'ConfigurationsByRecordZoneID' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'ConfigurationsByRecordZoneID' instead.")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual NSDictionary<CKRecordZoneID, CKFetchRecordZoneChangesOptions>? OptionsByRecordZoneID {
+			[Export ("optionsByRecordZoneID", ArgumentSemantic.Copy)]
+			get {
+				NSDictionary<CKRecordZoneID, CKFetchRecordZoneChangesOptions>? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSDictionary<CKRecordZoneID, CKFetchRecordZoneChangesOptions>> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selOptionsByRecordZoneIDXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSDictionary<CKRecordZoneID, CKFetchRecordZoneChangesOptions>> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selOptionsByRecordZoneIDXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setOptionsByRecordZoneID:", ArgumentSemantic.Copy)]
+			set {
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetOptionsByRecordZoneID_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetOptionsByRecordZoneID_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[ObsoletedOSPlatform ("tvos15.0", "Use 'RecordWasChangedHandler' instead.")]
+		[ObsoletedOSPlatform ("ios15.0", "Use 'RecordWasChangedHandler' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst15.0", "Use 'RecordWasChangedHandler' instead.")]
+		[ObsoletedOSPlatform ("macos12.0", "Use 'RecordWasChangedHandler' instead.")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public unsafe virtual global::System.Action<CKRecord>? RecordChanged {
+			[return: DelegateProxy (typeof (ObjCRuntime.Trampolines.SDActionArity1V34))]
+			[Export ("recordChangedBlock", ArgumentSemantic.Copy)]
+			get {
+				NativeHandle ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selRecordChangedBlockXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selRecordChangedBlockXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return global::ObjCRuntime.Trampolines.NIDActionArity1V34.Create (ret)!;
+			}
+			[param: BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity1V34))]
+			[Export ("setRecordChangedBlock:", ArgumentSemantic.Copy)]
+			set {
+				using var block_value = Trampolines.SDActionArity1V34.CreateNullableBlock (value);
+				BlockLiteral *block_ptr_value = null;
+				if (value is not null)
+					block_ptr_value = &block_value;
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetRecordChangedBlock_XHandle, (IntPtr) block_ptr_value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetRecordChangedBlock_XHandle, (IntPtr) block_ptr_value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("tvos15.0")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		public unsafe virtual CKFetchRecordZoneChangesRecordWasChangedHandler? RecordWasChangedHandler {
+			[return: DelegateProxy (typeof (ObjCRuntime.Trampolines.SDCKFetchRecordZoneChangesRecordWasChangedHandler))]
+			[Export ("recordWasChangedBlock", ArgumentSemantic.Copy)]
+			get {
+				NativeHandle ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selRecordWasChangedBlockXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selRecordWasChangedBlockXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return global::ObjCRuntime.Trampolines.NIDCKFetchRecordZoneChangesRecordWasChangedHandler.Create (ret)!;
+			}
+			[param: BlockProxy (typeof (ObjCRuntime.Trampolines.NIDCKFetchRecordZoneChangesRecordWasChangedHandler))]
+			[Export ("setRecordWasChangedBlock:", ArgumentSemantic.Copy)]
+			set {
+				using var block_value = Trampolines.SDCKFetchRecordZoneChangesRecordWasChangedHandler.CreateNullableBlock (value);
+				BlockLiteral *block_ptr_value = null;
+				if (value is not null)
+					block_ptr_value = &block_value;
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetRecordWasChangedBlock_XHandle, (IntPtr) block_ptr_value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetRecordWasChangedBlock_XHandle, (IntPtr) block_ptr_value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual CKFetchRecordZoneChangesWithIDWasDeletedHandler? RecordWithIDWasDeleted {
+			[return: DelegateProxy (typeof (ObjCRuntime.Trampolines.SDCKFetchRecordZoneChangesWithIDWasDeletedHandler))]
+			[Export ("recordWithIDWasDeletedBlock", ArgumentSemantic.Copy)]
+			get {
+				NativeHandle ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selRecordWithIDWasDeletedBlockXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selRecordWithIDWasDeletedBlockXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return global::ObjCRuntime.Trampolines.NIDCKFetchRecordZoneChangesWithIDWasDeletedHandler.Create (ret)!;
+			}
+			[param: BlockProxy (typeof (ObjCRuntime.Trampolines.NIDCKFetchRecordZoneChangesWithIDWasDeletedHandler))]
+			[Export ("setRecordWithIDWasDeletedBlock:", ArgumentSemantic.Copy)]
+			set {
+				using var block_value = Trampolines.SDCKFetchRecordZoneChangesWithIDWasDeletedHandler.CreateNullableBlock (value);
+				BlockLiteral *block_ptr_value = null;
+				if (value is not null)
+					block_ptr_value = &block_value;
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetRecordWithIDWasDeletedBlock_XHandle, (IntPtr) block_ptr_value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetRecordWithIDWasDeletedBlock_XHandle, (IntPtr) block_ptr_value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual CKFetchRecordZoneChangesTokensUpdatedHandler? RecordZoneChangeTokensUpdated {
+			[return: DelegateProxy (typeof (ObjCRuntime.Trampolines.SDCKFetchRecordZoneChangesTokensUpdatedHandler))]
+			[Export ("recordZoneChangeTokensUpdatedBlock", ArgumentSemantic.Copy)]
+			get {
+				NativeHandle ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selRecordZoneChangeTokensUpdatedBlockXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selRecordZoneChangeTokensUpdatedBlockXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return global::ObjCRuntime.Trampolines.NIDCKFetchRecordZoneChangesTokensUpdatedHandler.Create (ret)!;
+			}
+			[param: BlockProxy (typeof (ObjCRuntime.Trampolines.NIDCKFetchRecordZoneChangesTokensUpdatedHandler))]
+			[Export ("setRecordZoneChangeTokensUpdatedBlock:", ArgumentSemantic.Copy)]
+			set {
+				using var block_value = Trampolines.SDCKFetchRecordZoneChangesTokensUpdatedHandler.CreateNullableBlock (value);
+				BlockLiteral *block_ptr_value = null;
+				if (value is not null)
+					block_ptr_value = &block_value;
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetRecordZoneChangeTokensUpdatedBlock_XHandle, (IntPtr) block_ptr_value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetRecordZoneChangeTokensUpdatedBlock_XHandle, (IntPtr) block_ptr_value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual CKRecordZoneID[]? RecordZoneIDs {
+			[Export ("recordZoneIDs", ArgumentSemantic.Copy)]
+			get {
+				CKRecordZoneID[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<CKRecordZoneID>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selRecordZoneIDsXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<CKRecordZoneID>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selRecordZoneIDsXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setRecordZoneIDs:", ArgumentSemantic.Copy)]
+			set {
+				using var nsa_value = value is null ? null : NSArray.FromNSObjects (value);
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetRecordZoneIDs_XHandle, nsa_value.GetHandle ());
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetRecordZoneIDs_XHandle, nsa_value.GetHandle ());
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+	} /* class CKFetchRecordZoneChangesOperation */
+}

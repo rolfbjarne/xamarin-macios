@@ -1,0 +1,2271 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using GLKit;
+using Metal;
+using CoreML;
+using MapKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using Messages;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using QuickLook;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using CoreMotion;
+using ObjCRuntime;
+using AddressBook;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using NewsstandKit;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace UIKit {
+	[Register("UICollectionView", true)]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	public unsafe partial class UICollectionView : UIScrollView, INSCoding, IUIDataSourceTranslating, IUISpringLoadedInteractionSupporting {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("UICollectionView");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <param name="coder">The unarchiver object.</param>
+		/// <remarks>
+		///   <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization). This is part of the <see cref="Foundation.NSCoding" /> protocol.</para>
+		///   <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="Foundation.NSCoder" /> and decorate it with the <c>[Export("initWithCoder:"]</c> attribute.</para>
+		///   <para>The state of this object can also be serialized by using the <see cref="Foundation.INSCoding.EncodeTo" /> companion method.</para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[DesignatedInitializer]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("initWithCoder:")]
+		public UICollectionView (NSCoder coder) : base (NSObjectFlag.Empty)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, Selector.GetHandle ("initWithCoder:"), coder.Handle), "initWithCoder:");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (&__objc_super__, Selector.GetHandle ("initWithCoder:"), coder.Handle), "initWithCoder:");
+				GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (coder);
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected UICollectionView (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal UICollectionView (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("initWithFrame:collectionViewLayout:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public UICollectionView (CGRect frame, UICollectionViewLayout layout)
+			: base (NSObjectFlag.Empty)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var layout__handle__ = layout!.GetNonNullHandle (nameof (layout));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_CGRect_NativeHandle (this.Handle, Selector.GetHandle ("initWithFrame:collectionViewLayout:"), frame, layout__handle__), "initWithFrame:collectionViewLayout:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_CGRect_NativeHandle (&__objc_super__, Selector.GetHandle ("initWithFrame:collectionViewLayout:"), frame, layout__handle__), "initWithFrame:collectionViewLayout:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (layout);
+			#pragma warning disable 168
+			#pragma warning restore 168
+		}
+		[Export ("beginInteractiveMovementForItemAtIndexPath:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool BeginInteractiveMovementForItem (NSIndexPath indexPath)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var indexPath__handle__ = indexPath!.GetNonNullHandle (nameof (indexPath));
+			byte ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.bool_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("beginInteractiveMovementForItemAtIndexPath:"), indexPath__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("beginInteractiveMovementForItemAtIndexPath:"), indexPath__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (indexPath);
+			return ret != 0;
+		}
+		[Export ("cancelInteractiveMovement")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void CancelInteractiveMovement ()
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend (this.Handle, Selector.GetHandle ("cancelInteractiveMovement"));
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("cancelInteractiveMovement"));
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("cancelInteractiveTransition")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void CancelInteractiveTransition ()
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend (this.Handle, Selector.GetHandle ("cancelInteractiveTransition"));
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("cancelInteractiveTransition"));
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("cellForItemAtIndexPath:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UICollectionViewCell? CellForItem (NSIndexPath indexPath)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var indexPath__handle__ = indexPath!.GetNonNullHandle (nameof (indexPath));
+			UICollectionViewCell? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<UICollectionViewCell> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("cellForItemAtIndexPath:"), indexPath__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<UICollectionViewCell> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("cellForItemAtIndexPath:"), indexPath__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (indexPath);
+			return ret!;
+		}
+		[Export ("deleteItemsAtIndexPaths:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void DeleteItems (NSIndexPath[] indexPaths)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			if (indexPaths is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (indexPaths));
+			using var nsa_indexPaths = NSArray.FromNSObjects (indexPaths);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("deleteItemsAtIndexPaths:"), nsa_indexPaths.Handle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("deleteItemsAtIndexPaths:"), nsa_indexPaths.Handle);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("deleteSections:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void DeleteSections (NSIndexSet sections)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var sections__handle__ = sections!.GetNonNullHandle (nameof (sections));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("deleteSections:"), sections__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("deleteSections:"), sections__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (sections);
+		}
+		[Export ("dequeueConfiguredReusableCellWithRegistration:forIndexPath:item:")]
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UICollectionViewCell DequeueConfiguredReusableCell (UICollectionViewCellRegistration registration, NSIndexPath indexPath, NSObject item)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var registration__handle__ = registration!.GetNonNullHandle (nameof (registration));
+			var indexPath__handle__ = indexPath!.GetNonNullHandle (nameof (indexPath));
+			var item__handle__ = item!.GetNonNullHandle (nameof (item));
+			UICollectionViewCell? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<UICollectionViewCell> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("dequeueConfiguredReusableCellWithRegistration:forIndexPath:item:"), registration__handle__, indexPath__handle__, item__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<UICollectionViewCell> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("dequeueConfiguredReusableCellWithRegistration:forIndexPath:item:"), registration__handle__, indexPath__handle__, item__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (registration);
+			GC.KeepAlive (indexPath);
+			GC.KeepAlive (item);
+			return ret!;
+		}
+		[Export ("dequeueConfiguredReusableSupplementaryViewWithRegistration:forIndexPath:")]
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UICollectionReusableView DequeueConfiguredReusableSupplementaryView (UICollectionViewSupplementaryRegistration registration, NSIndexPath indexPath)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var registration__handle__ = registration!.GetNonNullHandle (nameof (registration));
+			var indexPath__handle__ = indexPath!.GetNonNullHandle (nameof (indexPath));
+			UICollectionReusableView? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<UICollectionReusableView> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("dequeueConfiguredReusableSupplementaryViewWithRegistration:forIndexPath:"), registration__handle__, indexPath__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<UICollectionReusableView> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("dequeueConfiguredReusableSupplementaryViewWithRegistration:forIndexPath:"), registration__handle__, indexPath__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (registration);
+			GC.KeepAlive (indexPath);
+			return ret!;
+		}
+		[Export ("dequeueReusableCellWithReuseIdentifier:forIndexPath:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UICollectionReusableView DequeueReusableCell (NSString reuseIdentifier, NSIndexPath indexPath)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var reuseIdentifier__handle__ = reuseIdentifier!.GetNonNullHandle (nameof (reuseIdentifier));
+			var indexPath__handle__ = indexPath!.GetNonNullHandle (nameof (indexPath));
+			UICollectionReusableView? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<UICollectionReusableView> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("dequeueReusableCellWithReuseIdentifier:forIndexPath:"), reuseIdentifier__handle__, indexPath__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<UICollectionReusableView> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("dequeueReusableCellWithReuseIdentifier:forIndexPath:"), reuseIdentifier__handle__, indexPath__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (reuseIdentifier);
+			GC.KeepAlive (indexPath);
+			return ret!;
+		}
+		[Export ("dequeueReusableSupplementaryViewOfKind:withReuseIdentifier:forIndexPath:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UICollectionReusableView DequeueReusableSupplementaryView (NSString kind, NSString identifier, NSIndexPath indexPath)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var kind__handle__ = kind!.GetNonNullHandle (nameof (kind));
+			var identifier__handle__ = identifier!.GetNonNullHandle (nameof (identifier));
+			var indexPath__handle__ = indexPath!.GetNonNullHandle (nameof (indexPath));
+			UICollectionReusableView? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<UICollectionReusableView> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("dequeueReusableSupplementaryViewOfKind:withReuseIdentifier:forIndexPath:"), kind__handle__, identifier__handle__, indexPath__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<UICollectionReusableView> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("dequeueReusableSupplementaryViewOfKind:withReuseIdentifier:forIndexPath:"), kind__handle__, identifier__handle__, indexPath__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (kind);
+			GC.KeepAlive (identifier);
+			GC.KeepAlive (indexPath);
+			return ret!;
+		}
+		[Export ("deselectItemAtIndexPath:animated:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void DeselectItem (NSIndexPath indexPath, bool animated)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var indexPath__handle__ = indexPath!.GetNonNullHandle (nameof (indexPath));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_bool (this.Handle, Selector.GetHandle ("deselectItemAtIndexPath:animated:"), indexPath__handle__, animated ? (byte) 1 : (byte) 0);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_bool (&__objc_super__, Selector.GetHandle ("deselectItemAtIndexPath:animated:"), indexPath__handle__, animated ? (byte) 1 : (byte) 0);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (indexPath);
+		}
+		/// <summary>Encodes the state of the object using the provided encoder.</summary><param name="encoder">The encoder object where the state of the object will be stored</param><remarks><para>This method is part of the <see cref="T:Foundation.INSCoding" /> protocol and is used by applications to preserve the state of the object into an archive.</para><para>Developers will typically create an <see cref="T:Foundation.NSKeyedArchiver" /> and then invoke the <see cref="M:Foundation.NSKeyedArchiver.ArchiveRootObjectToFile(Foundation.NSObject,System.String)" /> method which will call into this method.</para><para>If developers want to allow their object to be archived, they should override this method and store their state in using the provided <paramref name="encoder" /> parameter. In addition, developers should also implement a constructor that takes an NSCoder argument and is exported with <c>[Export ("initWithCoder:")]</c>.</para><example><code lang="csharp lang-csharp"><![CDATA[public void override EncodeTo (NSCoder coder) {
+		/// coder.Encode (1, key: "version");
+		/// coder.Encode (userName, key: "userName");
+		/// coder.Encode (hostName, key: "hostName");]]></code></example></remarks>
+		[Export ("encodeWithCoder:")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public new virtual void EncodeTo (NSCoder encoder)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var encoder__handle__ = encoder!.GetNonNullHandle (nameof (encoder));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("encodeWithCoder:"), encoder__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("encodeWithCoder:"), encoder__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (encoder);
+		}
+		[Export ("endInteractiveMovement")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void EndInteractiveMovement ()
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend (this.Handle, Selector.GetHandle ("endInteractiveMovement"));
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("endInteractiveMovement"));
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("finishInteractiveTransition")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void FinishInteractiveTransition ()
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend (this.Handle, Selector.GetHandle ("finishInteractiveTransition"));
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("finishInteractiveTransition"));
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <param name="presentationIndexPath">To be added.</param><summary>To be added.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("dataSourceIndexPathForPresentationIndexPath:")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSIndexPath? GetDataSourceIndexPath (NSIndexPath? presentationIndexPath)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var presentationIndexPath__handle__ = presentationIndexPath.GetHandle ();
+			NSIndexPath? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<NSIndexPath> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("dataSourceIndexPathForPresentationIndexPath:"), presentationIndexPath__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<NSIndexPath> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("dataSourceIndexPathForPresentationIndexPath:"), presentationIndexPath__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (presentationIndexPath);
+			return ret!;
+		}
+		/// <param name="presentationSectionIndex">To be added.</param><summary>To be added.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("dataSourceSectionIndexForPresentationSectionIndex:")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nint GetDataSourceSectionIndex (nint presentationSectionIndex)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			nint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, Selector.GetHandle ("dataSourceSectionIndexForPresentationSectionIndex:"), presentationSectionIndex);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (&__objc_super__, Selector.GetHandle ("dataSourceSectionIndexForPresentationSectionIndex:"), presentationSectionIndex);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("indexPathForSupplementaryView:")]
+		[SupportedOSPlatform ("tvos18.0")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[UnsupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSIndexPath? GetIndexPathForSupplementaryView (UICollectionReusableView supplementaryView)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var supplementaryView__handle__ = supplementaryView!.GetNonNullHandle (nameof (supplementaryView));
+			NSIndexPath? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<NSIndexPath> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("indexPathForSupplementaryView:"), supplementaryView__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<NSIndexPath> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("indexPathForSupplementaryView:"), supplementaryView__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (supplementaryView);
+			return ret!;
+		}
+		[Export ("indexPathsForSelectedItems")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSIndexPath[]? GetIndexPathsForSelectedItems ()
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			NSIndexPath[] ret;
+			if (IsDirectBinding) {
+				ret = CFArray.ArrayFromHandle<NSIndexPath>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("indexPathsForSelectedItems")), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = CFArray.ArrayFromHandle<NSIndexPath>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("indexPathsForSelectedItems")), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("indexPathsForVisibleSupplementaryElementsOfKind:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSIndexPath[] GetIndexPathsForVisibleSupplementaryElements (NSString elementKind)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var elementKind__handle__ = elementKind!.GetNonNullHandle (nameof (elementKind));
+			NSIndexPath[]? ret;
+			if (IsDirectBinding) {
+				ret = CFArray.ArrayFromHandle<NSIndexPath>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("indexPathsForVisibleSupplementaryElementsOfKind:"), elementKind__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = CFArray.ArrayFromHandle<NSIndexPath>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("indexPathsForVisibleSupplementaryElementsOfKind:"), elementKind__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (elementKind);
+			return ret!;
+		}
+		[Export ("layoutAttributesForItemAtIndexPath:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UICollectionViewLayoutAttributes? GetLayoutAttributesForItem (NSIndexPath indexPath)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var indexPath__handle__ = indexPath!.GetNonNullHandle (nameof (indexPath));
+			UICollectionViewLayoutAttributes? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<UICollectionViewLayoutAttributes> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("layoutAttributesForItemAtIndexPath:"), indexPath__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<UICollectionViewLayoutAttributes> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("layoutAttributesForItemAtIndexPath:"), indexPath__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (indexPath);
+			return ret!;
+		}
+		[Export ("layoutAttributesForSupplementaryElementOfKind:atIndexPath:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UICollectionViewLayoutAttributes? GetLayoutAttributesForSupplementaryElement (NSString elementKind, NSIndexPath indexPath)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var elementKind__handle__ = elementKind!.GetNonNullHandle (nameof (elementKind));
+			var indexPath__handle__ = indexPath!.GetNonNullHandle (nameof (indexPath));
+			UICollectionViewLayoutAttributes? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<UICollectionViewLayoutAttributes> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("layoutAttributesForSupplementaryElementOfKind:atIndexPath:"), elementKind__handle__, indexPath__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<UICollectionViewLayoutAttributes> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("layoutAttributesForSupplementaryElementOfKind:atIndexPath:"), elementKind__handle__, indexPath__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (elementKind);
+			GC.KeepAlive (indexPath);
+			return ret!;
+		}
+		/// <param name="dataSourceIndexPath">To be added.</param><summary>To be added.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("presentationIndexPathForDataSourceIndexPath:")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSIndexPath? GetPresentationIndexPath (NSIndexPath? dataSourceIndexPath)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var dataSourceIndexPath__handle__ = dataSourceIndexPath.GetHandle ();
+			NSIndexPath? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<NSIndexPath> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("presentationIndexPathForDataSourceIndexPath:"), dataSourceIndexPath__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<NSIndexPath> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("presentationIndexPathForDataSourceIndexPath:"), dataSourceIndexPath__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (dataSourceIndexPath);
+			return ret!;
+		}
+		/// <param name="dataSourceSectionIndex">To be added.</param><summary>To be added.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("presentationSectionIndexForDataSourceSectionIndex:")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nint GetPresentationSectionIndex (nint dataSourceSectionIndex)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			nint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, Selector.GetHandle ("presentationSectionIndexForDataSourceSectionIndex:"), dataSourceSectionIndex);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (&__objc_super__, Selector.GetHandle ("presentationSectionIndexForDataSourceSectionIndex:"), dataSourceSectionIndex);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("supplementaryViewForElementKind:atIndexPath:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UICollectionReusableView? GetSupplementaryView (NSString elementKind, NSIndexPath indexPath)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var elementKind__handle__ = elementKind!.GetNonNullHandle (nameof (elementKind));
+			var indexPath__handle__ = indexPath!.GetNonNullHandle (nameof (indexPath));
+			UICollectionReusableView? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<UICollectionReusableView> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("supplementaryViewForElementKind:atIndexPath:"), elementKind__handle__, indexPath__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<UICollectionReusableView> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("supplementaryViewForElementKind:atIndexPath:"), elementKind__handle__, indexPath__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (elementKind);
+			GC.KeepAlive (indexPath);
+			return ret!;
+		}
+		[Export ("visibleSupplementaryViewsOfKind:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UICollectionReusableView[] GetVisibleSupplementaryViews (NSString elementKind)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var elementKind__handle__ = elementKind!.GetNonNullHandle (nameof (elementKind));
+			UICollectionReusableView[]? ret;
+			if (IsDirectBinding) {
+				ret = CFArray.ArrayFromHandle<UICollectionReusableView>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("visibleSupplementaryViewsOfKind:"), elementKind__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = CFArray.ArrayFromHandle<UICollectionReusableView>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("visibleSupplementaryViewsOfKind:"), elementKind__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (elementKind);
+			return ret!;
+		}
+		[Export ("indexPathForCell:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSIndexPath? IndexPathForCell (UICollectionViewCell cell)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var cell__handle__ = cell!.GetNonNullHandle (nameof (cell));
+			NSIndexPath? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<NSIndexPath> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("indexPathForCell:"), cell__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<NSIndexPath> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("indexPathForCell:"), cell__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (cell);
+			return ret!;
+		}
+		[Export ("indexPathForItemAtPoint:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSIndexPath? IndexPathForItemAtPoint (CGPoint point)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			NSIndexPath ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<NSIndexPath> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_CGPoint (this.Handle, Selector.GetHandle ("indexPathForItemAtPoint:"), point), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<NSIndexPath> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_CGPoint (&__objc_super__, Selector.GetHandle ("indexPathForItemAtPoint:"), point), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("insertItemsAtIndexPaths:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void InsertItems (NSIndexPath[] indexPaths)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			if (indexPaths is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (indexPaths));
+			using var nsa_indexPaths = NSArray.FromNSObjects (indexPaths);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("insertItemsAtIndexPaths:"), nsa_indexPaths.Handle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("insertItemsAtIndexPaths:"), nsa_indexPaths.Handle);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("insertSections:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void InsertSections (NSIndexSet sections)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var sections__handle__ = sections!.GetNonNullHandle (nameof (sections));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("insertSections:"), sections__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("insertSections:"), sections__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (sections);
+		}
+		[Export ("moveItemAtIndexPath:toIndexPath:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void MoveItem (NSIndexPath indexPath, NSIndexPath newIndexPath)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var indexPath__handle__ = indexPath!.GetNonNullHandle (nameof (indexPath));
+			var newIndexPath__handle__ = newIndexPath!.GetNonNullHandle (nameof (newIndexPath));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("moveItemAtIndexPath:toIndexPath:"), indexPath__handle__, newIndexPath__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("moveItemAtIndexPath:toIndexPath:"), indexPath__handle__, newIndexPath__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (indexPath);
+			GC.KeepAlive (newIndexPath);
+		}
+		/// <param name="section">The index of the section to move.</param><param name="newSection">The new index of thesection.</param><summary>Moves a section from one location to another within the <see cref="T:UIKit.UICollectionView" />, animating as necessary.</summary><remarks><para>If this method is called within the <see cref="T:System.Action" /> delegate passed to the <see cref="M:UIKit.UICollectionView.PerformBatchUpdates(System.Action,UIKit.UICompletionHandler)" /> method, the animation will occur simultaneously with those of other manipulations of the <see cref="T:UIKit.UICollectionView" />.</para></remarks>
+		[Export ("moveSection:toSection:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void MoveSection (nint section, nint newSection)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr (this.Handle, Selector.GetHandle ("moveSection:toSection:"), section, newSection);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr (&__objc_super__, Selector.GetHandle ("moveSection:toSection:"), section, newSection);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <param name="section">The index of the section.</param><summary>Returns the number of items in the specified section.</summary><returns>The number of items in the specified section.</returns><remarks>To be added.</remarks>
+		[Export ("numberOfItemsInSection:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nint NumberOfItemsInSection (nint section)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			nint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, Selector.GetHandle ("numberOfItemsInSection:"), section);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (&__objc_super__, Selector.GetHandle ("numberOfItemsInSection:"), section);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("numberOfSections")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nint NumberOfSections ()
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			nint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, Selector.GetHandle ("numberOfSections"));
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("numberOfSections"));
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("performBatchUpdates:completion:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void PerformBatchUpdates ([BlockProxy (typeof (ObjCRuntime.Trampolines.NIDAction))]global::System.Action? updates, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDUICompletionHandler))]UICompletionHandler? completed)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			using var block_updates = Trampolines.SDAction.CreateNullableBlock (updates);
+			BlockLiteral *block_ptr_updates = null;
+			if (updates is not null)
+				block_ptr_updates = &block_updates;
+			using var block_completed = Trampolines.SDUICompletionHandler.CreateNullableBlock (completed);
+			BlockLiteral *block_ptr_completed = null;
+			if (completed is not null)
+				block_ptr_completed = &block_completed;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("performBatchUpdates:completion:"), (IntPtr) block_ptr_updates, (IntPtr) block_ptr_completed);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("performBatchUpdates:completion:"), (IntPtr) block_ptr_updates, (IntPtr) block_ptr_completed);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <param name="updates">An  delegate specifying the updates to apply.</param>
+		/// <summary>Applies and simultaneously animates multiple manipulations of the <see cref="UIKit.UICollectionView" />.</summary>
+		/// <returns>
+		///           <para>A task that represents the asynchronous PerformBatchUpdates operation.   The value of the TResult parameter is a <see cref="UIKit.UICompletionHandler" />.</para>
+		///         </returns>
+		/// <remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<bool> PerformBatchUpdatesAsync ([BlockProxy (typeof (ObjCRuntime.Trampolines.NIDAction))]global::System.Action? updates)
+		{
+			var tcs = new TaskCompletionSource<bool> ();
+			PerformBatchUpdates(updates, (finished_) => {
+				tcs.SetResult (finished_!);
+			});
+			return tcs.Task;
+		}
+		/// <param name="actionsToTranslate">To be added.</param><summary>To be added.</summary><remarks>To be added.</remarks>
+		[Export ("performUsingPresentationValues:")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void PerformUsingPresentationValues ([BlockProxy (typeof (ObjCRuntime.Trampolines.NIDAction))]global::System.Action actionsToTranslate)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			if (actionsToTranslate is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (actionsToTranslate));
+			using var block_actionsToTranslate = Trampolines.SDAction.CreateBlock (actionsToTranslate);
+			BlockLiteral *block_ptr_actionsToTranslate = &block_actionsToTranslate;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("performUsingPresentationValues:"), (IntPtr) block_ptr_actionsToTranslate);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("performUsingPresentationValues:"), (IntPtr) block_ptr_actionsToTranslate);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("reconfigureItemsAtIndexPaths:")]
+		[SupportedOSPlatform ("tvos15.0")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void ReconfigureItems (NSIndexPath[] indexPaths)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			if (indexPaths is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (indexPaths));
+			using var nsa_indexPaths = NSArray.FromNSObjects (indexPaths);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("reconfigureItemsAtIndexPaths:"), nsa_indexPaths.Handle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("reconfigureItemsAtIndexPaths:"), nsa_indexPaths.Handle);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("registerClass:forCellWithReuseIdentifier:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal virtual void RegisterClassForCell (nint cellClass, NSString reuseIdentifier)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var reuseIdentifier__handle__ = reuseIdentifier!.GetNonNullHandle (nameof (reuseIdentifier));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_NativeHandle (this.Handle, Selector.GetHandle ("registerClass:forCellWithReuseIdentifier:"), cellClass, reuseIdentifier__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_NativeHandle (&__objc_super__, Selector.GetHandle ("registerClass:forCellWithReuseIdentifier:"), cellClass, reuseIdentifier__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (reuseIdentifier);
+		}
+		[Export ("registerClass:forSupplementaryViewOfKind:withReuseIdentifier:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		protected virtual void RegisterClassForSupplementaryView (nint viewClass, NSString kind, NSString reuseIdentifier)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var kind__handle__ = kind!.GetNonNullHandle (nameof (kind));
+			var reuseIdentifier__handle__ = reuseIdentifier!.GetNonNullHandle (nameof (reuseIdentifier));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("registerClass:forSupplementaryViewOfKind:withReuseIdentifier:"), viewClass, kind__handle__, reuseIdentifier__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("registerClass:forSupplementaryViewOfKind:withReuseIdentifier:"), viewClass, kind__handle__, reuseIdentifier__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (kind);
+			GC.KeepAlive (reuseIdentifier);
+		}
+		[Export ("registerNib:forCellWithReuseIdentifier:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void RegisterNibForCell (UINib? nib, NSString reuseIdentifier)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var nib__handle__ = nib.GetHandle ();
+			var reuseIdentifier__handle__ = reuseIdentifier!.GetNonNullHandle (nameof (reuseIdentifier));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("registerNib:forCellWithReuseIdentifier:"), nib__handle__, reuseIdentifier__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("registerNib:forCellWithReuseIdentifier:"), nib__handle__, reuseIdentifier__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (nib);
+			GC.KeepAlive (reuseIdentifier);
+		}
+		[Export ("registerNib:forSupplementaryViewOfKind:withReuseIdentifier:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void RegisterNibForSupplementaryView (UINib? nib, NSString kind, NSString reuseIdentifier)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var nib__handle__ = nib.GetHandle ();
+			var kind__handle__ = kind!.GetNonNullHandle (nameof (kind));
+			var reuseIdentifier__handle__ = reuseIdentifier!.GetNonNullHandle (nameof (reuseIdentifier));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("registerNib:forSupplementaryViewOfKind:withReuseIdentifier:"), nib__handle__, kind__handle__, reuseIdentifier__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("registerNib:forSupplementaryViewOfKind:withReuseIdentifier:"), nib__handle__, kind__handle__, reuseIdentifier__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (nib);
+			GC.KeepAlive (kind);
+			GC.KeepAlive (reuseIdentifier);
+		}
+		[Export ("reloadData")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void ReloadData ()
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend (this.Handle, Selector.GetHandle ("reloadData"));
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("reloadData"));
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("reloadItemsAtIndexPaths:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void ReloadItems (NSIndexPath[] indexPaths)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			if (indexPaths is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (indexPaths));
+			using var nsa_indexPaths = NSArray.FromNSObjects (indexPaths);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("reloadItemsAtIndexPaths:"), nsa_indexPaths.Handle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("reloadItemsAtIndexPaths:"), nsa_indexPaths.Handle);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("reloadSections:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void ReloadSections (NSIndexSet sections)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var sections__handle__ = sections!.GetNonNullHandle (nameof (sections));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("reloadSections:"), sections__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("reloadSections:"), sections__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (sections);
+		}
+		[Export ("scrollToItemAtIndexPath:atScrollPosition:animated:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void ScrollToItem (NSIndexPath indexPath, UICollectionViewScrollPosition scrollPosition, bool animated)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var indexPath__handle__ = indexPath!.GetNonNullHandle (nameof (indexPath));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_UIntPtr_bool (this.Handle, Selector.GetHandle ("scrollToItemAtIndexPath:atScrollPosition:animated:"), indexPath__handle__, (UIntPtr) (ulong) scrollPosition, animated ? (byte) 1 : (byte) 0);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_UIntPtr_bool (&__objc_super__, Selector.GetHandle ("scrollToItemAtIndexPath:atScrollPosition:animated:"), indexPath__handle__, (UIntPtr) (ulong) scrollPosition, animated ? (byte) 1 : (byte) 0);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (indexPath);
+		}
+		[Export ("selectItemAtIndexPath:animated:scrollPosition:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SelectItem (NSIndexPath? indexPath, bool animated, UICollectionViewScrollPosition scrollPosition)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var indexPath__handle__ = indexPath.GetHandle ();
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_bool_UIntPtr (this.Handle, Selector.GetHandle ("selectItemAtIndexPath:animated:scrollPosition:"), indexPath__handle__, animated ? (byte) 1 : (byte) 0, (UIntPtr) (ulong) scrollPosition);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_bool_UIntPtr (&__objc_super__, Selector.GetHandle ("selectItemAtIndexPath:animated:scrollPosition:"), indexPath__handle__, animated ? (byte) 1 : (byte) 0, (UIntPtr) (ulong) scrollPosition);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (indexPath);
+		}
+		[Export ("setCollectionViewLayout:animated:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetCollectionViewLayout (UICollectionViewLayout layout, bool animated)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var layout__handle__ = layout!.GetNonNullHandle (nameof (layout));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_bool (this.Handle, Selector.GetHandle ("setCollectionViewLayout:animated:"), layout__handle__, animated ? (byte) 1 : (byte) 0);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_bool (&__objc_super__, Selector.GetHandle ("setCollectionViewLayout:animated:"), layout__handle__, animated ? (byte) 1 : (byte) 0);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (layout);
+		}
+		[Export ("setCollectionViewLayout:animated:completion:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void SetCollectionViewLayout (UICollectionViewLayout layout, bool animated, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDUICompletionHandler))]UICompletionHandler? completion)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var layout__handle__ = layout!.GetNonNullHandle (nameof (layout));
+			using var block_completion = Trampolines.SDUICompletionHandler.CreateNullableBlock (completion);
+			BlockLiteral *block_ptr_completion = null;
+			if (completion is not null)
+				block_ptr_completion = &block_completion;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_bool_NativeHandle (this.Handle, Selector.GetHandle ("setCollectionViewLayout:animated:completion:"), layout__handle__, animated ? (byte) 1 : (byte) 0, (IntPtr) block_ptr_completion);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_bool_NativeHandle (&__objc_super__, Selector.GetHandle ("setCollectionViewLayout:animated:completion:"), layout__handle__, animated ? (byte) 1 : (byte) 0, (IntPtr) block_ptr_completion);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (layout);
+		}
+		/// <param name="layout">The new .</param>
+		/// <param name="animated"> if the transition to the new layout should be animated.</param>
+		/// <summary>Sets the layout used by this <see cref="UIKit.UICollectionView" />.</summary>
+		/// <returns>
+		///           <para>A task that represents the asynchronous SetCollectionViewLayout operation.   The value of the TResult parameter is a <see cref="UIKit.UICompletionHandler" />.</para>
+		///         </returns>
+		/// <remarks>
+		///           <para copied="true">The SetCollectionViewLayoutAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+		///           <para copied="true">To be added.</para>
+		///         </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<bool> SetCollectionViewLayoutAsync (UICollectionViewLayout layout, bool animated)
+		{
+			var tcs = new TaskCompletionSource<bool> ();
+			SetCollectionViewLayout(layout, animated, (finished_) => {
+				tcs.SetResult (finished_!);
+			});
+			return tcs.Task;
+		}
+		[Export ("startInteractiveTransitionToCollectionViewLayout:completion:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual UICollectionViewTransitionLayout StartInteractiveTransition (UICollectionViewLayout newCollectionViewLayout, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDUICollectionViewLayoutInteractiveTransitionCompletion))]UICollectionViewLayoutInteractiveTransitionCompletion? completion)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var newCollectionViewLayout__handle__ = newCollectionViewLayout!.GetNonNullHandle (nameof (newCollectionViewLayout));
+			using var block_completion = Trampolines.SDUICollectionViewLayoutInteractiveTransitionCompletion.CreateNullableBlock (completion);
+			BlockLiteral *block_ptr_completion = null;
+			if (completion is not null)
+				block_ptr_completion = &block_completion;
+			UICollectionViewTransitionLayout? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<UICollectionViewTransitionLayout> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("startInteractiveTransitionToCollectionViewLayout:completion:"), newCollectionViewLayout__handle__, (IntPtr) block_ptr_completion), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<UICollectionViewTransitionLayout> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("startInteractiveTransitionToCollectionViewLayout:completion:"), newCollectionViewLayout__handle__, (IntPtr) block_ptr_completion), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (newCollectionViewLayout);
+			return ret!;
+		}
+		/// <param name="newCollectionViewLayout">The new layout object for the collected views.</param>
+		/// <summary>Changes the UICollectionView's layout using an interactive transition.</summary>
+		/// <returns>
+		///           <para>A task that represents the asynchronous <see cref="UIKit.UICollectionView.StartInteractiveTransition(UIKit.UICollectionViewLayout,UIKit.UICollectionViewLayoutInteractiveTransitionCompletion)" /> operation.</para>
+		///         </returns>
+		/// <remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<UICollectionViewTransitionResult> StartInteractiveTransitionAsync (UICollectionViewLayout newCollectionViewLayout)
+		{
+			var tcs = new TaskCompletionSource<UICollectionViewTransitionResult> ();
+			StartInteractiveTransition(newCollectionViewLayout, (completed_, finished_) => {
+				tcs.SetResult (new UICollectionViewTransitionResult (completed_!, finished_!));
+			});
+			return tcs.Task;
+		}
+		/// <param name="newCollectionViewLayout">The new layout object for the collected views.</param>
+		/// <param name="result">Action executed when the layout transition finishes.</param>
+		/// <summary>Asynchronously starts an interactive transition to the new layout, with a reference to the result.</summary>
+		/// <returns>A task that represents the asynchronous <see cref="UIKit.UICollectionView.StartInteractiveTransition(UIKit.UICollectionViewLayout,UIKit.UICollectionViewLayoutInteractiveTransitionCompletion)" /> operation.</returns>
+		/// <remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<UICollectionViewTransitionResult> StartInteractiveTransitionAsync (UICollectionViewLayout newCollectionViewLayout, out UICollectionViewTransitionLayout result)
+		{
+			var tcs = new TaskCompletionSource<UICollectionViewTransitionResult> ();
+			result = StartInteractiveTransition(newCollectionViewLayout, (completed_, finished_) => {
+				tcs.SetResult (new UICollectionViewTransitionResult (completed_!, finished_!));
+			})!;
+			return tcs.Task;
+		}
+		[Export ("updateInteractiveMovementTargetPosition:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void UpdateInteractiveMovement (CGPoint targetPosition)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_CGPoint (this.Handle, Selector.GetHandle ("updateInteractiveMovementTargetPosition:"), targetPosition);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_CGPoint (&__objc_super__, Selector.GetHandle ("updateInteractiveMovementTargetPosition:"), targetPosition);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("tvos15.0")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual bool AllowsFocus {
+			[Export ("allowsFocus")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("allowsFocus"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("allowsFocus"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAllowsFocus:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setAllowsFocus:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setAllowsFocus:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("tvos15.0")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual bool AllowsFocusDuringEditing {
+			[Export ("allowsFocusDuringEditing")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("allowsFocusDuringEditing"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("allowsFocusDuringEditing"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAllowsFocusDuringEditing:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setAllowsFocusDuringEditing:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setAllowsFocusDuringEditing:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool AllowsMultipleSelection {
+			[Export ("allowsMultipleSelection")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("allowsMultipleSelection"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("allowsMultipleSelection"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAllowsMultipleSelection:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setAllowsMultipleSelection:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setAllowsMultipleSelection:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual bool AllowsMultipleSelectionDuringEditing {
+			[Export ("allowsMultipleSelectionDuringEditing")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("allowsMultipleSelectionDuringEditing"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("allowsMultipleSelectionDuringEditing"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAllowsMultipleSelectionDuringEditing:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setAllowsMultipleSelectionDuringEditing:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setAllowsMultipleSelectionDuringEditing:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool AllowsSelection {
+			[Export ("allowsSelection")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("allowsSelection"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("allowsSelection"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAllowsSelection:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setAllowsSelection:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setAllowsSelection:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual bool AllowsSelectionDuringEditing {
+			[Export ("allowsSelectionDuringEditing")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("allowsSelectionDuringEditing"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("allowsSelectionDuringEditing"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAllowsSelectionDuringEditing:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setAllowsSelectionDuringEditing:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setAllowsSelectionDuringEditing:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UIView? BackgroundView {
+			[Export ("backgroundView", ArgumentSemantic.Retain)]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				UIView? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<UIView> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("backgroundView")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<UIView> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("backgroundView")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setBackgroundView:", ArgumentSemantic.Retain)]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("setBackgroundView:"), value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("setBackgroundView:"), value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UICollectionViewLayout CollectionViewLayout {
+			[Export ("collectionViewLayout", ArgumentSemantic.Retain)]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				UICollectionViewLayout? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<UICollectionViewLayout> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("collectionViewLayout")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<UICollectionViewLayout> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("collectionViewLayout")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setCollectionViewLayout:", ArgumentSemantic.Retain)]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				var value__handle__ = value!.GetNonNullHandle (nameof (value));
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("setCollectionViewLayout:"), value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("setCollectionViewLayout:"), value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual UIContextMenuInteraction? ContextMenuInteraction {
+			[Export ("contextMenuInteraction")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				UIContextMenuInteraction? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<UIContextMenuInteraction> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("contextMenuInteraction")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<UIContextMenuInteraction> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("contextMenuInteraction")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		/// <summary>The <see cref="T:UIKit.UICollectionViewDataSource" /> responsible for populating this <see cref="T:UIKit.UICollectionView" />.</summary><value><para>The default value is <see langword="null" />.</para><para tool="nullallowed">This value can be <see langword="null" />.</para></value><remarks>    </remarks><altmember cref="UIKit.UICollectionView.Source" />
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public IUICollectionViewDataSource DataSource {
+			get {
+				return (WeakDataSource as IUICollectionViewDataSource)!;
+			}
+			set {
+				var rvalue = value as NSObject;
+				if (!(value is null) && rvalue is null)
+					throw new ArgumentException ("The object passed of type " + value.GetType () + " does not derive from NSObject");
+				WeakDataSource = rvalue;
+			}
+		}
+		/// <summary>An instance of the UIKit.IUICollectionViewDelegate model class which acts as the class delegate.</summary><value>The instance of the UIKit.IUICollectionViewDelegate model class</value><remarks><para>The delegate instance assigned to this object will be used to handle events or provide data on demand to this class.</para><para>When setting the Delegate or WeakDelegate values events will be delivered to the specified instance instead of being delivered to the C#-style events</para><para>This is the strongly typed version of the object, developers should use the WeakDelegate property instead if they want to merely assign a class derived from NSObject that has been decorated with [Export] attributes.</para></remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public IUICollectionViewDelegate Delegate {
+			get {
+				return (WeakDelegate as IUICollectionViewDelegate)!;
+			}
+			set {
+				var rvalue = value as NSObject;
+				if (!(value is null) && rvalue is null)
+					throw new ArgumentException ("The object passed of type " + value.GetType () + " does not derive from NSObject");
+				WeakDelegate = rvalue;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		object? __mt_DragDelegate_var;
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		public virtual IUICollectionViewDragDelegate? DragDelegate {
+			[Export ("dragDelegate", ArgumentSemantic.Weak)]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				IUICollectionViewDragDelegate? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetINativeObject<IUICollectionViewDragDelegate> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("dragDelegate")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetINativeObject<IUICollectionViewDragDelegate> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("dragDelegate")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				MarkDirty ();
+				__mt_DragDelegate_var = ret;
+				return ret!;
+			}
+			[Export ("setDragDelegate:", ArgumentSemantic.Weak)]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("setDragDelegate:"), value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("setDragDelegate:"), value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+				MarkDirty ();
+				__mt_DragDelegate_var = value;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		public virtual bool DragInteractionEnabled {
+			[Export ("dragInteractionEnabled")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("dragInteractionEnabled"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("dragInteractionEnabled"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setDragInteractionEnabled:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setDragInteractionEnabled:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setDragInteractionEnabled:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		object? __mt_DropDelegate_var;
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		public virtual IUICollectionViewDropDelegate? DropDelegate {
+			[Export ("dropDelegate", ArgumentSemantic.Weak)]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				IUICollectionViewDropDelegate? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetINativeObject<IUICollectionViewDropDelegate> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("dropDelegate")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetINativeObject<IUICollectionViewDropDelegate> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("dropDelegate")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				MarkDirty ();
+				__mt_DropDelegate_var = ret;
+				return ret!;
+			}
+			[Export ("setDropDelegate:", ArgumentSemantic.Weak)]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("setDropDelegate:"), value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("setDropDelegate:"), value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+				MarkDirty ();
+				__mt_DropDelegate_var = value;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual bool Editing {
+			[Export ("isEditing")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("isEditing"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("isEditing"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setEditing:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setEditing:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setEditing:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		public virtual bool HasActiveDrag {
+			[Export ("hasActiveDrag")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("hasActiveDrag"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("hasActiveDrag"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		public virtual bool HasActiveDrop {
+			[Export ("hasActiveDrop")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("hasActiveDrop"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("hasActiveDrop"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		public virtual bool HasUncommittedUpdates {
+			[Export ("hasUncommittedUpdates")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("hasUncommittedUpdates"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("hasUncommittedUpdates"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSIndexPath[] IndexPathsForVisibleItems {
+			[Export ("indexPathsForVisibleItems")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				NSIndexPath[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<NSIndexPath>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("indexPathsForVisibleItems")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<NSIndexPath>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("indexPathsForVisibleItems")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		object? __mt_PrefetchDataSource_var;
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		public virtual IUICollectionViewDataSourcePrefetching? PrefetchDataSource {
+			[Export ("prefetchDataSource", ArgumentSemantic.Weak)]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				IUICollectionViewDataSourcePrefetching? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetINativeObject<IUICollectionViewDataSourcePrefetching> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("prefetchDataSource")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetINativeObject<IUICollectionViewDataSourcePrefetching> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("prefetchDataSource")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				MarkDirty ();
+				__mt_PrefetchDataSource_var = ret;
+				return ret!;
+			}
+			[Export ("setPrefetchDataSource:", ArgumentSemantic.Weak)]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("setPrefetchDataSource:"), value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("setPrefetchDataSource:"), value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+				MarkDirty ();
+				__mt_PrefetchDataSource_var = value;
+			}
+		}
+		/// <summary>Gets or sets whether prefecting is enabled. If <see langword="true" />, <see cref="P:UIKit.UICollectionView.PrefetchDataSource" /> must be set.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		public virtual bool PrefetchingEnabled {
+			[Export ("isPrefetchingEnabled")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("isPrefetchingEnabled"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("isPrefetchingEnabled"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setPrefetchingEnabled:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setPrefetchingEnabled:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setPrefetchingEnabled:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		public virtual bool RemembersLastFocusedIndexPath {
+			[Export ("remembersLastFocusedIndexPath")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("remembersLastFocusedIndexPath"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("remembersLastFocusedIndexPath"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setRemembersLastFocusedIndexPath:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setRemembersLastFocusedIndexPath:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setRemembersLastFocusedIndexPath:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		public virtual UICollectionViewReorderingCadence ReorderingCadence {
+			[Export ("reorderingCadence", ArgumentSemantic.Assign)]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				UICollectionViewReorderingCadence ret;
+				if (IsDirectBinding) {
+					ret = (UICollectionViewReorderingCadence) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, Selector.GetHandle ("reorderingCadence"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = (UICollectionViewReorderingCadence) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("reorderingCadence"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setReorderingCadence:", ArgumentSemantic.Assign)]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_IntPtr (this.Handle, Selector.GetHandle ("setReorderingCadence:"), (IntPtr) (long) value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr (&__objc_super__, Selector.GetHandle ("setReorderingCadence:"), (IntPtr) (long) value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual bool SelectionFollowsFocus {
+			[Export ("selectionFollowsFocus")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("selectionFollowsFocus"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("selectionFollowsFocus"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setSelectionFollowsFocus:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setSelectionFollowsFocus:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setSelectionFollowsFocus:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("tvos16.0")]
+		[SupportedOSPlatform ("ios16.0")]
+		[SupportedOSPlatform ("maccatalyst16.0")]
+		public virtual UICollectionViewSelfSizingInvalidation SelfSizingInvalidation {
+			[Export ("selfSizingInvalidation", ArgumentSemantic.Assign)]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				UICollectionViewSelfSizingInvalidation ret;
+				if (IsDirectBinding) {
+					ret = (UICollectionViewSelfSizingInvalidation) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, Selector.GetHandle ("selfSizingInvalidation"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = (UICollectionViewSelfSizingInvalidation) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("selfSizingInvalidation"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setSelfSizingInvalidation:", ArgumentSemantic.Assign)]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_IntPtr (this.Handle, Selector.GetHandle ("setSelfSizingInvalidation:"), (IntPtr) (long) value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr (&__objc_super__, Selector.GetHandle ("setSelfSizingInvalidation:"), (IntPtr) (long) value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		/// <summary>Gets or sets a Boolean value that controls whether the object participates in spring-loaded interactions.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual bool SpringLoaded {
+			[Export ("isSpringLoaded")]
+			[UnsupportedOSPlatform ("tvos")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("maccatalyst")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("isSpringLoaded"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("isSpringLoaded"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setSpringLoaded:")]
+			[UnsupportedOSPlatform ("tvos")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("maccatalyst")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setSpringLoaded:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setSpringLoaded:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UICollectionViewCell[] VisibleCells {
+			[Export ("visibleCells")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				UICollectionViewCell[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<UICollectionViewCell>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("visibleCells")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<UICollectionViewCell>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("visibleCells")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		object? __mt_WeakDataSource_var;
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSObject? WeakDataSource {
+			[Export ("dataSource", ArgumentSemantic.Assign)]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				NSObject? ret;
+				if (IsDirectBinding) {
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("dataSource")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("dataSource")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				MarkDirty ();
+				__mt_WeakDataSource_var = ret;
+				return ret!;
+			}
+			[Export ("setDataSource:", ArgumentSemantic.Assign)]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("setDataSource:"), value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("setDataSource:"), value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+				MarkDirty ();
+				__mt_WeakDataSource_var = value;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		object? __mt_WeakDelegate_var;
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSObject? WeakDelegate {
+			[Export ("delegate", ArgumentSemantic.Assign)]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				NSObject? ret;
+				if (IsDirectBinding) {
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("delegate")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("delegate")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				MarkDirty ();
+				__mt_WeakDelegate_var = ret;
+				return ret!;
+			}
+			[Export ("setDelegate:", ArgumentSemantic.Assign)]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("setDelegate:"), value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("setDelegate:"), value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+				MarkDirty ();
+				__mt_WeakDelegate_var = value;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		protected override void Dispose (bool disposing)
+		{
+			base.Dispose (disposing);
+			if (Handle == IntPtr.Zero) {
+				__mt_DragDelegate_var = null;
+				__mt_DropDelegate_var = null;
+				__mt_PrefetchDataSource_var = null;
+				__mt_WeakDataSource_var = null;
+				__mt_WeakDelegate_var = null;
+			}
+		}
+		/// <summary>Appearance class for objects of type <see cref="global::UIKit.UICollectionView" />.</summary>
+		/// <remarks>
+		///     <para>This appearance class is a strongly typed subclass of UIAppearance that is intended to be used with objects of class <see cref="global::UIKit.UICollectionView" />.</para>
+		///     <para>You can obtain an instance to this class by either accessing the static <see cref="global::UIKit.UICollectionView.Appearance" /> property or by calling <see cref="global::UIKit.UICollectionView.AppearanceWhenContainedIn(System.Type[])" /> to get a UIAppearance that is context sensitive.</para>
+		/// </remarks>
+		public partial class UICollectionViewAppearance : global::UIKit.UIScrollView.UIScrollViewAppearance {
+			protected internal UICollectionViewAppearance (IntPtr handle) : base (handle) {}
+		}
+		/// <summary>Strongly-typed property that returns the UIAppearance class for this class.</summary>
+		/// <remarks>
+		///   <para>Setting any appearance properties on this instance will affect the appearance of all instances of <see cref="global::UIKit.UICollectionView" />.</para>
+		///   <para>If developers want to control the appearance of subclasses of <see cref="global::UIKit.UICollectionView" />, they should use the <see cref="global::UIKit.UICollectionView.GetAppearance&lt;T&gt;(UIKit.UITraitCollection,System.Type[])" /> method.</para>
+		/// </remarks>
+		public static new UICollectionViewAppearance Appearance {
+			get { return new UICollectionViewAppearance (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (class_ptr, ObjCRuntime.Selector.GetHandle ("appearance"))); }
+		}
+		/// <summary>Obtains the appearance proxy <see cref="global::UIKit.UICollectionView.UICollectionViewAppearance" /> for the subclass of <see cref="global::UIKit.UICollectionView" />.</summary>
+		/// <typeparam name="T">The type for which the <see cref="global::UIKit.UIAppearance" /> proxy must be returned.  This is a subclass of <see cref="global::UIKit.UICollectionView" />.</typeparam>
+		/// <returns>
+		///   <para>An appearance proxy object for the specified type.</para>
+		/// </returns>
+		/// <remarks>
+		///   <para>Setting any appearance properties on the returned object will affect the appearance of all classes and subclasses of the type parameter.</para>
+		///   <para>Unlike the <see cref="global::UIKit.UICollectionView.Appearance" /> property, or the <see cref="global::UIKit.UICollectionView.AppearanceWhenContainedIn(System.Type[])" /> method which only work on instances of this particular class, the proxies returned by this method can be used to change the style of subclasses.</para>
+		///   <para>The following example shows how this method works:</para>
+		///   <example>
+		///   <code lang="csharp lang-csharp"><![CDATA[
+		///var myTheme = UICollectionView.GetAppearance<MyUICollectionViewSubclass> ();
+		///myTheme.TintColor = UIColor.Red;
+		///]]></code>
+		///   </example>
+		///   <para>For more information, see the documentation for the <see cref="global::UIKit.UIAppearance" /> class.</para>
+		/// </remarks>
+		public static new UICollectionViewAppearance GetAppearance<T> () where T: UICollectionView {
+			return new UICollectionViewAppearance (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (Class.GetHandle (typeof (T)), ObjCRuntime.Selector.GetHandle ("appearance")));
+		}
+		/// <param name="containers">List of types that developers want to have as the containers to apply this particular appearance</param>
+		/// <summary>Returns a strongly typed <see cref="global::UIKit.UIAppearance" /> for instances of this class when the view is hosted in the specified hierarchy.</summary>
+		/// <returns>The appearance proxy object that developers can use to set properties when the given container hierarchy is active</returns>
+		/// <remarks>
+		///   <para>The returned object represents the <see cref="global::UIKit.UIAppearance" /> proxy where developers can set appearance properties for instances of <see cref="global::UIKit.UICollectionView" /> when those instances are contained in the hierarchy specified by the <paramref name="containers" /> parameter.</para>
+		///   <para>If developers want to control the appearance of subclasses of <see cref="global::UIKit.UICollectionView" />, they should use the <see cref="global::UIKit.UICollectionView.GetAppearance&lt;T&gt;(UIKit.UITraitCollection,System.Type[])" /> method.</para>
+		///   <para>The following example shows how this method works:</para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		///var mySliders = UISlider.AppearanceWhenContainedIn (typeof (UINavigationBar), typeof (UIPopoverController));
+		///mySliders.TintColor = UIColor.Red;
+		///]]></code>
+		///   </example>
+		///   <para>For more information, see the documentation for the <see cref="global::UIKit.UIAppearance" /> class.</para>
+		/// </remarks>
+		public static new UICollectionViewAppearance AppearanceWhenContainedIn (params Type [] containers)
+		{
+			return new UICollectionViewAppearance (UIAppearance.GetAppearance (class_ptr, containers));
+		}
+		/// <summary>Obtains the appearance proxy <see cref="global::UIKit.UICollectionView.UICollectionViewAppearance" /> for <see cref="global::UIKit.UICollectionView" />.</summary>
+		/// <param name="traits">Trait collection to match.</param>
+		/// <returns>
+		///   <para>An appearance proxy object for the specified type.</para>
+		/// </returns>
+		/// <remarks>
+		///   <para>The following example shows how this method works:</para>
+		///   <example>
+		///   <code lang="csharp lang-csharp"><![CDATA[
+		///var myTraits = new UITraitCollection ();
+		///var myTheme = UICollectionView.GetAppearance (myTraits);
+		///myTheme.TintColor = UIColor.Red;
+		///]]></code>
+		///   </example>
+		///   <para>If developers want to control the appearance of subclasses of <see cref="global::UIKit.UICollectionView" />, they should use the <see cref="global::UIKit.UICollectionView.GetAppearance&lt;T&gt;(UIKit.UITraitCollection)" /> method.</para>
+		///   <para>For more information, see the documentation for the <see cref="global::UIKit.UIAppearance" /> class.</para>
+		/// </remarks>
+		public static new UICollectionViewAppearance GetAppearance (UITraitCollection traits) {
+			return new UICollectionViewAppearance (UIAppearance.GetAppearance (class_ptr, traits));
+		}
+		/// <summary>Obtains the appearance proxy <see cref="global::UIKit.UICollectionView.UICollectionViewAppearance" /> for <see cref="global::UIKit.UICollectionView" />.</summary>
+		/// <param name="traits">Trait collection to match.</param>
+		/// <param name="containers">List of types that the developer wishes to have as the containers to apply this particular appearance.</param>
+		/// <returns>
+		///   <para>An appearance proxy object for the specified type.</para>
+		/// </returns>
+		/// <remarks>
+		///   <para>The following example shows how this method works:</para>
+		///   <example>
+		///   <code lang="csharp lang-csharp"><![CDATA[
+		///var myTraits = new UITraitCollection ();
+		///var myTheme = UICollectionView.GetAppearance (myTraits, typeof (UINavigationBar), typeof (UIPopoverController));
+		///myTheme.TintColor = UIColor.Red;
+		///]]></code>
+		///   </example>
+		///   <para>If developers want to control the appearance of subclasses of <see cref="global::UIKit.UICollectionView" />, they should use the <see cref="global::UIKit.UICollectionView.GetAppearance&lt;T&gt;(UIKit.UITraitCollection,System.Type[])" /> method.</para>
+		///   <para>For more information, see the documentation for the <see cref="global::UIKit.UIAppearance" /> class.</para>
+		/// </remarks>
+		public static new UICollectionViewAppearance GetAppearance (UITraitCollection traits, params Type [] containers) {
+			return new UICollectionViewAppearance (UIAppearance.GetAppearance (class_ptr, traits, containers));
+		}
+		/// <summary>Obtains the appearance proxy <see cref="global::UIKit.UICollectionView.UICollectionViewAppearance" /> for the subclass of <see cref="global::UIKit.UICollectionView" />.</summary>
+		/// <typeparam name="T">The type for which the <see cref="global::UIKit.UIAppearance" /> proxy must be returned.  This is a subclass of <see cref="global::UIKit.UICollectionView" />.</typeparam>
+		/// <param name="traits">Trait collection to match.</param>
+		/// <returns>
+		///   <para>An appearance proxy object for the specified type.</para>
+		/// </returns>
+		/// <remarks>
+		///   <para>Setting any appearance properties on the returned object will affect the appearance of all classes and subclasses of the type parameter.</para>
+		///   <para>Unlike the <see cref="global::UIKit.UICollectionView.Appearance" /> property, or the <see cref="global::UIKit.UICollectionView.AppearanceWhenContainedIn(System.Type[])" /> method which only work on instances of this particular class, the proxies returned by this method can be used to change the style of subclasses.</para>
+		///   <para>The following example shows how this method works:</para>
+		///   <example>
+		///   <code lang="csharp lang-csharp"><![CDATA[
+		///var myTraits = new UITraitCollection ();
+		///var myTheme = UICollectionView.GetAppearance<MyUICollectionViewSubclass> (myTraits);
+		///myTheme.TintColor = UIColor.Red;
+		///]]></code>
+		///   </example>
+		///   <para>For more information, see the documentation for the <see cref="global::UIKit.UIAppearance" /> class.</para>
+		/// </remarks>
+		public static new UICollectionViewAppearance GetAppearance<T> (UITraitCollection traits) where T: UICollectionView {
+			return new UICollectionViewAppearance (UIAppearance.GetAppearance (Class.GetHandle (typeof (T)), traits));
+		}
+		/// <summary>Obtains the appearance proxy <see cref="global::UIKit.UICollectionView.UICollectionViewAppearance" /> for the subclass of <see cref="global::UIKit.UICollectionView" />.</summary>
+		/// <typeparam name="T">The type for which the <see cref="global::UIKit.UIAppearance" /> proxy must be returned.  This is a subclass of <see cref="global::UIKit.UICollectionView" />.</typeparam>
+		/// <param name="traits">Trait collection to match.</param>
+		/// <param name="containers">List of types that the developer wishes to have as the containers to apply this particular appearance.</param>
+		/// <returns>
+		///   <para>An appearance proxy object for the specified type.</para>
+		/// </returns>
+		/// <remarks>
+		///   <para>Setting any appearance properties on the returned object will affect the appearance of all classes and subclasses of the type parameter.</para>
+		///   <para>Unlike the <see cref="global::UIKit.UICollectionView.Appearance" /> property, or the <see cref="global::UIKit.UICollectionView.AppearanceWhenContainedIn(System.Type[])" /> method which only work on instances of this particular class, the proxies returned by this method can be used to change the style of subclasses.</para>
+		///   <para>The following example shows how this method works:</para>
+		///   <example>
+		///   <code lang="csharp lang-csharp"><![CDATA[
+		///var myTraits = new UITraitCollection ();
+		///var myTheme = UICollectionView.GetAppearance<MyUICollectionViewSubclass> (myTraits, typeof (UINavigationBar), typeof (UIPopoverController));
+		///myTheme.TintColor = UIColor.Red;
+		///]]></code>
+		///   </example>
+		///   <para>For more information, see the documentation for the <see cref="global::UIKit.UIAppearance" /> class.</para>
+		/// </remarks>
+		public static new UICollectionViewAppearance GetAppearance<T> (UITraitCollection traits, params Type [] containers) where T: UICollectionView{
+			return new UICollectionViewAppearance (UIAppearance.GetAppearance (Class.GetHandle (typeof (T)), containers));
+		}
+	} /* class UICollectionView */
+	//
+	// Async result classes
+	//
+	/// <summary>This class holds the return values for an asynchronous operation.</summary>
+	public partial class UICollectionViewTransitionResult {
+		/// <summary>The result value from the asynchronous operation.</summary>
+		public bool Completed { get; set; }
+		/// <summary>The result value from the asynchronous operation.</summary>
+		public bool Finished { get; set; }
+		partial void Initialize ();
+		/// <summary>Creates a new instance of this class.</summary>
+		/// <param name="completed">Result value from an asynchronous operation.</param>
+		/// <param name="finished">Result value from an asynchronous operation.</param>
+		public UICollectionViewTransitionResult (bool completed, bool finished) {
+			this.Completed = completed;
+			this.Finished = finished;
+			Initialize ();
+		}
+	}
+}

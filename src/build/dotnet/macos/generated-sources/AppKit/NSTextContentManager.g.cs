@@ -1,0 +1,906 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace AppKit {
+	[Register("NSTextContentManager", true)]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos")]
+	[UnsupportedOSPlatform ("tvos")]
+	[UnsupportedOSPlatform ("ios")]
+	public unsafe partial class NSTextContentManager : NSObject, INSCoding, INSSecureCoding, INSTextElementProvider {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAddTextLayoutManager_X = "addTextLayoutManager:";
+		static readonly NativeHandle selAddTextLayoutManager_XHandle = Selector.GetHandle ("addTextLayoutManager:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAdjustedRangeFromRange_ForEditingTextSelection_X = "adjustedRangeFromRange:forEditingTextSelection:";
+		static readonly NativeHandle selAdjustedRangeFromRange_ForEditingTextSelection_XHandle = Selector.GetHandle ("adjustedRangeFromRange:forEditingTextSelection:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAutomaticallySynchronizesTextLayoutManagersX = "automaticallySynchronizesTextLayoutManagers";
+		static readonly NativeHandle selAutomaticallySynchronizesTextLayoutManagersXHandle = Selector.GetHandle ("automaticallySynchronizesTextLayoutManagers");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAutomaticallySynchronizesToBackingStoreX = "automaticallySynchronizesToBackingStore";
+		static readonly NativeHandle selAutomaticallySynchronizesToBackingStoreXHandle = Selector.GetHandle ("automaticallySynchronizesToBackingStore");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDelegateX = "delegate";
+		static readonly NativeHandle selDelegateXHandle = Selector.GetHandle ("delegate");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDocumentRangeX = "documentRange";
+		static readonly NativeHandle selDocumentRangeXHandle = Selector.GetHandle ("documentRange");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selEncodeWithCoder_X = "encodeWithCoder:";
+		static readonly NativeHandle selEncodeWithCoder_XHandle = Selector.GetHandle ("encodeWithCoder:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selEnumerateTextElementsFromLocation_Options_UsingBlock_X = "enumerateTextElementsFromLocation:options:usingBlock:";
+		static readonly NativeHandle selEnumerateTextElementsFromLocation_Options_UsingBlock_XHandle = Selector.GetHandle ("enumerateTextElementsFromLocation:options:usingBlock:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selHasEditingTransactionX = "hasEditingTransaction";
+		static readonly NativeHandle selHasEditingTransactionXHandle = Selector.GetHandle ("hasEditingTransaction");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitX = "init";
+		static readonly NativeHandle selInitXHandle = Selector.GetHandle ("init");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithCoder_X = "initWithCoder:";
+		static readonly NativeHandle selInitWithCoder_XHandle = Selector.GetHandle ("initWithCoder:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selLocationFromLocation_WithOffset_X = "locationFromLocation:withOffset:";
+		static readonly NativeHandle selLocationFromLocation_WithOffset_XHandle = Selector.GetHandle ("locationFromLocation:withOffset:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selOffsetFromLocation_ToLocation_X = "offsetFromLocation:toLocation:";
+		static readonly NativeHandle selOffsetFromLocation_ToLocation_XHandle = Selector.GetHandle ("offsetFromLocation:toLocation:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPerformEditingTransactionUsingBlock_X = "performEditingTransactionUsingBlock:";
+		static readonly NativeHandle selPerformEditingTransactionUsingBlock_XHandle = Selector.GetHandle ("performEditingTransactionUsingBlock:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPrimaryTextLayoutManagerX = "primaryTextLayoutManager";
+		static readonly NativeHandle selPrimaryTextLayoutManagerXHandle = Selector.GetHandle ("primaryTextLayoutManager");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRecordEditActionInRange_NewTextRange_X = "recordEditActionInRange:newTextRange:";
+		static readonly NativeHandle selRecordEditActionInRange_NewTextRange_XHandle = Selector.GetHandle ("recordEditActionInRange:newTextRange:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRemoveTextLayoutManager_X = "removeTextLayoutManager:";
+		static readonly NativeHandle selRemoveTextLayoutManager_XHandle = Selector.GetHandle ("removeTextLayoutManager:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selReplaceContentsInRange_WithTextElements_X = "replaceContentsInRange:withTextElements:";
+		static readonly NativeHandle selReplaceContentsInRange_WithTextElements_XHandle = Selector.GetHandle ("replaceContentsInRange:withTextElements:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetAutomaticallySynchronizesTextLayoutManagers_X = "setAutomaticallySynchronizesTextLayoutManagers:";
+		static readonly NativeHandle selSetAutomaticallySynchronizesTextLayoutManagers_XHandle = Selector.GetHandle ("setAutomaticallySynchronizesTextLayoutManagers:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetAutomaticallySynchronizesToBackingStore_X = "setAutomaticallySynchronizesToBackingStore:";
+		static readonly NativeHandle selSetAutomaticallySynchronizesToBackingStore_XHandle = Selector.GetHandle ("setAutomaticallySynchronizesToBackingStore:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetDelegate_X = "setDelegate:";
+		static readonly NativeHandle selSetDelegate_XHandle = Selector.GetHandle ("setDelegate:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetPrimaryTextLayoutManager_X = "setPrimaryTextLayoutManager:";
+		static readonly NativeHandle selSetPrimaryTextLayoutManager_XHandle = Selector.GetHandle ("setPrimaryTextLayoutManager:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSynchronizeTextLayoutManagers_X = "synchronizeTextLayoutManagers:";
+		static readonly NativeHandle selSynchronizeTextLayoutManagers_XHandle = Selector.GetHandle ("synchronizeTextLayoutManagers:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSynchronizeToBackingStore_X = "synchronizeToBackingStore:";
+		static readonly NativeHandle selSynchronizeToBackingStore_XHandle = Selector.GetHandle ("synchronizeToBackingStore:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTextElementsForRange_X = "textElementsForRange:";
+		static readonly NativeHandle selTextElementsForRange_XHandle = Selector.GetHandle ("textElementsForRange:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTextLayoutManagersX = "textLayoutManagers";
+		static readonly NativeHandle selTextLayoutManagersXHandle = Selector.GetHandle ("textLayoutManagers");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("NSTextContentManager");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <param name="coder">The unarchiver object.</param>
+		/// <remarks>
+		///   <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization). This is part of the <see cref="Foundation.NSCoding" /> protocol.</para>
+		///   <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="Foundation.NSCoder" /> and decorate it with the <c>[Export("initWithCoder:"]</c> attribute.</para>
+		///   <para>The state of this object can also be serialized by using the <see cref="Foundation.INSCoding.EncodeTo" /> companion method.</para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[DesignatedInitializer]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("initWithCoder:")]
+		public NSTextContentManager (NSCoder coder) : base (NSObjectFlag.Empty)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, Selector.InitWithCoder, coder.Handle), "initWithCoder:");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (&__objc_super__, Selector.InitWithCoder, coder.Handle), "initWithCoder:");
+				GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (coder);
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected NSTextContentManager (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal NSTextContentManager (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("init")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public NSTextContentManager ()
+			: base (NSObjectFlag.Empty)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selInitXHandle), "init");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selInitXHandle), "init");
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("addTextLayoutManager:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void Add (NSTextLayoutManager textLayoutManager)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			var textLayoutManager__handle__ = textLayoutManager!.GetNonNullHandle (nameof (textLayoutManager));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selAddTextLayoutManager_XHandle, textLayoutManager__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selAddTextLayoutManager_XHandle, textLayoutManager__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (textLayoutManager);
+		}
+		[Export ("adjustedRangeFromRange:forEditingTextSelection:")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSTextRange? AdjustedRange (NSTextRange textRange, bool forEditingTextSelection)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			var textRange__handle__ = textRange!.GetNonNullHandle (nameof (textRange));
+			NSTextRange? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<NSTextRange> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_bool (this.Handle, selAdjustedRangeFromRange_ForEditingTextSelection_XHandle, textRange__handle__, forEditingTextSelection ? (byte) 1 : (byte) 0), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<NSTextRange> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_bool (&__objc_super__, selAdjustedRangeFromRange_ForEditingTextSelection_XHandle, textRange__handle__, forEditingTextSelection ? (byte) 1 : (byte) 0), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (textRange);
+			return ret!;
+		}
+		/// <summary>Encodes the state of the object using the provided encoder.</summary><param name="encoder">The encoder object where the state of the object will be stored</param><remarks><para>This method is part of the <see cref="T:Foundation.INSCoding" /> protocol and is used by applications to preserve the state of the object into an archive.</para><para>Developers will typically create an <see cref="T:Foundation.NSKeyedArchiver" /> and then invoke the <see cref="M:Foundation.NSKeyedArchiver.ArchiveRootObjectToFile(Foundation.NSObject,System.String)" /> method which will call into this method.</para><para>If developers want to allow their object to be archived, they should override this method and store their state in using the provided <paramref name="encoder" /> parameter. In addition, developers should also implement a constructor that takes an NSCoder argument and is exported with <c>[Export ("initWithCoder:")]</c>.</para><example><code lang="csharp lang-csharp"><![CDATA[public void override EncodeTo (NSCoder coder) {
+		/// coder.Encode (1, key: "version");
+		/// coder.Encode (userName, key: "userName");
+		/// coder.Encode (hostName, key: "hostName");]]></code></example></remarks>
+		[Export ("encodeWithCoder:")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void EncodeTo (NSCoder encoder)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			var encoder__handle__ = encoder!.GetNonNullHandle (nameof (encoder));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selEncodeWithCoder_XHandle, encoder__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selEncodeWithCoder_XHandle, encoder__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (encoder);
+		}
+		[Export ("enumerateTextElementsFromLocation:options:usingBlock:")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual INSTextLocation? EnumerateTextElements (INSTextLocation? textLocation, NSTextContentManagerEnumerationOptions options, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDFuncArity2V2))]global::System.Func<NSTextElement, bool> handler)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			var textLocation__handle__ = textLocation.GetHandle ();
+			if (handler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (handler));
+			using var block_handler = Trampolines.SDFuncArity2V2.CreateBlock (handler);
+			BlockLiteral *block_ptr_handler = &block_handler;
+			INSTextLocation? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetINativeObject<INSTextLocation> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_UIntPtr_NativeHandle (this.Handle, selEnumerateTextElementsFromLocation_Options_UsingBlock_XHandle, textLocation__handle__, (UIntPtr) (ulong) options, (IntPtr) block_ptr_handler), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetINativeObject<INSTextLocation> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_UIntPtr_NativeHandle (&__objc_super__, selEnumerateTextElementsFromLocation_Options_UsingBlock_XHandle, textLocation__handle__, (UIntPtr) (ulong) options, (IntPtr) block_ptr_handler), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (textLocation);
+			return ret!;
+		}
+		[Export ("locationFromLocation:withOffset:")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual INSTextLocation? GetLocation (INSTextLocation location, nint offset)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			var location__handle__ = location!.GetNonNullHandle (nameof (location));
+			INSTextLocation? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetINativeObject<INSTextLocation> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_IntPtr (this.Handle, selLocationFromLocation_WithOffset_XHandle, location__handle__, offset), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetINativeObject<INSTextLocation> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_IntPtr (&__objc_super__, selLocationFromLocation_WithOffset_XHandle, location__handle__, offset), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (location);
+			return ret!;
+		}
+		[Export ("offsetFromLocation:toLocation:")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nint GetOffset (INSTextLocation from, INSTextLocation to)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			var from__handle__ = from!.GetNonNullHandle (nameof (from));
+			var to__handle__ = to!.GetNonNullHandle (nameof (to));
+			nint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selOffsetFromLocation_ToLocation_XHandle, from__handle__, to__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selOffsetFromLocation_ToLocation_XHandle, from__handle__, to__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (from);
+			GC.KeepAlive (to);
+			return ret!;
+		}
+		[Export ("textElementsForRange:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSTextElement[] GetTextElements (NSTextRange range)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			var range__handle__ = range!.GetNonNullHandle (nameof (range));
+			NSTextElement[]? ret;
+			if (IsDirectBinding) {
+				ret = CFArray.ArrayFromHandle<NSTextElement>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selTextElementsForRange_XHandle, range__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = CFArray.ArrayFromHandle<NSTextElement>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selTextElementsForRange_XHandle, range__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (range);
+			return ret!;
+		}
+		[Export ("performEditingTransactionUsingBlock:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void PerformEditingTransaction ([BlockProxy (typeof (ObjCRuntime.Trampolines.NIDAction))]global::System.Action transaction)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			if (transaction is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (transaction));
+			using var block_transaction = Trampolines.SDAction.CreateBlock (transaction);
+			BlockLiteral *block_ptr_transaction = &block_transaction;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selPerformEditingTransactionUsingBlock_XHandle, (IntPtr) block_ptr_transaction);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selPerformEditingTransactionUsingBlock_XHandle, (IntPtr) block_ptr_transaction);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task PerformEditingTransactionAsync ()
+		{
+			var tcs = new TaskCompletionSource<bool> ();
+			PerformEditingTransaction(() => {
+				tcs.SetResult (true);
+			});
+			return tcs.Task;
+		}
+		[Export ("recordEditActionInRange:newTextRange:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void RecordEditAction (NSTextRange originalTextRange, NSTextRange newTextRange)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			var originalTextRange__handle__ = originalTextRange!.GetNonNullHandle (nameof (originalTextRange));
+			var newTextRange__handle__ = newTextRange!.GetNonNullHandle (nameof (newTextRange));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selRecordEditActionInRange_NewTextRange_XHandle, originalTextRange__handle__, newTextRange__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selRecordEditActionInRange_NewTextRange_XHandle, originalTextRange__handle__, newTextRange__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (originalTextRange);
+			GC.KeepAlive (newTextRange);
+		}
+		[Export ("removeTextLayoutManager:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void Remove (NSTextLayoutManager textLayoutManager)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			var textLayoutManager__handle__ = textLayoutManager!.GetNonNullHandle (nameof (textLayoutManager));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selRemoveTextLayoutManager_XHandle, textLayoutManager__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selRemoveTextLayoutManager_XHandle, textLayoutManager__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (textLayoutManager);
+		}
+		[Export ("replaceContentsInRange:withTextElements:")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void ReplaceContents (NSTextRange range, NSTextElement[]? textElements)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			var range__handle__ = range!.GetNonNullHandle (nameof (range));
+			using var nsa_textElements = textElements is null ? null : NSArray.FromNSObjects (textElements);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selReplaceContentsInRange_WithTextElements_XHandle, range__handle__, nsa_textElements.GetHandle ());
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selReplaceContentsInRange_WithTextElements_XHandle, range__handle__, nsa_textElements.GetHandle ());
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (range);
+		}
+		[Export ("synchronizeToBackingStore:")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void Synchronize ([BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity1V16))]global::System.Action<NSError>? completionHandler)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			using var block_completionHandler = Trampolines.SDActionArity1V16.CreateNullableBlock (completionHandler);
+			BlockLiteral *block_ptr_completionHandler = null;
+			if (completionHandler is not null)
+				block_ptr_completionHandler = &block_completionHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSynchronizeToBackingStore_XHandle, (IntPtr) block_ptr_completionHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSynchronizeToBackingStore_XHandle, (IntPtr) block_ptr_completionHandler);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("synchronizeTextLayoutManagers:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void SynchronizeTextLayoutManagers ([BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity1V16))]global::System.Action<NSError>? completionHandler)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			using var block_completionHandler = Trampolines.SDActionArity1V16.CreateNullableBlock (completionHandler);
+			BlockLiteral *block_ptr_completionHandler = null;
+			if (completionHandler is not null)
+				block_ptr_completionHandler = &block_completionHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSynchronizeTextLayoutManagers_XHandle, (IntPtr) block_ptr_completionHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSynchronizeTextLayoutManagers_XHandle, (IntPtr) block_ptr_completionHandler);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task SynchronizeTextLayoutManagersAsync ()
+		{
+			var tcs = new TaskCompletionSource<bool> ();
+			SynchronizeTextLayoutManagers((obj_) => {
+				if (obj_ is not null)
+					tcs.SetException (new NSErrorException(obj_));
+				else
+					tcs.SetResult (true);
+			});
+			return tcs.Task;
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool AutomaticallySynchronizesTextLayoutManagers {
+			[Export ("automaticallySynchronizesTextLayoutManagers")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selAutomaticallySynchronizesTextLayoutManagersXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selAutomaticallySynchronizesTextLayoutManagersXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAutomaticallySynchronizesTextLayoutManagers:")]
+			set {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetAutomaticallySynchronizesTextLayoutManagers_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetAutomaticallySynchronizesTextLayoutManagers_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool AutomaticallySynchronizesToBackingStore {
+			[Export ("automaticallySynchronizesToBackingStore")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selAutomaticallySynchronizesToBackingStoreXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selAutomaticallySynchronizesToBackingStoreXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAutomaticallySynchronizesToBackingStore:")]
+			set {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetAutomaticallySynchronizesToBackingStore_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetAutomaticallySynchronizesToBackingStore_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public INSTextContentManagerDelegate? Delegate {
+			get {
+				return (WeakDelegate as INSTextContentManagerDelegate)!;
+			}
+			set {
+				var rvalue = value as NSObject;
+				if (!(value is null) && rvalue is null)
+					throw new ArgumentException ("The object passed of type " + value.GetType () + " does not derive from NSObject");
+				WeakDelegate = rvalue;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		public virtual NSTextRange DocumentRange {
+			[Export ("documentRange", ArgumentSemantic.Retain)]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("maccatalyst")]
+			[UnsupportedOSPlatform ("ios")]
+			[UnsupportedOSPlatform ("tvos")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				NSTextRange? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSTextRange> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selDocumentRangeXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSTextRange> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selDocumentRangeXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool HasEditingTransaction {
+			[Export ("hasEditingTransaction")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selHasEditingTransactionXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selHasEditingTransactionXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSTextLayoutManager? PrimaryTextLayoutManager {
+			[Export ("primaryTextLayoutManager", ArgumentSemantic.Retain)]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				NSTextLayoutManager? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSTextLayoutManager> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selPrimaryTextLayoutManagerXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSTextLayoutManager> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selPrimaryTextLayoutManagerXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setPrimaryTextLayoutManager:", ArgumentSemantic.Retain)]
+			set {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetPrimaryTextLayoutManager_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetPrimaryTextLayoutManager_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSTextLayoutManager[] TextLayoutManagers {
+			[Export ("textLayoutManagers", ArgumentSemantic.Copy)]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				NSTextLayoutManager[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<NSTextLayoutManager>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selTextLayoutManagersXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<NSTextLayoutManager>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selTextLayoutManagersXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		object? __mt_WeakDelegate_var;
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSObject? WeakDelegate {
+			[Export ("delegate", ArgumentSemantic.Weak)]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				NSObject? ret;
+				if (IsDirectBinding) {
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selDelegateXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selDelegateXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				MarkDirty ();
+				__mt_WeakDelegate_var = ret;
+				return ret!;
+			}
+			[Export ("setDelegate:", ArgumentSemantic.Weak)]
+			set {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetDelegate_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetDelegate_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+				MarkDirty ();
+				__mt_WeakDelegate_var = value;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _StorageUnsupportedAttributeAddedNotification;
+		/// <summary>Notification constant for StorageUnsupportedAttributeAdded</summary>
+		/// <value><see cref="NSString" /> constant, should be used as a token to <see cref="NSNotificationCenter" />.</value>
+		/// <remarks>
+		///   <para>
+		///     This constant can be used with <see cref="NSNotificationCenter" /> to register a listener for this notification.
+		///     This is an <see cref="NSString" /> instead of a string, because these values can be used as tokens in some native
+		///     libraries instead of being used purely for their actual string content. The 'notification' parameter to the callback
+		///     contains extra information that is specific to the notification type.
+		///   </para>
+		///   <para>
+		///     To subscribe to this notification, developers can use the convenience <see cref="Notifications.ObserveStorageUnsupportedAttributeAdded(NSObject,EventHandler{NSNotificationEventArgs})" />
+		///     or <see cref="Notifications.ObserveStorageUnsupportedAttributeAdded(EventHandler{NSNotificationEventArgs})" /> methods,
+		///     which offers strongly typed access to the parameters of the notification.
+		///   </para>
+		///   <para>
+		///     The following example shows how to use the strongly typed <see cref="Notifications" /> class, to take the guesswork
+		///     out of the available properties in the notification:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // Lambda style
+		/// //
+		///
+		/// // listening
+		/// notification = NSTextContentManager.Notifications.ObserveStorageUnsupportedAttributeAdded ((sender, args) => {
+		/// /* Access strongly typed args */
+		/// Console.WriteLine ("Notification: {0}", args.Notification);
+		/// });
+		///
+		/// // To stop listening:
+		/// notification.Dispose ();
+		///
+		/// //
+		/// // Method style
+		/// //
+		/// NSObject notification;
+		/// void Callback (object sender, NSTextContentManager.NSNotificationEventArgs args)
+		/// {
+		///     // Access strongly typed args
+		///     Console.WriteLine ("Notification: {0}", args.Notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     notification = NSTextContentManager.Notifications.ObserveStorageUnsupportedAttributeAdded (Callback);
+		/// }
+		///
+		/// void Teardown ()
+		/// {
+		///     notification.Dispose ();
+		/// }]]></code>
+		///   </example>
+		///   <para>
+		///     The following example shows how to use the notification with the DefaultCenter API:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// // Lambda style
+		/// NSNotificationCenter.DefaultCenter.AddObserver (
+		///     NSTextContentManager.StorageUnsupportedAttributeAddedNotification, (notification) => { Console.WriteLine ("Received the notification StorageUnsupportedAttributeAdded", notification); }
+		/// );
+		///
+		/// // Method style
+		/// void Callback (NSNotification notification)
+		/// {
+		///     Console.WriteLine ("Received the notification StorageUnsupportedAttributeAdded", notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     NSNotificationCenter.DefaultCenter.AddObserver (NSTextContentManager.StorageUnsupportedAttributeAddedNotification, Callback);
+		/// }
+		/// ]]></code>
+		///   </example>
+		/// </remarks>
+		[Field ("NSTextContentStorageUnsupportedAttributeAddedNotification",  "AppKit")]
+		[Advice ("Use NSTextContentManager.Notifications.ObserveStorageUnsupportedAttributeAdded helper method instead.")]
+		public static NSString StorageUnsupportedAttributeAddedNotification {
+			get {
+				if (_StorageUnsupportedAttributeAddedNotification is null)
+					_StorageUnsupportedAttributeAddedNotification = Dlfcn.GetStringConstant (Libraries.AppKit.Handle, "NSTextContentStorageUnsupportedAttributeAddedNotification")!;
+				return _StorageUnsupportedAttributeAddedNotification;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		protected override void Dispose (bool disposing)
+		{
+			base.Dispose (disposing);
+			if (Handle == IntPtr.Zero) {
+				__mt_WeakDelegate_var = null;
+			}
+		}
+		//
+		// Notifications
+		//
+		/// <summary>Notifications posted by the <see cref="global::AppKit.NSTextContentManager" /> class.</summary>
+		/// <remarks>
+		///    <para>This class contains various helper methods that allow developers to observe events posted in the notification hub (<see cref="Foundation.NSNotificationCenter" />).</para>
+		///    <para>The methods defined in this class post events that invoke the provided method or lambda with a <see cref="Foundation.NSNotificationEventArgs" /> parameter, which contains strongly typed properties for the notification arguments.</para>
+		/// </remarks>
+		public static partial class Notifications {
+			/// <summary>Strongly typed notification for the <see cref="global::AppKit.NSTextContentManager.StorageUnsupportedAttributeAddedNotification" /> constant.</summary>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AppKit.NSTextContentManager.StorageUnsupportedAttributeAddedNotification" /> notifications.</para>
+			///   <example>
+			///   <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for any object
+			/// var token = NSTextContentManager.Notifications.ObserveStorageUnsupportedAttributeAdded ((notification) => {
+			///   Console.WriteLine ("Observed StorageUnsupportedAttributeAddedNotification!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveStorageUnsupportedAttributeAdded (EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (StorageUnsupportedAttributeAddedNotification, notification => handler (null, new NSNotificationEventArgs (notification)));
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AppKit.NSTextContentManager.StorageUnsupportedAttributeAddedNotification" /> constant.</summary>
+			/// <param name="objectToObserve">The specific object to observe.</param>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AppKit.NSTextContentManager.StorageUnsupportedAttributeAddedNotification" /> notifications.</para>
+			///   <example>
+			///     <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for a single object
+			/// var token = NSTextContentManager.Notifications.ObserveStorageUnsupportedAttributeAdded (objectToObserve, (notification) => {
+			///   Console.WriteLine ($"Observed StorageUnsupportedAttributeAddedNotification for {nameof (objectToObserve)}!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveStorageUnsupportedAttributeAdded (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (StorageUnsupportedAttributeAddedNotification, notification => handler (null, new NSNotificationEventArgs (notification)), objectToObserve);
+			}
+		}
+	} /* class NSTextContentManager */
+}

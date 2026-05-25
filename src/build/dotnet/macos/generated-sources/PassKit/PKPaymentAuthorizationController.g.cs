@@ -1,0 +1,397 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace PassKit {
+	/// <summary>Presents a payment authorization user interface to the user and acts on the user's response.</summary><remarks><para>This class performs the same job as <see cref="T:PassKit.PKPaymentAuthorizationViewController" /> but does not rely on UIKit. Because of this, this view controller can be used in watchOS apps and in intents extensions.</para></remarks><related type="externalDocumentation" href="https://developer.apple.com/reference/PassKit/PKPaymentAuthorizationController">Apple documentation for <c>PKPaymentAuthorizationController</c></related>
+	[Register("PKPaymentAuthorizationController", true)]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class PKPaymentAuthorizationController : NSObject {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCanMakePaymentsX = "canMakePayments";
+		static readonly NativeHandle selCanMakePaymentsXHandle = Selector.GetHandle ("canMakePayments");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCanMakePaymentsUsingNetworks_X = "canMakePaymentsUsingNetworks:";
+		static readonly NativeHandle selCanMakePaymentsUsingNetworks_XHandle = Selector.GetHandle ("canMakePaymentsUsingNetworks:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCanMakePaymentsUsingNetworks_Capabilities_X = "canMakePaymentsUsingNetworks:capabilities:";
+		static readonly NativeHandle selCanMakePaymentsUsingNetworks_Capabilities_XHandle = Selector.GetHandle ("canMakePaymentsUsingNetworks:capabilities:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDelegateX = "delegate";
+		static readonly NativeHandle selDelegateXHandle = Selector.GetHandle ("delegate");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDismissWithCompletion_X = "dismissWithCompletion:";
+		static readonly NativeHandle selDismissWithCompletion_XHandle = Selector.GetHandle ("dismissWithCompletion:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithDisbursementRequest_X = "initWithDisbursementRequest:";
+		static readonly NativeHandle selInitWithDisbursementRequest_XHandle = Selector.GetHandle ("initWithDisbursementRequest:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithPaymentRequest_X = "initWithPaymentRequest:";
+		static readonly NativeHandle selInitWithPaymentRequest_XHandle = Selector.GetHandle ("initWithPaymentRequest:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPresentWithCompletion_X = "presentWithCompletion:";
+		static readonly NativeHandle selPresentWithCompletion_XHandle = Selector.GetHandle ("presentWithCompletion:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetDelegate_X = "setDelegate:";
+		static readonly NativeHandle selSetDelegate_XHandle = Selector.GetHandle ("setDelegate:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSupportsDisbursementsX = "supportsDisbursements";
+		static readonly NativeHandle selSupportsDisbursementsXHandle = Selector.GetHandle ("supportsDisbursements");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSupportsDisbursementsUsingNetworks_X = "supportsDisbursementsUsingNetworks:";
+		static readonly NativeHandle selSupportsDisbursementsUsingNetworks_XHandle = Selector.GetHandle ("supportsDisbursementsUsingNetworks:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSupportsDisbursementsUsingNetworks_Capabilities_X = "supportsDisbursementsUsingNetworks:capabilities:";
+		static readonly NativeHandle selSupportsDisbursementsUsingNetworks_Capabilities_XHandle = Selector.GetHandle ("supportsDisbursementsUsingNetworks:capabilities:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("PKPaymentAuthorizationController");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected PKPaymentAuthorizationController (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal PKPaymentAuthorizationController (NativeHandle handle) : base (handle)
+		{
+		}
+
+		/// <param name="request">To be added.</param><summary>To be added.</summary><remarks>To be added.</remarks>
+		[Export ("initWithPaymentRequest:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PKPaymentAuthorizationController (PKPaymentRequest request)
+			: base (NSObjectFlag.Empty)
+		{
+			var request__handle__ = request!.GetNonNullHandle (nameof (request));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selInitWithPaymentRequest_XHandle, request__handle__), "initWithPaymentRequest:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selInitWithPaymentRequest_XHandle, request__handle__), "initWithPaymentRequest:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (request);
+		}
+		[Export ("initWithDisbursementRequest:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PKPaymentAuthorizationController (PKDisbursementRequest request)
+			: base (NSObjectFlag.Empty)
+		{
+			var request__handle__ = request!.GetNonNullHandle (nameof (request));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selInitWithDisbursementRequest_XHandle, request__handle__), "initWithDisbursementRequest:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selInitWithDisbursementRequest_XHandle, request__handle__), "initWithDisbursementRequest:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (request);
+		}
+		/// <param name="supportedNetworks">To be added.</param><summary>Gets a value that tells whether the user can make payments in at least one of the specified <paramref name="supportedNetworks" />.</summary><returns>A value that tells whether the user can make payments in at least one of the specified <paramref name="supportedNetworks" />.</returns><remarks>To be added.</remarks>
+		[Export ("canMakePaymentsUsingNetworks:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static bool CanMakePaymentsUsingNetworks (string[] supportedNetworks)
+		{
+			if (supportedNetworks is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (supportedNetworks));
+			using var nsa_supportedNetworks = NSArray.FromStrings (supportedNetworks);
+			byte ret;
+			ret = global::ObjCRuntime.Messaging.bool_objc_msgSend_NativeHandle (class_ptr, selCanMakePaymentsUsingNetworks_XHandle, nsa_supportedNetworks.Handle);
+			return ret != 0;
+		}
+		/// <param name="supportedNetworks">To be added.</param><param name="capabilties">To be added.</param><summary>Gets a value that tells whether the user can make payments in at least one of the specified <paramref name="supportedNetworks" /> with the specified <paramref name="capabilties" />.</summary><returns>A value that tells whether the user can make payments in at least one of the specified <paramref name="supportedNetworks" /> with the specified <paramref name="capabilties" />.</returns><remarks>To be added.</remarks>
+		[Export ("canMakePaymentsUsingNetworks:capabilities:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static bool CanMakePaymentsUsingNetworks (string[] supportedNetworks, PKMerchantCapability capabilties)
+		{
+			if (supportedNetworks is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (supportedNetworks));
+			using var nsa_supportedNetworks = NSArray.FromStrings (supportedNetworks);
+			byte ret;
+			ret = global::ObjCRuntime.Messaging.bool_objc_msgSend_NativeHandle_UIntPtr (class_ptr, selCanMakePaymentsUsingNetworks_Capabilities_XHandle, nsa_supportedNetworks.Handle, (UIntPtr) (ulong) capabilties);
+			return ret != 0;
+		}
+		/// <param name="completion"><para>To be added.</para><para tool="nullallowed">This parameter can be <see langword="null" />.</para></param><summary>Dismisses the payment authorization UI and runs the specified completion handler.</summary><remarks>Developers call this method to dismiss the payment authorization UI, typically when they receive a call to the <see cref="M:PassKit.PKPaymentAuthorizationControllerDelegate.DidFinish(PassKit.PKPaymentAuthorizationController)" /> method.</remarks>
+		[Export ("dismissWithCompletion:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void Dismiss ([BlockProxy (typeof (ObjCRuntime.Trampolines.NIDAction))]global::System.Action? completion)
+		{
+			using var block_completion = Trampolines.SDAction.CreateNullableBlock (completion);
+			BlockLiteral *block_ptr_completion = null;
+			if (completion is not null)
+				block_ptr_completion = &block_completion;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selDismissWithCompletion_XHandle, (IntPtr) block_ptr_completion);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selDismissWithCompletion_XHandle, (IntPtr) block_ptr_completion);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <summary>Dismisses the payment authorization UI and runs the specified completion handler.</summary>
+		/// <returns>A task that represents the asynchronous Dismiss operation</returns>
+		/// <remarks>
+		///           <para>The DismissAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+		///           <see cref="PassKit.PKPaymentAuthorizationControllerDelegate.DidFinish(PassKit.PKPaymentAuthorizationController)" />
+		///           <para copied="true">The DismissAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+		///           <see cref="PassKit.PKPaymentAuthorizationControllerDelegate.DidFinish(PassKit.PKPaymentAuthorizationController)" copied="true" />
+		///         </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task DismissAsync ()
+		{
+			var tcs = new TaskCompletionSource<bool> ();
+			Dismiss(() => {
+				tcs.SetResult (true);
+			});
+			return tcs.Task;
+		}
+		/// <param name="completion"><para>A handler that is called after the payment authorization UI is presented.</para><para tool="nullallowed">This parameter can be <see langword="null" />.</para></param><summary>Presents the payment authorization UI and runs a handler after the sheet is displayed.</summary><remarks>The developer must use the <see cref="M:PassKit.PKPaymentAuthorizationController.Dismiss(System.Action)" /> method to dismiss the payment authorization UI.</remarks>
+		[Export ("presentWithCompletion:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void Present ([BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity1V2))]global::System.Action<bool>? completion)
+		{
+			using var block_completion = Trampolines.SDActionArity1V2.CreateNullableBlock (completion);
+			BlockLiteral *block_ptr_completion = null;
+			if (completion is not null)
+				block_ptr_completion = &block_completion;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selPresentWithCompletion_XHandle, (IntPtr) block_ptr_completion);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selPresentWithCompletion_XHandle, (IntPtr) block_ptr_completion);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <summary>Presents the payment authorization UI and runs a handler after the sheet is displayed.</summary>
+		/// <returns>
+		///           <para class="improve-task-t-return-type-description">A task that represents the asynchronous Present operation.  The value of the TResult parameter is of type System.Action&lt;System.Boolean&gt;.</para>
+		///         </returns>
+		/// <remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<bool> PresentAsync ()
+		{
+			var tcs = new TaskCompletionSource<bool> ();
+			Present((obj_) => {
+				tcs.SetResult (obj_!);
+			});
+			return tcs.Task;
+		}
+		[Export ("supportsDisbursements")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static bool SupportsDisbursements ()
+		{
+			byte ret;
+			ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (class_ptr, selSupportsDisbursementsXHandle);
+			return ret != 0;
+		}
+		[Export ("supportsDisbursementsUsingNetworks:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static bool SupportsDisbursements (string[] supportedNetworks)
+		{
+			if (supportedNetworks is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (supportedNetworks));
+			using var nsa_supportedNetworks = NSArray.FromStrings (supportedNetworks);
+			byte ret;
+			ret = global::ObjCRuntime.Messaging.bool_objc_msgSend_NativeHandle (class_ptr, selSupportsDisbursementsUsingNetworks_XHandle, nsa_supportedNetworks.Handle);
+			return ret != 0;
+		}
+		[Export ("supportsDisbursementsUsingNetworks:capabilities:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static bool SupportsDisbursements (string[] supportedNetworks, PKMerchantCapability capabilities)
+		{
+			if (supportedNetworks is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (supportedNetworks));
+			using var nsa_supportedNetworks = NSArray.FromStrings (supportedNetworks);
+			byte ret;
+			ret = global::ObjCRuntime.Messaging.bool_objc_msgSend_NativeHandle_UIntPtr (class_ptr, selSupportsDisbursementsUsingNetworks_Capabilities_XHandle, nsa_supportedNetworks.Handle, (UIntPtr) (ulong) capabilities);
+			return ret != 0;
+		}
+		/// <summary>Gets a value that tells whether the user can make payments.</summary><value>A value that tells whether the user can make payments.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static bool CanMakePayments {
+			[Export ("canMakePayments")]
+			get {
+				byte ret;
+				ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (class_ptr, selCanMakePaymentsXHandle);
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		object? __mt_Delegate_var;
+		/// <summary>An instance of the PassKit.IPKPaymentAuthorizationControllerDelegate model class which acts as the class delegate.</summary><value>The instance of the PassKit.IPKPaymentAuthorizationControllerDelegate model class</value><remarks><para>The delegate instance assigned to this object will be used to handle events or provide data on demand to this class.</para><para>When setting the Delegate or WeakDelegate values events will be delivered to the specified instance instead of being delivered to the C#-style events</para><para>This is the strongly typed version of the object, developers should use the WeakDelegate property instead if they want to merely assign a class derived from NSObject that has been decorated with [Export] attributes.</para></remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual IPKPaymentAuthorizationControllerDelegate? Delegate {
+			[Export ("delegate", ArgumentSemantic.Weak)]
+			get {
+				IPKPaymentAuthorizationControllerDelegate? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetINativeObject<IPKPaymentAuthorizationControllerDelegate> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selDelegateXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetINativeObject<IPKPaymentAuthorizationControllerDelegate> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selDelegateXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				MarkDirty ();
+				__mt_Delegate_var = ret;
+				return ret!;
+			}
+			[Export ("setDelegate:", ArgumentSemantic.Weak)]
+			set {
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetDelegate_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetDelegate_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+				MarkDirty ();
+				__mt_Delegate_var = value;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		protected override void Dispose (bool disposing)
+		{
+			base.Dispose (disposing);
+			if (Handle == IntPtr.Zero) {
+				__mt_Delegate_var = null;
+			}
+		}
+	} /* class PKPaymentAuthorizationController */
+}

@@ -1,0 +1,325 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace MLCompute {
+	[Register("MLCEmbeddingDescriptor", true)]
+	[SupportedOSPlatform ("ios14.0")]
+	[SupportedOSPlatform ("tvos14.0")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[ObsoletedOSPlatform ("macos14.3", "Use the Metal Performance Shaders Graph or the Accelerate framework (BNNS) instead.")]
+	[ObsoletedOSPlatform ("ios17.4", "Use the Metal Performance Shaders Graph or the Accelerate framework (BNNS) instead.")]
+	[ObsoletedOSPlatform ("tvos17.4", "Use the Metal Performance Shaders Graph or the Accelerate framework (BNNS) instead.")]
+	[ObsoletedOSPlatform ("maccatalyst17.4", "Use the Metal Performance Shaders Graph or the Accelerate framework (BNNS) instead.")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class MLCEmbeddingDescriptor : NSObject, INSCopying {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCopyWithZone_X = "copyWithZone:";
+		static readonly NativeHandle selCopyWithZone_XHandle = Selector.GetHandle ("copyWithZone:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDescriptorWithEmbeddingCount_EmbeddingDimension_X = "descriptorWithEmbeddingCount:embeddingDimension:";
+		static readonly NativeHandle selDescriptorWithEmbeddingCount_EmbeddingDimension_XHandle = Selector.GetHandle ("descriptorWithEmbeddingCount:embeddingDimension:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDescriptorWithEmbeddingCount_EmbeddingDimension_PaddingIndex_MaximumNorm_PNorm_ScalesGradientByFrequency_X = "descriptorWithEmbeddingCount:embeddingDimension:paddingIndex:maximumNorm:pNorm:scalesGradientByFrequency:";
+		static readonly NativeHandle selDescriptorWithEmbeddingCount_EmbeddingDimension_PaddingIndex_MaximumNorm_PNorm_ScalesGradientByFrequency_XHandle = Selector.GetHandle ("descriptorWithEmbeddingCount:embeddingDimension:paddingIndex:maximumNorm:pNorm:scalesGradientByFrequency:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selEmbeddingCountX = "embeddingCount";
+		static readonly NativeHandle selEmbeddingCountXHandle = Selector.GetHandle ("embeddingCount");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selEmbeddingDimensionX = "embeddingDimension";
+		static readonly NativeHandle selEmbeddingDimensionXHandle = Selector.GetHandle ("embeddingDimension");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selMaximumNormX = "maximumNorm";
+		static readonly NativeHandle selMaximumNormXHandle = Selector.GetHandle ("maximumNorm");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPNormX = "pNorm";
+		static readonly NativeHandle selPNormXHandle = Selector.GetHandle ("pNorm");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPaddingIndexX = "paddingIndex";
+		static readonly NativeHandle selPaddingIndexXHandle = Selector.GetHandle ("paddingIndex");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selScalesGradientByFrequencyX = "scalesGradientByFrequency";
+		static readonly NativeHandle selScalesGradientByFrequencyXHandle = Selector.GetHandle ("scalesGradientByFrequency");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("MLCEmbeddingDescriptor");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected MLCEmbeddingDescriptor (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal MLCEmbeddingDescriptor (NativeHandle handle) : base (handle)
+		{
+		}
+
+		/// <param name="zone">Developers should pass <see langword="null" />.  Memory zones are no longer used.</param><summary>Performs a copy of the underlying Objective-C object.</summary><returns>The newly-allocated object.</returns><remarks><para>This method performs a "shallow copy" of <see langword="this" />. If this object contains references to external objects, the new object will contain references to the same object.</para></remarks>
+		[Export ("copyWithZone:")]
+		[return: ReleaseAttribute ()]
+		[ObsoletedOSPlatform ("macos14.3", "Use the Metal Performance Shaders Graph or the Accelerate framework (BNNS) instead.")]
+		[ObsoletedOSPlatform ("ios17.4", "Use the Metal Performance Shaders Graph or the Accelerate framework (BNNS) instead.")]
+		[ObsoletedOSPlatform ("tvos17.4", "Use the Metal Performance Shaders Graph or the Accelerate framework (BNNS) instead.")]
+		[ObsoletedOSPlatform ("maccatalyst17.4", "Use the Metal Performance Shaders Graph or the Accelerate framework (BNNS) instead.")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSObject Copy (NSZone? zone)
+		{
+			var zone__handle__ = zone.GetHandle ();
+			NSObject? ret;
+			if (IsDirectBinding) {
+				ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selCopyWithZone_XHandle, zone__handle__), true)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selCopyWithZone_XHandle, zone__handle__), true)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (zone);
+			return ret!;
+		}
+		[Export ("descriptorWithEmbeddingCount:embeddingDimension:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static MLCEmbeddingDescriptor? Create ([BindAs (typeof (nint), OriginalType = typeof (NSNumber))] nint embeddingCount, [BindAs (typeof (nint), OriginalType = typeof (NSNumber))] nint embeddingDimension)
+		{
+			using var nsb_embeddingCount = new NSNumber (embeddingCount);
+			using var nsb_embeddingDimension = new NSNumber (embeddingDimension);
+			MLCEmbeddingDescriptor ret;
+			ret =  Runtime.GetNSObject<MLCEmbeddingDescriptor> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (class_ptr, selDescriptorWithEmbeddingCount_EmbeddingDimension_XHandle, nsb_embeddingCount.GetHandle (), nsb_embeddingDimension.GetHandle ()), false)!;
+			return ret;
+		}
+		[Export ("descriptorWithEmbeddingCount:embeddingDimension:paddingIndex:maximumNorm:pNorm:scalesGradientByFrequency:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static MLCEmbeddingDescriptor? Create ([BindAs (typeof (nint), OriginalType = typeof (NSNumber))] nint embeddingCount, [BindAs (typeof (nint), OriginalType = typeof (NSNumber))] nint embeddingDimension, [BindAs (typeof (nint?), OriginalType = typeof (NSNumber))] nint? paddingIndex, [BindAs (typeof (float?), OriginalType = typeof (NSNumber))] float? maximumNorm, [BindAs (typeof (float?), OriginalType = typeof (NSNumber))] float? pNorm, bool scalesGradientByFrequency)
+		{
+			if (paddingIndex is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (paddingIndex));
+			if (maximumNorm is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (maximumNorm));
+			if (pNorm is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (pNorm));
+			using var nsb_embeddingCount = new NSNumber (embeddingCount);
+			using var nsb_embeddingDimension = new NSNumber (embeddingDimension);
+			using var nsb_paddingIndex = paddingIndex is null ? null : new NSNumber (paddingIndex.Value);
+			using var nsb_maximumNorm = maximumNorm is null ? null : new NSNumber (maximumNorm.Value);
+			using var nsb_pNorm = pNorm is null ? null : new NSNumber (pNorm.Value);
+			MLCEmbeddingDescriptor ret;
+			ret =  Runtime.GetNSObject<MLCEmbeddingDescriptor> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle_bool (class_ptr, selDescriptorWithEmbeddingCount_EmbeddingDimension_PaddingIndex_MaximumNorm_PNorm_ScalesGradientByFrequency_XHandle, nsb_embeddingCount.GetHandle (), nsb_embeddingDimension.GetHandle (), nsb_paddingIndex.GetHandle (), nsb_maximumNorm.GetHandle (), nsb_pNorm.GetHandle (), scalesGradientByFrequency ? (byte) 1 : (byte) 0), false)!;
+			return ret;
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[BindAs (typeof (nint), OriginalType = typeof (NSNumber))]
+		public virtual nint EmbeddingCount {
+			[Export ("embeddingCount")]
+			get {
+				nint ret;
+				if (IsDirectBinding) {
+					ret = Runtime.GetNSObject<NSNumber> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selEmbeddingCountXHandle), false)!.NIntValue;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = Runtime.GetNSObject<NSNumber> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selEmbeddingCountXHandle), false)!.NIntValue;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[BindAs (typeof (nint), OriginalType = typeof (NSNumber))]
+		public virtual nint EmbeddingDimension {
+			[Export ("embeddingDimension")]
+			get {
+				nint ret;
+				if (IsDirectBinding) {
+					ret = Runtime.GetNSObject<NSNumber> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selEmbeddingDimensionXHandle), false)!.NIntValue;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = Runtime.GetNSObject<NSNumber> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selEmbeddingDimensionXHandle), false)!.NIntValue;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[BindAs (typeof (float?), OriginalType = typeof (NSNumber))]
+		public virtual float? MaximumNorm {
+			[Export ("maximumNorm")]
+			get {
+				float? ret;
+				if (IsDirectBinding) {
+					ret = Runtime.GetNSObject<NSNumber> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selMaximumNormXHandle), false)?.FloatValue;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = Runtime.GetNSObject<NSNumber> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selMaximumNormXHandle), false)?.FloatValue;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[BindAs (typeof (float?), OriginalType = typeof (NSNumber))]
+		public virtual float? PNorm {
+			[Export ("pNorm")]
+			get {
+				float? ret;
+				if (IsDirectBinding) {
+					ret = Runtime.GetNSObject<NSNumber> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selPNormXHandle), false)?.FloatValue;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = Runtime.GetNSObject<NSNumber> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selPNormXHandle), false)?.FloatValue;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[BindAs (typeof (nint?), OriginalType = typeof (NSNumber))]
+		public virtual nint? PaddingIndex {
+			[Export ("paddingIndex")]
+			get {
+				nint? ret;
+				if (IsDirectBinding) {
+					ret = Runtime.GetNSObject<NSNumber> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selPaddingIndexXHandle), false)?.NIntValue;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = Runtime.GetNSObject<NSNumber> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selPaddingIndexXHandle), false)?.NIntValue;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool ScalesGradientByFrequency {
+			[Export ("scalesGradientByFrequency")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selScalesGradientByFrequencyXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selScalesGradientByFrequencyXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+	} /* class MLCEmbeddingDescriptor */
+}

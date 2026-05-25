@@ -1,0 +1,60 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using Metal;
+using CoreML;
+using AppKit;
+using MapKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using Messages;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using QuickLook;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using CoreMotion;
+using ObjCRuntime;
+using AddressBook;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace SceneKit {
+	/// <summary>Enumerates values that control which physics search results are returned.</summary>
+	public enum SCNPhysicsSearchMode : int {
+		/// <summary>To be added.</summary>
+		Unknown = -1,
+		/// <summary>Return the first matching result.</summary>
+		Any = 0,
+		/// <summary>Return the closest matching result.</summary>
+		Closest = 1,
+		/// <summary>Return all results that match the search criteria.</summary>
+		All = 2,
+	}
+}

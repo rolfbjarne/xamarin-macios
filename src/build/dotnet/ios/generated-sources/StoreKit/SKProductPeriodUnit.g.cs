@@ -1,0 +1,69 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using GLKit;
+using Metal;
+using CoreML;
+using MapKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using Messages;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using QuickLook;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using CoreMotion;
+using ObjCRuntime;
+using AddressBook;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using NewsstandKit;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace StoreKit {
+	/// <summary>Defines the natural period for a subscription.</summary>
+	[ObsoletedOSPlatform ("ios18.0")]
+	[ObsoletedOSPlatform ("maccatalyst18.0")]
+	[ObsoletedOSPlatform ("macos15.0")]
+	[ObsoletedOSPlatform ("tvos18.0")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
+	[Native]
+	public enum SKProductPeriodUnit : ulong {
+		/// <summary>The subscription is defined in terms of days.</summary>
+		Day = 0,
+		/// <summary>The subscription is defined in terms of weeks.</summary>
+		Week = 1,
+		/// <summary>The subscription is defined in terms of months.</summary>
+		Month = 2,
+		/// <summary>The subscription is defined in terms of a year or years.</summary>
+		Year = 3,
+	}
+}

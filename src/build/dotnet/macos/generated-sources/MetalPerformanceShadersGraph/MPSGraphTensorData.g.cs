@@ -1,0 +1,447 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace MetalPerformanceShadersGraph {
+	[Register("MPSGraphTensorData", true)]
+	[SupportedOSPlatform ("ios14.0")]
+	[SupportedOSPlatform ("tvos14.0")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class MPSGraphTensorData : MPSGraphObject {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDataTypeX = "dataType";
+		static readonly NativeHandle selDataTypeXHandle = Selector.GetHandle ("dataType");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDeviceX = "device";
+		static readonly NativeHandle selDeviceXHandle = Selector.GetHandle ("device");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithDevice_Data_Shape_DataType_X = "initWithDevice:data:shape:dataType:";
+		static readonly NativeHandle selInitWithDevice_Data_Shape_DataType_XHandle = Selector.GetHandle ("initWithDevice:data:shape:dataType:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithMPSImageBatch_X = "initWithMPSImageBatch:";
+		static readonly NativeHandle selInitWithMPSImageBatch_XHandle = Selector.GetHandle ("initWithMPSImageBatch:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithMPSMatrix_X = "initWithMPSMatrix:";
+		static readonly NativeHandle selInitWithMPSMatrix_XHandle = Selector.GetHandle ("initWithMPSMatrix:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithMPSMatrix_Rank_X = "initWithMPSMatrix:rank:";
+		static readonly NativeHandle selInitWithMPSMatrix_Rank_XHandle = Selector.GetHandle ("initWithMPSMatrix:rank:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithMPSNDArray_X = "initWithMPSNDArray:";
+		static readonly NativeHandle selInitWithMPSNDArray_XHandle = Selector.GetHandle ("initWithMPSNDArray:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithMPSVector_X = "initWithMPSVector:";
+		static readonly NativeHandle selInitWithMPSVector_XHandle = Selector.GetHandle ("initWithMPSVector:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithMPSVector_Rank_X = "initWithMPSVector:rank:";
+		static readonly NativeHandle selInitWithMPSVector_Rank_XHandle = Selector.GetHandle ("initWithMPSVector:rank:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithMTLBuffer_Shape_DataType_X = "initWithMTLBuffer:shape:dataType:";
+		static readonly NativeHandle selInitWithMTLBuffer_Shape_DataType_XHandle = Selector.GetHandle ("initWithMTLBuffer:shape:dataType:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithMTLBuffer_Shape_DataType_RowBytes_X = "initWithMTLBuffer:shape:dataType:rowBytes:";
+		static readonly NativeHandle selInitWithMTLBuffer_Shape_DataType_RowBytes_XHandle = Selector.GetHandle ("initWithMTLBuffer:shape:dataType:rowBytes:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithMTLTensor_X = "initWithMTLTensor:";
+		static readonly NativeHandle selInitWithMTLTensor_XHandle = Selector.GetHandle ("initWithMTLTensor:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selMpsndarrayX = "mpsndarray";
+		static readonly NativeHandle selMpsndarrayXHandle = Selector.GetHandle ("mpsndarray");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selShapeX = "shape";
+		static readonly NativeHandle selShapeXHandle = Selector.GetHandle ("shape");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("MPSGraphTensorData");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Creates a new <see cref="MPSGraphTensorData" /> with default values.</summary>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("init")]
+		public MPSGraphTensorData () : base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.Init), "init");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, global::ObjCRuntime.Selector.Init), "init");
+				GC.KeepAlive (this);
+				}
+			}
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected MPSGraphTensorData (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal MPSGraphTensorData (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("initWithDevice:data:shape:dataType:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public MPSGraphTensorData (MPSGraphDevice device, NSData data, [BindAs (typeof (int[]), OriginalType = typeof (NSNumber[]))] int[] shape, global::MetalPerformanceShaders.MPSDataType dataType)
+			: base (NSObjectFlag.Empty)
+		{
+			var device__handle__ = device!.GetNonNullHandle (nameof (device));
+			var data__handle__ = data!.GetNonNullHandle (nameof (data));
+			if (shape is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (shape));
+			using var nsb_shape = NSArray.FromNSObjects (o => new NSNumber (o), shape);
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_UInt32 (this.Handle, selInitWithDevice_Data_Shape_DataType_XHandle, device__handle__, data__handle__, nsb_shape.GetHandle (), (UInt32)dataType), "initWithDevice:data:shape:dataType:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle_UInt32 (&__objc_super__, selInitWithDevice_Data_Shape_DataType_XHandle, device__handle__, data__handle__, nsb_shape.GetHandle (), (UInt32)dataType), "initWithDevice:data:shape:dataType:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (device);
+			GC.KeepAlive (data);
+		}
+		[Export ("initWithMTLBuffer:shape:dataType:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public MPSGraphTensorData (global::Metal.IMTLBuffer buffer, [BindAs (typeof (int[]), OriginalType = typeof (NSNumber[]))] int[] shape, global::MetalPerformanceShaders.MPSDataType dataType)
+			: base (NSObjectFlag.Empty)
+		{
+			var buffer__handle__ = buffer!.GetNonNullHandle (nameof (buffer));
+			if (shape is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (shape));
+			using var nsb_shape = NSArray.FromNSObjects (o => new NSNumber (o), shape);
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_NativeHandle_NativeHandle_UInt32 (this.Handle, selInitWithMTLBuffer_Shape_DataType_XHandle, buffer__handle__, nsb_shape.GetHandle (), (UInt32)dataType), "initWithMTLBuffer:shape:dataType:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_NativeHandle_NativeHandle_UInt32 (&__objc_super__, selInitWithMTLBuffer_Shape_DataType_XHandle, buffer__handle__, nsb_shape.GetHandle (), (UInt32)dataType), "initWithMTLBuffer:shape:dataType:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (buffer);
+		}
+		[Export ("initWithMPSMatrix:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public MPSGraphTensorData (global::MetalPerformanceShaders.MPSMatrix matrix)
+			: base (NSObjectFlag.Empty)
+		{
+			var matrix__handle__ = matrix!.GetNonNullHandle (nameof (matrix));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_NativeHandle (this.Handle, selInitWithMPSMatrix_XHandle, matrix__handle__), "initWithMPSMatrix:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_NativeHandle (&__objc_super__, selInitWithMPSMatrix_XHandle, matrix__handle__), "initWithMPSMatrix:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (matrix);
+		}
+		[Export ("initWithMPSMatrix:rank:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public MPSGraphTensorData (global::MetalPerformanceShaders.MPSMatrix matrix, nuint rank)
+			: base (NSObjectFlag.Empty)
+		{
+			var matrix__handle__ = matrix!.GetNonNullHandle (nameof (matrix));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_NativeHandle_UIntPtr (this.Handle, selInitWithMPSMatrix_Rank_XHandle, matrix__handle__, rank), "initWithMPSMatrix:rank:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_NativeHandle_UIntPtr (&__objc_super__, selInitWithMPSMatrix_Rank_XHandle, matrix__handle__, rank), "initWithMPSMatrix:rank:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (matrix);
+		}
+		[Export ("initWithMPSVector:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public MPSGraphTensorData (global::MetalPerformanceShaders.MPSVector vector)
+			: base (NSObjectFlag.Empty)
+		{
+			var vector__handle__ = vector!.GetNonNullHandle (nameof (vector));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_NativeHandle (this.Handle, selInitWithMPSVector_XHandle, vector__handle__), "initWithMPSVector:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_NativeHandle (&__objc_super__, selInitWithMPSVector_XHandle, vector__handle__), "initWithMPSVector:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (vector);
+		}
+		[Export ("initWithMPSVector:rank:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public MPSGraphTensorData (global::MetalPerformanceShaders.MPSVector vector, nuint rank)
+			: base (NSObjectFlag.Empty)
+		{
+			var vector__handle__ = vector!.GetNonNullHandle (nameof (vector));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_NativeHandle_UIntPtr (this.Handle, selInitWithMPSVector_Rank_XHandle, vector__handle__, rank), "initWithMPSVector:rank:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_NativeHandle_UIntPtr (&__objc_super__, selInitWithMPSVector_Rank_XHandle, vector__handle__, rank), "initWithMPSVector:rank:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (vector);
+		}
+		[Export ("initWithMPSNDArray:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public MPSGraphTensorData (global::MetalPerformanceShaders.MPSNDArray ndarray)
+			: base (NSObjectFlag.Empty)
+		{
+			var ndarray__handle__ = ndarray!.GetNonNullHandle (nameof (ndarray));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_NativeHandle (this.Handle, selInitWithMPSNDArray_XHandle, ndarray__handle__), "initWithMPSNDArray:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_NativeHandle (&__objc_super__, selInitWithMPSNDArray_XHandle, ndarray__handle__), "initWithMPSNDArray:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (ndarray);
+		}
+		[Export ("initWithMPSImageBatch:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public MPSGraphTensorData (NSArray<global::MetalPerformanceShaders.MPSImage> imageBatch)
+			: base (NSObjectFlag.Empty)
+		{
+			var imageBatch__handle__ = imageBatch!.GetNonNullHandle (nameof (imageBatch));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_NativeHandle (this.Handle, selInitWithMPSImageBatch_XHandle, imageBatch__handle__), "initWithMPSImageBatch:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_NativeHandle (&__objc_super__, selInitWithMPSImageBatch_XHandle, imageBatch__handle__), "initWithMPSImageBatch:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (imageBatch);
+		}
+		[Export ("initWithMTLBuffer:shape:dataType:rowBytes:")]
+		[SupportedOSPlatform ("tvos15.4")]
+		[SupportedOSPlatform ("macos12.3")]
+		[SupportedOSPlatform ("ios15.4")]
+		[SupportedOSPlatform ("maccatalyst15.4")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public MPSGraphTensorData (global::Metal.IMTLBuffer buffer, [BindAs (typeof (int[]), OriginalType = typeof (NSNumber[]))] int[] shape, global::MetalPerformanceShaders.MPSDataType dataType, nuint rowBytes)
+			: base (NSObjectFlag.Empty)
+		{
+			var buffer__handle__ = buffer!.GetNonNullHandle (nameof (buffer));
+			if (shape is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (shape));
+			using var nsb_shape = NSArray.FromNSObjects (o => new NSNumber (o), shape);
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_UInt32_UIntPtr (this.Handle, selInitWithMTLBuffer_Shape_DataType_RowBytes_XHandle, buffer__handle__, nsb_shape.GetHandle (), (UInt32)dataType, rowBytes), "initWithMTLBuffer:shape:dataType:rowBytes:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_UInt32_UIntPtr (&__objc_super__, selInitWithMTLBuffer_Shape_DataType_RowBytes_XHandle, buffer__handle__, nsb_shape.GetHandle (), (UInt32)dataType, rowBytes), "initWithMTLBuffer:shape:dataType:rowBytes:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (buffer);
+		}
+		[Export ("initWithMTLTensor:")]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public MPSGraphTensorData (global::Metal.IMTLTensor tensor)
+			: base (NSObjectFlag.Empty)
+		{
+			var tensor__handle__ = tensor!.GetNonNullHandle (nameof (tensor));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selInitWithMTLTensor_XHandle, tensor__handle__), "initWithMTLTensor:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selInitWithMTLTensor_XHandle, tensor__handle__), "initWithMTLTensor:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (tensor);
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual global::MetalPerformanceShaders.MPSDataType DataType {
+			[Export ("dataType")]
+			get {
+				global::MetalPerformanceShaders.MPSDataType ret;
+				if (IsDirectBinding) {
+					ret = (global::MetalPerformanceShaders.MPSDataType) global::ObjCRuntime.Messaging.UInt32_objc_msgSend (this.Handle, selDataTypeXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = (global::MetalPerformanceShaders.MPSDataType) global::ObjCRuntime.Messaging.UInt32_objc_msgSendSuper (&__objc_super__, selDataTypeXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MPSGraphDevice Device {
+			[Export ("device")]
+			get {
+				MPSGraphDevice? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<MPSGraphDevice> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selDeviceXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<MPSGraphDevice> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selDeviceXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual global::MetalPerformanceShaders.MPSNDArray MPSNDArray {
+			[Export ("mpsndarray")]
+			get {
+				global::MetalPerformanceShaders.MPSNDArray? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<global::MetalPerformanceShaders.MPSNDArray> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selMpsndarrayXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<global::MetalPerformanceShaders.MPSNDArray> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selMpsndarrayXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[BindAs (typeof (int[]), OriginalType = typeof (NSNumber[]))]
+		public virtual int[] Shape {
+			[Export ("shape", ArgumentSemantic.Copy)]
+			get {
+				int[] ret;
+				if (IsDirectBinding) {
+					ret = NSArray.ArrayFromHandleFunc <int> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selShapeXHandle), NSNumber.ToInt32, false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = NSArray.ArrayFromHandleFunc <int> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selShapeXHandle), NSNumber.ToInt32, false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+	} /* class MPSGraphTensorData */
+}

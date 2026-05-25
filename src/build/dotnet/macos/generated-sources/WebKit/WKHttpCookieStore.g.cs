@@ -1,0 +1,391 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace WebKit {
+	/// <summary>Manages cookies for a <see cref="T:WebKit.WKWebsiteDataStore" />.</summary>
+	[Register("WKHTTPCookieStore", true)]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class WKHttpCookieStore : NSObject {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAddObserver_X = "addObserver:";
+		static readonly NativeHandle selAddObserver_XHandle = Selector.GetHandle ("addObserver:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDeleteCookie_CompletionHandler_X = "deleteCookie:completionHandler:";
+		static readonly NativeHandle selDeleteCookie_CompletionHandler_XHandle = Selector.GetHandle ("deleteCookie:completionHandler:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selGetAllCookies_X = "getAllCookies:";
+		static readonly NativeHandle selGetAllCookies_XHandle = Selector.GetHandle ("getAllCookies:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selGetCookiePolicy_X = "getCookiePolicy:";
+		static readonly NativeHandle selGetCookiePolicy_XHandle = Selector.GetHandle ("getCookiePolicy:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRemoveObserver_X = "removeObserver:";
+		static readonly NativeHandle selRemoveObserver_XHandle = Selector.GetHandle ("removeObserver:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetCookie_CompletionHandler_X = "setCookie:completionHandler:";
+		static readonly NativeHandle selSetCookie_CompletionHandler_XHandle = Selector.GetHandle ("setCookie:completionHandler:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetCookiePolicy_CompletionHandler_X = "setCookiePolicy:completionHandler:";
+		static readonly NativeHandle selSetCookiePolicy_CompletionHandler_XHandle = Selector.GetHandle ("setCookiePolicy:completionHandler:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetCookies_CompletionHandler_X = "setCookies:completionHandler:";
+		static readonly NativeHandle selSetCookies_CompletionHandler_XHandle = Selector.GetHandle ("setCookies:completionHandler:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("WKHTTPCookieStore");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected WKHttpCookieStore (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal WKHttpCookieStore (NativeHandle handle) : base (handle)
+		{
+		}
+
+		/// <summary>Add an observer to the cookie store.</summary><param name="observer">The observer to add.</param><remarks>The cookie store only keeps a weak reference to the <paramref name="observer" />, a separate (strong) reference must be kept for the observer to not be collected by the garbage collector. Call <see cref="M:WebKit.WKHttpCookieStore.RemoveObserver(WebKit.IWKHttpCookieStoreObserver)" /> to remove the observer to stop observing.</remarks>
+		[Export ("addObserver:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void AddObserver (IWKHttpCookieStoreObserver observer)
+		{
+			var observer__handle__ = observer!.GetNonNullHandle (nameof (observer));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selAddObserver_XHandle, observer__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selAddObserver_XHandle, observer__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (observer);
+		}
+		[Export ("deleteCookie:completionHandler:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void DeleteCookie (NSHttpCookie cookie, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDAction))]global::System.Action? completionHandler)
+		{
+			var cookie__handle__ = cookie!.GetNonNullHandle (nameof (cookie));
+			using var block_completionHandler = Trampolines.SDAction.CreateNullableBlock (completionHandler);
+			BlockLiteral *block_ptr_completionHandler = null;
+			if (completionHandler is not null)
+				block_ptr_completionHandler = &block_completionHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selDeleteCookie_CompletionHandler_XHandle, cookie__handle__, (IntPtr) block_ptr_completionHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selDeleteCookie_CompletionHandler_XHandle, cookie__handle__, (IntPtr) block_ptr_completionHandler);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (cookie);
+		}
+		/// <param name="cookie">The cookie to remove.</param>
+		/// <summary>Deletes the specified <paramref name="cookie" /> from the store and runs a completion handler when the operation is complete.</summary>
+		/// <returns>A task that represents the asynchronous DeleteCookie operation</returns>
+		/// <remarks>
+		///           <para copied="true">The DeleteCookieAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+		///           <para copied="true">To be added.</para>
+		///         </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task DeleteCookieAsync (NSHttpCookie cookie)
+		{
+			var tcs = new TaskCompletionSource<bool> ();
+			DeleteCookie(cookie, () => {
+				tcs.SetResult (true);
+			});
+			return tcs.Task;
+		}
+		[Export ("getAllCookies:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void GetAllCookies ([BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity1V51))]global::System.Action<NSHttpCookie[]> completionHandler)
+		{
+			if (completionHandler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (completionHandler));
+			using var block_completionHandler = Trampolines.SDActionArity1V51.CreateBlock (completionHandler);
+			BlockLiteral *block_ptr_completionHandler = &block_completionHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selGetAllCookies_XHandle, (IntPtr) block_ptr_completionHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selGetAllCookies_XHandle, (IntPtr) block_ptr_completionHandler);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <summary>Asynchronously fetches all the cookies.</summary>
+		/// <returns>
+		///           <para class="improve-task-t-return-type-description">A task that represents the asynchronous GetAllCookies operation.  The value of the TResult parameter is of type System.Action&lt;Foundation.NSHttpCookie[]&gt;.</para>
+		///         </returns>
+		/// <remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<NSHttpCookie[]> GetAllCookiesAsync ()
+		{
+			var tcs = new TaskCompletionSource<NSHttpCookie[]> ();
+			GetAllCookies((obj_) => {
+				tcs.SetResult (obj_!);
+			});
+			return tcs.Task;
+		}
+		[Export ("getCookiePolicy:")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void GetCookiePolicy ([BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity1V128))]global::System.Action<WKCookiePolicy> completionHandler)
+		{
+			if (completionHandler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (completionHandler));
+			using var block_completionHandler = Trampolines.SDActionArity1V128.CreateBlock (completionHandler);
+			BlockLiteral *block_ptr_completionHandler = &block_completionHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selGetCookiePolicy_XHandle, (IntPtr) block_ptr_completionHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selGetCookiePolicy_XHandle, (IntPtr) block_ptr_completionHandler);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<WKCookiePolicy> GetCookiePolicyAsync ()
+		{
+			var tcs = new TaskCompletionSource<WKCookiePolicy> ();
+			GetCookiePolicy((obj_) => {
+				tcs.SetResult (obj_!);
+			});
+			return tcs.Task;
+		}
+		/// <summary>Remove an observer to the cookie store.</summary><param name="observer">The observer to remove.</param>
+		[Export ("removeObserver:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void RemoveObserver (IWKHttpCookieStoreObserver observer)
+		{
+			var observer__handle__ = observer!.GetNonNullHandle (nameof (observer));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selRemoveObserver_XHandle, observer__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selRemoveObserver_XHandle, observer__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (observer);
+		}
+		[Export ("setCookie:completionHandler:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void SetCookie (NSHttpCookie cookie, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDAction))]global::System.Action? completionHandler)
+		{
+			var cookie__handle__ = cookie!.GetNonNullHandle (nameof (cookie));
+			using var block_completionHandler = Trampolines.SDAction.CreateNullableBlock (completionHandler);
+			BlockLiteral *block_ptr_completionHandler = null;
+			if (completionHandler is not null)
+				block_ptr_completionHandler = &block_completionHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selSetCookie_CompletionHandler_XHandle, cookie__handle__, (IntPtr) block_ptr_completionHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selSetCookie_CompletionHandler_XHandle, cookie__handle__, (IntPtr) block_ptr_completionHandler);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (cookie);
+		}
+		/// <param name="cookie">The cookie to set.</param>
+		/// <summary>Sets the specified <paramref name="cookie" /> and runs a handler when the operation completes.</summary>
+		/// <returns>A task that represents the asynchronous SetCookie operation</returns>
+		/// <remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task SetCookieAsync (NSHttpCookie cookie)
+		{
+			var tcs = new TaskCompletionSource<bool> ();
+			SetCookie(cookie, () => {
+				tcs.SetResult (true);
+			});
+			return tcs.Task;
+		}
+		[Export ("setCookiePolicy:completionHandler:")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void SetCookiePolicy (WKCookiePolicy policy, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDAction))]global::System.Action? completionHandler)
+		{
+			using var block_completionHandler = Trampolines.SDAction.CreateNullableBlock (completionHandler);
+			BlockLiteral *block_ptr_completionHandler = null;
+			if (completionHandler is not null)
+				block_ptr_completionHandler = &block_completionHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_NativeHandle (this.Handle, selSetCookiePolicy_CompletionHandler_XHandle, (IntPtr) (long) policy, (IntPtr) block_ptr_completionHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_NativeHandle (&__objc_super__, selSetCookiePolicy_CompletionHandler_XHandle, (IntPtr) (long) policy, (IntPtr) block_ptr_completionHandler);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task SetCookiePolicyAsync (WKCookiePolicy policy)
+		{
+			var tcs = new TaskCompletionSource<bool> ();
+			SetCookiePolicy(policy, () => {
+				tcs.SetResult (true);
+			});
+			return tcs.Task;
+		}
+		[Export ("setCookies:completionHandler:")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void SetCookies (NSHttpCookie[] cookies, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDAction))]global::System.Action? completionHandler)
+		{
+			if (cookies is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (cookies));
+			using var nsa_cookies = NSArray.FromNSObjects (cookies);
+			using var block_completionHandler = Trampolines.SDAction.CreateNullableBlock (completionHandler);
+			BlockLiteral *block_ptr_completionHandler = null;
+			if (completionHandler is not null)
+				block_ptr_completionHandler = &block_completionHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selSetCookies_CompletionHandler_XHandle, nsa_cookies.Handle, (IntPtr) block_ptr_completionHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selSetCookies_CompletionHandler_XHandle, nsa_cookies.Handle, (IntPtr) block_ptr_completionHandler);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task SetCookiesAsync (NSHttpCookie[] cookies)
+		{
+			var tcs = new TaskCompletionSource<bool> ();
+			SetCookies(cookies, () => {
+				tcs.SetResult (true);
+			});
+			return tcs.Task;
+		}
+	} /* class WKHttpCookieStore */
+}

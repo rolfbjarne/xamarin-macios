@@ -1,0 +1,431 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace MetalPerformanceShaders {
+	[Register("MPSCNNLocalContrastNormalizationGradientNode", true)]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
+	public unsafe partial class MPSCnnLocalContrastNormalizationGradientNode : MPSNNGradientFilterNode {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAlphaX = "alpha";
+		static readonly NativeHandle selAlphaXHandle = Selector.GetHandle ("alpha");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selBetaX = "beta";
+		static readonly NativeHandle selBetaXHandle = Selector.GetHandle ("beta");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDeltaX = "delta";
+		static readonly NativeHandle selDeltaXHandle = Selector.GetHandle ("delta");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithSourceGradient_SourceImage_GradientState_KernelWidth_KernelHeight_X = "initWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:";
+		static readonly NativeHandle selInitWithSourceGradient_SourceImage_GradientState_KernelWidth_KernelHeight_XHandle = Selector.GetHandle ("initWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selKernelHeightX = "kernelHeight";
+		static readonly NativeHandle selKernelHeightXHandle = Selector.GetHandle ("kernelHeight");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selKernelWidthX = "kernelWidth";
+		static readonly NativeHandle selKernelWidthXHandle = Selector.GetHandle ("kernelWidth");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selNodeWithSourceGradient_SourceImage_GradientState_KernelWidth_KernelHeight_X = "nodeWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:";
+		static readonly NativeHandle selNodeWithSourceGradient_SourceImage_GradientState_KernelWidth_KernelHeight_XHandle = Selector.GetHandle ("nodeWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selP0X = "p0";
+		static readonly NativeHandle selP0XHandle = Selector.GetHandle ("p0");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPmX = "pm";
+		static readonly NativeHandle selPmXHandle = Selector.GetHandle ("pm");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPsX = "ps";
+		static readonly NativeHandle selPsXHandle = Selector.GetHandle ("ps");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetAlpha_X = "setAlpha:";
+		static readonly NativeHandle selSetAlpha_XHandle = Selector.GetHandle ("setAlpha:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetBeta_X = "setBeta:";
+		static readonly NativeHandle selSetBeta_XHandle = Selector.GetHandle ("setBeta:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetDelta_X = "setDelta:";
+		static readonly NativeHandle selSetDelta_XHandle = Selector.GetHandle ("setDelta:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetP0_X = "setP0:";
+		static readonly NativeHandle selSetP0_XHandle = Selector.GetHandle ("setP0:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetPm_X = "setPm:";
+		static readonly NativeHandle selSetPm_XHandle = Selector.GetHandle ("setPm:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetPs_X = "setPs:";
+		static readonly NativeHandle selSetPs_XHandle = Selector.GetHandle ("setPs:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("MPSCNNLocalContrastNormalizationGradientNode");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected MPSCnnLocalContrastNormalizationGradientNode (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal MPSCnnLocalContrastNormalizationGradientNode (NativeHandle handle) : base (handle)
+		{
+		}
+
+		/// <param name="sourceGradient">To be added.</param><param name="sourceImage">To be added.</param><param name="gradientState">To be added.</param><param name="kernelWidth">To be added.</param><param name="kernelHeight">To be added.</param><summary>To be added.</summary><remarks>To be added.</remarks>
+		[Export ("initWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public MPSCnnLocalContrastNormalizationGradientNode (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, nuint kernelWidth, nuint kernelHeight)
+			: base (NSObjectFlag.Empty)
+		{
+			var sourceGradient__handle__ = sourceGradient!.GetNonNullHandle (nameof (sourceGradient));
+			var sourceImage__handle__ = sourceImage!.GetNonNullHandle (nameof (sourceImage));
+			var gradientState__handle__ = gradientState!.GetNonNullHandle (nameof (gradientState));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_UIntPtr_UIntPtr (this.Handle, selInitWithSourceGradient_SourceImage_GradientState_KernelWidth_KernelHeight_XHandle, sourceGradient__handle__, sourceImage__handle__, gradientState__handle__, kernelWidth, kernelHeight), "initWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle_UIntPtr_UIntPtr (&__objc_super__, selInitWithSourceGradient_SourceImage_GradientState_KernelWidth_KernelHeight_XHandle, sourceGradient__handle__, sourceImage__handle__, gradientState__handle__, kernelWidth, kernelHeight), "initWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (sourceGradient);
+			GC.KeepAlive (sourceImage);
+			GC.KeepAlive (gradientState);
+		}
+		/// <param name="sourceGradient">To be added.</param><param name="sourceImage">To be added.</param><param name="gradientState">To be added.</param><param name="kernelWidth">To be added.</param><param name="kernelHeight">To be added.</param><summary>To be added.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("nodeWithSourceGradient:sourceImage:gradientState:kernelWidth:kernelHeight:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static MPSCnnLocalContrastNormalizationGradientNode Create (MPSNNImageNode sourceGradient, MPSNNImageNode sourceImage, MPSNNGradientStateNode gradientState, nuint kernelWidth, nuint kernelHeight)
+		{
+			var sourceGradient__handle__ = sourceGradient!.GetNonNullHandle (nameof (sourceGradient));
+			var sourceImage__handle__ = sourceImage!.GetNonNullHandle (nameof (sourceImage));
+			var gradientState__handle__ = gradientState!.GetNonNullHandle (nameof (gradientState));
+			MPSCnnLocalContrastNormalizationGradientNode? ret;
+			ret =  Runtime.GetNSObject<MPSCnnLocalContrastNormalizationGradientNode> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_UIntPtr_UIntPtr (class_ptr, selNodeWithSourceGradient_SourceImage_GradientState_KernelWidth_KernelHeight_XHandle, sourceGradient__handle__, sourceImage__handle__, gradientState__handle__, kernelWidth, kernelHeight), false)!;
+			GC.KeepAlive (sourceGradient);
+			GC.KeepAlive (sourceImage);
+			GC.KeepAlive (gradientState);
+			return ret!;
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual float Alpha {
+			[Export ("alpha")]
+			get {
+				float ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, selAlphaXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.float_objc_msgSendSuper (&__objc_super__, selAlphaXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setAlpha:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_float (this.Handle, selSetAlpha_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float (&__objc_super__, selSetAlpha_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual float Beta {
+			[Export ("beta")]
+			get {
+				float ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, selBetaXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.float_objc_msgSendSuper (&__objc_super__, selBetaXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setBeta:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_float (this.Handle, selSetBeta_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float (&__objc_super__, selSetBeta_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual float Delta {
+			[Export ("delta")]
+			get {
+				float ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, selDeltaXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.float_objc_msgSendSuper (&__objc_super__, selDeltaXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setDelta:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_float (this.Handle, selSetDelta_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float (&__objc_super__, selSetDelta_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint KernelHeight {
+			[Export ("kernelHeight")]
+			get {
+				nuint ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend (this.Handle, selKernelHeightXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper (&__objc_super__, selKernelHeightXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint KernelWidth {
+			[Export ("kernelWidth")]
+			get {
+				nuint ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend (this.Handle, selKernelWidthXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper (&__objc_super__, selKernelWidthXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual float P0 {
+			[Export ("p0")]
+			get {
+				float ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, selP0XHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.float_objc_msgSendSuper (&__objc_super__, selP0XHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setP0:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_float (this.Handle, selSetP0_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float (&__objc_super__, selSetP0_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual float Pm {
+			[Export ("pm")]
+			get {
+				float ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, selPmXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.float_objc_msgSendSuper (&__objc_super__, selPmXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setPm:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_float (this.Handle, selSetPm_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float (&__objc_super__, selSetPm_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual float Ps {
+			[Export ("ps")]
+			get {
+				float ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, selPsXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.float_objc_msgSendSuper (&__objc_super__, selPsXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setPs:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_float (this.Handle, selSetPs_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float (&__objc_super__, selSetPs_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+	} /* class MPSCnnLocalContrastNormalizationGradientNode */
+}

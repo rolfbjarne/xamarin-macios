@@ -1,0 +1,377 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace Foundation {
+	/// <summary>Allows notifications to be sent to objects in other tasks.</summary>
+	[Register("NSDistributedNotificationCenter", true)]
+	[UnsupportedOSPlatform ("ios")]
+	[UnsupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class NSDistributedNotificationCenter : NSNotificationCenter {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAddObserver_Selector_Name_Object_X = "addObserver:selector:name:object:";
+		static readonly NativeHandle selAddObserver_Selector_Name_Object_XHandle = Selector.GetHandle ("addObserver:selector:name:object:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAddObserver_Selector_Name_Object_SuspensionBehavior_X = "addObserver:selector:name:object:suspensionBehavior:";
+		static readonly NativeHandle selAddObserver_Selector_Name_Object_SuspensionBehavior_XHandle = Selector.GetHandle ("addObserver:selector:name:object:suspensionBehavior:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDefaultCenterX = "defaultCenter";
+		static readonly NativeHandle selDefaultCenterXHandle = Selector.GetHandle ("defaultCenter");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPostNotificationName_Object_X = "postNotificationName:object:";
+		static readonly NativeHandle selPostNotificationName_Object_XHandle = Selector.GetHandle ("postNotificationName:object:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPostNotificationName_Object_UserInfo_X = "postNotificationName:object:userInfo:";
+		static readonly NativeHandle selPostNotificationName_Object_UserInfo_XHandle = Selector.GetHandle ("postNotificationName:object:userInfo:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPostNotificationName_Object_UserInfo_DeliverImmediately_X = "postNotificationName:object:userInfo:deliverImmediately:";
+		static readonly NativeHandle selPostNotificationName_Object_UserInfo_DeliverImmediately_XHandle = Selector.GetHandle ("postNotificationName:object:userInfo:deliverImmediately:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPostNotificationName_Object_UserInfo_Options_X = "postNotificationName:object:userInfo:options:";
+		static readonly NativeHandle selPostNotificationName_Object_UserInfo_Options_XHandle = Selector.GetHandle ("postNotificationName:object:userInfo:options:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRemoveObserver_Name_Object_X = "removeObserver:name:object:";
+		static readonly NativeHandle selRemoveObserver_Name_Object_XHandle = Selector.GetHandle ("removeObserver:name:object:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetSuspended_X = "setSuspended:";
+		static readonly NativeHandle selSetSuspended_XHandle = Selector.GetHandle ("setSuspended:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSuspendedX = "suspended";
+		static readonly NativeHandle selSuspendedXHandle = Selector.GetHandle ("suspended");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("NSDistributedNotificationCenter");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Creates a new <see cref="NSDistributedNotificationCenter" /> with default values.</summary>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("init")]
+		public NSDistributedNotificationCenter () : base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.Init), "init");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, global::ObjCRuntime.Selector.Init), "init");
+				GC.KeepAlive (this);
+				}
+			}
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected NSDistributedNotificationCenter (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal NSDistributedNotificationCenter (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("addObserver:selector:name:object:suspensionBehavior:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void AddObserver (NSObject observer, Selector selector, string? notificationName, string? notificationSenderc, NSNotificationSuspensionBehavior suspensionBehavior)
+		{
+			var observer__handle__ = observer!.GetNonNullHandle (nameof (observer));
+			var selector__handle__ = selector!.GetNonNullHandle (nameof (selector));
+			var nsnotificationName = CFString.CreateNative (notificationName);
+			var nsnotificationSenderc = CFString.CreateNative (notificationSenderc);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_NativeHandle_UIntPtr (this.Handle, selAddObserver_Selector_Name_Object_SuspensionBehavior_XHandle, observer__handle__, selector.Handle, nsnotificationName, nsnotificationSenderc, (UIntPtr) (ulong) suspensionBehavior);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle_NativeHandle_UIntPtr (&__objc_super__, selAddObserver_Selector_Name_Object_SuspensionBehavior_XHandle, observer__handle__, selector.Handle, nsnotificationName, nsnotificationSenderc, (UIntPtr) (ulong) suspensionBehavior);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (observer);
+			GC.KeepAlive (selector);
+			CFString.ReleaseNative (nsnotificationName);
+			CFString.ReleaseNative (nsnotificationSenderc);
+		}
+		[Export ("addObserver:selector:name:object:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void AddObserver (NSObject observer, Selector aSelector, string? aName, NSObject? anObject)
+		{
+			var observer__handle__ = observer!.GetNonNullHandle (nameof (observer));
+			var aSelector__handle__ = aSelector!.GetNonNullHandle (nameof (aSelector));
+			var anObject__handle__ = anObject.GetHandle ();
+			var nsaName = CFString.CreateNative (aName);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_NativeHandle (this.Handle, selAddObserver_Selector_Name_Object_XHandle, observer__handle__, aSelector.Handle, nsaName, anObject__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, selAddObserver_Selector_Name_Object_XHandle, observer__handle__, aSelector.Handle, nsaName, anObject__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (observer);
+			GC.KeepAlive (aSelector);
+			GC.KeepAlive (anObject);
+			CFString.ReleaseNative (nsaName);
+		}
+		[Export ("postNotificationName:object:userInfo:deliverImmediately:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void PostNotificationName (string name, string? anObject, NSDictionary? userInfo, bool deliverImmediately)
+		{
+			if (name is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (name));
+			var userInfo__handle__ = userInfo.GetHandle ();
+			var nsname = CFString.CreateNative (name);
+			var nsanObject = CFString.CreateNative (anObject);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_bool (this.Handle, selPostNotificationName_Object_UserInfo_DeliverImmediately_XHandle, nsname, nsanObject, userInfo__handle__, deliverImmediately ? (byte) 1 : (byte) 0);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle_bool (&__objc_super__, selPostNotificationName_Object_UserInfo_DeliverImmediately_XHandle, nsname, nsanObject, userInfo__handle__, deliverImmediately ? (byte) 1 : (byte) 0);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (userInfo);
+			CFString.ReleaseNative (nsname);
+			CFString.ReleaseNative (nsanObject);
+		}
+		[Export ("postNotificationName:object:userInfo:options:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void PostNotificationName (string name, string? anObjecb, NSDictionary? userInfo, NSNotificationFlags options)
+		{
+			if (name is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (name));
+			var userInfo__handle__ = userInfo.GetHandle ();
+			var nsname = CFString.CreateNative (name);
+			var nsanObjecb = CFString.CreateNative (anObjecb);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_UIntPtr (this.Handle, selPostNotificationName_Object_UserInfo_Options_XHandle, nsname, nsanObjecb, userInfo__handle__, (UIntPtr) (ulong) options);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle_UIntPtr (&__objc_super__, selPostNotificationName_Object_UserInfo_Options_XHandle, nsname, nsanObjecb, userInfo__handle__, (UIntPtr) (ulong) options);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (userInfo);
+			CFString.ReleaseNative (nsname);
+			CFString.ReleaseNative (nsanObjecb);
+		}
+		[Export ("postNotificationName:object:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void PostNotificationName (string aName, string? anObject)
+		{
+			if (aName is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (aName));
+			var nsaName = CFString.CreateNative (aName);
+			var nsanObject = CFString.CreateNative (anObject);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selPostNotificationName_Object_XHandle, nsaName, nsanObject);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selPostNotificationName_Object_XHandle, nsaName, nsanObject);
+					GC.KeepAlive (this);
+				}
+			}
+			CFString.ReleaseNative (nsaName);
+			CFString.ReleaseNative (nsanObject);
+		}
+		[Export ("postNotificationName:object:userInfo:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void PostNotificationName (string aName, string? anObject, NSDictionary? aUserInfo)
+		{
+			if (aName is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (aName));
+			var aUserInfo__handle__ = aUserInfo.GetHandle ();
+			var nsaName = CFString.CreateNative (aName);
+			var nsanObject = CFString.CreateNative (anObject);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, selPostNotificationName_Object_UserInfo_XHandle, nsaName, nsanObject, aUserInfo__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, selPostNotificationName_Object_UserInfo_XHandle, nsaName, nsanObject, aUserInfo__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (aUserInfo);
+			CFString.ReleaseNative (nsaName);
+			CFString.ReleaseNative (nsanObject);
+		}
+		[Export ("removeObserver:name:object:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void RemoveObserver (NSObject observer, string? aName, NSObject? anObject)
+		{
+			var observer__handle__ = observer!.GetNonNullHandle (nameof (observer));
+			var anObject__handle__ = anObject.GetHandle ();
+			var nsaName = CFString.CreateNative (aName);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, selRemoveObserver_Name_Object_XHandle, observer__handle__, nsaName, anObject__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, selRemoveObserver_Name_Object_XHandle, observer__handle__, nsaName, anObject__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (observer);
+			GC.KeepAlive (anObject);
+			CFString.ReleaseNative (nsaName);
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static NSDistributedNotificationCenter DefaultCenter {
+			[Export ("defaultCenter")]
+			get {
+				NSDistributedNotificationCenter? ret;
+				ret =  Runtime.GetNSObject<NSDistributedNotificationCenter> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (class_ptr, selDefaultCenterXHandle), false)!;
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool Suspended {
+			[Export ("suspended")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selSuspendedXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selSuspendedXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setSuspended:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetSuspended_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetSuspended_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _NSLocalNotificationCenterType;
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[Field ("NSLocalNotificationCenterType",  "Foundation")]
+		public static NSString NSLocalNotificationCenterType {
+			get {
+				if (_NSLocalNotificationCenterType is null)
+					_NSLocalNotificationCenterType = Dlfcn.GetStringConstant (Libraries.Foundation.Handle, "NSLocalNotificationCenterType")!;
+				return _NSLocalNotificationCenterType;
+			}
+		}
+	} /* class NSDistributedNotificationCenter */
+}

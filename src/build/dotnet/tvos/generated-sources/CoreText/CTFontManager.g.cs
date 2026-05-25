@@ -1,0 +1,54 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using GLKit;
+using Metal;
+using CoreML;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Security;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace CoreText {
+	public unsafe partial class CTFontManager  {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _RegisteredFontsChangedNotification;
+		/// <summary>Represents the value associated with the constant 'kCTFontManagerRegisteredFontsChangedNotification'.</summary>
+		[Field ("kCTFontManagerRegisteredFontsChangedNotification",  "CoreText")]
+		public static NSString RegisteredFontsChangedNotification {
+			get {
+				if (_RegisteredFontsChangedNotification is null)
+					_RegisteredFontsChangedNotification = Dlfcn.GetStringConstant (Libraries.CoreText.Handle, "kCTFontManagerRegisteredFontsChangedNotification")!;
+				return _RegisteredFontsChangedNotification;
+			}
+		}
+	} /* class CTFontManager */
+}

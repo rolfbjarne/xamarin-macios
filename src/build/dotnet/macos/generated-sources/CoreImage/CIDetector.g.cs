@@ -1,0 +1,480 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace CoreImage {
+	/// <summary>Image analysis class for face detection.</summary><remarks><para>
+	/// 	CIDetector is a general API to perform image analysis on an
+	/// 	image, but as of iOS5 only face detection is supported.  You
+	/// 	initiate the face detection by calling the static method <see cref="CoreImage.CIDetector.CreateFaceDetector(CoreImage.CIContext,bool)" />
+	/// 	and then get the results by calling one of the FeaturesInImage
+	/// 	overloads.
+	/// </para><example><code lang="csharp lang-csharp"><![CDATA[
+	/// var imageFile = "photoFace2.jpg";
+	/// var image = new UIImage(imageFile);
+	/// 
+	/// var context = new CIContext ();
+	/// var detector = CIDetector.CreateFaceDetector (context, true);
+	/// var ciImage = CIImage.FromCGImage (image.CGImage);
+	/// var features = detector.GetFeatures (ciImage);
+	/// 
+	/// Console.WriteLine ("Found " + features.Length + " faces (origin bottom-left)");
+	/// foreach (var feature in features){
+	/// var facefeature = (CIFaceFeature) feature;
+	/// 
+	/// Console.WriteLine ("Left eye  {0} {1}\n", facefeature.HasLeftEyePosition,  facefeature.LeftEyePosition);
+	/// Console.WriteLine ("Right eye {0} {1}\n", facefeature.HasRightEyePosition, facefeature.RightEyePosition);
+	/// Console.WriteLine ("Mouth     {0} {1}\n", facefeature.HasMouthPosition,    facefeature.MouthPosition);
+	/// }
+	/// 	]]></code></example><para>Instances of <see cref="T:CoreImage.CIDetector" /> are expensive to initialize, so application developers should prefer to re-use existing instances rather than frequently creating new ones.</para></remarks><related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/CoreImage/Reference/CIDetector_Ref/index.html">Apple documentation for <c>CIDetector</c></related>
+	[Register("CIDetector", true)]
+	public unsafe partial class CIDetector : NSObject {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDetectorOfType_Context_Options_X = "detectorOfType:context:options:";
+		static readonly NativeHandle selDetectorOfType_Context_Options_XHandle = Selector.GetHandle ("detectorOfType:context:options:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selFeaturesInImage_X = "featuresInImage:";
+		static readonly NativeHandle selFeaturesInImage_XHandle = Selector.GetHandle ("featuresInImage:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selFeaturesInImage_Options_X = "featuresInImage:options:";
+		static readonly NativeHandle selFeaturesInImage_Options_XHandle = Selector.GetHandle ("featuresInImage:options:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("CIDetector");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected CIDetector (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal CIDetector (NativeHandle handle) : base (handle)
+		{
+		}
+
+		/// <param name="image">Image to analyze.</param><summary>Analyzes the image and returns a list of features discovered in the image (faces, QR codes, rectangles).</summary><returns>Array of discovered features.</returns><remarks></remarks>
+		[Export ("featuresInImage:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual CIFeature[] FeaturesInImage (CIImage image)
+		{
+			var image__handle__ = image!.GetNonNullHandle (nameof (image));
+			CIFeature[]? ret;
+			if (IsDirectBinding) {
+				ret = CFArray.ArrayFromHandle<CIFeature>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selFeaturesInImage_XHandle, image__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = CFArray.ArrayFromHandle<CIFeature>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selFeaturesInImage_XHandle, image__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (image);
+			return ret!;
+		}
+		/// <param name="image">Image to analyze.</param><param name="options"><para>Set of options to configure the search for features in the image.</para><para tool="nullallowed">This parameter can be <see langword="null" />.</para></param><summary>Analyzes the image and returns a list of features discovered in the image (faces, QR codes, rectangles).</summary><returns>Array of discovered features.</returns><remarks></remarks>
+		[Export ("featuresInImage:options:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual CIFeature[] FeaturesInImage (CIImage image, NSDictionary? options)
+		{
+			var image__handle__ = image!.GetNonNullHandle (nameof (image));
+			var options__handle__ = options.GetHandle ();
+			CIFeature[]? ret;
+			if (IsDirectBinding) {
+				ret = CFArray.ArrayFromHandle<CIFeature>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selFeaturesInImage_Options_XHandle, image__handle__, options__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = CFArray.ArrayFromHandle<CIFeature>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selFeaturesInImage_Options_XHandle, image__handle__, options__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (image);
+			GC.KeepAlive (options);
+			return ret!;
+		}
+		[Export ("detectorOfType:context:options:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static CIDetector? FromType (NSString detectorType, CIContext? context, NSDictionary? options)
+		{
+			var detectorType__handle__ = detectorType!.GetNonNullHandle (nameof (detectorType));
+			var context__handle__ = context.GetHandle ();
+			var options__handle__ = options.GetHandle ();
+			CIDetector? ret;
+			ret =  Runtime.GetNSObject<CIDetector> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (class_ptr, selDetectorOfType_Context_Options_XHandle, detectorType__handle__, context__handle__, options__handle__), false)!;
+			GC.KeepAlive (detectorType);
+			GC.KeepAlive (context);
+			GC.KeepAlive (options);
+			return ret!;
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _Accuracy;
+		/// <summary>Represents the value associated with the constant 'CIDetectorAccuracy'.</summary>
+		[Field ("CIDetectorAccuracy",  "CoreImage")]
+		internal static NSString Accuracy {
+			get {
+				if (_Accuracy is null)
+					_Accuracy = Dlfcn.GetStringConstant (Libraries.CoreImage.Handle, "CIDetectorAccuracy")!;
+				return _Accuracy;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _AccuracyHigh;
+		/// <summary>Represents the value associated with the constant 'CIDetectorAccuracyHigh'.</summary>
+		[Field ("CIDetectorAccuracyHigh",  "CoreImage")]
+		internal static NSString AccuracyHigh {
+			get {
+				if (_AccuracyHigh is null)
+					_AccuracyHigh = Dlfcn.GetStringConstant (Libraries.CoreImage.Handle, "CIDetectorAccuracyHigh")!;
+				return _AccuracyHigh;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _AccuracyLow;
+		/// <summary>Represents the value associated with the constant 'CIDetectorAccuracyLow'.</summary>
+		[Field ("CIDetectorAccuracyLow",  "CoreImage")]
+		internal static NSString AccuracyLow {
+			get {
+				if (_AccuracyLow is null)
+					_AccuracyLow = Dlfcn.GetStringConstant (Libraries.CoreImage.Handle, "CIDetectorAccuracyLow")!;
+				return _AccuracyLow;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _AspectRatio;
+		/// <summary>Represents the value associated with the constant CIDetectorAspectRatio</summary><value></value><remarks>To be added.</remarks>
+		[Field ("CIDetectorAspectRatio",  "CoreImage")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public static NSString AspectRatio {
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			get {
+				if (_AspectRatio is null)
+					_AspectRatio = Dlfcn.GetStringConstant (Libraries.CoreImage.Handle, "CIDetectorAspectRatio")!;
+				return _AspectRatio;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _EyeBlink;
+		/// <summary>Represents the value associated with the constant 'CIDetectorEyeBlink'.</summary>
+		[Field ("CIDetectorEyeBlink",  "CoreImage")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		internal static NSString EyeBlink {
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			get {
+				if (_EyeBlink is null)
+					_EyeBlink = Dlfcn.GetStringConstant (Libraries.CoreImage.Handle, "CIDetectorEyeBlink")!;
+				return _EyeBlink;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _FocalLength;
+		/// <summary>Represents the value associated with the constant CIDetectorFocalLength</summary><value></value><remarks>To be added.</remarks>
+		[Field ("CIDetectorFocalLength",  "CoreImage")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public static NSString FocalLength {
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			get {
+				if (_FocalLength is null)
+					_FocalLength = Dlfcn.GetStringConstant (Libraries.CoreImage.Handle, "CIDetectorFocalLength")!;
+				return _FocalLength;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _ImageOrientation;
+		/// <summary>Represents the value associated with the constant 'CIDetectorImageOrientation'.</summary>
+		[Field ("CIDetectorImageOrientation",  "CoreImage")]
+		internal static NSString ImageOrientation {
+			get {
+				if (_ImageOrientation is null)
+					_ImageOrientation = Dlfcn.GetStringConstant (Libraries.CoreImage.Handle, "CIDetectorImageOrientation")!;
+				return _ImageOrientation;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _MaxFeatureCount;
+		/// <summary>Represents the value associated with the constant 'CIDetectorMaxFeatureCount'.</summary>
+		[Field ("CIDetectorMaxFeatureCount",  "CoreImage")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		internal static NSString MaxFeatureCount {
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			get {
+				if (_MaxFeatureCount is null)
+					_MaxFeatureCount = Dlfcn.GetStringConstant (Libraries.CoreImage.Handle, "CIDetectorMaxFeatureCount")!;
+				return _MaxFeatureCount;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _MinFeatureSize;
+		/// <summary>Represents the value associated with the constant 'CIDetectorMinFeatureSize'.</summary>
+		[Field ("CIDetectorMinFeatureSize",  "CoreImage")]
+		internal static NSString MinFeatureSize {
+			get {
+				if (_MinFeatureSize is null)
+					_MinFeatureSize = Dlfcn.GetStringConstant (Libraries.CoreImage.Handle, "CIDetectorMinFeatureSize")!;
+				return _MinFeatureSize;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _NumberOfAngles;
+		/// <summary>Gets the number of angles from which to sample when detecting features.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[Field ("CIDetectorNumberOfAngles",  "CoreImage")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public static NSString NumberOfAngles {
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			get {
+				if (_NumberOfAngles is null)
+					_NumberOfAngles = Dlfcn.GetStringConstant (Libraries.CoreImage.Handle, "CIDetectorNumberOfAngles")!;
+				return _NumberOfAngles;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _ReturnSubFeatures;
+		/// <summary>Gets a value that tells whether subfeatures are detected.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[Field ("CIDetectorReturnSubFeatures",  "CoreImage")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public static NSString ReturnSubFeatures {
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			get {
+				if (_ReturnSubFeatures is null)
+					_ReturnSubFeatures = Dlfcn.GetStringConstant (Libraries.CoreImage.Handle, "CIDetectorReturnSubFeatures")!;
+				return _ReturnSubFeatures;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _Smile;
+		/// <summary>Represents the value associated with the constant 'CIDetectorSmile'.</summary>
+		[Field ("CIDetectorSmile",  "CoreImage")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		internal static NSString Smile {
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			get {
+				if (_Smile is null)
+					_Smile = Dlfcn.GetStringConstant (Libraries.CoreImage.Handle, "CIDetectorSmile")!;
+				return _Smile;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _Tracking;
+		/// <summary>Represents the value associated with the constant 'CIDetectorTracking'.</summary>
+		[Field ("CIDetectorTracking",  "CoreImage")]
+		internal static NSString Tracking {
+			get {
+				if (_Tracking is null)
+					_Tracking = Dlfcn.GetStringConstant (Libraries.CoreImage.Handle, "CIDetectorTracking")!;
+				return _Tracking;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _TypeFace;
+		/// <summary>Represents the value associated with the constant 'CIDetectorTypeFace'.</summary>
+		[Field ("CIDetectorTypeFace",  "CoreImage")]
+		internal static NSString TypeFace {
+			get {
+				if (_TypeFace is null)
+					_TypeFace = Dlfcn.GetStringConstant (Libraries.CoreImage.Handle, "CIDetectorTypeFace")!;
+				return _TypeFace;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _TypeQRCode;
+		/// <summary>Represents the value associated with the constant CIDetectorTypeQRCode</summary><value></value><remarks>To be added.</remarks>
+		[Field ("CIDetectorTypeQRCode",  "CoreImage")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public static NSString TypeQRCode {
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			get {
+				if (_TypeQRCode is null)
+					_TypeQRCode = Dlfcn.GetStringConstant (Libraries.CoreImage.Handle, "CIDetectorTypeQRCode")!;
+				return _TypeQRCode;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _TypeRectangle;
+		/// <summary>Represents the value associated with the constant CIDetectorTypeRectangle</summary><value></value><remarks>To be added.</remarks>
+		[Field ("CIDetectorTypeRectangle",  "CoreImage")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public static NSString TypeRectangle {
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			get {
+				if (_TypeRectangle is null)
+					_TypeRectangle = Dlfcn.GetStringConstant (Libraries.CoreImage.Handle, "CIDetectorTypeRectangle")!;
+				return _TypeRectangle;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _TypeText;
+		/// <summary>Gets a value that tells whether the detector detects text.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[Field ("CIDetectorTypeText",  "CoreImage")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public static NSString TypeText {
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			get {
+				if (_TypeText is null)
+					_TypeText = Dlfcn.GetStringConstant (Libraries.CoreImage.Handle, "CIDetectorTypeText")!;
+				return _TypeText;
+			}
+		}
+	} /* class CIDetector */
+}

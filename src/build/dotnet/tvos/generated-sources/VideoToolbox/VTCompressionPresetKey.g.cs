@@ -1,0 +1,91 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using GLKit;
+using Metal;
+using CoreML;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Security;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace VideoToolbox {
+	[SupportedOSPlatform ("tvos26.0")]
+	[SupportedOSPlatform ("maccatalyst26.0")]
+	[SupportedOSPlatform ("macos26.0")]
+	[SupportedOSPlatform ("ios26.0")]
+	public unsafe static partial class VTCompressionPresetKey  {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _Balanced;
+		/// <summary>Represents the value associated with the constant 'kVTCompressionPreset_Balanced'.</summary>
+		[Field ("kVTCompressionPreset_Balanced",  "VideoToolbox")]
+		public static NSString Balanced {
+			get {
+				if (_Balanced is null)
+					_Balanced = Dlfcn.GetStringConstant (Libraries.VideoToolbox.Handle, "kVTCompressionPreset_Balanced")!;
+				return _Balanced;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _HighQuality;
+		/// <summary>Represents the value associated with the constant 'kVTCompressionPreset_HighQuality'.</summary>
+		[Field ("kVTCompressionPreset_HighQuality",  "VideoToolbox")]
+		public static NSString HighQuality {
+			get {
+				if (_HighQuality is null)
+					_HighQuality = Dlfcn.GetStringConstant (Libraries.VideoToolbox.Handle, "kVTCompressionPreset_HighQuality")!;
+				return _HighQuality;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _HighSpeed;
+		/// <summary>Represents the value associated with the constant 'kVTCompressionPreset_HighSpeed'.</summary>
+		[Field ("kVTCompressionPreset_HighSpeed",  "VideoToolbox")]
+		public static NSString HighSpeed {
+			get {
+				if (_HighSpeed is null)
+					_HighSpeed = Dlfcn.GetStringConstant (Libraries.VideoToolbox.Handle, "kVTCompressionPreset_HighSpeed")!;
+				return _HighSpeed;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _VideoConferencing;
+		/// <summary>Represents the value associated with the constant 'kVTCompressionPreset_VideoConferencing'.</summary>
+		[Field ("kVTCompressionPreset_VideoConferencing",  "VideoToolbox")]
+		public static NSString VideoConferencing {
+			get {
+				if (_VideoConferencing is null)
+					_VideoConferencing = Dlfcn.GetStringConstant (Libraries.VideoToolbox.Handle, "kVTCompressionPreset_VideoConferencing")!;
+				return _VideoConferencing;
+			}
+		}
+	} /* class VTCompressionPresetKey */
+}

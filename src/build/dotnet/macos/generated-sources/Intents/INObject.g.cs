@@ -1,0 +1,617 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace Intents {
+	[Register("INObject", true)]
+	[UnsupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class INObject : NSObject, IINSpeakable, INSCoding, INSCopying, INSSecureCoding {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAlternativeSpeakableMatchesX = "alternativeSpeakableMatches";
+		static readonly NativeHandle selAlternativeSpeakableMatchesXHandle = Selector.GetHandle ("alternativeSpeakableMatches");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCopyWithZone_X = "copyWithZone:";
+		static readonly NativeHandle selCopyWithZone_XHandle = Selector.GetHandle ("copyWithZone:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDisplayImageX = "displayImage";
+		static readonly NativeHandle selDisplayImageXHandle = Selector.GetHandle ("displayImage");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDisplayStringX = "displayString";
+		static readonly NativeHandle selDisplayStringXHandle = Selector.GetHandle ("displayString");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selEncodeWithCoder_X = "encodeWithCoder:";
+		static readonly NativeHandle selEncodeWithCoder_XHandle = Selector.GetHandle ("encodeWithCoder:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selIdentifierX = "identifier";
+		static readonly NativeHandle selIdentifierXHandle = Selector.GetHandle ("identifier");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithCoder_X = "initWithCoder:";
+		static readonly NativeHandle selInitWithCoder_XHandle = Selector.GetHandle ("initWithCoder:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithIdentifier_DisplayString_X = "initWithIdentifier:displayString:";
+		static readonly NativeHandle selInitWithIdentifier_DisplayString_XHandle = Selector.GetHandle ("initWithIdentifier:displayString:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithIdentifier_DisplayString_PronunciationHint_X = "initWithIdentifier:displayString:pronunciationHint:";
+		static readonly NativeHandle selInitWithIdentifier_DisplayString_PronunciationHint_XHandle = Selector.GetHandle ("initWithIdentifier:displayString:pronunciationHint:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithIdentifier_DisplayString_PronunciationHint_SubtitleString_DisplayImage_X = "initWithIdentifier:displayString:pronunciationHint:subtitleString:displayImage:";
+		static readonly NativeHandle selInitWithIdentifier_DisplayString_PronunciationHint_SubtitleString_DisplayImage_XHandle = Selector.GetHandle ("initWithIdentifier:displayString:pronunciationHint:subtitleString:displayImage:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithIdentifier_DisplayString_SubtitleString_DisplayImage_X = "initWithIdentifier:displayString:subtitleString:displayImage:";
+		static readonly NativeHandle selInitWithIdentifier_DisplayString_SubtitleString_DisplayImage_XHandle = Selector.GetHandle ("initWithIdentifier:displayString:subtitleString:displayImage:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPronunciationHintX = "pronunciationHint";
+		static readonly NativeHandle selPronunciationHintXHandle = Selector.GetHandle ("pronunciationHint");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetAlternativeSpeakableMatches_X = "setAlternativeSpeakableMatches:";
+		static readonly NativeHandle selSetAlternativeSpeakableMatches_XHandle = Selector.GetHandle ("setAlternativeSpeakableMatches:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetDisplayImage_X = "setDisplayImage:";
+		static readonly NativeHandle selSetDisplayImage_XHandle = Selector.GetHandle ("setDisplayImage:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetSubtitleString_X = "setSubtitleString:";
+		static readonly NativeHandle selSetSubtitleString_XHandle = Selector.GetHandle ("setSubtitleString:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSpokenPhraseX = "spokenPhrase";
+		static readonly NativeHandle selSpokenPhraseXHandle = Selector.GetHandle ("spokenPhrase");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSubtitleStringX = "subtitleString";
+		static readonly NativeHandle selSubtitleStringXHandle = Selector.GetHandle ("subtitleString");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selVocabularyIdentifierX = "vocabularyIdentifier";
+		static readonly NativeHandle selVocabularyIdentifierXHandle = Selector.GetHandle ("vocabularyIdentifier");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("INObject");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <param name="coder">The unarchiver object.</param>
+		/// <remarks>
+		///   <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization). This is part of the <see cref="Foundation.NSCoding" /> protocol.</para>
+		///   <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="Foundation.NSCoder" /> and decorate it with the <c>[Export("initWithCoder:"]</c> attribute.</para>
+		///   <para>The state of this object can also be serialized by using the <see cref="Foundation.INSCoding.EncodeTo" /> companion method.</para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[DesignatedInitializer]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("initWithCoder:")]
+		public INObject (NSCoder coder) : base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, Selector.InitWithCoder, coder.Handle), "initWithCoder:");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (&__objc_super__, Selector.InitWithCoder, coder.Handle), "initWithCoder:");
+				GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (coder);
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected INObject (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal INObject (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("initWithIdentifier:displayString:pronunciationHint:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public INObject (string? identifier, string displayString, string? pronunciationHint)
+			: base (NSObjectFlag.Empty)
+		{
+			if (displayString is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (displayString));
+			var nsidentifier = CFString.CreateNative (identifier);
+			var nsdisplayString = CFString.CreateNative (displayString);
+			var nspronunciationHint = CFString.CreateNative (pronunciationHint);
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, selInitWithIdentifier_DisplayString_PronunciationHint_XHandle, nsidentifier, nsdisplayString, nspronunciationHint), "initWithIdentifier:displayString:pronunciationHint:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, selInitWithIdentifier_DisplayString_PronunciationHint_XHandle, nsidentifier, nsdisplayString, nspronunciationHint), "initWithIdentifier:displayString:pronunciationHint:");
+					GC.KeepAlive (this);
+				}
+			}
+			CFString.ReleaseNative (nsidentifier);
+			CFString.ReleaseNative (nsdisplayString);
+			CFString.ReleaseNative (nspronunciationHint);
+		}
+		[Export ("initWithIdentifier:displayString:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public INObject (string? identifier, string displayString)
+			: base (NSObjectFlag.Empty)
+		{
+			if (displayString is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (displayString));
+			var nsidentifier = CFString.CreateNative (identifier);
+			var nsdisplayString = CFString.CreateNative (displayString);
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selInitWithIdentifier_DisplayString_XHandle, nsidentifier, nsdisplayString), "initWithIdentifier:displayString:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selInitWithIdentifier_DisplayString_XHandle, nsidentifier, nsdisplayString), "initWithIdentifier:displayString:");
+					GC.KeepAlive (this);
+				}
+			}
+			CFString.ReleaseNative (nsidentifier);
+			CFString.ReleaseNative (nsdisplayString);
+		}
+		[Export ("initWithIdentifier:displayString:subtitleString:displayImage:")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public INObject (string? identifier, string displayString, string? subtitleString, INImage? displayImage)
+			: base (NSObjectFlag.Empty)
+		{
+			if (displayString is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (displayString));
+			var displayImage__handle__ = displayImage.GetHandle ();
+			var nsidentifier = CFString.CreateNative (identifier);
+			var nsdisplayString = CFString.CreateNative (displayString);
+			var nssubtitleString = CFString.CreateNative (subtitleString);
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_NativeHandle (this.Handle, selInitWithIdentifier_DisplayString_SubtitleString_DisplayImage_XHandle, nsidentifier, nsdisplayString, nssubtitleString, displayImage__handle__), "initWithIdentifier:displayString:subtitleString:displayImage:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, selInitWithIdentifier_DisplayString_SubtitleString_DisplayImage_XHandle, nsidentifier, nsdisplayString, nssubtitleString, displayImage__handle__), "initWithIdentifier:displayString:subtitleString:displayImage:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (displayImage);
+			CFString.ReleaseNative (nsidentifier);
+			CFString.ReleaseNative (nsdisplayString);
+			CFString.ReleaseNative (nssubtitleString);
+		}
+		[Export ("initWithIdentifier:displayString:pronunciationHint:subtitleString:displayImage:")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public INObject (string? identifier, string displayString, string? pronunciationHint, string? subtitleString, INImage? displayImage)
+			: base (NSObjectFlag.Empty)
+		{
+			if (displayString is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (displayString));
+			var displayImage__handle__ = displayImage.GetHandle ();
+			var nsidentifier = CFString.CreateNative (identifier);
+			var nsdisplayString = CFString.CreateNative (displayString);
+			var nspronunciationHint = CFString.CreateNative (pronunciationHint);
+			var nssubtitleString = CFString.CreateNative (subtitleString);
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle (this.Handle, selInitWithIdentifier_DisplayString_PronunciationHint_SubtitleString_DisplayImage_XHandle, nsidentifier, nsdisplayString, nspronunciationHint, nssubtitleString, displayImage__handle__), "initWithIdentifier:displayString:pronunciationHint:subtitleString:displayImage:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, selInitWithIdentifier_DisplayString_PronunciationHint_SubtitleString_DisplayImage_XHandle, nsidentifier, nsdisplayString, nspronunciationHint, nssubtitleString, displayImage__handle__), "initWithIdentifier:displayString:pronunciationHint:subtitleString:displayImage:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (displayImage);
+			CFString.ReleaseNative (nsidentifier);
+			CFString.ReleaseNative (nsdisplayString);
+			CFString.ReleaseNative (nspronunciationHint);
+			CFString.ReleaseNative (nssubtitleString);
+		}
+		/// <param name="zone">Developers should pass <see langword="null" />.  Memory zones are no longer used.</param><summary>Performs a copy of the underlying Objective-C object.</summary><returns>The newly-allocated object.</returns><remarks><para>This method performs a "shallow copy" of <see langword="this" />. If this object contains references to external objects, the new object will contain references to the same object.</para></remarks>
+		[Export ("copyWithZone:")]
+		[return: ReleaseAttribute ()]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSObject Copy (NSZone? zone)
+		{
+			var zone__handle__ = zone.GetHandle ();
+			NSObject? ret;
+			if (IsDirectBinding) {
+				ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selCopyWithZone_XHandle, zone__handle__), true)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selCopyWithZone_XHandle, zone__handle__), true)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (zone);
+			return ret!;
+		}
+		/// <summary>Encodes the state of the object using the provided encoder.</summary><param name="encoder">The encoder object where the state of the object will be stored</param><remarks><para>This method is part of the <see cref="T:Foundation.INSCoding" /> protocol and is used by applications to preserve the state of the object into an archive.</para><para>Developers will typically create an <see cref="T:Foundation.NSKeyedArchiver" /> and then invoke the <see cref="M:Foundation.NSKeyedArchiver.ArchiveRootObjectToFile(Foundation.NSObject,System.String)" /> method which will call into this method.</para><para>If developers want to allow their object to be archived, they should override this method and store their state in using the provided <paramref name="encoder" /> parameter. In addition, developers should also implement a constructor that takes an NSCoder argument and is exported with <c>[Export ("initWithCoder:")]</c>.</para><example><code lang="csharp lang-csharp"><![CDATA[public void override EncodeTo (NSCoder coder) {
+		/// coder.Encode (1, key: "version");
+		/// coder.Encode (userName, key: "userName");
+		/// coder.Encode (hostName, key: "hostName");]]></code></example></remarks>
+		[Export ("encodeWithCoder:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void EncodeTo (NSCoder encoder)
+		{
+			var encoder__handle__ = encoder!.GetNonNullHandle (nameof (encoder));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selEncodeWithCoder_XHandle, encoder__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selEncodeWithCoder_XHandle, encoder__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (encoder);
+		}
+		[SupportedOSPlatform ("ios13.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public INSpeakableString[]? GetAlternativeSpeakableMatches ()
+		{
+			INSpeakableString[] ret;
+			ret = CFArray.ArrayFromHandle<INSpeakableString>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selAlternativeSpeakableMatchesXHandle), false)!;
+			return ret;
+		}
+		[Export ("setAlternativeSpeakableMatches:")]
+		[SupportedOSPlatform ("ios13.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetAlternativeSpeakableMatches (INSpeakableString[]? alternativeSpeakableMatches)
+		{
+			using var nsa_alternativeSpeakableMatches = alternativeSpeakableMatches is null ? null : NSArray.FromNSObjects (alternativeSpeakableMatches);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetAlternativeSpeakableMatches_XHandle, nsa_alternativeSpeakableMatches.GetHandle ());
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetAlternativeSpeakableMatches_XHandle, nsa_alternativeSpeakableMatches.GetHandle ());
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <summary>Gets the identifier for this string in the app-specific vocabulary file.</summary>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		public virtual IINSpeakable[]? AlternativeSpeakableMatches {
+			[Export ("alternativeSpeakableMatches")]
+			[UnsupportedOSPlatform ("tvos")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("maccatalyst")]
+			get {
+				IINSpeakable[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<IINSpeakable>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selAlternativeSpeakableMatchesXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<IINSpeakable>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selAlternativeSpeakableMatchesXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos")]
+		public virtual INImage? DisplayImage {
+			[Export ("displayImage", ArgumentSemantic.Retain)]
+			get {
+				INImage? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<INImage> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selDisplayImageXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<INImage> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selDisplayImageXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setDisplayImage:", ArgumentSemantic.Retain)]
+			set {
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetDisplayImage_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetDisplayImage_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual string DisplayString {
+			[Export ("displayString")]
+			get {
+				string ret;
+				if (IsDirectBinding) {
+					ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selDisplayStringXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selDisplayStringXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		/// <summary>The unique identifier of this pronunciation hint.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[ObsoletedOSPlatform ("macos10.13", "Use 'VocabularyIdentifier' instead.")]
+		[ObsoletedOSPlatform ("ios11.0", "Use 'VocabularyIdentifier' instead.")]
+		[ObsoletedOSPlatform ("tvos11.0", "Use 'VocabularyIdentifier' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'VocabularyIdentifier' instead.")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual string? Identifier {
+			[Export ("identifier")]
+			[UnsupportedOSPlatform ("tvos")]
+			[ObsoletedOSPlatform ("macos12.0", "Use 'VocabularyIdentifier' instead.")]
+			[ObsoletedOSPlatform ("ios12.2", "Use 'VocabularyIdentifier' instead.")]
+			[ObsoletedOSPlatform ("tvos12.2", "Use 'VocabularyIdentifier' instead.")]
+			[ObsoletedOSPlatform ("maccatalyst15.0", "Use 'VocabularyIdentifier' instead.")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("maccatalyst")]
+			get {
+				string ret;
+				if (IsDirectBinding) {
+					ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selIdentifierXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selIdentifierXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		/// <summary>Developers can use this to clarify how a name is pronounced.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual string? PronunciationHint {
+			[Export ("pronunciationHint")]
+			[UnsupportedOSPlatform ("tvos")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("maccatalyst")]
+			get {
+				string ret;
+				if (IsDirectBinding) {
+					ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selPronunciationHintXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selPronunciationHintXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		/// <summary>Siri's interpretation of the utterance.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual string SpokenPhrase {
+			[Export ("spokenPhrase")]
+			[UnsupportedOSPlatform ("tvos")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("maccatalyst")]
+			get {
+				string ret;
+				if (IsDirectBinding) {
+					ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selSpokenPhraseXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selSpokenPhraseXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos")]
+		public virtual string? SubtitleString {
+			[Export ("subtitleString")]
+			get {
+				string ret;
+				if (IsDirectBinding) {
+					ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selSubtitleStringXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selSubtitleStringXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setSubtitleString:")]
+			set {
+				var nsvalue = CFString.CreateNative (value);
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetSubtitleString_XHandle, nsvalue);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetSubtitleString_XHandle, nsvalue);
+						GC.KeepAlive (this);
+					}
+				}
+				CFString.ReleaseNative (nsvalue);
+			}
+		}
+		/// <summary>Gets an array of alternative matching phrases.</summary>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		public virtual string? VocabularyIdentifier {
+			[Export ("vocabularyIdentifier")]
+			[UnsupportedOSPlatform ("tvos")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("maccatalyst")]
+			get {
+				string ret;
+				if (IsDirectBinding) {
+					ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selVocabularyIdentifierXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selVocabularyIdentifierXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+	} /* class INObject */
+}

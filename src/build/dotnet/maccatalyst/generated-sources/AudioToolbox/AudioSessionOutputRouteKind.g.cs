@@ -1,0 +1,72 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using Metal;
+using CoreML;
+using AppKit;
+using MapKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using Messages;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using QuickLook;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using CoreMotion;
+using ObjCRuntime;
+using AddressBook;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace AudioToolbox {
+	/// <summary>An enumeration whose values specify different kinds of output routes. </summary>
+	public enum AudioSessionOutputRouteKind : int {
+		/// <summary>To be added.</summary>
+		None = 0,
+		/// <summary>To be added.</summary>
+		LineOut = 1,
+		/// <summary>To be added.</summary>
+		Headphones = 2,
+		/// <summary>To be added.</summary>
+		BluetoothHFP = 3,
+		/// <summary>To be added.</summary>
+		BluetoothA2DP = 4,
+		/// <summary>To be added.</summary>
+		BuiltInReceiver = 5,
+		/// <summary>To be added.</summary>
+		BuiltInSpeaker = 6,
+		/// <summary>To be added.</summary>
+		USBAudio = 7,
+		/// <summary>To be added.</summary>
+		HDMI = 8,
+		/// <summary>To be added.</summary>
+		AirPlay = 9,
+	}
+}

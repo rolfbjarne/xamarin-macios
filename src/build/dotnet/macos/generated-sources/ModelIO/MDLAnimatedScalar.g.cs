@@ -1,0 +1,295 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace ModelIO {
+	[Register("MDLAnimatedScalar", true)]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
+	public unsafe partial class MDLAnimatedScalar : MDLAnimatedValue {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDoubleAtTime_X = "doubleAtTime:";
+		static readonly NativeHandle selDoubleAtTime_XHandle = Selector.GetHandle ("doubleAtTime:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selFloatAtTime_X = "floatAtTime:";
+		static readonly NativeHandle selFloatAtTime_XHandle = Selector.GetHandle ("floatAtTime:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selGetDoubleArray_MaxCount_X = "getDoubleArray:maxCount:";
+		static readonly NativeHandle selGetDoubleArray_MaxCount_XHandle = Selector.GetHandle ("getDoubleArray:maxCount:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selGetFloatArray_MaxCount_X = "getFloatArray:maxCount:";
+		static readonly NativeHandle selGetFloatArray_MaxCount_XHandle = Selector.GetHandle ("getFloatArray:maxCount:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selResetWithDoubleArray_AtTimes_Count_X = "resetWithDoubleArray:atTimes:count:";
+		static readonly NativeHandle selResetWithDoubleArray_AtTimes_Count_XHandle = Selector.GetHandle ("resetWithDoubleArray:atTimes:count:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selResetWithFloatArray_AtTimes_Count_X = "resetWithFloatArray:atTimes:count:";
+		static readonly NativeHandle selResetWithFloatArray_AtTimes_Count_XHandle = Selector.GetHandle ("resetWithFloatArray:atTimes:count:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetDouble_AtTime_X = "setDouble:atTime:";
+		static readonly NativeHandle selSetDouble_AtTime_XHandle = Selector.GetHandle ("setDouble:atTime:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetFloat_AtTime_X = "setFloat:atTime:";
+		static readonly NativeHandle selSetFloat_AtTime_XHandle = Selector.GetHandle ("setFloat:atTime:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("MDLAnimatedScalar");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Creates a new <see cref="MDLAnimatedScalar" /> with default values.</summary>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("init")]
+		public MDLAnimatedScalar () : base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.Init), "init");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, global::ObjCRuntime.Selector.Init), "init");
+				GC.KeepAlive (this);
+				}
+			}
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected MDLAnimatedScalar (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal MDLAnimatedScalar (NativeHandle handle) : base (handle)
+		{
+		}
+
+		/// <param name="time">To be added.</param><summary>To be added.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("doubleAtTime:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual double GetDouble (double time)
+		{
+			double ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.Double_objc_msgSend_Double (this.Handle, selDoubleAtTime_XHandle, time);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.Double_objc_msgSendSuper_Double (&__objc_super__, selDoubleAtTime_XHandle, time);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		/// <param name="time">To be added.</param><summary>To be added.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("floatAtTime:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual float GetFloat (double time)
+		{
+			float ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.float_objc_msgSend_Double (this.Handle, selFloatAtTime_XHandle, time);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.float_objc_msgSendSuper_Double (&__objc_super__, selFloatAtTime_XHandle, time);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		/// <param name="value">To be added.</param><param name="time">To be added.</param><summary>To be added.</summary><remarks>To be added.</remarks>
+		[Export ("setFloat:atTime:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetValue (float value, double time)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_float_Double (this.Handle, selSetFloat_AtTime_XHandle, value, time);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float_Double (&__objc_super__, selSetFloat_AtTime_XHandle, value, time);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <param name="value">To be added.</param><param name="time">To be added.</param><summary>To be added.</summary><remarks>To be added.</remarks>
+		[Export ("setDouble:atTime:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetValue (double value, double time)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_Double_Double (this.Handle, selSetDouble_AtTime_XHandle, value, time);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_Double_Double (&__objc_super__, selSetDouble_AtTime_XHandle, value, time);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("getDoubleArray:maxCount:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal virtual nuint _GetDoubleArray (nint valuesArray, nuint maxCount)
+		{
+			nuint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend_IntPtr_UIntPtr (this.Handle, selGetDoubleArray_MaxCount_XHandle, valuesArray, maxCount);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper_IntPtr_UIntPtr (&__objc_super__, selGetDoubleArray_MaxCount_XHandle, valuesArray, maxCount);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("getFloatArray:maxCount:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal virtual nuint _GetFloatArray (nint valuesArray, nuint maxCount)
+		{
+			nuint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend_IntPtr_UIntPtr (this.Handle, selGetFloatArray_MaxCount_XHandle, valuesArray, maxCount);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper_IntPtr_UIntPtr (&__objc_super__, selGetFloatArray_MaxCount_XHandle, valuesArray, maxCount);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("resetWithDoubleArray:atTimes:count:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal virtual void _ResetWithDoubleArray (nint valuesArray, nint timesArray, nuint count)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr_UIntPtr (this.Handle, selResetWithDoubleArray_AtTimes_Count_XHandle, valuesArray, timesArray, count);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr_UIntPtr (&__objc_super__, selResetWithDoubleArray_AtTimes_Count_XHandle, valuesArray, timesArray, count);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("resetWithFloatArray:atTimes:count:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal virtual void _ResetWithFloatArray (nint valuesArray, nint timesArray, nuint count)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_IntPtr_UIntPtr (this.Handle, selResetWithFloatArray_AtTimes_Count_XHandle, valuesArray, timesArray, count);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_IntPtr_UIntPtr (&__objc_super__, selResetWithFloatArray_AtTimes_Count_XHandle, valuesArray, timesArray, count);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+	} /* class MDLAnimatedScalar */
+}

@@ -1,0 +1,842 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace AppKit {
+	[Register("NSProgressIndicator", true)]
+	[UnsupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class NSProgressIndicator : NSView, INSAccessibilityElementProtocol, INSAccessibilityGroup, INSAccessibilityProgressIndicator {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAccessibilityFrameX = "accessibilityFrame";
+		static readonly NativeHandle selAccessibilityFrameXHandle = Selector.GetHandle ("accessibilityFrame");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAccessibilityIdentifierX = "accessibilityIdentifier";
+		static readonly NativeHandle selAccessibilityIdentifierXHandle = Selector.GetHandle ("accessibilityIdentifier");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAccessibilityParentX = "accessibilityParent";
+		static readonly NativeHandle selAccessibilityParentXHandle = Selector.GetHandle ("accessibilityParent");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAccessibilityValueX = "accessibilityValue";
+		static readonly NativeHandle selAccessibilityValueXHandle = Selector.GetHandle ("accessibilityValue");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selControlSizeX = "controlSize";
+		static readonly NativeHandle selControlSizeXHandle = Selector.GetHandle ("controlSize");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selControlTintX = "controlTint";
+		static readonly NativeHandle selControlTintXHandle = Selector.GetHandle ("controlTint");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDoubleValueX = "doubleValue";
+		static readonly NativeHandle selDoubleValueXHandle = Selector.GetHandle ("doubleValue");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selIncrementBy_X = "incrementBy:";
+		static readonly NativeHandle selIncrementBy_XHandle = Selector.GetHandle ("incrementBy:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithFrame_X = "initWithFrame:";
+		static readonly NativeHandle selInitWithFrame_XHandle = Selector.GetHandle ("initWithFrame:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selIsAccessibilityFocusedX = "isAccessibilityFocused";
+		static readonly NativeHandle selIsAccessibilityFocusedXHandle = Selector.GetHandle ("isAccessibilityFocused");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selIsBezeledX = "isBezeled";
+		static readonly NativeHandle selIsBezeledXHandle = Selector.GetHandle ("isBezeled");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selIsDisplayedWhenStoppedX = "isDisplayedWhenStopped";
+		static readonly NativeHandle selIsDisplayedWhenStoppedXHandle = Selector.GetHandle ("isDisplayedWhenStopped");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selIsIndeterminateX = "isIndeterminate";
+		static readonly NativeHandle selIsIndeterminateXHandle = Selector.GetHandle ("isIndeterminate");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selMaxValueX = "maxValue";
+		static readonly NativeHandle selMaxValueXHandle = Selector.GetHandle ("maxValue");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selMinValueX = "minValue";
+		static readonly NativeHandle selMinValueXHandle = Selector.GetHandle ("minValue");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selObservedProgressX = "observedProgress";
+		static readonly NativeHandle selObservedProgressXHandle = Selector.GetHandle ("observedProgress");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetBezeled_X = "setBezeled:";
+		static readonly NativeHandle selSetBezeled_XHandle = Selector.GetHandle ("setBezeled:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetControlSize_X = "setControlSize:";
+		static readonly NativeHandle selSetControlSize_XHandle = Selector.GetHandle ("setControlSize:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetControlTint_X = "setControlTint:";
+		static readonly NativeHandle selSetControlTint_XHandle = Selector.GetHandle ("setControlTint:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetDisplayedWhenStopped_X = "setDisplayedWhenStopped:";
+		static readonly NativeHandle selSetDisplayedWhenStopped_XHandle = Selector.GetHandle ("setDisplayedWhenStopped:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetDoubleValue_X = "setDoubleValue:";
+		static readonly NativeHandle selSetDoubleValue_XHandle = Selector.GetHandle ("setDoubleValue:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetIndeterminate_X = "setIndeterminate:";
+		static readonly NativeHandle selSetIndeterminate_XHandle = Selector.GetHandle ("setIndeterminate:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetMaxValue_X = "setMaxValue:";
+		static readonly NativeHandle selSetMaxValue_XHandle = Selector.GetHandle ("setMaxValue:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetMinValue_X = "setMinValue:";
+		static readonly NativeHandle selSetMinValue_XHandle = Selector.GetHandle ("setMinValue:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetObservedProgress_X = "setObservedProgress:";
+		static readonly NativeHandle selSetObservedProgress_XHandle = Selector.GetHandle ("setObservedProgress:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetStyle_X = "setStyle:";
+		static readonly NativeHandle selSetStyle_XHandle = Selector.GetHandle ("setStyle:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetUsesThreadedAnimation_X = "setUsesThreadedAnimation:";
+		static readonly NativeHandle selSetUsesThreadedAnimation_XHandle = Selector.GetHandle ("setUsesThreadedAnimation:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSizeToFitX = "sizeToFit";
+		static readonly NativeHandle selSizeToFitXHandle = Selector.GetHandle ("sizeToFit");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selStartAnimation_X = "startAnimation:";
+		static readonly NativeHandle selStartAnimation_XHandle = Selector.GetHandle ("startAnimation:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selStopAnimation_X = "stopAnimation:";
+		static readonly NativeHandle selStopAnimation_XHandle = Selector.GetHandle ("stopAnimation:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selStyleX = "style";
+		static readonly NativeHandle selStyleXHandle = Selector.GetHandle ("style");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selUsesThreadedAnimationX = "usesThreadedAnimation";
+		static readonly NativeHandle selUsesThreadedAnimationXHandle = Selector.GetHandle ("usesThreadedAnimation");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("NSProgressIndicator");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Creates a new <see cref="NSProgressIndicator" /> with default values.</summary>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("init")]
+		public NSProgressIndicator () : base (NSObjectFlag.Empty)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.Init), "init");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, global::ObjCRuntime.Selector.Init), "init");
+				GC.KeepAlive (this);
+				}
+			}
+		}
+
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <param name="coder">The unarchiver object.</param>
+		/// <remarks>
+		///   <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization). This is part of the <see cref="Foundation.NSCoding" /> protocol.</para>
+		///   <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="Foundation.NSCoder" /> and decorate it with the <c>[Export("initWithCoder:"]</c> attribute.</para>
+		///   <para>The state of this object can also be serialized by using the <see cref="Foundation.INSCoding.EncodeTo" /> companion method.</para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[DesignatedInitializer]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("initWithCoder:")]
+		public NSProgressIndicator (NSCoder coder) : base (NSObjectFlag.Empty)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, Selector.InitWithCoder, coder.Handle), "initWithCoder:");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (&__objc_super__, Selector.InitWithCoder, coder.Handle), "initWithCoder:");
+				GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (coder);
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected NSProgressIndicator (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal NSProgressIndicator (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("initWithFrame:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public NSProgressIndicator (CGRect frameRect)
+			: base (NSObjectFlag.Empty)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_CGRect (this.Handle, selInitWithFrame_XHandle, frameRect), "initWithFrame:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_CGRect (&__objc_super__, selInitWithFrame_XHandle, frameRect), "initWithFrame:");
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("incrementBy:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void IncrementBy (double delta)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_Double (this.Handle, selIncrementBy_XHandle, delta);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_Double (&__objc_super__, selIncrementBy_XHandle, delta);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("sizeToFit")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SizeToFit ()
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend (this.Handle, selSizeToFitXHandle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper (&__objc_super__, selSizeToFitXHandle);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("startAnimation:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void StartAnimation (NSObject? sender)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			var sender__handle__ = sender.GetHandle ();
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selStartAnimation_XHandle, sender__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selStartAnimation_XHandle, sender__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (sender);
+		}
+		[Export ("stopAnimation:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void StopAnimation (NSObject? sender)
+		{
+			global::AppKit.NSApplication.EnsureUIThread ();
+			var sender__handle__ = sender.GetHandle ();
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selStopAnimation_XHandle, sender__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selStopAnimation_XHandle, sender__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (sender);
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos")]
+		public virtual bool AccessibilityFocused {
+			[Export ("isAccessibilityFocused")]
+			[UnsupportedOSPlatform ("maccatalyst")]
+			[UnsupportedOSPlatform ("ios")]
+			[UnsupportedOSPlatform ("tvos")]
+			[SupportedOSPlatform ("macos")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selIsAccessibilityFocusedXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selIsAccessibilityFocusedXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos")]
+		public virtual CGRect AccessibilityFrame {
+			[Export ("accessibilityFrame")]
+			[UnsupportedOSPlatform ("maccatalyst")]
+			[UnsupportedOSPlatform ("ios")]
+			[UnsupportedOSPlatform ("tvos")]
+			[SupportedOSPlatform ("macos")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				CGRect ret;
+				if (IsDirectBinding) {
+					if (global::ObjCRuntime.Runtime.IsARM64CallingConvention) {
+						ret = global::ObjCRuntime.Messaging.CGRect_objc_msgSend (this.Handle, selAccessibilityFrameXHandle);
+					} else {
+						ret = global::ObjCRuntime.Messaging.CGRect_objc_msgSend_stret (this.Handle, selAccessibilityFrameXHandle);
+					}
+				} else {
+					if (global::ObjCRuntime.Runtime.IsARM64CallingConvention) {
+						unsafe {
+							var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+							ret = global::ObjCRuntime.Messaging.CGRect_objc_msgSendSuper (&__objc_super__, selAccessibilityFrameXHandle);
+							GC.KeepAlive (this);
+						}
+					} else {
+						unsafe {
+							var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+							ret = global::ObjCRuntime.Messaging.CGRect_objc_msgSendSuper_stret (&__objc_super__, selAccessibilityFrameXHandle);
+							GC.KeepAlive (this);
+						}
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos")]
+		public virtual string AccessibilityIdentifier {
+			[Export ("accessibilityIdentifier")]
+			[UnsupportedOSPlatform ("maccatalyst")]
+			[UnsupportedOSPlatform ("ios")]
+			[UnsupportedOSPlatform ("tvos")]
+			[SupportedOSPlatform ("macos")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				string ret;
+				if (IsDirectBinding) {
+					ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selAccessibilityIdentifierXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selAccessibilityIdentifierXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("ios")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("macos")]
+		public virtual NSObject? AccessibilityParent {
+			[Export ("accessibilityParent")]
+			[UnsupportedOSPlatform ("maccatalyst")]
+			[UnsupportedOSPlatform ("ios")]
+			[UnsupportedOSPlatform ("tvos")]
+			[SupportedOSPlatform ("macos")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				NSObject? ret;
+				if (IsDirectBinding) {
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selAccessibilityParentXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selAccessibilityParentXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		public virtual NSNumber? AccessibilityValue {
+			[Export ("accessibilityValue")]
+			[UnsupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("macos")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				NSNumber? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSNumber> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selAccessibilityValueXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSNumber> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selAccessibilityValueXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[ObsoletedOSPlatform ("macos14.0", "This property is not respected anymore.")]
+		[UnsupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		public virtual bool Bezeled {
+			[Export ("isBezeled")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selIsBezeledXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selIsBezeledXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setBezeled:")]
+			set {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetBezeled_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetBezeled_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSControlSize ControlSize {
+			[Export ("controlSize")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				NSControlSize ret;
+				if (IsDirectBinding) {
+					ret = (NSControlSize) (ulong) global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend (this.Handle, selControlSizeXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = (NSControlSize) (ulong) global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper (&__objc_super__, selControlSizeXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setControlSize:")]
+			set {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr (this.Handle, selSetControlSize_XHandle, (UIntPtr) (ulong) value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr (&__objc_super__, selSetControlSize_XHandle, (UIntPtr) (ulong) value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[ObsoletedOSPlatform ("macos14.0", "This property is not respected anymore.")]
+		[UnsupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		public virtual NSControlTint ControlTint {
+			[Export ("controlTint")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				NSControlTint ret;
+				if (IsDirectBinding) {
+					ret = (NSControlTint) (ulong) global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend (this.Handle, selControlTintXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = (NSControlTint) (ulong) global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper (&__objc_super__, selControlTintXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setControlTint:")]
+			set {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr (this.Handle, selSetControlTint_XHandle, (UIntPtr) (ulong) value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr (&__objc_super__, selSetControlTint_XHandle, (UIntPtr) (ulong) value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual double DoubleValue {
+			[Export ("doubleValue")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				double ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.Double_objc_msgSend (this.Handle, selDoubleValueXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.Double_objc_msgSendSuper (&__objc_super__, selDoubleValueXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setDoubleValue:")]
+			set {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_Double (this.Handle, selSetDoubleValue_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_Double (&__objc_super__, selSetDoubleValue_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool Indeterminate {
+			[Export ("isIndeterminate")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selIsIndeterminateXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selIsIndeterminateXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setIndeterminate:")]
+			set {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetIndeterminate_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetIndeterminate_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool IsDisplayedWhenStopped {
+			[Export ("isDisplayedWhenStopped")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selIsDisplayedWhenStoppedXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selIsDisplayedWhenStoppedXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setDisplayedWhenStopped:")]
+			set {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetDisplayedWhenStopped_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetDisplayedWhenStopped_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual double MaxValue {
+			[Export ("maxValue")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				double ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.Double_objc_msgSend (this.Handle, selMaxValueXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.Double_objc_msgSendSuper (&__objc_super__, selMaxValueXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setMaxValue:")]
+			set {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_Double (this.Handle, selSetMaxValue_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_Double (&__objc_super__, selSetMaxValue_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual double MinValue {
+			[Export ("minValue")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				double ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.Double_objc_msgSend (this.Handle, selMinValueXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.Double_objc_msgSendSuper (&__objc_super__, selMinValueXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setMinValue:")]
+			set {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_Double (this.Handle, selSetMinValue_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_Double (&__objc_super__, selSetMinValue_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("macos14.0")]
+		[UnsupportedOSPlatform ("maccatalyst")]
+		public virtual NSProgress? ObservedProgress {
+			[Export ("observedProgress", ArgumentSemantic.Retain)]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				NSProgress? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSProgress> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selObservedProgressXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSProgress> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selObservedProgressXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setObservedProgress:", ArgumentSemantic.Retain)]
+			set {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetObservedProgress_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetObservedProgress_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSProgressIndicatorStyle Style {
+			[Export ("style")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				NSProgressIndicatorStyle ret;
+				if (IsDirectBinding) {
+					ret = (NSProgressIndicatorStyle) (ulong) global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend (this.Handle, selStyleXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = (NSProgressIndicatorStyle) (ulong) global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper (&__objc_super__, selStyleXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setStyle:")]
+			set {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr (this.Handle, selSetStyle_XHandle, (UIntPtr) (ulong) value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr (&__objc_super__, selSetStyle_XHandle, (UIntPtr) (ulong) value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool UsesThreadedAnimation {
+			[Export ("usesThreadedAnimation")]
+			get {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selUsesThreadedAnimationXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selUsesThreadedAnimationXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setUsesThreadedAnimation:")]
+			set {
+				global::AppKit.NSApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetUsesThreadedAnimation_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetUsesThreadedAnimation_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+	} /* class NSProgressIndicator */
+}

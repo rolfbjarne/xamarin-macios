@@ -1,0 +1,66 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using GLKit;
+using Metal;
+using CoreML;
+using MapKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using Messages;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using QuickLook;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using CoreMotion;
+using ObjCRuntime;
+using AddressBook;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using NewsstandKit;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace BrowserEngineKit {
+	[SupportedOSPlatform ("tvos17.4")]
+	[SupportedOSPlatform ("macos14.4")]
+	[SupportedOSPlatform ("ios17.4")]
+	[UnsupportedOSPlatform ("maccatalyst")]
+	[Native]
+	public enum BEGestureType : long {
+		Loupe = 0,
+		OneFingerTap = 1,
+		DoubleTapAndHold = 2,
+		DoubleTap = 3,
+		OneFingerDoubleTap = 8,
+		OneFingerTripleTap = 9,
+		TwoFingerSingleTap = 10,
+		TwoFingerRangedSelectGesture = 11,
+		IMPhraseBoundaryDrag = 14,
+		ForceTouch = 15,
+	}
+}

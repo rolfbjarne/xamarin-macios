@@ -1,0 +1,58 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using Metal;
+using CoreML;
+using AppKit;
+using MapKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using Messages;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using QuickLook;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using CoreMotion;
+using ObjCRuntime;
+using AddressBook;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace Foundation {
+	/// <summary>Flags controling the search in NSData's Find method.</summary><remarks></remarks>
+	[Flags]
+	[Native]
+	public enum NSDataSearchOptions : ulong {
+		/// <summary>Starts search from the end, instead of the start.</summary>
+		SearchBackwards = 1,
+		/// <summary>Limits the search to the start (or end if SearchBackwards is specified)</summary>
+		SearchAnchored = 2,
+	}
+}

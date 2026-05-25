@@ -1,0 +1,728 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace Metal {
+	[Register("MTL4RenderPassDescriptor", true)]
+	[SupportedOSPlatform ("macos26.0")]
+	[SupportedOSPlatform ("ios26.0")]
+	[SupportedOSPlatform ("tvos26.0")]
+	[SupportedOSPlatform ("maccatalyst26.0")]
+	public unsafe partial class MTL4RenderPassDescriptor : NSObject, INSCopying {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selColorAttachmentsX = "colorAttachments";
+		static readonly NativeHandle selColorAttachmentsXHandle = Selector.GetHandle ("colorAttachments");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCopyWithZone_X = "copyWithZone:";
+		static readonly NativeHandle selCopyWithZone_XHandle = Selector.GetHandle ("copyWithZone:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDefaultRasterSampleCountX = "defaultRasterSampleCount";
+		static readonly NativeHandle selDefaultRasterSampleCountXHandle = Selector.GetHandle ("defaultRasterSampleCount");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDepthAttachmentX = "depthAttachment";
+		static readonly NativeHandle selDepthAttachmentXHandle = Selector.GetHandle ("depthAttachment");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selGetSamplePositions_Count_X = "getSamplePositions:count:";
+		static readonly NativeHandle selGetSamplePositions_Count_XHandle = Selector.GetHandle ("getSamplePositions:count:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selImageblockSampleLengthX = "imageblockSampleLength";
+		static readonly NativeHandle selImageblockSampleLengthXHandle = Selector.GetHandle ("imageblockSampleLength");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRasterizationRateMapX = "rasterizationRateMap";
+		static readonly NativeHandle selRasterizationRateMapXHandle = Selector.GetHandle ("rasterizationRateMap");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRenderTargetArrayLengthX = "renderTargetArrayLength";
+		static readonly NativeHandle selRenderTargetArrayLengthXHandle = Selector.GetHandle ("renderTargetArrayLength");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRenderTargetHeightX = "renderTargetHeight";
+		static readonly NativeHandle selRenderTargetHeightXHandle = Selector.GetHandle ("renderTargetHeight");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRenderTargetWidthX = "renderTargetWidth";
+		static readonly NativeHandle selRenderTargetWidthXHandle = Selector.GetHandle ("renderTargetWidth");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetDefaultRasterSampleCount_X = "setDefaultRasterSampleCount:";
+		static readonly NativeHandle selSetDefaultRasterSampleCount_XHandle = Selector.GetHandle ("setDefaultRasterSampleCount:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetDepthAttachment_X = "setDepthAttachment:";
+		static readonly NativeHandle selSetDepthAttachment_XHandle = Selector.GetHandle ("setDepthAttachment:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetImageblockSampleLength_X = "setImageblockSampleLength:";
+		static readonly NativeHandle selSetImageblockSampleLength_XHandle = Selector.GetHandle ("setImageblockSampleLength:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetRasterizationRateMap_X = "setRasterizationRateMap:";
+		static readonly NativeHandle selSetRasterizationRateMap_XHandle = Selector.GetHandle ("setRasterizationRateMap:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetRenderTargetArrayLength_X = "setRenderTargetArrayLength:";
+		static readonly NativeHandle selSetRenderTargetArrayLength_XHandle = Selector.GetHandle ("setRenderTargetArrayLength:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetRenderTargetHeight_X = "setRenderTargetHeight:";
+		static readonly NativeHandle selSetRenderTargetHeight_XHandle = Selector.GetHandle ("setRenderTargetHeight:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetRenderTargetWidth_X = "setRenderTargetWidth:";
+		static readonly NativeHandle selSetRenderTargetWidth_XHandle = Selector.GetHandle ("setRenderTargetWidth:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetSamplePositions_Count_X = "setSamplePositions:count:";
+		static readonly NativeHandle selSetSamplePositions_Count_XHandle = Selector.GetHandle ("setSamplePositions:count:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetStencilAttachment_X = "setStencilAttachment:";
+		static readonly NativeHandle selSetStencilAttachment_XHandle = Selector.GetHandle ("setStencilAttachment:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetSupportColorAttachmentMapping_X = "setSupportColorAttachmentMapping:";
+		static readonly NativeHandle selSetSupportColorAttachmentMapping_XHandle = Selector.GetHandle ("setSupportColorAttachmentMapping:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetThreadgroupMemoryLength_X = "setThreadgroupMemoryLength:";
+		static readonly NativeHandle selSetThreadgroupMemoryLength_XHandle = Selector.GetHandle ("setThreadgroupMemoryLength:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetTileHeight_X = "setTileHeight:";
+		static readonly NativeHandle selSetTileHeight_XHandle = Selector.GetHandle ("setTileHeight:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetTileWidth_X = "setTileWidth:";
+		static readonly NativeHandle selSetTileWidth_XHandle = Selector.GetHandle ("setTileWidth:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetVisibilityResultBuffer_X = "setVisibilityResultBuffer:";
+		static readonly NativeHandle selSetVisibilityResultBuffer_XHandle = Selector.GetHandle ("setVisibilityResultBuffer:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetVisibilityResultType_X = "setVisibilityResultType:";
+		static readonly NativeHandle selSetVisibilityResultType_XHandle = Selector.GetHandle ("setVisibilityResultType:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selStencilAttachmentX = "stencilAttachment";
+		static readonly NativeHandle selStencilAttachmentXHandle = Selector.GetHandle ("stencilAttachment");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSupportColorAttachmentMappingX = "supportColorAttachmentMapping";
+		static readonly NativeHandle selSupportColorAttachmentMappingXHandle = Selector.GetHandle ("supportColorAttachmentMapping");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selThreadgroupMemoryLengthX = "threadgroupMemoryLength";
+		static readonly NativeHandle selThreadgroupMemoryLengthXHandle = Selector.GetHandle ("threadgroupMemoryLength");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTileHeightX = "tileHeight";
+		static readonly NativeHandle selTileHeightXHandle = Selector.GetHandle ("tileHeight");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTileWidthX = "tileWidth";
+		static readonly NativeHandle selTileWidthXHandle = Selector.GetHandle ("tileWidth");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selVisibilityResultBufferX = "visibilityResultBuffer";
+		static readonly NativeHandle selVisibilityResultBufferXHandle = Selector.GetHandle ("visibilityResultBuffer");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selVisibilityResultTypeX = "visibilityResultType";
+		static readonly NativeHandle selVisibilityResultTypeXHandle = Selector.GetHandle ("visibilityResultType");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("MTL4RenderPassDescriptor");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Creates a new <see cref="MTL4RenderPassDescriptor" /> with default values.</summary>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("init")]
+		public MTL4RenderPassDescriptor () : base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.Init), "init");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, global::ObjCRuntime.Selector.Init), "init");
+				GC.KeepAlive (this);
+				}
+			}
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected MTL4RenderPassDescriptor (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal MTL4RenderPassDescriptor (NativeHandle handle) : base (handle)
+		{
+		}
+
+		/// <param name="zone">Developers should pass <see langword="null" />.  Memory zones are no longer used.</param><summary>Performs a copy of the underlying Objective-C object.</summary><returns>The newly-allocated object.</returns><remarks><para>This method performs a "shallow copy" of <see langword="this" />. If this object contains references to external objects, the new object will contain references to the same object.</para></remarks>
+		[Export ("copyWithZone:")]
+		[return: ReleaseAttribute ()]
+		[SupportedOSPlatform ("ios26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSObject Copy (NSZone? zone)
+		{
+			var zone__handle__ = zone.GetHandle ();
+			NSObject? ret;
+			if (IsDirectBinding) {
+				ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selCopyWithZone_XHandle, zone__handle__), true)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selCopyWithZone_XHandle, zone__handle__), true)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (zone);
+			return ret!;
+		}
+		[Export ("getSamplePositions:count:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint GetSamplePositions (nint positions, nuint count)
+		{
+			nuint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend_IntPtr_UIntPtr (this.Handle, selGetSamplePositions_Count_XHandle, positions, count);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper_IntPtr_UIntPtr (&__objc_super__, selGetSamplePositions_Count_XHandle, positions, count);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("setSamplePositions:count:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetSamplePositions (nint positions, nuint count)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_IntPtr_UIntPtr (this.Handle, selSetSamplePositions_Count_XHandle, positions, count);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr_UIntPtr (&__objc_super__, selSetSamplePositions_Count_XHandle, positions, count);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MTLRenderPassColorAttachmentDescriptorArray ColorAttachments {
+			[Export ("colorAttachments")]
+			get {
+				MTLRenderPassColorAttachmentDescriptorArray? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<MTLRenderPassColorAttachmentDescriptorArray> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selColorAttachmentsXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<MTLRenderPassColorAttachmentDescriptorArray> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selColorAttachmentsXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint DefaultRasterSampleCount {
+			[Export ("defaultRasterSampleCount")]
+			get {
+				nuint ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend (this.Handle, selDefaultRasterSampleCountXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper (&__objc_super__, selDefaultRasterSampleCountXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setDefaultRasterSampleCount:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr (this.Handle, selSetDefaultRasterSampleCount_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr (&__objc_super__, selSetDefaultRasterSampleCount_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MTLRenderPassDepthAttachmentDescriptor? DepthAttachment {
+			[Export ("depthAttachment", ArgumentSemantic.Copy)]
+			get {
+				MTLRenderPassDepthAttachmentDescriptor? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<MTLRenderPassDepthAttachmentDescriptor> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selDepthAttachmentXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<MTLRenderPassDepthAttachmentDescriptor> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selDepthAttachmentXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setDepthAttachment:", ArgumentSemantic.Copy)]
+			set {
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetDepthAttachment_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetDepthAttachment_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint ImageblockSampleLength {
+			[Export ("imageblockSampleLength")]
+			get {
+				nuint ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend (this.Handle, selImageblockSampleLengthXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper (&__objc_super__, selImageblockSampleLengthXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setImageblockSampleLength:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr (this.Handle, selSetImageblockSampleLength_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr (&__objc_super__, selSetImageblockSampleLength_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual IMTLRasterizationRateMap? RasterizationRateMap {
+			[Export ("rasterizationRateMap", ArgumentSemantic.Retain)]
+			get {
+				IMTLRasterizationRateMap? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetINativeObject<IMTLRasterizationRateMap> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selRasterizationRateMapXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetINativeObject<IMTLRasterizationRateMap> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selRasterizationRateMapXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setRasterizationRateMap:", ArgumentSemantic.Retain)]
+			set {
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetRasterizationRateMap_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetRasterizationRateMap_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint RenderTargetArrayLength {
+			[Export ("renderTargetArrayLength")]
+			get {
+				nuint ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend (this.Handle, selRenderTargetArrayLengthXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper (&__objc_super__, selRenderTargetArrayLengthXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setRenderTargetArrayLength:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr (this.Handle, selSetRenderTargetArrayLength_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr (&__objc_super__, selSetRenderTargetArrayLength_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint RenderTargetHeight {
+			[Export ("renderTargetHeight")]
+			get {
+				nuint ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend (this.Handle, selRenderTargetHeightXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper (&__objc_super__, selRenderTargetHeightXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setRenderTargetHeight:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr (this.Handle, selSetRenderTargetHeight_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr (&__objc_super__, selSetRenderTargetHeight_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint RenderTargetWidth {
+			[Export ("renderTargetWidth")]
+			get {
+				nuint ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend (this.Handle, selRenderTargetWidthXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper (&__objc_super__, selRenderTargetWidthXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setRenderTargetWidth:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr (this.Handle, selSetRenderTargetWidth_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr (&__objc_super__, selSetRenderTargetWidth_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MTLRenderPassStencilAttachmentDescriptor? StencilAttachment {
+			[Export ("stencilAttachment", ArgumentSemantic.Copy)]
+			get {
+				MTLRenderPassStencilAttachmentDescriptor? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<MTLRenderPassStencilAttachmentDescriptor> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selStencilAttachmentXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<MTLRenderPassStencilAttachmentDescriptor> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selStencilAttachmentXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setStencilAttachment:", ArgumentSemantic.Copy)]
+			set {
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetStencilAttachment_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetStencilAttachment_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool SupportColorAttachmentMapping {
+			[Export ("supportColorAttachmentMapping")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selSupportColorAttachmentMappingXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selSupportColorAttachmentMappingXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setSupportColorAttachmentMapping:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetSupportColorAttachmentMapping_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetSupportColorAttachmentMapping_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint ThreadgroupMemoryLength {
+			[Export ("threadgroupMemoryLength")]
+			get {
+				nuint ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend (this.Handle, selThreadgroupMemoryLengthXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper (&__objc_super__, selThreadgroupMemoryLengthXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setThreadgroupMemoryLength:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr (this.Handle, selSetThreadgroupMemoryLength_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr (&__objc_super__, selSetThreadgroupMemoryLength_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint TileHeight {
+			[Export ("tileHeight")]
+			get {
+				nuint ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend (this.Handle, selTileHeightXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper (&__objc_super__, selTileHeightXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setTileHeight:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr (this.Handle, selSetTileHeight_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr (&__objc_super__, selSetTileHeight_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint TileWidth {
+			[Export ("tileWidth")]
+			get {
+				nuint ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend (this.Handle, selTileWidthXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper (&__objc_super__, selTileWidthXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setTileWidth:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_UIntPtr (this.Handle, selSetTileWidth_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_UIntPtr (&__objc_super__, selSetTileWidth_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual IMTLBuffer? VisibilityResultBuffer {
+			[Export ("visibilityResultBuffer", ArgumentSemantic.Retain)]
+			get {
+				IMTLBuffer? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetINativeObject<IMTLBuffer> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selVisibilityResultBufferXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetINativeObject<IMTLBuffer> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selVisibilityResultBufferXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setVisibilityResultBuffer:", ArgumentSemantic.Retain)]
+			set {
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetVisibilityResultBuffer_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetVisibilityResultBuffer_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MTLVisibilityResultType VisibilityResultType {
+			[Export ("visibilityResultType", ArgumentSemantic.Assign)]
+			get {
+				MTLVisibilityResultType ret;
+				if (IsDirectBinding) {
+					ret = (MTLVisibilityResultType) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, selVisibilityResultTypeXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = (MTLVisibilityResultType) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, selVisibilityResultTypeXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setVisibilityResultType:", ArgumentSemantic.Assign)]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_IntPtr (this.Handle, selSetVisibilityResultType_XHandle, (IntPtr) (long) value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr (&__objc_super__, selSetVisibilityResultType_XHandle, (IntPtr) (long) value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+	} /* class MTL4RenderPassDescriptor */
+}

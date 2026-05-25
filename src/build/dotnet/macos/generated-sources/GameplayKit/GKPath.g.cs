@@ -1,0 +1,413 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace GameplayKit {
+	/// <summary>Holds a 2D polygonal path that can be followed by a <see cref="T:GameplayKit.GKAgent" />.</summary><related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/GameplayKit/Reference/GKPath_Class/index.html">Apple documentation for <c>GKPath</c></related>
+	[Register("GKPath", true)]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
+	public unsafe partial class GKPath : NSObject {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selFloat2AtIndex_X = "float2AtIndex:";
+		static readonly NativeHandle selFloat2AtIndex_XHandle = Selector.GetHandle ("float2AtIndex:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selFloat3AtIndex_X = "float3AtIndex:";
+		static readonly NativeHandle selFloat3AtIndex_XHandle = Selector.GetHandle ("float3AtIndex:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithFloat3Points_Count_Radius_Cyclical_X = "initWithFloat3Points:count:radius:cyclical:";
+		static readonly NativeHandle selInitWithFloat3Points_Count_Radius_Cyclical_XHandle = Selector.GetHandle ("initWithFloat3Points:count:radius:cyclical:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithGraphNodes_Radius_X = "initWithGraphNodes:radius:";
+		static readonly NativeHandle selInitWithGraphNodes_Radius_XHandle = Selector.GetHandle ("initWithGraphNodes:radius:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithPoints_Count_Radius_Cyclical_X = "initWithPoints:count:radius:cyclical:";
+		static readonly NativeHandle selInitWithPoints_Count_Radius_Cyclical_XHandle = Selector.GetHandle ("initWithPoints:count:radius:cyclical:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selIsCyclicalX = "isCyclical";
+		static readonly NativeHandle selIsCyclicalXHandle = Selector.GetHandle ("isCyclical");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selNumPointsX = "numPoints";
+		static readonly NativeHandle selNumPointsXHandle = Selector.GetHandle ("numPoints");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPathWithFloat3Points_Count_Radius_Cyclical_X = "pathWithFloat3Points:count:radius:cyclical:";
+		static readonly NativeHandle selPathWithFloat3Points_Count_Radius_Cyclical_XHandle = Selector.GetHandle ("pathWithFloat3Points:count:radius:cyclical:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPathWithGraphNodes_Radius_X = "pathWithGraphNodes:radius:";
+		static readonly NativeHandle selPathWithGraphNodes_Radius_XHandle = Selector.GetHandle ("pathWithGraphNodes:radius:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPathWithPoints_Count_Radius_Cyclical_X = "pathWithPoints:count:radius:cyclical:";
+		static readonly NativeHandle selPathWithPoints_Count_Radius_Cyclical_XHandle = Selector.GetHandle ("pathWithPoints:count:radius:cyclical:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPointAtIndex_X = "pointAtIndex:";
+		static readonly NativeHandle selPointAtIndex_XHandle = Selector.GetHandle ("pointAtIndex:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRadiusX = "radius";
+		static readonly NativeHandle selRadiusXHandle = Selector.GetHandle ("radius");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetCyclical_X = "setCyclical:";
+		static readonly NativeHandle selSetCyclical_XHandle = Selector.GetHandle ("setCyclical:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetRadius_X = "setRadius:";
+		static readonly NativeHandle selSetRadius_XHandle = Selector.GetHandle ("setRadius:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("GKPath");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected GKPath (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal GKPath (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("initWithGraphNodes:radius:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public GKPath (GKGraphNode[] nodes, float radius)
+			: base (NSObjectFlag.Empty)
+		{
+			if (nodes is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (nodes));
+			using var nsa_nodes = NSArray.FromNSObjects (nodes);
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_float (this.Handle, selInitWithGraphNodes_Radius_XHandle, nsa_nodes.Handle, radius), "initWithGraphNodes:radius:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_float (&__objc_super__, selInitWithGraphNodes_Radius_XHandle, nsa_nodes.Handle, radius), "initWithGraphNodes:radius:");
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <param name="graphNodes">To be added.</param><param name="radius">To be added.</param><summary>Creates a new <see cref="T:GameplayKit.GKPath" /> with the specified <paramref name="graphNodes" /> and <paramref name="radius" />.</summary><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public GKPath (GKGraphNode2D[] graphNodes, float radius)
+			: this (nodes: graphNodes, radius: radius)
+		{
+		}
+		[Export ("pathWithFloat3Points:count:radius:cyclical:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static GKPath FromFloat3Points (nint points, nuint count, float radius, bool cyclical)
+		{
+			GKPath ret;
+			ret =  Runtime.GetNSObject<GKPath> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_IntPtr_UIntPtr_float_bool (class_ptr, selPathWithFloat3Points_Count_Radius_Cyclical_XHandle, points, count, radius, cyclical ? (byte) 1 : (byte) 0), false)!;
+			return ret;
+		}
+		[Export ("pathWithGraphNodes:radius:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static GKPath FromGraphNodes (GKGraphNode[] nodes, float radius)
+		{
+			if (nodes is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (nodes));
+			using var nsa_nodes = NSArray.FromNSObjects (nodes);
+			GKPath ret;
+			ret =  Runtime.GetNSObject<GKPath> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_float (class_ptr, selPathWithGraphNodes_Radius_XHandle, nsa_nodes.Handle, radius), false)!;
+			return ret;
+		}
+		/// <param name="graphNodes">To be added.</param><param name="radius">To be added.</param><summary>Factory method to create a <see cref="T:GameplayKit.GKPath" /> with the specified <paramref name="graphNodes" /> and <paramref name="radius" />.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static GKPath FromGraphNodes (GKGraphNode2D[] graphNodes, float radius)
+		{
+			return FromGraphNodes (nodes: graphNodes, radius: radius);
+		}
+		[Export ("pathWithPoints:count:radius:cyclical:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static GKPath FromPoints (nint points, nuint count, float radius, bool cyclical)
+		{
+			GKPath ret;
+			ret =  Runtime.GetNSObject<GKPath> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_IntPtr_UIntPtr_float_bool (class_ptr, selPathWithPoints_Count_Radius_Cyclical_XHandle, points, count, radius, cyclical ? (byte) 1 : (byte) 0), false)!;
+			return ret;
+		}
+		/// <param name="index">To be added.</param><summary>Developers should not use this deprecated method. Developers should use 'GetVector2Point' instead.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("pointAtIndex:")]
+		[ObsoletedOSPlatform ("ios10.0", "Use 'GetVector2Point' instead.")]
+		[ObsoletedOSPlatform ("tvos10.0", "Use 'GetVector2Point' instead.")]
+		[ObsoletedOSPlatform ("macos10.12", "Use 'GetVector2Point' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'GetVector2Point' instead.")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual global::System.Numerics.Vector2 GetPoint (nuint index)
+		{
+			global::System.Numerics.Vector2 ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.xamarin_simd__Vector2_objc_msgSend_UIntPtr (this.Handle, selPointAtIndex_XHandle, index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.xamarin_simd__Vector2_objc_msgSendSuper_UIntPtr (&__objc_super__, selPointAtIndex_XHandle, index);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		/// <param name="index">To be added.</param><summary>Returns a 2-dimensional vector for the node at the specified <paramref name="index" />.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("float2AtIndex:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual global::System.Numerics.Vector2 GetVector2Point (nuint index)
+		{
+			global::System.Numerics.Vector2 ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.xamarin_simd__Vector2_objc_msgSend_UIntPtr (this.Handle, selFloat2AtIndex_XHandle, index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.xamarin_simd__Vector2_objc_msgSendSuper_UIntPtr (&__objc_super__, selFloat2AtIndex_XHandle, index);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		/// <param name="index">To be added.</param><summary>Returns a 3-dimensional vector for the node at the specified <paramref name="index" />.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("float3AtIndex:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual global::System.Numerics.Vector3 GetVector3Point (nuint index)
+		{
+			global::System.Numerics.Vector3 ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.xamarin_simd__Vector3_objc_msgSend_UIntPtr (this.Handle, selFloat3AtIndex_XHandle, index);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.xamarin_simd__Vector3_objc_msgSendSuper_UIntPtr (&__objc_super__, selFloat3AtIndex_XHandle, index);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("initWithFloat3Points:count:radius:cyclical:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal virtual nint _InitWithFloat3Points (nint points, nuint count, float radius, bool cyclical)
+		{
+			nint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr_UIntPtr_float_bool (this.Handle, selInitWithFloat3Points_Count_Radius_Cyclical_XHandle, points, count, radius, cyclical ? (byte) 1 : (byte) 0);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr_UIntPtr_float_bool (&__objc_super__, selInitWithFloat3Points_Count_Radius_Cyclical_XHandle, points, count, radius, cyclical ? (byte) 1 : (byte) 0);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("initWithPoints:count:radius:cyclical:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal virtual nint _InitWithPoints (nint points, nuint count, float radius, bool cyclical)
+		{
+			nint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr_UIntPtr_float_bool (this.Handle, selInitWithPoints_Count_Radius_Cyclical_XHandle, points, count, radius, cyclical ? (byte) 1 : (byte) 0);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr_UIntPtr_float_bool (&__objc_super__, selInitWithPoints_Count_Radius_Cyclical_XHandle, points, count, radius, cyclical ? (byte) 1 : (byte) 0);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		/// <summary>Whether the <see cref="T:GameplayKit.GKPath" />'s last point connects to the first point.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool Cyclical {
+			[Export ("isCyclical")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selIsCyclicalXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selIsCyclicalXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setCyclical:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetCyclical_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetCyclical_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint NumPoints {
+			[Export ("numPoints")]
+			get {
+				nuint ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend (this.Handle, selNumPointsXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper (&__objc_super__, selNumPointsXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual float Radius {
+			[Export ("radius")]
+			get {
+				float ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, selRadiusXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.float_objc_msgSendSuper (&__objc_super__, selRadiusXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setRadius:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_float (this.Handle, selSetRadius_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float (&__objc_super__, selSetRadius_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+	} /* class GKPath */
+}

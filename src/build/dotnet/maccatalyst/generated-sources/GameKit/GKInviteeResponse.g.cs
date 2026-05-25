@@ -1,0 +1,73 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using Metal;
+using CoreML;
+using AppKit;
+using MapKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using Messages;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using QuickLook;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using CoreMotion;
+using ObjCRuntime;
+using AddressBook;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace GameKit {
+	/// <summary>An enumeration whose values specify the possible responses of a remote player to a <see cref="T:GameKit.GKInvite" />.</summary><remarks>To be added.</remarks>
+	[ObsoletedOSPlatform ("ios18.4", "Use 'GKInviteRecipientResponse' instead.")]
+	[ObsoletedOSPlatform ("macos15.4", "Use 'GKInviteRecipientResponse' instead.")]
+	[ObsoletedOSPlatform ("tvos18.4", "Use 'GKInviteRecipientResponse' instead.")]
+	[ObsoletedOSPlatform ("maccatalyst18.4", "Use 'GKInviteRecipientResponse' instead.")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[Native]
+	public enum GKInviteeResponse : long {
+		/// <summary>To be added.</summary>
+		Accepted = 0,
+		/// <summary>To be added.</summary>
+		Declined = 1,
+		/// <summary>To be added.</summary>
+		Failed = 2,
+		/// <summary>To be added.</summary>
+		Incompatible = 3,
+		/// <summary>To be added.</summary>
+		UnableToConnect = 4,
+		/// <summary>To be added.</summary>
+		NoAnswer = 5,
+	}
+}

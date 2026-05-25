@@ -1,0 +1,66 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using GLKit;
+using Metal;
+using CoreML;
+using MapKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using Messages;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using QuickLook;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using CoreMotion;
+using ObjCRuntime;
+using AddressBook;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using NewsstandKit;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace HomeKit {
+	/// <summary>Enumerates the possible states of a <see cref="T:HomeKit.HMEventTrigger" /> including reasons why it might not be enabled.</summary>
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[Native]
+	public enum HMEventTriggerActivationState : ulong {
+		/// <summary>To be added.</summary>
+		Disabled = 0,
+		/// <summary>To be added.</summary>
+		DisabledNoHomeHub = 1,
+		/// <summary>To be added.</summary>
+		DisabledNoCompatibleHomeHub = 2,
+		/// <summary>To be added.</summary>
+		DisabledNoLocationServicesAuthorization = 3,
+		/// <summary>To be added.</summary>
+		Enabled = 4,
+	}
+}

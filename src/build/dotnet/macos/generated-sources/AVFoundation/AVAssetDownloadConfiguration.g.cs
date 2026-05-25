@@ -1,0 +1,341 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace AVFoundation {
+	[Register("AVAssetDownloadConfiguration", true)]
+	[SupportedOSPlatform ("tvos15.0")]
+	[SupportedOSPlatform ("ios15.0")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class AVAssetDownloadConfiguration : NSObject {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selArtworkDataX = "artworkData";
+		static readonly NativeHandle selArtworkDataXHandle = Selector.GetHandle ("artworkData");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAuxiliaryContentConfigurationsX = "auxiliaryContentConfigurations";
+		static readonly NativeHandle selAuxiliaryContentConfigurationsXHandle = Selector.GetHandle ("auxiliaryContentConfigurations");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDownloadConfigurationWithAsset_Title_X = "downloadConfigurationWithAsset:title:";
+		static readonly NativeHandle selDownloadConfigurationWithAsset_Title_XHandle = Selector.GetHandle ("downloadConfigurationWithAsset:title:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDownloadsInterstitialAssetsX = "downloadsInterstitialAssets";
+		static readonly NativeHandle selDownloadsInterstitialAssetsXHandle = Selector.GetHandle ("downloadsInterstitialAssets");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selOptimizesAuxiliaryContentConfigurationsX = "optimizesAuxiliaryContentConfigurations";
+		static readonly NativeHandle selOptimizesAuxiliaryContentConfigurationsXHandle = Selector.GetHandle ("optimizesAuxiliaryContentConfigurations");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPrimaryContentConfigurationX = "primaryContentConfiguration";
+		static readonly NativeHandle selPrimaryContentConfigurationXHandle = Selector.GetHandle ("primaryContentConfiguration");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetArtworkData_X = "setArtworkData:";
+		static readonly NativeHandle selSetArtworkData_XHandle = Selector.GetHandle ("setArtworkData:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetAuxiliaryContentConfigurations_X = "setAuxiliaryContentConfigurations:";
+		static readonly NativeHandle selSetAuxiliaryContentConfigurations_XHandle = Selector.GetHandle ("setAuxiliaryContentConfigurations:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetDownloadsInterstitialAssets_X = "setDownloadsInterstitialAssets:";
+		static readonly NativeHandle selSetDownloadsInterstitialAssets_XHandle = Selector.GetHandle ("setDownloadsInterstitialAssets:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetInterstitialMediaSelectionCriteria_ForMediaCharacteristic_X = "setInterstitialMediaSelectionCriteria:forMediaCharacteristic:";
+		static readonly NativeHandle selSetInterstitialMediaSelectionCriteria_ForMediaCharacteristic_XHandle = Selector.GetHandle ("setInterstitialMediaSelectionCriteria:forMediaCharacteristic:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetOptimizesAuxiliaryContentConfigurations_X = "setOptimizesAuxiliaryContentConfigurations:";
+		static readonly NativeHandle selSetOptimizesAuxiliaryContentConfigurations_XHandle = Selector.GetHandle ("setOptimizesAuxiliaryContentConfigurations:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("AVAssetDownloadConfiguration");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected AVAssetDownloadConfiguration (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal AVAssetDownloadConfiguration (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("downloadConfigurationWithAsset:title:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static AVAssetDownloadConfiguration Create (AVUrlAsset asset, string title)
+		{
+			var asset__handle__ = asset!.GetNonNullHandle (nameof (asset));
+			if (title is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (title));
+			var nstitle = CFString.CreateNative (title);
+			AVAssetDownloadConfiguration? ret;
+			ret =  Runtime.GetNSObject<AVAssetDownloadConfiguration> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (class_ptr, selDownloadConfigurationWithAsset_Title_XHandle, asset__handle__, nstitle), false)!;
+			GC.KeepAlive (asset);
+			CFString.ReleaseNative (nstitle);
+			return ret!;
+		}
+		[Export ("setInterstitialMediaSelectionCriteria:forMediaCharacteristic:")]
+		[SupportedOSPlatform ("ios18.4")]
+		[SupportedOSPlatform ("tvos18.4")]
+		[SupportedOSPlatform ("maccatalyst18.4")]
+		[SupportedOSPlatform ("macos15.4")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetInterstitialMediaSelectionCriteria (AVPlayerMediaSelectionCriteria[] criteria, [BindAs (typeof (AVMediaCharacteristics), OriginalType = typeof (NSString))] global::AVFoundation.AVMediaCharacteristics mediaCharacteristic)
+		{
+			if (criteria is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (criteria));
+			using var nsa_criteria = NSArray.FromNSObjects (criteria);
+			using var nsb_mediaCharacteristic = global::AVFoundation.AVMediaCharacteristicsExtensions.GetConstant (mediaCharacteristic);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selSetInterstitialMediaSelectionCriteria_ForMediaCharacteristic_XHandle, nsa_criteria.Handle, nsb_mediaCharacteristic.GetHandle ());
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selSetInterstitialMediaSelectionCriteria_ForMediaCharacteristic_XHandle, nsa_criteria.Handle, nsb_mediaCharacteristic.GetHandle ());
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSData? ArtworkData {
+			[Export ("artworkData", ArgumentSemantic.Copy)]
+			get {
+				NSData? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSData> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selArtworkDataXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSData> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selArtworkDataXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setArtworkData:", ArgumentSemantic.Copy)]
+			set {
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetArtworkData_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetArtworkData_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual AVAssetDownloadContentConfiguration[] AuxiliaryContentConfigurations {
+			[Export ("auxiliaryContentConfigurations", ArgumentSemantic.Copy)]
+			get {
+				AVAssetDownloadContentConfiguration[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<AVAssetDownloadContentConfiguration>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selAuxiliaryContentConfigurationsXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<AVAssetDownloadContentConfiguration>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selAuxiliaryContentConfigurationsXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setAuxiliaryContentConfigurations:", ArgumentSemantic.Copy)]
+			set {
+				if (value is null)
+					ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (value));
+				using var nsa_value = NSArray.FromNSObjects (value);
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetAuxiliaryContentConfigurations_XHandle, nsa_value.Handle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetAuxiliaryContentConfigurations_XHandle, nsa_value.Handle);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[SupportedOSPlatform ("macos15.0")]
+		[SupportedOSPlatform ("ios18.0")]
+		public virtual bool DownloadsInterstitialAssets {
+			[Export ("downloadsInterstitialAssets")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selDownloadsInterstitialAssetsXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selDownloadsInterstitialAssetsXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setDownloadsInterstitialAssets:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetDownloadsInterstitialAssets_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetDownloadsInterstitialAssets_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool OptimizesAuxiliaryContentConfigurations {
+			[Export ("optimizesAuxiliaryContentConfigurations")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selOptimizesAuxiliaryContentConfigurationsXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selOptimizesAuxiliaryContentConfigurationsXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setOptimizesAuxiliaryContentConfigurations:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetOptimizesAuxiliaryContentConfigurations_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetOptimizesAuxiliaryContentConfigurations_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual AVAssetDownloadContentConfiguration PrimaryContentConfiguration {
+			[Export ("primaryContentConfiguration")]
+			get {
+				AVAssetDownloadContentConfiguration? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<AVAssetDownloadContentConfiguration> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selPrimaryContentConfigurationXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<AVAssetDownloadContentConfiguration> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selPrimaryContentConfigurationXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+	} /* class AVAssetDownloadConfiguration */
+}

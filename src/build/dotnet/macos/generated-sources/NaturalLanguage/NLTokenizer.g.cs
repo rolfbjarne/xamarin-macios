@@ -1,0 +1,320 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace NaturalLanguage {
+	/// <summary>Breaks a text up into semantic units.</summary>
+	[Register("NLTokenizer", true)]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
+	public unsafe partial class NLTokenizer : NSObject {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selEnumerateTokensInRange_UsingBlock_X = "enumerateTokensInRange:usingBlock:";
+		static readonly NativeHandle selEnumerateTokensInRange_UsingBlock_XHandle = Selector.GetHandle ("enumerateTokensInRange:usingBlock:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithUnit_X = "initWithUnit:";
+		static readonly NativeHandle selInitWithUnit_XHandle = Selector.GetHandle ("initWithUnit:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetLanguage_X = "setLanguage:";
+		static readonly NativeHandle selSetLanguage_XHandle = Selector.GetHandle ("setLanguage:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetString_X = "setString:";
+		static readonly NativeHandle selSetString_XHandle = Selector.GetHandle ("setString:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selStringX = "string";
+		static readonly NativeHandle selStringXHandle = Selector.GetHandle ("string");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTokenRangeAtIndex_X = "tokenRangeAtIndex:";
+		static readonly NativeHandle selTokenRangeAtIndex_XHandle = Selector.GetHandle ("tokenRangeAtIndex:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTokenRangeForRange_X = "tokenRangeForRange:";
+		static readonly NativeHandle selTokenRangeForRange_XHandle = Selector.GetHandle ("tokenRangeForRange:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTokensForRange_X = "tokensForRange:";
+		static readonly NativeHandle selTokensForRange_XHandle = Selector.GetHandle ("tokensForRange:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selUnitX = "unit";
+		static readonly NativeHandle selUnitXHandle = Selector.GetHandle ("unit");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("NLTokenizer");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected NLTokenizer (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal NLTokenizer (NativeHandle handle) : base (handle)
+		{
+		}
+
+		/// <param name="unit">The unit into which the tokenizer will separate text.</param><summary>Creates a new tokenizer that breaks text up into the specified semantic <paramref name="unit" />s.</summary><remarks>To be added.</remarks>
+		[Export ("initWithUnit:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public NLTokenizer (NLTokenUnit unit)
+			: base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_IntPtr (this.Handle, selInitWithUnit_XHandle, (IntPtr) (long) unit), "initWithUnit:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_IntPtr (&__objc_super__, selInitWithUnit_XHandle, (IntPtr) (long) unit), "initWithUnit:");
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <param name="range">The lexical range over which to get tokens.</param><param name="handler">A handler to run on each token.</param><summary>Enumerates tokens for the specified range in the text.</summary><remarks>To be added.</remarks>
+		[Export ("enumerateTokensInRange:usingBlock:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void EnumerateTokens (NSRange range, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDNLTokenizerEnumerateContinuationHandler))]NLTokenizerEnumerateContinuationHandler handler)
+		{
+			if (handler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (handler));
+			using var block_handler = Trampolines.SDNLTokenizerEnumerateContinuationHandler.CreateBlock (handler);
+			BlockLiteral *block_ptr_handler = &block_handler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NSRange_NativeHandle (this.Handle, selEnumerateTokensInRange_UsingBlock_XHandle, range, (IntPtr) block_ptr_handler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NSRange_NativeHandle (&__objc_super__, selEnumerateTokensInRange_UsingBlock_XHandle, range, (IntPtr) block_ptr_handler);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <param name="characterIndex">The index of a character that is covered by a token.</param><summary>Gets the range of the token that covers the specified character index.</summary><returns>The range of the token that covers the specified character index.</returns><remarks>To be added.</remarks>
+		[Export ("tokenRangeAtIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSRange GetTokenRange (nuint characterIndex)
+		{
+			NSRange ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.NSRange_objc_msgSend_UIntPtr (this.Handle, selTokenRangeAtIndex_XHandle, characterIndex);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.NSRange_objc_msgSendSuper_UIntPtr (&__objc_super__, selTokenRangeAtIndex_XHandle, characterIndex);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("tokenRangeForRange:")]
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSRange GetTokenRange (NSRange range)
+		{
+			NSRange ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.NSRange_objc_msgSend_NSRange (this.Handle, selTokenRangeForRange_XHandle, range);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.NSRange_objc_msgSendSuper_NSRange (&__objc_super__, selTokenRangeForRange_XHandle, range);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		/// <param name="range">The range for which to return all tokens.</param><summary>Tokenizes the specified range of text.</summary><returns>Tokens for the specified range.</returns><remarks>To be added.</remarks>
+		[Export ("tokensForRange:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSValue[] GetTokens (NSRange range)
+		{
+			NSValue[] ret;
+			if (IsDirectBinding) {
+				ret = CFArray.ArrayFromHandle<NSValue>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NSRange (this.Handle, selTokensForRange_XHandle, range), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = CFArray.ArrayFromHandle<NSValue>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NSRange (&__objc_super__, selTokensForRange_XHandle, range), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		/// <param name="language">The language value to set.</param><summary>Sets the language that the tokenizer will use when processing the string.</summary><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public void SetLanguage (NLLanguage language)
+		{
+			_SetLanguage (language.GetConstant ()!);
+		}
+		[Export ("setLanguage:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal virtual void _SetLanguage (NSString language)
+		{
+			var language__handle__ = language!.GetNonNullHandle (nameof (language));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetLanguage_XHandle, language__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetLanguage_XHandle, language__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (language);
+		}
+		/// <summary>Gets or sets the string to process.</summary><value>The string to process.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual string? String {
+			[Export ("string", ArgumentSemantic.Retain)]
+			get {
+				string ret;
+				if (IsDirectBinding) {
+					ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selStringXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selStringXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setString:", ArgumentSemantic.Retain)]
+			set {
+				var nsvalue = CFString.CreateNative (value);
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetString_XHandle, nsvalue);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetString_XHandle, nsvalue);
+						GC.KeepAlive (this);
+					}
+				}
+				CFString.ReleaseNative (nsvalue);
+			}
+		}
+		/// <summary>Gets the semantic unit of the tokens that this tokenizer returns.</summary><value>The semantic unit of the tokens that this tokenizer returns.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NLTokenUnit Unit {
+			[Export ("unit")]
+			get {
+				NLTokenUnit ret;
+				if (IsDirectBinding) {
+					ret = (NaturalLanguage.NLTokenUnit) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, selUnitXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = (NaturalLanguage.NLTokenUnit) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, selUnitXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+	} /* class NLTokenizer */
+}

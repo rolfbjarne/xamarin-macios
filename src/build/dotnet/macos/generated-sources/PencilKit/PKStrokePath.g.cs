@@ -1,0 +1,403 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace PencilKit {
+	[Register("PKStrokePath", true)]
+	[SupportedOSPlatform ("ios14.0")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class PKStrokePath : NSObject, INSCopying {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCopyWithZone_X = "copyWithZone:";
+		static readonly NativeHandle selCopyWithZone_XHandle = Selector.GetHandle ("copyWithZone:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCountX = "count";
+		static readonly NativeHandle selCountXHandle = Selector.GetHandle ("count");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCreationDateX = "creationDate";
+		static readonly NativeHandle selCreationDateXHandle = Selector.GetHandle ("creationDate");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selEnumerateInterpolatedPointsInRange_StrideByDistance_UsingBlock_X = "enumerateInterpolatedPointsInRange:strideByDistance:usingBlock:";
+		static readonly NativeHandle selEnumerateInterpolatedPointsInRange_StrideByDistance_UsingBlock_XHandle = Selector.GetHandle ("enumerateInterpolatedPointsInRange:strideByDistance:usingBlock:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selEnumerateInterpolatedPointsInRange_StrideByParametricStep_UsingBlock_X = "enumerateInterpolatedPointsInRange:strideByParametricStep:usingBlock:";
+		static readonly NativeHandle selEnumerateInterpolatedPointsInRange_StrideByParametricStep_UsingBlock_XHandle = Selector.GetHandle ("enumerateInterpolatedPointsInRange:strideByParametricStep:usingBlock:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selEnumerateInterpolatedPointsInRange_StrideByTime_UsingBlock_X = "enumerateInterpolatedPointsInRange:strideByTime:usingBlock:";
+		static readonly NativeHandle selEnumerateInterpolatedPointsInRange_StrideByTime_UsingBlock_XHandle = Selector.GetHandle ("enumerateInterpolatedPointsInRange:strideByTime:usingBlock:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithControlPoints_CreationDate_X = "initWithControlPoints:creationDate:";
+		static readonly NativeHandle selInitWithControlPoints_CreationDate_XHandle = Selector.GetHandle ("initWithControlPoints:creationDate:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInterpolatedLocationAt_X = "interpolatedLocationAt:";
+		static readonly NativeHandle selInterpolatedLocationAt_XHandle = Selector.GetHandle ("interpolatedLocationAt:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInterpolatedPointAt_X = "interpolatedPointAt:";
+		static readonly NativeHandle selInterpolatedPointAt_XHandle = Selector.GetHandle ("interpolatedPointAt:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selObjectAtIndexedSubscript_X = "objectAtIndexedSubscript:";
+		static readonly NativeHandle selObjectAtIndexedSubscript_XHandle = Selector.GetHandle ("objectAtIndexedSubscript:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selParametricValue_OffsetByDistance_X = "parametricValue:offsetByDistance:";
+		static readonly NativeHandle selParametricValue_OffsetByDistance_XHandle = Selector.GetHandle ("parametricValue:offsetByDistance:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selParametricValue_OffsetByTime_X = "parametricValue:offsetByTime:";
+		static readonly NativeHandle selParametricValue_OffsetByTime_XHandle = Selector.GetHandle ("parametricValue:offsetByTime:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPointAtIndex_X = "pointAtIndex:";
+		static readonly NativeHandle selPointAtIndex_XHandle = Selector.GetHandle ("pointAtIndex:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("PKStrokePath");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected PKStrokePath (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal PKStrokePath (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("initWithControlPoints:creationDate:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public PKStrokePath (PKStrokePoint[] controlPoints, NSDate creationDate)
+			: base (NSObjectFlag.Empty)
+		{
+			if (controlPoints is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (controlPoints));
+			var creationDate__handle__ = creationDate!.GetNonNullHandle (nameof (creationDate));
+			using var nsa_controlPoints = NSArray.FromNSObjects (controlPoints);
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selInitWithControlPoints_CreationDate_XHandle, nsa_controlPoints.Handle, creationDate__handle__), "initWithControlPoints:creationDate:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selInitWithControlPoints_CreationDate_XHandle, nsa_controlPoints.Handle, creationDate__handle__), "initWithControlPoints:creationDate:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (creationDate);
+		}
+		/// <param name="zone">Developers should pass <see langword="null" />.  Memory zones are no longer used.</param><summary>Performs a copy of the underlying Objective-C object.</summary><returns>The newly-allocated object.</returns><remarks><para>This method performs a "shallow copy" of <see langword="this" />. If this object contains references to external objects, the new object will contain references to the same object.</para></remarks>
+		[Export ("copyWithZone:")]
+		[return: ReleaseAttribute ()]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[UnsupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSObject Copy (NSZone? zone)
+		{
+			var zone__handle__ = zone.GetHandle ();
+			NSObject? ret;
+			if (IsDirectBinding) {
+				ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selCopyWithZone_XHandle, zone__handle__), true)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selCopyWithZone_XHandle, zone__handle__), true)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (zone);
+			return ret!;
+		}
+		[Export ("enumerateInterpolatedPointsInRange:strideByDistance:usingBlock:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void EnumerateInterpolatedPointsByDistanceStep (PKFloatRange range, nfloat distanceStep, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDPKInterpolatedPointsEnumeratorHandler))]PKInterpolatedPointsEnumeratorHandler enumeratorHandler)
+		{
+			var range__handle__ = range!.GetNonNullHandle (nameof (range));
+			if (enumeratorHandler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (enumeratorHandler));
+			using var block_enumeratorHandler = Trampolines.SDPKInterpolatedPointsEnumeratorHandler.CreateBlock (enumeratorHandler);
+			BlockLiteral *block_ptr_enumeratorHandler = &block_enumeratorHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_nfloat_NativeHandle (this.Handle, selEnumerateInterpolatedPointsInRange_StrideByDistance_UsingBlock_XHandle, range__handle__, distanceStep, (IntPtr) block_ptr_enumeratorHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_nfloat_NativeHandle (&__objc_super__, selEnumerateInterpolatedPointsInRange_StrideByDistance_UsingBlock_XHandle, range__handle__, distanceStep, (IntPtr) block_ptr_enumeratorHandler);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (range);
+		}
+		[Export ("enumerateInterpolatedPointsInRange:strideByParametricStep:usingBlock:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void EnumerateInterpolatedPointsByParametricStep (PKFloatRange range, nfloat parametricStep, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDPKInterpolatedPointsEnumeratorHandler))]PKInterpolatedPointsEnumeratorHandler enumeratorHandler)
+		{
+			var range__handle__ = range!.GetNonNullHandle (nameof (range));
+			if (enumeratorHandler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (enumeratorHandler));
+			using var block_enumeratorHandler = Trampolines.SDPKInterpolatedPointsEnumeratorHandler.CreateBlock (enumeratorHandler);
+			BlockLiteral *block_ptr_enumeratorHandler = &block_enumeratorHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_nfloat_NativeHandle (this.Handle, selEnumerateInterpolatedPointsInRange_StrideByParametricStep_UsingBlock_XHandle, range__handle__, parametricStep, (IntPtr) block_ptr_enumeratorHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_nfloat_NativeHandle (&__objc_super__, selEnumerateInterpolatedPointsInRange_StrideByParametricStep_UsingBlock_XHandle, range__handle__, parametricStep, (IntPtr) block_ptr_enumeratorHandler);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (range);
+		}
+		[Export ("enumerateInterpolatedPointsInRange:strideByTime:usingBlock:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void EnumerateInterpolatedPointsByTimeStep (PKFloatRange range, double timeStep, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDPKInterpolatedPointsEnumeratorHandler))]PKInterpolatedPointsEnumeratorHandler enumeratorHandler)
+		{
+			var range__handle__ = range!.GetNonNullHandle (nameof (range));
+			if (enumeratorHandler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (enumeratorHandler));
+			using var block_enumeratorHandler = Trampolines.SDPKInterpolatedPointsEnumeratorHandler.CreateBlock (enumeratorHandler);
+			BlockLiteral *block_ptr_enumeratorHandler = &block_enumeratorHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_Double_NativeHandle (this.Handle, selEnumerateInterpolatedPointsInRange_StrideByTime_UsingBlock_XHandle, range__handle__, timeStep, (IntPtr) block_ptr_enumeratorHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_Double_NativeHandle (&__objc_super__, selEnumerateInterpolatedPointsInRange_StrideByTime_UsingBlock_XHandle, range__handle__, timeStep, (IntPtr) block_ptr_enumeratorHandler);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (range);
+		}
+		[Export ("interpolatedLocationAt:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual CGPoint GetInterpolatedLocation (nfloat parametricValue)
+		{
+			CGPoint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.CGPoint_objc_msgSend_nfloat (this.Handle, selInterpolatedLocationAt_XHandle, parametricValue);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.CGPoint_objc_msgSendSuper_nfloat (&__objc_super__, selInterpolatedLocationAt_XHandle, parametricValue);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("interpolatedPointAt:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual PKStrokePoint GetInterpolatedPoint (nfloat parametricValue)
+		{
+			PKStrokePoint ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<PKStrokePoint> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_nfloat (this.Handle, selInterpolatedPointAt_XHandle, parametricValue), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<PKStrokePoint> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_nfloat (&__objc_super__, selInterpolatedPointAt_XHandle, parametricValue), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("objectAtIndexedSubscript:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual PKStrokePoint GetObject (nuint indexedSubscript)
+		{
+			PKStrokePoint ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<PKStrokePoint> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_UIntPtr (this.Handle, selObjectAtIndexedSubscript_XHandle, indexedSubscript), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<PKStrokePoint> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_UIntPtr (&__objc_super__, selObjectAtIndexedSubscript_XHandle, indexedSubscript), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("parametricValue:offsetByDistance:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nfloat GetParametricValue (nfloat parametricValue, nfloat distanceStep)
+		{
+			nfloat ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.nfloat_objc_msgSend_nfloat_nfloat (this.Handle, selParametricValue_OffsetByDistance_XHandle, parametricValue, distanceStep);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.nfloat_objc_msgSendSuper_nfloat_nfloat (&__objc_super__, selParametricValue_OffsetByDistance_XHandle, parametricValue, distanceStep);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("parametricValue:offsetByTime:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nfloat GetParametricValue (nfloat parametricValue, double timeStep)
+		{
+			nfloat ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.nfloat_objc_msgSend_nfloat_Double (this.Handle, selParametricValue_OffsetByTime_XHandle, parametricValue, timeStep);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.nfloat_objc_msgSendSuper_nfloat_Double (&__objc_super__, selParametricValue_OffsetByTime_XHandle, parametricValue, timeStep);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("pointAtIndex:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual PKStrokePoint GetPoint (nuint index)
+		{
+			PKStrokePoint ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<PKStrokePoint> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_UIntPtr (this.Handle, selPointAtIndex_XHandle, index), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<PKStrokePoint> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_UIntPtr (&__objc_super__, selPointAtIndex_XHandle, index), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint Count {
+			[Export ("count")]
+			get {
+				nuint ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend (this.Handle, selCountXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper (&__objc_super__, selCountXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSDate CreationDate {
+			[Export ("creationDate")]
+			get {
+				NSDate? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSDate> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selCreationDateXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSDate> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selCreationDateXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+	} /* class PKStrokePath */
+}

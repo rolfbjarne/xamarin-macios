@@ -1,0 +1,65 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace Photos {
+	/// <summary>Enumerates varieties of <see cref="T:Photos.PHAssetCollection" />.</summary>
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
+	[Native]
+	public enum PHAssetCollectionType : long {
+		/// <summary>A collection of related songs.</summary>
+		Album = 1,
+		/// <summary>A collection of songs whose relatedness was algorithmically determined.</summary>
+		SmartAlbum = 2,
+		/// <summary>A collection of photos taken at a particular time.</summary>
+		[ObsoletedOSPlatform ("ios13.0")]
+		[ObsoletedOSPlatform ("tvos13.0")]
+		[UnsupportedOSPlatform ("macos")]
+		[ObsoletedOSPlatform ("maccatalyst13.1")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		Moment = 3,
+	}
+}

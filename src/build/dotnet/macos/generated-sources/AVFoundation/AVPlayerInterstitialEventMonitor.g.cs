@@ -1,0 +1,1703 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace AVFoundation {
+	[Register("AVPlayerInterstitialEventMonitor", true)]
+	[SupportedOSPlatform ("tvos15.0")]
+	[SupportedOSPlatform ("ios15.0")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class AVPlayerInterstitialEventMonitor : NSObject {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCurrentEventX = "currentEvent";
+		static readonly NativeHandle selCurrentEventXHandle = Selector.GetHandle ("currentEvent");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCurrentEventSkipControlLabelX = "currentEventSkipControlLabel";
+		static readonly NativeHandle selCurrentEventSkipControlLabelXHandle = Selector.GetHandle ("currentEventSkipControlLabel");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCurrentEventSkippableStateX = "currentEventSkippableState";
+		static readonly NativeHandle selCurrentEventSkippableStateXHandle = Selector.GetHandle ("currentEventSkippableState");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selEventsX = "events";
+		static readonly NativeHandle selEventsXHandle = Selector.GetHandle ("events");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithPrimaryPlayer_X = "initWithPrimaryPlayer:";
+		static readonly NativeHandle selInitWithPrimaryPlayer_XHandle = Selector.GetHandle ("initWithPrimaryPlayer:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInterstitialEventMonitorWithPrimaryPlayer_X = "interstitialEventMonitorWithPrimaryPlayer:";
+		static readonly NativeHandle selInterstitialEventMonitorWithPrimaryPlayer_XHandle = Selector.GetHandle ("interstitialEventMonitorWithPrimaryPlayer:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInterstitialPlayerX = "interstitialPlayer";
+		static readonly NativeHandle selInterstitialPlayerXHandle = Selector.GetHandle ("interstitialPlayer");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPrimaryPlayerX = "primaryPlayer";
+		static readonly NativeHandle selPrimaryPlayerXHandle = Selector.GetHandle ("primaryPlayer");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("AVPlayerInterstitialEventMonitor");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected AVPlayerInterstitialEventMonitor (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal AVPlayerInterstitialEventMonitor (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("initWithPrimaryPlayer:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public AVPlayerInterstitialEventMonitor (AVPlayer primaryPlayer)
+			: base (NSObjectFlag.Empty)
+		{
+			var primaryPlayer__handle__ = primaryPlayer!.GetNonNullHandle (nameof (primaryPlayer));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selInitWithPrimaryPlayer_XHandle, primaryPlayer__handle__), "initWithPrimaryPlayer:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selInitWithPrimaryPlayer_XHandle, primaryPlayer__handle__), "initWithPrimaryPlayer:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (primaryPlayer);
+		}
+		[Export ("interstitialEventMonitorWithPrimaryPlayer:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static AVPlayerInterstitialEventMonitor InterstitialEventMonitorWithPrimaryPlayer (AVPlayer primaryPlayer)
+		{
+			var primaryPlayer__handle__ = primaryPlayer!.GetNonNullHandle (nameof (primaryPlayer));
+			AVPlayerInterstitialEventMonitor? ret;
+			ret =  Runtime.GetNSObject<AVPlayerInterstitialEventMonitor> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (class_ptr, selInterstitialEventMonitorWithPrimaryPlayer_XHandle, primaryPlayer__handle__), false)!;
+			GC.KeepAlive (primaryPlayer);
+			return ret!;
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual AVPlayerInterstitialEvent? CurrentEvent {
+			[Export ("currentEvent")]
+			get {
+				AVPlayerInterstitialEvent? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<AVPlayerInterstitialEvent> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selCurrentEventXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<AVPlayerInterstitialEvent> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selCurrentEventXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		public virtual string? CurrentEventSkipControlLabel {
+			[Export ("currentEventSkipControlLabel")]
+			get {
+				string ret;
+				if (IsDirectBinding) {
+					ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selCurrentEventSkipControlLabelXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selCurrentEventSkipControlLabelXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		public virtual AVPlayerInterstitialEventSkippableEventState CurrentEventSkippableState {
+			[Export ("currentEventSkippableState")]
+			get {
+				AVPlayerInterstitialEventSkippableEventState ret;
+				if (IsDirectBinding) {
+					ret = (AVPlayerInterstitialEventSkippableEventState) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, selCurrentEventSkippableStateXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = (AVPlayerInterstitialEventSkippableEventState) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, selCurrentEventSkippableStateXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual AVPlayerInterstitialEvent[] Events {
+			[Export ("events")]
+			get {
+				AVPlayerInterstitialEvent[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<AVPlayerInterstitialEvent>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selEventsXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<AVPlayerInterstitialEvent>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selEventsXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual AVQueuePlayer InterstitialPlayer {
+			[Export ("interstitialPlayer")]
+			get {
+				AVQueuePlayer? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<AVQueuePlayer> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selInterstitialPlayerXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<AVQueuePlayer> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selInterstitialPlayerXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		object? __mt_PrimaryPlayer_var;
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual AVPlayer? PrimaryPlayer {
+			[Export ("primaryPlayer", ArgumentSemantic.Weak)]
+			get {
+				AVPlayer? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<AVPlayer> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selPrimaryPlayerXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<AVPlayer> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selPrimaryPlayerXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				MarkDirty ();
+				__mt_PrimaryPlayer_var = ret;
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _AssetListResponseStatusDidChangeErrorKey;
+		/// <summary>Represents the value associated with the constant 'AVPlayerInterstitialEventMonitorAssetListResponseStatusDidChangeErrorKey'.</summary>
+		[Field ("AVPlayerInterstitialEventMonitorAssetListResponseStatusDidChangeErrorKey",  "AVFoundation")]
+		[SupportedOSPlatform ("tvos16.4")]
+		[SupportedOSPlatform ("macos13.3")]
+		[SupportedOSPlatform ("ios16.4")]
+		[SupportedOSPlatform ("maccatalyst16.4")]
+		public static NSString AssetListResponseStatusDidChangeErrorKey {
+			[SupportedOSPlatform ("tvos16.4")]
+			[SupportedOSPlatform ("macos13.3")]
+			[SupportedOSPlatform ("ios16.4")]
+			[SupportedOSPlatform ("maccatalyst16.4")]
+			get {
+				if (_AssetListResponseStatusDidChangeErrorKey is null)
+					_AssetListResponseStatusDidChangeErrorKey = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorAssetListResponseStatusDidChangeErrorKey")!;
+				return _AssetListResponseStatusDidChangeErrorKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _AssetListResponseStatusDidChangeEventKey;
+		/// <summary>Represents the value associated with the constant 'AVPlayerInterstitialEventMonitorAssetListResponseStatusDidChangeEventKey'.</summary>
+		[Field ("AVPlayerInterstitialEventMonitorAssetListResponseStatusDidChangeEventKey",  "AVFoundation")]
+		[SupportedOSPlatform ("tvos16.4")]
+		[SupportedOSPlatform ("macos13.3")]
+		[SupportedOSPlatform ("ios16.4")]
+		[SupportedOSPlatform ("maccatalyst16.4")]
+		public static NSString AssetListResponseStatusDidChangeEventKey {
+			[SupportedOSPlatform ("tvos16.4")]
+			[SupportedOSPlatform ("macos13.3")]
+			[SupportedOSPlatform ("ios16.4")]
+			[SupportedOSPlatform ("maccatalyst16.4")]
+			get {
+				if (_AssetListResponseStatusDidChangeEventKey is null)
+					_AssetListResponseStatusDidChangeEventKey = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorAssetListResponseStatusDidChangeEventKey")!;
+				return _AssetListResponseStatusDidChangeEventKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _AssetListResponseStatusDidChangeNotification;
+		/// <summary>Notification constant for AssetListResponseStatusDidChange</summary>
+		/// <value><see cref="NSString" /> constant, should be used as a token to <see cref="NSNotificationCenter" />.</value>
+		/// <remarks>
+		///   <para>
+		///     This constant can be used with <see cref="NSNotificationCenter" /> to register a listener for this notification.
+		///     This is an <see cref="NSString" /> instead of a string, because these values can be used as tokens in some native
+		///     libraries instead of being used purely for their actual string content. The 'notification' parameter to the callback
+		///     contains extra information that is specific to the notification type.
+		///   </para>
+		///   <para>
+		///     To subscribe to this notification, developers can use the convenience <see cref="Notifications.ObserveAssetListResponseStatusDidChange(NSObject,EventHandler{NSNotificationEventArgs})" />
+		///     or <see cref="Notifications.ObserveAssetListResponseStatusDidChange(EventHandler{NSNotificationEventArgs})" /> methods,
+		///     which offers strongly typed access to the parameters of the notification.
+		///   </para>
+		///   <para>
+		///     The following example shows how to use the strongly typed <see cref="Notifications" /> class, to take the guesswork
+		///     out of the available properties in the notification:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // Lambda style
+		/// //
+		///
+		/// // listening
+		/// notification = AVPlayerInterstitialEventMonitor.Notifications.ObserveAssetListResponseStatusDidChange ((sender, args) => {
+		/// /* Access strongly typed args */
+		/// Console.WriteLine ("Notification: {0}", args.Notification);
+		/// });
+		///
+		/// // To stop listening:
+		/// notification.Dispose ();
+		///
+		/// //
+		/// // Method style
+		/// //
+		/// NSObject notification;
+		/// void Callback (object sender, AVPlayerInterstitialEventMonitor.NSNotificationEventArgs args)
+		/// {
+		///     // Access strongly typed args
+		///     Console.WriteLine ("Notification: {0}", args.Notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     notification = AVPlayerInterstitialEventMonitor.Notifications.ObserveAssetListResponseStatusDidChange (Callback);
+		/// }
+		///
+		/// void Teardown ()
+		/// {
+		///     notification.Dispose ();
+		/// }]]></code>
+		///   </example>
+		///   <para>
+		///     The following example shows how to use the notification with the DefaultCenter API:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// // Lambda style
+		/// NSNotificationCenter.DefaultCenter.AddObserver (
+		///     AVPlayerInterstitialEventMonitor.AssetListResponseStatusDidChangeNotification, (notification) => { Console.WriteLine ("Received the notification AssetListResponseStatusDidChange", notification); }
+		/// );
+		///
+		/// // Method style
+		/// void Callback (NSNotification notification)
+		/// {
+		///     Console.WriteLine ("Received the notification AssetListResponseStatusDidChange", notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     NSNotificationCenter.DefaultCenter.AddObserver (AVPlayerInterstitialEventMonitor.AssetListResponseStatusDidChangeNotification, Callback);
+		/// }
+		/// ]]></code>
+		///   </example>
+		/// </remarks>
+		[Field ("AVPlayerInterstitialEventMonitorAssetListResponseStatusDidChangeNotification",  "AVFoundation")]
+		[SupportedOSPlatform ("tvos16.4")]
+		[SupportedOSPlatform ("macos13.3")]
+		[SupportedOSPlatform ("ios16.4")]
+		[SupportedOSPlatform ("maccatalyst16.4")]
+		[Advice ("Use AVPlayerInterstitialEventMonitor.Notifications.ObserveAssetListResponseStatusDidChange helper method instead.")]
+		public static NSString AssetListResponseStatusDidChangeNotification {
+			[SupportedOSPlatform ("tvos16.4")]
+			[SupportedOSPlatform ("macos13.3")]
+			[SupportedOSPlatform ("ios16.4")]
+			[SupportedOSPlatform ("maccatalyst16.4")]
+			get {
+				if (_AssetListResponseStatusDidChangeNotification is null)
+					_AssetListResponseStatusDidChangeNotification = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorAssetListResponseStatusDidChangeNotification")!;
+				return _AssetListResponseStatusDidChangeNotification;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _AssetListResponseStatusDidChangeStatusKey;
+		/// <summary>Represents the value associated with the constant 'AVPlayerInterstitialEventMonitorAssetListResponseStatusDidChangeStatusKey'.</summary>
+		[Field ("AVPlayerInterstitialEventMonitorAssetListResponseStatusDidChangeStatusKey",  "AVFoundation")]
+		[SupportedOSPlatform ("tvos16.4")]
+		[SupportedOSPlatform ("macos13.3")]
+		[SupportedOSPlatform ("ios16.4")]
+		[SupportedOSPlatform ("maccatalyst16.4")]
+		public static NSString AssetListResponseStatusDidChangeStatusKey {
+			[SupportedOSPlatform ("tvos16.4")]
+			[SupportedOSPlatform ("macos13.3")]
+			[SupportedOSPlatform ("ios16.4")]
+			[SupportedOSPlatform ("maccatalyst16.4")]
+			get {
+				if (_AssetListResponseStatusDidChangeStatusKey is null)
+					_AssetListResponseStatusDidChangeStatusKey = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorAssetListResponseStatusDidChangeStatusKey")!;
+				return _AssetListResponseStatusDidChangeStatusKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _CurrentEventDidChangeNotification;
+		/// <summary>Notification constant for CurrentEventDidChange</summary>
+		/// <value><see cref="NSString" /> constant, should be used as a token to <see cref="NSNotificationCenter" />.</value>
+		/// <remarks>
+		///   <para>
+		///     This constant can be used with <see cref="NSNotificationCenter" /> to register a listener for this notification.
+		///     This is an <see cref="NSString" /> instead of a string, because these values can be used as tokens in some native
+		///     libraries instead of being used purely for their actual string content. The 'notification' parameter to the callback
+		///     contains extra information that is specific to the notification type.
+		///   </para>
+		///   <para>
+		///     To subscribe to this notification, developers can use the convenience <see cref="Notifications.ObserveCurrentEventDidChange(NSObject,EventHandler{NSNotificationEventArgs})" />
+		///     or <see cref="Notifications.ObserveCurrentEventDidChange(EventHandler{NSNotificationEventArgs})" /> methods,
+		///     which offers strongly typed access to the parameters of the notification.
+		///   </para>
+		///   <para>
+		///     The following example shows how to use the strongly typed <see cref="Notifications" /> class, to take the guesswork
+		///     out of the available properties in the notification:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // Lambda style
+		/// //
+		///
+		/// // listening
+		/// notification = AVPlayerInterstitialEventMonitor.Notifications.ObserveCurrentEventDidChange ((sender, args) => {
+		/// /* Access strongly typed args */
+		/// Console.WriteLine ("Notification: {0}", args.Notification);
+		/// });
+		///
+		/// // To stop listening:
+		/// notification.Dispose ();
+		///
+		/// //
+		/// // Method style
+		/// //
+		/// NSObject notification;
+		/// void Callback (object sender, AVPlayerInterstitialEventMonitor.NSNotificationEventArgs args)
+		/// {
+		///     // Access strongly typed args
+		///     Console.WriteLine ("Notification: {0}", args.Notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     notification = AVPlayerInterstitialEventMonitor.Notifications.ObserveCurrentEventDidChange (Callback);
+		/// }
+		///
+		/// void Teardown ()
+		/// {
+		///     notification.Dispose ();
+		/// }]]></code>
+		///   </example>
+		///   <para>
+		///     The following example shows how to use the notification with the DefaultCenter API:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// // Lambda style
+		/// NSNotificationCenter.DefaultCenter.AddObserver (
+		///     AVPlayerInterstitialEventMonitor.CurrentEventDidChangeNotification, (notification) => { Console.WriteLine ("Received the notification CurrentEventDidChange", notification); }
+		/// );
+		///
+		/// // Method style
+		/// void Callback (NSNotification notification)
+		/// {
+		///     Console.WriteLine ("Received the notification CurrentEventDidChange", notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     NSNotificationCenter.DefaultCenter.AddObserver (AVPlayerInterstitialEventMonitor.CurrentEventDidChangeNotification, Callback);
+		/// }
+		/// ]]></code>
+		///   </example>
+		/// </remarks>
+		[Field ("AVPlayerInterstitialEventMonitorCurrentEventDidChangeNotification",  "AVFoundation")]
+		[SupportedOSPlatform ("tvos15.0")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[Advice ("Use AVPlayerInterstitialEventMonitor.Notifications.ObserveCurrentEventDidChange helper method instead.")]
+		public static NSString CurrentEventDidChangeNotification {
+			[SupportedOSPlatform ("tvos15.0")]
+			[SupportedOSPlatform ("ios15.0")]
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("macos")]
+			get {
+				if (_CurrentEventDidChangeNotification is null)
+					_CurrentEventDidChangeNotification = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorCurrentEventDidChangeNotification")!;
+				return _CurrentEventDidChangeNotification;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _CurrentEventSkippableStateDidChangeEventKey;
+		/// <summary>Represents the value associated with the constant 'AVPlayerInterstitialEventMonitorCurrentEventSkippableStateDidChangeEventKey'.</summary>
+		[Field ("AVPlayerInterstitialEventMonitorCurrentEventSkippableStateDidChangeEventKey",  "AVFoundation")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		public static NSString CurrentEventSkippableStateDidChangeEventKey {
+			[SupportedOSPlatform ("maccatalyst26.0")]
+			[SupportedOSPlatform ("tvos26.0")]
+			[SupportedOSPlatform ("macos26.0")]
+			[SupportedOSPlatform ("ios26.0")]
+			get {
+				if (_CurrentEventSkippableStateDidChangeEventKey is null)
+					_CurrentEventSkippableStateDidChangeEventKey = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorCurrentEventSkippableStateDidChangeEventKey")!;
+				return _CurrentEventSkippableStateDidChangeEventKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _CurrentEventSkippableStateDidChangeNotification;
+		/// <summary>Notification constant for CurrentEventSkippableStateDidChange</summary>
+		/// <value><see cref="NSString" /> constant, should be used as a token to <see cref="NSNotificationCenter" />.</value>
+		/// <remarks>
+		///   <para>
+		///     This constant can be used with <see cref="NSNotificationCenter" /> to register a listener for this notification.
+		///     This is an <see cref="NSString" /> instead of a string, because these values can be used as tokens in some native
+		///     libraries instead of being used purely for their actual string content. The 'notification' parameter to the callback
+		///     contains extra information that is specific to the notification type.
+		///   </para>
+		///   <para>
+		///     To subscribe to this notification, developers can use the convenience <see cref="Notifications.ObserveCurrentEventSkippableStateDidChange(NSObject,EventHandler{NSNotificationEventArgs})" />
+		///     or <see cref="Notifications.ObserveCurrentEventSkippableStateDidChange(EventHandler{NSNotificationEventArgs})" /> methods,
+		///     which offers strongly typed access to the parameters of the notification.
+		///   </para>
+		///   <para>
+		///     The following example shows how to use the strongly typed <see cref="Notifications" /> class, to take the guesswork
+		///     out of the available properties in the notification:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // Lambda style
+		/// //
+		///
+		/// // listening
+		/// notification = AVPlayerInterstitialEventMonitor.Notifications.ObserveCurrentEventSkippableStateDidChange ((sender, args) => {
+		/// /* Access strongly typed args */
+		/// Console.WriteLine ("Notification: {0}", args.Notification);
+		/// });
+		///
+		/// // To stop listening:
+		/// notification.Dispose ();
+		///
+		/// //
+		/// // Method style
+		/// //
+		/// NSObject notification;
+		/// void Callback (object sender, AVPlayerInterstitialEventMonitor.NSNotificationEventArgs args)
+		/// {
+		///     // Access strongly typed args
+		///     Console.WriteLine ("Notification: {0}", args.Notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     notification = AVPlayerInterstitialEventMonitor.Notifications.ObserveCurrentEventSkippableStateDidChange (Callback);
+		/// }
+		///
+		/// void Teardown ()
+		/// {
+		///     notification.Dispose ();
+		/// }]]></code>
+		///   </example>
+		///   <para>
+		///     The following example shows how to use the notification with the DefaultCenter API:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// // Lambda style
+		/// NSNotificationCenter.DefaultCenter.AddObserver (
+		///     AVPlayerInterstitialEventMonitor.CurrentEventSkippableStateDidChangeNotification, (notification) => { Console.WriteLine ("Received the notification CurrentEventSkippableStateDidChange", notification); }
+		/// );
+		///
+		/// // Method style
+		/// void Callback (NSNotification notification)
+		/// {
+		///     Console.WriteLine ("Received the notification CurrentEventSkippableStateDidChange", notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     NSNotificationCenter.DefaultCenter.AddObserver (AVPlayerInterstitialEventMonitor.CurrentEventSkippableStateDidChangeNotification, Callback);
+		/// }
+		/// ]]></code>
+		///   </example>
+		/// </remarks>
+		[Field ("AVPlayerInterstitialEventMonitorCurrentEventSkippableStateDidChangeNotification",  "AVFoundation")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		[Advice ("Use AVPlayerInterstitialEventMonitor.Notifications.ObserveCurrentEventSkippableStateDidChange helper method instead.")]
+		public static NSString CurrentEventSkippableStateDidChangeNotification {
+			[SupportedOSPlatform ("maccatalyst26.0")]
+			[SupportedOSPlatform ("tvos26.0")]
+			[SupportedOSPlatform ("macos26.0")]
+			[SupportedOSPlatform ("ios26.0")]
+			get {
+				if (_CurrentEventSkippableStateDidChangeNotification is null)
+					_CurrentEventSkippableStateDidChangeNotification = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorCurrentEventSkippableStateDidChangeNotification")!;
+				return _CurrentEventSkippableStateDidChangeNotification;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _CurrentEventSkippableStateDidChangeSkipControlLabelKey;
+		/// <summary>Represents the value associated with the constant 'AVPlayerInterstitialEventMonitorCurrentEventSkippableStateDidChangeSkipControlLabelKey'.</summary>
+		[Field ("AVPlayerInterstitialEventMonitorCurrentEventSkippableStateDidChangeSkipControlLabelKey",  "AVFoundation")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		public static NSString CurrentEventSkippableStateDidChangeSkipControlLabelKey {
+			[SupportedOSPlatform ("maccatalyst26.0")]
+			[SupportedOSPlatform ("tvos26.0")]
+			[SupportedOSPlatform ("macos26.0")]
+			[SupportedOSPlatform ("ios26.0")]
+			get {
+				if (_CurrentEventSkippableStateDidChangeSkipControlLabelKey is null)
+					_CurrentEventSkippableStateDidChangeSkipControlLabelKey = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorCurrentEventSkippableStateDidChangeSkipControlLabelKey")!;
+				return _CurrentEventSkippableStateDidChangeSkipControlLabelKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _CurrentEventSkippableStateDidChangeStateKey;
+		/// <summary>Represents the value associated with the constant 'AVPlayerInterstitialEventMonitorCurrentEventSkippableStateDidChangeStateKey'.</summary>
+		[Field ("AVPlayerInterstitialEventMonitorCurrentEventSkippableStateDidChangeStateKey",  "AVFoundation")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		public static NSString CurrentEventSkippableStateDidChangeStateKey {
+			[SupportedOSPlatform ("maccatalyst26.0")]
+			[SupportedOSPlatform ("tvos26.0")]
+			[SupportedOSPlatform ("macos26.0")]
+			[SupportedOSPlatform ("ios26.0")]
+			get {
+				if (_CurrentEventSkippableStateDidChangeStateKey is null)
+					_CurrentEventSkippableStateDidChangeStateKey = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorCurrentEventSkippableStateDidChangeStateKey")!;
+				return _CurrentEventSkippableStateDidChangeStateKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _CurrentEventSkippedEventKey;
+		/// <summary>Represents the value associated with the constant 'AVPlayerInterstitialEventMonitorCurrentEventSkippedEventKey'.</summary>
+		[Field ("AVPlayerInterstitialEventMonitorCurrentEventSkippedEventKey",  "AVFoundation")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		public static NSString CurrentEventSkippedEventKey {
+			[SupportedOSPlatform ("maccatalyst26.0")]
+			[SupportedOSPlatform ("tvos26.0")]
+			[SupportedOSPlatform ("macos26.0")]
+			[SupportedOSPlatform ("ios26.0")]
+			get {
+				if (_CurrentEventSkippedEventKey is null)
+					_CurrentEventSkippedEventKey = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorCurrentEventSkippedEventKey")!;
+				return _CurrentEventSkippedEventKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _CurrentEventSkippedNotification;
+		/// <summary>Notification constant for CurrentEventSkipped</summary>
+		/// <value><see cref="NSString" /> constant, should be used as a token to <see cref="NSNotificationCenter" />.</value>
+		/// <remarks>
+		///   <para>
+		///     This constant can be used with <see cref="NSNotificationCenter" /> to register a listener for this notification.
+		///     This is an <see cref="NSString" /> instead of a string, because these values can be used as tokens in some native
+		///     libraries instead of being used purely for their actual string content. The 'notification' parameter to the callback
+		///     contains extra information that is specific to the notification type.
+		///   </para>
+		///   <para>
+		///     To subscribe to this notification, developers can use the convenience <see cref="Notifications.ObserveCurrentEventSkipped(NSObject,EventHandler{NSNotificationEventArgs})" />
+		///     or <see cref="Notifications.ObserveCurrentEventSkipped(EventHandler{NSNotificationEventArgs})" /> methods,
+		///     which offers strongly typed access to the parameters of the notification.
+		///   </para>
+		///   <para>
+		///     The following example shows how to use the strongly typed <see cref="Notifications" /> class, to take the guesswork
+		///     out of the available properties in the notification:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // Lambda style
+		/// //
+		///
+		/// // listening
+		/// notification = AVPlayerInterstitialEventMonitor.Notifications.ObserveCurrentEventSkipped ((sender, args) => {
+		/// /* Access strongly typed args */
+		/// Console.WriteLine ("Notification: {0}", args.Notification);
+		/// });
+		///
+		/// // To stop listening:
+		/// notification.Dispose ();
+		///
+		/// //
+		/// // Method style
+		/// //
+		/// NSObject notification;
+		/// void Callback (object sender, AVPlayerInterstitialEventMonitor.NSNotificationEventArgs args)
+		/// {
+		///     // Access strongly typed args
+		///     Console.WriteLine ("Notification: {0}", args.Notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     notification = AVPlayerInterstitialEventMonitor.Notifications.ObserveCurrentEventSkipped (Callback);
+		/// }
+		///
+		/// void Teardown ()
+		/// {
+		///     notification.Dispose ();
+		/// }]]></code>
+		///   </example>
+		///   <para>
+		///     The following example shows how to use the notification with the DefaultCenter API:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// // Lambda style
+		/// NSNotificationCenter.DefaultCenter.AddObserver (
+		///     AVPlayerInterstitialEventMonitor.CurrentEventSkippedNotification, (notification) => { Console.WriteLine ("Received the notification CurrentEventSkipped", notification); }
+		/// );
+		///
+		/// // Method style
+		/// void Callback (NSNotification notification)
+		/// {
+		///     Console.WriteLine ("Received the notification CurrentEventSkipped", notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     NSNotificationCenter.DefaultCenter.AddObserver (AVPlayerInterstitialEventMonitor.CurrentEventSkippedNotification, Callback);
+		/// }
+		/// ]]></code>
+		///   </example>
+		/// </remarks>
+		[Field ("AVPlayerInterstitialEventMonitorCurrentEventSkippedNotification",  "AVFoundation")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		[Advice ("Use AVPlayerInterstitialEventMonitor.Notifications.ObserveCurrentEventSkipped helper method instead.")]
+		public static NSString CurrentEventSkippedNotification {
+			[SupportedOSPlatform ("maccatalyst26.0")]
+			[SupportedOSPlatform ("tvos26.0")]
+			[SupportedOSPlatform ("macos26.0")]
+			[SupportedOSPlatform ("ios26.0")]
+			get {
+				if (_CurrentEventSkippedNotification is null)
+					_CurrentEventSkippedNotification = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorCurrentEventSkippedNotification")!;
+				return _CurrentEventSkippedNotification;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _EventsDidChangeNotification;
+		/// <summary>Notification constant for EventsDidChange</summary>
+		/// <value><see cref="NSString" /> constant, should be used as a token to <see cref="NSNotificationCenter" />.</value>
+		/// <remarks>
+		///   <para>
+		///     This constant can be used with <see cref="NSNotificationCenter" /> to register a listener for this notification.
+		///     This is an <see cref="NSString" /> instead of a string, because these values can be used as tokens in some native
+		///     libraries instead of being used purely for their actual string content. The 'notification' parameter to the callback
+		///     contains extra information that is specific to the notification type.
+		///   </para>
+		///   <para>
+		///     To subscribe to this notification, developers can use the convenience <see cref="Notifications.ObserveEventsDidChange(NSObject,EventHandler{NSNotificationEventArgs})" />
+		///     or <see cref="Notifications.ObserveEventsDidChange(EventHandler{NSNotificationEventArgs})" /> methods,
+		///     which offers strongly typed access to the parameters of the notification.
+		///   </para>
+		///   <para>
+		///     The following example shows how to use the strongly typed <see cref="Notifications" /> class, to take the guesswork
+		///     out of the available properties in the notification:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // Lambda style
+		/// //
+		///
+		/// // listening
+		/// notification = AVPlayerInterstitialEventMonitor.Notifications.ObserveEventsDidChange ((sender, args) => {
+		/// /* Access strongly typed args */
+		/// Console.WriteLine ("Notification: {0}", args.Notification);
+		/// });
+		///
+		/// // To stop listening:
+		/// notification.Dispose ();
+		///
+		/// //
+		/// // Method style
+		/// //
+		/// NSObject notification;
+		/// void Callback (object sender, AVPlayerInterstitialEventMonitor.NSNotificationEventArgs args)
+		/// {
+		///     // Access strongly typed args
+		///     Console.WriteLine ("Notification: {0}", args.Notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     notification = AVPlayerInterstitialEventMonitor.Notifications.ObserveEventsDidChange (Callback);
+		/// }
+		///
+		/// void Teardown ()
+		/// {
+		///     notification.Dispose ();
+		/// }]]></code>
+		///   </example>
+		///   <para>
+		///     The following example shows how to use the notification with the DefaultCenter API:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// // Lambda style
+		/// NSNotificationCenter.DefaultCenter.AddObserver (
+		///     AVPlayerInterstitialEventMonitor.EventsDidChangeNotification, (notification) => { Console.WriteLine ("Received the notification EventsDidChange", notification); }
+		/// );
+		///
+		/// // Method style
+		/// void Callback (NSNotification notification)
+		/// {
+		///     Console.WriteLine ("Received the notification EventsDidChange", notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     NSNotificationCenter.DefaultCenter.AddObserver (AVPlayerInterstitialEventMonitor.EventsDidChangeNotification, Callback);
+		/// }
+		/// ]]></code>
+		///   </example>
+		/// </remarks>
+		[Field ("AVPlayerInterstitialEventMonitorEventsDidChangeNotification",  "AVFoundation")]
+		[SupportedOSPlatform ("tvos15.0")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[Advice ("Use AVPlayerInterstitialEventMonitor.Notifications.ObserveEventsDidChange helper method instead.")]
+		public static NSString EventsDidChangeNotification {
+			[SupportedOSPlatform ("tvos15.0")]
+			[SupportedOSPlatform ("ios15.0")]
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("macos")]
+			get {
+				if (_EventsDidChangeNotification is null)
+					_EventsDidChangeNotification = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorEventsDidChangeNotification")!;
+				return _EventsDidChangeNotification;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _InterstitialEventDidFinishDidPlayEntireEventKey;
+		/// <summary>Represents the value associated with the constant 'AVPlayerInterstitialEventMonitorInterstitialEventDidFinishDidPlayEntireEventKey'.</summary>
+		[Field ("AVPlayerInterstitialEventMonitorInterstitialEventDidFinishDidPlayEntireEventKey",  "AVFoundation")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		public static NSString InterstitialEventDidFinishDidPlayEntireEventKey {
+			[SupportedOSPlatform ("maccatalyst26.0")]
+			[SupportedOSPlatform ("tvos26.0")]
+			[SupportedOSPlatform ("macos26.0")]
+			[SupportedOSPlatform ("ios26.0")]
+			get {
+				if (_InterstitialEventDidFinishDidPlayEntireEventKey is null)
+					_InterstitialEventDidFinishDidPlayEntireEventKey = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorInterstitialEventDidFinishDidPlayEntireEventKey")!;
+				return _InterstitialEventDidFinishDidPlayEntireEventKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _InterstitialEventDidFinishEventKey;
+		/// <summary>Represents the value associated with the constant 'AVPlayerInterstitialEventMonitorInterstitialEventDidFinishEventKey'.</summary>
+		[Field ("AVPlayerInterstitialEventMonitorInterstitialEventDidFinishEventKey",  "AVFoundation")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		public static NSString InterstitialEventDidFinishEventKey {
+			[SupportedOSPlatform ("maccatalyst26.0")]
+			[SupportedOSPlatform ("tvos26.0")]
+			[SupportedOSPlatform ("macos26.0")]
+			[SupportedOSPlatform ("ios26.0")]
+			get {
+				if (_InterstitialEventDidFinishEventKey is null)
+					_InterstitialEventDidFinishEventKey = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorInterstitialEventDidFinishEventKey")!;
+				return _InterstitialEventDidFinishEventKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _InterstitialEventDidFinishNotification;
+		/// <summary>Notification constant for InterstitialEventDidFinish</summary>
+		/// <value><see cref="NSString" /> constant, should be used as a token to <see cref="NSNotificationCenter" />.</value>
+		/// <remarks>
+		///   <para>
+		///     This constant can be used with <see cref="NSNotificationCenter" /> to register a listener for this notification.
+		///     This is an <see cref="NSString" /> instead of a string, because these values can be used as tokens in some native
+		///     libraries instead of being used purely for their actual string content. The 'notification' parameter to the callback
+		///     contains extra information that is specific to the notification type.
+		///   </para>
+		///   <para>
+		///     To subscribe to this notification, developers can use the convenience <see cref="Notifications.ObserveInterstitialEventDidFinish(NSObject,EventHandler{NSNotificationEventArgs})" />
+		///     or <see cref="Notifications.ObserveInterstitialEventDidFinish(EventHandler{NSNotificationEventArgs})" /> methods,
+		///     which offers strongly typed access to the parameters of the notification.
+		///   </para>
+		///   <para>
+		///     The following example shows how to use the strongly typed <see cref="Notifications" /> class, to take the guesswork
+		///     out of the available properties in the notification:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // Lambda style
+		/// //
+		///
+		/// // listening
+		/// notification = AVPlayerInterstitialEventMonitor.Notifications.ObserveInterstitialEventDidFinish ((sender, args) => {
+		/// /* Access strongly typed args */
+		/// Console.WriteLine ("Notification: {0}", args.Notification);
+		/// });
+		///
+		/// // To stop listening:
+		/// notification.Dispose ();
+		///
+		/// //
+		/// // Method style
+		/// //
+		/// NSObject notification;
+		/// void Callback (object sender, AVPlayerInterstitialEventMonitor.NSNotificationEventArgs args)
+		/// {
+		///     // Access strongly typed args
+		///     Console.WriteLine ("Notification: {0}", args.Notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     notification = AVPlayerInterstitialEventMonitor.Notifications.ObserveInterstitialEventDidFinish (Callback);
+		/// }
+		///
+		/// void Teardown ()
+		/// {
+		///     notification.Dispose ();
+		/// }]]></code>
+		///   </example>
+		///   <para>
+		///     The following example shows how to use the notification with the DefaultCenter API:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// // Lambda style
+		/// NSNotificationCenter.DefaultCenter.AddObserver (
+		///     AVPlayerInterstitialEventMonitor.InterstitialEventDidFinishNotification, (notification) => { Console.WriteLine ("Received the notification InterstitialEventDidFinish", notification); }
+		/// );
+		///
+		/// // Method style
+		/// void Callback (NSNotification notification)
+		/// {
+		///     Console.WriteLine ("Received the notification InterstitialEventDidFinish", notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     NSNotificationCenter.DefaultCenter.AddObserver (AVPlayerInterstitialEventMonitor.InterstitialEventDidFinishNotification, Callback);
+		/// }
+		/// ]]></code>
+		///   </example>
+		/// </remarks>
+		[Field ("AVPlayerInterstitialEventMonitorInterstitialEventDidFinishNotification",  "AVFoundation")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		[Advice ("Use AVPlayerInterstitialEventMonitor.Notifications.ObserveInterstitialEventDidFinish helper method instead.")]
+		public static NSString InterstitialEventDidFinishNotification {
+			[SupportedOSPlatform ("maccatalyst26.0")]
+			[SupportedOSPlatform ("tvos26.0")]
+			[SupportedOSPlatform ("macos26.0")]
+			[SupportedOSPlatform ("ios26.0")]
+			get {
+				if (_InterstitialEventDidFinishNotification is null)
+					_InterstitialEventDidFinishNotification = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorInterstitialEventDidFinishNotification")!;
+				return _InterstitialEventDidFinishNotification;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _InterstitialEventDidFinishPlayoutTimeKey;
+		/// <summary>Represents the value associated with the constant 'AVPlayerInterstitialEventMonitorInterstitialEventDidFinishPlayoutTimeKey'.</summary>
+		[Field ("AVPlayerInterstitialEventMonitorInterstitialEventDidFinishPlayoutTimeKey",  "AVFoundation")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		public static NSString InterstitialEventDidFinishPlayoutTimeKey {
+			[SupportedOSPlatform ("maccatalyst26.0")]
+			[SupportedOSPlatform ("tvos26.0")]
+			[SupportedOSPlatform ("macos26.0")]
+			[SupportedOSPlatform ("ios26.0")]
+			get {
+				if (_InterstitialEventDidFinishPlayoutTimeKey is null)
+					_InterstitialEventDidFinishPlayoutTimeKey = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorInterstitialEventDidFinishPlayoutTimeKey")!;
+				return _InterstitialEventDidFinishPlayoutTimeKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _InterstitialEventWasUnscheduledErrorKey;
+		/// <summary>Represents the value associated with the constant 'AVPlayerInterstitialEventMonitorInterstitialEventWasUnscheduledErrorKey'.</summary>
+		[Field ("AVPlayerInterstitialEventMonitorInterstitialEventWasUnscheduledErrorKey",  "AVFoundation")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		public static NSString InterstitialEventWasUnscheduledErrorKey {
+			[SupportedOSPlatform ("maccatalyst26.0")]
+			[SupportedOSPlatform ("tvos26.0")]
+			[SupportedOSPlatform ("macos26.0")]
+			[SupportedOSPlatform ("ios26.0")]
+			get {
+				if (_InterstitialEventWasUnscheduledErrorKey is null)
+					_InterstitialEventWasUnscheduledErrorKey = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorInterstitialEventWasUnscheduledErrorKey")!;
+				return _InterstitialEventWasUnscheduledErrorKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _InterstitialEventWasUnscheduledEventKey;
+		/// <summary>Represents the value associated with the constant 'AVPlayerInterstitialEventMonitorInterstitialEventWasUnscheduledEventKey'.</summary>
+		[Field ("AVPlayerInterstitialEventMonitorInterstitialEventWasUnscheduledEventKey",  "AVFoundation")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		public static NSString InterstitialEventWasUnscheduledEventKey {
+			[SupportedOSPlatform ("maccatalyst26.0")]
+			[SupportedOSPlatform ("tvos26.0")]
+			[SupportedOSPlatform ("macos26.0")]
+			[SupportedOSPlatform ("ios26.0")]
+			get {
+				if (_InterstitialEventWasUnscheduledEventKey is null)
+					_InterstitialEventWasUnscheduledEventKey = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorInterstitialEventWasUnscheduledEventKey")!;
+				return _InterstitialEventWasUnscheduledEventKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _InterstitialEventWasUnscheduledNotification;
+		/// <summary>Notification constant for InterstitialEventWasUnscheduled</summary>
+		/// <value><see cref="NSString" /> constant, should be used as a token to <see cref="NSNotificationCenter" />.</value>
+		/// <remarks>
+		///   <para>
+		///     This constant can be used with <see cref="NSNotificationCenter" /> to register a listener for this notification.
+		///     This is an <see cref="NSString" /> instead of a string, because these values can be used as tokens in some native
+		///     libraries instead of being used purely for their actual string content. The 'notification' parameter to the callback
+		///     contains extra information that is specific to the notification type.
+		///   </para>
+		///   <para>
+		///     To subscribe to this notification, developers can use the convenience <see cref="Notifications.ObserveInterstitialEventWasUnscheduled(NSObject,EventHandler{NSNotificationEventArgs})" />
+		///     or <see cref="Notifications.ObserveInterstitialEventWasUnscheduled(EventHandler{NSNotificationEventArgs})" /> methods,
+		///     which offers strongly typed access to the parameters of the notification.
+		///   </para>
+		///   <para>
+		///     The following example shows how to use the strongly typed <see cref="Notifications" /> class, to take the guesswork
+		///     out of the available properties in the notification:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // Lambda style
+		/// //
+		///
+		/// // listening
+		/// notification = AVPlayerInterstitialEventMonitor.Notifications.ObserveInterstitialEventWasUnscheduled ((sender, args) => {
+		/// /* Access strongly typed args */
+		/// Console.WriteLine ("Notification: {0}", args.Notification);
+		/// });
+		///
+		/// // To stop listening:
+		/// notification.Dispose ();
+		///
+		/// //
+		/// // Method style
+		/// //
+		/// NSObject notification;
+		/// void Callback (object sender, AVPlayerInterstitialEventMonitor.NSNotificationEventArgs args)
+		/// {
+		///     // Access strongly typed args
+		///     Console.WriteLine ("Notification: {0}", args.Notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     notification = AVPlayerInterstitialEventMonitor.Notifications.ObserveInterstitialEventWasUnscheduled (Callback);
+		/// }
+		///
+		/// void Teardown ()
+		/// {
+		///     notification.Dispose ();
+		/// }]]></code>
+		///   </example>
+		///   <para>
+		///     The following example shows how to use the notification with the DefaultCenter API:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// // Lambda style
+		/// NSNotificationCenter.DefaultCenter.AddObserver (
+		///     AVPlayerInterstitialEventMonitor.InterstitialEventWasUnscheduledNotification, (notification) => { Console.WriteLine ("Received the notification InterstitialEventWasUnscheduled", notification); }
+		/// );
+		///
+		/// // Method style
+		/// void Callback (NSNotification notification)
+		/// {
+		///     Console.WriteLine ("Received the notification InterstitialEventWasUnscheduled", notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     NSNotificationCenter.DefaultCenter.AddObserver (AVPlayerInterstitialEventMonitor.InterstitialEventWasUnscheduledNotification, Callback);
+		/// }
+		/// ]]></code>
+		///   </example>
+		/// </remarks>
+		[Field ("AVPlayerInterstitialEventMonitorInterstitialEventWasUnscheduledNotification",  "AVFoundation")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		[Advice ("Use AVPlayerInterstitialEventMonitor.Notifications.ObserveInterstitialEventWasUnscheduled helper method instead.")]
+		public static NSString InterstitialEventWasUnscheduledNotification {
+			[SupportedOSPlatform ("maccatalyst26.0")]
+			[SupportedOSPlatform ("tvos26.0")]
+			[SupportedOSPlatform ("macos26.0")]
+			[SupportedOSPlatform ("ios26.0")]
+			get {
+				if (_InterstitialEventWasUnscheduledNotification is null)
+					_InterstitialEventWasUnscheduledNotification = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorInterstitialEventWasUnscheduledNotification")!;
+				return _InterstitialEventWasUnscheduledNotification;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _ScheduleRequestCompletedNotification;
+		/// <summary>Notification constant for ScheduleRequestCompleted</summary>
+		/// <value><see cref="NSString" /> constant, should be used as a token to <see cref="NSNotificationCenter" />.</value>
+		/// <remarks>
+		///   <para>
+		///     This constant can be used with <see cref="NSNotificationCenter" /> to register a listener for this notification.
+		///     This is an <see cref="NSString" /> instead of a string, because these values can be used as tokens in some native
+		///     libraries instead of being used purely for their actual string content. The 'notification' parameter to the callback
+		///     contains extra information that is specific to the notification type.
+		///   </para>
+		///   <para>
+		///     To subscribe to this notification, developers can use the convenience <see cref="Notifications.ObserveScheduleRequestCompleted(NSObject,EventHandler{NSNotificationEventArgs})" />
+		///     or <see cref="Notifications.ObserveScheduleRequestCompleted(EventHandler{NSNotificationEventArgs})" /> methods,
+		///     which offers strongly typed access to the parameters of the notification.
+		///   </para>
+		///   <para>
+		///     The following example shows how to use the strongly typed <see cref="Notifications" /> class, to take the guesswork
+		///     out of the available properties in the notification:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // Lambda style
+		/// //
+		///
+		/// // listening
+		/// notification = AVPlayerInterstitialEventMonitor.Notifications.ObserveScheduleRequestCompleted ((sender, args) => {
+		/// /* Access strongly typed args */
+		/// Console.WriteLine ("Notification: {0}", args.Notification);
+		/// });
+		///
+		/// // To stop listening:
+		/// notification.Dispose ();
+		///
+		/// //
+		/// // Method style
+		/// //
+		/// NSObject notification;
+		/// void Callback (object sender, AVPlayerInterstitialEventMonitor.NSNotificationEventArgs args)
+		/// {
+		///     // Access strongly typed args
+		///     Console.WriteLine ("Notification: {0}", args.Notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     notification = AVPlayerInterstitialEventMonitor.Notifications.ObserveScheduleRequestCompleted (Callback);
+		/// }
+		///
+		/// void Teardown ()
+		/// {
+		///     notification.Dispose ();
+		/// }]]></code>
+		///   </example>
+		///   <para>
+		///     The following example shows how to use the notification with the DefaultCenter API:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// // Lambda style
+		/// NSNotificationCenter.DefaultCenter.AddObserver (
+		///     AVPlayerInterstitialEventMonitor.ScheduleRequestCompletedNotification, (notification) => { Console.WriteLine ("Received the notification ScheduleRequestCompleted", notification); }
+		/// );
+		///
+		/// // Method style
+		/// void Callback (NSNotification notification)
+		/// {
+		///     Console.WriteLine ("Received the notification ScheduleRequestCompleted", notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     NSNotificationCenter.DefaultCenter.AddObserver (AVPlayerInterstitialEventMonitor.ScheduleRequestCompletedNotification, Callback);
+		/// }
+		/// ]]></code>
+		///   </example>
+		/// </remarks>
+		[Field ("AVPlayerInterstitialEventMonitorScheduleRequestCompletedNotification",  "AVFoundation")]
+		[SupportedOSPlatform ("maccatalyst26.4")]
+		[SupportedOSPlatform ("tvos26.4")]
+		[SupportedOSPlatform ("macos26.4")]
+		[SupportedOSPlatform ("ios26.4")]
+		[Advice ("Use AVPlayerInterstitialEventMonitor.Notifications.ObserveScheduleRequestCompleted helper method instead.")]
+		public static NSString ScheduleRequestCompletedNotification {
+			[SupportedOSPlatform ("maccatalyst26.4")]
+			[SupportedOSPlatform ("tvos26.4")]
+			[SupportedOSPlatform ("macos26.4")]
+			[SupportedOSPlatform ("ios26.4")]
+			get {
+				if (_ScheduleRequestCompletedNotification is null)
+					_ScheduleRequestCompletedNotification = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorScheduleRequestCompletedNotification")!;
+				return _ScheduleRequestCompletedNotification;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _ScheduleRequestErrorKey;
+		/// <summary>Represents the value associated with the constant 'AVPlayerInterstitialEventMonitorScheduleRequestErrorKey'.</summary>
+		[Field ("AVPlayerInterstitialEventMonitorScheduleRequestErrorKey",  "AVFoundation")]
+		[SupportedOSPlatform ("maccatalyst26.4")]
+		[SupportedOSPlatform ("tvos26.4")]
+		[SupportedOSPlatform ("macos26.4")]
+		[SupportedOSPlatform ("ios26.4")]
+		public static NSString ScheduleRequestErrorKey {
+			[SupportedOSPlatform ("maccatalyst26.4")]
+			[SupportedOSPlatform ("tvos26.4")]
+			[SupportedOSPlatform ("macos26.4")]
+			[SupportedOSPlatform ("ios26.4")]
+			get {
+				if (_ScheduleRequestErrorKey is null)
+					_ScheduleRequestErrorKey = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorScheduleRequestErrorKey")!;
+				return _ScheduleRequestErrorKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _ScheduleRequestIdentifierKey;
+		/// <summary>Represents the value associated with the constant 'AVPlayerInterstitialEventMonitorScheduleRequestIdentifierKey'.</summary>
+		[Field ("AVPlayerInterstitialEventMonitorScheduleRequestIdentifierKey",  "AVFoundation")]
+		[SupportedOSPlatform ("maccatalyst26.4")]
+		[SupportedOSPlatform ("tvos26.4")]
+		[SupportedOSPlatform ("macos26.4")]
+		[SupportedOSPlatform ("ios26.4")]
+		public static NSString ScheduleRequestIdentifierKey {
+			[SupportedOSPlatform ("maccatalyst26.4")]
+			[SupportedOSPlatform ("tvos26.4")]
+			[SupportedOSPlatform ("macos26.4")]
+			[SupportedOSPlatform ("ios26.4")]
+			get {
+				if (_ScheduleRequestIdentifierKey is null)
+					_ScheduleRequestIdentifierKey = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorScheduleRequestIdentifierKey")!;
+				return _ScheduleRequestIdentifierKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _ScheduleRequestResponseKey;
+		/// <summary>Represents the value associated with the constant 'AVPlayerInterstitialEventMonitorScheduleRequestResponseKey'.</summary>
+		[Field ("AVPlayerInterstitialEventMonitorScheduleRequestResponseKey",  "AVFoundation")]
+		[SupportedOSPlatform ("maccatalyst26.4")]
+		[SupportedOSPlatform ("tvos26.4")]
+		[SupportedOSPlatform ("macos26.4")]
+		[SupportedOSPlatform ("ios26.4")]
+		public static NSString ScheduleRequestResponseKey {
+			[SupportedOSPlatform ("maccatalyst26.4")]
+			[SupportedOSPlatform ("tvos26.4")]
+			[SupportedOSPlatform ("macos26.4")]
+			[SupportedOSPlatform ("ios26.4")]
+			get {
+				if (_ScheduleRequestResponseKey is null)
+					_ScheduleRequestResponseKey = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVPlayerInterstitialEventMonitorScheduleRequestResponseKey")!;
+				return _ScheduleRequestResponseKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		protected override void Dispose (bool disposing)
+		{
+			base.Dispose (disposing);
+			if (Handle == IntPtr.Zero) {
+				__mt_PrimaryPlayer_var = null;
+			}
+		}
+		//
+		// Notifications
+		//
+		/// <summary>Notifications posted by the <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor" /> class.</summary>
+		/// <remarks>
+		///    <para>This class contains various helper methods that allow developers to observe events posted in the notification hub (<see cref="Foundation.NSNotificationCenter" />).</para>
+		///    <para>The methods defined in this class post events that invoke the provided method or lambda with a <see cref="Foundation.NSNotificationEventArgs" /> parameter, which contains strongly typed properties for the notification arguments.</para>
+		/// </remarks>
+		public static partial class Notifications {
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.AssetListResponseStatusDidChangeNotification" /> constant.</summary>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.AssetListResponseStatusDidChangeNotification" /> notifications.</para>
+			///   <example>
+			///   <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for any object
+			/// var token = AVPlayerInterstitialEventMonitor.Notifications.ObserveAssetListResponseStatusDidChange ((notification) => {
+			///   Console.WriteLine ("Observed AssetListResponseStatusDidChangeNotification!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveAssetListResponseStatusDidChange (EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (AssetListResponseStatusDidChangeNotification, notification => handler (null, new NSNotificationEventArgs (notification)));
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.AssetListResponseStatusDidChangeNotification" /> constant.</summary>
+			/// <param name="objectToObserve">The specific object to observe.</param>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.AssetListResponseStatusDidChangeNotification" /> notifications.</para>
+			///   <example>
+			///     <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for a single object
+			/// var token = AVPlayerInterstitialEventMonitor.Notifications.ObserveAssetListResponseStatusDidChange (objectToObserve, (notification) => {
+			///   Console.WriteLine ($"Observed AssetListResponseStatusDidChangeNotification for {nameof (objectToObserve)}!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveAssetListResponseStatusDidChange (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (AssetListResponseStatusDidChangeNotification, notification => handler (null, new NSNotificationEventArgs (notification)), objectToObserve);
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.CurrentEventDidChangeNotification" /> constant.</summary>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.CurrentEventDidChangeNotification" /> notifications.</para>
+			///   <example>
+			///   <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for any object
+			/// var token = AVPlayerInterstitialEventMonitor.Notifications.ObserveCurrentEventDidChange ((notification) => {
+			///   Console.WriteLine ("Observed CurrentEventDidChangeNotification!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveCurrentEventDidChange (EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (CurrentEventDidChangeNotification, notification => handler (null, new NSNotificationEventArgs (notification)));
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.CurrentEventDidChangeNotification" /> constant.</summary>
+			/// <param name="objectToObserve">The specific object to observe.</param>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.CurrentEventDidChangeNotification" /> notifications.</para>
+			///   <example>
+			///     <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for a single object
+			/// var token = AVPlayerInterstitialEventMonitor.Notifications.ObserveCurrentEventDidChange (objectToObserve, (notification) => {
+			///   Console.WriteLine ($"Observed CurrentEventDidChangeNotification for {nameof (objectToObserve)}!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveCurrentEventDidChange (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (CurrentEventDidChangeNotification, notification => handler (null, new NSNotificationEventArgs (notification)), objectToObserve);
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.CurrentEventSkippableStateDidChangeNotification" /> constant.</summary>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.CurrentEventSkippableStateDidChangeNotification" /> notifications.</para>
+			///   <example>
+			///   <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for any object
+			/// var token = AVPlayerInterstitialEventMonitor.Notifications.ObserveCurrentEventSkippableStateDidChange ((notification) => {
+			///   Console.WriteLine ("Observed CurrentEventSkippableStateDidChangeNotification!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveCurrentEventSkippableStateDidChange (EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (CurrentEventSkippableStateDidChangeNotification, notification => handler (null, new NSNotificationEventArgs (notification)));
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.CurrentEventSkippableStateDidChangeNotification" /> constant.</summary>
+			/// <param name="objectToObserve">The specific object to observe.</param>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.CurrentEventSkippableStateDidChangeNotification" /> notifications.</para>
+			///   <example>
+			///     <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for a single object
+			/// var token = AVPlayerInterstitialEventMonitor.Notifications.ObserveCurrentEventSkippableStateDidChange (objectToObserve, (notification) => {
+			///   Console.WriteLine ($"Observed CurrentEventSkippableStateDidChangeNotification for {nameof (objectToObserve)}!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveCurrentEventSkippableStateDidChange (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (CurrentEventSkippableStateDidChangeNotification, notification => handler (null, new NSNotificationEventArgs (notification)), objectToObserve);
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.CurrentEventSkippedNotification" /> constant.</summary>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.CurrentEventSkippedNotification" /> notifications.</para>
+			///   <example>
+			///   <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for any object
+			/// var token = AVPlayerInterstitialEventMonitor.Notifications.ObserveCurrentEventSkipped ((notification) => {
+			///   Console.WriteLine ("Observed CurrentEventSkippedNotification!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveCurrentEventSkipped (EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (CurrentEventSkippedNotification, notification => handler (null, new NSNotificationEventArgs (notification)));
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.CurrentEventSkippedNotification" /> constant.</summary>
+			/// <param name="objectToObserve">The specific object to observe.</param>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.CurrentEventSkippedNotification" /> notifications.</para>
+			///   <example>
+			///     <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for a single object
+			/// var token = AVPlayerInterstitialEventMonitor.Notifications.ObserveCurrentEventSkipped (objectToObserve, (notification) => {
+			///   Console.WriteLine ($"Observed CurrentEventSkippedNotification for {nameof (objectToObserve)}!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveCurrentEventSkipped (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (CurrentEventSkippedNotification, notification => handler (null, new NSNotificationEventArgs (notification)), objectToObserve);
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.EventsDidChangeNotification" /> constant.</summary>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.EventsDidChangeNotification" /> notifications.</para>
+			///   <example>
+			///   <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for any object
+			/// var token = AVPlayerInterstitialEventMonitor.Notifications.ObserveEventsDidChange ((notification) => {
+			///   Console.WriteLine ("Observed EventsDidChangeNotification!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveEventsDidChange (EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (EventsDidChangeNotification, notification => handler (null, new NSNotificationEventArgs (notification)));
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.EventsDidChangeNotification" /> constant.</summary>
+			/// <param name="objectToObserve">The specific object to observe.</param>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.EventsDidChangeNotification" /> notifications.</para>
+			///   <example>
+			///     <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for a single object
+			/// var token = AVPlayerInterstitialEventMonitor.Notifications.ObserveEventsDidChange (objectToObserve, (notification) => {
+			///   Console.WriteLine ($"Observed EventsDidChangeNotification for {nameof (objectToObserve)}!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveEventsDidChange (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (EventsDidChangeNotification, notification => handler (null, new NSNotificationEventArgs (notification)), objectToObserve);
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.InterstitialEventDidFinishNotification" /> constant.</summary>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.InterstitialEventDidFinishNotification" /> notifications.</para>
+			///   <example>
+			///   <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for any object
+			/// var token = AVPlayerInterstitialEventMonitor.Notifications.ObserveInterstitialEventDidFinish ((notification) => {
+			///   Console.WriteLine ("Observed InterstitialEventDidFinishNotification!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveInterstitialEventDidFinish (EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (InterstitialEventDidFinishNotification, notification => handler (null, new NSNotificationEventArgs (notification)));
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.InterstitialEventDidFinishNotification" /> constant.</summary>
+			/// <param name="objectToObserve">The specific object to observe.</param>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.InterstitialEventDidFinishNotification" /> notifications.</para>
+			///   <example>
+			///     <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for a single object
+			/// var token = AVPlayerInterstitialEventMonitor.Notifications.ObserveInterstitialEventDidFinish (objectToObserve, (notification) => {
+			///   Console.WriteLine ($"Observed InterstitialEventDidFinishNotification for {nameof (objectToObserve)}!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveInterstitialEventDidFinish (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (InterstitialEventDidFinishNotification, notification => handler (null, new NSNotificationEventArgs (notification)), objectToObserve);
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.InterstitialEventWasUnscheduledNotification" /> constant.</summary>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.InterstitialEventWasUnscheduledNotification" /> notifications.</para>
+			///   <example>
+			///   <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for any object
+			/// var token = AVPlayerInterstitialEventMonitor.Notifications.ObserveInterstitialEventWasUnscheduled ((notification) => {
+			///   Console.WriteLine ("Observed InterstitialEventWasUnscheduledNotification!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveInterstitialEventWasUnscheduled (EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (InterstitialEventWasUnscheduledNotification, notification => handler (null, new NSNotificationEventArgs (notification)));
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.InterstitialEventWasUnscheduledNotification" /> constant.</summary>
+			/// <param name="objectToObserve">The specific object to observe.</param>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.InterstitialEventWasUnscheduledNotification" /> notifications.</para>
+			///   <example>
+			///     <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for a single object
+			/// var token = AVPlayerInterstitialEventMonitor.Notifications.ObserveInterstitialEventWasUnscheduled (objectToObserve, (notification) => {
+			///   Console.WriteLine ($"Observed InterstitialEventWasUnscheduledNotification for {nameof (objectToObserve)}!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveInterstitialEventWasUnscheduled (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (InterstitialEventWasUnscheduledNotification, notification => handler (null, new NSNotificationEventArgs (notification)), objectToObserve);
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.ScheduleRequestCompletedNotification" /> constant.</summary>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.ScheduleRequestCompletedNotification" /> notifications.</para>
+			///   <example>
+			///   <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for any object
+			/// var token = AVPlayerInterstitialEventMonitor.Notifications.ObserveScheduleRequestCompleted ((notification) => {
+			///   Console.WriteLine ("Observed ScheduleRequestCompletedNotification!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveScheduleRequestCompleted (EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (ScheduleRequestCompletedNotification, notification => handler (null, new NSNotificationEventArgs (notification)));
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.ScheduleRequestCompletedNotification" /> constant.</summary>
+			/// <param name="objectToObserve">The specific object to observe.</param>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVPlayerInterstitialEventMonitor.ScheduleRequestCompletedNotification" /> notifications.</para>
+			///   <example>
+			///     <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for a single object
+			/// var token = AVPlayerInterstitialEventMonitor.Notifications.ObserveScheduleRequestCompleted (objectToObserve, (notification) => {
+			///   Console.WriteLine ($"Observed ScheduleRequestCompletedNotification for {nameof (objectToObserve)}!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveScheduleRequestCompleted (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (ScheduleRequestCompletedNotification, notification => handler (null, new NSNotificationEventArgs (notification)), objectToObserve);
+			}
+		}
+	} /* class AVPlayerInterstitialEventMonitor */
+}

@@ -1,0 +1,615 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using GLKit;
+using Metal;
+using CoreML;
+using MapKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using Messages;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using QuickLook;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using CoreMotion;
+using ObjCRuntime;
+using AddressBook;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using NewsstandKit;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace Foundation {
+	[Register("NSURLProtectionSpace", true)]
+	public unsafe partial class NSUrlProtectionSpace : NSObject, INSCoding, INSCopying, INSSecureCoding {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("NSURLProtectionSpace");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <param name="coder">The unarchiver object.</param>
+		/// <remarks>
+		///   <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization). This is part of the <see cref="Foundation.NSCoding" /> protocol.</para>
+		///   <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="Foundation.NSCoder" /> and decorate it with the <c>[Export("initWithCoder:"]</c> attribute.</para>
+		///   <para>The state of this object can also be serialized by using the <see cref="Foundation.INSCoding.EncodeTo" /> companion method.</para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[DesignatedInitializer]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("initWithCoder:")]
+		public NSUrlProtectionSpace (NSCoder coder) : base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, Selector.GetHandle ("initWithCoder:"), coder.Handle), "initWithCoder:");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (&__objc_super__, Selector.GetHandle ("initWithCoder:"), coder.Handle), "initWithCoder:");
+				GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (coder);
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected NSUrlProtectionSpace (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal NSUrlProtectionSpace (NativeHandle handle) : base (handle)
+		{
+		}
+
+		/// <param name="zone">Developers should pass <see langword="null" />.  Memory zones are no longer used.</param><summary>Performs a copy of the underlying Objective-C object.</summary><returns>The newly-allocated object.</returns><remarks><para>This method performs a "shallow copy" of <see langword="this" />. If this object contains references to external objects, the new object will contain references to the same object.</para></remarks>
+		[Export ("copyWithZone:")]
+		[return: ReleaseAttribute ()]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSObject Copy (NSZone? zone)
+		{
+			var zone__handle__ = zone.GetHandle ();
+			NSObject? ret;
+			if (IsDirectBinding) {
+				ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("copyWithZone:"), zone__handle__), true)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("copyWithZone:"), zone__handle__), true)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (zone);
+			return ret!;
+		}
+		/// <summary>Encodes the state of the object using the provided encoder.</summary><param name="encoder">The encoder object where the state of the object will be stored</param><remarks><para>This method is part of the <see cref="T:Foundation.INSCoding" /> protocol and is used by applications to preserve the state of the object into an archive.</para><para>Developers will typically create an <see cref="T:Foundation.NSKeyedArchiver" /> and then invoke the <see cref="M:Foundation.NSKeyedArchiver.ArchiveRootObjectToFile(Foundation.NSObject,System.String)" /> method which will call into this method.</para><para>If developers want to allow their object to be archived, they should override this method and store their state in using the provided <paramref name="encoder" /> parameter. In addition, developers should also implement a constructor that takes an NSCoder argument and is exported with <c>[Export ("initWithCoder:")]</c>.</para><example><code lang="csharp lang-csharp"><![CDATA[public void override EncodeTo (NSCoder coder) {
+		/// coder.Encode (1, key: "version");
+		/// coder.Encode (userName, key: "userName");
+		/// coder.Encode (hostName, key: "hostName");]]></code></example></remarks>
+		[Export ("encodeWithCoder:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void EncodeTo (NSCoder encoder)
+		{
+			var encoder__handle__ = encoder!.GetNonNullHandle (nameof (encoder));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("encodeWithCoder:"), encoder__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("encodeWithCoder:"), encoder__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (encoder);
+		}
+		[Export ("initWithHost:port:protocol:realm:authenticationMethod:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal virtual nint _Init (string host, nint port, string? protocol, string? realm, string? authenticationMethod)
+		{
+			if (host is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (host));
+			var nshost = CFString.CreateNative (host);
+			var nsprotocol = CFString.CreateNative (protocol);
+			var nsrealm = CFString.CreateNative (realm);
+			var nsauthenticationMethod = CFString.CreateNative (authenticationMethod);
+			nint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_NativeHandle_IntPtr_NativeHandle_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("initWithHost:port:protocol:realm:authenticationMethod:"), nshost, port, nsprotocol, nsrealm, nsauthenticationMethod);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_NativeHandle_IntPtr_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("initWithHost:port:protocol:realm:authenticationMethod:"), nshost, port, nsprotocol, nsrealm, nsauthenticationMethod);
+					GC.KeepAlive (this);
+				}
+			}
+			CFString.ReleaseNative (nshost);
+			CFString.ReleaseNative (nsprotocol);
+			CFString.ReleaseNative (nsrealm);
+			CFString.ReleaseNative (nsauthenticationMethod);
+			return ret!;
+		}
+		[Export ("initWithProxyHost:port:type:realm:authenticationMethod:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal virtual nint _InitWithProxy (string host, nint port, string? type, string? realm, string? authenticationMethod)
+		{
+			if (host is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (host));
+			var nshost = CFString.CreateNative (host);
+			var nstype = CFString.CreateNative (type);
+			var nsrealm = CFString.CreateNative (realm);
+			var nsauthenticationMethod = CFString.CreateNative (authenticationMethod);
+			nint ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_NativeHandle_IntPtr_NativeHandle_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("initWithProxyHost:port:type:realm:authenticationMethod:"), nshost, port, nstype, nsrealm, nsauthenticationMethod);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_NativeHandle_IntPtr_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("initWithProxyHost:port:type:realm:authenticationMethod:"), nshost, port, nstype, nsrealm, nsauthenticationMethod);
+					GC.KeepAlive (this);
+				}
+			}
+			CFString.ReleaseNative (nshost);
+			CFString.ReleaseNative (nstype);
+			CFString.ReleaseNative (nsrealm);
+			CFString.ReleaseNative (nsauthenticationMethod);
+			return ret!;
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual string AuthenticationMethod {
+			[Export ("authenticationMethod")]
+			get {
+				string ret;
+				if (IsDirectBinding) {
+					ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("authenticationMethod")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("authenticationMethod")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSData[] DistinguishedNames {
+			[Export ("distinguishedNames")]
+			get {
+				NSData[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<NSData>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("distinguishedNames")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<NSData>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("distinguishedNames")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual string Host {
+			[Export ("host")]
+			get {
+				string ret;
+				if (IsDirectBinding) {
+					ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("host")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("host")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool IsProxy {
+			[Export ("isProxy")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("isProxy"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("isProxy"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nint Port {
+			[Export ("port")]
+			get {
+				nint ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, Selector.GetHandle ("port"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("port"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual string Protocol {
+			[Export ("protocol")]
+			get {
+				string ret;
+				if (IsDirectBinding) {
+					ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("protocol")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("protocol")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual string ProxyType {
+			[Export ("proxyType")]
+			get {
+				string ret;
+				if (IsDirectBinding) {
+					ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("proxyType")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("proxyType")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual string Realm {
+			[Export ("realm")]
+			get {
+				string ret;
+				if (IsDirectBinding) {
+					ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("realm")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFString.FromHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("realm")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool ReceivesCredentialSecurely {
+			[Export ("receivesCredentialSecurely")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("receivesCredentialSecurely"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("receivesCredentialSecurely"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal virtual nint ServerTrust {
+			[Export ("serverTrust")]
+			get {
+				nint ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, Selector.GetHandle ("serverTrust"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("serverTrust"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _AuthenticationMethodClientCertificate;
+		/// <summary>Represents the value associated with the constant NSURLAuthenticationMethodClientCertificate</summary><value></value><remarks>To be added.</remarks>
+		[Field ("NSURLAuthenticationMethodClientCertificate",  "Foundation")]
+		public static NSString AuthenticationMethodClientCertificate {
+			get {
+				if (_AuthenticationMethodClientCertificate is null)
+					_AuthenticationMethodClientCertificate = Dlfcn.GetStringConstant (Libraries.Foundation.Handle, "NSURLAuthenticationMethodClientCertificate")!;
+				return _AuthenticationMethodClientCertificate;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _AuthenticationMethodDefault;
+		/// <summary>Represents the value associated with the constant NSURLAuthenticationMethodDefault</summary><value></value><remarks>To be added.</remarks>
+		[Field ("NSURLAuthenticationMethodDefault",  "Foundation")]
+		public static NSString AuthenticationMethodDefault {
+			get {
+				if (_AuthenticationMethodDefault is null)
+					_AuthenticationMethodDefault = Dlfcn.GetStringConstant (Libraries.Foundation.Handle, "NSURLAuthenticationMethodDefault")!;
+				return _AuthenticationMethodDefault;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _AuthenticationMethodHTMLForm;
+		/// <summary>Represents the value associated with the constant NSURLAuthenticationMethodHTMLForm</summary><value></value><remarks>To be added.</remarks>
+		[Field ("NSURLAuthenticationMethodHTMLForm",  "Foundation")]
+		public static NSString AuthenticationMethodHTMLForm {
+			get {
+				if (_AuthenticationMethodHTMLForm is null)
+					_AuthenticationMethodHTMLForm = Dlfcn.GetStringConstant (Libraries.Foundation.Handle, "NSURLAuthenticationMethodHTMLForm")!;
+				return _AuthenticationMethodHTMLForm;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _AuthenticationMethodHTTPBasic;
+		/// <summary>Represents the value associated with the constant NSURLAuthenticationMethodHTTPBasic</summary><value></value><remarks>To be added.</remarks>
+		[Field ("NSURLAuthenticationMethodHTTPBasic",  "Foundation")]
+		public static NSString AuthenticationMethodHTTPBasic {
+			get {
+				if (_AuthenticationMethodHTTPBasic is null)
+					_AuthenticationMethodHTTPBasic = Dlfcn.GetStringConstant (Libraries.Foundation.Handle, "NSURLAuthenticationMethodHTTPBasic")!;
+				return _AuthenticationMethodHTTPBasic;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _AuthenticationMethodHTTPDigest;
+		/// <summary>Represents the value associated with the constant NSURLAuthenticationMethodHTTPDigest</summary><value></value><remarks>To be added.</remarks>
+		[Field ("NSURLAuthenticationMethodHTTPDigest",  "Foundation")]
+		public static NSString AuthenticationMethodHTTPDigest {
+			get {
+				if (_AuthenticationMethodHTTPDigest is null)
+					_AuthenticationMethodHTTPDigest = Dlfcn.GetStringConstant (Libraries.Foundation.Handle, "NSURLAuthenticationMethodHTTPDigest")!;
+				return _AuthenticationMethodHTTPDigest;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _AuthenticationMethodNTLM;
+		/// <summary>Represents the value associated with the constant NSURLAuthenticationMethodNTLM</summary><value></value><remarks>To be added.</remarks>
+		[Field ("NSURLAuthenticationMethodNTLM",  "Foundation")]
+		public static NSString AuthenticationMethodNTLM {
+			get {
+				if (_AuthenticationMethodNTLM is null)
+					_AuthenticationMethodNTLM = Dlfcn.GetStringConstant (Libraries.Foundation.Handle, "NSURLAuthenticationMethodNTLM")!;
+				return _AuthenticationMethodNTLM;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _AuthenticationMethodNegotiate;
+		/// <summary>Represents the value associated with the constant NSURLAuthenticationMethodNegotiate</summary><value></value><remarks>To be added.</remarks>
+		[Field ("NSURLAuthenticationMethodNegotiate",  "Foundation")]
+		public static NSString AuthenticationMethodNegotiate {
+			get {
+				if (_AuthenticationMethodNegotiate is null)
+					_AuthenticationMethodNegotiate = Dlfcn.GetStringConstant (Libraries.Foundation.Handle, "NSURLAuthenticationMethodNegotiate")!;
+				return _AuthenticationMethodNegotiate;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _AuthenticationMethodServerTrust;
+		/// <summary>Represents the value associated with the constant NSURLAuthenticationMethodServerTrust</summary><value></value><remarks>To be added.</remarks>
+		[Field ("NSURLAuthenticationMethodServerTrust",  "Foundation")]
+		public static NSString AuthenticationMethodServerTrust {
+			get {
+				if (_AuthenticationMethodServerTrust is null)
+					_AuthenticationMethodServerTrust = Dlfcn.GetStringConstant (Libraries.Foundation.Handle, "NSURLAuthenticationMethodServerTrust")!;
+				return _AuthenticationMethodServerTrust;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _FTP;
+		/// <summary>Represents the value associated with the constant NSURLProtectionSpaceFTP</summary><value></value><remarks>To be added.</remarks>
+		[Field ("NSURLProtectionSpaceFTP",  "Foundation")]
+		[ObsoletedOSPlatform ("ios18.4", "FTP is deprecated. Only supported when the classic loader is enabled.")]
+		[ObsoletedOSPlatform ("tvos18.4", "FTP is deprecated. Only supported when the classic loader is enabled.")]
+		[ObsoletedOSPlatform ("maccatalyst18.4", "FTP is deprecated. Only supported when the classic loader is enabled.")]
+		[ObsoletedOSPlatform ("macos15.4", "FTP is deprecated. Only supported when the classic loader is enabled.")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public static NSString FTP {
+			[ObsoletedOSPlatform ("ios18.4", "FTP is deprecated. Only supported when the classic loader is enabled.")]
+			[ObsoletedOSPlatform ("tvos18.4", "FTP is deprecated. Only supported when the classic loader is enabled.")]
+			[ObsoletedOSPlatform ("maccatalyst18.4", "FTP is deprecated. Only supported when the classic loader is enabled.")]
+			[ObsoletedOSPlatform ("macos15.4", "FTP is deprecated. Only supported when the classic loader is enabled.")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			[SupportedOSPlatform ("maccatalyst")]
+			get {
+				if (_FTP is null)
+					_FTP = Dlfcn.GetStringConstant (Libraries.Foundation.Handle, "NSURLProtectionSpaceFTP")!;
+				return _FTP;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _FTPProxy;
+		/// <summary>Represents the value associated with the constant NSURLProtectionSpaceFTPProxy</summary><value></value><remarks>To be added.</remarks>
+		[Field ("NSURLProtectionSpaceFTPProxy",  "Foundation")]
+		public static NSString FTPProxy {
+			get {
+				if (_FTPProxy is null)
+					_FTPProxy = Dlfcn.GetStringConstant (Libraries.Foundation.Handle, "NSURLProtectionSpaceFTPProxy")!;
+				return _FTPProxy;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _HTTP;
+		/// <summary>Represents the value associated with the constant NSURLProtectionSpaceHTTP</summary><value></value><remarks>To be added.</remarks>
+		[Field ("NSURLProtectionSpaceHTTP",  "Foundation")]
+		public static NSString HTTP {
+			get {
+				if (_HTTP is null)
+					_HTTP = Dlfcn.GetStringConstant (Libraries.Foundation.Handle, "NSURLProtectionSpaceHTTP")!;
+				return _HTTP;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _HTTPProxy;
+		/// <summary>Represents the value associated with the constant NSURLProtectionSpaceHTTPProxy</summary><value></value><remarks>To be added.</remarks>
+		[Field ("NSURLProtectionSpaceHTTPProxy",  "Foundation")]
+		[ObsoletedOSPlatform ("ios18.4", "FTP is deprecated. Only supported when the classic loader is enabled.")]
+		[ObsoletedOSPlatform ("tvos18.4", "FTP is deprecated. Only supported when the classic loader is enabled.")]
+		[ObsoletedOSPlatform ("maccatalyst18.4", "FTP is deprecated. Only supported when the classic loader is enabled.")]
+		[ObsoletedOSPlatform ("macos15.4", "FTP is deprecated. Only supported when the classic loader is enabled.")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public static NSString HTTPProxy {
+			[ObsoletedOSPlatform ("ios18.4", "FTP is deprecated. Only supported when the classic loader is enabled.")]
+			[ObsoletedOSPlatform ("tvos18.4", "FTP is deprecated. Only supported when the classic loader is enabled.")]
+			[ObsoletedOSPlatform ("maccatalyst18.4", "FTP is deprecated. Only supported when the classic loader is enabled.")]
+			[ObsoletedOSPlatform ("macos15.4", "FTP is deprecated. Only supported when the classic loader is enabled.")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			[SupportedOSPlatform ("maccatalyst")]
+			get {
+				if (_HTTPProxy is null)
+					_HTTPProxy = Dlfcn.GetStringConstant (Libraries.Foundation.Handle, "NSURLProtectionSpaceHTTPProxy")!;
+				return _HTTPProxy;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _HTTPS;
+		/// <summary>Represents the value associated with the constant NSURLProtectionSpaceHTTPS</summary><value></value><remarks>To be added.</remarks>
+		[Field ("NSURLProtectionSpaceHTTPS",  "Foundation")]
+		public static NSString HTTPS {
+			get {
+				if (_HTTPS is null)
+					_HTTPS = Dlfcn.GetStringConstant (Libraries.Foundation.Handle, "NSURLProtectionSpaceHTTPS")!;
+				return _HTTPS;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _HTTPSProxy;
+		/// <summary>Represents the value associated with the constant NSURLProtectionSpaceHTTPSProxy</summary><value></value><remarks>To be added.</remarks>
+		[Field ("NSURLProtectionSpaceHTTPSProxy",  "Foundation")]
+		public static NSString HTTPSProxy {
+			get {
+				if (_HTTPSProxy is null)
+					_HTTPSProxy = Dlfcn.GetStringConstant (Libraries.Foundation.Handle, "NSURLProtectionSpaceHTTPSProxy")!;
+				return _HTTPSProxy;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _SOCKSProxy;
+		/// <summary>Represents the value associated with the constant NSURLProtectionSpaceSOCKSProxy</summary><value></value><remarks>To be added.</remarks>
+		[Field ("NSURLProtectionSpaceSOCKSProxy",  "Foundation")]
+		public static NSString SOCKSProxy {
+			get {
+				if (_SOCKSProxy is null)
+					_SOCKSProxy = Dlfcn.GetStringConstant (Libraries.Foundation.Handle, "NSURLProtectionSpaceSOCKSProxy")!;
+				return _SOCKSProxy;
+			}
+		}
+	} /* class NSUrlProtectionSpace */
+}

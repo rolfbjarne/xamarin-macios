@@ -1,0 +1,51 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using GLKit;
+using Metal;
+using CoreML;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Security;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace MetalPerformanceShadersGraph {
+	[Native]
+	public enum MPSGraphPaddingMode : long {
+		Constant = 0,
+		Reflect = 1,
+		Symmetric = 2,
+		ClampToEdge = 3,
+		Zero = 4,
+		Periodic = 5,
+		AntiPeriodic = 6,
+	}
+}

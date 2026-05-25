@@ -1,0 +1,531 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace AuthenticationServices {
+	/// <summary>A class whose shared instance (see <see cref="P:AuthenticationServices.ASCredentialIdentityStore.SharedStore" />) holds credentials across providers.</summary>
+	[Register("ASCredentialIdentityStore", true)]
+	[SupportedOSPlatform ("maccatalyst")]
+	[UnsupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class ASCredentialIdentityStore : NSObject {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selGetCredentialIdentitiesForService_CredentialIdentityTypes_CompletionHandler_X = "getCredentialIdentitiesForService:credentialIdentityTypes:completionHandler:";
+		static readonly NativeHandle selGetCredentialIdentitiesForService_CredentialIdentityTypes_CompletionHandler_XHandle = Selector.GetHandle ("getCredentialIdentitiesForService:credentialIdentityTypes:completionHandler:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selGetCredentialIdentityStoreStateWithCompletion_X = "getCredentialIdentityStoreStateWithCompletion:";
+		static readonly NativeHandle selGetCredentialIdentityStoreStateWithCompletion_XHandle = Selector.GetHandle ("getCredentialIdentityStoreStateWithCompletion:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRemoveAllCredentialIdentitiesWithCompletion_X = "removeAllCredentialIdentitiesWithCompletion:";
+		static readonly NativeHandle selRemoveAllCredentialIdentitiesWithCompletion_XHandle = Selector.GetHandle ("removeAllCredentialIdentitiesWithCompletion:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRemoveCredentialIdentities_Completion_X = "removeCredentialIdentities:completion:";
+		static readonly NativeHandle selRemoveCredentialIdentities_Completion_XHandle = Selector.GetHandle ("removeCredentialIdentities:completion:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRemoveCredentialIdentityEntries_Completion_X = "removeCredentialIdentityEntries:completion:";
+		static readonly NativeHandle selRemoveCredentialIdentityEntries_Completion_XHandle = Selector.GetHandle ("removeCredentialIdentityEntries:completion:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selReplaceCredentialIdentitiesWithIdentities_Completion_X = "replaceCredentialIdentitiesWithIdentities:completion:";
+		static readonly NativeHandle selReplaceCredentialIdentitiesWithIdentities_Completion_XHandle = Selector.GetHandle ("replaceCredentialIdentitiesWithIdentities:completion:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selReplaceCredentialIdentityEntries_Completion_X = "replaceCredentialIdentityEntries:completion:";
+		static readonly NativeHandle selReplaceCredentialIdentityEntries_Completion_XHandle = Selector.GetHandle ("replaceCredentialIdentityEntries:completion:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSaveCredentialIdentities_Completion_X = "saveCredentialIdentities:completion:";
+		static readonly NativeHandle selSaveCredentialIdentities_Completion_XHandle = Selector.GetHandle ("saveCredentialIdentities:completion:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSaveCredentialIdentityEntries_Completion_X = "saveCredentialIdentityEntries:completion:";
+		static readonly NativeHandle selSaveCredentialIdentityEntries_Completion_XHandle = Selector.GetHandle ("saveCredentialIdentityEntries:completion:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSharedStoreX = "sharedStore";
+		static readonly NativeHandle selSharedStoreXHandle = Selector.GetHandle ("sharedStore");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("ASCredentialIdentityStore");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected ASCredentialIdentityStore (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal ASCredentialIdentityStore (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("getCredentialIdentitiesForService:credentialIdentityTypes:completionHandler:")]
+		[SupportedOSPlatform ("macos14.4")]
+		[SupportedOSPlatform ("ios17.4")]
+		[SupportedOSPlatform ("maccatalyst17.4")]
+		[UnsupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void GetCredentialIdentities (ASCredentialServiceIdentifier? serviceIdentifier, ASCredentialIdentityTypes credentialIdentityTypes, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDASCredentialIdentityStoreGetCredentialIdentitiesHandler))]ASCredentialIdentityStoreGetCredentialIdentitiesHandler completion)
+		{
+			var serviceIdentifier__handle__ = serviceIdentifier.GetHandle ();
+			if (completion is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (completion));
+			using var block_completion = Trampolines.SDASCredentialIdentityStoreGetCredentialIdentitiesHandler.CreateBlock (completion);
+			BlockLiteral *block_ptr_completion = &block_completion;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_UIntPtr_NativeHandle (this.Handle, selGetCredentialIdentitiesForService_CredentialIdentityTypes_CompletionHandler_XHandle, serviceIdentifier__handle__, (UIntPtr) (ulong) credentialIdentityTypes, (IntPtr) block_ptr_completion);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_UIntPtr_NativeHandle (&__objc_super__, selGetCredentialIdentitiesForService_CredentialIdentityTypes_CompletionHandler_XHandle, serviceIdentifier__handle__, (UIntPtr) (ulong) credentialIdentityTypes, (IntPtr) block_ptr_completion);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (serviceIdentifier);
+		}
+		[SupportedOSPlatform ("macos14.4")]
+		[SupportedOSPlatform ("ios17.4")]
+		[SupportedOSPlatform ("maccatalyst17.4")]
+		[UnsupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<IASCredentialIdentity[]> GetCredentialIdentitiesAsync (ASCredentialServiceIdentifier? serviceIdentifier, ASCredentialIdentityTypes credentialIdentityTypes)
+		{
+			var tcs = new TaskCompletionSource<IASCredentialIdentity[]> ();
+			GetCredentialIdentities(serviceIdentifier, credentialIdentityTypes, (credentialIdentities_) => {
+				tcs.SetResult (credentialIdentities_!);
+			});
+			return tcs.Task;
+		}
+		/// <param name="completion">To be added.</param><summary>Retrieves the state of store, which is passed as an argument to the <paramref name="completion" /> handler.</summary><remarks>To be added.</remarks>
+		[Export ("getCredentialIdentityStoreStateWithCompletion:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void GetCredentialIdentityStoreState ([BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity1V30))]global::System.Action<ASCredentialIdentityStoreState> completion)
+		{
+			if (completion is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (completion));
+			using var block_completion = Trampolines.SDActionArity1V30.CreateBlock (completion);
+			BlockLiteral *block_ptr_completion = &block_completion;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selGetCredentialIdentityStoreStateWithCompletion_XHandle, (IntPtr) block_ptr_completion);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selGetCredentialIdentityStoreStateWithCompletion_XHandle, (IntPtr) block_ptr_completion);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <summary>Asynchronously gets the state of the identity store.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<ASCredentialIdentityStoreState> GetCredentialIdentityStoreStateAsync ()
+		{
+			var tcs = new TaskCompletionSource<ASCredentialIdentityStoreState> ();
+			GetCredentialIdentityStoreState((obj_) => {
+				tcs.SetResult (obj_!);
+			});
+			return tcs.Task;
+		}
+		/// <param name="completion">To be added.</param><summary>Removes all credential identities from the store. The <paramref name="completion" /> handler is called after the process completes.</summary><remarks>To be added.</remarks>
+		[Export ("removeAllCredentialIdentitiesWithCompletion:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void RemoveAllCredentialIdentities ([BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity2V13))]global::System.Action<bool, NSError>? completion)
+		{
+			using var block_completion = Trampolines.SDActionArity2V13.CreateNullableBlock (completion);
+			BlockLiteral *block_ptr_completion = null;
+			if (completion is not null)
+				block_ptr_completion = &block_completion;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selRemoveAllCredentialIdentitiesWithCompletion_XHandle, (IntPtr) block_ptr_completion);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selRemoveAllCredentialIdentitiesWithCompletion_XHandle, (IntPtr) block_ptr_completion);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <summary>Asynchronously removes all credential identities from the store. The returned tuple will have a first value of <see langword="true" /> if all identities were removed without error.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<Tuple<bool,NSError>> RemoveAllCredentialIdentitiesAsync ()
+		{
+			var tcs = new TaskCompletionSource<Tuple<bool,NSError>> ();
+			RemoveAllCredentialIdentities((arg1_, arg2_) => {
+				tcs.SetResult (new Tuple<bool,NSError> (arg1_, arg2_));
+			});
+			return tcs.Task;
+		}
+		/// <param name="credentialIdentities">To be added.</param><param name="completion">To be added.</param><summary>Removes the specified <paramref name="credentialIdentities" /> from the store. The <paramref name="completion" /> handler is called after the process completes.</summary><remarks>To be added.</remarks>
+		[Export ("removeCredentialIdentities:completion:")]
+		[ObsoletedOSPlatform ("maccatalyst17.0", "Use 'RemoveCredentialIdentityEntries (ASPasswordCredentialIdentity [])' instead.")]
+		[ObsoletedOSPlatform ("ios17.0", "Use 'RemoveCredentialIdentityEntries (ASPasswordCredentialIdentity [])' instead.")]
+		[ObsoletedOSPlatform ("macos14.0", "Use 'RemoveCredentialIdentityEntries (ASPasswordCredentialIdentity [])' instead.")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void RemoveCredentialIdentities (ASPasswordCredentialIdentity[] credentialIdentities, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDASCredentialIdentityStoreCompletionHandler))]ASCredentialIdentityStoreCompletionHandler? completion)
+		{
+			if (credentialIdentities is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (credentialIdentities));
+			using var nsa_credentialIdentities = NSArray.FromNSObjects (credentialIdentities);
+			using var block_completion = Trampolines.SDASCredentialIdentityStoreCompletionHandler.CreateNullableBlock (completion);
+			BlockLiteral *block_ptr_completion = null;
+			if (completion is not null)
+				block_ptr_completion = &block_completion;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selRemoveCredentialIdentities_Completion_XHandle, nsa_credentialIdentities.Handle, (IntPtr) block_ptr_completion);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selRemoveCredentialIdentities_Completion_XHandle, nsa_credentialIdentities.Handle, (IntPtr) block_ptr_completion);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <param name="credentialIdentities">To be added.</param>
+		/// <summary>Asynchronously removes the specified <paramref name="credentialIdentities" /> from the store. The returned tuple will have a first value of <see langword="true" /> if all identities were removed without error.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[ObsoletedOSPlatform ("maccatalyst17.0", "Use 'RemoveCredentialIdentityEntries (ASPasswordCredentialIdentity [])' instead.")]
+		[ObsoletedOSPlatform ("ios17.0", "Use 'RemoveCredentialIdentityEntries (ASPasswordCredentialIdentity [])' instead.")]
+		[ObsoletedOSPlatform ("macos14.0", "Use 'RemoveCredentialIdentityEntries (ASPasswordCredentialIdentity [])' instead.")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<Tuple<bool,NSError?>> RemoveCredentialIdentitiesAsync (ASPasswordCredentialIdentity[] credentialIdentities)
+		{
+			var tcs = new TaskCompletionSource<Tuple<bool,NSError?>> ();
+			RemoveCredentialIdentities(credentialIdentities, (success_, error_) => {
+				tcs.SetResult (new Tuple<bool,NSError?> (success_, error_));
+			});
+			return tcs.Task;
+		}
+		[Export ("removeCredentialIdentityEntries:completion:")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[UnsupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void RemoveCredentialIdentityEntries (IASCredentialIdentity[] credentialIdentities, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity2V13))]global::System.Action<bool, NSError>? completion)
+		{
+			if (credentialIdentities is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (credentialIdentities));
+			using var nsa_credentialIdentities = NSArray.FromNSObjects (credentialIdentities);
+			using var block_completion = Trampolines.SDActionArity2V13.CreateNullableBlock (completion);
+			BlockLiteral *block_ptr_completion = null;
+			if (completion is not null)
+				block_ptr_completion = &block_completion;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selRemoveCredentialIdentityEntries_Completion_XHandle, nsa_credentialIdentities.Handle, (IntPtr) block_ptr_completion);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selRemoveCredentialIdentityEntries_Completion_XHandle, nsa_credentialIdentities.Handle, (IntPtr) block_ptr_completion);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[UnsupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<Tuple<bool,NSError>> RemoveCredentialIdentityEntriesAsync (IASCredentialIdentity[] credentialIdentities)
+		{
+			var tcs = new TaskCompletionSource<Tuple<bool,NSError>> ();
+			RemoveCredentialIdentityEntries(credentialIdentities, (arg1_, arg2_) => {
+				tcs.SetResult (new Tuple<bool,NSError> (arg1_, arg2_));
+			});
+			return tcs.Task;
+		}
+		/// <param name="newCredentialIdentities">To be added.</param><param name="completion">To be added.</param><summary>Replaces the existing identities with the specified <paramref name="newCredentialIdentities" /> from the store. The <paramref name="completion" /> handler is called after the process completes.</summary><remarks>To be added.</remarks>
+		[Export ("replaceCredentialIdentitiesWithIdentities:completion:")]
+		[ObsoletedOSPlatform ("maccatalyst17.0", "Use 'ReplaceCredentialIdentityEntries (ASPasswordCredentialIdentity [])' instead.")]
+		[ObsoletedOSPlatform ("ios17.0", "Use 'ReplaceCredentialIdentityEntries (ASPasswordCredentialIdentity [])' instead.")]
+		[ObsoletedOSPlatform ("macos14.0", "Use 'ReplaceCredentialIdentityEntries (ASPasswordCredentialIdentity [])' instead.")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void ReplaceCredentialIdentities (ASPasswordCredentialIdentity[] newCredentialIdentities, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDASCredentialIdentityStoreCompletionHandler))]ASCredentialIdentityStoreCompletionHandler? completion)
+		{
+			if (newCredentialIdentities is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (newCredentialIdentities));
+			using var nsa_newCredentialIdentities = NSArray.FromNSObjects (newCredentialIdentities);
+			using var block_completion = Trampolines.SDASCredentialIdentityStoreCompletionHandler.CreateNullableBlock (completion);
+			BlockLiteral *block_ptr_completion = null;
+			if (completion is not null)
+				block_ptr_completion = &block_completion;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selReplaceCredentialIdentitiesWithIdentities_Completion_XHandle, nsa_newCredentialIdentities.Handle, (IntPtr) block_ptr_completion);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selReplaceCredentialIdentitiesWithIdentities_Completion_XHandle, nsa_newCredentialIdentities.Handle, (IntPtr) block_ptr_completion);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <param name="newCredentialIdentities">To be added.</param>
+		/// <summary>Asynchronously replaces the existing identities with the specified <paramref name="newCredentialIdentities" /> from the store. The returned tuple will have a first value of <see langword="true" /> if all identities were removed without error.</summary>
+		/// <returns>To be added.</returns>
+		/// <remarks>To be added.</remarks>
+		[ObsoletedOSPlatform ("maccatalyst17.0", "Use 'ReplaceCredentialIdentityEntries (ASPasswordCredentialIdentity [])' instead.")]
+		[ObsoletedOSPlatform ("ios17.0", "Use 'ReplaceCredentialIdentityEntries (ASPasswordCredentialIdentity [])' instead.")]
+		[ObsoletedOSPlatform ("macos14.0", "Use 'ReplaceCredentialIdentityEntries (ASPasswordCredentialIdentity [])' instead.")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<Tuple<bool,NSError?>> ReplaceCredentialIdentitiesAsync (ASPasswordCredentialIdentity[] newCredentialIdentities)
+		{
+			var tcs = new TaskCompletionSource<Tuple<bool,NSError?>> ();
+			ReplaceCredentialIdentities(newCredentialIdentities, (success_, error_) => {
+				tcs.SetResult (new Tuple<bool,NSError?> (success_, error_));
+			});
+			return tcs.Task;
+		}
+		[Export ("replaceCredentialIdentityEntries:completion:")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[UnsupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void ReplaceCredentialIdentityEntries (IASCredentialIdentity[] newCredentialIdentities, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity2V13))]global::System.Action<bool, NSError>? completion)
+		{
+			if (newCredentialIdentities is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (newCredentialIdentities));
+			using var nsa_newCredentialIdentities = NSArray.FromNSObjects (newCredentialIdentities);
+			using var block_completion = Trampolines.SDActionArity2V13.CreateNullableBlock (completion);
+			BlockLiteral *block_ptr_completion = null;
+			if (completion is not null)
+				block_ptr_completion = &block_completion;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selReplaceCredentialIdentityEntries_Completion_XHandle, nsa_newCredentialIdentities.Handle, (IntPtr) block_ptr_completion);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selReplaceCredentialIdentityEntries_Completion_XHandle, nsa_newCredentialIdentities.Handle, (IntPtr) block_ptr_completion);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[UnsupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<Tuple<bool,NSError>> ReplaceCredentialIdentityEntriesAsync (IASCredentialIdentity[] newCredentialIdentities)
+		{
+			var tcs = new TaskCompletionSource<Tuple<bool,NSError>> ();
+			ReplaceCredentialIdentityEntries(newCredentialIdentities, (arg1_, arg2_) => {
+				tcs.SetResult (new Tuple<bool,NSError> (arg1_, arg2_));
+			});
+			return tcs.Task;
+		}
+		/// <param name="credentialIdentities">To be added.</param><param name="completion">To be added.</param><summary>Saves (or replaces, if the store does not support incremental updates) the <paramref name="credentialIdentities" /> to the store.</summary><remarks>To be added.</remarks>
+		[Export ("saveCredentialIdentities:completion:")]
+		[ObsoletedOSPlatform ("macos14.0", "Use 'SaveCredentialIdentityEntries  (ASCredentialIdentity [])' instead.")]
+		[ObsoletedOSPlatform ("ios17.0", "Use 'SaveCredentialIdentityEntries  (ASCredentialIdentity [])' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst17.0", "Use 'SaveCredentialIdentityEntries  (ASCredentialIdentity [])' instead.")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void SaveCredentialIdentities (ASPasswordCredentialIdentity[] credentialIdentities, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDASCredentialIdentityStoreCompletionHandler))]ASCredentialIdentityStoreCompletionHandler? completion)
+		{
+			if (credentialIdentities is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (credentialIdentities));
+			using var nsa_credentialIdentities = NSArray.FromNSObjects (credentialIdentities);
+			using var block_completion = Trampolines.SDASCredentialIdentityStoreCompletionHandler.CreateNullableBlock (completion);
+			BlockLiteral *block_ptr_completion = null;
+			if (completion is not null)
+				block_ptr_completion = &block_completion;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selSaveCredentialIdentities_Completion_XHandle, nsa_credentialIdentities.Handle, (IntPtr) block_ptr_completion);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selSaveCredentialIdentities_Completion_XHandle, nsa_credentialIdentities.Handle, (IntPtr) block_ptr_completion);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <param name="credentialIdentities">To be added.</param>
+		/// <summary>Asynchronously saves (or replaces, if the store does not support incremental updates) the <paramref name="credentialIdentities" /> to the store.</summary>
+		/// <returns>The first value will be <see langword="true" /> on success. The second value will be non-null on error.</returns>
+		/// <remarks>To be added.</remarks>
+		[ObsoletedOSPlatform ("macos14.0", "Use 'SaveCredentialIdentityEntries  (ASCredentialIdentity [])' instead.")]
+		[ObsoletedOSPlatform ("ios17.0", "Use 'SaveCredentialIdentityEntries  (ASCredentialIdentity [])' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst17.0", "Use 'SaveCredentialIdentityEntries  (ASCredentialIdentity [])' instead.")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<Tuple<bool,NSError?>> SaveCredentialIdentitiesAsync (ASPasswordCredentialIdentity[] credentialIdentities)
+		{
+			var tcs = new TaskCompletionSource<Tuple<bool,NSError?>> ();
+			SaveCredentialIdentities(credentialIdentities, (success_, error_) => {
+				tcs.SetResult (new Tuple<bool,NSError?> (success_, error_));
+			});
+			return tcs.Task;
+		}
+		[Export ("saveCredentialIdentityEntries:completion:")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[UnsupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void SaveCredentialIdentityEntries (IASCredentialIdentity[] credentialIdentities, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity2V13))]global::System.Action<bool, NSError>? completion)
+		{
+			if (credentialIdentities is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (credentialIdentities));
+			using var nsa_credentialIdentities = NSArray.FromNSObjects (credentialIdentities);
+			using var block_completion = Trampolines.SDActionArity2V13.CreateNullableBlock (completion);
+			BlockLiteral *block_ptr_completion = null;
+			if (completion is not null)
+				block_ptr_completion = &block_completion;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selSaveCredentialIdentityEntries_Completion_XHandle, nsa_credentialIdentities.Handle, (IntPtr) block_ptr_completion);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selSaveCredentialIdentityEntries_Completion_XHandle, nsa_credentialIdentities.Handle, (IntPtr) block_ptr_completion);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[UnsupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<Tuple<bool,NSError>> SaveCredentialIdentityEntriesAsync (IASCredentialIdentity[] credentialIdentities)
+		{
+			var tcs = new TaskCompletionSource<Tuple<bool,NSError>> ();
+			SaveCredentialIdentityEntries(credentialIdentities, (arg1_, arg2_) => {
+				tcs.SetResult (new Tuple<bool,NSError> (arg1_, arg2_));
+			});
+			return tcs.Task;
+		}
+		/// <summary>The singleton shared credential identity store.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static ASCredentialIdentityStore SharedStore {
+			[Export ("sharedStore")]
+			get {
+				ASCredentialIdentityStore? ret;
+				ret =  Runtime.GetNSObject<ASCredentialIdentityStore> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (class_ptr, selSharedStoreXHandle), false)!;
+				return ret!;
+			}
+		}
+	} /* class ASCredentialIdentityStore */
+}

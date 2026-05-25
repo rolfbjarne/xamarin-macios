@@ -1,0 +1,310 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace AVFoundation {
+	[Register("AVAssetReaderAudioMixOutput", true)]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
+	public unsafe partial class AVAssetReaderAudioMixOutput : AVAssetReaderOutput {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAssetReaderAudioMixOutputWithAudioTracks_AudioSettings_X = "assetReaderAudioMixOutputWithAudioTracks:audioSettings:";
+		static readonly NativeHandle selAssetReaderAudioMixOutputWithAudioTracks_AudioSettings_XHandle = Selector.GetHandle ("assetReaderAudioMixOutputWithAudioTracks:audioSettings:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAudioMixX = "audioMix";
+		static readonly NativeHandle selAudioMixXHandle = Selector.GetHandle ("audioMix");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAudioSettingsX = "audioSettings";
+		static readonly NativeHandle selAudioSettingsXHandle = Selector.GetHandle ("audioSettings");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAudioTimePitchAlgorithmX = "audioTimePitchAlgorithm";
+		static readonly NativeHandle selAudioTimePitchAlgorithmXHandle = Selector.GetHandle ("audioTimePitchAlgorithm");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAudioTracksX = "audioTracks";
+		static readonly NativeHandle selAudioTracksXHandle = Selector.GetHandle ("audioTracks");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithAudioTracks_AudioSettings_X = "initWithAudioTracks:audioSettings:";
+		static readonly NativeHandle selInitWithAudioTracks_AudioSettings_XHandle = Selector.GetHandle ("initWithAudioTracks:audioSettings:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetAudioMix_X = "setAudioMix:";
+		static readonly NativeHandle selSetAudioMix_XHandle = Selector.GetHandle ("setAudioMix:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetAudioTimePitchAlgorithm_X = "setAudioTimePitchAlgorithm:";
+		static readonly NativeHandle selSetAudioTimePitchAlgorithm_XHandle = Selector.GetHandle ("setAudioTimePitchAlgorithm:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("AVAssetReaderAudioMixOutput");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected AVAssetReaderAudioMixOutput (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal AVAssetReaderAudioMixOutput (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("initWithAudioTracks:audioSettings:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public AVAssetReaderAudioMixOutput (AVAssetTrack[] audioTracks, NSDictionary? audioSettings)
+			: base (NSObjectFlag.Empty)
+		{
+			if (audioTracks is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (audioTracks));
+			var audioSettings__handle__ = audioSettings.GetHandle ();
+			using var nsa_audioTracks = NSArray.FromNSObjects (audioTracks);
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selInitWithAudioTracks_AudioSettings_XHandle, nsa_audioTracks.Handle, audioSettings__handle__), "initWithAudioTracks:audioSettings:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selInitWithAudioTracks_AudioSettings_XHandle, nsa_audioTracks.Handle, audioSettings__handle__), "initWithAudioTracks:audioSettings:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (audioSettings);
+		}
+		/// <param name="audioTracks">To be added.</param><param name="settings">To be added.</param><summary>To be added.</summary><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public AVAssetReaderAudioMixOutput (AVAssetTrack[] audioTracks, AudioSettings? settings)
+			: this (audioTracks, settings.GetDictionary ())
+		{
+		}
+		/// <param name="audioTracks">To be added.</param><param name="settings"><para>The audio settings to use.</para><para tool="nullallowed">This parameter can be <see langword="null" />.</para></param><summary>Factory method to create a <see cref="T:AVFoundation.AVAssetReaderAudioMixOutput" /> with the specified <paramref name="audioTracks" /> and <paramref name="settings" />.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public AVAssetReaderAudioMixOutput Create (AVAssetTrack[] audioTracks, AudioSettings? settings)
+		{
+			return FromTracks (audioTracks, settings.GetDictionary ());
+		}
+		[Export ("assetReaderAudioMixOutputWithAudioTracks:audioSettings:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[Advice (@"Use 'Create' method.")]
+		internal static AVAssetReaderAudioMixOutput FromTracks (AVAssetTrack[] audioTracks, NSDictionary? audioSettings)
+		{
+			if (audioTracks is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (audioTracks));
+			var audioSettings__handle__ = audioSettings.GetHandle ();
+			using var nsa_audioTracks = NSArray.FromNSObjects (audioTracks);
+			AVAssetReaderAudioMixOutput? ret;
+			ret =  Runtime.GetNSObject<AVAssetReaderAudioMixOutput> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (class_ptr, selAssetReaderAudioMixOutputWithAudioTracks_AudioSettings_XHandle, nsa_audioTracks.Handle, audioSettings__handle__), false)!;
+			GC.KeepAlive (audioSettings);
+			return ret!;
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual AVAudioMix? AudioMix {
+			[Export ("audioMix", ArgumentSemantic.Copy)]
+			get {
+				AVAudioMix? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<AVAudioMix> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selAudioMixXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<AVAudioMix> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selAudioMixXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setAudioMix:", ArgumentSemantic.Copy)]
+			set {
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetAudioMix_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetAudioMix_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[Advice (@"Use 'Settings' property.")]
+		internal virtual NSDictionary? AudioSettings {
+			[Export ("audioSettings")]
+			get {
+				NSDictionary? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSDictionary> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selAudioSettingsXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSDictionary> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selAudioSettingsXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public virtual NSString AudioTimePitchAlgorithm {
+			[Export ("audioTimePitchAlgorithm", ArgumentSemantic.Copy)]
+			get {
+				NSString? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSString> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selAudioTimePitchAlgorithmXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSString> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selAudioTimePitchAlgorithmXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setAudioTimePitchAlgorithm:", ArgumentSemantic.Copy)]
+			set {
+				var value__handle__ = value!.GetNonNullHandle (nameof (value));
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetAudioTimePitchAlgorithm_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetAudioTimePitchAlgorithm_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual AVAssetTrack[] AudioTracks {
+			[Export ("audioTracks")]
+			get {
+				AVAssetTrack[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<AVAssetTrack>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selAudioTracksXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<AVAssetTrack>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selAudioTracksXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		/// <summary>If not <see langword="null" />, the output's audio settings.</summary><value><para>(More documentation for this node is coming)</para><para tool="nullallowed">This value can be <see langword="null" />.</para></value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public AudioSettings? Settings {
+			get {
+				var src = AudioSettings is not null ? new NSMutableDictionary (AudioSettings) : null;
+				return src is null ? null! : new AudioSettings(src);
+			}
+		}
+	} /* class AVAssetReaderAudioMixOutput */
+}

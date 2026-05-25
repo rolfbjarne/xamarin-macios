@@ -1,0 +1,77 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using Metal;
+using CoreML;
+using AppKit;
+using MapKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using Messages;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using QuickLook;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using CoreMotion;
+using ObjCRuntime;
+using AddressBook;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace CoreML {
+	[SupportedOSPlatform ("tvos13.0")]
+	[SupportedOSPlatform ("ios13.0")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos")]
+	internal unsafe static partial class MLFeatureValueImageOptionKeys  {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _CropAndScaleKey;
+		/// <summary>Represents the value associated with the constant 'MLFeatureValueImageOptionCropAndScale'.</summary>
+		[Field ("MLFeatureValueImageOptionCropAndScale",  "CoreML")]
+		public static NSString CropAndScaleKey {
+			get {
+				if (_CropAndScaleKey is null)
+					_CropAndScaleKey = Dlfcn.GetStringConstant (Libraries.CoreML.Handle, "MLFeatureValueImageOptionCropAndScale")!;
+				return _CropAndScaleKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _CropRectKey;
+		/// <summary>Represents the value associated with the constant 'MLFeatureValueImageOptionCropRect'.</summary>
+		[Field ("MLFeatureValueImageOptionCropRect",  "CoreML")]
+		public static NSString CropRectKey {
+			get {
+				if (_CropRectKey is null)
+					_CropRectKey = Dlfcn.GetStringConstant (Libraries.CoreML.Handle, "MLFeatureValueImageOptionCropRect")!;
+				return _CropRectKey;
+			}
+		}
+	} /* class MLFeatureValueImageOptionKeys */
+}

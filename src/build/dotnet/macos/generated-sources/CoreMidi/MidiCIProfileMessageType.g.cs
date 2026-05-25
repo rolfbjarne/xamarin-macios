@@ -1,0 +1,62 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace CoreMidi {
+	[SupportedOSPlatform ("tvos18.0")]
+	[SupportedOSPlatform ("macos15.0")]
+	[SupportedOSPlatform ("ios18.0")]
+	[SupportedOSPlatform ("maccatalyst18.0")]
+	[NativeName ("MIDICIProfileMessageType")]
+	public enum MidiCIProfileMessageType : byte {
+		ProfileInquiry = 32,
+		ReplyToProfileInquiry = 33,
+		SetProfileOn = 34,
+		SetProfileOff = 35,
+		ProfileEnabledReport = 36,
+		ProfileDisabledReport = 37,
+		ProfileAdded = 38,
+		ProfileRemoved = 39,
+		DetailsInquiry = 40,
+		ReplyToDetailsInquiry = 41,
+		ProfileSpecificData = 47,
+	}
+}

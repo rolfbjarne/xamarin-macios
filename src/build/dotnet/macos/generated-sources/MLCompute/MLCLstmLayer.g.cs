@@ -1,0 +1,421 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace MLCompute {
+	[Register("MLCLSTMLayer", true)]
+	[SupportedOSPlatform ("ios14.0")]
+	[SupportedOSPlatform ("tvos14.0")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[ObsoletedOSPlatform ("macos14.3", "Use the Metal Performance Shaders Graph or the Accelerate framework (BNNS) instead.")]
+	[ObsoletedOSPlatform ("ios17.4", "Use the Metal Performance Shaders Graph or the Accelerate framework (BNNS) instead.")]
+	[ObsoletedOSPlatform ("tvos17.4", "Use the Metal Performance Shaders Graph or the Accelerate framework (BNNS) instead.")]
+	[ObsoletedOSPlatform ("maccatalyst17.4", "Use the Metal Performance Shaders Graph or the Accelerate framework (BNNS) instead.")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class MLCLstmLayer : MLCLayer {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selBiasesX = "biases";
+		static readonly NativeHandle selBiasesXHandle = Selector.GetHandle ("biases");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selBiasesParametersX = "biasesParameters";
+		static readonly NativeHandle selBiasesParametersXHandle = Selector.GetHandle ("biasesParameters");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDescriptorX = "descriptor";
+		static readonly NativeHandle selDescriptorXHandle = Selector.GetHandle ("descriptor");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selGateActivationsX = "gateActivations";
+		static readonly NativeHandle selGateActivationsXHandle = Selector.GetHandle ("gateActivations");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selHiddenWeightsX = "hiddenWeights";
+		static readonly NativeHandle selHiddenWeightsXHandle = Selector.GetHandle ("hiddenWeights");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selHiddenWeightsParametersX = "hiddenWeightsParameters";
+		static readonly NativeHandle selHiddenWeightsParametersXHandle = Selector.GetHandle ("hiddenWeightsParameters");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInputWeightsX = "inputWeights";
+		static readonly NativeHandle selInputWeightsXHandle = Selector.GetHandle ("inputWeights");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInputWeightsParametersX = "inputWeightsParameters";
+		static readonly NativeHandle selInputWeightsParametersXHandle = Selector.GetHandle ("inputWeightsParameters");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selLayerWithDescriptor_InputWeights_HiddenWeights_Biases_X = "layerWithDescriptor:inputWeights:hiddenWeights:biases:";
+		static readonly NativeHandle selLayerWithDescriptor_InputWeights_HiddenWeights_Biases_XHandle = Selector.GetHandle ("layerWithDescriptor:inputWeights:hiddenWeights:biases:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selLayerWithDescriptor_InputWeights_HiddenWeights_PeepholeWeights_Biases_X = "layerWithDescriptor:inputWeights:hiddenWeights:peepholeWeights:biases:";
+		static readonly NativeHandle selLayerWithDescriptor_InputWeights_HiddenWeights_PeepholeWeights_Biases_XHandle = Selector.GetHandle ("layerWithDescriptor:inputWeights:hiddenWeights:peepholeWeights:biases:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selLayerWithDescriptor_InputWeights_HiddenWeights_PeepholeWeights_Biases_GateActivations_OutputResultActivation_X = "layerWithDescriptor:inputWeights:hiddenWeights:peepholeWeights:biases:gateActivations:outputResultActivation:";
+		static readonly NativeHandle selLayerWithDescriptor_InputWeights_HiddenWeights_PeepholeWeights_Biases_GateActivations_OutputResultActivation_XHandle = Selector.GetHandle ("layerWithDescriptor:inputWeights:hiddenWeights:peepholeWeights:biases:gateActivations:outputResultActivation:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selOutputResultActivationX = "outputResultActivation";
+		static readonly NativeHandle selOutputResultActivationXHandle = Selector.GetHandle ("outputResultActivation");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPeepholeWeightsX = "peepholeWeights";
+		static readonly NativeHandle selPeepholeWeightsXHandle = Selector.GetHandle ("peepholeWeights");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPeepholeWeightsParametersX = "peepholeWeightsParameters";
+		static readonly NativeHandle selPeepholeWeightsParametersXHandle = Selector.GetHandle ("peepholeWeightsParameters");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("MLCLSTMLayer");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected MLCLstmLayer (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal MLCLstmLayer (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("layerWithDescriptor:inputWeights:hiddenWeights:biases:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static MLCLstmLayer? Create (MLCLstmDescriptor descriptor, MLCTensor[] inputWeights, MLCTensor[] hiddenWeights, MLCTensor[]? biases)
+		{
+			var descriptor__handle__ = descriptor!.GetNonNullHandle (nameof (descriptor));
+			if (inputWeights is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (inputWeights));
+			if (hiddenWeights is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (hiddenWeights));
+			using var nsa_inputWeights = NSArray.FromNSObjects (inputWeights);
+			using var nsa_hiddenWeights = NSArray.FromNSObjects (hiddenWeights);
+			using var nsa_biases = biases is null ? null : NSArray.FromNSObjects (biases);
+			MLCLstmLayer? ret;
+			ret =  Runtime.GetNSObject<MLCLstmLayer> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_NativeHandle (class_ptr, selLayerWithDescriptor_InputWeights_HiddenWeights_Biases_XHandle, descriptor__handle__, nsa_inputWeights.Handle, nsa_hiddenWeights.Handle, nsa_biases.GetHandle ()), false)!;
+			GC.KeepAlive (descriptor);
+			return ret!;
+		}
+		[Export ("layerWithDescriptor:inputWeights:hiddenWeights:peepholeWeights:biases:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static MLCLstmLayer? Create (MLCLstmDescriptor descriptor, MLCTensor[] inputWeights, MLCTensor[] hiddenWeights, MLCTensor[]? peepholeWeights, MLCTensor[]? biases)
+		{
+			var descriptor__handle__ = descriptor!.GetNonNullHandle (nameof (descriptor));
+			if (inputWeights is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (inputWeights));
+			if (hiddenWeights is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (hiddenWeights));
+			using var nsa_inputWeights = NSArray.FromNSObjects (inputWeights);
+			using var nsa_hiddenWeights = NSArray.FromNSObjects (hiddenWeights);
+			using var nsa_peepholeWeights = peepholeWeights is null ? null : NSArray.FromNSObjects (peepholeWeights);
+			using var nsa_biases = biases is null ? null : NSArray.FromNSObjects (biases);
+			MLCLstmLayer? ret;
+			ret =  Runtime.GetNSObject<MLCLstmLayer> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle (class_ptr, selLayerWithDescriptor_InputWeights_HiddenWeights_PeepholeWeights_Biases_XHandle, descriptor__handle__, nsa_inputWeights.Handle, nsa_hiddenWeights.Handle, nsa_peepholeWeights.GetHandle (), nsa_biases.GetHandle ()), false)!;
+			GC.KeepAlive (descriptor);
+			return ret!;
+		}
+		[Export ("layerWithDescriptor:inputWeights:hiddenWeights:peepholeWeights:biases:gateActivations:outputResultActivation:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static MLCLstmLayer? Create (MLCLstmDescriptor descriptor, MLCTensor[] inputWeights, MLCTensor[] hiddenWeights, MLCTensor[]? peepholeWeights, MLCTensor[]? biases, MLCActivationDescriptor[] gateActivations, MLCActivationDescriptor outputResultActivation)
+		{
+			var descriptor__handle__ = descriptor!.GetNonNullHandle (nameof (descriptor));
+			if (inputWeights is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (inputWeights));
+			if (hiddenWeights is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (hiddenWeights));
+			if (gateActivations is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (gateActivations));
+			var outputResultActivation__handle__ = outputResultActivation!.GetNonNullHandle (nameof (outputResultActivation));
+			using var nsa_inputWeights = NSArray.FromNSObjects (inputWeights);
+			using var nsa_hiddenWeights = NSArray.FromNSObjects (hiddenWeights);
+			using var nsa_peepholeWeights = peepholeWeights is null ? null : NSArray.FromNSObjects (peepholeWeights);
+			using var nsa_biases = biases is null ? null : NSArray.FromNSObjects (biases);
+			using var nsa_gateActivations = NSArray.FromNSObjects (gateActivations);
+			MLCLstmLayer? ret;
+			ret =  Runtime.GetNSObject<MLCLstmLayer> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle (class_ptr, selLayerWithDescriptor_InputWeights_HiddenWeights_PeepholeWeights_Biases_GateActivations_OutputResultActivation_XHandle, descriptor__handle__, nsa_inputWeights.Handle, nsa_hiddenWeights.Handle, nsa_peepholeWeights.GetHandle (), nsa_biases.GetHandle (), nsa_gateActivations.Handle, outputResultActivation__handle__), false)!;
+			GC.KeepAlive (descriptor);
+			GC.KeepAlive (outputResultActivation);
+			return ret!;
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MLCTensor[]? Biases {
+			[Export ("biases", ArgumentSemantic.Retain)]
+			get {
+				MLCTensor[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<MLCTensor>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selBiasesXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<MLCTensor>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selBiasesXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MLCTensorParameter[]? BiasesParameters {
+			[Export ("biasesParameters", ArgumentSemantic.Retain)]
+			get {
+				MLCTensorParameter[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<MLCTensorParameter>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selBiasesParametersXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<MLCTensorParameter>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selBiasesParametersXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MLCLstmDescriptor Descriptor {
+			[Export ("descriptor", ArgumentSemantic.Copy)]
+			get {
+				MLCLstmDescriptor? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<MLCLstmDescriptor> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selDescriptorXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<MLCLstmDescriptor> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selDescriptorXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MLCActivationDescriptor[] GateActivations {
+			[Export ("gateActivations", ArgumentSemantic.Copy)]
+			get {
+				MLCActivationDescriptor[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<MLCActivationDescriptor>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selGateActivationsXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<MLCActivationDescriptor>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selGateActivationsXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MLCTensor[] HiddenWeights {
+			[Export ("hiddenWeights", ArgumentSemantic.Retain)]
+			get {
+				MLCTensor[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<MLCTensor>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selHiddenWeightsXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<MLCTensor>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selHiddenWeightsXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MLCTensorParameter[] HiddenWeightsParameters {
+			[Export ("hiddenWeightsParameters", ArgumentSemantic.Retain)]
+			get {
+				MLCTensorParameter[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<MLCTensorParameter>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selHiddenWeightsParametersXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<MLCTensorParameter>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selHiddenWeightsParametersXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MLCTensor[] InputWeights {
+			[Export ("inputWeights", ArgumentSemantic.Retain)]
+			get {
+				MLCTensor[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<MLCTensor>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selInputWeightsXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<MLCTensor>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selInputWeightsXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MLCTensorParameter[] InputWeightsParameters {
+			[Export ("inputWeightsParameters", ArgumentSemantic.Retain)]
+			get {
+				MLCTensorParameter[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<MLCTensorParameter>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selInputWeightsParametersXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<MLCTensorParameter>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selInputWeightsParametersXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MLCActivationDescriptor OutputResultActivation {
+			[Export ("outputResultActivation", ArgumentSemantic.Copy)]
+			get {
+				MLCActivationDescriptor? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<MLCActivationDescriptor> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selOutputResultActivationXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<MLCActivationDescriptor> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selOutputResultActivationXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MLCTensor[]? PeepholeWeights {
+			[Export ("peepholeWeights", ArgumentSemantic.Retain)]
+			get {
+				MLCTensor[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<MLCTensor>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selPeepholeWeightsXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<MLCTensor>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selPeepholeWeightsXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MLCTensorParameter[]? PeepholeWeightsParameters {
+			[Export ("peepholeWeightsParameters", ArgumentSemantic.Retain)]
+			get {
+				MLCTensorParameter[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<MLCTensorParameter>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selPeepholeWeightsParametersXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<MLCTensorParameter>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selPeepholeWeightsParametersXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+	} /* class MLCLstmLayer */
+}

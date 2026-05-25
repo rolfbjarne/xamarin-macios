@@ -1,0 +1,75 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace CoreAnimation {
+	public partial class CARendererOptions : DictionaryContainer {
+#if !COREBUILD
+		/// <summary>Creates a new <see cref="CARendererOptions" /> with default (empty) values.</summary>
+		public CARendererOptions () : base (new NSMutableDictionary ()) {}
+		/// <summary>Creates a new <see cref="CARendererOptions" /> from the values that are specified in <paramref name="dictionary" />.</summary>
+		/// <param name="dictionary">The dictionary to use to populate the properties of this type.</param>
+		public CARendererOptions (NSDictionary? dictionary) : base (dictionary) {}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		public CGColorSpace? ColorSpace {
+			get {
+				return GetNativeValue<CoreGraphics.CGColorSpace> (CARendererOptionKeys.ColorSpace!);
+			}
+			set {
+				SetNativeValue (CARendererOptionKeys.ColorSpace!, value);
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[UnsupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public global::Metal.IMTLCommandQueue? MetalCommandQueue {
+			get {
+				return Dictionary [CARendererOptionKeys.MetalCommandQueue!] as Metal.IMTLCommandQueue;
+			}
+			set {
+				SetNativeValue (CARendererOptionKeys.MetalCommandQueue!, value);
+			}
+		}
+#endif
+	}
+}

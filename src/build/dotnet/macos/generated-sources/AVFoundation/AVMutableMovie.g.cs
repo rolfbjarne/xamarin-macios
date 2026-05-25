@@ -1,0 +1,843 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace AVFoundation {
+	[Register("AVMutableMovie", true)]
+	[UnsupportedOSPlatform ("tvos")]
+	[SupportedOSPlatform ("ios13.0")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class AVMutableMovie : AVMovie {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selChapterMetadataGroupsBestMatchingPreferredLanguages_X = "chapterMetadataGroupsBestMatchingPreferredLanguages:";
+		static readonly NativeHandle selChapterMetadataGroupsBestMatchingPreferredLanguages_XHandle = Selector.GetHandle ("chapterMetadataGroupsBestMatchingPreferredLanguages:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selChapterMetadataGroupsWithTitleLocale_ContainingItemsWithCommonKeys_X = "chapterMetadataGroupsWithTitleLocale:containingItemsWithCommonKeys:";
+		static readonly NativeHandle selChapterMetadataGroupsWithTitleLocale_ContainingItemsWithCommonKeys_XHandle = Selector.GetHandle ("chapterMetadataGroupsWithTitleLocale:containingItemsWithCommonKeys:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDefaultMediaDataStorageX = "defaultMediaDataStorage";
+		static readonly NativeHandle selDefaultMediaDataStorageXHandle = Selector.GetHandle ("defaultMediaDataStorage");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithData_Options_Error_X = "initWithData:options:error:";
+		static readonly NativeHandle selInitWithData_Options_Error_XHandle = Selector.GetHandle ("initWithData:options:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithSettingsFromMovie_Options_Error_X = "initWithSettingsFromMovie:options:error:";
+		static readonly NativeHandle selInitWithSettingsFromMovie_Options_Error_XHandle = Selector.GetHandle ("initWithSettingsFromMovie:options:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithURL_Options_Error_X = "initWithURL:options:error:";
+		static readonly NativeHandle selInitWithURL_Options_Error_XHandle = Selector.GetHandle ("initWithURL:options:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInterleavingPeriodX = "interleavingPeriod";
+		static readonly NativeHandle selInterleavingPeriodXHandle = Selector.GetHandle ("interleavingPeriod");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selIsModifiedX = "isModified";
+		static readonly NativeHandle selIsModifiedXHandle = Selector.GetHandle ("isModified");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selLoadTrackWithTrackID_CompletionHandler_X = "loadTrackWithTrackID:completionHandler:";
+		static readonly NativeHandle selLoadTrackWithTrackID_CompletionHandler_XHandle = Selector.GetHandle ("loadTrackWithTrackID:completionHandler:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selLoadTracksWithMediaCharacteristic_CompletionHandler_X = "loadTracksWithMediaCharacteristic:completionHandler:";
+		static readonly NativeHandle selLoadTracksWithMediaCharacteristic_CompletionHandler_XHandle = Selector.GetHandle ("loadTracksWithMediaCharacteristic:completionHandler:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selLoadTracksWithMediaType_CompletionHandler_X = "loadTracksWithMediaType:completionHandler:";
+		static readonly NativeHandle selLoadTracksWithMediaType_CompletionHandler_XHandle = Selector.GetHandle ("loadTracksWithMediaType:completionHandler:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selMediaSelectionGroupForMediaCharacteristic_X = "mediaSelectionGroupForMediaCharacteristic:";
+		static readonly NativeHandle selMediaSelectionGroupForMediaCharacteristic_XHandle = Selector.GetHandle ("mediaSelectionGroupForMediaCharacteristic:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selMetadataX = "metadata";
+		static readonly NativeHandle selMetadataXHandle = Selector.GetHandle ("metadata");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selMetadataForFormat_X = "metadataForFormat:";
+		static readonly NativeHandle selMetadataForFormat_XHandle = Selector.GetHandle ("metadataForFormat:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selMovieWithData_Options_Error_X = "movieWithData:options:error:";
+		static readonly NativeHandle selMovieWithData_Options_Error_XHandle = Selector.GetHandle ("movieWithData:options:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selMovieWithSettingsFromMovie_Options_Error_X = "movieWithSettingsFromMovie:options:error:";
+		static readonly NativeHandle selMovieWithSettingsFromMovie_Options_Error_XHandle = Selector.GetHandle ("movieWithSettingsFromMovie:options:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selMovieWithURL_Options_Error_X = "movieWithURL:options:error:";
+		static readonly NativeHandle selMovieWithURL_Options_Error_XHandle = Selector.GetHandle ("movieWithURL:options:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPreferredRateX = "preferredRate";
+		static readonly NativeHandle selPreferredRateXHandle = Selector.GetHandle ("preferredRate");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPreferredTransformX = "preferredTransform";
+		static readonly NativeHandle selPreferredTransformXHandle = Selector.GetHandle ("preferredTransform");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPreferredVolumeX = "preferredVolume";
+		static readonly NativeHandle selPreferredVolumeXHandle = Selector.GetHandle ("preferredVolume");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetDefaultMediaDataStorage_X = "setDefaultMediaDataStorage:";
+		static readonly NativeHandle selSetDefaultMediaDataStorage_XHandle = Selector.GetHandle ("setDefaultMediaDataStorage:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetInterleavingPeriod_X = "setInterleavingPeriod:";
+		static readonly NativeHandle selSetInterleavingPeriod_XHandle = Selector.GetHandle ("setInterleavingPeriod:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetMetadata_X = "setMetadata:";
+		static readonly NativeHandle selSetMetadata_XHandle = Selector.GetHandle ("setMetadata:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetModified_X = "setModified:";
+		static readonly NativeHandle selSetModified_XHandle = Selector.GetHandle ("setModified:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetPreferredRate_X = "setPreferredRate:";
+		static readonly NativeHandle selSetPreferredRate_XHandle = Selector.GetHandle ("setPreferredRate:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetPreferredTransform_X = "setPreferredTransform:";
+		static readonly NativeHandle selSetPreferredTransform_XHandle = Selector.GetHandle ("setPreferredTransform:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetPreferredVolume_X = "setPreferredVolume:";
+		static readonly NativeHandle selSetPreferredVolume_XHandle = Selector.GetHandle ("setPreferredVolume:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetTimescale_X = "setTimescale:";
+		static readonly NativeHandle selSetTimescale_XHandle = Selector.GetHandle ("setTimescale:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTimescaleX = "timescale";
+		static readonly NativeHandle selTimescaleXHandle = Selector.GetHandle ("timescale");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTracksX = "tracks";
+		static readonly NativeHandle selTracksXHandle = Selector.GetHandle ("tracks");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selUnusedTrackIDX = "unusedTrackID";
+		static readonly NativeHandle selUnusedTrackIDXHandle = Selector.GetHandle ("unusedTrackID");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("AVMutableMovie");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Creates a new <see cref="AVMutableMovie" /> with default values.</summary>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("init")]
+		public AVMutableMovie () : base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.Init), "init");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, global::ObjCRuntime.Selector.Init), "init");
+				GC.KeepAlive (this);
+				}
+			}
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected AVMutableMovie (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal AVMutableMovie (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("initWithURL:options:error:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe AVMutableMovie (NSUrl URL, NSDictionary<NSString, NSObject>? options, out NSError? outError)
+			: base (NSObjectFlag.Empty)
+		{
+			var URL__handle__ = URL!.GetNonNullHandle (nameof (URL));
+			var options__handle__ = options.GetHandle ();
+			NativeHandle outErrorValue = IntPtr.Zero;
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_ref_NativeHandle (this.Handle, selInitWithURL_Options_Error_XHandle, URL__handle__, options__handle__, &outErrorValue), "initWithURL:options:error:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_ref_NativeHandle (&__objc_super__, selInitWithURL_Options_Error_XHandle, URL__handle__, options__handle__, &outErrorValue), "initWithURL:options:error:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (URL);
+			GC.KeepAlive (options);
+			outError = Runtime.GetNSObject<NSError> (outErrorValue)!;
+		}
+		[Export ("initWithData:options:error:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe AVMutableMovie (NSData data, NSDictionary<NSString, NSObject>? options, out NSError? outError)
+			: base (NSObjectFlag.Empty)
+		{
+			var data__handle__ = data!.GetNonNullHandle (nameof (data));
+			var options__handle__ = options.GetHandle ();
+			NativeHandle outErrorValue = IntPtr.Zero;
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_ref_NativeHandle (this.Handle, selInitWithData_Options_Error_XHandle, data__handle__, options__handle__, &outErrorValue), "initWithData:options:error:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_ref_NativeHandle (&__objc_super__, selInitWithData_Options_Error_XHandle, data__handle__, options__handle__, &outErrorValue), "initWithData:options:error:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (data);
+			GC.KeepAlive (options);
+			outError = Runtime.GetNSObject<NSError> (outErrorValue)!;
+		}
+		[Export ("initWithSettingsFromMovie:options:error:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe AVMutableMovie (AVMovie? movie, NSDictionary<NSString, NSObject>? options, out NSError? outError)
+			: base (NSObjectFlag.Empty)
+		{
+			var movie__handle__ = movie.GetHandle ();
+			var options__handle__ = options.GetHandle ();
+			NativeHandle outErrorValue = IntPtr.Zero;
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_ref_NativeHandle (this.Handle, selInitWithSettingsFromMovie_Options_Error_XHandle, movie__handle__, options__handle__, &outErrorValue), "initWithSettingsFromMovie:options:error:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_ref_NativeHandle (&__objc_super__, selInitWithSettingsFromMovie_Options_Error_XHandle, movie__handle__, options__handle__, &outErrorValue), "initWithSettingsFromMovie:options:error:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (movie);
+			GC.KeepAlive (options);
+			outError = Runtime.GetNSObject<NSError> (outErrorValue)!;
+		}
+		[Export ("movieWithData:options:error:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static AVMutableMovie? FromData (NSData data, NSDictionary<NSString, NSObject>? options, out NSError? outError)
+		{
+			var data__handle__ = data!.GetNonNullHandle (nameof (data));
+			var options__handle__ = options.GetHandle ();
+			NativeHandle outErrorValue = IntPtr.Zero;
+			AVMutableMovie? ret;
+			ret =  Runtime.GetNSObject<AVMutableMovie> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_ref_NativeHandle (class_ptr, selMovieWithData_Options_Error_XHandle, data__handle__, options__handle__, &outErrorValue), false)!;
+			GC.KeepAlive (data);
+			GC.KeepAlive (options);
+			outError = Runtime.GetNSObject<NSError> (outErrorValue)!;
+			return ret!;
+		}
+		[Export ("movieWithSettingsFromMovie:options:error:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static AVMutableMovie? FromMovie (AVMovie? movie, NSDictionary<NSString, NSObject>? options, out NSError? outError)
+		{
+			var movie__handle__ = movie.GetHandle ();
+			var options__handle__ = options.GetHandle ();
+			NativeHandle outErrorValue = IntPtr.Zero;
+			AVMutableMovie? ret;
+			ret =  Runtime.GetNSObject<AVMutableMovie> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_ref_NativeHandle (class_ptr, selMovieWithSettingsFromMovie_Options_Error_XHandle, movie__handle__, options__handle__, &outErrorValue), false)!;
+			GC.KeepAlive (movie);
+			GC.KeepAlive (options);
+			outError = Runtime.GetNSObject<NSError> (outErrorValue)!;
+			return ret!;
+		}
+		[Export ("movieWithURL:options:error:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static AVMutableMovie? FromUrl (NSUrl URL, NSDictionary<NSString, NSObject>? options, out NSError? outError)
+		{
+			var URL__handle__ = URL!.GetNonNullHandle (nameof (URL));
+			var options__handle__ = options.GetHandle ();
+			NativeHandle outErrorValue = IntPtr.Zero;
+			AVMutableMovie? ret;
+			ret =  Runtime.GetNSObject<AVMutableMovie> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_ref_NativeHandle (class_ptr, selMovieWithURL_Options_Error_XHandle, URL__handle__, options__handle__, &outErrorValue), false)!;
+			GC.KeepAlive (URL);
+			GC.KeepAlive (options);
+			outError = Runtime.GetNSObject<NSError> (outErrorValue)!;
+			return ret!;
+		}
+		[Export ("chapterMetadataGroupsWithTitleLocale:containingItemsWithCommonKeys:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual AVTimedMetadataGroup[] GetChapterMetadataGroups (NSLocale titleLocale, string[]? commonKeys)
+		{
+			var titleLocale__handle__ = titleLocale!.GetNonNullHandle (nameof (titleLocale));
+			using var nsa_commonKeys = NSArray.FromNullableStrings (commonKeys);
+			AVTimedMetadataGroup[]? ret;
+			if (IsDirectBinding) {
+				ret = CFArray.ArrayFromHandle<AVTimedMetadataGroup>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selChapterMetadataGroupsWithTitleLocale_ContainingItemsWithCommonKeys_XHandle, titleLocale__handle__, nsa_commonKeys.GetHandle ()), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = CFArray.ArrayFromHandle<AVTimedMetadataGroup>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selChapterMetadataGroupsWithTitleLocale_ContainingItemsWithCommonKeys_XHandle, titleLocale__handle__, nsa_commonKeys.GetHandle ()), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (titleLocale);
+			return ret!;
+		}
+		[Export ("chapterMetadataGroupsBestMatchingPreferredLanguages:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual AVTimedMetadataGroup[] GetChapterMetadataGroups (string[] bestMatchingPreferredLanguages)
+		{
+			if (bestMatchingPreferredLanguages is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (bestMatchingPreferredLanguages));
+			using var nsa_bestMatchingPreferredLanguages = NSArray.FromStrings (bestMatchingPreferredLanguages);
+			AVTimedMetadataGroup[] ret;
+			if (IsDirectBinding) {
+				ret = CFArray.ArrayFromHandle<AVTimedMetadataGroup>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selChapterMetadataGroupsBestMatchingPreferredLanguages_XHandle, nsa_bestMatchingPreferredLanguages.Handle), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = CFArray.ArrayFromHandle<AVTimedMetadataGroup>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selChapterMetadataGroupsBestMatchingPreferredLanguages_XHandle, nsa_bestMatchingPreferredLanguages.Handle), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("mediaSelectionGroupForMediaCharacteristic:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual AVMediaSelectionGroup? GetMediaSelectionGroup (string mediaCharacteristic)
+		{
+			if (mediaCharacteristic is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (mediaCharacteristic));
+			var nsmediaCharacteristic = CFString.CreateNative (mediaCharacteristic);
+			AVMediaSelectionGroup? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<AVMediaSelectionGroup> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selMediaSelectionGroupForMediaCharacteristic_XHandle, nsmediaCharacteristic), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<AVMediaSelectionGroup> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selMediaSelectionGroupForMediaCharacteristic_XHandle, nsmediaCharacteristic), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			CFString.ReleaseNative (nsmediaCharacteristic);
+			return ret!;
+		}
+		[Export ("metadataForFormat:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual AVMetadataItem[] GetMetadata (string format)
+		{
+			if (format is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (format));
+			var nsformat = CFString.CreateNative (format);
+			AVMetadataItem[]? ret;
+			if (IsDirectBinding) {
+				ret = CFArray.ArrayFromHandle<AVMetadataItem>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selMetadataForFormat_XHandle, nsformat), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = CFArray.ArrayFromHandle<AVMetadataItem>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selMetadataForFormat_XHandle, nsformat), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			CFString.ReleaseNative (nsformat);
+			return ret!;
+		}
+		[Export ("unusedTrackID")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual int GetUnusedTrackId ()
+		{
+			int ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.int_objc_msgSend (this.Handle, selUnusedTrackIDXHandle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.int_objc_msgSendSuper (&__objc_super__, selUnusedTrackIDXHandle);
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("loadTrackWithTrackID:completionHandler:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void LoadTrack (int trackId, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity2V19))]global::System.Action<AVMovieTrack, NSError> completionHandler)
+		{
+			if (completionHandler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (completionHandler));
+			using var block_completionHandler = Trampolines.SDActionArity2V19.CreateBlock (completionHandler);
+			BlockLiteral *block_ptr_completionHandler = &block_completionHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_int_NativeHandle (this.Handle, selLoadTrackWithTrackID_CompletionHandler_XHandle, trackId, (IntPtr) block_ptr_completionHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_int_NativeHandle (&__objc_super__, selLoadTrackWithTrackID_CompletionHandler_XHandle, trackId, (IntPtr) block_ptr_completionHandler);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<AVMovieTrack> LoadTrackAsync (int trackId)
+		{
+			var tcs = new TaskCompletionSource<AVMovieTrack> ();
+			LoadTrack(trackId, (arg1_, arg2_) => {
+				if (arg2_ is not null)
+					tcs.SetException (new NSErrorException(arg2_));
+				else
+					tcs.SetResult (arg1_!);
+			});
+			return tcs.Task;
+		}
+		[Export ("loadTracksWithMediaCharacteristic:completionHandler:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void LoadTracksWithMediaCharacteristic (string mediaCharacteristic, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity2V20))]global::System.Action<NSArray<AVMovieTrack>, NSError> completionHandler)
+		{
+			if (mediaCharacteristic is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (mediaCharacteristic));
+			if (completionHandler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (completionHandler));
+			var nsmediaCharacteristic = CFString.CreateNative (mediaCharacteristic);
+			using var block_completionHandler = Trampolines.SDActionArity2V20.CreateBlock (completionHandler);
+			BlockLiteral *block_ptr_completionHandler = &block_completionHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selLoadTracksWithMediaCharacteristic_CompletionHandler_XHandle, nsmediaCharacteristic, (IntPtr) block_ptr_completionHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selLoadTracksWithMediaCharacteristic_CompletionHandler_XHandle, nsmediaCharacteristic, (IntPtr) block_ptr_completionHandler);
+					GC.KeepAlive (this);
+				}
+			}
+			CFString.ReleaseNative (nsmediaCharacteristic);
+		}
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<NSArray<AVMovieTrack>> LoadTracksWithMediaCharacteristicAsync (string mediaCharacteristic)
+		{
+			var tcs = new TaskCompletionSource<NSArray<AVMovieTrack>> ();
+			LoadTracksWithMediaCharacteristic(mediaCharacteristic, (arg1_, arg2_) => {
+				if (arg2_ is not null)
+					tcs.SetException (new NSErrorException(arg2_));
+				else
+					tcs.SetResult (arg1_!);
+			});
+			return tcs.Task;
+		}
+		[Export ("loadTracksWithMediaType:completionHandler:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void LoadTracksWithMediaType (string mediaType, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity2V20))]global::System.Action<NSArray<AVMovieTrack>, NSError> completionHandler)
+		{
+			if (mediaType is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (mediaType));
+			if (completionHandler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (completionHandler));
+			var nsmediaType = CFString.CreateNative (mediaType);
+			using var block_completionHandler = Trampolines.SDActionArity2V20.CreateBlock (completionHandler);
+			BlockLiteral *block_ptr_completionHandler = &block_completionHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selLoadTracksWithMediaType_CompletionHandler_XHandle, nsmediaType, (IntPtr) block_ptr_completionHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selLoadTracksWithMediaType_CompletionHandler_XHandle, nsmediaType, (IntPtr) block_ptr_completionHandler);
+					GC.KeepAlive (this);
+				}
+			}
+			CFString.ReleaseNative (nsmediaType);
+		}
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios15.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<NSArray<AVMovieTrack>> LoadTracksWithMediaTypeAsync (string mediaType)
+		{
+			var tcs = new TaskCompletionSource<NSArray<AVMovieTrack>> ();
+			LoadTracksWithMediaType(mediaType, (arg1_, arg2_) => {
+				if (arg2_ is not null)
+					tcs.SetException (new NSErrorException(arg2_));
+				else
+					tcs.SetResult (arg1_!);
+			});
+			return tcs.Task;
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual AVMediaDataStorage? DefaultMediaDataStorage {
+			[Export ("defaultMediaDataStorage", ArgumentSemantic.Copy)]
+			get {
+				AVMediaDataStorage? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<AVMediaDataStorage> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selDefaultMediaDataStorageXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<AVMediaDataStorage> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selDefaultMediaDataStorageXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setDefaultMediaDataStorage:", ArgumentSemantic.Copy)]
+			set {
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetDefaultMediaDataStorage_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetDefaultMediaDataStorage_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual global::CoreMedia.CMTime InterleavingPeriod {
+			[Export ("interleavingPeriod", ArgumentSemantic.Assign)]
+			get {
+				global::CoreMedia.CMTime ret;
+				if (IsDirectBinding) {
+					if (global::ObjCRuntime.Runtime.IsARM64CallingConvention) {
+						ret = global::ObjCRuntime.Messaging.CMTime_objc_msgSend (this.Handle, selInterleavingPeriodXHandle);
+					} else {
+						ret = global::ObjCRuntime.Messaging.CMTime_objc_msgSend_stret (this.Handle, selInterleavingPeriodXHandle);
+					}
+				} else {
+					if (global::ObjCRuntime.Runtime.IsARM64CallingConvention) {
+						unsafe {
+							var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+							ret = global::ObjCRuntime.Messaging.CMTime_objc_msgSendSuper (&__objc_super__, selInterleavingPeriodXHandle);
+							GC.KeepAlive (this);
+						}
+					} else {
+						unsafe {
+							var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+							ret = global::ObjCRuntime.Messaging.CMTime_objc_msgSendSuper_stret (&__objc_super__, selInterleavingPeriodXHandle);
+							GC.KeepAlive (this);
+						}
+					}
+				}
+				return ret!;
+			}
+			[Export ("setInterleavingPeriod:", ArgumentSemantic.Assign)]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_CMTime (this.Handle, selSetInterleavingPeriod_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_CMTime (&__objc_super__, selSetInterleavingPeriod_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual AVMetadataItem[] Metadata {
+			[Export ("metadata", ArgumentSemantic.Copy)]
+			get {
+				AVMetadataItem[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<AVMetadataItem>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selMetadataXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<AVMetadataItem>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selMetadataXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setMetadata:", ArgumentSemantic.Copy)]
+			set {
+				if (value is null)
+					ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (value));
+				using var nsa_value = NSArray.FromNSObjects (value);
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetMetadata_XHandle, nsa_value.Handle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetMetadata_XHandle, nsa_value.Handle);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool Modified {
+			[Export ("isModified")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selIsModifiedXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selIsModifiedXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setModified:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetModified_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetModified_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual float PreferredRate {
+			[Export ("preferredRate")]
+			get {
+				float ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, selPreferredRateXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.float_objc_msgSendSuper (&__objc_super__, selPreferredRateXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setPreferredRate:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_float (this.Handle, selSetPreferredRate_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float (&__objc_super__, selSetPreferredRate_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual CGAffineTransform PreferredTransform {
+			[Export ("preferredTransform", ArgumentSemantic.Assign)]
+			get {
+				CGAffineTransform ret;
+				if (IsDirectBinding) {
+					if (global::ObjCRuntime.Runtime.IsARM64CallingConvention) {
+						ret = global::ObjCRuntime.Messaging.CGAffineTransform_objc_msgSend (this.Handle, selPreferredTransformXHandle);
+					} else {
+						ret = global::ObjCRuntime.Messaging.CGAffineTransform_objc_msgSend_stret (this.Handle, selPreferredTransformXHandle);
+					}
+				} else {
+					if (global::ObjCRuntime.Runtime.IsARM64CallingConvention) {
+						unsafe {
+							var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+							ret = global::ObjCRuntime.Messaging.CGAffineTransform_objc_msgSendSuper (&__objc_super__, selPreferredTransformXHandle);
+							GC.KeepAlive (this);
+						}
+					} else {
+						unsafe {
+							var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+							ret = global::ObjCRuntime.Messaging.CGAffineTransform_objc_msgSendSuper_stret (&__objc_super__, selPreferredTransformXHandle);
+							GC.KeepAlive (this);
+						}
+					}
+				}
+				return ret!;
+			}
+			[Export ("setPreferredTransform:", ArgumentSemantic.Assign)]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_CGAffineTransform (this.Handle, selSetPreferredTransform_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_CGAffineTransform (&__objc_super__, selSetPreferredTransform_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual float PreferredVolume {
+			[Export ("preferredVolume")]
+			get {
+				float ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, selPreferredVolumeXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.float_objc_msgSendSuper (&__objc_super__, selPreferredVolumeXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setPreferredVolume:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_float (this.Handle, selSetPreferredVolume_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float (&__objc_super__, selSetPreferredVolume_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual int Timescale {
+			[Export ("timescale")]
+			get {
+				int ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.int_objc_msgSend (this.Handle, selTimescaleXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.int_objc_msgSendSuper (&__objc_super__, selTimescaleXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setTimescale:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_int (this.Handle, selSetTimescale_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_int (&__objc_super__, selSetTimescale_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual AVMutableMovieTrack[] Tracks {
+			[Export ("tracks")]
+			get {
+				AVMutableMovieTrack[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<AVMutableMovieTrack>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selTracksXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<AVMutableMovieTrack>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selTracksXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+	} /* class AVMutableMovie */
+}

@@ -1,0 +1,72 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace CoreMedia {
+	/// <summary>An enumeration whose values specify valid types of media.</summary>
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
+	public enum CMMediaType : uint {
+		/// <summary>To be added.</summary>
+		Video = 1986618469,
+		/// <summary>To be added.</summary>
+		Audio = 1936684398,
+		/// <summary>To be added.</summary>
+		Muxed = 1836415096,
+		/// <summary>To be added.</summary>
+		Text = 1952807028,
+		/// <summary>To be added.</summary>
+		ClosedCaption = 1668047728,
+		/// <summary>To be added.</summary>
+		Subtitle = 1935832172,
+		/// <summary>To be added.</summary>
+		TimeCode = 1953325924,
+		/// <summary>To be added.</summary>
+		Metadata = 1835365473,
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		TaggedBufferGroup = 1952606066,
+	}
+}

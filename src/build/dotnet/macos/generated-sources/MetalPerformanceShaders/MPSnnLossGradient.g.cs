@@ -1,0 +1,525 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace MetalPerformanceShaders {
+	[Register("MPSNNLossGradient", true)]
+	[SupportedOSPlatform ("tvos13.0")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios13.0")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class MPSnnLossGradient : MPSCnnBinaryKernel {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selComputeLabelGradientsX = "computeLabelGradients";
+		static readonly NativeHandle selComputeLabelGradientsXHandle = Selector.GetHandle ("computeLabelGradients");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDeltaX = "delta";
+		static readonly NativeHandle selDeltaXHandle = Selector.GetHandle ("delta");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selEncodeBatchToCommandBuffer_SourceGradients_SourceImages_Labels_Weights_SourceStates_X = "encodeBatchToCommandBuffer:sourceGradients:sourceImages:labels:weights:sourceStates:";
+		static readonly NativeHandle selEncodeBatchToCommandBuffer_SourceGradients_SourceImages_Labels_Weights_SourceStates_XHandle = Selector.GetHandle ("encodeBatchToCommandBuffer:sourceGradients:sourceImages:labels:weights:sourceStates:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selEncodeBatchToCommandBuffer_SourceGradients_SourceImages_Labels_Weights_SourceStates_DestinationGradients_X = "encodeBatchToCommandBuffer:sourceGradients:sourceImages:labels:weights:sourceStates:destinationGradients:";
+		static readonly NativeHandle selEncodeBatchToCommandBuffer_SourceGradients_SourceImages_Labels_Weights_SourceStates_DestinationGradients_XHandle = Selector.GetHandle ("encodeBatchToCommandBuffer:sourceGradients:sourceImages:labels:weights:sourceStates:destinationGradients:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selEpsilonX = "epsilon";
+		static readonly NativeHandle selEpsilonXHandle = Selector.GetHandle ("epsilon");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithCoder_Device_X = "initWithCoder:device:";
+		static readonly NativeHandle selInitWithCoder_Device_XHandle = Selector.GetHandle ("initWithCoder:device:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithDevice_LossDescriptor_X = "initWithDevice:lossDescriptor:";
+		static readonly NativeHandle selInitWithDevice_LossDescriptor_XHandle = Selector.GetHandle ("initWithDevice:lossDescriptor:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selLabelSmoothingX = "labelSmoothing";
+		static readonly NativeHandle selLabelSmoothingXHandle = Selector.GetHandle ("labelSmoothing");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selLossTypeX = "lossType";
+		static readonly NativeHandle selLossTypeXHandle = Selector.GetHandle ("lossType");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selNumberOfClassesX = "numberOfClasses";
+		static readonly NativeHandle selNumberOfClassesXHandle = Selector.GetHandle ("numberOfClasses");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selReduceAcrossBatchX = "reduceAcrossBatch";
+		static readonly NativeHandle selReduceAcrossBatchXHandle = Selector.GetHandle ("reduceAcrossBatch");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selReductionTypeX = "reductionType";
+		static readonly NativeHandle selReductionTypeXHandle = Selector.GetHandle ("reductionType");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetComputeLabelGradients_X = "setComputeLabelGradients:";
+		static readonly NativeHandle selSetComputeLabelGradients_XHandle = Selector.GetHandle ("setComputeLabelGradients:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetDelta_X = "setDelta:";
+		static readonly NativeHandle selSetDelta_XHandle = Selector.GetHandle ("setDelta:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetEpsilon_X = "setEpsilon:";
+		static readonly NativeHandle selSetEpsilon_XHandle = Selector.GetHandle ("setEpsilon:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetLabelSmoothing_X = "setLabelSmoothing:";
+		static readonly NativeHandle selSetLabelSmoothing_XHandle = Selector.GetHandle ("setLabelSmoothing:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetWeight_X = "setWeight:";
+		static readonly NativeHandle selSetWeight_XHandle = Selector.GetHandle ("setWeight:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selWeightX = "weight";
+		static readonly NativeHandle selWeightXHandle = Selector.GetHandle ("weight");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("MPSNNLossGradient");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <param name="coder">The unarchiver object.</param>
+		/// <remarks>
+		///   <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization). This is part of the <see cref="Foundation.NSCoding" /> protocol.</para>
+		///   <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="Foundation.NSCoder" /> and decorate it with the <c>[Export("initWithCoder:"]</c> attribute.</para>
+		///   <para>The state of this object can also be serialized by using the <see cref="Foundation.INSCoding.EncodeTo" /> companion method.</para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[DesignatedInitializer]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("initWithCoder:")]
+		public MPSnnLossGradient (NSCoder coder) : base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, Selector.InitWithCoder, coder.Handle), "initWithCoder:");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (&__objc_super__, Selector.InitWithCoder, coder.Handle), "initWithCoder:");
+				GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (coder);
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected MPSnnLossGradient (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal MPSnnLossGradient (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("initWithDevice:lossDescriptor:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public MPSnnLossGradient (global::Metal.IMTLDevice device, MPSCnnLossDescriptor lossDescriptor)
+			: base (NSObjectFlag.Empty)
+		{
+			var device__handle__ = device!.GetNonNullHandle (nameof (device));
+			var lossDescriptor__handle__ = lossDescriptor!.GetNonNullHandle (nameof (lossDescriptor));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selInitWithDevice_LossDescriptor_XHandle, device__handle__, lossDescriptor__handle__), "initWithDevice:lossDescriptor:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selInitWithDevice_LossDescriptor_XHandle, device__handle__, lossDescriptor__handle__), "initWithDevice:lossDescriptor:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (device);
+			GC.KeepAlive (lossDescriptor);
+		}
+		[Export ("initWithCoder:device:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public MPSnnLossGradient (NSCoder aDecoder, global::Metal.IMTLDevice device)
+			: base (NSObjectFlag.Empty)
+		{
+			var aDecoder__handle__ = aDecoder!.GetNonNullHandle (nameof (aDecoder));
+			var device__handle__ = device!.GetNonNullHandle (nameof (device));
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selInitWithCoder_Device_XHandle, aDecoder__handle__, device__handle__), "initWithCoder:device:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selInitWithCoder_Device_XHandle, aDecoder__handle__, device__handle__), "initWithCoder:device:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (aDecoder);
+			GC.KeepAlive (device);
+		}
+		[Export ("encodeBatchToCommandBuffer:sourceGradients:sourceImages:labels:weights:sourceStates:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MPSImage[] EncodeBatch (global::Metal.IMTLCommandBuffer commandBuffer, MPSImage[] sourceGradients, MPSImage[] sourceImages, MPSImage[] labels, MPSImage[]? weights, MPSState[]? sourceStates)
+		{
+			var commandBuffer__handle__ = commandBuffer!.GetNonNullHandle (nameof (commandBuffer));
+			if (sourceGradients is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (sourceGradients));
+			if (sourceImages is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (sourceImages));
+			if (labels is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (labels));
+			using var nsa_sourceGradients = NSArray.FromNSObjects (sourceGradients);
+			using var nsa_sourceImages = NSArray.FromNSObjects (sourceImages);
+			using var nsa_labels = NSArray.FromNSObjects (labels);
+			using var nsa_weights = weights is null ? null : NSArray.FromNSObjects (weights);
+			using var nsa_sourceStates = sourceStates is null ? null : NSArray.FromNSObjects (sourceStates);
+			MPSImage[]? ret;
+			if (IsDirectBinding) {
+				ret = CFArray.ArrayFromHandle<MPSImage>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle (this.Handle, selEncodeBatchToCommandBuffer_SourceGradients_SourceImages_Labels_Weights_SourceStates_XHandle, commandBuffer__handle__, nsa_sourceGradients.Handle, nsa_sourceImages.Handle, nsa_labels.Handle, nsa_weights.GetHandle (), nsa_sourceStates.GetHandle ()), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = CFArray.ArrayFromHandle<MPSImage>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, selEncodeBatchToCommandBuffer_SourceGradients_SourceImages_Labels_Weights_SourceStates_XHandle, commandBuffer__handle__, nsa_sourceGradients.Handle, nsa_sourceImages.Handle, nsa_labels.Handle, nsa_weights.GetHandle (), nsa_sourceStates.GetHandle ()), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (commandBuffer);
+			return ret!;
+		}
+		[Export ("encodeBatchToCommandBuffer:sourceGradients:sourceImages:labels:weights:sourceStates:destinationGradients:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void EncodeBatch (global::Metal.IMTLCommandBuffer commandBuffer, MPSImage[] sourceGradients, MPSImage[] sourceImages, MPSImage[] labels, MPSImage[]? weights, MPSState[]? sourceStates, MPSImage[] destinationGradients)
+		{
+			var commandBuffer__handle__ = commandBuffer!.GetNonNullHandle (nameof (commandBuffer));
+			if (sourceGradients is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (sourceGradients));
+			if (sourceImages is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (sourceImages));
+			if (labels is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (labels));
+			if (destinationGradients is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (destinationGradients));
+			using var nsa_sourceGradients = NSArray.FromNSObjects (sourceGradients);
+			using var nsa_sourceImages = NSArray.FromNSObjects (sourceImages);
+			using var nsa_labels = NSArray.FromNSObjects (labels);
+			using var nsa_weights = weights is null ? null : NSArray.FromNSObjects (weights);
+			using var nsa_sourceStates = sourceStates is null ? null : NSArray.FromNSObjects (sourceStates);
+			using var nsa_destinationGradients = NSArray.FromNSObjects (destinationGradients);
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle (this.Handle, selEncodeBatchToCommandBuffer_SourceGradients_SourceImages_Labels_Weights_SourceStates_DestinationGradients_XHandle, commandBuffer__handle__, nsa_sourceGradients.Handle, nsa_sourceImages.Handle, nsa_labels.Handle, nsa_weights.GetHandle (), nsa_sourceStates.GetHandle (), nsa_destinationGradients.Handle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, selEncodeBatchToCommandBuffer_SourceGradients_SourceImages_Labels_Weights_SourceStates_DestinationGradients_XHandle, commandBuffer__handle__, nsa_sourceGradients.Handle, nsa_sourceImages.Handle, nsa_labels.Handle, nsa_weights.GetHandle (), nsa_sourceStates.GetHandle (), nsa_destinationGradients.Handle);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (commandBuffer);
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool ComputeLabelGradients {
+			[Export ("computeLabelGradients")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selComputeLabelGradientsXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selComputeLabelGradientsXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setComputeLabelGradients:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetComputeLabelGradients_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetComputeLabelGradients_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual float Delta {
+			[Export ("delta")]
+			get {
+				float ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, selDeltaXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.float_objc_msgSendSuper (&__objc_super__, selDeltaXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setDelta:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_float (this.Handle, selSetDelta_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float (&__objc_super__, selSetDelta_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual float Epsilon {
+			[Export ("epsilon")]
+			get {
+				float ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, selEpsilonXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.float_objc_msgSendSuper (&__objc_super__, selEpsilonXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setEpsilon:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_float (this.Handle, selSetEpsilon_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float (&__objc_super__, selSetEpsilon_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual float LabelSmoothing {
+			[Export ("labelSmoothing")]
+			get {
+				float ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, selLabelSmoothingXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.float_objc_msgSendSuper (&__objc_super__, selLabelSmoothingXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setLabelSmoothing:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_float (this.Handle, selSetLabelSmoothing_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float (&__objc_super__, selSetLabelSmoothing_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MPSCnnLossType LossType {
+			[Export ("lossType")]
+			get {
+				MPSCnnLossType ret;
+				if (IsDirectBinding) {
+					ret = (MPSCnnLossType) global::ObjCRuntime.Messaging.UInt32_objc_msgSend (this.Handle, selLossTypeXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = (MPSCnnLossType) global::ObjCRuntime.Messaging.UInt32_objc_msgSendSuper (&__objc_super__, selLossTypeXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual nuint NumberOfClasses {
+			[Export ("numberOfClasses")]
+			get {
+				nuint ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend (this.Handle, selNumberOfClassesXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.UIntPtr_objc_msgSendSuper (&__objc_super__, selNumberOfClassesXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("macos")]
+		public virtual bool ReduceAcrossBatch {
+			[Export ("reduceAcrossBatch")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selReduceAcrossBatchXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selReduceAcrossBatchXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MPSCnnReductionType ReductionType {
+			[Export ("reductionType")]
+			get {
+				MPSCnnReductionType ret;
+				if (IsDirectBinding) {
+					ret = (MPSCnnReductionType) global::ObjCRuntime.Messaging.int_objc_msgSend (this.Handle, selReductionTypeXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = (MPSCnnReductionType) global::ObjCRuntime.Messaging.int_objc_msgSendSuper (&__objc_super__, selReductionTypeXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual float Weight {
+			[Export ("weight")]
+			get {
+				float ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, selWeightXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.float_objc_msgSendSuper (&__objc_super__, selWeightXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setWeight:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_float (this.Handle, selSetWeight_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float (&__objc_super__, selSetWeight_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+	} /* class MPSnnLossGradient */
+}

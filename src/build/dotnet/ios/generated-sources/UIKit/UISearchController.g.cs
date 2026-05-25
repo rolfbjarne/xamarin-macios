@@ -1,0 +1,974 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using GLKit;
+using Metal;
+using CoreML;
+using MapKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using Messages;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using QuickLook;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using CoreMotion;
+using ObjCRuntime;
+using AddressBook;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using NewsstandKit;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace UIKit {
+	[Register("UISearchController", true)]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	public unsafe partial class UISearchController : UIViewController, IUIViewControllerAnimatedTransitioning, IUIViewControllerTransitioningDelegate {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("UISearchController");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>A constructor that initializes the object from the data stored in the unarchiver object.</summary>
+		/// <param name="coder">The unarchiver object.</param>
+		/// <remarks>
+		///   <para>This constructor is provided to allow the class to be initialized from an unarchiver (for example, during NIB deserialization). This is part of the <see cref="Foundation.NSCoding" /> protocol.</para>
+		///   <para>If developers want to create a subclass of this object and continue to support deserialization from an archive, they should implement a constructor with an identical signature: taking a single parameter of type <see cref="Foundation.NSCoder" /> and decorate it with the <c>[Export("initWithCoder:"]</c> attribute.</para>
+		///   <para>The state of this object can also be serialized by using the <see cref="Foundation.INSCoding.EncodeTo" /> companion method.</para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[DesignatedInitializer]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("initWithCoder:")]
+		public UISearchController (NSCoder coder) : base (NSObjectFlag.Empty)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_IntPtr (this.Handle, Selector.GetHandle ("initWithCoder:"), coder.Handle), "initWithCoder:");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_IntPtr (&__objc_super__, Selector.GetHandle ("initWithCoder:"), coder.Handle), "initWithCoder:");
+				GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (coder);
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected UISearchController (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal UISearchController (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("init")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[Advice (@"It's recommended to use the constructor that takes a 'UIViewController searchResultsController' in order to create/initialize an attached 'UISearchBar'.")]
+		public UISearchController ()
+			: base (NSObjectFlag.Empty)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("init")), "init");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("init")), "init");
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("initWithNibName:bundle:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public UISearchController (string? nibName, NSBundle? bundle)
+			: base (NSObjectFlag.Empty)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var bundle__handle__ = bundle.GetHandle ();
+			var nsnibName = CFString.CreateNative (nibName);
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("initWithNibName:bundle:"), nsnibName, bundle__handle__), "initWithNibName:bundle:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("initWithNibName:bundle:"), nsnibName, bundle__handle__), "initWithNibName:bundle:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (bundle);
+			CFString.ReleaseNative (nsnibName);
+			#pragma warning disable 168
+			#pragma warning restore 168
+		}
+		[Export ("initWithSearchResultsController:")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[Advice (@"You can pass a null 'UIViewController' to display the search results in the same view.")]
+		public UISearchController (UIViewController? searchResultsController)
+			: base (NSObjectFlag.Empty)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var searchResultsController__handle__ = searchResultsController.GetHandle ();
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("initWithSearchResultsController:"), searchResultsController__handle__), "initWithSearchResultsController:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("initWithSearchResultsController:"), searchResultsController__handle__), "initWithSearchResultsController:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (searchResultsController);
+		}
+		/// <param name="transitionContext">To be added.</param><summary>Animate the transition with the animator object.</summary><remarks>To be added.</remarks>
+		[Export ("animateTransition:")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void AnimateTransition (IUIViewControllerContextTransitioning transitionContext)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var transitionContext__handle__ = transitionContext!.GetNonNullHandle (nameof (transitionContext));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("animateTransition:"), transitionContext__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("animateTransition:"), transitionContext__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (transitionContext);
+		}
+		/// <param name="transitionCompleted">To be added.</param><summary>Indicates that the animation has ended.</summary><remarks>To be added.</remarks>
+		[Export ("animationEnded:")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void AnimationEnded (bool transitionCompleted)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("animationEnded:"), transitionCompleted ? (byte) 1 : (byte) 0);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("animationEnded:"), transitionCompleted ? (byte) 1 : (byte) 0);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <param name="dismissed">To be added.</param><summary>When a dismissal animation is called, this method can be overridden to provide a custom UIViewControllerAnimatedTransitioning.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("animationControllerForDismissedController:")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual IUIViewControllerAnimatedTransitioning GetAnimationControllerForDismissedController (UIViewController dismissed)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var dismissed__handle__ = dismissed!.GetNonNullHandle (nameof (dismissed));
+			IUIViewControllerAnimatedTransitioning? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetINativeObject<IUIViewControllerAnimatedTransitioning> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("animationControllerForDismissedController:"), dismissed__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetINativeObject<IUIViewControllerAnimatedTransitioning> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("animationControllerForDismissedController:"), dismissed__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (dismissed);
+			return ret!;
+		}
+		/// <param name="presented">To be added.</param><param name="presenting">To be added.</param><param name="source">To be added.</param><summary>Returns the animation controller that is used when <paramref name="presenting" /> presents <paramref name="presented" />.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("animationControllerForPresentedController:presentingController:sourceController:")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual IUIViewControllerAnimatedTransitioning GetAnimationControllerForPresentedController (UIViewController presented, UIViewController presenting, UIViewController source)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var presented__handle__ = presented!.GetNonNullHandle (nameof (presented));
+			var presenting__handle__ = presenting!.GetNonNullHandle (nameof (presenting));
+			var source__handle__ = source!.GetNonNullHandle (nameof (source));
+			IUIViewControllerAnimatedTransitioning? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetINativeObject<IUIViewControllerAnimatedTransitioning> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("animationControllerForPresentedController:presentingController:sourceController:"), presented__handle__, presenting__handle__, source__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetINativeObject<IUIViewControllerAnimatedTransitioning> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("animationControllerForPresentedController:presentingController:sourceController:"), presented__handle__, presenting__handle__, source__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (presented);
+			GC.KeepAlive (presenting);
+			GC.KeepAlive (source);
+			return ret!;
+		}
+		/// <param name="animator">To be added.</param><summary>When a controller is dismissed and an interaction is desired, this method can be overridden to provide a custom UIViewControllerInteractiveTransitioning.|When a dismissal interaction is called and an interaction animation is desired, t</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("interactionControllerForDismissal:")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual IUIViewControllerInteractiveTransitioning GetInteractionControllerForDismissal (IUIViewControllerAnimatedTransitioning animator)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var animator__handle__ = animator!.GetNonNullHandle (nameof (animator));
+			IUIViewControllerInteractiveTransitioning? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetINativeObject<IUIViewControllerInteractiveTransitioning> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("interactionControllerForDismissal:"), animator__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetINativeObject<IUIViewControllerInteractiveTransitioning> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("interactionControllerForDismissal:"), animator__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (animator);
+			return ret!;
+		}
+		/// <param name="animator">To be added.</param><summary>When a controller is presented and an interaction desired, this method can be overridden to provide a custom UIViewControllerInteractiveTransitioning.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("interactionControllerForPresentation:")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual IUIViewControllerInteractiveTransitioning GetInteractionControllerForPresentation (IUIViewControllerAnimatedTransitioning animator)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var animator__handle__ = animator!.GetNonNullHandle (nameof (animator));
+			IUIViewControllerInteractiveTransitioning? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetINativeObject<IUIViewControllerInteractiveTransitioning> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("interactionControllerForPresentation:"), animator__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetINativeObject<IUIViewControllerInteractiveTransitioning> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("interactionControllerForPresentation:"), animator__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (animator);
+			return ret!;
+		}
+		/// <param name="transitionContext">To be added.</param><summary>Gets the <see cref="T:UIKit.IUIViewControllerAnimatedTransitioning" /> used for the transition.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("interruptibleAnimatorForTransition:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual IUIViewImplicitlyAnimating GetInterruptibleAnimator (IUIViewControllerContextTransitioning transitionContext)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var transitionContext__handle__ = transitionContext!.GetNonNullHandle (nameof (transitionContext));
+			IUIViewImplicitlyAnimating? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetINativeObject<IUIViewImplicitlyAnimating> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("interruptibleAnimatorForTransition:"), transitionContext__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetINativeObject<IUIViewImplicitlyAnimating> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("interruptibleAnimatorForTransition:"), transitionContext__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (transitionContext);
+			return ret!;
+		}
+		/// <param name="presentedViewController">To be added.</param><param name="presentingViewController"><para>To be added.</para><para tool="nullallowed">This parameter can be <see langword="null" />.</para></param><param name="sourceViewController">To be added.</param><summary>Returns the presentation controller that is used when <paramref name="presentingViewController" /> presents <paramref name="presentedViewController" />.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("presentationControllerForPresentedViewController:presentingViewController:sourceViewController:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UIPresentationController GetPresentationControllerForPresentedViewController (UIViewController presentedViewController, UIViewController? presentingViewController, UIViewController sourceViewController)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var presentedViewController__handle__ = presentedViewController!.GetNonNullHandle (nameof (presentedViewController));
+			var presentingViewController__handle__ = presentingViewController.GetHandle ();
+			var sourceViewController__handle__ = sourceViewController!.GetNonNullHandle (nameof (sourceViewController));
+			UIPresentationController? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetNSObject<UIPresentationController> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, Selector.GetHandle ("presentationControllerForPresentedViewController:presentingViewController:sourceViewController:"), presentedViewController__handle__, presentingViewController__handle__, sourceViewController__handle__), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetNSObject<UIPresentationController> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, Selector.GetHandle ("presentationControllerForPresentedViewController:presentingViewController:sourceViewController:"), presentedViewController__handle__, presentingViewController__handle__, sourceViewController__handle__), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (presentedViewController);
+			GC.KeepAlive (presentingViewController);
+			GC.KeepAlive (sourceViewController);
+			return ret!;
+		}
+		/// <param name="transitionContext">To be added.</param><summary>The duration, in seconds, of the transition.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("transitionDuration:")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual double TransitionDuration (IUIViewControllerContextTransitioning transitionContext)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var transitionContext__handle__ = transitionContext!.GetNonNullHandle (nameof (transitionContext));
+			double ret;
+			if (IsDirectBinding) {
+				ret = global::ObjCRuntime.Messaging.Double_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("transitionDuration:"), transitionContext__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = global::ObjCRuntime.Messaging.Double_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("transitionDuration:"), transitionContext__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (transitionContext);
+			return ret!;
+		}
+		/// <summary>Gets or sets whether to display the search interface by default. The default is <see langword="true" />.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool Active {
+			[Export ("isActive")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("isActive"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("isActive"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setActive:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setActive:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setActive:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("ios13.0")]
+		[SupportedOSPlatform ("tvos13.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual bool AutomaticallyShowsCancelButton {
+			[Export ("automaticallyShowsCancelButton")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("automaticallyShowsCancelButton"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("automaticallyShowsCancelButton"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAutomaticallyShowsCancelButton:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setAutomaticallyShowsCancelButton:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setAutomaticallyShowsCancelButton:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[ObsoletedOSPlatform ("ios16.0", "Use the 'ScopeBarActivation' property instead.")]
+		[ObsoletedOSPlatform ("maccatalyst16.0", "Use the 'ScopeBarActivation' property instead.")]
+		[ObsoletedOSPlatform ("tvos16.0", "Use the 'ScopeBarActivation' property instead.")]
+		[SupportedOSPlatform ("ios13.0")]
+		[SupportedOSPlatform ("tvos13.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual bool AutomaticallyShowsScopeBar {
+			[Export ("automaticallyShowsScopeBar")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("automaticallyShowsScopeBar"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("automaticallyShowsScopeBar"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAutomaticallyShowsScopeBar:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setAutomaticallyShowsScopeBar:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setAutomaticallyShowsScopeBar:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios13.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual bool AutomaticallyShowsSearchResultsController {
+			[Export ("automaticallyShowsSearchResultsController")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("automaticallyShowsSearchResultsController"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("automaticallyShowsSearchResultsController"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setAutomaticallyShowsSearchResultsController:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setAutomaticallyShowsSearchResultsController:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setAutomaticallyShowsSearchResultsController:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		/// <summary>An instance of the UIKit.IUISearchControllerDelegate model class which acts as the class delegate.</summary><value>The instance of the UIKit.IUISearchControllerDelegate model class</value><remarks><para>The delegate instance assigned to this object will be used to handle events or provide data on demand to this class.</para><para>When setting the Delegate or WeakDelegate values events will be delivered to the specified instance instead of being delivered to the C#-style events</para><para>This is the strongly typed version of the object, developers should use the WeakDelegate property instead if they want to merely assign a class derived from NSObject that has been decorated with [Export] attributes.</para></remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public IUISearchControllerDelegate Delegate {
+			get {
+				return (WeakDelegate as IUISearchControllerDelegate)!;
+			}
+			set {
+				var rvalue = value as NSObject;
+				if (!(value is null) && rvalue is null)
+					throw new ArgumentException ("The object passed of type " + value.GetType () + " does not derive from NSObject");
+				WeakDelegate = rvalue;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[ObsoletedOSPlatform ("ios12.0", "Use 'ObscuresBackgroundDuringPresentation' instead.")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[ObsoletedOSPlatform ("maccatalyst13.1", "Use 'ObscuresBackgroundDuringPresentation' instead.")]
+		[SupportedOSPlatform ("ios")]
+		public virtual bool DimsBackgroundDuringPresentation {
+			[Export ("dimsBackgroundDuringPresentation")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("dimsBackgroundDuringPresentation"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("dimsBackgroundDuringPresentation"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setDimsBackgroundDuringPresentation:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setDimsBackgroundDuringPresentation:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setDimsBackgroundDuringPresentation:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool HidesNavigationBarDuringPresentation {
+			[Export ("hidesNavigationBarDuringPresentation")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("hidesNavigationBarDuringPresentation"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("hidesNavigationBarDuringPresentation"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setHidesNavigationBarDuringPresentation:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setHidesNavigationBarDuringPresentation:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setHidesNavigationBarDuringPresentation:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios16.0")]
+		[SupportedOSPlatform ("maccatalyst16.0")]
+		public virtual bool IgnoresSearchSuggestionsForSearchBarPlacementStacked {
+			[Export ("ignoresSearchSuggestionsForSearchBarPlacementStacked")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("ignoresSearchSuggestionsForSearchBarPlacementStacked"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("ignoresSearchSuggestionsForSearchBarPlacementStacked"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setIgnoresSearchSuggestionsForSearchBarPlacementStacked:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setIgnoresSearchSuggestionsForSearchBarPlacementStacked:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setIgnoresSearchSuggestionsForSearchBarPlacementStacked:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("tvos")]
+		public virtual bool ObscuresBackgroundDuringPresentation {
+			[Export ("obscuresBackgroundDuringPresentation")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("obscuresBackgroundDuringPresentation"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("obscuresBackgroundDuringPresentation"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setObscuresBackgroundDuringPresentation:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setObscuresBackgroundDuringPresentation:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setObscuresBackgroundDuringPresentation:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios16.0")]
+		[SupportedOSPlatform ("maccatalyst16.0")]
+		public virtual UISearchControllerScopeBarActivation ScopeBarActivation {
+			[Export ("scopeBarActivation", ArgumentSemantic.Assign)]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				UISearchControllerScopeBarActivation ret;
+				if (IsDirectBinding) {
+					ret = (UISearchControllerScopeBarActivation) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, Selector.GetHandle ("scopeBarActivation"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = (UISearchControllerScopeBarActivation) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("scopeBarActivation"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setScopeBarActivation:", ArgumentSemantic.Assign)]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_IntPtr (this.Handle, Selector.GetHandle ("setScopeBarActivation:"), (IntPtr) (long) value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_IntPtr (&__objc_super__, Selector.GetHandle ("setScopeBarActivation:"), (IntPtr) (long) value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UISearchBar SearchBar {
+			[Export ("searchBar", ArgumentSemantic.Retain)]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				UISearchBar? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<UISearchBar> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("searchBar")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<UISearchBar> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("searchBar")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios16.0")]
+		[SupportedOSPlatform ("maccatalyst16.0")]
+		public virtual UINavigationItemSearchBarPlacement SearchBarPlacement {
+			[Export ("searchBarPlacement")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				UINavigationItemSearchBarPlacement ret;
+				if (IsDirectBinding) {
+					ret = (UINavigationItemSearchBarPlacement) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, Selector.GetHandle ("searchBarPlacement"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = (UINavigationItemSearchBarPlacement) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("searchBarPlacement"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UIViewController SearchResultsController {
+			[Export ("searchResultsController", ArgumentSemantic.Retain)]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				UIViewController? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<UIViewController> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("searchResultsController")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<UIViewController> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("searchResultsController")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		/// <summary>Gets or sets the <see cref="T:UIKit.UISearchResultsUpdating" /> object that updates the contents of the <see cref="T:UIKit.UIViewController" />.</summary><value><para>(More documentation for this node is coming)</para><para tool="nullallowed">This value can be <see langword="null" />.</para></value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public IUISearchResultsUpdating SearchResultsUpdater {
+			get {
+				return (WeakSearchResultsUpdater as IUISearchResultsUpdating)!;
+			}
+			set {
+				var rvalue = value as NSObject;
+				if (!(value is null) && rvalue is null)
+					throw new ArgumentException ("The object passed of type " + value.GetType () + " does not derive from NSObject");
+				WeakSearchResultsUpdater = rvalue;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("ios16.0")]
+		[SupportedOSPlatform ("maccatalyst16.0")]
+		public virtual IUISearchSuggestion[]? SearchSuggestions {
+			[Export ("searchSuggestions", ArgumentSemantic.Copy)]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				IUISearchSuggestion[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<IUISearchSuggestion>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("searchSuggestions")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<IUISearchSuggestion>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("searchSuggestions")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+			[Export ("setSearchSuggestions:", ArgumentSemantic.Copy)]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				using var nsa_value = value is null ? null : NSArray.FromNSObjects (value);
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("setSearchSuggestions:"), nsa_value.GetHandle ());
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("setSearchSuggestions:"), nsa_value.GetHandle ());
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios13.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		public virtual bool ShowsSearchResultsController {
+			[Export ("showsSearchResultsController")]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, Selector.GetHandle ("showsSearchResultsController"));
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("showsSearchResultsController"));
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setShowsSearchResultsController:")]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, Selector.GetHandle ("setShowsSearchResultsController:"), value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, Selector.GetHandle ("setShowsSearchResultsController:"), value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		object? __mt_WeakDelegate_var;
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSObject? WeakDelegate {
+			[Export ("delegate", ArgumentSemantic.Assign)]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				NSObject? ret;
+				if (IsDirectBinding) {
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("delegate")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("delegate")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				MarkDirty ();
+				__mt_WeakDelegate_var = ret;
+				return ret!;
+			}
+			[Export ("setDelegate:", ArgumentSemantic.Assign)]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("setDelegate:"), value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("setDelegate:"), value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+				MarkDirty ();
+				__mt_WeakDelegate_var = value;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		object? __mt_WeakSearchResultsUpdater_var;
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSObject? WeakSearchResultsUpdater {
+			[Export ("searchResultsUpdater", ArgumentSemantic.Assign)]
+			get {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				NSObject? ret;
+				if (IsDirectBinding) {
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, Selector.GetHandle ("searchResultsUpdater")), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, Selector.GetHandle ("searchResultsUpdater")), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				MarkDirty ();
+				__mt_WeakSearchResultsUpdater_var = ret;
+				return ret!;
+			}
+			[Export ("setSearchResultsUpdater:", ArgumentSemantic.Assign)]
+			set {
+				global::UIKit.UIApplication.EnsureUIThread ();
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, Selector.GetHandle ("setSearchResultsUpdater:"), value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, Selector.GetHandle ("setSearchResultsUpdater:"), value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+				MarkDirty ();
+				__mt_WeakSearchResultsUpdater_var = value;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		protected override void Dispose (bool disposing)
+		{
+			base.Dispose (disposing);
+			if (Handle == IntPtr.Zero) {
+				__mt_WeakDelegate_var = null;
+				__mt_WeakSearchResultsUpdater_var = null;
+			}
+		}
+	} /* class UISearchController */
+}

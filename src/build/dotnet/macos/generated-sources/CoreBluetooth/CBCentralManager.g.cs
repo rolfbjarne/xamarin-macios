@@ -1,0 +1,789 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace CoreBluetooth {
+	/// <summary>Represents the local central device in Bluetooth LE.  Use the CBCentralManager to scan, discover and connect to remote peripherals.</summary><related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/CoreBluetooth/Reference/CBCentralManager_Class/index.html">Apple documentation for <c>CBCentralManager</c></related>
+	[Register("CBCentralManager", true)]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
+	public unsafe partial class CBCentralManager : CBManager {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCancelPeripheralConnection_X = "cancelPeripheralConnection:";
+		static readonly NativeHandle selCancelPeripheralConnection_XHandle = Selector.GetHandle ("cancelPeripheralConnection:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selConnectPeripheral_Options_X = "connectPeripheral:options:";
+		static readonly NativeHandle selConnectPeripheral_Options_XHandle = Selector.GetHandle ("connectPeripheral:options:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDelegateX = "delegate";
+		static readonly NativeHandle selDelegateXHandle = Selector.GetHandle ("delegate");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithDelegate_Queue_X = "initWithDelegate:queue:";
+		static readonly NativeHandle selInitWithDelegate_Queue_XHandle = Selector.GetHandle ("initWithDelegate:queue:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selInitWithDelegate_Queue_Options_X = "initWithDelegate:queue:options:";
+		static readonly NativeHandle selInitWithDelegate_Queue_Options_XHandle = Selector.GetHandle ("initWithDelegate:queue:options:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selIsScanningX = "isScanning";
+		static readonly NativeHandle selIsScanningXHandle = Selector.GetHandle ("isScanning");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRetrieveConnectedPeripheralsWithServices_X = "retrieveConnectedPeripheralsWithServices:";
+		static readonly NativeHandle selRetrieveConnectedPeripheralsWithServices_XHandle = Selector.GetHandle ("retrieveConnectedPeripheralsWithServices:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRetrievePeripheralsWithIdentifiers_X = "retrievePeripheralsWithIdentifiers:";
+		static readonly NativeHandle selRetrievePeripheralsWithIdentifiers_XHandle = Selector.GetHandle ("retrievePeripheralsWithIdentifiers:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selScanForPeripheralsWithServices_Options_X = "scanForPeripheralsWithServices:options:";
+		static readonly NativeHandle selScanForPeripheralsWithServices_Options_XHandle = Selector.GetHandle ("scanForPeripheralsWithServices:options:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetDelegate_X = "setDelegate:";
+		static readonly NativeHandle selSetDelegate_XHandle = Selector.GetHandle ("setDelegate:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selStopScanX = "stopScan";
+		static readonly NativeHandle selStopScanXHandle = Selector.GetHandle ("stopScan");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("CBCentralManager");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected CBCentralManager (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal CBCentralManager (NativeHandle handle) : base (handle)
+		{
+		}
+
+		/// <param name="centralDelegate"><para>To be added.</para><para tool="nullallowed">This parameter can be <see langword="null" />.</para></param><param name="queue"><para>To be added.</para><para tool="nullallowed">This parameter can be <see langword="null" />.</para></param><summary>Creates a new <see cref="T:CoreBluetooth.CBCentralManager" /> with the specified central delegate and dispatch queue.</summary><remarks>To be added.</remarks>
+		[Export ("initWithDelegate:queue:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public CBCentralManager (ICBCentralManagerDelegate? centralDelegate, global::CoreFoundation.DispatchQueue? queue)
+			: base (NSObjectFlag.Empty)
+		{
+			var centralDelegate__handle__ = centralDelegate.GetHandle ();
+			var queue__handle__ = queue.GetHandle ();
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selInitWithDelegate_Queue_XHandle, centralDelegate__handle__, queue__handle__), "initWithDelegate:queue:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selInitWithDelegate_Queue_XHandle, centralDelegate__handle__, queue__handle__), "initWithDelegate:queue:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (centralDelegate);
+			GC.KeepAlive (queue);
+			#pragma warning disable 168
+			var postget0 = WeakDelegate;
+			#pragma warning restore 168
+		}
+		/// <param name="centralDelegate"><para>To be added.</para><para tool="nullallowed">This parameter can be <see langword="null" />.</para></param><param name="queue"><para>To be added.</para><para tool="nullallowed">This parameter can be <see langword="null" />.</para></param><param name="options"><para>To be added.</para><para tool="nullallowed">This parameter can be <see langword="null" />.</para></param><summary>Creates a new <see cref="T:CoreBluetooth.CBCentralManager" /> with the specified central delegate, dispatch queue, and options.</summary><remarks>To be added.</remarks>
+		[Export ("initWithDelegate:queue:options:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[DesignatedInitializer]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public CBCentralManager (ICBCentralManagerDelegate? centralDelegate, global::CoreFoundation.DispatchQueue? queue, NSDictionary? options)
+			: base (NSObjectFlag.Empty)
+		{
+			var centralDelegate__handle__ = centralDelegate.GetHandle ();
+			var queue__handle__ = queue.GetHandle ();
+			var options__handle__ = options.GetHandle ();
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, selInitWithDelegate_Queue_Options_XHandle, centralDelegate__handle__, queue__handle__, options__handle__), "initWithDelegate:queue:options:");
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					InitializeHandle (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, selInitWithDelegate_Queue_Options_XHandle, centralDelegate__handle__, queue__handle__, options__handle__), "initWithDelegate:queue:options:");
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (centralDelegate);
+			GC.KeepAlive (queue);
+			GC.KeepAlive (options);
+			#pragma warning disable 168
+			var postget0 = WeakDelegate;
+			#pragma warning restore 168
+		}
+		/// <param name="centralDelegate">To be added.</param><param name="queue">To be added.</param><param name="options">To be added.</param><summary>Creates a new <see cref="T:CoreBluetooth.CBCentralManager" /> with the specified central delegate, dispatch queue, and options.</summary><remarks>To be added.</remarks>
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public CBCentralManager (ICBCentralManagerDelegate? centralDelegate, global::CoreFoundation.DispatchQueue? queue, CBCentralInitOptions options)
+			: this (centralDelegate, queue, options.GetDictionary ())
+		{
+		}
+		/// <param name="peripheral">To be added.</param><summary>Cancels an active or pending connection to the specified <paramref name="peripheral" />.</summary><remarks>To be added.</remarks>
+		[Export ("cancelPeripheralConnection:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void CancelPeripheralConnection (CBPeripheral peripheral)
+		{
+			var peripheral__handle__ = peripheral!.GetNonNullHandle (nameof (peripheral));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selCancelPeripheralConnection_XHandle, peripheral__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selCancelPeripheralConnection_XHandle, peripheral__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (peripheral);
+		}
+		/// <param name="peripheral">Peripheral to connect to.</param><param name="options"><para>Options to configure the peripheral connection, the keys include OptionAllowDuplicatesKey and OptionNotifyOnDisconnectionKey which should contain NSNumbers.</para><para tool="nullallowed">This parameter can be <see langword="null" />.</para></param><summary>Connects to the specified peripheral (weakly typed parameter version).</summary><remarks></remarks>
+		[Export ("connectPeripheral:options:")]
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void ConnectPeripheral (CBPeripheral peripheral, NSDictionary? options)
+		{
+			var peripheral__handle__ = peripheral!.GetNonNullHandle (nameof (peripheral));
+			var options__handle__ = options.GetHandle ();
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selConnectPeripheral_Options_XHandle, peripheral__handle__, options__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selConnectPeripheral_Options_XHandle, peripheral__handle__, options__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (peripheral);
+			GC.KeepAlive (options);
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public void ConnectPeripheral (CBPeripheral peripheral, CBConnectPeripheralOptions? options)
+		{
+			ConnectPeripheral (peripheral, options.GetDictionary ());
+		}
+		/// <param name="serviceUUIDs">To be added.</param><summary>Returns all connected peripherals that have services that are identified by the specified <paramref name="serviceUUIDs" />.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("retrieveConnectedPeripheralsWithServices:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual CBPeripheral[] RetrieveConnectedPeripherals (params CBUUID[] serviceUUIDs)
+		{
+			if (serviceUUIDs is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (serviceUUIDs));
+			using var nsa_serviceUUIDs = NSArray.FromNSObjects (serviceUUIDs);
+			CBPeripheral[] ret;
+			if (IsDirectBinding) {
+				ret = CFArray.ArrayFromHandle<CBPeripheral>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selRetrieveConnectedPeripheralsWithServices_XHandle, nsa_serviceUUIDs.Handle), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = CFArray.ArrayFromHandle<CBPeripheral>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selRetrieveConnectedPeripheralsWithServices_XHandle, nsa_serviceUUIDs.Handle), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		/// <param name="identifiers">To be added.</param><summary>Returns all peripherals that are identified by the specified <paramref name="identifiers" />.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("retrievePeripheralsWithIdentifiers:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual CBPeripheral[] RetrievePeripheralsWithIdentifiers (params NSUuid[] identifiers)
+		{
+			if (identifiers is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (identifiers));
+			using var nsa_identifiers = NSArray.FromNSObjects (identifiers);
+			CBPeripheral[] ret;
+			if (IsDirectBinding) {
+				ret = CFArray.ArrayFromHandle<CBPeripheral>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle (this.Handle, selRetrievePeripheralsWithIdentifiers_XHandle, nsa_identifiers.Handle), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = CFArray.ArrayFromHandle<CBPeripheral>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle (&__objc_super__, selRetrievePeripheralsWithIdentifiers_XHandle, nsa_identifiers.Handle), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			return ret;
+		}
+		[Export ("scanForPeripheralsWithServices:options:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal virtual void ScanForPeripherals (NSArray? serviceUUIDs, NSDictionary? options)
+		{
+			var serviceUUIDs__handle__ = serviceUUIDs.GetHandle ();
+			var options__handle__ = options.GetHandle ();
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selScanForPeripheralsWithServices_Options_XHandle, serviceUUIDs__handle__, options__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selScanForPeripheralsWithServices_Options_XHandle, serviceUUIDs__handle__, options__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (serviceUUIDs);
+			GC.KeepAlive (options);
+		}
+		/// <summary>Tells the manager to stop scanning for peripherals.</summary><remarks>To be added.</remarks>
+		[Export ("stopScan")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void StopScan ()
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend (this.Handle, selStopScanXHandle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper (&__objc_super__, selStopScanXHandle);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <summary>An instance of the CoreBluetooth.ICBCentralManagerDelegate model class which acts as the class delegate.</summary><value>The instance of the CoreBluetooth.ICBCentralManagerDelegate model class</value><remarks><para>The delegate instance assigned to this object will be used to handle events or provide data on demand to this class.</para><para>When setting the Delegate or WeakDelegate values events will be delivered to the specified instance instead of being delivered to the C#-style events</para><para>This is the strongly typed version of the object, developers should use the WeakDelegate property instead if they want to merely assign a class derived from NSObject that has been decorated with [Export] attributes.</para></remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public ICBCentralManagerDelegate Delegate {
+			get {
+				return (WeakDelegate as ICBCentralManagerDelegate)!;
+			}
+			set {
+				var rvalue = value as NSObject;
+				if (!(value is null) && rvalue is null)
+					throw new ArgumentException ("The object passed of type " + value.GetType () + " does not derive from NSObject");
+				WeakDelegate = rvalue;
+			}
+		}
+		/// <summary>Gets a Boolean value that tells whether the manager is currently scanning for peripherals.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public virtual bool IsScanning {
+			[Export ("isScanning")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selIsScanningXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selIsScanningXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		object? __mt_WeakDelegate_var;
+		/// <summary>An object that can respond to the delegate protocol for this type</summary><value>The instance that will respond to events and data requests.</value><remarks><para>The delegate instance assigned to this object will be used to handle events or provide data on demand to this class.</para><para>When setting the Delegate or WeakDelegate values events will be delivered to the specified instance instead of being delivered to the C#-style events</para><para>   Methods must be decorated with the [Export ("selectorName")] attribute to respond to each method from the protocol.   Alternatively use the Delegate method which is strongly typed and does not require the [Export] attributes on methods.</para></remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSObject? WeakDelegate {
+			[Export ("delegate", ArgumentSemantic.Assign)]
+			get {
+				NSObject? ret;
+				if (IsDirectBinding) {
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selDelegateXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selDelegateXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				MarkDirty ();
+				__mt_WeakDelegate_var = ret;
+				return ret!;
+			}
+			[Export ("setDelegate:", ArgumentSemantic.Assign)]
+			set {
+				NSApplication.EnsureDelegateAssignIsNotOverwritingInternalDelegate (__mt_WeakDelegate_var, value, GetInternalEventDelegateType);
+				var value__handle__ = value.GetHandle ();
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selSetDelegate_XHandle, value__handle__);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selSetDelegate_XHandle, value__handle__);
+						GC.KeepAlive (this);
+					}
+				}
+				GC.KeepAlive (value);
+				MarkDirty ();
+				__mt_WeakDelegate_var = value;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _OptionRestoreIdentifierKey;
+		/// <summary>Represents the value associated with the constant CBCentralManagerOptionRestoreIdentifierKey</summary><value></value><remarks>To be added.</remarks>
+		[Field ("CBCentralManagerOptionRestoreIdentifierKey",  "CoreBluetooth")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public static NSString OptionRestoreIdentifierKey {
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			get {
+				if (_OptionRestoreIdentifierKey is null)
+					_OptionRestoreIdentifierKey = Dlfcn.GetStringConstant (Libraries.CoreBluetooth.Handle, "CBCentralManagerOptionRestoreIdentifierKey")!;
+				return _OptionRestoreIdentifierKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _OptionShowPowerAlertKey;
+		/// <summary>Represents the value associated with the constant CBCentralManagerOptionShowPowerAlertKey</summary><value></value><remarks>To be added.</remarks>
+		[Field ("CBCentralManagerOptionShowPowerAlertKey",  "CoreBluetooth")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public static NSString OptionShowPowerAlertKey {
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			get {
+				if (_OptionShowPowerAlertKey is null)
+					_OptionShowPowerAlertKey = Dlfcn.GetStringConstant (Libraries.CoreBluetooth.Handle, "CBCentralManagerOptionShowPowerAlertKey")!;
+				return _OptionShowPowerAlertKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _OptionStartDelayKey;
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[Field ("CBConnectPeripheralOptionStartDelayKey",  "CoreBluetooth")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public static NSString OptionStartDelayKey {
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			get {
+				if (_OptionStartDelayKey is null)
+					_OptionStartDelayKey = Dlfcn.GetStringConstant (Libraries.CoreBluetooth.Handle, "CBConnectPeripheralOptionStartDelayKey")!;
+				return _OptionStartDelayKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _RestoredStatePeripheralsKey;
+		/// <summary>Represents the value associated with the constant CBCentralManagerRestoredStatePeripheralsKey</summary><value></value><remarks>To be added.</remarks>
+		[Field ("CBCentralManagerRestoredStatePeripheralsKey",  "CoreBluetooth")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public static NSString RestoredStatePeripheralsKey {
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			get {
+				if (_RestoredStatePeripheralsKey is null)
+					_RestoredStatePeripheralsKey = Dlfcn.GetStringConstant (Libraries.CoreBluetooth.Handle, "CBCentralManagerRestoredStatePeripheralsKey")!;
+				return _RestoredStatePeripheralsKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _RestoredStateScanOptionsKey;
+		/// <summary>Represents the value associated with the constant CBCentralManagerRestoredStateScanOptionsKey</summary><value></value><remarks>To be added.</remarks>
+		[Field ("CBCentralManagerRestoredStateScanOptionsKey",  "CoreBluetooth")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public static NSString RestoredStateScanOptionsKey {
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			get {
+				if (_RestoredStateScanOptionsKey is null)
+					_RestoredStateScanOptionsKey = Dlfcn.GetStringConstant (Libraries.CoreBluetooth.Handle, "CBCentralManagerRestoredStateScanOptionsKey")!;
+				return _RestoredStateScanOptionsKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _RestoredStateScanServicesKey;
+		/// <summary>Represents the value associated with the constant CBCentralManagerRestoredStateScanServicesKey</summary><value></value><remarks>To be added.</remarks>
+		[Field ("CBCentralManagerRestoredStateScanServicesKey",  "CoreBluetooth")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public static NSString RestoredStateScanServicesKey {
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			get {
+				if (_RestoredStateScanServicesKey is null)
+					_RestoredStateScanServicesKey = Dlfcn.GetStringConstant (Libraries.CoreBluetooth.Handle, "CBCentralManagerRestoredStateScanServicesKey")!;
+				return _RestoredStateScanServicesKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _ScanOptionAllowDuplicatesKey;
+		/// <summary>Represents the value associated with the constant CBCentralManagerScanOptionAllowDuplicatesKey</summary><value></value><remarks>To be added.</remarks>
+		[Field ("CBCentralManagerScanOptionAllowDuplicatesKey",  "CoreBluetooth")]
+		public static NSString ScanOptionAllowDuplicatesKey {
+			get {
+				if (_ScanOptionAllowDuplicatesKey is null)
+					_ScanOptionAllowDuplicatesKey = Dlfcn.GetStringConstant (Libraries.CoreBluetooth.Handle, "CBCentralManagerScanOptionAllowDuplicatesKey")!;
+				return _ScanOptionAllowDuplicatesKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _ScanOptionSolicitedServiceUUIDsKey;
+		/// <summary>Represents the value associated with the constant CBCentralManagerScanOptionSolicitedServiceUUIDsKey</summary><value></value><remarks>To be added.</remarks>
+		[Field ("CBCentralManagerScanOptionSolicitedServiceUUIDsKey",  "CoreBluetooth")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public static NSString ScanOptionSolicitedServiceUUIDsKey {
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			get {
+				if (_ScanOptionSolicitedServiceUUIDsKey is null)
+					_ScanOptionSolicitedServiceUUIDsKey = Dlfcn.GetStringConstant (Libraries.CoreBluetooth.Handle, "CBCentralManagerScanOptionSolicitedServiceUUIDsKey")!;
+				return _ScanOptionSolicitedServiceUUIDsKey;
+			}
+		}
+		//
+		// Events and properties from the delegate
+		//
+		internal virtual Type GetInternalEventDelegateType
+		{
+			get { return typeof (_CBCentralManagerDelegate); }
+		}
+		internal virtual _CBCentralManagerDelegate CreateInternalEventDelegateType ()
+		{
+			return (_CBCentralManagerDelegate)(new _CBCentralManagerDelegate());
+		}
+		internal _CBCentralManagerDelegate EnsureCBCentralManagerDelegate ()
+		{
+			if (WeakDelegate is not null)
+				NSApplication.EnsureEventAndDelegateAreNotMismatched (WeakDelegate, GetInternalEventDelegateType);
+			var del = Delegate as _CBCentralManagerDelegate;
+			if (del is null){
+				del = (_CBCentralManagerDelegate)CreateInternalEventDelegateType ();
+				Delegate = (ICBCentralManagerDelegate)del;
+			}
+			return del;
+		}
+		#pragma warning disable 672
+		[Register]
+		internal class _CBCentralManagerDelegate : NSObject, ICBCentralManagerDelegate { 
+			public _CBCentralManagerDelegate () { IsDirectBinding = false; }
+			[DynamicDependency (DynamicallyAccessedMemberTypes.PublicMethods, typeof (_CBCentralManagerDelegate))]
+			static _CBCentralManagerDelegate ()
+			{
+				GC.KeepAlive (null);
+			}
+			internal EventHandler<CBPeripheralEventArgs>? connectedPeripheral;
+			[Export ("centralManager:didConnectPeripheral:")]
+			public void ConnectedPeripheral (CoreBluetooth.CBCentralManager central, CoreBluetooth.CBPeripheral peripheral)
+			{
+				var handler = connectedPeripheral;
+				if (handler is not null){
+					var args = new CBPeripheralEventArgs (peripheral);
+					handler (central, args);
+				}
+			}
+			internal EventHandler<CBPeripheralDiconnectionEventEventArgs>? didDisconnectPeripheral;
+			[Export ("centralManager:didDisconnectPeripheral:timestamp:isReconnecting:error:")]
+			public void DidDisconnectPeripheral (CoreBluetooth.CBCentralManager central, CoreBluetooth.CBPeripheral peripheral, double timestamp, bool isReconnecting, NSError? error)
+			{
+				var handler = didDisconnectPeripheral;
+				if (handler is not null){
+					var args = new CBPeripheralDiconnectionEventEventArgs (peripheral, timestamp, isReconnecting, error);
+					handler (central, args);
+				}
+			}
+			internal EventHandler<CBPeripheralErrorEventArgs>? disconnectedPeripheral;
+			[Export ("centralManager:didDisconnectPeripheral:error:")]
+			public void DisconnectedPeripheral (CoreBluetooth.CBCentralManager central, CoreBluetooth.CBPeripheral peripheral, NSError? error)
+			{
+				var handler = disconnectedPeripheral;
+				if (handler is not null){
+					var args = new CBPeripheralErrorEventArgs (peripheral, error);
+					handler (central, args);
+				}
+			}
+			internal EventHandler<CBDiscoveredPeripheralEventArgs>? discoveredPeripheral;
+			[Export ("centralManager:didDiscoverPeripheral:advertisementData:RSSI:")]
+			public void DiscoveredPeripheral (CoreBluetooth.CBCentralManager central, CoreBluetooth.CBPeripheral peripheral, NSDictionary advertisementData, NSNumber RSSI)
+			{
+				var handler = discoveredPeripheral;
+				if (handler is not null){
+					var args = new CBDiscoveredPeripheralEventArgs (peripheral, advertisementData, RSSI);
+					handler (central, args);
+				}
+			}
+			internal EventHandler<CBPeripheralErrorEventArgs>? failedToConnectPeripheral;
+			[Export ("centralManager:didFailToConnectPeripheral:error:")]
+			public void FailedToConnectPeripheral (CoreBluetooth.CBCentralManager central, CoreBluetooth.CBPeripheral peripheral, NSError? error)
+			{
+				var handler = failedToConnectPeripheral;
+				if (handler is not null){
+					var args = new CBPeripheralErrorEventArgs (peripheral, error);
+					handler (central, args);
+				}
+			}
+			internal EventHandler? updatedState;
+			[Export ("centralManagerDidUpdateState:")]
+			public void UpdatedState (CoreBluetooth.CBCentralManager central)
+			{
+				var handler = updatedState;
+				if (handler is not null){
+					handler (central, EventArgs.Empty);
+				}
+			}
+			internal EventHandler<CBWillRestoreEventArgs>? willRestoreState;
+			[Export ("centralManager:willRestoreState:")]
+			public void WillRestoreState (CoreBluetooth.CBCentralManager central, NSDictionary dict)
+			{
+				var handler = willRestoreState;
+				if (handler is not null){
+					var args = new CBWillRestoreEventArgs (dict);
+					handler (central, args);
+				}
+			}
+		}
+		#pragma warning restore 672
+		/// <summary>Event raised by the object.</summary>
+		/// <remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+		public event EventHandler<CBPeripheralEventArgs> ConnectedPeripheral {
+			add { EnsureCBCentralManagerDelegate ()!.connectedPeripheral += value; }
+			remove { EnsureCBCentralManagerDelegate ()!.connectedPeripheral -= value; }
+		}
+		public event EventHandler<CBPeripheralDiconnectionEventEventArgs> DidDisconnectPeripheral {
+			add { EnsureCBCentralManagerDelegate ()!.didDisconnectPeripheral += value; }
+			remove { EnsureCBCentralManagerDelegate ()!.didDisconnectPeripheral -= value; }
+		}
+		/// <summary>Event raised by the object.</summary>
+		/// <remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+		public event EventHandler<CBPeripheralErrorEventArgs> DisconnectedPeripheral {
+			add { EnsureCBCentralManagerDelegate ()!.disconnectedPeripheral += value; }
+			remove { EnsureCBCentralManagerDelegate ()!.disconnectedPeripheral -= value; }
+		}
+		/// <summary>Event raised by the object.</summary>
+		/// <remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+		public event EventHandler<CBDiscoveredPeripheralEventArgs> DiscoveredPeripheral {
+			add { EnsureCBCentralManagerDelegate ()!.discoveredPeripheral += value; }
+			remove { EnsureCBCentralManagerDelegate ()!.discoveredPeripheral -= value; }
+		}
+		/// <summary>Event raised by the object.</summary>
+		/// <remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+		public event EventHandler<CBPeripheralErrorEventArgs> FailedToConnectPeripheral {
+			add { EnsureCBCentralManagerDelegate ()!.failedToConnectPeripheral += value; }
+			remove { EnsureCBCentralManagerDelegate ()!.failedToConnectPeripheral -= value; }
+		}
+		/// <summary>Event raised by the object.</summary>
+		/// <remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+		public event EventHandler UpdatedState {
+			add { EnsureCBCentralManagerDelegate ()!.updatedState += value; }
+			remove { EnsureCBCentralManagerDelegate ()!.updatedState -= value; }
+		}
+		/// <summary>Event raised by the object.</summary>
+		/// <remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
+		public event EventHandler<CBWillRestoreEventArgs> WillRestoreState {
+			add { EnsureCBCentralManagerDelegate ()!.willRestoreState += value; }
+			remove { EnsureCBCentralManagerDelegate ()!.willRestoreState -= value; }
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		protected override void Dispose (bool disposing)
+		{
+			base.Dispose (disposing);
+			if (Handle == IntPtr.Zero) {
+				__mt_WeakDelegate_var = null;
+			}
+		}
+	} /* class CBCentralManager */
+	//
+	// EventArgs classes
+	//
+	/// <summary>Provides data for an event based on an Objective-C protocol method.</summary>
+	public partial class CBDiscoveredPeripheralEventArgs : EventArgs {
+		/// <summary>Create a new instance of the <see cref="CBDiscoveredPeripheralEventArgs" /> with the specified event data.</summary>
+		/// <param name="peripheral">The value for the <see cref="Peripheral" /> property.</param>
+		/// <param name="advertisementData">The value for the <see cref="AdvertisementData" /> property.</param>
+		/// <param name="RSSI">The value for the <see cref="RSSI" /> property.</param>
+		public CBDiscoveredPeripheralEventArgs (CoreBluetooth.CBPeripheral peripheral, NSDictionary advertisementData, NSNumber RSSI)
+		{
+			this.RSSI = RSSI;
+			this.AdvertisementData = advertisementData;
+			this.Peripheral = peripheral;
+		}
+		public NSNumber RSSI { get; set; }
+		public NSDictionary AdvertisementData { get; set; }
+		public CoreBluetooth.CBPeripheral Peripheral { get; set; }
+	}
+	/// <summary>Provides data for an event based on an Objective-C protocol method.</summary>
+	public partial class CBPeripheralDiconnectionEventEventArgs : EventArgs {
+		/// <summary>Create a new instance of the <see cref="CBPeripheralDiconnectionEventEventArgs" /> with the specified event data.</summary>
+		/// <param name="peripheral">The value for the <see cref="Peripheral" /> property.</param>
+		/// <param name="timestamp">The value for the <see cref="Timestamp" /> property.</param>
+		/// <param name="isReconnecting">The value for the <see cref="IsReconnecting" /> property.</param>
+		/// <param name="error">The value for the <see cref="Error" /> property.</param>
+		public CBPeripheralDiconnectionEventEventArgs (CoreBluetooth.CBPeripheral peripheral, double timestamp, bool isReconnecting, NSError? error)
+		{
+			this.Error = error;
+			this.IsReconnecting = isReconnecting;
+			this.Peripheral = peripheral;
+			this.Timestamp = timestamp;
+		}
+		public NSError? Error { get; set; }
+		public bool IsReconnecting { get; set; }
+		public CoreBluetooth.CBPeripheral Peripheral { get; set; }
+		public double Timestamp { get; set; }
+	}
+	/// <summary>Provides data for an event based on an Objective-C protocol method.</summary>
+	public partial class CBPeripheralErrorEventArgs : EventArgs {
+		/// <summary>Create a new instance of the <see cref="CBPeripheralErrorEventArgs" /> with the specified event data.</summary>
+		/// <param name="peripheral">The value for the <see cref="Peripheral" /> property.</param>
+		/// <param name="error">The value for the <see cref="Error" /> property.</param>
+		public CBPeripheralErrorEventArgs (CoreBluetooth.CBPeripheral peripheral, NSError? error)
+		{
+			this.Error = error;
+			this.Peripheral = peripheral;
+		}
+		public NSError? Error { get; set; }
+		public CoreBluetooth.CBPeripheral Peripheral { get; set; }
+	}
+	/// <summary>Provides data for an event based on an Objective-C protocol method.</summary>
+	public partial class CBPeripheralEventArgs : EventArgs {
+		/// <summary>Create a new instance of the <see cref="CBPeripheralEventArgs" /> with the specified event data.</summary>
+		/// <param name="peripheral">The value for the <see cref="Peripheral" /> property.</param>
+		public CBPeripheralEventArgs (CoreBluetooth.CBPeripheral peripheral)
+		{
+			this.Peripheral = peripheral;
+		}
+		public CoreBluetooth.CBPeripheral Peripheral { get; set; }
+	}
+	/// <summary>Provides data for an event based on an Objective-C protocol method.</summary>
+	public partial class CBWillRestoreEventArgs : EventArgs {
+		/// <summary>Create a new instance of the <see cref="CBWillRestoreEventArgs" /> with the specified event data.</summary>
+		/// <param name="dict">The value for the <see cref="Dict" /> property.</param>
+		public CBWillRestoreEventArgs (NSDictionary dict)
+		{
+			this.Dict = dict;
+		}
+		public NSDictionary Dict { get; set; }
+	}
+}

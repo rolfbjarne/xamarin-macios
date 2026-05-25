@@ -1,0 +1,100 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using Metal;
+using CoreML;
+using AppKit;
+using MapKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using Messages;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using QuickLook;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using CoreMotion;
+using ObjCRuntime;
+using AddressBook;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace Foundation {
+	public unsafe static partial class NSLinguisticAnalysis  {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("NSString");
+		/// <param name="This">The instance on which this method operates.</param><param name="range">To be added.</param><param name="scheme">To be added.</param><param name="options">To be added.</param><param name="orthography">To be added.</param><param name="handler">To be added.</param><summary>To be added.</summary><remarks>To be added.</remarks>
+		[Export ("enumerateLinguisticTagsInRange:scheme:options:orthography:usingBlock:")]
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static void EnumerateLinguisticTags (this NSString This, NSRange range, NSString scheme, NSLinguisticTaggerOptions options, NSOrthography? orthography, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDNSEnumerateLinguisticTagsEnumerator))]NSEnumerateLinguisticTagsEnumerator handler)
+		{
+			var scheme__handle__ = scheme!.GetNonNullHandle (nameof (scheme));
+			var orthography__handle__ = orthography.GetHandle ();
+			if (handler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (handler));
+			using var block_handler = Trampolines.SDNSEnumerateLinguisticTagsEnumerator.CreateBlock (handler);
+			BlockLiteral *block_ptr_handler = &block_handler;
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NSRange_NativeHandle_UIntPtr_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("enumerateLinguisticTagsInRange:scheme:options:orthography:usingBlock:"), range, scheme__handle__, (UIntPtr) (ulong) options, orthography__handle__, (IntPtr) block_ptr_handler);
+			GC.KeepAlive (This);
+			GC.KeepAlive (scheme);
+			GC.KeepAlive (orthography);
+		}
+		/// <param name="This">The instance on which this method operates.</param><param name="range">To be added.</param><param name="scheme">To be added.</param><param name="options">To be added.</param><param name="orthography">To be added.</param><param name="handler">To be added.</param><summary>To be added.</summary><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static void EnumerateLinguisticTags (this NSString This, NSRange range, NSLinguisticTagScheme scheme, NSLinguisticTaggerOptions options, NSOrthography? orthography, NSEnumerateLinguisticTagsEnumerator handler)
+		{
+			EnumerateLinguisticTags (This, range, scheme.GetConstant ()!, options, orthography, handler);
+		}
+		/// <param name="This">The instance on which this method operates.</param><param name="range">To be added.</param><param name="scheme">To be added.</param><param name="options">To be added.</param><param name="orthography">To be added.</param><param name="tokenRanges">To be added.</param><summary>To be added.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("linguisticTagsInRange:scheme:options:orthography:tokenRanges:")]
+		[EditorBrowsable (EditorBrowsableState.Never)]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[return: BindAs (typeof (NSLinguisticTag[]), OriginalType = typeof (NSString[]))]
+		public unsafe static NSLinguisticTag[] GetLinguisticTags (this NSString This, NSRange range, NSString scheme, NSLinguisticTaggerOptions options, NSOrthography? orthography, out NSValue[]? tokenRanges)
+		{
+			var scheme__handle__ = scheme!.GetNonNullHandle (nameof (scheme));
+			var orthography__handle__ = orthography.GetHandle ();
+			NativeHandle tokenRangesValue = IntPtr.Zero;
+			NSLinguisticTag[] ret;
+			ret = NSArray.ArrayFromHandleFunc <NSLinguisticTag> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NSRange_NativeHandle_UIntPtr_NativeHandle_ref_NativeHandle (This.Handle, Selector.GetHandle ("linguisticTagsInRange:scheme:options:orthography:tokenRanges:"), range, scheme__handle__, (UIntPtr) (ulong) options, orthography__handle__, &tokenRangesValue), NSLinguisticTagExtensions.GetValue , false)!;
+			GC.KeepAlive (This);
+			GC.KeepAlive (scheme);
+			GC.KeepAlive (orthography);
+			tokenRanges = CFArray.ArrayFromHandle<NSValue> (tokenRangesValue)!;
+			return ret!;
+		}
+		/// <param name="This">The instance on which this method operates.</param><param name="range">To be added.</param><param name="scheme">To be added.</param><param name="options">To be added.</param><param name="orthography">To be added.</param><param name="tokenRanges">To be added.</param><summary>To be added.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static NSLinguisticTag[] GetLinguisticTags (this NSString This, NSRange range, NSLinguisticTagScheme scheme, NSLinguisticTaggerOptions options, NSOrthography? orthography, out NSValue[]? tokenRanges)
+		{
+			return GetLinguisticTags (This, range, scheme.GetConstant ()!, options, orthography, out tokenRanges);
+		}
+	} /* class NSLinguisticAnalysis */
+}

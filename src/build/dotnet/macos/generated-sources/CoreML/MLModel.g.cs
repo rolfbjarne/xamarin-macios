@@ -1,0 +1,687 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace CoreML {
+	/// <summary>Encapsulates a trained machine-learning model.</summary><remarks><para>The <see cref="T:CoreML.MLModel" /> class encapsulates a machine-learning model that maps a predefined set of input features to a predefined set of output features. Models are generally stored as .mlmodel files but these must be "compiled" into a .mlmodelc directory prior to inferencing. This compilation step generally occurs prior to deploymenty, but may be performed on the device with the time-consuming <see cref="M:CoreML.MLModel.CompileModel(Foundation.NSUrl,Foundation.NSError@)" /> method.</para></remarks>
+	[Register("MLModel", true)]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
+	public unsafe partial class MLModel : NSObject {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAvailableComputeDevicesX = "availableComputeDevices";
+		static readonly NativeHandle selAvailableComputeDevicesXHandle = Selector.GetHandle ("availableComputeDevices");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCompileModelAtURL_CompletionHandler_X = "compileModelAtURL:completionHandler:";
+		static readonly NativeHandle selCompileModelAtURL_CompletionHandler_XHandle = Selector.GetHandle ("compileModelAtURL:completionHandler:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCompileModelAtURL_Error_X = "compileModelAtURL:error:";
+		static readonly NativeHandle selCompileModelAtURL_Error_XHandle = Selector.GetHandle ("compileModelAtURL:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selConfigurationX = "configuration";
+		static readonly NativeHandle selConfigurationXHandle = Selector.GetHandle ("configuration");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selLoadContentsOfURL_Configuration_CompletionHandler_X = "loadContentsOfURL:configuration:completionHandler:";
+		static readonly NativeHandle selLoadContentsOfURL_Configuration_CompletionHandler_XHandle = Selector.GetHandle ("loadContentsOfURL:configuration:completionHandler:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selLoadModelAsset_Configuration_CompletionHandler_X = "loadModelAsset:configuration:completionHandler:";
+		static readonly NativeHandle selLoadModelAsset_Configuration_CompletionHandler_XHandle = Selector.GetHandle ("loadModelAsset:configuration:completionHandler:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selModelDescriptionX = "modelDescription";
+		static readonly NativeHandle selModelDescriptionXHandle = Selector.GetHandle ("modelDescription");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selModelWithContentsOfURL_Configuration_Error_X = "modelWithContentsOfURL:configuration:error:";
+		static readonly NativeHandle selModelWithContentsOfURL_Configuration_Error_XHandle = Selector.GetHandle ("modelWithContentsOfURL:configuration:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selModelWithContentsOfURL_Error_X = "modelWithContentsOfURL:error:";
+		static readonly NativeHandle selModelWithContentsOfURL_Error_XHandle = Selector.GetHandle ("modelWithContentsOfURL:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selParameterValueForKey_Error_X = "parameterValueForKey:error:";
+		static readonly NativeHandle selParameterValueForKey_Error_XHandle = Selector.GetHandle ("parameterValueForKey:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPredictionFromFeatures_CompletionHandler_X = "predictionFromFeatures:completionHandler:";
+		static readonly NativeHandle selPredictionFromFeatures_CompletionHandler_XHandle = Selector.GetHandle ("predictionFromFeatures:completionHandler:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPredictionFromFeatures_Error_X = "predictionFromFeatures:error:";
+		static readonly NativeHandle selPredictionFromFeatures_Error_XHandle = Selector.GetHandle ("predictionFromFeatures:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPredictionFromFeatures_Options_CompletionHandler_X = "predictionFromFeatures:options:completionHandler:";
+		static readonly NativeHandle selPredictionFromFeatures_Options_CompletionHandler_XHandle = Selector.GetHandle ("predictionFromFeatures:options:completionHandler:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPredictionFromFeatures_Options_Error_X = "predictionFromFeatures:options:error:";
+		static readonly NativeHandle selPredictionFromFeatures_Options_Error_XHandle = Selector.GetHandle ("predictionFromFeatures:options:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPredictionsFromBatch_Error_X = "predictionsFromBatch:error:";
+		static readonly NativeHandle selPredictionsFromBatch_Error_XHandle = Selector.GetHandle ("predictionsFromBatch:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selPredictionsFromBatch_Options_Error_X = "predictionsFromBatch:options:error:";
+		static readonly NativeHandle selPredictionsFromBatch_Options_Error_XHandle = Selector.GetHandle ("predictionsFromBatch:options:error:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("MLModel");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Creates a new <see cref="MLModel" /> with default values.</summary>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("init")]
+		public MLModel () : base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.Init), "init");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, global::ObjCRuntime.Selector.Init), "init");
+				GC.KeepAlive (this);
+				}
+			}
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected MLModel (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal MLModel (NativeHandle handle) : base (handle)
+		{
+		}
+
+		/// <param name="modelUrl">A URL to a model to compile.</param><param name="error">On failure, the error that occurred.</param><summary>Compiles the model at <paramref name="modelUrl" />.</summary><returns>To be added.</returns><remarks><para>This is an expensive function. Execution time varies depending on the model size, but developers should run this method on a background thread and take steps to avoid the need to run this method repeatedly.</para><para>The following example shows how a developer can download a model, compile it, and move the compiled model into the app's permanent storage:</para><example><code lang="csharp lang-csharp"><![CDATA[
+		/// NSUrl CompileModel(string modelName)
+		/// {
+		/// 	var downloadedFile = modelName + ".mlmodel";
+		/// 	var fileUrl = NSUrl.FromFilename(downloadedFile);
+		/// 	NSError err = null;
+		/// 	var compiledUrl = MLModel.CompileModel(fileUrl, out err);
+		/// 	if (err != null)
+		/// 	{
+		/// 		throw new Exception(err.ToString());
+		/// 	}
+		/// 	return compiledUrl;
+		/// }
+		/// 
+		/// NSUrl StoreModel(NSUrl sourceUrl)
+		/// {
+		/// 	var fileManager = NSFileManager.DefaultManager;
+		/// 	NSError err = null;
+		/// 	var appSupportDirectory = fileManager.GetUrl(NSSearchPathDirectory.ApplicationSupportDirectory, NSSearchPathDomain.User, sourceUrl, true, out err);
+		/// 	if (err != null)
+		/// 	{
+		/// 		throw new Exception(err.ToString());
+		/// 	}
+		/// 
+		/// 	// Create a permanent URL in appSupportDirectory
+		/// 	var destinationUrl = appSupportDirectory.Append(sourceUrl.LastPathComponent, true);
+		/// 	NSUrl resultingUrl = null;
+		/// 
+		/// 	var destPath = destinationUrl.AbsoluteString;
+		/// 	// If the compiled model directory exists, replace it
+		/// 	if (System.IO.Directory.Exists(destinationUrl.Path))
+		/// 	{
+		/// 		fileManager.Replace(destinationUrl, sourceUrl, null, NSFileManagerItemReplacementOptions.None, out resultingUrl, out err);
+		/// 	}
+		/// 	else
+		/// 	{
+		/// 		fileManager.Copy(sourceUrl, destinationUrl, out err);
+		/// 	}
+		/// 	if (err != null)
+		/// 	{
+		/// 		throw new Exception(err.ToString());
+		/// 	}
+		/// 	return resultingUrl;
+		/// }
+		/// 
+		/// private async Task<NSUrl> DownloadAndStoryCoreMLModelAsync()
+		/// {
+		/// var modelName = "SomeModel";
+		/// 	var sourceUrl ="https://Contoso.org/SomeModel.mlmodel";
+		/// 	using (var wc = new WebClient())
+		/// 	{
+		/// 		await wc.DownloadFileTaskAsync(sourceUrl, modelName +".mlmodel");
+		/// 		var compiledModelPath = CompileModel(modelName);
+		/// 		var finalPath = StoreModel(compiledModelPath);
+		/// return finalPath;
+		/// 	}
+		/// }
+		/// ]]></code></example></remarks>
+		[Export ("compileModelAtURL:error:")]
+		[ObsoletedOSPlatform ("macos13.0", "Use 'CompileModel (NSUrl, Action<NSUrl, NSError>)' overload or 'CompileModelAsync' instead.")]
+		[ObsoletedOSPlatform ("ios16.0", "Use 'CompileModel (NSUrl, Action<NSUrl, NSError>)' overload or 'CompileModelAsync' instead.")]
+		[ObsoletedOSPlatform ("tvos16.0", "Use 'CompileModel (NSUrl, Action<NSUrl, NSError>)' overload or 'CompileModelAsync' instead.")]
+		[ObsoletedOSPlatform ("maccatalyst16.0", "Use 'CompileModel (NSUrl, Action<NSUrl, NSError>)' overload or 'CompileModelAsync' instead.")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static NSUrl? CompileModel (NSUrl modelUrl, out NSError error)
+		{
+			var modelUrl__handle__ = modelUrl!.GetNonNullHandle (nameof (modelUrl));
+			NativeHandle errorValue = IntPtr.Zero;
+			NSUrl? ret;
+			ret =  Runtime.GetNSObject<NSUrl> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_ref_NativeHandle (class_ptr, selCompileModelAtURL_Error_XHandle, modelUrl__handle__, &errorValue), false)!;
+			GC.KeepAlive (modelUrl);
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret!;
+		}
+		[Export ("compileModelAtURL:completionHandler:")]
+		[SupportedOSPlatform ("tvos16.0")]
+		[SupportedOSPlatform ("macos13.0")]
+		[SupportedOSPlatform ("ios16.0")]
+		[SupportedOSPlatform ("maccatalyst16.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static void CompileModel (NSUrl modelUrl, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity2V23))]global::System.Action<NSUrl, NSError> handler)
+		{
+			var modelUrl__handle__ = modelUrl!.GetNonNullHandle (nameof (modelUrl));
+			if (handler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (handler));
+			using var block_handler = Trampolines.SDActionArity2V23.CreateBlock (handler);
+			BlockLiteral *block_ptr_handler = &block_handler;
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (class_ptr, selCompileModelAtURL_CompletionHandler_XHandle, modelUrl__handle__, (IntPtr) block_ptr_handler);
+			GC.KeepAlive (modelUrl);
+		}
+		[SupportedOSPlatform ("tvos16.0")]
+		[SupportedOSPlatform ("macos13.0")]
+		[SupportedOSPlatform ("ios16.0")]
+		[SupportedOSPlatform ("maccatalyst16.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static Task<NSUrl> CompileModelAsync (NSUrl modelUrl)
+		{
+			var tcs = new TaskCompletionSource<NSUrl> ();
+			CompileModel(modelUrl, (arg1_, arg2_) => {
+				if (arg2_ is not null)
+					tcs.SetException (new NSErrorException(arg2_));
+				else
+					tcs.SetResult (arg1_!);
+			});
+			return tcs.Task;
+		}
+		/// <param name="url">The URL of the model resource.</param><param name="error">On failure, the error that occurred.</param><summary>Creates and returns a CoreML model with the data that is stored at the specified <paramref name="url" />, reporting any errors in <paramref name="error" />.</summary><returns>The new model, or <see langword="null" /> if an error occurred.</returns><remarks>To be added.</remarks>
+		[Export ("modelWithContentsOfURL:error:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static MLModel? Create (NSUrl url, out NSError error)
+		{
+			var url__handle__ = url!.GetNonNullHandle (nameof (url));
+			NativeHandle errorValue = IntPtr.Zero;
+			MLModel? ret;
+			ret =  Runtime.GetNSObject<MLModel> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_ref_NativeHandle (class_ptr, selModelWithContentsOfURL_Error_XHandle, url__handle__, &errorValue), false)!;
+			GC.KeepAlive (url);
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret!;
+		}
+		/// <param name="url">To be added.</param><param name="configuration">To be added.</param><param name="error">To be added.</param><summary>To be added.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("modelWithContentsOfURL:configuration:error:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static MLModel? Create (NSUrl url, MLModelConfiguration configuration, out NSError error)
+		{
+			var url__handle__ = url!.GetNonNullHandle (nameof (url));
+			var configuration__handle__ = configuration!.GetNonNullHandle (nameof (configuration));
+			NativeHandle errorValue = IntPtr.Zero;
+			MLModel? ret;
+			ret =  Runtime.GetNSObject<MLModel> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_ref_NativeHandle (class_ptr, selModelWithContentsOfURL_Configuration_Error_XHandle, url__handle__, configuration__handle__, &errorValue), false)!;
+			GC.KeepAlive (url);
+			GC.KeepAlive (configuration);
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret!;
+		}
+		[Export ("parameterValueForKey:error:")]
+		[SupportedOSPlatform ("tvos13.0")]
+		[SupportedOSPlatform ("ios13.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual NSObject? GetParameterValue (MLParameterKey key, out NSError? error)
+		{
+			var key__handle__ = key!.GetNonNullHandle (nameof (key));
+			NativeHandle errorValue = IntPtr.Zero;
+			NSObject? ret;
+			if (IsDirectBinding) {
+				ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_ref_NativeHandle (this.Handle, selParameterValueForKey_Error_XHandle, key__handle__, &errorValue), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_ref_NativeHandle (&__objc_super__, selParameterValueForKey_Error_XHandle, key__handle__, &errorValue), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (key);
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret!;
+		}
+		/// <param name="input">The feature from which to make a prediction.</param><param name="error">On failure, the error that occurred.</param><summary>Makes a prediction on <paramref name="input" />.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("predictionFromFeatures:error:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual IMLFeatureProvider? GetPrediction (IMLFeatureProvider input, out NSError error)
+		{
+			var input__handle__ = input!.GetNonNullHandle (nameof (input));
+			NativeHandle errorValue = IntPtr.Zero;
+			IMLFeatureProvider? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetINativeObject<IMLFeatureProvider> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_ref_NativeHandle (this.Handle, selPredictionFromFeatures_Error_XHandle, input__handle__, &errorValue), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetINativeObject<IMLFeatureProvider> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_ref_NativeHandle (&__objc_super__, selPredictionFromFeatures_Error_XHandle, input__handle__, &errorValue), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (input);
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret!;
+		}
+		/// <param name="input">The feature from which to make a prediction.</param><param name="options">Options about resources to use for the prediction.</param><param name="error">On failure, the error that occurred.</param><summary>Makes a prediction on <paramref name="input" />.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("predictionFromFeatures:options:error:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual IMLFeatureProvider? GetPrediction (IMLFeatureProvider input, MLPredictionOptions options, out NSError error)
+		{
+			var input__handle__ = input!.GetNonNullHandle (nameof (input));
+			var options__handle__ = options!.GetNonNullHandle (nameof (options));
+			NativeHandle errorValue = IntPtr.Zero;
+			IMLFeatureProvider? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetINativeObject<IMLFeatureProvider> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_ref_NativeHandle (this.Handle, selPredictionFromFeatures_Options_Error_XHandle, input__handle__, options__handle__, &errorValue), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetINativeObject<IMLFeatureProvider> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_ref_NativeHandle (&__objc_super__, selPredictionFromFeatures_Options_Error_XHandle, input__handle__, options__handle__, &errorValue), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (input);
+			GC.KeepAlive (options);
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret!;
+		}
+		[Export ("predictionFromFeatures:completionHandler:")]
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void GetPrediction (IMLFeatureProvider input, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity2V63))]global::System.Action<IMLFeatureProvider, NSError> completionHandler)
+		{
+			var input__handle__ = input!.GetNonNullHandle (nameof (input));
+			if (completionHandler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (completionHandler));
+			using var block_completionHandler = Trampolines.SDActionArity2V63.CreateBlock (completionHandler);
+			BlockLiteral *block_ptr_completionHandler = &block_completionHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selPredictionFromFeatures_CompletionHandler_XHandle, input__handle__, (IntPtr) block_ptr_completionHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selPredictionFromFeatures_CompletionHandler_XHandle, input__handle__, (IntPtr) block_ptr_completionHandler);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (input);
+		}
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<IMLFeatureProvider> GetPredictionAsync (IMLFeatureProvider input)
+		{
+			var tcs = new TaskCompletionSource<IMLFeatureProvider> ();
+			GetPrediction(input, (arg1_, arg2_) => {
+				if (arg2_ is not null)
+					tcs.SetException (new NSErrorException(arg2_));
+				else
+					tcs.SetResult (arg1_!);
+			});
+			return tcs.Task;
+		}
+		[Export ("predictionFromFeatures:options:completionHandler:")]
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void GetPrediction (IMLFeatureProvider input, MLPredictionOptions options, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity2V63))]global::System.Action<IMLFeatureProvider, NSError> completionHandler)
+		{
+			var input__handle__ = input!.GetNonNullHandle (nameof (input));
+			var options__handle__ = options!.GetNonNullHandle (nameof (options));
+			if (completionHandler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (completionHandler));
+			using var block_completionHandler = Trampolines.SDActionArity2V63.CreateBlock (completionHandler);
+			BlockLiteral *block_ptr_completionHandler = &block_completionHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, selPredictionFromFeatures_Options_CompletionHandler_XHandle, input__handle__, options__handle__, (IntPtr) block_ptr_completionHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, selPredictionFromFeatures_Options_CompletionHandler_XHandle, input__handle__, options__handle__, (IntPtr) block_ptr_completionHandler);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (input);
+			GC.KeepAlive (options);
+		}
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<IMLFeatureProvider> GetPredictionAsync (IMLFeatureProvider input, MLPredictionOptions options)
+		{
+			var tcs = new TaskCompletionSource<IMLFeatureProvider> ();
+			GetPrediction(input, options, (arg1_, arg2_) => {
+				if (arg2_ is not null)
+					tcs.SetException (new NSErrorException(arg2_));
+				else
+					tcs.SetResult (arg1_!);
+			});
+			return tcs.Task;
+		}
+		[Export ("predictionsFromBatch:error:")]
+		[SupportedOSPlatform ("tvos13.0")]
+		[SupportedOSPlatform ("ios13.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual IMLBatchProvider? GetPredictions (IMLBatchProvider inputBatch, out NSError? error)
+		{
+			var inputBatch__handle__ = inputBatch!.GetNonNullHandle (nameof (inputBatch));
+			NativeHandle errorValue = IntPtr.Zero;
+			IMLBatchProvider? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetINativeObject<IMLBatchProvider> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_ref_NativeHandle (this.Handle, selPredictionsFromBatch_Error_XHandle, inputBatch__handle__, &errorValue), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetINativeObject<IMLBatchProvider> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_ref_NativeHandle (&__objc_super__, selPredictionsFromBatch_Error_XHandle, inputBatch__handle__, &errorValue), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (inputBatch);
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret!;
+		}
+		/// <param name="inputBatch">To be added.</param><param name="options">To be added.</param><param name="error">To be added.</param><summary>Gets the <see cref="T:CoreML.IMLBatchProvider" /> describing the outputs for the <paramref name="inputBatch" /> and <paramref name="options" />.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("predictionsFromBatch:options:error:")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual IMLBatchProvider? GetPredictions (IMLBatchProvider inputBatch, MLPredictionOptions options, out NSError error)
+		{
+			var inputBatch__handle__ = inputBatch!.GetNonNullHandle (nameof (inputBatch));
+			var options__handle__ = options!.GetNonNullHandle (nameof (options));
+			NativeHandle errorValue = IntPtr.Zero;
+			IMLBatchProvider? ret;
+			if (IsDirectBinding) {
+				ret =  Runtime.GetINativeObject<IMLBatchProvider> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_ref_NativeHandle (this.Handle, selPredictionsFromBatch_Options_Error_XHandle, inputBatch__handle__, options__handle__, &errorValue), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret =  Runtime.GetINativeObject<IMLBatchProvider> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_ref_NativeHandle (&__objc_super__, selPredictionsFromBatch_Options_Error_XHandle, inputBatch__handle__, options__handle__, &errorValue), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (inputBatch);
+			GC.KeepAlive (options);
+			error = Runtime.GetNSObject<NSError> (errorValue)!;
+			return ret!;
+		}
+		[Export ("loadModelAsset:configuration:completionHandler:")]
+		[SupportedOSPlatform ("tvos16.0")]
+		[SupportedOSPlatform ("macos13.0")]
+		[SupportedOSPlatform ("ios16.0")]
+		[SupportedOSPlatform ("maccatalyst16.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static void Load (MLModelAsset asset, MLModelConfiguration configuration, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity2V64))]global::System.Action<MLModel, NSError> handler)
+		{
+			var asset__handle__ = asset!.GetNonNullHandle (nameof (asset));
+			var configuration__handle__ = configuration!.GetNonNullHandle (nameof (configuration));
+			if (handler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (handler));
+			using var block_handler = Trampolines.SDActionArity2V64.CreateBlock (handler);
+			BlockLiteral *block_ptr_handler = &block_handler;
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (class_ptr, selLoadModelAsset_Configuration_CompletionHandler_XHandle, asset__handle__, configuration__handle__, (IntPtr) block_ptr_handler);
+			GC.KeepAlive (asset);
+			GC.KeepAlive (configuration);
+		}
+		[SupportedOSPlatform ("tvos16.0")]
+		[SupportedOSPlatform ("macos13.0")]
+		[SupportedOSPlatform ("ios16.0")]
+		[SupportedOSPlatform ("maccatalyst16.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static Task<MLModel> LoadAsync (MLModelAsset asset, MLModelConfiguration configuration)
+		{
+			var tcs = new TaskCompletionSource<MLModel> ();
+			Load(asset, configuration, (arg1_, arg2_) => {
+				if (arg2_ is not null)
+					tcs.SetException (new NSErrorException(arg2_));
+				else
+					tcs.SetResult (arg1_!);
+			});
+			return tcs.Task;
+		}
+		[Export ("loadContentsOfURL:configuration:completionHandler:")]
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static void LoadContents (NSUrl url, MLModelConfiguration configuration, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity2V64))]global::System.Action<MLModel, NSError> handler)
+		{
+			var url__handle__ = url!.GetNonNullHandle (nameof (url));
+			var configuration__handle__ = configuration!.GetNonNullHandle (nameof (configuration));
+			if (handler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (handler));
+			using var block_handler = Trampolines.SDActionArity2V64.CreateBlock (handler);
+			BlockLiteral *block_ptr_handler = &block_handler;
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (class_ptr, selLoadContentsOfURL_Configuration_CompletionHandler_XHandle, url__handle__, configuration__handle__, (IntPtr) block_ptr_handler);
+			GC.KeepAlive (url);
+			GC.KeepAlive (configuration);
+		}
+		[SupportedOSPlatform ("tvos14.0")]
+		[SupportedOSPlatform ("ios14.0")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe static Task<MLModel> LoadContentsAsync (NSUrl url, MLModelConfiguration configuration)
+		{
+			var tcs = new TaskCompletionSource<MLModel> ();
+			LoadContents(url, configuration, (arg1_, arg2_) => {
+				if (arg2_ is not null)
+					tcs.SetException (new NSErrorException(arg2_));
+				else
+					tcs.SetResult (arg1_!);
+			});
+			return tcs.Task;
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		public static IMLComputeDeviceProtocol[] AvailableComputeDevices {
+			[Export ("availableComputeDevices", ArgumentSemantic.Copy)]
+			get {
+				IMLComputeDeviceProtocol[]? ret;
+				ret = CFArray.ArrayFromHandle<IMLComputeDeviceProtocol>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (class_ptr, selAvailableComputeDevicesXHandle), false)!;
+				return ret!;
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public virtual MLModelConfiguration Configuration {
+			[Export ("configuration")]
+			get {
+				MLModelConfiguration? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<MLModelConfiguration> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selConfigurationXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<MLModelConfiguration> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selConfigurationXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		/// <summary>A developer-meaningful description of this <see cref="T:CoreML.MLModel" />.</summary><value>To be added.</value><remarks>A properly-specified <see cref="T:CoreML.MLModelDescription" /> contains all the detail necessary for a user of the model to properly create inputs and interpret outputs. For instance, image resolution, column- vs. row-major matrix forms, etc.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual MLModelDescription ModelDescription {
+			[Export ("modelDescription")]
+			get {
+				MLModelDescription? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<MLModelDescription> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selModelDescriptionXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<MLModelDescription> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selModelDescriptionXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+	} /* class MLModel */
+	//
+	// Async result classes
+	//
+	/// <summary>This class holds the return values for an asynchronous operation.</summary>
+	public partial class MLModelCompilationLoadResult {
+		/// <summary>The result value from the asynchronous operation.</summary>
+		public MLModel Arg1 { get; set; }
+		partial void Initialize ();
+		/// <summary>Creates a new instance of this class.</summary>
+		/// <param name="arg1">Result value from an asynchronous operation.</param>
+		public MLModelCompilationLoadResult (MLModel arg1) {
+			this.Arg1 = arg1;
+			Initialize ();
+		}
+	}
+	/// <summary>This class holds the return values for an asynchronous operation.</summary>
+	public partial class MLModelCompilationResult {
+		/// <summary>The result value from the asynchronous operation.</summary>
+		public NSUrl Arg1 { get; set; }
+		partial void Initialize ();
+		/// <summary>Creates a new instance of this class.</summary>
+		/// <param name="arg1">Result value from an asynchronous operation.</param>
+		public MLModelCompilationResult (NSUrl arg1) {
+			this.Arg1 = arg1;
+			Initialize ();
+		}
+	}
+}

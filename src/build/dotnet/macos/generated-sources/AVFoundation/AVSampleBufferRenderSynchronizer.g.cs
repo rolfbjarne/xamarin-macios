@@ -1,0 +1,616 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace AVFoundation {
+	[Register("AVSampleBufferRenderSynchronizer", true)]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
+	public unsafe partial class AVSampleBufferRenderSynchronizer : NSObject {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAddBoundaryTimeObserverForTimes_Queue_UsingBlock_X = "addBoundaryTimeObserverForTimes:queue:usingBlock:";
+		static readonly NativeHandle selAddBoundaryTimeObserverForTimes_Queue_UsingBlock_XHandle = Selector.GetHandle ("addBoundaryTimeObserverForTimes:queue:usingBlock:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAddPeriodicTimeObserverForInterval_Queue_UsingBlock_X = "addPeriodicTimeObserverForInterval:queue:usingBlock:";
+		static readonly NativeHandle selAddPeriodicTimeObserverForInterval_Queue_UsingBlock_XHandle = Selector.GetHandle ("addPeriodicTimeObserverForInterval:queue:usingBlock:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selAddRenderer_X = "addRenderer:";
+		static readonly NativeHandle selAddRenderer_XHandle = Selector.GetHandle ("addRenderer:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCurrentTimeX = "currentTime";
+		static readonly NativeHandle selCurrentTimeXHandle = Selector.GetHandle ("currentTime");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selDelaysRateChangeUntilHasSufficientMediaDataX = "delaysRateChangeUntilHasSufficientMediaData";
+		static readonly NativeHandle selDelaysRateChangeUntilHasSufficientMediaDataXHandle = Selector.GetHandle ("delaysRateChangeUntilHasSufficientMediaData");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRateX = "rate";
+		static readonly NativeHandle selRateXHandle = Selector.GetHandle ("rate");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRemoveRenderer_AtTime_CompletionHandler_X = "removeRenderer:atTime:completionHandler:";
+		static readonly NativeHandle selRemoveRenderer_AtTime_CompletionHandler_XHandle = Selector.GetHandle ("removeRenderer:atTime:completionHandler:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRemoveTimeObserver_X = "removeTimeObserver:";
+		static readonly NativeHandle selRemoveTimeObserver_XHandle = Selector.GetHandle ("removeTimeObserver:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRenderersX = "renderers";
+		static readonly NativeHandle selRenderersXHandle = Selector.GetHandle ("renderers");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetDelaysRateChangeUntilHasSufficientMediaData_X = "setDelaysRateChangeUntilHasSufficientMediaData:";
+		static readonly NativeHandle selSetDelaysRateChangeUntilHasSufficientMediaData_XHandle = Selector.GetHandle ("setDelaysRateChangeUntilHasSufficientMediaData:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetRate_X = "setRate:";
+		static readonly NativeHandle selSetRate_XHandle = Selector.GetHandle ("setRate:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetRate_Time_X = "setRate:time:";
+		static readonly NativeHandle selSetRate_Time_XHandle = Selector.GetHandle ("setRate:time:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetRate_Time_AtHostTime_X = "setRate:time:atHostTime:";
+		static readonly NativeHandle selSetRate_Time_AtHostTime_XHandle = Selector.GetHandle ("setRate:time:atHostTime:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTimebaseX = "timebase";
+		static readonly NativeHandle selTimebaseXHandle = Selector.GetHandle ("timebase");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("AVSampleBufferRenderSynchronizer");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Creates a new <see cref="AVSampleBufferRenderSynchronizer" /> with default values.</summary>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("init")]
+		public AVSampleBufferRenderSynchronizer () : base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.Init), "init");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, global::ObjCRuntime.Selector.Init), "init");
+				GC.KeepAlive (this);
+				}
+			}
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected AVSampleBufferRenderSynchronizer (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal AVSampleBufferRenderSynchronizer (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("addRenderer:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void Add (IAVQueuedSampleBufferRendering renderer)
+		{
+			var renderer__handle__ = renderer!.GetNonNullHandle (nameof (renderer));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selAddRenderer_XHandle, renderer__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selAddRenderer_XHandle, renderer__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (renderer);
+		}
+		[Export ("addBoundaryTimeObserverForTimes:queue:usingBlock:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual NSObject AddBoundaryTimeObserver (NSValue[] times, global::CoreFoundation.DispatchQueue? queue, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDAction))]global::System.Action handler)
+		{
+			if (times is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (times));
+			var queue__handle__ = queue.GetHandle ();
+			if (handler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (handler));
+			using var nsa_times = NSArray.FromNSObjects (times);
+			using var block_handler = Trampolines.SDAction.CreateBlock (handler);
+			BlockLiteral *block_ptr_handler = &block_handler;
+			NSObject? ret;
+			if (IsDirectBinding) {
+				ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (this.Handle, selAddBoundaryTimeObserverForTimes_Queue_UsingBlock_XHandle, nsa_times.Handle, queue__handle__, (IntPtr) block_ptr_handler), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_NativeHandle_NativeHandle_NativeHandle (&__objc_super__, selAddBoundaryTimeObserverForTimes_Queue_UsingBlock_XHandle, nsa_times.Handle, queue__handle__, (IntPtr) block_ptr_handler), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (queue);
+			return ret!;
+		}
+		[Export ("addPeriodicTimeObserverForInterval:queue:usingBlock:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual NSObject AddPeriodicTimeObserver (global::CoreMedia.CMTime interval, global::CoreFoundation.DispatchQueue? queue, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity1V9))]global::System.Action<global::CoreMedia.CMTime> handler)
+		{
+			var queue__handle__ = queue.GetHandle ();
+			if (handler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (handler));
+			using var block_handler = Trampolines.SDActionArity1V9.CreateBlock (handler);
+			BlockLiteral *block_ptr_handler = &block_handler;
+			NSObject? ret;
+			if (IsDirectBinding) {
+				ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_CMTime_NativeHandle_NativeHandle (this.Handle, selAddPeriodicTimeObserverForInterval_Queue_UsingBlock_XHandle, interval, queue__handle__, (IntPtr) block_ptr_handler), false)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = Runtime.GetNSObject (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper_CMTime_NativeHandle_NativeHandle (&__objc_super__, selAddPeriodicTimeObserverForInterval_Queue_UsingBlock_XHandle, interval, queue__handle__, (IntPtr) block_ptr_handler), false)!;
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (queue);
+			return ret!;
+		}
+		[Export ("removeRenderer:atTime:completionHandler:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void Remove (IAVQueuedSampleBufferRendering renderer, global::CoreMedia.CMTime time, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDActionArity1V2))]global::System.Action<bool>? completionHandler)
+		{
+			var renderer__handle__ = renderer!.GetNonNullHandle (nameof (renderer));
+			using var block_completionHandler = Trampolines.SDActionArity1V2.CreateNullableBlock (completionHandler);
+			BlockLiteral *block_ptr_completionHandler = null;
+			if (completionHandler is not null)
+				block_ptr_completionHandler = &block_completionHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_CMTime_NativeHandle (this.Handle, selRemoveRenderer_AtTime_CompletionHandler_XHandle, renderer__handle__, time, (IntPtr) block_ptr_completionHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_CMTime_NativeHandle (&__objc_super__, selRemoveRenderer_AtTime_CompletionHandler_XHandle, renderer__handle__, time, (IntPtr) block_ptr_completionHandler);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (renderer);
+		}
+		/// <param name="renderer">To be added.</param>
+		/// <param name="time">To be added.</param>
+		/// <summary>To be added.</summary>
+		/// <returns>
+		///           <para class="improve-task-t-return-type-description">A task that represents the asynchronous Remove operation.  The value of the TResult parameter is of type System.Action&lt;System.Boolean&gt;.</para>
+		///         </returns>
+		/// <remarks>
+		///           <para copied="true">The RemoveAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
+		///           <para copied="true">To be added.</para>
+		///         </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<bool> RemoveAsync (IAVQueuedSampleBufferRendering renderer, global::CoreMedia.CMTime time)
+		{
+			var tcs = new TaskCompletionSource<bool> ();
+			Remove(renderer, time, (obj_) => {
+				tcs.SetResult (obj_!);
+			});
+			return tcs.Task;
+		}
+		[Export ("removeTimeObserver:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void RemoveTimeObserver (NSObject observer)
+		{
+			var observer__handle__ = observer!.GetNonNullHandle (nameof (observer));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selRemoveTimeObserver_XHandle, observer__handle__);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selRemoveTimeObserver_XHandle, observer__handle__);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (observer);
+		}
+		[Export ("setRate:time:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetRate (float rate, global::CoreMedia.CMTime time)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_float_CMTime (this.Handle, selSetRate_Time_XHandle, rate, time);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float_CMTime (&__objc_super__, selSetRate_Time_XHandle, rate, time);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("setRate:time:atHostTime:")]
+		[SupportedOSPlatform ("tvos14.5")]
+		[SupportedOSPlatform ("ios14.5")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetRate (float rate, global::CoreMedia.CMTime time, global::CoreMedia.CMTime hostTime)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_float_CMTime_CMTime (this.Handle, selSetRate_Time_AtHostTime_XHandle, rate, time, hostTime);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float_CMTime_CMTime (&__objc_super__, selSetRate_Time_AtHostTime_XHandle, rate, time, hostTime);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		public virtual global::CoreMedia.CMTime CurrentTime {
+			[Export ("currentTime")]
+			get {
+				global::CoreMedia.CMTime ret;
+				if (IsDirectBinding) {
+					if (global::ObjCRuntime.Runtime.IsARM64CallingConvention) {
+						ret = global::ObjCRuntime.Messaging.CMTime_objc_msgSend (this.Handle, selCurrentTimeXHandle);
+					} else {
+						ret = global::ObjCRuntime.Messaging.CMTime_objc_msgSend_stret (this.Handle, selCurrentTimeXHandle);
+					}
+				} else {
+					if (global::ObjCRuntime.Runtime.IsARM64CallingConvention) {
+						unsafe {
+							var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+							ret = global::ObjCRuntime.Messaging.CMTime_objc_msgSendSuper (&__objc_super__, selCurrentTimeXHandle);
+							GC.KeepAlive (this);
+						}
+					} else {
+						unsafe {
+							var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+							ret = global::ObjCRuntime.Messaging.CMTime_objc_msgSendSuper_stret (&__objc_super__, selCurrentTimeXHandle);
+							GC.KeepAlive (this);
+						}
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("tvos14.5")]
+		[SupportedOSPlatform ("ios14.5")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("macos")]
+		public virtual bool DelaysRateChangeUntilHasSufficientMediaData {
+			[Export ("delaysRateChangeUntilHasSufficientMediaData")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selDelaysRateChangeUntilHasSufficientMediaDataXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selDelaysRateChangeUntilHasSufficientMediaDataXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+			[Export ("setDelaysRateChangeUntilHasSufficientMediaData:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_bool (this.Handle, selSetDelaysRateChangeUntilHasSufficientMediaData_XHandle, value ? (byte) 1 : (byte) 0);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool (&__objc_super__, selSetDelaysRateChangeUntilHasSufficientMediaData_XHandle, value ? (byte) 1 : (byte) 0);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual float Rate {
+			[Export ("rate")]
+			get {
+				float ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, selRateXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.float_objc_msgSendSuper (&__objc_super__, selRateXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+			[Export ("setRate:")]
+			set {
+				if (IsDirectBinding) {
+					global::ObjCRuntime.Messaging.void_objc_msgSend_float (this.Handle, selSetRate_XHandle, value);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float (&__objc_super__, selSetRate_XHandle, value);
+						GC.KeepAlive (this);
+					}
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual IAVQueuedSampleBufferRendering[] Renderers {
+			[Export ("renderers")]
+			get {
+				IAVQueuedSampleBufferRendering[]? ret;
+				if (IsDirectBinding) {
+					ret = CFArray.ArrayFromHandle<IAVQueuedSampleBufferRendering>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selRenderersXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = CFArray.ArrayFromHandle<IAVQueuedSampleBufferRendering>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selRenderersXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual global::CoreMedia.CMTimebase Timebase {
+			[Export ("timebase", ArgumentSemantic.Retain)]
+			get {
+				global::CoreMedia.CMTimebase ret;
+				if (IsDirectBinding) {
+					ret = Runtime.GetINativeObject<global::CoreMedia.CMTimebase> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selTimebaseXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = Runtime.GetINativeObject<global::CoreMedia.CMTimebase> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selTimebaseXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _RateDidChangeNotification;
+		/// <summary>Notification constant for RateDidChange</summary>
+		/// <value><see cref="NSString" /> constant, should be used as a token to <see cref="NSNotificationCenter" />.</value>
+		/// <remarks>
+		///   <para>
+		///     This constant can be used with <see cref="NSNotificationCenter" /> to register a listener for this notification.
+		///     This is an <see cref="NSString" /> instead of a string, because these values can be used as tokens in some native
+		///     libraries instead of being used purely for their actual string content. The 'notification' parameter to the callback
+		///     contains extra information that is specific to the notification type.
+		///   </para>
+		///   <para>
+		///     To subscribe to this notification, developers can use the convenience <see cref="Notifications.ObserveRateDidChange(NSObject,EventHandler{NSNotificationEventArgs})" />
+		///     or <see cref="Notifications.ObserveRateDidChange(EventHandler{NSNotificationEventArgs})" /> methods,
+		///     which offers strongly typed access to the parameters of the notification.
+		///   </para>
+		///   <para>
+		///     The following example shows how to use the strongly typed <see cref="Notifications" /> class, to take the guesswork
+		///     out of the available properties in the notification:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // Lambda style
+		/// //
+		///
+		/// // listening
+		/// notification = AVSampleBufferRenderSynchronizer.Notifications.ObserveRateDidChange ((sender, args) => {
+		/// /* Access strongly typed args */
+		/// Console.WriteLine ("Notification: {0}", args.Notification);
+		/// });
+		///
+		/// // To stop listening:
+		/// notification.Dispose ();
+		///
+		/// //
+		/// // Method style
+		/// //
+		/// NSObject notification;
+		/// void Callback (object sender, AVSampleBufferRenderSynchronizer.NSNotificationEventArgs args)
+		/// {
+		///     // Access strongly typed args
+		///     Console.WriteLine ("Notification: {0}", args.Notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     notification = AVSampleBufferRenderSynchronizer.Notifications.ObserveRateDidChange (Callback);
+		/// }
+		///
+		/// void Teardown ()
+		/// {
+		///     notification.Dispose ();
+		/// }]]></code>
+		///   </example>
+		///   <para>
+		///     The following example shows how to use the notification with the DefaultCenter API:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// // Lambda style
+		/// NSNotificationCenter.DefaultCenter.AddObserver (
+		///     AVSampleBufferRenderSynchronizer.RateDidChangeNotification, (notification) => { Console.WriteLine ("Received the notification RateDidChange", notification); }
+		/// );
+		///
+		/// // Method style
+		/// void Callback (NSNotification notification)
+		/// {
+		///     Console.WriteLine ("Received the notification RateDidChange", notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     NSNotificationCenter.DefaultCenter.AddObserver (AVSampleBufferRenderSynchronizer.RateDidChangeNotification, Callback);
+		/// }
+		/// ]]></code>
+		///   </example>
+		/// </remarks>
+		[Field ("AVSampleBufferRenderSynchronizerRateDidChangeNotification",  "AVFoundation")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[SupportedOSPlatform ("macos")]
+		[SupportedOSPlatform ("tvos")]
+		[Advice ("Use AVSampleBufferRenderSynchronizer.Notifications.ObserveRateDidChange helper method instead.")]
+		public static NSString RateDidChangeNotification {
+			[SupportedOSPlatform ("maccatalyst")]
+			[SupportedOSPlatform ("ios")]
+			[SupportedOSPlatform ("macos")]
+			[SupportedOSPlatform ("tvos")]
+			get {
+				if (_RateDidChangeNotification is null)
+					_RateDidChangeNotification = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVSampleBufferRenderSynchronizerRateDidChangeNotification")!;
+				return _RateDidChangeNotification;
+			}
+		}
+		//
+		// Notifications
+		//
+		/// <summary>Notifications posted by the <see cref="global::AVFoundation.AVSampleBufferRenderSynchronizer" /> class.</summary>
+		/// <remarks>
+		///    <para>This class contains various helper methods that allow developers to observe events posted in the notification hub (<see cref="Foundation.NSNotificationCenter" />).</para>
+		///    <para>The methods defined in this class post events that invoke the provided method or lambda with a <see cref="Foundation.NSNotificationEventArgs" /> parameter, which contains strongly typed properties for the notification arguments.</para>
+		/// </remarks>
+		public static partial class Notifications {
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVSampleBufferRenderSynchronizer.RateDidChangeNotification" /> constant.</summary>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVSampleBufferRenderSynchronizer.RateDidChangeNotification" /> notifications.</para>
+			///   <example>
+			///   <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for any object
+			/// var token = AVSampleBufferRenderSynchronizer.Notifications.ObserveRateDidChange ((notification) => {
+			///   Console.WriteLine ("Observed RateDidChangeNotification!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveRateDidChange (EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (RateDidChangeNotification, notification => handler (null, new NSNotificationEventArgs (notification)));
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVSampleBufferRenderSynchronizer.RateDidChangeNotification" /> constant.</summary>
+			/// <param name="objectToObserve">The specific object to observe.</param>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVSampleBufferRenderSynchronizer.RateDidChangeNotification" /> notifications.</para>
+			///   <example>
+			///     <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for a single object
+			/// var token = AVSampleBufferRenderSynchronizer.Notifications.ObserveRateDidChange (objectToObserve, (notification) => {
+			///   Console.WriteLine ($"Observed RateDidChangeNotification for {nameof (objectToObserve)}!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveRateDidChange (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (RateDidChangeNotification, notification => handler (null, new NSNotificationEventArgs (notification)), objectToObserve);
+			}
+		}
+	} /* class AVSampleBufferRenderSynchronizer */
+}

@@ -1,0 +1,339 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace GameController {
+	[Register("GCDualSenseAdaptiveTrigger", true)]
+	[SupportedOSPlatform ("tvos14.5")]
+	[SupportedOSPlatform ("ios14.5")]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("macos")]
+	public unsafe partial class GCDualSenseAdaptiveTrigger : GCControllerButtonInput {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selArmPositionX = "armPosition";
+		static readonly NativeHandle selArmPositionXHandle = Selector.GetHandle ("armPosition");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selModeX = "mode";
+		static readonly NativeHandle selModeXHandle = Selector.GetHandle ("mode");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetModeFeedbackWithResistiveStrengths_X = "setModeFeedbackWithResistiveStrengths:";
+		static readonly NativeHandle selSetModeFeedbackWithResistiveStrengths_XHandle = Selector.GetHandle ("setModeFeedbackWithResistiveStrengths:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetModeFeedbackWithStartPosition_ResistiveStrength_X = "setModeFeedbackWithStartPosition:resistiveStrength:";
+		static readonly NativeHandle selSetModeFeedbackWithStartPosition_ResistiveStrength_XHandle = Selector.GetHandle ("setModeFeedbackWithStartPosition:resistiveStrength:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetModeOffX = "setModeOff";
+		static readonly NativeHandle selSetModeOffXHandle = Selector.GetHandle ("setModeOff");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetModeSlopeFeedbackWithStartPosition_EndPosition_StartStrength_EndStrength_X = "setModeSlopeFeedbackWithStartPosition:endPosition:startStrength:endStrength:";
+		static readonly NativeHandle selSetModeSlopeFeedbackWithStartPosition_EndPosition_StartStrength_EndStrength_XHandle = Selector.GetHandle ("setModeSlopeFeedbackWithStartPosition:endPosition:startStrength:endStrength:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetModeVibrationWithAmplitudes_Frequency_X = "setModeVibrationWithAmplitudes:frequency:";
+		static readonly NativeHandle selSetModeVibrationWithAmplitudes_Frequency_XHandle = Selector.GetHandle ("setModeVibrationWithAmplitudes:frequency:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetModeVibrationWithStartPosition_Amplitude_Frequency_X = "setModeVibrationWithStartPosition:amplitude:frequency:";
+		static readonly NativeHandle selSetModeVibrationWithStartPosition_Amplitude_Frequency_XHandle = Selector.GetHandle ("setModeVibrationWithStartPosition:amplitude:frequency:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selSetModeWeaponWithStartPosition_EndPosition_ResistiveStrength_X = "setModeWeaponWithStartPosition:endPosition:resistiveStrength:";
+		static readonly NativeHandle selSetModeWeaponWithStartPosition_EndPosition_ResistiveStrength_XHandle = Selector.GetHandle ("setModeWeaponWithStartPosition:endPosition:resistiveStrength:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selStatusX = "status";
+		static readonly NativeHandle selStatusXHandle = Selector.GetHandle ("status");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("GCDualSenseAdaptiveTrigger");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected GCDualSenseAdaptiveTrigger (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal GCDualSenseAdaptiveTrigger (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("setModeFeedbackWithStartPosition:resistiveStrength:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetModeFeedback (float startPosition, float resistiveStrength)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_float_float (this.Handle, selSetModeFeedbackWithStartPosition_ResistiveStrength_XHandle, startPosition, resistiveStrength);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float_float (&__objc_super__, selSetModeFeedbackWithStartPosition_ResistiveStrength_XHandle, startPosition, resistiveStrength);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[SupportedOSPlatform ("tvos15.4")]
+		[SupportedOSPlatform ("macos12.3")]
+		[SupportedOSPlatform ("ios15.4")]
+		[SupportedOSPlatform ("maccatalyst15.4")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetModeFeedback (GCDualSenseAdaptiveTriggerPositionalResistiveStrengths positionalResistiveStrengths)
+		{
+			_SetModeFeedback (positionalResistiveStrengths.ToBlittable ());
+		}
+		[Export ("setModeOff")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetModeOff ()
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend (this.Handle, selSetModeOffXHandle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper (&__objc_super__, selSetModeOffXHandle);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("setModeSlopeFeedbackWithStartPosition:endPosition:startStrength:endStrength:")]
+		[SupportedOSPlatform ("tvos15.4")]
+		[SupportedOSPlatform ("macos12.3")]
+		[SupportedOSPlatform ("ios15.4")]
+		[SupportedOSPlatform ("maccatalyst15.4")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetModeSlopeFeedback (float startPosition, float endPosition, float startStrength, float endStrength)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_float_float_float_float (this.Handle, selSetModeSlopeFeedbackWithStartPosition_EndPosition_StartStrength_EndStrength_XHandle, startPosition, endPosition, startStrength, endStrength);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float_float_float_float (&__objc_super__, selSetModeSlopeFeedbackWithStartPosition_EndPosition_StartStrength_EndStrength_XHandle, startPosition, endPosition, startStrength, endStrength);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("setModeVibrationWithStartPosition:amplitude:frequency:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetModeVibration (float startPosition, float amplitude, float frequency)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_float_float_float (this.Handle, selSetModeVibrationWithStartPosition_Amplitude_Frequency_XHandle, startPosition, amplitude, frequency);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float_float_float (&__objc_super__, selSetModeVibrationWithStartPosition_Amplitude_Frequency_XHandle, startPosition, amplitude, frequency);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[SupportedOSPlatform ("tvos15.4")]
+		[SupportedOSPlatform ("macos12.3")]
+		[SupportedOSPlatform ("ios15.4")]
+		[SupportedOSPlatform ("maccatalyst15.4")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetModeVibration (GCDualSenseAdaptiveTriggerPositionalAmplitudes positionalAmplitudes, float frequency)
+		{
+			_SetModeVibration (positionalAmplitudes.ToBlittable (), frequency);
+		}
+		[Export ("setModeWeaponWithStartPosition:endPosition:resistiveStrength:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void SetModeWeapon (float startPosition, float endPosition, float resistiveStrength)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_float_float_float (this.Handle, selSetModeWeaponWithStartPosition_EndPosition_ResistiveStrength_XHandle, startPosition, endPosition, resistiveStrength);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_float_float_float (&__objc_super__, selSetModeWeaponWithStartPosition_EndPosition_ResistiveStrength_XHandle, startPosition, endPosition, resistiveStrength);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("setModeFeedbackWithResistiveStrengths:")]
+		[SupportedOSPlatform ("tvos15.4")]
+		[SupportedOSPlatform ("macos12.3")]
+		[SupportedOSPlatform ("ios15.4")]
+		[SupportedOSPlatform ("maccatalyst15.4")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal virtual void _SetModeFeedback (GCDualSenseAdaptiveTriggerPositionalResistiveStrengths_Blittable positionalResistiveStrengths)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_GCDualSenseAdaptiveTriggerPositionalResistiveStrengths_Blittable (this.Handle, selSetModeFeedbackWithResistiveStrengths_XHandle, positionalResistiveStrengths);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_GCDualSenseAdaptiveTriggerPositionalResistiveStrengths_Blittable (&__objc_super__, selSetModeFeedbackWithResistiveStrengths_XHandle, positionalResistiveStrengths);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("setModeVibrationWithAmplitudes:frequency:")]
+		[SupportedOSPlatform ("tvos15.4")]
+		[SupportedOSPlatform ("macos12.3")]
+		[SupportedOSPlatform ("ios15.4")]
+		[SupportedOSPlatform ("maccatalyst15.4")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal virtual void _SetModeVibration (GCDualSenseAdaptiveTriggerPositionalAmplitudes_Blittable positionalAmplitudes, float frequency)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_GCDualSenseAdaptiveTriggerPositionalAmplitudes_Blittable_float (this.Handle, selSetModeVibrationWithAmplitudes_Frequency_XHandle, positionalAmplitudes, frequency);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_GCDualSenseAdaptiveTriggerPositionalAmplitudes_Blittable_float (&__objc_super__, selSetModeVibrationWithAmplitudes_Frequency_XHandle, positionalAmplitudes, frequency);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual float ArmPosition {
+			[Export ("armPosition")]
+			get {
+				float ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.float_objc_msgSend (this.Handle, selArmPositionXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.float_objc_msgSendSuper (&__objc_super__, selArmPositionXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual GCDualSenseAdaptiveTriggerMode Mode {
+			[Export ("mode")]
+			get {
+				GCDualSenseAdaptiveTriggerMode ret;
+				if (IsDirectBinding) {
+					ret = (GameController.GCDualSenseAdaptiveTriggerMode) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, selModeXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = (GameController.GCDualSenseAdaptiveTriggerMode) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, selModeXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual GCDualSenseAdaptiveTriggerStatus Status {
+			[Export ("status")]
+			get {
+				GCDualSenseAdaptiveTriggerStatus ret;
+				if (IsDirectBinding) {
+					ret = (GameController.GCDualSenseAdaptiveTriggerStatus) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, selStatusXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = (GameController.GCDualSenseAdaptiveTriggerStatus) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, selStatusXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+	} /* class GCDualSenseAdaptiveTrigger */
+}

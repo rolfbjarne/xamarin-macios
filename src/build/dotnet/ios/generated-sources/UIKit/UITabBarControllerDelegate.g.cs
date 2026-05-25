@@ -1,0 +1,1105 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using GLKit;
+using Metal;
+using CoreML;
+using MapKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using Messages;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using QuickLook;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using CoreMotion;
+using ObjCRuntime;
+using AddressBook;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using NewsstandKit;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace UIKit {
+	#pragma warning disable CS1573
+	/// <summary>This interface represents the Objective-C protocol <c>UITabBarControllerDelegate</c>.</summary>
+	/// <remarks>
+	///   <para>A class that implements this interface (and subclasses <see cref="NSObject" />) will be exported to Objective-C as implementing the Objective-C protocol this interface represents.</para>
+	///   <para>A class may also implement members from this interface to implement members from the protocol.</para>
+	/// </remarks>
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	[Protocol (Name = "UITabBarControllerDelegate", WrapperType = typeof (UITabBarControllerDelegateWrapper))]
+	[ProtocolMember (IsRequired = false, IsProperty = false, IsStatic = false, Name = "ShouldSelectViewController", Selector = "tabBarController:shouldSelectViewController:", ReturnType = typeof (bool), ParameterType = new Type [] { typeof (UITabBarController), typeof (UIViewController) }, ParameterByRef = new bool [] { false, false })]
+	[ProtocolMember (IsRequired = false, IsProperty = false, IsStatic = false, Name = "ViewControllerSelected", Selector = "tabBarController:didSelectViewController:", ParameterType = new Type [] { typeof (UITabBarController), typeof (UIViewController) }, ParameterByRef = new bool [] { false, false })]
+	[ProtocolMember (IsRequired = false, IsProperty = false, IsStatic = false, Name = "OnCustomizingViewControllers", Selector = "tabBarController:willBeginCustomizingViewControllers:", ParameterType = new Type [] { typeof (UITabBarController), typeof (UIViewController[]) }, ParameterByRef = new bool [] { false, false })]
+	[ProtocolMember (IsRequired = false, IsProperty = false, IsStatic = false, Name = "OnEndCustomizingViewControllers", Selector = "tabBarController:willEndCustomizingViewControllers:changed:", ParameterType = new Type [] { typeof (UITabBarController), typeof (UIViewController[]), typeof (bool) }, ParameterByRef = new bool [] { false, false, false })]
+	[ProtocolMember (IsRequired = false, IsProperty = false, IsStatic = false, Name = "FinishedCustomizingViewControllers", Selector = "tabBarController:didEndCustomizingViewControllers:changed:", ParameterType = new Type [] { typeof (UITabBarController), typeof (UIViewController[]), typeof (bool) }, ParameterByRef = new bool [] { false, false, false })]
+	[ProtocolMember (IsRequired = false, IsProperty = false, IsStatic = false, Name = "SupportedInterfaceOrientations", Selector = "tabBarControllerSupportedInterfaceOrientations:", ReturnType = typeof (UIInterfaceOrientationMask), ParameterType = new Type [] { typeof (UITabBarController) }, ParameterByRef = new bool [] { false })]
+	[ProtocolMember (IsRequired = false, IsProperty = false, IsStatic = false, Name = "GetPreferredInterfaceOrientation", Selector = "tabBarControllerPreferredInterfaceOrientationForPresentation:", ReturnType = typeof (UIInterfaceOrientation), ParameterType = new Type [] { typeof (UITabBarController) }, ParameterByRef = new bool [] { false })]
+	[ProtocolMember (IsRequired = false, IsProperty = false, IsStatic = false, Name = "GetInteractionControllerForAnimationController", Selector = "tabBarController:interactionControllerForAnimationController:", ReturnType = typeof (IUIViewControllerInteractiveTransitioning), ParameterType = new Type [] { typeof (UITabBarController), typeof (IUIViewControllerAnimatedTransitioning) }, ParameterByRef = new bool [] { false, false })]
+	[ProtocolMember (IsRequired = false, IsProperty = false, IsStatic = false, Name = "GetAnimationControllerForTransition", Selector = "tabBarController:animationControllerForTransitionFromViewController:toViewController:", ReturnType = typeof (IUIViewControllerAnimatedTransitioning), ParameterType = new Type [] { typeof (UITabBarController), typeof (UIViewController), typeof (UIViewController) }, ParameterByRef = new bool [] { false, false, false })]
+	[ProtocolMember (IsRequired = false, IsProperty = false, IsStatic = false, Name = "ShouldSelectTab", Selector = "tabBarController:shouldSelectTab:", ReturnType = typeof (bool), ParameterType = new Type [] { typeof (UITabBarController), typeof (UITab) }, ParameterByRef = new bool [] { false, false })]
+	[ProtocolMember (IsRequired = false, IsProperty = false, IsStatic = false, Name = "DidSelectTab", Selector = "tabBarController:didSelectTab:previousTab:", ParameterType = new Type [] { typeof (UITabBarController), typeof (UITab), typeof (UITab) }, ParameterByRef = new bool [] { false, false, false })]
+	[ProtocolMember (IsRequired = false, IsProperty = false, IsStatic = false, Name = "GetOperationForAcceptingItemsFromDropSession", Selector = "tabBarController:tab:operationForAcceptingItemsFromDropSession:", ReturnType = typeof (UIDropOperation), ParameterType = new Type [] { typeof (UITabBarController), typeof (UITab), typeof (IUIDropSession) }, ParameterByRef = new bool [] { false, false, false })]
+	[ProtocolMember (IsRequired = false, IsProperty = false, IsStatic = false, Name = "AcceptItemsFromDropSession", Selector = "tabBarController:tab:acceptItemsFromDropSession:", ParameterType = new Type [] { typeof (UITabBarController), typeof (UITab), typeof (IUIDropSession) }, ParameterByRef = new bool [] { false, false, false })]
+	[ProtocolMember (IsRequired = false, IsProperty = false, IsStatic = false, Name = "WillBeginEditing", Selector = "tabBarControllerWillBeginEditing:", ParameterType = new Type [] { typeof (UITabBarController) }, ParameterByRef = new bool [] { false })]
+	[ProtocolMember (IsRequired = false, IsProperty = false, IsStatic = false, Name = "DidBeginEditing", Selector = "tabBarControllerDidEndEditing:", ParameterType = new Type [] { typeof (UITabBarController) }, ParameterByRef = new bool [] { false })]
+	[ProtocolMember (IsRequired = false, IsProperty = false, IsStatic = false, Name = "VisibilityDidChangeForTabs", Selector = "tabBarController:visibilityDidChangeForTabs:", ParameterType = new Type [] { typeof (UITabBarController), typeof (UITab[]) }, ParameterByRef = new bool [] { false, false })]
+	[ProtocolMember (IsRequired = false, IsProperty = false, IsStatic = false, Name = "DisplayOrderDidChangeForGroup", Selector = "tabBarController:displayOrderDidChangeForGroup:", ParameterType = new Type [] { typeof (UITabBarController), typeof (UITabGroup) }, ParameterByRef = new bool [] { false, false })]
+	[ProtocolMember (IsRequired = false, IsProperty = false, IsStatic = false, Name = "GetDisplayedViewControllers", Selector = "tabBarController:displayedViewControllersForTab:proposedViewControllers:", ReturnType = typeof (UIViewController[]), ParameterType = new Type [] { typeof (UITabBarController), typeof (UITab), typeof (UIViewController[]) }, ParameterByRef = new bool [] { false, false, false })]
+	public partial interface IUITabBarControllerDelegate : INativeObject, IDisposable
+	{
+		/// <param name="tabBarController">To be added.</param><param name="viewController">To be added.</param><summary>Whether the specified UIViewController should be made active.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[global::Foundation.OptionalMember]
+		[Export ("tabBarController:shouldSelectViewController:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool ShouldSelectViewController (UITabBarController tabBarController, UIViewController viewController)
+		{
+			return _ShouldSelectViewController (this, tabBarController, viewController);
+		}
+		/// <param name="tabBarController">To be added.</param><param name="viewController">To be added.</param><summary>Whether the specified UIViewController should be made active.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static bool _ShouldSelectViewController (IUITabBarControllerDelegate This, UITabBarController tabBarController, UIViewController viewController)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var viewController__handle__ = viewController!.GetNonNullHandle (nameof (viewController));
+			byte ret;
+			ret = global::ObjCRuntime.Messaging.bool_objc_msgSend_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:shouldSelectViewController:"), tabBarController__handle__, viewController__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (viewController);
+			return ret != 0;
+		}
+		/// <param name="tabBarController">To be added.</param><param name="viewController">To be added.</param><summary>Indicates that the app user selected an item from the tab bar.</summary><remarks>To be added.</remarks>
+		[global::Foundation.OptionalMember]
+		[Export ("tabBarController:didSelectViewController:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void ViewControllerSelected (UITabBarController tabBarController, UIViewController viewController)
+		{
+			_ViewControllerSelected (this, tabBarController, viewController);
+		}
+		/// <param name="tabBarController">To be added.</param><param name="viewController">To be added.</param><summary>Indicates that the app user selected an item from the tab bar.</summary><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static void _ViewControllerSelected (IUITabBarControllerDelegate This, UITabBarController tabBarController, UIViewController viewController)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var viewController__handle__ = viewController!.GetNonNullHandle (nameof (viewController));
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:didSelectViewController:"), tabBarController__handle__, viewController__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (viewController);
+		}
+		/// <param name="tabBarController">To be added.</param><param name="viewControllers">To be added.</param><summary>Indicates that the tab bar customization sheet is about to be displayed.</summary><remarks>To be added.</remarks>
+		[global::Foundation.OptionalMember]
+		[Export ("tabBarController:willBeginCustomizingViewControllers:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void OnCustomizingViewControllers (UITabBarController tabBarController, UIViewController[] viewControllers)
+		{
+			_OnCustomizingViewControllers (this, tabBarController, viewControllers);
+		}
+		/// <param name="tabBarController">To be added.</param><param name="viewControllers">To be added.</param><summary>Indicates that the tab bar customization sheet is about to be displayed.</summary><remarks>To be added.</remarks>
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static void _OnCustomizingViewControllers (IUITabBarControllerDelegate This, UITabBarController tabBarController, UIViewController[] viewControllers)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			if (viewControllers is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (viewControllers));
+			using var nsa_viewControllers = NSArray.FromNSObjects (viewControllers);
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:willBeginCustomizingViewControllers:"), tabBarController__handle__, nsa_viewControllers.Handle);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+		}
+		/// <param name="tabBarController">To be added.</param><param name="viewControllers">To be added.</param><param name="changed">To be added.</param><summary>Indicates that the tab bar customization sheet is about to be dismissed.</summary><remarks>To be added.</remarks>
+		[global::Foundation.OptionalMember]
+		[Export ("tabBarController:willEndCustomizingViewControllers:changed:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void OnEndCustomizingViewControllers (UITabBarController tabBarController, UIViewController[] viewControllers, bool changed)
+		{
+			_OnEndCustomizingViewControllers (this, tabBarController, viewControllers, changed);
+		}
+		/// <param name="tabBarController">To be added.</param><param name="viewControllers">To be added.</param><param name="changed">To be added.</param><summary>Indicates that the tab bar customization sheet is about to be dismissed.</summary><remarks>To be added.</remarks>
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static void _OnEndCustomizingViewControllers (IUITabBarControllerDelegate This, UITabBarController tabBarController, UIViewController[] viewControllers, bool changed)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			if (viewControllers is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (viewControllers));
+			using var nsa_viewControllers = NSArray.FromNSObjects (viewControllers);
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_bool (This.Handle, Selector.GetHandle ("tabBarController:willEndCustomizingViewControllers:changed:"), tabBarController__handle__, nsa_viewControllers.Handle, changed ? (byte) 1 : (byte) 0);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+		}
+		/// <param name="tabBarController">To be added.</param><param name="viewControllers">To be added.</param><param name="changed">To be added.</param><summary>Indicates that the customization sheet was dismissed.</summary><remarks>To be added.</remarks>
+		[global::Foundation.OptionalMember]
+		[Export ("tabBarController:didEndCustomizingViewControllers:changed:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void FinishedCustomizingViewControllers (UITabBarController tabBarController, UIViewController[] viewControllers, bool changed)
+		{
+			_FinishedCustomizingViewControllers (this, tabBarController, viewControllers, changed);
+		}
+		/// <param name="tabBarController">To be added.</param><param name="viewControllers">To be added.</param><param name="changed">To be added.</param><summary>Indicates that the customization sheet was dismissed.</summary><remarks>To be added.</remarks>
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static void _FinishedCustomizingViewControllers (IUITabBarControllerDelegate This, UITabBarController tabBarController, UIViewController[] viewControllers, bool changed)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			if (viewControllers is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (viewControllers));
+			using var nsa_viewControllers = NSArray.FromNSObjects (viewControllers);
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_bool (This.Handle, Selector.GetHandle ("tabBarController:didEndCustomizingViewControllers:changed:"), tabBarController__handle__, nsa_viewControllers.Handle, changed ? (byte) 1 : (byte) 0);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+		}
+		/// <param name="tabBarController">To be added.</param><summary>The supported orientations for presentation of the tab bar controller.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[global::Foundation.OptionalMember]
+		[Export ("tabBarControllerSupportedInterfaceOrientations:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UIInterfaceOrientationMask SupportedInterfaceOrientations (UITabBarController tabBarController)
+		{
+			return _SupportedInterfaceOrientations (this, tabBarController);
+		}
+		/// <param name="tabBarController">To be added.</param><summary>The supported orientations for presentation of the tab bar controller.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static UIInterfaceOrientationMask _SupportedInterfaceOrientations (IUITabBarControllerDelegate This, UITabBarController tabBarController)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			UIInterfaceOrientationMask ret;
+			ret = (UIInterfaceOrientationMask) (ulong) global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend_NativeHandle (This.Handle, Selector.GetHandle ("tabBarControllerSupportedInterfaceOrientations:"), tabBarController__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			return ret!;
+		}
+		/// <param name="tabBarController">To be added.</param><summary>The preferred orientation for presentation of the tab bar controller.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[global::Foundation.OptionalMember]
+		[Export ("tabBarControllerPreferredInterfaceOrientationForPresentation:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UIInterfaceOrientation GetPreferredInterfaceOrientation (UITabBarController tabBarController)
+		{
+			return _GetPreferredInterfaceOrientation (this, tabBarController);
+		}
+		/// <param name="tabBarController">To be added.</param><summary>The preferred orientation for presentation of the tab bar controller.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static UIInterfaceOrientation _GetPreferredInterfaceOrientation (IUITabBarControllerDelegate This, UITabBarController tabBarController)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			UIInterfaceOrientation ret;
+			ret = (UIInterfaceOrientation) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_NativeHandle (This.Handle, Selector.GetHandle ("tabBarControllerPreferredInterfaceOrientationForPresentation:"), tabBarController__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			return ret!;
+		}
+		/// <param name="tabBarController">To be added.</param><param name="animationController">To be added.</param><summary>Retrieves the UIViewControllerInteractiveTransitioning used during an interactive transition.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[global::Foundation.OptionalMember]
+		[Export ("tabBarController:interactionControllerForAnimationController:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual IUIViewControllerInteractiveTransitioning GetInteractionControllerForAnimationController (UITabBarController tabBarController, IUIViewControllerAnimatedTransitioning animationController)
+		{
+			return _GetInteractionControllerForAnimationController (this, tabBarController, animationController);
+		}
+		/// <param name="tabBarController">To be added.</param><param name="animationController">To be added.</param><summary>Retrieves the UIViewControllerInteractiveTransitioning used during an interactive transition.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static IUIViewControllerInteractiveTransitioning _GetInteractionControllerForAnimationController (IUITabBarControllerDelegate This, UITabBarController tabBarController, IUIViewControllerAnimatedTransitioning animationController)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var animationController__handle__ = animationController!.GetNonNullHandle (nameof (animationController));
+			IUIViewControllerInteractiveTransitioning? ret;
+			ret =  Runtime.GetINativeObject<IUIViewControllerInteractiveTransitioning> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:interactionControllerForAnimationController:"), tabBarController__handle__, animationController__handle__), false)!;
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (animationController);
+			return ret!;
+		}
+		/// <param name="tabBarController">To be added.</param><param name="fromViewController">To be added.</param><param name="toViewController">To be added.</param><summary>Retrieves the UIViewControllerAnimatedTransitioning used during a non-interactive transition.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[global::Foundation.OptionalMember]
+		[Export ("tabBarController:animationControllerForTransitionFromViewController:toViewController:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual IUIViewControllerAnimatedTransitioning GetAnimationControllerForTransition (UITabBarController tabBarController, UIViewController fromViewController, UIViewController toViewController)
+		{
+			return _GetAnimationControllerForTransition (this, tabBarController, fromViewController, toViewController);
+		}
+		/// <param name="tabBarController">To be added.</param><param name="fromViewController">To be added.</param><param name="toViewController">To be added.</param><summary>Retrieves the UIViewControllerAnimatedTransitioning used during a non-interactive transition.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static IUIViewControllerAnimatedTransitioning _GetAnimationControllerForTransition (IUITabBarControllerDelegate This, UITabBarController tabBarController, UIViewController fromViewController, UIViewController toViewController)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var fromViewController__handle__ = fromViewController!.GetNonNullHandle (nameof (fromViewController));
+			var toViewController__handle__ = toViewController!.GetNonNullHandle (nameof (toViewController));
+			IUIViewControllerAnimatedTransitioning? ret;
+			ret =  Runtime.GetINativeObject<IUIViewControllerAnimatedTransitioning> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:animationControllerForTransitionFromViewController:toViewController:"), tabBarController__handle__, fromViewController__handle__, toViewController__handle__), false)!;
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (fromViewController);
+			GC.KeepAlive (toViewController);
+			return ret!;
+		}
+		[global::Foundation.OptionalMember]
+		[Export ("tabBarController:shouldSelectTab:")]
+		[SupportedOSPlatform ("tvos18.0")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool ShouldSelectTab (UITabBarController tabBarController, UITab tab)
+		{
+			return _ShouldSelectTab (this, tabBarController, tab);
+		}
+		[SupportedOSPlatform ("tvos18.0")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static bool _ShouldSelectTab (IUITabBarControllerDelegate This, UITabBarController tabBarController, UITab tab)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var tab__handle__ = tab!.GetNonNullHandle (nameof (tab));
+			byte ret;
+			ret = global::ObjCRuntime.Messaging.bool_objc_msgSend_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:shouldSelectTab:"), tabBarController__handle__, tab__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (tab);
+			return ret != 0;
+		}
+		[global::Foundation.OptionalMember]
+		[Export ("tabBarController:didSelectTab:previousTab:")]
+		[SupportedOSPlatform ("tvos18.0")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void DidSelectTab (UITabBarController tabBarController, UITab tab, UITab? previousTab)
+		{
+			_DidSelectTab (this, tabBarController, tab, previousTab);
+		}
+		[SupportedOSPlatform ("tvos18.0")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static void _DidSelectTab (IUITabBarControllerDelegate This, UITabBarController tabBarController, UITab tab, UITab? previousTab)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var tab__handle__ = tab!.GetNonNullHandle (nameof (tab));
+			var previousTab__handle__ = previousTab.GetHandle ();
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:didSelectTab:previousTab:"), tabBarController__handle__, tab__handle__, previousTab__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (tab);
+			GC.KeepAlive (previousTab);
+		}
+		[global::Foundation.OptionalMember]
+		[Export ("tabBarController:tab:operationForAcceptingItemsFromDropSession:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UIDropOperation GetOperationForAcceptingItemsFromDropSession (UITabBarController tabBarController, UITab tab, IUIDropSession session)
+		{
+			return _GetOperationForAcceptingItemsFromDropSession (this, tabBarController, tab, session);
+		}
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static UIDropOperation _GetOperationForAcceptingItemsFromDropSession (IUITabBarControllerDelegate This, UITabBarController tabBarController, UITab tab, IUIDropSession session)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var tab__handle__ = tab!.GetNonNullHandle (nameof (tab));
+			var session__handle__ = session!.GetNonNullHandle (nameof (session));
+			UIDropOperation ret;
+			ret = (UIDropOperation) (ulong) global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:tab:operationForAcceptingItemsFromDropSession:"), tabBarController__handle__, tab__handle__, session__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (tab);
+			GC.KeepAlive (session);
+			return ret!;
+		}
+		[global::Foundation.OptionalMember]
+		[Export ("tabBarController:tab:acceptItemsFromDropSession:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void AcceptItemsFromDropSession (UITabBarController tabBarController, UITab tab, IUIDropSession session)
+		{
+			_AcceptItemsFromDropSession (this, tabBarController, tab, session);
+		}
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static void _AcceptItemsFromDropSession (IUITabBarControllerDelegate This, UITabBarController tabBarController, UITab tab, IUIDropSession session)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var tab__handle__ = tab!.GetNonNullHandle (nameof (tab));
+			var session__handle__ = session!.GetNonNullHandle (nameof (session));
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:tab:acceptItemsFromDropSession:"), tabBarController__handle__, tab__handle__, session__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (tab);
+			GC.KeepAlive (session);
+		}
+		[global::Foundation.OptionalMember]
+		[Export ("tabBarControllerWillBeginEditing:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void WillBeginEditing (UITabBarController tabBarController)
+		{
+			_WillBeginEditing (this, tabBarController);
+		}
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static void _WillBeginEditing (IUITabBarControllerDelegate This, UITabBarController tabBarController)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (This.Handle, Selector.GetHandle ("tabBarControllerWillBeginEditing:"), tabBarController__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+		}
+		[global::Foundation.OptionalMember]
+		[Export ("tabBarControllerDidEndEditing:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void DidBeginEditing (UITabBarController tabBarController)
+		{
+			_DidBeginEditing (this, tabBarController);
+		}
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static void _DidBeginEditing (IUITabBarControllerDelegate This, UITabBarController tabBarController)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (This.Handle, Selector.GetHandle ("tabBarControllerDidEndEditing:"), tabBarController__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+		}
+		[global::Foundation.OptionalMember]
+		[Export ("tabBarController:visibilityDidChangeForTabs:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void VisibilityDidChangeForTabs (UITabBarController tabBarController, UITab[] tabs)
+		{
+			_VisibilityDidChangeForTabs (this, tabBarController, tabs);
+		}
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static void _VisibilityDidChangeForTabs (IUITabBarControllerDelegate This, UITabBarController tabBarController, UITab[] tabs)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			if (tabs is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (tabs));
+			using var nsa_tabs = NSArray.FromNSObjects (tabs);
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:visibilityDidChangeForTabs:"), tabBarController__handle__, nsa_tabs.Handle);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+		}
+		[global::Foundation.OptionalMember]
+		[Export ("tabBarController:displayOrderDidChangeForGroup:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void DisplayOrderDidChangeForGroup (UITabBarController tabBarController, UITabGroup group)
+		{
+			_DisplayOrderDidChangeForGroup (this, tabBarController, group);
+		}
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static void _DisplayOrderDidChangeForGroup (IUITabBarControllerDelegate This, UITabBarController tabBarController, UITabGroup group)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var group__handle__ = group!.GetNonNullHandle (nameof (group));
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:displayOrderDidChangeForGroup:"), tabBarController__handle__, group__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (group);
+		}
+		[global::Foundation.OptionalMember]
+		[Export ("tabBarController:displayedViewControllersForTab:proposedViewControllers:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UIViewController[] GetDisplayedViewControllers (UITabBarController tabBarController, UITab tab, UIViewController[] proposedViewControllers)
+		{
+			return _GetDisplayedViewControllers (this, tabBarController, tab, proposedViewControllers);
+		}
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		internal static UIViewController[] _GetDisplayedViewControllers (IUITabBarControllerDelegate This, UITabBarController tabBarController, UITab tab, UIViewController[] proposedViewControllers)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var tab__handle__ = tab!.GetNonNullHandle (nameof (tab));
+			if (proposedViewControllers is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (proposedViewControllers));
+			using var nsa_proposedViewControllers = NSArray.FromNSObjects (proposedViewControllers);
+			UIViewController[]? ret;
+			ret = CFArray.ArrayFromHandle<UIViewController>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:displayedViewControllersForTab:proposedViewControllers:"), tabBarController__handle__, tab__handle__, nsa_proposedViewControllers.Handle), false)!;
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (tab);
+			return ret!;
+		}
+		[DynamicDependencyAttribute ("AcceptItemsFromDropSession(UIKit.UITabBarController,UIKit.UITab,UIKit.IUIDropSession)")]
+		[DynamicDependencyAttribute ("DidBeginEditing(UIKit.UITabBarController)")]
+		[DynamicDependencyAttribute ("DidSelectTab(UIKit.UITabBarController,UIKit.UITab,UIKit.UITab)")]
+		[DynamicDependencyAttribute ("DisplayOrderDidChangeForGroup(UIKit.UITabBarController,UIKit.UITabGroup)")]
+		[DynamicDependencyAttribute ("FinishedCustomizingViewControllers(UIKit.UITabBarController,UIKit.UIViewController[],System.Boolean)")]
+		[DynamicDependencyAttribute ("GetAnimationControllerForTransition(UIKit.UITabBarController,UIKit.UIViewController,UIKit.UIViewController)")]
+		[DynamicDependencyAttribute ("GetDisplayedViewControllers(UIKit.UITabBarController,UIKit.UITab,UIKit.UIViewController[])")]
+		[DynamicDependencyAttribute ("GetInteractionControllerForAnimationController(UIKit.UITabBarController,UIKit.IUIViewControllerAnimatedTransitioning)")]
+		[DynamicDependencyAttribute ("GetOperationForAcceptingItemsFromDropSession(UIKit.UITabBarController,UIKit.UITab,UIKit.IUIDropSession)")]
+		[DynamicDependencyAttribute ("GetPreferredInterfaceOrientation(UIKit.UITabBarController)")]
+		[DynamicDependencyAttribute ("OnCustomizingViewControllers(UIKit.UITabBarController,UIKit.UIViewController[])")]
+		[DynamicDependencyAttribute ("OnEndCustomizingViewControllers(UIKit.UITabBarController,UIKit.UIViewController[],System.Boolean)")]
+		[DynamicDependencyAttribute ("ShouldSelectTab(UIKit.UITabBarController,UIKit.UITab)")]
+		[DynamicDependencyAttribute ("ShouldSelectViewController(UIKit.UITabBarController,UIKit.UIViewController)")]
+		[DynamicDependencyAttribute ("SupportedInterfaceOrientations(UIKit.UITabBarController)")]
+		[DynamicDependencyAttribute ("ViewControllerSelected(UIKit.UITabBarController,UIKit.UIViewController)")]
+		[DynamicDependencyAttribute ("VisibilityDidChangeForTabs(UIKit.UITabBarController,UIKit.UITab[])")]
+		[DynamicDependencyAttribute ("WillBeginEditing(UIKit.UITabBarController)")]
+		[DynamicDependencyAttribute (DynamicallyAccessedMemberTypes.Interfaces | DynamicallyAccessedMemberTypes.PublicConstructors, typeof (UITabBarControllerDelegateWrapper))]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static IUITabBarControllerDelegate ()
+		{
+			GC.KeepAlive (null);
+		}
+	}
+	#pragma warning restore CS1573
+	#pragma warning disable CS1573
+	/// <summary>Extension methods to the <see cref="IUITabBarControllerDelegate" /> interface to support all the methods from the UITabBarControllerDelegate protocol.</summary>
+	/// <remarks>
+	///   <para>The extension methods for <see cref="IUITabBarControllerDelegate" /> interface allow developers to treat instances of the interface as having all the optional methods of the original UITabBarControllerDelegate protocol. Since the interface only contains the required members, these extension methods allow developers to call the optional members of the protocol.</para>
+	/// </remarks>
+	public unsafe static partial class UITabBarControllerDelegate_Extensions {
+		/// <param name="tabBarController">To be added.</param><param name="viewController">To be added.</param><summary>Whether the specified UIViewController should be made active.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static bool ShouldSelectViewController (this IUITabBarControllerDelegate This, UITabBarController tabBarController, UIViewController viewController)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var viewController__handle__ = viewController!.GetNonNullHandle (nameof (viewController));
+			byte ret;
+			ret = global::ObjCRuntime.Messaging.bool_objc_msgSend_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:shouldSelectViewController:"), tabBarController__handle__, viewController__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (viewController);
+			return ret != 0;
+		}
+		/// <param name="tabBarController">To be added.</param><param name="viewController">To be added.</param><summary>Indicates that the app user selected an item from the tab bar.</summary><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static void ViewControllerSelected (this IUITabBarControllerDelegate This, UITabBarController tabBarController, UIViewController viewController)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var viewController__handle__ = viewController!.GetNonNullHandle (nameof (viewController));
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:didSelectViewController:"), tabBarController__handle__, viewController__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (viewController);
+		}
+		/// <param name="tabBarController">To be added.</param><param name="viewControllers">To be added.</param><summary>Indicates that the tab bar customization sheet is about to be displayed.</summary><remarks>To be added.</remarks>
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static void OnCustomizingViewControllers (this IUITabBarControllerDelegate This, UITabBarController tabBarController, UIViewController[] viewControllers)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			if (viewControllers is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (viewControllers));
+			using var nsa_viewControllers = NSArray.FromNSObjects (viewControllers);
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:willBeginCustomizingViewControllers:"), tabBarController__handle__, nsa_viewControllers.Handle);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+		}
+		/// <param name="tabBarController">To be added.</param><param name="viewControllers">To be added.</param><param name="changed">To be added.</param><summary>Indicates that the tab bar customization sheet is about to be dismissed.</summary><remarks>To be added.</remarks>
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static void OnEndCustomizingViewControllers (this IUITabBarControllerDelegate This, UITabBarController tabBarController, UIViewController[] viewControllers, bool changed)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			if (viewControllers is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (viewControllers));
+			using var nsa_viewControllers = NSArray.FromNSObjects (viewControllers);
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_bool (This.Handle, Selector.GetHandle ("tabBarController:willEndCustomizingViewControllers:changed:"), tabBarController__handle__, nsa_viewControllers.Handle, changed ? (byte) 1 : (byte) 0);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+		}
+		/// <param name="tabBarController">To be added.</param><param name="viewControllers">To be added.</param><param name="changed">To be added.</param><summary>Indicates that the customization sheet was dismissed.</summary><remarks>To be added.</remarks>
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static void FinishedCustomizingViewControllers (this IUITabBarControllerDelegate This, UITabBarController tabBarController, UIViewController[] viewControllers, bool changed)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			if (viewControllers is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (viewControllers));
+			using var nsa_viewControllers = NSArray.FromNSObjects (viewControllers);
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_bool (This.Handle, Selector.GetHandle ("tabBarController:didEndCustomizingViewControllers:changed:"), tabBarController__handle__, nsa_viewControllers.Handle, changed ? (byte) 1 : (byte) 0);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+		}
+		/// <param name="tabBarController">To be added.</param><summary>The supported orientations for presentation of the tab bar controller.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static UIInterfaceOrientationMask SupportedInterfaceOrientations (this IUITabBarControllerDelegate This, UITabBarController tabBarController)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			UIInterfaceOrientationMask ret;
+			ret = (UIInterfaceOrientationMask) (ulong) global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend_NativeHandle (This.Handle, Selector.GetHandle ("tabBarControllerSupportedInterfaceOrientations:"), tabBarController__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			return ret!;
+		}
+		/// <param name="tabBarController">To be added.</param><summary>The preferred orientation for presentation of the tab bar controller.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static UIInterfaceOrientation GetPreferredInterfaceOrientation (this IUITabBarControllerDelegate This, UITabBarController tabBarController)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			UIInterfaceOrientation ret;
+			ret = (UIInterfaceOrientation) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSend_NativeHandle (This.Handle, Selector.GetHandle ("tabBarControllerPreferredInterfaceOrientationForPresentation:"), tabBarController__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			return ret!;
+		}
+		/// <param name="tabBarController">To be added.</param><param name="animationController">To be added.</param><summary>Retrieves the UIViewControllerInteractiveTransitioning used during an interactive transition.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static IUIViewControllerInteractiveTransitioning GetInteractionControllerForAnimationController (this IUITabBarControllerDelegate This, UITabBarController tabBarController, IUIViewControllerAnimatedTransitioning animationController)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var animationController__handle__ = animationController!.GetNonNullHandle (nameof (animationController));
+			IUIViewControllerInteractiveTransitioning? ret;
+			ret =  Runtime.GetINativeObject<IUIViewControllerInteractiveTransitioning> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:interactionControllerForAnimationController:"), tabBarController__handle__, animationController__handle__), false)!;
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (animationController);
+			return ret!;
+		}
+		/// <param name="tabBarController">To be added.</param><param name="fromViewController">To be added.</param><param name="toViewController">To be added.</param><summary>Retrieves the UIViewControllerAnimatedTransitioning used during a non-interactive transition.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static IUIViewControllerAnimatedTransitioning GetAnimationControllerForTransition (this IUITabBarControllerDelegate This, UITabBarController tabBarController, UIViewController fromViewController, UIViewController toViewController)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var fromViewController__handle__ = fromViewController!.GetNonNullHandle (nameof (fromViewController));
+			var toViewController__handle__ = toViewController!.GetNonNullHandle (nameof (toViewController));
+			IUIViewControllerAnimatedTransitioning? ret;
+			ret =  Runtime.GetINativeObject<IUIViewControllerAnimatedTransitioning> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:animationControllerForTransitionFromViewController:toViewController:"), tabBarController__handle__, fromViewController__handle__, toViewController__handle__), false)!;
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (fromViewController);
+			GC.KeepAlive (toViewController);
+			return ret!;
+		}
+		[SupportedOSPlatform ("tvos18.0")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static bool ShouldSelectTab (this IUITabBarControllerDelegate This, UITabBarController tabBarController, UITab tab)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var tab__handle__ = tab!.GetNonNullHandle (nameof (tab));
+			byte ret;
+			ret = global::ObjCRuntime.Messaging.bool_objc_msgSend_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:shouldSelectTab:"), tabBarController__handle__, tab__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (tab);
+			return ret != 0;
+		}
+		[SupportedOSPlatform ("tvos18.0")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static void DidSelectTab (this IUITabBarControllerDelegate This, UITabBarController tabBarController, UITab tab, UITab? previousTab)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var tab__handle__ = tab!.GetNonNullHandle (nameof (tab));
+			var previousTab__handle__ = previousTab.GetHandle ();
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:didSelectTab:previousTab:"), tabBarController__handle__, tab__handle__, previousTab__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (tab);
+			GC.KeepAlive (previousTab);
+		}
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static UIDropOperation GetOperationForAcceptingItemsFromDropSession (this IUITabBarControllerDelegate This, UITabBarController tabBarController, UITab tab, IUIDropSession session)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var tab__handle__ = tab!.GetNonNullHandle (nameof (tab));
+			var session__handle__ = session!.GetNonNullHandle (nameof (session));
+			UIDropOperation ret;
+			ret = (UIDropOperation) (ulong) global::ObjCRuntime.Messaging.UIntPtr_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:tab:operationForAcceptingItemsFromDropSession:"), tabBarController__handle__, tab__handle__, session__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (tab);
+			GC.KeepAlive (session);
+			return ret!;
+		}
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static void AcceptItemsFromDropSession (this IUITabBarControllerDelegate This, UITabBarController tabBarController, UITab tab, IUIDropSession session)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var tab__handle__ = tab!.GetNonNullHandle (nameof (tab));
+			var session__handle__ = session!.GetNonNullHandle (nameof (session));
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:tab:acceptItemsFromDropSession:"), tabBarController__handle__, tab__handle__, session__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (tab);
+			GC.KeepAlive (session);
+		}
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static void WillBeginEditing (this IUITabBarControllerDelegate This, UITabBarController tabBarController)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (This.Handle, Selector.GetHandle ("tabBarControllerWillBeginEditing:"), tabBarController__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+		}
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static void DidBeginEditing (this IUITabBarControllerDelegate This, UITabBarController tabBarController)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (This.Handle, Selector.GetHandle ("tabBarControllerDidEndEditing:"), tabBarController__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+		}
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static void VisibilityDidChangeForTabs (this IUITabBarControllerDelegate This, UITabBarController tabBarController, UITab[] tabs)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			if (tabs is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (tabs));
+			using var nsa_tabs = NSArray.FromNSObjects (tabs);
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:visibilityDidChangeForTabs:"), tabBarController__handle__, nsa_tabs.Handle);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+		}
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static void DisplayOrderDidChangeForGroup (this IUITabBarControllerDelegate This, UITabBarController tabBarController, UITabGroup group)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var group__handle__ = group!.GetNonNullHandle (nameof (group));
+			global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:displayOrderDidChangeForGroup:"), tabBarController__handle__, group__handle__);
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (group);
+		}
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public static UIViewController[] GetDisplayedViewControllers (this IUITabBarControllerDelegate This, UITabBarController tabBarController, UITab tab, UIViewController[] proposedViewControllers)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			var tabBarController__handle__ = tabBarController!.GetNonNullHandle (nameof (tabBarController));
+			var tab__handle__ = tab!.GetNonNullHandle (nameof (tab));
+			if (proposedViewControllers is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (proposedViewControllers));
+			using var nsa_proposedViewControllers = NSArray.FromNSObjects (proposedViewControllers);
+			UIViewController[]? ret;
+			ret = CFArray.ArrayFromHandle<UIViewController>(global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend_NativeHandle_NativeHandle_NativeHandle (This.Handle, Selector.GetHandle ("tabBarController:displayedViewControllersForTab:proposedViewControllers:"), tabBarController__handle__, tab__handle__, nsa_proposedViewControllers.Handle), false)!;
+			GC.KeepAlive (This);
+			GC.KeepAlive (tabBarController);
+			GC.KeepAlive (tab);
+			return ret!;
+		}
+	}
+	#pragma warning restore CS1573
+	internal unsafe sealed class UITabBarControllerDelegateWrapper : BaseWrapper, IUITabBarControllerDelegate {
+		public UITabBarControllerDelegateWrapper (NativeHandle handle, bool owns)
+			: base (handle, owns)
+		{
+		}
+		[DynamicDependencyAttribute (DynamicallyAccessedMemberTypes.PublicConstructors, typeof (UITabBarControllerDelegateWrapper))]
+		static UITabBarControllerDelegateWrapper ()
+		{
+			GC.KeepAlive (null);
+		}
+	}
+}
+namespace UIKit {
+	/// <summary>
+	///   <para>This is a class that implements the interface <see cref="IUITabBarControllerDelegate" /> (for the protocol <c>UITabBarControllerDelegate</c>).</para>
+	///   <para>Subclass this class to easily create a type that implements the protocol.</para>
+	///   <para>An alternative is to create a subclass of <see cref="NSObject" /> and then implemented the interface <see cref="IUITabBarControllerDelegate" />.</para>
+	/// </summary>
+	[Protocol()]
+	[Register("Microsoft_iOS__UIKit_UITabBarControllerDelegate", false)]
+	[Model]
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("tvos")]
+	public unsafe partial class UITabBarControllerDelegate : NSObject, IUITabBarControllerDelegate {
+		/// <summary>Creates a new <see cref="UITabBarControllerDelegate" /> with default values.</summary>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("init")]
+		public UITabBarControllerDelegate () : base (NSObjectFlag.Empty)
+		{
+			global::UIKit.UIApplication.EnsureUIThread ();
+			IsDirectBinding = false;
+			unsafe {
+			var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+			InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, global::ObjCRuntime.Selector.GetHandle ("init")), "init");
+			GC.KeepAlive (this);
+			}
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected UITabBarControllerDelegate (NSObjectFlag t) : base (t)
+		{
+			IsDirectBinding = false;
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal UITabBarControllerDelegate (NativeHandle handle) : base (handle)
+		{
+			IsDirectBinding = false;
+		}
+
+		[Export ("tabBarController:tab:acceptItemsFromDropSession:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void AcceptItemsFromDropSession (UITabBarController tabBarController, UITab tab, IUIDropSession session)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+		[Export ("tabBarControllerDidEndEditing:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void DidBeginEditing (UITabBarController tabBarController)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+		[Export ("tabBarController:didSelectTab:previousTab:")]
+		[SupportedOSPlatform ("tvos18.0")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void DidSelectTab (UITabBarController tabBarController, UITab tab, UITab? previousTab)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+		[Export ("tabBarController:displayOrderDidChangeForGroup:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void DisplayOrderDidChangeForGroup (UITabBarController tabBarController, UITabGroup group)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+		/// <param name="tabBarController">To be added.</param><param name="viewControllers">To be added.</param><param name="changed">To be added.</param><summary>Indicates that the customization sheet was dismissed.</summary><remarks>To be added.</remarks>
+		[Export ("tabBarController:didEndCustomizingViewControllers:changed:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void FinishedCustomizingViewControllers (UITabBarController tabBarController, UIViewController[] viewControllers, bool changed)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+		/// <param name="tabBarController">To be added.</param><param name="fromViewController">To be added.</param><param name="toViewController">To be added.</param><summary>Retrieves the UIViewControllerAnimatedTransitioning used during a non-interactive transition.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("tabBarController:animationControllerForTransitionFromViewController:toViewController:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual IUIViewControllerAnimatedTransitioning GetAnimationControllerForTransition (UITabBarController tabBarController, UIViewController fromViewController, UIViewController toViewController)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+		[Export ("tabBarController:displayedViewControllersForTab:proposedViewControllers:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UIViewController[] GetDisplayedViewControllers (UITabBarController tabBarController, UITab tab, UIViewController[] proposedViewControllers)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+		/// <param name="tabBarController">To be added.</param><param name="animationController">To be added.</param><summary>Retrieves the UIViewControllerInteractiveTransitioning used during an interactive transition.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("tabBarController:interactionControllerForAnimationController:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual IUIViewControllerInteractiveTransitioning GetInteractionControllerForAnimationController (UITabBarController tabBarController, IUIViewControllerAnimatedTransitioning animationController)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+		[Export ("tabBarController:tab:operationForAcceptingItemsFromDropSession:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UIDropOperation GetOperationForAcceptingItemsFromDropSession (UITabBarController tabBarController, UITab tab, IUIDropSession session)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+		/// <param name="tabBarController">To be added.</param><summary>The preferred orientation for presentation of the tab bar controller.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("tabBarControllerPreferredInterfaceOrientationForPresentation:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UIInterfaceOrientation GetPreferredInterfaceOrientation (UITabBarController tabBarController)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+		/// <param name="tabBarController">To be added.</param><param name="viewControllers">To be added.</param><summary>Indicates that the tab bar customization sheet is about to be displayed.</summary><remarks>To be added.</remarks>
+		[Export ("tabBarController:willBeginCustomizingViewControllers:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void OnCustomizingViewControllers (UITabBarController tabBarController, UIViewController[] viewControllers)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+		/// <param name="tabBarController">To be added.</param><param name="viewControllers">To be added.</param><param name="changed">To be added.</param><summary>Indicates that the tab bar customization sheet is about to be dismissed.</summary><remarks>To be added.</remarks>
+		[Export ("tabBarController:willEndCustomizingViewControllers:changed:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void OnEndCustomizingViewControllers (UITabBarController tabBarController, UIViewController[] viewControllers, bool changed)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+		[Export ("tabBarController:shouldSelectTab:")]
+		[SupportedOSPlatform ("tvos18.0")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool ShouldSelectTab (UITabBarController tabBarController, UITab tab)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+		/// <param name="tabBarController">To be added.</param><param name="viewController">To be added.</param><summary>Whether the specified UIViewController should be made active.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("tabBarController:shouldSelectViewController:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool ShouldSelectViewController (UITabBarController tabBarController, UIViewController viewController)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+		/// <param name="tabBarController">To be added.</param><summary>The supported orientations for presentation of the tab bar controller.</summary><returns>To be added.</returns><remarks>To be added.</remarks>
+		[Export ("tabBarControllerSupportedInterfaceOrientations:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("maccatalyst")]
+		[SupportedOSPlatform ("ios")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual UIInterfaceOrientationMask SupportedInterfaceOrientations (UITabBarController tabBarController)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+		/// <param name="tabBarController">To be added.</param><param name="viewController">To be added.</param><summary>Indicates that the app user selected an item from the tab bar.</summary><remarks>To be added.</remarks>
+		[Export ("tabBarController:didSelectViewController:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void ViewControllerSelected (UITabBarController tabBarController, UIViewController viewController)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+		[Export ("tabBarController:visibilityDidChangeForTabs:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void VisibilityDidChangeForTabs (UITabBarController tabBarController, UITab[] tabs)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+		[Export ("tabBarControllerWillBeginEditing:")]
+		[UnsupportedOSPlatform ("tvos")]
+		[SupportedOSPlatform ("ios18.0")]
+		[SupportedOSPlatform ("maccatalyst18.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void WillBeginEditing (UITabBarController tabBarController)
+		{
+			throw new You_Should_Not_Call_base_In_This_Method ();
+		}
+	} /* class UITabBarControllerDelegate */
+}

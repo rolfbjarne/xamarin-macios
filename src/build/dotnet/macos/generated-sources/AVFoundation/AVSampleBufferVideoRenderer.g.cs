@@ -1,0 +1,851 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using Metal;
+using CoreML;
+using OpenGL;
+using AppKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace AVFoundation {
+	[Register("AVSampleBufferVideoRenderer", true)]
+	[SupportedOSPlatform ("tvos17.0")]
+	[SupportedOSPlatform ("macos14.0")]
+	[SupportedOSPlatform ("ios17.0")]
+	[SupportedOSPlatform ("maccatalyst17.0")]
+	public unsafe partial class AVSampleBufferVideoRenderer : NSObject, IAVQueuedSampleBufferRendering {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selCopyDisplayedPixelBufferX = "copyDisplayedPixelBuffer";
+		static readonly NativeHandle selCopyDisplayedPixelBufferXHandle = Selector.GetHandle ("copyDisplayedPixelBuffer");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selEnqueueSampleBuffer_X = "enqueueSampleBuffer:";
+		static readonly NativeHandle selEnqueueSampleBuffer_XHandle = Selector.GetHandle ("enqueueSampleBuffer:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selErrorX = "error";
+		static readonly NativeHandle selErrorXHandle = Selector.GetHandle ("error");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selExpectMinimumUpcomingSampleBufferPresentationTime_X = "expectMinimumUpcomingSampleBufferPresentationTime:";
+		static readonly NativeHandle selExpectMinimumUpcomingSampleBufferPresentationTime_XHandle = Selector.GetHandle ("expectMinimumUpcomingSampleBufferPresentationTime:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selExpectMonotonicallyIncreasingUpcomingSampleBufferPresentationTimesX = "expectMonotonicallyIncreasingUpcomingSampleBufferPresentationTimes";
+		static readonly NativeHandle selExpectMonotonicallyIncreasingUpcomingSampleBufferPresentationTimesXHandle = Selector.GetHandle ("expectMonotonicallyIncreasingUpcomingSampleBufferPresentationTimes");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selFlushX = "flush";
+		static readonly NativeHandle selFlushXHandle = Selector.GetHandle ("flush");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selFlushWithRemovalOfDisplayedImage_CompletionHandler_X = "flushWithRemovalOfDisplayedImage:completionHandler:";
+		static readonly NativeHandle selFlushWithRemovalOfDisplayedImage_CompletionHandler_XHandle = Selector.GetHandle ("flushWithRemovalOfDisplayedImage:completionHandler:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selHasSufficientMediaDataForReliablePlaybackStartX = "hasSufficientMediaDataForReliablePlaybackStart";
+		static readonly NativeHandle selHasSufficientMediaDataForReliablePlaybackStartXHandle = Selector.GetHandle ("hasSufficientMediaDataForReliablePlaybackStart");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selIsReadyForMoreMediaDataX = "isReadyForMoreMediaData";
+		static readonly NativeHandle selIsReadyForMoreMediaDataXHandle = Selector.GetHandle ("isReadyForMoreMediaData");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selLoadVideoPerformanceMetricsWithCompletionHandler_X = "loadVideoPerformanceMetricsWithCompletionHandler:";
+		static readonly NativeHandle selLoadVideoPerformanceMetricsWithCompletionHandler_XHandle = Selector.GetHandle ("loadVideoPerformanceMetricsWithCompletionHandler:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRecommendedPixelBufferAttributesX = "recommendedPixelBufferAttributes";
+		static readonly NativeHandle selRecommendedPixelBufferAttributesXHandle = Selector.GetHandle ("recommendedPixelBufferAttributes");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRequestMediaDataWhenReadyOnQueue_UsingBlock_X = "requestMediaDataWhenReadyOnQueue:usingBlock:";
+		static readonly NativeHandle selRequestMediaDataWhenReadyOnQueue_UsingBlock_XHandle = Selector.GetHandle ("requestMediaDataWhenReadyOnQueue:usingBlock:");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selRequiresFlushToResumeDecodingX = "requiresFlushToResumeDecoding";
+		static readonly NativeHandle selRequiresFlushToResumeDecodingXHandle = Selector.GetHandle ("requiresFlushToResumeDecoding");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selResetUpcomingSampleBufferPresentationTimeExpectationsX = "resetUpcomingSampleBufferPresentationTimeExpectations";
+		static readonly NativeHandle selResetUpcomingSampleBufferPresentationTimeExpectationsXHandle = Selector.GetHandle ("resetUpcomingSampleBufferPresentationTimeExpectations");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selStatusX = "status";
+		static readonly NativeHandle selStatusXHandle = Selector.GetHandle ("status");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selStopRequestingMediaDataX = "stopRequestingMediaData";
+		static readonly NativeHandle selStopRequestingMediaDataXHandle = Selector.GetHandle ("stopRequestingMediaData");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		const string selTimebaseX = "timebase";
+		static readonly NativeHandle selTimebaseXHandle = Selector.GetHandle ("timebase");
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static readonly NativeHandle class_ptr = Class.GetHandle ("AVSampleBufferVideoRenderer");
+		/// <summary>The Objective-C class handle for this class.</summary>
+		/// <value>The pointer to the Objective-C class.</value>
+		/// <remarks>
+		///     Each managed class mirrors an unmanaged Objective-C class.
+		///     This value contains the pointer to the Objective-C class.
+		///     It is similar to calling the managed <see cref="ObjCRuntime.Class.GetHandle(string)" /> or the native <see href="https://developer.apple.com/documentation/objectivec/1418952-objc_getclass">objc_getClass</see> method with the type name.
+		/// </remarks>
+		public override NativeHandle ClassHandle { get { return class_ptr; } }
+		/// <summary>Creates a new <see cref="AVSampleBufferVideoRenderer" /> with default values.</summary>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		[Export ("init")]
+		public AVSampleBufferVideoRenderer () : base (NSObjectFlag.Empty)
+		{
+			if (IsDirectBinding) {
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, global::ObjCRuntime.Selector.Init), "init");
+			} else {
+				unsafe {
+				var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+				InitializeHandle (global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, global::ObjCRuntime.Selector.Init), "init");
+				GC.KeepAlive (this);
+				}
+			}
+		}
+
+		/// <summary>Constructor to call on derived classes to skip initialization and merely allocate the object.</summary>
+		/// <param name="t">Unused sentinel value, pass NSObjectFlag.Empty.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor should be called by derived classes when they completely construct the object in managed code and merely want the runtime to allocate and initialize the <see cref="Foundation.NSObject" />.
+		///         This is required to implement the two-step initialization process that Objective-C uses, the first step is to perform the object allocation, the second step is to initialize the object.
+		///         When developers invoke this constructor, they take advantage of a direct path that goes all the way up to <see cref="Foundation.NSObject" /> to merely allocate the object's memory and bind the Objective-C and C# objects together.
+		///         The actual initialization of the object is up to the developer.
+		///     </para>
+		///     <para>
+		///         This constructor is typically used by the binding generator to allocate the object, but prevent the actual initialization to take place.
+		///         Once the allocation has taken place, the constructor has to initialize the object.
+		///         With constructors generated by the binding generator this means that it manually invokes one of the "init" methods to initialize the object.
+		///     </para>
+		///     <para>It is the developer's responsibility to completely initialize the object if they chain up using this constructor chain.</para>
+		///     <para>
+		///         In general, if the developer's constructor invokes the corresponding base implementation, then it should also call an Objective-C init method.
+		///         If this is not the case, developers should instead chain to the proper constructor in their class.
+		///     </para>
+		///     <para>
+		///         The argument value is ignored and merely ensures that the only code that is executed is the construction phase is the basic <see cref="Foundation.NSObject" /> allocation and runtime type registration.
+		///         Typically the chaining would look like this:
+		///     </para>
+		///     <example>
+		///             <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // The NSObjectFlag constructor merely allocates the object and registers the C# class with the Objective-C runtime if necessary.
+		/// // No actual initXxx method is invoked, that is done later in the constructor
+		/// //
+		/// // This is taken from the iOS SDK's source code for the UIView class:
+		/// //
+		/// [Export ("initWithFrame:")]
+		/// public UIView (CGRect frame) : base (NSObjectFlag.Empty)
+		/// {
+		///     // Invoke the init method now.
+		///     var initWithFrame = new Selector ("initWithFrame:").Handle;
+		///     if (IsDirectBinding) {
+		///         Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSend_CGRect (this.Handle, initWithFrame, frame);
+		///     } else {
+		///         unsafe {
+		///             var __objc_super__ = new ObjCRuntime.ObjCSuper (this);
+		///             Handle = ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper_CGRect (&__objc_super__, initWithFrame, frame);
+		///         }
+		///         GC.KeepAlive (this);
+		///     }
+		/// }
+		/// ]]></code>
+		///     </example>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected AVSampleBufferVideoRenderer (NSObjectFlag t) : base (t)
+		{
+		}
+
+		/// <summary>A constructor used when creating managed representations of unmanaged objects. Called by the runtime.</summary>
+		/// <param name="handle">Pointer (handle) to the unmanaged object.</param>
+		/// <remarks>
+		///     <para>
+		///         This constructor is invoked by the runtime infrastructure (<see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" />) to create a new managed representation for a pointer to an unmanaged Objective-C object.
+		///         Developers should not invoke this method directly, instead they should call <see cref="ObjCRuntime.Runtime.GetNSObject(System.IntPtr)" /> as it will prevent two instances of a managed object pointing to the same native object.
+		///     </para>
+		/// </remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[EditorBrowsable (EditorBrowsableState.Advanced)]
+		protected internal AVSampleBufferVideoRenderer (NativeHandle handle) : base (handle)
+		{
+		}
+
+		[Export ("copyDisplayedPixelBuffer")]
+		[return: ReleaseAttribute ()]
+		[SupportedOSPlatform ("tvos17.4")]
+		[SupportedOSPlatform ("macos14.4")]
+		[SupportedOSPlatform ("ios17.4")]
+		[SupportedOSPlatform ("maccatalyst17.4")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual global::CoreVideo.CVPixelBuffer? CopyDisplayedPixelBuffer ()
+		{
+			global::CoreVideo.CVPixelBuffer? ret;
+			if (IsDirectBinding) {
+				ret = Runtime.GetINativeObject<CVPixelBuffer> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selCopyDisplayedPixelBufferXHandle), true)!;
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					ret = Runtime.GetINativeObject<CVPixelBuffer> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selCopyDisplayedPixelBufferXHandle), true)!;
+					GC.KeepAlive (this);
+				}
+			}
+			return ret!;
+		}
+		/// <param name="sampleBuffer">To be added.</param><summary>To be added.</summary><remarks>To be added.</remarks>
+		[Export ("enqueueSampleBuffer:")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void Enqueue (global::CoreMedia.CMSampleBuffer sampleBuffer)
+		{
+			var sampleBuffer__handle__ = sampleBuffer!.GetNonNullHandle (nameof (sampleBuffer));
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selEnqueueSampleBuffer_XHandle, sampleBuffer.Handle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selEnqueueSampleBuffer_XHandle, sampleBuffer.Handle);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (sampleBuffer);
+		}
+		[Export ("expectMinimumUpcomingSampleBufferPresentationTime:")]
+		[SupportedOSPlatform ("tvos17.4")]
+		[SupportedOSPlatform ("macos14.4")]
+		[SupportedOSPlatform ("ios17.4")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void ExpectMinimumUpcomingSampleBufferPresentationTime (global::CoreMedia.CMTime minimumUpcomingPresentationTime)
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_CMTime (this.Handle, selExpectMinimumUpcomingSampleBufferPresentationTime_XHandle, minimumUpcomingPresentationTime);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_CMTime (&__objc_super__, selExpectMinimumUpcomingSampleBufferPresentationTime_XHandle, minimumUpcomingPresentationTime);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("expectMonotonicallyIncreasingUpcomingSampleBufferPresentationTimes")]
+		[SupportedOSPlatform ("tvos17.4")]
+		[SupportedOSPlatform ("macos14.4")]
+		[SupportedOSPlatform ("ios17.4")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void ExpectMonotonicallyIncreasingUpcomingSampleBufferPresentationTimes ()
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend (this.Handle, selExpectMonotonicallyIncreasingUpcomingSampleBufferPresentationTimesXHandle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper (&__objc_super__, selExpectMonotonicallyIncreasingUpcomingSampleBufferPresentationTimesXHandle);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <summary>To be added.</summary><remarks>To be added.</remarks>
+		[Export ("flush")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void Flush ()
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend (this.Handle, selFlushXHandle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper (&__objc_super__, selFlushXHandle);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("flushWithRemovalOfDisplayedImage:completionHandler:")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void FlushWithRemovalOfDisplayedImage (bool removeDisplayedImage, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDAction))]global::System.Action? handler)
+		{
+			using var block_handler = Trampolines.SDAction.CreateNullableBlock (handler);
+			BlockLiteral *block_ptr_handler = null;
+			if (handler is not null)
+				block_ptr_handler = &block_handler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_bool_NativeHandle (this.Handle, selFlushWithRemovalOfDisplayedImage_CompletionHandler_XHandle, removeDisplayedImage ? (byte) 1 : (byte) 0, (IntPtr) block_ptr_handler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_bool_NativeHandle (&__objc_super__, selFlushWithRemovalOfDisplayedImage_CompletionHandler_XHandle, removeDisplayedImage ? (byte) 1 : (byte) 0, (IntPtr) block_ptr_handler);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[Export ("loadVideoPerformanceMetricsWithCompletionHandler:")]
+		[SupportedOSPlatform ("tvos17.4")]
+		[SupportedOSPlatform ("macos14.4")]
+		[SupportedOSPlatform ("ios17.4")]
+		[SupportedOSPlatform ("maccatalyst17.4")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void LoadVideoPerformanceMetrics ([BlockProxy (typeof (ObjCRuntime.Trampolines.NIDAVSampleBufferVideoRendererLoadVideoPerformanceMetricsCallback))]AVSampleBufferVideoRendererLoadVideoPerformanceMetricsCallback completionHandler)
+		{
+			if (completionHandler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (completionHandler));
+			using var block_completionHandler = Trampolines.SDAVSampleBufferVideoRendererLoadVideoPerformanceMetricsCallback.CreateBlock (completionHandler);
+			BlockLiteral *block_ptr_completionHandler = &block_completionHandler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle (this.Handle, selLoadVideoPerformanceMetricsWithCompletionHandler_XHandle, (IntPtr) block_ptr_completionHandler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle (&__objc_super__, selLoadVideoPerformanceMetricsWithCompletionHandler_XHandle, (IntPtr) block_ptr_completionHandler);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[SupportedOSPlatform ("tvos17.4")]
+		[SupportedOSPlatform ("macos14.4")]
+		[SupportedOSPlatform ("ios17.4")]
+		[SupportedOSPlatform ("maccatalyst17.4")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual Task<AVVideoPerformanceMetrics> LoadVideoPerformanceMetricsAsync ()
+		{
+			var tcs = new TaskCompletionSource<AVVideoPerformanceMetrics> ();
+			LoadVideoPerformanceMetrics((videoPerformanceMetrics_) => {
+				tcs.SetResult (videoPerformanceMetrics_!);
+			});
+			return tcs.Task;
+		}
+		/// <param name="queue">To be added.</param><param name="handler">To be added.</param><summary>To be added.</summary><remarks>To be added.</remarks>
+		[Export ("requestMediaDataWhenReadyOnQueue:usingBlock:")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public unsafe virtual void RequestMediaData (global::CoreFoundation.DispatchQueue queue, [BlockProxy (typeof (ObjCRuntime.Trampolines.NIDAction))]global::System.Action handler)
+		{
+			var queue__handle__ = queue!.GetNonNullHandle (nameof (queue));
+			if (handler is null)
+				ObjCRuntime.ThrowHelper.ThrowArgumentNullException (nameof (handler));
+			using var block_handler = Trampolines.SDAction.CreateBlock (handler);
+			BlockLiteral *block_ptr_handler = &block_handler;
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend_NativeHandle_NativeHandle (this.Handle, selRequestMediaDataWhenReadyOnQueue_UsingBlock_XHandle, queue.Handle, (IntPtr) block_ptr_handler);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper_NativeHandle_NativeHandle (&__objc_super__, selRequestMediaDataWhenReadyOnQueue_UsingBlock_XHandle, queue.Handle, (IntPtr) block_ptr_handler);
+					GC.KeepAlive (this);
+				}
+			}
+			GC.KeepAlive (queue);
+		}
+		[Export ("resetUpcomingSampleBufferPresentationTimeExpectations")]
+		[SupportedOSPlatform ("tvos17.4")]
+		[SupportedOSPlatform ("macos14.4")]
+		[SupportedOSPlatform ("ios17.4")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void ResetUpcomingSampleBufferPresentationTimeExpectations ()
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend (this.Handle, selResetUpcomingSampleBufferPresentationTimeExpectationsXHandle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper (&__objc_super__, selResetUpcomingSampleBufferPresentationTimeExpectationsXHandle);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		/// <summary>To be added.</summary><remarks>To be added.</remarks>
+		[Export ("stopRequestingMediaData")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual void StopRequestingMediaData ()
+		{
+			if (IsDirectBinding) {
+				global::ObjCRuntime.Messaging.void_objc_msgSend (this.Handle, selStopRequestingMediaDataXHandle);
+			} else {
+				unsafe {
+					var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+					global::ObjCRuntime.Messaging.void_objc_msgSendSuper (&__objc_super__, selStopRequestingMediaDataXHandle);
+					GC.KeepAlive (this);
+				}
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual NSError? Error {
+			[Export ("error")]
+			get {
+				NSError? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSError> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selErrorXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSError> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selErrorXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		public virtual bool HasSufficientMediaDataForReliablePlaybackStart {
+			[Export ("hasSufficientMediaDataForReliablePlaybackStart")]
+			[SupportedOSPlatform ("ios17.0")]
+			[SupportedOSPlatform ("macos14.0")]
+			[SupportedOSPlatform ("tvos17.0")]
+			[SupportedOSPlatform ("maccatalyst17.0")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selHasSufficientMediaDataForReliablePlaybackStartXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selHasSufficientMediaDataForReliablePlaybackStartXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		public virtual bool ReadyForMoreMediaData {
+			[Export ("isReadyForMoreMediaData")]
+			[SupportedOSPlatform ("ios17.0")]
+			[SupportedOSPlatform ("macos14.0")]
+			[SupportedOSPlatform ("tvos17.0")]
+			[SupportedOSPlatform ("maccatalyst17.0")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selIsReadyForMoreMediaDataXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selIsReadyForMoreMediaDataXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		public global::CoreVideo.CVPixelBufferAttributes RecommendedPixelBufferAttributes {
+			get {
+				var src = WeakRecommendedPixelBufferAttributes is not null ? new NSMutableDictionary (WeakRecommendedPixelBufferAttributes) : null;
+				return src is null ? null! : new global::CoreVideo.CVPixelBufferAttributes(src);
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual bool RequiresFlushToResumeDecoding {
+			[Export ("requiresFlushToResumeDecoding")]
+			get {
+				byte ret;
+				if (IsDirectBinding) {
+					ret = global::ObjCRuntime.Messaging.bool_objc_msgSend (this.Handle, selRequiresFlushToResumeDecodingXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = global::ObjCRuntime.Messaging.bool_objc_msgSendSuper (&__objc_super__, selRequiresFlushToResumeDecodingXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret != 0;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		public virtual AVQueuedSampleBufferRenderingStatus Status {
+			[Export ("status")]
+			get {
+				AVQueuedSampleBufferRenderingStatus ret;
+				if (IsDirectBinding) {
+					ret = (AVQueuedSampleBufferRenderingStatus) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSend (this.Handle, selStatusXHandle);
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = (AVQueuedSampleBufferRenderingStatus) (long) global::ObjCRuntime.Messaging.IntPtr_objc_msgSendSuper (&__objc_super__, selStatusXHandle);
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		/// <summary>To be added.</summary><value>To be added.</value><remarks>To be added.</remarks>
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("ios17.0")]
+		[SupportedOSPlatform ("macos14.0")]
+		[SupportedOSPlatform ("tvos17.0")]
+		[SupportedOSPlatform ("maccatalyst17.0")]
+		public virtual global::CoreMedia.CMTimebase Timebase {
+			[Export ("timebase", ArgumentSemantic.Retain)]
+			[SupportedOSPlatform ("ios17.0")]
+			[SupportedOSPlatform ("macos14.0")]
+			[SupportedOSPlatform ("tvos17.0")]
+			[SupportedOSPlatform ("maccatalyst17.0")]
+			get {
+				global::CoreMedia.CMTimebase ret;
+				if (IsDirectBinding) {
+					ret = Runtime.GetINativeObject<global::CoreMedia.CMTimebase> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selTimebaseXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret = Runtime.GetINativeObject<global::CoreMedia.CMTimebase> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selTimebaseXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		[SupportedOSPlatform ("tvos26.0")]
+		[SupportedOSPlatform ("maccatalyst26.0")]
+		[SupportedOSPlatform ("macos26.0")]
+		[SupportedOSPlatform ("ios26.0")]
+		public virtual NSDictionary<NSString, NSObject> WeakRecommendedPixelBufferAttributes {
+			[Export ("recommendedPixelBufferAttributes")]
+			get {
+				NSDictionary<NSString, NSObject>? ret;
+				if (IsDirectBinding) {
+					ret =  Runtime.GetNSObject<NSDictionary<NSString, NSObject>> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSend (this.Handle, selRecommendedPixelBufferAttributesXHandle), false)!;
+				} else {
+					unsafe {
+						var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);
+						ret =  Runtime.GetNSObject<NSDictionary<NSString, NSObject>> (global::ObjCRuntime.Messaging.NativeHandle_objc_msgSendSuper (&__objc_super__, selRecommendedPixelBufferAttributesXHandle), false)!;
+						GC.KeepAlive (this);
+					}
+				}
+				return ret!;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _AVSampleBufferVideoRendererDidFailToDecodeNotification;
+		/// <summary>Notification constant for AVSampleBufferVideoRendererDidFailToDecode</summary>
+		/// <value><see cref="NSString" /> constant, should be used as a token to <see cref="NSNotificationCenter" />.</value>
+		/// <remarks>
+		///   <para>
+		///     This constant can be used with <see cref="NSNotificationCenter" /> to register a listener for this notification.
+		///     This is an <see cref="NSString" /> instead of a string, because these values can be used as tokens in some native
+		///     libraries instead of being used purely for their actual string content. The 'notification' parameter to the callback
+		///     contains extra information that is specific to the notification type.
+		///   </para>
+		///   <para>
+		///     To subscribe to this notification, developers can use the convenience <see cref="Notifications.ObserveAVSampleBufferVideoRendererDidFailToDecode(NSObject,EventHandler{NSNotificationEventArgs})" />
+		///     or <see cref="Notifications.ObserveAVSampleBufferVideoRendererDidFailToDecode(EventHandler{NSNotificationEventArgs})" /> methods,
+		///     which offers strongly typed access to the parameters of the notification.
+		///   </para>
+		///   <para>
+		///     The following example shows how to use the strongly typed <see cref="Notifications" /> class, to take the guesswork
+		///     out of the available properties in the notification:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // Lambda style
+		/// //
+		///
+		/// // listening
+		/// notification = AVSampleBufferVideoRenderer.Notifications.ObserveAVSampleBufferVideoRendererDidFailToDecode ((sender, args) => {
+		/// /* Access strongly typed args */
+		/// Console.WriteLine ("Notification: {0}", args.Notification);
+		/// });
+		///
+		/// // To stop listening:
+		/// notification.Dispose ();
+		///
+		/// //
+		/// // Method style
+		/// //
+		/// NSObject notification;
+		/// void Callback (object sender, AVSampleBufferVideoRenderer.NSNotificationEventArgs args)
+		/// {
+		///     // Access strongly typed args
+		///     Console.WriteLine ("Notification: {0}", args.Notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     notification = AVSampleBufferVideoRenderer.Notifications.ObserveAVSampleBufferVideoRendererDidFailToDecode (Callback);
+		/// }
+		///
+		/// void Teardown ()
+		/// {
+		///     notification.Dispose ();
+		/// }]]></code>
+		///   </example>
+		///   <para>
+		///     The following example shows how to use the notification with the DefaultCenter API:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// // Lambda style
+		/// NSNotificationCenter.DefaultCenter.AddObserver (
+		///     AVSampleBufferVideoRenderer.AVSampleBufferVideoRendererDidFailToDecodeNotification, (notification) => { Console.WriteLine ("Received the notification AVSampleBufferVideoRendererDidFailToDecode", notification); }
+		/// );
+		///
+		/// // Method style
+		/// void Callback (NSNotification notification)
+		/// {
+		///     Console.WriteLine ("Received the notification AVSampleBufferVideoRendererDidFailToDecode", notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     NSNotificationCenter.DefaultCenter.AddObserver (AVSampleBufferVideoRenderer.AVSampleBufferVideoRendererDidFailToDecodeNotification, Callback);
+		/// }
+		/// ]]></code>
+		///   </example>
+		/// </remarks>
+		[Field ("AVSampleBufferVideoRendererDidFailToDecodeNotification",  "AVFoundation")]
+		[Advice ("Use AVSampleBufferVideoRenderer.Notifications.ObserveAVSampleBufferVideoRendererDidFailToDecode helper method instead.")]
+		public static NSString AVSampleBufferVideoRendererDidFailToDecodeNotification {
+			get {
+				if (_AVSampleBufferVideoRendererDidFailToDecodeNotification is null)
+					_AVSampleBufferVideoRendererDidFailToDecodeNotification = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVSampleBufferVideoRendererDidFailToDecodeNotification")!;
+				return _AVSampleBufferVideoRendererDidFailToDecodeNotification;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _AVSampleBufferVideoRendererDidFailToDecodeNotificationErrorKey;
+		/// <summary>Represents the value associated with the constant 'AVSampleBufferVideoRendererDidFailToDecodeNotificationErrorKey'.</summary>
+		[Field ("AVSampleBufferVideoRendererDidFailToDecodeNotificationErrorKey",  "AVFoundation")]
+		public static NSString AVSampleBufferVideoRendererDidFailToDecodeNotificationErrorKey {
+			get {
+				if (_AVSampleBufferVideoRendererDidFailToDecodeNotificationErrorKey is null)
+					_AVSampleBufferVideoRendererDidFailToDecodeNotificationErrorKey = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVSampleBufferVideoRendererDidFailToDecodeNotificationErrorKey")!;
+				return _AVSampleBufferVideoRendererDidFailToDecodeNotificationErrorKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _RequiresFlushToResumeDecodingDidChangeNotification;
+		/// <summary>Notification constant for RequiresFlushToResumeDecodingDidChange</summary>
+		/// <value><see cref="NSString" /> constant, should be used as a token to <see cref="NSNotificationCenter" />.</value>
+		/// <remarks>
+		///   <para>
+		///     This constant can be used with <see cref="NSNotificationCenter" /> to register a listener for this notification.
+		///     This is an <see cref="NSString" /> instead of a string, because these values can be used as tokens in some native
+		///     libraries instead of being used purely for their actual string content. The 'notification' parameter to the callback
+		///     contains extra information that is specific to the notification type.
+		///   </para>
+		///   <para>
+		///     To subscribe to this notification, developers can use the convenience <see cref="Notifications.ObserveRequiresFlushToResumeDecodingDidChange(NSObject,EventHandler{NSNotificationEventArgs})" />
+		///     or <see cref="Notifications.ObserveRequiresFlushToResumeDecodingDidChange(EventHandler{NSNotificationEventArgs})" /> methods,
+		///     which offers strongly typed access to the parameters of the notification.
+		///   </para>
+		///   <para>
+		///     The following example shows how to use the strongly typed <see cref="Notifications" /> class, to take the guesswork
+		///     out of the available properties in the notification:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// //
+		/// // Lambda style
+		/// //
+		///
+		/// // listening
+		/// notification = AVSampleBufferVideoRenderer.Notifications.ObserveRequiresFlushToResumeDecodingDidChange ((sender, args) => {
+		/// /* Access strongly typed args */
+		/// Console.WriteLine ("Notification: {0}", args.Notification);
+		/// });
+		///
+		/// // To stop listening:
+		/// notification.Dispose ();
+		///
+		/// //
+		/// // Method style
+		/// //
+		/// NSObject notification;
+		/// void Callback (object sender, AVSampleBufferVideoRenderer.NSNotificationEventArgs args)
+		/// {
+		///     // Access strongly typed args
+		///     Console.WriteLine ("Notification: {0}", args.Notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     notification = AVSampleBufferVideoRenderer.Notifications.ObserveRequiresFlushToResumeDecodingDidChange (Callback);
+		/// }
+		///
+		/// void Teardown ()
+		/// {
+		///     notification.Dispose ();
+		/// }]]></code>
+		///   </example>
+		///   <para>
+		///     The following example shows how to use the notification with the DefaultCenter API:
+		///   </para>
+		///   <example>
+		///     <code lang="csharp lang-csharp"><![CDATA[
+		/// // Lambda style
+		/// NSNotificationCenter.DefaultCenter.AddObserver (
+		///     AVSampleBufferVideoRenderer.RequiresFlushToResumeDecodingDidChangeNotification, (notification) => { Console.WriteLine ("Received the notification RequiresFlushToResumeDecodingDidChange", notification); }
+		/// );
+		///
+		/// // Method style
+		/// void Callback (NSNotification notification)
+		/// {
+		///     Console.WriteLine ("Received the notification RequiresFlushToResumeDecodingDidChange", notification);
+		/// }
+		///
+		/// void Setup ()
+		/// {
+		///     NSNotificationCenter.DefaultCenter.AddObserver (AVSampleBufferVideoRenderer.RequiresFlushToResumeDecodingDidChangeNotification, Callback);
+		/// }
+		/// ]]></code>
+		///   </example>
+		/// </remarks>
+		[Field ("AVSampleBufferVideoRendererRequiresFlushToResumeDecodingDidChangeNotification",  "AVFoundation")]
+		[Advice ("Use AVSampleBufferVideoRenderer.Notifications.ObserveRequiresFlushToResumeDecodingDidChange helper method instead.")]
+		public static NSString RequiresFlushToResumeDecodingDidChangeNotification {
+			get {
+				if (_RequiresFlushToResumeDecodingDidChangeNotification is null)
+					_RequiresFlushToResumeDecodingDidChangeNotification = Dlfcn.GetStringConstant (Libraries.AVFoundation.Handle, "AVSampleBufferVideoRendererRequiresFlushToResumeDecodingDidChangeNotification")!;
+				return _RequiresFlushToResumeDecodingDidChangeNotification;
+			}
+		}
+		//
+		// Notifications
+		//
+		/// <summary>Notifications posted by the <see cref="global::AVFoundation.AVSampleBufferVideoRenderer" /> class.</summary>
+		/// <remarks>
+		///    <para>This class contains various helper methods that allow developers to observe events posted in the notification hub (<see cref="Foundation.NSNotificationCenter" />).</para>
+		///    <para>The methods defined in this class post events that invoke the provided method or lambda with a <see cref="Foundation.NSNotificationEventArgs" /> parameter, which contains strongly typed properties for the notification arguments.</para>
+		/// </remarks>
+		public static partial class Notifications {
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVSampleBufferVideoRenderer.AVSampleBufferVideoRendererDidFailToDecodeNotification" /> constant.</summary>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVSampleBufferVideoRenderer.AVSampleBufferVideoRendererDidFailToDecodeNotification" /> notifications.</para>
+			///   <example>
+			///   <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for any object
+			/// var token = AVSampleBufferVideoRenderer.Notifications.ObserveAVSampleBufferVideoRendererDidFailToDecode ((notification) => {
+			///   Console.WriteLine ("Observed AVSampleBufferVideoRendererDidFailToDecodeNotification!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveAVSampleBufferVideoRendererDidFailToDecode (EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (AVSampleBufferVideoRendererDidFailToDecodeNotification, notification => handler (null, new NSNotificationEventArgs (notification)));
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVSampleBufferVideoRenderer.AVSampleBufferVideoRendererDidFailToDecodeNotification" /> constant.</summary>
+			/// <param name="objectToObserve">The specific object to observe.</param>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVSampleBufferVideoRenderer.AVSampleBufferVideoRendererDidFailToDecodeNotification" /> notifications.</para>
+			///   <example>
+			///     <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for a single object
+			/// var token = AVSampleBufferVideoRenderer.Notifications.ObserveAVSampleBufferVideoRendererDidFailToDecode (objectToObserve, (notification) => {
+			///   Console.WriteLine ($"Observed AVSampleBufferVideoRendererDidFailToDecodeNotification for {nameof (objectToObserve)}!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveAVSampleBufferVideoRendererDidFailToDecode (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (AVSampleBufferVideoRendererDidFailToDecodeNotification, notification => handler (null, new NSNotificationEventArgs (notification)), objectToObserve);
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVSampleBufferVideoRenderer.RequiresFlushToResumeDecodingDidChangeNotification" /> constant.</summary>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVSampleBufferVideoRenderer.RequiresFlushToResumeDecodingDidChangeNotification" /> notifications.</para>
+			///   <example>
+			///   <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for any object
+			/// var token = AVSampleBufferVideoRenderer.Notifications.ObserveRequiresFlushToResumeDecodingDidChange ((notification) => {
+			///   Console.WriteLine ("Observed RequiresFlushToResumeDecodingDidChangeNotification!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveRequiresFlushToResumeDecodingDidChange (EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (RequiresFlushToResumeDecodingDidChangeNotification, notification => handler (null, new NSNotificationEventArgs (notification)));
+			}
+			/// <summary>Strongly typed notification for the <see cref="global::AVFoundation.AVSampleBufferVideoRenderer.RequiresFlushToResumeDecodingDidChangeNotification" /> constant.</summary>
+			/// <param name="objectToObserve">The specific object to observe.</param>
+			/// <param name="handler">The handler that responds to the notification when it occurs.</param>
+			/// <returns>Token object that can be used to stop receiving notifications by either disposing it or passing it to <see cref="Foundation.NSNotificationCenter.RemoveObservers(System.Collections.Generic.IEnumerable{Foundation.NSObject})" />.</returns>
+			/// <remarks>
+			///   <para>This method can be used to subscribe to <see cref="global::AVFoundation.AVSampleBufferVideoRenderer.RequiresFlushToResumeDecodingDidChangeNotification" /> notifications.</para>
+			///   <example>
+			///     <code lang="csharp lang-csharp"><![CDATA[
+			/// // Listen to all notifications posted for a single object
+			/// var token = AVSampleBufferVideoRenderer.Notifications.ObserveRequiresFlushToResumeDecodingDidChange (objectToObserve, (notification) => {
+			///   Console.WriteLine ($"Observed RequiresFlushToResumeDecodingDidChangeNotification for {nameof (objectToObserve)}!");
+			/// };
+			/// 
+			/// // Stop listening for notifications
+			/// token.Dispose ();
+			/// ]]></code>
+			///   </example>
+			/// </remarks>
+			public static NSObject ObserveRequiresFlushToResumeDecodingDidChange (NSObject objectToObserve, EventHandler<NSNotificationEventArgs> handler)
+			{
+				return NSNotificationCenter.DefaultCenter.AddObserver (RequiresFlushToResumeDecodingDidChangeNotification, notification => handler (null, new NSNotificationEventArgs (notification)), objectToObserve);
+			}
+		}
+	} /* class AVSampleBufferVideoRenderer */
+}

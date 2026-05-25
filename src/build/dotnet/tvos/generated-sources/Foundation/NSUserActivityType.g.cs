@@ -1,0 +1,59 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using GLKit;
+using Metal;
+using CoreML;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Security;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using ObjCRuntime;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace Foundation {
+	/// <summary>Defines types of <see cref="T:Foundation.NSUserActivity" /> available from the system (currently only browsing the Web).</summary><remarks>To be added.</remarks>
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
+	public unsafe static partial class NSUserActivityType  {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _BrowsingWeb;
+		/// <summary>Represents the value associated with the constant NSUserActivityTypeBrowsingWeb</summary><value></value><remarks>To be added.</remarks>
+		[Field ("NSUserActivityTypeBrowsingWeb",  "Foundation")]
+		public static NSString BrowsingWeb {
+			get {
+				if (_BrowsingWeb is null)
+					_BrowsingWeb = Dlfcn.GetStringConstant (Libraries.Foundation.Handle, "NSUserActivityTypeBrowsingWeb")!;
+				return _BrowsingWeb;
+			}
+		}
+	} /* class NSUserActivityType */
+}

@@ -1,0 +1,88 @@
+//
+// Auto-generated from generator.cs, do not edit
+//
+// We keep references to objects, so warning 414 is expected
+#pragma warning disable 414
+using System;
+using System.Drawing;
+using System.Diagnostics;
+using System.ComponentModel;
+using System.Threading.Tasks;
+using System.Runtime.Versioning;
+using System.Runtime.InteropServices;
+using System.Diagnostics.CodeAnalysis;
+using UIKit;
+using Metal;
+using CoreML;
+using AppKit;
+using MapKit;
+using Photos;
+using ModelIO;
+using Network;
+using SceneKit;
+using Contacts;
+using Security;
+using CloudKit;
+using Messages;
+using AudioUnit;
+using CoreVideo;
+using CoreMedia;
+using QuickLook;
+using CoreImage;
+using SpriteKit;
+using Foundation;
+using CoreMotion;
+using ObjCRuntime;
+using AddressBook;
+using MediaPlayer;
+using GameplayKit;
+using CoreGraphics;
+using CoreLocation;
+using AVFoundation;
+using FileProvider;
+using CoreAnimation;
+using CoreFoundation;
+using NetworkExtension;
+using MetalPerformanceShadersGraph;
+#nullable enable
+namespace Vision {
+	[SupportedOSPlatform ("maccatalyst")]
+	[SupportedOSPlatform ("ios")]
+	[SupportedOSPlatform ("macos")]
+	[SupportedOSPlatform ("tvos")]
+	internal unsafe static partial class VNImageOptionKeys  {
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _CIContextKey;
+		/// <summary>Represents the value associated with the constant 'VNImageOptionCIContext'.</summary>
+		[Field ("VNImageOptionCIContext",  "Vision")]
+		public static NSString CIContextKey {
+			get {
+				if (_CIContextKey is null)
+					_CIContextKey = Dlfcn.GetStringConstant (Libraries.Vision.Handle, "VNImageOptionCIContext")!;
+				return _CIContextKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _CameraIntrinsicsKey;
+		/// <summary>Represents the value associated with the constant 'VNImageOptionCameraIntrinsics'.</summary>
+		[Field ("VNImageOptionCameraIntrinsics",  "Vision")]
+		public static NSString CameraIntrinsicsKey {
+			get {
+				if (_CameraIntrinsicsKey is null)
+					_CameraIntrinsicsKey = Dlfcn.GetStringConstant (Libraries.Vision.Handle, "VNImageOptionCameraIntrinsics")!;
+				return _CameraIntrinsicsKey;
+			}
+		}
+		[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]
+		static NSString? _PropertiesKey;
+		/// <summary>Represents the value associated with the constant 'VNImageOptionProperties'.</summary>
+		[Field ("VNImageOptionProperties",  "Vision")]
+		public static NSString PropertiesKey {
+			get {
+				if (_PropertiesKey is null)
+					_PropertiesKey = Dlfcn.GetStringConstant (Libraries.Vision.Handle, "VNImageOptionProperties")!;
+				return _PropertiesKey;
+			}
+		}
+	} /* class VNImageOptionKeys */
+}

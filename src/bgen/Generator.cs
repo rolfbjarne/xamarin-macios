@@ -2533,27 +2533,45 @@ public partial class Generator : IMemberGatherer {
 			return;
 
 		// Write StringBuilder content line-by-line without allocating a string
-		int start = 0;
-		while (start < sb.Length) {
-			int nlPos = -1;
-			for (int i = start; i < sb.Length; i++) {
-				if (sb [i] == '\n') {
-					nlPos = i;
-					break;
+		// Fast path: check if there are any newlines
+		bool hasNewline = false;
+		for (int i = 0; i < sb.Length; i++) {
+			if (sb [i] == '\n') {
+				hasNewline = true;
+				break;
+			}
+		}
+
+		if (!hasNewline) {
+			// Fast path: no newlines, write directly
+			w!.Write ('\t', indent);
+			foreach (var chunk in sb.GetChunks ())
+				w!.Write (chunk.Span);
+			w!.WriteLine ();
+		} else {
+			// Slow path: split on newlines
+			int start = 0;
+			while (start < sb.Length) {
+				int nlPos = -1;
+				for (int i = start; i < sb.Length; i++) {
+					if (sb [i] == '\n') {
+						nlPos = i;
+						break;
+					}
 				}
+
+				int lineEnd = nlPos < 0 ? sb.Length : nlPos;
+				int lineLen = lineEnd - start;
+
+				if (lineLen > 0) {
+					w!.Write ('\t', indent);
+					for (int i = start; i < lineEnd; i++)
+						w!.Write (sb [i]);
+					w!.WriteLine ();
+				}
+
+				start = nlPos < 0 ? sb.Length : nlPos + 1;
 			}
-
-			int lineEnd = nlPos < 0 ? sb.Length : nlPos;
-			int lineLen = lineEnd - start;
-
-			if (lineLen > 0) {
-				w!.Write ('\t', indent);
-				for (int i = start; i < lineEnd; i++)
-					w!.Write (sb [i]);
-				w!.WriteLine ();
-			}
-
-			start = nlPos < 0 ? sb.Length : nlPos + 1;
 		}
 	}
 

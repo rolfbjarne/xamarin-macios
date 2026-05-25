@@ -965,11 +965,16 @@ public partial class Generator : IMemberGatherer {
 			return true;
 
 		// Else look up to see if we are part of a property and look for the attribute there
-		var owningProperty = mi.DeclaringType?.GetProperties ()
-			.FirstOrDefault (prop => prop.GetSetMethod () == mi ||
-					prop.GetGetMethod () == mi);
-		if (owningProperty is not null && AttributeManager.HasAttribute<MarshalNativeExceptionsAttribute> (owningProperty))
-			return true;
+		var properties = mi.DeclaringType?.GetProperties ();
+		if (properties is not null) {
+			for (int i = 0; i < properties.Length; i++) {
+				if (properties [i].GetSetMethod () == mi || properties [i].GetGetMethod () == mi) {
+					if (AttributeManager.HasAttribute<MarshalNativeExceptionsAttribute> (properties [i]))
+						return true;
+					break;
+				}
+			}
+		}
 
 		return false;
 	}
@@ -1757,14 +1762,14 @@ public partial class Generator : IMemberGatherer {
 						  by_ref_init: out by_ref_init);
 
 			if (by_ref_init.Length > 0)
-				print (by_ref_init.ToString ());
+				print (by_ref_init);
 
 			use_temp_return = mi.ReturnType != TypeCache.System_Void;
 			if (use_temp_return)
 				GetReturnsWrappers (mi, null, null, out cast_a, out cast_b);
 
 			if (convs.Length > 0)
-				print (convs.ToString ());
+				print (convs);
 			print ("{0}{1}invoker (BlockPointer{2}){3};",
 				   use_temp_return ? "var ret = " : "",
 				   cast_a,
@@ -1773,9 +1778,9 @@ public partial class Generator : IMemberGatherer {
 			if (needsGCKeepAlives)
 				GenerateArgumentGCKeepAlives (mi, null);
 			if (disposes.Length > 0)
-				print (disposes.ToString ());
+				print (disposes);
 			if (by_ref_processing.Length > 0)
-				print (sw, by_ref_processing.ToString ());
+				print (sw, by_ref_processing);
 			if (use_temp_return) {
 				if (mi.ReturnType == TypeCache.System_Boolean) {
 					print ("return ret != 0;");
@@ -1784,7 +1789,7 @@ public partial class Generator : IMemberGatherer {
 				}
 			}
 			if (post_return?.Length > 0)
-				print (sw, post_return.ToString ());
+				print (sw, post_return);
 			indent--; print ("}");
 			indent--;
 			print ("}} /* class {0} */", ti.NativeInvokerName);
@@ -2407,6 +2412,11 @@ public partial class Generator : IMemberGatherer {
 		print (sw, format);
 	}
 
+	public void print (StringBuilder sb)
+	{
+		print (sw, sb);
+	}
+
 	public void print (string format, params object? [] args)
 	{
 		print (sw, format, args);
@@ -2482,6 +2492,39 @@ public partial class Generator : IMemberGatherer {
 	public void print (StreamWriter? w, string format, object? arg0, object? arg1, object? arg2)
 	{
 		print (w, string.Format (format, arg0, arg1, arg2));
+	}
+
+	public void print (StreamWriter? w, StringBuilder sb)
+	{
+		if (indent < 0)
+			throw new InvalidOperationException ("Indent is a negative value.");
+
+		if (sb.Length == 0)
+			return;
+
+		// Write StringBuilder content line-by-line without allocating a string
+		int start = 0;
+		while (start < sb.Length) {
+			int nlPos = -1;
+			for (int i = start; i < sb.Length; i++) {
+				if (sb [i] == '\n') {
+					nlPos = i;
+					break;
+				}
+			}
+
+			int lineEnd = nlPos < 0 ? sb.Length : nlPos;
+			int lineLen = lineEnd - start;
+
+			if (lineLen > 0) {
+				w!.Write ('\t', indent);
+				for (int i = start; i < lineEnd; i++)
+					w!.Write (sb [i]);
+				w!.WriteLine ();
+			}
+
+			start = nlPos < 0 ? sb.Length : nlPos + 1;
+		}
 	}
 
 	public void print (StreamWriter? w, IEnumerable e)
@@ -3370,9 +3413,14 @@ public partial class Generator : IMemberGatherer {
 		if (type is null)
 			return null;
 
-		var prop = type.GetProperties ()
-			.Where (pi => pi.Name == methodName)
-			.FirstOrDefault ();
+		var properties = type.GetProperties ();
+		PropertyInfo? prop = null;
+		for (int i = 0; i < properties.Length; i++) {
+			if (properties [i].Name == methodName) {
+				prop = properties [i];
+				break;
+			}
+		}
 
 		if (prop is not null)
 			return prop.GetAvailability (AvailabilityKind.Introduced, this);
@@ -3703,14 +3751,14 @@ public partial class Generator : IMemberGatherer {
 		var argsArray = args.ToString ();
 
 		if (by_ref_init.Length > 0)
-			print (by_ref_init.ToString ());
+			print (by_ref_init);
 
 		if (propInfo is not null && IsSetter (mi) && HasBindAsAttribute (propInfo)) {
 			convs.AppendFormat ("using var nsb_{0} = {1}\n", propInfo.Name, GetToBindAsWrapper (mi, minfo, null));
 		}
 
 		if (convs.Length > 0)
-			print (sw, convs.ToString ());
+			print (sw, convs);
 
 		Inject<PreSnippetAttribute> (mi);
 		var align = AttributeManager.GetCustomAttribute<AlignAttribute> (mi);
@@ -3824,7 +3872,7 @@ public partial class Generator : IMemberGatherer {
 		if (needsGCKeepAlives)
 			GenerateArgumentGCKeepAlives (mi, propInfo);
 		if (disposes.Length > 0)
-			print (sw, disposes.ToString ());
+			print (sw, disposes);
 		if ((body_options & BodyOption.StoreRet) == BodyOption.StoreRet) {
 			// nothing to do
 		} else if ((body_options & BodyOption.CondStoreRet) == BodyOption.CondStoreRet) {
@@ -3869,7 +3917,7 @@ public partial class Generator : IMemberGatherer {
 		if (AttributeManager.HasAttribute<FactoryAttribute> (mi))
 			print ("ret.Release (); // Release implicit ref taken by GetNSObject");
 		if (by_ref_processing.Length > 0)
-			print (sw, by_ref_processing.ToString ());
+			print (sw, by_ref_processing);
 		if (use_temp_return) {
 			if (AttributeManager.HasAttribute<ProxyAttribute> (mi.ReturnParameter))
 				print ("ret.IsDirectBinding = true;");
@@ -3903,7 +3951,7 @@ public partial class Generator : IMemberGatherer {
 		if (minfo.is_ctor)
 			WriteMarkDirtyIfDerived (sw, mi.DeclaringType!);
 		if (post_return?.Length > 0)
-			print (post_return.ToString ());
+			print (post_return);
 		indent--;
 	}
 

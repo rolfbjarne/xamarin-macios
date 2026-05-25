@@ -204,9 +204,10 @@ profile_time_only() {
     end_time=$(python3 -c "import time; print(time.time())")
     elapsed=$(python3 -c "print(f'{$end_time - $start_time:.2f}')")
 
-    local peak_rss alloc_bytes
+    local peak_rss alloc_bytes gc_counts
     peak_rss=$(echo "$output" | grep "maximum resident set size" | awk '{print $1}')
     alloc_bytes=$(echo "$output" | grep "BGEN_ALLOCATIONS:" | sed 's/.*: \([0-9]*\) bytes.*/\1/')
+    gc_counts=$(echo "$output" | grep "BGEN_GC_COUNTS:" | sed 's/.*BGEN_GC_COUNTS: //')
 
     echo ""
     echo "=== Results ==="
@@ -216,6 +217,9 @@ profile_time_only() {
     fi
     if [ -n "$alloc_bytes" ]; then
         echo "  Total allocated:  $((alloc_bytes / 1024 / 1024)) MB ($alloc_bytes bytes)"
+    fi
+    if [ -n "$gc_counts" ]; then
+        echo "  GC collections:   $gc_counts"
     fi
     echo ""
 }

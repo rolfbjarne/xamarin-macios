@@ -129,6 +129,7 @@ public class BindingTouch : IDisposable {
 		if (Environment.GetEnvironmentVariable ("BGEN_REPORT_ALLOCATIONS") == "1") {
 			var allocated = GC.GetTotalAllocatedBytes (precise: true);
 			Console.Error.WriteLine ($"BGEN_ALLOCATIONS: {allocated} bytes ({allocated / (1024 * 1024)} MB)");
+			Console.Error.WriteLine ($"BGEN_GC_COUNTS: gen0={GC.CollectionCount (0)}, gen1={GC.CollectionCount (1)}, gen2={GC.CollectionCount (2)}");
 		}
 		return result;
 	}

@@ -1105,9 +1105,12 @@ public partial class Generator : IMemberGatherer {
 			sb.Append ("_");
 			try {
 				var marshalType = ParameterGetMarshalType (new MarshalInfo (this, mi, pi));
-				if (marshalType.IndexOfAny (marshalTypeSigCharsToReplace) >= 0)
-					sb.Append (marshalType.Replace (' ', '_').Replace ('*', '_'));
-				else
+				if (marshalType.IndexOfAny (marshalTypeSigCharsToReplace) >= 0) {
+					for (int ci = 0; ci < marshalType.Length; ci++) {
+						var ch = marshalType [ci];
+						sb.Append (ch == ' ' || ch == '*' ? '_' : ch);
+					}
+				} else
 					sb.Append (marshalType);
 			} catch (BindingException ex) {
 				throw new BindingException (1079, ex.Error, ex, ex.Message, pi.Name.GetSafeParamName (), mi.DeclaringType, mi.Name);

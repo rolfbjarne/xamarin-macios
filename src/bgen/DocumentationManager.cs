@@ -128,7 +128,7 @@ public class DocumentationManager {
 			name = GetDocId (md.DeclaringType!) + "." + name;
 		if (md.IsGenericMethodDefinition)
 			name += $"``{md.GetGenericArguments ().Length}";
-		var parameters = md.GetParameters ();
+		var parameters = md.GetCachedParameters ();
 		if (parameters.Length > 0) {
 			name += "(" + string.Join (",", parameters.Select (p => GetDocId (p.ParameterType))) + ")";
 		} else if (alwaysIncludeParenthesis) {

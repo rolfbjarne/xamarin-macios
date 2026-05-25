@@ -17,12 +17,12 @@ class AsyncMethodInfo : MemberInformation {
 		: base (generator, gather, mi, type, categoryExtensionType, false, isExtensionMethod)
 	{
 		this.MethodInfo = mi;
-		this.AsyncInitialParams = mi.GetParameters ().DropLast ();
+		this.AsyncInitialParams = mi.GetCachedParameters ().DropLast ();
 
-		var lastType = mi.GetParameters ().Last ().ParameterType;
+		var lastType = mi.GetCachedParameters ().Last ().ParameterType;
 		if (!lastType.IsSubclassOf (generator.TypeCache.System_Delegate))
 			throw new BindingException (1036, true, mi.DeclaringType?.FullName, mi.Name, lastType.FullName);
-		var cbParams = lastType.GetMethod ("Invoke")?.GetParameters () ?? Array.Empty<ParameterInfo> ();
+		var cbParams = lastType.GetMethod ("Invoke")?.GetCachedParameters () ?? Array.Empty<ParameterInfo> ();
 		AsyncCompletionParams = cbParams;
 
 		var lastParam = cbParams.LastOrDefault ();

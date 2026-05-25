@@ -124,7 +124,7 @@ public class MemberInformation {
 		: this (generator, gather, mi, type, isInterfaceImpl, isExtensionMethod, isAppearance, isModel)
 	{
 		is_basewrapper_protocol_method = isBaseWrapperProtocolMethod;
-		foreach (ParameterInfo pi in mi.GetParameters ()) {
+		foreach (ParameterInfo pi in mi.GetCachedParameters ()) {
 			if (pi.ParameterType.IsSubclassOf (Generator.TypeCache.System_Delegate)) {
 				is_unsafe = true;
 				break;

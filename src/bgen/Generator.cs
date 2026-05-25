@@ -634,7 +634,7 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		pars.Add (new TrampolineParameterInfo ("IntPtr", "block"));
-		var parameters = mi.GetParameters ();
+		var parameters = mi.GetCachedParameters ();
 		foreach (var pi in parameters) {
 			var isForced = HasForcedAttribute (pi, out var isForcedOwns);
 
@@ -1036,7 +1036,7 @@ public partial class Generator : IMemberGatherer {
 		if (stret)
 			sb.Append ("_stret");
 
-		foreach (var pi in mi.GetParameters ()) {
+		foreach (var pi in mi.GetCachedParameters ()) {
 			if (IsTarget (pi))
 				continue;
 			sb.Append ("_");
@@ -1072,7 +1072,7 @@ public partial class Generator : IMemberGatherer {
 		b.Clear ();
 		int n = 0;
 
-		foreach (var pi in mi.GetParameters ()) {
+		foreach (var pi in mi.GetCachedParameters ()) {
 			if (IsTarget (pi))
 				continue;
 
@@ -1663,7 +1663,7 @@ public partial class Generator : IMemberGatherer {
 			generated_trampolines [ti.Type] = true;
 
 			var mi = ti.Type.GetMethod ("Invoke")!;
-			var parameters = mi.GetParameters ();
+			var parameters = mi.GetCachedParameters ();
 
 			print ("");
 			PrintExperimentalAttribute (ti.Type);
@@ -2970,7 +2970,7 @@ public partial class Generator : IMemberGatherer {
 	//
 	public string MakeSignature (MemberInformation minfo)
 	{
-		return MakeSignature (minfo, false, minfo.Method!.GetParameters ());
+		return MakeSignature (minfo, false, minfo.Method!.GetCachedParameters ());
 	}
 
 	//
@@ -2978,7 +2978,7 @@ public partial class Generator : IMemberGatherer {
 	//
 	public string MakeSignature (MemberInformation minfo, bool alreadyPreserved)
 	{
-		return MakeSignature (minfo, false, minfo.Method!.GetParameters (), "", alreadyPreserved);
+		return MakeSignature (minfo, false, minfo.Method!.GetCachedParameters (), "", alreadyPreserved);
 	}
 
 	public string GetAsyncName (MethodInfo mi)
@@ -3323,7 +3323,7 @@ public partial class Generator : IMemberGatherer {
 
 		// If we have supercall == false, we can be a Bind method that has a [Target]
 		if (supercall == false && !minfo.is_static) {
-			foreach (var pi in mi.GetParameters ()) {
+			foreach (var pi in mi.GetCachedParameters ()) {
 				if (IsTarget (pi)) {
 					if (pi.ParameterType == TypeCache.System_String) {
 						var mai = new MarshalInfo (this, mi, pi);
@@ -3554,7 +3554,7 @@ public partial class Generator : IMemberGatherer {
 		by_ref_init.Clear ();
 		post_return.Clear ();
 
-		foreach (var pi in mi.GetParameters ()) {
+		foreach (var pi in mi.GetCachedParameters ()) {
 			var safe_name = pi.Name.GetSafeParamName ();
 			var mai = new MarshalInfo (this, mi, pi);
 
@@ -3719,7 +3719,7 @@ public partial class Generator : IMemberGatherer {
 		if (AttributeManager.IsNullable (mi))
 			exceptions.Add (ErrorHelper.CreateWarning (1118, mi));
 
-		foreach (var pi in mi.GetParameters ()) {
+		foreach (var pi in mi.GetCachedParameters ()) {
 			var safe_name = pi.Name.GetSafeParamName ();
 			if (!BindThirdPartyLibrary) {
 				if (!mi.IsSpecialName && IsModel (pi.ParameterType)) {
@@ -3750,7 +3750,7 @@ public partial class Generator : IMemberGatherer {
 
 	void GenerateArgumentGCKeepAlives (MethodInfo mi, PropertyInfo? propInfo = null)
 	{
-		foreach (var pi in mi.GetParameters ()) {
+		foreach (var pi in mi.GetCachedParameters ()) {
 			var cap = propInfo?.SetMethod == mi ? (ICustomAttributeProvider) propInfo : (ICustomAttributeProvider) pi;
 			var bind_as = GetBindAsAttribute (cap);
 			var pit = pi.GetBindingType (mi, bind_as);
@@ -4614,7 +4614,7 @@ public partial class Generator : IMemberGatherer {
 		string extra = "";
 
 		if (asyncKind == AsyncMethodKind.WithResultOutParameter) {
-			if (minfo.Method!.GetParameters ().Length > 1)
+			if (minfo.Method!.GetCachedParameters ().Length > 1)
 				extra = ", ";
 			extra += "out " + TypeManager.FormatType (minfo.MethodInfo.DeclaringType, minfo.MethodInfo.ReturnType) + " " + minfo.GetUniqueParamName ("result");
 		}
@@ -4829,7 +4829,7 @@ public partial class Generator : IMemberGatherer {
 		if (AttributeManager.HasAttribute<ManualAttribute> (mi))
 			return;
 
-		var miParameters = mi.GetParameters ();
+		var miParameters = mi.GetCachedParameters ();
 		foreach (var pi in miParameters)
 			if (AttributeManager.HasAttribute<RetainAttribute> (pi)) {
 				print ("#pragma warning disable 168");
@@ -4994,7 +4994,7 @@ public partial class Generator : IMemberGatherer {
 	static PropertyInfo? GetProperty (MethodInfo method, bool getter = true, bool setter = true)
 	{
 		var props = method.DeclaringType!.GetProperties ();
-		if (method.GetParameters ().Length == 0)
+		if (method.GetCachedParameters ().Length == 0)
 			return !getter ? null : props.FirstOrDefault (prop => prop.GetGetMethod () == method);
 		else
 			return !setter ? null : props.FirstOrDefault (prop => prop.GetSetMethod () == method);
@@ -5036,11 +5036,11 @@ public partial class Generator : IMemberGatherer {
 					print ("[MonoNativeFunctionWrapper]\n");
 
 				var accessibility = mi.DeclaringType.IsInternal (this) ? "internal" : "public";
-				var isUnsafe = mi.GetParameters ().Any ((v => v.ParameterType.IsPointer)) || mi.ReturnType.IsPointer;
+				var isUnsafe = mi.GetCachedParameters ().Any ((v => v.ParameterType.IsPointer)) || mi.ReturnType.IsPointer;
 				print ("{3}{4} delegate {0} {1} ({2});",
 					   TypeManager.RenderType (mi.ReturnType, mi.ReturnTypeCustomAttributes),
 					   shortName,
-					   RenderParameterDecl (mi.GetParameters ()),
+					   RenderParameterDecl (mi.GetCachedParameters ()),
 					   accessibility,
 					   isUnsafe ? " unsafe" : string.Empty);
 			}
@@ -5243,7 +5243,7 @@ public partial class Generator : IMemberGatherer {
 					sb.Append ($", ReturnTypeDelegateProxy = typeof (ObjCRuntime.Trampolines.{ti.StaticName})");
 				}
 			}
-			var parameters = mi.GetParameters ();
+			var parameters = mi.GetCachedParameters ();
 			if (parameters is not null && parameters.Length > 0) {
 				sb.Append (", ParameterType = new Type [] { ");
 				for (int i = 0; i < parameters.Length; i++) {
@@ -5535,7 +5535,7 @@ public partial class Generator : IMemberGatherer {
 			var computeSignature = new Func<MethodInfo, string> ((MethodInfo minfo) => {
 				var sig = new StringBuilder ();
 				sig.Append ('(');
-				foreach (var param in minfo.GetParameters ())
+				foreach (var param in minfo.GetCachedParameters ())
 					sig.Append (param.ParameterType.FullName).Append (' ');
 				sig.Append (')');
 				return sig.ToString ();
@@ -6552,7 +6552,7 @@ public partial class Generator : IMemberGatherer {
 
 						// Verify all of the versions have the same arguments / return value
 						// And just generate the first one (us)
-						var methodParams = mi.GetParameters ();
+						var methodParams = mi.GetCachedParameters ();
 						for (int k = 0; k < typeContractMethods.Length; k++) {
 							var sel = GetSelector (typeContractMethods [k]);
 							if (sel is null || sel != minfo.selector)
@@ -6561,8 +6561,8 @@ public partial class Generator : IMemberGatherer {
 							if (mi.ReturnType != duplicateMethod.ReturnType)
 								throw new BindingException (1038, true, mi.Name, type.Name);
 
-							if (methodParams.Length != duplicateMethod.GetParameters ().Length)
-								throw new BindingException (1039, true, minfo.selector, type.Name, mi.GetParameters ().Length, duplicateMethod.GetParameters ().Length);
+							if (methodParams.Length != duplicateMethod.GetCachedParameters ().Length)
+								throw new BindingException (1039, true, minfo.selector, type.Name, mi.GetCachedParameters ().Length, duplicateMethod.GetCachedParameters ().Length);
 						}
 
 						int i = 0;
@@ -6571,7 +6571,7 @@ public partial class Generator : IMemberGatherer {
 								var sel = GetSelector (typeContractMethods [k]);
 								if (sel is null || sel != minfo.selector)
 									continue;
-								var duplicateParam = typeContractMethods [k].GetParameters () [i];
+								var duplicateParam = typeContractMethods [k].GetCachedParameters () [i];
 								if (param.IsOut != duplicateParam.IsOut)
 									throw new BindingException (1040, true, minfo.selector, type.Name, i);
 								if (param.ParameterType != duplicateParam.ParameterType)
@@ -7145,7 +7145,7 @@ public partial class Generator : IMemberGatherer {
 						if (ShouldSkipEventGeneration (mi))
 							continue;
 
-						var pars = mi.GetParameters ();
+						var pars = mi.GetCachedParameters ();
 						int minPars = bta.Singleton ? 0 : 1;
 
 						if (AttributeManager.HasAttribute<NoDefaultValueAttribute> (mi))
@@ -7165,7 +7165,7 @@ public partial class Generator : IMemberGatherer {
 							previous_miname = miname;
 
 						if (mi.ReturnType == TypeCache.System_Void) {
-							if (bta.Singleton || mi.GetParameters ().Length == 1)
+							if (bta.Singleton || mi.GetCachedParameters ().Length == 1)
 								print ("internal EventHandler? {0};", miname);
 							else
 								print ("internal EventHandler<{0}>? {1};", Nomenclator.GetEventArgName (mi), miname);
@@ -7352,7 +7352,7 @@ public partial class Generator : IMemberGatherer {
 						if (mi.ReturnType == TypeCache.System_Void) {
 							PrintObsoleteAttributes (mi);
 
-							if (bta.Singleton && mi.GetParameters ().Length == 0 || mi.GetParameters ().Length == 1)
+							if (bta.Singleton && mi.GetCachedParameters ().Length == 0 || mi.GetCachedParameters ().Length == 1)
 								print ("public event EventHandler {0} {{", Nomenclator.GetEventName (mi).CamelCase ());
 							else
 								print ("public event EventHandler<{0}> {1} {{", Nomenclator.GetEventArgName (mi), Nomenclator.GetEventName (mi).CamelCase ());
@@ -7903,7 +7903,7 @@ public partial class Generator : IMemberGatherer {
 		Type currentType = type;
 		do {
 			// avoid AmbiguousMatchException when GetMethod is used.
-			var parameters = mi.GetParameters ().Select ((arg) => arg.ParameterType).ToArray ();
+			var parameters = mi.GetCachedParameters ().Select ((arg) => arg.ParameterType).ToArray ();
 			var method = currentType.GetMethod (mi.Name, parameters);
 			if (method is not null) {
 				var export = GetExportAttribute (method, out var wrap);

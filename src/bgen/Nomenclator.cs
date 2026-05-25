@@ -56,12 +56,12 @@ public class Nomenclator {
 
 	public string GetEventArgName (MethodInfo mi)
 	{
-		if (mi.GetParameters ().Length == 1)
+		if (mi.GetCachedParameters ().Length == 1)
 			return "EventArgs";
 
 		var a = attributeManager.GetCustomAttribute<EventArgsAttribute> (mi);
 		if (a is null)
-			throw new BindingException (1004, true, mi.DeclaringType!.FullName, mi.Name, mi.GetParameters ().Length);
+			throw new BindingException (1004, true, mi.DeclaringType!.FullName, mi.Name, mi.GetCachedParameters ().Length);
 
 		var ea = (EventArgsAttribute) a;
 		if (ea.ArgName.EndsWith ("EventArgs", StringComparison.Ordinal))

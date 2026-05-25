@@ -14,6 +14,17 @@ using ObjCRuntime;
 
 public static class GeneratorExtensions {
 
+	static readonly Dictionary<MethodBase, ParameterInfo []> parameterCache = new ();
+
+	public static ParameterInfo [] GetCachedParameters (this MethodBase method)
+	{
+		if (!parameterCache.TryGetValue (method, out var parameters)) {
+			parameters = method.GetParameters ();
+			parameterCache [method] = parameters;
+		}
+		return parameters;
+	}
+
 	static string cachedTabs = new string ('\t', 32);
 
 	public static StreamWriter Write (this StreamWriter sw, char c, int count)

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
 #nullable enable
@@ -55,15 +56,24 @@ public static class StringExtensions {
 		return char.ToUpper (str [0]) + str.Substring (1);
 	}
 
+	static readonly Dictionary<string, string?> safeParamNameCache = new ();
+
 	public static string? GetSafeParamName (this string? paramName)
 	{
 		if (paramName is null)
 			return paramName;
 
+		if (safeParamNameCache.TryGetValue (paramName, out var cached))
+			return cached;
+
+		string? result;
 		if (!IsValidIdentifier (paramName, out var hasIllegalChars)) {
-			return hasIllegalChars ? null : "@" + paramName;
+			result = hasIllegalChars ? null : "@" + paramName;
+		} else {
+			result = paramName;
 		}
-		return paramName;
+		safeParamNameCache [paramName] = result;
+		return result;
 	}
 
 	// Since we're building against the iOS assemblies and there's no code generation there,

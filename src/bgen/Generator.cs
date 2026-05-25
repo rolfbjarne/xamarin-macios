@@ -1007,7 +1007,7 @@ public partial class Generator : IMemberGatherer {
 			return true;
 
 		// Else look up to see if we are part of a property and look for the attribute there
-		var properties = mi.DeclaringType?.GetProperties ();
+		var properties = mi.DeclaringType?.GetCachedProperties ();
 		if (properties is not null) {
 			for (int i = 0; i < properties.Length; i++) {
 				if (properties [i].GetSetMethod () == mi || properties [i].GetGetMethod () == mi) {
@@ -3540,7 +3540,7 @@ public partial class Generator : IMemberGatherer {
 		if (type is null)
 			return null;
 
-		var properties = type.GetProperties ();
+		var properties = type.GetCachedProperties ();
 		PropertyInfo? prop = null;
 		for (int i = 0; i < properties.Length; i++) {
 			if (properties [i].Name == methodName) {
@@ -4080,7 +4080,7 @@ public partial class Generator : IMemberGatherer {
 		if (type is null || type == TypeCache.System_Object)
 			return null;
 
-		var props = type.GetProperties ();
+		var props = type.GetCachedProperties ();
 		foreach (var pi in props) {
 			if (pi.Name != @this.MethodName)
 				continue;
@@ -5008,11 +5008,24 @@ public partial class Generator : IMemberGatherer {
 
 	static PropertyInfo? GetProperty (MethodInfo method, bool getter = true, bool setter = true)
 	{
-		var props = method.DeclaringType!.GetProperties ();
-		if (method.GetCachedParameters ().Length == 0)
-			return !getter ? null : props.FirstOrDefault (prop => prop.GetGetMethod () == method);
-		else
-			return !setter ? null : props.FirstOrDefault (prop => prop.GetSetMethod () == method);
+		var props = method.DeclaringType!.GetCachedProperties ();
+		if (method.GetCachedParameters ().Length == 0) {
+			if (!getter)
+				return null;
+			foreach (var prop in props) {
+				if (prop.GetGetMethod () == method)
+					return prop;
+			}
+			return null;
+		} else {
+			if (!setter)
+				return null;
+			foreach (var prop in props) {
+				if (prop.GetSetMethod () == method)
+					return prop;
+			}
+			return null;
+		}
 	}
 
 	void RenderDelegates (Dictionary<string, MethodInfo> delegateTypes)

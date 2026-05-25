@@ -10,7 +10,7 @@ public partial class Generator {
 	readonly List<AvailabilityBaseAttribute> reusable_memberAvailability = new ();
 	readonly List<AvailabilityBaseAttribute> reusable_availabilityToConsider = new ();
 
-	AvailabilityBaseAttribute [] GetPlatformAttributesToPrint (MemberInfo mi, MemberInfo? context, MemberInfo? inlinedType)
+	IReadOnlyList<AvailabilityBaseAttribute> GetPlatformAttributesToPrint (MemberInfo mi, MemberInfo? context, MemberInfo? inlinedType)
 	{
 		// Attributes are directly on the member
 		var attrs = AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (mi);
@@ -83,7 +83,7 @@ public partial class Generator {
 				}
 			}
 
-			// Remove any duplicate attributes (reference equality) and return as array
+			// Remove any duplicate attributes (reference equality) and return
 			// The list is typically small (5-10 items), so O(n^2) dedup is fine
 			for (int i = memberAvailability.Count - 1; i > 0; i--) {
 				for (int j = 0; j < i; j++) {
@@ -93,7 +93,7 @@ public partial class Generator {
 					}
 				}
 			}
-			return memberAvailability.ToArray ();
+			return memberAvailability;
 		}
 		return attrs;
 	}

@@ -15,6 +15,8 @@ public class TypeManager {
 	Dictionary<Type, string>? nsnumberToValueMap;
 	HashSet<string> typesThatMustAlwaysBeGloballyNamed = new ();
 	readonly Dictionary<(string?, Type), string> formatTypeCache = new ();
+	readonly Dictionary<Type, string> renderTypeCache = new ();
+	readonly Dictionary<Type, string> renderTypeNullableCache = new ();
 
 	public void SetTypesThatMustAlwaysBeGloballyNamed (Type [] types)
 	{
@@ -359,10 +361,29 @@ public class TypeManager {
 
 	public string RenderType (Type t, ICustomAttributeProvider? provider = null)
 	{
-		var nullable = string.Empty;
-		if (provider is not null && !t.IsValueType && AttributeManager.HasAttribute<NullAllowedAttribute> (provider))
-			nullable = "?";
+		bool isNullable = provider is not null && !t.IsValueType && AttributeManager.HasAttribute<NullAllowedAttribute> (provider);
 
+		// For IntPtr/UIntPtr, the [Native] attribute on the provider changes the output,
+		// so we can't use a simple type-only cache.
+		if (t == TypeCache.System_IntPtr) {
+			var name = AttributeManager.HasNativeAttribute (provider) ? "nint" : "IntPtr";
+			return isNullable ? name + "?" : name;
+		} else if (t == TypeCache.System_UIntPtr) {
+			var name = AttributeManager.HasNativeAttribute (provider) ? "nuint" : "UIntPtr";
+			return isNullable ? name + "?" : name;
+		}
+
+		var cache = isNullable ? renderTypeNullableCache : renderTypeCache;
+		if (cache.TryGetValue (t, out var cached))
+			return cached;
+
+		var result = ComputeRenderType (t, isNullable ? "?" : string.Empty);
+		cache [t] = result;
+		return result;
+	}
+
+	string ComputeRenderType (Type t, string nullable)
+	{
 		if (!t.IsEnum) {
 			switch (Type.GetTypeCode (t)) {
 			case TypeCode.Char:
@@ -394,12 +415,6 @@ public class TypeManager {
 
 		if (t == TypeCache.System_Void)
 			return "void";
-
-		if (t == TypeCache.System_IntPtr) {
-			return (AttributeManager.HasNativeAttribute (provider) ? "nint" : "IntPtr") + nullable;
-		} else if (t == TypeCache.System_UIntPtr) {
-			return (AttributeManager.HasNativeAttribute (provider) ? "nuint" : "UIntPtr") + nullable;
-		}
 
 		if (t.Namespace is not null) {
 			string ns = t.Namespace;

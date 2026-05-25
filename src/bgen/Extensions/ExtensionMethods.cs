@@ -58,6 +58,16 @@ public static class ReflectionExtensions {
 	static readonly Dictionary<(Type, BindingFlags), List<MethodInfo>> gatherMethodsCache = new ();
 	static readonly Dictionary<(Type, BindingFlags), List<PropertyInfo>> gatherPropertiesCache = new ();
 	static readonly Dictionary<Type, Type []> getInterfacesCache = new ();
+	static readonly Dictionary<Type, PropertyInfo []> getPropertiesCache = new ();
+
+	public static PropertyInfo [] GetCachedProperties (this Type type)
+	{
+		if (!getPropertiesCache.TryGetValue (type, out var result)) {
+			result = type.GetProperties ();
+			getPropertiesCache [type] = result;
+		}
+		return result;
+	}
 
 	public static Type [] GetCachedInterfaces (this Type type)
 	{

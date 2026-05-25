@@ -3989,12 +3989,24 @@ public partial class Generator : IMemberGatherer {
 		return (sem != ArgumentSemantic.Assign && sem != ArgumentSemantic.Weak); // also cover UnsafeUnretained
 	}
 
+	readonly Dictionary<Type, MethodInfo []> typeContractMethodsCache = new ();
+
 	public IEnumerable<MethodInfo> GetTypeContractMethods (Type source)
 	{
+		if (typeContractMethodsCache.TryGetValue (source, out var cached))
+			return cached;
+		var result = GetTypeContractMethodsCore (source);
+		typeContractMethodsCache [source] = result;
+		return result;
+	}
+
+	MethodInfo [] GetTypeContractMethodsCore (Type source)
+	{
 		if (source.IsEnum)
-			yield break;
+			return Array.Empty<MethodInfo> ();
+		var methods = new List<MethodInfo> ();
 		foreach (var method in source.GatherMethods (BindingFlags.Public | BindingFlags.Instance, this))
-			yield return method;
+			methods.Add (method);
 		foreach (var parent in source.GetInterfaces ()) {
 			// skip interfaces that aren't available on the current platform
 			if (parent.IsUnavailable (this))
@@ -4009,16 +4021,29 @@ public partial class Generator : IMemberGatherer {
 						if (exportAttribute is null)
 							continue;
 					}
-					yield return method;
+					methods.Add (method);
 				}
 			}
 		}
+		return methods.ToArray ();
 	}
+
+	readonly Dictionary<Type, PropertyInfo []> typeContractPropertiesCache = new ();
 
 	public IEnumerable<PropertyInfo> GetTypeContractProperties (Type source)
 	{
+		if (typeContractPropertiesCache.TryGetValue (source, out var cached))
+			return cached;
+		var result = GetTypeContractPropertiesCore (source);
+		typeContractPropertiesCache [source] = result;
+		return result;
+	}
+
+	PropertyInfo [] GetTypeContractPropertiesCore (Type source)
+	{
+		var props = new List<PropertyInfo> ();
 		foreach (var prop in source.GatherProperties (this))
-			yield return prop;
+			props.Add (prop);
 		foreach (var parent in source.GetInterfaces ()) {
 			// skip interfaces that aren't available on the current platform
 			if (parent.IsUnavailable (this))
@@ -4027,9 +4052,10 @@ public partial class Generator : IMemberGatherer {
 			// e.g. the Handle property won't have an [Export] since it's present to satisfyINativeObject
 			if (parent.Name != "INativeObject") {
 				foreach (var prop in parent.GatherProperties (this))
-					yield return prop;
+					props.Add (prop);
 			}
 		}
+		return props.ToArray ();
 	}
 
 	//

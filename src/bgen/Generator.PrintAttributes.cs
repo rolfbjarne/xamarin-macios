@@ -5,6 +5,11 @@ using System.Reflection;
 
 public partial class Generator {
 
+	// Reusable lists to avoid per-call List allocations in GetPlatformAttributesToPrint.
+	// Safe because bgen is single-threaded and these are fully consumed before return.
+	readonly List<AvailabilityBaseAttribute> reusable_memberAvailability = new ();
+	readonly List<AvailabilityBaseAttribute> reusable_availabilityToConsider = new ();
+
 	AvailabilityBaseAttribute [] GetPlatformAttributesToPrint (MemberInfo mi, MemberInfo? context, MemberInfo? inlinedType)
 	{
 		// Attributes are directly on the member
@@ -21,11 +26,14 @@ public partial class Generator {
 		// If neither are true, we have zero attributes that are relevant
 		bool shouldConsiderAttributes = attrs.Length > 0 || inlinedTypeAvailability is not null && inlinedTypeAvailability.Count > 0;
 		if (shouldConsiderAttributes) {
-			List<AvailabilityBaseAttribute> memberAvailability = new List<AvailabilityBaseAttribute> (attrs);
+			var memberAvailability = reusable_memberAvailability;
+			memberAvailability.Clear ();
+			memberAvailability.AddRange (attrs);
 			// Attributes on the _target_ context, the class itself or the target of the protocol inlining
 			List<AvailabilityBaseAttribute> parentContextAvailability = GetAllParentAttributes (context);
 			// We will consider any inlinedType attributes first, if any, before any from our parent context
-			List<AvailabilityBaseAttribute> availabilityToConsider = new List<AvailabilityBaseAttribute> ();
+			var availabilityToConsider = reusable_availabilityToConsider;
+			availabilityToConsider.Clear ();
 			if (inlinedTypeAvailability is not null) {
 				availabilityToConsider.AddRange (inlinedTypeAvailability);
 				// Don't copy parent attributes if the conflict with the type we're inlining members into

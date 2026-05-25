@@ -3235,7 +3235,10 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		var mai = new MarshalInfo (this, mi);
-		var owns = (minfo?.is_return_release == true) || (minfo?.is_forced_owns == true) ? "true" : "false";
+		var ownsValue = (minfo?.is_return_release == true) || (minfo?.is_forced_owns == true);
+		var owns = ownsValue ? "true" : "false";
+		var closeParen_owns_close_bang = ownsValue ? ", true)!" : ", false)!";
+		var closeParen_owns_close = ownsValue ? ", true)" : ", false)";
 		if (GetNativeEnumToManagedExpression (mi.ReturnType, out cast_a, out cast_b, out var _, postproc)) {
 			// we're done here
 		} else if (mi.ReturnType.IsEnum) {
@@ -3248,10 +3251,10 @@ public partial class Generator : IMemberGatherer {
 			// protocol support means we can return interfaces and, as far as .NET knows, they might not be NSObject
 			if (IsProtocolInterface (mi.ReturnType)) {
 				cast_a = " Runtime.GetINativeObject<" + TypeManager.FormatType (minfo?.type ?? mi.DeclaringType, mi.ReturnType) + "> (";
-				cast_b = $", {owns})!";
+				cast_b = closeParen_owns_close_bang;
 			} else if (minfo is not null && minfo.is_forced) {
 				cast_a = " Runtime.GetINativeObject<" + TypeManager.FormatType (minfo.type, mi.ReturnType) + "> (";
-				cast_b = $", true, {owns})!";
+				cast_b = ownsValue ? ", true, true)!" : ", true, false)!";
 			} else if (minfo is not null && minfo.is_bindAs) {
 				var bindAs = GetOneBindAsAttribute (minfo.mi);
 				var nullableBindAsType = TypeManager.GetUnderlyingNullableType (bindAs.Type);
@@ -3262,26 +3265,26 @@ public partial class Generator : IMemberGatherer {
 				var wrapper = GetFromBindAsWrapper (minfo, out suffix);
 				var formattedReturnType = TypeManager.FormatType (minfo.type, mi.ReturnType);
 				if (mi.ReturnType == TypeCache.NSString) {
-					cast_a = $"{wrapper}";
-					cast_b = $"{suffix}";
+					cast_a = wrapper;
+					cast_b = suffix;
 				} else {
 					var enumCast = (bindAsType.IsEnum && !minfo.type.IsArray) ? $"({formattedBindAsType}) " : string.Empty;
 					cast_a = $"{enumCast}Runtime.GetNSObject<{formattedReturnType}> (";
 					if (isNullable)
-						cast_b = $", {owns}){wrapper}";
+						cast_b = closeParen_owns_close + wrapper;
 					else
-						cast_b = $", {owns})!{wrapper}";
+						cast_b = closeParen_owns_close_bang + wrapper;
 				}
 			} else {
 				cast_a = " Runtime.GetNSObject<" + TypeManager.FormatType (minfo?.type ?? declaringType, mi.ReturnType) + "> (";
-				cast_b = $", {owns})!";
+				cast_b = closeParen_owns_close_bang;
 			}
 		} else if (mi.ReturnType.IsGenericParameter) {
 			cast_a = " Runtime.GetINativeObject<" + mi.ReturnType.Name + "> (";
-			cast_b = $", {owns})!";
+			cast_b = closeParen_owns_close_bang;
 		} else if (mai.Type == TypeCache.System_String && !mai.PlainString) {
 			cast_a = "CFString.FromHandle (";
-			cast_b = $", {owns})!";
+			cast_b = closeParen_owns_close_bang;
 		} else if (mi.ReturnType.IsSubclassOf (TypeCache.System_Delegate)) {
 			cast_a = "";
 			cast_b = "";
@@ -3297,7 +3300,7 @@ public partial class Generator : IMemberGatherer {
 				cast_b = $", {GetFromBindAsWrapper (minfo, out suffix)}, {owns})!" + suffix;
 			} else if (etype == TypeCache.System_String) {
 				cast_a = "CFArray.StringArrayFromHandle (";
-				cast_b = $", {owns})!";
+				cast_b = closeParen_owns_close_bang;
 			} else if (etype == TypeCache.Selector) {
 				exceptions.Add (ErrorHelper.CreateError (1066, mai.Type.FullName, mi.DeclaringType?.FullName, mi.Name));
 			} else {
@@ -3305,7 +3308,7 @@ public partial class Generator : IMemberGatherer {
 					cast_a = "CFArray.ArrayFromHandle<global::" + etype + ">(";
 				else
 					cast_a = "CFArray.ArrayFromHandle<" + TypeManager.FormatType (mi.DeclaringType, etype) + ">(";
-				cast_b = $", {owns})!";
+				cast_b = closeParen_owns_close_bang;
 			}
 		} else if (mi.ReturnType.Namespace == "System" && mi.ReturnType.Name == "nint") {
 			cast_a = "(nint) ";

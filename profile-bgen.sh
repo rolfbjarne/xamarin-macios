@@ -198,12 +198,25 @@ profile_time_only() {
     local start_time end_time elapsed
     start_time=$(python3 -c "import time; print(time.time())")
 
-    (cd "$SRC_DIR" && "$DOTNET" "$BGEN_DLL" @"build/dotnet/$PLATFORM/$PLATFORM.rsp")
+    local output
+    output=$(cd "$SRC_DIR" && BGEN_REPORT_ALLOCATIONS=1 /usr/bin/time -l "$DOTNET" "$BGEN_DLL" @"build/dotnet/$PLATFORM/$PLATFORM.rsp" 2>&1)
 
     end_time=$(python3 -c "import time; print(time.time())")
     elapsed=$(python3 -c "print(f'{$end_time - $start_time:.2f}')")
+
+    local peak_rss alloc_bytes
+    peak_rss=$(echo "$output" | grep "maximum resident set size" | awk '{print $1}')
+    alloc_bytes=$(echo "$output" | grep "BGEN_ALLOCATIONS:" | sed 's/.*: \([0-9]*\) bytes.*/\1/')
+
     echo ""
-    echo "=== Wall clock time: ${elapsed}s ==="
+    echo "=== Results ==="
+    echo "  Wall clock:       ${elapsed}s"
+    if [ -n "$peak_rss" ]; then
+        echo "  Peak RSS:         $((peak_rss / 1024 / 1024)) MB ($peak_rss bytes)"
+    fi
+    if [ -n "$alloc_bytes" ]; then
+        echo "  Total allocated:  $((alloc_bytes / 1024 / 1024)) MB ($alloc_bytes bytes)"
+    fi
     echo ""
 }
 

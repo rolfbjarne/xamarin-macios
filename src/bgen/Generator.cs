@@ -413,8 +413,10 @@ public partial class Generator : IMemberGatherer {
 		if (!type.IsEnum)
 			return false;
 		// First check if the smart enum candidate still holds the FieldAtttribute data
-		if (type.GetFields ().Any (f => AttributeManager.GetCustomAttribute<FieldAttribute> (f) is not null))
-			return true;
+		foreach (var f in type.GetFields ()) {
+			if (AttributeManager.GetCustomAttribute<FieldAttribute> (f) is not null)
+				return true;
+		}
 		// If the above fails it's possible that it comes from another dll (like X.I.dll) so we look for the [Enum]Extensions class existence
 		return type.Assembly.GetType (type.FullName + "Extensions") is not null;
 	}
@@ -1626,7 +1628,14 @@ public partial class Generator : IMemberGatherer {
 		if (exceptions.Count == 0)
 			return;
 
-		if (exceptions.All (v => v is BindingException pe && !pe.Error)) {
+		bool allNonErrors = true;
+		foreach (var ex in exceptions) {
+			if (ex is not BindingException pe || pe.Error) {
+				allNonErrors = false;
+				break;
+			}
+		}
+		if (allNonErrors) {
 			foreach (var e in exceptions)
 				ErrorHelper.Show (e);
 			return;
@@ -1850,9 +1859,11 @@ public partial class Generator : IMemberGatherer {
 	{
 		var libSuffixedName = $"{library_name}Library";
 		var constType = TypeCache.Constants;
-		var field = constType.GetFields (BindingFlags.Public | BindingFlags.Static).FirstOrDefault (f => f.Name == libSuffixedName);
-		var library_path = field?.GetRawConstantValue ();
-		return library_path is null;
+		foreach (var f in constType.GetFields (BindingFlags.Public | BindingFlags.Static)) {
+			if (f.Name == libSuffixedName)
+				return f.GetRawConstantValue () is null;
+		}
+		return true;
 	}
 
 	void GenerateLibraryHandles ()
@@ -5184,7 +5195,15 @@ public partial class Generator : IMemberGatherer {
 		var allProtocolMethods = new List<MethodInfo> ();
 		var allProtocolProperties = new List<PropertyInfo> ();
 		var allProtocolConstructors = new List<MethodInfo> ();
-		var ifacesFiltered = type.GetInterfaces ().Concat (new Type [] { ReflectionExtensions.GetBaseType (type, this) }).OrderBy (v => v.FullName, StringComparer.Ordinal).Where ((v) => IsProtocolInterface (v, false)).ToList ();
+		var ifacesFiltered = new List<Type> ();
+		foreach (var iface in type.GetInterfaces ()) {
+			if (IsProtocolInterface (iface, false))
+				ifacesFiltered.Add (iface);
+		}
+		var baseType = ReflectionExtensions.GetBaseType (type, this);
+		if (IsProtocolInterface (baseType, false))
+			ifacesFiltered.Add (baseType);
+		ifacesFiltered.Sort ((a, b) => string.CompareOrdinal (a.FullName, b.FullName));
 
 		if (AttributeManager.HasAttribute<BaseTypeAttribute> (type) && !AttributeManager.HasAttribute<ModelAttribute> (type))
 			exceptions.Add (ErrorHelper.CreateWarning (1123 /* "The type {0} has a [Protocol] and a [BaseType] attribute, but no [Model] attribute. This is likely incorrect; either remove the [BaseType] attribute, or add a [Model] attribute." */, type.FullName));
@@ -5234,8 +5253,16 @@ public partial class Generator : IMemberGatherer {
 			}
 		}
 
-		var extensionMethods = optionalInstanceMethods.Concat (requiredInstanceMethods.Where (v => IsRequired (v, out var generateExtensionMethod) && generateExtensionMethod));
-		var extensionProperties = optionalInstanceProperties.Concat (requiredInstanceProperties.Where (v => IsRequired (v, out var generateExtensionMethod) && generateExtensionMethod));
+		var extensionMethods = new List<MethodInfo> (optionalInstanceMethods);
+		foreach (var v in requiredInstanceMethods) {
+			if (IsRequired (v, out var generateExtensionMethod) && generateExtensionMethod)
+				extensionMethods.Add (v);
+		}
+		var extensionProperties = new List<PropertyInfo> (optionalInstanceProperties);
+		foreach (var v in requiredInstanceProperties) {
+			if (IsRequired (v, out var generateExtensionMethod) && generateExtensionMethod)
+				extensionProperties.Add (v);
+		}
 
 		// disable CS1573, which can happen when the original member in the api definition has xml comments and we copy that xml comment into the generated interface - because we may add parameters to method signatures, and the new parameters won't have an xml comment.
 		print ("#pragma warning disable CS1573"); // Parameter 'This' has no matching param tag in the XML comment for '...' (but other parameters do)
@@ -7926,9 +7953,11 @@ public partial class Generator : IMemberGatherer {
 	string? FindSelector (Type type, MethodInfo mi)
 	{
 		Type currentType = type;
+		var cachedParams = mi.GetCachedParameters ();
+		var parameters = new Type [cachedParams.Length];
+		for (int i = 0; i < cachedParams.Length; i++)
+			parameters [i] = cachedParams [i].ParameterType;
 		do {
-			// avoid AmbiguousMatchException when GetMethod is used.
-			var parameters = mi.GetCachedParameters ().Select ((arg) => arg.ParameterType).ToArray ();
 			var method = currentType.GetMethod (mi.Name, parameters);
 			if (method is not null) {
 				var export = GetExportAttribute (method, out var wrap);

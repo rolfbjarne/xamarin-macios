@@ -105,11 +105,11 @@ public class MemberInformation {
 		// declaration.  If this is an inlined method, then we need to see if this was
 		// also inlined in any of the base classes.
 		if (mi.DeclaringType != type) {
-			for (var baseType = ReflectionExtensions.GetBaseType (type, generator); baseType != Generator.TypeCache.System_Object; baseType = ReflectionExtensions.GetBaseType (baseType, generator)) {
+			for (var baseType = ReflectionExtensions.GetBaseType (type, generator); baseType != Generator.TypeCache.System_Object && !is_new; baseType = ReflectionExtensions.GetBaseType (baseType, generator)) {
 				foreach (var baseMethod in gather.GetTypeContractMethods (baseType)) {
 					if (baseMethod.DeclaringType != baseType && baseMethod == mi) {
-						// We found a case, we need to flag it as new.
 						is_new = true;
+						break;
 					}
 				}
 			}

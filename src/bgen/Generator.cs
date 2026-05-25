@@ -1173,11 +1173,11 @@ public partial class Generator : IMemberGatherer {
 
 		var marshalDirective = AttributeManager.GetCustomAttribute<MarshalDirectiveAttribute> (mi);
 		if (marshalDirective is not null && marshalDirective.Library is not null) {
-			print (m, "\t\t[DllImport (\"{0}\", EntryPoint=\"{1}\")]", marshalDirective.Library, method_name);
+			print (m, $"\t\t[DllImport (\"{marshalDirective.Library}\", EntryPoint=\"{method_name}\")]");
 		} else if (method_name.StartsWith ("xamarin_", StringComparison.Ordinal)) {
-			print (m, "\t\t[DllImport (\"__Internal\", EntryPoint=\"{0}\")]", method_name);
+			print (m, $"\t\t[DllImport (\"__Internal\", EntryPoint=\"{method_name}\")]");
 		} else {
-			print (m, "\t\t[DllImport (LIBOBJC_DYLIB, EntryPoint=\"{0}\")]", entry_point);
+			print (m, $"\t\t[DllImport (LIBOBJC_DYLIB, EntryPoint=\"{entry_point}\")]");
 		}
 
 		var returnType = (need_stret && aligned) ? "void" : ParameterGetMarshalType (new MarshalInfo (this, mi), true);
@@ -1187,10 +1187,8 @@ public partial class Generator : IMemberGatherer {
 			returnType = "ushort";
 
 		var receiverType = method_name.IndexOf ("objc_msgSendSuper", StringComparison.Ordinal) != -1 ? "ObjCSuper*" : "IntPtr";
-		print (m, "\t\tpublic unsafe extern static {0} {1} ({3}{4} receiver, IntPtr selector{2});",
-			   returnType, method_name, b.ToString (),
-			   (need_stret && aligned) ? "IntPtr* retval, " : "",
-			   receiverType);
+		var retvalPrefix = (need_stret && aligned) ? "IntPtr* retval, " : "";
+		print (m, $"\t\tpublic unsafe extern static {returnType} {method_name} ({retvalPrefix}{receiverType} receiver, IntPtr selector{b});");
 	}
 
 	bool IsNativeEnum (Type type)
@@ -1442,7 +1440,7 @@ public partial class Generator : IMemberGatherer {
 
 		m = GetOutputStream ("ObjCRuntime", "Messaging");
 		Header (m);
-		print (m, "namespace {0} {{", NamespaceCache.ObjCRuntime);
+		print (m, $"namespace {NamespaceCache.ObjCRuntime} {{");
 		print (m, "\tstatic partial class Messaging {");
 
 		if (BindThirdPartyLibrary) {

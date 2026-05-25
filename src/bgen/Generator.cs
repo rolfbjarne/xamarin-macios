@@ -2604,13 +2604,19 @@ public partial class Generator : IMemberGatherer {
 		}
 	}
 
+	readonly Dictionary<string, string> loweredNamespaceCache = new ();
+
 	bool IsInSupportedFramework (MemberInfo klass, PlatformName platform)
 	{
 		var ns = FindNamespace (klass);
 		if (string.IsNullOrEmpty (ns))
 			return false;
 		var list = GetFrameworkListForPlatform (platform);
-		return list.Contains (ns.ToLower (CultureInfo.InvariantCulture));
+		if (!loweredNamespaceCache.TryGetValue (ns, out var lowered)) {
+			lowered = ns.ToLower (CultureInfo.InvariantCulture);
+			loweredNamespaceCache [ns] = lowered;
+		}
+		return list.Contains (lowered);
 	}
 
 	void AddUnlistedAvailability (MemberInfo containingClass, List<AvailabilityBaseAttribute> availability)

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 #nullable enable
@@ -76,8 +75,17 @@ public partial class Generator {
 				}
 			}
 
-			// Remove any duplicates attributes as well
-			return memberAvailability.Distinct ().ToArray ();
+			// Remove any duplicate attributes (reference equality) and return as array
+			// The list is typically small (5-10 items), so O(n^2) dedup is fine
+			for (int i = memberAvailability.Count - 1; i > 0; i--) {
+				for (int j = 0; j < i; j++) {
+					if (ReferenceEquals (memberAvailability [i], memberAvailability [j])) {
+						memberAvailability.RemoveAt (i);
+						break;
+					}
+				}
+			}
+			return memberAvailability.ToArray ();
 		}
 		return attrs;
 	}

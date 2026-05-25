@@ -14,10 +14,18 @@ using ObjCRuntime;
 
 public static class GeneratorExtensions {
 
+	static string cachedTabs = new string ('\t', 32);
+
 	public static StreamWriter Write (this StreamWriter sw, char c, int count)
 	{
-		for (int i = 0; i < count; i++)
-			sw.Write (c);
+		if (count <= 0)
+			return sw;
+		if (c == '\t' && count <= cachedTabs.Length) {
+			sw.Write (cachedTabs.AsSpan (0, count));
+		} else {
+			for (int i = 0; i < count; i++)
+				sw.Write (c);
+		}
 		return sw;
 	}
 

@@ -2380,13 +2380,33 @@ public partial class Generator : IMemberGatherer {
 		if (indent < 0)
 			throw new InvalidOperationException ("Indent is a negative value.");
 
-		var lines = format.Split (newlineCharacters);
+		if (format.Length == 0)
+			return;
 
-		for (int i = 0; i < lines.Length; i++) {
-			if (lines [i].Length == 0)
-				continue;
+		var nlIndex = format.IndexOf ('\n');
+		if (nlIndex < 0) {
+			// Fast path: no newlines (most common case)
 			w!.Write ('\t', indent);
-			w!.WriteLine (lines [i]);
+			w!.WriteLine (format);
+		} else {
+			// Slow path: split on newlines
+			var span = format.AsSpan ();
+			int start = 0;
+			while (start < span.Length) {
+				int end = span.Slice (start).IndexOf ('\n');
+				ReadOnlySpan<char> line;
+				if (end < 0) {
+					line = span.Slice (start);
+					start = span.Length;
+				} else {
+					line = span.Slice (start, end);
+					start += end + 1;
+				}
+				if (line.Length == 0)
+					continue;
+				w!.Write ('\t', indent);
+				w!.WriteLine (line);
+			}
 		}
 	}
 
@@ -2425,8 +2445,14 @@ public partial class Generator : IMemberGatherer {
 		return true;
 	}
 
+	Dictionary<PlatformName, HashSet<string>>? frameworkListCache;
+
 	HashSet<string> GetFrameworkListForPlatform (PlatformName platform)
 	{
+		frameworkListCache ??= new Dictionary<PlatformName, HashSet<string>> ();
+		if (frameworkListCache.TryGetValue (platform, out var cached))
+			return cached;
+
 		HashSet<string>? frameworkList = null;
 		switch (platform) {
 		case PlatformName.iOS:
@@ -2445,7 +2471,9 @@ public partial class Generator : IMemberGatherer {
 			frameworkList = new HashSet<string> ();
 			break;
 		}
-		return new HashSet<string> (frameworkList.Select (x => x.ToLower (CultureInfo.InvariantCulture)));
+		var result = new HashSet<string> (frameworkList.Select (x => x.ToLower (CultureInfo.InvariantCulture)));
+		frameworkListCache [platform] = result;
+		return result;
 	}
 
 	static string? FindNamespace (MemberInfo item)
@@ -5389,6 +5417,8 @@ public partial class Generator : IMemberGatherer {
 		return ConformToNSCoding (attrs [0].BaseType);
 	}
 
+	static readonly System.Text.Encoding Utf8NoBom = new System.Text.UTF8Encoding (encoderShouldEmitUTF8Identifier: false);
+
 	StreamWriter GetOutputStream (string? @namespace, string name)
 	{
 		var dir = basedir;
@@ -5406,7 +5436,7 @@ public partial class Generator : IMemberGatherer {
 		if (created_directories.Add (dir))
 			Directory.CreateDirectory (dir);
 
-		return new StreamWriter (filename);
+		return new StreamWriter (filename, append: false, encoding: Utf8NoBom, bufferSize: 16 * 1024);
 	}
 
 

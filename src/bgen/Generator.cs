@@ -97,19 +97,19 @@ public partial class Generator : IMemberGatherer {
 	HashSet<string> async_result_types_emitted = new HashSet<string> ();
 
 	// Reusable StringBuilders for GenerateTypeLowering to avoid allocating 6 per method call
-	readonly StringBuilder reusable_args = new ();
-	readonly StringBuilder reusable_convs = new ();
-	readonly StringBuilder reusable_disposes = new ();
-	readonly StringBuilder reusable_by_ref_processing = new ();
-	readonly StringBuilder reusable_by_ref_init = new ();
-	readonly StringBuilder reusable_post_return = new ();
+	readonly StringBuilder reusable_args = new (128);
+	readonly StringBuilder reusable_convs = new (256);
+	readonly StringBuilder reusable_disposes = new (128);
+	readonly StringBuilder reusable_by_ref_processing = new (128);
+	readonly StringBuilder reusable_by_ref_init = new (128);
+	readonly StringBuilder reusable_post_return = new (128);
 	// Reusable StringBuilder for MakeSignature and MakeSig
-	readonly StringBuilder reusable_signature = new ();
-	readonly StringBuilder reusable_makesig = new ();
-	readonly StringBuilder reusable_register = new ();
+	readonly StringBuilder reusable_signature = new (256);
+	readonly StringBuilder reusable_makesig = new (256);
+	readonly StringBuilder reusable_register = new (256);
 	// Reusable StringBuilder for postproc in GenerateMethodBody
-	readonly StringBuilder reusable_postproc = new ();
-	readonly StringBuilder reusable_protocol = new ();
+	readonly StringBuilder reusable_postproc = new (128);
+	readonly StringBuilder reusable_protocol = new (512);
 	char [] reusable_charBuf = new char [512];
 	// Reusable list for PrintPlatformAttributesNoDuplicates
 	readonly List<AvailabilityBaseAttribute> reusable_inlined_ca = new ();
@@ -120,11 +120,11 @@ public partial class Generator : IMemberGatherer {
 	// the nested print uses the next builder in the stack instead of clobbering
 	// the outer handler's in-progress content.
 	readonly StringBuilder [] printBuilderPool = new StringBuilder [] {
-		new StringBuilder (), new StringBuilder (), new StringBuilder (), new StringBuilder ()
+		new StringBuilder (256), new StringBuilder (256), new StringBuilder (256), new StringBuilder (256)
 	};
 	int printBuilderDepth;
 	// Reusable StringBuilder for RenderParameterDecl/RenderArgs
-	readonly StringBuilder reusable_render = new ();
+	readonly StringBuilder reusable_render = new (256);
 	// Reusable stream/writer pair to avoid reallocating StreamWriter buffers per file
 	readonly SwappableStream reusable_stream = new ();
 	ReusableFileWriter? reusable_writer;

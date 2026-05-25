@@ -1917,17 +1917,17 @@ public partial class Generator : IMemberGatherer {
 		foreach (var library_info in libraries.OrderBy (v => v.Key, StringComparer.Ordinal)) {
 			var library_name = library_info.Key;
 			var library_path = library_info.Value;
-			print ("static public class {0} {{", library_name.Replace (".", string.Empty)); indent++;
+			print ($"static public class {library_name.Replace (".", string.Empty)} {{"); indent++;
 			if (BindThirdPartyLibrary && library_name == "__Internal") {
 				print ("static public readonly IntPtr Handle = Dlfcn.dlopen (null, 0);");
 			} else if (BindThirdPartyLibrary && library_path is not null && IsNotSystemLibrary (library_name)) {
 				print ($"static public readonly IntPtr Handle = Dlfcn.dlopen (\"{library_path}\", 0);");
 			} else if (BindThirdPartyLibrary) {
-				print ("static public readonly IntPtr Handle = Dlfcn.dlopen (Constants.{0}Library, 0);", library_name);
+				print ($"static public readonly IntPtr Handle = Dlfcn.dlopen (Constants.{library_name}Library, 0);");
 			} else {
 				// Skip the path check that our managed `dlopen` method does
 				// This is not required since the path is checked by `IsNotSystemLibrary`
-				print ("static public readonly IntPtr Handle = Dlfcn._dlopen (Constants.{0}Library, 0);", library_name);
+				print ($"static public readonly IntPtr Handle = Dlfcn._dlopen (Constants.{library_name}Library, 0);");
 			}
 			indent--; print ("}");
 		}
@@ -2040,23 +2040,23 @@ public partial class Generator : IMemberGatherer {
 				this.sw = sw;
 				Header (sw);
 
-				print ("namespace {0} {{", dictType.Namespace);
+				print ($"namespace {dictType.Namespace} {{");
 				indent++;
 				WriteDocumentation (dictType);
 				PrintPlatformAttributes (dictType);
 				PrintExperimentalAttribute (dictType);
-				print ("public partial class {0} : DictionaryContainer {{", typeName);
+				print ($"public partial class {typeName} : DictionaryContainer {{");
 				indent++;
 				sw.WriteLine ("#if !COREBUILD");
 				if (BindingTouch.SupportsXmlDocumentation) {
 					print ($"/// <summary>Creates a new <see cref=\"{typeName}\" /> with default (empty) values.</summary>");
 				}
-				print ("public {0} () : base (new NSMutableDictionary ()) {{}}\n", typeName);
+				print ($"public {typeName} () : base (new NSMutableDictionary ()) {{}}\n");
 				if (BindingTouch.SupportsXmlDocumentation) {
 					print ($"/// <summary>Creates a new <see cref=\"{typeName}\" /> from the values that are specified in <paramref name=\"dictionary\" />.</summary>");
 					print ($"/// <param name=\"dictionary\">The dictionary to use to populate the properties of this type.</param>");
 				}
-				print ("public {0} (NSDictionary? dictionary) : base (dictionary) {{}}\n", typeName);
+				print ($"public {typeName} (NSDictionary? dictionary) : base (dictionary) {{}}\n");
 
 				foreach (var pi in dictType.GatherProperties (this)) {
 					if (pi.IsUnavailable (this))
@@ -2224,7 +2224,7 @@ public partial class Generator : IMemberGatherer {
 					try {
 						getter = String.Format (getter, keyname, castToEnum);
 					} catch {
-						Console.WriteLine ("OOPS: g={0} k={1} c={2}", og, keyname, castToEnum);
+						Console.WriteLine ($"OOPS: g={og} k={keyname} c={castToEnum}");
 						throw;
 					}
 					setter = String.Format (setter, keyname, castToUnderlying);
@@ -2232,7 +2232,7 @@ public partial class Generator : IMemberGatherer {
 						indent++;
 						print ("get {"); indent++;
 						Inject<PreSnippetAttribute> (getMethod);
-						print ("return {0};", getter);
+						print ($"return {getter};");
 						indent--; print ("}");
 						indent--;
 					}
@@ -2269,20 +2269,20 @@ public partial class Generator : IMemberGatherer {
 				continue;
 
 			if (eventType.Namespace is not null) {
-				print ("namespace {0} {{", eventType.Namespace);
+				print ($"namespace {eventType.Namespace} {{");
 				indent++;
 			}
 
 			if (BindingTouch.SupportsXmlDocumentation) {
 				print ($"/// <summary>Provides data for an event based on a posted <see cref=\"NSNotification\" /> object.</summary>");
 			}
-			print ("public partial class {0} : NSNotificationEventArgs {{", eventType.Name); indent++;
+			print ($"public partial class {eventType.Name} : NSNotificationEventArgs {{"); indent++;
 
 			if (BindingTouch.SupportsXmlDocumentation) {
 				print ($"/// <summary>Initializes a new instance of the <see cref=\"{eventType.Name}\" /> class.</summary>");
 				print ($"/// <param name=\"notification\">The underlying <see cref=\"NSNotification\" /> object from the posted notification.</param>");
 			}
-			print ("public {0} (NSNotification notification) : base (notification) \n{{\n}}\n", eventType.Name);
+			print ($"public {eventType.Name} (NSNotification notification) : base (notification) \n{{\n}}\n");
 			int i = 0;
 			foreach (var prop in eventType.GetProperties (BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)) {
 				if (prop.IsUnavailable (this))
@@ -2305,13 +2305,13 @@ public partial class Generator : IMemberGatherer {
 					print ($"{(is_internal ? "internal" : "public")} {propertyType}{(nullable_type ? "?" : "")} {prop.Name} {{\n\tget {{\n");
 					indent += 2;
 					print ($"{NativeHandleType} value;");
-					print ("using (var str = new NSString (\"{0}\")){{", export.Selector);
+					print ($"using (var str = new NSString (\"{export.Selector}\")){{");
 					kn = "str.Handle";
 					indent++;
 				} else {
 					var lib = propNamespace?.Substring (propNamespace.IndexOf ('.') + 1) ?? "";
-					print ("[Field (\"{0}\", \"{1}\")]", export.Selector, lib);
-					print ("static IntPtr {0};", kn);
+					print ($"[Field (\"{export.Selector}\", \"{lib}\")]");
+					print ($"static IntPtr {kn};");
 					print ("");
 					// linker will remove the attributes (but it's useful for testing)
 					print_generated_code ();
@@ -2339,7 +2339,7 @@ public partial class Generator : IMemberGatherer {
 				indent--;
 				print ("else");
 				indent++;
-				print ("value = userinfo.LowlevelObjectForKey ({0});", kn);
+				print ($"value = userinfo.LowlevelObjectForKey ({kn});");
 				indent--;
 				if (use_export_as_string_constant) {
 					indent--;
@@ -2359,16 +2359,16 @@ public partial class Generator : IMemberGatherer {
 					if (null_allowed && !skip_null_check)
 						print ("if (value == IntPtr.Zero)\n\treturn null;");
 					else if (propertyType.TryIsArray (out elementType))
-						print ("if (value == IntPtr.Zero)\n\treturn Array.Empty<{0}> ();", TypeManager.RenderType (elementType));
+						print ($"if (value == IntPtr.Zero)\n\treturn Array.Empty<{TypeManager.RenderType (elementType)}> ();");
 					else if (!skip_null_check)
-						print ("if (value == IntPtr.Zero)\n\treturn default({0});", TypeManager.RenderType (propertyType));
+						print ($"if (value == IntPtr.Zero)\n\treturn default({TypeManager.RenderType (propertyType)});");
 
 					var fullname = propertyType.FullName;
 
 					if (is_property_array_wrapped_type) {
-						print ("return CFArray.ArrayFromHandle<{0}> (value)!;", TypeManager.RenderType (et!));
+						print ($"return CFArray.ArrayFromHandle<{TypeManager.RenderType (et!)}> (value)!;");
 					} else if (is_property_wrapped_type) {
-						print ("return Runtime.GetNSObject<{0}> (value)!;", TypeManager.RenderType (propertyType));
+						print ($"return Runtime.GetNSObject<{TypeManager.RenderType (propertyType)}> (value)!;");
 					} else if (propertyType == TypeCache.System_Double)
 						print (GenerateNSNumber ("", "DoubleValue"));
 					else if (propertyType == TypeCache.System_Float)
@@ -4322,12 +4322,12 @@ public partial class Generator : IMemberGatherer {
 		PrintObsoleteAttributes (pi);
 
 		foreach (var ba in AttributeManager.GetCustomAttributes<DebuggerBrowsableAttribute> (pi))
-			print ("[DebuggerBrowsable (DebuggerBrowsableState.{0})]", ba.State);
+			print ($"[DebuggerBrowsable (DebuggerBrowsableState.{ba.State})]");
 
 		foreach (var da in AttributeManager.GetCustomAttributes<DebuggerDisplayAttribute> (pi)) {
-			var narg = da.Name is not null ? string.Format (", Name = \"{0}\"", da.Name) : string.Empty;
-			var targ = da.Type is not null ? string.Format (", Type = \"{0}\"", da.Type) : string.Empty;
-			print ("[DebuggerDisplay (\"{0}\"{1}{2})]", da.Value, narg, targ);
+			var narg = da.Name is not null ? $", Name = \"{da.Name}\"" : string.Empty;
+			var targ = da.Type is not null ? $", Type = \"{da.Type}\"" : string.Empty;
+			print ($"[DebuggerDisplay (\"{da.Value}\"{narg}{targ})]");
 		}
 		foreach (var oa in AttributeManager.GetCustomAttributes<OptionalImplementationAttribute> (pi)) {
 			print ("[DebuggerBrowsable (DebuggerBrowsableState.Never)]");
@@ -4544,7 +4544,7 @@ public partial class Generator : IMemberGatherer {
 			} else {
 				print ("get {");
 				if (debug)
-					print ("Console.WriteLine (\"In {0}\");", pi.GetGetMethod ());
+					print ($"Console.WriteLine (\"In {pi.GetGetMethod ()}\");");
 				if (is_model)
 					print ("\tthrow new ModelNotImplementedException ();");
 				else if (minfo.is_abstract && !minfo.is_protocol_member && !minfo.is_protocol_implementation_method)
@@ -4600,7 +4600,7 @@ public partial class Generator : IMemberGatherer {
 			} else {
 				print ("set {");
 				if (debug)
-					print ("Console.WriteLine (\"In {0}\");", pi.GetSetMethod ());
+					print ($"Console.WriteLine (\"In {pi.GetSetMethod ()}\");");
 
 				// If we're doing a setter for a weak property that is protocolized event back
 				// we need to put in a check to verify you aren't stomping the "internal underscore"
@@ -4608,11 +4608,11 @@ public partial class Generator : IMemberGatherer {
 				if (!BindThirdPartyLibrary && pi.Name.StartsWith ("Weak", StringComparison.Ordinal)) {
 					string delName = pi.Name.Substring (4);
 					if (SafeIsProtocolEventBacked (delName, type))
-						print ("\t{0}.EnsureDelegateAssignIsNotOverwritingInternalDelegate ({1}, value, {2});", CurrentPlatform.GetApplicationClassName (), string.IsNullOrEmpty (var_name) ? "null" : var_name, GetDelegateTypePropertyName (delName));
+						print ($"\t{CurrentPlatform.GetApplicationClassName ()}.EnsureDelegateAssignIsNotOverwritingInternalDelegate ({(string.IsNullOrEmpty (var_name) ? "null" : var_name)}, value, {GetDelegateTypePropertyName (delName)});");
 				}
 
 				if (not_implemented_attr is not null) {
-					print ("\tthrow new NotImplementedException ({0});", not_implemented_attr.Message is null ? "" : "\"" + not_implemented_attr.Message + "\"");
+					print ($"\tthrow new NotImplementedException ({(not_implemented_attr.Message is null ? "" : "\"" + not_implemented_attr.Message + "\"")});");
 				} else if (is_model)
 					print ("\tthrow new ModelNotImplementedException ();");
 				else if (minfo.is_abstract && !minfo.is_protocol_member && !minfo.is_protocol_implementation_method)
@@ -4622,7 +4622,7 @@ public partial class Generator : IMemberGatherer {
 					if (!minfo.is_static && !is_interface_impl && !minfo.is_protocol_member && DoesPropertyNeedBackingField (pi)) {
 						if (!DoesPropertyNeedDirtyCheck (pi, export)) {
 							print ("\tMarkDirty ();");
-							print ("\t{0} = value;", var_name);
+							print ($"\t{var_name} = value;");
 						}
 					}
 				}
@@ -4630,7 +4630,7 @@ public partial class Generator : IMemberGatherer {
 			}
 		}
 		indent--;
-		print ("}}\n", pi.Name.GetSafeParamName ());
+		print ("}\n");
 	}
 
 	string GetReturnType (AsyncMethodInfo minfo)
@@ -4885,9 +4885,9 @@ public partial class Generator : IMemberGatherer {
 		}
 
 		if (output_semantics)
-			print ("[Export (\"{0}\", ArgumentSemantic.{1})]", sel, semantic);
+			print ($"[Export (\"{sel}\", ArgumentSemantic.{semantic})]");
 		else
-			print ("[Export (\"{0}\")]", sel);
+			print ($"[Export (\"{sel}\")]");
 	}
 
 	void GenerateMethod (MemberInformation minfo)
@@ -7166,14 +7166,14 @@ public partial class Generator : IMemberGatherer {
 					if (isProtocolEventBacked) {
 						// The generated virtual type property and creation virtual method
 						string generatedTypeOverrideType = shouldOverride ? "override" : "virtual";
-						print ("internal {0} Type {1}", generatedTypeOverrideType, delegateTypePropertyName);
+						print ($"internal {generatedTypeOverrideType} Type {delegateTypePropertyName}");
 						print ("{");
-						print ("	get {{ return typeof (_{0}); }}", dtype.Name);
+						print ($"\tget {{ return typeof (_{dtype.Name}); }}");
 						print ("}\n");
 
-						print ("internal {0} _{1} {2} ({3})", generatedTypeOverrideType, interfaceName, delegateCreationMethodName, hasKeepRefUntil ? "object oref" : "");
+						print ($"internal {generatedTypeOverrideType} _{interfaceName} {delegateCreationMethodName} ({(hasKeepRefUntil ? "object oref" : "")})");
 						print ("{");
-						print ("	return (_{0})(new _{1}({2}));", interfaceName, dtype.Name, hasKeepRefUntil ? "oref" : "");
+						print ($"\treturn (_{interfaceName})(new _{dtype.Name}({(hasKeepRefUntil ? "oref" : "")}));");
 						print ("}\n");
 					}
 
@@ -7191,19 +7191,19 @@ public partial class Generator : IMemberGatherer {
 						//   - We're in one of two cases: The user += an Event and then assigned their own delegate or the inverse
 						//   - One of them isn't being called anymore no matter what. Throw an exception.
 						if (!BindThirdPartyLibrary) {
-							print ("if (Weak{0} is not null)", delName);
-							print ("\t{0}.EnsureEventAndDelegateAreNotMismatched (Weak{1}, {2});", CurrentPlatform.GetApplicationClassName (), delName, delegateTypePropertyName);
+							print ($"if (Weak{delName} is not null)");
+							print ($"\t{CurrentPlatform.GetApplicationClassName ()}.EnsureEventAndDelegateAreNotMismatched (Weak{delName}, {delegateTypePropertyName});");
 						}
 
-						print ("var del = {1} as _{0};", dtype.Name, delName);
+						print ($"var del = {delName} as _{dtype.Name};");
 
 						print ("if (del is null){");
 						indent++;
 						if (!hasKeepRefUntil)
-							print ("del = (_{0}){1} ();", dtype.Name, delegateCreationMethodName);
+							print ($"del = (_{dtype.Name}){delegateCreationMethodName} ();");
 						else {
 							string oref = "new object[] {\"oref\"}";
-							print ("del = (_{0}){1} ({2});", dtype.Name, delegateCreationMethodName, oref);
+							print ($"del = (_{dtype.Name}){delegateCreationMethodName} ({oref});");
 							print ("if (instances is null) instances = new System.Collections.ArrayList ();");
 							print ("if (!instances.Contains (this)) instances.Add (this);");
 						}
@@ -7212,16 +7212,16 @@ public partial class Generator : IMemberGatherer {
 						print ("}");
 						print ("return del;");
 					} else {
-						print ("var del = {0};", delName);
-						print ("if (del is null || (!(del is _{0}))){{", dtype.Name);
-						print ("\tdel = new _{0} ({1});", dtype.Name, bta.KeepRefUntil is null ? "" : "oref");
+						print ($"var del = {delName};");
+						print ($"if (del is null || (!(del is _{dtype.Name}))){{");
+						print ($"\tdel = new _{dtype.Name} ({(bta.KeepRefUntil is null ? "" : "oref")});");
 						if (hasKeepRefUntil) {
 							print ("\tif (instances is null) instances = new System.Collections.ArrayList ();");
 							print ("\tif (!instances.Contains (this)) instances.Add (this);");
 						}
-						print ("\t{0} = del;", delName);
+						print ($"\t{delName} = del;");
 						print ("}");
-						print ("return (_{0}) del;", dtype.Name);
+						print ($"return (_{dtype.Name}) del;");
 					}
 					indent--; print ("}\n");
 
@@ -7230,17 +7230,17 @@ public partial class Generator : IMemberGatherer {
 					print ("#pragma warning disable 672");
 					print ("[Register]");
 					if (isProtocolEventBacked)
-						print ("internal class _{0} : {1}I{2} {{ ", dtype.Name, shouldOverride ? "_" + interfaceName + ", " : "NSObject, ", dtype.Name);
+						print ($"internal class _{dtype.Name} : {(shouldOverride ? "_" + interfaceName + ", " : "NSObject, ")}I{dtype.Name} {{ ");
 					else
-						print ("sealed class _{0} : {1} {{ ", dtype.Name, TypeManager.RenderType (dtype));
+						print ($"sealed class _{dtype.Name} : {TypeManager.RenderType (dtype)} {{ ");
 
 
 					indent++;
 					if (hasKeepRefUntil) {
 						print ("object reference;");
-						print ("public _{0} (object reference) {{ this.reference = reference; IsDirectBinding = false; }}\n", dtype.Name);
+						print ($"public _{dtype.Name} (object reference) {{ this.reference = reference; IsDirectBinding = false; }}\n");
 					} else
-						print ("public _{0} () {{ IsDirectBinding = false; }}\n", dtype.Name);
+						print ($"public _{dtype.Name} () {{ IsDirectBinding = false; }}\n");
 
 					// Tell the trimmer to not remove any of our protocol implementations, they might be called from native
 					// code even if we don't have any event handlers listening for them.
@@ -7279,16 +7279,16 @@ public partial class Generator : IMemberGatherer {
 
 						if (mi.ReturnType == TypeCache.System_Void) {
 							if (bta.Singleton || mi.GetCachedParameters ().Length == 1)
-								print ("internal EventHandler? {0};", miname);
+								print ($"internal EventHandler? {miname};");
 							else
-								print ("internal EventHandler<{0}>? {1};", Nomenclator.GetEventArgName (mi), miname);
+								print ($"internal EventHandler<{Nomenclator.GetEventArgName (mi)}>? {miname};");
 						} else
-							print ("internal {0}? {1};", Nomenclator.GetDelegateName (mi), miname);
+							print ($"internal {Nomenclator.GetDelegateName (mi)}? {miname};");
 
 						if (isProtocolEventBacked)
-							print ("[Export (\"{0}\")]", FindSelector (dtype, mi));
+							print ($"[Export (\"{FindSelector (dtype, mi)}\")]");
 
-						print ("public {0}{1} {2} ({3})", shouldOverrideDelegateString, TypeManager.RenderType (mi.ReturnType, mi.ReturnTypeCustomAttributes), mi.Name, RenderParameterDecl (pars));
+						print ($"public {shouldOverrideDelegateString}{TypeManager.RenderType (mi.ReturnType, mi.ReturnTypeCustomAttributes)} {mi.Name} ({RenderParameterDecl (pars)})");
 						print ("{"); indent++;
 
 						if (mi.Name == bta.KeepRefUntil)
@@ -7298,7 +7298,7 @@ public partial class Generator : IMemberGatherer {
 							string eaname;
 
 							if (debug)
-								print ("Console.WriteLine (\"Method {0}.{1} invoked\");", dtype.Name, mi.Name);
+								print ($"Console.WriteLine (\"Method {dtype.Name}.{mi.Name} invoked\");");
 							if (pars.Length != minPars) {
 								eaname = Nomenclator.GetEventArgName (mi);
 								if (!generatedEvents.ContainsKey (eaname) && !eventArgTypes.ContainsKey (eaname)) {
@@ -7308,18 +7308,18 @@ public partial class Generator : IMemberGatherer {
 							} else
 								eaname = "<NOTREACHED>";
 
-							print ("var handler = {0};", miname.PascalCase ());
+							print ($"var handler = {miname.PascalCase ()};");
 							print ("if (handler is not null){");
 							indent++;
 							string eventArgs;
 							if (pars.Length == minPars)
 								eventArgs = "EventArgs.Empty";
 							else {
-								print ("var args = new {0} ({1});", eaname, RenderArgs (pars.Skip (minPars), true));
+								print ($"var args = new {eaname} ({RenderArgs (pars.Skip (minPars), true)});");
 								eventArgs = "args";
 							}
 
-							print ("handler ({0}, {1});", sender, eventArgs);
+							print ($"handler ({sender}, {eventArgs});");
 							if (pars.Length != minPars && MustPullValuesBack (pars.Skip (minPars))) {
 								foreach (var par in pars.Skip (minPars)) {
 									if (!par.ParameterType.IsByRef)
@@ -7330,8 +7330,8 @@ public partial class Generator : IMemberGatherer {
 							}
 							if (AttributeManager.HasAttribute<CheckDisposedAttribute> (mi)) {
 								var arg = RenderArgs (pars.Take (1));
-								print ("if ({0}.Handle == IntPtr.Zero)", arg);
-								print ("\tthrow new ObjectDisposedException (\"{0}\", \"The object was disposed on the event, you should not call Dispose() inside the handler\");", arg);
+								print ($"if ({arg}.Handle == IntPtr.Zero)");
+								print ($"\tthrow new ObjectDisposedException (\"{arg}\", \"The object was disposed on the event, you should not call Dispose() inside the handler\");");
 							}
 							indent--;
 							print ("}");
@@ -7343,20 +7343,18 @@ public partial class Generator : IMemberGatherer {
 								delegate_types.Add (type.Namespace + "." + delname, mi);
 							}
 							if (debug)
-								print ("Console.WriteLine (\"Method {0}.{1} invoked\");", dtype.Name, mi.Name);
+								print ($"Console.WriteLine (\"Method {dtype.Name}.{mi.Name} invoked\");");
 
-							print ("var handler = {0};", miname.PascalCase ());
+							print ($"var handler = {miname.PascalCase ()};");
 							print ("if (handler is not null)");
-							print ("	return handler ({0}{1});",
-								   sender,
-								   pars.Length == minPars ? "" : String.Format (", {0}", RenderArgs (pars.Skip (1))));
+							print ($"\treturn handler ({sender}{(pars.Length == minPars ? "" : $", {RenderArgs (pars.Skip (1))}")});");
 
 							if (AttributeManager.HasAttribute<NoDefaultValueAttribute> (mi))
 								print ("throw new You_Should_Not_Call_base_In_This_Method ();");
 							else {
 								var def = GetDefaultValue (mi);
 								if ((def is string) && ((def as string) == "null") && mi.ReturnType.IsValueType)
-									print ("throw new Exception (\"No event handler has been added to the {0} event.\");", mi.Name);
+									print ($"throw new Exception (\"No event handler has been added to the {mi.Name} event.\");");
 								else {
 									foreach (var j in pars) {
 										if (j.ParameterType.IsByRef && j.IsOut) {
@@ -7365,11 +7363,11 @@ public partial class Generator : IMemberGatherer {
 									}
 
 									if (mi.ReturnType == TypeCache.System_nint) {
-										print ("return ((nint) ({0}));", def);
+										print ($"return ((nint) ({def}));");
 									} else if (mi.ReturnType == TypeCache.System_nuint) {
-										print ("return ((nuint) ({0}));", def);
+										print ($"return ((nuint) ({def}));");
 									} else {
-										print ("return {0}!;", def);
+										print ($"return {def}!;");
 									}
 								}
 							}
@@ -7385,9 +7383,9 @@ public partial class Generator : IMemberGatherer {
 						if (!InlineSelectors) {
 							foreach (var mi in noDefaultValue) {
 								var export = AttributeManager.GetOneCustomAttribute<ExportAttribute> (mi);
-								print ("static {2} sel{0}Handle = Selector.GetHandle (\"{1}\");", mi.Name, export.Selector, NativeHandleType);
+								print ($"static {NativeHandleType} sel{mi.Name}Handle = Selector.GetHandle (\"{export.Selector}\");");
 							}
-							print ("static {0} selRespondsToSelector = " + selRespondsToSelector + ";", NativeHandleType);
+							print ($"static {NativeHandleType} selRespondsToSelector = {selRespondsToSelector};");
 							selRespondsToSelector = "selRespondsToSelector";
 						}
 
@@ -7402,18 +7400,18 @@ public partial class Generator : IMemberGatherer {
 						foreach (var mi in noDefaultValue.OrderBy (m => m.Name, StringComparer.Ordinal)) {
 							if (InlineSelectors) {
 								var export = AttributeManager.GetOneCustomAttribute<ExportAttribute> (mi);
-								print ("if (selHandle.Equals (Selector.GetHandle (\"{0}\")))", export.Selector);
+								print ($"if (selHandle.Equals (Selector.GetHandle (\"{export.Selector}\")))");
 							} else {
-								print ("if (selHandle.Equals (sel{0}Handle))", mi.Name);
+								print ($"if (selHandle.Equals (sel{mi.Name}Handle))");
 							}
 							++indent;
-							print ("return {0} is not null;", mi.Name.PascalCase ());
+							print ($"return {mi.Name.PascalCase ()} is not null;");
 							--indent;
 						}
 						print ("unsafe {");
 						indent++;
 						print ("var __objc_super__ = new global::ObjCRuntime.ObjCSuper (this);");
-						print ("return global::" + NamespaceCache.Messaging + ".bool_objc_msgSendSuper_IntPtr (&__objc_super__, " + selRespondsToSelector + ", selHandle) != 0;");
+						print ($"return global::{NamespaceCache.Messaging}.bool_objc_msgSendSuper_IntPtr (&__objc_super__, {selRespondsToSelector}, selHandle) != 0;");
 						indent--;
 						print ("}");
 						--indent;
@@ -7466,16 +7464,16 @@ public partial class Generator : IMemberGatherer {
 							PrintObsoleteAttributes (mi);
 
 							if (bta.Singleton && mi.GetCachedParameters ().Length == 0 || mi.GetCachedParameters ().Length == 1)
-								print ("public event EventHandler {0} {{", Nomenclator.GetEventName (mi).CamelCase ());
+								print ($"public event EventHandler {Nomenclator.GetEventName (mi).CamelCase ()} {{");
 							else
-								print ("public event EventHandler<{0}> {1} {{", Nomenclator.GetEventArgName (mi), Nomenclator.GetEventName (mi).CamelCase ());
-							print ("\tadd {{ Ensure{0} ({1})!.{2} += value; }}", dtype.Name, ensureArg, miname);
-							print ("\tremove {{ Ensure{0} ({1})!.{2} -= value; }}", dtype.Name, ensureArg, miname);
+								print ($"public event EventHandler<{Nomenclator.GetEventArgName (mi)}> {Nomenclator.GetEventName (mi).CamelCase ()} {{");
+							print ($"\tadd {{ Ensure{dtype.Name} ({ensureArg})!.{miname} += value; }}");
+							print ($"\tremove {{ Ensure{dtype.Name} ({ensureArg})!.{miname} -= value; }}");
 							print ("}\n");
 						} else {
-							print ("public {0}? {1} {{", Nomenclator.GetDelegateName (mi), Nomenclator.GetDelegateApiName (mi).CamelCase ());
-							print ("\tget {{ return Ensure{0} ({1})!.{2}; }}", dtype.Name, ensureArg, miname);
-							print ("\tset {{ Ensure{0} ({1})!.{2} = value; }}", dtype.Name, ensureArg, miname);
+							print ($"public {Nomenclator.GetDelegateName (mi)}? {Nomenclator.GetDelegateApiName (mi).CamelCase ()} {{");
+							print ($"\tget {{ return Ensure{dtype.Name} ({ensureArg})!.{miname}; }}");
+							print ($"\tset {{ Ensure{dtype.Name} ({ensureArg})!.{miname} = value; }}");
 							print ("}\n");
 						}
 					}
@@ -7540,9 +7538,9 @@ public partial class Generator : IMemberGatherer {
 				}
 
 				string appearance_type_name = TypeName + "Appearance";
-				print ("public partial class {0} : {1} {{", appearance_type_name, base_class);
+				print ($"public partial class {appearance_type_name} : {base_class} {{");
 				indent++;
-				print ("protected internal {0} (IntPtr handle) : base (handle) {{}}", appearance_type_name);
+				print ($"protected internal {appearance_type_name} (IntPtr handle) : base (handle) {{}}");
 
 				if (appearance_selectors is not null) {
 					var currently_ignored_fields = new List<string> ();
@@ -7568,9 +7566,9 @@ public partial class Generator : IMemberGatherer {
 					print ($"///   <para>If developers want to control the appearance of subclasses of <see cref=\"global::{type.FullName}\" />, they should use the <see cref=\"global::{type.FullName}.GetAppearance&lt;T&gt;(UIKit.UITraitCollection,System.Type[])\" /> method.</para>");
 					print ($"/// </remarks>");
 				}
-				print ("public static {0}{1} Appearance {{", parent_implements_appearance ? "new " : "", appearance_type_name);
+				print ($"public static {(parent_implements_appearance ? "new " : "")}{appearance_type_name} Appearance {{");
 				indent++;
-				print ("get {{ return new {0} (global::{1}.IntPtr_objc_msgSend (class_ptr, {2})); }}", appearance_type_name, NamespaceCache.Messaging, InlineSelectors ? "ObjCRuntime.Selector.GetHandle (\"appearance\")" : "UIAppearance.SelectorAppearance");
+				print ($"get {{ return new {appearance_type_name} (global::{NamespaceCache.Messaging}.IntPtr_objc_msgSend (class_ptr, {(InlineSelectors ? "ObjCRuntime.Selector.GetHandle (\"appearance\")" : "UIAppearance.SelectorAppearance")})); }}");
 				indent--;
 				print ("}\n");
 
@@ -7593,9 +7591,9 @@ public partial class Generator : IMemberGatherer {
 					print ($"///   <para>For more information, see the documentation for the <see cref=\"global::UIKit.UIAppearance\" /> class.</para>");
 					print ($"/// </remarks>");
 				}
-				print ("public static {0}{1} GetAppearance<T> () where T: {2} {{", parent_implements_appearance ? "new " : "", appearance_type_name, TypeName);
+				print ($"public static {(parent_implements_appearance ? "new " : "")}{appearance_type_name} GetAppearance<T> () where T: {TypeName} {{");
 				indent++;
-				print ("return new {0} (global::{1}.IntPtr_objc_msgSend (Class.GetHandle (typeof (T)), {2}));", appearance_type_name, NamespaceCache.Messaging, InlineSelectors ? "ObjCRuntime.Selector.GetHandle (\"appearance\")" : "UIAppearance.SelectorAppearance");
+				print ($"return new {appearance_type_name} (global::{NamespaceCache.Messaging}.IntPtr_objc_msgSend (Class.GetHandle (typeof (T)), {(InlineSelectors ? "ObjCRuntime.Selector.GetHandle (\"appearance\")" : "UIAppearance.SelectorAppearance")}));");
 				indent--;
 				print ("}\n");
 
@@ -7616,10 +7614,10 @@ public partial class Generator : IMemberGatherer {
 					print ($"///   <para>For more information, see the documentation for the <see cref=\"global::UIKit.UIAppearance\" /> class.</para>");
 					print ($"/// </remarks>");
 				}
-				print ("public static {0}{1} AppearanceWhenContainedIn (params Type [] containers)", parent_implements_appearance ? "new " : "", appearance_type_name);
+				print ($"public static {(parent_implements_appearance ? "new " : "")}{appearance_type_name} AppearanceWhenContainedIn (params Type [] containers)");
 				print ("{");
 				indent++;
-				print ("return new {0} (UIAppearance.GetAppearance (class_ptr, containers));", appearance_type_name);
+				print ($"return new {appearance_type_name} (UIAppearance.GetAppearance (class_ptr, containers));");
 				indent--;
 				print ("}\n");
 
@@ -7642,9 +7640,9 @@ public partial class Generator : IMemberGatherer {
 					print ($"///   <para>For more information, see the documentation for the <see cref=\"global::UIKit.UIAppearance\" /> class.</para>");
 					print ($"/// </remarks>");
 				}
-				print ("public static {0}{1} GetAppearance (UITraitCollection traits) {{", parent_implements_appearance ? "new " : "", appearance_type_name);
+				print ($"public static {(parent_implements_appearance ? "new " : "")}{appearance_type_name} GetAppearance (UITraitCollection traits) {{");
 				indent++;
-				print ("return new {0} (UIAppearance.GetAppearance (class_ptr, traits));", appearance_type_name);
+				print ($"return new {appearance_type_name} (UIAppearance.GetAppearance (class_ptr, traits));");
 				indent--;
 				print ("}\n");
 
@@ -7668,9 +7666,9 @@ public partial class Generator : IMemberGatherer {
 					print ($"///   <para>For more information, see the documentation for the <see cref=\"global::UIKit.UIAppearance\" /> class.</para>");
 					print ($"/// </remarks>");
 				}
-				print ("public static {0}{1} GetAppearance (UITraitCollection traits, params Type [] containers) {{", parent_implements_appearance ? "new " : "", appearance_type_name);
+				print ($"public static {(parent_implements_appearance ? "new " : "")}{appearance_type_name} GetAppearance (UITraitCollection traits, params Type [] containers) {{");
 				indent++;
-				print ("return new {0} (UIAppearance.GetAppearance (class_ptr, traits, containers));", appearance_type_name);
+				print ($"return new {appearance_type_name} (UIAppearance.GetAppearance (class_ptr, traits, containers));");
 				indent--;
 				print ("}\n");
 
@@ -7695,9 +7693,9 @@ public partial class Generator : IMemberGatherer {
 					print ($"///   <para>For more information, see the documentation for the <see cref=\"global::UIKit.UIAppearance\" /> class.</para>");
 					print ($"/// </remarks>");
 				}
-				print ("public static {0}{1} GetAppearance<T> (UITraitCollection traits) where T: {2} {{", parent_implements_appearance ? "new " : "", appearance_type_name, TypeName);
+				print ($"public static {(parent_implements_appearance ? "new " : "")}{appearance_type_name} GetAppearance<T> (UITraitCollection traits) where T: {TypeName} {{");
 				indent++;
-				print ("return new {0} (UIAppearance.GetAppearance (Class.GetHandle (typeof (T)), traits));", appearance_type_name);
+				print ($"return new {appearance_type_name} (UIAppearance.GetAppearance (Class.GetHandle (typeof (T)), traits));");
 				indent--;
 				print ("}\n");
 
@@ -7723,9 +7721,9 @@ public partial class Generator : IMemberGatherer {
 					print ($"///   <para>For more information, see the documentation for the <see cref=\"global::UIKit.UIAppearance\" /> class.</para>");
 					print ($"/// </remarks>");
 				}
-				print ("public static {0}{1} GetAppearance<T> (UITraitCollection traits, params Type [] containers) where T: {2}{{", parent_implements_appearance ? "new " : "", appearance_type_name, TypeName);
+				print ($"public static {(parent_implements_appearance ? "new " : "")}{appearance_type_name} GetAppearance<T> (UITraitCollection traits, params Type [] containers) where T: {TypeName}{{");
 				indent++;
-				print ("return new {0} (UIAppearance.GetAppearance (Class.GetHandle (typeof (T)), containers));", appearance_type_name);
+				print ($"return new {appearance_type_name} (UIAppearance.GetAppearance (Class.GetHandle (typeof (T)), containers));");
 				indent--;
 				print ("}\n");
 
@@ -7782,9 +7780,9 @@ public partial class Generator : IMemberGatherer {
 						print ($"\t/// ]]></code>");
 						print ($"\t///   </example>");
 						print ($"\t/// </remarks>");
-						print ("\tpublic static NSObject Observe{0} (EventHandler<{1}> handler)", notification_name, event_name);
+						print ($"\tpublic static NSObject Observe{notification_name} (EventHandler<{event_name}> handler)");
 						print ("\t{");
-						print ("\t\treturn {0}.AddObserver ({1}, notification => handler (null, new {2} (notification)));", notification_center, property.Name, event_name);
+						print ($"\t\treturn {notification_center}.AddObserver ({property.Name}, notification => handler (null, new {event_name} (notification)));");
 						print ("\t}");
 
 						print ($"\t/// <summary>Strongly typed notification for the {constantReference} constant.</summary>");
@@ -7805,9 +7803,9 @@ public partial class Generator : IMemberGatherer {
 						print ($"\t/// ]]></code>");
 						print ($"\t///   </example>");
 						print ($"\t/// </remarks>");
-						print ("\tpublic static NSObject Observe{0} (NSObject objectToObserve, EventHandler<{1}> handler)", notification_name, event_name);
+						print ($"\tpublic static NSObject Observe{notification_name} (NSObject objectToObserve, EventHandler<{event_name}> handler)");
 						print ("\t{");
-						print ("\t\treturn {0}.AddObserver ({1}, notification => handler (null, new {2} (notification)), objectToObserve);", notification_center, property.Name, event_name);
+						print ($"\t\treturn {notification_center}.AddObserver ({property.Name}, notification => handler (null, new {event_name} (notification)), objectToObserve);");
 						print ("\t}");
 					}
 				}
@@ -7815,7 +7813,7 @@ public partial class Generator : IMemberGatherer {
 			}
 
 			indent--;
-			print ("}} /* class {0} */", TypeName);
+			print ($"}} /* class {TypeName} */");
 
 			//
 			// Copy delegates from the API files into the output if they were declared there
@@ -7847,17 +7845,17 @@ public partial class Generator : IMemberGatherer {
 				if (BindingTouch.SupportsXmlDocumentation) {
 					print ("/// <summary>Provides data for an event based on an Objective-C protocol method.</summary>");
 				}
-				print ("public partial class {0} : EventArgs {{", eaclass); indent++;
+				print ($"public partial class {eaclass} : EventArgs {{"); indent++;
 				if (BindingTouch.SupportsXmlDocumentation) {
 					print ($"/// <summary>Create a new instance of the <see cref=\"{eaclass}\" /> with the specified event data.</summary>");
 					foreach (var p in pars.Skip (1))
 						print ($"/// <param name=\"{p.Name.GetSafeParamName ()}\">The value for the <see cref=\"{GetPublicParameterName (p)}\" /> property.</param>");
 				}
-				print ("public {0} ({1})", eaclass, RenderParameterDecl (pars.Skip (1), true));
+				print ($"public {eaclass} ({RenderParameterDecl (pars.Skip (1), true)})");
 				print ("{");
 				indent++;
 				foreach (var p in pars.Skip (minPars).OrderBy (p => p.Name, StringComparer.Ordinal)) {
-					print ("this.{0} = {1};", GetPublicParameterName (p), p.Name.GetSafeParamName ());
+					print ($"this.{GetPublicParameterName (p)} = {p.Name.GetSafeParamName ()};");
 				}
 				indent--;
 				print ("}");
@@ -7868,7 +7866,7 @@ public partial class Generator : IMemberGatherer {
 					var bareType = pt.TryIsByRef (out var elementType) ? elementType : pt;
 					var nullable = !pt.IsValueType && AttributeManager.IsNullable (p);
 
-					print ("public {0}{1} {2} {{ get; set; }}", TypeManager.RenderType (bareType), nullable ? "?" : "", GetPublicParameterName (p));
+					print ($"public {TypeManager.RenderType (bareType)}{(nullable ? "?" : "")} {GetPublicParameterName (p)} {{ get; set; }}");
 				}
 				indent--; print ("}\n");
 			}
@@ -7888,7 +7886,7 @@ public partial class Generator : IMemberGatherer {
 				if (BindingTouch.SupportsXmlDocumentation) {
 					print ($"/// <summary>This class holds the return values for an asynchronous operation.</summary>");
 				}
-				print ("public partial class {0} {{", async_type.Item1); indent++;
+				print ($"public partial class {async_type.Item1} {{"); indent++;
 
 				var ctor = new StringBuilder ();
 
@@ -7898,9 +7896,7 @@ public partial class Generator : IMemberGatherer {
 						print ($"/// <summary>The result value from the asynchronous operation.</summary>");
 					}
 					var safe_name = pi.Name.GetSafeParamName ();
-					print ("public {0} {1} {{ get; set; }}",
-						TypeManager.FormatType (type, pi.ParameterType),
-						safe_name.Capitalize ());
+					print ($"public {TypeManager.FormatType (type, pi.ParameterType)} {safe_name.Capitalize ()} {{ get; set; }}");
 
 					if (comma)
 						ctor.Append (", ");
@@ -7917,10 +7913,10 @@ public partial class Generator : IMemberGatherer {
 						print ($"/// <param name=\"{safe_name}\">Result value from an asynchronous operation.</param>");
 					}
 				}
-				print ("\npublic {0} ({1}) {{", async_type.Item1, ctor); indent++;
+				print ($"\npublic {async_type.Item1} ({ctor}) {{"); indent++;
 				foreach (var pi in async_type.Item2) {
 					var safe_name = pi.Name.GetSafeParamName ();
-					print ("this.{0} = {1};", safe_name.Capitalize (), safe_name);
+					print ($"this.{safe_name.Capitalize ()} = {safe_name};");
 				}
 				print ("Initialize ();");
 				indent--; print ("}");

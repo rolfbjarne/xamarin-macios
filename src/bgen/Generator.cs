@@ -105,6 +105,10 @@ public partial class Generator : IMemberGatherer {
 	readonly StringBuilder reusable_postproc = new ();
 	// Reusable list for PrintPlatformAttributesNoDuplicates
 	readonly List<AvailabilityBaseAttribute> reusable_inlined_ca = new ();
+	// Reusable set for StripIntroducedOnNamespaceNotIncluded
+	readonly HashSet<PlatformName> reusable_droppedPlatforms = new ();
+	// Reusable StringBuilder for print(format, args) to avoid intermediate string allocations
+	internal readonly StringBuilder reusable_print = new ();
 
 	//
 	// This contains delegates that are referenced in the source and need to be generated.
@@ -2416,6 +2420,11 @@ public partial class Generator : IMemberGatherer {
 		print (sw, format);
 	}
 
+	public void print ([System.Runtime.CompilerServices.InterpolatedStringHandlerArgument ("")] PrintInterpolatedStringHandler handler)
+	{
+		print (sw, handler.GetStringBuilder ());
+	}
+
 	public void print (StringBuilder sb)
 	{
 		print (sw, sb);
@@ -2428,17 +2437,17 @@ public partial class Generator : IMemberGatherer {
 
 	public void print (string format, object? arg0)
 	{
-		print (sw, string.Format (format, arg0));
+		print (sw, format, arg0);
 	}
 
 	public void print (string format, object? arg0, object? arg1)
 	{
-		print (sw, string.Format (format, arg0, arg1));
+		print (sw, format, arg0, arg1);
 	}
 
 	public void print (string format, object? arg0, object? arg1, object? arg2)
 	{
-		print (sw, string.Format (format, arg0, arg1, arg2));
+		print (sw, format, arg0, arg1, arg2);
 	}
 
 	static char [] newlineCharacters = new char [] { '\n' };
@@ -2480,22 +2489,34 @@ public partial class Generator : IMemberGatherer {
 
 	public void print (StreamWriter? w, string format, params object? [] args)
 	{
-		print (w, string.Format (format, args));
+		var sb = reusable_print;
+		sb.Clear ();
+		sb.AppendFormat (format, args);
+		print (w, sb);
 	}
 
 	public void print (StreamWriter? w, string format, object? arg0)
 	{
-		print (w, string.Format (format, arg0));
+		var sb = reusable_print;
+		sb.Clear ();
+		sb.AppendFormat (format, arg0);
+		print (w, sb);
 	}
 
 	public void print (StreamWriter? w, string format, object? arg0, object? arg1)
 	{
-		print (w, string.Format (format, arg0, arg1));
+		var sb = reusable_print;
+		sb.Clear ();
+		sb.AppendFormat (format, arg0, arg1);
+		print (w, sb);
 	}
 
 	public void print (StreamWriter? w, string format, object? arg0, object? arg1, object? arg2)
 	{
-		print (w, string.Format (format, arg0, arg1, arg2));
+		var sb = reusable_print;
+		sb.Clear ();
+		sb.AppendFormat (format, arg0, arg1, arg2);
+		print (w, sb);
 	}
 
 	public void print (StreamWriter? w, StringBuilder sb)
@@ -2535,6 +2556,11 @@ public partial class Generator : IMemberGatherer {
 	{
 		foreach (var a in e)
 			w!.WriteLine (a);
+	}
+
+	public void print (StreamWriter? w, [System.Runtime.CompilerServices.InterpolatedStringHandlerArgument ("")] PrintInterpolatedStringHandler handler)
+	{
+		print (w, handler.GetStringBuilder ());
 	}
 
 	bool Duplicated (AvailabilityBaseAttribute candidate, AvailabilityBaseAttribute [] attributes)
@@ -2646,7 +2672,8 @@ public partial class Generator : IMemberGatherer {
 	void StripIntroducedOnNamespaceNotIncluded (List<AvailabilityBaseAttribute> memberAvailability, MemberInfo context)
 	{
 		if (context is TypeInfo containingClass) {
-			var droppedPlatforms = new HashSet<PlatformName> ();
+			var droppedPlatforms = reusable_droppedPlatforms;
+			droppedPlatforms.Clear ();
 
 			// Walk all members and look for introduced that are nonsense for our containing class's platform
 			// Take a snapshot count since we only need to check existing items (not ones we add)

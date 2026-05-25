@@ -1744,12 +1744,12 @@ public partial class Generator : IMemberGatherer {
 			PrintExperimentalAttribute (ti.Type);
 			print ($"internal sealed class {ti.NativeInvokerName} : TrampolineBlockBase {{");
 			indent++;
-			print ("{0} invoker;", ti.DelegateName);
+			print ($"{ti.DelegateName} invoker;");
 			print ("");
 			print_generated_code ();
-			print ("public unsafe {0} (BlockLiteral *block) : base (block)", ti.NativeInvokerName);
+			print ($"public unsafe {ti.NativeInvokerName} (BlockLiteral *block) : base (block)");
 			print ("{"); indent++;
-			print ("invoker = block->GetDelegateForBlock<{0}> ();", ti.DelegateName);
+			print ($"invoker = block->GetDelegateForBlock<{ti.DelegateName}> ();");
 			indent--; print ("}");
 			print ("");
 			print ("[DynamicDependency (nameof (Create))]");
@@ -1759,7 +1759,7 @@ public partial class Generator : IMemberGatherer {
 			print ("}");
 			print ("");
 			print_generated_code ();
-			print ("public unsafe static {0}? Create (IntPtr block)\n{{", ti.UserDelegate); indent++;
+			print ($"public unsafe static {ti.UserDelegate}? Create (IntPtr block)\n{{"); indent++;
 			print ("if (block == IntPtr.Zero)"); indent++;
 			print ("return null;"); indent--;
 			print ($"var del = ({ti.UserDelegate}?) GetExistingManagedDelegate (block);");
@@ -1769,7 +1769,7 @@ public partial class Generator : IMemberGatherer {
 			var string_pars = new StringBuilder ();
 			MakeSignatureFromParameterInfo (false, string_pars, mi, declaringType: null, parameters: parameters);
 			print_generated_code ();
-			print ("unsafe {0} Invoke ({1})", TypeManager.FormatType (null, mi.ReturnType), string_pars.ToString ());
+			print ($"unsafe {TypeManager.FormatType (null, mi.ReturnType)} Invoke ({string_pars.ToString ()})");
 			print ("{"); indent++;
 			string? cast_a = "", cast_b = "";
 			bool use_temp_return;
@@ -1796,11 +1796,7 @@ public partial class Generator : IMemberGatherer {
 
 			if (convs.Length > 0)
 				print (convs);
-			print ("{0}{1}invoker (BlockPointer{2}){3};",
-				   use_temp_return ? "var ret = " : "",
-				   cast_a,
-				   args.ToString (),
-				   cast_b);
+			print ($"{(use_temp_return ? "var ret = " : "")}{cast_a}invoker (BlockPointer{args.ToString ()}){cast_b};");
 			if (needsGCKeepAlives)
 				GenerateArgumentGCKeepAlives (mi, null);
 			if (disposes.Length > 0)
@@ -3367,10 +3363,10 @@ public partial class Generator : IMemberGatherer {
 		if (stret && aligned) {
 			var ret_val = "(IntPtr*) aligned_ret";
 			if (minfo.is_static)
-				print ("{0} ({5}, class_ptr, {3}{4});", sig, "/*unusued*/", "/*unusued*/", selector_field, args, ret_val);
+				print ($"{sig} ({ret_val}, class_ptr, {selector_field}{args});");
 			else {
 				var rcv = receiver.Length > 0 ? receiver : target_name + handle;
-				print ("{0} ({3}, {1}, {2}{4});", sig, rcv, selector_field, ret_val, args);
+				print ($"{sig} ({ret_val}, {rcv}, {selector_field}{args});");
 			}
 
 			print ("aligned_assigned = true;");
@@ -3393,17 +3389,10 @@ public partial class Generator : IMemberGatherer {
 			}
 
 			if (minfo.is_static)
-				print ("{0}{1}{2} (class_ptr, {5}{6}){7};",
-					   returns ? "ret = " : "",
-					   cast_a, sig, target_name,
-					   "/*unusued3*/", //supercall ? "Super" : "",
-					   selector_field, args, cast_b);
+				print ($"{(returns ? "ret = " : "")}{cast_a}{sig} (class_ptr, {selector_field}{args}){cast_b};");
 			else {
 				var rcv = receiver.Length > 0 ? receiver : target_name + handle;
-				print ("{0}{1}{2} ({3}, {4}{5}){6};",
-					   returns ? "ret = " : "",
-					   cast_a, sig, rcv,
-					   selector_field, args, cast_b);
+				print ($"{(returns ? "ret = " : "")}{cast_a}{sig} ({rcv}, {selector_field}{args}){cast_b};");
 			}
 
 			if (reusable_postproc.Length > 0)
@@ -3883,14 +3872,15 @@ public partial class Generator : IMemberGatherer {
 				print ("{0} ret;", NativeHandleType);
 				trampoline_info = MakeTrampoline (mi.ReturnType);
 			} else if (align is not null) {
-				print ("{0} ret = default({0});", TypeManager.FormatType (mi.DeclaringType, mi.ReturnType));
-				print ("IntPtr ret_alloced = Marshal.AllocHGlobal (Marshal.SizeOf<{0}> () + {1});", TypeManager.FormatType (mi.DeclaringType, mi.ReturnType), align.Align);
-				print ("IntPtr aligned_ret = new IntPtr (((nint) (ret_alloced + {0}) >> {1}) << {1});", align.Align - 1, align.Bits);
+				var retType = TypeManager.FormatType (mi.DeclaringType, mi.ReturnType);
+				print ($"{retType} ret = default({retType});");
+				print ($"IntPtr ret_alloced = Marshal.AllocHGlobal (Marshal.SizeOf<{retType}> () + {align.Align});");
+				print ($"IntPtr aligned_ret = new IntPtr (((nint) (ret_alloced + {align.Align - 1}) >> {align.Bits}) << {align.Bits});");
 				print ("bool aligned_assigned = false;");
 			} else if (minfo.is_bindAs) {
 				var bindAsAttrib = GetOneBindAsAttribute (minfo.mi);
 				// tricky, e.g. when an nullable `NSNumber[]` is bound as a `float[]`, since FormatType and bindAsAttrib have not clue about the original nullability 
-				print ("{0} ret;", TypeManager.FormatType (bindAsAttrib.Type.DeclaringType, bindAsAttrib.Type));
+				print ($"{TypeManager.FormatType (bindAsAttrib.Type.DeclaringType, bindAsAttrib.Type)} ret;");
 			} else if (mi.ReturnType == TypeCache.System_Boolean) {
 				print ("byte ret;");
 			} else if (mi.ReturnType == TypeCache.System_Char) {
@@ -3900,15 +3890,15 @@ public partial class Generator : IMemberGatherer {
 			} else {
 				var isClassType = mi.ReturnType.IsClass || mi.ReturnType.IsInterface;
 				var nullableReturn = isClassType ? "?" : string.Empty;
-				print ("{0}{1} ret;", TypeManager.FormatType (minfo.type, mi.ReturnType), nullableReturn);
+				print ($"{TypeManager.FormatType (minfo.type, mi.ReturnType)}{nullableReturn} ret;");
 			}
 		} else if (mi.ReturnType != TypeCache.System_Void && mi.Name != "Constructor") {
 			if (minfo.is_bindAs) {
 				var bindAsAttrib = GetOneBindAsAttribute (minfo.mi);
 				// tricky, e.g. when an nullable `NSNumber[]` is bound as a `float[]`, since FormatType and bindAsAttrib have not clue about the original nullability 
-				print ("{0} ret;", TypeManager.FormatType (bindAsAttrib.Type.DeclaringType, bindAsAttrib.Type));
+				print ($"{TypeManager.FormatType (bindAsAttrib.Type.DeclaringType, bindAsAttrib.Type)} ret;");
 			} else {
-				print ("{0} ret;", TypeManager.FormatType (minfo.type, mi.ReturnType));
+				print ($"{TypeManager.FormatType (minfo.type, mi.ReturnType)} ret;");
 			}
 		} else if (minfo.is_ctor && minfo.is_protocol_member) {
 			// special case because constructors in protocol members will be converted to factory methods
@@ -3963,7 +3953,7 @@ public partial class Generator : IMemberGatherer {
 			// nothing to do
 		} else if ((body_options & BodyOption.MarkRetDirty) == BodyOption.MarkRetDirty) {
 			print ("MarkDirty ();");
-			print ("{0} = ret;", var_name);
+			print ($"{var_name} = ret;");
 		}
 
 		if ((postget is not null) && (postget.Length > 0)) {
@@ -4320,12 +4310,7 @@ public partial class Generator : IMemberGatherer {
 			print_generated_code ();
 			PrintPropertyAttributes (pi, minfo);
 			PrintAttributes (pi, preserve: true, advice: true);
-			print ("{0} {1}{2}{3} {4} {{",
-				   mod,
-				   minfo.GetModifiers (),
-				   TypeManager.FormatType (pi.DeclaringType, pi.PropertyType),
-				   nullable ? "?" : String.Empty,
-					pi.Name.GetSafeParamName ());
+			print ($"{mod} {minfo.GetModifiers ()}{TypeManager.FormatType (pi.DeclaringType, pi.PropertyType)}{(nullable ? "?" : "")} {pi.Name.GetSafeParamName ()} {{");
 			indent++;
 			if (generate_getter) {
 				PrintAttributes (pi.GetGetMethod ()!, platform: true, preserve: true, advice: true);
@@ -4360,12 +4345,12 @@ public partial class Generator : IMemberGatherer {
 				}
 
 				if (TypeManager.IsDictionaryContainerType (pi.PropertyType))
-					print ("{0} = value.GetDictionary ()!;", wrap);
+					print ($"{wrap} = value.GetDictionary ()!;");
 				else {
 					if (TypeManager.IsArrayOfWrappedType (pi.PropertyType))
-						print ("{0} = NSArray.FromNSObjects (value);", wrap);
+						print ($"{wrap} = NSArray.FromNSObjects (value);");
 					else
-						print ("{0} = {1}value;", wrap, is_protocol_wrapper ? "r" : "");
+						print ($"{wrap} = {(is_protocol_wrapper ? "r" : "")}value;");
 				}
 				indent--;
 				print ("}");
@@ -4386,7 +4371,7 @@ public partial class Generator : IMemberGatherer {
 
 			if (minfo.is_thread_static)
 				print ("[ThreadStatic]");
-			print ("{1}object? {0};", var_name, minfo.is_static ? "static " : "");
+			print ($"{(minfo.is_static ? "static " : "")}object? {var_name};");
 
 			if (!minfo.is_static && !is_interface_impl) {
 				instance_fields_to_clear_on_dispose?.Add (var_name);
@@ -4409,12 +4394,7 @@ public partial class Generator : IMemberGatherer {
 			propertyTypeName = TypeManager.FormatType (minfo.type, pi.PropertyType);
 		}
 
-		print ("{0} {1}{2}{3} {4} {{",
-			   mod,
-			   minfo.GetModifiers (),
-			   propertyTypeName,
-				nullable ? "?" : "",
-				pi.Name.GetSafeParamName ());
+		print ($"{mod} {minfo.GetModifiers ()}{propertyTypeName}{(nullable ? "?" : "")} {pi.Name.GetSafeParamName ()} {{");
 		indent++;
 
 		if (minfo.has_inner_wrap_attribute) {

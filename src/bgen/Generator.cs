@@ -101,6 +101,8 @@ public partial class Generator : IMemberGatherer {
 	readonly StringBuilder reusable_signature = new ();
 	readonly StringBuilder reusable_makesig = new ();
 	readonly StringBuilder reusable_register = new ();
+	// Reusable StringBuilder for postproc in GenerateMethodBody
+	readonly StringBuilder reusable_postproc = new ();
 
 	//
 	// This contains delegates that are referenced in the source and need to be generated.
@@ -2707,17 +2709,24 @@ public partial class Generator : IMemberGatherer {
 	//          The Foo property and the Klass both could have unique or duplicate attributes
 	// We collect them all, starting with the inner most first in the list.
 	// Later on CopyValidAttributes will handle only copying the first valid one down
+	readonly Dictionary<MemberInfo, List<AvailabilityBaseAttribute>> parentAttributeCache = new ();
 	List<AvailabilityBaseAttribute> GetAllParentAttributes (MemberInfo context)
 	{
+		if (parentAttributeCache.TryGetValue (context, out var cached))
+			return cached;
+
 		var parentAvailability = new List<AvailabilityBaseAttribute> ();
+		var current = context;
 		while (true) {
-			parentAvailability.AddRange (AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (context));
-			var parentContext = FindContainingContext (context);
-			if (context == parentContext) {
-				return parentAvailability;
+			parentAvailability.AddRange (AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (current));
+			var parentContext = FindContainingContext (current);
+			if (current == parentContext) {
+				break;
 			}
-			context = parentContext;
+			current = parentContext;
 		}
+		parentAttributeCache [context] = parentAvailability;
+		return parentAvailability;
 	}
 
 	public bool PrintPlatformAttributes (MemberInfo? mi, Type? inlinedType = null)
@@ -3295,10 +3304,10 @@ public partial class Generator : IMemberGatherer {
 		} else {
 			bool returns = mi.ReturnType != TypeCache.System_Void && mi.Name != "Constructor";
 			string? cast_a = "", cast_b = "";
-			var postproc = new StringBuilder ();
+			reusable_postproc.Clear ();
 
 			if (returns)
-				GetReturnsWrappers (mi, minfo, mi.DeclaringType, out cast_a, out cast_b, postproc);
+				GetReturnsWrappers (mi, minfo, mi.DeclaringType, out cast_a, out cast_b, reusable_postproc);
 			else if (mi.Name == "Constructor") {
 				cast_a = "InitializeHandle (";
 				cast_b = ", \"" + selector + "\")";
@@ -3318,8 +3327,8 @@ public partial class Generator : IMemberGatherer {
 					   selector_field, args, cast_b);
 			}
 
-			if (postproc.Length > 0)
-				print (postproc.ToString ());
+			if (reusable_postproc.Length > 0)
+				print (reusable_postproc);
 		}
 
 		if (!isInstanceMethod) {
@@ -3677,8 +3686,6 @@ public partial class Generator : IMemberGatherer {
 	// undecorated code is assumed to be iOS 2.0
 	static AvailabilityBaseAttribute iOSIntroducedDefault = new IntroducedAttribute (PlatformName.iOS, 2, 0);
 
-	string? CurrentMethod;
-
 	void GenerateThreadCheck (StreamWriter? sw = null)
 	{
 		string s;
@@ -3722,8 +3729,6 @@ public partial class Generator : IMemberGatherer {
 		var category_type = minfo.category_extension_type;
 		var is_appearance = minfo.is_appearance;
 		TrampolineInfo? trampoline_info = null;
-
-		CurrentMethod = String.Format ("{0}.{1}", type.Name, mi.Name);
 
 		// Warn about [Static] used in a member of [Category]
 		var hasStaticAtt = AttributeManager.HasAttribute<StaticAttribute> (mi);

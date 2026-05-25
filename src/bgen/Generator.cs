@@ -90,6 +90,18 @@ public partial class Generator : IMemberGatherer {
 	List<Tuple<string, ParameterInfo []>> async_result_types = new List<Tuple<string, ParameterInfo []>> ();
 	HashSet<string> async_result_types_emitted = new HashSet<string> ();
 
+	// Reusable StringBuilders for GenerateTypeLowering to avoid allocating 6 per method call
+	readonly StringBuilder reusable_args = new ();
+	readonly StringBuilder reusable_convs = new ();
+	readonly StringBuilder reusable_disposes = new ();
+	readonly StringBuilder reusable_by_ref_processing = new ();
+	readonly StringBuilder reusable_by_ref_init = new ();
+	readonly StringBuilder reusable_post_return = new ();
+	// Reusable StringBuilder for MakeSignature and MakeSig
+	readonly StringBuilder reusable_signature = new ();
+	readonly StringBuilder reusable_makesig = new ();
+	readonly StringBuilder reusable_register = new ();
+
 	//
 	// This contains delegates that are referenced in the source and need to be generated.
 	//
@@ -977,7 +989,8 @@ public partial class Generator : IMemberGatherer {
 	//
 	string MakeSig (string send, bool stret, MethodInfo mi, bool aligned)
 	{
-		var sb = new StringBuilder ();
+		var sb = reusable_makesig;
+		sb.Clear ();
 		var shouldMarshalNativeExceptions = ShouldMarshalNativeExceptions (mi);
 		var marshalDirective = AttributeManager.GetCustomAttribute<MarshalDirectiveAttribute> (mi);
 
@@ -1027,7 +1040,8 @@ public partial class Generator : IMemberGatherer {
 			return;
 		send_methods [method_name] = method_name;
 
-		var b = new StringBuilder ();
+		var b = reusable_register;
+		b.Clear ();
 		int n = 0;
 
 		foreach (var pi in mi.GetParameters ()) {
@@ -2886,7 +2900,8 @@ public partial class Generator : IMemberGatherer {
 	{
 		var mi = minfo.Method!;
 		var category_class = minfo.category_extension_type;
-		var sb = new StringBuilder ();
+		var sb = reusable_signature;
+		sb.Clear ();
 		string name = GetMethodName (minfo, is_async);
 
 		// Some codepaths already write preservation info
@@ -3392,12 +3407,18 @@ public partial class Generator : IMemberGatherer {
 	// @by_ref_processing
 	void GenerateTypeLowering (MethodInfo mi, bool null_allowed_override, out StringBuilder args, out StringBuilder convs, out StringBuilder disposes, out StringBuilder by_ref_processing, out StringBuilder by_ref_init, out StringBuilder post_return, PropertyInfo? propInfo = null, bool castEnum = true)
 	{
-		args = new StringBuilder ();
-		convs = new StringBuilder ();
-		disposes = new StringBuilder ();
-		by_ref_processing = new StringBuilder ();
-		by_ref_init = new StringBuilder ();
-		post_return = new StringBuilder ();
+		args = reusable_args;
+		convs = reusable_convs;
+		disposes = reusable_disposes;
+		by_ref_processing = reusable_by_ref_processing;
+		by_ref_init = reusable_by_ref_init;
+		post_return = reusable_post_return;
+		args.Clear ();
+		convs.Clear ();
+		disposes.Clear ();
+		by_ref_processing.Clear ();
+		by_ref_init.Clear ();
+		post_return.Clear ();
 
 		foreach (var pi in mi.GetParameters ()) {
 			var safe_name = pi.Name.GetSafeParamName ();
@@ -4652,7 +4673,8 @@ public partial class Generator : IMemberGatherer {
 		if (AttributeManager.HasAttribute<ManualAttribute> (mi))
 			return;
 
-		foreach (var pi in mi.GetParameters ())
+		var miParameters = mi.GetParameters ();
+		foreach (var pi in miParameters)
 			if (AttributeManager.HasAttribute<RetainAttribute> (pi)) {
 				print ("#pragma warning disable 168");
 				print ("{0}? __mt_{1}_{2};", pi.ParameterType, mi.Name, pi.Name);
@@ -4665,9 +4687,9 @@ public partial class Generator : IMemberGatherer {
 				if (c == ':')
 					argCount++;
 			}
-			if (mi.GetParameters ().Length != argCount) {
+			if (miParameters.Length != argCount) {
 				exceptions.Add (ErrorHelper.CreateWarning (1105,
-					minfo.selector, argCount, mi, mi.GetParameters ().Length));
+					minfo.selector, argCount, mi, miParameters.Length));
 			}
 		}
 
@@ -4689,7 +4711,7 @@ public partial class Generator : IMemberGatherer {
 						firstParamDocs = p;
 				}
 				// if the method has parameters, but doesn't have any 'param' docs, then we don't add any 'param' doc for 'This'.
-				if (mi.GetParameters ().Length > 0 && firstParamDocs is null)
+				if (miParameters.Length > 0 && firstParamDocs is null)
 					return node;
 				// we're good for injection
 				var thisParamDoc = node.OwnerDocument!.CreateElement ("param");
@@ -4761,10 +4783,9 @@ public partial class Generator : IMemberGatherer {
 			else if (minfo.call_protocol_implementation_method) {
 				indent++;
 				var ret = mi.ReturnType == TypeCache.System_Void ? null : "return ";
-				var parameters = mi.GetParameters ();
-				var selfCall = minfo.is_static ? string.Empty : (parameters.Length == 0 ? "this" : "this, ");
+				var selfCall = minfo.is_static ? string.Empty : (miParameters.Length == 0 ? "this" : "this, ");
 				var genericArguments = minfo.is_static ? "<T>" : string.Empty;
-				print ($"{ret}_{GetMethodName (minfo, false)}{genericArguments} ({selfCall}{RenderArgs (parameters)});");
+				print ($"{ret}_{GetMethodName (minfo, false)}{genericArguments} ({selfCall}{RenderArgs (miParameters)});");
 				indent--;
 			} else if (minfo.wrap_method is not null) {
 				if (!minfo.is_ctor) {
@@ -6332,16 +6353,32 @@ public partial class Generator : IMemberGatherer {
 					if (bound_methods.Contains (minfo))
 						continue;
 
-					var protocolsThatHaveThisMethod = typeContractMethods.Where (x => { var sel = GetSelector (x); return sel is not null && sel == minfo.selector; });
-					if (protocolsThatHaveThisMethod.Count () > 1) {
+					int protocolMethodCount = 0;
+					for (int k = 0; k < typeContractMethods.Length; k++) {
+						var sel = GetSelector (typeContractMethods [k]);
+						if (sel is not null && sel == minfo.selector)
+							protocolMethodCount++;
+					}
+					if (protocolMethodCount > 1) {
 						// If multiple protocols have this method and we haven't generated a copy yet
-						if (generated_methods.Any (x => x.selector == minfo.selector))
+						bool alreadyGenerated = false;
+						for (int k = 0; k < generated_methods.Count; k++) {
+							if (generated_methods [k].selector == minfo.selector) {
+								alreadyGenerated = true;
+								break;
+							}
+						}
+						if (alreadyGenerated)
 							continue;
 
 						// Verify all of the versions have the same arguments / return value
 						// And just generate the first one (us)
 						var methodParams = mi.GetParameters ();
-						foreach (var duplicateMethod in protocolsThatHaveThisMethod) {
+						for (int k = 0; k < typeContractMethods.Length; k++) {
+							var sel = GetSelector (typeContractMethods [k]);
+							if (sel is null || sel != minfo.selector)
+								continue;
+							var duplicateMethod = typeContractMethods [k];
 							if (mi.ReturnType != duplicateMethod.ReturnType)
 								throw new BindingException (1038, true, mi.Name, type.Name);
 
@@ -6351,8 +6388,11 @@ public partial class Generator : IMemberGatherer {
 
 						int i = 0;
 						foreach (var param in methodParams) {
-							foreach (var duplicateMethod in protocolsThatHaveThisMethod) {
-								var duplicateParam = duplicateMethod.GetParameters () [i];
+							for (int k = 0; k < typeContractMethods.Length; k++) {
+								var sel = GetSelector (typeContractMethods [k]);
+								if (sel is null || sel != minfo.selector)
+									continue;
+								var duplicateParam = typeContractMethods [k].GetParameters () [i];
 								if (param.IsOut != duplicateParam.IsOut)
 									throw new BindingException (1040, true, minfo.selector, type.Name, i);
 								if (param.ParameterType != duplicateParam.ParameterType)
@@ -6399,26 +6439,52 @@ public partial class Generator : IMemberGatherer {
 					if (bound_properties.Contains (pi.Name))
 						continue;
 
-					var protocolsThatHaveThisProp = typeContractProperties.Where (x => x.Name == pi.Name);
-					if (protocolsThatHaveThisProp.Count () > 1) {
+					int protocolPropCount = 0;
+					for (int k = 0; k < typeContractProperties.Length; k++) {
+						if (typeContractProperties [k].Name == pi.Name)
+							protocolPropCount++;
+					}
+					if (protocolPropCount > 1) {
 						// If multiple protocols have this property and we haven't generated a copy yet
 						if (generated_properties.Contains (pi.Name))
 							continue;
 
 						// If there is a version that has get and set
-						if (protocolsThatHaveThisProp.Any (x => x.CanRead && x.CanWrite)) {
+						bool anyReadWrite = false;
+						for (int k = 0; k < typeContractProperties.Length; k++) {
+							if (typeContractProperties [k].Name == pi.Name && typeContractProperties [k].CanRead && typeContractProperties [k].CanWrite) {
+								anyReadWrite = true;
+								break;
+							}
+						}
+						if (anyReadWrite) {
 							// Skip if we are not it
 							if (!(pi.CanRead && pi.CanWrite))
 								continue;
 						} else {
 							// Verify all of the versions have the same get/set abilities since there is no universal get/set version
 							// And just generate the first one (us)
-							if (!protocolsThatHaveThisProp.All (x => x.CanRead == pi.CanRead && x.CanWrite == pi.CanWrite))
+							bool allMatch = true;
+							for (int k = 0; k < typeContractProperties.Length; k++) {
+								if (typeContractProperties [k].Name == pi.Name) {
+									if (typeContractProperties [k].CanRead != pi.CanRead || typeContractProperties [k].CanWrite != pi.CanWrite) {
+										allMatch = false;
+										break;
+									}
+								}
+							}
+							if (!allMatch)
 								throw new BindingException (1037, true, pi.Name, type.Name);
 						}
 
 						if (AttributeManager.IsNullable (pi)) {
-							var nonNullableProperty = protocolsThatHaveThisProp.SingleOrDefault (v => !AttributeManager.IsNullable (v));
+							PropertyInfo? nonNullableProperty = null;
+							for (int k = 0; k < typeContractProperties.Length; k++) {
+								if (typeContractProperties [k].Name == pi.Name && !AttributeManager.IsNullable (typeContractProperties [k])) {
+									nonNullableProperty = typeContractProperties [k];
+									break;
+								}
+							}
 							if (nonNullableProperty is not null) {
 								// We're getting the same property from multiple interfaces, and the nullability attributes don't match.
 								// This results in a warning (which turn into an error because we've turned on warnaserror):

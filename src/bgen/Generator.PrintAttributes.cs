@@ -10,21 +10,21 @@ public partial class Generator {
 	{
 		// Attributes are directly on the member
 		var attrs = AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (mi);
-		List<AvailabilityBaseAttribute> memberAvailability = new List<AvailabilityBaseAttribute> (attrs);
 
 		// Due to differences between Xamarin and NET6 availability attributes, we have to synthesize many duplicates for NET6
 		// See https://github.com/dotnet/macios/issues/10170 for details
 		if (context is null)
 			context = FindContainingContext (mi);
-		// Attributes on the _target_ context, the class itself or the target of the protocol inlining
-		List<AvailabilityBaseAttribute> parentContextAvailability = GetAllParentAttributes (context);
 		// (Optional) Attributes from the inlined protocol type itself
 		var inlinedTypeAvailability = inlinedType is not null ? GetAllParentAttributes (inlinedType) : null;
 
 		// We must consider attributes if we have any on our type, or if we're inlining and that inlined type has attributes
 		// If neither are true, we have zero attributes that are relevant
-		bool shouldConsiderAttributes = memberAvailability.Count > 0 || inlinedTypeAvailability is not null && inlinedTypeAvailability.Count > 0;
+		bool shouldConsiderAttributes = attrs.Length > 0 || inlinedTypeAvailability is not null && inlinedTypeAvailability.Count > 0;
 		if (shouldConsiderAttributes) {
+			List<AvailabilityBaseAttribute> memberAvailability = new List<AvailabilityBaseAttribute> (attrs);
+			// Attributes on the _target_ context, the class itself or the target of the protocol inlining
+			List<AvailabilityBaseAttribute> parentContextAvailability = GetAllParentAttributes (context);
 			// We will consider any inlinedType attributes first, if any, before any from our parent context
 			List<AvailabilityBaseAttribute> availabilityToConsider = new List<AvailabilityBaseAttribute> ();
 			if (inlinedTypeAvailability is not null) {
@@ -79,6 +79,6 @@ public partial class Generator {
 			// Remove any duplicates attributes as well
 			return memberAvailability.Distinct ().ToArray ();
 		}
-		return memberAvailability.ToArray ();
+		return attrs;
 	}
 }

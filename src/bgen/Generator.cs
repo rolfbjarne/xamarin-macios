@@ -115,6 +115,8 @@ public partial class Generator : IMemberGatherer {
 	readonly HashSet<PlatformName> reusable_droppedPlatforms = new ();
 	// Reusable StringBuilder for print(format, args) to avoid intermediate string allocations
 	internal readonly StringBuilder reusable_print = new ();
+	// Reusable StringBuilder for RenderParameterDecl/RenderArgs
+	readonly StringBuilder reusable_render = new ();
 	// Reusable stream/writer pair to avoid reallocating StreamWriter buffers per file
 	readonly SwappableStream reusable_stream = new ();
 	ReusableFileWriter? reusable_writer;
@@ -5036,11 +5038,20 @@ public partial class Generator : IMemberGatherer {
 					print ("[MonoNativeFunctionWrapper]\n");
 
 				var accessibility = mi.DeclaringType.IsInternal (this) ? "internal" : "public";
-				var isUnsafe = mi.GetCachedParameters ().Any ((v => v.ParameterType.IsPointer)) || mi.ReturnType.IsPointer;
+				var miParams = mi.GetCachedParameters ();
+				var isUnsafe = mi.ReturnType.IsPointer;
+				if (!isUnsafe) {
+					for (int i = 0; i < miParams.Length; i++) {
+						if (miParams [i].ParameterType.IsPointer) {
+							isUnsafe = true;
+							break;
+						}
+					}
+				}
 				print ("{3}{4} delegate {0} {1} ({2});",
 					   TypeManager.RenderType (mi.ReturnType, mi.ReturnTypeCustomAttributes),
 					   shortName,
-					   RenderParameterDecl (mi.GetCachedParameters ()),
+					   RenderParameterDecl (miParams),
 					   accessibility,
 					   isUnsafe ? " unsafe" : string.Empty);
 			}
@@ -8006,25 +8017,38 @@ public partial class Generator : IMemberGatherer {
 
 	string RenderParameterDecl (IEnumerable<ParameterInfo> pi, bool removeRefTypes)
 	{
-		return String.Join (", ", pi.Select (p => RenderSingleParameter (p, removeRefTypes) + " " + p.Name.GetSafeParamName ()).ToArray ());
+		var sb = reusable_render;
+		sb.Clear ();
+		bool first = true;
+		foreach (var p in pi) {
+			if (!first)
+				sb.Append (", ");
+			first = false;
+			sb.Append (RenderSingleParameter (p, removeRefTypes));
+			sb.Append (' ');
+			sb.Append (p.Name.GetSafeParamName ());
+		}
+		return sb.ToString ();
 	}
 
 	string RenderSingleParameter (ParameterInfo p, bool removeRefTypes)
 	{
 		var pt = p.ParameterType;
 
-		string name = string.Empty;
+		string prefix = string.Empty;
 		if (AttributeManager.HasAttribute<BlockCallbackAttribute> (p))
-			name = "[BlockCallback] ";
+			prefix = "[BlockCallback] ";
 		else if (AttributeManager.HasAttribute<CCallbackAttribute> (p))
-			name = "[CCallback] ";
+			prefix = "[CCallback] ";
 
 		if (pt.TryIsByRef (out var ptElementType)) {
 			pt = ptElementType;
-			name += (removeRefTypes ? "" : (p.IsOut ? "out " : "ref ")) + TypeManager.RenderType (pt, p);
-		} else
-			name += TypeManager.RenderType (pt, p);
-		return name;
+			if (removeRefTypes)
+				return prefix + TypeManager.RenderType (pt, p);
+			return prefix + (p.IsOut ? "out " : "ref ") + TypeManager.RenderType (pt, p);
+		}
+		var rendered = TypeManager.RenderType (pt, p);
+		return prefix.Length == 0 ? rendered : prefix + rendered;
 	}
 
 	string? GetPublicParameterName (ParameterInfo pi)
@@ -8044,12 +8068,38 @@ public partial class Generator : IMemberGatherer {
 
 	string RenderArgs (IEnumerable<ParameterInfo> pi, bool removeRefTypes)
 	{
-		return String.Join (", ", pi.Select (p => (p.ParameterType.IsByRef ? (removeRefTypes ? "" : (p.IsOut ? "out " : "ref ")) : "") + p.Name.GetSafeParamName ()).ToArray ());
+		var sb = reusable_render;
+		sb.Clear ();
+		bool first = true;
+		foreach (var p in pi) {
+			if (!first)
+				sb.Append (", ");
+			first = false;
+			if (p.ParameterType.IsByRef) {
+				if (!removeRefTypes)
+					sb.Append (p.IsOut ? "out " : "ref ");
+			}
+			sb.Append (p.Name.GetSafeParamName ());
+		}
+		return sb.ToString ();
+	}
+
+	bool MustPullValuesBack (ParameterInfo [] parameters)
+	{
+		for (int i = 0; i < parameters.Length; i++) {
+			if (parameters [i].ParameterType.IsByRef)
+				return true;
+		}
+		return false;
 	}
 
 	bool MustPullValuesBack (IEnumerable<ParameterInfo> parameters)
 	{
-		return parameters.Any (pi => pi.ParameterType.IsByRef);
+		foreach (var pi in parameters) {
+			if (pi.ParameterType.IsByRef)
+				return true;
+		}
+		return false;
 	}
 
 	object GetDefaultValue (MethodInfo mi)

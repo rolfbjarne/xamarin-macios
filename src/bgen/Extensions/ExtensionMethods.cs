@@ -168,11 +168,12 @@ public static class ReflectionExtensions {
 
 	public static AvailabilityBaseAttribute? GetAvailability (this ICustomAttributeProvider attrProvider, AvailabilityKind availabilityKind, Generator generator)
 	{
-		return generator.AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (attrProvider)
-			.FirstOrDefault (attr =>
-				attr.AvailabilityKind == availabilityKind &&
-					attr.Platform == generator.CurrentPlatform
-			);
+		var attributes = generator.AttributeManager.GetCustomAttributes<AvailabilityBaseAttribute> (attrProvider);
+		for (int i = 0; i < attributes.Length; i++) {
+			if (attributes [i].AvailabilityKind == availabilityKind && attributes [i].Platform == generator.CurrentPlatform)
+				return attributes [i];
+		}
+		return null;
 	}
 
 	public static List<PropertyInfo> GatherProperties (this Type type, BindingFlags flags, Generator generator)

@@ -425,14 +425,16 @@ public class AttributeManager {
 
 	readonly List<System.Attribute> convertedAttributeBuffer = new ();
 
-	void CreateAttributeInstance<T> (CustomAttributeData attribute, ICustomAttributeProvider? provider, List<T> output) where T : System.Attribute
+	void CreateAttributeInstance<T> (CustomAttributeData attribute, ICustomAttributeProvider? provider, ref List<T>? output) where T : System.Attribute
 	{
 		int startCount = convertedAttributeBuffer.Count;
 		int converted = ConvertOldAttributes (attribute, convertedAttributeBuffer);
 		if (converted > 0) {
 			for (int i = startCount; i < convertedAttributeBuffer.Count; i++) {
-				if (convertedAttributeBuffer [i] is T typed)
+				if (convertedAttributeBuffer [i] is T typed) {
+					output ??= new List<T> ();
 					output.Add (typed);
+				}
 			}
 			convertedAttributeBuffer.RemoveRange (startCount, converted);
 			return;
@@ -517,6 +519,7 @@ public class AttributeManager {
 			}
 		}
 
+		output ??= new List<T> ();
 		output.Add ((T) instance);
 	}
 
@@ -532,9 +535,7 @@ public class AttributeManager {
 			if (ignoredAttributes.Contains (attributes [i].GetAttributeType ().FullName))
 				continue;
 
-			if (list is null)
-				list = new List<T> ();
-			CreateAttributeInstance<T> (attributes [i], provider, list);
+			CreateAttributeInstance<T> (attributes [i], provider, ref list);
 		}
 
 		if (list is not null && list.Count > 0)

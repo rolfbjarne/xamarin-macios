@@ -128,7 +128,7 @@ public partial class Generator : IMemberGatherer {
 	// Reusable stream/writer pair to avoid reallocating StreamWriter buffers per file
 	readonly SwappableStream reusable_stream = new ();
 	ReusableFileWriter? reusable_writer;
-	// Cache for "name__handle__" strings used in MarshalParameter
+	// Cache for "name__handle__" strings used in AppendMarshalParameter
 	static readonly Dictionary<string, string> handleSuffixCache = new ();
 
 	//
@@ -854,64 +854,86 @@ public partial class Generator : IMemberGatherer {
 	}
 
 	//
-	public string? MarshalParameter (MethodInfo mi, ParameterInfo pi, bool null_allowed_override, PropertyInfo? propInfo, bool castEnum, StringBuilder convs, StringBuilder by_ref_init, StringBuilder post_return)
+	public void AppendMarshalParameter (StringBuilder target, MethodInfo mi, ParameterInfo pi, bool null_allowed_override, PropertyInfo? propInfo, bool castEnum, StringBuilder convs, StringBuilder by_ref_init, StringBuilder post_return)
 	{
-		if (pi.ParameterType.IsByRef && pi.ParameterType.GetElementType ()?.IsValueType == false)
-			return "&" + pi.Name + "Value";
+		if (pi.ParameterType.IsByRef && pi.ParameterType.GetElementType ()?.IsValueType == false) {
+			target.Append ('&').Append (pi.Name).Append ("Value");
+			return;
+		}
 
-		if (HasBindAsAttribute (pi))
-			return $"nsb_{pi.Name}.GetHandle ()";
-		if (propInfo is not null && HasBindAsAttribute (propInfo))
-			return $"nsb_{propInfo.Name}.GetHandle ()";
+		if (HasBindAsAttribute (pi)) {
+			target.Append ("nsb_").Append (pi.Name).Append (".GetHandle ()");
+			return;
+		}
+		if (propInfo is not null && HasBindAsAttribute (propInfo)) {
+			target.Append ("nsb_").Append (propInfo.Name).Append (".GetHandle ()");
+			return;
+		}
 
 		var safe_name = pi.Name.GetSafeParamName ();
 
-		if (TypeManager.IsWrappedType (pi.ParameterType))
-			return GetHandleSuffix (safe_name);
-
-		if (GetNativeEnumToNativeExpression (pi.ParameterType, out var preExpression, out var postExpression, out var nativeType))
-			return preExpression + safe_name + postExpression;
-
-		if (castEnum && pi.ParameterType.IsEnum)
-			return "(" + PrimitiveType (pi.ParameterType) + ")" + safe_name;
-
-		if (castEnum && pi.ParameterType.Namespace == "System") {
-			if (pi.ParameterType.Name == "nint")
-				return "(IntPtr) " + safe_name;
-			else if (pi.ParameterType.Name == "nuint")
-				return "(UIntPtr) " + safe_name;
+		if (TypeManager.IsWrappedType (pi.ParameterType)) {
+			target.Append (GetHandleSuffix (safe_name));
+			return;
 		}
 
-		if (TypeManager.IsNativeType (pi.ParameterType))
-			return safe_name;
+		if (GetNativeEnumToNativeExpression (pi.ParameterType, out var preExpression, out var postExpression, out var nativeType)) {
+			target.Append (preExpression).Append (safe_name).Append (postExpression);
+			return;
+		}
+
+		if (castEnum && pi.ParameterType.IsEnum) {
+			target.Append ('(').Append (PrimitiveType (pi.ParameterType)).Append (')').Append (safe_name);
+			return;
+		}
+
+		if (castEnum && pi.ParameterType.Namespace == "System") {
+			if (pi.ParameterType.Name == "nint") {
+				target.Append ("(IntPtr) ").Append (safe_name);
+				return;
+			} else if (pi.ParameterType.Name == "nuint") {
+				target.Append ("(UIntPtr) ").Append (safe_name);
+				return;
+			}
+		}
+
+		if (TypeManager.IsNativeType (pi.ParameterType)) {
+			target.Append (safe_name);
+			return;
+		}
 
 		if (pi.ParameterType == TypeCache.System_String) {
 			var mai = new MarshalInfo (this, mi, pi);
 			if (mai.PlainString)
-				return safe_name;
-			else {
-				return "ns" + pi.Name;
-			}
+				target.Append (safe_name);
+			else
+				target.Append ("ns").Append (pi.Name);
+			return;
 		}
 
 		if (pi.ParameterType.IsValueType) {
 			if (pi.ParameterType == TypeCache.System_Boolean)
-				return safe_name + " ? (byte) 1 : (byte) 0";
-			return safe_name;
+				target.Append (safe_name).Append (" ? (byte) 1 : (byte) 0");
+			else
+				target.Append (safe_name);
+			return;
 		}
 
 		if (marshalTypes.TryGetMarshalType (pi.ParameterType, out var mt)) {
-			if (null_allowed_override || AttributeManager.IsNullable (pi))
-				return GetHandleSuffix (safe_name);
-			return String.Format (mt.ParameterMarshal, safe_name);
+			if (null_allowed_override || AttributeManager.IsNullable (pi)) {
+				target.Append (GetHandleSuffix (safe_name));
+			} else {
+				target.AppendFormat (mt.ParameterMarshal, safe_name);
+			}
+			return;
 		}
 
 		if (pi.ParameterType.IsArray) {
-			//Type etype = pi.ParameterType.GetElementType ();
-
 			if (null_allowed_override || AttributeManager.IsNullable (pi))
-				return String.Format ("nsa_{0}.GetHandle ()", pi.Name);
-			return "nsa_" + pi.Name + ".Handle";
+				target.Append ("nsa_").Append (pi.Name).Append (".GetHandle ()");
+			else
+				target.Append ("nsa_").Append (pi.Name).Append (".Handle");
+			return;
 		}
 
 		//
@@ -921,7 +943,7 @@ public partial class Generator : IMemberGatherer {
 			var et = pi.ParameterType.GetElementType ()!;
 			var nullable = TypeManager.GetUnderlyingNullableType (et);
 			if (nullable is not null) {
-				return $"converted_{safe_name}";
+				target.Append ("converted_").Append (safe_name);
 			} else if (et.IsValueType) {
 				if (pi.IsOut)
 					convs.AppendLine ($"{safe_name} = default;");
@@ -931,37 +953,49 @@ public partial class Generator : IMemberGatherer {
 				post_return.AppendLine ("}");
 
 				if (et == TypeCache.System_Boolean)
-					return "(byte*) " + safe_name + "__pointer";
-				return safe_name + "__pointer";
+					target.Append ("(byte*) ").Append (safe_name).Append ("__pointer");
+				else
+					target.Append (safe_name).Append ("__pointer");
+			} else {
+				target.Append (pi.IsOut ? "out " : "ref ").Append (safe_name);
 			}
-			return (pi.IsOut ? "out " : "ref ") + safe_name;
+			return;
 		}
 
 		// Handle 'ValueType* foo'
 		if (pi.ParameterType.IsPointer) {
 			var et = pi.ParameterType.GetElementType ()!;
-			if (et.IsValueType)
-				return safe_name;
+			if (et.IsValueType) {
+				target.Append (safe_name);
+				return;
+			}
 		}
 
 		if (pi.ParameterType.IsSubclassOf (TypeCache.System_Delegate)) {
-			return String.Format ("(IntPtr) block_ptr_{0}", pi.Name);
+			target.Append ("(IntPtr) block_ptr_").Append (pi.Name);
+			return;
 		}
 
 		if (TypeManager.IsDictionaryContainerType (pi.ParameterType)) {
 			if (null_allowed_override || AttributeManager.IsNullable (pi))
-				return String.Format ("{0} is null ? NativeHandle.Zero : {0}.Dictionary.Handle", safe_name);
-			return safe_name + ".Dictionary.Handle";
+				target.Append (safe_name).Append (" is null ? NativeHandle.Zero : ").Append (safe_name).Append (".Dictionary.Handle");
+			else
+				target.Append (safe_name).Append (".Dictionary.Handle");
+			return;
 		}
 
 		if (pi.ParameterType.IsGenericParameter) {
 			if (null_allowed_override || AttributeManager.IsNullable (pi))
-				return string.Format ("{0}.GetHandle ()", safe_name);
-			return safe_name + ".Handle";
+				target.Append (safe_name).Append (".GetHandle ()");
+			else
+				target.Append (safe_name).Append (".Handle");
+			return;
 		}
 
-		if (TypeCache.INativeObject.IsAssignableFrom (pi.ParameterType))
-			return $"{safe_name}.GetHandle ()";
+		if (TypeCache.INativeObject.IsAssignableFrom (pi.ParameterType)) {
+			target.Append (safe_name).Append (".GetHandle ()");
+			return;
+		}
 
 		// This means you need to add a new MarshalType in the method "Go"
 		throw new BindingException (1002, true, pi.ParameterType.FullName, mi.DeclaringType?.FullName, mi.Name.GetSafeParamName ());
@@ -1005,6 +1039,10 @@ public partial class Generator : IMemberGatherer {
 		// If we have it directly on our method, good enough
 		if (AttributeManager.HasAttribute<MarshalNativeExceptionsAttribute> (mi))
 			return true;
+
+		// Only look up properties if this method is a property accessor (get_/set_)
+		if (!mi.IsSpecialName)
+			return false;
 
 		// Else look up to see if we are part of a property and look for the attribute there
 		var properties = mi.DeclaringType?.GetCachedProperties ();
@@ -3602,7 +3640,7 @@ public partial class Generator : IMemberGatherer {
 			if (!IsTarget (pi)) {
 				// Construct invocation
 				args.Append (", ");
-				args.Append (MarshalParameter (mi, pi, null_allowed_override, propInfo, castEnum, convs, by_ref_init, post_return));
+				AppendMarshalParameter (args, mi, pi, null_allowed_override, propInfo, castEnum, convs, by_ref_init, post_return);
 
 				if (pi.ParameterType.IsByRef) {
 					var et = pi.ParameterType.GetElementType ();

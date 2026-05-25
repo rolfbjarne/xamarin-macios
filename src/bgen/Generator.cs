@@ -4625,8 +4625,7 @@ public partial class Generator : IMemberGatherer {
 			   minfo.GetVisibility (),
 			   modifier,
 			   GetReturnType (minfo),
-			   MakeSignature (minfo, true, minfo.AsyncInitialParams, extra),
-			   minfo.is_abstract ? ";" : "");
+			   MakeSignature (minfo, true, minfo.AsyncInitialParams, extra));
 	}
 
 	void GenerateAsyncMethod (MemberInformation original_minfo, AsyncMethodKind asyncKind)
@@ -4924,7 +4923,7 @@ public partial class Generator : IMemberGatherer {
 		if (!is_abstract) {
 			if (minfo.is_ctor && !minfo.is_protocol_member) {
 				indent++;
-				print (": {0}", minfo.wrap_method is null ? "base (NSObjectFlag.Empty)" : minfo.wrap_method);
+				print ($": {(minfo.wrap_method is null ? "base (NSObjectFlag.Empty)" : minfo.wrap_method)}");
 				indent--;
 			}
 
@@ -4946,8 +4945,8 @@ public partial class Generator : IMemberGatherer {
 				if (!minfo.is_ctor) {
 					indent++;
 
-					var ret = mi.ReturnType == TypeCache.System_Void ? null : "return ";
-					print ("{0}{1}{2};", ret, minfo.is_extension_method ? "This." : "", minfo.wrap_method);
+					var ret = mi.ReturnType == TypeCache.System_Void ? "" : "return ";
+					print ($"{ret}{(minfo.is_extension_method ? "This." : "")}{minfo.wrap_method};");
 					indent--;
 				}
 			} else {

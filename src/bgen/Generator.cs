@@ -1084,7 +1084,8 @@ public partial class Generator : IMemberGatherer {
 				throw new BindingException (1079, ex.Error, ex, ex.Message, pi.Name.GetSafeParamName (), mi.DeclaringType, mi.Name);
 			}
 			b.Append (" ");
-			b.Append ("arg" + (++n));
+			b.Append ("arg");
+			b.Append (++n);
 		}
 
 		if (ShouldMarshalNativeExceptions (mi))
@@ -1383,7 +1384,7 @@ public partial class Generator : IMemberGatherer {
 			// We call lookup to build the hierarchy graph
 			GeneratedTypes.Lookup (t);
 
-			var tselectors = new List<string> ();
+			var tselectorSet = new HashSet<string> ();
 
 			foreach (var pi in GetTypeContractProperties (t)) {
 				if (pi.IsUnavailable (this))
@@ -1422,7 +1423,7 @@ public partial class Generator : IMemberGatherer {
 					var ba = GetBindAttribute (getter);
 
 					if (!is_abstract)
-						tselectors.Add (ba is not null ? ba.Selector! : export.Selector!);
+						tselectorSet.Add (ba is not null ? ba.Selector! : export.Selector!);
 					DeclareInvoker (getter);
 				}
 
@@ -1431,7 +1432,7 @@ public partial class Generator : IMemberGatherer {
 					var notImpl = AttributeManager.HasAttribute<NotImplementedAttribute> (setter);
 
 					if (!is_abstract && !notImpl)
-						tselectors.Add (ba is not null ? ba.Selector! : GetOneSetterExportAttribute (pi).Selector!);
+						tselectorSet.Add (ba is not null ? ba.Selector! : GetOneSetterExportAttribute (pi).Selector!);
 					DeclareInvoker (setter);
 				}
 			}
@@ -1515,7 +1516,7 @@ public partial class Generator : IMemberGatherer {
 					if (selector is null)
 						throw new BindingException (1009, true, mi.DeclaringType, mi.Name);
 
-					tselectors.Add (selector);
+					tselectorSet.Add (selector);
 					if (selector_use.ContainsKey (selector)) {
 						selector_use [selector]++;
 					} else
@@ -1538,7 +1539,7 @@ public partial class Generator : IMemberGatherer {
 					need_abstract [t] = true;
 			}
 
-			selectors [t] = tselectors.Distinct ().ToArray ();
+			selectors [t] = tselectorSet.ToArray ();
 		}
 
 		if (reportAlloc) {
@@ -3050,11 +3051,13 @@ public partial class Generator : IMemberGatherer {
 		bool comma = false;
 		if (minfo.is_extension_method) {
 			sb.Append ("this ");
-			sb.Append ("I" + mi.DeclaringType?.Name);
+			sb.Append ('I');
+			sb.Append (mi.DeclaringType?.Name);
 			sb.Append (" This");
 			comma = true;
 		} else if (minfo.is_protocol_implementation_method && !minfo.is_static) {
-			sb.Append ("I" + mi.DeclaringType!.Name);
+			sb.Append ('I');
+			sb.Append (mi.DeclaringType!.Name);
 			sb.Append (" This");
 			comma = true;
 		} else if (category_class is not null) {

@@ -1701,17 +1701,17 @@ public partial class Generator : IMemberGatherer {
 			print ("");
 			PrintExperimentalAttribute (ti.Type);
 			print ("[UnmanagedFunctionPointerAttribute (CallingConvention.Cdecl)]");
-			print ("[UserDelegateType (typeof ({0}))]", ti.UserDelegate);
-			print ("unsafe internal delegate {0} {1} ({2});", ti.ReturnType, ti.DelegateName, ti.Parameters);
+			print ($"[UserDelegateType (typeof ({ti.UserDelegate}))]");
+			print ($"unsafe internal delegate {ti.ReturnType} {ti.DelegateName} ({ti.Parameters});");
 			print ("");
 			print ("//\n// This class bridges native block invocations that call into C#\n//");
 			PrintExperimentalAttribute (ti.Type);
-			print ("static internal class {0} {{", ti.StaticName); indent++;
+			print ($"static internal class {ti.StaticName} {{"); indent++;
 			print ("[UnmanagedCallersOnly]");
-			print ("[UserDelegateType (typeof ({0}))]", ti.UserDelegate);
-			print ("internal static unsafe {0} Invoke ({1}) {{", ti.ReturnType, ti.Parameters);
+			print ($"[UserDelegateType (typeof ({ti.UserDelegate}))]");
+			print ($"internal static unsafe {ti.ReturnType} Invoke ({ti.Parameters}) {{");
 			indent++;
-			print ("var del = BlockLiteral.GetTarget<{0}> (block);", ti.UserDelegate);
+			print ($"var del = BlockLiteral.GetTarget<{ti.UserDelegate}> (block);");
 			bool is_void = ti.ReturnType == "void";
 			// FIXME: right now we only support 'null' when the delegate does not return a value
 			// otherwise we will need to know the default value to be returned (likely uncommon)
@@ -1720,7 +1720,7 @@ public partial class Generator : IMemberGatherer {
 				indent++;
 				if (ti.Convert.Length > 0)
 					print (ti.Convert);
-				print ("del ({0});", ti.Invoke);
+				print ($"del ({ti.Invoke});");
 				if (ti.PostConvert.Length > 0)
 					print (ti.PostConvert);
 				indent--;
@@ -1738,7 +1738,7 @@ public partial class Generator : IMemberGatherer {
 				indent--;
 				if (ti.Convert.Length > 0)
 					print (ti.Convert);
-				print ("var retval = del ({1});", ti.DelegateReturnType, ti.Invoke);
+				print ($"var retval = del ({ti.Invoke});");
 				if (ti.PostConvert.Length > 0)
 					print (ti.PostConvert);
 				print (ti.ReturnFormat, "retval");
@@ -1746,7 +1746,7 @@ public partial class Generator : IMemberGatherer {
 			indent--;
 			print ("}");
 			print ("");
-			print ("internal static unsafe BlockLiteral CreateNullableBlock ({0}? callback)", ti.UserDelegate);
+			print ($"internal static unsafe BlockLiteral CreateNullableBlock ({ti.UserDelegate}? callback)");
 			print ("{");
 			indent++;
 			print ("if (callback is null)");
@@ -1758,15 +1758,15 @@ public partial class Generator : IMemberGatherer {
 			print ("}");
 			print ("");
 			print ("[BindingImpl (BindingImplOptions.GeneratedCode | BindingImplOptions.Optimizable)]");
-			print ("internal static unsafe BlockLiteral CreateBlock ({0} callback)", ti.UserDelegate);
+			print ($"internal static unsafe BlockLiteral CreateBlock ({ti.UserDelegate} callback)");
 			print ("{");
 			indent++;
-			print ("delegate* unmanaged<{0}> trampoline = &Invoke;", ti.FunctionPointerSignature);
-			print ("return new BlockLiteral (trampoline, callback, typeof ({0}), nameof (Invoke));", ti.StaticName);
+			print ($"delegate* unmanaged<{ti.FunctionPointerSignature}> trampoline = &Invoke;");
+			print ($"return new BlockLiteral (trampoline, callback, typeof ({ti.StaticName}), nameof (Invoke));");
 			indent--;
 			print ("}");
 			indent--;
-			print ("}} /* class {0} */", ti.StaticName);
+			print ($"}} /* class {ti.StaticName} */");
 
 			//
 			// Now generate the class that allows us to invoke a Objective-C block from C#
@@ -1845,7 +1845,7 @@ public partial class Generator : IMemberGatherer {
 				print (sw, post_return);
 			indent--; print ("}");
 			indent--;
-			print ("}} /* class {0} */", ti.NativeInvokerName);
+			print ($"}} /* class {ti.NativeInvokerName} */");
 		}
 	}
 
@@ -3363,7 +3363,7 @@ public partial class Generator : IMemberGatherer {
 		if (supercall && !minfo.is_static) {
 			print ("unsafe {");
 			indent++;
-			print ("var __objc_super__ = new global::ObjCRuntime.ObjCSuper ({0});", target_name);
+			print ($"var __objc_super__ = new global::ObjCRuntime.ObjCSuper ({target_name});");
 			receiver = "&__objc_super__";
 		} else {
 			receiver = "";
@@ -3454,7 +3454,7 @@ public partial class Generator : IMemberGatherer {
 			// so that it is not collected before the msg send call has completed.
 			print ("GC.KeepAlive (This);");
 		} else if (supercall) {
-			print ("GC.KeepAlive ({0});", target_name);
+			print ($"GC.KeepAlive ({target_name});");
 			indent--;
 			print ("}"); // close unsafe block
 		}
@@ -4023,17 +4023,12 @@ public partial class Generator : IMemberGatherer {
 						var caller_avail = GetIntroduced (mi, propInfo!) ?? iOSIntroducedDefault;
 						if (caller_avail.Version < postget_avail.Version) {
 							version_check = true;
-							print ("var postget{0} = {4}.UIDevice.CurrentDevice.CheckSystemVersion ({1},{2}) ? {3} : null;",
-								i,
-								postget_avail.Version!.Major,
-								postget_avail.Version.Minor,
-								postget [i].MethodName,
-								"UIKit");
+							print ($"var postget{i} = {"UIKit"}.UIDevice.CurrentDevice.CheckSystemVersion ({postget_avail.Version!.Major},{postget_avail.Version.Minor}) ? {postget [i].MethodName} : null;");
 						}
 					}
 				}
 				if (!version_check)
-					print ("var postget{0} = {1};", i, postget [i].MethodName);
+					print ($"var postget{i} = {postget [i].MethodName};");
 			}
 			print ("#pragma warning restore 168");
 		}
@@ -4047,11 +4042,11 @@ public partial class Generator : IMemberGatherer {
 				print ("ret.IsDirectBinding = true;");
 
 			if (mi.ReturnType.IsSubclassOf (TypeCache.System_Delegate)) {
-				print ("return global::ObjCRuntime.Trampolines.{0}.Create (ret)!;", trampoline_info?.NativeInvokerName);
+				print ($"return global::ObjCRuntime.Trampolines.{trampoline_info?.NativeInvokerName}.Create (ret)!;");
 			} else if (align is not null) {
 				print ("if (aligned_assigned)");
 				indent++;
-				print ("unsafe {{ ret = *({0} *) aligned_ret; }}", TypeManager.FormatType (mi.DeclaringType, mi.ReturnType));
+				print ($"unsafe {{ ret = *({TypeManager.FormatType (mi.DeclaringType, mi.ReturnType)} *) aligned_ret; }}");
 				indent--;
 				print ("Marshal.FreeHGlobal (ret_alloced);");
 				print ("return ret;");
@@ -4229,7 +4224,7 @@ public partial class Generator : IMemberGatherer {
 		var obsoleteAttributes = AttributeManager.GetCustomAttributes<ObsoleteAttribute> (provider);
 
 		foreach (var oa in obsoleteAttributes) {
-			print ("[Obsolete (\"{0}\", {1})]", oa.Message, oa.IsError ? "true" : "false");
+			print ($"[Obsolete (\"{oa.Message}\", {(oa.IsError ? "true" : "false")})]");
 		}
 
 		var printEditorBrowsableAttribute = TryGetPrintEditorBrowsableAttribute (provider, out var editorBrowsableAttribute);
@@ -4368,15 +4363,15 @@ public partial class Generator : IMemberGatherer {
 				indent++;
 
 				if (TypeManager.IsDictionaryContainerType (pi.PropertyType)) {
-					print ("var src = {0} is not null ? new NSMutableDictionary ({0}) : null;", wrap);
-					print ("return src is null ? null! : new {0}(src);", TypeManager.FormatType (pi.DeclaringType, pi.PropertyType));
+					print ($"var src = {wrap} is not null ? new NSMutableDictionary ({wrap}) : null;");
+					print ($"return src is null ? null! : new {TypeManager.FormatType (pi.DeclaringType, pi.PropertyType)}(src);");
 				} else {
 					if (TypeManager.IsArrayOfWrappedType (pi.PropertyType))
-						print ("return NSArray.FromArray<{0}>({1} as NSArray){2};", TypeManager.FormatType (pi.DeclaringType, pi.PropertyType.GetElementType ()), wrap, nullable ? "" : "!");
+						print ($"return NSArray.FromArray<{TypeManager.FormatType (pi.DeclaringType, pi.PropertyType.GetElementType ())}>({wrap} as NSArray){(nullable ? "" : "!")};");
 					else if (pi.PropertyType.IsValueType)
-						print ("return ({0}) ({1});", TypeManager.FormatType (pi.DeclaringType, pi.PropertyType), wrap);
+						print ($"return ({TypeManager.FormatType (pi.DeclaringType, pi.PropertyType)}) ({wrap});");
 					else
-						print ("return ({0} as {1})!;", wrap, TypeManager.FormatType (pi.DeclaringType, pi.PropertyType));
+						print ($"return ({wrap} as {TypeManager.FormatType (pi.DeclaringType, pi.PropertyType)})!;");
 				}
 				indent--;
 				print ("}");
@@ -4469,7 +4464,7 @@ public partial class Generator : IMemberGatherer {
 				indent++;
 
 				if (not_implemented_attr is not null)
-					print ("throw new NotImplementedException ({0});", not_implemented_attr.Message is null ? "" : $@"""{not_implemented_attr.Message}""");
+					print ($"throw new NotImplementedException ({(not_implemented_attr.Message is null ? "" : $@"""{not_implemented_attr.Message}""")});");
 				else
 					print ($"{minfo.wpmi?.WrapSetter};");
 
@@ -4701,7 +4696,7 @@ public partial class Generator : IMemberGatherer {
 			if (tuple)
 				ttype = minfo.IsNSErrorNullable ? "Tuple<bool,NSError?>" : "Tuple<bool,NSError>";
 		}
-		print ("var tcs = new TaskCompletionSource<{0}> ();", ttype);
+		print ($"var tcs = new TaskCompletionSource<{ttype}> ();");
 		bool ignoreResult = !is_void &&
 			asyncKind == AsyncMethodKind.Plain &&
 			asyncAttribute.PostNonResultSnippet is null;
@@ -4719,8 +4714,8 @@ public partial class Generator : IMemberGatherer {
 		int nesting_level = 1;
 		if (minfo.HasNSError && !tuple) {
 			var var_name = minfo.AsyncCompletionParams.Last ().Name.GetSafeParamName (); ;
-			print ("if ({0}_ is not null)", var_name);
-			print ("\ttcs.SetException (new NSErrorException({0}_));", var_name);
+			print ($"if ({var_name}_ is not null)");
+			print ($"\ttcs.SetException (new NSErrorException({var_name}_));");
 			print ("else");
 			++nesting_level; ++indent;
 		}
@@ -4730,13 +4725,11 @@ public partial class Generator : IMemberGatherer {
 		else if (tuple) {
 			var cond_name = minfo.AsyncCompletionParams [0].Name;
 			var var_name = minfo.AsyncCompletionParams.Last ().Name;
-			print ("tcs.SetResult (new {2} ({0}_, {1}_));", cond_name, var_name, ttype);
+			print ($"tcs.SetResult (new {ttype} ({cond_name}_, {var_name}_));");
 		} else if (minfo.IsSingleArgAsync)
-			print ("tcs.SetResult ({0}_!);", minfo.AsyncCompletionParams [0].Name);
+			print ($"tcs.SetResult ({minfo.AsyncCompletionParams [0].Name}_!);");
 		else
-			print ("tcs.SetResult (new {0} ({1}));",
-				GetAsyncTaskType (minfo),
-				GetInvokeParamList (minfo.HasNSError ? minfo.AsyncCompletionParams.DropLast () : minfo.AsyncCompletionParams, true, true));
+			print ($"tcs.SetResult (new {GetAsyncTaskType (minfo)} ({GetInvokeParamList (minfo.HasNSError ? minfo.AsyncCompletionParams.DropLast () : minfo.AsyncCompletionParams, true, true)}));");
 		indent -= nesting_level;
 		if (is_void || ignoreResult)
 			print ("});");
@@ -4803,7 +4796,7 @@ public partial class Generator : IMemberGatherer {
 	{
 		if (mi.ReturnType.IsSubclassOf (TypeCache.System_Delegate)) {
 			var ti = MakeTrampoline (mi.ReturnType);
-			print ("[return: DelegateProxy (typeof (ObjCRuntime.Trampolines.{0}))]", ti.StaticName);
+			print ($"[return: DelegateProxy (typeof (ObjCRuntime.Trampolines.{ti.StaticName}))]");
 		}
 	}
 
@@ -4811,7 +4804,7 @@ public partial class Generator : IMemberGatherer {
 	{
 		if (type.IsSubclassOf (TypeCache.System_Delegate)) {
 			var ti = MakeTrampoline (type);
-			print ("[param: BlockProxy (typeof (ObjCRuntime.Trampolines.{0}))]", ti.NativeInvokerName);
+			print ($"[param: BlockProxy (typeof (ObjCRuntime.Trampolines.{ti.NativeInvokerName}))]");
 		}
 	}
 
@@ -4824,7 +4817,7 @@ public partial class Generator : IMemberGatherer {
 			return;
 
 		if (minfo.is_export)
-			print ("[Export (\"{0}\"{1})]", minfo.selector, minfo.is_variadic ? ", IsVariadic = true" : string.Empty);
+			print ($"[Export (\"{minfo.selector}\"{(minfo.is_variadic ? ", IsVariadic = true" : string.Empty)})]");
 	}
 
 	void PrintExport (MemberInformation minfo, ExportAttribute ea)

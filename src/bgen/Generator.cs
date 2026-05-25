@@ -109,6 +109,8 @@ public partial class Generator : IMemberGatherer {
 	readonly StringBuilder reusable_register = new ();
 	// Reusable StringBuilder for postproc in GenerateMethodBody
 	readonly StringBuilder reusable_postproc = new ();
+	readonly StringBuilder reusable_protocol = new ();
+	char [] reusable_charBuf = new char [512];
 	// Reusable list for PrintPlatformAttributesNoDuplicates
 	readonly List<AvailabilityBaseAttribute> reusable_inlined_ca = new ();
 	// Reusable set for StripIntroducedOnNamespaceNotIncluded
@@ -2600,7 +2602,7 @@ public partial class Generator : IMemberGatherer {
 				w!.Write (chunk.Span);
 			w!.WriteLine ();
 		} else {
-			// Slow path: split on newlines
+			// Slow path: split on newlines - use a char buffer to avoid per-char writes
 			int start = 0;
 			while (start < sb.Length) {
 				int nlPos = -1;
@@ -2616,8 +2618,10 @@ public partial class Generator : IMemberGatherer {
 
 				if (lineLen > 0) {
 					w!.Write ('\t', indent);
-					for (int i = start; i < lineEnd; i++)
-						w!.Write (sb [i]);
+					if (reusable_charBuf.Length < lineLen)
+						reusable_charBuf = new char [lineLen];
+					sb.CopyTo (start, reusable_charBuf, lineLen);
+					w!.Write (reusable_charBuf, 0, lineLen);
 					w!.WriteLine ();
 				}
 
@@ -4620,7 +4624,8 @@ public partial class Generator : IMemberGatherer {
 
 	string GetInvokeParamList (ParameterInfo [] parameters, bool suffix = true, bool force = false)
 	{
-		var sb = new StringBuilder ();
+		var sb = reusable_render;
+		sb.Clear ();
 		bool comma = false;
 		foreach (var pi in parameters) {
 			if (comma) {
@@ -5284,7 +5289,8 @@ public partial class Generator : IMemberGatherer {
 			   backwardsCompatibleCodeGeneration ? string.Empty : ", BackwardsCompatibleCodeGeneration = false"
 			   );
 
-		var sb = new StringBuilder ();
+		var sb = reusable_protocol;
+		sb.Clear ();
 
 		foreach (var mi in allProtocolMethods) {
 			var attrib = GetOneExportAttribute (mi);
@@ -5349,7 +5355,7 @@ public partial class Generator : IMemberGatherer {
 					sb.Append (", IsVariadic = true");
 			}
 			sb.Append (")]");
-			print (sb.ToString ());
+			print (sb);
 		}
 		foreach (var pi in allProtocolProperties) {
 			var attrib = GetOneExportAttribute (pi);
@@ -5382,7 +5388,7 @@ public partial class Generator : IMemberGatherer {
 					sb.Append ($", ReturnTypeDelegateProxy = typeof (ObjCRuntime.Trampolines.{ti.StaticName})");
 			}
 			sb.Append (")]");
-			print (sb.ToString ());
+			print (sb);
 		}
 
 		PrintXpcInterfaceAttribute (type);
@@ -5404,7 +5410,7 @@ public partial class Generator : IMemberGatherer {
 			sb.AppendLine (iname);
 		}
 		if (sb.Length > 0)
-			print (sb.ToString ());
+			print (sb);
 		indent--;
 
 		print ("{");
@@ -8067,11 +8073,30 @@ public partial class Generator : IMemberGatherer {
 			if (!first)
 				sb.Append (", ");
 			first = false;
-			sb.Append (RenderSingleParameter (p, removeRefTypes));
+			AppendSingleParameter (sb, p, removeRefTypes);
 			sb.Append (' ');
 			sb.Append (p.Name.GetSafeParamName ());
 		}
 		return sb.ToString ();
+	}
+
+	void AppendSingleParameter (StringBuilder sb, ParameterInfo p, bool removeRefTypes)
+	{
+		var pt = p.ParameterType;
+
+		if (AttributeManager.HasAttribute<BlockCallbackAttribute> (p))
+			sb.Append ("[BlockCallback] ");
+		else if (AttributeManager.HasAttribute<CCallbackAttribute> (p))
+			sb.Append ("[CCallback] ");
+
+		if (pt.TryIsByRef (out var ptElementType)) {
+			pt = ptElementType;
+			if (!removeRefTypes)
+				sb.Append (p.IsOut ? "out " : "ref ");
+			sb.Append (TypeManager.RenderType (pt, p));
+			return;
+		}
+		sb.Append (TypeManager.RenderType (pt, p));
 	}
 
 	string RenderSingleParameter (ParameterInfo p, bool removeRefTypes)

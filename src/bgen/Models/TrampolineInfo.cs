@@ -45,21 +45,15 @@ public class TrampolineInfo {
 		PostConvert = postConvert;
 		Type = type;
 		FunctionPointerSignature = functionPointerSignature;
+		StaticName = "S" + delegateName;
+		NativeInvokerName = "NI" + delegateName;
 	}
 
 	// Name for the static class generated that contains the Objective-C to C# block bridge
-	public string StaticName {
-		get {
-			return "S" + DelegateName;
-		}
-	}
+	public string StaticName { get; }
 
 	// Name for the class generated that allows C# to invoke an Objective-C block
-	public string NativeInvokerName {
-		get {
-			return "NI" + DelegateName;
-		}
-	}
+	public string NativeInvokerName { get; }
 }
 
 class TrampolineParameterInfo {

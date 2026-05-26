@@ -554,6 +554,10 @@ namespace Xamarin.Linker {
 					new LoadValue ((key, value) => Application.TypeMapAssemblyName = value),
 					new SaveValue ((key, storage) => saveNonEmpty (key, Application.TypeMapAssemblyName, storage))
 				)},
+				{ "TypeMapFilePath", (
+					new LoadValue ((key, value) => TypeMapFilePath = value),
+					new SaveValue ((key, storage) => saveNonEmpty (key, TypeMapFilePath, storage))
+				)},
 				{ "TypeMapOutputDirectory", (
 					new LoadValue ((key, value) => Application.TypeMapOutputDirectory = value),
 					new SaveValue ((key, storage) => saveNonEmpty (key, Application.TypeMapOutputDirectory, storage))

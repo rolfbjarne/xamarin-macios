@@ -2,6 +2,7 @@
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Serialization;
 
@@ -72,6 +73,72 @@ namespace LinkAllTests {
 			{
 				SetMe = 1;
 			}
+		}
+
+		// https://github.com/xamarin/bugzilla-archives/blob/main/16/16505/bug.html
+		[Test]
+		public void PrintPreview_NSGraphicsContextCurrentContext ()
+		{
+			// Verify that accessing NSGraphicsContext.CurrentContext during print preview
+			// doesn't crash due to the linker trimming NSPrintPreviewGraphicsContext.
+			var printableView = new PrintableView (new CoreGraphics.CGRect (0, 0, 100, 100));
+
+			var printInfo = (NSPrintInfo) NSPrintInfo.SharedPrintInfo.Copy ();
+			printInfo.JobDisposition = "NSPrintPreviewJob";
+
+			var printOp = NSPrintOperation.FromView (printableView, printInfo);
+			printOp.ShowsPrintPanel = true;
+			printOp.ShowsProgressPanel = true;
+
+			var closedPreview = false;
+			var closeAction = new Action (() => {
+				if (closedPreview)
+					return;
+				NSApplication.SharedApplication.AbortModal ();
+				closedPreview = true;
+			});
+
+			printableView.TaskCompletionSource.Task.ContinueWith (task => {
+				NSTimer.CreateScheduledTimer (0.01, (t) => closeAction ());
+			});
+
+			// Auto-close after 3 seconds in case something goes wrong
+			var timer = NSTimer.CreateScheduledTimer (3.0, (t) => closeAction ());
+			NSRunLoop.Current.AddTimer (timer, NSRunLoopMode.ModalPanel);
+
+			printOp.RunOperation ();
+
+			Assert.That (printableView.TaskCompletionSource.Task.IsCompletedSuccessfully, Is.True, "DrawPageBorder was called successfully");
+			var context = printableView.TaskCompletionSource.Task.Result;
+			Assert.That (context, Is.Not.Null, "NSGraphicsContext.CurrentContext was not null during print preview");
+		}
+	}
+
+	class PrintableView : NSView {
+		public PrintableView (CoreGraphics.CGRect frame) : base (frame) { }
+
+		public TaskCompletionSource<NSGraphicsContext?> TaskCompletionSource = new ();
+
+		public override void DrawPageBorder (CoreGraphics.CGSize borderSize)
+		{
+			try {
+				var context = NSGraphicsContext.CurrentContext;
+				base.DrawPageBorder (borderSize);
+				TaskCompletionSource.TrySetResult (context);
+			} catch (Exception e) {
+				TaskCompletionSource.TrySetException (e);
+			}
+		}
+
+		public override bool KnowsPageRange (ref Foundation.NSRange range)
+		{
+			range = new Foundation.NSRange (1, 1);
+			return true;
+		}
+
+		public override CoreGraphics.CGRect RectForPage (nint pageNumber)
+		{
+			return Bounds;
 		}
 	}
 }

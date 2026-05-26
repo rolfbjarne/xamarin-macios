@@ -1156,6 +1156,34 @@ namespace GeneratorTests {
 		}
 
 		[Test]
+		public void DynamicDependencyAttribute ()
+		{
+			var bgen = BuildFile (Profile.MacCatalyst, "dynamic-dependency-attribute.cs");
+
+			var type = bgen.ApiAssembly.MainModule.Types.First (v => v.Name == "MyClass");
+			var getter = type.Methods.First (v => v.Name == "get_CurrentContext");
+			var setter = type.Methods.First (v => v.Name == "set_CurrentContext");
+			var doSomething = type.Methods.First (v => v.Name == "DoSomething");
+
+			// Getter should have the DynamicDependency attribute
+			var getterDDA = getter.CustomAttributes.Where (ca => ca.AttributeType.Name == "DynamicDependencyAttribute").ToArray ();
+			Assert.That (getterDDA.Length, Is.EqualTo (1), "Getter DynamicDependency count");
+			Assert.That (getterDDA [0].ConstructorArguments [1].Value, Is.EqualTo ("Foundation.NSProxy"), "Getter DynamicDependency TypeName");
+			Assert.That (getterDDA [0].ConstructorArguments [2].Value, Is.EqualTo ("Microsoft.macOS"), "Getter DynamicDependency AssemblyName");
+
+			// Setter should not have it
+			var setterDDA = setter.CustomAttributes.Where (ca => ca.AttributeType.Name == "DynamicDependencyAttribute").ToArray ();
+			Assert.That (setterDDA.Length, Is.EqualTo (0), "Setter DynamicDependency count");
+
+			// Method should have the DynamicDependency attribute
+			var methodDDA = doSomething.CustomAttributes.Where (ca => ca.AttributeType.Name == "DynamicDependencyAttribute").ToArray ();
+			Assert.That (methodDDA.Length, Is.EqualTo (1), "Method DynamicDependency count");
+			Assert.That (methodDDA [0].ConstructorArguments [0].Value, Is.EqualTo ("Create"), "Method DynamicDependency MemberSignature");
+			Assert.That (methodDDA [0].ConstructorArguments [1].Value, Is.EqualTo ("NS.MyClass"), "Method DynamicDependency TypeName");
+			Assert.That (methodDDA [0].ConstructorArguments [2].Value, Is.EqualTo ("api0"), "Method DynamicDependency AssemblyName");
+		}
+
+		[Test]
 		[TestCase (Profile.iOS)]
 		public void NewerAvailabilityInInlinedProtocol (Profile profile)
 		{

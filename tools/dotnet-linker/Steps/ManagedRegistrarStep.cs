@@ -325,7 +325,7 @@ namespace Xamarin.Linker {
 			var info = new TrampolineInfo (callback, method, name);
 			if (int.TryParse (name.Split ('_') [1], NumberStyles.None, CultureInfo.InvariantCulture, out var id)) {
 				info.Id = id;
-			} else {
+			} else {
 				Console.WriteLine ("TODO: failed to parse the ID from the DynamicDependencyAttribute for method {0}, the trampoline won't be registered correctly. The member signature was: {1}", method.FullName, name);
 			}
 			infos.Add (info);

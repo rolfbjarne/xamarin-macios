@@ -37,7 +37,7 @@ public class AssemblyPreparer : IDisposable {
 
 	public List<AssemblyPreparerInfo> Assemblies { get; set; } = new List<AssemblyPreparerInfo> ();
 
-	public IList<(string Path, AssemblyDefinition Assembly)> AddedAssemblies => configuration.AddedAssemblies;
+	public IList<(string Path, AssemblyDefinition Assembly, string? OriginatingAssembly)> AddedAssemblies => configuration.AddedAssemblies;
 
 	LinkerConfiguration.Configurator GetConfigurator (string? reproPath = null, Func<string, string, AssemblyPreparerInfo>? assemblyPreparerInfoFactory = null)
 	{

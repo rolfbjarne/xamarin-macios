@@ -22,7 +22,7 @@ namespace Xamarin.Linker {
 		protected override int ErrorCode { get; } = 2470;
 
 		AppBundleRewriter abr { get { return Configuration.AppBundleRewriter; } }
-		List<(string Path, AssemblyDefinition Assembly)> addedAssemblies = new List<(string Path, AssemblyDefinition Assembly)> ();
+		List<(string Path, AssemblyDefinition Assembly, string? OriginatingAssembly)> addedAssemblies = new ();
 		List<Exception> exceptions = new List<Exception> ();
 
 		void AddException (Exception exception)
@@ -56,7 +56,7 @@ namespace Xamarin.Linker {
 				var rootTypeMapAssemblyName = new AssemblyNameDefinition (App.TypeMapAssemblyName, new Version (1, 0, 0, 0));
 				rootTypeMapAssembly = AssemblyDefinition.CreateAssembly (rootTypeMapAssemblyName, rootTypeMapAssemblyName.Name, moduleParameters);
 				Annotations.SetAction (rootTypeMapAssembly, AssemblyAction.Link);
-				addedAssemblies.Add ((createdRootTypeMapAssemblyPath, rootTypeMapAssembly));
+				addedAssemblies.Add ((createdRootTypeMapAssemblyPath, rootTypeMapAssembly, Configuration.PlatformAssembly));
 
 				// We're running from inside the linker, but the TypeMapEntryAssembly property can only be set using a command-line
 				// argument, so we need to cheat a bit here and use reflection to set it. This will go away once we're not running
@@ -243,7 +243,7 @@ namespace Xamarin.Linker {
 				var typeMapAssemblyPath = Path.Combine (App.TypeMapOutputDirectory, typeMapAssembly.Name.Name + ".dll");
 				var existingAction = Annotations.GetAction (assembly);
 				Annotations.SetAction (typeMapAssembly, existingAction);
-				addedAssemblies.Add ((typeMapAssemblyPath, typeMapAssembly));
+				addedAssemblies.Add ((typeMapAssemblyPath, typeMapAssembly, assembly.MainModule.FileName));
 
 				var accessesAssemblies = new HashSet<AssemblyDefinition> ();
 				accessesAssemblies.Add (assembly);

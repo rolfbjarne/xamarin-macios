@@ -189,6 +189,18 @@ namespace Xamarin.MacDev.Tasks {
 					var rv = new TaskItem (v.Path);
 					rv.SetMetadata ("PostprocessAssembly", "true");
 					rv.SetMetadata ("RelativePath", preparer.Configuration.AssemblyPublishDir + Path.GetFileName (v.Path));
+					if (v.OriginatingAssembly is not null) {
+						var originatingItem = map.SingleOrDefault (kvp => Path.GetFileName (kvp.Key.InputPath) == Path.GetFileName (v.OriginatingAssembly)).Value;
+						if (originatingItem is null) {
+							Log.LogMessage (MessageImportance.Low, $"Could not find originating assembly for {v.Path} with originating assembly name {v.OriginatingAssembly}");
+						} else {
+							var metadata = originatingItem.MetadataNames.Cast<string> ().ToList ();
+							if (metadata.Contains ("TrimMode"))
+								rv.SetMetadata ("TrimMode", originatingItem.GetMetadata ("TrimMode"));
+							if (metadata.Contains ("IsTrimmable"))
+								rv.SetMetadata ("IsTrimmable", originatingItem.GetMetadata ("IsTrimmable"));
+						}
+					}
 					return rv;
 				}));
 

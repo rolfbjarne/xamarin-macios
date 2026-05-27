@@ -88,7 +88,7 @@ namespace Xamarin.Linker {
 
 #if ASSEMBLY_PREPARER
 		public List<AssemblyDefinition> Assemblies => Application.LinkContext.Assemblies;
-		public List<(string Path, AssemblyDefinition Assembly)> AddedAssemblies = new List<(string Path, AssemblyDefinition Assembly)> ();
+		public List<(string Path, AssemblyDefinition Assembly, string? OriginatingAssembly)> AddedAssemblies = new ();
 #else
 		// The list of assemblies is populated in CollectAssembliesStep.
 		public List<AssemblyDefinition> Assemblies = new List<AssemblyDefinition> ();

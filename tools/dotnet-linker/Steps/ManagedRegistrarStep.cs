@@ -84,7 +84,7 @@ namespace Xamarin.Linker {
 		AppBundleRewriter abr { get { return Configuration.AppBundleRewriter; } }
 		List<Exception> exceptions = new List<Exception> ();
 
-	
+
 		Dictionary<string, string> unmanagedCallersOnlyMap = new ();
 
 		void AddException (Exception exception)

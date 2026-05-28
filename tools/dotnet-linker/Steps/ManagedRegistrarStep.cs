@@ -84,6 +84,9 @@ namespace Xamarin.Linker {
 		AppBundleRewriter abr { get { return Configuration.AppBundleRewriter; } }
 		List<Exception> exceptions = new List<Exception> ();
 
+	
+		Dictionary<string, string> unmanagedCallersOnlyMap = new ();
+
 		void AddException (Exception exception)
 		{
 			if (exceptions is null)
@@ -97,6 +100,23 @@ namespace Xamarin.Linker {
 
 			if (App.Registrar != RegistrarMode.ManagedStatic && App.Registrar != RegistrarMode.TrimmableStatic)
 				return;
+
+			if (App.IsPostProcessingAssemblies) {
+				var ucoMapPath = Path.Combine (Configuration.IntermediateOutputPath, "unmanaged_callers_only_map.txt");
+				if (File.Exists (ucoMapPath)) {
+					foreach (var line in File.ReadAllLines (ucoMapPath)) {
+						var parts = line.Split ('|');
+						if (parts.Length != 2) {
+							Console.WriteLine ($"Warning: Invalid line in unmanaged_callers_only_map.txt: {line}");
+							continue;
+						}
+						var methodFullName = parts [0];
+						var ucoEntryPoint = parts [1];
+						unmanagedCallersOnlyMap.Add (methodFullName, ucoEntryPoint);
+					}
+					File.Delete (ucoMapPath);
+				}
+			}
 
 			Configuration.Application.StaticRegistrar.Register (Configuration.GetNonDeletedAssemblies (this));
 		}
@@ -113,11 +133,23 @@ namespace Xamarin.Linker {
 			// Report back any exceptions that occurred during the processing.
 			exceptions = this.exceptions;
 
+			if (App.PrepareAssemblies && !App.InCustomTrimmerStep) {
+				// TODO: send in the txt path from MSBuild (so that we can properly add it to FileWrites)
+				var ucoMapPath = Path.Combine (Configuration.IntermediateOutputPath, "unmanaged_callers_only_map.txt");
+				using (var writer = new StreamWriter (ucoMapPath, false)) {
+					foreach (var entry in unmanagedCallersOnlyMap.Select (kvp => $"{kvp.Key}|{kvp.Value}").OrderBy (v => v)) {
+						writer.WriteLine (entry);
+					}
+				}
+			}
+
 #if !ASSEMBLY_PREPARER
 			// Mark some stuff we use later on.
-			abr.SetCurrentAssembly (abr.PlatformAssembly);
-			Annotations.Mark (abr.RegistrarHelper_Register.Resolve ());
-			abr.ClearCurrentAssembly ();
+			if (App.InCustomTrimmerStep && App.PrepareAssemblies == false) {
+				abr.SetCurrentAssembly (abr.PlatformAssembly);
+				Annotations.Mark (abr.RegistrarHelper_Register.Resolve ());
+				abr.ClearCurrentAssembly ();
+			}
 #endif
 		}
 
@@ -308,27 +340,31 @@ namespace Xamarin.Linker {
 
 		void CollectUnmanagedCallersMethod (MethodDefinition method, AssemblyTrampolineInfo infos, List<TypeDefinition> proxyInterfaces)
 		{
-			var ddos = method.CustomAttributes
-				.Where (v => v.AttributeType.Is ("System.Diagnostics.CodeAnalysis", "DynamicDependencyAttribute"))
-				.Where (v => v.ConstructorArguments.Count == 2 && v.ConstructorArguments [0].Type.Is ("System", "String") && v.ConstructorArguments [1].Type.Is ("System", "Type"))
-				.Select (v => (MemberSignature: (string) v.ConstructorArguments [0].Value, Type: (TypeReference) v.ConstructorArguments [1].Value))
-				.Where (v => v.MemberSignature?.StartsWith ("callback_", StringComparison.Ordinal) == true && v.Type?.Name == "__Registrar_Callbacks__")
-				.ToArray ();
-			if (ddos.Length != 1) {
-				AddException (ErrorHelper.CreateWarning (App, 99, method, $"Didn't find exactly one matching DynamicDependencyAttribute for method {method.FullName}, found {ddos.Length}"));
+			if (!unmanagedCallersOnlyMap.TryGetValue (method.FullName, out var ucoName)) {
+				AddException (ErrorHelper.CreateWarning (App, 99, method, $"Couldn't find an entry in the unmanaged_callers_only_map for method {method.FullName}."));
 				return;
 			}
-			var ddo = ddos [0];
-			var name = ddo.MemberSignature;
-			var callback = ddo.Type.Resolve ().Methods.Single (v => v.Name == name);
 
-			var info = new TrampolineInfo (callback, method, name);
+			var callbackType = method.DeclaringType.NestedTypes.SingleOrDefault (v => v.Name == "__Registrar_Callbacks__");
+			if (callbackType is null) {
+				AddException (ErrorHelper.CreateWarning (App, 99, method, $"Couldn't find the __Registrar_Callbacks__ nested type for method {method.FullName}."));
+				return;
+			}
+
+			var candidates = callbackType.Methods.Where (v => v.Name == ucoName).ToArray ();
+			if (candidates.Length != 1) {
+				AddException (ErrorHelper.CreateWarning (App, 99, method, $"Didn't find exactly one matching callback method in __Registrar_Callbacks__ for method {method.FullName}, found {candidates.Length}"));
+				return;
+			}
+			var callback = candidates [0];
+
+			var info = new TrampolineInfo (callback, method, ucoName);
 			if (this.App.Registrar == RegistrarMode.TrimmableStatic) {
 				// Don't set Id here, it's not used.
-			} else if (int.TryParse (name.Split ('_') [1], NumberStyles.None, CultureInfo.InvariantCulture, out var id)) {
+			} else if (int.TryParse (ucoName.Split ('_') [1], NumberStyles.None, CultureInfo.InvariantCulture, out var id)) {
 				info.Id = id;
 			} else {
-				Console.WriteLine ("TODO: failed to parse the ID from the DynamicDependencyAttribute for method {0}, the trampoline won't be registered correctly. The member signature was: {1}", method.FullName, name);
+				Console.WriteLine ("TODO: failed to parse the ID from the DynamicDependencyAttribute for method {0}, the trampoline won't be registered correctly. The member signature was: {1}", method.FullName, ucoName);
 			}
 			infos.Add (info);
 		}
@@ -339,6 +375,8 @@ namespace Xamarin.Linker {
 			var baseMethod = StaticRegistrar.GetBaseMethodInTypeHierarchy (method);
 			var placeholderType = abr.System_IntPtr;
 			var name = $"callback_{counter++}_{Sanitize (method.DeclaringType.FullName)}_{Sanitize (method.Name)}";
+
+			unmanagedCallersOnlyMap.Add (method.FullName, name);
 
 			var callbackType = method.DeclaringType.NestedTypes.SingleOrDefault (v => v.Name == "__Registrar_Callbacks__");
 			if (callbackType is null) {

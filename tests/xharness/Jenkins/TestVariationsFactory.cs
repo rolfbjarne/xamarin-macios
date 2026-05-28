@@ -64,34 +64,28 @@ namespace Xharness.Jenkins {
 				if (supports_monovm) {
 					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, MonoVM, Dynamic Registrar)", TestVariation = "monovm|prepare-assemblies|dynamic-registrar", Ignored = ignore };
 					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, MonoVM, Managed Static Registrar)", TestVariation = "monovm|prepare-assemblies|managed-static-registrar", Ignored = ignore };
-					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, MonoVM, Trimmable Static Registrar)", TestVariation = "monovm|prepare-assemblies|trimmable-static-registrar", Ignored = ignore };
+					if (jenkins.Harness.DotNetVersion.Major >= 11) { // on Mono, the trimmable static registrar only works in .NET 11
+						yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, MonoVM, Trimmable Static Registrar)", TestVariation = "monovm|prepare-assemblies|trimmable-static-registrar", Ignored = ignore };
+					}
 				}
 				break;
 			case "link sdk":
 				if (supports_coreclr) {
 					// if prepare-assemblies is enabled, then linking only works in any meaningful way when using the trimmable static registrar, which only works on CoreCLR in .NET 10
-					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, CoreCLR, Dynamic Registrar)", TestVariation = "coreclr|prepare-assemblies|dynamic-registrar", Ignored = ignore };
-					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, CoreCLR, Managed Static Registrar)", TestVariation = "coreclr|prepare-assemblies|managed-static-registrar", Ignored = ignore };
 					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, CoreCLR, Trimmable Static Registrar)", TestVariation = "coreclr|prepare-assemblies|trimmable-static-registrar", Ignored = ignore };
 				}
 				if (supports_monovm && jenkins.Harness.DotNetVersion.Major >= 11) {
-					// if prepare-assemblies is enabled, then linking only works in any meaningful way when using the trimmable static registrar, which only works on Mono .NET 11
-					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, MonoVM, Dynamic Registrar)", TestVariation = "monovm|prepare-assemblies|dynamic-registrar", Ignored = ignore };
-					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, MonoVM, Managed Static Registrar)", TestVariation = "monovm|prepare-assemblies|managed-static-registrar", Ignored = ignore };
+					// if prepare-assemblies is enabled, then linking only works in any meaningful way when using the trimmable static registrar, which, on Mono, only works in .NET 11
 					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, MonoVM, Trimmable Static Registrar)", TestVariation = "monovm|prepare-assemblies|trimmable-static-registrar", Ignored = ignore };
 				}
 				break;
 			case "link all":
 				if (supports_coreclr) {
 					// if prepare-assemblies is enabled, then linking only works in any meaningful way when using the trimmable static registrar, which only works on CoreCLR in .NET 10
-					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, CoreCLR, Dynamic Registrar)", TestVariation = "coreclr|prepare-assemblies|dynamic-registrar", Ignored = ignore };
-					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, CoreCLR, Managed Static Registrar)", TestVariation = "coreclr|prepare-assemblies|managed-static-registrar", Ignored = ignore };
 					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, CoreCLR, Trimmable Static Registrar)", TestVariation = "coreclr|prepare-assemblies|trimmable-static-registrar", Ignored = ignore };
 				}
 				if (supports_monovm && jenkins.Harness.DotNetVersion.Major >= 11) {
-					// if prepare-assemblies is enabled, then linking only works in any meaningful way when using the trimmable static registrar, which only works on Mono .NET 11
-					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, MonoVM, Dynamic Registrar)", TestVariation = "monovm|prepare-assemblies|dynamic-registrar", Ignored = ignore };
-					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, MonoVM, Managed Static Registrar)", TestVariation = "monovm|prepare-assemblies|managed-static-registrar", Ignored = ignore };
+					// if prepare-assemblies is enabled, then linking only works in any meaningful way when using the trimmable static registrar, which, on Mono, only works in .NET 11
 					yield return new TestData { Variation = $"{test.ProjectConfiguration} (PrepareAssemblies, MonoVM, Trimmable Static Registrar)", TestVariation = "monovm|prepare-assemblies|trimmable-static-registrar", Ignored = ignore };
 				}
 				if (test.ProjectConfiguration == "Debug") {

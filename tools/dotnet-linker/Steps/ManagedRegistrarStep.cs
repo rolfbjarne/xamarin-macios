@@ -323,7 +323,9 @@ namespace Xamarin.Linker {
 			var callback = ddo.Type.Resolve ().Methods.Single (v => v.Name == name);
 
 			var info = new TrampolineInfo (callback, method, name);
-			if (int.TryParse (name.Split ('_') [1], NumberStyles.None, CultureInfo.InvariantCulture, out var id)) {
+			if (this.App.Registrar == RegistrarMode.TrimmableStatic) {
+				// Don't set Id here, it's not used.
+			} else if (int.TryParse (name.Split ('_') [1], NumberStyles.None, CultureInfo.InvariantCulture, out var id)) {
 				info.Id = id;
 			} else {
 				Console.WriteLine ("TODO: failed to parse the ID from the DynamicDependencyAttribute for method {0}, the trampoline won't be registered correctly. The member signature was: {1}", method.FullName, name);

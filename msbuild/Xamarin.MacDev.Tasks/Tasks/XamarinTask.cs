@@ -411,6 +411,11 @@ namespace Xamarin.MacDev.Tasks {
 		{
 			((ICustomLogger) this).LogError ("", exception);
 		}
+
+		void IToolLog.LogWarning (Exception ex)
+		{
+			((ICustomLogger) this).LogWarning (ex.Message);
+		}
 		#endregion
 	}
 }

@@ -107,15 +107,37 @@ namespace Xamarin.Utils {
 			task.Log.LogErrorFromException (ex, true, true, null);
 		}
 
+		public void LogError (string message)
+		{
+			task.Log.LogError (null, $"MX9999", null, null, null, null, 0, 0, 0, message);
+		}
+
 		public void LogError (Xamarin.Bundler.ProductException ex)
 		{
 			task.Log.LogError (null, $"MX{ex.Code:0000}", null, null, ex.FileName, ex.LineNumber, 0, 0, 0, ex.Message);
+		}
+
+		public void LogError (Exception ex)
+		{
+			if (ex is Xamarin.Bundler.ProductException pex)
+				LogError (pex);
+			else
+				LogException (ex);
 		}
 
 		public void LogWarning (Xamarin.Bundler.ProductException ex)
 		{
 			task.Log.LogWarning (null, $"MX{ex.Code:0000}", null, null, ex.FileName, ex.LineNumber, 0, 0, 0, ex.Message);
 		}
+
+		public void LogWarning (Exception ex)
+		{
+			if (ex is Xamarin.Bundler.ProductException pex)
+				LogWarning (pex);
+			else
+				task.Log.LogWarning (null, $"MX9999", null, null, null, null, 0, 0, 0, ex.Message);
+		}
+
 	}
 }
 

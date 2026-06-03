@@ -106,7 +106,7 @@ public class AssemblyPreparer : IDisposable {
 		var file = Path.Combine (reproPath, "arguments.txt");
 		if (!File.Exists (file))
 			throw new FileNotFoundException ($"Repro arguments file not found: {file}");
-		return new AssemblyPreparer (StaticLogger.Instance, Array.Empty<AssemblyPreparerInfo> (), file);
+		return new AssemblyPreparer (ConsoleLog.Instance, Array.Empty<AssemblyPreparerInfo> (), file);
 	}
 
 	public bool Prepare (out List<ProductException> exceptions)

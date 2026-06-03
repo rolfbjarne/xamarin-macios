@@ -138,7 +138,7 @@ namespace Xamarin.Linker {
 #else
 				if (!context.TryGetCustomData ("LinkerOptionsFile", out var linker_options_file))
 					throw new Exception ($"No custom linker options file was passed to the linker (using --custom-data LinkerOptionsFile=...");
-				instance = new LinkerConfiguration (StaticLogger.Instance, linker_options_file) {
+				instance = new LinkerConfiguration (ConsoleLog.Instance, linker_options_file) {
 					Context = context,
 				};
 
@@ -581,11 +581,11 @@ namespace Xamarin.Linker {
 					new LoadValue ((key, value) => {
 						if (!int.TryParse (value, out var verbosity))
 							throw new InvalidOperationException ($"Invalid Verbosity '{value}' in {linker_file}");
-						Driver.Verbosity += verbosity;
+						Application.Verbosity += verbosity;
 					}),
 					new SaveValue ((key, storage) => {
-						if (Driver.Verbosity != 0)
-							storage.Add ($"{key}={Driver.Verbosity}");
+						if (Application.Verbosity != 0)
+							storage.Add ($"{key}={Application.Verbosity}");
 					})
 				)},
 				{ "Warn", (
@@ -632,17 +632,15 @@ namespace Xamarin.Linker {
 		{
 			this.Logger = log;
 
-#if ASSEMBLY_PREPARER
-			AssemblyResolver = new DotNetResolver ();
-			MetadataResolver = new MetadataResolver (AssemblyResolver);
-#endif
-
 			LinkerFile = linker_file;
 
 			Profile = new BaseProfile (this);
 			Application = new Application (this);
 
 #if ASSEMBLY_PREPARER
+			AssemblyResolver = new DotNetResolver (Application);
+			MetadataResolver = new MetadataResolver (AssemblyResolver);
+
 			configurations.Add (this.Context, this);
 #endif
 

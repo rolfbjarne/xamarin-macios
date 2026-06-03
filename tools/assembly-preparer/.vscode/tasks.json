@@ -8,7 +8,9 @@
 				"kind": "build",
 				"isDefault": true
 			},
-			"problemMatcher": [],
+			"problemMatcher": [
+				"$msCompile"
+			],
 			"label": "build"
 		}
 	]

@@ -7,13 +7,6 @@ public interface IAssemblyPreparerLog {
 	void Log (string message);
 }
 
-public class ConsoleLog : IAssemblyPreparerLog {
-	public void Log (string message)
-	{
-		Console.WriteLine (message);
-	}
-}
-
 class AggregateLog : IAssemblyPreparerLog {
 	List<IAssemblyPreparerLog> logs = new ();
 

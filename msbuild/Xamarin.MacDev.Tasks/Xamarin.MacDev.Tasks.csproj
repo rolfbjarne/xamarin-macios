@@ -73,9 +73,6 @@
     <Compile Include="..\..\tools\common\JsonExtensions.cs">
       <Link>external\JsonExtensions.cs</Link>
     </Compile>
-    <Compile Include="..\..\tools\common\IToolLog.cs">
-      <Link>IToolLog.cs</Link>
-    </Compile>
     <Compile Include="..\..\tools\common\StringUtils.cs">
       <Link>StringUtils.cs</Link>
     </Compile>

@@ -1230,12 +1230,17 @@ namespace Xamarin.Bundler {
 			ErrorHelper.Show (this, exception);
 		}
 
+		public void LogWarning (Exception exception)
+		{
+			ErrorHelper.Show (this, exception);
+		}
+
 		public void LogException (Exception exception)
 		{
 			ErrorHelper.Show (this, exception);
 		}
 
-		int verbosity = Driver.GetDefaultVerbosity ();
+		int verbosity = Driver.GetDefaultVerbosity (Driver.NAME);
 		public int Verbosity {
 			get => verbosity;
 			set => verbosity = value;

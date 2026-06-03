@@ -99,38 +99,38 @@ namespace Xamarin.Bundler {
 			return v;
 		}
 
-		// [Obsolete ("Don't use static methods")]
-		public static void Log (string value)
-		{
-			Log (0, value);
-		}
+		// // [Obsolete ("Don't use static methods")]
+		// public static void Log (string value)
+		// {
+		// 	Log (0, value);
+		// }
 
-		// [Obsolete ("Don't use static methods")]
-		public static void Log (string format, params object? [] args)
-		{
-			Log (0, format, args);
-		}
+		// // [Obsolete ("Don't use static methods")]
+		// public static void Log (string format, params object? [] args)
+		// {
+		// 	Log (0, format, args);
+		// }
 
-		// [Obsolete ("Don't use static methods")]
-		public static void Log (int min_verbosity, string value)
-		{
-			if (min_verbosity > Verbosity)
-				return;
+		// // [Obsolete ("Don't use static methods")]
+		// public static void Log (int min_verbosity, string value)
+		// {
+		// 	if (min_verbosity > Verbosity)
+		// 		return;
 
-			Console.WriteLine (value);
-		}
+		// 	Console.WriteLine (value);
+		// }
 
-		// [Obsolete ("Don't use static methods")]
-		public static void Log (int min_verbosity, string format, params object? [] args)
-		{
-			if (min_verbosity > Verbosity)
-				return;
+		// // [Obsolete ("Don't use static methods")]
+		// public static void Log (int min_verbosity, string format, params object? [] args)
+		// {
+		// 	if (min_verbosity > Verbosity)
+		// 		return;
 
-			if (args.Length > 0)
-				Console.WriteLine (format, args);
-			else
-				Console.WriteLine (format);
-		}
+		// 	if (args.Length > 0)
+		// 		Console.WriteLine (format, args);
+		// 	else
+		// 		Console.WriteLine (format);
+		// }
 
 		static TargetFramework targetFramework;
 
@@ -418,7 +418,7 @@ namespace Xamarin.Bundler {
 			}
 		}
 
-		public static void ValidateXcode (IToolLog logger, bool accept_any_xcode_version, bool warn_if_not_found)
+		public static void ValidateXcode (IToolLog app, bool accept_any_xcode_version, bool warn_if_not_found)
 		{
 			if (sdk_root is null) {
 				sdk_root = FindSystemXcode (app);
@@ -475,7 +475,7 @@ namespace Xamarin.Bundler {
 				throw ErrorHelper.CreateError (58, Errors.MT0058, Path.GetDirectoryName (Path.GetDirectoryName (DeveloperDirectory)), plist_path);
 			}
 
-			logger.Log (1, "Using Xcode {0} ({2}) found in {1}", XcodeVersion, sdk_root, XcodeProductVersion);
+			app.Log (1, "Using Xcode {0} ({2}) found in {1}", XcodeVersion, sdk_root, XcodeProductVersion);
 		}
 
 		internal static bool TryParseBool (string value, out bool result)
@@ -733,30 +733,30 @@ namespace Xamarin.Bundler {
 		}
 	}
 
-	// [Obsolete ("Don't use this class, use an instance of ILogger instead")]
-	public class StaticLogger : IToolLog {
-		public readonly static StaticLogger Instance = new StaticLogger ();
+	// // [Obsolete ("Don't use this class, use an instance of ILogger instead")]
+	// public class StaticLogger : IToolLog {
+	// 	public readonly static StaticLogger Instance = new StaticLogger ();
 
-		public int Verbosity => Driver.Verbosity;
+	// 	public int Verbosity => Driver.Verbosity;
 
-		public void Log (string value)
-		{
-			Driver.Log (value);
-		}
+	// 	public void Log (string value)
+	// 	{
+	// 		Driver.Log (value);
+	// 	}
 
-		public void Log (string format, params object? [] args)
-		{
-			Driver.Log (format, args);
-		}
+	// 	public void Log (string format, params object? [] args)
+	// 	{
+	// 		Driver.Log (format, args);
+	// 	}
 
-		public void Log (int min_verbosity, string value)
-		{
-			Driver.Log (min_verbosity, value);
-		}
+	// 	public void Log (int min_verbosity, string value)
+	// 	{
+	// 		Driver.Log (min_verbosity, value);
+	// 	}
 
-		public void Log (int min_verbosity, string format, params object? [] args)
-		{
-			Driver.Log (min_verbosity, format, args);
-		}
-	}
+	// 	public void Log (int min_verbosity, string format, params object? [] args)
+	// 	{
+	// 		Driver.Log (min_verbosity, format, args);
+	// 	}
+	// }
 }

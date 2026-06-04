@@ -15,7 +15,6 @@ namespace Metal {
 
 		/// <param name="descriptor">The descriptor.</param>
 		///         <summary>Creates and returns a new vertex descriptor object from the provided Model IO vertex descriptor.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -39,7 +38,6 @@ namespace Metal {
 		/// <param name="descriptor">The descriptor.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>Creates and returns a new vertex descriptor object from the provided Model IO vertex descriptor.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

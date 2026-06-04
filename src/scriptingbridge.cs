@@ -60,43 +60,43 @@ namespace ScriptingBridge {
 	[DisableDefaultCtor] // *** -[SBElementArray init]: should never be used.
 	interface SBElementArray {
 		/// <param name="capacity">The capacity.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="ScriptingBridge.SBElementArray" /> with the specified capacity.</summary>
 		[Export ("initWithCapacity:")]
 		NativeHandle Constructor (nuint capacity);
 
 		/// <param name="name">The name to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Returns the object with the specified name.</summary>
+		/// <returns>The object with the specified name.</returns>
 		[Export ("objectWithName:")]
 		NSObject ObjectWithName (string name);
 
 		/// <param name="identifier">The identifier to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Returns the object with the specified identifier.</summary>
+		/// <returns>The object with the specified identifier.</returns>
 		[Export ("objectWithID:")]
 		NSObject ObjectWithID (NSObject identifier);
 
 		/// <param name="location">The location.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Returns the object at the specified location.</summary>
+		/// <returns>The object at the specified location.</returns>
 		[Export ("objectAtLocation:")]
 		NSObject ObjectAtLocation (NSObject location);
 
 		/// <param name="selector">The selector.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Returns an array of results from applying the selector to each element.</summary>
+		/// <returns>An array of results.</returns>
 		[Export ("arrayByApplyingSelector:")]
 		NSObject [] ArrayByApplyingSelector (Selector selector);
 
 		/// <param name="aSelector">The a selector.</param>
 		///         <param name="argument">The argument.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Returns an array of results from applying the selector with the argument to each element.</summary>
+		/// <returns>An array of results.</returns>
 		[Export ("arrayByApplyingSelector:withObject:")]
 		NSObject [] ArrayByApplyingSelector (Selector aSelector, NSObject argument);
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Gets the array by evaluating the reference.</summary>
+		/// <returns>The evaluated array.</returns>
 		[Export ("get")]
 		NSObject [] Get ();
 	}

@@ -34,10 +34,9 @@ namespace CoreGraphics {
 
 	// uint32_t -> CGGradient.h
 	/// <summary>Drawing location for gradients.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum CGGradientDrawingOptions : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
 		/// <summary>The fill will draw before the start location.</summary>
 		DrawsBeforeStartLocation = (1 << 0),
@@ -186,10 +185,9 @@ namespace CoreGraphics {
 			}
 		}
 
-		/// <param name="colorspace">To be added.</param>
-		///         <param name="colors">To be added.</param>
+		/// <param name="colorspace">The colorspace.</param>
+		///         <param name="colors">The colors.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CGGradient (CGColorSpace? colorspace, CGColor [] colors)
 			: base (Create (colorspace, colors), true)
 		{

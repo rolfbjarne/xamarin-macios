@@ -8,7 +8,6 @@ namespace Foundation {
 
 	// Helper to (mostly) support NS[Mutable]Copying protocols
 	/// <summary>An OS-controlled area within memory from which objects are allocated.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -38,7 +37,6 @@ namespace Foundation {
 #if !COREBUILD
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? Name {
 			get {
 				return CFString.FromHandle (NSZoneName (Handle));
@@ -55,7 +53,6 @@ namespace Foundation {
 
 		// note: Copy(NSZone) and MutableCopy(NSZone) with a nil pointer == default
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static readonly NSZone Default = new NSZone (NSDefaultMallocZone (), false);
 #endif
 	}

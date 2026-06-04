@@ -1190,7 +1190,7 @@ namespace Metal {
 		/// <summary>Indicates a sampler.</summary>
 		[MacCatalyst (13, 1)]
 		Sampler = 59,
-		/// <summary>Indicates a pointer.</summary>
+		/// <summary>Indicates APointer.</summary>
 		[MacCatalyst (13, 1)]
 		Pointer = 60,
 		/// <summary>Indicates an unsigned 8-bit normalized integer.</summary>
@@ -1233,13 +1233,13 @@ namespace Metal {
 		/// <summary>Indicates a value that contains four signed 16-bit normalized integer components.</summary>
 		[MacCatalyst (13, 1)]
 		[NoMac, TV (14, 5)] Rgba16Snorm = 74,
-		/// <summary>Indicates a packed RGBA normalized integer value with 10 bits each for RGB and 2 bits for A.</summary>
+		/// <summary>Indicates APacked RGBA normalized integer value with 10 bits each for RGB and 2 bits for A.</summary>
 		[MacCatalyst (13, 1)]
 		[NoMac, TV (14, 5)] Rgb10A2Unorm = 75,
 		/// <summary>Indicates a 32-bit packed floating point RGB value with 11 bits for R and G and 10 bits for B.</summary>
 		[MacCatalyst (13, 1)]
 		[NoMac, TV (14, 5)] Rg11B10Float = 76,
-		/// <summary>Indicates a packed RGBE normalized floating point value with 9 bits each for R, G, and B, with a 5-bit exponent.</summary>
+		/// <summary>Indicates APacked RGBE normalized floating point value with 9 bits each for R, G, and B, with a 5-bit exponent.</summary>
 		[MacCatalyst (13, 1)]
 		[NoMac, TV (14, 5)] Rgb9E5Float = 77,
 		/// <summary>To be added.</summary>
@@ -1342,7 +1342,7 @@ namespace Metal {
 	}
 #endif
 
-	/// <summary>Options relating to argument information in the creation of a pipeline.</summary>
+	/// <summary>Options relating to argument information in the creation of APipeline.</summary>
 	[Native]
 	[Flags]
 	public enum MTLPipelineOption : ulong {

@@ -51,7 +51,6 @@ namespace CoreLocation {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct CLLocationCoordinate2D {
 		/// <summary>Latitude in degrees. Positive values are north of the equator, negative values are south of the equator.</summary>
-		///         <remarks>To be added.</remarks>
 		public /* CLLocationDegrees */ double Latitude;
 		/// <summary>Longitude in degrees.</summary>
 		///         <remarks>The value is relative to the zero meridian. Positive values point east, negative values point west.</remarks>
@@ -60,7 +59,6 @@ namespace CoreLocation {
 		/// <param name="latitude">The latitude in degrees, where positive values are north of the equator.</param>
 		///         <param name="longitude">The longitude in degrees relative to the zero meridian, where positive values are east of the meridian.</param>
 		///         <summary>Constructor that allows the latitude and longitude to be specified.</summary>
-		///         <remarks>To be added.</remarks>
 		public CLLocationCoordinate2D (double latitude, double longitude)
 		{
 			Latitude = latitude;
@@ -82,7 +80,6 @@ namespace CoreLocation {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
 			return $"(Latitude={Latitude}, Longitude={Longitude}";
@@ -91,15 +88,13 @@ namespace CoreLocation {
 
 #if IOS && !COREBUILD // This code comes from Intents.CLPlacemark_INIntentsAdditions Category
 	/// <summary>Associates data such as street address with a coordinate.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/CoreLocation/Reference/CLPlacemark_class/index.html">Apple documentation for <c>CLPlacemark</c></related>
 	public partial class CLPlacemark {
-		/// <param name="location">To be added.</param>
-		///         <param name="name">To be added.</param>
-		///         <param name="postalAddress">To be added.</param>
+		/// <param name="location">The location.</param>
+		///         <param name="name">The name to use.</param>
+		///         <param name="postalAddress">The postal address.</param>
 		///         <summary>Creates a new placemark from the given name, location, and postal address.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]

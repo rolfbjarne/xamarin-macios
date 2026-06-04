@@ -64,7 +64,7 @@ namespace CoreAudioKit {
 		/// <param name="width">The width.</param>
 		/// <param name="height">The height.</param>
 		/// <param name="hostHasController">The host has controller.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new view configuration with the specified dimensions and host controller state.</summary>
 		[Export ("initWithWidth:height:hostHasController:")]
 		NativeHandle Constructor (nfloat width, nfloat height, bool hostHasController);
 

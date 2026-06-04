@@ -29,7 +29,7 @@ namespace Photos {
 				yield return this [i];
 		}
 
-		/// <typeparam name="T">To be added.</typeparam>
+		/// <typeparam name="T">The type of objects to retrieve from the fetch result.</typeparam>
 		///         <param name="indexes">The indexes.</param>
 		///         <summary>Returns the objects at <paramref name="indexes" />, all of which must be type T.</summary>
 		public T? [] ObjectsAt<T> (NSIndexSet indexes) where T : NSObject

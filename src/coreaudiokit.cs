@@ -99,8 +99,8 @@ namespace CoreAudioKit {
 	[Protocol]
 	interface AUCustomViewPersistentData {
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
+		/// <summary>Gets or sets custom persistent data for the view.</summary>
+		/// <value>A dictionary containing the persistent data, or <see langword="null" />.</value>
 		[Abstract]
 		[NullAllowed, Export ("customViewPersistentData", ArgumentSemantic.Assign)]
 		NSDictionary<NSString, NSObject> CustomViewPersistentData { get; set; }

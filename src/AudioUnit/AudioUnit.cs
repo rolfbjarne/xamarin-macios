@@ -122,7 +122,6 @@ namespace AudioUnit {
 	///     <param name="numberFrames">To be added.</param>
 	///     <param name="audioUnit">To be added.</param>
 	///     <summary>Callback used with <see cref="AudioUnit.SetInputCallback(InputDelegate,AudioUnitScopeType,System.UInt32)" />.</summary>
-	///     <returns>To be added.</returns>
 	///     <remarks>To be added.</remarks>
 	public delegate AudioUnitStatus InputDelegate (AudioUnitRenderActionFlags actionFlags, AudioTimeStamp timeStamp, uint busNumber, uint numberFrames, AudioUnit audioUnit);
 
@@ -178,23 +177,18 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CFUrl FileUrl { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public InstrumentType InstrumentType { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public byte BankMSB { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public byte BankLSB { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public byte PresetID { get; set; }
 
@@ -264,39 +258,30 @@ namespace AudioUnit {
 	public class AudioUnitParameterInfo {
 #if !COREBUILD
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? UnitName { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitClumpID ClumpID { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string? Name { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitParameterUnit Unit { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float MinValue { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float MaxValue { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public float DefaultValue { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitParameterFlag Flags { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitParameterType Type { get; private set; }
 
@@ -460,7 +445,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public AudioComponent Component {
 			get {
@@ -469,7 +453,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsPlaying { get { return _isPlaying; } }
 
@@ -477,7 +460,6 @@ namespace AudioUnit {
 		///         <param name="scope">To be added.</param>
 		///         <param name="audioUnitElement">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe AudioUnitStatus SetFormat (AudioToolbox.AudioStreamBasicDescription audioFormat, AudioUnitScopeType scope, uint audioUnitElement = 0)
 		{
@@ -492,7 +474,6 @@ namespace AudioUnit {
 		/// <param name="scope">To be added.</param>
 		///         <param name="audioUnitElement">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public uint GetCurrentDevice (AudioUnitScopeType scope, uint audioUnitElement = 0)
 		{
@@ -517,7 +498,6 @@ namespace AudioUnit {
 		[Obsolete ("This API is not available on iOS.")]
 #endif
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("ios")]
@@ -555,7 +535,6 @@ namespace AudioUnit {
 		///         <param name="scope">To be added.</param>
 		///         <param name="audioUnitElement">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe AudioUnitStatus SetCurrentDevice (uint inputDevice, AudioUnitScopeType scope, uint audioUnitElement = 0)
 		{
@@ -570,7 +549,6 @@ namespace AudioUnit {
 		/// <param name="scope">To be added.</param>
 		///         <param name="audioUnitElement">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioStreamBasicDescription GetAudioFormat (AudioUnitScopeType scope, uint audioUnitElement = 0)
 		{
@@ -595,7 +573,6 @@ namespace AudioUnit {
 		/// <param name="scope">To be added.</param>
 		///         <param name="audioUnitElement">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public ClassInfoDictionary? GetClassInfo (AudioUnitScopeType scope = AudioUnitScopeType.Global, uint audioUnitElement = 0)
 		{
@@ -621,7 +598,6 @@ namespace AudioUnit {
 		///         <param name="scope">To be added.</param>
 		///         <param name="audioUnitElement">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitStatus SetClassInfo (ClassInfoDictionary preset, AudioUnitScopeType scope = AudioUnitScopeType.Global, uint audioUnitElement = 0)
 		{
@@ -635,7 +611,6 @@ namespace AudioUnit {
 		/// <param name="scope">To be added.</param>
 		///         <param name="audioUnitElement">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe AudioUnitParameterInfo []? GetParameterList (AudioUnitScopeType scope = AudioUnitScopeType.Global, uint audioUnitElement = 0)
 		{
@@ -669,7 +644,6 @@ namespace AudioUnit {
 		///         <param name="scope">To be added.</param>
 		///         <param name="audioUnitElement">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitStatus LoadInstrument (SamplerInstrumentData instrumentData, AudioUnitScopeType scope = AudioUnitScopeType.Global, uint audioUnitElement = 0)
 		{
@@ -687,7 +661,6 @@ namespace AudioUnit {
 		///         <param name="sourceOutputNumber">To be added.</param>
 		///         <param name="destInputNumber">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitStatus MakeConnection (AudioUnit sourceAudioUnit, uint sourceOutputNumber, uint destInputNumber)
 		{
@@ -708,7 +681,6 @@ namespace AudioUnit {
 		///         <param name="scope">To be added.</param>
 		///         <param name="audioUnitElement">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitStatus SetEnableIO (bool enableIO, AudioUnitScopeType scope, uint audioUnitElement = 0)
 		{
@@ -723,7 +695,6 @@ namespace AudioUnit {
 		///         <param name="scope">To be added.</param>
 		///         <param name="audioUnitElement">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitStatus SetMaximumFramesPerSlice (uint value, AudioUnitScopeType scope, uint audioUnitElement = 0)
 		{
@@ -736,7 +707,6 @@ namespace AudioUnit {
 		/// <param name="scope">To be added.</param>
 		///         <param name="audioUnitElement">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public uint GetMaximumFramesPerSlice (AudioUnitScopeType scope = AudioUnitScopeType.Global, uint audioUnitElement = 0)
 		{
@@ -762,7 +732,6 @@ namespace AudioUnit {
 		/// <param name="scope">To be added.</param>
 		///         <param name="count">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitStatus SetElementCount (AudioUnitScopeType scope, uint count)
 		{
@@ -774,7 +743,6 @@ namespace AudioUnit {
 
 		/// <param name="scope">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public uint GetElementCount (AudioUnitScopeType scope)
 		{
@@ -801,7 +769,6 @@ namespace AudioUnit {
 		///         <param name="scope">To be added.</param>
 		///         <param name="audioUnitElement">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitStatus SetSampleRate (double sampleRate, AudioUnitScopeType scope = AudioUnitScopeType.Output, uint audioUnitElement = 0)
 		{
@@ -816,7 +783,6 @@ namespace AudioUnit {
 		///         <param name="data2">To be added.</param>
 		///         <param name="offsetSampleFrame">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitStatus MusicDeviceMIDIEvent (uint status, uint data1, uint data2, uint offsetSampleFrame = 0)
 		{
@@ -827,7 +793,6 @@ namespace AudioUnit {
 		unsafe static extern AudioUnitStatus AudioUnitGetProperty (IntPtr inUnit, AudioUnitPropertyIDType inID, AudioUnitScopeType inScope, uint inElement, double* outData, uint* ioDataSize);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public double GetLatency ()
 		{
@@ -848,7 +813,6 @@ namespace AudioUnit {
 		///         <param name="scope">To be added.</param>
 		///         <param name="audioUnitElement">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitStatus SetRenderCallback (RenderDelegate renderDelegate, AudioUnitScopeType scope = AudioUnitScopeType.Global, uint audioUnitElement = 0)
 		{
@@ -895,7 +859,6 @@ namespace AudioUnit {
 		///         <param name="scope">To be added.</param>
 		///         <param name="audioUnitElement">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitStatus SetInputCallback (InputDelegate inputDelegate, AudioUnitScopeType scope = AudioUnitScopeType.Global, uint audioUnitElement = 0)
 		{
@@ -949,7 +912,6 @@ namespace AudioUnit {
 		///         <param name="name">To be added.</param>
 		///         <param name="version">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -984,7 +946,6 @@ namespace AudioUnit {
 
 		/// <param name="desiredPointSize">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -1000,7 +961,6 @@ namespace AudioUnit {
 #endif
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitStatus Initialize ()
 		{
@@ -1008,7 +968,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitStatus Uninitialize ()
 		{
@@ -1047,7 +1006,6 @@ namespace AudioUnit {
 		///         <param name="numberFrames">To be added.</param>
 		///         <param name="data">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitStatus Render (ref AudioUnitRenderActionFlags actionFlags, AudioTimeStamp timeStamp, uint busNumber, uint numberFrames, AudioBuffers data)
 		{
@@ -1073,7 +1031,6 @@ namespace AudioUnit {
 		///         <param name="scope">To be added.</param>
 		///         <param name="audioUnitElement">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitStatus SetParameter (AudioUnitParameterType type, float value, AudioUnitScopeType scope, uint audioUnitElement = 0)
 		{
@@ -1083,7 +1040,6 @@ namespace AudioUnit {
 		/// <param name="inParameterEvent">To be added.</param>
 		///         <param name="inNumParamEvents">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitStatus ScheduleParameter (AudioUnitParameterEvent inParameterEvent, uint inNumParamEvents)
 		{
@@ -1224,7 +1180,6 @@ namespace AudioUnit {
 
 		/// <param name="region">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitStatus SetScheduledFileRegion (AUScheduledAudioFileRegion region)
 		{
@@ -1243,7 +1198,6 @@ namespace AudioUnit {
 
 		/// <param name="timeStamp">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitStatus SetScheduleStartTimeStamp (AudioTimeStamp timeStamp)
 		{
@@ -1254,7 +1208,6 @@ namespace AudioUnit {
 
 		/// <param name="audioFile">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public AudioUnitStatus SetScheduledFiles (AudioFile audioFile)
 		{
@@ -1275,7 +1228,6 @@ namespace AudioUnit {
 
 		/// <param name="audioFiles">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe AudioUnitStatus SetScheduledFiles (AudioFile [] audioFiles)
 		{
@@ -1340,11 +1292,9 @@ namespace AudioUnit {
 		///         <remarks>This IntPtr is a handle to the underlying unmanaged representation for this object.</remarks>
 		public NativeHandle Handle { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsEmpty { get { return Handle == IntPtr.Zero; } }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool IsAtEnd { get { return current is null; } }
 
@@ -1372,7 +1322,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public AURenderEvent* UnsafeFirst {
 			get {
@@ -1381,7 +1330,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public AURenderEvent First {
 			get {
@@ -1392,7 +1340,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public AURenderEvent Current {
 			get {
@@ -1403,7 +1350,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		object IEnumerator.Current {
 			get { return Current; }
@@ -1426,7 +1372,6 @@ namespace AudioUnit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public bool /*IEnumerator<AURenderEvent>.*/MoveNext ()
 		{
@@ -1475,7 +1420,6 @@ namespace AudioUnit {
 		public AURenderEvent* UnsafeNext;
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public AURenderEvent? Next {
 			get {
@@ -1531,7 +1475,6 @@ namespace AudioUnit {
 		public AURenderEvent* UnsafeNext;
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public AURenderEvent? Next {
 			get {

@@ -13,7 +13,7 @@ using System.Collections.Generic;
 #nullable enable
 
 namespace SceneKit {
-	/// <summary>To be added.</summary>
+/// <summary>Provides property controllers for animating SceneKit particle system properties.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -29,7 +29,7 @@ namespace SceneKit {
 				mutDict = (NSMutableDictionary) dict;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Initializes a new empty instance of the <see cref="SCNPropertyControllers" /> class.</summary>
 		public SCNPropertyControllers ()
 		{
 			mutDict = new NSMutableDictionary ();
@@ -52,7 +52,7 @@ namespace SceneKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the property controller for particle position.</summary>
 		public SCNParticlePropertyController? Position {
 			get {
 				return dict [SCNParticleProperty.Position] as SCNParticlePropertyController;
@@ -62,7 +62,7 @@ namespace SceneKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the property controller for particle angle.</summary>
 		public SCNParticlePropertyController? Angle {
 			get {
 				return dict [SCNParticleProperty.Angle] as SCNParticlePropertyController;
@@ -72,7 +72,7 @@ namespace SceneKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the property controller for particle rotation axis.</summary>
 		public SCNParticlePropertyController? RotationAxis {
 			get {
 				return dict [SCNParticleProperty.RotationAxis] as SCNParticlePropertyController;
@@ -82,7 +82,7 @@ namespace SceneKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the property controller for particle velocity.</summary>
 		public SCNParticlePropertyController? Velocity {
 			get {
 				return dict [SCNParticleProperty.Velocity] as SCNParticlePropertyController;
@@ -92,7 +92,7 @@ namespace SceneKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the property controller for particle angular velocity.</summary>
 		public SCNParticlePropertyController? AngularVelocity {
 			get {
 				return dict [SCNParticleProperty.AngularVelocity] as SCNParticlePropertyController;
@@ -102,7 +102,7 @@ namespace SceneKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the property controller for particle life.</summary>
 		public SCNParticlePropertyController? Life {
 			get {
 				return dict [SCNParticleProperty.Life] as SCNParticlePropertyController;
@@ -112,7 +112,7 @@ namespace SceneKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the property controller for particle color.</summary>
 		public SCNParticlePropertyController? Color {
 			get {
 				return dict [SCNParticleProperty.Color] as SCNParticlePropertyController;
@@ -122,7 +122,7 @@ namespace SceneKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the property controller for particle opacity.</summary>
 		public SCNParticlePropertyController? Opacity {
 			get {
 				return dict [SCNParticleProperty.Opacity] as SCNParticlePropertyController;
@@ -132,7 +132,7 @@ namespace SceneKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the property controller for particle size.</summary>
 		public SCNParticlePropertyController? Size {
 			get {
 				return dict [SCNParticleProperty.Size] as SCNParticlePropertyController;
@@ -142,7 +142,7 @@ namespace SceneKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the property controller for particle frame.</summary>
 		public SCNParticlePropertyController? Frame {
 			get {
 				return dict [SCNParticleProperty.Frame] as SCNParticlePropertyController;
@@ -152,7 +152,7 @@ namespace SceneKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the property controller for particle frame rate.</summary>
 		public SCNParticlePropertyController? FrameRate {
 			get {
 				return dict [SCNParticleProperty.FrameRate] as SCNParticlePropertyController;
@@ -162,7 +162,7 @@ namespace SceneKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the property controller for particle bounce.</summary>
 		public SCNParticlePropertyController? Bounce {
 			get {
 				return dict [SCNParticleProperty.Bounce] as SCNParticlePropertyController;
@@ -172,7 +172,7 @@ namespace SceneKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the property controller for particle charge.</summary>
 		public SCNParticlePropertyController? Charge {
 			get {
 				return dict [SCNParticleProperty.Charge] as SCNParticlePropertyController;
@@ -182,7 +182,7 @@ namespace SceneKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the property controller for particle friction.</summary>
 		public SCNParticlePropertyController? Friction {
 			get {
 				return dict [SCNParticleProperty.Friction] as SCNParticlePropertyController;

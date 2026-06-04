@@ -38,7 +38,6 @@ namespace Foundation {
 	public partial class NSData : IEnumerable, IEnumerable<byte> {
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public byte [] ToArray ()
 		{
 			var res = new byte [Length];
@@ -84,7 +83,6 @@ namespace Foundation {
 		/// <param name="buffer">C# Byte array containing the data to wrap.</param>
 		///         <summary>Creates an NSData that wraps a managed C# byte array.</summary>
 		///         <returns>Newly created NSData object wrapping the contents of the array.</returns>
-		///         <remarks>To be added.</remarks>
 		public static NSData FromArray (byte [] buffer)
 		{
 			if (buffer is null)
@@ -294,23 +292,21 @@ namespace Foundation {
 			}
 		}
 
-		/// <param name="file">To be added.</param>
-		///         <param name="auxiliaryFile">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="file">The file.</param>
+		///         <param name="auxiliaryFile">The auxiliary file.</param>
+		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool Save (string file, bool auxiliaryFile, out NSError? error)
 		{
 			return Save (file, auxiliaryFile ? NSDataWritingOptions.Atomic : (NSDataWritingOptions) 0, out error);
 		}
 
-		/// <param name="file">To be added.</param>
-		///         <param name="options">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="file">The file.</param>
+		///         <param name="options">The options to use.</param>
+		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool Save (string file, NSDataWritingOptions options, out NSError? error)
 		{
 			unsafe {
@@ -324,23 +320,21 @@ namespace Foundation {
 			}
 		}
 
-		/// <param name="url">To be added.</param>
-		///         <param name="auxiliaryFile">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="url">The URL to use.</param>
+		///         <param name="auxiliaryFile">The auxiliary file.</param>
+		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool Save (NSUrl url, bool auxiliaryFile, out NSError? error)
 		{
 			return Save (url, auxiliaryFile ? NSDataWritingOptions.Atomic : (NSDataWritingOptions) 0, out error);
 		}
 
-		/// <param name="url">To be added.</param>
-		///         <param name="options">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="url">The URL to use.</param>
+		///         <param name="options">The options to use.</param>
+		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool Save (NSUrl url, NSDataWritingOptions options, out NSError? error)
 		{
 			unsafe {

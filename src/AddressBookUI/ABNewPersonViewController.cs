@@ -114,7 +114,7 @@ namespace AddressBookUI {
 		}
 
 		/// <param name="e">The event arguments.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Raises the <see cref="NewPersonComplete" /> event.</summary>
 		protected internal virtual void OnNewPersonComplete (ABNewPersonCompleteEventArgs e)
 		{
 			var h = EnsureEventDelegate ().newPersonComplete;

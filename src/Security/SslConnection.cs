@@ -26,7 +26,7 @@ namespace Security {
 
 		GCHandle handle;
 
-		/// <summary>To be added.</summary>
+		/// <summary>Initializes a new instance of the <see cref="SslConnection" /> class.</summary>
 		protected SslConnection ()
 		{
 			handle = GCHandle.Alloc (this);

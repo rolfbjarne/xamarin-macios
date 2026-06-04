@@ -11,7 +11,6 @@ namespace VideoSubscriberAccount {
 
 		/// <param name="self">The instance on which this method operates.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static NSString? [] GetConstants (this VSAccountProviderAuthenticationScheme [] self)
 		{
 			if (self is null)
@@ -25,7 +24,6 @@ namespace VideoSubscriberAccount {
 
 		/// <param name="constants">The constants.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static VSAccountProviderAuthenticationScheme [] GetValues (NSString [] constants)
 		{
 			if (constants is null)

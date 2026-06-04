@@ -188,7 +188,7 @@ namespace AVFoundation {
 	public enum AVCaptureExposureMode : long {
 		/// <summary>Exposure setting is locked.</summary>
 		Locked,
-		/// <summary>The camera performs auto expose.</summary>
+		/// <summary>The camerAPerforms auto expose.</summary>
 		AutoExpose,
 		/// <summary>Performs auto-expose and adjusts the setting continously. </summary>
 		ContinuousAutoExposure,
@@ -650,7 +650,7 @@ namespace AVFoundation {
 		CannotStartPlaying = 0x21706c61, // '!pla'
 		/// <summary>Indicates that audio recording was attempted and failed.</summary>
 		CannotStartRecording = 0x21726563, // '!rec'
-		/// <summary>Indicates that the app tried to set a parameter to a disallowed value.</summary>
+		/// <summary>Indicates that the app tried to set AParameter to a disallowed value.</summary>
 		BadParam = -50,
 		/// <summary>Indicates that another app with higher priority preempted the operation.</summary>
 		InsufficientPriority = 0x21707269, // '!pri'
@@ -1315,7 +1315,7 @@ namespace AVFoundation {
 		[Field ("AVAssetExportPresetAppleM4A")]
 		AppleM4A = 8, // AVAssetExportPresetAppleM4A
 
-		/// <summary>Indicates a pass-through export, where possible.</summary>
+		/// <summary>Indicates APass-through export, where possible.</summary>
 		[Field ("AVAssetExportPresetPassthrough")]
 		Passthrough = 9, // AVAssetExportPresetPassthrough
 

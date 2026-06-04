@@ -26,7 +26,7 @@ namespace GameKit {
 		/// <param name="This">The instance on which this extension method operates.</param>
 		///         <param name="picker">The picker.</param>
 		///         <param name="type">The type.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Connections type selected.</summary>
 		public static void ConnectionTypeSelected (this IGKPeerPickerControllerDelegate This, GKPeerPickerController picker, GKPeerPickerConnectionType type)
 		{
 			throw new PlatformNotSupportedException (Constants.TypeUnavailable);
@@ -35,8 +35,7 @@ namespace GameKit {
 		/// <param name="This">The instance on which this extension method operates.</param>
 		///         <param name="picker">The picker.</param>
 		///         <param name="forType">The for type.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets session.</summary>
 		public static GKSession GetSession (this IGKPeerPickerControllerDelegate This, GKPeerPickerController picker, GKPeerPickerConnectionType forType)
 		{
 			throw new PlatformNotSupportedException (Constants.TypeUnavailable);
@@ -46,7 +45,7 @@ namespace GameKit {
 		///         <param name="picker">The picker.</param>
 		///         <param name="peerId">The peer id.</param>
 		///         <param name="toSession">The to session.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Peers connected.</summary>
 		public static void PeerConnected (this IGKPeerPickerControllerDelegate This, GKPeerPickerController picker, string peerId, GKSession toSession)
 		{
 			throw new PlatformNotSupportedException (Constants.TypeUnavailable);
@@ -54,7 +53,7 @@ namespace GameKit {
 
 		/// <param name="This">The instance on which this extension method operates.</param>
 		///         <param name="picker">The picker.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Controllers cancelled.</summary>
 		public static void ControllerCancelled (this IGKPeerPickerControllerDelegate This, GKPeerPickerController picker)
 		{
 			throw new PlatformNotSupportedException (Constants.TypeUnavailable);
@@ -108,7 +107,6 @@ namespace GameKit {
 		/// <param name="picker">The picker.</param>
 		///         <param name="forType">The for type.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public virtual GKSession GetSession (GKPeerPickerController picker, GKPeerPickerConnectionType forType)
 		{
 			throw new PlatformNotSupportedException (Constants.TypeUnavailable);
@@ -170,8 +168,7 @@ namespace GameKit {
 			throw new PlatformNotSupportedException (Constants.TypeUnavailable);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the connection types mask.</summary>
 		public virtual GKPeerPickerConnectionType ConnectionTypesMask {
 			get {
 				throw new PlatformNotSupportedException (Constants.TypeUnavailable);
@@ -197,8 +194,7 @@ namespace GameKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the visible.</summary>
 		public virtual bool Visible {
 			get {
 				throw new PlatformNotSupportedException (Constants.TypeUnavailable);

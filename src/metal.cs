@@ -5337,7 +5337,7 @@ namespace Metal {
 		void SetSamplerStates (IMTLSamplerState [] samplers, NSRange range);
 
 		/// <param name="index">The index for the constant. Either a Metal index ID or the index member of a <see cref="Metal.MTLArgumentDescriptor" />.</param>
-		/// <summary>Returns a pointer to the constant at the specified <paramref name="index" /> into the buffer.</summary>
+		/// <summary>Returns APointer to the constant at the specified <paramref name="index" /> into the buffer.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		[Abstract]

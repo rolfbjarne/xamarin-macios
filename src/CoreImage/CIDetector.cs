@@ -105,7 +105,6 @@ namespace CoreImage {
 		/// <param name="context">The context to use.</param>
 		///         <param name="detectorOptions">The detector options.</param>
 		///         <summary>Create a detector that recognizes rectangular objects in the image.</summary>
-		///         <returns>To be added.</returns>
 		public static CIDetector? CreateRectangleDetector (CIContext context, CIDetectorOptions detectorOptions)
 		{
 			using (var options = detectorOptions?.ToDictionary ())
@@ -116,7 +115,6 @@ namespace CoreImage {
 		/// <param name="context">The context to use.</param>
 		///         <param name="detectorOptions">The detector options.</param>
 		///         <summary>Create a detector that recognizes QR codes.</summary>
-		///         <returns>To be added.</returns>
 		public static CIDetector? CreateQRDetector (CIContext context, CIDetectorOptions detectorOptions)
 		{
 			using (var options = detectorOptions?.ToDictionary ())
@@ -126,7 +124,6 @@ namespace CoreImage {
 		/// <param name="context">The context to use.</param>
 		///         <param name="detectorOptions">The detector options.</param>
 		///         <summary>Creates a new CIDetector with the specified context and detection options.</summary>
-		///         <returns>To be added.</returns>
 		public static CIDetector? CreateTextDetector (CIContext context, CIDetectorOptions detectorOptions)
 		{
 			using (var options = detectorOptions?.ToDictionary ())

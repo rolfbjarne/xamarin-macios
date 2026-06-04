@@ -48,29 +48,29 @@ namespace SearchKit {
 
 	[StrongDictionary ("SKTextAnalysisKeys")]
 	interface SKTextAnalysis {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the minimum term length.</summary>
+		/// <value>The minimum number of characters for a term.</value>
 		int MinTermLength { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the stop words.</summary>
+		/// <value>A set of words to exclude from indexing.</value>
 		NSSet StopWords { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the substitutions dictionary.</summary>
+		/// <value>A dictionary of term substitutions.</value>
 		NSDictionary Substitutions { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the maximum number of terms.</summary>
+		/// <value>The maximum number of terms.</value>
 		NSNumber MaximumTerms { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets whether proximity indexing is enabled.</summary>
+		/// <value><see langword="true" /> if proximity indexing is enabled; otherwise, <see langword="false" />.</value>
 		bool ProximityIndexing { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the characters allowed in terms.</summary>
+		/// <value>The term characters string.</value>
 		string TermChars { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the characters allowed at the start of terms.</summary>
+		/// <value>The start term characters string.</value>
 		string StartTermChars { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the characters allowed at the end of terms.</summary>
+		/// <value>The end term characters string.</value>
 		string EndTermChars { get; set; }
 	}
 }

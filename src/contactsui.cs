@@ -169,14 +169,14 @@ namespace ContactsUI {
 	[BaseType (typeof (XViewController))]
 	interface CNContactViewController {
 		/// <param name="nibName">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
+		/// <param name="nibName">
+		///   <para>The name of the nib file, or <see langword="null" />.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
 		/// <param name="bundle">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
-		/// <summary>Creates a new <see cref="ContactsUI.CNContactViewController" /> from the specified <paramref name="nibName" /> in the specified <paramref name="bundle" />.</summary>
+		///   <para>The bundle in which to search for the nib file, or <see langword="null" />.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
 		[Export ("initWithNibName:bundle:")]
 #if !MONOMAC
 		[PostGet ("NibBundle")]
@@ -184,14 +184,14 @@ namespace ContactsUI {
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
 
 		/// <summary>Describes all the keys that must be fetched for display in a <see cref="ContactsUI.CNContactViewController" />. For use with <see cref="Contacts.CNContactFetchRequest.KeysToFetch" />.</summary>
-		///         <value>To be added.</value>
+		/// <value>The key descriptor.</value>
 		[Static]
 		[Export ("descriptorForRequiredKeys")]
 		ICNKeyDescriptor DescriptorForRequiredKeys { get; }
 
 #if MONOMAC
 		/// <summary>The <see cref="Contacts.CNContact" /> that is displayed.</summary>
-		///         <value>To be added.</value>
+		/// <value>The contact, or <see langword="null" />.</value>
 		[NullAllowed]
 		[Export ("contact", ArgumentSemantic.Copy)]
 #else
@@ -207,7 +207,7 @@ namespace ContactsUI {
 
 		/// <param name="contact">The contact.</param>
 		///         <summary>Creates a <see cref="ContactsUI.CNContactViewController" /> to display <paramref name="contact" />.</summary>
-		///         <returns>To be added.</returns>
+		/// <returns>A new <see cref="ContactsUI.CNContactViewController" /> instance.</returns>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Static]
@@ -216,7 +216,7 @@ namespace ContactsUI {
 
 		/// <param name="contact">The contact.</param>
 		///         <summary>Creates a <see cref="ContactsUI.CNContactViewController" /> to display <paramref name="contact" /> when it is not known if <paramref name="contact" /> was fetched or newly created.</summary>
-		///         <returns>To be added.</returns>
+		/// <returns>A new <see cref="ContactsUI.CNContactViewController" /> instance.</returns>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Static]
@@ -224,11 +224,11 @@ namespace ContactsUI {
 		CNContactViewController FromUnknownContact (CNContact contact);
 
 		/// <param name="contact">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
-		///         <summary>Creates a <see cref="ContactsUI.CNContactViewController" /> to display the newly-created <paramref name="contact" />.</summary>
-		///         <returns>To be added.</returns>
+		/// <param name="contact">
+		///   <para>The contact to create, or <see langword="null" />.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
+		/// <returns>A new <see cref="ContactsUI.CNContactViewController" /> instance.</returns>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Static]
@@ -318,32 +318,32 @@ namespace ContactsUI {
 		string Message { get; set; }
 
 		/// <summary>Whether editing the contact is allowed.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if editing is allowed; otherwise, <see langword="false" />.</value>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("allowsEditing", ArgumentSemantic.Assign)]
 		bool AllowsEditing { get; set; }
 
 		/// <summary>Whether buttons triggering actions (such as sending a text) are displayed.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if action buttons are shown; otherwise, <see langword="false" />.</value>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("allowsActions", ArgumentSemantic.Assign)]
 		bool AllowsActions { get; set; }
 
 		/// <summary>Whether to show data from contacts linked to the <see cref="ContactsUI.CNContactViewController.Contact" />.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> to show linked contacts; otherwise, <see langword="false" />.</value>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("shouldShowLinkedContacts", ArgumentSemantic.Assign)]
 		bool ShouldShowLinkedContacts { get; set; }
 
 		/// <param name="key">The key to use.</param>
-		///         <param name="identifier">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
-		///         <summary>Highlights the property identified by <paramref name="key" />. If <paramref name="key" /> is multivalued, <paramref name="identifier" /> specifies which to highlight. (See <see cref="Contacts.CNContactKey" /> for values for <paramref name="key" />.)</summary>
+		/// <param name="key">The key to use.</param>
+		/// <param name="identifier">
+		///   <para>The identifier for the specific value, or <see langword="null" />.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Export ("highlightPropertyWithKey:identifier:")] //TODO: Maybe we can mNullallowedake a strongly type version

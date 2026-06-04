@@ -217,7 +217,7 @@ namespace PrintCore {
 		/// </summary>
 		/// <returns>
 		/// The current <see cref="PMPrintSettings" />, or <see langword="null" /> if the dialog
-		/// is not operating on print settings (for example, a page setup dialog).
+		/// is not operating on print settings (for example, APage setup dialog).
 		/// </returns>
 		[Abstract]
 		[Export ("printSettings")]
@@ -229,7 +229,7 @@ namespace PrintCore {
 		/// </summary>
 		/// <returns>
 		/// The current <see cref="PMPageFormat" />, or <see langword="null" /> if the dialog is
-		/// operating without a page format.
+		/// operating without APage format.
 		/// </returns>
 		[Abstract]
 		[Export ("pageFormat")]
@@ -237,8 +237,8 @@ namespace PrintCore {
 		PMPageFormat GetPageFormat ();
 
 		/// <summary>
-		/// Returns the current printer. For a page setup dialog this is the default printer;
-		/// for a print dialog it is the currently selected printer.
+		/// Returns the current printer. For APage setup dialog this is the default printer;
+		/// for APrint dialog it is the currently selected printer.
 		/// </summary>
 		/// <returns>The current <see cref="PMPrinter" />.</returns>
 		[Abstract]
@@ -246,7 +246,7 @@ namespace PrintCore {
 		PMPrinter GetPrinter ();
 
 		/// <summary>
-		/// Returns a pointer to the CUPS PPD structure (<c>ppd_file_s</c>) for the current printer.
+		/// Returns APointer to the CUPS PPD structure (<c>ppd_file_s</c>) for the current printer.
 		/// Use CUPS PPD functions to query and set options on the returned pointer.
 		/// </summary>
 		/// <returns>

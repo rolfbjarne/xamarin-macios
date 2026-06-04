@@ -24,7 +24,7 @@
 
 namespace ScriptingBridge {
 	// AE.framework/Headers/AEDataModel.h:typedef SInt32 AESendMode;
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies options for sending Apple events.</summary>
 	[Flags]
 	public enum AESendMode : int {
 		/// <summary>Indicates no reply.</summary>
@@ -55,7 +55,7 @@ namespace ScriptingBridge {
 
 	// LaunchServices.framework/Headers/LSOpen.h:typedef OptionBits LSLaunchFlags;
 	// DirectoryService.framework/Headers/DirServicesTypes.h:typedef UInt32 OptionBits;
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies options for launching applications.</summary>
 	[Flags]
 	public enum LSLaunchFlags : uint {
 		/// <summary>Indicates launch defaults.</summary>

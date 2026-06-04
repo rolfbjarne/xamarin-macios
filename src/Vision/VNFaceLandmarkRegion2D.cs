@@ -15,7 +15,6 @@ namespace Vision {
 	public partial class VNFaceLandmarkRegion2D {
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public virtual CGPoint []? NormalizedPoints {
 			get {
 				var ret = _GetNormalizedPoints ();
@@ -35,7 +34,6 @@ namespace Vision {
 
 		/// <param name="imageSize">The image size.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public virtual CGPoint []? GetPointsInImage (CGSize imageSize)
 		{
 			// return the address of the array of pointCount points

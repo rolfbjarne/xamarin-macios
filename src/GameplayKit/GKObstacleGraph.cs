@@ -14,7 +14,6 @@ namespace GameplayKit {
 	public partial class GKObstacleGraph {
 		/// <param name="obstacle">The obstacle.</param>
 		///         <summary>Returns the array of <see cref="GameplayKit.GKGraphNode2D" /> corresponding to the <paramref name="obstacle" />.</summary>
-		///         <returns>To be added.</returns>
 		public GKGraphNode2D []? GetNodes (GKPolygonObstacle obstacle)
 		{
 			return NSArray.ArrayFromHandleDropNullElements<GKGraphNode2D> (_GetNodes (obstacle));
@@ -46,15 +45,14 @@ namespace GameplayKit {
 
 		/// <param name="obstacles">The obstacles.</param>
 		///         <param name="bufferRadius">The buffer radius.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="GKObstacleGraph" /> instance.</summary>
 		public GKObstacleGraph (GKPolygonObstacle [] obstacles, float bufferRadius) : base (obstacles, bufferRadius, new Class (typeof (NodeType)))
 		{
 		}
 
 		/// <param name="obstacles">The obstacles.</param>
 		///         <param name="bufferRadius">The buffer radius.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gs k obstacle graph.</summary>
 		public static new GKObstacleGraph<NodeType>? FromObstacles (GKPolygonObstacle [] obstacles, float bufferRadius)
 		{
 			return Runtime.GetNSObject<GKObstacleGraph<NodeType>> (GraphWithObstacles (obstacles, bufferRadius, new Class (typeof (NodeType))));
@@ -62,7 +60,6 @@ namespace GameplayKit {
 
 		/// <param name="obstacle">The obstacle.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public new NodeType []? GetNodes (GKPolygonObstacle obstacle)
 		{
 			return NSArray.ArrayFromHandleDropNullElements<NodeType> (_GetNodes (obstacle));

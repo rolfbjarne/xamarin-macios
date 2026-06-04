@@ -17,8 +17,8 @@ namespace Foundation {
 		}
 
 		/// <param name="fileExtension">The file extension.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Returns the paths for all resources with the specified file extension.</summary>
+		/// <returns>An array of file paths matching the specified extension.</returns>
 		public string [] PathsForResources (string fileExtension)
 		{
 			return PathsForResources (fileExtension, null);

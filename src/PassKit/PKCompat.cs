@@ -18,7 +18,6 @@ namespace PassKit {
 	public unsafe partial class PKDisbursementVoucher : NSObject {
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public override NativeHandle ClassHandle => throw new InvalidOperationException (Constants.RemovedFromPassKit);
 
 		/// <param name="t">The t.</param>
@@ -34,10 +33,8 @@ namespace PassKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public virtual NSData Data => throw new InvalidOperationException (Constants.RemovedFromPassKit);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public virtual NSUrl RedemptionUrl => throw new InvalidOperationException (Constants.RemovedFromPassKit);
 	} /* class PKDisbursementVoucher */
 
@@ -53,7 +50,6 @@ namespace PassKit {
 	public unsafe partial class PKDisbursementAuthorizationController : NSObject {
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public override NativeHandle ClassHandle { get { throw new InvalidOperationException (Constants.RemovedFromPassKit); } }
 
 		/// <param name="t">The t.</param>
@@ -85,14 +81,12 @@ namespace PassKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public unsafe virtual Task<Tuple<bool, NSError>> AuthorizeDisbursementAsync ()
 		{
 			throw new InvalidOperationException (Constants.RemovedFromPassKit);
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public IPKDisbursementAuthorizationControllerDelegate Delegate {
 			get {
 				throw new InvalidOperationException (Constants.RemovedFromPassKit);
@@ -100,7 +94,6 @@ namespace PassKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public static bool SupportsDisbursements {
 			get {
 				throw new InvalidOperationException (Constants.RemovedFromPassKit);
@@ -108,7 +101,6 @@ namespace PassKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public virtual NSObject? WeakDelegate {
 			get {
 				throw new InvalidOperationException (Constants.RemovedFromPassKit);
@@ -192,7 +184,6 @@ namespace PassKit {
 		// Apple just removed this protocol from their headers in Xcode 15 (beta 1).
 		// It's also not found on their documentation site, so I'm assuming it's done on purpose.
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		[UnsupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]
@@ -205,7 +196,6 @@ namespace PassKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		[UnsupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]
@@ -218,7 +208,6 @@ namespace PassKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		[UnsupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]

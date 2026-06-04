@@ -35,10 +35,9 @@ using CoreGraphics;
 namespace AppKit {
 	public partial class NSBezierPath {
 
-		/// <param name="pattern">To be added.</param>
-		/// <param name="phase">To be added.</param>
+		/// <param name="pattern">The pattern.</param>
+		/// <param name="phase">The phase.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		public unsafe void GetLineDash (out nfloat [] pattern, out nfloat phase)
 		{
 			nint length;
@@ -51,10 +50,9 @@ namespace AppKit {
 				_GetLineDash ((IntPtr) ptr, out length, out phase);
 		}
 
-		/// <param name="pattern">To be added.</param>
-		/// <param name="phase">To be added.</param>
+		/// <param name="pattern">The pattern.</param>
+		/// <param name="phase">The phase.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		public unsafe void SetLineDash (nfloat [] pattern, nfloat phase)
 		{
 			if (pattern is null)
@@ -64,11 +62,10 @@ namespace AppKit {
 				_SetLineDash ((IntPtr) ptr, pattern.Length, phase);
 		}
 
-		/// <param name="index">To be added.</param>
-		/// <param name="points">To be added.</param>
+		/// <param name="index">The zero-based index.</param>
+		/// <param name="points">The points.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		public unsafe NSBezierPathElement ElementAt (nint index, out CGPoint [] points)
 		{
 			NSBezierPathElement bpe;
@@ -88,10 +85,9 @@ namespace AppKit {
 			return bpe;
 		}
 
-		/// <param name="points">To be added.</param>
-		/// <param name="index">To be added.</param>
+		/// <param name="points">The points.</param>
+		/// <param name="index">The zero-based index.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		public unsafe void SetAssociatedPointsAtIndex (CGPoint [] points, nint index)
 		{
 			if (points is null)
@@ -104,9 +100,8 @@ namespace AppKit {
 				_SetAssociatedPointsAtIndex ((IntPtr) ptr, index);
 		}
 
-		/// <param name="points">To be added.</param>
+		/// <param name="points">The points.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public unsafe void Append (CGPoint [] points)
 		{
 			if (points is null)
@@ -118,10 +113,9 @@ namespace AppKit {
 				_AppendPathWithPoints ((IntPtr) ptr, points.Length);
 		}
 
-		/// <param name="glyphs">To be added.</param>
-		///         <param name="font">To be added.</param>
+		/// <param name="glyphs">The glyphs.</param>
+		///         <param name="font">The font.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public unsafe void Append (uint [] glyphs, NSFont font)
 		{
 			if (glyphs is null)

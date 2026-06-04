@@ -175,7 +175,7 @@ namespace AudioToolbox {
 		AudioInputAvailable = 0x61696176,
 		/// <summary>Indicates server died.</summary>
 		ServerDied = 0x64696564,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates other mixable audio should duck.</summary>
 		[Deprecated (PlatformName.iOS, 7, 0)]
 		[Deprecated (PlatformName.MacOSX, 10, 9)]
 		[Deprecated (PlatformName.TvOS, 9, 0)]

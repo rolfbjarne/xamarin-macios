@@ -28,14 +28,11 @@ namespace MessageUI {
 			Error = error;
 			Controller = controller;
 		}
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the result.</summary>
 		public MFMailComposeResult Result { get; private set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the error.</summary>
 		public NSError? Error { get; private set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the controller.</summary>
 		public MFMailComposeViewController Controller { get; private set; }
 	}
 
@@ -50,7 +47,7 @@ namespace MessageUI {
 			return (Mono_MFMailComposeViewControllerDelegate) del;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Events handler.</summary>
 		public event EventHandler<MFComposeResultEventArgs> Finished {
 			add {
 				EnsureDelegate ().cbFinished += value;
@@ -93,11 +90,9 @@ namespace MessageUI {
 			Result = result;
 			Controller = controller;
 		}
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the result.</summary>
 		public MessageComposeResult Result { get; private set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the controller.</summary>
 		public MFMessageComposeViewController Controller { get; private set; }
 	}
 
@@ -113,7 +108,7 @@ namespace MessageUI {
 			return (Mono_MFMessageComposeViewControllerDelegate) del;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Events handler.</summary>
 		public event EventHandler<MFMessageComposeResultEventArgs> Finished {
 			add {
 				EnsureDelegate ().cbFinished += value;

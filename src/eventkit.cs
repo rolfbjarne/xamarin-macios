@@ -639,15 +639,13 @@ namespace EventKit {
 			<param name="predicate">A predicate for the reminders you want to fetch.</param>
 			<summary>Fetches the reminders that match the specified predicate.</summary>
 			<returns>
-			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous FetchReminders operation.  The value of the TResult parameter is of type System.Action&lt;EventKit.EKReminder[]&gt;.</para>
-			        </returns>
-			<remarks>To be added.</remarks>
+			  <para class="improve-task-t-return-type-description">A task that represents the asynchronous FetchReminders operation.  The value of the TResult parameter is of type System.Action&lt;EventKit.EKReminder[]&gt;.</para>
+			</returns>
 			""",
 			XmlDocsWithOutParameter = """
-			<param name="predicate">To be added.</param>
-			<param name="result">To be added.</param>
-			<summary>To be added.</summary>
-			<remarks>To be added.</remarks>
+			<param name="predicate">A predicate for the reminders you want to fetch.</param>
+			<param name="result">The result of the operation.</param>
+			<summary>Fetches the reminders that match the specified predicate.</summary>
 			""")]
 		IntPtr FetchReminders (NSPredicate predicate, Action<EKReminder []> completion);
 

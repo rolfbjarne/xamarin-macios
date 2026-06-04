@@ -18,7 +18,7 @@ using System.Runtime.CompilerServices;
 using CoreFoundation;
 
 namespace Security {
-	/// <summary>To be added.</summary>
+	/// <summary>Represents an X.509 certificate for security operations.</summary>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]

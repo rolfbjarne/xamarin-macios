@@ -53,7 +53,7 @@ namespace Metal {
 		[DllImport (Constants.MetalLibrary)]
 		unsafe static extern IntPtr MTLCopyAllDevices ();
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets all available Metal devices on the system.</summary>
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios18.0")]

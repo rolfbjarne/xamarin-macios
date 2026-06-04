@@ -100,7 +100,6 @@ namespace CoreImage {
 		/// <param name="sourceImage">The source image.</param>
 		///         <param name="options">The options to use.</param>
 		///         <summary>Creates a new <see cref="CoreImage.CISampler" /> from the <paramref name="sourceImage" /> with <paramref name="options" />.</summary>
-		///         <returns>To be added.</returns>
 		public CISampler FromImage (CIImage sourceImage, CISamplerOptions? options)
 		{
 			if (options is null)

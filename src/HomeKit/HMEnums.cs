@@ -1468,7 +1468,7 @@ namespace HomeKit {
 		[Field ("HMAccessoryCategoryTypeBridge")]
 		Bridge,
 
-		/// <summary>Represents a physical door that may be opened or closed.</summary>
+		/// <summary>Represents APhysical door that may be opened or closed.</summary>
 		[Field ("HMAccessoryCategoryTypeDoor")]
 		Door,
 
@@ -1492,7 +1492,7 @@ namespace HomeKit {
 		DoorOpener = GarageDoorOpener,
 #endif
 
-		/// <summary>Represents a physical lightbulb.</summary>
+		/// <summary>Represents APhysical lightbulb.</summary>
 		[Field ("HMAccessoryCategoryTypeLightbulb")]
 		Lightbulb,
 
@@ -1504,7 +1504,7 @@ namespace HomeKit {
 		[Field ("HMAccessoryCategoryTypeProgrammableSwitch")]
 		ProgrammableSwitch,
 
-		/// <summary>Represents a physical sensor.</summary>
+		/// <summary>Represents APhysical sensor.</summary>
 		[Field ("HMAccessoryCategoryTypeSensor")]
 		Sensor,
 
@@ -1516,7 +1516,7 @@ namespace HomeKit {
 		[Field ("HMAccessoryCategoryTypeThermostat")]
 		Thermostat,
 
-		/// <summary>Represents a physical window.</summary>
+		/// <summary>Represents APhysical window.</summary>
 		[Field ("HMAccessoryCategoryTypeWindow")]
 		Window,
 

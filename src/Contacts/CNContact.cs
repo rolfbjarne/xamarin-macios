@@ -15,7 +15,6 @@ namespace Contacts {
 
 		/// <param name="options">The options to use.</param>
 		///         <summary>Whether the key described in <paramref name="options" /> is available for this <see cref="Contacts.CNContact" />.</summary>
-		///         <returns>To be added.</returns>
 		public virtual bool IsKeyAvailable (CNContactOptions options)
 		{
 			var key = ContactOptionsToNSString (options);
@@ -24,7 +23,6 @@ namespace Contacts {
 
 		/// <param name="options">The options to use.</param>
 		///         <summary>Gets the localized version of the key described in <paramref name="options" />.</summary>
-		///         <returns>To be added.</returns>
 		public static string LocalizeProperty (CNContactOptions options)
 		{
 			var key = ContactOptionsToNSString (options);
@@ -88,7 +86,6 @@ namespace Contacts {
 		/// <typeparam name="T">To be added.</typeparam>
 		///         <param name="keyDescriptors">The key descriptors.</param>
 		///         <summary>Whether the keys described in <paramref name="keyDescriptors" /> are available.</summary>
-		///         <returns>To be added.</returns>
 		public bool AreKeysAvailable<T> (T [] keyDescriptors)
 			where T : INSObjectProtocol, INSSecureCoding, INSCopying
 		{
@@ -98,7 +95,6 @@ namespace Contacts {
 
 		/// <param name="options">The options to use.</param>
 		///         <summary>Whether the keys specified in <paramref name="options" /> are available.</summary>
-		///         <returns>To be added.</returns>
 		public bool AreKeysAvailable (CNContactOptions options)
 		{
 			using (var array = new NSMutableArray ()) {

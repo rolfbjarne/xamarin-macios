@@ -29,7 +29,6 @@ namespace OpenGLES {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Export ("debugLabel")]
 		[NullAllowed]
 		string DebugLabel { get; set; }
@@ -43,16 +42,14 @@ namespace OpenGLES {
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor] // init now marked with NS_UNAVAILABLE
 	interface EAGLContext {
-		/// <param name="api">To be added.</param>
+		/// <param name="api">The api.</param>
 		/// <summary>Creates a new EAGL context that supports the specified rendering API.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithAPI:")]
 		NativeHandle Constructor (EAGLRenderingAPI api);
 
-		/// <param name="api">To be added.</param>
-		/// <param name="sharegroup">To be added.</param>
+		/// <param name="api">The api.</param>
+		/// <param name="sharegroup">The sharegroup.</param>
 		/// <summary>Creates a new EAGL context in the specified share group and that supports the specified rendering API.</summary>
-		/// <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		[Export ("initWithAPI:sharegroup:")]
 		NativeHandle Constructor (EAGLRenderingAPI api, EAGLSharegroup sharegroup);
@@ -63,7 +60,6 @@ namespace OpenGLES {
 		///         </param>
 		///         <summary>Makes the supplied <paramref name="context" /> the context that contains the OpenGL ES state.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Static, Export ("setCurrentContext:")]
 		bool SetCurrentContext ([NullAllowed] EAGLContext context);
 
@@ -72,20 +68,17 @@ namespace OpenGLES {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Static, Export ("currentContext")]
 		[NullAllowed]
 		EAGLContext CurrentContext { get; }
 
 		/// <summary>Gets the OpenGL ES rendering API version with which the EAGL context was created.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("API")]
 		EAGLRenderingAPI API { get; }
 
 		/// <summary>Gets the share group to which the EAGL context belongs.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("sharegroup")]
 		EAGLSharegroup ShareGroup { get; }
 
@@ -94,7 +87,6 @@ namespace OpenGLES {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Export ("debugLabel")]
 		[NullAllowed]
 		string DebugLabel { get; set; }
@@ -103,21 +95,19 @@ namespace OpenGLES {
 		// These are from @interface EAGLContext (EAGLContextDrawableAdditions)
 		//
 
-		/// <param name="target">To be added.</param>
+		/// <param name="target">The target.</param>
 		/// <param name="drawable">
 		///           <para>To be added.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		[Export ("renderbufferStorage:fromDrawable:")]
 		bool RenderBufferStorage (nuint target, [NullAllowed] CoreAnimation.CAEAGLLayer drawable);
 
-		/// <param name="target">To be added.</param>
+		/// <param name="target">The target.</param>
 		/// <summary>Displays the contents of a render buffer.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		[Export ("presentRenderbuffer:")]
 		bool PresentRenderBuffer (nuint target);
 
@@ -131,23 +121,21 @@ namespace OpenGLES {
 
 		/// <summary>Gets or sets a Boolean value that controls whether OpenGL ES uses other threads to perform work.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("multiThreaded")]
 		bool IsMultiThreaded { [Bind ("isMultiThreaded")] get; set; }
 
 		// IOSurface (EAGLContext)
 
-		/// <param name="ioSurface">To be added.</param>
-		/// <param name="target">To be added.</param>
-		/// <param name="internalFormat">To be added.</param>
-		/// <param name="width">To be added.</param>
-		/// <param name="height">To be added.</param>
-		/// <param name="format">To be added.</param>
-		/// <param name="type">To be added.</param>
-		/// <param name="plane">To be added.</param>
+		/// <param name="ioSurface">The io surface.</param>
+		/// <param name="target">The target.</param>
+		/// <param name="internalFormat">The internal format.</param>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		/// <param name="format">The format.</param>
+		/// <param name="type">The type.</param>
+		/// <param name="plane">The plane.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		[Export ("texImageIOSurface:target:internalFormat:width:height:format:type:plane:")]
 		bool TexImage (IOSurface.IOSurface ioSurface, nuint target, nuint internalFormat, uint width, uint height, nuint format, nuint type, uint plane);
 	}
@@ -161,7 +149,6 @@ namespace OpenGLES {
 	interface EAGLDrawable {
 		/// <summary>To be added.</summary>
 		/// <value>To be added.</value>
-		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[NullAllowed] // by default this property is null
 		[Export ("drawableProperties", ArgumentSemantic.Copy)]

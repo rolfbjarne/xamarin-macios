@@ -208,9 +208,9 @@ namespace GLKit {
 	[ObsoletedOSPlatform ("ios12.0", "Use 'Metal' instead.")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct GLKVertexAttributeParameters {
-		/// <summary>To be added.</summary>
+		/// <summary>The type.</summary>
 		public uint Type;
-		/// <summary>To be added.</summary>
+		/// <summary>The size.</summary>
 		public uint Size;
 #if XAMCORE_5_0
 		byte normalized;
@@ -219,7 +219,7 @@ namespace GLKit {
 			set => normalized = value.AsByte ();
 		}
 #else
-		/// <summary>To be added.</summary>
+		/// <summary>The normalized.</summary>
 		[MarshalAs (UnmanagedType.I1)]
 		public bool Normalized;
 #endif
@@ -233,8 +233,7 @@ namespace GLKit {
 #endif
 
 		/// <param name="vertexFormat">The vertex format.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Froms vertex format.</summary>
 		public static GLKVertexAttributeParameters FromVertexFormat (MDLVertexFormat vertexFormat)
 		{
 #if XAMCORE_5_0

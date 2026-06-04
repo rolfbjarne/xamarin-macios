@@ -36,7 +36,6 @@ using CoreFoundation;
 namespace AddressBook {
 
 	/// <summary>A data source that produces address book data. (See <see cref="AddressBook.ABSourceType" />.)</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[ObsoletedOSPlatform ("ios", "Use the 'Contacts' API instead.")]
 	[SupportedOSPlatform ("maccatalyst")]

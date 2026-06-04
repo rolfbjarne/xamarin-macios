@@ -177,7 +177,7 @@ namespace AudioUnit {
 		}
 
 		/// <param name="callback">callbackk to be removed.</param>
-		///         <summary>Removes a previously registered callback from being called every time the audio graph is rendered.</summary>
+		///         <summary>Removes APreviously registered callback from being called every time the audio graph is rendered.</summary>
 		///         <returns>
 		///         </returns>
 		///         <remarks>

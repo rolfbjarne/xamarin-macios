@@ -52,7 +52,7 @@ namespace CoreText {
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
 		Persistent = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates session.</summary>
 		[UnsupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("ios")]
@@ -112,8 +112,7 @@ namespace CoreText {
 		unsafe static extern byte CTFontManagerRegisterFontsForURL (IntPtr fontUrl, CTFontManagerScope scope, IntPtr* error);
 		/// <param name="fontUrl">The font url.</param>
 		///         <param name="scope">The scope.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Registers fonts for url.</summary>
 		public static NSError? RegisterFontsForUrl (NSUrl fontUrl, CTFontManagerScope scope)
 		{
 			if (fontUrl is null)
@@ -233,8 +232,7 @@ namespace CoreText {
 
 		/// <param name="fontUrl">The font url.</param>
 		///         <param name="scope">The scope.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Unregisters fonts for url.</summary>
 		public static NSError? UnregisterFontsForUrl (NSUrl fontUrl, CTFontManagerScope scope)
 		{
 			if (fontUrl is null)
@@ -329,7 +327,6 @@ namespace CoreText {
 
 		/// <param name="url">The URL to use.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]

@@ -17,7 +17,6 @@ namespace Foundation {
 		/// Array of indexes to make the index-path.
 		///   	   </param>
 		/// <summary>Creates an <see cref="Foundation.NSIndexPath" /> with the indexes specified in the provided array of native integers.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>
 		///           <para />
 		///         </remarks>
@@ -34,7 +33,6 @@ namespace Foundation {
 		/// Array of indexes to make the index-path.
 		///   	   </param>
 		/// <summary>Creates an <see cref="Foundation.NSIndexPath" /> with the indexes specified in the provided array of native unsigned integers.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>
 		///           <para>
 		///           </para>
@@ -105,7 +103,6 @@ namespace Foundation {
 
 		/// <param name="range">The range.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

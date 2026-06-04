@@ -163,13 +163,13 @@ namespace IntentsUI {
 		/// <param name="controller">The controller.</param>
 		/// <param name="voiceShortcut">The voice shortcut.</param>
 		/// <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the voice shortcut was successfully added.</summary>
 		[Abstract]
 		[Export ("addVoiceShortcutViewController:didFinishWithVoiceShortcut:error:")]
 		void DidFinish (INUIAddVoiceShortcutViewController controller, [NullAllowed] INVoiceShortcut voiceShortcut, [NullAllowed] NSError error);
 
 		/// <param name="controller">The controller.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the user cancels adding a voice shortcut.</summary>
 		[Abstract]
 		[Export ("addVoiceShortcutViewControllerDidCancel:")]
 		void DidCancel (INUIAddVoiceShortcutViewController controller);

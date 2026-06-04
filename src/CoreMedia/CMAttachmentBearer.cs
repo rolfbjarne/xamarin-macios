@@ -38,8 +38,7 @@ namespace CoreMedia {
 		///         <typeparam name="TValue">To be added.</typeparam>
 		///         <param name="target">The target.</param>
 		///         <param name="attachmentMode">The attachment mode.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Ns s dictionary.</summary>
 		public static NSDictionary<TKey, TValue>? GetAttachments<TKey, TValue> (this ICMAttachmentBearer target, CMAttachmentMode attachmentMode)
 			where TKey : class, INativeObject
 			where TValue : class, INativeObject
@@ -86,8 +85,7 @@ namespace CoreMedia {
 		///         <param name="target">The target.</param>
 		///         <param name="key">The key to use.</param>
 		///         <param name="attachmentModeOut">The attachment mode out.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets attachment.</summary>
 		public static T? GetAttachment<T> (this ICMAttachmentBearer target, CMSampleBufferAttachmentKey key, out CMAttachmentMode attachmentModeOut) where T : class, INativeObject
 		{
 			return GetAttachment<T> (target, key.GetConstant ()!, out attachmentModeOut);

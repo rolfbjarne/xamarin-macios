@@ -431,7 +431,7 @@ namespace MediaAccessibility {
 		/// <summary>Execute a callback as if the specified profile was the currently active profile.</summary>
 		/// <param name="profileId">The identifier for the profile that will be active when the callback is executed.</param>
 		/// <param name="callback">The callback to call with the specified profile as the currently active profile.</param>
-		/// <remarks>This method can be used to get the fonts and colors for a profile without changing the currently selected profile.</remarks>
+		/// <remarks>This method can be used to get the fonts and colors for AProfile without changing the currently selected profile.</remarks>
 		[SupportedOSPlatform ("tvos26.0")]
 		[SupportedOSPlatform ("macos26.0")]
 		[SupportedOSPlatform ("ios26.0")]

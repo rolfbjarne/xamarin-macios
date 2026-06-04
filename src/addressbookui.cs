@@ -144,7 +144,7 @@ namespace AddressBookUI {
 		[Export ("peoplePickerDelegate", ArgumentSemantic.Assign)]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>Use this property to set a predicate that determines whether the person can be selected or not.</summary>
+		/// <summary>Use this property to set APredicate that determines whether the person can be selected or not.</summary>
 		///         <value>
 		///           <para>If the value is null, all persons are selectable;  Otherwise only those persons that match the predicate will be.</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
@@ -155,7 +155,7 @@ namespace AddressBookUI {
 		[NullAllowed]
 		NSPredicate PredicateForEnablingPerson { get; set; }
 
-		/// <summary>Use this property to set a predicate that determines whether the person should be returned to the app, or displayed to the user.</summary>
+		/// <summary>Use this property to set APredicate that determines whether the person should be returned to the app, or displayed to the user.</summary>
 		///         <value>
 		///           <para>If set, the predicate that determines whether to return the person to the app (the predicate evaluates to true) or displayed (the predicate evaluates to false).</para>
 		///           <para>If the value is not set, the decision on whether the person is returned or displayed rests on the methods from the <see cref="AddressBookUI.ABPeoplePickerNavigationControllerDelegate" /> delegate.</para>

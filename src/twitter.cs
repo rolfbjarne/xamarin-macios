@@ -19,7 +19,7 @@ namespace Twitter {
 	[BaseType (typeof (NSObject))]
 	interface TWRequest {
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the account used for authentication.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
@@ -28,18 +28,18 @@ namespace Twitter {
 		[Export ("account")]
 		ACAccount Account { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the request method.</summary>
+		/// <value>The HTTP request method.</value>
 		[Export ("requestMethod")]
 		TWRequestMethod RequestMethod { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the request URL.</summary>
+		/// <value>The URL for the request.</value>
 		[Export ("URL")]
 		NSUrl Url { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the request parameters.</summary>
+		/// <value>A dictionary of parameters.</value>
 		[Export ("parameters")]
 		NSDictionary Parameters { get; }
 
@@ -49,33 +49,33 @@ namespace Twitter {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <param name="requestMethod">The request method.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new Twitter request with the specified URL, parameters, and method.</summary>
 		[Export ("initWithURL:parameters:requestMethod:")]
 		NativeHandle Constructor (NSUrl url, [NullAllowed] NSDictionary parameters, TWRequestMethod requestMethod);
 
 		/// <param name="data">The data to use.</param>
 		///         <param name="name">The name to use.</param>
 		///         <param name="type">The type.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Adds multipart data with the specified name and type.</summary>
 		[Export ("addMultiPartData:withName:type:")]
 		void AddMultiPartData (NSData data, string name, string type);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the signed URL request.</summary>
+		/// <value>The signed URL request.</value>
 		[Export ("signedURLRequest")]
 		NSUrlRequest SignedUrlRequest { get; }
 
 		/// <param name="handler">The completion handler to call when the operation completes.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Performs the request asynchronously.</summary>
 		[Export ("performRequestWithHandler:")]
 		[Async (ResultTypeName = "TWRequestResult", XmlDocs = """
-			<summary>To be added.</summary>
+			<summary>Performs the request asynchronously.</summary>
 			<returns>
 			          <para>A task that represents the asynchronous PerformRequest operation.   The value of the TResult parameter is of type <c>Action&lt;Twitter.TWRequestResult&gt;</c>.</para>
 			        </returns>
 			<remarks>
 			          <para copied="true">The PerformRequestAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          <para copied="true">Returns a task representing the asynchronous operation.</para>
 			        </remarks>
 			""")]
 		void PerformRequest (TWRequestHandler handler);

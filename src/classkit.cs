@@ -591,7 +591,7 @@ namespace ClassKit {
 	interface CLSContextProvider {
 		/// <param name="context">The context to use.</param>
 		/// <param name="completion">The completion.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Updates the descendants of the specified context.</summary>
 		[Abstract]
 		[Export ("updateDescendantsOfContext:completion:")]
 		void UpdateDescendants (CLSContext context, Action<NSError> completion);

@@ -3,7 +3,7 @@
         <param name="modelUrl">A URL to a model to compile.</param>
         <param name="error">On failure, the error that occurred.</param>
         <summary>Compiles the model at <paramref name="modelUrl" />.</summary>
-        <returns>To be added.</returns>
+        <returns>A URL to the compiled model, or <see langword="null" /> if compilation failed.</returns>
         <remarks>
           <para>This is an expensive function. Execution time varies depending on the model size, but developers should run this method on a background thread and take steps to avoid the need to run this method repeatedly.</para>
           <para>The following example shows how a developer can download a model, compile it, and move the compiled model into the app's permanent storage:</para>

@@ -442,7 +442,7 @@ namespace MetalPerformanceShadersGraph {
 		[Export ("complexTensorWithRealTensor:imaginaryTensor:name:")]
 		MPSGraphTensor ComplexTensor (MPSGraphTensor realTensor, MPSGraphTensor imaginaryTensor, [NullAllowed] string name);
 
-		/// <summary>Creates a planar tensor from a complex tensor, extracting the real and imaginary parts into a planar format.</summary>
+		/// <summary>Creates APlanar tensor from a complex tensor, extracting the real and imaginary parts into APlanar format.</summary>
 		[TV (26, 3), Mac (26, 3), iOS (26, 3), MacCatalyst (26, 3)]
 		[Export ("planarTensorWithComplexTensor:name:")]
 		MPSGraphTensor PlanarTensor (MPSGraphTensor tensor, [NullAllowed] string name);

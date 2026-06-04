@@ -210,21 +210,18 @@ namespace MetalPerformanceShaders {
 #pragma warning restore 0169
 #if !COREBUILD
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public MTLPixelFormat PixelFormat {
 			get => (MTLPixelFormat) (ulong) _PixelFormat;
 			set => _PixelFormat = (nuint) (ulong) value;
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public MTLTextureType TextureType {
 			get => (MTLTextureType) (ulong) _TextureType;
 			set => _TextureType = (nuint) (ulong) value;
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public MTLTextureUsage TextureUsage {
 			get => (MTLTextureUsage) (ulong) _TextureUsage;
 			set => _TextureUsage = (nuint) (ulong) value;

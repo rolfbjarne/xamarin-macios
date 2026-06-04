@@ -146,7 +146,7 @@ namespace AudioToolbox {
 		/// <summary>Gets or sets the flags.</summary>
 		public AudioFileStreamPropertyFlag Flags { get; set; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns a string representation of this property event.</summary>
 		public override string ToString ()
 		{
 			return String.Format ("AudioFileStreamProperty ({0})", Property);
@@ -178,10 +178,10 @@ namespace AudioToolbox {
 		public int Bytes { get; private set; }
 		/// <summary>Gets or sets the input data.</summary>
 		public IntPtr InputData { get; private set; }
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the packet descriptions for the audio data.</summary>
 		public AudioStreamPacketDescription []? PacketDescriptions { get; private set; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns a string representation of this packet event.</summary>
 		public override string ToString ()
 		{
 			return String.Format ("Packet (Bytes={0} InputData={1} PacketDescriptions={2}", Bytes, InputData, PacketDescriptions?.Length ?? -1);

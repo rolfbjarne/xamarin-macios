@@ -595,7 +595,7 @@ namespace Intents {
 		Debit,
 		/// <summary>Payment from a credit card.</summary>
 		Credit,
-		/// <summary>Payment from a prepaid card or account.</summary>
+		/// <summary>Payment from APrepaid card or account.</summary>
 		Prepaid,
 		/// <summary>Payment using a store card.</summary>
 		Store,
@@ -603,7 +603,7 @@ namespace Intents {
 		ApplePay,
 	}
 
-	/// <summary>Enumerates the states of a payment.</summary>
+	/// <summary>Enumerates the states of APayment.</summary>
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -646,7 +646,7 @@ namespace Intents {
 	[Native]
 	[Flags]
 	public enum INPhotoAttributeOptions : ulong {
-		/// <summary>The media is a photograph.</summary>
+		/// <summary>The media is APhotograph.</summary>
 		Photo = (1 << 0),
 		/// <summary>The media is a video.</summary>
 		Video = (1 << 1),
@@ -666,7 +666,7 @@ namespace Intents {
 		FrontFacingCamera = (1 << 8),
 		/// <summary>The image is a screenshot. </summary>
 		Screenshot = (1 << 9),
-		/// <summary>Indicates a photo taken in a burst.</summary>
+		/// <summary>Indicates APhoto taken in a burst.</summary>
 		BurstPhoto = (1 << 10),
 		/// <summary>The photo was constructed via the High-Dynamic Range process.</summary>
 		HdrPhoto = (1 << 11),
@@ -1365,13 +1365,13 @@ namespace Intents {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum INVocabularyStringType : long {
-		/// <summary>Identifies a person in the Contacts database.</summary>
+		/// <summary>Identifies APerson in the Contacts database.</summary>
 		ContactName = 1,
 		/// <summary>Identifies a group of related contacts.</summary>
 		ContactGroupName,
 		/// <summary>Identifies a keyword or other photo metadata.</summary>
 		PhotoTag = 100,
-		/// <summary>Identifies a photo album.</summary>
+		/// <summary>Identifies APhoto album.</summary>
 		PhotoAlbumName,
 		/// <summary>Identifies a workout.</summary>
 		WorkoutActivityName = 200,
@@ -1380,10 +1380,10 @@ namespace Intents {
 		/// <summary>Identifies a car name.</summary>
 		[MacCatalyst (13, 1)]
 		CarName,
-		/// <summary>Identifies a payments organization nickname.</summary>
+		/// <summary>Identifies APayments organization nickname.</summary>
 		[MacCatalyst (13, 1)]
 		PaymentsOrganizationName = 400,
-		/// <summary>Identifies a payments account nickname.</summary>
+		/// <summary>Identifies APayments account nickname.</summary>
 		[MacCatalyst (13, 1)]
 		PaymentsAccountNickname,
 		/// <summary>Identifies a notebook item title.</summary>
@@ -1754,7 +1754,7 @@ namespace Intents {
 		Failure,
 		/// <summary>Developers should use this code to indicate that they failed to process the intent and further processing must be done in the app.</summary>
 		FailureRequiringAppLaunch,
-		/// <summary>Developers should use this code to indicate that they failed to process the intent and a password is required to access the note.</summary>
+		/// <summary>Developers should use this code to indicate that they failed to process the intent and APassword is required to access the note.</summary>
 		FailureCannotUpdatePasswordProtectedNote,
 	}
 
@@ -2084,7 +2084,7 @@ namespace Intents {
 		CurrencyUnsupported,
 	}
 
-	/// <summary>Enumerates reasons that a payer could not be resolved.</summary>
+	/// <summary>Enumerates reasons that APayer could not be resolved.</summary>
 	[NoTV, NoMac]
 	[MacCatalyst (13, 1)]
 	[Native]
@@ -2189,7 +2189,7 @@ namespace Intents {
 		CurrencyUnsupported,
 	}
 
-	/// <summary>Enumerates reason that a payee was not supported for a payment.</summary>
+	/// <summary>Enumerates reason that APayee was not supported for APayment.</summary>
 	[NoTV, NoMac]
 	[MacCatalyst (13, 1)]
 	[Native]
@@ -2328,7 +2328,7 @@ namespace Intents {
 		Contact,
 		/// <summary>The code represents a request for payment.</summary>
 		RequestPayment,
-		/// <summary>The code makes a payment.</summary>
+		/// <summary>The code makes APayment.</summary>
 		SendPayment,
 		/// <summary>To be added.</summary>
 		[MacCatalyst (13, 1)]
@@ -3021,7 +3021,7 @@ namespace Intents {
 		[Field ("INCancelWorkoutIntentIdentifier")]
 		CancelWorkout,
 
-		/// <summary>Resume a paused workout.</summary>
+		/// <summary>Resume APaused workout.</summary>
 		[Unavailable (PlatformName.MacOSX)]
 		[Field ("INResumeWorkoutIntentIdentifier")]
 		ResumeWorkout,
@@ -3095,7 +3095,7 @@ namespace Intents {
 		HangUpCall,
 	}
 
-	/// <summary>Enumerates the types of information associated with a particular value of a <see cref="Intents.INPersonHandleType" />.</summary>
+	/// <summary>Enumerates the types of information associated with AParticular value of a <see cref="Intents.INPersonHandleType" />.</summary>
 	[NoTV]
 	[MacCatalyst (13, 1)]
 	enum INPersonHandleLabel {
@@ -3165,7 +3165,7 @@ namespace Intents {
 		[Field ("INPersonRelationshipMother")]
 		Mother,
 
-		/// <summary>Indicates a parent.</summary>
+		/// <summary>Indicates AParent.</summary>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Field ("INPersonRelationshipParent")]
@@ -3201,7 +3201,7 @@ namespace Intents {
 		[Field ("INPersonRelationshipSpouse")]
 		Spouse,
 
-		/// <summary>Indicates a partner.</summary>
+		/// <summary>Indicates APartner.</summary>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		[Field ("INPersonRelationshipPartner")]
@@ -4583,7 +4583,7 @@ namespace Intents {
 		INRestaurantReservationBooking [] AvailableBookings { get; }
 	}
 
-	/// <summary>An <see cref="Intents.INIntent" /> indicating the user wishes to retrieve information about a particular guest making a reservation.</summary>
+	/// <summary>An <see cref="Intents.INIntent" /> indicating the user wishes to retrieve information about AParticular guest making a reservation.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/reference/Intents/INGetRestaurantGuestIntent">Apple documentation for <c>INGetRestaurantGuestIntent</c></related>
 	[Unavailable (PlatformName.MacOSX)]
@@ -5586,7 +5586,7 @@ namespace Intents {
 		INPaymentMethod ApplePayPaymentMethod { get; }
 	}
 
-	/// <summary>Encapsulates details about a payment.</summary>
+	/// <summary>Encapsulates details about APayment.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/reference/Intents/INPaymentRecord">Apple documentation for <c>INPaymentRecord</c></related>
 	[Unavailable (PlatformName.MacOSX)]
@@ -5625,7 +5625,7 @@ namespace Intents {
 		INCurrencyAmount FeeAmount { get; }
 	}
 
-	/// <summary>Encapsulates a person's data, for the purposes of Intents / SiriKit.</summary>
+	/// <summary>Encapsulates APerson's data, for the purposes of Intents / SiriKit.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/reference/Intents/INPerson">Apple documentation for <c>INPerson</c></related>
 	[NoTV]
@@ -5903,7 +5903,7 @@ namespace Intents {
 		string SiriLanguageCode { get; }
 	}
 
-	/// <summary>Holds information about a pair of prices.</summary>
+	/// <summary>Holds information about APair of prices.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/reference/Intents/INPriceRange">Apple documentation for <c>INPriceRange</c></related>
 	[Unavailable (PlatformName.MacOSX)]
@@ -6106,7 +6106,7 @@ namespace Intents {
 		INRelativeSettingResolutionResult GetConfirmationRequired (NSObject itemToConfirm, nint reason);
 	}
 
-	/// <summary>An <see cref="Intents.INIntent" /> indicating the user wishes to request a payment.</summary>
+	/// <summary>An <see cref="Intents.INIntent" /> indicating the user wishes to request APayment.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/reference/Intents/INRequestPaymentIntent">Apple documentation for <c>INRequestPaymentIntent</c></related>
 	[Unavailable (PlatformName.MacOSX)]
@@ -6147,7 +6147,7 @@ namespace Intents {
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
-		/// <summary>Developers may override this method to customize the confirmation of a payment request.</summary>
+		/// <summary>Developers may override this method to customize the confirmation of APayment request.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("confirmRequestPayment:completion:")]
 		void Confirm (INRequestPaymentIntent intent, Action<INRequestPaymentIntentResponse> completion);
@@ -6163,7 +6163,7 @@ namespace Intents {
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
-		/// <summary>Developers may implement this method to customize the resolution of a payer.</summary>
+		/// <summary>Developers may implement this method to customize the resolution of APayer.</summary>
 		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("resolvePayerForRequestPayment:completion:")]
@@ -6655,7 +6655,7 @@ namespace Intents {
 		INRestaurantResolutionResult GetConfirmationRequired (NSObject itemToConfirm, nint reason);
 	}
 
-	/// <summary>An <see cref="Intents.INIntent" /> indicating the user wishes to resume a paused workout.</summary>
+	/// <summary>An <see cref="Intents.INIntent" /> indicating the user wishes to resume APaused workout.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/reference/Intents/INResumeWorkoutIntent">Apple documentation for <c>INResumeWorkoutIntent</c></related>
 	[Unavailable (PlatformName.MacOSX)]
@@ -7058,7 +7058,7 @@ namespace Intents {
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
-		/// <summary>Developers may override this method to customize the confirmation of the saving of a profile.</summary>
+		/// <summary>Developers may override this method to customize the confirmation of the saving of AProfile.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("confirmSaveProfileInCar:completion:")]
 		void Confirm (INSaveProfileInCarIntent intent, Action<INSaveProfileInCarIntentResponse> completion);
@@ -7495,7 +7495,7 @@ namespace Intents {
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
-		/// <summary>Developers may override this method to customize the confirmation of a photo search.</summary>
+		/// <summary>Developers may override this method to customize the confirmation of APhoto search.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("confirmSearchForPhotos:completion:")]
 		void Confirm (INSearchForPhotosIntent intent, Action<INSearchForPhotosIntentResponse> completion);
@@ -7516,7 +7516,7 @@ namespace Intents {
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
-		/// <summary>Developers may override this method to customize the resoluition of a photo album name.</summary>
+		/// <summary>Developers may override this method to customize the resoluition of APhoto album name.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("resolveAlbumNameForSearchForPhotos:withCompletion:")]
 		void ResolveAlbumName (INSearchForPhotosIntent intent, Action<INStringResolutionResult> completion);
@@ -7750,7 +7750,7 @@ namespace Intents {
 		INMessage [] SentMessages { get; set; }
 	}
 
-	/// <summary>An <see cref="Intents.INIntent" /> indicating the user wishes to make a payment.</summary>
+	/// <summary>An <see cref="Intents.INIntent" /> indicating the user wishes to make APayment.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/reference/Intents/INSendPaymentIntent">Apple documentation for <c>INSendPaymentIntent</c></related>
 	[NoTV]
@@ -7791,7 +7791,7 @@ namespace Intents {
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
-		/// <summary>Developers may override this method to customize the confirmation of a request to send a payment.</summary>
+		/// <summary>Developers may override this method to customize the confirmation of a request to send APayment.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("confirmSendPayment:completion:")]
 		void Confirm (INSendPaymentIntent intent, Action<INSendPaymentIntentResponse> completion);
@@ -8078,7 +8078,7 @@ namespace Intents {
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
-		/// <summary>Developers may override this method to customize the resolution of a fan speed, as a percentage.</summary>
+		/// <summary>Developers may override this method to customize the resolution of a fan speed, as APercentage.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("resolveFanSpeedPercentageForSetClimateSettingsInCar:withCompletion:")]
 		void ResolveFanSpeedPercentage (INSetClimateSettingsInCarIntent intent, Action<INDoubleResolutionResult> completion);
@@ -8314,7 +8314,7 @@ namespace Intents {
 		INSetMessageAttributeIntentResponseCode Code { get; }
 	}
 
-	/// <summary>An <see cref="Intents.INIntent" /> indicating the user wishes to choose a particular user profile.</summary>
+	/// <summary>An <see cref="Intents.INIntent" /> indicating the user wishes to choose AParticular user profile.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/reference/Intents/INSetProfileInCarIntent">Apple documentation for <c>INSetProfileInCarIntent</c></related>
 	[Deprecated (PlatformName.iOS, 15, 0)]
@@ -8382,14 +8382,14 @@ namespace Intents {
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
-		/// <summary>Developers may override this method to customize the confirmation of setting a profile.</summary>
+		/// <summary>Developers may override this method to customize the confirmation of setting AProfile.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("confirmSetProfileInCar:completion:")]
 		void Confirm (INSetProfileInCarIntent intent, Action<INSetProfileInCarIntentResponse> completion);
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
-		/// <summary>Developers may override this method to customize the resolution of a profile number.</summary>
+		/// <summary>Developers may override this method to customize the resolution of AProfile number.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("resolveProfileNumberForSetProfileInCar:withCompletion:")]
 		void ResolveProfileNumber (INSetProfileInCarIntent intent, Action<INIntegerResolutionResult> completion);
@@ -8413,7 +8413,7 @@ namespace Intents {
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
-		/// <summary>Developers may override this method to customize the resolution of a profile name.</summary>
+		/// <summary>Developers may override this method to customize the resolution of AProfile name.</summary>
 		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("resolveProfileNameForSetProfileInCar:withCompletion:")]
@@ -8651,7 +8651,7 @@ namespace Intents {
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
-		/// <summary>Developers can override this method to customize the resolution of choosing a particular seat.</summary>
+		/// <summary>Developers can override this method to customize the resolution of choosing AParticular seat.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("resolveSeatForSetSeatSettingsInCar:withCompletion:")]
 		void ResolveSeat (INSetSeatSettingsInCarIntent intent, Action<INCarSeatResolutionResult> completion);
@@ -9019,7 +9019,7 @@ namespace Intents {
 
 		/// <param name="intent">Specifies the user's intention.</param>
 		/// <param name="completion">Completion method that must be called by the override.</param>
-		/// <summary>Developers may implement this method to customize the behavior of confirming that a photo playback session may start.</summary>
+		/// <summary>Developers may implement this method to customize the behavior of confirming that APhoto playback session may start.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("confirmStartPhotoPlayback:completion:")]
 		void Confirm (INStartPhotoPlaybackIntent intent, Action<INStartPhotoPlaybackIntentResponse> completion);
@@ -10231,7 +10231,7 @@ namespace Intents {
 		string TransactionNote { get; set; }
 	}
 
-	/// <summary>Account details for a payment intent.</summary>
+	/// <summary>Account details for APayment intent.</summary>
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -10324,7 +10324,7 @@ namespace Intents {
 		INPaymentAccountResolutionResult GetConfirmationRequired (NSObject itemToConfirm, nint reason);
 	}
 
-	/// <summary>Details on the amount of a payment intention.</summary>
+	/// <summary>Details on the amount of APayment intention.</summary>
 	[Unavailable (PlatformName.MacOSX)]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -11034,7 +11034,7 @@ namespace Intents {
 		INCallDestinationTypeResolutionResult GetConfirmationRequired (NSObject itemToConfirm, nint reason);
 	}
 
-	/// <summary>Information about a past call.</summary>
+	/// <summary>Information about APast call.</summary>
 	[NoTV]
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]

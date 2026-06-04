@@ -95,10 +95,10 @@ namespace ReplayKit {
 		[MacCatalyst (13, 1)]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'StartRecording (Action<NSError>)' instead.")]
 		[Async (XmlDocs = """
-			<param name="microphoneEnabled">To be added.</param>
+			<param name="microphoneEnabled">Whether the microphone is enabled.</param>
 			<summary>Asynchronously starts recording the screen, controlling whether recording is enabled.</summary>
 			<returns>A task that represents the asynchronous StartRecording operation</returns>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[Export ("startRecordingWithMicrophoneEnabled:handler:")]
 		void StartRecording (bool microphoneEnabled, [NullAllowed] Action<NSError> handler);
@@ -107,7 +107,7 @@ namespace ReplayKit {
 		[Async (XmlDocs = """
 			<summary>Starts the recording and runs a handler when the recording starts.</summary>
 			<returns>A task that represents the asynchronous StartRecording operation</returns>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[Export ("startRecordingWithHandler:")]
 		void StartRecording ([NullAllowed] Action<NSError> handler);
@@ -117,7 +117,7 @@ namespace ReplayKit {
 			<returns>
 			          <para class="improve-task-t-return-type-description">A task that represents the asynchronous StopRecording operation.  The value of the TResult parameter is of type System.Action&lt;ReplayKit.RPPreviewViewController,Foundation.NSError&gt;.</para>
 			        </returns>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[Export ("stopRecordingWithHandler:")]
 		void StopRecording ([NullAllowed] Action<RPPreviewViewController, NSError> handler);
@@ -125,7 +125,7 @@ namespace ReplayKit {
 		[Async (XmlDocs = """
 			<summary>Discards the recording.</summary>
 			<returns>A task that represents the asynchronous DiscardRecording operation</returns>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[Export ("discardRecordingWithHandler:")]
 		void DiscardRecording (Action handler);
@@ -135,12 +135,12 @@ namespace ReplayKit {
 		IRPScreenRecorderDelegate Delegate { get; set; }
 
 		/// <summary>Gets a Boolean that tells whether the screen is being recording.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if recording; otherwise, <see langword="false" />.</value>
 		[Export ("recording", ArgumentSemantic.Assign)]
 		bool Recording { [Bind ("isRecording")] get; }
 
 		/// <summary>Gets or sets a Boolean value that enables or disables the microphone.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if the microphone is enabled; otherwise, <see langword="false" />.</value>
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("microphoneEnabled", ArgumentSemantic.Assign)]
@@ -152,12 +152,12 @@ namespace ReplayKit {
 		}
 
 		/// <summary>Gets a Boolean value that tells whether the screen recorder is available.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if available; otherwise, <see langword="false" />.</value>
 		[Export ("available", ArgumentSemantic.Assign)]
 		bool Available { [Bind ("isAvailable")] get; }
 
 		/// <summary>Gets or sest a Boolean value that controls whether the camera enabled.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if the camera is enabled; otherwise, <see langword="false" />.</value>
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("cameraEnabled")]
@@ -175,10 +175,10 @@ namespace ReplayKit {
 
 		[MacCatalyst (13, 1)]
 		[Async (XmlDocs = """
-			<param name="captureHandler">To be added.</param>
+			<param name="captureHandler">The handler that receives capture data.</param>
 			<summary>Starts recording.</summary>
 			<returns>A task that represents the asynchronous StartCapture operation</returns>
-			<remarks>To be added.</remarks>
+			
 			""")]
 		[Export ("startCaptureWithHandler:completionHandler:")]
 		void StartCapture ([NullAllowed] Action<CMSampleBuffer, RPSampleBufferType, NSError> captureHandler, [NullAllowed] Action<NSError> completionHandler);
@@ -189,7 +189,7 @@ namespace ReplayKit {
 			<returns>A task that represents the asynchronous StopCapture operation</returns>
 			<remarks>
 			          <para copied="true">The StopCaptureAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
+			          <para copied="true">Returns a task representing the asynchronous operation.</para>
 			        </remarks>
 			""")]
 		[Export ("stopCaptureWithHandler:")]

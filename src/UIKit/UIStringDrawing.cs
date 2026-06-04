@@ -9,7 +9,6 @@ namespace UIKit {
 		/// <param name="This">The this.</param>
 		/// <param name="point">The point.</param>
 		/// <param name="font">The font.</param>
-		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("ios", "Use NSString.DrawString(CGPoint, UIStringAttributes) instead.")]
@@ -27,7 +26,6 @@ namespace UIKit {
 		/// <param name="font">The font.</param>
 		/// <param name="breakMode">The break mode.</param>
 		/// <summary>Developers should use <see cref="NSStringDrawing.DrawString(NSString, CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
-		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("ios", "Use NSString.DrawString(CGRect, UIStringAttributes) instead.")]
@@ -47,7 +45,6 @@ namespace UIKit {
 		/// <param name="breakMode">The break mode.</param>
 		/// <param name="adjustment">The adjustment.</param>
 		/// <summary>Developers should use <see cref="NSStringDrawing.DrawString(NSString, CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method..</summary>
-		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("ios", "Use NSString.DrawString(CGRect, UIStringAttributes) instead.")]
@@ -68,7 +65,6 @@ namespace UIKit {
 		/// <param name="breakMode">The break mode.</param>
 		/// <param name="adjustment">The adjustment.</param>
 		/// <summary>Developers should use <see cref="NSStringDrawing.DrawString(NSString, CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
-		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("ios", "Use NSString.DrawString(CGRect, UIStringAttributes) instead.")]
@@ -84,7 +80,6 @@ namespace UIKit {
 		///         <param name="rect">The rect.</param>
 		///         <param name="font">The font.</param>
 		///         <summary>Developers should use <see cref="NSStringDrawing.DrawString(NSString, CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("ios", "Use NSString.DrawString(CGRect, UIStringAttributes) instead.")]
@@ -101,7 +96,6 @@ namespace UIKit {
 		///         <param name="font">The font.</param>
 		///         <param name="mode">The mode.</param>
 		///         <summary>Developers should use <see cref="NSStringDrawing.DrawString(NSString, CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("ios", "Use NSString.DrawString(CGRect, UIStringAttributes) instead.")]
@@ -119,7 +113,6 @@ namespace UIKit {
 		///         <param name="mode">The mode.</param>
 		///         <param name="alignment">The alignment.</param>
 		///         <summary>Developers should use <see cref="NSStringDrawing.DrawString(NSString, CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("ios", "Use NSString.DrawString(CGRect, UIStringAttributes) instead.")]
@@ -134,7 +127,6 @@ namespace UIKit {
 		/// <param name="This">The instance on which this method operates.</param>
 		///         <param name="font">The font.</param>
 		///         <summary>Developers should use <see cref="NSStringDrawing.GetSizeUsingAttributes(Foundation.NSString,UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("ios", "Use NSString.GetSizeUsingAttributes(UIStringAttributes) instead.")]
@@ -151,7 +143,6 @@ namespace UIKit {
 		/// <param name="forWidth">The for width.</param>
 		/// <param name="breakMode">The break mode.</param>
 		/// <summary>Gets the <see cref="CoreGraphics.CGSize" /> necessary to display this <see cref="Foundation.NSString" />.</summary>
-		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("ios", "Use NSString.GetBoundingRect (CGSize, NSStringDrawingOptions, UIStringAttributes, NSStringDrawingContext) instead.")]
@@ -167,7 +158,6 @@ namespace UIKit {
 		///         <param name="font">The font.</param>
 		///         <param name="constrainedToSize">The constrained to size.</param>
 		///         <summary>The calculated size of the string if rendered with the <paramref name="font" /> or <paramref name="constrainedToSize" />, whichever is smaller.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("ios", "Use NSString.GetBoundingRect (CGSize, NSStringDrawingOptions, UIStringAttributes, NSStringDrawingContext) instead.")]
@@ -184,7 +174,6 @@ namespace UIKit {
 		///         <param name="constrainedToSize">The constrained to size.</param>
 		///         <param name="lineBreakMode">The line break mode.</param>
 		///         <summary>Gets the <see cref="CoreGraphics.CGSize" /> necessary to display this <see cref="Foundation.NSString" />.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("ios", "Use NSString.GetBoundingRect (CGSize, NSStringDrawingOptions, UIStringAttributes, NSStringDrawingContext) instead.")]
@@ -203,7 +192,6 @@ namespace UIKit {
 		/// <param name="forWidth">The for width.</param>
 		/// <param name="lineBreakMode">The line break mode.</param>
 		/// <summary>Gets the <see cref="CoreGraphics.CGSize" /> necessary to display this <see cref="Foundation.NSString" />.</summary>
-		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("ios")]

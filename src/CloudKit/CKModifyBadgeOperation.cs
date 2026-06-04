@@ -42,8 +42,7 @@ namespace CloudKit {
 			throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the badge value for the app icon.</summary>
 		public virtual nuint BadgeValue {
 			get {
 				throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);

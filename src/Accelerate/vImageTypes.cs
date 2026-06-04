@@ -43,7 +43,7 @@ namespace Accelerate {
 	// vImage_Buffer - vImage_Types.h
 	/// <summary>Structure used to represent image data.</summary>
 	///     <remarks>
-	///       <para>This structure is used to describe a block of image data.   The image data is stored in the Data property with the Width and Height properties describing how many pixels the image has on each dimension.   </para>
+	///       <para>This structure is used to describe a block of image data.   The image data is stored in the DatAProperty with the Width and Height properties describing how many pixels the image has on each dimension.   </para>
 	///       <para>
 	///       </para>
 	///       <para>The BytesPerRow property describes how many bytes are used on each row of pixels.   This is often referred to as the stride of the image.   It does not necessarily have to match the width in pixels, it can often be set to a different value to ensure that each image row starts in an aligned memory address (this is typically done to improve performance as CPUs are able to perform aligned fetches from memory faster than unaligned ones).</para>
@@ -275,7 +275,7 @@ namespace Accelerate {
 		NoAllocate = 512,
 	}
 
-	/// <summary>Represents a pixel using 32-bit floating points values for its alpha, red, green and blue components.</summary>
+	/// <summary>Represents APixel using 32-bit floating points values for its alpha, red, green and blue components.</summary>
 	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -304,7 +304,7 @@ namespace Accelerate {
 		public readonly static PixelFFFF Zero;
 	}
 
-	/// <summary>Represents a pixel using 8-bit integers for its red, green, blue and alpha components.</summary>
+	/// <summary>Represents APixel using 8-bit integers for its red, green, blue and alpha components.</summary>
 	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -334,7 +334,7 @@ namespace Accelerate {
 		public readonly static Pixel8888 Zero;
 	}
 
-	/// <summary>Represents a pixel using 16-bit unsigned integers for its alpha, red, green and blue components.</summary>
+	/// <summary>Represents APixel using 16-bit unsigned integers for its alpha, red, green and blue components.</summary>
 	///     <remarks>
 	///       <para>
 	///       </para>
@@ -362,7 +362,7 @@ namespace Accelerate {
 		public readonly static PixelARGB16U Zero;
 	}
 
-	/// <summary>Represents a pixel using 16-bit signed integers for its alpha, red, green and blue components.</summary>
+	/// <summary>Represents APixel using 16-bit signed integers for its alpha, red, green and blue components.</summary>
 	///     <remarks>
 	///       <para>
 	///       </para>

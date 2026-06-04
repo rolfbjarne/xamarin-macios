@@ -35,8 +35,7 @@ namespace Foundation {
 		public NativeHandle Handle { get; private set; }
 
 #if !COREBUILD
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the name of this memory zone.</summary>
 		public string? Name {
 			get {
 				return CFString.FromHandle (NSZoneName (Handle));
@@ -52,7 +51,7 @@ namespace Foundation {
 		}
 
 		// note: Copy(NSZone) and MutableCopy(NSZone) with a nil pointer == default
-		/// <summary>To be added.</summary>
+		/// <summary>The default memory zone.</summary>
 		public static readonly NSZone Default = new NSZone (NSDefaultMallocZone (), false);
 #endif
 	}

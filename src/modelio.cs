@@ -453,7 +453,7 @@ namespace ModelIO {
 		NSData GetSphericalHarmonicsCoefficients (Vector3 position);
 	}
 
-	/// <summary>A point of view that looks into a 3D scence, and that can simulate certain aspects of a physical camera.</summary>
+	/// <summary>A point of view that looks into a 3D scence, and that can simulate certain aspects of APhysical camera.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/ModelIO/Reference/MDLCamera_Class/index.html">Apple documentation for <c>MDLCamera</c></related>
 	[MacCatalyst (13, 1)]
@@ -2102,7 +2102,7 @@ namespace ModelIO {
 		[Export ("components", ArgumentSemantic.Copy)]
 		IMDLComponent [] Components { get; }
 
-		/// <param name="component">The component to associate with a protocol.</param>
+		/// <param name="component">The component to associate with AProtocol.</param>
 		///         <param name="protocol">The protocol to associate with the component.</param>
 		///         <summary>Associates <paramref name="component" /> with this MDLOBject for the specified protocol.</summary>
 		///         <remarks>To be added.</remarks>
@@ -2762,7 +2762,7 @@ namespace ModelIO {
 		}
 	}
 
-	/// <summary>Indexes and identifies a portion of an MDLMesh, and contains material information about the indexed portion.</summary>
+	/// <summary>Indexes and identifies APortion of an MDLMesh, and contains material information about the indexed portion.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/ModelIO/Reference/MDLSubmesh_Class/index.html">Apple documentation for <c>MDLSubmesh</c></related>
 	[MacCatalyst (13, 1)]
@@ -3585,7 +3585,7 @@ namespace ModelIO {
 		[Export ("initWithBytes:deallocator:")]
 		NativeHandle Constructor (IntPtr bytes, [NullAllowed] Action deallocator);
 
-		/// <summary>Returns a pointer to the mesh buffer data.</summary>
+		/// <summary>Returns APointer to the mesh buffer data.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Export ("bytes")]

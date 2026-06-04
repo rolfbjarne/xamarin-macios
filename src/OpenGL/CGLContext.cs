@@ -60,8 +60,7 @@ namespace OpenGL {
 
 		[DllImport (Constants.OpenGLLibrary)]
 		extern static CGLErrorCode CGLLockContext (IntPtr ctx);
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Lock.</summary>
 		public CGLErrorCode Lock ()
 		{
 			return CGLLockContext (Handle);
@@ -69,8 +68,7 @@ namespace OpenGL {
 
 		[DllImport (Constants.OpenGLLibrary)]
 		extern static CGLErrorCode CGLUnlockContext (IntPtr ctx);
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Unlock.</summary>
 		public CGLErrorCode Unlock ()
 		{
 			return CGLUnlockContext (Handle);
@@ -82,8 +80,7 @@ namespace OpenGL {
 		[DllImport (Constants.OpenGLLibrary)]
 		extern static IntPtr CGLGetCurrentContext ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the current context.</summary>
 		public static CGLContext? CurrentContext {
 			get {
 				IntPtr ctx = CGLGetCurrentContext ();

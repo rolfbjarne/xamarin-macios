@@ -58,7 +58,6 @@ namespace CoreFoundation {
 		/// <param name="action">The action to perform.</param>
 		///         <param name="flags">The flags.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static DispatchBlock Create (Action action, DispatchBlockFlags flags = DispatchBlockFlags.None)
 		{
 			if (action is null)
@@ -71,7 +70,6 @@ namespace CoreFoundation {
 		///         <param name="qosClass">The qos class.</param>
 		///         <param name="relative_priority">The relative_priority.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static DispatchBlock Create (Action action, DispatchBlockFlags flags, DispatchQualityOfService qosClass, int relative_priority)
 		{
 			if (action is null)
@@ -84,7 +82,6 @@ namespace CoreFoundation {
 		///         <param name="qosClass">The qos class.</param>
 		///         <param name="relative_priority">The relative_priority.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static DispatchBlock Create (DispatchBlock block, DispatchBlockFlags flags, DispatchQualityOfService qosClass, int relative_priority)
 		{
 			if (block is null)
@@ -96,7 +93,6 @@ namespace CoreFoundation {
 		///         <param name="qosClass">The qos class.</param>
 		///         <param name="relative_priority">The relative_priority.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public DispatchBlock Create (DispatchBlockFlags flags, DispatchQualityOfService qosClass, int relative_priority)
 		{
 			return new DispatchBlock (dispatch_block_create_with_qos_class ((nuint) (ulong) flags, qosClass, relative_priority, GetCheckedHandle ()), true);
@@ -193,14 +189,12 @@ namespace CoreFoundation {
 		extern static nint dispatch_block_testcancel (IntPtr block);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public nint TestCancel ()
 		{
 			return dispatch_block_testcancel (GetCheckedHandle ());
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public bool Cancelled {
 			get { return TestCancel () != 0; }
 		}
@@ -210,7 +204,6 @@ namespace CoreFoundation {
 
 		/// <param name="time">The time.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public nint Wait (DispatchTime time)
 		{
 			return dispatch_block_wait (GetCheckedHandle (), time);
@@ -218,7 +211,6 @@ namespace CoreFoundation {
 
 		/// <param name="timeout">The timeout duration.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public nint Wait (TimeSpan timeout)
 		{
 			return Wait (new DispatchTime (DispatchTime.Now, timeout));

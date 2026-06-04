@@ -229,8 +229,8 @@ namespace CoreGraphics {
 
 		/// <param name="key">The key to use.</param>
 		///     <param name="value">The value to set.</param>
-		///     <param name="info">The info.</param>
-		///     <summary>To be added.</summary>
+		/// <param name="info">The info.</param>
+		/// <summary>A callback invoked for each entry in a PDF dictionary.</summary>
 		public delegate void ApplyCallback (string? key, object? value, object? info);
 
 		[UnmanagedCallersOnly]
@@ -246,8 +246,8 @@ namespace CoreGraphics {
 		}
 
 		/// <param name="callback">The callback to invoke.</param>
-		///         <param name="info">The info.</param>
-		///         <summary>To be added.</summary>
+		/// <param name="info">The info.</param>
+		/// <summary>Applies the callback to each entry in the dictionary.</summary>
 		public void Apply (ApplyCallback callback, object? info = null)
 		{
 			var data = new Tuple<ApplyCallback, object?> (callback, info);
@@ -270,7 +270,7 @@ namespace CoreGraphics {
 		}
 
 		/// <param name="callback">The callback to invoke.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Applies the callback to each entry in the dictionary.</summary>
 		public void Apply (Action<string?, CGPDFObject> callback)
 		{
 			GCHandle gch = GCHandle.Alloc (callback);

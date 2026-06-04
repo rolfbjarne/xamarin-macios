@@ -72,7 +72,7 @@ namespace ImageIO {
 		///         <value />
 		public bool ShouldCache { get; set; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets whether the image data should be cached immediately upon loading.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -113,7 +113,7 @@ namespace ImageIO {
 		/// <summary>Determines if the created thumbnail should be rotated and scaled to match the full image.</summary>
 		public bool CreateThumbnailWithTransform { get; set; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the subsample factor for image decoding.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -281,7 +281,7 @@ namespace ImageIO {
 			/* CGImageSourceRef __nonnull */ IntPtr isrc, /* CFDictionaryRef __nullable */ IntPtr options);
 
 		/// <param name="dict">Properties to copy.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Copies the properties of the image source.</summary>
 		[Advice ("Use 'GetProperties'.")]
 		public NSDictionary? CopyProperties (NSDictionary? dict)
 		{
@@ -291,7 +291,7 @@ namespace ImageIO {
 		}
 
 		/// <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Copies the properties of the image source using the specified options.</summary>
 		[Advice ("Use 'GetProperties'.")]
 		public NSDictionary? CopyProperties (CGImageOptions options)
 		{
@@ -308,7 +308,7 @@ namespace ImageIO {
 
 		/// <param name="dict">Properties to copy.</param>
 		///         <param name="imageIndex">Image index.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Copies the properties of the image at the specified index.</summary>
 		[Advice ("Use 'GetProperties'.")]
 		public NSDictionary? CopyProperties (NSDictionary? dict, int imageIndex)
 		{
@@ -319,7 +319,7 @@ namespace ImageIO {
 
 		/// <param name="options">The options to use.</param>
 		///         <param name="imageIndex">The image index.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Copies the properties of the image at the specified index using the specified options.</summary>
 		[Advice ("Use 'GetProperties'.")]
 		public NSDictionary? CopyProperties (CGImageOptions options, int imageIndex)
 		{
@@ -330,7 +330,7 @@ namespace ImageIO {
 		}
 
 		/// <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the properties of the image source.</summary>
 		public CoreGraphics.CGImageProperties GetProperties (CGImageOptions? options = null)
 		{
 			using var dict = options?.ToDictionary ();
@@ -339,7 +339,7 @@ namespace ImageIO {
 
 		/// <param name="index">The zero-based index.</param>
 		///         <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the properties of the image at the specified index.</summary>
 		public CoreGraphics.CGImageProperties GetProperties (int index, CGImageOptions? options = null)
 		{
 			using var dict = options?.ToDictionary ();
@@ -410,7 +410,7 @@ namespace ImageIO {
 
 		/// <param name="provider">The provider.</param>
 		///         <param name="final">The final.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Updates the image source with data from the specified provider.</summary>
 		public void UpdateDataProvider (CGDataProvider provider, bool final)
 		{
 			if (provider is null)
@@ -469,7 +469,7 @@ namespace ImageIO {
 		[DllImport (Constants.ImageIOLibrary)]
 		extern static nuint CGImageSourceGetPrimaryImageIndex (IntPtr /* CGImageSource */ src);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the index of the primary image in the image source.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]

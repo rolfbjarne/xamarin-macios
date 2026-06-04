@@ -8,8 +8,7 @@ namespace Intents {
 	public partial class INSetDefrosterSettingsInCarIntent {
 		/// <param name="enable">The enable.</param>
 		///         <param name="defroster">The defroster.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new intent to set defroster settings in a car.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("ios12.0", "Use the overload that takes 'INSpeakableString carName'.")]

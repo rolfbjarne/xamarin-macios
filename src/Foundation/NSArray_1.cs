@@ -19,7 +19,6 @@ namespace Foundation {
 #endif
 	/// <typeparam name="TKey">To be added.</typeparam>
 	///     <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -29,7 +28,6 @@ namespace Foundation {
 		where TKey : class, INativeObject {
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public NSArray ()
 		{
 		}
@@ -49,10 +47,9 @@ namespace Foundation {
 		{
 		}
 
-		/// <param name="items">To be added.</param>
+		/// <param name="items">The items.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		static public NSArray<TKey> FromNSObjects (params TKey [] items)
 		{
 			if (items is null)
@@ -61,11 +58,10 @@ namespace Foundation {
 			return FromNSObjects (items.Length, items);
 		}
 
-		/// <param name="count">To be added.</param>
-		///         <param name="items">To be added.</param>
+		/// <param name="count">The count.</param>
+		///         <param name="items">The items.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		static public NSArray<TKey> FromNSObjects (int count, params TKey [] items)
 		{
 			if (items is null)
@@ -102,7 +98,6 @@ namespace Foundation {
 		#region IEnumerable implementation
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return new NSFastEnumerator<TKey> (this);

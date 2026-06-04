@@ -34,51 +34,47 @@ namespace GLKit {
 
 	// GLint (32 bits on 64 bit hardware) -> GLKEffects.h
 	/// <summary>An enumeration whose values specify various components of a vertex.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum GLKVertexAttrib {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates position.</summary>
 		Position,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates normal.</summary>
 		Normal,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates color.</summary>
 		Color,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates tex coord0.</summary>
 		TexCoord0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates tex coord1.</summary>
 		TexCoord1,
 	}
 
 	// GLint (32 bits on 64 bit hardware) -> GLKEffectPropertyLight.h
 	/// <summary>An enumeration whose values specify how lighting is calculated by an effect.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum GLKLightingType {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates per vertex.</summary>
 		PerVertex,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates per pixel.</summary>
 		PerPixel,
 	}
 
 	// GLint (32 bits on 64 bit hardware) -> GLKEffectPropertyTexture.h
 	/// <summary>An enumeration of ways in which texture can be combined with other color components.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum GLKTextureEnvMode {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates replace.</summary>
 		Replace,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates modulate.</summary>
 		Modulate,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates decal.</summary>
 		Decal,
 	}
 
 	// GLenum (32 bits on 64 bit hardware) -> GLKEffectPropertyTexture.h
 	/// <summary>An enumeration whose values specify different kinds of texture.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum GLKTextureTarget {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates texture2 d.</summary>
 		Texture2D = 0x0DE1,    // GL_TEXTURE_2D
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates cube map.</summary>
 		CubeMap = 0x8513, // GL_TEXTURE_CUBE_MAP
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates target ct.</summary>
 		TargetCt = 2,
 	}
 
@@ -96,121 +92,113 @@ namespace GLKit {
 
 	// GLint (32 bits on 64 bit hardware) -> GLKView.h
 	/// <summary>An enumeration whose values specify the format of the color renderbuffer.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum GLKViewDrawableColorFormat {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates r g b a8888.</summary>
 		RGBA8888 = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates r g b565.</summary>
 		RGB565,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates s r g b a8888.</summary>
 		SRGBA8888,
 	}
 
 	// GLint (32 bits on 64 bit hardware) -> GLKView.h
 	/// <summary>An enumeration whose values specify the format of the depth renderbuffer.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum GLKViewDrawableDepthFormat {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates format16.</summary>
 		Format16,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates format24.</summary>
 		Format24,
 	}
 
 	// GLint (32 bits on 64 bit hardware) -> GLKView.h
 	/// <summary>An enumeration whose values specify the format of the stencil renderbuffer.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum GLKViewDrawableStencilFormat {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates format none.</summary>
 		FormatNone,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates format8.</summary>
 		Format8,
 	}
 
 	// GLint (32 bits on 64 bit hardware) -> GLKView.h
 	/// <summary>An enumeration whose values specify the format of the multisampling buffer.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum GLKViewDrawableMultisample {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sample4x.</summary>
 		Sample4x,
 	}
 
 	// GLint (32 bits on 64 bit hardware) -> GLKTextureLoader.h
 	/// <summary>An enumeration whose values specify the manner in which the alpha information is stored in the source image.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum GLKTextureInfoAlphaState {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates non premultiplied.</summary>
 		NonPremultiplied,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates premultiplied.</summary>
 		Premultiplied,
 	}
 
 	// GLint (32 bits on 64 bit hardware) -> GLKTextureLoader.h
 	/// <summary>An enumeration whose values specify the origin in the original source image.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum GLKTextureInfoOrigin {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates top left.</summary>
 		TopLeft,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bottom left.</summary>
 		BottomLeft,
 	}
 
 	// GLuint (we'll keep `int` for compatibility) -> GLKTextureLoader.h
 	/// <summary>An enumeration whose values specify errors relating to texture loading.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum GLKTextureLoaderError {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates file or u r l not found.</summary>
 		FileOrURLNotFound = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid n s data.</summary>
 		InvalidNSData = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid c g image.</summary>
 		InvalidCGImage = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown path type.</summary>
 		UnknownPathType = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown file type.</summary>
 		UnknownFileType = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates p v r atlas unsupported.</summary>
 		PVRAtlasUnsupported = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates cube map invalid num files.</summary>
 		CubeMapInvalidNumFiles = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates compressed texture upload.</summary>
 		CompressedTextureUpload = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates uncompressed texture upload.</summary>
 		UncompressedTextureUpload = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsupported cube map dimensions.</summary>
 		UnsupportedCubeMapDimensions = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsupported bit depth.</summary>
 		UnsupportedBitDepth = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsupported p v r format.</summary>
 		UnsupportedPVRFormat = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates data preprocessing failure.</summary>
 		DataPreprocessingFailure = 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates mipmap unsupported.</summary>
 		MipmapUnsupported = 13,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsupported orientation.</summary>
 		UnsupportedOrientation = 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates reorientation failure.</summary>
 		ReorientationFailure = 15,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates alpha premultiplication failure.</summary>
 		AlphaPremultiplicationFailure = 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid e a g l context.</summary>
 		InvalidEAGLContext = 17,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates incompatible format s r g b.</summary>
 		IncompatibleFormatSRGB = 18,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsupported texture target.</summary>
 		UnsupportedTextureTarget = 19,
 	}
 
 	// glVertexAttribPointer structure values, again, problems with definitions being in different namespaces
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -221,10 +209,8 @@ namespace GLKit {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct GLKVertexAttributeParameters {
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public uint Type;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public uint Size;
 #if XAMCORE_5_0
 		byte normalized;
@@ -234,7 +220,6 @@ namespace GLKit {
 		}
 #else
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[MarshalAs (UnmanagedType.I1)]
 		public bool Normalized;
 #endif
@@ -247,10 +232,9 @@ namespace GLKit {
 		extern static GLKVertexAttributeParametersInternal FromVertexFormat_ (nuint vertexFormat);
 #endif
 
-		/// <param name="vertexFormat">To be added.</param>
+		/// <param name="vertexFormat">The vertex format.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static GLKVertexAttributeParameters FromVertexFormat (MDLVertexFormat vertexFormat)
 		{
 #if XAMCORE_5_0

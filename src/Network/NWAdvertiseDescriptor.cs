@@ -16,7 +16,6 @@ using OS_nw_txt_record = System.IntPtr;
 
 namespace Network {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
@@ -70,12 +69,11 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		static extern IntPtr nw_advertise_descriptor_create_bonjour_service (IntPtr name, IntPtr type, IntPtr domain);
 
-		/// <param name="name">To be added.</param>
-		///         <param name="type">To be added.</param>
-		///         <param name="domain">To be added.</param>
+		/// <param name="name">The name to use.</param>
+		///         <param name="type">The type.</param>
+		///         <param name="domain">The domain.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static NWAdvertiseDescriptor? CreateBonjourService (string name, string type, string? domain = null)
 		{
 			if (name is null)
@@ -96,9 +94,8 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		static extern void nw_advertise_descriptor_set_txt_record (IntPtr handle, IntPtr txtRecord, nuint txtLen);
 
-		/// <param name="txt">To be added.</param>
+		/// <param name="txt">The txt.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetTxtRecord (string txt)
 		{
 			if (txt is null)
@@ -116,7 +113,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool NoAutoRename {
 			set => nw_advertise_descriptor_set_no_auto_rename (GetCheckedHandle (), value.AsByte ());
 			get => nw_advertise_descriptor_get_no_auto_rename (GetCheckedHandle ()) != 0;

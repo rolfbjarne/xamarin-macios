@@ -33,10 +33,8 @@ using System.Threading;
 namespace AppKit {
 	public partial class NSApplication : NSResponder {
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static bool CheckForIllegalCrossThreadCalls = true;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static bool CheckForEventAndDelegateMismatches = true;
 
 		private static Thread? mainThread;
@@ -47,7 +45,6 @@ namespace AppKit {
 		static bool initialized;
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[Preserve]
 		public static void Init ()
 		{
@@ -95,7 +92,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static void InitDrawingBridge ()
 		{
 			var UseCocoaDrawableField = Type.GetType ("System.Drawing.GDIPlus, System.Drawing")?.GetField ("UseCocoaDrawable", BindingFlags.Static | BindingFlags.Public);
@@ -105,9 +101,8 @@ namespace AppKit {
 			UseCarbonDrawableField?.SetValue (null, false);
 		}
 
-		/// <param name="args">To be added.</param>
+		/// <param name="args">The event arguments.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static void Main (string [] args)
 		{
 			// Switch to an AppKitSynchronizationContext if Main is invoked
@@ -125,28 +120,25 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static void EnsureUIThread ()
 		{
 			if (NSApplication.CheckForIllegalCrossThreadCalls && NSApplication.mainThread != Thread.CurrentThread)
 				throw new AppKitThreadAccessException ();
 		}
 
-		/// <param name="del">To be added.</param>
-		///         <param name="expectedType">To be added.</param>
+		/// <param name="del">The del.</param>
+		///         <param name="expectedType">The expected type.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static void EnsureEventAndDelegateAreNotMismatched (object del, Type expectedType)
 		{
 			if (NSApplication.CheckForEventAndDelegateMismatches && !(expectedType.IsAssignableFrom (del.GetType ())))
 				throw new InvalidOperationException (string.Format ("Event registration is overwriting existing delegate. Either just use events or your own delegate: {0} {1}", del.GetType (), expectedType));
 		}
 
-		/// <param name="currentDelegateValue">To be added.</param>
-		///         <param name="newDelegateValue">To be added.</param>
-		///         <param name="internalDelegateType">To be added.</param>
+		/// <param name="currentDelegateValue">The current delegate value.</param>
+		///         <param name="newDelegateValue">The new delegate value.</param>
+		///         <param name="internalDelegateType">The internal delegate type.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static void EnsureDelegateAssignIsNotOverwritingInternalDelegate (object? currentDelegateValue, object? newDelegateValue, Type internalDelegateType)
 		{
 			if (NSApplication.CheckForEventAndDelegateMismatches && currentDelegateValue is not null && newDelegateValue is not null
@@ -155,10 +147,9 @@ namespace AppKit {
 				throw new InvalidOperationException (string.Format ("Event registration is overwriting existing delegate. Either just use events or your own delegate: {0} {1}", newDelegateValue.GetType (), internalDelegateType));
 		}
 
-		/// <param name="mask">To be added.</param>
-		///         <param name="lastEvent">To be added.</param>
+		/// <param name="mask">The mask.</param>
+		///         <param name="lastEvent">The last event.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void DiscardEvents (NSEventMask mask, NSEvent lastEvent)
 		{
 			DiscardEvents ((nuint) (ulong) mask, lastEvent);
@@ -167,7 +158,6 @@ namespace AppKit {
 		// note: if needed override the protected Get|Set methods
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NSApplicationActivationPolicy ActivationPolicy {
 			get { return GetActivationPolicy (); }
 			// ignore return value (bool)

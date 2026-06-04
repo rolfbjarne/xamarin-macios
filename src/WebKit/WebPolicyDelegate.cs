@@ -34,7 +34,7 @@ namespace WebKit {
 		static IntPtr selIgnore = Selector.GetHandle ("ignore");
 
 		/// <param name="decisionToken">The decision token.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Decides use.</summary>
 		public static void DecideUse (NSObject decisionToken)
 		{
 			if (decisionToken is null)
@@ -45,7 +45,7 @@ namespace WebKit {
 		}
 
 		/// <param name="decisionToken">The decision token.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Decides download.</summary>
 		public static void DecideDownload (NSObject decisionToken)
 		{
 			if (decisionToken is null)
@@ -56,7 +56,7 @@ namespace WebKit {
 		}
 
 		/// <param name="decisionToken">The decision token.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Decides ignore.</summary>
 		public static void DecideIgnore (NSObject decisionToken)
 		{
 			if (decisionToken is null)

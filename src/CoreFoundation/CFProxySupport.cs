@@ -34,7 +34,7 @@ using System.Threading.Tasks;
 using CFNetwork;
 
 namespace CoreFoundation {
-	/// <summary>Provides information about a proxy.</summary>
+	/// <summary>Provides information about AProxy.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -76,7 +76,7 @@ namespace CoreFoundation {
 			}
 		}
 
-		/// <summary>URL location of a proxy auto-configuration script.</summary>
+		/// <summary>URL location of AProxy auto-configuration script.</summary>
 		/// <value>A URL containing the location of the proxy auto-configuration script file.</value>
 		/// <remarks>This property will only set when <see cref="CoreFoundation.CFProxy.ProxyType" /> is set to AutoConfigurationUrl.</remarks>
 		public NSUrl? AutoConfigurationUrl {

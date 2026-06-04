@@ -22,7 +22,7 @@ namespace CoreVideo {
 			/* CVPixelBufferRef CV_NULLABLE */ IntPtr pixelBuffer
 		);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the IOSurface backing this pixel buffer.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

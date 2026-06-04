@@ -109,7 +109,7 @@ namespace Social {
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use Tencent Weibo SDK instead.")]
 		TencentWeibo,
 
-		/// <summary>To be added.</summary>
+		/// <summary>LinkedIn service.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use LinkedIn SDK instead.")]
 		[Field ("SLServiceTypeLinkedIn")]
 		[NoiOS]

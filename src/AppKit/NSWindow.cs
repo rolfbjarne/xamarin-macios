@@ -34,8 +34,7 @@ namespace AppKit {
 	public partial class NSWindow {
 
 		// Automatically set ReleaseWhenClosed=false in every constructor.
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether the window is released when closed.</summary>
 		[Obsolete ("Set 'TrackReleasedWhenClosed' and call 'ReleaseWhenClosed()' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public static bool DisableReleasedWhenClosedInConstructor;
@@ -61,7 +60,7 @@ namespace AppKit {
 		}
 
 		/// <param name="windowRef">The window ref.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates an NSWindow from a native window reference.</summary>
 		static public NSWindow FromWindowRef (IntPtr windowRef)
 		{
 			return new NSWindow (windowRef);

@@ -147,8 +147,8 @@ namespace OpenGLES {
 	[Protocol]
 	// no [Model] because "The EAGLDrawable protocol is not intended to be implemented by objects outside of the iOS."
 	interface EAGLDrawable {
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
+		/// <summary>Gets or sets the drawable properties for this drawable.</summary>
+		/// <value>A dictionary containing the drawable properties.</value>
 		[Abstract]
 		[NullAllowed] // by default this property is null
 		[Export ("drawableProperties", ArgumentSemantic.Copy)]

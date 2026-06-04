@@ -18,7 +18,7 @@ using System.Runtime.CompilerServices;
 using CoreFoundation;
 
 namespace Security {
-	/// <summary>To be added.</summary>
+	/// <summary>Represents a trust evaluation policy for certificates.</summary>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]

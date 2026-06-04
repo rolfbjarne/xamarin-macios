@@ -95,27 +95,27 @@ namespace Security {
 	// For ease of use, we let the user pass the AuthorizationParameters, and we
 	// create the structure for them with the proper data
 	//
-	/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the authorization parameters.</summary>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	public class AuthorizationParameters {
-		/// <summary>To be added.</summary>
+		/// <summary>The path to system privilege tool.</summary>
 		public string? PathToSystemPrivilegeTool;
-		/// <summary>To be added.</summary>
+		/// <summary>The prompt.</summary>
 		public string? Prompt;
-		/// <summary>To be added.</summary>
+		/// <summary>The icon path.</summary>
 		public string? IconPath;
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the authorization environment.</summary>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	public class AuthorizationEnvironment {
-		/// <summary>To be added.</summary>
+		/// <summary>The username.</summary>
 		public string? Username;
-		/// <summary>To be added.</summary>
+		/// <summary>The password.</summary>
 		public string? Password;
-		/// <summary>To be added.</summary>
+		/// <summary>The add to shared credential pool.</summary>
 		public bool AddToSharedCredentialPool;
 	}
 
@@ -207,8 +207,7 @@ namespace Security {
 		}
 
 		/// <param name="flags">The flags.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Create.</summary>
 		public static Authorization? Create (AuthorizationFlags flags)
 		{
 			return Create (null, null, flags);
@@ -226,8 +225,7 @@ namespace Security {
 		/// <param name="parameters">The parameters.</param>
 		///         <param name="environment">The environment.</param>
 		///         <param name="flags">The flags.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Create.</summary>
 		public static Authorization? Create (AuthorizationParameters? parameters, AuthorizationEnvironment? environment, AuthorizationFlags flags)
 		{
 			AuthorizationItemSet pars = new AuthorizationItemSet ();

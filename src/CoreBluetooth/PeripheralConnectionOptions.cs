@@ -40,15 +40,13 @@ namespace CoreBluetooth {
 	public class PeripheralConnectionOptions : DictionaryContainer {
 #if !COREBUILD
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public PeripheralConnectionOptions ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
+		/// <param name="dictionary">The dictionary.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public PeripheralConnectionOptions (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -57,7 +55,6 @@ namespace CoreBluetooth {
 #if !MONOMAC
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool? NotifyOnConnection {
 			get {
 				return GetBoolValue (CBConnectPeripheralOptionsKeys.NotifyOnConnectionKey);
@@ -74,7 +71,6 @@ namespace CoreBluetooth {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool? NotifyOnNotification {
 			get {
 				return GetBoolValue (CBConnectPeripheralOptionsKeys.NotifyOnNotificationKey);
@@ -94,7 +90,6 @@ namespace CoreBluetooth {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool? NotifyOnDisconnection {
 			get {
 				return GetBoolValue (CBConnectPeripheralOptionsKeys.NotifyOnDisconnectionKey);

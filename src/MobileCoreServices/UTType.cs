@@ -53,7 +53,7 @@ namespace MobileCoreServices {
 		extern static byte /* Boolean */ UTTypeIsDeclared (IntPtr /* CFStringRef */ handle);
 
 		/// <param name="utType">The ut type.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Determines whether the specified UTI is a dynamic UTI.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -73,7 +73,7 @@ namespace MobileCoreServices {
 		}
 
 		/// <param name="utType">The ut type.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Determines whether the specified UTI is a declared UTI.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -98,7 +98,7 @@ namespace MobileCoreServices {
 		/// <param name="tagClass">The tag class.</param>
 		///         <param name="tag">The tag.</param>
 		///         <param name="conformingToUti">The conforming to uti.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a preferred UTI identifier for the specified tag and conforming type.</summary>
 		public static string? CreatePreferredIdentifier (string tagClass, string tag, string conformingToUti)
 		{
 			var a = CFString.CreateNative (tagClass);
@@ -117,7 +117,7 @@ namespace MobileCoreServices {
 		/// <param name="tagClass">The tag class.</param>
 		///         <param name="tag">The tag.</param>
 		///         <param name="conformingToUti">The conforming to uti.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates all UTI identifiers for the specified tag and conforming type.</summary>
 		public static string? []? CreateAllIdentifiers (string tagClass, string tag, string conformingToUti)
 		{
 			if (tagClass is null)
@@ -147,7 +147,7 @@ namespace MobileCoreServices {
 
 		/// <param name="uti">The uti.</param>
 		///         <param name="tagClass">The tag class.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets all tags for the specified UTI and tag class.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -175,7 +175,7 @@ namespace MobileCoreServices {
 
 		/// <param name="uti">The uti.</param>
 		///         <param name="conformsToUti">The conforms to uti.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Determines whether a UTI conforms to another UTI.</summary>
 		public static bool ConformsTo (string uti, string conformsToUti)
 		{
 			if (uti is null)
@@ -195,7 +195,7 @@ namespace MobileCoreServices {
 		extern static IntPtr /* NSString */ UTTypeCopyDescription (IntPtr /* CFStringRef */ utiStr);
 
 		/// <param name="uti">The uti.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the description for the specified UTI.</summary>
 		public static string? GetDescription (string uti)
 		{
 			if (uti is null)
@@ -212,7 +212,7 @@ namespace MobileCoreServices {
 
 		/// <param name="uti">The uti.</param>
 		///         <param name="tagClass">The tag class.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the preferred tag for the specified UTI and tag class.</summary>
 		public static string? GetPreferredTag (string uti, string tagClass)
 		{
 			if (uti is null)
@@ -232,7 +232,7 @@ namespace MobileCoreServices {
 		extern static IntPtr /* NSDictionary */ UTTypeCopyDeclaration (IntPtr utiStr);
 
 		/// <param name="uti">The uti.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the declaration dictionary for the specified UTI.</summary>
 		public static NSDictionary? GetDeclaration (string uti)
 		{
 			if (uti is null)
@@ -263,7 +263,7 @@ namespace MobileCoreServices {
 
 		/// <param name="uti1">The uti1.</param>
 		///         <param name="uti2">The uti2.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Determines whether two UTIs are equal.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]

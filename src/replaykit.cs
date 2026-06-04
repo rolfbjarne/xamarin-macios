@@ -517,14 +517,14 @@ namespace ReplayKit {
 	[BaseType (typeof (RPBroadcastHandler))]
 	interface RPBroadcastSampleHandler {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the key for the video sample orientation.</summary>
+		/// <value>The key string.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("RPVideoSampleOrientationKey")]
 		NSString VideoSampleOrientationKey { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the key for the application info bundle identifier.</summary>
+		/// <value>The key string.</value>
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Field ("RPApplicationInfoBundleIdentifierKey")]

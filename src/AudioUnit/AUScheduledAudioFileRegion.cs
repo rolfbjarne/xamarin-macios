@@ -41,25 +41,20 @@ namespace AudioUnit {
 		AUScheduledAudioFileRegionCompletionHandler? completionHandler;
 		bool alreadyUsed = false;
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the time stamp.</summary>
 		public AudioTimeStamp TimeStamp { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the audio file.</summary>
 		public AudioFile AudioFile { get; private set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the loop count.</summary>
 		public uint LoopCount { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the start frame.</summary>
 		public long StartFrame { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the frames to play.</summary>
 		public uint FramesToPlay { get; set; }
 
 		/// <param name="audioFile">The audio file.</param>
 		///         <param name="completionHandler">The completion handler to call when the operation completes.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="AUScheduledAudioFileRegion" /> instance.</summary>
 		public AUScheduledAudioFileRegion (AudioFile audioFile, AUScheduledAudioFileRegionCompletionHandler? completionHandler = null)
 		{
 			if (audioFile is null)

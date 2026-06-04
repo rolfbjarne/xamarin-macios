@@ -60,14 +60,14 @@ namespace CoreText {
 	[SupportedOSPlatform ("tvos")]
 	public class CTFrameAttributes {
 
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="CTFrameAttributes" /> instance.</summary>
 		public CTFrameAttributes ()
 			: this (new NSMutableDictionary ())
 		{
 		}
 
 		/// <param name="dictionary">The dictionary.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CTFrameAttributes" /> instance.</summary>
 		public CTFrameAttributes (NSDictionary dictionary)
 		{
 			if (dictionary is null)
@@ -75,12 +75,10 @@ namespace CoreText {
 			Dictionary = dictionary;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the dictionary.</summary>
 		public NSDictionary Dictionary { get; private set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the progression.</summary>
 		public CTFrameProgression? Progression {
 			get {
 				var value = Adapter.GetUInt32Value (Dictionary, CTFrameAttributeKey.Progression);
@@ -121,15 +119,13 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		extern static NSRange CTFrameGetVisibleStringRange (IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Gets string range.</summary>
 		public NSRange GetStringRange ()
 		{
 			return CTFrameGetStringRange (Handle);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Gets visible string range.</summary>
 		public NSRange GetVisibleStringRange ()
 		{
 			return CTFrameGetVisibleStringRange (Handle);
@@ -138,8 +134,7 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		extern static IntPtr CTFrameGetPath (IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Gets path.</summary>
 		public CGPath? GetPath ()
 		{
 			IntPtr h = CTFrameGetPath (Handle);
@@ -149,8 +144,7 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		extern static IntPtr CTFrameGetFrameAttributes (IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Gets frame attributes.</summary>
 		public CTFrameAttributes? GetFrameAttributes ()
 		{
 			var attrs = Runtime.GetNSObject<NSDictionary> (CTFrameGetFrameAttributes (Handle));
@@ -161,7 +155,6 @@ namespace CoreText {
 		extern static IntPtr CTFrameGetLines (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CTLine [] GetLines ()
 		{
 			var cfArrayRef = CTFrameGetLines (Handle);
@@ -178,7 +171,7 @@ namespace CoreText {
 		extern static void CTFrameGetLineOrigins (IntPtr handle, NSRange range, [Out] CGPoint [] origins);
 		/// <param name="range">The range.</param>
 		///         <param name="origins">The origins.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Gets line origins.</summary>
 		public void GetLineOrigins (NSRange range, CGPoint [] origins)
 		{
 			if (origins is null)
@@ -194,7 +187,7 @@ namespace CoreText {
 		extern static void CTFrameDraw (IntPtr handle, IntPtr context);
 
 		/// <param name="ctx">The ctx.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Draw.</summary>
 		public void Draw (CGContext ctx)
 		{
 			if (ctx is null)

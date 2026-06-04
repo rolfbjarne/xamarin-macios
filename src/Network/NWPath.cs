@@ -14,7 +14,7 @@ using System.Runtime.CompilerServices;
 using CoreFoundation;
 
 namespace Network {
-	/// <summary>To be added.</summary>
+/// <summary>Represents a network path that provides information about available network connectivity.</summary>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
@@ -26,44 +26,44 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		extern static NWPathStatus nw_path_get_status (IntPtr handle);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the status of this network path.</summary>
 		public NWPathStatus Status => nw_path_get_status (GetCheckedHandle ());
 
 		[DllImport (Constants.NetworkLibrary)]
 		extern static byte nw_path_is_expensive (IntPtr handle);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets a value indicating whether the path uses an expensive interface.</summary>
 		public bool IsExpensive => nw_path_is_expensive (GetCheckedHandle ()) != 0;
 
 		[DllImport (Constants.NetworkLibrary)]
 		extern static byte nw_path_has_ipv4 (IntPtr handle);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets a value indicating whether the path has IPv4 connectivity.</summary>
 		public bool HasIPV4 => nw_path_has_ipv4 (GetCheckedHandle ()) != 0;
 
 		[DllImport (Constants.NetworkLibrary)]
 		extern static byte nw_path_has_ipv6 (IntPtr handle);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets a value indicating whether the path has IPv6 connectivity.</summary>
 		public bool HasIPV6 => nw_path_has_ipv6 (GetCheckedHandle ()) != 0;
 
 		[DllImport (Constants.NetworkLibrary)]
 		extern static byte nw_path_has_dns (IntPtr handle);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets a value indicating whether the path has DNS resolution capability.</summary>
 		public bool HasDns => nw_path_has_dns (GetCheckedHandle ()) != 0;
 
 		[DllImport (Constants.NetworkLibrary)]
 		extern static byte nw_path_uses_interface_type (IntPtr handle, NWInterfaceType type);
 
 		/// <param name="type">The type.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Determines whether the path uses the specified interface type.</summary>
 		public bool UsesInterfaceType (NWInterfaceType type) => nw_path_uses_interface_type (GetCheckedHandle (), type) != 0;
 
 		[DllImport (Constants.NetworkLibrary)]
 		extern static IntPtr nw_path_copy_effective_local_endpoint (IntPtr handle);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the effective local endpoint for this path.</summary>
 		public NWEndpoint? EffectiveLocalEndpoint {
 			get {
 				var x = nw_path_copy_effective_local_endpoint (GetCheckedHandle ());
@@ -76,7 +76,7 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		extern static IntPtr nw_path_copy_effective_remote_endpoint (IntPtr handle);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the effective remote endpoint for this path.</summary>
 		public NWEndpoint? EffectiveRemoteEndpoint {
 			get {
 				var x = nw_path_copy_effective_remote_endpoint (GetCheckedHandle ());
@@ -90,7 +90,7 @@ namespace Network {
 		extern static byte nw_path_is_equal (IntPtr p1, IntPtr p2);
 
 		/// <param name="other">The other.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Determines whether this path is equal to the specified path.</summary>
 		public bool EqualsTo (NWPath other)
 		{
 			if (other is null)
@@ -116,9 +116,9 @@ namespace Network {
 
 
 #if !XAMCORE_5_0
-		/// <param name="callback">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <param name="callback">The callback to invoke for each interface.</param>
+		/// <summary>Enumerates the interfaces available on this path.</summary>
+		/// <remarks>Use the overload that takes a <c>Func		///         <remarks>To be added.</remarks>lt;NWInterface, bool		///         <remarks>To be added.</remarks>gt;</c> instead.</remarks>
 		[Obsolete ("Use the overload that takes a 'Func<NWInterface, bool>' instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		public void EnumerateInterfaces (Action<NWInterface> callback)

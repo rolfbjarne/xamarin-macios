@@ -121,60 +121,60 @@ namespace CoreGraphics {
 	[MacCatalyst (13, 1)]
 	interface CGColorSpaceNames {
 		/// <summary>Gets the name of the generic gray color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[Field ("kCGColorSpaceGenericGray")]
 		NSString GenericGray { get; }
 
 		/// <summary>Gets a string constant that identifies the GenericRgb color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[Field ("kCGColorSpaceGenericRGB")]
 		NSString GenericRgb { get; }
 
 		/// <summary>Gets a string constant that identifies the GenericCmyk color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[Field ("kCGColorSpaceGenericCMYK")]
 		NSString GenericCmyk { get; }
 
 		/// <summary>Gets a string constant that identifies the DisplayP3 color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceDisplayP3")]
 		NSString DisplayP3 { get; }
 
 		/// <summary>Gets a string constant that identifies the GenericRgbLinear color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[Field ("kCGColorSpaceGenericRGBLinear")]
 		NSString GenericRgbLinear { get; }
 
 		/// <summary>Gets a string constant that identifies the AdobeRgb1998 color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[Field ("kCGColorSpaceAdobeRGB1998")]
 		NSString AdobeRgb1998 { get; }
 
 		/// <summary>Gets a string constant that identifies the Srgb color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[Field ("kCGColorSpaceSRGB")]
 		NSString Srgb { get; }
 
 		/// <summary>Gets the name of the generic gray color space that has a gamma value of 2.2.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[Field ("kCGColorSpaceGenericGrayGamma2_2")]
 		NSString GenericGrayGamma2_2 { get; }
 
 		/// <summary>Gets a string constant that identifies the GenericXyz color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceGenericXYZ")]
 		NSString GenericXyz { get; }
 
 		/// <summary>Gets a string constant that identifies the AcesCGLinear color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceACESCGLinear")]
 		NSString AcesCGLinear { get; }
 
 		/// <summary>Gets a string constant that identifies the ItuR_709 color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceITUR_709")]
 		NSString ItuR_709 { get; }
@@ -189,7 +189,7 @@ namespace CoreGraphics {
 		NSString ItuR_709_Hlg { get; }
 
 		/// <summary>Gets a string constant that identifies the ItuR_2020 color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceITUR_2020")]
 		NSString ItuR_2020 { get; }
@@ -200,56 +200,56 @@ namespace CoreGraphics {
 		NSString ItuR_2020_sRgbGamma { get; }
 
 		/// <summary>Gets a string constant that identifies the RommRgb color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceROMMRGB")]
 		NSString RommRgb { get; }
 
 		/// <summary>Gets a string constant that identifies the Dcip3 color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceDCIP3")]
 		NSString Dcip3 { get; }
 
 		/// <summary>Gets a string constant that identifies the ExtendedSrgb color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceExtendedSRGB")]
 		NSString ExtendedSrgb { get; }
 
 		/// <summary>Gets a string constant that identifies the LinearSrgb color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceLinearSRGB")]
 		NSString LinearSrgb { get; }
 
 		/// <summary>Gets a string constant that identifies the ExtendedLinearSrgb color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceExtendedLinearSRGB")]
 		NSString ExtendedLinearSrgb { get; }
 
 		/// <summary>Gets a string constant that identifies the ExtendedGray color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceExtendedGray")]
 		NSString ExtendedGray { get; }
 
 		/// <summary>Gets a string constant that identifies the LinearGray color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceLinearGray")]
 		NSString LinearGray { get; }
 
 		/// <summary>Gets a string constant that identifies the ExtendedLinearGray color space.</summary>
-		///         <value>To be added.</value>
+		/// <value>The color space name string.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceExtendedLinearGray")]
 		NSString ExtendedLinearGray { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the CMYK color space name string. Use <see cref="GenericCmyk" /> instead.</summary>
+		/// <value>The color space name string.</value>
+		
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -257,9 +257,9 @@ namespace CoreGraphics {
 		[Field ("kCGColorSpaceGenericCMYK")]
 		NSString GenericCMYK { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Adobe RGB 1998 color space name string. Use <see cref="AdobeRgb1998" /> instead.</summary>
+		/// <value>The color space name string.</value>
+		
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -267,9 +267,9 @@ namespace CoreGraphics {
 		[Field ("kCGColorSpaceAdobeRGB1998")]
 		NSString AdobeRGB1998 { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the sRGB color space name string. Use <see cref="Srgb" /> instead.</summary>
+		/// <value>The color space name string.</value>
+		
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -277,9 +277,9 @@ namespace CoreGraphics {
 		[Field ("kCGColorSpaceSRGB")]
 		NSString SRGB { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the generic RGB color space name string. Use <see cref="GenericRgb" /> instead.</summary>
+		/// <value>The color space name string.</value>
+		
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -287,9 +287,9 @@ namespace CoreGraphics {
 		[Field ("kCGColorSpaceGenericRGB")]
 		NSString GenericRGB { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the linear generic RGB color space name string. Use <see cref="GenericRgbLinear" /> instead.</summary>
+		/// <value>The color space name string.</value>
+		
 		[NoiOS]
 		[NoMacCatalyst]
 		[NoTV]
@@ -297,8 +297,8 @@ namespace CoreGraphics {
 		[Field ("kCGColorSpaceGenericRGBLinear")]
 		NSString GenericRGBLinear { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the generic Lab color space name string.</summary>
+		/// <value>The color space name string.</value>
 		[MacCatalyst (13, 1)]
 		[Field ("kCGColorSpaceGenericLab")]
 		NSString GenericLab { get; }

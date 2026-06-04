@@ -48,21 +48,20 @@ namespace AudioUnit {
 		const string ElementNameKey = "element-name";
 		const string ExternalFileRefs = "file-references";
 
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="ClassInfoDictionary" /> instance.</summary>
 		public ClassInfoDictionary ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
 		/// <param name="dictionary">The dictionary.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="ClassInfoDictionary" /> instance.</summary>
 		public ClassInfoDictionary (NSDictionary? dictionary)
 			: base (dictionary)
 		{
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the manufacturer.</summary>
 		public AudioComponentManufacturerType? Manufacturer {
 			get {
 				using (var key = new NSString (ManufacturerKey))
@@ -70,16 +69,14 @@ namespace AudioUnit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the name.</summary>
 		public string? Name {
 			get {
 				return GetStringValue (NameKey);
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the type.</summary>
 		public AudioComponentType? Type {
 			get {
 				using (var key = new NSString (TypeKey))

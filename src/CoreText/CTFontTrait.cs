@@ -127,14 +127,14 @@ namespace CoreText {
 	[SupportedOSPlatform ("tvos")]
 	public class CTFontTraits {
 
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="CTFontTraits" /> instance.</summary>
 		public CTFontTraits ()
 			: this (new NSMutableDictionary ())
 		{
 		}
 
 		/// <param name="dictionary">The dictionary.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CTFontTraits" /> instance.</summary>
 		public CTFontTraits (NSDictionary dictionary)
 		{
 			if (dictionary is null)
@@ -142,20 +142,17 @@ namespace CoreText {
 			Dictionary = dictionary;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the dictionary.</summary>
 		public NSDictionary Dictionary { get; private set; }
 
 		// CFNumber
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the symbolic.</summary>
 		public uint? Symbolic {
 			get { return Adapter.GetUInt32Value (Dictionary, CTFontTraitKey.Symbolic); }
 			set { Adapter.SetValue (Dictionary, CTFontTraitKey.Symbolic!, value); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the symbolic traits.</summary>
 		public CTFontSymbolicTraits? SymbolicTraits {
 			get {
 				var v = Symbolic;
@@ -169,8 +166,7 @@ namespace CoreText {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the stylistic class.</summary>
 		public CTFontStylisticClass? StylisticClass {
 			get {
 				var v = Symbolic;
@@ -185,24 +181,21 @@ namespace CoreText {
 		}
 
 		// CFNumber representing a float value 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the weight.</summary>
 		public float? Weight {
 			get { return Adapter.GetSingleValue (Dictionary, CTFontTraitKey.Weight); }
 			set { Adapter.SetValue (Dictionary, CTFontTraitKey.Weight!, value); }
 		}
 
 		// CFNumber representing a float value 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the width.</summary>
 		public float? Width {
 			get { return Adapter.GetSingleValue (Dictionary, CTFontTraitKey.Width); }
 			set { Adapter.SetValue (Dictionary, CTFontTraitKey.Width!, value); }
 		}
 
 		// CFNumber representing a float value 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the slant.</summary>
 		public float? Slant {
 			get { return Adapter.GetSingleValue (Dictionary, CTFontTraitKey.Slant); }
 			set { Adapter.SetValue (Dictionary, CTFontTraitKey.Slant!, value); }

@@ -639,7 +639,7 @@ namespace ARKit {
 		ARPlaneExtent PlaneExtent { get; }
 	}
 
-	/// <summary>Geometry representing a plane detected in the real world.</summary>
+	/// <summary>Geometry representing APlane detected in the real world.</summary>
 	[BaseType (typeof (NSObject))]
 	[DisableDefaultCtor]
 	interface ARPlaneGeometry : NSSecureCoding {
@@ -684,7 +684,7 @@ namespace ARKit {
 		void Update (ARPlaneGeometry planeGeometry);
 	}
 
-	/// <summary>A set of 3-dimensional points, indicating image-processing's belief in a fixed real-world point on a physical surface.</summary>
+	/// <summary>A set of 3-dimensional points, indicating image-processing's belief in a fixed real-world point on APhysical surface.</summary>
 	///     <remarks>
 	///       <para>Developers can visualize this data in a <see cref="ARKit.ARSCNView" /> by setting <see cref="ARKit.ARSCNDebugOptions.ShowFeaturePoints" /> to <see langword="true" />.</para>
 	///     </remarks>
@@ -1931,7 +1931,7 @@ namespace ARKit {
 	/// <summary>
 	///       <see cref="ARKit.ARConfiguration" /> subclass that uses a recognized image as a basis for world-tracking.</summary>
 	///     <remarks>
-	///       <para>Developers should use this subclass of <see cref="ARKit.ARConfiguration" /> in scenarios where a known image, viewable by the rear-facing camera, is a more reliable anchor than real-world features from a broader field of view. For instance, a poster or advetisement located in a moving train car. </para>
+	///       <para>Developers should use this subclass of <see cref="ARKit.ARConfiguration" /> in scenarios where a known image, viewable by the rear-facing camera, is a more reliable anchor than real-world features from a broader field of view. For instance, APoster or advetisement located in a moving train car. </para>
 	///     </remarks>
 	[NoTV, NoMac]
 	[BaseType (typeof (ARConfiguration))]
@@ -2084,7 +2084,7 @@ namespace ARKit {
 		ARReferenceObject ReferenceObject { get; }
 	}
 
-	/// <summary>A serializable and shareable combination of real-world spatial data points and mixed-reality anchors.</summary>
+	/// <summary>A serializable and shareable combination of real-world spatial datAPoints and mixed-reality anchors.</summary>
 	///     <remarks>
 	///       <para>Developers can use an <see cref="ARKit.ARWorldMap" /> to serialize a mixed-reality scene. The serialized data can be used at a later time to recreate a scene or shared with another user to create a shared experience.</para>
 	///     </remarks>

@@ -544,7 +544,7 @@ namespace CoreML {
 
 	/// <summary>Encapsulates a trained machine-learning model.</summary>
 	///     <remarks>
-	///       <para>The <see cref="CoreML.MLModel" /> class encapsulates a machine-learning model that maps a predefined set of input features to a predefined set of output features. Models are generally stored as .mlmodel files but these must be "compiled" into a .mlmodelc directory prior to inferencing. This compilation step generally occurs prior to deploymenty, but may be performed on the device with the time-consuming <see cref="CoreML.MLModel.CompileModel(Foundation.NSUrl,out Foundation.NSError)" /> method.</para>
+	///       <para>The <see cref="CoreML.MLModel" /> class encapsulates a machine-learning model that maps APredefined set of input features to APredefined set of output features. Models are generally stored as .mlmodel files but these must be "compiled" into a .mlmodelc directory prior to inferencing. This compilation step generally occurs prior to deploymenty, but may be performed on the device with the time-consuming <see cref="CoreML.MLModel.CompileModel(Foundation.NSUrl,out Foundation.NSError)" /> method.</para>
 	///     </remarks>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -585,19 +585,19 @@ namespace CoreML {
 		[return: NullAllowed]
 		MLModel Create (NSUrl url, MLModelConfiguration configuration, out NSError error);
 
-		/// <param name="input">The feature from which to make a prediction.</param>
+		/// <param name="input">The feature from which to make APrediction.</param>
 		///         <param name="error">On failure, the error that occurred.</param>
-		///         <summary>Makes a prediction on <paramref name="input" />.</summary>
+		///         <summary>Makes APrediction on <paramref name="input" />.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[Export ("predictionFromFeatures:error:")]
 		[return: NullAllowed]
 		IMLFeatureProvider GetPrediction (IMLFeatureProvider input, out NSError error);
 
-		/// <param name="input">The feature from which to make a prediction.</param>
+		/// <param name="input">The feature from which to make APrediction.</param>
 		///         <param name="options">Options about resources to use for the prediction.</param>
 		///         <param name="error">On failure, the error that occurred.</param>
-		///         <summary>Makes a prediction on <paramref name="input" />.</summary>
+		///         <summary>Makes APrediction on <paramref name="input" />.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[Export ("predictionFromFeatures:options:error:")]
@@ -801,7 +801,7 @@ namespace CoreML {
 	[BaseType (typeof (NSObject))]
 	interface MLMultiArray : NSSecureCoding {
 
-		/// <summary>Gets a pointer to the raw array data.</summary>
+		/// <summary>Gets APointer to the raw array data.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.MacOSX, 13, 0, message: "Use 'GetBytes (Action<IntPtr, nint>)' or 'GetMutableBytes' async methods instead.")]

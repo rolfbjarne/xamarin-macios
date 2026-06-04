@@ -2,7 +2,6 @@
 namespace NetworkExtension {
 
 	/// <summary>Enumeration of error conditions relating to the VPN configuration.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[ErrorDomain ("NEVPNErrorDomain")]
 	[Native]
@@ -22,7 +21,6 @@ namespace NetworkExtension {
 	}
 
 	/// <summary>Enumerates the state of a VPN connection.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NEVpnStatus : long {
@@ -41,7 +39,6 @@ namespace NetworkExtension {
 	}
 
 	/// <summary>Enumerates supported techniques for authenticating Internet Key Exchange.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NEVpnIkeAuthenticationMethod : long {
@@ -54,7 +51,6 @@ namespace NetworkExtension {
 	}
 
 	/// <summary>Enumerates the algorithms that can be used for <see cref="NetworkExtension.NEVpnIke2SecurityAssociationParameters.EncryptionAlgorithm" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native ("NEVPNIKEv2EncryptionAlgorithm")]
 	public enum NEVpnIke2EncryptionAlgorithm : long {
@@ -70,14 +66,14 @@ namespace NetworkExtension {
 		[Deprecated (PlatformName.MacOSX, 26, 0, "Not supported anymore.")]
 		[Deprecated (PlatformName.MacCatalyst, 26, 0, "Not supported anymore.")]
 		TripleDES = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates a e s128.</summary>
 		AES128 = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates a e s256.</summary>
 		AES256 = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates a e s128 g c m.</summary>
 		[MacCatalyst (13, 1)]
 		AES128GCM = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates a e s256 g c m.</summary>
 		[MacCatalyst (13, 1)]
 		AES256GCM = 6,
 		[iOS (13, 0)]
@@ -86,7 +82,6 @@ namespace NetworkExtension {
 	}
 
 	/// <summary>Enumerates the valid integrity algorithms for <see cref="NetworkExtension.NEVpnIke2SecurityAssociationParameters.IntegrityAlgorithm" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native ("NEVPNIKEv2IntegrityAlgorithm")]
 	public enum NEVpnIke2IntegrityAlgorithm : long {
@@ -111,28 +106,26 @@ namespace NetworkExtension {
 	}
 
 	/// <summary>Enumerates the frequencies with which the connection attempts to detect dead peers.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native ("NEVPNIKEv2DeadPeerDetectionRate")]
 	public enum NEVpnIke2DeadPeerDetectionRate : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates low.</summary>
 		Low = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates medium.</summary>
 		Medium = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates high.</summary>
 		High = 3,
 	}
 
 	/// <summary>Enumeration of Diffie Hellman groups, which determine encryption strength.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native ("NEVPNIKEv2DiffieHellmanGroup")]
 	public enum NEVpnIke2DiffieHellman : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid.</summary>
 		Invalid = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates group0.</summary>
 		Group0 = Invalid,
 		/// <summary>To be added.</summary>
 		[NoTV]
@@ -152,21 +145,21 @@ namespace NetworkExtension {
 		[Deprecated (PlatformName.MacOSX, 26, 0, "Groups less than 14 are not supported anymore.")]
 		[Deprecated (PlatformName.MacCatalyst, 26, 0, "Groups less than 14 are not supported anymore.")]
 		Group5 = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates group14.</summary>
 		Group14 = 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates group15.</summary>
 		Group15 = 15,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates group16.</summary>
 		Group16 = 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates group17.</summary>
 		Group17 = 17,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates group18.</summary>
 		Group18 = 18,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates group19.</summary>
 		Group19 = 19,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates group20.</summary>
 		Group20 = 20,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates group21.</summary>
 		Group21 = 21,
 		[iOS (13, 0)]
 		[MacCatalyst (13, 1)]
@@ -176,22 +169,20 @@ namespace NetworkExtension {
 	}
 
 	/// <summary>Enumerates the <see cref="NetworkExtension.NEOnDemandRule.Action" /> values of a <see cref="NetworkExtension.NEOnDemandRule" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NEOnDemandRuleAction : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates connect.</summary>
 		Connect = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates disconnect.</summary>
 		Disconnect = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates evaluate connection.</summary>
 		EvaluateConnection = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ignore.</summary>
 		Ignore = 4,
 	}
 
 	/// <summary>Enumerates the valid network interface types.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[TV (17, 0)]
 	[Native]
@@ -209,7 +200,6 @@ namespace NetworkExtension {
 	}
 
 	/// <summary>Enumerates behavior if the matching host name cannot be resolved.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NEEvaluateConnectionRuleAction : long {
@@ -220,17 +210,16 @@ namespace NetworkExtension {
 	}
 
 	/// <summary>Enumerates the cryptographic algorithm associated with the certificate.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native ("NEVPNIKEv2CertificateType")] // NSInteger
 	public enum NEVpnIke2CertificateType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates r s a.</summary>
 		RSA = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates e c d s a256.</summary>
 		ECDSA256 = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates e c d s a384.</summary>
 		ECDSA384 = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates e c d s a521.</summary>
 		ECDSA521 = 4,
 		[NoTV]
 		[iOS (13, 0)]
@@ -262,44 +251,42 @@ namespace NetworkExtension {
 	}
 
 	/// <summary>Enumerates network tunnel errors.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[ErrorDomain ("NETunnelProviderErrorDomain")]
 	[Native]
 	public enum NETunnelProviderError : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid.</summary>
 		Invalid = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates canceled.</summary>
 		Canceled = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates failed.</summary>
 		Failed = 3,
 	}
 
 	/// <summary>Enumerates <see cref="NetworkExtension.NEAppProxyFlow" /> error codes.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[ErrorDomain ("NEAppProxyErrorDomain")]
 	[Native]
 	public enum NEAppProxyFlowError : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates not connected.</summary>
 		NotConnected = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates peer reset.</summary>
 		PeerReset = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates host unreachable.</summary>
 		HostUnreachable = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid argument.</summary>
 		InvalidArgument = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates aborted.</summary>
 		Aborted = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates refused.</summary>
 		Refused = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates timed out.</summary>
 		TimedOut = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates internal.</summary>
 		Internal = 8,
 		// iOS 9.3
 		/// <summary>The datagram was too large.</summary>
@@ -309,7 +296,6 @@ namespace NetworkExtension {
 	}
 
 	/// <summary>Enumerates reasons that a provider extension has stopped.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum NEProviderStopReason : long {
@@ -354,7 +340,6 @@ namespace NetworkExtension {
 	}
 
 	/// <summary>Enumerates status information about network connection paths.</summary>
-	/// <remarks>To be added.</remarks>
 	[Deprecated (PlatformName.iOS, 18, 0, message: "Use 'Network.NWPathStatus' instead.")]
 	[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use 'Network.NWPathStatus' instead.")]
 	[Deprecated (PlatformName.MacOSX, 15, 0, message: "Use 'Network.NWPathStatus' instead.")]
@@ -373,7 +358,6 @@ namespace NetworkExtension {
 	}
 
 	/// <summary>Enumerates states that can be encountered while establishing a TCP connection.</summary>
-	/// <remarks>To be added.</remarks>
 	[Deprecated (PlatformName.iOS, 18, 0, message: "Use 'Network.NWConnectionState' instead.")]
 	[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use 'Network.NWConnectionState' instead.")]
 	[Deprecated (PlatformName.MacOSX, 15, 0, message: "Use 'Network.NWConnectionState' instead.")]
@@ -396,7 +380,6 @@ namespace NetworkExtension {
 	}
 
 	/// <summary>Enumerates states that can be encountered while establishing a UDP connection.</summary>
-	/// <remarks>To be added.</remarks>
 	[Deprecated (PlatformName.iOS, 18, 0, message: "Use 'Network.NWConnectionState' instead.")]
 	[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use 'Network.NWConnectionState' instead.")]
 	[Deprecated (PlatformName.MacOSX, 15, 0, message: "Use 'Network.NWConnectionState' instead.")]

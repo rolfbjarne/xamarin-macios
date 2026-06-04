@@ -97,7 +97,6 @@ namespace CoreGraphics {
 		///           <attribution license="cc4" from="Microsoft" modified="false" />
 		///           <para>A <see cref="CoreGraphics.CGRect" /> that represents the intersection of <paramref name="a" /> and <paramref name="b" />.</para>
 		///         </returns>
-		///         <remarks>To be added</remarks>
 		public static CGRect Intersect (CGRect a, CGRect b)
 		{
 			// MS.NET returns a non-empty rectangle if the two rectangles
@@ -117,7 +116,6 @@ namespace CoreGraphics {
 		/// <param name="rect">
 		///           <attribution license="cc4" from="Microsoft" modified="false" />The <see cref="CoreGraphics.CGRect" /> with which to intersect. </param>
 		///         <summary>Replaces this <see cref="CoreGraphics.CGRect" /> with the intersection of itself and the specified <see cref="CoreGraphics.CGRect" />.</summary>
-		///         <remarks>To be added</remarks>
 		public void Intersect (CGRect rect)
 		{
 			this = CGRect.Intersect (this, rect);
@@ -149,7 +147,6 @@ namespace CoreGraphics {
 		/// <summary>Tests whether all numeric properties of this <see cref="CoreGraphics.CGRect" /> have values of zero.</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added</remarks>
 		public bool IsEmpty {
 			get { return width == 0.0 || height == 0.0; }
 		}
@@ -207,7 +204,6 @@ namespace CoreGraphics {
 		/// <summary>Gets the x-coordinate of the left edge of this <see cref="CoreGraphics.CGRect" /> structure.</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added</remarks>
 		public nfloat Left {
 			get { return X; }
 		}
@@ -226,7 +222,6 @@ namespace CoreGraphics {
 		/// <summary>Gets or sets the coordinates of the upper-left corner of this <see cref="CoreGraphics.CGRect" /> structure.</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added</remarks>
 		public CGPoint Location {
 			get { return new CGPoint (x, y); }
 			set {
@@ -238,7 +233,6 @@ namespace CoreGraphics {
 		/// <summary>Gets or sets the size of this <see cref="CoreGraphics.CGRect" />.</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added</remarks>
 		public CGSize Size {
 			get { return new CGSize (width, height); }
 			set {
@@ -449,7 +443,6 @@ namespace CoreGraphics {
 		///           <attribution license="cc4" from="Microsoft" modified="false" />
 		///           <para>This method returns true if there is any intersection, otherwise false.</para>
 		///         </returns>
-		///         <remarks>To be added</remarks>
 		public bool IntersectsWith (CGRect rect)
 		{
 			return !(

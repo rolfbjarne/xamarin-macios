@@ -31,61 +31,59 @@
 
 namespace Security {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	// Untyped enum in ObjC
 	public enum AuthorizationStatus {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates success.</summary>
 		Success = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid set.</summary>
 		InvalidSet = -60001,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid ref.</summary>
 		InvalidRef = -60002,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid tag.</summary>
 		InvalidTag = -60003,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid pointer.</summary>
 		InvalidPointer = -60004,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates denied.</summary>
 		Denied = -60005,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates canceled.</summary>
 		Canceled = -60006,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates interaction not allowed.</summary>
 		InteractionNotAllowed = -60007,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates internal.</summary>
 		Internal = -60008,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates externalize not allowed.</summary>
 		ExternalizeNotAllowed = -60009,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates internalize not allowed.</summary>
 		InternalizeNotAllowed = -60010,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid flags.</summary>
 		InvalidFlags = -60011,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates tool execute failure.</summary>
 		ToolExecuteFailure = -60031,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates tool environment error.</summary>
 		ToolEnvironmentError = -60032,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad address.</summary>
 		BadAddress = -60033,
 	}
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	// typedef UInt32 AuthorizationFlags;
 	[Flags]
 	public enum AuthorizationFlags : int {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates defaults.</summary>
 		Defaults,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates interaction allowed.</summary>
 		InteractionAllowed = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates extend rights.</summary>
 		ExtendRights = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates partial rights.</summary>
 		PartialRights = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates destroy rights.</summary>
 		DestroyRights = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates pre authorize.</summary>
 		PreAuthorize = 1 << 4,
 		[SupportedOSPlatform ("maccatalyst17.0")]
 		[SupportedOSPlatform ("macos14.0")]
@@ -98,34 +96,26 @@ namespace Security {
 	// create the structure for them with the proper data
 	//
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	public class AuthorizationParameters {
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public string? PathToSystemPrivilegeTool;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public string? Prompt;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public string? IconPath;
 	}
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	public class AuthorizationEnvironment {
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public string? Username;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public string? Password;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public bool AddToSharedCredentialPool;
 	}
 
@@ -147,7 +137,6 @@ namespace Security {
 	}
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	public unsafe class Authorization : DisposableObject {
@@ -170,9 +159,9 @@ namespace Security {
 		{
 		}
 
-		/// <param name="pathToTool">To be added.</param>
-		///         <param name="flags">To be added.</param>
-		///         <param name="args">To be added.</param>
+		/// <param name="pathToTool">The path to tool.</param>
+		///         <param name="flags">The flags.</param>
+		///         <param name="args">The event arguments.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
@@ -207,10 +196,9 @@ namespace Security {
 			Dispose (0, disposing);
 		}
 
-		/// <param name="flags">To be added.</param>
-		///         <param name="disposing">To be added.</param>
+		/// <param name="flags">The flags.</param>
+		///         <param name="disposing">The disposing.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public virtual void Dispose (AuthorizationFlags flags, bool disposing)
 		{
 			if (Handle != IntPtr.Zero && Owns)
@@ -218,10 +206,9 @@ namespace Security {
 			base.Dispose (disposing);
 		}
 
-		/// <param name="flags">To be added.</param>
+		/// <param name="flags">The flags.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static Authorization? Create (AuthorizationFlags flags)
 		{
 			return Create (null, null, flags);
@@ -236,12 +223,11 @@ namespace Security {
 			}
 		}
 
-		/// <param name="parameters">To be added.</param>
-		///         <param name="environment">To be added.</param>
-		///         <param name="flags">To be added.</param>
+		/// <param name="parameters">The parameters.</param>
+		///         <param name="environment">The environment.</param>
+		///         <param name="flags">The flags.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static Authorization? Create (AuthorizationParameters? parameters, AuthorizationEnvironment? environment, AuthorizationFlags flags)
 		{
 			AuthorizationItemSet pars = new AuthorizationItemSet ();

@@ -19,7 +19,6 @@ using System.Runtime.CompilerServices;
 
 namespace AVFoundation {
 	/// <summary>Corresponds to a <see cref="AudioToolbox.AudioChannelLayout " /> channel layout.</summary>
-	///     <remarks>To be added.</remarks>
 	/// <related type="externalDocumentation" href="https://developer.apple.com/documentation/avfaudio/avaudiochannellayout">Apple documentation for <c>AVAudioChannelLayout</c></related>
 	public partial class AVAudioChannelLayout {
 		static IntPtr CreateLayoutPtr (AudioChannelLayout layout, out IntPtr handleToLayout)
@@ -29,9 +28,8 @@ namespace AVFoundation {
 			return handleToLayout;
 		}
 
-		/// <param name="layout">To be added.</param>
+		/// <param name="layout">The layout.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		public AVAudioChannelLayout (AudioChannelLayout layout)
 			: this (CreateLayoutPtr (layout, out var handleToLayout))
@@ -41,7 +39,6 @@ namespace AVFoundation {
 
 		/// <summary>The underlying <see cref="AudioToolbox.AudioChannelLayout" />.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public AudioChannelLayout? Layout {
 			get {
 				return AudioChannelLayout.FromHandle (_Layout);

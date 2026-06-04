@@ -13,10 +13,9 @@ namespace Metal {
 		[DllImport (Constants.MetalKitLibrary)]
 		static extern  /* MTLVertexDescriptor __nonnull */ IntPtr MTKMetalVertexDescriptorFromModelIO (/* MDLVertexDescriptor __nonnull */ IntPtr modelIODescriptor);
 
-		/// <param name="descriptor">To be added.</param>
+		/// <param name="descriptor">The descriptor.</param>
 		///         <summary>Creates and returns a new vertex descriptor object from the provided Model IO vertex descriptor.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -37,11 +36,10 @@ namespace Metal {
 		[DllImport (Constants.MetalKitLibrary)]
 		unsafe static extern /* MTLVertexDescriptor __nonnull */ IntPtr MTKMetalVertexDescriptorFromModelIOWithError (/* MDLVertexDescriptor __nonnull */ IntPtr modelIODescriptor, IntPtr* error);
 
-		/// <param name="descriptor">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="descriptor">The descriptor.</param>
+		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>Creates and returns a new vertex descriptor object from the provided Model IO vertex descriptor.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

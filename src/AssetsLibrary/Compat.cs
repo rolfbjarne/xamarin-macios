@@ -64,7 +64,6 @@ namespace AssetsLibrary {
 	static public partial class ALAssetsErrorExtensions {
 		/// <param name="self">The enumeration value</param>
 		///         <summary>Returns the error domain associated with the AssetsLibrary.ALAssetsError value</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>
 		///           <para>See the <see cref="Foundation.NSError" /> for information on how to use the error domains when reporting errors.</para>
 		///         </remarks>
@@ -198,7 +197,6 @@ namespace AssetsLibrary {
 
 		/// <param name="uti">To be added.</param>
 		///         <summary>Returns the specific version for the asset that matches the requested UTI.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual ALAssetRepresentation RepresentationForUti (string uti)
 		{
@@ -250,7 +248,6 @@ namespace AssetsLibrary {
 
 		/// <param name="property">To be added.</param>
 		///         <summary>Low-level access to properties in the ALAsset.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual NSObject ValueForProperty (NSString property)
 		{
@@ -303,7 +300,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>Default asset representation.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public virtual ALAssetRepresentation DefaultRepresentation {
 			get {
@@ -312,7 +308,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>Whether the application may edit the asset.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public virtual bool Editable {
 			get {
@@ -433,7 +428,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>Geographical information about the asset.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CLLocation Location {
 			get {
@@ -442,7 +436,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>For videos, play time.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public double Duration {
 			get {
@@ -451,7 +444,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>Asset orientation.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public ALAssetOrientation Orientation {
 			get {
@@ -460,7 +452,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>Asset's creation time stamp.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSDate Date {
 			get {
@@ -469,7 +460,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>Returns a list of all the available representations for this asset.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public string [] Representations {
 			get {
@@ -489,7 +479,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSUrl? AssetUrl {
 			get {
@@ -534,7 +523,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>Returns an image suitable for full screen use.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual CGImage GetFullScreenImage ()
 		{
@@ -542,7 +530,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>Returns the image representing this asset.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual CGImage GetImage ()
 		{
@@ -551,7 +538,6 @@ namespace AssetsLibrary {
 
 		/// <param name="options">CGImage options.</param>
 		///         <summary>Returns an image representing the asset.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual CGImage GetImage (NSDictionary options)
 		{
@@ -559,7 +545,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>Gets the size of the asset's representation.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public virtual CGSize Dimensions {
 			get {
@@ -568,7 +553,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>Gets the name of the file that holds the representation.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public virtual string Filename {
 			get {
@@ -577,7 +561,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>Asset metadata stored as a dictionary.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public virtual NSDictionary Metadata {
 			get {
@@ -586,7 +569,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>The asset orientation.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public virtual ALAssetOrientation Orientation {
 			get {
@@ -595,7 +577,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>The scale for this asset representation.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public virtual float Scale {
 			get {
@@ -604,7 +585,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>The size in bytes of this asset representation.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public virtual long Size {
 			get {
@@ -613,7 +593,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>The URL for this specific asset reprensetation.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public virtual NSUrl Url {
 			get {
@@ -622,7 +601,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>The UTI of this asset.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public virtual string Uti {
 			get {
@@ -685,7 +663,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>Used to list video assets.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public static ALAssetsFilter AllVideos {
 			get {
@@ -777,7 +754,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>The number of assets in this group.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public virtual nint Count {
 			get {
@@ -786,7 +762,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>Whether the app may edit the group.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public virtual bool Editable {
 			get {
@@ -795,7 +770,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>Poster image used for this group.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public virtual CGImage PosterImage {
 			get {
@@ -837,7 +811,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>The type of assets of this group (Library, SavedPhotos, Faces or Events).</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public ALAssetsGroupType Type {
 			get {
@@ -855,7 +828,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>A unique reference URL for the <see cref="AssetsLibrary.ALAssetsGroup" />.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NSUrl PropertyUrl {
 			get {
@@ -943,7 +915,6 @@ namespace AssetsLibrary {
 
 		/// <param name="videoPathURL">A URL locating a video.</param>
 		///         <summary>Whether the video at <paramref name="videoPathURL" /> can be saved in the Photos Album.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>
 		///           <para>Application developers implementing custom Audio-Video capture or editing video files should use this method prior to attempting to add the video to the Photos Album.</para>
 		///         </remarks>
@@ -1142,7 +1113,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Foundation.NSSet UpdatedAssets {
 			get {
@@ -1151,7 +1121,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Foundation.NSSet InsertedAssetGroups {
 			get {
@@ -1160,7 +1129,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Foundation.NSSet UpdatedAssetGroups {
 			get {
@@ -1169,7 +1137,6 @@ namespace AssetsLibrary {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public Foundation.NSSet DeletedAssetGroupsKey {
 			get {

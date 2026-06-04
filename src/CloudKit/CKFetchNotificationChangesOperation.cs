@@ -84,7 +84,7 @@ namespace CloudKit {
 			}
 		}
 
-		/// <summary>The <see cref="CloudKit.CKServerChangeToken" /> from a previous fetch operation.</summary>
+		/// <summary>The <see cref="CloudKit.CKServerChangeToken" /> from APrevious fetch operation.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>

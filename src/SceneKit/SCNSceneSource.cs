@@ -19,7 +19,6 @@ namespace SceneKit {
 		/// <typeparam name="T">To be added.</typeparam>
 		///         <param name="uid">The uid.</param>
 		///         <summary>Gets the entry that is identified by <paramref name="uid" />.</summary>
-		///         <returns>To be added.</returns>
 		public NSObject? GetEntryWithIdentifier<T> (string uid)
 		{
 			return GetEntryWithIdentifier (uid, new Class (typeof (T)));
@@ -27,7 +26,6 @@ namespace SceneKit {
 
 		/// <typeparam name="T">To be added.</typeparam>
 		///         <summary>Returns the list of identifiers that identify objects that belong to the specified class.</summary>
-		///         <returns>To be added.</returns>
 		public string [] GetIdentifiersOfEntries<T> ()
 		{
 			var klass = new Class (typeof (T));

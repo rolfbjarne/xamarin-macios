@@ -7,13 +7,11 @@ namespace Photos {
 	public partial class PHFetchResult : IEnumerable<NSObject> {
 		/// <param name="index">The zero-based index.</param>
 		/// <summary>Returns the asset at <paramref name="index" />.</summary>
-		/// <value>To be added.</value>
 		public NSObject this [nint index] {
 			get { return _ObjectAtIndexedSubscript (index); }
 		}
 
 		/// <summary>A <see cref="System.Collections.Generic.IEnumerator{T}" /> that can iterate over the assets in the <see cref="Photos.PHFetchResult" />.</summary>
-		///         <returns>To be added.</returns>
 		public IEnumerator<NSObject> GetEnumerator ()
 		{
 			nint len = Count;
@@ -23,7 +21,6 @@ namespace Photos {
 		}
 
 		/// <summary>Returns an <see cref="System.Collections.IEnumerator" /> of the assets in the <see cref="Photos.PHFetchResult" />.</summary>
-		///         <returns>To be added.</returns>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			nint len = Count;
@@ -35,7 +32,6 @@ namespace Photos {
 		/// <typeparam name="T">To be added.</typeparam>
 		///         <param name="indexes">The indexes.</param>
 		///         <summary>Returns the objects at <paramref name="indexes" />, all of which must be type T.</summary>
-		///         <returns>To be added.</returns>
 		public T? [] ObjectsAt<T> (NSIndexSet indexes) where T : NSObject
 		{
 			var nsarr = _ObjectsAt (indexes);

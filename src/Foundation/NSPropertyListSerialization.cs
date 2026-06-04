@@ -33,8 +33,7 @@ namespace Foundation {
 		/// <param name="plist">The plist.</param>
 		///         <param name="format">The format.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Datas with property list.</summary>
 		public static NSData DataWithPropertyList (NSObject plist, NSPropertyListFormat format, out NSError error)
 		{
 			return DataWithPropertyList (plist, format, NSPropertyListWriteOptions.Immutable, out error);
@@ -44,8 +43,7 @@ namespace Foundation {
 		///         <param name="stream">The stream.</param>
 		///         <param name="format">The format.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Writes property list.</summary>
 		public static nint WritePropertyList (NSObject plist, NSOutputStream stream, NSPropertyListFormat format, out NSError error)
 		{
 			return WritePropertyList (plist, stream, format, NSPropertyListWriteOptions.Immutable, out error);
@@ -54,8 +52,7 @@ namespace Foundation {
 		/// <param name="data">The data to use.</param>
 		///         <param name="format">The format.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Propertys list with data.</summary>
 		public static NSObject PropertyListWithData (NSData data, ref NSPropertyListFormat format, out NSError error)
 		{
 			return PropertyListWithData (data, NSPropertyListReadOptions.Immutable, ref format, out error);
@@ -64,8 +61,7 @@ namespace Foundation {
 		/// <param name="stream">The stream.</param>
 		///         <param name="format">The format.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Propertys list with stream.</summary>
 		public static NSObject PropertyListWithStream (NSInputStream stream, ref NSPropertyListFormat format, out NSError error)
 		{
 			return PropertyListWithStream (stream, NSPropertyListReadOptions.Immutable, ref format, out error);

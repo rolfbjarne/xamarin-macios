@@ -107,7 +107,6 @@ namespace IdentityLookup {
 			        </returns>
 			<remarks>
 			          <para copied="true">The DeferQueryRequestToNetworkAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
 			        </remarks>
 			""")]
 		void DeferQueryRequestToNetwork (Action<ILNetworkResponse, NSError> completion);

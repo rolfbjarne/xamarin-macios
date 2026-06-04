@@ -45,7 +45,7 @@ namespace CoreVideo {
 	}
 
 	// CVPixelBuffer.h
-	/// <summary>A struct that holds the <see cref="CoreVideo.CVPlanarComponentInfo" />s of a planar buffer.</summary>
+	/// <summary>A struct that holds the <see cref="CoreVideo.CVPlanarComponentInfo" />s of APlanar buffer.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

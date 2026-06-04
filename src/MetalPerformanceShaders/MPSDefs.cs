@@ -84,29 +84,29 @@ namespace MetalPerformanceShaders {
 		public double TranslateY;
 	}
 
-	/// <summary>To be added.</summary>
+/// <summary>Represents a coordinate in an image with x, y, and channel components.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	public struct MPSImageCoordinate {
-		/// <summary>To be added.</summary>
+	/// <summary>The x-coordinate in the image.</summary>
 		public nuint X;
-		/// <summary>To be added.</summary>
+	/// <summary>The y-coordinate in the image.</summary>
 		public nuint Y;
-		/// <summary>To be added.</summary>
+	/// <summary>The channel index in the image.</summary>
 		public nuint Channel;
 	}
 
-	/// <summary>To be added.</summary>
+/// <summary>Represents a rectangular region in an image defined by an offset and size.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	public struct MPSImageRegion {
-		/// <summary>To be added.</summary>
+	/// <summary>The offset coordinate of the region.</summary>
 		public MPSImageCoordinate Offset;
-		/// <summary>To be added.</summary>
+	/// <summary>The size of the region.</summary>
 		public MPSImageCoordinate Size;
 	}
 
@@ -148,13 +148,13 @@ namespace MetalPerformanceShaders {
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	public struct MPSMatrixCopyOffsets {
-		/// <summary>To be added.</summary>
+	/// <summary>The source row offset for the copy operation.</summary>
 		public uint SourceRowOffset;
-		/// <summary>To be added.</summary>
+	/// <summary>The source column offset for the copy operation.</summary>
 		public uint SourceColumnOffset;
-		/// <summary>To be added.</summary>
+	/// <summary>The destination row offset for the copy operation.</summary>
 		public uint DestinationRowOffset;
-		/// <summary>To be added.</summary>
+	/// <summary>The destination column offset for the copy operation.</summary>
 		public uint DestinationColumnOffset;
 	}
 
@@ -164,9 +164,9 @@ namespace MetalPerformanceShaders {
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	public struct MPSImageReadWriteParams {
-		/// <summary>To be added.</summary>
+	/// <summary>The starting feature channel offset.</summary>
 		public nuint FeatureChannelOffset;
-		/// <summary>To be added.</summary>
+	/// <summary>The number of feature channels to read or write.</summary>
 		public nuint NumberOfFeatureChannelsToReadWrite;
 	}
 
@@ -176,25 +176,25 @@ namespace MetalPerformanceShaders {
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	public struct MPSImageKeypointRangeInfo {
-		/// <summary>To be added.</summary>
+	/// <summary>The maximum number of keypoints to detect.</summary>
 		public nuint MaximumKeypoints;
-		/// <summary>To be added.</summary>
+	/// <summary>The minimum threshold value for keypoint detection.</summary>
 		public float MinimumThresholdValue;
 	}
 
-	/// <summary>To be added.</summary>
+/// <summary>Contains texture information for an MPS state, including dimensions and format.</summary>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	public struct MPSStateTextureInfo {
-		/// <summary>To be added.</summary>
+	/// <summary>The width of the texture in pixels.</summary>
 		public nuint Width;
-		/// <summary>To be added.</summary>
+	/// <summary>The height of the texture in pixels.</summary>
 		public nuint Height;
-		/// <summary>To be added.</summary>
+	/// <summary>The depth of the texture.</summary>
 		public nuint Depth;
-		/// <summary>To be added.</summary>
+	/// <summary>The number of array elements in the texture.</summary>
 		public nuint ArrayLength;
 
 #pragma warning disable 0169 // Avoid warning when building core.dll and the unused reserved fields
@@ -209,19 +209,19 @@ namespace MetalPerformanceShaders {
 		nuint Reserved3;
 #pragma warning restore 0169
 #if !COREBUILD
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the pixel format of the texture.</summary>
 		public MTLPixelFormat PixelFormat {
 			get => (MTLPixelFormat) (ulong) _PixelFormat;
 			set => _PixelFormat = (nuint) (ulong) value;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the texture type.</summary>
 		public MTLTextureType TextureType {
 			get => (MTLTextureType) (ulong) _TextureType;
 			set => _TextureType = (nuint) (ulong) value;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the texture usage flags.</summary>
 		public MTLTextureUsage TextureUsage {
 			get => (MTLTextureUsage) (ulong) _TextureUsage;
 			set => _TextureUsage = (nuint) (ulong) value;
@@ -229,16 +229,16 @@ namespace MetalPerformanceShaders {
 #endif
 	}
 
-	/// <summary>To be added.</summary>
+/// <summary>Represents an axis-aligned bounding box defined by minimum and maximum coordinates.</summary>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MPSAxisAlignedBoundingBox {
-		/// <summary>To be added.</summary>
+	/// <summary>The minimum corner of the bounding box.</summary>
 		public Vector3 Min;
-		/// <summary>To be added.</summary>
+	/// <summary>The maximum corner of the bounding box.</summary>
 		public Vector3 Max;
 	}
 

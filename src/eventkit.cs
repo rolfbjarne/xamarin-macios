@@ -523,10 +523,10 @@ namespace EventKit {
 		/// <param name="type">The type.</param>
 		/// <param name="interval">The interval.</param>
 		/// <param name="end">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
-		/// <summary>To be added.</summary>
+		///   <para>The recurrence end, or <see langword="null" /> for no end.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
+		/// <summary>Creates a recurrence rule with the specified frequency, interval, and end.</summary>
 		[Export ("initRecurrenceWithFrequency:interval:end:")]
 		NativeHandle Constructor (EKRecurrenceFrequency type, nint interval, [NullAllowed] EKRecurrenceEnd end);
 

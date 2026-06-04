@@ -71,7 +71,6 @@ namespace PushKit {
 		/// <summary>Represents the value associated with the constant PKPushTypeVoIP</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Introduced (PlatformName.MacCatalyst, 14, 0)]
 		[NoMac]
 		[Field ("PKPushTypeVoIP")]
@@ -79,7 +78,6 @@ namespace PushKit {
 
 		/// <summary>Gets the WatchKit complication push type, <c>PKPushTypeComplication</c>.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Use directly from watchOS instead.")]
 		[NoMac]
 		[NoMacCatalyst]
@@ -89,7 +87,6 @@ namespace PushKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("PKPushTypeFileProvider")]
 		NSString FileProvider { get; }
@@ -115,20 +112,18 @@ namespace PushKit {
 	[Protocol]
 	[BaseType (typeof (NSObject))]
 	interface PKPushRegistryDelegate {
-		/// <param name="registry">To be added.</param>
-		/// <param name="credentials">To be added.</param>
-		/// <param name="type">To be added.</param>
+		/// <param name="registry">The registry.</param>
+		/// <param name="credentials">The credentials.</param>
+		/// <param name="type">The type.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("pushRegistry:didUpdatePushCredentials:forType:"), EventArgs ("PKPushRegistryUpdated"), EventName ("CredentialsUpdated")]
 		void DidUpdatePushCredentials (PKPushRegistry registry, PKPushCredentials credentials, string type);
 
-		/// <param name="registry">To be added.</param>
-		/// <param name="payload">To be added.</param>
-		/// <param name="type">To be added.</param>
+		/// <param name="registry">The registry.</param>
+		/// <param name="payload">The payload.</param>
+		/// <param name="type">The type.</param>
 		/// <summary>Developers should not use this deprecated method. Developers should use the 'DidReceiveIncomingPushWithPayload' overload accepting an 'Action' argument instead.</summary>
-		/// <remarks>To be added.</remarks>
 		[NoMac]
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use the 'DidReceiveIncomingPushWithPayload' overload accepting an 'Action' argument instead.")]
 		[NoMacCatalyst]
@@ -136,12 +131,11 @@ namespace PushKit {
 		[Export ("pushRegistry:didReceiveIncomingPushWithPayload:forType:"), EventArgs ("PKPushRegistryRecieved"), EventName ("IncomingPushReceived")]
 		void DidReceiveIncomingPush (PKPushRegistry registry, PKPushPayload payload, string type);
 
-		/// <param name="registry">To be added.</param>
-		/// <param name="payload">To be added.</param>
-		/// <param name="type">To be added.</param>
-		/// <param name="completion">To be added.</param>
+		/// <param name="registry">The registry.</param>
+		/// <param name="payload">The payload.</param>
+		/// <param name="type">The type.</param>
+		/// <param name="completion">The completion.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("pushRegistry:didReceiveIncomingPushWithPayload:forType:withCompletionHandler:")]
 		void DidReceiveIncomingPush (PKPushRegistry registry, PKPushPayload payload, string type, Action completion);
@@ -155,10 +149,9 @@ namespace PushKit {
 		[Export ("pushRegistry:didReceiveIncomingVoIPPushWithPayload:metadata:withCompletionHandler:")]
 		void DidReceiveIncomingVoIPPush (PKPushRegistry registry, PKPushPayload payload, PKVoIPPushMetadata metadata, Action completion);
 
-		/// <param name="registry">To be added.</param>
-		/// <param name="type">To be added.</param>
+		/// <param name="registry">The registry.</param>
+		/// <param name="type">The type.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("pushRegistry:didInvalidatePushTokenForType:"), EventArgs ("PKPushRegistryRecieved"), EventName ("PushTokenInvalidated")]
 		void DidInvalidatePushToken (PKPushRegistry registry, string type);
 	}

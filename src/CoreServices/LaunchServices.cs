@@ -26,97 +26,93 @@
 using CoreFoundation;
 
 namespace CoreServices {
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Specifies roles an application can assume for a document.</summary>
 	[Flags]
 	public enum LSRoles/*Mask*/ : uint /* always 32-bit uint */
 	{
-		/// <summary>To be added.</summary>
+		/// <summary>No role.</summary>
 		None = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>The application can view the document.</summary>
 		Viewer = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>The application can edit the document.</summary>
 		Editor = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>The application can execute the document.</summary>
 		Shell = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>All roles.</summary>
 		All = 0xffffffff,
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Specifies acceptance flags for Launch Services.</summary>
 	[Flags]
 	public enum LSAcceptanceFlags : uint /* always 32-bit uint */
 	{
-		/// <summary>To be added.</summary>
+		/// <summary>Default acceptance behavior.</summary>
 		Default = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Allow login UI to be presented.</summary>
 		AllowLoginUI = 2,
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Specifies Launch Services result codes.</summary>
 	public enum LSResult {
-		/// <summary>To be added.</summary>
+		/// <summary>The operation succeeded.</summary>
 		Success = 0,
 		[SupportedOSPlatform ("macos13.0")]
 		MalformedLocErr = -10400,
-		/// <summary>To be added.</summary>
+		/// <summary>The application is in the trash.</summary>
 		AppInTrash = -10660,
-		/// <summary>To be added.</summary>
+		/// <summary>The executable has an incorrect format.</summary>
 		ExecutableIncorrectFormat = -10661,
-		/// <summary>To be added.</summary>
+		/// <summary>The attribute was not found.</summary>
 		AttributeNotFound = -10662,
-		/// <summary>To be added.</summary>
+		/// <summary>The attribute is not settable.</summary>
 		AttributeNotSettable = -10663,
-		/// <summary>To be added.</summary>
+		/// <summary>The application version is incompatible.</summary>
 		IncompatibleApplicationVersion = -10664,
-		/// <summary>To be added.</summary>
+		/// <summary>No Rosetta environment is available.</summary>
 		NoRosettaEnvironment = -10665,
-		/// <summary>To be added.</summary>
+		/// <summary>An unknown error occurred.</summary>
 		Unknown = -10810,
-		/// <summary>To be added.</summary>
+		/// <summary>The item is not an application.</summary>
 		NotAnApplication = -10811,
-		/// <summary>To be added.</summary>
+		/// <summary>Launch Services has not been initialized.</summary>
 		NotInitialized = -10812,
-		/// <summary>To be added.</summary>
+		/// <summary>The data is unavailable.</summary>
 		DataUnavailable = -10813,
-		/// <summary>To be added.</summary>
+		/// <summary>The application was not found.</summary>
 		ApplicationNotFound = -10814,
-		/// <summary>To be added.</summary>
+		/// <summary>The type is unknown.</summary>
 		UnknownType = -10815,
-		/// <summary>To be added.</summary>
+		/// <summary>The data is too old.</summary>
 		DataTooOld = -10816,
-		/// <summary>To be added.</summary>
+		/// <summary>A data error occurred.</summary>
 		Data = -10817,
-		/// <summary>To be added.</summary>
+		/// <summary>A launch is already in progress.</summary>
 		LaunchInProgress = -10818,
-		/// <summary>To be added.</summary>
+		/// <summary>The application is not registered.</summary>
 		NotRegistered = -10819,
-		/// <summary>To be added.</summary>
+		/// <summary>The application does not claim the type.</summary>
 		AppDoesNotClaimType = -10820,
-		/// <summary>To be added.</summary>
+		/// <summary>The application does not support the URL scheme.</summary>
 		AppDoesNotSupportSchemeWarning = -10821,
-		/// <summary>To be added.</summary>
+		/// <summary>A server communication error occurred.</summary>
 		ServerCommunication = -10822,
-		/// <summary>To be added.</summary>
+		/// <summary>Cannot set the information.</summary>
 		CannotSetInfo = -10823,
-		/// <summary>To be added.</summary>
+		/// <summary>No registration information is available.</summary>
 		NoRegistrationInfo = -10824,
-		/// <summary>To be added.</summary>
+		/// <summary>The system version is incompatible.</summary>
 		IncompatibleSystemVersion = -10825,
-		/// <summary>To be added.</summary>
+		/// <summary>No launch permission.</summary>
 		NoLaunchPermission = -10826,
-		/// <summary>To be added.</summary>
+		/// <summary>No executable found.</summary>
 		NoExecutable = -10827,
-		/// <summary>To be added.</summary>
+		/// <summary>No Classic environment is available.</summary>
 		NoClassicEnvironment = -10828,
-		/// <summary>To be added.</summary>
+		/// <summary>Multiple sessions are not supported.</summary>
 		MultipleSessionsNotSupported = -10829,
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Provides access to macOS Launch Services functionality.</summary>
 	[SupportedOSPlatform ("macos")]
 	public static class LaunchServices {
 		#region Locating an Application
@@ -126,10 +122,9 @@ namespace CoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		static extern IntPtr LSCopyDefaultApplicationURLForURL (IntPtr inUrl, LSRoles inRole, /*out*/ IntPtr outError);
 
-		/// <param name="url">To be added.</param>
-		///         <param name="roles">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="url">The URL to query.</param>
+		/// <param name="roles">The application roles.</param>
+		/// <summary>Gets the default application URL for the specified URL.</summary>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
 		public static NSUrl? GetDefaultApplicationUrlForUrl (NSUrl url, LSRoles roles = LSRoles.All)
@@ -149,10 +144,9 @@ namespace CoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		static extern IntPtr LSCopyDefaultApplicationURLForContentType (IntPtr inContentType, LSRoles inRole, /*out*/ IntPtr outError);
 
-		/// <param name="contentType">To be added.</param>
-		///         <param name="roles">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="contentType">The content type identifier.</param>
+		/// <param name="roles">The application roles.</param>
+		/// <summary>Gets the default application URL for the specified content type.</summary>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
 		public static NSUrl? GetDefaultApplicationUrlForContentType (string contentType, LSRoles roles = LSRoles.All)
@@ -175,10 +169,9 @@ namespace CoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		static extern IntPtr LSCopyApplicationURLsForURL (IntPtr inUrl, LSRoles inRole);
 
-		/// <param name="url">To be added.</param>
-		///         <param name="roles">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="url">The URL to query.</param>
+		/// <param name="roles">The application roles.</param>
+		/// <summary>Gets application URLs that can handle the specified URL.</summary>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
 		public static NSUrl [] GetApplicationUrlsForUrl (NSUrl url, LSRoles roles = LSRoles.All)
@@ -200,13 +193,12 @@ namespace CoreServices {
 
 		// NOTE: intentionally inverting the status results (return bool, with an out
 		// LSResult vs return LSResult with an out bool) to make the API nicer to use
-		/// <param name="itemUrl">To be added.</param>
-		///         <param name="targetUrl">To be added.</param>
-		///         <param name="roles">To be added.</param>
-		///         <param name="acceptanceFlags">To be added.</param>
-		///         <param name="result">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="itemUrl">The itemUrl.</param>
+		/// <param name="targetUrl">The targetUrl.</param>
+		/// <param name="roles">The application roles.</param>
+		/// <param name="acceptanceFlags">The acceptance flags.</param>
+		/// <param name="result">The result.</param>
+		/// <summary>Determines whether a URL can accept another URL.</summary>
 		public static bool CanUrlAcceptUrl (NSUrl itemUrl, NSUrl targetUrl,
 			LSRoles roles, LSAcceptanceFlags acceptanceFlags, out LSResult result)
 		{
@@ -224,12 +216,11 @@ namespace CoreServices {
 			return acceptsItem != 0;
 		}
 
-		/// <param name="itemUrl">To be added.</param>
-		///         <param name="targetUrl">To be added.</param>
-		///         <param name="roles">To be added.</param>
-		///         <param name="acceptanceFlags">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="itemUrl">The itemUrl.</param>
+		/// <param name="targetUrl">The targetUrl.</param>
+		/// <param name="roles">The application roles.</param>
+		/// <param name="acceptanceFlags">The acceptance flags.</param>
+		/// <summary>Determines whether a URL can accept another URL.</summary>
 		public static bool CanUrlAcceptUrl (NSUrl itemUrl, NSUrl targetUrl,
 			LSRoles roles = LSRoles.All, LSAcceptanceFlags acceptanceFlags = LSAcceptanceFlags.Default)
 		{
@@ -242,9 +233,8 @@ namespace CoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		static extern IntPtr LSCopyApplicationURLsForBundleIdentifier (IntPtr inBundleIdentifier, /*out*/ IntPtr outError);
 
-		/// <param name="bundleIdentifier">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="bundleIdentifier">The bundleIdentifier.</param>
+		///         <summary>Gets application URLs for the specified bundle identifier.</summary>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
 		public static NSUrl [] GetApplicationUrlsForBundleIdentifier (string bundleIdentifier)
@@ -270,9 +260,8 @@ namespace CoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		unsafe static extern LSResult LSOpenCFURLRef (IntPtr inUrl, void** outLaunchedUrl);
 
-		/// <param name="url">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="url">The URL to query.</param>
+		///         <summary>Opens the specified URL.</summary>
 		public unsafe static LSResult Open (NSUrl url)
 		{
 			if (url is null)
@@ -283,10 +272,9 @@ namespace CoreServices {
 			return result;
 		}
 
-		/// <param name="url">To be added.</param>
-		///         <param name="launchedUrl">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="url">The URL to query.</param>
+		/// <param name="launchedUrl">The launchedUrl.</param>
+		///         <summary>Opens the specified URL and returns the launched application URL.</summary>
 		public unsafe static LSResult Open (NSUrl url, out NSUrl? launchedUrl)
 		{
 			if (url is null)
@@ -306,10 +294,9 @@ namespace CoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		static extern LSResult LSRegisterURL (IntPtr inUrl, byte inUpdate);
 
-		/// <param name="url">To be added.</param>
-		///         <param name="update">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="url">The URL to query.</param>
+		/// <param name="update">The update.</param>
+		///         <summary>Registers the application at the specified URL.</summary>
 		public static LSResult Register (NSUrl url, bool update)
 		{
 			if (url is null)
@@ -329,10 +316,9 @@ namespace CoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		static extern IntPtr LSCopyAllRoleHandlersForContentType (IntPtr inContentType, LSRoles inRole);
 
-		/// <param name="contentType">To be added.</param>
-		///         <param name="roles">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="contentType">The content type identifier.</param>
+		/// <param name="roles">The application roles.</param>
+		///         <summary>Gets all role handlers for the specified content type.</summary>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
 		public static string? []? GetAllRoleHandlersForContentType (string contentType, LSRoles roles = LSRoles.All)
@@ -355,10 +341,9 @@ namespace CoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		static extern IntPtr LSCopyDefaultRoleHandlerForContentType (IntPtr inContentType, LSRoles inRole);
 
-		/// <param name="contentType">To be added.</param>
-		///         <param name="roles">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="contentType">The content type identifier.</param>
+		/// <param name="roles">The application roles.</param>
+		///         <summary>Gets the default role handler for the specified content type.</summary>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
 		public static string? GetDefaultRoleHandlerForContentType (string contentType, LSRoles roles = LSRoles.All)
@@ -382,11 +367,10 @@ namespace CoreServices {
 		static extern LSResult LSSetDefaultRoleHandlerForContentType (IntPtr inContentType,
 			LSRoles inRole, IntPtr inHandlerBundleID);
 
-		/// <param name="contentType">To be added.</param>
-		///         <param name="handlerBundleId">To be added.</param>
-		///         <param name="roles">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="contentType">The content type identifier.</param>
+		/// <param name="handlerBundleId">The handlerBundleId.</param>
+		/// <param name="roles">The application roles.</param>
+		///         <summary>Sets the default role handler for the specified content type.</summary>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
 		// NOTE: intentionally swapped handlerBundleId and roles parameters for a nicer API
@@ -417,9 +401,8 @@ namespace CoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		static extern IntPtr LSCopyAllHandlersForURLScheme (IntPtr inUrlScheme);
 
-		/// <param name="urlScheme">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="urlScheme">The urlScheme.</param>
+		///         <summary>Gets all handlers for the specified URL scheme.</summary>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'GetApplicationUrlsForUrl' instead.")]
 		public static string? []? GetAllHandlersForUrlScheme (string urlScheme)
@@ -442,9 +425,8 @@ namespace CoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		static extern IntPtr LSCopyDefaultHandlerForURLScheme (IntPtr inUrlScheme);
 
-		/// <param name="urlScheme">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="urlScheme">The urlScheme.</param>
+		///         <summary>Gets the default handler for the specified URL scheme.</summary>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos10.15", "Use 'GetDefaultApplicationUrlForUrl' instead.")]
 		public static string? GetDefaultHandlerForUrlScheme (string urlScheme)
@@ -467,10 +449,9 @@ namespace CoreServices {
 		[DllImport (Constants.CoreServicesLibrary)]
 		static extern LSResult LSSetDefaultHandlerForURLScheme (IntPtr inUrlScheme, IntPtr inHandlerBundleId);
 
-		/// <param name="urlScheme">To be added.</param>
-		///         <param name="handlerBundleId">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="urlScheme">The urlScheme.</param>
+		/// <param name="handlerBundleId">The handlerBundleId.</param>
+		///         <summary>Sets the default handler for the specified URL scheme.</summary>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos14.0")]
 		public static LSResult SetDefaultHandlerForUrlScheme (string urlScheme, string handlerBundleId)

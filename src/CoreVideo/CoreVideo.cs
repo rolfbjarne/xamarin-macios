@@ -38,9 +38,9 @@ namespace CoreVideo {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct CVPlanarComponentInfo {
-		/// <summary>To be added.</summary>
+	/// <summary>The byte offset of this component within the plane.</summary>
 		public /* int32_t */ int Offset;
-		/// <summary>To be added.</summary>
+	/// <summary>The number of bytes per row for this component.</summary>
 		public /* uint32_t */ uint RowBytes;
 	}
 
@@ -51,7 +51,7 @@ namespace CoreVideo {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct CVPlanarPixelBufferInfo {
-		/// <summary>To be added.</summary>
+	/// <summary>The component info array for each plane.</summary>
 		public CVPlanarComponentInfo [] ComponentInfo;
 	}
 
@@ -62,11 +62,11 @@ namespace CoreVideo {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct CVPlanarPixelBufferInfo_YCbCrPlanar {
-		/// <summary>To be added.</summary>
+	/// <summary>The component info for the Y (luma) plane.</summary>
 		public CVPlanarComponentInfo ComponentInfoY;
-		/// <summary>To be added.</summary>
+	/// <summary>The component info for the Cb (blue chroma) plane.</summary>
 		public CVPlanarComponentInfo ComponentInfoCb;
-		/// <summary>To be added.</summary>
+	/// <summary>The component info for the Cr (red chroma) plane.</summary>
 		public CVPlanarComponentInfo ComponentInfoCr;
 	}
 
@@ -88,23 +88,23 @@ namespace CoreVideo {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct CVTimeStamp {
-		/// <summary>To be added.</summary>
+	/// <summary>The version of this time stamp structure.</summary>
 		public UInt32 Version;
-		/// <summary>To be added.</summary>
+	/// <summary>The video time scale (units per second).</summary>
 		public Int32 VideoTimeScale;
-		/// <summary>To be added.</summary>
+	/// <summary>The video time in video time scale units.</summary>
 		public Int64 VideoTime;
-		/// <summary>To be added.</summary>
+	/// <summary>The host time in Mach absolute time units.</summary>
 		public UInt64 HostTime;
-		/// <summary>To be added.</summary>
+	/// <summary>The rate scalar indicating the playback rate.</summary>
 		public double RateScalar;
-		/// <summary>To be added.</summary>
+	/// <summary>The video refresh period in video time scale units.</summary>
 		public Int64 VideoRefreshPeriod;
-		/// <summary>To be added.</summary>
+	/// <summary>The SMPTE time code associated with this time stamp.</summary>
 		public CVSMPTETime SMPTETime;
-		/// <summary>To be added.</summary>
+	/// <summary>Flags indicating the validity of various fields.</summary>
 		public UInt64 Flags;
-		/// <summary>To be added.</summary>
+	/// <summary>Reserved for future use.</summary>
 		public UInt64 Reserved;
 	}
 
@@ -114,23 +114,23 @@ namespace CoreVideo {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct CVSMPTETime {
-		/// <summary>To be added.</summary>
+	/// <summary>The subframe count within the current frame.</summary>
 		public Int16 Subframes;
-		/// <summary>To be added.</summary>
+	/// <summary>The number of subframes per frame.</summary>
 		public Int16 SubframeDivisor;
-		/// <summary>To be added.</summary>
+	/// <summary>The frame counter value.</summary>
 		public UInt32 Counter;
-		/// <summary>To be added.</summary>
+	/// <summary>The SMPTE time type (e.g., 24fps, 25fps, 30fps).</summary>
 		public UInt32 Type;
-		/// <summary>To be added.</summary>
+	/// <summary>Flags indicating the SMPTE time state.</summary>
 		public UInt32 Flags;
-		/// <summary>To be added.</summary>
+	/// <summary>The hours component of the SMPTE time code.</summary>
 		public Int16 Hours;
-		/// <summary>To be added.</summary>
+	/// <summary>The minutes component of the SMPTE time code.</summary>
 		public Int16 Minutes;
-		/// <summary>To be added.</summary>
+	/// <summary>The seconds component of the SMPTE time code.</summary>
 		public Int16 Seconds;
-		/// <summary>To be added.</summary>
+	/// <summary>The frames component of the SMPTE time code.</summary>
 		public Int16 Frames;
 	}
 
@@ -142,11 +142,11 @@ namespace CoreVideo {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct CVFillExtendedPixelsCallBackData {
-		/// <summary>To be added.</summary>
+	/// <summary>The version of this callback data structure.</summary>
 		public nint /* CFIndex */ Version;
-		/// <summary>To be added.</summary>
+	/// <summary>The callback function to fill extended pixels.</summary>
 		public CVFillExtendedPixelsCallBack FillCallBack;
-		/// <summary>To be added.</summary>
+	/// <summary>User-defined data passed to the callback.</summary>
 		public IntPtr UserInfo;
 	}
 

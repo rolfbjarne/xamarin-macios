@@ -41,7 +41,7 @@ namespace Security {
 		extern static IntPtr /* __nullable SecPolicyRef */ SecPolicyCreateRevocation (/* CFOptionFlags */ nuint revocationFlags);
 
 		/// <param name="revocationFlags">The revocation flags.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a revocation policy with the specified flags.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -61,7 +61,7 @@ namespace Security {
 
 		/// <param name="policyIdentifier">The policy identifier.</param>
 		///         <param name="properties">The properties.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a security policy with the specified identifier and properties.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]

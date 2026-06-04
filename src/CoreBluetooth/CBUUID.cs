@@ -95,10 +95,9 @@ namespace CoreBluetooth {
 		}
 
 		// to satisfy IEquatable<T>
-		/// <param name="obj">To be added.</param>
+		/// <param name="obj">The obj.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public unsafe bool Equals (CBUUID? obj)
 		{
 			return base.Equals (obj);
@@ -106,10 +105,9 @@ namespace CoreBluetooth {
 
 		// base class Equals is good enough
 		// this fixes a compiler warning: CS0660: `CoreBluetooth.CBUUID' defines operator == or operator != but does not override Object.Equals(object o)
-		/// <param name="obj">To be added.</param>
+		/// <param name="obj">The obj.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public override bool Equals (object? obj)
 		{
 			return base.Equals (obj);

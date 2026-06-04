@@ -27,7 +27,7 @@ namespace Foundation {
 	public sealed partial class NSArray<TKey> : NSArray, IEnumerable<TKey>
 		where TKey : class, INativeObject {
 
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="NSArray" /> instance.</summary>
 		public NSArray ()
 		{
 		}
@@ -49,7 +49,6 @@ namespace Foundation {
 
 		/// <param name="items">The items.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		static public NSArray<TKey> FromNSObjects (params TKey [] items)
 		{
 			if (items is null)
@@ -61,7 +60,6 @@ namespace Foundation {
 		/// <param name="count">The count.</param>
 		///         <param name="items">The items.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		static public NSArray<TKey> FromNSObjects (int count, params TKey [] items)
 		{
 			if (items is null)
@@ -97,7 +95,6 @@ namespace Foundation {
 
 		#region IEnumerable implementation
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return new NSFastEnumerator<TKey> (this);

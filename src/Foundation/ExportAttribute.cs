@@ -96,16 +96,14 @@ namespace Foundation {
 			set { this.semantic = value; }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the is variadic.</summary>
 		public bool IsVariadic {
 			get;
 			set;
 		}
 
 		/// <param name="prop">The prop.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Tos getter.</summary>
 		public ExportAttribute ToGetter (PropertyInfo prop)
 		{
 			if (string.IsNullOrEmpty (Selector))
@@ -114,8 +112,7 @@ namespace Foundation {
 		}
 
 		/// <param name="prop">The prop.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Tos setter.</summary>
 		public ExportAttribute ToSetter (PropertyInfo prop)
 		{
 			if (string.IsNullOrEmpty (Selector))

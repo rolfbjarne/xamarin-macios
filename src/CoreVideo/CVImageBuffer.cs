@@ -48,7 +48,7 @@ namespace CoreVideo {
 		[DllImport (Constants.CoreVideoLibrary)]
 		extern static CGRect CVImageBufferGetCleanRect (/* CVImageBufferRef __nonnull */ IntPtr imageBuffer);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the clean rectangle of this image buffer.</summary>
 		public CGRect CleanRect {
 			get {
 				return CVImageBufferGetCleanRect (Handle);
@@ -58,7 +58,7 @@ namespace CoreVideo {
 		[DllImport (Constants.CoreVideoLibrary)]
 		extern static CGSize CVImageBufferGetDisplaySize (/* CVImageBufferRef __nonnull */ IntPtr imageBuffer);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the display size of this image buffer.</summary>
 		public CGSize DisplaySize {
 			get {
 				return CVImageBufferGetDisplaySize (Handle);
@@ -68,7 +68,7 @@ namespace CoreVideo {
 		[DllImport (Constants.CoreVideoLibrary)]
 		extern static CGSize CVImageBufferGetEncodedSize (/* CVImageBufferRef __nonnull */ IntPtr imageBuffer);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the encoded size of this image buffer.</summary>
 		public CGSize EncodedSize {
 			get {
 				return CVImageBufferGetDisplaySize (Handle);
@@ -78,7 +78,7 @@ namespace CoreVideo {
 		[DllImport (Constants.CoreVideoLibrary)]
 		extern static /* Boolean */ byte CVImageBufferIsFlipped (/* CVImageBufferRef __nonnull */ IntPtr imageBuffer);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets a value indicating whether this image buffer is flipped.</summary>
 		public bool IsFlipped {
 			get {
 				return CVImageBufferIsFlipped (Handle) != 0;
@@ -118,7 +118,7 @@ namespace CoreVideo {
 		extern static int CVYCbCrMatrixGetIntegerCodePointForString (IntPtr yCbCrMatrixString);
 
 		/// <param name="yCbCrMatrix">The y cb cr matrix.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the code point for the specified YCbCr matrix.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -136,7 +136,7 @@ namespace CoreVideo {
 		extern static int CVColorPrimariesGetIntegerCodePointForString (IntPtr colorPrimariesString);
 
 		/// <param name="color">The color.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the code point for the specified color primaries.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -154,7 +154,7 @@ namespace CoreVideo {
 		extern static int CVTransferFunctionGetIntegerCodePointForString (IntPtr colorPrimariesString);
 
 		/// <param name="function">The function.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the code point for the specified transfer function.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -172,7 +172,7 @@ namespace CoreVideo {
 		extern static IntPtr CVYCbCrMatrixGetStringForIntegerCodePoint (int yCbCrMatrixCodePoint);
 
 		/// <param name="yCbCrMatrixCodePoint">The y cb cr matrix code point.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the YCbCr matrix option for the specified code point.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -191,7 +191,7 @@ namespace CoreVideo {
 		extern static IntPtr CVColorPrimariesGetStringForIntegerCodePoint (int colorPrimariesCodePoint);
 
 		/// <param name="colorPrimariesCodePoint">The color primaries code point.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the color primaries option for the specified code point.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -210,7 +210,7 @@ namespace CoreVideo {
 		extern static IntPtr CVTransferFunctionGetStringForIntegerCodePoint (int transferFunctionCodePoint);
 
 		/// <param name="transferFunctionCodePoint">The transfer function code point.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the transfer function option for the specified code point.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

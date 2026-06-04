@@ -17,35 +17,35 @@ namespace Metal {
 	/// <summary>Argument values for use with <see cref="Metal.MTLBlendOperation" />.</summary>
 	[Native]
 	public enum MTLBlendFactor : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Zero.</summary>
 		Zero = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>One.</summary>
 		One = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Source Color.</summary>
 		SourceColor = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>One Minus Source Color.</summary>
 		OneMinusSourceColor = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Source Alpha.</summary>
 		SourceAlpha = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>One Minus Source Alpha.</summary>
 		OneMinusSourceAlpha = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Destination Color.</summary>
 		DestinationColor = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>One Minus Destination Color.</summary>
 		OneMinusDestinationColor = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Destination Alpha.</summary>
 		DestinationAlpha = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>One Minus Destination Alpha.</summary>
 		OneMinusDestinationAlpha = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Source Alpha Saturated.</summary>
 		SourceAlphaSaturated = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Blend Color.</summary>
 		BlendColor = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>One Minus Blend Color.</summary>
 		OneMinusBlendColor = 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Blend Alpha.</summary>
 		BlendAlpha = 13,
-		/// <summary>To be added.</summary>
+		/// <summary>One Minus Blend Alpha.</summary>
 		OneMinusBlendAlpha = 14,
 		[MacCatalyst (13, 1)]
 		Source1Color = 15,
@@ -62,15 +62,15 @@ namespace Metal {
 	/// <summary>How the source and destination values are combined.</summary>
 	[Native]
 	public enum MTLBlendOperation : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Add.</summary>
 		Add = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Subtract.</summary>
 		Subtract = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Reverse Subtract.</summary>
 		ReverseSubtract = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Min.</summary>
 		Min = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Max.</summary>
 		Max = 4,
 		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
 		Unspecialized = 5,
@@ -80,17 +80,17 @@ namespace Metal {
 	[Native]
 	[Flags]
 	public enum MTLColorWriteMask : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Red.</summary>
 		Red = 0x1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Green.</summary>
 		Green = 0x1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Blue.</summary>
 		Blue = 0x1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Alpha.</summary>
 		Alpha = 0x1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>All.</summary>
 		All = 0xf,
 		[Mac (26, 0), iOS (26, 0), MacCatalyst (26, 0), TV (26, 0)]
 		Unspecialized = 0x10,
@@ -99,17 +99,17 @@ namespace Metal {
 	/// <summary>The state of the command-buffer state-machine. Enqueued-&gt;Committed-&gt;Scheduled-&gt;Completed.</summary>
 	[Native]
 	public enum MTLCommandBufferStatus : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Not Enqueued.</summary>
 		NotEnqueued,
-		/// <summary>To be added.</summary>
+		/// <summary>Enqueued.</summary>
 		Enqueued,
-		/// <summary>To be added.</summary>
+		/// <summary>Committed.</summary>
 		Committed,
-		/// <summary>To be added.</summary>
+		/// <summary>Scheduled.</summary>
 		Scheduled,
-		/// <summary>To be added.</summary>
+		/// <summary>Completed.</summary>
 		Completed,
-		/// <summary>To be added.</summary>
+		/// <summary>Error.</summary>
 		Error,
 	}
 
@@ -117,23 +117,23 @@ namespace Metal {
 	[Native]
 	[ErrorDomain ("MTLCommandBufferErrorDomain")]
 	public enum MTLCommandBufferError : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Internal.</summary>
 		Internal = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Timeout.</summary>
 		Timeout = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Page Fault.</summary>
 		PageFault = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Blacklisted.</summary>
 		Blacklisted = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Not Permitted.</summary>
 		NotPermitted = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Out Of Memory.</summary>
 		OutOfMemory = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Resource.</summary>
 		InvalidResource = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Memoryless.</summary>
 		Memoryless = 10,
 		/// <summary>Indicates that the device was removed.</summary>
 		DeviceRemoved = 11,
@@ -143,27 +143,27 @@ namespace Metal {
 	/// <summary>An action performed at the start of a rendering pass.</summary>
 	[Native]
 	public enum MTLLoadAction : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Dont Care.</summary>
 		DontCare,
-		/// <summary>To be added.</summary>
+		/// <summary>Load.</summary>
 		Load,
-		/// <summary>To be added.</summary>
+		/// <summary>Clear.</summary>
 		Clear,
 	}
 
 	/// <summary>The action to be performed at the end of a rendering pass.</summary>
 	[Native]
 	public enum MTLStoreAction : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Dont Care.</summary>
 		DontCare,
-		/// <summary>To be added.</summary>
+		/// <summary>Store.</summary>
 		Store,
-		/// <summary>To be added.</summary>
+		/// <summary>Multisample Resolve.</summary>
 		MultisampleResolve,
-		/// <summary>To be added.</summary>
+		/// <summary>Store And Multisample Resolve.</summary>
 		[MacCatalyst (13, 1)]
 		StoreAndMultisampleResolve,
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown.</summary>
 		[MacCatalyst (13, 1)]
 		Unknown,
 		/// <summary>Indicates that data will be stored in a way that does not consider the sample position.</summary>
@@ -174,27 +174,27 @@ namespace Metal {
 	/// <summary>The dimensionality of each texture and how multiple images are arranged.</summary>
 	[Native]
 	public enum MTLTextureType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>k1 D.</summary>
 		k1D = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>k1 D Array.</summary>
 		k1DArray = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>k2 D.</summary>
 		k2D = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>k2 D Array.</summary>
 		k2DArray = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>k2 D Multisample.</summary>
 		k2DMultisample = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>k Cube.</summary>
 		kCube = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>k Cube Array.</summary>
 		[MacCatalyst (13, 1)]
 		kCubeArray = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>k3 D.</summary>
 		k3D = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>k2 D Multisample Array.</summary>
 		[MacCatalyst (13, 1)]
 		k2DMultisampleArray = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>k Texture Buffer.</summary>
 		[MacCatalyst (13, 1)]
 		kTextureBuffer = 9,
 	}
@@ -202,40 +202,40 @@ namespace Metal {
 	/// <summary>Options for calculating the pixel value returned within a mipmap level.</summary>
 	[Native]
 	public enum MTLSamplerMinMagFilter : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Nearest.</summary>
 		Nearest,
-		/// <summary>To be added.</summary>
+		/// <summary>Linear.</summary>
 		Linear,
 	}
 
 	/// <summary>Options for calculating the pixel value returned with multiple mipmap levels.</summary>
 	[Native]
 	public enum MTLSamplerMipFilter : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Not Mipmapped.</summary>
 		NotMipmapped,
-		/// <summary>To be added.</summary>
+		/// <summary>Nearest.</summary>
 		Nearest,
-		/// <summary>To be added.</summary>
+		/// <summary>Linear.</summary>
 		Linear,
 	}
 
 	/// <summary>The wrapping mode. Used when a fetch falls outside the bounds of a texture.</summary>
 	[Native]
 	public enum MTLSamplerAddressMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Clamp To Edge.</summary>
 		ClampToEdge = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Mirror Clamp To Edge.</summary>
 		[iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		MirrorClampToEdge = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Repeat.</summary>
 		Repeat = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Mirror Repeat.</summary>
 		MirrorRepeat = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Clamp To Zero.</summary>
 		ClampToZero = 4,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Clamp To Border Color.</summary>
 		[iOS (14, 0)]
 		[MacCatalyst (14, 0)]
 		ClampToBorderColor = 5,
@@ -244,101 +244,101 @@ namespace Metal {
 	/// <summary>Enumerates vertex data formats (type and number).</summary>
 	[Native]
 	public enum MTLVertexFormat : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid.</summary>
 		Invalid = 0,
 
-		/// <summary>To be added.</summary>
+		/// <summary>U Char2.</summary>
 		UChar2 = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>U Char3.</summary>
 		UChar3 = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>U Char4.</summary>
 		UChar4 = 3,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Char2.</summary>
 		Char2 = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Char3.</summary>
 		Char3 = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Char4.</summary>
 		Char4 = 6,
 
-		/// <summary>To be added.</summary>
+		/// <summary>U Char2 Normalized.</summary>
 		UChar2Normalized = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>U Char3 Normalized.</summary>
 		UChar3Normalized = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>U Char4 Normalized.</summary>
 		UChar4Normalized = 9,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Char2 Normalized.</summary>
 		Char2Normalized = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Char3 Normalized.</summary>
 		Char3Normalized = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Char4 Normalized.</summary>
 		Char4Normalized = 12,
 
-		/// <summary>To be added.</summary>
+		/// <summary>U Short2.</summary>
 		UShort2 = 13,
-		/// <summary>To be added.</summary>
+		/// <summary>U Short3.</summary>
 		UShort3 = 14,
-		/// <summary>To be added.</summary>
+		/// <summary>U Short4.</summary>
 		UShort4 = 15,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Short2.</summary>
 		Short2 = 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Short3.</summary>
 		Short3 = 17,
-		/// <summary>To be added.</summary>
+		/// <summary>Short4.</summary>
 		Short4 = 18,
 
-		/// <summary>To be added.</summary>
+		/// <summary>U Short2 Normalized.</summary>
 		UShort2Normalized = 19,
-		/// <summary>To be added.</summary>
+		/// <summary>U Short3 Normalized.</summary>
 		UShort3Normalized = 20,
-		/// <summary>To be added.</summary>
+		/// <summary>U Short4 Normalized.</summary>
 		UShort4Normalized = 21,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Short2 Normalized.</summary>
 		Short2Normalized = 22,
-		/// <summary>To be added.</summary>
+		/// <summary>Short3 Normalized.</summary>
 		Short3Normalized = 23,
-		/// <summary>To be added.</summary>
+		/// <summary>Short4 Normalized.</summary>
 		Short4Normalized = 24,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Half2.</summary>
 		Half2 = 25,
-		/// <summary>To be added.</summary>
+		/// <summary>Half3.</summary>
 		Half3 = 26,
-		/// <summary>To be added.</summary>
+		/// <summary>Half4.</summary>
 		Half4 = 27,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Float.</summary>
 		Float = 28,
-		/// <summary>To be added.</summary>
+		/// <summary>Float2.</summary>
 		Float2 = 29,
-		/// <summary>To be added.</summary>
+		/// <summary>Float3.</summary>
 		Float3 = 30,
-		/// <summary>To be added.</summary>
+		/// <summary>Float4.</summary>
 		Float4 = 31,
-		/// <summary>To be added.</summary>
+		/// <summary>Int.</summary>
 		Int = 32,
-		/// <summary>To be added.</summary>
+		/// <summary>Int2.</summary>
 		Int2 = 33,
-		/// <summary>To be added.</summary>
+		/// <summary>Int3.</summary>
 		Int3 = 34,
-		/// <summary>To be added.</summary>
+		/// <summary>Int4.</summary>
 		Int4 = 35,
 
-		/// <summary>To be added.</summary>
+		/// <summary>U Int.</summary>
 		UInt = 36,
-		/// <summary>To be added.</summary>
+		/// <summary>U Int2.</summary>
 		UInt2 = 37,
-		/// <summary>To be added.</summary>
+		/// <summary>U Int3.</summary>
 		UInt3 = 38,
-		/// <summary>To be added.</summary>
+		/// <summary>U Int4.</summary>
 		UInt4 = 39,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Int1010102 Normalized.</summary>
 		Int1010102Normalized = 40,
-		/// <summary>To be added.</summary>
+		/// <summary>U Int1010102 Normalized.</summary>
 		UInt1010102Normalized = 41,
 
 		/// <summary>Indicates four unsigned 8-bit characters that describe BGRA channels.</summary>
@@ -497,72 +497,72 @@ namespace Metal {
 		RGBA32Sint = 124,
 		/// <summary>Indicates a format with 4 32-bit floating point channels.</summary>
 		RGBA32Float = 125,
-		/// <summary>To be added.</summary>
+		/// <summary>B C1 R G B A.</summary>
 		[NoTV]
 		[NoiOS]
 		[NoMacCatalyst]
 		BC1RGBA = 130,
-		/// <summary>To be added.</summary>
+		/// <summary>B C1_ R G B A_s R G B.</summary>
 		[NoTV]
 		[NoiOS]
 		[NoMacCatalyst]
 		BC1_RGBA_sRGB = 131,
-		/// <summary>To be added.</summary>
+		/// <summary>B C2 R G B A.</summary>
 		[NoTV]
 		[NoiOS]
 		[NoMacCatalyst]
 		BC2RGBA = 132,
-		/// <summary>To be added.</summary>
+		/// <summary>B C2_ R G B A_s R G B.</summary>
 		[NoTV]
 		[NoiOS]
 		[NoMacCatalyst]
 		BC2_RGBA_sRGB = 133,
-		/// <summary>To be added.</summary>
+		/// <summary>B C3 R G B A.</summary>
 		[NoTV]
 		[NoiOS]
 		[NoMacCatalyst]
 		BC3RGBA = 134,
-		/// <summary>To be added.</summary>
+		/// <summary>B C3_ R G B A_s R G B.</summary>
 		[NoTV]
 		[NoiOS]
 		[NoMacCatalyst]
 		BC3_RGBA_sRGB = 135,
-		/// <summary>To be added.</summary>
+		/// <summary>B C4_ R Unorm.</summary>
 		[NoTV]
 		[NoiOS]
 		[NoMacCatalyst]
 		BC4_RUnorm = 140,
-		/// <summary>To be added.</summary>
+		/// <summary>B C4_ R Snorm.</summary>
 		[NoTV]
 		[NoiOS]
 		[NoMacCatalyst]
 		BC4_RSnorm = 141,
-		/// <summary>To be added.</summary>
+		/// <summary>B C5_ R G Unorm.</summary>
 		[NoTV]
 		[NoiOS]
 		[NoMacCatalyst]
 		BC5_RGUnorm = 142,
-		/// <summary>To be added.</summary>
+		/// <summary>B C5_ R G Snorm.</summary>
 		[NoTV]
 		[NoiOS]
 		[NoMacCatalyst]
 		BC5_RGSnorm = 143,
-		/// <summary>To be added.</summary>
+		/// <summary>B C6 H_ R G B Float.</summary>
 		[NoTV]
 		[NoiOS]
 		[NoMacCatalyst]
 		BC6H_RGBFloat = 150,
-		/// <summary>To be added.</summary>
+		/// <summary>B C6 H_ R G B U Float.</summary>
 		[NoTV]
 		[NoiOS]
 		[NoMacCatalyst]
 		BC6H_RGBUFloat = 151,
-		/// <summary>To be added.</summary>
+		/// <summary>B C7_ R G B A Unorm.</summary>
 		[NoTV]
 		[NoiOS]
 		[NoMacCatalyst]
 		BC7_RGBAUnorm = 152,
-		/// <summary>To be added.</summary>
+		/// <summary>B C7_ R G B A Unorm_s R G B.</summary>
 		[NoTV]
 		[NoiOS]
 		[NoMacCatalyst]
@@ -773,7 +773,7 @@ namespace Metal {
 		/// <summary>Indicates a single-channel 8-bit stencil format.</summary>
 		Stencil8 = 253,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Depth24 Unorm_ Stencil8.</summary>
 		[NoiOS]
 		[NoTV]
 		[NoMacCatalyst]
@@ -787,7 +787,7 @@ namespace Metal {
 		[MacCatalyst (13, 1)]
 		X32_Stencil8 = 261,
 
-		/// <summary>To be added.</summary>
+		/// <summary>X24_ Stencil8.</summary>
 		[NoiOS]
 		[NoTV]
 		[NoMacCatalyst]
@@ -808,11 +808,11 @@ namespace Metal {
 	/// <summary>The type of a Metal function.</summary>
 	[Native]
 	public enum MTLFunctionType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Vertex.</summary>
 		Vertex = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Fragment.</summary>
 		Fragment = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Kernel.</summary>
 		Kernel = 3,
 		[iOS (14, 0)]
 		[TV (14, 0)]
@@ -832,38 +832,38 @@ namespace Metal {
 	[Native]
 	[ErrorDomain ("MTLLibraryErrorDomain")]
 	public enum MTLLibraryError : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Unsupported.</summary>
 		Unsupported = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Internal.</summary>
 		Internal,
-		/// <summary>To be added.</summary>
+		/// <summary>Compile Failure.</summary>
 		CompileFailure,
-		/// <summary>To be added.</summary>
+		/// <summary>Compile Warning.</summary>
 		CompileWarning,
-		/// <summary>To be added.</summary>
+		/// <summary>Function Not Found.</summary>
 		FunctionNotFound,
-		/// <summary>To be added.</summary>
+		/// <summary>File Not Found.</summary>
 		FileNotFound,
 	}
 
 	/// <summary>Holds a comparison test. When the comparison test passes, the incoming fragment is compared to the stored data at the specified location.</summary>
 	[Native]
 	public enum MTLCompareFunction : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Never.</summary>
 		Never = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Less.</summary>
 		Less = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Equal.</summary>
 		Equal = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Less Equal.</summary>
 		LessEqual = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Greater.</summary>
 		Greater = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Not Equal.</summary>
 		NotEqual = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Greater Equal.</summary>
 		GreaterEqual = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Always.</summary>
 		Always = 7,
 	}
 
@@ -871,45 +871,45 @@ namespace Metal {
 	/// <summary>What to do if a stencil value passes or fails a comparison test.</summary>
 	[Native]
 	public enum MTLStencilOperation : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Keep.</summary>
 		Keep = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Zero.</summary>
 		Zero = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Replace.</summary>
 		Replace = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Increment Clamp.</summary>
 		IncrementClamp = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Decrement Clamp.</summary>
 		DecrementClamp = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Invert.</summary>
 		Invert = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Increment Wrap.</summary>
 		IncrementWrap = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Decrement Wrap.</summary>
 		DecrementWrap = 7,
 	}
 
 	/// <summary>Enumerates the primitive geometry used for drawing commands.</summary>
 	[Native]
 	public enum MTLPrimitiveType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Point.</summary>
 		Point = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Line.</summary>
 		Line = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Line Strip.</summary>
 		LineStrip = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Triangle.</summary>
 		Triangle = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Triangle Strip.</summary>
 		TriangleStrip = 4,
 	}
 
 	/// <summary>The index type for an index buffer.</summary>
 	[Native]
 	public enum MTLIndexType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>U Int16.</summary>
 		UInt16,
-		/// <summary>To be added.</summary>
+		/// <summary>U Int32.</summary>
 		UInt32,
 	}
 
@@ -927,51 +927,51 @@ namespace Metal {
 	/// <summary>Enumerates modes for culling and which types of primitives are culled.</summary>
 	[Native]
 	public enum MTLCullMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Front.</summary>
 		Front = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Back.</summary>
 		Back = 2,
 	}
 
 	/// <summary>Vertex winding rule for front-facing primitives.</summary>
 	[Native]
 	public enum MTLWinding : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Clockwise.</summary>
 		Clockwise = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Counter Clockwise.</summary>
 		CounterClockwise = 1,
 	}
 
 	/// <summary>How to rasterize triangle and triangle-strip primitives.</summary>
 	[Native]
 	public enum MTLTriangleFillMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Fill.</summary>
 		Fill,
-		/// <summary>To be added.</summary>
+		/// <summary>Lines.</summary>
 		Lines,
 	}
 
 	/// <summary>The purgeable state of the resource.</summary>
 	[Native]
 	public enum MTLPurgeableState : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Keep Current.</summary>
 		KeepCurrent = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Non Volatile.</summary>
 		NonVolatile = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Volatile.</summary>
 		Volatile = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Empty.</summary>
 		Empty = 4,
 	}
 
 	/// <summary>Enumerates what cache mode is used for CPU mapping of a resource.</summary>
 	[Native]
 	public enum MTLCpuCacheMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Default Cache.</summary>
 		DefaultCache,
-		/// <summary>To be added.</summary>
+		/// <summary>Write Combined.</summary>
 		WriteCombined,
 	}
 
@@ -1008,7 +1008,7 @@ namespace Metal {
 		/// <summary>Indicates that the resource is stored in a location where both the GPU and CPU can access it.</summary>
 		[MacCatalyst (13, 1)]
 		StorageModeShared = MTLStorageMode.Shared << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Storage Mode Managed.</summary>
 		[NoiOS]
 		[NoTV]
 		[NoMacCatalyst]
@@ -1035,16 +1035,16 @@ namespace Metal {
 	/// <summary>The frequency at which the vertex shader function should fetch attribute data.</summary>
 	[Native]
 	public enum MTLVertexStepFunction : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Constant.</summary>
 		Constant,
-		/// <summary>To be added.</summary>
+		/// <summary>Per Vertex.</summary>
 		PerVertex,
-		/// <summary>To be added.</summary>
+		/// <summary>Per Instance.</summary>
 		PerInstance,
-		/// <summary>To be added.</summary>
+		/// <summary>Per Patch.</summary>
 		[MacCatalyst (13, 1)]
 		PerPatch = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Per Patch Control Point.</summary>
 		[MacCatalyst (13, 1)]
 		PerPatchControlPoint = 4,
 	}
@@ -1242,13 +1242,13 @@ namespace Metal {
 		/// <summary>Indicates APacked RGBE normalized floating point value with 9 bits each for R, G, and B, with a 5-bit exponent.</summary>
 		[MacCatalyst (13, 1)]
 		[NoMac, TV (14, 5)] Rgb9E5Float = 77,
-		/// <summary>To be added.</summary>
+		/// <summary>Render Pipeline.</summary>
 		[MacCatalyst (13, 1)]
 
 		RenderPipeline = 78,
 		[MacCatalyst (13, 1)]
 		[iOS (13, 0), TV (13, 0)] ComputePipeline = 79,
-		/// <summary>To be added.</summary>
+		/// <summary>Indirect Command Buffer.</summary>
 		[MacCatalyst (13, 1)]
 		IndirectCommandBuffer = 80,
 
@@ -1291,19 +1291,19 @@ namespace Metal {
 	/// <summary>The resource type of an argument of a function.</summary>
 	[Native]
 	public enum MTLArgumentType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Buffer.</summary>
 		Buffer = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Threadgroup Memory.</summary>
 		ThreadgroupMemory = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Texture.</summary>
 		Texture = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Sampler.</summary>
 		Sampler = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Visible Function Table.</summary>
 		[MacCatalyst (13, 1)]
 
 		[NoMac, TV (14, 5)] ImageblockData = 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Visible Function Table.</summary>
 		[MacCatalyst (13, 1)]
 		[NoMac, TV (14, 5)] Imageblock = 17,
 
@@ -1333,11 +1333,11 @@ namespace Metal {
 	[Deprecated (PlatformName.MacCatalyst, 17, 0)]
 	[Native]
 	public enum MTLArgumentAccess : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Read Only.</summary>
 		ReadOnly,
-		/// <summary>To be added.</summary>
+		/// <summary>Read Write.</summary>
 		ReadWrite,
-		/// <summary>To be added.</summary>
+		/// <summary>Write Only.</summary>
 		WriteOnly,
 	}
 #endif
@@ -1346,10 +1346,10 @@ namespace Metal {
 	[Native]
 	[Flags]
 	public enum MTLPipelineOption : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None,
 #if !XAMCORE_5_0
-		/// <summary>To be added.</summary>
+		/// <summary>Argument Info.</summary>
 		[Deprecated (PlatformName.iOS, 18, 0, message: "Use 'BindingInfo' instead.")]
 		[Deprecated (PlatformName.TvOS, 18, 0, message: "Use 'BindingInfo' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use 'BindingInfo' instead.")]
@@ -1357,7 +1357,7 @@ namespace Metal {
 		ArgumentInfo = 1 << 0,
 #endif
 		BindingInfo = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Buffer Type Info.</summary>
 		BufferTypeInfo,
 		[iOS (14, 0)]
 		[TV (14, 0)]
@@ -1430,19 +1430,19 @@ namespace Metal {
 		[NoTV, NoMac, NoMacCatalyst]
 		iOS_GPUFamily4_v1 = 11,
 
-		/// <summary>To be added.</summary>
+		/// <summary>i O S_ G P U Family1_v5.</summary>
 		[NoTV, NoMac, NoMacCatalyst]
 		iOS_GPUFamily1_v5 = 12,
-		/// <summary>To be added.</summary>
+		/// <summary>i O S_ G P U Family2_v5.</summary>
 		[NoTV, NoMac, NoMacCatalyst]
 		iOS_GPUFamily2_v5 = 13,
-		/// <summary>To be added.</summary>
+		/// <summary>i O S_ G P U Family3_v4.</summary>
 		[NoTV, NoMac, NoMacCatalyst]
 		iOS_GPUFamily3_v4 = 14,
-		/// <summary>To be added.</summary>
+		/// <summary>i O S_ G P U Family4_v2.</summary>
 		[NoTV, NoMac, NoMacCatalyst]
 		iOS_GPUFamily4_v2 = 15,
-		/// <summary>To be added.</summary>
+		/// <summary>i O S_ G P U Family5_v1.</summary>
 		[NoTV, NoMac, NoMacCatalyst]
 		iOS_GPUFamily5_v1 = 16,
 
@@ -1496,7 +1496,7 @@ namespace Metal {
 		[NoMacCatalyst]
 		tvOS_GPUFamily2_v1 = 30003,
 
-		/// <summary>To be added.</summary>
+		/// <summary>tv O S_ G P U Family1_v4.</summary>
 		[NoiOS, NoMac]
 		[NoMacCatalyst]
 		tvOS_GPUFamily1_v4 = 30004,
@@ -1521,7 +1521,7 @@ namespace Metal {
 		/// <summary>Indicates version 2.0.</summary>
 		[MacCatalyst (13, 1)]
 		v2_0 = (2 << 16),
-		/// <summary>To be added.</summary>
+		/// <summary>v2_1.</summary>
 		[MacCatalyst (13, 1)]
 		v2_1 = (2 << 16) + 1,
 		[iOS (13, 0), TV (13, 0)]
@@ -1546,9 +1546,9 @@ namespace Metal {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MTLDepthClipMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Clip.</summary>
 		Clip = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Clamp.</summary>
 		Clamp = 1,
 	}
 
@@ -1575,7 +1575,7 @@ namespace Metal {
 	public enum MTLStorageMode : ulong {
 		/// <summary>Indicates that both the CPU and GPU can access the location of the resource.</summary>
 		Shared = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Managed.</summary>
 		[NoiOS]
 		[NoTV]
 		[NoMacCatalyst]
@@ -1604,11 +1604,11 @@ namespace Metal {
 	[MacCatalyst (14, 0)]
 	[Native]
 	public enum MTLSamplerBorderColor : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Transparent Black.</summary>
 		TransparentBlack = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Opaque Black.</summary>
 		OpaqueBlack = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Opaque White.</summary>
 		OpaqueWhite = 2,
 	}
 
@@ -1616,68 +1616,68 @@ namespace Metal {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MTLPrimitiveTopologyClass : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Unspecified.</summary>
 		Unspecified = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Point.</summary>
 		Point = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Line.</summary>
 		Line = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Triangle.</summary>
 		Triangle = 3,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MTLTessellationPartitionMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Pow2.</summary>
 		Pow2 = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Integer.</summary>
 		Integer = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Fractional Odd.</summary>
 		FractionalOdd = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Fractional Even.</summary>
 		FractionalEven = 3,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MTLTessellationFactorFormat : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Half.</summary>
 		Half = 0,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MTLTessellationControlPointIndexType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>U Int16.</summary>
 		UInt16 = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>U Int32.</summary>
 		UInt32 = 2,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MTLTessellationFactorStepFunction : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Constant.</summary>
 		Constant = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Per Patch.</summary>
 		PerPatch = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Per Instance.</summary>
 		PerInstance = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Per Patch And Per Instance.</summary>
 		PerPatchAndPerInstance = 3,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MTLPatchType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Triangle.</summary>
 		Triangle = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Quad.</summary>
 		Quad = 2,
 	}
 
@@ -1767,7 +1767,7 @@ namespace Metal {
 		UInt4 = 39,
 		/// <summary>Indicates a 10-10-10-2 scheme of packed normalized signed integers.</summary>
 		Int1010102Normalized = 40,
-		/// <summary>To be added.</summary>
+		/// <summary>U Int1010102 Normalized.</summary>
 		UInt1010102Normalized = 41,
 		/// <summary>Indicates four unsigned 8-bit characters that describe BGRA channels.</summary>
 		[MacCatalyst (13, 1)]
@@ -1808,32 +1808,32 @@ namespace Metal {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MTLStepFunction : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Constant.</summary>
 		Constant = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Per Vertex.</summary>
 		PerVertex = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Per Instance.</summary>
 		PerInstance = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Per Patch.</summary>
 		PerPatch = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Per Patch Control Point.</summary>
 		PerPatchControlPoint = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Thread Position In Grid X.</summary>
 		ThreadPositionInGridX = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Thread Position In Grid Y.</summary>
 		ThreadPositionInGridY = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Thread Position In Grid X Indexed.</summary>
 		ThreadPositionInGridXIndexed = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Thread Position In Grid Y Indexed.</summary>
 		ThreadPositionInGridYIndexed = 8,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MTLRenderStages : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Vertex.</summary>
 		Vertex = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>Fragment.</summary>
 		Fragment = (1 << 1),
 		[iOS (15, 0), TV (15, 0), MacCatalyst (15, 0)]
 		Tile = (1uL << 2),
@@ -1871,11 +1871,11 @@ namespace Metal {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MTLReadWriteTextureTier : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>One.</summary>
 		One = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Two.</summary>
 		Two = 2,
 	}
 
@@ -1902,9 +1902,9 @@ namespace Metal {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MTLDispatchType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Serial.</summary>
 		Serial,
-		/// <summary>To be added.</summary>
+		/// <summary>Concurrent.</summary>
 		Concurrent,
 	}
 
@@ -1912,11 +1912,11 @@ namespace Metal {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MTLBarrierScope : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Buffers.</summary>
 		Buffers = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Textures.</summary>
 		Textures = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Render Targets.</summary>
 		[NoiOS, NoTV]
 		[NoMacCatalyst]
 		RenderTargets = 1 << 2,
@@ -1926,15 +1926,15 @@ namespace Metal {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MTLIndirectCommandType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Draw.</summary>
 		Draw = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Draw Indexed.</summary>
 		DrawIndexed = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Draw Patches.</summary>
 		[TV (14, 5)]
 		[MacCatalyst (13, 1)]
 		DrawPatches = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Draw Indexed Patches.</summary>
 		[TV (14, 5)]
 		[MacCatalyst (13, 1)]
 		DrawIndexedPatches = 1 << 3,
@@ -1954,9 +1954,9 @@ namespace Metal {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MTLMultisampleStencilResolveFilter : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Sample0.</summary>
 		Sample0 = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Depth Resolved Sample.</summary>
 		DepthResolvedSample = 1,
 	}
 

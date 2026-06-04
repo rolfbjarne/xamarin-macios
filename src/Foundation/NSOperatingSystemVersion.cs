@@ -32,11 +32,11 @@ namespace Foundation {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct NSOperatingSystemVersion : IEquatable<NSOperatingSystemVersion>, IComparable {
-		/// <summary>To be added.</summary>
+		/// <summary>The major.</summary>
 		public nint Major;
-		/// <summary>To be added.</summary>
+		/// <summary>The minor.</summary>
 		public nint Minor;
-		/// <summary>To be added.</summary>
+		/// <summary>The patch version.</summary>
 		public nint PatchVersion;
 
 		public NSOperatingSystemVersion (nint major, nint minor, nint patchVersion)
@@ -64,7 +64,6 @@ namespace Foundation {
 			=> (obj is NSOperatingSystemVersion other) ? CompareTo (other) : 1;
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override string ToString ()
 			=> $"{Major}.{Minor}.{PatchVersion}";
 

@@ -1351,7 +1351,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static void CGContextEndPage (/* CGContextRef __nullable */ IntPtr c);
 
-		/// <summary>Called to indicate the end of a page in a page-based context.</summary>
+		/// <summary>Called to indicate the end of APage in APage-based context.</summary>
 		///         <remarks>To be added.</remarks>
 		public void EndPage ()
 		{
@@ -1446,7 +1446,7 @@ namespace CoreGraphics {
 		extern static CGPoint CGContextConvertPointToUserSpace (/* CGContextRef */ IntPtr context, CGPoint point);
 
 		/// <param name="point">A point.</param>
-		///         <summary>Converts a point from device space coordinates to user space coordinates.</summary>
+		///         <summary>Converts APoint from device space coordinates to user space coordinates.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGPoint ConvertPointToUserSpace (CGPoint point)

@@ -24,13 +24,13 @@ namespace CoreFoundation {
 	// base class to be reused for other patterns that use other retain/release
 	// systems.
 	//
-	/// <summary>To be added.</summary>
+	/// <summary>Base class for managed wrappers of Core Foundation native objects.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public abstract class NativeObject : DisposableObject {
-		/// <summary>To be added.</summary>
+		/// <summary>Initializes a new instance of the <see cref="NativeObject" /> class.</summary>
 		protected NativeObject ()
 		{
 		}
@@ -57,12 +57,12 @@ namespace CoreFoundation {
 
 		// <quote>If cf is NULL, this will cause a runtime error and your application will crash.</quote>
 		// https://developer.apple.com/documentation/corefoundation/1521269-cfretain?language=occ
-		/// <summary>To be added.</summary>
+		/// <summary>Retains the native object by incrementing its reference count.</summary>
 		protected internal virtual void Retain () => CFObject.CFRetain (GetCheckedHandle ());
 
 		// <quote>If cf is NULL, this will cause a runtime error and your application will crash.</quote>
 		// https://developer.apple.com/documentation/corefoundation/1521153-cfrelease
-		/// <summary>To be added.</summary>
+		/// <summary>Releases the native object by decrementing its reference count.</summary>
 		protected internal virtual void Release () => CFObject.CFRelease (GetCheckedHandle ());
 	}
 }

@@ -9,7 +9,6 @@ using System.Runtime.CompilerServices;
 namespace CoreFoundation {
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -62,9 +61,8 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary, CharSet = CharSet.Unicode)]
 		static extern void CFStringAppendCharacters (/* CFMutableStringRef* */ IntPtr theString, IntPtr chars, nint numChars);
 
-		/// <param name="string">To be added.</param>
+		/// <param name="string">The string.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Append (string @string)
 		{
 			if (@string is null)
@@ -77,24 +75,22 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		unsafe static extern internal byte /* Boolean */ CFStringTransform (/* CFMutableStringRef* */ IntPtr @string, /* CFRange* */ CFRange* range, /* CFStringRef* */ IntPtr transform, /* Boolean */ byte reverse);
 
-		/// <param name="range">To be added.</param>
-		///         <param name="transform">To be added.</param>
-		///         <param name="reverse">To be added.</param>
+		/// <param name="range">The range.</param>
+		///         <param name="transform">The transform.</param>
+		///         <param name="reverse">The reverse.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool Transform (ref CFRange range, CFStringTransform transform, bool reverse)
 		{
 			return Transform (ref range, transform.GetConstant ().GetHandle (), reverse);
 		}
 
 		// constant documentation mention it also accept any ICT transform
-		/// <param name="range">To be added.</param>
-		///         <param name="transform">To be added.</param>
-		///         <param name="reverse">To be added.</param>
+		/// <param name="range">The range.</param>
+		///         <param name="transform">The transform.</param>
+		///         <param name="reverse">The reverse.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool Transform (ref CFRange range, CFString transform, bool reverse)
 		{
 			bool result = Transform (ref range, transform.GetHandle (), reverse);
@@ -102,12 +98,11 @@ namespace CoreFoundation {
 			return result;
 		}
 
-		/// <param name="range">To be added.</param>
-		///         <param name="transform">To be added.</param>
-		///         <param name="reverse">To be added.</param>
+		/// <param name="range">The range.</param>
+		///         <param name="transform">The transform.</param>
+		///         <param name="reverse">The reverse.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool Transform (ref CFRange range, NSString transform, bool reverse)
 		{
 			bool result = Transform (ref range, transform.GetHandle (), reverse);
@@ -115,12 +110,11 @@ namespace CoreFoundation {
 			return result;
 		}
 
-		/// <param name="range">To be added.</param>
-		///         <param name="transform">To be added.</param>
-		///         <param name="reverse">To be added.</param>
+		/// <param name="range">The range.</param>
+		///         <param name="transform">The transform.</param>
+		///         <param name="reverse">The reverse.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool Transform (ref CFRange range, string transform, bool reverse)
 		{
 			var t = CreateNative (transform);
@@ -143,22 +137,20 @@ namespace CoreFoundation {
 			}
 		}
 
-		/// <param name="transform">To be added.</param>
-		///         <param name="reverse">To be added.</param>
+		/// <param name="transform">The transform.</param>
+		///         <param name="reverse">The reverse.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool Transform (CFStringTransform transform, bool reverse)
 		{
 			return Transform (transform.GetConstant ().GetHandle (), reverse);
 		}
 
 		// constant documentation mention it also accept any ICT transform
-		/// <param name="transform">To be added.</param>
-		///         <param name="reverse">To be added.</param>
+		/// <param name="transform">The transform.</param>
+		///         <param name="reverse">The reverse.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool Transform (CFString transform, bool reverse)
 		{
 			bool result = Transform (transform.GetHandle (), reverse);
@@ -166,11 +158,10 @@ namespace CoreFoundation {
 			return result;
 		}
 
-		/// <param name="transform">To be added.</param>
-		///         <param name="reverse">To be added.</param>
+		/// <param name="transform">The transform.</param>
+		///         <param name="reverse">The reverse.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool Transform (NSString transform, bool reverse)
 		{
 			bool result = Transform (transform.GetHandle (), reverse);
@@ -178,11 +169,10 @@ namespace CoreFoundation {
 			return result;
 		}
 
-		/// <param name="transform">To be added.</param>
-		///         <param name="reverse">To be added.</param>
+		/// <param name="transform">The transform.</param>
+		///         <param name="reverse">The reverse.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool Transform (string transform, bool reverse)
 		{
 			var t = CreateNative (transform);

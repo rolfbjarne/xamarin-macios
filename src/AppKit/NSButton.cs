@@ -42,7 +42,7 @@ namespace AppKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the button cell associated with this button.</summary>
 		public new NSButtonCell Cell {
 			get { return (NSButtonCell) base.Cell; }
 			set { base.Cell = value; }

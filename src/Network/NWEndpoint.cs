@@ -16,7 +16,7 @@ using OS_nw_endpoint = System.IntPtr;
 using OS_nw_txt_record = System.IntPtr;
 
 namespace Network {
-	/// <summary>To be added.</summary>
+/// <summary>Represents a network endpoint, such as a host/port pair, Bonjour service, or URL.</summary>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
@@ -30,7 +30,7 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		extern static NWEndpointType nw_endpoint_get_type (OS_nw_endpoint handle);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the type of this network endpoint.</summary>
 		public NWEndpointType Type => nw_endpoint_get_type (GetCheckedHandle ());
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -38,7 +38,7 @@ namespace Network {
 
 		/// <param name="hostname">The hostname.</param>
 		///         <param name="port">The port.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a network endpoint with the specified hostname and port.</summary>
 		public static NWEndpoint? Create (string hostname, string port)
 		{
 			if (hostname is null)
@@ -56,7 +56,7 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		static extern IntPtr nw_endpoint_get_hostname (OS_nw_endpoint endpoint);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the hostname of this endpoint.</summary>
 		public string? Hostname => Marshal.PtrToStringAnsi (nw_endpoint_get_hostname (GetCheckedHandle ()));
 
 		[DllImport (Constants.NetworkLibrary, EntryPoint = "nw_endpoint_copy_port_string")]
@@ -68,13 +68,13 @@ namespace Network {
 			return TransientString.ToStringAndFree (ptr)!;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the port string of this endpoint.</summary>
 		public string Port => nw_endpoint_copy_port_string (GetCheckedHandle ());
 
 		[DllImport (Constants.NetworkLibrary)]
 		static extern ushort nw_endpoint_get_port (OS_nw_endpoint endpoint);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the port number of this endpoint.</summary>
 		public ushort PortNumber => nw_endpoint_get_port (GetCheckedHandle ());
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -93,7 +93,7 @@ namespace Network {
 			return TransientString.ToStringAndFree (ptr)!;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the address string of this endpoint.</summary>
 		public string Address => nw_endpoint_copy_address_string (GetCheckedHandle ());
 
 #if false
@@ -109,7 +109,7 @@ namespace Network {
 		/// <param name="name">The name to use.</param>
 		///         <param name="serviceType">The service type.</param>
 		///         <param name="domain">The domain.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a Bonjour service endpoint with the specified name, type, and domain.</summary>
 		public static NWEndpoint? CreateBonjourService (string name, string serviceType, string domain)
 		{
 			if (serviceType is null)
@@ -126,19 +126,19 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		static extern unsafe IntPtr nw_endpoint_get_bonjour_service_name (OS_nw_endpoint endpoint);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the Bonjour service name of this endpoint.</summary>
 		public string? BonjourServiceName => Marshal.PtrToStringAnsi (nw_endpoint_get_bonjour_service_name (GetCheckedHandle ()));
 
 		[DllImport (Constants.NetworkLibrary)]
 		static extern IntPtr nw_endpoint_get_bonjour_service_type (OS_nw_endpoint endpoint);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the Bonjour service type of this endpoint.</summary>
 		public string? BonjourServiceType => Marshal.PtrToStringAnsi (nw_endpoint_get_bonjour_service_type (GetCheckedHandle ()));
 
 		[DllImport (Constants.NetworkLibrary)]
 		static extern IntPtr nw_endpoint_get_bonjour_service_domain (OS_nw_endpoint endpoint);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the Bonjour service domain of this endpoint.</summary>
 		public string? BonjourServiceDomain => Marshal.PtrToStringAnsi (nw_endpoint_get_bonjour_service_domain (GetCheckedHandle ()));
 
 		[SupportedOSPlatform ("tvos13.0")]

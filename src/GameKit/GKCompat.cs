@@ -97,7 +97,7 @@ namespace GameKit {
 		}
 
 		/// <param name="picker">The picker.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Called when the peer picker controller is cancelled.</summary>
 		public virtual void ControllerCancelled (GKPeerPickerController picker)
 		{
 			throw new PlatformNotSupportedException (Constants.TypeUnavailable);
@@ -105,7 +105,7 @@ namespace GameKit {
 
 		/// <param name="picker">The picker.</param>
 		///         <param name="forType">The for type.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the session for the specified connection type.</summary>
 		public virtual GKSession GetSession (GKPeerPickerController picker, GKPeerPickerConnectionType forType)
 		{
 			throw new PlatformNotSupportedException (Constants.TypeUnavailable);
@@ -114,7 +114,7 @@ namespace GameKit {
 		/// <param name="picker">The picker.</param>
 		///         <param name="peerId">The peer id.</param>
 		///         <param name="toSession">The to session.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Called when a peer connects to the session.</summary>
 		public virtual void PeerConnected (GKPeerPickerController picker, string peerId, GKSession toSession)
 		{
 			throw new PlatformNotSupportedException (Constants.TypeUnavailable);

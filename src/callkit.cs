@@ -348,7 +348,6 @@ namespace CallKit {
 			<returns>A task that accepts the result of the request completion.</returns>
 			<remarks>
 			          <para copied="true">The CompleteRequestAsync method is suitable to be used with C# async by returning control to the caller with a Task representing the operation.</para>
-			          <para copied="true">To be added.</para>
 			        </remarks>
 			""")]
 		[Export ("completeRequestWithCompletionHandler:")]
@@ -358,8 +357,8 @@ namespace CallKit {
 		[MacCatalyst (13, 1)]
 		ICXCallDirectoryExtensionContextDelegate Delegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets a Boolean value indicating whether this is an incremental load.</summary>
+		/// <value><see langword="true" /> if this is an incremental load; otherwise, <see langword="false" />.</value>
 		[MacCatalyst (13, 1)]
 		[Export ("incremental")]
 		bool Incremental { [Bind ("isIncremental")] get; }

@@ -36,14 +36,13 @@ namespace CoreText {
 
 	// defined as uint32_t - /System/Library/Frameworks/CoreText.framework/Headers/CTLine.h
 	/// <summary>An enumeration whose values specify valid options for line truncation.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <altmember cref="CoreText.CTLine.GetTruncatedLine" />
 	public enum CTLineTruncation : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates start.</summary>
 		Start = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates end.</summary>
 		End = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates middle.</summary>
 		Middle = 2,
 	}
 
@@ -87,12 +86,11 @@ namespace CoreText {
 		///
 		/// 	</summary>
 		UseOpticalBounds = 1 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates include language extents.</summary>
 		IncludeLanguageExtents = 1 << 5, // iOS8 and Mac 10.11
 	}
 
 	/// <summary>A line of text, comprising an array of <see cref="CoreText.CTRun" />s.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/SimpleTextInput/">SimpleTextInput</related>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -108,9 +106,8 @@ namespace CoreText {
 		#region Line Creation
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTLineCreateWithAttributedString (IntPtr @string);
-		/// <param name="value">To be added.</param>
+		/// <param name="value">The value to set.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CTLine (NSAttributedString value)
 			: base (CTLineCreateWithAttributedString (value.GetNonNullHandle (nameof (value))), true, true)
 		{
@@ -119,12 +116,11 @@ namespace CoreText {
 
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTLineCreateTruncatedLine (IntPtr line, double width, CTLineTruncation truncationType, IntPtr truncationToken);
-		/// <param name="width">To be added.</param>
-		///         <param name="truncationType">To be added.</param>
-		///         <param name="truncationToken">To be added.</param>
+		/// <param name="width">The width.</param>
+		///         <param name="truncationType">The truncation type.</param>
+		///         <param name="truncationToken">The truncation token.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CTLine? GetTruncatedLine (double width, CTLineTruncation truncationType, CTLine? truncationToken)
 		{
 			var h = CTLineCreateTruncatedLine (Handle, width, truncationType, truncationToken.GetHandle ());
@@ -150,7 +146,6 @@ namespace CoreText {
 		static extern nint CTLineGetGlyphCount (IntPtr line);
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public nint GlyphCount {
 			get { return CTLineGetGlyphCount (Handle); }
 		}
@@ -159,7 +154,6 @@ namespace CoreText {
 		static extern IntPtr CTLineGetGlyphRuns (IntPtr line);
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CTRun [] GetGlyphRuns ()
 		{
 			var cfArrayRef = CTLineGetGlyphRuns (Handle);
@@ -174,7 +168,6 @@ namespace CoreText {
 		static extern NSRange CTLineGetStringRange (IntPtr line);
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NSRange StringRange {
 			get { return CTLineGetStringRange (Handle); }
 		}
@@ -188,9 +181,8 @@ namespace CoreText {
 
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern void CTLineDraw (IntPtr line, IntPtr context);
-		/// <param name="context">To be added.</param>
+		/// <param name="context">The context to use.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Draw (CGContext context)
 		{
 			if (context is null)
@@ -205,10 +197,9 @@ namespace CoreText {
 		static extern CGRect CTLineGetImageBounds (/* CTLineRef __nonnull */ IntPtr line,
 			/* CGContextRef __nullable */ IntPtr context);
 
-		/// <param name="context">To be added.</param>
+		/// <param name="context">The context to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CGRect GetImageBounds (CGContext? context)
 		{
 			CGRect bounds = CTLineGetImageBounds (Handle, context.GetHandle ());
@@ -263,7 +254,6 @@ namespace CoreText {
 		static extern double CTLineGetTrailingWhitespaceWidth (IntPtr line);
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public double TrailingWhitespaceWidth {
 			get { return CTLineGetTrailingWhitespaceWidth (Handle); }
 		}
@@ -272,10 +262,9 @@ namespace CoreText {
 		#region Line Caret Positioning and Highlighting
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern nint CTLineGetStringIndexForPosition (IntPtr line, CGPoint position);
-		/// <param name="position">To be added.</param>
+		/// <param name="position">The position.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public nint GetStringIndexForPosition (CGPoint position)
 		{
 			return CTLineGetStringIndexForPosition (Handle, position);
@@ -295,12 +284,11 @@ namespace CoreText {
 			return CTLineGetOffsetForStringIndex (Handle, charIndex, IntPtr.Zero);
 		}
 
-		/// <param name="offset">To be added.</param>
-		///     <param name="charIndex">To be added.</param>
-		///     <param name="leadingEdge">To be added.</param>
-		///     <param name="stop">To be added.</param>
+		/// <param name="offset">The offset.</param>
+		///     <param name="charIndex">The char index.</param>
+		///     <param name="leadingEdge">The leading edge.</param>
+		///     <param name="stop">The stop.</param>
 		///     <summary>To be added.</summary>
-		///     <remarks>To be added.</remarks>
 		public delegate void CaretEdgeEnumerator (double offset, nint charIndex, bool leadingEdge, ref bool stop);
 
 		[SupportedOSPlatform ("ios")]
@@ -321,9 +309,8 @@ namespace CoreText {
 			}
 		}
 
-		/// <param name="enumerator">To be added.</param>
+		/// <param name="enumerator">The enumerator.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

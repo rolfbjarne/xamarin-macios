@@ -41,25 +41,22 @@ namespace LocalAuthentication {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[NullAllowed] // by default this property is null
 		[Export ("localizedFallbackTitle")]
 		string LocalizedFallbackTitle { get; set; }
 
-		/// <param name="policy">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="policy">The policy.</param>
+		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>Preflights <paramref name="policy" />, and reports any errors in the <paramref name="error" /><see langword="out" /> parameter.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("canEvaluatePolicy:error:")]
 		bool CanEvaluatePolicy (LAPolicy policy, [NullAllowed] out NSError error);
 
-		/// <param name="policy">To be added.</param>
-		///         <param name="localizedReason">To be added.</param>
-		///         <param name="reply">To be added.</param>
+		/// <param name="policy">The policy.</param>
+		///         <param name="localizedReason">The localized reason.</param>
+		///         <param name="reply">The reply.</param>
 		///         <summary>Evaluates the specified access control <paramref name="policy" />.</summary>
-		///         <remarks>To be added.</remarks>
 		[Async (XmlDocs = """
 			<param name="policy">To be added.</param>
 			<param name="localizedReason">To be added.</param>
@@ -76,7 +73,6 @@ namespace LocalAuthentication {
 		void EvaluatePolicy (LAPolicy policy, string localizedReason, LAContextReplyHandler reply);
 
 		/// <summary>Stops all pending policy evaluations and renders the context unusable for further policy evaluation.</summary>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("invalidate")]
 		void Invalidate ();
@@ -85,30 +81,27 @@ namespace LocalAuthentication {
 		///           <para>To be added.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		///         <param name="type">To be added.</param>
+		///         <param name="type">The type.</param>
 		///         <summary>Attempts to set the specified credential <paramref name="type" /> to the specified <paramref name="credential" />, and returns <see langword="true" /> if it succeeds. </summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("setCredential:type:")]
 		bool SetCredentialType ([NullAllowed] NSData credential, LACredentialType type);
 
 
-		/// <param name="type">To be added.</param>
+		/// <param name="type">The type.</param>
 		///         <summary>Returns <see langword="true" /> if the specified credential <paramref name="type" /> is set.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("isCredentialSet:")]
 		bool IsCredentialSet (LACredentialType type);
 
 
-		/// <param name="accessControl">To be added.</param>
-		///         <param name="operation">To be added.</param>
-		///         <param name="localizedReason">To be added.</param>
-		///         <param name="reply">To be added.</param>
+		/// <param name="accessControl">The access control.</param>
+		///         <param name="operation">The operation.</param>
+		///         <param name="localizedReason">The localized reason.</param>
+		///         <param name="reply">The reply.</param>
 		///         <summary>Evaluates <paramref name="accessControl" /> for the specified access control <paramref name="operation" />.</summary>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("evaluateAccessControl:operation:localizedReason:reply:")]
 		void EvaluateAccessControl (SecAccessControl accessControl, LAAccessControlOperation operation, string localizedReason, Action<bool, NSError> reply);
@@ -118,7 +111,6 @@ namespace LocalAuthentication {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 18, 0, message: "Use 'LADomainStateBiometry.StateHash' instead.")]
 		[Deprecated (PlatformName.MacOSX, 15, 0, message: "Use 'LADomainStateBiometry.StateHash' instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 18, 0, message: "Use 'LADomainStateBiometry.StateHash' instead.")]
@@ -132,21 +124,18 @@ namespace LocalAuthentication {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[NullAllowed, Export ("localizedCancelTitle")]
 		string LocalizedCancelTitle { get; set; }
 
 		/// <summary>Represents the value that is associated with the LATouchIDAuthenticationMaximumAllowableReuseDuration constant.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("LATouchIDAuthenticationMaximumAllowableReuseDuration")]
 		double /* NSTimeInterval */ TouchIdAuthenticationMaximumAllowableReuseDuration { get; }
 
 		/// <summary>Gets or sets the time, in seconds, after a successful Touch ID authentication for which a user will not be challenged for another.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("touchIDAuthenticationAllowableReuseDuration")]
 		double /* NSTimeInterval */ TouchIdAuthenticationAllowableReuseDuration { get; set; }
@@ -156,7 +145,6 @@ namespace LocalAuthentication {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 9, 0)]
 		[Deprecated (PlatformName.MacOSX, 10, 11)]
 		[MacCatalyst (13, 1)]
@@ -167,7 +155,6 @@ namespace LocalAuthentication {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("localizedReason")]
@@ -175,7 +162,6 @@ namespace LocalAuthentication {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("interactionNotAllowed")]
@@ -183,7 +169,6 @@ namespace LocalAuthentication {
 
 		/// <summary>Gets a value that tells what kind of biometric authentication is supported by the device.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("biometryType")]
 		LABiometryType BiometryType { get; }

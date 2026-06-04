@@ -57,7 +57,6 @@ namespace SpriteKit {
 		}
 
 		/// <summary>Returns an enumerator that iterates over the child nodes that belong to the current node.</summary>
-		///         <returns>To be added.</returns>
 		public IEnumerator<SKNode> GetEnumerator ()
 		{
 			foreach (var node in Children)
@@ -65,7 +64,6 @@ namespace SpriteKit {
 		}
 
 		/// <summary>Internal.</summary>
-		///         <returns>To be added.</returns>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return GetEnumerator ();
@@ -74,8 +72,7 @@ namespace SpriteKit {
 		/// <param name="filename">The filename.</param>
 		///         <param name="types">The types.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Create.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -102,8 +99,7 @@ namespace SpriteKit {
 		/// <param name="filename">The filename.</param>
 		///         <param name="classes">The classes.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Create.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]

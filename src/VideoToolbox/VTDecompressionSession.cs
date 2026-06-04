@@ -53,7 +53,7 @@ namespace VideoToolbox {
 		/// <param name="sourceFrame">The token passed starting the decoding operation.</param>
 		/// <param name="status">Status code indicating if the operation was successful or not.</param>
 		/// <param name="flags">Contains information about the decoding operation.</param>
-		/// <param name="buffer">Contains a pointer to the decoded buffer if successful. A <see langword="null" /> value indicates an error.</param>
+		/// <param name="buffer">Contains APointer to the decoded buffer if successful. A <see langword="null" /> value indicates an error.</param>
 		/// <param name="presentationTimeStamp">The presentation timestamp of the decoded frame.</param>
 		/// <param name="presentationDuration">The duration of the decoded frame.</param>
 		public delegate void VTDecompressionOutputCallback (/* void* */ IntPtr sourceFrame, /* OSStatus */ VTStatus status, VTDecodeInfoFlags flags, CVImageBuffer? buffer, CMTime presentationTimeStamp, CMTime presentationDuration);

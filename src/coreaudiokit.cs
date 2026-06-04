@@ -276,23 +276,23 @@ namespace CoreAudioKit {
 		[Export ("initWithFrame:")]
 		NativeHandle Constructor (CGRect bounds);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets a value that indicates whether the transport view is enabled.</summary>
+		/// <value><see langword="true" /> if the transport view is enabled; otherwise, <see langword="false" />.</value>
 		[Export ("enabled")]
 		bool Enabled { [Bind ("isEnabled")] get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets a value that indicates whether audio is currently playing.</summary>
+		/// <value><see langword="true" /> if audio is playing; otherwise, <see langword="false" />.</value>
 		[Export ("playing")]
 		bool Playing { [Bind ("isPlaying")] get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets a value that indicates whether audio is currently being recorded.</summary>
+		/// <value><see langword="true" /> if recording is in progress; otherwise, <see langword="false" />.</value>
 		[Export ("recording")]
 		bool Recording { [Bind ("isRecording")] get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets a value that indicates whether the transport view is connected to an audio unit.</summary>
+		/// <value><see langword="true" /> if connected; otherwise, <see langword="false" />.</value>
 		[Export ("connected")]
 		bool Connected { [Bind ("isConnected")] get; }
 

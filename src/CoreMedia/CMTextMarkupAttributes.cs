@@ -34,18 +34,16 @@ namespace CoreMedia {
 
 	// Convenience structure
 	/// <summary>A color to be used with <see cref="CoreMedia.CMTextMarkupAttributes.BackgroundColor" /> and <see cref="CoreMedia.CMTextMarkupAttributes.ForegroundColor" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct TextMarkupColor {
-		/// <param name="red">To be added.</param>
-		///         <param name="green">To be added.</param>
-		///         <param name="blue">To be added.</param>
-		///         <param name="alpha">To be added.</param>
+		/// <param name="red">The red.</param>
+		///         <param name="green">The green.</param>
+		///         <param name="blue">The blue.</param>
+		///         <param name="alpha">The alpha.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public TextMarkupColor (float red, float green, float blue, float alpha)
 			: this ()
 		{
@@ -66,40 +64,33 @@ namespace CoreMedia {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public float Red { get; private set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public float Green { get; private set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public float Blue { get; private set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public float Alpha { get; private set; }
 	}
 
 	/// <summary>Manages the attributes used by <see cref="AVFoundation.AVTextStyleRule" />.</summary>
 	///     <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class CMTextMarkupAttributes : DictionaryContainer {
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CMTextMarkupAttributes ()
 		{
 		}
 
 #if !COREBUILD
-		/// <param name="dictionary">To be added.</param>
+		/// <param name="dictionary">The dictionary.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CMTextMarkupAttributes (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -231,7 +222,6 @@ namespace CoreMedia {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public float? BaseFontSizePercentageRelativeToVideoHeight {
 			get {
 				return GetFloatValue (CMTextMarkupAttributesKeys.BaseFontSizePercentageRelativeToVideoHeight);

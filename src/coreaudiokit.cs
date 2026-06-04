@@ -157,7 +157,7 @@ namespace CoreAudioKit {
 
 		/// <param name="nibNameOrNull">The nib name or null.</param>
 		/// <param name="nibBundleOrNull">The nib bundle or null.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="CoreAudioKit.CAInterDeviceAudioViewController" /> with the specified nib name and bundle.</summary>
 		[Export ("initWithNibName:bundle:")]
 		NativeHandle Constructor ([NullAllowed] string nibNameOrNull, [NullAllowed] NSBundle nibBundleOrNull);
 	}

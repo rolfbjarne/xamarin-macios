@@ -39,7 +39,7 @@ namespace MetalPerformanceShaders {
 		// Using 'NSArray<MPSImage>' instead of `MPSImage[]` because image array 'Handle' matters.
 		/// <param name="imageBatch">The image batch.</param>
 		///         <param name="commandBuffer">The command buffer.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Synchronize.</summary>
 		public static void Synchronize (NSArray<MPSImage> imageBatch, IMTLCommandBuffer commandBuffer)
 		{
 			if (imageBatch is null)
@@ -61,8 +61,7 @@ namespace MetalPerformanceShaders {
 
 		// Using 'NSArray<MPSImage>' instead of `MPSImage[]` because image array 'Handle' matters.
 		/// <param name="imageBatch">The image batch.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets resource size.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]

@@ -702,7 +702,7 @@ namespace SceneKit {
 		#region CreatePerspectiveFieldOfView
 
 		/// <summary>
-		/// Creates a perspective projection matrix.
+		/// Creates APerspective projection matrix.
 		/// </summary>
 		/// <param name="fovy">Angle of the field of view in the y direction (in radians)</param>
 		/// <param name="aspect">Aspect ratio of the view (width / height)</param>
@@ -741,7 +741,7 @@ namespace SceneKit {
 		}
 
 		/// <summary>
-		/// Creates a perspective projection matrix.
+		/// Creates APerspective projection matrix.
 		/// </summary>
 		/// <param name="fovy">Angle of the field of view in the y direction (in radians)</param>
 		/// <param name="aspect">Aspect ratio of the view (width / height)</param>
@@ -770,7 +770,7 @@ namespace SceneKit {
 		#region CreatePerspectiveOffCenter
 
 		/// <summary>
-		/// Creates a perspective projection matrix.
+		/// Creates APerspective projection matrix.
 		/// </summary>
 		/// <param name="left">Left edge of the view frustum</param>
 		/// <param name="right">Right edge of the view frustum</param>
@@ -811,7 +811,7 @@ namespace SceneKit {
 		}
 
 		/// <summary>
-		/// Creates a perspective projection matrix.
+		/// Creates APerspective projection matrix.
 		/// </summary>
 		/// <param name="left">Left edge of the view frustum</param>
 		/// <param name="right">Right edge of the view frustum</param>

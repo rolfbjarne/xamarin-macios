@@ -107,7 +107,7 @@ namespace AddressBookUI {
 		}
 
 		/// <param name="e">The event arguments.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Raises the PerformDefaultAction event.</summary>
 		protected internal virtual void OnPerformDefaultAction (ABPersonViewPerformDefaultActionEventArgs e)
 		{
 			var h = EnsureEventDelegate ().performDefaultAction;

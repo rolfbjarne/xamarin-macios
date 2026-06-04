@@ -136,13 +136,13 @@ var text = new NSAttributedString (
     <param name="foregroundColor">Desired foreground color (or null if none is desired).</param>
     <param name="backgroundColor">Desired background color (or null if none is desired)..</param>
     <param name="strokeColor">Desired stroke color (or null if none is desired).</param>
-    <param name="paragraphStyle">To be added.</param>
-    <param name="ligatures">To be added.</param>
-    <param name="kerning">To be added.</param>
-    <param name="underlineStyle">To be added.</param>
+    <param name="paragraphStyle">Desired paragraph style (or null if none is desired).</param>
+    <param name="ligatures">The ligature style to use.</param>
+    <param name="kerning">The kerning adjustment to apply.</param>
+    <param name="underlineStyle">The underline style to apply.</param>
     <param name="shadow">Desired shadow.</param>
     <param name="strokeWidth">Desired stroked width..</param>
-    <param name="strikethroughStyle">To be added.</param>
+    <param name="strikethroughStyle">The strikethrough style to apply.</param>
     <summary>Creates a UIKit attributed string with the specified attributes in the parameters.</summary>
     <remarks>
       <para>

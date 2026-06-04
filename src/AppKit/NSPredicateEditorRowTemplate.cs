@@ -19,7 +19,7 @@ using CoreData;
 namespace AppKit {
 	public partial class NSPredicateEditorRowTemplate {
 		/// <param name="compoundTypes">The compound types.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSPredicateEditorRowTemplate" /> instance.</summary>
 		public NSPredicateEditorRowTemplate (params NSCompoundPredicateType [] compoundTypes)
 			: this (Array.ConvertAll (compoundTypes, t => NSNumber.FromUInt32 ((uint) t)))
 		{
@@ -30,7 +30,7 @@ namespace AppKit {
 		///         <param name="operators">The operators.</param>
 		///         <param name="modifier">The modifier.</param>
 		///         <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSPredicateEditorRowTemplate" /> instance.</summary>
 		public NSPredicateEditorRowTemplate (
 			IEnumerable<NSExpression> leftExpressions,
 			IEnumerable<NSExpression> rightExpressions,
@@ -51,7 +51,7 @@ namespace AppKit {
 		///         <param name="operators">The operators.</param>
 		///         <param name="modifier">The modifier.</param>
 		///         <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSPredicateEditorRowTemplate" /> instance.</summary>
 		public NSPredicateEditorRowTemplate (
 			IEnumerable<string> leftExpressionsFromKeyPaths,
 			IEnumerable<string> rightExpressionsFromConstants,
@@ -72,7 +72,7 @@ namespace AppKit {
 		///         <param name="operators">The operators.</param>
 		///         <param name="modifier">The modifier.</param>
 		///         <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSPredicateEditorRowTemplate" /> instance.</summary>
 		public NSPredicateEditorRowTemplate (
 			string leftExpressionFromKeyPath,
 			string rightExpressionFromConstant,
@@ -93,7 +93,7 @@ namespace AppKit {
 		///         <param name="operators">The operators.</param>
 		///         <param name="modifier">The modifier.</param>
 		///         <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSPredicateEditorRowTemplate" /> instance.</summary>
 		public NSPredicateEditorRowTemplate (
 			string leftExpressionFromKeyPath,
 			IEnumerable<string> rightExpressionsFromConstants,
@@ -114,7 +114,7 @@ namespace AppKit {
 		///         <param name="operators">The operators.</param>
 		///         <param name="modifier">The modifier.</param>
 		///         <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSPredicateEditorRowTemplate" /> instance.</summary>
 		public NSPredicateEditorRowTemplate (
 			IEnumerable<NSExpression> leftExpressions,
 			NSAttributeType attributeType,
@@ -135,7 +135,7 @@ namespace AppKit {
 		///         <param name="operators">The operators.</param>
 		///         <param name="modifier">The modifier.</param>
 		///         <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSPredicateEditorRowTemplate" /> instance.</summary>
 		public NSPredicateEditorRowTemplate (
 			IEnumerable<string> leftExpressionsFromKeyPaths,
 			NSAttributeType attributeType,
@@ -156,7 +156,7 @@ namespace AppKit {
 		///         <param name="operators">The operators.</param>
 		///         <param name="modifier">The modifier.</param>
 		///         <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSPredicateEditorRowTemplate" /> instance.</summary>
 		public NSPredicateEditorRowTemplate (
 			string leftExpressionFromKeyPath,
 			NSAttributeType attributeType,

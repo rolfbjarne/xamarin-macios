@@ -30,9 +30,9 @@ namespace VideoToolbox {
 		// since header docs indicate that there are no options available
 		// as of 9.0/10.11 and to always pass NULL
 		/// <param name="pixelBuffer">The pixel buffer.</param>
-		///         <param name="image">The image.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <param name="image">The resulting CGImage.</param>
+		/// <summary>Creates a CGImage from the specified pixel buffer.</summary>
+		/// <returns>A <see cref="VTStatus" /> value indicating success or failure.</returns>
 		public static VTStatus ToCGImage (this CVPixelBuffer pixelBuffer, out CGImage? image)
 		{
 			if (pixelBuffer is null)

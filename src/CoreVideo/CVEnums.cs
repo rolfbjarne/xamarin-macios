@@ -35,9 +35,9 @@ namespace CoreVideo {
 	/// <summary>An enumeration whose values specify whether a buffer attachment should or should not propagate.</summary>
 	[MacCatalyst (13, 1)]
 	public enum CVAttachmentMode : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates should not propagate.</summary>
 		ShouldNotPropagate = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates should propagate.</summary>
 		ShouldPropagate = 1,
 	}
 
@@ -45,9 +45,9 @@ namespace CoreVideo {
 	[Flags]
 	[MacCatalyst (13, 1)]
 	public enum CVPixelBufferLock : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0x00000000,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates read only.</summary>
 		ReadOnly = 0x00000001,
 	}
 
@@ -102,7 +102,7 @@ namespace CoreVideo {
 	/// <summary>A flagging enumeration. Currently only contains a <c>None</c> value of 0.</summary>
 	[MacCatalyst (13, 1)]
 	public enum CVOptionFlags : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
 	}
 
@@ -110,7 +110,7 @@ namespace CoreVideo {
 	[Flags]
 	[MacCatalyst (13, 1)]
 	public enum CVTimeFlags : int {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates is indefinite.</summary>
 		IsIndefinite = 1 << 0,
 	}
 
@@ -118,23 +118,23 @@ namespace CoreVideo {
 	[Flags]
 	[MacCatalyst (13, 1)]
 	public enum CVTimeStampFlags : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates video time valid.</summary>
 		VideoTimeValid = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates host time valid.</summary>
 		HostTimeValid = (1 << 1),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates s m p t e time valid.</summary>
 		SMPTETimeValid = (1 << 2),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates video refresh period valid.</summary>
 		VideoRefreshPeriodValid = (1 << 3),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates rate scalar valid.</summary>
 		RateScalarValid = (1 << 4),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates top field.</summary>
 		TopField = (1 << 16),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bottom field.</summary>
 		BottomField = (1 << 17),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates video host time valid.</summary>
 		VideoHostTimeValid = (VideoTimeValid | HostTimeValid),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates is interlaced.</summary>
 		IsInterlaced = (TopField | BottomField),
 	}
 
@@ -151,21 +151,21 @@ namespace CoreVideo {
 	/// <summary>An enumeration whose values specify SMPTE timecode types.</summary>
 	[MacCatalyst (13, 1)]
 	public enum CVSMPTETimeType : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates type24.</summary>
 		Type24 = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates type25.</summary>
 		Type25 = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates type30 drop.</summary>
 		Type30Drop = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates type30.</summary>
 		Type30 = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates type2997.</summary>
 		Type2997 = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates type2997 drop.</summary>
 		Type2997Drop = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates type60.</summary>
 		Type60 = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates type5994.</summary>
 		Type5994 = 7,
 	}
 
@@ -173,7 +173,7 @@ namespace CoreVideo {
 	/// <summary>Defines an option for <see cref="CoreVideo.CVPixelBufferPool.Flush(CoreVideo.CVPixelBufferPoolFlushFlags)" />.</summary>
 	[MacCatalyst (13, 1)]
 	public enum CVPixelBufferPoolFlushFlags : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates flush excess buffers.</summary>
 		FlushExcessBuffers = 1,
 	}
 

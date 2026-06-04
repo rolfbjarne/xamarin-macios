@@ -32,7 +32,6 @@ namespace CoreMotion {
 		}
 
 		/// <summary>A string, of the form $"a=({x},{y},{z})".</summary>
-		///         <returns>To be added.</returns>
 		public override string ToString ()
 		{
 			return String.Format ("a=({0},{1},{2})", X, Y, Z);
@@ -46,23 +45,23 @@ namespace CoreMotion {
 	[SupportedOSPlatform ("macos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct CMRotationMatrix {
-		/// <summary>To be added.</summary>
+		/// <summary>The m11.</summary>
 		public double m11;
-		/// <summary>To be added.</summary>
+		/// <summary>The m12.</summary>
 		public double m12;
-		/// <summary>To be added.</summary>
+		/// <summary>The m13.</summary>
 		public double m13;
-		/// <summary>To be added.</summary>
+		/// <summary>The m21.</summary>
 		public double m21;
-		/// <summary>To be added.</summary>
+		/// <summary>The m22.</summary>
 		public double m22;
-		/// <summary>To be added.</summary>
+		/// <summary>The m23.</summary>
 		public double m23;
-		/// <summary>To be added.</summary>
+		/// <summary>The m31.</summary>
 		public double m31;
-		/// <summary>To be added.</summary>
+		/// <summary>The m32.</summary>
 		public double m32;
-		/// <summary>To be added.</summary>
+		/// <summary>The m33.</summary>
 		public double m33;
 	}
 
@@ -99,7 +98,6 @@ namespace CoreMotion {
 		}
 
 		/// <summary>In the form $"quaternion({x},{y},{z},{w}").</summary>
-		///         <returns>To be added.</returns>
 		public override string ToString ()
 		{
 			return String.Format ("quaternion=({0},{1},{2},{3})", x, y, z, w);
@@ -132,7 +130,6 @@ namespace CoreMotion {
 		}
 
 		/// <summary>A string of the form $"rotationRate=({x},{y},{z}"	string".</summary>
-		///         <returns>To be added.</returns>
 		public override string ToString ()
 		{
 			return String.Format ("rotationRate=({0},{1},{2}", x, y, z);

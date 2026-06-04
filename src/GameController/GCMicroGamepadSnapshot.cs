@@ -8,7 +8,7 @@ namespace GameController {
 
 	// GCMicroGamepadSnapshot.h
 	// float_t are 4 bytes (at least for ARM64)
-	/// <summary>Represents the instantaneous state of a micro gamepad in V100 format at a point in time.</summary>
+	/// <summary>Represents the instantaneous state of a micro gamepad in V100 format at APoint in time.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]

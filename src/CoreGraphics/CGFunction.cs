@@ -55,8 +55,7 @@ namespace CoreGraphics {
 		{
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the evaluate function used by this CGFunction.</summary>
 		public CGFunctionEvaluate? EvaluateFunction {
 			get {
 				return evaluate;

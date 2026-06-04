@@ -10,50 +10,46 @@
 
 namespace AVFoundation {
 	/// <summary>Enumerates physical locations of data sources on AV devices.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum AVAudioDataSourceLocation {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates upper.</summary>
 		Upper,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates lower.</summary>
 		Lower,
 	}
 
 	/// <summary>Enumerates physical orientations of data sources on AV devices.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum AVAudioDataSourceOrientation {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates top.</summary>
 		Top,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bottom.</summary>
 		Bottom,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates front.</summary>
 		Front,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates back.</summary>
 		Back,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates left.</summary>
 		Left,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates right.</summary>
 		Right,
 	}
 
 	/// <summary>Enumerates microphone directivity values.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum AVAudioDataSourcePolarPattern {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates omnidirectional.</summary>
 		Omnidirectional,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates cardioid.</summary>
 		Cardioid,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates subcardioid.</summary>
 		Subcardioid,
 	}
 
 	/// <summary>Describes a data source of an <see cref="AVFoundation.AVAudioSession" /> object.</summary>
-	///     <remarks>To be added.</remarks>
 	/// <related type="externalDocumentation" href="https://developer.apple.com/documentation/avfaudio/avaudiosessiondatasourcedescription">Apple documentation for <c>AVAudioSessionDataSourceDescription</c></related>
 	public partial class AVAudioSessionDataSourceDescription {
 		static internal AVAudioDataSourceLocation ToLocation (NSString? l)
@@ -106,7 +102,6 @@ namespace AVFoundation {
 
 		/// <summary>Indicates the location of the data source on the device.</summary>
 		///         <value>The value can be either LocationUpper or LocationLower from <see cref="AVFoundation.AVAudioSession" />.<para tool="nullallowed">This value can be <see langword="null" />.</para></value>
-		///         <remarks>To be added.</remarks>
 		public AVAudioDataSourceLocation Location {
 			get {
 				return ToLocation (Location_);
@@ -124,7 +119,6 @@ namespace AVFoundation {
 
 		/// <summary>The supported polar configurations by this audio data source.</summary>
 		///         <value>Array of strings containing the names of the supported microphone directions for the source, one of PolarPatternOmnidirectional, PolarPatternCardioid, PolarPatternSubcardioid from <see cref="AVFoundation.AVAudioSession" />.</value>
-		///         <remarks>To be added.</remarks>
 		public AVAudioDataSourcePolarPattern []? SupportedPolarPatterns {
 			get {
 				var x = SupportedPolarPatterns_;
@@ -141,7 +135,6 @@ namespace AVFoundation {
 
 		/// <summary>Indicates the currenly selected microphone direction.</summary>
 		///         <value>The current setting for the microphone direction, one of PolarPatternOmnidirectional, PolarPatternCardioid, PolarPatternSubcardioid from <see cref="AVFoundation.AVAudioSession" /></value>
-		///         <remarks>To be added.</remarks>
 		public AVAudioDataSourcePolarPattern SelectedPolarPattern {
 			get {
 				return ToPolarPattern (SelectedPolarPattern_);
@@ -157,11 +150,10 @@ namespace AVFoundation {
 			}
 		}
 
-		/// <param name="pattern">To be added.</param>
-		///         <param name="outError">To be added.</param>
+		/// <param name="pattern">The pattern.</param>
+		///         <param name="outError">The out error.</param>
 		///         <summary>Sets the preferred directivity for the data source.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool SetPreferredPolarPattern (AVAudioDataSourcePolarPattern pattern, out NSError outError)
 		{
 			return SetPreferredPolarPattern_ (ToToken (pattern), out outError);

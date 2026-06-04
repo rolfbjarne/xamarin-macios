@@ -362,18 +362,18 @@ namespace ContactsUI {
 	interface CNContactViewControllerDelegate {
 
 		/// <param name="viewController">The view controller.</param>
-		///         <param name="property">The property.</param>
-		///         <summary>Return <see langword="true" /> if the default action for the property should be triggered when it is selected by the user.</summary>
-		///         <returns>To be added.</returns>
+		/// <param name="property">The property.</param>
+		/// <summary>Return <see langword="true" /> if the default action for the property should be triggered when it is selected by the user.</summary>
+		/// <returns><see langword="true" /> if the default action should be performed; otherwise, <see langword="false" />.</returns>
 		[Export ("contactViewController:shouldPerformDefaultActionForContactProperty:")]
 		bool ShouldPerformDefaultAction (CNContactViewController viewController, CNContactProperty property);
 
 		/// <param name="viewController">The view controller.</param>
-		///         <param name="contact">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
-		///         <summary>Method that is called after the view is presented.</summary>
+		/// <param name="contact">
+		///   <para>The completed contact, or <see langword="null" /> if the user cancelled.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
+		/// <summary>Method that is called after the view is presented.</summary>
 		[Export ("contactViewController:didCompleteWithContact:")]
 		void DidComplete (CNContactViewController viewController, [NullAllowed] CNContact contact);
 	}

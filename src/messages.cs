@@ -82,8 +82,8 @@ namespace Messages {
 	[Protocol]
 	interface MSMessagesAppTranscriptPresentation {
 		/// <param name="size">The size.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns the content size that fits within the specified size.</summary>
+		/// <returns>The content size that fits.</returns>
 		[Abstract]
 		[Export ("contentSizeThatFits:")]
 		CGSize GetContentSizeThatFits (CGSize size);

@@ -18,7 +18,6 @@ using OS_nw_privacy_context = System.IntPtr;
 
 namespace Network {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
@@ -100,11 +99,10 @@ namespace Network {
 		//
 		// If you pass null, to either configureTls, or configureTcp they will use the default options
 		//
-		/// <param name="configureTls">To be added.</param>
-		///         <param name="configureTcp">To be added.</param>
+		/// <param name="configureTls">The configure tls.</param>
+		///         <param name="configureTcp">The configure tcp.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public unsafe static NWParameters CreateSecureTcp (Action<NWProtocolOptions>? configureTls = null, Action<NWProtocolOptions>? configureTcp = null)
 		{
@@ -125,10 +123,9 @@ namespace Network {
 			return new NWParameters (ptr, owns: true);
 		}
 
-		/// <param name="configureTcp">To be added.</param>
+		/// <param name="configureTcp">The configure tcp.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		// If you pass null to configureTcp, it will use the default options
 		public unsafe static NWParameters CreateTcp (Action<NWProtocolOptions>? configureTcp = null)
@@ -151,11 +148,10 @@ namespace Network {
 		//
 		// If you pass null, to either configureTls, or configureTcp they will use the default options
 		//
-		/// <param name="configureTls">To be added.</param>
-		///         <param name="configureUdp">To be added.</param>
+		/// <param name="configureTls">The configure tls.</param>
+		///         <param name="configureUdp">The configure udp.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public unsafe static NWParameters CreateSecureUdp (Action<NWProtocolOptions>? configureTls = null, Action<NWProtocolOptions>? configureUdp = null)
 		{
@@ -177,10 +173,9 @@ namespace Network {
 		}
 
 		// If you pass null to configureTcp, it will use the default options
-		/// <param name="configureUdp">To be added.</param>
+		/// <param name="configureUdp">The configure udp.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public unsafe static NWParameters CreateUdp (Action<NWProtocolOptions>? configureUdp = null)
 		{
@@ -226,7 +221,6 @@ namespace Network {
 		static extern nw_parameters_t nw_parameters_create ();
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public NWParameters ()
 		{
 			InitializeHandle (nw_parameters_create ());
@@ -237,7 +231,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public NWParameters Clone ()
 		{
 			return new NWParameters (nw_parameters_copy (GetCheckedHandle ()), owns: true);
@@ -251,7 +244,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NWMultiPathService MultipathService {
 			get => nw_parameters_get_multipath_service (GetCheckedHandle ());
 			set => nw_parameters_set_multipath_service (GetCheckedHandle (), value);
@@ -262,7 +254,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NWProtocolStack ProtocolStack => new NWProtocolStack (nw_parameters_copy_default_protocol_stack (GetCheckedHandle ()), owns: true);
 
 		[DllImport (Constants.NetworkLibrary)]
@@ -273,7 +264,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool LocalOnly {
 			get => nw_parameters_get_local_only (GetCheckedHandle ()) != 0;
 			set => nw_parameters_set_local_only (GetCheckedHandle (), value.AsByte ());
@@ -287,7 +277,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool PreferNoProxy {
 			get => nw_parameters_get_prefer_no_proxy (GetCheckedHandle ()) != 0;
 			set => nw_parameters_set_prefer_no_proxy (GetCheckedHandle (), value.AsByte ());
@@ -301,7 +290,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NWParametersExpiredDnsBehavior ExpiredDnsBehavior {
 			get => nw_parameters_get_expired_dns_behavior (GetCheckedHandle ());
 			set => nw_parameters_set_expired_dns_behavior (GetCheckedHandle (), value);
@@ -315,7 +303,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NWInterface? RequiredInterface {
 			get {
 				var iface = nw_parameters_copy_required_interface (GetCheckedHandle ());
@@ -334,9 +321,8 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		static extern void nw_parameters_prohibit_interface (nw_parameters_t parameters, IntPtr handleInterface);
 
-		/// <param name="iface">To be added.</param>
+		/// <param name="iface">The iface.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void ProhibitInterface (NWInterface iface)
 		{
 			if (iface is null)
@@ -350,7 +336,6 @@ namespace Network {
 		static extern void nw_parameters_clear_prohibited_interfaces (nw_parameters_t parameters);
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void ClearProhibitedInterfaces ()
 		{
 			nw_parameters_clear_prohibited_interfaces (GetCheckedHandle ());
@@ -364,7 +349,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NWInterfaceType RequiredInterfaceType {
 			get => nw_parameters_get_required_interface_type (GetCheckedHandle ());
 			set => nw_parameters_set_required_interface_type (GetCheckedHandle (), value);
@@ -373,9 +357,8 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		static extern void nw_parameters_prohibit_interface_type (nw_parameters_t parameters, NWInterfaceType type);
 
-		/// <param name="ifaceType">To be added.</param>
+		/// <param name="ifaceType">The iface type.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void ProhibitInterfaceType (NWInterfaceType ifaceType)
 		{
 			nw_parameters_prohibit_interface_type (GetCheckedHandle (), ifaceType);
@@ -385,7 +368,6 @@ namespace Network {
 		static extern void nw_parameters_clear_prohibited_interface_types (nw_parameters_t parameters);
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void ClearProhibitedInterfaceTypes ()
 		{
 			nw_parameters_clear_prohibited_interface_types (GetCheckedHandle ());
@@ -407,9 +389,8 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		unsafe static extern void nw_parameters_iterate_prohibited_interfaces (nw_parameters_t parameters, BlockLiteral* callback);
 
-		/// <param name="iterationCallback">To be added.</param>
+		/// <param name="iterationCallback">The iteration callback.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public void IterateProhibitedInterfaces (Func<NWInterface, bool> iterationCallback)
 		{
@@ -432,9 +413,8 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		unsafe static extern void nw_parameters_iterate_prohibited_interface_types (IntPtr handle, BlockLiteral* callback);
 
-		/// <param name="callback">To be added.</param>
+		/// <param name="callback">The callback to invoke.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public void IterateProhibitedInterfaces (Func<NWInterfaceType, bool> callback)
 		{
@@ -453,7 +433,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool ProhibitExpensive {
 			get => nw_parameters_get_prohibit_expensive (GetCheckedHandle ()) != 0;
 			set => nw_parameters_set_prohibit_expensive (GetCheckedHandle (), value.AsByte ());
@@ -467,7 +446,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool ReuseLocalAddress {
 			get => nw_parameters_get_reuse_local_address (GetCheckedHandle ()) != 0;
 			set => nw_parameters_set_reuse_local_address (GetCheckedHandle (), value.AsByte ());
@@ -481,7 +459,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool FastOpenEnabled {
 			get => nw_parameters_get_fast_open_enabled (GetCheckedHandle ()) != 0;
 			set => nw_parameters_set_fast_open_enabled (GetCheckedHandle (), value.AsByte ());
@@ -495,7 +472,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NWServiceClass ServiceClass {
 			get => nw_parameters_get_service_class (GetCheckedHandle ());
 			set => nw_parameters_set_service_class (GetCheckedHandle (), value);
@@ -509,7 +485,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NWEndpoint? LocalEndpoint {
 			get {
 				var x = nw_parameters_copy_local_endpoint (GetCheckedHandle ());
@@ -534,7 +509,6 @@ namespace Network {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IncludePeerToPeer {
 			get => nw_parameters_get_include_peer_to_peer (GetCheckedHandle ()) != 0;
 			set => nw_parameters_set_include_peer_to_peer (GetCheckedHandle (), value.AsByte ());

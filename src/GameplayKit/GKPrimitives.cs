@@ -19,26 +19,26 @@ namespace GameplayKit {
 	[SupportedOSPlatform ("maccatalyst")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct GKBox {
-		/// <summary>To be added.</summary>
+		/// <summary>The min.</summary>
 		public Vector3 Min;
-		/// <summary>To be added.</summary>
+		/// <summary>The max.</summary>
 		public Vector3 Max;
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the g k quad.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct GKQuad {
-		/// <summary>To be added.</summary>
+		/// <summary>The min.</summary>
 		public Vector2 Min;
-		/// <summary>To be added.</summary>
+		/// <summary>The max.</summary>
 		public Vector2 Max;
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the g k triangle.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
@@ -49,7 +49,6 @@ namespace GameplayKit {
 		Vector3 point2;
 		Vector3 point3;
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public Vector3 [] Points {
 			get {
 				return new Vector3 [] { point1, point2, point3 };

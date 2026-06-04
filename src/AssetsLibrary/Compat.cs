@@ -137,7 +137,7 @@ namespace AssetsLibrary {
 	public enum ALAssetType : int {
 		/// <summary>The asset is a video.</summary>
 		Video = 0,
-		/// <summary>The asset is a photo.</summary>
+		/// <summary>The asset is APhoto.</summary>
 		Photo = 1,
 		/// <summary>The asset has an unknown type.</summary>
 		Unknown = 2,
@@ -499,7 +499,7 @@ namespace AssetsLibrary {
 	} /* class ALAsset */
 
 	/// <summary>A specific representation of an asset.</summary>
-	///     <remarks>Some assets can have more than one representation.   Consider images that are stored in two different formats for example, this class represents a particular reprensetation of the asset.</remarks>
+	///     <remarks>Some assets can have more than one representation.   Consider images that are stored in two different formats for example, this class represents AParticular reprensetation of the asset.</remarks>
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/AssetsLibrary/Reference/ALAssetRepresentation_Class/index.html">Apple documentation for <c>ALAssetRepresentation</c></related>
 	[EditorBrowsable (EditorBrowsableState.Never)]
 	[Obsolete (Constants.AssetsLibraryRemoved)]

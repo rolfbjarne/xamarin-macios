@@ -66,7 +66,7 @@ namespace OpenGL {
 #if !COREBUILD
 		/// <param name="attributes">The attributes.</param>
 		///         <param name="npix">The npix.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CGLPixelFormat" /> instance.</summary>
 		public CGLPixelFormat (CGLPixelFormatAttribute [] attributes, out int npix)
 			: base (Create (attributes, out npix), true)
 		{
@@ -99,7 +99,7 @@ namespace OpenGL {
 		}
 
 		/// <param name="attributes">The attributes.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CGLPixelFormat" /> instance.</summary>
 		public CGLPixelFormat (params object [] attributes)
 			: base (Create (ConvertToAttributes (attributes), out _), true)
 		{
@@ -107,7 +107,7 @@ namespace OpenGL {
 
 		/// <param name="npix">The npix.</param>
 		///         <param name="attributes">The attributes.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CGLPixelFormat" /> instance.</summary>
 		public CGLPixelFormat (out int npix, params object [] attributes) : this (ConvertToAttributes (attributes), out npix)
 		{
 		}

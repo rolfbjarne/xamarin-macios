@@ -60,7 +60,7 @@ namespace NetworkExtension {
 		[Deprecated (PlatformName.MacOSX, 26, 0, "Not supported anymore.")]
 		[Deprecated (PlatformName.MacCatalyst, 26, 0, "Not supported anymore.")]
 		DES = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates triple d e s.</summary>
 		[NoTV]
 		[Deprecated (PlatformName.iOS, 26, 0, "Not supported anymore.")]
 		[Deprecated (PlatformName.MacOSX, 26, 0, "Not supported anymore.")]
@@ -127,19 +127,19 @@ namespace NetworkExtension {
 		Invalid = 0,
 		/// <summary>Indicates group0.</summary>
 		Group0 = Invalid,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates group1.</summary>
 		[NoTV]
 		[Deprecated (PlatformName.iOS, 26, 0, "Groups less than 14 are not supported anymore.")]
 		[Deprecated (PlatformName.MacOSX, 26, 0, "Groups less than 14 are not supported anymore.")]
 		[Deprecated (PlatformName.MacCatalyst, 26, 0, "Groups less than 14 are not supported anymore.")]
 		Group1 = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates group2.</summary>
 		[NoTV]
 		[Deprecated (PlatformName.iOS, 26, 0, "Groups less than 14 are not supported anymore.")]
 		[Deprecated (PlatformName.MacOSX, 26, 0, "Groups less than 14 are not supported anymore.")]
 		[Deprecated (PlatformName.MacCatalyst, 26, 0, "Groups less than 14 are not supported anymore.")]
 		Group2 = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates group5.</summary>
 		[NoTV]
 		[Deprecated (PlatformName.iOS, 26, 0, "Groups less than 14 are not supported anymore.")]
 		[Deprecated (PlatformName.MacOSX, 26, 0, "Groups less than 14 are not supported anymore.")]

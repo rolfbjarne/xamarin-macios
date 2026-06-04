@@ -31,16 +31,15 @@ namespace CoreFoundation {
 	}
 
 	/// <summary>Enumerates process state transitions to monitor for <see cref="CoreFoundation.DispatchSource.ProcessMonitor" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum ProcessMonitorFlags : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>The monitored process exited.</summary>
 		Exit = 0x80000000,
-		/// <summary>To be added.</summary>
+		/// <summary>The monitored process forked.</summary>
 		Fork = 0x40000000,
-		/// <summary>To be added.</summary>
+		/// <summary>The monitored process called exec.</summary>
 		Exec = 0x20000000,
-		/// <summary>To be added.</summary>
+		/// <summary>The monitored process received a signal.</summary>
 		Signal = 0x08000000,
 	}
 
@@ -151,7 +150,6 @@ namespace CoreFoundation {
 		}
 
 		/// <summary>Suspends the dispatch source.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Suspend ()
 		{
 			dispatch_suspend (GetCheckedHandle ());
@@ -305,19 +303,16 @@ namespace CoreFoundation {
 		public class DataAdd : Data {
 			static IntPtr type_data_add;
 
-			/// <param name="handle">To be added.</param>
-			///         <param name="owns">To be added.</param>
+			/// <param name="handle">The native handle.</param>
+			/// <param name="owns">Whether this instance owns the handle.</param>
 			///         <summary>Creates a DataOr DispatchSource from an unmanaged pointer.</summary>
-			///         <remarks>To be added.</remarks>
 			public DataAdd (IntPtr handle, bool owns) : base (handle, owns) { }
-			/// <param name="handle">To be added.</param>
+			/// <param name="handle">The native handle.</param>
 			///         <summary>Creates a DataOr DispatchSource from an unmanaged pointer.</summary>
-			///         <remarks>To be added.</remarks>
 			public DataAdd (IntPtr handle) : base (handle, false) { }
 
 			/// <param name="queue">The target queue for this dispatch source object.   Pass null to use the default target queue (the default priority global concurrent queue).</param>
 			///         <summary>Creates a DataAdd source that delivers events on the specified queue.</summary>
-			///         <remarks>To be added.</remarks>
 			public DataAdd (DispatchQueue? queue = null)
 			{
 				if (type_data_add == IntPtr.Zero)
@@ -343,19 +338,16 @@ namespace CoreFoundation {
 		public class DataOr : Data {
 			static IntPtr type_data_or;
 
-			/// <param name="handle">To be added.</param>
-			///         <param name="owns">To be added.</param>
+			/// <param name="handle">The native handle.</param>
+			/// <param name="owns">Whether this instance owns the handle.</param>
 			///         <summary>Creates a DataOr DispatchSource from an unmanaged pointer.</summary>
-			///         <remarks>To be added.</remarks>
 			public DataOr (IntPtr handle, bool owns) : base (handle, owns) { }
-			/// <param name="handle">To be added.</param>
+			/// <param name="handle">The native handle.</param>
 			///         <summary>Creates a DataOr DispatchSource from an unmanaged pointer.</summary>
-			///         <remarks>To be added.</remarks>
 			public DataOr (IntPtr handle) : base (handle, false) { }
 
 			/// <param name="queue">The target queue for this dispatch source object.   Pass null to use the default target queue (the default priority global concurrent queue).</param>
 			///         <summary>Creates a DataOr source that delivers events on the specified queue.</summary>
-			///         <remarks>To be added.</remarks>
 			public DataOr (DispatchQueue? queue = null)
 			{
 				if (type_data_or == IntPtr.Zero)
@@ -401,7 +393,6 @@ namespace CoreFoundation {
 			{ }
 
 			/// <summary>The MachPort that this DispatchSource is monitoring.</summary>
-			///         <remarks>To be added.</remarks>
 			public int MachPort {
 				get {
 					return (int) dispatch_source_get_handle (GetCheckedHandle ());
@@ -418,14 +409,12 @@ namespace CoreFoundation {
 		public class MachSend : Mach {
 			static IntPtr type_mach_send;
 
-			/// <param name="handle">To be added.</param>
-			///         <param name="owns">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="handle">The native handle.</param>
+			/// <param name="owns">Whether this instance owns the handle.</param>
+			///         <summary>Creates a MachSend dispatch source from a native handle.</summary>
 			public MachSend (IntPtr handle, bool owns) : base (handle, owns) { }
-			/// <param name="handle">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="handle">The native handle.</param>
+			///         <summary>Creates a MachSend dispatch source from a native handle without ownership.</summary>
 			public MachSend (IntPtr handle) : base (handle, false) { }
 
 			/// <param name="machPort">The mach port</param>
@@ -468,14 +457,12 @@ namespace CoreFoundation {
 		public class MachReceive : DispatchSource {
 			static IntPtr type_mach_recv;
 
-			/// <param name="handle">To be added.</param>
-			///         <param name="owns">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="handle">The native handle.</param>
+			/// <param name="owns">Whether this instance owns the handle.</param>
+			///         <summary>Creates a MachReceive dispatch source from a native handle.</summary>
 			public MachReceive (IntPtr handle, bool owns) : base (handle, owns) { }
-			/// <param name="handle">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="handle">The native handle.</param>
+			///         <summary>Creates a MachReceive dispatch source from a native handle without ownership.</summary>
 			public MachReceive (IntPtr handle) : base (handle, false) { }
 
 			/// <param name="machPort">Mach port to monitor for incoming data.</param>
@@ -507,19 +494,17 @@ namespace CoreFoundation {
 		[SupportedOSPlatform ("tvos")]
 		public class MemoryPressure : DispatchSource {
 			static IntPtr type_memorypressure;
-			/// <param name="handle">To be added.</param>
-			///         <param name="owns">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="handle">The native handle.</param>
+			/// <param name="owns">Whether this instance owns the handle.</param>
+			/// <summary>Creates a new memory pressure dispatch source.</summary>
 			public MemoryPressure (IntPtr handle, bool owns) : base (handle, owns) { }
-			/// <param name="handle">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="handle">The native handle.</param>
+			/// <summary>Creates a new memory pressure dispatch source.</summary>
 			public MemoryPressure (IntPtr handle) : base (handle, false) { }
 
 			/// <param name="monitorFlags">Memory pressure flags to monitor.   The default just monitors memory pressure warnings and the return to normal.</param>
 			///         <param name="queue">The target queue for this dispatch source object.   Pass null to use the default target queue (the default priority global concurrent queue).</param>
-			///         <summary>To be added.</summary>
+			/// <summary>Creates a new memory pressure dispatch source.</summary>
 			///         <remarks>
 			///           <para>
 			///           </para>
@@ -557,19 +542,17 @@ namespace CoreFoundation {
 		public class ProcessMonitor : DispatchSource {
 			static IntPtr type_proc;
 
-			/// <param name="handle">To be added.</param>
-			///         <param name="owns">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="handle">The native handle.</param>
+			/// <param name="owns">Whether this instance owns the handle.</param>
+			/// <summary>Creates a new process monitor dispatch source.</summary>
 			public ProcessMonitor (IntPtr handle, bool owns) : base (handle, owns) { }
-			/// <param name="handle">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="handle">The native handle.</param>
+			/// <summary>Creates a new process monitor dispatch source.</summary>
 			public ProcessMonitor (IntPtr handle) : base (handle, false) { }
 			/// <param name="processId">The process ID to monitor.</param>
 			///         <param name="monitorKind">The kind of monitoring desired fo the specified process.</param>
 			///         <param name="queue">The target queue for this dispatch source object.   Pass null to use the default target queue (the default priority global concurrent queue).</param>
-			///         <summary>To be added.</summary>
+			/// <summary>Creates a new process monitor dispatch source.</summary>
 			///         <remarks>
 			///           <para />
 			///         </remarks>
@@ -589,7 +572,6 @@ namespace CoreFoundation {
 			}
 
 			/// <summary>The process ID that is being monitored</summary>
-			///         <remarks>To be added.</remarks>
 			public int ProcessId {
 				get {
 					return (int) dispatch_source_get_handle (GetCheckedHandle ());
@@ -613,19 +595,16 @@ namespace CoreFoundation {
 		[SupportedOSPlatform ("tvos")]
 		public class ReadMonitor : DispatchSource {
 			static IntPtr type_read;
-			/// <param name="handle">To be added.</param>
-			///         <param name="owns">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="handle">The native handle.</param>
+			/// <param name="owns">Whether this instance owns the handle.</param>
+			/// <summary>Creates a new read monitor dispatch source.</summary>
 			public ReadMonitor (IntPtr handle, bool owns) : base (handle, owns) { }
-			/// <param name="handle">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="handle">The native handle.</param>
+			/// <summary>Creates a new read monitor dispatch source.</summary>
 			public ReadMonitor (IntPtr handle) : base (handle, false) { }
-			/// <param name="fileDescriptor">To be added.</param>
+			/// <param name="fileDescriptor">The file descriptor to monitor.</param>
 			///         <param name="queue">The target queue for this dispatch source object.   Pass null to use the default target queue (the default priority global concurrent queue).</param>
 			///         <summary>Creates a file descriptor read monitor.</summary>
-			///         <remarks>To be added.</remarks>
 			public ReadMonitor (int fileDescriptor, DispatchQueue? queue = null)
 			{
 
@@ -680,14 +659,12 @@ namespace CoreFoundation {
 		[SupportedOSPlatform ("tvos")]
 		public class SignalMonitor : DispatchSource {
 			static IntPtr type_signal;
-			/// <param name="handle">To be added.</param>
-			///         <param name="owns">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="handle">The native handle.</param>
+			/// <param name="owns">Whether this instance owns the handle.</param>
+			///         <summary>Creates a SignalMonitor dispatch source from a native handle.</summary>
 			public SignalMonitor (IntPtr handle, bool owns) : base (handle, owns) { }
-			/// <param name="handle">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="handle">The native handle.</param>
+			///         <summary>Creates a SignalMonitor dispatch source from a native handle without ownership.</summary>
 			public SignalMonitor (IntPtr handle) : base (handle, false) { }
 			/// <param name="signalNumber">Signal to monitor</param>
 			///         <param name="queue">The target queue for this dispatch source object.   Pass null to use the default target queue (the default priority global concurrent queue).</param>
@@ -709,8 +686,7 @@ namespace CoreFoundation {
 					InitializeHandle (handle);
 			}
 
-			/// <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <summary>Gets the signal number being monitored.</summary>
 			public int SignalNumber {
 				get {
 					return (int) dispatch_source_get_handle (GetCheckedHandle ());
@@ -734,24 +710,20 @@ namespace CoreFoundation {
 		[SupportedOSPlatform ("tvos")]
 		public class Timer : DispatchSource {
 			static IntPtr type_timer;
-			/// <param name="handle">To be added.</param>
-			///         <param name="owns">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="handle">The native handle.</param>
+			/// <param name="owns">Whether this instance owns the handle.</param>
+			/// <summary>Creates a new timer dispatch source.</summary>
 			public Timer (IntPtr handle, bool owns) : base (handle, owns) { }
-			/// <param name="handle">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="handle">The native handle.</param>
+			/// <summary>Creates a new timer dispatch source.</summary>
 			public Timer (IntPtr handle) : base (handle, false) { }
 			/// <param name="queue">The target queue for this dispatch source object.   Pass null to use the default target queue (the default priority global concurrent queue).</param>
 			///         <summary>Creates a timer dispatch source that will be invoked at periodic intervals.</summary>
-			///         <remarks>To be added.</remarks>
 			public Timer (DispatchQueue? queue = null) : this (false, queue) { }
 
-			/// <param name="strict">To be added.</param>
-			///         <param name="queue">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="strict">The strict.</param>
+			/// <param name="queue">The dispatch queue to use.</param>
+			/// <summary>Creates a new timer dispatch source.</summary>
 			public Timer (bool strict = false, DispatchQueue? queue = null)
 			{
 				if (type_timer == IntPtr.Zero)
@@ -806,21 +778,18 @@ namespace CoreFoundation {
 			// If different than -1, we opened the descriptor and must close it.
 			int fd;
 
-			/// <param name="handle">To be added.</param>
-			///         <param name="owns">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="handle">The native handle.</param>
+			/// <param name="owns">Whether this instance owns the handle.</param>
+			/// <summary>Creates a new vnode monitor dispatch source.</summary>
 			public VnodeMonitor (IntPtr handle, bool owns) : base (handle, owns) { }
-			/// <param name="handle">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="handle">The native handle.</param>
+			/// <summary>Creates a new vnode monitor dispatch source.</summary>
 			public VnodeMonitor (IntPtr handle) : base (handle, false) { }
 
 			/// <param name="fileDescriptor">Unix file descriptor to monitor</param>
 			///         <param name="vnodeKind">The kind of monitoring to perform.</param>
 			///         <param name="queue">The target queue for this dispatch source object.   Pass null to use the default target queue (the default priority global concurrent queue).</param>
 			///         <summary>Creates a VNode monitor for the specified file descriptor to monitor the specified set of events on it.</summary>
-			///         <remarks>To be added.</remarks>
 			public VnodeMonitor (int fileDescriptor, VnodeMonitorKind vnodeKind, DispatchQueue? queue = null)
 			{
 				if (type_vnode == IntPtr.Zero)
@@ -847,7 +816,6 @@ namespace CoreFoundation {
 			///         <param name="vnodeKind">The kind of monitoring to perform.</param>
 			///         <param name="queue">The target queue for this dispatch source object.   Pass null to use the default target queue (the default priority global concurrent queue).</param>
 			///         <summary>Creates a VNode monitor for the specified file path to monitor the specified set of events on it.</summary>
-			///         <remarks>To be added.</remarks>
 			public VnodeMonitor (string path, VnodeMonitorKind vnodeKind, DispatchQueue? queue = null)
 			{
 				if (path is null)
@@ -881,7 +849,6 @@ namespace CoreFoundation {
 			}
 
 			/// <summary>File descriptor that is being monitored</summary>
-			///         <remarks>To be added.</remarks>
 			public int FileDescriptor {
 				get {
 					return (int) dispatch_source_get_handle (GetCheckedHandle ());
@@ -906,20 +873,17 @@ namespace CoreFoundation {
 		[SupportedOSPlatform ("tvos")]
 		public class WriteMonitor : DispatchSource {
 			static IntPtr type_write;
-			/// <param name="handle">To be added.</param>
-			///         <param name="owns">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="handle">The native handle.</param>
+			/// <param name="owns">Whether this instance owns the handle.</param>
+			/// <summary>Creates a new write monitor dispatch source.</summary>
 			public WriteMonitor (IntPtr handle, bool owns) : base (handle, owns) { }
-			/// <param name="handle">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="handle">The native handle.</param>
+			/// <summary>Creates a new write monitor dispatch source.</summary>
 			public WriteMonitor (IntPtr handle) : base (handle, false) { }
 
-			/// <param name="fileDescriptor">To be added.</param>
+			/// <param name="fileDescriptor">The file descriptor to monitor.</param>
 			///         <param name="queue">The target queue for this dispatch source object.   Pass null to use the default target queue (the default priority global concurrent queue).</param>
 			///         <summary>Creates a file descriptor monitor that invokes the event handler when writing to the file descriptor wont block.</summary>
-			///         <remarks>To be added.</remarks>
 			public WriteMonitor (int fileDescriptor, DispatchQueue? queue = null)
 			{
 				if (type_write == IntPtr.Zero)

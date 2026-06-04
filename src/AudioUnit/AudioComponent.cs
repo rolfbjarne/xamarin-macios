@@ -49,8 +49,7 @@ namespace AudioUnit {
 
 #if !TVOS
 	// keys are not constants and had to be found in AudioToolbox.framework/Headers/AudioComponent.h
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Describes the system resource usage of an audio component.</summary>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -61,17 +60,14 @@ namespace AudioUnit {
 		static NSString networkClientK = new NSString ("network.client");
 		static NSString exceptionK = new NSString ("temporary-exception.files.all.read-write");
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new empty resource usage info instance.</summary>
 		public ResourceUsageInfo () : base () { }
 
-		/// <param name="dic">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="dic">The backing dictionary.</param>
+		/// <summary>Creates a resource usage info instance from the specified dictionary.</summary>
 		public ResourceUsageInfo (NSDictionary dic) : base (dic) { }
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the IOKit user client names used by this component.</summary>
 		public string []? IOKitUserClient {
 			get {
 				return GetStringArrayValue (userClientK);
@@ -84,8 +80,7 @@ namespace AudioUnit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Mach global names used by this component.</summary>
 		public string []? MachLookUpGlobalName {
 			get {
 				return GetStringArrayValue (globalNameK);
@@ -98,8 +93,7 @@ namespace AudioUnit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether the component requires network access.</summary>
 		public bool? NetworkClient {
 			get {
 				return GetBoolValue (networkClientK);
@@ -109,8 +103,7 @@ namespace AudioUnit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether the component has a temporary read/write exception.</summary>
 		public bool? TemporaryExceptionReadWrite {
 			get {
 				return GetBoolValue (exceptionK);
@@ -122,8 +115,7 @@ namespace AudioUnit {
 	}
 
 	// keys are not constants and had to be found in AudioToolbox.framework/Headers/AudioComponent.h
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Describes an audio component and its properties.</summary>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -139,17 +131,14 @@ namespace AudioUnit {
 		static NSString resourceUsageK = new NSString ("resourceUsage");
 		static NSString tagsK = new NSString ("tags");
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new empty audio component info instance.</summary>
 		public AudioComponentInfo () : base () { }
 
-		/// <param name="dic">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="dic">The backing dictionary.</param>
+		/// <summary>Creates an audio component info instance from the specified dictionary.</summary>
 		public AudioComponentInfo (NSDictionary dic) : base (dic) { }
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the audio component type.</summary>
 		public string? Type {
 			get {
 				return GetStringValue (typeK);
@@ -159,8 +148,7 @@ namespace AudioUnit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the audio component subtype.</summary>
 		public string? Subtype {
 			get {
 				return GetStringValue (subtypeK);
@@ -170,8 +158,7 @@ namespace AudioUnit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the audio component manufacturer.</summary>
 		public string? Manufacturer {
 			get {
 				return GetStringValue (manufacturerK);
@@ -181,8 +168,7 @@ namespace AudioUnit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the name of the audio component.</summary>
 		public string? Name {
 			get {
 				return GetStringValue (nameK);
@@ -192,8 +178,7 @@ namespace AudioUnit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the version of the audio component.</summary>
 		public nuint? Version {
 			get {
 				return GetNUIntValue (versionK);
@@ -203,8 +188,7 @@ namespace AudioUnit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the factory function name.</summary>
 		public string? FactoryFunction {
 			get {
 				return GetStringValue (factoryFunctionK);
@@ -214,8 +198,7 @@ namespace AudioUnit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether the component is sandbox-safe.</summary>
 		public bool? SandboxSafe {
 			get {
 				return GetBoolValue (sandboxSafeK);
@@ -225,8 +208,7 @@ namespace AudioUnit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the resource usage information.</summary>
 		public ResourceUsageInfo? ResourceUsage {
 			get {
 				return GetStrongDictionary<ResourceUsageInfo> (resourceUsageK, (dict) => new ResourceUsageInfo (dict));
@@ -236,8 +218,7 @@ namespace AudioUnit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the tags for the component.</summary>
 		public string []? Tags {
 			get {
 				return GetStringArrayValue (tagsK);
@@ -256,7 +237,6 @@ namespace AudioUnit {
 
 
 	/// <summary>An audio component.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -269,17 +249,15 @@ namespace AudioUnit {
 		{
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates an audio unit from this component.</summary>
 		public AudioUnit CreateAudioUnit ()
 		{
 			return new AudioUnit (this);
 		}
 
-		/// <param name="cmp">To be added.</param>
-		///         <param name="cd">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="cmp">The audio component to search from, or <see langword="null" /> to start from the beginning.</param>
+		/// <param name="cd">The audio component description to match.</param>
+		/// <summary>Finds the next audio component matching the given description.</summary>
 		public static AudioComponent? FindNextComponent (AudioComponent? cmp, ref AudioComponentDescription cd)
 		{
 			var handle = cmp.GetHandle ();
@@ -293,71 +271,63 @@ namespace AudioUnit {
 			return result;
 		}
 
-		/// <param name="cd">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="cd">The audio component description to match.</param>
+		/// <summary>Finds the first audio component matching the given description.</summary>
 		public static AudioComponent? FindComponent (ref AudioComponentDescription cd)
 		{
 			return FindNextComponent (null, ref cd);
 		}
 
-		/// <param name="output">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="output">The output type to find.</param>
+		/// <summary>Finds an audio output component of the specified type.</summary>
 		public static AudioComponent? FindComponent (AudioTypeOutput output)
 		{
 			var cd = AudioComponentDescription.CreateOutput (output);
 			return FindComponent (ref cd);
 		}
 
-		/// <param name="musicDevice">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="musicDevice">The music device type to find.</param>
+		/// <summary>Finds a music device component of the specified type.</summary>
 		public static AudioComponent? FindComponent (AudioTypeMusicDevice musicDevice)
 		{
 			var cd = AudioComponentDescription.CreateMusicDevice (musicDevice);
 			return FindComponent (ref cd);
 		}
 
-		/// <param name="conveter">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="conveter">The converter type to find.</param>
+		/// <summary>Finds a converter component of the specified type.</summary>
 		public static AudioComponent? FindComponent (AudioTypeConverter conveter)
 		{
 			var cd = AudioComponentDescription.CreateConverter (conveter);
 			return FindComponent (ref cd);
 		}
 
-		/// <param name="effect">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="effect">The effect type to find.</param>
+		/// <summary>Finds an effect component of the specified type.</summary>
 		public static AudioComponent? FindComponent (AudioTypeEffect effect)
 		{
 			var cd = AudioComponentDescription.CreateEffect (effect);
 			return FindComponent (ref cd);
 		}
 
-		/// <param name="mixer">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="mixer">The mixer type to find.</param>
+		/// <summary>Finds a mixer component of the specified type.</summary>
 		public static AudioComponent? FindComponent (AudioTypeMixer mixer)
 		{
 			var cd = AudioComponentDescription.CreateMixer (mixer);
 			return FindComponent (ref cd);
 		}
 
-		/// <param name="panner">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="panner">The panner type to find.</param>
+		/// <summary>Finds a panner component of the specified type.</summary>
 		public static AudioComponent? FindComponent (AudioTypePanner panner)
 		{
 			var cd = AudioComponentDescription.CreatePanner (panner);
 			return FindComponent (ref cd);
 		}
 
-		/// <param name="generator">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="generator">The generator type to find.</param>
+		/// <summary>Finds a generator component of the specified type.</summary>
 		public static AudioComponent? FindComponent (AudioTypeGenerator generator)
 		{
 			var cd = AudioComponentDescription.CreateGenerator (generator);
@@ -370,8 +340,7 @@ namespace AudioUnit {
 		[DllImport (Constants.AudioUnitLibrary, EntryPoint = "AudioComponentCopyName")]
 		unsafe static extern int /* OSStatus */ AudioComponentCopyName (IntPtr component, IntPtr* cfstr);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the name of the audio component.</summary>
 		public string? Name {
 			get {
 				IntPtr r;
@@ -386,8 +355,7 @@ namespace AudioUnit {
 		[DllImport (Constants.AudioUnitLibrary)]
 		unsafe static extern int /* OSStatus */ AudioComponentGetDescription (IntPtr component, AudioComponentDescription* desc);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the component description.</summary>
 		public AudioComponentDescription? Description {
 			get {
 				AudioComponentDescription desc;
@@ -403,8 +371,7 @@ namespace AudioUnit {
 		[DllImport (Constants.AudioUnitLibrary)]
 		unsafe static extern int /* OSStatus */ AudioComponentGetVersion (IntPtr component, int* /* UInt32* */ version);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the version of the audio component.</summary>
 		public Version? Version {
 			get {
 				int ret;
@@ -445,9 +412,8 @@ namespace AudioUnit {
 		[DllImport (Constants.AudioUnitLibrary)]
 		static extern IntPtr AudioComponentGetIcon (IntPtr comp, float /* float */ desiredPointSize);
 
-		/// <param name="desiredPointSize">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="desiredPointSize">The desired point size for the icon.</param>
+		/// <summary>Gets the icon for the audio component at the specified point size.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
@@ -470,8 +436,7 @@ namespace AudioUnit {
 		[DllImport (Constants.AudioUnitLibrary)]
 		static extern double AudioComponentGetLastActiveTime (IntPtr comp);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the last time the audio component was active.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
@@ -494,8 +459,7 @@ namespace AudioUnit {
 		[DllImport (Constants.AudioUnitLibrary)]
 		static extern IntPtr AudioComponentGetIcon (IntPtr comp);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the icon for the audio component.</summary>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("maccatalyst")]
@@ -663,16 +627,14 @@ namespace AudioUnit {
 	}
 
 #if !COREBUILD
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Provides validation parameter keys for audio component validation.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public static class AudioComponentValidationParameter {
 		//		#define kAudioComponentValidationParameter_ForceValidation		 "ForceValidation"
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key to force validation.</summary>
 		public static NSString ForceValidation = new NSString ("ForceValidation");
 
 		//		#define kAudioComponentValidationParameter_LoadOutOfProcess		 "LoadOutOfProcess"
@@ -683,21 +645,18 @@ namespace AudioUnit {
 		public static NSString LoadOutOfProcess = new NSString ("LoadOutOfProcess");
 
 		//		#define kAudioComponentValidationParameter_TimeOut				"TimeOut"
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key to specify a timeout for validation.</summary>
 		public static NSString TimeOut = new NSString ("TimeOut");
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Provides configuration info keys for audio components.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public static class AudioComponentConfigurationInfo {
 		//		#define kAudioComponentConfigurationInfo_ValidationResult	"ValidationResult"
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The key for the validation result.</summary>
 		public static NSString ValidationResult = new NSString ("ValidationResult");
 	}
 #endif

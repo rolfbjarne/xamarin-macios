@@ -164,24 +164,23 @@ namespace CoreFoundation {
 
 	// CFIndex
 	/// <summary>An enumeration whose values specify valid statuses for a <see cref="CoreFoundation.CFStream" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[Native] // System/Library/Frameworks/CoreFoundation.framework/Headers/CFStream.h
 	public enum CFStreamStatus : long {
-		/// <summary>To be added.</summary>
+		/// <summary>The stream is not open.</summary>
 		NotOpen = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>The stream is being opened.</summary>
 		Opening,
-		/// <summary>To be added.</summary>
+		/// <summary>The stream is open.</summary>
 		Open,
-		/// <summary>To be added.</summary>
+		/// <summary>The stream is being read from.</summary>
 		Reading,
-		/// <summary>To be added.</summary>
+		/// <summary>The stream is being written to.</summary>
 		Writing,
-		/// <summary>To be added.</summary>
+		/// <summary>The stream has reached its end.</summary>
 		AtEnd,
-		/// <summary>To be added.</summary>
+		/// <summary>The stream is closed.</summary>
 		Closed,
-		/// <summary>To be added.</summary>
+		/// <summary>An error occurred on the stream.</summary>
 		Error,
 	}
 
@@ -479,12 +478,10 @@ namespace CoreFoundation {
 
 		#region Stream API
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the error associated with this stream.</summary>
 		public abstract CFException? GetError ();
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Checks for an error and throws if one exists.</summary>
 		protected void CheckError ()
 		{
 			var exc = GetError ();
@@ -492,8 +489,7 @@ namespace CoreFoundation {
 				throw exc;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Opens the stream.</summary>
 		public void Open ()
 		{
 			if (open || closed)
@@ -506,12 +502,10 @@ namespace CoreFoundation {
 			open = true;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Performs the platform-specific open operation.</summary>
 		protected abstract bool DoOpen ();
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Closes the stream.</summary>
 		public void Close ()
 		{
 			if (!open)
@@ -533,20 +527,17 @@ namespace CoreFoundation {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Performs the platform-specific close operation.</summary>
 		protected abstract void DoClose ();
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the current status of the stream.</summary>
 		public CFStreamStatus GetStatus ()
 		{
 			GetCheckedHandle ();
 			return DoGetStatus ();
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Performs the platform-specific get status operation.</summary>
 		protected abstract CFStreamStatus DoGetStatus ();
 
 		internal IntPtr GetProperty (NSString name)
@@ -555,15 +546,13 @@ namespace CoreFoundation {
 			return DoGetProperty (name);
 		}
 
-		/// <param name="name">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="name">The property name.</param>
+	/// <summary>Gets the specified property value.</summary>
 		protected abstract IntPtr DoGetProperty (NSString name);
 
-		/// <param name="name">To be added.</param>
-		///         <param name="value">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="name">The property name.</param>
+		///         <param name="value">The property value.</param>
+	/// <summary>Sets the specified property value.</summary>
 		protected abstract bool DoSetProperty (NSString name, INativeObject? value);
 
 		internal void SetProperty (NSString name, INativeObject? value)
@@ -581,29 +570,25 @@ namespace CoreFoundation {
 		#region Events
 
 		/// <summary>An <see cref="System.EventArgs" /> used by several events in <see cref="CoreFoundation.CFString" />.</summary>
-		///     <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		public class StreamEventArgs : EventArgs {
-			/// <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <summary>Gets the event type.</summary>
 			public CFStreamEventType EventType {
 				get;
 				private set;
 			}
 
-			/// <param name="type">To be added.</param>
-			///         <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <param name="type">The stream event type.</param>
+		/// <summary>Initializes a new instance with the specified event type.</summary>
 			public StreamEventArgs (CFStreamEventType type)
 			{
 				this.EventType = type;
 			}
 
-			/// <summary>To be added.</summary>
-			///         <remarks>To be added.</remarks>
+			/// <summary>Returns a string representation of the event arguments.</summary>
 			public override string ToString ()
 			{
 				return string.Format ("[StreamEventArgs: EventType={0}]", EventType);
@@ -616,9 +601,8 @@ namespace CoreFoundation {
 		public event EventHandler<StreamEventArgs>? ErrorEvent;
 		public event EventHandler<StreamEventArgs>? ClosedEvent;
 
-		/// <param name="args">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="args">The event arguments.</param>
+	/// <summary>Raises the open completed event.</summary>
 		protected virtual void OnOpenCompleted (StreamEventArgs args)
 		{
 			var e = OpenCompletedEvent;
@@ -626,9 +610,8 @@ namespace CoreFoundation {
 				e (this, args);
 		}
 
-		/// <param name="args">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="args">The event arguments.</param>
+	/// <summary>Raises the has bytes available event.</summary>
 		protected virtual void OnHasBytesAvailableEvent (StreamEventArgs args)
 		{
 			var e = HasBytesAvailableEvent;
@@ -636,9 +619,8 @@ namespace CoreFoundation {
 				e (this, args);
 		}
 
-		/// <param name="args">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="args">The event arguments.</param>
+	/// <summary>Raises the can accept bytes event.</summary>
 		protected virtual void OnCanAcceptBytesEvent (StreamEventArgs args)
 		{
 			var e = CanAcceptBytesEvent;
@@ -646,9 +628,8 @@ namespace CoreFoundation {
 				e (this, args);
 		}
 
-		/// <param name="args">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="args">The event arguments.</param>
+	/// <summary>Raises the error event.</summary>
 		protected virtual void OnErrorEvent (StreamEventArgs args)
 		{
 			var e = ErrorEvent;
@@ -656,9 +637,8 @@ namespace CoreFoundation {
 				e (this, args);
 		}
 
-		/// <param name="args">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="args">The event arguments.</param>
+	/// <summary>Raises the closed event.</summary>
 		protected virtual void OnClosedEvent (StreamEventArgs args)
 		{
 			var e = ClosedEvent;
@@ -668,23 +648,20 @@ namespace CoreFoundation {
 
 		#endregion
 
-		/// <param name="loop">To be added.</param>
-		///         <param name="mode">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="loop">The run loop to schedule with.</param>
+		///         <param name="mode">The run loop mode.</param>
+	/// <summary>Schedules the stream with the specified run loop.</summary>
 		protected abstract void ScheduleWithRunLoop (CFRunLoop loop, NSString? mode);
 
-		/// <param name="loop">To be added.</param>
-		///         <param name="mode">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="loop">The run loop to schedule with.</param>
+		///         <param name="mode">The run loop mode.</param>
+	/// <summary>Removes the stream from the specified run loop.</summary>
 		protected abstract void UnscheduleFromRunLoop (CFRunLoop loop, NSString? mode);
 
-		/// <param name="s">To be added.</param>
-		///     <param name="type">To be added.</param>
-		///     <param name="info">To be added.</param>
+		/// <param name="s">The stream handle.</param>
+		///     <param name="type">The stream event type.</param>
+		///     <param name="info">The callback context info.</param>
 		///     <summary>A delegate used as a callback in various <see cref="CoreFoundation.CFStream" /> methods.</summary>
-		///     <remarks>To be added.</remarks>
 		protected delegate void CFStreamCallback (IntPtr s, nint type, IntPtr info);
 
 		[UnmanagedCallersOnly]
@@ -694,9 +671,8 @@ namespace CoreFoundation {
 			stream?.OnCallback ((CFStreamEventType) (long) type);
 		}
 
-		/// <param name="type">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="type">The stream event type.</param>
+	/// <summary>Handles a stream callback event.</summary>
 		protected virtual void OnCallback (CFStreamEventType type)
 		{
 			var args = new StreamEventArgs (type);
@@ -719,10 +695,9 @@ namespace CoreFoundation {
 			}
 		}
 
-		/// <param name="runLoop">To be added.</param>
-		///         <param name="runLoopMode">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="runLoop">The run loop to use for events.</param>
+		///         <param name="runLoopMode">The run loop mode.</param>
+	/// <summary>Enables stream events on the specified run loop.</summary>
 		public void EnableEvents (CFRunLoop runLoop, NSString runLoopMode)
 		{
 			if (open || closed || (loop is not null))
@@ -820,8 +795,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* dispatch_queue_t */ IntPtr CFWriteStreamCopyDispatchQueue (/* CFWriteStreamRef */ IntPtr stream);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the dispatch queue for read events.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -836,8 +810,7 @@ namespace CoreFoundation {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the dispatch queue for write events.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

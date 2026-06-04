@@ -217,10 +217,10 @@ namespace Photos {
 		/// <summary>A smart album that groups Live Photo images.</summary>
 		[MacCatalyst (13, 1)]
 		SmartAlbumLivePhotos = 213,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates smart album animated.</summary>
 		[MacCatalyst (13, 1)]
 		SmartAlbumAnimated = 214,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates smart album long exposures.</summary>
 		[MacCatalyst (13, 1)]
 		SmartAlbumLongExposures = 215,
 		[iOS (13, 0)]
@@ -260,13 +260,13 @@ namespace Photos {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum PHAssetMediaType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates image.</summary>
 		Image = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates video.</summary>
 		Video = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates audio.</summary>
 		Audio = 3,
 	}
 
@@ -401,17 +401,17 @@ namespace Photos {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum PHAssetPlaybackStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsupported.</summary>
 		Unsupported = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates image.</summary>
 		Image = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates image animated.</summary>
 		ImageAnimated = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates live photo.</summary>
 		LivePhoto = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates video.</summary>
 		Video = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates video looping.</summary>
 		VideoLooping = 5,
 	}
 
@@ -420,11 +420,11 @@ namespace Photos {
 	[NoMacCatalyst]
 	[Native]
 	public enum PHProjectTextElementType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates body.</summary>
 		Body = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates title.</summary>
 		Title,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates subtitle.</summary>
 		Subtitle,
 	}
 
@@ -433,29 +433,29 @@ namespace Photos {
 	[NoMacCatalyst]
 	[Native]
 	public enum PHProjectCreationSource : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates undefined.</summary>
 		Undefined = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates user selection.</summary>
 		UserSelection = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates album.</summary>
 		Album = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates memory.</summary>
 		Memory = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates moment.</summary>
 		Moment = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates project.</summary>
 		Project = 20,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates project book.</summary>
 		ProjectBook = 21,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates project calendar.</summary>
 		ProjectCalendar = 22,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates project card.</summary>
 		ProjectCard = 23,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates project print order.</summary>
 		ProjectPrintOrder = 24,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates project slideshow.</summary>
 		ProjectSlideshow = 25,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates project extension.</summary>
 		ProjectExtension = 26,
 	}
 
@@ -464,13 +464,13 @@ namespace Photos {
 	[NoMacCatalyst]
 	[Native]
 	public enum PHProjectSectionType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates undefined.</summary>
 		Undefined = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates cover.</summary>
 		Cover = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates content.</summary>
 		Content = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates auxiliary.</summary>
 		Auxiliary = 3,
 	}
 
@@ -480,10 +480,10 @@ namespace Photos {
 	[Native ("PHLivePhotoEditingErrorCode")]
 	[ErrorDomain ("PHLivePhotoEditingErrorDomain")]
 	public enum PHLivePhotoEditingError : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 15, message: "Use 'PHPhotosError.InternalError' instead.")]
 		Unknown,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates aborted.</summary>
 		[Deprecated (PlatformName.MacOSX, 10, 15, message: "Use 'PHPhotosError.UserCancelled' instead.")]
 		Aborted,
 	}
@@ -492,23 +492,23 @@ namespace Photos {
 	[NoTV]
 	[NoMacCatalyst]
 	public enum FigExifCustomRenderedValue : short {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates not custom.</summary>
 		NotCustom = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates custom.</summary>
 		Custom = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hdr image.</summary>
 		HdrImage = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hdr plus e v0_ hdr image.</summary>
 		HdrPlusEV0_HdrImage = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hdr plus e v0_ e v0 image.</summary>
 		HdrPlusEV0_EV0Image = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates panorama image.</summary>
 		PanoramaImage = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sdof image.</summary>
 		SdofImage = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sdof plus original_ sdof image.</summary>
 		SdofPlusOriginal_SdofImage = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sdof plus original_ original image.</summary>
 		SdofPlusOriginal_OriginalImage = 9,
 	}
 

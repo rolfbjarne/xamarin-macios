@@ -37,14 +37,12 @@ using System.Threading;
 
 namespace CoreFoundation {
 
-	/// <param name="data">To be added.</param>
-	///     <param name="error">To be added.</param>
+	/// <param name="data">The data to use.</param>
+	///     <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 	///     <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public delegate void DispatchIOHandler (DispatchData? data, int error);
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -90,12 +88,11 @@ namespace CoreFoundation {
 		[DllImport (Constants.libcLibrary)]
 		unsafe extern static void dispatch_write (int fd, IntPtr dispatchData, IntPtr dispatchQueue, BlockLiteral* handler);
 
-		/// <param name="fd">To be added.</param>
-		///         <param name="dispatchData">To be added.</param>
-		///         <param name="dispatchQueue">To be added.</param>
-		///         <param name="handler">To be added.</param>
+		/// <param name="fd">The fd.</param>
+		///         <param name="dispatchData">The dispatch data.</param>
+		///         <param name="dispatchQueue">The dispatch queue.</param>
+		///         <param name="handler">The completion handler to call when the operation completes.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public static void Write (int fd, DispatchData dispatchData, DispatchQueue dispatchQueue, DispatchIOHandler handler)
 		{

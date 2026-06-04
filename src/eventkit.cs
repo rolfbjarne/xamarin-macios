@@ -327,7 +327,7 @@ namespace EventKit {
 		EKEvent FromStore (EKEventStore eventStore);
 
 		/// <summary>Specifies whether or not this is an all-day event.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if this is an all-day event; otherwise, <see langword="false" />.</value>
 		[Export ("allDay")]
 		bool AllDay { [Bind ("isAllDay")] get; set; }
 

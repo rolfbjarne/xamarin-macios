@@ -860,7 +860,7 @@ namespace Security {
 		/// <summary>Indicates not set.</summary>
 		NotSet = -1,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates allow.</summary>
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "Use 'LAContext.InteractionNotAllowed' instead.")]
 		[Deprecated (PlatformName.iOS, 14, 0, message: "Use 'LAContext.InteractionNotAllowed' instead.")]
 		[Deprecated (PlatformName.TvOS, 14, 0, message: "Use 'LAContext.InteractionNotAllowed' instead.")]
@@ -868,7 +868,7 @@ namespace Security {
 		[Field ("kSecUseAuthenticationUIAllow")]
 		Allow,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates fail.</summary>
 		[Deprecated (PlatformName.MacOSX, 11, 0, message: "Use 'LAContext.InteractionNotAllowed' instead.")]
 		[Deprecated (PlatformName.iOS, 14, 0, message: "Use 'LAContext.InteractionNotAllowed' instead.")]
 		[Deprecated (PlatformName.TvOS, 14, 0, message: "Use 'LAContext.InteractionNotAllowed' instead.")]

@@ -42,11 +42,10 @@ namespace CoreText {
 
 	// defined as uint32_t - /System/Library/Frameworks/CoreText.framework/Headers/CTFontManager.h
 	/// <summary>An enumeration whose values specify the scope for font registration.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum CTFontManagerScope : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates process.</summary>
 		Process = 1,
 		[SupportedOSPlatform ("ios13.0")]
 		[SupportedOSPlatform ("tvos13.0")]
@@ -63,13 +62,12 @@ namespace CoreText {
 
 	// defined as uint32_t - /System/Library/Frameworks/CoreText.framework/Headers/CTFontManager.h
 	/// <summary>An enumeration whose values specify values for auto-activation of fonts.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum CTFontManagerAutoActivation : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates default.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates disabled.</summary>
 		Disabled = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates enabled.</summary>
 		Enabled = 2,
 		/// <summary>Developers should not use this deprecated field. It's now treated as 'Default'.</summary>
 		[SupportedOSPlatform ("ios")]
@@ -92,10 +90,9 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern byte CTFontManagerIsSupportedFont (IntPtr url);
 
-		/// <param name="url">To be added.</param>
+		/// <param name="url">The URL to use.</param>
 		///         <summary>Developers should not use this deprecated method. </summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[UnsupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("ios")]
@@ -113,11 +110,10 @@ namespace CoreText {
 
 		[DllImport (Constants.CoreTextLibrary)]
 		unsafe static extern byte CTFontManagerRegisterFontsForURL (IntPtr fontUrl, CTFontManagerScope scope, IntPtr* error);
-		/// <param name="fontUrl">To be added.</param>
-		///         <param name="scope">To be added.</param>
+		/// <param name="fontUrl">The font url.</param>
+		///         <param name="scope">The scope.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static NSError? RegisterFontsForUrl (NSUrl fontUrl, CTFontManagerScope scope)
 		{
 			if (fontUrl is null)
@@ -164,11 +160,10 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		unsafe static extern byte CTFontManagerRegisterFontsForURLs (IntPtr arrayRef, CTFontManagerScope scope, IntPtr* error_array);
 
-		/// <param name="fontUrls">To be added.</param>
-		///         <param name="scope">To be added.</param>
+		/// <param name="fontUrls">The font urls.</param>
+		///         <param name="scope">The scope.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -236,11 +231,10 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		unsafe static extern byte CTFontManagerUnregisterFontsForURL (IntPtr fotUrl, CTFontManagerScope scope, IntPtr* error);
 
-		/// <param name="fontUrl">To be added.</param>
-		///         <param name="scope">To be added.</param>
+		/// <param name="fontUrl">The font url.</param>
+		///         <param name="scope">The scope.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static NSError? UnregisterFontsForUrl (NSUrl fontUrl, CTFontManagerScope scope)
 		{
 			if (fontUrl is null)
@@ -274,11 +268,10 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		unsafe static extern byte CTFontManagerUnregisterFontsForURLs (IntPtr arrayRef, CTFontManagerScope scope, IntPtr* error_array);
 
-		/// <param name="fontUrls">To be added.</param>
-		///         <param name="scope">To be added.</param>
+		/// <param name="fontUrls">The font urls.</param>
+		///         <param name="scope">The scope.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -334,10 +327,9 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern /* CFArrayRef */ IntPtr CTFontManagerCreateFontDescriptorsFromURL (/* CFURLRef */ IntPtr fileURL);
 
-		/// <param name="url">To be added.</param>
+		/// <param name="url">The URL to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -497,7 +489,6 @@ namespace CoreText {
 		}
 
 		/// <summary>Observer for receiving notifications when fonts are added to the registry.</summary>
-		///     <remarks>To be added.</remarks>
 		public static partial class Notifications {
 			/// <include file="../../docs/api/CoreText.CTFontManager/Notifications.xml" path="/Documentation/Docs[@DocId='M:CoreText.CTFontManager.Notifications.ObserveRegisteredFontsChanged(System.EventHandler{Foundation.NSNotificationEventArgs})']/*" />
 			public static NSObject ObserveRegisteredFontsChanged (EventHandler<NSNotificationEventArgs> handler)

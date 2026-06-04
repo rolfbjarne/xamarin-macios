@@ -12,8 +12,7 @@ namespace Intents {
 		///         <param name="seat">The seat.</param>
 		///         <param name="level">The level.</param>
 		///         <param name="relativeLevelSetting">The relative level setting.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new intent to set seat settings in a car.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("ios12.0", "Use the overload that takes 'INSpeakableString carName'.")]

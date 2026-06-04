@@ -17,16 +17,14 @@ namespace VideoToolbox {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct VTDataRateLimit {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the number of bytes.</summary>
 		public uint NumberOfBytes { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the seconds.</summary>
 		public double Seconds { get; set; }
 
 		/// <param name="numberOfBytes">The number of bytes.</param>
 		///         <param name="seconds">The seconds.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="VTDataRateLimit" /> instance.</summary>
 		public VTDataRateLimit (uint numberOfBytes, double seconds) : this ()
 		{
 			NumberOfBytes = numberOfBytes;

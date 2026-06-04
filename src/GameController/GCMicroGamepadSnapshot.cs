@@ -64,7 +64,7 @@ namespace GameController {
 
 	// GCMicroGamepadSnapshot.h
 	// float_t are 4 bytes (at least for ARM64)
-	/// <summary>To be added.</summary>
+	/// <summary>Contains snapshot data for a micro gamepad controller.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -76,22 +76,22 @@ namespace GameController {
 	public struct GCMicroGamepadSnapshotData {
 
 		// Standard information
-		/// <summary>To be added.</summary>
+		/// <summary>The version of the snapshot data format.</summary>
 		public ushort /* uint16_t */ Version;
-		/// <summary>To be added.</summary>
+		/// <summary>The size of the snapshot data structure.</summary>
 		public ushort /* uint16_t */ Size;
 
 		// Standard gamepad data
 		// Axes in the range [-1.0, 1.0]
-		/// <summary>To be added.</summary>
+		/// <summary>The X-axis value of the directional pad, in the range [-1.0, 1.0].</summary>
 		public float /* float_t = float */ DPadX;
-		/// <summary>To be added.</summary>
+		/// <summary>The Y-axis value of the directional pad, in the range [-1.0, 1.0].</summary>
 		public float /* float_t = float */ DPadY;
 
 		// Buttons in the range [0.0, 1.0]
-		/// <summary>To be added.</summary>
+		/// <summary>The A button value, in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ ButtonA;
-		/// <summary>To be added.</summary>
+		/// <summary>The X button value, in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ ButtonX;
 
 		[SupportedOSPlatform ("tvos")]
@@ -105,8 +105,7 @@ namespace GameController {
 		unsafe static extern /* NSData * __nullable */ IntPtr NSDataFromGCMicroGamepadSnapshotData (
 			/* __nullable */ GCMicroGamepadSnapshotData* snapshotData);
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Attempts to fill a snapshot data structure from NSData.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -175,8 +174,7 @@ namespace GameController {
 
 		/// <param name="data">The data to use.</param>
 		///         <param name="snapshotData">The snapshot data.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Attempts to fill a snapshot data structure from NSData.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]

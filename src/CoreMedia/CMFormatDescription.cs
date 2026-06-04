@@ -42,7 +42,6 @@ namespace CoreMedia {
 #if !COREBUILD
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public NSDictionary? GetExtensions ()
 		{
 			var cfDictRef = CMFormatDescriptionGetExtensions (Handle);
@@ -54,7 +53,6 @@ namespace CoreMedia {
 
 		/// <param name="extensionKey">The extension key.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public NSObject? GetExtension (string extensionKey)
 		{
 			var extensionKeyHandle = CFString.CreateNative (extensionKey);
@@ -201,7 +199,6 @@ namespace CoreMedia {
 		extern static /* CFTypeID */ nint CMFormatDescriptionGetTypeID ();
 
 		/// <summary>Type identifier for the CoreMedia.CMFormatDescription type.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>
 		///           <para>The returned token is the CoreFoundation type identifier (CFType) that has been assigned to this class.</para>
 		///           <para>This can be used to determine type identity between different CoreFoundation objects.</para>
@@ -287,7 +284,6 @@ namespace CoreMedia {
 		extern static /* AudioStreamBasicDescription */ IntPtr CMAudioFormatDescriptionGetStreamBasicDescription (/* CMAudioFormatDescriptionRef */ IntPtr desc);
 
 		/// <summary>Audio-media only: Returns the AudioStreamBasicDescritpion object for the audio.</summary>
-		///         <value>To be added.</value>
 		public AudioStreamBasicDescription? AudioStreamBasicDescription {
 			get {
 				var ret = CMAudioFormatDescriptionGetStreamBasicDescription (Handle);
@@ -304,7 +300,6 @@ namespace CoreMedia {
 		unsafe extern static /* AudioChannelLayout* */ IntPtr CMAudioFormatDescriptionGetChannelLayout (/* CMAudioFormatDescriptionRef */ IntPtr desc, /* size_t* */ nint* size);
 
 		/// <summary>Audio-media only: describe the channel layout.</summary>
-		///         <value>To be added.</value>
 		public AudioChannelLayout? AudioChannelLayout {
 			get {
 				nint size;
@@ -350,7 +345,6 @@ namespace CoreMedia {
 		unsafe extern static /* const void* */ IntPtr CMAudioFormatDescriptionGetMagicCookie (/* CMAudioFormatDescriptionRef */ IntPtr desc, /* size_t* */ nint* size);
 
 		/// <summary>Audio-media only: magic cookie that might need to be passed to some backends.</summary>
-		///         <value>To be added.</value>
 		public byte []? AudioMagicCookie {
 			get {
 				nint size;
@@ -371,7 +365,6 @@ namespace CoreMedia {
 		extern static /* AudioFormatListItem* */ IntPtr CMAudioFormatDescriptionGetMostCompatibleFormat (/* CMAudioFormatDescriptionRef */ IntPtr desc);
 
 		/// <summary>Audio-media only: returns the most compaible audio format.</summary>
-		///         <value>To be added.</value>
 		public AudioFormat AudioMostCompatibleFormat {
 			get {
 				unsafe {
@@ -387,7 +380,6 @@ namespace CoreMedia {
 		extern static /* AudioFormatListItem* */ IntPtr CMAudioFormatDescriptionGetRichestDecodableFormat (/* CMAudioFormatDescriptionRef */ IntPtr desc);
 
 		/// <summary>Audio-media only: Returns the richest decodable format.</summary>
-		///         <value>To be added.</value>
 		public AudioFormat AudioRichestDecodableFormat {
 			get {
 				unsafe {
@@ -496,7 +488,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public CMVideoDimensions Dimensions {
 			get {
 				return CMVideoFormatDescriptionGetDimensions (Handle);
@@ -512,7 +503,6 @@ namespace CoreMedia {
 		/// <param name="imageBuffer">The image buffer.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static CMVideoFormatDescription? CreateForImageBuffer (CVImageBuffer imageBuffer, out CMFormatDescriptionError error)
 		{
 			if (imageBuffer is null)
@@ -546,7 +536,6 @@ namespace CoreMedia {
 		///         <param name="nalUnitHeaderLength">The nal unit header length.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -640,7 +629,6 @@ namespace CoreMedia {
 
 		/// <param name="originIsAtTopLeft">The origin is at top left.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CGRect GetCleanAperture (bool originIsAtTopLeft)
 		{
 			return CMVideoFormatDescriptionGetCleanAperture (Handle, originIsAtTopLeft.AsByte ());
@@ -649,14 +637,12 @@ namespace CoreMedia {
 		/// <param name="usePixelAspectRatio">The use pixel aspect ratio.</param>
 		///         <param name="useCleanAperture">The use clean aperture.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CGSize GetPresentationDimensions (bool usePixelAspectRatio, bool useCleanAperture)
 		{
 			return CMVideoFormatDescriptionGetPresentationDimensions (Handle, usePixelAspectRatio.AsByte (), useCleanAperture.AsByte ());
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static NSObject? []? GetExtensionKeysCommonWithImageBuffers ()
 		{
 			var arr = CMVideoFormatDescriptionGetExtensionKeysCommonWithImageBuffers ();
@@ -665,7 +651,6 @@ namespace CoreMedia {
 
 		/// <param name="imageBuffer">The image buffer.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public bool VideoMatchesImageBuffer (CVImageBuffer imageBuffer)
 		{
 			if (imageBuffer is null)
@@ -694,7 +679,6 @@ namespace CoreMedia {
 		///         <param name="extensions">The extensions.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

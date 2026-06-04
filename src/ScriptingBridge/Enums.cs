@@ -25,76 +25,74 @@
 namespace ScriptingBridge {
 	// AE.framework/Headers/AEDataModel.h:typedef SInt32 AESendMode;
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum AESendMode : int {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates no reply.</summary>
 		NoReply = 0x00000001,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates queue reply.</summary>
 		QueueReply = 0x00000002,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates wait reply.</summary>
 		WaitReply = 0x00000003,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dont reconnect.</summary>
 		DontReconnect = 0x00000080,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates want receipt.</summary>
 		WantReceipt = 0x00000200,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates never interact.</summary>
 		NeverInteract = 0x00000010,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates can interact.</summary>
 		CanInteract = 0x00000020,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates always interact.</summary>
 		AlwaysInteract = 0x00000030,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates can switch layer.</summary>
 		CanSwitchLayer = 0x00000040,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dont record.</summary>
 		DontRecord = 0x00001000,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dont execute.</summary>
 		DontExecute = 0x00002000,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates process non reply events.</summary>
 		ProcessNonReplyEvents = 0x00008000,
 	}
 
 	// LaunchServices.framework/Headers/LSOpen.h:typedef OptionBits LSLaunchFlags;
 	// DirectoryService.framework/Headers/DirServicesTypes.h:typedef UInt32 OptionBits;
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum LSLaunchFlags : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates launch defaults.</summary>
 		LaunchDefaults = 0x00000001,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates launch and print.</summary>
 		LaunchAndPrint = 0x00000002,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates launch reserved2.</summary>
 		LaunchReserved2 = 0x00000004,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates launch reserved3.</summary>
 		LaunchReserved3 = 0x00000008,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates launch reserved4.</summary>
 		LaunchReserved4 = 0x00000010,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates launch reserved5.</summary>
 		LaunchReserved5 = 0x00000020,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates launch and display errors.</summary>
 		LaunchAndDisplayErrors = 0x00000040,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates launch inhibit b g only.</summary>
 		LaunchInhibitBGOnly = 0x00000080,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates launch dont add to recents.</summary>
 		LaunchDontAddToRecents = 0x00000100,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates launch dont switch.</summary>
 		LaunchDontSwitch = 0x00000200,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates launch no params.</summary>
 		LaunchNoParams = 0x00000800,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates launch async.</summary>
 		LaunchAsync = 0x00010000,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates launch start classic.</summary>
 		LaunchStartClassic = 0x00020000,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates launch in classic.</summary>
 		LaunchInClassic = 0x00040000,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates launch new instance.</summary>
 		LaunchNewInstance = 0x00080000,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates launch and hide.</summary>
 		LaunchAndHide = 0x00100000,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates launch and hide others.</summary>
 		LaunchAndHideOthers = 0x00200000,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates launch has untrusted contents.</summary>
 		LaunchHasUntrustedContents = 0x00400000,
 	}
 

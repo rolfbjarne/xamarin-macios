@@ -36,13 +36,13 @@ namespace CoreFoundation {
 	[SupportedOSPlatform ("tvos")]
 	public static class CFErrorDomain {
 
-		/// <summary>To be added.</summary>
+	/// <summary>The Cocoa error domain.</summary>
 		public static readonly NSString? Cocoa;
-		/// <summary>To be added.</summary>
+	/// <summary>The Mach error domain.</summary>
 		public static readonly NSString? Mach;
-		/// <summary>To be added.</summary>
+	/// <summary>The OSStatus error domain.</summary>
 		public static readonly NSString? OSStatus;
-		/// <summary>To be added.</summary>
+	/// <summary>The POSIX error domain.</summary>
 		public static readonly NSString? Posix;
 
 		static CFErrorDomain ()
@@ -63,15 +63,15 @@ namespace CoreFoundation {
 	[SupportedOSPlatform ("tvos")]
 	public static class CFExceptionDataKey {
 
-		/// <summary>To be added.</summary>
+	/// <summary>The key for the error description.</summary>
 		public static readonly NSString? Description;
-		/// <summary>To be added.</summary>
+	/// <summary>The key for the localized error description.</summary>
 		public static readonly NSString? LocalizedDescription;
-		/// <summary>To be added.</summary>
+	/// <summary>The key for the localized failure reason.</summary>
 		public static readonly NSString? LocalizedFailureReason;
-		/// <summary>To be added.</summary>
+	/// <summary>The key for the localized recovery suggestion.</summary>
 		public static readonly NSString? LocalizedRecoverySuggestion;
-		/// <summary>To be added.</summary>
+	/// <summary>The key for the underlying error.</summary>
 		public static readonly NSString? UnderlyingError;
 
 		static CFExceptionDataKey ()
@@ -102,7 +102,7 @@ namespace CoreFoundation {
 		}
 
 		/// <param name="cfErrorHandle">The cf error handle.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a <see cref="CFException" /> from the specified Core Foundation error handle.</summary>
 		public static CFException FromCFError (IntPtr cfErrorHandle)
 		{
 			return FromCFError (cfErrorHandle, true);
@@ -110,7 +110,7 @@ namespace CoreFoundation {
 
 		/// <param name="cfErrorHandle">The cf error handle.</param>
 		///         <param name="release">The release.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a <see cref="CFException" /> from the specified Core Foundation error handle.</summary>
 		public static CFException FromCFError (IntPtr cfErrorHandle, bool release)
 		{
 			if (cfErrorHandle == IntPtr.Zero)
@@ -137,14 +137,14 @@ namespace CoreFoundation {
 			return e;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the error code.</summary>
 		public nint Code { get; private set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the error domain.</summary>
 		///         <altmember cref="CoreFoundation.CFErrorDomain" />
 		public NSString? Domain { get; private set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the localized failure reason.</summary>
 		public string? FailureReason { get; private set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the localized recovery suggestion.</summary>
 		public string? RecoverySuggestion { get; private set; }
 
 		[DllImport (Constants.CoreFoundationLibrary)]

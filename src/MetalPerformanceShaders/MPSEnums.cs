@@ -14,13 +14,13 @@ namespace MetalPerformanceShaders {
 		SkipApiValidation = 1 << 0,
 		/// <summary>Allow the use of reduced-precision types in calculations.</summary>
 		AllowReducedPrecision = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Disable internal tiling.</summary>
 		[MacCatalyst (13, 1)]
 		DisableInternalTiling = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Insert debug groups.</summary>
 		[MacCatalyst (13, 1)]
 		InsertDebugGroups = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Enable verbose output.</summary>
 		[MacCatalyst (13, 1)]
 		Verbose = 1 << 4,
 	}
@@ -33,13 +33,13 @@ namespace MetalPerformanceShaders {
 		Zero,
 		/// <summary>Pixels outside the region of interest are clamped to the values at the edge of the region.</summary>
 		Clamp = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Mirror the edge values.</summary>
 		[MacCatalyst (13, 1)]
 		Mirror,
-		/// <summary>To be added.</summary>
+		/// <summary>Mirror with the edge value repeated.</summary>
 		[MacCatalyst (13, 1)]
 		MirrorWithEdge,
-		/// <summary>To be added.</summary>
+		/// <summary>Pad with a constant value.</summary>
 		[MacCatalyst (13, 1)]
 		Constant,
 	}
@@ -59,12 +59,12 @@ namespace MetalPerformanceShaders {
 	/// <summary>Enumerates values that specify floating point data types.</summary>
 	[Introduced (PlatformName.MacCatalyst, 13, 0)]
 	public enum MPSDataType : uint { // uint32_t
-		/// <summary>To be added.</summary>
+		/// <summary>An invalid data type.</summary>
 		Invalid = 0,
 
 		/// <summary>Indicates floating point format data of any width.</summary>
 		FloatBit = 0x10000000,
-		/// <summary>To be added.</summary>
+		/// <summary>16-bit floating point.</summary>
 		Float16 = FloatBit | 16,
 		/// <summary>Indicates 32-bit floating point format data.</summary>
 		Float32 = FloatBit | 32,
@@ -78,15 +78,15 @@ namespace MetalPerformanceShaders {
 		[iOS (26, 4), MacCatalyst (26, 4), TV (26, 4)]
 		ComplexBFloat16 = AlternateEncodingBit | FloatBit | ComplexBit | 32,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The signed bit flag.</summary>
 		SignedBit = 0x20000000,
 		[TV (18, 4), Mac (15, 4), iOS (18, 4), MacCatalyst (18, 4)]
 		Int2 = SignedBit | 2,
 		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		Int4 = SignedBit | 4,
-		/// <summary>To be added.</summary>
+		/// <summary>8-bit signed integer.</summary>
 		Int8 = SignedBit | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>16-bit signed integer.</summary>
 		Int16 = SignedBit | 16,
 		Int32 = SignedBit | 32,
 		[iOS (14, 1)]
@@ -98,11 +98,11 @@ namespace MetalPerformanceShaders {
 		UInt2 = 2,
 		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		UInt4 = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>8-bit unsigned integer.</summary>
 		UInt8 = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>16-bit unsigned integer.</summary>
 		UInt16 = 16,
-		/// <summary>To be added.</summary>
+		/// <summary>32-bit unsigned integer.</summary>
 		UInt32 = 32,
 		[iOS (14, 1)]
 		[TV (14, 2)]
@@ -116,13 +116,13 @@ namespace MetalPerformanceShaders {
 		[iOS (16, 0), MacCatalyst (16, 0), TV (16, 0), Mac (14, 0)]
 		BFloat16 = AlternateEncodingBit | Float16,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The normalized bit flag.</summary>
 		[MacCatalyst (13, 1)]
 		NormalizedBit = 0x40000000,
-		/// <summary>To be added.</summary>
+		/// <summary>1-bit unsigned normalized.</summary>
 		[MacCatalyst (13, 1)]
 		Unorm1 = NormalizedBit | 1,
-		/// <summary>To be added.</summary>
+		/// <summary>8-bit unsigned normalized.</summary>
 		[MacCatalyst (13, 1)]
 		Unorm8 = NormalizedBit | 8,
 	}
@@ -165,13 +165,13 @@ namespace MetalPerformanceShaders {
 	/// <summary>Enumerates the result forms of a matrix decomposition.</summary>
 	[Introduced (PlatformName.MacCatalyst, 13, 0)]
 	public enum MPSMatrixDecompositionStatus {
-		/// <summary>To be added.</summary>
+		/// <summary>Success.</summary>
 		Success = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Failure.</summary>
 		Failure = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Singular.</summary>
 		Singular = -2,
-		/// <summary>To be added.</summary>
+		/// <summary>Non Positive Definite.</summary>
 		NonPositiveDefinite = -3,
 	}
 
@@ -191,9 +191,9 @@ namespace MetalPerformanceShaders {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPSRnnSequenceDirection : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Forward.</summary>
 		Forward = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Backward.</summary>
 		Backward,
 	}
 
@@ -201,48 +201,48 @@ namespace MetalPerformanceShaders {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPSRnnBidirectionalCombineMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>No value specified.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Add.</summary>
 		Add,
-		/// <summary>To be added.</summary>
+		/// <summary>Concatenate.</summary>
 		Concatenate,
 	}
 
 	/// <summary>Enumerates the available activation functions of a neuron.</summary>
 	[MacCatalyst (13, 1)]
 	public enum MPSCnnNeuronType {
-		/// <summary>To be added.</summary>
+		/// <summary>No value specified.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Re L U.</summary>
 		ReLU,
-		/// <summary>To be added.</summary>
+		/// <summary>Linear.</summary>
 		Linear,
-		/// <summary>To be added.</summary>
+		/// <summary>Sigmoid.</summary>
 		Sigmoid,
-		/// <summary>To be added.</summary>
+		/// <summary>Hard Sigmoid.</summary>
 		HardSigmoid,
-		/// <summary>To be added.</summary>
+		/// <summary>Tan H.</summary>
 		TanH,
-		/// <summary>To be added.</summary>
+		/// <summary>Absolute.</summary>
 		Absolute,
-		/// <summary>To be added.</summary>
+		/// <summary>Soft Plus.</summary>
 		SoftPlus,
-		/// <summary>To be added.</summary>
+		/// <summary>Soft Sign.</summary>
 		SoftSign,
-		/// <summary>To be added.</summary>
+		/// <summary>Elu.</summary>
 		Elu,
-		/// <summary>To be added.</summary>
+		/// <summary>P Re L U.</summary>
 		PReLU,
-		/// <summary>To be added.</summary>
+		/// <summary>Re Lun.</summary>
 		ReLun,
-		/// <summary>To be added.</summary>
+		/// <summary>Power.</summary>
 		[MacCatalyst (13, 1)]
 		Power,
-		/// <summary>To be added.</summary>
+		/// <summary>Exponential.</summary>
 		[MacCatalyst (13, 1)]
 		Exponential,
-		/// <summary>To be added.</summary>
+		/// <summary>Logarithm.</summary>
 		[MacCatalyst (13, 1)]
 		Logarithm,
 		[TV (13, 0), iOS (13, 0)]
@@ -255,9 +255,9 @@ namespace MetalPerformanceShaders {
 	[Native]
 	[Flags]
 	public enum MPSCnnBinaryConvolutionFlags : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>No value specified.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Use Beta Scaling.</summary>
 		UseBetaScaling = 1 << 0,
 	}
 
@@ -265,11 +265,11 @@ namespace MetalPerformanceShaders {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPSCnnBinaryConvolutionType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Binary Weights.</summary>
 		BinaryWeights = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Xnor.</summary>
 		Xnor,
-		/// <summary>To be added.</summary>
+		/// <summary>And.</summary>
 		And,
 	}
 
@@ -277,37 +277,37 @@ namespace MetalPerformanceShaders {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPSNNPaddingMethod : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Align Centered.</summary>
 		AlignCentered = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Align Top Left.</summary>
 		AlignTopLeft = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Align Bottom Right.</summary>
 		AlignBottomRight = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Align Reserved.</summary>
 		AlignReserved = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Add Remainder To Top Left.</summary>
 		AddRemainderToTopLeft = 0 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Add Remainder To Top Right.</summary>
 		AddRemainderToTopRight = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Add Remainder To Bottom Left.</summary>
 		AddRemainderToBottomLeft = 2 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Add Remainder To Bottom Right.</summary>
 		AddRemainderToBottomRight = 3 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Size Valid Only.</summary>
 		SizeValidOnly = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Size Same.</summary>
 		SizeSame = 1 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Size Full.</summary>
 		SizeFull = 2 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Size Reserved.</summary>
 		SizeReserved = 3 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Custom Whitelist For Node Fusion.</summary>
 		CustomWhitelistForNodeFusion = (1 << 13),
-		/// <summary>To be added.</summary>
+		/// <summary>Custom.</summary>
 		Custom = (1 << 14),
-		/// <summary>To be added.</summary>
+		/// <summary>Size Mask.</summary>
 		SizeMask = 2032,
-		/// <summary>To be added.</summary>
+		/// <summary>Exclude Edges.</summary>
 		ExcludeEdges = (1 << 15),
 	}
 
@@ -315,47 +315,47 @@ namespace MetalPerformanceShaders {
 	[Introduced (PlatformName.MacCatalyst, 13, 0)]
 	[Native]
 	public enum MPSDataLayout : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Height Per Width Per Feature Channels.</summary>
 		HeightPerWidthPerFeatureChannels = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Feature Channels Per Height Per Width.</summary>
 		FeatureChannelsPerHeightPerWidth = 1,
 	}
 
 	[Introduced (PlatformName.MacCatalyst, 13, 0)]
 	[Native]
 	public enum MPSStateResourceType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>No value specified.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Buffer.</summary>
 		Buffer = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Texture.</summary>
 		Texture = 2,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPSIntersectionType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Nearest.</summary>
 		Nearest = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Any.</summary>
 		Any = 1,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPSTriangleIntersectionTestType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>The default value.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Watertight.</summary>
 		Watertight = 1,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPSBoundingBoxIntersectionTestType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>The default value.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Axis Aligned.</summary>
 		AxisAligned = 1,
 		[TV (13, 0), iOS (13, 0)]
 		[MacCatalyst (13, 1)]
@@ -366,22 +366,22 @@ namespace MetalPerformanceShaders {
 	[Flags]
 	[Native]
 	public enum MPSRayMaskOptions : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>No value specified.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Primitive.</summary>
 		Primitive = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Instance.</summary>
 		Instance = 2,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPSRayDataType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Origin Direction.</summary>
 		OriginDirection = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Origin Min Distance Direction Max Distance.</summary>
 		OriginMinDistanceDirectionMaxDistance = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Origin Mask Direction Max Distance.</summary>
 		OriginMaskDirectionMaxDistance = 2,
 		[TV (13, 0), iOS (13, 0)]
 		[MacCatalyst (13, 1)]
@@ -391,15 +391,15 @@ namespace MetalPerformanceShaders {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPSIntersectionDataType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Distance.</summary>
 		Distance = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Primitive Index.</summary>
 		PrimitiveIndex = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Primitive Index Coordinates.</summary>
 		PrimitiveIndexCoordinates = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Primitive Index Instance Index.</summary>
 		PrimitiveIndexInstanceIndex = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Primitive Index Instance Index Coordinates.</summary>
 		PrimitiveIndexInstanceIndexCoordinates = 4,
 
 		[iOS (15, 0), TV (15, 0), MacCatalyst (15, 0)]
@@ -418,9 +418,9 @@ namespace MetalPerformanceShaders {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPSTransformType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Float4x4.</summary>
 		Float4x4 = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Identity.</summary>
 		Identity = 1,
 	}
 
@@ -428,11 +428,11 @@ namespace MetalPerformanceShaders {
 	[Flags]
 	[Native]
 	public enum MPSAccelerationStructureUsage : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>No value specified.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Refit.</summary>
 		Refit = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Frequent Rebuild.</summary>
 		FrequentRebuild = 2,
 		[TV (13, 0), iOS (13, 0)]
 		[MacCatalyst (13, 1)]
@@ -445,19 +445,19 @@ namespace MetalPerformanceShaders {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPSAccelerationStructureStatus : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Unbuilt.</summary>
 		Unbuilt = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Built.</summary>
 		Built = 1,
 	}
 
 	[MacCatalyst (13, 1)]
 	public enum MPSCnnWeightsQuantizationType : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>No value specified.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Linear.</summary>
 		Linear = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Lookup Table.</summary>
 		LookupTable = 2,
 	}
 
@@ -465,11 +465,11 @@ namespace MetalPerformanceShaders {
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum MPSCnnConvolutionGradientOption : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Gradient With Data.</summary>
 		GradientWithData = 0x1,
-		/// <summary>To be added.</summary>
+		/// <summary>Gradient With Weights And Bias.</summary>
 		GradientWithWeightsAndBias = 0x2,
-		/// <summary>To be added.</summary>
+		/// <summary>All.</summary>
 		All = GradientWithData | GradientWithWeightsAndBias,
 	}
 
@@ -477,54 +477,54 @@ namespace MetalPerformanceShaders {
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum MPSNNComparisonType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Equal.</summary>
 		Equal,
-		/// <summary>To be added.</summary>
+		/// <summary>Not Equal.</summary>
 		NotEqual,
-		/// <summary>To be added.</summary>
+		/// <summary>Less.</summary>
 		Less,
-		/// <summary>To be added.</summary>
+		/// <summary>Less Or Equal.</summary>
 		LessOrEqual,
-		/// <summary>To be added.</summary>
+		/// <summary>Greater.</summary>
 		Greater,
-		/// <summary>To be added.</summary>
+		/// <summary>Greater Or Equal.</summary>
 		GreaterOrEqual,
 	}
 
 	[Introduced (PlatformName.MacCatalyst, 13, 0)]
 	public enum MPSCnnLossType : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Mean Absolute Error.</summary>
 		MeanAbsoluteError = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Mean Squared Error.</summary>
 		MeanSquaredError,
-		/// <summary>To be added.</summary>
+		/// <summary>Soft Max Cross Entropy.</summary>
 		SoftMaxCrossEntropy,
-		/// <summary>To be added.</summary>
+		/// <summary>Sigmoid Cross Entropy.</summary>
 		SigmoidCrossEntropy,
-		/// <summary>To be added.</summary>
+		/// <summary>Categorical Cross Entropy.</summary>
 		CategoricalCrossEntropy,
-		/// <summary>To be added.</summary>
+		/// <summary>Hinge.</summary>
 		Hinge,
-		/// <summary>To be added.</summary>
+		/// <summary>Huber.</summary>
 		Huber,
-		/// <summary>To be added.</summary>
+		/// <summary>Cosine Distance.</summary>
 		CosineDistance,
-		/// <summary>To be added.</summary>
+		/// <summary>Log.</summary>
 		Log,
-		/// <summary>To be added.</summary>
+		/// <summary>Kullback Leibler Divergence.</summary>
 		KullbackLeiblerDivergence,
 		//Count, // must always be last, and because of this it will cause breaking changes.
 	}
 
 	[Introduced (PlatformName.MacCatalyst, 13, 0)]
 	public enum MPSCnnReductionType {
-		/// <summary>To be added.</summary>
+		/// <summary>No value specified.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Sum.</summary>
 		Sum,
-		/// <summary>To be added.</summary>
+		/// <summary>Mean.</summary>
 		Mean,
-		/// <summary>To be added.</summary>
+		/// <summary>Sum By Non Zero Weights.</summary>
 		SumByNonZeroWeights,
 		//Count, // must always be last, and because of this it will cause breaking changes.
 	}
@@ -533,9 +533,9 @@ namespace MetalPerformanceShaders {
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum MPSNNConvolutionAccumulatorPrecisionOption : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Half.</summary>
 		Half = 0x0,
-		/// <summary>To be added.</summary>
+		/// <summary>Float.</summary>
 		Float = 1uL << 0,
 	}
 
@@ -543,26 +543,26 @@ namespace MetalPerformanceShaders {
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum MPSCnnBatchNormalizationFlags : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>The default value.</summary>
 		Default = 0x0,
-		/// <summary>To be added.</summary>
+		/// <summary>Calculate Statistics Automatic.</summary>
 		CalculateStatisticsAutomatic = Default,
-		/// <summary>To be added.</summary>
+		/// <summary>Calculate Statistics Always.</summary>
 		CalculateStatisticsAlways = 0x1,
-		/// <summary>To be added.</summary>
+		/// <summary>Calculate Statistics Never.</summary>
 		CalculateStatisticsNever = 0x2,
-		/// <summary>To be added.</summary>
+		/// <summary>Calculate Statistics Mask.</summary>
 		CalculateStatisticsMask = 0x3,
 	}
 
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MPSNNRegularizationType : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>No value specified.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>L1.</summary>
 		L1 = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>L2.</summary>
 		L2 = 2,
 	}
 
@@ -570,74 +570,74 @@ namespace MetalPerformanceShaders {
 	[Flags]
 	[Native]
 	public enum MPSNNTrainingStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>No value specified.</summary>
 		None = 0x0,
-		/// <summary>To be added.</summary>
+		/// <summary>Cpu.</summary>
 		Cpu = 0x1,
-		/// <summary>To be added.</summary>
+		/// <summary>Gpu.</summary>
 		Gpu = 0x2,
 	}
 
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum MPSRnnMatrixId : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Single Gate Input Weights.</summary>
 		SingleGateInputWeights = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Single Gate Recurrent Weights.</summary>
 		SingleGateRecurrentWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Single Gate Bias Terms.</summary>
 		SingleGateBiasTerms,
-		/// <summary>To be added.</summary>
+		/// <summary>Lstm Input Gate Input Weights.</summary>
 		LstmInputGateInputWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Lstm Input Gate Recurrent Weights.</summary>
 		LstmInputGateRecurrentWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Lstm Input Gate Memory Weights.</summary>
 		LstmInputGateMemoryWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Lstm Input Gate Bias Terms.</summary>
 		LstmInputGateBiasTerms,
-		/// <summary>To be added.</summary>
+		/// <summary>Lstm Forget Gate Input Weights.</summary>
 		LstmForgetGateInputWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Lstm Forget Gate Recurrent Weights.</summary>
 		LstmForgetGateRecurrentWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Lstm Forget Gate Memory Weights.</summary>
 		LstmForgetGateMemoryWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Lstm Forget Gate Bias Terms.</summary>
 		LstmForgetGateBiasTerms,
-		/// <summary>To be added.</summary>
+		/// <summary>Lstm Memory Gate Input Weights.</summary>
 		LstmMemoryGateInputWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Lstm Memory Gate Recurrent Weights.</summary>
 		LstmMemoryGateRecurrentWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Lstm Memory Gate Memory Weights.</summary>
 		LstmMemoryGateMemoryWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Lstm Memory Gate Bias Terms.</summary>
 		LstmMemoryGateBiasTerms,
-		/// <summary>To be added.</summary>
+		/// <summary>Lstm Output Gate Input Weights.</summary>
 		LstmOutputGateInputWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Lstm Output Gate Recurrent Weights.</summary>
 		LstmOutputGateRecurrentWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Lstm Output Gate Memory Weights.</summary>
 		LstmOutputGateMemoryWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Lstm Output Gate Bias Terms.</summary>
 		LstmOutputGateBiasTerms,
-		/// <summary>To be added.</summary>
+		/// <summary>Gru Input Gate Input Weights.</summary>
 		GruInputGateInputWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Gru Input Gate Recurrent Weights.</summary>
 		GruInputGateRecurrentWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Gru Input Gate Bias Terms.</summary>
 		GruInputGateBiasTerms,
-		/// <summary>To be added.</summary>
+		/// <summary>Gru Recurrent Gate Input Weights.</summary>
 		GruRecurrentGateInputWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Gru Recurrent Gate Recurrent Weights.</summary>
 		GruRecurrentGateRecurrentWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Gru Recurrent Gate Bias Terms.</summary>
 		GruRecurrentGateBiasTerms,
-		/// <summary>To be added.</summary>
+		/// <summary>Gru Output Gate Input Weights.</summary>
 		GruOutputGateInputWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Gru Output Gate Recurrent Weights.</summary>
 		GruOutputGateRecurrentWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Gru Output Gate Input Gate Weights.</summary>
 		GruOutputGateInputGateWeights,
-		/// <summary>To be added.</summary>
+		/// <summary>Gru Output Gate Bias Terms.</summary>
 		GruOutputGateBiasTerms,
 		//Count, // must always be last, and because of this it will cause breaking changes.
 	}

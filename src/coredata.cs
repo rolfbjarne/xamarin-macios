@@ -932,7 +932,7 @@ namespace CoreData {
 	[Protocol]
 	interface NSFetchRequestResult { }
 
-	/// <summary>Holds search criteria used to retrieve data from a persistent store.</summary>
+	/// <summary>Holds search criteria used to retrieve data from APersistent store.</summary>
 	/// <remarks>To be added.</remarks>
 	/// <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/CoreDataFramework/Classes/NSFetchRequest_Class/index.html">Apple documentation for <c>NSFetchRequest</c></related>
 	[DisableDefaultCtor] // designated
@@ -1696,7 +1696,7 @@ namespace CoreData {
 		void AwakeFromInsert ();
 
 		/// <param name="flags">To be added.</param>
-		///         <summary>Method that is called to awaken the receiver when a property state change occurs.</summary>
+		///         <summary>Method that is called to awaken the receiver when AProperty state change occurs.</summary>
 		///         <remarks>
 		///           <para>See the <see cref="CoreData.NSSnapshotEventType" /> enumeration for a list of the values that can be returned by this method.</para>
 		///         </remarks>
@@ -3320,7 +3320,7 @@ namespace CoreData {
 	// type is NSPersistentStore, which means we must be able to create managed wrappers
 	// for such native classes using the managed NSPersistentStore. This means we can't
 	// make our managed version [Abstract].
-	/// <summary>Abstract base class for Core Data persistent stores.</summary>
+	/// <summary>Abstract base class for Core DatAPersistent stores.</summary>
 	/// <remarks>To be added.</remarks>
 	/// <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/NSPersistentStore_Class/index.html">Apple documentation for <c>NSPersistentStore</c></related>
 	[BaseType (typeof (NSObject))]
@@ -3508,7 +3508,7 @@ namespace CoreData {
 		NSPersistentHistoryToken PersistentHistoryTracking { get; }
 	}
 
-	/// <summary>Descriptor for a persistent store inside a persistent container.</summary>
+	/// <summary>Descriptor for APersistent store inside APersistent container.</summary>
 	/// <remarks>To be added.</remarks>
 	/// <related type="externalDocumentation" href="https://developer.apple.com/reference/CoreData/NSPersistentStoreDescription">Apple documentation for <c>NSPersistentStoreDescription</c></related>
 	[MacCatalyst (13, 1)]
@@ -3623,7 +3623,7 @@ namespace CoreData {
 		bool ShouldInferMappingModelAutomatically { get; set; }
 
 		/// <param name="url">The url for the persistent store.</param>
-		/// <summary>Creates a persistent store description with the specified store URL.</summary>
+		/// <summary>Creates APersistent store description with the specified store URL.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("initWithURL:")]
 		[DesignatedInitializer]
@@ -3644,7 +3644,7 @@ namespace CoreData {
 	[DisableDefaultCtor]
 	interface NSPersistentContainer {
 		/// <param name="name">The name of the persistent container to create.</param>
-		///         <summary>Creates a persistent container with the specified name.</summary>
+		///         <summary>Creates APersistent container with the specified name.</summary>
 		///         <returns>A persistent container with the specified name.</returns>
 		///         <remarks>To be added.</remarks>
 		[Static]
@@ -3653,7 +3653,7 @@ namespace CoreData {
 
 		/// <param name="name">The name of the persistent container to create.</param>
 		///         <param name="model">The object model for the persistent container to create.</param>
-		///         <summary>Creates a persistent container with the specified name and object model.</summary>
+		///         <summary>Creates APersistent container with the specified name and object model.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[Static]
@@ -3727,7 +3727,7 @@ namespace CoreData {
 			""")]
 		void LoadPersistentStores (Action<NSPersistentStoreDescription, NSError> block);
 
-		/// <summary>Creates and returns a private managed object context.</summary>
+		/// <summary>Creates and returns APrivate managed object context.</summary>
 		///         <value>A private managed object context.</value>
 		///         <remarks>To be added.</remarks>
 		[Export ("newBackgroundContext")]
@@ -3798,7 +3798,7 @@ namespace CoreData {
 		///         <param name="storeType">To be added.</param>
 		///         <param name="url">To be added.</param>
 		///         <param name="error">To be added.</param>
-		///         <summary>Sets the metadata for a persistent store at a URL.</summary>
+		///         <summary>Sets the metadata for APersistent store at a URL.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 9, 0, message: "Use the method that takes an 'out NSError' parameter.")]
@@ -3819,7 +3819,7 @@ namespace CoreData {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		///         <param name="error">To be added.</param>
-		///         <summary>Sets the metadata for a persistent store at a URL..</summary>
+		///         <summary>Sets the metadata for APersistent store at a URL..</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
@@ -3848,7 +3848,7 @@ namespace CoreData {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		///         <param name="store">To be added.</param>
-		///         <summary>Sets the metadata for a persistent store.</summary>
+		///         <summary>Sets the metadata for APersistent store.</summary>
 		///         <remarks>To be added.</remarks>
 		[Export ("setMetadata:forPersistentStore:")]
 #if XAMCORE_5_0
@@ -4387,7 +4387,7 @@ namespace CoreData {
 		NSPersistentStoreUbiquitousTransitionType EventType { get; }
 	}
 
-	/// <summary>Criteria used to retrieve data from or save data in a persistent store.</summary>
+	/// <summary>Criteria used to retrieve data from or save data in APersistent store.</summary>
 	/// <remarks>To be added.</remarks>
 	/// <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/CoreData/Reference/NSPersistentStoreRequest_Class/index.html">Apple documentation for <c>NSPersistentStoreRequest</c></related>
 	[BaseType (typeof (NSObject))]
@@ -4430,7 +4430,7 @@ namespace CoreData {
 		INSFetchRequestResult [] FinalResult { get; }
 	}
 
-	/// <summary>Class that represents the result of request that was made of a persistent data store.</summary>
+	/// <summary>Class that represents the result of request that was made of APersistent data store.</summary>
 	/// <remarks>To be added.</remarks>
 	/// <related type="externalDocumentation" href="https://developer.apple.com/reference/CoreData/NSPersistentStoreResult">Apple documentation for <c>NSPersistentStoreResult</c></related>
 	[MacCatalyst (13, 1)]
@@ -4459,7 +4459,7 @@ namespace CoreData {
 		NSBatchUpdateRequestResultType ResultType { get; }
 	}
 
-	/// <summary>Class that represents the results of an asynchronous request that was made of a persistent data store.</summary>
+	/// <summary>Class that represents the results of an asynchronous request that was made of APersistent data store.</summary>
 	/// <remarks>To be added.</remarks>
 	/// <related type="externalDocumentation" href="https://developer.apple.com/reference/CoreData/NSPersistentStoreAsynchronousResult">Apple documentation for <c>NSPersistentStoreAsynchronousResult</c></related>
 	[MacCatalyst (13, 1)]
@@ -4640,7 +4640,7 @@ namespace CoreData {
 		bool StoredInExternalRecord { [Bind ("isStoredInExternalRecord")] get; set; }
 	}
 
-	/// <summary>Maps a property between source and destination entities.</summary>
+	/// <summary>Maps AProperty between source and destination entities.</summary>
 	/// <remarks>To be added.</remarks>
 	/// <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/NSPropertyMapping_class/index.html">Apple documentation for <c>NSPropertyMapping</c></related>
 	[BaseType (typeof (NSObject))]

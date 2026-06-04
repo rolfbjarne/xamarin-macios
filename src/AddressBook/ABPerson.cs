@@ -1074,7 +1074,6 @@ namespace AddressBook {
 
 		/// <param name="record">The record.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static ABPersonCompositeNameFormat GetCompositeNameFormat (ABRecord? record)
 		{
 			var result = ABPersonGetCompositeNameFormatForRecord (record.GetHandle ());
@@ -1087,7 +1086,6 @@ namespace AddressBook {
 
 		/// <param name="record">The record.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static string? GetCompositeNameDelimiter (ABRecord? record)
 		{
 			var handle = ABPersonCopyCompositeNameDelimiterForRecord (record.GetHandle ());
@@ -1286,7 +1284,6 @@ namespace AddressBook {
 		extern static IntPtr ABPersonCopySource (IntPtr group);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public ABRecord? Source {
 			get {
 				var h = ABPersonCopySource (Handle);
@@ -1397,7 +1394,6 @@ namespace AddressBook {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public ABMultiValue<PersonAddress>? GetAllAddresses ()
 		{
 			return CreateDictionaryMultiValue<PersonAddress> (CopyValue (ABPersonPropertyId.Address), l => new PersonAddress (l));
@@ -1544,7 +1540,6 @@ namespace AddressBook {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public ABMultiValue<InstantMessageService>? GetInstantMessageServices ()
 		{
 			return CreateDictionaryMultiValue<InstantMessageService> (CopyValue (ABPersonPropertyId.InstantMessage), l => new InstantMessageService (l));
@@ -1582,7 +1577,6 @@ namespace AddressBook {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public ABMultiValue<SocialProfile>? GetSocialProfiles ()
 		{
 			return CreateDictionaryMultiValue<SocialProfile> (CopyValue (ABPersonPropertyId.SocialProfile), l => new SocialProfile (l));
@@ -1715,7 +1709,6 @@ namespace AddressBook {
 		extern static IntPtr ABPersonCopyArrayOfAllLinkedPeople (IntPtr person);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public ABPerson? []? GetLinkedPeople ()
 		{
 			var linked = ABPersonCopyArrayOfAllLinkedPeople (Handle);
@@ -1727,7 +1720,6 @@ namespace AddressBook {
 
 		/// <param name="format">The format.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public NSData? GetImage (ABPersonImageFormat format)
 		{
 			return Runtime.GetNSObject<NSData> (ABPersonCopyImageDataWithFormat (Handle, (nint) (long) format), true);
@@ -1738,7 +1730,6 @@ namespace AddressBook {
 
 		/// <param name="people">The people.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static NSData? GetVCards (params ABPerson [] people)
 		{
 			if (people is null)
@@ -1759,7 +1750,6 @@ namespace AddressBook {
 		/// <param name="source">The source.</param>
 		///         <param name="vCardData">The v card data.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static ABPerson? []? CreateFromVCard (ABRecord? source, NSData vCardData)
 		{
 			if (vCardData is null)

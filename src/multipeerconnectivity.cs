@@ -223,7 +223,7 @@ namespace MultipeerConnectivity {
 		void ConnectPeer (MCPeerID peerID, NSData data);
 
 		/// <param name="peerID">The ID of the peer whose connection should be cancelled.</param>
-		///         <summary>Cancel's a pending connection to the <paramref name="peerID" />.</summary>
+		///         <summary>Cancel's APending connection to the <paramref name="peerID" />.</summary>
 		///         <remarks>To be added.</remarks>
 		[Export ("cancelConnectPeer:")]
 		void CancelConnectPeer (MCPeerID peerID);
@@ -370,7 +370,7 @@ namespace MultipeerConnectivity {
 		IMCNearbyServiceAdvertiserDelegate Delegate { get; set; }
 
 		/// <summary>The identity by which this device will be known on the peer network.</summary>
-		///         <value>This will contain the data passed in to the <see cref="MultipeerConnectivity.MCNearbyServiceAdvertiser(MultipeerConnectivity.MCPeerID,Foundation.NSDictionary,string)" /> constructor.</value>
+		///         <value>This will contain the datAPassed in to the <see cref="MultipeerConnectivity.MCNearbyServiceAdvertiser(MultipeerConnectivity.MCPeerID,Foundation.NSDictionary,string)" /> constructor.</value>
 		///         <remarks>To be added.</remarks>
 		[Export ("myPeerID")]
 		MCPeerID MyPeerID { get; }
@@ -381,7 +381,7 @@ namespace MultipeerConnectivity {
 		NSDictionary DiscoveryInfo { get; }
 
 		/// <summary>The network protocol this peer supports.</summary>
-		///         <value>This will contain the data passed in to the <see cref="MultipeerConnectivity.MCNearbyServiceAdvertiser(MultipeerConnectivity.MCPeerID,Foundation.NSDictionary,string)" /> constructor.</value>
+		///         <value>This will contain the datAPassed in to the <see cref="MultipeerConnectivity.MCNearbyServiceAdvertiser(MultipeerConnectivity.MCPeerID,Foundation.NSDictionary,string)" /> constructor.</value>
 		///         <remarks>To be added.</remarks>
 		[Export ("serviceType")]
 		string ServiceType { get; }
@@ -514,7 +514,7 @@ namespace MultipeerConnectivity {
 		///           <para>To be added.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		///         <summary>Indicates that a peer has been found.</summary>
+		///         <summary>Indicates that APeer has been found.</summary>
 		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("browser:foundPeer:withDiscoveryInfo:")]
@@ -522,7 +522,7 @@ namespace MultipeerConnectivity {
 
 		/// <param name="browser">To be added.</param>
 		///         <param name="peerID">To be added.</param>
-		///         <summary>Indicates that a peer has been lost.</summary>
+		///         <summary>Indicates that APeer has been lost.</summary>
 		///         <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("browser:lostPeer:")]

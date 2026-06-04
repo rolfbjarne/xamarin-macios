@@ -123,7 +123,6 @@ namespace CoreGraphics {
 		extern static /* size_t */ nint CGBitmapContextGetWidth (/* CGContextRef */ IntPtr context);
 
 		/// <summary>Gets the width for <c>this</c> <see cref="CoreGraphics.CGBitmapContext" /> object, in pixels, or 0 if <c>this</c> object is not a bitmap context.</summary>
-		///         <value>To be added.</value>
 		public nint Width {
 			get { return CGBitmapContextGetWidth (Handle); }
 		}
@@ -132,7 +131,6 @@ namespace CoreGraphics {
 		extern static /* size_t */ nint CGBitmapContextGetHeight (/* CGContextRef */ IntPtr context);
 
 		/// <summary>Gets the height for <c>this</c> <see cref="CoreGraphics.CGBitmapContext" /> object, in pixels, or 0 if <c>this</c> object is not a bitmap context.</summary>
-		///         <value>To be added.</value>
 		public nint Height {
 			get { return CGBitmapContextGetHeight (Handle); }
 		}
@@ -160,7 +158,6 @@ namespace CoreGraphics {
 		extern static /* size_t */ nint CGBitmapContextGetBytesPerRow (/* CGContextRef */ IntPtr context);
 
 		/// <summary>Gets the number of bytes per row for <c>this</c> <see cref="CoreGraphics.CGBitmapContext" /> object, or 0 if <c>this</c> object is not a bitmap context.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>
 		///           <para>Number of bytes per row, a number greather or equal that the number of bytes used by a row of pixels.   </para>
 		///           <para>Typically is the width multiplied by the number of bytes per pixel, with some extra padding.   This is called the image stride.   </para>
@@ -174,7 +171,6 @@ namespace CoreGraphics {
 		extern static /* CGColorSpaceRef */ IntPtr CGBitmapContextGetColorSpace (/* CGContextRef */ IntPtr context);
 
 		/// <summary>Gets the color space for <c>this</c> <see cref="CoreGraphics.CGBitmapContext" /> object, as a <see cref="CoreGraphics.CGColorSpace" />, or <see langword="null" /> if <c>this</c> object is not a bitmap context.</summary>
-		///         <value>To be added.</value>
 		public CGColorSpace? ColorSpace {
 			get {
 				var ptr = CGBitmapContextGetColorSpace (Handle);
@@ -186,7 +182,6 @@ namespace CoreGraphics {
 		extern static CGImageAlphaInfo CGBitmapContextGetAlphaInfo (/* CGContextRef */ IntPtr context);
 
 		/// <summary>Gets the alpha information for <c>this</c> <see cref="CoreGraphics.CGBitmapContext" /> object, as a <see cref="CoreGraphics.CGImageAlphaInfo" /> object, or <see cref="CoreGraphics.CGImageAlphaInfo.None" /> if <c>this</c> object is not a bitmap context.</summary>
-		///         <value>To be added.</value>
 		public CGImageAlphaInfo AlphaInfo {
 			get { return CGBitmapContextGetAlphaInfo (Handle); }
 		}
@@ -194,8 +189,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGBitmapInfo */ uint CGBitmapContextGetBitmapInfo (/* CGContextRef */ IntPtr context);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the bitmap info.</summary>
 		public CGBitmapFlags BitmapInfo {
 			get { return (CGBitmapFlags) CGBitmapContextGetBitmapInfo (Handle); }
 		}
@@ -203,8 +197,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGImageRef */ IntPtr CGBitmapContextCreateImage (/* CGContextRef */ IntPtr context);
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Tos image.</summary>
 		public CGImage? ToImage ()
 		{
 			var h = CGBitmapContextCreateImage (Handle);

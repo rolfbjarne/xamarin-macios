@@ -31,13 +31,10 @@ namespace GameKit {
 			Session = session;
 		}
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public NSData Data { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string PeerID { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public GKSession Session { get; private set; }
 	}
 
@@ -209,13 +206,10 @@ namespace GameKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public GKSession Session { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string PeerID { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public GKPeerConnectionState State { get; private set; }
 	}
 
@@ -236,13 +230,10 @@ namespace GameKit {
 			Error = error;
 		}
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public GKSession Session { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string? PeerID { get; private set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public NSError? Error { get; private set; }
 	}
 #endif

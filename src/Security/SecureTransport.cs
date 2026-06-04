@@ -10,31 +10,31 @@ namespace Security {
 	[Deprecated (PlatformName.TvOS, 13, 0, message: "Use 'TlsProtocolVersion' instead.")]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'TlsProtocolVersion' instead.")]
 	public enum SslProtocol {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ssl_3_0.</summary>
 		Ssl_3_0 = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates tls_1_0.</summary>
 		Tls_1_0 = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates tls_1_1.</summary>
 		Tls_1_1 = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates tls_1_2.</summary>
 		Tls_1_2 = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dtls_1_0.</summary>
 		Dtls_1_0 = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates tls_1_3.</summary>
 		[MacCatalyst (13, 1)]
 		Tls_1_3 = 10,
 		Dtls_1_2 = 11,
 
 		/* Obsolete on iOS */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ssl_2_0.</summary>
 		Ssl_2_0 = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ssl_3_0_only.</summary>
 		Ssl_3_0_only = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates tls_1_0_only.</summary>
 		Tls_1_0_only = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates all.</summary>
 		All = 6,
 	}
 
@@ -269,37 +269,37 @@ namespace Security {
 	[Deprecated (PlatformName.TvOS, 13, 0, message: Constants.UseNetworkInstead)]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: Constants.UseNetworkInstead)]
 	public enum SslSessionOption {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates break on server auth.</summary>
 		BreakOnServerAuth,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates break on cert requested.</summary>
 		BreakOnCertRequested,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates break on client auth.</summary>
 		BreakOnClientAuth,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates false start.</summary>
 		[MacCatalyst (13, 1)]
 		FalseStart,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates send one byte record.</summary>
 		SendOneByteRecord,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates allow server identity change.</summary>
 		[MacCatalyst (13, 1)]
 		AllowServerIdentityChange = 5,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates fallback.</summary>
 		[MacCatalyst (13, 1)]
 		Fallback = 6,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates break on client hello.</summary>
 		[MacCatalyst (13, 1)]
 		BreakOnClientHello = 7,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates allow renegotiation.</summary>
 		[MacCatalyst (13, 1)]
 		AllowRenegotiation = 8,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates enable session tickets.</summary>
 		[MacCatalyst (13, 1)]
 		EnableSessionTickets = 9,
 	}
@@ -312,11 +312,11 @@ namespace Security {
 	[Deprecated (PlatformName.TvOS, 13, 0, message: Constants.UseNetworkInstead)]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: Constants.UseNetworkInstead)]
 	public enum SslAuthenticate {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates never.</summary>
 		Never,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates always.</summary>
 		Always,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates try.</summary>
 		Try,
 	}
 
@@ -328,9 +328,9 @@ namespace Security {
 	[Deprecated (PlatformName.TvOS, 13, 0, message: Constants.UseNetworkInstead)]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: Constants.UseNetworkInstead)]
 	public enum SslProtocolSide {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates server.</summary>
 		Server,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates client.</summary>
 		Client,
 	}
 
@@ -342,9 +342,9 @@ namespace Security {
 	[Deprecated (PlatformName.TvOS, 13, 0, message: Constants.UseNetworkInstead)]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: Constants.UseNetworkInstead)]
 	public enum SslConnectionType {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates stream.</summary>
 		Stream,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates datagram.</summary>
 		Datagram,
 	}
 
@@ -356,17 +356,17 @@ namespace Security {
 	[Deprecated (PlatformName.TvOS, 13, 0, message: Constants.UseNetworkInstead)]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: Constants.UseNetworkInstead)]
 	public enum SslSessionState {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid.</summary>
 		Invalid = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates idle.</summary>
 		Idle,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates handshake.</summary>
 		Handshake,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates connected.</summary>
 		Connected,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates closed.</summary>
 		Closed,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates aborted.</summary>
 		Aborted,
 	}
 
@@ -377,11 +377,11 @@ namespace Security {
 	[Deprecated (PlatformName.TvOS, 13, 0, message: Constants.UseNetworkInstead)]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: Constants.UseNetworkInstead)]
 	public enum SslSessionStrengthPolicy {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates default.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates a t sv1.</summary>
 		ATSv1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates a t sv1 no p f s.</summary>
 		ATSv1NoPFS,
 	}
 
@@ -393,13 +393,13 @@ namespace Security {
 	[Deprecated (PlatformName.TvOS, 13, 0, message: Constants.UseNetworkInstead)]
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: Constants.UseNetworkInstead)]
 	public enum SslClientCertificateState {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates requested.</summary>
 		Requested,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sent.</summary>
 		Sent,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates rejected.</summary>
 		Rejected,
 	}
 
@@ -409,15 +409,15 @@ namespace Security {
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'TlsCipherSuiteGroup' instead.")]
 	// typedef CF_ENUM(int, SSLCiphersuiteGroup)
 	public enum SslCipherSuiteGroup {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates default.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates compatibility.</summary>
 		Compatibility,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates legacy.</summary>
 		Legacy,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ats.</summary>
 		Ats,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ats compatibility.</summary>
 		AtsCompatibility,
 		/// <summary>The ciphersuite group that conforms to the App Transport Security Forward Compatibility Profile version 2.1.</summary>
 		[iOS (26, 5), TV (26, 5), Mac (26, 5), MacCatalyst (26, 5)]

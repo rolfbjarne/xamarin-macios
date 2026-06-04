@@ -36,7 +36,6 @@ using CoreFoundation;
 
 namespace Security {
 	/// <summary>A trust level. A trust object combines a certificate with a policy or policies. </summary>
-	///     <remarks>To be added.</remarks>
 	public partial class SecTrust : NativeObject {
 		[Preserve (Conditional = true)]
 		internal SecTrust (NativeHandle handle, bool owns)
@@ -294,7 +293,6 @@ namespace Security {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -311,10 +309,9 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static byte SecTrustSetExceptions (IntPtr /* SecTrustRef */ trust, IntPtr /* __nullable CFDataRef */ exceptions);
 
-		/// <param name="data">To be added.</param>
+		/// <param name="data">The data to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -390,10 +387,9 @@ namespace Security {
 			return SetAnchorCertificates (array);
 		}
 
-		/// <param name="array">To be added.</param>
+		/// <param name="array">The array.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public SecStatusCode SetAnchorCertificates (SecCertificate [] array)
 		{
 			if (array is null)

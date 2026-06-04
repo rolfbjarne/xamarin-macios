@@ -40,14 +40,14 @@ namespace CoreVideo {
 	[SupportedOSPlatform ("tvos")]
 	public class CVPixelBufferPoolSettings : DictionaryContainer {
 #if !COREBUILD
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="CVPixelBufferPoolSettings" /> instance.</summary>
 		public CVPixelBufferPoolSettings ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
 		/// <param name="dictionary">The dictionary.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CVPixelBufferPoolSettings" /> instance.</summary>
 		public CVPixelBufferPoolSettings (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -86,14 +86,14 @@ namespace CoreVideo {
 	[SupportedOSPlatform ("tvos")]
 	public partial class CVPixelBufferPoolAllocationSettings : DictionaryContainer {
 #if !COREBUILD
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="CVPixelBufferPoolAllocationSettings" /> instance.</summary>
 		public CVPixelBufferPoolAllocationSettings ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
 		/// <param name="dictionary">The dictionary.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CVPixelBufferPoolAllocationSettings" /> instance.</summary>
 		public CVPixelBufferPoolAllocationSettings (NSDictionary dictionary)
 			: base (dictionary)
 		{

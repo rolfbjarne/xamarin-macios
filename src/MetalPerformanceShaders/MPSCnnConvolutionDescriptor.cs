@@ -7,7 +7,7 @@ namespace MetalPerformanceShaders {
 		///         <param name="gamma">The gamma.</param>
 		///         <param name="beta">The beta.</param>
 		///         <param name="epsilon">The epsilon.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets the batch normalization parameters for this convolution descriptor.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]

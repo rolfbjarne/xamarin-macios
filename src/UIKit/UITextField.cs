@@ -28,13 +28,13 @@ namespace UIKit {
 	/// <param name="textField">The text field.</param>
 	///     <param name="range">The range.</param>
 	///     <param name="replacementString">The replacement string.</param>
-	///     <summary>A delegate used to respond to changes on the UITextField.</summary>
-	///     <returns>To be added.</returns>
+	/// <summary>A delegate used to respond to changes on the UITextField.</summary>
+	/// <returns><see langword="true" /> if the change should be made; otherwise, <see langword="false" />.</returns>
 	public delegate bool UITextFieldChange (UITextField textField, NSRange range, string replacementString);
 
 	/// <param name="textField">The text field.</param>
-	///     <summary>A delegate used to get the condition for a UITextField.</summary>
-	///     <returns>To be added.</returns>
+	/// <summary>A delegate used to get the condition for a UITextField.</summary>
+	/// <returns><see langword="true" /> if the condition is met; otherwise, <see langword="false" />.</returns>
 	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/MapDemo">Example_ContentControls</related>
 	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/MonoCatalog-MonoDevelop/">monocatalog</related>
 	public delegate bool UITextFieldCondition (UITextField textField);

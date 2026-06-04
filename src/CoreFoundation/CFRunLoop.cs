@@ -83,8 +83,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFIndex */ nint CFRunLoopSourceGetOrder (/* CFRunLoopSourceRef */ IntPtr source);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the order.</summary>
 		public nint Order {
 			get {
 				return CFRunLoopSourceGetOrder (Handle);
@@ -94,7 +93,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static void CFRunLoopSourceInvalidate (/* CFRunLoopSourceRef */ IntPtr source);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Invalidate.</summary>
 		public void Invalidate ()
 		{
 			CFRunLoopSourceInvalidate (Handle);
@@ -103,8 +102,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* Boolean */ byte CFRunLoopSourceIsValid (/* CFRunLoopSourceRef */ IntPtr source);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the is valid.</summary>
 		public bool IsValid {
 			get {
 				return CFRunLoopSourceIsValid (Handle) != 0;
@@ -114,7 +112,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static void CFRunLoopSourceSignal (/* CFRunLoopSourceRef */ IntPtr source);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Signal.</summary>
 		public void Signal ()
 		{
 			CFRunLoopSourceSignal (Handle);

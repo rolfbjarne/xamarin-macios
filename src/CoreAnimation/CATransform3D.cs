@@ -39,7 +39,7 @@ namespace CoreAnimation {
 		public nfloat M43;
 		public nfloat M44;
 
-		/// <summary>To be added.</summary>
+	/// <summary>The identity transform.</summary>
 		static public readonly CATransform3D Identity;
 
 		static CATransform3D ()
@@ -51,7 +51,7 @@ namespace CoreAnimation {
 		[DllImport (Constants.QuartzLibrary)]
 		extern static byte CATransform3DIsIdentity (CATransform3D t);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets a value indicating whether this transform is the identity transform.</summary>
 		public bool IsIdentity {
 			get {
 				return CATransform3DIsIdentity (this) != 0;
@@ -62,14 +62,14 @@ namespace CoreAnimation {
 		extern static byte CATransform3DEqualToTransform (CATransform3D a, CATransform3D b);
 
 		/// <param name="other">The other.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Determines whether this transform is equal to the specified transform.</summary>
 		public bool Equals (CATransform3D other)
 		{
 			return CATransform3DEqualToTransform (this, other) != 0;
 		}
 
 		/// <param name="other">The other.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Determines whether this transform is equal to the specified object.</summary>
 		public override bool Equals (object? other)
 		{
 			if (!(other is CATransform3D))
@@ -77,7 +77,7 @@ namespace CoreAnimation {
 			return CATransform3DEqualToTransform (this, (CATransform3D) other) != 0;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Returns the hash code for this instance.</summary>
 		public override int GetHashCode ()
 		{
 			var hash = new HashCode ();
@@ -162,7 +162,7 @@ namespace CoreAnimation {
 		extern static CATransform3D CATransform3DConcat (CATransform3D a, CATransform3D b);
 
 		/// <param name="b">The b.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Concatenates this transform with the specified transform.</summary>
 		public CATransform3D Concat (CATransform3D b)
 		{
 			return CATransform3DConcat (this, b);
@@ -171,14 +171,14 @@ namespace CoreAnimation {
 		[DllImport (Constants.QuartzLibrary)]
 		extern static CATransform3D CATransform3DInvert (CATransform3D t);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Returns the inverse of this transform.</summary>
 		public CATransform3D Invert ()
 		{
 			return CATransform3DInvert (this);
 		}
 
 		/// <param name="m">The m.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a 3D transform from the specified affine transform.</summary>
 		[DllImport (Constants.QuartzLibrary, EntryPoint = "CATransform3DMakeAffineTransform")]
 		public extern static CATransform3D MakeFromAffine (CGAffineTransform m);
 
@@ -186,7 +186,7 @@ namespace CoreAnimation {
 		[DllImport (Constants.QuartzLibrary)]
 		extern static byte CATransform3DIsAffine (CATransform3D t);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets a value indicating whether this transform can be represented as an affine transform.</summary>
 		public bool IsAffine {
 			get {
 				return CATransform3DIsAffine (this) != 0;
@@ -194,11 +194,11 @@ namespace CoreAnimation {
 		}
 
 		/// <param name="t">The t.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the affine transform representation of the specified 3D transform.</summary>
 		[DllImport (Constants.QuartzLibrary, EntryPoint = "CATransform3DGetAffineTransform")]
 		public extern static CGAffineTransform GetAffine (CATransform3D t);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the affine transform representation of this 3D transform.</summary>
 		public override string ToString ()
 		{
 			return String.Format ("[{0} {1} {2} {3}; {4} {5} {6} {7}; {8} {9} {10} {11}; {12} {13} {14} {15}]",

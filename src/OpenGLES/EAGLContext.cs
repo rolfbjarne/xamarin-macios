@@ -27,7 +27,6 @@ namespace OpenGLES {
 		/// <param name="target">The target.</param>
 		/// <param name="presentationTime">The presentation time.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
@@ -43,7 +42,6 @@ namespace OpenGLES {
 		/// <param name="presentationTime">The presentation time.</param>
 		/// <param name="mode">The mode.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]

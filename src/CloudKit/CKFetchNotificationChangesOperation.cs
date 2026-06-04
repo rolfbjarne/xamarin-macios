@@ -42,7 +42,7 @@ namespace CloudKit {
 		///           <para>To be added.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CKFetchNotificationChangesOperation" /> instance.</summary>
 		public CKFetchNotificationChangesOperation (CKServerChangeToken? previousServerChangeToken)
 			: base (NSObjectFlag.Empty)
 		{
@@ -64,7 +64,6 @@ namespace CloudKit {
 		}
 
 		/// <summary>Gets whether more notifications are waiting for delivery.</summary>
-		///         <value>To be added.</value>
 		public virtual bool MoreComing {
 			get {
 				throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
@@ -100,7 +99,6 @@ namespace CloudKit {
 		}
 
 		/// <summary>Gets or sets the maximum number of results to fetch.</summary>
-		///         <value>To be added.</value>
 		public virtual nuint ResultsLimit {
 			get {
 				throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);

@@ -34,7 +34,6 @@ namespace CoreImage {
 
 	// convenience enum on kCISamplerWrap[Black|Clamp] fields -> CISampler.h (headers hidden under QuartzCore.framework)
 	/// <summary>Enumerates values that control how samples from outside the source image are treated.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum CIWrapMode {
 		/// <summary>Areas outside the source image are treated as black.</summary>
 		Black,
@@ -44,7 +43,6 @@ namespace CoreImage {
 
 	// convenience enum on kCISamplerFilter[Nearest|Linear] fields -> CISampler.h (headers hidden under QuartzCore.framework)
 	/// <summary>Enumerates filter modes.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum CIFilterMode {
 		/// <summary>Use the value of the nearest pixel.</summary>
 		Nearest,
@@ -53,27 +51,22 @@ namespace CoreImage {
 	}
 
 	/// <summary>Options to control sampler operations for <see cref="CoreImage.CISampler" /> objects.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class CISamplerOptions {
 		/// <summary>Creates a new default sampler options argument.</summary>
-		///         <remarks>To be added.</remarks>
 		public CISamplerOptions () { }
 
 		/// <summary>Gets or sets the matrix to use for affine transformations.</summary>
 		///         <value>The matrix to use for affine transformations.</value>
-		///         <remarks>To be added.</remarks>
 		public CGAffineTransform? AffineMatrix { get; set; }
 		/// <summary>Gets or sets the wrapping mode, which controls whether pixels outside of the source image boundary will be clamped to the edge value or be black.</summary>
 		///         <value>The wrapping mode, which controls whether pixels outside of the source image boundary will be clamped to the edge value or be black.</value>
-		///         <remarks>To be added.</remarks>
 		public CIWrapMode? WrapMode { get; set; }
 		/// <summary>Gets or sets the filter mode, which controls whether to do the nearest value or to linearly interpolate the value from the surrounding pixels.</summary>
 		///         <value>The filter mode, which controls whether to do the nearest value or to linearly interpolate the value from the surrounding pixels.</value>
-		///         <remarks>To be added.</remarks>
 		public CIFilterMode? FilterMode { get; set; }
 		/// <summary>Gets or sets the color space to which samples are converted before being passed to kernels.</summary>
 		///         <value>The color space to which samples are converted before being passed to kernels.</value>
@@ -104,11 +97,10 @@ namespace CoreImage {
 	}
 
 	public partial class CISampler {
-		/// <param name="sourceImage">To be added.</param>
-		///         <param name="options">To be added.</param>
+		/// <param name="sourceImage">The source image.</param>
+		///         <param name="options">The options to use.</param>
 		///         <summary>Creates a new <see cref="CoreImage.CISampler" /> from the <paramref name="sourceImage" /> with <paramref name="options" />.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CISampler FromImage (CIImage sourceImage, CISamplerOptions? options)
 		{
 			if (options is null)
@@ -119,7 +111,6 @@ namespace CoreImage {
 		/// <param name="sourceImage">The image from which to sample.</param>
 		///         <param name="options">Options that specify transform matrices, wrapping and filtering modes, and the color space.</param>
 		///         <summary>Creates a new sampler from a source image and a set of options.</summary>
-		///         <remarks>To be added.</remarks>
 		[DesignatedInitializer]
 		public CISampler (CIImage sourceImage, CISamplerOptions? options) : this (sourceImage, options?.ToDictionary ())
 		{

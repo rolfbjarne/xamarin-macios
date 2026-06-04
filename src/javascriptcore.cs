@@ -219,17 +219,15 @@ namespace JavaScriptCore {
 		[Export ("defineProperty:descriptor:")]
 		void DefineProperty (string property, NSObject descriptor);
 
-		/// <param name="index">To be added.</param>
+		/// <param name="index">The zero-based index.</param>
 		/// <summary>Returns the value at the specified <paramref name="index" />, or <c>undefined</c> if none exists.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		[Export ("valueAtIndex:")]
 		JSValue GetValueAt (nuint index);
 
-		/// <param name="value">To be added.</param>
-		/// <param name="index">To be added.</param>
+		/// <param name="value">The value to set.</param>
+		/// <param name="index">The zero-based index.</param>
 		/// <summary>Sets the item at the specified index to the specified value.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("setValue:atIndex:")]
 		void SetValue (JSValue value, nuint index);
 
@@ -435,42 +433,36 @@ namespace JavaScriptCore {
 		/// <summary>Represents the value associated with the constant JSPropertyDescriptorWritableKey</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("JSPropertyDescriptorWritableKey")]
 		NSString Writable { get; }
 
 		/// <summary>Represents the value associated with the constant JSPropertyDescriptorEnumerableKey</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("JSPropertyDescriptorEnumerableKey")]
 		NSString Enumerable { get; }
 
 		/// <summary>Represents the value associated with the constant JSPropertyDescriptorConfigurableKey</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("JSPropertyDescriptorConfigurableKey")]
 		NSString Configurable { get; }
 
 		/// <summary>Represents the value associated with the constant JSPropertyDescriptorValueKey</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("JSPropertyDescriptorValueKey")]
 		NSString Value { get; }
 
 		/// <summary>Represents the value associated with the constant JSPropertyDescriptorGetKey</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("JSPropertyDescriptorGetKey")]
 		NSString Get { get; }
 
 		/// <summary>Represents the value associated with the constant JSPropertyDescriptorSetKey</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("JSPropertyDescriptorSetKey")]
 		NSString Set { get; }
 	}

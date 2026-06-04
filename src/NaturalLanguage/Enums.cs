@@ -60,7 +60,7 @@ namespace NaturalLanguage {
 		Word,
 		/// <summary>Indicates a sentence.</summary>
 		Sentence,
-		/// <summary>Indicates a paragraph.</summary>
+		/// <summary>Indicates AParagraph.</summary>
 		Paragraph,
 		/// <summary>Indicates an entire document.</summary>
 		Document,
@@ -273,7 +273,7 @@ namespace NaturalLanguage {
 		/// <summary>Indicates that tokens will be returned for whether they are part of speech or whitespace, or their punctuation type if they are punctuation.</summary>
 		[Field ("NLTagSchemeLexicalClass")]
 		LexicalClass,
-		/// <summary>Indicates that tokens will be tagged with the type of name of which they are a part. (For example, part of a personal name.)</summary>
+		/// <summary>Indicates that tokens will be tagged with the type of name of which they are APart. (For example, part of APersonal name.)</summary>
 		[Field ("NLTagSchemeNameType")]
 		NameType,
 		/// <summary>Indicates that tokens will be tagged those tags indicated by <see cref="NaturalLanguage.NLTagScheme.LexicalClass" /> and <see cref="NaturalLanguage.NLTagScheme.NameType" />.</summary>

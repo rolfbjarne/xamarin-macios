@@ -14,7 +14,7 @@ using CoreFoundation;
 using nw_connection_group_t = System.IntPtr;
 
 namespace Network {
-	/// <summary>To be added.</summary>
+	/// <summary>Listens for incoming network connections.</summary>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
@@ -226,7 +226,7 @@ namespace Network {
 
 		/// <param name="endpoint">The endpoint.</param>
 		///     <param name="added">The added.</param>
-		///     <summary>To be added.</summary>
+	/// <summary>A delegate that is called when an advertised endpoint is added or removed.</summary>
 		public delegate void AdvertisedEndpointChanged (NWEndpoint endpoint, bool added);
 
 		[UnmanagedCallersOnly]

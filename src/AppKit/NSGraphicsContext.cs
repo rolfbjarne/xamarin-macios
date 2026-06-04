@@ -37,8 +37,7 @@ namespace AppKit {
 	public partial class NSGraphicsContext {
 		/// <param name="context">The context to use.</param>
 		///         <param name="initialFlippedState">The initial flipped state.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Froms graphics port.</summary>
 		public static NSGraphicsContext FromGraphicsPort (CGContext context, bool initialFlippedState)
 		{
 			if (context is null)
@@ -48,8 +47,7 @@ namespace AppKit {
 			return result;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the graphics port.</summary>
 		public virtual CGContext GraphicsPort {
 			get { return new CGContext (GraphicsPortHandle, false); }
 		}

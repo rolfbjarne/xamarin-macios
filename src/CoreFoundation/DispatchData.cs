@@ -33,7 +33,7 @@ using System.Threading;
 
 namespace CoreFoundation {
 
-	/// <summary>To be added.</summary>
+	/// <summary>Represents an immutable block of dispatch data.</summary>
 	public partial class DispatchData : DispatchObject {
 #if !COREBUILD
 		[Preserve (Conditional = true)]

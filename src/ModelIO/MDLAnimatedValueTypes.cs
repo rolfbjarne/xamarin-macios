@@ -25,12 +25,10 @@ using Quaterniond = global::CoreGraphics.NQuaterniond;
 // https://github.com/apple/swift/blob/cbdf0ff1e7bfbd192c33d64c9c7d31fbb11f712c/stdlib/public/SDK/ModelIO/ModelIO.swift
 
 namespace ModelIO {
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Provides animated value functionality for ModelIO.</summary>
 	public partial class MDLAnimatedValue {
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the key times for this animated value.</summary>
 		public double []? KeyTimes {
 			get {
 				var wkt = WeakKeyTimes;
@@ -53,8 +51,7 @@ namespace ModelIO {
 		// 2. _GetTimes return value is ignored and could turn out useful at some point.
 		// 3. Lack of documentation at the moment of binding this.
 		// [1]: https://github.com/apple/swift/blob/cbdf0ff1e7bfbd192c33d64c9c7d31fbb11f712c/stdlib/public/SDK/ModelIO/ModelIO.swift#L50
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets all the key times for this animated value.</summary>
 		public virtual double [] GetTimes ()
 		{
 			var count = TimeSampleCount;
@@ -67,14 +64,12 @@ namespace ModelIO {
 		}
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Provides animated scalar array value functionality.</summary>
 	public partial class MDLAnimatedScalarArray {
 
-		/// <param name="array">To be added.</param>
-		///         <param name="time">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="array">The array of values.</param>
+		/// <param name="time">The time at which to set or get the value.</param>
+		///         <summary>Sets the float array values at the specified time.</summary>
 		public virtual void SetValues (float [] array, double time)
 		{
 			if (array is null)
@@ -86,10 +81,9 @@ namespace ModelIO {
 			}
 		}
 
-		/// <param name="array">To be added.</param>
-		///         <param name="time">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="array">The array of values.</param>
+		/// <param name="time">The time at which to set or get the value.</param>
+		///         <summary>Sets the double array values at the specified time.</summary>
 		public virtual void SetValues (double [] array, double time)
 		{
 			if (array is null)
@@ -101,9 +95,8 @@ namespace ModelIO {
 			}
 		}
 
-		/// <param name="time">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="time">The time at which to set or get the value.</param>
+		///         <summary>Gets the float values at the specified time.</summary>
 		public virtual float [] GetFloatValues (double time)
 		{
 			var count = ElementCount;
@@ -116,9 +109,8 @@ namespace ModelIO {
 			return timesArr;
 		}
 
-		/// <param name="time">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="time">The time at which to set or get the value.</param>
+		///         <summary>Gets the double values at the specified time.</summary>
 		public virtual double [] GetDoubleValues (double time)
 		{
 			var count = ElementCount;
@@ -131,10 +123,9 @@ namespace ModelIO {
 			return timesArr;
 		}
 
-		/// <param name="values">To be added.</param>
-		///         <param name="times">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="values">The values.</param>
+		/// <param name="times">The times.</param>
+		///         <summary>Resets the animation with the specified float values and times.</summary>
 		public virtual void Reset (float [] values, double [] times)
 		{
 			if (values is null)
@@ -149,10 +140,9 @@ namespace ModelIO {
 			}
 		}
 
-		/// <param name="values">To be added.</param>
-		///         <param name="times">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="values">The values.</param>
+		/// <param name="times">The times.</param>
+		///         <summary>Resets the animation with the specified double values and times.</summary>
 		public virtual void Reset (double [] values, double [] times)
 		{
 			if (values is null)
@@ -167,8 +157,7 @@ namespace ModelIO {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets all the float values across all key times.</summary>
 		public virtual float [] GetFloatValues ()
 		{
 			var count = ElementCount * TimeSampleCount;
@@ -181,8 +170,7 @@ namespace ModelIO {
 			return timesArr;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets all the double values across all key times.</summary>
 		public virtual double [] GetDoubleValues ()
 		{
 			var count = ElementCount * TimeSampleCount;
@@ -196,8 +184,7 @@ namespace ModelIO {
 		}
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Provides animated Vector3 array value functionality.</summary>
 	public partial class MDLAnimatedVector3Array {
 
 		public virtual void SetValues (Vector3 [] array, double time)
@@ -224,9 +211,8 @@ namespace ModelIO {
 			}
 		}
 
-		/// <param name="time">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="time">The time at which to set or get the value.</param>
+		///         <summary>Gets the Vector3 array values at the specified time.</summary>
 		public virtual Vector3 [] GetNVector3Values (double time)
 		{
 			var count = ElementCount;
@@ -241,9 +227,8 @@ namespace ModelIO {
 			return timesArr;
 		}
 
-		/// <param name="time">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="time">The time at which to set or get the value.</param>
+		/// <summary>Gets the double-precision Vector3 value at the specified time.</summary>
 		public virtual Vector3d [] GetNVector3dValues (double time)
 		{
 			var count = ElementCount;
@@ -286,8 +271,7 @@ namespace ModelIO {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets all the Vector3 values across all key times.</summary>
 		public virtual Vector3 [] GetNVector3Values ()
 		{
 			var count = ElementCount * TimeSampleCount;
@@ -302,8 +286,7 @@ namespace ModelIO {
 			return timesArr;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the double-precision Vector3 value at the specified time.</summary>
 		public virtual Vector3d [] GetNVector3dValues ()
 		{
 			var count = ElementCount * TimeSampleCount;
@@ -319,8 +302,7 @@ namespace ModelIO {
 		}
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Provides animated quaternion array value functionality.</summary>
 	public partial class MDLAnimatedQuaternionArray {
 
 		public virtual void SetValues (Quaternion [] array, double time)
@@ -347,9 +329,8 @@ namespace ModelIO {
 			}
 		}
 
-		/// <param name="time">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="time">The time at which to set or get the value.</param>
+		/// <summary>Gets the quaternion value at the specified time.</summary>
 		public virtual Quaternion [] GetQuaternionValues (double time)
 		{
 			var count = ElementCount;
@@ -364,9 +345,8 @@ namespace ModelIO {
 			return timesArr;
 		}
 
-		/// <param name="time">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="time">The time at which to set or get the value.</param>
+		/// <summary>Gets the double-precision quaternion values at the specified time.</summary>
 		public virtual Quaterniond [] GetQuaterniondValues (double time)
 		{
 			var count = ElementCount;
@@ -409,8 +389,7 @@ namespace ModelIO {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the quaternion value at the specified time.</summary>
 		public virtual Quaternion [] GetQuaternionValues ()
 		{
 			var count = ElementCount * TimeSampleCount;
@@ -425,8 +404,7 @@ namespace ModelIO {
 			return timesArr;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the double-precision quaternion values at the specified time.</summary>
 		public virtual Quaterniond [] GetQuaterniondValues ()
 		{
 			var count = ElementCount * TimeSampleCount;
@@ -441,14 +419,12 @@ namespace ModelIO {
 		}
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Provides animated scalar value functionality.</summary>
 	public partial class MDLAnimatedScalar {
 
-		/// <param name="values">To be added.</param>
-		///         <param name="times">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="values">The values.</param>
+		/// <param name="times">The times.</param>
+		///         <summary>Resets the animation with the specified float values and times.</summary>
 		public virtual void Reset (float [] values, double [] times)
 		{
 			if (values is null)
@@ -463,10 +439,9 @@ namespace ModelIO {
 			}
 		}
 
-		/// <param name="values">To be added.</param>
-		///         <param name="times">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="values">The values.</param>
+		/// <param name="times">The times.</param>
+		///         <summary>Resets the animation with the specified double values and times.</summary>
 		public virtual void Reset (double [] values, double [] times)
 		{
 			if (values is null)
@@ -481,8 +456,7 @@ namespace ModelIO {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets all the float values across all key times.</summary>
 		public virtual float [] GetFloatValues ()
 		{
 			var count = TimeSampleCount;
@@ -495,8 +469,7 @@ namespace ModelIO {
 			return timesArr;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets all the double values across all key times.</summary>
 		public virtual double [] GetDoubleValues ()
 		{
 			var count = TimeSampleCount;
@@ -510,8 +483,7 @@ namespace ModelIO {
 		}
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Provides animated Vector2 value functionality.</summary>
 	public partial class MDLAnimatedVector2 {
 
 		public virtual void Reset (Vector2 [] values, double [] times)
@@ -546,8 +518,7 @@ namespace ModelIO {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Vector2 value at the specified time.</summary>
 		public virtual Vector2 [] GetVector2Values ()
 		{
 			var count = TimeSampleCount;
@@ -562,8 +533,7 @@ namespace ModelIO {
 			return timesArr;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Vector2 value at the specified time.</summary>
 		public virtual Vector2d [] GetVector2dValues ()
 		{
 			var count = TimeSampleCount;
@@ -579,8 +549,7 @@ namespace ModelIO {
 		}
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Provides animated Vector3 value functionality.</summary>
 	public partial class MDLAnimatedVector3 {
 
 		public virtual void Reset (Vector3 [] values, double [] times)
@@ -615,8 +584,7 @@ namespace ModelIO {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets all the Vector3 values across all key times.</summary>
 		public virtual Vector3 [] GetNVector3Values ()
 		{
 			var count = TimeSampleCount;
@@ -631,8 +599,7 @@ namespace ModelIO {
 			return timesArr;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the double-precision Vector3 value at the specified time.</summary>
 		public virtual Vector3d [] GetNVector3dValues ()
 		{
 			var count = TimeSampleCount;
@@ -648,8 +615,7 @@ namespace ModelIO {
 		}
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Provides animated Vector4 value functionality.</summary>
 	public partial class MDLAnimatedVector4 {
 
 		public virtual void Reset (Vector4 [] values, double [] times)
@@ -684,8 +650,7 @@ namespace ModelIO {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Vector4 value at the specified time.</summary>
 		public virtual Vector4 [] GetVector4Values ()
 		{
 			var count = TimeSampleCount;
@@ -700,8 +665,7 @@ namespace ModelIO {
 			return timesArr;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Vector4 value at the specified time.</summary>
 		public virtual Vector4d [] GetVector4dValues ()
 		{
 			var count = TimeSampleCount;
@@ -717,8 +681,7 @@ namespace ModelIO {
 		}
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Provides animated 4x4 matrix value functionality.</summary>
 	public partial class MDLAnimatedMatrix4x4 {
 
 		public virtual void Reset (Matrix4 [] values, double [] times)
@@ -753,8 +716,7 @@ namespace ModelIO {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the 4x4 matrix value at the specified time.</summary>
 		public virtual Matrix4 [] GetNMatrix4Values ()
 		{
 			var count = TimeSampleCount;
@@ -769,8 +731,7 @@ namespace ModelIO {
 			return timesArr;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the double-precision 4x4 matrix value at the specified time.</summary>
 		public virtual Matrix4d [] GetNMatrix4dValues ()
 		{
 			var count = TimeSampleCount;
@@ -786,8 +747,7 @@ namespace ModelIO {
 		}
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Provides 4x4 matrix array functionality for ModelIO.</summary>
 	public partial class MDLMatrix4x4Array {
 
 		public virtual void SetValues (Matrix4 [] array)
@@ -814,8 +774,7 @@ namespace ModelIO {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the 4x4 matrix value at the specified time.</summary>
 		public virtual Matrix4 [] GetNMatrix4Values ()
 		{
 			var count = ElementCount;
@@ -830,8 +789,7 @@ namespace ModelIO {
 			return timesArr;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the double-precision 4x4 matrix value at the specified time.</summary>
 		public virtual Matrix4d [] GetNMatrix4dValues ()
 		{
 			var count = ElementCount;

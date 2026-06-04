@@ -211,7 +211,7 @@ namespace UIKit {
 		public UIRotationGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Constructs a gesture recognizer and provides a method to invoke when the gesture is recognized.</summary>
-		///         <remarks>This overload allows the method that will be invoked to receive the recognizer that detected the gesture as a parameter.</remarks>
+		///         <remarks>This overload allows the method that will be invoked to receive the recognizer that detected the gesture as AParameter.</remarks>
 		public UIRotationGestureRecognizer (Action<UIRotationGestureRecognizer> action) : base (Selector.GetHandle (UIGestureRecognizer.parametrized_selector), new Callback<UIRotationGestureRecognizer> (action)) { }
 
 	}
@@ -223,7 +223,7 @@ namespace UIKit {
 		public UILongPressGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Constructs a gesture recognizer and provides a method to invoke when the gesture is recognized.</summary>
-		///         <remarks>This overload allows the method that will be invoked to receive the recognizer that detected the gesture as a parameter.</remarks>
+		///         <remarks>This overload allows the method that will be invoked to receive the recognizer that detected the gesture as AParameter.</remarks>
 		public UILongPressGestureRecognizer (Action<UILongPressGestureRecognizer> action) : base (Selector.GetHandle (UIGestureRecognizer.parametrized_selector), new Callback<UILongPressGestureRecognizer> (action)) { }
 
 	}
@@ -234,7 +234,7 @@ namespace UIKit {
 		public UITapGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Constructs a gesture recognizer and provides a method to invoke when the gesture is recognized.</summary>
-		///         <remarks>This overload allows the method that will be invoked to receive the recognizer that detected the gesture as a parameter.</remarks>
+		///         <remarks>This overload allows the method that will be invoked to receive the recognizer that detected the gesture as AParameter.</remarks>
 		public UITapGestureRecognizer (Action<UITapGestureRecognizer> action) : base (Selector.GetHandle (UIGestureRecognizer.parametrized_selector), new Callback<UITapGestureRecognizer> (action)) { }
 
 	}
@@ -245,7 +245,7 @@ namespace UIKit {
 		public UIPanGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Constructs a gesture recognizer and provides a method to invoke when the gesture is recognized.</summary>
-		///         <remarks>This overload allows the method that will be invoked to receive the recognizer that detected the gesture as a parameter.</remarks>
+		///         <remarks>This overload allows the method that will be invoked to receive the recognizer that detected the gesture as AParameter.</remarks>
 		public UIPanGestureRecognizer (Action<UIPanGestureRecognizer> action) : base (Selector.GetHandle (UIGestureRecognizer.parametrized_selector), new Callback<UIPanGestureRecognizer> (action)) { }
 
 		internal UIPanGestureRecognizer (IntPtr sel, Token token) : base (token, sel) { }
@@ -259,7 +259,7 @@ namespace UIKit {
 		public UIPinchGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Constructs a gesture recognizer and provides a method to invoke when the gesture is recognized.</summary>
-		///         <remarks>This overload allows the method that will be invoked to receive the recognizer that detected the gesture as a parameter.</remarks>
+		///         <remarks>This overload allows the method that will be invoked to receive the recognizer that detected the gesture as AParameter.</remarks>
 		public UIPinchGestureRecognizer (Action<UIPinchGestureRecognizer> action) : base (Selector.GetHandle (UIGestureRecognizer.parametrized_selector), new Callback<UIPinchGestureRecognizer> (action)) { }
 
 	}
@@ -271,7 +271,7 @@ namespace UIKit {
 		public UISwipeGestureRecognizer (Action action) : base (action) { }
 		/// <param name="action">Code to invoke when the gesture is recognized.</param>
 		///         <summary>Constructs a gesture recognizer and provides a method to invoke when the gesture is recognized.</summary>
-		///         <remarks>This overload allows the method that will be invoked to receive the recognizer that detected the gesture as a parameter.</remarks>
+		///         <remarks>This overload allows the method that will be invoked to receive the recognizer that detected the gesture as AParameter.</remarks>
 		public UISwipeGestureRecognizer (Action<UISwipeGestureRecognizer> action) : base (Selector.GetHandle (UIGestureRecognizer.parametrized_selector), new Callback<UISwipeGestureRecognizer> (action)) { }
 
 	}

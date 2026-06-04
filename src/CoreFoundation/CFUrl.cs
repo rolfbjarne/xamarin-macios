@@ -114,7 +114,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFStringRef */ IntPtr CFURLGetString (/* CFURLRef */ IntPtr anURL);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns the string representation of this URL.</summary>
 		public override string? ToString ()
 		{
 			return CFString.FromHandle (CFURLGetString (Handle));

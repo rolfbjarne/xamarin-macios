@@ -32,7 +32,6 @@ using CoreFoundation;
 
 namespace CoreGraphics {
 	/// <summary>A callback function to be used with various <see cref="CoreGraphics" /> functions.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -58,7 +57,6 @@ namespace CoreGraphics {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CGFunctionEvaluate? EvaluateFunction {
 			get {
 				return evaluate;
@@ -98,10 +96,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static unsafe IntPtr CGFunctionCreate (/* void* */ IntPtr data, /* size_t */ nint domainDimension, /* CGFloat* */ nfloat* domain, nint rangeDimension, /* CGFloat* */ nfloat* range, CGFunctionCallbacks* callbacks);
 
-		/// <param name="data">To be added.</param>
-		///     <param name="outData">To be added.</param>
+		/// <param name="data">The data to use.</param>
+		///     <param name="outData">The out data.</param>
 		///     <summary>A delegate used to specify the callback function of a <see cref="CoreGraphics.CGFunction" />.</summary>
-		///     <remarks>To be added.</remarks>
 		unsafe public delegate void CGFunctionEvaluate (nfloat* data, nfloat* outData);
 
 

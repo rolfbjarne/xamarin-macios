@@ -51,7 +51,6 @@ namespace UIKit {
 		///         <param name="green">The green.</param>
 		///         <param name="blue">The blue.</param>
 		///         <summary>Creates a color from the specified combinated of red, green, and blue components.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>
 		///           <para tool="threads">This can be used from a background thread.</para>
 		///         </remarks>
@@ -82,7 +81,6 @@ namespace UIKit {
 		///         <param name="blue">The blue.</param>
 		///         <param name="alpha">The alpha.</param>
 		///         <summary>Creates a color from the specified combination of red, green, and blue elements, with the specified transparency.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>
 		///           <para tool="threads">This can be used from a background thread.</para>
 		///         </remarks>

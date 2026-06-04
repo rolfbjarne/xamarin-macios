@@ -67,7 +67,6 @@ namespace CoreFoundation {
 
 		/// <param name="filename">The filename.</param>
 		///         <summary>Creates a CFUrl from a pathname.</summary>
-		///         <returns>To be added.</returns>
 		static public CFUrl? FromFile (string filename)
 		{
 			if (filename is null)
@@ -91,7 +90,6 @@ namespace CoreFoundation {
 		/// <param name="url">The URL to use.</param>
 		///         <param name="baseurl">The baseurl.</param>
 		///         <summary>Creates a CFUrl from a string and a base URL. </summary>
-		///         <returns>To be added.</returns>
 		static public CFUrl? FromUrlString (string url, CFUrl? baseurl)
 		{
 			if (url is null)
@@ -117,7 +115,6 @@ namespace CoreFoundation {
 		extern static /* CFStringRef */ IntPtr CFURLGetString (/* CFURLRef */ IntPtr anURL);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override string? ToString ()
 		{
 			return CFString.FromHandle (CFURLGetString (Handle));
@@ -127,8 +124,7 @@ namespace CoreFoundation {
 		extern static /* CFStringRef */ IntPtr CFURLCopyFileSystemPath (/* CFURLRef */ IntPtr anURL,
 			/* CFURLPathStyle */ nint style);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the file system path.</summary>
 		public string? FileSystemPath {
 			get {
 				return GetFileSystemPath (Handle);
@@ -147,8 +143,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* Boolean */ byte CFURLIsFileReferenceURL (/* CFURLRef */IntPtr url);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the is file reference.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -160,7 +155,6 @@ namespace CoreFoundation {
 		}
 
 		/// <summary>Type identifier for the CoreFoundation.CFUrl type.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>
 		///           <para>The returned token is the CoreFoundation type identifier (CFType) that has been assigned to this class.</para>
 		///           <para>This can be used to determine type identity between different CoreFoundation objects.</para>

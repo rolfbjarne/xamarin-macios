@@ -43,7 +43,7 @@ namespace Security {
 			IntPtr /* SecCertificateRef */ certificate,
 			IntPtr /* SecKeyRef */ privateKey);
 
-		/// <summary>Create a <see cref="SecIdentity" /> instance from a certificate and a private key.</summary>
+		/// <summary>Create a <see cref="SecIdentity" /> instance from a certificate and APrivate key.</summary>
 		/// <param name="certificate">The certificate to use for the new <see cref="SecIdentity" /> instance.</param>
 		/// <param name="privateKey">The private to use for the new <see cref="SecIdentity" /> instance.</param>
 		/// <returns>A new <see cref="SecIdentity" /> instance if successful, otherwise <see langword="null" />.</returns>

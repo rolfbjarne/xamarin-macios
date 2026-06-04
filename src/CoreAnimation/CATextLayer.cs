@@ -73,9 +73,8 @@ namespace CoreAnimation {
 			}
 		}
 
-		/// <param name="fontName">To be added.</param>
+		/// <param name="fontName">The font name.</param>
 		///         <summary>Sets the font.</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetFont (string fontName)
 		{
 			if (fontName is null)
@@ -85,9 +84,8 @@ namespace CoreAnimation {
 			}
 		}
 
-		/// <param name="font">To be added.</param>
+		/// <param name="font">The font.</param>
 		///         <summary>Sets the font.</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetFont (CGFont font)
 		{
 			if (font is null)
@@ -96,9 +94,8 @@ namespace CoreAnimation {
 			GC.KeepAlive (font);
 		}
 
-		/// <param name="font">To be added.</param>
+		/// <param name="font">The font.</param>
 		///         <summary>Sets the font.</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetFont (CTFont font)
 		{
 			if (font is null)
@@ -108,9 +105,8 @@ namespace CoreAnimation {
 		}
 
 #if MONOMAC
-		/// <param name="font">To be added.</param>
+		/// <param name="font">The font.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetFont (NSFont font)
 		{
 			if (font is null)
@@ -122,7 +118,6 @@ namespace CoreAnimation {
 
 		/// <summary>Gets or sets a weak reference to the font.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public object? WeakFont {
 			get {
 				var handle = _Font;

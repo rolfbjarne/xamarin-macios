@@ -29,7 +29,7 @@ namespace AVFoundation {
 		}
 
 		/// <param name="layout">The layout.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new audio channel layout from the specified <see cref="AudioToolbox.AudioChannelLayout" />.</summary>
 		[DesignatedInitializer]
 		public AVAudioChannelLayout (AudioChannelLayout layout)
 			: this (CreateLayoutPtr (layout, out var handleToLayout))
@@ -38,7 +38,6 @@ namespace AVFoundation {
 		}
 
 		/// <summary>The underlying <see cref="AudioToolbox.AudioChannelLayout" />.</summary>
-		///         <value>To be added.</value>
 		public AudioChannelLayout? Layout {
 			get {
 				return AudioChannelLayout.FromHandle (_Layout);

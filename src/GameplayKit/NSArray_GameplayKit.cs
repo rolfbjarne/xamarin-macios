@@ -17,10 +17,10 @@ namespace GameplayKit {
 	[SupportedOSPlatform ("maccatalyst")]
 	public static class NSArray_GameplayKit {
 
-		/// <typeparam name="T">To be added.</typeparam>
+		/// <typeparam name="T">The type of elements in the array.</typeparam>
 		///         <param name="This">The instance on which this method operates.</param>
 		///         <param name="randomSource">The random source.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Returns a shuffled copy of the array using the specified random source.</summary>
 		[Export ("shuffledArrayWithRandomSource:")]
 		public static T [] GetShuffledArray<T> (this NSArray This, GKRandomSource randomSource) where T : class, INativeObject
 		{
@@ -32,9 +32,9 @@ namespace GameplayKit {
 			return result;
 		}
 
-		/// <typeparam name="T">To be added.</typeparam>
+		/// <typeparam name="T">The type of elements in the array.</typeparam>
 		///         <param name="This">The instance on which this method operates.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Returns a shuffled copy of the array.</summary>
 		[Export ("shuffledArray")]
 		public static T [] GetShuffledArray<T> (this NSArray This) where T : class, INativeObject
 		{

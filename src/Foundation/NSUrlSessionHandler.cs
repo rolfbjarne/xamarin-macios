@@ -108,7 +108,6 @@ namespace Foundation {
 	}
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public partial class NSUrlSessionHandler : HttpMessageHandler {
 		private const string SetCookie = "Set-Cookie";
 		private const string Cookie = "Cookie";
@@ -147,14 +146,12 @@ namespace Foundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public NSUrlSessionHandler () : this (CreateConfig ())
 		{
 		}
 
-		/// <param name="configuration">To be added.</param>
+		/// <param name="configuration">The configuration to use.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[CLSCompliant (false)]
 		public NSUrlSessionHandler (NSUrlSessionConfiguration configuration)
 		{
@@ -218,7 +215,6 @@ namespace Foundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool DisableCaching {
 			get {
 				return disableCaching;
@@ -233,7 +229,6 @@ namespace Foundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool AllowAutoRedirect {
 			get {
 				return allowAutoRedirect;
@@ -260,7 +255,6 @@ namespace Foundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public ICredentials? Credentials {
 			get {
 				return credentials;
@@ -449,11 +443,10 @@ namespace Foundation {
 			return nsrequest;
 		}
 
-		/// <param name="request">To be added.</param>
-		///         <param name="cancellationToken">To be added.</param>
+		/// <param name="request">The request.</param>
+		///         <param name="cancellationToken">A cancellation token.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		protected override async Task<HttpResponseMessage> SendAsync (HttpRequestMessage request, CancellationToken cancellationToken)
 		{
 			Volatile.Write (ref sentRequest, true);

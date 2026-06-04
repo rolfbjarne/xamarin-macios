@@ -33,9 +33,9 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AVPixelAspectRatio {
-		/// <summary>To be added.</summary>
+		/// <summary>The horizontal spacing of the pixel aspect ratio.</summary>
 		public nint /* NSInteger */ HorizontalSpacing;
-		/// <summary>To be added.</summary>
+		/// <summary>The vertical spacing of the pixel aspect ratio.</summary>
 		public nint /* NSInteger */ VerticalSpacing;
 
 		public AVPixelAspectRatio (nint horizontalSpacing, nint verticalSpacing)
@@ -44,7 +44,7 @@ namespace AVFoundation {
 			VerticalSpacing = verticalSpacing;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns a string representation of this pixel aspect ratio.</summary>
 		public override string ToString ()
 		{
 			return String.Format ("(horizontalSpacing={0}, verticalSpacing={1})", HorizontalSpacing, VerticalSpacing);
@@ -60,14 +60,14 @@ namespace AVFoundation {
 			return left.HorizontalSpacing != right.HorizontalSpacing || left.VerticalSpacing != right.VerticalSpacing;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns the hash code for this pixel aspect ratio.</summary>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (HorizontalSpacing, VerticalSpacing);
 		}
 
 		/// <param name="other">The other.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Determines whether this instance is equal to the specified object.</summary>
 		public override bool Equals (object? other)
 		{
 			if (other is AVPixelAspectRatio) {

@@ -16,11 +16,10 @@
           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
         </param>
         <param name="dependentParameters">
-          <para>To be added.</para>
+          <para>An array of parameter addresses that are dependent on this parameter.</para>
           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
         </param>
         <summary>Creates a new parameter with the specified values.</summary>
         <returns>A new parameter that was created with the specified values.</returns>
-        <remarks>To be added.</remarks>
       </Docs>
 </Documentation>

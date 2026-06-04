@@ -32,7 +32,6 @@ namespace AppKit {
 		// note: if needed override the protected Get|Set methods
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NSIndexSet SelectionIndexes {
 			get { return GetSelectionIndexes (); }
 			// ignore return value (bool)
@@ -42,7 +41,6 @@ namespace AppKit {
 		// note: if needed override the protected Get|Set methods
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public ulong SelectionIndex {
 			get { return (ulong) GetSelectionIndex (); }
 			// ignore return value (bool)
@@ -52,7 +50,6 @@ namespace AppKit {
 		// note: if needed override the protected Get|Set methods
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NSObject [] SelectedObjects {
 			get { return GetSelectedObjects (); }
 			// ignore return value (bool)

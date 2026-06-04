@@ -48,8 +48,7 @@ namespace VideoToolbox {
 		/// <param name="options">The options to use.</param>
 		///         <param name="fileUrl">The file url.</param>
 		///         <param name="timeRange">The time range.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Create.</summary>
 		public static VTMultiPassStorage? Create (
 			VTMultiPassStorageCreationOptions? options,
 			NSUrl? fileUrl = null,
@@ -61,8 +60,7 @@ namespace VideoToolbox {
 		/// <param name="fileUrl">The file url.</param>
 		///         <param name="timeRange">The time range.</param>
 		///         <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Create.</summary>
 		public static VTMultiPassStorage? Create (
 			NSUrl? fileUrl = null,
 			CMTimeRange? timeRange = null,
@@ -90,8 +88,7 @@ namespace VideoToolbox {
 		[DllImport (Constants.VideoToolboxLibrary)]
 		extern static /* OSStatus */ VTStatus VTMultiPassStorageClose (/* VTMultiPassStorage */ IntPtr multiPassStorage);
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Close.</summary>
 		public VTStatus Close ()
 		{
 			if (closed)

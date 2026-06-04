@@ -1199,7 +1199,7 @@ namespace GameplayKit {
 		Vector3 GetVector3Point (nuint index);
 	}
 
-	/// <summary>Defines a probability distribution. This class defines a uniform distribution (all values equally likely), while subclasses <see cref="GameplayKit.GKGaussianDistribution" /> and <see cref="GameplayKit.GKShuffledDistribution" /> provide different likelihoods.</summary>
+	/// <summary>Defines AProbability distribution. This class defines a uniform distribution (all values equally likely), while subclasses <see cref="GameplayKit.GKGaussianDistribution" /> and <see cref="GameplayKit.GKShuffledDistribution" /> provide different likelihoods.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/GameplayKit/Reference/GKRandomDistribution_Class/index.html">Apple documentation for <c>GKRandomDistribution</c></related>
 	[MacCatalyst (13, 1)]
@@ -1489,7 +1489,7 @@ namespace GameplayKit {
 		void Reset ();
 	}
 
-	/// <summary>A single element, comprising a predicate and an action, that represents a discrete rule in a <see cref="GameplayKit.GKRuleSystem" />.</summary>
+	/// <summary>A single element, comprising APredicate and an action, that represents a discrete rule in a <see cref="GameplayKit.GKRuleSystem" />.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/GameplayKit/Reference/GKRule_Class/index.html">Apple documentation for <c>GKRule</c></related>
 	[MacCatalyst (13, 1)]

@@ -38,7 +38,6 @@ namespace ImageIO {
 #if !COREBUILD
 	// untyped enum -> CGImageSource.h
 	/// <summary>The status of the CGImageSource loader.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum CGImageSourceStatus {
 		/// <summary>The image loader has completed, the full set of images is loaded.</summary>
 		Complete = 0,
@@ -57,7 +56,6 @@ namespace ImageIO {
 	public partial class CGImageOptions {
 
 		/// <summary>Default constructor.</summary>
-		///         <remarks>To be added.</remarks>
 		public CGImageOptions ()
 		{
 			ShouldCache = true;
@@ -72,12 +70,10 @@ namespace ImageIO {
 
 		/// <summary>Determines whether the loaded image should be cached.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public bool ShouldCache { get; set; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -86,7 +82,6 @@ namespace ImageIO {
 
 		/// <summary>Determines whether the image loaded will use floating point values for its components (if the source image has them).</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public bool ShouldAllowFloat { get; set; }
 
 		internal virtual NSMutableDictionary ToDictionary ()
@@ -110,7 +105,6 @@ namespace ImageIO {
 
 		/// <summary>Determines whether to create a thumbnail if one is not found on the image source.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool CreateThumbnailFromImageIfAbsent { get; set; }
 		/// <summary>Forces a thumbnail to be created, even if the source image has one.</summary>
 		///         <value />
@@ -118,16 +112,13 @@ namespace ImageIO {
 		public bool CreateThumbnailFromImageAlways { get; set; }
 		/// <summary>Maximum width and height allowed for a thumbnail (in pixels).</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public int? MaxPixelSize { get; set; }
 		/// <summary>Determines if the created thumbnail should be rotated and scaled to match the full image.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool CreateThumbnailWithTransform { get; set; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -178,7 +169,6 @@ namespace ImageIO {
 
 		/// <summary>The type identifiers for the formats supported by the image loader.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public static string? []? TypeIdentifiers {
 			get {
 				var handle = CGImageSourceCopyTypeIdentifiers ();
@@ -200,7 +190,6 @@ namespace ImageIO {
 		/// <param name="url">Url to load the image from.</param>
 		///         <summary>Creates an image loader that loads the file from the given url.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CGImageSource? FromUrl (NSUrl url)
 		{
 			return FromUrl (url, null);
@@ -210,7 +199,6 @@ namespace ImageIO {
 		///         <param name="options">Image creation options.</param>
 		///         <summary>Creates an image loader that loads the file from the given url.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CGImageSource? FromUrl (NSUrl url, CGImageOptions? options)
 		{
 			if (url is null)
@@ -231,7 +219,6 @@ namespace ImageIO {
 		/// <param name="provider">Dynamic data provider.</param>
 		///         <summary>Creates an image loader using a dynamic data provider.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CGImageSource? FromDataProvider (CGDataProvider provider)
 		{
 			return FromDataProvider (provider, null);
@@ -241,7 +228,6 @@ namespace ImageIO {
 		///         <param name="options">Image creation options.</param>
 		///         <summary>Creates an image loader using a dynamic data provider.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CGImageSource? FromDataProvider (CGDataProvider provider, CGImageOptions? options)
 		{
 			if (provider is null)
@@ -261,7 +247,6 @@ namespace ImageIO {
 		/// <param name="data">Block of bytes containing the image.</param>
 		///         <summary>Creates an image loader from the block of bytes.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CGImageSource? FromData (NSData data)
 		{
 			return FromData (data, null);
@@ -271,7 +256,6 @@ namespace ImageIO {
 		///         <param name="options">Image creation options.</param>
 		///         <summary>Creates an image loader from the block of bytes.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CGImageSource? FromData (NSData data, CGImageOptions? options)
 		{
 			if (data is null)
@@ -290,7 +274,6 @@ namespace ImageIO {
 
 		/// <summary>The image type of the underling image.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public string? TypeIdentifier {
 			get {
 				return CFString.FromHandle (CGImageSourceGetType (Handle));
@@ -302,7 +285,6 @@ namespace ImageIO {
 
 		/// <summary>Number of images loaded (does not include the Thumbnail).</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public nint ImageCount {
 			get {
 				return CGImageSourceGetCount (Handle);
@@ -316,7 +298,6 @@ namespace ImageIO {
 		/// <param name="dict">Properties to copy.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Advice ("Use 'GetProperties'.")]
 		public NSDictionary? CopyProperties (NSDictionary? dict)
 		{
@@ -325,10 +306,9 @@ namespace ImageIO {
 			return Runtime.GetNSObject<NSDictionary> (result, true);
 		}
 
-		/// <param name="options">To be added.</param>
+		/// <param name="options">The options to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Advice ("Use 'GetProperties'.")]
 		public NSDictionary? CopyProperties (CGImageOptions options)
 		{
@@ -347,7 +327,6 @@ namespace ImageIO {
 		///         <param name="imageIndex">Image index.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Advice ("Use 'GetProperties'.")]
 		public NSDictionary? CopyProperties (NSDictionary? dict, int imageIndex)
 		{
@@ -356,11 +335,10 @@ namespace ImageIO {
 			return Runtime.GetNSObject<NSDictionary> (result, true);
 		}
 
-		/// <param name="options">To be added.</param>
-		///         <param name="imageIndex">To be added.</param>
+		/// <param name="options">The options to use.</param>
+		///         <param name="imageIndex">The image index.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Advice ("Use 'GetProperties'.")]
 		public NSDictionary? CopyProperties (CGImageOptions options, int imageIndex)
 		{
@@ -370,21 +348,19 @@ namespace ImageIO {
 			return CopyProperties (dict, imageIndex);
 		}
 
-		/// <param name="options">To be added.</param>
+		/// <param name="options">The options to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CoreGraphics.CGImageProperties GetProperties (CGImageOptions? options = null)
 		{
 			using var dict = options?.ToDictionary ();
 			return new CoreGraphics.CGImageProperties (CopyProperties (dict));
 		}
 
-		/// <param name="index">To be added.</param>
-		///         <param name="options">To be added.</param>
+		/// <param name="index">The zero-based index.</param>
+		///         <param name="options">The options to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CoreGraphics.CGImageProperties GetProperties (int index, CGImageOptions? options = null)
 		{
 			using var dict = options?.ToDictionary ();
@@ -400,7 +376,6 @@ namespace ImageIO {
 		///         <param name="options">Image creation options.</param>
 		///         <summary>Creates a CGImage from this loader.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CGImage? CreateImage (int index, CGImageOptions options)
 		{
 			using (var dict = options?.ToDictionary ()) {
@@ -416,7 +391,6 @@ namespace ImageIO {
 		///         <param name="options">Thumbnail image creation options.</param>
 		///         <summary>Creates a CGImage thumbnail from this loader..</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CGImage? CreateThumbnail (int index, CGImageThumbnailOptions? options)
 		{
 			using (var dict = options?.ToDictionary ()) {
@@ -432,7 +406,6 @@ namespace ImageIO {
 		/// <param name="options">Image creation options.</param>
 		///         <summary>Creates an incremental image loader.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CGImageSource CreateIncremental (CGImageOptions? options)
 		{
 			using (var dict = options?.ToDictionary ())
@@ -446,7 +419,6 @@ namespace ImageIO {
 		/// <param name="data">Block of bytes containing the image.</param>
 		///         <param name="final">Whether this block is the last block of data.</param>
 		///         <summary>Pushes new data into a dynamic image loader.</summary>
-		///         <remarks>To be added.</remarks>
 		public void UpdateData (NSData data, bool final)
 		{
 			if (data is null)
@@ -460,10 +432,9 @@ namespace ImageIO {
 			/* CGDataProviderRef __nonnull */ IntPtr dataProvider,
 			byte final);
 
-		/// <param name="provider">To be added.</param>
-		///         <param name="final">To be added.</param>
+		/// <param name="provider">The provider.</param>
+		///         <param name="final">The final.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void UpdateDataProvider (CGDataProvider provider, bool final)
 		{
 			if (provider is null)
@@ -478,7 +449,6 @@ namespace ImageIO {
 
 		/// <summary>Returns the loader status.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CGImageSourceStatus GetStatus ()
 		{
 			return CGImageSourceGetStatus (Handle);
@@ -492,7 +462,6 @@ namespace ImageIO {
 		/// <param name="index">Image index.</param>
 		///         <summary>Returns the loader status.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CGImageSourceStatus GetStatus (int index)
 		{
 			return CGImageSourceGetStatusAtIndex (Handle, index);
@@ -528,7 +497,6 @@ namespace ImageIO {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]

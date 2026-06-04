@@ -14,7 +14,7 @@ using System.Threading;
 
 namespace CoreFoundation {
 #if !COREBUILD
-	/// <summary>To be added.</summary>
+/// <summary>Represents a dispatch block that wraps an action for execution on a dispatch queue.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -28,7 +28,7 @@ namespace CoreFoundation {
 
 		/// <param name="action">The action to perform.</param>
 		///         <param name="flags">The flags.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a dispatch block that wraps the specified action with the given flags.</summary>
 		public DispatchBlock (Action action, DispatchBlockFlags flags = DispatchBlockFlags.None)
 			: base (create (action, flags), true)
 		{
@@ -38,7 +38,7 @@ namespace CoreFoundation {
 		///         <param name="flags">The flags.</param>
 		///         <param name="qosClass">The qos class.</param>
 		///         <param name="relative_priority">The relative_priority.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a dispatch block with the specified action, flags, QoS class, and priority.</summary>
 		public DispatchBlock (Action action, DispatchBlockFlags flags, DispatchQualityOfService qosClass, int relative_priority)
 			: base (create (flags, qosClass, relative_priority, action), true)
 		{
@@ -48,7 +48,7 @@ namespace CoreFoundation {
 		///         <param name="flags">The flags.</param>
 		///         <param name="qosClass">The qos class.</param>
 		///         <param name="relative_priority">The relative_priority.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new dispatch block from an existing block with the specified flags, QoS class, and priority.</summary>
 		public DispatchBlock (DispatchBlock dispatchBlock, DispatchBlockFlags flags, DispatchQualityOfService qosClass, int relative_priority)
 			: base (dispatch_block_create_with_qos_class ((nuint) (ulong) flags, qosClass, relative_priority, dispatchBlock.GetNonNullHandle (nameof (dispatchBlock))), true)
 		{
@@ -57,7 +57,7 @@ namespace CoreFoundation {
 
 		/// <param name="action">The action to perform.</param>
 		///         <param name="flags">The flags.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a dispatch block that wraps the specified action with the given flags.</summary>
 		public static DispatchBlock Create (Action action, DispatchBlockFlags flags = DispatchBlockFlags.None)
 		{
 			if (action is null)
@@ -69,7 +69,7 @@ namespace CoreFoundation {
 		///         <param name="flags">The flags.</param>
 		///         <param name="qosClass">The qos class.</param>
 		///         <param name="relative_priority">The relative_priority.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a dispatch block with the specified action, flags, QoS class, and priority.</summary>
 		public static DispatchBlock Create (Action action, DispatchBlockFlags flags, DispatchQualityOfService qosClass, int relative_priority)
 		{
 			if (action is null)
@@ -81,7 +81,7 @@ namespace CoreFoundation {
 		///         <param name="flags">The flags.</param>
 		///         <param name="qosClass">The qos class.</param>
 		///         <param name="relative_priority">The relative_priority.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new dispatch block from an existing block with the specified flags, QoS class, and priority.</summary>
 		public static DispatchBlock Create (DispatchBlock block, DispatchBlockFlags flags, DispatchQualityOfService qosClass, int relative_priority)
 		{
 			if (block is null)
@@ -92,13 +92,13 @@ namespace CoreFoundation {
 		/// <param name="flags">The flags.</param>
 		///         <param name="qosClass">The qos class.</param>
 		///         <param name="relative_priority">The relative_priority.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new dispatch block from this block with the specified flags, QoS class, and priority.</summary>
 		public DispatchBlock Create (DispatchBlockFlags flags, DispatchQualityOfService qosClass, int relative_priority)
 		{
 			return new DispatchBlock (dispatch_block_create_with_qos_class ((nuint) (ulong) flags, qosClass, relative_priority, GetCheckedHandle ()), true);
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Retains the dispatch block.</summary>
 		protected internal override void Retain ()
 		{
 			// Retaining a block (using _Block_copy) can move it, if it's originally
@@ -107,7 +107,7 @@ namespace CoreFoundation {
 			InitializeHandle (BlockLiteral._Block_copy (GetCheckedHandle ()));
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Releases the dispatch block.</summary>
 		protected internal override void Release ()
 		{
 			BlockLiteral._Block_release (GetCheckedHandle ());
@@ -151,7 +151,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.libcLibrary)]
 		extern static void dispatch_block_cancel (IntPtr block);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Cancels the dispatch block.</summary>
 		public void Cancel ()
 		{
 			dispatch_block_cancel (GetCheckedHandle ());
@@ -162,7 +162,7 @@ namespace CoreFoundation {
 
 		/// <param name="queue">The dispatch queue on which to execute.</param>
 		///         <param name="notification">The notification.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Schedules a notification action to be called when this block completes.</summary>
 		public void Notify (DispatchQueue queue, Action notification)
 		{
 			if (notification is null)
@@ -173,7 +173,7 @@ namespace CoreFoundation {
 
 		/// <param name="queue">The dispatch queue on which to execute.</param>
 		///         <param name="notification">The notification.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Schedules a notification block to be submitted when this block completes.</summary>
 		public void Notify (DispatchQueue queue, DispatchBlock notification)
 		{
 			if (queue is null)
@@ -188,13 +188,13 @@ namespace CoreFoundation {
 		[DllImport (Constants.libcLibrary)]
 		extern static nint dispatch_block_testcancel (IntPtr block);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Tests whether this dispatch block has been cancelled.</summary>
 		public nint TestCancel ()
 		{
 			return dispatch_block_testcancel (GetCheckedHandle ());
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets a value indicating whether this dispatch block has been cancelled.</summary>
 		public bool Cancelled {
 			get { return TestCancel () != 0; }
 		}
@@ -203,14 +203,14 @@ namespace CoreFoundation {
 		extern static nint dispatch_block_wait (IntPtr block, DispatchTime time);
 
 		/// <param name="time">The time.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Waits for the dispatch block to complete until the specified time.</summary>
 		public nint Wait (DispatchTime time)
 		{
 			return dispatch_block_wait (GetCheckedHandle (), time);
 		}
 
 		/// <param name="timeout">The timeout duration.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Waits for the dispatch block to complete until the specified timeout.</summary>
 		public nint Wait (TimeSpan timeout)
 		{
 			return Wait (new DispatchTime (DispatchTime.Now, timeout));
@@ -233,14 +233,14 @@ namespace CoreFoundation {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Invokes the dispatch block synchronously.</summary>
 		public void Invoke ()
 		{
 			((Action) this!) ();
 		}
 	}
 
-	/// <summary>To be added.</summary>
+/// <summary>Specifies flags for dispatch block creation and execution behavior.</summary>
 	[Flags]
 	[Native]
 	public enum DispatchBlockFlags : ulong {

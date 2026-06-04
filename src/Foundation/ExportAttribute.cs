@@ -84,7 +84,6 @@ namespace Foundation {
 
 		/// <summary>The name of the C# selector if specified, or null if it is derived from the property name or method.</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		public string? Selector {
 			get { return this.selector; }
 			set { this.selector = value; }
@@ -92,7 +91,6 @@ namespace Foundation {
 
 		/// <summary>The semantics for object ownership on setter properties or methods.</summary>
 		///         <value>The assignment ownership semantics for setting the value.</value>
-		///         <remarks>To be added.</remarks>
 		public ArgumentSemantic ArgumentSemantic {
 			get { return this.semantic; }
 			set { this.semantic = value; }
@@ -100,16 +98,14 @@ namespace Foundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsVariadic {
 			get;
 			set;
 		}
 
-		/// <param name="prop">To be added.</param>
+		/// <param name="prop">The prop.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public ExportAttribute ToGetter (PropertyInfo prop)
 		{
 			if (string.IsNullOrEmpty (Selector))
@@ -117,10 +113,9 @@ namespace Foundation {
 			return new ExportAttribute (selector, semantic);
 		}
 
-		/// <param name="prop">To be added.</param>
+		/// <param name="prop">The prop.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public ExportAttribute ToSetter (PropertyInfo prop)
 		{
 			if (string.IsNullOrEmpty (Selector))

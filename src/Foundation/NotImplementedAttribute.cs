@@ -17,7 +17,7 @@ namespace Foundation {
 	// This allows the Foo.set_XXX to exists but throw an exception
 	// but derived classes would then override the property
 	//
-	/// <summary>To be added.</summary>
+	/// <summary>Indicates that a method has not been implemented.</summary>
 	[AttributeUsage (AttributeTargets.Method, AllowMultiple = false)]
 	public class NotImplementedAttribute : Attribute {
 		/// <summary>Creates a new <see cref="NotImplementedAttribute" /> instance.</summary>

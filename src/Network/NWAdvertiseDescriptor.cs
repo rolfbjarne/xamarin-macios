@@ -72,8 +72,7 @@ namespace Network {
 		/// <param name="name">The name to use.</param>
 		///         <param name="type">The type.</param>
 		///         <param name="domain">The domain.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Creates bonjour service.</summary>
 		public static NWAdvertiseDescriptor? CreateBonjourService (string name, string type, string? domain = null)
 		{
 			if (name is null)
@@ -95,7 +94,7 @@ namespace Network {
 		static extern void nw_advertise_descriptor_set_txt_record (IntPtr handle, IntPtr txtRecord, nuint txtLen);
 
 		/// <param name="txt">The txt.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets txt record.</summary>
 		public void SetTxtRecord (string txt)
 		{
 			if (txt is null)
@@ -111,8 +110,7 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		static extern byte nw_advertise_descriptor_get_no_auto_rename (IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the no auto rename.</summary>
 		public bool NoAutoRename {
 			set => nw_advertise_descriptor_set_no_auto_rename (GetCheckedHandle (), value.AsByte ());
 			get => nw_advertise_descriptor_get_no_auto_rename (GetCheckedHandle ()) != 0;

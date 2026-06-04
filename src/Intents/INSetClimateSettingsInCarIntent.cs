@@ -6,17 +6,17 @@ using Intents;
 namespace Intents {
 
 	public partial class INSetClimateSettingsInCarIntent {
-		/// <param name="enableFan">To be added.</param>
-		///         <param name="enableAirConditioner">To be added.</param>
-		///         <param name="enableClimateControl">To be added.</param>
-		///         <param name="enableAutoMode">To be added.</param>
-		///         <param name="airCirculationMode">To be added.</param>
-		///         <param name="fanSpeedIndex">To be added.</param>
-		///         <param name="fanSpeedPercentage">To be added.</param>
-		///         <param name="relativeFanSpeedSetting">To be added.</param>
-		///         <param name="temperature">To be added.</param>
-		///         <param name="relativeTemperatureSetting">To be added.</param>
-		///         <param name="climateZone">To be added.</param>
+		/// <param name="enableFan">The enable fan.</param>
+		///         <param name="enableAirConditioner">The enable air conditioner.</param>
+		///         <param name="enableClimateControl">The enable climate control.</param>
+		///         <param name="enableAutoMode">The enable auto mode.</param>
+		///         <param name="airCirculationMode">The air circulation mode.</param>
+		///         <param name="fanSpeedIndex">The fan speed index.</param>
+		///         <param name="fanSpeedPercentage">The fan speed percentage.</param>
+		///         <param name="relativeFanSpeedSetting">The relative fan speed setting.</param>
+		///         <param name="temperature">The temperature.</param>
+		///         <param name="relativeTemperatureSetting">The relative temperature setting.</param>
+		///         <param name="climateZone">The climate zone.</param>
 		///         <summary>To be added.</summary>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]

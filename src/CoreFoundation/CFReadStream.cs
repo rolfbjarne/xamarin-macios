@@ -51,7 +51,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFErrorRef */ IntPtr CFReadStreamCopyError (/* CFReadStreamRef */ IntPtr stream);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the error associated with the stream, if any.</summary>
 		public override CFException? GetError ()
 		{
 			var error = CFReadStreamCopyError (Handle);
@@ -63,7 +63,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* Boolean */ byte CFReadStreamOpen (/* CFReadStreamRef */ IntPtr stream);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Opens the read stream.</summary>
 		protected override bool DoOpen ()
 		{
 			return CFReadStreamOpen (Handle) != 0;
@@ -72,7 +72,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static void CFReadStreamClose (/* CFReadStreamRef */ IntPtr stream);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Closes the read stream.</summary>
 		protected override void DoClose ()
 		{
 			CFReadStreamClose (Handle);
@@ -81,7 +81,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* CFStreamStatus -> CFIndex */ nint CFReadStreamGetStatus (/* CFReadStreamRef */ IntPtr stream);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the current status of the stream.</summary>
 		protected override CFStreamStatus DoGetStatus ()
 		{
 			return (CFStreamStatus) (long) CFReadStreamGetStatus (Handle);
@@ -101,7 +101,7 @@ namespace CoreFoundation {
 
 		/// <param name="loop">The loop.</param>
 		///         <param name="mode">The mode.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Schedules the stream on the specified run loop and mode.</summary>
 		protected override void ScheduleWithRunLoop (CFRunLoop loop, NSString? mode)
 		{
 			if (loop is null)
@@ -118,7 +118,7 @@ namespace CoreFoundation {
 
 		/// <param name="loop">The loop.</param>
 		///         <param name="mode">The mode.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Unschedules the stream from the specified run loop and mode.</summary>
 		protected override void UnscheduleFromRunLoop (CFRunLoop loop, NSString? mode)
 		{
 			if (loop is null)
@@ -184,7 +184,7 @@ namespace CoreFoundation {
 		extern static /* CFTypeRef */ IntPtr CFReadStreamCopyProperty (/* CFReadStreamRef */ IntPtr stream, /* CFStreamRef */ IntPtr propertyName);
 
 		/// <param name="name">The name to use.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the value of the specified property.</summary>
 		protected override IntPtr DoGetProperty (NSString name)
 		{
 			if (name is null)
@@ -199,7 +199,7 @@ namespace CoreFoundation {
 
 		/// <param name="name">The name to use.</param>
 		///         <param name="value">The value to set.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets the value of the specified property.</summary>
 		protected override bool DoSetProperty (NSString name, INativeObject? value)
 		{
 			if (name is null)

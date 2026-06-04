@@ -37,7 +37,6 @@ namespace Foundation {
 
 	// This is a convenience enum around a set of native strings.
 	/// <summary>File kind enumeration.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum NSFileType {
 		/// <summary>A directory</summary>
 		Directory,
@@ -49,7 +48,7 @@ namespace Foundation {
 		Socket,
 		/// <summary>A special system character device.</summary>
 		CharacterSpecial,
-		/// <summary>To be added.</summary>
+		/// <summary>A block special device.</summary>
 		BlockSpecial,
 		/// <summary>Unknown file type.</summary>
 		Unknown,
@@ -57,89 +56,67 @@ namespace Foundation {
 
 #if !MONOMAC
 	/// <summary>Enumerates file protection levels.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum NSFileProtection {
-		/// <summary>To be added.</summary>
+		/// <summary>No file protection.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>The file is encrypted and inaccessible when the device is locked.</summary>
 		Complete,
-		/// <summary>To be added.</summary>
+		/// <summary>The file is encrypted and inaccessible when the device is locked, unless the file is already open.</summary>
 		CompleteUnlessOpen,
-		/// <summary>To be added.</summary>
+		/// <summary>The file is encrypted until the first user authentication after boot.</summary>
 		CompleteUntilFirstUserAuthentication,
 	}
 #endif
 
 	/// <summary>Encapsulates file attributes for use with <see cref="Foundation.NSFileManager" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class NSFileAttributes {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether the file is append-only.</summary>
 		public bool? AppendOnly { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether the file is busy.</summary>
 		public bool? Busy { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether the file extension is hidden.</summary>
 		public bool? ExtensionHidden { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the creation date.</summary>
 		public NSDate? CreationDate { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the owner account name.</summary>
 		public string? OwnerAccountName { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the group owner account name.</summary>
 		public string? GroupOwnerAccountName { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the file system number.</summary>
 		public nint? SystemNumber { get; set; } // NSInteger
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the device identifier.</summary>
 		public nuint? DeviceIdentifier { get; set; } // unsigned long
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the group owner account ID.</summary>
 		public nuint? GroupOwnerAccountID { get; set; } // unsigned long
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets whether the file is immutable.</summary>
 		public bool? Immutable { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the modification date.</summary>
 		public NSDate? ModificationDate { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the owner account ID.</summary>
 		public nuint? OwnerAccountID { get; set; } // unsigned long
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the HFS creator code.</summary>
 		public nuint? HfsCreatorCode { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the HFS type code.</summary>
 		public nuint? HfsTypeCode { get; set; } // unsigned long
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the POSIX permissions.</summary>
 		public short? PosixPermissions { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the reference count (hard links).</summary>
 		public nuint? ReferenceCount { get; set; } // unsigned long
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the system file number (inode).</summary>
 		public nuint? SystemFileNumber { get; set; } // unsigned long
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the file size in bytes.</summary>
 		public ulong? Size { get; set; } // unsigned long long
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the file type.</summary>
 		public NSFileType? Type { get; set; }
 
 #if !MONOMAC
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the file protection level.</summary>
 		public NSFileProtection? ProtectionKey { get; set; }
 #endif
 
@@ -286,9 +263,8 @@ namespace Foundation {
 		}
 		#endregion
 
-		/// <param name="dict">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="dict">The dictionary containing file attributes.</param>
+		/// <summary>Creates an NSFileAttributes from a dictionary.</summary>
 		[return: NotNullIfNotNull (nameof (dict))]
 		public static NSFileAttributes? FromDictionary (NSDictionary? dict)
 		{
@@ -374,20 +350,15 @@ namespace Foundation {
 
 		// The documentation only says these are NSNumbers, it doesn't say which type of number.
 		/// <summary>The volume size in bytes.</summary>
-		///         <remarks>To be added.</remarks>
 		public ulong Size { get; internal set; }
 		/// <summary>The number of free bytes in the volume.</summary>
-		///         <remarks>To be added.</remarks>
 		public ulong FreeSize { get; internal set; }
 		/// <summary>The total number of nodes in the volume (maximum number of files).</summary>
-		///         <remarks>To be added.</remarks>
 		public long Nodes { get; internal set; }
 		/// <summary>The number of free nodes in the volume.</summary>
-		///         <remarks>To be added.</remarks>
 		public long FreeNodes { get; internal set; }
 		// "The value corresponds to the value of st_dev, as returned by stat(2)" => st_dev is defined to be int32_t in all architectures.
 		/// <summary>The device number (corresponds to st_dev on the Unix stat structure).</summary>
-		///         <remarks>To be added.</remarks>
 		public uint Number { get; internal set; }
 
 		internal static NSFileSystemAttributes? FromDictionary (NSDictionary dict)
@@ -464,11 +435,10 @@ namespace Foundation {
 			}
 		}
 
-		/// <param name="attributes">To be added.</param>
-		///         <param name="path">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="attributes">The file attributes to set.</param>
+		/// <param name="path">The file path.</param>
+		/// <param name="error">On return, contains an error object if an error occurred.</param>
+		/// <summary>Sets file attributes at the specified path.</summary>
 		public bool SetAttributes (NSFileAttributes attributes, string path, out NSError error)
 		{
 			if (attributes is null)
@@ -476,10 +446,9 @@ namespace Foundation {
 			return SetAttributes (attributes.ToDictionary (), path, out error);
 		}
 
-		/// <param name="attributes">To be added.</param>
-		///         <param name="path">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="attributes">The file attributes to set.</param>
+		/// <param name="path">The file path.</param>
+		/// <summary>Sets file attributes at the specified path.</summary>
 		public bool SetAttributes (NSFileAttributes attributes, string path)
 		{
 			if (attributes is null)
@@ -488,49 +457,44 @@ namespace Foundation {
 			return SetAttributes (attributes.ToDictionary (), path, out _);
 		}
 
-		/// <param name="path">To be added.</param>
-		///         <param name="createIntermediates">To be added.</param>
-		///         <param name="attributes">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="path">The file path.</param>
+		/// <param name="createIntermediates">Whether to create intermediate directories.</param>
+		/// <param name="attributes">The file attributes to set.</param>
+		/// <param name="error">On return, contains an error object if an error occurred.</param>
+		/// <summary>Creates a directory at the specified path.</summary>
 		public bool CreateDirectory (string path, bool createIntermediates, NSFileAttributes? attributes, out NSError error)
 		{
 			return CreateDirectory (path, createIntermediates, attributes?.ToDictionary (), out error);
 		}
 
-		/// <param name="path">To be added.</param>
-		///         <param name="createIntermediates">To be added.</param>
-		///         <param name="attributes">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="path">The file path.</param>
+		/// <param name="createIntermediates">Whether to create intermediate directories.</param>
+		/// <param name="attributes">The file attributes to set.</param>
+		/// <summary>Creates a directory at the specified path.</summary>
 		public bool CreateDirectory (string path, bool createIntermediates, NSFileAttributes? attributes)
 		{
 			return CreateDirectory (path, createIntermediates, attributes?.ToDictionary (), out var _);
 		}
 
-		/// <param name="path">To be added.</param>
-		///         <param name="data">To be added.</param>
-		///         <param name="attributes">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="path">The file path.</param>
+		/// <param name="data">The data to write to the file.</param>
+		/// <param name="attributes">The file attributes to set.</param>
+		/// <summary>Creates a file at the specified path with the given data and attributes.</summary>
 		public bool CreateFile (string path, NSData data, NSFileAttributes? attributes)
 		{
 			return CreateFile (path, data, attributes?.ToDictionary ());
 		}
 
-		/// <param name="path">To be added.</param>
-		///         <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="path">The file path.</param>
+		/// <param name="error">On return, contains an error object if an error occurred.</param>
+		/// <summary>Gets the file attributes for the specified path.</summary>
 		public NSFileAttributes? GetAttributes (string path, out NSError error)
 		{
 			return NSFileAttributes.FromDictionary (_GetAttributes (path, out error));
 		}
 
-		/// <param name="path">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="path">The file path.</param>
+		/// <summary>Gets the file attributes for the specified path.</summary>
 		public NSFileAttributes? GetAttributes (string path)
 		{
 			return NSFileAttributes.FromDictionary (_GetAttributes (path, out var _));
@@ -555,18 +519,16 @@ namespace Foundation {
 			return NSFileSystemAttributes.FromDictionary (_GetFileSystemAttributes (path, out error));
 		}
 
-		/// <param name="properties">To be added.</param>
-		///         <param name="options">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="properties">The volume properties to query.</param>
+		/// <param name="options">The volume enumeration options.</param>
+		/// <summary>Returns an array of URLs for the mounted volumes.</summary>
 		public NSUrl [] GetMountedVolumes (NSString [] properties, NSVolumeEnumerationOptions options)
 		{
 			using var array = NSArray.FromNSObjects (properties);
 			return GetMountedVolumes (array, options);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the current working directory.</summary>
 		public string CurrentDirectory {
 			get { return GetCurrentDirectory (); }
 			// ignore boolean return value
@@ -575,7 +537,7 @@ namespace Foundation {
 
 		/// <param name="filename">Path of file</param>
 		///         <param name="skipBackup">True if you want to flag this file to be skipped for backups or false if you want to have this file backed up to iCloud.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets or clears the skip-backup attribute for a file.</summary>
 		///         <returns>A null return value will indicate success, while a non-null error will contain an instance of NSError detailing the problem</returns>
 		///         <remarks>If you set the SkipBackup attribute on a file, it will inform the operating system that this file should not be backed up into iCloud.   
 		///         This high-level API automagically adjust itself based on the version of iOS being executed. 

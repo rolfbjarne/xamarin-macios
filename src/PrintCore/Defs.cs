@@ -16,271 +16,267 @@ using PMObject = System.IntPtr;
 
 namespace PrintCore {
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Specifies status code values.</summary>
 	public enum PMStatusCode {
-		/// <summary>To be added.</summary>
+		/// <summary>Ok.</summary>
 		Ok = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>General Error.</summary>
 		GeneralError = -30870,
-		/// <summary>To be added.</summary>
+		/// <summary>Out Of Scope.</summary>
 		OutOfScope = -30871,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Parameter.</summary>
 		InvalidParameter = -50,
-		/// <summary>To be added.</summary>
+		/// <summary>No Default Printer.</summary>
 		NoDefaultPrinter = -30872,
-		/// <summary>To be added.</summary>
+		/// <summary>Not Implemented.</summary>
 		NotImplemented = -30873,
-		/// <summary>To be added.</summary>
+		/// <summary>No Such Entry.</summary>
 		NoSuchEntry = -30874,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Print Settings.</summary>
 		InvalidPrintSettings = -30875,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Page Format.</summary>
 		InvalidPageFormat = -30876,
-		/// <summary>To be added.</summary>
+		/// <summary>Value Out Of Range.</summary>
 		ValueOutOfRange = -30877,
-		/// <summary>To be added.</summary>
+		/// <summary>Lock Ignored.</summary>
 		LockIgnored = -30878,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Print Session.</summary>
 		InvalidPrintSession = -30879,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Printer.</summary>
 		InvalidPrinter = -30880,
-		/// <summary>To be added.</summary>
+		/// <summary>Object In Use.</summary>
 		ObjectInUse = -30881,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Preset.</summary>
 		InvalidPreset = -30899,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Allocation Failure.</summary>
 		AllocationFailure = -108,
-		/// <summary>To be added.</summary>
+		/// <summary>Internal Error.</summary>
 		InternalError = -30870,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Index.</summary>
 		InvalidIndex = -30882,
-		/// <summary>To be added.</summary>
+		/// <summary>String Conversion Failure.</summary>
 		StringConversionFailure = -30883,
-		/// <summary>To be added.</summary>
+		/// <summary>X M L Parse Error.</summary>
 		XMLParseError = -30884,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Job Template.</summary>
 		InvalidJobTemplate = -30885,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Printer Info.</summary>
 		InvalidPrinterInfo = -30886,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Connection.</summary>
 		InvalidConnection = -30887,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Key.</summary>
 		InvalidKey = -30888,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Value.</summary>
 		InvalidValue = -30889,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Allocator.</summary>
 		InvalidAllocator = -30890,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Ticket.</summary>
 		InvalidTicket = -30891,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Item.</summary>
 		InvalidItem = -30892,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Type.</summary>
 		InvalidType = -30893,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Reply.</summary>
 		InvalidReply = -30894,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid File Type.</summary>
 		InvalidFileType = -30895,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Object.</summary>
 		InvalidObject = -30896,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Paper.</summary>
 		InvalidPaper = -30897,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Calibration Target.</summary>
 		InvalidCalibrationTarget = -30898,
 
-		/// <summary>To be added.</summary>
+		/// <summary>No Default Item.</summary>
 		NoDefaultItem = -9500,
-		/// <summary>To be added.</summary>
+		/// <summary>No Default Settings.</summary>
 		NoDefaultSettings = -9501,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Pde Context.</summary>
 		InvalidPdeContext = -9530,
-		/// <summary>To be added.</summary>
+		/// <summary>Dont Switch Pde Error.</summary>
 		DontSwitchPdeError = -9531,
-		/// <summary>To be added.</summary>
+		/// <summary>Unable To Find Process.</summary>
 		UnableToFindProcess = -9532,
-		/// <summary>To be added.</summary>
+		/// <summary>Feature Not Installed.</summary>
 		FeatureNotInstalled = -9533,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Pbm Ref.</summary>
 		InvalidPbmRef = -9540,
-		/// <summary>To be added.</summary>
+		/// <summary>No Selected Printers.</summary>
 		NoSelectedPrinters = -9541,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Lookup Spec.</summary>
 		InvalidLookupSpec = -9542,
-		/// <summary>To be added.</summary>
+		/// <summary>Sync Request Failed.</summary>
 		SyncRequestFailed = -9543,
-		/// <summary>To be added.</summary>
+		/// <summary>Edit Request Failed.</summary>
 		EditRequestFailed = -9544,
-		/// <summary>To be added.</summary>
+		/// <summary>Pr Browser No U I.</summary>
 		PrBrowserNoUI = -9545,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Ticket Type Not Found.</summary>
 		TicketTypeNotFound = -9580,
-		/// <summary>To be added.</summary>
+		/// <summary>Update Ticket Failed.</summary>
 		UpdateTicketFailed = -9581,
-		/// <summary>To be added.</summary>
+		/// <summary>Validate Ticket Failed.</summary>
 		ValidateTicketFailed = -9582,
-		/// <summary>To be added.</summary>
+		/// <summary>Sub Ticket Not Found.</summary>
 		SubTicketNotFound = -9583,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Sub Ticket.</summary>
 		InvalidSubTicket = -9584,
-		/// <summary>To be added.</summary>
+		/// <summary>Delete Sub Ticket Failed.</summary>
 		DeleteSubTicketFailed = -9585,
-		/// <summary>To be added.</summary>
+		/// <summary>Item Is Locked.</summary>
 		ItemIsLocked = -9586,
-		/// <summary>To be added.</summary>
+		/// <summary>Ticket Is Locked.</summary>
 		TicketIsLocked = -9587,
-		/// <summary>To be added.</summary>
+		/// <summary>Template Is Locked.</summary>
 		TemplateIsLocked = -9588,
-		/// <summary>To be added.</summary>
+		/// <summary>Key Not Found.</summary>
 		KeyNotFound = -9589,
-		/// <summary>To be added.</summary>
+		/// <summary>Key Not Unique.</summary>
 		KeyNotUnique = -9590,
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown Data Type.</summary>
 		UnknownDataType = -9591,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Create Message Failed.</summary>
 		CreateMessageFailed = -9620,
-		/// <summary>To be added.</summary>
+		/// <summary>Server Communication Failed.</summary>
 		ServerCommunicationFailed = -9621,
-		/// <summary>To be added.</summary>
+		/// <summary>Key Or Value Not Found.</summary>
 		KeyOrValueNotFound = -9623,
-		/// <summary>To be added.</summary>
+		/// <summary>Messaging Error.</summary>
 		MessagingError = -9624,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Server Not Found.</summary>
 		ServerNotFound = -9630,
-		/// <summary>To be added.</summary>
+		/// <summary>Server Already Running.</summary>
 		ServerAlreadyRunning = -9631,
-		/// <summary>To be added.</summary>
+		/// <summary>Server Suspended.</summary>
 		ServerSuspended = -9632,
-		/// <summary>To be added.</summary>
+		/// <summary>Server Attribute Restricted.</summary>
 		ServerAttributeRestricted = -9633,
-		/// <summary>To be added.</summary>
+		/// <summary>File Or Dir Operation Failed.</summary>
 		FileOrDirOperationFailed = -9634,
-		/// <summary>To be added.</summary>
+		/// <summary>User Or Group Not Found.</summary>
 		UserOrGroupNotFound = -9635,
-		/// <summary>To be added.</summary>
+		/// <summary>Permission Error.</summary>
 		PermissionError = -9636,
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown Message.</summary>
 		UnknownMessage = -9637,
-		/// <summary>To be added.</summary>
+		/// <summary>Queue Not Found.</summary>
 		QueueNotFound = -9638,
-		/// <summary>To be added.</summary>
+		/// <summary>Queue Already Exists.</summary>
 		QueueAlreadyExists = -9639,
-		/// <summary>To be added.</summary>
+		/// <summary>Queue Job Failed.</summary>
 		QueueJobFailed = -9640,
-		/// <summary>To be added.</summary>
+		/// <summary>Job Not Found.</summary>
 		JobNotFound = -9641,
-		/// <summary>To be added.</summary>
+		/// <summary>Job Busy.</summary>
 		JobBusy = -9642,
-		/// <summary>To be added.</summary>
+		/// <summary>Job Canceled.</summary>
 		JobCanceled = -9643,
-		/// <summary>To be added.</summary>
+		/// <summary>Document Not Found.</summary>
 		DocumentNotFound = -9644,
 
-		/// <summary>To be added.</summary>
+		/// <summary>P M Symbol Not Found.</summary>
 		PMSymbolNotFound = -9660,
-		/// <summary>To be added.</summary>
+		/// <summary>I O M Symbol Not Found.</summary>
 		IOMSymbolNotFound = -9661,
-		/// <summary>To be added.</summary>
+		/// <summary>Cvm Symbol Not Found.</summary>
 		CvmSymbolNotFound = -9662,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid P M Context.</summary>
 		InvalidPMContext = -9663,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid I O M Context.</summary>
 		InvalidIOMContext = -9664,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Cvm Context.</summary>
 		InvalidCvmContext = -9665,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Job I D.</summary>
 		InvalidJobID = -9666,
-		/// <summary>To be added.</summary>
+		/// <summary>No Printer Job I D.</summary>
 		NoPrinterJobID = -9667,
-		/// <summary>To be added.</summary>
+		/// <summary>Job Stream Open Failed.</summary>
 		JobStreamOpenFailed = -9668,
-		/// <summary>To be added.</summary>
+		/// <summary>Job Stream Read Failed.</summary>
 		JobStreamReadFailed = -9669,
-		/// <summary>To be added.</summary>
+		/// <summary>Job Stream End Error.</summary>
 		JobStreamEndError = -9670,
-		/// <summary>To be added.</summary>
+		/// <summary>Job Manager Aborted.</summary>
 		JobManagerAborted = -9671,
-		/// <summary>To be added.</summary>
+		/// <summary>Job Get Ticket Bad Format Error.</summary>
 		JobGetTicketBadFormatError = -9672,
-		/// <summary>To be added.</summary>
+		/// <summary>Job Get Ticket Read Error.</summary>
 		JobGetTicketReadError = -9673,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Plugin Not Found.</summary>
 		PluginNotFound = -9701,
-		/// <summary>To be added.</summary>
+		/// <summary>Plugin Registeration Failed.</summary>
 		PluginRegisterationFailed = -9702,
-		/// <summary>To be added.</summary>
+		/// <summary>Font Not Found.</summary>
 		FontNotFound = -9703,
-		/// <summary>To be added.</summary>
+		/// <summary>Font Name Too Long.</summary>
 		FontNameTooLong = -9704,
-		/// <summary>To be added.</summary>
+		/// <summary>General C G Error.</summary>
 		GeneralCGError = -9705,
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid State.</summary>
 		InvalidState = -9706,
-		/// <summary>To be added.</summary>
+		/// <summary>Unexpected Imaging Error.</summary>
 		UnexpectedImagingError = -9707,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Invalid Printer Address.</summary>
 		InvalidPrinterAddress = -9780,
-		/// <summary>To be added.</summary>
+		/// <summary>Open Failed.</summary>
 		OpenFailed = -9781,
-		/// <summary>To be added.</summary>
+		/// <summary>Read Failed.</summary>
 		ReadFailed = -9782,
-		/// <summary>To be added.</summary>
+		/// <summary>Write Failed.</summary>
 		WriteFailed = -9783,
-		/// <summary>To be added.</summary>
+		/// <summary>Status Failed.</summary>
 		StatusFailed = -9784,
-		/// <summary>To be added.</summary>
+		/// <summary>Close Failed.</summary>
 		CloseFailed = -9785,
-		/// <summary>To be added.</summary>
+		/// <summary>Unsupported Connection.</summary>
 		UnsupportedConnection = -9786,
-		/// <summary>To be added.</summary>
+		/// <summary>I O Attr Not Available.</summary>
 		IOAttrNotAvailable = -9787,
-		/// <summary>To be added.</summary>
+		/// <summary>Read Got Zero Data.</summary>
 		ReadGotZeroData = -9788,
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Specifies printer state values.</summary>
 	public enum PMPrinterState : System.UInt16 {
-		/// <summary>To be added.</summary>
+		/// <summary>Idle.</summary>
 		Idle = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Processing.</summary>
 		Processing = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Stopped.</summary>
 		Stopped = 5,
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Specifies duplex mode values.</summary>
 	public enum PMDuplexMode : System.UInt32 {
-		/// <summary>To be added.</summary>
+		/// <summary>None.</summary>
 		None = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>No Tumble.</summary>
 		NoTumble = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Tumble.</summary>
 		Tumble = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Simplex Tumble.</summary>
 		SimplexTumble = 4,
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Specifies orientation values.</summary>
 	public enum PMOrientation : System.UInt16 {
-		/// <summary>To be added.</summary>
+		/// <summary>Portrait.</summary>
 		Portrait = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Landscape.</summary>
 		Landscape = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Reverse Portrait.</summary>
 		ReversePortrait = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Reverse Landscape.</summary>
 		ReverseLandscape = 4,
 	}
 
@@ -293,40 +289,34 @@ namespace PrintCore {
 		ScaleToFit = 2,
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Represents resolution.</summary>
 	[SupportedOSPlatform ("macos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct PMResolution {
 
 		double hRes;
 		double vRes;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The horizontal resolution.</summary>
 		public double HorizontalResolution => hRes;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The vertical resolution.</summary>
 		public double VerticalResolution => vRes;
 
-		/// <param name="horizontal">To be added.</param>
-		///         <param name="vertical">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="horizontal">The horizontal resolution.</param>
+		/// <param name="vertical">The vertical resolution.</param>
+		/// <summary>Creates a resolution with the specified values.</summary>
 		public PMResolution (double horizontal, double vertical)
 		{
 			hRes = horizontal;
 			vRes = vertical;
 		}
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a string representation of this instance.</summary>
 		public override string ToString ()
 		{
 			return $"[HorizontalResolution={hRes},VerticalResolution={vRes}]";
 		}
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Represents rect.</summary>
 	[SupportedOSPlatform ("macos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct PMRect {
@@ -335,25 +325,20 @@ namespace PrintCore {
 		internal double bottom;
 		internal double right;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The top.</summary>
 		public double Top => top;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The left.</summary>
 		public double Left => left;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The bottom.</summary>
 		public double Bottom => bottom;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The right.</summary>
 		public double Right => right;
 
-		/// <param name="top">To be added.</param>
-		///         <param name="bottom">To be added.</param>
-		///         <param name="left">To be added.</param>
-		///         <param name="right">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="top">The top value.</param>
+		/// <param name="bottom">The bottom value.</param>
+		/// <param name="left">The left value.</param>
+		/// <param name="right">The right value.</param>
+		/// <summary>Creates a rectangle with the specified values.</summary>
 		public PMRect (double top, double bottom, double left, double right)
 		{
 			this.top = top;
@@ -362,47 +347,39 @@ namespace PrintCore {
 			this.right = right;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a string representation of this instance.</summary>
 		public override string ToString ()
 		{
 			return $"[Top={top},Bottom={bottom},Left={left},Right={right}]";
 		}
 	}
 
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Represents paper margins.</summary>
 	[SupportedOSPlatform ("macos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct PMPaperMargins {
 		PMRect Rect;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The top.</summary>
 		public double Top => Rect.top;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The left.</summary>
 		public double Left => Rect.left;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The bottom.</summary>
 		public double Bottom => Rect.bottom;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The right.</summary>
 		public double Right => Rect.right;
 
-		/// <param name="top">To be added.</param>
-		///         <param name="bottom">To be added.</param>
-		///         <param name="left">To be added.</param>
-		///         <param name="right">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="top">The top value.</param>
+		/// <param name="bottom">The bottom value.</param>
+		/// <param name="left">The left value.</param>
+		/// <param name="right">The right value.</param>
+		/// <summary>Creates paper margins with the specified values.</summary>
 		public PMPaperMargins (double top, double bottom, double left, double right)
 		{
 			Rect = new PMRect (top, bottom, left, right);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a string representation of this instance.</summary>
 		public override string ToString ()
 		{
 			return Rect.ToString ();

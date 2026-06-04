@@ -12,42 +12,39 @@
 namespace IOSurface {
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum IOSurfaceLockOptions : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates read only.</summary>
 		ReadOnly = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates avoid sync.</summary>
 		AvoidSync = 2,
 	}
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum IOSurfacePurgeabilityState : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates non volatile.</summary>
 		NonVolatile = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates volatile.</summary>
 		Volatile = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates empty.</summary>
 		Empty = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates keep current.</summary>
 		KeepCurrent = 3,
 	}
 
 	// To be used with kIOSurfaceCacheMode or IOSurfacePropertyKeyCacheMode
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum IOSurfaceMemoryMap {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates default cache.</summary>
 		DefaultCache = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates inhibit cache.</summary>
 		InhibitCache = 1 << 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates write thru cache.</summary>
 		WriteThruCache = 2 << 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates copyback cache.</summary>
 		CopybackCache = 3 << 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates write combine cache.</summary>
 		WriteCombineCache = 4 << 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates copyback inner cache.</summary>
 		CopybackInnerCache = 5 << 8,
 	};
 

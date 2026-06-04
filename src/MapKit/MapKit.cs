@@ -18,7 +18,6 @@ namespace MapKit {
 
 	// MKTileOverlay.h
 	/// <summary>Encapsulates the index values of AParticular <see cref="MapKit.MKTileOverlay" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -26,10 +25,8 @@ namespace MapKit {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MKTileOverlayPath {
 		/// <summary>The index of the <see cref="MapKit.MKTileOverlay" /> along the X axis.</summary>
-		///         <remarks>To be added.</remarks>
 		public /* NSInteger */ nint X;
 		/// <summary>The index of the <see cref="MapKit.MKTileOverlay" /> along the Y axis.</summary>
-		///         <remarks>To be added.</remarks>
 		public /* NSInteger */ nint Y;
 		/// <summary>The Zoom level for the <see cref="MapKit.MKTileOverlay" />.</summary>
 		///         <remarks>
@@ -58,40 +55,34 @@ namespace MapKit {
 		///         </remarks>
 		public /* NSInteger */ nint Z;
 		/// <summary>The screen scaling factor for which the tile is intended. A value of 1.0 indicates standard resolution, a value of 2.0 indicates Retina displays.</summary>
-		///         <remarks>To be added.</remarks>
 		public /* CGFloat */ nfloat ContentScaleFactor;
 	}
 
 	// MKGeometry.h
 	// note: CLLocationDegrees is double - see CLLocation.h
 	/// <summary>The area spanned by a region of the map.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MKCoordinateSpan {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The amount of north-to-south distance in degrees.</summary>
 		public /* CLLocationDegrees */ double LatitudeDelta;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The amount of east-to-west distance in degrees.</summary>
 		public /* CLLocationDegrees */ double LongitudeDelta;
 
 		// MKCoordinateSpanMake
-		/// <param name="latitudeDelta">To be added.</param>
-		///         <param name="longitudeDelta">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="latitudeDelta">The latitudeDelta.</param>
+		/// <param name="longitudeDelta">The longitudeDelta.</param>
+		/// <summary>Creates a coordinate span with the specified latitude and longitude deltas.</summary>
 		public MKCoordinateSpan (double latitudeDelta, double longitudeDelta)
 		{
 			LatitudeDelta = latitudeDelta;
 			LongitudeDelta = longitudeDelta;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a string representation of this coordinate span.</summary>
 		public override string ToString ()
 		{
 			return $"(LatitudeDelta={LatitudeDelta}, LongitudeDelta={LongitudeDelta}";
@@ -100,7 +91,6 @@ namespace MapKit {
 
 	// MKGeometry.h
 	/// <summary>Defines a region of the map to display.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -149,8 +139,7 @@ namespace MapKit {
 		[DllImport (Constants.MapKitLibrary, EntryPoint = "MKCoordinateRegionForMapRect")]
 		extern static public MKCoordinateRegion FromMapRect (MKMapRect rect);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a string representation of this coordinate span.</summary>
 		public override string ToString ()
 		{
 			return $"(Center={Center}, Span={Span}";
@@ -165,30 +154,25 @@ namespace MapKit {
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MKMapPoint {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the X coordinate.</summary>
 		public double X;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the Y coordinate.</summary>
 		public double Y;
 
-		/// <param name="coordinate">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="coordinate">The coordinate.</param>
+		///         <summary>Converts a coordinate to a map point.</summary>
 		[DllImport (Constants.MapKitLibrary, EntryPoint = "MKMapPointForCoordinate")]
 		public extern static MKMapPoint FromCoordinate (CLLocationCoordinate2D coordinate);
 
-		/// <param name="mapPoint">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="mapPoint">The mapPoint.</param>
+		///         <summary>Converts a map point to a coordinate.</summary>
 		[DllImport (Constants.MapKitLibrary, EntryPoint = "MKCoordinateForMapPoint")]
 		public extern static CLLocationCoordinate2D ToCoordinate (MKMapPoint mapPoint);
 
 		// MKMapPointMake
-		/// <param name="x">To be added.</param>
-		///         <param name="y">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="x">The x.</param>
+		/// <param name="y">The y.</param>
+		/// <summary>Creates a map point with the specified x and y values.</summary>
 		public MKMapPoint (double x, double y)
 		{
 			X = x;
@@ -206,9 +190,8 @@ namespace MapKit {
 			return a.X != b.X || a.Y != b.Y;
 		}
 
-		/// <param name="other">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="other">The other.</param>
+		/// <summary>Determines whether the specified object is equal to this instance.</summary>
 		public override bool Equals (object? other)
 		{
 			if (other is MKMapPoint) {
@@ -219,16 +202,14 @@ namespace MapKit {
 			return false;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a hash code for this instance.</summary>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (X, Y);
 		}
 
 		// MKStringFromMapPoint does not really exists, it's inlined in MKGeometry.h
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a string representation of this coordinate span.</summary>
 		public override string ToString ()
 		{
 			return String.Format ("{{{0}, {1}}}", X, Y);
@@ -246,26 +227,22 @@ namespace MapKit {
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MKMapSize {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the width.</summary>
 		public double Width;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the height.</summary>
 		public double Height;
 
 		// MKMapSizeMake
-		/// <param name="width">To be added.</param>
-		///         <param name="height">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		/// <summary>Creates a map size with the specified width and height.</summary>
 		public MKMapSize (double width, double height)
 		{
 			Width = width;
 			Height = height;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a map size with the specified width and height.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -283,9 +260,8 @@ namespace MapKit {
 			return a.Width != b.Width || a.Height != b.Height;
 		}
 
-		/// <param name="other">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="other">The other.</param>
+		/// <summary>Determines whether the specified object is equal to this instance.</summary>
 		public override bool Equals (object? other)
 		{
 			if (other is MKMapSize) {
@@ -296,16 +272,14 @@ namespace MapKit {
 			return false;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a hash code for this instance.</summary>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (Width, Height);
 		}
 
 		// MKStringFromMapSize does not really exists, it's inlined in MKGeometry.h
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a string representation of this coordinate span.</summary>
 		public override string ToString ()
 		{
 			return String.Format ("{{{0}, {1}}}", Width, Height);
@@ -314,7 +288,6 @@ namespace MapKit {
 
 	// MKGeometry.h
 	/// <summary>A rectangular area in a 2D map projection, measured in map points.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -322,7 +295,6 @@ namespace MapKit {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct MKMapRect {
 		/// <summary>A known-invalid <see cref="MapKit.MKMapRect" /> (see <see cref="MapKit.MKMapRect.IsNull" />).</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -335,13 +307,11 @@ namespace MapKit {
 		///         </remarks>
 		public MKMapPoint Origin;
 		/// <summary>The extent of the <see cref="MapKit.MKMapRect" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public MKMapSize Size;
 
-		/// <param name="origin">To be added.</param>
-		///         <param name="size">To be added.</param>
+		/// <param name="origin">The origin.</param>
+		/// <param name="size">The size.</param>
 		///         <summary>Creates a new <see cref="MapKit.MKMapPoint" /> struct with the specified <paramref name="origin" /> and <paramref name="size" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public MKMapRect (MKMapPoint origin, MKMapSize size)
 		{
 			Origin = origin;
@@ -349,12 +319,11 @@ namespace MapKit {
 		}
 
 		// MKMapRectMake
-		/// <param name="x">To be added.</param>
-		///         <param name="y">To be added.</param>
-		///         <param name="width">To be added.</param>
-		///         <param name="height">To be added.</param>
+		/// <param name="x">The x.</param>
+		/// <param name="y">The y.</param>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
 		///         <summary>Creates a new <see cref="MapKit.MKMapRect" /> originating at [<paramref name="x" />, <paramref name="y" />] and of the specified <paramref name="height" /> and <paramref name="width" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public MKMapRect (double x, double y, double width, double height)
 		{
 			Origin.X = x;
@@ -365,7 +334,6 @@ namespace MapKit {
 
 		// MKMapRectGetMinX
 		/// <summary>The minimum X-axis value of the <see cref="MapKit.MKMapRect" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public double MinX {
 			get {
 				return Origin.X;
@@ -374,7 +342,6 @@ namespace MapKit {
 
 		// MKMapRectGetMinY
 		/// <summary>The minimum Y-axis value of the <see cref="MapKit.MKMapRect" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public double MinY {
 			get {
 				return Origin.Y;
@@ -383,7 +350,6 @@ namespace MapKit {
 
 		// MKMapRectGetMaxX
 		/// <summary>The maximum X-axis value of the <see cref="MapKit.MKMapRect" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public double MaxX {
 			get {
 				return Origin.X + Size.Width;
@@ -392,7 +358,6 @@ namespace MapKit {
 
 		// MKMapRectGetMaxY
 		/// <summary>The maximum Y-axis value of the <see cref="MapKit.MKMapRect" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public double MaxY {
 			get {
 				return Origin.Y + Size.Height;
@@ -401,7 +366,6 @@ namespace MapKit {
 
 		// MKMapRectGetMidX
 		/// <summary>The X-axis midpoint of the <see cref="MapKit.MKMapRect" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public double MidX {
 			get {
 				return Origin.X + Size.Width / 2.0;
@@ -410,7 +374,6 @@ namespace MapKit {
 
 		// MKMapRectGetMidY
 		/// <summary>The Y-axis midpoint of the <see cref="MapKit.MKMapRect" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public double MidY {
 			get {
 				return Origin.Y + Size.Height / 2.0;
@@ -419,7 +382,6 @@ namespace MapKit {
 
 		// MKMapRectGetWidth
 		/// <summary>The extent along the X-axis of the <see cref="MapKit.MKMapRect" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public double Width {
 			get {
 				return Size.Width;
@@ -428,7 +390,6 @@ namespace MapKit {
 
 		// MKMapRectGetHeight
 		/// <summary>The height of this <see cref="MapKit.MKMapRect" />, in degrees.</summary>
-		///         <remarks>To be added.</remarks>
 		public double Height {
 			get {
 				return Size.Height;
@@ -437,7 +398,6 @@ namespace MapKit {
 
 		// MKMapRectIsNull
 		/// <summary>Whether the <see cref="MapKit.MKMapRect" /> is the known-invalid rectangle <see cref="MapKit.MKMapRect.Null" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public bool IsNull {
 			get {
 				return Double.IsInfinity (Origin.X) || Double.IsInfinity (Origin.Y);
@@ -446,7 +406,6 @@ namespace MapKit {
 
 		// MKMapRectIsEmpty
 		/// <summary>Whether the <see cref="MapKit.MKMapRect" /> has APositive area.</summary>
-		///         <remarks>To be added.</remarks>
 		public bool IsEmpty {
 			get {
 				return IsNull || Size.Width == 0 || Size.Height == 0;
@@ -454,7 +413,6 @@ namespace MapKit {
 		}
 
 		/// <summary>The <see cref="MapKit.MKMapRect" /> that represents the world in the 2D map projection.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -485,9 +443,8 @@ namespace MapKit {
 			return a.Origin != b.Origin || a.Size != b.Size;
 		}
 
-		/// <param name="other">To be added.</param>
+		/// <param name="other">The other.</param>
 		///         <summary>Whether this <see cref="MapKit.MKMapRect" /> has the same <see cref="MapKit.MKMapRect.Origin" /> and <see cref="MapKit.MKMapRect.Size" /> values as the <paramref name="other" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public override bool Equals (object? other)
 		{
 			if (other is MKMapRect) {
@@ -499,7 +456,6 @@ namespace MapKit {
 		}
 
 		/// <summary>Returns a hash of this <see cref="MapKit.MKMapRect" /> struct's value.</summary>
-		///         <remarks>To be added.</remarks>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (Origin, Size);
@@ -507,7 +463,6 @@ namespace MapKit {
 
 		// MKStringFromMapRect does not really exists, it's inlined in MKGeometry.h
 		/// <summary>A brief representation of the origin and size of the <see cref="MapKit.MKMapRect" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
 			return string.Format ("{{{0}, {1}}}", Origin, Size);
@@ -516,9 +471,8 @@ namespace MapKit {
 		[DllImport (Constants.MapKitLibrary, EntryPoint = "MKMapRectContainsPoint")]
 		static extern byte MKMapRectContainsPoint (MKMapRect rect, MKMapPoint point);
 
-		/// <param name="point">To be added.</param>
+		/// <param name="point">The point.</param>
 		///         <summary>Whether the <see cref="MapKit.MKMapRect" /> contains <paramref name="point" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public bool Contains (MKMapPoint point)
 		{
 			return MKMapRectContainsPoint (this, point) != 0;
@@ -527,35 +481,31 @@ namespace MapKit {
 		[DllImport (Constants.MapKitLibrary, EntryPoint = "MKMapRectContainsRect")]
 		static extern byte MKMapRectContainsRect (MKMapRect rect1, MKMapRect rect2);
 
-		/// <param name="rect">To be added.</param>
+		/// <param name="rect">The rect.</param>
 		///         <summary>Whether <paramref name="rect" /> is entirely within the bounds of this <see cref="MapKit.MKMapRect" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public bool Contains (MKMapRect rect)
 		{
 			return MKMapRectContainsRect (this, rect) != 0;
 		}
 
-		/// <param name="rect1">To be added.</param>
-		///         <param name="rect2">To be added.</param>
+		/// <param name="rect1">The rect1.</param>
+		/// <param name="rect2">The rect2.</param>
 		///         <summary>Returns the rectangle covering both <paramref name="rect1" /> and <paramref name="rect2" />.</summary>
-		///         <remarks>To be added.</remarks>
 		[DllImport (Constants.MapKitLibrary, EntryPoint = "MKMapRectUnion")]
 		static public extern MKMapRect Union (MKMapRect rect1, MKMapRect rect2);
 
-		/// <param name="rect1">To be added.</param>
-		///         <param name="rect2">To be added.</param>
+		/// <param name="rect1">The rect1.</param>
+		/// <param name="rect2">The rect2.</param>
 		///         <summary>Static method returning the intersection of <paramref name="rect1" /> with <paramref name="rect2" />.</summary>
-		///         <remarks>To be added.</remarks>
 		[DllImport (Constants.MapKitLibrary, EntryPoint = "MKMapRectIntersection")]
 		static public extern MKMapRect Intersection (MKMapRect rect1, MKMapRect rect2);
 
 		[DllImport (Constants.MapKitLibrary)]
 		static extern byte MKMapRectIntersectsRect (MKMapRect rect1, MKMapRect rect2);
 
-		/// <param name="rect1">To be added.</param>
-		///         <param name="rect2">To be added.</param>
+		/// <param name="rect1">The rect1.</param>
+		/// <param name="rect2">The rect2.</param>
 		///         <summary>Whether <paramref name="rect1" /> and <paramref name="rect2" /> overlap.</summary>
-		///         <remarks>To be added.</remarks>
 		public static bool Intersects (MKMapRect rect1, MKMapRect rect2)
 		{
 			return MKMapRectIntersectsRect (rect1, rect2) != 0;
@@ -564,10 +514,9 @@ namespace MapKit {
 		[DllImport (Constants.MapKitLibrary, EntryPoint = "MKMapRectInset")]
 		static extern MKMapRect MKMapRectInset (MKMapRect rect, double dx, double dy);
 
-		/// <param name="dx">To be added.</param>
-		///         <param name="dy">To be added.</param>
+		/// <param name="dx">The dx.</param>
+		/// <param name="dy">The dy.</param>
 		///         <summary>Returns a new <see cref="MapKit.MKMapRect" /> based on <c>this</c>, offset by <paramref name="dx" /> and <paramref name="dy" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public MKMapRect Inset (double dx, double dy)
 		{
 			return MKMapRectInset (this, dx, dy);
@@ -576,10 +525,9 @@ namespace MapKit {
 		[DllImport (Constants.MapKitLibrary, EntryPoint = "MKMapRectOffset")]
 		static extern MKMapRect MKMapRectOffset (MKMapRect rect, double dx, double dy);
 
-		/// <param name="dx">To be added.</param>
-		///         <param name="dy">To be added.</param>
+		/// <param name="dx">The dx.</param>
+		/// <param name="dy">The dy.</param>
 		///         <summary>A new <see cref="MapKit.MKMapRect" /> whose origin is shifted by <paramref name="dx" /> and <paramref name="dy" />.</summary>
-		///         <remarks>To be added.</remarks>
 		public MKMapRect Offset (double dx, double dy)
 		{
 			return MKMapRectOffset (this, dx, dy);
@@ -589,9 +537,9 @@ namespace MapKit {
 		unsafe static extern void MKMapRectDivide (MKMapRect rect, MKMapRect* slice, MKMapRect* remainder, double amount, CGRectEdge edge);
 
 #if !COREBUILD
-		/// <param name="amount">To be added.</param>
-		///         <param name="edge">To be added.</param>
-		///         <param name="remainder">To be added.</param>
+		/// <param name="amount">The amount.</param>
+		/// <param name="edge">The edge.</param>
+		/// <param name="remainder">The remainder.</param>
 		///         <summary>Splits this <see cref="MapKit.MKMapRect" /> into a two smaller rectangle (returned value and <paramref name="remainder" />).</summary>
 		///         <remarks>
 		///           <example>
@@ -623,7 +571,6 @@ namespace MapKit {
 		static extern byte MKMapRectSpans180thMeridian (MKMapRect rect);
 
 		/// <summary>Whether the <see cref="MapKit.MKMapRect" /> crosses the ante-meridian.</summary>
-		///         <remarks>To be added.</remarks>
 		public bool Spans180thMeridian {
 			get { return MKMapRectSpans180thMeridian (this) != 0; }
 		}
@@ -632,7 +579,6 @@ namespace MapKit {
 		static extern MKMapRect MKMapRectRemainder (MKMapRect rect);
 
 		/// <summary>A new <see cref="MapKit.MKMapRect" /> that has been normalized to remove areas outside the world map's boundaries.</summary>
-		///         <remarks>To be added.</remarks>
 		public MKMapRect Remainder ()
 		{
 			return MKMapRectRemainder (this);
@@ -641,29 +587,25 @@ namespace MapKit {
 
 	// MKGeometry.h
 	/// <summary>Helper class containing methods for calculating distances and latitude-dependent scales.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("tvos")]
 	public static class MKGeometry {
 
-		/// <param name="latitude">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="latitude">The latitude.</param>
+		///         <summary>Gets the number of map points per meter at the specified latitude.</summary>
 		[DllImport (Constants.MapKitLibrary, EntryPoint = "MKMapPointsPerMeterAtLatitude")]
 		static extern public double MapPointsPerMeterAtLatitude (/* CLLocationDegrees */ double latitude);
 
-		/// <param name="latitude">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="latitude">The latitude.</param>
+		///         <summary>Gets the number of meters per map point at the specified latitude.</summary>
 		[DllImport (Constants.MapKitLibrary, EntryPoint = "MKMetersPerMapPointAtLatitude")]
 		static extern public /* CLLocationDistance */ double MetersPerMapPointAtLatitude (/* CLLocationDegrees */ double latitude);
 
-		/// <param name="a">To be added.</param>
-		///         <param name="b">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="a">The a.</param>
+		/// <param name="b">The b.</param>
+		///         <summary>Gets the distance in meters between two map points.</summary>
 		[DllImport (Constants.MapKitLibrary, EntryPoint = "MKMetersBetweenMapPoints")]
 		static extern public /* CLLocationDistance */ double MetersBetweenMapPoints (MKMapPoint a, MKMapPoint b);
 	}

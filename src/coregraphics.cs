@@ -454,17 +454,17 @@ namespace CoreGraphics {
 	[MacCatalyst (13, 1)]
 	[StrongDictionary ("CGPDFOutlineKeys")]
 	interface CGPDFOutlineOptions {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the outline title.</summary>
+		/// <value>The title string.</value>
 		string OutlineTitle { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the outline children.</summary>
+		/// <value>An array of child outline dictionaries.</value>
 		NSDictionary [] OutlineChildren { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the outline destination.</summary>
+		/// <value>The destination object.</value>
 		NSObject OutlineDestination { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the destination rectangle.</summary>
+		/// <value>The destination rectangle.</value>
 		CGRect DestinationRect { get; set; }
 	}
 

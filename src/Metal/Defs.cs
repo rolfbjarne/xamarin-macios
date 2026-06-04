@@ -13,7 +13,7 @@ using ModelIO;
 #nullable enable
 
 namespace Metal {
-	/// <summary>The location of a pixel in an image or texture.</summary>
+	/// <summary>The location of APixel in an image or texture.</summary>
 	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]

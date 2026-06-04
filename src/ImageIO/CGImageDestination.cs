@@ -56,7 +56,6 @@ namespace ImageIO {
 	public partial class CGImageAuxiliaryDataInfo {
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public CGImageMetadata? Metadata {
 			get {
 				return GetNativeValue<CGImageMetadata> (CGImageAuxiliaryDataInfoKeys.MetadataKey);
@@ -80,7 +79,6 @@ namespace ImageIO {
 		}
 
 		/// <summary>Type identifier for the ImageIO.CGImageDestination type.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>
 		///           <para>The returned token is the CoreFoundation type identifier (CFType) that has been assigned to this class.</para>
 		///           <para>This can be used to determine type identity between different CoreFoundation objects.</para>
@@ -96,7 +94,6 @@ namespace ImageIO {
 		extern static /* CFArrayRef __nonnull */ IntPtr CGImageDestinationCopyTypeIdentifiers ();
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public static string? []? TypeIdentifiers {
 			get {
 				var handle = CGImageDestinationCopyTypeIdentifiers ();
@@ -114,7 +111,6 @@ namespace ImageIO {
 		///         <param name="imageCount">The image count.</param>
 		///         <param name="options">The options to use.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static CGImageDestination? Create (CGDataConsumer consumer, string typeIdentifier, int imageCount, CGImageDestinationOptions? options = null)
 		{
 			if (consumer is null)
@@ -144,7 +140,6 @@ namespace ImageIO {
 		///         <param name="imageCount">The image count.</param>
 		///         <param name="options">The options to use.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static CGImageDestination? Create (NSMutableData data, string typeIdentifier, int imageCount, CGImageDestinationOptions? options = null)
 		{
 			if (data is null)
@@ -173,7 +168,6 @@ namespace ImageIO {
 		///         <param name="typeIdentifier">The type identifier.</param>
 		///         <param name="imageCount">The image count.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static CGImageDestination? Create (NSUrl url, string typeIdentifier, int imageCount)
 		{
 			if (url is null)
@@ -273,7 +267,6 @@ namespace ImageIO {
 		extern static byte CGImageDestinationFinalize (/* CGImageDestinationRef __nonnull */ IntPtr idst);
 
 		/// <summary>Writes the images to the destination and disposes the object.</summary>
-		///         <returns>To be added.</returns>
 		public bool Close ()
 		{
 			var success = CGImageDestinationFinalize (Handle);
@@ -336,7 +329,6 @@ namespace ImageIO {
 		///         <param name="options">The options to use.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -361,7 +353,6 @@ namespace ImageIO {
 		///         <param name="options">The options to use.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]

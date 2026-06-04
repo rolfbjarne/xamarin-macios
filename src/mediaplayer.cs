@@ -43,7 +43,7 @@ namespace MediaPlayer {
 	interface MPMediaItem : NSSecureCoding {
 #endif // !MONOMAC
 		/// <param name="property">To be added.</param>
-		///         <summary>Returns a Boolean value that tells whether the specified <paramref name="property" /> can be used in a media property predicate.</summary>
+		///         <summary>Returns a Boolean value that tells whether the specified <paramref name="property" /> can be used in a mediAProperty predicate.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[Static]
@@ -1995,7 +1995,7 @@ namespace MediaPlayer {
 	// Objective-C exception thrown.  Name: NSGenericException Reason: MPTimedMetadata cannot be created directly
 	[DisableDefaultCtor]
 	interface MPTimedMetadata {
-		/// <summary>A key that identifies a piece of timed metadata.</summary>
+		/// <summary>A key that identifies APiece of timed metadata.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Export ("key")]
@@ -2684,7 +2684,7 @@ namespace MediaPlayer {
 		bool Playable { [Bind ("isPlayable")] get; set; }
 	}
 
-	/// <summary>Provides media metadata information to external media players.</summary>
+	/// <summary>Provides media metadata information to external mediAPlayers.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/MediaPlayer/Reference/MPPlayableContentDataSource_Ref/index.html">Apple documentation for <c>MPPlayableContentDataSource</c></related>
 	[NoMac]
@@ -2750,7 +2750,7 @@ namespace MediaPlayer {
 
 	interface IMPPlayableContentDelegate { }
 
-	/// <summary>Delegate object providing methods for external media players to send playback commands to the app.</summary>
+	/// <summary>Delegate object providing methods for external mediAPlayers to send playback commands to the app.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/MediaPlayer/Reference/MPPlayableContentDelegate_Ref/index.html">Apple documentation for <c>MPPlayableContentDelegate</c></related>
 	[NoMac]
@@ -2806,7 +2806,7 @@ namespace MediaPlayer {
 		void InitializePlaybackQueue (MPPlayableContentManager contentManager, [NullAllowed] MPContentItem [] contentItems, Action<NSError> completionHandler);
 	}
 
-	/// <summary>Controls interactions between the app and external media players.</summary>
+	/// <summary>Controls interactions between the app and external mediAPlayers.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/MediaPlayer/Reference/MPPlayableContentManager_Ref/index.html">Apple documentation for <c>MPPlayableContentManager</c></related>
 	[NoMac]
@@ -3085,7 +3085,7 @@ namespace MediaPlayer {
 		NSArray _PreferredIntervals { get; set; }
 	}
 
-	/// <summary>Class that handles events from external media players.</summary>
+	/// <summary>Class that handles events from external mediAPlayers.</summary>
 	/// <remarks>To be added.</remarks>
 	/// <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/MediaPlayer/Reference/MPRemoteCommandCenter_Ref/index.html">Apple documentation for <c>MPRemoteCommandCenter</c></related>
 	[MacCatalyst (13, 1)]
@@ -3226,7 +3226,7 @@ namespace MediaPlayer {
 		MPChangePlaybackPositionCommand ChangePlaybackPositionCommand { get; }
 	}
 
-	/// <summary>Class that provides information about a player command.</summary>
+	/// <summary>Class that provides information about APlayer command.</summary>
 	/// <remarks>To be added.</remarks>
 	/// <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/MediaPlayer/Reference/MPRemoteCommandEvent_Ref/index.html">Apple documentation for <c>MPRemoteCommandEvent</c></related>
 	[MacCatalyst (13, 1)]
@@ -3292,7 +3292,7 @@ namespace MediaPlayer {
 		MPSeekCommandEventType Type { get; }
 	}
 
-	/// <summary>The time interval rate of an external media player.</summary>
+	/// <summary>The time interval rate of an external mediAPlayer.</summary>
 	/// <remarks>To be added.</remarks>
 	/// <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/MediaPlayer/Reference/MPSkipIntervalCommandEvent_Ref/index.html">Apple documentation for <c>MPSkipIntervalCommandEvent</c></related>
 	[MacCatalyst (13, 1)]
@@ -3649,7 +3649,7 @@ namespace MediaPlayer {
 		NativeHandle Constructor ();
 	}
 
-	/// <summary>Operates on media player queues.</summary>
+	/// <summary>Operates on mediAPlayer queues.</summary>
 	[NoMac]
 	[NoTV]
 	[MacCatalyst (13, 1)]
@@ -3703,7 +3703,7 @@ namespace MediaPlayer {
 		void SetEndTime (double endTime, MPMediaItem mediaItem);
 	}
 
-	/// <summary>Implements modification of media items in a player queue, selecting them by their store identifier.s</summary>
+	/// <summary>Implements modification of media items in APlayer queue, selecting them by their store identifier.s</summary>
 	/// <remarks>To be added.</remarks>
 	[NoMac]
 	[TV (14, 0)]

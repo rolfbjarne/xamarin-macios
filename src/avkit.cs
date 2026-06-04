@@ -1017,12 +1017,12 @@ namespace AVKit {
 	interface AVRoutePickerViewDelegate {
 
 		/// <param name="routePickerView">The route picker view.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the route picker view is about to begin presenting routes.</summary>
 		[Export ("routePickerViewWillBeginPresentingRoutes:")]
 		void WillBeginPresentingRoutes (AVRoutePickerView routePickerView);
 
 		/// <param name="routePickerView">The route picker view.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the route picker view has finished presenting routes.</summary>
 		[Export ("routePickerViewDidEndPresentingRoutes:")]
 		void DidEndPresentingRoutes (AVRoutePickerView routePickerView);
 	}

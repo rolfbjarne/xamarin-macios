@@ -38,7 +38,6 @@ namespace CoreAnimation {
 	partial class CAAnimation {
 		/// <summary>The current animation time.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[DllImport (Constants.QuartzLibrary, EntryPoint = "CACurrentMediaTime")]
 		public extern static /* CFTimeInterval */ double CurrentMediaTime ();
 	}
@@ -51,7 +50,6 @@ namespace CoreAnimation {
 
 		/// <summary>An array of colors defining the gradient.   These values can be animated.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CGColor []? Colors {
 			get {
 				return NSArray.ArrayFromHandleDropNullElements<CGColor> (_Colors, CreateColor);
@@ -67,10 +65,9 @@ namespace CoreAnimation {
 	public partial class CAKeyFrameAnimation {
 
 		// For compatibility, as we told users to explicitly use this method before, or get a warning
-		/// <param name="path">To be added.</param>
+		/// <param name="path">The path.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CAKeyFrameAnimation GetFromKeyPath (string path)
 		{
 			return FromKeyPath (path);

@@ -61,8 +61,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static IntPtr sec_protocol_metadata_copy_peer_public_key (IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>The peer public key.</summary>
 		public DispatchData? PeerPublicKey => CreateDispatchData (sec_protocol_metadata_copy_peer_public_key (GetCheckedHandle ()));
 
 		[SupportedOSPlatform ("tvos")]
@@ -117,8 +116,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static byte sec_protocol_metadata_get_early_data_accepted (IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>The early data accepted.</summary>
 		public bool EarlyDataAccepted => sec_protocol_metadata_get_early_data_accepted (GetCheckedHandle ()) != 0;
 
 		[DllImport (Constants.SecurityLibrary)]
@@ -126,8 +124,7 @@ namespace Security {
 
 		/// <param name="metadataA">The metadata a.</param>
 		///         <param name="metadataB">The metadata b.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Challenges parameters are equal.</summary>
 		public static bool ChallengeParametersAreEqual (SecProtocolMetadata metadataA, SecProtocolMetadata metadataB)
 		{
 			if (metadataA is null)
@@ -145,8 +142,7 @@ namespace Security {
 
 		/// <param name="metadataA">The metadata a.</param>
 		///         <param name="metadataB">The metadata b.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Peerss are equal.</summary>
 		public static bool PeersAreEqual (SecProtocolMetadata metadataA, SecProtocolMetadata metadataB)
 		{
 			if (metadataA is null)
@@ -173,7 +169,7 @@ namespace Security {
 		unsafe static extern byte sec_protocol_metadata_access_distinguished_names (IntPtr handle, BlockLiteral* callback);
 
 		/// <param name="callback">The callback to invoke.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets distinguished names for peer handler.</summary>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public void SetDistinguishedNamesForPeerHandler (Action<DispatchData> callback)
 		{
@@ -202,7 +198,7 @@ namespace Security {
 		unsafe static extern byte sec_protocol_metadata_access_ocsp_response (IntPtr handle, BlockLiteral* callback);
 
 		/// <param name="callback">The callback to invoke.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets ocsp response for peer handler.</summary>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public void SetOcspResponseForPeerHandler (Action<DispatchData> callback)
 		{
@@ -231,7 +227,7 @@ namespace Security {
 		unsafe static extern byte sec_protocol_metadata_access_peer_certificate_chain (IntPtr handle, BlockLiteral* callback);
 
 		/// <param name="callback">The callback to invoke.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets certificate chain for peer handler.</summary>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public void SetCertificateChainForPeerHandler (Action<SecCertificate> callback)
 		{
@@ -259,7 +255,7 @@ namespace Security {
 		unsafe static extern byte sec_protocol_metadata_access_supported_signature_algorithms (IntPtr handle, BlockLiteral* callback);
 
 		/// <param name="callback">The callback to invoke.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets signature algorithms for peer handler.</summary>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public void SetSignatureAlgorithmsForPeerHandler (Action<ushort> callback)
 		{

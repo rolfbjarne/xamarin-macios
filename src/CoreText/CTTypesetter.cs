@@ -59,11 +59,9 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public NSDictionary Dictionary { get; private set; }
 
 		/// <summary>Developers should not use this deprecated property. </summary>
-		///         <value>To be added.</value>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -86,14 +84,12 @@ namespace CoreText {
 
 		// The documentation says this is an NSNumber (not exactly which type), so 'int' is as good as anything else.
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public int? ForceEmbeddingLevel {
 			get { return Adapter.GetInt32Value (Dictionary, CTTypesetterOptionKey.ForceEmbeddingLevel); }
 			set { Adapter.SetValue (Dictionary, CTTypesetterOptionKey.ForceEmbeddingLevel, value); }
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -158,7 +154,6 @@ namespace CoreText {
 		/// <param name="stringRange">The string range.</param>
 		///         <param name="offset">The offset.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CTLine? GetLine (NSRange stringRange, double offset)
 		{
 			var h = CTTypesetterCreateLineWithOffset (Handle, stringRange, offset);
@@ -173,7 +168,6 @@ namespace CoreText {
 		static extern IntPtr CTTypesetterCreateLine (IntPtr typesetter, NSRange stringRange);
 		/// <param name="stringRange">The string range.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CTLine? GetLine (NSRange stringRange)
 		{
 			var h = CTTypesetterCreateLine (Handle, stringRange);
@@ -192,7 +186,6 @@ namespace CoreText {
 		///         <param name="width">The width.</param>
 		///         <param name="offset">The offset.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public nint SuggestLineBreak (int startIndex, double width, double offset)
 		{
 			return CTTypesetterSuggestLineBreakWithOffset (Handle, startIndex, width, offset);
@@ -203,7 +196,6 @@ namespace CoreText {
 		/// <param name="startIndex">The start index.</param>
 		///         <param name="width">The width.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public nint SuggestLineBreak (int startIndex, double width)
 		{
 			return CTTypesetterSuggestLineBreak (Handle, startIndex, width);
@@ -215,7 +207,6 @@ namespace CoreText {
 		///         <param name="width">The width.</param>
 		///         <param name="offset">The offset.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public nint SuggestClusterBreak (int startIndex, double width, double offset)
 		{
 			return CTTypesetterSuggestClusterBreakWithOffset (Handle, startIndex, width, offset);
@@ -226,7 +217,6 @@ namespace CoreText {
 		/// <param name="startIndex">The start index.</param>
 		///         <param name="width">The width.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public nint SuggestClusterBreak (int startIndex, double width)
 		{
 			return CTTypesetterSuggestClusterBreak (Handle, startIndex, width);

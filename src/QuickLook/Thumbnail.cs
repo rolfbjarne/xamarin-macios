@@ -35,7 +35,6 @@ using CoreGraphics;
 
 namespace QuickLook {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public static partial class QLThumbnailImage {
 
 		// QuickLook.framework/Versions/A/Headers/QLThumbnailImage.h
@@ -48,13 +47,12 @@ namespace QuickLook {
 		[DllImport (Constants.QuickLookLibrary)]
 		extern static /* CGImageRef */ IntPtr QLThumbnailImageCreate (/* CFAllocatorRef */ IntPtr allocator, /* CFUrlRef */ IntPtr url, CGSize maxThumbnailSize, /* CFDictionaryRef */ IntPtr options);
 
-		/// <param name="url">To be added.</param>
-		///         <param name="maxThumbnailSize">To be added.</param>
-		///         <param name="scaleFactor">To be added.</param>
-		///         <param name="iconMode">To be added.</param>
+		/// <param name="url">The URL to use.</param>
+		///         <param name="maxThumbnailSize">The max thumbnail size.</param>
+		///         <param name="scaleFactor">The scale factor.</param>
+		///         <param name="iconMode">The icon mode.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]

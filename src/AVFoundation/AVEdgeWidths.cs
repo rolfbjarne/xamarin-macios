@@ -33,13 +33,13 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AVEdgeWidths {
-		/// <summary>To be added.</summary>
+		/// <summary>The left edge width.</summary>
 		public nfloat /* CGFloat */ Left;
-		/// <summary>To be added.</summary>
+		/// <summary>The top edge width.</summary>
 		public nfloat /* CGFloat */ Top;
-		/// <summary>To be added.</summary>
+		/// <summary>The right edge width.</summary>
 		public nfloat /* CGFloat */ Right;
-		/// <summary>To be added.</summary>
+		/// <summary>The bottom edge width.</summary>
 		public nfloat /* CGFloat */ Bottom;
 
 		public AVEdgeWidths (nfloat left, nfloat top, nfloat right, nfloat bottom)
@@ -50,7 +50,7 @@ namespace AVFoundation {
 			Bottom = bottom;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns a string representation of this edge widths value.</summary>
 		public override string ToString ()
 		{
 			return string.Format ("(left={0},top={1},right={2},bottom={3})", Left, Top, Right, Bottom);
@@ -74,14 +74,14 @@ namespace AVFoundation {
 				left.Bottom != right.Bottom;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Returns the hash code for this edge widths value.</summary>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (Left, Top, Right, Bottom);
 		}
 
 		/// <param name="other">The other.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Determines whether this instance is equal to the specified object.</summary>
 		public override bool Equals (object? other)
 		{
 			if (other is AVEdgeWidths) {

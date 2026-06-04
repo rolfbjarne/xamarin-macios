@@ -1,36 +1,35 @@
 <Documentation>
   <Docs DocId="M:EventKit.EKRecurrenceRule.#ctor(EventKit.EKRecurrenceFrequency,System.IntPtr,EventKit.EKRecurrenceDayOfWeek[],Foundation.NSNumber[],Foundation.NSNumber[],Foundation.NSNumber[],Foundation.NSNumber[],Foundation.NSNumber[],EventKit.EKRecurrenceEnd)">
-        <param name="type">To be added.</param>
-        <param name="interval">To be added.</param>
+        <param name="type">The frequency of the recurrence (daily, weekly, monthly, or yearly).</param>
+        <param name="interval">The interval between recurrences of the specified frequency.</param>
         <param name="days">
-          <para>To be added.</para>
+          <para>The days of the week on which the event recurs.</para>
           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
         </param>
         <param name="monthDays">
-          <para>To be added.</para>
+          <para>The days of the month on which the event recurs (values from -31 to 31, excluding 0).</para>
           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
         </param>
         <param name="months">
-          <para>To be added.</para>
+          <para>The months of the year in which the event recurs (values from 1 to 12).</para>
           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
         </param>
         <param name="weeksOfTheYear">
-          <para>To be added.</para>
+          <para>The weeks of the year in which the event recurs (values from -53 to 53, excluding 0).</para>
           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
         </param>
         <param name="daysOfTheYear">
-          <para>To be added.</para>
+          <para>The days of the year on which the event recurs (values from -366 to 366, excluding 0).</para>
           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
         </param>
         <param name="setPositions">
-          <para>To be added.</para>
+          <para>The positions within the recurrence set to filter results (values from -366 to 366, excluding 0).</para>
           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
         </param>
         <param name="end">
-          <para>To be added.</para>
+          <para>The end condition for the recurrence rule.</para>
           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
         </param>
-        <summary>To be added.</summary>
-        <remarks>To be added.</remarks>
+        <summary>Creates a recurrence rule with the specified frequency, interval, and recurrence constraints.</summary>
       </Docs>
 </Documentation>

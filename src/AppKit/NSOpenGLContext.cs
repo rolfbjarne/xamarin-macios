@@ -23,7 +23,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		unsafe public Rectangle SwapRectangle {
 			get {
 				Rectangle ret;
@@ -35,8 +34,7 @@ namespace AppKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the swap rectangle enabled.</summary>
 		public bool SwapRectangleEnabled {
 			get {
 				return GetValue (NSOpenGLContextParameter.SwapRectangleEnable) != 0;
@@ -46,8 +44,7 @@ namespace AppKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the rasterization enabled.</summary>
 		public bool RasterizationEnabled {
 			get {
 				return GetValue (NSOpenGLContextParameter.RasterizationEnable) != 0;
@@ -57,8 +54,7 @@ namespace AppKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the swap interval.</summary>
 		public bool SwapInterval {
 			get {
 				return GetValue (NSOpenGLContextParameter.SwapInterval) != 0;
@@ -68,8 +64,7 @@ namespace AppKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the surface order.</summary>
 		public NSSurfaceOrder SurfaceOrder {
 			get {
 				switch (GetValue (NSOpenGLContextParameter.SurfaceOrder)) {
@@ -84,8 +79,7 @@ namespace AppKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the surface opaque.</summary>
 		public bool SurfaceOpaque {
 			get {
 				return GetValue (NSOpenGLContextParameter.SurfaceOpacity) != 0;
@@ -95,8 +89,7 @@ namespace AppKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the state validation.</summary>
 		public bool StateValidation {
 			get {
 				return GetValue (NSOpenGLContextParameter.StateValidation) != 0;

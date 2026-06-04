@@ -14,7 +14,6 @@ using CoreFoundation;
 namespace CoreMedia {
 
 	/// <summary>A time value that represents a rational number <see cref="CoreMedia.CMTime.Value" />/<see cref="CoreMedia.CMTime.TimeScale" />.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/AVCaptureFrames/">avcaptureframes</related>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -24,71 +23,60 @@ namespace CoreMedia {
 	public partial struct CMTime {
 		// CMTimeFlags -> uint32_t -> CMTime.h
 		/// <summary>An enumeration whose values are flags used by <see cref="CoreMedia.CMTime" />.</summary>
-		///     <remarks>To be added.</remarks>
 		[Flags]
 		public enum Flags : uint {
-			/// <summary>To be added.</summary>
+			/// <summary>The time value is valid.</summary>
 			Valid = 1,
-			/// <summary>To be added.</summary>
+			/// <summary>The time value has been rounded.</summary>
 			HasBeenRounded = 2,
-			/// <summary>To be added.</summary>
+			/// <summary>The time represents positive infinity.</summary>
 			PositiveInfinity = 4,
-			/// <summary>To be added.</summary>
+			/// <summary>The time represents negative infinity.</summary>
 			NegativeInfinity = 8,
-			/// <summary>To be added.</summary>
+			/// <summary>The time is indefinite.</summary>
 			Indefinite = 16,
-			/// <summary>To be added.</summary>
+			/// <summary>Mask for implied value flags.</summary>
 			ImpliedValueFlagsMask = PositiveInfinity | NegativeInfinity | Indefinite,
 		}
 #if !COREBUILD
 
 		/// <summary>Constant that contains an invalid CMTime.</summary>
-		///         <remarks>To be added.</remarks>
 		public readonly static CMTime Invalid = new CMTime (0);
 
 		const Flags kIndefinite = Flags.Valid | Flags.Indefinite;
 		/// <summary>Constant that contains an indefinite CMTime.</summary>
-		///         <remarks>To be added.</remarks>
 		public readonly static CMTime Indefinite = new CMTime (kIndefinite);
 
 		const Flags kPositive = Flags.Valid | Flags.PositiveInfinity;
 		/// <summary>Constant that contains APositive infinity CMTime.</summary>
-		///         <remarks>To be added.</remarks>
 		public readonly static CMTime PositiveInfinity = new CMTime (kPositive);
 
 		const Flags kNegative = Flags.Valid | Flags.NegativeInfinity;
 		/// <summary>Constant that contains a negative infinity CMTime.</summary>
-		///         <remarks>To be added.</remarks>
 		public readonly static CMTime NegativeInfinity = new CMTime (kNegative);
 
 		/// <summary>Constant that contains a zero CMTime.</summary>
-		///         <remarks>To be added.</remarks>
 		public readonly static CMTime Zero = new CMTime (Flags.Valid, 1);
 
 		/// <summary>Maximum supported time scale.</summary>
-		///         <remarks>To be added.</remarks>
 		public const int MaxTimeScale = 0x7fffffff;
 
 #endif // !COREBUILD
 
 		// CMTimeValue -> int64_t -> CMTime.h
 		/// <summary>Value component of a CMTime (the numerator).</summary>
-		///         <remarks>To be added.</remarks>
 		public long Value;
 
 		// CMTimeScale -> int32_t -> CMTime.h
 		/// <summary>Timescale for the CMTime (the denominator).</summary>
-		///         <remarks>To be added.</remarks>
 		public int TimeScale;
 
 		// CMTimeFlags -> uint32_t -> CMTime.h
 		/// <summary>Flags set on the CMTime</summary>
-		///         <remarks>To be added.</remarks>
 		public Flags TimeFlags;
 
 		// CMTimeEpoch -> int64_t -> CMTime.h
 		/// <summary>The time epoch.</summary>
-		///         <remarks>To be added.</remarks>
 		public long TimeEpoch;
 
 #if !COREBUILD
@@ -108,10 +96,9 @@ namespace CoreMedia {
 			TimeFlags = f;
 		}
 
-		/// <param name="value">To be added.</param>
-		///         <param name="timescale">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="value">The time value (numerator).</param>
+		/// <param name="timescale">The timescale (denominator).</param>
+		/// <summary>Creates a CMTime with the specified value and timescale.</summary>
 		public CMTime (long value, int timescale)
 		{
 			Value = value;
@@ -120,11 +107,10 @@ namespace CoreMedia {
 			TimeEpoch = 0;
 		}
 
-		/// <param name="value">To be added.</param>
-		///         <param name="timescale">To be added.</param>
-		///         <param name="epoch">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="value">The time value (numerator).</param>
+		/// <param name="timescale">The timescale (denominator).</param>
+		/// <param name="epoch">The epoch.</param>
+		/// <summary>Creates a CMTime with the specified value, timescale, and epoch.</summary>
 		public CMTime (long value, int timescale, long epoch)
 		{
 			Value = value;
@@ -134,7 +120,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>Indicates that the CMTime value stored is invalid.</summary>
-		///         <remarks>To be added.</remarks>
 		public bool IsInvalid {
 			get {
 				return (TimeFlags & Flags.Valid) == 0;
@@ -142,7 +127,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>Indicates if the CMTime is numeric.</summary>
-		///         <remarks>To be added.</remarks>
 		public bool IsNumeric {
 			get {
 				return ((TimeFlags & (Flags.Valid | Flags.ImpliedValueFlagsMask)) == Flags.Valid);
@@ -151,7 +135,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>Indicates that the CMTime was rounded.</summary>
-		///         <remarks>To be added.</remarks>
 		public bool HasBeenRounded {
 			get {
 				return IsNumeric && ((TimeFlags & Flags.HasBeenRounded) != 0);
@@ -159,7 +142,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>Indicates that the CMTime is indefinite.</summary>
-		///         <remarks>To be added.</remarks>
 		public bool IsIndefinite {
 			get {
 				return (TimeFlags & kIndefinite) == kIndefinite;
@@ -167,7 +149,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>Indicates if the CMTime represents positive infinity.</summary>
-		///         <remarks>To be added.</remarks>
 		public bool IsPositiveInfinity {
 			get {
 				return (TimeFlags & kPositive) == kPositive;
@@ -175,7 +156,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>Indicates if the CMTime represents negative infinity.</summary>
-		///         <remarks>To be added.</remarks>
 		public bool IsNegativeInfinity {
 			get {
 				return (TimeFlags & kNegative) == kNegative;
@@ -185,8 +165,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMTimeAbsoluteValue (CMTime time);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the absolute value of this CMTime.</summary>
 		public CMTime AbsoluteValue {
 			get {
 				return CMTimeAbsoluteValue (this);
@@ -196,10 +175,9 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* int32_t */ int CMTimeCompare (CMTime time1, CMTime time2);
 
-		/// <param name="time1">To be added.</param>
-		///         <param name="time2">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="time1">The first time value.</param>
+		/// <param name="time2">The second time value.</param>
+		/// <summary>Compares two CMTime values.</summary>
 		public static int Compare (CMTime time1, CMTime time2)
 		{
 			return CMTimeCompare (time1, time2);
@@ -237,9 +215,8 @@ namespace CoreMedia {
 			return comp >= 0;
 		}
 
-		/// <param name="obj">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="obj">The object to compare with.</param>
+		/// <summary>Determines whether this instance equals the specified object.</summary>
 		public override bool Equals (object? obj)
 		{
 			if (obj is CMTime time)
@@ -247,8 +224,7 @@ namespace CoreMedia {
 			return false;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a hash code for this instance.</summary>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (Value, TimeScale, TimeFlags, TimeEpoch);
@@ -257,10 +233,9 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMTimeAdd (CMTime addend1, CMTime addend2);
 
-		/// <param name="time1">To be added.</param>
-		///         <param name="time2">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="time1">The first time value.</param>
+		/// <param name="time2">The second time value.</param>
+		/// <summary>Adds two CMTime values.</summary>
 		public static CMTime Add (CMTime time1, CMTime time2)
 		{
 			return CMTimeAdd (time1, time2);
@@ -269,10 +244,9 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMTimeSubtract (CMTime minuend, CMTime subtrahend);
 
-		/// <param name="minuend">To be added.</param>
-		///         <param name="subtraend">To be added.</param>
+		/// <param name="minuend">The time to subtract from.</param>
+		/// <param name="subtraend">The time to subtract.</param>
 		///         <summary>Substracts a CMTime from another CMTime.</summary>
-		///         <remarks>To be added.</remarks>
 		public static CMTime Subtract (CMTime minuend, CMTime subtraend)
 		{
 			return CMTimeSubtract (minuend, subtraend);
@@ -281,10 +255,9 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMTimeMultiply (CMTime time, /* int32_t */ int multiplier);
 
-		/// <param name="time">To be added.</param>
-		///         <param name="multiplier">To be added.</param>
+		/// <param name="time">The time value.</param>
+		/// <param name="multiplier">The multiplier.</param>
 		///         <summary>Multiples a CMTime by an integer value.</summary>
-		///         <remarks>To be added.</remarks>
 		public static CMTime Multiply (CMTime time, int multiplier)
 		{
 			return CMTimeMultiply (time, multiplier);
@@ -293,10 +266,9 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMTimeMultiplyByFloat64 (CMTime time, /* Float64 */ double multiplier);
 
-		/// <param name="time">To be added.</param>
-		///         <param name="multiplier">To be added.</param>
+		/// <param name="time">The time value.</param>
+		/// <param name="multiplier">The multiplier.</param>
 		///         <summary>Multiples a CMTime by a double value.</summary>
-		///         <remarks>To be added.</remarks>
 		public static CMTime Multiply (CMTime time, double multiplier)
 		{
 			return CMTimeMultiplyByFloat64 (time, multiplier);
@@ -309,11 +281,10 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMTimeMultiplyByRatio (CMTime time, /* int32_t */ int multiplier, /* int32_t */ int divisor);
 
-		/// <param name="time">To be added.</param>
-		///         <param name="multiplier">To be added.</param>
-		///         <param name="divisor">To be added.</param>
+		/// <param name="time">The time value.</param>
+		/// <param name="multiplier">The multiplier.</param>
+		/// <param name="divisor">The divisor.</param>
 		///         <summary>Multiples a CMTime by a fraction expressed as a multiplier and a divisor.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -346,10 +317,9 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMTimeConvertScale (CMTime time, /* int32_t */ int newScale, CMTimeRoundingMethod method);
 
-		/// <param name="newScale">To be added.</param>
-		///         <param name="method">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="newScale">The new timescale.</param>
+		/// <param name="method">The rounding method.</param>
+		/// <summary>Converts this time to a new timescale.</summary>
 		public CMTime ConvertScale (int newScale, CMTimeRoundingMethod method)
 		{
 			return CMTimeConvertScale (this, newScale, method);
@@ -359,7 +329,6 @@ namespace CoreMedia {
 		extern static /* Float64 */ double CMTimeGetSeconds (CMTime time);
 
 		/// <summary>Number of seconds</summary>
-		///         <remarks>To be added.</remarks>
 		public double Seconds {
 			get {
 				return CMTimeGetSeconds (this);
@@ -369,8 +338,8 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMTimeMakeWithSeconds (/* Float64 */ double seconds, /* int32_t */ int preferredTimeScale);
 
-		/// <param name="seconds">To be added.</param>
-		///         <param name="preferredTimeScale">To be added.</param>
+		/// <param name="seconds">The number of seconds.</param>
+		/// <param name="preferredTimeScale">The preferred timescale.</param>
 		///         <summary>Creates a new instance of CMTime from a second and timescale description.</summary>
 		///         <returns>The constructed CMTime.</returns>
 		///         <remarks>
@@ -383,10 +352,9 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMTimeMaximum (CMTime time1, CMTime time2);
 
-		/// <param name="time1">To be added.</param>
-		///         <param name="time2">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="time1">The first time value.</param>
+		/// <param name="time2">The second time value.</param>
+		/// <summary>Returns the maximum of two CMTime values.</summary>
 		public static CMTime GetMaximum (CMTime time1, CMTime time2)
 		{
 			return CMTimeMaximum (time1, time2);
@@ -395,10 +363,9 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMTimeMinimum (CMTime time1, CMTime time2);
 
-		/// <param name="time1">To be added.</param>
-		///         <param name="time2">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="time1">The first time value.</param>
+		/// <param name="time2">The second time value.</param>
+		/// <summary>Returns the minimum of two CMTime values.</summary>
 		public static CMTime GetMinimum (CMTime time1, CMTime time2)
 		{
 			return CMTimeMinimum (time1, time2);
@@ -411,10 +378,9 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMTimeFoldIntoRange (CMTime time, CMTimeRange foldRange);
 
-		/// <param name="time">To be added.</param>
-		///         <param name="foldRange">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="time">The time value.</param>
+		/// <param name="foldRange">The time range to fold into.</param>
+		///         <summary>Folds the time into the specified range.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -426,16 +392,12 @@ namespace CoreMedia {
 
 		// FIXME: generated will need some changes to emit [Field] in partial struct (not class)
 		/// <summary>Key that can be used in NSDictionary objects returned by CMTime to extract the Value property.</summary>
-		///         <remarks>To be added.</remarks>
 		public readonly static NSString? ValueKey;
 		/// <summary>Key that can be used in NSDictionary objects returned by CMTime to extract the Scale property.</summary>
-		///         <remarks>To be added.</remarks>
 		public readonly static NSString? ScaleKey;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Key that can be used in NSDictionary objects to extract the Epoch property.</summary>
 		public readonly static NSString? EpochKey;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Key that can be used in NSDictionary objects to extract the Flags property.</summary>
 		public readonly static NSString? FlagsKey;
 
 		static CMTime ()
@@ -450,8 +412,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* CFDictionaryRef */ IntPtr CMTimeCopyAsDictionary (CMTime time, /* CFAllocatorRef */ IntPtr allocator);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Converts this CMTime to a dictionary representation.</summary>
 		public NSDictionary ToDictionary ()
 		{
 			return new NSDictionary (CMTimeCopyAsDictionary (this, IntPtr.Zero), true);
@@ -460,8 +421,7 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static /* CFStringRef */ IntPtr CMTimeCopyDescription (/* CFAllocatorRef */ IntPtr allocator, CMTime time);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets a description string of this CMTime.</summary>
 		public string? Description {
 			get {
 				return CFString.FromHandle (CMTimeCopyDescription (IntPtr.Zero, this), true);
@@ -469,7 +429,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>Human readable description of the CMTime.</summary>
-		///         <remarks>To be added.</remarks>
 		public override string? ToString ()
 		{
 			return Description;
@@ -478,9 +437,8 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMTimeMakeFromDictionary (/* CFDictionaryRef */ IntPtr dict);
 
-		/// <param name="dict">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="dict">The dictionary representation of the time.</param>
+		///         <summary>Creates a CMTime from a dictionary representation.</summary>
 		public static CMTime FromDictionary (NSDictionary dict)
 		{
 			if (dict is null)

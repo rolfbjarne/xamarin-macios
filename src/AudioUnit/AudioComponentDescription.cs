@@ -113,7 +113,7 @@ namespace AudioUnit {
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
 		Remote = 0x72696f63, // 'rioc'
-		/// <summary>Indicates voice processing i o.</summary>
+		/// <summary>Indicates voice processing I/O.</summary>
 		VoiceProcessingIO = 0x7670696f, // 'vpio'
 	}
 
@@ -411,7 +411,7 @@ namespace AudioUnit {
 		}
 
 		/// <param name="panner">The panner.</param>
-		///         <summary>Creates a panner component description.</summary>
+		///         <summary>Creates APanner component description.</summary>
 		///         <returns>An initialized AudioComponentDescription with the <see cref="AudioComponentDescription.ComponentType" /> set to <see cref="AudioComponentType.Panner" /> and the specified panner.</returns>
 		public static AudioComponentDescription CreatePanner (AudioTypePanner panner)
 		{

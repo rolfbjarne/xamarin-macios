@@ -53,7 +53,7 @@ namespace Speech {
 		NotDetermined,
 		/// <summary>The user has denied permission for speech recognition.</summary>
 		Denied,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates restricted.</summary>
 		Restricted,
 		/// <summary>The user has allowed speech recognition.</summary>
 		Authorized,
@@ -170,7 +170,6 @@ namespace Speech {
 
 		/// <summary>Gets whether this is the final attempt at recognition.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("final")]
 		bool Final { [Bind ("isFinal")] get; }
 
@@ -192,7 +191,6 @@ namespace Speech {
 
 		/// <summary>Gets whether the speech recognition activity is in its final stage.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("finishing")]
 		bool Finishing { [Bind ("isFinishing")] get; }
 
@@ -201,7 +199,6 @@ namespace Speech {
 
 		/// <summary>Gets whether the speech recognition attempt was cancelled.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("cancelled")]
 		bool Cancelled { [Bind ("isCancelled")] get; }
 
@@ -224,33 +221,28 @@ namespace Speech {
 
 		/// <param name="task">The <see cref="Speech.SFSpeechRecognitionTask" /> for which this is the delegate object.</param>
 		/// <summary>The system calls this method periodically as speech is detected.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("speechRecognitionDidDetectSpeech:")]
 		void DidDetectSpeech (SFSpeechRecognitionTask task);
 
 		/// <param name="task">The <see cref="Speech.SFSpeechRecognitionTask" /> for which this is the delegate object.</param>
-		/// <param name="transcription">To be added.</param>
+		/// <param name="transcription">The transcription.</param>
 		/// <summary>The system calls this method periodically, as the speech recognition attempts to refine the results.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("speechRecognitionTask:didHypothesizeTranscription:")]
 		void DidHypothesizeTranscription (SFSpeechRecognitionTask task, SFTranscription transcription);
 
 		/// <param name="task">The <see cref="Speech.SFSpeechRecognitionTask" /> for which this is the delegate object.</param>
-		/// <param name="recognitionResult">To be added.</param>
+		/// <param name="recognitionResult">The recognition result.</param>
 		/// <summary>The system calls this method  after it has completed recognition.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("speechRecognitionTask:didFinishRecognition:")]
 		void DidFinishRecognition (SFSpeechRecognitionTask task, SFSpeechRecognitionResult recognitionResult);
 
 		/// <param name="task">The <see cref="Speech.SFSpeechRecognitionTask" /> for which this is the delegate object.</param>
 		/// <summary>Called by the system after the audio input has finished.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("speechRecognitionTaskFinishedReadingAudio:")]
 		void FinishedReadingAudio (SFSpeechRecognitionTask task);
 
-		/// <param name="task">To be added.</param>
+		/// <param name="task">The task.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("speechRecognitionTaskWasCancelled:")]
 		void WasCancelled (SFSpeechRecognitionTask task);
 
@@ -258,7 +250,6 @@ namespace Speech {
 		/// <param name="successfully">
 		///           <see langword="true" /> if the speech recognition ended without error or cancellation.</param>
 		/// <summary>The system calls this method after the <paramref name="task" /> has finished.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("speechRecognitionTask:didFinishSuccessfully:")]
 		void DidFinishSuccessfully (SFSpeechRecognitionTask task, bool successfully);
 
@@ -277,11 +268,10 @@ namespace Speech {
 	[BaseType (typeof (NSObject))]
 	interface SFSpeechRecognizerDelegate {
 
-		/// <param name="speechRecognizer">To be added.</param>
+		/// <param name="speechRecognizer">The speech recognizer.</param>
 		/// <param name="available">
 		///           <see langword="true" /> if speech recognition is permitted.</param>
 		/// <summary>The system calls this when the availability of speech recognition has been changed.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("speechRecognizer:availabilityDidChange:")]
 		void AvailabilityDidChange (SFSpeechRecognizer speechRecognizer, bool available);
 	}

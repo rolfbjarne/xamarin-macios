@@ -131,9 +131,7 @@ namespace CoreImage {
 
 #if MONOMAC
 		/// <param name="size">The size.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a CGLayer with the specified size.</summary>
 		[UnsupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos10.11")]

@@ -38,7 +38,6 @@ namespace MapKit {
 		public CLLocationCoordinate2D? MapCenter { get; set; }
 		/// <summary>Coordinate span for the region to be displayed by the maps app.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MKCoordinateSpan? MapSpan { get; set; }
 		/// <summary>Controls whether to display traffic information on the map.</summary>
 		///         <value>
@@ -102,19 +101,17 @@ namespace MapKit {
 	}
 
 	public partial class MKMapItem {
-		/// <param name="launchOptions">To be added.</param>
+		/// <param name="launchOptions">The launch options.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void OpenInMaps (MKLaunchOptions? launchOptions = null)
 		{
 			_OpenInMaps (launchOptions?.ToDictionary ());
 		}
 
-		/// <param name="mapItems">To be added.</param>
-		///         <param name="launchOptions">To be added.</param>
+		/// <param name="mapItems">The map items.</param>
+		///         <param name="launchOptions">The launch options.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static bool OpenMaps (MKMapItem [] mapItems, MKLaunchOptions? launchOptions = null)
 		{
 			return _OpenMaps (mapItems, launchOptions?.ToDictionary ());

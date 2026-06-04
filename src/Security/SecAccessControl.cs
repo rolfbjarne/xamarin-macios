@@ -20,7 +20,6 @@ using CoreFoundation;
 namespace Security {
 
 	/// <summary>Contains access control flags for creating keychain entries.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	// changed to CFOptionFlags in Xcode 8 SDK
@@ -113,7 +112,6 @@ namespace Security {
 	}
 
 	/// <summary>Class that contains accessibility flags and access control object creation flags.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -126,10 +124,9 @@ namespace Security {
 		{
 		}
 
-		/// <param name="accessible">To be added.</param>
-		///         <param name="flags">To be added.</param>
+		/// <param name="accessible">The accessible.</param>
+		///         <param name="flags">The flags.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public SecAccessControl (SecAccessible accessible, SecAccessControlCreateFlags flags = SecAccessControlCreateFlags.UserPresence)
 			: base (SecAccessControlCreateWithFlags (IntPtr.Zero, KeysAccessible.FromSecAccessible (accessible), (nint) (long) flags, out var _), true)
 		{
@@ -139,11 +136,9 @@ namespace Security {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public SecAccessible Accessible { get; private set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public SecAccessControlCreateFlags Flags { get; private set; }
 
 		[DllImport (Constants.SecurityLibrary)]

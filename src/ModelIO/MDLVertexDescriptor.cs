@@ -11,7 +11,6 @@ namespace ModelIO {
 
 		/// <param name="descriptor">The descriptor.</param>
 		///         <summary>Creates a new vertex descriptor from a Metal vertex descriptor.</summary>
-		///         <returns>To be added.</returns>
 		public static MDLVertexDescriptor? FromMetal (MTLVertexDescriptor descriptor)
 		{
 			if (descriptor is null)
@@ -31,7 +30,6 @@ namespace ModelIO {
 		/// <param name="descriptor">The descriptor.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>Creates a Model IO vertex descriptor from the specified metal vertex descriptor.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

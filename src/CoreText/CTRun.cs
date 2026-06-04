@@ -63,7 +63,7 @@ namespace CoreText {
 		extern static void CTRunDraw (IntPtr h, IntPtr context, NSRange range);
 		/// <param name="context">The context to use.</param>
 		///         <param name="range">The range.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Draws the glyphs in the specified range to the given graphics context.</summary>
 		public void Draw (CGContext context, NSRange range)
 		{
 			CTRunDraw (Handle, context.Handle, range);
@@ -74,7 +74,7 @@ namespace CoreText {
 		extern static void CTRunGetAdvances (IntPtr h, NSRange range, [In, Out] CGSize []? buffer);
 		/// <param name="range">The range.</param>
 		///         <param name="buffer">The buffer.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the advance widths for glyphs in the specified range.</summary>
 		public CGSize [] GetAdvances (NSRange range, CGSize []? buffer)
 		{
 			buffer = GetBuffer (range, buffer);
@@ -97,13 +97,13 @@ namespace CoreText {
 		}
 
 		/// <param name="range">The range.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the advance widths for glyphs in the specified range.</summary>
 		public CGSize [] GetAdvances (NSRange range)
 		{
 			return GetAdvances (range, null);
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the advance widths for all glyphs in the run.</summary>
 		public CGSize [] GetAdvances ()
 		{
 			return GetAdvances (new NSRange (0, 0), null);
@@ -112,7 +112,7 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		extern static IntPtr CTRunGetAttributes (IntPtr handle);
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the string attributes for this run.</summary>
 		public CTStringAttributes? GetAttributes ()
 		{
 			var d = Runtime.GetNSObject<NSDictionary> (CTRunGetAttributes (Handle));
@@ -122,7 +122,7 @@ namespace CoreText {
 
 		[DllImport (Constants.CoreTextLibrary)]
 		extern static nint CTRunGetGlyphCount (IntPtr handle);
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the number of glyphs in this run.</summary>
 		public nint GlyphCount {
 			get {
 				return CTRunGetGlyphCount (Handle);
@@ -133,7 +133,7 @@ namespace CoreText {
 		extern static void CTRunGetGlyphs (IntPtr h, NSRange range, [In, Out] ushort []? buffer);
 		/// <param name="range">The range.</param>
 		///         <param name="buffer">The buffer.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the glyph IDs for glyphs in the specified range.</summary>
 		public ushort [] GetGlyphs (NSRange range, ushort []? buffer)
 		{
 			buffer = GetBuffer (range, buffer);
@@ -144,13 +144,13 @@ namespace CoreText {
 		}
 
 		/// <param name="range">The range.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the glyph IDs for glyphs in the specified range.</summary>
 		public ushort [] GetGlyphs (NSRange range)
 		{
 			return GetGlyphs (range, null);
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the glyph IDs for all glyphs in the run.</summary>
 		public ushort [] GetGlyphs ()
 		{
 			return GetGlyphs (new NSRange (0, 0), null);
@@ -160,7 +160,7 @@ namespace CoreText {
 		extern static CGRect CTRunGetImageBounds (IntPtr h, IntPtr context, NSRange range);
 		/// <param name="context">The context to use.</param>
 		///         <param name="range">The range.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the bounding rectangle for the glyphs in the specified range.</summary>
 		public CGRect GetImageBounds (CGContext context, NSRange range)
 		{
 			CGRect bounds = CTRunGetImageBounds (Handle, context.Handle, range);
@@ -172,7 +172,7 @@ namespace CoreText {
 		extern static void CTRunGetPositions (IntPtr h, NSRange range, [In, Out] CGPoint []? buffer);
 		/// <param name="range">The range.</param>
 		///         <param name="buffer">The buffer.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the glyph positions in the specified range.</summary>
 		public CGPoint [] GetPositions (NSRange range, CGPoint []? buffer)
 		{
 			buffer = GetBuffer (range, buffer);
@@ -183,13 +183,13 @@ namespace CoreText {
 		}
 
 		/// <param name="range">The range.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the glyph positions in the specified range.</summary>
 		public CGPoint [] GetPositions (NSRange range)
 		{
 			return GetPositions (range, null);
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the positions for all glyphs in the run.</summary>
 		public CGPoint [] GetPositions ()
 		{
 			return GetPositions (new NSRange (0, 0), null);
@@ -197,7 +197,7 @@ namespace CoreText {
 
 		[DllImport (Constants.CoreTextLibrary)]
 		extern static CTRunStatus CTRunGetStatus (IntPtr handle);
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the status flags for this run.</summary>
 		public CTRunStatus Status {
 			get {
 				return CTRunGetStatus (Handle);
@@ -216,13 +216,13 @@ namespace CoreText {
 		}
 
 		/// <param name="range">The range.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the string indices for glyphs in the specified range.</summary>
 		public nint [] GetStringIndices (NSRange range)
 		{
 			return GetStringIndices (range, null);
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the string indices for all glyphs in the run.</summary>
 		public nint [] GetStringIndices ()
 		{
 			return GetStringIndices (new NSRange (0, 0), null);
@@ -230,7 +230,7 @@ namespace CoreText {
 
 		[DllImport (Constants.CoreTextLibrary)]
 		extern static NSRange CTRunGetStringRange (IntPtr handle);
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the range of characters that this run covers in the original string.</summary>
 		public NSRange StringRange {
 			get {
 				return CTRunGetStringRange (Handle);
@@ -239,7 +239,7 @@ namespace CoreText {
 
 		[DllImport (Constants.CoreTextLibrary)]
 		extern static CGAffineTransform CTRunGetTextMatrix (IntPtr handle);
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the text matrix for this run.</summary>
 		public CGAffineTransform TextMatrix {
 			get {
 				return CTRunGetTextMatrix (Handle);
@@ -256,7 +256,7 @@ namespace CoreText {
 			return CTRunGetTypographicBounds (Handle, range, out ascent, out descent, out leading);
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the typographic bounds (ascent, descent, and leading) for all glyphs in the run.</summary>
 		public double GetTypographicBounds ()
 		{
 			NSRange range = new NSRange () { Location = 0, Length = 0 };

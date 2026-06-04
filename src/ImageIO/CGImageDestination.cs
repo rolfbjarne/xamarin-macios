@@ -52,10 +52,10 @@ namespace ImageIO {
 		}
 	}
 
-	/// <summary>To be added.</summary>
+/// <summary>Provides access to auxiliary image data information such as metadata.</summary>
 	public partial class CGImageAuxiliaryDataInfo {
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the metadata associated with the auxiliary image data.</summary>
 		public CGImageMetadata? Metadata {
 			get {
 				return GetNativeValue<CGImageMetadata> (CGImageAuxiliaryDataInfoKeys.MetadataKey);
@@ -93,7 +93,7 @@ namespace ImageIO {
 		[DllImport (Constants.ImageIOLibrary)]
 		extern static /* CFArrayRef __nonnull */ IntPtr CGImageDestinationCopyTypeIdentifiers ();
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the type identifiers supported by the image destination system.</summary>
 		public static string? []? TypeIdentifiers {
 			get {
 				var handle = CGImageDestinationCopyTypeIdentifiers ();
@@ -110,7 +110,7 @@ namespace ImageIO {
 		///         <param name="typeIdentifier">The type identifier.</param>
 		///         <param name="imageCount">The image count.</param>
 		///         <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates an image destination that writes to the specified data consumer.</summary>
 		public static CGImageDestination? Create (CGDataConsumer consumer, string typeIdentifier, int imageCount, CGImageDestinationOptions? options = null)
 		{
 			if (consumer is null)
@@ -139,7 +139,7 @@ namespace ImageIO {
 		///         <param name="typeIdentifier">The type identifier.</param>
 		///         <param name="imageCount">The image count.</param>
 		///         <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates an image destination that writes to the specified mutable data object.</summary>
 		public static CGImageDestination? Create (NSMutableData data, string typeIdentifier, int imageCount, CGImageDestinationOptions? options = null)
 		{
 			if (data is null)
@@ -167,7 +167,7 @@ namespace ImageIO {
 		/// <param name="url">The URL to use.</param>
 		///         <param name="typeIdentifier">The type identifier.</param>
 		///         <param name="imageCount">The image count.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates an image destination that writes to the specified URL.</summary>
 		public static CGImageDestination? Create (NSUrl url, string typeIdentifier, int imageCount)
 		{
 			if (url is null)
@@ -190,7 +190,7 @@ namespace ImageIO {
 			/* CFDictionaryRef __nullable */ IntPtr properties);
 
 		/// <param name="properties">The properties.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets the properties for the image destination.</summary>
 		public void SetProperties (NSDictionary? properties)
 		{
 			CGImageDestinationSetProperties (Handle, properties.GetHandle ());
@@ -204,7 +204,7 @@ namespace ImageIO {
 
 		/// <param name="image">The image.</param>
 		///         <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Adds an image to the destination with the specified options.</summary>
 		public void AddImage (CGImage image, CGImageDestinationOptions? options = null)
 		{
 			if (image is null)
@@ -218,7 +218,7 @@ namespace ImageIO {
 
 		/// <param name="image">The image.</param>
 		///         <param name="properties">The properties.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Adds an image to the destination with the specified properties dictionary.</summary>
 		public void AddImage (CGImage image, NSDictionary? properties)
 		{
 			if (image is null)
@@ -237,7 +237,7 @@ namespace ImageIO {
 		/// <param name="source">The source.</param>
 		///         <param name="index">The zero-based index.</param>
 		///         <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Adds an image from a source at the specified index with options.</summary>
 		public void AddImage (CGImageSource source, int index, CGImageDestinationOptions? options = null)
 		{
 			if (source is null)
@@ -252,7 +252,7 @@ namespace ImageIO {
 		/// <param name="source">The source.</param>
 		///         <param name="index">The zero-based index.</param>
 		///         <param name="properties">The properties.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Adds an image from a source at the specified index with a properties dictionary.</summary>
 		public void AddImage (CGImageSource source, int index, NSDictionary? properties)
 		{
 			if (source is null)
@@ -286,7 +286,7 @@ namespace ImageIO {
 		/// <param name="image">The image.</param>
 		///         <param name="meta">The meta.</param>
 		///         <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Adds an image with associated metadata to the destination.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -305,7 +305,7 @@ namespace ImageIO {
 		/// <param name="image">The image.</param>
 		///         <param name="meta">The meta.</param>
 		///         <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Adds an image with associated metadata and options to the destination.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -328,7 +328,7 @@ namespace ImageIO {
 		/// <param name="image">The image.</param>
 		///         <param name="options">The options to use.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Copies images from the source to this destination with the specified options.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -352,7 +352,7 @@ namespace ImageIO {
 		/// <param name="image">The image.</param>
 		///         <param name="options">The options to use.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Copies images from the source to this destination with the specified options.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -372,7 +372,7 @@ namespace ImageIO {
 
 		/// <param name="auxiliaryImageDataType">The auxiliary image data type.</param>
 		///         <param name="auxiliaryDataInfo">The auxiliary data info.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Adds auxiliary data information of the specified type to the image destination.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]

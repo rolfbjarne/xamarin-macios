@@ -12,7 +12,7 @@
 using Metal;
 
 namespace MetalPerformanceShaders {
-	/// <summary>To be added.</summary>
+	/// <summary>Provides methods for working with batches of Metal Performance Shaders images.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]

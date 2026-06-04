@@ -59,7 +59,7 @@ namespace Foundation {
 		SslV3,
 		/// <summary>Require the use of TLSv1.</summary>
 		TlsV1,
-		/// <summary>Indicates that the two parties should negotiate a protocol, and it should use the most secure socket protocol available between the client and the server.</summary>
+		/// <summary>Indicates that the two parties should negotiate AProtocol, and it should use the most secure socket protocol available between the client and the server.</summary>
 		NegotiatedSsl,
 		/// <summary>The protocol is not known (can only happen if you build using an old SDK and run on a new device, and you have set the setting to "negotiated" and then you read the value back).</summary>
 		Unknown,
@@ -353,7 +353,7 @@ namespace Foundation {
 			writeStream = Runtime.GetNSObject<NSOutputStream> (write);
 		}
 
-		/// <summary>Creates a pair of <see cref="NSInputStream" /> and <see cref="NSOutputStream" /> connected to the specified socket.</summary>
+		/// <summary>Creates APair of <see cref="NSInputStream" /> and <see cref="NSOutputStream" /> connected to the specified socket.</summary>
 		/// <param name="socket">The <see cref="CFSocket" /> to connect the streams to.</param>
 		/// <param name="readStream">When this method returns, contains the created <see cref="NSInputStream" />.</param>
 		/// <param name="writeStream">When this method returns, contains the created <see cref="NSOutputStream" />.</param>
@@ -378,7 +378,7 @@ namespace Foundation {
 			AssignStreams (read, write, out readStream, out writeStream);
 		}
 
-		/// <summary>Creates a pair of <see cref="NSInputStream" /> and <see cref="NSOutputStream" /> connected to a peer socket with the specified signature.</summary>
+		/// <summary>Creates APair of <see cref="NSInputStream" /> and <see cref="NSOutputStream" /> connected to APeer socket with the specified signature.</summary>
 		/// <param name="family">The address family to use.</param>
 		/// <param name="type">The socket type to use.</param>
 		/// <param name="proto">The protocol type to use.</param>
@@ -408,7 +408,7 @@ namespace Foundation {
 			}
 		}
 
-		/// <summary>Creates a pair of <see cref="NSInputStream" /> and <see cref="NSOutputStream" /> connected to the specified host endpoint.</summary>
+		/// <summary>Creates APair of <see cref="NSInputStream" /> and <see cref="NSOutputStream" /> connected to the specified host endpoint.</summary>
 		/// <param name="endpoint">The IP endpoint to connect to.</param>
 		/// <param name="readStream">When this method returns, contains the created <see cref="NSInputStream" />.</param>
 		/// <param name="writeStream">When this method returns, contains the created <see cref="NSOutputStream" />.</param>
@@ -434,7 +434,7 @@ namespace Foundation {
 			}
 		}
 
-		/// <summary>Creates a pair of bound <see cref="NSInputStream" /> and <see cref="NSOutputStream" /> with the specified buffer size.</summary>
+		/// <summary>Creates APair of bound <see cref="NSInputStream" /> and <see cref="NSOutputStream" /> with the specified buffer size.</summary>
 		/// <param name="readStream">When this method returns, contains the created <see cref="NSInputStream" />.</param>
 		/// <param name="writeStream">When this method returns, contains the created <see cref="NSOutputStream" />.</param>
 		/// <param name="bufferSize">The size of the buffer to use for the streams.</param>

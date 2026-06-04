@@ -75,7 +75,6 @@ namespace CoreText {
 		/// <param name="range">The range.</param>
 		///         <param name="buffer">The buffer.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CGSize [] GetAdvances (NSRange range, CGSize []? buffer)
 		{
 			buffer = GetBuffer (range, buffer);
@@ -99,14 +98,12 @@ namespace CoreText {
 
 		/// <param name="range">The range.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CGSize [] GetAdvances (NSRange range)
 		{
 			return GetAdvances (range, null);
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CGSize [] GetAdvances ()
 		{
 			return GetAdvances (new NSRange (0, 0), null);
@@ -116,7 +113,6 @@ namespace CoreText {
 		extern static IntPtr CTRunGetAttributes (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CTStringAttributes? GetAttributes ()
 		{
 			var d = Runtime.GetNSObject<NSDictionary> (CTRunGetAttributes (Handle));
@@ -127,7 +123,6 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		extern static nint CTRunGetGlyphCount (IntPtr handle);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public nint GlyphCount {
 			get {
 				return CTRunGetGlyphCount (Handle);
@@ -139,7 +134,6 @@ namespace CoreText {
 		/// <param name="range">The range.</param>
 		///         <param name="buffer">The buffer.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public ushort [] GetGlyphs (NSRange range, ushort []? buffer)
 		{
 			buffer = GetBuffer (range, buffer);
@@ -151,14 +145,12 @@ namespace CoreText {
 
 		/// <param name="range">The range.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public ushort [] GetGlyphs (NSRange range)
 		{
 			return GetGlyphs (range, null);
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public ushort [] GetGlyphs ()
 		{
 			return GetGlyphs (new NSRange (0, 0), null);
@@ -169,7 +161,6 @@ namespace CoreText {
 		/// <param name="context">The context to use.</param>
 		///         <param name="range">The range.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CGRect GetImageBounds (CGContext context, NSRange range)
 		{
 			CGRect bounds = CTRunGetImageBounds (Handle, context.Handle, range);
@@ -182,7 +173,6 @@ namespace CoreText {
 		/// <param name="range">The range.</param>
 		///         <param name="buffer">The buffer.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CGPoint [] GetPositions (NSRange range, CGPoint []? buffer)
 		{
 			buffer = GetBuffer (range, buffer);
@@ -194,14 +184,12 @@ namespace CoreText {
 
 		/// <param name="range">The range.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CGPoint [] GetPositions (NSRange range)
 		{
 			return GetPositions (range, null);
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CGPoint [] GetPositions ()
 		{
 			return GetPositions (new NSRange (0, 0), null);
@@ -210,7 +198,6 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		extern static CTRunStatus CTRunGetStatus (IntPtr handle);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public CTRunStatus Status {
 			get {
 				return CTRunGetStatus (Handle);
@@ -230,14 +217,12 @@ namespace CoreText {
 
 		/// <param name="range">The range.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public nint [] GetStringIndices (NSRange range)
 		{
 			return GetStringIndices (range, null);
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public nint [] GetStringIndices ()
 		{
 			return GetStringIndices (new NSRange (0, 0), null);
@@ -246,7 +231,6 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		extern static NSRange CTRunGetStringRange (IntPtr handle);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public NSRange StringRange {
 			get {
 				return CTRunGetStringRange (Handle);
@@ -256,7 +240,6 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		extern static CGAffineTransform CTRunGetTextMatrix (IntPtr handle);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public CGAffineTransform TextMatrix {
 			get {
 				return CTRunGetTextMatrix (Handle);
@@ -274,7 +257,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public double GetTypographicBounds ()
 		{
 			NSRange range = new NSRange () { Location = 0, Length = 0 };

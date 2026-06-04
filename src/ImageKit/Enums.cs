@@ -32,116 +32,106 @@
 namespace ImageKit {
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[Native]
 	public enum IKCameraDeviceViewDisplayMode : long {
 		None = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates table.</summary>
 		Table = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates icon.</summary>
 		Icon = 1,
 	};
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[Native]
 	public enum IKCameraDeviceViewTransferMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates file.</summary>
 		File = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates memory.</summary>
 		Memory = 1,
 	};
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[Native]
 	public enum IKDeviceBrowserViewDisplayMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates table.</summary>
 		Table = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates outline.</summary>
 		Outline = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates icon.</summary>
 		Icon = 2,
 	};
 
 	// Untyped enum in ObjC
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum IKImageBrowserCellState : int {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates no image.</summary>
 		NoImage = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid.</summary>
 		Invalid = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ready.</summary>
 		Ready = 2,
 	};
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	[Native]
 	public enum IKCellsStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates shadowed.</summary>
 		Shadowed = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates outlined.</summary>
 		Outlined = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates titled.</summary>
 		Titled = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates subtitled.</summary>
 		Subtitled = 1 << 3,
 	};
 
 	//used as a value for the IKImageBrowserGroupStyleKey in the NSDictionary that defines a group in IKImageBrowserView
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[Native]
 	public enum IKGroupStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bezel.</summary>
 		Bezel = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates disclosure.</summary>
 		Disclosure = 1,
 	};
 
 	// Untyped enum in ObjC
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum IKImageBrowserDropOperation : int {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates on.</summary>
 		On = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates before.</summary>
 		Before = 1,
 	};
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[Native]
 	public enum IKScannerDeviceViewTransferMode : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates file.</summary>
 		File = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates memory.</summary>
 		Memory = 1,
 	};
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[Native]
 	public enum IKScannerDeviceViewDisplayMode : long {
 		None = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates simple.</summary>
 		Simple = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates advanced.</summary>
 		Advanced = 1,
 	};
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum IKFilterBrowserPanelStyleMask : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates normal.</summary>
 		Normal = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates textured.</summary>
 		Textured = 1 << 8,
 		// Other NSWindow Style Mask bit settings do not apply to this panel
 	}

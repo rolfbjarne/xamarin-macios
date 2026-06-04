@@ -223,7 +223,7 @@ namespace CoreData {
 		StringTooLong = 1660,
 		/// <summary>Indicates that a string was too short.</summary>
 		StringTooShort = 1670,
-		/// <summary>Indicates that a pattern failed to match a string.</summary>
+		/// <summary>Indicates that APattern failed to match a string.</summary>
 		StringPatternMatching = 1680,
 		/// <summary>Indicates invalid uri.</summary>
 		[MacCatalyst (13, 1)]
@@ -235,7 +235,7 @@ namespace CoreData {
 	public enum ObjectGraphManagementErrorType : ulong {
 		/// <summary>Indicates that a lock could not be obtained on a managed object context.</summary>
 		ManagedObjectContextLocking = 132000,
-		/// <summary>Indicates that a lock could not be obtained on a persistent store.</summary>
+		/// <summary>Indicates that a lock could not be obtained on APersistent store.</summary>
 		PersistentStoreCoordinatorLocking = 132010,
 		/// <summary>Indicates that an attempt was made to fire a fault at an object that does not exist.</summary>
 		ManagedObjectReferentialIntegrity = 133000,
@@ -254,7 +254,7 @@ namespace CoreData {
 		TypeMismatch = 134010,
 		/// <summary>Indicates that an incompatible schema was encountered, for example, one that specifies a table that is not present.</summary>
 		IncompatibleSchema = 134020,
-		/// <summary>Indicates that an error, such as a permissions error, was encountered while saving a persistent store.</summary>
+		/// <summary>Indicates that an error, such as APermissions error, was encountered while saving APersistent store.</summary>
 		Save = 134030,
 		/// <summary>Indicates that an error occurred while saving one or more stores in a container.</summary>
 		IncompleteSave = 134040,
@@ -262,9 +262,9 @@ namespace CoreData {
 		SaveConflicts = 134050,
 		/// <summary>Indicates that an error occurred while performing an operation on persistent store.</summary>
 		Operation = 134070,
-		/// <summary>Indicates that an error occurred while trying to open a persistent store.</summary>
+		/// <summary>Indicates that an error occurred while trying to open APersistent store.</summary>
 		Open = 134080,
-		/// <summary>Indicates that connecting to a persistent store took too long.</summary>
+		/// <summary>Indicates that connecting to APersistent store took too long.</summary>
 		Timeout = 134090,
 		/// <summary>Indicates that the entity version hashes in the persistent store are not compatible with the managed object model.</summary>
 		IncompatibleVersionHash = 134100,
@@ -281,9 +281,9 @@ namespace CoreData {
 		MigrationMissingSourceModel = 134130,
 		/// <summary>The mapping model was missing.</summary>
 		MigrationMissingMappingModel = 134140,
-		/// <summary>There was a problem with the source store.</summary>
+		/// <summary>There was AProblem with the source store.</summary>
 		MigrationManagerSourceStore = 134150,
-		/// <summary>There was a problem with the destination store.</summary>
+		/// <summary>There was AProblem with the destination store.</summary>
 		MigrationManagerDestinationStore = 134160,
 		/// <summary>An error occurred while processing an entity migration policy.</summary>
 		EntityMigrationPolicy = 134170,

@@ -49,8 +49,7 @@ namespace CoreFoundation {
 		// that allows custom releasing of the buffer
 		//
 		/// <param name="buffer">The buffer.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Froms byte buffer.</summary>
 		public static DispatchData FromByteBuffer (byte [] buffer)
 		{
 			if (buffer is null)
@@ -64,8 +63,7 @@ namespace CoreFoundation {
 		/// <param name="buffer">The buffer.</param>
 		///         <param name="start">The start.</param>
 		///         <param name="length">The length.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Froms byte buffer.</summary>
 		public static DispatchData FromByteBuffer (byte [] buffer, int start, int length)
 		{
 			if (buffer is null)
@@ -111,8 +109,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.libcLibrary)]
 		extern static nuint dispatch_data_get_size (IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>The size.</summary>
 		public nuint Size => dispatch_data_get_size (Handle);
 
 		[DllImport (Constants.libcLibrary)]
@@ -135,8 +132,7 @@ namespace CoreFoundation {
 
 		/// <param name="data1">The data1.</param>
 		///         <param name="data2">The data2.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Concat.</summary>
 		public static DispatchData Concat (DispatchData data1, DispatchData data2)
 		{
 			if (data1 is null)

@@ -46,7 +46,6 @@ namespace Security {
 #if !COREBUILD
 
 		/// <summary>Type identifier for the Security.SecTrust type.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>
 		///           <para>The returned token is the CoreFoundation type identifier (CFType) that has been assigned to this class.</para>
 		///           <para>This can be used to determine type identity between different CoreFoundation objects.</para>
@@ -291,8 +290,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static IntPtr /* CFDataRef */ SecTrustCopyExceptions (IntPtr /* SecTrustRef */ trust);
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Gets exceptions.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -310,8 +308,7 @@ namespace Security {
 		extern static byte SecTrustSetExceptions (IntPtr /* SecTrustRef */ trust, IntPtr /* __nullable CFDataRef */ exceptions);
 
 		/// <param name="data">The data to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Sets exceptions.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -327,7 +324,6 @@ namespace Security {
 		extern static double /* CFAbsoluteTime */ SecTrustGetVerifyTime (IntPtr /* SecTrustRef */ trust);
 
 		/// <summary>Get the verification time.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>This is often used for digital signatures.</remarks>
 		public double GetVerifyTime ()
 		{
@@ -388,8 +384,7 @@ namespace Security {
 		}
 
 		/// <param name="array">The array.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Sets anchor certificates.</summary>
 		public SecStatusCode SetAnchorCertificates (SecCertificate [] array)
 		{
 			if (array is null)

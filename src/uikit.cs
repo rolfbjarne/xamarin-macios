@@ -2169,7 +2169,7 @@ namespace UIKit {
 	[Protocol]
 	interface UIActivityItemSource {
 		/// <param name="activityViewController">To be added.</param>
-		/// <summary>Returns data that can be used as a placeholder for real data.</summary>
+		/// <summary>Returns data that can be used as APlaceholder for real data.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		[Abstract]
@@ -2887,7 +2887,7 @@ namespace UIKit {
 	interface UIViewControllerPreviewingDelegate {
 		/// <param name="previewingContext">The context in which the 3D Touch is occurring..</param>
 		/// <param name="location">The location where the 3D touch is occurring.</param>
-		/// <summary>Method that is called when the user has pressed a source view, blurring the remainder of the screen, so that a preview view controller can be returned.</summary>
+		/// <summary>Method that is called when the user has pressed a source view, blurring the remainder of the screen, so that APreview view controller can be returned.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 13, 0, message: "Replaced by 'UIContextMenuInteraction'.")]
@@ -3358,7 +3358,7 @@ namespace UIKit {
 		[Field ("UIApplicationLaunchOptionsRemoteNotificationKey")]
 		NSString LaunchOptionsRemoteNotificationKey { get; }
 
-		/// <summary>Launch Options Key: Use this key to find out if custom data was passed to the program by the opening application. The value of this key will be a property list. </summary>
+		/// <summary>Launch Options Key: Use this key to find out if custom data was passed to the program by the opening application. The value of this key will be AProperty list. </summary>
 		///         <value>
 		///           Represents the value associated with the constant UIApplicationLaunchOptionsAnnotationKey
 		///         </value>
@@ -3407,7 +3407,7 @@ namespace UIKit {
 
 		/// <summary>Whether content protection is available.</summary>
 		///         <value>
-		///           <see langword="true" /> if data protection is enabled and the device is locked. Otherwise, <see langword="false" />.</value>
+		///           <see langword="true" /> if datAProtection is enabled and the device is locked. Otherwise, <see langword="false" />.</value>
 		///         <remarks>
 		///           <para>If this method returns <see langword="false" />, the application will not be allowed to read or write files whose <see cref="Foundation.NSFileManager.FileProtectionKey" /> is <see cref="Foundation.NSFileManager.FileProtectionComplete" /> or <see cref="Foundation.NSFileManager.FileProtectionCompleteUnlessOpen" />.</para>
 		///         </remarks>
@@ -4631,7 +4631,7 @@ namespace UIKit {
 		/// <param name="application">Reference to this application (<see cref="UIKit.UIApplication.SharedApplication" />).</param>
 		/// <param name="url">The <see cref="Foundation.NSUrl" /> specified by the calling application.</param>
 		/// <param name="sourceApplication">The bundle ID of the calling application.</param>
-		/// <param name="annotation">Optional property-list data passed by the calling application.</param>
+		/// <param name="annotation">Optional property-list datAPassed by the calling application.</param>
 		/// <summary>Loads a resource from the specified URL.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
@@ -4861,7 +4861,7 @@ namespace UIKit {
 		/// <param name="actionIdentifier">To be added.</param>
 		/// <param name="remoteNotificationInfo">To be added.</param>
 		/// <param name="completionHandler">To be added.</param>
-		/// <summary>Informs the app of a custom action to perform based on a push notification, and includes the <paramref name="actionIdentifier" /> value, <paramref name="remoteNotificationInfo" /> data from the notification, and <paramref name="completionHandler" /> for the app developer to run after performing the action.</summary>
+		/// <summary>Informs the app of a custom action to perform based on APush notification, and includes the <paramref name="actionIdentifier" /> value, <paramref name="remoteNotificationInfo" /> data from the notification, and <paramref name="completionHandler" /> for the app developer to run after performing the action.</summary>
 		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[Deprecated (PlatformName.iOS, 10, 0, message: "Use 'UNUserNotificationCenterDelegate.DidReceiveNotificationResponse' instead.")]
@@ -6176,7 +6176,7 @@ namespace UIKit {
 		/// <param name="collectionView">The collection view that originated the request.</param>
 		/// <param name="originalIndexPath">To be added.</param>
 		/// <param name="proposedIndexPath">To be added.</param>
-		/// <summary>When overridden, allows the developer to modify the final location of a moved item. (For instance, to disallow a move to a particular <paramref name="proposedIndexPath" />.)</summary>
+		/// <summary>When overridden, allows the developer to modify the final location of a moved item. (For instance, to disallow a move to AParticular <paramref name="proposedIndexPath" />.)</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 15, 0, message: "Use 'GetTargetIndexPathForMoveOfItemFromOriginalIndexPath' instead.")]
@@ -7875,7 +7875,7 @@ namespace UIKit {
 		void WillResume (UIDynamicAnimator animator);
 
 		/// <param name="animator">To be added.</param>
-		/// <summary>Called when a pause is required in an animation's dynamic behavior.</summary>
+		/// <summary>Called when APause is required in an animation's dynamic behavior.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("dynamicAnimatorDidPause:")]
 		void DidPause (UIDynamicAnimator animator);
@@ -9805,7 +9805,7 @@ namespace UIKit {
 		/// <param name="offset">Character offset from the initial position.</param>
 		/// <summary>Gets the character offset from an initial position.</summary>
 		/// <returns>The specified character offset.</returns>
-		/// <remarks>This can be either a positive or negative value.</remarks>
+		/// <remarks>This can be either APositive or negative value.</remarks>
 		[Abstract]
 		[Export ("positionFromPosition:inDirection:offset:")]
 		UITextPosition GetPosition (UITextPosition fromPosition, UITextLayoutDirection inDirection, nint offset);
@@ -9830,7 +9830,7 @@ namespace UIKit {
 
 		/// <param name="range">A UITextRange object indicating the range of a document's text.</param>
 		/// <param name="direction">A constant indicating direction for storage.</param>
-		/// <summary>Gets a position within a specified range.</summary>
+		/// <summary>Gets APosition within a specified range.</summary>
 		/// <returns>A position within a specified range.</returns>
 		/// <remarks>To be added.</remarks>
 		[Abstract]
@@ -10476,7 +10476,7 @@ namespace UIKit {
 		UIScrollTypeMask AllowedScrollTypesMask { get; set; }
 	}
 
-	/// <summary>A <see cref="UIKit.UIPanGestureRecognizer" /> that recognizes a panning gesture moving from the screen edge inward.</summary>
+	/// <summary>A <see cref="UIKit.UIPanGestureRecognizer" /> that recognizes APanning gesture moving from the screen edge inward.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIScreenEdgePanGestureRecognizer_class/index.html">Apple documentation for <c>UIScreenEdgePanGestureRecognizer</c></related>
 	[NoTV]
@@ -13257,7 +13257,7 @@ namespace UIKit {
 		// manually bound (const fields) in monotouch.dll - unlike the newer fields (static properties)
 
 		/// <summary>A string indicating the type of media being picked.</summary>
-		///         <value>An array that indicates the media types that are to be accessed by the media picker controller.</value>
+		///         <value>An array that indicates the media types that are to be accessed by the mediAPicker controller.</value>
 		///         <remarks>To be added.</remarks>
 		[Field ("UIImagePickerControllerMediaType")]
 		NSString MediaType { get; }
@@ -13283,7 +13283,7 @@ namespace UIKit {
 		NSString CropRect { get; }
 
 		/// <summary>The filesystem URL for a movie.</summary>
-		///         <value>String that indicates the URL that is to be accessed by the media picker controller.</value>
+		///         <value>String that indicates the URL that is to be accessed by the mediAPicker controller.</value>
 		///         <remarks>To be added.</remarks>
 		[Field ("UIImagePickerControllerMediaURL")]
 		NSString MediaURL { get; }
@@ -13338,7 +13338,7 @@ namespace UIKit {
 	interface UIImagePickerControllerDelegate {
 		/// <param name="picker">To be added.</param>
 		/// <param name="info">To be added.</param>
-		/// <summary>Indicates that the user has picked a picture or movie.</summary>
+		/// <summary>Indicates that the user has picked APicture or movie.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("imagePickerController:didFinishPickingMediaWithInfo:"), EventArgs ("UIImagePickerMediaPicked", XmlDocs = """
 			<summary>Event raised by the object.</summary>
@@ -14855,7 +14855,7 @@ namespace UIKit {
 		void SetObjects (INSItemProviderWriting [] objects, bool localOnly, [NullAllowed] NSDate expirationDate);
 	}
 
-	/// <summary>Constants that identify the name of a pasteboard.</summary>
+	/// <summary>Constants that identify the name of APasteboard.</summary>
 	[NoTV]
 	[MacCatalyst (13, 1)]
 	[Static]
@@ -15085,7 +15085,7 @@ namespace UIKit {
 		NSAttributedString GetAttributedTitle (UIPickerView pickerView, nint row, nint component);
 	}
 
-	/// <summary>Allows accessibility hint and label to be set in a picker view.</summary>
+	/// <summary>Allows accessibility hint and label to be set in APicker view.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIPickerViewAccessibilityDelegate_Protocol/index.html">Apple documentation for <c>UIPickerViewAccessibilityDelegate</c></related>
 	[NoTV]
@@ -15973,7 +15973,7 @@ namespace UIKit {
 		[NullAllowed, Export ("focusedItem", ArgumentSemantic.Weak)]
 		IUIFocusItem FocusedItem { get; }
 
-		/// <summary>Gets a Boolean value that tells whether a part of the screen is being captured, mirrored, or transmitted via AriPlay.</summary>
+		/// <summary>Gets a Boolean value that tells whether APart of the screen is being captured, mirrored, or transmitted via AriPlay.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 17, 2, message: "Use 'UITraitCollection.SceneCaptureState' property instead.")]
@@ -17429,13 +17429,13 @@ namespace UIKit {
 
 		/// <param name="title">The title to set.</param>
 		/// <param name="segment">The segment index.</param>
-		/// <summary>Set a title for a particular segment.</summary>
+		/// <summary>Set a title for AParticular segment.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("setTitle:forSegmentAtIndex:")]
 		void SetTitle (string title, nint segment);
 
 		/// <param name="segment">The segment index to return the title for.</param>
-		/// <summary>Allows the title for a particular segment to be retrieved.</summary>
+		/// <summary>Allows the title for AParticular segment to be retrieved.</summary>
 		/// <returns>The title for a given segment</returns>
 		/// <remarks>Returns null if a title has not been set.</remarks>
 		[Export ("titleForSegmentAtIndex:")]
@@ -17444,13 +17444,13 @@ namespace UIKit {
 
 		/// <param name="image">The image to set.</param>
 		/// <param name="segment">The segment index.</param>
-		/// <summary>Set an image for a particular segment.</summary>
+		/// <summary>Set an image for AParticular segment.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("setImage:forSegmentAtIndex:")]
 		void SetImage (UIImage image, nint segment);
 
 		/// <param name="segment">The segment to return the image for.</param>
-		/// <summary>Retrieves the image used in a particular segment</summary>
+		/// <summary>Retrieves the image used in AParticular segment</summary>
 		/// <returns>The image for the specified segment.</returns>
 		/// <remarks>The segment indices start at 0. If a segment index is specified beyond the upper range of segments in the control, the image of the segment at the upper range will be returned.</remarks>
 		[Export ("imageForSegmentAtIndex:")]
@@ -17458,13 +17458,13 @@ namespace UIKit {
 
 		/// <param name="width">The segment width to set..</param>
 		/// <param name="segment">The segment index..</param>
-		/// <summary>Sets the width for a particular segment.</summary>
+		/// <summary>Sets the width for AParticular segment.</summary>
 		/// <remarks>The default value of 0.0 will cause the segment to be automatically sized.</remarks>
 		[Export ("setWidth:forSegmentAtIndex:")]
 		void SetWidth (nfloat width, nint segment);
 
 		/// <param name="segment">The index of the segment.</param>
-		/// <summary>Returns the with of a particular segment.</summary>
+		/// <summary>Returns the with of AParticular segment.</summary>
 		/// <returns>The segment width.</returns>
 		/// <remarks>If the value is 0.0, the segmented control will automatically sizes the segment.</remarks>
 		[Export ("widthForSegmentAtIndex:")]
@@ -17492,7 +17492,7 @@ namespace UIKit {
 		void SetEnabled (bool enabled, nint segment);
 
 		/// <param name="segment">The index of the segment.</param>
-		/// <summary>Returns if a particular segment is enabled.</summary>
+		/// <summary>Returns if AParticular segment is enabled.</summary>
 		/// <returns>Returns true if the segment is enabled.</returns>
 		/// <remarks>Segments are enabled by default.</remarks>
 		[Export ("isEnabledForSegmentAtIndex:")]
@@ -22098,7 +22098,7 @@ namespace UIKit {
 		///         <value>
 		///         </value>
 		///         <remarks>
-		///           <para>This property is associated with the <see cref="UIKit.UIView.IntrinsicContentSize" /> method. This value indicates that the <see cref="UIKit.UIView" /> has no natural size in a particular dimension.</para>
+		///           <para>This property is associated with the <see cref="UIKit.UIView.IntrinsicContentSize" /> method. This value indicates that the <see cref="UIKit.UIView" /> has no natural size in AParticular dimension.</para>
 		///         </remarks>
 		[Field ("UIViewNoIntrinsicMetric")]
 		nfloat NoIntrinsicMetric { get; }
@@ -24599,7 +24599,7 @@ namespace UIKit {
 		[Field ("UITextContentTypeNameSuffix")]
 		NSString NameSuffix { get; }
 
-		/// <summary>Indicates a text field that holds a preferred name.</summary>
+		/// <summary>Indicates a text field that holds APreferred name.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Field ("UITextContentTypeNickname")]
@@ -24617,7 +24617,7 @@ namespace UIKit {
 		[Field ("UITextContentTypeOrganizationName")]
 		NSString OrganizationName { get; }
 
-		/// <summary>Indicates a text field that holds a precise location (such as an address, latitude and longitude coordinates, or a named point of interest).</summary>
+		/// <summary>Indicates a text field that holds APrecise location (such as an address, latitude and longitude coordinates, or a named point of interest).</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Field ("UITextContentTypeLocation")]
@@ -24671,7 +24671,7 @@ namespace UIKit {
 		[Field ("UITextContentTypeCountryName")]
 		NSString CountryName { get; }
 
-		/// <summary>Indicates a text field that holds a postal code.</summary>
+		/// <summary>Indicates a text field that holds APostal code.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Field ("UITextContentTypePostalCode")]
@@ -25645,7 +25645,7 @@ namespace UIKit {
 		void WillReposition (UIPopoverController popoverController, ref CGRect rect, ref UIView view);
 	}
 
-	/// <summary>Manages the user experience of a popover. </summary>
+	/// <summary>Manages the user experience of APopover. </summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIPopoverPresentationController_class/index.html">Apple documentation for <c>UIPopoverPresentationController</c></related>
 	[NoTV]
@@ -25884,7 +25884,7 @@ namespace UIKit {
 		UITextInputMode [] ActiveInputModes { get; }
 	}
 
-	/// <summary>Information about a printer.</summary>
+	/// <summary>Information about APrinter.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIPrinter_class/index.html">Apple documentation for <c>UIPrinter</c></related>
 	[NoTV]
@@ -25932,7 +25932,7 @@ namespace UIKit {
 		void ContactPrinter (UIPrinterContactPrinterHandler completionHandler);
 	}
 
-	/// <summary>Presents a standard interface for selecting a printer.</summary>
+	/// <summary>Presents a standard interface for selecting APrinter.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIPrinterPickerController_class/index.html">Apple documentation for <c>UIPrinterPickerController</c></related>
 	[NoTV]
@@ -26028,7 +26028,7 @@ namespace UIKit {
 
 	interface IUIPrinterPickerControllerDelegate { }
 
-	/// <summary>Delegate object for a <see cref="UIKit.UIPrinterPickerController" />. Defines events relating to the presentation and dismissal of the controller, and a method for when a printer has been selected.</summary>
+	/// <summary>Delegate object for a <see cref="UIKit.UIPrinterPickerController" />. Defines events relating to the presentation and dismissal of the controller, and a method for when APrinter has been selected.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIPrinterPickerControllerDelegate_protocol/index.html">Apple documentation for <c>UIPrinterPickerControllerDelegate</c></related>
 	[NoTV]
@@ -26077,13 +26077,13 @@ namespace UIKit {
 		void DidDismiss (UIPrinterPickerController printerPickerController);
 
 		/// <param name="printerPickerController">The printer picker controller that is being displayed.</param>
-		/// <summary>The <paramref name="printerPickerController" /> selected a printer.</summary>
+		/// <summary>The <paramref name="printerPickerController" /> selected APrinter.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("printerPickerControllerDidSelectPrinter:")]
 		void DidSelectPrinter (UIPrinterPickerController printerPickerController);
 	}
 
-	/// <summary>Paper size and printing region for a print job.</summary>
+	/// <summary>Paper size and printing region for APrint job.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIPrintPaper_Class/index.html">Apple documentation for <c>UIPrintPaper</c></related>
 	[NoTV]
@@ -26210,7 +26210,7 @@ namespace UIKit {
 
 		/// <param name="printInteractionController">To be added.</param>
 		/// <param name="paperList">To be added.</param>
-		/// <summary>Retrieves an object holding the paper size and printing area to use for a printing job.</summary>
+		/// <summary>Retrieves an object holding the paper size and printing area to use for APrinting job.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		[EventArgs ("", XmlDocs = """
@@ -26305,7 +26305,7 @@ namespace UIKit {
 		UIPrinterCutterBehavior ChooseCutterBehavior (UIPrintInteractionController printInteractionController, NSNumber [] availableBehaviors);
 	}
 
-	/// <summary>A delegate executed after printing completes or after a printing error occurs.</summary>
+	/// <summary>A delegate executed after printing completes or after APrinting error occurs.</summary>
 	delegate void UIPrintInteractionCompletionHandler ([NullAllowed] UIPrintInteractionController printInteractionController, bool completed, [NullAllowed] NSError error);
 
 	/// <include file="../docs/api/UIKit/UIPrintInteractionController.xml" path="/Documentation/Docs[@DocId='T:UIKit.UIPrintInteractionController']/*" />
@@ -28237,7 +28237,7 @@ namespace UIKit {
 		/// <param name="previewInteraction">To be added.</param>
 		/// <param name="transitionProgress">To be added.</param>
 		/// <param name="ended">To be added.</param>
-		/// <summary>The system calls this method repeatedly during the commit phase of a preview interaction.</summary>
+		/// <summary>The system calls this method repeatedly during the commit phase of APreview interaction.</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("previewInteraction:didUpdateCommitTransition:ended:")]
 		[EventArgs ("NSPreviewInteractionPreviewUpdate", XmlDocs = """
@@ -28295,7 +28295,7 @@ namespace UIKit {
 		[Export ("setNeedsFocusUpdate")]
 		void SetNeedsFocusUpdate ();
 
-		/// <summary>If any focus environment has a pending update, this method forces an immediate focus update. Unlike <see cref="UIKit.IUIFocusEnvironment.SetNeedsFocusUpdate" />, this method may be called by any <see cref="UIKit.IUIFocusEnvironment" />, whether it currently contains focus or not.</summary>
+		/// <summary>If any focus environment has APending update, this method forces an immediate focus update. Unlike <see cref="UIKit.IUIFocusEnvironment.SetNeedsFocusUpdate" />, this method may be called by any <see cref="UIKit.IUIFocusEnvironment" />, whether it currently contains focus or not.</summary>
 		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("updateFocusIfNeeded")]
@@ -28630,7 +28630,7 @@ namespace UIKit {
 		UIDragItem [] GetItemsForBeginningSession (UIDragInteraction interaction, IUIDragSession session);
 
 		/// <param name="interaction">The interaction that is making the request.</param>
-		/// <param name="item">The item for which to get a preview.</param>
+		/// <param name="item">The item for which to get APreview.</param>
 		/// <param name="session">The drag session.</param>
 		/// <summary>Method that is called to get a targeted drag preview for animating the lift.</summary>
 		/// <returns>To be added.</returns>
@@ -28737,7 +28737,7 @@ namespace UIKit {
 		void WillAddItems (UIDragInteraction interaction, IUIDragSession session, UIDragItem [] items, UIDragInteraction addingInteraction);
 
 		/// <param name="interaction">The interaction that is making the request.</param>
-		/// <param name="item">The item for which to get a preview.</param>
+		/// <param name="item">The item for which to get APreview.</param>
 		/// <param name="defaultPreview">The default drag preview for the item.</param>
 		/// <summary>Method that is called for each visible item in a drag session when the user cancels the drag session.</summary>
 		/// <returns>To be added.</returns>
@@ -28831,7 +28831,7 @@ namespace UIKit {
 		void SessionDidEnd (UIDropInteraction interaction, IUIDropSession session);
 
 		/// <param name="interaction">The interaction that is making the request.</param>
-		/// <param name="item">The item for which to get a preview.</param>
+		/// <param name="item">The item for which to get APreview.</param>
 		/// <param name="defaultPreview">The default preview for the item.</param>
 		/// <summary>Method that is called for each drag item to allow the developer to provide a custom preview.</summary>
 		/// <returns>To be added.</returns>
@@ -28850,7 +28850,7 @@ namespace UIKit {
 		void WillAnimateDrop (UIDropInteraction interaction, UIDragItem item, IUIDragAnimating animator);
 	}
 
-	/// <summary>Represents a proposed response to a drop operation.</summary>
+	/// <summary>Represents AProposed response to a drop operation.</summary>
 	[NoTV]
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -29643,7 +29643,7 @@ namespace UIKit {
 		/// <param name="textDraggableView">The originating view.</param>
 		/// <param name="item">The item for which to get a lift preview.</param>
 		/// <param name="session">The drag session.</param>
-		/// <summary>Method that is called to get a preview for the item that is lifting.</summary>
+		/// <summary>Method that is called to get APreview for the item that is lifting.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		[Export ("textDraggableView:dragPreviewForLiftingItem:session:")]
@@ -29780,7 +29780,7 @@ namespace UIKit {
 		UITextDropEditability WillBecomeEditable (IUITextDroppable textDroppableView, IUITextDropRequest drop);
 
 		/// <param name="textDroppableView">The receiving view.</param>
-		/// <param name="drop">The drop request for which to get a proposal.</param>
+		/// <param name="drop">The drop request for which to get AProposal.</param>
 		/// <summary>Method that is called to get the drop proposal.</summary>
 		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>

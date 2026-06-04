@@ -24,7 +24,6 @@ namespace VideoToolbox {
 			/* CFArrayRef* */ IntPtr* listOfVideoEncodersOut);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		static public VTVideoEncoder []? GetEncoderList ()
 		{
 			IntPtr array;
@@ -36,20 +35,15 @@ namespace VideoToolbox {
 			return NSArray.DictionaryArrayFromHandleDropNullElements<VTVideoEncoder> (array, dict => new VTVideoEncoder (dict), releaseHandle: true);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the codec type.</summary>
 		public int CodecType { get; private set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the codec name.</summary>
 		public string? CodecName { get; private set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the display name.</summary>
 		public string? DisplayName { get; private set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the encoder id.</summary>
 		public string? EncoderId { get; private set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the encoder name.</summary>
 		public string? EncoderName { get; private set; }
 
 		[SupportedOSPlatform ("macos")]
@@ -187,8 +181,7 @@ namespace VideoToolbox {
 		///         <param name="height">The height.</param>
 		///         <param name="codecType">The codec type.</param>
 		///         <param name="encoderSpecification">The encoder specification.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets supported encoder properties.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
@@ -221,17 +214,15 @@ namespace VideoToolbox {
 		}
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the v t supported encoder properties.</summary>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	public class VTSupportedEncoderProperties {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the encoder id.</summary>
 		public string? EncoderId { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the supported properties.</summary>
 		public NSDictionary? SupportedProperties { get; set; }
 	}
 }

@@ -574,7 +574,7 @@ namespace AuthenticationServices {
 		void PrepareInterfaceForGeneratePasswordsRequest (ASGeneratePasswordsRequest generatePasswordsRequest);
 	}
 
-	/// <summary>Associates a username and a password.</summary>
+	/// <summary>Associates a username and APassword.</summary>
 	/// <remarks>To be added.</remarks>
 	[TV (13, 0)]
 	[MacCatalyst (13, 1)]

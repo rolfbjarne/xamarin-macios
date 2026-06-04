@@ -9,7 +9,7 @@
 namespace Contacts {
 	public partial class CNContactStore {
 
-		/// <typeparam name="T">To be added.</typeparam>
+		/// <typeparam name="T">The type of contact to retrieve.</typeparam>
 		///         <param name="identifier">The identifier to use.</param>
 		///         <param name="keys">The keys.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
@@ -21,7 +21,7 @@ namespace Contacts {
 				return GetUnifiedContact (identifier, array, out error);
 		}
 
-		/// <typeparam name="T">To be added.</typeparam>
+		/// <typeparam name="T">The type of contacts to retrieve.</typeparam>
 		///         <param name="predicate">The predicate.</param>
 		///         <param name="keys">The keys.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
@@ -34,7 +34,7 @@ namespace Contacts {
 		}
 
 #if MONOMAC
-		/// <typeparam name="T">To be added.</typeparam>
+		/// <typeparam name="T">The type of the me contact to retrieve.</typeparam>
 		///         <param name="keys">The keys.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>Gets unified me contact.</summary>

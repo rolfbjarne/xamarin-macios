@@ -41,7 +41,7 @@ namespace Foundation {
 		}
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>Provides a dictionary representation of a script command description.</summary>
 	public partial class NSScriptCommandDescriptionDictionary {
 
 		/// <param name="arg">The arg.</param>

@@ -28,7 +28,7 @@ namespace Foundation {
 	/// <summary>Attribute applied to interfaces that represent Objective-C protocols.</summary>
 	///     <remarks>
 	///       <para>
-	///         Xamarin.iOS will export any interfaces with this attribute as a protocol to Objective-C,
+	///         Xamarin.iOS will export any interfaces with this attribute as AProtocol to Objective-C,
 	///         and any classes that implement these interfaces will be marked as implementing
 	///         the corresponding protocol when exported to Objective-C.
 	///       </para>
@@ -64,7 +64,7 @@ namespace Foundation {
 		///         <value>To be added.</value>
 		///         <remarks>Objective-C protocols are bound as interfaces in managed code, but sometimes a class is needed (in certain
 		///           scenarios our Objective-C-managed bridge have the pointer to an instance of a native object and we only know that it
-		///           implements a particular protocol; in that case we might need a managed type that can wrap this instance, because the
+		///           implements AParticular protocol; in that case we might need a managed type that can wrap this instance, because the
 		///           actual type of the object may not formally implement the interface).</remarks>
 		public Type? WrapperType { get; set; }
 		/// <summary>The name of the protocol.</summary>

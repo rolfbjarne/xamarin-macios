@@ -16,7 +16,6 @@ namespace GameController {
 	// GCExtendedGamepadSnapshot.h
 	// float_t are 4 bytes (at least for ARM64)
 	/// <summary>The state of a <see cref="GameController.GCExtendedGamepad" />. Produced by <see cref="GameController.GCExtendedGamepadSnapshot.TryGetSnapShotData(Foundation.NSData,out GameController.GCExtendedGamepadSnapShotDataV100)" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
@@ -31,61 +30,45 @@ namespace GameController {
 
 		// Standard information
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public ushort /* uint16_t */ Version; // 0x0100
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public ushort /* uint16_t */ Size;    // sizeof(GCExtendedGamepadSnapShotDataV100) or larger
 
 		// Extended gamepad data
 		// Axes in the range [-1.0, 1.0]
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ DPadX;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ DPadY;
 
 		// Buttons in the range [0.0, 1.0]
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ ButtonA;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ ButtonB;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ ButtonX;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ ButtonY;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ LeftShoulder;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ RightShoulder;
 
 		// Axes in the range [-1.0, 1.0]
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ LeftThumbstickX;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ LeftThumbstickY;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ RightThumbstickX;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ RightThumbstickY;
 
 		// Buttons in the range [0.0, 1.0]
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ LeftTrigger;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ RightTrigger;
 
 		// radar: https://trello.com/c/7FoGTORD (GCExtendedGamepadSnapShotDataV100 struct size / alignment not backward compatible)
@@ -106,7 +89,6 @@ namespace GameController {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public NSData? ToNSData ()
 		{
 			unsafe {
@@ -119,7 +101,6 @@ namespace GameController {
 	}
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
@@ -134,61 +115,45 @@ namespace GameController {
 
 		// Standard information
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public ushort /* uint16_t */ Version;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public ushort /* uint16_t */ Size;
 
 		// Extended gamepad data
 		// Axes in the range [-1.0, 1.0]
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ DPadX;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ DPadY;
 
 		// Buttons in the range [0.0, 1.0]
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ ButtonA;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ ButtonB;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ ButtonX;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ ButtonY;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ LeftShoulder;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ RightShoulder;
 
 		// Axes in the range [-1.0, 1.0]
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ LeftThumbstickX;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ LeftThumbstickY;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ RightThumbstickX;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ RightThumbstickY;
 
 		// Buttons in the range [0.0, 1.0]
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ LeftTrigger;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public float /* float_t = float */ RightTrigger;
 
 		[SupportedOSPlatform ("ios")]
@@ -248,7 +213,6 @@ namespace GameController {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -375,11 +339,10 @@ namespace GameController {
 #endif
 			/* NSData * __nullable */ IntPtr data);
 
-		/// <param name="data">To be added.</param>
-		/// <param name="snapshotData">To be added.</param>
+		/// <param name="data">The data to use.</param>
+		/// <param name="snapshotData">The snapshot data.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -400,11 +363,10 @@ namespace GameController {
 			}
 		}
 
-		/// <param name="data">To be added.</param>
-		///         <param name="snapshotData">To be added.</param>
+		/// <param name="data">The data to use.</param>
+		///         <param name="snapshotData">The snapshot data.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]

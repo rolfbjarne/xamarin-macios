@@ -41,7 +41,7 @@ namespace Accounts {
 		UpdatingNonexistentAccount,
 		/// <summary>Indicates that the client did not have a valid bundle identifier.</summary>
 		InvalidClientBundleID,      // in the header file, but not in the API diff
-		/// <summary>Indicates that the operation was denied by a plug-in.</summary>
+		/// <summary>Indicates that the operation was denied by APlug-in.</summary>
 		DeniedByPlugin,
 		/// <summary>Indicates that Core Data failed to save the account.</summary>
 		CoreDataSaveFailed,

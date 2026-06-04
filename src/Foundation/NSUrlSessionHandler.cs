@@ -145,13 +145,13 @@ namespace Foundation {
 			return config;
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="NSUrlSessionHandler" /> instance.</summary>
 		public NSUrlSessionHandler () : this (CreateConfig ())
 		{
 		}
 
 		/// <param name="configuration">The configuration to use.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSUrlSessionHandler" /> instance.</summary>
 		[CLSCompliant (false)]
 		public NSUrlSessionHandler (NSUrlSessionConfiguration configuration)
 		{
@@ -213,8 +213,7 @@ namespace Foundation {
 
 		bool disableCaching;
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the disable caching.</summary>
 		public bool DisableCaching {
 			get {
 				return disableCaching;
@@ -227,8 +226,7 @@ namespace Foundation {
 
 		bool allowAutoRedirect;
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the allow auto redirect.</summary>
 		public bool AllowAutoRedirect {
 			get {
 				return allowAutoRedirect;
@@ -253,8 +251,7 @@ namespace Foundation {
 
 		ICredentials? credentials;
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the credentials.</summary>
 		public ICredentials? Credentials {
 			get {
 				return credentials;
@@ -446,7 +443,6 @@ namespace Foundation {
 		/// <param name="request">The request.</param>
 		///         <param name="cancellationToken">A cancellation token.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		protected override async Task<HttpResponseMessage> SendAsync (HttpRequestMessage request, CancellationToken cancellationToken)
 		{
 			Volatile.Write (ref sentRequest, true);

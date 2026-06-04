@@ -27,7 +27,7 @@ using System.IO;
 
 namespace ObjCRuntime {
 
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies that a framework is required by the assembly.</summary>
 	[AttributeUsage (AttributeTargets.Assembly, AllowMultiple = true)]
 	public class RequiredFrameworkAttribute : Attribute {
 		/// <summary>Gets or sets the name.</summary>

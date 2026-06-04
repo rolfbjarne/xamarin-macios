@@ -131,14 +131,14 @@ namespace AudioToolbox {
 #endif
 		/// <summary>Enhanced AC-3.</summary>
 		EnhancedAC3 = 0x65632d33, // 'ec-3'
-		/// <summary>To be added.</summary>
+		/// <summary>Flac.</summary>
 		Flac = 0x666c6163, // 'flac'
 		[SupportedOSPlatform ("ios13.0")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos13.0")]
 		[SupportedOSPlatform ("maccatalyst")]
 		LatmInLoas = 0x6c6f6173, // 'loas'
-		/// <summary>To be added.</summary>
+		/// <summary>Opus.</summary>
 		Opus = 0x6f707573, // 'opus'
 		/// <summary>Apple Positional Audio Codec.</summary>
 		[SupportedOSPlatform ("ios18.0")]
@@ -180,13 +180,13 @@ namespace AudioToolbox {
 		/// <summary>Use this value to indicate that no flags are set.   Use instead of the value zero, as that represents that no flag state is set.</summary>
 		FlagsAreAllClear = unchecked((uint) (1 << 31)),
 
-		/// <summary>To be added.</summary>
+		/// <summary>Linear P C M Is Float.</summary>
 		LinearPCMIsFloat = (1 << 0),     // 0x1
-		/// <summary>To be added.</summary>
+		/// <summary>Linear P C M Is Big Endian.</summary>
 		LinearPCMIsBigEndian = (1 << 1),     // 0x2
-		/// <summary>To be added.</summary>
+		/// <summary>Linear P C M Is Signed Integer.</summary>
 		LinearPCMIsSignedInteger = (1 << 2),     // 0x4
-		/// <summary>To be added.</summary>
+		/// <summary>Linear P C M Is Packed.</summary>
 		LinearPCMIsPacked = (1 << 3),     // 0x8
 		/// <summary>Linear PCM audio format: if set, sample bits are on the high bits.</summary>
 		LinearPCMIsAlignedHigh = (1 << 4),     // 0x10
@@ -194,12 +194,12 @@ namespace AudioToolbox {
 		///         channel, otherwise the data for the left and right channels is
 		///         interleaved in the same buffer.</summary>
 		LinearPCMIsNonInterleaved = (1 << 5),     // 0x20
-		/// <summary>To be added.</summary>
+		/// <summary>Linear P C M Is Non Mixable.</summary>
 		LinearPCMIsNonMixable = (1 << 6),     // 0x40
 
-		/// <summary>To be added.</summary>
+		/// <summary>Linear P C M Sample Fraction Shift.</summary>
 		LinearPCMSampleFractionShift = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Linear P C M Sample Fraction Mask.</summary>
 		LinearPCMSampleFractionMask = 0x3F << (int) LinearPCMSampleFractionShift,
 		/// <summary>Linear PCM audio format: all flags are set to zero.   Use this instead of zero, which means that no flags are configured.</summary>
 		LinearPCMFlagsAreAllClear = FlagsAreAllClear,
@@ -213,9 +213,9 @@ namespace AudioToolbox {
 		/// <summary>Apple Lossless data, native endian, signed integers, 32 bits.</summary>
 		AppleLossless32BitSourceData = 4,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Caf Is Float.</summary>
 		CafIsFloat = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>Caf Is Little Endian.</summary>
 		CafIsLittleEndian = (1 << 1),
 	}
 
@@ -247,8 +247,7 @@ namespace AudioToolbox {
 		///         <remarks>
 		///         </remarks>
 		public AudioFormatFlags FormatFlags;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The bytes per packet.</summary>
 		public int BytesPerPacket; // uint
 		/// <summary>Number of frames per audio packet.</summary>
 		///         <remarks>
@@ -282,7 +281,6 @@ namespace AudioToolbox {
 		const AudioFormatFlags AudioFormatFlagIsBigEndian = 0;
 
 		/// <summary>Developers should not use this deprecated field. Canonical is no longer encouraged, since fixed-point no longer provides APerformance advantage over floating point. 'AudioFormatFlagsNativeFloatPacked' is preferred instead.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -295,12 +293,10 @@ namespace AudioToolbox {
 			AudioFormatFlags.IsPacked | AudioFormatFlags.IsNonInterleaved | (AudioFormatFlags) (AudioUnitSampleFractionBits << (int) AudioFormatFlags.LinearPCMSampleFractionShift);
 
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>See documentation for details.</summary>
 		public static readonly AudioFormatFlags AudioFormatFlagsNativeFloat = AudioFormatFlags.IsFloat | AudioFormatFlags.IsPacked | (BitConverter.IsLittleEndian ? 0 : AudioFormatFlags.IsBigEndian);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>See documentation for details.</summary>
 		public static readonly AudioFormatFlags AudioFormatFlagsAudioUnitNativeFloat = AudioFormatFlags.IsFloat | AudioFormatFlags.IsPacked | (BitConverter.IsLittleEndian ? 0 : AudioFormatFlags.IsBigEndian) | AudioFormatFlags.IsNonInterleaved;
 
 		/// <param name="formatType">Format type for the AudioStreamBasicDescription.</param>
@@ -337,9 +333,8 @@ namespace AudioToolbox {
 			return desc;
 		}
 
-		/// <param name="format">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="format">The format.</param>
+		/// <summary>See documentation for details.</summary>
 		public unsafe static AudioChannelLayoutTag []? GetAvailableEncodeChannelLayoutTags (AudioStreamBasicDescription format)
 		{
 			var type_size = sizeof (AudioStreamBasicDescription);
@@ -357,9 +352,8 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <param name="format">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="format">The format.</param>
+		/// <summary>See documentation for details.</summary>
 		public unsafe static int []? GetAvailableEncodeNumberChannels (AudioStreamBasicDescription format)
 		{
 			uint size;
@@ -376,9 +370,8 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <param name="magicCookie">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="magicCookie">The magicCookie.</param>
+		/// <summary>See documentation for details.</summary>
 		public unsafe AudioFormat []? GetOutputFormatList (byte []? magicCookie = null)
 		{
 			var afi = new AudioFormatInfo ();
@@ -402,9 +395,8 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <param name="magicCookie">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="magicCookie">The magicCookie.</param>
+		/// <summary>See documentation for details.</summary>
 		public unsafe AudioFormat []? GetFormatList (byte [] magicCookie)
 		{
 			if (magicCookie is null)
@@ -436,9 +428,8 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <param name="format">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="format">The format.</param>
+		/// <summary>Get Format Info.</summary>
 		public static AudioFormatError GetFormatInfo (ref AudioStreamBasicDescription format)
 		{
 			unsafe {
@@ -448,8 +439,7 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the format name.</summary>
 		public unsafe string? FormatName {
 			get {
 				IntPtr ptr;
@@ -464,8 +454,7 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the is encrypted.</summary>
 		public unsafe bool IsEncrypted {
 			get {
 				uint data;
@@ -480,8 +469,7 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the is externally framed.</summary>
 		public unsafe bool IsExternallyFramed {
 			get {
 				uint data;
@@ -496,8 +484,7 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the is variable bitrate.</summary>
 		public unsafe bool IsVariableBitrate {
 			get {
 				uint data;
@@ -605,90 +592,88 @@ namespace AudioToolbox {
 	}
 
 	/// <summary>Flags for the <see cref="AudioToolbox.AudioChannelDescription.Flags" /> property.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum AudioChannelFlags : uint { // UInt32 in AudioPanningInfo -- AudioFormat.h
-		/// <summary>To be added.</summary>
+		/// <summary>All Off.</summary>
 		AllOff = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Rectangular Coordinates.</summary>
 		RectangularCoordinates = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Spherical Coordinates.</summary>
 		SphericalCoordinates = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Meters.</summary>
 		Meters = 1 << 2,
 	}
 
 	/// <summary>An enumeration whose values specify the <see cref="AudioToolbox.AudioChannelDescription.Label" /> property.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum AudioChannelLabel : int { // UInt32 AudioChannelLabel
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown.</summary>
 		Unknown = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Unused.</summary>
 		Unused = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Use Coordinates.</summary>
 		UseCoordinates = 100,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Left.</summary>
 		Left = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Right.</summary>
 		Right = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Center.</summary>
 		Center = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>L F E Screen.</summary>
 		LFEScreen = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Left Surround.</summary>
 		LeftSurround = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Surround.</summary>
 		RightSurround = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Left Center.</summary>
 		LeftCenter = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Center.</summary>
 		RightCenter = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Center Surround.</summary>
 		CenterSurround = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Left Surround Direct.</summary>
 		LeftSurroundDirect = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Surround Direct.</summary>
 		RightSurroundDirect = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Top Center Surround.</summary>
 		TopCenterSurround = 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Vertical Height Left.</summary>
 		VerticalHeightLeft = 13,
-		/// <summary>To be added.</summary>
+		/// <summary>Vertical Height Center.</summary>
 		VerticalHeightCenter = 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Vertical Height Right.</summary>
 		VerticalHeightRight = 15,
-		/// <summary>To be added.</summary>
+		/// <summary>Top Back Left.</summary>
 		TopBackLeft = 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Top Back Center.</summary>
 		TopBackCenter = 17,
-		/// <summary>To be added.</summary>
+		/// <summary>Top Back Right.</summary>
 		TopBackRight = 18,
-		/// <summary>To be added.</summary>
+		/// <summary>Rear Surround Left.</summary>
 		RearSurroundLeft = 33,
-		/// <summary>To be added.</summary>
+		/// <summary>Rear Surround Right.</summary>
 		RearSurroundRight = 34,
-		/// <summary>To be added.</summary>
+		/// <summary>Left Wide.</summary>
 		LeftWide = 35,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Wide.</summary>
 		RightWide = 36,
-		/// <summary>To be added.</summary>
+		/// <summary>L F E2.</summary>
 		LFE2 = 37,
-		/// <summary>To be added.</summary>
+		/// <summary>Left Total.</summary>
 		LeftTotal = 38,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Total.</summary>
 		RightTotal = 39,
-		/// <summary>To be added.</summary>
+		/// <summary>Hearing Impaired.</summary>
 		HearingImpaired = 40,
-		/// <summary>To be added.</summary>
+		/// <summary>Narration.</summary>
 		Narration = 41,
-		/// <summary>To be added.</summary>
+		/// <summary>Mono.</summary>
 		Mono = 42,
-		/// <summary>To be added.</summary>
+		/// <summary>Dialog Centric Mix.</summary>
 		DialogCentricMix = 43,
-		/// <summary>To be added.</summary>
+		/// <summary>Center Surround Direct.</summary>
 		CenterSurroundDirect = 44,
-		/// <summary>To be added.</summary>
+		/// <summary>Haptic.</summary>
 		Haptic = 45,
 
 		LeftTopFront = VerticalHeightLeft,
@@ -703,139 +688,137 @@ namespace AudioToolbox {
 		RightTopRear = 54,
 
 		// first order ambisonic channels
-		/// <summary>To be added.</summary>
+		/// <summary>Ambisonic_ W.</summary>
 		Ambisonic_W = 200,
-		/// <summary>To be added.</summary>
+		/// <summary>Ambisonic_ X.</summary>
 		Ambisonic_X = 201,
-		/// <summary>To be added.</summary>
+		/// <summary>Ambisonic_ Y.</summary>
 		Ambisonic_Y = 202,
-		/// <summary>To be added.</summary>
+		/// <summary>Ambisonic_ Z.</summary>
 		Ambisonic_Z = 203,
 
 		// Mid/Side Recording
-		/// <summary>To be added.</summary>
+		/// <summary>M S_ Mid.</summary>
 		MS_Mid = 204,
-		/// <summary>To be added.</summary>
+		/// <summary>M S_ Side.</summary>
 		MS_Side = 205,
 
 		// X-Y Recording
-		/// <summary>To be added.</summary>
+		/// <summary>X Y_ X.</summary>
 		XY_X = 206,
-		/// <summary>To be added.</summary>
+		/// <summary>X Y_ Y.</summary>
 		XY_Y = 207,
 
 		// Binaural Recording
-		/// <summary>To be added.</summary>
+		/// <summary>Binaural Left.</summary>
 		BinauralLeft = 208,
-		/// <summary>To be added.</summary>
+		/// <summary>Binaural Right.</summary>
 		BinauralRight = 209,
 
 		// other
-		/// <summary>To be added.</summary>
+		/// <summary>Headphones Left.</summary>
 		HeadphonesLeft = 301,
-		/// <summary>To be added.</summary>
+		/// <summary>Headphones Right.</summary>
 		HeadphonesRight = 302,
-		/// <summary>To be added.</summary>
+		/// <summary>Click Track.</summary>
 		ClickTrack = 304,
-		/// <summary>To be added.</summary>
+		/// <summary>Foreign Language.</summary>
 		ForeignLanguage = 305,
 
 		// generic discrete channel
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete.</summary>
 		Discrete = 400,
 
 		// numbered discrete channel
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete_0.</summary>
 		Discrete_0 = (1 << 16) | 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete_1.</summary>
 		Discrete_1 = (1 << 16) | 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete_2.</summary>
 		Discrete_2 = (1 << 16) | 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete_3.</summary>
 		Discrete_3 = (1 << 16) | 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete_4.</summary>
 		Discrete_4 = (1 << 16) | 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete_5.</summary>
 		Discrete_5 = (1 << 16) | 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete_6.</summary>
 		Discrete_6 = (1 << 16) | 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete_7.</summary>
 		Discrete_7 = (1 << 16) | 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete_8.</summary>
 		Discrete_8 = (1 << 16) | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete_9.</summary>
 		Discrete_9 = (1 << 16) | 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete_10.</summary>
 		Discrete_10 = (1 << 16) | 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete_11.</summary>
 		Discrete_11 = (1 << 16) | 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete_12.</summary>
 		Discrete_12 = (1 << 16) | 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete_13.</summary>
 		Discrete_13 = (1 << 16) | 13,
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete_14.</summary>
 		Discrete_14 = (1 << 16) | 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete_15.</summary>
 		Discrete_15 = (1 << 16) | 15,
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete_65535.</summary>
 		Discrete_65535 = (1 << 16) | 65535,
 
 		// HOA ACN channels
 
 		// generic
-		/// <summary>To be added.</summary>
+		/// <summary>Hoa Acn.</summary>
 		HoaAcn = 500,
 
 		// numbered
-		/// <summary>To be added.</summary>
+		/// <summary>Hoa Acn0.</summary>
 		HoaAcn0 = (2 << 16) | 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Hoa Acn1.</summary>
 		HoaAcn1 = (2 << 16) | 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Hoa Acn2.</summary>
 		HoaAcn2 = (2 << 16) | 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Hoa Acn3.</summary>
 		HoaAcn3 = (2 << 16) | 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Hoa Acn4.</summary>
 		HoaAcn4 = (2 << 16) | 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Hoa Acn5.</summary>
 		HoaAcn5 = (2 << 16) | 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Hoa Acn6.</summary>
 		HoaAcn6 = (2 << 16) | 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Hoa Acn7.</summary>
 		HoaAcn7 = (2 << 16) | 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Hoa Acn8.</summary>
 		HoaAcn8 = (2 << 16) | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Hoa Acn9.</summary>
 		HoaAcn9 = (2 << 16) | 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Hoa Acn10.</summary>
 		HoaAcn10 = (2 << 16) | 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Hoa Acn11.</summary>
 		HoaAcn11 = (2 << 16) | 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Hoa Acn12.</summary>
 		HoaAcn12 = (2 << 16) | 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Hoa Acn13.</summary>
 		HoaAcn13 = (2 << 16) | 13,
-		/// <summary>To be added.</summary>
+		/// <summary>Hoa Acn14.</summary>
 		HoaAcn14 = (2 << 16) | 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Hoa Acn15.</summary>
 		HoaAcn15 = (2 << 16) | 15,
-		/// <summary>To be added.</summary>
+		/// <summary>Hoa Acn65024.</summary>
 		HoaAcn65024 = (2 << 16) | 65024,
 		HoaSn3d = HoaAcn0,
 		HoaN3d = (3 << 16),
 	}
 
 #if !COREBUILD
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Gets the audio channel label extensions.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public static class AudioChannelLabelExtensions {
-		/// <param name="value">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="value">The value.</param>
+		/// <summary>Is Reserved.</summary>
 		public static bool IsReserved (this AudioChannelLabel value)
 		{
 			return (uint) value >= 0xF0000000 && (uint) value <= 0xFFFFFFFE;
@@ -844,46 +827,45 @@ namespace AudioToolbox {
 #endif
 
 	/// <summary>An enumeration whose values specify constants in the <see cref="AudioToolbox.AudioChannelLayout.Bitmap" /> property.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	[NativeName ("AudioChannelBitmap")]
 	public enum AudioChannelBit : uint // UInt32 mChannelBitmap in AudioChannelLayout
 	{
-		/// <summary>To be added.</summary>
+		/// <summary>Left.</summary>
 		Left = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Right.</summary>
 		Right = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Center.</summary>
 		Center = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>L F E Screen.</summary>
 		LFEScreen = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Left Surround.</summary>
 		LeftSurround = 1 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Surround.</summary>
 		RightSurround = 1 << 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Left Center.</summary>
 		LeftCenter = 1 << 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Center.</summary>
 		RightCenter = 1 << 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Center Surround.</summary>
 		CenterSurround = 1 << 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Left Surround Direct.</summary>
 		LeftSurroundDirect = 1 << 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Right Surround Direct.</summary>
 		RightSurroundDirect = 1 << 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Top Center Surround.</summary>
 		TopCenterSurround = 1 << 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Vertical Height Left.</summary>
 		VerticalHeightLeft = 1 << 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Vertical Height Center.</summary>
 		VerticalHeightCenter = 1 << 13,
-		/// <summary>To be added.</summary>
+		/// <summary>Vertical Height Right.</summary>
 		VerticalHeightRight = 1 << 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Top Back Left.</summary>
 		TopBackLeft = 1 << 15,
-		/// <summary>To be added.</summary>
+		/// <summary>Top Back Center.</summary>
 		TopBackCenter = 1 << 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Top Back Right.</summary>
 		TopBackRight = 1 << 17,
 
 		LeftTopFront = VerticalHeightLeft,
@@ -899,26 +881,22 @@ namespace AudioToolbox {
 	}
 
 	/// <summary>Describes an Audio Channel.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AudioChannelDescription {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The label.</summary>
 		public AudioChannelLabel Label;
 		/// <summary>Determines how the coordinates should be interpreted.</summary>
-		///         <remarks>To be added.</remarks>
 		public AudioChannelFlags Flags;
 		float Coord0;
 		float Coord1;
 		float Coord2;
 #if !COREBUILD
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the coords.</summary>
 		public float [] Coords {
 			get {
 				return new float [3] { Coord0, Coord1, Coord2 };
@@ -932,8 +910,7 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the name.</summary>
 		public unsafe string? Name {
 			get {
 				IntPtr sptr;
@@ -950,8 +927,7 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the short name.</summary>
 		public unsafe string? ShortName {
 			get {
 				IntPtr sptr;
@@ -977,7 +953,6 @@ namespace AudioToolbox {
 
 		/// <summary>User visible representation.</summary>
 		///         <returns />
-		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
 			return String.Format ("[id={0} {1} - {2},{3},{4}", Label, Flags, Coords [0], Coords [1], Coords [2]);
@@ -987,276 +962,275 @@ namespace AudioToolbox {
 
 	// CoreAudioTypes.framework/Headers/CoreAudioBaseTypes.h
 	/// <summary>An enumeration whose values are valid for channel layout tags.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum AudioChannelLayoutTag : uint { // UInt32 AudioChannelLayoutTag
-		/// <summary>To be added.</summary>
+		/// <summary>Use Channel Descriptions.</summary>
 		UseChannelDescriptions = (0 << 16) | 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Use Channel Bitmap.</summary>
 		UseChannelBitmap = (1 << 16) | 0,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Mono.</summary>
 		Mono = (100 << 16) | 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Stereo.</summary>
 		Stereo = (101 << 16) | 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Stereo Headphones.</summary>
 		StereoHeadphones = (102 << 16) | 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Matrix Stereo.</summary>
 		MatrixStereo = (103 << 16) | 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Mid Side.</summary>
 		MidSide = (104 << 16) | 2,
-		/// <summary>To be added.</summary>
+		/// <summary>X Y.</summary>
 		XY = (105 << 16) | 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Binaural.</summary>
 		Binaural = (106 << 16) | 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Ambisonic_ B_ Format.</summary>
 		Ambisonic_B_Format = (107 << 16) | 4,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Quadraphonic.</summary>
 		Quadraphonic = (108 << 16) | 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Pentagonal.</summary>
 		Pentagonal = (109 << 16) | 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Hexagonal.</summary>
 		Hexagonal = (110 << 16) | 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Octagonal.</summary>
 		Octagonal = (111 << 16) | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Cube.</summary>
 		Cube = (112 << 16) | 8,
 
 
-		/// <summary>To be added.</summary>
+		/// <summary>M P E G_1_0.</summary>
 		MPEG_1_0 = Mono,
-		/// <summary>To be added.</summary>
+		/// <summary>M P E G_2_0.</summary>
 		MPEG_2_0 = Stereo,
-		/// <summary>To be added.</summary>
+		/// <summary>M P E G_3_0_ A.</summary>
 		MPEG_3_0_A = (113 << 16) | 3,
-		/// <summary>To be added.</summary>
+		/// <summary>M P E G_3_0_ B.</summary>
 		MPEG_3_0_B = (114 << 16) | 3,
-		/// <summary>To be added.</summary>
+		/// <summary>M P E G_4_0_ A.</summary>
 		MPEG_4_0_A = (115 << 16) | 4,
-		/// <summary>To be added.</summary>
+		/// <summary>M P E G_4_0_ B.</summary>
 		MPEG_4_0_B = (116 << 16) | 4,
-		/// <summary>To be added.</summary>
+		/// <summary>M P E G_5_0_ A.</summary>
 		MPEG_5_0_A = (117 << 16) | 5,
-		/// <summary>To be added.</summary>
+		/// <summary>M P E G_5_0_ B.</summary>
 		MPEG_5_0_B = (118 << 16) | 5,
-		/// <summary>To be added.</summary>
+		/// <summary>M P E G_5_0_ C.</summary>
 		MPEG_5_0_C = (119 << 16) | 5,
-		/// <summary>To be added.</summary>
+		/// <summary>M P E G_5_0_ D.</summary>
 		MPEG_5_0_D = (120 << 16) | 5,
-		/// <summary>To be added.</summary>
+		/// <summary>M P E G_5_1_ A.</summary>
 		MPEG_5_1_A = (121 << 16) | 6,
-		/// <summary>To be added.</summary>
+		/// <summary>M P E G_5_1_ B.</summary>
 		MPEG_5_1_B = (122 << 16) | 6,
-		/// <summary>To be added.</summary>
+		/// <summary>M P E G_5_1_ C.</summary>
 		MPEG_5_1_C = (123 << 16) | 6,
-		/// <summary>To be added.</summary>
+		/// <summary>M P E G_5_1_ D.</summary>
 		MPEG_5_1_D = (124 << 16) | 6,
-		/// <summary>To be added.</summary>
+		/// <summary>M P E G_6_1_ A.</summary>
 		MPEG_6_1_A = (125 << 16) | 7,
-		/// <summary>To be added.</summary>
+		/// <summary>M P E G_7_1_ A.</summary>
 		MPEG_7_1_A = (126 << 16) | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>M P E G_7_1_ B.</summary>
 		MPEG_7_1_B = (127 << 16) | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>M P E G_7_1_ C.</summary>
 		MPEG_7_1_C = (128 << 16) | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Emagic_ Default_7_1.</summary>
 		Emagic_Default_7_1 = (129 << 16) | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>S M P T E_ D T V.</summary>
 		SMPTE_DTV = (130 << 16) | 8,
 
-		/// <summary>To be added.</summary>
+		/// <summary>I T U_1_0.</summary>
 		ITU_1_0 = Mono,
-		/// <summary>To be added.</summary>
+		/// <summary>I T U_2_0.</summary>
 		ITU_2_0 = Stereo,
 
-		/// <summary>To be added.</summary>
+		/// <summary>I T U_2_1.</summary>
 		ITU_2_1 = (131 << 16) | 3,
-		/// <summary>To be added.</summary>
+		/// <summary>I T U_2_2.</summary>
 		ITU_2_2 = (132 << 16) | 4,
-		/// <summary>To be added.</summary>
+		/// <summary>I T U_3_0.</summary>
 		ITU_3_0 = MPEG_3_0_A,
-		/// <summary>To be added.</summary>
+		/// <summary>I T U_3_1.</summary>
 		ITU_3_1 = MPEG_4_0_A,
 
-		/// <summary>To be added.</summary>
+		/// <summary>I T U_3_2.</summary>
 		ITU_3_2 = MPEG_5_0_A,
-		/// <summary>To be added.</summary>
+		/// <summary>I T U_3_2_1.</summary>
 		ITU_3_2_1 = MPEG_5_1_A,
-		/// <summary>To be added.</summary>
+		/// <summary>I T U_3_4_1.</summary>
 		ITU_3_4_1 = MPEG_7_1_C,
 
 
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_0.</summary>
 		DVD_0 = Mono,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_1.</summary>
 		DVD_1 = Stereo,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_2.</summary>
 		DVD_2 = ITU_2_1,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_3.</summary>
 		DVD_3 = ITU_2_2,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_4.</summary>
 		DVD_4 = (133 << 16) | 3,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_5.</summary>
 		DVD_5 = (134 << 16) | 4,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_6.</summary>
 		DVD_6 = (135 << 16) | 5,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_7.</summary>
 		DVD_7 = MPEG_3_0_A,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_8.</summary>
 		DVD_8 = MPEG_4_0_A,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_9.</summary>
 		DVD_9 = MPEG_5_0_A,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_10.</summary>
 		DVD_10 = (136 << 16) | 4,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_11.</summary>
 		DVD_11 = (137 << 16) | 5,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_12.</summary>
 		DVD_12 = MPEG_5_1_A,
 
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_13.</summary>
 		DVD_13 = DVD_8,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_14.</summary>
 		DVD_14 = DVD_9,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_15.</summary>
 		DVD_15 = DVD_10,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_16.</summary>
 		DVD_16 = DVD_11,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_17.</summary>
 		DVD_17 = DVD_12,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_18.</summary>
 		DVD_18 = (138 << 16) | 5,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_19.</summary>
 		DVD_19 = MPEG_5_0_B,
-		/// <summary>To be added.</summary>
+		/// <summary>D V D_20.</summary>
 		DVD_20 = MPEG_5_1_B,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Audio Unit_4.</summary>
 		AudioUnit_4 = Quadraphonic,
-		/// <summary>To be added.</summary>
+		/// <summary>Audio Unit_5.</summary>
 		AudioUnit_5 = Pentagonal,
-		/// <summary>To be added.</summary>
+		/// <summary>Audio Unit_6.</summary>
 		AudioUnit_6 = Hexagonal,
-		/// <summary>To be added.</summary>
+		/// <summary>Audio Unit_8.</summary>
 		AudioUnit_8 = Octagonal,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Audio Unit_5_0.</summary>
 		AudioUnit_5_0 = MPEG_5_0_B,
-		/// <summary>To be added.</summary>
+		/// <summary>Audio Unit_6_0.</summary>
 		AudioUnit_6_0 = (139 << 16) | 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Audio Unit_7_0.</summary>
 		AudioUnit_7_0 = (140 << 16) | 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Audio Unit_7_0_ Front.</summary>
 		AudioUnit_7_0_Front = (148 << 16) | 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Audio Unit_5_1.</summary>
 		AudioUnit_5_1 = MPEG_5_1_A,
-		/// <summary>To be added.</summary>
+		/// <summary>Audio Unit_6_1.</summary>
 		AudioUnit_6_1 = MPEG_6_1_A,
-		/// <summary>To be added.</summary>
+		/// <summary>Audio Unit_7_1.</summary>
 		AudioUnit_7_1 = MPEG_7_1_C,
-		/// <summary>To be added.</summary>
+		/// <summary>Audio Unit_7_1_ Front.</summary>
 		AudioUnit_7_1_Front = MPEG_7_1_A,
 
-		/// <summary>To be added.</summary>
+		/// <summary>A A C_3_0.</summary>
 		AAC_3_0 = MPEG_3_0_B,
-		/// <summary>To be added.</summary>
+		/// <summary>A A C_ Quadraphonic.</summary>
 		AAC_Quadraphonic = Quadraphonic,
-		/// <summary>To be added.</summary>
+		/// <summary>A A C_4_0.</summary>
 		AAC_4_0 = MPEG_4_0_B,
-		/// <summary>To be added.</summary>
+		/// <summary>A A C_5_0.</summary>
 		AAC_5_0 = MPEG_5_0_D,
-		/// <summary>To be added.</summary>
+		/// <summary>A A C_5_1.</summary>
 		AAC_5_1 = MPEG_5_1_D,
-		/// <summary>To be added.</summary>
+		/// <summary>A A C_6_0.</summary>
 		AAC_6_0 = (141 << 16) | 6,
-		/// <summary>To be added.</summary>
+		/// <summary>A A C_6_1.</summary>
 		AAC_6_1 = (142 << 16) | 7,
-		/// <summary>To be added.</summary>
+		/// <summary>A A C_7_0.</summary>
 		AAC_7_0 = (143 << 16) | 7,
-		/// <summary>To be added.</summary>
+		/// <summary>A A C_7_1.</summary>
 		AAC_7_1 = MPEG_7_1_B,
-		/// <summary>To be added.</summary>
+		/// <summary>A A C_7_1_ B.</summary>
 		AAC_7_1_B = (183 << 16) | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>A A C_7_1_ C.</summary>
 		AAC_7_1_C = (184 << 16) | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>A A C_ Octagonal.</summary>
 		AAC_Octagonal = (144 << 16) | 8,
 
-		/// <summary>To be added.</summary>
+		/// <summary>T M H_10_2_std.</summary>
 		TMH_10_2_std = (145 << 16) | 16,
-		/// <summary>To be added.</summary>
+		/// <summary>T M H_10_2_full.</summary>
 		TMH_10_2_full = (146 << 16) | 21,
 
-		/// <summary>To be added.</summary>
+		/// <summary>A C3_1_0_1.</summary>
 		AC3_1_0_1 = (149 << 16) | 2,
-		/// <summary>To be added.</summary>
+		/// <summary>A C3_3_0.</summary>
 		AC3_3_0 = (150 << 16) | 3,
-		/// <summary>To be added.</summary>
+		/// <summary>A C3_3_1.</summary>
 		AC3_3_1 = (151 << 16) | 4,
-		/// <summary>To be added.</summary>
+		/// <summary>A C3_3_0_1.</summary>
 		AC3_3_0_1 = (152 << 16) | 4,
-		/// <summary>To be added.</summary>
+		/// <summary>A C3_2_1_1.</summary>
 		AC3_2_1_1 = (153 << 16) | 4,
-		/// <summary>To be added.</summary>
+		/// <summary>A C3_3_1_1.</summary>
 		AC3_3_1_1 = (154 << 16) | 5,
 
-		/// <summary>To be added.</summary>
+		/// <summary>E A C_6_0_ A.</summary>
 		EAC_6_0_A = (155 << 16) | 6,
-		/// <summary>To be added.</summary>
+		/// <summary>E A C_7_0_ A.</summary>
 		EAC_7_0_A = (156 << 16) | 7,
 
-		/// <summary>To be added.</summary>
+		/// <summary>E A C3_6_1_ A.</summary>
 		EAC3_6_1_A = (157 << 16) | 7,
-		/// <summary>To be added.</summary>
+		/// <summary>E A C3_6_1_ B.</summary>
 		EAC3_6_1_B = (158 << 16) | 7,
-		/// <summary>To be added.</summary>
+		/// <summary>E A C3_6_1_ C.</summary>
 		EAC3_6_1_C = (159 << 16) | 7,
-		/// <summary>To be added.</summary>
+		/// <summary>E A C3_7_1_ A.</summary>
 		EAC3_7_1_A = (160 << 16) | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>E A C3_7_1_ B.</summary>
 		EAC3_7_1_B = (161 << 16) | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>E A C3_7_1_ C.</summary>
 		EAC3_7_1_C = (162 << 16) | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>E A C3_7_1_ D.</summary>
 		EAC3_7_1_D = (163 << 16) | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>E A C3_7_1_ E.</summary>
 		EAC3_7_1_E = (164 << 16) | 8,
 
-		/// <summary>To be added.</summary>
+		/// <summary>E A C3_7_1_ F.</summary>
 		EAC3_7_1_F = (165 << 16) | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>E A C3_7_1_ G.</summary>
 		EAC3_7_1_G = (166 << 16) | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>E A C3_7_1_ H.</summary>
 		EAC3_7_1_H = (167 << 16) | 8,
 
-		/// <summary>To be added.</summary>
+		/// <summary>D T S_3_1.</summary>
 		DTS_3_1 = (168 << 16) | 4,
-		/// <summary>To be added.</summary>
+		/// <summary>D T S_4_1.</summary>
 		DTS_4_1 = (169 << 16) | 5,
-		/// <summary>To be added.</summary>
+		/// <summary>D T S_6_0_ A.</summary>
 		DTS_6_0_A = (170 << 16) | 6,
-		/// <summary>To be added.</summary>
+		/// <summary>D T S_6_0_ B.</summary>
 		DTS_6_0_B = (171 << 16) | 6,
-		/// <summary>To be added.</summary>
+		/// <summary>D T S_6_0_ C.</summary>
 		DTS_6_0_C = (172 << 16) | 6,
-		/// <summary>To be added.</summary>
+		/// <summary>D T S_6_1_ A.</summary>
 		DTS_6_1_A = (173 << 16) | 7,
-		/// <summary>To be added.</summary>
+		/// <summary>D T S_6_1_ B.</summary>
 		DTS_6_1_B = (174 << 16) | 7,
-		/// <summary>To be added.</summary>
+		/// <summary>D T S_6_1_ C.</summary>
 		DTS_6_1_C = (175 << 16) | 7,
-		/// <summary>To be added.</summary>
+		/// <summary>D T S_7_0.</summary>
 		DTS_7_0 = (176 << 16) | 7,
-		/// <summary>To be added.</summary>
+		/// <summary>D T S_7_1.</summary>
 		DTS_7_1 = (177 << 16) | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>D T S_8_0_ A.</summary>
 		DTS_8_0_A = (178 << 16) | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>D T S_8_0_ B.</summary>
 		DTS_8_0_B = (179 << 16) | 8,
-		/// <summary>To be added.</summary>
+		/// <summary>D T S_8_1_ A.</summary>
 		DTS_8_1_A = (180 << 16) | 9,
-		/// <summary>To be added.</summary>
+		/// <summary>D T S_8_1_ B.</summary>
 		DTS_8_1_B = (181 << 16) | 9,
-		/// <summary>To be added.</summary>
+		/// <summary>D T S_6_1_ D.</summary>
 		DTS_6_1_D = (182 << 16) | 7,
 
 		Wave_2_1 = DVD_4,
@@ -1270,9 +1244,9 @@ namespace AudioToolbox {
 		Wave_6_1 = (188 << 16) | 7,
 		Wave_7_1 = (189 << 16) | 8,
 
-		/// <summary>To be added.</summary>
+		/// <summary>H O A_ A C N_ S N3 D.</summary>
 		HOA_ACN_SN3D = (190U << 16),
-		/// <summary>To be added.</summary>
+		/// <summary>H O A_ A C N_ N3 D.</summary>
 		HOA_ACN_N3D = (191U << 16),
 
 		Atmos_7_1_4 = (192 << 16) | 12,
@@ -1315,7 +1289,7 @@ namespace AudioToolbox {
 		Logic_Atmos_7_1_4_B = (202U << 16) | 12,
 		Logic_Atmos_7_1_6 = (203U << 16) | 14,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Discrete In Order.</summary>
 		DiscreteInOrder = (147 << 16) | 0,                       // needs to be ORed with the actual number of channels  
 
 
@@ -1374,21 +1348,19 @@ namespace AudioToolbox {
 		[SupportedOSPlatform ("tvos18.0")]
 		MPEG_7_1_D = (219U << 16) | 8,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Unknown.</summary>
 		Unknown = 0xFFFF0000,                          // needs to be ORed with the actual number of channels
 	}
 
 #if !COREBUILD
 	/// <summary>An extension class that provides a <see cref="AudioToolbox.AudioChannelLayoutTagExtensions.ToAudioChannel(AudioToolbox.AudioChannelLayoutTag)" /> extension method to the <see cref="AudioToolbox.AudioChannelLayoutTag" /> class.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public static class AudioChannelLayoutTagExtensions {
-		/// <param name="layoutTag">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="layoutTag">The layoutTag.</param>
+		/// <summary>To Audio Channel.</summary>
 		public static AudioChannelBit? ToAudioChannel (this AudioChannelLayoutTag layoutTag)
 		{
 			int value;
@@ -1403,17 +1375,15 @@ namespace AudioToolbox {
 			return (AudioChannelBit) value;
 		}
 
-		/// <param name="inLayoutTag">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="inLayoutTag">The inLayoutTag.</param>
+		/// <summary>Get Number Of Channels.</summary>
 		public static uint GetNumberOfChannels (this AudioChannelLayoutTag inLayoutTag)
 		{
 			return (uint) inLayoutTag & 0x0000FFFF;
 		}
 
-		/// <param name="value">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="value">The value.</param>
+		/// <summary>Is Reserved.</summary>
 		public static bool IsReserved (this AudioChannelLayoutTag value)
 		{
 			return (uint) value >= 0xF0000000 && (uint) value <= 0xFFFFFFFE;
@@ -1422,7 +1392,6 @@ namespace AudioToolbox {
 #endif // !COREBUILD
 
 	/// <summary>Specifies the file or hardware audio channel layout.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -1430,8 +1399,7 @@ namespace AudioToolbox {
 	[DebuggerDisplay ("{Name}")]
 	public class AudioChannelLayout {
 #if !COREBUILD
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Audio Channel Layout.</summary>
 		public AudioChannelLayout ()
 		{
 		}
@@ -1449,8 +1417,7 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the tag.</summary>
 		[Advice ("Use the strongly typed 'AudioTag' instead.")]
 		public int Tag {
 			get {
@@ -1461,8 +1428,7 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the bitmap.</summary>
 		[Advice ("Use 'ChannelUsage' instead.")]
 		public int Bitmap {
 			get {
@@ -1473,18 +1439,14 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The audio tag.</summary>
 		public AudioChannelLayoutTag AudioTag;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The channel usage.</summary>
 		public AudioChannelBit ChannelUsage;
 		/// <summary>The description of the various channels.</summary>
-		///         <remarks>To be added.</remarks>
 		public AudioChannelDescription []? Channels;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the name.</summary>
 		public unsafe string? Name {
 			get {
 				IntPtr sptr;
@@ -1501,8 +1463,7 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the simple name.</summary>
 		public unsafe string? SimpleName {
 			get {
 				IntPtr sptr;
@@ -1519,17 +1480,15 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <param name="channelBitmap">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="channelBitmap">The channelBitmap.</param>
+		/// <summary>From Audio Channel Bitmap.</summary>
 		public static AudioChannelLayout? FromAudioChannelBitmap (AudioChannelBit channelBitmap)
 		{
 			return GetChannelLayout (AudioFormatProperty.ChannelLayoutForBitmap, (int) channelBitmap);
 		}
 
-		/// <param name="channelLayoutTag">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="channelLayoutTag">The channelLayoutTag.</param>
+		/// <summary>From Audio Channel Layout Tag.</summary>
 		public static AudioChannelLayout? FromAudioChannelLayoutTag (AudioChannelLayoutTag channelLayoutTag)
 		{
 			return GetChannelLayout (AudioFormatProperty.ChannelLayoutForTag, (int) channelLayoutTag);
@@ -1567,7 +1526,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>Renders a human-readable version of the object.</summary>
-		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
 			return String.Format ("AudioChannelLayout: Tag={0} Bitmap={1} Channels={2}", AudioTag, ChannelUsage, Channels!.Length);
@@ -1596,9 +1554,8 @@ namespace AudioToolbox {
 			return buffer;
 		}
 
-		/// <param name="layout">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="layout">The layout.</param>
+		/// <summary>Validate.</summary>
 		public static AudioFormatError Validate (AudioChannelLayout layout)
 		{
 			if (layout is null)
@@ -1612,10 +1569,9 @@ namespace AudioToolbox {
 			return res;
 		}
 
-		/// <param name="inputLayout">To be added.</param>
-		///         <param name="outputLayout">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="inputLayout">The inputLayout.</param>
+		/// <param name="outputLayout">The outputLayout.</param>
+		/// <summary>See documentation for details.</summary>
 		public unsafe static int []? GetChannelMap (AudioChannelLayout inputLayout, AudioChannelLayout outputLayout)
 		{
 			if (inputLayout is null)
@@ -1650,10 +1606,9 @@ namespace AudioToolbox {
 			return res == 0 ? value : null;
 		}
 
-		/// <param name="inputLayout">To be added.</param>
-		///         <param name="outputLayout">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="inputLayout">The inputLayout.</param>
+		/// <param name="outputLayout">The outputLayout.</param>
+		/// <summary>See documentation for details.</summary>
 		public unsafe static float [,]? GetMatrixMixMap (AudioChannelLayout inputLayout, AudioChannelLayout outputLayout)
 		{
 			if (inputLayout is null)
@@ -1692,9 +1647,8 @@ namespace AudioToolbox {
 			return res == 0 ? value : null;
 		}
 
-		/// <param name="layout">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="layout">The layout.</param>
+		/// <summary>Get Number Of Channels.</summary>
 		public static int? GetNumberOfChannels (AudioChannelLayout layout)
 		{
 			if (layout is null)
@@ -1712,9 +1666,8 @@ namespace AudioToolbox {
 			return res != 0 ? null : (int?) value;
 		}
 
-		/// <param name="layout">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="layout">The layout.</param>
+		/// <summary>Get Tag For Channel Layout.</summary>
 		public static AudioChannelLayoutTag? GetTagForChannelLayout (AudioChannelLayout layout)
 		{
 			if (layout is null)
@@ -1733,9 +1686,8 @@ namespace AudioToolbox {
 			return res != 0 ? null : (AudioChannelLayoutTag?) value;
 		}
 
-		/// <param name="count">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="count">The count.</param>
+		/// <summary>See documentation for details.</summary>
 		public unsafe static AudioChannelLayoutTag []? GetTagsForNumberOfChannels (int count)
 		{
 			const int type_size = sizeof (uint);
@@ -1771,7 +1723,6 @@ namespace AudioToolbox {
 	}
 
 	/// <summary>Enumerates SMTPE time states.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum SmpteTimeFlags : uint { // UInt32
 		/// <summary>The time state is unknown.</summary>
@@ -1783,7 +1734,6 @@ namespace AudioToolbox {
 	}
 
 	/// <summary>Enumerates MPEG-4 audio data types.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum MPEG4ObjectID { // long
 		/// <summary>MPEG-4 MAIN audio profile AAC Main.</summary>
 		AacMain = 1,
@@ -1814,35 +1764,25 @@ namespace AudioToolbox {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct SmpteTime { // CoreAudio.framework - CoreAudioTypes.h
 		/// <summary>A subframe offset to add to the time.</summary>
-		///         <remarks>To be added.</remarks>
 		public short Subframes;
 		/// <summary>The number of subframes in a video frame.</summary>
-		///         <remarks>To be added.</remarks>
 		public short SubframeDivisor;
 		/// <summary>The total number, of 8 required, received messages in the SMPTE time code.</summary>
-		///         <remarks>To be added.</remarks>
 		public uint Counter;
 		/// <summary>The SMPTE time code type.</summary>
-		///         <remarks>To be added.</remarks>
 		public uint Type;
 		/// <summary>Whether the time code is complete or is running.</summary>
-		///         <remarks>To be added.</remarks>
 		public uint Flags;
 		/// <summary>The hours part of the code.</summary>
-		///         <remarks>To be added.</remarks>
 		public short Hours;
 		/// <summary>The minutes part of the code.</summary>
-		///         <remarks>To be added.</remarks>
 		public short Minutes;
 		/// <summary>The seconds part of the code.</summary>
-		///         <remarks>To be added.</remarks>
 		public short Seconds;
 		/// <summary>The frames part of the code.</summary>
-		///         <remarks>To be added.</remarks>
 		public short Frames;
 
 		/// <summary>Gets a value that tells whether the time code is complete or is running.</summary>
-		///         <remarks>To be added.</remarks>
 		public SmpteTimeFlags FlagsStrong {
 			get {
 				return (SmpteTimeFlags) Flags;
@@ -1852,7 +1792,6 @@ namespace AudioToolbox {
 			}
 		}
 		/// <summary>Gets or sets the SMPTE time code type</summary>
-		///         <remarks>To be added.</remarks>
 		public SmpteTimeType TypeStrong {
 			get {
 				return (SmpteTimeType) Type;
@@ -1863,7 +1802,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>Returns a string representation of the time code.</summary>
-		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
 			return String.Format ("[Subframes={0},Divisor={1},Counter={2},Type={3},Flags={4},Hours={5},Minutes={6},Seconds={7},Frames={8}]",
@@ -1872,32 +1810,31 @@ namespace AudioToolbox {
 	}
 
 	/// <summary>An enumeration whose values specify the version of SMPTE time used by a <see cref="AudioToolbox.SmpteTime" />.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum SmpteTimeType : uint // UInt32 in AudioFileRegionList
 	{
-		/// <summary>To be added.</summary>
+		/// <summary>Type24.</summary>
 		Type24 = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Type25.</summary>
 		Type25 = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Type30 Drop.</summary>
 		Type30Drop = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Type30.</summary>
 		Type30 = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Type2997.</summary>
 		Type2997 = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Type2997 Drop.</summary>
 		Type2997Drop = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Type60.</summary>
 		Type60 = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Type5994.</summary>
 		Type5994 = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Type60 Drop.</summary>
 		Type60Drop = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Type5994 Drop.</summary>
 		Type5994Drop = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Type50.</summary>
 		Type50 = 10,
-		/// <summary>To be added.</summary>
+		/// <summary>Type2398.</summary>
 		Type2398 = 11,
 	}
 
@@ -1930,30 +1867,22 @@ namespace AudioToolbox {
 			SampleHostTimeValid = SampleTimeValid | HostTimeValid,
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The sample time.</summary>
 		public double SampleTime;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The host time.</summary>
 		public ulong HostTime;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The rate scalar.</summary>
 		public double RateScalar;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The word clock time.</summary>
 		public ulong WordClockTime;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The s m p t e time.</summary>
 		public SmpteTime SMPTETime;
 		/// <summary>Flags used to interpret the data in this AudioTimeStamp.</summary>
-		///         <remarks>To be added.</remarks>
 		public AtsFlags Flags;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The reserved.</summary>
 		public uint Reserved;
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Returns a string representation of this instance.</summary>
 		public override string ToString ()
 		{
 			var sb = new StringBuilder ("{");
@@ -2017,7 +1946,6 @@ namespace AudioToolbox {
 		public IntPtr Data;
 
 		/// <summary>Debugging method that display information about the AudioBuffer.</summary>
-		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
 			return string.Format ("[channels={0},dataByteSize={1},ptrData=0x{2:x}]", NumberChannels, DataByteSize, Data);
@@ -2089,27 +2017,21 @@ namespace AudioToolbox {
 	// CoreAudioClock.h (inside AudioToolbox)
 	// It was a confusion between CA (CoreAudio) and CA (CoreAnimation)
 	/// <summary>Struct defining bar beat time, for use with <see cref="AudioToolbox.MusicSequence" /> methods such as <see cref="AudioToolbox.MusicSequence.BarBeatTimeToBeats(AudioToolbox.CABarBeatTime,out System.Double)" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct CABarBeatTime {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>See documentation for details.</summary>
 		public /* SInt32 */ int Bar;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>See documentation for details.</summary>
 		public /* UInt16 */ ushort Beat;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>See documentation for details.</summary>
 		public /* UInt16 */ ushort Subbeat;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>See documentation for details.</summary>
 		public /* UInt16 */ ushort SubbeatDivisor;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>See documentation for details.</summary>
 		public /* UInt16 */ ushort Reserved;
 	}
 }

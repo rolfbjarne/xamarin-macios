@@ -7,8 +7,7 @@ namespace MapKit {
 	public partial class MKPolyline {
 
 		/// <param name="points">The points.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Froms points.</summary>
 		///         <remarks>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="threads">This can be used from a background thread.</para>
@@ -26,8 +25,7 @@ namespace MapKit {
 		}
 
 		/// <param name="coords">The coords.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Froms coordinates.</summary>
 		///         <remarks>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="threads">This can be used from a background thread.</para>

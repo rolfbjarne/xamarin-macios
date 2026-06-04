@@ -10,7 +10,7 @@ namespace VideoSubscriberAccount {
 		// these are less common pattern so it's not automatically generated
 
 		/// <param name="self">The instance on which this method operates.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the NSString constants for the specified authentication schemes.</summary>
 		public static NSString? [] GetConstants (this VSAccountProviderAuthenticationScheme [] self)
 		{
 			if (self is null)
@@ -23,7 +23,7 @@ namespace VideoSubscriberAccount {
 		}
 
 		/// <param name="constants">The constants.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the authentication scheme values for the specified NSString constants.</summary>
 		public static VSAccountProviderAuthenticationScheme [] GetValues (NSString [] constants)
 		{
 			if (constants is null)

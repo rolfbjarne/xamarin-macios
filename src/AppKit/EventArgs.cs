@@ -70,22 +70,19 @@ namespace AppKit {
 	}
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum NSPopoverCloseReason {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates standard.</summary>
 		Standard,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates detach to window.</summary>
 		DetachToWindow,
 	}
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public partial class NSPopoverCloseEventArgs {
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public NSPopoverCloseReason Reason {
 			get {
 				if (_Reason == NSPopover.CloseReasonStandard) {

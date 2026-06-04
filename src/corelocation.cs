@@ -1263,7 +1263,7 @@ namespace CoreLocation {
 		/// <param name="center">The center of the region.</param>
 		/// <param name="radius">The radius of the region, in meters.</param>
 		/// <param name="identifier">The name of the region.</param>
-		/// <summary>Constructor that produces a circular region called <paramref name="identifier" /> with a particular <paramref name="center" /> of <paramref name="radius" /> (in meters).</summary>
+		/// <summary>Constructor that produces a circular region called <paramref name="identifier" /> with AParticular <paramref name="center" /> of <paramref name="radius" /> (in meters).</summary>
 		/// <remarks>To be added.</remarks>
 		[Export ("initWithCenter:radius:identifier:")]
 		NativeHandle Constructor (CLLocationCoordinate2D center, double radius, string identifier);
@@ -1464,7 +1464,7 @@ namespace CoreLocation {
 		/// <summary>The accuracy of <see cref="CoreLocation.CLBeacon.Proximity" />, in meters.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>
-		///           <para>Application developers should not use this value to try to indicate a precise location. It should be used to tell the difference between multiple beacons with the same <see cref="CoreLocation.CLBeacon.Proximity" /> value.</para>
+		///           <para>Application developers should not use this value to try to indicate APrecise location. It should be used to tell the difference between multiple beacons with the same <see cref="CoreLocation.CLBeacon.Proximity" /> value.</para>
 		///           <para>Even if both the device and the beacon are stationary, this value may vary over time due to radio interference.</para>
 		///         </remarks>
 		[Export ("accuracy")]

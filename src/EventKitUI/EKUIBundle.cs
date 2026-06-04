@@ -10,7 +10,7 @@
 #nullable enable
 
 namespace EventKitUI {
-	/// <summary>To be added.</summary>
+	/// <summary>Provides access to the EventKit UI framework bundle.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	public static class EKUIBundle {
@@ -18,8 +18,7 @@ namespace EventKitUI {
 		[DllImport (Constants.EventKitUILibrary)]
 		static extern IntPtr EventKitUIBundle ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the EventKit UI framework bundle.</summary>
 		public static NSBundle? UIBundle {
 			get {
 				return Runtime.GetNSObject<NSBundle> (EventKitUIBundle ());

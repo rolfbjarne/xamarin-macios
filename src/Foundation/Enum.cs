@@ -871,7 +871,7 @@ namespace Foundation {
 	///     </remarks>
 	[Native]
 	public enum NSKeyValueChange : ulong {
-		/// <summary>The change is reported for setting a value in a property.</summary>
+		/// <summary>The change is reported for setting a value in AProperty.</summary>
 		Setting = 1,
 		/// <summary>The change being reported is an insertion into a collection.</summary>
 		Insertion,

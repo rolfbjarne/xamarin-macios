@@ -30,11 +30,11 @@ namespace GameKit {
 			PeerID = peer;
 			Session = session;
 		}
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the data that was received.</summary>
 		public NSData Data { get; private set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the peer ID of the sender.</summary>
 		public string PeerID { get; private set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the session on which the data was received.</summary>
 		public GKSession Session { get; private set; }
 	}
 
@@ -62,7 +62,7 @@ namespace GameKit {
 		//
 		// This delegate is used by the 
 		ReceiverObject? receiver;
-		/// <summary>To be added.</summary>
+	/// <summary>Occurs when data is received from a peer.</summary>
 		public event EventHandler<GKDataReceivedEventArgs>? ReceiveData {
 			add {
 				if (receiver is null) {
@@ -82,7 +82,7 @@ namespace GameKit {
 
 		/// <param name="obj">The obj.</param>
 		///         <param name="context">The context to use.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets the data receive handler for this session.</summary>
 		public void SetDataReceiveHandler (NSObject obj, IntPtr context)
 		{
 			receiver = null;
@@ -102,7 +102,7 @@ namespace GameKit {
 			return (Mono_GKSessionDelegate) del;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Occurs when a peer changes its connection state.</summary>
 		public event EventHandler<GKPeerChangedStateEventArgs> PeerChanged {
 			add {
 				EnsureDelegate ().cbPeerChanged += value;
@@ -113,7 +113,7 @@ namespace GameKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Occurs when a connection request is received from a peer.</summary>
 		public event EventHandler<GKPeerConnectionEventArgs> ConnectionRequest {
 			add {
 				EnsureDelegate ().cbConnectionRequest += value;
@@ -124,7 +124,7 @@ namespace GameKit {
 			}
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Occurs when a connection attempt fails.</summary>
 		public event EventHandler<GKPeerConnectionEventArgs> ConnectionFailed {
 			add {
 				EnsureDelegate ().cbConnectionFailed += value;
@@ -134,7 +134,7 @@ namespace GameKit {
 				EnsureDelegate ().cbConnectionFailed -= value;
 			}
 		}
-		/// <summary>To be added.</summary>
+	/// <summary>Occurs when the session encounters an error.</summary>
 		public event EventHandler<GKPeerConnectionEventArgs> Failed {
 			add {
 				EnsureDelegate ().cbFailedWithError += value;
@@ -205,11 +205,11 @@ namespace GameKit {
 			State = state;
 		}
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the session associated with this event.</summary>
 		public GKSession Session { get; private set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the peer ID associated with this event.</summary>
 		public string PeerID { get; private set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the connection state of the peer.</summary>
 		public GKPeerConnectionState State { get; private set; }
 	}
 
@@ -229,11 +229,11 @@ namespace GameKit {
 			PeerID = peerID;
 			Error = error;
 		}
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the session associated with this event.</summary>
 		public GKSession Session { get; private set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the peer ID associated with this event, or <see langword="null" /> if not applicable.</summary>
 		public string? PeerID { get; private set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets the error that occurred, or <see langword="null" /> if no error occurred.</summary>
 		public NSError? Error { get; private set; }
 	}
 #endif

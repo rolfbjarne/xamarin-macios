@@ -33,28 +33,24 @@ namespace ScriptingBridge {
 	[BaseType (typeof (NSObject))]
 	interface SBObject : NSCoding {
 
-		/// <param name="properties">To be added.</param>
+		/// <param name="properties">The properties.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithProperties:")]
 		NativeHandle Constructor (NSDictionary properties);
 
-		/// <param name="data">To be added.</param>
+		/// <param name="data">The data to use.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithData:")]
 		NativeHandle Constructor (NSObject data);
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("get")]
 		NSObject Get { get; }
 
 		// part of SBObject.h include file, not in the official documentation
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("lastError")]
 		NSError LastError { get; }
 	}
@@ -63,51 +59,44 @@ namespace ScriptingBridge {
 	[BaseType (typeof (NSMutableArray))]
 	[DisableDefaultCtor] // *** -[SBElementArray init]: should never be used.
 	interface SBElementArray {
-		/// <param name="capacity">To be added.</param>
+		/// <param name="capacity">The capacity.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithCapacity:")]
 		NativeHandle Constructor (nuint capacity);
 
-		/// <param name="name">To be added.</param>
+		/// <param name="name">The name to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("objectWithName:")]
 		NSObject ObjectWithName (string name);
 
-		/// <param name="identifier">To be added.</param>
+		/// <param name="identifier">The identifier to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("objectWithID:")]
 		NSObject ObjectWithID (NSObject identifier);
 
-		/// <param name="location">To be added.</param>
+		/// <param name="location">The location.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("objectAtLocation:")]
 		NSObject ObjectAtLocation (NSObject location);
 
-		/// <param name="selector">To be added.</param>
+		/// <param name="selector">The selector.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("arrayByApplyingSelector:")]
 		NSObject [] ArrayByApplyingSelector (Selector selector);
 
-		/// <param name="aSelector">To be added.</param>
-		///         <param name="argument">To be added.</param>
+		/// <param name="aSelector">The a selector.</param>
+		///         <param name="argument">The argument.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("arrayByApplyingSelector:withObject:")]
 		NSObject [] ArrayByApplyingSelector (Selector aSelector, NSObject argument);
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("get")]
 		NSObject [] Get ();
 	}
@@ -139,21 +128,18 @@ namespace ScriptingBridge {
 	[BaseType (typeof (SBObject), Delegates = new string [] { "WeakDelegate" }, Events = new Type [] { typeof (SBApplicationDelegate) })]
 	[DisableDefaultCtor] // An uncaught exception was raised: *** -[SBApplication init]: should never be used.
 	interface SBApplication : NSCoding {
-		/// <param name="url">To be added.</param>
+		/// <param name="url">The URL to use.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithURL:")]
 		NativeHandle Constructor (NSUrl url);
 
-		/// <param name="pid">To be added.</param>
+		/// <param name="pid">The pid.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithProcessIdentifier:")]
 		NativeHandle Constructor (int /* pid_t = int */ pid);
 
-		/// <param name="ident">To be added.</param>
+		/// <param name="ident">The ident.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithBundleIdentifier:")]
 		NativeHandle Constructor (string ident);
 
@@ -172,51 +158,43 @@ namespace ScriptingBridge {
 		[Export ("applicationWithProcessIdentifier:")]
 		IntPtr _FromProcessIdentifier (int /* pid_t = int */ pid);
 
-		/// <param name="className">To be added.</param>
+		/// <param name="className">The class name.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("classForScriptingClass:")]
 		Class ClassForScripting (string className);
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("isRunning")]
 		bool IsRunning { get; }
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("activate")]
 		void Activate ();
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("delegate", ArgumentSemantic.Retain), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Wrap ("WeakDelegate")]
 		ISBApplicationDelegate Delegate { get; set; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("launchFlags")]
 		LSLaunchFlags LaunchFlags { get; set; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("sendMode")]
 		AESendMode SendMode { get; set; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("timeout")]
 		nint Timeout { get; set; }
 	}

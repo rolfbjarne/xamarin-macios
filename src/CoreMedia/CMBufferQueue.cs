@@ -39,7 +39,6 @@ namespace CoreMedia {
 	// [SupportedOSPlatform ("ios")] -  SupportedOSPlatform is not valid on this declaration type "delegate" 
 	/// <param name="buffer">The buffer.</param>
 	///     <summary>Delegate for getting media buffer sizes.</summary>
-	///     <returns>To be added.</returns>
 	public delegate nint CMBufferGetSize (INativeObject buffer);
 
 	/// <summary>CoreMedia Buffer Queue.</summary>
@@ -121,7 +120,6 @@ namespace CoreMedia {
 		///         <param name="compare">The compare.</param>
 		///         <param name="dataBecameReadyNotification">The data became ready notification.</param>
 		///         <summary>Creates a custom CMBufferQueue that sorts and returns the objects in the queue based on the various callbacks you provide.</summary>
-		///         <returns>To be added.</returns>
 		public static CMBufferQueue? FromCallbacks (int count, CMBufferGetTime? getDecodeTimeStamp, CMBufferGetTime? getPresentationTimeStamp, CMBufferGetTime? getDuration,
 			CMBufferGetBool? isDataReady, CMBufferCompare? compare, NSString dataBecameReadyNotification)
 		{
@@ -138,7 +136,6 @@ namespace CoreMedia {
 		///         <param name="dataBecameReadyNotification">The data became ready notification.</param>
 		///         <param name="getTotalSize">The get total size.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static CMBufferQueue? FromCallbacks (int count, CMBufferGetTime? getDecodeTimeStamp, CMBufferGetTime? getPresentationTimeStamp, CMBufferGetTime? getDuration,
 			CMBufferGetBool? isDataReady, CMBufferCompare? compare, NSString dataBecameReadyNotification, CMBufferGetSize? getTotalSize)
 		{
@@ -185,7 +182,6 @@ namespace CoreMedia {
 
 		/// <param name="count">Number of items in the queue.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static CMBufferQueue? CreateUnsorted (int count)
 		{
 			// note: different version of iOS can return a different (size) structure, e.g. iOS 7.1,
@@ -228,7 +224,6 @@ namespace CoreMedia {
 		extern static /* CMBufferRef */ IntPtr CMBufferQueueDequeueAndRetain (/* CMBufferQueueRef */ IntPtr queue);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public INativeObject? Dequeue ()
 		{
 			//
@@ -253,7 +248,6 @@ namespace CoreMedia {
 		extern static /* CMBufferRef */ IntPtr CMBufferQueueDequeueIfDataReadyAndRetain (/* CMBufferQueueRef */ IntPtr queue);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public INativeObject? DequeueIfDataReady ()
 		{
 			//
@@ -277,7 +271,6 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static byte CMBufferQueueIsEmpty (/* CMBufferQueueRef */ IntPtr queue);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public bool IsEmpty {
 			get {
 				return CMBufferQueueIsEmpty (Handle) != 0;
@@ -288,7 +281,6 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static OSStatus CMBufferQueueMarkEndOfData (/* CMBufferQueueRef */ IntPtr queue);
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public int MarkEndOfData ()
 		{
 			return CMBufferQueueMarkEndOfData (Handle);
@@ -297,7 +289,6 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static byte CMBufferQueueContainsEndOfData (/* CMBufferQueueRef */ IntPtr queue);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public bool ContainsEndOfData {
 			get {
 				return CMBufferQueueContainsEndOfData (Handle) != 0;
@@ -307,7 +298,6 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static byte CMBufferQueueIsAtEndOfData (/* CMBufferQueueRef */ IntPtr queue);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public bool IsAtEndOfData {
 			get {
 				return CMBufferQueueIsAtEndOfData (Handle) != 0;
@@ -317,7 +307,6 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static OSStatus CMBufferQueueReset (/* CMBufferQueueRef */ IntPtr queue);
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public OSStatus Reset ()
 		{
 			return CMBufferQueueReset (Handle);
@@ -326,7 +315,6 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static nint CMBufferQueueGetBufferCount (/* CMBufferQueueRef */ IntPtr queue);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public nint BufferCount {
 			get {
 				return CMBufferQueueGetBufferCount (Handle);
@@ -336,7 +324,6 @@ namespace CoreMedia {
 		[DllImport (Constants.CoreMediaLibrary)]
 		extern static CMTime CMBufferQueueGetDuration (/* CMBufferQueueRef */ IntPtr queue);
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public CMTime Duration {
 			get {
 				return CMBufferQueueGetDuration (Handle);
@@ -351,7 +338,6 @@ namespace CoreMedia {
 		extern static /* size_t */ nint CMBufferQueueGetTotalSize (/* CMBufferQueueRef */ IntPtr queue);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

@@ -59,7 +59,7 @@ namespace Foundation {
 #if !XAMCORE_5_0
 		/// <summary>Do not use the default constructor unless you are dealing with a low-level API that will initialize the object for you.</summary>
 		/// <remarks>
-		/// <para>The default constructor for <see cref="NSError" /> leaves the object in a partial state that can only be initialized by a handful of low-level Objective-C APIs. In general, you should not use this constructor, you should instead use the constructor that takes an <see cref="NSString" /> error domain argument.</para>
+		/// <para>The default constructor for <see cref="NSError" /> leaves the object in APartial state that can only be initialized by a handful of low-level Objective-C APIs. In general, you should not use this constructor, you should instead use the constructor that takes an <see cref="NSString" /> error domain argument.</para>
 		/// </remarks>
 		[Obsolete ("Use the other constructor or factory method instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]

@@ -20,7 +20,6 @@ namespace ImageIO {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool Recursive { get; set; }
 
 		internal NSMutableDictionary ToDictionary ()
@@ -39,7 +38,6 @@ namespace ImageIO {
 
 	// CGImageMetadata.h
 	/// <summary>An immutable container for metadata. (See <see cref="ImageIO.CGMutableImageMetadata" />.)</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -55,9 +53,8 @@ namespace ImageIO {
 		static extern /* CGImageMetadataRef __nullable */ IntPtr CGImageMetadataCreateFromXMPData (
 			/* CFDataRef __nonnull */ IntPtr data);
 
-		/// <param name="data">To be added.</param>
+		/// <param name="data">The data to use.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CGImageMetadata (NSData data)
 			: base (CGImageMetadataCreateFromXMPData (data.GetNonNullHandle (nameof (data))), true, verify: true)
 		{
@@ -83,11 +80,10 @@ namespace ImageIO {
 			/* CGImageMetadataRef __nonnull */ IntPtr metadata, /* CGImageMetadataTagRef __nullable */ IntPtr parent,
 			/* CFStringRef __nonnull*/ IntPtr path);
 
-		/// <param name="parent">To be added.</param>
-		///         <param name="path">To be added.</param>
+		/// <param name="parent">The parent.</param>
+		///         <param name="path">The path.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public NSString? GetStringValue (CGImageMetadata? parent, NSString path)
 		{
 			// parent may be null
@@ -105,7 +101,6 @@ namespace ImageIO {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CGImageMetadataTag []? GetTags ()
 		{
 			var result = CGImageMetadataCopyTags (Handle);
@@ -117,11 +112,10 @@ namespace ImageIO {
 			/* CGImageMetadataRef __nonnull */ IntPtr metadata, /* CGImageMetadataTagRef __nullable */ IntPtr parent,
 			/* CFStringRef __nonnull */ IntPtr path);
 
-		/// <param name="parent">To be added.</param>
-		///         <param name="path">To be added.</param>
+		/// <param name="parent">The parent.</param>
+		///         <param name="path">The path.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CGImageMetadataTag? GetTag (CGImageMetadata? parent, NSString path)
 		{
 			// parent may be null
@@ -148,11 +142,10 @@ namespace ImageIO {
 			return del (nsKey, nsValue) ? (byte) 1 : (byte) 0;
 		}
 
-		/// <param name="rootPath">To be added.</param>
-		///         <param name="options">To be added.</param>
-		///         <param name="block">To be added.</param>
+		/// <param name="rootPath">The root path.</param>
+		///         <param name="options">The options to use.</param>
+		///         <param name="block">The block.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public void EnumerateTags (NSString? rootPath, CGImageMetadataEnumerateOptions? options, CGImageMetadataTagBlock block)
 		{
@@ -172,7 +165,6 @@ namespace ImageIO {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public NSData? CreateXMPData ()
 		{
 			// note: there's no options defined for iOS7 (needs to be null)
@@ -186,11 +178,10 @@ namespace ImageIO {
 			/* CGImageMetadataRef __nonnull */ IntPtr metadata, /* CFStringRef __nonnull */ IntPtr dictionaryName,
 			/* CFStringRef __nonnull */ IntPtr propertyName);
 
-		/// <param name="dictionaryName">To be added.</param>
-		///         <param name="propertyName">To be added.</param>
+		/// <param name="dictionaryName">The dictionary name.</param>
+		///         <param name="propertyName">The property name.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CGImageMetadataTag? CopyTagMatchingImageProperty (NSString dictionaryName, NSString propertyName)
 		{
 			if (dictionaryName is null)

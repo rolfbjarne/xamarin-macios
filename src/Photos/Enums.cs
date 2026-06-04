@@ -158,7 +158,7 @@ namespace Photos {
 		/// <summary>A collection of songs whose relatedness was algorithmically determined.</summary>
 		SmartAlbum = 2,
 
-		/// <summary>A collection of photos taken at a particular time.</summary>
+		/// <summary>A collection of photos taken at AParticular time.</summary>
 		[Deprecated (PlatformName.iOS, 13, 0)]
 		[Deprecated (PlatformName.TvOS, 13, 0)]
 		[Unavailable (PlatformName.MacOSX)]

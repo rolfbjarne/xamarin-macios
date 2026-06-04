@@ -32,11 +32,9 @@ namespace AddressBookUI {
 			Person = person;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the person.</summary>
 		public ABPerson? Person { get; private set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the completed.</summary>
 		public bool Completed {
 			get { return Person is not null; }
 		}
@@ -68,7 +66,6 @@ namespace AddressBookUI {
 
 		ABPerson? displayedPerson;
 		/// <summary>Gets or sets the <see cref="AddressBook.ABPerson" /> whose data is used to prepopulate the <see cref="AddressBookUI.ABNewPersonViewController" />.</summary>
-		///         <value>To be added.</value>
 		public ABPerson? DisplayedPerson {
 			get {
 				MarkDirty ();
@@ -82,7 +79,6 @@ namespace AddressBookUI {
 
 		ABAddressBook? addressBook;
 		/// <summary>Gets or sets the <see cref="AddressBook.ABAddressBook" /> to which the contact will be added.</summary>
-		///         <value>To be added.</value>
 		public ABAddressBook? AddressBook {
 			get {
 				MarkDirty ();
@@ -96,7 +92,6 @@ namespace AddressBookUI {
 
 		ABGroup? parentGroup;
 		/// <summary>Gets or sets the <see cref="AddressBook.ABGroup" /> to which the new contact should be saved.</summary>
-		///         <value>To be added.</value>
 		public ABGroup? ParentGroup {
 			get {
 				MarkDirty ();
@@ -127,7 +122,7 @@ namespace AddressBookUI {
 				h (this, e);
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Events handler.</summary>
 		public event EventHandler<ABNewPersonCompleteEventArgs> NewPersonComplete {
 			add { EnsureEventDelegate ().newPersonComplete += value; }
 			remove { EnsureEventDelegate ().newPersonComplete -= value; }

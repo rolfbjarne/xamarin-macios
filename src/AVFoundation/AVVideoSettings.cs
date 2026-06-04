@@ -104,7 +104,7 @@ namespace AVFoundation {
 		}
 
 		/// <param name="dictionary">The dictionary.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="AVVideoSettingsUncompressed" /> instance.</summary>
 		public AVVideoSettingsUncompressed (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -185,14 +185,14 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("tvos")]
 	public class AVVideoSettingsCompressed : DictionaryContainer {
 #if !COREBUILD
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="AVVideoSettingsCompressed" /> instance.</summary>
 		public AVVideoSettingsCompressed ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
 		/// <param name="dictionary">The dictionary.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="AVVideoSettingsCompressed" /> instance.</summary>
 		public AVVideoSettingsCompressed (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -290,8 +290,7 @@ namespace AVFoundation {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the max key frame interval duration.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -306,8 +305,7 @@ namespace AVFoundation {
 		}
 
 #if !MONOMAC
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the allow frame reordering.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
@@ -321,8 +319,7 @@ namespace AVFoundation {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the entropy encoding.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
@@ -362,8 +359,7 @@ namespace AVFoundation {
 		}
 
 		// frame rate can be floating point (29.97 is common for instance)
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the expected source frame rate.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
@@ -378,8 +374,7 @@ namespace AVFoundation {
 		}
 
 		// frame rate can be floating point (29.97 is common for instance)
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the average non droppable frame rate.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("tvos")]
@@ -460,14 +455,14 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("tvos")]
 	public class AVVideoCodecSettings : DictionaryContainer {
 #if !COREBUILD
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="AVVideoCodecSettings" /> instance.</summary>
 		public AVVideoCodecSettings ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
 		/// <param name="dictionary">The dictionary.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="AVVideoCodecSettings" /> instance.</summary>
 		public AVVideoCodecSettings (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -656,14 +651,14 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("tvos")]
 	public class AVVideoPixelAspectRatioSettings : DictionaryContainer {
 #if !COREBUILD
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="AVVideoPixelAspectRatioSettings" /> instance.</summary>
 		public AVVideoPixelAspectRatioSettings ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
 		/// <param name="dictionary">The dictionary.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="AVVideoPixelAspectRatioSettings" /> instance.</summary>
 		public AVVideoPixelAspectRatioSettings (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -706,14 +701,14 @@ namespace AVFoundation {
 	[SupportedOSPlatform ("tvos")]
 	public class AVVideoCleanApertureSettings : DictionaryContainer {
 #if !COREBUILD
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="AVVideoCleanApertureSettings" /> instance.</summary>
 		public AVVideoCleanApertureSettings ()
 			: base (new NSMutableDictionary ())
 		{
 		}
 
 		/// <param name="dictionary">The dictionary.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="AVVideoCleanApertureSettings" /> instance.</summary>
 		public AVVideoCleanApertureSettings (NSDictionary dictionary)
 			: base (dictionary)
 		{

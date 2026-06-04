@@ -32,8 +32,8 @@ namespace JavaScriptCore {
 
 		/// <param name="value">The value to set.</param>
 		///         <param name="context">The context to use.</param>
-		///         <summary>Creates a JavaScript string from the provided string.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Creates a JavaScript string from the provided string.</summary>
+		/// <returns>A new <see cref="JSValue" /> containing the string.</returns>
 		static public JSValue From (string value, JSContext context)
 		{
 			using (var str = new NSString (value)) {
@@ -43,7 +43,6 @@ namespace JavaScriptCore {
 
 		/// <param name="index">The zero-based index.</param>
 		/// <summary>Gets or sets the item that is indexed by the provided <paramref name="index" />.</summary>
-		/// <value>To be added.</value>
 		public JSValue this [nuint index] {
 			get { return _ObjectAtIndexedSubscript (index); }
 			set { _SetObject (value, index); }
@@ -51,7 +50,6 @@ namespace JavaScriptCore {
 
 		/// <param name="key">The key to use.</param>
 		/// <summary>Gets or sets the item that is indexed by the provided <paramref name="key" />.</summary>
-		/// <value>To be added.</value>
 		public JSValue this [NSObject key] {
 			get { return _ObjectForKeyedSubscript (key); }
 			set { _SetObject (value, key); }

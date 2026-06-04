@@ -101,7 +101,6 @@ namespace CoreFoundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override string ToString ()
 		{
 			return string.Format ("[CFSocketNativeHandle {0}]", handle);
@@ -114,15 +113,14 @@ namespace CoreFoundation {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class CFSocketException : Exception {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the error.</summary>
 		public CFSocketError Error {
 			get;
 			private set;
 		}
 
 		/// <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CFSocketException" /> instance.</summary>
 		public CFSocketException (CFSocketError error)
 		{
 			this.Error = error;
@@ -469,7 +467,6 @@ namespace CoreFoundation {
 		///         <param name="endpoint">The endpoint.</param>
 		///         <param name="timeout">Time to wait for the operation to complete.   If the value is negative, no wait takes place, and instead the operation takes place in the background.</param>
 		///         <summary>Creates a connected socket by specifying an address family, socket type, protocol type as well as the endpoint to connect to.</summary>
-		///         <returns>To be added.</returns>
 		public static CFSocket CreateConnectedToSocketSignature (AddressFamily family, SocketType type,
 																 ProtocolType proto, IPEndPoint endpoint,
 																 double timeout)
@@ -539,7 +536,6 @@ namespace CoreFoundation {
 		extern static CFSocketFlags CFSocketGetSocketFlags (IntPtr handle);
 
 		/// <summary>Returns the set of CFSocket-specific flags.</summary>
-		///         <returns>To be added.</returns>
 		public CFSocketFlags GetSocketFlags ()
 		{
 			return CFSocketGetSocketFlags (Handle);
@@ -604,7 +600,6 @@ namespace CoreFoundation {
 			}
 
 			/// <summary>The remote end points that connected</summary>
-			///         <value>To be added.</value>
 			public IPEndPoint RemoteEndPoint {
 				get;
 				private set;
@@ -612,7 +607,7 @@ namespace CoreFoundation {
 
 			/// <param name="handle">The handle.</param>
 			///         <param name="remote">The remote.</param>
-			///         <summary>To be added.</summary>
+			///         <summary>Creates a new <see cref="CFSocketAcceptEventArgs" /> instance.</summary>
 			public CFSocketAcceptEventArgs (CFSocketNativeHandle handle, IPEndPoint remote)
 			{
 				this.SocketHandle = handle;
@@ -628,7 +623,6 @@ namespace CoreFoundation {
 			}
 
 			/// <summary>Human readable description of the event arguments.</summary>
-			///         <returns>To be added.</returns>
 			public override string ToString ()
 			{
 				return string.Format ("[CFSocketAcceptEventArgs: RemoteEndPoint={0}]", RemoteEndPoint);
@@ -642,22 +636,20 @@ namespace CoreFoundation {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		public class CFSocketConnectEventArgs : EventArgs {
-			/// <summary>To be added.</summary>
-			///         <value>To be added.</value>
+			/// <summary>Gets or sets the result.</summary>
 			public CFSocketError Result {
 				get;
 				private set;
 			}
 
 			/// <param name="result">The result.</param>
-			///         <summary>To be added.</summary>
+			///         <summary>Creates a new <see cref="CFSocketConnectEventArgs" /> instance.</summary>
 			public CFSocketConnectEventArgs (CFSocketError result)
 			{
 				this.Result = result;
 			}
 
 			/// <summary>Human readable description of the event arguments.</summary>
-			///         <returns>To be added.</returns>
 			public override string ToString ()
 			{
 				return string.Format ("[CFSocketConnectEventArgs: Result={0}]", Result);
@@ -718,7 +710,7 @@ namespace CoreFoundation {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		public class CFSocketReadEventArgs : EventArgs {
-			/// <summary>To be added.</summary>
+			/// <summary>Creates a new <see cref="CFSocketReadEventArgs" /> instance.</summary>
 			public CFSocketReadEventArgs () { }
 		}
 
@@ -728,7 +720,7 @@ namespace CoreFoundation {
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
 		public class CFSocketWriteEventArgs : EventArgs {
-			/// <summary>To be added.</summary>
+			/// <summary>Creates a new <see cref="CFSocketWriteEventArgs" /> instance.</summary>
 			public CFSocketWriteEventArgs () { }
 		}
 

@@ -16,16 +16,14 @@ using CoreVideo;
 
 namespace VideoToolbox {
 	public partial class VTDecompressionProperties {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the pixel buffer pool.</summary>
 		public CVPixelBufferPool? PixelBufferPool {
 			get {
 				return GetNativeValue<CVPixelBufferPool> (VTDecompressionPropertyKey.PixelBufferPool);
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the field mode.</summary>
 		public VTFieldMode FieldMode {
 			get {
 				var key = GetNSStringValue (VTDecompressionPropertyKey.FieldMode);
@@ -68,8 +66,7 @@ namespace VideoToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the deinterlace mode.</summary>
 		public VTDeinterlaceMode DeinterlaceMode {
 			get {
 				var key = GetNSStringValue (VTDecompressionPropertyKey.DeinterlaceMode);
@@ -97,8 +94,7 @@ namespace VideoToolbox {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the only these frames.</summary>
 		public VTOnlyTheseFrames OnlyTheseFrames {
 			get {
 				var key = GetNSStringValue (VTDecompressionPropertyKey.OnlyTheseFrames);

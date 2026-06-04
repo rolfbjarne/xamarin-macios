@@ -135,7 +135,7 @@ namespace CoreVideo {
 		}
 
 		// any CF object can be attached
-		/// <typeparam name="T">To be added.</typeparam>
+		/// <typeparam name="T">The type of the attachment value.</typeparam>
 		///         <param name="key">The key to use.</param>
 		///         <param name="attachmentMode">The attachment mode.</param>
 		///         <summary>Gets attachment.</summary>
@@ -155,10 +155,8 @@ namespace CoreVideo {
 
 #if MONOMAC && !XAMCORE_5_0
 		/// <param name="key">The key to use.</param>
-		///         <param name="attachmentMode">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="attachmentMode">The attachment mode.</param>
+		/// <summary>Gets the attachment for the specified key.</summary>
 		[Obsolete ("Use the generic 'GetAttachment<T>' method instead.")]
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[UnsupportedOSPlatform ("tvos")]
@@ -204,10 +202,10 @@ namespace CoreVideo {
 
 		// There is some API that needs a more strongly typed version of a NSDictionary
 		// and there is no easy way to downcast from NSDictionary to NSDictionary<TKey, TValue>
-		/// <typeparam name="TKey">To be added.</typeparam>
-		///         <typeparam name="TValue">To be added.</typeparam>
+		/// <typeparam name="TKey">The type of the dictionary keys.</typeparam>
+		/// <typeparam name="TValue">The type of the dictionary values.</typeparam>
 		///         <param name="attachmentMode">The attachment mode.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets all attachments as a strongly-typed dictionary.</summary>
 		public NSDictionary<TKey, TValue>? GetAttachments<TKey, TValue> (CVAttachmentMode attachmentMode)
 			where TKey : class, INativeObject
 			where TValue : class, INativeObject

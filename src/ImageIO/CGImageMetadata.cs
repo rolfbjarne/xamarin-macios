@@ -18,8 +18,7 @@ namespace ImageIO {
 	[SupportedOSPlatform ("tvos")]
 	public partial class CGImageMetadataEnumerateOptions {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the recursive.</summary>
 		public bool Recursive { get; set; }
 
 		internal NSMutableDictionary ToDictionary ()
@@ -54,7 +53,7 @@ namespace ImageIO {
 			/* CFDataRef __nonnull */ IntPtr data);
 
 		/// <param name="data">The data to use.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CGImageMetadata" /> instance.</summary>
 		public CGImageMetadata (NSData data)
 			: base (CGImageMetadataCreateFromXMPData (data.GetNonNullHandle (nameof (data))), true, verify: true)
 		{
@@ -62,7 +61,6 @@ namespace ImageIO {
 		}
 
 		/// <summary>Type identifier for the ImageIO.CGImageMetadata type.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>
 		///           <para>The returned token is the CoreFoundation type identifier (CFType) that has been assigned to this class.</para>
 		///           <para>This can be used to determine type identity between different CoreFoundation objects.</para>
@@ -82,8 +80,7 @@ namespace ImageIO {
 
 		/// <param name="parent">The parent.</param>
 		///         <param name="path">The path.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets string value.</summary>
 		public NSString? GetStringValue (CGImageMetadata? parent, NSString path)
 		{
 			// parent may be null
@@ -100,7 +97,6 @@ namespace ImageIO {
 			/* CGImageMetadataRef __nonnull */ IntPtr metadata);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CGImageMetadataTag []? GetTags ()
 		{
 			var result = CGImageMetadataCopyTags (Handle);
@@ -114,8 +110,7 @@ namespace ImageIO {
 
 		/// <param name="parent">The parent.</param>
 		///         <param name="path">The path.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets tag.</summary>
 		public CGImageMetadataTag? GetTag (CGImageMetadata? parent, NSString path)
 		{
 			// parent may be null
@@ -145,7 +140,7 @@ namespace ImageIO {
 		/// <param name="rootPath">The root path.</param>
 		///         <param name="options">The options to use.</param>
 		///         <param name="block">The block.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Enumerates tags.</summary>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public void EnumerateTags (NSString? rootPath, CGImageMetadataEnumerateOptions? options, CGImageMetadataTagBlock block)
 		{
@@ -163,8 +158,7 @@ namespace ImageIO {
 		extern static /* CFDataRef __nullable */ IntPtr CGImageMetadataCreateXMPData (
 			/* CGImageMetadataRef __nonnull */ IntPtr metadata, /* CFDictionaryRef __nullable */ IntPtr options);
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Creates x m p data.</summary>
 		public NSData? CreateXMPData ()
 		{
 			// note: there's no options defined for iOS7 (needs to be null)
@@ -180,8 +174,7 @@ namespace ImageIO {
 
 		/// <param name="dictionaryName">The dictionary name.</param>
 		///         <param name="propertyName">The property name.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Copys tag matching image property.</summary>
 		public CGImageMetadataTag? CopyTagMatchingImageProperty (NSString dictionaryName, NSString propertyName)
 		{
 			if (dictionaryName is null)

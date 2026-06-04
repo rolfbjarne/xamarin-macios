@@ -63,7 +63,7 @@ namespace AppKit {
 
 	public partial class NSAlert {
 		/// <param name="window">The window.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Begins sheet.</summary>
 		public void BeginSheet (NSWindow window)
 		{
 			BeginSheet (window, null, null, IntPtr.Zero);
@@ -71,7 +71,7 @@ namespace AppKit {
 
 		/// <param name="window">The window.</param>
 		///         <param name="onEnded">The on ended.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Begins sheet.</summary>
 		public void BeginSheet (NSWindow window, Action? onEnded)
 		{
 			BeginSheetForResponse (window, r => {
@@ -82,15 +82,14 @@ namespace AppKit {
 
 		/// <param name="window">The window.</param>
 		/// <param name="onEnded">The on ended.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Begins sheet for response.</summary>
 		public void BeginSheetForResponse (NSWindow window, Action<nint> onEnded)
 		{
 			BeginSheet (window, new NSAlertDidEndDispatcher (onEnded), NSAlertDidEndDispatcher.Selector, IntPtr.Zero);
 		}
 
 		/// <param name="window">The window.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Runs sheet modal.</summary>
 		public nint RunSheetModal (NSWindow window)
 		{
 			return RunSheetModal (window, NSApplication.SharedApplication);
@@ -98,8 +97,7 @@ namespace AppKit {
 
 		/// <param name="window">The window.</param>
 		///         <param name="application">The application.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Runs sheet modal.</summary>
 		public nint RunSheetModal (NSWindow? window, NSApplication application)
 		{
 			if (application is null)

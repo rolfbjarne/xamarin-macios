@@ -306,7 +306,6 @@ namespace AudioToolbox {
 
 		/// <param name="sequence">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static MusicTrack? FromSequence (MusicSequence sequence)
 		{
@@ -319,7 +318,6 @@ namespace AudioToolbox {
 		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicTrackGetSequence (/* MusicTrack */ IntPtr inTrack, /* MusicSequence* */ IntPtr* outSequence);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public MusicSequence? Sequence {
 			get {
@@ -338,7 +336,6 @@ namespace AudioToolbox {
 
 		/// <param name="endpoint">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus SetDestMidiEndpoint (MidiEndpoint endpoint)
 		{
@@ -365,7 +362,6 @@ namespace AudioToolbox {
 
 		/// <param name="node">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus SetDestNode (int node)
 		{
@@ -396,7 +392,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool MuteStatus {
 			get {
@@ -416,7 +411,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public bool SoloStatus {
 			get {
@@ -436,7 +430,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public double TrackLength {
 			get {
@@ -460,7 +453,6 @@ namespace AudioToolbox {
 		/// <param name="timeStamp">To be added.</param>
 		///         <param name="message">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe MusicPlayerStatus AddMidiNoteEvent (double timeStamp, MidiNoteMessage message)
 		{
@@ -473,7 +465,6 @@ namespace AudioToolbox {
 		/// <param name="timestamp">To be added.</param>
 		///         <param name="channelMessage">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe MusicPlayerStatus AddMidiChannelEvent (double timestamp, MidiChannelMessage channelMessage)
 		{
@@ -486,7 +477,6 @@ namespace AudioToolbox {
 		/// <param name="timestamp">To be added.</param>
 		///         <param name="rawData">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus AddMidiRawDataEvent (double timestamp, MidiRawData rawData)
 		{
@@ -505,7 +495,6 @@ namespace AudioToolbox {
 		/// <param name="timestamp">To be added.</param>
 		///         <param name="evt">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus AddNewExtendedNoteEvent (double timestamp, ExtendedNoteOnEvent evt)
 		{
@@ -520,7 +509,6 @@ namespace AudioToolbox {
 		/// <param name="timestamp">To be added.</param>
 		///         <param name="bmp">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus AddExtendedTempoEvent (double timestamp, double bmp)
 		{
@@ -533,7 +521,6 @@ namespace AudioToolbox {
 		/// <param name="timestamp">To be added.</param>
 		///         <param name="metaEvent">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus AddMetaEvent (double timestamp, MidiMetaEvent metaEvent)
 		{
@@ -552,7 +539,6 @@ namespace AudioToolbox {
 		/// <param name="timestamp">To be added.</param>
 		///         <param name="userData">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus AddUserEvent (double timestamp, MusicEventUserData userData)
 		{
@@ -571,7 +557,6 @@ namespace AudioToolbox {
 		///         <param name="endTime">To be added.</param>
 		///         <param name="moveTime">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus MoveEvents (double startTime, double endTime, double moveTime)
 		{
@@ -584,7 +569,6 @@ namespace AudioToolbox {
 		/// <param name="startTime">To be added.</param>
 		///         <param name="endTime">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus Clear (double startTime, double endTime)
 		{
@@ -597,7 +581,6 @@ namespace AudioToolbox {
 		/// <param name="startTime">To be added.</param>
 		///         <param name="endTime">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus Cut (double startTime, double endTime)
 		{
@@ -612,7 +595,6 @@ namespace AudioToolbox {
 		///         <param name="targetTrack">To be added.</param>
 		///         <param name="targetInsertTime">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus CopyInsert (double sourceStartTime, double sourceEndTime, MusicTrack targetTrack, double targetInsertTime)
 		{
@@ -631,7 +613,6 @@ namespace AudioToolbox {
 		///         <param name="targetTrack">To be added.</param>
 		///         <param name="targetInsertTime">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus Merge (double sourceStartTime, double sourceEndTime, MusicTrack targetTrack, double targetInsertTime)
 		{

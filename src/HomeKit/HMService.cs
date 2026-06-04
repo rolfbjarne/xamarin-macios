@@ -17,7 +17,6 @@ namespace HomeKit {
 
 		/// <param name="serviceType">The service type.</param>
 		///         <summary>Asynchronously updates the associated service type to  <paramref name="serviceType" /></summary>
-		///         <returns>To be added.</returns>
 		public Task UpdateAssociatedServiceTypeAsync (HMServiceType serviceType)
 		{
 			return UpdateAssociatedServiceTypeAsync (serviceType.GetConstant ());

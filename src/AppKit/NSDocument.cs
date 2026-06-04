@@ -6,10 +6,9 @@ using System.Collections.Generic;
 namespace AppKit {
 
 	public partial class NSDocument {
-		/// <param name="document">To be added.</param>
-		///     <param name="didDuplicate">To be added.</param>
+		/// <param name="document">The document.</param>
+		///     <param name="didDuplicate">The did duplicate.</param>
 		///     <summary>To be added.</summary>
-		///     <remarks>To be added.</remarks>
 		public delegate void DuplicateCallback (NSDocument document, bool didDuplicate);
 
 		[Register ("__NSDocumentDuplicateCallback")]
@@ -34,9 +33,8 @@ namespace AppKit {
 			}
 		}
 
-		/// <param name="callback">To be added.</param>
+		/// <param name="callback">The callback to invoke.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void DuplicateDocument (DuplicateCallback? callback)
 		{
 			if (callback is null) {

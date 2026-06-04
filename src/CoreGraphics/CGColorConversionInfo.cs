@@ -11,7 +11,7 @@ using CoreFoundation;
 #endif
 
 namespace CoreGraphics {
-	/// <summary>To be added.</summary>
+	/// <summary>Represents a triple of color space, transform type, and rendering intent for color conversion.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
@@ -24,7 +24,7 @@ namespace CoreGraphics {
 	}
 
 	// CGColorConverter.h
-	/// <summary>To be added.</summary>
+	/// <summary>Describes a conversion between color spaces.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
@@ -104,8 +104,8 @@ namespace CoreGraphics {
 		}
 
 		/// <param name="source">The source.</param>
-		///         <param name="destination">The destination.</param>
-		///         <summary>To be added.</summary>
+		/// <param name="destination">The destination.</param>
+		/// <summary>Creates a new color conversion info from the specified source and destination color spaces.</summary>
 		public CGColorConversionInfo (CGColorSpace source, CGColorSpace destination)
 			: base (Create (source, destination), true, verify: true)
 		{

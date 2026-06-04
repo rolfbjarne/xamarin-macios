@@ -45,8 +45,7 @@ namespace VideoToolbox {
 		unsafe extern static VTStatus VTSessionCopySupportedPropertyDictionary (/* VTSessionRef */ IntPtr session, /* CFDictionaryRef* */ IntPtr* supportedPropertyDictionaryOut);
 
 		/// <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Sets properties.</summary>
 		public VTStatus SetProperties (VTPropertyOptions options)
 		{
 			if (options is null)
@@ -60,8 +59,7 @@ namespace VideoToolbox {
 
 		/// <param name="propertyKey">The property key.</param>
 		///         <param name="value">The value to set.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Sets property.</summary>
 		public VTStatus SetProperty (NSString propertyKey, NSObject? value)
 		{
 			if (propertyKey is null)
@@ -73,8 +71,7 @@ namespace VideoToolbox {
 			return status;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Gets properties.</summary>
 		public VTPropertyOptions? GetProperties ()
 		{
 			VTStatus result;
@@ -92,8 +89,7 @@ namespace VideoToolbox {
 		}
 
 		/// <param name="propertyKey">The property key.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets property.</summary>
 		public NSObject? GetProperty (NSString propertyKey)
 		{
 			if (propertyKey is null)
@@ -110,8 +106,7 @@ namespace VideoToolbox {
 			return Runtime.GetNSObject<NSObject> (ret, true);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Gets serializable properties.</summary>
 		public NSDictionary? GetSerializableProperties ()
 		{
 			VTStatus result;

@@ -37,7 +37,6 @@ namespace MapKit {
 
 	// NSUInteger -> MKTypes.h
 	/// <summary>The type of map.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MKMapType : ulong {
@@ -58,37 +57,34 @@ namespace MapKit {
 
 	// NSUInteger -> MKDistanceFormatter.h
 	/// <summary>An enumeration whose values specify the units used with <see cref="MapKit.MKDistanceFormatter" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum MKDistanceFormatterUnits : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates default.</summary>
 		Default,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates metric.</summary>
 		Metric,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates imperial.</summary>
 		Imperial,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates imperial with yards.</summary>
 		ImperialWithYards,
 	}
 
 	// NSUInteger -> MKDistanceFormatter.h
 	/// <summary>An enumeration whose values specify the length of a <see cref="MapKit.MKDistanceFormatter" /> string.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum MKDistanceFormatterUnitStyle : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates default.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates abbreviated.</summary>
 		Abbreviated,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates full.</summary>
 		Full,
 	}
 
 	// NSInteger -> MKMapView.h
 	/// <summary>An enumeration whose value specify whether the overlay should render above roads, but beneath labels, etc..</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MKOverlayLevel : long {
@@ -100,20 +96,19 @@ namespace MapKit {
 
 	// NSUInteger -> MKTypes.h
 	/// <summary>An enumeration whose values represent various errors that can occur with <see cref="MapKit.MKDirections.CalculateDirections" /> and <see cref="MapKit.MKDirections.CalculateETA(MapKit.MKETAHandler)" />.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	[ErrorDomain ("MKErrorDomain")]
 	public enum MKErrorCode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unknown.</summary>
 		Unknown = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates server failure.</summary>
 		ServerFailure,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates loading throttled.</summary>
 		LoadingThrottled,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates placemark not found.</summary>
 		PlacemarkNotFound,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates directions not found.</summary>
 		DirectionsNotFound,
 		DecodingFailed,
 	}
@@ -124,15 +119,15 @@ namespace MapKit {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MKAnnotationViewDragState : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates starting.</summary>
 		Starting,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dragging.</summary>
 		Dragging,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates canceling.</summary>
 		Canceling,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ending.</summary>
 		Ending,
 	}
 
@@ -145,21 +140,20 @@ namespace MapKit {
 	[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use 'MKPinAnnotationView.PinTintColor' instead.")]
 	[Deprecated (PlatformName.MacOSX, 10, 11, message: "Use 'MKPinAnnotationView.PinTintColor' instead.")]
 	public enum MKPinAnnotationColor : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates red.</summary>
 		Red,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates green.</summary>
 		Green,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates purple.</summary>
 		Purple,
 	}
 
 	// NSUInteger -> MKTypes.h
 	/// <summary>An enumeration of valid tracking modes.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MKUserTrackingMode : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None,
 		/// <summary>To be added.</summary>
 		Follow,
@@ -173,7 +167,6 @@ namespace MapKit {
 	}
 
 	/// <summary>Enumerates values that control whether search queries, in addition to place results, are included in completion lists.</summary>
-	/// <remarks>To be added.</remarks>
 	[Native]
 	[Deprecated (PlatformName.iOS, 13, 0, message: "Use 'MKLocalSearchCompleterResultType' instead.")]
 	[Deprecated (PlatformName.MacOSX, 10, 15, message: "Use 'MKLocalSearchCompleterResultType' instead.")]
@@ -188,7 +181,6 @@ namespace MapKit {
 	}
 
 	/// <summary>Enumerates collision detection modes.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MKAnnotationViewCollisionMode : long {
@@ -206,16 +198,15 @@ namespace MapKit {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MKScaleViewAlignment : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates leading.</summary>
 		Leading,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates trailing.</summary>
 		Trailing,
 		[TV (26, 0), NoMac, iOS (26, 0), MacCatalyst (26, 0)]
 		Center,
 	}
 
 	/// <summary>Enumerates visibility behavior for marker titles.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum MKFeatureVisibility : long {

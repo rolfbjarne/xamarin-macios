@@ -96,7 +96,7 @@ namespace ImageIO {
 		extern static /* CFArrayRef __nullable */ IntPtr CGImageMetadataCopyTags (
 			/* CGImageMetadataRef __nonnull */ IntPtr metadata);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the metadata tags in this image metadata container.</summary>
 		public CGImageMetadataTag []? GetTags ()
 		{
 			var result = CGImageMetadataCopyTags (Handle);

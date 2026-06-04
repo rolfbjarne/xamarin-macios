@@ -9,7 +9,6 @@ namespace CoreWlan {
 	/// <summary>To be added.</summary>
 	public unsafe partial class CWInterface {
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public CWChannel []? SupportedWlanChannels {
 			get {
 				NSSet? channels = _SupportedWlanChannels;
@@ -18,7 +17,6 @@ namespace CoreWlan {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public CWNetwork []? CachedScanResults {
 			get {
 				NSSet? results = _CachedScanResults;
@@ -27,7 +25,6 @@ namespace CoreWlan {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public static string []? InterfaceNames {
 			get {
 				NSSet? interfaceNames = _InterfaceNames;
@@ -40,7 +37,6 @@ namespace CoreWlan {
 		/// <param name="ssid">The ssid.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CWNetwork []? ScanForNetworksWithSsid (NSData ssid, out NSError error)
 		{
 			NSSet? networks = _ScanForNetworksWithSsid (ssid, out error);
@@ -50,7 +46,6 @@ namespace CoreWlan {
 		/// <param name="networkName">The network name.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CWNetwork []? ScanForNetworksWithName (string networkName, out NSError error)
 		{
 			NSSet? networks = _ScanForNetworksWithName (networkName, out error);
@@ -61,7 +56,6 @@ namespace CoreWlan {
 		///         <param name="includeHidden">The include hidden.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 		public CWNetwork []? ScanForNetworksWithSsid (NSData ssid, bool includeHidden, out NSError? error)
@@ -74,7 +68,6 @@ namespace CoreWlan {
 		///         <param name="includeHidden">The include hidden.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 		public CWNetwork []? ScanForNetworksWithName (string networkName, bool includeHidden, out NSError? error)

@@ -100,7 +100,7 @@ namespace LocalAuthentication {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum LACredentialType : long {
-		/// <summary>Indicates that an application provided a password.</summary>
+		/// <summary>Indicates that an application provided APassword.</summary>
 		ApplicationPassword = 0,
 		[iOS (13, 4), NoTV]
 		[MacCatalyst (13, 1)]

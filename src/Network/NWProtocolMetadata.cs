@@ -42,7 +42,7 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		internal static extern byte nw_protocol_metadata_is_ip (OS_nw_protocol_metadata metadata);
 
-		/// <summary>The is i p.</summary>
+		/// <summary>The is IP.</summary>
 		public bool IsIP => nw_protocol_metadata_is_ip (GetCheckedHandle ()) != 0;
 
 		[DllImport (Constants.NetworkLibrary)]

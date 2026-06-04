@@ -429,15 +429,15 @@ namespace Messages {
 	interface MSStickerBrowserViewDataSource {
 		/// <param name="stickerBrowserView">The sticker browser view.</param>
 		/// <summary>The number of <see cref="Messages.MSSticker" /> objects held by this data source.</summary>
-		/// <returns>To be added.</returns>
+		/// <returns>The number of stickers.</returns>
 		[Abstract]
 		[Export ("numberOfStickersInStickerBrowserView:")]
 		nint GetNumberOfStickers (MSStickerBrowserView stickerBrowserView);
 
 		/// <param name="stickerBrowserView">The sticker browser view.</param>
 		/// <param name="index">The zero-based index.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns the sticker at the specified index.</summary>
+		/// <returns>The sticker at the specified index.</returns>
 		[Abstract]
 		[Export ("stickerBrowserView:stickerAtIndex:")]
 		MSSticker GetSticker (MSStickerBrowserView stickerBrowserView, nint index);

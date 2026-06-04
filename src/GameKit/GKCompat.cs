@@ -61,7 +61,6 @@ namespace GameKit {
 	}
 
 	/// <summary>Delegate object for the <see cref="GameKit.GKPeerPickerController" /> class.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/GameKit/Reference/GKPeerPickerControllerDelegate_Protocol/index.html">Apple documentation for <c>GKPeerPickerControllerDelegate</c></related>
 	[EditorBrowsable (EditorBrowsableState.Never)]
 	[Obsolete ("Use 'MCBrowserViewController' from the 'MultipeerConnectivity' framework instead.")]
@@ -91,7 +90,7 @@ namespace GameKit {
 
 		/// <param name="picker">The picker.</param>
 		///         <param name="type">The type.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Called when a connection type is selected.</summary>
 		public virtual void ConnectionTypeSelected (GKPeerPickerController picker, GKPeerPickerConnectionType type)
 		{
 			throw new PlatformNotSupportedException (Constants.TypeUnavailable);
@@ -123,7 +122,6 @@ namespace GameKit {
 	} /* class GKPeerPickerControllerDelegate */
 
 	/// <summary>A View Controller that can be use to discover other players on other iPhones or iPads.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/GameKit/Reference/GKPeerPickerController_Class/index.html">Apple documentation for <c>GKPeerPickerController</c></related>
 	[EditorBrowsable (EditorBrowsableState.Never)]
 	[Obsolete ("Use 'MCBrowserViewController' from the 'MultipeerConnectivity' framework instead.")]
@@ -156,13 +154,13 @@ namespace GameKit {
 			throw new PlatformNotSupportedException (Constants.TypeUnavailable);
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Dismisses the peer picker controller.</summary>
 		public virtual void Dismiss ()
 		{
 			throw new PlatformNotSupportedException (Constants.TypeUnavailable);
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Shows the peer picker controller.</summary>
 		public virtual void Show ()
 		{
 			throw new PlatformNotSupportedException (Constants.TypeUnavailable);

@@ -28,7 +28,6 @@ namespace CoreGraphics {
 		///     <param name="eventRef">To be added.</param>
 		///     <param name="userInfo">To be added.</param>
 		///     <summary>To be added.</summary>
-		///     <returns>To be added.</returns>
 		///     <remarks>To be added.</remarks>
 		public delegate IntPtr CGEventTapCallback (IntPtr tapProxyEvent, CGEventType eventType, IntPtr eventRef, IntPtr userInfo);
 
@@ -118,7 +117,6 @@ namespace CoreGraphics {
 		///         <param name="cback">To be added.</param>
 		///         <param name="data">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[Obsolete ("The location parameter is not used. Consider using the overload without the location parameter.", false)]
 		[System.ComponentModel.EditorBrowsable (System.ComponentModel.EditorBrowsableState.Never)]
@@ -279,7 +277,6 @@ namespace CoreGraphics {
 		extern static IntPtr CGEventCreateCopy (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGEvent Copy ()
 		{
@@ -290,7 +287,6 @@ namespace CoreGraphics {
 		extern static IntPtr CGEventCreateData (IntPtr allocator, IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public NSData? ToData ()
 		{
@@ -301,7 +297,6 @@ namespace CoreGraphics {
 		extern static IntPtr CGEventCreateSourceFromEvent (IntPtr evthandle);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public CGEventSource? CreateEventSource ()
 		{
@@ -319,7 +314,6 @@ namespace CoreGraphics {
 		extern static void CGEventSetLocation (IntPtr handle, CGPoint location);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGPoint Location {
 			get {
@@ -334,7 +328,6 @@ namespace CoreGraphics {
 		extern static CGPoint CGEventGetUnflippedLocation (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGPoint UnflippedLocation {
 			get {
@@ -346,7 +339,6 @@ namespace CoreGraphics {
 		// just to peek at the flags
 		/// <param name="eventHandle">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary, EntryPoint = "CGEventGetFlags")]
 		public extern static CGEventFlags GetFlags (IntPtr eventHandle);
@@ -355,7 +347,6 @@ namespace CoreGraphics {
 		internal extern static void CGEventSetFlags (IntPtr eventHandle, CGEventFlags flags);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGEventFlags Flags {
 			get {
@@ -513,7 +504,6 @@ namespace CoreGraphics {
 		extern static void CGEventSetType (IntPtr handle, CGEventType evtType);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public CGEventType EventType {
 			get {
@@ -532,7 +522,6 @@ namespace CoreGraphics {
 		extern static void CGEventSetTimestamp (IntPtr handle, ulong timeStampp);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public ulong Timestamp {
 			get {
@@ -573,7 +562,6 @@ namespace CoreGraphics {
 
 		/// <param name="machPort">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static bool IsTapEnabled (CFMachPort machPort)
 		{
@@ -588,7 +576,6 @@ namespace CoreGraphics {
 		unsafe extern static void CGEventKeyboardGetUnicodeString (IntPtr handle, nuint maxLen, nuint* actualLen, ushort* buffer);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe string GetUnicodeString ()
 		{
@@ -692,7 +679,6 @@ namespace CoreGraphics {
 			uint* /* uint32_t* */ eventTapCount);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe CGEventTapInformation []? GetEventTapList ()
 		{

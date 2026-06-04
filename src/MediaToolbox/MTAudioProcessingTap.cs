@@ -154,7 +154,7 @@ namespace MediaToolbox {
 		[DllImport (Constants.MediaToolboxLibrary)]
 		unsafe extern static void* MTAudioProcessingTapGetStorage (/* MTAudioProcessingTapRef */ IntPtr tap);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the storage pointer associated with this audio processing tap.</summary>
 		public unsafe void* GetStorage ()
 		{
 			return MTAudioProcessingTapGetStorage (Handle);

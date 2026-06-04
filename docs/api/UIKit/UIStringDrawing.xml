@@ -1,15 +1,15 @@
 <Documentation>
   <Docs DocId="M:UIKit.UIStringDrawing.DrawString(Foundation.NSString,CoreGraphics.CGPoint,System.Runtime.InteropServices.NFloat,UIKit.UIFont,System.Runtime.InteropServices.NFloat,System.Runtime.InteropServices.NFloat@,UIKit.UILineBreakMode,UIKit.UIBaselineAdjustment)">
         
-        <param name="point">To be added.</param>
-        <param name="width">To be added.</param>
-        <param name="font">To be added.</param>
-        <param name="minFontSize">To be added.</param>
-        <param name="actualFontSize">To be added.</param>
-        <param name="breakMode">To be added.</param>
-        <param name="adjustment">To be added.</param>
-        <summary>Developers should use <see cref="NSStringDrawing.DrawString(NSString,CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
-        <returns>To be added.</returns>
+        <param name="point">The point at which to draw the string.</param>
+        <param name="width">The maximum width of the drawn string.</param>
+        <param name="font">The font to use for rendering the string.</param>
+        <param name="minFontSize">The minimum font size to use when shrinking text to fit.</param>
+        <param name="actualFontSize">On return, contains the actual font size used to draw the string.</param>
+        <param name="breakMode">The line break mode to use.</param>
+        <param name="adjustment">The baseline adjustment to apply when shrinking text.</param>
+        <summary>Developers should use <see cref="M:UIKit.NSStringDrawing.DrawString(Foundation.NSString,CoreGraphics.CGRect,UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
+        <returns>The size of the rendered string.</returns>
         <remarks>
           <para>(More documentation for this node is coming)</para>
           <para tool="threads">This can be used from a background thread.</para>
@@ -17,14 +17,14 @@
       </Docs>
   <Docs DocId="M:UIKit.UIStringDrawing.DrawString(Foundation.NSString,CoreGraphics.CGPoint,System.Runtime.InteropServices.NFloat,UIKit.UIFont,System.Runtime.InteropServices.NFloat,UIKit.UILineBreakMode,UIKit.UIBaselineAdjustment)">
         
-        <param name="point">To be added.</param>
-        <param name="width">To be added.</param>
-        <param name="font">To be added.</param>
-        <param name="fontSize">To be added.</param>
-        <param name="breakMode">To be added.</param>
-        <param name="adjustment">To be added.</param>
-        <summary>Developers should use <see cref="NSStringDrawing.DrawString(NSString,CoreGraphics.CGRect, UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
-        <returns>To be added.</returns>
+        <param name="point">The point at which to draw the string.</param>
+        <param name="width">The maximum width of the drawn string.</param>
+        <param name="font">The font to use for rendering the string.</param>
+        <param name="fontSize">The minimum font size to use when shrinking text to fit.</param>
+        <param name="breakMode">The line break mode to use.</param>
+        <param name="adjustment">The baseline adjustment to apply when shrinking text.</param>
+        <summary>Developers should use <see cref="M:UIKit.NSStringDrawing.DrawString(Foundation.NSString,CoreGraphics.CGRect,UIKit.UIStringAttributes)" /> rather than this deprecated method.</summary>
+        <returns>The size of the rendered string.</returns>
         <remarks>
           <para>(More documentation for this node is coming)</para>
           <para tool="threads">This can be used from a background thread.</para>

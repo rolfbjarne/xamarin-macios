@@ -162,7 +162,6 @@ namespace Compression {
 		}
 
 		/// <summary>A stream object that represents the underlying stream.</summary>
-		///         <value>To be added.</value>
 		///         <exception cref="System.ObjectDisposedException">
 		///           The underlying stream is closed.
 		///         </exception>
@@ -206,7 +205,6 @@ namespace Compression {
 		}
 
 		/// <summary>This property is not supported and always throws a NotSupportedException.</summary>
-		///         <value>To be added.</value>
 		public override long Position {
 			get { throw new NotSupportedException ("This operation is not supported."); }
 			set { throw new NotSupportedException ("This operation is not supported."); }
@@ -261,7 +259,6 @@ namespace Compression {
 		/// <param name="offset">The location in the stream.</param>
 		///         <param name="origin">One of the SeekOrigin values.</param>
 		///         <summary>This operation is not supported and always throws a NotSupportedException.</summary>
-		///         <returns>To be added.</returns>
 		///         <exception cref="System.NotSupportedException">
 		///           This property is not supported on this stream.
 		///         </exception>
@@ -305,7 +302,6 @@ namespace Compression {
 
 		/// <param name="destination">The destination.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override int Read (Span<byte> destination)
 		{
 			if (GetType () != typeof (CompressionStream)) {
@@ -425,8 +421,7 @@ namespace Compression {
 
 		/// <param name="destination">The destination.</param>
 		///         <param name="cancellationToken">A cancellation token.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Values task.</summary>
 		public override ValueTask<int> ReadAsync (Memory<byte> destination, CancellationToken cancellationToken = default (CancellationToken))
 		{
 			if (GetType () != typeof (CompressionStream)) {
@@ -695,7 +690,6 @@ namespace Compression {
 		/// <param name="source">The source.</param>
 		///         <param name="cancellationToken">A cancellation token.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override ValueTask WriteAsync (ReadOnlyMemory<byte> source, CancellationToken cancellationToken)
 		{
 			if (GetType () != typeof (CompressionStream)) {

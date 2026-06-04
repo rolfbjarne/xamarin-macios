@@ -610,8 +610,7 @@ namespace MediaPlayer {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the has protected asset.</summary>
 		[SupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -622,8 +621,7 @@ namespace MediaPlayer {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the is explicit item.</summary>
 		[SupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -634,8 +632,7 @@ namespace MediaPlayer {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the date added.</summary>
 		[SupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -647,7 +644,6 @@ namespace MediaPlayer {
 		}
 
 		/// <summary>Gets the non-library ID.</summary>
-		///         <value>To be added.</value>
 		[SupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

@@ -78,7 +78,7 @@ namespace Social {
 	}
 
 	/// <summary>Enumeration with the various kinds of social services that can be used.</summary>
-	/// <remarks>This enumeration is used to map into the underlying set of services offered by the social framework. It is intended to assist code completion while developing and take the guesswork out of using the framework in some entry points that take an NSString as a parameter.</remarks>
+	/// <remarks>This enumeration is used to map into the underlying set of services offered by the social framework. It is intended to assist code completion while developing and take the guesswork out of using the framework in some entry points that take an NSString as AParameter.</remarks>
 	enum SLServiceKind {
 		/// <summary>Facebook services</summary>
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use Facebook SDK instead.")]
@@ -179,7 +179,7 @@ namespace Social {
 		void PerformRequest (Action<NSData, NSHttpUrlResponse, NSError> handler);
 	}
 
-	/// <summary>A <see cref="UIKit.UIViewController" /> that manages the user experience for the composition of a post for a social service.</summary>
+	/// <summary>A <see cref="UIKit.UIViewController" /> that manages the user experience for the composition of APost for a social service.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/NetworkingInternet/Reference/SLComposeViewController_Class/index.html">Apple documentation for <c>SLComposeViewController</c></related>
 	[NoMac]
@@ -333,7 +333,7 @@ namespace Social {
 	}
 
 
-	/// <summary>Allows users to configure properties of a post for social sharing.</summary>
+	/// <summary>Allows users to configure properties of APost for social sharing.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/Social/Reference/SLComposeSheetConfigurationItem_Class/index.html">Apple documentation for <c>SLComposeSheetConfigurationItem</c></related>
 	[NoMac]

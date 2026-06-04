@@ -35,18 +35,17 @@ namespace CoreGraphics {
 #if MONOMAC || __MACCATALYST__
 	// uint32_t -> CGWindow.h (OSX SDK only)
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[Flags]
 	public enum CGWindowImageOption : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates default.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bounds ignore framing.</summary>
 		BoundsIgnoreFraming = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates should be opaque.</summary>
 		ShouldBeOpaque = (1 << 1),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates only shadows.</summary>
 		OnlyShadows = (1 << 2),
 		BestResolution = (1 << 3),
 		NominalResolution = (1 << 4),
@@ -54,22 +53,21 @@ namespace CoreGraphics {
 
 	// uint32_t -> CGWindow.h (OSX SDK only)
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[Flags]
 	public enum CGWindowListOption : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates all.</summary>
 		All = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates on screen only.</summary>
 		OnScreenOnly = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates on screen above window.</summary>
 		OnScreenAboveWindow = (1 << 1),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates on screen below window.</summary>
 		OnScreenBelowWindow = (1 << 2),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates including window.</summary>
 		IncludingWindow = (1 << 3),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates exclude desktop elements.</summary>
 		ExcludeDesktopElements = (1 << 4),
 	}
 #endif
@@ -107,17 +105,16 @@ namespace CoreGraphics {
 	}
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum CGImagePixelFormatInfo : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates packed.</summary>
 		Packed = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates rgb555.</summary>
 		Rgb555 = 1 << 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates rgb565.</summary>
 		Rgb565 = 2 << 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates rgb101010.</summary>
 		Rgb101010 = 3 << 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates rgb cif10.</summary>
 		RgbCif10 = 4 << 16,
 		/// <summary>To be added.</summary>
 		[SupportedOSPlatform ("ios")]
@@ -168,7 +165,7 @@ namespace CoreGraphics {
 
 		/// <summary>The image has an alpha channel.</summary>
 		AlphaInfoMask = 0x1F,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates float info mask.</summary>
 		FloatInfoMask = 0xf00,
 		/// <summary>The components of the bitmap are floating point values.</summary>
 		FloatComponents = (1 << 8),
@@ -188,20 +185,19 @@ namespace CoreGraphics {
 	}
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum CGImageByteOrderInfo : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates byte order mask.</summary>
 		ByteOrderMask = 0x7000,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates byte order default.</summary>
 		ByteOrderDefault = (0 << 12),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates byte order16 little.</summary>
 		ByteOrder16Little = (1 << 12),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates byte order32 little.</summary>
 		ByteOrder32Little = (2 << 12),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates byte order16 big.</summary>
 		ByteOrder16Big = (3 << 12),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates byte order32 big.</summary>
 		ByteOrder32Big = (4 << 12),
 	}
 
@@ -328,8 +324,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		static extern IntPtr CGWindowListCreateImage (CGRect screenBounds, CGWindowListOption windowOption, uint windowID, CGWindowImageOption imageOption);
 
-		/// <param name="windownumber">To be added.</param>
-		///         <param name="bounds">To be added.</param>
+		/// <param name="windownumber">The windownumber.</param>
+		///         <param name="bounds">The bounds.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
@@ -457,7 +453,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGImageRef */ IntPtr CGImageCreateCopyWithColorSpace (/* CGImageRef */ IntPtr image, /* CGColorSpaceRef */ IntPtr space);
 
-		/// <param name="cs">To be added.</param>
+		/// <param name="cs">The cs.</param>
 		///         <summary>Creates a copy of the image based on the specified colorspace.</summary>
 		///         <returns>
 		///         </returns>
@@ -617,7 +613,6 @@ namespace CoreGraphics {
 
 		/// <summary>Returns the image's data provider.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CGDataProvider DataProvider {
 			get {
 				return new CGDataProvider (CGImageGetDataProvider (Handle), false);
@@ -629,7 +624,6 @@ namespace CoreGraphics {
 
 		/// <summary>Returns an array of values that consist of upper and lower limits, into which the corresponding image pixel data are linearly interpolated for decoding.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public unsafe nfloat* Decode {
 			get {
 				return CGImageGetDecode (Handle);
@@ -685,7 +679,6 @@ namespace CoreGraphics {
 		// we return an NSString, instead of a string, as all our UTType constants are NSString (see mobilecoreservices.cs)
 		/// <summary>Gets the image's universal type identifier.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -706,7 +699,6 @@ namespace CoreGraphics {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -722,7 +714,6 @@ namespace CoreGraphics {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

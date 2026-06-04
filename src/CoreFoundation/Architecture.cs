@@ -4,7 +4,6 @@ using CoreFoundation;
 
 namespace CoreFoundation {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public partial class CFBundle {
 
 		// from machine.h
@@ -16,19 +15,18 @@ namespace CoreFoundation {
 		// #define CPU_TYPE_POWERPC    ((cpu_type_t) 18)
 		// #define CPU_TYPE_POWERPC64  (CPU_TYPE_POWERPC | CPU_ARCH_ABI64)
 		/// <summary>To be added.</summary>
-		///     <remarks>To be added.</remarks>
 		public enum Architecture {
-			/// <summary>To be added.</summary>
+			/// <summary>Indicates i386.</summary>
 			I386 = 0x00000007,
-			/// <summary>To be added.</summary>
+			/// <summary>Indicates x86_64.</summary>
 			X86_64 = 0x01000007,
-			/// <summary>To be added.</summary>
+			/// <summary>Indicates a r m.</summary>
 			ARM = 0x0000000c,
-			/// <summary>To be added.</summary>
+			/// <summary>Indicates a r m64.</summary>
 			ARM64 = 0x01000000 | ARM,
-			/// <summary>To be added.</summary>
+			/// <summary>Indicates p p c.</summary>
 			PPC = 0x00000012,
-			/// <summary>To be added.</summary>
+			/// <summary>Indicates p p c64.</summary>
 			PPC64 = 0x01000000 | PPC,
 		}
 	}

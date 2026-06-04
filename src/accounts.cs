@@ -319,13 +319,13 @@ namespace Accounts {
 	[NoMacCatalyst]
 	[Static]
 	interface ACLinkedInKey {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the LinkedIn app ID key.</summary>
+		/// <value>The <see cref="T:Foundation.NSString" /> constant representing the LinkedIn app ID key.</value>
 		[Field ("ACLinkedInAppIdKey")]
 		NSString AppId { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the LinkedIn permissions key.</summary>
+		/// <value>The <see cref="T:Foundation.NSString" /> constant representing the LinkedIn permissions key.</value>
 		[Field ("ACLinkedInPermissionsKey")]
 		NSString Permissions { get; }
 	}

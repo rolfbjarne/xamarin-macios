@@ -628,8 +628,7 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTFontDescriptorCreateCopyWithAttributes (IntPtr original, IntPtr attributes);
 		/// <param name="attributes">The attributes.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Withs attributes.</summary>
 		public CTFontDescriptor? WithAttributes (NSDictionary attributes)
 		{
 			if (attributes is null)
@@ -648,7 +647,6 @@ namespace CoreText {
 
 		/// <param name="attributes">The attributes.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>
 		///           <example>
 		///             <code lang="csharp lang-csharp"><![CDATA[
@@ -1029,7 +1027,6 @@ namespace CoreText {
 		static extern IntPtr CTFontDescriptorCreateMatchingFontDescriptors (IntPtr descriptor, IntPtr mandatoryAttributes);
 		/// <param name="mandatoryAttributes">The mandatory attributes.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CTFontDescriptor [] GetMatchingFontDescriptors (NSSet? mandatoryAttributes)
 		{
 			var cfArrayRef = CTFontDescriptorCreateMatchingFontDescriptors (Handle, mandatoryAttributes.GetHandle ());
@@ -1041,7 +1038,6 @@ namespace CoreText {
 
 		/// <param name="mandatoryAttributes">The mandatory attributes.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CTFontDescriptor? []? GetMatchingFontDescriptors (params NSString [] mandatoryAttributes)
 		{
 			NSSet attrs = NSSet.MakeNSObjectSet (mandatoryAttributes);
@@ -1049,7 +1045,6 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CTFontDescriptor? []? GetMatchingFontDescriptors ()
 		{
 			NSSet? attrs = null;
@@ -1059,8 +1054,7 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTFontDescriptorCreateMatchingFontDescriptor (IntPtr descriptor, IntPtr mandatoryAttributes);
 		/// <param name="mandatoryAttributes">The mandatory attributes.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets matching font descriptor.</summary>
 		public CTFontDescriptor? GetMatchingFontDescriptor (NSSet? mandatoryAttributes)
 		{
 			CTFontDescriptor? result = CreateDescriptor (CTFontDescriptorCreateMatchingFontDescriptors (Handle, mandatoryAttributes.GetHandle ()));
@@ -1069,16 +1063,14 @@ namespace CoreText {
 		}
 
 		/// <param name="mandatoryAttributes">The mandatory attributes.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets matching font descriptor.</summary>
 		public CTFontDescriptor? GetMatchingFontDescriptor (params NSString [] mandatoryAttributes)
 		{
 			NSSet attrs = NSSet.MakeNSObjectSet (mandatoryAttributes);
 			return GetMatchingFontDescriptor (attrs);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Gets matching font descriptor.</summary>
 		public CTFontDescriptor? GetMatchingFontDescriptor ()
 		{
 			NSSet? attrs = null;

@@ -114,7 +114,7 @@ namespace Contacts {
 		DataAccessError = 2,
 		/// <summary>The user has denied the app access to their contacts.</summary>
 		AuthorizationDenied = 100,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates no accessible writable containers.</summary>
 		NoAccessibleWritableContainers = 101,
 		UnauthorizedKeys = 102,
 		FeatureDisabledByUser = 103,
@@ -129,7 +129,7 @@ namespace Contacts {
 		ContainmentScope = 203,
 		/// <summary>The <see cref="Contacts.CNContact" /> does not exist.</summary>
 		ParentRecordDoesNotExist = 204,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates record identifier invalid.</summary>
 		RecordIdentifierInvalid = 205,
 		RecordNotWritable = 206,
 		ParentContainerNotWritable = 207,
@@ -143,17 +143,17 @@ namespace Contacts {
 		PredicateInvalid = 400,
 		/// <summary>A policy validation error.</summary>
 		PolicyViolation = 500,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates client identifier invalid.</summary>
 		ClientIdentifierInvalid = 600,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates client identifier does not exist.</summary>
 		ClientIdentifierDoesNotExist = 601,
 		ClientIdentifierCollision = 602,
 		ChangeHistoryExpired = 603,
 		ChangeHistoryInvalidAnchor = 604,
 		ChangeHistoryInvalidFetchRequest = 605,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates v card malformed.</summary>
 		VCardMalformed = 700,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates v card summarization error.</summary>
 		VCardSummarizationError = 701,
 	}
 
@@ -170,59 +170,59 @@ namespace Contacts {
 	[MacCatalyst (13, 1)]
 	[Flags]
 	public enum CNContactOptions : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates nickname.</summary>
 		Nickname = 1 << 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates phonetic given name.</summary>
 		PhoneticGivenName = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates phonetic middle name.</summary>
 		PhoneticMiddleName = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates phonetic family name.</summary>
 		PhoneticFamilyName = 1 << 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates organization name.</summary>
 		OrganizationName = 1 << 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates department name.</summary>
 		DepartmentName = 1 << 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates job title.</summary>
 		JobTitle = 1 << 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates birthday.</summary>
 		Birthday = 1 << 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates non gregorian birthday.</summary>
 		NonGregorianBirthday = 1 << 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates note.</summary>
 		Note = 1 << 9,
 #if !MONOMAC
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates image data.</summary>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		ImageData = 1 << 10,
 #endif
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates thumbnail image data.</summary>
 		ThumbnailImageData = 1 << 11,
 #if !MONOMAC
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates image data available.</summary>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		ImageDataAvailable = 1 << 12,
 #endif
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates type.</summary>
 		Type = 1 << 13,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates phone numbers.</summary>
 		PhoneNumbers = 1 << 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates email addresses.</summary>
 		EmailAddresses = 1 << 15,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates postal addresses.</summary>
 		PostalAddresses = 1 << 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dates.</summary>
 		Dates = 1 << 17,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates url addresses.</summary>
 		UrlAddresses = 1 << 18,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates relations.</summary>
 		Relations = 1 << 19,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates social profiles.</summary>
 		SocialProfiles = 1 << 20,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates instant message addresses.</summary>
 		InstantMessageAddresses = 1 << 21,
 	}
 }

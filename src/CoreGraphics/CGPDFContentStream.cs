@@ -39,7 +39,7 @@ namespace CoreGraphics {
 		}
 
 		/// <param name="page">The page.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CGPDFContentStream" /> instance.</summary>
 		public CGPDFContentStream (CGPDFPage page)
 			: base (CGPDFContentStreamCreateWithPage (page.GetNonNullHandle (nameof (page))), true)
 		{
@@ -61,7 +61,7 @@ namespace CoreGraphics {
 		/// <param name="stream">The stream.</param>
 		///         <param name="streamResources">The stream resources.</param>
 		///         <param name="parent">The parent.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CGPDFContentStream" /> instance.</summary>
 		public CGPDFContentStream (CGPDFStream stream, NSDictionary? streamResources = null, CGPDFContentStream? parent = null)
 			: base (Create (stream, streamResources, parent), true)
 		{
@@ -81,7 +81,6 @@ namespace CoreGraphics {
 		extern static /* CFArrayRef */ IntPtr CGPDFContentStreamGetStreams (/* CGPDFContentStreamRef */ IntPtr cs);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public CGPDFStream? []? GetStreams ()
 		{
 			var rv = CGPDFContentStreamGetStreams (Handle);
@@ -93,8 +92,7 @@ namespace CoreGraphics {
 
 		/// <param name="category">The category.</param>
 		///         <param name="name">The name to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets resource.</summary>
 		public CGPDFObject? GetResource (string category, string name)
 		{
 			if (category is null)

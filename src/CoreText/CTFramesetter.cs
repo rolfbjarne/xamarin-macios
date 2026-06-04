@@ -34,7 +34,6 @@ using CoreGraphics;
 
 namespace CoreText {
 	/// <summary>Lays out type in a rectangular frame.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/SimpleTextInput/">SimpleTextInput</related>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -50,9 +49,8 @@ namespace CoreText {
 		#region Framesetter Creation
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTFramesetterCreateWithAttributedString (IntPtr @string);
-		/// <param name="value">To be added.</param>
+		/// <param name="value">The value to set.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CTFramesetter (NSAttributedString value)
 			: base (CTFramesetterCreateWithAttributedString (value.GetNonNullHandle (nameof (value))), true, true)
 		{
@@ -63,12 +61,11 @@ namespace CoreText {
 		#region Frame Creation
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTFramesetterCreateFrame (IntPtr framesetter, NSRange stringRange, IntPtr path, IntPtr frameAttributes);
-		/// <param name="stringRange">To be added.</param>
-		///         <param name="path">To be added.</param>
-		///         <param name="frameAttributes">To be added.</param>
+		/// <param name="stringRange">The string range.</param>
+		///         <param name="path">The path.</param>
+		///         <param name="frameAttributes">The frame attributes.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CTFrame? GetFrame (NSRange stringRange, CGPath path, CTFrameAttributes? frameAttributes)
 		{
 			if (path is null)
@@ -85,7 +82,6 @@ namespace CoreText {
 		static extern IntPtr CTFramesetterGetTypesetter (IntPtr framesetter);
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CTTypesetter? GetTypesetter ()
 		{
 			var h = CTFramesetterGetTypesetter (Handle);
@@ -100,13 +96,12 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		unsafe static extern CGSize CTFramesetterSuggestFrameSizeWithConstraints (
 				IntPtr framesetter, NSRange stringRange, IntPtr frameAttributes, CGSize constraints, NSRange* fitRange);
-		/// <param name="stringRange">To be added.</param>
-		///         <param name="frameAttributes">To be added.</param>
-		///         <param name="constraints">To be added.</param>
-		///         <param name="fitRange">To be added.</param>
+		/// <param name="stringRange">The string range.</param>
+		///         <param name="frameAttributes">The frame attributes.</param>
+		///         <param name="constraints">The constraints.</param>
+		///         <param name="fitRange">The fit range.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CGSize SuggestFrameSize (NSRange stringRange, CTFrameAttributes? frameAttributes, CGSize constraints, out NSRange fitRange)
 		{
 			fitRange = default;
@@ -127,10 +122,9 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTFramesetterCreateWithTypesetter (IntPtr typesetter);
 
-		/// <param name="typesetter">To be added.</param>
+		/// <param name="typesetter">The typesetter.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]

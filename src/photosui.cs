@@ -101,7 +101,7 @@ namespace PhotosUI {
 		UIGestureRecognizer PlaybackGestureRecognizer { get; }
 
 		/// <summary>Gets or sets a Boolean value that controls whether sound is muted for the Live Photo. Default is <see langword="false" />.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if muted; otherwise, <see langword="false" />.</value>
 		[Export ("muted")]
 		bool Muted { [Bind ("isMuted")] get; set; }
 

@@ -92,7 +92,7 @@ namespace MediaToolbox {
 
 		/// <param name="callbacks">The callbacks.</param>
 		///         <param name="flags">The flags.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="MTAudioProcessingTap" /> instance.</summary>
 		public MTAudioProcessingTap (MTAudioProcessingTapCallbacks callbacks, MTAudioProcessingTapCreationFlags flags)
 		{
 			if (callbacks is null)
@@ -155,7 +155,6 @@ namespace MediaToolbox {
 		unsafe extern static void* MTAudioProcessingTapGetStorage (/* MTAudioProcessingTapRef */ IntPtr tap);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public unsafe void* GetStorage ()
 		{
 			return MTAudioProcessingTapGetStorage (Handle);
@@ -292,7 +291,7 @@ namespace MediaToolbox {
 	/// <summary>Holds the set of callbacks passed to the <see cref="MediaToolbox.MTAudioProcessingTap.MTAudioProcessingTap(MediaToolbox.MTAudioProcessingTapCallbacks,MediaToolbox.MTAudioProcessingTapCreationFlags)" /> constructor.</summary>
 	public class MTAudioProcessingTapCallbacks {
 		/// <param name="process">The process.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="MTAudioProcessingTapCallbacks" /> instance.</summary>
 		public MTAudioProcessingTapCallbacks (MTAudioProcessingTapProcessDelegate process)
 		{
 			if (process is null)
@@ -301,20 +300,15 @@ namespace MediaToolbox {
 			Processing = process;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the initialize.</summary>
 		public MTAudioProcessingTapInitCallback? Initialize { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the finalize.</summary>
 		public Action<MTAudioProcessingTap>? Finalize { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the prepare.</summary>
 		public MTAudioProcessingTapPrepareCallback? Prepare { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the unprepare.</summary>
 		public Action<MTAudioProcessingTap>? Unprepare { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the processing.</summary>
 		public MTAudioProcessingTapProcessDelegate? Processing { get; private set; }
 	}
 

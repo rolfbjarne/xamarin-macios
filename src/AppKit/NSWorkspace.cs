@@ -11,9 +11,7 @@ namespace AppKit {
 		///         <param name="options">The options to use.</param>
 		///         <param name="descriptor">The descriptor.</param>
 		///         <param name="identifiers">The identifiers.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Opens the specified URLs with the specified application.</summary>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos11.0", "Use 'NSWorkspace.OpenUrls' with completion handler.")]
 		[UnsupportedOSPlatform ("maccatalyst")]
@@ -27,9 +25,7 @@ namespace AppKit {
 		///         <param name="bundleIdentifier">The bundle identifier.</param>
 		///         <param name="options">The options to use.</param>
 		///         <param name="descriptor">The descriptor.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Opens the specified URLs with the specified application and options.</summary>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos11.0", "Use 'NSWorkspace.OpenUrls' with completion handler.")]
 		[UnsupportedOSPlatform ("maccatalyst")]
@@ -38,10 +34,8 @@ namespace AppKit {
 			return _OpenUrls (urls, bundleIdentifier, options, descriptor, null);
 		}
 
-		/// <param name="fileType">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <param name="fileType">The file type to get the icon for.</param>
+		/// <summary>Gets the icon for the specified file type.</summary>
 		[ObsoletedOSPlatform ("macos", "Use 'NSWorkspace.GetIcon' instead.")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]

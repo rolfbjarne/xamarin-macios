@@ -50,7 +50,6 @@ namespace CoreFoundation {
 #if !COREBUILD
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public static CFAllocator Default {
 			get {
 				return Default_cf ?? (Default_cf = new CFAllocator (default_ptr, false));
@@ -59,7 +58,6 @@ namespace CoreFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public static CFAllocator SystemDefault {
 			get {
 				return SystemDefault_cf ?? (SystemDefault_cf = new CFAllocator (system_default_ptr, false));
@@ -68,7 +66,6 @@ namespace CoreFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public static CFAllocator Malloc {
 			get {
 				return Malloc_cf ?? (Malloc_cf = new CFAllocator (malloc_ptr, false));
@@ -77,7 +74,6 @@ namespace CoreFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public static CFAllocator MallocZone {
 			get {
 				return MallocZone_cf ?? (MallocZone_cf = new CFAllocator (malloc_zone_ptr, false));
@@ -87,7 +83,6 @@ namespace CoreFoundation {
 		// Internal only: to get the null handle, use 'CFAllocator.null_ptr' instead.
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public static CFAllocator Null {
 			get {
 				return Null_cf ?? (Null_cf = new CFAllocator (null_ptr, false));
@@ -98,10 +93,9 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		static extern /* void* */ IntPtr CFAllocatorAllocate (/* CFAllocatorRef*/ IntPtr allocator, /*CFIndex*/ nint size, /* CFOptionFlags */ nuint hint);
 
-		/// <param name="size">To be added.</param>
+		/// <param name="size">The size.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public IntPtr Allocate (long size)
 		{
 			return CFAllocatorAllocate (Handle, (nint) size, 0);
@@ -110,9 +104,8 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		static extern void CFAllocatorDeallocate (/* CFAllocatorRef */ IntPtr allocator, /* void* */ IntPtr ptr);
 
-		/// <param name="ptr">To be added.</param>
+		/// <param name="ptr">The ptr.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Deallocate (IntPtr ptr)
 		{
 			CFAllocatorDeallocate (Handle, ptr);

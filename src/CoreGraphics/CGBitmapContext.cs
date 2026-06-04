@@ -32,7 +32,6 @@ using System.Runtime.CompilerServices;
 
 namespace CoreGraphics {
 	/// <summary>CGContext backed by an in-memory bitmap.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <related type="sample" href="https://github.com/xamarin/ios-samples/tree/master/Drawing/">Example_Drawing</related>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -116,7 +115,6 @@ namespace CoreGraphics {
 
 		/// <summary>Gets a pointer to the image data for <c>this</c> <see cref="CoreGraphics.CGBitmapContext" /> object, or <see langword="null" /> if <c>this</c> object is not a bitmap context.</summary>
 		///         <value>A pointer to the data.</value>
-		///         <remarks>To be added.</remarks>
 		public IntPtr Data {
 			get { return CGBitmapContextGetData (Handle); }
 		}
@@ -126,7 +124,6 @@ namespace CoreGraphics {
 
 		/// <summary>Gets the width for <c>this</c> <see cref="CoreGraphics.CGBitmapContext" /> object, in pixels, or 0 if <c>this</c> object is not a bitmap context.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public nint Width {
 			get { return CGBitmapContextGetWidth (Handle); }
 		}
@@ -136,7 +133,6 @@ namespace CoreGraphics {
 
 		/// <summary>Gets the height for <c>this</c> <see cref="CoreGraphics.CGBitmapContext" /> object, in pixels, or 0 if <c>this</c> object is not a bitmap context.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public nint Height {
 			get { return CGBitmapContextGetHeight (Handle); }
 		}
@@ -156,7 +152,6 @@ namespace CoreGraphics {
 
 		/// <summary>Number of bits per pixel.</summary>
 		///         <value>Gets the number of bits per pixel for <c>this</c> <see cref="CoreGraphics.CGBitmapContext" /> object, or 0 if <c>this</c> object is not a bitmap context.</value>
-		///         <remarks>To be added.</remarks>
 		public nint BitsPerPixel {
 			get { return (nint) CGBitmapContextGetBitsPerPixel (Handle); }
 		}
@@ -180,7 +175,6 @@ namespace CoreGraphics {
 
 		/// <summary>Gets the color space for <c>this</c> <see cref="CoreGraphics.CGBitmapContext" /> object, as a <see cref="CoreGraphics.CGColorSpace" />, or <see langword="null" /> if <c>this</c> object is not a bitmap context.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CGColorSpace? ColorSpace {
 			get {
 				var ptr = CGBitmapContextGetColorSpace (Handle);
@@ -193,7 +187,6 @@ namespace CoreGraphics {
 
 		/// <summary>Gets the alpha information for <c>this</c> <see cref="CoreGraphics.CGBitmapContext" /> object, as a <see cref="CoreGraphics.CGImageAlphaInfo" /> object, or <see cref="CoreGraphics.CGImageAlphaInfo.None" /> if <c>this</c> object is not a bitmap context.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CGImageAlphaInfo AlphaInfo {
 			get { return CGBitmapContextGetAlphaInfo (Handle); }
 		}
@@ -203,7 +196,6 @@ namespace CoreGraphics {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CGBitmapFlags BitmapInfo {
 			get { return (CGBitmapFlags) CGBitmapContextGetBitmapInfo (Handle); }
 		}
@@ -213,7 +205,6 @@ namespace CoreGraphics {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CGImage? ToImage ()
 		{
 			var h = CGBitmapContextCreateImage (Handle);

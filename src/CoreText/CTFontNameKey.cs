@@ -33,43 +33,42 @@ namespace CoreText {
 
 	// Utility enum for constant strings in ObjC
 	/// <summary>An enumeration whose values specify constants providing access to names associated with a <see cref="CoreText.CTFont" />.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum CTFontNameKey {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates copyright.</summary>
 		Copyright,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates family.</summary>
 		Family,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sub family.</summary>
 		SubFamily,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates style.</summary>
 		Style,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unique.</summary>
 		Unique,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates full.</summary>
 		Full,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates version.</summary>
 		Version,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates post script.</summary>
 		PostScript,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates trademark.</summary>
 		Trademark,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates manufacturer.</summary>
 		Manufacturer,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates designer.</summary>
 		Designer,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates description.</summary>
 		Description,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates vendor url.</summary>
 		VendorUrl,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates designer url.</summary>
 		DesignerUrl,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates license.</summary>
 		License,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates license url.</summary>
 		LicenseUrl,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sample text.</summary>
 		SampleText,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates postscript cid.</summary>
 		PostscriptCid,
 	}
 

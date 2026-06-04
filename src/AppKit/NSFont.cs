@@ -12,7 +12,6 @@ namespace AppKit {
 	public partial class NSFont {
 		/// <param name="font">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSFont? FromCTFont (CTFont? font)
 		{
@@ -25,7 +24,6 @@ namespace AppKit {
 
 		/// <param name="glyphs">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe CGRect [] GetBoundingRects (CGGlyph [] glyphs)
 		{
@@ -45,7 +43,6 @@ namespace AppKit {
 
 		/// <param name="glyphs">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe CGSize [] GetAdvancements (CGGlyph [] glyphs)
 		{
@@ -66,7 +63,6 @@ namespace AppKit {
 		/// <param name="fontName">To be added.</param>
 		/// <param name="fontSize">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSFont? FromFontName (string fontName, nfloat fontSize)
 		{
@@ -77,7 +73,6 @@ namespace AppKit {
 		/// <param name="fontDescriptor">To be added.</param>
 		/// <param name="fontSize">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSFont? FromDescription (NSFontDescriptor fontDescriptor, nfloat fontSize)
 		{
@@ -88,7 +83,6 @@ namespace AppKit {
 		/// <param name="fontDescriptor">To be added.</param>
 		///         <param name="textTransform">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static NSFont? FromDescription (NSFontDescriptor fontDescriptor, NSAffineTransform textTransform)
 		{
@@ -98,7 +92,6 @@ namespace AppKit {
 
 		/// <param name="fontSize">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSFont? UserFontOfSize (nfloat fontSize)
 		{
@@ -108,7 +101,6 @@ namespace AppKit {
 
 		/// <param name="fontSize">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSFont? UserFixedPitchFontOfSize (nfloat fontSize)
 		{
@@ -118,7 +110,6 @@ namespace AppKit {
 
 		/// <param name="fontSize">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSFont? SystemFontOfSize (nfloat fontSize)
 		{
@@ -128,7 +119,6 @@ namespace AppKit {
 
 		/// <param name="fontSize">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSFont? BoldSystemFontOfSize (nfloat fontSize)
 		{
@@ -138,7 +128,6 @@ namespace AppKit {
 
 		/// <param name="fontSize">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSFont? LabelFontOfSize (nfloat fontSize)
 		{
@@ -148,7 +137,6 @@ namespace AppKit {
 
 		/// <param name="fontSize">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSFont? TitleBarFontOfSize (nfloat fontSize)
 		{
@@ -158,7 +146,6 @@ namespace AppKit {
 
 		/// <param name="fontSize">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSFont? MenuFontOfSize (nfloat fontSize)
 		{
@@ -168,7 +155,6 @@ namespace AppKit {
 
 		/// <param name="fontSize">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSFont? MenuBarFontOfSize (nfloat fontSize)
 		{
@@ -178,7 +164,6 @@ namespace AppKit {
 
 		/// <param name="fontSize">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSFont? MessageFontOfSize (nfloat fontSize)
 		{
@@ -188,7 +173,6 @@ namespace AppKit {
 
 		/// <param name="fontSize">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSFont? PaletteFontOfSize (nfloat fontSize)
 		{
@@ -198,7 +182,6 @@ namespace AppKit {
 
 		/// <param name="fontSize">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSFont? ToolTipsFontOfSize (nfloat fontSize)
 		{
@@ -208,7 +191,6 @@ namespace AppKit {
 
 		/// <param name="fontSize">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		public static NSFont? ControlContentFontOfSize (nfloat fontSize)
 		{
@@ -217,7 +199,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos10.13")]
@@ -230,7 +211,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos10.13")]
@@ -244,7 +224,6 @@ namespace AppKit {
 
 		/// <param name="renderingMode">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[ObsoletedOSPlatform ("macos10.13")]
@@ -256,7 +235,6 @@ namespace AppKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual NSFont? GetVerticalFont ()
 		{
@@ -267,7 +245,6 @@ namespace AppKit {
 		/// <param name="fontSize">To be added.</param>
 		/// <param name="weight">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
@@ -286,7 +263,6 @@ namespace AppKit {
 		/// <param name="fontSize">To be added.</param>
 		/// <param name="weight">To be added.</param>
 		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
 		/// <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]

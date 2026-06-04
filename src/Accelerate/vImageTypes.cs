@@ -55,7 +55,6 @@ namespace Accelerate {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct vImageBuffer {
 		/// <summary>Points to the image data.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public IntPtr Data { get; set; }
 
@@ -68,7 +67,6 @@ namespace Accelerate {
 		nint RowBytesCountIntPtr; // size_t = nint
 
 		/// <summary>Bytes per row in the image.   This is the stride of the row.   </summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int BytesPerRow {
 			get { return (int) RowBytesCountIntPtr; }
@@ -76,7 +74,6 @@ namespace Accelerate {
 		}
 
 		/// <summary>The width of the image in pixels.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int Width {
 			get { return (int) WidthIntPtr; }
@@ -84,7 +81,6 @@ namespace Accelerate {
 		}
 
 		/// <summary>The height of the image in pixels.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int Height {
 			get { return (int) HeightIntPtr; }
@@ -749,7 +745,6 @@ namespace Accelerate {
 		///         <param name="post_bias">To be added.</param>
 		///         <param name="flags">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public static vImageError MatrixMultiplyARGB8888 (ref vImageBuffer src,
 								   ref vImageBuffer dest,

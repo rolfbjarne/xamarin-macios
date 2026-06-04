@@ -3514,8 +3514,8 @@ namespace PdfKit {
 		void Print (NSPrintInfo printInfo, bool doRotate, PdfPrintScalingMode scaleMode);
 #pragma warning restore
 
-		/// <param name="point">The point for which to return a page.</param>
-		///         <param name="nearest">Whether to return the nearest page if the point is not on a page.</param>
+		/// <param name="point">The point for which to return APage.</param>
+		///         <param name="nearest">Whether to return the nearest page if the point is not on APage.</param>
 		///         <summary>Returns the page for the point, or the nearest page if <paramref name="nearest" /> is <see langword="true" />.</summary>
 		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>

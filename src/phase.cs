@@ -1347,7 +1347,7 @@ namespace Phase {
 	///    <para>
 	///        The caller will provide the list of audio buffers, but the callback may replace the
 	///        <see cref="AudioBuffer.Data" /> pointer (and update the <see cref="AudioBuffer.DataByteSize" /> value)
-	///        with a pointer to a memory location that the callback owns, and which will be valid until
+	///        with APointer to a memory location that the callback owns, and which will be valid until
 	///        the next render cycle.
 	///    </para>
 	/// </param>

@@ -7,7 +7,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace CloudKit {
 	/// <summary>Marks push notifications as read. Typically used by apps that use push notifications to track record changes.</summary>
-	///     <remarks>To be added.</remarks>
 	[Register ("CKMarkNotificationsReadOperation", SkipRegistration = true)]
 	[UnsupportedOSPlatform ("ios", "Use 'CKDatabaseSubscription', 'CKFetchDatabaseChangesOperation' and 'CKFetchRecordZoneChangesOperation' instead.")]
 	[UnsupportedOSPlatform ("macos", "Use 'CKDatabaseSubscription', 'CKFetchDatabaseChangesOperation' and 'CKFetchRecordZoneChangesOperation' instead.")]
@@ -31,9 +30,8 @@ namespace CloudKit {
 			throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
 		}
 
-		/// <param name="notificationIds">To be added.</param>
+		/// <param name="notificationIds">The notification ids.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CKMarkNotificationsReadOperation (CKNotificationID [] notificationIds)
 			: base (NSObjectFlag.Empty)
 		{
@@ -42,7 +40,6 @@ namespace CloudKit {
 
 		/// <summary>Gets or sets the handler that is run after the operation completes.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public unsafe virtual CKMarkNotificationsReadHandler? Completed {
 			get {
 				throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);
@@ -57,7 +54,6 @@ namespace CloudKit {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		public virtual CKNotificationID []? NotificationIds {
 			get {
 				throw new PlatformNotSupportedException (Constants.TypeRemovedAllPlatforms);

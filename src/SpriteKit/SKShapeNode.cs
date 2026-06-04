@@ -15,7 +15,6 @@ namespace SpriteKit {
 	public partial class SKShapeNode : SKNode {
 		/// <param name="points">The points.</param>
 		///         <summary>Creates a new shape node from the specified <paramref name="points" />.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -31,8 +30,7 @@ namespace SpriteKit {
 		/// <param name="points">The points.</param>
 		///         <param name="offset">The offset.</param>
 		///         <param name="length">The length.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Froms points.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -49,7 +47,6 @@ namespace SpriteKit {
 
 		/// <param name="points">The points.</param>
 		///         <summary>Creates a new shape node from the specified spline <paramref name="points" />.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -65,8 +62,7 @@ namespace SpriteKit {
 		/// <param name="points">The points.</param>
 		///         <param name="offset">The offset.</param>
 		///         <param name="length">The length.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Froms spline points.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

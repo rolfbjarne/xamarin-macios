@@ -418,7 +418,7 @@ namespace EventKit {
 		ABRecord GetRecord (ABAddressBook addressBook);
 
 		/// <summary>Gets a Boolean value that tells whether the participant is the account owner.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if the participant is the current user; otherwise, <see langword="false" />.</value>
 		[MacCatalyst (13, 1)]
 		[Export ("isCurrentUser")]
 		bool IsCurrentUser { get; }

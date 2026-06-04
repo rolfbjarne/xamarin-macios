@@ -10,7 +10,7 @@
 #nullable enable
 
 namespace GameplayKit {
-	/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the n s array_ gameplay kit.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
@@ -21,7 +21,6 @@ namespace GameplayKit {
 		///         <param name="This">The instance on which this method operates.</param>
 		///         <param name="randomSource">The random source.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[Export ("shuffledArrayWithRandomSource:")]
 		public static T [] GetShuffledArray<T> (this NSArray This, GKRandomSource randomSource) where T : class, INativeObject
 		{
@@ -36,7 +35,6 @@ namespace GameplayKit {
 		/// <typeparam name="T">To be added.</typeparam>
 		///         <param name="This">The instance on which this method operates.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[Export ("shuffledArray")]
 		public static T [] GetShuffledArray<T> (this NSArray This) where T : class, INativeObject
 		{

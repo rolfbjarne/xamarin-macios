@@ -124,7 +124,7 @@ namespace Security {
 		Pkcs12VerifyFailure = -25264,
 		/// <summary>Indicates that the parent of the certificate is not actually the signer.</summary>
 		NotSigner = -26267,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates missing entitlement.</summary>
 		MissingEntitlement = -34018,
 		RestrictedApi = -34020,
 		/// <summary>Indicates that a service was not available.</summary>
@@ -253,7 +253,7 @@ namespace Security {
 		OCSPResponseNonceMismatch = -67646, /* The OCSP response nonce did not match the request. */
 		/// <summary>Indicates that the length of a code signing chain was bad.</summary>
 		CodeSigningBadCertChainLength = -67647, /* Code signing encountered an incorrect certificate chain length. */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates code signing no basic constraints.</summary>
 		CodeSigningNoBasicConstraints = -67648, /* Code signing found no basic constraints. */
 		/// <summary>Indicates that the length of a code signing path was too long.</summary>
 		CodeSigningBadPathLengthConstraint = -67649,    /* Code signing encountered an incorrect path length constraint. */
@@ -329,7 +329,7 @@ namespace Security {
 		CRLAlreadySigned = -67684,  /* The certificate revocation list is already signed. */
 		/// <summary>Indicates an invalid number of fields.</summary>
 		InvalidNumberOfFields = -67685, /* An invalid number of fields were encountered. */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates verification failure.</summary>
 		VerificationFailure = -67686,   /* A verification failure occurred. */
 		/// <summary>Indicates that an unknown tag was encountered.</summary>
 		UnknownTag = -67687,    /* An unknown tag was encountered. */
@@ -379,7 +379,7 @@ namespace Security {
 		EMMLoadFailed = -67709, /* The EMM load has failed. */
 		/// <summary>Indicates that an EMM load operation failed.</summary>
 		EMMUnloadFailed = -67710,   /* The EMM unload has failed. */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates addin load failed.</summary>
 		AddinLoadFailed = -67711,   /* The add-in load operation has failed. */
 		/// <summary>Indicates an invalid key reference.</summary>
 		InvalidKeyRef = -67712, /* An invalid key was encountered. */
@@ -393,7 +393,7 @@ namespace Security {
 		InvalidAddinFunctionTable = -67716, /* An invalid add-in function table was encountered. */
 		/// <summary>Indicates an invalid service mask.</summary>
 		InvalidServiceMask = -67717,    /* An invalid service mask was encountered. */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates module not loaded.</summary>
 		ModuleNotLoaded = -67718,   /* A module was not loaded. */
 		/// <summary>Indicates an invalid subservice ID.</summary>
 		InvalidSubServiceID = -67719,   /* An invalid subservice ID was encountered. */
@@ -777,17 +777,17 @@ namespace Security {
 	// values are defined in Security.framework/Headers/SecKey.h 
 	/// <summary>An enumeration whose values specify the type of padding to be used in encryption and decryption.</summary>
 	public enum SecPadding {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates p k c s1.</summary>
 		PKCS1 = 1,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates o a e p.</summary>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		OAEP = 2,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates raw.</summary>
 		[MacCatalyst (13, 1)]
 		Raw = 0x4000,
 
@@ -803,22 +803,22 @@ namespace Security {
 		[MacCatalyst (13, 1)]
 		PKCS1MD5 = 0x8001,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates p k c s1 s h a1.</summary>
 		PKCS1SHA1 = 0x8002,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates p k c s1 s h a224.</summary>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		PKCS1SHA224 = 0x8003,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates p k c s1 s h a256.</summary>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		PKCS1SHA256 = 0x8004,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates p k c s1 s h a384.</summary>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		PKCS1SHA384 = 0x8005,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates p k c s1 s h a512.</summary>
 		[NoMac]
 		[MacCatalyst (13, 1)]
 		PKCS1SHA512 = 0x8006,
@@ -857,7 +857,7 @@ namespace Security {
 	/// <summary>Enumeration whose values represent valid options for <see cref="Security.SecRecord.AuthenticationUI" />.</summary>
 	[MacCatalyst (13, 1)]
 	public enum SecAuthenticationUI {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates not set.</summary>
 		NotSet = -1,
 
 		/// <summary>To be added.</summary>
@@ -876,7 +876,7 @@ namespace Security {
 		[Field ("kSecUseAuthenticationUIFail")]
 		Fail,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates skip.</summary>
 		[Field ("kSecUseAuthenticationUISkip")]
 		Skip,
 	}
@@ -886,10 +886,10 @@ namespace Security {
 #endif
 	[MacCatalyst (13, 1)]
 	public enum SecTokenID {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
 
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates secure enclave.</summary>
 		[Field ("kSecAttrTokenIDSecureEnclave")]
 		SecureEnclave,
 	}
@@ -897,15 +897,15 @@ namespace Security {
 	[MacCatalyst (13, 1)]
 	[Native]
 	public enum SecKeyOperationType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sign.</summary>
 		Sign = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates verify.</summary>
 		Verify = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates encrypt.</summary>
 		Encrypt = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates decrypt.</summary>
 		Decrypt = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates key exchange.</summary>
 		KeyExchange = 4,
 	}
 
@@ -915,19 +915,19 @@ namespace Security {
 	[Flags]
 	[Native]
 	public enum SecRevocation : ulong {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates o c s p method.</summary>
 		OCSPMethod = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates c r l method.</summary>
 		CRLMethod = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates prefer c r l.</summary>
 		PreferCRL = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates require positive response.</summary>
 		RequirePositiveResponse = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates network access disabled.</summary>
 		NetworkAccessDisabled = 16,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates use any available method.</summary>
 		UseAnyAvailableMethod = OCSPMethod | CRLMethod,
 	}
 }

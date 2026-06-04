@@ -148,7 +148,7 @@ namespace SceneKit {
 		}
 
 		/// <param name="transform">The transform.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a new matrix from the specified Core Animation transform.</summary>
 		public SCNMatrix4 (CoreAnimation.CATransform3D transform)
 		{
 			Column0 = new SCNVector4 ((pfloat) transform.M11, (pfloat) transform.M12, (pfloat) transform.M13, (pfloat) transform.M14);

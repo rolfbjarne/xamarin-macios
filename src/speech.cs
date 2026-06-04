@@ -190,7 +190,7 @@ namespace Speech {
 		SFSpeechRecognitionTaskState State { get; }
 
 		/// <summary>Gets whether the speech recognition activity is in its final stage.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if the task is finishing; otherwise, <see langword="false" />.</value>
 		[Export ("finishing")]
 		bool Finishing { [Bind ("isFinishing")] get; }
 
@@ -198,7 +198,7 @@ namespace Speech {
 		void Finish ();
 
 		/// <summary>Gets whether the speech recognition attempt was cancelled.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if the task was cancelled; otherwise, <see langword="false" />.</value>
 		[Export ("cancelled")]
 		bool Cancelled { [Bind ("isCancelled")] get; }
 

@@ -49,7 +49,6 @@ namespace CoreVideo {
 		extern static CGRect CVImageBufferGetCleanRect (/* CVImageBufferRef __nonnull */ IntPtr imageBuffer);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public CGRect CleanRect {
 			get {
 				return CVImageBufferGetCleanRect (Handle);
@@ -60,7 +59,6 @@ namespace CoreVideo {
 		extern static CGSize CVImageBufferGetDisplaySize (/* CVImageBufferRef __nonnull */ IntPtr imageBuffer);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public CGSize DisplaySize {
 			get {
 				return CVImageBufferGetDisplaySize (Handle);
@@ -71,7 +69,6 @@ namespace CoreVideo {
 		extern static CGSize CVImageBufferGetEncodedSize (/* CVImageBufferRef __nonnull */ IntPtr imageBuffer);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public CGSize EncodedSize {
 			get {
 				return CVImageBufferGetDisplaySize (Handle);
@@ -82,7 +79,6 @@ namespace CoreVideo {
 		extern static /* Boolean */ byte CVImageBufferIsFlipped (/* CVImageBufferRef __nonnull */ IntPtr imageBuffer);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public bool IsFlipped {
 			get {
 				return CVImageBufferIsFlipped (Handle) != 0;
@@ -123,7 +119,6 @@ namespace CoreVideo {
 
 		/// <param name="yCbCrMatrix">The y cb cr matrix.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -142,7 +137,6 @@ namespace CoreVideo {
 
 		/// <param name="color">The color.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -161,7 +155,6 @@ namespace CoreVideo {
 
 		/// <param name="function">The function.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -180,7 +173,6 @@ namespace CoreVideo {
 
 		/// <param name="yCbCrMatrixCodePoint">The y cb cr matrix code point.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -200,7 +192,6 @@ namespace CoreVideo {
 
 		/// <param name="colorPrimariesCodePoint">The color primaries code point.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -220,7 +211,6 @@ namespace CoreVideo {
 
 		/// <param name="transferFunctionCodePoint">The transfer function code point.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

@@ -24,57 +24,49 @@ namespace Twitter {
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[NullAllowed] // by default this property is null
 		[Export ("account")]
 		ACAccount Account { get; set; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("requestMethod")]
 		TWRequestMethod RequestMethod { get; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("URL")]
 		NSUrl Url { get; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("parameters")]
 		NSDictionary Parameters { get; }
 
-		/// <param name="url">To be added.</param>
+		/// <param name="url">The URL to use.</param>
 		/// <param name="parameters">
 		///           <para>HTTP parameters for this request.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <param name="requestMethod">To be added.</param>
+		/// <param name="requestMethod">The request method.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithURL:parameters:requestMethod:")]
 		NativeHandle Constructor (NSUrl url, [NullAllowed] NSDictionary parameters, TWRequestMethod requestMethod);
 
-		/// <param name="data">To be added.</param>
-		///         <param name="name">To be added.</param>
-		///         <param name="type">To be added.</param>
+		/// <param name="data">The data to use.</param>
+		///         <param name="name">The name to use.</param>
+		///         <param name="type">The type.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("addMultiPartData:withName:type:")]
 		void AddMultiPartData (NSData data, string name, string type);
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("signedURLRequest")]
 		NSUrlRequest SignedUrlRequest { get; }
 
-		/// <param name="handler">To be added.</param>
+		/// <param name="handler">The completion handler to call when the operation completes.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[Export ("performRequestWithHandler:")]
 		[Async (ResultTypeName = "TWRequestResult", XmlDocs = """
 			<summary>To be added.</summary>
@@ -102,54 +94,46 @@ namespace Twitter {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("completionHandler")]
 		Action<TWTweetComposeViewControllerResult> CompletionHandler { get; set; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Static]
 		[Export ("canSendTweet")]
 		bool CanSendTweet { get; }
 
-		/// <param name="text">To be added.</param>
+		/// <param name="text">The text.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("setInitialText:")]
 		bool SetInitialText (string text);
 
-		/// <param name="image">To be added.</param>
+		/// <param name="image">The image.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("addImage:")]
 		bool AddImage (UIImage image);
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("removeAllImages")]
 		bool RemoveAllImages ();
 
-		/// <param name="url">To be added.</param>
+		/// <param name="url">The URL to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("addURL:")]
 		bool AddUrl (NSUrl url);
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[Export ("removeAllURLs")]
 		bool RemoveAllUrls ();
 	}

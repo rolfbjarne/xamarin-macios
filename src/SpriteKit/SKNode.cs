@@ -24,7 +24,6 @@ namespace SpriteKit {
 		///         <returns>
 		///
 		/// The new instance of the node.   The parameter type <typeparamref name="T" /> is used to determine which kind of class you want to get out of the file.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -40,17 +39,15 @@ namespace SpriteKit {
 			}
 		}
 
-		/// <param name="node">To be added.</param>
+		/// <param name="node">The node.</param>
 		///         <summary>Adds <paramref name="node" /> to the end of the list of child nodes.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Add (SKNode node)
 		{
 			AddChild (node);
 		}
 
-		/// <param name="nodes">To be added.</param>
+		/// <param name="nodes">The nodes.</param>
 		///         <summary>Adds <paramref name="nodes" /> to the end of the list of child nodes.</summary>
-		///         <remarks>To be added.</remarks>
 		public void AddNodes (params SKNode []? nodes)
 		{
 			if (nodes is null)
@@ -61,7 +58,6 @@ namespace SpriteKit {
 
 		/// <summary>Returns an enumerator that iterates over the child nodes that belong to the current node.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public IEnumerator<SKNode> GetEnumerator ()
 		{
 			foreach (var node in Children)
@@ -70,18 +66,16 @@ namespace SpriteKit {
 
 		/// <summary>Internal.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return GetEnumerator ();
 		}
 
-		/// <param name="filename">To be added.</param>
-		///         <param name="types">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="filename">The filename.</param>
+		///         <param name="types">The types.</param>
+		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -105,12 +99,11 @@ namespace SpriteKit {
 			}
 		}
 
-		/// <param name="filename">To be added.</param>
-		///         <param name="classes">To be added.</param>
-		///         <param name="error">To be added.</param>
+		/// <param name="filename">The filename.</param>
+		///         <param name="classes">The classes.</param>
+		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]

@@ -38,7 +38,6 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace CoreFoundation {
 	/// <summary>Represents a range from two integers: location and length.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -50,46 +49,40 @@ namespace CoreFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public int Location {
 			get { return (int) loc; }
 		}
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public int Length {
 			get { return (int) len; }
 		}
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public long LongLocation {
 			get { return (long) loc; }
 		}
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public long LongLength {
 			get { return (long) len; }
 		}
 
-		/// <param name="loc">To be added.</param>
-		///         <param name="len">To be added.</param>
+		/// <param name="loc">The loc.</param>
+		///         <param name="len">The len.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CFRange (int loc, int len)
 		{
 			this.loc = loc;
 			this.len = len;
 		}
 
-		/// <param name="l">To be added.</param>
-		///         <param name="len">To be added.</param>
+		/// <param name="l">The l.</param>
+		///         <param name="len">The len.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CFRange (long l, long len)
 		{
 			this.loc = (nint) l;
@@ -104,7 +97,6 @@ namespace CoreFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
 			return string.Format ("CFRange [Location: {0} Length: {1}]", loc, len);
@@ -113,7 +105,6 @@ namespace CoreFoundation {
 
 	// nothing is exposed publicly
 	/// <summary>Base class for CoreFoundation objects.</summary>
-	///     <remarks>To be added.</remarks>
 	internal static class CFObject {
 
 		[DllImport (Constants.CoreFoundationLibrary)]
@@ -157,7 +148,6 @@ namespace CoreFoundation {
 		internal string? str;
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		protected CFString () { }
 
 		[DllImport (Constants.CoreFoundationLibrary, CharSet = CharSet.Unicode)]
@@ -355,7 +345,6 @@ namespace CoreFoundation {
 
 		/// <summary>String length.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public int Length {
 			get {
 				if (str is not null)
@@ -379,7 +368,6 @@ namespace CoreFoundation {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 		{
 			if (str is null)

@@ -15,7 +15,7 @@ using CoreGraphics;
 namespace PdfKit {
 	public partial class PdfAnnotation {
 
-		/// <typeparam name="T">To be added.</typeparam>
+		/// <typeparam name="T">The type of the value to set.</typeparam>
 		///         <param name="value">The value to set.</param>
 		///         <param name="key">The key to use.</param>
 		///         <summary>Sets value.</summary>
@@ -50,7 +50,7 @@ namespace PdfKit {
 			}
 		}
 
-		/// <typeparam name="T">To be added.</typeparam>
+		/// <typeparam name="T">The type of the value to get.</typeparam>
 		///         <param name="key">The key to use.</param>
 		///         <summary>Gets value.</summary>
 		[SupportedOSPlatform ("macos")]

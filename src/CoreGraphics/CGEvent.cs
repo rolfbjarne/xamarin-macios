@@ -17,18 +17,16 @@ using System.Runtime.CompilerServices;
 using CoreFoundation;
 
 namespace CoreGraphics {
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Delegate for handling events from an event tap.</summary>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	public sealed class CGEvent : NativeObject {
 #if !COREBUILD
-		/// <param name="tapProxyEvent">To be added.</param>
-		///     <param name="eventType">To be added.</param>
-		///     <param name="eventRef">To be added.</param>
-		///     <param name="userInfo">To be added.</param>
-		///     <summary>To be added.</summary>
-		///     <remarks>To be added.</remarks>
+		/// <param name="tapProxyEvent">The proxy for the event tap.</param>
+		/// <param name="eventType">The type of the event.</param>
+		/// <param name="eventRef">The event reference.</param>
+		/// <param name="userInfo">User-defined data.</param>
+		/// <summary>Delegate for handling events from an event tap.</summary>
 		public delegate IntPtr CGEventTapCallback (IntPtr tapProxyEvent, CGEventType eventType, IntPtr eventRef, IntPtr userInfo);
 
 		static ConditionalWeakTable<CFMachPort, TapData>? tap_table;
@@ -109,15 +107,14 @@ namespace CoreGraphics {
 		extern static unsafe IntPtr CGEventTapCreateForPSN (IntPtr processSerialNumer, CGEventTapPlacement place, CGEventTapOptions options, CGEventMask mask, delegate* unmanaged<IntPtr, CGEventType, IntPtr, IntPtr, IntPtr> cback, IntPtr data);
 
 #if !XAMCORE_5_0
-		/// <param name="processSerialNumber">To be added.</param>
-		///         <param name="location">To be added.</param>
-		///         <param name="place">To be added.</param>
-		///         <param name="options">To be added.</param>
-		///         <param name="mask">To be added.</param>
-		///         <param name="cback">To be added.</param>
-		///         <param name="data">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="processSerialNumber">The process serial number.</param>
+		/// <param name="location">The tap location.</param>
+		/// <param name="place">The tap placement.</param>
+		/// <param name="options">The tap options.</param>
+		/// <param name="mask">The event mask.</param>
+		/// <param name="cback">The callback function.</param>
+		/// <param name="data">User-defined data.</param>
+		/// <summary>Creates a Mach port-based event tap.</summary>
 		[Obsolete ("The location parameter is not used. Consider using the overload without the location parameter.", false)]
 		[System.ComponentModel.EditorBrowsable (System.ComponentModel.EditorBrowsableState.Never)]
 		public static CFMachPort? CreateTap (IntPtr processSerialNumber, CGEventTapLocation location, CGEventTapPlacement place, CGEventTapOptions options, CGEventMask mask, CGEventTapCallback cback, IntPtr data)
@@ -179,9 +176,8 @@ namespace CoreGraphics {
 			return result;
 		}
 
-		/// <param name="source">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="source">The event source.</param>
+		///         <summary>Creates a CGEvent from serialized data.</summary>
 		public CGEvent (NSData source)
 			: base (Create (source), true)
 		{
@@ -190,9 +186,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static IntPtr CGEventCreate (IntPtr eventSourceHandle);
 
-		/// <param name="eventSource">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="eventSource">The eventSource.</param>
+		///         <summary>Creates a new event with the specified source.</summary>
 		public CGEvent (CGEventSource? eventSource)
 			: base (CGEventCreate (eventSource.GetHandle ()), true)
 		{
@@ -208,12 +203,11 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static IntPtr CGEventCreateMouseEvent (IntPtr source, CGEventType mouseType, CGPoint mouseCursorPosition, CGMouseButton mouseButton);
 
-		/// <param name="source">To be added.</param>
-		///         <param name="mouseType">To be added.</param>
-		///         <param name="mouseCursorPosition">To be added.</param>
-		///         <param name="mouseButton">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="source">The event source.</param>
+		/// <param name="mouseType">The mouse event type.</param>
+		/// <param name="mouseCursorPosition">The mouse cursor position.</param>
+		/// <param name="mouseButton">The mouse button.</param>
+		/// <summary>Creates a mouse event.</summary>
 		public CGEvent (CGEventSource? source, CGEventType mouseType, CGPoint mouseCursorPosition, CGMouseButton mouseButton)
 			: base (CGEventCreateMouseEvent (source.GetHandle (), mouseType, mouseCursorPosition, mouseButton), true)
 		{
@@ -223,11 +217,10 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static IntPtr CGEventCreateKeyboardEvent (IntPtr source, ushort virtualKey, byte keyDown);
 
-		/// <param name="source">To be added.</param>
-		///         <param name="virtualKey">To be added.</param>
-		///         <param name="keyDown">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="source">The event source.</param>
+		/// <param name="virtualKey">The virtual key code.</param>
+		/// <param name="keyDown">Whether the key is pressed down.</param>
+		/// <summary>Creates a keyboard event.</summary>
 		public CGEvent (CGEventSource? source, ushort virtualKey, bool keyDown)
 			: base (CGEventCreateKeyboardEvent (source.GetHandle (), virtualKey, keyDown.AsByte ()), true)
 		{
@@ -276,8 +269,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static IntPtr CGEventCreateCopy (IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a copy of this event.</summary>
 		public CGEvent Copy ()
 		{
 			return new CGEvent (CGEventCreateCopy (Handle), true);
@@ -286,8 +278,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static IntPtr CGEventCreateData (IntPtr allocator, IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Serializes this event to data.</summary>
 		public NSData? ToData ()
 		{
 			return Runtime.GetNSObject<NSData> (CGEventCreateData (IntPtr.Zero, Handle), true);
@@ -296,8 +287,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static IntPtr CGEventCreateSourceFromEvent (IntPtr evthandle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates an event source from this event.</summary>
 		public CGEventSource? CreateEventSource ()
 		{
 			var esh = CGEventCreateSourceFromEvent (Handle);
@@ -313,8 +303,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static void CGEventSetLocation (IntPtr handle, CGPoint location);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the mouse location.</summary>
 		public CGPoint Location {
 			get {
 				return CGEventGetLocation (Handle);
@@ -327,8 +316,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static CGPoint CGEventGetUnflippedLocation (IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the unflipped mouse location.</summary>
 		public CGPoint UnflippedLocation {
 			get {
 				return CGEventGetUnflippedLocation (Handle);
@@ -337,17 +325,15 @@ namespace CoreGraphics {
 
 		// Keep this public, as we want to avoid creating instances of the object
 		// just to peek at the flags
-		/// <param name="eventHandle">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="eventHandle">The eventHandle.</param>
+		///         <summary>Gets the event flags for the specified event handle.</summary>
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary, EntryPoint = "CGEventGetFlags")]
 		public extern static CGEventFlags GetFlags (IntPtr eventHandle);
 
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		internal extern static void CGEventSetFlags (IntPtr eventHandle, CGEventFlags flags);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the event flags.</summary>
 		public CGEventFlags Flags {
 			get {
 				return GetFlags (Handle);
@@ -486,9 +472,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static IntPtr CGEventSetSource (IntPtr handle, IntPtr source);
 
-		/// <param name="eventSource">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="eventSource">The eventSource.</param>
+		///         <summary>Sets the event source for this event.</summary>
 		public void SetEventSource (CGEventSource eventSource)
 		{
 			if (eventSource is null)
@@ -503,8 +488,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static void CGEventSetType (IntPtr handle, CGEventType evtType);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the event type.</summary>
 		public CGEventType EventType {
 			get {
 				return CGEventGetType (Handle);
@@ -521,8 +505,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static void CGEventSetTimestamp (IntPtr handle, ulong timeStampp);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the event timestamp.</summary>
 		public ulong Timestamp {
 			get {
 				return CGEventGetTimestamp (Handle);
@@ -535,9 +518,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static void CGEventTapEnable (IntPtr machPort, byte enable);
 
-		/// <param name="machPort">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="machPort">The machPort.</param>
+		/// <summary>Enables or disables an event tap.</summary>
 		public static void TapEnable (CFMachPort machPort)
 		{
 			if (machPort is null)
@@ -546,9 +528,8 @@ namespace CoreGraphics {
 			GC.KeepAlive (machPort);
 		}
 
-		/// <param name="machPort">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="machPort">The machPort.</param>
+		///         <summary>Disables the specified event tap.</summary>
 		public static void TapDisable (CFMachPort machPort)
 		{
 			if (machPort is null)
@@ -560,9 +541,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static byte CGEventTapIsEnabled (IntPtr machPort);
 
-		/// <param name="machPort">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="machPort">The machPort.</param>
+		///         <summary>Gets whether the specified event tap is enabled.</summary>
 		public static bool IsTapEnabled (CFMachPort machPort)
 		{
 			if (machPort is null)
@@ -575,8 +555,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		unsafe extern static void CGEventKeyboardGetUnicodeString (IntPtr handle, nuint maxLen, nuint* actualLen, ushort* buffer);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the Unicode string associated with this keyboard event.</summary>
 		public unsafe string GetUnicodeString ()
 		{
 			const int bufferLength = 40;
@@ -589,9 +568,8 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		unsafe extern static void CGEventKeyboardSetUnicodeString (IntPtr handle, nuint len, IntPtr buffer);
 
-		/// <param name="value">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="value">The field value.</param>
+		///         <summary>Sets the Unicode string for this keyboard event.</summary>
 		public void SetUnicodeString (string value)
 		{
 			if (value is null)
@@ -603,10 +581,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static void CGEventTapPostEvent (IntPtr proxy, IntPtr evtHandle);
 
-		/// <param name="tapProxyEvent">To be added.</param>
-		///         <param name="evt">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="tapProxyEvent">The proxy for the event tap.</param>
+		/// <param name="evt">The evt.</param>
+		///         <summary>Posts an event through an event tap proxy.</summary>
 		public static void TapPostEven (IntPtr tapProxyEvent, CGEvent evt)
 		{
 			if (evt is null)
@@ -619,10 +596,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.ApplicationServicesCoreGraphicsLibrary)]
 		extern static void CGEventPost (CGEventTapLocation location, IntPtr handle);
 
-		/// <param name="evt">To be added.</param>
-		///         <param name="location">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="evt">The evt.</param>
+		/// <param name="location">The tap location.</param>
+		/// <summary>Posts an event to the event stream.</summary>
 		public static void Post (CGEvent evt, CGEventTapLocation location)
 		{
 			if (evt is null)
@@ -678,8 +654,7 @@ namespace CoreGraphics {
 			CGEventTapInformation* tapList,
 			uint* /* uint32_t* */ eventTapCount);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets a list of all event taps.</summary>
 		public unsafe CGEventTapInformation []? GetEventTapList ()
 		{
 			uint count;
@@ -732,40 +707,29 @@ namespace CoreGraphics {
 	}
 
 #if !COREBUILD
-	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
+	/// <summary>Contains information about an event tap.</summary>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
 	public struct CGEventTapInformation {
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the list of all installed event taps.</summary>
 		public uint /* uint32_t */ EventTapID;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tap point location.</summary>
 		public CGEventTapLocation TapPoint;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The tap options.</summary>
 		public CGEventTapOptions Options;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The events of interest mask.</summary>
 		public CGEventMask EventsOfInterest;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The event tap identifier.</summary>
 		public int /* pid_t = int */ TappingProcess;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The process that created the tap.</summary>
 		public int /* pid_t = int */ ProcessBeingTapped;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The process being tapped.</summary>
 		public bool /* bool */ Enabled;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Whether the tap is enabled.</summary>
 		public float /* float */ MinUsecLatency;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The minimum latency in microseconds.</summary>
 		public float /* float */ AvgUsecLatency;
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>The average latency in microseconds.</summary>
 		public float /* float */ MaxUsecLatency;
 	};
 #endif // !COREBUILD

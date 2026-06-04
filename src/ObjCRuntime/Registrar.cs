@@ -54,14 +54,14 @@ using ProductException = ObjCRuntime.RuntimeException;
 namespace ObjCRuntime {
 	/// <param name="sender">The object that raised the event.</param>
 	///     <param name="args">The event arguments.</param>
-	///     <summary>To be added.</summary>
+	/// <summary>A handler for assembly registration events.</summary>
 	public delegate void AssemblyRegistrationHandler (object? sender, AssemblyRegistrationEventArgs args);
 
-	/// <summary>To be added.</summary>
+	/// <summary>Provides event data for assembly registration events.</summary>
 	public class AssemblyRegistrationEventArgs : EventArgs {
 		/// <summary>Gets or sets the register.</summary>
 		public bool Register { get; set; }
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the assembly name being registered.</summary>
 		public System.Reflection.AssemblyName? AssemblyName { get; internal set; }
 	}
 }

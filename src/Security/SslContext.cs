@@ -19,7 +19,6 @@ using CoreFoundation;
 
 namespace Security {
 	/// <summary>Class that encapsulates SSL session state..</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -36,10 +35,9 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static /* SSLContextRef */ IntPtr SSLCreateContext (/* CFAllocatorRef */ IntPtr alloc, SslProtocolSide protocolSide, SslConnectionType connectionType);
 
-		/// <param name="protocolSide">To be added.</param>
-		///         <param name="connectionType">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="protocolSide">The protocol side (client or server).</param>
+		///         <param name="connectionType">The type of connection (stream or datagram).</param>
+	/// <summary>Creates a new SSL context with the specified protocol side and connection type.</summary>
 		public SslContext (SslProtocolSide protocolSide, SslConnectionType connectionType)
 			: base (SSLCreateContext (IntPtr.Zero, protocolSide, connectionType), true)
 		{
@@ -64,8 +62,7 @@ namespace Security {
 			base.Dispose (disposing);
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the status of the last SSL operation.</summary>
 		public SslStatus GetLastStatus ()
 		{
 			return result;
@@ -77,8 +74,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static /* OSStatus */ SslStatus SSLSetProtocolVersionMax (/* SSLContextRef */ IntPtr context, SslProtocol maxVersion);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the maximum protocol version.</summary>
 		public SslProtocol MaxProtocol {
 			get {
 				SslProtocol value;
@@ -98,8 +94,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static /* OSStatus */ SslStatus SSLSetProtocolVersionMin (/* SSLContextRef */ IntPtr context, SslProtocol minVersion);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the minimum protocol version.</summary>
 		public SslProtocol MinProtocol {
 			get {
 				SslProtocol value;
@@ -116,8 +111,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe extern static /* OSStatus */ SslStatus SSLGetNegotiatedProtocolVersion (/* SSLContextRef */ IntPtr context, SslProtocol* protocol);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the negotiated protocol version.</summary>
 		public SslProtocol NegotiatedProtocol {
 			get {
 				SslProtocol value;
@@ -140,8 +134,7 @@ namespace Security {
 			/* SSLReadFunc */ delegate* unmanaged<IntPtr, IntPtr, nint*, SslStatus> readFunc,
 			/* SSLWriteFunc */ delegate* unmanaged<IntPtr, IntPtr, nint*, SslStatus> writeFunc);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the SSL connection.</summary>
 		public SslConnection? Connection {
 			get {
 				if (connection is null)
@@ -173,10 +166,9 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe extern static /* OSStatus */ SslStatus SSLGetSessionOption (/* SSLContextRef */ IntPtr context, SslSessionOption option, byte* value);
 
-		/// <param name="option">To be added.</param>
-		///         <param name="value">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="option">The session option to get or set.</param>
+		///         <param name="value">The option value.</param>
+		/// <summary>Gets the value of the specified session option.</summary>
 		public SslStatus GetSessionOption (SslSessionOption option, out bool value)
 		{
 			byte byteValue;
@@ -190,10 +182,9 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static /* OSStatus */ SslStatus SSLSetSessionOption (/* SSLContextRef */ IntPtr context, SslSessionOption option, byte value);
 
-		/// <param name="option">To be added.</param>
-		///         <param name="value">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="option">The session option to get or set.</param>
+		///         <param name="value">The option value.</param>
+		/// <summary>Sets the value of the specified session option.</summary>
 		public SslStatus SetSessionOption (SslSessionOption option, bool value)
 		{
 			result = SSLSetSessionOption (Handle, option, value.AsByte ());
@@ -203,9 +194,8 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static /* OSStatus */ SslStatus SSLSetClientSideAuthenticate (/* SSLContextRef */ IntPtr context, SslAuthenticate auth);
 
-		/// <param name="auth">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="auth">The authentication mode.</param>
+		/// <summary>Sets the client-side authentication requirement.</summary>
 		public SslStatus SetClientSideAuthenticate (SslAuthenticate auth)
 		{
 			result = SSLSetClientSideAuthenticate (Handle, auth);
@@ -215,8 +205,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static /* OSStatus */ SslStatus SSLHandshake (/* SSLContextRef */ IntPtr context);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Performs the SSL handshake.</summary>
 		public SslStatus Handshake ()
 		{
 			result = SSLHandshake (Handle);
@@ -226,8 +215,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe extern static /* OSStatus */ SslStatus SSLGetSessionState (/* SSLContextRef */ IntPtr context, SslSessionState* state);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the current session state.</summary>
 		public SslSessionState SessionState {
 			get {
 				var value = SslSessionState.Invalid;
@@ -244,8 +232,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern unsafe static /* OSStatus */ SslStatus SSLSetPeerID (/* SSLContextRef */ IntPtr context, /* const void** */ byte* peerID, /* size_t */ nint peerIDLen);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the peer domain name.</summary>
 		public unsafe byte []? PeerId {
 			get {
 				nint length;
@@ -270,8 +257,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern unsafe static /* OSStatus */ SslStatus SSLGetBufferedReadSize (/* SSLContextRef */ IntPtr context, /* size_t* */ nint* bufSize);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the enabled cipher suites.</summary>
 		public nint BufferedReadSize {
 			get {
 				nint value;
@@ -333,8 +319,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern unsafe static /* OSStatus */ SslStatus SSLGetDatagramWriteSize (/* SSLContextRef */ IntPtr context, /* size_t* */ nint* bufSize);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the negotiated cipher suite.</summary>
 		public nint DatagramWriteSize {
 			get {
 				nint value;
@@ -351,8 +336,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern unsafe static /* OSStatus */ SslStatus SSLSetMaxDatagramRecordSize (/* SSLContextRef */ IntPtr context, /* size_t */ nint maxSize);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the DTLS cookie for datagram connections.</summary>
 		public nint MaxDatagramRecordSize {
 			get {
 				nint value;
@@ -369,9 +353,8 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern unsafe static /* OSStatus */ SslStatus SSLSetDatagramHelloCookie (/* SSLContextRef */ IntPtr context, /* const void* */ byte* cookie, nint cookieLength);
 
-		/// <param name="cookie">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="cookie">The DTLS cookie data.</param>
+		/// <summary>Sets the DTLS cookie for datagram connections.</summary>
 		public unsafe SslStatus SetDatagramHelloCookie (byte [] cookie)
 		{
 			nint len = cookie is null ? 0 : cookie.Length;
@@ -389,8 +372,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern unsafe static /* OSStatus */ SslStatus SSLSetPeerDomainName (/* SSLContextRef */ IntPtr context, /* char* */ byte* peerName, /* size_t */ nint peerNameLen);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the peer identifier.</summary>
 		public string PeerDomainName {
 			get {
 				nint length;
@@ -487,10 +469,9 @@ namespace Security {
 #pragma warning restore RBI0014
 		}
 
-		/// <param name="identify">To be added.</param>
-		///         <param name="certificates">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="identify">The identity certificate.</param>
+		/// <param name="certificates">The certificate chain.</param>
+		/// <summary>Sets the certificate identity and chain.</summary>
 		public SslStatus SetCertificate (SecIdentity identify, IEnumerable<SecCertificate> certificates)
 		{
 			using (var array = Bundle (identify, certificates)) {
@@ -503,8 +484,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern unsafe static /* OSStatus */ SslStatus SSLGetClientCertificateState (/* SSLContextRef */ IntPtr context, SslClientCertificateState* clientState);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Sets the encryption certificate identity and chain.</summary>
 		public SslClientCertificateState ClientCertificateState {
 			get {
 				SslClientCertificateState value;
@@ -526,10 +506,9 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern unsafe static /* OSStatus */ SslStatus SSLSetEncryptionCertificate (/* SSLContextRef */ IntPtr context, /* CFArrayRef */ IntPtr certRefs);
 
-		/// <param name="identify">To be added.</param>
-		///         <param name="certificates">To be added.</param>
+		/// <param name="identify">The identity certificate.</param>
+		/// <param name="certificates">The certificate chain.</param>
 		///         <summary>Developers should not use this deprecated method. Export ciphers are not available anymore.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -550,8 +529,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern unsafe static /* OSStatus */ SslStatus SSLCopyPeerTrust (/* SSLContextRef */ IntPtr context, /* SecTrustRef */ IntPtr* trust);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the client-side certificate.</summary>
 		public SecTrust? PeerTrust {
 			get {
 				IntPtr value;
@@ -565,8 +543,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern unsafe static /* CFType */ IntPtr SSLContextGetTypeID ();
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the peer trust.</summary>
 		public static IntPtr GetTypeId ()
 		{
 			return SSLContextGetTypeID ();
@@ -577,9 +554,8 @@ namespace Security {
 		// Xcode 8 beta 1: the P/Invoke was removed completely.
 
 #if !XAMCORE_5_0
-		/// <param name="policyStrength">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="policyStrength">On return, the minimum group size.</param>
+		/// <summary>Gets the diffie-Hellman parameters.</summary>
 		[UnsupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("ios")]
@@ -604,9 +580,8 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		static extern int SSLSetSessionConfig (IntPtr /* SSLContextRef* */ context, IntPtr /* CFStringRef* */ config);
 
-		/// <param name="config">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="config">The minimum group size to require.</param>
+		/// <summary>Sets the minimum required diffie-Hellman group size.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -626,9 +601,8 @@ namespace Security {
 			return result;
 		}
 
-		/// <param name="config">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="config">On return, the minimum group size.</param>
+		/// <summary>Gets the minimum required diffie-Hellman group size.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -653,8 +627,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		static extern int SSLReHandshake (IntPtr /* SSLContextRef* */ context);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the supported ALPN protocols.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -690,8 +663,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe static extern /* OSStatus */ SslStatus SSLCopyRequestedPeerNameLength (IntPtr /* SSLContextRef* */ context, nuint* /* size_t */ peerNameLen);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Sets the ALPN protocols.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -727,9 +699,8 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		static extern /* OSStatus */ int SSLSetSessionTicketsEnabled (IntPtr /* SSLContextRef */ context, byte /* Boolean */ enabled);
 
-		/// <param name="enabled">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="enabled">Whether OCSP stapling is enabled.</param>
+		/// <summary>Sets the OCSP response for stapling.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -754,9 +725,8 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		static extern /* OSStatus */ int SSLSetError (IntPtr /* SSLContextRef */ context, SecStatusCode /* OSStatus */ status);
 
-		/// <param name="status">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="status">The OCSP response status.</param>
+		/// <summary>Sets the OCSP response stapling status.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -781,9 +751,8 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		static extern /* OSStatus */ int SSLSetOCSPResponse (IntPtr /* SSLContextRef */ context, IntPtr /* CFDataRef __nonnull */ response);
 
-		/// <param name="response">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="response">The signed certificate timestamp data.</param>
+		/// <summary>Sets the signed certificate timestamp.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -812,9 +781,8 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		static extern /* OSStatus */ int SSLSetALPNProtocols (IntPtr /* SSLContextRef */ context, IntPtr /* CFArrayRef */ protocols);
 
-		/// <param name="protocols">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="protocols">The ALPN protocol names.</param>
+		/// <summary>Gets the signed certificate timestamps.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -840,9 +808,8 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe static extern /* OSStatus */ int SSLCopyALPNProtocols (IntPtr /* SSLContextRef */ context, IntPtr* /* CFArrayRef* */ protocols);
 
-		/// <param name="error">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="error">On return, the error code.</param>
+		/// <summary>Gets the OCSP response from the peer.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -863,8 +830,7 @@ namespace Security {
 			return CFArray.StringArrayFromHandle (protocols, true)!;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the error codes to abort on.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]

@@ -27,20 +27,16 @@
 
 namespace Foundation {
 	/// <summary>Defines the operating system version. Particularly for use with the <see cref="Foundation.NSProcessInfo.IsOperatingSystemAtLeastVersion(Foundation.NSOperatingSystemVersion)" /> method.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public struct NSOperatingSystemVersion : IEquatable<NSOperatingSystemVersion>, IComparable {
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public nint Major;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public nint Minor;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public nint PatchVersion;
 
 		public NSOperatingSystemVersion (nint major, nint minor, nint patchVersion)
@@ -69,7 +65,6 @@ namespace Foundation {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public override string ToString ()
 			=> $"{Major}.{Minor}.{PatchVersion}";
 

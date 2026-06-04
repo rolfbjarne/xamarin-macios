@@ -51,7 +51,6 @@ namespace CoreFoundation {
 		extern static /* CFErrorRef */ IntPtr CFWriteStreamCopyError (/* CFWriteStreamRef */ IntPtr stream);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override CFException? GetError ()
 		{
 			var error = CFWriteStreamCopyError (Handle);
@@ -64,7 +63,6 @@ namespace CoreFoundation {
 		extern static /* Boolean */ byte CFWriteStreamOpen (/* CFWriteStreamRef */ IntPtr stream);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		protected override bool DoOpen ()
 		{
 			return CFWriteStreamOpen (Handle) != 0;
@@ -83,7 +81,6 @@ namespace CoreFoundation {
 		extern static /* CFStreamStatus */ nint CFWriteStreamGetStatus (/* CFWriteStreamRef */ IntPtr stream);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		protected override CFStreamStatus DoGetStatus ()
 		{
 			return (CFStreamStatus) (long) CFWriteStreamGetStatus (Handle);
@@ -92,8 +89,7 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		extern static /* Boolean */ byte CFWriteStreamCanAcceptBytes (/* CFWriteStreamRef */ IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Cans accept bytes.</summary>
 		public bool CanAcceptBytes ()
 		{
 			return CFWriteStreamCanAcceptBytes (Handle) != 0;
@@ -103,8 +99,7 @@ namespace CoreFoundation {
 		static extern nint CFWriteStreamWrite (IntPtr handle, IntPtr buffer, nint count);
 
 		/// <param name="buffer">The buffer.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Write.</summary>
 		public int Write (byte [] buffer)
 		{
 			if (buffer is null)
@@ -185,7 +180,6 @@ namespace CoreFoundation {
 
 		/// <param name="name">The name to use.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		protected override IntPtr DoGetProperty (NSString name)
 		{
 			if (name is null)
@@ -201,7 +195,6 @@ namespace CoreFoundation {
 		/// <param name="name">The name to use.</param>
 		///         <param name="value">The value to set.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		protected override bool DoSetProperty (NSString name, INativeObject? value)
 		{
 			if (name is null)

@@ -13,7 +13,6 @@ using Metal;
 
 namespace MetalPerformanceShaders {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
@@ -38,10 +37,9 @@ namespace MetalPerformanceShaders {
 		static extern void MPSStateBatchSynchronize (IntPtr batch, IntPtr /* id<MTLCommandBuffer> */ cmdBuf);
 
 		// Using 'NSArray<MPSState>' instead of `MPSState[]` because array 'Handle' matters.
-		/// <param name="stateBatch">To be added.</param>
-		///         <param name="commandBuffer">To be added.</param>
+		/// <param name="stateBatch">The state batch.</param>
+		///         <param name="commandBuffer">The command buffer.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static void Synchronize (NSArray<MPSState> stateBatch, IMTLCommandBuffer commandBuffer)
 		{
 			if (stateBatch is null)
@@ -62,10 +60,9 @@ namespace MetalPerformanceShaders {
 		static extern nuint MPSStateBatchResourceSize (IntPtr batch);
 
 		// Using 'NSArray<MPSState>' instead of `MPSState[]` because array 'Handle' matters.
-		/// <param name="stateBatch">To be added.</param>
+		/// <param name="stateBatch">The state batch.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]

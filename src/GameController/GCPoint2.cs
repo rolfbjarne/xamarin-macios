@@ -10,7 +10,7 @@ using CoreFoundation;
 using CoreGraphics;
 
 namespace GameController {
-	/// <summary>Represents an ordered pair of floating-point x- and y-coordinates that defines a point in a two-dimensional plane.</summary>
+	/// <summary>Represents an ordered pair of floating-point x- and y-coordinates that defines APoint in a two-dimensional plane.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]

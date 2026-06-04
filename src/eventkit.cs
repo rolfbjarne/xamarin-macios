@@ -445,8 +445,8 @@ namespace EventKit {
 		EKRecurrenceEnd FromEndDate (NSDate endDate);
 
 		/// <param name="occurrenceCount">The occurrence count.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Creates a recurrence end that ends after the specified number of occurrences.</summary>
+		/// <returns>A new <see cref="EKRecurrenceEnd" /> instance.</returns>
 		[Static]
 		[Export ("recurrenceEndWithOccurrenceCount:")]
 		EKRecurrenceEnd FromOccurrenceCount (nint occurrenceCount);

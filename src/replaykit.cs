@@ -37,7 +37,6 @@ namespace ReplayKit {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>Creates a new Replay Kit preview controller from the named NIB in the specified <paramref name="bundle" />.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
@@ -63,16 +62,14 @@ namespace ReplayKit {
 	[BaseType (typeof (NSObject))]
 	interface RPPreviewViewControllerDelegate {
 
-		/// <param name="previewController">To be added.</param>
+		/// <param name="previewController">The preview controller.</param>
 		/// <summary>Method that is called when the previewer is ready to be dismissed.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("previewControllerDidFinish:")]
 		void DidFinish (RPPreviewViewController previewController);
 
-		/// <param name="previewController">To be added.</param>
-		/// <param name="activityTypes">To be added.</param>
+		/// <param name="previewController">The preview controller.</param>
+		/// <param name="activityTypes">The activity types.</param>
 		/// <summary>Method that is called when the previewer is ready to be dismissed.</summary>
-		/// <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("previewController:didFinishWithActivityTypes:")]
@@ -139,13 +136,11 @@ namespace ReplayKit {
 
 		/// <summary>Gets a Boolean that tells whether the screen is being recording.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("recording", ArgumentSemantic.Assign)]
 		bool Recording { [Bind ("isRecording")] get; }
 
 		/// <summary>Gets or sets a Boolean value that enables or disables the microphone.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("microphoneEnabled", ArgumentSemantic.Assign)]
@@ -158,13 +153,11 @@ namespace ReplayKit {
 
 		/// <summary>Gets a Boolean value that tells whether the screen recorder is available.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("available", ArgumentSemantic.Assign)]
 		bool Available { [Bind ("isAvailable")] get; }
 
 		/// <summary>Gets or sest a Boolean value that controls whether the camera enabled.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Export ("cameraEnabled")]
@@ -234,14 +227,13 @@ namespace ReplayKit {
 	[BaseType (typeof (NSObject))]
 	interface RPScreenRecorderDelegate {
 
-		/// <param name="screenRecorder">To be added.</param>
-		/// <param name="error">To be added.</param>
+		/// <param name="screenRecorder">The screen recorder.</param>
+		/// <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		/// <param name="previewViewController">
 		///           <para>To be added.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>Developers should not use this deprecated method. Developers should use 'DidStopRecording(RPScreenRecorder,RPPreviewViewController,NSError)' instead.</summary>
-		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.TvOS, 10, 0, message: "Use 'DidStopRecording(RPScreenRecorder,RPPreviewViewController,NSError)' instead.")]
 		[Deprecated (PlatformName.iOS, 10, 0, message: "Use 'DidStopRecording(RPScreenRecorder,RPPreviewViewController,NSError)' instead.")]
 		[NoMac]
@@ -250,7 +242,7 @@ namespace ReplayKit {
 		[Export ("screenRecorder:didStopRecordingWithError:previewViewController:")]
 		void DidStopRecording (RPScreenRecorder screenRecorder, NSError error, [NullAllowed] RPPreviewViewController previewViewController);
 
-		/// <param name="screenRecorder">To be added.</param>
+		/// <param name="screenRecorder">The screen recorder.</param>
 		/// <param name="previewViewController">
 		///           <para>To be added.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
@@ -260,14 +252,12 @@ namespace ReplayKit {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("screenRecorder:didStopRecordingWithPreviewViewController:error:")]
 		void DidStopRecording (RPScreenRecorder screenRecorder, [NullAllowed] RPPreviewViewController previewViewController, [NullAllowed] NSError error);
 
-		/// <param name="screenRecorder">To be added.</param>
+		/// <param name="screenRecorder">The screen recorder.</param>
 		/// <summary>Method that is called when the availability status changes.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("screenRecorderDidChangeAvailability:")]
 		void DidChangeAvailability (RPScreenRecorder screenRecorder);
 	}
@@ -289,7 +279,6 @@ namespace ReplayKit {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
@@ -316,7 +305,6 @@ namespace ReplayKit {
 		[Async (XmlDocs = """
 			<param name="preferredExtension">To be added.</param>
 			<summary>Asynchronously presents the UI for choosing a broadcast activity view controller, attempts to load the user's choice.</summary>
-			<returns>To be added.</returns>
 			<remarks>To be added.</remarks>
 			""")]
 		[Export ("loadBroadcastActivityViewControllerWithPreferredExtension:handler:")]
@@ -354,13 +342,11 @@ namespace ReplayKit {
 	interface RPBroadcastController {
 		/// <summary>Gets a boolean value that tells whether the extension is currently broadcasting.</summary>
 		///         <value>A boolean value that tells whether the extension is currently broadcasting.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("broadcasting")]
 		bool Broadcasting { [Bind ("isBroadcasting")] get; }
 
 		/// <summary>Gets a value that tells whether the broadcast is paused.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("paused")]
 		bool Paused { [Bind ("isPaused")] get; }
 
@@ -423,21 +409,18 @@ namespace ReplayKit {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("broadcastController:didFinishWithError:")]
 		void DidFinish (RPBroadcastController broadcastController, [NullAllowed] NSError error);
 
-		/// <param name="broadcastController">To be added.</param>
-		/// <param name="serviceInfo">To be added.</param>
+		/// <param name="broadcastController">The broadcast controller.</param>
+		/// <param name="serviceInfo">The service info.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("broadcastController:didUpdateServiceInfo:")]
 		void DidUpdateServiceInfo (RPBroadcastController broadcastController, NSDictionary<NSString, INSCoding> serviceInfo);
 
-		/// <param name="broadcastController">To be added.</param>
-		/// <param name="broadcastUrl">To be added.</param>
+		/// <param name="broadcastController">The broadcast controller.</param>
+		/// <param name="broadcastUrl">The broadcast url.</param>
 		/// <summary>Method that is called when the broadcast URL is updated.</summary>
-		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("broadcastController:didUpdateBroadcastURL:")]
 		void DidUpdateBroadcastUrl (RPBroadcastController broadcastController, NSUrl broadcastUrl);
@@ -468,20 +451,18 @@ namespace ReplayKit {
 	[Category]
 	[BaseType (typeof (NSExtensionContext))]
 	interface NSExtensionContext_RPBroadcastExtension {
-		/// <param name="handler">To be added.</param>
+		/// <param name="handler">The completion handler to call when the operation completes.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("loadBroadcastingApplicationInfoWithCompletion:")]
 		void LoadBroadcastingApplicationInfo (LoadBroadcastingHandler handler);
 
-		/// <param name="broadcastURL">To be added.</param>
-		/// <param name="broadcastConfiguration">To be added.</param>
+		/// <param name="broadcastURL">The broadcast u r l.</param>
+		/// <param name="broadcastConfiguration">The broadcast configuration.</param>
 		/// <param name="setupInfo">
 		///           <para>To be added.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>Developers should not use this deprecated method. Developers should use 'CompleteRequest(NSUrl,NSDictionary&lt;NSString,INSCoding&gt;)' instead.</summary>
-		/// <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.TvOS, 11, 0, message: "Use 'CompleteRequest(NSUrl,NSDictionary<NSString,INSCoding>)' instead.")]
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use 'CompleteRequest(NSUrl,NSDictionary<NSString,INSCoding>)' instead.")]
 		[NoMac]
@@ -490,13 +471,12 @@ namespace ReplayKit {
 		[Export ("completeRequestWithBroadcastURL:broadcastConfiguration:setupInfo:")]
 		void CompleteRequest (NSUrl broadcastURL, RPBroadcastConfiguration broadcastConfiguration, [NullAllowed] NSDictionary<NSString, INSCoding> setupInfo);
 
-		/// <param name="broadcastURL">To be added.</param>
+		/// <param name="broadcastURL">The broadcast u r l.</param>
 		/// <param name="setupInfo">
 		///           <para>To be added.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("completeRequestWithBroadcastURL:setupInfo:")]
 		void CompleteRequest (NSUrl broadcastURL, [NullAllowed] NSDictionary<NSString, INSCoding> setupInfo);
@@ -539,14 +519,12 @@ namespace ReplayKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Field ("RPVideoSampleOrientationKey")]
 		NSString VideoSampleOrientationKey { get; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NoTV]
 		[MacCatalyst (13, 1)]
 		[Field ("RPApplicationInfoBundleIdentifierKey")]

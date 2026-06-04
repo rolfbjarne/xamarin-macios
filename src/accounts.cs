@@ -138,7 +138,6 @@ namespace Accounts {
 			<param name="accountType">To be added.</param>
 			<param name="options">To be added.</param>
 			<summary>To be added.</summary>
-			<returns>To be added.</returns>
 			<remarks>To be added.</remarks>
 			""")]
 		void RequestAccess (ACAccountType accountType, [NullAllowed] NSDictionary options, ACRequestCompletionHandler completion);
@@ -164,7 +163,6 @@ namespace Accounts {
 			<param name="accountType">To be added.</param>
 			<param name="options">To be added.</param>
 			<summary>To be added.</summary>
-			<returns>To be added.</returns>
 			<remarks>To be added.</remarks>
 			""")]
 		void RequestAccess (ACAccountType accountType, [NullAllowed] AccountStoreOptions options, ACRequestCompletionHandler completion);
@@ -213,7 +211,6 @@ namespace Accounts {
 		/// <summary>Represents the value associated with the constant ACAccountTypeIdentifierTwitter</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use Twitter SDK instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use Twitter SDK instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use Twitter SDK instead.")]
@@ -222,7 +219,6 @@ namespace Accounts {
 
 		/// <summary>Represents the value associated with the constant ACAccountTypeIdentifierSinaWeibo</summary>
 		///         <value />
-		///         <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use Sina Weibo SDK instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use Sina Weibo SDK instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use Sina Weibo SDK instead.")]
@@ -232,7 +228,6 @@ namespace Accounts {
 		/// <summary>Developers should not use this deprecated property. Developers should use Facebook SDK instead.</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use Facebook SDK instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use Facebook SDK instead.")]
 		[Deprecated (PlatformName.MacCatalyst, 13, 1, message: "Use Facebook SDK instead.")]
@@ -242,7 +237,6 @@ namespace Accounts {
 		/// <summary>Represents the value associated with the constant ACAccountTypeIdentifierTencentWeibo</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Deprecated (PlatformName.iOS, 11, 0, message: "Use Tencent Weibo SDK instead.")]
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use Tencent Weibo SDK instead.")]
 		[MacCatalyst (13, 1)]
@@ -252,7 +246,6 @@ namespace Accounts {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NoiOS]
 		[NoTV]
 		[Deprecated (PlatformName.MacOSX, 10, 13, message: "Use LinkedIn SDK instead.")]
@@ -270,14 +263,12 @@ namespace Accounts {
 		/// <summary>Represents the value associated with the constant ACFacebookAppIdKey</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ACFacebookAppIdKey")]
 		NSString AppId { get; }
 
 		/// <summary>Represents the value associated with the constant ACFacebookPermissionsKey</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ACFacebookPermissionsKey")]
 		NSString Permissions { get; }
 
@@ -285,7 +276,6 @@ namespace Accounts {
 		/// <summary>Represents the value associated with the constant ACFacebookAudienceKey</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ACFacebookAudienceKey")]
 		NSString Audience { get; }
 	}
@@ -299,21 +289,18 @@ namespace Accounts {
 		/// <summary>Represents the value associated with the constant ACFacebookAudienceEveryone</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ACFacebookAudienceEveryone")]
 		NSString Everyone { get; }
 
 		/// <summary>Represents the value associated with the constant ACFacebookAudienceFriends</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ACFacebookAudienceFriends")]
 		NSString Friends { get; }
 
 		/// <summary>Represents the value associated with the constant ACFacebookAudienceOnlyMe</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ACFacebookAudienceOnlyMe")]
 		NSString OnlyMe { get; }
 	}
@@ -328,7 +315,6 @@ namespace Accounts {
 		/// <summary>Represents the value associated with the constant ACTencentWeiboAppIdKey</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ACTencentWeiboAppIdKey")]
 		NSString AppId { get; }
 	}
@@ -341,13 +327,11 @@ namespace Accounts {
 	interface ACLinkedInKey {
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ACLinkedInAppIdKey")]
 		NSString AppId { get; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("ACLinkedInPermissionsKey")]
 		NSString Permissions { get; }
 	}

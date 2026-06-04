@@ -16,7 +16,6 @@ namespace CoreMedia {
 
 	// CMSampleBuffer.h
 	/// <summary>Timing information for a <see cref="CoreMedia.CMSampleBuffer" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -24,19 +23,15 @@ namespace CoreMedia {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct CMSampleTimingInfo {
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CMTime Duration;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CMTime PresentationTimeStamp;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CMTime DecodeTimeStamp;
 	}
 
 	// CMTimeRange.h
 	/// <summary>A duration of time.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -44,21 +39,16 @@ namespace CoreMedia {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct CMTimeRange {
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CMTime Start;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CMTime Duration;
 #if !COREBUILD
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static readonly CMTimeRange Zero;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static readonly CMTimeRange InvalidRange;
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -67,7 +57,6 @@ namespace CoreMedia {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -76,7 +65,6 @@ namespace CoreMedia {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -104,7 +92,6 @@ namespace CoreMedia {
 
 	// CMTimeRange.h
 	/// <summary>Specifies a mapping between a source <see cref="CoreMedia.CMTimeRange" /> and a target <see cref="CoreMedia.CMTimeRange" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -112,18 +99,15 @@ namespace CoreMedia {
 	[StructLayout (LayoutKind.Sequential)]
 	public struct CMTimeMapping {
 		/// <summary>The source time range.</summary>
-		///         <remarks>To be added.</remarks>
 		public CMTimeRange Source;
 		/// <summary>The target time range.</summary>
-		///         <remarks>To be added.</remarks>
 		public CMTimeRange Target;
 
 #if !COREBUILD
-		/// <param name="source">To be added.</param>
-		///         <param name="target">To be added.</param>
+		/// <param name="source">The source.</param>
+		///         <param name="target">The target.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -133,10 +117,9 @@ namespace CoreMedia {
 			return CMTimeMappingMake (source, target);
 		}
 
-		/// <param name="target">To be added.</param>
+		/// <param name="target">The target.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -146,10 +129,9 @@ namespace CoreMedia {
 			return CMTimeMappingMakeEmpty (target);
 		}
 
-		/// <param name="dict">To be added.</param>
+		/// <param name="dict">The dict.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -163,7 +145,6 @@ namespace CoreMedia {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -175,7 +156,6 @@ namespace CoreMedia {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -224,7 +204,6 @@ namespace CoreMedia {
 	}
 
 	/// <summary>A value to be used as a denominator in a <see cref="CoreMedia.CMTime" /> calculation.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -233,17 +212,14 @@ namespace CoreMedia {
 	public struct CMTimeScale {
 		// CMTime.h
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static readonly CMTimeScale MaxValue = new CMTimeScale (0x7fffffff);
 
 		// int32_t -> CMTime.h
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public int Value;
 
-		/// <param name="value">To be added.</param>
+		/// <param name="value">The value to set.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CMTimeScale (int value)
 		{
 			if (value < 0 || value > 0x7fffffff)

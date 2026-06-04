@@ -10,8 +10,7 @@ namespace UIKit {
 
 		/// <param name="category1">The category1.</param>
 		///         <param name="category2">The category2.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Compare.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -39,7 +38,6 @@ namespace UIKit {
 
 		/// <param name="self">The self.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]

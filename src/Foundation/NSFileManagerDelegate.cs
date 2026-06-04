@@ -14,7 +14,7 @@ namespace Foundation {
 		/// <param name="fileManager">The file manager.</param>
 		///         <param name="srcPath">The src path.</param>
 		///         <param name="dstPath">The dst path.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Determines whether the file manager should copy the item at the source path to the destination path.</summary>
 		public virtual bool ShouldCopyItemAtPath (NSFileManager fileManager, string srcPath, string dstPath)
 		{
 			return ShouldCopyItemAtPath (fileManager, (NSString) srcPath, (NSString) dstPath);

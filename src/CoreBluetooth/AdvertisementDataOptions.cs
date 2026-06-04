@@ -55,7 +55,7 @@ namespace CoreBluetooth {
 		{
 		}
 
-		/// <summary>Represents the local name of a peripheral</summary>
+		/// <summary>Represents the local name of APeripheral</summary>
 		///         <value>
 		///         </value>
 		///         <remarks>The property uses constant CBAdvertisementDataLocalNameKey value to access the underlying dictionary.</remarks>

@@ -213,20 +213,20 @@ namespace IntentsUI {
 		/// <param name="controller">The controller.</param>
 		/// <param name="voiceShortcut">The voice shortcut.</param>
 		/// <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the voice shortcut was successfully updated.</summary>
 		[Abstract]
 		[Export ("editVoiceShortcutViewController:didUpdateVoiceShortcut:error:")]
 		void DidUpdate (INUIEditVoiceShortcutViewController controller, [NullAllowed] INVoiceShortcut voiceShortcut, [NullAllowed] NSError error);
 
 		/// <param name="controller">The controller.</param>
 		/// <param name="deletedVoiceShortcutIdentifier">The deleted voice shortcut identifier.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the voice shortcut was successfully deleted.</summary>
 		[Abstract]
 		[Export ("editVoiceShortcutViewController:didDeleteVoiceShortcutWithIdentifier:")]
 		void DidDelete (INUIEditVoiceShortcutViewController controller, NSUuid deletedVoiceShortcutIdentifier);
 
 		/// <param name="controller">The controller.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Called when the user cancels editing a voice shortcut.</summary>
 		[Abstract]
 		[Export ("editVoiceShortcutViewControllerDidCancel:")]
 		void DidCancel (INUIEditVoiceShortcutViewController controller);

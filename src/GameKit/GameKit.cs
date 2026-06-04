@@ -103,12 +103,12 @@ namespace GameKit {
 		Server,
 		/// <summary>Acting as a client.</summary>
 		Client,
-		/// <summary>Acting as a peer.</summary>
+		/// <summary>Acting as APeer.</summary>
 		Peer,
 	}
 
 	// untyped enum -> GKPublicConstants.h
-	/// <summary>An enumeration whose values specify the state of a peer-to-peer connection.</summary>
+	/// <summary>An enumeration whose values specify the state of APeer-to-peer connection.</summary>
 	/// <remarks>To be added.</remarks>
 	/// <altmember cref="GameKit.GKSession.PeersWithConnectionState" />
 	/// <altmember cref="GameKit.GKSessionDelegate.PeerChangedState" />
@@ -131,7 +131,7 @@ namespace GameKit {
 	}
 
 	// NSInteger -> GKLeaderboard.h
-	/// <summary>An enumeration whose values specify the amount of time to which a player's best score is restricted.</summary>
+	/// <summary>An enumeration whose values specify the amount of time to which APlayer's best score is restricted.</summary>
 	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum GKLeaderboardTimeScope : long {
@@ -176,7 +176,7 @@ namespace GameKit {
 		NotAuthenticated,
 		/// <summary>The player is authenticating.</summary>
 		AuthenticationInProgress,
-		/// <summary>The in-game representation of a player was invalid.</summary>
+		/// <summary>The in-game representation of APlayer was invalid.</summary>
 		InvalidPlayer,
 		/// <summary>The score is not set.</summary>
 		ScoreNotSet,
@@ -204,7 +204,7 @@ namespace GameKit {
 		TurnBasedMatchDataTooLarge,
 		/// <summary>The maximum number of sessions was reached before the operation was requested.</summary>
 		TurnBasedTooManySessions,
-		/// <summary>The in-game representation of a player in a turn-based game was invalid.</summary>
+		/// <summary>The in-game representation of APlayer in a turn-based game was invalid.</summary>
 		TurnBasedInvalidParticipant,
 		/// <summary>An attempt was made to play out of turn.</summary>
 		TurnBasedInvalidTurn,
@@ -345,7 +345,7 @@ namespace GameKit {
 	}
 
 	// NSInteger -> GKPlayer.h
-	/// <summary>An enumeration whose values specify the size of a photo being loaded by <see cref="GameKit.GKPlayer.LoadPhoto(GameKit.GKPhotoSize,GameKit.GKPlayerPhotoLoaded)" />.</summary>
+	/// <summary>An enumeration whose values specify the size of APhoto being loaded by <see cref="GameKit.GKPlayer.LoadPhoto(GameKit.GKPhotoSize,GameKit.GKPlayerPhotoLoaded)" />.</summary>
 	/// <remarks>To be added.</remarks>
 	[Native]
 	public enum GKPhotoSize : long {

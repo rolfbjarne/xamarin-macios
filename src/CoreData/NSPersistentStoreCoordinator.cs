@@ -1,6 +1,6 @@
 
 namespace CoreData {
-	/// <summary>Mediates between a persistent store and the managed object context or contexts.</summary>
+	/// <summary>Mediates between APersistent store and the managed object context or contexts.</summary>
 	///     <related type="externalDocumentation" href="https://developer.apple.com/library/ios/documentation/Cocoa/Reference/CoreDataFramework/Classes/NSPersistentStoreCoordinator_Class/index.html">Apple documentation for <c>NSPersistentStoreCoordinator</c></related>
 	public partial class NSPersistentStoreCoordinator {
 #if !__TVOS__

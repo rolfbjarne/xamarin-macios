@@ -14,7 +14,6 @@ namespace SceneKit {
 		/// <param name="shapes">A list of shapes to transform.</param>
 		///         <param name="transforms">A list of transforms to apply..</param>
 		///         <summary>Creates and returns a new physics shape by applying the specified <paramref name="transforms" /> to the specified shapes <paramref name="shapes" />.</summary>
-		///         <returns>To be added.</returns>
 		public static SCNPhysicsShape Create (SCNPhysicsShape [] shapes, SCNMatrix4 [] transforms)
 		{
 			if (shapes is null)
@@ -35,7 +34,6 @@ namespace SceneKit {
 		///         <param name="keepAsCompound">The keep as compound.</param>
 		///         <param name="scale">The scale.</param>
 		///         <summary>Creates and returns a new physics shape from the specified values.</summary>
-		///         <returns>To be added.</returns>
 		public static SCNPhysicsShape Create (SCNGeometry geometry,
 			SCNPhysicsShapeType? shapeType = null,
 			bool? keepAsCompound = null,
@@ -51,7 +49,6 @@ namespace SceneKit {
 		/// <param name="geometry">The geometry.</param>
 		///         <param name="options">The options to use.</param>
 		///         <summary>Creates and returns a new physics shape from the specified <paramref name="geometry" /> and <paramref name="options" />.</summary>
-		///         <returns>To be added.</returns>
 		public static SCNPhysicsShape Create (SCNGeometry geometry, SCNPhysicsShapeOptions? options)
 		{
 			return Create (geometry, options?.ToDictionary ());
@@ -62,7 +59,6 @@ namespace SceneKit {
 		///         <param name="keepAsCompound">The keep as compound.</param>
 		///         <param name="scale">The scale.</param>
 		///         <summary>Creates and returns a new physics shape from the specified values.</summary>
-		///         <returns>To be added.</returns>
 		public static SCNPhysicsShape Create (SCNNode node,
 			SCNPhysicsShapeType? shapeType = null,
 			bool? keepAsCompound = null,
@@ -78,14 +74,12 @@ namespace SceneKit {
 		/// <param name="node">The node.</param>
 		///         <param name="options">The options to use.</param>
 		///         <summary>Creates and returns a new physics shape from the specified <paramref name="node" /> and <paramref name="options" />.</summary>
-		///         <returns>To be added.</returns>
 		public static SCNPhysicsShape Create (SCNNode node, SCNPhysicsShapeOptions? options)
 		{
 			return Create (node, options?.ToDictionary ());
 		}
 
 		/// <summary>Gets the options that were used when creating the physics shape.</summary>
-		///         <value>To be added.</value>
 		public SCNPhysicsShapeOptions? Options {
 			get {
 				var o = _Options;
@@ -102,17 +96,14 @@ namespace SceneKit {
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("tvos")]
 	public class SCNPhysicsShapeOptions {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the shape type.</summary>
 		public SCNPhysicsShapeType? ShapeType { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the keep as compound.</summary>
 		public bool? KeepAsCompound { get; set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the scale.</summary>
 		public SCNVector3? Scale { get; set; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="SCNPhysicsShapeOptions" /> instance.</summary>
 		public SCNPhysicsShapeOptions () { }
 
 		internal SCNPhysicsShapeOptions (NSDictionary source)
@@ -134,8 +125,7 @@ namespace SceneKit {
 				Scale = nret.Vector3Value;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Tos dictionary.</summary>
 		public NSDictionary? ToDictionary ()
 		{
 			var n = 0;

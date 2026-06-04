@@ -34,7 +34,7 @@ namespace CoreGraphics {
 
 #if MONOMAC || __MACCATALYST__
 	// uint32_t -> CGWindow.h (OSX SDK only)
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies options for capturing window images.</summary>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[Flags]
@@ -52,7 +52,7 @@ namespace CoreGraphics {
 	}
 
 	// uint32_t -> CGWindow.h (OSX SDK only)
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies options for listing windows.</summary>
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[Flags]
@@ -104,7 +104,7 @@ namespace CoreGraphics {
 		Only,
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies the pixel format of a Core Graphics image.</summary>
 	public enum CGImagePixelFormatInfo : uint {
 		/// <summary>Indicates packed.</summary>
 		Packed = 0,
@@ -116,7 +116,7 @@ namespace CoreGraphics {
 		Rgb101010 = 3 << 16,
 		/// <summary>Indicates rgb cif10.</summary>
 		RgbCif10 = 4 << 16,
-		/// <summary>To be added.</summary>
+		/// <summary>The mask for pixel format info.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -184,7 +184,7 @@ namespace CoreGraphics {
 		ByteOrder32Big = (4 << 12),
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>Specifies the byte order of image pixel data.</summary>
 	[Flags]
 	public enum CGImageByteOrderInfo : uint {
 		/// <summary>Indicates byte order mask.</summary>
@@ -326,9 +326,7 @@ namespace CoreGraphics {
 
 		/// <param name="windownumber">The windownumber.</param>
 		///         <param name="bounds">The bounds.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a screen image of the specified window and bounds.</summary>
 		[SupportedOSPlatform ("maccatalyst")]
 		[ObsoletedOSPlatform ("maccatalyst18.0", "Use ScreenCaptureKit instead.")]
 		[UnsupportedOSPlatform ("ios")]

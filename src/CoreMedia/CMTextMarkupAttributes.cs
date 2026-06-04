@@ -43,7 +43,7 @@ namespace CoreMedia {
 		///         <param name="green">The green.</param>
 		///         <param name="blue">The blue.</param>
 		///         <param name="alpha">The alpha.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="TextMarkupColor" /> instance.</summary>
 		public TextMarkupColor (float red, float green, float blue, float alpha)
 			: this ()
 		{
@@ -62,17 +62,13 @@ namespace CoreMedia {
 			Alpha = alpha;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the red.</summary>
 		public float Red { get; private set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the green.</summary>
 		public float Green { get; private set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the blue.</summary>
 		public float Blue { get; private set; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the alpha.</summary>
 		public float Alpha { get; private set; }
 	}
 
@@ -83,14 +79,14 @@ namespace CoreMedia {
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class CMTextMarkupAttributes : DictionaryContainer {
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="CMTextMarkupAttributes" /> instance.</summary>
 		public CMTextMarkupAttributes ()
 		{
 		}
 
 #if !COREBUILD
 		/// <param name="dictionary">The dictionary.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CMTextMarkupAttributes" /> instance.</summary>
 		public CMTextMarkupAttributes (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -220,8 +216,7 @@ namespace CoreMedia {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the base font size percentage relative to video height.</summary>
 		public float? BaseFontSizePercentageRelativeToVideoHeight {
 			get {
 				return GetFloatValue (CMTextMarkupAttributesKeys.BaseFontSizePercentageRelativeToVideoHeight);

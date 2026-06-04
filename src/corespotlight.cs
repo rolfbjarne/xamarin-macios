@@ -1375,7 +1375,7 @@ namespace CoreSpotlight {
 		[Export ("addedDate", ArgumentSemantic.Strong)]
 		NSDate AddedDate { get; set; }
 
-		/// <summary>Gets or sets the length of time that a playable content item plays.</summary>
+		/// <summary>Gets or sets the length of time that APlayable content item plays.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
@@ -2147,7 +2147,7 @@ namespace CoreSpotlight {
 		[Export ("imageDirection", ArgumentSemantic.Strong)]
 		NSNumber ImageDirection { get; set; }
 
-		/// <summary>Gets or sets the possibly user-specified location name of a point of interest.</summary>
+		/// <summary>Gets or sets the possibly user-specified location name of APoint of interest.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>
@@ -2257,7 +2257,7 @@ namespace CoreSpotlight {
 		[Export ("GPSProcessingMethod")]
 		string GpsProcessingMethod { get; set; }
 
-		/// <summary>Gets or sets GPS area information for a place item.</summary>
+		/// <summary>Gets or sets GPS area information for APlace item.</summary>
 		///         <value>
 		///           <para>(More documentation for this node is coming)</para>
 		///           <para tool="nullallowed">This value can be <see langword="null" />.</para>

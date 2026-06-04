@@ -19,7 +19,7 @@ namespace ClassKit {
 	enum CLSBinaryValueType : long {
 		/// <summary>Indicates an activity that results in a true or false value</summary>
 		TrueFalse = 0,
-		/// <summary>Indicates an activity that results in a pass or fail value.</summary>
+		/// <summary>Indicates an activity that results in APass or fail value.</summary>
 		PassFail,
 		/// <summary>Indicates an activity that results in a yes or no value</summary>
 		YesNo,
@@ -43,7 +43,7 @@ namespace ClassKit {
 		Section,
 		/// <summary>Indicates a context for level.</summary>
 		Level,
-		/// <summary>Indicates a context for a page.</summary>
+		/// <summary>Indicates a context for APage.</summary>
 		Page,
 		/// <summary>Indicates a context for a task.</summary>
 		Task,

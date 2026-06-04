@@ -152,7 +152,7 @@ namespace ImageIO {
 		extern static /* CFArrayRef __nullable */ IntPtr CGImageMetadataTagCopyQualifiers (
 			/* CGImageMetadataTagRef __nonnull */ IntPtr tag);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the qualifiers associated with this metadata tag.</summary>
 		public CGImageMetadataTag? []? GetQualifiers ()
 		{
 			IntPtr result = CGImageMetadataTagCopyQualifiers (Handle);

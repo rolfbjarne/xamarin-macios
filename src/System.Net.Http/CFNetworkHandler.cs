@@ -41,7 +41,6 @@ using CF = CoreFoundation;
 
 namespace System.Net.Http {
 	/// <summary>To be added.</summary>
-	/// <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -96,7 +95,6 @@ namespace System.Net.Http {
 		Dictionary<IntPtr, StreamBucket> streamBuckets;
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public CFNetworkHandler ()
 		{
 			allowAutoRedirect = true;
@@ -113,7 +111,6 @@ namespace System.Net.Http {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool AllowAutoRedirect {
 			get {
 				return allowAutoRedirect;
@@ -126,7 +123,6 @@ namespace System.Net.Http {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public CookieContainer CookieContainer {
 			get {
 				return cookies ?? (cookies = new CookieContainer ());
@@ -139,7 +135,6 @@ namespace System.Net.Http {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool UseSystemProxy {
 			get {
 				return useSystemProxy;
@@ -206,11 +201,10 @@ namespace System.Net.Http {
 			return req;
 		}
 
-		/// <param name="request">To be added.</param>
-		///         <param name="cancellationToken">To be added.</param>
+		/// <param name="request">The request.</param>
+		///         <param name="cancellationToken">A cancellation token.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		protected override async Task<HttpResponseMessage> SendAsync (HttpRequestMessage request, CancellationToken cancellationToken)
 		{
 			return await SendAsync (request, cancellationToken, true).ConfigureAwait (false);

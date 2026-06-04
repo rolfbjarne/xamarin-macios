@@ -639,7 +639,7 @@ namespace AVKit {
 	[BaseType (typeof (NSView))]
 	interface AVPlayerView {
 		/// <param name="frameRect">The frame rect.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new player view with the specified frame rectangle.</summary>
 		[Export ("initWithFrame:")]
 		NativeHandle Constructor (CGRect frameRect);
 
@@ -654,8 +654,8 @@ namespace AVKit {
 		[Export ("videoGravity")]
 		string VideoGravity { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets a value that tells whether the first frame of video is ready to display.</summary>
+		/// <value><see langword="true" /> if the player view is ready to display video; otherwise, <see langword="false" />.</value>
 		[NoMacCatalyst]
 		[Export ("readyForDisplay")]
 		bool ReadyForDisplay { [Bind ("isReadyForDisplay")] get; }
@@ -686,7 +686,7 @@ namespace AVKit {
 
 		/// <param name="chapterNumber">The chapter number.</param>
 		/// <param name="chapterTitle">The chapter title.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Briefly displays the chapter number and title in the player view.</summary>
 		[Export ("flashChapterNumber:chapterTitle:")]
 		void FlashChapter (nuint chapterNumber, [NullAllowed] string chapterTitle);
 

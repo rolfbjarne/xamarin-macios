@@ -10,7 +10,7 @@
 #nullable enable
 
 namespace Security {
-	/// <summary>To be added.</summary>
+	/// <summary>Provides extension methods for <see cref="SecStatusCode" />.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -26,8 +26,8 @@ namespace Security {
 			/* void * */ IntPtr reserved); /* always null */
 
 		/// <param name="status">The status.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Gets a human-readable description for the specified security status code.</summary>
+		/// <returns>A string describing the status code, or <see langword="null" /> if no description is available.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("maccatalyst")]

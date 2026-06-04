@@ -25,30 +25,30 @@ namespace GameController {
 	public struct GCGamepadSnapShotDataV100 {
 
 		// Standard information
-		/// <summary>To be added.</summary>
+		/// <summary>The version of the snapshot data format.</summary>
 		public ushort /* uint16_t */ Version; // 0x0100
-		/// <summary>To be added.</summary>
+		/// <summary>The size of the snapshot data structure.</summary>
 		public ushort /* uint16_t */ Size;    // sizeof(GCGamepadSnapShotDataV100) or larger
 
 		// Standard gamepad data
 		// Axes in the range [-1.0, 1.0]
-		/// <summary>To be added.</summary>
+		/// <summary>The X-axis value of the directional pad, in the range [-1.0, 1.0].</summary>
 		public float /* float_t = float */ DPadX;
-		/// <summary>To be added.</summary>
+		/// <summary>The Y-axis value of the directional pad, in the range [-1.0, 1.0].</summary>
 		public float /* float_t = float */ DPadY;
 
 		// Buttons in the range [0.0, 1.0]
-		/// <summary>To be added.</summary>
+		/// <summary>The A button value, in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ ButtonA;
-		/// <summary>To be added.</summary>
+		/// <summary>The B button value, in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ ButtonB;
-		/// <summary>To be added.</summary>
+		/// <summary>The X button value, in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ ButtonX;
-		/// <summary>To be added.</summary>
+		/// <summary>The Y button value, in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ ButtonY;
-		/// <summary>To be added.</summary>
+		/// <summary>The left shoulder button value, in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ LeftShoulder;
-		/// <summary>To be added.</summary>
+		/// <summary>The right shoulder button value, in the range [0.0, 1.0].</summary>
 		public float /* float_t = float */ RightShoulder;
 
 		[DllImport (Constants.GameControllerLibrary)]

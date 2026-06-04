@@ -43,7 +43,6 @@ namespace CoreGraphics {
 #if !COREBUILD
 		/// <summary>Gets an invalid, or null, rectangle.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CGRectNull", "CoreGraphics")] // unused but helps xtro
 		public static CGRect Null {
 			get { return Dlfcn.GetCGRect (Libraries.CoreGraphics.Handle, "CGRectNull"); }
@@ -51,7 +50,6 @@ namespace CoreGraphics {
 
 		/// <summary>Gets an infinitely large rectangle.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Field ("CGRectInfinite", "CoreGraphics")] // unused but helps xtro
 		public static CGRect Infinite {
 			get { return Dlfcn.GetCGRect (Libraries.CoreGraphics.Handle, "CGRectInfinite"); }
@@ -196,7 +194,6 @@ namespace CoreGraphics {
 
 		/// <summary>The Y coordinate of the top of the rectangle.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public nfloat Top {
 			get { return Y; }
 		}
@@ -299,12 +296,11 @@ namespace CoreGraphics {
 		}
 
 
-		/// <param name="x">To be added.</param>
-		///         <param name="y">To be added.</param>
-		///         <param name="width">To be added.</param>
-		///         <param name="height">To be added.</param>
+		/// <param name="x">The x.</param>
+		///         <param name="y">The y.</param>
+		///         <param name="width">The width.</param>
+		///         <param name="height">The height.</param>
 		///         <summary>Constructs a rectangle with the specified dimensions.</summary>
-		///         <remarks>To be added.</remarks>
 		public CGRect (float x, float y, float width, float height)
 		{
 			this.x = x;
@@ -322,22 +318,20 @@ namespace CoreGraphics {
 				y < Bottom;
 		}
 
-		/// <param name="x">To be added.</param>
-		///         <param name="y">To be added.</param>
+		/// <param name="x">The x.</param>
+		///         <param name="y">The y.</param>
 		///         <summary>Determines if the specified point is contained within this <see cref="CoreGraphics.CGRect" /> structure.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool Contains (float x, float y)
 		{
 			return Contains ((nfloat) x, (nfloat) y);
 		}
 
-		/// <param name="x">To be added.</param>
-		///         <param name="y">To be added.</param>
+		/// <param name="x">The x.</param>
+		///         <param name="y">The y.</param>
 		///         <summary>
 		///           <see langword="true" /> if the point [<paramref name="x" />, <paramref name="y" />] is within the rectangle.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public bool Contains (double x, double y)
 		{
 			return Contains ((nfloat) x, (nfloat) y);
@@ -387,10 +381,9 @@ namespace CoreGraphics {
 			height += y * 2;
 		}
 
-		/// <param name="x">To be added.</param>
-		///         <param name="y">To be added.</param>
+		/// <param name="x">The x.</param>
+		///         <param name="y">The y.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Inflate (float x, float y)
 		{
 			Inflate ((nfloat) x, (nfloat) y);
@@ -426,19 +419,17 @@ namespace CoreGraphics {
 			Y += y;
 		}
 
-		/// <param name="x">To be added.</param>
-		///         <param name="y">To be added.</param>
+		/// <param name="x">The x.</param>
+		///         <param name="y">The y.</param>
 		///         <summary>Adjusts the location of this rectangle by the specified amount.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Offset (float x, float y)
 		{
 			Offset ((nfloat) x, (nfloat) y);
 		}
 
-		/// <param name="x">To be added.</param>
-		///         <param name="y">To be added.</param>
+		/// <param name="x">The x.</param>
+		///         <param name="y">The y.</param>
 		///         <summary>Adjusts the location of this rectangle by the specified amount.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Offset (double x, double y)
 		{
 			Offset ((nfloat) x, (nfloat) y);

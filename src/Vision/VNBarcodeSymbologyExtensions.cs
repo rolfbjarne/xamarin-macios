@@ -13,7 +13,6 @@ namespace Vision {
 	public static partial class VNBarcodeSymbologyExtensions {
 		/// <param name="self">The instance on which this method operates.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static NSString [] GetConstants (this VNBarcodeSymbology [] self)
 		{
 			if (self is null)
@@ -27,7 +26,6 @@ namespace Vision {
 
 		/// <param name="constants">The constants.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static VNBarcodeSymbology [] GetValues (NSString []? constants)
 		{
 			if (constants is null)

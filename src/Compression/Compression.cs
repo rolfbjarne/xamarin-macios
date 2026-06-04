@@ -301,7 +301,7 @@ namespace Compression {
 		}
 
 		/// <param name="destination">The destination.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Reads decompressed data into the destination span.</summary>
 		public override int Read (Span<byte> destination)
 		{
 			if (GetType () != typeof (CompressionStream)) {
@@ -520,7 +520,7 @@ namespace Compression {
 		}
 
 		/// <param name="source">The source.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Writes and compresses the source data.</summary>
 		public override void Write (ReadOnlySpan<byte> source)
 		{
 			if (GetType () != typeof (CompressionStream)) {
@@ -689,7 +689,7 @@ namespace Compression {
 
 		/// <param name="source">The source.</param>
 		///         <param name="cancellationToken">A cancellation token.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Asynchronously writes and compresses the source data.</summary>
 		public override ValueTask WriteAsync (ReadOnlyMemory<byte> source, CancellationToken cancellationToken)
 		{
 			if (GetType () != typeof (CompressionStream)) {

@@ -92,7 +92,6 @@ namespace CoreText {
 
 		/// <param name="url">The URL to use.</param>
 		///         <summary>Developers should not use this deprecated method. </summary>
-		///         <returns>To be added.</returns>
 		[UnsupportedOSPlatform ("maccatalyst")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("ios")]
@@ -161,8 +160,7 @@ namespace CoreText {
 
 		/// <param name="fontUrls">The font urls.</param>
 		///         <param name="scope">The scope.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Registers fonts from the specified URLs in the given scope.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -268,8 +266,7 @@ namespace CoreText {
 
 		/// <param name="fontUrls">The font urls.</param>
 		///         <param name="scope">The scope.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Unregisters fonts from the specified URLs in the given scope.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -326,7 +323,7 @@ namespace CoreText {
 		static extern /* CFArrayRef */ IntPtr CTFontManagerCreateFontDescriptorsFromURL (/* CFURLRef */ IntPtr fileURL);
 
 		/// <param name="url">The URL to use.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the font descriptors for fonts at the specified URL.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -363,7 +360,7 @@ namespace CoreText {
 
 		/// <param name="font">The CoreGraphics font to register with the CoreText font system.</param>
 		///         <param name="error">On return the error, if any.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Registers a font with the font manager.</summary>
 		///         <returns>True on success, false on error.</returns>
 		///         <remarks>
 		///           <para>

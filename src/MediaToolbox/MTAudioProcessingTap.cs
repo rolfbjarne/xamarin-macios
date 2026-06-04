@@ -42,7 +42,6 @@ using CoreMedia;
 
 namespace MediaToolbox {
 	/// <summary>Holds the state for an audio processing tap.</summary>
-	///     <remarks>To be added.</remarks>
 	public class MTAudioProcessingTap : NativeObject {
 #if !COREBUILD
 		delegate void Action_IntPtr (IntPtr arg);
@@ -91,10 +90,9 @@ namespace MediaToolbox {
 			MTAudioProcessingTapCreationFlags flags,
 			/* MTAudioProcessingTapRef* */ IntPtr* tapOut);
 
-		/// <param name="callbacks">To be added.</param>
-		///         <param name="flags">To be added.</param>
+		/// <param name="callbacks">The callbacks.</param>
+		///         <param name="flags">The flags.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public MTAudioProcessingTap (MTAudioProcessingTapCallbacks callbacks, MTAudioProcessingTapCreationFlags flags)
 		{
 			if (callbacks is null)
@@ -158,7 +156,6 @@ namespace MediaToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public unsafe void* GetStorage ()
 		{
 			return MTAudioProcessingTapGetStorage (Handle);
@@ -264,43 +261,38 @@ namespace MediaToolbox {
 
 	// uint32_t -> MTAudioProcessingTap.h
 	/// <summary>An enumeration that specifies the flags to be used with calls to the <see cref="MediaToolbox.MTAudioProcessingTap.MTAudioProcessingTap(MediaToolbox.MTAudioProcessingTapCallbacks,MediaToolbox.MTAudioProcessingTapCreationFlags)" /> constructor.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum MTAudioProcessingTapCreationFlags : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates pre effects.</summary>
 		PreEffects = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates post effects.</summary>
 		PostEffects = (1 << 1),
 	}
 
 	// uint32_t -> MTAudioProcessingTap.h
 	/// <summary>An enumeration that specifies flags to be used with the <see cref="MediaToolbox.MTAudioProcessingTap.GetSourceAudio(System.IntPtr,AudioToolbox.AudioBuffers,out MediaToolbox.MTAudioProcessingTapFlags,out CoreMedia.CMTimeRange,out System.IntPtr)" /> method, and the <see cref="MediaToolbox.MTAudioProcessingTapProcessDelegate" /> constructor.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum MTAudioProcessingTapFlags : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates start of stream.</summary>
 		StartOfStream = (1 << 8),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates end of stream.</summary>
 		EndOfStream = (1 << 9),
 	}
 
 	// used as OSStatus (4 bytes)
 	// Not documented error codes
 	/// <summary>An enumeration whose values indicate whether there was an argument error when calling the <see cref="MediaToolbox.MTAudioProcessingTap.GetSourceAudio(System.IntPtr,AudioToolbox.AudioBuffers,out MediaToolbox.MTAudioProcessingTapFlags,out CoreMedia.CMTimeRange,out System.IntPtr)" /> method.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum MTAudioProcessingTapError {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid argument.</summary>
 		InvalidArgument = -12780,
 	}
 
 	/// <summary>Holds the set of callbacks passed to the <see cref="MediaToolbox.MTAudioProcessingTap.MTAudioProcessingTap(MediaToolbox.MTAudioProcessingTapCallbacks,MediaToolbox.MTAudioProcessingTapCreationFlags)" /> constructor.</summary>
-	///     <remarks>To be added.</remarks>
 	public class MTAudioProcessingTapCallbacks {
-		/// <param name="process">To be added.</param>
+		/// <param name="process">The process.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public MTAudioProcessingTapCallbacks (MTAudioProcessingTapProcessDelegate process)
 		{
 			if (process is null)
@@ -311,46 +303,38 @@ namespace MediaToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MTAudioProcessingTapInitCallback? Initialize { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public Action<MTAudioProcessingTap>? Finalize { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MTAudioProcessingTapPrepareCallback? Prepare { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public Action<MTAudioProcessingTap>? Unprepare { get; set; }
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MTAudioProcessingTapProcessDelegate? Processing { get; private set; }
 	}
 
-	/// <param name="tap">To be added.</param>
-	///     <param name="tapStorage">To be added.</param>
+	/// <param name="tap">The tap.</param>
+	///     <param name="tapStorage">The tap storage.</param>
 	///     <summary>The delegate to be used as <see cref="MediaToolbox.MTAudioProcessingTapCallbacks" />'s <see cref="MediaToolbox.MTAudioProcessingTapCallbacks.Initialize" /> property.</summary>
-	///     <remarks>To be added.</remarks>
 	public unsafe delegate void MTAudioProcessingTapInitCallback (MTAudioProcessingTap tap, out void* tapStorage);
-	/// <param name="tap">To be added.</param>
-	///     <param name="maxFrames">To be added.</param>
-	///     <param name="processingFormat">To be added.</param>
+	/// <param name="tap">The tap.</param>
+	///     <param name="maxFrames">The max frames.</param>
+	///     <param name="processingFormat">The processing format.</param>
 	///     <summary>The delegate to be used as <see cref="MediaToolbox.MTAudioProcessingTapCallbacks" />'s <see cref="MediaToolbox.MTAudioProcessingTapCallbacks.Prepare" /> property.</summary>
-	///     <remarks>To be added.</remarks>
 	public delegate void MTAudioProcessingTapPrepareCallback (MTAudioProcessingTap tap, nint maxFrames, ref AudioStreamBasicDescription processingFormat);
 
-	/// <param name="tap">To be added.</param>
-	///     <param name="numberFrames">To be added.</param>
-	///     <param name="flags">To be added.</param>
-	///     <param name="bufferList">To be added.</param>
-	///     <param name="numberFramesOut">To be added.</param>
-	///     <param name="flagsOut">To be added.</param>
+	/// <param name="tap">The tap.</param>
+	///     <param name="numberFrames">The number frames.</param>
+	///     <param name="flags">The flags.</param>
+	///     <param name="bufferList">The buffer list.</param>
+	///     <param name="numberFramesOut">The number frames out.</param>
+	///     <param name="flagsOut">The flags out.</param>
 	///     <summary>The delegate to be used as <see cref="MediaToolbox.MTAudioProcessingTapCallbacks" />'s <see cref="MediaToolbox.MTAudioProcessingTapCallbacks.Processing" /> property.</summary>
-	///     <remarks>To be added.</remarks>
 	public delegate void MTAudioProcessingTapProcessDelegate (MTAudioProcessingTap tap, nint numberFrames, MTAudioProcessingTapFlags flags,
 								  AudioBuffers bufferList, out nint numberFramesOut, out MTAudioProcessingTapFlags flagsOut);
 

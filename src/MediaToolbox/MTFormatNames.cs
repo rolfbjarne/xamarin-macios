@@ -6,7 +6,7 @@ using CoreFoundation;
 using CoreMedia;
 
 namespace MediaToolbox {
-	/// <summary>To be added.</summary>
+	/// <summary>Provides methods for getting localized format names for media types.</summary>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -21,7 +21,7 @@ namespace MediaToolbox {
 			CMMediaType mediaType);
 
 		/// <param name="mediaType">The media type.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the localized name for the specified media type.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -41,7 +41,7 @@ namespace MediaToolbox {
 
 		/// <param name="mediaType">The media type.</param>
 		///         <param name="mediaSubType">The media sub type.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the localized name for the specified media type and subtype.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

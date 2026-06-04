@@ -2252,7 +2252,7 @@ namespace Foundation {
 		/// <param name="key">The key identifying the item to decode.</param>
 		/// <param name="length">Number of bytes in the returned block.</param>
 		/// <summary>Low-level: decodes the item with the associated key into a memory block,
-		/// 	and returns a pointer to it.</summary>
+		/// 	and returns APointer to it.</summary>
 		/// <returns>Pointer to the block of memory that contains at least
 		/// 	the number of bytes set on the length parameter.</returns>
 		/// <remarks>
@@ -2262,7 +2262,7 @@ namespace Foundation {
 
 		/// <param name="length">Number of bytes in the returned block.</param>
 		/// <summary>Low-level: decodes the next item into a memory block,
-		/// 	and returns a pointer to it.</summary>
+		/// 	and returns APointer to it.</summary>
 		/// <returns>Pointer to the block of memory that contains at least
 		/// 	the number of bytes set on the length parameter.</returns>
 		/// <remarks>
@@ -3353,7 +3353,7 @@ namespace Foundation {
 		NSString DataAvailableNotification { get; }
 	}
 
-	/// <summary>Represents the components of a person name.</summary>
+	/// <summary>Represents the components of APerson name.</summary>
 	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Static]
@@ -12656,7 +12656,7 @@ namespace Foundation {
 
 		/// <summary>Desired tracking adjustment (minimum space to maintain between characters) to be used during the drawing operation.</summary>
 		/// <value>The value is specified in points, typically a value between -0.5f and 0.</value>
-		/// <remarks>Zero means that standard spacing should be used.  Use negative values to adjust the tracking, for example -0.5f allows characters to be closer together by half a point. </remarks>
+		/// <remarks>Zero means that standard spacing should be used.  Use negative values to adjust the tracking, for example -0.5f allows characters to be closer together by half APoint. </remarks>
 		[NoTV]
 		[Deprecated (PlatformName.iOS, 7, 0)]
 		[NoMacCatalyst]
@@ -18818,7 +18818,7 @@ namespace Foundation {
 	/// <summary>Provides custom validation logic for <see cref="NSPredicate" /> and <see cref="NSExpression" /> objects before they are evaluated.</summary>
 	/// <remarks>
 	///   <para>Implement this protocol to control which predicates and expressions are considered safe for evaluation. Each visitor method is called during
-	///   validation, allowing the implementation to inspect and approve or reject individual components of a predicate tree.</para>
+	///   validation, allowing the implementation to inspect and approve or reject individual components of APredicate tree.</para>
 	/// </remarks>
 	[iOS (26, 4), TV (26, 4), Mac (26, 4), MacCatalyst (26, 4)]
 	[Protocol (BackwardsCompatibleCodeGeneration = false), Model]
@@ -18838,7 +18838,7 @@ namespace Foundation {
 		[Export ("visitExpression:error:")]
 		bool VisitExpression (NSExpression expression, [NullAllowed] out NSError error);
 
-		/// <summary>Validates whether the specified comparison operator type is allowed to be used in a predicate.</summary>
+		/// <summary>Validates whether the specified comparison operator type is allowed to be used in APredicate.</summary>
 		/// <param name="operatorType">The <see cref="NSPredicateOperatorType" /> to validate.</param>
 		/// <param name="error">When this method returns <see langword="false" />, contains an <see cref="NSError" /> describing why the operator type was rejected; otherwise, <see langword="null" />.</param>
 		/// <returns><see langword="true" /> if the operator type is valid and allowed; otherwise, <see langword="false" />.</returns>
@@ -21073,14 +21073,14 @@ namespace Foundation {
 		string NetworkProtocolName { get; }
 
 		/// <summary>
-		///           <see langword="true" /> if a proxy was used to retrieve the resource.</summary>
+		///           <see langword="true" /> if AProxy was used to retrieve the resource.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Export ("proxyConnection")]
 		bool ProxyConnection { [Bind ("isProxyConnection")] get; }
 
 		/// <summary>
-		///           <see langword="true" /> if the resource was retrieved via a persistent connection.</summary>
+		///           <see langword="true" /> if the resource was retrieved via APersistent connection.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Export ("reusedConnection")]

@@ -22,13 +22,11 @@ namespace Security {
 	public delegate void SecTrustWithErrorCallback (SecTrust? trust, bool result, NSError? /* CFErrorRef _Nullable */ error);
 
 	/// <summary>A trust level. A trust object combines a certificate with a policy or policies. </summary>
-	///     <remarks>To be added.</remarks>
 	public partial class SecTrust {
 
-		/// <param name="certificate">To be added.</param>
-		///         <param name="policy">To be added.</param>
+		/// <param name="certificate">The certificate.</param>
+		///         <param name="policy">The policy.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public SecTrust (SecCertificate certificate, SecPolicy policy)
 		{
 			if (certificate is null)
@@ -47,7 +45,6 @@ namespace Security {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -75,9 +72,8 @@ namespace Security {
 				throw new InvalidOperationException (result.ToString ());
 		}
 
-		/// <param name="policy">To be added.</param>
+		/// <param name="policy">The policy.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetPolicy (SecPolicy policy)
 		{
 			if (policy is null)
@@ -87,9 +83,8 @@ namespace Security {
 			GC.KeepAlive (policy);
 		}
 
-		/// <param name="policies">To be added.</param>
+		/// <param name="policies">The policies.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetPolicies (IEnumerable<SecPolicy> policies)
 		{
 			if (policies is null)
@@ -99,9 +94,8 @@ namespace Security {
 				SetPolicies (array.Handle);
 		}
 
-		/// <param name="policies">To be added.</param>
+		/// <param name="policies">The policies.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetPolicies (NSArray policies)
 		{
 			if (policies is null)
@@ -127,7 +121,6 @@ namespace Security {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -159,7 +152,6 @@ namespace Security {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -271,7 +263,6 @@ namespace Security {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -295,10 +286,9 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		unsafe static extern byte SecTrustEvaluateWithError (/* SecTrustRef */ IntPtr trust, /* CFErrorRef** */ IntPtr* error);
 
-		/// <param name="error">To be added.</param>
+		/// <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -323,7 +313,6 @@ namespace Security {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -352,9 +341,8 @@ namespace Security {
 				throw new InvalidOperationException (result.ToString ());
 		}
 
-		/// <param name="ocspResponse">To be added.</param>
+		/// <param name="ocspResponse">The ocsp response.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -368,9 +356,8 @@ namespace Security {
 			GC.KeepAlive (ocspResponse);
 		}
 
-		/// <param name="ocspResponses">To be added.</param>
+		/// <param name="ocspResponses">The ocsp responses.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -384,9 +371,8 @@ namespace Security {
 				SetOCSPResponse (array.Handle);
 		}
 
-		/// <param name="ocspResponses">To be added.</param>
+		/// <param name="ocspResponses">The ocsp responses.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -407,10 +393,9 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		static extern SecStatusCode /* OSStatus */ SecTrustSetSignedCertificateTimestamps (/* SecTrustRef* */ IntPtr trust, /* CFArrayRef* */ IntPtr sctArray);
 
-		/// <param name="sct">To be added.</param>
+		/// <param name="sct">The sct.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
@@ -424,10 +409,9 @@ namespace Security {
 				return SecTrustSetSignedCertificateTimestamps (Handle, array.Handle);
 		}
 
-		/// <param name="sct">To be added.</param>
+		/// <param name="sct">The sct.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]

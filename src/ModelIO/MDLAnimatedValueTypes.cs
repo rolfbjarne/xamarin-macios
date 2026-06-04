@@ -30,7 +30,6 @@ namespace ModelIO {
 	public partial class MDLAnimatedValue {
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public double []? KeyTimes {
 			get {
@@ -55,7 +54,6 @@ namespace ModelIO {
 		// 3. Lack of documentation at the moment of binding this.
 		// [1]: https://github.com/apple/swift/blob/cbdf0ff1e7bfbd192c33d64c9c7d31fbb11f712c/stdlib/public/SDK/ModelIO/ModelIO.swift#L50
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual double [] GetTimes ()
 		{
@@ -105,7 +103,6 @@ namespace ModelIO {
 
 		/// <param name="time">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual float [] GetFloatValues (double time)
 		{
@@ -121,7 +118,6 @@ namespace ModelIO {
 
 		/// <param name="time">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual double [] GetDoubleValues (double time)
 		{
@@ -172,7 +168,6 @@ namespace ModelIO {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual float [] GetFloatValues ()
 		{
@@ -187,7 +182,6 @@ namespace ModelIO {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual double [] GetDoubleValues ()
 		{
@@ -232,7 +226,6 @@ namespace ModelIO {
 
 		/// <param name="time">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual Vector3 [] GetNVector3Values (double time)
 		{
@@ -250,7 +243,6 @@ namespace ModelIO {
 
 		/// <param name="time">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual Vector3d [] GetNVector3dValues (double time)
 		{
@@ -295,7 +287,6 @@ namespace ModelIO {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual Vector3 [] GetNVector3Values ()
 		{
@@ -312,7 +303,6 @@ namespace ModelIO {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual Vector3d [] GetNVector3dValues ()
 		{
@@ -359,7 +349,6 @@ namespace ModelIO {
 
 		/// <param name="time">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual Quaternion [] GetQuaternionValues (double time)
 		{
@@ -377,7 +366,6 @@ namespace ModelIO {
 
 		/// <param name="time">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual Quaterniond [] GetQuaterniondValues (double time)
 		{
@@ -422,7 +410,6 @@ namespace ModelIO {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual Quaternion [] GetQuaternionValues ()
 		{
@@ -439,7 +426,6 @@ namespace ModelIO {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual Quaterniond [] GetQuaterniondValues ()
 		{
@@ -496,7 +482,6 @@ namespace ModelIO {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual float [] GetFloatValues ()
 		{
@@ -511,7 +496,6 @@ namespace ModelIO {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual double [] GetDoubleValues ()
 		{
@@ -563,7 +547,6 @@ namespace ModelIO {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual Vector2 [] GetVector2Values ()
 		{
@@ -580,7 +563,6 @@ namespace ModelIO {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual Vector2d [] GetVector2dValues ()
 		{
@@ -634,7 +616,6 @@ namespace ModelIO {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual Vector3 [] GetNVector3Values ()
 		{
@@ -651,7 +632,6 @@ namespace ModelIO {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual Vector3d [] GetNVector3dValues ()
 		{
@@ -705,7 +685,6 @@ namespace ModelIO {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual Vector4 [] GetVector4Values ()
 		{
@@ -722,7 +701,6 @@ namespace ModelIO {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual Vector4d [] GetVector4dValues ()
 		{
@@ -776,7 +754,6 @@ namespace ModelIO {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual Matrix4 [] GetNMatrix4Values ()
 		{
@@ -793,7 +770,6 @@ namespace ModelIO {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual Matrix4d [] GetNMatrix4dValues ()
 		{
@@ -839,7 +815,6 @@ namespace ModelIO {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual Matrix4 [] GetNMatrix4Values ()
 		{
@@ -856,7 +831,6 @@ namespace ModelIO {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public virtual Matrix4d [] GetNMatrix4dValues ()
 		{

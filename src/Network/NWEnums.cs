@@ -40,17 +40,17 @@ namespace Network {
 
 	[MacCatalyst (13, 1)]
 	public enum NWConnectionState {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid.</summary>
 		Invalid = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates waiting.</summary>
 		Waiting = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates preparing.</summary>
 		Preparing = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ready.</summary>
 		Ready = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates failed.</summary>
 		Failed = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates cancelled.</summary>
 		Cancelled = 5,
 	}
 
@@ -73,13 +73,13 @@ namespace Network {
 
 	[MacCatalyst (13, 1)]
 	public enum NWEndpointType {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid.</summary>
 		Invalid = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates address.</summary>
 		Address = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates host.</summary>
 		Host = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bonjour service.</summary>
 		BonjourService = 3,
 		[TV (13, 0), iOS (13, 0)]
 		[MacCatalyst (13, 1)]
@@ -132,61 +132,61 @@ namespace Network {
 
 	[MacCatalyst (13, 1)]
 	public enum NWIPVersion {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates any.</summary>
 		Any = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates version4.</summary>
 		Version4 = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates version6.</summary>
 		Version6 = 2,
 	}
 
 	[MacCatalyst (13, 1)]
 	public enum NWInterfaceType {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates other.</summary>
 		Other = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates wifi.</summary>
 		Wifi = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates cellular.</summary>
 		Cellular = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates wired.</summary>
 		Wired = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates loopback.</summary>
 		Loopback = 4,
 	}
 
 	[MacCatalyst (13, 1)]
 	public enum NWListenerState {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid.</summary>
 		Invalid = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates waiting.</summary>
 		Waiting = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ready.</summary>
 		Ready = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates failed.</summary>
 		Failed = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates cancelled.</summary>
 		Cancelled = 4,
 	}
 
 	[MacCatalyst (13, 1)]
 	public enum NWMultiPathService {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates disabled.</summary>
 		Disabled = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates handover.</summary>
 		Handover = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates interactive.</summary>
 		Interactive = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates aggregate.</summary>
 		Aggregate = 3,
 	}
 
 	[MacCatalyst (13, 1)]
 	public enum NWParametersExpiredDnsBehavior {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates default.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates allow.</summary>
 		Allow = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates prohibit.</summary>
 		Prohibit = 2,
 		[TV (18, 0), Mac (15, 0), iOS (18, 0), MacCatalyst (18, 0)]
 		Persistent = 3,
@@ -195,39 +195,39 @@ namespace Network {
 	// this maps to `nw_path_status_t` in Network/Headers/path.h (and not the enum from NetworkExtension)
 	[MacCatalyst (13, 1)]
 	public enum NWPathStatus {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid.</summary>
 		Invalid = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates satisfied.</summary>
 		Satisfied = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates unsatisfied.</summary>
 		Unsatisfied = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates satisfiable.</summary>
 		Satisfiable = 3,
 	}
 
 	public enum NWServiceClass {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates best effort.</summary>
 		BestEffort = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates background.</summary>
 		Background = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates interactive video.</summary>
 		InteractiveVideo = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates interactive voice.</summary>
 		InteractiveVoice = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates responsive data.</summary>
 		ResponsiveData = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates signaling.</summary>
 		Signaling = 5,
 	}
 
 	public enum NWIPEcnFlag {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates non ect.</summary>
 		NonEct = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ect.</summary>
 		Ect = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ect1.</summary>
 		Ect1 = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates ce.</summary>
 		Ce = 3,
 	}
 

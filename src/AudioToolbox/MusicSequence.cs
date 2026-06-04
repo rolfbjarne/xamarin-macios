@@ -130,7 +130,6 @@ namespace AudioToolbox {
 		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicSequenceGetAUGraph (/* MusicSequence */ IntPtr inSequence, /* AUGraph* */ IntPtr* outGraph);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -167,7 +166,6 @@ namespace AudioToolbox {
 		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicSequenceGetSequenceType (/* MusicSequence */ IntPtr inSequence, MusicSequenceType* outType);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public MusicSequenceType SequenceType {
 			get {
@@ -197,7 +195,6 @@ namespace AudioToolbox {
 		/// <param name="fps">To be added.</param>
 		///         <param name="ticks">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public short SetSmpteResolution (sbyte fps, byte ticks)
 		{
@@ -211,7 +208,6 @@ namespace AudioToolbox {
 		extern static /* CFDictionaryRef */ IntPtr MusicSequenceGetInfoDictionary (/* MusicSequence */ IntPtr inSequence);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public NSDictionary? GetInfoDictionary ()
 		{
@@ -222,7 +218,6 @@ namespace AudioToolbox {
 		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicSequenceNewTrack (/* MusicSequence */ IntPtr inSequence, /* MusicTrack* */ IntPtr* outTrack);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicTrack? CreateTrack ()
 		{
@@ -240,7 +235,6 @@ namespace AudioToolbox {
 
 		// an `uint` but we keep `int` for compatibility (should be enough tracks)
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public int TrackCount {
 			get {
@@ -258,7 +252,6 @@ namespace AudioToolbox {
 
 		/// <param name="trackIndex">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicTrack? GetTrack (int trackIndex)
 		{
@@ -277,7 +270,6 @@ namespace AudioToolbox {
 		/// <param name="track">To be added.</param>
 		///         <param name="index">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus GetTrackIndex (MusicTrack track, out int index)
 		{
@@ -317,7 +309,6 @@ namespace AudioToolbox {
 
 		/// <param name="endpoint">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus SetMidiEndpoint (MidiEndpoint endpoint)
 		{
@@ -334,7 +325,6 @@ namespace AudioToolbox {
 
 		/// <param name="beats">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public double GetSecondsForBeats (double beats)
 		{
@@ -351,7 +341,6 @@ namespace AudioToolbox {
 
 		/// <param name="seconds">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public double GetBeatsForSeconds (double seconds)
 		{
@@ -402,7 +391,6 @@ namespace AudioToolbox {
 		///         <param name="subbeatDivisor">To be added.</param>
 		///         <param name="barBeatTime">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus BeatsToBarBeatTime (double beats, int subbeatDivisor, out CABarBeatTime barBeatTime)
 		{
@@ -419,7 +407,6 @@ namespace AudioToolbox {
 		/// <param name="barBeatTime">To be added.</param>
 		///         <param name="beats">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus BarBeatTimeToBeats (CABarBeatTime barBeatTime, out double beats)
 		{
@@ -435,7 +422,6 @@ namespace AudioToolbox {
 		extern static /* OSStatus */ MusicPlayerStatus MusicSequenceReverse (/* MusicSequence */ IntPtr inSequence);
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus Reverse ()
 		{
@@ -449,7 +435,6 @@ namespace AudioToolbox {
 		///         <param name="fileTypeId">To be added.</param>
 		///         <param name="loadFlags">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus LoadFile (NSUrl url, MusicSequenceFileTypeID fileTypeId, MusicSequenceLoadFlags loadFlags = 0)
 		{
@@ -468,7 +453,6 @@ namespace AudioToolbox {
 		///         <param name="fileTypeId">To be added.</param>
 		///         <param name="loadFlags">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus LoadData (NSData data, MusicSequenceFileTypeID fileTypeId, MusicSequenceLoadFlags loadFlags = 0)
 		{
@@ -490,7 +474,6 @@ namespace AudioToolbox {
 		///         <param name="flags">To be added.</param>
 		///         <param name="resolution">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus CreateFile (NSUrl url, MusicSequenceFileTypeID fileType, MusicSequenceFileFlags flags = 0, ushort resolution = 0)
 		{
@@ -510,7 +493,6 @@ namespace AudioToolbox {
 		///         <param name="flags">To be added.</param>
 		///         <param name="resolution">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public NSData? CreateData (MusicSequenceFileTypeID fileType, MusicSequenceFileFlags flags = 0, ushort resolution = 0)
 		{

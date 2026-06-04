@@ -20,13 +20,12 @@ namespace Foundation {
 	/// <summary>To be added.</summary>
 	[AttributeUsage (AttributeTargets.Method, AllowMultiple = false)]
 	public class NotImplementedAttribute : Attribute {
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="NotImplementedAttribute" /> instance.</summary>
 		public NotImplementedAttribute () { }
 		/// <param name="message">The message.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NotImplementedAttribute" /> instance.</summary>
 		public NotImplementedAttribute (string message) { Message = message; }
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the message.</summary>
 		public string? Message { get; set; }
 	}
 }

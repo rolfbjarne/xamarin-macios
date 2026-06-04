@@ -15,7 +15,7 @@ using CoreFoundation;
 using OS_nw_path_monitor = System.IntPtr;
 
 namespace Network {
-	/// <summary>To be added.</summary>
+	/// <summary>Monitors network path changes and notifies when connectivity status updates.</summary>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]

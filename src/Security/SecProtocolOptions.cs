@@ -17,7 +17,7 @@ using dispatch_queue_t = System.IntPtr;
 using sec_identity_t = System.IntPtr;
 
 namespace Security {
-	/// <summary>To be added.</summary>
+	/// <summary>Provides options for configuring a security protocol.</summary>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
@@ -67,7 +67,7 @@ namespace Security {
 		static extern void sec_protocol_options_add_tls_ciphersuite_group (sec_protocol_options_t handle, SslCipherSuiteGroup cipherSuiteGroup);
 
 		/// <param name="cipherSuiteGroup">The cipher suite group.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Adds the specified cipher suite group to the protocol options.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -103,7 +103,7 @@ namespace Security {
 		static extern void sec_protocol_options_set_tls_min_version (sec_protocol_options_t handle, SslProtocol protocol);
 
 		/// <param name="protocol">The protocol.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets the minimum TLS protocol version.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -139,7 +139,7 @@ namespace Security {
 		static extern void sec_protocol_options_set_tls_max_version (sec_protocol_options_t handle, SslProtocol protocol);
 
 		/// <param name="protocol">The protocol.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets the maximum TLS protocol version.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -253,7 +253,7 @@ namespace Security {
 		static extern void sec_protocol_options_set_tls_diffie_hellman_parameters (IntPtr handle, IntPtr dispatchDataParameter);
 
 		/// <param name="parameters">The parameters.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sets the Diffie-Hellman parameters for TLS.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
@@ -274,7 +274,7 @@ namespace Security {
 		static extern void sec_protocol_options_add_pre_shared_key (IntPtr handle, IntPtr dispatchDataParameter);
 
 		/// <param name="parameters">The parameters.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Adds a pre-shared key for TLS.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]

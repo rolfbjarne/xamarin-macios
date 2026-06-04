@@ -34,8 +34,7 @@ namespace IOSurface {
 		// See bug #59201 
 		/// <param name="options">The options to use.</param>
 		///         <param name="seed">The seed.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Lock.</summary>
 		public int Lock (IOSurfaceLockOptions options, ref int seed)
 		{
 			unsafe {
@@ -48,8 +47,7 @@ namespace IOSurface {
 		// kern_return_t
 		// See bug #59201 
 		/// <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Lock.</summary>
 		public int Lock (IOSurfaceLockOptions options)
 		{
 			return _Lock (options, IntPtr.Zero);
@@ -59,8 +57,7 @@ namespace IOSurface {
 		// See bug #59201 
 		/// <param name="options">The options to use.</param>
 		///         <param name="seed">The seed.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Unlock.</summary>
 		public int Unlock (IOSurfaceLockOptions options, ref int seed)
 		{
 			unsafe {
@@ -73,8 +70,7 @@ namespace IOSurface {
 		// kern_return_t
 		// See bug #59201 
 		/// <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Unlock.</summary>
 		public int Unlock (IOSurfaceLockOptions options)
 		{
 			return _Unlock (options, IntPtr.Zero);
@@ -84,8 +80,7 @@ namespace IOSurface {
 		// kern_return_t
 		/// <param name="newState">The new state.</param>
 		///         <param name="oldState">The old state.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Sets purgeable.</summary>
 		public int SetPurgeable (IOSurfacePurgeabilityState newState, ref IOSurfacePurgeabilityState oldState)
 		{
 			unsafe {
@@ -96,8 +91,7 @@ namespace IOSurface {
 		}
 
 		/// <param name="newState">The new state.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Sets purgeable.</summary>
 		public int SetPurgeable (IOSurfacePurgeabilityState newState)
 		{
 			return _SetPurgeable (newState, IntPtr.Zero);

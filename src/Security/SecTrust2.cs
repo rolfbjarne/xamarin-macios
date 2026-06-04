@@ -31,7 +31,7 @@ namespace Security {
 		extern static IntPtr sec_trust_create (IntPtr sectrustHandle);
 
 		/// <param name="trust">The trust.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="SecTrust2" /> instance.</summary>
 		public SecTrust2 (SecTrust trust)
 		{
 			if (trust is null)
@@ -44,8 +44,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static IntPtr sec_trust_copy_ref (IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>The trust.</summary>
 		public SecTrust Trust => new SecTrust (sec_trust_copy_ref (GetCheckedHandle ()), owns: true);
 	}
 }

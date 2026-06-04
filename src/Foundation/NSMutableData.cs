@@ -23,7 +23,7 @@ namespace Foundation {
 		}
 
 		/// <param name="bytes">The bytes.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Appends bytes.</summary>
 		public void AppendBytes (byte [] bytes)
 		{
 			if (bytes is null)
@@ -39,7 +39,7 @@ namespace Foundation {
 		/// <param name="bytes">The bytes.</param>
 		/// <param name="start">The start.</param>
 		/// <param name="len">The len.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Appends bytes.</summary>
 		public void AppendBytes (byte [] bytes, nint start, nint len)
 		{
 			if (bytes is null)
@@ -58,7 +58,6 @@ namespace Foundation {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			IntPtr source = Bytes;

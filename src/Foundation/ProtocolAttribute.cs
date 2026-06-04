@@ -55,7 +55,7 @@ namespace Foundation {
 	[AttributeUsage (AttributeTargets.Class | AttributeTargets.Interface)]
 	public sealed class ProtocolAttribute : Attribute {
 
-		/// <summary>To be added.</summary>
+	/// <summary>Initializes a new instance of the <see cref="ProtocolAttribute" /> class.</summary>
 		///         <remarks>
 		///         </remarks>
 		public ProtocolAttribute () { }
@@ -74,7 +74,7 @@ namespace Foundation {
 		// In which SDK version this protocol switched from being informal (i.e. a category) to a formal protocol.
 		// System.Version is not a valid type for attributes, so we're using a string instead.
 		string? informal_until;
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the SDK version in which this protocol became formal.</summary>
 		public string? FormalSince {
 			get {
 				return informal_until;
@@ -96,42 +96,42 @@ namespace Foundation {
 #endif
 	}
 
-	/// <summary>To be added.</summary>
+/// <summary>Specifies metadata about a member of an Objective-C protocol.</summary>
 	[AttributeUsage (AttributeTargets.Interface, AllowMultiple = true)]
 	public sealed class ProtocolMemberAttribute : Attribute {
-		/// <summary>To be added.</summary>
+	/// <summary>Initializes a new instance of the <see cref="ProtocolMemberAttribute" /> class.</summary>
 		public ProtocolMemberAttribute () { }
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets a value indicating whether this member is required by the protocol.</summary>
 		public bool IsRequired { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets a value indicating whether this member is a property.</summary>
 		public bool IsProperty { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets a value indicating whether this member is static.</summary>
 		public bool IsStatic { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the name of the protocol member.</summary>
 		public string? Name { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the Objective-C selector for this member.</summary>
 		public string? Selector { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the return type of this member.</summary>
 		public Type? ReturnType { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the delegate proxy type for the return value.</summary>
 		public Type? ReturnTypeDelegateProxy { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the parameter types for this member.</summary>
 		public Type []? ParameterType { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets which parameters are passed by reference.</summary>
 		public bool []? ParameterByRef { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the block proxy types for block parameters.</summary>
 		public Type? []? ParameterBlockProxy { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets a value indicating whether this member accepts a variable number of arguments.</summary>
 		public bool IsVariadic { get; set; }
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the type of the property.</summary>
 		public Type? PropertyType { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the Objective-C selector for the property getter.</summary>
 		public string? GetterSelector { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the Objective-C selector for the property setter.</summary>
 		public string? SetterSelector { get; set; }
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the argument semantics for the property.</summary>
 		public ArgumentSemantic ArgumentSemantic { get; set; }
 	}
 

@@ -49,7 +49,7 @@ namespace ImageIO {
 		UnknownType = -3,
 		/// <summary>The data fed to the CGImageSource is invalid and does not represent an image that can be decoded.</summary>
 		InvalidData = -4,
-		/// <summary>The image loader detected a premature end-of-file condition.</summary>
+		/// <summary>The image loader detected APremature end-of-file condition.</summary>
 		UnexpectedEOF = -5,
 	}
 
@@ -216,17 +216,17 @@ namespace ImageIO {
 		extern static /* CGImageSourceRef __nullable */ IntPtr CGImageSourceCreateWithDataProvider (
 			/* CGDataProviderRef __nonnull */ IntPtr provider, /* CFDictionaryRef __nullable */ IntPtr options);
 
-		/// <param name="provider">Dynamic data provider.</param>
-		///         <summary>Creates an image loader using a dynamic data provider.</summary>
+		/// <param name="provider">Dynamic datAProvider.</param>
+		///         <summary>Creates an image loader using a dynamic datAProvider.</summary>
 		///         <returns>To be added.</returns>
 		public static CGImageSource? FromDataProvider (CGDataProvider provider)
 		{
 			return FromDataProvider (provider, null);
 		}
 
-		/// <param name="provider">Dynamic data provider.</param>
+		/// <param name="provider">Dynamic datAProvider.</param>
 		///         <param name="options">Image creation options.</param>
-		///         <summary>Creates an image loader using a dynamic data provider.</summary>
+		///         <summary>Creates an image loader using a dynamic datAProvider.</summary>
 		///         <returns>To be added.</returns>
 		public static CGImageSource? FromDataProvider (CGDataProvider provider, CGImageOptions? options)
 		{

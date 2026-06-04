@@ -64,7 +64,7 @@ namespace CoreFoundation {
 
 		/// <param name="type">The type.</param>
 		///     <param name="data">The data to use.</param>
-		///     <summary>To be added.</summary>
+		/// <summary>A callback invoked when a message is received on a CFMessagePort.</summary>
 		public delegate NSData CFMessagePortCallBack (int type, NSData data);
 
 		static Dictionary<IntPtr, CFMessagePortCallBack> outputHandles = new Dictionary<IntPtr, CFMessagePortCallBack> (Runtime.IntPtrEqualityComparer);

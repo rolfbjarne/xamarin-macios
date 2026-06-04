@@ -31,8 +31,7 @@ using CoreGraphics;
 namespace AppKit {
 
 	public partial class NSImage {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the c g image.</summary>
 		public CGImage CGImage {
 			get {
 				var rect = CGRect.Empty;
@@ -41,8 +40,7 @@ namespace AppKit {
 		}
 
 		/// <param name="stream">The stream.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Froms stream.</summary>
 		public static NSImage? FromStream (System.IO.Stream stream)
 		{
 			using (var data = NSData.FromStream (stream)) {
@@ -76,8 +74,7 @@ namespace AppKit {
 		}
 
 		// note: if needed override the protected Get|Set methods
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the name.</summary>
 		public string? Name {
 			get { return GetName (); }
 			// ignore return value (bool)
@@ -85,8 +82,7 @@ namespace AppKit {
 		}
 
 		/// <param name="name">The name to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Images named.</summary>
 		public static NSImage? ImageNamed (NSImageName name)
 		{
 			return ImageNamed (name.GetConstant ()!);
@@ -95,8 +91,7 @@ namespace AppKit {
 
 	public partial class NSImageRep {
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the c g image.</summary>
 		public CGImage CGImage {
 			get {
 				var rect = CGRect.Empty;

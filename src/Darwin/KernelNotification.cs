@@ -224,7 +224,6 @@ namespace Darwin {
 		int handle;
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		public NativeHandle Handle { get { return (NativeHandle) (IntPtr) handle; } }
 
@@ -269,7 +268,6 @@ namespace Darwin {
 		///         <param name="eventList">To be added.</param>
 		///         <param name="timeout">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public int KEvent (KernelEvent [] changeList, KernelEvent [] eventList, TimeSpan? timeout = null)
 		{
@@ -294,7 +292,6 @@ namespace Darwin {
 		///         <param name="nEvents">To be added.</param>
 		///         <param name="timeout">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public unsafe int KEvent (KernelEvent [] changeList, int nChanges, KernelEvent [] eventList, int nEvents, TimeSpec? timeout = null)
 		{
@@ -343,7 +340,6 @@ namespace Darwin {
 		/// <param name="changeList">To be added.</param>
 		///         <param name="eventList">To be added.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>To be added.</remarks>
 		public int KEvent (KernelEvent [] changeList, KernelEvent [] eventList)
 		{

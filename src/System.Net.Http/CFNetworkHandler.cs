@@ -94,7 +94,7 @@ namespace System.Net.Http {
 
 		Dictionary<IntPtr, StreamBucket> streamBuckets;
 
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="CFNetworkHandler" /> instance.</summary>
 		public CFNetworkHandler ()
 		{
 			allowAutoRedirect = true;
@@ -109,8 +109,7 @@ namespace System.Net.Http {
 					"Properties can only be modified before sending the first request.");
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the allow auto redirect.</summary>
 		public bool AllowAutoRedirect {
 			get {
 				return allowAutoRedirect;
@@ -121,8 +120,7 @@ namespace System.Net.Http {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the cookie container.</summary>
 		public CookieContainer CookieContainer {
 			get {
 				return cookies ?? (cookies = new CookieContainer ());
@@ -133,8 +131,7 @@ namespace System.Net.Http {
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the use system proxy.</summary>
 		public bool UseSystemProxy {
 			get {
 				return useSystemProxy;
@@ -204,7 +201,6 @@ namespace System.Net.Http {
 		/// <param name="request">The request.</param>
 		///         <param name="cancellationToken">A cancellation token.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		protected override async Task<HttpResponseMessage> SendAsync (HttpRequestMessage request, CancellationToken cancellationToken)
 		{
 			return await SendAsync (request, cancellationToken, true).ConfigureAwait (false);

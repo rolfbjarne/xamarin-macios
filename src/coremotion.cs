@@ -1185,7 +1185,7 @@ namespace CoreMotion {
 		MotionActivityNotAvailable,
 		/// <summary>The user has not authorized the app to access motion data.</summary>
 		MotionActivityNotAuthorized,
-		/// <summary>The app does not have a properly-configured entitlements file.</summary>
+		/// <summary>The app does not have AProperly-configured entitlements file.</summary>
 		MotionActivityNotEntitled,
 		/// <summary>An invalid parameter was specified.</summary>
 		InvalidParameter,

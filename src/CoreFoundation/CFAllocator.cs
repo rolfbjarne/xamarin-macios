@@ -48,32 +48,28 @@ namespace CoreFoundation {
 		}
 
 #if !COREBUILD
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the default.</summary>
 		public static CFAllocator Default {
 			get {
 				return Default_cf ?? (Default_cf = new CFAllocator (default_ptr, false));
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the system default.</summary>
 		public static CFAllocator SystemDefault {
 			get {
 				return SystemDefault_cf ?? (SystemDefault_cf = new CFAllocator (system_default_ptr, false));
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the malloc.</summary>
 		public static CFAllocator Malloc {
 			get {
 				return Malloc_cf ?? (Malloc_cf = new CFAllocator (malloc_ptr, false));
 			}
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the malloc zone.</summary>
 		public static CFAllocator MallocZone {
 			get {
 				return MallocZone_cf ?? (MallocZone_cf = new CFAllocator (malloc_zone_ptr, false));
@@ -81,8 +77,7 @@ namespace CoreFoundation {
 		}
 
 		// Internal only: to get the null handle, use 'CFAllocator.null_ptr' instead.
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the null.</summary>
 		public static CFAllocator Null {
 			get {
 				return Null_cf ?? (Null_cf = new CFAllocator (null_ptr, false));
@@ -94,8 +89,7 @@ namespace CoreFoundation {
 		static extern /* void* */ IntPtr CFAllocatorAllocate (/* CFAllocatorRef*/ IntPtr allocator, /*CFIndex*/ nint size, /* CFOptionFlags */ nuint hint);
 
 		/// <param name="size">The size.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Allocate.</summary>
 		public IntPtr Allocate (long size)
 		{
 			return CFAllocatorAllocate (Handle, (nint) size, 0);
@@ -105,14 +99,13 @@ namespace CoreFoundation {
 		static extern void CFAllocatorDeallocate (/* CFAllocatorRef */ IntPtr allocator, /* void* */ IntPtr ptr);
 
 		/// <param name="ptr">The ptr.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Deallocate.</summary>
 		public void Deallocate (IntPtr ptr)
 		{
 			CFAllocatorDeallocate (Handle, ptr);
 		}
 
 		/// <summary>Type identifier for the CoreFoundation.CFAllocator type.</summary>
-		///         <returns>To be added.</returns>
 		///         <remarks>
 		///           <para>The returned token is the CoreFoundation type identifier (CFType) that has been assigned to this class.</para>
 		///           <para>This can be used to determine type identity between different CoreFoundation objects.</para>

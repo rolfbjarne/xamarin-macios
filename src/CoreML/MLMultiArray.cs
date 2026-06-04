@@ -34,7 +34,7 @@ namespace CoreML {
 		{
 		}
 
-		/// <param name="dataPointer">The data pointer.</param>
+		/// <param name="dataPointer">The datAPointer.</param>
 		/// <param name="shape">The shape.</param>
 		/// <param name="dataType">The data type.</param>
 		/// <param name="strides">The strides.</param>

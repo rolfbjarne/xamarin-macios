@@ -6,8 +6,8 @@ using Intents;
 namespace Intents {
 
 	public partial class INSetDefrosterSettingsInCarIntent {
-		/// <param name="enable">To be added.</param>
-		///         <param name="defroster">To be added.</param>
+		/// <param name="enable">The enable.</param>
+		///         <param name="defroster">The defroster.</param>
 		///         <summary>To be added.</summary>
 		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("ios")]

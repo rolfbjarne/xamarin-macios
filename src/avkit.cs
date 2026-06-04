@@ -104,19 +104,16 @@ namespace AVKit {
 		/// <summary>Gets a value that tells whether Picture in Picture is currently possible on the device.</summary>
 		///         <value>
 		///           <see langword="false" /> if another app is running Picture in Picture.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("pictureInPicturePossible")]
 		bool PictureInPicturePossible { [Bind ("isPictureInPicturePossible")] get; }
 
 		/// <summary>Gets a value that tells whether Picture in Picture is currently displayed.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("pictureInPictureActive")]
 		bool PictureInPictureActive { [Bind ("isPictureInPictureActive")] get; }
 
 		/// <summary>Gets a value that tells whether Picture in Picture playback has been paused and moved off the screen by another application.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("pictureInPictureSuspended")]
 		bool PictureInPictureSuspended { [Bind ("isPictureInPictureSuspended")] get; }
 
@@ -178,41 +175,35 @@ namespace AVKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface AVPictureInPictureControllerDelegate {
-		/// <param name="pictureInPictureController">To be added.</param>
+		/// <param name="pictureInPictureController">The picture in picture controller.</param>
 		/// <summary>Picture In Picture playback is about to start.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("pictureInPictureControllerWillStartPictureInPicture:")]
 		void WillStartPictureInPicture (AVPictureInPictureController pictureInPictureController);
 
-		/// <param name="pictureInPictureController">To be added.</param>
+		/// <param name="pictureInPictureController">The picture in picture controller.</param>
 		/// <summary>Picture In Picture playback has started.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("pictureInPictureControllerDidStartPictureInPicture:")]
 		void DidStartPictureInPicture (AVPictureInPictureController pictureInPictureController);
 
-		/// <param name="pictureInPictureController">To be added.</param>
-		/// <param name="error">To be added.</param>
+		/// <param name="pictureInPictureController">The picture in picture controller.</param>
+		/// <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		/// <summary>Picture In Picture playback failed to start.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("pictureInPictureController:failedToStartPictureInPictureWithError:")]
 		void FailedToStartPictureInPicture (AVPictureInPictureController pictureInPictureController, NSError error);
 
-		/// <param name="pictureInPictureController">To be added.</param>
+		/// <param name="pictureInPictureController">The picture in picture controller.</param>
 		/// <summary>Picture In Picture playback is about to stop.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("pictureInPictureControllerWillStopPictureInPicture:")]
 		void WillStopPictureInPicture (AVPictureInPictureController pictureInPictureController);
 
-		/// <param name="pictureInPictureController">To be added.</param>
+		/// <param name="pictureInPictureController">The picture in picture controller.</param>
 		/// <summary>Picture In Picture playback has stopped.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("pictureInPictureControllerDidStopPictureInPicture:")]
 		void DidStopPictureInPicture (AVPictureInPictureController pictureInPictureController);
 
-		/// <param name="pictureInPictureController">To be added.</param>
-		/// <param name="completionHandler">To be added.</param>
+		/// <param name="pictureInPictureController">The picture in picture controller.</param>
+		/// <param name="completionHandler">The completion handler to call when the operation completes.</param>
 		/// <summary>Picture In Picture playback is about to stop. Called to give the app the opportunity to provide a playback user interface by passing <see langword="true" /> to <paramref name="completionHandler" />.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("pictureInPictureController:restoreUserInterfaceForPictureInPictureStopWithCompletionHandler:")]
 		void RestoreUserInterfaceForPictureInPicture (AVPictureInPictureController pictureInPictureController, Action<bool> completionHandler);
 	}
@@ -231,7 +222,6 @@ namespace AVKit {
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>Creates a new <see cref="AVKit.AVPlayerViewController" /> for the specified NIB name and bundle.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
 		NativeHandle Constructor ([NullAllowed] string nibName, [NullAllowed] NSBundle bundle);
@@ -248,7 +238,6 @@ namespace AVKit {
 
 		/// <summary>Gets a value that tells whether the first frame of vido is ready to display.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("readyForDisplay")]
 		bool ReadyForDisplay { [Bind ("isReadyForDisplay")] get; }
 
@@ -452,60 +441,53 @@ namespace AVKit {
 	[Protocol, Model]
 	[BaseType (typeof (NSObject))]
 	interface AVPlayerViewControllerDelegate {
-		/// <param name="playerViewController">To be added.</param>
+		/// <param name="playerViewController">The player view controller.</param>
 		/// <summary>Picture In Picture playback is about to start.</summary>
-		/// <remarks>To be added.</remarks>
 		[TV (14, 0)]
 		[MacCatalyst (13, 1)]
 		[Export ("playerViewControllerWillStartPictureInPicture:")]
 		void WillStartPictureInPicture (AVPlayerViewController playerViewController);
 
-		/// <param name="playerViewController">To be added.</param>
+		/// <param name="playerViewController">The player view controller.</param>
 		/// <summary>Picture In Picture playback has started.</summary>
-		/// <remarks>To be added.</remarks>
 		[TV (14, 0)]
 		[MacCatalyst (13, 1)]
 		[Export ("playerViewControllerDidStartPictureInPicture:")]
 		void DidStartPictureInPicture (AVPlayerViewController playerViewController);
 
-		/// <param name="playerViewController">To be added.</param>
-		/// <param name="error">To be added.</param>
+		/// <param name="playerViewController">The player view controller.</param>
+		/// <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
 		/// <summary>Picture In Picture playback failed to start.</summary>
-		/// <remarks>To be added.</remarks>
 		[TV (14, 0)]
 		[MacCatalyst (13, 1)]
 		[Export ("playerViewController:failedToStartPictureInPictureWithError:")]
 		void FailedToStartPictureInPicture (AVPlayerViewController playerViewController, NSError error);
 
-		/// <param name="playerViewController">To be added.</param>
+		/// <param name="playerViewController">The player view controller.</param>
 		/// <summary>Picture In Picture playback is about to stop.</summary>
-		/// <remarks>To be added.</remarks>
 		[TV (14, 0)]
 		[MacCatalyst (13, 1)]
 		[Export ("playerViewControllerWillStopPictureInPicture:")]
 		void WillStopPictureInPicture (AVPlayerViewController playerViewController);
 
-		/// <param name="playerViewController">To be added.</param>
+		/// <param name="playerViewController">The player view controller.</param>
 		/// <summary>Picture In Picture playback has stopped.</summary>
-		/// <remarks>To be added.</remarks>
 		[TV (14, 0)]
 		[MacCatalyst (13, 1)]
 		[Export ("playerViewControllerDidStopPictureInPicture:")]
 		void DidStopPictureInPicture (AVPlayerViewController playerViewController);
 
-		/// <param name="playerViewController">To be added.</param>
+		/// <param name="playerViewController">The player view controller.</param>
 		/// <summary>App developers should return <see langword="true" /> to indicate that the player viewer should dismiss when Picture In Picture playback starts, or <see langword="false" /> to prevent this.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		[TV (14, 0)]
 		[MacCatalyst (13, 1)]
 		[Export ("playerViewControllerShouldAutomaticallyDismissAtPictureInPictureStart:")]
 		bool ShouldAutomaticallyDismissAtPictureInPictureStart (AVPlayerViewController playerViewController);
 
-		/// <param name="playerViewController">To be added.</param>
-		/// <param name="completionHandler">To be added.</param>
+		/// <param name="playerViewController">The player view controller.</param>
+		/// <param name="completionHandler">The completion handler to call when the operation completes.</param>
 		/// <summary>Picture In Picture playback is about to stop. Called to give the app the opportunity to provide a playback user interface by passing <see langword="true" /> to <paramref name="completionHandler" />.</summary>
-		/// <remarks>To be added.</remarks>
 		[TV (14, 0)]
 		[MacCatalyst (13, 1)]
 		[Export ("playerViewController:restoreUserInterfaceForPictureInPictureStopWithCompletionHandler:")]
@@ -656,9 +638,8 @@ namespace AVKit {
 	[NoMacCatalyst]
 	[BaseType (typeof (NSView))]
 	interface AVPlayerView {
-		/// <param name="frameRect">To be added.</param>
+		/// <param name="frameRect">The frame rect.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithFrame:")]
 		NativeHandle Constructor (CGRect frameRect);
 
@@ -675,7 +656,6 @@ namespace AVKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[NoMacCatalyst]
 		[Export ("readyForDisplay")]
 		bool ReadyForDisplay { [Bind ("isReadyForDisplay")] get; }
@@ -704,10 +684,9 @@ namespace AVKit {
 		[Export ("canBeginTrimming")]
 		bool CanBeginTrimming { get; }
 
-		/// <param name="chapterNumber">To be added.</param>
-		/// <param name="chapterTitle">To be added.</param>
+		/// <param name="chapterNumber">The chapter number.</param>
+		/// <param name="chapterTitle">The chapter title.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("flashChapterNumber:chapterTitle:")]
 		void FlashChapter (nuint chapterNumber, [NullAllowed] string chapterTitle);
 
@@ -816,9 +795,8 @@ namespace AVKit {
 	[NoMacCatalyst]
 	[BaseType (typeof (NSView))]
 	interface AVCaptureView {
-		/// <param name="frameRect">To be added.</param>
+		/// <param name="frameRect">The frame rect.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initWithFrame:")]
 		NativeHandle Constructor (CGRect frameRect);
 
@@ -849,10 +827,9 @@ namespace AVKit {
 	[NoMacCatalyst]
 	[BaseType (typeof (NSObject))]
 	interface AVCaptureViewDelegate {
-		/// <param name="captureView">To be added.</param>
-		/// <param name="fileOutput">To be added.</param>
+		/// <param name="captureView">The capture view.</param>
+		/// <param name="fileOutput">The file output.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Abstract]
 		[Export ("captureView:startRecordingToFileOutput:")]
 		void StartRecording (AVCaptureView captureView, AVCaptureFileOutput fileOutput);
@@ -1039,15 +1016,13 @@ namespace AVKit {
 	[BaseType (typeof (NSObject))]
 	interface AVRoutePickerViewDelegate {
 
-		/// <param name="routePickerView">To be added.</param>
+		/// <param name="routePickerView">The route picker view.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("routePickerViewWillBeginPresentingRoutes:")]
 		void WillBeginPresentingRoutes (AVRoutePickerView routePickerView);
 
-		/// <param name="routePickerView">To be added.</param>
+		/// <param name="routePickerView">The route picker view.</param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("routePickerViewDidEndPresentingRoutes:")]
 		void DidEndPresentingRoutes (AVRoutePickerView routePickerView);
 	}
@@ -1198,13 +1173,13 @@ namespace AVKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum AVCaptureViewControlsStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates inline.</summary>
 		Inline,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates floating.</summary>
 		Floating,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates inline device selection.</summary>
 		InlineDeviceSelection,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates default.</summary>
 		Default = Inline,
 	}
 
@@ -1213,9 +1188,9 @@ namespace AVKit {
 	[NoMacCatalyst]
 	[Native]
 	public enum AVPlayerViewTrimResult : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates o k button.</summary>
 		OKButton,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates cancel button.</summary>
 		CancelButton,
 	}
 

@@ -40,7 +40,6 @@ namespace Foundation {
 
 		/// <param name="identifier">The identifier to use.</param>
 		///         <summary>Developers should not use this deprecated method. Developers should use 'CreateBackgroundSessionConfiguration' instead.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

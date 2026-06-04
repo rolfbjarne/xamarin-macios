@@ -45,7 +45,6 @@ namespace EventKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("isNew")]
 		bool IsNew { get; }
 
@@ -291,13 +290,11 @@ namespace EventKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("subscribed")]
 		bool Subscribed { [Bind ("isSubscribed")] get; }
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("immutable")]
 		bool Immutable { [Bind ("isImmutable")] get; }
 
@@ -331,7 +328,6 @@ namespace EventKit {
 
 		/// <summary>Specifies whether or not this is an all-day event.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("allDay")]
 		bool AllDay { [Bind ("isAllDay")] get; set; }
 
@@ -423,7 +419,6 @@ namespace EventKit {
 
 		/// <summary>Gets a Boolean value that tells whether the participant is the account owner.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Export ("isCurrentUser")]
 		bool IsCurrentUser { get; }
@@ -449,10 +444,9 @@ namespace EventKit {
 		[Export ("recurrenceEndWithEndDate:")]
 		EKRecurrenceEnd FromEndDate (NSDate endDate);
 
-		/// <param name="occurrenceCount">To be added.</param>
+		/// <param name="occurrenceCount">The occurrence count.</param>
 		/// <summary>To be added.</summary>
 		/// <returns>To be added.</returns>
-		/// <remarks>To be added.</remarks>
 		[Static]
 		[Export ("recurrenceEndWithOccurrenceCount:")]
 		EKRecurrenceEnd FromOccurrenceCount (nint occurrenceCount);
@@ -526,14 +520,13 @@ namespace EventKit {
 		[Export ("setPositions")]
 		NSNumber [] SetPositions { get; }
 
-		/// <param name="type">To be added.</param>
-		/// <param name="interval">To be added.</param>
+		/// <param name="type">The type.</param>
+		/// <param name="interval">The interval.</param>
 		/// <param name="end">
 		///           <para>To be added.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
 		/// <summary>To be added.</summary>
-		/// <remarks>To be added.</remarks>
 		[Export ("initRecurrenceWithFrequency:interval:end:")]
 		NativeHandle Constructor (EKRecurrenceFrequency type, nint interval, [NullAllowed] EKRecurrenceEnd end);
 
@@ -654,7 +647,6 @@ namespace EventKit {
 			<param name="predicate">To be added.</param>
 			<param name="result">To be added.</param>
 			<summary>To be added.</summary>
-			<returns>To be added.</returns>
 			<remarks>To be added.</remarks>
 			""")]
 		IntPtr FetchReminders (NSPredicate predicate, Action<EKReminder []> completion);
@@ -751,7 +743,6 @@ namespace EventKit {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		[Export ("completed")]
 		bool Completed { [Bind ("isCompleted")] get; set; }
 

@@ -33,12 +33,11 @@ namespace Security {
 			}
 		}
 
-		/// <param name="domainName">To be added.</param>
-		///         <param name="account">To be added.</param>
-		///         <param name="password">To be added.</param>
-		///         <param name="handler">To be added.</param>
+		/// <param name="domainName">The domain name.</param>
+		///         <param name="account">The account.</param>
+		///         <param name="password">The password.</param>
+		///         <param name="handler">The completion handler to call when the operation completes.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -143,7 +142,6 @@ namespace Security {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static string? CreateSharedWebCredentialPassword ()
 		{
 			var handle = SecCreateSharedWebCredentialPassword ();

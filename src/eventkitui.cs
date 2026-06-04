@@ -19,13 +19,13 @@ namespace EventKitUI {
 	[BaseType (typeof (UIViewController), Delegates = new string [] { "WeakDelegate" }, Events = new Type [] { typeof (EKEventViewDelegate) })]
 	interface EKEventViewController {
 		/// <param name="nibName">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
+		///   <para>The name of the nib file, or <see langword="null" />.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
 		/// <param name="bundle">
-		///           <para>To be added.</para>
-		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
-		///         </param>
+		///   <para>The bundle in which to search for the nib file, or <see langword="null" />.</para>
+		///   <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
+		/// </param>
 		/// <summary>Creates a new <see cref="EventKitUI.EKEventViewController" /> from the specified Nib name in the specified <paramref name="bundle" />.</summary>
 		[Export ("initWithNibName:bundle:")]
 		[PostGet ("NibBundle")]
@@ -41,12 +41,12 @@ namespace EventKitUI {
 		EKEvent Event { get; set; }
 
 		/// <summary>Gets or sets a Boolean value that controls whether the user can edit the event.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if the event can be edited; otherwise, <see langword="false" />.</value>
 		[Export ("allowsEditing")]
 		bool AllowsEditing { get; set; }
 
 		/// <summary>Gets or sets a Boolean value that controls whether the event can be viewed in the day preview.</summary>
-		///         <value>To be added.</value>
+		/// <value><see langword="true" /> if calendar preview is allowed; otherwise, <see langword="false" />.</value>
 		[Export ("allowsCalendarPreview")]
 		bool AllowsCalendarPreview { get; set; }
 

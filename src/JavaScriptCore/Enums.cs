@@ -10,17 +10,17 @@ namespace JavaScriptCore {
 	// untyped enum -> JSValueRef.h
 	/// <summary>An enumeration whose values specify JavaScript types, including <c>Object</c> and <c>undefined</c>.</summary>
 	public enum JSType {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates undefined.</summary>
 		Undefined,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates null.</summary>
 		Null,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates boolean.</summary>
 		Boolean,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates number.</summary>
 		Number,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates string.</summary>
 		String,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates object.</summary>
 		Object,
 		[iOS (13, 0)]
 		[MacCatalyst (13, 1)]
@@ -33,13 +33,13 @@ namespace JavaScriptCore {
 	/// <summary>Enumerates attributes of properties.</summary>
 	[Flags]
 	public enum JSPropertyAttributes : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates read only.</summary>
 		ReadOnly = 1 << 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dont enum.</summary>
 		DontEnum = 1 << 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dont delete.</summary>
 		DontDelete = 1 << 3,
 	}
 
@@ -47,9 +47,9 @@ namespace JavaScriptCore {
 	/// <summary>Enumerates class attributes.</summary>
 	[Flags]
 	public enum JSClassAttributes : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates no automatic prototype.</summary>
 		NoAutomaticPrototype = 1 << 1,
 	}
 

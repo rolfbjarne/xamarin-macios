@@ -32,11 +32,10 @@ namespace IOSurface {
 
 		// kern_return_t
 		// See bug #59201 
-		/// <param name="options">To be added.</param>
-		///         <param name="seed">To be added.</param>
+		/// <param name="options">The options to use.</param>
+		///         <param name="seed">The seed.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public int Lock (IOSurfaceLockOptions options, ref int seed)
 		{
 			unsafe {
@@ -48,10 +47,9 @@ namespace IOSurface {
 
 		// kern_return_t
 		// See bug #59201 
-		/// <param name="options">To be added.</param>
+		/// <param name="options">The options to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public int Lock (IOSurfaceLockOptions options)
 		{
 			return _Lock (options, IntPtr.Zero);
@@ -59,11 +57,10 @@ namespace IOSurface {
 
 		// kern_return_t
 		// See bug #59201 
-		/// <param name="options">To be added.</param>
-		///         <param name="seed">To be added.</param>
+		/// <param name="options">The options to use.</param>
+		///         <param name="seed">The seed.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public int Unlock (IOSurfaceLockOptions options, ref int seed)
 		{
 			unsafe {
@@ -75,10 +72,9 @@ namespace IOSurface {
 
 		// kern_return_t
 		// See bug #59201 
-		/// <param name="options">To be added.</param>
+		/// <param name="options">The options to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public int Unlock (IOSurfaceLockOptions options)
 		{
 			return _Unlock (options, IntPtr.Zero);
@@ -86,11 +82,10 @@ namespace IOSurface {
 
 #if !MONOMAC
 		// kern_return_t
-		/// <param name="newState">To be added.</param>
-		///         <param name="oldState">To be added.</param>
+		/// <param name="newState">The new state.</param>
+		///         <param name="oldState">The old state.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public int SetPurgeable (IOSurfacePurgeabilityState newState, ref IOSurfacePurgeabilityState oldState)
 		{
 			unsafe {
@@ -100,10 +95,9 @@ namespace IOSurface {
 			}
 		}
 
-		/// <param name="newState">To be added.</param>
+		/// <param name="newState">The new state.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public int SetPurgeable (IOSurfacePurgeabilityState newState)
 		{
 			return _SetPurgeable (newState, IntPtr.Zero);

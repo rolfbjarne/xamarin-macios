@@ -427,7 +427,7 @@ namespace AddressBook {
 		extern static IntPtr ABAddressBookCopyArrayOfAllPeopleInSource (IntPtr addressBook, IntPtr source);
 
 		/// <param name="source">The source.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the people from the specified source.</summary>
 		public ABPerson [] GetPeople (ABRecord source)
 		{
 			if (source is null)
@@ -442,7 +442,7 @@ namespace AddressBook {
 
 		/// <param name="source">The source.</param>
 		///         <param name="sortOrdering">The sort ordering.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the people from the specified source, sorted by the specified ordering.</summary>
 		public ABPerson [] GetPeople (ABRecord source, ABPersonSortBy sortOrdering)
 		{
 			if (source is null)
@@ -491,7 +491,7 @@ namespace AddressBook {
 		extern static IntPtr ABAddressBookCopyArrayOfAllGroupsInSource (IntPtr addressBook, IntPtr source);
 
 		/// <param name="source">The source.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the groups from the specified source.</summary>
 		public ABGroup [] GetGroups (ABRecord source)
 		{
 			if (source is null)

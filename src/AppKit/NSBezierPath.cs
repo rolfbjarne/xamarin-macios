@@ -37,7 +37,7 @@ namespace AppKit {
 
 		/// <param name="pattern">The pattern.</param>
 		/// <param name="phase">The phase.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Gets line dash.</summary>
 		public unsafe void GetLineDash (out nfloat [] pattern, out nfloat phase)
 		{
 			nint length;
@@ -52,7 +52,7 @@ namespace AppKit {
 
 		/// <param name="pattern">The pattern.</param>
 		/// <param name="phase">The phase.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Sets line dash.</summary>
 		public unsafe void SetLineDash (nfloat [] pattern, nfloat phase)
 		{
 			if (pattern is null)
@@ -64,8 +64,7 @@ namespace AppKit {
 
 		/// <param name="index">The zero-based index.</param>
 		/// <param name="points">The points.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Elements at.</summary>
 		public unsafe NSBezierPathElement ElementAt (nint index, out CGPoint [] points)
 		{
 			NSBezierPathElement bpe;
@@ -87,7 +86,7 @@ namespace AppKit {
 
 		/// <param name="points">The points.</param>
 		/// <param name="index">The zero-based index.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Sets associated points at index.</summary>
 		public unsafe void SetAssociatedPointsAtIndex (CGPoint [] points, nint index)
 		{
 			if (points is null)
@@ -101,7 +100,7 @@ namespace AppKit {
 		}
 
 		/// <param name="points">The points.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Append.</summary>
 		public unsafe void Append (CGPoint [] points)
 		{
 			if (points is null)
@@ -115,7 +114,7 @@ namespace AppKit {
 
 		/// <param name="glyphs">The glyphs.</param>
 		///         <param name="font">The font.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Append.</summary>
 		public unsafe void Append (uint [] glyphs, NSFont font)
 		{
 			if (glyphs is null)

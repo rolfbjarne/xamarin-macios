@@ -107,7 +107,7 @@ namespace Foundation {
 		}
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>An HTTP message handler that uses NSUrlSession for network operations.</summary>
 	public partial class NSUrlSessionHandler : HttpMessageHandler {
 		private const string SetCookie = "Set-Cookie";
 		private const string Cookie = "Cookie";
@@ -442,7 +442,7 @@ namespace Foundation {
 
 		/// <param name="request">The request.</param>
 		///         <param name="cancellationToken">A cancellation token.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Sends an HTTP request asynchronously.</summary>
 		protected override async Task<HttpResponseMessage> SendAsync (HttpRequestMessage request, CancellationToken cancellationToken)
 		{
 			Volatile.Write (ref sentRequest, true);

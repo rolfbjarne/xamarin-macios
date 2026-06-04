@@ -45,7 +45,7 @@ namespace UIKit {
 
 		/// <summary>The top inset.</summary>
 		public nfloat Top;
-		/// <summary>To be added.</summary>
+		/// <summary>The leading.</summary>
 		public nfloat Leading;
 		/// <summary>The bottom edge inset.</summary>
 		public nfloat Bottom;
@@ -64,7 +64,6 @@ namespace UIKit {
 		// note: NSDirectionalEdgeInsetsEqualToDirectionalEdgeInsets (UIGeometry.h) is a macro
 		/// <param name="other">The other edge inset object to compare.</param>
 		///         <summary>Returns true if <paramref name="other" /> has the same values as this NSDirectionalEdgeInset.</summary>
-		///         <returns>To be added.</returns>
 		public bool Equals (NSDirectionalEdgeInsets other)
 		{
 			if (Leading != other.Leading)
@@ -78,7 +77,6 @@ namespace UIKit {
 
 		/// <param name="obj">The other object to compare.</param>
 		///         <summary>Returns true if <paramref name="obj" /> is an NSDirectionalEdgeInset and has the same values as this object.</summary>
-		///         <returns>To be added.</returns>
 		public override bool Equals (object? obj)
 		{
 			if (obj is NSDirectionalEdgeInsets insets)
@@ -97,7 +95,6 @@ namespace UIKit {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (Top, Leading, Trailing, Bottom);
@@ -109,7 +106,6 @@ namespace UIKit {
 
 		/// <param name="s">The string that describes the new insets.</param>
 		///         <summary>Creates a new NSDirectionalEdgeInset object from a curly-braced, comma-separated list of the top, leading, bottom, and trailing inset values.</summary>
-		///         <returns>To be added.</returns>
 		static public NSDirectionalEdgeInsets FromString (string s)
 		{
 			// note: null is allowed
@@ -126,7 +122,6 @@ namespace UIKit {
 
 		// note: ensure we can roundtrip ToString into FromString
 		/// <summary>Converts this object to a string that contains a curly-braced, comma-separated list of the top, leading, bottom, and trailing inset values.</summary>
-		///         <returns>To be added.</returns>
 		public override string ToString ()
 		{
 			using (var ns = new NSString (NSStringFromDirectionalEdgeInsets (this)))

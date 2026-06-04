@@ -42,7 +42,6 @@ namespace AddressBookUI {
 		public int? Identifier { get; private set; }
 
 		/// <summary>Gets or sets the should perform default action.</summary>
-		///         <value>To be added.</value>
 		public bool ShouldPerformDefaultAction { get; set; }
 	}
 
@@ -145,7 +144,7 @@ namespace AddressBookUI {
 		}
 
 		/// <param name="e">The event arguments.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Raises the PerformDefaultAction event.</summary>
 		protected internal virtual void OnPerformDefaultAction (ABPersonViewPerformDefaultActionEventArgs e)
 		{
 			var h = EnsureEventDelegate ().performDefaultAction;

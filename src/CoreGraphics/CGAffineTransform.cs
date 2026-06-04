@@ -263,7 +263,6 @@ namespace CoreGraphics {
 
 		/// <summary>Determines if the affine corresponds to the identity affine.</summary>
 		///         <value>Whether the affine is the identity.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsIdentity {
 			get {
 				return A == 1 && B == 0 && C == 0 && D == 1 && Tx == 0 && Ty == 0;
@@ -278,7 +277,6 @@ namespace CoreGraphics {
 
 		/// <summary>Renders the affine in textual form.</summary>
 		///         <returns />
-		///         <remarks>To be added.</remarks>
 		public override String? ToString ()
 		{
 #if MONOMAC
@@ -315,7 +313,6 @@ namespace CoreGraphics {
 		///         <summary>Compares the objects for equality.</summary>
 		///         <returns>
 		///           <see langword="true" /> if the objects are equal, <see langword="false" /> if not.</returns>
-		///         <remarks>To be added.</remarks>
 		public override bool Equals (object? o)
 		{
 			if (o is CGAffineTransform transform) {
@@ -326,7 +323,6 @@ namespace CoreGraphics {
 
 		/// <summary>The hashcode for this object.</summary>
 		///         <returns>An integer value.</returns>
-		///         <remarks>To be added.</remarks>
 		public override int GetHashCode ()
 		{
 			return HashCode.Combine (A, C, B, D, Tx, Ty);
@@ -352,11 +348,10 @@ namespace CoreGraphics {
 						B * point.X + D * point.Y + Ty);
 		}
 
-		/// <param name="rect">To be added.</param>
-		///         <param name="t">To be added.</param>
+		/// <param name="rect">The rect.</param>
+		///         <param name="t">The t.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		public extern static CGRect CGRectApplyAffineTransform (CGRect rect, CGAffineTransform t);
 
@@ -373,10 +368,9 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static CGSize CGSizeApplyAffineTransform (CGSize rect, CGAffineTransform t);
 
-		/// <param name="size">To be added.</param>
+		/// <param name="size">The size.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CGSize TransformSize (CGSize size)
 		{
 			return CGSizeApplyAffineTransform (size, this);

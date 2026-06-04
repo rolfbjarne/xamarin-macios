@@ -7,7 +7,6 @@
 namespace ReplayKit {
 
 	/// <summary>Enumerates errors that can be encountered while recording.</summary>
-	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Native ("RPRecordingErrorCode")]
 	[ErrorDomain ("RPRecordingErrorDomain")]
@@ -38,19 +37,19 @@ namespace ReplayKit {
 		Entitlements = -5810,
 		/// <summary>Indicates that an active phone call prevented recording.</summary>
 		ActivePhoneCall = -5811,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates failed to save.</summary>
 		FailedToSave = -5812,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates car play.</summary>
 		CarPlay = -5813,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates failed application connection invalid.</summary>
 		FailedApplicationConnectionInvalid = -5814,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates failed application connection interrupted.</summary>
 		FailedApplicationConnectionInterrupted = -5815,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates failed no matching application context.</summary>
 		FailedNoMatchingApplicationContext = -5816,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates failed media services failure.</summary>
 		FailedMediaServicesFailure = -5817,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates video mixing failure.</summary>
 		VideoMixingFailure = -5818,
 		BroadcastSetupFailed = -5819,
 		FailedToObtainUrl = -5820,
@@ -84,11 +83,11 @@ namespace ReplayKit {
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum RPSampleBufferType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates video.</summary>
 		Video = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates audio app.</summary>
 		AudioApp,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates audio mic.</summary>
 		AudioMic,
 	}
 

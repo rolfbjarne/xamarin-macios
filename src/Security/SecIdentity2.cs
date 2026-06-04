@@ -18,7 +18,7 @@ using System.Runtime.CompilerServices;
 using CoreFoundation;
 
 namespace Security {
-	/// <summary>To be added.</summary>
+	/// <summary>Represents a digital identity consisting of a private key and its associated certificate chain.</summary>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
@@ -70,7 +70,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static IntPtr sec_identity_copy_certificates_ref (IntPtr handle);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the certificates associated with this identity.</summary>
 		public SecCertificate []? Certificates {
 			get {
 				var certArray = sec_identity_copy_certificates_ref (GetCheckedHandle ());

@@ -31,41 +31,41 @@ namespace OpenGL {
 	public enum CGLErrorCode : uint {
 		/// <summary>To be added.</summary>
 		NoError = 0,        /* no error */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad attribute.</summary>
 		BadAttribute = 10000,   /* invalid pixel format attribute  */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad property.</summary>
 		BadProperty = 10001,    /* invalid renderer property       */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad pixel format.</summary>
 		BadPixelFormat = 10002, /* invalid pixel format            */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad renderer info.</summary>
 		BadRendererInfo = 10003,    /* invalid renderer info           */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad context.</summary>
 		BadContext = 10004, /* invalid context                 */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad drawable.</summary>
 		BadDrawable = 10005,    /* invalid drawable                */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad display.</summary>
 		BadDisplay = 10006, /* invalid graphics device         */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad state.</summary>
 		BadState = 10007,   /* invalid context state           */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad value.</summary>
 		BadValue = 10008,   /* invalid numerical value         */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad match.</summary>
 		BadMatch = 10009,   /* invalid share context           */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad enumeration.</summary>
 		BadEnumeration = 10010, /* invalid enumerant               */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad off screen.</summary>
 		BadOffScreen = 10011,   /* invalid offscreen drawable      */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad full screen.</summary>
 		BadFullScreen = 10012,  /* invalid offscreen drawable      */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad window.</summary>
 		BadWindow = 10013,  /* invalid window                  */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad address.</summary>
 		BadAddress = 10014, /* invalid pointer                 */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad code module.</summary>
 		BadCodeModule = 10015,  /* invalid code module             */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad alloc.</summary>
 		BadAlloc = 10016,   /* invalid memory allocation       */
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates bad connection.</summary>
 		BadConnection = 10017,  /* invalid CoreGraphics connection */
 
 	}
@@ -77,77 +77,77 @@ namespace OpenGL {
 	public enum CGLPixelFormatAttribute : uint {
 		/// <summary>To be added.</summary>
 		AllRenderers = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates double buffer.</summary>
 		DoubleBuffer = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates stereo.</summary>
 		Stereo = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates aux buffers.</summary>
 		AuxBuffers = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates color size.</summary>
 		ColorSize = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates alpha size.</summary>
 		AlphaSize = 11,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates depth size.</summary>
 		DepthSize = 12,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates stencil size.</summary>
 		StencilSize = 13,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates accum size.</summary>
 		AccumSize = 14,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates minimum policy.</summary>
 		MinimumPolicy = 51,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates maximum policy.</summary>
 		MaximumPolicy = 52,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates off screen.</summary>
 		OffScreen = 53,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates full screen.</summary>
 		FullScreen = 54,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sample buffers.</summary>
 		SampleBuffers = 55,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates samples.</summary>
 		Samples = 56,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates aux depth stencil.</summary>
 		AuxDepthStencil = 57,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates color float.</summary>
 		ColorFloat = 58,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates multisample.</summary>
 		Multisample = 59,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates supersample.</summary>
 		Supersample = 60,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates sample alpha.</summary>
 		SampleAlpha = 61,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates renderer i d.</summary>
 		RendererID = 70,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates single renderer.</summary>
 		SingleRenderer = 71,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates no recovery.</summary>
 		NoRecovery = 72,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates accelerated.</summary>
 		Accelerated = 73,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates closest policy.</summary>
 		ClosestPolicy = 74,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates robust.</summary>
 		Robust = 75,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates backing store.</summary>
 		BackingStore = 76,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates m p safe.</summary>
 		MPSafe = 78,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates window.</summary>
 		Window = 80,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates multi screen.</summary>
 		MultiScreen = 81,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates compliant.</summary>
 		Compliant = 83,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates screen mask.</summary>
 		ScreenMask = 84,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates pixel buffer.</summary>
 		PixelBuffer = 90,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates remote pixel buffer.</summary>
 		RemotePixelBuffer = 91,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates allow offline renderers.</summary>
 		AllowOfflineRenderers = 96,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates accelerated compute.</summary>
 		AcceleratedCompute = 97,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates virtual screen count.</summary>
 		VirtualScreenCount = 128,
 	}
 

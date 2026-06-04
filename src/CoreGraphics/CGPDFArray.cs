@@ -195,7 +195,6 @@ namespace CoreGraphics {
 		///     <param name="value">The value to set.</param>
 		///     <param name="info">The info.</param>
 		///     <summary>To be added.</summary>
-		///     <returns>To be added.</returns>
 		public delegate bool ApplyCallback (nint index, object? value, object? info);
 
 		[SupportedOSPlatform ("ios")]
@@ -207,8 +206,7 @@ namespace CoreGraphics {
 
 		/// <param name="callback">The callback to invoke.</param>
 		///         <param name="info">The info.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Apply.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

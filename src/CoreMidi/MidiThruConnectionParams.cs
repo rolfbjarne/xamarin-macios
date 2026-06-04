@@ -84,7 +84,7 @@ namespace CoreMidi {
 	[StructLayout (LayoutKind.Sequential)]
 	public unsafe struct MidiValueMap {
 		byte [] map_value;
-		/// <summary>To be added.</summary>
+		/// <summary>Gets or sets the 128-byte value map.</summary>
 		public byte [] Value {
 			get {
 				return map_value ?? (map_value = new byte [128]);
@@ -355,7 +355,7 @@ namespace CoreMidi {
 		[DllImport (Constants.CoreMidiLibrary)]
 		unsafe extern static void MIDIThruConnectionParamsInitialize (MidiThruConnectionParamsStruct* inConnectionParams);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Initializes a new instance of the MIDI thru connection parameters.</summary>
 		public MidiThruConnectionParams ()
 		{
 			// Always create a valid init point

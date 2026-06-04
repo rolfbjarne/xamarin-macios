@@ -642,7 +642,7 @@ namespace AVFoundation {
 #endif
 	}
 
-	/// <summary>Manages a pixel aspect settings.</summary>
+	/// <summary>Manages APixel aspect settings.</summary>
 	///     <remarks>
 	///     </remarks>
 	[SupportedOSPlatform ("ios")]

@@ -227,11 +227,10 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		unsafe extern static void CGPDFDictionaryApplyFunction (/* CGPDFDictionaryRef */ IntPtr dic, delegate* unmanaged<IntPtr, IntPtr, IntPtr, void> function, /* void* */ IntPtr info);
 
-		/// <param name="key">To be added.</param>
-		///     <param name="value">To be added.</param>
-		///     <param name="info">To be added.</param>
+		/// <param name="key">The key to use.</param>
+		///     <param name="value">The value to set.</param>
+		///     <param name="info">The info.</param>
 		///     <summary>To be added.</summary>
-		///     <remarks>To be added.</remarks>
 		public delegate void ApplyCallback (string? key, object? value, object? info);
 
 		[UnmanagedCallersOnly]
@@ -246,10 +245,9 @@ namespace CoreGraphics {
 				callback (Marshal.PtrToStringUTF8 (key), CGPDFObject.FromHandle (pdfObject), data.Item2);
 		}
 
-		/// <param name="callback">To be added.</param>
-		///         <param name="info">To be added.</param>
+		/// <param name="callback">The callback to invoke.</param>
+		///         <param name="info">The info.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Apply (ApplyCallback callback, object? info = null)
 		{
 			var data = new Tuple<ApplyCallback, object?> (callback, info);
@@ -271,9 +269,8 @@ namespace CoreGraphics {
 				callback (Marshal.PtrToStringUTF8 (key), new CGPDFObject (pdfObject));
 		}
 
-		/// <param name="callback">To be added.</param>
+		/// <param name="callback">The callback to invoke.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void Apply (Action<string?, CGPDFObject> callback)
 		{
 			GCHandle gch = GCHandle.Alloc (callback);

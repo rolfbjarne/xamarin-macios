@@ -56,8 +56,7 @@ namespace Security {
 				handle.Free ();
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the connection id.</summary>
 		public IntPtr ConnectionId { get; private set; }
 
 		unsafe internal delegate* unmanaged<IntPtr, IntPtr, nint*, SslStatus> ReadFunc { get { return &Read; } }
@@ -94,7 +93,7 @@ namespace Security {
 		byte [] buffer;
 
 		/// <param name="stream">The stream.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="SslStreamConnection" /> instance.</summary>
 		public SslStreamConnection (Stream stream)
 		{
 			if (stream is null)
@@ -104,8 +103,7 @@ namespace Security {
 			buffer = new byte [16384];
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the inner stream.</summary>
 		public Stream InnerStream { get; private set; }
 
 		public override SslStatus Read (IntPtr data, ref nint dataLength)

@@ -1103,7 +1103,7 @@ namespace AVFoundation {
 	[MacCatalyst (13, 1)]
 	delegate AVAudioEngineManualRenderingStatus AVAudioEngineManualRenderingBlock (/* AVAudioFrameCount = uint */ uint numberOfFrames, AudioBuffers outBuffer, [NullAllowed] /* OSStatus */ ref int outError);
 
-	/// <summary>A group of connected <see cref="AVFoundation.AVAudioNode" /> objects, each of which performs a processing or IO task.</summary>
+	/// <summary>A group of connected <see cref="AVFoundation.AVAudioNode" /> objects, each of which performs AProcessing or IO task.</summary>
 	/// <related type="externalDocumentation" href="https://developer.apple.com/documentation/avfaudio/avaudioengine">Apple documentation for <c>AVAudioEngine</c></related>
 	[MacCatalyst (13, 1)]
 	[BaseType (typeof (NSObject))]
@@ -2144,19 +2144,19 @@ namespace AVFoundation {
 		[Export ("stride")]
 		nuint Stride { get; }
 
-		/// <summary>Gets a pointer to the audio data as a buffer of floats.</summary>
+		/// <summary>Gets APointer to the audio data as a buffer of floats.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Export ("floatChannelData")]
 		IntPtr FloatChannelData { get; }
 
-		/// <summary>Gets a pointer to the buffer's <see langword="Int16" /> audio samples.</summary>
+		/// <summary>Gets APointer to the buffer's <see langword="Int16" /> audio samples.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Export ("int16ChannelData")]
 		IntPtr Int16ChannelData { get; }
 
-		/// <summary>Gets a pointer to the buffer's <see langword="int32" /> audio samples.</summary>
+		/// <summary>Gets APointer to the buffer's <see langword="int32" /> audio samples.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Export ("int32ChannelData")]
@@ -2576,7 +2576,7 @@ namespace AVFoundation {
 		///           <para>To be added.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		///         <summary>Schedules the playing of a portion of the audio <paramref name="file" />.</summary>
+		///         <summary>Schedules the playing of APortion of the audio <paramref name="file" />.</summary>
 		///         <remarks>To be added.</remarks>
 		[Async (XmlDocs = """
 			<param name="file">To be added.</param>
@@ -6743,7 +6743,7 @@ namespace AVFoundation {
 		[return: NullAllowed]
 		NSData GetPersistentContentKey (NSData keyVendorResponse, [NullAllowed] NSDictionary<NSString, NSObject> options, out NSError error);
 
-		/// <summary>Gets a Boolean value that tells whether a persistent key is required for streaming content requests.</summary>
+		/// <summary>Gets a Boolean value that tells whether APersistent key is required for streaming content requests.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
@@ -10279,7 +10279,7 @@ namespace AVFoundation {
 
 		}
 
-		/// <summary>Constants identifying Quicktime metadata properties.</summary>
+		/// <summary>Constants identifying Quicktime metadatAProperties.</summary>
 		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
@@ -10584,7 +10584,7 @@ namespace AVFoundation {
 			NSString UserDataTaggedCharacteristic { get; }
 		}
 
-		/// <summary>Constants identifying 3GP metadata properties.</summary>
+		/// <summary>Constants identifying 3GP metadatAProperties.</summary>
 		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
@@ -10695,7 +10695,7 @@ namespace AVFoundation {
 			NSString UserDataMediaRating { get; }
 		}
 
-		/// <summary>Constants identifying Quicktime metadata properties.</summary>
+		/// <summary>Constants identifying Quicktime metadatAProperties.</summary>
 		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
@@ -11064,7 +11064,7 @@ namespace AVFoundation {
 			NSString LocationHorizontalAccuracyInMeters { get; }
 		}
 
-		/// <summary>Constants identifying iTunes metadata properties.</summary>
+		/// <summary>Constants identifying iTunes metadatAProperties.</summary>
 		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
@@ -11406,7 +11406,7 @@ namespace AVFoundation {
 			NSString ExecProducer { get; }
 		}
 
-		/// <summary>Constants specifying ID3 metadata properties.</summary>
+		/// <summary>Constants specifying ID3 metadatAProperties.</summary>
 		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
@@ -12068,7 +12068,7 @@ namespace AVFoundation {
 			NSString UserUrl { get; }
 		}
 
-		/// <summary>Constants identifying Icy streaming metadata properties.</summary>
+		/// <summary>Constants identifying Icy streaming metadatAProperties.</summary>
 		/// <remarks>To be added.</remarks>
 		[MacCatalyst (13, 1)]
 		[Static]
@@ -13793,7 +13793,7 @@ namespace AVFoundation {
 
 		/// <param name="asset">To be added.</param>
 		/// <param name="preset">To be added.</param>
-		/// <summary>Creates an export session from an AVAsset and a preset.</summary>
+		/// <summary>Creates an export session from an AVAsset and APreset.</summary>
 		/// <remarks>To be added.</remarks>
 		[Wrap ("this (asset, preset.GetConstant ()!)")]
 		NativeHandle Constructor (AVAsset asset, AVAssetExportSessionPreset preset);
@@ -13966,7 +13966,7 @@ namespace AVFoundation {
 		///         <param name="asset">The asset against which to check the preset.</param>
 		///         <param name="outputFileType">The output file type against which to check the preset.</param>
 		///         <param name="isCompatibleResult">An action to run with the result of the check.</param>
-		///         <summary>Determines if a preset is compatible with an asset and output type, passing the result to <paramref name="isCompatibleResult" />.</summary>
+		///         <summary>Determines if APreset is compatible with an asset and output type, passing the result to <paramref name="isCompatibleResult" />.</summary>
 		///         <remarks>To be added.</remarks>
 		[Async (XmlDocs = """
 			<param name="presetName">The preset to check.</param>
@@ -22149,7 +22149,7 @@ namespace AVFoundation {
 		[Export ("pauseSpeakingAtBoundary:")]
 		bool PauseSpeaking (AVSpeechBoundary boundary);
 
-		/// <summary>Restarts a paused utterance.</summary>
+		/// <summary>Restarts APaused utterance.</summary>
 		///         <returns>
 		///           <see langword="true" /> if synthesis restarted successfully.</returns>
 		///         <remarks>To be added.</remarks>
@@ -22967,7 +22967,7 @@ namespace AVFoundation {
 		[Field ("AVAudioUnitTypeMixer")]
 		NSString Mixer { get; }
 
-		/// <summary>Indicates that the underlying audio unit is a panner.</summary>
+		/// <summary>Indicates that the underlying audio unit is APanner.</summary>
 		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[Field ("AVAudioUnitTypePanner")]
@@ -23358,7 +23358,7 @@ namespace AVFoundation {
 
 	partial interface IAVContentKeyRecipient { }
 
-	/// <summary>Interface defining required methods that require decryption keys for media data processing.</summary>
+	/// <summary>Interface defining required methods that require decryption keys for media datAProcessing.</summary>
 	/// <remarks>To be added.</remarks>
 	[MacCatalyst (13, 1)]
 	[Protocol]
@@ -24075,8 +24075,8 @@ namespace AVFoundation {
 
 	/// <summary>The delegate that will be called in a callback from <see cref="AVAudioSourceNode" />.</summary>
 	/// <returns>An OSStatus result code. Return 0 to indicate success.</returns>
-	/// <param name="isSilence">Indicates whether the supplied audio data only contains silence. This is a pointer to a <see cref="System.Byte" /> value.</param>
-	/// <param name="timestamp">The timestamp the audio renders (HAL time). This is a pointer to an <see cref="AudioToolbox.AudioTimeStamp" /> value.</param>
+	/// <param name="isSilence">Indicates whether the supplied audio data only contains silence. This is APointer to a <see cref="System.Byte" /> value.</param>
+	/// <param name="timestamp">The timestamp the audio renders (HAL time). This is APointer to an <see cref="AudioToolbox.AudioTimeStamp" /> value.</param>
 	/// <param name="frameCount">The number of frames of audio to supply.</param>
 	/// <param name="outputData">The <see cref="AudioToolbox.AudioBuffers" /> that contains the supplied audio data when the callback returns. This is a handle for an <see cref="AudioToolbox.AudioBuffers" /> value.</param>
 	delegate /* OSStatus */ int AVAudioSourceNodeRenderHandlerRaw (IntPtr isSilence, IntPtr timestamp, uint frameCount, IntPtr outputData);

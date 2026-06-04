@@ -25,7 +25,7 @@
 
 namespace Foundation {
 
-	/// <summary>Exposes a property as an Interface Builder Outlet.</summary>
+	/// <summary>Exposes AProperty as an Interface Builder Outlet.</summary>
 	///     <remarks>
 	///       <para>
 	/// 	This property must be applied to properties that represent an

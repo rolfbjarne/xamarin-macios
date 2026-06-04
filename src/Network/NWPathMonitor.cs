@@ -33,7 +33,7 @@ namespace Network {
 		NWPath? currentPath;
 		public NWPath? CurrentPath => currentPath;
 
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="NWPathMonitor" /> instance.</summary>
 		public NWPathMonitor ()
 			: this (nw_path_monitor_create (), true)
 		{
@@ -43,7 +43,7 @@ namespace Network {
 		extern static IntPtr nw_path_monitor_create_with_type (NWInterfaceType interfaceType);
 
 		/// <param name="interfaceType">The interface type.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NWPathMonitor" /> instance.</summary>
 		public NWPathMonitor (NWInterfaceType interfaceType)
 			: this (nw_path_monitor_create_with_type (interfaceType), true)
 		{
@@ -52,20 +52,20 @@ namespace Network {
 		[DllImport (Constants.NetworkLibrary)]
 		extern static void nw_path_monitor_cancel (IntPtr handle);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Cancel.</summary>
 		public void Cancel () => nw_path_monitor_cancel (GetCheckedHandle ());
 
 		[DllImport (Constants.NetworkLibrary)]
 		extern static void nw_path_monitor_start (IntPtr handle);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Start.</summary>
 		public void Start () => nw_path_monitor_start (GetCheckedHandle ());
 
 		[DllImport (Constants.NetworkLibrary)]
 		extern static void nw_path_monitor_set_queue (IntPtr handle, IntPtr queue);
 
 		/// <param name="queue">The dispatch queue on which to execute.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets queue.</summary>
 		public void SetQueue (DispatchQueue queue)
 		{
 			if (queue is null)
@@ -120,7 +120,7 @@ namespace Network {
 		static extern unsafe void nw_path_monitor_set_cancel_handler (IntPtr handle, BlockLiteral* callback);
 
 		/// <param name="callback">The callback to invoke.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets monitor canceled handler.</summary>
 		[BindingImpl (BindingImplOptions.Optimizable)]
 		public void SetMonitorCanceledHandler (Action callback)
 		{

@@ -18,7 +18,6 @@ namespace Metal {
 #endif
 
 	/// <summary>Represents a single GPU.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -31,7 +30,6 @@ namespace Metal {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public static IMTLDevice? SystemDefault {
 			get {
 				// Metal could be unavailable on the hardware (and we don't want to return an invalid instance)
@@ -58,7 +56,6 @@ namespace Metal {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios18.0")]
@@ -100,11 +97,10 @@ namespace Metal {
 			return NSArray.NonNullArrayFromHandleDropNullElements<IMTLDevice> (rv, releaseHandle: true);
 		}
 
-		/// <param name="block">To be added.</param>
-		///         <param name="device">To be added.</param>
-		///         <param name="notifyName">To be added.</param>
+		/// <param name="block">The block.</param>
+		///         <param name="device">The device.</param>
+		///         <param name="notifyName">The notify name.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[UnmanagedCallersOnly]
 		public static unsafe void TrampolineNotificationHandler (IntPtr block, IntPtr device, IntPtr notifyName)
 		{
@@ -120,9 +116,8 @@ namespace Metal {
 		[DllImport (Constants.MetalLibrary)]
 		static extern void MTLRemoveDeviceObserver (IntPtr observer);
 
-		/// <param name="observer">To be added.</param>
+		/// <param name="observer">The observer.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]
@@ -149,7 +144,6 @@ namespace Metal {
 		///         <param name="options">Options for creating the buffer.</param>
 		///         <summary>Creates and returns a new buffer with a copy of the specified data.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static IMTLBuffer? CreateBuffer<T> (this IMTLDevice This, T [] data, MTLResourceOptions options) where T : struct
 		{
 			if (data is null)
@@ -168,7 +162,6 @@ namespace Metal {
 		/// <param name="positions">Array that will be filled with the default sample postions.</param>
 		/// <param name="count">The number of positions, which determines the set of default positions.</param>
 		/// <summary>Provides the default sample positions for the specified sample <paramref name="count" />.</summary>
-		/// <remarks>To be added.</remarks>
 		public unsafe static void GetDefaultSamplePositions (this IMTLDevice This, MTLSamplePosition [] positions, nuint count)
 		{
 			if (positions is null)

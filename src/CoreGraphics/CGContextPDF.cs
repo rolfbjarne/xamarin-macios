@@ -35,19 +35,14 @@ namespace CoreGraphics {
 	public partial class CGPDFPageInfo {
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public CGRect? MediaBox { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public CGRect? CropBox { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public CGRect? BleedBox { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public CGRect? TrimBox { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public CGRect? ArtBox { get; set; }
 
 		static void Add (NSMutableDictionary dict, IntPtr key, CGRect? val)
@@ -78,37 +73,26 @@ namespace CoreGraphics {
 	public partial class CGPDFInfo : CGPDFPageInfo {
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string? Title { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string? Author { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string? Subject { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string []? Keywords { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string? Creator { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string? OwnerPassword { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public string? UserPassword { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public int? EncryptionKeyLength { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public bool? AllowsPrinting { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public bool? AllowsCopying { get; set; }
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public CGPDFAccessPermissions? AccessPermissions { get; set; }
 		//public NSDictionary OutputIntent { get; set; }
 		[SupportedOSPlatform ("macos")]

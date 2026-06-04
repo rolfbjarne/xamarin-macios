@@ -65,7 +65,7 @@ namespace AudioToolbox {
 		}
 
 		/// <param name="soundId">The sound id.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="SystemSound" /> instance.</summary>
 		public SystemSound (uint soundId) : this (soundId, false) { }
 
 
@@ -82,7 +82,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>Gets or sets whether to override user preferences when calling <see cref="PlaySystemSound()" /> or <see cref="PlaySystemSound(Action)" />.</summary>
-		///         <value>To be added.</value>
 		public bool IsUISound {
 			get {
 				uint out_size = sizeof (uint);
@@ -113,7 +112,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>Controls whether the sound will complete playing, even if the application dies.</summary>
-		///         <value>To be added.</value>
 		public bool CompletePlaybackIfAppDies {
 			get {
 				uint out_size = sizeof (uint);
@@ -236,7 +234,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>Asynchronously plays a sound or alert, returning a <see cref="Task" /> that completes after the sound ends.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -271,7 +268,6 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>Asynchronously plays a system sound and returns a <see cref="System.Threading.Tasks.Task" /> that is completed when the sound ends.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

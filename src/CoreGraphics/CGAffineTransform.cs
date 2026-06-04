@@ -351,7 +351,6 @@ namespace CoreGraphics {
 		/// <param name="rect">The rect.</param>
 		///         <param name="t">The t.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		public extern static CGRect CGRectApplyAffineTransform (CGRect rect, CGAffineTransform t);
 
@@ -369,8 +368,7 @@ namespace CoreGraphics {
 		extern static CGSize CGSizeApplyAffineTransform (CGSize rect, CGAffineTransform t);
 
 		/// <param name="size">The size.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Transforms size.</summary>
 		public CGSize TransformSize (CGSize size)
 		{
 			return CGSizeApplyAffineTransform (size, this);

@@ -1505,7 +1505,7 @@ namespace Photos {
 		void CancelLivePhotoRequest (int requestID);
 	}
 
-	/// <summary>Contains options for requesting live photos from a photo manager.</summary>
+	/// <summary>Contains options for requesting live photos from APhoto manager.</summary>
 	///     
 	///     <related type="externalDocumentation" href="https://developer.apple.com/reference/Photos/PHLivePhotoRequestOptions">Apple documentation for <c>PHLivePhotoRequestOptions</c></related>
 	[MacCatalyst (13, 1)]
@@ -1754,7 +1754,7 @@ namespace Photos {
 		NSString ShouldRenderAtPlaybackTimeKey { get; }
 	}
 
-	/// <summary>Contains a playback option for use when processing or editing a Live Photo.</summary>
+	/// <summary>Contains APlayback option for use when processing or editing a Live Photo.</summary>
 	[MacCatalyst (13, 1)]
 	[StrongDictionary ("PHLivePhotoEditingOptionKeys")]
 	interface PHLivePhotoEditingOption {
@@ -1968,7 +1968,7 @@ namespace Photos {
 		[Export ("creationRequestForDownloadJobWithResource:")]
 		PHAssetResourceUploadJobChangeRequest CreateDownloadJobRequest (PHAssetResource resource);
 
-		/// <summary>Gets a placeholder object for the upload job that will be created by this change request.</summary>
+		/// <summary>Gets APlaceholder object for the upload job that will be created by this change request.</summary>
 		[NullAllowed]
 		[Export ("placeholderForCreatedAssetResourceUploadJob", ArgumentSemantic.Strong)]
 		PHObjectPlaceholder PlaceholderForCreatedAssetResourceUploadJob { get; }

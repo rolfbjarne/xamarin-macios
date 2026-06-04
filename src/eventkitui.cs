@@ -269,7 +269,7 @@ namespace EventKitUI {
 	[Protocol]
 	interface EKCalendarChooserDelegate {
 		/// <param name="calendarChooser">The calendar chooser.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Called when the calendar selection has changed.</summary>
 		[EventArgs ("", XmlDocs = """
 			<summary>Event raised by the object.</summary>
 			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
@@ -278,7 +278,7 @@ namespace EventKitUI {
 		void SelectionChanged (EKCalendarChooser calendarChooser);
 
 		/// <param name="calendarChooser">The calendar chooser.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Called when the user taps Done in the calendar chooser.</summary>
 		[EventArgs ("", XmlDocs = """
 			<summary>Event raised by the object.</summary>
 			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>
@@ -287,7 +287,7 @@ namespace EventKitUI {
 		void Finished (EKCalendarChooser calendarChooser);
 
 		/// <param name="calendarChooser">The calendar chooser.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Called when the user cancels the calendar chooser.</summary>
 		[EventArgs ("", XmlDocs = """
 			<summary>Event raised by the object.</summary>
 			<remarks>If developers do not assign a value to this event, this will reset the value for the WeakDelegate property to an internal handler that maps delegates to events.</remarks>

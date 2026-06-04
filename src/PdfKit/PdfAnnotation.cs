@@ -18,8 +18,7 @@ namespace PdfKit {
 		/// <typeparam name="T">To be added.</typeparam>
 		///         <param name="value">The value to set.</param>
 		///         <param name="key">The key to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Sets value.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -36,8 +35,7 @@ namespace PdfKit {
 
 		/// <param name="str">The str.</param>
 		///         <param name="key">The key to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Sets value.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -54,8 +52,7 @@ namespace PdfKit {
 
 		/// <typeparam name="T">To be added.</typeparam>
 		///         <param name="key">The key to use.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Gets value.</summary>
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -65,8 +62,7 @@ namespace PdfKit {
 			return Runtime.GetINativeObject<T> (_GetValue (key.GetConstant ()!), true)!;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the annotation type.</summary>
 		public PdfAnnotationKey AnnotationType {
 			get { return PdfAnnotationKeyExtensions.GetValue (Type!); }
 			set { Type = value.GetConstant ()!; }

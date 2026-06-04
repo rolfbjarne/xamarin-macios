@@ -113,7 +113,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* void* */ IntPtr CGBitmapContextGetData (/* CGContextRef */ IntPtr context);
 
-		/// <summary>Gets a pointer to the image data for <c>this</c> <see cref="CoreGraphics.CGBitmapContext" /> object, or <see langword="null" /> if <c>this</c> object is not a bitmap context.</summary>
+		/// <summary>Gets APointer to the image data for <c>this</c> <see cref="CoreGraphics.CGBitmapContext" /> object, or <see langword="null" /> if <c>this</c> object is not a bitmap context.</summary>
 		///         <value>A pointer to the data.</value>
 		public IntPtr Data {
 			get { return CGBitmapContextGetData (Handle); }
@@ -140,7 +140,7 @@ namespace CoreGraphics {
 
 		/// <summary>Number of bits per component for</summary>
 		///         <value>Gets the number of bits per component for <c>this</c> <see cref="CoreGraphics.CGBitmapContext" /> object, or 0 if <c>this</c> object is not a bitmap context.</value>
-		///         <remarks>The number of bits used by each component of a pixel in memory.  For example, when using 32-bit RGBA buffers the value for this would be an 8.</remarks>
+		///         <remarks>The number of bits used by each component of APixel in memory.  For example, when using 32-bit RGBA buffers the value for this would be an 8.</remarks>
 		public nint BitsPerComponent {
 			get { return CGBitmapContextGetBitsPerComponent (Handle); }
 		}
@@ -160,7 +160,7 @@ namespace CoreGraphics {
 		/// <summary>Gets the number of bytes per row for <c>this</c> <see cref="CoreGraphics.CGBitmapContext" /> object, or 0 if <c>this</c> object is not a bitmap context.</summary>
 		///         <remarks>
 		///           <para>Number of bytes per row, a number greather or equal that the number of bytes used by a row of pixels.   </para>
-		///           <para>Typically is the width multiplied by the number of bytes per pixel, with some extra padding.   This is called the image stride.   </para>
+		///           <para>Typically is the width multiplied by the number of bytes per pixel, with some extrAPadding.   This is called the image stride.   </para>
 		///           <para>While this does not affect the rendering of the image, it can improve the performance of image rendering by aligning the first pixel to the natural processor alignment.</para>
 		///         </remarks>
 		public nint BytesPerRow {

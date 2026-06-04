@@ -83,13 +83,13 @@ namespace CoreAudioKit {
 	[BaseType (typeof (AUAudioUnit))]
 	interface AUAudioUnitViewControllerExtensions {
 		/// <param name="availableViewConfigurations">The available view configurations.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns the indices of the supported view configurations.</summary>
+		/// <returns>An index set containing the indices of the supported view configurations.</returns>
 		[Export ("supportedViewConfigurations:")]
 		NSIndexSet GetSupportedViewConfigurations (AUAudioUnitViewConfiguration [] availableViewConfigurations);
 
 		/// <param name="viewConfiguration">The view configuration.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Selects the specified view configuration.</summary>
 		[Export ("selectViewConfiguration:")]
 		void SelectViewConfiguration (AUAudioUnitViewConfiguration viewConfiguration);
 	}

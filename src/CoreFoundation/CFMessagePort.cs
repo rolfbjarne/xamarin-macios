@@ -18,7 +18,6 @@ namespace CoreFoundation {
 	// untyped enum from CFMessagePort.h
 	// used as a return value of type SInt32 (always 4 bytes)
 	/// <summary>This enumeration contains status codes for <see cref="CoreFoundation.CFMessagePort.SendRequest(System.Int32,Foundation.NSData,System.Double,System.Double,Foundation.NSString,out Foundation.NSData)" />.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum CFMessagePortSendRequestStatus {
 		/// <summary>The message was sent, and any expected reply was received.</summary>
 		Success = 0,
@@ -63,11 +62,10 @@ namespace CoreFoundation {
 			public delegate* unmanaged<IntPtr, IntPtr> copyDescription;
 		}
 
-		/// <param name="type">To be added.</param>
-		///     <param name="data">To be added.</param>
+		/// <param name="type">The type.</param>
+		///     <param name="data">The data to use.</param>
 		///     <summary>To be added.</summary>
 		///     <returns>To be added.</returns>
-		///     <remarks>To be added.</remarks>
 		public delegate NSData CFMessagePortCallBack (int type, NSData data);
 
 		static Dictionary<IntPtr, CFMessagePortCallBack> outputHandles = new Dictionary<IntPtr, CFMessagePortCallBack> (Runtime.IntPtrEqualityComparer);
@@ -224,12 +222,11 @@ namespace CoreFoundation {
 		[DllImport (Constants.CoreFoundationLibrary)]
 		static extern IntPtr CFMessagePortGetInvalidationCallBack (/* CFMessagePortRef */ IntPtr ms);
 
-		/// <param name="name">To be added.</param>
-		///         <param name="callback">To be added.</param>
-		///         <param name="allocator">To be added.</param>
+		/// <param name="name">The name to use.</param>
+		///         <param name="callback">The callback to invoke.</param>
+		///         <param name="allocator">The allocator.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CFMessagePort? CreateLocalPort (string? name, CFMessagePortCallBack callback, CFAllocator? allocator = null)
 		{
 			if (callback is null)
@@ -381,11 +378,10 @@ namespace CoreFoundation {
 				callback.Invoke ();
 		}
 
-		/// <param name="allocator">To be added.</param>
-		///         <param name="name">To be added.</param>
+		/// <param name="allocator">The allocator.</param>
+		///         <param name="name">The name to use.</param>
 		///         <summary>Deprecated.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CFMessagePort? CreateRemotePort (CFAllocator? allocator, string name)
 		{
 			if (name is null)
@@ -408,15 +404,14 @@ namespace CoreFoundation {
 			CFMessagePortInvalidate (GetCheckedHandle ());
 		}
 
-		/// <param name="msgid">To be added.</param>
-		///         <param name="data">To be added.</param>
-		///         <param name="sendTimeout">To be added.</param>
-		///         <param name="rcvTimeout">To be added.</param>
-		///         <param name="replyMode">To be added.</param>
-		///         <param name="returnData">To be added.</param>
+		/// <param name="msgid">The msgid.</param>
+		///         <param name="data">The data to use.</param>
+		///         <param name="sendTimeout">The send timeout.</param>
+		///         <param name="rcvTimeout">The rcv timeout.</param>
+		///         <param name="replyMode">The reply mode.</param>
+		///         <param name="returnData">The return data.</param>
 		///         <summary>Sends a message to the port.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public CFMessagePortSendRequestStatus SendRequest (int msgid, NSData? data, double sendTimeout, double rcvTimeout, NSString? replyMode, out NSData? returnData)
 		{
 			CFMessagePortSendRequestStatus result;
@@ -442,9 +437,8 @@ namespace CoreFoundation {
 			return new CFRunLoopSource (runLoopHandle, false);
 		}
 
-		/// <param name="queue">To be added.</param>
+		/// <param name="queue">The dispatch queue on which to execute.</param>
 		///         <summary>Schedules message port’s callbacks on the specified dispatch queue.</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetDispatchQueue (DispatchQueue? queue)
 		{
 			CFMessagePortSetDispatchQueue (GetCheckedHandle (), queue.GetHandle ());

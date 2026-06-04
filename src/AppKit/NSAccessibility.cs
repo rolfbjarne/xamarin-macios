@@ -17,22 +17,19 @@ using CoreGraphics;
 
 namespace AppKit {
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	public partial interface INSAccessibility { }
 
 	/// <summary>To be added.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	public partial class NSAccessibility {
 #if !COREBUILD
 		[DllImport (Constants.AppKitLibrary)]
 		static extern CGRect NSAccessibilityFrameInView (NativeHandle parentView, CGRect frame);
 
-		/// <param name="parentView">To be added.</param>
-		///         <param name="frame">To be added.</param>
+		/// <param name="parentView">The parent view.</param>
+		///         <param name="frame">The frame.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CGRect GetFrameInView (NSView parentView, CGRect frame)
 		{
 			CGRect result = NSAccessibilityFrameInView (parentView.GetHandle (), frame);
@@ -43,11 +40,10 @@ namespace AppKit {
 		[DllImport (Constants.AppKitLibrary)]
 		static extern CGPoint NSAccessibilityPointInView (NativeHandle parentView, CGPoint point);
 
-		/// <param name="parentView">To be added.</param>
-		///         <param name="point">To be added.</param>
+		/// <param name="parentView">The parent view.</param>
+		///         <param name="point">The point.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static CGPoint GetPointInView (NSView parentView, CGPoint point)
 		{
 			CGPoint result = NSAccessibilityPointInView (parentView.GetHandle (), point);
@@ -58,11 +54,10 @@ namespace AppKit {
 		[DllImport (Constants.AppKitLibrary)]
 		static extern void NSAccessibilityPostNotificationWithUserInfo (IntPtr element, IntPtr notification, IntPtr userInfo);
 
-		/// <param name="element">To be added.</param>
-		///         <param name="notification">To be added.</param>
-		///         <param name="userInfo">To be added.</param>
+		/// <param name="element">The element.</param>
+		///         <param name="notification">The notification.</param>
+		///         <param name="userInfo">The user info.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static void PostNotification (NSObject element, NSString notification, NSDictionary? userInfo)
 		{
 			if (element is null)
@@ -80,10 +75,9 @@ namespace AppKit {
 		[DllImport (Constants.AppKitLibrary)]
 		static extern void NSAccessibilityPostNotification (IntPtr element, IntPtr notification);
 
-		/// <param name="element">To be added.</param>
-		///         <param name="notification">To be added.</param>
+		/// <param name="element">The element.</param>
+		///         <param name="notification">The notification.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static void PostNotification (NSObject element, NSString notification)
 		{
 			if (element is null)
@@ -100,11 +94,10 @@ namespace AppKit {
 		[DllImport (Constants.AppKitLibrary)]
 		static extern IntPtr NSAccessibilityRoleDescription (IntPtr role, IntPtr subrole);
 
-		/// <param name="role">To be added.</param>
-		///         <param name="subrole">To be added.</param>
+		/// <param name="role">The role.</param>
+		///         <param name="subrole">The subrole.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static string? GetRoleDescription (NSString role, NSString? subrole)
 		{
 			if (role is null)
@@ -119,10 +112,9 @@ namespace AppKit {
 		[DllImport (Constants.AppKitLibrary)]
 		static extern IntPtr NSAccessibilityRoleDescriptionForUIElement (IntPtr element);
 
-		/// <param name="element">To be added.</param>
+		/// <param name="element">The element.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static string? GetRoleDescription (NSObject element)
 		{
 			if (element is null)
@@ -136,10 +128,9 @@ namespace AppKit {
 		[DllImport (Constants.AppKitLibrary)]
 		static extern IntPtr NSAccessibilityActionDescription (IntPtr action);
 
-		/// <param name="action">To be added.</param>
+		/// <param name="action">The action to perform.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static string? GetActionDescription (NSString action)
 		{
 			if (action is null)
@@ -153,10 +144,9 @@ namespace AppKit {
 		[DllImport (Constants.AppKitLibrary)]
 		static extern IntPtr NSAccessibilityUnignoredAncestor (IntPtr element);
 
-		/// <param name="element">To be added.</param>
+		/// <param name="element">The element.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static NSObject? GetUnignoredAncestor (NSObject element)
 		{
 			if (element is null)
@@ -170,10 +160,9 @@ namespace AppKit {
 		[DllImport (Constants.AppKitLibrary)]
 		static extern IntPtr NSAccessibilityUnignoredDescendant (IntPtr element);
 
-		/// <param name="element">To be added.</param>
+		/// <param name="element">The element.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static NSObject? GetUnignoredDescendant (NSObject element)
 		{
 			if (element is null)
@@ -187,10 +176,9 @@ namespace AppKit {
 		[DllImport (Constants.AppKitLibrary)]
 		static extern IntPtr NSAccessibilityUnignoredChildren (IntPtr originalChildren);
 
-		/// <param name="originalChildren">To be added.</param>
+		/// <param name="originalChildren">The original children.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static NSObject []? GetUnignoredChildren (NSArray originalChildren)
 		{
 			if (originalChildren is null)
@@ -204,10 +192,9 @@ namespace AppKit {
 		[DllImport (Constants.AppKitLibrary)]
 		static extern IntPtr NSAccessibilityUnignoredChildrenForOnlyChild (IntPtr originalChild);
 
-		/// <param name="originalChild">To be added.</param>
+		/// <param name="originalChild">The original child.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static NSObject []? GetUnignoredChildren (NSObject originalChild)
 		{
 			if (originalChild is null)
@@ -221,10 +208,9 @@ namespace AppKit {
 		[DllImport (Constants.AppKitLibrary)]
 		static extern byte NSAccessibilitySetMayContainProtectedContent (byte flag);
 
-		/// <param name="flag">To be added.</param>
+		/// <param name="flag">The flag.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static bool SetMayContainProtectedContent (bool flag)
 		{
 			return NSAccessibilitySetMayContainProtectedContent (flag ? (byte) 1 : (byte) 0) != 0;

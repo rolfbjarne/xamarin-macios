@@ -38,7 +38,7 @@ namespace Foundation {
 		/// <summary>Gets the root proxy object for this connection.</summary>
 		/// <typeparam name="TProxy">The type of the proxy object to return.</typeparam>
 		/// <returns>The root proxy object, cast to the specified type.</returns>
-		/// <remarks>This method retrieves the root object provided by the receiver's peer. The returned object is a proxy that represents the root object on the remote side of the connection.</remarks>
+		/// <remarks>This method retrieves the root object provided by the receiver's peer. The returned object is AProxy that represents the root object on the remote side of the connection.</remarks>
 		public TProxy GetRootProxy<TProxy> () where TProxy : NSObject
 		{
 			return GetRootProxy<TProxy> (_GetRootProxy ());

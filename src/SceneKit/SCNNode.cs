@@ -34,7 +34,7 @@ namespace SceneKit {
 		}
 
 		/// <summary>Gets an enumerator for iterating over the node's descendants.</summary>
-		///         <returns>To be added.</returns>
+		/// <returns>An enumerator that iterates through the child nodes.</returns>
 		public IEnumerator<SCNNode> GetEnumerator ()
 		{
 			foreach (var node in ChildNodes)
@@ -42,7 +42,7 @@ namespace SceneKit {
 		}
 
 		/// <summary>Gets an enumerator for the node's children.</summary>
-		///         <returns>To be added.</returns>
+		/// <returns>An enumerator that iterates through the child nodes.</returns>
 		IEnumerator IEnumerable.GetEnumerator ()
 		{
 			return GetEnumerator ();

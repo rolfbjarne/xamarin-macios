@@ -64,7 +64,6 @@ namespace CoreGraphics {
 		extern static /* CGPDFDictionaryRef */ IntPtr CGPDFStreamGetDictionary (/* CGPDFStreamRef */ IntPtr stream);
 
 		/// <summary>The dictionary associated with the PDF stream.</summary>
-		///         <value>To be added.</value>
 		public CGPDFDictionary Dictionary {
 			get {
 				return new CGPDFDictionary (CGPDFStreamGetDictionary (Handle));
@@ -75,8 +74,8 @@ namespace CoreGraphics {
 		unsafe extern static /* CFDataRef */ IntPtr CGPDFStreamCopyData (/* CGPDFStreamRef */ IntPtr stream, /* CGPDFDataFormat* */ CGPDFDataFormat* format);
 
 		/// <param name="format">The format.</param>
-		///         <summary>The data associated with the PDF stream, and also returns the file format of the data.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>The data associated with the PDF stream, and also returns the file format of the data.</summary>
+		/// <returns>The stream data, or <see langword="null" /> if it cannot be retrieved.</returns>
 		public NSData? GetData (out CGPDFDataFormat format)
 		{
 			format = default;

@@ -25,7 +25,6 @@ namespace MediaAccessibility {
 		/// <param name="domain">The domain.</param>
 		///         <param name="language">The language.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static bool AddSelectedLanguage (MACaptionAppearanceDomain domain, string language)
 		{
 			// this will throw an ANE if language is null
@@ -41,7 +40,6 @@ namespace MediaAccessibility {
 
 		/// <param name="domain">The domain.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static string? [] GetSelectedLanguages (MACaptionAppearanceDomain domain)
 		{
 			using (var langs = new CFArray (MACaptionAppearanceCopySelectedLanguages ((int) domain), owns: true)) {
@@ -58,7 +56,6 @@ namespace MediaAccessibility {
 
 		/// <param name="domain">The domain.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static MACaptionAppearanceDisplayType GetDisplayType (MACaptionAppearanceDomain domain)
 		{
 			return (MACaptionAppearanceDisplayType) (int) MACaptionAppearanceGetDisplayType ((int) domain);
@@ -80,7 +77,6 @@ namespace MediaAccessibility {
 
 		/// <param name="domain">The domain.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static NSString [] GetPreferredCaptioningMediaCharacteristics (MACaptionAppearanceDomain domain)
 		{
 			using (var chars = new CFArray (MACaptionAppearanceCopyPreferredCaptioningMediaCharacteristics ((int) domain), owns: true)) {
@@ -99,7 +95,6 @@ namespace MediaAccessibility {
 		/// <param name="domain">The domain.</param>
 		///         <param name="behavior">The behavior.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static CGColor GetForegroundColor (MACaptionAppearanceDomain domain, ref MACaptionAppearanceBehavior behavior)
 		{
 			nint b = (int) behavior;
@@ -119,7 +114,6 @@ namespace MediaAccessibility {
 		/// <param name="domain">The domain.</param>
 		///         <param name="behavior">The behavior.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static CGColor GetBackgroundColor (MACaptionAppearanceDomain domain, ref MACaptionAppearanceBehavior behavior)
 		{
 			nint b = (int) behavior;
@@ -139,7 +133,6 @@ namespace MediaAccessibility {
 		/// <param name="domain">The domain.</param>
 		///         <param name="behavior">The behavior.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static CGColor GetWindowColor (MACaptionAppearanceDomain domain, ref MACaptionAppearanceBehavior behavior)
 		{
 			nint b = (int) behavior;
@@ -158,7 +151,6 @@ namespace MediaAccessibility {
 		/// <param name="domain">The domain.</param>
 		///         <param name="behavior">The behavior.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static nfloat GetForegroundOpacity (MACaptionAppearanceDomain domain, ref MACaptionAppearanceBehavior behavior)
 		{
 			nint b = (int) behavior;
@@ -177,7 +169,6 @@ namespace MediaAccessibility {
 		/// <param name="domain">The domain.</param>
 		///         <param name="behavior">The behavior.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static nfloat GetBackgroundOpacity (MACaptionAppearanceDomain domain, ref MACaptionAppearanceBehavior behavior)
 		{
 			nint b = (int) behavior;
@@ -196,7 +187,6 @@ namespace MediaAccessibility {
 		/// <param name="domain">The domain.</param>
 		///         <param name="behavior">The behavior.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static nfloat GetWindowOpacity (MACaptionAppearanceDomain domain, ref MACaptionAppearanceBehavior behavior)
 		{
 			nint b = (int) behavior;
@@ -215,7 +205,6 @@ namespace MediaAccessibility {
 		/// <param name="domain">The domain.</param>
 		///         <param name="behavior">The behavior.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static nfloat GetWindowRoundedCornerRadius (MACaptionAppearanceDomain domain, ref MACaptionAppearanceBehavior behavior)
 		{
 			nint b = (int) behavior;
@@ -235,7 +224,6 @@ namespace MediaAccessibility {
 		///         <param name="behavior">The behavior.</param>
 		///         <param name="fontStyle">The font style.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static CTFontDescriptor GetFontDescriptor (MACaptionAppearanceDomain domain, ref MACaptionAppearanceBehavior behavior, MACaptionAppearanceFontStyle fontStyle)
 		{
 			nint b = (int) behavior;
@@ -255,7 +243,6 @@ namespace MediaAccessibility {
 		/// <param name="domain">The domain.</param>
 		///         <param name="behavior">The behavior.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static nfloat GetRelativeCharacterSize (MACaptionAppearanceDomain domain, ref MACaptionAppearanceBehavior behavior)
 		{
 			nint b = (int) behavior;
@@ -274,7 +261,6 @@ namespace MediaAccessibility {
 		/// <param name="domain">The domain.</param>
 		///         <param name="behavior">The behavior.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public static MACaptionAppearanceTextEdgeStyle GetTextEdgeStyle (MACaptionAppearanceDomain domain, ref MACaptionAppearanceBehavior behavior)
 		{
 			nint b = (int) behavior;
@@ -480,7 +466,6 @@ namespace MediaAccessibility {
 		// according to webkit source code (the only use I could find) this is an array of CFString
 		// https://github.com/WebKit/webkit/blob/master/Source/WebCore/page/CaptionUserPreferencesMediaAF.cpp
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		static public string? []? GetPreferredCharacteristics ()
 		{
 			var handle = MAAudibleMediaCopyPreferredCharacteristics ();

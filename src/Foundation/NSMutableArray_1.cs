@@ -33,7 +33,7 @@ namespace Foundation {
 	[Register ("NSMutableArray", SkipRegistration = true)]
 	public sealed partial class NSMutableArray<TValue> : NSMutableArray, IEnumerable<TValue>
 		where TValue : class, INativeObject {
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="NSMutableArray" /> instance.</summary>
 		public NSMutableArray ()
 		{
 		}
@@ -56,14 +56,14 @@ namespace Foundation {
 		}
 
 		/// <param name="capacity">The capacity.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="NSMutableArray" /> instance.</summary>
 		public NSMutableArray (nuint capacity)
 			: base (capacity)
 		{
 		}
 
 		/// <param name="values">The values.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="NSMutableArray" /> instance.</summary>
 		public NSMutableArray (params TValue [] values)
 		{
 			if (values is null)
@@ -75,8 +75,7 @@ namespace Foundation {
 
 		// Strongly typed methods from NSArray
 		/// <param name="obj">The obj.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Contains.</summary>
 		public bool Contains (TValue obj)
 		{
 			if (obj is null)
@@ -88,8 +87,7 @@ namespace Foundation {
 		}
 
 		/// <param name="obj">The obj.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Indexs of.</summary>
 		public nuint IndexOf (TValue obj)
 		{
 			if (obj is null)
@@ -102,7 +100,7 @@ namespace Foundation {
 
 		// Strongly typed methods from NSMutableArray
 		/// <param name="obj">The obj.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Add.</summary>
 		public void Add (TValue obj)
 		{
 			if (obj is null)
@@ -114,7 +112,7 @@ namespace Foundation {
 
 		/// <param name="obj">The obj.</param>
 		/// <param name="index">The zero-based index.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Insert.</summary>
 		public void Insert (TValue obj, nint index)
 		{
 			if (obj is null)
@@ -128,7 +126,7 @@ namespace Foundation {
 
 		/// <param name="index">The zero-based index.</param>
 		/// <param name="withObject">The with object.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Replaces object.</summary>
 		public void ReplaceObject (nint index, TValue withObject)
 		{
 			if (withObject is null)
@@ -141,7 +139,7 @@ namespace Foundation {
 		}
 
 		/// <param name="source">The source.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Adds objects.</summary>
 		public void AddObjects (params TValue [] source)
 		{
 			if (source is null)
@@ -157,7 +155,7 @@ namespace Foundation {
 
 		/// <param name="objects">The objects.</param>
 		///         <param name="atIndexes">The at indexes.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Inserts objects.</summary>
 		public void InsertObjects (TValue [] objects, NSIndexSet atIndexes)
 		{
 			if (objects is null)
@@ -230,7 +228,6 @@ namespace Foundation {
 
 		#region IEnumerable implementation
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator ()
 		{
 			return GetEnumerator ();

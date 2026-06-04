@@ -25,32 +25,32 @@ namespace PhotosUI {
 	interface PHContentEditingController {
 
 		/// <param name="adjustmentData">The adjustment data.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns whether this controller can handle the specified adjustment data.</summary>
+		/// <returns><see langword="true" /> if the adjustment data can be handled; otherwise, <see langword="false" />.</returns>
 		[Abstract]
 		[Export ("canHandleAdjustmentData:")]
 		bool CanHandleAdjustmentData (PHAdjustmentData adjustmentData);
 
 		/// <param name="contentEditingInput">The content editing input.</param>
 		/// <param name="placeholderImage">The placeholder image.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Starts content editing with the specified input and placeholder image.</summary>
 		[Abstract]
 		[Export ("startContentEditingWithInput:placeholderImage:")]
 		void StartContentEditing (PHContentEditingInput contentEditingInput, UIImage placeholderImage);
 
-		/// <param name="completionHandler">To be added. This parameter can be <see langword="null" />.</param>
-		/// <summary>To be added.</summary>
+		/// <param name="completionHandler">The completion handler to call when editing is finished.</param>
+		/// <summary>Finishes content editing and calls the completion handler with the output.</summary>
 		[Abstract]
 		[Export ("finishContentEditingWithCompletionHandler:")]
 		void FinishContentEditing (Action<PHContentEditingOutput> completionHandler);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Cancels the current content editing session.</summary>
 		[Abstract]
 		[Export ("cancelContentEditing")]
 		void CancelContentEditing ();
 
-		/// <summary>To be added.</summary>
-		/// <value>To be added.</value>
+		/// <summary>Gets a value that indicates whether a cancel confirmation should be shown.</summary>
+		/// <value><see langword="true" /> if a cancel confirmation should be shown; otherwise, <see langword="false" />.</value>
 		[Abstract]
 		[Export ("shouldShowCancelConfirmation")]
 		bool ShouldShowCancelConfirmation { get; }

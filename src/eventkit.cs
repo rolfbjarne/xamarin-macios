@@ -43,8 +43,8 @@ namespace EventKit {
 		[Export ("hasChanges")]
 		bool HasChanges { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets a value that indicates whether this object is new and has not been saved.</summary>
+		/// <value><see langword="true" /> if this object is new; otherwise, <see langword="false" />.</value>
 		[Export ("isNew")]
 		bool IsNew { get; }
 

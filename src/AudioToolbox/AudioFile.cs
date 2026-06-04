@@ -111,7 +111,7 @@ namespace AudioToolbox {
 		UnsupportedProperty = 0x7074793f, // pty?
 		/// <summary>The size of the property data was invalid.</summary>
 		BadPropertySize = 0x2173697a, // !siz
-		/// <summary>To be added.</summary>
+		/// <summary>A file permission error occurred.</summary>
 		Permissions = 0x70726d3f, // prm?
 		/// <summary>The file must be optimized in order to write more audio data.</summary>
 		NotOptimized = 0x6f70746d, // optm
@@ -167,124 +167,124 @@ namespace AudioToolbox {
 	/// <seealso cref="AudioToolbox.AudioFileStream.GetProperty(AudioToolbox.AudioFileStreamProperty,ref System.Int32,System.IntPtr)" />
 	/// <seealso cref="AudioToolbox.AudioFile.SetProperty(AudioToolbox.AudioFileProperty,System.Int32,System.IntPtr)" />
 	public enum AudioFileProperty { // typedef UInt32 AudioFilePropertyID
-		/// <summary>To be added.</summary>
+		/// <summary>The file format.</summary>
 		FileFormat = 0x66666d74,
-		/// <summary>To be added.</summary>
+		/// <summary>The data format.</summary>
 		DataFormat = 0x64666d74,
-		/// <summary>To be added.</summary>
+		/// <summary>Whether the file is optimized.</summary>
 		IsOptimized = 0x6f70746d,
-		/// <summary>To be added.</summary>
+		/// <summary>The magic cookie data.</summary>
 		MagicCookieData = 0x6d676963,
-		/// <summary>To be added.</summary>
+		/// <summary>The audio data byte count.</summary>
 		AudioDataByteCount = 0x62636e74,
-		/// <summary>To be added.</summary>
+		/// <summary>The audio data packet count.</summary>
 		AudioDataPacketCount = 0x70636e74,
-		/// <summary>To be added.</summary>
+		/// <summary>The maximum packet size.</summary>
 		MaximumPacketSize = 0x70737a65,
-		/// <summary>To be added.</summary>
+		/// <summary>The data offset.</summary>
 		DataOffset = 0x646f6666,
-		/// <summary>To be added.</summary>
+		/// <summary>The channel layout.</summary>
 		ChannelLayout = 0x636d6170,
-		/// <summary>To be added.</summary>
+		/// <summary>Whether to defer size updates.</summary>
 		DeferSizeUpdates = 0x64737a75,
-		/// <summary>To be added.</summary>
+		/// <summary>The data format name.</summary>
 		DataFormatName = 0x666e6d65,
-		/// <summary>To be added.</summary>
+		/// <summary>The marker list.</summary>
 		MarkerList = 0x6d6b6c73,
-		/// <summary>To be added.</summary>
+		/// <summary>The region list.</summary>
 		RegionList = 0x72676c73,
-		/// <summary>To be added.</summary>
+		/// <summary>Packet to frame translation.</summary>
 		PacketToFrame = 0x706b6672,
-		/// <summary>To be added.</summary>
+		/// <summary>Frame to packet translation.</summary>
 		FrameToPacket = 0x6672706b,
-		/// <summary>To be added.</summary>
+		/// <summary>Packet to byte translation.</summary>
 		PacketToByte = 0x706b6279,
-		/// <summary>To be added.</summary>
+		/// <summary>Byte to packet translation.</summary>
 		ByteToPacket = 0x6279706b,
-		/// <summary>To be added.</summary>
+		/// <summary>The chunk identifiers.</summary>
 		ChunkIDs = 0x63686964,
-		/// <summary>To be added.</summary>
+		/// <summary>The info dictionary.</summary>
 		InfoDictionary = 0x696e666f,
-		/// <summary>To be added.</summary>
+		/// <summary>The packet table info.</summary>
 		PacketTableInfo = 0x706e666f,
-		/// <summary>To be added.</summary>
+		/// <summary>The format list.</summary>
 		FormatList = 0x666c7374,
-		/// <summary>To be added.</summary>
+		/// <summary>The upper bound of packet size.</summary>
 		PacketSizeUpperBound = 0x706b7562,
-		/// <summary>To be added.</summary>
+		/// <summary>The reserved duration.</summary>
 		ReserveDuration = 0x72737276,
-		/// <summary>To be added.</summary>
+		/// <summary>The estimated duration.</summary>
 		EstimatedDuration = 0x65647572,
-		/// <summary>To be added.</summary>
+		/// <summary>The bit rate.</summary>
 		BitRate = 0x62726174,
-		/// <summary>To be added.</summary>
+		/// <summary>The ID3 tag.</summary>
 		ID3Tag = 0x69643374,
-		/// <summary>To be added.</summary>
+		/// <summary>The source bit depth.</summary>
 		SourceBitDepth = 0x73627464,
-		/// <summary>To be added.</summary>
+		/// <summary>The album artwork.</summary>
 		AlbumArtwork = 0x61617274,
-		/// <summary>To be added.</summary>
+		/// <summary>Whether the file is ready to produce packets.</summary>
 		ReadyToProducePackets = 0x72656479,
 		/// <summary>The average number of bytes per audio packet.</summary>
 		AverageBytesPerPacket = 0x61627070,
-		/// <summary>To be added.</summary>
+		/// <summary>The audio track count.</summary>
 		AudioTrackCount = 0x61746374,
-		/// <summary>To be added.</summary>
+		/// <summary>The audio track to use.</summary>
 		UseAudioTrack = 0x7561746b,
 	}
 
 	/// <summary>An enumeration whose values specify an audio-loop's direction.</summary>
 	public enum AudioFileLoopDirection { // Unused?
-		/// <summary>To be added.</summary>
+		/// <summary>No looping.</summary>
 		NoLooping = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Loop forward.</summary>
 		Forward = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Loop forward and backward.</summary>
 		ForwardAndBackward = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Loop backward.</summary>
 		Backward = 3,
 	}
 
 	/// <summary>An enumeration whose values specify different types of chunks appropriate to audio files.</summary>
 	public enum AudioFileChunkType : uint // CoreAudio.framework - CoreAudioTypes.h - "four char code IDs"
 	{
-		/// <summary>To be added.</summary>
+		/// <summary>The CAF description chunk.</summary>
 		CAFStreamDescription = 0x64657363,  // 'desc'
-		/// <summary>To be added.</summary>
+		/// <summary>The audio data chunk.</summary>
 		CAFAudioData = 0x64617461,  // 'data'
-		/// <summary>To be added.</summary>
+		/// <summary>The packet table chunk.</summary>
 		CAFChannelLayout = 0x6368616e,  // 'chan'
-		/// <summary>To be added.</summary>
+		/// <summary>The channel layout chunk.</summary>
 		CAFFiller = 0x66726565, // 'free'
-		/// <summary>To be added.</summary>
+		/// <summary>The magic cookie chunk.</summary>
 		CAFMarker = 0x6d61726b, // 'mark'
-		/// <summary>To be added.</summary>
+		/// <summary>The info strings chunk.</summary>
 		CAFRegion = 0x7265676e, // 'regn'
-		/// <summary>To be added.</summary>
+		/// <summary>The edit comments chunk.</summary>
 		CAFInstrument = 0x696e7374, // 'inst'
-		/// <summary>To be added.</summary>
+		/// <summary>The instrument chunk.</summary>
 		CAFMagicCookieID = 0x6b756b69,  // 'kuki'
-		/// <summary>To be added.</summary>
+		/// <summary>The MIDI chunk.</summary>
 		CAFInfoStrings = 0x696e666f,    // 'info'
-		/// <summary>To be added.</summary>
+		/// <summary>The overview chunk.</summary>
 		CAFEditComments = 0x65646374,   // 'edct'
-		/// <summary>To be added.</summary>
+		/// <summary>The peak chunk.</summary>
 		CAFPacketTable = 0x70616b74,    // 'pakt'
-		/// <summary>To be added.</summary>
+		/// <summary>The marker chunk.</summary>
 		CAFStrings = 0x73747267,    // 'strg'
-		/// <summary>To be added.</summary>
+		/// <summary>The region chunk.</summary>
 		CAFUUID = 0x75756964,   // 'uuid'
-		/// <summary>To be added.</summary>
+		/// <summary>The unique material identifier chunk.</summary>
 		CAFPeak = 0x7065616b,   // 'peak'
-		/// <summary>To be added.</summary>
+		/// <summary>The free chunk.</summary>
 		CAFOverview = 0x6f767677,   // 'ovvw'
-		/// <summary>To be added.</summary>
+		/// <summary>The strings chunk.</summary>
 		CAFMIDI = 0x6d696469,   // 'midi'
-		/// <summary>To be added.</summary>
+		/// <summary>The user-defined chunk.</summary>
 		CAFUMID = 0x756d6964,   // 'umid'
-		/// <summary>To be added.</summary>
+		/// <summary>The UUID chunk.</summary>
 		CAFFormatListID = 0x6c647363,   // 'ldsc'
-		/// <summary>To be added.</summary>
+		/// <summary>The information chunk.</summary>
 		CAFiXML = 0x69584d4c,   // 'iXML'
 	}
 
@@ -316,15 +316,15 @@ namespace AudioToolbox {
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AudioFileSmpteTime { // AudioFile_SMPTE_Time
-		/// <summary>To be added.</summary>
+		/// <summary>The hours component of the SMPTE time.</summary>
 		public sbyte Hours;
-		/// <summary>To be added.</summary>
+		/// <summary>The minutes component of the SMPTE time.</summary>
 		public byte Minutes;
-		/// <summary>To be added.</summary>
+		/// <summary>The seconds component of the SMPTE time.</summary>
 		public byte Seconds;
-		/// <summary>To be added.</summary>
+		/// <summary>The frames component of the SMPTE time.</summary>
 		public byte Frames;
-		/// <summary>To be added.</summary>
+		/// <summary>The sub-frame sample offset.</summary>
 		public uint SubFrameSampleOffset;
 	}
 
@@ -335,21 +335,21 @@ namespace AudioToolbox {
 	[SupportedOSPlatform ("tvos")]
 	[StructLayout (LayoutKind.Sequential)]
 	public struct AudioFileMarker {
-		/// <summary>To be added.</summary>
+		/// <summary>The frame position of the marker.</summary>
 		public double FramePosition;
 		internal IntPtr Name_cfstringref;
-		/// <summary>To be added.</summary>
+		/// <summary>The marker identifier.</summary>
 		public int MarkerID;
-		/// <summary>To be added.</summary>
+		/// <summary>The SMPTE time of the marker.</summary>
 		public AudioFileSmpteTime SmpteTime;
-		/// <summary>To be added.</summary>
+		/// <summary>The type of the marker.</summary>
 		public AudioFileMarkerType Type;
-		/// <summary>To be added.</summary>
+		/// <summary>Reserved for future use.</summary>
 		public ushort Reserved;
-		/// <summary>To be added.</summary>
+		/// <summary>The channel for the marker.</summary>
 		public ushort Channel;
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the name of the marker.</summary>
 		public string? Name {
 			get {
 				return CFString.FromHandle (Name_cfstringref);
@@ -406,52 +406,52 @@ namespace AudioToolbox {
 	/// <summary>An enumeration whose values specify the <see cref="AudioFileMarker.Type" /> property.</summary>
 	public enum AudioFileMarkerType : uint // UInt32 in AudioFileMarkerType - AudioFile.h
 	{
-		/// <summary>To be added.</summary>
+		/// <summary>A generic marker.</summary>
 		Generic = 0,
 
-		/// <summary>To be added.</summary>
+		/// <summary>The program start marker.</summary>
 		CAFProgramStart = 0x70626567,   // 'pbeg'
-		/// <summary>To be added.</summary>
+		/// <summary>The program end marker.</summary>
 		CAFProgramEnd = 0x70656e64, // 'pend'
-		/// <summary>To be added.</summary>
+		/// <summary>The track start marker.</summary>
 		CAFTrackStart = 0x74626567, // 'tbeg'
-		/// <summary>To be added.</summary>
+		/// <summary>The track end marker.</summary>
 		CAFTrackEnd = 0x74656e54,   // 'tend'
-		/// <summary>To be added.</summary>
+		/// <summary>An index marker.</summary>
 		CAFIndex = 0x696e6478,  // 'indx'
-		/// <summary>To be added.</summary>
+		/// <summary>The region start marker.</summary>
 		CAFRegionStart = 0x72626567,    // 'rbeg'
-		/// <summary>To be added.</summary>
+		/// <summary>The region end marker.</summary>
 		CAFRegionEnd = 0x72626567,  // 'rend'
-		/// <summary>To be added.</summary>
+		/// <summary>A region sync point marker.</summary>
 		CAFRegionSyncPoint = 0x72737963,    // 'rsyc'
-		/// <summary>To be added.</summary>
+		/// <summary>The selection start marker.</summary>
 		CAFSelectionStart = 0x73626567, // 'sbeg'
-		/// <summary>To be added.</summary>
+		/// <summary>The selection end marker.</summary>
 		CAFSelectionEnd = 0x73626567,   // 'send'
-		/// <summary>To be added.</summary>
+		/// <summary>The edit source begin marker.</summary>
 		CAFEditSourceBegin = 0x63626567,    // 'cbeg'
-		/// <summary>To be added.</summary>
+		/// <summary>The edit source end marker.</summary>
 		CAFEditSourceEnd = 0x63626567,  // 'cend'
-		/// <summary>To be added.</summary>
+		/// <summary>The edit destination begin marker.</summary>
 		CAFEditDestinationBegin = 0x64626567,   // 'dbeg'
-		/// <summary>To be added.</summary>
+		/// <summary>The edit destination end marker.</summary>
 		CAFEditDestinationEnd = 0x64626567, // 'dend'
-		/// <summary>To be added.</summary>
+		/// <summary>The sustain loop start marker.</summary>
 		CAFSustainLoopStart = 0x736c6267,   // 'slbg'
-		/// <summary>To be added.</summary>
+		/// <summary>The sustain loop end marker.</summary>
 		CAFSustainLoopEnd = 0x736c6265, // 'slen'
-		/// <summary>To be added.</summary>
+		/// <summary>The release loop start marker.</summary>
 		CAFReleaseLoopStart = 0x726c6267,   // 'rlbg'
-		/// <summary>To be added.</summary>
+		/// <summary>The release loop end marker.</summary>
 		CAFReleaseLoopEnd = 0x726c6265, // 'rlen'
-		/// <summary>To be added.</summary>
+		/// <summary>The saved play position marker.</summary>
 		CAFSavedPlayPosition = 0x73706c79,  // 'sply'
-		/// <summary>To be added.</summary>
+		/// <summary>A tempo marker.</summary>
 		CAFTempo = 0x746d706f,  // 'tmpo'
-		/// <summary>To be added.</summary>
+		/// <summary>A time signature marker.</summary>
 		CAFTimeSignature = 0x74736967,  // 'tsig'
-		/// <summary>To be added.</summary>
+		/// <summary>A key signature marker.</summary>
 		CAFKeySignature = 0x6b736967,   // 'ksig'
 	}
 

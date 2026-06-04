@@ -5,7 +5,7 @@ using CoreLocation;
 namespace MapKit {
 
 	public partial class MKMultiPoint {
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the array of map points that define this multi-point shape.</summary>
 		public unsafe MKMapPoint [] Points {
 			get {
 				var source = (MKMapPoint*) _Points;
@@ -20,7 +20,7 @@ namespace MapKit {
 
 		/// <param name="first">The first.</param>
 		///         <param name="count">The count.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the coordinates for the specified range of points.</summary>
 		public unsafe CLLocationCoordinate2D [] GetCoordinates (int first, int count)
 		{
 			var range = new NSRange (first, count);

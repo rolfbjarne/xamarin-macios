@@ -54,13 +54,13 @@ namespace EventKit {
 		Optional,
 		/// <summary>Chairing the meeting.</summary>
 		Chair,
-		/// <summary>Not a participant.</summary>
+		/// <summary>Not AParticipant.</summary>
 		NonParticipant,
 	}
 
 	// untyped enum -> EKTypes.h
 	// iOS 9 promoted this to an NSInteger - which breaks compatibility
-	/// <summary>The status of a participant.</summary>
+	/// <summary>The status of AParticipant.</summary>
 	[Native]
 	public enum EKParticipantStatus : long {
 		/// <summary>We do not know what the participant's intentions are at this point.</summary>
@@ -224,7 +224,7 @@ namespace EventKit {
 	/// <summary>Determines how changes to an event will be applied, either it affects a single instance or affects all instances.</summary>
 	[Native]
 	public enum EKSpan : long {
-		/// <summary>The change only affects a particular instance of the event.</summary>
+		/// <summary>The change only affects AParticular instance of the event.</summary>
 		ThisEvent,
 		/// <summary>The change affects all future events.</summary>
 		FutureEvents,

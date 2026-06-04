@@ -168,7 +168,7 @@ namespace ModelIO {
 		///           <para>The allocator to use instead of the default, internal allocator.</para>
 		///           <para tool="nullallowed">This parameter can be <see langword="null" />.</para>
 		///         </param>
-		/// <summary>Creates a planar region centered at the origin, aligned with the X-Z plane, with the specified dimensions.</summary>
+		/// <summary>Creates APlanar region centered at the origin, aligned with the X-Z plane, with the specified dimensions.</summary>
 		/// <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("tvos")]

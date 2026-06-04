@@ -42,7 +42,6 @@ namespace Security {
 		///         <param name="options">The options to use.</param>
 		///         <param name="array">The array.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		static public SecStatusCode ImportPkcs12 (byte [] buffer, NSDictionary options, out NSDictionary []? array)
 		{
 			using (NSData data = NSData.FromArray (buffer)) {
@@ -54,7 +53,6 @@ namespace Security {
 		///         <param name="options">The options to use.</param>
 		///         <param name="array">The array.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		static public SecStatusCode ImportPkcs12 (NSData data, NSDictionary options, out NSDictionary []? array)
 		{
 			if (options is null)

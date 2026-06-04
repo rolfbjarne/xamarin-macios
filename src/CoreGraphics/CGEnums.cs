@@ -12,9 +12,9 @@
 namespace CoreGraphics {
 
 	public enum MatrixOrder {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates prepend.</summary>
 		Prepend = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates append.</summary>
 		Append = 1,
 	}
 
@@ -70,7 +70,7 @@ namespace CoreGraphics {
 		Invisible,
 		/// <summary>Perform a Fill operation on the text glyphs followed by a clip operation using the current clip path.</summary>
 		FillClip,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates stroke clip.</summary>
 		StrokeClip,
 		/// <summary>Perform a Stroke operation on the text glyphs followed by a clip operation using the current clip path.</summary>
 		FillStrokeClip,
@@ -102,69 +102,69 @@ namespace CoreGraphics {
 		Low,
 		/// <summary>High quality, at the cost of speed.</summary>
 		High,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates medium.</summary>
 		Medium,            /* Yes, in this order, since Medium was added in 4 */
 	}
 
 	// untyped enum -> CGContext.h
 	/// <include file="../../docs/api/CoreGraphics/CGBlendMode.xml" path="/Documentation/Docs[@DocId='T:CoreGraphics.CGBlendMode']/*" />
 	public enum CGBlendMode {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates normal.</summary>
 		Normal,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates multiply.</summary>
 		Multiply,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates screen.</summary>
 		Screen,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates overlay.</summary>
 		Overlay,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates darken.</summary>
 		Darken,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates lighten.</summary>
 		Lighten,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates color dodge.</summary>
 		ColorDodge,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates color burn.</summary>
 		ColorBurn,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates soft light.</summary>
 		SoftLight,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hard light.</summary>
 		HardLight,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates difference.</summary>
 		Difference,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates exclusion.</summary>
 		Exclusion,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates hue.</summary>
 		Hue,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates saturation.</summary>
 		Saturation,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates color.</summary>
 		Color,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates luminosity.</summary>
 		Luminosity,
 
 		/// <summary>Clears the destination and makes it transparent (R=0).</summary>
 		Clear,
 		/// <summary>Copies the source color with alpha to the target (R=S)</summary>
 		Copy,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates source in.</summary>
 		SourceIn,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates source out.</summary>
 		SourceOut,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates source atop.</summary>
 		SourceAtop,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates destination over.</summary>
 		DestinationOver,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates destination in.</summary>
 		DestinationIn,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates destination out.</summary>
 		DestinationOut,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates destination atop.</summary>
 		DestinationAtop,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates x o r.</summary>
 		XOR,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates plus darker.</summary>
 		PlusDarker,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates plus lighter.</summary>
 		PlusLighter,
 	}
 
@@ -227,54 +227,54 @@ namespace CoreGraphics {
 	// untyped enum -> CGPDFObject.h
 	/// <summary>Enumerates the various types of values that are found in a PDF document.</summary>
 	public enum CGPDFObjectType {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates null.</summary>
 		Null = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates boolean.</summary>
 		Boolean,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates integer.</summary>
 		Integer,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates real.</summary>
 		Real,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates name.</summary>
 		Name,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates string.</summary>
 		String,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates array.</summary>
 		Array,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates dictionary.</summary>
 		Dictionary,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates stream.</summary>
 		Stream,
 	};
 
 	[MacCatalyst (13, 1)]
 	public enum CGPDFAccessPermissions : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates allows low quality printing.</summary>
 		AllowsLowQualityPrinting = (1 << 0),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates allows high quality printing.</summary>
 		AllowsHighQualityPrinting = (1 << 1),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates allows document changes.</summary>
 		AllowsDocumentChanges = (1 << 2),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates allows document assembly.</summary>
 		AllowsDocumentAssembly = (1 << 3),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates allows content copying.</summary>
 		AllowsContentCopying = (1 << 4),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates allows content accessibility.</summary>
 		AllowsContentAccessibility = (1 << 5),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates allows commenting.</summary>
 		AllowsCommenting = (1 << 6),
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates allows form field entry.</summary>
 		AllowsFormFieldEntry = (1 << 7),
 	}
 
 	// uint32_t enum -> CGColorConversionInfo.h
 	[MacCatalyst (13, 1)]
 	public enum CGColorConversionInfoTransformType : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates from space.</summary>
 		FromSpace = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates to space.</summary>
 		ToSpace,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates apply space.</summary>
 		ApplySpace,
 	}
 }

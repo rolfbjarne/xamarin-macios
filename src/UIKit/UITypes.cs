@@ -206,7 +206,7 @@ namespace UIKit {
 	}
 
 #if IOS || __MACCATALYST__
-	/// <summary>Represents the position of a pointer accessory relative to the pointer.</summary>
+	/// <summary>Represents the position of APointer accessory relative to the pointer.</summary>
 	[SupportedOSPlatform ("ios15.0")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[StructLayout (LayoutKind.Sequential)]

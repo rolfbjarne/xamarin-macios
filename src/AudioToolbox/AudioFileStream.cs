@@ -93,7 +93,7 @@ namespace AudioToolbox {
 		MagicCookieData = 0x6d676963,
 		/// <summary>Indicates audio data byte count.</summary>
 		AudioDataByteCount = 0x62636e74,
-		/// <summary>Indicates audio data packet count.</summary>
+		/// <summary>Indicates audio datAPacket count.</summary>
 		AudioDataPacketCount = 0x70636e74,
 		/// <summary>Indicates maximum packet size.</summary>
 		MaximumPacketSize = 0x70737a65,
@@ -287,12 +287,12 @@ namespace AudioToolbox {
 			afs!.OnPacketDecoded (numberBytes, inputData, desc);
 		}
 
-		/// <summary>This event is raised when a packet has been decoded.</summary>
+		/// <summary>This event is raised when APacket has been decoded.</summary>
 		public EventHandler<PacketReceivedEventArgs>? PacketDecoded;
 		/// <param name="numberOfBytes">The number of bytes available in the decoded packet.</param>
 		///         <param name="inputData">Pointer to the decoded data.</param>
 		///         <param name="packetDescriptions">A description of the packets decoded.</param>
-		///         <summary>Invoked when a packet has been decoded.</summary>
+		///         <summary>Invoked when APacket has been decoded.</summary>
 		///         <remarks>The default implementation raises the PacketDecoded event.</remarks>
 		protected virtual void OnPacketDecoded (int numberOfBytes, IntPtr inputData, AudioStreamPacketDescription []? packetDescriptions)
 		{
@@ -301,12 +301,12 @@ namespace AudioToolbox {
 				p (this, new PacketReceivedEventArgs (numberOfBytes, inputData, packetDescriptions));
 		}
 
-		/// <summary>This event is raised when a property has been found on the decoded data.</summary>
+		/// <summary>This event is raised when AProperty has been found on the decoded data.</summary>
 		///         <remarks>The most interesting property that is raised is AudioFileStreamProperty.ReadyToProducePackets;   When this property is parsed there is enough information to create the output queue.   The MagicCookie and the StreamBasicDescription contain the information necessary to create a working instance of the OutputAudioQueue.</remarks>
 		public EventHandler<PropertyFoundEventArgs>? PropertyFound;
 		/// <param name="propertyID">The property that has been found.</param>
 		///         <param name="ioFlags" />
-		///         <summary>Invoked when a property is found.</summary>
+		///         <summary>Invoked when AProperty is found.</summary>
 		///         <remarks>The default implementation merely raises the PropetyFound event.</remarks>
 		protected virtual void OnPropertyFound (AudioFileStreamProperty propertyID, ref AudioFileStreamPropertyFlag ioFlags)
 		{
@@ -356,7 +356,7 @@ namespace AudioToolbox {
 		/// <param name="size">The number of bytes to parse from the provided block.</param>
 		///         <param name="data">A pointer to the audio data to decode.</param>
 		///         <param name="discontinuity">True if this invocation to ParseBytes is contiguous to the previous one, false otherwise.</param>
-		///         <summary>Parse and decode the block of data provided.</summary>
+		///         <summary>Parse and decode the block of datAProvided.</summary>
 		///         <returns>Parse status.</returns>
 		///         <remarks>
 		///           <para>The OnPacketDecoded/OnProperty found methods are invoked as data is parsed.   If you have not subclassed this class, you can alternatively hook up to the PacketDecoded and PropertyFound events to receive parsing notifications.</para>
@@ -402,7 +402,7 @@ namespace AudioToolbox {
 		///         <param name="offset">First byte within the array that contains the data to decode.</param>
 		///         <param name="count">Number of bytes to parse.</param>
 		///         <param name="discontinuity">True if this invocation to ParseBytes is contiguous to the previous one, false otherwise.</param>
-		///         <summary>Parses and decode a portion of the array of bytes provided.</summary>
+		///         <summary>Parses and decode APortion of the array of bytes provided.</summary>
 		///         <returns>The status from parsing the buffer.</returns>
 		///         <remarks>
 		///           <para>The OnPacketDecoded/OnProperty found methods are invoked as data is parsed.   If you have not subclassed this class, you can alternatively hook up to the PacketDecoded and PropertyFound events to receive parsing notifications.</para>
@@ -852,7 +852,7 @@ namespace AudioToolbox {
 		}
 
 		/// <param name="packet">Packet number to map.</param>
-		///         <summary>Maps a packet number to an audio frame number in the audio file stream.</summary>
+		///         <summary>Maps APacket number to an audio frame number in the audio file stream.</summary>
 		///         <returns>
 		///         </returns>
 		///         <remarks>
@@ -904,7 +904,7 @@ namespace AudioToolbox {
 
 		/// <param name="packet">Packet number.</param>
 		///         <param name="isEstimate">On return, the value will be true if the byte offset is an estimate.</param>
-		///         <summary>Maps a packet number to a byte number in the audio file stream.</summary>
+		///         <summary>Maps APacket number to a byte number in the audio file stream.</summary>
 		///         <returns>
 		///         </returns>
 		///         <remarks>
@@ -933,7 +933,7 @@ namespace AudioToolbox {
 		/// <param name="byteval">The location in the file.</param>
 		///         <param name="byteOffsetInPacket">Return value, byte offset within the packet.</param>
 		///         <param name="isEstimate">Return value, whether the return is an estimate or not.</param>
-		///         <summary>Maps a position in the file to an audio packet.</summary>
+		///         <summary>Maps APosition in the file to an audio packet.</summary>
 		///         <returns>The packet number that corresponds to this byte in the file.</returns>
 		///         <remarks>
 		///           <para>
@@ -988,7 +988,7 @@ namespace AudioToolbox {
 			}
 		}
 
-		/// <summary>Average bytes per packet.   This value is precise for audio files with constant bit rates or audio files that have a packet index, otherwise it is a computed average.</summary>
+		/// <summary>Average bytes per packet.   This value is precise for audio files with constant bit rates or audio files that have APacket index, otherwise it is a computed average.</summary>
 		///         <value>
 		///         </value>
 		///         <remarks>

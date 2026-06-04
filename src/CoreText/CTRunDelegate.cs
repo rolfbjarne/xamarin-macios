@@ -89,21 +89,18 @@ namespace CoreText {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public virtual nfloat GetAscent ()
 		{
 			return 0;
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public virtual nfloat GetDescent ()
 		{
 			return 0;
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public virtual nfloat GetWidth ()
 		{
 			return 0;
@@ -204,7 +201,7 @@ namespace CoreText {
 		}
 
 		/// <param name="operations">The operations.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="CTRunDelegate" /> instance.</summary>
 		public CTRunDelegate (CTRunDelegateOperations operations)
 			: base (Create (operations), true)
 		{
@@ -215,8 +212,7 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTRunDelegateGetRefCon (IntPtr runDelegate);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the operations.</summary>
 		public CTRunDelegateOperations? Operations {
 			get {
 				return CTRunDelegateOperations.GetOperations (CTRunDelegateGetRefCon (Handle));

@@ -16,9 +16,9 @@ namespace MediaAccessibility {
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum MACaptionAppearanceDomain : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates default.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates user.</summary>
 		User = 1,
 	}
 
@@ -26,11 +26,11 @@ namespace MediaAccessibility {
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum MACaptionAppearanceDisplayType : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates forced only.</summary>
 		ForcedOnly = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates automatic.</summary>
 		Automatic = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates always on.</summary>
 		AlwaysOn = 2,
 	}
 
@@ -38,9 +38,9 @@ namespace MediaAccessibility {
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum MACaptionAppearanceBehavior : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates use value.</summary>
 		UseValue = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates use content if available.</summary>
 		UseContentIfAvailable = 1,
 	}
 
@@ -48,21 +48,21 @@ namespace MediaAccessibility {
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum MACaptionAppearanceFontStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates default.</summary>
 		Default = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates monospaced with serif.</summary>
 		MonospacedWithSerif = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates proportional with serif.</summary>
 		ProportionalWithSerif = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates monospaced without serif.</summary>
 		MonospacedWithoutSerif = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates proportional without serif.</summary>
 		ProportionalWithoutSerif = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates casual.</summary>
 		Casual = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates cursive.</summary>
 		Cursive = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates small capital.</summary>
 		SmallCapital = 7,
 	}
 
@@ -70,17 +70,17 @@ namespace MediaAccessibility {
 	[Native]
 	[MacCatalyst (13, 1)]
 	public enum MACaptionAppearanceTextEdgeStyle : long {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates undefined.</summary>
 		Undefined = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates none.</summary>
 		None = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates raised.</summary>
 		Raised = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates depressed.</summary>
 		Depressed = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates uniform.</summary>
 		Uniform = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates drop shadow.</summary>
 		DropShadow = 5,
 	}
 }

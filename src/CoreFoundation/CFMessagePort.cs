@@ -65,7 +65,6 @@ namespace CoreFoundation {
 		/// <param name="type">The type.</param>
 		///     <param name="data">The data to use.</param>
 		///     <summary>To be added.</summary>
-		///     <returns>To be added.</returns>
 		public delegate NSData CFMessagePortCallBack (int type, NSData data);
 
 		static Dictionary<IntPtr, CFMessagePortCallBack> outputHandles = new Dictionary<IntPtr, CFMessagePortCallBack> (Runtime.IntPtrEqualityComparer);
@@ -225,8 +224,7 @@ namespace CoreFoundation {
 		/// <param name="name">The name to use.</param>
 		///         <param name="callback">The callback to invoke.</param>
 		///         <param name="allocator">The allocator.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Creates local port.</summary>
 		public static CFMessagePort? CreateLocalPort (string? name, CFMessagePortCallBack callback, CFAllocator? allocator = null)
 		{
 			if (callback is null)
@@ -381,7 +379,6 @@ namespace CoreFoundation {
 		/// <param name="allocator">The allocator.</param>
 		///         <param name="name">The name to use.</param>
 		///         <summary>Deprecated.</summary>
-		///         <returns>To be added.</returns>
 		public static CFMessagePort? CreateRemotePort (CFAllocator? allocator, string name)
 		{
 			if (name is null)
@@ -411,7 +408,6 @@ namespace CoreFoundation {
 		///         <param name="replyMode">The reply mode.</param>
 		///         <param name="returnData">The return data.</param>
 		///         <summary>Sends a message to the port.</summary>
-		///         <returns>To be added.</returns>
 		public CFMessagePortSendRequestStatus SendRequest (int msgid, NSData? data, double sendTimeout, double rcvTimeout, NSString? replyMode, out NSData? returnData)
 		{
 			CFMessagePortSendRequestStatus result;

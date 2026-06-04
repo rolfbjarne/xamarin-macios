@@ -79,8 +79,7 @@ namespace CoreGraphics {
 		extern static /* CGPDFDocumentRef */ IntPtr CGPDFDocumentCreateWithURL (/* CFURLRef */ IntPtr url);
 
 		/// <param name="str">The str.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Froms file.</summary>
 		public static CGPDFDocument? FromFile (string str)
 		{
 			using (var url = CFUrl.FromFile (str)) {
@@ -95,8 +94,7 @@ namespace CoreGraphics {
 		}
 
 		/// <param name="str">The str.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Froms url.</summary>
 		public static CGPDFDocument? FromUrl (string str)
 		{
 			using (var url = CFUrl.FromUrlString (str, null)) {
@@ -112,8 +110,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* size_t */ nint CGPDFDocumentGetNumberOfPages (/* CGPDFDocumentRef */ IntPtr document);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the pages.</summary>
 		public nint Pages {
 			get {
 				return CGPDFDocumentGetNumberOfPages (Handle);
@@ -150,7 +147,6 @@ namespace CoreGraphics {
 		extern static byte CGPDFDocumentIsEncrypted (/* CGPDFDocumentRef */ IntPtr document);
 
 		/// <summary>Gets whether <c>this</c> <see cref="CoreGraphics.CGPDFDocument" /> object is encrypted.</summary>
-		///         <value>To be added.</value>
 		public bool IsEncrypted {
 			get {
 				return CGPDFDocumentIsEncrypted (Handle) != 0;
@@ -161,8 +157,7 @@ namespace CoreGraphics {
 		extern static byte CGPDFDocumentUnlockWithPassword (/* CGPDFDocumentRef */ IntPtr document, /* const char* */ IntPtr password);
 
 		/// <param name="password">The password.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Unlock.</summary>
 		public bool Unlock (string password)
 		{
 			using var passwordPtr = new TransientString (password);
@@ -173,7 +168,6 @@ namespace CoreGraphics {
 		extern static byte CGPDFDocumentIsUnlocked (/* CGPDFDocumentRef */ IntPtr document);
 
 		/// <summary>Gets whether the <c>this</c> <see cref="CoreGraphics.CGPDFDocument" /> object is not locked, either because the object is not encrypted or a password has been supplied.</summary>
-		///         <value>To be added.</value>
 		public bool IsUnlocked {
 			get {
 				return CGPDFDocumentIsUnlocked (Handle) != 0;
@@ -184,7 +178,6 @@ namespace CoreGraphics {
 		extern static byte CGPDFDocumentAllowsPrinting (/* CGPDFDocumentRef */ IntPtr document);
 
 		/// <summary>Gets whether <c>this</c> <see cref="CoreGraphics.CGPDFDocument" /> object allows printing.</summary>
-		///         <value>To be added.</value>
 		public bool AllowsPrinting {
 			get {
 				return CGPDFDocumentAllowsPrinting (Handle) != 0;
@@ -195,7 +188,6 @@ namespace CoreGraphics {
 		extern static byte CGPDFDocumentAllowsCopying (/* CGPDFDocumentRef */ IntPtr document);
 
 		/// <summary>Gets whether <c>this</c> <see cref="CoreGraphics.CGPDFDocument" /> object allows copying.</summary>
-		///         <value>To be added.</value>
 		public bool AllowsCopying {
 			get {
 				return CGPDFDocumentAllowsCopying (Handle) != 0;
@@ -205,7 +197,6 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CGPDFDictionaryRef */ IntPtr CGPDFDocumentGetCatalog (/* CGPDFDocumentRef */ IntPtr document);
 		/// <summary>Gets the catalog for <c>this</c> <see cref="CoreGraphics.CGPDFDocument" /> object.</summary>
-		///         <returns>To be added.</returns>
 		public CGPDFDictionary GetCatalog ()
 		{
 			return new CGPDFDictionary (CGPDFDocumentGetCatalog (Handle));
@@ -215,7 +206,6 @@ namespace CoreGraphics {
 		extern static /* CGPDFDictionaryRef */ IntPtr CGPDFDocumentGetInfo (/* CGPDFDocumentRef */ IntPtr document);
 
 		/// <summary>Gets information for <c>this</c> <see cref="CoreGraphics.CGPDFDocument" /> as a <see cref="CoreGraphics.CGPDFDictionary" /> dictionary.</summary>
-		///         <returns>To be added.</returns>
 		public CGPDFDictionary GetInfo ()
 		{
 			return new CGPDFDictionary (CGPDFDocumentGetInfo (Handle));
@@ -229,7 +219,7 @@ namespace CoreGraphics {
 		extern static void CGPDFContextSetOutline (/* CGPDFDocumentRef */ IntPtr document, IntPtr /* dictionary */ outline);
 
 		/// <param name="options">The options to use.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Sets outline.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -246,8 +236,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static /* CFDictionaryPtry */ IntPtr CGPDFDocumentGetOutline (/* CGPDFDocumentRef */ IntPtr document);
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Gets outline.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]
@@ -265,8 +254,7 @@ namespace CoreGraphics {
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		extern static CGPDFAccessPermissions CGPDFDocumentGetAccessPermissions (IntPtr document);
 
-		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Gets access permissions.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

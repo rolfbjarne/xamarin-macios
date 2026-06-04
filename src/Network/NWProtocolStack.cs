@@ -18,7 +18,7 @@ using nw_protocol_stack_t = System.IntPtr;
 using nw_protocol_options_t = System.IntPtr;
 
 namespace Network {
-	/// <summary>To be added.</summary>
+	/// <summary>Represents a stack of network protocols for a connection.</summary>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]

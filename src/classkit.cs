@@ -498,7 +498,6 @@ namespace ClassKit {
 		[Async (XmlDocs = """
 			<summary>Asynchronously saves the data store and returns a task that represents the operation.</summary>
 			<returns>A task that represents the operation.</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("saveWithCompletion:")]
 		void Save ([NullAllowed] Action<NSError> completion);
@@ -513,7 +512,6 @@ namespace ClassKit {
 			<param name="predicate">The search predicate.</param>
 			<summary>Searches for a context that matches the supplied <paramref name="predicate" /> and returns a task that contains the result.</summary>
 			<returns>A task that contains the search results</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("contextsMatchingPredicate:completion:")]
 		void FindContextsMatching (NSPredicate predicate, Action<CLSContext [], NSError> completion);
@@ -522,7 +520,6 @@ namespace ClassKit {
 			<param name="identifierPath">The identifier paths for the contexts to find.</param>
 			<summary>Finds the contexts identified by a set of identifier paths and returns a task that contains the results.</summary>
 			<returns>A task that contains the search results</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("contextsMatchingIdentifierPath:completion:")]
 		void FindContextsMatching (string [] identifierPath, Action<CLSContext [], NSError> completion);
@@ -543,7 +540,6 @@ namespace ClassKit {
 			<param name="documentUrl">The URL of the document to check.</param>
 			<summary>Asynchronously checks whether the specified document is assigned and returns a task that contains the result.</summary>
 			<returns>A task that contains the result of the check.</returns>
-			<remarks>To be added.</remarks>
 			""")]
 		[Export ("checkIsAssignedDocument:completion:")]
 		void CheckIsAssignedDocument (NSUrl documentUrl, CLSDataStoreCheckAssignedDocumentCompletionHandler completion);

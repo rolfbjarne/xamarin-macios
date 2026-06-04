@@ -36,8 +36,7 @@ namespace AppKit {
 		NSActionDispatcher? dispatcher;
 
 		/// <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Froms target.</summary>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 		public static NSSlider FromTarget (Action action)
@@ -52,8 +51,7 @@ namespace AppKit {
 		///         <param name="minValue">The min value.</param>
 		///         <param name="maxValue">The max value.</param>
 		///         <param name="action">The action to perform.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Froms value.</summary>
 		[SupportedOSPlatform ("macos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
 		public static NSSlider FromValue (double value, double minValue, double maxValue, Action action)

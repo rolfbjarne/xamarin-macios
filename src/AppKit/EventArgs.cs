@@ -69,7 +69,7 @@ namespace AppKit {
 		}
 	}
 
-	/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the n s popover close reason.</summary>
 	public enum NSPopoverCloseReason {
 		/// <summary>Indicates unknown.</summary>
 		Unknown,
@@ -81,8 +81,7 @@ namespace AppKit {
 
 	/// <summary>To be added.</summary>
 	public partial class NSPopoverCloseEventArgs {
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the reason.</summary>
 		public NSPopoverCloseReason Reason {
 			get {
 				if (_Reason == NSPopover.CloseReasonStandard) {

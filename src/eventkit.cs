@@ -288,13 +288,13 @@ namespace EventKit {
 		[Export ("calendarIdentifier")]
 		string CalendarIdentifier { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets a value that indicates whether this calendar is subscribed.</summary>
+		/// <value><see langword="true" /> if the calendar is subscribed; otherwise, <see langword="false" />.</value>
 		[Export ("subscribed")]
 		bool Subscribed { [Bind ("isSubscribed")] get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets a value that indicates whether this calendar is immutable.</summary>
+		/// <value><see langword="true" /> if the calendar is immutable; otherwise, <see langword="false" />.</value>
 		[Export ("immutable")]
 		bool Immutable { [Bind ("isImmutable")] get; }
 

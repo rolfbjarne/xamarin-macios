@@ -15,7 +15,6 @@ namespace Foundation {
 		///         <param name="srcPath">The src path.</param>
 		///         <param name="dstPath">The dst path.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public virtual bool ShouldCopyItemAtPath (NSFileManager fileManager, string srcPath, string dstPath)
 		{
 			return ShouldCopyItemAtPath (fileManager, (NSString) srcPath, (NSString) dstPath);
@@ -28,8 +27,7 @@ namespace Foundation {
 		///         <param name="fileManager">The file manager.</param>
 		///         <param name="srcPath">The src path.</param>
 		///         <param name="dstPath">The dst path.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Shoulds copy item at path.</summary>
 		public static bool ShouldCopyItemAtPath (this INSFileManagerDelegate This, NSFileManager fileManager, string srcPath, string dstPath)
 		{
 			return This.ShouldCopyItemAtPath (fileManager, (NSString) srcPath, (NSString) dstPath);

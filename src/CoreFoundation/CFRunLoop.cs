@@ -338,7 +338,7 @@ namespace CoreFoundation {
 		///
 		///
 		///   	   </param>
-		///         <summary>Initiates the runloop for a a particular duration of time.</summary>
+		///         <summary>Initiates the runloop for a AParticular duration of time.</summary>
 		///         <returns>
 		///
 		///

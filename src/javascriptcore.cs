@@ -221,7 +221,7 @@ namespace JavaScriptCore {
 
 		/// <param name="index">The zero-based index.</param>
 		/// <summary>Returns the value at the specified <paramref name="index" />, or <c>undefined</c> if none exists.</summary>
-		/// <returns>To be added.</returns>
+		/// <returns>The <see cref="T:JavaScriptCore.JSValue" /> at the specified index, or <c>undefined</c> if no value exists at that index.</returns>
 		[Export ("valueAtIndex:")]
 		JSValue GetValueAt (nuint index);
 

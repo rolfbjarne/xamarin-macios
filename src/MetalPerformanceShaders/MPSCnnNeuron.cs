@@ -4,10 +4,9 @@ using Metal;
 
 namespace MetalPerformanceShaders {
 	public partial class MPSCnnNeuronPReLU {
-		/// <param name="device">To be added.</param>
-		///         <param name="a">To be added.</param>
+		/// <param name="device">The device.</param>
+		///         <param name="a">The a.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]

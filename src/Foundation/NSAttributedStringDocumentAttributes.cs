@@ -33,7 +33,7 @@ namespace Foundation {
 	/// <summary>A <see cref="Foundation.DictionaryContainer" /> that provides document attributes for <see cref="Foundation.NSAttributedString" />s.</summary>
 	public partial class NSAttributedStringDocumentAttributes : DictionaryContainer {
 #if !COREBUILD
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the document type as a weak string value.</summary>
 		public NSString? WeakDocumentType {
 			get {
 				return GetNSStringValue (NSAttributedStringDocumentAttributeKey.DocumentTypeDocumentAttribute);
@@ -44,8 +44,7 @@ namespace Foundation {
 		}
 
 #if !XAMCORE_5_0
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+	/// <summary>Gets or sets the string encoding for the document.</summary>
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[Obsolete ("Use 'CharacterEncoding' instead.")]
 		public NSStringEncoding? StringEncoding {
@@ -59,7 +58,7 @@ namespace Foundation {
 #endif // !XAMCORE_5_0
 
 #if !XAMCORE_5_0
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the document type.</summary>
 		public NSDocumentType DocumentType {
 			get {
 
@@ -71,7 +70,7 @@ namespace Foundation {
 		}
 #endif // !XAMCORE_5_0
 
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the default attributes dictionary for the document.</summary>
 		public NSDictionary? WeakDefaultAttributes {
 			get {
 				return GetNativeValue<NSDictionary> (NSAttributedStringDocumentAttributeKey.DefaultAttributesDocumentAttribute);
@@ -94,7 +93,7 @@ namespace Foundation {
 			}
 		}
 #else
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets a value indicating whether the document is read-only.</summary>
 		public bool ReadOnly {
 			get {
 				var value = GetInt32Value (NSAttributedStringDocumentAttributeKey.ReadOnlyDocumentAttribute);
@@ -132,7 +131,7 @@ namespace Foundation {
 #endif // !TVOS
 
 #if __MACOS__
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the web preferences used when loading HTML content.</summary>
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
@@ -148,7 +147,7 @@ namespace Foundation {
 #endif // !__MACOS__
 
 #if __MACOS__
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the web resource load delegate for HTML content.</summary>
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
@@ -164,7 +163,7 @@ namespace Foundation {
 #endif // !__MACOS__
 
 #if __MACOS__
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the base URL for resolving relative URLs in the document.</summary>
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
@@ -180,7 +179,7 @@ namespace Foundation {
 #endif // !__MACOS__
 
 #if __MACOS__
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the text size multiplier for rendering HTML content.</summary>
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
@@ -196,7 +195,7 @@ namespace Foundation {
 #endif // !__MACOS__
 
 #if __MACOS__
-		/// <summary>To be added.</summary>
+	/// <summary>Gets or sets the timeout interval for loading HTML content.</summary>
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("maccatalyst")]

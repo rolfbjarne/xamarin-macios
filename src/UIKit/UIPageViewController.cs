@@ -18,17 +18,17 @@ namespace UIKit {
 		}
 
 		/// <param name="style">The style.</param>
-		///         <param name="navigationOrientation">The navigation orientation.</param>
-		///         <param name="spineLocation">The spine location.</param>
-		///         <param name="interPageSpacing">The inter page spacing.</param>
-		///         <summary>To be added.</summary>
+		/// <param name="navigationOrientation">The navigation orientation.</param>
+		/// <param name="spineLocation">The spine location.</param>
+		/// <param name="interPageSpacing">The inter page spacing.</param>
+		/// <summary>Creates a new page view controller with the specified style, orientation, spine location, and inter-page spacing.</summary>
 		public UIPageViewController (UIPageViewControllerTransitionStyle style, UIPageViewControllerNavigationOrientation navigationOrientation, UIPageViewControllerSpineLocation spineLocation, float interPageSpacing) : this (style, navigationOrientation, NSDictionary.FromObjectsAndKeys (new object [] { spineLocation, interPageSpacing }, new object [] { OptionSpineLocationKey, OptionInterPageSpacingKey }))
 		{
 		}
 
 		/// <param name="style">The style.</param>
-		///         <param name="navigationOrientation">The navigation orientation.</param>
-		///         <summary>To be added.</summary>
+		/// <param name="navigationOrientation">The navigation orientation.</param>
+		/// <summary>Creates a new page view controller with the specified style and orientation.</summary>
 		public UIPageViewController (UIPageViewControllerTransitionStyle style, UIPageViewControllerNavigationOrientation navigationOrientation) : this (style, navigationOrientation, NSDictionary.FromObjectsAndKeys (new object [] { UIPageViewControllerSpineLocation.Mid }, new object [] { OptionSpineLocationKey }))
 		{
 		}

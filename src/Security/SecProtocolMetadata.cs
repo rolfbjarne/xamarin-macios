@@ -16,7 +16,7 @@ using sec_protocol_metadata_t = System.IntPtr;
 using dispatch_queue_t = System.IntPtr;
 
 namespace Security {
-	/// <summary>To be added.</summary>
+	/// <summary>Provides metadata about a negotiated security protocol.</summary>
 	[SupportedOSPlatform ("tvos")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
@@ -75,8 +75,7 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static SslProtocol sec_protocol_metadata_get_negotiated_protocol_version (IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets the negotiated protocol version.</summary>
 		[SupportedOSPlatform ("tvos")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("ios")]

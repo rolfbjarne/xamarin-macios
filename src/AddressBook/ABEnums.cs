@@ -77,7 +77,7 @@ namespace AddressBook {
 	}
 
 	/// <summary>
-	///       The format to use for a person's composite name.
+	///       The format to use for APerson's composite name.
 	///     </summary>
 	///     <remarks>
 	///       <para>
@@ -232,7 +232,7 @@ namespace AddressBook {
 	public enum ABPersonKind {
 		/// <summary>
 		///           It's unknown whether the
-		///           <see cref="AddressBook.ABPerson" /> is a person or
+		///           <see cref="AddressBook.ABPerson" /> is APerson or
 		///           an organization.
 		///         </summary>
 		None,
@@ -241,7 +241,7 @@ namespace AddressBook {
 		///         </summary>
 		Organization,
 		/// <summary>
-		///           The <see cref="AddressBook.ABPerson" /> is a person.
+		///           The <see cref="AddressBook.ABPerson" /> is APerson.
 		///         </summary>
 		Person,
 	}

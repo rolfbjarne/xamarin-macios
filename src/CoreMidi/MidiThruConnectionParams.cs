@@ -85,7 +85,6 @@ namespace CoreMidi {
 	public unsafe struct MidiValueMap {
 		byte [] map_value;
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public byte [] Value {
 			get {
 				return map_value ?? (map_value = new byte [128]);
@@ -368,21 +367,18 @@ namespace CoreMidi {
 		}
 
 		/// <summary>Midi input routes.</summary>
-		///         <value>To be added.</value>
 		public MidiThruConnectionEndpoint []? Sources {
 			get { return connectionParams.Sources; }
 			set { connectionParams.Sources = value; }
 		}
 
 		/// <summary>MidI/Output destination routes.</summary>
-		///         <value>To be added.</value>
 		public MidiThruConnectionEndpoint []? Destinations {
 			get { return connectionParams.Destinations; }
 			set { connectionParams.Destinations = value; }
 		}
 
 		/// <summary>Map of the 16 MIDI channels</summary>
-		///         <value>To be added.</value>
 		///         <remarks>Set a MIDI channel to 0xFF to filter it out. It can have the following channel values range 0 to 15 or 1 to 16.</remarks>
 		public byte [] ChannelMap {
 			get { return connectionParams.ChannelMap; }
@@ -392,21 +388,18 @@ namespace CoreMidi {
 		}
 
 		/// <summary>Lowest velocity to filter.</summary>
-		///         <value>To be added.</value>
 		public byte LowVelocity {
 			get { return connectionParams.LowVelocity; }
 			set { connectionParams.LowVelocity = value; }
 		}
 
 		/// <summary>Highest velocity to filter.</summary>
-		///         <value>To be added.</value>
 		public byte HighVelocity {
 			get { return connectionParams.HighVelocity; }
 			set { connectionParams.HighVelocity = value; }
 		}
 
 		/// <summary>Lowest note to filter.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>
 		///           <para>
 		///             <see cref="CoreMidi.MidiThruConnectionParams.HighNote" /> is greater than or equal to <see cref="CoreMidi.MidiThruConnectionParams.LowNote" /> means that notes outside this range will be filtered out.</para>
@@ -421,7 +414,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>Highest note to filter.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>
 		///           <para>
 		///             <see cref="CoreMidi.MidiThruConnectionParams.HighNote" /> is greater than or equal to <see cref="CoreMidi.MidiThruConnectionParams.LowNote" /> means that notes outside this range will be filtered out.</para>
@@ -436,84 +428,72 @@ namespace CoreMidi {
 		}
 
 		/// <summary>Instructs how note numbers are transformed.</summary>
-		///         <value>To be added.</value>
 		public MidiTransform NoteNumber {
 			get { return connectionParams.NoteNumber; }
 			set { connectionParams.NoteNumber = value; }
 		}
 
 		/// <summary>Instructs how velocity notes are transformed.</summary>
-		///         <value>To be added.</value>
 		public MidiTransform Velocity {
 			get { return connectionParams.Velocity; }
 			set { connectionParams.Velocity = value; }
 		}
 
 		/// <summary>Instructs how polyphonic key pressure events are transformed.</summary>
-		///         <value>To be added.</value>
 		public MidiTransform KeyPressure {
 			get { return connectionParams.KeyPressure; }
 			set { connectionParams.KeyPressure = value; }
 		}
 
 		/// <summary>Instructs how monophonic channels pressure are transformed.</summary>
-		///         <value>To be added.</value>
 		public MidiTransform ChannelPressure {
 			get { return connectionParams.ChannelPressure; }
 			set { connectionParams.ChannelPressure = value; }
 		}
 
 		/// <summary>Instructs how program change events are transformed.</summary>
-		///         <value>To be added.</value>
 		public MidiTransform ProgramChange {
 			get { return connectionParams.ProgramChange; }
 			set { connectionParams.ProgramChange = value; }
 		}
 
 		/// <summary>Instructs how pitch bend events are transformed.</summary>
-		///         <value>To be added.</value>
 		public MidiTransform PitchBend {
 			get { return connectionParams.PitchBend; }
 			set { connectionParams.PitchBend = value; }
 		}
 
 		/// <summary>Flag to set all MIDI system exclusive messages to be filtered out.</summary>
-		///         <value>To be added.</value>
 		public bool FilterOutSysEx {
 			get { return connectionParams.FilterOutSysEx == 1; }
 			set { connectionParams.FilterOutSysEx = value ? (byte) 1 : (byte) 0; }
 		}
 
 		/// <summary>Flag to set all MIDI time code messages to be filtered out.</summary>
-		///         <value>To be added.</value>
 		public bool FilterOutMtc {
 			get { return connectionParams.FilterOutMtc == 1; }
 			set { connectionParams.FilterOutMtc = value ? (byte) 1 : (byte) 0; }
 		}
 
 		/// <summary>Flag to set all MIDI play, stop, resume and clock messages to be filtered out.</summary>
-		///         <value>To be added.</value>
 		public bool FilterOutBeatClock {
 			get { return connectionParams.FilterOutBeatClock == 1; }
 			set { connectionParams.FilterOutBeatClock = value ? (byte) 1 : (byte) 0; }
 		}
 
 		/// <summary>Flag to set all MIDI tune request messages to be filtered out.</summary>
-		///         <value>To be added.</value>
 		public bool FilterOutTuneRequest {
 			get { return connectionParams.FilterOutTuneRequest == 1; }
 			set { connectionParams.FilterOutTuneRequest = value ? (byte) 1 : (byte) 0; }
 		}
 
 		/// <summary>Flag to set all MIDI continuous control messages to be filtered out.</summary>
-		///         <value>To be added.</value>
 		public bool FilterOutAllControls {
 			get { return connectionParams.FilterOutAllControls == 1; }
 			set { connectionParams.FilterOutAllControls = value ? (byte) 1 : (byte) 0; }
 		}
 
 		/// <summary>Midi control transformations.</summary>
-		///         <value>To be added.</value>
 		public MidiControlTransform []? Controls {
 			get => controls;
 			set {
@@ -524,7 +504,6 @@ namespace CoreMidi {
 		}
 
 		/// <summary>MIDI value maps.</summary>
-		///         <value>To be added.</value>
 		public MidiValueMap []? Maps {
 			get => maps;
 			set {

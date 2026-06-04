@@ -129,17 +129,17 @@ namespace ScriptingBridge {
 	[DisableDefaultCtor] // An uncaught exception was raised: *** -[SBApplication init]: should never be used.
 	interface SBApplication : NSCoding {
 		/// <param name="url">The URL to use.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="ScriptingBridge.SBApplication" /> with the specified URL.</summary>
 		[Export ("initWithURL:")]
 		NativeHandle Constructor (NSUrl url);
 
 		/// <param name="pid">The pid.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="ScriptingBridge.SBApplication" /> with the specified process identifier.</summary>
 		[Export ("initWithProcessIdentifier:")]
 		NativeHandle Constructor (int /* pid_t = int */ pid);
 
 		/// <param name="ident">The ident.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Creates a new <see cref="ScriptingBridge.SBApplication" /> with the specified bundle identifier.</summary>
 		[Export ("initWithBundleIdentifier:")]
 		NativeHandle Constructor (string ident);
 
@@ -159,42 +159,42 @@ namespace ScriptingBridge {
 		IntPtr _FromProcessIdentifier (int /* pid_t = int */ pid);
 
 		/// <param name="className">The class name.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		/// <summary>Returns the class for the specified scripting class name.</summary>
+		/// <returns>The Objective-C class for the scripting class.</returns>
 		[Export ("classForScriptingClass:")]
 		Class ClassForScripting (string className);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets a value that indicates whether the application is running.</summary>
+		/// <value><see langword="true" /> if the application is running; otherwise, <see langword="false" />.</value>
 		[Export ("isRunning")]
 		bool IsRunning { get; }
 
-		/// <summary>To be added.</summary>
+		/// <summary>Activates the application.</summary>
 		[Export ("activate")]
 		void Activate ();
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the delegate.</summary>
+		/// <value>The delegate, or <see langword="null" />.</value>
 		[Export ("delegate", ArgumentSemantic.Retain), NullAllowed]
 		NSObject WeakDelegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the strongly-typed delegate.</summary>
+		/// <value>The delegate.</value>
 		[Wrap ("WeakDelegate")]
 		ISBApplicationDelegate Delegate { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the launch flags.</summary>
+		/// <value>The launch flags.</value>
 		[Export ("launchFlags")]
 		LSLaunchFlags LaunchFlags { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the send mode.</summary>
+		/// <value>The Apple event send mode.</value>
 		[Export ("sendMode")]
 		AESendMode SendMode { get; set; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the timeout in ticks.</summary>
+		/// <value>The timeout value.</value>
 		[Export ("timeout")]
 		nint Timeout { get; set; }
 	}

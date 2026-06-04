@@ -43,7 +43,7 @@ namespace Foundation {
 
 		// this is a less common pattern so it's not automatically generated
 		/// <param name="self">The instance on which this method operates.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the NSString constants for the specified run loop modes.</summary>
 		public static NSString [] GetConstants (this NSRunLoopMode [] self)
 		{
 			if (self is null)

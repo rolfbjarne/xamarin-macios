@@ -350,7 +350,7 @@ namespace CoreGraphics {
 
 		/// <param name="rect">The rect.</param>
 		///         <param name="t">The t.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Applies the specified affine transform to the rectangle.</summary>
 		[DllImport (Constants.CoreGraphicsLibrary)]
 		public extern static CGRect CGRectApplyAffineTransform (CGRect rect, CGAffineTransform t);
 

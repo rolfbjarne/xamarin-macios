@@ -244,8 +244,8 @@ namespace PhotosUI {
 	[Protocol]
 	interface PHProjectExtensionController {
 
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns the supported project types.</summary>
+		/// <returns>An array of project type descriptions.</returns>
 		[Deprecated (PlatformName.MacOSX, 10, 14)]
 		[Export ("supportedProjectTypes", ArgumentSemantic.Copy)]
 		PHProjectTypeDescription [] GetSupportedProjectTypes ();
@@ -253,28 +253,28 @@ namespace PhotosUI {
 		/// <param name="extensionContext">The extension context.</param>
 		/// <param name="projectInfo">The project info.</param>
 		/// <param name="completion">The completion.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Begins a new project with the specified context and info.</summary>
 		[Abstract]
 		[Export ("beginProjectWithExtensionContext:projectInfo:completion:")]
 		void BeginProject (PHProjectExtensionContext extensionContext, PHProjectInfo projectInfo, Action<NSError> completion);
 
 		/// <param name="extensionContext">The extension context.</param>
 		/// <param name="completion">The completion.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Resumes an existing project with the specified context.</summary>
 		[Abstract]
 		[Export ("resumeProjectWithExtensionContext:completion:")]
 		void ResumeProject (PHProjectExtensionContext extensionContext, Action<NSError> completion);
 
 		/// <param name="completion">The completion.</param>
-		/// <summary>To be added.</summary>
+		/// <summary>Finishes the current project.</summary>
 		[Abstract]
 		[Export ("finishProjectWithCompletionHandler:")]
 		void FinishProject (Action completion);
 
 		/// <param name="category">The category.</param>
 		/// <param name="invalidator">The invalidator.</param>
-		/// <summary>To be added.</summary>
-		/// <returns>To be added.</returns>
+		/// <summary>Returns a data source for the specified category.</summary>
+		/// <returns>A data source for project type descriptions.</returns>
 		[Protected]
 		[NoMacCatalyst]
 		[Export ("typeDescriptionDataSourceForCategory:invalidator:")]

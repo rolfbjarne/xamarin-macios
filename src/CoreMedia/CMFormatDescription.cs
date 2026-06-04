@@ -41,7 +41,7 @@ namespace CoreMedia {
 
 #if !COREBUILD
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the format description extensions as a dictionary.</summary>
 		public NSDictionary? GetExtensions ()
 		{
 			var cfDictRef = CMFormatDescriptionGetExtensions (Handle);
@@ -52,7 +52,7 @@ namespace CoreMedia {
 		extern static /* CFPropertyListRef */ IntPtr CMFormatDescriptionGetExtension (/* CMFormatDescriptionRef */ IntPtr desc, /* CFStringRef */ IntPtr extensionkey);
 
 		/// <param name="extensionKey">The extension key.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the value of the specified format description extension.</summary>
 		public NSObject? GetExtension (string extensionKey)
 		{
 			var extensionKeyHandle = CFString.CreateNative (extensionKey);
@@ -487,7 +487,7 @@ namespace CoreMedia {
 		{
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the video dimensions described by this format.</summary>
 		public CMVideoDimensions Dimensions {
 			get {
 				return CMVideoFormatDescriptionGetDimensions (Handle);
@@ -502,7 +502,7 @@ namespace CoreMedia {
 
 		/// <param name="imageBuffer">The image buffer.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a video format description from an image buffer.</summary>
 		public static CMVideoFormatDescription? CreateForImageBuffer (CVImageBuffer imageBuffer, out CMFormatDescriptionError error)
 		{
 			if (imageBuffer is null)
@@ -535,7 +535,7 @@ namespace CoreMedia {
 		/// <param name="parameterSets">The parameter sets.</param>
 		///         <param name="nalUnitHeaderLength">The nal unit header length.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a video format description from H.264 parameter sets.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -628,7 +628,7 @@ namespace CoreMedia {
 		}
 
 		/// <param name="originIsAtTopLeft">The origin is at top left.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the clean aperture rectangle for this video format.</summary>
 		public CGRect GetCleanAperture (bool originIsAtTopLeft)
 		{
 			return CMVideoFormatDescriptionGetCleanAperture (Handle, originIsAtTopLeft.AsByte ());
@@ -636,13 +636,13 @@ namespace CoreMedia {
 
 		/// <param name="usePixelAspectRatio">The use pixel aspect ratio.</param>
 		///         <param name="useCleanAperture">The use clean aperture.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Gets the presentation dimensions of this video format.</summary>
 		public CGSize GetPresentationDimensions (bool usePixelAspectRatio, bool useCleanAperture)
 		{
 			return CMVideoFormatDescriptionGetPresentationDimensions (Handle, usePixelAspectRatio.AsByte (), useCleanAperture.AsByte ());
 		}
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the extension keys that are common with image buffers.</summary>
 		public static NSObject? []? GetExtensionKeysCommonWithImageBuffers ()
 		{
 			var arr = CMVideoFormatDescriptionGetExtensionKeysCommonWithImageBuffers ();
@@ -650,7 +650,7 @@ namespace CoreMedia {
 		}
 
 		/// <param name="imageBuffer">The image buffer.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Determines whether this video format matches the specified image buffer.</summary>
 		public bool VideoMatchesImageBuffer (CVImageBuffer imageBuffer)
 		{
 			if (imageBuffer is null)
@@ -678,7 +678,7 @@ namespace CoreMedia {
 		///         <param name="nalUnitHeaderLength">The nal unit header length.</param>
 		///         <param name="extensions">The extensions.</param>
 		///         <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
+		/// <summary>Creates a video format description from HEVC parameter sets.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("tvos")]

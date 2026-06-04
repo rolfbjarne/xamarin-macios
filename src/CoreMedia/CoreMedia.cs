@@ -56,7 +56,6 @@ namespace CoreMedia {
 		public static readonly CMTimeRange InvalidMapping;
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -64,7 +63,6 @@ namespace CoreMedia {
 		public static NSString? TimeMappingSourceKey { get; private set; }
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -107,7 +105,6 @@ namespace CoreMedia {
 		/// <param name="source">The source.</param>
 		///         <param name="target">The target.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -119,7 +116,6 @@ namespace CoreMedia {
 
 		/// <param name="target">The target.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -131,7 +127,6 @@ namespace CoreMedia {
 
 		/// <param name="dict">The dict.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -144,7 +139,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]
@@ -155,7 +149,6 @@ namespace CoreMedia {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("macos")]
 		[SupportedOSPlatform ("maccatalyst")]

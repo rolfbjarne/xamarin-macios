@@ -34,7 +34,6 @@ namespace Foundation {
 	public partial class NSAttributedStringDocumentAttributes : DictionaryContainer {
 #if !COREBUILD
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public NSString? WeakDocumentType {
 			get {
 				return GetNSStringValue (NSAttributedStringDocumentAttributeKey.DocumentTypeDocumentAttribute);
@@ -46,7 +45,6 @@ namespace Foundation {
 
 #if !XAMCORE_5_0
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		///         <remarks>To be added.</remarks>
 		[EditorBrowsable (EditorBrowsableState.Never)]
 		[Obsolete ("Use 'CharacterEncoding' instead.")]
@@ -62,7 +60,6 @@ namespace Foundation {
 
 #if !XAMCORE_5_0
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public NSDocumentType DocumentType {
 			get {
 
@@ -75,7 +72,6 @@ namespace Foundation {
 #endif // !XAMCORE_5_0
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public NSDictionary? WeakDefaultAttributes {
 			get {
 				return GetNativeValue<NSDictionary> (NSAttributedStringDocumentAttributeKey.DefaultAttributesDocumentAttribute);
@@ -99,7 +95,6 @@ namespace Foundation {
 		}
 #else
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public bool ReadOnly {
 			get {
 				var value = GetInt32Value (NSAttributedStringDocumentAttributeKey.ReadOnlyDocumentAttribute);
@@ -138,7 +133,6 @@ namespace Foundation {
 
 #if __MACOS__
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
@@ -155,7 +149,6 @@ namespace Foundation {
 
 #if __MACOS__
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
@@ -172,7 +165,6 @@ namespace Foundation {
 
 #if __MACOS__
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
@@ -189,7 +181,6 @@ namespace Foundation {
 
 #if __MACOS__
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("maccatalyst")]
@@ -206,7 +197,6 @@ namespace Foundation {
 
 #if __MACOS__
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		[UnsupportedOSPlatform ("ios")]
 		[UnsupportedOSPlatform ("tvos")]
 		[UnsupportedOSPlatform ("maccatalyst")]

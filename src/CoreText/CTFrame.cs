@@ -154,7 +154,7 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		extern static IntPtr CTFrameGetLines (IntPtr handle);
 
-		/// <summary>To be added.</summary>
+		/// <summary>Gets the lines in this frame.</summary>
 		public CTLine [] GetLines ()
 		{
 			var cfArrayRef = CTFrameGetLines (Handle);

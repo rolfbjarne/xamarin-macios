@@ -203,8 +203,7 @@ namespace AddressBook {
 		unsafe extern static IntPtr ABAddressBookCreateWithOptions (IntPtr dictionary, IntPtr* cfError);
 
 		/// <param name="error">The error that occurred, or <see langword="null" /> if no error occurred.</param>
-		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
+		///         <summary>Create.</summary>
 		public static ABAddressBook? Create (out NSError? error)
 		{
 			IntPtr e;
@@ -429,7 +428,6 @@ namespace AddressBook {
 
 		/// <param name="source">The source.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public ABPerson [] GetPeople (ABRecord source)
 		{
 			if (source is null)
@@ -445,7 +443,6 @@ namespace AddressBook {
 		/// <param name="source">The source.</param>
 		///         <param name="sortOrdering">The sort ordering.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public ABPerson [] GetPeople (ABRecord source, ABPersonSortBy sortOrdering)
 		{
 			if (source is null)
@@ -495,7 +492,6 @@ namespace AddressBook {
 
 		/// <param name="source">The source.</param>
 		///         <summary>To be added.</summary>
-		///         <returns>To be added.</returns>
 		public ABGroup [] GetGroups (ABRecord source)
 		{
 			if (source is null)

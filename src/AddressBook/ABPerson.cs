@@ -353,25 +353,18 @@ namespace AddressBook {
 	[UnsupportedOSPlatform ("tvos")]
 	public static class ABPersonSocialProfileService {
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static readonly NSString? Twitter;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static readonly NSString? GameCenter;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static readonly NSString? Facebook;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static readonly NSString? Myspace;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static readonly NSString? LinkedIn;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static readonly NSString? Flickr;
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public static readonly NSString? SinaWeibo;
 
 		static ABPersonSocialProfileService ()
@@ -446,7 +439,6 @@ namespace AddressBook {
 		/// <summary>Represents the value associated with the constant kABPersonPhoneOtherFAXLabel</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		public static NSString? OtherFax { get; private set; }
 
 		static ABPersonPhoneLabel ()
@@ -540,27 +532,22 @@ namespace AddressBook {
 		/// <summary>Represents the value associated with the constant kABPersonInstantMessageServiceQQ</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		public static NSString? QQ { get; private set; }
 		/// <summary>Represents the value associated with the constant kABPersonInstantMessageServiceGoogleTalk</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		public static NSString? GoogleTalk { get; private set; }
 		/// <summary>Represents the value associated with the constant kABPersonInstantMessageServiceSkype</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		public static NSString? Skype { get; private set; }
 		/// <summary>Represents the value associated with the constant kABPersonInstantMessageServiceFacebook</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		public static NSString? Facebook { get; private set; }
 		/// <summary>Represents the value associated with the constant kABPersonInstantMessageServiceGaduGadu</summary>
 		///         <value>
 		///         </value>
-		///         <remarks>To be added.</remarks>
 		public static NSString? GaduGadu { get; private set; }
 
 		static ABPersonInstantMessageService ()
@@ -853,9 +840,8 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr ABPersonCreateInSource (IntPtr source);
 
-		/// <param name="source">To be added.</param>
+		/// <param name="source">The source.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public ABPerson (ABRecord source)
 			: base (ABPersonCreateInSource (source.GetNonNullHandle (nameof (source))), true)
 		{
@@ -1086,10 +1072,9 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static ABPersonCompositeNameFormat ABPersonGetCompositeNameFormatForRecord (IntPtr record);
 
-		/// <param name="record">To be added.</param>
+		/// <param name="record">The record.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static ABPersonCompositeNameFormat GetCompositeNameFormat (ABRecord? record)
 		{
 			var result = ABPersonGetCompositeNameFormatForRecord (record.GetHandle ());
@@ -1100,10 +1085,9 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr ABPersonCopyCompositeNameDelimiterForRecord (IntPtr record);
 
-		/// <param name="record">To be added.</param>
+		/// <param name="record">The record.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static string? GetCompositeNameDelimiter (ABRecord? record)
 		{
 			var handle = ABPersonCopyCompositeNameDelimiterForRecord (record.GetHandle ());
@@ -1303,7 +1287,6 @@ namespace AddressBook {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public ABRecord? Source {
 			get {
 				var h = ABPersonCopySource (Handle);
@@ -1415,7 +1398,6 @@ namespace AddressBook {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public ABMultiValue<PersonAddress>? GetAllAddresses ()
 		{
 			return CreateDictionaryMultiValue<PersonAddress> (CopyValue (ABPersonPropertyId.Address), l => new PersonAddress (l));
@@ -1439,9 +1421,8 @@ namespace AddressBook {
 			GC.KeepAlive (value);
 		}
 
-		/// <param name="addresses">To be added.</param>
+		/// <param name="addresses">The addresses.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetAddresses (ABMultiValue<PersonAddress>? addresses)
 		{
 			SetValue (ABPersonPropertyId.Address, addresses.GetHandle ());
@@ -1564,7 +1545,6 @@ namespace AddressBook {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public ABMultiValue<InstantMessageService>? GetInstantMessageServices ()
 		{
 			return CreateDictionaryMultiValue<InstantMessageService> (CopyValue (ABPersonPropertyId.InstantMessage), l => new InstantMessageService (l));
@@ -1587,9 +1567,8 @@ namespace AddressBook {
 			GC.KeepAlive (value);
 		}
 
-		/// <param name="services">To be added.</param>
+		/// <param name="services">The services.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetInstantMessages (ABMultiValue<InstantMessageService>? services)
 		{
 			SetValue (ABPersonPropertyId.InstantMessage, services.GetHandle ());
@@ -1604,25 +1583,22 @@ namespace AddressBook {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public ABMultiValue<SocialProfile>? GetSocialProfiles ()
 		{
 			return CreateDictionaryMultiValue<SocialProfile> (CopyValue (ABPersonPropertyId.SocialProfile), l => new SocialProfile (l));
 		}
 
 		// Obsolete
-		/// <param name="value">To be added.</param>
+		/// <param name="value">The value to set.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetSocialProfile (ABMultiValue<NSDictionary>? value)
 		{
 			SetValue (ABPersonPropertyId.SocialProfile, value.GetHandle ());
 			GC.KeepAlive (value);
 		}
 
-		/// <param name="profiles">To be added.</param>
+		/// <param name="profiles">The profiles.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public void SetSocialProfile (ABMultiValue<SocialProfile>? profiles)
 		{
 			SetValue (ABPersonPropertyId.SocialProfile, profiles.GetHandle ());
@@ -1740,7 +1716,6 @@ namespace AddressBook {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public ABPerson? []? GetLinkedPeople ()
 		{
 			var linked = ABPersonCopyArrayOfAllLinkedPeople (Handle);
@@ -1750,10 +1725,9 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr ABPersonCopyImageDataWithFormat (IntPtr handle, nint format);
 
-		/// <param name="format">To be added.</param>
+		/// <param name="format">The format.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public NSData? GetImage (ABPersonImageFormat format)
 		{
 			return Runtime.GetNSObject<NSData> (ABPersonCopyImageDataWithFormat (Handle, (nint) (long) format), true);
@@ -1762,10 +1736,9 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr ABPersonCreateVCardRepresentationWithPeople (IntPtr people);
 
-		/// <param name="people">To be added.</param>
+		/// <param name="people">The people.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static NSData? GetVCards (params ABPerson [] people)
 		{
 			if (people is null)
@@ -1783,11 +1756,10 @@ namespace AddressBook {
 		[DllImport (Constants.AddressBookLibrary)]
 		extern static IntPtr ABPersonCreatePeopleInSourceWithVCardRepresentation (IntPtr source, IntPtr vCardData);
 
-		/// <param name="source">To be added.</param>
-		///         <param name="vCardData">To be added.</param>
+		/// <param name="source">The source.</param>
+		///         <param name="vCardData">The v card data.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static ABPerson? []? CreateFromVCard (ABRecord? source, NSData vCardData)
 		{
 			if (vCardData is null)
@@ -1814,14 +1786,12 @@ namespace AddressBook {
 	[UnsupportedOSPlatform ("tvos")]
 	public class SocialProfile : DictionaryContainer {
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public SocialProfile ()
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
+		/// <param name="dictionary">The dictionary.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public SocialProfile (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -1891,14 +1861,12 @@ namespace AddressBook {
 	[UnsupportedOSPlatform ("tvos")]
 	public class InstantMessageService : DictionaryContainer {
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public InstantMessageService ()
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
+		/// <param name="dictionary">The dictionary.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public InstantMessageService (NSDictionary dictionary)
 			: base (dictionary)
 		{
@@ -1945,14 +1913,12 @@ namespace AddressBook {
 	[UnsupportedOSPlatform ("tvos")]
 	public class PersonAddress : DictionaryContainer {
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public PersonAddress ()
 		{
 		}
 
-		/// <param name="dictionary">To be added.</param>
+		/// <param name="dictionary">The dictionary.</param>
 		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public PersonAddress (NSDictionary dictionary)
 			: base (dictionary)
 		{

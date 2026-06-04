@@ -14,7 +14,6 @@ using CoreMedia;
 
 namespace VideoToolbox {
 	/// <summary>Class that provides a storage for encoding metadata.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("tvos")]
@@ -46,12 +45,11 @@ namespace VideoToolbox {
 			/* VTMultiPassStorageRef */ IntPtr* multiPassStorageOut);
 
 		// Convenience method taking a strong dictionary
-		/// <param name="options">To be added.</param>
-		///         <param name="fileUrl">To be added.</param>
-		///         <param name="timeRange">To be added.</param>
+		/// <param name="options">The options to use.</param>
+		///         <param name="fileUrl">The file url.</param>
+		///         <param name="timeRange">The time range.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static VTMultiPassStorage? Create (
 			VTMultiPassStorageCreationOptions? options,
 			NSUrl? fileUrl = null,
@@ -60,12 +58,11 @@ namespace VideoToolbox {
 			return Create (fileUrl, timeRange, options?.Dictionary);
 		}
 
-		/// <param name="fileUrl">To be added.</param>
-		///         <param name="timeRange">To be added.</param>
-		///         <param name="options">To be added.</param>
+		/// <param name="fileUrl">The file url.</param>
+		///         <param name="timeRange">The time range.</param>
+		///         <param name="options">The options to use.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public static VTMultiPassStorage? Create (
 			NSUrl? fileUrl = null,
 			CMTimeRange? timeRange = null,
@@ -95,7 +92,6 @@ namespace VideoToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public VTStatus Close ()
 		{
 			if (closed)

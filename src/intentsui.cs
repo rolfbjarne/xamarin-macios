@@ -251,8 +251,8 @@ namespace IntentsUI {
 		[Export ("style")]
 		INUIAddVoiceShortcutButtonStyle Style { get; }
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>Gets or sets the delegate for this button.</summary>
+		/// <value>The delegate instance, or <see langword="null" />.</value>
 		[Wrap ("WeakDelegate")]
 		[NullAllowed]
 		IINUIAddVoiceShortcutButtonDelegate Delegate { get; set; }

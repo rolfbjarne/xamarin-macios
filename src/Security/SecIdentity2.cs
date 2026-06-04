@@ -32,7 +32,7 @@ namespace Security {
 		extern static IntPtr sec_identity_create (IntPtr secidentityHandle);
 
 		/// <param name="identity">The identity.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="SecIdentity2" /> instance.</summary>
 		public SecIdentity2 (SecIdentity identity)
 		{
 			if (identity is null)
@@ -47,7 +47,7 @@ namespace Security {
 
 		/// <param name="identity">The identity.</param>
 		///         <param name="certificates">The certificates.</param>
-		///         <summary>To be added.</summary>
+		///         <summary>Creates a new <see cref="SecIdentity2" /> instance.</summary>
 		public SecIdentity2 (SecIdentity identity, params SecCertificate [] certificates)
 		{
 			if (identity is null)
@@ -64,15 +64,13 @@ namespace Security {
 		[DllImport (Constants.SecurityLibrary)]
 		extern static /* SecIdentityRef */ IntPtr sec_identity_copy_ref (/* OS_sec_identity */ IntPtr handle);
 
-		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
+		/// <summary>The identity.</summary>
 		public SecIdentity Identity => new SecIdentity (sec_identity_copy_ref (GetCheckedHandle ()), owns: true);
 
 		[DllImport (Constants.SecurityLibrary)]
 		extern static IntPtr sec_identity_copy_certificates_ref (IntPtr handle);
 
 		/// <summary>To be added.</summary>
-		///         <value>To be added.</value>
 		public SecCertificate []? Certificates {
 			get {
 				var certArray = sec_identity_copy_certificates_ref (GetCheckedHandle ());

@@ -214,7 +214,7 @@ namespace ObjCRuntime {
 		///         <summary>Gets the pointer in memory to the specified symbol.</summary>
 		///         <returns>The value from the library, or IntPtr.Zero on failure.</returns>
 		///         <remarks>
-		///           <para>Use this to get a generic pointer to a public symbol in the library.</para>
+		///           <para>Use this to get a generic pointer to APublic symbol in the library.</para>
 		///         </remarks>
 		public static IntPtr GetIndirect (IntPtr handle, string symbol)
 		{

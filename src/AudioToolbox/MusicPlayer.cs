@@ -16,63 +16,60 @@ namespace AudioToolbox {
 
 	// untyped enum (used as an OSStatus in the API) -> MusicPlayer.h
 	/// <summary>An enumeration whose values describe the status of a <see cref="AudioToolbox.MusicPlayer" />.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum MusicPlayerStatus {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates success.</summary>
 		Success = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid sequence type.</summary>
 		InvalidSequenceType = -10846,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates track index error.</summary>
 		TrackIndexError = -10859,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates track not found.</summary>
 		TrackNotFound = -10858,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates end of track.</summary>
 		EndOfTrack = -10857,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates start of track.</summary>
 		StartOfTrack = -10856,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates illegal track destination.</summary>
 		IllegalTrackDestination = -10855,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates no sequence.</summary>
 		NoSequence = -10854,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid event type.</summary>
 		InvalidEventType = -10853,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates invalid player state.</summary>
 		InvalidPlayerState = -10852,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates cannot do in current context.</summary>
 		CannotDoInCurrentContext = -10863,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates no track destination.</summary>
 		NoTrackDestination = -66720,
 	}
 
 	// typedef UInt32 -> MusicPlayer.h
 	/// <summary>An enumeration whose values describe various music event types.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum MusicEventType : uint {
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates null.</summary>
 		Null,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates extended note.</summary>
 		ExtendedNote = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates extended tempo.</summary>
 		ExtendedTempo = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates user.</summary>
 		User = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates meta.</summary>
 		Meta = 5,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates midi note message.</summary>
 		MidiNoteMessage = 6,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates midi channel message.</summary>
 		MidiChannelMessage = 7,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates midi raw data.</summary>
 		MidiRawData = 8,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates parameter.</summary>
 		Parameter = 9,
-		/// <summary>To be added.</summary>
+		/// <summary>Indicates a u preset.</summary>
 		AUPreset = 10,
 	}
 
 	// typedef UInt32 -> MusicPlayer.h
 	/// <summary>An enumeration that specifies the <c>loadFlags</c> values in the <see cref="AudioToolbox.MusicSequence.LoadData(Foundation.NSData,AudioToolbox.MusicSequenceFileTypeID,AudioToolbox.MusicSequenceLoadFlags)" /> and <see cref="AudioToolbox.MusicSequence.LoadFile(Foundation.NSUrl,AudioToolbox.MusicSequenceFileTypeID,AudioToolbox.MusicSequenceLoadFlags)" /> methods.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum MusicSequenceLoadFlags {
 		/// <summary>Indicates that the input tracks will be preserved in the output.</summary>
@@ -83,7 +80,6 @@ namespace AudioToolbox {
 
 	// typedef UInt32 -> MusicPlayer.h
 	/// <summary>An enumeration that specifies the type of a music sequence file.</summary>
-	///     <remarks>To be added.</remarks>
 	public enum MusicSequenceFileTypeID : uint {
 		/// <summary>Indicates that the type is not specified.</summary>
 		Any = 0,
@@ -95,7 +91,6 @@ namespace AudioToolbox {
 
 	// typedef UInt32 -> MusicPlayer.h
 	/// <summary>Can be used to specify that an existing file should be erased when creating a new file. Used with the <see cref="AudioToolbox.MusicSequence.CreateFile(Foundation.NSUrl,AudioToolbox.MusicSequenceFileTypeID,AudioToolbox.MusicSequenceFileFlags,System.UInt16)" /> method.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	public enum MusicSequenceFileFlags {
 		/// <summary>Indicates that the existing file should not be erased.</summary>
@@ -106,7 +101,6 @@ namespace AudioToolbox {
 
 
 	/// <summary>An object that plays a <see cref="AudioToolbox.MusicSequence" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
@@ -144,16 +138,14 @@ namespace AudioToolbox {
 		}
 
 		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
 		public MusicPlayer ()
 			: base (Create (), true)
 		{
 		}
 
-		/// <param name="OSstatus">To be added.</param>
+		/// <param name="OSstatus">The o sstatus.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		static public MusicPlayer? Create (out MusicPlayerStatus OSstatus)
 		{
 			IntPtr handle;
@@ -177,7 +169,6 @@ namespace AudioToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public double Time {
 			get {
 				double time;
@@ -210,7 +201,6 @@ namespace AudioToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus Preroll ()
 		{
 			return MusicPlayerPreroll (Handle);
@@ -221,7 +211,6 @@ namespace AudioToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus Start ()
 		{
 			return MusicPlayerStart (Handle);
@@ -232,7 +221,6 @@ namespace AudioToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus Stop ()
 		{
 			return MusicPlayerStop (Handle);
@@ -243,7 +231,6 @@ namespace AudioToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public bool IsPlaying {
 			get {
 				byte res;
@@ -262,7 +249,6 @@ namespace AudioToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public double PlayRateScalar {
 			get {
 				double rate;
@@ -279,11 +265,10 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicPlayerGetHostTimeForBeats (/* MusicPlayer */ IntPtr inPlayer, /* MusicTimeStamp */ double inBeats, /* UInt64* */ long* outHostTime);
 
-		/// <param name="beats">To be added.</param>
-		///         <param name="hostTime">To be added.</param>
+		/// <param name="beats">The beats.</param>
+		///         <param name="hostTime">The host time.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus GetHostTimeForBeats (double beats, out long hostTime)
 		{
 			hostTime = 0;
@@ -297,11 +282,10 @@ namespace AudioToolbox {
 		[DllImport (Constants.AudioToolboxLibrary)]
 		unsafe extern static /* OSStatus */ MusicPlayerStatus MusicPlayerGetBeatsForHostTime (/* MusicPlayer */ IntPtr inPlayer, /* UInt64 */ long inHostTime, /* MusicTimeStamp* */ double* outBeats);
 
-		/// <param name="hostTime">To be added.</param>
-		///         <param name="beats">To be added.</param>
+		/// <param name="hostTime">The host time.</param>
+		///         <param name="beats">The beats.</param>
 		///         <summary>To be added.</summary>
 		///         <returns>To be added.</returns>
-		///         <remarks>To be added.</remarks>
 		public MusicPlayerStatus GetBeatsForHostTime (long hostTime, out double beats)
 		{
 			beats = 0;
@@ -321,7 +305,6 @@ namespace AudioToolbox {
 
 		/// <summary>To be added.</summary>
 		///         <value>To be added.</value>
-		///         <remarks>To be added.</remarks>
 		public MusicSequence? MusicSequence {
 			get {
 				IntPtr seqHandle;

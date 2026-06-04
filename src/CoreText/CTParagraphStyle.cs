@@ -39,59 +39,56 @@ namespace CoreText {
 
 	// defined as uint8_t - /System/Library/Frameworks/CoreText.framework/Headers/CTParagraphStyle.h
 	/// <summary>An enumeration whose values specify options for text alignment.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <altmember cref="CoreText.CTParagraphStyle.Alignment" />
 	///     <altmember cref="CoreText.CTParagraphStyleSettings.Alignment" />
 	///     <altmember cref="CoreText.CTTextTab(CoreText.CTTextAlignment,System.Double)" />
 	public enum CTTextAlignment : byte {
-		/// <summary>To be added.</summary>
+		/// <summary>Text is left-aligned.</summary>
 		Left = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Text is right-aligned.</summary>
 		Right = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Text is centered.</summary>
 		Center = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Text is justified.</summary>
 		Justified = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Text alignment follows the natural direction.</summary>
 		Natural = 4,
 	}
 
 	// defined as uint8_t - /System/Library/Frameworks/CoreText.framework/Headers/CTParagraphStyle.h
 	/// <summary>An enumeration whose values specify line-breaking options.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <altmember cref="CoreText.CTParagraphStyle.LineBreakMode" />
 	///     <altmember cref="CoreText.CTParagraphStyleSettings.LineBreakMode" />
 	public enum CTLineBreakMode : byte {
-		/// <summary>To be added.</summary>
+		/// <summary>Lines break at word boundaries.</summary>
 		WordWrapping = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Lines break at character boundaries.</summary>
 		CharWrapping = 1,
-		/// <summary>To be added.</summary>
+		/// <summary>Lines are clipped at the edge.</summary>
 		Clipping = 2,
-		/// <summary>To be added.</summary>
+		/// <summary>Lines are truncated at the beginning.</summary>
 		TruncatingHead = 3,
-		/// <summary>To be added.</summary>
+		/// <summary>Lines are truncated at the end.</summary>
 		TruncatingTail = 4,
-		/// <summary>To be added.</summary>
+		/// <summary>Lines are truncated in the middle.</summary>
 		TruncatingMiddle = 5,
 	}
 
 	/// <summary>An enumeration whose values can be used as flags indicating writing directions.</summary>
-	///     <remarks>To be added.</remarks>
 	[Flags]
 	// defined as int8_t - /System/Library/Frameworks/CoreText.framework/Headers/CTParagraphStyle.h
 	public enum CTWritingDirection : sbyte {
-		/// <summary>To be added.</summary>
+		/// <summary>The natural writing direction based on locale.</summary>
 		Natural = -1,
-		/// <summary>To be added.</summary>
+		/// <summary>Left-to-right writing direction.</summary>
 		LeftToRight = 0,
-		/// <summary>To be added.</summary>
+		/// <summary>Right-to-left writing direction.</summary>
 		RightToLeft = 1,
 
 		// part of an unnamed enum inside CTStringAttributes.h
-		/// <summary>To be added.</summary>
+		/// <summary>Embedding writing direction override.</summary>
 		Embedding = (0 << 1),
-		/// <summary>To be added.</summary>
+		/// <summary>Override writing direction.</summary>
 		Override = (1 << 1),
 	}
 
@@ -243,72 +240,52 @@ namespace CoreText {
 	}
 
 	/// <summary>A class that can be used to override elements of a <see cref="CoreText.CTParagraphStyle" />.</summary>
-	///     <remarks>To be added.</remarks>
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
 	[SupportedOSPlatform ("macos")]
 	[SupportedOSPlatform ("tvos")]
 	public class CTParagraphStyleSettings {
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a new paragraph style settings instance with default values.</summary>
 		public CTParagraphStyleSettings ()
 		{
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the tab stops.</summary>
 		public IEnumerable<CTTextTab>? TabStops { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the text alignment.</summary>
 		public CTTextAlignment? Alignment { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the line break mode.</summary>
 		public CTLineBreakMode? LineBreakMode { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the base writing direction.</summary>
 		public CTWritingDirection? BaseWritingDirection { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the line bounds options.</summary>
 		public CTLineBoundsOptions? LineBoundsOptions { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the first line head indent.</summary>
 		public nfloat? FirstLineHeadIndent { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the head indent.</summary>
 		public nfloat? HeadIndent { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the tail indent.</summary>
 		public nfloat? TailIndent { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the default tab interval.</summary>
 		public nfloat? DefaultTabInterval { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the line height multiple.</summary>
 		public nfloat? LineHeightMultiple { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the maximum line height.</summary>
 		public nfloat? MaximumLineHeight { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the minimum line height.</summary>
 		public nfloat? MinimumLineHeight { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the line spacing.</summary>
 		public nfloat? LineSpacing { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the paragraph spacing.</summary>
 		public nfloat? ParagraphSpacing { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the paragraph spacing before.</summary>
 		public nfloat? ParagraphSpacingBefore { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the maximum line spacing.</summary>
 		public nfloat? MaximumLineSpacing { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the minimum line spacing.</summary>
 		public nfloat? MinimumLineSpacing { get; set; }
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets or sets the line spacing.</summary>
 		public nfloat? LineSpacingAdjustment { get; set; }
 
 		internal List<CTParagraphStyleSpecifierValue> GetSpecifiers ()
@@ -387,7 +364,6 @@ namespace CoreText {
 	}
 
 	/// <summary>Describes the style of paragraphs.</summary>
-	///     <remarks>To be added.</remarks>
 	///     <altmember cref="CoreText.CTStringAttributes.ParagraphStyle" />
 	[SupportedOSPlatform ("ios")]
 	[SupportedOSPlatform ("maccatalyst")]
@@ -403,9 +379,8 @@ namespace CoreText {
 		#region Paragraph Style Creation
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTParagraphStyleCreate (CTParagraphStyleSetting []? settings, nint settingCount);
-		/// <param name="settings">To be added.</param>
-		///         <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <param name="settings">The paragraph style settings, or <see langword="null" /> for default settings.</param>
+		/// <summary>Creates a paragraph style with the specified settings.</summary>
 		public CTParagraphStyle (CTParagraphStyleSettings? settings)
 			: base (settings is null ? CTParagraphStyleCreate (null, 0) : CreateFromSettings (settings), true, true)
 		{
@@ -447,8 +422,7 @@ namespace CoreText {
 			return handle;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a paragraph style with default settings.</summary>
 		public CTParagraphStyle ()
 			: this (null)
 		{
@@ -456,8 +430,7 @@ namespace CoreText {
 
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern IntPtr CTParagraphStyleCreateCopy (IntPtr paragraphStyle);
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Creates a copy of this paragraph style.</summary>
 		public CTParagraphStyle Clone ()
 		{
 			return new CTParagraphStyle (CTParagraphStyleCreateCopy (Handle), true);
@@ -468,8 +441,7 @@ namespace CoreText {
 		[DllImport (Constants.CoreTextLibrary)]
 		static extern unsafe byte CTParagraphStyleGetValueForSpecifier (IntPtr paragraphStyle, CTParagraphStyleSpecifier spec, nuint valueBufferSize, void* valueBuffer);
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the tab stops for this paragraph style.</summary>
 		public unsafe CTTextTab? []? GetTabStops ()
 		{
 			IntPtr cfArrayRef;
@@ -480,8 +452,7 @@ namespace CoreText {
 			return NSArray.ArrayFromHandle (cfArrayRef, p => new CTTextTab (p, false));
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the text alignment.</summary>
 		public CTTextAlignment Alignment {
 			get { return (CTTextAlignment) GetByteValue (CTParagraphStyleSpecifier.Alignment); }
 		}
@@ -494,20 +465,17 @@ namespace CoreText {
 			return value;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the line break mode.</summary>
 		public CTLineBreakMode LineBreakMode {
 			get { return (CTLineBreakMode) GetByteValue (CTParagraphStyleSpecifier.LineBreakMode); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the base writing direction.</summary>
 		public CTWritingDirection BaseWritingDirection {
 			get { return (CTWritingDirection) GetByteValue (CTParagraphStyleSpecifier.BaseWritingDirection); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the first line head indent.</summary>
 		public nfloat FirstLineHeadIndent {
 			get { return GetFloatValue (CTParagraphStyleSpecifier.FirstLineHeadIndent); }
 		}
@@ -520,44 +488,37 @@ namespace CoreText {
 			return value;
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the head indent.</summary>
 		public nfloat HeadIndent {
 			get { return GetFloatValue (CTParagraphStyleSpecifier.HeadIndent); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the tail indent.</summary>
 		public nfloat TailIndent {
 			get { return GetFloatValue (CTParagraphStyleSpecifier.TailIndent); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the default tab interval.</summary>
 		public nfloat DefaultTabInterval {
 			get { return GetFloatValue (CTParagraphStyleSpecifier.DefaultTabInterval); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the line height multiple.</summary>
 		public nfloat LineHeightMultiple {
 			get { return GetFloatValue (CTParagraphStyleSpecifier.LineHeightMultiple); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the maximum line height.</summary>
 		public nfloat MaximumLineHeight {
 			get { return GetFloatValue (CTParagraphStyleSpecifier.MaximumLineHeight); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the minimum line height.</summary>
 		public nfloat MinimumLineHeight {
 			get { return GetFloatValue (CTParagraphStyleSpecifier.MinimumLineHeight); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the line spacing.</summary>
 		[SupportedOSPlatform ("ios")]
 		[SupportedOSPlatform ("maccatalyst")]
 		[SupportedOSPlatform ("macos")]
@@ -570,14 +531,12 @@ namespace CoreText {
 			get { return GetFloatValue (CTParagraphStyleSpecifier.LineSpacing); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the paragraph spacing.</summary>
 		public nfloat ParagraphSpacing {
 			get { return GetFloatValue (CTParagraphStyleSpecifier.ParagraphSpacing); }
 		}
 
-		/// <summary>To be added.</summary>
-		///         <remarks>To be added.</remarks>
+		/// <summary>Gets the paragraph spacing before.</summary>
 		public nfloat ParagraphSpacingBefore {
 			get { return GetFloatValue (CTParagraphStyleSpecifier.ParagraphSpacingBefore); }
 		}
